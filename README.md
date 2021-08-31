@@ -51,6 +51,29 @@ small and middle deployments, and you shouldn’t feel obligated to use this
 feature. However we understand that this tool wouldn’t be useful if you couldn’t
 customize it when you are ready for it.
 
+### `Use eslint in VS code`
+
+**Note: This is to be used for consistent placing and adering to certain coding practice !**
+
+step 1: Make sure you have eslint extension installed in your vscode environment.
+
+step 2: Add these variables to your VScode settings
+
+"editor.formatOnSave": true,
+// turn it off for JS and JSX, we will do this via eslint
+"[javascript]": {
+"editor.formatOnSave": false
+},
+"[javascriptreact]": {
+"editor.formatOnSave": false
+},
+// show eslint icon at bottom toolbar
+"eslint.alwaysShowStatus": true,
+// tell the ESLint plugin to run on save
+"editor.codeActionsOnSave": {
+"source.fixAll": true
+},
+
 ## Learn More
 
 You can learn more in the
