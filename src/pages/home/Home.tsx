@@ -1,5 +1,5 @@
 import React from 'react';
-import {ColorModeSwitcher} from '../../utils/ColorModeSwitcher';
+import {ColorModeSwitcher} from '../../utils';
 
 export const Home = () => (
 	<div>
