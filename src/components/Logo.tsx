@@ -8,12 +8,12 @@ import LogoNameDark from '../assets/logo-name-dark.png';
 import { useColorMode } from '@chakra-ui/color-mode';
 import { useMediaQuery } from '@chakra-ui/media-query';
 
-interface ILogo {
-	className: string;
-	imageClassName: string;
+interface ILogoP {
+	className?: string;
+	imageClassName?: string;
 }
 
-export const Logo = ({className, imageClassName}: ILogo) => {
+export const Logo = ({className, imageClassName}: ILogoP) => {
 	const { colorMode } = useColorMode();
 	const [isLargerThan720] = useMediaQuery('(min-width: 720px)');
 
