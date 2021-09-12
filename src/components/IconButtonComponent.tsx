@@ -18,6 +18,7 @@ export const IconButtonComponent = ({ primary, ...rest }: IIconButtonComponentP)
 			backgroundColor={primary ? 'brand.primary' : backgroundColor}
 			borderRadius="50%"
 			color={primary ? 'black' : textColor}
+			_hover={primary ? {bg: 'brand.primaryTint'} : undefined}
 			{...rest}
 			sx={
 				{
