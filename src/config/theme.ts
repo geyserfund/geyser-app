@@ -1,10 +1,10 @@
 import {extendTheme} from '@chakra-ui/react';
+import { colors } from '../constants';
 
 export const theme = extendTheme({
 	colors: {
 		brand: {
-			primary: '#20ECC7',
-			primaryTint: '#12CEAC',
+			...colors,
 		},
 	},
 });
