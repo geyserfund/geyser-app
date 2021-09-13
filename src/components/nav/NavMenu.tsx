@@ -9,7 +9,6 @@ import { FiMoreHorizontal } from 'react-icons/fi';
 import {FaMoon, FaSun} from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
 import { colors, styles } from '../../constants';
-// Import { IconButtonComponent } from '../ui';
 
 const useStyles = createUseStyles({
 	menuList: {
@@ -65,13 +64,8 @@ export const NavMenu = () => {
 	const iconClassName = useColorModeValue(classes.iconNight, classes.iconDay);
 	const SwitchIcon = useColorModeValue(FaMoon, FaSun);
 
-	const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
-		toggleColorMode();
-		console.log('checking event', event);
-	};
-
 	return (
-		<Menu placement="bottom">
+		<Menu placement="bottom" >
 			<MenuButton
 				as={IconButton}
 				aria-label="options"
@@ -80,6 +74,7 @@ export const NavMenu = () => {
 				backgroundColor={backgroundColor}
 				icon={<Icon as={FiMoreHorizontal} boxSize="30px"/>}
 				variant="solid"
+				margin="0px 12px"
 				sx={styles.buttonCommon}
 			/>
 			<MenuList width="150px" className={classes.menuList}>
@@ -100,7 +95,7 @@ export const NavMenu = () => {
 						colorScheme="blackAlpha"
 						size="lg"
 						isChecked={colorMode === 'light'}
-						onChange={handleSwitch}
+						onChange={toggleColorMode}
 					/>
 					<Icon className={iconClassName} as={SwitchIcon}/>
 				</Box>

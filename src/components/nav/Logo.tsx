@@ -15,7 +15,7 @@ interface ILogoP {
 
 export const Logo = ({className, imageClassName}: ILogoP) => {
 	const { colorMode } = useColorMode();
-	const [isLargerThan720] = useMediaQuery('(min-width: 720px)');
+	const [isLargerThan720] = useMediaQuery('(min-width: 900px)');
 
 	const imageToUse = colorMode === 'light' ? isLargerThan720 ? LogoNameLight : LogoLight : isLargerThan720 ? LogoNameDark : LogoDark;
 

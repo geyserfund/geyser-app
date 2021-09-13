@@ -13,14 +13,16 @@ export const Router = () => (
 	<Box height="100vh">
 		<BrowserRouter>
 			<NavBar />
-			<Switch>
-				<Route path="/project/:projectId">
-					<Project />
-				</Route>
-				<Route path="/">
-					<Home />
-				</Route>
-			</Switch>
+			<Box height="calc(100vh - 60px)" overflowY="auto">
+				<Switch>
+					<Route path="/project/:projectId">
+						<Project />
+					</Route>
+					<Route path="/">
+						<Home />
+					</Route>
+				</Switch>
+			</Box>
 		</BrowserRouter>
 	</Box>
 );
