@@ -9,7 +9,17 @@ export const theme = extendTheme({
 		},
 	},
 	fonts: {
+		heading: fonts.brand,
+		body: fonts.brand,
 		default: fonts.brand,
+	},
+	components: {
+		Button: {
+			// 1. We can update the base styles
+			baseStyle: {
+				fontWeight: 'normal', // Normally, it is "semibold"
+			},
+		},
 	},
 });
 

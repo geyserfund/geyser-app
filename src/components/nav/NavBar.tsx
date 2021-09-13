@@ -16,7 +16,7 @@ export const NavBar = () => (
 			display="flex"
 			width="75%"
 			justifyContent="space-between"
-			margin="10px 0px"
+			margin="10px 10px"
 		>
 			<Logo />
 			<Box>
@@ -24,14 +24,14 @@ export const NavBar = () => (
 					leftIcon={<AddIcon />}
 					primary
 					standard
-					margin="0px 12px"
+					marginRight="12px"
 				>
 			Start
 				</ButtonComponent>
 				<ButtonComponent
 					leftIcon={<Icon as={FiTwitter}/>}
 					standard
-					margin="0px 12px"
+					marginRight="12px"
 				>
 			Login
 				</ButtonComponent>

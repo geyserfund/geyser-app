@@ -74,7 +74,6 @@ export const NavMenu = () => {
 				backgroundColor={backgroundColor}
 				icon={<Icon as={FiMoreHorizontal} boxSize="30px"/>}
 				variant="solid"
-				margin="0px 12px"
 				sx={styles.buttonCommon}
 			/>
 			<MenuList width="150px" className={classes.menuList}>
