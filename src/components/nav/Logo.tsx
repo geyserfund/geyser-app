@@ -1,10 +1,10 @@
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
 import React from 'react';
-import LogoLight from '../assets/logo.png';
-import LogoDark from '../assets/logo-dark.png';
-import LogoNameLight from '../assets/logo-name.png';
-import LogoNameDark from '../assets/logo-name-dark.png';
+import LogoLight from '../../assets/logo.png';
+import LogoDark from '../../assets/logo-dark.png';
+import LogoNameLight from '../../assets/logo-name.png';
+import LogoNameDark from '../../assets/logo-name-dark.png';
 import { useColorMode } from '@chakra-ui/color-mode';
 import { useMediaQuery } from '@chakra-ui/media-query';
 

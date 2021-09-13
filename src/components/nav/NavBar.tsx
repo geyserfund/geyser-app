@@ -1,12 +1,15 @@
 import React from 'react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
-import {FiTwitter, FiMoreHorizontal} from 'react-icons/fi';
-import { ButtonComponent } from './ButtonComponent';
+import {FiTwitter} from 'react-icons/fi';
+import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
-import { IconButtonComponent } from './IconButtonComponent';
+import { Box } from '@chakra-ui/layout';
+import { NavMenu } from './NavMenu';
 
 export const NavBar = () => (
-	<div>
+	<Box
+		display="flex"
+	>
 		<Logo />
 		<ButtonComponent
 			leftIcon={<AddIcon />}
@@ -21,10 +24,7 @@ export const NavBar = () => (
 		>
 			Login
 		</ButtonComponent>
-		<IconButtonComponent
-			aria-label="menu"
-			icon={<Icon as={FiMoreHorizontal} boxSize="30px"/>}
-		/>
-	</div>
+		<NavMenu />
+	</Box>
 );
 
