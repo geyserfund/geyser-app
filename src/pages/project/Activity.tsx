@@ -90,14 +90,14 @@ export const Activity = () => {
 	return (
 		<Box
 			flex={2}
-			padding="20px 35px"
+			padding="10px 15px"
 			display="flex"
 			flexDirection="column"
 			justifyContent="flex-start"
 			alignItems="center"
 			backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
 		>
-			<VStack spacing="12px" width="100%" overflow="hidden">
+			<VStack padding="10px 20px" spacing="12px" width="100%" overflowY="hidden">
 				<CircularFundProgress amount={2000} />
 				<ButtonComponent primary standard leftIcon={<SatoshiIcon />} width="100%">Fund this project</ButtonComponent>
 				<ButtonComponent standard leftIcon={<HiOutlineSpeakerphone fontSize="20px" />} width="100%">Share with Friends</ButtonComponent>
