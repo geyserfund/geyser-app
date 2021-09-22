@@ -6,6 +6,7 @@ import TweetEmbed from 'react-tweet-embed';
 import { IdComponent } from '../../components/molecules';
 import { Card, TwitterSkeleton } from '../../components/ui';
 import { Activity } from './Activity';
+import { isDarkMode } from '../../utils';
 
 const useStyles = createUseStyles({
 	twitter: {
@@ -18,6 +19,7 @@ export const Project = () => {
 	const ProjectName = 'The Hut in El Salvador';
 
 	const [twitterLoading, settwitterLoading] = useState(true);
+	const isDark = isDarkMode();
 
 	const handleSuccess = () => {
 		settwitterLoading(false);
@@ -38,7 +40,7 @@ export const Project = () => {
 				display="flex"
 				overflow="hidden"
 			>
-				<Box backgroundColor="brand.bgGrey" flex={3} >
+				<Box backgroundColor={isDark ? 'brand.bgDark' : 'brand.bgGrey'} flex={3} >
 					<Box padding="20px 40px 0px 40px">
 						<Text> Project: </Text>
 						<Box display="flex" alignItems="center" justifyContent="space-between">
@@ -52,11 +54,11 @@ export const Project = () => {
 					<Box padding="20px 40px">
 						{
 							twitterLoading
-								&& <TwitterSkeleton /> }
+							&& <TwitterSkeleton />}
 						<TweetEmbed
 							className={classes.twitter}
 							id="1435353835573293058"
-							options={{ cards: 'hidden', conversation: 'none' }}
+							options={{ cards: 'hidden', conversation: 'none', theme: isDark ? 'dark' : 'light' }}
 							onTweetLoadSuccess={handleSuccess}
 						/>
 						<VStack spacing="5px" alignItems="left">

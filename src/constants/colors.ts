@@ -8,5 +8,8 @@ export const colors = {
 	bgDark: '#393939',
 	bgGrey: '#F4F4F4',
 	bgGold: '#FFE600',
-
+	bgGreen: 'rgba(32, 236, 199, 0.2)',
+	bgGreenDark: 'rgba(32, 236, 199, 0.2)',
+	bgGreyDark: '#595959',
 };
+

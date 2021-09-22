@@ -15,6 +15,7 @@ interface IButtonComponentP extends ButtonProps {
 
 const useStyles = createUseStyles({
 	container: {
+		minHeight: '40px',
 		position: 'relative',
 		'& .chakra-button__icon': {
 			position: 'absolute',
@@ -30,6 +31,7 @@ const useStyles = createUseStyles({
 		display: 'flex',
 		width: '100%',
 		justifyContent: 'center',
+		fontSize: '12px',
 	},
 });
 
