@@ -15,6 +15,7 @@ export const NavBar = () => (
 		<Box
 			display="flex"
 			width="75%"
+			maxWidth="1300px"
 			justifyContent="space-between"
 			margin="10px 10px"
 		>
@@ -26,7 +27,7 @@ export const NavBar = () => (
 					standard
 					marginRight="12px"
 				>
-			Start
+			Start Project
 				</ButtonComponent>
 				<ButtonComponent
 					leftIcon={<Icon as={FiTwitter}/>}

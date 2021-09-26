@@ -19,7 +19,7 @@ const useStyles = createUseStyles({
 		backgroundColor: colors.primary,
 		color: colors.textBlack,
 		padding: 0,
-		borderRadius: 20,
+		borderRadius: 12,
 		overflow: 'hidden',
 		'& button': {
 			'&:hover': {
@@ -65,7 +65,7 @@ export const NavMenu = () => {
 	const SwitchIcon = useColorModeValue(FaMoon, FaSun);
 
 	return (
-		<Menu placement="bottom" >
+		<Menu placement="bottom-end" >
 			<MenuButton
 				as={IconButton}
 				aria-label="options"

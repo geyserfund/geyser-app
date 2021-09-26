@@ -13,7 +13,11 @@ export interface IIdComponent {
 
 export const IdComponent = ({ URL, userName, fullName, badge }: IIdComponent) => (
 	<HStack spacing="5px" display="flex">
-		<Avatar width="20px" height="20px" name={fullName} src={URL} />
+		<Avatar width="30px" height="3	0px" name={fullName} src={URL} sx={{
+			'& .chakra-avatar__initials': {
+				lineHeight: '30px',
+			},
+		}}/>
 		<Text> {userName}</Text>
 		<Badge variant={badge} />
 	</HStack>

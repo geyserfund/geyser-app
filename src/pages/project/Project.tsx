@@ -1,31 +1,27 @@
-import { Box, Divider, Heading, HStack, VStack } from '@chakra-ui/layout';
-import { Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import TweetEmbed from 'react-tweet-embed';
-import { IdComponent } from '../../components/molecules';
-import { Card, TwitterSkeleton } from '../../components/ui';
-import { Activity } from './Activity';
-import { isDarkMode } from '../../utils';
+import { Box, Text } from '@chakra-ui/layout';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
 
+import React from 'react';
+import { createUseStyles } from 'react-jss';
+import { isMobileMode } from '../../utils';
+import { Activity } from './Activity';
+import { Details } from './Details';
 const useStyles = createUseStyles({
-	twitter: {
-		maxWidth: 450,
+	tabListContainer: {
+		'& button': {
+			paddingLeft: 0,
+			paddingRight: 0,
+			// BorderColor: 'black',
+			borderBottomWidth: '3px',
+			boxShadow: 'none !important',
+		},
+
 	},
 });
 
 export const Project = () => {
 	const classes = useStyles();
-	const ProjectName = 'The Hut in El Salvador';
-
-	const [twitterLoading, settwitterLoading] = useState(true);
-	const isDark = isDarkMode();
-
-	const handleSuccess = () => {
-		settwitterLoading(false);
-		console.log('checking success');
-	};
-
+	const isMobile = isMobileMode();
 	return (
 		<Box
 			display="flex"
@@ -33,62 +29,41 @@ export const Project = () => {
 			alignItems="center"
 			height="100%"
 		>
-			<Card
-				width="85%"
+			<Box
+				width="100%"
+				maxWidth="1400px"
 				height="-webkit-fill-available"
-				margin="40px 0px"
+				margin={isMobile ? 0 : '20px 30px'}
+				padding={'20px 10px'}
 				display="flex"
 				overflow="hidden"
-			>
-				<Box backgroundColor={isDark ? 'brand.bgDark' : 'brand.bgGrey'} flex={3} >
-					<Box padding="20px 40px 0px 40px">
-						<Text> Project: </Text>
-						<Box display="flex" alignItems="center" justifyContent="space-between">
-							<Heading fontSize="28px" fontWeight="normal">
-								{ProjectName}
-							</Heading>
-							<Text>Created 1 Week ago</Text>
-						</Box>
-					</Box>
-					<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="5px 0px" />
-					<Box padding="20px 40px">
-						{
-							twitterLoading
-							&& <TwitterSkeleton />}
-						<TweetEmbed
-							className={classes.twitter}
-							id="1435353835573293058"
-							options={{ cards: 'hidden', conversation: 'none', theme: isDark ? 'dark' : 'light' }}
-							onTweetLoadSuccess={handleSuccess}
-						/>
-						<VStack spacing="5px" alignItems="left">
-							<HStack spacing="10px" display="flex">
-								<Text>Project Owner:</Text>
-								<IdComponent
-									URL={'https://bit.ly/dan-abramov'}
-									userName={'danAbramov'}
-									fullName="Dan Abrahmov"
-									twitter
-									badge="ambassador"
-								/>
-							</HStack>
-							<HStack spacing="10px" display="flex">
-								<Text>Ambassador:</Text>
-								<IdComponent
-									URL={'https://bit.ly/dan-abramov'}
-									userName={'danAbramov'}
-									fullName="Dan Abrahmov"
-									twitter
-									badge="ambassador"
-								/>
-							</HStack>
-						</VStack>
+			>{
+					isMobile ? (
+						<Tabs width="100%" colorScheme="blackAlpha">
+							<TabList className={classes.tabListContainer}>
+								<Tab flex={1}><Text width="100%" textAlign="left" fontSize="24px" color="brand.textBlack">Project</Text></Tab>
+								<Tab flex={1}><Text width="100%" textAlign="right" fontSize="24px" color="brand.textBlack">Activity</Text></Tab>
+							</TabList>
 
-					</Box>
-				</Box>
-				<Activity />
+							<TabPanels height="-webkit-fill-available" overflow="hidden">
+								<TabPanel padding="0px" height="-webkit-fill-available" overflow="hidden">
+									<Details />
+								</TabPanel>
+								<TabPanel padding="0px" height="-webkit-fill-available" overflow="hidden">
+									<Activity />
+								</TabPanel>
 
-			</Card>
+							</TabPanels>
+						</Tabs>
+					) : (
+						<>
+							<Details />
+							<Activity />
+						</>
+					)
+				}
+
+			</Box>
 		</Box>
 	);
 };

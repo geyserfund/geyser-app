@@ -19,7 +19,7 @@ export const IdBar = ({ URL, userName, fullName, twitter, badge, amount, ...rest
 			padding="10px 25px"
 			backgroundColor={dark ? 'brand.bgGreenDark' : 'brand.bgGreen'}
 			width="100%"
-			borderRadius="20px"
+			borderRadius="12px"
 			{...rest}
 		>
 			<IdComponent {...{ URL, userName, fullName, twitter, badge }} />
