@@ -100,15 +100,15 @@ const Activity = () => {
 			backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
 			borderRadius={isMobile ? '22px' : '0px 22px 22px 0px'}
 		>
-			<VStack padding={isMobile ? '10px 0px' : '10px 20px'} spacing="12px" width="100%" overflowY="hidden">
+			<VStack padding={isMobile ? '10px 0px' : '10px 20px'} spacing="12px" width="100%" height="100%" overflowY="hidden">
 				<CircularFundProgress amount={2000} />
 				<ButtonComponent primary standard leftIcon={<SatoshiIcon />} width="100%" >Fund this project</ButtonComponent>
 				<ButtonComponent standard leftIcon={<HiOutlineSpeakerphone fontSize="20px" />} width="100%" >Share with Friends</ButtonComponent>
-				<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden">
+				<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" height="-webkit-fill-available">
 					<Text fontSize="16px" marginBottom="10px" marginTop="10px">
 						{`Project Backers ${users.length ? `( ${users.length} )` : ''}`}
 					</Text>
-					<VStack spacing={'8px'} width="100%" overflow="auto" height="calc(100% - 60px)" paddingBottom="10px">
+					<VStack spacing={'8px'} width="100%" overflow="auto" height="calc(100% - 60px)" paddingBottom="30px">
 						{
 							users.map((user, index) => (
 								<IdBar key={index} {...user} />

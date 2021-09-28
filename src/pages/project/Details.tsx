@@ -57,7 +57,7 @@ export const Details = () => {
 				</Box>
 			</Box>
 			<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="5px 0px" />
-			<Box padding={componentPadding} height={isMobile ? 'calc(100% - 170px)' : 'calc(100% - 100px)'} overflowY="auto" marginBottom="100px">
+			<Box padding={componentPadding} height={isMobile ? 'calc(100% - 150px)' : 'calc(100% - 100px)'} overflowY="auto" marginBottom="100px">
 				{
 					twitterLoading
 							&& <TwitterSkeleton />}

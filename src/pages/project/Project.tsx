@@ -38,7 +38,7 @@ export const Project = () => {
 				maxWidth="1400px"
 				height="-webkit-fill-available"
 				margin={isMobile ? 0 : '20px 30px'}
-				// Padding="10px"
+				padding="10px"
 				display="flex"
 				overflow="hidden"
 			>{
@@ -49,13 +49,13 @@ export const Project = () => {
 								<Tab flex={1}><Text width="100%" textAlign="right" fontSize="24px" color="brand.textBlack">Activity</Text></Tab>
 							</TabList>
 
-							<TabPanels height="-webkit-fill-available" overflow="hidden">
-								<TabPanel padding="10px 0px" height="-webkit-fill-available" overflow="hidden">
+							<TabPanels height="-webkit-fill-available" >
+								<TabPanel padding="10px 0px" height="-webkit-fill-available" >
 									<Suspense fallback={Fallback}>
 										<Details />
 									</Suspense>
 								</TabPanel>
-								<TabPanel padding="10px 0px" height="-webkit-fill-available" overflow="hidden">
+								<TabPanel padding="10px 0px" height="-webkit-fill-available" >
 									<Suspense fallback={Fallback}>
 										<Activity />
 									</Suspense>
