@@ -1,13 +1,17 @@
 import { Box, Text } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { createUseStyles } from 'react-jss';
+import { Fallback } from '../../components/ui';
 import { isMobileMode } from '../../utils';
-import { Activity } from './Activity';
-import { Details } from './Details';
+
+const Activity = lazy(() => import('./Activity'));
+const Details = lazy(() => import('./Details'));
+
 const useStyles = createUseStyles({
 	tabListContainer: {
+		margin: '0px 10px',
 		'& button': {
 			paddingLeft: 0,
 			paddingRight: 0,
@@ -34,7 +38,7 @@ export const Project = () => {
 				maxWidth="1400px"
 				height="-webkit-fill-available"
 				margin={isMobile ? 0 : '20px 30px'}
-				padding={'20px 10px'}
+				// Padding="10px"
 				display="flex"
 				overflow="hidden"
 			>{
@@ -46,20 +50,24 @@ export const Project = () => {
 							</TabList>
 
 							<TabPanels height="-webkit-fill-available" overflow="hidden">
-								<TabPanel padding="0px" height="-webkit-fill-available" overflow="hidden">
-									<Details />
+								<TabPanel padding="10px 0px" height="-webkit-fill-available" overflow="hidden">
+									<Suspense fallback={Fallback}>
+										<Details />
+									</Suspense>
 								</TabPanel>
-								<TabPanel padding="0px" height="-webkit-fill-available" overflow="hidden">
-									<Activity />
+								<TabPanel padding="10px 0px" height="-webkit-fill-available" overflow="hidden">
+									<Suspense fallback={Fallback}>
+										<Activity />
+									</Suspense>
 								</TabPanel>
 
 							</TabPanels>
 						</Tabs>
 					) : (
-						<>
+						<Suspense fallback={Fallback}>
 							<Details />
 							<Activity />
-						</>
+						</Suspense>
 					)
 				}
 

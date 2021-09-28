@@ -57,17 +57,27 @@ export const Details = () => {
 				</Box>
 			</Box>
 			<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="5px 0px" />
-			<Box padding={componentPadding} height="calc(100% - 90px)" overflowY="auto" marginBottom="100px">
+			<Box padding={componentPadding} height={isMobile ? 'calc(100% - 170px)' : 'calc(100% - 100px)'} overflowY="auto" marginBottom="100px">
 				{
 					twitterLoading
 							&& <TwitterSkeleton />}
 				<Box minWidth={'300px'} maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
-					<TweetEmbed
-						className={classes.twitter}
-						id="1435353835573293058"
-						options={{ cards: 'hidden', conversation: 'none', theme: isDark ? 'dark' : 'light' }}
-						onTweetLoadSuccess={handleSuccess}
-					/>
+					{
+						isDark
+							? <TweetEmbed
+								className={classes.twitter}
+								id="1435353835573293058"
+								options={{ cards: 'hidden', conversation: 'none', theme: 'dark' }}
+								onTweetLoadSuccess={handleSuccess}
+							/>
+							: <TweetEmbed
+								className={classes.twitter}
+								id="1435353835573293058"
+								options={{ cards: 'hidden', conversation: 'none', theme: 'light' }}
+								onTweetLoadSuccess={handleSuccess}
+							/>
+					}
+
 				</Box>
 
 				<VStack spacing="5px" alignItems="left" marginTop="20px">
@@ -141,3 +151,5 @@ export const Details = () => {
 		</Card>
 	);
 };
+
+export default Details;

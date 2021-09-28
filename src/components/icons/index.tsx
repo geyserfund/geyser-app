@@ -1,25 +1,59 @@
 import Icon from '@chakra-ui/icon';
+import { Image } from '@chakra-ui/image';
+import { Box } from '@chakra-ui/layout';
 import React from 'react';
-import { FcSearch } from 'react-icons/fc';
-
-export const StarIcon = () => (
-	<Icon viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-		<path d="M0 10.2H10V0.2H0V10.2Z" fill="url(#pattern0)"/>
-		<defs>
-			<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-				<use xlinkHref="#image0" transform="scale(0.015625)"/>
-			</pattern>
-			<image id="image0" width="64" height="64" xlinkHref="data:image/png;base64,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"/>
-		</defs>
-	</Icon>
-);
-
-export const MagnifyGlassIcon = () => (
-	<Icon as={FcSearch } />
-);
+import StarPng from '../../assets/star.png';
+import CrownPng from '../../assets/crown.png';
+import LighteningPng from '../../assets/lightening.png';
+import MagnifyPng from '../../assets/magnify.png';
+import MedalPng from '../../assets/medal.png';
+import TrophyPng from '../../assets/trophy.png';
+import HourglassPng from '../../assets/hourglass.png';
 
 export const SatoshiIcon = () => (
 	<Icon>
 		<text x="0" y="22" fill="black" fontSize="25px">丰</text>
 	</Icon>
+);
+
+export const StarIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={StarPng} alt="star icon" />
+	</Box>
+);
+
+export const MagnifyGlassIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={MagnifyPng} alt="star icon" />
+	</Box>
+);
+
+export const MedalIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={MedalPng} alt="star icon" />
+	</Box>
+);
+
+export const LighteningIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={LighteningPng} alt="star icon" />
+	</Box>
+);
+
+export const TrophyIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={TrophyPng} alt="star icon" />
+	</Box>
+);
+
+export const CrownIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={CrownPng} alt="star icon" />
+	</Box>
+);
+
+export const HourglassIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={HourglassPng} alt="star icon" />
+	</Box>
 );

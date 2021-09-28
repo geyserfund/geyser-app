@@ -16,7 +16,7 @@ interface IuserInfo {
 	amount: number;
 }
 
-export const Activity = () => {
+const Activity = () => {
 	const users: IuserInfo[] = [
 		{
 			URL: 'https://bit.ly/dan-abramov',
@@ -122,3 +122,5 @@ export const Activity = () => {
 		</Card>
 	);
 };
+
+export default Activity;
