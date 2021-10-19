@@ -11,6 +11,7 @@ interface IButtonComponentP extends ButtonProps {
 	className?: string;
 	primary?: boolean;
 	standard?: boolean;
+	circular?: boolean;
 }
 
 const useStyles = createUseStyles({
@@ -35,22 +36,22 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const ButtonComponent = ({className, primary, children, standard, ...rest }: IButtonComponentP) => {
+export const ButtonComponent = ({ className, primary, children, standard, circular, backgroundColor, ...rest }: IButtonComponentP) => {
 	const classes = useStyles();
-	const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark);
+	const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark);
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
 	return (
 		<Button
-			className={classNames(className, { [classes.container]: standard}, {primary})}
+			className={classNames(className, { [classes.container]: standard }, { primary })}
 			variant="solid"
 			minWidth={standard ? '200px' : ''}
-			backgroundColor={primary ? 'brand.primary' : backgroundColor}
-			borderRadius={standard ? '50px' : undefined}
-			_hover={primary ? {bg: 'brand.primaryTint'} : undefined}
+			backgroundColor={backgroundColor ? backgroundColor : primary ? 'brand.primary' : bgColor}
+			borderRadius={circular ? '50px' : standard ? '12px' : undefined}
+			_hover={primary ? { bg: 'brand.primaryTint' } : undefined}
 			{...rest}
 			sx={styles.buttonCommon}
 		>
-			<Box as="span" className={classes.text} textColor={ primary ? 'black' : textColor}>
+			<Box as="span" className={classes.text} textColor={primary ? 'black' : textColor}>
 				{children}
 			</Box>
 		</Button>

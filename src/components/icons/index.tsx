@@ -1,4 +1,4 @@
-import Icon from '@chakra-ui/icon';
+import Icon, { IconProps } from '@chakra-ui/icon';
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
 import React from 'react';
@@ -10,9 +10,9 @@ import MedalPng from '../../assets/medal.png';
 import TrophyPng from '../../assets/trophy.png';
 import HourglassPng from '../../assets/hourglass.png';
 
-export const SatoshiIcon = () => (
-	<Icon>
-		<text x="0" y="22" fill="black" fontSize="25px">丰</text>
+export const SatoshiIcon = ({ fontSize, ...rest }: IconProps) => (
+	<Icon fontSize={fontSize || '25px'} {...rest}>
+		<text x="0" y="22" fill="black" fontSize={'25px'}>丰</text>
 	</Icon>
 );
 

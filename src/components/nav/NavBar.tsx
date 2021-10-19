@@ -1,6 +1,6 @@
 import React from 'react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
-import {FiTwitter} from 'react-icons/fi';
+import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
 import { Box } from '@chakra-ui/layout';
@@ -27,11 +27,12 @@ export const NavBar = () => {
 				{
 					isMobile ? <>
 						<ButtonComponent
-							leftIcon={<Icon as={FiTwitter}/>}
+							leftIcon={<Icon as={FiTwitter} />}
 							standard
+							circular
 							marginRight="12px"
 						>
-			Login
+							Login
 						</ButtonComponent>
 						<NavMenu />
 					</> : (
@@ -40,16 +41,18 @@ export const NavBar = () => {
 								leftIcon={<AddIcon />}
 								primary
 								standard
+								circular
 								marginRight="12px"
 							>
-						Start Project
+								Start Project
 							</ButtonComponent>
 							<ButtonComponent
-								leftIcon={<Icon as={FiTwitter}/>}
+								leftIcon={<Icon as={FiTwitter} />}
 								standard
+								circular
 								marginRight="12px"
 							>
-						Login
+								Login
 							</ButtonComponent>
 							<NavMenu />
 						</Box>

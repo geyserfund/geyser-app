@@ -4,7 +4,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
 import React, { lazy, Suspense } from 'react';
 import { createUseStyles } from 'react-jss';
 import { Fallback } from '../../components/ui';
-import { isMobileMode } from '../../utils';
+import { isDarkMode, isMobileMode } from '../../utils';
 
 const Activity = lazy(() => import('./Activity'));
 const Details = lazy(() => import('./Details'));
@@ -45,8 +45,8 @@ export const Project = () => {
 					isMobile ? (
 						<Tabs width="100%" colorScheme="blackAlpha">
 							<TabList className={classes.tabListContainer}>
-								<Tab flex={1}><Text width="100%" textAlign="left" fontSize="24px" color="brand.textBlack">Project</Text></Tab>
-								<Tab flex={1}><Text width="100%" textAlign="right" fontSize="24px" color="brand.textBlack">Activity</Text></Tab>
+								<Tab flex={1}><Text width="100%" textAlign="left" fontSize="24px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Project</Text></Tab>
+								<Tab flex={1}><Text width="100%" textAlign="right" fontSize="24px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Fund</Text></Tab>
 							</TabList>
 
 							<TabPanels height="-webkit-fill-available" >
