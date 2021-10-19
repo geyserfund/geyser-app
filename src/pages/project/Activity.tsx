@@ -215,7 +215,7 @@ const Activity = () => {
 
 	const successPage = () => (
 		<VStack
-			padding={isMobile ? '10px 0px' : '10px 20px'}
+			padding={isMobile ? '10px 10px' : '10px 20px'}
 			spacing="12px"
 			width="100%"
 			height="100%"
