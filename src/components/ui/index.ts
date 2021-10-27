@@ -5,3 +5,4 @@ export * from './Loader';
 export * from './TwitterSkeleton';
 export * from './Badge';
 export * from './Fallback';
+export * from './ImageBar';

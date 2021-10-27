@@ -1,15 +1,15 @@
 import React from 'react';
 import { CircularProgress } from '@chakra-ui/react';
-import {Box} from '@chakra-ui/layout';
-import {Stat, StatHelpText, StatLabel, StatNumber} from '@chakra-ui/stat';
+import { Box } from '@chakra-ui/layout';
+import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { isDarkMode } from '../../utils';
 
 interface ICircularFundProgress {
-    amount: number;
-    goal?: number;
+	amount: number;
+	goal?: number;
 }
 
-export const CircularFundProgress = ({amount}: ICircularFundProgress) => {
+export const CircularFundProgress = ({ amount }: ICircularFundProgress) => {
 	const isDark = isDarkMode();
 	return (
 		<CircularProgress
@@ -21,6 +21,7 @@ export const CircularFundProgress = ({amount}: ICircularFundProgress) => {
 			display="flex"
 			justifyContent="center"
 			alignItems="center"
+			filter="drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))"
 		>
 			<Box position="absolute" fontSize="12px">
 				<Stat textAlign="center">

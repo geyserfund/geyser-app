@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import TweetEmbed from 'react-tweet-embed';
 import { IdComponent } from '../../components/molecules';
-import { Card, TwitterSkeleton } from '../../components/ui';
+import { Card, ImageBar, TwitterSkeleton } from '../../components/ui';
 import { isDarkMode, isMobileMode } from '../../utils';
 
 const useStyles = createUseStyles({
@@ -101,6 +101,9 @@ export const Details = () => {
 							badge="ambassador"
 						/>
 					</HStack>
+				</VStack>
+				<VStack spacing="5px" alignItems="left" marginTop="20px">
+					<ImageBar />
 				</VStack>
 				<VStack spacing="10px" marginTop="15px" display="flex" flexDirection="column" alignItems="flex-start">
 					<Text fontSize="16px">About</Text>

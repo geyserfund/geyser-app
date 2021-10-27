@@ -22,5 +22,6 @@ module.exports = {
 	rules: {
 		'object-curly-spacing': 0,
 		'no-negated-condition': 0,
+		'array-callback-return': 0,
 	},
 };
