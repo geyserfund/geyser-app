@@ -6,3 +6,4 @@ export * from './TwitterSkeleton';
 export * from './Badge';
 export * from './Fallback';
 export * from './ImageBar';
+export * from './CustomToggle';

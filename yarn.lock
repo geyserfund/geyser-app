@@ -2710,6 +2710,11 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-twitter-auth@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@types/react-twitter-auth/-/react-twitter-auth-0.0.4.tgz#bb1836bbbbbdfb8623c78cf3e6ce44b9930e7e45"
+  integrity sha512-xMmoZ8z62vkeyYM8G+tuKJlvUSlCkdZYWFEqCmr0Ws8RMd9DkhexDMQdtKMJNR+g8NW2LUfIh2Rdvy2csOGdBg==
+
 "@types/react@*", "@types/react@^17.0.0":
   version "17.0.20"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.20.tgz#a4284b184d47975c71658cd69e759b6bd37c3b8c"
@@ -4611,6 +4616,11 @@ crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-js@^3.1.9-1:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
+  integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
@@ -10568,6 +10578,13 @@ react-twitter-auth@^0.0.13:
     react-icons "^2.2.5"
     url-search-params-polyfill "^2.0.0"
     whatwg-fetch "2.0.3"
+
+react-twitter-login@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/react-twitter-login/-/react-twitter-login-1.4.0.tgz#554051b27b9f6c15fe31fec6e7315b72554aed36"
+  integrity sha512-b688EnR3r7/g16qZmJsbUnAq3oDTAmV6fekVQ+CA+K1skTtrD74jkcft7OokcXExVPJenarTFuwmambUnRv9wA==
+  dependencies:
+    crypto-js "^3.1.9-1"
 
 react@^17.0.2:
   version "17.0.2"

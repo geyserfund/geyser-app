@@ -1,14 +1,13 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
 import { NumberInput, NumberInputField } from '@chakra-ui/number-input';
 import { CloseButton } from '@chakra-ui/close-button';
-import { Checkbox } from '@chakra-ui/checkbox';
 import { Textarea } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { SatoshiIcon } from '../../components/icons';
 import { CircularFundProgress } from '../../components/molecules';
 import { IdBar } from '../../components/molecules/IdBar';
-import { BadgeVariant, ButtonComponent, Card } from '../../components/ui';
+import { BadgeVariant, ButtonComponent, Card, CustomToggle } from '../../components/ui';
 import { isDarkMode, isMobileMode } from '../../utils';
 
 const users: IuserInfo[] = [
@@ -197,9 +196,10 @@ const Activity = () => {
 
 			</Box>
 			<Box width="100%">
-				<Checkbox colorScheme="green" defaultValue="false">
+				{/* <Checkbox colorScheme="green" defaultValue="false">
 					Remain Anonymous
-				</Checkbox>
+				</Checkbox> */}
+				<CustomToggle />
 			</Box>
 			<ButtonComponent
 				primary

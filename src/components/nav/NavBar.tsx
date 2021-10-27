@@ -6,62 +6,70 @@ import { Logo } from './Logo';
 import { Box } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
 import { isMobileMode } from '../../utils';
+import { useDisclosure } from '@chakra-ui/hooks';
+import { ConnectTwitter } from '../molecules';
 
 export const NavBar = () => {
 	const isMobile = isMobileMode();
 
+	const {isOpen, onOpen, onClose} = useDisclosure();
+
 	return (
-		<Box
-			display="flex"
-			width="100%"
-			justifyContent="center"
-		>
+		<>
 			<Box
 				display="flex"
-				width={isMobile ? '100%' : '75%'}
-				maxWidth="1300px"
-				justifyContent="space-between"
-				margin="10px 10px"
+				width="100%"
+				justifyContent="center"
 			>
-				<Logo />
-				{
-					isMobile ? <>
-						<ButtonComponent
-							leftIcon={<Icon as={FiTwitter} />}
-							standard
-							circular
-							marginRight="12px"
-						>
-							Login
-						</ButtonComponent>
-						<NavMenu />
-					</> : (
-						<Box>
-							<ButtonComponent
-								leftIcon={<AddIcon />}
-								primary
-								standard
-								circular
-								marginRight="12px"
-							>
-								Start Project
-							</ButtonComponent>
+				<Box
+					display="flex"
+					width={isMobile ? '100%' : '75%'}
+					maxWidth="1300px"
+					justifyContent="space-between"
+					margin="10px 10px"
+				>
+					<Logo />
+					{
+						isMobile ? <>
 							<ButtonComponent
 								leftIcon={<Icon as={FiTwitter} />}
 								standard
 								circular
 								marginRight="12px"
 							>
-								Login
+							Login
 							</ButtonComponent>
 							<NavMenu />
-						</Box>
-					)
-				}
+						</> : (
+							<Box>
+								<ButtonComponent
+									leftIcon={<AddIcon />}
+									primary
+									standard
+									circular
+									marginRight="12px"
+								>
+								Start Project
+								</ButtonComponent>
+								<ButtonComponent
+									leftIcon={<Icon as={FiTwitter} />}
+									standard
+									circular
+									marginRight="12px"
+									onClick={onOpen}
+								>
+								Login
+								</ButtonComponent>
+								<NavMenu />
+							</Box>
+						)
+					}
+
+				</Box>
 
 			</Box>
-
-		</Box>
+			<ConnectTwitter isOpen={isOpen} onClose={onClose}/>
+		</>
 	);
 };
 
