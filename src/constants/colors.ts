@@ -11,5 +11,8 @@ export const colors = {
 	bgGreen: 'rgba(32, 236, 199, 0.2)',
 	bgGreenDark: 'rgba(32, 236, 199, 0.2)',
 	bgGreyDark: '#595959',
+	bgLightGrey: '#F0F0F0',
+	bgLightGreen: '#D2FBF4',
+
 };
 

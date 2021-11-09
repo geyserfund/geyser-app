@@ -201,15 +201,18 @@ const Activity = () => {
 				</Checkbox> */}
 				<CustomToggle />
 			</Box>
-			<ButtonComponent
-				primary
-				standard
-				leftIcon={<SatoshiIcon />}
-				width="100%"
-				onClick={handleFund}
-			>
+			<Box width="100%">
+				<ButtonComponent
+					primary
+					standard
+					leftIcon={<SatoshiIcon />}
+					width="100%"
+					marginTop="15px"
+					onClick={handleFund}
+				>
 				Fund project
-			</ButtonComponent>
+				</ButtonComponent>
+			</Box>
 
 		</VStack>);
 

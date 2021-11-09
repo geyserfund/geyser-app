@@ -6,8 +6,6 @@ import TwitterLogin from 'react-twitter-auth';
 import { ButtonComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
-// Import TwitterLogin from 'react-twitter-login';
-
 interface IConnectTwitter {
     isOpen: boolean,
 	onClose: () => void,
@@ -47,10 +45,10 @@ export const ConnectTwitter = ({
 					</Text>
 					<Box className={classes.twitterContainer}>
 						<TwitterLogin
-							loginUrl="http://localhost:4000/api/v1/auth/twitter"
+							loginUrl="http://localhost:4000/auth/twitter"
 							onFailure={handleFailed}
 							onSuccess={handleSuccess}
-							requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse"
+							requestTokenUrl="http://localhost:4000/auth/twitter/callback"
 							showIcon={true}
 						>
 							<ButtonComponent
@@ -63,11 +61,6 @@ export const ConnectTwitter = ({
                                 Login with Twitter
 							</ButtonComponent>
 						</TwitterLogin>
-						{/* <TwitterLogin
-							authCallback={authHandler}
-							consumerKey={CONSUMER_KEY}
-							consumerSecret={CONSUMER_SECRET}
-						/> */}
 					</Box>
 				</ModalBody>
 			</ModalContent>
