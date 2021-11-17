@@ -5,12 +5,12 @@ import { CrownIcon, HourglassIcon, MagnifyGlassIcon, MedalIcon, StarIcon, Trophy
 export type BadgeVariant = 'owner' | 'ambassador' | 'earlyFunder' | 'crown' | 'trophy' | 'medal' | 'ownerPending'
 
 interface IBadge {
-    variant: BadgeVariant
-	full ?: boolean
+	variant: BadgeVariant
+	full?: boolean
 }
 
-export const Badge = ({variant, full}: IBadge) => {
-	const renderIcon = (variant : string) => {
+export const Badge = ({ variant, full }: IBadge) => {
+	const renderIcon = (variant: string) => {
 		switch (variant) {
 			case 'ambassador':
 				return <StarIcon />;
@@ -43,7 +43,7 @@ export const Badge = ({variant, full}: IBadge) => {
 	return (
 		<Box as="span" backgroundColor="brand.bgGold" padding="0px 8px" borderRadius="20px">
 			{renderIcon(variant)}
-			{ full ? textMap[variant] : ''}
+			{full ? textMap[variant] : ''}
 		</Box>
 	);
 };

@@ -2,13 +2,18 @@ import { Box, Text, VStack } from '@chakra-ui/layout';
 import { NumberInput, NumberInputField } from '@chakra-ui/number-input';
 import { CloseButton } from '@chakra-ui/close-button';
 import { Textarea } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { SatoshiIcon } from '../../components/icons';
 import { CircularFundProgress } from '../../components/molecules';
 import { IdBar } from '../../components/molecules/IdBar';
 import { BadgeVariant, ButtonComponent, Card, CustomToggle } from '../../components/ui';
 import { isDarkMode, isMobileMode } from '../../utils';
+import { IProject } from '../../interfaces';
+import { useMutation } from '@apollo/client';
+import { MUTATION_FUND_PROJECT } from '../../graphql/mutations/fund';
+// Import { useMutation } from '@apollo/client';
+// import { MUTATION_FUND_PROJECT } from '../../graphql/mutations/fund';
 
 const users: IuserInfo[] = [
 	{
@@ -86,9 +91,22 @@ interface IuserInfo {
 	amount: number;
 }
 
-const Activity = () => {
+interface IActivityProps {
+	project: IProject
+}
+
+const Activity = ({ project }: IActivityProps) => {
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
+	const [btcRate, setBtcRate] = useState(0);
+	const [amount, setAmount] = useState(0);
+	// Const [comment, setComment] = useState('');
+
+	const [fundProject, { data, loading, error }] = useMutation(MUTATION_FUND_PROJECT);
+
+	useEffect(() => {
+		getBitcoinRates();
+	}, []);
 
 	const handleFundProject = () => {
 		setFundpage(false);
@@ -100,10 +118,40 @@ const Activity = () => {
 
 	const handleFund = () => {
 		setCompletedFunding(true);
+		fundProject({
+			variables: {
+				projectId: project.id,
+				amount,
+			},
+		});
 	};
+
+	console.log('checking data loading and error', data, loading, error);
 
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
+
+	const getBitcoinRates = async () => {
+		const response: any = (await fetch('https://api.coinbase.com/v2/exchange-rates?currency=BTC'));
+		const responseJson = await response.json();
+		console.log('checking response', responseJson);
+		console.log('checking btc', responseJson.data.rates.USD);
+		const satoshirate = responseJson.data.rates.USD * 0.00000001;
+		setBtcRate(satoshirate);
+	};
+
+	const handleInput = (stringv: string, numberv: number) => {
+		console.log('Checking input', stringv, numberv);
+
+		if (!numberv) {
+			setAmount(0);
+			return;
+		}
+
+		setAmount(numberv);
+	};
+
+	console.log('checking project', project);
 
 	const infoPage = () => (
 		<VStack
@@ -114,7 +162,7 @@ const Activity = () => {
 			overflowY="hidden"
 			margin="10px 15px"
 		>
-			<CircularFundProgress amount={2000} />
+			<CircularFundProgress rate={btcRate} goal={170000} amount={parseInt(project.balance, 10)} />
 			<ButtonComponent
 				primary
 				standard
@@ -171,13 +219,25 @@ const Activity = () => {
 					height="85px"
 					borderRadius="12px"
 					display="flex"
+					flexDirection="column"
 					justifyContent="center"
 					alignItems="center"
 				>
-					<NumberInput variant="unstyled" marginLeft="10px">
-						<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
-					</NumberInput>
-					<SatoshiIcon fontSize="30px" marginRight="10px" marginBottom="5px" />
+					<Box
+						display="flex"
+						justifyContent="center"
+						alignItems="center"
+						width="80%"
+						position="relative"
+					>
+						<NumberInput variant="unstyled" marginLeft="10px" onChange={handleInput} value={amount}>
+							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
+						</NumberInput>
+						<Box position="absolute" right={20}>
+							<SatoshiIcon fontSize="30px" marginRight="10px" marginBottom="5px" />
+						</Box>
+					</Box>
+					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * amount}`}</Text>
 				</Box>
 
 			</Box>
@@ -210,7 +270,7 @@ const Activity = () => {
 					marginTop="15px"
 					onClick={handleFund}
 				>
-				Fund project
+					Fund project
 				</ButtonComponent>
 			</Box>
 

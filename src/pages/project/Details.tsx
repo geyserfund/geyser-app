@@ -6,7 +6,9 @@ import { createUseStyles } from 'react-jss';
 import TweetEmbed from 'react-tweet-embed';
 import { IdComponent } from '../../components/molecules';
 import { Card, ImageBar, TwitterSkeleton } from '../../components/ui';
+import { IProject, IProjectUser } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
+import { DateTime, Interval } from 'luxon';
 
 const useStyles = createUseStyles({
 	twitter: {
@@ -21,9 +23,12 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const Details = () => {
+interface IActivityProps {
+	project: IProject
+}
+
+export const Details = ({ project }: IActivityProps) => {
 	const classes = useStyles();
-	const ProjectName = 'The Hut in El Salvador';
 
 	const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)');
 	const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
@@ -39,6 +44,47 @@ export const Details = () => {
 
 	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';
 
+	const getDaysAgo = (date: string) => {
+		const dateTime = DateTime.fromMillis(parseInt(date, 10));
+		const currentDateTime = DateTime.now();
+
+		const i = Interval.fromDateTimes(dateTime, currentDateTime);
+
+		const days = Math.floor(i.length('days'));
+		if (days === 1) {
+			return 'a day';
+		}
+
+		if (days < 1) {
+			const hours = Math.floor(i.length('hours'));
+			if (hours === 1) {
+				return 'an hour';
+			}
+
+			if (hours < 1) {
+				const minutes = Math.floor(i.length('minutes'));
+				if (hours === 1) {
+					return 'a minute';
+				}
+
+				if (minutes < 1) {
+					return 'just now';
+				}
+
+				return `${minutes} minutes`;
+			}
+
+			return `${hours} hours`;
+		}
+
+		return `${days} days`;
+	};
+
+	const getTwitterID = (url: string) => {
+		const splited = url.split('/');
+		return splited[splited.length - 1];
+	};
+
 	return (
 		<Card
 			backgroundColor={isDark ? 'brand.bgDark' : 'brand.bgGrey'}
@@ -51,28 +97,28 @@ export const Details = () => {
 				<Text fontSize="16px"> Project: </Text>
 				<Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap">
 					<Heading fontSize="28px" fontWeight="normal">
-						{ProjectName}
+						{project.title}
 					</Heading>
-					<Text>Created 1 Week ago</Text>
+					<Text>{`Created ${getDaysAgo(project.createdAt)} ago`}</Text>
 				</Box>
 			</Box>
 			<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="5px 0px" />
 			<Box padding={componentPadding} height={isMobile ? 'calc(100% - 150px)' : 'calc(100% - 100px)'} overflowY="auto" marginBottom="100px">
 				{
 					twitterLoading
-							&& <TwitterSkeleton />}
+					&& <TwitterSkeleton />}
 				<Box minWidth={'300px'} maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
 					{
 						isDark
 							? <TweetEmbed
 								className={classes.twitter}
-								id="1435353835573293058"
+								id={getTwitterID(project.originUrl)}
 								options={{ cards: 'hidden', conversation: 'none', theme: 'dark' }}
 								onTweetLoadSuccess={handleSuccess}
 							/>
 							: <TweetEmbed
 								className={classes.twitter}
-								id="1435353835573293058"
+								id={getTwitterID(project.originUrl)}
 								options={{ cards: 'hidden', conversation: 'none', theme: 'light' }}
 								onTweetLoadSuccess={handleSuccess}
 							/>
@@ -84,22 +130,28 @@ export const Details = () => {
 					<HStack spacing="10px" display="flex" flexWrap="wrap">
 						<Text fontSize="16px">Project Owner:</Text>
 						<IdComponent
-							URL={'https://bit.ly/dan-abramov'}
-							userName={'danAbramov'}
-							fullName="Dan Abrahmov"
+							URL={project.owner.user.picture}
+							userName={project.owner.user.username}
+							fullName={project.owner.user.username}
 							twitter
-							badge="ambassador"
+							badge="owner"
 						/>
 					</HStack>
 					<HStack spacing="10px" display="flex" flexWrap="wrap">
 						<Text fontSize="16px">Ambassador:</Text>
-						<IdComponent
-							URL={'https://bit.ly/dan-abramov'}
-							userName={'danAbramov'}
-							fullName="Dan Abrahmov"
-							twitter
-							badge="ambassador"
-						/>
+						{
+							project.ambassadors.map((ambassador: IProjectUser) => (
+								<IdComponent
+									key={ambassador.user.id}
+									URL={'https://bit.ly/dan-abramov'}
+									userName={ambassador.user.username}
+									fullName={ambassador.user.username}
+									twitter
+									badge="ambassador"
+								/>
+							))
+						}
+
 					</HStack>
 				</VStack>
 				<VStack spacing="5px" alignItems="left" marginTop="20px">
@@ -108,9 +160,9 @@ export const Details = () => {
 				<VStack spacing="10px" marginTop="15px" display="flex" flexDirection="column" alignItems="flex-start">
 					<Text fontSize="16px">About</Text>
 					<Text
-					/* Default options */
+						/* Default options */
 						lines={3}
-						more={<><br/>Show more</>}
+						more={<><br />Show more</>}
 						less="Show less"
 						className={classes.aboutText}
 						// AnchorClass="my-anchor-css-class"
@@ -119,34 +171,7 @@ export const Details = () => {
 					// Width={280}
 					// TruncatedEndingComponent={'... '}
 					>
-							Lorem ipsum dolor sit amet, consectetur{' '}
-						<a
-							href="https://www.yahoo.com/"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-								yahoo.com
-						</a>{' '}
-							adipiscing elit, sed do eiusmod tempor incididunt
-											ut labore et dolore magna amet, consectetur adipiscing elit,
-							sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-							Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-							nisi ut aliquip ex Lorem ipsum dolor sit amet, consectetur adipiscing
-							elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-							aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-							laboris nisi ut aliquip ex Lorem ipsum dolor sit amet, consectetur
-							adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-							magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-
-							ut labore et dolore magna amet, consectetur adipiscing elit,
-							sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-							Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-							nisi ut aliquip ex Lorem ipsum dolor sit amet, consectetur adipiscing
-							elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-							aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-							laboris nisi ut aliquip ex Lorem ipsum dolor sit amet, consectetur
-							adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-							magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+						{project.description}
 					</Text>
 				</VStack>
 

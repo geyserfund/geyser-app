@@ -135,7 +135,7 @@ export const ImageBar = () => {
 								className={classes.imageContainer}
 								onClick={() => handlePictureClick(index)}
 							>
-								<Image height="100%" src={val.thumbnail} objectFit="contain"/>
+								<Image height="100%" src={val.thumbnail} objectFit="contain" />
 							</Box>
 						))
 					}
@@ -145,7 +145,7 @@ export const ImageBar = () => {
 			{viewGallery && (
 				<Box
 					className={classes.galleryContainer}
-					// OnClick={handleGalleryClose}
+				// OnClick={handleGalleryClose}
 				>
 					<CloseButton
 						size="lg"
