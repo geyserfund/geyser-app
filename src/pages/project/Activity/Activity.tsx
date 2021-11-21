@@ -4,16 +4,20 @@ import { CloseButton } from '@chakra-ui/close-button';
 import { Textarea } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
-import { SatoshiIcon } from '../../components/icons';
-import { CircularFundProgress } from '../../components/molecules';
-import { IdBar } from '../../components/molecules/IdBar';
-import { BadgeVariant, ButtonComponent, Card, CustomToggle } from '../../components/ui';
-import { isDarkMode, isMobileMode } from '../../utils';
-import { IProject } from '../../interfaces';
-import { useMutation } from '@apollo/client';
-import { MUTATION_FUND_PROJECT } from '../../graphql/mutations/fund';
+import { SatoshiIcon } from '../../../components/icons';
+import { CircularFundProgress } from '../../../components/molecules';
+import { IdBar } from '../../../components/molecules/IdBar';
+import { BadgeVariant, ButtonComponent, Card, CustomToggle } from '../../../components/ui';
+import { IFundingTx, IProject } from '../../../interfaces';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
 // Import { useMutation } from '@apollo/client';
 // import { MUTATION_FUND_PROJECT } from '../../graphql/mutations/fund';
+import { QUERY_GET_FUNDING } from '../../../graphql';
+import { setInterval } from 'timers';
+import { SuccessPage } from './SuccessPage';
+import { QrPage } from './QrPage';
+import { isDarkMode, isMobileMode } from '../../../utils';
 
 const users: IuserInfo[] = [
 	{
@@ -95,18 +99,86 @@ interface IActivityProps {
 	project: IProject
 }
 
+const initialFunding = {
+	id: '',
+	invoiceId: '',
+	paid: false,
+	amount: 0,
+	paymentRequest: '',
+	canceled: false,
+};
+
+let fundInterval:any;
 const Activity = ({ project }: IActivityProps) => {
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
+	const [startedFunding, setStartedFunding] = useState(false);
 	const [btcRate, setBtcRate] = useState(0);
 	const [amount, setAmount] = useState(0);
-	// Const [comment, setComment] = useState('');
+	const [comment, setComment] = useState('');
+	const [anonymous, setAnonymous] = useState(false);
 
-	const [fundProject, { data, loading, error }] = useMutation(MUTATION_FUND_PROJECT);
+	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
+
+	const [fundProject, {
+		data,
+		// Loading,
+		// error,
+	}] = useMutation(MUTATION_FUND_PROJECT);
+
+	const [getFunding, { loading: fundLoading, error: fundError, data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
+		{
+			variables: { fundingTxId: fundingTx.id },
+			fetchPolicy: 'network-only',
+		},
+	);
+
+	console.log('checking fund loading', fundLoading);
+	console.log('checking fund error', fundError);
+	console.log('checking fund data', fundData);
+
+	useEffect(() => {
+		if (fundData && fundData.getFundingTx) {
+			if (fundData.getFundingTx.paid || fundData.getFundingTx.canceled) {
+				clearInterval(fundInterval);
+				setCompletedFunding(true);
+			}
+		}
+	}, [fundData]);
+
+	useEffect(() => {
+		if (completedFunding) {
+			console.log('inside clear');
+			clearInterval(fundInterval);
+		}
+
+		if (startedFunding && !completedFunding) {
+			fundInterval = setInterval(getFunding, 2000);
+		}
+	}, [startedFunding, completedFunding]);
 
 	useEffect(() => {
 		getBitcoinRates();
 	}, []);
+
+	useEffect(() => {
+		if (data && data.fundProject && data.fundProject.success) {
+			console.log('checking funding data', data.fundProject.fundingTx);
+			setFundingTx(data.fundProject.fundingTx);
+			setStartedFunding(true);
+			setCompletedFunding(false);
+		}
+	}, [data]);
+
+	const isDark = isDarkMode();
+	const isMobile = isMobileMode();
+
+	const getBitcoinRates = async () => {
+		const response: any = (await fetch('https://api.coinbase.com/v2/exchange-rates?currency=BTC'));
+		const responseJson = await response.json();
+		const satoshirate = responseJson.data.rates.USD * 0.00000001;
+		setBtcRate(satoshirate);
+	};
 
 	const handleFundProject = () => {
 		setFundpage(false);
@@ -117,27 +189,20 @@ const Activity = ({ project }: IActivityProps) => {
 	};
 
 	const handleFund = () => {
-		setCompletedFunding(true);
 		fundProject({
 			variables: {
 				projectId: project.id,
 				amount,
+				comment,
+				anonymous,
 			},
 		});
 	};
 
-	console.log('checking data loading and error', data, loading, error);
-
-	const isDark = isDarkMode();
-	const isMobile = isMobileMode();
-
-	const getBitcoinRates = async () => {
-		const response: any = (await fetch('https://api.coinbase.com/v2/exchange-rates?currency=BTC'));
-		const responseJson = await response.json();
-		console.log('checking response', responseJson);
-		console.log('checking btc', responseJson.data.rates.USD);
-		const satoshirate = responseJson.data.rates.USD * 0.00000001;
-		setBtcRate(satoshirate);
+	const handleComment = (event: any) => {
+		if (event) {
+			setComment(event.target.value);
+		}
 	};
 
 	const handleInput = (stringv: string, numberv: number) => {
@@ -150,8 +215,6 @@ const Activity = ({ project }: IActivityProps) => {
 
 		setAmount(numberv);
 	};
-
-	console.log('checking project', project);
 
 	const infoPage = () => (
 		<VStack
@@ -233,7 +296,7 @@ const Activity = ({ project }: IActivityProps) => {
 						<NumberInput variant="unstyled" marginLeft="10px" onChange={handleInput} value={amount}>
 							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
 						</NumberInput>
-						<Box position="absolute" right={20}>
+						<Box position="absolute" right={-5}>
 							<SatoshiIcon fontSize="30px" marginRight="10px" marginBottom="5px" />
 						</Box>
 					</Box>
@@ -251,7 +314,7 @@ const Activity = ({ project }: IActivityProps) => {
 					justifyContent="center"
 					alignItems="center"
 				>
-					<Textarea variant="unstyled" fontSize="14px" margin="5px" />
+					<Textarea variant="unstyled" fontSize="14px" margin="5px" value={comment} onChange={handleComment}/>
 				</Box>
 
 			</Box>
@@ -259,7 +322,7 @@ const Activity = ({ project }: IActivityProps) => {
 				{/* <Checkbox colorScheme="green" defaultValue="false">
 					Remain Anonymous
 				</Checkbox> */}
-				<CustomToggle />
+				<CustomToggle value={anonymous} onChange={setAnonymous}/>
 			</Box>
 			<Box width="100%">
 				<ButtonComponent
@@ -276,33 +339,6 @@ const Activity = ({ project }: IActivityProps) => {
 
 		</VStack>);
 
-	const successPage = () => (
-		<VStack
-			padding={isMobile ? '10px 10px' : '10px 20px'}
-			spacing="12px"
-			width="100%"
-			height="100%"
-			overflowY="hidden"
-			position="relative"
-			backgroundColor="brand.primary"
-			alignItems="center"
-			justifyContent="center"
-		>
-			<Text fontSize="30px" width="70%" textAlign="center">
-				21000
-				Successfully Funded!
-			</Text>
-			<ButtonComponent
-				standard
-				leftIcon={<HiOutlineSpeakerphone />}
-				width="100%"
-				onClick={handleFund}
-			>
-				Share project with friends
-			</ButtonComponent>
-		</VStack>
-	);
-
 	return (
 		<Card
 			flex={2}
@@ -316,7 +352,19 @@ const Activity = ({ project }: IActivityProps) => {
 			borderRadius={isMobile ? '22px' : '0px 22px 22px 0px'}
 		>
 
-			{completedFunding ? successPage() : fundPage ? infoPage() : paymentPage()}
+			{completedFunding
+				? <SuccessPage />
+				: startedFunding
+					? <QrPage
+						comment={comment}
+						title={project.title}
+						amount={amount}
+						owner={project.owner.user.username}
+						qrCode={fundingTx.paymentRequest}
+					/>
+					: fundPage
+						? infoPage()
+						: paymentPage()}
 
 		</Card>
 	);

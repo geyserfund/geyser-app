@@ -2,17 +2,15 @@ import { useQuery } from '@apollo/client';
 import { Box, Text } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
 
-import React, { lazy, Suspense } from 'react';
+import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useParams } from 'react-router';
-import { Fallback } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 // Import Loader from '../../components/ui/Loader';
 import { QUERY_GET_PROJECT } from '../../graphql';
 import { isDarkMode, isMobileMode } from '../../utils';
-
-const Activity = lazy(() => import('./Activity'));
-const Details = lazy(() => import('./Details'));
+import Activity from './Activity/Activity';
+import Details from './Details';
 
 const useStyles = createUseStyles({
 	tabListContainer: {
@@ -47,60 +45,58 @@ export const Project = () => {
 		);
 	}
 
-	if (error) {
+	if (error || !data.getProjectByName.success) {
 		return <Text> Something went wrong, Please refresh</Text>;
 	}
 
-	const { project } = data.getProjectByName;
+	if (data.getProjectByName.success) {
+		const { project } = data.getProjectByName;
 
-	console.log('checking data', loading, error, data);
+		console.log('checking data', loading, error, data);
 
-	return (
-		<Box
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
-			height="100%"
-		>
+		return (
 			<Box
-				width="100%"
-				maxWidth="1400px"
-				height="-webkit-fill-available"
-				margin={isMobile ? 0 : '20px 30px'}
-				padding="10px"
 				display="flex"
-				overflow="hidden"
-			>{
-					isMobile ? (
-						<Tabs width="100%" colorScheme="blackAlpha">
-							<TabList className={classes.tabListContainer}>
-								<Tab flex={1}><Text width="100%" textAlign="left" fontSize="24px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Project</Text></Tab>
-								<Tab flex={1}><Text width="100%" textAlign="right" fontSize="24px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Fund</Text></Tab>
-							</TabList>
+				justifyContent="center"
+				alignItems="center"
+				height="100%"
+			>
+				<Box
+					width="100%"
+					maxWidth="1400px"
+					height="-webkit-fill-available"
+					margin={isMobile ? 0 : '20px 30px'}
+					padding="10px"
+					display="flex"
+					overflow="hidden"
+				>{
+						isMobile ? (
+							<Tabs width="100%" colorScheme="blackAlpha">
+								<TabList className={classes.tabListContainer}>
+									<Tab flex={1}><Text width="100%" textAlign="left" fontSize="24px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Project</Text></Tab>
+									<Tab flex={1}><Text width="100%" textAlign="right" fontSize="24px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Fund</Text></Tab>
+								</TabList>
 
-							<TabPanels height="-webkit-fill-available" >
-								<TabPanel padding="10px 0px" height="-webkit-fill-available" >
-									<Suspense fallback={Fallback}>
+								<TabPanels height="-webkit-fill-available" >
+									<TabPanel padding="10px 0px" height="-webkit-fill-available" >
 										<Details project={project} />
-									</Suspense>
-								</TabPanel>
-								<TabPanel padding="10px 0px" height="-webkit-fill-available" >
-									<Suspense fallback={Fallback}>
+									</TabPanel>
+									<TabPanel padding="10px 0px" height="-webkit-fill-available" >
 										<Activity project={project} />
-									</Suspense>
-								</TabPanel>
+									</TabPanel>
 
-							</TabPanels>
-						</Tabs>
-					) : (
-						<Suspense fallback={Fallback}>
-							<Details project={project} />
-							<Activity project={project} />
-						</Suspense>
-					)
-				}
+								</TabPanels>
+							</Tabs>
+						) : (
+							<>
+								<Details project={project} />
+								<Activity project={project} />
+							</>
+						)
+					}
 
+				</Box>
 			</Box>
-		</Box>
-	);
+		);
+	}
 };

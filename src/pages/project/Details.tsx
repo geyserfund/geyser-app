@@ -7,8 +7,7 @@ import TweetEmbed from 'react-tweet-embed';
 import { IdComponent } from '../../components/molecules';
 import { Card, ImageBar, TwitterSkeleton } from '../../components/ui';
 import { IProject, IProjectUser } from '../../interfaces';
-import { isDarkMode, isMobileMode } from '../../utils';
-import { DateTime, Interval } from 'luxon';
+import { getDaysAgo, getTwitterID, isDarkMode, isMobileMode } from '../../utils';
 
 const useStyles = createUseStyles({
 	twitter: {
@@ -43,47 +42,6 @@ export const Details = ({ project }: IActivityProps) => {
 	};
 
 	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';
-
-	const getDaysAgo = (date: string) => {
-		const dateTime = DateTime.fromMillis(parseInt(date, 10));
-		const currentDateTime = DateTime.now();
-
-		const i = Interval.fromDateTimes(dateTime, currentDateTime);
-
-		const days = Math.floor(i.length('days'));
-		if (days === 1) {
-			return 'a day';
-		}
-
-		if (days < 1) {
-			const hours = Math.floor(i.length('hours'));
-			if (hours === 1) {
-				return 'an hour';
-			}
-
-			if (hours < 1) {
-				const minutes = Math.floor(i.length('minutes'));
-				if (hours === 1) {
-					return 'a minute';
-				}
-
-				if (minutes < 1) {
-					return 'just now';
-				}
-
-				return `${minutes} minutes`;
-			}
-
-			return `${hours} hours`;
-		}
-
-		return `${days} days`;
-	};
-
-	const getTwitterID = (url: string) => {
-		const splited = url.split('/');
-		return splited[splited.length - 1];
-	};
 
 	return (
 		<Card
