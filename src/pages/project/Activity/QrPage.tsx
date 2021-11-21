@@ -1,5 +1,5 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
-import React from 'react';
+import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import QRCode from 'react-qr-code';
 import { isMobileMode } from '../../../utils';
@@ -7,6 +7,11 @@ import { isMobileMode } from '../../../utils';
 const useStyles = createUseStyles({
 	blockText: {
 		fontSize: '12px',
+	},
+	copyText: {
+		'& :hover': {
+			cursor: 'pointer',
+		},
 	},
 });
 
@@ -23,6 +28,13 @@ export 	const QrPage = ({
 }:IQrPage) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
+
+	const [copy, setcopy] = useState(false);
+
+	const handleCopy = () => {
+		navigator.clipboard.writeText(qrCode);
+		setcopy(true);
+	};
 
 	return (
 		<VStack
@@ -46,6 +58,9 @@ export 	const QrPage = ({
 				</Box>
 			</Box>
 			<QRCode value={qrCode} />
+			<Box className={classes.copyText}>
+				<Text onClick={handleCopy}>{!copy ? 'Copy Invoice' : 'Invoice Copied'}</Text>
+			</Box>
 
 		</VStack>
 	);
