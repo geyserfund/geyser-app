@@ -38,7 +38,6 @@ export const Details = ({ project }: IActivityProps) => {
 
 	const handleSuccess = () => {
 		settwitterLoading(false);
-		console.log('checking success');
 	};
 
 	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';

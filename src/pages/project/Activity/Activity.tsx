@@ -7,93 +7,24 @@ import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { SatoshiIcon } from '../../../components/icons';
 import { CircularFundProgress } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
-import { BadgeVariant, ButtonComponent, Card, CustomToggle } from '../../../components/ui';
-import { IFundingTx, IProject } from '../../../interfaces';
+import { ButtonComponent, Card, CustomToggle } from '../../../components/ui';
+import { IFundingTx, IProject, IProjectUser } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
-// Import { useMutation } from '@apollo/client';
-// import { MUTATION_FUND_PROJECT } from '../../graphql/mutations/fund';
 import { QUERY_GET_FUNDING } from '../../../graphql';
 import { setInterval } from 'timers';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
 import { isDarkMode, isMobileMode } from '../../../utils';
 
-const users: IuserInfo[] = [
-	{
-		URL: 'https://bit.ly/dan-abramov',
-		userName: 'danAbramov',
-		fullName: 'Dan Abrahmov',
-		twitter: true,
-		badge: 'ambassador',
-		amount: 120,
-	},
-	{
-		URL: 'https://bit.ly/dan-abramov',
-		userName: 'danAbramov',
-		fullName: 'Dan Abrahmov',
-		twitter: true,
-		badge: 'crown',
-		amount: 200000,
-	},
-	{
-		URL: 'https://bit.ly/dan-abramov',
-		userName: 'danAbramov',
-		fullName: 'Dan Abrahmov',
-		twitter: true,
-		badge: 'medal',
-		amount: 200000,
-	},
-	{
-		URL: 'https://bit.ly/dan-abramov',
-		userName: 'danAbramov',
-		fullName: 'Dan Abrahmov',
-		twitter: true,
-		badge: 'earlyFunder',
-		amount: 200000,
-	},
-	{
-		URL: 'https://bit.ly/dan-abramov',
-		userName: 'danAbramov',
-		fullName: 'Dan Abrahmov',
-		twitter: true,
-		badge: 'ownerPending',
-		amount: 200000,
-	},
-	{
-		URL: 'https://bit.ly/dan-abramov',
-		userName: 'danAbramov',
-		fullName: 'Dan Abrahmov',
-		twitter: true,
-		badge: 'ambassador',
-		amount: 200000,
-	},
-	{
-		URL: 'https://bit.ly/dan-abramov',
-		userName: 'danAbramov',
-		fullName: 'Dan Abrahmov',
-		twitter: true,
-		badge: 'ambassador',
-		amount: 200000,
-	},
-	{
-		URL: 'https://bit.ly/dan-abramov',
-		userName: 'danAbramov',
-		fullName: 'Dan Abrahmov',
-		twitter: true,
-		badge: 'ambassador',
-		amount: 200000,
-	},
-
-];
-interface IuserInfo {
-	URL: string;
-	userName: string;
-	fullName: string;
-	twitter: boolean;
-	badge: BadgeVariant;
-	amount: number;
-}
+// Interface IuserInfo {
+// 	URL: string;
+// 	userName: string;
+// 	fullName: string;
+// 	twitter: boolean;
+// 	badge: BadgeVariant;
+// 	amount: number;
+// }
 
 interface IActivityProps {
 	project: IProject
@@ -216,6 +147,10 @@ const Activity = ({ project }: IActivityProps) => {
 		setAmount(numberv);
 	};
 
+	const users: IProjectUser[] = project.funders;
+
+	console.log('checkign users', users);
+
 	const infoPage = () => (
 		<VStack
 			padding={isMobile ? '10px 0px' : '10px 20px'}
@@ -225,7 +160,7 @@ const Activity = ({ project }: IActivityProps) => {
 			overflowY="hidden"
 			margin="10px 15px"
 		>
-			<CircularFundProgress rate={btcRate} goal={170000} amount={parseInt(project.balance, 10)} />
+			<CircularFundProgress rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
 			<ButtonComponent
 				primary
 				standard
@@ -249,7 +184,7 @@ const Activity = ({ project }: IActivityProps) => {
 				<VStack spacing={'8px'} width="100%" overflow="auto" height="calc(100% - 60px)" paddingBottom="30px">
 					{
 						users.map((user, index) => (
-							<IdBar key={index} {...user} />
+							<IdBar key={index} {...user.user} />
 						))
 					}
 				</VStack>

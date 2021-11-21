@@ -6,7 +6,6 @@ import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
-// Import Loader from '../../components/ui/Loader';
 import { QUERY_GET_PROJECT } from '../../graphql';
 import { isDarkMode, isMobileMode } from '../../utils';
 import Activity from './Activity/Activity';
@@ -18,7 +17,6 @@ const useStyles = createUseStyles({
 		'& button': {
 			paddingLeft: 0,
 			paddingRight: 0,
-			// BorderColor: 'black',
 			borderBottomWidth: '3px',
 			boxShadow: 'none !important',
 		},
@@ -31,7 +29,6 @@ export const Project = () => {
 	const isMobile = isMobileMode();
 
 	const { projectId } = useParams<{ projectId: string }>();
-	console.log('checking location object', location);
 
 	const { loading, error, data } = useQuery(QUERY_GET_PROJECT,
 		{
