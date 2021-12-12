@@ -12,7 +12,7 @@ import { ConnectTwitter } from '../molecules';
 export const NavBar = () => {
 	const isMobile = isMobileMode();
 
-	const {isOpen, onOpen, onClose} = useDisclosure();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
 		<>
@@ -36,8 +36,9 @@ export const NavBar = () => {
 								standard
 								circular
 								marginRight="12px"
+								onClick={onOpen}
 							>
-							Login
+								Login
 							</ButtonComponent>
 							<NavMenu />
 						</> : (
@@ -49,7 +50,7 @@ export const NavBar = () => {
 									circular
 									marginRight="12px"
 								>
-								Start Project
+									Start Project
 								</ButtonComponent>
 								<ButtonComponent
 									leftIcon={<Icon as={FiTwitter} />}
@@ -58,7 +59,7 @@ export const NavBar = () => {
 									marginRight="12px"
 									onClick={onOpen}
 								>
-								Login
+									Login
 								</ButtonComponent>
 								<NavMenu />
 							</Box>
@@ -68,7 +69,7 @@ export const NavBar = () => {
 				</Box>
 
 			</Box>
-			<ConnectTwitter isOpen={isOpen} onClose={onClose}/>
+			<ConnectTwitter isOpen={isOpen} onClose={onClose} />
 		</>
 	);
 };

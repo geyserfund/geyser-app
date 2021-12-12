@@ -28,11 +28,11 @@ export interface IProjectUser {
 export interface IUser {
     id: string;
     username: string;
+
     picture: string;
     URL: string;
-	userName: string;
-	fullName: string;
-	twitter: boolean;
-	badge: BadgeVariant;
-	amount: number;
+    fullName: string;
+    twitter: boolean;
+    badge: BadgeVariant;
+    amount: number;
 }

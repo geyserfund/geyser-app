@@ -1,13 +1,13 @@
-import { Box, Text } from '@chakra-ui/layout';
+import { Box, LinkOverlay, Text } from '@chakra-ui/layout';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import TwitterLogin from 'react-twitter-auth';
+// Import TwitterLogin from 'react-twitter-auth';
 import { ButtonComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 interface IConnectTwitter {
-    isOpen: boolean,
+	isOpen: boolean,
 	onClose: () => void,
 }
 
@@ -25,13 +25,13 @@ export const ConnectTwitter = ({
 }: IConnectTwitter) => {
 	const classes = useStyles();
 
-	const handleFailed = () => {
-		console.log('failed');
-	};
+	// Const handleFailed = () => {
+	// 	console.log('failed');
+	// };
 
-	const handleSuccess = () => {
-		console.log('failed');
-	};
+	// const handleSuccess = () => {
+	// 	console.log('failed');
+	// };
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
@@ -41,26 +41,30 @@ export const ConnectTwitter = ({
 				<ModalCloseButton />
 				<ModalBody >
 					<Text>
-                    To create a project you have to first connect to your twitter account so that we can recognize you for your contributions
+						To create a project you have to first connect to your twitter account so that we can recognize you for your contributions
 					</Text>
 					<Box className={classes.twitterContainer}>
-						<TwitterLogin
+						{/* <TwitterLogin
 							loginUrl="http://localhost:4000/auth/twitter"
 							onFailure={handleFailed}
 							onSuccess={handleSuccess}
 							requestTokenUrl="http://localhost:4000/auth/twitter/callback"
 							showIcon={true}
-						>
+						> */}
+						<LinkOverlay href={'http://localhost:4000/auth/twitter'}>
 							<ButtonComponent
 								margin="10px"
 								isFullWidth
 								primary
 								standard
-								leftIcon={<Icon as={SiTwitter} /> }
+								leftIcon={<Icon as={SiTwitter} />}
+
 							>
-                                Login with Twitter
+								Login with Twitter
 							</ButtonComponent>
-						</TwitterLogin>
+						</LinkOverlay>
+
+						{/* </TwitterLogin> */}
 					</Box>
 				</ModalBody>
 			</ModalContent>

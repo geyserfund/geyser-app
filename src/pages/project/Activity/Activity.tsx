@@ -17,15 +17,6 @@ import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
 import { isDarkMode, isMobileMode } from '../../../utils';
 
-// Interface IuserInfo {
-// 	URL: string;
-// 	userName: string;
-// 	fullName: string;
-// 	twitter: boolean;
-// 	badge: BadgeVariant;
-// 	amount: number;
-// }
-
 interface IActivityProps {
 	project: IProject
 }
@@ -39,7 +30,7 @@ const initialFunding = {
 	canceled: false,
 };
 
-let fundInterval:any;
+let fundInterval: any;
 const Activity = ({ project }: IActivityProps) => {
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
@@ -249,7 +240,7 @@ const Activity = ({ project }: IActivityProps) => {
 					justifyContent="center"
 					alignItems="center"
 				>
-					<Textarea variant="unstyled" fontSize="14px" margin="5px" value={comment} onChange={handleComment}/>
+					<Textarea variant="unstyled" fontSize="14px" margin="5px" value={comment} onChange={handleComment} />
 				</Box>
 
 			</Box>
@@ -257,7 +248,7 @@ const Activity = ({ project }: IActivityProps) => {
 				{/* <Checkbox colorScheme="green" defaultValue="false">
 					Remain Anonymous
 				</Checkbox> */}
-				<CustomToggle value={anonymous} onChange={setAnonymous}/>
+				<CustomToggle value={anonymous} onChange={setAnonymous} />
 			</Box>
 			<Box width="100%">
 				<ButtonComponent

@@ -1,8 +1,9 @@
 import { useQuery } from '@apollo/client';
 import { Box, Text } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
+import Cookies from 'js-cookie';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
@@ -35,6 +36,11 @@ export const Project = () => {
 			variables: { name: projectId },
 		},
 	);
+
+	useEffect(() => {
+		console.log('checking accessToken', Cookies.get('accessToken')); // => 'value'
+		console.log('checking refreshToken', Cookies.get('refreshToken')); // => 'value'
+	}, []);
 
 	if (loading) {
 		return (
