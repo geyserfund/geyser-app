@@ -3,6 +3,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import Cookies from 'js-cookie';
 import { REACT_APP_GRAPHQL_ENDPOINT } from '../constants';
+// Import { onError } from "@apollo/client/link/error";
 
 const httpLink = createHttpLink({
 	uri: REACT_APP_GRAPHQL_ENDPOINT,
@@ -20,29 +21,29 @@ const authLink = setContext((_, { headers }) => {
 	};
 });
 
-const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-	if (graphQLErrors) {
-		for (let err of graphQLErrors) {
-			switch (err.extensions.code) {
-				// Apollo Server sets code to UNAUTHENTICATED
-				// when an AuthenticationError is thrown in a resolver
-				case 'UNAUTHENTICATED':
+// Const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+// 	if (graphQLErrors) {
+// 		for (let err of graphQLErrors) {
+// 			switch (err.extensions.code) {
+// 				// Apollo Server sets code to UNAUTHENTICATED
+// 				// when an AuthenticationError is thrown in a resolver
+// 				case 'UNAUTHENTICATED':
 
-					// Modify the operation context with a new token
-					const oldHeaders = operation.getContext().headers;
-					operation.setContext({
-						headers: {
-							...oldHeaders,
-							authorization: getNewToken(),
-						},
-					});
-					// Retry the request, returning the new observable
-					return forward(operation);
-			}
-		}
-	}
+// 					// Modify the operation context with a new token
+// 					const oldHeaders = operation.getContext().headers;
+// 					operation.setContext({
+// 						headers: {
+// 							...oldHeaders,
+// 							authorization: getNewToken(),
+// 						},
+// 					});
+// 					// Retry the request, returning the new observable
+// 					return forward(operation);
+// 			}
+// 		}
+// 	}
 
-	export const client = new ApolloClient({
-		link: authLink.concat(httpLink),
-		cache: new InMemoryCache(),
-	});
+export const client = new ApolloClient({
+	link: authLink.concat(httpLink),
+	cache: new InMemoryCache(),
+});
