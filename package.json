@@ -17,6 +17,7 @@
     "@types/react-dom": "^16.9.14",
     "@types/react-image-gallery": "^1.0.5",
     "@types/react-show-more-text": "^1.4.1",
+    "apollo-link": "^1.2.14",
     "classnames": "^2.3.1",
     "framer-motion": "^4.1.17",
     "graphql": "^15.5.2",
