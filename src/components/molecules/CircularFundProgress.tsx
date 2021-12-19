@@ -6,14 +6,19 @@ import { isDarkMode } from '../../utils';
 
 interface ICircularFundProgress {
 	amount: number;
-	goal?: number;
+	goal: number;
+	rate: number
 }
 
-export const CircularFundProgress = ({ amount }: ICircularFundProgress) => {
+export const CircularFundProgress = ({ goal, rate, amount }: ICircularFundProgress) => {
+	console.log('rate', rate);
 	const isDark = isDarkMode();
+	const goalUSD = (goal * rate).toFixed(2);
+	const amountUSD = (amount * rate).toFixed(2);
+	const percentage = (parseFloat(amountUSD) / parseFloat(goalUSD)) * 100;
 	return (
 		<CircularProgress
-			value={20}
+			value={percentage}
 			size="208px"
 			thickness="6px"
 			color="brand.primary"
@@ -27,7 +32,7 @@ export const CircularFundProgress = ({ amount }: ICircularFundProgress) => {
 				<Stat textAlign="center">
 					<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Funded</StatLabel>
 					<StatNumber>{amount} 丰</StatNumber>
-					<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>$0.1 of goal ($259)</StatHelpText>
+					<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`$${amountUSD} of goal ($${goalUSD})`}</StatHelpText>
 				</Stat>
 			</Box>
 		</CircularProgress>

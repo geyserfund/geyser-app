@@ -53,13 +53,19 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const CustomToggle = () => {
+interface ICustomToggle {
+	value: boolean;
+	onChange: any;
+}
+
+export const CustomToggle = ({value, onChange}:ICustomToggle) => {
 	const classes = useStyles();
 
-	const [anonymous, setAnonymous] = useState(false);
+	const [anonymous, setAnonymous] = useState(value);
 
 	const handleToggle = () => {
 		setAnonymous(!anonymous);
+		onChange(!anonymous);
 	};
 
 	console.log('sdf');
