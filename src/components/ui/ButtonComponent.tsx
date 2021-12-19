@@ -36,14 +36,14 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const ButtonComponent = ({ className, primary, children, standard, circular, backgroundColor, ...rest }: IButtonComponentP) => {
+export const ButtonComponent = ({ className, variant, primary, children, standard, circular, backgroundColor, ...rest }: IButtonComponentP) => {
 	const classes = useStyles();
 	const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark);
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
 	return (
 		<Button
 			className={classNames(className, { [classes.container]: standard }, { primary })}
-			variant="solid"
+			variant={variant || 'solid'}
 			minWidth={standard ? '200px' : ''}
 			backgroundColor={backgroundColor ? backgroundColor : primary ? 'brand.primary' : bgColor}
 			borderRadius={circular ? '50px' : standard ? '12px' : undefined}

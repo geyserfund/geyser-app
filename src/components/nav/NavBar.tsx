@@ -8,6 +8,7 @@ import { NavMenu } from './NavMenu';
 import { isMobileMode } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { ConnectTwitter } from '../molecules';
+import { Button } from '@chakra-ui/react';
 
 export const NavBar = () => {
 	const isMobile = isMobileMode();
@@ -20,6 +21,9 @@ export const NavBar = () => {
 				display="flex"
 				width="100%"
 				justifyContent="center"
+				background="brand.bgGrey2"
+				borderBottom={'2px solid #E9E9E9'}
+				boxSizing="border-box"
 			>
 				<Box
 					display="flex"
@@ -47,20 +51,19 @@ export const NavBar = () => {
 									leftIcon={<AddIcon />}
 									primary
 									standard
-									circular
 									marginRight="12px"
 								>
 									Start Project
 								</ButtonComponent>
-								<ButtonComponent
-									leftIcon={<Icon as={FiTwitter} />}
-									standard
-									circular
+								<Button
+									variant="ghost"
 									marginRight="12px"
 									onClick={onOpen}
+									width="150px"
+									fontSize="15px"
 								>
 									Login
-								</ButtonComponent>
+								</Button>
 								<NavMenu />
 							</Box>
 						)
