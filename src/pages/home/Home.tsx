@@ -5,7 +5,7 @@ import { Logo } from '../../components/nav/Logo';
 import { ButtonComponent } from '../../components/ui';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
 import { ProjectCard } from '../../components/molecules';
-import { isMobileMode } from '../../utils';
+import { isDarkMode, isMobileMode } from '../../utils';
 
 export const Home = () => {
 	useEffect(() => {
@@ -14,6 +14,7 @@ export const Home = () => {
 	}, []);
 
 	const isMobile = isMobileMode();
+	const isDark = isDarkMode();
 
 	return (
 		<Box
@@ -23,7 +24,7 @@ export const Home = () => {
 		>
 			<Box
 				flex={1}
-				background="brand.bgGrey2"
+				background={isDark ? 'brand.bgDarkMode' : 'brand.bgGrey2'}
 				display="flex"
 				justifyContent="center"
 				alignItems="center"

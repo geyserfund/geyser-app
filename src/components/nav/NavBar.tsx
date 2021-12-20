@@ -5,13 +5,14 @@ import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
 import { Box } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
-import { isMobileMode } from '../../utils';
+import { isDarkMode, isMobileMode } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { ConnectTwitter } from '../molecules';
 import { Button } from '@chakra-ui/react';
 
 export const NavBar = () => {
 	const isMobile = isMobileMode();
+	const isDark = isDarkMode();
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -21,7 +22,7 @@ export const NavBar = () => {
 				display="flex"
 				width="100%"
 				justifyContent="center"
-				background="brand.bgGrey2"
+				background={isDark ? 'brand.bgDarkMode' : 'brand.bgGrey2'}
 				borderBottom={'2px solid #E9E9E9'}
 				boxSizing="border-box"
 			>
