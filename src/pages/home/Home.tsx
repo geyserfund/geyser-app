@@ -101,7 +101,7 @@ export const Home = () => {
 					marginBottom="20px"
 				/>
 				<ProjectCard
-					open
+					// Open
 					title="Educating youths in Nigeria"
 					name="running-with-bitcoin"
 					marginBottom="20px"

@@ -7,7 +7,7 @@ import { Card, ICard } from '../ui';
 
 interface IProjectCardProp extends ICard {
     title: string
-    open: boolean
+    open?: boolean
 	name: string
 	className?: string
 }
