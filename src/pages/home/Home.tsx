@@ -4,6 +4,8 @@ import { Box, IconButton, Text } from '@chakra-ui/react';
 import { Logo } from '../../components/nav/Logo';
 import { ButtonComponent } from '../../components/ui';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+import { ProjectCard } from '../../components/molecules';
+import { isMobileMode } from '../../utils';
 
 export const Home = () => {
 	useEffect(() => {
@@ -11,10 +13,13 @@ export const Home = () => {
 		console.log('checking refreshToken', Cookies.get('refreshToken')); // => 'value'
 	}, []);
 
+	const isMobile = isMobileMode();
+
 	return (
 		<Box
 			display={'flex'}
 			height="100%"
+			flexDirection={isMobile ? 'column' : 'row' }
 		>
 			<Box
 				flex={1}
@@ -24,9 +29,10 @@ export const Home = () => {
 				alignItems="center"
 			>
 				<Box
-					min-minWidth="485px"
+					minWidth="280px"
 					width="60%"
 					marginBottom="30px"
+					marginTop="10px"
 				>
 					<Box marginBottom="40px" display="flex" justifyContent="space-between">
 						<Logo />
@@ -69,12 +75,36 @@ export const Home = () => {
 						</ButtonComponent>
 					</Box>
 				</Box>
-
 			</Box>
 			<Box
-				width="380px"
+				width={isMobile ? '100%' : '380px'}
+				padding="20px 15px"
+				overflowY={isMobile ? undefined : 'auto'}
+				display="flex"
+				flexDirection="column"
+				alignItems="center"
 			>
-				Right
+				<Text alignSelf="flex-start" fontSize="20px" color="brand.textGrey" marginBottom="10px">
+					CROWDFUNDING PROJECTS
+				</Text>
+				<ProjectCard
+					open
+					title="Bitcoin Education in Congo"
+					name="running-with-bitcoin"
+					marginBottom="20px"
+				/>
+				<ProjectCard
+					open
+					title="Educating youths in Nigeria"
+					name="running-with-bitcoin"
+					marginBottom="20px"
+				/>
+				<ProjectCard
+					open
+					title="Educating youths in Nigeria"
+					name="running-with-bitcoin"
+					marginBottom="20px"
+				/>
 			</Box>
 		</Box>
 	);
