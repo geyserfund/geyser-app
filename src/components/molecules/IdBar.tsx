@@ -9,7 +9,7 @@ interface IIdBar extends IIdComponent, HTMLChakraProps<'div'> {
 	amount: number;
 }
 
-export const IdBar = ({ URL, userName, fullName, twitter, badge, amount, ...rest }: IIdBar) => {
+export const IdBar = ({ URL, username, fullName, twitter, badge, amount, ...rest }: IIdBar) => {
 	const { colorMode } = useColorMode();
 	const dark = colorMode === 'dark';
 	return (
@@ -22,7 +22,7 @@ export const IdBar = ({ URL, userName, fullName, twitter, badge, amount, ...rest
 			borderRadius="12px"
 			{...rest}
 		>
-			<IdComponent {...{ URL, userName, fullName, twitter, badge }} />
+			<IdComponent {...{ URL, username, fullName, twitter, badge }} />
 			<Text>{`${amount} 丰`}</Text>
 		</Box>
 	);

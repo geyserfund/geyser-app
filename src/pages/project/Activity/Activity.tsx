@@ -1,13 +1,10 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
-import { NumberInput, NumberInputField } from '@chakra-ui/number-input';
-import { CloseButton } from '@chakra-ui/close-button';
-import { Textarea } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { SatoshiIcon } from '../../../components/icons';
 import { CircularFundProgress } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
-import { ButtonComponent, Card, CustomToggle, FundingStatus } from '../../../components/ui';
+import { ButtonComponent, Card, FundingStatus } from '../../../components/ui';
 import { IFundingTx, IProject, IProjectUser } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
@@ -16,6 +13,7 @@ import { setInterval } from 'timers';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
 import { getDaysLeft, isDarkMode, isMobileMode } from '../../../utils';
+import { PaymentPage } from './PaymentPage';
 
 interface IActivityProps {
 	project: IProject
@@ -121,23 +119,6 @@ const Activity = ({ project }: IActivityProps) => {
 		});
 	};
 
-	const handleComment = (event: any) => {
-		if (event) {
-			setComment(event.target.value);
-		}
-	};
-
-	const handleInput = (stringv: string, numberv: number) => {
-		console.log('Checking input', stringv, numberv);
-
-		if (!numberv) {
-			setAmount(0);
-			return;
-		}
-
-		setAmount(numberv);
-	};
-
 	const users: IProjectUser[] = project.funders;
 
 	console.log('checkign users', users);
@@ -185,88 +166,6 @@ const Activity = ({ project }: IActivityProps) => {
 			</Box>
 		</VStack>);
 
-	const paymentPage = () => (
-		<VStack
-			padding={isMobile ? '10px 0px' : '10px 20px'}
-			margin="10px 15px"
-			spacing="12px"
-			width="100%"
-			height="100%"
-			overflowY="hidden"
-			paddingTop="40px"
-			position="relative"
-		>
-			<CloseButton
-				borderRadius="50%"
-				position="absolute"
-				right="10px"
-				top="10px"
-				onClick={handleCloseButton}
-			/>
-			<Box width="100%" >
-				<Text lineHeight="26px">Send amount</Text>
-				<Box
-					backgroundColor="brand.bgGreen"
-					height="85px"
-					borderRadius="12px"
-					display="flex"
-					flexDirection="column"
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Box
-						display="flex"
-						justifyContent="center"
-						alignItems="center"
-						width="80%"
-						position="relative"
-					>
-						<NumberInput variant="unstyled" marginLeft="10px" onChange={handleInput} value={amount}>
-							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
-						</NumberInput>
-						<Box position="absolute" right={-5}>
-							<SatoshiIcon fontSize="30px" marginRight="10px" marginBottom="5px" />
-						</Box>
-					</Box>
-					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * amount}`}</Text>
-				</Box>
-
-			</Box>
-			<Box width="100%" >
-				<Text lineHeight="26px">Comment</Text>
-				<Box
-					backgroundColor="brand.bgGreen"
-					height="85px"
-					borderRadius="12px"
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Textarea variant="unstyled" fontSize="14px" margin="5px" value={comment} onChange={handleComment} />
-				</Box>
-
-			</Box>
-			<Box width="100%">
-				{/* <Checkbox colorScheme="green" defaultValue="false">
-					Remain Anonymous
-				</Checkbox> */}
-				<CustomToggle value={anonymous} onChange={setAnonymous} />
-			</Box>
-			<Box width="100%">
-				<ButtonComponent
-					primary
-					standard
-					leftIcon={<SatoshiIcon />}
-					width="100%"
-					marginTop="15px"
-					onClick={handleFund}
-				>
-					Fund project
-				</ButtonComponent>
-			</Box>
-
-		</VStack>);
-
 	return (
 		<Card
 			flex={2}
@@ -291,7 +190,19 @@ const Activity = ({ project }: IActivityProps) => {
 					/>
 					: fundPage
 						? infoPage()
-						: paymentPage()}
+						: <PaymentPage
+							{...{isMobile,
+								handleCloseButton,
+								btcRate,
+								amount,
+								setAmount,
+								comment,
+								setComment,
+								anonymous,
+								setAnonymous,
+								handleFund }}
+						/>
+			}
 
 		</Card>
 	);
