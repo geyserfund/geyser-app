@@ -2,6 +2,7 @@ import { Box, CloseButton, NumberInput, NumberInputField, Text, Textarea, VStack
 import React, { useState } from 'react';
 import { SatoshiIcon } from '../../../components/icons';
 import { ButtonComponent, CustomToggle, ErrorBox } from '../../../components/ui';
+import { isDarkMode } from '../../../utils';
 
 interface IPaymentPageProps {
     isMobile: boolean
@@ -107,7 +108,7 @@ export const PaymentPage = ({
 							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
 						</NumberInput>
 						<Box position="absolute" right={-5}>
-							<SatoshiIcon fontSize="30px" marginRight="10px" marginBottom="5px" />
+							<SatoshiIcon isDark={isDarkMode()} fontSize="30px" marginRight="10px" marginBottom="5px" />
 						</Box>
 					</Box>
 					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * amount}`}</Text>

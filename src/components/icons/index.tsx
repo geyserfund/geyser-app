@@ -10,9 +10,9 @@ import TrophyPng from '../../assets/trophy.png';
 import HourglassPng from '../../assets/hourglass.png';
 import SatoshiPng from '../../assets/satoshi.png';
 
-export const SatoshiIcon = ({ scale = 1, wrapperClass, ...rest }: any) => (
+export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, ...rest }: any) => (
 	<Box padding="3px 0px" className={wrapperClass}>
-		<Image height={`${26 * scale}px`} width={`${14 * scale}px`} src={SatoshiPng} alt="satoshi" {...rest} />
+		<Image filter={isDark ? 'invert(100%)' : undefined } height={`${26 * scale}px`} width={`${14 * scale}px`} src={SatoshiPng} alt="satoshi" {...rest} />
 	</Box>
 );
 

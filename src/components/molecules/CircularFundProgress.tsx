@@ -62,7 +62,7 @@ export const CircularFundProgress = ({ goal, rate, amount }: ICircularFundProgre
 	const getStat = () => (
 		<Stat textAlign="center">
 			<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Funded</StatLabel>
-			<StatNumber className="amount-label-sat" position="relative">{amount} <SatoshiIcon wrapperClass={classes.satoshi} /></StatNumber>
+			<StatNumber className="amount-label-sat" position="relative">{amount} <SatoshiIcon isDark={isDark} wrapperClass={classes.satoshi} /></StatNumber>
 			<StatNumber className="amount-label-usd" position="relative">{'$'}{amountUSD} </StatNumber>
 			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of ${goalUSD} goal`}</StatHelpText>
 		</Stat>
