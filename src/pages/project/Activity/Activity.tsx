@@ -15,7 +15,7 @@ import { QUERY_GET_FUNDING } from '../../../graphql';
 import { setInterval } from 'timers';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
-import { isDarkMode, isMobileMode } from '../../../utils';
+import { getDaysLeft, isDarkMode, isMobileMode } from '../../../utils';
 
 interface IActivityProps {
 	project: IProject
@@ -153,6 +153,7 @@ const Activity = ({ project }: IActivityProps) => {
 		>
 			<FundingStatus open={true}/>
 			<CircularFundProgress rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
+			<Text>{`${getDaysLeft(project.expiresAt)} to go`}</Text>
 			<ButtonComponent
 				primary
 				standard
