@@ -88,7 +88,7 @@ export const Details = ({ project }: IActivityProps) => {
 						<Text fontSize="16px">Project Owner:</Text>
 						<IdComponent
 							URL={project.owner.user.picture}
-							userName={project.owner.user.username}
+							username={project.owner.user.username}
 							fullName={project.owner.user.username}
 							twitter
 							badge="owner"
@@ -101,7 +101,7 @@ export const Details = ({ project }: IActivityProps) => {
 								<IdComponent
 									key={ambassador.user.id}
 									URL={'https://bit.ly/dan-abramov'}
-									userName={ambassador.user.username}
+									username={ambassador.user.username}
 									fullName={ambassador.user.username}
 									twitter
 									badge="ambassador"
