@@ -7,7 +7,7 @@ import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { SatoshiIcon } from '../../../components/icons';
 import { CircularFundProgress } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
-import { ButtonComponent, Card, CustomToggle } from '../../../components/ui';
+import { ButtonComponent, Card, CustomToggle, FundingStatus } from '../../../components/ui';
 import { IFundingTx, IProject, IProjectUser } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
@@ -151,6 +151,7 @@ const Activity = ({ project }: IActivityProps) => {
 			overflowY="hidden"
 			margin="10px 15px"
 		>
+			<FundingStatus open={true}/>
 			<CircularFundProgress rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
 			<ButtonComponent
 				primary
@@ -269,7 +270,6 @@ const Activity = ({ project }: IActivityProps) => {
 		<Card
 			flex={2}
 			maxWidth={isMobile ? 'auto' : '450px'}
-			// Padding="10px 15px"
 			display="flex"
 			flexDirection="column"
 			justifyContent="flex-start"

@@ -1,13 +1,14 @@
-import { Box, Image, Text } from '@chakra-ui/react';
+import { Image, Text } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
-import { Card, ICard } from '../ui';
+import { isDarkMode } from '../../utils';
+import { Card, FundingStatus, ICard } from '../ui';
 
 interface IProjectCardProp extends ICard {
-    title: string
-    open?: boolean
+	title: string
+	open?: boolean
 	name: string
 	className?: string
 }
@@ -20,9 +21,10 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const ProjectCard = ({title, open, name, className, ...rest}: IProjectCardProp) => {
+export const ProjectCard = ({ title, open, name, className, ...rest }: IProjectCardProp) => {
 	const classes = useStyles();
 	const history = useHistory();
+	const isDark = isDarkMode();
 
 	const handleCardCLick = () => {
 		history.push(`/project/${name}`);
@@ -30,7 +32,9 @@ export const ProjectCard = ({title, open, name, className, ...rest}: IProjectCar
 
 	return (
 		<Card
-			className={ classNames(classes.container, className)}
+			className={classNames(classes.container, className)}
+			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : undefined}
+			borderRadius="5px"
 			height="fit-content"
 			padding="5px"
 			display="flex"
@@ -42,18 +46,9 @@ export const ProjectCard = ({title, open, name, className, ...rest}: IProjectCar
 			width="100%"
 			{...rest}
 		>
-			<Image src="https://picsum.photos/500/600" height="150px" width="100%" borderRadius="5px" marginBottom="10px"/>
+			<Image src="https://picsum.photos/500/600" height="150px" width="100%" borderRadius="5px" marginBottom="10px" />
 			<Text fontSize="15px" marginBottom="10px"> {title}</Text>
-			<Box display="flex" alignItems="center">
-				<Box
-					borderRadius="50%"
-					backgroundColor={open ? 'brand.lightGreen' : 'red'}
-					height="10px"
-					width="10px"
-					marginRight="15px"
-				/>
-				<Text>{open ? 'CROWDFUNDING OPEN' : 'CROWDFUNDING CLOSED'}</Text>
-			</Box>
+			<FundingStatus open={open}/>
 		</Card>
 	);
 };

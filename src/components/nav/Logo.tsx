@@ -9,20 +9,23 @@ import { useColorMode } from '@chakra-ui/color-mode';
 import { useMediaQuery } from '@chakra-ui/media-query';
 import { HTMLChakraProps } from '@chakra-ui/system';
 
-interface ILogoP extends HTMLChakraProps<'div'>{
+interface ILogoP extends HTMLChakraProps<'div'> {
 	className?: string;
 	imageClassName?: string;
+	full?: boolean;
 }
 
-export const Logo = ({className, imageClassName, ...rest}: ILogoP) => {
+export const Logo = ({ className, imageClassName, full, ...rest }: ILogoP) => {
 	const { colorMode } = useColorMode();
 	const [isLargerThan720] = useMediaQuery('(min-width: 900px)');
 
-	const imageToUse = colorMode === 'light' ? isLargerThan720 ? LogoNameLight : LogoLight : isLargerThan720 ? LogoNameDark : LogoDark;
+	const useFullOne = isLargerThan720 || full;
+
+	const imageToUse = colorMode === 'light' ? useFullOne ? LogoNameLight : LogoLight : useFullOne ? LogoNameDark : LogoDark;
 
 	return (
 		<Box className={className} {...rest}>
-			<Image className={imageClassName} height="40px" src={imageToUse} alt="geyser logo image" objectFit="contain"/>
+			<Image className={imageClassName} height="40px" src={imageToUse} alt="geyser logo image" objectFit="contain" />
 		</Box>
 	);
 };
