@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import TweetEmbed from 'react-tweet-embed';
 import { IdComponent } from '../../components/molecules';
-import { Card, ImageBar, TwitterSkeleton } from '../../components/ui';
+import { ImageBar, TwitterSkeleton } from '../../components/ui';
 import { IProject, IProjectUser } from '../../interfaces';
 import { getDaysAgo, getTwitterID, isDarkMode, isMobileMode } from '../../utils';
 
@@ -43,10 +43,9 @@ export const Details = ({ project }: IActivityProps) => {
 	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';
 
 	return (
-		<Card
-			backgroundColor={isDark ? 'brand.bgDark' : 'brand.bgGrey'}
+		<Box
+			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
 			flex={3}
-			borderRadius={isMobile ? '22px' : '22px 0px 0px 22px'}
 			height="100%"
 			overflow="hidden"
 		>
@@ -133,7 +132,7 @@ export const Details = ({ project }: IActivityProps) => {
 				</VStack>
 
 			</Box>
-		</Card>
+		</Box>
 	);
 };
 

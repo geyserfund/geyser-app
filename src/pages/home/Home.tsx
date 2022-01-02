@@ -85,7 +85,7 @@ export const Home = () => {
 				alignItems="center"
 				backgroundColor={isDark ? 'brand.bglightDarkMode' : 'bgWhite'}
 			>
-				<Text alignSelf="flex-start" fontSize="15px" color="brand.textGrey" marginBottom="10px">
+				<Text alignSelf="flex-start" fontSize="15px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'} marginBottom="10px">
 					CROWDFUNDING PROJECTS
 				</Text>
 				<ProjectCard

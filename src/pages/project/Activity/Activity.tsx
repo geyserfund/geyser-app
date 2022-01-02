@@ -132,7 +132,7 @@ const Activity = ({ project }: IActivityProps) => {
 			overflowY="hidden"
 			margin="10px 15px"
 		>
-			<FundingStatus open={true}/>
+			<FundingStatus open={true} />
 			<CircularFundProgress rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
 			<Text>{`${getDaysLeft(project.expiresAt)} to go`}</Text>
 			<ButtonComponent
@@ -175,7 +175,6 @@ const Activity = ({ project }: IActivityProps) => {
 			justifyContent="flex-start"
 			alignItems="center"
 			backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
-			borderRadius={isMobile ? '22px' : '0px 22px 22px 0px'}
 		>
 
 			{completedFunding
@@ -191,7 +190,8 @@ const Activity = ({ project }: IActivityProps) => {
 					: fundPage
 						? infoPage()
 						: <PaymentPage
-							{...{isMobile,
+							{...{
+								isMobile,
 								handleCloseButton,
 								btcRate,
 								amount,
@@ -200,7 +200,8 @@ const Activity = ({ project }: IActivityProps) => {
 								setComment,
 								anonymous,
 								setAnonymous,
-								handleFund }}
+								handleFund,
+							}}
 						/>
 			}
 

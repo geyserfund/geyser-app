@@ -63,16 +63,26 @@ export const NavBar = () => {
 					<Logo />
 					{
 						isMobile ? <>
-							<ButtonComponent
-								leftIcon={<Icon as={FiTwitter} />}
-								standard
-								circular
-								marginRight="12px"
-								onClick={onOpen}
-							>
-								Login
-							</ButtonComponent>
-							<NavMenu />
+							{
+								user
+									? <ButtonComponent
+										className={classes.userInfo}
+										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+										standard
+									>
+										{user.twitterHandle}
+									</ButtonComponent>
+									: <ButtonComponent
+										leftIcon={<Icon as={FiTwitter} />}
+										standard
+										circular
+										marginRight="12px"
+										onClick={onOpen}
+									>
+										Login
+									</ButtonComponent>
+							}
+							<NavMenu />d
 						</> : (
 							<Box>
 								<ButtonComponent
@@ -87,7 +97,7 @@ export const NavBar = () => {
 									user
 										? <ButtonComponent
 											className={classes.userInfo}
-											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl}/>}
+											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
 											standard
 										>
 											{user.twitterHandle}
@@ -98,7 +108,7 @@ export const NavBar = () => {
 											marginRight="12px"
 											onClick={onOpen}
 										>
-										Login
+											Login
 										</ButtonComponent>
 								}
 

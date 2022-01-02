@@ -5,7 +5,6 @@ import Cookies from 'js-cookie';
 import { REACT_APP_GRAPHQL_ENDPOINT } from '../constants';
 import { onError } from '@apollo/client/link/error';
 import { customHistory } from '.';
-// Import { customHistory } from '.';
 
 const httpLink = createHttpLink({
 	uri: REACT_APP_GRAPHQL_ENDPOINT,
@@ -15,11 +14,17 @@ const authLink = setContext((_, { headers }) => {
 	// Get the authentication token from local storage if it exists
 	const token = Cookies.get('accessToken');
 	// Return the headers to the context so httpLink can read them
+	if (token) {
+		return {
+			headers: {
+				...headers,
+				authorization: token ? `Bearer ${token}` : '',
+			},
+		};
+	}
+
 	return {
-		headers: {
-			...headers,
-			authorization: token ? `Bearer ${token}` : '',
-		},
+		headers,
 	};
 });
 
@@ -28,21 +33,22 @@ const errorLink = onError(({ graphQLErrors,
 	forward,
 }) => {
 	if (graphQLErrors) {
-		console.log('Checking graphQL errors', graphQLErrors);
 		for (const err of graphQLErrors) {
 			if (err && err.extensions && err.extensions.code) {
 				if (err.extensions.code === 'UNAUTHENTICATED') {
 					return new Observable(observer => {
 						const refreshToken = Cookies.get('refreshToken');
-
 						fetch('http://localhost:4000/auth/refresh-token', {
 							method: 'get',
-							headers: {Authorization: `Bearer ${refreshToken}`},
-
+							headers: { Authorization: `Bearer ${refreshToken}` },
 						}).then(response => {
+							console.log('cbecking response', response);
 							if (response.status === 401) {
-								customHistory.push('/unauthorized');
-								return;
+								if (!err.path?.includes('getUser')) {
+									customHistory.push(customHistory.location.pathname, { loggedOut: true });
+								}
+
+								throw new Error('refreshTokenexpired');
 							}
 
 							return response.json();
