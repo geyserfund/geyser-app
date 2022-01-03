@@ -12,7 +12,7 @@ import { QUERY_GET_FUNDING } from '../../../graphql';
 import { setInterval } from 'timers';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
-import { getDaysLeft, isDarkMode, isMobileMode } from '../../../utils';
+import { getDaysLeft, isDarkMode, isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 
 interface IActivityProps {
@@ -40,10 +40,12 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 
+	const {toast} = useNotification();
+
 	const [fundProject, {
 		data,
 		// Loading,
-		// error,
+		error: invoiceError,
 	}] = useMutation(MUTATION_FUND_PROJECT);
 
 	const [getFunding, { loading: fundLoading, error: fundError, data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
@@ -52,6 +54,18 @@ const Activity = ({ project }: IActivityProps) => {
 			fetchPolicy: 'network-only',
 		},
 	);
+
+	console.log('Chceking invoice error', invoiceError);
+
+	// UseEffect(() => {
+	// 	if (invoiceError) {
+	// 		toast({
+	// 			title: 'Something went wrong',
+	// 			description: 'Please refresh the page and try again',
+	// 			status: 'error',
+	// 		});
+	// 	}
+	// }, [invoiceError]);
 
 	console.log('checking fund loading', fundLoading);
 	console.log('checking fund error', fundError);
@@ -109,14 +123,23 @@ const Activity = ({ project }: IActivityProps) => {
 	};
 
 	const handleFund = () => {
-		fundProject({
-			variables: {
-				projectId: project.id,
-				amount,
-				comment,
-				anonymous,
-			},
-		});
+		try {
+			fundProject({
+				variables: {
+					projectId: project.id,
+					amount,
+					comment,
+					anonymous,
+				},
+			});
+		} catch (error) {
+			console.log('checking error', error);
+			toast({
+				title: 'œSomething went wrong',
+				description: 'Please refresh the page and try again',
+				status: 'error',
+			});
+		}
 	};
 
 	const users: IProjectUser[] = project.funders;

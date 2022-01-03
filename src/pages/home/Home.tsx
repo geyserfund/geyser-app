@@ -41,12 +41,12 @@ export const Home = () => {
 						<Box>
 							<IconButton
 								background={'none'}
-								ariaLabel="twitter"
+								aria-label="twitter"
 								icon={<FaTwitter fontSize="25px" />}
 							/>
 							<IconButton
 								background={'none'}
-								ariaLabel="telegram"
+								aria-label="telegram"
 								icon={<FaTelegramPlane fontSize="25px" />}
 								marginLeft="5px"
 							/>

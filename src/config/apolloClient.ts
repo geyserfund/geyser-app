@@ -80,6 +80,8 @@ const errorLink = onError(({ graphQLErrors,
 						});
 					});
 				}
+
+				console.log('checking error inside errorLink', err);
 			}
 		}
 	}

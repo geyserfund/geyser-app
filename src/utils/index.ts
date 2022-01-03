@@ -4,3 +4,4 @@ export * from './isMobileMode';
 export * from './stringOperation';
 export * from './dateOperations';
 export * from './logout';
+export * from './Notification';
