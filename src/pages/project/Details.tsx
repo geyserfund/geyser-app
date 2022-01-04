@@ -8,6 +8,7 @@ import { IdComponent } from '../../components/molecules';
 import { ImageBar, TwitterSkeleton } from '../../components/ui';
 import { IProject, IProjectUser } from '../../interfaces';
 import { getDaysAgo, getTwitterID, isDarkMode, isMobileMode } from '../../utils';
+import { King } from './ProjectLayout';
 
 const useStyles = createUseStyles({
 	twitter: {
@@ -42,6 +43,90 @@ export const Details = ({ project }: IActivityProps) => {
 
 	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';
 
+	const getRender = () => {
+		if (project.name === 'bitcoin-adoption-in-congo') {
+			return <King />;
+		}
+
+		return contentRender();
+	};
+
+	const contentRender = () => (
+		<>
+			{
+				twitterLoading
+						&& <TwitterSkeleton />}
+			<Box minWidth={'300px'} maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
+				{
+					isDark
+						? <TweetEmbed
+							className={classes.twitter}
+							id={getTwitterID(project.originUrl)}
+							options={{ cards: 'hidden', conversation: 'none', theme: 'dark' }}
+							onTweetLoadSuccess={handleSuccess}
+						/>
+						: <TweetEmbed
+							className={classes.twitter}
+							id={getTwitterID(project.originUrl)}
+							options={{ cards: 'hidden', conversation: 'none', theme: 'light' }}
+							onTweetLoadSuccess={handleSuccess}
+						/>
+				}
+
+			</Box>
+
+			<VStack spacing="5px" alignItems="left" marginTop="20px">
+				<HStack spacing="10px" display="flex" flexWrap="wrap">
+					<Text fontSize="16px">Project Owner:</Text>
+					<IdComponent
+						URL={project.owner.user.picture}
+						username={project.owner.user.username}
+						fullName={project.owner.user.username}
+						twitter
+						badge="owner"
+					/>
+				</HStack>
+				<HStack spacing="10px" display="flex" flexWrap="wrap">
+					<Text fontSize="16px">Ambassador:</Text>
+					{
+						project.ambassadors.map((ambassador: IProjectUser) => (
+							<IdComponent
+								key={ambassador.user.id}
+								URL={'https://bit.ly/dan-abramov'}
+								username={ambassador.user.username}
+								fullName={ambassador.user.username}
+								twitter
+								badge="ambassador"
+							/>
+						))
+					}
+
+				</HStack>
+			</VStack>
+			<VStack spacing="5px" alignItems="left" marginTop="20px">
+				<ImageBar />
+			</VStack>
+			<VStack spacing="10px" marginTop="15px" display="flex" flexDirection="column" alignItems="flex-start">
+				<Text fontSize="16px">About</Text>
+				<Text
+					/* Default options */
+					lines={3}
+					more={<><br />Show more</>}
+					less="Show less"
+					className={classes.aboutText}
+					// AnchorClass="my-anchor-css-class"
+					// OnClick={this.executeOnClick}
+					expanded={false}
+					// Width={280}
+					// TruncatedEndingComponent={'... '}
+				>
+					{project.description}
+				</Text>
+			</VStack>
+
+		</>
+	);
+
 	return (
 		<Box
 			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
@@ -61,76 +146,8 @@ export const Details = ({ project }: IActivityProps) => {
 			<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="5px 0px" />
 			<Box padding={componentPadding} height={isMobile ? 'calc(100% - 150px)' : 'calc(100% - 100px)'} overflowY="auto" marginBottom="100px">
 				{
-					twitterLoading
-					&& <TwitterSkeleton />}
-				<Box minWidth={'300px'} maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
-					{
-						isDark
-							? <TweetEmbed
-								className={classes.twitter}
-								id={getTwitterID(project.originUrl)}
-								options={{ cards: 'hidden', conversation: 'none', theme: 'dark' }}
-								onTweetLoadSuccess={handleSuccess}
-							/>
-							: <TweetEmbed
-								className={classes.twitter}
-								id={getTwitterID(project.originUrl)}
-								options={{ cards: 'hidden', conversation: 'none', theme: 'light' }}
-								onTweetLoadSuccess={handleSuccess}
-							/>
-					}
-
-				</Box>
-
-				<VStack spacing="5px" alignItems="left" marginTop="20px">
-					<HStack spacing="10px" display="flex" flexWrap="wrap">
-						<Text fontSize="16px">Project Owner:</Text>
-						<IdComponent
-							URL={project.owner.user.picture}
-							username={project.owner.user.username}
-							fullName={project.owner.user.username}
-							twitter
-							badge="owner"
-						/>
-					</HStack>
-					<HStack spacing="10px" display="flex" flexWrap="wrap">
-						<Text fontSize="16px">Ambassador:</Text>
-						{
-							project.ambassadors.map((ambassador: IProjectUser) => (
-								<IdComponent
-									key={ambassador.user.id}
-									URL={'https://bit.ly/dan-abramov'}
-									username={ambassador.user.username}
-									fullName={ambassador.user.username}
-									twitter
-									badge="ambassador"
-								/>
-							))
-						}
-
-					</HStack>
-				</VStack>
-				<VStack spacing="5px" alignItems="left" marginTop="20px">
-					<ImageBar />
-				</VStack>
-				<VStack spacing="10px" marginTop="15px" display="flex" flexDirection="column" alignItems="flex-start">
-					<Text fontSize="16px">About</Text>
-					<Text
-						/* Default options */
-						lines={3}
-						more={<><br />Show more</>}
-						less="Show less"
-						className={classes.aboutText}
-						// AnchorClass="my-anchor-css-class"
-						// OnClick={this.executeOnClick}
-						expanded={false}
-					// Width={280}
-					// TruncatedEndingComponent={'... '}
-					>
-						{project.description}
-					</Text>
-				</VStack>
-
+					getRender()
+				}
 			</Box>
 		</Box>
 	);

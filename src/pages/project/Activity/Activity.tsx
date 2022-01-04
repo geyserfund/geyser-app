@@ -122,9 +122,9 @@ const Activity = ({ project }: IActivityProps) => {
 		setFundpage(true);
 	};
 
-	const handleFund = () => {
+	const handleFund = async () => {
 		try {
-			fundProject({
+			const response = await fundProject({
 				variables: {
 					projectId: project.id,
 					amount,
@@ -132,10 +132,11 @@ const Activity = ({ project }: IActivityProps) => {
 					anonymous,
 				},
 			});
+			console.log('cheecking', response);
 		} catch (error) {
 			console.log('checking error', error);
 			toast({
-				title: 'œSomething went wrong',
+				title: 'Something went wrong',
 				description: 'Please refresh the page and try again',
 				status: 'error',
 			});

@@ -18,6 +18,8 @@ export const colors = {
 	lightGreen: '#00E34D',
 	bglightDarkMode: '#464646',
 	bgHeavyDarkMode: '#161616',
+	bgStatusProblem: '#fbdadc',
+	bgStatusSolution: '#c0dfed',
 
 };
 
