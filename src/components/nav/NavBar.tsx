@@ -55,10 +55,9 @@ export const NavBar = () => {
 			>
 				<Box
 					display="flex"
-					width={isMobile ? '100%' : '75%'}
-					maxWidth="1300px"
+					width="100%"
 					justifyContent="space-between"
-					margin="10px 10px"
+					margin={isMobile ? '10px' : '10px 20px'}
 				>
 					<Logo />
 					{
@@ -82,7 +81,7 @@ export const NavBar = () => {
 										Login
 									</ButtonComponent>
 							}
-							<NavMenu />d
+							<NavMenu />
 						</> : (
 							<Box>
 								<ButtonComponent
