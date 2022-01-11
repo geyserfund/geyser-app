@@ -11,6 +11,7 @@ interface IProjectCardProp extends ICard {
 	open?: boolean
 	name: string
 	className?: string
+	imgSrc?: string
 }
 
 const useStyles = createUseStyles({
@@ -21,7 +22,7 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const ProjectCard = ({ title, open, name, className, ...rest }: IProjectCardProp) => {
+export const ProjectCard = ({ title, imgSrc, open, name, className, ...rest }: IProjectCardProp) => {
 	const classes = useStyles();
 	const history = useHistory();
 	const isDark = isDarkMode();
@@ -46,9 +47,9 @@ export const ProjectCard = ({ title, open, name, className, ...rest }: IProjectC
 			width="100%"
 			{...rest}
 		>
-			<Image src="https://picsum.photos/500/600" height="150px" width="100%" borderRadius="5px" marginBottom="10px" />
+			<Image src={imgSrc} height="150px" width="100%" borderRadius="5px" marginBottom="10px" objectFit="fill" />
 			<Text fontSize="15px" marginBottom="10px"> {title}</Text>
-			<FundingStatus open={open}/>
+			<FundingStatus open={open} />
 		</Card>
 	);
 };

@@ -29,7 +29,6 @@ export interface IProjectUser {
 export interface IUser {
     id: string;
     username: string;
-
     picture: string;
     URL: string;
     fullName: string;

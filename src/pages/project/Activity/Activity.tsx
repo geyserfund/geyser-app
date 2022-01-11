@@ -40,7 +40,7 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 
-	const {toast} = useNotification();
+	const { toast } = useNotification();
 
 	const [fundProject, {
 		data,

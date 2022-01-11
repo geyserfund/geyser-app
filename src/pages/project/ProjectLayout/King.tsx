@@ -1,7 +1,9 @@
 import { Box, HStack, Image, ListItem, OrderedList, Text, UnorderedList, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
+import { IdComponent } from '../../../components/molecules';
 import { StatusBar } from '../../../components/ui';
+import { IUser } from '../../../interfaces';
 
 const useStyles = createUseStyles({
 	containers: {
@@ -21,16 +23,63 @@ const useStyles = createUseStyles({
 	},
 });
 
+const owner: IUser = {
+	picture: 'https://pbs.twimg.com/profile_images/1479024887633264645/ka0Zbz-1_400x400.jpg',
+	username: 'parman_the',
+	fullName: 'King Johnson Apata',
+	id: '',
+	URL: '',
+	twitter: false,
+	badge: 'owner',
+	amount: 0,
+};
+
+const ambassador: IUser = {
+	picture: 'https://pbs.twimg.com/profile_images/1477647411963056128/7wd0aNSZ_400x400.jpg',
+	username: 'ApataJ',
+	fullName: 'Parman Bitcoin Private Key Whispere',
+	id: '',
+	URL: '',
+	twitter: false,
+	badge: 'ambassador',
+	amount: 0,
+};
+
 export const King = () => {
 	const classes = useStyles();
 	return (
 		<>
+
+			<VStack spacing="5px" alignItems="left" marginTop="20px">
+				<HStack spacing="10px" display="flex" flexWrap="wrap">
+					<Text fontSize="16px">Project Owner:</Text>
+					<IdComponent
+						URL={owner.picture}
+						username={owner.username}
+						fullName={owner.username}
+						twitter
+						badge="owner"
+					/>
+				</HStack>
+				<HStack spacing="10px" display="flex" flexWrap="wrap">
+					<Text fontSize="16px">Ambassador:</Text>
+					<IdComponent
+						URL={'https://bit.ly/dan-abramov'}
+						username={ambassador.username}
+						fullName={ambassador.username}
+						twitter
+						badge="ambassador"
+					/>
+
+				</HStack>
+			</VStack>
 			<VStack className={classes.containers} alignItems="center !important" >
 				<Box maxWidth={'500px'}>
 					<Image src="/king_2.png" />
 
 				</Box>
 			</VStack>
+
 			<VStack className={classes.containers}>
 				<StatusBar variant="problem" message="Financial illiteracy among youths. " />
 			</VStack>

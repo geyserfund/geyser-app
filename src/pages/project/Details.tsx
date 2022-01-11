@@ -44,7 +44,7 @@ export const Details = ({ project }: IActivityProps) => {
 	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';
 
 	const getRender = () => {
-		if (project.name === 'bitcoin-adoption-in-congo') {
+		if (project.name === 'bitcoin-conference-in-lagos') {
 			return <King />;
 		}
 
@@ -55,7 +55,7 @@ export const Details = ({ project }: IActivityProps) => {
 		<>
 			{
 				twitterLoading
-						&& <TwitterSkeleton />}
+				&& <TwitterSkeleton />}
 			<Box minWidth={'300px'} maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
 				{
 					isDark
@@ -117,8 +117,8 @@ export const Details = ({ project }: IActivityProps) => {
 					// AnchorClass="my-anchor-css-class"
 					// OnClick={this.executeOnClick}
 					expanded={false}
-					// Width={280}
-					// TruncatedEndingComponent={'... '}
+				// Width={280}
+				// TruncatedEndingComponent={'... '}
 				>
 					{project.description}
 				</Text>

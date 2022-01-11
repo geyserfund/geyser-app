@@ -90,11 +90,12 @@ export const Home = () => {
 				</Text>
 				<ProjectCard
 					open
-					title="Bitcoin Education in Congo"
-					name="running-with-bitcoin"
+					title="Bitcoin Conference In Lagos"
+					name="bitcoin-conference-in-lagos"
 					marginBottom="20px"
+					imgSrc="/king_2.png"
 				/>
-				<ProjectCard
+				{/* <ProjectCard
 					open
 					title="Educating youths in Nigeria"
 					name="running-with-bitcoin"
@@ -105,7 +106,7 @@ export const Home = () => {
 					title="Educating youths in Nigeria"
 					name="running-with-bitcoin"
 					marginBottom="20px"
-				/>
+				/> */}
 			</Box>
 		</Box>
 	);
