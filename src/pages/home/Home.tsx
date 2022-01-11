@@ -6,6 +6,7 @@ import { ButtonComponent } from '../../components/ui';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
 import { ProjectCard } from '../../components/molecules';
 import { isDarkMode, isMobileMode } from '../../utils';
+import { colors } from '../../constants';
 
 export const Home = () => {
 	useEffect(() => {
@@ -54,23 +55,33 @@ export const Home = () => {
 					</Box>
 					<Box marginBottom="30px">
 						<Text fontSize="25px" marginBottom="25px">
-							Great problem-solving ideas emerge globally, so let’s connect and fund them globally.
+							Crowdfunding the world with Bitcoin
 						</Text>
-						<Text fontSize="20px" marginBottom="25px">
-							We believe that problem-solving ideas emerge everywhere, and that global communities come together to support initiatives they care about. We are building a platform for global crowdfunding based entirely on Bitcoin.
+						<Text fontSize="18px" marginBottom="25px">
+							Problem-solving ideas emerge everywhere, and yet mainstream crowdfunding is only available in western countries.
 						</Text>
-						<Text fontSize="20px">
-							Explore and support live crowdfunding projects or <u>get in touch</u> to get your ideas funded on our platform. For any question ask us on <u>Telegram</u>.
+						<Text fontSize="18px" marginBottom="25px">
+							Geyser will use Bitcoin’s lightning network to create a platform where creators and entrepreneurs can access the capital needed to realize their ideas, no matter where in the world they are.
+						</Text>
+						<Text fontSize="18px">
+							Explore and support live crowdfunding projects or submit your ideas to be funded here. For any questions, get in touch with us on Telegram.
 						</Text>
 					</Box>
-					<Box display="flex" justifyContent="space-between">
-						<Link href="https://airtable.com/shrE0ffCRdX6CkYYw" isExternal width="100%">
+					<Box display="flex" justifyContent="space-between" width="100%">
+						<Link href="https://airtable.com/shrOzN3U8ePy4Y0uf" isExternal >
 							<ButtonComponent
 								standard
 								primary
-								isFullWidth
 							>
 								Start a crowdfund
+							</ButtonComponent>
+						</Link>
+						<Link href="https://airtable.com/shrE0ffCRdX6CkYYw" isExternal >
+							<ButtonComponent
+								standard
+								backgroundColor={colors.bgLightGrey}
+							>
+								Subscribe
 							</ButtonComponent>
 						</Link>
 					</Box>
