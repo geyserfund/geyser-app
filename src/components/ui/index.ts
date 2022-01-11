@@ -7,3 +7,6 @@ export * from './Badge';
 export * from './Fallback';
 export * from './ImageBar';
 export * from './CustomToggle';
+export * from './FundingStatus';
+export * from './ErrorBox';
+export * from './StatusBar';

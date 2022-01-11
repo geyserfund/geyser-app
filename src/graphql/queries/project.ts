@@ -15,6 +15,7 @@ query GetProjectByName($name: String!) {
         fundingGoal
         createdAt
         updatedAt
+        expiresAt
         active
         ownerConfirmed
         fundsClaimed

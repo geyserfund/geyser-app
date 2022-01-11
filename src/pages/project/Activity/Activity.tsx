@@ -1,13 +1,10 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
-import { NumberInput, NumberInputField } from '@chakra-ui/number-input';
-import { CloseButton } from '@chakra-ui/close-button';
-import { Textarea } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { SatoshiIcon } from '../../../components/icons';
 import { CircularFundProgress } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
-import { ButtonComponent, Card, CustomToggle } from '../../../components/ui';
+import { ButtonComponent, Card, FundingStatus } from '../../../components/ui';
 import { IFundingTx, IProject, IProjectUser } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
@@ -15,7 +12,8 @@ import { QUERY_GET_FUNDING } from '../../../graphql';
 import { setInterval } from 'timers';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
-import { isDarkMode, isMobileMode } from '../../../utils';
+import { getDaysLeft, isDarkMode, isMobileMode, useNotification } from '../../../utils';
+import { PaymentPage } from './PaymentPage';
 
 interface IActivityProps {
 	project: IProject
@@ -42,10 +40,12 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 
+	const { toast } = useNotification();
+
 	const [fundProject, {
 		data,
 		// Loading,
-		// error,
+		error: invoiceError,
 	}] = useMutation(MUTATION_FUND_PROJECT);
 
 	const [getFunding, { loading: fundLoading, error: fundError, data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
@@ -54,6 +54,18 @@ const Activity = ({ project }: IActivityProps) => {
 			fetchPolicy: 'network-only',
 		},
 	);
+
+	console.log('Chceking invoice error', invoiceError);
+
+	// UseEffect(() => {
+	// 	if (invoiceError) {
+	// 		toast({
+	// 			title: 'Something went wrong',
+	// 			description: 'Please refresh the page and try again',
+	// 			status: 'error',
+	// 		});
+	// 	}
+	// }, [invoiceError]);
 
 	console.log('checking fund loading', fundLoading);
 	console.log('checking fund error', fundError);
@@ -110,32 +122,25 @@ const Activity = ({ project }: IActivityProps) => {
 		setFundpage(true);
 	};
 
-	const handleFund = () => {
-		fundProject({
-			variables: {
-				projectId: project.id,
-				amount,
-				comment,
-				anonymous,
-			},
-		});
-	};
-
-	const handleComment = (event: any) => {
-		if (event) {
-			setComment(event.target.value);
+	const handleFund = async () => {
+		try {
+			const response = await fundProject({
+				variables: {
+					projectId: project.id,
+					amount,
+					comment,
+					anonymous,
+				},
+			});
+			console.log('cheecking', response);
+		} catch (error) {
+			console.log('checking error', error);
+			toast({
+				title: 'Something went wrong',
+				description: 'Please refresh the page and try again',
+				status: 'error',
+			});
 		}
-	};
-
-	const handleInput = (stringv: string, numberv: number) => {
-		console.log('Checking input', stringv, numberv);
-
-		if (!numberv) {
-			setAmount(0);
-			return;
-		}
-
-		setAmount(numberv);
 	};
 
 	const users: IProjectUser[] = project.funders;
@@ -151,7 +156,9 @@ const Activity = ({ project }: IActivityProps) => {
 			overflowY="hidden"
 			margin="10px 15px"
 		>
+			<FundingStatus open={true} />
 			<CircularFundProgress rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
+			<Text>{`${getDaysLeft(project.expiresAt)} to go`}</Text>
 			<ButtonComponent
 				primary
 				standard
@@ -183,99 +190,15 @@ const Activity = ({ project }: IActivityProps) => {
 			</Box>
 		</VStack>);
 
-	const paymentPage = () => (
-		<VStack
-			padding={isMobile ? '10px 0px' : '10px 20px'}
-			margin="10px 15px"
-			spacing="12px"
-			width="100%"
-			height="100%"
-			overflowY="hidden"
-			paddingTop="40px"
-			position="relative"
-		>
-			<CloseButton
-				borderRadius="50%"
-				position="absolute"
-				right="10px"
-				top="10px"
-				onClick={handleCloseButton}
-			/>
-			<Box width="100%" >
-				<Text lineHeight="26px">Send amount</Text>
-				<Box
-					backgroundColor="brand.bgGreen"
-					height="85px"
-					borderRadius="12px"
-					display="flex"
-					flexDirection="column"
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Box
-						display="flex"
-						justifyContent="center"
-						alignItems="center"
-						width="80%"
-						position="relative"
-					>
-						<NumberInput variant="unstyled" marginLeft="10px" onChange={handleInput} value={amount}>
-							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
-						</NumberInput>
-						<Box position="absolute" right={-5}>
-							<SatoshiIcon fontSize="30px" marginRight="10px" marginBottom="5px" />
-						</Box>
-					</Box>
-					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * amount}`}</Text>
-				</Box>
-
-			</Box>
-			<Box width="100%" >
-				<Text lineHeight="26px">Comment</Text>
-				<Box
-					backgroundColor="brand.bgGreen"
-					height="85px"
-					borderRadius="12px"
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Textarea variant="unstyled" fontSize="14px" margin="5px" value={comment} onChange={handleComment} />
-				</Box>
-
-			</Box>
-			<Box width="100%">
-				{/* <Checkbox colorScheme="green" defaultValue="false">
-					Remain Anonymous
-				</Checkbox> */}
-				<CustomToggle value={anonymous} onChange={setAnonymous} />
-			</Box>
-			<Box width="100%">
-				<ButtonComponent
-					primary
-					standard
-					leftIcon={<SatoshiIcon />}
-					width="100%"
-					marginTop="15px"
-					onClick={handleFund}
-				>
-					Fund project
-				</ButtonComponent>
-			</Box>
-
-		</VStack>);
-
 	return (
 		<Card
 			flex={2}
 			maxWidth={isMobile ? 'auto' : '450px'}
-			// Padding="10px 15px"
 			display="flex"
 			flexDirection="column"
 			justifyContent="flex-start"
 			alignItems="center"
 			backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
-			borderRadius={isMobile ? '22px' : '0px 22px 22px 0px'}
 		>
 
 			{completedFunding
@@ -290,7 +213,21 @@ const Activity = ({ project }: IActivityProps) => {
 					/>
 					: fundPage
 						? infoPage()
-						: paymentPage()}
+						: <PaymentPage
+							{...{
+								isMobile,
+								handleCloseButton,
+								btcRate,
+								amount,
+								setAmount,
+								comment,
+								setComment,
+								anonymous,
+								setAnonymous,
+								handleFund,
+							}}
+						/>
+			}
 
 		</Card>
 	);

@@ -10,6 +10,7 @@ export interface IProject {
     fundingGoal: string;
     createdAt: string;
     updatedAt: string;
+    expiresAt: string;
     active: string;
     ownerConfirmed: string;
     fundsClaimed: string;
@@ -28,7 +29,6 @@ export interface IProjectUser {
 export interface IUser {
     id: string;
     username: string;
-
     picture: string;
     URL: string;
     fullName: string;

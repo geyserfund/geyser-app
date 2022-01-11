@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.4.10",
-    "@chakra-ui/icons": "^1.0.15",
-    "@chakra-ui/react": "^1.6.7",
-    "@emotion/react": "^11.4.1",
-    "@emotion/styled": "^11.3.0",
+    "@chakra-ui/icons": "^1.1.1",
+    "@chakra-ui/react": "^1.7.3",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^10.4.9",
     "@testing-library/user-event": "^12.8.3",
@@ -19,7 +19,7 @@
     "@types/react-show-more-text": "^1.4.1",
     "apollo-link": "^1.2.14",
     "classnames": "^2.3.1",
-    "framer-motion": "^4.1.17",
+    "framer-motion": "4.1.17",
     "graphql": "^15.5.2",
     "js-cookie": "^3.0.1",
     "luxon": "^2.1.1",
@@ -41,6 +41,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "create-env": "printenv > .env",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

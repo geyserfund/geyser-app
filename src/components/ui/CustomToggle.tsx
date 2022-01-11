@@ -3,12 +3,13 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
+import { isDarkMode } from '../../utils';
 
 const useStyles = createUseStyles({
-	toggleContainer: {
+	toggleContainer: ({isDark}:{isDark: boolean}) => ({
 		width: '100%',
 		height: '46px',
-		backgroundColor: colors.bgLightGrey,
+		backgroundColor: isDark ? colors.bglightDarkMode : colors.bgLightGrey,
 		borderRadius: '14px',
 		display: 'flex',
 		border: '1px solid',
@@ -26,7 +27,7 @@ const useStyles = createUseStyles({
 				transition: 'opacity 300ms',
 			},
 		},
-	},
+	}),
 	toggleShade: {
 		position: 'absolute',
 		width: '100%',
@@ -43,7 +44,7 @@ const useStyles = createUseStyles({
 		justifyContent: 'center',
 		alignItems: 'center',
 		flex: '1',
-		backgroundColor: 'none',
+		backgroundColor: 'transparent',
 		borderColor: 'transparent',
 		zIndex: 2,
 	},
@@ -59,8 +60,8 @@ interface ICustomToggle {
 }
 
 export const CustomToggle = ({value, onChange}:ICustomToggle) => {
-	const classes = useStyles();
-
+	const isDark = isDarkMode();
+	const classes = useStyles({isDark});
 	const [anonymous, setAnonymous] = useState(value);
 
 	const handleToggle = () => {

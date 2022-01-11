@@ -1,4 +1,3 @@
-import Icon, { IconProps } from '@chakra-ui/icon';
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
 import React from 'react';
@@ -9,51 +8,52 @@ import MagnifyPng from '../../assets/magnify.png';
 import MedalPng from '../../assets/medal.png';
 import TrophyPng from '../../assets/trophy.png';
 import HourglassPng from '../../assets/hourglass.png';
+import SatoshiPng from '../../assets/satoshi.png';
 
-export const SatoshiIcon = ({ fontSize, ...rest }: IconProps) => (
-	<Icon fontSize={fontSize || '25px'} {...rest}>
-		<text x="0" y="22" fill="black" fontSize={'25px'}>丰</text>
-	</Icon>
+export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, ...rest }: any) => (
+	<Box padding="3px 0px" className={wrapperClass}>
+		<Image filter={isDark ? 'invert(100%)' : undefined } height={`${26 * scale}px`} width={`${14 * scale}px`} src={SatoshiPng} alt="satoshi" {...rest} />
+	</Box>
 );
 
 export const StarIcon = () => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={StarPng} alt="star icon" />
+		<Image height="20px" width="20px" src={StarPng} alt="star" />
 	</Box>
 );
 
 export const MagnifyGlassIcon = () => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={MagnifyPng} alt="star icon" />
+		<Image height="20px" width="20px" src={MagnifyPng} alt="magnify glass" />
 	</Box>
 );
 
 export const MedalIcon = () => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={MedalPng} alt="star icon" />
+		<Image height="20px" width="20px" src={MedalPng} alt="medal" />
 	</Box>
 );
 
 export const LighteningIcon = () => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={LighteningPng} alt="star icon" />
+		<Image height="20px" width="20px" src={LighteningPng} alt="lightening" />
 	</Box>
 );
 
 export const TrophyIcon = () => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={TrophyPng} alt="star icon" />
+		<Image height="20px" width="20px" src={TrophyPng} alt="trophy" />
 	</Box>
 );
 
 export const CrownIcon = () => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={CrownPng} alt="star icon" />
+		<Image height="20px" width="20px" src={CrownPng} alt="crown" />
 	</Box>
 );
 
 export const HourglassIcon = () => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={HourglassPng} alt="star icon" />
+		<Image height="20px" width="20px" src={HourglassPng} alt="hourglass" />
 	</Box>
 );

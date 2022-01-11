@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 
-interface ICard extends HTMLChakraProps<'div'> {
-    children: React.ReactNode
+export interface ICard extends HTMLChakraProps<'div'> {
+    children?: React.ReactNode
 }
 
 const useStyles = createUseStyles({
