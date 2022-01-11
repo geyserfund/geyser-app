@@ -1,6 +1,15 @@
 runtime: nodejs16
 service: default
 instance_class: F2
+handlers:
+# Serve all static files with url ending with a file extension
+- url: /(.*\..+)$
+  static_files: build/\1
+  upload: build/(.*\..+)$
+# Catch all handler to index.html
+- url: /.*
+  static_files: build/index.html
+  upload: build/index.html
 env_variables:
   APP_URL: https://geyser.fund
   MIN_INITIAL_FUNDING: 1
