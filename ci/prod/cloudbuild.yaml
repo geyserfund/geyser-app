@@ -3,17 +3,17 @@ steps:
   - id: "install dependencies"
     name: 'gcr.io/cloud-builders/yarn'
     args: ['install']
-  # - id: "create .env file"
-  #   name: 'gcr.io/cloud-builders/yarn'
-  #   args: ['run', 'create-env']
-  #   secretEnv: ['REACT_APP_API_ENDPOINT']
+  - id: "create .env file"
+    name: 'gcr.io/cloud-builders/yarn'
+    args: ['run', 'create-env']
+    secretEnv: ['REACT_APP_API_ENDPOINT']
   - id: "build application"
     name: 'gcr.io/cloud-builders/yarn'
     args: ['run', 'build']
   - id: "deploy application"
     name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
-# availableSecrets:
-#   secretManager:
-#   - versionName: projects/825287961877/secrets/database-url/versions/2
-#     env: 'REACT_APP_API_ENDPOINT'
+availableSecrets:
+  secretManager:
+  - versionName: projects/825287961877/secrets/geyser-web-app-frontend-api-endpoint/versions/1
+    env: 'REACT_APP_API_ENDPOINT'
