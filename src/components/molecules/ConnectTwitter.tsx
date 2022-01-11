@@ -5,6 +5,7 @@ import { createUseStyles } from 'react-jss';
 import { ButtonComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
+import { REACT_APP_API_ENDPOINT } from '../../constants';
 interface IConnectTwitter {
 	isOpen: boolean,
 	onClose: () => void,
@@ -35,7 +36,7 @@ export const ConnectTwitter = ({
 						To create a project you have to first connect to your twitter account so that we can recognize you for your contributions
 					</Text>
 					<Box className={classes.twitterContainer}>
-						<Link href={'http://localhost:4000/auth/twitter'}>
+						<Link href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
 							<ButtonComponent
 								margin="10px"
 								isFullWidth

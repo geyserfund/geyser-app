@@ -41,6 +41,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "create-env": "printenv > .env",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
