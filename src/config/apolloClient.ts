@@ -35,9 +35,9 @@ const errorLink = onError(({ graphQLErrors,
 	if (graphQLErrors) {
 		for (const err of graphQLErrors) {
 			if (err && err.extensions && err.extensions.code) {
-				if (err.extensions.code === 'UNAUTHENTICATED') {
+				const refreshToken = Cookies.get('refreshToken');
+				if (err.extensions.code === 'UNAUTHENTICATED' && refreshToken) {
 					return new Observable(observer => {
-						const refreshToken = Cookies.get('refreshToken');
 						fetch(`${REACT_APP_API_ENDPOINT}/auth/refresh-token`, {
 							method: 'get',
 							headers: { Authorization: `Bearer ${refreshToken}` },
