@@ -15,5 +15,5 @@ steps:
     args: ["app", "deploy"]
 availableSecrets:
   secretManager:
-    - versionName: projects/825287961877/secrets/geyser-web-app-frontend-api-endpoint/versions/3
+    - versionName: projects/825287961877/secrets/geyser-web-app-frontend-api-endpoint/versions/4
       env: "REACT_APP_API_ENDPOINT"
