@@ -44,18 +44,14 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const [fundProject, {
 		data,
-		// Loading,
-		error: invoiceError,
 	}] = useMutation(MUTATION_FUND_PROJECT);
 
-	const [getFunding, { loading: fundLoading, error: fundError, data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
+	const [getFunding, { data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
 		{
 			variables: { fundingTxId: fundingTx.id },
 			fetchPolicy: 'network-only',
 		},
 	);
-
-	console.log('Chceking invoice error', invoiceError);
 
 	// UseEffect(() => {
 	// 	if (invoiceError) {
@@ -66,10 +62,6 @@ const Activity = ({ project }: IActivityProps) => {
 	// 		});
 	// 	}
 	// }, [invoiceError]);
-
-	console.log('checking fund loading', fundLoading);
-	console.log('checking fund error', fundError);
-	console.log('checking fund data', fundData);
 
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
@@ -144,8 +136,6 @@ const Activity = ({ project }: IActivityProps) => {
 	};
 
 	const users: IProjectUser[] = project.funders;
-
-	console.log('checkign users', users);
 
 	const infoPage = () => (
 		<VStack

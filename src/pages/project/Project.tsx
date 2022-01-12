@@ -13,6 +13,7 @@ import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
 import { QUERY_GET_PROJECT } from '../../graphql';
 import { isDarkMode, isMobileMode, logout } from '../../utils';
+import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
 
@@ -41,7 +42,12 @@ export const Project = () => {
 	console.log('checking state', state);
 
 	useEffect(() => {
-		getProject();
+		try {
+			getProject();
+		} catch (_) {
+			customHistory.push('/not-found');
+		}
+
 		if (state && state.loggedOut) {
 			logout();
 			onOpen();
@@ -59,7 +65,6 @@ export const Project = () => {
 		console.log('checking accessToken', Cookies.get('accessToken')); // => 'value'
 		console.log('checking refreshToken', Cookies.get('refreshToken')); // => 'value'
 	}, []);
-	console.log('checking data', loading, error, data);
 
 	if (loading) {
 		return (
@@ -68,7 +73,7 @@ export const Project = () => {
 	}
 
 	if (error || !data || !data.getProjectByName.success) {
-		return <Text> Something went wrong, Please refresh</Text>;
+		return <NotFound />;
 	}
 
 	const { project } = data && data.getProjectByName;

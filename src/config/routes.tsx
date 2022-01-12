@@ -9,6 +9,7 @@ import { NavBar } from '../components/nav';
 import { Home } from '../pages/home';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
+import { NotFound } from '../pages/notFound';
 
 export const customHistory = createBrowserHistory();
 
@@ -20,6 +21,9 @@ export const Router = () => (
 				<Switch>
 					<Route path="/project/:projectId">
 						<Project />
+					</Route>
+					<Route path="/not-found">
+						<NotFound />
 					</Route>
 					<Route path="/">
 						<Home />
