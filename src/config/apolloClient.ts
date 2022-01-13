@@ -8,6 +8,7 @@ import { customHistory } from '.';
 
 const httpLink = createHttpLink({
 	uri: `${REACT_APP_API_ENDPOINT}/graphql`,
+	credentials: 'include',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -19,6 +20,7 @@ const authLink = setContext((_, { headers }) => {
 			headers: {
 				...headers,
 				'access-token': token ? `Bearer ${token}` : '',
+				authorization: token ? `Bearer ${token}` : '',
 			},
 		};
 	}
@@ -61,6 +63,7 @@ const errorLink = onError(({ graphQLErrors,
 								operation.setContext({
 									headers: {
 										...oldHeaders,
+										authorization: `Bearer ${response.accessToken}`,
 										'access-token': `Bearer ${response.accessToken}`,
 									},
 								});
@@ -89,6 +92,8 @@ const errorLink = onError(({ graphQLErrors,
 
 export const client = new ApolloClient({
 	link: from([errorLink, authLink.concat(httpLink)]),
+	// Link: from([errorLink, httpLink]),
 	cache: new InMemoryCache(),
+	// Headers: {'access-token': token ? `Bearer ${token}` : ''},
 });
 
