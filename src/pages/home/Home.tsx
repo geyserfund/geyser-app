@@ -40,17 +40,22 @@ export const Home = () => {
 					<Box marginBottom="40px" display="flex" justifyContent="space-between">
 						<Logo full />
 						<Box>
-							<IconButton
-								background={'none'}
-								aria-label="twitter"
-								icon={<FaTwitter fontSize="25px" />}
-							/>
-							<IconButton
-								background={'none'}
-								aria-label="telegram"
-								icon={<FaTelegramPlane fontSize="25px" />}
-								marginLeft="5px"
-							/>
+							<Link href="https://twitter.com/geyserfund" target="_blank">
+								<IconButton
+									background={'none'}
+									aria-label="twitter"
+									icon={<FaTwitter fontSize="25px" />}
+								/>
+							</Link>
+							<Link href="https://t.me/+EZ5otIPhVcxhMmFk" target="_blank">
+								<IconButton
+									background={'none'}
+									aria-label="telegram"
+									icon={<FaTelegramPlane fontSize="25px" />}
+									marginLeft="5px"
+								/>
+							</Link>
+
 						</Box>
 					</Box>
 					<Box marginBottom="30px">

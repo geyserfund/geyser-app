@@ -18,7 +18,7 @@ const authLink = setContext((_, { headers }) => {
 		return {
 			headers: {
 				...headers,
-				authorization: token ? `Bearer ${token}` : '',
+				'access-token': token ? `Bearer ${token}` : '',
 			},
 		};
 	}
@@ -61,7 +61,7 @@ const errorLink = onError(({ graphQLErrors,
 								operation.setContext({
 									headers: {
 										...oldHeaders,
-										authorization: `Bearer ${response.accessToken}`,
+										'access-token': `Bearer ${response.accessToken}`,
 									},
 								});
 								const subscriber = {
