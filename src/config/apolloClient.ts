@@ -8,13 +8,14 @@ import { customHistory } from '.';
 
 const httpLink = createHttpLink({
 	uri: `${REACT_APP_API_ENDPOINT}/graphql`,
-	// Credentials: 'include',
+	credentials: 'include',
 });
 
 const authLink = setContext((_, { headers }) => {
 	// Get the authentication token from local storage if it exists
 	const token = Cookies.get('accessToken');
 	// Return the headers to the context so httpLink can read them
+	Cookies.set('authorization', token ? `Bearer ${token}` : '');
 	if (token) {
 		return {
 			headers: {
