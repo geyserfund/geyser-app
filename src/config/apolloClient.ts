@@ -8,7 +8,7 @@ import { customHistory } from '.';
 
 const httpLink = createHttpLink({
 	uri: `${REACT_APP_API_ENDPOINT}/graphql`,
-	credentials: 'include',
+	// Credentials: 'include',
 });
 
 const authLink = setContext((_, { headers }) => {
