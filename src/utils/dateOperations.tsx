@@ -5,10 +5,16 @@ export 	const getDaysAgo = (date: string) => {
 	const currentDateTime = DateTime.now();
 
 	const i = Interval.fromDateTimes(dateTime, currentDateTime);
-
 	const days = Math.floor(i.length('days'));
+	const hours = Math.floor(i.length('hours'));
+	console.log('checking days and hours', days, hours);
+
 	if (days === 1) {
 		return 'a day';
+	}
+
+	if (days > 1) {
+		return `${days} days`;
 	}
 
 	if (days < 1) {
@@ -32,8 +38,6 @@ export 	const getDaysAgo = (date: string) => {
 
 		return `${hours} hours`;
 	}
-
-	return `${days} days`;
 };
 
 export 	const getDaysLeft = (date: string) => {

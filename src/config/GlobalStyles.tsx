@@ -4,6 +4,7 @@ import { Global } from '@emotion/react';
 export const GlobalStyles = () => (
 	<Global
 		styles={`
+        @import url('https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap');
         @font-face {
             font-family: 'Myanmar-Khyay';

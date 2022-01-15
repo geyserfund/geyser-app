@@ -73,6 +73,8 @@ export const Project = () => {
 	}
 
 	if (error || !data || !data.getProjectByName.success) {
+		console.log('checking error', error);
+		console.log('checking data', data);
 		return <NotFound />;
 	}
 

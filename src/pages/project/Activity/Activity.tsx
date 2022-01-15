@@ -5,7 +5,7 @@ import { SatoshiIcon } from '../../../components/icons';
 import { CircularFundProgress } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { ButtonComponent, Card, FundingStatus } from '../../../components/ui';
-import { IFundingTx, IProject, IProjectUser } from '../../../interfaces';
+import { IFundingTx, IProject, IProjectFunding } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
 import { QUERY_GET_FUNDING } from '../../../graphql';
@@ -135,7 +135,7 @@ const Activity = ({ project }: IActivityProps) => {
 		}
 	};
 
-	const users: IProjectUser[] = project.funders;
+	const funders: IProjectFunding[] = project.fundingTxs;
 
 	const infoPage = () => (
 		<VStack
@@ -167,12 +167,12 @@ const Activity = ({ project }: IActivityProps) => {
 			</ButtonComponent>
 			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" height="-webkit-fill-available">
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
-					{`Project Backers ${users.length ? `( ${users.length} )` : ''}`}
+					{`Project Backers ${funders.length ? `( ${funders.length} )` : ''}`}
 				</Text>
 				<VStack spacing={'8px'} width="100%" overflow="auto" height="calc(100% - 60px)" paddingBottom="30px">
 					{
-						users.map((user, index) => (
-							<IdBar key={index} {...user.user} />
+						funders.map((funder, index) => (
+							<IdBar key={index} funder={funder} />
 						))
 					}
 				</VStack>

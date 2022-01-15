@@ -48,6 +48,17 @@ query GetProjectByName($name: String!) {
           }
           confirmed
         }
+        fundingTxs {
+          user {
+            username
+            imageUrl
+            twitterHandle
+            connectedTwitter
+          }
+          amount
+          paidAt
+          comment
+        }
       }
     }
   }

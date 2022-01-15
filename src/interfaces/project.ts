@@ -19,6 +19,7 @@ export interface IProject {
     owner: IProjectUser;
     ambassadors: IProjectUser[];
     funders: IProjectUser[];
+    fundingTxs: IProjectFunding[];
 }
 
 export interface IProjectUser {
@@ -35,4 +36,18 @@ export interface IUser {
     twitter: boolean;
     badge: BadgeVariant;
     amount: number;
+}
+
+export interface IProjectFunding {
+        amount:string;
+        comment:string;
+        paidAt:string;
+        user: IFunder
+}
+
+export interface IFunder {
+    username: string;
+    imageUrl: string;
+    twitterHandle: string;
+    connectedTwitter: boolean;
 }
