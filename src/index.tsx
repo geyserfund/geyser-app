@@ -2,14 +2,14 @@ import {ColorModeScript} from '@chakra-ui/react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import {App} from './App';
-import { Fonts } from './config';
+import { GlobalStyles } from './config';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './utils/serviceWorker';
 
 ReactDOM.render(
 	<React.StrictMode>
 		<ColorModeScript />
-		<Fonts />
+		<GlobalStyles />
 		<App />
 	</React.StrictMode>,
 	document.getElementById('root'),
