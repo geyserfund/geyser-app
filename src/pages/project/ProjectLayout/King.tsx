@@ -1,8 +1,8 @@
-import { Box, HStack, Image, ListItem, OrderedList, Text, UnorderedList, VStack } from '@chakra-ui/react';
+import { Box, HStack, Image, Link, ListItem, OrderedList, Text, UnorderedList, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { IdComponent } from '../../../components/molecules';
-import { StatusBar } from '../../../components/ui';
+import { ImageBar, StatusBar } from '../../../components/ui';
 import { IUser } from '../../../interfaces';
 
 const useStyles = createUseStyles({
@@ -25,7 +25,7 @@ const useStyles = createUseStyles({
 
 const owner: IUser = {
 	picture: 'https://pbs.twimg.com/profile_images/1479024887633264645/ka0Zbz-1_400x400.jpg',
-	username: 'parman_the',
+	username: 'ApataJ',
 	fullName: 'King Johnson Apata',
 	id: '',
 	URL: '',
@@ -36,55 +36,85 @@ const owner: IUser = {
 
 const ambassador: IUser = {
 	picture: 'https://pbs.twimg.com/profile_images/1477647411963056128/7wd0aNSZ_400x400.jpg',
-	username: 'ApataJ',
+	username: 'parman_the',
 	fullName: 'Parman Bitcoin Private Key Whispere',
 	id: '',
 	URL: '',
 	twitter: false,
-	badge: 'ambassador',
+	badge: 'owner',
 	amount: 0,
 };
 
 export const King = () => {
 	const classes = useStyles();
+
+	const images = [
+		{
+			original: '/king_1.png',
+			thumbnail: '/king_1.png',
+		},
+		{
+			original: '/king_2.png',
+			thumbnail: '/king_2.png',
+		},
+		{
+			original: '/king_3.png',
+			thumbnail: '/king_3.png',
+		},
+		{
+			original: '/king_4.png',
+			thumbnail: '/king_4.png',
+		},
+		{
+			original: '/king_5.png',
+			thumbnail: '/king_5.png',
+		},
+		{
+			original: '/king_6.png',
+			thumbnail: '/king_6.png',
+		},
+	];
+
 	return (
 		<>
 
 			<VStack spacing="5px" alignItems="left" marginTop="20px">
 				<HStack spacing="10px" display="flex" flexWrap="wrap">
 					<Text fontSize="16px">Project Owner:</Text>
-					<IdComponent
-						URL={owner.picture}
-						username={owner.username}
-						fullName={owner.username}
-						twitter
-						badge="owner"
-					/>
+					<Link href={`https://twitter.com/${owner.username}`} isExternal>
+						<IdComponent
+							URL={owner.picture}
+							username={owner.username}
+							fullName={owner.username}
+							twitter
+							badge="owner"
+						/>
+					</Link>
+
 				</HStack>
 				<HStack spacing="10px" display="flex" flexWrap="wrap">
 					<Text fontSize="16px">Ambassador:</Text>
-					<IdComponent
-						URL={'https://bit.ly/dan-abramov'}
-						username={ambassador.username}
-						fullName={ambassador.username}
-						twitter
-						badge="ambassador"
-					/>
+					<Link href={`https://twitter.com/${ambassador.username}`} isExternal>
+						<IdComponent
+							URL={ambassador.picture}
+							username={ambassador.username}
+							fullName={ambassador.username}
+							twitter
+							badge="owner"
+						/>
+					</Link>
 
 				</HStack>
 			</VStack>
-			<VStack className={classes.containers} alignItems="center !important" >
-				<Box maxWidth={'500px'}>
-					<Image src="/king_2.png" />
-
-				</Box>
-			</VStack>
-
 			<VStack className={classes.containers}>
 				<StatusBar variant="problem" message="Financial illiteracy among youths. " />
 			</VStack>
 			<VStack className={classes.containers}>
 				<StatusBar variant="solution" message="Teaching financial literacy to the youths of Nigeria with Bitcoin and lightning." />
+			</VStack>
+
+			<VStack className={classes.containers} spacing="5px" alignItems="left" marginTop="20px">
+				<ImageBar images={images}/>
 			</VStack>
 			<VStack className={classes.containers} >
 				<Text fontWeight={600} fontSize={'1.25em'}>
@@ -111,6 +141,14 @@ export const King = () => {
 					I’d like to create the first “Lagos Bitcoin Conference 2022”. My aim is to gather 300 youths under one roof to discuss Bitcoin, Lightning, and financial literacy. I would also love international speakers to be available physically or via online meeting, to talk to us and enlighten us more on Bitcoin.
 				</Text>
 			</VStack>
+			<HStack spacing="30px">
+				<Box>
+					<Image src="/king_1.png" />
+				</Box>
+				<Box>
+					<Image src="/king_2.png" />
+				</Box>
+			</HStack>
 			<VStack className={classes.containers} >
 				<Text fontWeight={600} fontSize={'16px'}>
 					The agenda:

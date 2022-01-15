@@ -64,7 +64,14 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const ImageBar = () => {
+interface IImageBar {
+	images: {
+		thumbnail: string;
+		original: string;
+	}[]
+}
+
+export const ImageBar = ({images}:IImageBar) => {
 	const classes = useStyles();
 
 	const [viewGallery, setViewGallery] = useState(false);
@@ -79,46 +86,6 @@ export const ImageBar = () => {
 		setStartIndex(0);
 		setViewGallery(false);
 	};
-
-	const images = [
-		{
-			original: 'https://picsum.photos/200/300',
-			thumbnail: 'https://picsum.photos/200/300',
-		},
-		{
-			original: 'https://picsum.photos/400/500',
-			thumbnail: 'https://picsum.photos/400/500',
-		},
-		{
-			original: 'https://picsum.photos/600/600',
-			thumbnail: 'https://picsum.photos/600/600',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-		{
-			original: 'https://picsum.photos/700/300',
-			thumbnail: 'https://picsum.photos/700/300',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-
-	];
 
 	return (
 		<>

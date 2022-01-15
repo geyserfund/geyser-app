@@ -42,23 +42,12 @@ export const StatusBar = ({message, variant}: IStatusBarProp) => {
 		}
 	};
 
-	const getFlexDitection = () => {
-		switch (variant) {
-			case 'problem':
-				return 'row';
-			case 'solution':
-				return 'column';
-			default:
-				return 'column';
-		}
-	};
-
 	return (
 		<Box width="100%" display="flex" backgroundColor={getBackground()} padding="8px 5px" borderRadius="8px" >
 			<Box padding="10px">
 				{ getIcon()}
 			</Box>
-			<Box flex={1} display="flex" flexDirection={getFlexDitection()} alignItems={variant === 'solution' ? 'flex-start' : 'center'}>
+			<Box flex={1} display="flex" flexDirection="column" alignItems={'flex-start'}>
 				<Text fontWeight={600}>{`${getLabel()}: `}</Text><Text>{message}</Text>
 			</Box>
 
