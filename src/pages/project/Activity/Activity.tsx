@@ -1,5 +1,5 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { SatoshiIcon } from '../../../components/icons';
 import { CircularFundProgress } from '../../../components/molecules';
@@ -14,9 +14,11 @@ import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
 import { getDaysLeft, isDarkMode, isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
+import { AuthContext } from '../../../context';
 
 interface IActivityProps {
 	project: IProject
+	twitterOnOpen: () => void
 }
 
 const initialFunding = {
@@ -29,16 +31,17 @@ const initialFunding = {
 };
 
 let fundInterval: any;
-const Activity = ({ project }: IActivityProps) => {
+const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
 	const [startedFunding, setStartedFunding] = useState(false);
 	const [btcRate, setBtcRate] = useState(0);
 	const [amount, setAmount] = useState(0);
 	const [comment, setComment] = useState('');
-	const [anonymous, setAnonymous] = useState(false);
-
+	const [anonymous, setAnonymous] = useState(true);
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
+
+	const {user} = useContext(AuthContext);
 
 	const { toast } = useNotification();
 
@@ -53,15 +56,17 @@ const Activity = ({ project }: IActivityProps) => {
 		},
 	);
 
-	// UseEffect(() => {
-	// 	if (invoiceError) {
-	// 		toast({
-	// 			title: 'Something went wrong',
-	// 			description: 'Please refresh the page and try again',
-	// 			status: 'error',
-	// 		});
-	// 	}
-	// }, [invoiceError]);
+	useEffect(() => {
+		if (user && user.id) {
+			setAnonymous(false);
+		}
+	}, [user]);
+
+	useEffect(() => {
+		if (!anonymous && (!user || !user.id)) {
+			twitterOnOpen();
+		}
+	}, [anonymous]);
 
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {

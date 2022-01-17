@@ -106,7 +106,7 @@ export const Project = () => {
 										<Details project={project} />
 									</TabPanel>
 									<TabPanel padding="10px 0px" height="-webkit-fill-available" >
-										<Activity project={project} />
+										<Activity project={project} twitterOnOpen={twitterOnOpen}/>
 									</TabPanel>
 
 								</TabPanels>
@@ -114,7 +114,7 @@ export const Project = () => {
 						) : (
 							<>
 								<Details project={project} />
-								<Activity project={project} />
+								<Activity project={project} twitterOnOpen={twitterOnOpen}/>
 							</>
 						)
 					}

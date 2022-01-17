@@ -133,7 +133,12 @@ export const PaymentPage = ({
 				{/* <Checkbox colorScheme="green" defaultValue="false">
                 Remain Anonymous
             </Checkbox> */}
-				<CustomToggle value={anonymous} onChange={setAnonymous} />
+				<CustomToggle
+					first="Appear as anonymous"
+					second="Appear with profile"
+					value={anonymous}
+					onChange={setAnonymous}
+				/>
 			</Box>
 			<Box width="100%">
 				<ButtonComponent

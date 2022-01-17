@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent } from '../ui';
@@ -8,11 +8,9 @@ import { NavMenu } from './NavMenu';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { ConnectTwitter } from '../molecules';
-import { useQuery } from '@apollo/client';
-import { QUERY_GET_USER } from '../../graphql';
 import { Avatar } from '@chakra-ui/react';
-import { IuserProfile } from '../../interfaces';
 import { createUseStyles } from 'react-jss';
+import { AuthContext } from '../../context';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -29,19 +27,9 @@ export const NavBar = () => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 
-	const [user, setUser] = useState<IuserProfile>();
-
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const { loading, error, data } = useQuery(QUERY_GET_USER);
-
-	console.log('checking loading, error, data', loading, error, data, user);
-
-	useEffect(() => {
-		if (data && data.getUser) {
-			setUser(data.getUser);
-		}
-	}, [data]);
+	const {user} = useContext(AuthContext);
 
 	return (
 		<>
