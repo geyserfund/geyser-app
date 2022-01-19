@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Box, Image, Link, Text, VStack } from '@chakra-ui/react';
 import { ButtonComponent } from '../../components/ui';
-import { ProjectCard } from '../../components/molecules';
+import { Footer, ProjectCard } from '../../components/molecules';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { fonts } from '../../constants/fonts';
 import { colors, geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo } from '../../constants';
@@ -26,10 +26,12 @@ export const Home = () => {
 				flex={1}
 				background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
 				display="flex"
-				justifyContent="center"
-				// AlignItems="center"
+				flexDirection="column"
+				// JustifyContent="center"
+				alignItems="center"
 				padding="0px 10px"
 				overflowY={!isMobile ? 'auto' : undefined}
+				position="relative"
 			>
 				<VStack
 					spacing="10px"
@@ -41,7 +43,7 @@ export const Home = () => {
 					alignItems="flex-start"
 				>
 					<Box width="100%" display="flex" justifyContent="center">
-						<Image src={geyserHomeLogo} height="250px"/>
+						<Image src={geyserHomeLogo} height="250px" />
 					</Box>
 					<Box width="100%" fontFamily={fonts.header} fontWeight={700} textAlign={'center'}>
 						<Text fontSize="40px">Let’s change the world with</Text>
@@ -59,17 +61,17 @@ export const Home = () => {
 							backgroundColor={colors.bgGrey}
 							isFullWidth
 						>
-								Subscribe
+							Subscribe
 						</ButtonComponent>
 					</Link>
 					<Box width="100%" display="flex" justifyContent="center">
-						<Image src={geyserHomeCoin1} height="150px"/>
+						<Image src={geyserHomeCoin1} height="150px" />
 					</Box>
 					<Text fontSize="25px" fontWeight={600}>
 						Get funded by Bitcoiners around the world to bring your ideas to life
 					</Text>
 					<Text fontSize="20px">
-					Are you a creator or entrepreneur looking for the funds needed to realize your ideas? No matter where you are in the world, Geyser now makes it easy for you to create and commit to a time-bound crowdfund, and allow supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser here.
+						Are you a creator or entrepreneur looking for the funds needed to realize your ideas? No matter where you are in the world, Geyser now makes it easy for you to create and commit to a time-bound crowdfund, and allow supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser here.
 					</Text>
 					<Link href="https://airtable.com/shrOzN3U8ePy4Y0uf" isExternal width="100%" >
 						<ButtonComponent
@@ -77,20 +79,21 @@ export const Home = () => {
 							primary
 							isFullWidth
 						>
-								Start a crowdfund
+							Start a crowdfund
 						</ButtonComponent>
 					</Link>
 					<Box width="100%" display="flex" justifyContent="center">
-						<Image src={geyserHomeCoin2} height="150px"/>
+						<Image src={geyserHomeCoin2} height="150px" />
 					</Box>
 					<Text fontSize="25px" fontWeight={600}>
-					Why Geyser?
+						Why Geyser?
 					</Text>
 					<Text fontSize="20px">
-					Geyser was inpsired by a natural phenomena: the piling up of heat and pressure which ejects water turbulently up into the sky, in a beatufiful display of energy. We believe that crowds have the power to do the same with ideas by throwing forth intermittend displays of solidarity and support until projects gush out from theory to practice.
+						Geyser was inpsired by a natural phenomena: the piling up of heat and pressure which ejects water turbulently up into the sky, in a beatufiful display of energy. We believe that crowds have the power to do the same with ideas by throwing forth intermittend displays of solidarity and support until projects gush out from theory to practice.
 					</Text>
 					<br />
 				</VStack>
+				<Footer />
 			</Box>
 			<Box
 				width={isMobile ? '100%' : '380px'}

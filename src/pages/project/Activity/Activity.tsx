@@ -1,6 +1,7 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
+import { RiLinkUnlinkM } from 'react-icons/ri';
 import { SatoshiIcon } from '../../../components/icons';
 import { CircularFundProgress } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
@@ -40,8 +41,9 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 	const [comment, setComment] = useState('');
 	const [anonymous, setAnonymous] = useState(true);
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
+	const [copy, setCopy] = useState(false);
 
-	const {user} = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
 
 	const { toast } = useNotification();
 
@@ -70,7 +72,7 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
-			if (fundData.getFundingTx.paid || fundData.getFundingTx.canceled) {
+			if (fundData.getFundingTx.paid) {
 				clearInterval(fundInterval);
 				setCompletedFunding(true);
 			}
@@ -117,6 +119,8 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 
 	const handleCloseButton = () => {
 		setFundpage(true);
+		setCompletedFunding(false);
+		setStartedFunding(false);
 	};
 
 	const handleFund = async () => {
@@ -142,6 +146,14 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 
 	const funders: IProjectFunding[] = project.fundingTxs;
 
+	const shareProjectWithfriends = () => {
+		navigator.clipboard.writeText(window.location.href);
+		setCopy(true);
+		setTimeout(() => {
+			setCopy(false);
+		}, 5000);
+	};
+
 	const infoPage = () => (
 		<VStack
 			padding={isMobile ? '10px 0px' : '10px 20px'}
@@ -165,10 +177,11 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 			</ButtonComponent>
 			<ButtonComponent
 				standard
-				leftIcon={<HiOutlineSpeakerphone fontSize="20px" />}
+				leftIcon={copy ? <RiLinkUnlinkM /> : <HiOutlineSpeakerphone fontSize="20px" />}
 				width="100%"
+				onClick={shareProjectWithfriends}
 			>
-				Share with Friends
+				{copy ? 'Project Link Copied' : 'Share project with friends'}
 			</ButtonComponent>
 			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" height="-webkit-fill-available">
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
@@ -197,7 +210,7 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 		>
 
 			{completedFunding
-				? <SuccessPage />
+				? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
 				: startedFunding
 					? <QrPage
 						comment={comment}
@@ -205,6 +218,7 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 						amount={amount}
 						owner={project.owner.user.username}
 						qrCode={fundingTx.paymentRequest}
+						handleCloseButton={handleCloseButton}
 					/>
 					: fundPage
 						? infoPage()

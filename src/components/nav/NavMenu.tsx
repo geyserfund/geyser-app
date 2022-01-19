@@ -1,5 +1,6 @@
 import { IconButton } from '@chakra-ui/button';
 import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode';
+import {Link} from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import { Box } from '@chakra-ui/layout';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
@@ -8,7 +9,7 @@ import React from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import {FaMoon, FaSun} from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
-import { colors, styles } from '../../constants';
+import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles } from '../../constants';
 
 const useStyles = createUseStyles({
 	menuList: {
@@ -16,12 +17,15 @@ const useStyles = createUseStyles({
 		flexDirection: 'column',
 		alignItems: 'center',
 		minWidth: '150px',
-		backgroundColor: colors.primary,
-		color: colors.textBlack,
 		padding: 0,
 		borderRadius: 12,
 		overflow: 'hidden',
 		'& button': {
+			'& a': {
+				textAlign: 'center',
+				width: '100%',
+				height: '100%',
+			},
 			'&:hover': {
 				backgroundColor: colors.primaryTint,
 			},
@@ -32,10 +36,12 @@ const useStyles = createUseStyles({
 				backgroundColor: colors.primaryTint,
 			},
 		},
+
 	},
 	menuItem: {
 		display: 'flex',
 		justifyContent: 'center',
+		padding: '10px 0px',
 	},
 	switchContainer: {
 		paddingTop: '5px',
@@ -56,7 +62,7 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const NavMenu = () => {
+export const NavMenu = ({logout}:{logout:any}) => {
 	const classes = useStyles();
 	const {colorMode, toggleColorMode} = useColorMode();
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
@@ -78,16 +84,22 @@ export const NavMenu = () => {
 			/>
 			<MenuList width="150px" className={classes.menuList}>
 				<MenuItem className={classes.menuItem}>
+					<Link href={AboutUsUrl} isExternal>
                     About
+					</Link>
 				</MenuItem>
 				<MenuItem className={classes.menuItem}>
-                    TC
+					<Link href={FAQUrl} isExternal>
+                    FAQ
+					</Link>
 				</MenuItem>
 				<MenuItem className={classes.menuItem}>
+					<Link href={FeedbackUrl} isExternal>
                     Feedback
+					</Link>
 				</MenuItem>
-				<MenuItem className={classes.menuItem}>
-                    Lightening 101
+				<MenuItem className={classes.menuItem} onClick={logout}>
+                    LogOut
 				</MenuItem>
 				<Box className={classes.switchContainer}>
 					<Switch

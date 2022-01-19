@@ -4,15 +4,16 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOve
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
 import Cookies from 'js-cookie';
 
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useLocation, useParams } from 'react-router';
 import { ConnectTwitter } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
+import { AuthContext } from '../../context';
 import { QUERY_GET_PROJECT } from '../../graphql';
-import { isDarkMode, isMobileMode, logout } from '../../utils';
+import { isDarkMode, isMobileMode } from '../../utils';
 import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
@@ -39,7 +40,7 @@ export const Project = () => {
 
 	const { projectId } = useParams<{ projectId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
-	console.log('checking state', state);
+	const {logout} = useContext(AuthContext);
 
 	useEffect(() => {
 		try {

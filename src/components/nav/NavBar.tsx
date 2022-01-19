@@ -29,7 +29,7 @@ export const NavBar = () => {
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const {user} = useContext(AuthContext);
+	const { user, logout } = useContext(AuthContext);
 
 	return (
 		<>
@@ -51,7 +51,7 @@ export const NavBar = () => {
 					{
 						isMobile ? <>
 							{
-								user
+								user.id
 									? <ButtonComponent
 										className={classes.userInfo}
 										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
@@ -69,7 +69,7 @@ export const NavBar = () => {
 										Login
 									</ButtonComponent>
 							}
-							<NavMenu />
+							<NavMenu logout={logout} />
 						</> : (
 							<Box>
 								<ButtonComponent
@@ -78,10 +78,10 @@ export const NavBar = () => {
 									standard
 									marginRight="12px"
 								>
-									Start Project
+									Start a Crowdfund
 								</ButtonComponent>
 								{
-									user
+									user.id
 										? <ButtonComponent
 											className={classes.userInfo}
 											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
@@ -98,17 +98,7 @@ export const NavBar = () => {
 											Login
 										</ButtonComponent>
 								}
-
-								{/* <Button
-									variant="ghost"
-									marginRight="12px"
-									onClick={onOpen}
-									width="150px"
-									fontSize="15px"
-								>
-									Login
-								</Button> */}
-								<NavMenu />
+								<NavMenu logout={logout} />
 							</Box>
 						)
 					}
