@@ -130,7 +130,6 @@ export const Home = () => {
 						Geyser was inpsired by a natural phenomena: the piling up of heat and pressure which ejects water turbulently up into the sky, in a beatufiful display of energy. We believe that crowds have the power to do the same with ideas by throwing forth intermittend displays of solidarity and support until projects gush out from theory to practice.
 					</Text>
 				</Box>
-
 			</VStack>
 			<Footer />
 		</VStack >

@@ -73,16 +73,6 @@ const sponsors: IUser[] = [
 		badge: 'owner',
 		amount: 0,
 	},
-	{
-		picture: 'https://pbs.twimg.com/profile_images/1362672747399159818/QR9bbtrT_400x400.jpg',
-		username: 'walletofsatoshi',
-		fullName: 'walletofsatoshi',
-		id: '',
-		URL: '',
-		twitter: false,
-		badge: 'owner',
-		amount: 0,
-	},
 ];
 
 export const King = () => {
