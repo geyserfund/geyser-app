@@ -40,7 +40,7 @@ export const Project = () => {
 
 	const { projectId } = useParams<{ projectId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
-	const {logout} = useContext(AuthContext);
+	const { logout } = useContext(AuthContext);
 
 	useEffect(() => {
 		try {
@@ -96,26 +96,25 @@ export const Project = () => {
 					overflow="hidden"
 				>{
 						isMobile ? (
-							<Tabs width="100%" colorScheme="blackAlpha">
+							<Tabs width="100%" colorScheme="blackAlpha" backgroundColor="brand.bgGrey">
 								<TabList className={classes.tabListContainer}>
-									<Tab flex={1}><Text width="100%" textAlign="left" fontSize="24px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Project</Text></Tab>
-									<Tab flex={1}><Text width="100%" textAlign="right" fontSize="24px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Fund</Text></Tab>
+									<Tab flex={1}><Text width="100%" textAlign="left" fontSize="20px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Project</Text></Tab>
+									<Tab flex={1}><Text width="100%" textAlign="right" fontSize="20px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Fund</Text></Tab>
 								</TabList>
 
 								<TabPanels height="-webkit-fill-available" >
-									<TabPanel padding="10px 0px" height="-webkit-fill-available" >
+									<TabPanel padding="0px" height="-webkit-fill-available" >
 										<Details project={project} />
 									</TabPanel>
-									<TabPanel padding="10px 0px" height="-webkit-fill-available" >
-										<Activity project={project} twitterOnOpen={twitterOnOpen}/>
+									<TabPanel padding="0px" height="-webkit-fill-available" >
+										<Activity project={project} twitterOnOpen={twitterOnOpen} />
 									</TabPanel>
-
 								</TabPanels>
 							</Tabs>
 						) : (
 							<>
 								<Details project={project} />
-								<Activity project={project} twitterOnOpen={twitterOnOpen}/>
+								<Activity project={project} twitterOnOpen={twitterOnOpen} />
 							</>
 						)
 					}
