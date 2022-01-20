@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss';
 import QRCode from 'react-qr-code';
 import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
-import { RiLinksLine } from 'react-icons/ri';
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 
 const useStyles = createUseStyles({
 	blockText: {
@@ -73,9 +73,9 @@ export const QrPage = ({
 			<Box className={classes.copyText}>
 				<ButtonComponent
 					isFullWidth
-					primary
+					primary={copy}
 					onClick={handleCopy}
-					leftIcon={<RiLinksLine />}
+					leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
 				>
 					{!copy ? 'Copy Invoice' : 'Invoice Copied'}
 				</ButtonComponent>

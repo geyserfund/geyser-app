@@ -5,7 +5,7 @@ import { ButtonComponent } from '../../components/ui';
 import { Footer, ProjectCard } from '../../components/molecules';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { fonts } from '../../constants/fonts';
-import { colors, geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo } from '../../constants';
+import { colors, geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo, StartCrowdFundUrl, SubscribeUrl } from '../../constants';
 
 export const Home = () => {
 	useEffect(() => {
@@ -55,7 +55,7 @@ export const Home = () => {
 					<Text fontSize="20px">
 						Geyser is a global and user-friendly crowdfunding platform, that helps creators to get the funding they need for their projects to burst out with great force into the world (just like geysers!). Explore live crowdfunding projects, fund them on Bitcoin’s lightning network, and keep track of the projects.
 					</Text>
-					<Link href="https://airtable.com/shrE0ffCRdX6CkYYw" isExternal width="100%" >
+					<Link href={SubscribeUrl} isExternal width="100%" >
 						<ButtonComponent
 							standard
 							backgroundColor={colors.bgGrey}
@@ -73,7 +73,7 @@ export const Home = () => {
 					<Text fontSize="20px">
 						Are you a creator or entrepreneur looking for the funds needed to realize your ideas? No matter where you are in the world, Geyser now makes it easy for you to create and commit to a time-bound crowdfund, and allow supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser here.
 					</Text>
-					<Link href="https://airtable.com/shrOzN3U8ePy4Y0uf" isExternal width="100%" >
+					<Link href={StartCrowdFundUrl} isExternal width="100%" >
 						<ButtonComponent
 							standard
 							primary

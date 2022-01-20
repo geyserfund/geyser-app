@@ -10,6 +10,7 @@ interface ICircularFundProgress {
 	amount: number;
 	goal: number;
 	rate: number
+	loading: boolean;
 }
 
 const useStyles = createUseStyles({
@@ -42,7 +43,7 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const CircularFundProgress = ({ goal, rate, amount }: ICircularFundProgress) => {
+export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularFundProgress) => {
 	console.log('rate', rate);
 	const classes = useStyles();
 	const isDark = isDarkMode();
@@ -71,6 +72,7 @@ export const CircularFundProgress = ({ goal, rate, amount }: ICircularFundProgre
 	return (
 		<>{percentage < 100
 			? <CircularProgress
+				isIndeterminate={loading}
 				className={classes.circularProgress}
 				value={percentage}
 				size="208px"

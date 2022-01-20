@@ -9,3 +9,6 @@ export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf';
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund';
 export const GeyserTelegramUrl = 'https://t.me/+EZ5otIPhVcxhMmFk';
 export const GeyserPrivacyUrl = 'https://www.privacypolicygenerator.info/live.php?token=9WUygSeVmxCeoXHT4zMZ1QdNM5XrHc6Z';
+
+export const SubscribeUrl = 'https://airtable.com/shrE0ffCRdX6CkYYw';
+export const StartCrowdFundUrl = 'https://airtable.com/shrOzN3U8ePy4Y0uf';

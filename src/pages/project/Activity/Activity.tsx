@@ -51,7 +51,7 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 		data,
 	}] = useMutation(MUTATION_FUND_PROJECT);
 
-	const [getFunding, { data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
+	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
 		{
 			variables: { fundingTxId: fundingTx.id },
 			fetchPolicy: 'network-only',
@@ -164,7 +164,8 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 			margin="10px 15px"
 		>
 			<FundingStatus open={true} />
-			<CircularFundProgress rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
+
+			<CircularFundProgress loading={loading} rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
 			<Text>{`${getDaysLeft(project.expiresAt)} to go`}</Text>
 			<ButtonComponent
 				primary

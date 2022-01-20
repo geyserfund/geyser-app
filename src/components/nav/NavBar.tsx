@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from '@chakra-ui/react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent } from '../ui';
@@ -11,6 +12,7 @@ import { ConnectTwitter } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
+import { StartCrowdFundUrl } from '../../constants';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -72,14 +74,17 @@ export const NavBar = () => {
 							<NavMenu logout={logout} />
 						</> : (
 							<Box>
-								<ButtonComponent
-									leftIcon={<AddIcon />}
-									primary
-									standard
-									marginRight="12px"
-								>
-									Start a Crowdfund
-								</ButtonComponent>
+								<Link href={StartCrowdFundUrl} isExternal>
+									<ButtonComponent
+										leftIcon={<AddIcon />}
+										primary
+										standard
+										marginRight="12px"
+										width="220px"
+									>
+										Start a Crowdfund
+									</ButtonComponent>
+								</Link>
 								{
 									user.id
 										? <ButtonComponent
