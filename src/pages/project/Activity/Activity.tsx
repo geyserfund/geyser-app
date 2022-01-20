@@ -42,6 +42,7 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 	const [anonymous, setAnonymous] = useState(true);
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [copy, setCopy] = useState(false);
+	const [funders, setfunders] = useState<IProjectFunding[]>([]);
 
 	const { user } = useContext(AuthContext);
 
@@ -57,6 +58,18 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 			fetchPolicy: 'network-only',
 		},
 	);
+
+	useEffect(() => {
+		if (project && project.fundingTxs) {
+			const unsortedFunders = [...project.fundingTxs];
+			if (unsortedFunders.length > 0) {
+				console.log('funder', unsortedFunders);
+				unsortedFunders.sort((a, b) => parseInt(b.paidAt, 10) - parseInt(a.paidAt, 10));
+				console.log('funder', unsortedFunders);
+				setfunders(unsortedFunders);
+			}
+		}
+	}, [project.fundingTxs]);
 
 	useEffect(() => {
 		if (user && user.id) {
@@ -143,8 +156,6 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 			});
 		}
 	};
-
-	const funders: IProjectFunding[] = project.fundingTxs;
 
 	const shareProjectWithfriends = () => {
 		navigator.clipboard.writeText(window.location.href);

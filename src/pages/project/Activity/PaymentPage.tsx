@@ -5,16 +5,16 @@ import { ButtonComponent, CustomToggle, ErrorBox } from '../../../components/ui'
 import { isDarkMode } from '../../../utils';
 
 interface IPaymentPageProps {
-    isMobile: boolean
-    handleCloseButton:() => void
-    btcRate: number
-    amount: number
-    setAmount: React.Dispatch<React.SetStateAction<number>>
-    comment: string
-    setComment: React.Dispatch<React.SetStateAction<string>>
-    anonymous: boolean
-    setAnonymous: React.Dispatch<React.SetStateAction<boolean>>
-    handleFund: () => void
+	isMobile: boolean
+	handleCloseButton: () => void
+	btcRate: number
+	amount: number
+	setAmount: React.Dispatch<React.SetStateAction<number>>
+	comment: string
+	setComment: React.Dispatch<React.SetStateAction<string>>
+	anonymous: boolean
+	setAnonymous: React.Dispatch<React.SetStateAction<boolean>>
+	handleFund: () => void
 }
 
 export const PaymentPage = ({
@@ -33,7 +33,9 @@ export const PaymentPage = ({
 
 	const handleComment = (event: any) => {
 		if (event) {
-			setComment(event.target.value);
+			if (event.target.value.length < 280) {
+				setComment(event.target.value);
+			}
 		}
 	};
 
@@ -149,11 +151,11 @@ export const PaymentPage = ({
 					marginTop="15px"
 					onClick={submit}
 				>
-                Fund project
+					Fund project
 				</ButtonComponent>
 			</Box>
 			{error && <Box width="100%">
-				<ErrorBox message={error}/>
+				<ErrorBox message={error} />
 			</Box>}
 
 		</VStack>);

@@ -53,7 +53,8 @@ export const Details = ({ project }: IActivityProps) => {
 				isDark,
 				classes,
 				project,
-				handleSuccess }}
+				handleSuccess,
+			}}
 		/>;
 	};
 
@@ -65,9 +66,9 @@ export const Details = ({ project }: IActivityProps) => {
 			overflow="hidden"
 		>
 			<Box padding={componentPadding}>
-				<Text fontSize="16px"> Project: </Text>
+				{!isMobile && <Text fontSize="16px"> Project: </Text>}
 				<Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap">
-					<Heading fontSize="28px" fontWeight="normal">
+					<Heading fontSize={isMobile ? '23px' : '28px'} fontWeight="normal">
 						{project.title}
 					</Heading>
 					<Text>{`Created ${getDaysAgo(project.createdAt)} ago`}</Text>
