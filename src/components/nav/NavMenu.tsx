@@ -1,15 +1,16 @@
 import { IconButton } from '@chakra-ui/button';
 import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode';
-import {Link} from '@chakra-ui/react';
+import { Link } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import { Box } from '@chakra-ui/layout';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { Switch } from '@chakra-ui/switch';
 import React from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
-import {FaMoon, FaSun} from 'react-icons/fa';
+import { FaMoon, FaSun } from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
 import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles } from '../../constants';
+import { IuserProfile } from '../../interfaces';
 
 const useStyles = createUseStyles({
 	menuList: {
@@ -62,9 +63,9 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const NavMenu = ({logout}:{logout:any}) => {
+export const NavMenu = ({ logout, user }: { logout: any, user: IuserProfile | undefined }) => {
 	const classes = useStyles();
-	const {colorMode, toggleColorMode} = useColorMode();
+	const { colorMode, toggleColorMode } = useColorMode();
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
 	const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark);
 	const iconClassName = useColorModeValue(classes.iconNight, classes.iconDay);
@@ -78,29 +79,29 @@ export const NavMenu = ({logout}:{logout:any}) => {
 				borderRadius="50%"
 				color={textColor}
 				backgroundColor={backgroundColor}
-				icon={<Icon as={FiMoreHorizontal} boxSize="30px"/>}
+				icon={<Icon as={FiMoreHorizontal} boxSize="30px" />}
 				variant="solid"
 				sx={styles.buttonCommon}
 			/>
 			<MenuList width="150px" className={classes.menuList}>
 				<MenuItem className={classes.menuItem}>
 					<Link href={AboutUsUrl} isExternal>
-                    About
+						About
 					</Link>
 				</MenuItem>
 				<MenuItem className={classes.menuItem}>
 					<Link href={FAQUrl} isExternal>
-                    FAQ
+						FAQ
 					</Link>
 				</MenuItem>
 				<MenuItem className={classes.menuItem}>
 					<Link href={FeedbackUrl} isExternal>
-                    Feedback
+						Feedback
 					</Link>
 				</MenuItem>
-				<MenuItem className={classes.menuItem} onClick={logout}>
-                    LogOut
-				</MenuItem>
+				{user && user.id ? <MenuItem MenuItem className={classes.menuItem} onClick={logout}>
+					LogOut
+				</MenuItem> : null}
 				<Box className={classes.switchContainer}>
 					<Switch
 						colorScheme="blackAlpha"
@@ -108,10 +109,10 @@ export const NavMenu = ({logout}:{logout:any}) => {
 						isChecked={colorMode === 'light'}
 						onChange={toggleColorMode}
 					/>
-					<Icon className={iconClassName} as={SwitchIcon}/>
+					<Icon className={iconClassName} as={SwitchIcon} />
 				</Box>
 
 			</MenuList>
-		</Menu>
+		</Menu >
 	);
 };

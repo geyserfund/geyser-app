@@ -71,7 +71,7 @@ export const NavBar = () => {
 										Login
 									</ButtonComponent>
 							}
-							<NavMenu logout={logout} />
+							<NavMenu user={user} logout={logout} />
 						</> : (
 							<Box>
 								<Link href={StartCrowdFundUrl} isExternal>
@@ -103,7 +103,7 @@ export const NavBar = () => {
 											Login
 										</ButtonComponent>
 								}
-								<NavMenu logout={logout} />
+								<NavMenu user={user} logout={logout} />
 							</Box>
 						)
 					}
