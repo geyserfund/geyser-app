@@ -45,6 +45,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, ...rest }: I
 			maxWidth="500px"
 			minWidth="350px"
 			width="100%"
+			border="2px solid #E9E9E9"
 			{...rest}
 		>
 			<Image src={imgSrc} height="150px" width="100%" borderRadius="5px" marginBottom="10px" objectFit="fill" />
