@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { Link } from '@chakra-ui/react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent } from '../ui';
@@ -8,11 +9,10 @@ import { NavMenu } from './NavMenu';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { ConnectTwitter } from '../molecules';
-import { useQuery } from '@apollo/client';
-import { QUERY_GET_USER } from '../../graphql';
 import { Avatar } from '@chakra-ui/react';
-import { IuserProfile } from '../../interfaces';
 import { createUseStyles } from 'react-jss';
+import { AuthContext } from '../../context';
+import { StartCrowdFundUrl } from '../../constants';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -29,19 +29,9 @@ export const NavBar = () => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 
-	const [user, setUser] = useState<IuserProfile>();
-
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const { loading, error, data } = useQuery(QUERY_GET_USER);
-
-	console.log('checking loading, error, data', loading, error, data, user);
-
-	useEffect(() => {
-		if (data && data.getUser) {
-			setUser(data.getUser);
-		}
-	}, [data]);
+	const { user, logout } = useContext(AuthContext);
 
 	return (
 		<>
@@ -63,7 +53,7 @@ export const NavBar = () => {
 					{
 						isMobile ? <>
 							{
-								user
+								user.id
 									? <ButtonComponent
 										className={classes.userInfo}
 										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
@@ -81,19 +71,22 @@ export const NavBar = () => {
 										Login
 									</ButtonComponent>
 							}
-							<NavMenu />
+							<NavMenu logout={logout} />
 						</> : (
 							<Box>
-								<ButtonComponent
-									leftIcon={<AddIcon />}
-									primary
-									standard
-									marginRight="12px"
-								>
-									Start Project
-								</ButtonComponent>
+								<Link href={StartCrowdFundUrl} isExternal>
+									<ButtonComponent
+										leftIcon={<AddIcon />}
+										primary
+										standard
+										marginRight="12px"
+										width="220px"
+									>
+										Start a Crowdfund
+									</ButtonComponent>
+								</Link>
 								{
-									user
+									user.id
 										? <ButtonComponent
 											className={classes.userInfo}
 											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
@@ -110,17 +103,7 @@ export const NavBar = () => {
 											Login
 										</ButtonComponent>
 								}
-
-								{/* <Button
-									variant="ghost"
-									marginRight="12px"
-									onClick={onOpen}
-									width="150px"
-									fontSize="15px"
-								>
-									Login
-								</Button> */}
-								<NavMenu />
+								<NavMenu logout={logout} />
 							</Box>
 						)
 					}

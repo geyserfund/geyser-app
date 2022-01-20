@@ -4,11 +4,14 @@ import {
 } from '@chakra-ui/react';
 import { client, Router, theme } from './config';
 import { ApolloProvider } from '@apollo/client';
+import { AuthProvider } from './context';
 
 export const App = () => (
 	<ChakraProvider theme={theme}>
 		<ApolloProvider client={client}>
-			<Router />
+			<AuthProvider>
+				<Router />
+			</AuthProvider>
 		</ApolloProvider>
 	</ChakraProvider>
 );

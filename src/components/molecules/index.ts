@@ -3,3 +3,4 @@ export * from './CircularFundProgress';
 export * from './IdBar';
 export * from './ConnectTwitter';
 export * from './ProjectCard';
+export * from './Footer';

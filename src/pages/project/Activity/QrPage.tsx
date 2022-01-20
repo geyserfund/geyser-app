@@ -1,31 +1,33 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
+import { CloseButton } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import QRCode from 'react-qr-code';
+import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 
 const useStyles = createUseStyles({
 	blockText: {
 		fontSize: '12px',
 	},
 	copyText: {
-		'& :hover': {
-			cursor: 'pointer',
-		},
+		width: '100%',
 	},
 });
 
 interface IQrPage {
-    comment: string;
-     title: string;
-     amount: number;
-     owner: string;
-     qrCode: string;
+	comment: string;
+	title: string;
+	amount: number;
+	owner: string;
+	qrCode: string;
+	handleCloseButton: () => void
 }
 
-export 	const QrPage = ({
-	comment, title, amount, owner, qrCode,
-}:IQrPage) => {
+export const QrPage = ({
+	comment, title, amount, owner, qrCode, handleCloseButton,
+}: IQrPage) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
 
@@ -34,6 +36,9 @@ export 	const QrPage = ({
 	const handleCopy = () => {
 		navigator.clipboard.writeText(qrCode);
 		setcopy(true);
+		setTimeout(() => {
+			setcopy(false);
+		}, 2000);
 	};
 
 	return (
@@ -47,7 +52,14 @@ export 	const QrPage = ({
 			display="flex"
 			alignItems="center"
 			justifyContent="center"
+			position="relative"
 		>
+			<CloseButton
+				borderRadius="50%"
+				position="absolute"
+				right="10px"
+				onClick={handleCloseButton}
+			/>
 			<Box width="100%" padding="10px">
 				<Text fontSize="16px"> Confirm and pay using QR Code </Text>
 				<Box backgroundColor="brand.bgLightGrey" borderRadius="12px" padding="10px">
@@ -57,9 +69,17 @@ export 	const QrPage = ({
 					{comment && <Text className={classes.blockText}> {`Message: ${comment}`}</Text>}
 				</Box>
 			</Box>
-			<QRCode value={qrCode} />
+			<QRCode value={qrCode} onClick={handleCopy} />
 			<Box className={classes.copyText}>
-				<Text onClick={handleCopy}>{!copy ? 'Copy Invoice' : 'Invoice Copied'}</Text>
+				<ButtonComponent
+					isFullWidth
+					primary={copy}
+					onClick={handleCopy}
+					leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
+				>
+					{!copy ? 'Copy Invoice' : 'Invoice Copied'}
+				</ButtonComponent>
+				<Text ></Text>
 			</Box>
 
 		</VStack>

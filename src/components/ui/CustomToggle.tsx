@@ -57,9 +57,11 @@ const useStyles = createUseStyles({
 interface ICustomToggle {
 	value: boolean;
 	onChange: any;
+	first: string;
+	second: string;
 }
 
-export const CustomToggle = ({value, onChange}:ICustomToggle) => {
+export const CustomToggle = ({first, second, value, onChange}:ICustomToggle) => {
 	const isDark = isDarkMode();
 	const classes = useStyles({isDark});
 	const [anonymous, setAnonymous] = useState(value);
@@ -73,14 +75,14 @@ export const CustomToggle = ({value, onChange}:ICustomToggle) => {
 	return (
 		<Box className={classes.toggleContainer} onClick={handleToggle}>
 			<Box className={classes.toggleShade} />
-			<Box className={classNames(classes.basicBox, {[classes.activeBox]: !anonymous})}>
+			<Box className={classNames(classes.basicBox, {[classes.activeBox]: anonymous})}>
 				<Text>
-					Appear as anonymous
+					{first}
 				</Text>
 			</Box>
-			<Box className={classNames(classes.basicBox, {[classes.activeBox]: anonymous})} >
+			<Box className={classNames(classes.basicBox, {[classes.activeBox]: !anonymous})} >
 				<Text>
-					Appear with profile
+					{second}
 				</Text>
 			</Box>
 		</Box>

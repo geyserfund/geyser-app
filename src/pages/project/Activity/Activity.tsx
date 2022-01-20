@@ -1,6 +1,7 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
+import { RiLinkUnlinkM } from 'react-icons/ri';
 import { SatoshiIcon } from '../../../components/icons';
 import { CircularFundProgress } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
@@ -14,9 +15,11 @@ import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
 import { getDaysLeft, isDarkMode, isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
+import { AuthContext } from '../../../context';
 
 interface IActivityProps {
 	project: IProject
+	twitterOnOpen: () => void
 }
 
 const initialFunding = {
@@ -29,16 +32,18 @@ const initialFunding = {
 };
 
 let fundInterval: any;
-const Activity = ({ project }: IActivityProps) => {
+const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
 	const [startedFunding, setStartedFunding] = useState(false);
 	const [btcRate, setBtcRate] = useState(0);
 	const [amount, setAmount] = useState(0);
 	const [comment, setComment] = useState('');
-	const [anonymous, setAnonymous] = useState(false);
-
+	const [anonymous, setAnonymous] = useState(true);
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
+	const [copy, setCopy] = useState(false);
+
+	const { user } = useContext(AuthContext);
 
 	const { toast } = useNotification();
 
@@ -46,26 +51,28 @@ const Activity = ({ project }: IActivityProps) => {
 		data,
 	}] = useMutation(MUTATION_FUND_PROJECT);
 
-	const [getFunding, { data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
+	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
 		{
 			variables: { fundingTxId: fundingTx.id },
 			fetchPolicy: 'network-only',
 		},
 	);
 
-	// UseEffect(() => {
-	// 	if (invoiceError) {
-	// 		toast({
-	// 			title: 'Something went wrong',
-	// 			description: 'Please refresh the page and try again',
-	// 			status: 'error',
-	// 		});
-	// 	}
-	// }, [invoiceError]);
+	useEffect(() => {
+		if (user && user.id) {
+			setAnonymous(false);
+		}
+	}, [user]);
+
+	useEffect(() => {
+		if (!anonymous && (!user || !user.id)) {
+			twitterOnOpen();
+		}
+	}, [anonymous]);
 
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
-			if (fundData.getFundingTx.paid || fundData.getFundingTx.canceled) {
+			if (fundData.getFundingTx.paid) {
 				clearInterval(fundInterval);
 				setCompletedFunding(true);
 			}
@@ -112,6 +119,8 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const handleCloseButton = () => {
 		setFundpage(true);
+		setCompletedFunding(false);
+		setStartedFunding(false);
 	};
 
 	const handleFund = async () => {
@@ -137,6 +146,14 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const funders: IProjectFunding[] = project.fundingTxs;
 
+	const shareProjectWithfriends = () => {
+		navigator.clipboard.writeText(window.location.href);
+		setCopy(true);
+		setTimeout(() => {
+			setCopy(false);
+		}, 5000);
+	};
+
 	const infoPage = () => (
 		<VStack
 			padding={isMobile ? '10px 0px' : '10px 20px'}
@@ -147,7 +164,8 @@ const Activity = ({ project }: IActivityProps) => {
 			margin="10px 15px"
 		>
 			<FundingStatus open={true} />
-			<CircularFundProgress rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
+
+			<CircularFundProgress loading={loading} rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
 			<Text>{`${getDaysLeft(project.expiresAt)} to go`}</Text>
 			<ButtonComponent
 				primary
@@ -160,10 +178,11 @@ const Activity = ({ project }: IActivityProps) => {
 			</ButtonComponent>
 			<ButtonComponent
 				standard
-				leftIcon={<HiOutlineSpeakerphone fontSize="20px" />}
+				leftIcon={copy ? <RiLinkUnlinkM /> : <HiOutlineSpeakerphone fontSize="20px" />}
 				width="100%"
+				onClick={shareProjectWithfriends}
 			>
-				Share with Friends
+				{copy ? 'Project Link Copied' : 'Share project with friends'}
 			</ButtonComponent>
 			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" height="-webkit-fill-available">
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
@@ -192,7 +211,7 @@ const Activity = ({ project }: IActivityProps) => {
 		>
 
 			{completedFunding
-				? <SuccessPage />
+				? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
 				: startedFunding
 					? <QrPage
 						comment={comment}
@@ -200,6 +219,7 @@ const Activity = ({ project }: IActivityProps) => {
 						amount={amount}
 						owner={project.owner.user.username}
 						qrCode={fundingTx.paymentRequest}
+						handleCloseButton={handleCloseButton}
 					/>
 					: fundPage
 						? infoPage()

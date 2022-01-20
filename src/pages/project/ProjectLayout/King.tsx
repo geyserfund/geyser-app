@@ -50,28 +50,28 @@ export const King = () => {
 
 	const images = [
 		{
-			original: '/king_1.png',
-			thumbnail: '/king_1.png',
+			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_1.png',
+			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_1.png',
 		},
 		{
-			original: '/king_2.png',
-			thumbnail: '/king_2.png',
+			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png',
+			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png',
 		},
 		{
-			original: '/king_3.png',
-			thumbnail: '/king_3.png',
+			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png',
+			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png',
 		},
 		{
-			original: '/king_4.png',
-			thumbnail: '/king_4.png',
+			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_4.png',
+			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_4.png',
 		},
 		{
-			original: '/king_5.png',
-			thumbnail: '/king_5.png',
+			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png',
+			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png',
 		},
 		{
-			original: '/king_6.png',
-			thumbnail: '/king_6.png',
+			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png',
+			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png',
 		},
 	];
 
@@ -114,7 +114,7 @@ export const King = () => {
 			</VStack>
 
 			<VStack className={classes.containers} spacing="5px" alignItems="left" marginTop="20px">
-				<ImageBar images={images}/>
+				<ImageBar images={images} />
 			</VStack>
 			<VStack className={classes.containers} >
 				<Text fontWeight={600} fontSize={'1.25em'}>
@@ -143,10 +143,10 @@ export const King = () => {
 			</VStack>
 			<HStack spacing="30px">
 				<Box>
-					<Image src="/king_1.png" />
+					<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_1.png" />
 				</Box>
 				<Box>
-					<Image src="/king_2.png" />
+					<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png" />
 				</Box>
 			</HStack>
 			<VStack className={classes.containers} >
@@ -190,13 +190,13 @@ export const King = () => {
 
 				<HStack spacing="30px">
 					<Box>
-						<Image src="/king_3.png" />
+						<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png" />
 					</Box>
 					<Box>
-						<Image src="/king_4.png" />
+						<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_4.png" />
 					</Box>
 					<Box>
-						<Image src="/king_5.png" />
+						<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png" />
 					</Box>
 				</HStack>
 
@@ -217,7 +217,7 @@ export const King = () => {
 
 				</UnorderedList>
 				<Box maxWidth={'400px'}>
-					<Image src="/king_6.png" />
+					<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png" />
 				</Box>
 			</VStack>
 
