@@ -8,12 +8,12 @@ handlers:
   upload: build/(.*\..+)$
 # Catch all handler to index.html
 - url: /.*
-  static_files: build/index.html
-  upload: build/index.html
-- url: /.*
   secure: always
   redirect_http_response_code: 301
   script: auto
+- url: /.*
+  static_files: build/index.html
+  upload: build/index.html
 env_variables:
   APP_URL: https://geyser.fund
   MIN_INITIAL_FUNDING: 1
