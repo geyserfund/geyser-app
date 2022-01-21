@@ -15,6 +15,7 @@ interface ICircularFundProgress {
 
 const useStyles = createUseStyles({
 	circularProgress: {
+		borderRadius: '50%',
 		position: 'relative',
 		display: 'flex',
 		justifyContent: 'center',
@@ -61,7 +62,7 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 	};
 
 	const getStat = () => (
-		<Stat textAlign="center">
+		<Stat textAlign="center" borderRadius="50%">
 			<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Funded</StatLabel>
 			<StatNumber className="amount-label-sat" position="relative">{amount} <SatoshiIcon isDark={isDark} wrapperClass={classes.satoshi} /></StatNumber>
 			<StatNumber className="amount-label-usd" position="relative">{'$'}{amountUSD} </StatNumber>

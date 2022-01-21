@@ -113,8 +113,8 @@ export const King = () => {
 	};
 
 	return (
-		<>
-			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px">
+		<HStack justifyContent="center" width="100%">
+			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
 				<Card className={classes.cardContainer}>
 					<VStack spacing="12px" alignItems="flex-start">
 						<Box>
@@ -291,6 +291,6 @@ export const King = () => {
 				</VStack>
 			</VStack >
 
-		</>
+		</HStack>
 	);
 };

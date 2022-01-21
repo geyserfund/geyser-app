@@ -80,30 +80,32 @@ export const Home = () => {
 				<Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeCoin1} height="150px" />
 				</Box>
-				<Card width="100%" borderRadius="6px" marginBottom="20px" border="2px solid #E9E9E9">
-					<VStack
-						width="100%"
-						padding="20px 15px"
-						alignItems="center"
-						backgroundColor={isDark ? 'brand.bglightDarkMode' : 'bgWhite'}
-					>
-						<Text fontSize="15px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'} marginBottom="10px">
-							CROWDFUNDING PROJECTS
-						</Text>
-						<HStack
-							overflowX={'auto'}
+				<VStack paddingBottom="20px" width="100%" alignItems="center">
+					<Card maxHeight="328px" width="100%" borderRadius="20px" border="2px solid #E9E9E9">
+						<VStack
+							width="100%"
+							padding="20px 15px"
+							alignItems="center"
+							backgroundColor={isDark ? 'brand.bglightDarkMode' : 'bgWhite'}
 						>
-							<ProjectCard
-								open
-								title="Bitcoin Conference In Lagos"
-								name="bitcoin-conference-in-lagos"
-								marginBottom="20px"
-								imgSrc="https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png"
-							/>
-						</HStack>
+							<Text fontSize="15px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'} marginBottom="10px">
+								CROWDFUNDING PROJECTS
+							</Text>
+							<HStack
+								overflowX={'auto'}
+							>
+								<ProjectCard
+									open
+									title="Bitcoin Conference In Lagos"
+									name="bitcoin-conference-in-lagos"
+									marginBottom="20px"
+									imgSrc="https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png"
+								/>
+							</HStack>
 
-					</VStack>
-				</Card>
+						</VStack>
+					</Card>
+				</VStack>
 				<Text className={classes.titles}>
 					Get funded by Bitcoiners around the world to bring your ideas to life
 				</Text>

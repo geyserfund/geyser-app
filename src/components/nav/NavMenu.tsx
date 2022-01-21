@@ -1,13 +1,13 @@
 import { IconButton } from '@chakra-ui/button';
-import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode';
+import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Link } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
-import { Box } from '@chakra-ui/layout';
+// Import { Box } from '@chakra-ui/layout';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
-import { Switch } from '@chakra-ui/switch';
+// Import { Switch } from '@chakra-ui/switch';
 import React from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
-import { FaMoon, FaSun } from 'react-icons/fa';
+// Import { FaMoon, FaSun } from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
 import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles } from '../../constants';
 import { IuserProfile } from '../../interfaces';
@@ -65,11 +65,11 @@ const useStyles = createUseStyles({
 
 export const NavMenu = ({ logout, user }: { logout: any, user: IuserProfile | undefined }) => {
 	const classes = useStyles();
-	const { colorMode, toggleColorMode } = useColorMode();
+	// Const { colorMode, toggleColorMode } = useColorMode();
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
 	const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark);
-	const iconClassName = useColorModeValue(classes.iconNight, classes.iconDay);
-	const SwitchIcon = useColorModeValue(FaMoon, FaSun);
+	// Const iconClassName = useColorModeValue(classes.iconNight, classes.iconDay);
+	// const SwitchIcon = useColorModeValue(FaMoon, FaSun);
 
 	return (
 		<Menu placement="bottom-end" >
@@ -102,7 +102,7 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IuserProfile | un
 				{user && user.id ? <MenuItem MenuItem className={classes.menuItem} onClick={logout}>
 					LogOut
 				</MenuItem> : null}
-				<Box className={classes.switchContainer}>
+				{/* <Box className={classes.switchContainer}>
 					<Switch
 						colorScheme="blackAlpha"
 						size="lg"
@@ -110,7 +110,7 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IuserProfile | un
 						onChange={toggleColorMode}
 					/>
 					<Icon className={iconClassName} as={SwitchIcon} />
-				</Box>
+				</Box> */}
 
 			</MenuList>
 		</Menu >
