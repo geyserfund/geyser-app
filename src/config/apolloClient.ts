@@ -2,7 +2,7 @@
 import { ApolloClient, createHttpLink, from, InMemoryCache, Observable } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import Cookies from 'js-cookie';
-import { REACT_APP_API_ENDPOINT } from '../constants';
+import { cookieOptions, REACT_APP_API_ENDPOINT } from '../constants';
 import { onError } from '@apollo/client/link/error';
 import { customHistory } from '.';
 
@@ -58,8 +58,8 @@ const errorLink = onError(({ graphQLErrors,
 						}).then(response => {
 							console.log('checking response', response);
 							if (response && response.accessToken && response.refreshToken) {
-								Cookies.set('accessToken', response.accessToken);
-								Cookies.set('refreshToken', response.refreshToken);
+								Cookies.set('accessToken', response.accessToken, cookieOptions);
+								Cookies.set('refreshToken', response.refreshToken, cookieOptions);
 								const oldHeaders = operation.getContext().headers;
 								operation.setContext({
 									headers: {

@@ -3,6 +3,7 @@ import { ApolloError, useLazyQuery } from '@apollo/client';
 import React, { createContext, useState, useEffect } from 'react';
 import { QUERY_GET_USER } from '../graphql';
 import { IuserProfile } from '../interfaces';
+import { cookieOptions } from '../constants';
 
 const defaultAuthUser = {
 	id: 0,
@@ -16,11 +17,11 @@ const defaultContext = {
 	user: defaultAuthUser,
 	loading: false,
 	error: undefined,
-	logout: () => {},
+	logout: () => { },
 };
 
 interface IAuthContext {
-  isLoggedIn: boolean,
+	isLoggedIn: boolean,
 	user: IuserProfile,
 	loading: boolean,
 	error?: ApolloError,
@@ -33,8 +34,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const logout = () => {
 		setUser(defaultAuthUser);
 		setIsLoggedIn(false);
-		Cookies.remove('accessToken');
-		Cookies.remove('refreshToken');
+		Cookies.remove('accessToken', cookieOptions);
+		Cookies.remove('refreshToken', cookieOptions);
 		Object.keys(Cookies.get()).forEach(cookieName => {
 			Cookies.remove(cookieName);
 		});
@@ -61,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [data]);
 
 	return (
-		<AuthContext.Provider value={{user, loading, error, isLoggedIn, logout}}>
+		<AuthContext.Provider value={{ user, loading, error, isLoggedIn, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);

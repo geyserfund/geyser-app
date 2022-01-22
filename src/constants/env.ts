@@ -1,2 +1,3 @@
-export const twitterConsumerKey = process.env.REACT_APP_TWITTER_CONSUMER_KEY as string;
-export const twitterConsumerSecret = process.env.REACT_APP_TWITTER_CONSUMER_SECRET as string;
+export const { NODE_ENV } = process.env;
+export const { REACT_APP_API_ENDPOINT } = process.env;
+
