@@ -10,12 +10,12 @@ import { IFundingTx, IProject, IProjectFunding } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
 import { QUERY_GET_FUNDING } from '../../../graphql';
-import { setInterval } from 'timers';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
-import { getDaysLeft, isDarkMode, isMobileMode, useNotification } from '../../../utils';
+import { getCountDown, isDarkMode, isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
+import Loader from '../../../components/ui/Loader';
 
 interface IActivityProps {
 	project: IProject
@@ -29,7 +29,6 @@ const initialFunding = {
 	paymentRequest: '',
 	canceled: false,
 };
-
 let fundInterval: any;
 const Activity = ({ project }: IActivityProps) => {
 	const [fundPage, setFundpage] = useState(true);
@@ -42,6 +41,7 @@ const Activity = ({ project }: IActivityProps) => {
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [copy, setCopy] = useState(false);
 	const [funders, setfunders] = useState<IProjectFunding[]>([]);
+	const [countDown, setCountDown] = useState('');
 
 	const { user, twitterOnOpen } = useContext(AuthContext);
 
@@ -49,6 +49,7 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const [fundProject, {
 		data,
+		loading: fundLoading,
 	}] = useMutation(MUTATION_FUND_PROJECT);
 
 	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
@@ -58,13 +59,23 @@ const Activity = ({ project }: IActivityProps) => {
 		},
 	);
 
+	const handleCountDown = () => {
+		const countDown = getCountDown(project.expiresAt);
+		setCountDown(countDown);
+	};
+
+	useEffect(() => {
+		const interval = setInterval(handleCountDown, 1000);
+		return () => {
+			clearInterval(interval);
+		};
+	}, [project.expiresAt]);
+
 	useEffect(() => {
 		if (project && project.fundingTxs) {
 			const unsortedFunders = [...project.fundingTxs];
 			if (unsortedFunders.length > 0) {
-				console.log('funder', unsortedFunders);
 				unsortedFunders.sort((a, b) => parseInt(b.paidAt, 10) - parseInt(a.paidAt, 10));
-				console.log('funder', unsortedFunders);
 				setfunders(unsortedFunders);
 			}
 		}
@@ -93,7 +104,6 @@ const Activity = ({ project }: IActivityProps) => {
 
 	useEffect(() => {
 		if (completedFunding) {
-			console.log('inside clear');
 			clearInterval(fundInterval);
 		}
 
@@ -108,7 +118,6 @@ const Activity = ({ project }: IActivityProps) => {
 
 	useEffect(() => {
 		if (data && data.fundProject && data.fundProject.success) {
-			console.log('checking funding data', data.fundProject.fundingTx);
 			setFundingTx(data.fundProject.fundingTx);
 			setStartedFunding(true);
 			setCompletedFunding(false);
@@ -137,7 +146,7 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const handleFund = async () => {
 		try {
-			const response = await fundProject({
+			await fundProject({
 				variables: {
 					projectId: project.id,
 					amount,
@@ -145,9 +154,7 @@ const Activity = ({ project }: IActivityProps) => {
 					anonymous,
 				},
 			});
-			console.log('cheecking', response);
-		} catch (error) {
-			console.log('checking error', error);
+		} catch (_) {
 			toast({
 				title: 'Something went wrong',
 				description: 'Please refresh the page and try again',
@@ -176,7 +183,7 @@ const Activity = ({ project }: IActivityProps) => {
 			<FundingStatus open={true} />
 
 			<CircularFundProgress loading={loading} rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
-			<Text>{`${getDaysLeft(project.expiresAt)} to go`}</Text>
+			<Text>{`COUNTDOWN: ${countDown}`}</Text>
 			<ButtonComponent
 				primary
 				standard
@@ -220,10 +227,9 @@ const Activity = ({ project }: IActivityProps) => {
 			backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
 		>
 
-			{completedFunding
-				? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
-				: startedFunding
-					? <QrPage
+			{fundLoading ? <Loader />
+				: completedFunding ? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
+					: startedFunding ? <QrPage
 						comment={comment}
 						title={project.title}
 						amount={amount}
@@ -231,22 +237,21 @@ const Activity = ({ project }: IActivityProps) => {
 						qrCode={fundingTx.paymentRequest}
 						handleCloseButton={handleCloseButton}
 					/>
-					: fundPage
-						? infoPage()
-						: <PaymentPage
-							{...{
-								isMobile,
-								handleCloseButton,
-								btcRate,
-								amount,
-								setAmount,
-								comment,
-								setComment,
-								anonymous,
-								setAnonymous,
-								handleFund,
-							}}
-						/>
+						: fundPage ? infoPage()
+							: <PaymentPage
+								{...{
+									isMobile,
+									handleCloseButton,
+									btcRate,
+									amount,
+									setAmount,
+									comment,
+									setComment,
+									anonymous,
+									setAnonymous,
+									handleFund,
+								}}
+							/>
 			}
 
 		</Card>

@@ -71,7 +71,6 @@ export const CustomToggle = ({first, second, value, onChange}:ICustomToggle) => 
 		onChange(!anonymous);
 	};
 
-	console.log('sdf');
 	return (
 		<Box className={classes.toggleContainer} onClick={handleToggle}>
 			<Box className={classes.toggleShade} />

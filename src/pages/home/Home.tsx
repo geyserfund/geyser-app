@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import Cookies from 'js-cookie';
+import React from 'react';
 import { Box, HStack, Image, Link, Text, VStack } from '@chakra-ui/react';
 import { ButtonComponent, Card } from '../../components/ui';
 import { Footer, ProjectCard } from '../../components/molecules';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { fonts } from '../../constants/fonts';
-import { colors, geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo, StartCrowdFundUrl, SubscribeUrl } from '../../constants';
+import { geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo, StartCrowdFundUrl, SubscribeUrl } from '../../constants';
 import { createUseStyles } from 'react-jss';
 
 type RuleNames = 'titles' | 'headers' | 'texts'
@@ -34,11 +33,6 @@ export const Home = () => {
 
 	const classes = useStyles({ isMobile: isMobileMode() });
 
-	useEffect(() => {
-		console.log('checking accessToken', Cookies.get('accessToken')); // => 'value'
-		console.log('checking refreshToken', Cookies.get('refreshToken')); // => 'value'
-	}, []);
-
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
@@ -48,7 +42,7 @@ export const Home = () => {
 			<VStack
 				spacing="10px"
 				width="100%"
-				maxWidth="1200px"
+				maxWidth="1000px"
 				padding={isMobile ? '0px' : '0px 20px'}
 				display="flex"
 				flexDirection="column"
@@ -70,8 +64,8 @@ export const Home = () => {
 				<Link href={SubscribeUrl} isExternal width="100%" >
 					<ButtonComponent
 						standard
-						backgroundColor={colors.bgGrey}
 						isFullWidth
+						fontSize="15px"
 					>
 						Subscribe
 					</ButtonComponent>
@@ -80,7 +74,10 @@ export const Home = () => {
 				<Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeCoin1} height="150px" />
 				</Box>
-				<VStack paddingBottom="20px" width="100%" alignItems="center">
+				<VStack paddingBottom="30px" width="100%" alignItems="flex-start">
+					<Text className={classes.titles}>
+					Project Highlights
+					</Text>
 					<Card maxHeight="328px" width="100%" borderRadius="20px" border="2px solid #E9E9E9">
 						<VStack
 							width="100%"
@@ -88,9 +85,9 @@ export const Home = () => {
 							alignItems="center"
 							backgroundColor={isDark ? 'brand.bglightDarkMode' : 'bgWhite'}
 						>
-							<Text fontSize="15px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'} marginBottom="10px">
-								CROWDFUNDING PROJECTS
-							</Text>
+							{/* <Text fontSize="15px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'} marginBottom="10px">
+								PROJECT HIGHLIGHTS
+							</Text> */}
 							<HStack
 								overflowX={'auto'}
 							>
@@ -117,6 +114,7 @@ export const Home = () => {
 						standard
 						primary
 						isFullWidth
+						fontSize="15px"
 					>
 						Start a crowdfund
 					</ButtonComponent>

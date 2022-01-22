@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
@@ -21,6 +21,14 @@ export const SuccessPage = ({ amount, handleCloseButton }: ISuccessPage) => {
 		setCopy(true);
 	};
 
+	useEffect(() => {
+		if (copy) {
+			setTimeout(() => {
+				setCopy(false);
+			}, 2000);
+		}
+	}, [copy]);
+
 	return (
 		<VStack
 			padding={isMobile ? '10px 10px' : '10px 20px'}
@@ -40,14 +48,15 @@ export const SuccessPage = ({ amount, handleCloseButton }: ISuccessPage) => {
 				top="10px"
 				onClick={handleCloseButton}
 			/>
-			<Box display="flex" alignItems="center">
-				<Text marginRight="5px" fontSize="30px" width="70%" textAlign="center">{amount} </Text><SatoshiIcon />
+			<Box display="flex" justifyContent="center" alignItems="center" width="100%">
+				<Text marginRight="5px" fontSize="30px" >{amount} </Text><SatoshiIcon paddingBottom="5px"/>
 			</Box>
 			<Text fontSize="30px" width="70%" textAlign="center">
 				Successfully Funded!
 			</Text>
 			<ButtonComponent
 				standard
+				primary={copy}
 				leftIcon={copy ? <BiCopyAlt /> : <HiOutlineSpeakerphone />}
 				width="100%"
 				onClick={shareProjectWithfriends}

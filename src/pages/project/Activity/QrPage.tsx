@@ -58,6 +58,7 @@ export const QrPage = ({
 				borderRadius="50%"
 				position="absolute"
 				right="10px"
+				top="0px"
 				onClick={handleCloseButton}
 			/>
 			<Box width="100%" padding="10px">

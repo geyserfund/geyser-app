@@ -50,16 +50,13 @@ const errorLink = onError(({ graphQLErrors,
 						}).then(response => {
 							onProcess = true;
 							if (response.status === 401) {
-								// If (operation.operationName === 'GetProjectByName') {
 								customHistory.push(customHistory.location.pathname, { loggedOut: true });
-								// }
 
 								throw new Error('refreshTokenexpired');
 							}
 
 							return response.json();
 						}).then(response => {
-							console.log('checking response', response);
 							if (response && response.accessToken && response.refreshToken) {
 								Cookies.set('accessToken', response.accessToken, cookieOptions);
 								Cookies.set('refreshToken', response.refreshToken, cookieOptions);
@@ -82,14 +79,11 @@ const errorLink = onError(({ graphQLErrors,
 							}
 						}).catch(error => {
 							// No refresh or client token available, we force user to login
-							console.log('did it get here ?', error);
 							// CustomHistory.push('/unauthorized');
 							observer.error(error);
 						});
 					});
 				}
-
-				console.log('checking error inside errorLink', err);
 			}
 		}
 	}

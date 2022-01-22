@@ -32,7 +32,6 @@ const useStyles = createUseStyles({
 		display: 'flex',
 		width: '100%',
 		justifyContent: 'center',
-		fontSize: '12px',
 	},
 });
 
@@ -48,6 +47,7 @@ export const ButtonComponent = ({ className, variant, primary, children, standar
 			backgroundColor={backgroundColor ? backgroundColor : primary ? 'brand.primary' : bgColor}
 			borderRadius={circular ? '50px' : standard ? '12px' : undefined}
 			_hover={primary ? { bg: 'brand.primaryTint' } : undefined}
+			fontSize="12px"
 			{...rest}
 			sx={styles.buttonCommon}
 		>

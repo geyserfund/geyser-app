@@ -40,7 +40,6 @@ export const PaymentPage = ({
 	};
 
 	const handleInput = (stringv: string, numberv: number) => {
-		console.log('Checking input', stringv, numberv);
 		if (!numberv) {
 			setAmount(0);
 			return;

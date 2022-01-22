@@ -16,6 +16,7 @@ interface IProjectCardProp extends ICard {
 
 const useStyles = createUseStyles({
 	container: {
+		marginBottom: '10px',
 		'&:hover': {
 			cursor: 'pointer',
 		},

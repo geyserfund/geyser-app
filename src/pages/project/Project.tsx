@@ -1,7 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 import { Box, Text } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
-import Cookies from 'js-cookie';
 import React, { useEffect } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useLocation, useParams } from 'react-router';
@@ -46,11 +45,6 @@ export const Project = () => {
 		},
 	);
 
-	useEffect(() => {
-		console.log('checking accessToken', Cookies.get('accessToken')); // => 'value'
-		console.log('checking refreshToken', Cookies.get('refreshToken')); // => 'value'
-	}, []);
-
 	if (loading) {
 		return (
 			<Loader />
@@ -58,8 +52,6 @@ export const Project = () => {
 	}
 
 	if (error || !data || !data.getProjectByName.success) {
-		console.log('checking error', error);
-		console.log('checking data', data);
 		return <NotFound />;
 	}
 

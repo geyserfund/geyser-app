@@ -73,6 +73,40 @@ const sponsors: IUser[] = [
 		badge: 'owner',
 		amount: 0,
 	},
+	{
+		picture: 'https://pbs.twimg.com/profile_images/1370765783765282823/dMGd0WEI_400x400.jpg',
+		username: 'Bitnob_official',
+		fullName: 'Bitnob_official',
+		id: '',
+		URL: '',
+		twitter: false,
+		badge: 'owner',
+		amount: 0,
+	},
+];
+
+interface Ispeaker {
+	name: string;
+	twitterHandle: string
+}
+
+const speakers: Ispeaker[] = [
+	{
+		name: 'Parman - 🇦🇲 Bitcoin Private Key Whisperer .*',
+		twitterHandle: 'parman_the',
+	},
+	{
+		name: 'Paco de la India',
+		twitterHandle: 'RunwithBitcoin',
+	},
+	{
+		name: 'King ⚡ Johnson Apata🦁👑',
+		twitterHandle: 'ApataJ',
+	},
+	{
+		name: 'Ray Youssef',
+		twitterHandle: '@raypaxful',
+	},
 ];
 
 export const King = () => {
@@ -228,8 +262,15 @@ export const King = () => {
 								Speakers include:
 							</Text>
 							<UnorderedList paddingLeft="18px">
-								<ListItem>Arman the parman (armantheparman.com) </ListItem>
-								<ListItem>Ray Youssef</ListItem>
+								{
+									speakers.map(speaker => (
+										<ListItem key={speaker.twitterHandle}>
+											<Link href={`https://twitter.com/${speaker.twitterHandle}`} isExternal>
+												{speaker.name}
+											</Link>
+										</ListItem>
+									))
+								}
 							</UnorderedList>
 
 						</VStack>
@@ -285,8 +326,13 @@ export const King = () => {
 				</Card>
 				<VStack>
 					<Text>SPONSORS</Text>
-					<HStack>
-						<Image height="50px" src="https://storage.googleapis.com/geyser-projects-media/project/king/wallet-logo.svg" />
+					<HStack justifyContent="space-around" width="100%">
+						<Link href="https://walletofsatoshi.com" isExternal>
+							<Image height="50px" src="https://storage.googleapis.com/geyser-projects-media/project/king/wallet-logo.svg" />
+						</Link>
+						<Link href="https://bitnob.com/" isExternal>
+							<Image height="50px" src="https://storage.googleapis.com/geyser-projects-media/project/king/logo-black.png" />
+						</Link>
 					</HStack>
 				</VStack>
 			</VStack >
