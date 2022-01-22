@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Link } from '@chakra-ui/react';
+import React, { useContext, useEffect } from 'react';
+import { Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent } from '../ui';
@@ -13,6 +13,8 @@ import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
 import { StartCrowdFundUrl } from '../../constants';
+import { useLocation } from 'react-router';
+import { customHistory } from '../../config';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -29,9 +31,23 @@ export const NavBar = () => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 
+	const { user, getUser, logout, twitterisOpen, twitterOnOpen, twitterOnClose } = useContext(AuthContext);
+
+	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const { user, logout } = useContext(AuthContext);
+	useEffect(() => {
+		if (state && state.loggedOut) {
+			logout();
+			onOpen();
+			customHistory.replace(customHistory.location.pathname, {});
+		}
+
+		if (state && state.refresh) {
+			getUser();
+			customHistory.replace(customHistory.location.pathname, {});
+		}
+	}, [state]);
 
 	return (
 		<>
@@ -66,7 +82,7 @@ export const NavBar = () => {
 										standard
 										circular
 										marginRight="12px"
-										onClick={onOpen}
+										onClick={twitterOnOpen}
 									>
 										Login
 									</ButtonComponent>
@@ -98,7 +114,7 @@ export const NavBar = () => {
 											leftIcon={<Icon as={FiTwitter} />}
 											standard
 											marginRight="12px"
-											onClick={onOpen}
+											onClick={twitterOnOpen}
 										>
 											Login
 										</ButtonComponent>
@@ -111,7 +127,27 @@ export const NavBar = () => {
 				</Box>
 
 			</Box>
-			<ConnectTwitter isOpen={isOpen} onClose={onClose} />
+			<Modal isOpen={isOpen} onClose={onClose}>
+				<ModalOverlay />
+				<ModalContent display="flex" alignItems="center" padding="20px 15px">
+					<ModalHeader><Text fontSize="16px" fontWeight="normal">You have been logged out</Text></ModalHeader>
+					<ModalCloseButton />
+					<ModalBody >
+						<Text>
+							Please logback in with your profile, or press continue if you want to stay anonymous.
+						</Text>
+						<Box display="flex" justifyContent="space-between" paddingTop="20px">
+							<ButtonComponent standard primary onClick={twitterOnOpen}>
+								Login
+							</ButtonComponent>
+							<ButtonComponent onClick={onClose}>
+								Continue
+							</ButtonComponent>
+						</Box>
+					</ModalBody>
+				</ModalContent>
+			</Modal>
+			<ConnectTwitter isOpen={twitterisOpen} onClose={twitterOnClose} />
 		</>
 	);
 };

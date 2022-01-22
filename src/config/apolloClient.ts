@@ -31,6 +31,8 @@ const authLink = setContext((_, { headers }) => {
 	};
 });
 
+let onProcess = false;
+
 const errorLink = onError(({ graphQLErrors,
 	operation,
 	forward,
@@ -39,17 +41,18 @@ const errorLink = onError(({ graphQLErrors,
 		for (const err of graphQLErrors) {
 			if (err && err.extensions && err.extensions.code) {
 				const refreshToken = Cookies.get('refreshToken');
-				if (err.extensions.code === 'UNAUTHENTICATED' && refreshToken) {
+				if (err.extensions.code === 'UNAUTHENTICATED' && refreshToken && !onProcess) {
 					return new Observable(observer => {
+						onProcess = true;
 						fetch(`${REACT_APP_API_ENDPOINT}/auth/refresh-token`, {
 							method: 'get',
 							headers: { Authorization: `Bearer ${refreshToken}` },
 						}).then(response => {
-							console.log('cbecking response', response);
+							onProcess = true;
 							if (response.status === 401) {
-								if (!err.path?.includes('getUser')) {
-									customHistory.push(customHistory.location.pathname, { loggedOut: true });
-								}
+								// If (operation.operationName === 'GetProjectByName') {
+								customHistory.push(customHistory.location.pathname, { loggedOut: true });
+								// }
 
 								throw new Error('refreshTokenexpired');
 							}
@@ -60,6 +63,7 @@ const errorLink = onError(({ graphQLErrors,
 							if (response && response.accessToken && response.refreshToken) {
 								Cookies.set('accessToken', response.accessToken, cookieOptions);
 								Cookies.set('refreshToken', response.refreshToken, cookieOptions);
+								customHistory.replace(customHistory.location.pathname, {refresh: true});
 								const oldHeaders = operation.getContext().headers;
 								operation.setContext({
 									headers: {

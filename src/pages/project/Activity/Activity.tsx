@@ -19,7 +19,6 @@ import { AuthContext } from '../../../context';
 
 interface IActivityProps {
 	project: IProject
-	twitterOnOpen: () => void
 }
 
 const initialFunding = {
@@ -32,7 +31,7 @@ const initialFunding = {
 };
 
 let fundInterval: any;
-const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
+const Activity = ({ project }: IActivityProps) => {
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
 	const [startedFunding, setStartedFunding] = useState(false);
@@ -44,7 +43,7 @@ const Activity = ({ project, twitterOnOpen }: IActivityProps) => {
 	const [copy, setCopy] = useState(false);
 	const [funders, setfunders] = useState<IProjectFunding[]>([]);
 
-	const { user } = useContext(AuthContext);
+	const { user, twitterOnOpen } = useContext(AuthContext);
 
 	const { toast } = useNotification();
 

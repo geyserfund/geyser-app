@@ -4,6 +4,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import { QUERY_GET_USER } from '../graphql';
 import { IuserProfile } from '../interfaces';
 import { cookieOptions } from '../constants';
+import { useDisclosure } from '@chakra-ui/react';
 
 const defaultAuthUser = {
 	id: 0,
@@ -18,6 +19,10 @@ const defaultContext = {
 	loading: false,
 	error: undefined,
 	logout: () => { },
+	twitterisOpen: false,
+	twitterOnOpen: () => {},
+	twitterOnClose: () => {},
+	getUser: () => {},
 };
 
 interface IAuthContext {
@@ -26,6 +31,10 @@ interface IAuthContext {
 	loading: boolean,
 	error?: ApolloError,
 	logout: any
+	twitterisOpen: boolean
+	twitterOnOpen:() => void
+	twitterOnClose: () => void
+	getUser: any
 }
 
 export const AuthContext = createContext<IAuthContext>(defaultContext);
@@ -46,6 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const [user, setUser] = useState<IuserProfile>(defaultAuthUser);
 	const [getUser, { loading, error, data }] = useLazyQuery(QUERY_GET_USER);
+	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 
 	useEffect(() => {
 		try {
@@ -62,7 +72,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [data]);
 
 	return (
-		<AuthContext.Provider value={{ user, loading, error, isLoggedIn, logout }}>
+		<AuthContext.Provider value={{ user, getUser, loading, error, isLoggedIn, logout, twitterisOpen, twitterOnOpen, twitterOnClose }}>
 			{children}
 		</AuthContext.Provider>
 	);

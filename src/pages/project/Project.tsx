@@ -1,17 +1,12 @@
 import { useLazyQuery } from '@apollo/client';
 import { Box, Text } from '@chakra-ui/layout';
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
 import Cookies from 'js-cookie';
-
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useLocation, useParams } from 'react-router';
-import { ConnectTwitter } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
-import { AuthContext } from '../../context';
 import { QUERY_GET_PROJECT } from '../../graphql';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { NotFound } from '../notFound';
@@ -34,25 +29,14 @@ const useStyles = createUseStyles({
 export const Project = () => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
-
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
-
 	const { projectId } = useParams<{ projectId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
-	const { logout } = useContext(AuthContext);
 
 	useEffect(() => {
 		try {
 			getProject();
 		} catch (_) {
 			customHistory.push('/not-found');
-		}
-
-		if (state && state.loggedOut) {
-			logout();
-			onOpen();
-			customHistory.replace(customHistory.location.pathname, {});
 		}
 	}, [state]);
 
@@ -107,41 +91,20 @@ export const Project = () => {
 										<Details project={project} />
 									</TabPanel>
 									<TabPanel padding="0px" height="-webkit-fill-available" >
-										<Activity project={project} twitterOnOpen={twitterOnOpen} />
+										<Activity project={project} />
 									</TabPanel>
 								</TabPanels>
 							</Tabs>
 						) : (
 							<>
 								<Details project={project} />
-								<Activity project={project} twitterOnOpen={twitterOnOpen} />
+								<Activity project={project} />
 							</>
 						)
 					}
 
 				</Box>
 			</Box>
-			<Modal isOpen={isOpen} onClose={onClose}>
-				<ModalOverlay />
-				<ModalContent display="flex" alignItems="center" padding="20px 15px">
-					<ModalHeader><Text fontSize="16px" fontWeight="normal">You have been logged out</Text></ModalHeader>
-					<ModalCloseButton />
-					<ModalBody >
-						<Text>
-							Please logback in with your profile, or press continue if you want to stay anonymous.
-						</Text>
-						<Box display="flex" justifyContent="space-between" paddingTop="20px">
-							<ButtonComponent standard primary onClick={twitterOnOpen}>
-								Login
-							</ButtonComponent>
-							<ButtonComponent onClick={onClose}>
-								Continue
-							</ButtonComponent>
-						</Box>
-					</ModalBody>
-				</ModalContent>
-			</Modal>
-			<ConnectTwitter isOpen={twitterisOpen} onClose={twitterOnClose} />
 		</>
 	);
 };
