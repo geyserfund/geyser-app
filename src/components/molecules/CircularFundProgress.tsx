@@ -7,6 +7,7 @@ import { isDarkMode } from '../../utils';
 import { SatoshiIcon } from '../icons';
 import { createUseStyles } from 'react-jss';
 import Loader from '../ui/Loader';
+import { commaFormatted } from '../../utils/helperFunctions';
 
 interface ICircularFundProgress {
 	amount: number;
@@ -77,14 +78,14 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 						<BsCurrencyBitcoin fontSize="30px"/>{bitCoins}
 					</>
 						: <>
-							<SatoshiIcon isDark={isDark} className={classes.satoshi}/> {amount}
+							<SatoshiIcon isDark={isDark} className={classes.satoshi}/> {commaFormatted(amount)}
 						</>
 
 				}
 
 			</StatNumber>
 			<StatNumber className="amount-label-usd" position="relative">{'$'}{amountUSD} </StatNumber>
-			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of ${goal} goal`}</StatHelpText>
+			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of ${commaFormatted(goal)}$`}</StatHelpText>
 		</Stat>
 	);
 

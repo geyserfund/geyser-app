@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, HStack, Image, Link, Text, VStack } from '@chakra-ui/react';
-import { ButtonComponent, Card } from '../../components/ui';
+import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { ButtonComponent, Card, Linkin } from '../../components/ui';
 import { Footer, ProjectCard } from '../../components/molecules';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { fonts } from '../../constants/fonts';
@@ -51,7 +51,7 @@ export const Home = () => {
 				<Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeLogo} height="250px" />
 				</Box>
-				<Box width="100%" fontFamily={fonts.header} fontWeight={700} textAlign={'center'} paddingBottom={'10px'}>
+				<Box width="100%" fontFamily={fonts.header} fontWeight={700} textAlign={'center'} paddingBottom={'20px'}>
 					<Text className={classes.headers}>Let’s change the world with</Text>
 					<Text className={classes.headers}>Bitcoin crowdfunding</Text>
 				</Box>
@@ -61,7 +61,7 @@ export const Home = () => {
 				<Text className={classes.texts}>
 					Geyser is a global and user-friendly crowdfunding platform, that helps creators to get the funding they need for their projects to burst out with great force into the world (just like geysers!). Explore live crowdfunding projects, fund them on Bitcoin’s lightning network, and keep track of the projects.
 				</Text>
-				<Link href={SubscribeUrl} isExternal width="100%" >
+				<Linkin href={SubscribeUrl} isExternal width="100%" >
 					<ButtonComponent
 						standard
 						isFullWidth
@@ -69,7 +69,7 @@ export const Home = () => {
 					>
 						Subscribe
 					</ButtonComponent>
-				</Link>
+				</Linkin>
 
 				<Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeCoin1} height="150px" />
@@ -109,7 +109,7 @@ export const Home = () => {
 				<Text className={classes.texts}>
 					Are you a creator or entrepreneur looking for the funds needed to realize your ideas? No matter where you are in the world, Geyser now makes it easy for you to create and commit to a time-bound crowdfund, and allow supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser here.
 				</Text>
-				<Link href={StartCrowdFundUrl} isExternal width="100%" >
+				<Linkin href={StartCrowdFundUrl} isExternal width="100%" >
 					<ButtonComponent
 						standard
 						primary
@@ -118,7 +118,7 @@ export const Home = () => {
 					>
 						Start a crowdfund
 					</ButtonComponent>
-				</Link>
+				</Linkin>
 				<Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeCoin2} height="150px" />
 				</Box>

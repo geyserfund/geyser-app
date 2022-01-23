@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
-import { Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
-import { ButtonComponent } from '../ui';
+import { ButtonComponent, Linkin } from '../ui';
 import { Logo } from './Logo';
 import { Box } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
@@ -90,7 +90,7 @@ export const NavBar = () => {
 							<NavMenu user={user} logout={logout} />
 						</> : (
 							<Box>
-								<Link href={StartCrowdFundUrl} isExternal>
+								<Linkin href={StartCrowdFundUrl} isExternal >
 									<ButtonComponent
 										leftIcon={<AddIcon />}
 										primary
@@ -100,7 +100,7 @@ export const NavBar = () => {
 									>
 										Start a Crowdfund
 									</ButtonComponent>
-								</Link>
+								</Linkin>
 								{
 									user.id
 										? <ButtonComponent

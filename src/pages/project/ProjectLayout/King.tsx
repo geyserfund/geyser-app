@@ -1,6 +1,7 @@
 import { Avatar, Box, HStack, Image, Link, ListItem, OrderedList, Text, UnorderedList, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
+import { Footer } from '../../../components/molecules';
 import { Card, ImageBar, StatusBar } from '../../../components/ui';
 import { IUser } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
@@ -143,7 +144,7 @@ export const King = () => {
 	};
 
 	return (
-		<HStack justifyContent="center" width="100%">
+		<VStack alignItems="center" width="100%">
 			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
 				<Card className={classes.cardContainer}>
 					<VStack spacing="12px" alignItems="flex-start">
@@ -333,7 +334,7 @@ export const King = () => {
 				</Card>
 
 			</VStack >
-
-		</HStack>
+			<Footer />
+		</VStack>
 	);
 };
