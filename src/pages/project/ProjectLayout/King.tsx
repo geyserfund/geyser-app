@@ -115,12 +115,8 @@ export const King = () => {
 	const ownerRef: any = useRef(null);
 	const images = [
 		{
-			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_1.png',
-			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_1.png',
-		},
-		{
-			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png',
-			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png',
+			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png',
+			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png',
 		},
 		{
 			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png',
@@ -238,10 +234,7 @@ export const King = () => {
 						</VStack>
 						<HStack spacing="30px">
 							<Box>
-								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_1.png" />
-							</Box>
-							<Box>
-								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png" />
+								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png" />
 							</Box>
 						</HStack>
 						<VStack className={classes.containers} >
@@ -324,17 +317,21 @@ export const King = () => {
 					</VStack>
 
 				</Card>
-				<VStack>
-					<Text>SPONSORS</Text>
-					<HStack justifyContent="space-around" width="100%">
-						<Link href="https://walletofsatoshi.com" isExternal>
-							<Image height="50px" src="https://storage.googleapis.com/geyser-projects-media/project/king/wallet-logo.svg" />
-						</Link>
-						<Link href="https://bitnob.com/" isExternal>
-							<Image height="50px" src="https://storage.googleapis.com/geyser-projects-media/project/king/logo-black.png" />
-						</Link>
-					</HStack>
-				</VStack>
+				<Card className={classes.cardContainer}>
+					<VStack marginBottom="10px">
+						<Text alignSelf="flex-start" fontSize="10px" color="brand.textGrey">SPONSORS</Text>
+						<HStack justifyContent="space-around" width="80%">
+							<Link href="https://bitnob.com/" isExternal>
+								<Image height="70px" src="https://storage.googleapis.com/geyser-projects-media/project/king/logo-black.png" />
+							</Link>
+							<Link href="https://walletofsatoshi.com" isExternal>
+								<Image height="70px" src="https://storage.googleapis.com/geyser-projects-media/project/king/wallet-of-satoshi.png" />
+							</Link>
+
+						</HStack>
+					</VStack>
+				</Card>
+
 			</VStack >
 
 		</HStack>

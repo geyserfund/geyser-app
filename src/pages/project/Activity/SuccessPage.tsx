@@ -52,7 +52,7 @@ export const SuccessPage = ({ amount, handleCloseButton }: ISuccessPage) => {
 				<Text marginRight="5px" fontSize="30px" >{amount} </Text><SatoshiIcon paddingBottom="5px"/>
 			</Box>
 			<Text fontSize="30px" width="70%" textAlign="center">
-				Successfully Funded!
+			Successfully funded!
 			</Text>
 			<ButtonComponent
 				standard
