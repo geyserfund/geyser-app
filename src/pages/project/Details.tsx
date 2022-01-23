@@ -75,7 +75,7 @@ export const Details = ({ project }: IActivityProps) => {
 				</Box>
 			</Box>
 			<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="5px 0px" />
-			<Box padding={componentPadding} height={isMobile ? 'calc(100% - 110px)' : 'calc(100% - 90px)'} overflowY="auto">
+			<Box id="project-scoll-container" padding={componentPadding} height={isMobile ? 'calc(100% - 110px)' : 'calc(100% - 90px)'} overflowY="auto">
 				{
 					getRender()
 				}

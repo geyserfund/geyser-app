@@ -139,7 +139,11 @@ export const King = () => {
 
 	const handleScroll = () => {
 		if (ownerRef && ownerRef.current) {
-			ownerRef.current.scrollIntoView({ behavior: 'smooth' });
+			const scrollElement = document.getElementById('project-scoll-container');
+			if (scrollElement) {
+				const scrollValue = ownerRef.current.offsetTop - scrollElement.offsetTop;
+				scrollElement?.scrollTo({top: scrollValue, behavior: 'smooth'});
+			}
 		}
 	};
 
