@@ -183,7 +183,7 @@ const Activity = ({ project }: IActivityProps) => {
 		>
 			<FundingStatus open={true} />
 
-			<CircularFundProgress loading={loading} rate={btcRate} goal={parseInt(project.fundingGoal, 10)} amount={parseInt(project.balance, 10)} />
+			<CircularFundProgress loading={loading} rate={btcRate} goal={project.fundingGoal} amount={project.balance} />
 			<Text>{`COUNTDOWN: ${countDown}`}</Text>
 			<ButtonComponent
 				primary

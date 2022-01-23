@@ -2,6 +2,7 @@ import React from 'react';
 import { CircularProgress } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/layout';
 import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
+import {BsCurrencyBitcoin} from 'react-icons/bs';
 import { isDarkMode } from '../../utils';
 import { SatoshiIcon } from '../icons';
 import { createUseStyles } from 'react-jss';
@@ -23,7 +24,9 @@ const useStyles = createUseStyles({
 		alignItems: 'center',
 		filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))',
 		'& .amount-label-sat': {
-			display: 'block',
+			display: 'flex',
+			alignItems: 'flex-start',
+			justifyContent: 'center',
 		},
 		'& .amount-label-usd': {
 			display: 'none',
@@ -39,18 +42,22 @@ const useStyles = createUseStyles({
 
 	},
 	satoshi: {
-		position: 'absolute',
-		top: 0,
-
+		marginRight: '5px',
 	},
 });
 
 export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularFundProgress) => {
 	const classes = useStyles();
 	const isDark = isDarkMode();
-	const goalUSD = (goal * rate).toFixed(2);
 	const amountUSD = (amount * rate).toFixed(2);
-	const percentage = (parseFloat(amountUSD) / parseFloat(goalUSD)) * 100;
+	const percentage = (parseFloat(amountUSD) / goal) * 100;
+
+	let bitCoins = 0;
+
+	if (amount >= 1000000) {
+		bitCoins = parseFloat((amount / 100000000).toFixed(4));
+	}
+
 	// Const percentage = 100;
 
 	const getDisplayPercent = (percent: number) => {
@@ -64,9 +71,20 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 	const getStat = () => (
 		<Stat textAlign="center" borderRadius="50%">
 			<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Funded</StatLabel>
-			<StatNumber className="amount-label-sat" position="relative">{amount} <SatoshiIcon isDark={isDark} wrapperClass={classes.satoshi} /></StatNumber>
+			<StatNumber className="amount-label-sat" position="relative">
+				{
+					bitCoins ? <>
+						<BsCurrencyBitcoin fontSize="30px"/>{bitCoins}
+					</>
+						: <>
+							<SatoshiIcon isDark={isDark} className={classes.satoshi}/> {amount}
+						</>
+
+				}
+
+			</StatNumber>
 			<StatNumber className="amount-label-usd" position="relative">{'$'}{amountUSD} </StatNumber>
-			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of ${goalUSD} goal`}</StatHelpText>
+			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of ${goal} goal`}</StatHelpText>
 		</Stat>
 	);
 

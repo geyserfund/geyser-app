@@ -6,8 +6,8 @@ export interface IProject {
     name: string;
     description: string;
     originUrl: string;
-    balance: string;
-    fundingGoal: string;
+    balance: number;
+    fundingGoal: number;
     createdAt: string;
     updatedAt: string;
     expiresAt: string;
