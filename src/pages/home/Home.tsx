@@ -42,7 +42,7 @@ export const Home = () => {
 			<VStack
 				spacing="10px"
 				width="100%"
-				maxWidth="1000px"
+				maxWidth="780px"
 				padding={isMobile ? '0px' : '0px 20px'}
 				display="flex"
 				flexDirection="column"

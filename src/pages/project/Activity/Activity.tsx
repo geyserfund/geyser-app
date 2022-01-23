@@ -96,6 +96,7 @@ const Activity = ({ project }: IActivityProps) => {
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
 			if (fundData.getFundingTx.paid) {
+				setfunders([fundData.getFundingTx, ...funders]);
 				clearInterval(fundInterval);
 				setCompletedFunding(true);
 			}

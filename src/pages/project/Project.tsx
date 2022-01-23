@@ -83,7 +83,7 @@ export const Project = () => {
 										<Details project={project} />
 									</TabPanel>
 									<TabPanel padding="0px" height="-webkit-fill-available" >
-										<Activity project={project} />
+										<Activity project={project}/>
 									</TabPanel>
 								</TabPanels>
 							</Tabs>

@@ -9,6 +9,14 @@ query GetFundingTx($fundingTxId: BigInt!) {
       amount
       paid
       canceled
+      comment
+      paidAt
+      user {
+        twitterHandle
+        imageUrl
+        username
+        id
+      }
     }
   }
 `;
