@@ -1,4 +1,4 @@
-import { Avatar, Box, HStack, Image, Link, ListItem, OrderedList, Text, UnorderedList, VStack } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Image, Link, ListItem, OrderedList, Text, UnorderedList, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { Card, ImageBar, StatusBar } from '../../../components/ui';
@@ -176,12 +176,12 @@ export const King = () => {
 								</HStack>
 							</Link>
 						</Box>
-						<Box width="100%">
+						<Box width="100%" overflow="hidden">
 							<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
-							<HStack width="100%" spacing="20px" overflowX="auto">
+							<Wrap >
 								{
 									sponsors.map((sponsor: IUser) => (
-										<Box key={sponsor.username}>
+										<WrapItem key={sponsor.username} display="inline-block">
 											<Link href={`https://twitter.com/${sponsor.username}`} isExternal>
 												<HStack spacing="15px">
 													<Avatar width="35px" height="35px" name={sponsor.username} src={sponsor.picture} />
@@ -190,12 +190,12 @@ export const King = () => {
 													</Text>
 												</HStack>
 											</Link>
-										</Box>
+										</WrapItem>
 
 									))
 								}
 
-							</HStack>
+							</Wrap>
 
 						</Box>
 					</VStack>
@@ -320,7 +320,7 @@ export const King = () => {
 				<Card className={classes.cardContainer}>
 					<VStack marginBottom="10px">
 						<Text alignSelf="flex-start" fontSize="10px" color="brand.textGrey">SPONSORS</Text>
-						<HStack justifyContent="space-around" width="80%">
+						<HStack justifyContent="space-around" width={isMobile ? '100%' : '80%'}>
 							<Link href="https://bitnob.com/" isExternal>
 								<Image height="70px" src="https://storage.googleapis.com/geyser-projects-media/project/king/logo-black.png" />
 							</Link>

@@ -96,7 +96,7 @@ export const Home = () => {
 									title="Bitcoin Conference In Lagos"
 									name="bitcoin-conference-in-lagos"
 									marginBottom="20px"
-									imgSrc="https://storage.googleapis.com/geyser-projects-media/project/king/king_2.png"
+									imgSrc="https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png"
 								/>
 							</HStack>
 
