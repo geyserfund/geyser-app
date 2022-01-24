@@ -43,9 +43,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, ...rest }: I
 			flexDirection="column"
 			alignItems="center"
 			onClick={handleCardCLick}
-			maxWidth="500px"
-			minWidth="350px"
-			width="100%"
+			width="350px"
 			border="2px solid #E9E9E9"
 			{...rest}
 		>
