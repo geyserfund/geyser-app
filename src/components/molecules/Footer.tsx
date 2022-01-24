@@ -1,7 +1,7 @@
 import { HStack, IconButton, Link, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
-import { colors, GeyserPrivacyUrl, GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
+import { AnalyticsUrl, colors, GeyserPrivacyUrl, GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
 
 export const Footer = () => (
 	<VStack
@@ -19,12 +19,19 @@ export const Footer = () => (
 			<Text color="grey">
 			Geyser
 			</Text>
-			<Link color="grey" href={GeyserPrivacyUrl} t>
+			<Link color="grey" href={GeyserPrivacyUrl} isExternal>
 				<Text color="grey">
 			Privacy
 				</Text>
 
 			</Link>
+			<Link color="grey" href={AnalyticsUrl} isExternal>
+				<Text color="grey">
+				Analytics
+				</Text>
+
+			</Link>
+
 			<Link href={GeyserTwitterUrl} isExternal>
 				<IconButton
 					size="sm"

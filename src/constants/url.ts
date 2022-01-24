@@ -12,3 +12,6 @@ export const GeyserPrivacyUrl = 'https://www.privacypolicygenerator.info/live.ph
 
 export const SubscribeUrl = 'https://airtable.com/shrE0ffCRdX6CkYYw';
 export const StartCrowdFundUrl = 'https://airtable.com/shrOzN3U8ePy4Y0uf';
+export const AnalyticsUrl = 'https://simpleanalytics.com/geyser.fund';
+
+export const anonymousProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/project/common/anonymous.jpeg';

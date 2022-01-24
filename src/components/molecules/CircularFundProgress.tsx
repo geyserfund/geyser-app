@@ -85,7 +85,7 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 
 			</StatNumber>
 			<StatNumber className="amount-label-usd" position="relative">{'$'}{amountUSD} </StatNumber>
-			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of ${commaFormatted(goal)}$`}</StatHelpText>
+			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of $${commaFormatted(goal)}`}</StatHelpText>
 		</Stat>
 	);
 

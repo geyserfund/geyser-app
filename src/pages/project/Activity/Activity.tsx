@@ -174,12 +174,11 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const infoPage = () => (
 		<VStack
-			padding={isMobile ? '10px 0px' : '10px 20px'}
+			padding={isMobile ? '10px 5px' : '10px 20px'}
 			spacing="12px"
 			width="100%"
 			height="100%"
 			overflowY="hidden"
-			margin="10px 15px"
 		>
 			<FundingStatus open={true} />
 
@@ -206,7 +205,7 @@ const Activity = ({ project }: IActivityProps) => {
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
 					{`Project Backers ${funders.length ? `( ${funders.length} )` : ''}`}
 				</Text>
-				<VStack spacing={'8px'} width="100%" overflow="auto" height="calc(100% - 60px)" paddingBottom="30px">
+				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 60px)' : '100%'} paddingBottom="30px">
 					{
 						funders.map((funder, index) => (
 							<IdBar key={index} funder={funder} />
@@ -227,7 +226,6 @@ const Activity = ({ project }: IActivityProps) => {
 			alignItems="center"
 			backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
 		>
-
 			{fundLoading ? <Loader />
 				: completedFunding ? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
 					: startedFunding ? <QrPage
@@ -254,7 +252,6 @@ const Activity = ({ project }: IActivityProps) => {
 								}}
 							/>
 			}
-
 		</Card>
 	);
 };
