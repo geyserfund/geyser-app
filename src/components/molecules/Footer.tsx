@@ -11,6 +11,7 @@ export const Footer = () => (
 		backgroundColor="brand.bgGrey"
 		alignItems="center"
 		justifyContent="center"
+		paddingBottom="5px"
 	>
 		<HStack
 			spacing="20px"
@@ -53,7 +54,7 @@ export const Footer = () => (
 			</Link>
 		</HStack>
 
-		<Text textAlign="center">
+		<Text textAlign="center" color="grey">
 				Made with ❤️ from around the 🌍 by <Link href="https://twitter.com/metamick14" isExternal>@metamick14</Link>, <Link href="https://twitter.com/steliosats" isExternal>@steliosats</Link> & <Link href="https://twitter.com/sajald77" isExternal>@sajald77</Link>
 		</Text>
 	</VStack>
