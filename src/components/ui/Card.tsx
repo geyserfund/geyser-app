@@ -19,7 +19,6 @@ export const Card = ({className, children, ...rest}: ICard) => {
 	return (
 		<Box
 			className={classNames(classes.cardContainer, className)}
-			height="-webkit-fill-available"
 			overflow="hidden"
 			{...rest}
 		>

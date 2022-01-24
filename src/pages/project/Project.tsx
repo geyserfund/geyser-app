@@ -67,7 +67,7 @@ export const Project = () => {
 			>
 				<Box
 					width="100%"
-					height="-webkit-fill-available"
+					height="100%"
 					display="flex"
 					overflow="hidden"
 				>{
@@ -78,11 +78,11 @@ export const Project = () => {
 									<Tab flex={1}><Text width="100%" textAlign="right" fontSize="20px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Fund</Text></Tab>
 								</TabList>
 
-								<TabPanels height="-webkit-fill-available" >
-									<TabPanel padding="0px" height="-webkit-fill-available" >
+								<TabPanels height="100%" >
+									<TabPanel padding="0px" height="100%" >
 										<Details project={project} />
 									</TabPanel>
-									<TabPanel padding="0px" height="-webkit-fill-available" >
+									<TabPanel padding="0px" height="100%" >
 										<Activity project={project}/>
 									</TabPanel>
 								</TabPanels>

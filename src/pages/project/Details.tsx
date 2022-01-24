@@ -7,7 +7,13 @@ import { IProject } from '../../interfaces';
 import { getDaysAgo, isDarkMode, isMobileMode } from '../../utils';
 import { Default, King } from './ProjectLayout';
 
-const useStyles = createUseStyles({
+type Rules = 'twitter' | 'aboutText' | 'detailsContainer'
+
+interface IStyles {
+	isMobile?: boolean;
+}
+
+const useStyles = createUseStyles<Rules, IStyles >({
 	twitter: {
 		maxWidth: 450,
 		'.twitter-widget-0': {
@@ -18,6 +24,15 @@ const useStyles = createUseStyles({
 		width: '100%',
 		fontSize: '14px',
 	},
+	detailsContainer: ({isMobile}: IStyles) => ({
+		padding: isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px',
+		height: isMobile ? '-webkit-calc(100% - 110px)' : '-webkit-calc(100% - 90px)',
+		fallbacks: [
+			{height: isMobile ? 'calc(100% - 110px)' : 'calc(100% - 90px)'},
+		],
+		overflowY: 'scroll',
+		WebkitOverflowScrolling: 'touch',
+	}),
 });
 
 interface IActivityProps {
@@ -25,20 +40,19 @@ interface IActivityProps {
 }
 
 export const Details = ({ project }: IActivityProps) => {
-	const classes = useStyles();
+	const isMobile = isMobileMode();
+	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';
+	const classes = useStyles({isMobile});
 
 	const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)');
 	const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
 
 	const [twitterLoading, settwitterLoading] = useState(true);
 	const isDark = isDarkMode();
-	const isMobile = isMobileMode();
 
 	const handleSuccess = () => {
 		settwitterLoading(false);
 	};
-
-	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';
 
 	const getRender = () => {
 		if (project.name === 'bitcoin-conference-in-lagos') {
@@ -63,6 +77,8 @@ export const Details = ({ project }: IActivityProps) => {
 			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
 			flex={3}
 			height="100%"
+			display="flex"
+			flexDirection="column"
 			overflow="hidden"
 		>
 			<Box padding={componentPadding}>
@@ -75,7 +91,7 @@ export const Details = ({ project }: IActivityProps) => {
 				</Box>
 			</Box>
 			<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="5px 0px" />
-			<Box id="project-scoll-container" padding={componentPadding} height={isMobile ? 'calc(100% - 110px)' : 'calc(100% - 90px)'} overflowY="auto">
+			<Box className={classes.detailsContainer} id="project-scoll-container" >
 				{
 					getRender()
 				}

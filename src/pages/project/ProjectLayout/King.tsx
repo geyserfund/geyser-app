@@ -38,6 +38,7 @@ const useStyles = createUseStyles<Labels, Istyles>({
 		padding: isMobile ? '12px 10px' : '12px 20px',
 		border: '2px solid #E9E9E9',
 		background: 'white',
+		height: 'fit-content',
 	}),
 });
 

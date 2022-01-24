@@ -181,7 +181,6 @@ const Activity = ({ project }: IActivityProps) => {
 			overflowY="hidden"
 		>
 			<FundingStatus open={true} />
-
 			<CircularFundProgress loading={loading} rate={btcRate} goal={project.fundingGoal} amount={project.balance} />
 			<Text>{`COUNTDOWN: ${countDown}`}</Text>
 			<ButtonComponent
@@ -195,24 +194,24 @@ const Activity = ({ project }: IActivityProps) => {
 			</ButtonComponent>
 			<ButtonComponent
 				standard
+				primary={copy}
 				leftIcon={copy ? <RiLinkUnlinkM /> : <HiOutlineSpeakerphone fontSize="20px" />}
 				width="100%"
 				onClick={shareProjectWithfriends}
 			>
 				{copy ? 'Project Link Copied' : 'Share project with friends'}
 			</ButtonComponent>
-			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" height="-webkit-fill-available">
+			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" flex="1">
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
 					{`Project Backers ${funders.length ? `( ${funders.length} )` : ''}`}
 				</Text>
-				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 60px)' : '100%'} paddingBottom="30px">
+				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 90px)' : '100%'} paddingBottom="10px">
 					{
 						funders.map((funder, index) => (
 							<IdBar key={index} funder={funder} />
 						))
 					}
 				</VStack>
-
 			</Box>
 		</VStack>);
 
@@ -225,6 +224,7 @@ const Activity = ({ project }: IActivityProps) => {
 			justifyContent="flex-start"
 			alignItems="center"
 			backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
+			height="100%"
 		>
 			{fundLoading ? <Loader />
 				: completedFunding ? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
