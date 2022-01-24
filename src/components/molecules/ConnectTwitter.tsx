@@ -1,8 +1,8 @@
-import { Box, Link, Text } from '@chakra-ui/layout';
+import { Box, Text } from '@chakra-ui/layout';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import { ButtonComponent } from '../ui';
+import { ButtonComponent, Linkin } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 import { REACT_APP_API_ENDPOINT } from '../../constants';
@@ -36,7 +36,7 @@ export const ConnectTwitter = ({
 						To create a project you have to first connect to your twitter account so that we can recognize you for your contributions
 					</Text>
 					<Box className={classes.twitterContainer}>
-						<Link href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
+						<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
 							<ButtonComponent
 								margin="10px"
 								isFullWidth
@@ -47,7 +47,7 @@ export const ConnectTwitter = ({
 							>
 								Login with Twitter
 							</ButtonComponent>
-						</Link>
+						</Linkin>
 
 						{/* </TwitterLogin> */}
 					</Box>
