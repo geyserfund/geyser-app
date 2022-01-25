@@ -26,9 +26,9 @@ const useStyles = createUseStyles<Rules, IStyles >({
 	},
 	detailsContainer: ({isMobile}: IStyles) => ({
 		padding: isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px',
-		height: isMobile ? '-webkit-calc(100% - 110px)' : '-webkit-calc(100% - 90px)',
+		height: isMobile ? '-webkit-calc(100% - 120px)' : '-webkit-calc(100% - 90px)',
 		fallbacks: [
-			{height: isMobile ? 'calc(100% - 110px)' : 'calc(100% - 90px)'},
+			{height: isMobile ? 'calc(100% - 120px)' : 'calc(100% - 90px)'},
 		],
 		overflowY: 'scroll',
 		WebkitOverflowScrolling: 'touch',
