@@ -17,6 +17,7 @@ const useStyles = createUseStyles<Labels, Istyles>({
 		spacing: '5px',
 		alignItems: 'flex-start',
 		display: 'flex',
+		width: '100%',
 		'& img': {
 			borderRadius: '5px',
 		},
@@ -90,24 +91,33 @@ const sponsors: IUser[] = [
 interface Ispeaker {
 	name: string;
 	twitterHandle: string
+	description?: string
 }
 
 const speakers: Ispeaker[] = [
 	{
 		name: 'Parman - 🇦🇲 Bitcoin Private Key Whisperer .*',
 		twitterHandle: 'parman_the',
+		description: 'will speak about financial literacy and money.',
 	},
 	{
 		name: 'Paco de la India',
 		twitterHandle: 'RunwithBitcoin',
+		description: 'will speak about what is good money and why #bitcoin',
 	},
 	{
 		name: 'King ⚡ Johnson Apata🦁👑',
 		twitterHandle: 'ApataJ',
+		description: 'you would to talk about #bitcoin education',
 	},
 	{
 		name: 'Ray Youssef',
-		twitterHandle: '@raypaxful',
+		twitterHandle: 'raypaxful',
+	},
+	{
+		name: 'Kieran Nolan',
+		twitterHandle: 'KieranDNolan',
+		description: 'will speak about his experience travelling the world with Bitcoin.',
 	},
 ];
 
@@ -143,7 +153,7 @@ export const King = () => {
 			const scrollElement = document.getElementById('project-scoll-container');
 			if (scrollElement) {
 				const scrollValue = ownerRef.current.offsetTop - scrollElement.offsetTop;
-				scrollElement?.scrollTo({top: scrollValue, behavior: 'smooth'});
+				scrollElement?.scrollTo({ top: scrollValue, behavior: 'smooth' });
 			}
 		}
 	};
@@ -260,13 +270,16 @@ export const King = () => {
 							<Text fontWeight={600} fontSize={'16px'}>
 								Speakers include:
 							</Text>
-							<UnorderedList paddingLeft="18px">
+							<UnorderedList paddingLeft="18px" width="100%">
 								{
 									speakers.map(speaker => (
-										<ListItem key={speaker.twitterHandle}>
+										<ListItem key={speaker.twitterHandle} display="block">
 											<Link href={`https://twitter.com/${speaker.twitterHandle}`} isExternal>
-												{speaker.name}
+												{`${speaker.name} `}
 											</Link>
+											<Text display="inline-block">
+												{speaker.description}
+											</Text>
 										</ListItem>
 									))
 								}
@@ -278,7 +291,7 @@ export const King = () => {
 							<Text fontWeight={600} fontSize={'16px'}>
 								The funds received for this crowdfund will be used for:
 							</Text>
-							<UnorderedList paddingLeft="18px">
+							<UnorderedList paddingLeft="18px" >
 								<ListItem>Booking an event hall (Isheri Ijegun Lagos)</ListItem>
 								<ListItem>Creating and distributing flyers to youths</ListItem>
 								<ListItem>Giveaway of Satoshis</ListItem>
@@ -340,6 +353,6 @@ export const King = () => {
 
 			</VStack >
 			<Footer />
-		</VStack>
+		</VStack >
 	);
 };

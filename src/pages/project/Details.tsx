@@ -13,7 +13,7 @@ interface IStyles {
 	isMobile?: boolean;
 }
 
-const useStyles = createUseStyles<Rules, IStyles >({
+const useStyles = createUseStyles<Rules, IStyles>({
 	twitter: {
 		maxWidth: 450,
 		'.twitter-widget-0': {
@@ -24,11 +24,11 @@ const useStyles = createUseStyles<Rules, IStyles >({
 		width: '100%',
 		fontSize: '14px',
 	},
-	detailsContainer: ({isMobile}: IStyles) => ({
-		padding: isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px',
+	detailsContainer: ({ isMobile }: IStyles) => ({
+		padding: isMobile ? '20px 10px 10px 10px' : '20px 40px 0px 40px',
 		height: isMobile ? '-webkit-calc(100% - 120px)' : '-webkit-calc(100% - 90px)',
 		fallbacks: [
-			{height: isMobile ? 'calc(100% - 120px)' : 'calc(100% - 90px)'},
+			{ height: isMobile ? 'calc(100% - 120px)' : 'calc(100% - 90px)' },
 		],
 		overflowY: 'scroll',
 		WebkitOverflowScrolling: 'touch',
@@ -42,7 +42,7 @@ interface IActivityProps {
 export const Details = ({ project }: IActivityProps) => {
 	const isMobile = isMobileMode();
 	const componentPadding = isMobile ? '20px 10px 0px 10px' : '20px 40px 0px 40px';
-	const classes = useStyles({isMobile});
+	const classes = useStyles({ isMobile });
 
 	const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)');
 	const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
