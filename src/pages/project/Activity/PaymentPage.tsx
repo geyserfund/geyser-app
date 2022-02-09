@@ -71,7 +71,7 @@ export const PaymentPage = ({
 
 	return (
 		<VStack
-			padding={isMobile ? '10px 0px' : '10px 20px'}
+			padding={isMobile ? '10px 10px' : '10px 20px'}
 			margin="10px 15px"
 			spacing="12px"
 			width="100%"
@@ -126,7 +126,14 @@ export const PaymentPage = ({
 					justifyContent="center"
 					alignItems="center"
 				>
-					<Textarea variant="unstyled" fontSize="14px" margin="5px" value={comment} onChange={handleComment} />
+					<Textarea
+						variant="unstyled"
+						fontSize="14px"
+						margin="5px"
+						resize="none"
+						value={comment}
+						onChange={handleComment}
+					/>
 				</Box>
 
 			</Box>
