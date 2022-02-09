@@ -57,7 +57,7 @@ const owner: IUser = {
 const ambassador: IUser = {
 	picture: 'https://pbs.twimg.com/profile_images/1477647411963056128/7wd0aNSZ_400x400.jpg',
 	username: 'parman_the',
-	fullName: 'Parman Bitcoin Private Key Whispere',
+	fullName: 'Parman Bitcoin Private Key Whisperer',
 	id: '',
 	URL: '',
 	twitter: false,
@@ -96,28 +96,24 @@ interface Ispeaker {
 
 const speakers: Ispeaker[] = [
 	{
-		name: 'Parman - 🇦🇲 Bitcoin Private Key Whisperer .*',
+		name: 'Parman - 🇦🇲 Bitcoin Private Key Whisperer',
 		twitterHandle: 'parman_the',
 		description: 'will speak about financial literacy and money.',
 	},
 	{
 		name: 'Paco de la India',
 		twitterHandle: 'RunwithBitcoin',
-		description: 'will speak about what is good money and why #bitcoin',
+		description: 'will speak about his experience travelling the world with Bitcoin.',
 	},
 	{
 		name: 'King ⚡ Johnson Apata🦁👑',
 		twitterHandle: 'ApataJ',
-		description: 'you would to talk about #bitcoin education',
-	},
-	{
-		name: 'Ray Youssef',
-		twitterHandle: 'raypaxful',
+		description: 'will speak about what is good money and why #bitcoin matters.',
 	},
 	{
 		name: 'Kieran Nolan',
 		twitterHandle: 'KieranDNolan',
-		description: 'will speak about his experience travelling the world with Bitcoin.',
+		description: 'will talk about #bitcoin education.',
 	},
 ];
 

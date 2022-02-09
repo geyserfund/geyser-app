@@ -84,7 +84,7 @@ export const NavBar = () => {
 										marginRight="12px"
 										onClick={twitterOnOpen}
 									>
-										Login
+										Log In
 									</ButtonComponent>
 							}
 							<NavMenu user={user} logout={logout} />
@@ -116,7 +116,7 @@ export const NavBar = () => {
 											marginRight="12px"
 											onClick={twitterOnOpen}
 										>
-											Login
+											Log In
 										</ButtonComponent>
 								}
 								<NavMenu user={user} logout={logout} />
@@ -138,7 +138,7 @@ export const NavBar = () => {
 						</Text>
 						<Box display="flex" justifyContent="space-between" paddingTop="20px">
 							<ButtonComponent standard primary onClick={twitterOnOpen}>
-								Login
+								Log In
 							</ButtonComponent>
 							<ButtonComponent onClick={onClose}>
 								Continue
