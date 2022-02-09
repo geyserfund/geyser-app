@@ -195,7 +195,7 @@ export const King = () => {
 									sponsors.map((sponsor: IUser) => (
 										<WrapItem key={sponsor.username} display="inline-block">
 											<Link href={`https://twitter.com/${sponsor.username}`} isExternal>
-												<HStack spacing="15px">
+												<HStack spacing="5px" marginRight="10px">
 													<Avatar width="35px" height="35px" name={sponsor.username} src={sponsor.picture} />
 													<Text fontSize="18px">
 														{sponsor.username}
@@ -203,10 +203,8 @@ export const King = () => {
 												</HStack>
 											</Link>
 										</WrapItem>
-
 									))
 								}
-
 							</Wrap>
 
 						</Box>
@@ -280,9 +278,7 @@ export const King = () => {
 									))
 								}
 							</UnorderedList>
-
 						</VStack>
-
 						<VStack className={classes.containers} >
 							<Text fontWeight={600} fontSize={'16px'}>
 								The funds received for this crowdfund will be used for:
@@ -296,7 +292,6 @@ export const King = () => {
 								<ListItem>Snacks and transportation for speakers to join conference</ListItem>
 							</UnorderedList>
 						</VStack>
-
 						<HStack spacing="30px">
 							<Box>
 								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png" />
@@ -308,7 +303,6 @@ export const King = () => {
 								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png" />
 							</Box>
 						</HStack>
-
 						<VStack className={classes.containers} ref={ownerRef}>
 							<Text fontWeight={600} fontSize={'1.25em'}>
 								Who am I?
@@ -328,9 +322,7 @@ export const King = () => {
 								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png" />
 							</Box>
 						</VStack>
-
 					</VStack>
-
 				</Card>
 				<Card className={classes.cardContainer}>
 					<VStack marginBottom="10px">
@@ -342,11 +334,9 @@ export const King = () => {
 							<Link href="https://walletofsatoshi.com" isExternal>
 								<Image height="70px" src="https://storage.googleapis.com/geyser-projects-media/project/king/wallet-of-satoshi.png" />
 							</Link>
-
 						</HStack>
 					</VStack>
 				</Card>
-
 			</VStack >
 			<Footer />
 		</VStack >

@@ -130,7 +130,7 @@ const Activity = ({ project }: IActivityProps) => {
 
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
-
+	// TODO: refactor this
 	const getBitcoinRates = async () => {
 		const response: any = (await fetch('https://api.coinbase.com/v2/exchange-rates?currency=BTC'));
 		const responseJson = await response.json();

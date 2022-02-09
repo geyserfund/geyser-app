@@ -6,6 +6,7 @@ import { ButtonComponent, Linkin } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 import { REACT_APP_API_ENDPOINT } from '../../constants';
+
 interface IConnectTwitter {
 	isOpen: boolean,
 	onClose: () => void,
@@ -53,8 +54,6 @@ export const ConnectTwitter = ({
 								Login with Twitter
 							</ButtonComponent>
 						</Linkin>
-
-						{/* </TwitterLogin> */}
 					</Box>
 				</ModalBody>
 			</ModalContent>
