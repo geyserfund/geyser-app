@@ -71,7 +71,7 @@ export const PaymentPage = ({
 
 	return (
 		<VStack
-			padding={isMobile ? '10px 0px' : '10px 20px'}
+			padding={isMobile ? '10px 10px' : '10px 20px'}
 			margin="10px 15px"
 			spacing="12px"
 			width="100%"
