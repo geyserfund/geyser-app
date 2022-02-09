@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CircularProgress } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/layout';
 import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
-import {BsCurrencyBitcoin} from 'react-icons/bs';
+import { BsCurrencyBitcoin } from 'react-icons/bs';
 import { isDarkMode } from '../../utils';
 import { SatoshiIcon } from '../icons';
 import { createUseStyles } from 'react-jss';
@@ -25,20 +25,8 @@ const useStyles = createUseStyles({
 		alignItems: 'center',
 		filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))',
 		'& .amount-label-sat': {
-			display: 'flex',
 			alignItems: 'flex-start',
 			justifyContent: 'center',
-		},
-		'& .amount-label-usd': {
-			display: 'none',
-		},
-		'&:hover': {
-			'& .amount-label-sat': {
-				display: 'none',
-			},
-			'& .amount-label-usd': {
-				display: 'block',
-			},
 		},
 
 	},
@@ -52,6 +40,8 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 	const isDark = isDarkMode();
 	const amountUSD = (amount * rate).toFixed(2);
 	const percentage = (parseFloat(amountUSD) / goal) * 100;
+
+	const [display, setDisplay] = useState(false);
 
 	let bitCoins = 0;
 
@@ -69,22 +59,33 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 		return percent.toFixed();
 	};
 
+	const handleClick = () => {
+		setDisplay(!display);
+	};
+
+	const handleMouseOver = () => {
+		setDisplay(true);
+		setTimeout(() => {
+			setDisplay(false);
+		}, 5000);
+	};
+
 	const getStat = () => (
-		<Stat textAlign="center" borderRadius="50%">
+		<Stat textAlign="center" borderRadius="50%" >
 			<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Funded</StatLabel>
-			<StatNumber className="amount-label-sat" position="relative">
+			<StatNumber className="amount-label-sat" position="relative" display={!display ? 'flex' : 'none'}>
 				{
 					bitCoins ? <>
-						<BsCurrencyBitcoin fontSize="30px"/>{bitCoins}
+						<BsCurrencyBitcoin fontSize="30px" />{bitCoins}
 					</>
 						: <>
-							<SatoshiIcon isDark={isDark} className={classes.satoshi}/> {commaFormatted(amount)}
+							<SatoshiIcon isDark={isDark} className={classes.satoshi} /> {commaFormatted(amount)}
 						</>
 
 				}
 
 			</StatNumber>
-			<StatNumber className="amount-label-usd" position="relative">{'$'}{amountUSD} </StatNumber>
+			<StatNumber className="amount-label-usd" display={display ? 'block' : 'none'} position="relative">{'$'}{amountUSD} </StatNumber>
 			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of $${commaFormatted(goal)}`}</StatHelpText>
 		</Stat>
 	);
@@ -95,6 +96,8 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 
 			: percentage < 100
 				? <CircularProgress
+					onMouseOver={handleMouseOver}
+					onMouseOut={handleClick}
 					isIndeterminate={loading}
 					className={classes.circularProgress}
 					value={percentage}
