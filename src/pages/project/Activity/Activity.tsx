@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { RiLinkUnlinkM } from 'react-icons/ri';
 import { SatoshiIcon } from '../../../components/icons';
-import { CircularFundProgress } from '../../../components/molecules';
+import { CircularFundProgress, ConnectTwitter } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { ButtonComponent, Card, FundingStatus } from '../../../components/ui';
 import { IFundingTx, IProject, IProjectFunding } from '../../../interfaces';
@@ -16,6 +16,7 @@ import { getCountDown, isDarkMode, isMobileMode, useNotification } from '../../.
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
+import { useDisclosure } from '@chakra-ui/react';
 
 interface IActivityProps {
 	project: IProject
@@ -42,8 +43,9 @@ const Activity = ({ project }: IActivityProps) => {
 	const [copy, setCopy] = useState(false);
 	const [funders, setfunders] = useState<IProjectFunding[]>([]);
 	const [countDown, setCountDown] = useState('');
+	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 
-	const { user, twitterOnOpen } = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
 
 	const { toast } = useNotification();
 
@@ -90,6 +92,7 @@ const Activity = ({ project }: IActivityProps) => {
 	useEffect(() => {
 		if (!anonymous && (!user || !user.id)) {
 			twitterOnOpen();
+			setAnonymous(true);
 		}
 	}, [anonymous]);
 
@@ -104,7 +107,7 @@ const Activity = ({ project }: IActivityProps) => {
 	}, [fundData]);
 
 	useEffect(() => {
-		if (completedFunding) {
+		if (completedFunding || !startedFunding) {
 			clearInterval(fundInterval);
 		}
 
@@ -216,43 +219,51 @@ const Activity = ({ project }: IActivityProps) => {
 		</VStack>);
 
 	return (
-		<Card
-			flex={2}
-			maxWidth={isMobile ? 'auto' : '450px'}
-			display="flex"
-			flexDirection="column"
-			justifyContent="flex-start"
-			alignItems="center"
-			backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
-			height="100%"
-		>
-			{fundLoading ? <Loader />
-				: completedFunding ? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
-					: startedFunding ? <QrPage
-						comment={comment}
-						title={project.title}
-						amount={amount}
-						owner={project.owner.user.username}
-						qrCode={fundingTx.paymentRequest}
-						handleCloseButton={handleCloseButton}
-					/>
-						: fundPage ? infoPage()
-							: <PaymentPage
-								{...{
-									isMobile,
-									handleCloseButton,
-									btcRate,
-									amount,
-									setAmount,
-									comment,
-									setComment,
-									anonymous,
-									setAnonymous,
-									handleFund,
-								}}
-							/>
-			}
-		</Card>
+		<>
+			<Card
+				flex={2}
+				maxWidth={isMobile ? 'auto' : '450px'}
+				display="flex"
+				flexDirection="column"
+				justifyContent="flex-start"
+				alignItems="center"
+				backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
+				height="100%"
+			>
+				{fundLoading ? <Loader />
+					: completedFunding ? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
+						: startedFunding ? <QrPage
+							comment={comment}
+							title={project.title}
+							amount={amount}
+							owner={project.owner.user.username}
+							qrCode={fundingTx.paymentRequest}
+							handleCloseButton={handleCloseButton}
+						/>
+							: fundPage ? infoPage()
+								: <PaymentPage
+									{...{
+										isMobile,
+										handleCloseButton,
+										btcRate,
+										amount,
+										setAmount,
+										comment,
+										setComment,
+										anonymous,
+										setAnonymous,
+										handleFund,
+									}}
+								/>
+				}
+			</Card>
+			<ConnectTwitter
+				title="Link Your Twitter account"
+				description="Link your twitter account to appear as a project backer when you fund a project."
+				isOpen={twitterisOpen}
+				onClose={twitterOnClose}
+			/>
+		</>
 	);
 };
 

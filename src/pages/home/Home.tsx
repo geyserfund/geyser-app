@@ -76,7 +76,7 @@ export const Home = () => {
 				</Box>
 				<VStack paddingBottom="30px" width="100%" alignItems="flex-start">
 					<Text className={classes.titles}>
-					Project Highlights
+						Project Highlights
 					</Text>
 					<Card maxHeight="328px" width="100%" borderRadius="20px" border="2px solid #E9E9E9">
 						<VStack
@@ -85,9 +85,6 @@ export const Home = () => {
 							alignItems="center"
 							backgroundColor={isDark ? 'brand.bglightDarkMode' : 'bgWhite'}
 						>
-							{/* <Text fontSize="15px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'} marginBottom="10px">
-								PROJECT HIGHLIGHTS
-							</Text> */}
 							<HStack
 								overflowX={'auto'}
 							>
@@ -127,7 +124,7 @@ export const Home = () => {
 				</Text>
 				<Box paddingBottom="50px">
 					<Text className={classes.texts}>
-						Geyser was inspired by a natural phenomena: the piling up of heat and pressure which ejects water turbulently up into the sky, in a beatufiful display of energy. We believe that crowds have the power to do the same with ideas by throwing forth intermittend displays of solidarity and support until projects gush out from theory to practice.
+						Geyser was inspired by a natural phenomena: the piling up of heat and pressure which ejects water turbulently up into the sky, in a beautiful display of energy. We believe that crowds have the power to do the same with ideas by throwing forth intermittend displays of solidarity and support until projects gush out from theory to practice.
 					</Text>
 				</Box>
 			</VStack>
