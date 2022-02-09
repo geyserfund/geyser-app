@@ -126,7 +126,14 @@ export const PaymentPage = ({
 					justifyContent="center"
 					alignItems="center"
 				>
-					<Textarea variant="unstyled" fontSize="14px" margin="5px" value={comment} onChange={handleComment} />
+					<Textarea
+						variant="unstyled"
+						fontSize="14px"
+						margin="5px"
+						resize="none"
+						value={comment}
+						onChange={handleComment}
+					/>
 				</Box>
 
 			</Box>
