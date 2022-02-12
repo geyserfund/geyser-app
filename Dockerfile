@@ -1,6 +1,6 @@
 # pull official base image
 ARG NODE_VERSION=16
-FROM node:${NODE_VERSION}-alpine AS appbuild
+FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS appbuild
 
 # set working directory
 WORKDIR /usr/app
