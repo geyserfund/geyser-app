@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { Footer } from '../../../components/molecules';
 import { Card, ImageBar, StatusBar } from '../../../components/ui';
+import { kingProfileUrl } from '../../../constants';
 import { IUser } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 
@@ -44,7 +45,7 @@ const useStyles = createUseStyles<Labels, Istyles>({
 });
 
 const owner: IUser = {
-	picture: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png',
+	picture: kingProfileUrl,
 	username: 'ApataJ',
 	fullName: 'Apata J',
 	id: '',

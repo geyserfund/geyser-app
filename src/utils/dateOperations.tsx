@@ -57,7 +57,7 @@ export 	const getDaysLeft = (date: string) => {
 
 		if (hours < 1) {
 			const minutes = Math.floor(i.length('minutes'));
-			if (hours === 1) {
+			if (minutes === 1) {
 				return 'a minute';
 			}
 
@@ -72,6 +72,45 @@ export 	const getDaysLeft = (date: string) => {
 	}
 
 	return `${days} days`;
+};
+
+export const formatDaysLeft = (date: string) => {
+	const dateTime = DateTime.fromMillis(parseInt(date, 10));
+	const currentDateTime = DateTime.now();
+
+	const i = Interval.fromDateTimes(currentDateTime, dateTime);
+
+	const days = Math.floor(i.length('days'));
+
+	const format = (amount: number, label: string) => ({amount, label});
+
+	if (days === 1) {
+		return format(1, 'day');
+	}
+
+	if (days < 1) {
+		const hours = Math.floor(i.length('hours'));
+		if (hours === 1) {
+			return format(1, 'hour');
+		}
+
+		if (hours < 1) {
+			const minutes = Math.floor(i.length('minutes'));
+			if (minutes === 1) {
+				return format(1, 'minute');
+			}
+
+			if (minutes < 1) {
+				return format(1, 'minute');
+			}
+
+			return format(minutes, 'minutes');
+		}
+
+		return format(hours, 'hours');
+	}
+
+	return format(days, 'days');
 };
 
 export const getCountDown = (date: string) => {
