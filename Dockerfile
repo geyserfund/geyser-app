@@ -27,7 +27,9 @@ RUN yarn install
 FROM dependencies AS build
 
 WORKDIR /usr/app
+COPY ./public ./public
 COPY ./src ./src
+COPY tsconfig.json .eslintrc.js ./
 RUN yarn build
 RUN rm -rf ./src
 
@@ -37,9 +39,12 @@ RUN rm -rf ./src
 FROM base AS production
 
 WORKDIR /usr/app
+COPY package.json yarn.lock ./
 
 # Copy production dependencies over
 COPY --from=dependencies /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/build ./build
 
-CMD yarn start
+# RUN yarn install --production
+RUN yarn global add serve
+CMD serve -s build
