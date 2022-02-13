@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
-import { ButtonComponent, Card, Linkin } from '../../components/ui';
-import { Footer, ProjectCard } from '../../components/molecules';
-import { isDarkMode, isMobileMode } from '../../utils';
+import { ButtonComponent, Linkin } from '../../components/ui';
+import { Footer, ProjectCard, ProjectComingSoon } from '../../components/molecules';
+import { isDarkMode, isMobileMode, useNotification } from '../../utils';
 import { fonts } from '../../constants/fonts';
 import { geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo, StartCrowdFundUrl, SubscribeUrl } from '../../constants';
 import { createUseStyles } from 'react-jss';
+import { useQuery } from '@apollo/client';
+import { QUERY_GET_PROJECT } from '../../graphql';
+import Loader from '../../components/ui/Loader';
 
 type RuleNames = 'titles' | 'headers' | 'texts'
 
@@ -30,9 +33,28 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 export const Home = () => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
+	const { toast } = useNotification();
 
 	const classes = useStyles({ isMobile: isMobileMode() });
 
+	const { loading: projectsLoading, error, data } = useQuery(QUERY_GET_PROJECT,
+		{
+			variables: { name: 'bitcoin-conference-in-lagos' },
+		},
+	);
+
+	useEffect(() => {
+		if (error) {
+			toast({
+				title: 'Something went wrong',
+				description: 'Please refresh the',
+				status: 'error',
+			});
+		}
+	}, [error]);
+
+	const project = data && data.getProjectByName && data.getProjectByName.project;
+	console.log('checking the project', project);
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
@@ -74,31 +96,31 @@ export const Home = () => {
 				<Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeCoin1} height="150px" />
 				</Box>
-				<VStack paddingBottom="30px" width="100%" alignItems="flex-start">
+				<VStack width="100%" alignItems="flex-start">
 					<Text className={classes.titles}>
-						Project Highlights
+						Fund live projects
 					</Text>
-					<Card maxHeight="328px" width="100%" borderRadius="20px" border="2px solid #E9E9E9">
-						<VStack
-							width="100%"
-							padding="20px 15px"
-							alignItems="center"
-							backgroundColor={isDark ? 'brand.bglightDarkMode' : 'bgWhite'}
-						>
-							<HStack
+					{
+						projectsLoading
+							? <Loader width="100%"/>
+							: <HStack
 								overflowX={'auto'}
+								width="100%"
+								paddingTop="5px"
+								paddingBottom="20px"
+								spacing="15px"
 							>
 								<ProjectCard
 									open
 									title="Bitcoin Conference In Lagos"
 									name="bitcoin-conference-in-lagos"
-									marginBottom="20px"
+									project={project}
 									imgSrc="https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png"
 								/>
+								<ProjectComingSoon />
 							</HStack>
+					}
 
-						</VStack>
-					</Card>
 				</VStack>
 				<Text className={classes.titles}>
 					Get funded by Bitcoiners around the world to bring your ideas to life

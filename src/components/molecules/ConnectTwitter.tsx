@@ -29,9 +29,8 @@ export const ConnectTwitter = ({
 	description,
 }: IConnectTwitter) => {
 	const classes = useStyles();
-
-	const useTitle = title || 'Connect to Twitter';
-	const useDescription = description || 'To create a project you have to first connect to your twitter account so that we can recognize you for your contributions';
+	const useTitle = title || 'Link Your Twitter account';
+	const useDescription = description || 'Link your twitter account to appear as a project backer when you fund a project.';
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
