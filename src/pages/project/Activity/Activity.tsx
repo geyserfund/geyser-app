@@ -17,6 +17,7 @@ import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
 import { useDisclosure } from '@chakra-ui/react';
+import { fetchBitcoinRates } from '../../../api';
 
 interface IActivityProps {
 	project: IProject
@@ -132,9 +133,9 @@ const Activity = ({ project }: IActivityProps) => {
 	const isMobile = isMobileMode();
 	// TODO: refactor this
 	const getBitcoinRates = async () => {
-		const response: any = (await fetch('https://api.coinbase.com/v2/exchange-rates?currency=BTC'));
-		const responseJson = await response.json();
-		const satoshirate = responseJson.data.rates.USD * 0.00000001;
+		const response: any = await fetchBitcoinRates();
+		console.log('chcking rates', response);
+		const satoshirate = response.rates.USD * 0.00000001;
 		setBtcRate(satoshirate);
 	};
 

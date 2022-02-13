@@ -1,9 +1,9 @@
-import { Box } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 import { Spinner } from '@chakra-ui/spinner';
 import React from 'react';
 
-const Loader = () => (
-	<Box height="80%" display="flex" justifyContent="center" alignItems="center">
+const Loader = ({...rest}:BoxProps) => (
+	<Box height="80%" display="flex" justifyContent="center" alignItems="center" {...rest}>
 		<Spinner
 			thickness="4px"
 			speed="0.65s"
