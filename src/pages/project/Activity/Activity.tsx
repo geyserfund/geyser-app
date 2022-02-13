@@ -258,8 +258,6 @@ const Activity = ({ project }: IActivityProps) => {
 				}
 			</Card>
 			<ConnectTwitter
-				title="Link Your Twitter account"
-				description="Link your twitter account to appear as a project backer when you fund a project."
 				isOpen={twitterisOpen}
 				onClose={twitterOnClose}
 			/>
