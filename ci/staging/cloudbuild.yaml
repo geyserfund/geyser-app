@@ -3,15 +3,17 @@ steps:
   - id: "Pull latest image to use as cache"
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args: ['-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || exit 0']
+    args: [
+            '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || exit 0'
+          ]
   - id: "Build new image" 
     name: 'gcr.io/cloud-builders/docker'
     args: [
-              'build',
-              '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA',
-              '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
-              '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
-              '.'
+            'build',
+            '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA',
+            '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
+            '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
+            '.'
           ]
   # Push the container image to Container Registry
   - id: "Push new image to the registry"
@@ -28,8 +30,10 @@ steps:
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
     - '--region'
     - 'us-central1'
-    - '--set-env-vars REACT_APP_API_ENDPOINT=${_API_ENDPOINT}'
-    - '--set-env-vars NODE_ENV=${_NODE_ENV}'
+    - '--set-env-vars'
+    - 'REACT_APP_API_ENDPOINT=${_API_ENDPOINT}'
+    - '--set-env-vars' 
+    - 'NODE_ENV=${_NODE_ENV}'
 images:
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
 timeout: 900s
