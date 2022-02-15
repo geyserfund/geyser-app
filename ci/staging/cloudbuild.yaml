@@ -1,9 +1,21 @@
  steps:
  # Build the container image
- - name: 'gcr.io/cloud-builders/docker'
-   args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:$COMMIT_SHA', '.']
+ - id: "Pull latest image to use as cache"
+  name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args: ['-c', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:latest || exit 0']
+ - id: "Build new image" 
+   name: 'gcr.io/cloud-builders/docker'
+   args: [
+            'build',
+            '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:$COMMIT_SHA',
+            '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:latest',
+            '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:latest',
+            '.'
+         ]
  # Push the container image to Container Registry
- - name: 'gcr.io/cloud-builders/docker'
+ - id: "Push new image to the registry"
+   name: 'gcr.io/cloud-builders/docker'
    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:$COMMIT_SHA']
  # Deploy container image to Cloud Run
  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
