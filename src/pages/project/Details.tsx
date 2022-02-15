@@ -33,15 +33,16 @@ const useStyles = createUseStyles<Rules, IStyles>({
 	},
 	detailsContainer: ({ isMobile }: IStyles) => ({
 		padding: isMobile ? '20px 10px 10px 10px' : '20px 40px 0px 40px',
-		height: isMobile ? '-webkit-calc(100% - 80px)' : '-webkit-calc(100% - 87px)',
+		height: isMobile ? '-webkit-calc(100% - 80px)' : '-webkit-calc(100% - 62px)',
 		fallbacks: [
-			{ height: isMobile ? 'calc(100% - 80px)' : 'calc(100% - 87px)' },
+			{ height: isMobile ? 'calc(100% - 80px)' : 'calc(100% - 62px)' },
 		],
 		overflowY: 'scroll',
 		WebkitOverflowScrolling: 'touch',
 	}),
 	headerContainer: ({ isMobile }: IStyles) => ({
 		display: 'flex',
+		width: '100%',
 		flexDirection: isMobile ? 'column' : 'row',
 		alignItems: isMobile ? 'flex-start' : 'center',
 		justifyContent: 'space-between',
@@ -121,14 +122,11 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 			overflow="hidden"
 		>
 			<HStack padding={componentPadding} justifyContent="space-between">
-				<Box >
-					<Text fontSize={isMobile ? '14px' : '16px'}> Project: </Text>
-					<Box className={classes.headerContainer} >
-						<Heading fontSize={isMobile ? '20px' : '28px'} fontWeight="normal">
-							{project.title}
-						</Heading>
-						<Text fontSize={isMobile ? '12px' : '14px'}>{`Created ${getDaysAgo(project.createdAt)} ago`}</Text>
-					</Box>
+				<Box className={classes.headerContainer} >
+					<Heading fontSize={isMobile ? '20px' : '28px'} fontWeight="normal">
+						{project.title}
+					</Heading>
+					<Text fontSize={isMobile ? '12px' : '14px'}>{`Created ${getDaysAgo(project.createdAt)} ago`}</Text>
 				</Box>
 				{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
 					<Text fontSize="12px">Fund</Text>
