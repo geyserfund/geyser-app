@@ -46,4 +46,4 @@ COPY --from=dependencies /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/build ./build
 
 # RUN yarn global add serve
-CMD serve -s build
+CMD yarn serve -s build
