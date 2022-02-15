@@ -53,7 +53,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
 	fundButton: {
 		position: 'absolute',
 		left: '0px',
-		top: '11px',
+		top: '5px',
 		height: '55px',
 		width: '60px',
 		paddingLeft: '12px',
