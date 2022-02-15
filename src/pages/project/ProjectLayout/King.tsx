@@ -249,7 +249,7 @@ export const King = () => {
 							</Box>
 						</HStack>
 						<VStack className={classes.containers} >
-							<Text fontWeight={600} fontSize={'16px'}>
+							<Text fontWeight={600} fontSize="16px">
 								The agenda:
 							</Text>
 							<OrderedList paddingLeft="18px">
