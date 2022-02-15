@@ -21,3 +21,4 @@
    - 'NODE_ENV=${_NODE_ENV}'
  images:
  - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:$COMMIT_SHA'
+ timeout: 900s
