@@ -16,11 +16,17 @@ import { getCountDown, isDarkMode, isMobileMode, useNotification } from '../../.
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
-import { useDisclosure } from '@chakra-ui/react';
+import { Button, useDisclosure } from '@chakra-ui/react';
 import { fetchBitcoinRates } from '../../../api';
+import { createUseStyles } from 'react-jss';
+import { colors } from '../../../constants';
+import { slideInRight, slideOutRight } from '../../../css';
+import classNames from 'classnames';
 
 interface IActivityProps {
 	project: IProject
+	detailOpen: boolean
+	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const initialFunding = {
@@ -32,7 +38,45 @@ const initialFunding = {
 	canceled: false,
 };
 let fundInterval: any;
-const Activity = ({ project }: IActivityProps) => {
+
+type Rules = string
+
+interface IStyles {
+	isMobile: boolean;
+	detailOpen: boolean;
+}
+
+const useStyles = createUseStyles<Rules, IStyles>({
+	container: ({ isMobile, detailOpen }: IStyles) => ({
+		display: (!isMobile || !detailOpen) ? 'flex' : 'none',
+	}),
+	fundButton: {
+		position: 'absolute',
+		left: '0px',
+		top: '11px',
+		height: '55px',
+		width: '60px',
+		paddingLeft: '12px',
+		borderBottomLeftRadius: 0,
+		borderTopLeftRadius: 0,
+		borderBottomRightRadius: '45%',
+		borderTopRightRadius: '45%',
+		backgroundColor: colors.primary,
+		textAlign: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+	},
+	...slideInRight,
+	...slideOutRight,
+});
+
+const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
+	const { user } = useContext(AuthContext);
+	const { toast } = useNotification();
+	const isDark = isDarkMode();
+	const isMobile = isMobileMode();
+
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
 	const [startedFunding, setStartedFunding] = useState(false);
@@ -46,9 +90,7 @@ const Activity = ({ project }: IActivityProps) => {
 	const [countDown, setCountDown] = useState('');
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 
-	const { user } = useContext(AuthContext);
-
-	const { toast } = useNotification();
+	const classes = useStyles({isMobile, detailOpen});
 
 	const [fundProject, {
 		data,
@@ -129,8 +171,6 @@ const Activity = ({ project }: IActivityProps) => {
 		}
 	}, [data]);
 
-	const isDark = isDarkMode();
-	const isMobile = isMobileMode();
 	// TODO: refactor this
 	const getBitcoinRates = async () => {
 		const response: any = await fetchBitcoinRates();
@@ -176,14 +216,22 @@ const Activity = ({ project }: IActivityProps) => {
 		}, 5000);
 	};
 
+	const handleFundClick = () => {
+		setDetailOpen(true);
+	};
+
 	const infoPage = () => (
 		<VStack
-			padding={isMobile ? '10px 5px' : '10px 20px'}
+			padding={isMobile ? '10px 5px 0px 5px' : '10px 20px'}
 			spacing="12px"
 			width="100%"
 			height="100%"
 			overflowY="hidden"
+			position="relative"
 		>
+			{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
+				<Text fontSize="12px">Project</Text>
+			</Button>}
 			<FundingStatus open={true} />
 			<CircularFundProgress loading={loading} rate={btcRate} goal={project.fundingGoal} amount={project.balance} />
 			<Text>{`COUNTDOWN: ${countDown}`}</Text>
@@ -209,7 +257,7 @@ const Activity = ({ project }: IActivityProps) => {
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
 					{`Project Backers ${funders.length ? `( ${funders.length} )` : ''}`}
 				</Text>
-				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 90px)' : '100%'} paddingBottom="10px">
+				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
 					{
 						funders.map((funder, index) => (
 							<IdBar key={index} funder={funder} />
@@ -222,9 +270,11 @@ const Activity = ({ project }: IActivityProps) => {
 	return (
 		<>
 			<Card
+				className={classNames(classes.container, {
+					[classes.slideInRight]: isMobile && !detailOpen,
+				})}
 				flex={2}
 				maxWidth={isMobile ? 'auto' : '450px'}
-				display="flex"
 				flexDirection="column"
 				justifyContent="flex-start"
 				alignItems="center"
