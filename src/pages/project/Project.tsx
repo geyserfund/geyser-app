@@ -1,35 +1,19 @@
 import { useLazyQuery } from '@apollo/client';
-import { Box, Text } from '@chakra-ui/layout';
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
-import React, { useEffect } from 'react';
-import { createUseStyles } from 'react-jss';
+import { Box } from '@chakra-ui/layout';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
 import { QUERY_GET_PROJECT } from '../../graphql';
-import { isDarkMode, isMobileMode } from '../../utils';
 import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
 
-const useStyles = createUseStyles({
-	tabListContainer: {
-		margin: '0px 10px',
-		'& button': {
-			paddingLeft: 0,
-			paddingRight: 0,
-			borderBottomWidth: '3px',
-			boxShadow: 'none !important',
-		},
-
-	},
-});
-
 export const Project = () => {
-	const classes = useStyles();
-	const isMobile = isMobileMode();
 	const { projectId } = useParams<{ projectId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
+
+	const [detailOpen, setDetailOpen] = useState(true);
 
 	useEffect(() => {
 		try {
@@ -70,31 +54,11 @@ export const Project = () => {
 					height="100%"
 					display="flex"
 					overflow="hidden"
-				>{
-						isMobile ? (
-							<Tabs width="100%" colorScheme="blackAlpha" backgroundColor="brand.bgGrey">
-								<TabList className={classes.tabListContainer}>
-									<Tab flex={1}><Text width="100%" textAlign="left" fontSize="20px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Project</Text></Tab>
-									<Tab flex={1}><Text width="100%" textAlign="right" fontSize="20px" color={isDarkMode() ? 'brand.textWhite' : 'brand.textBlack'}>Fund</Text></Tab>
-								</TabList>
+					position="relative"
 
-								<TabPanels height="100%" >
-									<TabPanel padding="0px" height="100%" >
-										<Details project={project} />
-									</TabPanel>
-									<TabPanel padding="0px" height="100%" >
-										<Activity project={project}/>
-									</TabPanel>
-								</TabPanels>
-							</Tabs>
-						) : (
-							<>
-								<Details project={project} />
-								<Activity project={project} />
-							</>
-						)
-					}
-
+				>
+					<Details project={project} {...{detailOpen, setDetailOpen}}/>
+					<Activity project={project} {...{detailOpen, setDetailOpen}}/>
 				</Box>
 			</Box>
 		</>
