@@ -45,6 +45,5 @@ COPY package.json yarn.lock ./
 COPY --from=dependencies /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/build ./build
 
-# RUN yarn install --production
-RUN yarn global add serve
+# RUN yarn global add serve
 CMD serve -s build

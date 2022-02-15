@@ -35,6 +35,7 @@
     "react-tweet-embed": "^1.2.2",
     "react-twitter-auth": "^0.0.13",
     "react-twitter-login": "^1.4.0",
+    "serve": "^13.0.2",
     "typescript": "^3.9.10",
     "web-vitals": "^0.2.4"
   },
