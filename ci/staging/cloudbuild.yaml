@@ -16,7 +16,7 @@ steps:
   # Push the container image to Container Registry
   - id: "Push new image to the registry"
     name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:$COMMIT_SHA']
+    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:latest']
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -28,8 +28,7 @@ steps:
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:$COMMIT_SHA'
     - '--region'
     - 'REGION'
-    - '--set-env-vars REACT_APP_API_ENDPOINT=${_API_ENDPOINT}'
-    - '--set-env-vars NODE_ENV=${_NODE_ENV}'
+    - '--set-env-vars "REACT_APP_API_ENDPOINT=${_API_ENDPOINT},NODE_ENV=${_NODE_ENV}"'
 images:
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/geyser-app:$COMMIT_SHA'
 timeout: 900s
