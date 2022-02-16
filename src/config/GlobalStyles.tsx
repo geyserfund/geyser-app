@@ -32,6 +32,10 @@ export const GlobalStyles = () => (
         background-clip: content-box;
         }
 
+        button:focus {
+            box-shadow: none !important;
+        }
+
         ::-webkit-scrollbar-thumb:hover {
         background-color: #a8bbbf;
         }

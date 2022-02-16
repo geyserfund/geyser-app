@@ -1,13 +1,15 @@
-import { Avatar, Box, HStack, Image, Link, ListItem, OrderedList, Text, UnorderedList, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import React, { useRef } from 'react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, HStack, Image, Link, ListItem, OrderedList, Text, UnorderedList, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import React, { useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
+import TweetEmbed from 'react-tweet-embed';
 import { Footer } from '../../../components/molecules';
 import { Card, ImageBar, StatusBar } from '../../../components/ui';
+import Loader from '../../../components/ui/Loader';
 import { kingProfileUrl } from '../../../constants';
 import { IUser } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 
-type Labels = 'containers' | 'texts' | 'readmore' | 'cardContainer'
+type Labels = string
 
 interface Istyles {
 	isMobile?: boolean
@@ -42,6 +44,14 @@ const useStyles = createUseStyles<Labels, Istyles>({
 		background: 'white',
 		height: 'fit-content',
 	}),
+	twitter: {
+		maxWidth: 450,
+		display: 'block',
+		width: '100%',
+		'.twitter-widget-0': {
+			width: '200px !important',
+		},
+	},
 });
 
 const owner: IUser = {
@@ -118,32 +128,47 @@ const speakers: Ispeaker[] = [
 	},
 ];
 
+const images = [
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_4.png',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_4.png',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_update1.png',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_update1.png',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_update2.jpeg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_update2.jpeg',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_update3.png',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_update3.png',
+	},
+];
+
 export const King = () => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 	const ownerRef: any = useRef(null);
-	const images = [
-		{
-			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png',
-			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png',
-		},
-		{
-			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png',
-			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png',
-		},
-		{
-			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_4.png',
-			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_4.png',
-		},
-		{
-			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png',
-			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png',
-		},
-		{
-			original: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png',
-			thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png',
-		},
-	];
+
+	const [twitterLoading, setTwitterLoading] = useState(true);
 
 	const handleScroll = () => {
 		if (ownerRef && ownerRef.current) {
@@ -324,6 +349,77 @@ export const King = () => {
 							</Box>
 						</VStack>
 					</VStack>
+				</Card>
+				<Card className={classes.cardContainer}>
+					<Accordion allowMultiple>
+						<AccordionItem border="none">
+							<h2>
+								<AccordionButton >
+									<Box flex="1" textAlign="left">
+										<Text fontSize="12px" color="brand.textGrey">PROJECT UPDATE #01</Text>
+										<Text fontSize="10px" color="brand.textGrey">13 Feb 2022</Text>
+									</Box>
+									<AccordionIcon />
+								</AccordionButton>
+							</h2>
+							<AccordionPanel pb={4} display="flex" flexDirection="column" alignItems="center" width="100%">
+								{
+									twitterLoading && <Loader />
+								}
+								<TweetEmbed
+									className={classes.twitter}
+									id={'1486515536657747969'}
+									options={{ cards: 'hidden', conversation: 'none' }}
+									onTweetLoadSuccess={() => setTwitterLoading(false)}
+								/>
+							</AccordionPanel>
+						</AccordionItem>
+					</Accordion>
+				</Card>
+				<Card className={classes.cardContainer}>
+					<Accordion allowMultiple>
+						<AccordionItem border="none">
+							<h2>
+								<AccordionButton >
+									<Box flex="1" textAlign="left">
+										<Text fontSize="12px" color="brand.textGrey">PROJECT UPDATE #02</Text>
+										<Text fontSize="10px" color="brand.textGrey">14 Feb 2022</Text>
+									</Box>
+									<AccordionIcon />
+								</AccordionButton>
+							</h2>
+							<AccordionPanel pb={4}>
+								<VStack spacing="12px" alignItems="flex-start" textAlign="justify">
+									<Text fontSize="16px" fontWeight={500}>LAGOS BITCOIN CONFERENCE UPDATE</Text>
+									<Text>The conference is about tackling a major problem among the youths in Nigeria and Africa as a whole. The aim is to teach youths financial literacy with help of bitcoin and lightning, and taking back their freedom from the system. The aim is also educating the youths to be active and advanced in this information and technology age so we can move from an underdeveloped country to a super developed country</Text>
+									<Text>So, how is the conference planning going? We have 3 major updates: </Text>
+									<UnorderedList paddingLeft="18px" >
+										<ListItem fontSize="14px">We have started with the distribution of flyers, hand bills and stickers about the conference. </ListItem>
+										<ListItem fontSize="14px">The conference date has been set for the event which will be held on March 26th - the last Saturday of March</ListItem>
+										<ListItem fontSize="14px">Bitnob has decided to sponsor the conference hall in Ikeja city in Lagos, with the capacity to hold 300 youths. </ListItem>
+									</UnorderedList>
+									<Text>
+									Photos and videos of the progress will be out soon!
+									</Text>
+
+									<Text>
+									I believe with this conference, there would be a positive revolution that will transform my country for the better if not best. Live coverage of the event will be available on YouTube for lovers of bitcoin around the world to see the rise of youths learning to move the country in the right direction with sound money.
+									</Text>
+									<HStack spacing="30px">
+										<Box>
+											<Image borderRadius="3px" src="https://storage.googleapis.com/geyser-projects-media/project/king/king_update2.jpeg" />
+										</Box>
+										<Box>
+											<Image borderRadius="3px" src="https://storage.googleapis.com/geyser-projects-media/project/king/king_update1.png" />
+										</Box>
+										<Box>
+											<Image borderRadius="3px" src="https://storage.googleapis.com/geyser-projects-media/project/king/king_update3.png" />
+										</Box>
+									</HStack>
+								</VStack>
+							</AccordionPanel>
+						</AccordionItem>
+					</Accordion>
 				</Card>
 				<Card className={classes.cardContainer}>
 					<VStack marginBottom="10px">

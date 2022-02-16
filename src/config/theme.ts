@@ -18,6 +18,10 @@ export const theme = extendTheme({
 			// 1. We can update the base styles
 			baseStyle: {
 				fontWeight: 'normal', // Normally, it is "semibold"
+				height: '200px',
+				onfocus: {
+					boxShadow: 'none',
+				},
 			},
 		},
 		Text: {
