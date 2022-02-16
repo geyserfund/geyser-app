@@ -19,9 +19,6 @@ export const theme = extendTheme({
 			baseStyle: {
 				fontWeight: 'normal', // Normally, it is "semibold"
 				height: '200px',
-				onfocus: {
-					boxShadow: 'none',
-				},
 			},
 		},
 		Text: {
