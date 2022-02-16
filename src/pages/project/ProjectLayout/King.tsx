@@ -169,6 +169,7 @@ export const King = () => {
 	const ownerRef: any = useRef(null);
 
 	const [twitterLoading, setTwitterLoading] = useState(true);
+	const [imageIndex, setImageIndex] = useState(0);
 
 	const handleScroll = () => {
 		if (ownerRef && ownerRef.current) {
@@ -241,7 +242,7 @@ export const King = () => {
 						<VStack spacing="10px">
 							<StatusBar variant="problem" message="Financial illiteracy among the youth in Nigeria, a country ravaged by double-digit inflation." />
 							<StatusBar variant="solution" message="Teaching financial literacy to the youths of Nigeria with Bitcoin and lightning." />
-							<ImageBar images={images} />
+							<ImageBar images={images} imageIndex={imageIndex}/>
 						</VStack>
 						<VStack className={classes.containers} >
 							<Text fontWeight={600} fontSize={'1.25em'}>
@@ -269,8 +270,8 @@ export const King = () => {
 							</Text>
 						</VStack>
 						<HStack spacing="30px">
-							<Box>
-								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png" />
+							<Box onClick={() => setImageIndex(0)}>
+								<Image src={images[0].original} />
 							</Box>
 						</HStack>
 						<VStack className={classes.containers} >
@@ -318,15 +319,15 @@ export const King = () => {
 								<ListItem>Snacks and transportation for speakers to join conference</ListItem>
 							</UnorderedList>
 						</VStack>
-						<HStack spacing="30px">
-							<Box>
-								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_3.png" />
+						<HStack spacing="30px" overflowX="auto">
+							<Box onClick={() => setImageIndex(1)}>
+								<Image src={images[1].original} />
 							</Box>
-							<Box>
-								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_4.png" />
+							<Box onClick={() => setImageIndex(2)}>
+								<Image src={images[2].original} />
 							</Box>
-							<Box>
-								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_5.png" />
+							<Box onClick={() => setImageIndex(3)}>
+								<Image src={images[3].original} />
 							</Box>
 						</HStack>
 						<VStack className={classes.containers} ref={ownerRef}>
@@ -344,8 +345,8 @@ export const King = () => {
 							</Text>
 						</VStack>
 						<VStack className={classes.containers}>
-							<Box minWidth="280px" maxWidth={'400px'}>
-								<Image src="https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png" />
+							<Box minWidth="280px" maxWidth={'400px'} onClick={() => setImageIndex(4)}>
+								<Image src={images[4].original} />
 							</Box>
 						</VStack>
 					</VStack>
@@ -406,14 +407,14 @@ export const King = () => {
 									I believe with this conference, there would be a positive revolution that will transform my country for the better if not best. Live coverage of the event will be available on YouTube for lovers of bitcoin around the world to see the rise of youths learning to move the country in the right direction with sound money.
 									</Text>
 									<HStack spacing="30px">
-										<Box>
-											<Image borderRadius="3px" src="https://storage.googleapis.com/geyser-projects-media/project/king/king_update2.jpeg" />
+										<Box onClick={() => setImageIndex(5)}>
+											<Image borderRadius="3px" src={images[5].original} />
 										</Box>
-										<Box>
-											<Image borderRadius="3px" src="https://storage.googleapis.com/geyser-projects-media/project/king/king_update1.png" />
+										<Box onClick={() => setImageIndex(6)}>
+											<Image borderRadius="3px" src={images[6].original}/>
 										</Box>
-										<Box>
-											<Image borderRadius="3px" src="https://storage.googleapis.com/geyser-projects-media/project/king/king_update3.png" />
+										<Box onClick={() => setImageIndex(7)}>
+											<Image borderRadius="3px" src={images[7].original}/>
 										</Box>
 									</HStack>
 								</VStack>
