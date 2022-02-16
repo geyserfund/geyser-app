@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
-import { slideInLeft, slideOutLeft } from '../../css';
+import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { getDaysAgo, isDarkMode, isMobileMode } from '../../utils';
 import { Default, King } from './ProjectLayout';
@@ -15,11 +15,15 @@ type Rules = string
 interface IStyles {
 	isMobile: boolean;
 	detailOpen: boolean;
+	fadeStarted: boolean;
 }
 
 const useStyles = createUseStyles<Rules, IStyles>({
-	container: ({ isMobile, detailOpen }: IStyles) => ({
-		display: (!isMobile || detailOpen) ? 'flex' : 'none',
+	container: ({ isMobile, detailOpen, fadeStarted }: IStyles) => ({
+		display: (!isMobile || detailOpen || fadeStarted) ? 'flex' : 'none',
+		position: fadeStarted ? 'absolute' : 'relative',
+		top: fadeStarted ? 0 : undefined,
+		left: fadeStarted ? 0 : undefined,
 	}),
 	twitter: {
 		maxWidth: 450,
@@ -63,7 +67,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
 		boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
 	},
 	...slideInLeft,
-	...slideOutLeft,
+	...fadeOut,
 });
 
 interface IActivityProps {
@@ -74,15 +78,16 @@ interface IActivityProps {
 
 export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const isMobile = isMobileMode();
+	const isDark = isDarkMode();
+
 	const componentPadding = isMobile ? '5px 0px 5px 10px' : '20px 40px 5px 40px';
-
-	const classes = useStyles({ isMobile, detailOpen });
-
 	const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)');
 	const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
 
 	const [twitterLoading, settwitterLoading] = useState(true);
-	const isDark = isDarkMode();
+	const [fadeStarted, setFadeStarted] = useState(false);
+
+	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
 	const handleSuccess = () => {
 		settwitterLoading(false);
@@ -90,6 +95,10 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 
 	const handleFundClick = () => {
 		setDetailOpen(false);
+		setFadeStarted(true);
+		setTimeout(() => {
+			setFadeStarted(false);
+		}, 500);
 	};
 
 	const getRender = () => {
@@ -114,9 +123,10 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 		<Box
 			className={classNames(classes.container, {
 				[classes.slideInLeft]: isMobile && detailOpen,
-			}) }
+				[classes.fadeOut]: isMobile && fadeStarted,
+			})}
 			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
-			flex={3}
+			flex={!isMobile ? 3 : undefined}
 			height="100%"
 			flexDirection="column"
 			overflow="hidden"

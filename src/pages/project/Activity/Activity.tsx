@@ -20,7 +20,7 @@ import { Button, useDisclosure } from '@chakra-ui/react';
 import { fetchBitcoinRates } from '../../../api';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
-import { slideInRight, slideOutRight } from '../../../css';
+import { fadeOut, slideInRight } from '../../../css';
 import classNames from 'classnames';
 
 interface IActivityProps {
@@ -44,11 +44,15 @@ type Rules = string
 interface IStyles {
 	isMobile: boolean;
 	detailOpen: boolean;
+	fadeStarted: boolean;
 }
 
 const useStyles = createUseStyles<Rules, IStyles>({
-	container: ({ isMobile, detailOpen }: IStyles) => ({
-		display: (!isMobile || !detailOpen) ? 'flex' : 'none',
+	container: ({ isMobile, detailOpen, fadeStarted }: IStyles) => ({
+		position: fadeStarted ? 'absolute' : 'relative',
+		display: (!isMobile || !detailOpen || fadeStarted) ? 'flex' : 'none',
+		top: fadeStarted ? 0 : undefined,
+		left: fadeStarted ? 0 : undefined,
 	}),
 	fundButton: {
 		position: 'absolute',
@@ -68,7 +72,8 @@ const useStyles = createUseStyles<Rules, IStyles>({
 		boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
 	},
 	...slideInRight,
-	...slideOutRight,
+	...fadeOut,
+
 });
 
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
@@ -89,8 +94,9 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const [funders, setfunders] = useState<IProjectFunding[]>([]);
 	const [countDown, setCountDown] = useState('');
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
+	const [fadeStarted, setFadeStarted] = useState(false);
 
-	const classes = useStyles({isMobile, detailOpen});
+	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
 	const [fundProject, {
 		data,
@@ -217,7 +223,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	};
 
 	const handleFundClick = () => {
+		setFadeStarted(true);
 		setDetailOpen(true);
+		setTimeout(() => {
+			setFadeStarted(false);
+		}, 500);
 	};
 
 	const infoPage = () => (
@@ -272,9 +282,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 			<Card
 				className={classNames(classes.container, {
 					[classes.slideInRight]: isMobile && !detailOpen,
+					[classes.fadeOut]: isMobile && fadeStarted,
 				})}
-				flex={2}
+				flex={!isMobile ? 2 : undefined}
 				maxWidth={isMobile ? 'auto' : '450px'}
+				width={isMobile ? '100%' : undefined}
 				flexDirection="column"
 				justifyContent="flex-start"
 				alignItems="center"
