@@ -10,8 +10,9 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [
-            '-c DOCKER_BUILDKIT=1 \
-            docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
+            '-c',
+            'DOCKER_BUILDKIT=1',
+            'docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
             -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
             --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest .'
           ]
