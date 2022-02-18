@@ -1,11 +1,11 @@
 steps:
   - id: "Kaniko build"
-  name: 'gcr.io/kaniko-project/executor:latest'
-  args:
-  - --context=.
-  - --destination='us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
-  - --cache=true
-  - --cache-ttl=24h
+    name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+    - --context=.
+    - --destination='us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
+    - --cache=true
+    - --cache-ttl=24h
   - id: "Push image to registry (2/2): latest (with commit hash)"
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA']
