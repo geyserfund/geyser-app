@@ -1,17 +1,19 @@
 steps:
   # Obtain cached images for Container Registry
-  - id: "Caching (1/2) pull build image"
+  # - id: "Caching (1/2) pull build image"
+  - id: "Caching pull build image"
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args: [
-            '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build || true'
-          ]
-  - id: "Caching (2/2) pull latest image"
-    name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [
-            '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true'
-          ]
+    args:
+    - '-c'
+    - docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build || true \
+    - && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
+  # - id: "Caching (2/2) pull latest image"
+  #   name: 'gcr.io/cloud-builders/docker'
+  #   entrypoint: 'bash'
+  #   args: [
+  #           '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true'
+  #         ]
   - id: "Build image (1/2) target: build"
     name: 'gcr.io/cloud-builders/docker'
     args: [
