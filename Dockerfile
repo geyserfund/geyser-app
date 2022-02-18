@@ -44,7 +44,9 @@ COPY package.json yarn.lock ./
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/build ./build
-RUN printenv > .env
+RUN /bin/sh -c "printenv"
+RUN /bin/sh -c "printenv > .env"
+
 
 # RUN yarn global add serve
 CMD yarn serve -s build
