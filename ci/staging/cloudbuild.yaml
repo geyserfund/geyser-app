@@ -1,43 +1,11 @@
 steps:
-  # Obtain cached images for Container Registry
-  - id: "Caching (1/2) pull build image"
-    name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [
-            '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build || true'
-          ]
-  - id: "Caching (2/2) pull latest image"
-    name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [
-            '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true'
-          ]
-  - id: "Build image (1/2) target: build"
-    name: 'gcr.io/cloud-builders/docker'
-    args: [
-            'build',
-            '--target', 'build',
-            '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build',
-            '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build',
-            '.'
-          ]
-  - id: "Update cache in registry (1/1): build"
-    name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build']
-  - id: "Build image (2/2) target: latest"
-    name: 'gcr.io/cloud-builders/docker'
-    args: [
-            'build',
-              '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA',
-              '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
-              '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build',
-              '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
-              '.'
-          ]
-  # Push the latest container images to Container Registry
-  - id: "Push image to registry (1/2): latest"
-    name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest']
+  - id: "Kaniko build"
+  name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+  - --context=.
+  - --destination='us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
+  - --cache=true
+  - --cache-ttl=24h
   - id: "Push image to registry (2/2): latest (with commit hash)"
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA']
@@ -56,8 +24,4 @@ steps:
     - 'REACT_APP_API_ENDPOINT=${_API_ENDPOINT}'
     - '--set-env-vars' 
     - 'NODE_ENV=${_NODE_ENV}'
-images:
-    - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build'
-    - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
-    - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest'
 timeout: 900s
