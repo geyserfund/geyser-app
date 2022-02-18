@@ -13,11 +13,11 @@ steps:
             '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build || true'
           ]
   - id: "Caching (3/3) pull latest image"
-  name: 'gcr.io/cloud-builders/docker'
-  entrypoint: 'bash'
-  args: [
-          '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true'
-        ]
+    name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+            '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true'
+          ]
     # - id: "Build image (1/3) target: dependencies"
     # name: 'gcr.io/cloud-builders/docker'
     # args: [
@@ -37,14 +37,14 @@ steps:
             '.'
           ]
   - id: "Build image (3/3) target: latest"
-  name: 'gcr.io/cloud-builders/docker'
-  args: [
-          'build',
-            '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA',
-            '-t', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
-            '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
-            '.'
-        ]
+    name: 'gcr.io/cloud-builders/docker'
+    args: [
+            'build',
+              '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA',
+              '-t', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
+              '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
+              '.'
+          ]
   # Push the latest container images to Container Registry
   # - id: "Push image to registry (1/4): dependencies"
   #   name: 'gcr.io/cloud-builders/docker'
