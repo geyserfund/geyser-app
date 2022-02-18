@@ -42,7 +42,7 @@ WORKDIR /usr/app
 COPY package.json yarn.lock ./
 
 # Copy production dependencies over
-COPY --from=dependencies /usr/app/prod_node_modules ./node_modules
+COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/build ./build
 
 # RUN yarn global add serve
