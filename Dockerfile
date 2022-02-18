@@ -44,8 +44,10 @@ COPY package.json yarn.lock ./
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/build ./build
-RUN /bin/sh -c "printenv"
-RUN /bin/sh -c "printenv > .env"
+ARG API_ENDPOINT
+ENV REACT_APP_API_ENDPOINT=$API_ENDPOINT
+RUN printenv
+RUN printenv > .env
 
 
 # RUN yarn global add serve
