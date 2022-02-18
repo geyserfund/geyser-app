@@ -29,7 +29,7 @@ export const ConnectTwitter = ({
 	description,
 }: IConnectTwitter) => {
 	const classes = useStyles();
-
+	console.log('REACT_APP_API_ENDPOINT: ', REACT_APP_API_ENDPOINT);
 	const useTitle = title || 'Connect to Twitter';
 	const useDescription = description || 'To create a project you have to first connect to your twitter account so that we can recognize you for your contributions';
 
