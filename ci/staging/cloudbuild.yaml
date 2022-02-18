@@ -6,8 +6,9 @@ steps:
     entrypoint: 'bash'
     args:
     - '-c'
-    - docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build || true \
-    - && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
+    - |
+      docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build || true \
+      && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
   # - id: "Caching (2/2) pull latest image"
   #   name: 'gcr.io/cloud-builders/docker'
   #   entrypoint: 'bash'
