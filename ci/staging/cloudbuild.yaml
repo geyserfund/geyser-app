@@ -1,18 +1,12 @@
 steps:
   # Obtain cached images for Container Registry
-  # - id: "Caching (1/3) pull dependencies image"
-  #   name: 'gcr.io/cloud-builders/docker'
-  #   entrypoint: 'bash'
-  #   args: [
-  #           '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies || true'
-  #         ]
-  - id: "Caching (2/3) pull build image"
+  - id: "Caching (1/2) pull build image"
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [
             '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build || true'
           ]
-  - id: "Caching (3/3) pull latest image"
+  - id: "Caching (2/2) pull latest image"
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [
@@ -44,7 +38,7 @@ steps:
   - id: "Push image to registry (1/2): latest"
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest']
-  - id: "Push image to registry (1/4): latest (with commit hash)"
+  - id: "Push image to registry (2/2): latest (with commit hash)"
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA']
   # Deploy container image to Cloud Run
