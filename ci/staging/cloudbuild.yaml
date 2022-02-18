@@ -22,7 +22,7 @@ steps:
     # name: 'gcr.io/cloud-builders/docker'
     # args: [
     #         'build',
-    #         --target dependencies
+    #         '--target', 'dependencies',
     #         '-t', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies',
     #         '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies',
     #         '.'
@@ -31,7 +31,7 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     args: [
             'build',
-            --target build
+            '--target', 'build',
             '-t', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build',
             '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build',
             '.'
