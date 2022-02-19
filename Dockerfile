@@ -32,7 +32,7 @@ COPY ./src ./src
 COPY tsconfig.json .eslintrc.js ./
 
 ARG REACT_APP_API_ENDPOINT
-RUN /bib/sh -c "printenv > .env && yarn build"
+RUN /bin/sh -c "printenv > .env && yarn build"
 RUN rm -rf ./src
 
 ###########################
