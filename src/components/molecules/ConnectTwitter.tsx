@@ -29,7 +29,6 @@ export const ConnectTwitter = ({
 	description,
 }: IConnectTwitter) => {
 	const classes = useStyles();
-
 	const useTitle = title || 'Connect to Twitter';
 	const useDescription = description || 'To create a project you have to first connect to your twitter account so that we can recognize you for your contributions';
 

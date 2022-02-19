@@ -1,27 +1,43 @@
 steps:
-  # Build the container image
-  - id: "Pull latest image to use as cache"
+  # Obtain cached images for Container Registry
+  # - id: "Caching (1/2) pull build image"
+  - id: "Pull Cache: build"
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args: [
-            '-c', 'docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true'
-          ]
-  - id: "Build new image" 
+    args:
+    - '-c'
+    - |
+      docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build || true \
+      && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
+  - id: "Update Cache: build"
     name: 'gcr.io/cloud-builders/docker'
-    args: [
-            'build',
-            '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA',
-            '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
-            '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest',
-            '.'
-          ]
-  # Push the latest container image to Container Registry
-  - id: "Push latest image to the registry"
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - |
+      docker build \
+      --target build \
+      -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
+      --build-arg REACT_APP_API_ENDPOINT=${_API_ENDPOINT} \
+      --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build . \
+      && \
+      docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build
+  - id: "Update Image: latest"
     name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest']
-  - id: "Push new image to the registry (with commit hash)"
-    name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA']
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - |
+      docker build \
+      -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
+      -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
+      --build-arg REACT_APP_API_ENDPOINT=${_API_ENDPOINT} \
+      --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
+      --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest . \
+      && \
+      docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
+      && \
+      docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -33,11 +49,10 @@ steps:
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
     - '--region'
     - 'us-central1'
-    - '--set-env-vars'
-    - 'REACT_APP_API_ENDPOINT=${_API_ENDPOINT}'
     - '--set-env-vars' 
     - 'NODE_ENV=${_NODE_ENV}'
 images:
+    - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build'
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest'
 timeout: 900s
