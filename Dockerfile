@@ -30,6 +30,10 @@ WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
 COPY tsconfig.json .eslintrc.js ./
+
+ARG REACT_APP_API_ENDPOINT
+RUN printenv > .env
+
 RUN yarn build
 RUN rm -rf ./src
 
@@ -44,11 +48,6 @@ COPY package.json yarn.lock ./
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/build ./build
-ARG API_ENDPOINT
-ENV REACT_APP_API_ENDPOINT=$API_ENDPOINT
-RUN printenv
-RUN printenv > .env
-
 
 # RUN yarn global add serve
 CMD yarn serve -s build
