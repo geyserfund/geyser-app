@@ -1,6 +1,12 @@
-import { NODE_ENV } from '.';
+/* eslint-disable capitalized-comments */
+// import { NODE_ENV } from '.';
 
-export const cookieOptions = NODE_ENV === 'development' ? {} : {
+// export const cookieOptions = NODE_ENV === 'development' ? {} : {
+// 	domain: 'geyser.fund',
+// 	secure: true,
+// };
+
+export const cookieOptions = {
 	domain: 'geyser.fund',
 	secure: true,
 };
