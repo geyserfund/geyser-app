@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
 import ImageGallery from 'react-image-gallery';
@@ -69,9 +69,10 @@ interface IImageBar {
 		thumbnail: string;
 		original: string;
 	}[]
+	imageIndex?: number
 }
 
-export const ImageBar = ({images}:IImageBar) => {
+export const ImageBar = ({images, imageIndex}:IImageBar) => {
 	const classes = useStyles();
 
 	const [viewGallery, setViewGallery] = useState(false);
@@ -86,6 +87,15 @@ export const ImageBar = ({images}:IImageBar) => {
 		setStartIndex(0);
 		setViewGallery(false);
 	};
+
+	useEffect(() => {
+		if (imageIndex) {
+			setStartIndex(imageIndex);
+			setViewGallery(true);
+		} else {
+			setStartIndex(0);
+		}
+	}, [imageIndex]);
 
 	return (
 		<>

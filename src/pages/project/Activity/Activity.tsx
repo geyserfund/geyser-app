@@ -16,10 +16,17 @@ import { getCountDown, isDarkMode, isMobileMode, useNotification } from '../../.
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
-import { useDisclosure } from '@chakra-ui/react';
+import { Button, useDisclosure } from '@chakra-ui/react';
+import { fetchBitcoinRates } from '../../../api';
+import { createUseStyles } from 'react-jss';
+import { colors } from '../../../constants';
+import { fadeOut, slideInRight } from '../../../css';
+import classNames from 'classnames';
 
 interface IActivityProps {
 	project: IProject
+	detailOpen: boolean
+	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const initialFunding = {
@@ -31,7 +38,50 @@ const initialFunding = {
 	canceled: false,
 };
 let fundInterval: any;
-const Activity = ({ project }: IActivityProps) => {
+
+type Rules = string
+
+interface IStyles {
+	isMobile: boolean;
+	detailOpen: boolean;
+	fadeStarted: boolean;
+}
+
+const useStyles = createUseStyles<Rules, IStyles>({
+	container: ({ isMobile, detailOpen, fadeStarted }: IStyles) => ({
+		position: fadeStarted ? 'absolute' : 'relative',
+		display: (!isMobile || !detailOpen || fadeStarted) ? 'flex' : 'none',
+		top: fadeStarted ? 0 : undefined,
+		left: fadeStarted ? 0 : undefined,
+	}),
+	fundButton: {
+		position: 'absolute',
+		left: '0px',
+		top: '5px',
+		height: '55px',
+		width: '60px',
+		paddingLeft: '12px',
+		borderBottomLeftRadius: 0,
+		borderTopLeftRadius: 0,
+		borderBottomRightRadius: '45%',
+		borderTopRightRadius: '45%',
+		backgroundColor: colors.primary,
+		textAlign: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+	},
+	...slideInRight,
+	...fadeOut,
+
+});
+
+const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
+	const { user } = useContext(AuthContext);
+	const { toast } = useNotification();
+	const isDark = isDarkMode();
+	const isMobile = isMobileMode();
+
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
 	const [startedFunding, setStartedFunding] = useState(false);
@@ -44,10 +94,9 @@ const Activity = ({ project }: IActivityProps) => {
 	const [funders, setfunders] = useState<IProjectFunding[]>([]);
 	const [countDown, setCountDown] = useState('');
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
+	const [fadeStarted, setFadeStarted] = useState(false);
 
-	const { user } = useContext(AuthContext);
-
-	const { toast } = useNotification();
+	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
 	const [fundProject, {
 		data,
@@ -128,13 +177,11 @@ const Activity = ({ project }: IActivityProps) => {
 		}
 	}, [data]);
 
-	const isDark = isDarkMode();
-	const isMobile = isMobileMode();
 	// TODO: refactor this
 	const getBitcoinRates = async () => {
-		const response: any = (await fetch('https://api.coinbase.com/v2/exchange-rates?currency=BTC'));
-		const responseJson = await response.json();
-		const satoshirate = responseJson.data.rates.USD * 0.00000001;
+		const response: any = await fetchBitcoinRates();
+		console.log('chcking rates', response);
+		const satoshirate = response.rates.USD * 0.00000001;
 		setBtcRate(satoshirate);
 	};
 
@@ -175,14 +222,26 @@ const Activity = ({ project }: IActivityProps) => {
 		}, 5000);
 	};
 
+	const handleFundClick = () => {
+		setFadeStarted(true);
+		setDetailOpen(true);
+		setTimeout(() => {
+			setFadeStarted(false);
+		}, 500);
+	};
+
 	const infoPage = () => (
 		<VStack
-			padding={isMobile ? '10px 5px' : '10px 20px'}
+			padding={isMobile ? '10px 5px 0px 5px' : '10px 20px'}
 			spacing="12px"
 			width="100%"
 			height="100%"
 			overflowY="hidden"
+			position="relative"
 		>
+			{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
+				<Text fontSize="12px">Project</Text>
+			</Button>}
 			<FundingStatus open={true} />
 			<CircularFundProgress loading={loading} rate={btcRate} goal={project.fundingGoal} amount={project.balance} />
 			<Text>{`COUNTDOWN: ${countDown}`}</Text>
@@ -208,7 +267,7 @@ const Activity = ({ project }: IActivityProps) => {
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
 					{`Project Backers ${funders.length ? `( ${funders.length} )` : ''}`}
 				</Text>
-				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 90px)' : '100%'} paddingBottom="10px">
+				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
 					{
 						funders.map((funder, index) => (
 							<IdBar key={index} funder={funder} />
@@ -221,9 +280,13 @@ const Activity = ({ project }: IActivityProps) => {
 	return (
 		<>
 			<Card
-				flex={2}
+				className={classNames(classes.container, {
+					[classes.slideInRight]: isMobile && !detailOpen,
+					[classes.fadeOut]: isMobile && fadeStarted,
+				})}
+				flex={!isMobile ? 2 : undefined}
 				maxWidth={isMobile ? 'auto' : '450px'}
-				display="flex"
+				width={isMobile ? '100%' : undefined}
 				flexDirection="column"
 				justifyContent="flex-start"
 				alignItems="center"
@@ -258,8 +321,6 @@ const Activity = ({ project }: IActivityProps) => {
 				}
 			</Card>
 			<ConnectTwitter
-				title="Link Your Twitter account"
-				description="Link your twitter account to appear as a project backer when you fund a project."
 				isOpen={twitterisOpen}
 				onClose={twitterOnClose}
 			/>

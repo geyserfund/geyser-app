@@ -61,7 +61,7 @@ export const Default = ({
 			{
 				twitterLoading
 				&& <TwitterSkeleton />}
-			<Box minWidth={'300px'} maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
+			<Box minWidth="300px" maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
 				{
 					isDark
 						? <TweetEmbed
