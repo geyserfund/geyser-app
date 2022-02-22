@@ -54,10 +54,10 @@ const useStyles = createUseStyles<Rules, IStyles>({
 	}),
 	fundButton: {
 		height: '55px',
-		width: '60px',
+		width: '100px',
 		paddingLeft: '25px',
-		borderBottomLeftRadius: '45%',
-		borderTopLeftRadius: '45%',
+		borderBottomLeftRadius: '40px',
+		borderTopLeftRadius: '40px',
 		borderBottomRightRadius: 0,
 		borderTopRightRadius: 0,
 		backgroundColor: colors.primary,
@@ -133,14 +133,14 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 		>
 			<HStack padding={componentPadding} justifyContent="space-between">
 				<Box className={classes.headerContainer} >
-					<Heading fontSize={isMobile ? '20px' : '28px'} fontWeight="normal">
+					<Heading fontSize={isMobile ? '18px' : '28px'} fontWeight="normal">
 						{project.title}
 					</Heading>
-					<Text fontSize={isMobile ? '12px' : '14px'}>{`Created ${getDaysAgo(project.createdAt)} ago`}</Text>
+					<Text fontSize={isMobile ? '11px' : '14px'}>{`Created ${getDaysAgo(project.createdAt)} ago`}</Text>
 				</Box>
 				{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
-					<Text fontSize="12px">Fund</Text>
-					<Text fontSize="12px">now</Text>
+					<Text fontSize="12px">Fund now</Text>
+					{/* <Text fontSize="12px">now</Text> */}
 				</Button>}
 			</HStack>
 
