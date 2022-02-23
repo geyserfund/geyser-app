@@ -1,4 +1,19 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, HStack, Image, Link, ListItem, OrderedList, Text, UnorderedList, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import {
+	Accordion,
+	AccordionButton,
+	AccordionIcon,
+	AccordionItem,
+	AccordionPanel,
+	Box,
+	HStack,
+	Image,
+	Link,
+	ListItem,
+	OrderedList,
+	Text,
+	UnorderedList,
+	VStack,
+} from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import TweetEmbed from 'react-tweet-embed';
@@ -8,6 +23,7 @@ import Loader from '../../../components/ui/Loader';
 import { kingProfileUrl } from '../../../constants';
 import { IUser } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
+import { OwnerSponsorCard } from '../ProjectComponent';
 
 type Labels = string
 
@@ -171,72 +187,21 @@ export const King = () => {
 	const [twitterLoading, setTwitterLoading] = useState(true);
 	const [imageIndex, setImageIndex] = useState(0);
 
-	const handleScroll = () => {
-		if (ownerRef && ownerRef.current) {
-			const scrollElement = document.getElementById('project-scoll-container');
-			if (scrollElement) {
-				const scrollValue = ownerRef.current.offsetTop - scrollElement.offsetTop;
-				scrollElement?.scrollTo({ top: scrollValue, behavior: 'smooth' });
-			}
-		}
-	};
+	// Const handleScroll = () => {
+	// 	if (ownerRef && ownerRef.current) {
+	// 		const scrollElement = document.getElementById('project-scoll-container');
+	// 		if (scrollElement) {
+	// 			const scrollValue = ownerRef.current.offsetTop - scrollElement.offsetTop;
+	// 			scrollElement?.scrollTo({ top: scrollValue, behavior: 'smooth' });
+	// 		}
+	// 	}
+	// };
 
+	const ownerIntro = 'I’m Apata Johnson. I’m a visionary, a dedicated entrepreneur, who loves technology. As a thinker, and someone who cherish technology I can say that Bitcoin is the next big thing, I have hope that with Bitcoin we change the way we view money in Nigeria and the world as a whole. And how, with Bitcoin, Nigeria will transform from an underdeveloped nation to a super developed nation. I’m just a freedom lover and I feel Nigeria needs bitcoin.';
 	return (
 		<VStack alignItems="center" width="100%">
 			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
-				<Card className={classes.cardContainer}>
-					<VStack spacing="12px" alignItems="flex-start">
-						<Box>
-							<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
-							<HStack spacing="30px">
-								<Link href={`https://twitter.com/${owner.username}`} isExternal>
-									<Avatar width="75px" height="75px" name={owner.username} src={owner.picture} />
-								</Link>
-								<VStack justifyContent="space-between" alignItems="flex-start">
-									<Link href={`https://twitter.com/${owner.username}`} isExternal>
-										<Text fontSize="18px">
-											Apata J
-										</Text>
-									</Link>
-									<Text fontSize="12px" >
-										I’m Apata Johnson. I’m a visionary, a dedicated entrepreneur, who loves technology. {!isMobile && <span>As a thinker, and someone who cherish technology I can say that Bitcoin is the next big thing,</span>} <span className={classes.readmore} onClick={handleScroll}>...read more</span>
-									</Text>
-								</VStack>
-							</HStack>
-						</Box>
-						<Box >
-							<Text fontSize="10px" color="brand.textGrey">AMBASSADOR</Text>
-							<Link href={`https://twitter.com/${ambassador.username}`} isExternal>
-								<HStack spacing="15px">
-									<Avatar width="35px" height="35px" name={ambassador.username} src={ambassador.picture} />
-									<Text fontSize="18px">
-										{ambassador.username}
-									</Text>
-								</HStack>
-							</Link>
-						</Box>
-						<Box width="100%" overflow="hidden">
-							<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
-							<Wrap >
-								{
-									sponsors.map((sponsor: IUser) => (
-										<WrapItem key={sponsor.username} display="inline-block">
-											<Link href={`https://twitter.com/${sponsor.username}`} isExternal>
-												<HStack spacing="5px" marginRight="10px">
-													<Avatar width="35px" height="35px" name={sponsor.username} src={sponsor.picture} />
-													<Text fontSize="18px">
-														{sponsor.username}
-													</Text>
-												</HStack>
-											</Link>
-										</WrapItem>
-									))
-								}
-							</Wrap>
-
-						</Box>
-					</VStack>
-				</Card>
+				<OwnerSponsorCard owner={owner} ambassador={ambassador} sponsors={sponsors} ownerIntro={ownerIntro} />
 				<Card className={classes.cardContainer}>
 					<VStack className={classes.containers} spacing="20px">
 						<VStack spacing="10px">
