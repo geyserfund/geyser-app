@@ -1,10 +1,8 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, HStack, Image, Link, ListItem, OrderedList, Text, UnorderedList, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import TweetEmbed from 'react-tweet-embed';
 import { Footer } from '../../../components/molecules';
-import { Card, ImageBar, StatusBar } from '../../../components/ui';
-import Loader from '../../../components/ui/Loader';
+import { Card, ImageBar, StatusBar, TwitterComponent } from '../../../components/ui';
 import { kingProfileUrl } from '../../../constants';
 import { IUser } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
@@ -44,14 +42,6 @@ const useStyles = createUseStyles<Labels, Istyles>({
 		background: 'white',
 		height: 'fit-content',
 	}),
-	twitter: {
-		maxWidth: 450,
-		display: 'block',
-		width: '100%',
-		'.twitter-widget-0': {
-			width: '200px !important',
-		},
-	},
 });
 
 const owner: IUser = {
@@ -168,7 +158,6 @@ export const King = () => {
 	const classes = useStyles({ isMobile });
 	const ownerRef: any = useRef(null);
 
-	const [twitterLoading, setTwitterLoading] = useState(true);
 	const [imageIndex, setImageIndex] = useState(0);
 
 	const handleScroll = () => {
@@ -364,15 +353,7 @@ export const King = () => {
 								</AccordionButton>
 							</h2>
 							<AccordionPanel pb={4} display="flex" flexDirection="column" alignItems="center" width="100%">
-								{
-									twitterLoading && <Loader />
-								}
-								<TweetEmbed
-									className={classes.twitter}
-									id={'1486515536657747969'}
-									options={{ cards: 'hidden', conversation: 'none' }}
-									onTweetLoadSuccess={() => setTwitterLoading(false)}
-								/>
+								<TwitterComponent id={'1486515536657747969'}/>
 							</AccordionPanel>
 						</AccordionItem>
 					</Accordion>
@@ -396,7 +377,7 @@ export const King = () => {
 									<Text>So, how is the conference planning going? We have 3 major updates: </Text>
 									<UnorderedList paddingLeft="18px" >
 										<ListItem fontSize="14px">We have started with the distribution of flyers, hand bills and stickers about the conference. </ListItem>
-										<ListItem fontSize="14px">The conference date has been set for the event which will be held on March 26th - the last Saturday of March</ListItem>
+										<ListItem fontSize="14px">The conference date has been set for the event which will be held on Saturday April 9th</ListItem>
 										<ListItem fontSize="14px">Bitnob has decided to sponsor the conference hall in Ikeja city in Lagos, with the capacity to hold 300 youths. </ListItem>
 									</UnorderedList>
 									<Text>
@@ -417,6 +398,37 @@ export const King = () => {
 											<Image borderRadius="3px" src={images[7].original}/>
 										</Box>
 									</HStack>
+								</VStack>
+							</AccordionPanel>
+						</AccordionItem>
+					</Accordion>
+				</Card>
+				<Card className={classes.cardContainer}>
+					<Accordion allowMultiple>
+						<AccordionItem border="none">
+							<h2>
+								<AccordionButton >
+									<Box flex="1" textAlign="left">
+										<Text fontSize="12px" color="brand.textGrey">PROJECT UPDATE #03</Text>
+										<Text fontSize="10px" color="brand.textGrey">23 Feb 2022</Text>
+									</Box>
+									<AccordionIcon />
+								</AccordionButton>
+							</h2>
+							<AccordionPanel pb={4}>
+								<VStack spacing="12px" alignItems="flex-start" textAlign="justify">
+									<Text fontSize="16px" fontWeight={500}>{'Conference date is set to 9 April: what\'s next?'}</Text>
+									<Text>{'My friends and I have been working hard handing out the conference fliers and stickers and circulating them in the streets of Lagos. By talking to people on the streets, there seems to be much excitement about this conference: it\'s going to be bigger than I thought! God is helping us!'}</Text>
+									<Text>{'What\'s next? Getting more communities in Lagos on-board, and doing proper planning of the conference agenda and setup.'}</Text>
+									<Text>
+										{'I\'m also getting a lot of ideas of the aftermath of the conference. I think we can move to other states. Since bitcoin education is best for people on the street. I can still organize street meet ups and educate them on bitcoin live.'}
+									</Text>
+									<Text>
+										{'See the video of my good friend spreading the word about the conference!'}
+									</Text>
+									<Box display="flex" justifyContent="center" width="100%">
+										<TwitterComponent id="1496460733697167371" />
+									</Box>
 								</VStack>
 							</AccordionPanel>
 						</AccordionItem>
