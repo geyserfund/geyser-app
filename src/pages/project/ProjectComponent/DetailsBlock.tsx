@@ -35,7 +35,7 @@ const useStyles = createUseStyles<Labels, Istyles>({
 		},
 	},
 	texts: {
-		TextAlign: 'justify',
+		textAlign: 'justify',
 	},
 	readmore: {
 		'&:hover': {
