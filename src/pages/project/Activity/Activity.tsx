@@ -1,27 +1,23 @@
-import { Box, Text, VStack } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useState } from 'react';
-import { HiOutlineSpeakerphone } from 'react-icons/hi';
-import { RiLinkUnlinkM } from 'react-icons/ri';
-import { SatoshiIcon } from '../../../components/icons';
-import { CircularFundProgress, ConnectTwitter } from '../../../components/molecules';
-import { IdBar } from '../../../components/molecules/IdBar';
-import { ButtonComponent, Card, FundingStatus } from '../../../components/ui';
+import { ConnectTwitter } from '../../../components/molecules';
+import { Card } from '../../../components/ui';
 import { IFundingTx, IProject, IProjectFunding } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
 import { QUERY_GET_FUNDING } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
-import { getCountDown, isDarkMode, isMobileMode, useNotification } from '../../../utils';
+import { isDarkMode, isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
-import { Button, useDisclosure } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
 import { fetchBitcoinRates } from '../../../api';
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
-import { fadeOut, slideInRight } from '../../../css';
 import classNames from 'classnames';
+import { useStyles } from './styles';
+import { InfoPage } from './InfoPage';
+import { fundingStages, IFundingStages, stageList } from '../../../constants';
+// Import { fundingStages } from '../../../constants';
 
 interface IActivityProps {
 	project: IProject
@@ -39,48 +35,13 @@ const initialFunding = {
 };
 let fundInterval: any;
 
-type Rules = string
-
-interface IStyles {
-	isMobile: boolean;
-	detailOpen: boolean;
-	fadeStarted: boolean;
-}
-
-const useStyles = createUseStyles<Rules, IStyles>({
-	container: ({ isMobile, detailOpen, fadeStarted }: IStyles) => ({
-		position: fadeStarted ? 'absolute' : 'relative',
-		display: (!isMobile || !detailOpen || fadeStarted) ? 'flex' : 'none',
-		top: fadeStarted ? 0 : undefined,
-		left: fadeStarted ? 0 : undefined,
-	}),
-	fundButton: {
-		position: 'absolute',
-		left: '0px',
-		top: '5px',
-		height: '55px',
-		width: '80px',
-		paddingLeft: '12px',
-		borderBottomLeftRadius: 0,
-		borderTopLeftRadius: 0,
-		borderBottomRightRadius: '40px',
-		borderTopRightRadius: '40px',
-		backgroundColor: colors.primary,
-		textAlign: 'center',
-		display: 'flex',
-		flexDirection: 'column',
-		boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-	},
-	...slideInRight,
-	...fadeOut,
-
-});
-
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
 	const { toast } = useNotification();
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
+
+	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.inital);
 
 	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
@@ -90,9 +51,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const [comment, setComment] = useState('');
 	const [anonymous, setAnonymous] = useState(true);
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
-	const [copy, setCopy] = useState(false);
 	const [funders, setfunders] = useState<IProjectFunding[]>([]);
-	const [countDown, setCountDown] = useState('');
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
@@ -109,18 +68,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 			fetchPolicy: 'network-only',
 		},
 	);
-
-	const handleCountDown = () => {
-		const countDown = getCountDown(project.expiresAt);
-		setCountDown(countDown);
-	};
-
-	useEffect(() => {
-		const interval = setInterval(handleCountDown, 1000);
-		return () => {
-			clearInterval(interval);
-		};
-	}, [project.expiresAt]);
 
 	useEffect(() => {
 		if (project && project.fundingTxs) {
@@ -177,22 +124,22 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		}
 	}, [data]);
 
-	// TODO: refactor this
 	const getBitcoinRates = async () => {
 		const response: any = await fetchBitcoinRates();
-		console.log('chcking rates', response);
 		const satoshirate = response.rates.USD * 0.00000001;
 		setBtcRate(satoshirate);
 	};
 
 	const handleFundProject = () => {
 		setFundpage(false);
+		gotoNextStage();
 	};
 
 	const handleCloseButton = () => {
 		setFundpage(true);
 		setCompletedFunding(false);
 		setStartedFunding(false);
+		setFundState(fundingStages.inital);
 	};
 
 	const handleFund = async () => {
@@ -214,14 +161,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		}
 	};
 
-	const shareProjectWithfriends = () => {
-		navigator.clipboard.writeText(window.location.href);
-		setCopy(true);
-		setTimeout(() => {
-			setCopy(false);
-		}, 5000);
-	};
-
 	const handleFundClick = () => {
 		setFadeStarted(true);
 		setDetailOpen(true);
@@ -230,52 +169,94 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		}, 500);
 	};
 
-	const infoPage = () => (
-		<VStack
-			padding={isMobile ? '10px 5px 0px 5px' : '10px 20px'}
-			spacing="12px"
-			width="100%"
-			height="100%"
-			overflowY="hidden"
-			position="relative"
-		>
-			{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
-				<Text fontSize="12px">Project</Text>
-			</Button>}
-			<FundingStatus open={true} />
-			<CircularFundProgress loading={loading} rate={btcRate} goal={project.fundingGoal} amount={project.balance} />
-			<Text>{`COUNTDOWN: ${countDown}`}</Text>
-			<ButtonComponent
-				primary
-				standard
-				leftIcon={<SatoshiIcon />}
-				width="100%"
-				onClick={handleFundProject}
-			>
-				Fund this project
-			</ButtonComponent>
-			<ButtonComponent
-				standard
-				primary={copy}
-				leftIcon={copy ? <RiLinkUnlinkM /> : <HiOutlineSpeakerphone fontSize="20px" />}
-				width="100%"
-				onClick={shareProjectWithfriends}
-			>
-				{copy ? 'Project Link Copied' : 'Share project with friends'}
-			</ButtonComponent>
-			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" flex="1">
-				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
-					{`Project Backers ${funders.length ? `( ${funders.length} )` : ''}`}
-				</Text>
-				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
-					{
-						funders.map((funder, index) => (
-							<IdBar key={index} funder={funder} />
-						))
-					}
-				</VStack>
-			</Box>
-		</VStack>);
+	const gotoNextStage = () => {
+		const currentIndex = stageList.indexOf(fundState);
+		const nextState = stageList[currentIndex + 1];
+		setFundState(nextState);
+	};
+
+	const renderActivity = () => {
+		if (fundLoading) {
+			return <Loader />;
+		}
+
+		if (completedFunding) {
+			return <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />;
+		}
+
+		if (startedFunding) {
+			return 	<QrPage
+				comment={comment}
+				title={project.title}
+				amount={amount}
+				owner={project.owner.user.username}
+				qrCode={fundingTx.paymentRequest}
+				handleCloseButton={handleCloseButton}
+			/>;
+		}
+
+		if (fundPage) {
+			return <InfoPage {...{
+				project,
+				handleFundClick,
+				handleFundProject,
+				loading,
+				btcRate,
+				funders,
+			}} />;
+		}
+
+		return <PaymentPage
+			{...{
+				isMobile,
+				handleCloseButton,
+				btcRate,
+				amount,
+				setAmount,
+				comment,
+				setComment,
+				anonymous,
+				setAnonymous,
+				handleFund,
+			}}
+		/>;
+
+		// Switch (fundState) {
+		// 	case fundingStages.loading:
+		// 		return <Loader />;
+		// 	case fundingStages.inital:
+		// 		return infoPage();
+		// 	case fundingStages.form:
+		// 		return <PaymentPage
+		// 			{...{
+		// 				isMobile,
+		// 				handleCloseButton,
+		// 				btcRate,
+		// 				amount,
+		// 				setAmount,
+		// 				comment,
+		// 				setComment,
+		// 				anonymous,
+		// 				setAnonymous,
+		// 				handleFund,
+		// 			}}
+		// 		/>;
+		// 	case fundingStages.started:
+		// 		return 	<QrPage
+		// 			comment={comment}
+		// 			title={project.title}
+		// 			amount={amount}
+		// 			owner={project.owner.user.username}
+		// 			qrCode={fundingTx.paymentRequest}
+		// 			handleCloseButton={handleCloseButton}
+		// 		/>;
+		// 	case fundingStages.completed:
+		// 		return <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />;
+
+		// 	default:
+		// 		return null;
+		// }
+	};
 
 	return (
 		<>
@@ -293,32 +274,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
 				height="100%"
 			>
-				{fundLoading ? <Loader />
-					: completedFunding ? <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />
-						: startedFunding ? <QrPage
-							comment={comment}
-							title={project.title}
-							amount={amount}
-							owner={project.owner.user.username}
-							qrCode={fundingTx.paymentRequest}
-							handleCloseButton={handleCloseButton}
-						/>
-							: fundPage ? infoPage()
-								: <PaymentPage
-									{...{
-										isMobile,
-										handleCloseButton,
-										btcRate,
-										amount,
-										setAmount,
-										comment,
-										setComment,
-										anonymous,
-										setAnonymous,
-										handleFund,
-									}}
-								/>
-				}
+				{renderActivity()}
 			</Card>
 			<ConnectTwitter
 				isOpen={twitterisOpen}
