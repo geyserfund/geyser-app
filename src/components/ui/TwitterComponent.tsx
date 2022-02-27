@@ -1,0 +1,42 @@
+import classNames from 'classnames';
+import React, { useState } from 'react';
+import { createUseStyles } from 'react-jss';
+import TweetEmbed from 'react-tweet-embed';
+import Loader from './Loader';
+
+const useStyles = createUseStyles({
+	twitter: {
+		maxWidth: 450,
+		display: 'block',
+		width: '100%',
+		'.twitter-widget-0': {
+			width: '200px !important',
+		},
+	},
+});
+
+interface ITwitterComponent {
+    id: string
+    options?: any
+    className?: string
+    [key: string]: any
+}
+
+export const TwitterComponent = ({options, className, id, ...rest}: ITwitterComponent) => {
+	const classes = useStyles();
+	const [twitterLoading, setTwitterLoading] = useState(true);
+
+	return (
+		<>
+			{twitterLoading && <Loader />}
+			<TweetEmbed
+				className={classNames(classes.twitter, className) }
+				id={id}
+				options={{ conversation: 'none', ...options }}
+				onTweetLoadSuccess={() => setTwitterLoading(false)}
+				{...rest}
+			/>
+		</>);
+};
+
+export default TwitterComponent;
