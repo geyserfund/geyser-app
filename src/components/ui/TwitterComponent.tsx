@@ -6,9 +6,9 @@ import Loader from './Loader';
 
 const useStyles = createUseStyles({
 	twitter: {
+		width: '100%',
 		maxWidth: 450,
 		display: 'block',
-		width: '100%',
 		'.twitter-widget-0': {
 			width: '200px !important',
 		},

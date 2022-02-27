@@ -66,3 +66,19 @@ export interface IProjectBlock {
         images?: string[];
         blockType: string;
 }
+
+export interface IProjectUpdate {
+    updateTitle: string;
+    date: number;
+    tweet?: string;
+    type: string;
+    bodyTitle?: string;
+    body?: string[];
+    images?: string[];
+}
+
+export interface IProjectSponsor {
+    user: IUser;
+    image: string;
+    companyUrl: string;
+}

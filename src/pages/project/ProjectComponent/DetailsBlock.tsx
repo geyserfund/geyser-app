@@ -9,48 +9,11 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { createUseStyles } from 'react-jss';
 import { Card, ImageBar, StatusBar } from '../../../components/ui';
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import ReactMarkdown from 'react-markdown';
-
-type Labels = string
-
-interface Istyles {
-	isMobile?: boolean
-}
-
-const useStyles = createUseStyles<Labels, Istyles>({
-	containers: {
-		spacing: '5px',
-		alignItems: 'flex-start',
-		display: 'flex',
-		width: '100%',
-		'& img': {
-			borderRadius: '5px',
-		},
-		'& a': {
-			color: 'grey',
-		},
-	},
-	texts: {
-		textAlign: 'justify',
-	},
-	readmore: {
-		'&:hover': {
-			textDecoration: 'underline',
-			cursor: 'pointer',
-		},
-	},
-	cardContainer: ({ isMobile }: Istyles) => ({
-		borderRadius: '6px',
-		padding: isMobile ? '12px 10px' : '12px 20px',
-		border: '2px solid #E9E9E9',
-		background: 'white',
-		height: 'fit-content',
-	}),
-});
+import { useStyles } from './styles';
 
 interface IDetailsBlock {
     images: any
@@ -80,68 +43,72 @@ export const DetailsBlock = ({images, projectDetails}: IDetailsBlock) => {
 		}
 	};
 
-	const renderParagraphList = (block: IProjectBlock) => (
-		<VStack key={block.title} className={classes.containers} >
-			<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
-			{
-				block.body.map((block: string, index: number) => (
-					<Text key={index} className={classes.texts}>
-						<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
-					</Text>
-				))
-			}{
-				renderImages(block.images)
-			}
-		</VStack>
-	);
+	const renderParagraphList = (block: IProjectBlock) => {
+		if (block.body && block.body.length > 0) {
+			return (
+				<>
+					{
+						block.body.map((block: string, index: number) => (
+							<Text key={index} className={classes.texts}>
+								<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
+							</Text>
+						))
+					}
+				</>
+			);
+		}
+	};
 
 	const renderUnorderedList = (block: IProjectBlock) => (
-		<VStack key={block.title} className={classes.containers} >
-			<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
-			<UnorderedList paddingLeft="18px">
-				{
-					block.body.map((block: string, index: number) => (
-						<ListItem key={index} className={classes.texts}>
-							<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
-						</ListItem>
-					))
-				}
-			</UnorderedList>
+		<UnorderedList paddingLeft="18px">
 			{
-				renderImages(block.images)
+				block.body.map((block: string, index: number) => (
+					<ListItem key={index} className={classes.texts}>
+						<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
+					</ListItem>
+				))
 			}
-		</VStack>
+		</UnorderedList>
 	);
 
 	const renderOrderedList = (block: IProjectBlock) => (
-		<VStack key={block.title} className={classes.containers} >
-			<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
-			<OrderedList paddingLeft="18px">
-				{
-					block.body.map((block: string, index: number) => (
-						<ListItem key={index} className={classes.texts}>
-							<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
-						</ListItem>
-					))
-				}
-			</OrderedList>
+		<OrderedList paddingLeft="18px">
 			{
-				renderImages(block.images)
+				block.body.map((block: string, index: number) => (
+					<ListItem key={index} className={classes.texts}>
+						<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
+					</ListItem>
+				))
 			}
-		</VStack>
+		</OrderedList>
 	);
 
 	const renderBlocks = () => blocks.map((block: IProjectBlock) => {
-		switch (block.blockType) {
-			case 'PL':
-				return renderParagraphList(block);
-			case 'UL':
-				return renderUnorderedList(block);
-			case 'OL':
-				return renderOrderedList(block);
-			default:
-				return null;
-		}
+		const switchBlocks = () => {
+			switch (block.blockType) {
+				case 'PL':
+					return renderParagraphList(block);
+				case 'UL':
+					return renderUnorderedList(block);
+				case 'OL':
+					return renderOrderedList(block);
+				default:
+					return null;
+			}
+		};
+
+		return (
+			<VStack key={block.title} className={classes.containers} >
+				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
+				{
+					switchBlocks()
+				}
+				{
+					renderImages(block.images)
+				}
+			</VStack>
+
+		);
 	});
 
 	return (

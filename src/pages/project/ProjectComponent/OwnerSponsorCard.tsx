@@ -1,36 +1,14 @@
 import { Avatar, Box, HStack, Link, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { createUseStyles } from 'react-jss';
 import { Card } from '../../../components/ui';
-import { IUser } from '../../../interfaces';
+import { IProjectSponsor, IUser } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
-
-type Labels = string
-
-interface Istyles {
-	isMobile?: boolean
-}
-
-const useStyles = createUseStyles<Labels, Istyles>({
-	readmore: {
-		'&:hover': {
-			textDecoration: 'underline',
-			cursor: 'pointer',
-		},
-	},
-	cardContainer: ({ isMobile }: Istyles) => ({
-		borderRadius: '6px',
-		padding: isMobile ? '12px 10px' : '12px 20px',
-		border: '2px solid #E9E9E9',
-		background: 'white',
-		height: 'fit-content',
-	}),
-});
+import { useStyles } from './styles';
 
 interface IOwnerSponsorCard {
     owner: IUser
     ambassador: IUser
-    sponsors: IUser[]
+    sponsors: IProjectSponsor[]
     ownerIntro: string
 }
 
@@ -80,13 +58,13 @@ export const OwnerSponsorCard = ({owner, ambassador, sponsors, ownerIntro}: IOwn
 					<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
 					<Wrap >
 						{
-							sponsors.map((sponsor: IUser) => (
-								<WrapItem key={sponsor.username} display="inline-block">
-									<Link href={`https://twitter.com/${sponsor.username}`} isExternal>
+							sponsors.map((sponsor: IProjectSponsor) => (
+								<WrapItem key={sponsor.user.username} display="inline-block">
+									<Link href={`https://twitter.com/${sponsor.user.username}`} isExternal>
 										<HStack spacing="5px" marginRight="10px">
-											<Avatar width="35px" height="35px" name={sponsor.username} src={sponsor.picture} />
+											<Avatar width="35px" height="35px" name={sponsor.user.username} src={sponsor.user.picture} />
 											<Text fontSize="18px">
-												{sponsor.username}
+												{sponsor.user.username}
 											</Text>
 										</HStack>
 									</Link>

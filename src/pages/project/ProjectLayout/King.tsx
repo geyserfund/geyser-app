@@ -1,62 +1,11 @@
 import {
-	Accordion,
-	AccordionButton,
-	AccordionIcon,
-	AccordionItem,
-	AccordionPanel,
-	Box,
-	HStack,
-	Image,
-	Link,
-	Text,
 	VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import { createUseStyles } from 'react-jss';
 import { Footer } from '../../../components/molecules';
-import { Card, TwitterComponent } from '../../../components/ui';
 import { kingProfileUrl } from '../../../constants';
-import { IProjectBlock, IProjectDetail, IUser } from '../../../interfaces';
-import { isMobileMode } from '../../../utils';
-import { OwnerSponsorCard } from '../ProjectComponent';
-import { DetailsBlock } from '../ProjectComponent/DetailsBlock';
-
-type Labels = string
-
-interface Istyles {
-	isMobile?: boolean
-}
-
-const useStyles = createUseStyles<Labels, Istyles>({
-	containers: {
-		spacing: '5px',
-		alignItems: 'flex-start',
-		display: 'flex',
-		width: '100%',
-		'& img': {
-			borderRadius: '5px',
-		},
-		'& a': {
-			color: 'grey',
-		},
-	},
-	texts: {
-		TextAlign: 'justify',
-	},
-	readmore: {
-		'&:hover': {
-			textDecoration: 'underline',
-			cursor: 'pointer',
-		},
-	},
-	cardContainer: ({ isMobile }: Istyles) => ({
-		borderRadius: '6px',
-		padding: isMobile ? '12px 10px' : '12px 20px',
-		border: '2px solid #E9E9E9',
-		background: 'white',
-		height: 'fit-content',
-	}),
-});
+import { IProjectBlock, IProjectDetail, IProjectSponsor, IProjectUpdate, IUser } from '../../../interfaces';
+import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../ProjectComponent';
 
 const owner: IUser = {
 	picture: kingProfileUrl,
@@ -80,26 +29,36 @@ const ambassador: IUser = {
 	amount: 0,
 };
 
-const sponsors: IUser[] = [
+const sponsors: IProjectSponsor[] = [
 	{
-		picture: 'https://pbs.twimg.com/profile_images/1362672747399159818/QR9bbtrT_400x400.jpg',
-		username: 'walletofsatoshi',
-		fullName: 'walletofsatoshi',
-		id: '',
-		URL: '',
-		twitter: false,
-		badge: 'owner',
-		amount: 0,
+		user: {
+			picture: 'https://pbs.twimg.com/profile_images/1362672747399159818/QR9bbtrT_400x400.jpg',
+			username: 'walletofsatoshi',
+			fullName: 'walletofsatoshi',
+			id: '',
+			URL: '',
+			twitter: false,
+			badge: 'owner',
+			amount: 0,
+		},
+		image: 'https://storage.googleapis.com/geyser-projects-media/project/king/wallet-of-satoshi.png',
+		companyUrl: 'https://walletofsatoshi.com',
+
 	},
 	{
-		picture: 'https://pbs.twimg.com/profile_images/1370765783765282823/dMGd0WEI_400x400.jpg',
-		username: 'Bitnob_official',
-		fullName: 'Bitnob_official',
-		id: '',
-		URL: '',
-		twitter: false,
-		badge: 'owner',
-		amount: 0,
+		user: {
+			picture: 'https://pbs.twimg.com/profile_images/1370765783765282823/dMGd0WEI_400x400.jpg',
+			username: 'Bitnob_official',
+			fullName: 'Bitnob_official',
+			id: '',
+			URL: '',
+			twitter: false,
+			badge: 'owner',
+			amount: 0,
+		},
+		image: 'https://storage.googleapis.com/geyser-projects-media/project/king/logo-black.png',
+		companyUrl: 'https://bitnob.com/',
+
 	},
 ];
 
@@ -213,6 +172,9 @@ const projectBlocks: IProjectBlock[] = [{
 	title: 'Speakers include:',
 	body: [
 		'[Parman - 🇦🇲 Bitcoin Private Key Whisperer](https://twitter.com/parman_the/) will speak about financial literacy and money.',
+		'[Paco de la India](https://twitter.com/RunwithBitcoin) will speak about his experience travelling the world with Bitcoin.',
+		'[King ⚡ Johnson Apata🦁👑](https://twitter.com/ApataJ) will speak about what is good money and why #bitcoin matters.',
+		'[Kieran Nolan](https://twitter.com/KieranDNolan) will talk about #bitcoin education.',
 	],
 	blockType: 'UL',
 },
@@ -227,8 +189,43 @@ const projectBlocks: IProjectBlock[] = [{
 		'Snacks and transportation for speakers to join conference',
 	],
 	blockType: 'UL',
-	images: [images[5].original, images[6].original, images[7].original],
+	images: [images[1].original, images[2].original, images[3].original],
 }];
+
+const projectUpdates: IProjectUpdate[] = [
+	{
+		updateTitle: 'PROJECT UPDATE #01',
+		date: new Date('2022-02-13').getMilliseconds(),
+		tweet: '1486515536657747969',
+		type: 'PL',
+	},
+	{
+		updateTitle: 'PROJECT UPDATE #02',
+		date: new Date('2022-02-14').getMilliseconds(),
+		bodyTitle: 'LAGOS BITCOIN CONFERENCE UPDATE',
+		body: [
+			'The conference is about tackling a major problem among the youths in Nigeria and Africa as a whole. The aim is to teach youths financial literacy with help of bitcoin and lightning, and taking back their freedom from the system. The aim is also educating the youths to be active and advanced in this information and technology age so we can move from an underdeveloped country to a super developed country.',
+			'So, how is the conference planning going? We have 3 major updates:',
+			'- We have started with the distribution of flyers, hand bills and stickers about the conference.	\n- The conference date has been set for the event which will be held on Saturday April 9th\n- Bitnob has decided to sponsor the conference hall in Ikeja city in Lagos, with the capacity to hold 300 youths',
+			'Photos and videos of the progress will be out soon!',
+			'I believe with this conference, there would be a positive revolution that will transform my country for the better if not best. Live coverage of the event will be available on YouTube for lovers of bitcoin around the world to see the rise of youths learning to move the country in the right direction with sound money.',
+		],
+		images: [images[5].original, images[6].original, images[7].original],
+		type: 'PL',
+	},
+	{
+		updateTitle: 'PROJECT UPDATE #03',
+		date: new Date('2022-02-23').getMilliseconds(),
+		bodyTitle: 'Conference date is set to 9 April: what\'s next?',
+		body: [
+			'My friends and I have been working hard handing out the conference fliers and stickers and circulating them in the streets of Lagos. By talking to people on the streets, there seems to be much excitement about this conference: it\'s going to be bigger than I thought! God is helping us!',
+			'I\'m also getting a lot of ideas of the aftermath of the conference. I think we can move to other states. Since bitcoin education is best for people on the street. I can still organize street meet ups and educate them on bitcoin live.',
+			'See the video of my good friend spreading the word about the conference!',
+		],
+		tweet: '1496460733697167371',
+		type: 'PL',
+	},
+];
 
 const projectDetails: IProjectDetail = {
 	problem: 'Financial illiteracy among the youth in Nigeria, a country ravaged by double-digit inflation.',
@@ -238,58 +235,20 @@ const projectDetails: IProjectDetail = {
 };
 
 export const King = () => {
-	const isMobile = isMobileMode();
-	const classes = useStyles({ isMobile });
+	const renderUpdates = () => {
+		if (projectUpdates && projectUpdates.length > 0) {
+			return projectUpdates.map((update: IProjectUpdate) => <UpdatesBlock key={update.updateTitle} projectUpdate={update}/>,
+			);
+		}
+	};
 
 	return (
 		<VStack alignItems="center" width="100%">
 			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
 				<OwnerSponsorCard owner={owner} ambassador={ambassador} sponsors={sponsors} ownerIntro={projectDetails.ownerIntro} />
 				<DetailsBlock images={images} projectDetails={projectDetails} />
-				<Card className={classes.cardContainer}>
-					<Accordion allowMultiple>
-						<AccordionItem border="none">
-							<h2>
-								<AccordionButton >
-									<Box flex="1" textAlign="left">
-										<Text fontSize="12px" color="brand.textGrey">PROJECT UPDATE #03</Text>
-										<Text fontSize="10px" color="brand.textGrey">23 Feb 2022</Text>
-									</Box>
-									<AccordionIcon />
-								</AccordionButton>
-							</h2>
-							<AccordionPanel pb={4}>
-								<VStack spacing="12px" alignItems="flex-start" textAlign="justify">
-									<Text fontSize="16px" fontWeight={500}>{'Conference date is set to 9 April: what\'s next?'}</Text>
-									<Text>{'My friends and I have been working hard handing out the conference fliers and stickers and circulating them in the streets of Lagos. By talking to people on the streets, there seems to be much excitement about this conference: it\'s going to be bigger than I thought! God is helping us!'}</Text>
-									<Text>{'What\'s next? Getting more communities in Lagos on-board, and doing proper planning of the conference agenda and setup.'}</Text>
-									<Text>
-										{'I\'m also getting a lot of ideas of the aftermath of the conference. I think we can move to other states. Since bitcoin education is best for people on the street. I can still organize street meet ups and educate them on bitcoin live.'}
-									</Text>
-									<Text>
-										{'See the video of my good friend spreading the word about the conference!'}
-									</Text>
-									<Box display="flex" justifyContent="center" width="100%">
-										<TwitterComponent id="1496460733697167371" />
-									</Box>
-								</VStack>
-							</AccordionPanel>
-						</AccordionItem>
-					</Accordion>
-				</Card>
-				<Card className={classes.cardContainer}>
-					<VStack marginBottom="10px">
-						<Text alignSelf="flex-start" fontSize="10px" color="brand.textGrey">SPONSORS</Text>
-						<HStack justifyContent="space-around" width={isMobile ? '100%' : '80%'}>
-							<Link href="https://bitnob.com/" isExternal>
-								<Image height="70px" src="https://storage.googleapis.com/geyser-projects-media/project/king/logo-black.png" />
-							</Link>
-							<Link href="https://walletofsatoshi.com" isExternal>
-								<Image height="70px" src="https://storage.googleapis.com/geyser-projects-media/project/king/wallet-of-satoshi.png" />
-							</Link>
-						</HStack>
-					</VStack>
-				</Card>
+				{ renderUpdates() }
+				<SponsorBlock sponsors={sponsors}/>
 			</VStack >
 			<Footer />
 		</VStack >
