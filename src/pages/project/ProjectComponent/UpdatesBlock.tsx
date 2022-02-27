@@ -53,23 +53,21 @@ export const UpdatesBlock = ({projectUpdate}: IUpdatesBlock) => {
 		}
 	};
 
-	const renderParagraphList = (block: string[]) => (
+	const renderParagraphList = (list: string[]) => (
 		<>
 			{
-				block.map((block: string, index: number) => (
-					<Text key={index} className={classes.texts}>
-						<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
-					</Text>
+				list.map((block: string) => (
+					<ReactMarkdown key={block} className={classes.texts} linkTarget="_blank">{block}</ReactMarkdown>
 				))
 			}
 		</>
 	);
 
-	const renderUnorderedList = (block: string[]) => (
+	const renderUnorderedList = (list: string[]) => (
 		<UnorderedList paddingLeft="18px">
 			{
-				block.map((block: string, index: number) => (
-					<ListItem key={index} className={classes.texts}>
+				list.map((block: string) => (
+					<ListItem key={block} className={classes.texts}>
 						<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
 					</ListItem>
 				))
@@ -77,11 +75,11 @@ export const UpdatesBlock = ({projectUpdate}: IUpdatesBlock) => {
 		</UnorderedList>
 	);
 
-	const renderOrderedList = (block: string[]) => (
+	const renderOrderedList = (list: string[]) => (
 		<OrderedList paddingLeft="18px">
 			{
-				block.map((block: string, index: number) => (
-					<ListItem key={index} className={classes.texts}>
+				list.map((block: string) => (
+					<ListItem key={block} className={classes.texts}>
 						<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
 					</ListItem>
 				))

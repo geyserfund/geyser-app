@@ -94,7 +94,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 		}
 	}, [btcRate, project]);
 
-	const getProjectBackers = () => project && project.fundingTxs && project.fundingTxs.length;
+	const getProjectBackers = () => (project && project.fundingTxs) ? project.fundingTxs.length : '';
 
 	const {amount, label} = formatDaysLeft(project.expiresAt);
 
@@ -130,18 +130,18 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 						</Box>
 					</CircularProgress>
 					<VStack alignItems="center" justifyContent="center" spacing="0">
-						<Text fontsize="14px" fontWeight={600}>{getProjectBackers()}</Text>
+						<Text fontSize="14px" fontWeight={600}>{getProjectBackers()}</Text>
 						<Text fontSize="12px">backers</Text>
 					</VStack>
 					<VStack alignItems="center" justifyContent={'center'} spacing="0">
 						<HStack>
 							<SatoshiIcon scale={0.6}/>
-							<Text fontsize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
+							<Text fontSize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
 						</HStack>
 						<Text fontSize="12px">received</Text>
 					</VStack>
 					<VStack alignItems="center" justifyContent="center" spacing="0">
-						<Text fontsize="14px" fontWeight={600}>{amount}</Text>
+						<Text fontSize="14px" fontWeight={600}>{`${amount}`}</Text>
 						<Text fontSize="12px">{`${label} left`}</Text>
 					</VStack>
 				</HStack>

@@ -140,7 +140,6 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 				</Box>
 				{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
 					<Text fontSize="12px">Fund now</Text>
-					{/* <Text fontSize="12px">now</Text> */}
 				</Button>}
 			</HStack>
 

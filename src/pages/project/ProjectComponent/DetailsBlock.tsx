@@ -45,26 +45,20 @@ export const DetailsBlock = ({images, projectDetails}: IDetailsBlock) => {
 
 	const renderParagraphList = (block: IProjectBlock) => {
 		if (block.body && block.body.length > 0) {
-			return (
-				<>
-					{
-						block.body.map((block: string, index: number) => (
-							<Text key={index} className={classes.texts}>
-								<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
-							</Text>
-						))
-					}
-				</>
-			);
+			return block.body.map((body: string) => (
+				<ReactMarkdown key={body} className={classes.texts} linkTarget="_blank">{body}</ReactMarkdown>
+			));
 		}
+
+		return null;
 	};
 
 	const renderUnorderedList = (block: IProjectBlock) => (
 		<UnorderedList paddingLeft="18px">
 			{
-				block.body.map((block: string, index: number) => (
-					<ListItem key={index} className={classes.texts}>
-						<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
+				block.body.map((body: string) => (
+					<ListItem key={body} className={classes.texts}>
+						<ReactMarkdown linkTarget="_blank">{body}</ReactMarkdown>
 					</ListItem>
 				))
 			}
@@ -74,9 +68,9 @@ export const DetailsBlock = ({images, projectDetails}: IDetailsBlock) => {
 	const renderOrderedList = (block: IProjectBlock) => (
 		<OrderedList paddingLeft="18px">
 			{
-				block.body.map((block: string, index: number) => (
-					<ListItem key={index} className={classes.texts}>
-						<ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
+				block.body.map((body: string) => (
+					<ListItem key={body} className={classes.texts}>
+						<ReactMarkdown linkTarget="_blank">{body}</ReactMarkdown>
 					</ListItem>
 				))
 			}
@@ -100,12 +94,8 @@ export const DetailsBlock = ({images, projectDetails}: IDetailsBlock) => {
 		return (
 			<VStack key={block.title} className={classes.containers} >
 				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
-				{
-					switchBlocks()
-				}
-				{
-					renderImages(block.images)
-				}
+				{ switchBlocks() }
+				{ renderImages(block.images) }
 			</VStack>
 
 		);
