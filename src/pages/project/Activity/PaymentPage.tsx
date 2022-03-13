@@ -2,18 +2,15 @@ import { Box, CloseButton, NumberInput, NumberInputField, Text, Textarea, VStack
 import React, { useState } from 'react';
 import { SatoshiIcon } from '../../../components/icons';
 import { ButtonComponent, CustomToggle, ErrorBox } from '../../../components/ui';
+import {IFundForm} from '../../../hooks';
 import { isDarkMode } from '../../../utils';
 
 interface IPaymentPageProps {
 	isMobile: boolean
 	handleCloseButton: () => void
 	btcRate: number
-	amount: number
-	setAmount: React.Dispatch<React.SetStateAction<number>>
-	comment: string
-	setComment: React.Dispatch<React.SetStateAction<string>>
-	anonymous: boolean
-	setAnonymous: React.Dispatch<React.SetStateAction<boolean>>
+	state: IFundForm
+	setTarget: (_: any) => void
 	handleFund: () => void
 }
 
@@ -21,31 +18,14 @@ export const PaymentPage = ({
 	isMobile,
 	handleCloseButton,
 	btcRate,
-	amount,
-	setAmount,
-	comment,
-	setComment,
-	anonymous,
-	setAnonymous,
 	handleFund,
+	state,
+	setTarget,
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
 
-	const handleComment = (event: any) => {
-		if (event) {
-			if (event.target.value.length < 280) {
-				setComment(event.target.value);
-			}
-		}
-	};
-
 	const handleInput = (stringv: string, numberv: number) => {
-		if (!numberv) {
-			setAmount(0);
-			return;
-		}
-
-		setAmount(numberv);
+		setTarget({target: {name: 'amount', value: numberv}});
 	};
 
 	const submit = () => {
@@ -56,12 +36,12 @@ export const PaymentPage = ({
 	};
 
 	const validateFundingAmount = () => {
-		if (amount * btcRate >= 1000) {
+		if (state.amount * btcRate >= 1000) {
 			setError('Payment above $1000 is not allowed at the moment. Please update the amount, or contact us for donating a higher amount');
 			return false;
 		}
 
-		if (amount < 1) {
+		if (state.amount < 1) {
 			setError('Payment below 1 sats is not allowed at the moment. Please update the amount');
 			return false;
 		}
@@ -105,14 +85,21 @@ export const PaymentPage = ({
 						width="80%"
 						position="relative"
 					>
-						<NumberInput variant="unstyled" marginLeft="10px" onChange={handleInput} value={amount} onFocus={() => setError('')}>
+						<NumberInput
+							name="amount"
+							variant="unstyled"
+							marginLeft="10px"
+							onChange={handleInput}
+							value={state.amount}
+							onFocus={() => setError('')}
+						>
 							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
 						</NumberInput>
 						<Box position="absolute" right={-5}>
 							<SatoshiIcon isDark={isDarkMode()} fontSize="30px" marginRight="10px" marginBottom="5px" />
 						</Box>
 					</Box>
-					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * amount}`}</Text>
+					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * state.amount}`}</Text>
 				</Box>
 
 			</Box>
@@ -131,8 +118,10 @@ export const PaymentPage = ({
 						fontSize="14px"
 						margin="5px"
 						resize="none"
-						value={comment}
-						onChange={handleComment}
+						value={state.comment}
+						maxLength={280}
+						name="comment"
+						onChange={setTarget}
 					/>
 				</Box>
 
@@ -144,8 +133,9 @@ export const PaymentPage = ({
 				<CustomToggle
 					first="Appear as anonymous"
 					second="Appear with profile"
-					value={anonymous}
-					onChange={setAnonymous}
+					value={state.anonymous}
+					name="anonymous"
+					onChange={setTarget}
 				/>
 			</Box>
 			<Box width="100%">

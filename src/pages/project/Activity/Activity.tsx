@@ -17,7 +17,7 @@ import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage } from './InfoPage';
 import { fundingStages, IFundingStages, stageList } from '../../../constants';
-// Import { fundingStages } from '../../../constants';
+import {useFundState} from '../../../hooks';
 
 interface IActivityProps {
 	project: IProject
@@ -43,13 +43,12 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.inital);
 
-	const [fundPage, setFundpage] = useState(true);
 	const [completedFunding, setCompletedFunding] = useState(false);
 	const [startedFunding, setStartedFunding] = useState(false);
 	const [btcRate, setBtcRate] = useState(0);
-	const [amount, setAmount] = useState(0);
-	const [comment, setComment] = useState('');
-	const [anonymous, setAnonymous] = useState(true);
+
+	const {state, setTarget, setState} = useFundState();
+
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [funders, setfunders] = useState<IProjectFunding[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
@@ -59,7 +58,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundProject, {
 		data,
-		loading: fundLoading,
+		// Loading: fundLoading,
 	}] = useMutation(MUTATION_FUND_PROJECT);
 
 	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
@@ -81,16 +80,16 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (user && user.id) {
-			setAnonymous(false);
+			setState('anonymous', false);
 		}
 	}, [user]);
 
 	useEffect(() => {
-		if (!anonymous && (!user || !user.id)) {
+		if (!state.anonymous && (!user || !user.id)) {
 			twitterOnOpen();
-			setAnonymous(true);
+			setState('anonymous', true);
 		}
-	}, [anonymous]);
+	}, [state.anonymous]);
 
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
@@ -131,12 +130,10 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	};
 
 	const handleFundProject = () => {
-		setFundpage(false);
 		gotoNextStage();
 	};
 
 	const handleCloseButton = () => {
-		setFundpage(true);
 		setCompletedFunding(false);
 		setStartedFunding(false);
 		setFundState(fundingStages.inital);
@@ -147,11 +144,10 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 			await fundProject({
 				variables: {
 					projectId: project.id,
-					amount,
-					comment,
-					anonymous,
+					...state,
 				},
 			});
+			gotoNextStage();
 		} catch (_) {
 			toast({
 				title: 'Something went wrong',
@@ -176,86 +172,46 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	};
 
 	const renderActivity = () => {
-		if (fundLoading) {
-			return <Loader />;
+		switch (fundState) {
+			case fundingStages.loading:
+				return <Loader />;
+			case fundingStages.inital:
+				return <InfoPage
+					{...{
+						project,
+						handleFundClick,
+						handleFundProject,
+						loading,
+						btcRate,
+						funders,
+					}}
+				/>;
+			case fundingStages.form:
+				return <PaymentPage
+					{...{
+						isMobile,
+						handleCloseButton,
+						btcRate,
+						state,
+						setTarget,
+						handleFund,
+					}}
+				/>;
+			case fundingStages.started:
+				return 	<QrPage
+					comment={state.comment}
+					title={project.title}
+					amount={state.amount}
+					owner={project.owner.user.username}
+					qrCode={fundingTx.paymentRequest}
+					handleCloseButton={handleCloseButton}
+				/>;
+			case fundingStages.completed:
+				return <SuccessPage amount={state.amount} handleCloseButton={handleCloseButton} />;
+
+			default:
+				return null;
 		}
-
-		if (completedFunding) {
-			return <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />;
-		}
-
-		if (startedFunding) {
-			return 	<QrPage
-				comment={comment}
-				title={project.title}
-				amount={amount}
-				owner={project.owner.user.username}
-				qrCode={fundingTx.paymentRequest}
-				handleCloseButton={handleCloseButton}
-			/>;
-		}
-
-		if (fundPage) {
-			return <InfoPage {...{
-				project,
-				handleFundClick,
-				handleFundProject,
-				loading,
-				btcRate,
-				funders,
-			}} />;
-		}
-
-		return <PaymentPage
-			{...{
-				isMobile,
-				handleCloseButton,
-				btcRate,
-				amount,
-				setAmount,
-				comment,
-				setComment,
-				anonymous,
-				setAnonymous,
-				handleFund,
-			}}
-		/>;
-
-		// Switch (fundState) {
-		// 	case fundingStages.loading:
-		// 		return <Loader />;
-		// 	case fundingStages.inital:
-		// 		return infoPage();
-		// 	case fundingStages.form:
-		// 		return <PaymentPage
-		// 			{...{
-		// 				isMobile,
-		// 				handleCloseButton,
-		// 				btcRate,
-		// 				amount,
-		// 				setAmount,
-		// 				comment,
-		// 				setComment,
-		// 				anonymous,
-		// 				setAnonymous,
-		// 				handleFund,
-		// 			}}
-		// 		/>;
-		// 	case fundingStages.started:
-		// 		return 	<QrPage
-		// 			comment={comment}
-		// 			title={project.title}
-		// 			amount={amount}
-		// 			owner={project.owner.user.username}
-		// 			qrCode={fundingTx.paymentRequest}
-		// 			handleCloseButton={handleCloseButton}
-		// 		/>;
-		// 	case fundingStages.completed:
-		// 		return <SuccessPage amount={amount} handleCloseButton={handleCloseButton} />;
-
-		// 	default:
-		// 		return null;
-		// }
 	};
 
 	return (
