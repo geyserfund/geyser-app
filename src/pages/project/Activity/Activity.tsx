@@ -43,8 +43,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.inital);
 
-	const [completedFunding, setCompletedFunding] = useState(false);
-	const [startedFunding, setStartedFunding] = useState(false);
 	const [btcRate, setBtcRate] = useState(0);
 
 	const {state, setTarget, setState} = useFundState();
@@ -96,30 +94,29 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 			if (fundData.getFundingTx.paid) {
 				setfunders([fundData.getFundingTx, ...funders]);
 				clearInterval(fundInterval);
-				setCompletedFunding(true);
+				gotoNextStage();
 			}
 		}
 	}, [fundData]);
 
 	useEffect(() => {
-		if (completedFunding || !startedFunding) {
+		if (fundState === fundingStages.completed || fundState === fundingStages.canceled) {
 			clearInterval(fundInterval);
 		}
 
-		if (startedFunding && !completedFunding) {
+		if (fundState === fundingStages.started) {
 			fundInterval = setInterval(getFunding, 2000);
 		}
-	}, [startedFunding, completedFunding]);
+	}, [fundState]);
 
 	useEffect(() => {
 		getBitcoinRates();
 	}, []);
 
 	useEffect(() => {
-		if (data && data.fundProject && data.fundProject.success) {
+		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
 			setFundingTx(data.fundProject.fundingTx);
-			setStartedFunding(true);
-			setCompletedFunding(false);
+			gotoNextStage();
 		}
 	}, [data]);
 
@@ -134,8 +131,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	};
 
 	const handleCloseButton = () => {
-		setCompletedFunding(false);
-		setStartedFunding(false);
 		setFundState(fundingStages.inital);
 	};
 
