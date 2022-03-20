@@ -24,7 +24,7 @@ yarn dev
 
 ## `Use eslint in VS code`
 
-**Note: This is to be used for consistent placing and adering to certain coding practice !**
+**Note: This is to be used for consistent placing and adering to certain coding practice!**
 
 step 1: Make sure you have eslint extension installed in your vscode environment.
 
