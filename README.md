@@ -1,6 +1,9 @@
-## Available Scripts
+#Geyser App
+The Geyser Front-End
 
-In the project directory, you can run:
+## Development
+
+To get started:
 
 ```
 yarn install
@@ -14,9 +17,9 @@ yarn dev
 
 ### Front-End
 
-REACT_APP_API_ENDPOINT=<API_URL>
+`REACT_APP_API_ENDPOINT=<API_URL>`
 
-NODE_ENV=<environment>
+`NODE_ENV=<environment>`
 
 ## `Use eslint in VS code`
 
