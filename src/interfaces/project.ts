@@ -51,3 +51,34 @@ export interface IFunder {
     twitterHandle: string;
     connectedTwitter: boolean;
 }
+
+export interface IProjectDetail {
+    problem: string;
+    solution: string;
+    blocks: IProjectBlock[];
+    ownerIntro: string
+    images?: string[]
+}
+
+export interface IProjectBlock {
+        title: string;
+        body: string[];
+        images?: string[];
+        blockType: string;
+}
+
+export interface IProjectUpdate {
+    updateTitle: string;
+    date: number;
+    tweet?: string;
+    type: string;
+    bodyTitle?: string;
+    body?: string[];
+    images?: string[];
+}
+
+export interface IProjectSponsor {
+    user: IUser;
+    image: string;
+    companyUrl: string;
+}

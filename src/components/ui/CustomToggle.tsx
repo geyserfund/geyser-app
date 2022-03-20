@@ -59,16 +59,17 @@ interface ICustomToggle {
 	onChange: any;
 	first: string;
 	second: string;
+	name?: string;
 }
 
-export const CustomToggle = ({first, second, value, onChange}:ICustomToggle) => {
+export const CustomToggle = ({first, second, value, onChange, name}:ICustomToggle) => {
 	const isDark = isDarkMode();
 	const classes = useStyles({isDark});
 	const [anonymous, setAnonymous] = useState(value);
 
 	const handleToggle = () => {
 		setAnonymous(!anonymous);
-		onChange(!anonymous);
+		onChange({target: {name, value: !anonymous}});
 	};
 
 	return (

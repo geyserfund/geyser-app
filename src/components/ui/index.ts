@@ -11,3 +11,4 @@ export * from './FundingStatus';
 export * from './ErrorBox';
 export * from './StatusBar';
 export * from './Linkin';
+export * from './TwitterComponent';

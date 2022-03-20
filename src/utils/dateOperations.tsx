@@ -122,3 +122,11 @@ export const getCountDown = (date: string) => {
 
 	return duration.toFormat('d \'days : \' h\'h :\' m\'m : \' s\'s');
 };
+
+export const getFormattedDate = (date: number) => {
+	const dateTime = DateTime.fromMillis(date);
+
+	const {day, monthShort, year} = dateTime;
+
+	return `${day} ${monthShort} ${year}`;
+};

@@ -20,4 +20,6 @@ export const getShortAmountLabel = (amount: number) => {
 		const newAmount = Math.round(amount / 1000000);
 		return `${newAmount}B`;
 	}
+
+	return '';
 };
