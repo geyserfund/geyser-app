@@ -12,12 +12,13 @@ yarn dev
 
 ## Environment Variables
 
-# Front-End
+### Front-End
 
 REACT_APP_API_ENDPOINT=<API_URL>
+
 NODE_ENV=<environment>
 
-### `Use eslint in VS code`
+## `Use eslint in VS code`
 
 **Note: This is to be used for consistent placing and adering to certain coding practice !**
 
