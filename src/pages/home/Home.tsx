@@ -53,7 +53,7 @@ export const Home = () => {
 		}
 	}, [error]);
 
-	const project = data && data.getProjectByName && data.getProjectByName.project;
+	const project = (data && data.getProjectByName && data.getProjectByName.project) || {};
 	console.log('checking the project', project);
 	return (
 		<VStack
