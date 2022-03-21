@@ -1,9 +1,10 @@
-import { Box, CloseButton, NumberInput, NumberInputField, Text, Textarea, VStack } from '@chakra-ui/react';
+import { Box, CloseButton, Text, Textarea, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { SatoshiIcon } from '../../../components/icons';
 import { ButtonComponent, CustomToggle, ErrorBox } from '../../../components/ui';
+import { IProjectType, projectTypes } from '../../../constants';
 import {IFundForm} from '../../../hooks';
-import { isDarkMode } from '../../../utils';
+import { DonationBased, RewardBased } from '../FundForm';
 
 interface IPaymentPageProps {
 	isMobile: boolean
@@ -11,7 +12,9 @@ interface IPaymentPageProps {
 	btcRate: number
 	state: IFundForm
 	setTarget: (_: any) => void
+	setState: any
 	handleFund: () => void
+	type: IProjectType
 }
 
 export const PaymentPage = ({
@@ -21,12 +24,10 @@ export const PaymentPage = ({
 	handleFund,
 	state,
 	setTarget,
+	setState,
+	type,
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
-
-	const handleInput = (stringv: string, numberv: number) => {
-		setTarget({target: {name: 'amount', value: numberv}});
-	};
 
 	const submit = () => {
 		const valid = validateFundingAmount();
@@ -49,6 +50,23 @@ export const PaymentPage = ({
 		return true;
 	};
 
+	const renderFundForm = () => {
+		switch (type) {
+			case projectTypes.donation:
+				return <DonationBased
+					{...{btcRate,
+						state,
+						setTarget,
+						setError }}
+				/>;
+
+			case projectTypes.reward:
+				return <RewardBased {...{setState}}/>;
+			default:
+				return null;
+		}
+	};
+
 	return (
 		<VStack
 			padding={isMobile ? '10px 10px' : '10px 20px'}
@@ -67,42 +85,7 @@ export const PaymentPage = ({
 				top="10px"
 				onClick={handleCloseButton}
 			/>
-			<Box width="100%" >
-				<Text lineHeight="26px">Send amount</Text>
-				<Box
-					backgroundColor="brand.bgGreen"
-					height="85px"
-					borderRadius="12px"
-					display="flex"
-					flexDirection="column"
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Box
-						display="flex"
-						justifyContent="center"
-						alignItems="center"
-						width="80%"
-						position="relative"
-					>
-						<NumberInput
-							name="amount"
-							variant="unstyled"
-							marginLeft="10px"
-							onChange={handleInput}
-							value={state.amount}
-							onFocus={() => setError('')}
-						>
-							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
-						</NumberInput>
-						<Box position="absolute" right={-5}>
-							<SatoshiIcon isDark={isDarkMode()} fontSize="30px" marginRight="10px" marginBottom="5px" />
-						</Box>
-					</Box>
-					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * state.amount}`}</Text>
-				</Box>
-
-			</Box>
+			{renderFundForm()}
 			<Box width="100%" >
 				<Text lineHeight="26px">Comment</Text>
 				<Box
@@ -127,9 +110,6 @@ export const PaymentPage = ({
 
 			</Box>
 			<Box width="100%">
-				{/* <Checkbox colorScheme="green" defaultValue="false">
-                Remain Anonymous
-            </Checkbox> */}
 				<CustomToggle
 					first="Appear as anonymous"
 					second="Appear with profile"

@@ -21,5 +21,7 @@ export const colors = {
 	bgStatusProblem: '#fbdadc',
 	bgStatusSolution: '#c0dfed',
 
+	normalLightGreen: '#1BD5B3',
+
 };
 

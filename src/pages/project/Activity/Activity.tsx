@@ -12,12 +12,12 @@ import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
 import { useDisclosure } from '@chakra-ui/react';
-import { fetchBitcoinRates } from '../../../api';
 import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage } from './InfoPage';
 import { fundingStages, IFundingStages, stageList } from '../../../constants';
 import {useFundState} from '../../../hooks';
+import { useBtcContext } from '../../../context/btc';
 
 interface IActivityProps {
 	project: IProject
@@ -37,13 +37,12 @@ let fundInterval: any;
 
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
+	const {btcRate} = useBtcContext();
 	const { toast } = useNotification();
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.inital);
-
-	const [btcRate, setBtcRate] = useState(0);
 
 	const {state, setTarget, setState} = useFundState();
 
@@ -110,21 +109,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [fundState]);
 
 	useEffect(() => {
-		getBitcoinRates();
-	}, []);
-
-	useEffect(() => {
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();
 		}
 	}, [data]);
-
-	const getBitcoinRates = async () => {
-		const response: any = await fetchBitcoinRates();
-		const satoshirate = response.rates.USD * 0.00000001;
-		setBtcRate(satoshirate);
-	};
 
 	const handleFundProject = () => {
 		gotoNextStage();
@@ -188,8 +177,10 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						handleCloseButton,
 						btcRate,
 						state,
+						setState,
 						setTarget,
 						handleFund,
+						type: 'reward-based',
 					}}
 				/>;
 			case fundingStages.started:

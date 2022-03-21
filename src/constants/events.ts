@@ -17,3 +17,13 @@ canceled:IFundingStages;
 export const stageList: IFundingStages[] = ['loading', 'inital', 'form', 'started', 'completed', 'canceled'];
 
 export type IFundingStages = 'loading'|'inital' | 'form' | 'started' | 'completed' | 'canceled'
+
+export type IProjectType = 'donation-based'|'reward-based'
+
+export const projectTypes:{
+	donation:IProjectType,
+	reward: IProjectType
+} = {
+	donation: 'donation-based',
+	reward: 'reward-based',
+};

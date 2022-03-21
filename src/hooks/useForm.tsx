@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 export interface IFundForm {
+	donationAmount: number;
+	rewardAmount: number;
 	amount: number;
 	comment: string;
 	anonymous: boolean;
@@ -9,6 +11,8 @@ export interface IFundForm {
 
 export const useFundState = () => {
 	const [state, _setState] = useState<IFundForm>({
+		donationAmount: 0,
+		rewardAmount: 0,
 		amount: 0,
 		comment: '',
 		anonymous: true,
@@ -25,5 +29,6 @@ export const useFundState = () => {
 		_setState(newState);
 	};
 
+	console.log('checking state', state);
 	return {state, setTarget, setState};
 };
