@@ -18,7 +18,7 @@ interface IInfoPage {
     handleFundProject: () => void;
     loading: boolean;
     btcRate: number;
-    funders: IProjectFunding[]
+    fundingTxs: IProjectFunding[]
 }
 
 export const InfoPage = ({
@@ -27,8 +27,9 @@ export const InfoPage = ({
 	loading,
 	project,
 	btcRate,
-	funders,
+	fundingTxs,
 }: IInfoPage) => {
+	console.log('FUNDERS: ', fundingTxs);
 	const isMobile = isMobileMode();
 	const classes = useStyles({isMobile});
 
@@ -90,12 +91,12 @@ export const InfoPage = ({
 			</ButtonComponent>
 			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" flex="1">
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
-					{`Project Backers ${funders.length ? `( ${funders.length} )` : ''}`}
+					{`Project Backers ${fundingTxs.length ? `( ${fundingTxs.length} )` : ''}`}
 				</Text>
 				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
 					{
-						funders.map((funder, index) => (
-							<IdBar key={index} funder={funder} />
+						fundingTxs.map((fundingTx, index) => (
+							<IdBar key={index} fundingTx={fundingTx} />
 						))
 					}
 				</VStack>

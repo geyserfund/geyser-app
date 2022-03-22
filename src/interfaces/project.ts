@@ -1,3 +1,4 @@
+import { IuserProfile } from '.';
 import { BadgeVariant } from '../components/ui';
 
 export interface IProject {
@@ -39,17 +40,16 @@ export interface IUser {
 }
 
 export interface IProjectFunding {
-        amount:string;
-        comment:string;
-        paidAt:string;
-        user: IFunder
+    funder: IFunder;
+    amount:string;
+    comment:string;
+    paidAt:string;
 }
 
 export interface IFunder {
-    username: string;
-    imageUrl: string;
-    twitterHandle: string;
-    connectedTwitter: boolean;
+    user: IuserProfile;
+    confirmed: boolean;
+    amountFunded: number;
 }
 
 export interface IProjectDetail {
