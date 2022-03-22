@@ -4,7 +4,7 @@ import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent, Linkin } from '../ui';
 import { Logo } from './Logo';
-import { Box } from '@chakra-ui/layout';
+import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
@@ -12,9 +12,10 @@ import { ConnectTwitter } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
-import { StartCrowdFundUrl } from '../../constants';
+import { StartCrowdFundUrl, HomeUrl, GrantsUrl } from '../../constants';
 import { useLocation } from 'react-router';
 import { customHistory } from '../../config';
+import { Link, Show } from '@chakra-ui/react';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -65,7 +66,20 @@ export const NavBar = () => {
 					justifyContent="space-between"
 					margin={isMobile ? '10px' : '10px 20px 10px 40px'}
 				>
-					<Logo />
+					<HStack
+						spacing="25px"
+						justifyContent="center"
+						alignItems="center">
+						<Logo mr={isMobile ? 0 : 5} />
+						<Show above="md">
+							<Link href={HomeUrl} fontWeight="bold">
+						Home
+							</Link>
+							<Link href={GrantsUrl} fontWeight="bold">
+						Grants
+							</Link>
+						</Show>
+					</HStack>
 					{
 						isMobile ? <>
 							{

@@ -2,6 +2,8 @@ export const geyserHomeLogo = 'https://storage.googleapis.com/geyser-projects-me
 export const geyserHomeCoin1 = 'https://storage.googleapis.com/geyser-projects-media/app/coins1.png';
 export const geyserHomeCoin2 = 'https://storage.googleapis.com/geyser-projects-media/app/coins2.png';
 
+export const HomeUrl = 'https://geyser.fund';
+export const GrantsUrl = 'https://geyser.fund/grants';
 export const AboutUsUrl = 'https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09';
 export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3';
 export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf';
