@@ -11,11 +11,13 @@ query GetFundingTx($fundingTxId: BigInt!) {
       canceled
       comment
       paidAt
-      user {
-        twitterHandle
-        imageUrl
-        username
-        id
+      funder {
+        user {
+          twitterHandle
+          imageUrl
+          username
+          id
+        }
       }
     }
   }

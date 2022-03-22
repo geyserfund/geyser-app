@@ -48,7 +48,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const {state, setTarget, setState} = useFundState();
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
-	const [funders, setfunders] = useState<IProjectFunding[]>([]);
+	const [fundingTxs, setFundingTxs] = useState<IProjectFunding[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
@@ -68,10 +68,10 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (project && project.fundingTxs) {
-			const unsortedFunders = [...project.fundingTxs];
-			if (unsortedFunders.length > 0) {
-				unsortedFunders.sort((a, b) => parseInt(b.paidAt, 10) - parseInt(a.paidAt, 10));
-				setfunders(unsortedFunders);
+			const unsortedFundingTxs = [...project.fundingTxs];
+			if (unsortedFundingTxs.length > 0) {
+				unsortedFundingTxs.sort((a, b) => parseInt(b.paidAt, 10) - parseInt(a.paidAt, 10));
+				setFundingTxs(unsortedFundingTxs);
 			}
 		}
 	}, [project.fundingTxs]);
@@ -92,7 +92,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
 			if (fundData.getFundingTx.paid) {
-				setfunders([fundData.getFundingTx, ...funders]);
+				setFundingTxs([fundData.getFundingTx, ...fundingTxs]);
 				clearInterval(fundInterval);
 				gotoNextStage();
 			}
@@ -178,7 +178,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						handleFundProject,
 						loading,
 						btcRate,
-						funders,
+						fundingTxs,
 					}}
 				/>;
 			case fundingStages.form:

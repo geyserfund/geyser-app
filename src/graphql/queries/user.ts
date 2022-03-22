@@ -8,6 +8,7 @@ query GetUser {
       username
       imageUrl
       twitterHandle
+      connectedTwitter
     }
   }
 `;
