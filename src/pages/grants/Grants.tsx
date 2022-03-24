@@ -234,14 +234,14 @@ export const Grants = () => {
 						alignItems="center"
 						width={isMobile ? '100%' : '75%'}
 						margin="0 auto"
-						px={[2, 95]}
+						px={[2, 100]}
 					>
 
 						{/* bubble section */}
 						<Box mt={{base: 10, xl: 0}}>
 
 							<Box border="1px solid lightgrey" borderRadius="full" p={[20, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto">
-								<Image src={Bubble} w={{md: '90%'}} margin="0 auto"/>
+								<Image src={Bubble} w={{md: '90%'}} margin="0 auto" cursor="pointer"/>
 							</Box>
 
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
@@ -340,12 +340,10 @@ export const Grants = () => {
 						<Text mb={2} fontSize="lg" fontWeight="bold">Potential recipients</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
 							<RecipientButton/>
-							<Link href="" isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md" display="flex" justifyContent="center" alignItems="center" pl={5}>
-								<Text fontWeight="bold">🔥 5</Text>
+							<Link href="" isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md">
 								<Text textDecoration="underline" textDecorationThickness="3px" textDecorationColor="brand.bgGreyDark" px={6} py={2} fontWeight="bold">bolt-fun</Text>
 							</Link>
-							<Link href="" isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md" display="flex" justifyContent="center" alignItems="center" pl={5}>
-								<Text fontWeight="bold">🔥 12</Text>
+							<Link href="" isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md">
 								<Text textDecoration="underline" textDecorationThickness="3px" textDecorationColor="brand.bgGreyDark" px={6} py={2} fontWeight="bold">pleb.labs</Text>
 							</Link>
 						</HStack>
