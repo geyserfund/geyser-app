@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Text, HStack, Link, Image, Avatar, Button, VStack, Show, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Text, HStack, Link, Image, Avatar, Button, VStack, Show, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Input } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import Bubble from '../../assets/bubble.svg';
@@ -9,6 +9,8 @@ import Stelios from '../../assets/stelios.jpg';
 import Saz from '../../assets/saz.jpg';
 import Kraken from '../../assets/kraken.svg';
 import WalletOfSat from '../../assets/walletofsat.svg';
+import Qr from '../../assets/qr.svg';
+import Confetti from '../../assets/confetti.svg';
 import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon } from '../../components/icons';
 import { createUseStyles } from 'react-jss';
 import { isMobileMode, isMediumScreen } from '../../utils';
@@ -23,48 +25,154 @@ const useStyles = createUseStyles({
 });
 
 const ContributeButton = () => {
+	const [step, setStep] = useState(0);
+	const [amount, setAmount] = useState(0);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	if (step === 0) {
+		return (
+			<>
+				<ButtonComponent
+					borderRadius="4px"
+					backgroundColor="brand-bgGrey2"
+					width="100%"
+					my={3}
+					onClick={onOpen}
+				>
+        Contribute to this grant
+				</ButtonComponent>
+
+				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+					<ModalOverlay />
+					<ModalContent>
+						<ModalHeader>Comment and contribute</ModalHeader>
+						<ModalCloseButton onClick={() => setAmount(0)} />
+						<ModalBody>
+							<HStack>
+								<Text>Amount</Text>
+								<SatoshiIcon/>
+							</HStack>
+							<NumberInput
+								name="amount"
+								onChange={valueString => setAmount(parseInt(valueString, 10))}
+								inputMode="numeric"
+								focusBorderColor="#20ECC7"
+								min={1}
+							>
+								<NumberInputField placeholder={'sats'} />
+								<NumberInputStepper>
+									<NumberIncrementStepper />
+									<NumberDecrementStepper />
+								</NumberInputStepper>
+							</NumberInput>
+							<Text mt={5}>Comment</Text>
+							<Input
+								name="comment"
+								placeholder="Add a comment..."
+								focusBorderColor="#20ECC7"
+								py={10}
+							/>
+							<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
+							<Text>Geyser will custody the grant funds until the recepients are established.</Text>
+						</ModalBody>
+						<ModalFooter>
+							<ButtonComponent
+								primary
+								width="100%"
+								onClick={() => setStep(1)}
+								disabled={amount <= 0}
+							>
+              Contribute
+							</ButtonComponent>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
+			</>
+		);
+	}
+
+	if (step === 1) {
+		return (
+			<>
+				<ButtonComponent
+					borderRadius="4px"
+					backgroundColor="brand-bgGrey2"
+					width="100%"
+					my={3}
+					onClick={onOpen}
+				>
+				Contribute to this grant
+				</ButtonComponent>
+
+				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+					<ModalOverlay />
+					<ModalContent>
+						<ModalHeader>Pay with lightning invoice</ModalHeader>
+						<ModalCloseButton onClick={() => {
+							setStep(0);
+							setAmount(0);
+							onClose();
+						}} />
+						<ModalBody>
+							<Image src={Qr} margin="0 auto"/>
+							<Text mt={5}>Amount (sats)</Text>
+							<NumberInput
+								name="amount"
+								disabled
+								value={amount}
+							>
+								<NumberInputField backgroundColor="grey" />
+							</NumberInput>
+						</ModalBody>
+						<ModalFooter>
+							<ButtonComponent primary width="100%" onClick={() => setStep(2)}>Pay</ButtonComponent>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
+			</>
+		);
+	}
+
+	if (step === 2) {
+		return (
+			<>
+				<ButtonComponent
+					borderRadius="4px"
+					backgroundColor="brand-bgGrey2"
+					width="100%"
+					my={3}
+					onClick={onOpen}
+				>
+				Contribute to this grant
+				</ButtonComponent>
+
+				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+					<ModalOverlay />
+					<ModalContent>
+						<ModalHeader>Success!</ModalHeader>
+						<ModalCloseButton onClick={() => {
+							setStep(0);
+							setAmount(0);
+							onClose();
+						}} />
+						<ModalBody>
+							<Image src={Confetti} margin="0 auto" width="100%"/>
+						</ModalBody>
+						<ModalFooter>
+							<ButtonComponent primary width="100%" onClick={() => {
+								setStep(0);
+								setAmount(0);
+								onClose();
+							}}>Close</ButtonComponent>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
+			</>
+		);
+	}
+
 	return (
 		<>
-			<ButtonComponent
-				borderRadius="4px"
-				backgroundColor="brand-bgGrey2"
-				width="100%"
-				my={3}
-				onClick={onOpen}
-			>
-      Contribute to this grant
-			</ButtonComponent>
-			<Modal onClose={onClose} isOpen={isOpen} isCentered>
-				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader>Comment and contribute</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody>
-						<Text>Amount</Text>
-						<NumberInput
-							name="amount"
-						>
-							<NumberInputField placeholder={'sats'} focusBorderColor="#20ECC7" />
-							<NumberInputStepper>
-								<NumberIncrementStepper />
-								<NumberDecrementStepper />
-							</NumberInputStepper>
-						</NumberInput>
-						<Text mt={5}>Comment</Text>
-						<NumberInput
-							name="comment"
-						>
-							<NumberInputField py={10} placeholder={'Add a comment...'} focusBorderColor="#20ECC7" />
-						</NumberInput>
-						<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
-						<Text>Geyser will custody the grant funds until the recepients are established.</Text>
-					</ModalBody>
-					<ModalFooter>
-						<ButtonComponent primary width="100%" >Contribute</ButtonComponent>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
 		</>
 	);
 };
@@ -81,6 +189,7 @@ const RecipientButton = () => {
 			>
 			Submit a potential recipient
 			</ButtonComponent>
+
 			<Modal onClose={onClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
@@ -89,17 +198,17 @@ const RecipientButton = () => {
 					<ModalBody>
 						<Text>Drop below the name, and a Tweet or link that demonstrates the person or organization’s fit to receive this grant.</Text>
 						<Text mt={5}>Name</Text>
-						<NumberInput
+						<Input
 							name="name"
-						>
-							<NumberInputField placeholder={'Recipient'} focusBorderColor="#20ECC7" />
-						</NumberInput>
+							placeholder="Recipient"
+							focusBorderColor="#20ECC7"
+						/>
 						<Text mt={5}>Link</Text>
-						<NumberInput
+						<Input
 							name="link"
-						>
-							<NumberInputField placeholder={'https://twitter.com/metamick14'} focusBorderColor="#20ECC7" />
-						</NumberInput>
+							placeholder="https://twitter.com/metamick14"
+							focusBorderColor="#20ECC7"
+						/>
 					</ModalBody>
 					<ModalFooter>
 						<ButtonComponent primary width="100%" >Nominate</ButtonComponent>
@@ -125,7 +234,7 @@ export const Grants = () => {
 						alignItems="center"
 						width={isMobile ? '100%' : '75%'}
 						margin="0 auto"
-						px={[2, 75]}
+						px={[2, 95]}
 					>
 
 						{/* bubble section */}
@@ -135,13 +244,13 @@ export const Grants = () => {
 								<Image src={Bubble} w={{md: '90%'}} margin="0 auto"/>
 							</Box>
 
-							<Text fontSize="md" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
+							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
 							<Box display="flex" justifyContent="center">
 								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" my={4}>
 									<HStack spacing="10px" mr={10}>
-										<SatoshiIcon/><Text fontSize="xl"><b>23,000</b> received</Text>
+										<SatoshiIcon/><Text fontSize="lg"><b>23,000</b> received</Text>
 									</HStack>
-									<Text fontSize="xl" textAlign={isMobile ? 'right' : 'left'}><b>213</b> donations</Text>
+									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>213</b> donations</Text>
 								</Box>
 							</Box>
 
