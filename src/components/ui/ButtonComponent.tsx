@@ -45,7 +45,7 @@ export const ButtonComponent = ({ className, variant, primary, children, standar
 			variant={variant || 'solid'}
 			minWidth={standard ? '200px' : ''}
 			backgroundColor={backgroundColor ? backgroundColor : primary ? 'brand.primary' : bgColor}
-			borderRadius={circular ? '50px' : standard ? '12px' : undefined}
+			borderRadius={circular ? '50px' : standard ? '4px' : undefined}
 			_hover={primary ? { bg: 'brand.primaryTint' } : undefined}
 			fontSize="12px"
 			{...rest}
