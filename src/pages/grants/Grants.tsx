@@ -1,19 +1,16 @@
+/* eslint-disable capitalized-comments */
 import React, { useState } from 'react';
 import { Box, Text, HStack, Link, Image, Avatar, Button, VStack, Show, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Input } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import Bubble from '../../assets/bubble.svg';
-import Mick from '../../assets/mick.svg';
-import Secondl1ght from '../../assets/secondl1ght.svg';
-import Stelios from '../../assets/stelios.jpg';
-import Saz from '../../assets/saz.jpg';
-import Kraken from '../../assets/kraken.svg';
-import WalletOfSat from '../../assets/walletofsat.svg';
 import Qr from '../../assets/qr.svg';
 import Confetti from '../../assets/confetti.svg';
 import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon } from '../../components/icons';
 import { createUseStyles } from 'react-jss';
-import { isMobileMode, isMediumScreen } from '../../utils';
+import { getDaysAgo, isMobileMode, isMediumScreen } from '../../utils';
+// import { QUERY_GET_PROJECT } from '../../graphql';
+import { IProject, IGrantee } from '../../interfaces';
 
 const useStyles = createUseStyles({
 	potentialRecipients: {
@@ -276,10 +273,29 @@ const RecipientButton = () => {
 	);
 };
 
-export const Grants = () => {
+const ClickableAvatar = ({ url, imageUrl }: { url: string, imageUrl: string }) => {
+	console.log('IMAGEURL: ', imageUrl);
+	return (
+		<Link href={url} isExternal>
+			<Avatar w={['40px', '60px']} h={['40px', '60px']} src={imageUrl} />
+		</Link>
+	);
+};
+
+const Grantee = ({ grantee }: { grantee: IGrantee }) => {
+	const classes = useStyles();
+	console.log('URL: ', grantee.url);
+	return (
+		<Link href={grantee.url} isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md" display="flex" justifyContent="center" alignItems="center" pl={5}>
+			<Text textDecoration="underline" textDecorationThickness="3px" textDecorationColor="brand.bgGreyDark" px={6} py={2} fontWeight="bold">{grantee.name}</Text>
+		</Link>
+	);
+};
+
+export const Grants = ({ project }: { project: IProject }) => {
 	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
-	const classes = useStyles();
+	const { owners, funders, sponsors, grantees } = project;
 
 	return (
 		<>
@@ -305,9 +321,9 @@ export const Grants = () => {
 							<Box display="flex" justifyContent="center">
 								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" my={4}>
 									<HStack spacing="10px" mr={10}>
-										<SatoshiIcon/><Text fontSize="lg"><b>23,000</b> received</Text>
+										<SatoshiIcon/><Text fontSize="lg"><b>{project.balance}</b> received</Text>
 									</HStack>
-									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>213</b> donations</Text>
+									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>{project.funders.length}</b> donations</Text>
 								</Box>
 							</Box>
 
@@ -315,22 +331,32 @@ export const Grants = () => {
 
 						{/* grant info */}
 						<Box width={{xl: '40%'}}>
-							<Text fontSize="4xl" fontWeight="bold">Bitcoin Hackathons</Text>
+							<Text fontSize="4xl" fontWeight="bold">{project.title}</Text>
 							<Text color="brand.primary" fontWeight="bold" fontSize="lg">Supporting Bitcoin hackathons focused on on-chain and lightning applications.</Text>
 							<HStack my={2} spacing="10px">
 								<Text bg="brand.bgGrey" px={5} py={1} borderRadius="lg">#001</Text>
 								<Text bg="brand.bgGrey" px={5} py={1} borderRadius="lg">Hackathons</Text>
 								<Text bg="brand.bgGrey" px={5} py={1} borderRadius="lg">Building</Text>
 							</HStack>
-							<Text>Created <b>23-Mar-2022</b></Text>
+							<Text>Created <b>{`${getDaysAgo(project.createdAt)} ago`}</b></Text>
 							<HStack my={1} flexWrap="wrap" spacing="10px">
 								<Text>The Board:</Text>
-								<Link href="https://twitter.com/metamick14" isExternal fontSize="sm" color="brand.primary" fontWeight="bold">@metamick14</Link>
-								<Link href="https://twitter.com/steliosats" isExternal fontSize="sm" color="brand.primary" fontWeight="bold">@steliosats</Link>
-								<Link href="https://twitter.com/sajald77" isExternal fontSize="sm" color="brand.primary" fontWeight="bold">@sajald77</Link>
-								<Link href="https://twitter.com/secondl1ght" isExternal fontSize="sm" color="brand.primary" fontWeight="bold">@secondl1ght</Link>
+								<Box>
+									{
+										owners.map(owner => (
+											<Link
+												key={owner.user.id}
+												href={`https://twitter.com/${owner.user.twitterHandle}`}
+												isExternal
+												fontSize="sm"
+												color="brand.primary"
+												fontWeight="bold"
+											>@{ owner.user.twitterHandle } </Link>
+										))
+									}
+								</Box>
 							</HStack>
-							<Text>The aim of this grant is to support Bitcoin development through fast iterative hackathon sessions. The funds donated to this grant will be given out to award winners of Bitcoin Hackathons in the month of March and April 2022. The sum will be distributed among different projects and this information will be shared on this page. Geyser will charge no fees.</Text>
+							<Text>{project.description}</Text>
 							<ContributeButton/>
 						</Box>
 					</Box>
@@ -366,30 +392,30 @@ export const Grants = () => {
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Most recent donations</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
-							<Link href="" isExternal>
-								<Avatar w={['40px', '60px']} h={['40px', '60px']} src={Mick} />
-							</Link>
-							<Link href="" isExternal>
-								<Avatar w={['40px', '60px']} h={['40px', '60px']} src={Stelios} />
-							</Link>
-							<Link href="" isExternal>
-								<Avatar w={['40px', '60px']} h={['40px', '60px']} src={Saz} />
-							</Link>
-							<Link href="" isExternal>
-								<Avatar w={['40px', '60px']} h={['40px', '60px']} src={Secondl1ght} />
-							</Link>
+							{
+								funders.map(funder => (
+									<ClickableAvatar
+										key={funder.user.id}
+										url={`https://twitter.com/${funder.user.twitterHandle}`}
+										imageUrl={funder.user.imageUrl}
+									/>
+								))
+							}
 						</HStack>
 					</Box>
 
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Sponsors</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
-							<Link href="" isExternal>
-								<Avatar w={['40px', '60px']} h={['40px', '60px']} src={Kraken} />
-							</Link>
-							<Link href="" isExternal>
-								<Avatar w={['40px', '60px']} h={['40px', '60px']} src={WalletOfSat} />
-							</Link>
+							{
+								sponsors.map(sponsor => (
+									<ClickableAvatar
+										key={sponsor.user.id}
+										url={`https://twitter.com/${sponsor.user.twitterHandle}`}
+										imageUrl={sponsor.user.imageUrl}
+									/>
+								))
+							}
 						</HStack>
 					</Box>
 
@@ -397,12 +423,9 @@ export const Grants = () => {
 						<Text mb={2} fontSize="lg" fontWeight="bold">Potential recipients</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
 							<RecipientButton/>
-							<Link href="" isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md">
-								<Text textDecoration="underline" textDecorationThickness="3px" textDecorationColor="brand.bgGreyDark" px={6} py={2} fontWeight="bold">bolt-fun</Text>
-							</Link>
-							<Link href="" isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md">
-								<Text textDecoration="underline" textDecorationThickness="3px" textDecorationColor="brand.bgGreyDark" px={6} py={2} fontWeight="bold">pleb.labs</Text>
-							</Link>
+							{
+								grantees.map(grantee => <Grantee key={grantee.id} grantee={grantee}/>)
+							}
 						</HStack>
 					</Box>
 

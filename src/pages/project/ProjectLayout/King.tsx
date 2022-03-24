@@ -8,7 +8,8 @@ import { IProjectBlock, IProjectDetail, IProjectSponsor, IProjectUpdate, IUser }
 import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../ProjectComponent';
 
 const owner: IUser = {
-	picture: kingProfileUrl,
+	imageUrl: kingProfileUrl,
+	twitterHandle: 'ApataJ',
 	username: 'ApataJ',
 	fullName: 'Apata J',
 	id: '',
@@ -19,8 +20,9 @@ const owner: IUser = {
 };
 
 const ambassador: IUser = {
-	picture: 'https://pbs.twimg.com/profile_images/1477647411963056128/7wd0aNSZ_400x400.jpg',
+	imageUrl: 'https://pbs.twimg.com/profile_images/1477647411963056128/7wd0aNSZ_400x400.jpg',
 	username: 'parman_the',
+	twitterHandle: 'parman_the',
 	fullName: 'Parman Bitcoin Private Key Whisperer',
 	id: '',
 	URL: '',
@@ -32,8 +34,9 @@ const ambassador: IUser = {
 const sponsors: IProjectSponsor[] = [
 	{
 		user: {
-			picture: 'https://pbs.twimg.com/profile_images/1362672747399159818/QR9bbtrT_400x400.jpg',
+			imageUrl: 'https://pbs.twimg.com/profile_images/1362672747399159818/QR9bbtrT_400x400.jpg',
 			username: 'walletofsatoshi',
+			twitterHandle: 'walletofsatoshi',
 			fullName: 'walletofsatoshi',
 			id: '',
 			URL: '',
@@ -47,8 +50,9 @@ const sponsors: IProjectSponsor[] = [
 	},
 	{
 		user: {
-			picture: 'https://pbs.twimg.com/profile_images/1370765783765282823/dMGd0WEI_400x400.jpg',
+			imageUrl: 'https://pbs.twimg.com/profile_images/1370765783765282823/dMGd0WEI_400x400.jpg',
 			username: 'Bitnob_official',
+			twitterHandle: 'Bitnob_official',
 			fullName: 'Bitnob_official',
 			id: '',
 			URL: '',

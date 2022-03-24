@@ -8,6 +8,37 @@ import { QUERY_GET_PROJECT } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
+import { Grants } from '../grants';
+import { IProject } from '../../interfaces';
+
+interface IActivityProps {
+	project: IProject
+	detailOpen: boolean
+	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const Crowdfunding = ({ project, detailOpen, setDetailOpen }: IActivityProps) => (
+	<>
+		<Box
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+			height="100%"
+		>
+			<Box
+				width="100%"
+				height="100%"
+				display="flex"
+				overflow="hidden"
+				position="relative"
+
+			>
+				<Details project={project} {...{detailOpen, setDetailOpen}}/>
+				<Activity project={project} {...{detailOpen, setDetailOpen}}/>
+			</Box>
+		</Box>
+	</>
+);
 
 export const Project = () => {
 	const { projectId } = useParams<{ projectId: string }>();
@@ -40,27 +71,11 @@ export const Project = () => {
 	}
 
 	const { project } = data && data.getProjectByName;
-
+	console.log('PROJECT: ', project);
+	console.log('PROJECT TYPE: ', project.type);
 	return (
-		<>
-			<Box
-				display="flex"
-				justifyContent="center"
-				alignItems="center"
-				height="100%"
-			>
-				<Box
-					width="100%"
-					height="100%"
-					display="flex"
-					overflow="hidden"
-					position="relative"
-
-				>
-					<Details project={project} {...{detailOpen, setDetailOpen}}/>
-					<Activity project={project} {...{detailOpen, setDetailOpen}}/>
-				</Box>
-			</Box>
-		</>
+		project.type === 'grant'
+			? <Grants project={project}/>
+			: <Crowdfunding project={project} {...{detailOpen, setDetailOpen}} />
 	);
 };

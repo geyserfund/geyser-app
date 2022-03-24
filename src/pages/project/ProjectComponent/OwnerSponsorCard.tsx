@@ -28,7 +28,7 @@ export const OwnerSponsorCard = ({owner, ambassador, sponsors, ownerIntro}: IOwn
 					<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
 					<HStack spacing="30px" alignItems="flex-start">
 						<Link href={`https://twitter.com/${owner.username}`} isExternal>
-							<Avatar width="75px" height="75px" name={owner.username} src={owner.picture} />
+							<Avatar width="75px" height="75px" name={owner.username} src={owner.imageUrl} />
 						</Link>
 						<VStack justifyContent="space-between" alignItems="flex-start">
 							<Link href={`https://twitter.com/${owner.username}`} isExternal>
@@ -47,7 +47,7 @@ export const OwnerSponsorCard = ({owner, ambassador, sponsors, ownerIntro}: IOwn
 					<Text fontSize="10px" color="brand.textGrey">AMBASSADOR</Text>
 					<Link href={`https://twitter.com/${ambassador.username}`} isExternal>
 						<HStack spacing="15px">
-							<Avatar width="35px" height="35px" name={ambassador.username} src={ambassador.picture} />
+							<Avatar width="35px" height="35px" name={ambassador.username} src={ambassador.imageUrl} />
 							<Text fontSize="18px">
 								{ambassador.username}
 							</Text>
@@ -62,7 +62,7 @@ export const OwnerSponsorCard = ({owner, ambassador, sponsors, ownerIntro}: IOwn
 								<WrapItem key={sponsor.user.username} display="inline-block">
 									<Link href={`https://twitter.com/${sponsor.user.username}`} isExternal>
 										<HStack spacing="5px" marginRight="10px">
-											<Avatar width="35px" height="35px" name={sponsor.user.username} src={sponsor.user.picture} />
+											<Avatar width="35px" height="35px" name={sponsor.user.username} src={sponsor.user.imageUrl} />
 											<Text fontSize="18px">
 												{sponsor.user.username}
 											</Text>
