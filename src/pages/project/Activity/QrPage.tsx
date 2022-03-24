@@ -20,13 +20,13 @@ interface IQrPage {
 	comment: string;
 	title: string;
 	amount: number;
-	owner: string;
+	owners: string[];
 	qrCode: string;
 	handleCloseButton: () => void
 }
 
 export const QrPage = ({
-	comment, title, amount, owner, qrCode, handleCloseButton,
+	comment, title, amount, owners, qrCode, handleCloseButton,
 }: IQrPage) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
@@ -65,7 +65,7 @@ export const QrPage = ({
 				<Text fontSize="16px"> Confirm and pay using QR Code </Text>
 				<Box backgroundColor="brand.bgLightGrey" borderRadius="12px" padding="10px">
 					<Text className={classes.blockText}> {`Project: ${title}`}</Text>
-					<Text className={classes.blockText}> {`Project Owner: ${owner}`}</Text>
+					<Text className={classes.blockText}> {`Project Owners: ${owners.join(', ')}`}</Text>
 					<Text className={classes.blockText}> {`Amount: ${amount}`}</Text>
 					{comment && <Text className={classes.blockText}> {`Message: ${comment}`}</Text>}
 				</Box>

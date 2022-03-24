@@ -10,7 +10,6 @@ query GetProjectByName($name: String!) {
         title
         name
         description
-        originUrl
         balance
         fundingGoal
         createdAt
@@ -20,13 +19,17 @@ query GetProjectByName($name: String!) {
         ownerConfirmed
         fundsClaimed
         creationConfirmed
-        owner {
-          id
-          username
+        owners {
+          user {
+            id
+            username
+          }
         }
         ambassadors {
-          id
-          username
+          user {
+            id
+            username 
+          }
         }
         funders {
           user {

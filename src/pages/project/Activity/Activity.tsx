@@ -3,7 +3,7 @@ import { ConnectTwitter } from '../../../components/molecules';
 import { Card } from '../../../components/ui';
 import { IFundingTx, IProject, IProjectFunding } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
+import { MUTATION_FUND_PROJECT } from '../../../graphql';
 import { QUERY_GET_FUNDING } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
@@ -28,11 +28,16 @@ interface IActivityProps {
 const initialFunding = {
 	id: '',
 	invoiceId: '',
-	paid: false,
+	status: 'unpaid',
 	amount: 0,
 	paymentRequest: '',
+	address: '',
 	canceled: false,
+	comment: '',
+	paidAt: '',
+	onChain: false,
 };
+
 let fundInterval: any;
 
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
@@ -115,6 +120,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
+			console.log('FUNDING DATA: ', data.fundProject);
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();
 		}
@@ -136,6 +142,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const handleFund = async () => {
 		try {
+			console.log(`FUNDING FORM STATE: ${state}`);
 			await fundProject({
 				variables: {
 					projectId: project.id,
@@ -197,7 +204,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					comment={state.comment}
 					title={project.title}
 					amount={state.amount}
-					owner={project.owner.user.username}
+					owners={project.owners.map(owner => owner.user.username)}
 					qrCode={fundingTx.paymentRequest}
 					handleCloseButton={handleCloseButton}
 				/>;

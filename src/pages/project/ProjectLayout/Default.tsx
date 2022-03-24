@@ -1,20 +1,22 @@
-import { Box, HStack, VStack } from '@chakra-ui/layout';
+/* eslint-disable capitalized-comments */
+// import { Box, HStack, VStack } from '@chakra-ui/layout';
+import { HStack, VStack } from '@chakra-ui/layout';
 import { Text } from '@chakra-ui/react';
 import React from 'react';
-import TweetEmbed from 'react-tweet-embed';
+// import TweetEmbed from 'react-tweet-embed';
 import { IdComponent } from '../../../components/molecules';
 import { ImageBar, TwitterSkeleton } from '../../../components/ui';
 import { IProjectUser } from '../../../interfaces';
-import { getTwitterID } from '../../../utils';
+// import { getTwitterID } from '../../../utils';
 
 export const Default = ({
 	twitterLoading,
-	isLargerThan1100,
-	isLargerThan1000,
-	isDark,
+	// isLargerThan1100,
+	// isLargerThan1000,
+	// isDark,
 	classes,
 	project,
-	handleSuccess,
+	// handleSuccess,
 }: any) => {
 	const images = [
 		{
@@ -61,7 +63,7 @@ export const Default = ({
 			{
 				twitterLoading
 				&& <TwitterSkeleton />}
-			<Box minWidth="300px" maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
+			{/* <Box minWidth="300px" maxWidth={isLargerThan1100 ? 'auto' : isLargerThan1000 ? 400 : 320}>
 				{
 					isDark
 						? <TweetEmbed
@@ -78,18 +80,23 @@ export const Default = ({
 						/>
 				}
 
-			</Box>
+			</Box> */}
 
 			<VStack spacing="5px" alignItems="left" marginTop="20px">
 				<HStack spacing="10px" display="flex" flexWrap="wrap">
 					<Text fontSize="16px">Project Owner:</Text>
-					<IdComponent
-						URL={project.owner.user.picture}
-						username={project.owner.user.username}
-						fullName={project.owner.user.username}
-						twitter
-						badge="owner"
-					/>
+					{
+						project.owners.map((owner: IProjectUser) => (
+							<IdComponent
+								key={owner.user.id}
+								URL={owner.user.picture}
+								username={owner.user.username}
+								fullName={owner.user.username}
+								twitter
+								badge="owner"
+							/>
+						))
+					}
 				</HStack>
 				<HStack spacing="10px" display="flex" flexWrap="wrap">
 					<Text fontSize="16px">Ambassador:</Text>

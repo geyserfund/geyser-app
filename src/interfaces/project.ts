@@ -6,7 +6,6 @@ export interface IProject {
     title: string;
     name: string;
     description: string;
-    originUrl: string;
     balance: number;
     fundingGoal: number;
     createdAt: string;
@@ -16,8 +15,7 @@ export interface IProject {
     ownerConfirmed: string;
     fundsClaimed: string;
     creationConfirmed: string;
-    creator: IProjectUser;
-    owner: IProjectUser;
+    owners: IProjectUser[];
     ambassadors: IProjectUser[];
     funders: IProjectUser[];
     fundingTxs: IProjectFunding[];
