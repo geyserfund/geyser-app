@@ -28,170 +28,166 @@ const useStyles = createUseStyles({
 	},
 });
 
-interface ContributeProps {
-	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>
-}
+// const ContributeButton = ({ confettiEffects }: ContributeProps) => {
+// 	const [step, setStep] = useState(0);
+// 	const [amount, setAmount] = useState(0);
+// 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-const ContributeButton = ({ confettiEffects }: ContributeProps) => {
-	const [step, setStep] = useState(0);
-	const [amount, setAmount] = useState(0);
-	const { isOpen, onOpen, onClose } = useDisclosure();
+// 	if (step === 0) {
+// 		return (
+// 			<>
+// 				<ButtonComponent
+// 					borderRadius="4px"
+// 					backgroundColor="brand-bgGrey2"
+// 					width="100%"
+// 					my={3}
+// 					onClick={onOpen}
+// 				>
+//         Contribute to this grant
+// 				</ButtonComponent>
 
-	if (step === 0) {
-		return (
-			<>
-				<ButtonComponent
-					borderRadius="4px"
-					backgroundColor="brand-bgGrey2"
-					width="100%"
-					my={3}
-					onClick={onOpen}
-				>
-        Contribute to this grant
-				</ButtonComponent>
+// 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+// 					<ModalOverlay />
+// 					<ModalContent>
+// 						<ModalHeader textAlign="center">Comment and contribute</ModalHeader>
+// 						<ModalCloseButton onClick={() => setAmount(0)} />
+// 						<ModalBody>
+// 							<HStack>
+// 								<Text>Amount</Text>
+// 								<SatoshiIcon/>
+// 							</HStack>
+// 							<NumberInput
+// 								name="amount"
+// 								onChange={valueString => setAmount(parseInt(valueString, 10))}
+// 								inputMode="numeric"
+// 								focusBorderColor="#20ECC7"
+// 								min={1}
+// 								isRequired={true}
+// 							>
+// 								<NumberInputField placeholder={'sats'} />
+// 								<NumberInputStepper>
+// 									<NumberIncrementStepper />
+// 									<NumberDecrementStepper />
+// 								</NumberInputStepper>
+// 							</NumberInput>
+// 							<Text mt={5}>Comment</Text>
+// 							<Textarea
+// 								name="comment"
+// 								placeholder="Add a comment..."
+// 								focusBorderColor="#20ECC7"
+// 								resize="none"
+// 								size="sm"
+// 							/>
+// 							<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
+// 							<Text>Geyser will custody the grant funds until the recepients are established.</Text>
+// 						</ModalBody>
+// 						<ModalFooter>
+// 							<ButtonComponent
+// 								primary
+// 								width="100%"
+// 								onClick={() => {
+// 									confettiEffects(false);
+// 									setStep(1);
+// 								}}
+// 								disabled={amount <= 0}
+// 							>
+//               Contribute
+// 							</ButtonComponent>
+// 						</ModalFooter>
+// 					</ModalContent>
+// 				</Modal>
+// 			</>
+// 		);
+// 	}
 
-				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
-					<ModalOverlay />
-					<ModalContent>
-						<ModalHeader textAlign="center">Comment and contribute</ModalHeader>
-						<ModalCloseButton onClick={() => setAmount(0)} />
-						<ModalBody>
-							<HStack>
-								<Text>Amount</Text>
-								<SatoshiIcon/>
-							</HStack>
-							<NumberInput
-								name="amount"
-								onChange={valueString => setAmount(parseInt(valueString, 10))}
-								inputMode="numeric"
-								focusBorderColor="#20ECC7"
-								min={1}
-								isRequired={true}
-							>
-								<NumberInputField placeholder={'sats'} />
-								<NumberInputStepper>
-									<NumberIncrementStepper />
-									<NumberDecrementStepper />
-								</NumberInputStepper>
-							</NumberInput>
-							<Text mt={5}>Comment</Text>
-							<Textarea
-								name="comment"
-								placeholder="Add a comment..."
-								focusBorderColor="#20ECC7"
-								resize="none"
-								size="sm"
-							/>
-							<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
-							<Text>Geyser will custody the grant funds until the recepients are established.</Text>
-						</ModalBody>
-						<ModalFooter>
-							<ButtonComponent
-								primary
-								width="100%"
-								onClick={() => {
-									confettiEffects(false);
-									setStep(1);
-								}}
-								disabled={amount <= 0}
-							>
-              Contribute
-							</ButtonComponent>
-						</ModalFooter>
-					</ModalContent>
-				</Modal>
-			</>
-		);
-	}
+// 	if (step === 1) {
+// 		return (
+// 			<>
+// 				<ButtonComponent
+// 					borderRadius="4px"
+// 					backgroundColor="brand-bgGrey2"
+// 					width="100%"
+// 					my={3}
+// 					onClick={onOpen}
+// 				>
+// 				Contribute to this grant
+// 				</ButtonComponent>
 
-	if (step === 1) {
-		return (
-			<>
-				<ButtonComponent
-					borderRadius="4px"
-					backgroundColor="brand-bgGrey2"
-					width="100%"
-					my={3}
-					onClick={onOpen}
-				>
-				Contribute to this grant
-				</ButtonComponent>
+// 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+// 					<ModalOverlay />
+// 					<ModalContent>
+// 						<ModalHeader textAlign="center">Pay with lightning invoice</ModalHeader>
+// 						<ModalCloseButton onClick={() => {
+// 							setStep(0);
+// 							setAmount(0);
+// 							onClose();
+// 						}} />
+// 						<ModalBody>
+// 							<Image src="" margin="0 auto"/>
+// 							<Text mt={5}>Amount (sats)</Text>
+// 							<NumberInput
+// 								name="amount"
+// 								disabled
+// 								value={amount}
+// 							>
+// 								<NumberInputField backgroundColor="grey" />
+// 							</NumberInput>
+// 						</ModalBody>
+// 						<ModalFooter>
+// 							<ButtonComponent primary width="100%" onClick={() => {
+// 								setStep(2);
+// 								confettiEffects(true);
+// 							}}>Pay</ButtonComponent>
+// 						</ModalFooter>
+// 					</ModalContent>
+// 				</Modal>
+// 			</>
+// 		);
+// 	}
 
-				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
-					<ModalOverlay />
-					<ModalContent>
-						<ModalHeader textAlign="center">Pay with lightning invoice</ModalHeader>
-						<ModalCloseButton onClick={() => {
-							setStep(0);
-							setAmount(0);
-							onClose();
-						}} />
-						<ModalBody>
-							<Image src="" margin="0 auto"/>
-							<Text mt={5}>Amount (sats)</Text>
-							<NumberInput
-								name="amount"
-								disabled
-								value={amount}
-							>
-								<NumberInputField backgroundColor="grey" />
-							</NumberInput>
-						</ModalBody>
-						<ModalFooter>
-							<ButtonComponent primary width="100%" onClick={() => {
-								setStep(2);
-								confettiEffects(true);
-							}}>Pay</ButtonComponent>
-						</ModalFooter>
-					</ModalContent>
-				</Modal>
-			</>
-		);
-	}
+// 	if (step === 2) {
+// 		return (
+// 			<>
+// 				<ButtonComponent
+// 					borderRadius="4px"
+// 					backgroundColor="brand-bgGrey2"
+// 					width="100%"
+// 					my={3}
+// 					onClick={onOpen}
+// 				>
+// 				Contribute to this grant
+// 				</ButtonComponent>
 
-	if (step === 2) {
-		return (
-			<>
-				<ButtonComponent
-					borderRadius="4px"
-					backgroundColor="brand-bgGrey2"
-					width="100%"
-					my={3}
-					onClick={onOpen}
-				>
-				Contribute to this grant
-				</ButtonComponent>
+// 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+// 					<ModalOverlay />
+// 					<ModalContent>
+// 						<ModalHeader textAlign="center">Success!</ModalHeader>
+// 						<ModalCloseButton onClick={() => {
+// 							setStep(0);
+// 							setAmount(0);
+// 							onClose();
+// 						}} />
+// 						<ModalBody>
+// 							<Text textAlign="center" fontSize="50px">🎉</Text>
+// 						</ModalBody>
+// 						<ModalFooter>
+// 							<ButtonComponent primary width="100%" onClick={() => {
+// 								setStep(0);
+// 								setAmount(0);
+// 								onClose();
+// 							}}>Close</ButtonComponent>
+// 						</ModalFooter>
+// 					</ModalContent>
+// 				</Modal>
+// 			</>
+// 		);
+// 	}
 
-				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
-					<ModalOverlay />
-					<ModalContent>
-						<ModalHeader textAlign="center">Success!</ModalHeader>
-						<ModalCloseButton onClick={() => {
-							setStep(0);
-							setAmount(0);
-							onClose();
-						}} />
-						<ModalBody>
-							<Text textAlign="center" fontSize="50px">🎉</Text>
-						</ModalBody>
-						<ModalFooter>
-							<ButtonComponent primary width="100%" onClick={() => {
-								setStep(0);
-								setAmount(0);
-								onClose();
-							}}>Close</ButtonComponent>
-						</ModalFooter>
-					</ModalContent>
-				</Modal>
-			</>
-		);
-	}
-
-	return (
-		<>
-		</>
-	);
-};
+// 	return (
+// 		<>
+// 		</>
+// 	);
+// };
 
 const RecipientButton = () => {
 	const [step, setStep] = useState(0);
@@ -385,7 +381,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</HStack>
 							<Text>{project.description}</Text>
-							<ContributeButton project={project}/>
+							<ContributeButton project={project} confettiEffects={setConfetti}/>
 						</Box>
 					</Box>
 				</Box>

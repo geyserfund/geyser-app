@@ -39,9 +39,12 @@ const initialFunding = {
 
 let fundInterval: any;
 
-// if (fundState === fundingStages.form) {
+interface ContributeProps {
+	project: IProject,
+	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-export const ContributeButton = ({ project }: { project: IProject }) => {
+export const ContributeButton = ({ project, confettiEffects }: ContributeProps) => {
 	const [amount, setAmount] = useState(0);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { toast } = useNotification();
@@ -95,6 +98,8 @@ export const ContributeButton = ({ project }: { project: IProject }) => {
 			console.log('FUND DATA: ', fundData);
 
 			if (fundData.getFundingTx.status === 'paid') {
+				console.log('CONFETTI');
+				confettiEffects(true);
 				clearInterval(fundInterval);
 				gotoNextStage();
 			}
@@ -154,7 +159,6 @@ export const ContributeButton = ({ project }: { project: IProject }) => {
 	/*
     *   MODALS
     */
-
 	const renderFormModal = () => (
 		<>
 			<ButtonComponent borderRadius="4px" backgroundColor="brand-bgGrey2" width="100%" my={3} onClick={onOpen}>
@@ -252,47 +256,4 @@ export const ContributeButton = ({ project }: { project: IProject }) => {
 	};
 
 	return renderModal();
-
-	// A if (step === 2) {
-	// 	return (
-	// 		<>
-	// 			<ButtonComponent
-	// 				borderRadius="4px"
-	// 				backgroundColor="brand-bgGrey2"
-	// 				width="100%"
-	// 				my={3}
-	// 				onClick={onOpen}
-	// 			>
-	// 			Contribute to this grant
-	// 			</ButtonComponent>
-
-	// 			<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
-	// 				<ModalOverlay />
-	// 				<ModalContent>
-	// 					<ModalHeader>Success!</ModalHeader>
-	// 					<ModalCloseButton onClick={() => {
-	// 						setStep(0);
-	// 						setAmount(0);
-	// 						onClose();
-	// 					}} />
-	// 					<ModalBody>
-	// 						<Image src={Confetti} margin="0 auto" width="100%"/>
-	// 					</ModalBody>
-	// 					<ModalFooter>
-	// 						<ButtonComponent primary width="100%" onClick={() => {
-	// 							setStep(0);
-	// 							setAmount(0);
-	// 							onClose();
-	// 						}}>Close</ButtonComponent>
-	// 					</ModalFooter>
-	// 				</ModalContent>
-	// 			</Modal>
-	// 		</>
-	// 	);
-	// }
-
-	// return (
-	// 	<>
-	// 	</>
-	// );
 };
