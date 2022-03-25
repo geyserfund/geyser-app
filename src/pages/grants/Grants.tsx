@@ -281,10 +281,11 @@ export const Grants = () => {
 	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
 	const classes = useStyles();
+	const [arrowChange, setArrowChange] = useState(false);
 
 	return (
 		<>
-			<Box height={{xl: '100vh'}} id="top">
+			<Box id="top">
 				<Box display="flex" justifyContent="center" alignItems="center" height={{xl: '85vh'}}>
 					<Box
 						display={isMedium ? 'block' : 'flex'}
@@ -305,7 +306,7 @@ export const Grants = () => {
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
 							<Box display="flex" justifyContent="center">
 								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" my={4}>
-									<HStack spacing="10px" mr={10}>
+									<HStack spacing="10px" mr={isMobile ? 0 : 10}>
 										<SatoshiIcon/><Text fontSize="lg"><b>23,000</b> received</Text>
 									</HStack>
 									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>213</b> donations</Text>
@@ -336,33 +337,23 @@ export const Grants = () => {
 						</Box>
 					</Box>
 				</Box>
-
-				{/* arrow icons */}
-				<Show above="xl">
-					<Box display="flex" justifyContent="center">
-						<Link href="#bottom">
-							<Button bg="none" border="1px solid lightgrey">
-								<ArrowDownIcon/>
-							</Button>
-						</Link>
-					</Box>
-				</Show>
 			</Box>
 
-			<Box id="bottom" pt={10}></Box>
-			<Box height={{xl: '100vh'}} py={{base: 20, xl: 0}} >
-				<Show above="xl">
-					<Box display="flex" justifyContent="center">
-						<Link href="#top">
-							<Button bg="none" border="1px solid lightgrey">
-								<ArrowUpIcon/>
-							</Button>
-						</Link>
-					</Box>
-				</Show>
+			{/* arrow icon */}
+			<Show above="xl">
+				<Box display="flex" justifyContent="center">
+					<Link href={arrowChange ? '#bottom' : '#top'}>
+						<Button bg="none" border="1px solid lightgrey" onClick={() => setArrowChange(!arrowChange)}>
+							{ arrowChange ? <ArrowUpIcon/> : <ArrowDownIcon/> }
+						</Button>
+					</Link>
+				</Box>
+			</Show>
 
-				{/* donation, sponsor, recipient sections */}
-				<VStack justifyContent="center" alignItems="center" height={{xl: '85vh'}} spacing="50px">
+			{/* donation, sponsor, recipient sections */}
+			<Box id="bottom"></Box>
+			<Box py={20}>
+				<VStack justifyContent="center" alignItems="center" spacing="50px">
 
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Most recent donations</Text>
