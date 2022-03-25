@@ -6,3 +6,4 @@ export * from './stringOperation';
 export * from './dateOperations';
 export * from './Notification';
 export * from './useBitcoinRates';
+export * from './helperFunctions';

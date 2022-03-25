@@ -46,7 +46,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
 
-	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.inital);
+	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial);
 
 	const [btcRate, setBtcRate] = useState(0);
 
@@ -96,7 +96,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
-			if (fundData.getFundingTx.paid) {
+			if (fundData.getFundingTx.status === 'paid') {
 				setFundingTxs([fundData.getFundingTx, ...fundingTxs]);
 				clearInterval(fundInterval);
 				gotoNextStage();
@@ -137,7 +137,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	};
 
 	const handleCloseButton = () => {
-		setFundState(fundingStages.inital);
+		setFundState(fundingStages.initial);
 	};
 
 	const handleFund = async () => {
@@ -178,7 +178,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		switch (fundState) {
 			case fundingStages.loading:
 				return <Loader />;
-			case fundingStages.inital:
+			case fundingStages.initial:
 				return <InfoPage
 					{...{
 						project,

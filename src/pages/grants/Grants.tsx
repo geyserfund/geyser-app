@@ -1,14 +1,21 @@
 /* eslint-disable capitalized-comments */
 import React, { useState } from 'react';
-import { Box, Text, HStack, Link, Image, Avatar, Button, VStack, Show, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Input, Textarea } from '@chakra-ui/react';
+import Confetti from 'react-confetti';
+import {
+	Box, Text, HStack, Link, Image, Avatar, Button, VStack, Show,
+	Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter,
+	ModalBody, ModalCloseButton, useDisclosure, Input,
+} from '@chakra-ui/react';
+
 import { Footer } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
+import { ContributeButton } from './ContributeButton';
+
 import Bubble from '../../assets/bubble.svg';
-import Qr from '../../assets/qr.svg';
+
 import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon } from '../../components/icons';
 import { createUseStyles } from 'react-jss';
 import { getDaysAgo, isMobileMode, isMediumScreen } from '../../utils';
-import Confetti from 'react-confetti';
 import useWindowSize from 'react-use/lib/useWindowSize';
 // import { QUERY_GET_PROJECT } from '../../graphql';
 import { IProject, IGrantee } from '../../interfaces';
@@ -380,7 +387,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</HStack>
 							<Text>{project.description}</Text>
-							<ContributeButton confettiEffects={setConfetti} />
+							<ContributeButton project={project}/>
 						</Box>
 					</Box>
 				</Box>
