@@ -10,10 +10,11 @@ import Saz from '../../assets/saz.jpg';
 import Kraken from '../../assets/kraken.svg';
 import WalletOfSat from '../../assets/walletofsat.svg';
 import Qr from '../../assets/qr.svg';
-import Confetti from '../../assets/confetti.svg';
 import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon } from '../../components/icons';
 import { createUseStyles } from 'react-jss';
 import { isMobileMode, isMediumScreen } from '../../utils';
+import Confetti from 'react-confetti';
+import useWindowSize from 'react-use/lib/useWindowSize';
 
 const useStyles = createUseStyles({
 	potentialRecipients: {
@@ -24,7 +25,11 @@ const useStyles = createUseStyles({
 	},
 });
 
-const ContributeButton = () => {
+interface ContributeProps {
+	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const ContributeButton = ({ confettiEffects }: ContributeProps) => {
 	const [step, setStep] = useState(0);
 	const [amount, setAmount] = useState(0);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,7 +50,7 @@ const ContributeButton = () => {
 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
 					<ModalOverlay />
 					<ModalContent>
-						<ModalHeader>Comment and contribute</ModalHeader>
+						<ModalHeader textAlign="center">Comment and contribute</ModalHeader>
 						<ModalCloseButton onClick={() => setAmount(0)} />
 						<ModalBody>
 							<HStack>
@@ -81,7 +86,10 @@ const ContributeButton = () => {
 							<ButtonComponent
 								primary
 								width="100%"
-								onClick={() => setStep(1)}
+								onClick={() => {
+									confettiEffects(false);
+									setStep(1);
+								}}
 								disabled={amount <= 0}
 							>
               Contribute
@@ -109,7 +117,7 @@ const ContributeButton = () => {
 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
 					<ModalOverlay />
 					<ModalContent>
-						<ModalHeader>Pay with lightning invoice</ModalHeader>
+						<ModalHeader textAlign="center">Pay with lightning invoice</ModalHeader>
 						<ModalCloseButton onClick={() => {
 							setStep(0);
 							setAmount(0);
@@ -127,7 +135,10 @@ const ContributeButton = () => {
 							</NumberInput>
 						</ModalBody>
 						<ModalFooter>
-							<ButtonComponent primary width="100%" onClick={() => setStep(2)}>Pay</ButtonComponent>
+							<ButtonComponent primary width="100%" onClick={() => {
+								setStep(2);
+								confettiEffects(true);
+							}}>Pay</ButtonComponent>
 						</ModalFooter>
 					</ModalContent>
 				</Modal>
@@ -151,14 +162,14 @@ const ContributeButton = () => {
 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
 					<ModalOverlay />
 					<ModalContent>
-						<ModalHeader>Success!</ModalHeader>
+						<ModalHeader textAlign="center">Success!</ModalHeader>
 						<ModalCloseButton onClick={() => {
 							setStep(0);
 							setAmount(0);
 							onClose();
 						}} />
 						<ModalBody>
-							<Image src={Confetti} margin="0 auto" width="100%"/>
+							<Text textAlign="center" fontSize="50px">🎉</Text>
 						</ModalBody>
 						<ModalFooter>
 							<ButtonComponent primary width="100%" onClick={() => {
@@ -253,7 +264,7 @@ const RecipientButton = () => {
 			<Modal onClose={onClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Success</ModalHeader>
+					<ModalHeader textAlign="center">Success</ModalHeader>
 					<ModalCloseButton onClick={() => {
 						setRecipient('');
 						setLink('');
@@ -282,9 +293,18 @@ export const Grants = () => {
 	const isMedium = isMediumScreen();
 	const classes = useStyles();
 	const [arrowChange, setArrowChange] = useState(false);
+	const [confetti, setConfetti] = useState(false);
+	const { width, height } = useWindowSize();
 
 	return (
 		<>
+			{confetti && <Confetti
+				width={width}
+				height={height}
+				recycle={false}
+				numberOfPieces={2100}
+				tweenDuration={100000}
+			/>}
 			<Box id="top">
 				<Box display="flex" justifyContent="center" alignItems="center" height={{xl: '85vh'}}>
 					<Box
@@ -333,7 +353,7 @@ export const Grants = () => {
 								<Link href="https://twitter.com/secondl1ght" isExternal fontSize="sm" color="brand.primary" fontWeight="bold">@secondl1ght</Link>
 							</HStack>
 							<Text>The aim of this grant is to support Bitcoin development through fast iterative hackathon sessions. The funds donated to this grant will be given out to award winners of Bitcoin Hackathons in the month of March and April 2022. The sum will be distributed among different projects and this information will be shared on this page. Geyser will charge no fees.</Text>
-							<ContributeButton/>
+							<ContributeButton confettiEffects={setConfetti} />
 						</Box>
 					</Box>
 				</Box>
