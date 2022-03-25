@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Text, HStack, Link, Image, Avatar, Button, VStack, Show, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Input } from '@chakra-ui/react';
+import { Box, Text, HStack, Link, Image, Avatar, Button, VStack, Show, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Input, Textarea } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import Bubble from '../../assets/bubble.svg';
@@ -67,11 +67,12 @@ const ContributeButton = () => {
 								</NumberInputStepper>
 							</NumberInput>
 							<Text mt={5}>Comment</Text>
-							<Input
+							<Textarea
 								name="comment"
 								placeholder="Add a comment..."
 								focusBorderColor="#20ECC7"
-								py={10}
+								resize="none"
+								size="sm"
 							/>
 							<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
 							<Text>Geyser will custody the grant funds until the recepients are established.</Text>
