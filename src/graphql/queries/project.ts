@@ -9,6 +9,7 @@ query GetProjectByName($name: String!) {
         id
         title
         name
+        type
         description
         balance
         fundingGoal
@@ -23,20 +24,39 @@ query GetProjectByName($name: String!) {
           user {
             id
             username
+            twitterHandle
+            imageUrl
           }
         }
         ambassadors {
           user {
             id
             username 
+            twitterHandle
+            imageUrl
+          }
+        }
+        sponsors {
+          user {
+            id
+            username 
+            twitterHandle
+            imageUrl
           }
         }
         funders {
           user {
             id
             username
+            twitterHandle
+            imageUrl
           }
           confirmed
+        }
+        grantees {
+          id
+          url
+          name
         }
         fundingTxs {
           funder {

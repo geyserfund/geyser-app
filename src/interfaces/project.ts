@@ -6,6 +6,7 @@ export interface IProject {
     title: string;
     name: string;
     description: string;
+    type: string;
     balance: number;
     fundingGoal: number;
     createdAt: string;
@@ -18,7 +19,15 @@ export interface IProject {
     owners: IProjectUser[];
     ambassadors: IProjectUser[];
     funders: IProjectUser[];
+    sponsors: IProjectUser[];
+    grantees: IGrantee[];
     fundingTxs: IProjectFunding[];
+}
+
+export interface IGrantee {
+    id: number;
+    url: string;
+    name: string;
 }
 
 export interface IProjectUser {
@@ -29,10 +38,11 @@ export interface IProjectUser {
 export interface IUser {
     id: string;
     username: string;
-    picture: string;
+    imageUrl: string;
     URL: string;
     fullName: string;
     twitter: boolean;
+    twitterHandle: string;
     badge: BadgeVariant;
     amount: number;
 }

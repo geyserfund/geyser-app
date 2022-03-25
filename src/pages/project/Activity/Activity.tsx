@@ -143,6 +143,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const handleFund = async () => {
 		try {
 			console.log(`FUNDING FORM STATE: ${state}`);
+			// TODO: change the variables to an input of type IFundingInput
 			await fundProject({
 				variables: {
 					projectId: project.id,

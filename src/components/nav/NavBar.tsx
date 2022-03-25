@@ -12,8 +12,8 @@ import { ConnectTwitter } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
-import { StartCrowdFundUrl, HomeUrl, GrantsUrl } from '../../constants';
-import { useLocation } from 'react-router';
+import { StartCrowdFundUrl, HomeUrl } from '../../constants';
+import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
 import { Link, Show } from '@chakra-ui/react';
 
@@ -36,6 +36,7 @@ export const NavBar = () => {
 
 	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const history = useHistory();
 
 	useEffect(() => {
 		if (state && state.loggedOut) {
@@ -75,7 +76,7 @@ export const NavBar = () => {
 							<Link href={HomeUrl} fontWeight="bold">
 						Home
 							</Link>
-							<Link href={GrantsUrl} fontWeight="bold">
+							<Link fontWeight="bold" onClick={() => history.push('/grants/')}>
 						Grants
 							</Link>
 						</Show>

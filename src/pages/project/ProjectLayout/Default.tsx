@@ -89,7 +89,7 @@ export const Default = ({
 						project.owners.map((owner: IProjectUser) => (
 							<IdComponent
 								key={owner.user.id}
-								URL={owner.user.picture}
+								URL={owner.user.imageUrl}
 								username={owner.user.username}
 								fullName={owner.user.username}
 								twitter
