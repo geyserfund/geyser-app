@@ -12,7 +12,6 @@ import { ButtonComponent } from '../../components/ui';
 import { ContributeButton } from './ContributeButton';
 
 import Bubble from '../../assets/bubble.svg';
-
 import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon } from '../../components/icons';
 import { createUseStyles } from 'react-jss';
 import { getDaysAgo, isMobileMode, isMediumScreen } from '../../utils';
@@ -128,7 +127,7 @@ const ContributeButton = ({ confettiEffects }: ContributeProps) => {
 							onClose();
 						}} />
 						<ModalBody>
-							<Image src={Qr} margin="0 auto"/>
+							<Image src="" margin="0 auto"/>
 							<Text mt={5}>Amount (sats)</Text>
 							<NumberInput
 								name="amount"
@@ -314,7 +313,6 @@ const Grantee = ({ grantee }: { grantee: IGrantee }) => {
 export const Grants = ({ project }: { project: IProject }) => {
 	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
-	const classes = useStyles();
 	const [arrowChange, setArrowChange] = useState(false);
 	const [confetti, setConfetti] = useState(false);
 	const { width, height } = useWindowSize();
