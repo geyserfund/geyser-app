@@ -1,310 +1,19 @@
 /* eslint-disable capitalized-comments */
 import React, { useState } from 'react';
 import Confetti from 'react-confetti';
-import {
-	Box, Text, HStack, Link, Image, Avatar, Button, VStack, Show,
-	Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter,
-	ModalBody, ModalCloseButton, useDisclosure, Input,
-} from '@chakra-ui/react';
-
+import { Box, Text, HStack, Link, Image, Button, VStack, Show } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
-import { ContributeButton } from './ContributeButton';
-
+import { ContributeButton } from './components/ContributeButton';
+import { RecipientButton } from './components/RecipientButton';
+import { ClickableAvatar } from './components/ClickableAvatar';
+import { Grantee } from './components/Grantee';
 import Bubble from '../../assets/bubble.svg';
 import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon } from '../../components/icons';
-import { createUseStyles } from 'react-jss';
+
 import { getDaysAgo, isMobileMode, isMediumScreen } from '../../utils';
 import useWindowSize from 'react-use/lib/useWindowSize';
 // import { QUERY_GET_PROJECT } from '../../graphql';
-import { IProject, IGrantee } from '../../interfaces';
-
-const useStyles = createUseStyles({
-	potentialRecipients: {
-		'&:hover': {
-			textDecoration: 'none',
-			backgroundColor: '#F6F6F6',
-		},
-	},
-});
-
-// const ContributeButton = ({ confettiEffects }: ContributeProps) => {
-// 	const [step, setStep] = useState(0);
-// 	const [amount, setAmount] = useState(0);
-// 	const { isOpen, onOpen, onClose } = useDisclosure();
-
-// 	if (step === 0) {
-// 		return (
-// 			<>
-// 				<ButtonComponent
-// 					borderRadius="4px"
-// 					backgroundColor="brand-bgGrey2"
-// 					width="100%"
-// 					my={3}
-// 					onClick={onOpen}
-// 				>
-//         Contribute to this grant
-// 				</ButtonComponent>
-
-// 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
-// 					<ModalOverlay />
-// 					<ModalContent>
-// 						<ModalHeader textAlign="center">Comment and contribute</ModalHeader>
-// 						<ModalCloseButton onClick={() => setAmount(0)} />
-// 						<ModalBody>
-// 							<HStack>
-// 								<Text>Amount</Text>
-// 								<SatoshiIcon/>
-// 							</HStack>
-// 							<NumberInput
-// 								name="amount"
-// 								onChange={valueString => setAmount(parseInt(valueString, 10))}
-// 								inputMode="numeric"
-// 								focusBorderColor="#20ECC7"
-// 								min={1}
-// 								isRequired={true}
-// 							>
-// 								<NumberInputField placeholder={'sats'} />
-// 								<NumberInputStepper>
-// 									<NumberIncrementStepper />
-// 									<NumberDecrementStepper />
-// 								</NumberInputStepper>
-// 							</NumberInput>
-// 							<Text mt={5}>Comment</Text>
-// 							<Textarea
-// 								name="comment"
-// 								placeholder="Add a comment..."
-// 								focusBorderColor="#20ECC7"
-// 								resize="none"
-// 								size="sm"
-// 							/>
-// 							<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
-// 							<Text>Geyser will custody the grant funds until the recepients are established.</Text>
-// 						</ModalBody>
-// 						<ModalFooter>
-// 							<ButtonComponent
-// 								primary
-// 								width="100%"
-// 								onClick={() => {
-// 									confettiEffects(false);
-// 									setStep(1);
-// 								}}
-// 								disabled={amount <= 0}
-// 							>
-//               Contribute
-// 							</ButtonComponent>
-// 						</ModalFooter>
-// 					</ModalContent>
-// 				</Modal>
-// 			</>
-// 		);
-// 	}
-
-// 	if (step === 1) {
-// 		return (
-// 			<>
-// 				<ButtonComponent
-// 					borderRadius="4px"
-// 					backgroundColor="brand-bgGrey2"
-// 					width="100%"
-// 					my={3}
-// 					onClick={onOpen}
-// 				>
-// 				Contribute to this grant
-// 				</ButtonComponent>
-
-// 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
-// 					<ModalOverlay />
-// 					<ModalContent>
-// 						<ModalHeader textAlign="center">Pay with lightning invoice</ModalHeader>
-// 						<ModalCloseButton onClick={() => {
-// 							setStep(0);
-// 							setAmount(0);
-// 							onClose();
-// 						}} />
-// 						<ModalBody>
-// 							<Image src="" margin="0 auto"/>
-// 							<Text mt={5}>Amount (sats)</Text>
-// 							<NumberInput
-// 								name="amount"
-// 								disabled
-// 								value={amount}
-// 							>
-// 								<NumberInputField backgroundColor="grey" />
-// 							</NumberInput>
-// 						</ModalBody>
-// 						<ModalFooter>
-// 							<ButtonComponent primary width="100%" onClick={() => {
-// 								setStep(2);
-// 								confettiEffects(true);
-// 							}}>Pay</ButtonComponent>
-// 						</ModalFooter>
-// 					</ModalContent>
-// 				</Modal>
-// 			</>
-// 		);
-// 	}
-
-// 	if (step === 2) {
-// 		return (
-// 			<>
-// 				<ButtonComponent
-// 					borderRadius="4px"
-// 					backgroundColor="brand-bgGrey2"
-// 					width="100%"
-// 					my={3}
-// 					onClick={onOpen}
-// 				>
-// 				Contribute to this grant
-// 				</ButtonComponent>
-
-// 				<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
-// 					<ModalOverlay />
-// 					<ModalContent>
-// 						<ModalHeader textAlign="center">Success!</ModalHeader>
-// 						<ModalCloseButton onClick={() => {
-// 							setStep(0);
-// 							setAmount(0);
-// 							onClose();
-// 						}} />
-// 						<ModalBody>
-// 							<Text textAlign="center" fontSize="50px">🎉</Text>
-// 						</ModalBody>
-// 						<ModalFooter>
-// 							<ButtonComponent primary width="100%" onClick={() => {
-// 								setStep(0);
-// 								setAmount(0);
-// 								onClose();
-// 							}}>Close</ButtonComponent>
-// 						</ModalFooter>
-// 					</ModalContent>
-// 				</Modal>
-// 			</>
-// 		);
-// 	}
-
-// 	return (
-// 		<>
-// 		</>
-// 	);
-// };
-
-const RecipientButton = () => {
-	const [step, setStep] = useState(0);
-	const [recipient, setRecipient] = useState('');
-	const [link, setLink] = useState('');
-	const { isOpen, onOpen, onClose } = useDisclosure();
-
-	const addRecipient = (event:React.ChangeEvent<HTMLInputElement>) => setRecipient(event.target.value);
-
-	const addLink = (event:React.ChangeEvent<HTMLInputElement>) => setLink(event.target.value);
-
-	if (step === 0) {
-		return (
-			<>
-				<ButtonComponent
-					borderRadius="4px"
-					backgroundColor="brand-bgGrey2"
-					mb={2}
-					onClick={onOpen}
-				>
-				Submit a potential recipient
-				</ButtonComponent>
-
-				<Modal onClose={onClose} isOpen={isOpen} isCentered>
-					<ModalOverlay />
-					<ModalContent>
-						<ModalHeader>Submit request for a  grant recipient</ModalHeader>
-						<ModalCloseButton onClick={() => {
-							setRecipient('');
-							setLink('');
-							onClose();
-						}} />
-						<ModalBody>
-							<Text>Drop below the name, and a Tweet or link that demonstrates the person or organization’s fit to receive this grant.</Text>
-							<Text mt={5}>Name</Text>
-							<Input
-								name="name"
-								placeholder="Recipient"
-								focusBorderColor="#20ECC7"
-								onChange={addRecipient}
-								isRequired={true}
-							/>
-							<Text mt={5}>Link</Text>
-							<Input
-								name="link"
-								placeholder="https://twitter.com/metamick14"
-								focusBorderColor="#20ECC7"
-								onChange={addLink}
-								value={link}
-								isRequired={true}
-							/>
-						</ModalBody>
-						<ModalFooter>
-							<ButtonComponent primary width="100%" onClick={() => setStep(1)} disabled={link.length === 0 || recipient.length === 0}>Nominate</ButtonComponent>
-						</ModalFooter>
-					</ModalContent>
-				</Modal>
-			</>
-		);
-	}
-
-	return (
-		<>
-			<ButtonComponent
-				borderRadius="4px"
-				backgroundColor="brand-bgGrey2"
-				mb={2}
-				onClick={onOpen}
-			>
-			Submit a potential recipient
-			</ButtonComponent>
-
-			<Modal onClose={onClose} isOpen={isOpen} isCentered>
-				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader textAlign="center">Success</ModalHeader>
-					<ModalCloseButton onClick={() => {
-						setRecipient('');
-						setLink('');
-						setStep(0);
-						onClose();
-					}} />
-					<ModalBody>
-						<Text>You nominated <b>{recipient}</b> to become a potential grant recipient.</Text>
-					</ModalBody>
-					<ModalFooter>
-						<ButtonComponent primary width="100%" onClick={() => {
-							setRecipient('');
-							setLink('');
-							setStep(0);
-							onClose();
-						}} >Close</ButtonComponent>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</>
-	);
-};
-
-const ClickableAvatar = ({ url, imageUrl }: { url: string, imageUrl: string }) => {
-	console.log('IMAGEURL: ', imageUrl);
-	return (
-		<Link href={url} isExternal>
-			<Avatar w={['40px', '60px']} h={['40px', '60px']} src={imageUrl} />
-		</Link>
-	);
-};
-
-const Grantee = ({ grantee }: { grantee: IGrantee }) => {
-	const classes = useStyles();
-	console.log('URL: ', grantee.url);
-	return (
-		<Link href={grantee.url} isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md" display="flex" justifyContent="center" alignItems="center" pl={5}>
-			<Text textDecoration="underline" textDecorationThickness="3px" textDecorationColor="brand.bgGreyDark" px={6} py={2} fontWeight="bold">{grantee.name}</Text>
-		</Link>
-	);
-};
+import { IProject } from '../../interfaces';
 
 export const Grants = ({ project }: { project: IProject }) => {
 	const isMobile = isMobileMode();
@@ -316,7 +25,6 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 	return (
 		<>
-
 			{confetti && <Confetti
 				width={width}
 				height={height}
@@ -344,8 +52,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 							</Box>
 
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
-							<Box display="flex" justifyContent="center">
-								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" my={4}>
+							<Box display="flex" justifyContent="center" alignItems="center">
+								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" alignItems="center" my={4}>
 									<HStack spacing="10px" mr={isMobile ? 0 : 10}>
 										<SatoshiIcon/><Text fontSize="lg"><b>{project.balance}</b> received</Text>
 									</HStack>
@@ -365,7 +73,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								<Text bg="brand.bgGrey" px={5} py={1} borderRadius="lg">Building</Text>
 							</HStack>
 							<Text>Created <b>{`${getDaysAgo(project.createdAt)} ago`}</b></Text>
-							<HStack my={1} flexWrap="wrap" spacing="5px">
+							<HStack my={1} flexWrap="wrap">
 								<Text>The Board:</Text>
 								<Box>
 									{

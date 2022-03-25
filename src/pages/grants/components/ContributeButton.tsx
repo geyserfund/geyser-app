@@ -2,25 +2,25 @@
 import { useMutation, useLazyQuery } from '@apollo/client';
 import React, { useState, useEffect } from 'react';
 
-import { QrInvoice } from './components/QrInvoice';
-import { SuccessPage } from '../project/Activity/SuccessPage';
-import { ButtonComponent } from '../../components/ui';
-import Loader from '../../components/ui/Loader';
-import { SatoshiIcon } from '../../components/icons';
+import { QrInvoice } from './QrInvoice';
+import { PaymentSuccess } from './PaymentSuccess';
+import { ButtonComponent } from '../../../components/ui';
+import Loader from '../../../components/ui/Loader';
+import { SatoshiIcon } from '../../../components/icons';
 
 import {
 	MUTATION_FUND_PROJECT,
 	QUERY_GET_FUNDING,
-} from '../../graphql';
+} from '../../../graphql';
 
-import { fetchBitcoinRates } from '../../api';
-import { useNotification, validateFundingAmount } from '../../utils';
-import { IFundingTx, IProject } from '../../interfaces';
-import { fundingStages, IFundingStages, stageList } from '../../constants';
+import { fetchBitcoinRates } from '../../../api';
+import { useNotification, validateFundingAmount } from '../../../utils';
+import { IFundingTx, IProject } from '../../../interfaces';
+import { fundingStages, IFundingStages, stageList } from '../../../constants';
 
 import {
 	Text, HStack, Modal, ModalOverlay, ModalContent, NumberInput,
-	ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input,
+	ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Textarea,
 	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box,
 } from '@chakra-ui/react';
 
@@ -96,10 +96,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 	// EFFECTS
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
-			console.log('FUND DATA: ', fundData);
-
 			if (fundData.getFundingTx.status === 'paid') {
-				console.log('CONFETTI');
 				confettiEffects(true);
 				clearInterval(fundInterval);
 				gotoNextStage();
@@ -109,7 +106,6 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 
 	useEffect(() => {
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
-			console.log('FUNDING DATA: ', data.fundProject);
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();
 		}
@@ -121,8 +117,6 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 		}
 
 		if (fundState === fundingStages.started) {
-			console.log(fundState);
-
 			fundInterval = setInterval(getFunding, 2000);
 		}
 	}, [fundState]);
@@ -191,12 +185,13 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 								<NumberDecrementStepper />
 							</NumberInputStepper>
 						</NumberInput>
-						<Text mt={5}>Comment</Text>
-						<Input
+						<Text mt={5}>Comment (optional)</Text>
+						<Textarea
 							name="comment"
 							placeholder="Add a comment..."
 							focusBorderColor="#20ECC7"
-							py={10}
+							resize="none"
+							size="sm"
 						/>
 						<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
 						<Text>Geyser will custody the grant funds until the recepients are established.</Text>
@@ -208,12 +203,26 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 							onClick={() => handleFund()}
 							disabled={amount <= 0}
 						>
-                        Contribute
+            Contribute
 						</ButtonComponent>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
 		</>
+	);
+
+	const renderLoadingModal = () => (
+		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
+			<ModalOverlay />
+			<ModalContent>
+				<ModalHeader textAlign="center">Loading...</ModalHeader>
+				<ModalBody>
+					<Box py={10}>
+						<Loader/>
+					</Box>
+				</ModalBody>
+			</ModalContent>
+		</Modal>
 	);
 
 	const renderInvoiceModal = () => (
@@ -240,21 +249,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 			<ModalContent>
 				<ModalHeader textAlign="center">Success!</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
-				<SuccessPage amount={fundingTx.amount} handleCloseButton={handleCloseButton} />;
-			</ModalContent>
-		</Modal>
-	);
-
-	const renderLoadingModal = () => (
-		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader textAlign="center">Loading...</ModalHeader>
-				<ModalBody>
-					<Box py={10}>
-						<Loader/>
-					</Box>
-				</ModalBody>
+				<PaymentSuccess amount={fundingTx.amount} grant={project.title}/>
 			</ModalContent>
 		</Modal>
 	);
