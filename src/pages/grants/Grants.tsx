@@ -316,12 +316,14 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 	return (
 		<>
+
 			{confetti && <Confetti
 				width={width}
 				height={height}
 				recycle={false}
-				numberOfPieces={2100}
-				tweenDuration={100000}
+				numberOfPieces={1500}
+				tweenDuration={80000}
+				colors={['#1BD5B3', '#20ECC7', '#6BE7CE', '#FFFFFF', '#E9E9E9', '#5B5B5B', '#0F9078', '#F7931A']}
 			/>}
 			<Box id="top">
 				<Box display="flex" justifyContent="center" alignItems="center" height={{xl: '85vh'}}>
@@ -363,7 +365,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								<Text bg="brand.bgGrey" px={5} py={1} borderRadius="lg">Building</Text>
 							</HStack>
 							<Text>Created <b>{`${getDaysAgo(project.createdAt)} ago`}</b></Text>
-							<HStack my={1} flexWrap="wrap" spacing="10px">
+							<HStack my={1} flexWrap="wrap" spacing="5px">
 								<Text>The Board:</Text>
 								<Box>
 									{

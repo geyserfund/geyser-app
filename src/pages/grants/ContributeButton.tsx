@@ -2,10 +2,10 @@
 import { useMutation, useLazyQuery } from '@apollo/client';
 import React, { useState, useEffect } from 'react';
 
-// import Confetti from '../../assets/confetti.svg';
-import { QrPage } from '../project/Activity/QrPage';
+import { QrInvoice } from './components/QrInvoice';
 import { SuccessPage } from '../project/Activity/SuccessPage';
 import { ButtonComponent } from '../../components/ui';
+import Loader from '../../components/ui/Loader';
 import { SatoshiIcon } from '../../components/icons';
 
 import {
@@ -21,7 +21,7 @@ import { fundingStages, IFundingStages, stageList } from '../../constants';
 import {
 	Text, HStack, Modal, ModalOverlay, ModalContent, NumberInput,
 	ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input,
-	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper,
+	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box,
 } from '@chakra-ui/react';
 
 const initialFunding = {
@@ -53,6 +53,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 
 	const handleCloseButton = () => {
 		setFundState(fundingStages.form);
+		setAmount(0);
 		onClose();
 	};
 
@@ -138,6 +139,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 				});
 			}
 
+			setFundState(fundingStages.loading);
 			await fundProject({
 				variables: {
 					input: {
@@ -146,6 +148,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 					},
 				},
 			});
+			setFundState(fundingStages.form);
 			gotoNextStage();
 		} catch (_) {
 			toast({
@@ -167,8 +170,8 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 			<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Comment and contribute</ModalHeader>
-					<ModalCloseButton onClick={() => setAmount(0)} />
+					<ModalHeader textAlign="center">Comment and contribute</ModalHeader>
+					<ModalCloseButton onClick={handleCloseButton} />
 					<ModalBody>
 						<HStack>
 							<Text>Amount</Text>
@@ -217,9 +220,9 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Pay with lightning invoice</ModalHeader>
+				<ModalHeader textAlign="center">Pay with lightning invoice</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
-				<QrPage
+				<QrInvoice
 					comment={fundingTx.comment}
 					title={project.title}
 					amount={fundingTx.amount}
@@ -235,15 +238,32 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Pay with lightning invoice</ModalHeader>
+				<ModalHeader textAlign="center">Success!</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
 				<SuccessPage amount={fundingTx.amount} handleCloseButton={handleCloseButton} />;
 			</ModalContent>
 		</Modal>
 	);
 
+	const renderLoadingModal = () => (
+		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
+			<ModalOverlay />
+			<ModalContent>
+				<ModalHeader textAlign="center">Loading...</ModalHeader>
+				<ModalBody>
+					<Box py={10}>
+						<Loader/>
+					</Box>
+				</ModalBody>
+			</ModalContent>
+		</Modal>
+	);
+
 	const renderModal = () => {
 		switch (fundState) {
+			case fundingStages.loading:
+				return renderLoadingModal();
+
 			case fundingStages.started:
 				return renderInvoiceModal();
 
