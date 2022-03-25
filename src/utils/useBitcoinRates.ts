@@ -14,7 +14,6 @@ export const useBitcoinRates = ():IuseBitcoinRates => {
 		const getBitcoinRates = async () => {
 			setLoading(true);
 			const response: any = await fetchBitcoinRates();
-			console.log('chcking rates', response);
 			const satoshirate = response.rates.USD * 0.00000001;
 			setBtcRate(satoshirate);
 			setLoading(false);

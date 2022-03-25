@@ -120,7 +120,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
-			console.log('FUNDING DATA: ', data.fundProject);
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();
 		}
@@ -142,7 +141,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const handleFund = async () => {
 		try {
-			console.log(`FUNDING FORM STATE: ${state}`);
 			// TODO: change the variables to an input of type IFundingInput
 			await fundProject({
 				variables: {

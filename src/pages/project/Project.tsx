@@ -71,8 +71,7 @@ export const Project = () => {
 	}
 
 	const { project } = data && data.getProjectByName;
-	console.log('PROJECT: ', project);
-	console.log('PROJECT TYPE: ', project.type);
+
 	return (
 		project.type === 'grant'
 			? <Grants project={project}/>

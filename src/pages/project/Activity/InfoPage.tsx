@@ -29,7 +29,6 @@ export const InfoPage = ({
 	btcRate,
 	fundingTxs,
 }: IInfoPage) => {
-	console.log('FUNDERS: ', fundingTxs);
 	const isMobile = isMobileMode();
 	const classes = useStyles({isMobile});
 
@@ -104,4 +103,3 @@ export const InfoPage = ({
 		</VStack>
 	);
 };
-
