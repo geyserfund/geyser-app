@@ -48,7 +48,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const [confetti, setConfetti] = useState(false);
 	const [hoverBubble, setHoverBubble] = useState(false);
 	const { width, height } = useWindowSize();
-	const { owners, funders, sponsors, grantees } = project;
+	const { owners, sponsors, grantees, fundingTxs } = project;
 	const [sats, setSats] = useState(0);
 
 	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
@@ -130,7 +130,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 									<HStack spacing="10px" mr={isMobile ? 0 : 10}>
 										<SatoshiIcon/><Text fontSize="lg"><b>{project.balance}</b> received</Text>
 									</HStack>
-									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>{project.funders.length}</b> donations</Text>
+									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>{project.fundingTxs.length}</b> donations</Text>
 								</Box>
 							</Box>
 
@@ -188,13 +188,13 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Most recent donations</Text>
-						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
+						<HStack flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
 							{
-								funders.map(funder => (
+								fundingTxs.map(tx => (
 									<ClickableAvatar
-										key={funder.user.id}
-										url={`https://twitter.com/${funder.user.twitterHandle}`}
-										imageUrl={funder.user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 25)] : funder.user.imageUrl}
+										key={tx.id}
+										url={`https://twitter.com/${tx.funder.user.twitterHandle}`}
+										imageUrl={tx.funder.user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 25)] : tx.funder.user.imageUrl}
 									/>
 								))
 							}
@@ -219,7 +219,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Potential recipients</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
-							<RecipientButton/>
+							<RecipientButton project={project}/>
 							{
 								grantees.map(grantee => <Grantee key={grantee.id} grantee={grantee}/>)
 							}

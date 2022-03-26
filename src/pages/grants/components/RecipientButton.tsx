@@ -1,17 +1,82 @@
-import React, { useState } from 'react';
-import { Text,	Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
+/* eslint-disable capitalized-comments */
+import { useMutation } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import {
+	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Image, Box,
+	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, UseToastOptions,
+} from '@chakra-ui/react';
+import Check from '../../../assets/check.svg';
+import { HiOutlineSpeakerphone } from 'react-icons/hi';
+import { BiCopyAlt } from 'react-icons/bi';
+
+import { VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
 import { BubbleCursor } from './BubbleCursor';
+import { isMobileMode, useNotification } from '../../../utils';
 
-export const RecipientButton = () => {
+import {
+	MUTATION_SUBMIT_GRANTEE,
+} from '../../../graphql';
+import { IProject } from '../../../interfaces';
+
+export const RecipientButton = ({ project }: { project: IProject }) => {
+	const isMobile = isMobileMode();
 	const [step, setStep] = useState(0);
-	const [recipient, setRecipient] = useState('');
-	const [link, setLink] = useState('');
+	const [grantee, setGrantee] = useState('');
+	const [url, setUrl] = useState('');
+	const { toast } = useNotification();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const addRecipient = (event:React.ChangeEvent<HTMLInputElement>) => setRecipient(event.target.value);
+	// copy link
+	const shareProjectWithfriends = () => {
+		navigator.clipboard.writeText(window.location.href);
+		setCopy(true);
+	};
 
-	const addLink = (event:React.ChangeEvent<HTMLInputElement>) => setLink(event.target.value);
+	const [copy, setCopy] = useState(false);
+	useEffect(() => {
+		if (copy) {
+			setTimeout(() => {
+				setCopy(false);
+			}, 2000);
+		}
+	}, [copy]);
+
+	// Mutation to submit grantee
+	const [submitGrantee, {
+		error,
+		// Loading: fundLoading,
+	}] = useMutation(MUTATION_SUBMIT_GRANTEE);
+
+	const handleSubmission = async () => {
+		try {
+			await submitGrantee({
+				variables: {
+					projectId: project.id,
+					name: grantee,
+					url,
+				},
+			});
+		} catch (_) {
+			const toastData: UseToastOptions = {
+				title: 'Something went wrong',
+				description: 'Please refresh the page and try again',
+				status: 'error',
+			};
+
+			if (error) {
+				for (const e of error.graphQLErrors) {
+					if (e.extensions && e.extensions.code === 'BAD_USER_INPUT') {
+						toastData.title = e.message;
+						toastData.description = 'The URL format needs to have an HTTPS protocol.';
+						toast(toastData);
+					}
+				}
+			} else {
+				toast(toastData);
+			}
+		}
+	};
 
 	if (step === 0) {
 		return (
@@ -31,8 +96,8 @@ export const RecipientButton = () => {
 						<BubbleCursor/>
 						<ModalHeader>Submit request for a  grant recipient</ModalHeader>
 						<ModalCloseButton onClick={() => {
-							setRecipient('');
-							setLink('');
+							setGrantee('');
+							setUrl('');
 							onClose();
 						}} />
 						<ModalBody>
@@ -42,7 +107,7 @@ export const RecipientButton = () => {
 								name="name"
 								placeholder="Recipient"
 								focusBorderColor="#20ECC7"
-								onChange={addRecipient}
+								onChange={event => setGrantee(event.target.value)}
 								isRequired={true}
 							/>
 							<Text mt={5}>Link</Text>
@@ -50,13 +115,17 @@ export const RecipientButton = () => {
 								name="link"
 								placeholder="https://twitter.com/metamick14"
 								focusBorderColor="#20ECC7"
-								onChange={addLink}
-								value={link}
+								onChange={event => setUrl(event.target.value)}
+								value={url}
 								isRequired={true}
 							/>
 						</ModalBody>
 						<ModalFooter>
-							<ButtonComponent primary width="100%" onClick={() => setStep(1)} disabled={link.length === 0 || recipient.length === 0}>Nominate</ButtonComponent>
+							<ButtonComponent
+								primary width="100%"
+								onClick={handleSubmission}
+								disabled={url.length === 0 || grantee.length === 0}
+							>Nominate</ButtonComponent>
 						</ModalFooter>
 					</ModalContent>
 				</Modal>
@@ -81,18 +150,40 @@ export const RecipientButton = () => {
 					<BubbleCursor/>
 					<ModalHeader textAlign="center">Success!</ModalHeader>
 					<ModalCloseButton onClick={() => {
-						setRecipient('');
-						setLink('');
+						setGrantee('');
+						setUrl('');
 						setStep(0);
 						onClose();
 					}} />
 					<ModalBody>
-						<Text>You nominated <b>{recipient}</b> to become a potential grant recipient.</Text>
+						<VStack
+							padding={isMobile ? '10px 10px' : '10px 20px'}
+							spacing="12px"
+							width="100%"
+							height="100%"
+							overflowY="hidden"
+							position="relative"
+							alignItems="center"
+							justifyContent="center"
+						>
+							<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
+								<Image src={Check} />
+							</Box>
+							<Text py={5} textAlign="center"><b>{grantee}</b> has been added to the potential recipients!</Text><ButtonComponent
+								standard
+								primary={copy}
+								leftIcon={copy ? <BiCopyAlt /> : <HiOutlineSpeakerphone />}
+								width="100%"
+								onClick={shareProjectWithfriends}
+							>
+								{copy ? 'Grant Link Copied' : 'Share grant with friends'}
+							</ButtonComponent>
+						</VStack>
 					</ModalBody>
 					<ModalFooter>
 						<ButtonComponent primary width="100%" onClick={() => {
-							setRecipient('');
-							setLink('');
+							setGrantee('');
+							setUrl('');
 							setStep(0);
 							onClose();
 						}} >Close</ButtonComponent>

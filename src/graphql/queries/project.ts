@@ -59,6 +59,7 @@ query GetProjectByName($name: String!) {
           name
         }
         fundingTxs {
+          id
           funder {
             user {
               username
