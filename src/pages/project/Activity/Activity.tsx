@@ -44,7 +44,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.inital);
 
-	const {state, setTarget, setState, updateReward} = useFundState();
+	const {state, setTarget, setState, updateReward} = useFundState({rewards: project.rewards});
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [funders, setfunders] = useState<IProjectFunding[]>([]);
@@ -181,6 +181,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						setTarget,
 						updateReward,
 						handleFund,
+						rewards: project.rewards,
 						type: 'reward-based',
 					}}
 				/>;

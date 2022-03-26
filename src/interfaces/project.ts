@@ -20,6 +20,15 @@ export interface IProject {
     ambassadors: IProjectUser[];
     funders: IProjectUser[];
     fundingTxs: IProjectFunding[];
+    rewards?: IProjectReward[]
+}
+
+export interface IProjectReward {
+    id: number;
+    price: number;
+    title: string;
+    description: string;
+    backers: number;
 }
 
 export interface IProjectUser {

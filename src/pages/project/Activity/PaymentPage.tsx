@@ -4,6 +4,7 @@ import { SatoshiIcon } from '../../../components/icons';
 import { ButtonComponent, CustomToggle, ErrorBox, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
 import { IProjectType, projectTypes, SelectCountryOptions } from '../../../constants';
 import {IFundForm} from '../../../hooks';
+import { IProjectReward } from '../../../interfaces';
 import { DonationBased, RewardBased } from '../FundForm';
 
 interface IPaymentPageProps {
@@ -16,6 +17,7 @@ interface IPaymentPageProps {
 	setState: any
 	handleFund: () => void
 	type: IProjectType
+	rewards?: IProjectReward[]
 }
 
 export const PaymentPage = ({
@@ -28,6 +30,7 @@ export const PaymentPage = ({
 	setState,
 	updateReward,
 	type,
+	rewards,
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
 
@@ -63,7 +66,7 @@ export const PaymentPage = ({
 				/>;
 
 			case projectTypes.reward:
-				return <RewardBased {...{setState, updateReward}}/>;
+				return <RewardBased {...{rewards, setState, updateReward}}/>;
 			default:
 				return null;
 		}
