@@ -21,37 +21,35 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const isMedium = isMediumScreen();
 	const [arrowChange, setArrowChange] = useState(false);
 	const [confetti, setConfetti] = useState(false);
-	const [bubbleCursor, setBubbleCursor] = useState(true);
 	const [bigBubble, setBigBubble] = useState(false);
 	const { width, height } = useWindowSize();
 	const { owners, funders, sponsors, grantees } = project;
 
 	return (
 		<>
-			{bubbleCursor
-&& <AnimatedCursor
-	innerSize={21}
-	outerSize={21}
-	color={bigBubble ? '21, 213, 179' : '32, 236, 199'}
-	outerAlpha={0.2}
-	innerScale={0.7}
-	outerScale={5}
-	clickables={[
-		'a',
-		'input[type="text"]',
-		'input[type="email"]',
-		'input[type="number"]',
-		'input[type="submit"]',
-		'input[type="image"]',
-		'label[for]',
-		'select',
-		'textarea',
-		'button',
-		'.link',
-		'img',
-		'#blob',
-	]}
-/>}
+			<AnimatedCursor
+				innerSize={21}
+				outerSize={21}
+				color={bigBubble ? '21, 213, 179' : '32, 236, 199'}
+				outerAlpha={0.2}
+				innerScale={0.7}
+				outerScale={5}
+				clickables={[
+					'a',
+					'input[type="text"]',
+					'input[type="email"]',
+					'input[type="number"]',
+					'input[type="submit"]',
+					'input[type="image"]',
+					'label[for]',
+					'select',
+					'textarea',
+					'button',
+					'.link',
+					'img',
+					'#blob',
+				]}
+			/>
 
 			{confetti && <Confetti
 				width={width}
@@ -125,9 +123,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</HStack>
 							<Text>{project.description}</Text>
-							<Box onClick={() => setBubbleCursor(false)}>
-								<ContributeButton project={project} confettiEffects={setConfetti} setBubbleCursor={setBubbleCursor}/>
-							</Box>
+							<ContributeButton project={project} confettiEffects={setConfetti} />
 						</Box>
 					</Box>
 				</Box>

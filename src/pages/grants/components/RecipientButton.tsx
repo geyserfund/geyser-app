@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text,	Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
 import { ButtonComponent } from '../../../components/ui';
+import { BubbleCursor } from './BubbleCursor';
 
 export const RecipientButton = () => {
 	const [step, setStep] = useState(0);
@@ -27,6 +28,7 @@ export const RecipientButton = () => {
 				<Modal onClose={onClose} isOpen={isOpen} isCentered>
 					<ModalOverlay />
 					<ModalContent>
+						<BubbleCursor/>
 						<ModalHeader>Submit request for a  grant recipient</ModalHeader>
 						<ModalCloseButton onClick={() => {
 							setRecipient('');
@@ -76,6 +78,7 @@ export const RecipientButton = () => {
 			<Modal onClose={onClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
+					<BubbleCursor/>
 					<ModalHeader textAlign="center">Success!</ModalHeader>
 					<ModalCloseButton onClick={() => {
 						setRecipient('');

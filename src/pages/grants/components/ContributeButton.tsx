@@ -3,6 +3,7 @@ import { useMutation, useLazyQuery } from '@apollo/client';
 import React, { useState, useEffect } from 'react';
 
 import { QrInvoice } from './QrInvoice';
+import { BubbleCursor } from './BubbleCursor';
 import { PaymentSuccess } from './PaymentSuccess';
 import { ButtonComponent } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
@@ -41,11 +42,10 @@ let fundInterval: any;
 
 interface ContributeProps {
 	project: IProject,
-	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>,
-	setBubbleCursor: React.Dispatch<React.SetStateAction<boolean>>
+	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const ContributeButton = ({ project, confettiEffects, setBubbleCursor }: ContributeProps) => {
+export const ContributeButton = ({ project, confettiEffects }: ContributeProps) => {
 	const [amount, setAmount] = useState(0);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { toast } = useNotification();
@@ -166,6 +166,7 @@ export const ContributeButton = ({ project, confettiEffects, setBubbleCursor }: 
 			<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
+					<BubbleCursor/>
 					<ModalHeader textAlign="center">Comment and contribute</ModalHeader>
 					<ModalCloseButton onClick={handleCloseButton} />
 					<ModalBody>
@@ -182,7 +183,7 @@ export const ContributeButton = ({ project, confettiEffects, setBubbleCursor }: 
 							isRequired={true}
 						>
 							<NumberInputField placeholder={'sats'} />
-							<NumberInputStepper>
+							<NumberInputStepper id="increments">
 								<NumberIncrementStepper />
 								<NumberDecrementStepper />
 							</NumberInputStepper>
@@ -217,6 +218,7 @@ export const ContributeButton = ({ project, confettiEffects, setBubbleCursor }: 
 		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
+				<BubbleCursor/>
 				<ModalHeader textAlign="center">Loading...</ModalHeader>
 				<ModalBody>
 					<Box py={10}>
@@ -231,6 +233,7 @@ export const ContributeButton = ({ project, confettiEffects, setBubbleCursor }: 
 		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
+				<BubbleCursor/>
 				<ModalHeader textAlign="center">Pay with lightning invoice</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
 				<QrInvoice
@@ -246,12 +249,10 @@ export const ContributeButton = ({ project, confettiEffects, setBubbleCursor }: 
 	);
 
 	const renderSuccessModal = () => (
-		<Modal closeOnOverlayClick={false} onClose={() => {
-			setBubbleCursor(true);
-			handleCloseButton();
-		}} isOpen={isOpen} isCentered>
+		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
+				<BubbleCursor/>
 				<ModalHeader textAlign="center">Success!</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
 				<PaymentSuccess amount={fundingTx.amount} grant={project.title}/>
