@@ -1,7 +1,7 @@
 /* eslint-disable capitalized-comments */
 import React, { useState } from 'react';
 import Confetti from 'react-confetti';
-import { Box, Text, HStack, Link, Button, VStack, Show } from '@chakra-ui/react';
+import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ContributeButton } from './components/ContributeButton';
 import { RecipientButton } from './components/RecipientButton';
@@ -21,16 +21,17 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const isMedium = isMediumScreen();
 	const [arrowChange, setArrowChange] = useState(false);
 	const [confetti, setConfetti] = useState(false);
-	const [bigBubble, setBigBubble] = useState(false);
+	const [hoverBubble, setHoverBubble] = useState(false);
 	const { width, height } = useWindowSize();
 	const { owners, funders, sponsors, grantees } = project;
+	const [sats, setSats] = useState(0);
 
 	return (
 		<>
 			<AnimatedCursor
 				innerSize={21}
 				outerSize={21}
-				color={bigBubble ? '21, 213, 179' : '32, 236, 199'}
+				color={hoverBubble ? '21, 213, 179' : '32, 236, 199'}
 				outerAlpha={0.2}
 				innerScale={0.7}
 				outerScale={5}
@@ -74,14 +75,19 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* bubble section */}
 						<Box mt={{base: 10, xl: 0}}>
 
-							<Box border="1px solid lightgrey" borderRadius="full" p={[10, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto">
-								<Blob id="blob" size="21vh" onMouseEnter={() => setBigBubble(true)} onMouseLeave={() => setBigBubble(false)}
-									style={{
-										backgroundColor: '#20ECC7',
-										margin: '0 auto',
-									}}
-								/>
-							</Box>
+							<Tooltip label={sats === 0 ? 'Contribute sats!' : `${sats} sat` } placement="top" bg="brand.primary" color="black" borderRadius="base" closeOnClick={false}>
+								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
+									setHoverBubble(false);
+									setSats(0);
+								}}>
+									<Blob id="blob" size="21vh" onMouseDown={() => setSats(sats + 1)}
+										style={{
+											backgroundColor: '#20ECC7',
+											margin: '0 auto',
+										}}
+									/>
+								</Box>
+							</Tooltip>
 
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
 							<Box display="flex" justifyContent="center" alignItems="center">
