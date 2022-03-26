@@ -103,7 +103,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* bubble section */}
 						<Box mt={{base: 10, xl: 0}}>
 
-							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base">
+							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow>
 								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
 									setHoverBubble(false);
 								}}>
@@ -194,7 +194,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 									<ClickableAvatar
 										key={tx.id}
 										url={`https://twitter.com/${tx.funder.user.twitterHandle}`}
-										imageUrl={tx.funder.user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 25)] : tx.funder.user.imageUrl}
+										imageUrl={tx.funder.user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : tx.funder.user.imageUrl}
 									/>
 								))
 							}
