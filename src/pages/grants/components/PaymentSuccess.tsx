@@ -40,8 +40,8 @@ export const PaymentSuccess = ({ amount, grant }: IPaymentSuccess) => {
 			alignItems="center"
 			justifyContent="center"
 		>
-			<Box bg="brand.primary" borderRadius="full" width="100px">
-				<Image src={Check}/>
+			<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
+				<Image src={Check} />
 			</Box>
 			<Text py={5} textAlign="center">You made a contribution of <b>{amount}</b> sats to <b>{grant}</b>.</Text>
 			<ButtonComponent
