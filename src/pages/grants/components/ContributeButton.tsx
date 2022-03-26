@@ -42,10 +42,13 @@ let fundInterval: any;
 
 interface ContributeProps {
 	project: IProject,
-	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>
+	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>,
+	buttonStyle: string,
+	sats: number,
+	setSats: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const ContributeButton = ({ project, confettiEffects }: ContributeProps) => {
+export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, setSats }: ContributeProps) => {
 	const [amount, setAmount] = useState(0);
 	const [comment, setComment] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,10 +56,13 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.form);
 
+	const buttonType = buttonStyle;
+
 	const handleCloseButton = () => {
 		setFundState(fundingStages.form);
 		setAmount(0);
 		setComment('');
+		setSats(0);
 		onClose();
 	};
 
@@ -163,9 +169,13 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
     */
 	const renderFormModal = () => (
 		<>
-			<ButtonComponent borderRadius="4px" backgroundColor="brand-bgGrey2" width="100%" my={3} onClick={onOpen}>
+			{buttonType === 'main'
+				? <ButtonComponent borderRadius="4px" backgroundColor="brand-bgGrey2" width="100%" my={3} onClick={onOpen}>
             Contribute to this grant
-			</ButtonComponent>
+				</ButtonComponent> : 	<ButtonComponent primary margin="0 auto" onClick={() => {
+					setAmount(sats);
+					onOpen();
+				}}>Send {sats} sat</ButtonComponent>}
 			<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
@@ -182,8 +192,9 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 							onChange={valueString => setAmount(parseInt(valueString, 10))}
 							inputMode="numeric"
 							focusBorderColor="#20ECC7"
-							min={1}
+							min={0}
 							isRequired={true}
+							value={amount}
 						>
 							<NumberInputField placeholder={'sats'} />
 							<NumberInputStepper id="increments">
