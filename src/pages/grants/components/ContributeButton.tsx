@@ -219,7 +219,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 			<ModalOverlay />
 			<ModalContent>
 				<BubbleCursor/>
-				<ModalHeader textAlign="center">Creating invoice...</ModalHeader>
+				<ModalHeader textAlign="center">⚡ Creating invoice...</ModalHeader>
 				<ModalBody>
 					<Box py={10}>
 						<Loader/>

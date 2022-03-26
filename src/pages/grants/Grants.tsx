@@ -29,12 +29,13 @@ export const Grants = ({ project }: { project: IProject }) => {
 	return (
 		<>
 			<AnimatedCursor
-				innerSize={21}
+				innerSize={0}
 				outerSize={21}
 				color={hoverBubble ? '21, 213, 179' : '32, 236, 199'}
-				outerAlpha={0.2}
-				innerScale={0.7}
-				outerScale={5}
+				outerAlpha={0.7}
+				innerScale={0}
+				outerScale={2.1}
+				trailingSpeed={1}
 				clickables={[
 					'a',
 					'input[type="text"]',
@@ -82,7 +83,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								}}>
 									<Blob id="blob" size="21vh" onMouseDown={() => setSats(sats + 1000)}
 										style={{
-											backgroundImage: 'linear-gradient(rgba(32, 236, 199), rgba(27, 213, 179)',
+											backgroundImage: 'radial-gradient(rgba(32, 236, 199), rgba(27, 213, 179), #5B5B5B)',
 											margin: '0 auto',
 											boxShadow: '0px 0px 21px #1BD5B3',
 										}}

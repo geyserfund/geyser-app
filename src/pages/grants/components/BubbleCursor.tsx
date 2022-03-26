@@ -3,12 +3,13 @@ import AnimatedCursor from 'react-animated-cursor';
 
 export const BubbleCursor = () => (
 	<AnimatedCursor
-		innerSize={21}
+		innerSize={0}
 		outerSize={21}
 		color="32, 236, 199"
-		outerAlpha={0.2}
-		innerScale={0.7}
-		outerScale={5}
+		outerAlpha={0.7}
+		innerScale={0}
+		outerScale={2.1}
+		trailingSpeed={1}
 		clickables={[
 			'a',
 			'label[for]',
