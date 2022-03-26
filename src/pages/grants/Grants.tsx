@@ -1,7 +1,7 @@
 /* eslint-disable capitalized-comments */
 import React, { useState } from 'react';
 import Confetti from 'react-confetti';
-import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip } from '@chakra-ui/react';
+import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip, Fade } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ContributeButton } from './components/ContributeButton';
 import { RecipientButton } from './components/RecipientButton';
@@ -76,10 +76,9 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* bubble section */}
 						<Box mt={{base: 10, xl: 0}}>
 
-							<Tooltip label={sats === 0 ? 'Contribute sats!' : `${sats} sat` } placement="top" bg="brand.primary" color="black" borderRadius="base" closeOnClick={false}>
+							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base">
 								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
 									setHoverBubble(false);
-									setSats(0);
 								}}>
 									<Blob id="blob" size="21vh" onMouseDown={() => setSats(sats + 1000)}
 										style={{
@@ -90,6 +89,13 @@ export const Grants = ({ project }: { project: IProject }) => {
 									/>
 								</Box>
 							</Tooltip>
+
+							{sats > 0
+							&& <Box display="flex" justifyContent="center" alignItems="center" m={4}>
+								<Fade in={sats > 0}>
+									<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} />
+								</Fade>
+							</Box>}
 
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
 							<Box display="flex" justifyContent="center" alignItems="center">
@@ -131,7 +137,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</HStack>
 							<Text>{project.description}</Text>
-							<ContributeButton project={project} confettiEffects={setConfetti} />
+							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" sats={sats} setSats={setSats} />
 						</Box>
 					</Box>
 				</Box>
