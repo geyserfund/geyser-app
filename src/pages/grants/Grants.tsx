@@ -1,14 +1,15 @@
 /* eslint-disable capitalized-comments */
 import React, { useState } from 'react';
 import Confetti from 'react-confetti';
-import { Box, Text, HStack, Link, Image, Button, VStack, Show } from '@chakra-ui/react';
+import { Box, Text, HStack, Link, Button, VStack, Show } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ContributeButton } from './components/ContributeButton';
 import { RecipientButton } from './components/RecipientButton';
 import { ClickableAvatar } from './components/ClickableAvatar';
 import { Grantee } from './components/Grantee';
-import Bubble from '../../assets/bubble.svg';
 import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon } from '../../components/icons';
+import { Blob } from 'react-blob';
+import AnimatedCursor from 'react-animated-cursor';
 
 import { getDaysAgo, isMobileMode, isMediumScreen } from '../../utils';
 import useWindowSize from 'react-use/lib/useWindowSize';
@@ -20,11 +21,38 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const isMedium = isMediumScreen();
 	const [arrowChange, setArrowChange] = useState(false);
 	const [confetti, setConfetti] = useState(false);
+	const [bubbleCursor, setBubbleCursor] = useState(true);
+	const [bigBubble, setBigBubble] = useState(false);
 	const { width, height } = useWindowSize();
 	const { owners, funders, sponsors, grantees } = project;
 
 	return (
 		<>
+			{bubbleCursor
+&& <AnimatedCursor
+	innerSize={21}
+	outerSize={21}
+	color={bigBubble ? '21, 213, 179' : '32, 236, 199'}
+	outerAlpha={0.2}
+	innerScale={0.7}
+	outerScale={5}
+	clickables={[
+		'a',
+		'input[type="text"]',
+		'input[type="email"]',
+		'input[type="number"]',
+		'input[type="submit"]',
+		'input[type="image"]',
+		'label[for]',
+		'select',
+		'textarea',
+		'button',
+		'.link',
+		'img',
+		'#blob',
+	]}
+/>}
+
 			{confetti && <Confetti
 				width={width}
 				height={height}
@@ -33,6 +61,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 				tweenDuration={80000}
 				colors={['#1BD5B3', '#20ECC7', '#6BE7CE', '#FFFFFF', '#E9E9E9', '#5B5B5B', '#0F9078', '#F7931A']}
 			/>}
+
 			<Box id="top">
 				<Box display="flex" justifyContent="center" alignItems="center" height={{xl: '85vh'}}>
 					<Box
@@ -47,8 +76,13 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* bubble section */}
 						<Box mt={{base: 10, xl: 0}}>
 
-							<Box border="1px solid lightgrey" borderRadius="full" p={[20, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto">
-								<Image src={Bubble} w={{md: '90%'}} margin="0 auto" cursor="pointer"/>
+							<Box border="1px solid lightgrey" borderRadius="full" p={[10, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto">
+								<Blob id="blob" size="21vh" onMouseEnter={() => setBigBubble(true)} onMouseLeave={() => setBigBubble(false)}
+									style={{
+										backgroundColor: '#20ECC7',
+										margin: '0 auto',
+									}}
+								/>
 							</Box>
 
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
@@ -91,7 +125,9 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</HStack>
 							<Text>{project.description}</Text>
-							<ContributeButton project={project} confettiEffects={setConfetti}/>
+							<Box onClick={() => setBubbleCursor(false)}>
+								<ContributeButton project={project} confettiEffects={setConfetti} setBubbleCursor={setBubbleCursor}/>
+							</Box>
 						</Box>
 					</Box>
 				</Box>

@@ -41,10 +41,11 @@ let fundInterval: any;
 
 interface ContributeProps {
 	project: IProject,
-	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>
+	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>,
+	setBubbleCursor: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const ContributeButton = ({ project, confettiEffects }: ContributeProps) => {
+export const ContributeButton = ({ project, confettiEffects, setBubbleCursor }: ContributeProps) => {
 	const [amount, setAmount] = useState(0);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { toast } = useNotification();
@@ -245,7 +246,10 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 	);
 
 	const renderSuccessModal = () => (
-		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
+		<Modal closeOnOverlayClick={false} onClose={() => {
+			setBubbleCursor(true);
+			handleCloseButton();
+		}} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader textAlign="center">Success!</ModalHeader>
