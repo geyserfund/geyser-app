@@ -76,14 +76,15 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Box mt={{base: 10, xl: 0}}>
 
 							<Tooltip label={sats === 0 ? 'Contribute sats!' : `${sats} sat` } placement="top" bg="brand.primary" color="black" borderRadius="base" closeOnClick={false}>
-								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
+								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
 									setHoverBubble(false);
 									setSats(0);
 								}}>
-									<Blob id="blob" size="21vh" onMouseDown={() => setSats(sats + 1)}
+									<Blob id="blob" size="21vh" onMouseDown={() => setSats(sats + 1000)}
 										style={{
-											backgroundColor: '#20ECC7',
+											backgroundImage: 'linear-gradient(rgba(32, 236, 199), rgba(27, 213, 179)',
 											margin: '0 auto',
+											boxShadow: '0px 0px 21px #1BD5B3',
 										}}
 									/>
 								</Box>
