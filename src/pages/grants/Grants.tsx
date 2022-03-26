@@ -23,7 +23,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const [confetti, setConfetti] = useState(false);
 	const [hoverBubble, setHoverBubble] = useState(false);
 	const { width, height } = useWindowSize();
-	const { owners, funders, sponsors, grantees } = project;
+	const { owners, sponsors, grantees, fundingTxs } = project;
 	const [sats, setSats] = useState(0);
 
 	return (
@@ -103,7 +103,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 									<HStack spacing="10px" mr={isMobile ? 0 : 10}>
 										<SatoshiIcon/><Text fontSize="lg"><b>{project.balance}</b> received</Text>
 									</HStack>
-									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>{project.funders.length}</b> donations</Text>
+									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>{project.fundingTxs.length}</b> donations</Text>
 								</Box>
 							</Box>
 
@@ -163,11 +163,11 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Text mb={2} fontSize="lg" fontWeight="bold">Most recent donations</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
 							{
-								funders.map(funder => (
+								fundingTxs.map(tx => (
 									<ClickableAvatar
-										key={funder.user.id}
-										url={`https://twitter.com/${funder.user.twitterHandle}`}
-										imageUrl={funder.user.imageUrl}
+										key={tx.id}
+										url={`https://twitter.com/${tx.funder.user.twitterHandle}`}
+										imageUrl={tx.funder.user.imageUrl}
 									/>
 								))
 							}

@@ -48,6 +48,7 @@ export interface IUser {
 }
 
 export interface IProjectFunding {
+    id: number;
     funder: IFunder;
     amount:string;
     comment:string;
@@ -64,8 +65,8 @@ export interface IProjectDetail {
     problem: string;
     solution: string;
     blocks: IProjectBlock[];
-    ownerIntro: string
-    images?: string[]
+    ownerIntro: string;
+    images?: string[];
 }
 
 export interface IProjectBlock {

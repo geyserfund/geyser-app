@@ -76,20 +76,6 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 				toast(toastData);
 			}
 		}
-
-		// try {
-		// 	setStep(1);
-		// } catch (err) {
-		// 	const error: any = err;
-		// 	console.log(error);
-		// 	const toastData: UseToastOptions = {
-		// 		title: 'Something went wrong',
-		// 		description: 'Please refresh the page and try again',
-		// 		status: 'error',
-		// 	};
-
-		// 	toast(toastData);
-		// }
 	};
 
 	if (step === 0) {
