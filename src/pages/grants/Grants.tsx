@@ -186,7 +186,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Potential recipients</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
-							<RecipientButton/>
+							<RecipientButton project={project}/>
 							{
 								grantees.map(grantee => <Grantee key={grantee.id} grantee={grantee}/>)
 							}

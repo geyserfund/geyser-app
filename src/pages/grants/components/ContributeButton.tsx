@@ -47,6 +47,7 @@ interface ContributeProps {
 
 export const ContributeButton = ({ project, confettiEffects }: ContributeProps) => {
 	const [amount, setAmount] = useState(0);
+	const [comment, setComment] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { toast } = useNotification();
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
@@ -55,6 +56,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 	const handleCloseButton = () => {
 		setFundState(fundingStages.form);
 		setAmount(0);
+		setComment('');
 		onClose();
 	};
 
@@ -140,6 +142,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 				variables: {
 					input: {
 						projectId: project.id,
+						comment,
 						donationAmount: amount,
 					},
 				},
@@ -191,6 +194,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 						<Text mt={5}>Comment (optional)</Text>
 						<Textarea
 							name="comment"
+							onChange={event => setComment(event.target.value) }
 							placeholder="Add a comment..."
 							focusBorderColor="#20ECC7"
 							resize="none"
