@@ -1,8 +1,8 @@
-import { Box, CloseButton, Text, Textarea, VStack } from '@chakra-ui/react';
+import { Box, CloseButton, Divider, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { SatoshiIcon } from '../../../components/icons';
-import { ButtonComponent, CustomToggle, ErrorBox } from '../../../components/ui';
-import { IProjectType, projectTypes } from '../../../constants';
+import { ButtonComponent, CustomToggle, ErrorBox, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
+import { IProjectType, projectTypes, SelectCountryOptions } from '../../../constants';
 import {IFundForm} from '../../../hooks';
 import { DonationBased, RewardBased } from '../FundForm';
 
@@ -12,6 +12,7 @@ interface IPaymentPageProps {
 	btcRate: number
 	state: IFundForm
 	setTarget: (_: any) => void
+	updateReward:any
 	setState: any
 	handleFund: () => void
 	type: IProjectType
@@ -25,6 +26,7 @@ export const PaymentPage = ({
 	state,
 	setTarget,
 	setState,
+	updateReward,
 	type,
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
@@ -61,7 +63,7 @@ export const PaymentPage = ({
 				/>;
 
 			case projectTypes.reward:
-				return <RewardBased {...{setState}}/>;
+				return <RewardBased {...{setState, updateReward}}/>;
 			default:
 				return null;
 		}
@@ -75,39 +77,44 @@ export const PaymentPage = ({
 			width="100%"
 			height="100%"
 			overflowY="hidden"
-			paddingTop="40px"
+			// PaddingTop="40px"
 			position="relative"
+			alignItems="flex-start"
 		>
 			<CloseButton
 				borderRadius="50%"
 				position="absolute"
 				right="10px"
-				top="10px"
+				top="-5px"
 				onClick={handleCloseButton}
 			/>
 			{renderFundForm()}
+			<Divider orientation="horizontal"/>
+			<SectionTitle>Comment</SectionTitle>
 			<Box width="100%" >
-				<Text lineHeight="26px">Comment</Text>
-				<Box
-					backgroundColor="brand.bgGreen"
-					height="85px"
-					borderRadius="12px"
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Textarea
-						variant="unstyled"
-						fontSize="14px"
-						margin="5px"
-						resize="none"
-						value={state.comment}
-						maxLength={280}
-						name="comment"
-						onChange={setTarget}
-					/>
-				</Box>
-
+				<TextArea
+					placeholder="Leave a public message here."
+					variant="unstyled"
+					fontSize="14px"
+					padding="5px"
+					resize="none"
+					value={state.comment}
+					maxLength={280}
+					name="comment"
+					onChange={setTarget}
+				/>
+			</Box>
+			<Box width="100%" >
+				<SelectComponent
+					placeholder="Delivery Rewards..."
+					options={SelectCountryOptions}
+				/>
+			</Box>
+			<Box width="100%">
+				<TextBox
+					type="email"
+					placeholder="Contact Email"
+				/>
 			</Box>
 			<Box width="100%">
 				<CustomToggle

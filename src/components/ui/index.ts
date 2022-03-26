@@ -12,3 +12,7 @@ export * from './ErrorBox';
 export * from './StatusBar';
 export * from './Linkin';
 export * from './TwitterComponent';
+export * from './SectionTitle';
+export * from './TextArea';
+export * from './SelectComponent';
+export * from './TextBox';

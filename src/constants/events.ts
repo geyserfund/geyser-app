@@ -1,3 +1,5 @@
+import { ISelectOption } from '../interfaces';
+
 export const fundingStages:{
 loading:IFundingStages;
 inital:IFundingStages;
@@ -27,3 +29,14 @@ export const projectTypes:{
 	donation: 'donation-based',
 	reward: 'reward-based',
 };
+
+export const SelectCountryOptions:ISelectOption[] = [
+	{
+		label: 'Inside US',
+		value: 'INSIDE_US',
+	},
+	{
+		label: 'Outside US',
+		value: 'OUTSIDE_US',
+	},
+];

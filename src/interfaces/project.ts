@@ -82,3 +82,8 @@ export interface IProjectSponsor {
     image: string;
     companyUrl: string;
 }
+
+export interface IRewardCount {
+    id: number;
+    count: number;
+}

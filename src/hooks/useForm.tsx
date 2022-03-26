@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IRewardCount } from '../interfaces';
 
 export interface IFundForm {
 	donationAmount: number;
@@ -6,7 +7,7 @@ export interface IFundForm {
 	amount: number;
 	comment: string;
 	anonymous: boolean;
-	rewards: any[];
+	rewards: {[key:number]:number};
 }
 
 export const useFundState = () => {
@@ -16,7 +17,7 @@ export const useFundState = () => {
 		amount: 0,
 		comment: '',
 		anonymous: true,
-		rewards: [],
+		rewards: {},
 	});
 	const setTarget = (event: any) => {
 		const {name, value} = event.target;
@@ -29,6 +30,11 @@ export const useFundState = () => {
 		_setState(newState);
 	};
 
+	const updateReward = ({id, count}:IRewardCount) => {
+		const newState = {...state, rewards: {...state.rewards, [id]: count}};
+		_setState(newState);
+	};
+
 	console.log('checking state', state);
-	return {state, setTarget, setState};
+	return {state, setTarget, setState, updateReward};
 };
