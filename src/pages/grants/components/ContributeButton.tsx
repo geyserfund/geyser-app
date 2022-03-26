@@ -133,6 +133,7 @@ export const ContributeButton = ({ project, confettiEffects }: ContributeProps) 
 				});
 			}
 
+			confettiEffects(false);
 			setFundState(fundingStages.loading);
 			await fundProject({
 				variables: {
