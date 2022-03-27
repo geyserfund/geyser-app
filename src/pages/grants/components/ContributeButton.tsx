@@ -46,10 +46,11 @@ interface ContributeProps {
 	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>,
 	buttonStyle: string,
 	sats: number,
-	setSats: React.Dispatch<React.SetStateAction<number>>
+	setSats: React.Dispatch<React.SetStateAction<number>>,
+	clearCloseButton: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, setSats }: ContributeProps) => {
+export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, setSats, clearCloseButton }: ContributeProps) => {
 	const [amount, setAmount] = useState(0);
 	const [comment, setComment] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,6 +65,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		setAmount(0);
 		setComment('');
 		setSats(0);
+		clearCloseButton(false);
 		onClose();
 	};
 
@@ -284,7 +286,10 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						<ButtonComponent
 							primary
 							width="100%"
-							onClick={() => handleFund()}
+							onClick={() => {
+								clearCloseButton(true);
+								handleFund();
+							}}
 							disabled={amount <= 0}
 						>
             Contribute

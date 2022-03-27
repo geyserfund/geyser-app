@@ -9,10 +9,6 @@ import MedalPng from '../../assets/medal.png';
 import TrophyPng from '../../assets/trophy.png';
 import HourglassPng from '../../assets/hourglass.png';
 import SatoshiPng from '../../assets/satoshi.png';
-import ArrowDownSvg from '../../assets/arrowdownicon.svg';
-import ArrowUpSvg from '../../assets/arrowupicon.svg';
-import QuestionSvg from '../../assets/question.svg';
-import CloseSvg from '../../assets/close.svg';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, ...rest }: any) => (
 	<Box padding="3px 0px" className={wrapperClass}>
@@ -59,29 +55,5 @@ export const CrownIcon = () => (
 export const HourglassIcon = () => (
 	<Box padding="3px 0px">
 		<Image height="20px" width="20px" src={HourglassPng} alt="hourglass" />
-	</Box>
-);
-
-export const ArrowDownIcon = () => (
-	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={ArrowDownSvg} alt="arrowdown" />
-	</Box>
-);
-
-export const ArrowUpIcon = () => (
-	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={ArrowUpSvg} alt="arrowup" />
-	</Box>
-);
-
-export const QuestionIcon = () => (
-	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={QuestionSvg} alt="questionmark" />
-	</Box>
-);
-
-export const CloseIcon = () => (
-	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={CloseSvg} alt="close" />
 	</Box>
 );

@@ -1,16 +1,16 @@
 /* eslint-disable capitalized-comments */
 import React, { useState } from 'react';
 import Confetti from 'react-confetti';
-import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip, Fade } from '@chakra-ui/react';
-import { ButtonComponent } from '../../components/ui';
+import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip, Fade, CloseButton } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ContributeButton } from './components/ContributeButton';
 import { RecipientButton } from './components/RecipientButton';
 import { ClickableAvatar } from './components/ClickableAvatar';
 import { Grantee } from './components/Grantee';
-import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon, CloseIcon } from '../../components/icons';
+import { SatoshiIcon } from '../../components/icons';
 import { Blob } from 'react-blob';
 import AnimatedCursor from 'react-animated-cursor';
+import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 
 import Ellipse42 from '../../assets/random-avatars/Ellipse42.svg';
 import Ellipse43 from '../../assets/random-avatars/Ellipse43.svg';
@@ -52,6 +52,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const { owners, sponsors, grantees, fundingTxs } = project;
 	const [sats, setSats] = useState(0);
 	const [webLNToast, setWebLNToast] = useState(true);
+	const [clearCloseButton, setClearCloseButton] = useState(false);
 
 	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
 
@@ -100,10 +101,10 @@ export const Grants = ({ project }: { project: IProject }) => {
 				{/* webLN toast */}
 				<Fade in={webLNToast} unmountOnExit={true}>
 					<Box display="flex" justifyContent="center" alignItems="center" position="absolute" left="0" right="0" margin="auto">
-						<Box width={{base: '90%', md: '75%', lg: '50%', xl: '25%'}} backgroundColor="brand.primary" color="black" opacity="0.5" p={2} rounded="md" mt={1}>
+						<Box width={{base: '90%', md: '75%', lg: '50%', xl: '25%'}} backgroundColor="brand.primary" color="black" opacity="0.65" p={2} rounded="md" mt={1}>
 							<Box display="flex" justifyContent="space-between" alignItems="center">
 								<Text fontSize="md" fontWeight="bold">We use WebLN! 🌩️</Text>
-								<ButtonComponent primary onClick={() => setWebLNToast(false)}><CloseIcon/></ButtonComponent>
+								<CloseButton onClick={() => setWebLNToast(false)}></CloseButton>
 							</Box>
 							<Text>Make payments directly from your browser by using getalby.com. Click <Link isExternal href="https://getalby.com">here</Link> to download.</Text>
 						</Box>
@@ -123,15 +124,19 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* bubble section */}
 						<Box mt={{base: 10, xl: 0}}>
 
-							<Box display="flex" justifyContent="center" height="40px" alignItems="center" m={1}>
+							<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
 								{sats > 0
 				&&					<Fade in={sats > 0}>
-					<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} />
+					<HStack>
+						<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton}/>
+						{!clearCloseButton
+						&& <CloseButton onClick={() => setSats(0)}/>}
+					</HStack>
 				</Fade>
 								}
 							</Box>
 
-							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2}>
+							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={sats > 0}>
 								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
 									setHoverBubble(false);
 								}}>
@@ -185,7 +190,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</HStack>
 							<Text>{project.description}</Text>
-							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" sats={sats} setSats={setSats} />
+							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton} />
 						</Box>
 					</Box>
 				</Box>
