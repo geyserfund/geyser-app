@@ -111,7 +111,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								}
 							</Box>
 
-							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true}>
+							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2}>
 								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
 									setHoverBubble(false);
 								}}>
@@ -183,8 +183,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 			</Show>
 
 			{/* donation, sponsor, recipient sections */}
-			<Box id="bottom"></Box>
-			<Box py={20}>
+			<Box py={20} id="bottom">
 				<VStack justifyContent="center" alignItems="center" spacing="50px">
 
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
@@ -193,6 +192,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 							{
 								fundingTxs.map(tx => (
 									<ClickableAvatar
+										amount={tx.amount}
+										comment={tx.comment}
 										key={tx.id}
 										url={`https://twitter.com/${tx.funder.user.twitterHandle}`}
 										imageUrl={tx.funder.user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : tx.funder.user.imageUrl}
@@ -205,9 +206,13 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Sponsors</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
+							{/* TODO add amount and comment fields to the sponsors table on the backend */}
 							{
 								sponsors.map(sponsor => (
+
 									<ClickableAvatar
+										amount="100000"
+										comment="Satsoshi"
 										key={sponsor.user.id}
 										url={`https://twitter.com/${sponsor.user.twitterHandle}`}
 										imageUrl={sponsor.user.imageUrl}
@@ -225,6 +230,13 @@ export const Grants = ({ project }: { project: IProject }) => {
 								grantees.map(grantee => <Grantee key={grantee.id} grantee={grantee}/>)
 							}
 						</HStack>
+					</Box>
+
+					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
+						<Text mb={2} fontSize="lg" fontWeight="bold">More info</Text>
+						<Text>
+						The funds are to be transferred onto on-chain multi-sig wallets held by the board, who will distribute the entire 100% funds to the relevant causes. The Potential Recipients will help the board identify the pool of recipients.
+						</Text>
 					</Box>
 
 				</VStack>
