@@ -125,9 +125,9 @@ const CallToAction = ({ link, ctaText }: { link: string, ctaText: string }) => {
 		<Link isExternal href={link} className={classes.becomeSponsor}>
 			{hoverSponsor
 				? <Fade in={hoverSponsor}>
-					<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={3} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}>{ctaText}</ButtonComponent>
+					<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={4} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}>{ctaText}</ButtonComponent>
 				</Fade>
-				: <Fade in={!hoverSponsor}><ButtonComponent backgroundColor="brand-bgGrey2" mt={3} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}><AddIcon/></ButtonComponent>
+				: <Fade in={!hoverSponsor}><ButtonComponent backgroundColor="brand-bgGrey2" mt={4} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}><AddIcon/></ButtonComponent>
 				</Fade>
 			}
 		</Link>
