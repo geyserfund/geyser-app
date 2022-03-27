@@ -301,6 +301,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 					owners={project.owners.map(owner => owner.user.username)}
 					qrCode={fundingTx.paymentRequest}
 					handleCloseButton={handleCloseButton}
+					invoiceCancelled={fundingTx.canceled}
 				/>
 			</ModalContent>
 		</Modal>

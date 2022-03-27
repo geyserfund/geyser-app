@@ -23,11 +23,13 @@ interface IQrInvoice {
 	amount: number;
 	owners: string[];
 	qrCode: string;
-	handleCloseButton: () => void
+	invoiceCancelled: boolean;
+	handleCloseButton: () => void;
+
 }
 
 export const QrInvoice = ({
-	comment, title, amount, owners, qrCode}: IQrInvoice) => {
+	comment, title, amount, owners, qrCode, invoiceCancelled}: IQrInvoice) => {
 	const classes = useStyles();
 
 	const [copy, setcopy] = useState(false);
@@ -63,6 +65,10 @@ export const QrInvoice = ({
 				</Box>
 			</Box>
 			<QRCode value={qrCode} onClick={handleCopy} />
+			{invoiceCancelled
+				? <Text color="#EA453B">You cancelled your payment. Please close window and try again.</Text>
+				: <Text color="#EAA13B">Waiting for your payment...</Text>
+			}
 			<Box className={classes.copyText}>
 				<ButtonComponent
 					isFullWidth
