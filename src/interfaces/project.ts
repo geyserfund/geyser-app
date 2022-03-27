@@ -1,4 +1,3 @@
-import { IuserProfile } from '.';
 import { BadgeVariant } from '../components/ui';
 
 export interface IProject {
@@ -56,7 +55,7 @@ export interface IProjectFunding {
 }
 
 export interface IFunder {
-    user: IuserProfile;
+    user: IUser;
     confirmed: boolean;
     amountFunded: number;
 }
@@ -70,10 +69,10 @@ export interface IProjectDetail {
 }
 
 export interface IProjectBlock {
-        title: string;
-        body: string[];
-        images?: string[];
-        blockType: string;
+    title: string;
+    body: string[];
+    images?: string[];
+    blockType: string;
 }
 
 export interface IProjectUpdate {

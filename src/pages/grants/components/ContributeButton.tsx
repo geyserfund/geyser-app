@@ -46,7 +46,8 @@ interface ContributeProps {
 	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>,
 	buttonStyle: string,
 	sats: number,
-	setSats: React.Dispatch<React.SetStateAction<number>>,
+	// setSats: React.Dispatch<React.SetStateAction<number>>,
+	setSats: any,
 	clearCloseButton: React.Dispatch<React.SetStateAction<boolean>>,
 }
 

@@ -1,5 +1,5 @@
 /* eslint-disable capitalized-comments */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
 import Confetti from 'react-confetti';
 import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip, Fade, CloseButton } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
@@ -43,6 +43,7 @@ import { getDaysAgo, isMobileMode, isMediumScreen, getCountDown } from '../../ut
 import useWindowSize from 'react-use/lib/useWindowSize';
 // import { QUERY_GET_PROJECT } from '../../graphql';
 import { IProject } from '../../interfaces';
+import { IAvatarBoardItem, IAvatarBoardProps } from './interfaces';
 
 const Countdown = ({ endDate }: { endDate: string}) => {
 	const [countDown, setCountDown] = useState('');
@@ -65,6 +66,96 @@ const Countdown = ({ endDate }: { endDate: string}) => {
 	);
 };
 
+const BlobComponent = ({ incrementSats, setHoverBubble, tooltipDisabled }: {
+	incrementSats: any,
+	setHoverBubble: Dispatch<SetStateAction<boolean>>,
+	tooltipDisabled: boolean,
+ }) => {
+	console.log('');
+
+	return (
+		<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={tooltipDisabled}>
+			<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
+				setHoverBubble(false);
+			}}>
+				<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
+					style={{
+						backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
+						margin: '0 auto',
+						boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
+					}}
+				/>
+			</Box>
+		</Tooltip>
+	);
+};
+
+const CustomCursor = () => (
+	<AnimatedCursor
+		innerSize={0}
+		outerSize={21}
+		color={'32, 236, 199'}
+		outerAlpha={0.7}
+		innerScale={0}
+		outerScale={2.1}
+		trailingSpeed={1}
+		clickables={[
+			'a',
+			'input[type="text"]',
+			'input[type="email"]',
+			'input[type="number"]',
+			'input[type="submit"]',
+			'input[type="image"]',
+			'label[for]',
+			'select',
+			'textarea',
+			'button',
+			'.link',
+			'img',
+			'#blob',
+		]}
+	/>
+);
+
+const CallToAction = ({ link, ctaText }: { link: string, ctaText: string }) => {
+	const classes = useStyles();
+
+	return (
+		<Link isExternal href={link} className={classes.becomeSponsor}>
+			<ButtonComponent backgroundColor="brand-bgGrey2" mt={3}>  leftIcon={<AddIcon />} {ctaText}</ButtonComponent>
+		</Link>
+	);
+};
+
+const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) => {
+	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
+
+	return (
+		<>
+			{ items.length === 0
+				? <Text>No {`${itemName}s`} yet.</Text>
+				: <Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
+					<Text mb={2} fontSize="lg" fontWeight="bold">Most recent {`${itemName}s`}</Text>
+					{ callToActionLink && <CallToAction link={callToActionLink} ctaText={`Become a ${itemName}`}/> }
+					<Box flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
+						{
+							items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
+								<ClickableAvatar
+									amount={amount}
+									comment={comment}
+									key={id}
+									url={`https://twitter.com/${user.twitterHandle}`}
+									imageUrl={user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : user.imageUrl}
+								/>
+							))
+						}
+					</Box>
+				</Box>
+			}
+		</>
+	);
+};
+
 const useStyles = createUseStyles({
 	becomeSponsor: {
 		'&:hover': {
@@ -78,43 +169,20 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const isMedium = isMediumScreen();
 	const [arrowChange, setArrowChange] = useState(false);
 	const [confetti, setConfetti] = useState(false);
-	const [hoverBubble, setHoverBubble] = useState(false);
+	// const [hoverBubble, setHoverBubble] = useState(false);
 	const { width, height } = useWindowSize();
 	const { owners, sponsors, grantees, fundingTxs } = project;
 	const [sats, setSats] = useState(0);
 	const [clearCloseButton, setClearCloseButton] = useState(false);
-	const classes = useStyles();
 
-	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
+	const incrementSatoshis = (amount: number) => setSats(sats + amount);
 
 	return (
 		<>
 
 			{/* bubble cursor */}
-			<AnimatedCursor
-				innerSize={0}
-				outerSize={21}
-				color={hoverBubble ? '21, 213, 179' : '32, 236, 199'}
-				outerAlpha={0.7}
-				innerScale={0}
-				outerScale={2.1}
-				trailingSpeed={1}
-				clickables={[
-					'a',
-					'input[type="text"]',
-					'input[type="email"]',
-					'input[type="number"]',
-					'input[type="submit"]',
-					'input[type="image"]',
-					'label[for]',
-					'select',
-					'textarea',
-					'button',
-					'.link',
-					'img',
-					'#blob',
-				]}
-			/>
+			{/* {hoverBubble} */}
+			<CustomCursor />
 
 			{/* confetti effects on invoice payment */}
 			{confetti && <Confetti
@@ -143,31 +211,20 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							{/* send sats button */}
 							<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
-								{sats > 0
-				&&					<Fade in={sats > 0}>
-					<HStack>
-						<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton}/>
-						{!clearCloseButton
-						&& <CloseButton onClick={() => setSats(0)}/>}
-					</HStack>
-				</Fade>
+								{
+									sats > 0
+									&& <Fade in={sats > 0}>
+										<HStack>
+											<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton}/>
+											{!clearCloseButton
+											&& <CloseButton onClick={() => setSats(0)}/>}
+										</HStack>
+									</Fade>
 								}
 							</Box>
 
 							{/* bubble */}
-							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={sats > 0}>
-								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
-									setHoverBubble(false);
-								}}>
-									<Blob id="blob" size="21vh" onMouseDown={() => setSats(sats + 1000)}
-										style={{
-											backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
-											margin: '0 auto',
-											boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
-										}}
-									/>
-								</Box>
-							</Tooltip>
+							<BlobComponent incrementSats={incrementSatoshis} setHoverBubble={() => {}} tooltipDisabled={sats > 0} />
 
 							{/* info section */}
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
@@ -233,48 +290,17 @@ export const Grants = ({ project }: { project: IProject }) => {
 				<VStack justifyContent="center" alignItems="center" spacing="50px">
 
 					{/* recent donation */}
-					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
-						<Text mb={2} fontSize="lg" fontWeight="bold">Most recent donations</Text>
-						<Box flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
-							{
-								fundingTxs.map(tx => (
-									<ClickableAvatar
-										amount={tx.amount}
-										comment={tx.comment}
-										key={tx.id}
-										url={`https://twitter.com/${tx.funder.user.twitterHandle}`}
-										imageUrl={tx.funder.user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : tx.funder.user.imageUrl}
-									/>
-								))
-							}
-						</Box>
-					</Box>
+					<AvatarsBoard
+						items={fundingTxs.map(({ id, amount, funder, comment }) => ({ id, user: funder.user, comment, amount: Number(amount) }))}
+						itemName="donation"
+					/>
 
 					{/* sponsors */}
-					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
-						<Text mb={2} fontSize="lg" fontWeight="bold">Sponsors</Text>
-						{sponsors.length > 0
-							? <Box display="flex" alignItems="center" flexWrap="wrap" margin="0 auto">
-								{/* TODO add amount and comment fields to the sponsors table on the backend */}
-								{
-									sponsors.map(sponsor => (
-
-										<ClickableAvatar
-											amount="100000"
-											comment="Satsoshi"
-											key={sponsor.user.id}
-											url={`https://twitter.com/${sponsor.user.twitterHandle}`}
-											imageUrl={sponsor.user.imageUrl}
-										/>
-									))
-								}
-							</Box>
-							: <Text>No sponsors yet.</Text>
-						}
-						<Link isExternal href="https://airtable.com/shr8X1T7M8SuvHOjD" className={classes.becomeSponsor}>
-							<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={3}>Become a sponsor</ButtonComponent>
-						</Link>
-					</Box>
+					<AvatarsBoard
+						items={sponsors.map(({ user}) => ({ id: Number(user.id), user }))}
+						itemName="sponsor"
+						callToActionLink="https://airtable.com/shr8X1T7M8SuvHOjD"
+					/>
 
 					{/* grantees */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
