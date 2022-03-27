@@ -103,7 +103,15 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* bubble section */}
 						<Box mt={{base: 10, xl: 0}}>
 
-							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow>
+							<Box display="flex" justifyContent="center" height="40px" alignItems="center" m={1}>
+								{sats > 0
+				&&					<Fade in={sats > 0}>
+					<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} />
+				</Fade>
+								}
+							</Box>
+
+							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true}>
 								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
 									setHoverBubble(false);
 								}}>
@@ -116,13 +124,6 @@ export const Grants = ({ project }: { project: IProject }) => {
 									/>
 								</Box>
 							</Tooltip>
-
-							{sats > 0
-							&& <Box display="flex" justifyContent="center" alignItems="center" m={4}>
-								<Fade in={sats > 0}>
-									<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} />
-								</Fade>
-							</Box>}
 
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
 							<Box display="flex" justifyContent="center" alignItems="center">

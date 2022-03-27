@@ -175,7 +175,9 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				</ButtonComponent> : 	<ButtonComponent primary margin="0 auto" onClick={() => {
 					setAmount(sats);
 					onOpen();
-				}}>Send {sats} sat</ButtonComponent>}
+				}}>
+					<Box display="flex" justifyContent="center" alignItems="center">Send <SatoshiIcon scale={0.8} mx={1}/> {sats}</Box>
+				</ButtonComponent>}
 			<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
@@ -194,7 +196,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							focusBorderColor="#20ECC7"
 							min={0}
 							isRequired={true}
-							value={amount}
+							defaultValue={amount}
 						>
 							<NumberInputField placeholder={'sats'} />
 							<NumberInputStepper id="increments">
