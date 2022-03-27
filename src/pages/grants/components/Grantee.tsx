@@ -17,7 +17,7 @@ export const Grantee = ({ grantee }: { grantee: IGrantee }) => {
 
 	return (
 		<Link href={grantee.url} isExternal className={classes.potentialRecipients} border="2px solid lightgrey" borderRadius="md" display="flex" justifyContent="center" alignItems="center" m={2}>
-			<Text textDecoration="underline" textDecorationThickness="3px" textDecorationColor="brand.bgGreyDark" px={6} py={2} fontWeight="bold">{grantee.name}</Text>
+			<Text wordBreak="break-all" textDecoration="underline" textDecorationThickness="3px" textDecorationColor="brand.bgGreyDark" px={6} py={2} fontWeight="bold">{grantee.name}</Text>
 		</Link>
 	);
 };
