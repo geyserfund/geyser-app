@@ -30,11 +30,8 @@ const renderWithoutTooltip = ({ url, imageUrl }: IClickableAvatar) => (
 
 export const ClickableAvatar = ({ comment, amount, url, imageUrl }: { url: string, imageUrl: string, amount: number | undefined, comment: string | undefined }) => {
 	if (comment || amount) {
-		console.log('HERE');
-
 		return renderWithTooltip({ comment, amount, url, imageUrl });
 	}
 
-	console.log('HEREeee');
 	return renderWithoutTooltip({ url, imageUrl });
 };

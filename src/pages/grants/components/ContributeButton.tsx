@@ -118,8 +118,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	}, [fundData]);
 
 	useEffect(() => {
-		console.log('DATA: ', data);
-
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();
@@ -127,8 +125,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	}, [data]);
 
 	useEffect(() => {
-		console.log('FUND STATE:', fundState);
-
 		if (fundState === fundingStages.completed || fundState === fundingStages.canceled) {
 			clearInterval(fundInterval);
 		}
@@ -143,13 +139,11 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				webln.enable();
 				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
 				const paymentHash = await sha256(preimage);
-				console.log('HASH: ', paymentHash);
+
 				return paymentHash;
 			};
 
 			requestPayment().then(paymentHash => {
-				console.log('payment hash:', paymentHash);
-
 				// Check preimage
 				if (paymentHash === fundingTx.invoiceId) {
 					confettiEffects(true);

@@ -181,8 +181,6 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 				borderRadius="4px"
 				backgroundColor="brand-bgGrey2"
 				onClick={() => {
-					console.log('STEP:', step);
-
 					onOpen();
 				}}
 			>
