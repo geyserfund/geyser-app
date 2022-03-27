@@ -45,14 +45,18 @@ interface ContributeProps {
 	project: IProject,
 	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>,
 	buttonStyle: string,
-	sats: number,
-	// setSats: React.Dispatch<React.SetStateAction<number>>,
-	setSats: any,
-	clearCloseButton: React.Dispatch<React.SetStateAction<boolean>>,
+	sats?: number,
+	setSats?: React.Dispatch<React.SetStateAction<number>>,
+	clearCloseButton?: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, setSats, clearCloseButton }: ContributeProps) => {
-	const [amount, setAmount] = useState(0);
+	const [amount, setAmount] = useState(sats || 0);
+
+	useEffect(() => {
+		setAmount(sats || 0);
+	}, [sats]);
+
 	const [comment, setComment] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { toast } = useNotification();
@@ -65,8 +69,12 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		setFundState(fundingStages.form);
 		setAmount(0);
 		setComment('');
-		setSats(0);
-		clearCloseButton(false);
+
+		if (setSats && clearCloseButton) {
+			setSats(0);
+			clearCloseButton(false);
+		}
+
 		onClose();
 	};
 
@@ -127,8 +135,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	}, [data]);
 
 	useEffect(() => {
-		console.log('FUND STATE:', fundState);
-
 		if (fundState === fundingStages.completed || fundState === fundingStages.canceled) {
 			clearInterval(fundInterval);
 		}
@@ -143,12 +149,10 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				webln.enable();
 				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
 				const paymentHash = await sha256(preimage);
-				console.log('HASH: ', paymentHash);
 				return paymentHash;
 			};
 
 			requestPayment().then(paymentHash => {
-				console.log('payment hash:', paymentHash);
 
 				// Check preimage
 				if (paymentHash === fundingTx.invoiceId) {
@@ -233,7 +237,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				? <ButtonComponent borderRadius="4px" backgroundColor="brand-bgGrey2" width="100%" my={3} onClick={onOpen}>
             Contribute to this grant
 				</ButtonComponent> : 	<ButtonComponent primary margin="0 auto" onClick={() => {
-					setAmount(sats);
+					// setAmount();
 					onOpen();
 				}}>
 					<Box display="flex" justifyContent="center" alignItems="center">Send <SatoshiIcon scale={0.8} mx={1}/> {sats}</Box>
@@ -281,7 +285,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							primary
 							width="100%"
 							onClick={() => {
-								clearCloseButton(true);
 								handleFund();
 							}}
 							disabled={amount <= 0}

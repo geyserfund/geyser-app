@@ -66,27 +66,48 @@ const Countdown = ({ endDate }: { endDate: string}) => {
 	);
 };
 
-const BlobComponent = ({ incrementSats, setHoverBubble, tooltipDisabled }: {
-	incrementSats: any,
+const BlobComponent = ({ project, setHoverBubble, setConfetti }: {
+	project: IProject,
 	setHoverBubble: Dispatch<SetStateAction<boolean>>,
-	tooltipDisabled: boolean,
+	setConfetti: Dispatch<SetStateAction<boolean>>
  }) => {
 	console.log('');
+	const [sats, setSats] = useState(0);
+	const [clearCloseButton, setClearCloseButton] = useState(false);
+
+	const incrementSats = (amount: number) => {
+		console.log(sats);
+
+		setSats(sats + amount);
+	};
 
 	return (
-		<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={tooltipDisabled}>
-			<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
-				setHoverBubble(false);
-			}}>
-				<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
-					style={{
-						backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
-						margin: '0 auto',
-						boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
-					}}
-				/>
+		<>
+			<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
+				{ sats > 0
+					&& <Fade in={sats > 0}>
+						<HStack>
+							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton}/>
+							{!clearCloseButton
+							&& <CloseButton onClick={() => setSats(0)}/>}
+						</HStack>
+					</Fade>
+				}
 			</Box>
-		</Tooltip>
+			<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={sats > 0}>
+				<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
+					setHoverBubble(false);
+				}}>
+					<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
+						style={{
+							backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
+							margin: '0 auto',
+							boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
+						}}
+					/>
+				</Box>
+			</Tooltip>
+		</>
 	);
 };
 
@@ -119,10 +140,17 @@ const CustomCursor = () => (
 
 const CallToAction = ({ link, ctaText }: { link: string, ctaText: string }) => {
 	const classes = useStyles();
+	const [hoverSponsor, setHoverSponsor] = useState(false);
 
 	return (
 		<Link isExternal href={link} className={classes.becomeSponsor}>
-			<ButtonComponent backgroundColor="brand-bgGrey2" mt={3}>  leftIcon={<AddIcon />} {ctaText}</ButtonComponent>
+			{hoverSponsor
+				? <Fade in={hoverSponsor}>
+					<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={4} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}>{ctaText}</ButtonComponent>
+				</Fade>
+				: <Fade in={!hoverSponsor}><ButtonComponent backgroundColor="brand-bgGrey2" mt={4} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}><AddIcon/></ButtonComponent>
+				</Fade>
+			}
 		</Link>
 	);
 };
@@ -136,7 +164,6 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 				? <Text>No {`${itemName}s`} yet.</Text>
 				: <Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 					<Text mb={2} fontSize="lg" fontWeight="bold">Most recent {`${itemName}s`}</Text>
-					{ callToActionLink && <CallToAction link={callToActionLink} ctaText={`Become a ${itemName}`}/> }
 					<Box flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
 						{
 							items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
@@ -150,6 +177,7 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 							))
 						}
 					</Box>
+					{ callToActionLink && <CallToAction link={callToActionLink} ctaText={`Become a ${itemName}`}/> }
 				</Box>
 			}
 		</>
@@ -172,10 +200,6 @@ export const Grants = ({ project }: { project: IProject }) => {
 	// const [hoverBubble, setHoverBubble] = useState(false);
 	const { width, height } = useWindowSize();
 	const { owners, sponsors, grantees, fundingTxs } = project;
-	const [sats, setSats] = useState(0);
-	const [clearCloseButton, setClearCloseButton] = useState(false);
-
-	const incrementSatoshis = (amount: number) => setSats(sats + amount);
 
 	return (
 		<>
@@ -209,22 +233,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* bubble section */}
 						<Box mt={{base: 3, xl: 0}}>
 
-							{/* send sats button */}
-							<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
-								{
-									sats > 0
-									&& <Fade in={sats > 0}>
-										<HStack>
-											<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton}/>
-											{!clearCloseButton
-											&& <CloseButton onClick={() => setSats(0)}/>}
-										</HStack>
-									</Fade>
-								}
-							</Box>
-
 							{/* bubble */}
-							<BlobComponent incrementSats={incrementSatoshis} setHoverBubble={() => {}} tooltipDisabled={sats > 0} />
+							<BlobComponent project={project} setHoverBubble={() => {}} setConfetti={setConfetti}/>
 
 							{/* info section */}
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
@@ -243,7 +253,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* grant info */}
 						<Box width={{xl: '40%'}}>
 							<Text fontSize="4xl" fontWeight="bold">{project.title}</Text>
-							<Text color="brand.primary" fontWeight="bold" fontSize="lg">Supporting Bitcoin hackathons focused on on-chain and lightning applications.</Text>
+							<Text color="brand.primary" fontWeight="bold" fontSize="lg">Grant program to support hackathon events</Text>
 							<Box flexWrap="wrap" display="flex" my={2}>
 								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">#001</Text>
 								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">Hackathons</Text>
@@ -267,8 +277,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 									}
 								</Box>
 							</HStack>
-							<Text>{project.description}</Text>
-							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton} />
+							<Text textAlign="justify">{project.description}</Text>
+							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" />
 						</Box>
 					</Box>
 				</Box>
@@ -317,7 +327,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">More info</Text>
 						<Text>
-						The funds are to be transferred onto on-chain multi-sig wallets held by the board, who will distribute the entire 100% funds to the relevant causes. The Potential Recipients will help the board identify the pool of recipients.
+						Support your favorite causes through Geyser Grants, and submit your suggested recipients. Once the Grant closes, the Board will select from the relevant initiatives and distribute the funds accordingly. All the data will be presented in an open source way. For more info about the Grants, read <Link isExternal href="https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09">here</Link>.
 						</Text>
 					</Box>
 
