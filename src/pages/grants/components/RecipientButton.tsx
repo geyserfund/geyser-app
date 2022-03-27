@@ -106,7 +106,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 						<Text mt={5}>Link</Text>
 						<Input
 							name="link"
-							placeholder="https://twitter.com/metamick14"
+							placeholder="https://twitter.com/boltfun_btc"
 							focusBorderColor="#20ECC7"
 							onChange={event => setUrl(event.target.value)}
 							value={url}

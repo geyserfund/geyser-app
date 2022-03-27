@@ -202,7 +202,6 @@ export const Grants = ({ project }: { project: IProject }) => {
 		<>
 
 			{/* bubble cursor */}
-			{/* {hoverBubble} */}
 			<CustomCursor />
 
 			{/* confetti effects on invoice payment */}
