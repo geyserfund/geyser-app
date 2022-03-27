@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import QRCode from 'react-qr-code';
 import { ButtonComponent } from '../../../components/ui';
-import { QuestionIcon } from '../../../components/icons';
+import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { Link } from '@chakra-ui/react';
 
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
@@ -74,12 +74,12 @@ export const QrInvoice = ({
 					isFullWidth
 					primary={copy}
 					onClick={handleCopy}
-					leftIcon={copy ? <RiLinkUnlinkM size="1.25rem" /> : <RiLinksLine size="1.25rem" />}
+					leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
 				>
 					{!copy ? 'Copy Invoice' : 'Invoice Copied'}
 				</ButtonComponent>
 				<Link isExternal href="https://geyser.notion.site/How-to-get-started-with-Lightning-77e201fbc3f944b683b0cf3d30716961">
-					<ButtonComponent isFullWidth my={2} leftIcon={<QuestionIcon/>}>Don&apos;t have a wallet?</ButtonComponent>
+					<ButtonComponent isFullWidth my={2} leftIcon={<QuestionOutlineIcon/>}>Don&apos;t have a wallet?</ButtonComponent>
 				</Link>
 			</Box>
 

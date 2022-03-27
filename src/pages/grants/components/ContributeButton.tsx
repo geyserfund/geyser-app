@@ -1,5 +1,5 @@
 /* eslint-disable capitalized-comments */
-import { requestProvider, MissingProviderError, RejectionError } from 'webln';
+import { RejectionError, WebLNProvider } from 'webln';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import React, { useState, useEffect } from 'react';
 
@@ -46,10 +46,12 @@ interface ContributeProps {
 	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>,
 	buttonStyle: string,
 	sats: number,
-	setSats: React.Dispatch<React.SetStateAction<number>>
+	// setSats: React.Dispatch<React.SetStateAction<number>>,
+	setSats: any,
+	clearCloseButton: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, setSats }: ContributeProps) => {
+export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, setSats, clearCloseButton }: ContributeProps) => {
 	const [amount, setAmount] = useState(0);
 	const [comment, setComment] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,6 +66,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		setAmount(0);
 		setComment('');
 		setSats(0);
+		clearCloseButton(false);
 		onClose();
 	};
 
@@ -115,24 +118,13 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	}, [fundData]);
 
 	useEffect(() => {
+		console.log('DATA: ', data);
+
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();
 		}
 	}, [data]);
-
-	// requestProvider().then(webln => {
-	// 	webln.sendPayment(fundingTx.paymentRequest).then(({ preimage }) => {
-	// 		console.log('PREIMAGE', preimage);
-
-	// 	})
-	// });
-	// console.log('Error type: ', error.errorType);
-	// console.error('HERE', error);
-	// console.log(error.constructor.prototype);
-	// console.log(error.stack);
-	// console.log('NAME:', error.name);
-	// console.log(error instanceof MissingProviderError);
 
 	useEffect(() => {
 		console.log('FUND STATE:', fundState);
@@ -143,16 +135,19 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 
 		if (fundState === fundingStages.started) {
 			const requestPayment = async () => {
-				const webln = await requestProvider();
+				const { webln }: { webln: WebLNProvider } = window as any;
+				if (!webln) {
+					throw new Error('no provider');
+				}
 
+				webln.enable();
 				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
-
 				const paymentHash = await sha256(preimage);
 				console.log('HASH: ', paymentHash);
 				return paymentHash;
 			};
 
-			requestPayment().then((paymentHash: any) => {
+			requestPayment().then(paymentHash => {
 				console.log('payment hash:', paymentHash);
 
 				// Check preimage
@@ -160,24 +155,25 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 					confettiEffects(true);
 					gotoNextStage();
 				} else {
-					toast({
-						title: 'Wrong payment preimage',
-						description: 'The paytment preimage returned by the WebLN provider did not match the payment hash.',
-						status: 'error',
-					});
+					throw new Error('wrong preimage');
 				}
 			}).catch(error => {
-				if (error.constructor === RejectionError) {
-					// Temporary toast
+				if (error.message === 'no provider') {
 					toast({
 						title: 'Pro tip: use a WebLN extension',
 						description: 'Check this link for a list of supported wallets',
 						status: 'info',
 					});
-				} else if (error.constructor === MissingProviderError) {
+				} else if (error.message === 'wrong preimage') {
 					toast({
-						title: 'Pro tip: use a WebLN extension',
-						description: 'Check this link for a list of supported wallets',
+						title: 'Wrong payment preimage',
+						description: 'The payment preimage returned by the WebLN provider did not match the payment hash.',
+						status: 'error',
+					});
+				} else if (error.constructor === RejectionError || error.message === 'User rejected') {
+					toast({
+						title: 'Requested operation declined',
+						description: 'Please use the invoice instead.',
 						status: 'info',
 					});
 				} else {
@@ -284,7 +280,10 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						<ButtonComponent
 							primary
 							width="100%"
-							onClick={() => handleFund()}
+							onClick={() => {
+								clearCloseButton(true);
+								handleFund();
+							}}
 							disabled={amount <= 0}
 						>
             Contribute
