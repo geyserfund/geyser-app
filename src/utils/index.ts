@@ -7,3 +7,4 @@ export * from './dateOperations';
 export * from './Notification';
 export * from './useBitcoinRates';
 export * from './helperFunctions';
+export * from './sha256';

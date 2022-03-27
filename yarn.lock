@@ -2670,6 +2670,13 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/chrome@^0.0.74":
+  version "0.0.74"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.74.tgz#f69827c48fcf7fecc90c96089807661749a5a5e3"
+  integrity sha512-hzosS5CkQcIKCgxcsV2AzbJ36KNxG/Db2YEN/erEu7Boprg+KpMDLBQqKFmSo+JkQMGqRcicUyqCowJpuT+C6A==
+  dependencies:
+    "@types/filesystem" "*"
+
 "@types/debug@^4.0.0":
   version "4.1.7"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
@@ -2694,6 +2701,18 @@
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
+
+"@types/filesystem@*":
+  version "0.0.32"
+  resolved "https://registry.yarnpkg.com/@types/filesystem/-/filesystem-0.0.32.tgz#307df7cc084a2293c3c1a31151b178063e0a8edf"
+  integrity sha512-Yuf4jR5YYMR2DVgwuCiP11s0xuVRyPKmz8vo6HBY3CGdeMj8af93CFZX+T82+VD1+UqHOxTq31lO7MI7lepBtQ==
+  dependencies:
+    "@types/filewriter" "*"
+
+"@types/filewriter@*":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/filewriter/-/filewriter-0.0.29.tgz#a48795ecadf957f6c0d10e0c34af86c098fa5bee"
+  integrity sha512-BsPXH/irW0ht0Ji6iw/jJaK8Lj3FJemon2gvEqHKpCdDCeemHa+rI3WBGq5z7cDMZgoLjY40oninGxqk+8NzNQ==
 
 "@types/glob@^7.1.1":
   version "7.1.4"
@@ -13713,6 +13732,13 @@ webidl-conversions@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-6.1.0.tgz#9111b4d7ea80acd40f5270d666621afa78b69514"
   integrity sha512-qBIvFLGiBpLjfwmYAaHPXsn+ho5xZnGvyGvsarywGNc8VyQJUMHJ8OBKGGrPER0okBeMDaan4mNBlgBROxuI8w==
+
+webln@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/webln/-/webln-0.3.0.tgz#acb0afbe7c1a48eda67f9fd2ae7c6bcd646added"
+  integrity sha512-QMLGIQtHzSVwYldhREjJsVGfVZ37q+hkBpi9KiruxI8FJwD0UocshrP9sbtd1H5N96uAAq53aywesy3/sw+YOA==
+  dependencies:
+    "@types/chrome" "^0.0.74"
 
 webpack-dev-middleware@^3.7.2:
   version "3.7.3"

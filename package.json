@@ -43,7 +43,8 @@
     "serve": "^13.0.2",
     "styled-components": "^5.3.5",
     "typescript": "^3.9.10",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "webln": "^0.3.0"
   },
   "scripts": {
     "dev": "react-scripts start",

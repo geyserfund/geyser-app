@@ -1,4 +1,5 @@
 /* eslint-disable capitalized-comments */
+import { requestProvider, MissingProviderError } from 'webln';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import React, { useState, useEffect } from 'react';
 
@@ -15,7 +16,7 @@ import {
 } from '../../../graphql';
 
 import { fetchBitcoinRates } from '../../../api';
-import { useNotification, validateFundingAmount } from '../../../utils';
+import { useNotification, validateFundingAmount, sha256 } from '../../../utils';
 import { IFundingTx, IProject } from '../../../interfaces';
 import { fundingStages, IFundingStages, stageList } from '../../../constants';
 
@@ -126,12 +127,52 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		}
 
 		if (fundState === fundingStages.started) {
-			fundInterval = setInterval(getFunding, 2000);
+			const requestPayment = async () => {
+				const webln = await requestProvider();
+
+				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
+
+				const paymentHash = await sha256(preimage);
+				console.log('HASH: ', paymentHash);
+				return paymentHash;
+			};
+
+			requestPayment().then((paymentHash: any) => {
+				console.log('payment hash:', paymentHash);
+
+				// Check preimage
+				if (paymentHash === fundingTx.invoiceId) {
+					confettiEffects(true);
+					gotoNextStage();
+				} else {
+					toast({
+						title: 'Wrong payment preimage',
+						description: 'The paytment preimage returned by the WebLN provider did not match the payment hash.',
+						status: 'error',
+					});
+				}
+			}).catch((error: any) => {
+				if (error instanceof MissingProviderError) {
+					toast({
+						title: 'Pro tip: use a WebLN extension',
+						description: 'Check this link for a list of supported wallets',
+						status: 'info',
+					});
+					fundInterval = setInterval(getFunding, 2000);
+				} else {
+					toast({
+						title: 'Oops! Something went wrong with WebLN.',
+						description: 'Please use the invoice instead.',
+						status: 'error',
+					});
+				}
+			});
 		}
 	}, [fundState]);
 
 	const handleFund = async () => {
 		try {
+			// eslint-disable-next-line no-warning-comments
 			// TODO: change the variables to an input of type IFundingInput
 			const errorMessage = validateFundingAmount(amount, btcRate);
 			if (errorMessage) {
