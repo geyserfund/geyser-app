@@ -84,6 +84,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const [sats, setSats] = useState(0);
 	const [clearCloseButton, setClearCloseButton] = useState(false);
 	const classes = useStyles();
+	const [hoverSponsor, setHoverSponsor] = useState(false);
 
 	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
 
@@ -186,7 +187,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* grant info */}
 						<Box width={{xl: '40%'}}>
 							<Text fontSize="4xl" fontWeight="bold">{project.title}</Text>
-							<Text color="brand.primary" fontWeight="bold" fontSize="lg">Supporting Bitcoin hackathons focused on on-chain and lightning applications.</Text>
+							<Text color="brand.primary" fontWeight="bold" fontSize="lg">A grant program to support hackathon events</Text>
 							<Box flexWrap="wrap" display="flex" my={2}>
 								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">#001</Text>
 								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">Hackathons</Text>
@@ -271,8 +272,14 @@ export const Grants = ({ project }: { project: IProject }) => {
 							</Box>
 							: <Text>No sponsors yet.</Text>
 						}
-						<Link isExternal href="https://airtable.com/shr8X1T7M8SuvHOjD" className={classes.becomeSponsor}>
-							<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={3}>Become a sponsor</ButtonComponent>
+						<Link isExternal href="https://airtable.com/shr8X1T7M8SuvHOjD" className={classes.becomeSponsor} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}>
+							{hoverSponsor
+								? <Fade in={hoverSponsor}>
+									<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={3}>Become a sponsor</ButtonComponent>
+								</Fade>
+								: <Fade in={!hoverSponsor}><ButtonComponent backgroundColor="brand-bgGrey2" mt={3}><AddIcon/></ButtonComponent>
+								</Fade>
+							}
 						</Link>
 					</Box>
 
