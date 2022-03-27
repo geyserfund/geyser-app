@@ -2,13 +2,12 @@
 import { useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import {
-	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Image, Box,
+	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
 	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input,
 } from '@chakra-ui/react';
-import Check from '../../../assets/check.svg';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { BiCopyAlt } from 'react-icons/bi';
-
+import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
 import { BubbleCursor } from './BubbleCursor';
@@ -150,18 +149,19 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 						justifyContent="center"
 					>
 						<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
-							<Image src={Check} />
+							<CheckIcon w={10} h={10}/>
 						</Box>
-						<Text py={5} textAlign="center"><b>{grantee}</b> has been added to the potential recipients!</Text><ButtonComponent
-							standard
-							primary={copy}
-							leftIcon={copy ? <BiCopyAlt /> : <HiOutlineSpeakerphone />}
-							width="100%"
-							onClick={shareProjectWithfriends}
-						>
-							{copy ? 'Grant Link Copied' : 'Share grant with friends'}
-						</ButtonComponent>
+						<Text py={5} textAlign="center"><b>{grantee}</b> has been added to the potential recipients!</Text>
 					</VStack>
+					<ButtonComponent
+						standard
+						primary={copy}
+						leftIcon={copy ? <BiCopyAlt /> : <HiOutlineSpeakerphone />}
+						width="100%"
+						onClick={shareProjectWithfriends}
+					>
+						{copy ? 'Grant Link Copied' : 'Share grant with friends'}
+					</ButtonComponent>
 				</ModalBody>
 				<ModalFooter>
 					<ButtonComponent primary width="100%" onClick={() => {
