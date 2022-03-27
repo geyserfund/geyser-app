@@ -1,11 +1,13 @@
 import { Box, Text } from '@chakra-ui/layout';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import React from 'react';
+import { useHistory } from 'react-router';
 import { createUseStyles } from 'react-jss';
 import { ButtonComponent, Linkin } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 import { REACT_APP_API_ENDPOINT } from '../../constants';
+import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
 
 interface IConnectTwitter {
 	isOpen: boolean,
@@ -29,6 +31,7 @@ export const ConnectTwitter = ({
 	description,
 }: IConnectTwitter) => {
 	const classes = useStyles();
+	const history = useHistory();
 	const useTitle = title || 'Link Your Twitter account';
 	const useDescription = description || 'Link your twitter account to appear as a project backer when you fund a project.';
 
@@ -36,6 +39,8 @@ export const ConnectTwitter = ({
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent display="flex" alignItems="center" padding="20px 15px">
+				{history.location.pathname === '/project/bitcoin-hackathons'
+			&& <BubbleCursor/>}
 				<ModalHeader><Text fontSize="16px" fontWeight="normal">{useTitle}</Text></ModalHeader>
 				<ModalCloseButton />
 				<ModalBody >
