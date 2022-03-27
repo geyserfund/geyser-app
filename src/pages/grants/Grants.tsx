@@ -272,7 +272,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 							: <Text>No sponsors yet.</Text>
 						}
 						<Link isExternal href="https://airtable.com/shr8X1T7M8SuvHOjD" className={classes.becomeSponsor}>
-							<ButtonComponent backgroundColor="brand-bgGrey2" mt={3}><AddIcon mr={3}/> Become a sponsor</ButtonComponent>
+							<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={3}>Become a sponsor</ButtonComponent>
 						</Link>
 					</Box>
 
