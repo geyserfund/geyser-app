@@ -16,6 +16,7 @@ import { StartCrowdFundUrl, HomeUrl } from '../../constants';
 import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
 import { Link, Show } from '@chakra-ui/react';
+import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -145,17 +146,19 @@ export const NavBar = () => {
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent display="flex" alignItems="center" padding="20px 15px">
+					{history.location.pathname === '/project/bitcoin-hackathons'
+		&& <BubbleCursor/>}
 					<ModalHeader><Text fontSize="16px" fontWeight="normal">You have been logged out</Text></ModalHeader>
 					<ModalCloseButton />
 					<ModalBody >
 						<Text>
-							Please logback in with your profile, or press continue if you want to stay anonymous.
+							Please log back in with your profile, or press continue if you want to stay anonymous.
 						</Text>
 						<Box display="flex" justifyContent="space-between" paddingTop="20px">
-							<ButtonComponent standard primary onClick={twitterOnOpen}>
+							<ButtonComponent width="50%" mx={1} primary onClick={twitterOnOpen}>
 								Log In
 							</ButtonComponent>
-							<ButtonComponent onClick={onClose}>
+							<ButtonComponent width="50%" mx={1} onClick={onClose}>
 								Continue
 							</ButtonComponent>
 						</Box>
