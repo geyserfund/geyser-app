@@ -6,9 +6,10 @@ import React, { useState, useEffect } from 'react';
 import { QrInvoice } from './QrInvoice';
 import { BubbleCursor } from './BubbleCursor';
 import { PaymentSuccess } from './PaymentSuccess';
-import { ButtonComponent } from '../../../components/ui';
+import { ButtonComponent, Linkin } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { SatoshiIcon } from '../../../components/icons';
+import { REACT_APP_API_ENDPOINT } from '../../../constants';
 
 import {
 	MUTATION_FUND_PROJECT,
@@ -23,7 +24,7 @@ import { fundingStages, IFundingStages, stageList } from '../../../constants';
 import {
 	Text, HStack, Modal, ModalOverlay, ModalContent, NumberInput,
 	ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Textarea,
-	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box,
+	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box, Button,
 } from '@chakra-ui/react';
 
 const initialFunding = {
@@ -58,6 +59,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	const { toast } = useNotification();
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.form);
+	const [appearAs, setAppearAs] = useState('anonymous');
 
 	const buttonType = buttonStyle;
 
@@ -267,7 +269,13 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							resize="none"
 							size="sm"
 						/>
-						<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
+						<Box display="flex" justifyContent="center" alignItems="center" mt={4} border="2px solid #E9E9E9" rounded="md">
+							<Button backgroundColor={appearAs === 'anonymous' ? '#E9E9E9' : 'white'} fontSize="xs" width="50%" rounded="none" onClick={() => setAppearAs('anonymous')} >Appear as anonymous</Button>
+							<Linkin width="50%" href={`${REACT_APP_API_ENDPOINT}/auth/twitter`} display="flex" justifyContent="center" alignItems="center">
+								<Button width="100%" backgroundColor={appearAs === 'anonymous' ? 'white' : '#E9E9E9'} fontSize="xs" rounded="none" onClick={() => setAppearAs('profile')}>Appear with profile</Button>
+							</Linkin>
+						</Box>
+						<Text fontWeight="bold" mt={6}>Where do the funds go?</Text>
 						<Text>The funds are sent to a multi-signature address held by the Grant Board, who will secure and send to the relevant projects.</Text>
 					</ModalBody>
 					<ModalFooter>
