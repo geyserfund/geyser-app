@@ -288,7 +288,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							</Linkin>
 						</Box>
 						<Text fontWeight="bold" mt={6}>Where do the funds go?</Text>
-						<Text>The funds are sent to a multi-signature address held by the Grant Board, who will secure and send to the relevant projects.</Text>
+						<Text>The funds are secured by the Grant Board until they are sent to the relevant projects at the end of the grant.</Text>
 					</ModalBody>
 					<ModalFooter>
 						<ButtonComponent
