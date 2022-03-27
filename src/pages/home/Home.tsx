@@ -47,7 +47,7 @@ export const Home = () => {
 		if (error) {
 			toast({
 				title: 'Something went wrong',
-				description: 'Please refresh the',
+				description: 'Please refresh the page',
 				status: 'error',
 			});
 		}
