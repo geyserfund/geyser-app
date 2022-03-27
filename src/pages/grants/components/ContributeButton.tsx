@@ -1,5 +1,5 @@
 /* eslint-disable capitalized-comments */
-import { requestProvider, MissingProviderError } from 'webln';
+import { requestProvider, MissingProviderError, RejectionError } from 'webln';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import React, { useState, useEffect } from 'react';
 
@@ -121,7 +121,22 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		}
 	}, [data]);
 
+	// requestProvider().then(webln => {
+	// 	webln.sendPayment(fundingTx.paymentRequest).then(({ preimage }) => {
+	// 		console.log('PREIMAGE', preimage);
+
+	// 	})
+	// });
+	// console.log('Error type: ', error.errorType);
+	// console.error('HERE', error);
+	// console.log(error.constructor.prototype);
+	// console.log(error.stack);
+	// console.log('NAME:', error.name);
+	// console.log(error instanceof MissingProviderError);
+
 	useEffect(() => {
+		console.log('FUND STATE:', fundState);
+
 		if (fundState === fundingStages.completed || fundState === fundingStages.canceled) {
 			clearInterval(fundInterval);
 		}
@@ -151,14 +166,20 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						status: 'error',
 					});
 				}
-			}).catch((error: any) => {
-				if (error instanceof MissingProviderError) {
+			}).catch(error => {
+				if (error.constructor === RejectionError) {
+					// Temporary toast
 					toast({
 						title: 'Pro tip: use a WebLN extension',
 						description: 'Check this link for a list of supported wallets',
 						status: 'info',
 					});
-					fundInterval = setInterval(getFunding, 2000);
+				} else if (error.constructor === MissingProviderError) {
+					toast({
+						title: 'Pro tip: use a WebLN extension',
+						description: 'Check this link for a list of supported wallets',
+						status: 'info',
+					});
 				} else {
 					toast({
 						title: 'Oops! Something went wrong with WebLN.',
@@ -166,6 +187,8 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						status: 'error',
 					});
 				}
+
+				fundInterval = setInterval(getFunding, 2000);
 			});
 		}
 	}, [fundState]);
@@ -216,7 +239,9 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				</ButtonComponent> : 	<ButtonComponent primary margin="0 auto" onClick={() => {
 					setAmount(sats);
 					onOpen();
-				}}>Send {sats} sat</ButtonComponent>}
+				}}>
+					<Box display="flex" justifyContent="center" alignItems="center">Send <SatoshiIcon scale={0.8} mx={1}/> {sats}</Box>
+				</ButtonComponent>}
 			<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
@@ -235,7 +260,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							focusBorderColor="#20ECC7"
 							min={0}
 							isRequired={true}
-							value={amount}
+							defaultValue={amount}
 						>
 							<NumberInputField placeholder={'sats'} />
 							<NumberInputStepper id="increments">
@@ -290,7 +315,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 			<ModalOverlay />
 			<ModalContent>
 				<BubbleCursor/>
-				<ModalHeader textAlign="center">Pay with lightning invoice</ModalHeader>
+				<ModalHeader textAlign="center">🌩️ Pay with lightning invoice</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
 				<QrInvoice
 					comment={fundingTx.comment}
@@ -299,6 +324,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 					owners={project.owners.map(owner => owner.user.username)}
 					qrCode={fundingTx.paymentRequest}
 					handleCloseButton={handleCloseButton}
+					invoiceCancelled={fundingTx.canceled}
 				/>
 			</ModalContent>
 		</Modal>
