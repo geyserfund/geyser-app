@@ -273,7 +273,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 									}
 								</Box>
 							</HStack>
-							<Text>{project.description}</Text>
+							<Text textAlign="justify">{project.description}</Text>
 							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton} />
 						</Box>
 					</Box>
