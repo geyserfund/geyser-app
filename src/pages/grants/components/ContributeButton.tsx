@@ -10,6 +10,8 @@ import { ButtonComponent, Linkin } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { SatoshiIcon } from '../../../components/icons';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
+import { SiTwitter } from 'react-icons/si';
+import Icon from '@chakra-ui/icon';
 
 import {
 	MUTATION_FUND_PROJECT,
@@ -277,11 +279,12 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							focusBorderColor="#20ECC7"
 							resize="none"
 							size="sm"
+							rounded="md"
 						/>
 						<Box display="flex" justifyContent="center" alignItems="center" mt={4} border="2px solid #E9E9E9" rounded="md">
 							<Button backgroundColor={appearAs === 'anonymous' ? '#E9E9E9' : 'white'} fontSize="xs" width="50%" rounded="none" onClick={() => setAppearAs('anonymous')} >Appear as anonymous</Button>
 							<Linkin width="50%" href={`${REACT_APP_API_ENDPOINT}/auth/twitter`} display="flex" justifyContent="center" alignItems="center">
-								<Button width="100%" backgroundColor={appearAs === 'anonymous' ? 'white' : '#E9E9E9'} fontSize="xs" rounded="none" onClick={() => setAppearAs('profile')}>Appear with profile</Button>
+								<ButtonComponent width="100%" backgroundColor={appearAs === 'anonymous' ? 'white' : '#E9E9E9'} fontSize="xs" rounded="none" leftIcon={<Icon as={SiTwitter} />} onClick={() => setAppearAs('profile')}>Appear with profile</ButtonComponent>
 							</Linkin>
 						</Box>
 						<Text fontWeight="bold" mt={6}>Where do the funds go?</Text>
@@ -292,6 +295,10 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							primary
 							width="100%"
 							onClick={() => {
+								if (clearCloseButton) {
+									clearCloseButton(true);
+								}
+
 								handleFund();
 							}}
 							disabled={amount <= 0}
