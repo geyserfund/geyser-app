@@ -126,7 +126,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 		</>
 	);
 
-	const renderSuccessModal = () => (     
+	const renderSuccessModal = () => (
 		<Modal onClose={onClose} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
