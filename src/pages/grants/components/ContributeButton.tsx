@@ -292,7 +292,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 			<ModalOverlay />
 			<ModalContent>
 				<BubbleCursor/>
-				<ModalHeader textAlign="center">Pay with lightning invoice</ModalHeader>
+				<ModalHeader textAlign="center">🌩️ Pay with lightning invoice</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
 				<QrInvoice
 					comment={fundingTx.comment}
