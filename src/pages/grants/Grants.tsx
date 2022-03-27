@@ -119,10 +119,17 @@ const CustomCursor = () => (
 
 const CallToAction = ({ link, ctaText }: { link: string, ctaText: string }) => {
 	const classes = useStyles();
+	const [hoverSponsor, setHoverSponsor] = useState(false);
 
 	return (
 		<Link isExternal href={link} className={classes.becomeSponsor}>
-			<ButtonComponent backgroundColor="brand-bgGrey2" mt={3}>  leftIcon={<AddIcon />} {ctaText}</ButtonComponent>
+			{hoverSponsor
+				? <Fade in={hoverSponsor}>
+					<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={3} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}>{ctaText}</ButtonComponent>
+				</Fade>
+				: <Fade in={!hoverSponsor}><ButtonComponent backgroundColor="brand-bgGrey2" mt={3} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}><AddIcon/></ButtonComponent>
+				</Fade>
+			}
 		</Link>
 	);
 };
@@ -136,7 +143,6 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 				? <Text>No {`${itemName}s`} yet.</Text>
 				: <Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 					<Text mb={2} fontSize="lg" fontWeight="bold">Most recent {`${itemName}s`}</Text>
-					{ callToActionLink && <CallToAction link={callToActionLink} ctaText={`Become a ${itemName}`}/> }
 					<Box flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
 						{
 							items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
@@ -150,6 +156,7 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 							))
 						}
 					</Box>
+					{ callToActionLink && <CallToAction link={callToActionLink} ctaText={`Become a ${itemName}`}/> }
 				</Box>
 			}
 		</>
