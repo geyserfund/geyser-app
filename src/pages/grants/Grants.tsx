@@ -62,7 +62,7 @@ const Countdown = ({ endDate }: { endDate: string}) => {
 	}, []);
 
 	return (
-		<Text textAlign={isMedium ? 'center' : 'left'} fontSize="lg" color="brand.primary" fontWeight="bold">{`${countDown}`}</Text>
+		<Text textAlign={isMedium ? 'center' : 'left'} fontSize="lg" color="brand.darkerPrimary" fontWeight="bold">{`${countDown}`}</Text>
 	);
 };
 
@@ -234,7 +234,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 							<BlobComponent project={project} setHoverBubble={() => {}} setConfetti={setConfetti}/>
 
 							{/* info section */}
-							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
+							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.darkerPrimary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
 							<Countdown endDate={project.expiresAt}/>
 							<Box display="flex" justifyContent="center" alignItems="center">
 								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" alignItems="center" my={4}>
@@ -250,7 +250,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* grant info */}
 						<Box width={{xl: '40%'}}>
 							<Text fontSize="4xl" fontWeight="bold">{project.title}</Text>
-							<Text color="brand.primary" fontWeight="bold" fontSize="lg">Grant program to support hackathon events</Text>
+							<Text color="brand.darkerPrimary" fontWeight="bold" fontSize="lg">Grant program to support hackathon events</Text>
 							<Box flexWrap="wrap" display="flex" my={2}>
 								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">#001</Text>
 								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">Hackathons</Text>
@@ -267,7 +267,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 												href={`https://twitter.com/${owner.user.twitterHandle}`}
 												isExternal
 												fontSize="sm"
-												color="brand.primary"
+												color="brand.darkerPrimary"
 												fontWeight="bold"
 											>@{ owner.user.twitterHandle } </Link>
 										))
