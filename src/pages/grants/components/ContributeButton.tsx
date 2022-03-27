@@ -126,6 +126,8 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	}, [fundData]);
 
 	useEffect(() => {
+		console.log('DATA: ', data);
+
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();
@@ -151,6 +153,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 			};
 
 			requestPayment().then(paymentHash => {
+
 				// Check preimage
 				if (paymentHash === fundingTx.invoiceId) {
 					confettiEffects(true);
@@ -282,7 +285,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							primary
 							width="100%"
 							onClick={() => {
-								// clearCloseButton(true);
 								handleFund();
 							}}
 							disabled={amount <= 0}

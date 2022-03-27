@@ -32,6 +32,5 @@ export const ClickableAvatar = ({ comment, amount, url, imageUrl }: { url: strin
 	if (comment || amount) {
 		return renderWithTooltip({ comment, amount, url, imageUrl });
 	}
-
 	return renderWithoutTooltip({ url, imageUrl });
 };

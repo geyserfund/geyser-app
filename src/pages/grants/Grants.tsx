@@ -200,11 +200,6 @@ export const Grants = ({ project }: { project: IProject }) => {
 	// const [hoverBubble, setHoverBubble] = useState(false);
 	const { width, height } = useWindowSize();
 	const { owners, sponsors, grantees, fundingTxs } = project;
-	// const [sats, setSats] = useState(0);
-
-	// useEffect(() => {
-	// 	console.log('Updated sats!');
-	// }, [sats]);
 
 	return (
 		<>
@@ -237,8 +232,6 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 						{/* bubble section */}
 						<Box mt={{base: 3, xl: 0}}>
-
-							{/* send sats button */}
 
 							{/* bubble */}
 							<BlobComponent project={project} setHoverBubble={() => {}} setConfetti={setConfetti}/>
