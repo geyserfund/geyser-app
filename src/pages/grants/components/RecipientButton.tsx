@@ -90,6 +90,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 				Submit a potential recipient
 				</ButtonComponent>
 
+				{/* submit modal */}
 				<Modal onClose={onClose} isOpen={isOpen} isCentered>
 					<ModalOverlay />
 					<ModalContent>
@@ -144,6 +145,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 			Submit a potential recipient
 			</ButtonComponent>
 
+			{/* success modal */}
 			<Modal onClose={onClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>

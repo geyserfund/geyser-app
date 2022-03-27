@@ -70,6 +70,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 	return (
 		<>
+
+			{/* bubble cursor */}
 			<AnimatedCursor
 				innerSize={0}
 				outerSize={21}
@@ -95,6 +97,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 				]}
 			/>
 
+			{/* confetti effects on invoice payment */}
 			{confetti && <Confetti
 				width={width}
 				height={height}
@@ -104,6 +107,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 				colors={['#1BD5B3', '#20ECC7', '#6BE7CE', '#FFFFFF', '#E9E9E9', '#5B5B5B', '#0F9078', '#F7931A']}
 			/>}
 
+			{/* hero section */}
 			<Box id="top">
 				<Box display="flex" justifyContent="center" alignItems="center" height={{xl: '85vh'}}>
 					<Box
@@ -118,6 +122,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* bubble section */}
 						<Box mt={{base: 10, xl: 0}}>
 
+							{/* send sats button */}
 							<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
 								{sats > 0
 				&&					<Fade in={sats > 0}>
@@ -130,6 +135,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								}
 							</Box>
 
+							{/* bubble */}
 							<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={sats > 0}>
 								<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
 									setHoverBubble(false);
@@ -144,6 +150,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</Tooltip>
 
+							{/* info section */}
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
 							<Text textAlign={isMedium ? 'center' : 'left'} fontSize="lg" color="brand.primary" fontWeight="bold">{`${countDown}`}</Text>
 							<Box display="flex" justifyContent="center" alignItems="center">
@@ -206,6 +213,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 			<Box py={20} id="bottom">
 				<VStack justifyContent="center" alignItems="center" spacing="50px">
 
+					{/* recent donation */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Most recent donations</Text>
 						<HStack flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
@@ -223,6 +231,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						</HStack>
 					</Box>
 
+					{/* sponsors */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Sponsors</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
@@ -242,6 +251,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						</HStack>
 					</Box>
 
+					{/* grantees */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Potential recipients</Text>
 						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
@@ -252,6 +262,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						</HStack>
 					</Box>
 
+					{/* more info */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">More info</Text>
 						<Text>
