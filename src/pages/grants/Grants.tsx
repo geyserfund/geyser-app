@@ -1,5 +1,5 @@
 /* eslint-disable capitalized-comments */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Confetti from 'react-confetti';
 import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip, Fade, CloseButton } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
@@ -37,7 +37,7 @@ import Ellipse63 from '../../assets/random-avatars/Ellipse63.svg';
 import Ellipse64 from '../../assets/random-avatars/Ellipse64.svg';
 import Ellipse65 from '../../assets/random-avatars/Ellipse65.svg';
 
-import { getDaysAgo, isMobileMode, isMediumScreen, getDaysLeft } from '../../utils';
+import { getDaysAgo, isMobileMode, isMediumScreen, getCountDown } from '../../utils';
 import useWindowSize from 'react-use/lib/useWindowSize';
 // import { QUERY_GET_PROJECT } from '../../graphql';
 import { IProject } from '../../interfaces';
@@ -53,12 +53,25 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const [sats, setSats] = useState(0);
 	const [webLNToast, setWebLNToast] = useState(true);
 	const [clearCloseButton, setClearCloseButton] = useState(false);
+	const [countDown, setCountDown] = useState('');
 
 	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
 
 	setTimeout(() => {
 		setWebLNToast(false);
 	}, 10000);
+
+	const handleCountDown = () => {
+		const countDown = getCountDown(project.expiresAt);
+		setCountDown(countDown);
+	};
+
+	useEffect(() => {
+		const interval = setInterval(handleCountDown, 1000);
+		return () => {
+			clearInterval(interval);
+		};
+	}, [project.expiresAt]);
 
 	return (
 		<>
@@ -103,10 +116,10 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box display="flex" justifyContent="center" alignItems="center" position="absolute" left="0" right="0" margin="auto">
 						<Box width={{base: '90%', md: '75%', lg: '50%', xl: '25%'}} backgroundColor="brand.primary" color="black" opacity="0.65" p={2} rounded="md" mt={1}>
 							<Box display="flex" justifyContent="space-between" alignItems="center">
-								<Text fontSize="md" fontWeight="bold">We use WebLN! 🌩️</Text>
+								<Text fontSize="md" fontWeight="bold">🌩️ We use WebLN!</Text>
 								<CloseButton onClick={() => setWebLNToast(false)}></CloseButton>
 							</Box>
-							<Text>Make payments directly from your browser by using getalby.com. Click <Link isExternal href="https://getalby.com">here</Link> to download.</Text>
+							<Text>Make payments directly from your browser by using getalby.com. Click <Link isExternal href="https://getalby.com">here</Link> to download the extension.</Text>
 						</Box>
 					</Box>
 				</Fade>
@@ -150,8 +163,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</Tooltip>
 
-							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
-							<Text textAlign={isMedium ? 'center' : 'left'} fontSize="md">Time left: <b>{`${getDaysLeft(project.expiresAt)}`}</b></Text>
+							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
+							<Text textAlign={isMedium ? 'center' : 'left'} fontSize="lg" color="brand.primary" fontWeight="bold">{`${countDown}`}</Text>
 							<Box display="flex" justifyContent="center" alignItems="center">
 								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" alignItems="center" my={4}>
 									<HStack spacing="10px" mr={isMobile ? 0 : 10}>
