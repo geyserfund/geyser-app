@@ -10,7 +10,9 @@ import { Grantee } from './components/Grantee';
 import { SatoshiIcon } from '../../components/icons';
 import { Blob } from 'react-blob';
 import AnimatedCursor from 'react-animated-cursor';
-import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
+import { ArrowDownIcon, ArrowUpIcon, AddIcon } from '@chakra-ui/icons';
+import { ButtonComponent } from '../../components/ui';
+import { createUseStyles } from 'react-jss';
 
 import Ellipse42 from '../../assets/random-avatars/Ellipse42.svg';
 import Ellipse43 from '../../assets/random-avatars/Ellipse43.svg';
@@ -42,6 +44,14 @@ import useWindowSize from 'react-use/lib/useWindowSize';
 // import { QUERY_GET_PROJECT } from '../../graphql';
 import { IProject } from '../../interfaces';
 
+const useStyles = createUseStyles({
+	becomeSponsor: {
+		'&:hover': {
+			textDecoration: 'none',
+		},
+	},
+});
+
 export const Grants = ({ project }: { project: IProject }) => {
 	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
@@ -53,6 +63,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const [sats, setSats] = useState(0);
 	const [clearCloseButton, setClearCloseButton] = useState(false);
 	const [countDown, setCountDown] = useState('');
+	const classes = useStyles();
 
 	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
 
@@ -120,7 +131,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					>
 
 						{/* bubble section */}
-						<Box mt={{base: 10, xl: 0}}>
+						<Box mt={{base: 3, xl: 0}}>
 
 							{/* send sats button */}
 							<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
@@ -168,11 +179,11 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Box width={{xl: '40%'}}>
 							<Text fontSize="4xl" fontWeight="bold">{project.title}</Text>
 							<Text color="brand.primary" fontWeight="bold" fontSize="lg">Supporting Bitcoin hackathons focused on on-chain and lightning applications.</Text>
-							<HStack my={2} spacing="10px">
-								<Text bg="brand.bgGrey" px={5} py={1} borderRadius="lg">#001</Text>
-								<Text bg="brand.bgGrey" px={5} py={1} borderRadius="lg">Hackathons</Text>
-								<Text bg="brand.bgGrey" px={5} py={1} borderRadius="lg">Building</Text>
-							</HStack>
+							<Box flexWrap="wrap" display="flex" my={2}>
+								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">#001</Text>
+								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">Hackathons</Text>
+								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">Building</Text>
+							</Box>
 							<Text>Created <b>{`${getDaysAgo(project.createdAt)} ago`}</b></Text>
 							<HStack my={1} flexWrap="wrap">
 								<Text>The Board:</Text>
@@ -216,7 +227,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					{/* recent donation */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Most recent donations</Text>
-						<HStack flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
+						<Box flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
 							{
 								fundingTxs.map(tx => (
 									<ClickableAvatar
@@ -228,38 +239,44 @@ export const Grants = ({ project }: { project: IProject }) => {
 									/>
 								))
 							}
-						</HStack>
+						</Box>
 					</Box>
 
 					{/* sponsors */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Sponsors</Text>
-						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
-							{/* TODO add amount and comment fields to the sponsors table on the backend */}
-							{
-								sponsors.map(sponsor => (
+						{sponsors.length > 0
+							? <Box display="flex" alignItems="center" flexWrap="wrap" margin="0 auto">
+								{/* TODO add amount and comment fields to the sponsors table on the backend */}
+								{
+									sponsors.map(sponsor => (
 
-									<ClickableAvatar
-										amount="100000"
-										comment="Satsoshi"
-										key={sponsor.user.id}
-										url={`https://twitter.com/${sponsor.user.twitterHandle}`}
-										imageUrl={sponsor.user.imageUrl}
-									/>
-								))
-							}
-						</HStack>
+										<ClickableAvatar
+											amount="100000"
+											comment="Satsoshi"
+											key={sponsor.user.id}
+											url={`https://twitter.com/${sponsor.user.twitterHandle}`}
+											imageUrl={sponsor.user.imageUrl}
+										/>
+									))
+								}
+							</Box>
+							: <Text>No sponsors yet.</Text>
+						}
+						<Link isExternal href="https://airtable.com/shr8X1T7M8SuvHOjD" className={classes.becomeSponsor}>
+							<ButtonComponent backgroundColor="brand-bgGrey2" mt={3}><AddIcon mr={3}/> Become a sponsor</ButtonComponent>
+						</Link>
 					</Box>
 
 					{/* grantees */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">Potential recipients</Text>
-						<HStack flexWrap="wrap" spacing={['0px', '15px']}>
+						<Box flexWrap="wrap" display="flex" alignItems="center">
 							<RecipientButton project={project}/>
 							{
 								grantees.map(grantee => <Grantee key={grantee.id} grantee={grantee}/>)
 							}
-						</HStack>
+						</Box>
 					</Box>
 
 					{/* more info */}

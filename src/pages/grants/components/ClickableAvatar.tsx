@@ -5,7 +5,7 @@ export const ClickableAvatar = ({ url, imageUrl, amount, comment }: { url: strin
 
 	<Tooltip label={comment ? `${amount} sats "${comment}"` : `${amount} sats`} placement="top" bg="brand.bgGrey" color="black" borderRadius="base" hasArrow py={2}>
 		<Link href={url} isExternal p={1}>
-			<Avatar w={['40px', '60px']} h={['40px', '60px']} src={imageUrl} />
+			<Avatar w={['40px', '60px']} h={['40px', '60px']} src={imageUrl} m={1} />
 		</Link>
 	</Tooltip>
 );
