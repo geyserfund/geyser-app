@@ -180,7 +180,6 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 			<ButtonComponent
 				borderRadius="4px"
 				backgroundColor="brand-bgGrey2"
-				mb={2}
 				onClick={() => {
 					console.log('STEP:', step);
 

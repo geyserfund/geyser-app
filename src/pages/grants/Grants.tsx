@@ -249,7 +249,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						{/* grant info */}
 						<Box width={{xl: '40%'}}>
 							<Text fontSize="4xl" fontWeight="bold">{project.title}</Text>
-							<Text color="brand.primary" fontWeight="bold" fontSize="lg">A grant program to support hackathon events</Text>
+							<Text color="brand.primary" fontWeight="bold" fontSize="lg">Grant program to support hackathon events</Text>
 							<Box flexWrap="wrap" display="flex" my={2}>
 								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">#001</Text>
 								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">Hackathons</Text>
@@ -323,7 +323,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">More info</Text>
 						<Text>
-						The funds are to be transferred onto on-chain multi-sig wallets held by the board, who will distribute the entire 100% funds to the relevant causes. The Potential Recipients will help the board identify the pool of recipients.
+						Support your favorite causes through Geyser Grants, and submit your suggested recipients. Once the Grant closes, the Board will select from the relevant initiatives and distribute the funds accordingly. All the data will be presented in an open source way. For more info about the Grants, read <Link isExternal href="https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09">here</Link>.
 						</Text>
 					</Box>
 

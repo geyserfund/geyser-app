@@ -274,7 +274,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							size="sm"
 						/>
 						<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
-						<Text>Geyser will custody the grant funds until the recepients are established.</Text>
+						<Text>The funds are sent to a multi-signature address held by the Grant Board, who will secure and send to the relevant projects.</Text>
 					</ModalBody>
 					<ModalFooter>
 						<ButtonComponent
