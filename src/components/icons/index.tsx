@@ -12,6 +12,7 @@ import SatoshiPng from '../../assets/satoshi.png';
 import ArrowDownSvg from '../../assets/arrowdownicon.svg';
 import ArrowUpSvg from '../../assets/arrowupicon.svg';
 import QuestionSvg from '../../assets/question.svg';
+import CloseSvg from '../../assets/close.svg';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, ...rest }: any) => (
 	<Box padding="3px 0px" className={wrapperClass}>
@@ -76,5 +77,11 @@ export const ArrowUpIcon = () => (
 export const QuestionIcon = () => (
 	<Box padding="3px 0px">
 		<Image height="20px" width="20px" src={QuestionSvg} alt="questionmark" />
+	</Box>
+);
+
+export const CloseIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={CloseSvg} alt="close" />
 	</Box>
 );

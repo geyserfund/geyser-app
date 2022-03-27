@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import Confetti from 'react-confetti';
 import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip, Fade } from '@chakra-ui/react';
+import { ButtonComponent } from '../../components/ui';
 import { Footer } from '../../components/molecules';
 import { ContributeButton } from './components/ContributeButton';
 import { RecipientButton } from './components/RecipientButton';
 import { ClickableAvatar } from './components/ClickableAvatar';
 import { Grantee } from './components/Grantee';
-import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon } from '../../components/icons';
+import { SatoshiIcon, ArrowDownIcon, ArrowUpIcon, CloseIcon } from '../../components/icons';
 import { Blob } from 'react-blob';
 import AnimatedCursor from 'react-animated-cursor';
 
@@ -50,8 +51,13 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const { width, height } = useWindowSize();
 	const { owners, sponsors, grantees, fundingTxs } = project;
 	const [sats, setSats] = useState(0);
+	const [webLNToast, setWebLNToast] = useState(true);
 
 	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
+
+	setTimeout(() => {
+		setWebLNToast(false);
+	}, 10000);
 
 	return (
 		<>
@@ -90,6 +96,20 @@ export const Grants = ({ project }: { project: IProject }) => {
 			/>}
 
 			<Box id="top">
+
+				{/* webLN toast */}
+				<Fade in={webLNToast} unmountOnExit={true}>
+					<Box display="flex" justifyContent="center" alignItems="center" position="absolute" left="0" right="0" margin="auto">
+						<Box width={{base: '90%', md: '75%', lg: '50%', xl: '25%'}} backgroundColor="brand.primary" color="black" opacity="0.5" p={2} rounded="md" mt={1}>
+							<Box display="flex" justifyContent="space-between" alignItems="center">
+								<Text fontSize="md" fontWeight="bold">We use WebLN! 🌩️</Text>
+								<ButtonComponent primary onClick={() => setWebLNToast(false)}><CloseIcon/></ButtonComponent>
+							</Box>
+							<Text>Make payments directly from your browser by using getalby.com. Click <Link isExternal href="https://getalby.com">here</Link> to download.</Text>
+						</Box>
+					</Box>
+				</Fade>
+
 				<Box display="flex" justifyContent="center" alignItems="center" height={{xl: '85vh'}}>
 					<Box
 						display={isMedium ? 'block' : 'flex'}
