@@ -74,7 +74,7 @@ export const QrInvoice = ({
 					isFullWidth
 					primary={copy}
 					onClick={handleCopy}
-					leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
+					leftIcon={copy ? <RiLinkUnlinkM size="1.25rem" /> : <RiLinksLine size="1.25rem" />}
 				>
 					{!copy ? 'Copy Invoice' : 'Invoice Copied'}
 				</ButtonComponent>
