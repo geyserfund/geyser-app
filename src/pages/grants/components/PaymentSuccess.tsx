@@ -4,8 +4,8 @@ import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { BiCopyAlt } from 'react-icons/bi';
-import Check from '../../../assets/check.svg';
-import { Image, Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
+import { CheckIcon } from '@chakra-ui/icons';
 
 interface IPaymentSuccess {
 	amount: number
@@ -41,7 +41,7 @@ export const PaymentSuccess = ({ amount, grant }: IPaymentSuccess) => {
 			justifyContent="center"
 		>
 			<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
-				<Image src={Check} />
+				<CheckIcon w={10} h={10}/>
 			</Box>
 			<Text py={5} textAlign="center">You made a contribution of <b>{amount}</b> sats to <b>{grant}</b>.</Text>
 			<ButtonComponent
