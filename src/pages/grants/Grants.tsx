@@ -37,7 +37,7 @@ import Ellipse63 from '../../assets/random-avatars/Ellipse63.svg';
 import Ellipse64 from '../../assets/random-avatars/Ellipse64.svg';
 import Ellipse65 from '../../assets/random-avatars/Ellipse65.svg';
 
-import { getDaysAgo, isMobileMode, isMediumScreen } from '../../utils';
+import { getDaysAgo, isMobileMode, isMediumScreen, getDaysLeft } from '../../utils';
 import useWindowSize from 'react-use/lib/useWindowSize';
 // import { QUERY_GET_PROJECT } from '../../graphql';
 import { IProject } from '../../interfaces';
@@ -151,6 +151,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 							</Tooltip>
 
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant open</Text>
+							<Text textAlign={isMedium ? 'center' : 'left'} fontSize="md">Time left: <b>{`${getDaysLeft(project.expiresAt)}`}</b></Text>
 							<Box display="flex" justifyContent="center" alignItems="center">
 								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" alignItems="center" my={4}>
 									<HStack spacing="10px" mr={isMobile ? 0 : 10}>
