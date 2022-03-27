@@ -42,6 +42,27 @@ import useWindowSize from 'react-use/lib/useWindowSize';
 // import { QUERY_GET_PROJECT } from '../../graphql';
 import { IProject } from '../../interfaces';
 
+const Countdown = ({ endDate }: { endDate: string}) => {
+	const [countDown, setCountDown] = useState('');
+	const isMedium = isMediumScreen();
+
+	const handleCountDown = () => {
+		const countDown = getCountDown(endDate);
+		setCountDown(countDown);
+	};
+
+	useEffect(() => {
+		const interval = setInterval(handleCountDown, 1000);
+		return () => {
+			clearInterval(interval);
+		};
+	}, []);
+
+	return (
+		<Text textAlign={isMedium ? 'center' : 'left'} fontSize="lg" color="brand.primary" fontWeight="bold">{`${countDown}`}</Text>
+	);
+};
+
 export const Grants = ({ project }: { project: IProject }) => {
 	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
@@ -52,21 +73,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const { owners, sponsors, grantees, fundingTxs } = project;
 	const [sats, setSats] = useState(0);
 	const [clearCloseButton, setClearCloseButton] = useState(false);
-	const [countDown, setCountDown] = useState('');
 
 	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
-
-	const handleCountDown = () => {
-		const countDown = getCountDown(project.expiresAt);
-		setCountDown(countDown);
-	};
-
-	useEffect(() => {
-		const interval = setInterval(handleCountDown, 1000);
-		return () => {
-			clearInterval(interval);
-		};
-	}, [project.expiresAt]);
 
 	return (
 		<>
@@ -152,7 +160,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							{/* info section */}
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
-							<Text textAlign={isMedium ? 'center' : 'left'} fontSize="lg" color="brand.primary" fontWeight="bold">{`${countDown}`}</Text>
+							<Countdown endDate={project.expiresAt}/>
 							<Box display="flex" justifyContent="center" alignItems="center">
 								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" alignItems="center" my={4}>
 									<HStack spacing="10px" mr={isMobile ? 0 : 10}>
