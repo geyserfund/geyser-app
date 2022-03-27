@@ -153,7 +153,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 			};
 
 			requestPayment().then(paymentHash => {
-
 				// Check preimage
 				if (paymentHash === fundingTx.invoiceId) {
 					confettiEffects(true);
