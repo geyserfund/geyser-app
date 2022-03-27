@@ -66,25 +66,50 @@ const Countdown = ({ endDate }: { endDate: string}) => {
 	);
 };
 
-const BlobComponent = ({ incrementSats, setHoverBubble, tooltipDisabled }: {
-	incrementSats: any,
+const BlobComponent = ({ project, setHoverBubble, setConfetti }: {
+	project: IProject,
 	setHoverBubble: Dispatch<SetStateAction<boolean>>,
-	tooltipDisabled: boolean,
- }) => (
-	<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={tooltipDisabled}>
-		<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
-			setHoverBubble(false);
-		}}>
-			<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
-				style={{
-					backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
-					margin: '0 auto',
-					boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
-				}}
-			/>
-		</Box>
-	</Tooltip>
-);
+	setConfetti: Dispatch<SetStateAction<boolean>>
+ }) => {
+	console.log('');
+	const [sats, setSats] = useState(0);
+	const [clearCloseButton, setClearCloseButton] = useState(false);
+
+	const incrementSats = (amount: number) => {
+		console.log(sats);
+
+		setSats(sats + amount);
+	};
+
+	return (
+		<>
+			<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
+				{ sats > 0
+					&& <Fade in={sats > 0}>
+						<HStack>
+							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton}/>
+							{!clearCloseButton
+							&& <CloseButton onClick={() => setSats(0)}/>}
+						</HStack>
+					</Fade>
+				}
+			</Box>
+			<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={sats > 0}>
+				<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
+					setHoverBubble(false);
+				}}>
+					<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
+						style={{
+							backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
+							margin: '0 auto',
+							boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
+						}}
+					/>
+				</Box>
+			</Tooltip>
+		</>
+	);
+};
 
 const CustomCursor = () => (
 	<AnimatedCursor
@@ -175,9 +200,11 @@ export const Grants = ({ project }: { project: IProject }) => {
 	// const [hoverBubble, setHoverBubble] = useState(false);
 	const { width, height } = useWindowSize();
 	const { owners, sponsors, grantees, fundingTxs } = project;
-	const [sats, setSats] = useState(0);
-	const [clearCloseButton, setClearCloseButton] = useState(false);
-	const incrementSatoshis = (amount: number) => setSats(sats + amount);
+	// const [sats, setSats] = useState(0);
+
+	// useEffect(() => {
+	// 	console.log('Updated sats!');
+	// }, [sats]);
 
 	return (
 		<>
@@ -212,21 +239,9 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Box mt={{base: 3, xl: 0}}>
 
 							{/* send sats button */}
-							<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
-								{
-									sats > 0
-									&& <Fade in={sats > 0}>
-										<HStack>
-											<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton}/>
-											{!clearCloseButton
-											&& <CloseButton onClick={() => setSats(0)}/>}
-										</HStack>
-									</Fade>
-								}
-							</Box>
 
 							{/* bubble */}
-							<BlobComponent incrementSats={incrementSatoshis} setHoverBubble={() => {}} tooltipDisabled={sats > 0} />
+							<BlobComponent project={project} setHoverBubble={() => {}} setConfetti={setConfetti}/>
 
 							{/* info section */}
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.primary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
@@ -270,7 +285,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 							</HStack>
 							<Text textAlign="justify">{project.description}</Text>
-							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton} />
+							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" />
 						</Box>
 					</Box>
 				</Box>
