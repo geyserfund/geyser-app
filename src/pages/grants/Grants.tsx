@@ -70,25 +70,21 @@ const BlobComponent = ({ incrementSats, setHoverBubble, tooltipDisabled }: {
 	incrementSats: any,
 	setHoverBubble: Dispatch<SetStateAction<boolean>>,
 	tooltipDisabled: boolean,
- }) => {
-	console.log('');
-
-	return (
-		<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={tooltipDisabled}>
-			<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
-				setHoverBubble(false);
-			}}>
-				<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
-					style={{
-						backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
-						margin: '0 auto',
-						boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
-					}}
-				/>
-			</Box>
-		</Tooltip>
-	);
-};
+ }) => (
+	<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={tooltipDisabled}>
+		<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
+			setHoverBubble(false);
+		}}>
+			<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
+				style={{
+					backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
+					margin: '0 auto',
+					boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
+				}}
+			/>
+		</Box>
+	</Tooltip>
+);
 
 const CustomCursor = () => (
 	<AnimatedCursor
