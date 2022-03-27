@@ -130,8 +130,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	}, [fundData]);
 
 	useEffect(() => {
-		console.log('DATA: ', data);
-
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();

@@ -71,13 +71,10 @@ const BlobComponent = ({ project, setHoverBubble, setConfetti }: {
 	setHoverBubble: Dispatch<SetStateAction<boolean>>,
 	setConfetti: Dispatch<SetStateAction<boolean>>
  }) => {
-	console.log('');
 	const [sats, setSats] = useState(0);
 	const [clearCloseButton, setClearCloseButton] = useState(false);
 
 	const incrementSats = (amount: number) => {
-		console.log(sats);
-
 		setSats(sats + amount);
 	};
 
