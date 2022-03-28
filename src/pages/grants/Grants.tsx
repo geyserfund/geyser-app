@@ -213,13 +213,13 @@ export const Grants = ({ project }: { project: IProject }) => {
 					{/* recent donation */}
 					<MemoizedAvatarsBoard
 						items={fundingTxs.map(({ id, amount, funder, comment }) => ({ id, user: funder.user, comment, amount: Number(amount) }))}
-						itemName="donation"
+						itemName="Most recent donations"
 					/>
 
 					{/* sponsors */}
 					<MemoizedAvatarsBoard
 						items={sponsors.map(({ user}) => ({ id: Number(user.id), user }))}
-						itemName="sponsor"
+						itemName="Sponsors"
 						callToActionLink="https://airtable.com/shr8X1T7M8SuvHOjD"
 					/>
 

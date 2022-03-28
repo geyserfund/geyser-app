@@ -64,7 +64,7 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 			{ items.length === 0
 				? <Text>No {`${itemName}s`} yet.</Text>
 				: <Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
-					<Text mb={2} fontSize="lg" fontWeight="bold">Most recent {`${itemName}s`}</Text>
+					<Text mb={2} fontSize="lg" fontWeight="bold">{`${itemName}`}</Text>
 					<Box flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
 						{
 							items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
