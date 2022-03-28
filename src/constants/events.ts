@@ -32,11 +32,11 @@ export const projectTypes:{
 
 export const SelectCountryOptions:ISelectOption[] = [
 	{
-		label: 'Inside US',
+		label: 'Inside the USA',
 		value: 'INSIDE_US',
 	},
 	{
-		label: 'Outside US',
+		label: 'Outside USA',
 		value: 'OUTSIDE_US',
 	},
 ];

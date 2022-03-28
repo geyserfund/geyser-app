@@ -46,28 +46,28 @@ export const Project = () => {
 			price: 60,
 			backers: 23,
 			title: 'Bitcoin Board Game',
-			Description: 'Get the Game',
+			description: 'Get the Game',
 		},
 		{
 			id: 2,
 			price: 60,
 			backers: 23,
 			title: 'Bitcoin Board Game',
-			Description: 'Get the Game',
+			description: 'Get the Game',
 		},
 		{
 			id: 3,
 			price: 60,
 			backers: 23,
 			title: 'Bitcoin Board Game',
-			Description: 'Get the Game',
+			description: 'Get the Game',
 		},
 		{
 			id: 4,
 			price: 60,
 			backers: 23,
 			title: 'Bitcoin Board Game',
-			Description: 'Get the Game',
+			description: 'Get the Game',
 		},
 	];
 	return (
