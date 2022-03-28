@@ -47,9 +47,9 @@ const CallToAction = ({ link, ctaText }: { link: string, ctaText: string }) => {
 		<Link isExternal href={link} className={classes.becomeSponsor}>
 			{hoverSponsor
 				? <Fade in={hoverSponsor}>
-					<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} mt={4} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}>{ctaText}</ButtonComponent>
+					<ButtonComponent backgroundColor="brand-bgGrey2" leftIcon={<AddIcon />} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}>{ctaText}</ButtonComponent>
 				</Fade>
-				: <Fade in={!hoverSponsor}><ButtonComponent backgroundColor="brand-bgGrey2" mt={4} onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}><AddIcon/></ButtonComponent>
+				: <Fade in={!hoverSponsor}><ButtonComponent backgroundColor="brand-bgGrey2" onMouseEnter={() => setHoverSponsor(true)} onMouseLeave={() => setHoverSponsor(false)}><AddIcon/></ButtonComponent>
 				</Fade>
 			}
 		</Link>
@@ -65,7 +65,7 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 				? <Text>No {`${itemName}s`} yet.</Text>
 				: <Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 					<Text mb={2} fontSize="lg" fontWeight="bold">{`${itemName}`}</Text>
-					<Box flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
+					<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center" margin="0 auto">
 						{
 							items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
 								<MemoizedClickableAvatar
@@ -77,8 +77,8 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 								/>
 							))
 						}
+						{ callToActionLink && <CallToAction link={callToActionLink} ctaText={'Become a sponsor'}/> }
 					</Box>
-					{ callToActionLink && <CallToAction link={callToActionLink} ctaText={`Become a ${itemName}`}/> }
 				</Box>
 			}
 		</>

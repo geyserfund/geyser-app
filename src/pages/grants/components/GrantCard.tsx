@@ -66,12 +66,12 @@ export const GrantCard = ({link, color1, color2, color3, number, status, title}:
 			{projectsLoading ? <Loader width="100%"/>
 				: <>
 					<HStack>
-						<SatoshiIcon scale={0.8}/><Text color="brand.darkerPrimary" fontWeight="bold">{`${project.balance}`}</Text>
+						<SatoshiIcon scale={0.8}/><Text fontWeight="bold">{`${project.balance}`}</Text>
 						<Text>raised</Text>
 					</HStack>
 
 					<HStack>
-						<Text color="brand.darkerPrimary" fontWeight="bold">{project.fundingTxs.length}</Text>
+						<Text fontWeight="bold">{project.fundingTxs.length}</Text>
 						<Text>donations</Text>
 					</HStack>
 				</>

@@ -9,7 +9,7 @@ export const GrantsLanding = () => (
 
 		<Box width="85%" margin="0 auto" mt={10}>
 			<Text fontSize="4xl">Geyser Grants</Text>
-			<Text>It&apos;s not always easy for individuals and institutions to donate to a single Geyser fund campaign. Grants makes it easy for anyone to contribute to a particular cause without having to look in detail at every project. The Geyser Fund Board will search within and beyond Geyser fund campaigns to select the most impactful projects.</Text>
+			<Text>Grants makes it easy for anyone to contribute to a particular cause without having to look in detail at every project. The Geyser Fund Board will search within and beyond Geyser fund campaigns to select the most impactful projects.</Text>
 		</Box>
 
 		<Box display="flex" justifyContent="center" alignItems="center" backgroundColor="brand.bgGrey2" py={20} mt={12} mb={20} mx={[0, 20]} rounded="md">
