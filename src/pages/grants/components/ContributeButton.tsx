@@ -280,7 +280,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						<Box display="flex" justifyContent="center" alignItems="center" mt={4} border="2px solid #E9E9E9" rounded="md">
 							<Button backgroundColor={appearAs === 'anonymous' ? '#E9E9E9' : 'white'} fontSize="xs" width="50%" rounded="none" onClick={() => setAppearAs('anonymous')} >Appear as anonymous</Button>
 							<Linkin width="50%" href={`${REACT_APP_API_ENDPOINT}/auth/twitter`} display="flex" justifyContent="center" alignItems="center">
-								<ButtonComponent width="100%" backgroundColor={appearAs === 'anonymous' ? 'white' : '#E9E9E9'} fontSize="xs" rounded="none" leftIcon={<Icon as={SiTwitter} />} onClick={() => setAppearAs('profile')}>Appear with profile</ButtonComponent>
+								<ButtonComponent width="100%" backgroundColor={appearAs === 'anonymous' ? 'white' : '#E9E9E9'} fontSize="xs" rounded="none" leftIcon={<Icon as={SiTwitter} />} onClick={() => setAppearAs('profile')}>Verify Twitter</ButtonComponent>
 							</Linkin>
 						</Box>
 						<Text fontWeight="bold" mt={6}>Where do the funds go?</Text>
