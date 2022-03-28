@@ -261,7 +261,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							focusBorderColor="#20ECC7"
 							min={0}
 							isRequired={true}
-							defaultValue={amount}
+							defaultValue={`${amount}`}
 						>
 							<NumberInputField placeholder={'sats'} />
 							<NumberInputStepper id="increments">
