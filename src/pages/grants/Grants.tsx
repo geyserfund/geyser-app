@@ -166,7 +166,7 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 									amount={amount}
 									comment={comment}
 									key={id}
-									url={`https://twitter.com/${user.twitterHandle}`}
+									url={user.twitterHandle === null ? 'https://bitcoin.org' : `https://twitter.com/${user.twitterHandle}`}
 									imageUrl={user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : user.imageUrl}
 								/>
 							))
@@ -320,7 +320,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
 						<Text mb={2} fontSize="lg" fontWeight="bold">More info</Text>
 						<Text>
-						Support your favorite causes through Geyser Grants, and submit your suggested recipients. Once the Grant closes, the Board will select from the relevant initiatives and distribute the funds accordingly. All the data will be presented in an open source way. For more info about the Grants, read <Link isExternal href="https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09">here</Link>.
+						Support your favorite causes through Geyser Grants, and submit your suggested recipients. Once the Grant closes, the Board will select from the relevant initiatives and distribute the funds accordingly. All the data will be presented in an open source way. For more info about the Grants, read <Link isExternal href="https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09" textDecoration="underline">here</Link>.
 						</Text>
 					</Box>
 

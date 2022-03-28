@@ -94,7 +94,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 						onClose();
 					}} />
 					<ModalBody>
-						<Text>Drop below the name, and a Tweet or link that demonstrates the person or organization’s fit to receive this grant.</Text>
+						<Text>Drop a name below, and a Tweet or link that demonstrates the person or organization’s fit to receive this grant.</Text>
 						<Text mt={5}>Name</Text>
 						<Input
 							name="name"

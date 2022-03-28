@@ -26,7 +26,7 @@ import { fundingStages, IFundingStages, stageList } from '../../../constants';
 import {
 	Text, HStack, Modal, ModalOverlay, ModalContent, NumberInput,
 	ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Textarea,
-	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box, Button,
+	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box, Button, Link,
 } from '@chakra-ui/react';
 
 const initialFunding = {
@@ -287,7 +287,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							</Linkin>
 						</Box>
 						<Text fontWeight="bold" mt={6}>Where do the funds go?</Text>
-						<Text>The funds are secured by the Grant Board until they are sent to the relevant projects at the end of the grant.</Text>
+						<Text>The funds are secured by the Grant Board until they are sent to the relevant projects at the end of the donation period.</Text>
 					</ModalBody>
 					<ModalFooter>
 						<ButtonComponent
@@ -332,6 +332,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				<BubbleCursor/>
 				<ModalHeader textAlign="center">🌩️ Pay with lightning invoice</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
+				<Text width="90%" fontSize="xs" margin="0 auto">Pay with any lightning wallet by scanning or copying the invoice below, or download the <Link isExternal href="https://getalby.com" textDecoration="underline">Alby</Link> extention to pay directly from your browser.</Text>
 				<QrInvoice
 					comment={fundingTx.comment}
 					title={project.title}
