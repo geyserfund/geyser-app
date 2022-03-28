@@ -66,12 +66,12 @@ const Countdown = ({ endDate }: { endDate: string}) => {
 	);
 };
 
-const BlobComponent = ({ project, setHoverBubble, setConfetti }: {
+const BlobComponent = ({ project, setConfetti }: {
 	project: IProject,
-	setHoverBubble: Dispatch<SetStateAction<boolean>>,
 	setConfetti: Dispatch<SetStateAction<boolean>>
  }) => {
 	const [sats, setSats] = useState(0);
+	const [wobble, makeWobble] = useState(false);
 	const [clearCloseButton, setClearCloseButton] = useState(false);
 
 	const incrementSats = (amount: number) => {
@@ -92,9 +92,7 @@ const BlobComponent = ({ project, setHoverBubble, setConfetti }: {
 				}
 			</Box>
 			<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={sats > 0}>
-				<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => setHoverBubble(true)} onMouseLeave={() => {
-					setHoverBubble(false);
-				}}>
+				<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => makeWobble(!wobble)} onMouseLeave={() => makeWobble(!wobble)}>
 					<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
 						style={{
 							backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
@@ -194,7 +192,6 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const isMedium = isMediumScreen();
 	const [arrowChange, setArrowChange] = useState(false);
 	const [confetti, setConfetti] = useState(false);
-	// const [hoverBubble, setHoverBubble] = useState(false);
 	const { width, height } = useWindowSize();
 	const { owners, sponsors, grantees, fundingTxs } = project;
 
@@ -231,7 +228,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Box mt={{base: 3, xl: 0}}>
 
 							{/* bubble */}
-							<BlobComponent project={project} setHoverBubble={() => {}} setConfetti={setConfetti}/>
+							<BlobComponent project={project} setConfetti={setConfetti}/>
 
 							{/* info section */}
 							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.darkerPrimary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
