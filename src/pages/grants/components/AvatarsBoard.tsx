@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ClickableAvatar } from '../components/ClickableAvatar';
+import { MemoizedClickableAvatar } from '../components';
 import { ButtonComponent } from '../../../components/ui';
 import { IAvatarBoardItem, IAvatarBoardProps } from '../interfaces';
 import { createUseStyles } from 'react-jss';
@@ -59,7 +59,6 @@ const CallToAction = ({ link, ctaText }: { link: string, ctaText: string }) => {
 const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) => {
 	const randomAvatars = [Ellipse42, Ellipse43, Ellipse44, Ellipse45, Ellipse46, Ellipse47, Ellipse48, Ellipse49, Ellipse50, Ellipse51, Ellipse52, Ellipse53, Ellipse54, Ellipse55, Ellipse56, Ellipse57, Ellipse58, Ellipse59, Ellipse60, Ellipse61, Ellipse62, Ellipse63, Ellipse64, Ellipse65];
 	console.log(callToActionLink);
-
 	return (
 		<>
 			{ items.length === 0
@@ -69,7 +68,7 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 					<Box flexWrap="wrap" justifyContent="center" alignItems="center" margin="0 auto">
 						{
 							items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
-								<ClickableAvatar
+								<MemoizedClickableAvatar
 									amount={amount}
 									comment={comment}
 									key={id}
