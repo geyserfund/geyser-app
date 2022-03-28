@@ -72,7 +72,7 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 									amount={amount}
 									comment={comment}
 									key={id}
-									url={`https://twitter.com/${user.twitterHandle}`}
+									url={user.twitterHandle === null ? 'https://bitcoin.org' : `https://twitter.com/${user.twitterHandle}`}
 									imageUrl={user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : user.imageUrl}
 								/>
 							))
