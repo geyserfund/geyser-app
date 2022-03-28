@@ -82,7 +82,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 			</ButtonComponent> */}
 
 			{/* success modal */}
-			<Modal onClose={onClose} isOpen={isOpen} isCentered>
+			<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
 					<BubbleCursor/>
@@ -94,7 +94,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 						onClose();
 					}} />
 					<ModalBody>
-						<Text>Drop below the name, and a Tweet or link that demonstrates the person or organization’s fit to receive this grant.</Text>
+						<Text>Drop a name below, and a link that demonstrates the person or organization’s fit to receive this grant.</Text>
 						<Text mt={5}>Name</Text>
 						<Input
 							name="name"
@@ -106,7 +106,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 						<Text mt={5}>Link</Text>
 						<Input
 							name="link"
-							placeholder="https://twitter.com/metamick14"
+							placeholder="https://twitter.com/boltfun_btc"
 							focusBorderColor="#20ECC7"
 							onChange={event => setUrl(event.target.value)}
 							value={url}
@@ -126,7 +126,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 	);
 
 	const renderSuccessModal = () => (
-		<Modal onClose={onClose} isOpen={isOpen} isCentered>
+		<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
 				<BubbleCursor/>

@@ -6,9 +6,12 @@ import React, { useState, useEffect } from 'react';
 import { QrInvoice } from './QrInvoice';
 import { BubbleCursor } from './BubbleCursor';
 import { PaymentSuccess } from './PaymentSuccess';
-import { ButtonComponent } from '../../../components/ui';
+import { ButtonComponent, Linkin } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { SatoshiIcon } from '../../../components/icons';
+import { REACT_APP_API_ENDPOINT } from '../../../constants';
+import { SiTwitter } from 'react-icons/si';
+import Icon from '@chakra-ui/icon';
 
 import {
 	MUTATION_FUND_PROJECT,
@@ -23,7 +26,7 @@ import { fundingStages, IFundingStages, stageList } from '../../../constants';
 import {
 	Text, HStack, Modal, ModalOverlay, ModalContent, NumberInput,
 	ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Textarea,
-	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box,
+	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box, Button, Link,
 } from '@chakra-ui/react';
 
 const initialFunding = {
@@ -62,6 +65,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	const { toast } = useNotification();
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.form);
+	const [appearAs, setAppearAs] = useState('anonymous');
 
 	const buttonType = buttonStyle;
 
@@ -69,6 +73,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		setFundState(fundingStages.form);
 		setAmount(0);
 		setComment('');
+		clearInterval(fundInterval);
 
 		if (setSats && clearCloseButton) {
 			setSats(0);
@@ -126,8 +131,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	}, [fundData]);
 
 	useEffect(() => {
-		console.log('DATA: ', data);
-
 		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
 			setFundingTx(data.fundProject.fundingTx);
 			gotoNextStage();
@@ -146,7 +149,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 					throw new Error('no provider');
 				}
 
-				webln.enable();
+				await webln.enable();
 				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
 				const paymentHash = await sha256(preimage);
 				return paymentHash;
@@ -162,11 +165,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				}
 			}).catch(error => {
 				if (error.message === 'no provider') {
-					toast({
-						title: 'Pro tip: use a WebLN extension',
-						description: 'Check this link for a list of supported wallets',
-						status: 'info',
-					});
+					//
 				} else if (error.message === 'wrong preimage') {
 					toast({
 						title: 'Wrong payment preimage',
@@ -180,6 +179,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						status: 'info',
 					});
 				} else {
+					console.log(error);
 					toast({
 						title: 'Oops! Something went wrong with WebLN.',
 						description: 'Please use the invoice instead.',
@@ -259,7 +259,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							focusBorderColor="#20ECC7"
 							min={0}
 							isRequired={true}
-							defaultValue={amount}
+							defaultValue={`${amount}`}
 						>
 							<NumberInputField placeholder={'sats'} />
 							<NumberInputStepper id="increments">
@@ -275,15 +275,26 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 							focusBorderColor="#20ECC7"
 							resize="none"
 							size="sm"
+							rounded="md"
 						/>
-						<Text fontWeight="bold" mt={10}>Where do the funds go?</Text>
-						<Text>Geyser will custody the grant funds until the recepients are established.</Text>
+						<Box display="flex" justifyContent="center" alignItems="center" mt={4} border="2px solid #E9E9E9" rounded="md">
+							<Button backgroundColor={appearAs === 'anonymous' ? '#E9E9E9' : 'white'} fontSize="xs" width="50%" rounded="none" onClick={() => setAppearAs('anonymous')} >Appear as anonymous</Button>
+							<Linkin width="50%" href={`${REACT_APP_API_ENDPOINT}/auth/twitter`} display="flex" justifyContent="center" alignItems="center">
+								<ButtonComponent width="100%" backgroundColor={appearAs === 'anonymous' ? 'white' : '#E9E9E9'} fontSize="xs" rounded="none" leftIcon={<Icon as={SiTwitter} />} onClick={() => setAppearAs('profile')}>Appear with profile</ButtonComponent>
+							</Linkin>
+						</Box>
+						<Text fontWeight="bold" mt={6}>Where do the funds go?</Text>
+						<Text>The funds are secured by the Grant Board until they are sent to the selected projects at the end of the donation period.</Text>
 					</ModalBody>
 					<ModalFooter>
 						<ButtonComponent
 							primary
 							width="100%"
 							onClick={() => {
+								if (clearCloseButton) {
+									clearCloseButton(true);
+								}
+
 								handleFund();
 							}}
 							disabled={amount <= 0}
@@ -318,6 +329,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				<BubbleCursor/>
 				<ModalHeader textAlign="center">🌩️ Pay with lightning invoice</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
+				<Text width="90%" fontSize="xs" margin="0 auto">Pay with any lightning wallet by scanning or copying the invoice below, or download the <Link isExternal href="https://getalby.com" textDecoration="underline">Alby</Link> extention to pay directly from your browser.</Text>
 				<QrInvoice
 					comment={fundingTx.comment}
 					title={project.title}

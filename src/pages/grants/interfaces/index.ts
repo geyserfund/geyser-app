@@ -12,10 +12,3 @@ export interface IAvatarBoardProps {
     itemName: string
     callToActionLink?: string
 }
-
-export interface IClickableAvatar {
-    comment?: string;
-    amount?: number;
-    url: string;
-    imageUrl: string;
-}

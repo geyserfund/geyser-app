@@ -20,6 +20,6 @@ export const colors = {
 	bgHeavyDarkMode: '#161616',
 	bgStatusProblem: '#fbdadc',
 	bgStatusSolution: '#c0dfed',
+	darkerPrimary: '#1BD5B3',
 
 };
-
