@@ -73,6 +73,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		setFundState(fundingStages.form);
 		setAmount(0);
 		setComment('');
+		clearInterval(fundInterval);
 
 		if (setSats && clearCloseButton) {
 			setSats(0);
