@@ -77,7 +77,7 @@ export const NavBar = () => {
 							<Link href={HomeUrl} fontWeight="bold">
 						Home
 							</Link>
-							<Link fontWeight="bold" onClick={() => history.push('/grants/')}>
+							<Link fontWeight="bold" onClick={() => history.push('/grants')}>
 						Grants
 							</Link>
 						</Show>
