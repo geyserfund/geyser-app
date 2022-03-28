@@ -1,10 +1,7 @@
-/* eslint-disable capitalized-comments */
 import React from 'react';
 import { Link, Avatar, Tooltip } from '@chakra-ui/react';
 
 const ClickableAvatar = ({ comment, amount, url, imageUrl }: { url: string, imageUrl: string, amount: number | undefined, comment: string | undefined }) => {
-	console.log('Renders!');
-
 	if (comment || amount) {
 		let label = '';
 
