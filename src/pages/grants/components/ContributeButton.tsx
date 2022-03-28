@@ -149,7 +149,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 					throw new Error('no provider');
 				}
 
-				webln.enable();
+				await webln.enable();
 				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
 				const paymentHash = await sha256(preimage);
 				return paymentHash;
@@ -165,11 +165,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 				}
 			}).catch(error => {
 				if (error.message === 'no provider') {
-					toast({
-						title: 'Pro tip: use a WebLN extension',
-						description: 'Check this link for a list of supported wallets',
-						status: 'info',
-					});
+					//
 				} else if (error.message === 'wrong preimage') {
 					toast({
 						title: 'Wrong payment preimage',
@@ -183,6 +179,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						status: 'info',
 					});
 				} else {
+					console.log(error);
 					toast({
 						title: 'Oops! Something went wrong with WebLN.',
 						description: 'Please use the invoice instead.',
