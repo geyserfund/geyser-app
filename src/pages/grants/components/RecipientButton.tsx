@@ -82,7 +82,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 			</ButtonComponent> */}
 
 			{/* success modal */}
-			<Modal onClose={onClose} isOpen={isOpen} isCentered>
+			<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
 					<BubbleCursor/>
@@ -126,7 +126,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 	);
 
 	const renderSuccessModal = () => (
-		<Modal onClose={onClose} isOpen={isOpen} isCentered>
+		<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
 				<BubbleCursor/>
