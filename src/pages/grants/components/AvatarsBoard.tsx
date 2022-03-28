@@ -61,26 +61,28 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 
 	return (
 		<>
-			{ items.length === 0
-				? <Text>No {`${itemName}s`} yet.</Text>
-				: <Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
-					<Text mb={2} fontSize="lg" fontWeight="bold">{`${itemName}`}</Text>
-					<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center" margin="0 auto">
-						{
-							items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
-								<MemoizedClickableAvatar
-									amount={amount}
-									comment={comment}
-									key={id}
-									url={user.twitterHandle === null ? 'https://bitcoin.org' : `https://twitter.com/${user.twitterHandle}`}
-									imageUrl={user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : user.imageUrl}
-								/>
-							))
-						}
-						{ callToActionLink && <CallToAction link={callToActionLink} ctaText={'Become a sponsor'}/> }
-					</Box>
+			<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
+				<Text mb={2} fontSize="lg" fontWeight="bold">{`${itemName}`}</Text>
+				<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center" margin="0 auto">
+					{ items.length === 0
+						? <Text mr={2}>No {`${itemName.toLowerCase()}`} yet.</Text>
+						: <>
+							{
+								items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
+									<MemoizedClickableAvatar
+										amount={amount}
+										comment={comment}
+										key={id}
+										url={user.twitterHandle === null ? 'https://bitcoin.org' : `https://twitter.com/${user.twitterHandle}`}
+										imageUrl={user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : user.imageUrl}
+									/>
+								))
+							}
+						</>
+					}
+					{ callToActionLink && <CallToAction link={callToActionLink} ctaText={'Become a sponsor'}/> }
 				</Box>
-			}
+			</Box>
 		</>
 	);
 };
