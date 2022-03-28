@@ -63,7 +63,7 @@ export const GrantCard = ({link, color1, color2, color3, number, status, title}:
 
 			<Text fontWeight="bold" fontSize="2xl">{title}</Text>
 
-			{projectsLoading ? <Loader width="100%"/>
+			{projectsLoading ? <Loader width="50%"/>
 				: <>
 					<HStack>
 						<SatoshiIcon scale={0.8}/><Text fontWeight="bold">{`${project.balance}`}</Text>
