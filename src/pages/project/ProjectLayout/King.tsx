@@ -19,7 +19,7 @@ const owner: IUser = {
 	amount: 0,
 };
 
-const ambassador: IUser = {
+const ambassadors: IUser[] = [{
 	imageUrl: 'https://pbs.twimg.com/profile_images/1477647411963056128/7wd0aNSZ_400x400.jpg',
 	username: 'parman_the',
 	twitterHandle: 'parman_the',
@@ -29,7 +29,7 @@ const ambassador: IUser = {
 	twitter: false,
 	badge: 'owner',
 	amount: 0,
-};
+}];
 
 const sponsors: IProjectSponsor[] = [
 	{
@@ -249,8 +249,14 @@ export const King = () => {
 	return (
 		<VStack alignItems="center" width="100%">
 			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
-				<OwnerSponsorCard owner={owner} ambassador={ambassador} sponsors={sponsors} ownerIntro={projectDetails.ownerIntro} />
-				<DetailsBlock images={images} projectDetails={projectDetails} />
+				<OwnerSponsorCard
+					images={images}
+					owner={owner}
+					ambassadors={ambassadors}
+					sponsors={sponsors}
+					ownerIntro={projectDetails.ownerIntro}
+				/>
+				<DetailsBlock projectDetails={projectDetails} />
 				{ renderUpdates() }
 				<SponsorBlock sponsors={sponsors}/>
 			</VStack >

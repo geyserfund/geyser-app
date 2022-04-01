@@ -8,6 +8,7 @@ export const colors = {
 	bgDark: '#393939',
 	bgGrey: '#F4F4F4',
 	bgGrey2: '#F6F6F6',
+	bgGrey3: '#E9E9E9',
 	bgGold: '#FFE600',
 	bgGreen: 'rgba(32, 236, 199, 0.2)',
 	bgGreenDark: 'rgba(32, 236, 199, 0.2)',
@@ -24,6 +25,7 @@ export const colors = {
 
 	normalLightGreen: '#1BD5B3',
 
+	gray100: '#EDF2F7',
 	gray200: '#E2E8F0',
 
 };

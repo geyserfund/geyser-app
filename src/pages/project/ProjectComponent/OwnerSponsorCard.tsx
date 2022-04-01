@@ -1,18 +1,20 @@
-import { Avatar, Box, HStack, Link, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+import { Avatar, Box, HStack, IconButton, Link, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { Card } from '../../../components/ui';
-import { IProjectSponsor, IUser } from '../../../interfaces';
+import { Card, ImageBar, StatusBar } from '../../../components/ui';
+import { IProjectImage, IProjectSponsor, IUser } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { useStyles } from './styles';
 
 interface IOwnerSponsorCard {
     owner: IUser
-    ambassador: IUser
+    ambassadors: IUser[]
     sponsors: IProjectSponsor[]
     ownerIntro: string
+	images: IProjectImage[]
 }
 
-export const OwnerSponsorCard = ({owner, ambassador, sponsors, ownerIntro}: IOwnerSponsorCard) => {
+export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images}: IOwnerSponsorCard) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 	const [readMore, setReadMore] = useState(false);
@@ -23,7 +25,12 @@ export const OwnerSponsorCard = ({owner, ambassador, sponsors, ownerIntro}: IOwn
 
 	return (
 		<Card className={classes.cardContainer}>
-			<VStack spacing="12px" alignItems="flex-start">
+			<VStack spacing="15px" alignItems="flex-start">
+				<VStack spacing="10px">
+					<ImageBar images={images} />
+					<StatusBar variant="problem" message="Financial illiteracy among the youth in Nigeria, a country ravaged by double-digit inflation." />
+					<StatusBar variant="solution" message="Teaching financial literacy to the youths of Nigeria with Bitcoin and lightning." />
+				</VStack>
 				<Box>
 					<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
 					<HStack spacing="30px" alignItems="flex-start">
@@ -43,37 +50,52 @@ export const OwnerSponsorCard = ({owner, ambassador, sponsors, ownerIntro}: IOwn
 						</VStack>
 					</HStack>
 				</Box>
-				<Box >
-					<Text fontSize="10px" color="brand.textGrey">AMBASSADOR</Text>
-					<Link href={`https://twitter.com/${ambassador.username}`} isExternal>
-						<HStack spacing="15px">
-							<Avatar width="35px" height="35px" name={ambassador.username} src={ambassador.imageUrl} />
-							<Text fontSize="18px">
-								{ambassador.username}
-							</Text>
-						</HStack>
-					</Link>
-				</Box>
-				<Box width="100%" overflow="hidden">
-					<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
-					<Wrap >
+				<VStack spacing="10px" alignItems="flex-start" >
+					<Text fontSize="10px" color="brand.textGrey">AMBASSADORS</Text>
+					<Wrap>
 						{
-							sponsors.map((sponsor: IProjectSponsor) => (
-								<WrapItem key={sponsor.user.username} display="inline-block">
-									<Link href={`https://twitter.com/${sponsor.user.username}`} isExternal>
-										<HStack spacing="5px" marginRight="10px">
-											<Avatar width="35px" height="35px" name={sponsor.user.username} src={sponsor.user.imageUrl} />
-											<Text fontSize="18px">
-												{sponsor.user.username}
+							ambassadors.map((ambassador: IUser) => (
+								<WrapItem key={ambassador.username} display="inline-block">
+									<Link href={`https://twitter.com/${ambassador.username}`} isExternal >
+										<HStack className={classes.amabassadorBlock} spacing="5px">
+											<Avatar width="24px" height="24px" name={ambassador.username} src={ambassador.imageUrl} />
+											<Text fontSize="14px" >
+												{`@${ambassador.username}`}
 											</Text>
 										</HStack>
 									</Link>
 								</WrapItem>
 							))
 						}
+						<WrapItem>
+							<IconButton aria-label="add-ambassador" icon={<AddIcon />} onClick={undefined} />
+						</WrapItem>
 					</Wrap>
 
-				</Box>
+				</VStack>
+				<VStack spacing="10px" alignItems="flex-start">
+					<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
+					<Wrap >
+						{
+							sponsors.map((sponsor: IProjectSponsor) => (
+								<WrapItem key={sponsor.user.username} display="inline-block">
+									<Link href={`https://twitter.com/${sponsor.user.username}`} isExternal>
+										<HStack spacing="5px" className={classes.amabassadorBlock}>
+											<Avatar width="24px" height="24px" name={sponsor.user.username} src={sponsor.user.imageUrl} />
+											<Text fontSize="14px">
+												{`@${sponsor.user.username}`}
+											</Text>
+										</HStack>
+									</Link>
+								</WrapItem>
+							))
+						}
+						<WrapItem>
+							<IconButton aria-label="add-sponsor" icon={<AddIcon />} onClick={undefined} />
+						</WrapItem>
+					</Wrap>
+
+				</VStack>
 			</VStack>
 		</Card>
 	);
