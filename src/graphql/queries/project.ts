@@ -28,6 +28,12 @@ query GetProjectByName($name: String!) {
             imageUrl
           }
         }
+        rewards {
+          cost
+          description
+          currency
+          name
+        }
         ambassadors {
           user {
             id
@@ -67,6 +73,10 @@ query GetProjectByName($name: String!) {
               twitterHandle
               connectedTwitter
             }
+            badges {
+              badge
+              description
+          }
           }
           amount
           paidAt

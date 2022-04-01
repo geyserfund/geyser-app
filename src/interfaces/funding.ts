@@ -2,6 +2,13 @@
 // TODO: make this type work
 // export type FundingTxStatus = 'unpaid' | 'paid' | 'canceled' | 'pending'
 
+export enum EShippingDestination {
+    // eslint-disable-next-line no-unused-vars
+    national = 'national',
+    // eslint-disable-next-line no-unused-vars
+    international = 'international'
+}
+
 export interface IFundingTx {
    id: string;
    invoiceId: string;
@@ -12,11 +19,31 @@ export interface IFundingTx {
    canceled: boolean;
 }
 
-export interface IFundingInput {
-    projectId: number,
-    donationAmount: number | null,
-    rewardsCost: number | null,
-    comment: string | null,
-    anonymous: boolean,
-    email: string | null,
+export interface IFundingReward {
+    projectRewardId: number;
+    cost: number;
+    quantity: number;
+}
+
+interface IFundingRewardWithoutCost {
+    projectRewardId: number;
+    quantity: number;
+}
+
+export interface IDonationFundingInput {
+    projectId: number;
+    amount: number;
+    comment: string | null;
+    anonymous: boolean;
+}
+
+export interface IRewardFundingInput {
+    projectId: number;
+    donationAmount: number | null;
+    rewardsCost: number;
+    rewards: IFundingRewardWithoutCost[];
+    shippingDestination: EShippingDestination;
+    comment: string | null;
+    anonymous: boolean;
+    email: string;
 }

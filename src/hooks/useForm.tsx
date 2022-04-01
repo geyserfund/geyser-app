@@ -1,9 +1,14 @@
 import { useState } from 'react';
+import { EShippingDestination } from '../interfaces';
+
+const { national } = EShippingDestination;
 
 export interface IFundForm {
 	amount: number;
 	comment: string;
 	anonymous: boolean;
+	shippingDestination: EShippingDestination;
+	email: string;
 	rewards: any[];
 }
 
@@ -11,7 +16,9 @@ export const useFundState = () => {
 	const [state, _setState] = useState<IFundForm>({
 		amount: 0,
 		comment: '',
+		shippingDestination: national,
 		anonymous: true,
+		email: '',
 		rewards: [],
 	});
 	const setTarget = (event: any) => {

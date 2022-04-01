@@ -14,13 +14,13 @@ import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 
 import {
-	MUTATION_FUND_PROJECT,
+	MUTATION_FUND,
 	QUERY_GET_FUNDING,
 } from '../../../graphql';
 
 import { fetchBitcoinRates } from '../../../api';
 import { useNotification, validateFundingAmount, sha256 } from '../../../utils';
-import { IFundingTx, IProject } from '../../../interfaces';
+import { IDonationFundingInput, IFundingTx, IProject } from '../../../interfaces';
 import { fundingStages, IFundingStages, stageList } from '../../../constants';
 
 import {
@@ -110,7 +110,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	const [fundProject, {
 		data,
 		// Loading: fundLoading,
-	}] = useMutation(MUTATION_FUND_PROJECT);
+	}] = useMutation(MUTATION_FUND);
 
 	const [getFunding, { data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
 		{
@@ -207,15 +207,15 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 
 			confettiEffects(false);
 			setFundState(fundingStages.loading);
-			await fundProject({
-				variables: {
-					input: {
-						projectId: project.id,
-						comment,
-						donationAmount: amount,
-					},
-				},
-			});
+
+			const input: IDonationFundingInput = {
+				projectId: Number(project.id),
+				comment,
+				amount,
+				anonymous: appearAs === 'anonymous',
+			};
+
+			await fundProject({ variables: { input } });
 			setFundState(fundingStages.form);
 			gotoNextStage();
 		} catch (_) {

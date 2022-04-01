@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ConnectTwitter } from '../../../components/molecules';
 import { Card } from '../../../components/ui';
-import { IFundingTx, IProject, IProjectFunding } from '../../../interfaces';
+import {
+	IFundingTx, IProject, IProjectFunding, EShippingDestination,
+	EProjectType, IRewardFundingInput, IDonationFundingInput, IFundingReward,
+} from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { MUTATION_FUND_PROJECT } from '../../../graphql';
+import { MUTATION_FUND, MUTATION_FUND_WITH_REWARD } from '../../../graphql';
 import { QUERY_GET_FUNDING } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
@@ -24,6 +27,15 @@ interface IActivityProps {
 	detailOpen: boolean
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+const {
+	reward,
+} = EProjectType;
+
+const {
+	national,
+	international,
+} = EShippingDestination;
 
 const initialFunding = {
 	id: '',
@@ -51,18 +63,17 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const [btcRate, setBtcRate] = useState(0);
 
 	const {state, setTarget, setState} = useFundState();
-
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [fundingTxs, setFundingTxs] = useState<IProjectFunding[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
+	console.log(`[TODO] add shipping destination to form, possible values:  ${national}, ${international}`);
 
 	const [fundProject, {
 		data,
-		// Loading: fundLoading,
-	}] = useMutation(MUTATION_FUND_PROJECT);
+	}] = project.type === reward ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
 
 	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
 		{
@@ -119,8 +130,8 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, []);
 
 	useEffect(() => {
-		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
-			setFundingTx(data.fundProject.fundingTx);
+		if (data && data.fund && data.fund.success && fundState !== fundingStages.started) {
+			setFundingTx(data.fund.fundingTx);
 			gotoNextStage();
 		}
 	}, [data]);
@@ -139,15 +150,37 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		setFundState(fundingStages.initial);
 	};
 
+	const computeRewardsCost = (rewards: IFundingReward[]) => (
+		rewards.reduce((total: number, r: IFundingReward) => {
+			total += (r.cost * r.quantity);
+			return total;
+		}, 0)
+	);
+
 	const handleFund = async () => {
 		try {
 			// TODO: change the variables to an input of type IFundingInput
-			await fundProject({
-				variables: {
-					projectId: project.id,
-					...state,
-				},
-			});
+			let input;
+
+			if (project.type === reward) {
+				const { amount, ...formData } = state;
+				input = {
+					projectId: Number(project.id),
+					...formData,
+					donationAmount: amount,
+					rewardsCost: computeRewardsCost(formData.rewards),
+				} as IRewardFundingInput;
+			} else {
+				const { amount, comment, anonymous } = state;
+				input = {
+					projectId: Number(project.id),
+					amount,
+					comment,
+					anonymous,
+				} as IDonationFundingInput;
+			}
+
+			await fundProject({ variables: { input } });
 			gotoNextStage();
 		} catch (_) {
 			toast({
