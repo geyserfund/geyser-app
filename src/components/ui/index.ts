@@ -16,3 +16,4 @@ export * from './SectionTitle';
 export * from './TextArea';
 export * from './SelectComponent';
 export * from './TextBox';
+export * from './SatoshiAmount';

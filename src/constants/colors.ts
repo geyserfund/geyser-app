@@ -23,5 +23,7 @@ export const colors = {
 
 	normalLightGreen: '#1BD5B3',
 
+	gray200: '#E2E8F0',
+
 };
 

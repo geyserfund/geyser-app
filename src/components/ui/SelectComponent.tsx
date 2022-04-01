@@ -9,8 +9,8 @@ const useStyles = createUseStyles({
 	inputElement: ({focused}:{focused: boolean}) => ({
 		'& .platform__select__control': {
 			borderWidth: '2px',
-			borderColor: focused ? colors.normalLightGreen : colors.bgLightGrey,
-			boxShadow: focused ? `0 0 0 1px ${colors.normalLightGreen}` : `0 0 0 1px ${colors.bgLightGrey}`,
+			borderColor: focused ? colors.normalLightGreen : colors.gray200,
+			boxShadow: focused ? `0 0 0 1px ${colors.normalLightGreen}` : `0 0 0 0px ${colors.gray200}`,
 			'&:hover': {
 				borderColor: colors.normalLightGreen,
 				boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,

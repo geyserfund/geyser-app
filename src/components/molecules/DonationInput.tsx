@@ -6,6 +6,7 @@ import {
 	InputRightElement,
 	Button,
 	useDisclosure,
+	InputGroupProps,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
@@ -49,9 +50,10 @@ const useStyles = createUseStyles({
 interface IDonationInputProps extends InputProps {
     name: string
     onChange: any
+	inputGroup?: InputGroupProps
 }
 
-export const DonationInput = ({className, onChange, name, ...rest}: IDonationInputProps) => {
+export const DonationInput = ({className, onChange, name, inputGroup, ...rest}: IDonationInputProps) => {
 	const {btcRate} = useBtcContext();
 
 	const classes = useStyles();
@@ -79,7 +81,7 @@ export const DonationInput = ({className, onChange, name, ...rest}: IDonationInp
 	}, [satoshi]);
 
 	return (
-		<InputGroup>
+		<InputGroup {...inputGroup}>
 			<InputLeftElement>
 				{
 					isSatoshi ? <SatoshiIcon /> : <BiDollar fontSize="25px"/>

@@ -25,7 +25,7 @@ export const RewardBased = ({setState, updateReward, rewards}: IRewardBasedProps
 		<VStack width="100%" spacing="12px" flex="1" overflowY="auto" overflowX="visible">
 			<Box width="100%" >
 				<SectionTitle>Donate to this idea</SectionTitle>
-				<DonationInput name="donationAmount" onChange={setState}/>
+				<DonationInput inputGroup={{padding: '2px'}} name="donationAmount" onChange={setState}/>
 			</Box>
 			<Box width="100%" >
 				<SectionTitle>Donate to receive a reward</SectionTitle>
