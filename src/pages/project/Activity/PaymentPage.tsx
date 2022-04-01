@@ -1,9 +1,11 @@
-import { Box, CloseButton, NumberInput, NumberInputField, Text, Textarea, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Box, CloseButton, Divider, HStack, Text, VStack } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { SatoshiIcon } from '../../../components/icons';
-import { ButtonComponent, CustomToggle, ErrorBox } from '../../../components/ui';
+import { ButtonComponent, ErrorBox, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
+import { IProjectType, projectTypes, SelectCountryOptions } from '../../../constants';
 import {IFundForm} from '../../../hooks';
-import { isDarkMode } from '../../../utils';
+import { IProjectReward } from '../../../interfaces';
+import { DonationBased, RewardBased } from '../FundForm';
 
 interface IPaymentPageProps {
 	isMobile: boolean
@@ -11,7 +13,11 @@ interface IPaymentPageProps {
 	btcRate: number
 	state: IFundForm
 	setTarget: (_: any) => void
+	updateReward:any
+	setState: any
 	handleFund: () => void
+	type: IProjectType
+	rewards?: IProjectReward[]
 }
 
 export const PaymentPage = ({
@@ -21,12 +27,18 @@ export const PaymentPage = ({
 	handleFund,
 	state,
 	setTarget,
+	setState,
+	updateReward,
+	type,
+	rewards,
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
 
-	const handleInput = (stringv: string, numberv: number) => {
-		setTarget({target: {name: 'amount', value: numberv}});
-	};
+	useEffect(() => {
+		if (error) {
+			setTimeout(() => setError(''), 2000);
+		}
+	}, [error]);
 
 	const submit = () => {
 		const valid = validateFundingAmount();
@@ -36,19 +48,60 @@ export const PaymentPage = ({
 	};
 
 	const validateFundingAmount = () => {
-		if (state.amount * btcRate >= 1000) {
+		if (getTotalAmount('dollar') >= 1000) {
 			setError('Payment above $1000 is not allowed at the moment. Please update the amount, or contact us for donating a higher amount');
 			return false;
 		}
 
-		if (state.amount < 1) {
+		if (getTotalAmount('sats') < 1) {
 			setError('Payment below 1 sats is not allowed at the moment. Please update the amount');
+			return false;
+		}
+
+		if (state.rewardAmount && state.location === '') {
+			setError('Delivery location must be selected for a reward');
 			return false;
 		}
 
 		return true;
 	};
 
+	const renderFundForm = () => {
+		switch (type) {
+			case projectTypes.donation:
+				return <DonationBased
+					{...{btcRate,
+						state,
+						setTarget,
+						setError }}
+				/>;
+
+			case projectTypes.reward:
+				return <RewardBased {...{rewards, setState, updateReward}}/>;
+			default:
+				return null;
+		}
+	};
+
+	const getRewardsNumber = () => {
+		let totalRewards = 0;
+		Object.keys(state.rewards).map(key => {
+			totalRewards += state.rewards[key];
+		});
+		return totalRewards;
+	};
+
+	const getTotalAmount = (type: 'sats' | 'dollar') => {
+		if (type === 'sats') {
+			return Math.round(state.rewardAmount / btcRate) + state.donationAmount;
+		}
+
+		const donationAmount = Math.round(state.donationAmount * btcRate);
+
+		return donationAmount + state.rewardAmount;
+	};
+
+	console.log('checking state', state);
 	return (
 		<VStack
 			padding={isMobile ? '10px 10px' : '10px 20px'}
@@ -57,87 +110,58 @@ export const PaymentPage = ({
 			width="100%"
 			height="100%"
 			overflowY="hidden"
-			paddingTop="40px"
+			// PaddingTop="40px"
 			position="relative"
+			alignItems="flex-start"
 		>
 			<CloseButton
 				borderRadius="50%"
 				position="absolute"
 				right="10px"
-				top="10px"
+				top="-5px"
 				onClick={handleCloseButton}
 			/>
+			{renderFundForm()}
+			<Divider orientation="horizontal"/>
+			<SectionTitle>Comment</SectionTitle>
 			<Box width="100%" >
-				<Text lineHeight="26px">Send amount</Text>
-				<Box
-					backgroundColor="brand.bgGreen"
-					height="85px"
-					borderRadius="12px"
-					display="flex"
-					flexDirection="column"
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Box
-						display="flex"
-						justifyContent="center"
-						alignItems="center"
-						width="80%"
-						position="relative"
-					>
-						<NumberInput
-							name="amount"
-							variant="unstyled"
-							marginLeft="10px"
-							onChange={handleInput}
-							value={state.amount}
-							onFocus={() => setError('')}
-						>
-							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
-						</NumberInput>
-						<Box position="absolute" right={-5}>
-							<SatoshiIcon isDark={isDarkMode()} fontSize="30px" marginRight="10px" marginBottom="5px" />
-						</Box>
-					</Box>
-					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * state.amount}`}</Text>
-				</Box>
-
-			</Box>
-			<Box width="100%" >
-				<Text lineHeight="26px">Comment</Text>
-				<Box
-					backgroundColor="brand.bgGreen"
-					height="85px"
-					borderRadius="12px"
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Textarea
-						variant="unstyled"
-						fontSize="14px"
-						margin="5px"
-						resize="none"
-						value={state.comment}
-						maxLength={280}
-						name="comment"
-						onChange={setTarget}
-					/>
-				</Box>
-
-			</Box>
-			<Box width="100%">
-				{/* <Checkbox colorScheme="green" defaultValue="false">
-                Remain Anonymous
-            </Checkbox> */}
-				<CustomToggle
-					first="Appear as anonymous"
-					second="Appear with profile"
-					value={state.anonymous}
-					name="anonymous"
+				<TextArea
+					placeholder="Leave a public message here."
+					variant="unstyled"
+					fontSize="14px"
+					padding="5px"
+					resize="none"
+					value={state.comment}
+					maxLength={280}
+					name="comment"
 					onChange={setTarget}
 				/>
 			</Box>
+			<Box width="100%" >
+				<SelectComponent
+					fontSize="14px"
+					placeholder="Delivery Rewards..."
+					options={SelectCountryOptions}
+				/>
+			</Box>
+			<Box width="100%">
+				<TextBox
+					type="email"
+					placeholder="Contact Email"
+				/>
+			</Box>
+			<HStack width="100%" justifyContent="space-between" alignItems="flex-start">
+				<VStack alignItems="flex-start" spacing="0px">
+					<SectionTitle>Total</SectionTitle>
+					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
+					<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardAmount / btcRate)}</SatoshiAmount>
+				</VStack>
+				<VStack alignItems="flex-end" spacing="0px">
+					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats')}</SatoshiAmount>
+					<Text> {`$${getTotalAmount('dollar')}`}</Text>
+				</VStack>
+			</HStack>
+
 			<Box width="100%">
 				<ButtonComponent
 					primary

@@ -31,6 +31,15 @@ export interface IProject {
     sponsors: IProjectUser[];
     grantees: IGrantee[];
     fundingTxs: IProjectFunding[];
+    rewards?: IProjectReward[]
+}
+
+export interface IProjectReward {
+    id: number;
+    price: number;
+    title: string;
+    description: string;
+    backers: number;
 }
 
 export interface IGrantee {
@@ -99,4 +108,9 @@ export interface IProjectSponsor {
     user: IUser;
     image: string;
     companyUrl: string;
+}
+
+export interface IRewardCount {
+    id: number;
+    count: number;
 }

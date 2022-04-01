@@ -2,8 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ConnectTwitter } from '../../../components/molecules';
 import { Card } from '../../../components/ui';
 import {
-	IFundingTx, IProject, IProjectFunding, EShippingDestination,
-	EProjectType, IRewardFundingInput, IDonationFundingInput, IFundingReward,
+	IFundingTx,
+	IProject,
+	IProjectFunding,
+	EShippingDestination,
+	EProjectType,
+	IRewardFundingInput,
+	IDonationFundingInput,
 } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND, MUTATION_FUND_WITH_REWARD } from '../../../graphql';
@@ -15,22 +20,18 @@ import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
 import { useDisclosure } from '@chakra-ui/react';
-import { fetchBitcoinRates } from '../../../api';
 import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage } from './InfoPage';
 import { fundingStages, IFundingStages, stageList } from '../../../constants';
 import {useFundState} from '../../../hooks';
+import { useBtcContext } from '../../../context/btc';
 
 interface IActivityProps {
 	project: IProject
 	detailOpen: boolean
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-
-const {
-	reward,
-} = EProjectType;
 
 const {
 	national,
@@ -54,15 +55,15 @@ let fundInterval: any;
 
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
+	const {btcRate} = useBtcContext();
 	const { toast } = useNotification();
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial);
 
-	const [btcRate, setBtcRate] = useState(0);
+	const {state, setTarget, setState, updateReward} = useFundState({rewards: project.rewards});
 
-	const {state, setTarget, setState} = useFundState();
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [fundingTxs, setFundingTxs] = useState<IProjectFunding[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
@@ -73,7 +74,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundProject, {
 		data,
-	}] = project.type === reward ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
+	}] = project.type === EProjectType.reward ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
 
 	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
 		{
@@ -126,21 +127,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [fundState]);
 
 	useEffect(() => {
-		getBitcoinRates();
-	}, []);
-
-	useEffect(() => {
 		if (data && data.fund && data.fund.success && fundState !== fundingStages.started) {
 			setFundingTx(data.fund.fundingTx);
 			gotoNextStage();
 		}
 	}, [data]);
-
-	const getBitcoinRates = async () => {
-		const response: any = await fetchBitcoinRates();
-		const satoshirate = response.rates.USD * 0.00000001;
-		setBtcRate(satoshirate);
-	};
 
 	const handleFundProject = () => {
 		gotoNextStage();
@@ -150,25 +141,23 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		setFundState(fundingStages.initial);
 	};
 
-	const computeRewardsCost = (rewards: IFundingReward[]) => (
-		rewards.reduce((total: number, r: IFundingReward) => {
-			total += (r.cost * r.quantity);
-			return total;
-		}, 0)
-	);
-
 	const handleFund = async () => {
 		try {
 			// TODO: change the variables to an input of type IFundingInput
 			let input;
 
-			if (project.type === reward) {
-				const { amount, ...formData } = state;
+			if (project.type === EProjectType.reward) {
+				const { amount, rewardsCost, rewards, ...formData } = state;
+				const rewardsArray = Object.keys(rewards).map(key => ({
+					projectRewardId: parseInt(key, 10),
+					quantity: rewards[key],
+				}));
 				input = {
 					projectId: Number(project.id),
 					...formData,
+					rewards: rewardsArray,
 					donationAmount: amount,
-					rewardsCost: computeRewardsCost(formData.rewards),
+					rewardsCost: Math.round(rewardsCost / btcRate),
 				} as IRewardFundingInput;
 			} else {
 				const { amount, comment, anonymous } = state;
@@ -227,8 +216,12 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						handleCloseButton,
 						btcRate,
 						state,
+						setState,
 						setTarget,
+						updateReward,
 						handleFund,
+						rewards: project.rewards,
+						type: 'reward-based',
 					}}
 				/>;
 			case fundingStages.started:
