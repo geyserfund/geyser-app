@@ -1,12 +1,11 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-warning-comments
 // TODO: make this type work
 // export type FundingTxStatus = 'unpaid' | 'paid' | 'canceled' | 'pending'
 
 export enum EShippingDestination {
-    // eslint-disable-next-line no-unused-vars
-    national = 'national',
-    // eslint-disable-next-line no-unused-vars
-    international = 'international'
+    national = 'NATIONAL',
+    international = 'INTERNATIONAL'
 }
 
 export interface IFundingTx {

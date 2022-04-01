@@ -12,10 +12,9 @@ import { ConnectTwitter } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
-import { StartCrowdFundUrl, HomeUrl } from '../../constants';
+import { StartCrowdFundUrl } from '../../constants';
 import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
-import { Link, Show } from '@chakra-ui/react';
 import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
 
 const useStyles = createUseStyles({
@@ -73,14 +72,6 @@ export const NavBar = () => {
 						justifyContent="center"
 						alignItems="center">
 						<Logo mr={isMobile ? 0 : 5} />
-						<Show above="md">
-							<Link href={HomeUrl} fontWeight="bold">
-						Home
-							</Link>
-							<Link fontWeight="bold" onClick={() => history.push('/grants')}>
-						Grants
-							</Link>
-						</Show>
 					</HStack>
 					{
 						isMobile ? <>
