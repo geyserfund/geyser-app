@@ -58,11 +58,6 @@ export const PaymentPage = ({
 			return false;
 		}
 
-		if (state.rewardAmount && state.location === '') {
-			setError('Delivery location must be selected for a reward');
-			return false;
-		}
-
 		return true;
 	};
 
@@ -93,12 +88,12 @@ export const PaymentPage = ({
 
 	const getTotalAmount = (type: 'sats' | 'dollar') => {
 		if (type === 'sats') {
-			return Math.round(state.rewardAmount / btcRate) + state.donationAmount;
+			return Math.round(state.rewardsCost / btcRate) + state.donationAmount;
 		}
 
 		const donationAmount = Math.round(state.donationAmount * btcRate);
 
-		return donationAmount + state.rewardAmount;
+		return donationAmount + state.rewardsCost;
 	};
 
 	console.log('checking state', state);
@@ -154,7 +149,7 @@ export const PaymentPage = ({
 				<VStack alignItems="flex-start" spacing="0px">
 					<SectionTitle>Total</SectionTitle>
 					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
-					<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardAmount / btcRate)}</SatoshiAmount>
+					<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
 					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats')}</SatoshiAmount>

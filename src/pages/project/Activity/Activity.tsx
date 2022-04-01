@@ -1,9 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ConnectTwitter } from '../../../components/molecules';
 import { Card } from '../../../components/ui';
-import { IFundingTx, IProject, IProjectFunding } from '../../../interfaces';
+import {
+	IFundingTx,
+	IProject,
+	IProjectFunding,
+	EShippingDestination,
+	EProjectType,
+	IRewardFundingInput,
+	IDonationFundingInput,
+} from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { MUTATION_FUND_PROJECT } from '../../../graphql/mutations/fund';
+import { MUTATION_FUND, MUTATION_FUND_WITH_REWARD } from '../../../graphql';
 import { QUERY_GET_FUNDING } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
@@ -25,14 +33,24 @@ interface IActivityProps {
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+const {
+	national,
+	international,
+} = EShippingDestination;
+
 const initialFunding = {
 	id: '',
 	invoiceId: '',
-	paid: false,
+	status: 'unpaid',
 	amount: 0,
 	paymentRequest: '',
+	address: '',
 	canceled: false,
+	comment: '',
+	paidAt: '',
+	onChain: false,
 };
+
 let fundInterval: any;
 
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
@@ -42,21 +60,21 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
 
-	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.inital);
+	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial);
 
 	const {state, setTarget, setState, updateReward} = useFundState({rewards: project.rewards});
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
-	const [funders, setfunders] = useState<IProjectFunding[]>([]);
+	const [fundingTxs, setFundingTxs] = useState<IProjectFunding[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
+	console.log(`[TODO] add shipping destination to form, possible values:  ${national}, ${international}`);
 
 	const [fundProject, {
 		data,
-		// Loading: fundLoading,
-	}] = useMutation(MUTATION_FUND_PROJECT);
+	}] = project.type === EProjectType.reward ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
 
 	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
 		{
@@ -67,10 +85,10 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (project && project.fundingTxs) {
-			const unsortedFunders = [...project.fundingTxs];
-			if (unsortedFunders.length > 0) {
-				unsortedFunders.sort((a, b) => parseInt(b.paidAt, 10) - parseInt(a.paidAt, 10));
-				setfunders(unsortedFunders);
+			const unsortedFundingTxs = [...project.fundingTxs];
+			if (unsortedFundingTxs.length > 0) {
+				unsortedFundingTxs.sort((a, b) => parseInt(b.paidAt, 10) - parseInt(a.paidAt, 10));
+				setFundingTxs(unsortedFundingTxs);
 			}
 		}
 	}, [project.fundingTxs]);
@@ -90,8 +108,8 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
-			if (fundData.getFundingTx.paid) {
-				setfunders([fundData.getFundingTx, ...funders]);
+			if (fundData.getFundingTx.status === 'paid') {
+				setFundingTxs([fundData.getFundingTx, ...fundingTxs]);
 				clearInterval(fundInterval);
 				gotoNextStage();
 			}
@@ -109,8 +127,8 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [fundState]);
 
 	useEffect(() => {
-		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
-			setFundingTx(data.fundProject.fundingTx);
+		if (data && data.fund && data.fund.success && fundState !== fundingStages.started) {
+			setFundingTx(data.fund.fundingTx);
 			gotoNextStage();
 		}
 	}, [data]);
@@ -120,17 +138,38 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	};
 
 	const handleCloseButton = () => {
-		setFundState(fundingStages.inital);
+		setFundState(fundingStages.initial);
 	};
 
 	const handleFund = async () => {
 		try {
-			await fundProject({
-				variables: {
-					projectId: project.id,
-					...state,
-				},
-			});
+			// TODO: change the variables to an input of type IFundingInput
+			let input;
+
+			if (project.type === EProjectType.reward) {
+				const { amount, rewardsCost, rewards, ...formData } = state;
+				const rewardsArray = Object.keys(rewards).map(key => ({
+					projectRewardId: parseInt(key, 10),
+					quantity: rewards[key],
+				}));
+				input = {
+					projectId: Number(project.id),
+					...formData,
+					rewards: rewardsArray,
+					donationAmount: amount,
+					rewardsCost: Math.round(rewardsCost / btcRate),
+				} as IRewardFundingInput;
+			} else {
+				const { amount, comment, anonymous } = state;
+				input = {
+					projectId: Number(project.id),
+					amount,
+					comment,
+					anonymous,
+				} as IDonationFundingInput;
+			}
+
+			await fundProject({ variables: { input } });
 			gotoNextStage();
 		} catch (_) {
 			toast({
@@ -159,7 +198,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		switch (fundState) {
 			case fundingStages.loading:
 				return <Loader />;
-			case fundingStages.inital:
+			case fundingStages.initial:
 				return <InfoPage
 					{...{
 						project,
@@ -167,7 +206,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						handleFundProject,
 						loading,
 						btcRate,
-						funders,
+						fundingTxs,
 					}}
 				/>;
 			case fundingStages.form:
@@ -190,7 +229,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					comment={state.comment}
 					title={project.title}
 					amount={state.amount}
-					owner={project.owner.user.username}
+					owners={project.owners.map(owner => owner.user.username)}
 					qrCode={fundingTx.paymentRequest}
 					handleCloseButton={handleCloseButton}
 				/>;

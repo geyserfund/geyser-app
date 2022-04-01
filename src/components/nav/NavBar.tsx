@@ -4,7 +4,7 @@ import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent, Linkin } from '../ui';
 import { Logo } from './Logo';
-import { Box } from '@chakra-ui/layout';
+import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
@@ -13,8 +13,9 @@ import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
 import { StartCrowdFundUrl } from '../../constants';
-import { useLocation } from 'react-router';
+import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
+import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -35,6 +36,7 @@ export const NavBar = () => {
 
 	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const history = useHistory();
 
 	useEffect(() => {
 		if (state && state.loggedOut) {
@@ -65,7 +67,12 @@ export const NavBar = () => {
 					justifyContent="space-between"
 					margin={isMobile ? '10px' : '10px 20px 10px 40px'}
 				>
-					<Logo />
+					<HStack
+						spacing="25px"
+						justifyContent="center"
+						alignItems="center">
+						<Logo mr={isMobile ? 0 : 5} />
+					</HStack>
 					{
 						isMobile ? <>
 							{
@@ -130,17 +137,19 @@ export const NavBar = () => {
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent display="flex" alignItems="center" padding="20px 15px">
+					{history.location.pathname === '/project/bitcoin-hackathons'
+		&& <BubbleCursor/>}
 					<ModalHeader><Text fontSize="16px" fontWeight="normal">You have been logged out</Text></ModalHeader>
 					<ModalCloseButton />
 					<ModalBody >
 						<Text>
-							Please logback in with your profile, or press continue if you want to stay anonymous.
+							Please log back in with your profile, or press continue if you want to stay anonymous.
 						</Text>
 						<Box display="flex" justifyContent="space-between" paddingTop="20px">
-							<ButtonComponent standard primary onClick={twitterOnOpen}>
+							<ButtonComponent width="50%" mx={1} primary onClick={twitterOnOpen}>
 								Log In
 							</ButtonComponent>
-							<ButtonComponent onClick={onClose}>
+							<ButtonComponent width="50%" mx={1} onClick={onClose}>
 								Continue
 							</ButtonComponent>
 						</Box>

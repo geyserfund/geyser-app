@@ -3,4 +3,5 @@ export interface IuserProfile {
     username: string;
     imageUrl: string;
     twitterHandle: string;
+    connectedTwitter: boolean;
 }

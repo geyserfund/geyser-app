@@ -11,14 +11,15 @@ import { fonts } from '../../constants/fonts';
 import { anonymousProfileUrl } from '../../constants';
 
 interface IIdBar extends HTMLChakraProps<'div'> {
-	funder: IProjectFunding
+	fundingTx: IProjectFunding
 }
 
-export const IdBar = ({ funder, ...rest }: IIdBar) => {
+export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 	const { colorMode } = useColorMode();
 	const dark = colorMode === 'dark';
 
-	const timeAgo = getDaysAgo(funder.paidAt) || '';
+	const { funder } = fundingTx;
+	const timeAgo = getDaysAgo(fundingTx.paidAt) || '';
 	let anonymous = false;
 	if (funder.user.username === 'anonymous') {
 		anonymous = true;
@@ -60,11 +61,11 @@ export const IdBar = ({ funder, ...rest }: IIdBar) => {
 				}
 
 				<Box display="flex" alignItems="center">
-					<SatoshiIcon scale={0.7}/><Text marginLeft="5px">{`${funder.amount}`} </Text>
+					<SatoshiIcon scale={0.7}/><Text marginLeft="5px">{`${fundingTx.amount}`} </Text>
 				</Box>
 			</Box>
 			<Box marginTop="5px" width="100%">
-				{funder.comment && <Text fontFamily={fonts.solway}>{funder.comment}</Text>}
+				{fundingTx.comment && <Text fontFamily={fonts.solway}>{fundingTx.comment}</Text>}
 				{timeAgo && <Text color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>{`${timeAgo} ago`}</Text>}
 			</Box>
 

@@ -1,0 +1,1 @@
+{"apps":{"http":{"servers":{"srv0":{"listen":[":443"],"routes":[{"handle":[{"handler":"subroute","routes":[{"handle":[{"handler":"reverse_proxy","upstreams":[{"dial":"geyser-app:3000"}]}]}]}],"match":[{"host":["staging.geyser.fund"]}],"terminal":true}]}}},"tls":{"automation":{"policies":[{"issuers":[{"module":"internal"}],"subjects":["staging.geyser.fund"]}]}}}}

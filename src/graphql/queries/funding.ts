@@ -7,15 +7,17 @@ query GetFundingTx($fundingTxId: BigInt!) {
       invoiceId
       paymentRequest
       amount
-      paid
+      status
       canceled
       comment
       paidAt
-      user {
-        twitterHandle
-        imageUrl
-        username
-        id
+      funder {
+        user {
+          twitterHandle
+          imageUrl
+          username
+          id
+        }
       }
     }
   }

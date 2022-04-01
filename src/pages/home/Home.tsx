@@ -47,14 +47,13 @@ export const Home = () => {
 		if (error) {
 			toast({
 				title: 'Something went wrong',
-				description: 'Please refresh the',
+				description: 'Please refresh the page',
 				status: 'error',
 			});
 		}
 	}, [error]);
 
 	const project = (data && data.getProjectByName && data.getProjectByName.project) || {};
-	console.log('checking the project', project);
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
@@ -154,4 +153,3 @@ export const Home = () => {
 		</VStack >
 	);
 };
-

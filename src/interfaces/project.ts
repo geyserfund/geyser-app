@@ -1,11 +1,21 @@
 import { BadgeVariant } from '../components/ui';
 
+// TODO: there has to be a better way to deal with enums false flag unused-var
+export enum EProjectType {
+    // eslint-disable-next-line no-unused-vars
+    reward = 'reward',
+    // eslint-disable-next-line no-unused-vars
+    grant = 'grant',
+    // eslint-disable-next-line no-unused-vars
+    donation = 'donation'
+}
+
 export interface IProject {
     id: string;
     title: string;
     name: string;
     description: string;
-    originUrl: string;
+    type: EProjectType;
     balance: number;
     fundingGoal: number;
     createdAt: string;
@@ -15,10 +25,11 @@ export interface IProject {
     ownerConfirmed: string;
     fundsClaimed: string;
     creationConfirmed: string;
-    creator: IProjectUser;
-    owner: IProjectUser;
+    owners: IProjectUser[];
     ambassadors: IProjectUser[];
     funders: IProjectUser[];
+    sponsors: IProjectUser[];
+    grantees: IGrantee[];
     fundingTxs: IProjectFunding[];
     rewards?: IProjectReward[]
 }
@@ -31,6 +42,12 @@ export interface IProjectReward {
     backers: number;
 }
 
+export interface IGrantee {
+    id: number;
+    url: string;
+    name: string;
+}
+
 export interface IProjectUser {
     user: IUser;
     confirmed: boolean;
@@ -39,41 +56,42 @@ export interface IProjectUser {
 export interface IUser {
     id: string;
     username: string;
-    picture: string;
+    imageUrl: string;
     URL: string;
     fullName: string;
     twitter: boolean;
+    twitterHandle: string;
     badge: BadgeVariant;
     amount: number;
 }
 
 export interface IProjectFunding {
-        amount:string;
-        comment:string;
-        paidAt:string;
-        user: IFunder
+    id: number;
+    funder: IFunder;
+    amount:string;
+    comment:string;
+    paidAt:string;
 }
 
 export interface IFunder {
-    username: string;
-    imageUrl: string;
-    twitterHandle: string;
-    connectedTwitter: boolean;
+    user: IUser;
+    confirmed: boolean;
+    amountFunded: number;
 }
 
 export interface IProjectDetail {
     problem: string;
     solution: string;
     blocks: IProjectBlock[];
-    ownerIntro: string
-    images?: string[]
+    ownerIntro: string;
+    images?: string[];
 }
 
 export interface IProjectBlock {
-        title: string;
-        body: string[];
-        images?: string[];
-        blockType: string;
+    title: string;
+    body: string[];
+    images?: string[];
+    blockType: string;
 }
 
 export interface IProjectUpdate {

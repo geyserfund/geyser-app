@@ -1,13 +1,17 @@
 import { useState } from 'react';
+import { EShippingDestination } from '../interfaces';
+
+const { national } = EShippingDestination;
 import { IProjectReward, IRewardCount } from '../interfaces';
 
 export interface IFundForm {
 	donationAmount: number;
-	rewardAmount: number;
+	rewardsCost: number;
 	amount: number;
 	comment: string;
 	anonymous: boolean;
-	location: string;
+	shippingDestination: EShippingDestination;
+	email: string;
 	rewards: {[key:string]:number};
 }
 
@@ -18,11 +22,12 @@ export interface IuseFundStateProps {
 export const useFundState = ({rewards}: IuseFundStateProps) => {
 	const [state, _setState] = useState<IFundForm>({
 		donationAmount: 0,
-		rewardAmount: 0,
+		rewardsCost: 0,
 		amount: 0,
 		comment: '',
+		shippingDestination: national,
 		anonymous: true,
-		location: '',
+		email: '',
 		rewards: {},
 	});
 	const setTarget = (event: any) => {
@@ -38,18 +43,18 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 
 	const updateReward = ({id, count}:IRewardCount) => {
 		const newRewards = {...state.rewards, [`${id}`]: count};
-		let rewardAmount = 0;
+		let rewardsCost = 0;
 		if (rewards) {
 			Object.keys(newRewards).map((value:string) => {
 				const id = parseInt(value, 10);
 				const reward = rewards.find((reward: IProjectReward) => reward.id === id);
 				if (reward && reward.id) {
-					rewardAmount += reward.price * newRewards[value];
+					rewardsCost += reward.price * newRewards[value];
 				}
 			});
 		}
 
-		const newState = {...state, rewards: newRewards, rewardAmount};
+		const newState = {...state, rewards: newRewards, rewardsCost};
 		_setState(newState);
 	};
 

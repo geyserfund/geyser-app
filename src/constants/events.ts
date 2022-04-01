@@ -2,23 +2,23 @@ import { ISelectOption } from '../interfaces';
 
 export const fundingStages:{
 loading:IFundingStages;
-inital:IFundingStages;
+initial:IFundingStages;
 form: IFundingStages;
 started:IFundingStages;
 completed:IFundingStages;
 canceled:IFundingStages;
 } = {
 	loading: 'loading',
-	inital: 'inital',
+	initial: 'initial',
 	form: 'form',
 	started: 'started',
 	completed: 'completed',
 	canceled: 'canceled',
 };
 
-export const stageList: IFundingStages[] = ['loading', 'inital', 'form', 'started', 'completed', 'canceled'];
+export const stageList: IFundingStages[] = ['loading', 'initial', 'form', 'started', 'completed', 'canceled'];
 
-export type IFundingStages = 'loading'|'inital' | 'form' | 'started' | 'completed' | 'canceled'
+export type IFundingStages = 'loading'|'initial' | 'form' | 'started' | 'completed' | 'canceled'
 
 export type IProjectType = 'donation-based'|'reward-based'
 

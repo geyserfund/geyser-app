@@ -20,10 +20,10 @@ export const colors = {
 	bgHeavyDarkMode: '#161616',
 	bgStatusProblem: '#fbdadc',
 	bgStatusSolution: '#c0dfed',
+	darkerPrimary: '#1BD5B3',
 
 	normalLightGreen: '#1BD5B3',
 
 	gray200: '#E2E8F0',
 
 };
-

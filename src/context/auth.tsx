@@ -11,6 +11,7 @@ const defaultAuthUser = {
 	username: '',
 	imageUrl: '',
 	twitterHandle: '',
+	connectedTwitter: false,
 };
 
 const defaultContext = {

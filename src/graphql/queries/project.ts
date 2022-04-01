@@ -9,8 +9,8 @@ query GetProjectByName($name: String!) {
         id
         title
         name
+        type
         description
-        originUrl
         balance
         fundingGoal
         createdAt
@@ -20,40 +20,63 @@ query GetProjectByName($name: String!) {
         ownerConfirmed
         fundsClaimed
         creationConfirmed
-        creator {
+        owners {
           user {
             id
             username
+            twitterHandle
+            imageUrl
           }
-          confirmed
         }
-        owner {
-          user {
-            id
-            username
-          }
-          confirmed
+        rewards {
+          cost
+          description
+          currency
+          name
         }
         ambassadors {
-          confirmed
           user {
             id
-            username
+            username 
+            twitterHandle
+            imageUrl
+          }
+        }
+        sponsors {
+          user {
+            id
+            username 
+            twitterHandle
+            imageUrl
           }
         }
         funders {
           user {
             id
             username
+            twitterHandle
+            imageUrl
           }
           confirmed
         }
+        grantees {
+          id
+          url
+          name
+        }
         fundingTxs {
-          user {
-            username
-            imageUrl
-            twitterHandle
-            connectedTwitter
+          id
+          funder {
+            user {
+              username
+              imageUrl
+              twitterHandle
+              connectedTwitter
+            }
+            badges {
+              badge
+              description
+          }
           }
           amount
           paidAt
