@@ -1,12 +1,4 @@
-/* eslint-disable no-unused-vars */
-// eslint-disable-next-line no-warning-comments
-// TODO: make this type work
-// export type FundingTxStatus = 'unpaid' | 'paid' | 'canceled' | 'pending'
-
-export enum EShippingDestination {
-    national = 'NATIONAL',
-    international = 'INTERNATIONAL'
-}
+import { ShippingDestination } from '../constants';
 
 export interface IFundingTx {
    id: string;
@@ -41,7 +33,7 @@ export interface IRewardFundingInput {
     donationAmount: number | null;
     rewardsCost: number;
     rewards: IFundingRewardWithoutCost[];
-    shippingDestination: EShippingDestination;
+    shippingDestination: ShippingDestination;
     comment: string | null;
     anonymous: boolean;
     email: string;

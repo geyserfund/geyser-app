@@ -5,8 +5,6 @@ import {
 	IFundingTx,
 	IProject,
 	IProjectFunding,
-	EShippingDestination,
-	EProjectType,
 	IRewardFundingInput,
 	IDonationFundingInput,
 } from '../../../interfaces';
@@ -33,11 +31,6 @@ interface IActivityProps {
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const {
-	national,
-	international,
-} = EShippingDestination;
-
 const initialFunding = {
 	id: '',
 	invoiceId: '',
@@ -62,6 +55,8 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial);
 
+	console.log('PROJECT REWARDS:', project.rewards);
+
 	const {state, setTarget, setState, updateReward} = useFundState({rewards: project.rewards});
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
@@ -70,11 +65,10 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
-	console.log(`[TODO] add shipping destination to form, possible values:  ${national}, ${international}`);
 
 	const [fundProject, {
 		data,
-	}] = project.type === EProjectType.reward ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
+	}] = project.type === 'reward' ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
 
 	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
 		{
@@ -127,9 +121,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [fundState]);
 
 	useEffect(() => {
-		if (data && data.fund && data.fund.success && fundState !== fundingStages.started) {
-			setFundingTx(data.fund.fundingTx);
-			gotoNextStage();
+		if (data && fundState !== fundingStages.started) {
+			if ((data.fund && data.fund.success) || (data.fundWithReward && data.fundWithReward.success)) {
+				setFundingTx(data.fund.fundingTx);
+				gotoNextStage();
+			}
 		}
 	}, [data]);
 
@@ -143,10 +139,9 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const handleFund = async () => {
 		try {
-			// TODO: change the variables to an input of type IFundingInput
 			let input;
 
-			if (project.type === EProjectType.reward) {
+			if (project.type === 'reward') {
 				const { amount, rewardsCost, rewards, ...formData } = state;
 				const rewardsArray = Object.keys(rewards).map(key => ({
 					projectRewardId: parseInt(key, 10),

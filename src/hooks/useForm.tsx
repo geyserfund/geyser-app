@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { EShippingDestination } from '../interfaces';
+import { ShippingDestination } from '../constants';
 
-const { national } = EShippingDestination;
 import { IProjectReward, IRewardCount } from '../interfaces';
 
 export interface IFundForm {
@@ -10,7 +9,7 @@ export interface IFundForm {
 	amount: number;
 	comment: string;
 	anonymous: boolean;
-	shippingDestination: EShippingDestination;
+	shippingDestination: ShippingDestination;
 	email: string;
 	rewards: {[key:string]:number};
 }
@@ -25,7 +24,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		rewardsCost: 0,
 		amount: 0,
 		comment: '',
-		shippingDestination: national,
+		shippingDestination: 'national',
 		anonymous: true,
 		email: '',
 		rewards: {},
@@ -49,7 +48,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 				const id = parseInt(value, 10);
 				const reward = rewards.find((reward: IProjectReward) => reward.id === id);
 				if (reward && reward.id) {
-					rewardsCost += reward.price * newRewards[value];
+					rewardsCost += reward.cost * newRewards[value];
 				}
 			});
 		}

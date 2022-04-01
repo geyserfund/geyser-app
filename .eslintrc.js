@@ -24,5 +24,12 @@ module.exports = {
 		'no-negated-condition': 0,
 		'array-callback-return': 0,
 		'capitalized-comments:': 0,
+		'no-restricted-syntax': [
+			'error',
+			{
+				selector: 'TSEnumDeclaration',
+				message: 'Don\'t declare enums',
+			},
+		],
 	},
 };

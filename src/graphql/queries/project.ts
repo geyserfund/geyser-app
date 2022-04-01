@@ -33,6 +33,7 @@ query GetProjectByName($name: String!) {
           description
           currency
           name
+          backers
         }
         ambassadors {
           user {

@@ -40,36 +40,7 @@ export const Project = () => {
 	}
 
 	const { project } = data && data.getProjectByName;
-	const rewards = [
-		{
-			id: 1,
-			price: 60,
-			backers: 23,
-			title: 'Bitcoin Board Game',
-			description: 'Get the Game',
-		},
-		{
-			id: 2,
-			price: 60,
-			backers: 23,
-			title: 'Bitcoin Board Game',
-			description: 'Get the Game',
-		},
-		{
-			id: 3,
-			price: 60,
-			backers: 23,
-			title: 'Bitcoin Board Game',
-			description: 'Get the Game',
-		},
-		{
-			id: 4,
-			price: 60,
-			backers: 23,
-			title: 'Bitcoin Board Game',
-			description: 'Get the Game',
-		},
-	];
+
 	return (
 		<>
 			<Box
@@ -86,8 +57,8 @@ export const Project = () => {
 					position="relative"
 
 				>
-					<Details project={{...project, rewards} } {...{detailOpen, setDetailOpen}}/>
-					<Activity project={{...project, rewards}} {...{detailOpen, setDetailOpen}}/>
+					<Details project={project} {...{detailOpen, setDetailOpen}}/>
+					<Activity project={project} {...{detailOpen, setDetailOpen}}/>
 				</Box>
 			</Box>
 		</>

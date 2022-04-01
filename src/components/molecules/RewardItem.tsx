@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
-import { IRewardCount } from '../../interfaces';
+import { IRewardCount, IProjectReward } from '../../interfaces';
 
 const useStyles = createUseStyles({
 	container: {
@@ -46,23 +46,15 @@ const useStyles = createUseStyles({
 	},
 });
 
-interface IRewardItem {
-	id: number;
-    price: number;
-    title: string;
-    backers: number;
-    description: string;
-}
-
 interface IRewardItemProps {
-    item: IRewardItem
+    item: IProjectReward
 	updateCount: (_:IRewardCount)=> void
 }
 
 export const RewardItem = ({item, updateCount}: IRewardItemProps) => {
 	const classes = useStyles();
 
-	const {price, title, backers, description} = item;
+	const {cost, name, backers, description} = item;
 
 	const [count, setCount] = useState(0);
 	const {isOpen: focus, onOpen: setFocus, onClose: setBlur} = useDisclosure();
@@ -87,12 +79,12 @@ export const RewardItem = ({item, updateCount}: IRewardItemProps) => {
 		<Box tabIndex={-1} className={classNames(classes.container, {[classes.focused]: focus })} >
 			<HStack className={classes.upperContainer} >
 				<VStack spacing={0}>
-					<Text fontSize="14px" color={colors.normalLightGreen}>{`$${price}`}</Text>
+					<Text fontSize="14px" color={colors.normalLightGreen}>{`$${cost}`}</Text>
 					<Text fontSize="10px" color={colors.normalLightGreen}>per item</Text>
 				</VStack>
 				<VStack alignItems="flex-start" flex={1} spacing="0px">
-					<Text fontSize="14px">{title}</Text>
-					<Box className={classes.backer}>{`${backers} backers`}</Box>
+					<Text fontSize="14px">{name}</Text>
+					<Box className={classes.backer}>{ backers === 1 ? `${backers} backer` : `${backers} backers` }</Box>
 				</VStack>
 				<HStack>
 					{count

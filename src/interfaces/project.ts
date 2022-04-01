@@ -1,21 +1,13 @@
 import { BadgeVariant } from '../components/ui';
 
-// TODO: there has to be a better way to deal with enums false flag unused-var
-export enum EProjectType {
-    // eslint-disable-next-line no-unused-vars
-    reward = 'reward',
-    // eslint-disable-next-line no-unused-vars
-    grant = 'grant',
-    // eslint-disable-next-line no-unused-vars
-    donation = 'donation'
-}
+export type IProjectType = 'reward' | 'grant' | 'donation'
 
 export interface IProject {
     id: string;
     title: string;
     name: string;
     description: string;
-    type: EProjectType;
+    type: IProjectType;
     balance: number;
     fundingGoal: number;
     createdAt: string;
@@ -36,8 +28,8 @@ export interface IProject {
 
 export interface IProjectReward {
     id: number;
-    price: number;
-    title: string;
+    cost: number;
+    name: string;
     description: string;
     backers: number;
 }

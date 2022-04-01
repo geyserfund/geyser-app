@@ -22,13 +22,17 @@ export type IFundingStages = 'loading'|'initial' | 'form' | 'started' | 'complet
 
 export type IProjectType = 'donation-based'|'reward-based'
 
-export const projectTypes:{
-	donation:IProjectType,
+export const projectTypes: {
+	donation: IProjectType,
 	reward: IProjectType
 } = {
 	donation: 'donation-based',
 	reward: 'reward-based',
 };
+
+export type FundingTxStatus = 'unpaid' | 'paid' | 'canceled' | 'pending'
+
+export type ShippingDestination = 'national' | 'international'
 
 export const SelectCountryOptions:ISelectOption[] = [
 	{
