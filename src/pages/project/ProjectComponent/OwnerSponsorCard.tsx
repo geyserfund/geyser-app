@@ -12,9 +12,9 @@ interface IOwnerSponsorCard {
     ambassadors: IUser[]
     sponsors: IProjectSponsor[]
     ownerIntro: string
-	problem: string
-	idea: string
-	images: IProjectImage[]
+	  problem: string
+    idea: string
+	  images: IProjectImage[]
 }
 
 export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images, problem, idea}: IOwnerSponsorCard) => {
