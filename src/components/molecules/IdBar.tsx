@@ -17,7 +17,6 @@ interface IIdBar extends HTMLChakraProps<'div'> {
 export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 	const { colorMode } = useColorMode();
 	const dark = colorMode === 'dark';
-	console.log('fundingTx:', fundingTx);
 
 	const { funder } = fundingTx;
 	const timeAgo = getDaysAgo(fundingTx.paidAt) || '';

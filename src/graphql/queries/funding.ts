@@ -7,7 +7,7 @@ query GetFundingTx($fundingTxId: BigInt!) {
       invoiceId
       paymentRequest
       amount
-      paid
+      status
       canceled
       comment
       paidAt

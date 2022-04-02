@@ -6,7 +6,6 @@ import { BsCurrencyBitcoin } from 'react-icons/bs';
 import { isDarkMode } from '../../utils';
 import { SatoshiIcon } from '../icons';
 import { createUseStyles } from 'react-jss';
-import Loader from '../ui/Loader';
 import { commaFormatted } from '../../utils/helperFunctions';
 
 interface ICircularFundProgress {
@@ -91,30 +90,27 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 	);
 
 	return (
-		<>{!percentage
-			? <Loader />
-
-			: percentage < 100
-				? <CircularProgress
-					onMouseOver={handleMouseOver}
-					onMouseOut={handleClick}
-					isIndeterminate={loading}
-					className={classes.circularProgress}
-					value={percentage}
-					size="208px"
-					thickness="6px"
-					color="brand.primary"
-					filter="drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))"
-				>
-					<Box position="absolute" fontSize="12px">
-						{getStat()}
-					</Box>
-				</CircularProgress>
-				: <Box display="flex" justifyContent="center" alignItems="center" width="208px" height="208px" padding="16px">
-					<Box width="176px" height="176px" backgroundColor="brand.primary" borderRadius="50%" padding="10px" className={classes.circularProgress}>
-						{getStat()}
-					</Box>
-				</Box>}
+		<>{percentage < 100
+			? <CircularProgress
+				onMouseOver={handleMouseOver}
+				onMouseOut={handleClick}
+				isIndeterminate={loading}
+				className={classes.circularProgress}
+				value={percentage}
+				size="208px"
+				thickness="6px"
+				color="brand.primary"
+				filter="drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))"
+			>
+				<Box position="absolute" fontSize="12px">
+					{getStat()}
+				</Box>
+			</CircularProgress>
+			: <Box display="flex" justifyContent="center" alignItems="center" width="208px" height="208px" padding="16px">
+				<Box width="176px" height="176px" backgroundColor="brand.primary" borderRadius="50%" padding="10px" className={classes.circularProgress}>
+					{getStat()}
+				</Box>
+			</Box>}
 		</>
 	);
 };

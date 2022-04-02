@@ -10,6 +10,7 @@ import { Home } from '../pages/home';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
+import { GrantsLanding } from '../pages/grants/GrantsLanding';
 
 export const customHistory = createBrowserHistory();
 
@@ -19,6 +20,9 @@ export const Router = () => (
 			<NavBar />
 			<Box height="calc(100vh - 62px)" overflowY="auto">
 				<Switch>
+					<Route path="/grants">
+						<GrantsLanding />
+					</Route>
 					<Route path="/project/:projectId">
 						<Project />
 					</Route>

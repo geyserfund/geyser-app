@@ -1,6 +1,6 @@
 import { IconButton } from '@chakra-ui/button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { Link } from '@chakra-ui/react';
+import { Link, Show } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 // Import { Box } from '@chakra-ui/layout';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
@@ -9,7 +9,7 @@ import React from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 // Import { FaMoon, FaSun } from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
-import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles } from '../../constants';
+import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles, HomeUrl, GrantsUrl } from '../../constants';
 import { IuserProfile } from '../../interfaces';
 
 const useStyles = createUseStyles({
@@ -84,6 +84,18 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IuserProfile | un
 				sx={styles.buttonCommon}
 			/>
 			<MenuList width="150px" className={classes.menuList}>
+				<Show below="md">
+					<MenuItem className={classes.menuItem}>
+						<Link href={HomeUrl}>
+					Home
+						</Link>
+					</MenuItem>
+					<MenuItem className={classes.menuItem}>
+						<Link href={GrantsUrl}>
+					Grants
+						</Link>
+					</MenuItem>
+				</Show>
 				<MenuItem className={classes.menuItem}>
 					<Link href={AboutUsUrl} isExternal>
 						About

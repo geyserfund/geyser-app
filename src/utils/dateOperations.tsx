@@ -1,6 +1,6 @@
 import { DateTime, Interval } from 'luxon';
 
-export 	const getDaysAgo = (date: string) => {
+export const getDaysAgo = (date: string) => {
 	const dateTime = DateTime.fromMillis(parseInt(date, 10));
 	const currentDateTime = DateTime.now();
 
@@ -38,7 +38,7 @@ export 	const getDaysAgo = (date: string) => {
 	}
 };
 
-export 	const getDaysLeft = (date: string) => {
+export const getDaysLeft = (date: string) => {
 	const dateTime = DateTime.fromMillis(parseInt(date, 10));
 	const currentDateTime = DateTime.now();
 

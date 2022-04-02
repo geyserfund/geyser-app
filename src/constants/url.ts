@@ -2,6 +2,8 @@ export const geyserHomeLogo = 'https://storage.googleapis.com/geyser-projects-me
 export const geyserHomeCoin1 = 'https://storage.googleapis.com/geyser-projects-media/app/coins1.png';
 export const geyserHomeCoin2 = 'https://storage.googleapis.com/geyser-projects-media/app/coins2.png';
 
+export const HomeUrl = 'https://geyser.fund';
+export const GrantsUrl = 'https://geyser.fund/grants';
 export const AboutUsUrl = 'https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09';
 export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3';
 export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf';
@@ -17,3 +19,7 @@ export const AnalyticsUrl = 'https://simpleanalytics.com/geyser.fund';
 export const anonymousProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/project/common/anonymous.jpeg';
 
 export const kingProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png';
+export const craigProfileUrl = 'https://pbs.twimg.com/profile_images/1445744925258092551/77zw6irJ_400x400.jpg';
+
+export const AmbassadorUrl = 'https://airtable.com/shreTVU3ZjqJ3PIq8';
+export const AddSponsorUrl = 'https://airtable.com/shrmnAbkAupDx8GPo';
