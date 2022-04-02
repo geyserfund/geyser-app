@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { SatoshiIcon } from '../../../components/icons';
 import { ButtonComponent, ErrorBox, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
 import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
+import { useFundCalc } from '../../../helpers/fundingCalculation';
 import {IFundForm} from '../../../hooks';
 import { IProjectReward, IProjectType } from '../../../interfaces';
 import { DonationBased, RewardBased } from '../FundForm';
@@ -35,6 +36,7 @@ export const PaymentPage = ({
 	rewards,
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
+	const {getShippingCost, getTotalAmount} = useFundCalc(state);
 
 	useEffect(() => {
 		if (error) {
@@ -91,30 +93,6 @@ export const PaymentPage = ({
 			totalRewards += state.rewards[key];
 		});
 		return totalRewards;
-	};
-
-	const getTotalAmount = (type: 'sats' | 'dollar') => {
-		const shippingAmount = getShippingCost();
-
-		if (type === 'sats') {
-			return Math.round(state.rewardsCost / btcRate) + state.donationAmount + shippingAmount;
-		}
-
-		const donationAmount = Math.round((state.donationAmount + shippingAmount) * btcRate);
-
-		return donationAmount + state.rewardsCost;
-	};
-
-	const getShippingCost = () => {
-		if (state.rewardsCost === 0) {
-			return 0;
-		}
-
-		if (state.shippingDestination === 'national') {
-			return Math.round(15 / btcRate);
-		}
-
-		return Math.round(60 / btcRate);
 	};
 
 	console.log('checking state', state);

@@ -18,7 +18,7 @@ export const DonationBased = ({
 	setError,
 }: IDonationBasedProps) => {
 	const handleInput = (stringv: string, numberv: number) => {
-		setTarget({target: {name: 'donationAmount', value: numberv}});
+		setTarget({target: {name: 'donationAmount', value: numberv || 0}});
 	};
 
 	return (
@@ -46,7 +46,7 @@ export const DonationBased = ({
 							variant="unstyled"
 							marginLeft="10px"
 							onChange={handleInput}
-							value={state.amount}
+							value={state.donationAmount}
 							onFocus={() => setError('')}
 						>
 							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />

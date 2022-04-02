@@ -7,14 +7,18 @@ import { SatoshiIcon } from '../../../components/icons';
 import { Box, CloseButton } from '@chakra-ui/react';
 import { BiCopyAlt } from 'react-icons/bi';
 import ReactConfetti from 'react-confetti';
+import { useFundCalc } from '../../../helpers/fundingCalculation';
+import { IFundForm } from '../../../hooks';
 
 interface ISuccessPage {
-	amount: number
+	state: IFundForm
 	handleCloseButton: () => void
 }
 
-export const SuccessPage = ({ amount, handleCloseButton }: ISuccessPage) => {
+export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 	const [copy, setCopy] = useState(false);
+
+	const {getTotalAmount} = useFundCalc(state);
 
 	const isMobile = isMobileMode();
 	const shareProjectWithfriends = () => {
@@ -43,18 +47,18 @@ export const SuccessPage = ({ amount, handleCloseButton }: ISuccessPage) => {
 			justifyContent="center"
 		>
 			<ReactConfetti
-				drawShape={ctx => {
-					ctx.beginPath();
-					for (let i = 0; i < 22; i++) {
-						const angle = 0.35 * i;
-						const x = (0.2 + (1.5 * angle)) * Math.cos(angle);
-						const y = (0.2 + (1.5 * angle)) * Math.sin(angle);
-						ctx.lineTo(x, y);
-					}
+				// DrawShape={ctx => {
+				// 	ctx.beginPath();
+				// 	for (let i = 0; i < 22; i++) {
+				// 		const angle = 0.35 * i;
+				// 		const x = (0.2 + (1.5 * angle)) * Math.cos(angle);
+				// 		const y = (0.2 + (1.5 * angle)) * Math.sin(angle);
+				// 		ctx.lineTo(x, y);
+				// 	}
 
-					ctx.stroke();
-					ctx.closePath();
-				}}
+				// 	ctx.stroke();
+				// 	ctx.closePath();
+				// }}
 			/>
 			<CloseButton
 				borderRadius="50%"
@@ -64,7 +68,7 @@ export const SuccessPage = ({ amount, handleCloseButton }: ISuccessPage) => {
 				onClick={handleCloseButton}
 			/>
 			<Box display="flex" justifyContent="center" alignItems="center" width="100%">
-				<SatoshiIcon scale={1.2} paddingBottom="5px"/><Text marginLeft="5px" fontSize="30px" >{amount} </Text>
+				<SatoshiIcon scale={1.2} paddingBottom="5px"/><Text marginLeft="5px" fontSize="30px" >{getTotalAmount('sats')} </Text>
 			</Box>
 			<Text fontSize="30px" width="70%" textAlign="center">
 			Successfully funded!

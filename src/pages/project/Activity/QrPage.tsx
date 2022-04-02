@@ -9,10 +9,10 @@ import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { IFundingTx, IProject, IProjectReward } from '../../../interfaces';
 import { IFundForm } from '../../../hooks';
 import { GiftIcon } from '../../../components/icons';
-import { useBtcContext } from '../../../context/btc';
 import { BsLightning } from 'react-icons/bs';
 import {GiCrossedChains} from 'react-icons/gi';
 import { colors } from '../../../constants';
+import { useFundCalc } from '../../../helpers/fundingCalculation';
 
 const useStyles = createUseStyles({
 	blockText: {
@@ -56,7 +56,7 @@ export const QrPage = ({
 	const {comment} = state;
 	const {title} = project;
 
-	const {btcRate} = useBtcContext();
+	const {getTotalAmount, getShippingCost, getRewardsNumber, btcRate} = useFundCalc(state);
 
 	console.log(paymentRequest, address);
 
@@ -102,38 +102,6 @@ export const QrPage = ({
 		return rewardNames;
 	};
 
-	const getRewardsNumber = () => {
-		let totalRewards = 0;
-		Object.keys(state.rewards).map(key => {
-			totalRewards += state.rewards[key];
-		});
-		return totalRewards;
-	};
-
-	const getTotalAmount = (type: 'sats' | 'dollar') => {
-		const shippingAmount = getShippingCost();
-
-		if (type === 'sats') {
-			return Math.round(state.rewardsCost / btcRate) + state.donationAmount + shippingAmount;
-		}
-
-		const donationAmount = Math.round((state.donationAmount + shippingAmount) * btcRate);
-
-		return donationAmount + state.rewardsCost;
-	};
-
-	const getShippingCost = () => {
-		if (state.rewardsCost === 0) {
-			return 0;
-		}
-
-		if (state.shippingDestination === 'national') {
-			return Math.round(15 / btcRate);
-		}
-
-		return Math.round(60 / btcRate);
-	};
-
 	const qrBackgroundColor = copy ? colors.primary : colors.bgWhite;
 
 	return (
@@ -170,7 +138,7 @@ export const QrPage = ({
 						<VStack alignItems="flex-start" spacing="0px">
 							<SectionTitle>Total</SectionTitle>
 							<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
-							{state.rewardsCost && <SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>}
+							{state.rewardsCost && <SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / 	btcRate)}</SatoshiAmount>}
 							{state.rewardsCost && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
 							{comment && <Text className={classes.blockText}> {`Comment: ${comment}`}</Text>}

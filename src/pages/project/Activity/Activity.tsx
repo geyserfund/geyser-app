@@ -103,7 +103,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
 			if (fundData.getFundingTx.status === 'paid' || fundData.getFundingTx.status === 'pending') {
-				const newTranactions = fundData.getFundingTx.status === 'pending' ? fundData.getFundingTx : [fundData.getFundingTx, ...fundingTxs];
+				const newTranactions = fundData.getFundingTx.status === 'pending' ? fundingTxs : [fundData.getFundingTx, ...fundingTxs];
 				setFundingTxs(newTranactions);
 				clearInterval(fundInterval);
 				gotoNextStage();
@@ -233,7 +233,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					handleCloseButton={handleCloseButton}
 				/>;
 			case fundingStages.completed:
-				return <SuccessPage amount={state.amount} handleCloseButton={handleCloseButton} />;
+				return <SuccessPage state={state} handleCloseButton={handleCloseButton} />;
 
 			default:
 				return null;
