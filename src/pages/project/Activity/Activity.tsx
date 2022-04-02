@@ -147,7 +147,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 			let input;
 
 			if (project.type === 'reward') {
-				const { amount, rewardsCost, rewards, ...formData } = state;
+				const { amount, email, rewardsCost, rewards, ...formData } = state;
 				const rewardsArray = Object.keys(rewards).map(key => ({
 					projectRewardId: parseInt(key, 10),
 					quantity: rewards[key],
@@ -156,6 +156,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				input = {
 					projectId: Number(project.id),
 					...formData,
+					email: email || null,
 					rewards: filteredRewards,
 					rewardsCost: Math.round(rewardsCost / btcRate),
 				} as IRewardFundingInput;

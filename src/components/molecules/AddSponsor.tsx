@@ -3,8 +3,6 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOve
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { ButtonComponent, Linkin } from '../ui';
-import { SiTwitter } from 'react-icons/si';
-import Icon from '@chakra-ui/icon';
 import { AddSponsorUrl } from '../../constants';
 
 interface IConnectTwitter {
@@ -27,8 +25,8 @@ export const AddSponsor = ({
 	onClose,
 }: IConnectTwitter) => {
 	const classes = useStyles();
-	const useTitle = 'Become a founding partner';
-	const useDescription = 'Become a Funding Partner to be featured in the crowdfund and the product. Reach out to Craig at craig.deutsch@protonmail.com for more info.';
+	const useTitle = 'Become a sponsor';
+	const useDescription = 'Interested in sponsoring this campaign? Click continue to let us know your details and we can quickly add you as a sponsor.';
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -45,9 +43,8 @@ export const AddSponsor = ({
 								isFullWidth
 								primary
 								standard
-								leftIcon={<Icon as={SiTwitter} />}
 							>
-								Email
+								Continue
 							</ButtonComponent>
 						</Linkin>
 					</Box>
