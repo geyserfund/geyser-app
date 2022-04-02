@@ -12,12 +12,12 @@ interface IOwnerSponsorCard {
     ambassadors: IUser[]
     sponsors: IProjectSponsor[]
     ownerIntro: string
-	problem: string
-	solution: string
-	images: IProjectImage[]
+	  problem: string
+    idea: string
+	  images: IProjectImage[]
 }
 
-export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images, problem, solution}: IOwnerSponsorCard) => {
+export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images, problem, idea}: IOwnerSponsorCard) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 	const [readMore, setReadMore] = useState(false);
@@ -36,7 +36,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 					<VStack spacing="10px">
 						<ImageBar images={images} />
 						<StatusBar variant="problem" message={problem} />
-						<StatusBar variant="solution" message={solution} />
+						<StatusBar variant="idea" message={idea} />
 					</VStack>
 					<Box>
 						<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
