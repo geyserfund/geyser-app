@@ -6,3 +6,5 @@ export * from './ProjectCard';
 export * from './Footer';
 export * from './DonationInput';
 export * from './RewardItem';
+export * from './AddAmbassador';
+export * from './AddSponsor';
