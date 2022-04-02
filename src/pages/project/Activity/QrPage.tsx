@@ -34,6 +34,9 @@ const useStyles = createUseStyles({
 			cursor: 'pointer',
 		},
 	},
+	tabActive: {
+		color: `${colors.normalLightGreen} !important`,
+	},
 });
 
 interface IQrPage {
@@ -180,8 +183,8 @@ export const QrPage = ({
 			<Card width="100%" borderRadius="5px">
 				<Tabs variant="enclosed" isFitted onChange={setPlatform}>
 					<TabList >
-						<Tab value="lightning" color={platform === 0 ? colors.normalLightGreen : colors.textBlack}><BsLightning/><Text marginLeft="3px">Lightning</Text></Tab>
-						<Tab value="onChain" color={platform === 1 ? colors.normalLightGreen : colors.textBlack}><GiCrossedChains /><Text marginLeft="3px">On-chain</Text></Tab>
+						<Tab className={platform === 0 ? classes.tabActive : ''} value="lightning" ><BsLightning/><Text marginLeft="3px">Lightning</Text></Tab>
+						<Tab className={platform === 1 ? classes.tabActive : ''} value="onChain" ><GiCrossedChains /><Text marginLeft="3px">On-chain</Text></Tab>
 					</TabList>
 					<TabPanels>
 						<TabPanel display="flex" justifyContent="center">
