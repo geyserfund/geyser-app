@@ -108,11 +108,11 @@ const projectBlocks: IProjectBlock[] = [{
 {
 	title: 'Rewards',
 	body: [
-		'- Support the Cause (donate to the project without a reward) = $',
-		'- Board Game (get the full board game) = $',
-		'- Gratitude listing (get featured in the rulebook) = $',
-		'- Premium backer (get company logo featured on the box) = $',
-		'- The Bitcoin Game includes:\n',
+		'- Support the Cause (donate to the project without a reward) = $60',
+		'- Board Game (get the full board game) = $300',
+		'- Gratitude listing (get featured in the rulebook) = $500',
+		'- Premium backer (get company logo featured on the box) = $1000+',
+		'\nThe Bitcoin Game includes:\n',
 		'- Full-sized game board',
 		'- Deck of Action Cards',
 		'- 6 Little HODLer Bitcoin characters',
