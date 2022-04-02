@@ -3,8 +3,6 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOve
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { ButtonComponent, Linkin } from '../ui';
-import { SiTwitter } from 'react-icons/si';
-import Icon from '@chakra-ui/icon';
 import { AmbassadorUrl } from '../../constants';
 
 interface IConnectTwitter {
@@ -28,8 +26,7 @@ export const AddAmbassador = ({
 }: IConnectTwitter) => {
 	const classes = useStyles();
 	const useTitle = 'Become an ambassador';
-	const useDescription = 'Become an ambassador to support this project, by bringing in your reputation to increase the sense of trust.\n';
-	const text = 'To become an ambassador send an email to Craig at craig.deutsch@protonmail.com.';
+	const useDescription = 'Become an ambassador to increase the project’s visibility and trustfulness. Click continue to add your information and the project owner will get back in touch with you soon.\n';
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
@@ -39,7 +36,6 @@ export const AddAmbassador = ({
 				<ModalCloseButton />
 				<ModalBody >
 					<Text>{useDescription}</Text>
-					<Text paddingTop="20px">{text}</Text>
 					<Box className={classes.twitterContainer}>
 						<Linkin href={AmbassadorUrl} isExternal>
 							<ButtonComponent
@@ -47,9 +43,8 @@ export const AddAmbassador = ({
 								isFullWidth
 								primary
 								standard
-								leftIcon={<Icon as={SiTwitter} />}
 							>
-								Email
+								Continue
 							</ButtonComponent>
 						</Linkin>
 					</Box>

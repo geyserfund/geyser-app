@@ -73,7 +73,7 @@ export interface IFunder {
 
 export interface IProjectDetail {
     problem: string;
-    solution: string;
+    idea: string;
     blocks: IProjectBlock[];
     ownerIntro: string;
     images?: string[];

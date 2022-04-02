@@ -5,7 +5,7 @@ import { Box, Text } from '@chakra-ui/react';
 
 interface IStatusBarProp {
 	message: string;
-	variant: 'problem' | 'solution';
+	variant: 'problem' | 'idea';
 }
 
 export const StatusBar = ({ message, variant }: IStatusBarProp) => {
@@ -13,30 +13,19 @@ export const StatusBar = ({ message, variant }: IStatusBarProp) => {
 		switch (variant) {
 			case 'problem':
 				return 'PROBLEM';
-			case 'solution':
-				return 'SOLUTION';
+			case 'idea':
+				return 'IDEA';
 			default:
 				return 'PROBLEM';
 		}
 	};
 
-	// Const getIcon = () => {
-	// 	switch (variant) {
-	// 		case 'problem':
-	// 			return <BiError fontSize={25} />;
-	// 		case 'solution':
-	// 			return <FaCheckDouble fontSize={20} />;
-	// 		default:
-	// 			return <BiError fontSize={25} />;
-	// 	}
-	// };
-
 	const getBackground = () => {
 		switch (variant) {
 			case 'problem':
 				return 'brand.bgStatusProblem';
-			case 'solution':
-				return 'brand.bgStatusSolution';
+			case 'idea':
+				return 'brand.bgStatusIdea';
 			default:
 				return 'brand.bgStatusProblem';
 		}
@@ -48,7 +37,7 @@ export const StatusBar = ({ message, variant }: IStatusBarProp) => {
 				{getIcon()}
 			</Box> */}
 			<Box flex={1} display="flex" flexDirection="column" alignItems={'flex-start'}>
-				<Text fontSize="10px" color="brand.textGrey">{`${getLabel()}: `}</Text><Text>{message}</Text>
+				<Text fontSize="10px" color="brand.textGrey">{`${getLabel()} `}</Text><Text>{message}</Text>
 			</Box>
 
 		</Box>
