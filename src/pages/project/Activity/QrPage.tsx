@@ -51,6 +51,14 @@ export const QrPage = ({
 		}, 2000);
 	};
 
+	const handleCopyOnchain = () => {
+		navigator.clipboard.writeText(getOnchainAddress());
+		setcopy(true);
+		setTimeout(() => {
+			setcopy(false);
+		}, 2000);
+	};
+
 	const getOnchainAddress = () => {
 		const bitcoins = amount / 100000000;
 		return `bitcoin:${address}?amount=${bitcoins}`;
@@ -86,7 +94,7 @@ export const QrPage = ({
 				</Box>
 			</Box>
 			<QRCode value={paymentRequest} onClick={handleCopy} />
-			<QRCode value={getOnchainAddress()} onClick={handleCopy} />
+			<QRCode value={getOnchainAddress()} onClick={handleCopyOnchain} />
 			<Box className={classes.copyText}>
 				<ButtonComponent
 					isFullWidth
@@ -95,6 +103,17 @@ export const QrPage = ({
 					leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
 				>
 					{!copy ? 'Copy Invoice' : 'Invoice Copied'}
+				</ButtonComponent>
+				<Text ></Text>
+			</Box>
+			<Box className={classes.copyText}>
+				<ButtonComponent
+					isFullWidth
+					primary={copy}
+					onClick={handleCopyOnchain}
+					leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
+				>
+					{!copy ? 'Copy Address' : 'Address Copied'}
 				</ButtonComponent>
 				<Text ></Text>
 			</Box>
