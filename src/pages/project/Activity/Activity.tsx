@@ -103,8 +103,8 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
 			if (fundData.getFundingTx.status === 'paid' || fundData.getFundingTx.status === 'pending') {
-				const newTranactions = fundData.getFundingTx.status === 'pending' ? fundingTxs : [fundData.getFundingTx, ...fundingTxs];
-				setFundingTxs(newTranactions);
+				const newTransactions = fundData.getFundingTx.status === 'pending' ? fundingTxs : [fundData.getFundingTx, ...fundingTxs];
+				setFundingTxs(newTransactions);
 				clearInterval(fundInterval);
 				gotoNextStage();
 			}

@@ -41,7 +41,7 @@ export const SelectCountryOptions:ISelectOption[] = [
 		value: 'national',
 	},
 	{
-		label: 'Deliver outside USA',
+		label: 'Deliver outside the USA',
 		value: 'international',
 	},
 ];

@@ -11,6 +11,7 @@ query GetFundingTx($fundingTxId: BigInt!) {
       canceled
       comment
       paidAt
+      onChain
       funder {
         user {
           twitterHandle
