@@ -108,13 +108,23 @@ export const QrPage = ({
 	};
 
 	const getTotalAmount = (type: 'sats' | 'dollar') => {
+		const shippingAmount = getShippingCost();
+
 		if (type === 'sats') {
-			return Math.round(state.rewardsCost / btcRate) + state.donationAmount;
+			return Math.round(state.rewardsCost / btcRate) + state.donationAmount + shippingAmount;
 		}
 
-		const donationAmount = Math.round(state.donationAmount * btcRate);
+		const donationAmount = Math.round((state.donationAmount + shippingAmount) * btcRate);
 
 		return donationAmount + state.rewardsCost;
+	};
+
+	const getShippingCost = () => {
+		if (state.shippingDestination === 'national') {
+			return Math.round(15 / btcRate);
+		}
+
+		return Math.round(60 / btcRate);
 	};
 
 	const qrBackgroundColor = copy ? colors.primary : colors.bgWhite;
@@ -142,7 +152,7 @@ export const QrPage = ({
 			<Card width="100%" borderRadius="5px">
 				<VStack width="100%" padding="15px" alignItems="flex-start">
 					{state.rewardsCost > 0 && (
-						<VStack borderBottom="1px solid grey100">
+						<VStack paddingBottom="5px" borderBottom={`1px solid ${colors.gray200}`}>
 							<HStack>
 								<GiftIcon />
 								<Text>{`Reward: ${getRewardNames()}`}</Text>
@@ -154,6 +164,7 @@ export const QrPage = ({
 							<SectionTitle>Total</SectionTitle>
 							<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
 							<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
+							{state.shippingDestination && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
 							{comment && <Text className={classes.blockText}> {`Comment: ${comment}`}</Text>}
 							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text>}

@@ -87,13 +87,23 @@ export const PaymentPage = ({
 	};
 
 	const getTotalAmount = (type: 'sats' | 'dollar') => {
+		const shippingAmount = getShippingCost();
+
 		if (type === 'sats') {
-			return Math.round(state.rewardsCost / btcRate) + state.donationAmount;
+			return Math.round(state.rewardsCost / btcRate) + state.donationAmount + shippingAmount;
 		}
 
-		const donationAmount = Math.round(state.donationAmount * btcRate);
+		const donationAmount = Math.round((state.donationAmount + shippingAmount) * btcRate);
 
 		return donationAmount + state.rewardsCost;
+	};
+
+	const getShippingCost = () => {
+		if (state.shippingDestination === 'national') {
+			return Math.round(15 / btcRate);
+		}
+
+		return Math.round(60 / btcRate);
 	};
 
 	console.log('checking state', state);
@@ -155,6 +165,7 @@ export const PaymentPage = ({
 					<SectionTitle>Total</SectionTitle>
 					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
 					<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
+					<SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
 					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats')}</SatoshiAmount>
