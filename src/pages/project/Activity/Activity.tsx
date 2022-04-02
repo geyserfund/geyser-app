@@ -102,8 +102,9 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (fundData && fundData.getFundingTx) {
-			if (fundData.getFundingTx.status === 'paid') {
-				setFundingTxs([fundData.getFundingTx, ...fundingTxs]);
+			if (fundData.getFundingTx.status === 'paid' || fundData.getFundingTx.status === 'pending') {
+				const newTranactions = fundData.getFundingTx.status === 'pending' ? fundData.getFundingTx : [fundData.getFundingTx, ...fundingTxs];
+				setFundingTxs(newTranactions);
 				clearInterval(fundInterval);
 				gotoNextStage();
 			}
@@ -111,7 +112,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [fundData]);
 
 	useEffect(() => {
-		if (fundState === fundingStages.completed || fundState === fundingStages.canceled) {
+		if (fundState === fundingStages.completed || fundState === fundingStages.canceled || fundState) {
 			clearInterval(fundInterval);
 		}
 
