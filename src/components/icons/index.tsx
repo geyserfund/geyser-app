@@ -8,6 +8,7 @@ import MagnifyPng from '../../assets/magnify.png';
 import MedalPng from '../../assets/medal.png';
 import TrophyPng from '../../assets/trophy.png';
 import HourglassPng from '../../assets/hourglass.png';
+import GiftPng from '../../assets/gift.png';
 import SatoshiPng from '../../assets/satoshi.png';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }: any) => {
@@ -69,5 +70,11 @@ export const CrownIcon = () => (
 export const HourglassIcon = () => (
 	<Box padding="3px 0px">
 		<Image height="20px" width="20px" src={HourglassPng} alt="hourglass" />
+	</Box>
+);
+
+export const GiftIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={GiftPng} alt="gift" />
 	</Box>
 );

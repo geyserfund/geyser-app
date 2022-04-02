@@ -226,8 +226,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 			case fundingStages.started:
 				return 	<QrPage
 					state={state}
-					title={project.title}
-					owners={project.owners.map(owner => owner.user.username)}
+					project={project}
 					fundingTx={fundingTx}
 					handleCloseButton={handleCloseButton}
 				/>;

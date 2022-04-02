@@ -24,7 +24,7 @@ export const SatoshiAmount = ({label, extra, fontSize, children, ...rest}: ISato
 
 	return (
 		<HStack alignItems="center">
-			{label && <Text fontSize={fontSize} {...rest}>{`${label} = `}</Text>}
+			{label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
 			<SatoshiIcon color={rest.color} scale={getScale() } />
 			<Text fontSize={fontSize} {...rest}>{`${children} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
 		</HStack>
