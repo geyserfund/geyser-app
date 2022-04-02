@@ -7,6 +7,7 @@ export interface IFundingTx {
    status: string;
    amount: number;
    paymentRequest: string;
+   address: string;
    canceled: boolean;
 }
 

@@ -6,6 +6,8 @@ import QRCode from 'react-qr-code';
 import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
+import { IFundingTx } from '../../../interfaces';
+import { IFundForm } from '../../../hooks';
 
 const useStyles = createUseStyles({
 	blockText: {
@@ -17,28 +19,41 @@ const useStyles = createUseStyles({
 });
 
 interface IQrPage {
-	comment: string;
 	title: string;
-	amount: number;
 	owners: string[];
-	qrCode: string;
 	handleCloseButton: () => void
+	fundingTx: IFundingTx
+	state: IFundForm
 }
 
 export const QrPage = ({
-	comment, title, amount, owners, qrCode, handleCloseButton,
+	fundingTx,
+	state,
+	title,
+	owners,
+	handleCloseButton,
 }: IQrPage) => {
+	const { paymentRequest, address, amount} = fundingTx;
+	const {comment} = state;
+
+	console.log(paymentRequest, address);
+
 	const isMobile = isMobileMode();
 	const classes = useStyles();
 
 	const [copy, setcopy] = useState(false);
 
 	const handleCopy = () => {
-		navigator.clipboard.writeText(qrCode);
+		navigator.clipboard.writeText(paymentRequest);
 		setcopy(true);
 		setTimeout(() => {
 			setcopy(false);
 		}, 2000);
+	};
+
+	const getOnchainAddress = () => {
+		const bitcoins = amount / 100000000;
+		return `bitcoin:${address}?amount=${bitcoins}`;
 	};
 
 	return (
@@ -70,7 +85,8 @@ export const QrPage = ({
 					{comment && <Text className={classes.blockText}> {`Message: ${comment}`}</Text>}
 				</Box>
 			</Box>
-			<QRCode value={qrCode} onClick={handleCopy} />
+			<QRCode value={paymentRequest} onClick={handleCopy} />
+			<QRCode value={getOnchainAddress()} onClick={handleCopy} />
 			<Box className={classes.copyText}>
 				<ButtonComponent
 					isFullWidth

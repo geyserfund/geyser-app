@@ -134,15 +134,20 @@ export const PaymentPage = ({
 			</Box>
 			<Box width="100%" >
 				<SelectComponent
+					name="shippingDestination"
 					fontSize="14px"
 					placeholder="Delivery Rewards..."
 					options={SelectCountryOptions}
+					onChange={setState}
 				/>
 			</Box>
 			<Box width="100%">
 				<TextBox
 					type="email"
+					name="email"
 					placeholder="Contact Email"
+					value={state.email}
+					onChange={setTarget}
 				/>
 			</Box>
 			<HStack width="100%" justifyContent="space-between" alignItems="flex-start">

@@ -1,5 +1,5 @@
 import { Box, Divider, Heading, HStack } from '@chakra-ui/layout';
-import { useMediaQuery } from '@chakra-ui/media-query';
+// Import { useMediaQuery } from '@chakra-ui/media-query';
 import { Button, Text } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, { useState } from 'react';
@@ -8,7 +8,7 @@ import { colors } from '../../constants';
 import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { getDaysAgo, isDarkMode, isMobileMode } from '../../utils';
-import { Default, King } from './ProjectLayout';
+import { Craig, King } from './ProjectLayout';
 
 type Rules = string
 
@@ -81,17 +81,17 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 	const isDark = isDarkMode();
 
 	const componentPadding = isMobile ? '5px 0px 5px 10px' : '20px 40px 5px 40px';
-	const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)');
-	const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
+	// Const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)');
+	// const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
 
-	const [twitterLoading, settwitterLoading] = useState(true);
+	// const [twitterLoading, settwitterLoading] = useState(true);
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
-	const handleSuccess = () => {
-		settwitterLoading(false);
-	};
+	// Const handleSuccess = () => {
+	// 	settwitterLoading(false);
+	// };
 
 	const handleFundClick = () => {
 		setDetailOpen(false);
@@ -106,18 +106,21 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 			return <King />;
 		}
 
-		return <Default
-			{...{
-				twitterLoading,
-				isLargerThan1100,
-				isLargerThan1000,
-				isDark,
-				classes,
-				project,
-				handleSuccess,
-			}}
-		/>;
+		if (project.name === 'the-bitcoin-game') {
+			return <Craig />;
+		}
 	};
+	// Return <Default
+	// 	{...{
+	// 		twitterLoading,
+	// 		isLargerThan1100,
+	// 		isLargerThan1000,
+	// 		isDark,
+	// 		classes,
+	// 		project,
+	// 		handleSuccess,
+	// 	}}
+	// />;
 
 	return (
 		<Box

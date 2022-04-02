@@ -121,8 +121,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [fundState]);
 
 	useEffect(() => {
-		if (data && fundState !== fundingStages.started) {
-			if ((data.fund && data.fund.success) || (data.fundWithReward && data.fundWithReward.success)) {
+		if (data && fundState === fundingStages.form) {
+			if (data.fundWithReward && data.fundWithReward.success) {
+				setFundingTx(data.fundWithReward.fundingTx);
+				gotoNextStage();
+			} else if (data.fund && data.fund.success) {
 				setFundingTx(data.fund.fundingTx);
 				gotoNextStage();
 			}
@@ -147,11 +150,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					projectRewardId: parseInt(key, 10),
 					quantity: rewards[key],
 				}));
+				const filteredRewards = rewardsArray.filter(reward => reward.quantity !== 0);
 				input = {
 					projectId: Number(project.id),
 					...formData,
-					rewards: rewardsArray,
-					donationAmount: amount,
+					rewards: filteredRewards,
 					rewardsCost: Math.round(rewardsCost / btcRate),
 				} as IRewardFundingInput;
 			} else {
@@ -221,11 +224,10 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				/>;
 			case fundingStages.started:
 				return 	<QrPage
-					comment={state.comment}
+					state={state}
 					title={project.title}
-					amount={state.amount}
 					owners={project.owners.map(owner => owner.user.username)}
-					qrCode={fundingTx.paymentRequest}
+					fundingTx={fundingTx}
 					handleCloseButton={handleCloseButton}
 				/>;
 			case fundingStages.completed:
@@ -235,6 +237,8 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				return null;
 		}
 	};
+
+	console.log('checking fund state', fundState);
 
 	return (
 		<>

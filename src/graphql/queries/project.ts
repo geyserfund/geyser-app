@@ -29,6 +29,7 @@ query GetProjectByName($name: String!) {
           }
         }
         rewards {
+          id
           cost
           description
           currency

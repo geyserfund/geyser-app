@@ -37,10 +37,10 @@ export type ShippingDestination = 'national' | 'international'
 export const SelectCountryOptions:ISelectOption[] = [
 	{
 		label: 'Inside the USA',
-		value: 'INSIDE_US',
+		value: 'national',
 	},
 	{
 		label: 'Outside USA',
-		value: 'OUTSIDE_US',
+		value: 'international',
 	},
 ];

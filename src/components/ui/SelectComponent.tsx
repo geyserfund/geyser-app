@@ -37,9 +37,13 @@ const useStyles = createUseStyles({
 	}),
 });
 
-export const SelectComponent = ({className, ...rest}: any) => {
+export const SelectComponent = ({name, onChange, className, ...rest}: any) => {
 	const {isOpen: focused, onOpen: onFocus, onClose: onBlur} = useDisclosure();
 	const classes = useStyles({focused});
+
+	const onSelect = (option: any) => {
+		onChange(name, option.value);
+	};
 
 	return (
 		<Select
@@ -47,6 +51,7 @@ export const SelectComponent = ({className, ...rest}: any) => {
 			onBlur={onBlur}
 			classNamePrefix="platform__select"
 			className={classNames(classes.inputElement, className)}
+			onChange={onSelect}
 			{...rest}
 		/>
 	);

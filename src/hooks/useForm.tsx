@@ -53,6 +53,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 			});
 		}
 
+		console.log('chekcing rewards and rewards cost', newRewards, rewardsCost);
 		const newState = {...state, rewards: newRewards, rewardsCost};
 		_setState(newState);
 	};
