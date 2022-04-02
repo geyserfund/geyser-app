@@ -57,24 +57,24 @@ const images = [
 		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_1.jpg',
 	},
 	{
-		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_2.jpg',
-		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_2.jpg',
-	},
-	{
-		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_3.jpg',
-		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_3.jpg',
-	},
-	{
-		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_4.jpg',
-		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_4.jpg',
-	},
-	{
 		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_5.jpg',
 		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_5.jpg',
 	},
 	{
 		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_6.jpg',
 		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_6.jpg',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_4.jpg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_4.jpg',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_2.jpg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_2.jpg',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_3.jpg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_3.jpg',
 	},
 	{
 		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_7.jpg',
