@@ -255,6 +255,8 @@ export const King = () => {
 					ambassadors={ambassadors}
 					sponsors={sponsors}
 					ownerIntro={projectDetails.ownerIntro}
+					problem={projectDetails.problem}
+					solution={projectDetails.solution}
 				/>
 				<DetailsBlock projectDetails={projectDetails} />
 				{ renderUpdates() }

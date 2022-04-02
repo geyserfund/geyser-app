@@ -77,8 +77,8 @@ const images = [
 		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_6.jpg',
 	},
 	{
-		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_7.jpeg',
-		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_7.jpeg',
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_7.jpg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_7.jpg',
 	},
 	{
 		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_8.jpg',
@@ -151,6 +151,8 @@ export const Craig = () => {
 					ambassadors={ambassadors}
 					sponsors={sponsors}
 					ownerIntro={projectDetails.ownerIntro}
+					problem={projectDetails.problem}
+					solution={projectDetails.solution}
 				/>
 				<DetailsBlock projectDetails={projectDetails} />
 				{ renderUpdates() }

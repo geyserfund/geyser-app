@@ -11,10 +11,12 @@ interface IOwnerSponsorCard {
     ambassadors: IUser[]
     sponsors: IProjectSponsor[]
     ownerIntro: string
+	problem: string
+	solution: string
 	images: IProjectImage[]
 }
 
-export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images}: IOwnerSponsorCard) => {
+export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images, problem, solution}: IOwnerSponsorCard) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 	const [readMore, setReadMore] = useState(false);
@@ -28,8 +30,8 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 			<VStack spacing="15px" alignItems="flex-start">
 				<VStack spacing="10px">
 					<ImageBar images={images} />
-					<StatusBar variant="problem" message="Financial illiteracy among the youth in Nigeria, a country ravaged by double-digit inflation." />
-					<StatusBar variant="solution" message="Teaching financial literacy to the youths of Nigeria with Bitcoin and lightning." />
+					<StatusBar variant="problem" message={problem} />
+					<StatusBar variant="solution" message={solution} />
 				</VStack>
 				<Box>
 					<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
