@@ -77,7 +77,11 @@ export const DonationInput = ({className, onChange, name, inputGroup, ...rest}: 
 	};
 
 	useEffect(() => {
-		onChange(name, satoshi);
+		if (!satoshi) {
+			onChange(name, 0);
+		} else {
+			onChange(name, satoshi);
+		}
 	}, [satoshi]);
 
 	return (

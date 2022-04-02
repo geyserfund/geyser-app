@@ -57,7 +57,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	console.log('PROJECT REWARDS:', project.rewards);
 
-	const {state, setTarget, setState, updateReward} = useFundState({rewards: project.rewards});
+	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
 	const [fundingTxs, setFundingTxs] = useState<IProjectFunding[]>([]);
@@ -139,6 +139,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const handleCloseButton = () => {
 		setFundState(fundingStages.initial);
+		resetForm();
 	};
 
 	const handleFund = async () => {
