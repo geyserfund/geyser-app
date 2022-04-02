@@ -1,4 +1,5 @@
 import { createUseStyles } from 'react-jss';
+import { colors } from '../../../constants';
 
 type Labels = string
 
@@ -38,4 +39,15 @@ export const useStyles = createUseStyles<Labels, Istyles>({
 		background: 'white',
 		height: 'fit-content',
 	}),
+	amabassadorBlock: {
+		backgroundColor: colors.gray100,
+		padding: '7px',
+		borderRadius: '5px',
+		marginRight: '10px',
+		textDecoration: 'none',
+		'&:hover': {
+			textDecoration: 'none',
+
+		},
+	},
 });

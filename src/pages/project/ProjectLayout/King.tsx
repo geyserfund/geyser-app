@@ -8,7 +8,8 @@ import { IProjectBlock, IProjectDetail, IProjectSponsor, IProjectUpdate, IUser }
 import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../ProjectComponent';
 
 const owner: IUser = {
-	picture: kingProfileUrl,
+	imageUrl: kingProfileUrl,
+	twitterHandle: 'ApataJ',
 	username: 'ApataJ',
 	fullName: 'Apata J',
 	id: '',
@@ -18,22 +19,24 @@ const owner: IUser = {
 	amount: 0,
 };
 
-const ambassador: IUser = {
-	picture: 'https://pbs.twimg.com/profile_images/1477647411963056128/7wd0aNSZ_400x400.jpg',
+const ambassadors: IUser[] = [{
+	imageUrl: 'https://pbs.twimg.com/profile_images/1477647411963056128/7wd0aNSZ_400x400.jpg',
 	username: 'parman_the',
+	twitterHandle: 'parman_the',
 	fullName: 'Parman Bitcoin Private Key Whisperer',
 	id: '',
 	URL: '',
 	twitter: false,
 	badge: 'owner',
 	amount: 0,
-};
+}];
 
 const sponsors: IProjectSponsor[] = [
 	{
 		user: {
-			picture: 'https://pbs.twimg.com/profile_images/1362672747399159818/QR9bbtrT_400x400.jpg',
+			imageUrl: 'https://pbs.twimg.com/profile_images/1362672747399159818/QR9bbtrT_400x400.jpg',
 			username: 'walletofsatoshi',
+			twitterHandle: 'walletofsatoshi',
 			fullName: 'walletofsatoshi',
 			id: '',
 			URL: '',
@@ -47,8 +50,9 @@ const sponsors: IProjectSponsor[] = [
 	},
 	{
 		user: {
-			picture: 'https://pbs.twimg.com/profile_images/1370765783765282823/dMGd0WEI_400x400.jpg',
+			imageUrl: 'https://pbs.twimg.com/profile_images/1370765783765282823/dMGd0WEI_400x400.jpg',
 			username: 'Bitnob_official',
+			twitterHandle: 'Bitnob_official',
 			fullName: 'Bitnob_official',
 			id: '',
 			URL: '',
@@ -245,8 +249,16 @@ export const King = () => {
 	return (
 		<VStack alignItems="center" width="100%">
 			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
-				<OwnerSponsorCard owner={owner} ambassador={ambassador} sponsors={sponsors} ownerIntro={projectDetails.ownerIntro} />
-				<DetailsBlock images={images} projectDetails={projectDetails} />
+				<OwnerSponsorCard
+					images={images}
+					owner={owner}
+					ambassadors={ambassadors}
+					sponsors={sponsors}
+					ownerIntro={projectDetails.ownerIntro}
+					problem={projectDetails.problem}
+					solution={projectDetails.solution}
+				/>
+				<DetailsBlock projectDetails={projectDetails} />
 				{ renderUpdates() }
 				<SponsorBlock sponsors={sponsors}/>
 			</VStack >

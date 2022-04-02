@@ -1,12 +1,13 @@
-import { IuserProfile } from '.';
 import { BadgeVariant } from '../components/ui';
+
+export type IProjectType = 'reward' | 'grant' | 'donation'
 
 export interface IProject {
     id: string;
     title: string;
     name: string;
     description: string;
-    originUrl: string;
+    type: IProjectType;
     balance: number;
     fundingGoal: number;
     createdAt: string;
@@ -16,11 +17,27 @@ export interface IProject {
     ownerConfirmed: string;
     fundsClaimed: string;
     creationConfirmed: string;
-    creator: IProjectUser;
-    owner: IProjectUser;
+    owners: IProjectUser[];
     ambassadors: IProjectUser[];
     funders: IProjectUser[];
+    sponsors: IProjectUser[];
+    grantees: IGrantee[];
     fundingTxs: IProjectFunding[];
+    rewards?: IProjectReward[]
+}
+
+export interface IProjectReward {
+    id: number;
+    cost: number;
+    name: string;
+    description: string;
+    backers: number;
+}
+
+export interface IGrantee {
+    id: number;
+    url: string;
+    name: string;
 }
 
 export interface IProjectUser {
@@ -31,15 +48,17 @@ export interface IProjectUser {
 export interface IUser {
     id: string;
     username: string;
-    picture: string;
+    imageUrl: string;
     URL: string;
     fullName: string;
     twitter: boolean;
+    twitterHandle: string;
     badge: BadgeVariant;
     amount: number;
 }
 
 export interface IProjectFunding {
+    id: number;
     funder: IFunder;
     amount:string;
     comment:string;
@@ -47,7 +66,7 @@ export interface IProjectFunding {
 }
 
 export interface IFunder {
-    user: IuserProfile;
+    user: IUser;
     confirmed: boolean;
     amountFunded: number;
 }
@@ -56,15 +75,15 @@ export interface IProjectDetail {
     problem: string;
     solution: string;
     blocks: IProjectBlock[];
-    ownerIntro: string
-    images?: string[]
+    ownerIntro: string;
+    images?: string[];
 }
 
 export interface IProjectBlock {
-        title: string;
-        body: string[];
-        images?: string[];
-        blockType: string;
+    title: string;
+    body: string[];
+    images?: string[];
+    blockType: string;
 }
 
 export interface IProjectUpdate {
@@ -81,4 +100,9 @@ export interface IProjectSponsor {
     user: IUser;
     image: string;
     companyUrl: string;
+}
+
+export interface IRewardCount {
+    id: number;
+    count: number;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import { BiError } from 'react-icons/bi';
-import { FaCheckDouble } from 'react-icons/fa';
+// Import { BiError } from 'react-icons/bi';
+// import { FaCheckDouble } from 'react-icons/fa';
 
 interface IStatusBarProp {
 	message: string;
@@ -12,24 +12,24 @@ export const StatusBar = ({ message, variant }: IStatusBarProp) => {
 	const getLabel = () => {
 		switch (variant) {
 			case 'problem':
-				return 'Problem';
+				return 'PROBLEM';
 			case 'solution':
-				return 'Solution';
+				return 'SOLUTION';
 			default:
-				return 'Problem';
+				return 'PROBLEM';
 		}
 	};
 
-	const getIcon = () => {
-		switch (variant) {
-			case 'problem':
-				return <BiError fontSize={25} />;
-			case 'solution':
-				return <FaCheckDouble fontSize={20} />;
-			default:
-				return <BiError fontSize={25} />;
-		}
-	};
+	// Const getIcon = () => {
+	// 	switch (variant) {
+	// 		case 'problem':
+	// 			return <BiError fontSize={25} />;
+	// 		case 'solution':
+	// 			return <FaCheckDouble fontSize={20} />;
+	// 		default:
+	// 			return <BiError fontSize={25} />;
+	// 	}
+	// };
 
 	const getBackground = () => {
 		switch (variant) {
@@ -43,12 +43,12 @@ export const StatusBar = ({ message, variant }: IStatusBarProp) => {
 	};
 
 	return (
-		<Box width="100%" display="flex" backgroundColor={getBackground()} padding="8px 5px" borderRadius="8px" >
-			<Box padding="10px">
+		<Box width="100%" display="flex" backgroundColor={getBackground()} padding="8px 10px" borderRadius="8px" >
+			{/* <Box padding="10px">
 				{getIcon()}
-			</Box>
+			</Box> */}
 			<Box flex={1} display="flex" flexDirection="column" alignItems={'flex-start'}>
-				<Text fontWeight={600}>{`${getLabel()}: `}</Text><Text>{message}</Text>
+				<Text fontSize="10px" color="brand.textGrey">{`${getLabel()}: `}</Text><Text>{message}</Text>
 			</Box>
 
 		</Box>
