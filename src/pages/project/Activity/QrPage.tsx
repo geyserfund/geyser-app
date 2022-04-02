@@ -123,6 +123,10 @@ export const QrPage = ({
 	};
 
 	const getShippingCost = () => {
+		if (state.rewardsCost === 0) {
+			return 0;
+		}
+
 		if (state.shippingDestination === 'national') {
 			return Math.round(15 / btcRate);
 		}
@@ -155,7 +159,7 @@ export const QrPage = ({
 			<Card width="100%" borderRadius="5px">
 				<VStack width="100%" padding="15px" alignItems="flex-start">
 					{state.rewardsCost > 0 && (
-						<VStack paddingBottom="5px" borderBottom={`1px solid ${colors.gray200}`}>
+						<VStack width="100%" alignItems="flex-start" paddingBottom="5px" borderBottom={`1px solid ${colors.gray200}`}>
 							<HStack>
 								<GiftIcon />
 								<Text>{`Reward: ${getRewardNames()}`}</Text>
@@ -166,8 +170,8 @@ export const QrPage = ({
 						<VStack alignItems="flex-start" spacing="0px">
 							<SectionTitle>Total</SectionTitle>
 							<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
-							<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
-							{state.shippingDestination && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
+							{state.rewardsCost && <SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>}
+							{state.rewardsCost && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
 							{comment && <Text className={classes.blockText}> {`Comment: ${comment}`}</Text>}
 							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text>}
@@ -187,15 +191,17 @@ export const QrPage = ({
 						<Tab className={platform === 1 ? classes.tabActive : ''} value="onChain" ><GiCrossedChains /><Text marginLeft="3px">On-chain</Text></Tab>
 					</TabList>
 					<TabPanels>
-						<TabPanel display="flex" justifyContent="center">
+						<TabPanel display="flex" flexDirection="column" alignItems="center">
 							<Box className={classes.qrContainer} backgroundColor={qrBackgroundColor}>
 								<QRCode bgColor={qrBackgroundColor} className={classes.qr} value={paymentRequest} onClick={handleCopy} />
 							</Box>
+							<Text paddingTop="15px">Waiting for payment...</Text>
 						</TabPanel>
-						<TabPanel display="flex" justifyContent="center">
+						<TabPanel display="flex" flexDirection="column" alignItems="center">
 							<Box className={classes.qrContainer} backgroundColor={qrBackgroundColor}>
 								<QRCode bgColor={qrBackgroundColor} className={classes.qr} value={getOnchainAddress()} onClick={handleCopyOnchain} />
 							</Box>
+							<Text paddingTop="15px">Waiting for payment...</Text>
 						</TabPanel>
 					</TabPanels>
 				</Tabs>

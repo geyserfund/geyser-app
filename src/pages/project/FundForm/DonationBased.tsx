@@ -18,7 +18,7 @@ export const DonationBased = ({
 	setError,
 }: IDonationBasedProps) => {
 	const handleInput = (stringv: string, numberv: number) => {
-		setTarget({target: {name: 'amount', value: numberv}});
+		setTarget({target: {name: 'donationAmount', value: numberv}});
 	};
 
 	return (

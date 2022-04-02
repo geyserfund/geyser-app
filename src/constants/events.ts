@@ -1,4 +1,4 @@
-import { ISelectOption } from '../interfaces';
+import { IProjectType, ISelectOption } from '../interfaces';
 
 export const fundingStages:{
 loading:IFundingStages;
@@ -20,27 +20,28 @@ export const stageList: IFundingStages[] = ['loading', 'initial', 'form', 'start
 
 export type IFundingStages = 'loading'|'initial' | 'form' | 'started' | 'completed' | 'canceled'
 
-export type IProjectType = 'donation-based'|'reward-based'
-
-export const projectTypes: {
-	donation: IProjectType,
-	reward: IProjectType
-} = {
-	donation: 'donation-based',
-	reward: 'reward-based',
+export const projectTypes = {
+	donation: 'donation' as IProjectType,
+	reward: 'reward' as IProjectType,
+	grant: 'grant' as IProjectType,
 };
 
 export type FundingTxStatus = 'unpaid' | 'paid' | 'canceled' | 'pending'
 
 export type ShippingDestination = 'national' | 'international'
 
+export const shippingTypes = {
+	national: 'national' as ShippingDestination,
+	international: 'international' as ShippingDestination,
+};
+
 export const SelectCountryOptions:ISelectOption[] = [
 	{
-		label: 'Inside the USA',
+		label: 'Deliver inside the USA',
 		value: 'national',
 	},
 	{
-		label: 'Outside USA',
+		label: 'Deliver outside USA',
 		value: 'international',
 	},
 ];

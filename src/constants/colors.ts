@@ -27,5 +27,5 @@ export const colors = {
 
 	gray100: '#EDF2F7',
 	gray200: '#E2E8F0',
-
+	grayPlaceholder: '#a0aec0',
 };

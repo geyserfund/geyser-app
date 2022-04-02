@@ -67,7 +67,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
 	const [fundProject, {
-		data,
+		data, loading: fundLoading,
 	}] = project.type === 'reward' ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
 
 	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
@@ -159,10 +159,10 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					rewardsCost: Math.round(rewardsCost / btcRate),
 				} as IRewardFundingInput;
 			} else {
-				const { amount, comment, anonymous } = state;
+				const { donationAmount, comment, anonymous } = state;
 				input = {
 					projectId: Number(project.id),
-					amount,
+					amount: donationAmount,
 					comment,
 					anonymous,
 				} as IDonationFundingInput;
@@ -211,6 +211,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 			case fundingStages.form:
 				return <PaymentPage
 					{...{
+						fundLoading,
 						isMobile,
 						handleCloseButton,
 						btcRate,
@@ -220,7 +221,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						updateReward,
 						handleFund,
 						rewards: project.rewards,
-						type: 'reward-based',
+						type: project.type,
 					}}
 				/>;
 			case fundingStages.started:

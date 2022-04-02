@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShippingDestination } from '../constants';
+import { ShippingDestination, shippingTypes } from '../constants';
 
 import { IProjectReward, IRewardCount } from '../interfaces';
 
@@ -19,16 +19,18 @@ export interface IuseFundStateProps {
 }
 
 export const useFundState = ({rewards}: IuseFundStateProps) => {
-	const [state, _setState] = useState<IFundForm>({
+	const intialState = {
 		donationAmount: 0,
 		rewardsCost: 0,
 		amount: 0,
 		comment: '',
-		shippingDestination: 'national',
+		shippingDestination: shippingTypes.national,
 		anonymous: true,
 		email: '',
 		rewards: {},
-	});
+	};
+
+	const [state, _setState] = useState<IFundForm>(intialState);
 	const setTarget = (event: any) => {
 		const {name, value} = event.target;
 		const newState = {...state, [name]: value};
@@ -58,6 +60,9 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		_setState(newState);
 	};
 
-	console.log('checking state', state);
-	return {state, setTarget, setState, updateReward};
+	const resetForm = () => {
+		_setState(intialState);
+	};
+
+	return {state, setTarget, setState, updateReward, resetForm};
 };

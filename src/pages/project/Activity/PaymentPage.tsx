@@ -2,13 +2,14 @@ import { Box, CloseButton, Divider, HStack, Text, VStack } from '@chakra-ui/reac
 import React, { useEffect, useState } from 'react';
 import { SatoshiIcon } from '../../../components/icons';
 import { ButtonComponent, ErrorBox, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
-import { IProjectType, projectTypes, SelectCountryOptions } from '../../../constants';
+import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import {IFundForm} from '../../../hooks';
-import { IProjectReward } from '../../../interfaces';
+import { IProjectReward, IProjectType } from '../../../interfaces';
 import { DonationBased, RewardBased } from '../FundForm';
 
 interface IPaymentPageProps {
 	isMobile: boolean
+	fundLoading: boolean
 	handleCloseButton: () => void
 	btcRate: number
 	state: IFundForm
@@ -22,6 +23,7 @@ interface IPaymentPageProps {
 
 export const PaymentPage = ({
 	isMobile,
+	fundLoading,
 	handleCloseButton,
 	btcRate,
 	handleFund,
@@ -36,7 +38,7 @@ export const PaymentPage = ({
 
 	useEffect(() => {
 		if (error) {
-			setTimeout(() => setError(''), 2000);
+			setTimeout(() => setError(''), 3000);
 		}
 	}, [error]);
 
@@ -55,6 +57,11 @@ export const PaymentPage = ({
 
 		if (getTotalAmount('sats') < 1) {
 			setError('Payment below 1 sats is not allowed at the moment. Please update the amount');
+			return false;
+		}
+
+		if (state.rewardsCost && !state.email) {
+			setError('Email is a required field when donating for a reward.');
 			return false;
 		}
 
@@ -99,6 +106,10 @@ export const PaymentPage = ({
 	};
 
 	const getShippingCost = () => {
+		if (state.rewardsCost === 0) {
+			return 0;
+		}
+
 		if (state.shippingDestination === 'national') {
 			return Math.round(15 / btcRate);
 		}
@@ -127,40 +138,44 @@ export const PaymentPage = ({
 				onClick={handleCloseButton}
 			/>
 			{renderFundForm()}
-			<Divider orientation="horizontal"/>
-			<SectionTitle>Comment</SectionTitle>
-			<Box width="100%" >
-				<TextArea
-					placeholder="Leave a public message here."
-					variant="unstyled"
-					fontSize="14px"
-					padding="5px"
-					resize="none"
-					value={state.comment}
-					maxLength={280}
-					name="comment"
-					onChange={setTarget}
-				/>
-			</Box>
-			<Box width="100%" >
-				<SelectComponent
-					name="shippingDestination"
-					fontSize="14px"
-					placeholder="Delivery Rewards..."
-					options={SelectCountryOptions}
-					onChange={setState}
-				/>
-			</Box>
-			<Box width="100%">
-				<TextBox
-					type="email"
-					name="email"
-					placeholder="Contact Email"
-					value={state.email}
-					onChange={setTarget}
-				/>
-			</Box>
-			<HStack width="100%" justifyContent="space-between" alignItems="flex-start">
+			<Divider orientation="horizontal" marginTop="2px !important"/>
+			<VStack spacing="5px" width="100%" alignItems="flex-start">
+				<SectionTitle>Comment</SectionTitle>
+				<Box width="100%">
+					<TextArea
+						placeholder="Leave a public message here."
+						variant="unstyled"
+						fontSize="14px"
+						padding="5px"
+						resize="none"
+						value={state.comment}
+						maxLength={280}
+						name="comment"
+						onChange={setTarget}
+					/>
+				</Box>
+				{state.rewardsCost && <Box width="100%" >
+					<SelectComponent
+						name="shippingDestination"
+						fontSize="14px"
+						placeholder={<Text color={colors.grayPlaceholder}>Delivery Rewards...</Text>}
+						options={SelectCountryOptions}
+						onChange={setState}
+						value={SelectCountryOptions.find(val => val.value === state.shippingDestination) }
+					/>
+				</Box>}
+				{state.rewardsCost &&	<Box width="100%">
+					<TextBox
+						type="email"
+						name="email"
+						fontSize="14px"
+						placeholder="Contact Email"
+						value={state.email}
+						onChange={setTarget}
+					/>
+				</Box>}
+			</VStack>
+			{type === projectTypes.reward && <HStack width="100%" justifyContent="space-between" alignItems="flex-start">
 				<VStack alignItems="flex-start" spacing="0px">
 					<SectionTitle>Total</SectionTitle>
 					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
@@ -171,15 +186,14 @@ export const PaymentPage = ({
 					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats')}</SatoshiAmount>
 					<Text> {`$${getTotalAmount('dollar')}`}</Text>
 				</VStack>
-			</HStack>
-
+			</HStack>}
 			<Box width="100%">
 				<ButtonComponent
+					isLoading={fundLoading}
 					primary
 					standard
 					leftIcon={<SatoshiIcon />}
 					width="100%"
-					marginTop="15px"
 					onClick={submit}
 				>
 					Fund project

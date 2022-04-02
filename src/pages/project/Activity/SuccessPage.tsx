@@ -6,6 +6,7 @@ import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { SatoshiIcon } from '../../../components/icons';
 import { Box, CloseButton } from '@chakra-ui/react';
 import { BiCopyAlt } from 'react-icons/bi';
+import ReactConfetti from 'react-confetti';
 
 interface ISuccessPage {
 	amount: number
@@ -41,6 +42,20 @@ export const SuccessPage = ({ amount, handleCloseButton }: ISuccessPage) => {
 			alignItems="center"
 			justifyContent="center"
 		>
+			<ReactConfetti
+				drawShape={ctx => {
+					ctx.beginPath();
+					for (let i = 0; i < 22; i++) {
+						const angle = 0.35 * i;
+						const x = (0.2 + (1.5 * angle)) * Math.cos(angle);
+						const y = (0.2 + (1.5 * angle)) * Math.sin(angle);
+						ctx.lineTo(x, y);
+					}
+
+					ctx.stroke();
+					ctx.closePath();
+				}}
+			/>
 			<CloseButton
 				borderRadius="50%"
 				position="absolute"
