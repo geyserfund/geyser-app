@@ -115,6 +115,7 @@ const images = [
 ];
 
 const projectBlocks: IProjectBlock[] = [{
+	key: 'problem',
 	title: 'The problem',
 	body: [
 		'Bitcoin is hard to understand. For the uninitiated, learning about Bitcoin is full of complicated new terms and a seemingly intangible digital asset. To fully grasp Bitcoin, one must become a student of numerous disciplines such as economics, cryptography, philosophy, finance, and technology. Getting people to not only recognize the value of Bitcoin and its importance, but also to comprehend how the Bitcoin network functions is a difficult task.',
@@ -122,6 +123,7 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'PL',
 },
 {
+	key: 'idea',
 	title: 'The idea',
 	body: [
 		'The Bitcoin Game started as an educational activity to explain Bitcoin in a simple, easy-to-understand, and hands-on way. As a life-long educator, I knew that teaching Bitcoin to precoiners needed to be broken down into a tactile activity that abstracted the technological complexities away in favor of terms anyone can understand. I did this educational activity with meetup groups, family members, and children as young as 5. Each time afterwards, I received feedback that the participants finally had a basic understanding of how Bitcoin works. I wanted to spread this activity to as many people as possible and realized it would be best done as a game. The Bitcoin Game is what evolved from that activity.',
@@ -131,6 +133,7 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'PL',
 },
 {
+	key: 'rewards',
 	title: 'Rewards',
 	body: [
 		'- **Board Game ($60)**: get the full, 1st edition of The Bitcoin Game.',
@@ -150,6 +153,7 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'PL',
 },
 {
+	key: 'aboutMe',
 	title: 'About me',
 	body: [
 		'I am former elementary school teacher and administrator. I taught children ranging from 3 to 9 years old. I have been involved in Bitcoin since 2017 and made the decision to transition my career into Bitcoin full time after the 2020/21 school year. Since then, I have been finding ways to contribute to Bitcoin. I started a local meetup, led intro Bitcoin classes, spun up some full nodes, began mining at home, joined telegram communities, started tweeting on Bitcoin Twitter after years of lurking, and wrote op-eds for Bitcoin Magazine. I have recently joined Bitcoin Magazine as Junior Editor.',

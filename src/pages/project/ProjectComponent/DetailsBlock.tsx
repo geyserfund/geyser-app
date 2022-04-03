@@ -36,7 +36,7 @@ export const DetailsBlock = ({ projectDetails}: IDetailsBlock) => {
 				<HStack spacing="30px" overflowX="auto">
 					{
 						images.map((image: string) => (
-							<Box key={image}>
+							<Box key={image} maxWidth="400px">
 								<Image src={image} />
 							</Box>))
 					}
@@ -48,7 +48,10 @@ export const DetailsBlock = ({ projectDetails}: IDetailsBlock) => {
 	const renderParagraphList = (block: IProjectBlock) => {
 		if (block.body && block.body.length > 0) {
 			return block.body.map((body: string) => (
-				<ReactMarkdown key={body} className={classes.texts} linkTarget="_blank">{body}</ReactMarkdown>
+				<Box key={body} id={block.key}>
+					<ReactMarkdown className={classes.texts} linkTarget="_blank">{body}</ReactMarkdown>
+				</Box>
+
 			));
 		}
 
@@ -115,8 +118,10 @@ export const DetailsBlock = ({ projectDetails}: IDetailsBlock) => {
 							<AccordionIcon />
 						</AccordionButton>
 					</h2>
-					<AccordionPanel pb={4} display="flex" flexDirection="column" alignItems="center" width="100%" >
-						{renderBlocks()}
+					<AccordionPanel pb={4} width="100%">
+						<VStack alignItems="center" width="100%" spacing="15px">
+							{renderBlocks()}
+						</VStack>
 					</AccordionPanel>
 				</AccordionItem>
 			</Accordion>

@@ -6,9 +6,8 @@ import { Avatar } from '@chakra-ui/react';
 // Import { Badge } from '../ui';
 import { IProjectFunding } from '../../interfaces';
 import { SatoshiIcon } from '../icons';
-import { getDaysAgo } from '../../utils';
+import { getDaysAgo, getRandomOrb } from '../../utils';
 import { fonts } from '../../constants/fonts';
-import { anonymousProfileUrl } from '../../constants';
 
 interface IIdBar extends HTMLChakraProps<'div'> {
 	fundingTx: IProjectFunding
@@ -25,6 +24,7 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 		anonymous = true;
 	}
 
+	console.log('checking id', fundingTx);
 	return (
 		<Box
 			padding="10px 25px"
@@ -50,12 +50,12 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 							</HStack>
 						</Link>
 						: <HStack spacing="5px" display="flex">
-							<Avatar width="30px" height="3	0px" name={anonymous ? 'Anonymous' : funder.user.username} src={anonymous ? anonymousProfileUrl : funder.user.imageUrl} sx={{
+							<Avatar width="30px" height="3	0px" name={anonymous ? 'Anonymous' : funder.user.username} src={anonymous ? getRandomOrb(fundingTx.id) : funder.user.imageUrl} sx={{
 								'& .chakra-avatar__initials': {
 									lineHeight: '30px',
 								},
 							}}/>
-							<Text fontSize="16px"> {anonymous ? 'Anonymous' : funder.user.username}</Text>
+							<Text fontSize="16px"> {anonymous ? '' : funder.user.username}</Text>
 							{/* <Badge variant={''} /> */}
 						</HStack>
 				}

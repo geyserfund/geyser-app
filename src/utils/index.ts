@@ -8,3 +8,4 @@ export * from './Notification';
 export * from './useBitcoinRates';
 export * from './helperFunctions';
 export * from './sha256';
+export * from './getRandom';

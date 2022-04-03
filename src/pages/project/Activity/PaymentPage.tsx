@@ -103,20 +103,18 @@ export const PaymentPage = ({
 			spacing="12px"
 			width="100%"
 			height="100%"
-			overflowY="hidden"
-			// PaddingTop="40px"
 			position="relative"
 			alignItems="flex-start"
 		>
 			<CloseButton
 				borderRadius="50%"
 				position="absolute"
-				right="10px"
-				top="-5px"
+				right="0px"
+				top="-10px"
 				onClick={handleCloseButton}
 			/>
 			{renderFundForm()}
-			<Divider orientation="horizontal" marginTop="2px !important"/>
+			<Divider borderTopWidth="3px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
 			<VStack spacing="5px" width="100%" alignItems="flex-start">
 				<SectionTitle>Comment</SectionTitle>
 				<Box width="100%">
@@ -159,6 +157,7 @@ export const PaymentPage = ({
 					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
 					<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
 					{ state.rewardsCost && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
+
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
 					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats')}</SatoshiAmount>
