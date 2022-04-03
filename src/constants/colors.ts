@@ -19,8 +19,8 @@ export const colors = {
 	lightGreen: '#00E34D',
 	bglightDarkMode: '#464646',
 	bgHeavyDarkMode: '#161616',
-	bgStatusProblem: '#fbdadc',
-	bgStatusSolution: '#c0dfed',
+	bgStatusProblem: '#FFE9E9',
+	bgStatusSolution: '#DCF7FF',
 	darkerPrimary: '#1BD5B3',
 
 	normalLightGreen: '#1BD5B3',
