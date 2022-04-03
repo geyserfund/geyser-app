@@ -3,11 +3,9 @@ import { Text, VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
-import { SatoshiIcon } from '../../../components/icons';
-import { Box, CloseButton } from '@chakra-ui/react';
+import { CloseButton } from '@chakra-ui/react';
 import { BiCopyAlt } from 'react-icons/bi';
 import ReactConfetti from 'react-confetti';
-import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 
 interface ISuccessPage {
@@ -17,13 +15,19 @@ interface ISuccessPage {
 
 export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 	const [copy, setCopy] = useState(false);
-
-	const {getTotalAmount} = useFundCalc(state);
+	console.log(state);
 
 	const isMobile = isMobileMode();
 	const shareProjectWithfriends = () => {
 		navigator.clipboard.writeText(window.location.href);
 		setCopy(true);
+	};
+
+	const openInNewTab = (url: string) => {
+		const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+		if (newWindow) {
+			newWindow.opener = null;
+		}
 	};
 
 	useEffect(() => {
@@ -67,11 +71,13 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 				top="10px"
 				onClick={handleCloseButton}
 			/>
-			<Box display="flex" justifyContent="center" alignItems="center" width="100%">
-				<SatoshiIcon scale={1.2} paddingBottom="5px"/><Text marginLeft="5px" fontSize="30px" >{getTotalAmount('sats')} </Text>
-			</Box>
+			{/* <Box display="flex" justifyContent="center" alignItems="center" width="100%">
+			</Box> */}
 			<Text fontSize="30px" width="70%" textAlign="center">
-			Successfully funded!
+				Funding successful!
+			</Text>
+			<Text paddingBlockEnd="30px" textAlign="center">
+				The payment went through. You can now share this campaign with friends.
 			</Text>
 			<ButtonComponent
 				standard
@@ -82,6 +88,22 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 			>
 				{copy ? 'Project Link Copied' : 'Share project with friends'}
 			</ButtonComponent>
+			{
+				!state.anonymous
+				&& <ButtonComponent
+					standard
+					primary={copy}
+					width="100%"
+					onClick={() => openInNewTab('https://twitter.com/geyserfunders')}
+					style={{
+						whiteSpace: 'normal',
+						wordWrap: 'break-word',
+					}}
+				>
+				Check your Twitter! Our bot @geyserfunders just sent out a tweet to thank you for supporting this project.
+				</ButtonComponent>
+			}
+
 		</VStack>
 	);
 };

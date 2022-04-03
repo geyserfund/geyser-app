@@ -3,7 +3,7 @@ import { HTMLChakraProps } from '@chakra-ui/system';
 import { useColorMode } from '@chakra-ui/color-mode';
 import React from 'react';
 import { Avatar } from '@chakra-ui/react';
-// Import { Badge } from '../ui';
+import { Badge } from '../ui';
 import { IProjectFunding } from '../../interfaces';
 import { SatoshiIcon } from '../icons';
 import { getDaysAgo, getRandomOrb } from '../../utils';
@@ -44,8 +44,8 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 										lineHeight: '30px',
 									},
 								}}/>
-								<Text fontSize="16px"> {funder.user.username}</Text>
-								{/* <Badge variant={''} /> */}
+								<Text fontSize="16px"> {funder.user.twitterHandle}</Text>
+								{funder.badges.map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`}/>))}
 							</HStack>
 						</Link>
 						: <HStack spacing="5px" display="flex">

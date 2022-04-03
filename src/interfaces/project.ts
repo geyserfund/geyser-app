@@ -70,6 +70,12 @@ export interface IFunder {
     user: IUser;
     confirmed: boolean;
     amountFunded: number;
+    badges: IFunderBadge[];
+}
+
+export interface IFunderBadge {
+    badge: string;
+    description: string;
 }
 
 export interface IProjectDetail {

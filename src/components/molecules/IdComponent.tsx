@@ -1,7 +1,7 @@
 import { Avatar } from '@chakra-ui/avatar';
 import { HStack, Text } from '@chakra-ui/layout';
 import React from 'react';
-import { Badge, BadgeVariant } from '../ui';
+import { BadgeVariant } from '../ui';
 
 export interface IIdComponent {
 	URL: string;
@@ -11,7 +11,7 @@ export interface IIdComponent {
 	badge: BadgeVariant
 }
 
-export const IdComponent = ({ URL, username, fullName, badge }: IIdComponent) => (
+export const IdComponent = ({ URL, username, fullName }: IIdComponent) => (
 	<HStack spacing="5px" display="flex">
 		<Avatar width="30px" height="30px" name={fullName} src={URL} sx={{
 			'& .chakra-avatar__initials': {
@@ -19,7 +19,6 @@ export const IdComponent = ({ URL, username, fullName, badge }: IIdComponent) =>
 			},
 		}} />
 		<Text> {username}</Text>
-		<Badge variant={badge} />
 	</HStack>
 );
 
