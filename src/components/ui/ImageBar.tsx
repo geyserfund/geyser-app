@@ -97,6 +97,32 @@ export const ImageBar = ({images, imageIndex}:IImageBar) => {
 		}
 	}, [imageIndex]);
 
+	useEffect(() => {
+		const innerImage = document.getElementsByClassName('image-gallery-swipe');
+		const outerBox = document.getElementsByClassName('image-gallery-slide-wrapper');
+		if (viewGallery) {
+			if (innerImage[0] && outerBox[0]) {
+				innerImage[0].addEventListener('click', (event:any) => {
+					event.stopPropagation();
+				});
+				outerBox[0].addEventListener('click', (event: any) => {
+					let stop = false;
+					event.path.map((val:any) => {
+						console.log(val.localName);
+						if (val.localName === 'button') {
+							stop = true;
+						}
+					});
+					if (stop) {
+						return;
+					}
+
+					setViewGallery(false);
+				});
+			}
+		}
+	}, [viewGallery]);
+
 	return (
 		<>
 			<Box
@@ -141,6 +167,8 @@ export const ImageBar = ({images, imageIndex}:IImageBar) => {
 						startIndex={startIndex}
 						useBrowserFullscreen
 						stopPropagation
+						showPlayButton={false}
+						showFullscreenButton={false}
 					/>
 				</Box>
 			)}
