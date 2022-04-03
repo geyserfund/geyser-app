@@ -6,7 +6,7 @@ import QRCode from 'react-qr-code';
 import { ButtonComponent, Card, SatoshiAmount, SectionTitle } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import { IFundingTx, IProject, IProjectReward } from '../../../interfaces';
+import { IFundingTx, IFundingAmounts, IProject, IProjectReward } from '../../../interfaces';
 import { IFundForm } from '../../../hooks';
 import { GiftIcon } from '../../../components/icons';
 import { BsLightning } from 'react-icons/bs';
@@ -42,12 +42,14 @@ const useStyles = createUseStyles({
 interface IQrPage {
 	handleCloseButton: () => void
 	fundingTx: IFundingTx
+	amounts: IFundingAmounts
 	state: IFundForm
 	project: IProject
 }
 
 export const QrPage = ({
 	fundingTx,
+	amounts,
 	state,
 	project,
 	handleCloseButton,
@@ -56,7 +58,7 @@ export const QrPage = ({
 	const {comment} = state;
 	const {title} = project;
 
-	const {getTotalAmount, getShippingCost, getRewardsNumber, btcRate} = useFundCalc(state);
+	const {getTotalAmount, getRewardsNumber} = useFundCalc(state);
 
 	console.log(paymentRequest, address);
 
@@ -137,9 +139,9 @@ export const QrPage = ({
 					<HStack width="100%" justifyContent="space-between" alignItems="flex-start">
 						<VStack alignItems="flex-start" spacing="0px">
 							<SectionTitle>Total</SectionTitle>
-							<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
-							{state.rewardsCost && <SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / 	btcRate)}</SatoshiAmount>}
-							{state.rewardsCost && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
+							<SatoshiAmount label="Donation">{amounts.donationAmount}</SatoshiAmount>
+							{amounts.rewardsCost && <SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{amounts.rewardsCost}</SatoshiAmount>}
+							{amounts.rewardsCost && <SatoshiAmount label="Shipping" >{amounts.shippingCost}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
 							{comment && <Text className={classes.blockText}> {`Comment: ${comment}`}</Text>}
 							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text>}

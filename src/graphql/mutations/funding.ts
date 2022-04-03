@@ -17,6 +17,12 @@ mutation Fund($input: DonationFundingInput!) {
         onChain
         address
       }
+      amountSummary {
+        total
+        donationAmount
+        shippingCost
+        rewardsCost
+      }
     }
   }
 `;
@@ -37,6 +43,12 @@ mutation FundWithReward($input: RewardFundingInput!) {
         paidAt
         onChain
         address
+      }
+      amountSummary {
+        total
+        donationAmount
+        shippingCost
+        rewardsCost
       }
     }
   }

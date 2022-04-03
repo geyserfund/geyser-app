@@ -10,6 +10,7 @@ export interface IFundForm {
 	comment: string;
 	anonymous: boolean;
 	shippingDestination: ShippingDestination;
+	shippingCost: number;
 	email: string;
 	rewards: {[key:string]:number};
 }
@@ -25,6 +26,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		amount: 0,
 		comment: '',
 		shippingDestination: shippingTypes.national,
+		shippingCost: 0,
 		anonymous: true,
 		email: '',
 		rewards: {},

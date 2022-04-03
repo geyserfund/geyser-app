@@ -7,6 +7,7 @@ import {
 	IProjectFunding,
 	IRewardFundingInput,
 	IDonationFundingInput,
+	IFundingAmounts,
 } from '../../../interfaces';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND, MUTATION_FUND_WITH_REWARD } from '../../../graphql';
@@ -44,6 +45,13 @@ const initialFunding = {
 	onChain: false,
 };
 
+const initialAmounts = {
+	total: 0,
+	donationAmount: 0,
+	shippingCost: 0,
+	rewardsCost: 0,
+};
+
 let fundInterval: any;
 
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
@@ -60,6 +68,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
+	const [amounts, setAmounts] = useState<IFundingAmounts>(initialAmounts);
 	const [fundingTxs, setFundingTxs] = useState<IProjectFunding[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
@@ -125,9 +134,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		if (data && fundState === fundingStages.form) {
 			if (data.fundWithReward && data.fundWithReward.success) {
 				setFundingTx(data.fundWithReward.fundingTx);
+				setAmounts(data.fundWithReward.amountSummary);
 				gotoNextStage();
 			} else if (data.fund && data.fund.success) {
 				setFundingTx(data.fund.fundingTx);
+				setAmounts(data.fund.amountSummary);
 				gotoNextStage();
 			}
 		}
@@ -231,6 +242,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					state={state}
 					project={project}
 					fundingTx={fundingTx}
+					amounts={amounts}
 					handleCloseButton={handleCloseButton}
 				/>;
 			case fundingStages.completed:

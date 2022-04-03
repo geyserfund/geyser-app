@@ -19,6 +19,10 @@ query GetFundingTx($fundingTxId: BigInt!) {
           username
           id
         }
+        badges {
+          badge
+          description
+        }
       }
     }
   }

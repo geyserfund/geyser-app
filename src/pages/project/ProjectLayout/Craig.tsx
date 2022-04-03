@@ -133,13 +133,9 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'PL',
 },
 {
-	key: 'rewards',
-	title: 'Rewards',
+	key: 'includes',
+	title: 'The Bitcoin Game includes',
 	body: [
-		'- **Board Game ($60)**: get the full, 1st edition of The Bitcoin Game.',
-		'- **Board Game + Gratitude Listing ($300)**: get the full board game and get your name listed in the rulebook.',
-		'- **Board Game + Gratitude Listing + Poster ($500)**: get 2 copies of the board game, your name listed in the rule book, and a limited edition bitcoin-themed original poster.',
-		'\nThe Bitcoin Game includes:\n',
 		'- Full-sized game board',
 		'- Deck of Action Cards',
 		'- 6 Satoshi Nakamoto characters',
@@ -147,6 +143,16 @@ const projectBlocks: IProjectBlock[] = [{
 		'- 1 standard die',
 		'- 18 ASIC miner dice',
 		'- Rule book with glossary and additional resources',
+	],
+	blockType: 'PL',
+},
+{
+	key: 'rewards',
+	title: 'Rewards',
+	body: [
+		'- **Board Game ($60)**: get the full, 1st edition of The Bitcoin Game.',
+		'- **Board Game + Gratitude Listing ($300)**: get the full board game and get your name listed in the rulebook.',
+		'- **Board Game + Gratitude Listing + Poster ($500)**: get 2 copies of the board game, your name listed in the rule book, and a limited edition bitcoin-themed original poster.',
 		'Thank you for supporting this project. I look forward to playing this game with you!',
 	],
 	images: [images[14].original],
