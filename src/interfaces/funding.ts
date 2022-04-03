@@ -17,6 +17,13 @@ export interface IFundingReward {
     quantity: number;
 }
 
+export interface IFundingAmounts {
+    total: number;
+    shippingCost: number;
+    rewardsCost: number;
+    donationAmount: number;
+}
+
 interface IFundingRewardWithoutCost {
     projectRewardId: number;
     quantity: number;
@@ -35,6 +42,7 @@ export interface IRewardFundingInput {
     rewardsCost: number;
     rewards: IFundingRewardWithoutCost[];
     shippingDestination: ShippingDestination;
+    shippingCost: number;
     comment: string | null;
     anonymous: boolean;
     email: string;
