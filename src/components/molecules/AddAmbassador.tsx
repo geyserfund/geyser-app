@@ -31,20 +31,21 @@ export const AddAmbassador = ({
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
 			<ModalOverlay />
-			<ModalContent display="flex" alignItems="center" padding="20px 15px">
+			<ModalContent display="flex" alignItems="center" padding="20px 20px">
 				<ModalHeader><Text fontSize="16px" fontWeight="normal">{useTitle}</Text></ModalHeader>
 				<ModalCloseButton />
-				<ModalBody >
-					<Text>{useDescription}</Text>
+				<ModalBody>
 					<Box className={classes.twitterContainer}>
+						<Text>{useDescription}</Text>
 						<Linkin href={AmbassadorUrl} isExternal>
 							<ButtonComponent
 								margin="10px"
 								isFullWidth
 								primary
 								standard
+								onClick={() => {}}
 							>
-								Continue
+							Continue
 							</ButtonComponent>
 						</Linkin>
 					</Box>

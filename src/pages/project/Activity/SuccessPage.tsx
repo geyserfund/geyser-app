@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, VStack } from '@chakra-ui/layout';
+import { Box, Text, VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
@@ -23,12 +23,7 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 		setCopy(true);
 	};
 
-	const openInNewTab = (url: string) => {
-		const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-		if (newWindow) {
-			newWindow.opener = null;
-		}
-	};
+	const botTwitterUrl = 'https://twitter.com/geyserfunders';
 
 	useEffect(() => {
 		if (copy) {
@@ -39,7 +34,7 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 	}, [copy]);
 
 	return (
-		<VStack
+		<><VStack
 			padding={isMobile ? '10px 10px' : '10px 20px'}
 			spacing="12px"
 			width="100%"
@@ -50,60 +45,38 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 			alignItems="center"
 			justifyContent="center"
 		>
-			<ReactConfetti
-				// DrawShape={ctx => {
-				// 	ctx.beginPath();
-				// 	for (let i = 0; i < 22; i++) {
-				// 		const angle = 0.35 * i;
-				// 		const x = (0.2 + (1.5 * angle)) * Math.cos(angle);
-				// 		const y = (0.2 + (1.5 * angle)) * Math.sin(angle);
-				// 		ctx.lineTo(x, y);
-				// 	}
-
-				// 	ctx.stroke();
-				// 	ctx.closePath();
-				// }}
-			/>
+			<ReactConfetti />
 			<CloseButton
 				borderRadius="50%"
 				position="absolute"
 				right="10px"
 				top="10px"
-				onClick={handleCloseButton}
-			/>
-			{/* <Box display="flex" justifyContent="center" alignItems="center" width="100%">
-			</Box> */}
-			<Text fontSize="30px" width="70%" textAlign="center">
+				onClick={handleCloseButton} />
+			<Text fontSize="30px" width="80%" textAlign="center" paddingBlockEnd="50px">
 				Funding successful!
 			</Text>
-			<Text paddingBlockEnd="30px" textAlign="center">
-				The payment went through. You can now share this campaign with friends.
-			</Text>
-			<ButtonComponent
-				standard
-				primary={copy}
-				leftIcon={copy ? <BiCopyAlt /> : <HiOutlineSpeakerphone />}
-				width="100%"
-				onClick={shareProjectWithfriends}
-			>
-				{copy ? 'Project Link Copied' : 'Share project with friends'}
-			</ButtonComponent>
-			{
-				!state.anonymous
-				&& <ButtonComponent
+			<Box alignItems="left" width="100%">
+				<Text paddingBlockEnd="30px">
+					The payment went through. You can now share this campaign with friends.
+				</Text>
+				{state.rewards
+					&& <Text textAlign="left" width="100%" paddingBlockEnd="10px">
+						🎁  The creator will get in touch with you.
+					</Text>}
+				{!state.anonymous
+					&& <Text textAlign="left" paddingBlockEnd="30px">
+						🤖  Check your Twitter! Our bot <a href={botTwitterUrl}>@geyserfunders</a> just sent out a tweet.
+					</Text>}
+				<ButtonComponent
 					standard
 					primary={copy}
+					leftIcon={copy ? <BiCopyAlt /> : <HiOutlineSpeakerphone />}
 					width="100%"
-					onClick={() => openInNewTab('https://twitter.com/geyserfunders')}
-					style={{
-						whiteSpace: 'normal',
-						wordWrap: 'break-word',
-					}}
+					onClick={shareProjectWithfriends}
 				>
-				Check your Twitter! Our bot @geyserfunders just sent out a tweet to thank you for supporting this project.
+					{copy ? 'Project Link Copied' : 'Share project with friends'}
 				</ButtonComponent>
-			}
-
-		</VStack>
+			</Box>
+		</VStack></>
 	);
 };

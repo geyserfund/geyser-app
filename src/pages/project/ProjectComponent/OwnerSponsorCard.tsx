@@ -42,7 +42,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 				<VStack spacing="15px" alignItems="flex-start">
 					<VStack spacing="10px" >
 						<ImageBar images={images} />
-						<StatusBar variant="problem" message={problem} />
+						{ problem && <StatusBar variant="problem" message={problem} />}
 						<StatusBar variant="idea" message={idea} />
 					</VStack>
 					<Box>
