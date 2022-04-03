@@ -24,7 +24,6 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 		anonymous = true;
 	}
 
-	console.log('checking id', fundingTx);
 	return (
 		<Box
 			padding="10px 25px"

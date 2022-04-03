@@ -20,7 +20,7 @@ export const colors = {
 	bglightDarkMode: '#464646',
 	bgHeavyDarkMode: '#161616',
 	bgStatusProblem: '#FFE9E9',
-	bgStatusSolution: '#DCF7FF',
+	bgStatusIdea: '#DCF7FF',
 	darkerPrimary: '#1BD5B3',
 
 	normalLightGreen: '#1BD5B3',
