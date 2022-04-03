@@ -63,6 +63,7 @@ export interface IProjectFunding {
     amount:string;
     comment:string;
     paidAt:string;
+    onChain: boolean;
 }
 
 export interface IFunder {
@@ -73,7 +74,7 @@ export interface IFunder {
 
 export interface IProjectDetail {
     problem: string;
-    solution: string;
+    idea: string;
     blocks: IProjectBlock[];
     ownerIntro: string;
     images?: string[];

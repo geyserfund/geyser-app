@@ -249,7 +249,7 @@ const projectUpdates: IProjectUpdate[] = [
 
 const projectDetails: IProjectDetail = {
 	problem: 'Financial illiteracy among the youth in Nigeria, a country ravaged by double-digit inflation.',
-	solution: 'Teaching financial literacy to the youths of Nigeria with Bitcoin and lightning.',
+	idea: 'Teaching financial literacy to the youths of Nigeria with Bitcoin and lightning.',
 	ownerIntro: 'I’m Apata Johnson. I’m a visionary, a dedicated entrepreneur, who loves technology. As a thinker, and someone who cherish technology I can say that Bitcoin is the next big thing, I have hope that with Bitcoin we change the way we view money in Nigeria and the world as a whole. And how, with Bitcoin, Nigeria will transform from an underdeveloped nation to a super developed nation. I’m just a freedom lover and I feel Nigeria needs bitcoin.',
 	blocks: projectBlocks,
 };
@@ -272,7 +272,7 @@ export const King = () => {
 					sponsors={sponsors}
 					ownerIntro={projectDetails.ownerIntro}
 					problem={projectDetails.problem}
-					solution={projectDetails.solution}
+					idea={projectDetails.idea}
 				/>
 				<DetailsBlock projectDetails={projectDetails} />
 				{ renderUpdates() }

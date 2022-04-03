@@ -53,6 +53,10 @@ const sponsors: IProjectSponsor[] = [
 
 const images = [
 	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/first_image.jpeg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/first_image.jpeg',
+	},
+	{
 		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_10.jpg',
 		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_10.jpg',
 	},
@@ -92,6 +96,22 @@ const images = [
 		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_9.jpg',
 		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_9.jpg',
 	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_11.jpg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_11.jpg',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_12.jpg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_12.jpg',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_13.jpg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_13.jpg',
+	},
+	{
+		original: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_15.jpg',
+		thumbnail: 'https://storage.googleapis.com/geyser-projects-media/project/craig/craig_15.jpg',
+	},
 ];
 
 const projectBlocks: IProjectBlock[] = [{
@@ -109,17 +129,16 @@ const projectBlocks: IProjectBlock[] = [{
 		'The Bitcoin Game started as an educational activity to explain Bitcoin in a simple, easy-to-understand, and hands-on way. As a life-long educator, I knew that teaching Bitcoin to precoiners needed to be broken down into a tactile activity that abstracted the technological complexities away in favor of terms anyone can understand. I did this educational activity with meetup groups, family members, and children as young as 5. Each time afterwards, I received feedback that the participants finally had a basic understanding of how Bitcoin works. I wanted to spread this activity to as many people as possible and realized it would be best done as a game. The Bitcoin Game is what evolved from that activity.',
 		'The original activity has gone through many adaptations to become what you are helping launch today. It is quite different from the lesson I created at first, but the end result is still the same: players will learn about the complexities of Bitcoin in a simple, easy-to-understand, and intuitive way. Some of the concepts include: mining (hashing/target), block reward, halving, difficulty adjustments, mining pools, the importance of running a node and owning a hardware wallet/signing device, bitcoin gaining value over time, and more! There’s even some Bitcoin memes in there for fun. I can guarantee the educational goal is accomplished and my hope is for the secondary goal to be too: players having fun learning about the Bitcoin Network, invest bitcoin as wisely as possible, and lower their time preference by strategizing to create a better world in the future.',
 	],
-	images: [images[0].original],
+	images: [images[1].original],
 	blockType: 'PL',
 },
 {
 	key: 'rewards',
 	title: 'Rewards',
 	body: [
-		'- Support the Cause (donate to the project without a reward) = $60',
-		'- Board Game (get the full board game) = $300',
-		'- Gratitude listing (get featured in the rulebook) = $500',
-		'- Premium backer (get company logo featured on the box) = $1000+',
+		'- **Board Game ($60)**: get the full, 1st edition of The Bitcoin Game.',
+		'- **Board Game + Gratitude Listing ($300)**: get the full board game and get your name listed in the rulebook.',
+		'- **Board Game + Gratitude Listing + Poster ($500)**: get 2 copies of the board game, your name listed in the rule book, and a limited edition bitcoin-themed original poster.',
 		'\nThe Bitcoin Game includes:\n',
 		'- Full-sized game board',
 		'- Deck of Action Cards',
@@ -130,7 +149,7 @@ const projectBlocks: IProjectBlock[] = [{
 		'- Rule book with glossary and additional resources',
 		'Thank you for supporting this project. I look forward to playing this game with you!',
 	],
-	images: [images[1].original],
+	images: [images[14].original],
 	blockType: 'PL',
 },
 {
@@ -145,9 +164,9 @@ const projectBlocks: IProjectBlock[] = [{
 const projectUpdates: IProjectUpdate[] = [];
 
 const projectDetails: IProjectDetail = {
-	problem: 'Bitcoin is for many hard to understand for the many terms and intangible concepts.',
-	solution: 'A fun and engaging board game that helps to explain Bitcoin’s complex mechanisms and is accessible for the whole family.',
-	ownerIntro: 'I’m a Junior Editor at Bitcoin Magazine with a passion for Bitcoin Education.  ',
+	problem: 'There are very few ways to make learning Bitcoin fun and engaging.',
+	idea: 'The ultimate Bitcoin board game that makes learning about Bitcoin accessible and fun for the whole family.',
+	ownerIntro: 'I’m a Junior Editor at Bitcoin Magazine with a passion for Bitcoin Education.',
 	blocks: projectBlocks,
 };
 
@@ -169,7 +188,7 @@ export const Craig = () => {
 					sponsors={sponsors}
 					ownerIntro={projectDetails.ownerIntro}
 					problem={projectDetails.problem}
-					solution={projectDetails.solution}
+					idea={projectDetails.idea}
 				/>
 				<DetailsBlock projectDetails={projectDetails} />
 				{ renderUpdates() }

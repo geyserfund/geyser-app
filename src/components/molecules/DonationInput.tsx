@@ -58,8 +58,8 @@ export const DonationInput = ({className, onChange, name, inputGroup, ...rest}: 
 
 	const classes = useStyles();
 
-	const {isOpen: isDollar, onToggle} = useDisclosure();
-	const isSatoshi = !isDollar;
+	const {isOpen: isSatoshi, onToggle} = useDisclosure();
+	const isDollar = !isSatoshi;
 
 	const [satoshi, setSatoshi] = useState(0);
 	const [dollar, setDollar] = useState(0.0);
@@ -67,12 +67,12 @@ export const DonationInput = ({className, onChange, name, inputGroup, ...rest}: 
 	const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const val = parseInt(event.target.value, 10);
 		console.log('cehcking btcRate', btcRate);
-		if (isSatoshi) {
-			setSatoshi(val);
-			setDollar(Math.round(val * btcRate));
-		} else {
+		if (isDollar) {
 			setDollar(val);
 			setSatoshi(Math.round(val / btcRate));
+		} else {
+			setSatoshi(val);
+			setDollar(Math.round(val * btcRate));
 		}
 	};
 

@@ -83,6 +83,7 @@ query GetProjectByName($name: String!) {
           amount
           paidAt
           comment
+          onChain
         }
       }
     }

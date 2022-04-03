@@ -97,7 +97,7 @@ export const DetailsBlock = ({ projectDetails}: IDetailsBlock) => {
 		};
 
 		return (
-			<VStack key={block.title} className={classes.containers} >
+			<VStack key={block.title} className={classes.containers} space={8}>
 				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
 				{ switchBlocks() }
 				{ renderImages(block.images) }

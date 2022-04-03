@@ -66,7 +66,7 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 			</Box>
 			<Box marginTop="5px" width="100%">
 				{fundingTx.comment && <Text fontFamily={fonts.solway}>{fundingTx.comment}</Text>}
-				{timeAgo && <Text color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>{`${timeAgo} ago`}</Text>}
+				{timeAgo && <Text color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>{`${fundingTx.onChain ? '⛓' : '⚡️'} ${timeAgo} ago`}</Text>}
 			</Box>
 
 		</Box>
