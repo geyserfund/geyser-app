@@ -19,13 +19,14 @@ export const colors = {
 	lightGreen: '#00E34D',
 	bglightDarkMode: '#464646',
 	bgHeavyDarkMode: '#161616',
-	bgStatusProblem: '#fbdadc',
-	bgStatusIdea: '#c0dfed',
+	bgStatusProblem: '#FFE9E9',
+	bgStatusSolution: '#DCF7FF',
 	darkerPrimary: '#1BD5B3',
 
 	normalLightGreen: '#1BD5B3',
 
 	gray100: '#EDF2F7',
 	gray200: '#E2E8F0',
+	gray300: '#CBD5E0',
 	grayPlaceholder: '#a0aec0',
 };

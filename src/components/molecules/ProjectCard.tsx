@@ -106,7 +106,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 			{...rest}
 		>
 			<Box height="139px" width="100%" position="relative">
-				<Image src={imgSrc} height="100%" width="100%" objectFit="fill" />
+				<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
 				<Box className={classes.viewProject}>
 					<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
 					<Box className={classes.darkLayout} />

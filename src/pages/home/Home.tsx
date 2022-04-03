@@ -43,8 +43,14 @@ export const Home = () => {
 		},
 	);
 
+	const { loading: gameLoading, error: errorGame, data: gameData } = useQuery(QUERY_GET_PROJECT,
+		{
+			variables: { name: 'the-bitcoin-game' },
+		},
+	);
+
 	useEffect(() => {
-		if (error) {
+		if (error || errorGame) {
 			toast({
 				title: 'Something went wrong',
 				description: 'Please refresh the page',
@@ -54,6 +60,7 @@ export const Home = () => {
 	}, [error]);
 
 	const project = (data && data.getProjectByName && data.getProjectByName.project) || {};
+	const gameProject = (gameData && gameData.getProjectByName && gameData.getProjectByName.project) || {};
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
@@ -100,7 +107,7 @@ export const Home = () => {
 						Fund live projects
 					</Text>
 					{
-						projectsLoading
+						projectsLoading || gameLoading
 							? <Loader width="100%"/>
 							: <HStack
 								overflowX={'auto'}
@@ -109,6 +116,13 @@ export const Home = () => {
 								paddingBottom="20px"
 								spacing="15px"
 							>
+								<ProjectCard
+									open
+									title="The Bitcoin Game"
+									name="the-bitcoin-game"
+									project={gameProject}
+									imgSrc="https://storage.googleapis.com/geyser-projects-media/project/craig/craig_10.jpg"
+								/>
 								<ProjectCard
 									open
 									title="Bitcoin Conference In Lagos"

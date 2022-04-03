@@ -16,17 +16,13 @@ const useStyles = createUseStyles({
 		border: '2px solid',
 		borderColor: colors.bgLightGrey,
 		borderRadius: '12px',
-		'&:focus': {
-			borderColor: colors.normalLightGreen,
-			boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
-		},
 		'&:hover': {
-			borderColor: colors.normalLightGreen,
-			boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+			borderColor: colors.gray300,
+			// BoxShadow: `0 0 0 1px ${colors.gray300}`,
 		},
 	},
 	focused: {
-		borderColor: colors.normalLightGreen,
+		borderColor: `${colors.normalLightGreen} !important`,
 		boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
 	},
 	upperContainer: {
@@ -76,7 +72,7 @@ export const RewardItem = ({item, updateCount}: IRewardItemProps) => {
 	const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
 
 	return (
-		<Box tabIndex={-1} className={classNames(classes.container, {[classes.focused]: focus })} >
+		<Box tabIndex={-1} onFocus={setFocus} onBlur={setBlur} className={classNames(classes.container, {[classes.focused]: focus })} >
 			<HStack className={classes.upperContainer} >
 				<VStack spacing={0}>
 					<Text fontSize="14px" color={colors.normalLightGreen}>{`$${cost}`}</Text>

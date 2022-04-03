@@ -6,14 +6,20 @@ import classNames from 'classnames';
 import { useDisclosure } from '@chakra-ui/react';
 
 const useStyles = createUseStyles({
-	inputElement: ({focused}:{focused: boolean}) => ({
+	focused: {
+		'& .platform__select__control': {
+
+			borderColor: `${colors.normalLightGreen} !important`,
+			boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+
+		},
+	},
+	inputElement: {
 		'& .platform__select__control': {
 			borderWidth: '2px',
-			borderColor: focused ? colors.normalLightGreen : colors.gray200,
-			boxShadow: focused ? `0 0 0 1px ${colors.normalLightGreen}` : `0 0 0 0px ${colors.gray200}`,
+			borderColor: colors.gray200,
 			'&:hover': {
-				borderColor: colors.normalLightGreen,
-				boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+				borderColor: colors.gray300,
 			},
 			'&:active': {
 				borderColor: colors.normalLightGreen,
@@ -34,23 +40,24 @@ const useStyles = createUseStyles({
 			color: 'black',
 		},
 
-	}),
+	},
 });
 
 export const SelectComponent = ({name, onChange, className, ...rest}: any) => {
 	const {isOpen: focused, onOpen: onFocus, onClose: onBlur} = useDisclosure();
-	const classes = useStyles({focused});
+	const classes = useStyles();
 
 	const onSelect = (option: any) => {
 		onChange(name, option.value);
 	};
 
+	console.log('checking docused', focused);
 	return (
 		<Select
 			onFocus={onFocus}
 			onBlur={onBlur}
 			classNamePrefix="platform__select"
-			className={classNames(classes.inputElement, className)}
+			className={classNames(classes.inputElement, className, {[classes.focused]: focused})}
 			onChange={onSelect}
 			{...rest}
 		/>

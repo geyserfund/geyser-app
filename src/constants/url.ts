@@ -17,6 +17,7 @@ export const StartCrowdFundUrl = 'https://airtable.com/shrOzN3U8ePy4Y0uf';
 export const AnalyticsUrl = 'https://simpleanalytics.com/geyser.fund';
 
 export const anonymousProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/project/common/anonymous.jpeg';
+export const anonymousOrbBaseUrl = 'https://storage.googleapis.com/geyser-projects-media/orbs/ellipse_';
 
 export const kingProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/project/king/king_6.png';
 export const craigProfileUrl = 'https://pbs.twimg.com/profile_images/1445744925258092551/77zw6irJ_400x400.jpg';

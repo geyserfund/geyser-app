@@ -1,6 +1,6 @@
 import { AddIcon } from '@chakra-ui/icons';
 import { Avatar, Box, HStack, IconButton, Link, Text, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { AddAmbassador, AddSponsor } from '../../../components/molecules';
 import { Card, ImageBar, StatusBar } from '../../../components/ui';
 import { IProjectImage, IProjectSponsor, IUser } from '../../../interfaces';
@@ -20,20 +20,27 @@ interface IOwnerSponsorCard {
 export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images, problem, idea}: IOwnerSponsorCard) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
-	const [readMore, setReadMore] = useState(false);
 
 	const {isOpen: ambassadorOpen, onOpen: onAmbassadorOpen, onClose: onAmbassadorClose} = useDisclosure();
 	const {isOpen: sponsorOpen, onOpen: onSponsorOpen, onClose: onSponsorClose} = useDisclosure();
 
-	const handleToggleReadMore = () => {
-		setReadMore(!readMore);
+	const handleScroll = () => {
+		const element = document.getElementById('aboutMe');
+
+		if (element) {
+			const scrollElement = document.getElementById('project-scoll-container');
+			if (scrollElement) {
+				const scrollValue = element.offsetTop - scrollElement.offsetTop;
+				scrollElement?.scrollTo({ top: scrollValue, behavior: 'smooth' });
+			}
+		}
 	};
 
 	return (
 		<>
 			<Card className={classes.cardContainer}>
 				<VStack spacing="15px" alignItems="flex-start">
-					<VStack spacing="10px">
+					<VStack spacing="10px" >
 						<ImageBar images={images} />
 						<StatusBar variant="problem" message={problem} />
 						<StatusBar variant="idea" message={idea} />
@@ -51,8 +58,8 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 									</Text>
 								</Link>
 								<Text fontSize="12px" >
-									{readMore ? ownerIntro : isMobile ? ownerIntro.slice(0, 84) : ownerIntro.slice(0, 180) }
-									{!readMore && <span className={classes.readmore} onClick={handleToggleReadMore}>...read more</span>}
+									{isMobile ? ownerIntro.slice(0, 84) : ownerIntro.slice(0, 180) }
+									<span className={classes.readmore} onClick={handleScroll}>...read more</span>
 								</Text>
 							</VStack>
 						</HStack>
