@@ -7,8 +7,11 @@ const useStyles = createUseStyles({
 	inputElement: {
 		borderWidth: '2px',
 		'&:focus': {
-			borderColor: colors.normalLightGreen,
+			borderColor: `${colors.normalLightGreen} !important`,
 			boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+		},
+		'&:hover': {
+			borderColor: colors.gray300,
 		},
 	},
 });

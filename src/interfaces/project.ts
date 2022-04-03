@@ -80,6 +80,7 @@ export interface IProjectDetail {
 }
 
 export interface IProjectBlock {
+    key: string;
     title: string;
     body: string[];
     images?: string[];

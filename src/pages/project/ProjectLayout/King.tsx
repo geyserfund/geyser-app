@@ -131,6 +131,7 @@ const images = [
 ];
 
 const projectBlocks: IProjectBlock[] = [{
+	key: 'youth',
 	title: 'The youths of Nigeria',
 	body: [
 		'Nigeria is a country with double digit inflation, and yet youths are not aware of the pitfalls and dangers that this poses to their economic welfare. All in all, Nigerian youths don’t know how to create and maintain wealth, and poverty is raging in the country.  A solution is then needed to improve youths’ awareness on how to maintain and grow their wealth, through a conversation of money and Bitcoin.',
@@ -140,6 +141,7 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'PL',
 },
 {
+	key: 'conference',
 	title: 'The Conference',
 	body: [
 		'I believe the best way to teach the youths about Bitcoin is through face-to-face human contact. Many youths may not be technically savvy and understanding Bitcoin can be a true challenge. Therefore, I believe the best way of teaching about Bitcoin is through a conference where youths can come together and learn about Bitcoin in a positive environment.',
@@ -149,6 +151,7 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'PL',
 },
 {
+	key: 'agenda1',
 	title: 'The agenda:',
 	body: [
 		'Bitcoin can act as a shield against the increasing inflation in Nigeria due to bad economy and government.',
@@ -161,6 +164,7 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'OL',
 },
 {
+	key: 'agenda2',
 	title: 'The agenda:',
 	body: [
 		'Bitcoin can act as a shield against the increasing inflation in Nigeria due to bad economy and government.',
@@ -173,6 +177,7 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'OL',
 },
 {
+	key: 'speakers',
 	title: 'Speakers include:',
 	body: [
 		'[Parman - 🇦🇲 Bitcoin Private Key Whisperer](https://twitter.com/parman_the/) will speak about financial literacy and money.',
@@ -183,6 +188,7 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'UL',
 },
 {
+	key: 'usage',
 	title: 'The funds received for this crowdfund will be used for:',
 	body: [
 		'Booking an event hall (Isheri Ijegun Lagos)',
@@ -194,6 +200,16 @@ const projectBlocks: IProjectBlock[] = [{
 	],
 	blockType: 'UL',
 	images: [images[1].original, images[2].original, images[3].original],
+},
+{
+	key: 'aboutMe',
+	title: 'Who am I?',
+	body: [
+		'I’m Apata Johnson. I’m a visionary, a dedicated entrepreneur, who loves technology. As a thinker, and someone who cherish technology I can say that Bitcoin is the next big thing, I have hope that with Bitcoin we change the way we view money in Nigeria and the world as a whole. And how, with Bitcoin, Nigeria will transform from an underdeveloped nation to a super developed nation. I’m just a freedom lover and I feel Nigeria needs bitcoin.',
+		'I created Luminus Exchange to help educate Nigerians about Bitcoin. Read more about me and my work here: [About Bitcoin](https://drive.google.com/file/d/1IK80L-hNlh0RpSJCWQQFu3jG9r2W2U1C/view)',
+	],
+	blockType: 'PL',
+	images: [images[4].original],
 }];
 
 const projectUpdates: IProjectUpdate[] = [
