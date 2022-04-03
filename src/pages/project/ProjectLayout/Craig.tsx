@@ -144,6 +144,7 @@ const projectBlocks: IProjectBlock[] = [{
 		'- 18 ASIC miner dice',
 		'- Rule book with glossary and additional resources',
 	],
+	images: [images[3].original],
 	blockType: 'PL',
 },
 {
@@ -170,8 +171,8 @@ const projectBlocks: IProjectBlock[] = [{
 const projectUpdates: IProjectUpdate[] = [];
 
 const projectDetails: IProjectDetail = {
-	problem: 'There are very few ways to make learning Bitcoin fun and engaging.',
-	idea: 'The ultimate Bitcoin board game that makes learning about Bitcoin accessible and fun for the whole family.',
+	problem: '',
+	idea: 'The ultimate Bitcoin board game that makes learning about Bitcoin fun and accessible to anyone.',
 	ownerIntro: 'I’m a Junior Editor at Bitcoin Magazine with a passion for Bitcoin Education.',
 	blocks: projectBlocks,
 };

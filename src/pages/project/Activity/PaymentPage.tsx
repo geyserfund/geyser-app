@@ -52,8 +52,8 @@ export const PaymentPage = ({
 	};
 
 	const validateFundingAmount = () => {
-		if (getTotalAmount('dollar') >= 1000) {
-			setError('Payment above $1000 is not allowed at the moment. Please update the amount, or contact us for donating a higher amount');
+		if (getTotalAmount('dollar') >= 5000) {
+			setError('Payment above $5000 is not allowed at the moment. Please update the amount, or contact us for donating a higher amount');
 			return false;
 		}
 
