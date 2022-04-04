@@ -211,7 +211,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 			const input: IDonationFundingInput = {
 				projectId: Number(project.id),
 				comment,
-				amount,
+				donationAmount: amount,
 				anonymous: appearAs === 'anonymous',
 			};
 

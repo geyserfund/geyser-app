@@ -31,7 +31,7 @@ interface IFundingRewardWithoutCost {
 
 export interface IDonationFundingInput {
     projectId: number;
-    amount: number;
+    donationAmount: number;
     comment: string | null;
     anonymous: boolean;
 }
