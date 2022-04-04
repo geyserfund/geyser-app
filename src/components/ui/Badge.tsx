@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/layout';
+import { Box, Text } from '@chakra-ui/layout';
 import React from 'react';
 // Import { CrownIcon, HourglassIcon, MagnifyGlassIcon, MedalIcon, StarIcon, TrophyIcon } from '../icons';
 
@@ -50,7 +50,9 @@ export type BadgeVariant = 'owner' | 'ambassador' | 'earlyFunder' | 'crown' | 't
 
 export const Badge = ({ badge }: { badge: string }) =>
 	(
-		<Box as="span" backgroundColor="brand.bgGold" padding="0px 8px" borderRadius="20px">{badge}</Box>
+		<Box as="span" backgroundColor="brand.bgGold" padding="0px 8px" borderRadius="20px">
+			<Text fontSize="10px">{badge}</Text>
+		</Box>
 	);
 
 export default Badge;
