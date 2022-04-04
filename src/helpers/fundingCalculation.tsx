@@ -22,10 +22,10 @@ export const useFundCalc = (state: IFundForm) => {
 		}
 
 		if (state.shippingDestination === 'national') {
-			return Math.round(0.015 / btcRate);
+			return Math.round(15 / btcRate);
 		}
 
-		return Math.round(0.060 / btcRate);
+		return Math.round(60 / btcRate);
 	};
 
 	const getRewardsNumber = () => {
