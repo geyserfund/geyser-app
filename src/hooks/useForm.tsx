@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ShippingDestination, shippingTypes } from '../constants';
+import { AuthContext } from '../context';
 
 import { IProjectReward, IRewardCount } from '../interfaces';
 
@@ -20,6 +21,8 @@ export interface IuseFundStateProps {
 }
 
 export const useFundState = ({rewards}: IuseFundStateProps) => {
+	const { user } = useContext(AuthContext);
+
 	const intialState = {
 		donationAmount: 0,
 		rewardsCost: 0,
@@ -27,7 +30,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		comment: '',
 		shippingDestination: shippingTypes.national,
 		shippingCost: 0,
-		anonymous: true,
+		anonymous: !(user && user.connectedTwitter),
 		email: '',
 		rewards: {},
 	};
