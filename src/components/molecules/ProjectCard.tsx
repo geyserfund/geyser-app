@@ -10,7 +10,7 @@ import { formatDaysLeft, isDarkMode, useBitcoinRates } from '../../utils';
 import { getShortAmountLabel } from '../../utils/helperFunctions';
 import { SatoshiIcon } from '../icons';
 import { ButtonComponent, Card, ICard, Linkin } from '../ui';
-import { kingProfileUrl, StartCrowdFundUrl, SubscribeUrl } from '../../constants';
+import { StartCrowdFundUrl, SubscribeUrl } from '../../constants';
 
 interface IProjectCardProp extends ICard {
 	title: string
@@ -114,7 +114,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 			</Box>
 			<VStack spacing="5px" width="100%" padding="10px">
 				<HStack spacing="10px" justifyContent="flex-start" width="100%">
-					<Avatar src={kingProfileUrl} height="22px" width="22px" />
+					<Avatar src={project.owners[0].user.imageUrl} height="22px" width="22px" />
 					<Text>{title}</Text>
 				</HStack>
 				<HStack alignItems="center" justifyContent={'space-between'} width="100%">
