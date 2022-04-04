@@ -59,7 +59,7 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 				<Text paddingBlockEnd="30px">
 					The payment went through. You can now share this campaign with friends.
 				</Text>
-				{state.rewards
+				{(state.rewards && state.rewards.length > 0)
 					&& <Text textAlign="left" width="100%" paddingBlockEnd="10px">
 						🎁  The creator will get in touch with you.
 					</Text>}

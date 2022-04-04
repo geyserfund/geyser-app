@@ -175,7 +175,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				const { donationAmount, comment, anonymous } = state;
 				input = {
 					projectId: Number(project.id),
-					amount: donationAmount,
+					donationAmount,
 					comment,
 					anonymous,
 				} as IDonationFundingInput;
