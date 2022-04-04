@@ -22,6 +22,7 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 		navigator.clipboard.writeText(window.location.href);
 		setCopy(true);
 	};
+
 	const botTwitterUrl = 'https://twitter.com/geyserfunders';
 
 	useEffect(() => {
