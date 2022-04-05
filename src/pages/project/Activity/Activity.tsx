@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { RejectionError, WebLNProvider } from 'webln';
 import { ConnectTwitter } from '../../../components/molecules';
 import { Card } from '../../../components/ui';
 import {
@@ -14,7 +15,7 @@ import { MUTATION_FUND, MUTATION_FUND_WITH_REWARD } from '../../../graphql';
 import { QUERY_GET_FUNDING } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
-import { isDarkMode, isMobileMode, useNotification } from '../../../utils';
+import { isDarkMode, isMobileMode, useNotification, sha256 } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
@@ -126,7 +127,53 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		}
 
 		if (fundState === fundingStages.started) {
-			fundInterval = setInterval(getFunding, 2000);
+			const requestWebLNPayment = async () => {
+				console.log('Check WebLN');
+
+				const { webln }: { webln: WebLNProvider } = window as any;
+				if (!webln) {
+					throw new Error('no provider');
+				}
+
+				await webln.enable();
+				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
+				const paymentHash = await sha256(preimage);
+				return paymentHash;
+			};
+
+			requestWebLNPayment().then(paymentHash => {
+				// Check preimage
+				if (paymentHash === fundingTx.invoiceId) {
+					gotoNextStage();
+				} else {
+					throw new Error('wrong preimage');
+				}
+			}).catch(error => {
+				if (error.message === 'no provider') {
+					//
+				} else if (error.message === 'wrong preimage') {
+					toast({
+						title: 'Wrong payment preimage',
+						description: 'The payment preimage returned by the WebLN provider did not match the payment hash.',
+						status: 'error',
+					});
+				} else if (error.constructor === RejectionError || error.message === 'User rejected') {
+					toast({
+						title: 'Requested operation declined',
+						description: 'Please use the invoice instead.',
+						status: 'info',
+					});
+				} else {
+					console.log(error);
+					toast({
+						title: 'Oops! Something went wrong with WebLN.',
+						description: 'Please use the invoice instead.',
+						status: 'error',
+					});
+				}
+
+				fundInterval = setInterval(getFunding, 2000);
+			});
 		}
 	}, [fundState]);
 
