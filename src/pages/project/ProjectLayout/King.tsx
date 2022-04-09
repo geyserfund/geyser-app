@@ -48,22 +48,6 @@ const sponsors: IProjectSponsor[] = [
 		companyUrl: 'https://walletofsatoshi.com',
 
 	},
-	{
-		user: {
-			imageUrl: 'https://pbs.twimg.com/profile_images/1370765783765282823/dMGd0WEI_400x400.jpg',
-			username: 'Bitnob_official',
-			twitterHandle: 'Bitnob_official',
-			fullName: 'Bitnob_official',
-			id: '',
-			URL: '',
-			twitter: false,
-			badge: 'owner',
-			amount: 0,
-		},
-		image: 'https://storage.googleapis.com/geyser-projects-media/project/king/logo-black.png',
-		companyUrl: 'https://bitnob.com/',
-
-	},
 ];
 
 // Interface Ispeaker {
