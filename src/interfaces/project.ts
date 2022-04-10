@@ -13,14 +13,15 @@ export interface IProject {
     createdAt: string;
     updatedAt: string;
     expiresAt: string;
-    active: string;
+    active: boolean;
     ownerConfirmed: string;
     fundsClaimed: string;
     creationConfirmed: string;
-    owners: IProjectUser[];
-    ambassadors: IProjectUser[];
-    funders: IProjectUser[];
-    sponsors: IProjectUser[];
+    media: string[];
+    owners: IParticipant[];
+    ambassadors: IParticipant[];
+    funders: IFunder[];
+    sponsors: ISponsor[];
     grantees: IGrantee[];
     fundingTxs: IProjectFunding[];
     rewards?: IProjectReward[]
@@ -38,11 +39,6 @@ export interface IGrantee {
     id: number;
     url: string;
     name: string;
-}
-
-export interface IProjectUser {
-    user: IUser;
-    confirmed: boolean;
 }
 
 export interface IUser {
@@ -66,9 +62,12 @@ export interface IProjectFunding {
     onChain: boolean;
 }
 
-export interface IFunder {
+export interface IParticipant {
     user: IUser;
     confirmed: boolean;
+}
+
+export interface IFunder extends IParticipant {
     amountFunded: number;
     badges: IFunderBadge[];
 }
@@ -104,10 +103,12 @@ export interface IProjectUpdate {
     images?: string[];
 }
 
-export interface IProjectSponsor {
-    user: IUser;
-    image: string;
-    companyUrl: string;
+export interface ISponsor {
+    id: number;
+    name: string;
+    user?: IUser;
+    image?: string;
+    url?: string;
 }
 
 export interface IRewardCount {

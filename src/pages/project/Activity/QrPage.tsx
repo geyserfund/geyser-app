@@ -84,6 +84,11 @@ export const QrPage = ({
 		}, 2000);
 	};
 
+	const getBip21String = () => {
+		const bitcoins = amount / 100000000;
+		return `bitcoin:${address}?amount=${bitcoins}&lightning=${paymentRequest}`;
+	};
+
 	const getOnchainAddress = () => {
 		const bitcoins = amount / 100000000;
 		return `bitcoin:${address}?amount=${bitcoins}`;
@@ -169,7 +174,7 @@ export const QrPage = ({
 						</TabPanel>
 						<TabPanel display="flex" flexDirection="column" alignItems="center">
 							<Box className={classes.qrContainer} backgroundColor={qrBackgroundColor}>
-								<QRCode bgColor={qrBackgroundColor} className={classes.qr} value={getOnchainAddress()} onClick={handleCopyOnchain} />
+								<QRCode bgColor={qrBackgroundColor} className={classes.qr} value={getBip21String()} onClick={handleCopyOnchain} />
 							</Box>
 							<Text paddingTop="15px">Waiting for payment...</Text>
 						</TabPanel>

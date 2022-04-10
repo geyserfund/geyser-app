@@ -2,7 +2,7 @@ import { IUser } from '../../../interfaces';
 
 export interface IAvatarBoardItem {
     id: number
-    user: IUser
+    user?: IUser
     comment?: string
     amount?: number
 }
