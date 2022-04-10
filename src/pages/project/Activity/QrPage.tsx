@@ -152,8 +152,8 @@ export const QrPage = ({
 							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text>}
 						</VStack>
 						<VStack alignItems="flex-end" spacing="0px">
-							<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats')}</SatoshiAmount>
-							<Text> {`$${getTotalAmount('dollar')}`}</Text>
+							<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats', project.name)}</SatoshiAmount>
+							<Text> {`$${getTotalAmount('dollar', project.name)}`}</Text>
 						</VStack>
 					</HStack>
 				</VStack>
