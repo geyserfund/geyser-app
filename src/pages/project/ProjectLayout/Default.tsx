@@ -6,7 +6,7 @@ import React from 'react';
 // import TweetEmbed from 'react-tweet-embed';
 import { IdComponent } from '../../../components/molecules';
 import { ImageBar, TwitterSkeleton } from '../../../components/ui';
-import { IProjectUser } from '../../../interfaces';
+import { IParticipant } from '../../../interfaces';
 // import { getTwitterID } from '../../../utils';
 
 export const Default = ({
@@ -19,43 +19,11 @@ export const Default = ({
 	// handleSuccess,
 }: any) => {
 	const images = [
-		{
-			original: 'https://picsum.photos/200/300',
-			thumbnail: 'https://picsum.photos/200/300',
-		},
-		{
-			original: 'https://picsum.photos/400/500',
-			thumbnail: 'https://picsum.photos/400/500',
-		},
-		{
-			original: 'https://picsum.photos/600/600',
-			thumbnail: 'https://picsum.photos/600/600',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-		{
-			original: 'https://picsum.photos/700/300',
-			thumbnail: 'https://picsum.photos/700/300',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-		{
-			original: 'https://picsum.photos/900/400',
-			thumbnail: 'https://picsum.photos/900/400',
-		},
-
+		'https://picsum.photos/200/300',
+		'https://picsum.photos/400/500',
+		'https://picsum.photos/600/600',
+		'https://picsum.photos/900/400',
+		'https://picsum.photos/700/300',
 	];
 
 	return (
@@ -86,7 +54,7 @@ export const Default = ({
 				<HStack spacing="10px" display="flex" flexWrap="wrap">
 					<Text fontSize="16px">Project Owner:</Text>
 					{
-						project.owners.map((owner: IProjectUser) => (
+						project.owners.map((owner: IParticipant) => (
 							<IdComponent
 								key={owner.user.id}
 								URL={owner.user.imageUrl}
@@ -101,7 +69,7 @@ export const Default = ({
 				<HStack spacing="10px" display="flex" flexWrap="wrap">
 					<Text fontSize="16px">Ambassador:</Text>
 					{
-						project.ambassadors.map((ambassador: IProjectUser) => (
+						project.ambassadors.map((ambassador: IParticipant) => (
 							<IdComponent
 								key={ambassador.user.id}
 								URL={'https://bit.ly/dan-abramov'}

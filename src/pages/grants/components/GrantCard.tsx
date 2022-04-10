@@ -3,7 +3,7 @@ import { Box, Text, HStack } from '@chakra-ui/react';
 import { useHistory } from 'react-router';
 import { Blob } from 'react-blob';
 import { SatoshiIcon } from '../../../components/icons';
-import { QUERY_GET_PROJECT } from '../../../graphql';
+import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import { useQuery } from '@apollo/client';
 import Loader from '../../../components/ui/Loader';
 import { useNotification } from '../../../utils';
@@ -26,7 +26,7 @@ export const GrantCard = ({link, color1, color2, color3, number, status, title}:
 		history.push(`/project/${link}`);
 	};
 
-	const { loading: projectsLoading, error, data } = useQuery(QUERY_GET_PROJECT,
+	const { loading: projectsLoading, error, data } = useQuery(QUERY_PROJECT_BY_NAME,
 		{
 			variables: { name: link },
 		},
