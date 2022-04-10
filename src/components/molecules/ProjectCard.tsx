@@ -114,7 +114,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 			</Box>
 			<VStack spacing="5px" width="100%" padding="10px">
 				<HStack spacing="10px" justifyContent="flex-start" width="100%">
-					<Avatar src={project.owners[0].user.imageUrl} height="22px" width="22px" />
+					<Avatar src={project.owners && project.owners[0].user.imageUrl} height="22px" width="22px" />
 					<Text>{title}</Text>
 				</HStack>
 				<HStack alignItems="center" justifyContent={'space-between'} width="100%">

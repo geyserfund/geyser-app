@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { IRewardCount, IProjectReward } from '../../interfaces';
+import { SatoshiAmount } from '../ui';
 
 const useStyles = createUseStyles({
 	container: {
@@ -50,7 +51,7 @@ interface IRewardItemProps {
 export const RewardItem = ({item, updateCount}: IRewardItemProps) => {
 	const classes = useStyles();
 
-	const {cost, name, backers, description} = item;
+	const {cost, name, backers, description, currency } = item;
 
 	const [count, setCount] = useState(0);
 	const {isOpen: focus, onOpen: setFocus, onClose: setBlur} = useDisclosure();
@@ -75,7 +76,10 @@ export const RewardItem = ({item, updateCount}: IRewardItemProps) => {
 		<Box tabIndex={-1} onFocus={setFocus} onBlur={setBlur} className={classNames(classes.container, {[classes.focused]: focus })} >
 			<HStack className={classes.upperContainer} >
 				<VStack spacing={0}>
-					<Text fontSize="14px" color={colors.normalLightGreen}>{`$${cost}`}</Text>
+					{ currency === 'usd'
+						? <Text fontSize="14px" color={colors.normalLightGreen}>{`$${cost}`}</Text>
+						: <SatoshiAmount>{`${cost}`}</SatoshiAmount>
+					}
 					<Text fontSize="10px" color={colors.normalLightGreen}>per item</Text>
 				</VStack>
 				<VStack alignItems="flex-start" flex={1} spacing="0px">

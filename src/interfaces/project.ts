@@ -30,6 +30,7 @@ export interface IProject {
 export interface IProjectReward {
     id: number;
     cost: number;
+    currency: string;
     name: string;
     description: string;
     backers: number;
