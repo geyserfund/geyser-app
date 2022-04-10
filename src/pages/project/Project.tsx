@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
-import { QUERY_GET_PROJECT } from '../../graphql';
+import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
@@ -23,7 +23,7 @@ export const Project = () => {
 		}
 	}, [state]);
 
-	const [getProject, { loading, error, data }] = useLazyQuery(QUERY_GET_PROJECT,
+	const [getProject, { loading, error, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
 		{
 			variables: { name: projectId },
 		},

@@ -10,10 +10,10 @@ import React from 'react';
 import { Card } from '../../../components/ui';
 import { useStyles } from './styles';
 import { isMobileMode } from '../../../utils';
-import { IProjectSponsor } from '../../../interfaces';
+import { ISponsor } from '../../../interfaces';
 
 interface ISponsorBlock {
-    sponsors: IProjectSponsor[]
+    sponsors: ISponsor[]
 }
 
 export const SponsorBlock = ({sponsors}: ISponsorBlock) => {
@@ -30,9 +30,9 @@ export const SponsorBlock = ({sponsors}: ISponsorBlock) => {
 				<Text alignSelf="flex-start" fontSize="10px" color="brand.textGrey">SPONSORS</Text>
 				<Wrap display="flex" spacing="40px" align="center" width={'100%'}>
 					{
-						sponsors.map((sponsor: IProjectSponsor) => (
-							<WrapItem key={sponsor.companyUrl} marginRight="20px">
-								<Link href={sponsor.companyUrl} isExternal>
+						sponsors.map((sponsor: ISponsor) => (
+							<WrapItem key={sponsor.id} marginRight="20px">
+								<Link href={sponsor.url} isExternal>
 									<Image height="70px" src={sponsor.image} />
 								</Link>
 							</WrapItem>

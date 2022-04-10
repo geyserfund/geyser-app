@@ -14,7 +14,7 @@ import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 
 import { getDaysAgo, isMobileMode, isMediumScreen, getCountDown } from '../../utils';
 import useWindowSize from 'react-use/lib/useWindowSize';
-// import { QUERY_GET_PROJECT } from '../../graphql';
+// import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { IProject } from '../../interfaces';
 
 const Countdown = ({ endDate }: { endDate: string}) => {
@@ -111,7 +111,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const [arrowChange, setArrowChange] = useState(false);
 	const [confetti, setConfetti] = useState(false);
 	const { width, height } = useWindowSize();
-	const { owners, sponsors, grantees, fundingTxs } = project;
+	const { owners, grantees, fundingTxs } = project;
 
 	return (
 		<>
@@ -217,11 +217,11 @@ export const Grants = ({ project }: { project: IProject }) => {
 					/>
 
 					{/* sponsors */}
-					<MemoizedAvatarsBoard
-						items={sponsors.map(({ user}) => ({ id: Number(user.id), user }))}
+					{/* <MemoizedAvatarsBoard
+						items={sponsors.map(({ id, image, user }) => ({ id, user: { ...user, image } }))}
 						itemName="Sponsors"
 						callToActionLink="https://airtable.com/shr8X1T7M8SuvHOjD"
-					/>
+					/> */}
 
 					{/* grantees */}
 					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>

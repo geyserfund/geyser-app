@@ -8,7 +8,7 @@ import { colors } from '../../constants';
 import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { getDaysAgo, isDarkMode, isMobileMode } from '../../utils';
-import { Craig, King } from './ProjectLayout';
+import { Craig, King, Toni } from './ProjectLayout';
 
 type Rules = string
 
@@ -103,24 +103,17 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 
 	const getRender = () => {
 		if (project.name === 'bitcoin-conference-in-lagos') {
-			return <King />;
+			return <King project={project}/>;
 		}
 
 		if (project.name === 'the-bitcoin-game') {
-			return <Craig />;
+			return <Craig project={project}/>;
+		}
+
+		if (project.name === 'day-of-genesis') {
+			return <Toni project={project} />;
 		}
 	};
-	// Return <Default
-	// 	{...{
-	// 		twitterLoading,
-	// 		isLargerThan1100,
-	// 		isLargerThan1000,
-	// 		isDark,
-	// 		classes,
-	// 		project,
-	// 		handleSuccess,
-	// 	}}
-	// />;
 
 	return (
 		<Box
