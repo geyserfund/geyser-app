@@ -122,9 +122,7 @@ export const PaymentPage = ({
 				<Box width="100%">
 					<TextArea
 						placeholder="Leave a public message here."
-						variant="unstyled"
 						fontSize="14px"
-						padding="5px"
 						resize="none"
 						value={state.comment}
 						maxLength={280}
