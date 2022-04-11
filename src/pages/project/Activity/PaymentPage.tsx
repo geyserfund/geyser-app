@@ -132,7 +132,7 @@ export const PaymentPage = ({
 						onChange={setTarget}
 					/>
 				</Box>
-				{state.rewardsCost && <Box width="100%" >
+				{state.rewardsCost && name !== 'day-of-genesis' && <Box width="100%" >
 					<SelectComponent
 						name="shippingDestination"
 						fontSize="14px"
