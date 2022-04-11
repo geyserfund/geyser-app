@@ -173,8 +173,8 @@ export const QrPage = ({
 							<Text paddingTop="15px">Waiting for payment...</Text>
 						</TabPanel>
 						<TabPanel display="flex" flexDirection="column" alignItems="center">
-							<Box height="auto" className={classes.qrContainer} backgroundColor={qrBackgroundColor}>
-								<QRCode bgColor={qrBackgroundColor} className={classes.qr} value={getOnchainAddress()} onClick={handleCopyOnchain} />
+							<Box className={classes.qrContainer} backgroundColor={qrBackgroundColor}>
+								<QRCode size={186} bgColor={qrBackgroundColor} className={classes.qr} value={getOnchainAddress()} onClick={handleCopyOnchain} />
 							</Box>
 							<Text paddingTop="15px">Waiting for payment...</Text>
 						</TabPanel>
