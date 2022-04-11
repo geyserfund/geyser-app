@@ -168,13 +168,13 @@ export const QrPage = ({
 					<TabPanels>
 						<TabPanel display="flex" flexDirection="column" alignItems="center">
 							<Box className={classes.qrContainer} backgroundColor={qrBackgroundColor}>
-								<QRCode bgColor={qrBackgroundColor} className={classes.qr} value={paymentRequest} onClick={handleCopy} />
+								<QRCode size={186} bgColor={qrBackgroundColor} className={classes.qr} value={paymentRequest} onClick={handleCopy} />
 							</Box>
 							<Text paddingTop="15px">Waiting for payment...</Text>
 						</TabPanel>
 						<TabPanel display="flex" flexDirection="column" alignItems="center">
 							<Box className={classes.qrContainer} backgroundColor={qrBackgroundColor}>
-								<QRCode bgColor={qrBackgroundColor} className={classes.qr} value={getOnchainAddress()} onClick={handleCopyOnchain} />
+								<QRCode size={186} bgColor={qrBackgroundColor} className={classes.qr} value={getOnchainAddress()} onClick={handleCopyOnchain} />
 							</Box>
 							<Text paddingTop="15px">Waiting for payment...</Text>
 						</TabPanel>
