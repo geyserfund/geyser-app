@@ -48,11 +48,11 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 					<Box>
 						<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
 						<HStack spacing="30px" alignItems="flex-start">
-							<Link href={`https://twitter.com/${owner.user.username}`} isExternal>
+							<Link href={`https://twitter.com/${owner.user.twitterHandle}`} isExternal>
 								<Avatar width="75px" height="75px" name={owner.user.username} src={owner.user.imageUrl} />
 							</Link>
 							<VStack justifyContent="space-between" alignItems="flex-start">
-								<Link href={`https://twitter.com/${owner.user.username}`} isExternal>
+								<Link href={`https://twitter.com/${owner.user.twitterHandle}`} isExternal>
 									<Text fontSize="18px">
 										{owner.user.username}
 									</Text>
