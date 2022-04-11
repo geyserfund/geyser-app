@@ -19,7 +19,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 		key: 'idea',
 		title: 'The idea',
 		body: [
-			'Genesis Liberation Day is a challenging digital card game which focuses on teaching players the key principles of Bitcoin. In this play-to-learn game, when players beat their opponents they will be able to unlock Bitcoin Lessons focused on the origins of Bitcoin, its philosophy, its technology and much more.',
+			'Day Of Genesis is a challenging digital card game which focuses on teaching players the key principles of Bitcoin. In this play-to-learn game, when players beat their opponents they will be able to unlock Bitcoin Lessons focused on the origins of Bitcoin, its philosophy, its technology and much more.',
 			'Login and payments (micro bets and micro rewards) will work fully with the Lightning Network.',
 			' It is a very competitive and thrilling game. Fast and agile. Fun and powerful. And play-to-learn mode is a very innovative method to bring newcomers to Bitcoin and teach them the most important aspects of the technology in a fun way.',
 			'The game concept is based on a ‘Deck-building’ and ‘Push Your Luck’ format, and game modes include: playing against an AI (play-to-learn mode), playing online in a multiplayer mode (1vs1) and tournaments (CUP). ',
@@ -104,7 +104,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 		key: 'rewards',
 		title: 'Rewards',
 		body: [
-			'- **Eternal Extra Life ($50)**: Enjoy an Extra Life forever on top of the standard 3 lives you get in the game, and get access to the closed beta version of the game right away!',
+			'- **Eternal Extra Life and get early access to the game ($50)**: Enjoy an Extra Life forever on top of the standard 3 lives you get in the game, and get access to the closed beta version of the game right away!',
 		],
 		blockType: 'PL',
 		images: [project.media[8]],
