@@ -282,6 +282,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						handleFund,
 						rewards: project.rewards,
 						type: project.type,
+						name: project.name,
 					}}
 				/>;
 			case fundingStages.started:

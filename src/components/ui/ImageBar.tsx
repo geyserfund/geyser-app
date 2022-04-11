@@ -65,10 +65,7 @@ const useStyles = createUseStyles({
 });
 
 interface IImageBar {
-	images: {
-		thumbnail: string;
-		original: string;
-	}[]
+	images: string[]
 	imageIndex?: number
 }
 
@@ -138,7 +135,7 @@ export const ImageBar = ({images, imageIndex}:IImageBar) => {
 								className={classes.imageContainer}
 								onClick={() => handlePictureClick(index)}
 							>
-								<Image height="100%" src={val.thumbnail} objectFit="contain" />
+								<Image height="100%" src={val} objectFit="contain" />
 							</Box>
 						))
 					}
@@ -161,7 +158,7 @@ export const ImageBar = ({images, imageIndex}:IImageBar) => {
 					/>
 					<ImageGallery
 						onClick={event => event.stopPropagation()}
-						items={images}
+						items={images.map(image => ({ original: image }))}
 						thumbnailPosition="bottom"
 						additionalClass={classes.gallery}
 						startIndex={startIndex}

@@ -4,11 +4,15 @@ import { ButtonComponent, Linkin } from '../../components/ui';
 import { Footer, ProjectCard, ProjectComingSoon } from '../../components/molecules';
 import { isDarkMode, isMobileMode, useNotification } from '../../utils';
 import { fonts } from '../../constants/fonts';
-import { geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo, StartCrowdFundUrl, SubscribeUrl } from '../../constants';
+import {
+	geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo,
+	StartCrowdFundUrl, SubscribeUrl,
+} from '../../constants';
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
-import { QUERY_GET_PROJECT } from '../../graphql';
+import { QUERY_PROJECTS } from '../../graphql';
 import Loader from '../../components/ui/Loader';
+import { IProject } from '../../interfaces';
 
 type RuleNames = 'titles' | 'headers' | 'texts'
 
@@ -37,20 +41,10 @@ export const Home = () => {
 
 	const classes = useStyles({ isMobile: isMobileMode() });
 
-	const { loading: projectsLoading, error, data } = useQuery(QUERY_GET_PROJECT,
-		{
-			variables: { name: 'bitcoin-conference-in-lagos' },
-		},
-	);
-
-	const { loading: gameLoading, error: errorGame, data: gameData } = useQuery(QUERY_GET_PROJECT,
-		{
-			variables: { name: 'the-bitcoin-game' },
-		},
-	);
+	const { loading, error, data } = useQuery(QUERY_PROJECTS);
 
 	useEffect(() => {
-		if (error || errorGame) {
+		if (error) {
 			toast({
 				title: 'Something went wrong',
 				description: 'Please refresh the page',
@@ -59,8 +53,8 @@ export const Home = () => {
 		}
 	}, [error]);
 
-	const project = (data && data.getProjectByName && data.getProjectByName.project) || {};
-	const gameProject = (gameData && gameData.getProjectByName && gameData.getProjectByName.project) || {};
+	const projects = (data && data.projects && data.projects.projects) || {};
+
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
@@ -107,7 +101,7 @@ export const Home = () => {
 						Fund live projects
 					</Text>
 					{
-						projectsLoading || gameLoading
+						loading
 							? <Loader width="100%"/>
 							: <HStack
 								overflowX={'auto'}
@@ -116,20 +110,17 @@ export const Home = () => {
 								paddingBottom="20px"
 								spacing="15px"
 							>
-								<ProjectCard
-									open
-									title="The Bitcoin Game"
-									name="the-bitcoin-game"
-									project={gameProject}
-									imgSrc="https://storage.googleapis.com/geyser-projects-media/project/craig/craig_10.jpg"
-								/>
-								<ProjectCard
-									open
-									title="Bitcoin Conference In Lagos"
-									name="bitcoin-conference-in-lagos"
-									project={project}
-									imgSrc="https://storage.googleapis.com/geyser-projects-media/project/king/king_7.png"
-								/>
+								{ projects.map((project: IProject) => (
+									<ProjectCard
+										key={project.id}
+										open
+										title={project.title}
+										name={project.name}
+										project={project}
+										imgSrc={project.media[0]}
+									/>
+								))
+								}
 								<ProjectComingSoon />
 							</HStack>
 					}

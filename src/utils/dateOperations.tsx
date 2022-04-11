@@ -1,4 +1,4 @@
-import { DateTime, Interval } from 'luxon';
+import { DateTime, Interval, Duration } from 'luxon';
 
 export const getDaysAgo = (date: string) => {
 	const dateTime = DateTime.fromMillis(parseInt(date, 10));
@@ -77,12 +77,15 @@ export const getDaysLeft = (date: string) => {
 export const formatDaysLeft = (date: string) => {
 	const dateTime = DateTime.fromMillis(parseInt(date, 10));
 	const currentDateTime = DateTime.now();
+	const format = (amount: number, label: string) => ({amount, label});
+
+	if (currentDateTime > dateTime) {
+		return format(0, 'days');
+	}
 
 	const i = Interval.fromDateTimes(currentDateTime, dateTime);
 
 	const days = Math.floor(i.length('days'));
-
-	const format = (amount: number, label: string) => ({amount, label});
 
 	if (days === 1) {
 		return format(1, 'day');
@@ -117,8 +120,14 @@ export const getCountDown = (date: string) => {
 	const dateTime = DateTime.fromMillis(parseInt(date, 10));
 	const currentDateTime = DateTime.now();
 
-	const i = Interval.fromDateTimes(currentDateTime, dateTime);
-	const duration = i.toDuration();
+	let duration: Duration;
+
+	if (currentDateTime > dateTime) {
+		duration = Duration.fromObject({ hours: 0 });
+	} else {
+		const i = Interval.fromDateTimes(currentDateTime, dateTime);
+		duration = i.toDuration();
+	}
 
 	return duration.toFormat('d \'days : \' h\'h :\' m\'m : \' s\'s');
 };

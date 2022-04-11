@@ -20,6 +20,7 @@ interface IPaymentPageProps {
 	handleFund: () => void
 	type: IProjectType
 	rewards?: IProjectReward[]
+	name: string
 }
 
 export const PaymentPage = ({
@@ -34,6 +35,7 @@ export const PaymentPage = ({
 	updateReward,
 	type,
 	rewards,
+	name,
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
 	const {getShippingCost, getTotalAmount} = useFundCalc(state);
@@ -52,12 +54,12 @@ export const PaymentPage = ({
 	};
 
 	const validateFundingAmount = () => {
-		if (getTotalAmount('dollar') >= 5000) {
+		if (getTotalAmount('dollar', name) >= 5000) {
 			setError('Payment above $5000 is not allowed at the moment. Please update the amount, or contact us for donating a higher amount');
 			return false;
 		}
 
-		if (getTotalAmount('sats') < 1) {
+		if (getTotalAmount('sats', name) < 1) {
 			setError('Payment below 1 sats is not allowed at the moment. Please update the amount');
 			return false;
 		}
@@ -120,9 +122,7 @@ export const PaymentPage = ({
 				<Box width="100%">
 					<TextArea
 						placeholder="Leave a public message here."
-						variant="unstyled"
 						fontSize="14px"
-						padding="5px"
 						resize="none"
 						value={state.comment}
 						maxLength={280}
@@ -130,7 +130,7 @@ export const PaymentPage = ({
 						onChange={setTarget}
 					/>
 				</Box>
-				{state.rewardsCost && <Box width="100%" >
+				{state.rewardsCost && name !== 'day-of-genesis' && <Box width="100%" >
 					<SelectComponent
 						name="shippingDestination"
 						fontSize="14px"
@@ -156,12 +156,12 @@ export const PaymentPage = ({
 					<SectionTitle>Total</SectionTitle>
 					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
 					<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
-					{ state.rewardsCost && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
+					{ state.rewardsCost && name !== 'day-of-genesis' && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
-					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats')}</SatoshiAmount>
-					<Text> {`$${getTotalAmount('dollar')}`}</Text>
+					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
+					<Text> {`$${getTotalAmount('dollar', name)}`}</Text>
 				</VStack>
 			</HStack>}
 			<Box width="100%">

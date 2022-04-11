@@ -68,13 +68,15 @@ const AvatarsBoard = ({ items, itemName, callToActionLink }: IAvatarBoardProps) 
 						? <Text mr={2}>No {`${itemName.toLowerCase()}`} yet.</Text>
 						: <>
 							{
-								items.map(({ user, id, comment, amount }: IAvatarBoardItem) => (
+								items.map(({ id, comment, amount }: IAvatarBoardItem) => (
 									<MemoizedClickableAvatar
 										amount={amount}
 										comment={comment}
 										key={id}
-										url={user.twitterHandle === null ? 'https://bitcoin.org' : `https://twitter.com/${user.twitterHandle}`}
-										imageUrl={user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : user.imageUrl}
+										// Url={user?.twitterHandle === null ? 'https://bitcoin.org' : `https://twitter.com/${user.twitterHandle}`}
+										// imageUrl={user.username === 'anonymous' ? randomAvatars[Math.floor(Math.random() * 24)] : user.imageUrl}
+										url="https://bitcoin.org"
+										imageUrl={randomAvatars[Math.floor(Math.random() * 24)] }
 									/>
 								))
 							}

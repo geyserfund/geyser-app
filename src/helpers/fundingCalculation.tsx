@@ -4,8 +4,8 @@ import { IFundForm } from '../hooks';
 export const useFundCalc = (state: IFundForm) => {
 	const {btcRate} = useBtcContext();
 
-	const getTotalAmount = (type: 'sats' | 'dollar') => {
-		const shippingAmount = getShippingCost();
+	const getTotalAmount = (type: 'sats' | 'dollar', name: string) => {
+		const shippingAmount = name === 'day-of-genesis' ? 0 : getShippingCost();
 
 		if (type === 'sats') {
 			return Math.round(state.rewardsCost / btcRate) + state.donationAmount + shippingAmount;
@@ -22,10 +22,10 @@ export const useFundCalc = (state: IFundForm) => {
 		}
 
 		if (state.shippingDestination === 'national') {
-			return Math.round(15 / btcRate);
+			return Math.round(0.015 / btcRate);
 		}
 
-		return Math.round(60 / btcRate);
+		return Math.round(0.060 / btcRate);
 	};
 
 	const getRewardsNumber = () => {
