@@ -70,14 +70,14 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							{
 								ambassadors.map((ambassador: IParticipant) => (
 									<WrapItem key={ambassador.user.username} display="inline-block">
-										<Link href={`https://twitter.com/${ambassador.user.username}`} isExternal >
+										<Link href={`https://twitter.com/${ambassador.user.twitterHandle}`} isExternal >
 											<HStack className={classes.amabassadorBlock} spacing="5px">
 												<Avatar
 													width="24px" height="24px"
-													name={ambassador.user.username} src={ambassador.user.imageUrl}
+													name={ambassador.user.twitterHandle} src={ambassador.user.imageUrl}
 												/>
 												<Text fontSize="14px" >
-													{`${ambassador.user.username}`}
+													{`${ambassador.user.twitterHandle}`}
 												</Text>
 											</HStack>
 										</Link>
