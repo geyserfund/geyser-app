@@ -81,7 +81,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 		title: 'TOP CONTRIBUTORS',
 		body: [
 			'Contributors of +125k Satoshis will receive a right for an Eternal Extra Life and will get access to the closed beta version right away! THE CLOSE BETA IS ALREADY AVAILABLE.',
-			'[Presentation PDF](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/93416c08-eab0-479b-a9c0-3f955f5e4fa4/presentacion.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220410%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220410T214513Z&X-Amz-Expires=86400&X-Amz-Signature=490b0868d9a5e992f09e622b8306f99848aa05a706a9001e64cac20d52d0d428&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22presentacion.pdf%22&x-id=GetObject)',
+			'[Presentation PDF](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/5363508b-5205-4b3f-8bb8-2c31808c148e/presentation.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220412%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220412T104157Z&X-Amz-Expires=86400&X-Amz-Signature=910c7659e455e3c920296347031ee2b63f04e7a6afe1917b2233eeca6cba14f1&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22presentation.pdf%22&x-id=GetObject)',
 			'[Fast Guide PDF](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f90912b5-171c-4798-8955-cf0f0cdad9e9/Fast_guide.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220410%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220410T214820Z&X-Amz-Expires=86400&X-Amz-Signature=3d648660c367b22e95fcd355b455b97c359fc43790bf19e212db82da1f79a31c&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Fast_guide.pdf%22&x-id=GetObject)',
 		],
 		blockType: 'PL',
@@ -122,7 +122,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 
 	const projectDetails: IProjectDetail = {
 		problem: '',
-		idea: 'A digital card game that is fun, allows you to earn, and teaches you about the principles, history and philosophy of Bitcoin. ',
+		idea: 'A digital card game that is fun, allows you to earn satoshis, and teaches you about the principles, history and philosophy of Bitcoin. ',
 		ownerIntro: 'I’m a former professional football player with an entrepreneurial heart and passionate about Bitcoin since 2013',
 		blocks: projectBlocks,
 	};
