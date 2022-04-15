@@ -1,12 +1,15 @@
-import { Box, CloseButton, Divider, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, CloseButton, Divider, HStack, Text, VStack, Button, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { SatoshiIcon } from '../../../components/icons';
+import { SatoshiIcon, GifIcon } from '../../../components/icons';
 import { ButtonComponent, ErrorBox, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
 import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import {IFundForm} from '../../../hooks';
 import { IProjectReward, IProjectType } from '../../../interfaces';
 import { DonationBased, RewardBased } from '../FundForm';
+import { Grid } from '@giphy/react-components';
+import { GiphyFetch } from '@giphy/js-fetch-api';
+import { SearchIcon } from '@chakra-ui/icons';
 
 interface IPaymentPageProps {
 	isMobile: boolean
@@ -39,6 +42,8 @@ export const PaymentPage = ({
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
 	const {getShippingCost, getTotalAmount} = useFundCalc(state);
+	const [gifSearch, setGifSearch] = useState('');
+	const [showGif, setShowGif] = useState(false);
 
 	useEffect(() => {
 		if (error) {
@@ -52,6 +57,9 @@ export const PaymentPage = ({
 			handleFund();
 		}
 	};
+
+	const gf = new GiphyFetch('AqeIUD33qyHnMwLDSDWP0da9lCSu0LXx');
+	const fetchGifs = () => gf.search(gifSearch, { sort: 'relevant', limit: 9 });
 
 	const validateFundingAmount = () => {
 		if (getTotalAmount('dollar', name) >= 5000) {
@@ -119,8 +127,9 @@ export const PaymentPage = ({
 			<Divider borderTopWidth="3px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
 			<VStack spacing="5px" width="100%" alignItems="flex-start">
 				<SectionTitle>Comment</SectionTitle>
-				<Box width="100%">
+				<Box width="100%" position="relative">
 					<TextArea
+						pr={14}
 						placeholder="Leave a public message here."
 						fontSize="14px"
 						resize="none"
@@ -128,7 +137,32 @@ export const PaymentPage = ({
 						maxLength={280}
 						name="comment"
 						onChange={setTarget}
+						onClick={() => setShowGif(false)}
 					/>
+					<Button zIndex="10" position="absolute" top="2" right="3" bg="none" p={0} onClick={() => {
+						setShowGif(!showGif);
+						setGifSearch('');
+					}}>
+						<GifIcon/>
+					</Button>
+					{showGif
+					&& <Box boxShadow="lg" borderRadius="lg" width="100%" marginLeft="auto" p={2}>
+						<InputGroup mb={2}>
+							<InputLeftElement >
+								<SearchIcon/>
+							</InputLeftElement>
+							<Input placeholder="Search" variant="filled" textAlign="center" focusBorderColor="brand.primary"
+								onChange={e => setGifSearch(e.target.value)}
+							/>
+						</InputGroup>
+						{!gifSearch
+							? <Text width="100%" textAlign="center">Find the perfect gif.</Text>
+							: <Box display="flex" justifyContent="center" alignItems="center">
+								<Grid width={300} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} noResultsMessage={gifSearch ? 'No results.' : ''} key={gifSearch} onGifClick={gif => console.log(gif.url)} />
+							</Box>
+						}
+					</Box>
+					}
 				</Box>
 				{state.rewardsCost && name !== 'day-of-genesis' && <Box width="100%" >
 					<SelectComponent
