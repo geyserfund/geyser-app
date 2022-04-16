@@ -42,6 +42,7 @@ const initialFunding = {
 	address: '',
 	canceled: false,
 	comment: '',
+	gif: '',
 	paidAt: '',
 	onChain: false,
 };
@@ -219,11 +220,12 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					rewardsCost: Math.round(rewardsCost / btcRate),
 				} as IRewardFundingInput;
 			} else {
-				const { donationAmount, comment, anonymous } = state;
+				const { donationAmount, comment, gif, anonymous } = state;
 				input = {
 					projectId: Number(project.id),
 					donationAmount,
 					comment,
+					gif,
 					anonymous,
 				} as IDonationFundingInput;
 			}
