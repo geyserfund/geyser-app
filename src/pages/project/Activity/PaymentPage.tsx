@@ -150,7 +150,6 @@ export const PaymentPage = ({
 						}} onClick={() => {
 							setSelectedGif('');
 							setGifHover(false);
-							onOpen();
 						}}/>
 						: <Button zIndex="10" position="absolute" top="2" right="3" bg="none" p={0} onClick={onOpen}>
 							<GifIcon/>
