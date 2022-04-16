@@ -64,6 +64,9 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 				</Box>
 			</Box>
 			<Box marginTop="5px" width="100%">
+				{fundingTx.gif
+&& <Image src={`https://media.giphy.com/media/${fundingTx.gif}/giphy.gif`} alt="gif" />
+				}
 				{fundingTx.comment && <Text fontFamily={fonts.solway}>{fundingTx.comment}</Text>}
 				{fundingTx.gif
 && <Image src={`https://media.giphy.com/media/${fundingTx.gif}/giphy.gif`} alt="gif" margin="0 auto" borderRadius="4px" />

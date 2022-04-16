@@ -4,6 +4,7 @@ export interface IFundingTx {
    id: string;
    invoiceId: string;
    comment: string;
+   gif: string | number;
    status: string;
    amount: number;
    paymentRequest: string;
@@ -33,6 +34,7 @@ export interface IDonationFundingInput {
     projectId: number;
     donationAmount: number;
     comment: string | null;
+    gif: string | number | null;
     anonymous: boolean;
 }
 
@@ -44,6 +46,7 @@ export interface IRewardFundingInput {
     shippingDestination: ShippingDestination;
     shippingCost: number;
     comment: string | null;
+    gif: string | number | null;
     anonymous: boolean;
     email: string;
 }
