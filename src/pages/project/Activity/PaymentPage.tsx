@@ -163,19 +163,19 @@ export const PaymentPage = ({
 				}} isOpen={isOpen} isCentered>
 					<ModalOverlay />
 					<ModalContent>
-						<ModalCloseButton mt="5px" />
-						<ModalBody>
-							<Box height="350px" overflow="auto" mr={5}>
-								<InputGroup mb={2}>
-									<InputLeftElement >
-										<SearchIcon/>
-									</InputLeftElement>
-									<Input placeholder="Search" variant="filled" textAlign="center" focusBorderColor="brand.primary"
-										onChange={e => setGifSearch(e.target.value)}
-									/>
-								</InputGroup>
+						<ModalBody p={2}>
+							<InputGroup mb={2}>
+								<InputLeftElement >
+									<SearchIcon/>
+								</InputLeftElement>
+								<Input placeholder="Search" variant="filled" focusBorderColor="brand.primary" bg="#DDFFF8"
+									onChange={e => setGifSearch(e.target.value)}
+								/>
+								<ModalCloseButton mt="5px" ml="7px"/>
+							</InputGroup>
+							<Box mr="5px" height="450px" overflow="auto">
 								<Box display="flex" justifyContent="center" alignItems="center" cursor="pointer">
-									<Grid width={350} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
+									<Grid width={400} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
 										setSelectedGif(gif.id);
 										onClose();
 									}} />
