@@ -42,7 +42,7 @@ query GetProjectByName($name: String!) {
           id
           user {
             id
-            username 
+            username
             twitterHandle
             imageUrl
           }
@@ -53,7 +53,7 @@ query GetProjectByName($name: String!) {
           url
           user {
             id
-            username 
+            username
             twitterHandle
             imageUrl
           }
@@ -90,6 +90,7 @@ query GetProjectByName($name: String!) {
           amount
           paidAt
           comment
+          gif
           onChain
         }
       }
@@ -139,7 +140,7 @@ query projects {
           id
           user {
             id
-            username 
+            username
             twitterHandle
             imageUrl
           }
@@ -150,7 +151,7 @@ query projects {
           url
           user {
             id
-            username 
+            username
             twitterHandle
             imageUrl
           }
@@ -187,6 +188,7 @@ query projects {
           amount
           paidAt
           comment
+          gif
           onChain
         }
       }
