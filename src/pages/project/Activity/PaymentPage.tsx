@@ -179,7 +179,7 @@ export const PaymentPage = ({
 									<Grid width={300} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
 										setSelectedGif(gif.id);
 										state.gif = gif.id;
-										setTarget();
+										setTarget(gif);
 										onClose();
 									}} />
 								</Box>

@@ -9,7 +9,7 @@ export interface IFundForm {
 	rewardsCost: number;
 	amount: number;
 	comment: string;
-	gif: string;
+	gif: string | number;
 	anonymous: boolean;
 	shippingDestination: ShippingDestination;
 	shippingCost: number;
