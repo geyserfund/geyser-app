@@ -53,7 +53,7 @@ export const Home = () => {
 		}
 	}, [error]);
 
-	const projects = (data && data.projects && data.projects.projects) || {};
+	const projects = (data && data.projects && data.projects.projects) || [];
 
 	return (
 		<VStack
