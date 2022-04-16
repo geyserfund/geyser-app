@@ -29,7 +29,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 	},
 	{
 		key: 'earn',
-		title: 'PLAY TO EARN',
+		title: 'PLAY TO LEARN',
 		body: [
 			'Play against an AI. It unlocks a new Bitcoin lesson every time you win a game. Earn some medals and Satoshis as you go.',
 		],
@@ -81,7 +81,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 		title: 'TOP CONTRIBUTORS',
 		body: [
 			'Contributors of +125k Satoshis will receive a right for an Eternal Extra Life and will get access to the closed beta version right away! THE CLOSE BETA IS ALREADY AVAILABLE.',
-			'[Presentation PDF](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/5363508b-5205-4b3f-8bb8-2c31808c148e/presentation.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220412%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220412T104157Z&X-Amz-Expires=86400&X-Amz-Signature=910c7659e455e3c920296347031ee2b63f04e7a6afe1917b2233eeca6cba14f1&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22presentation.pdf%22&x-id=GetObject)',
+			'[Presentation PDF](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e11e3a18-9320-4eb8-946d-e37100ee0d64/presentation.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220416%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220416T084431Z&X-Amz-Expires=86400&X-Amz-Signature=30c2055b33dcacc3b2c0e8525c31fe5ebae2c63367c62889322ee2abdab0bfd4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22presentation.pdf%22&x-id=GetObject)',
 			'[Fast Guide PDF](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f90912b5-171c-4798-8955-cf0f0cdad9e9/Fast_guide.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220410%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220410T214820Z&X-Amz-Expires=86400&X-Amz-Signature=3d648660c367b22e95fcd355b455b97c359fc43790bf19e212db82da1f79a31c&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Fast_guide.pdf%22&x-id=GetObject)',
 		],
 		blockType: 'PL',
@@ -104,7 +104,15 @@ export const Toni = ({ project }: { project: IProject}) => {
 		key: 'rewards',
 		title: 'Rewards',
 		body: [
-			'- **Eternal Extra Life and get early access to the game ($50)**: Enjoy an Extra Life forever on top of the standard 3 lives you get in the game, and get access to the closed beta version of the game right away!',
+			'**PRO license + Eternal Extra Life (EEL) + Early Access to the game ($50)**',
+			'Enjoy an Extra Life forever on top of the standard 3 lives you get in the game, and get access to the closed beta version of the game right away!',
+			'The Pro License includes:',
+			'- Avatar',
+			'- Vs Pro mode ',
+			'- CUP mode ',
+			'- Vs and CUP medals ',
+			'- Access to Tiers that allow players to get revenue shares',
+			'**There will be a maximum of 10,000 license issued**',
 		],
 		blockType: 'PL',
 		images: [project.media[8]],
