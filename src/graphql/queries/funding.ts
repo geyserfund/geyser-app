@@ -10,6 +10,7 @@ query GetFundingTx($fundingTxId: BigInt!) {
       status
       canceled
       comment
+      gif
       paidAt
       onChain
       funder {

@@ -59,6 +59,7 @@ export interface IProjectFunding {
     funder: IFunder;
     amount:string;
     comment:string;
+    gif: string;
     paidAt:string;
     onChain: boolean;
 }
