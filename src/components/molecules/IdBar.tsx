@@ -2,7 +2,7 @@ import { Box, Text, HStack, Link } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import { useColorMode } from '@chakra-ui/color-mode';
 import React from 'react';
-import { Avatar } from '@chakra-ui/react';
+import { Avatar, Image } from '@chakra-ui/react';
 import { Badge } from '../ui';
 import { IProjectFunding } from '../../interfaces';
 import { SatoshiIcon } from '../icons';
@@ -65,6 +65,9 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 			</Box>
 			<Box marginTop="5px" width="100%">
 				{fundingTx.comment && <Text fontFamily={fonts.solway}>{fundingTx.comment}</Text>}
+				{fundingTx.gif
+&& <Image src={`https://media.giphy.com/media/${fundingTx.gif}/giphy.gif`} alt="gif" margin="0 auto" borderRadius="4px" />
+				}
 				{timeAgo && <Text color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>{`${fundingTx.onChain ? '⛓' : '⚡️'} ${timeAgo} ago`}</Text>}
 			</Box>
 

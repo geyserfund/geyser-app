@@ -163,9 +163,9 @@ export const PaymentPage = ({
 				}} isOpen={isOpen} isCentered>
 					<ModalOverlay />
 					<ModalContent>
-						<ModalCloseButton />
+						<ModalCloseButton mt="5px" />
 						<ModalBody>
-							<Box height="350px" overflow="auto" mt={10}>
+							<Box height="350px" overflow="auto" mr={5}>
 								<InputGroup mb={2}>
 									<InputLeftElement >
 										<SearchIcon/>
@@ -175,7 +175,7 @@ export const PaymentPage = ({
 									/>
 								</InputGroup>
 								<Box display="flex" justifyContent="center" alignItems="center" cursor="pointer">
-									<Grid width={300} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
+									<Grid width={350} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
 										setSelectedGif(gif.id);
 										onClose();
 									}} />
