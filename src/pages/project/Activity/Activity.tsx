@@ -327,7 +327,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					handleCloseButton={handleCloseButton}
 				/>;
 			case fundingStages.completed:
-				return <SuccessPage state={state} fundingTx={fundingTx} handleCloseButton={handleCloseButton} />;
+				return <SuccessPage
+					state={state}
+					project={project}
+					fundingTx={fundingTx}
+					handleCloseButton={handleCloseButton} />;
 
 			default:
 				return null;

@@ -1,6 +1,6 @@
 /* eslint-disable capitalized-comments */
 import React, { useEffect, useState } from 'react';
-import { Box, Text, VStack } from '@chakra-ui/layout';
+import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
@@ -8,17 +8,21 @@ import { CloseButton } from '@chakra-ui/react';
 import { BiCopyAlt } from 'react-icons/bi';
 import ReactConfetti from 'react-confetti';
 import { IFundForm } from '../../../hooks';
-import { IFundingTx } from '../../../interfaces';
+import { IBadge, IFundingTx, IProject } from '../../../interfaces';
+import { computeFunderBadges } from '../../../helpers/computeBadges';
 // import { MUTATION_CLAIM_FUNDING } from '../../../graphql';
 
 interface ISuccessPage {
 	state: IFundForm
 	fundingTx: IFundingTx
+	project: IProject
 	handleCloseButton: () => void
 }
 
-export const SuccessPage = ({ state, fundingTx, handleCloseButton }: ISuccessPage) => {
+export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: ISuccessPage) => {
 	const [copy, setCopy] = useState(false);
+	const [newBadges, setNewBadges] = useState<IBadge[]>([]);
+
 	console.log(state);
 
 	const isMobile = isMobileMode();
@@ -32,6 +36,25 @@ export const SuccessPage = ({ state, fundingTx, handleCloseButton }: ISuccessPag
 	// const [claimFunding, {
 	// 	data, loading,
 	// }] = useMutation(MUTATION_CLAIM_FUNDING);
+
+	// const claimFunding = () => {
+
+	// };
+
+	useEffect(() => {
+		if (state.anonymous) {
+			const badges = computeFunderBadges({
+				project,
+				funder: {
+					...fundingTx.funder,
+					timesFunded: 1,
+					amountFunded: fundingTx.amount,
+					confirmedAt: fundingTx.paidAt,
+				},
+			});
+			setNewBadges(badges);
+		}
+	}, []);
 
 	useEffect(() => {
 		if (copy) {
@@ -71,10 +94,26 @@ export const SuccessPage = ({ state, fundingTx, handleCloseButton }: ISuccessPag
 					&& <Text textAlign="left" width="100%" paddingBlockEnd="10px">
 						🎁  The creator will get in touch with you.
 					</Text>}
+				{state.anonymous && newBadges.length > 0
+					&& <HStack>
+						<Text paddingBlockEnd="30px">
+						The amount you funded has earned you the following {newBadges.length === 1 ? 'badge' : 'badge'}: {newBadges.map(badge => badge.badge).join(', ')}.
+						Log in now to claim it!
+						</Text>
+						<ButtonComponent
+							primary={copy}
+							width="25%"
+							onClick={() => {}}
+						>
+					Log In
+						</ButtonComponent>
+					</HStack>
+				}
 				{!state.anonymous
 					&& <Text textAlign="left" paddingBlockEnd="30px">
 						🤖  Check your Twitter! Our bot <a href={botTwitterUrl}>@geyserfunders</a> just sent out a tweet.
-					</Text>}
+					</Text>
+				}
 				<ButtonComponent
 					standard
 					primary={copy}
@@ -84,11 +123,6 @@ export const SuccessPage = ({ state, fundingTx, handleCloseButton }: ISuccessPag
 				>
 					{copy ? 'Project Link Copied' : 'Share project with friends'}
 				</ButtonComponent>
-				{state.anonymous
-					&& <Text paddingBlockEnd="30px">
-						Log in to claim this funding
-					</Text>
-				}
 				{console.log('FUNDING TX: ', fundingTx)}
 			</Box>
 		</VStack></>
