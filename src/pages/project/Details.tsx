@@ -114,7 +114,7 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 			return <Toni project={project} />;
 		}
 
-		if (project.name === 'lightning-rebels') {
+		if (project.name === 'lightning-rebel') {
 			return <Yeferson project={project} />;
 		}
 	};
