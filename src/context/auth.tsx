@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
 import { ApolloError, useLazyQuery } from '@apollo/client';
 import React, { createContext, useState, useEffect } from 'react';
-import { QUERY_GET_USER } from '../graphql';
-import { IuserProfile } from '../interfaces';
+import { ME } from '../graphql';
+import { IUser } from '../interfaces';
 import { cookieOptions } from '../constants';
 import { useDisclosure } from '@chakra-ui/react';
 
@@ -28,7 +28,7 @@ const defaultContext = {
 
 interface IAuthContext {
 	isLoggedIn: boolean,
-	user: IuserProfile,
+	user: IUser,
 	loading: boolean,
 	error?: ApolloError,
 	logout: any
@@ -54,8 +54,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-	const [user, setUser] = useState<IuserProfile>(defaultAuthUser);
-	const [getUser, { loading, error, data }] = useLazyQuery(QUERY_GET_USER);
+	const [user, setUser] = useState<IUser>(defaultAuthUser);
+	const [getUser, { loading, error, data }] = useLazyQuery(ME);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 
 	useEffect(() => {
@@ -67,8 +67,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, []);
 
 	useEffect(() => {
-		if (data && data.getUser) {
-			setUser(data.getUser);
+		if (data && data.me) {
+			setUser(data.me);
 		}
 	}, [data]);
 

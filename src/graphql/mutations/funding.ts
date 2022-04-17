@@ -3,42 +3,38 @@ import { gql } from '@apollo/client';
 export const MUTATION_FUND = gql`
 mutation Fund($input: DonationFundingInput!) {
   fund(input: $input) {
-    success
-      message
-      fundingTx {
-        id
-        invoiceId
-        paymentRequest
-        amount
-        status
-        canceled
-        comment
-        paidAt
-        onChain
-        address
-      }
-      amountSummary {
-        total
-        donationAmount
-        shippingCost
-        rewardsCost
-      }
+    fundingTx {
+      id
+      uuid
+      invoiceId
+      paymentRequest
+      amount
+      status
+      comment
+      paidAt
+      onChain
+      address
+    }
+    amountSummary {
+      total
+      donationAmount
+      shippingCost
+      rewardsCost
     }
   }
+}
 `;
 
 export const MUTATION_FUND_WITH_REWARD = gql`
 mutation FundWithReward($input: RewardFundingInput!) {
   fundWithReward(input: $input) {
-    success
-      message
-      fundingTx {
+     fundingTx {
         id
+        uuid
         invoiceId
         paymentRequest
         amount
         status
-        canceled
         comment
         paidAt
         onChain
@@ -50,7 +46,20 @@ mutation FundWithReward($input: RewardFundingInput!) {
         shippingCost
         rewardsCost
       }
-    }
   }
+}
 `;
 
+export const MUTATION_CLAIM_FUNDING = gql`
+mutation ClaimAnonymousFunding($uuid: String!) {
+  claimAnonymousFunding(uuid: $uuid) {
+    fundingTx {
+      funder {
+        user {
+          username
+        }
+      }
+    }
+  }
+}
+`;

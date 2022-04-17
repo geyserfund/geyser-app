@@ -82,7 +82,7 @@ export const InfoPage = ({
 				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
 					{
 						fundingTxs.map((fundingTx, index) => (
-							<IdBar key={index} fundingTx={fundingTx} />
+							<IdBar key={index} fundingTx={fundingTx} project={project}/>
 						))
 					}
 				</VStack>

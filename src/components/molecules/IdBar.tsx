@@ -4,16 +4,18 @@ import { useColorMode } from '@chakra-ui/color-mode';
 import React from 'react';
 import { Avatar } from '@chakra-ui/react';
 import { Badge } from '../ui';
-import { IProjectFunding } from '../../interfaces';
+import { IProjectFunding, IProject } from '../../interfaces';
 import { SatoshiIcon } from '../icons';
 import { getDaysAgo, getRandomOrb } from '../../utils';
 import { fonts } from '../../constants/fonts';
+import { computeFunderBadges } from '../../helpers/computeBadges';
 
 interface IIdBar extends HTMLChakraProps<'div'> {
 	fundingTx: IProjectFunding
+	project: IProject
 }
 
-export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
+export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const { colorMode } = useColorMode();
 	const dark = colorMode === 'dark';
 
@@ -37,7 +39,7 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 			>
 				{
 					funder.user.twitterHandle
-						? <Link href={`https://twitter.com/${funder.user.twitterHandle}`} isExternal>
+						? <Link href={`https://twitter.com/${funder.user.twitterHandle}`} isExternal style={{ textDecoration: 'none' }}>
 							<HStack spacing="5px" display="flex">
 								<Avatar width="30px" height="3	0px" name={funder.user.username} src={funder.user.imageUrl} sx={{
 									'& .chakra-avatar__initials': {
@@ -45,7 +47,7 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 									},
 								}}/>
 								<Text fontSize="16px"> {funder.user.twitterHandle}</Text>
-								{funder.badges.map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`}/>))}
+								{computeFunderBadges({project, funder }).map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`}/>))}
 							</HStack>
 						</Link>
 						: <HStack spacing="5px" display="flex">
@@ -55,7 +57,6 @@ export const IdBar = ({ fundingTx, ...rest }: IIdBar) => {
 								},
 							}}/>
 							<Text fontSize="16px"> {anonymous ? '' : funder.user.username}</Text>
-							{/* <Badge variant={''} /> */}
 						</HStack>
 				}
 

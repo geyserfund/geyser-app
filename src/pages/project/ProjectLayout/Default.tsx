@@ -61,7 +61,6 @@ export const Default = ({
 								username={owner.user.username}
 								fullName={owner.user.username}
 								twitter
-								badge="owner"
 							/>
 						))
 					}
@@ -76,7 +75,6 @@ export const Default = ({
 								username={ambassador.user.username}
 								fullName={ambassador.user.username}
 								twitter
-								badge="ambassador"
 							/>
 						))
 					}
