@@ -1,12 +1,13 @@
 /* eslint-disable capitalized-comments */
 import { RejectionError, WebLNProvider } from 'webln';
 import { useMutation, useLazyQuery } from '@apollo/client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { QrInvoice } from './QrInvoice';
 import { BubbleCursor } from './BubbleCursor';
 import { PaymentSuccess } from './PaymentSuccess';
 import { ButtonComponent, Linkin } from '../../../components/ui';
+import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
 import { SatoshiIcon } from '../../../components/icons';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
@@ -41,6 +42,13 @@ const initialFunding = {
 	comment: '',
 	paidAt: '',
 	onChain: false,
+	funder: {
+		amountFunded: 0,
+		timesFunded: 0,
+		confirmed: false,
+		confirmedAt: '',
+		badges: [],
+	},
 };
 
 let fundInterval: any;
@@ -61,10 +69,11 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		setAmount(sats || 0);
 	}, [sats]);
 
+	const { user } = useContext(AuthContext);
 	const [comment, setComment] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { toast } = useNotification();
-	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
+	const [fundingTx, setFundingTx] = useState<IFundingTx>({ ...initialFunding, funder: { ...initialFunding.funder, user } });
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.form);
 	const [appearAs, setAppearAs] = useState('anonymous');
 

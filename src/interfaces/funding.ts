@@ -11,7 +11,8 @@ export interface IFundingTx {
    paymentRequest: string;
    address: string;
    canceled: boolean;
-   funder?: IFunder;
+   funder: IFunder;
+   paidAt: string;
 }
 
 export interface IFundingReward {

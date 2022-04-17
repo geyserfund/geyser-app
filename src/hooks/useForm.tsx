@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ShippingDestination, shippingTypes } from '../constants';
 import { AuthContext } from '../context';
 
@@ -41,6 +41,16 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		const newState = {...state, [name]: value};
 		_setState(newState);
 	};
+
+	useEffect(() => {
+		if (!user || !user.connectedTwitter) {
+			console.log('Setting to anon');
+			setState('anonymous', true);
+		} else {
+			console.log('Setting to non-anon');
+			setState('anonymous', false);
+		}
+	}, [user]);
 
 	const setState = (name: string, value: any) => {
 		const newState = {...state, [name]: value};
