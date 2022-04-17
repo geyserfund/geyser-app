@@ -40,6 +40,7 @@ query GetProjectByName($name: String!) {
         }
         ambassadors {
           id
+          confirmed
           user {
             id
             username 
@@ -50,6 +51,7 @@ query GetProjectByName($name: String!) {
         sponsors {
           id
           image
+          confirmed
           url
           user {
             id

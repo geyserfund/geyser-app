@@ -9,14 +9,6 @@ import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../P
 export const Yeferson = ({ project }: { project: IProject}) => {
 	const projectBlocks: IProjectBlock[] = [
 		{
-			key: 'idea',
-			title: 'The idea',
-			body: [
-				'A classic space arcade game with awesome pixel art graphics with in-game Bitcoin Lightning rewards.',
-			],
-			blockType: 'PL',
-		},
-		{
 			key: 'about',
 			title: 'About the game',
 			body: [
@@ -32,8 +24,8 @@ export const Yeferson = ({ project }: { project: IProject}) => {
 			title: 'Where to play',
 			body: [
 				'This videogame will have a free to win mobile version on the Google Play Store and a premium version for PC. The said version will be available on the **Elixir Launcher**, a Play to Earn (P2E) gaming platform belonging to the P2E videogame development company Satoshi Games.',
-				'Difference between, the mobile version and the PC version.',
-				'- The mobile version will be free but comes with advertisements, which will represent the main income for the team that develops this project.',
+				'Differences between, the mobile version and the PC version.',
+				'- The mobile version will be free but comes with advertisements, which will represent the main income for the team.',
 				'- The PC version will not have any kind of advertising, however, the game will cost $6. You can also pre-purchase it now with a 50% discount on [Elixir](https://elixir.app/).',
 
 			],
@@ -55,7 +47,7 @@ export const Yeferson = ({ project }: { project: IProject}) => {
 				'By donating and contributing to this game you’ll support us in developing this and more Bitcoin games for you. ',
 				'You’ll be able to access rewards:',
 				'- **Access to first contest:** Be part of a game competition where you can win Sats.',
-				'- **Premium: Access to contest + Early access + More: ** Access private beta version of the game weeks before release (June 10) and access to private  Discord channel.',
+				'- **Premium: Access to contest + Early access + More:** Access private beta version of the game weeks before release (June 10) and access to private  Discord channel.',
 			],
 			blockType: 'PL',
 		},
@@ -76,6 +68,7 @@ export const Yeferson = ({ project }: { project: IProject}) => {
 				'Twitter: @district_p2e',
 				'Instagram: @distritocstudios',
 				'Facebook: @distritocstudios',
+				'[Discord](https://discord.gg/EhZZhHFK)',
 			],
 			images: [project.media[3]],
 			blockType: 'UL',
@@ -85,6 +78,7 @@ export const Yeferson = ({ project }: { project: IProject}) => {
 			title: 'Demo Video',
 			body: [
 				'[Youtube Demo Video](https://www.youtube.com/watch?v=88QjMXzPPg0&t=14s)',
+				'[![lightning rebel demo](https://storage.googleapis.com/geyser-projects-media/project/lightning-rebel/image4.png)](https://www.youtube.com/watch?v=88QjMXzPPg0 "Lightning Rebel Demo")',
 			],
 			blockType: 'PL',
 		},
@@ -103,8 +97,8 @@ export const Yeferson = ({ project }: { project: IProject}) => {
 
 	const projectDetails: IProjectDetail = {
 		problem: '',
-		idea: 'A digital card game that is fun, allows you to earn satoshis, and teaches you about the principles, history and philosophy of Bitcoin. ',
-		ownerIntro: 'I’m a former professional football player with an entrepreneurial heart and passionate about Bitcoin since 2013',
+		idea: 'A classic space arcade game with awesome pixel art graphics with in-game Bitcoin Lightning rewards.',
+		ownerIntro: 'This game is being developed by the Venezuelan startup DCS, Distrito c Studios, which was founded by Yeferson Peña, Hernán Colmenares and Josué Valentín.',
 		blocks: projectBlocks,
 	};
 
