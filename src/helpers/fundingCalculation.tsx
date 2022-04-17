@@ -5,7 +5,7 @@ export const useFundCalc = (state: IFundForm) => {
 	const {btcRate} = useBtcContext();
 
 	const getTotalAmount = (type: 'sats' | 'dollar', name: string) => {
-		const shippingAmount = (name === 'day-of-genesis' || name === 'lightning-rebels') ? 0 : getShippingCost();
+		const shippingAmount = (name === 'day-of-genesis' || name === 'lightning-rebel') ? 0 : getShippingCost();
 
 		if (type === 'sats') {
 			return Math.round(state.rewardsCost / btcRate) + state.donationAmount + shippingAmount;

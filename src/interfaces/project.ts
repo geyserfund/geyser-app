@@ -106,6 +106,7 @@ export interface IProjectUpdate {
 
 export interface ISponsor {
     id: number;
+    confirmed: boolean;
     name: string;
     user?: IUser;
     image?: string;

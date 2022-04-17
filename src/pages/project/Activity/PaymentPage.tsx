@@ -97,7 +97,7 @@ export const PaymentPage = ({
 		return totalRewards;
 	};
 
-	const hasShipping = () => name !== 'day-of-genesis' && name !== 'lightning-rebels';
+	const hasShipping = () => name !== 'day-of-genesis' && name !== 'lightning-rebel';
 
 	console.log('checking state', state);
 	return (

@@ -31,11 +31,13 @@ export const SponsorBlock = ({sponsors}: ISponsorBlock) => {
 				<Wrap display="flex" spacing="40px" align="center" width={'100%'}>
 					{
 						sponsors.map((sponsor: ISponsor) => (
-							<WrapItem key={sponsor.id} marginRight="20px">
-								<Link href={sponsor.url} isExternal>
-									<Image height="70px" src={sponsor.image} />
-								</Link>
-							</WrapItem>
+							sponsor.confirmed
+								? <WrapItem key={sponsor.id} marginRight="20px">
+									<Link href={sponsor.url} isExternal>
+										<Image height="70px" src={sponsor.image} />
+									</Link>
+								</WrapItem>
+								: <></>
 						))
 					}
 				</Wrap>
