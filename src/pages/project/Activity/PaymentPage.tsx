@@ -97,6 +97,8 @@ export const PaymentPage = ({
 		return totalRewards;
 	};
 
+	const hasShipping = () => name !== 'day-of-genesis' && name !== 'lightning-rebels';
+
 	console.log('checking state', state);
 	return (
 		<VStack
@@ -130,7 +132,7 @@ export const PaymentPage = ({
 						onChange={setTarget}
 					/>
 				</Box>
-				{state.rewardsCost && name !== 'day-of-genesis' && <Box width="100%" >
+				{state.rewardsCost && hasShipping() && <Box width="100%" >
 					<SelectComponent
 						name="shippingDestination"
 						fontSize="14px"
@@ -156,7 +158,7 @@ export const PaymentPage = ({
 					<SectionTitle>Total</SectionTitle>
 					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
 					<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
-					{ state.rewardsCost && name !== 'day-of-genesis' && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
+					{ state.rewardsCost && hasShipping() && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
