@@ -151,7 +151,7 @@ export const PaymentPage = ({
 							setSelectedGif('');
 							setGifHover(false);
 						}}/>
-						: <Button zIndex="10" position="absolute" top="2" right="3" bg="none" p={0} onClick={onOpen}>
+						: <Button zIndex="10" position="absolute" top="20px" right="3" bg="none" p={0} onClick={onOpen}>
 							<GifIcon/>
 						</Button>
 					}
@@ -173,9 +173,9 @@ export const PaymentPage = ({
 								/>
 								<ModalCloseButton mt="5px" ml="7px"/>
 							</InputGroup>
-							<Box mr="5px" height="450px" overflow="auto">
+							<Box height="450px" overflow="auto">
 								<Box display="flex" justifyContent="center" alignItems="center" cursor="pointer">
-									<Grid width={400} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
+									<Grid width={isMobile ? 350 : 400} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
 										setSelectedGif(gif.id);
 										onClose();
 									}} />
