@@ -31,6 +31,7 @@ import {
 
 const initialFunding = {
 	id: '',
+	uuid: '',
 	invoiceId: '',
 	status: 'unpaid',
 	amount: 0,

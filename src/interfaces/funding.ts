@@ -1,7 +1,9 @@
 import { ShippingDestination } from '../constants';
+import { IFunder } from './participant';
 
 export interface IFundingTx {
    id: string;
+   uuid: string;
    invoiceId: string;
    comment: string;
    status: string;
@@ -9,6 +11,7 @@ export interface IFundingTx {
    paymentRequest: string;
    address: string;
    canceled: boolean;
+   funder?: IFunder;
 }
 
 export interface IFundingReward {

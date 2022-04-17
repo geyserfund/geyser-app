@@ -1,3 +1,4 @@
+/* eslint-disable capitalized-comments */
 import React, { useEffect, useState } from 'react';
 import { Box, Text, VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
@@ -7,13 +8,16 @@ import { CloseButton } from '@chakra-ui/react';
 import { BiCopyAlt } from 'react-icons/bi';
 import ReactConfetti from 'react-confetti';
 import { IFundForm } from '../../../hooks';
+import { IFundingTx } from '../../../interfaces';
+// import { MUTATION_CLAIM_FUNDING } from '../../../graphql';
 
 interface ISuccessPage {
 	state: IFundForm
+	fundingTx: IFundingTx
 	handleCloseButton: () => void
 }
 
-export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
+export const SuccessPage = ({ state, fundingTx, handleCloseButton }: ISuccessPage) => {
 	const [copy, setCopy] = useState(false);
 	console.log(state);
 
@@ -24,6 +28,10 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 	};
 
 	const botTwitterUrl = 'https://twitter.com/geyserfunders';
+
+	// const [claimFunding, {
+	// 	data, loading,
+	// }] = useMutation(MUTATION_CLAIM_FUNDING);
 
 	useEffect(() => {
 		if (copy) {
@@ -76,6 +84,12 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 				>
 					{copy ? 'Project Link Copied' : 'Share project with friends'}
 				</ButtonComponent>
+				{state.anonymous
+					&& <Text paddingBlockEnd="30px">
+						Log in to claim this funding
+					</Text>
+				}
+				{console.log('FUNDING TX: ', fundingTx)}
 			</Box>
 		</VStack></>
 	);

@@ -25,7 +25,7 @@ export const Project = () => {
 
 	const [getProject, { loading, error, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
 		{
-			variables: { name: projectId },
+			variables: { where: { name: projectId } },
 		},
 	);
 
@@ -35,11 +35,11 @@ export const Project = () => {
 		);
 	}
 
-	if (error || !data || !data.getProjectByName.success) {
+	if (error || !data || !data.project) {
 		return <NotFound />;
 	}
 
-	const { project } = data && data.getProjectByName;
+	const { project } = data;
 
 	return (
 		<>

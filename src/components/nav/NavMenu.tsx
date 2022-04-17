@@ -10,7 +10,7 @@ import { FiMoreHorizontal } from 'react-icons/fi';
 // Import { FaMoon, FaSun } from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
 import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles, HomeUrl, GrantsUrl } from '../../constants';
-import { IuserProfile } from '../../interfaces';
+import { IUser } from '../../interfaces';
 
 const useStyles = createUseStyles({
 	menuList: {
@@ -63,7 +63,7 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const NavMenu = ({ logout, user }: { logout: any, user: IuserProfile | undefined }) => {
+export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined }) => {
 	const classes = useStyles();
 	// Const { colorMode, toggleColorMode } = useColorMode();
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);

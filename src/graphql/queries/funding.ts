@@ -1,14 +1,13 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_GET_FUNDING = gql`
-query GetFundingTx($fundingTxId: BigInt!) {
-    getFundingTx(fundingTxId: $fundingTxId) {
+query GetFundingTx($id: BigInt!) {
+    fundingTx(id: $id) {
       id
       invoiceId
       paymentRequest
       amount
       status
-      canceled
       comment
       paidAt
       onChain
