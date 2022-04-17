@@ -13,6 +13,7 @@ mutation Fund($input: DonationFundingInput!) {
         status
         canceled
         comment
+        gif
         paidAt
         onChain
         address
@@ -40,6 +41,7 @@ mutation FundWithReward($input: RewardFundingInput!) {
         status
         canceled
         comment
+        gif
         paidAt
         onChain
         address
@@ -53,4 +55,3 @@ mutation FundWithReward($input: RewardFundingInput!) {
     }
   }
 `;
-

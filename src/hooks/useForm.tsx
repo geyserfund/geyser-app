@@ -9,6 +9,7 @@ export interface IFundForm {
 	rewardsCost: number;
 	amount: number;
 	comment: string;
+	gif: string | number;
 	anonymous: boolean;
 	shippingDestination: ShippingDestination;
 	shippingCost: number;
@@ -28,6 +29,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		rewardsCost: 0,
 		amount: 0,
 		comment: '',
+		gif: '',
 		shippingDestination: shippingTypes.national,
 		shippingCost: 0,
 		anonymous: !(user && user.connectedTwitter),
