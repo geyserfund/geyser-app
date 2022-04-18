@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const MUTATION_FUND = gql`
-mutation Fund($input: DonationFundingInput!) {
+mutation Fund($input: FundingInput!) {
   fund(input: $input) {
     fundingTx {
       id
@@ -21,31 +21,6 @@ mutation Fund($input: DonationFundingInput!) {
       shippingCost
       rewardsCost
     }
-  }
-}
-`;
-
-export const MUTATION_FUND_WITH_REWARD = gql`
-mutation FundWithReward($input: RewardFundingInput!) {
-  fundWithReward(input: $input) {
-     fundingTx {
-        id
-        uuid
-        invoiceId
-        paymentRequest
-        amount
-        status
-        comment
-        paidAt
-        onChain
-        address
-      }
-      amountSummary {
-        total
-        donationAmount
-        shippingCost
-        rewardsCost
-      }
   }
 }
 `;

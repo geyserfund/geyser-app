@@ -168,10 +168,6 @@ query projects {
             twitterHandle
             connectedTwitter
           }
-          badges {
-            badge
-            description
-        }
         }
         amount
         paidAt

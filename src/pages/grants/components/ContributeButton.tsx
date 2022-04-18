@@ -70,7 +70,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	}, [sats]);
 
 	const { user } = useContext(AuthContext);
-	const [comment, setComment] = useState('');
+	// const [comment, setComment] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { toast } = useNotification();
 	const [fundingTx, setFundingTx] = useState<IFundingTx>({ ...initialFunding, funder: { ...initialFunding.funder, user } });
@@ -82,7 +82,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	const handleCloseButton = () => {
 		setFundState(fundingStages.form);
 		setAmount(0);
-		setComment('');
+		// setComment('');
 		clearInterval(fundInterval);
 
 		if (setSats && clearCloseButton) {
@@ -219,10 +219,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 			setFundState(fundingStages.loading);
 
 			const input: IDonationFundingInput = {
-				projectId: Number(project.id),
-				comment,
 				donationAmount: amount,
-				anonymous: appearAs === 'anonymous',
 			};
 
 			await fundProject({ variables: { input } });
@@ -280,7 +277,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						<Text mt={5}>Comment (optional)</Text>
 						<Textarea
 							name="comment"
-							onChange={event => setComment(event.target.value) }
+							// onChange={event => setComment(event.target.value) }
 							placeholder="Add a comment..."
 							focusBorderColor="#20ECC7"
 							resize="none"

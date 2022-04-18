@@ -58,9 +58,7 @@ export const QrPage = ({
 	const {comment} = state;
 	const {title} = project;
 
-	const {getTotalAmount, getRewardsNumber} = useFundCalc(state);
-
-	console.log(paymentRequest, address);
+	const {getTotalAmount, getRewardsQuantity} = useFundCalc(state);
 
 	const isMobile = isMobileMode();
 	const classes = useStyles();
@@ -109,6 +107,19 @@ export const QrPage = ({
 		return rewardNames;
 	};
 
+	const rewardCountString = () => {
+		const count = getRewardsQuantity();
+		if (count === 0) {
+			return '';
+		}
+
+		if (count === 1) {
+			return '1 reward';
+		}
+
+		return `${count} rewards`;
+	};
+
 	const qrBackgroundColor = copy ? colors.primary : colors.bgWhite;
 
 	return (
@@ -145,7 +156,7 @@ export const QrPage = ({
 						<VStack alignItems="flex-start" spacing="0px">
 							<SectionTitle>Total</SectionTitle>
 							<SatoshiAmount label="Donation">{amounts.donationAmount}</SatoshiAmount>
-							{amounts.rewardsCost && <SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{amounts.rewardsCost}</SatoshiAmount>}
+							{amounts.rewardsCost && <SatoshiAmount label="Reward" extra={rewardCountString()}>{amounts.rewardsCost}</SatoshiAmount>}
 							{amounts.rewardsCost && <SatoshiAmount label="Shipping" >{amounts.shippingCost}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
 							{comment && <Text className={classes.blockText}> {`Comment: ${comment}`}</Text>}

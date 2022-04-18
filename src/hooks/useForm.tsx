@@ -7,12 +7,13 @@ import { IProjectReward, IRewardCount } from '../interfaces';
 export interface IFundForm {
 	donationAmount: number;
 	rewardsCost: number;
-	amount: number;
+	totalAmount: number;
 	comment: string;
 	anonymous: boolean;
 	shippingDestination: ShippingDestination;
 	shippingCost: number;
 	email: string;
+	media: string;
 	rewards: {[key:string]:number};
 }
 
@@ -26,12 +27,13 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 	const intialState = {
 		donationAmount: 0,
 		rewardsCost: 0,
-		amount: 0,
+		totalAmount: 0,
 		comment: '',
 		shippingDestination: shippingTypes.national,
 		shippingCost: 0,
 		anonymous: !(user && user.connectedTwitter),
 		email: '',
+		media: '',
 		rewards: {},
 	};
 
@@ -71,7 +73,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		}
 
 		console.log('chekcing rewards and rewards cost', newRewards, rewardsCost);
-		const newState = {...state, rewards: newRewards, rewardsCost};
+		const newState = {...state, rewards: newRewards, rewardsCost };
 		_setState(newState);
 	};
 

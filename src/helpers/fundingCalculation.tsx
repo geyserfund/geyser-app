@@ -28,7 +28,7 @@ export const useFundCalc = (state: IFundForm) => {
 		return Math.round(0.060 / btcRate);
 	};
 
-	const getRewardsNumber = () => {
+	const getRewardsQuantity = () => {
 		let totalRewards = 0;
 		Object.keys(state.rewards).map(key => {
 			totalRewards += state.rewards[key];
@@ -36,6 +36,6 @@ export const useFundCalc = (state: IFundForm) => {
 		return totalRewards;
 	};
 
-	return {getTotalAmount, getShippingCost, getRewardsNumber, btcRate};
+	return {getTotalAmount, getShippingCost, getRewardsQuantity, btcRate};
 };
 
