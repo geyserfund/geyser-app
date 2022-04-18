@@ -1,5 +1,9 @@
+import { NODE_ENV } from '../constants';
 import { useBtcContext } from '../context/btc';
 import { IFundForm } from '../hooks';
+
+const nationalShippingCost = NODE_ENV === 'production' ? 15 : 0.015;
+const internationalShippingCost = NODE_ENV === 'production' ? 60 : 0.060;
 
 export const useFundCalc = (state: IFundForm) => {
 	const {btcRate} = useBtcContext();
@@ -22,10 +26,10 @@ export const useFundCalc = (state: IFundForm) => {
 		}
 
 		if (state.shippingDestination === 'national') {
-			return Math.round(0.015 / btcRate);
+			return Math.round(nationalShippingCost / btcRate);
 		}
 
-		return Math.round(0.060 / btcRate);
+		return Math.round(internationalShippingCost / btcRate);
 	};
 
 	const getRewardsNumber = () => {
