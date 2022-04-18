@@ -71,15 +71,6 @@ export interface IProjectUpdate {
     images?: string[];
 }
 
-export interface ISponsor {
-    id: number;
-    confirmed: boolean;
-    name: string;
-    user?: IUser;
-    image?: string;
-    url?: string;
-}
-
 export interface IRewardCount {
     id: number;
     count: number;
