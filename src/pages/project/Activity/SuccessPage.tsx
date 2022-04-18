@@ -90,7 +90,7 @@ export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: IS
 				<Text paddingBlockEnd="30px">
 					The payment went through. You can now share this campaign with friends.
 				</Text>
-				{(state.rewards && state.rewards.length > 0)
+				{(state.rewards && Object.entries(state.rewards).length > 0)
 					&& <Text textAlign="left" width="100%" paddingBlockEnd="10px">
 						🎁  The creator will get in touch with you.
 					</Text>}

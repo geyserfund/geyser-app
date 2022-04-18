@@ -6,13 +6,13 @@ import {
 	IFundingTx,
 	IProject,
 	IProjectFunding,
+	IFundingInput,
 	IRewardFundingInput,
-	IDonationFundingInput,
 	IFundingAmounts,
 } from '../../../interfaces';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { MUTATION_FUND, MUTATION_FUND_WITH_REWARD, QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
-import { QUERY_GET_FUNDING } from '../../../graphql';
+import { MUTATION_FUND, QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
+import { QUERY_GET_FUNDING, QUERY_GET_FUNDING_STATUS } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
 import { isDarkMode, isMobileMode, useNotification, sha256 } from '../../../utils';
@@ -24,7 +24,7 @@ import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage } from './InfoPage';
 import { fundingStages, IFundingStages, stageList } from '../../../constants';
-import {useFundState} from '../../../hooks';
+import { useFundState, IFundForm } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
 
 interface IActivityProps {
@@ -94,9 +94,16 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundProject, {
 		data, loading: fundLoading,
-	}] = project.type === 'reward' ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
+	}] = useMutation(MUTATION_FUND);
 
 	const [getFunding, { data: funding, loading }] = useLazyQuery(QUERY_GET_FUNDING,
+		{
+			variables: { id: fundingTx.id },
+			fetchPolicy: 'network-only',
+		},
+	);
+
+	const [getFundingStatus, { data: fundingStatus }] = useLazyQuery(QUERY_GET_FUNDING_STATUS,
 		{
 			variables: { id: fundingTx.id },
 			fetchPolicy: 'network-only',
@@ -141,18 +148,20 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [state.anonymous]);
 
 	useEffect(() => {
-		console.log('FUNDING:', funding);
-
 		if (funding && funding.fundingTx) {
-			if (funding.fundingTx.status === 'paid' || funding.fundingTx.status === 'pending') {
-				const newTransactions = funding.fundingTx.status === 'pending' ? fundingTxs : [funding.fundingTx, ...fundingTxs];
-				setFundingTx(funding.fundingTx);
-				setFundingTxs(newTransactions);
-				clearInterval(fundInterval);
-				gotoNextStage();
-			}
+			const newTransactions = funding.fundingTx.status === 'pending' ? fundingTxs : [funding.fundingTx, ...fundingTxs];
+			setFundingTx(funding.fundingTx);
+			setFundingTxs(newTransactions);
+			clearInterval(fundInterval);
+			gotoNextStage();
 		}
 	}, [funding]);
+
+	useEffect(() => {
+		if (fundingStatus && fundingStatus.fundingTx && (fundingStatus.fundingTx.status === 'paid' || fundingStatus.fundingTx.status === 'pending')) {
+			getFunding();
+		}
+	}, [fundingStatus]);
 
 	useEffect(() => {
 		if (fundState === fundingStages.completed || fundState === fundingStages.canceled || fundState) {
@@ -205,18 +214,14 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					});
 				}
 
-				fundInterval = setInterval(getFunding, 2000);
+				fundInterval = setInterval(getFundingStatus, 1000);
 			});
 		}
 	}, [fundState]);
 
 	useEffect(() => {
 		if (data && fundState === fundingStages.form) {
-			if (data.fundWithReward && data.fundWithReward.fundingTx && data.fundWithReward.amountSummary) {
-				setFundingTx(data.fundWithReward.fundingTx);
-				setAmounts(data.fundWithReward.amountSummary);
-				gotoNextStage();
-			} else if (data.fund && data.fund.fundingTx && data.fund.amountSummary) {
+			if (data.fund && data.fund.fundingTx && data.fund.amountSummary) {
 				setFundingTx(data.fund.fundingTx);
 				setAmounts(data.fund.amountSummary);
 				gotoNextStage();
@@ -233,34 +238,47 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		resetForm();
 	};
 
+	const formatFundingInput = (state: IFundForm) => {
+		const {
+			donationAmount,
+			rewardsCost,
+			shippingCost: cost,
+			shippingDestination: destination,
+			rewards,
+			email,
+			anonymous,
+			comment,
+			media,
+		} = state;
+
+		const input: IFundingInput = {
+			projectId: Number(project.id),
+			anonymous,
+			...(donationAmount !== 0 && { donationInput: { donationAmount } }),
+			metadataInput: {
+				...(email && { email }),
+				...(media && { media }),
+				...(comment && { comment }),
+			},
+		};
+
+		if (Object.entries(state.rewards).length > 0) {
+			const rewardsArray = Object.keys(rewards).map(key => ({ id: parseInt(key, 10), quantity: rewards[key] }));
+			const filteredRewards = rewardsArray.filter(reward => reward.quantity !== 0);
+			const rewardInput: IRewardFundingInput = {
+				shipping: { cost, destination },
+				rewards: filteredRewards,
+				rewardsCost: Math.round(rewardsCost / btcRate),
+			};
+			input.rewardInput = rewardInput;
+		}
+
+		return input;
+	};
+
 	const handleFund = async () => {
 		try {
-			let input;
-
-			if (project.type === 'reward') {
-				const { amount, email, rewardsCost, rewards, ...formData } = state;
-				const rewardsArray = Object.keys(rewards).map(key => ({
-					projectRewardId: parseInt(key, 10),
-					quantity: rewards[key],
-				}));
-				const filteredRewards = rewardsArray.filter(reward => reward.quantity !== 0);
-				input = {
-					projectId: Number(project.id),
-					...formData,
-					email: email || null,
-					rewards: filteredRewards,
-					rewardsCost: Math.round(rewardsCost / btcRate),
-				} as IRewardFundingInput;
-			} else {
-				const { donationAmount, comment, anonymous } = state;
-				input = {
-					projectId: Number(project.id),
-					donationAmount,
-					comment,
-					anonymous,
-				} as IDonationFundingInput;
-			}
-
+			const input = formatFundingInput(state);
 			await fundProject({ variables: { input } });
 			gotoNextStage();
 		} catch (_) {
@@ -337,8 +355,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				return null;
 		}
 	};
-
-	console.log('checking fund state', fundState);
 
 	return (
 		<>

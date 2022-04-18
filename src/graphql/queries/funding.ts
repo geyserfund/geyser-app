@@ -18,11 +18,15 @@ query GetFundingTx($id: BigInt!) {
           username
           id
         }
-        badges {
-          badge
-          description
-        }
       }
     }
   }
+`;
+
+export const QUERY_GET_FUNDING_STATUS = gql`
+query GetFundingTxStatus($id: BigInt!) {
+    fundingTx(id: $id) {
+      status
+  }
+}
 `;

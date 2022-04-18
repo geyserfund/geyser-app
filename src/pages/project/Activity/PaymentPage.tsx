@@ -38,7 +38,7 @@ export const PaymentPage = ({
 	name,
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
-	const {getShippingCost, getTotalAmount} = useFundCalc(state);
+	const {getShippingCost, getTotalAmount, getRewardsQuantity} = useFundCalc(state);
 
 	useEffect(() => {
 		if (error) {
@@ -89,12 +89,17 @@ export const PaymentPage = ({
 		}
 	};
 
-	const getRewardsNumber = () => {
-		let totalRewards = 0;
-		Object.keys(state.rewards).map(key => {
-			totalRewards += state.rewards[key];
-		});
-		return totalRewards;
+	const rewardCountString = () => {
+		const count = getRewardsQuantity();
+		if (count === 0) {
+			return '';
+		}
+
+		if (count === 1) {
+			return '1 reward';
+		}
+
+		return `${count} rewards`;
 	};
 
 	const hasShipping = () => name !== 'day-of-genesis' && name !== 'lightning-rebel';
@@ -157,7 +162,7 @@ export const PaymentPage = ({
 				<VStack alignItems="flex-start" spacing="0px">
 					<SectionTitle>Total</SectionTitle>
 					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
-					<SatoshiAmount label="Reward" extra={`${getRewardsNumber()} reward`}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
+					<SatoshiAmount label="Reward" extra={rewardCountString()}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
 					{ state.rewardsCost && hasShipping() && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 
 				</VStack>
