@@ -1,12 +1,15 @@
-import { Box, CloseButton, Divider, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, CloseButton, Divider, HStack, Text, VStack, Button, Input, InputGroup, InputLeftElement, Modal, ModalOverlay, ModalBody, ModalCloseButton, ModalContent, useDisclosure, Image } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { SatoshiIcon } from '../../../components/icons';
+import { SatoshiIcon, GifIcon } from '../../../components/icons';
 import { ButtonComponent, ErrorBox, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
 import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import {IFundForm} from '../../../hooks';
 import { IProjectReward, IProjectType } from '../../../interfaces';
 import { DonationBased, RewardBased } from '../FundForm';
+import { Grid } from '@giphy/react-components';
+import { GiphyFetch } from '@giphy/js-fetch-api';
+import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 
 interface IPaymentPageProps {
 	isMobile: boolean
@@ -39,6 +42,10 @@ export const PaymentPage = ({
 }: IPaymentPageProps) => {
 	const [error, setError] = useState('');
 	const {getShippingCost, getTotalAmount, getRewardsQuantity} = useFundCalc(state);
+	const [gifSearch, setGifSearch] = useState('bitcoin');
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [selectedGif, setSelectedGif] = useState<string | number>('');
+	const [gifHover, setGifHover] = useState(false);
 
 	useEffect(() => {
 		if (error) {
@@ -52,6 +59,9 @@ export const PaymentPage = ({
 			handleFund();
 		}
 	};
+
+	const gf = new GiphyFetch('AqeIUD33qyHnMwLDSDWP0da9lCSu0LXx');
+	const fetchGifs = (offset: number) => gf.search(gifSearch, { offset, sort: 'relevant', limit: 9 });
 
 	const validateFundingAmount = () => {
 		if (getTotalAmount('dollar', name) >= 5000) {
@@ -126,8 +136,9 @@ export const PaymentPage = ({
 			<Divider borderTopWidth="3px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
 			<VStack spacing="5px" width="100%" alignItems="flex-start">
 				<SectionTitle>Comment</SectionTitle>
-				<Box width="100%">
+				<Box width="100%" position="relative">
 					<TextArea
+						pr={16}
 						placeholder="Leave a public message here."
 						fontSize="14px"
 						resize="none"
@@ -135,8 +146,52 @@ export const PaymentPage = ({
 						maxLength={280}
 						name="comment"
 						onChange={setTarget}
+
 					/>
+					{gifHover && selectedGif && <CloseIcon position="absolute" top="31px" right="29px"/>}
+					{selectedGif
+						?	<Image src={`https://media.giphy.com/media/${selectedGif}/giphy.gif`} alt="gif" width="50px" height="50px" zIndex="10" position="absolute" top="3.5" right="3" cursor="pointer" opacity={gifHover ? '0.25' : '1'} onMouseEnter={() => {
+							setGifHover(true);
+						}} onMouseLeave={() => {
+							setGifHover(false);
+						}} onClick={() => {
+							setSelectedGif('');
+							setGifHover(false);
+						}}/>
+						: <Button zIndex="10" position="absolute" top="20px" right="3" bg="none" p={0} onClick={onOpen}>
+							<GifIcon/>
+						</Button>
+					}
 				</Box>
+				<Modal onClose={() => {
+					setGifSearch('bitcoin');
+					onClose();
+				}} isOpen={isOpen} isCentered>
+					<ModalOverlay />
+					<ModalContent>
+						<ModalBody p={2}>
+							<InputGroup mb={2}>
+								<InputLeftElement >
+									<SearchIcon/>
+								</InputLeftElement>
+								<Input placeholder="Search" variant="filled" focusBorderColor="brand.primary" bg="#DDFFF8"
+									onChange={e => setGifSearch(e.target.value)}
+								/>
+								<ModalCloseButton mt="5px" ml="7px"/>
+							</InputGroup>
+							<Box height="450px" overflow="auto">
+								<Box display="flex" justifyContent="center" alignItems="center" cursor="pointer">
+									<Grid width={isMobile ? 350 : 400} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
+										setSelectedGif(gif.id);
+										state.gif = gif.id;
+										setTarget(gif);
+										onClose();
+									}} />
+								</Box>
+							</Box>
+						</ModalBody>
+					</ModalContent>
+				</Modal>
 				{state.rewardsCost && hasShipping() && <Box width="100%" >
 					<SelectComponent
 						name="shippingDestination"

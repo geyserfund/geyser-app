@@ -144,18 +144,26 @@ query projects {
         url
         user {
           id
-          username 
-          twitterHandle
-          imageUrl
+          user {
+            id
+            username 
+            twitterHandle
+            imageUrl
+          }
         }
       }
       funders {
         id
         user {
           id
-          username
-          twitterHandle
-          imageUrl
+          image
+          url
+          user {
+            id
+            username 
+            twitterHandle
+            imageUrl
+          }
         }
         confirmed
       }
@@ -169,10 +177,30 @@ query projects {
             connectedTwitter
           }
         }
-        amount
-        paidAt
-        comment
-        onChain
+        grantees {
+          id
+          url
+          name
+        }
+        fundingTxs {
+          id
+          funder {
+            user {
+              username
+              imageUrl
+              twitterHandle
+              connectedTwitter
+            }
+            badges {
+              badge
+              description
+          }
+          }
+          amount
+          paidAt
+          comment
+          onChain
+        }
       }
     }
   }

@@ -52,6 +52,7 @@ const initialFunding = {
 	address: '',
 	canceled: false,
 	comment: '',
+	gif: '',
 	paidAt: '',
 	onChain: false,
 	funder: {

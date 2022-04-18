@@ -9,6 +9,7 @@ query GetFundingTx($id: BigInt!) {
       amount
       status
       comment
+      gif
       paidAt
       onChain
       funder {

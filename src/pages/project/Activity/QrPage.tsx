@@ -55,7 +55,7 @@ export const QrPage = ({
 	handleCloseButton,
 }: IQrPage) => {
 	const { paymentRequest, address, amount} = fundingTx;
-	const {comment} = state;
+	const {comment, gif} = state;
 	const {title} = project;
 
 	const {getTotalAmount, getRewardsQuantity} = useFundCalc(state);
@@ -160,6 +160,7 @@ export const QrPage = ({
 							{amounts.rewardsCost && <SatoshiAmount label="Shipping" >{amounts.shippingCost}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
 							{comment && <Text className={classes.blockText}> {`Comment: ${comment}`}</Text>}
+							{gif && <Text className={classes.blockText}> {`Gif: https://media.giphy.com/media/${gif}/giphy.gif`}</Text>}
 							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text>}
 						</VStack>
 						<VStack alignItems="flex-end" spacing="0px">

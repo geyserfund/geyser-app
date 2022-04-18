@@ -10,6 +10,7 @@ import TrophyPng from '../../assets/trophy.png';
 import HourglassPng from '../../assets/hourglass.png';
 import GiftPng from '../../assets/gift.png';
 import SatoshiPng from '../../assets/satoshi.png';
+import GifSvg from '../../assets/gif.svg';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }: any) => {
 	const getFilter = () => {
@@ -76,5 +77,11 @@ export const HourglassIcon = () => (
 export const GiftIcon = () => (
 	<Box padding="3px 0px">
 		<Image height="20px" width="20px" src={GiftPng} alt="gift" />
+	</Box>
+);
+
+export const GifIcon = () => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={GifSvg} alt="gif" />
 	</Box>
 );
