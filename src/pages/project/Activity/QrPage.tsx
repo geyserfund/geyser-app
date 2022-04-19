@@ -55,7 +55,6 @@ export const QrPage = ({
 	handleCloseButton,
 }: IQrPage) => {
 	const { paymentRequest, address, amount} = fundingTx;
-	const {comment, gif} = state;
 	const {title} = project;
 
 	const {getTotalAmount, getRewardsQuantity} = useFundCalc(state);
@@ -159,9 +158,9 @@ export const QrPage = ({
 							{amounts.rewardsCost && <SatoshiAmount label="Reward" extra={rewardCountString()}>{amounts.rewardsCost}</SatoshiAmount>}
 							{amounts.rewardsCost && <SatoshiAmount label="Shipping" >{amounts.shippingCost}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
-							{comment && <Text className={classes.blockText}> {`Comment: ${comment}`}</Text>}
-							{gif && <Text className={classes.blockText}> {`Gif: https://media.giphy.com/media/${gif}/giphy.gif`}</Text>}
-							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text>}
+							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text> }
+							{ state.comment && <Text className={classes.blockText}> {`Comment: ${state.comment}`}</Text> }
+							{/* { state.media && <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" /> } */}
 						</VStack>
 						<VStack alignItems="flex-end" spacing="0px">
 							<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats', project.name)}</SatoshiAmount>

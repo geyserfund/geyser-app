@@ -10,6 +10,7 @@ import { DonationBased, RewardBased } from '../FundForm';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
+import { IGif } from '@giphy/js-types';
 
 interface IPaymentPageProps {
 	isMobile: boolean
@@ -44,7 +45,7 @@ export const PaymentPage = ({
 	const {getShippingCost, getTotalAmount, getRewardsQuantity} = useFundCalc(state);
 	const [gifSearch, setGifSearch] = useState('bitcoin');
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const [selectedGif, setSelectedGif] = useState<string | number>('');
+	const [selectedGif, setSelectedGif] = useState<IGif|null>(null);
 	const [gifHover, setGifHover] = useState(false);
 
 	useEffect(() => {
@@ -150,12 +151,12 @@ export const PaymentPage = ({
 					/>
 					{gifHover && selectedGif && <CloseIcon position="absolute" top="31px" right="29px"/>}
 					{selectedGif
-						?	<Image src={`https://media.giphy.com/media/${selectedGif}/giphy.gif`} alt="gif" width="50px" height="50px" zIndex="10" position="absolute" top="3.5" right="3" cursor="pointer" opacity={gifHover ? '0.25' : '1'} onMouseEnter={() => {
+						?	<Image src={`${selectedGif.images.preview_webp.url}`} alt="gif" width="50px" height="50px" zIndex="10" position="absolute" top="3.5" right="3" cursor="pointer" opacity={gifHover ? '0.25' : '1'} onMouseEnter={() => {
 							setGifHover(true);
 						}} onMouseLeave={() => {
 							setGifHover(false);
 						}} onClick={() => {
-							setSelectedGif('');
+							setSelectedGif(null);
 							setGifHover(false);
 						}}/>
 						: <Button zIndex="10" position="absolute" top="20px" right="3" bg="none" p={0} onClick={onOpen}>
@@ -182,9 +183,8 @@ export const PaymentPage = ({
 							<Box height="450px" overflow="auto">
 								<Box display="flex" justifyContent="center" alignItems="center" cursor="pointer">
 									<Grid width={isMobile ? 350 : 400} columns={3} fetchGifs={fetchGifs} noLink={true} hideAttribution={true} key={gifSearch} onGifClick={gif => {
-										setSelectedGif(gif.id);
-										state.gif = gif.id;
-										setTarget(gif);
+										setSelectedGif(gif);
+										setState('media', gif.images.original.webp);
 										onClose();
 									}} />
 								</Box>

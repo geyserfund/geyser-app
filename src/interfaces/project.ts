@@ -1,4 +1,5 @@
 import { IParticipant, IFunder, ISponsor, IGrantee } from './participant';
+import { IFundingTx } from './funding';
 
 export type IProjectType = 'reward' | 'grant' | 'donation'
 
@@ -23,7 +24,7 @@ export interface IProject {
     funders: IFunder[];
     sponsors: ISponsor[];
     grantees: IGrantee[];
-    fundingTxs: IProjectFunding[];
+    fundingTxs: IFundingTx[];
     rewards?: IProjectReward[]
 }
 
@@ -34,16 +35,6 @@ export interface IProjectReward {
     name: string;
     description: string;
     backers: number;
-}
-
-export interface IProjectFunding {
-    id: number;
-    funder: IFunder;
-    amount:string;
-    comment:string;
-    gif: string | number;
-    paidAt:string;
-    onChain: boolean;
 }
 
 export interface IProjectDetail {

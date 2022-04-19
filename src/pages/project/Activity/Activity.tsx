@@ -5,14 +5,13 @@ import { Card } from '../../../components/ui';
 import {
 	IFundingTx,
 	IProject,
-	IProjectFunding,
 	IFundingInput,
 	IRewardFundingInput,
 	IFundingAmounts,
 } from '../../../interfaces';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { MUTATION_FUND, QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
-import { QUERY_GET_FUNDING, QUERY_GET_FUNDING_STATUS } from '../../../graphql';
+import { QUERY_GET_FUNDING_STATUS } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
 import { isDarkMode, isMobileMode, useNotification, sha256 } from '../../../utils';
@@ -43,7 +42,7 @@ const initialAmounts = {
 };
 
 const initialFunding = {
-	id: '',
+	id: 0,
 	uuid: '',
 	invoiceId: '',
 	status: 'unpaid',
@@ -52,7 +51,7 @@ const initialFunding = {
 	address: '',
 	canceled: false,
 	comment: '',
-	gif: '',
+	media: '',
 	paidAt: '',
 	onChain: false,
 	funder: {
@@ -74,19 +73,17 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial);
 
-	console.log('PROJECT REWARDS:', project.rewards);
-
 	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
 
 	const [fundingTx, setFundingTx] = useState<IFundingTx>({ ...initialFunding, funder: { ...initialFunding.funder, user } });
 	const [amounts, setAmounts] = useState<IFundingAmounts>(initialAmounts);
-	const [fundingTxs, setFundingTxs] = useState<IProjectFunding[]>([]);
+	const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
-	const { loading: loadingFundingData, error, data: fundingData } = useQuery(
+	const { loading, error, data: fundingData } = useQuery(
 		QUERY_PROJECT_FUNDING_DATA,
 		{
 			variables: { where: { id: project.id } },
@@ -96,13 +93,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const [fundProject, {
 		data, loading: fundLoading,
 	}] = useMutation(MUTATION_FUND);
-
-	const [getFunding, { data: funding, loading }] = useLazyQuery(QUERY_GET_FUNDING,
-		{
-			variables: { id: fundingTx.id },
-			fetchPolicy: 'network-only',
-		},
-	);
 
 	const [getFundingStatus, { data: fundingStatus }] = useLazyQuery(QUERY_GET_FUNDING_STATUS,
 		{
@@ -118,12 +108,12 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [fundingData]);
 
 	useEffect(() => {
-		if (loadingFundingData) {
+		if (loading) {
 			setFundState(fundingStages.loading);
 		} else {
 			setFundState(fundingStages.initial);
 		}
-	}, [loadingFundingData]);
+	}, [loading]);
 
 	useEffect(() => {
 		if (error) {
@@ -149,18 +139,14 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [state.anonymous]);
 
 	useEffect(() => {
-		if (funding && funding.fundingTx) {
-			const newTransactions = funding.fundingTx.status === 'pending' ? fundingTxs : [funding.fundingTx, ...fundingTxs];
-			setFundingTx(funding.fundingTx);
-			setFundingTxs(newTransactions);
+		if (fundingStatus && fundingStatus.fundingTx && (fundingStatus.fundingTx.status === 'paid' || fundingStatus.fundingTx.status === 'pending')) {
+			const newTx = { ...fundingTx, status: fundingStatus.fundingTx.status };
+			const newTxs = fundingStatus.fundingTx.status === 'pending' ? fundingTxs : [newTx, ...fundingTxs];
+
+			setFundingTx(newTx);
+			setFundingTxs(newTxs);
 			clearInterval(fundInterval);
 			gotoNextStage();
-		}
-	}, [funding]);
-
-	useEffect(() => {
-		if (fundingStatus && fundingStatus.fundingTx && (fundingStatus.fundingTx.status === 'paid' || fundingStatus.fundingTx.status === 'pending')) {
-			getFunding();
 		}
 	}, [fundingStatus]);
 
@@ -207,7 +193,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						status: 'info',
 					});
 				} else {
-					console.log(error);
 					toast({
 						title: 'Oops! Something went wrong with WebLN.',
 						description: 'Please use the invoice instead.',
@@ -215,7 +200,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					});
 				}
 
-				fundInterval = setInterval(getFundingStatus, 1000);
+				fundInterval = setInterval(getFundingStatus, 1500);
 			});
 		}
 	}, [fundState]);

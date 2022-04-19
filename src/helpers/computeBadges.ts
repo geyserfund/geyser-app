@@ -32,8 +32,6 @@ const specialBadges: IBadges = {
 };
 
 export const computeFunderBadges = ({ project, funder }: { project: IProject, funder: IFunder}) => {
-	console.log('funder', funder);
-
 	const funderBadges: IBadge[] = [];
 	const { amountFunded: amount, timesFunded: times } = funder;
 
@@ -43,7 +41,6 @@ export const computeFunderBadges = ({ project, funder }: { project: IProject, fu
 
 	// Check if earned amount badge
 	const amountBadgeIndex: string | undefined = Object.keys(amountBadges).reverse().find(threshold => (amount > Number(threshold)));
-	console.log('index', amountBadgeIndex);
 
 	if (amountBadgeIndex) {
 		funderBadges.push(amountBadges[amountBadgeIndex]);
@@ -65,8 +62,6 @@ export const computeFunderBadges = ({ project, funder }: { project: IProject, fu
 			description: `This user funded this project ${times} times!`,
 		});
 	}
-
-	console.log('BADGES:', funderBadges);
 
 	return funderBadges;
 };

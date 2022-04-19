@@ -11,9 +11,18 @@ mutation Fund($input: FundingInput!) {
       amount
       status
       comment
+      media
       paidAt
       onChain
       address
+      funder {
+        user {
+          twitterHandle
+          imageUrl
+          username
+          id
+        }
+      }
     }
     amountSummary {
       total

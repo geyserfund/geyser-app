@@ -13,8 +13,8 @@ query GetProject($where: ProjectQueryInput!) {
     createdAt
     updatedAt
     expiresAt
-    active
     media
+    active
     ownerConfirmed
     fundsClaimed
     creationConfirmed
@@ -46,8 +46,6 @@ query GetProject($where: ProjectQueryInput!) {
     }
     sponsors {
       id
-      image
-      url
       user {
         id
         username 
@@ -88,6 +86,7 @@ query GetProjectFundingData($where: ProjectQueryInput!) {
       amount
       paidAt
       comment
+      media
       onChain
     }
   }
@@ -96,112 +95,57 @@ query GetProjectFundingData($where: ProjectQueryInput!) {
 
 export const QUERY_PROJECTS = gql`
 query projects {
-    projects {
+  projects {
+    id
+    title
+    name
+    type
+    description
+    balance
+    fundingGoal
+    createdAt
+    updatedAt
+    expiresAt
+    active
+    ownerConfirmed
+    fundsClaimed
+    creationConfirmed
+    media
+    owners {
       id
-      title
-      name
-      type
-      description
-      balance
-      fundingGoal
-      createdAt
-      updatedAt
-      expiresAt
-      active
-      ownerConfirmed
-      fundsClaimed
-      creationConfirmed
-      media
-      owners {
+      user {
         id
-        user {
-          id
-          username
-          twitterHandle
-          imageUrl
-        }
-      }
-      rewards {
-        id
-        cost
-        description
-        currency
-        name
-        backers
-      }
-      ambassadors {
-        id
-        user {
-          id
-          username 
-          twitterHandle
-          imageUrl
-        }
-      }
-      sponsors {
-        id
-        image
-        url
-        user {
-          id
-          user {
-            id
-            username 
-            twitterHandle
-            imageUrl
-          }
-        }
-      }
-      funders {
-        id
-        user {
-          id
-          image
-          url
-          user {
-            id
-            username 
-            twitterHandle
-            imageUrl
-          }
-        }
-        confirmed
-      }
-      fundingTxs {
-        id
-        funder {
-          user {
-            username
-            imageUrl
-            twitterHandle
-            connectedTwitter
-          }
-        }
-        grantees {
-          id
-          url
-          name
-        }
-        fundingTxs {
-          id
-          funder {
-            user {
-              username
-              imageUrl
-              twitterHandle
-              connectedTwitter
-            }
-            badges {
-              badge
-              description
-          }
-          }
-          amount
-          paidAt
-          comment
-          onChain
-        }
+        username
+        twitterHandle
+        imageUrl
       }
     }
-  }
+    funders {
+      id
+      user {
+        id
+        username 
+        twitterHandle
+        imageUrl
+      }
+      confirmed
+    }
+    fundingTxs {
+      id
+      amount
+      paidAt
+      comment
+      onChain
+      funder {
+        id
+        user {
+          username
+          imageUrl
+          twitterHandle
+          connectedTwitter
+        }
+      }
+      }
+    }
+}
 `;

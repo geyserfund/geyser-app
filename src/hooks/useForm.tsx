@@ -9,7 +9,6 @@ export interface IFundForm {
 	rewardsCost: number;
 	totalAmount: number;
 	comment: string;
-	gif: string | number;
 	anonymous: boolean;
 	shippingDestination: ShippingDestination;
 	shippingCost: number;
@@ -30,7 +29,6 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		rewardsCost: 0,
 		totalAmount: 0,
 		comment: '',
-		gif: '',
 		shippingDestination: shippingTypes.national,
 		shippingCost: 0,
 		anonymous: !(user && user.connectedTwitter),
@@ -62,7 +60,16 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 	};
 
 	const updateReward = ({id, count}:IRewardCount) => {
-		const newRewards = {...state.rewards, [`${id}`]: count};
+		const newRewards = { ...state.rewards };
+
+		if (!state.rewards[id]) {
+			if (count !== 0) {
+				newRewards[id] = count;
+			}
+		} else if (count === 0) {
+			delete newRewards[id];
+		}
+
 		let rewardsCost = 0;
 		if (rewards) {
 			Object.keys(newRewards).map((value:string) => {

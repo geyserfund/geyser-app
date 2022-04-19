@@ -31,7 +31,7 @@ import {
 } from '@chakra-ui/react';
 
 const initialFunding = {
-	id: '',
+	id: 0,
 	uuid: '',
 	invoiceId: '',
 	status: 'unpaid',
@@ -40,6 +40,7 @@ const initialFunding = {
 	address: '',
 	canceled: false,
 	comment: '',
+	media: '',
 	paidAt: '',
 	onChain: false,
 	funder: {

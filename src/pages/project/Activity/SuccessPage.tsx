@@ -1,6 +1,6 @@
 /* eslint-disable capitalized-comments */
 import React, { useEffect, useState } from 'react';
-import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
+import { Box, Text, VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
@@ -22,8 +22,6 @@ interface ISuccessPage {
 export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: ISuccessPage) => {
 	const [copy, setCopy] = useState(false);
 	const [newBadges, setNewBadges] = useState<IBadge[]>([]);
-
-	console.log(state);
 
 	const isMobile = isMobileMode();
 	const shareProjectWithfriends = () => {
@@ -95,19 +93,19 @@ export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: IS
 						🎁  The creator will get in touch with you.
 					</Text>}
 				{state.anonymous && newBadges.length > 0
-					&& <HStack>
-						<Text paddingBlockEnd="30px">
-						The amount you funded has earned you the following {newBadges.length === 1 ? 'badge' : 'badge'}: {newBadges.map(badge => badge.badge).join(', ')}.
-						Log in now to claim it!
-						</Text>
-						<ButtonComponent
-							primary={copy}
-							width="25%"
-							onClick={() => {}}
-						>
-					Log In
-						</ButtonComponent>
-					</HStack>
+					// && <HStack>
+					// 	<Text paddingBlockEnd="30px">
+					// 	The amount you funded has earned you the following {newBadges.length === 1 ? 'badge' : 'badge'}: {newBadges.map(badge => badge.badge).join(', ')}.
+					// 	Log in now to claim it!
+					// 	</Text>
+					// 	<ButtonComponent
+					// 		primary={copy}
+					// 		width="25%"
+					// 		onClick={() => {}}
+					// 	>
+					// Log In
+					// 	</ButtonComponent>
+					// </HStack>
 				}
 				{!state.anonymous
 					&& <Text textAlign="left" paddingBlockEnd="30px">
@@ -123,7 +121,6 @@ export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: IS
 				>
 					{copy ? 'Project Link Copied' : 'Share project with friends'}
 				</ButtonComponent>
-				{console.log('FUNDING TX: ', fundingTx)}
 			</Box>
 		</VStack></>
 	);

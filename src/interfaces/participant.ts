@@ -24,6 +24,7 @@ export interface ISponsor {
     user?: IUser;
     image?: string;
     url?: string;
+    confirmed: boolean;
 }
 
 export interface IGrantee {

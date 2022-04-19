@@ -3,14 +3,14 @@ import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { Avatar, Image } from '@chakra-ui/react';
 import { Badge } from '../ui';
-import { IProjectFunding, IProject } from '../../interfaces';
+import { IFundingTx, IProject } from '../../interfaces';
 import { SatoshiIcon } from '../icons';
 import { getDaysAgo, getRandomOrb } from '../../utils';
 import { fonts } from '../../constants/fonts';
 import { computeFunderBadges } from '../../helpers/computeBadges';
 
 interface IIdBar extends HTMLChakraProps<'div'> {
-	fundingTx: IProjectFunding
+	fundingTx: IFundingTx
 	project: IProject
 }
 
@@ -63,8 +63,8 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 			</Box>
 			<Box marginTop="6px" width="100%">
 				{fundingTx.comment && <Text mb="6px" fontFamily={fonts.solway}>{fundingTx.comment}</Text>}
-				{fundingTx.gif
-&& <Image src={`https://media.giphy.com/media/${fundingTx.gif}/giphy.gif`} alt="gif" width="100%" borderRadius="4px" />
+				{fundingTx.media
+&& <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" />
 				}
 				{timeAgo && <Text mt="6px" color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>{`${fundingTx.onChain ? '⛓' : '⚡️'} ${timeAgo} ago`}</Text>}
 			</Box>
