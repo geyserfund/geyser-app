@@ -1,14 +1,12 @@
 import { Avatar } from '@chakra-ui/avatar';
 import { HStack, Text } from '@chakra-ui/layout';
 import React from 'react';
-import { BadgeVariant } from '../ui';
 
 export interface IIdComponent {
 	URL: string;
 	username: string;
 	fullName: string;
 	twitter: boolean;
-	badge: BadgeVariant
 }
 
 export const IdComponent = ({ URL, username, fullName }: IIdComponent) => (

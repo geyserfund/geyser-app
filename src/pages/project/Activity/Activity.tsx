@@ -5,14 +5,13 @@ import { Card } from '../../../components/ui';
 import {
 	IFundingTx,
 	IProject,
-	IProjectFunding,
+	IFundingInput,
 	IRewardFundingInput,
-	IDonationFundingInput,
 	IFundingAmounts,
 } from '../../../interfaces';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import { MUTATION_FUND, MUTATION_FUND_WITH_REWARD } from '../../../graphql';
-import { QUERY_GET_FUNDING } from '../../../graphql';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { MUTATION_FUND, QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
+import { QUERY_GET_FUNDING_STATUS } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
 import { isDarkMode, isMobileMode, useNotification, sha256 } from '../../../utils';
@@ -24,7 +23,7 @@ import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage } from './InfoPage';
 import { fundingStages, IFundingStages, stageList } from '../../../constants';
-import {useFundState} from '../../../hooks';
+import { useFundState, IFundForm } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
 
 interface IActivityProps {
@@ -33,18 +32,7 @@ interface IActivityProps {
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const initialFunding = {
-	id: '',
-	invoiceId: '',
-	status: 'unpaid',
-	amount: 0,
-	paymentRequest: '',
-	address: '',
-	canceled: false,
-	comment: '',
-	paidAt: '',
-	onChain: false,
-};
+let fundInterval: any;
 
 const initialAmounts = {
 	total: 0,
@@ -53,10 +41,31 @@ const initialAmounts = {
 	rewardsCost: 0,
 };
 
-let fundInterval: any;
+const initialFunding = {
+	id: 0,
+	uuid: '',
+	invoiceId: '',
+	status: 'unpaid',
+	amount: 0,
+	paymentRequest: '',
+	address: '',
+	canceled: false,
+	comment: '',
+	media: '',
+	paidAt: '',
+	onChain: false,
+	funder: {
+		amountFunded: 0,
+		timesFunded: 0,
+		confirmed: false,
+		confirmedAt: '',
+		badges: [],
+	},
+};
 
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
+
 	const {btcRate} = useBtcContext();
 	const { toast } = useNotification();
 	const isDark = isDarkMode();
@@ -64,38 +73,57 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial);
 
-	console.log('PROJECT REWARDS:', project.rewards);
-
 	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
 
-	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
+	const [fundingTx, setFundingTx] = useState<IFundingTx>({ ...initialFunding, funder: { ...initialFunding.funder, user } });
 	const [amounts, setAmounts] = useState<IFundingAmounts>(initialAmounts);
-	const [fundingTxs, setFundingTxs] = useState<IProjectFunding[]>([]);
+	const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
+	const { loading, error, data: fundingData } = useQuery(
+		QUERY_PROJECT_FUNDING_DATA,
+		{
+			variables: { where: { id: project.id } },
+		},
+	);
+
 	const [fundProject, {
 		data, loading: fundLoading,
-	}] = project.type === 'reward' ? useMutation(MUTATION_FUND_WITH_REWARD) : useMutation(MUTATION_FUND);
+	}] = useMutation(MUTATION_FUND);
 
-	const [getFunding, { data: fundData, loading }] = useLazyQuery(QUERY_GET_FUNDING,
+	const [getFundingStatus, { data: fundingStatus }] = useLazyQuery(QUERY_GET_FUNDING_STATUS,
 		{
-			variables: { fundingTxId: fundingTx.id },
+			variables: { id: fundingTx.id },
 			fetchPolicy: 'network-only',
 		},
 	);
 
 	useEffect(() => {
-		if (project && project.fundingTxs) {
-			const unsortedFundingTxs = [...project.fundingTxs];
-			if (unsortedFundingTxs.length > 0) {
-				unsortedFundingTxs.sort((a, b) => parseInt(b.paidAt, 10) - parseInt(a.paidAt, 10));
-				setFundingTxs(unsortedFundingTxs);
-			}
+		if (fundingData && fundingData.project.fundingTxs) {
+			setFundingTxs(fundingData.project.fundingTxs);
 		}
-	}, [project.fundingTxs]);
+	}, [fundingData]);
+
+	useEffect(() => {
+		if (loading) {
+			setFundState(fundingStages.loading);
+		} else {
+			setFundState(fundingStages.initial);
+		}
+	}, [loading]);
+
+	useEffect(() => {
+		if (error) {
+			toast({
+				title: 'Something went wrong',
+				description: 'Please refresh the page',
+				status: 'error',
+			});
+		}
+	}, [error]);
 
 	useEffect(() => {
 		if (user && user.id) {
@@ -111,15 +139,16 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [state.anonymous]);
 
 	useEffect(() => {
-		if (fundData && fundData.getFundingTx) {
-			if (fundData.getFundingTx.status === 'paid' || fundData.getFundingTx.status === 'pending') {
-				const newTransactions = fundData.getFundingTx.status === 'pending' ? fundingTxs : [fundData.getFundingTx, ...fundingTxs];
-				setFundingTxs(newTransactions);
-				clearInterval(fundInterval);
-				gotoNextStage();
-			}
+		if (fundingStatus && fundingStatus.fundingTx && (fundingStatus.fundingTx.status === 'paid' || fundingStatus.fundingTx.status === 'pending')) {
+			const newTx = { ...fundingTx, status: fundingStatus.fundingTx.status };
+			const newTxs = fundingStatus.fundingTx.status === 'pending' ? fundingTxs : [newTx, ...fundingTxs];
+
+			setFundingTx(newTx);
+			setFundingTxs(newTxs);
+			clearInterval(fundInterval);
+			gotoNextStage();
 		}
-	}, [fundData]);
+	}, [fundingStatus]);
 
 	useEffect(() => {
 		if (fundState === fundingStages.completed || fundState === fundingStages.canceled || fundState) {
@@ -164,7 +193,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						status: 'info',
 					});
 				} else {
-					console.log(error);
 					toast({
 						title: 'Oops! Something went wrong with WebLN.',
 						description: 'Please use the invoice instead.',
@@ -172,18 +200,14 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					});
 				}
 
-				fundInterval = setInterval(getFunding, 2000);
+				fundInterval = setInterval(getFundingStatus, 1500);
 			});
 		}
 	}, [fundState]);
 
 	useEffect(() => {
 		if (data && fundState === fundingStages.form) {
-			if (data.fundWithReward && data.fundWithReward.success) {
-				setFundingTx(data.fundWithReward.fundingTx);
-				setAmounts(data.fundWithReward.amountSummary);
-				gotoNextStage();
-			} else if (data.fund && data.fund.success) {
+			if (data.fund && data.fund.fundingTx && data.fund.amountSummary) {
 				setFundingTx(data.fund.fundingTx);
 				setAmounts(data.fund.amountSummary);
 				gotoNextStage();
@@ -200,34 +224,47 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		resetForm();
 	};
 
+	const formatFundingInput = (state: IFundForm) => {
+		const {
+			donationAmount,
+			rewardsCost,
+			shippingCost: cost,
+			shippingDestination: destination,
+			rewards,
+			email,
+			anonymous,
+			comment,
+			media,
+		} = state;
+
+		const input: IFundingInput = {
+			projectId: Number(project.id),
+			anonymous,
+			...(donationAmount !== 0 && { donationInput: { donationAmount } }),
+			metadataInput: {
+				...(email && { email }),
+				...(media && { media }),
+				...(comment && { comment }),
+			},
+		};
+
+		if (Object.entries(state.rewards).length > 0) {
+			const rewardsArray = Object.keys(rewards).map(key => ({ id: parseInt(key, 10), quantity: rewards[key] }));
+			const filteredRewards = rewardsArray.filter(reward => reward.quantity !== 0);
+			const rewardInput: IRewardFundingInput = {
+				shipping: { cost, destination },
+				rewards: filteredRewards,
+				rewardsCost: Math.round(rewardsCost / btcRate),
+			};
+			input.rewardInput = rewardInput;
+		}
+
+		return input;
+	};
+
 	const handleFund = async () => {
 		try {
-			let input;
-
-			if (project.type === 'reward') {
-				const { amount, email, rewardsCost, rewards, ...formData } = state;
-				const rewardsArray = Object.keys(rewards).map(key => ({
-					projectRewardId: parseInt(key, 10),
-					quantity: rewards[key],
-				}));
-				const filteredRewards = rewardsArray.filter(reward => reward.quantity !== 0);
-				input = {
-					projectId: Number(project.id),
-					...formData,
-					email: email || null,
-					rewards: filteredRewards,
-					rewardsCost: Math.round(rewardsCost / btcRate),
-				} as IRewardFundingInput;
-			} else {
-				const { donationAmount, comment, anonymous } = state;
-				input = {
-					projectId: Number(project.id),
-					donationAmount,
-					comment,
-					anonymous,
-				} as IDonationFundingInput;
-			}
-
+			const input = formatFundingInput(state);
 			await fundProject({ variables: { input } });
 			gotoNextStage();
 		} catch (_) {
@@ -294,14 +331,16 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 					handleCloseButton={handleCloseButton}
 				/>;
 			case fundingStages.completed:
-				return <SuccessPage state={state} handleCloseButton={handleCloseButton} />;
+				return <SuccessPage
+					state={state}
+					project={project}
+					fundingTx={fundingTx}
+					handleCloseButton={handleCloseButton} />;
 
 			default:
 				return null;
 		}
 	};
-
-	console.log('checking fund state', fundState);
 
 	return (
 		<>

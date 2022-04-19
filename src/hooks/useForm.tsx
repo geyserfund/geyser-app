@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ShippingDestination, shippingTypes } from '../constants';
 import { AuthContext } from '../context';
 
@@ -7,12 +7,13 @@ import { IProjectReward, IRewardCount } from '../interfaces';
 export interface IFundForm {
 	donationAmount: number;
 	rewardsCost: number;
-	amount: number;
+	totalAmount: number;
 	comment: string;
 	anonymous: boolean;
 	shippingDestination: ShippingDestination;
 	shippingCost: number;
 	email: string;
+	media: string;
 	rewards: {[key:string]:number};
 }
 
@@ -26,12 +27,13 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 	const intialState = {
 		donationAmount: 0,
 		rewardsCost: 0,
-		amount: 0,
+		totalAmount: 0,
 		comment: '',
 		shippingDestination: shippingTypes.national,
 		shippingCost: 0,
 		anonymous: !(user && user.connectedTwitter),
 		email: '',
+		media: '',
 		rewards: {},
 	};
 
@@ -42,13 +44,32 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		_setState(newState);
 	};
 
+	useEffect(() => {
+		if (!user || !user.connectedTwitter) {
+			console.log('Setting to anon');
+			setState('anonymous', true);
+		} else {
+			console.log('Setting to non-anon');
+			setState('anonymous', false);
+		}
+	}, [user]);
+
 	const setState = (name: string, value: any) => {
 		const newState = {...state, [name]: value};
 		_setState(newState);
 	};
 
 	const updateReward = ({id, count}:IRewardCount) => {
-		const newRewards = {...state.rewards, [`${id}`]: count};
+		const newRewards = { ...state.rewards };
+
+		if (!state.rewards[id]) {
+			if (count !== 0) {
+				newRewards[id] = count;
+			}
+		} else if (count === 0) {
+			delete newRewards[id];
+		}
+
 		let rewardsCost = 0;
 		if (rewards) {
 			Object.keys(newRewards).map((value:string) => {
@@ -61,7 +82,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		}
 
 		console.log('chekcing rewards and rewards cost', newRewards, rewardsCost);
-		const newState = {...state, rewards: newRewards, rewardsCost};
+		const newState = {...state, rewards: newRewards, rewardsCost };
 		_setState(newState);
 	};
 
