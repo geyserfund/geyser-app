@@ -1,12 +1,13 @@
 /* eslint-disable capitalized-comments */
 import { RejectionError, WebLNProvider } from 'webln';
 import { useMutation, useLazyQuery } from '@apollo/client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { QrInvoice } from './QrInvoice';
 import { BubbleCursor } from './BubbleCursor';
 import { PaymentSuccess } from './PaymentSuccess';
 import { ButtonComponent, Linkin } from '../../../components/ui';
+import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
 import { SatoshiIcon } from '../../../components/icons';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
@@ -30,7 +31,8 @@ import {
 } from '@chakra-ui/react';
 
 const initialFunding = {
-	id: '',
+	id: 0,
+	uuid: '',
 	invoiceId: '',
 	status: 'unpaid',
 	amount: 0,
@@ -38,8 +40,16 @@ const initialFunding = {
 	address: '',
 	canceled: false,
 	comment: '',
+	media: '',
 	paidAt: '',
 	onChain: false,
+	funder: {
+		amountFunded: 0,
+		timesFunded: 0,
+		confirmed: false,
+		confirmedAt: '',
+		badges: [],
+	},
 };
 
 let fundInterval: any;
@@ -60,10 +70,11 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		setAmount(sats || 0);
 	}, [sats]);
 
-	const [comment, setComment] = useState('');
+	const { user } = useContext(AuthContext);
+	// const [comment, setComment] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { toast } = useNotification();
-	const [fundingTx, setFundingTx] = useState<IFundingTx>(initialFunding);
+	const [fundingTx, setFundingTx] = useState<IFundingTx>({ ...initialFunding, funder: { ...initialFunding.funder, user } });
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.form);
 	const [appearAs, setAppearAs] = useState('anonymous');
 
@@ -72,7 +83,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 	const handleCloseButton = () => {
 		setFundState(fundingStages.form);
 		setAmount(0);
-		setComment('');
+		// setComment('');
 		clearInterval(fundInterval);
 
 		if (setSats && clearCloseButton) {
@@ -209,10 +220,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 			setFundState(fundingStages.loading);
 
 			const input: IDonationFundingInput = {
-				projectId: Number(project.id),
-				comment,
 				donationAmount: amount,
-				anonymous: appearAs === 'anonymous',
 			};
 
 			await fundProject({ variables: { input } });
@@ -270,7 +278,7 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						<Text mt={5}>Comment (optional)</Text>
 						<Textarea
 							name="comment"
-							onChange={event => setComment(event.target.value) }
+							// onChange={event => setComment(event.target.value) }
 							placeholder="Add a comment..."
 							focusBorderColor="#20ECC7"
 							resize="none"

@@ -1,14 +1,20 @@
 import { ShippingDestination } from '../constants';
+import { IFunder } from './participant';
 
 export interface IFundingTx {
-   id: string;
+   id: number;
+   uuid: string;
    invoiceId: string;
    comment: string;
+   media: string | number;
    status: string;
    amount: number;
    paymentRequest: string;
    address: string;
    canceled: boolean;
+   funder: IFunder;
+   paidAt: string;
+   onChain: boolean;
 }
 
 export interface IFundingReward {
@@ -25,25 +31,35 @@ export interface IFundingAmounts {
 }
 
 interface IFundingRewardWithoutCost {
-    projectRewardId: number;
+    id: number;
     quantity: number;
 }
 
-export interface IDonationFundingInput {
+export interface IFundingInput {
     projectId: number;
-    donationAmount: number;
-    comment: string | null;
     anonymous: boolean;
+    donationInput?: IDonationFundingInput;
+    rewardInput?: IRewardFundingInput;
+    metadataInput?: IMetadataFundingInput;
+}
+
+export interface IDonationFundingInput {
+    donationAmount: number;
 }
 
 export interface IRewardFundingInput {
-    projectId: number;
-    donationAmount: number | null;
     rewardsCost: number;
     rewards: IFundingRewardWithoutCost[];
-    shippingDestination: ShippingDestination;
-    shippingCost: number;
-    comment: string | null;
-    anonymous: boolean;
-    email: string;
+    shipping: IShippingFundingInput;
+}
+
+export interface IShippingFundingInput {
+    destination: ShippingDestination;
+    cost: number;
+}
+
+export interface IMetadataFundingInput {
+    comment?: string;
+    email?: string;
+    media?: string;
 }

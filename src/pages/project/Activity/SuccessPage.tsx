@@ -1,3 +1,4 @@
+/* eslint-disable capitalized-comments */
 import React, { useEffect, useState } from 'react';
 import { Box, Text, VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
@@ -7,15 +8,20 @@ import { CloseButton } from '@chakra-ui/react';
 import { BiCopyAlt } from 'react-icons/bi';
 import ReactConfetti from 'react-confetti';
 import { IFundForm } from '../../../hooks';
+import { IBadge, IFundingTx, IProject } from '../../../interfaces';
+import { computeFunderBadges } from '../../../helpers/computeBadges';
+// import { MUTATION_CLAIM_FUNDING } from '../../../graphql';
 
 interface ISuccessPage {
 	state: IFundForm
+	fundingTx: IFundingTx
+	project: IProject
 	handleCloseButton: () => void
 }
 
-export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
+export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: ISuccessPage) => {
 	const [copy, setCopy] = useState(false);
-	console.log(state);
+	const [newBadges, setNewBadges] = useState<IBadge[]>([]);
 
 	const isMobile = isMobileMode();
 	const shareProjectWithfriends = () => {
@@ -24,6 +30,29 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 	};
 
 	const botTwitterUrl = 'https://twitter.com/geyserfunders';
+
+	// const [claimFunding, {
+	// 	data, loading,
+	// }] = useMutation(MUTATION_CLAIM_FUNDING);
+
+	// const claimFunding = () => {
+
+	// };
+
+	useEffect(() => {
+		if (state.anonymous) {
+			const badges = computeFunderBadges({
+				project,
+				funder: {
+					...fundingTx.funder,
+					timesFunded: 1,
+					amountFunded: fundingTx.amount,
+					confirmedAt: fundingTx.paidAt,
+				},
+			});
+			setNewBadges(badges);
+		}
+	}, []);
 
 	useEffect(() => {
 		if (copy) {
@@ -59,14 +88,30 @@ export const SuccessPage = ({ state, handleCloseButton }: ISuccessPage) => {
 				<Text paddingBlockEnd="30px">
 					The payment went through. You can now share this campaign with friends.
 				</Text>
-				{(state.rewards && state.rewards.length > 0)
+				{(state.rewards && Object.entries(state.rewards).length > 0)
 					&& <Text textAlign="left" width="100%" paddingBlockEnd="10px">
 						🎁  The creator will get in touch with you.
 					</Text>}
+				{state.anonymous && newBadges.length > 0
+					// && <HStack>
+					// 	<Text paddingBlockEnd="30px">
+					// 	The amount you funded has earned you the following {newBadges.length === 1 ? 'badge' : 'badge'}: {newBadges.map(badge => badge.badge).join(', ')}.
+					// 	Log in now to claim it!
+					// 	</Text>
+					// 	<ButtonComponent
+					// 		primary={copy}
+					// 		width="25%"
+					// 		onClick={() => {}}
+					// 	>
+					// Log In
+					// 	</ButtonComponent>
+					// </HStack>
+				}
 				{!state.anonymous
 					&& <Text textAlign="left" paddingBlockEnd="30px">
 						🤖  Check your Twitter! Our bot <a href={botTwitterUrl}>@geyserfunders</a> just sent out a tweet.
-					</Text>}
+					</Text>
+				}
 				<ButtonComponent
 					standard
 					primary={copy}

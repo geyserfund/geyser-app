@@ -55,7 +55,7 @@ export const DonationBased = ({
 							<SatoshiIcon isDark={isDarkMode()} fontSize="30px" marginRight="10px" marginBottom="5px" />
 						</Box>
 					</Box>
-					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * state.amount}`}</Text>
+					<Text color="brand.textGrey" fontSize="12px">{`$ ${btcRate * state.totalAmount}`}</Text>
 				</Box>
 
 			</Box>
