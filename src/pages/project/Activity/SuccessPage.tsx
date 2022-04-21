@@ -10,6 +10,7 @@ import ReactConfetti from 'react-confetti';
 import { IFundForm } from '../../../hooks';
 import { IBadge, IFundingTx, IProject } from '../../../interfaces';
 import { computeFunderBadges } from '../../../helpers/computeBadges';
+import { BotTwitterUrl } from '../../../constants';
 // import { MUTATION_CLAIM_FUNDING } from '../../../graphql';
 
 interface ISuccessPage {
@@ -28,8 +29,6 @@ export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: IS
 		navigator.clipboard.writeText(window.location.href);
 		setCopy(true);
 	};
-
-	const botTwitterUrl = 'https://twitter.com/geyserfunders';
 
 	// const [claimFunding, {
 	// 	data, loading,
@@ -109,7 +108,7 @@ export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: IS
 				}
 				{!state.anonymous
 					&& <Text textAlign="left" paddingBlockEnd="30px">
-						🤖  Check your Twitter! Our bot <a href={botTwitterUrl}>@geyserfunders</a> just sent out a tweet.
+						🤖  Check your Twitter! Our bot <a href={BotTwitterUrl}>@geyserfunders</a> just sent out a tweet.
 					</Text>
 				}
 				<ButtonComponent
