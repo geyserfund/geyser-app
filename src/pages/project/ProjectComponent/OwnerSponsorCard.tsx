@@ -69,19 +69,21 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 						<Wrap>
 							{
 								ambassadors.map((ambassador: IParticipant) => (
-									<WrapItem key={ambassador.user.username} display="inline-block">
-										<Link href={`https://twitter.com/${ambassador.user.twitterHandle}`} isExternal >
-											<HStack className={classes.amabassadorBlock} spacing="5px">
-												<Avatar
-													width="24px" height="24px"
-													name={ambassador.user.twitterHandle} src={ambassador.user.imageUrl}
-												/>
-												<Text fontSize="14px" >
-													{`${ambassador.user.twitterHandle}`}
-												</Text>
-											</HStack>
-										</Link>
-									</WrapItem>
+									ambassador.confirmed
+										? <WrapItem key={ambassador.user.username} display="inline-block">
+											<Link href={`https://twitter.com/${ambassador.user.twitterHandle}`} isExternal >
+												<HStack className={classes.amabassadorBlock} spacing="5px">
+													<Avatar
+														width="24px" height="24px"
+														name={ambassador.user.twitterHandle} src={ambassador.user.imageUrl}
+													/>
+													<Text fontSize="14px" >
+														{`${ambassador.user.twitterHandle}`}
+													</Text>
+												</HStack>
+											</Link>
+										</WrapItem>
+										: <></>
 								))
 							}
 							<WrapItem>
@@ -95,32 +97,34 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 						<Wrap >
 							{
 								sponsors.map((sponsor: ISponsor) => (
-									<WrapItem key={sponsor.id} display="inline-block">
-										{ sponsor.user
-											? <Link href={`https://twitter.com/${sponsor.user.twitterHandle}`} isExternal>
-												<HStack spacing="5px" className={classes.amabassadorBlock}>
-													<Avatar
-														width="24px" height="24px"
-														name={sponsor.user.twitterHandle}
-														src={sponsor.user.imageUrl} />
-													<Text fontSize="14px">
-														{`${sponsor.user?.twitterHandle}`}
-													</Text>
-												</HStack>
-											</Link>
-											: <Link href={sponsor.url} isExternal>
-												<HStack spacing="5px" className={classes.amabassadorBlock}>
-													<Avatar
-														width="24px" height="24px"
-														name={sponsor.name}
-														src={sponsor.image} />
-													<Text fontSize="14px">
-														{`${sponsor.name}`}
-													</Text>
-												</HStack>
-											</Link>
-										}
-									</WrapItem>
+									sponsor.confirmed
+										? <WrapItem key={sponsor.id} display="inline-block">
+											{ sponsor.user
+												? <Link href={`https://twitter.com/${sponsor.user.twitterHandle}`} isExternal>
+													<HStack spacing="5px" className={classes.amabassadorBlock}>
+														<Avatar
+															width="24px" height="24px"
+															name={sponsor.user.twitterHandle}
+															src={sponsor.user.imageUrl} />
+														<Text fontSize="14px">
+															{`${sponsor.user?.twitterHandle}`}
+														</Text>
+													</HStack>
+												</Link>
+												: <Link href={sponsor.url} isExternal>
+													<HStack spacing="5px" className={classes.amabassadorBlock}>
+														<Avatar
+															width="24px" height="24px"
+															name={sponsor.name}
+															src={sponsor.image} />
+														<Text fontSize="14px">
+															{`${sponsor.name}`}
+														</Text>
+													</HStack>
+												</Link>
+											}
+										</WrapItem>
+										: <></>
 								))
 							}
 							<WrapItem>

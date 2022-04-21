@@ -1,15 +1,15 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_GET_FUNDING = gql`
-query GetFundingTx($fundingTxId: BigInt!) {
-    getFundingTx(fundingTxId: $fundingTxId) {
+query GetFundingTx($id: BigInt!) {
+    fundingTx(id: $id) {
       id
       invoiceId
       paymentRequest
       amount
       status
-      canceled
       comment
+      media
       paidAt
       onChain
       funder {
@@ -19,11 +19,15 @@ query GetFundingTx($fundingTxId: BigInt!) {
           username
           id
         }
-        badges {
-          badge
-          description
-        }
       }
     }
   }
+`;
+
+export const QUERY_GET_FUNDING_STATUS = gql`
+query GetFundingTxStatus($id: BigInt!) {
+    fundingTx(id: $id) {
+      status
+  }
+}
 `;

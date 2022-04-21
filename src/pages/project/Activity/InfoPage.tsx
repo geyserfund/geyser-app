@@ -10,7 +10,7 @@ import { isMobileMode } from '../../../utils';
 import {Button } from '@chakra-ui/react';
 
 import { useStyles } from './styles';
-import { IProject, IProjectFunding } from '../../../interfaces';
+import { IProject, IFundingTx } from '../../../interfaces';
 import { Countdown } from './Countdown';
 
 interface IInfoPage {
@@ -19,7 +19,7 @@ interface IInfoPage {
     handleFundProject: () => void;
     loading: boolean;
     btcRate: number;
-    fundingTxs: IProjectFunding[]
+    fundingTxs: IFundingTx[]
 }
 
 export const InfoPage = ({
@@ -82,7 +82,7 @@ export const InfoPage = ({
 				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
 					{
 						fundingTxs.map((fundingTx, index) => (
-							<IdBar key={index} fundingTx={fundingTx} />
+							<IdBar key={index} fundingTx={fundingTx} project={project}/>
 						))
 					}
 				</VStack>

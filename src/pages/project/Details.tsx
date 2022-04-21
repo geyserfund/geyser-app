@@ -8,7 +8,7 @@ import { colors } from '../../constants';
 import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { getDaysAgo, isDarkMode, isMobileMode } from '../../utils';
-import { Craig, King, Toni } from './ProjectLayout';
+import { Craig, King, Toni, Yeferson } from './ProjectLayout';
 
 type Rules = string
 
@@ -112,6 +112,10 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 
 		if (project.name === 'day-of-genesis') {
 			return <Toni project={project} />;
+		}
+
+		if (project.name === 'lightning-rebel') {
+			return <Yeferson project={project} />;
 		}
 	};
 

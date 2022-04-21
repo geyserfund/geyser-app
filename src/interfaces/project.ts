@@ -1,4 +1,5 @@
-import { BadgeVariant } from '../components/ui';
+import { IParticipant, IFunder, ISponsor, IGrantee } from './participant';
+import { IFundingTx } from './funding';
 
 export type IProjectType = 'reward' | 'grant' | 'donation'
 
@@ -23,7 +24,7 @@ export interface IProject {
     funders: IFunder[];
     sponsors: ISponsor[];
     grantees: IGrantee[];
-    fundingTxs: IProjectFunding[];
+    fundingTxs: IFundingTx[];
     rewards?: IProjectReward[]
 }
 
@@ -34,48 +35,6 @@ export interface IProjectReward {
     name: string;
     description: string;
     backers: number;
-}
-
-export interface IGrantee {
-    id: number;
-    url: string;
-    name: string;
-}
-
-export interface IUser {
-    id: string;
-    username: string;
-    imageUrl: string;
-    URL: string;
-    fullName: string;
-    twitter: boolean;
-    twitterHandle: string;
-    badge: BadgeVariant;
-    amount: number;
-}
-
-export interface IProjectFunding {
-    id: number;
-    funder: IFunder;
-    amount:string;
-    comment:string;
-    paidAt:string;
-    onChain: boolean;
-}
-
-export interface IParticipant {
-    user: IUser;
-    confirmed: boolean;
-}
-
-export interface IFunder extends IParticipant {
-    amountFunded: number;
-    badges: IFunderBadge[];
-}
-
-export interface IFunderBadge {
-    badge: string;
-    description: string;
 }
 
 export interface IProjectDetail {
@@ -102,14 +61,6 @@ export interface IProjectUpdate {
     bodyTitle?: string;
     body?: string[];
     images?: string[];
-}
-
-export interface ISponsor {
-    id: number;
-    name: string;
-    user?: IUser;
-    image?: string;
-    url?: string;
 }
 
 export interface IRewardCount {
