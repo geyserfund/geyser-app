@@ -37,6 +37,7 @@ query GetProject($where: ProjectQueryInput!) {
     }
     ambassadors {
       id
+      confirmed
       user {
         id
         username 
@@ -46,6 +47,9 @@ query GetProject($where: ProjectQueryInput!) {
     }
     sponsors {
       id
+      confirmed
+      url
+      image
       user {
         id
         username 
@@ -122,13 +126,13 @@ query projects {
     }
     funders {
       id
+      confirmed
       user {
         id
         username 
         twitterHandle
         imageUrl
       }
-      confirmed
     }
     fundingTxs {
       id
