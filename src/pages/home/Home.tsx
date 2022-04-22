@@ -1,20 +1,29 @@
 import React, { useEffect } from 'react';
 import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
-import { ButtonComponent, Linkin } from '../../components/ui';
-import { Footer, ProjectCard, ProjectComingSoon } from '../../components/molecules';
-import { isDarkMode, isMobileMode, useNotification } from '../../utils';
-import { fonts } from '../../constants/fonts';
 import {
-	geyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo,
-	StartCrowdFundUrl, SubscribeUrl,
+	// ButtonComponent, Linkin,
+	SatoshiAmount } from '../../components/ui';
+import { Footer,
+	//  ProjectCard, ProjectComingSoon
+} from '../../components/molecules';
+import { isDarkMode, isMobileMode, randomIntFromInterval, useNotification } from '../../utils';
+// Import { fonts } from '../../constants/fonts';
+import {
+	colors,
+	// GeyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo,
+	LaunchImageUrl,
+	// StartCrowdFundUrl, SubscribeUrl,
 } from '../../constants';
 import { createUseStyles } from 'react-jss';
+import { LiveProject } from '../../components/molecules/LiveProject';
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS } from '../../graphql';
-import Loader from '../../components/ui/Loader';
-import { IProject } from '../../interfaces';
+// Import { useQuery } from '@apollo/client';
+// import { QUERY_PROJECTS } from '../../graphql';
+// import Loader from '../../components/ui/Loader';
+// import { IProject } from '../../interfaces';
 
-type RuleNames = 'titles' | 'headers' | 'texts'
+type RuleNames = string
 
 interface IStyleProps {
 	isMobile?: boolean
@@ -32,6 +41,23 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 	texts: ({ isMobile }: IStyleProps) => ({
 		fontSize: isMobile ? '15px' : '20px',
 	}),
+	pageStats: {
+		width: '100%',
+		height: '80px',
+		boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+		borderRadius: '4px',
+		justifyContent: 'space-between',
+		padding: '50px',
+	},
+	boldText: {
+		fontSize: '22px',
+		fontWeight: '600',
+		color: colors.normalLightGreen,
+	},
+	sectionTitle: {
+		fontSize: '16px',
+		color: colors.textGrey,
+	},
 });
 
 export const Home = () => {
@@ -55,6 +81,8 @@ export const Home = () => {
 
 	const projects = (data && data.projects) || [];
 
+	const project = projects && projects.length > 0 ? projects[randomIntFromInterval(0, (projects.length - 1))] : null;
+
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
@@ -62,15 +90,57 @@ export const Home = () => {
 			padding="0px 10px"
 		>
 			<VStack
-				spacing="10px"
+				spacing="40px"
 				width="100%"
-				maxWidth="780px"
+				maxWidth="1080px"
 				padding={isMobile ? '0px' : '0px 20px'}
 				display="flex"
 				flexDirection="column"
 				alignItems="flex-start"
 			>
-				<Box width="100%" display="flex" justifyContent="center">
+				<HStack justifyContent="space-between" width="100%" marginTop="20px" marginBottom="45px">
+					<VStack alignItems="flex-start" spacing="25px">
+						<VStack spacing={0} alignItems="flex-start">
+							<Text fontSize="33px">
+								Bitcoin ideas can change the world.
+							</Text>
+							<Text fontSize="33px">
+								Play a part by funding them on Geyser.
+							</Text>
+						</VStack>
+						<Text fontSize="18px" maxWidth="685px">
+						Geyser is a global crowdfunding platform that helps Bitcoin builders and creators with the funding their projects need to burst out into the world.
+						</Text>
+						<HStack className={classes.pageStats}>
+							<VStack>
+								<Text className={classes.boldText}>3</Text>
+								<Text>Projects</Text>
+							</VStack>
+							<VStack>
+								<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>8,142,299</SatoshiAmount>
+								<Text>Sats</Text>
+							</VStack>
+							<VStack>
+								<Text className={classes.boldText}>17</Text>
+								<Text>Plebs</Text>
+							</VStack>
+						</HStack>
+					</VStack>
+					<Box>
+						<Image src={LaunchImageUrl} />
+					</Box>
+				</HStack>
+				<VStack alignItems="flex-start" width="100%">
+					<Text className={classes.sectionTitle}>LIVE PROJECTS</Text>
+					<LiveProject loading={loading} project={project}/>
+				</VStack>
+				<VStack alignItems="flex-start" width="100%">
+					<Text className={classes.sectionTitle}>GAMING</Text>
+				</VStack>
+				<VStack alignItems="flex-start" width="100%">
+					<Text className={classes.sectionTitle}>EDUCATION</Text>
+				</VStack>
+				{/* <Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeLogo} height="250px" />
 				</Box>
 				<Box width="100%" fontFamily={fonts.header} fontWeight={700} textAlign={'center'} paddingBottom={'20px'}>
@@ -152,7 +222,7 @@ export const Home = () => {
 					<Text className={classes.texts}>
 						Geyser was inspired by a natural phenomena: the piling up of heat and pressure which ejects water turbulently up into the sky, in a beautiful display of energy. We believe that crowds have the power to do the same with ideas by throwing forth intermittend displays of solidarity and support until projects gush out from theory to practice.
 					</Text>
-				</Box>
+				</Box> */}
 			</VStack>
 			<Footer />
 		</VStack >
