@@ -11,6 +11,7 @@ import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
+import { LaunchIdea } from '../pages/launchIdea';
 
 export const customHistory = createBrowserHistory();
 
@@ -22,6 +23,9 @@ export const Router = () => (
 				<Switch>
 					<Route path="/grants">
 						<GrantsLanding />
+					</Route>
+					<Route path="/launch">
+						<LaunchIdea />
 					</Route>
 					<Route path="/project/:projectId">
 						<Project />
