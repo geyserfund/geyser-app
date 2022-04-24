@@ -146,7 +146,7 @@ export const Home = () => {
 				</VStack>
 				<VStack alignItems="flex-start" width="100%" position="relative">
 					<Text className={classes.sectionTitle}>CLOSED PROJECTS</Text>
-					<ProjectBars loading={loading} projects={[...projects, ...projects, ...projects]} />
+					<ProjectBars loading={loading} projects={[...projects]} />
 				</VStack>
 				{/* <Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeLogo} height="250px" />

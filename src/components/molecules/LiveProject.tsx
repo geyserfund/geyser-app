@@ -39,7 +39,14 @@ export const LiveProject = ({loading, project}: ILiveProject) => {
 			<Box flex="1" height="100%" borderRadius="4px" overflow="hidden">
 				<Image src={image} width="100%" height="100%"/>
 			</Box>
-			<VStack height="100%" flex="1" alignItems="flex-start" justifyContent="flex-start" padding={isMobile ? '20px 0px' : '0px 20px'}>
+			<VStack
+				height="100%"
+				width={isMobile ? '100%' : undefined }
+				flex="1"
+				alignItems="flex-start"
+				justifyContent="flex-start"
+				padding={isMobile ? '20px 0px' : '0px 20px'}
+			>
 				<Text fontSize="33px" fontWeight={700}>{project.title}</Text>
 				<HStack>
 					<Avatar height="33px" width="33px" name={owner.user.username} src={owner.user.imageUrl}/>
