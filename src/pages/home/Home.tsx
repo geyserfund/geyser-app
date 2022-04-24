@@ -18,6 +18,7 @@ import { createUseStyles } from 'react-jss';
 import { LiveProject } from '../../components/molecules/LiveProject';
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS } from '../../graphql';
+import { ProjectBars } from '../../components/molecules/ProjectBars';
 // Import { useQuery } from '@apollo/client';
 // import { QUERY_PROJECTS } from '../../graphql';
 // import Loader from '../../components/ui/Loader';
@@ -87,18 +88,27 @@ export const Home = () => {
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
 			position="relative"
-			padding="0px 10px"
+			padding="0px 0px"
 		>
 			<VStack
 				spacing="40px"
 				width="100%"
-				maxWidth="1080px"
-				padding={isMobile ? '0px' : '0px 20px'}
+				maxWidth="1280px"
+				padding={isMobile ? '0px 10px' : '0px 40px'}
+				marginBottom="40px"
 				display="flex"
 				flexDirection="column"
 				alignItems="flex-start"
 			>
-				<HStack justifyContent="space-between" width="100%" marginTop="20px" marginBottom="45px">
+				<Box
+					display="flex"
+					flexDirection={isMobile ? 'column-reverse' : 'row'}
+					justifyContent="space-between"
+					width="100%"
+					marginTop="10px"
+					marginBottom="45px"
+					alignSelf="center"
+				>
 					<VStack alignItems="flex-start" spacing="25px">
 						<VStack spacing={0} alignItems="flex-start">
 							<Text fontSize="33px">
@@ -129,16 +139,14 @@ export const Home = () => {
 					<Box>
 						<Image src={LaunchImageUrl} />
 					</Box>
-				</HStack>
+				</Box>
 				<VStack alignItems="flex-start" width="100%">
 					<Text className={classes.sectionTitle}>LIVE PROJECTS</Text>
 					<LiveProject loading={loading} project={project}/>
 				</VStack>
-				<VStack alignItems="flex-start" width="100%">
-					<Text className={classes.sectionTitle}>GAMING</Text>
-				</VStack>
-				<VStack alignItems="flex-start" width="100%">
-					<Text className={classes.sectionTitle}>EDUCATION</Text>
+				<VStack alignItems="flex-start" width="100%" position="relative">
+					<Text className={classes.sectionTitle}>CLOSED PROJECTS</Text>
+					<ProjectBars loading={loading} projects={[...projects, ...projects, ...projects]} />
 				</VStack>
 				{/* <Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeLogo} height="250px" />

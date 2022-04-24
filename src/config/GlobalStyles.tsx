@@ -17,21 +17,20 @@ export const GlobalStyles = () => (
             font-style: normal;
             font-display: swap;
         }
-        /* custom scrollbar */
+
+
         ::-webkit-scrollbar {
-        width: 20px;
-        }
-
-        ::-webkit-scrollbar-track {
-        background-color: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-        background-color: #d6dee1;
-        border-radius: 20px;
-        border: 6px solid transparent;
-        background-clip: content-box;
-        }
+            width: 8px;
+            height: 5px;
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: rgba(90, 90, 90,0.2);
+          }
+          
+          ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+          }
 
         button:focus {
             box-shadow: none !important;
@@ -39,6 +38,9 @@ export const GlobalStyles = () => (
 
         ::-webkit-scrollbar-thumb:hover {
         background-color: #a8bbbf;
+        }
+        body {
+            overflow: overlay;
         }
       `}
 	/>

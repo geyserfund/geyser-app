@@ -65,7 +65,7 @@ export const NavBar = () => {
 					display="flex"
 					width="100%"
 					justifyContent="space-between"
-					margin={isMobile ? '10px' : '10px 20px 10px 40px'}
+					margin={isMobile ? '10px' : '10px 40px 10px 40px'}
 				>
 					<HStack
 						spacing="25px"

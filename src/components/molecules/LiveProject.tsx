@@ -1,9 +1,9 @@
-import { Avatar, Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Image, Skeleton, SkeletonCircle, Stack, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { useBtcContext } from '../../context/btc';
 import { IProject } from '../../interfaces';
+import { isMobileMode } from '../../utils';
 import { ButtonComponent, SatoshiAmount } from '../ui';
-import Loader from '../ui/Loader';
 
 interface ILiveProject {
     loading: boolean
@@ -12,13 +12,11 @@ interface ILiveProject {
 }
 
 export const LiveProject = ({loading, project}: ILiveProject) => {
-	console.log('blah blah');
+	const isMobile = isMobileMode();
 	const {btcRate} = useBtcContext();
 
 	if (loading || !project) {
-		return (<VStack width="100%" height="100px" justifyContent="center" alignItems="center">
-			<Loader />
-		</VStack>);
+		return <LiveProjectSkeleton />;
 	}
 
 	console.log('checking media', project);
@@ -30,11 +28,18 @@ export const LiveProject = ({loading, project}: ILiveProject) => {
 	console.log('checking percentage', goalInSatoshi, btcRate, project, percentage);
 
 	return (
-		<HStack spacing="25px" width="100%" maxHeight="290px" alignItems="flex-start">
+		<Box
+			display="flex"
+			flexDirection={isMobile ? 'column' : 'row'}
+			spacing="25px"
+			width="100%"
+			maxWidth="925px"
+			alignItems="flex-start"
+		>
 			<Box flex="1" height="100%" borderRadius="4px" overflow="hidden">
 				<Image src={image} width="100%" height="100%"/>
 			</Box>
-			<VStack height="100%" flex="1" alignItems="flex-start" justifyContent="flex-start">
+			<VStack height="100%" flex="1" alignItems="flex-start" justifyContent="flex-start" padding={isMobile ? '20px 0px' : '0px 20px'}>
 				<Text fontSize="33px" fontWeight={700}>{project.title}</Text>
 				<HStack>
 					<Avatar height="33px" width="33px" name={owner.user.username} src={owner.user.imageUrl}/>
@@ -57,6 +62,34 @@ export const LiveProject = ({loading, project}: ILiveProject) => {
 						View Project
 				</ButtonComponent>
 			</VStack>
-		</HStack>
+		</Box>
 	);
+};
+
+export const LiveProjectSkeleton = () => {
+	const isMobile = isMobileMode();
+
+	return (
+		<Box
+			display="flex"
+			flexDirection={isMobile ? 'column' : 'row'}
+			spacing="25px"
+			width="100%"
+			maxWidth="925px"
+			alignItems="flex-start"
+		>
+			<Skeleton height="290px" flex={1}/>
+			<Stack flex="1" spacing="20px" padding={isMobile ? '20px 0px' : '0px 20px'} width={isMobile ? '100%' : undefined}>
+				<Skeleton height="50px" />
+				<HStack>
+					<SkeletonCircle />
+					<Skeleton height="20px" width="100px"/>
+				</HStack>
+				<Stack>
+					<Skeleton height="20px" />
+					<Skeleton height="20px" />
+					<Skeleton height="20px" />
+				</Stack>
+			</Stack>
+		</Box>);
 };
