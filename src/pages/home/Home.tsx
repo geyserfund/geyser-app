@@ -82,8 +82,11 @@ export const Home = () => {
 
 	const projects = (data && data.projects) || [];
 
+	const summary = data && data.summary;
+
 	const project = projects && projects.length > 0 ? projects[randomIntFromInterval(0, (projects.length - 1))] : null;
 
+	console.log('checking summary', summary);
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}

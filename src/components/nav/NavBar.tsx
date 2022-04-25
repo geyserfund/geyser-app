@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
-import { ButtonComponent, Linkin } from '../ui';
+import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
 import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
@@ -12,7 +12,7 @@ import { ConnectTwitter } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
-import { StartCrowdFundUrl } from '../../constants';
+// Import { StartCrowdFundUrl } from '../../constants';
 import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
 import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
@@ -50,6 +50,10 @@ export const NavBar = () => {
 			customHistory.replace(customHistory.location.pathname, {});
 		}
 	}, [state]);
+
+	const handleLaunch = () => {
+		history.push('/launch');
+	};
 
 	return (
 		<>
@@ -97,17 +101,16 @@ export const NavBar = () => {
 							<NavMenu user={user} logout={logout} />
 						</> : (
 							<Box>
-								<Linkin href={StartCrowdFundUrl} isExternal >
-									<ButtonComponent
-										leftIcon={<AddIcon />}
-										primary
-										standard
-										marginRight="12px"
-										width="220px"
-									>
-										Start a Crowdfund
-									</ButtonComponent>
-								</Linkin>
+								<ButtonComponent
+									leftIcon={<AddIcon />}
+									primary
+									standard
+									marginRight="12px"
+									width="220px"
+									onClick={handleLaunch}
+								>
+										Launch your idea
+								</ButtonComponent>
 								{
 									user.id
 										? <ButtonComponent

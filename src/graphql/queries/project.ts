@@ -145,7 +145,12 @@ query projects {
           connectedTwitter
         }
       }
-      }
     }
+  }
+  summary {
+    projectsCount
+    fundersCount
+    fundedTotal
+  }
 }
 `;

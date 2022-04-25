@@ -1,10 +1,11 @@
 import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
+import { createCreatorRecord } from '../../api';
 import { EnvelopeIcon, LighteningIcon, RopeIcon } from '../../components/icons';
 import { ButtonComponent, Card, SectionTitle, TextArea, TextBox } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
-import { isMobileMode } from '../../utils';
+import { isMobileMode, useNotification } from '../../utils';
 
 const useStyles = createUseStyles({
 	iconContainer: {
@@ -27,6 +28,8 @@ export const LaunchIdea = () => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
 
+	const { toast } = useNotification();
+
 	const [form, setForm] = useState({email: '', description: ''});
 	const [submitting, setSubmitting] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
@@ -39,11 +42,46 @@ export const LaunchIdea = () => {
 		}
 	};
 
-	const handleSubmitForm = () => {
-		setSubmitting(true);
-		setTimeout(() => {
+	const handleSubmitForm = async () => {
+		if (!form.email) {
+			toast({
+				title: 'Empty email',
+				description: 'please provide your email',
+				status: 'error',
+			});
+		}
+
+		if (!form.description) {
+			toast({
+				title: 'Empty description',
+				description: 'description of your idea is required',
+				status: 'error',
+			});
+		}
+
+		try {
+			setSubmitting(true);
+			const records = [{
+				fields: {
+					Email: form.email,
+					Project: form.description,
+					Type: [
+						'Creator',
+					],
+				},
+			}];
+			const value = await createCreatorRecord({records});
 			setSubmitted(true);
-		}, 2000);
+			console.log('checking repsonse value', value);
+		} catch (error) {
+			console.log('checking error', error);
+			toast({
+				title: 'Something went wrong',
+				description: 'Please try again',
+				status: 'error',
+			});
+		}
+
 		setSubmitting(false);
 	};
 
@@ -57,45 +95,6 @@ export const LaunchIdea = () => {
 		</Card>
 	);
 
-	const SubmitForm = () => (
-		<Card className={classes.cardContainer}>
-			<VStack spacing="30px">
-				<Text fontSize="33px" fontWeight={700}>Submit project idea</Text>
-				<VStack width="100%" alignItems="flex-start">
-					<SectionTitle>Your email/contact</SectionTitle>
-					<TextBox
-						type="email"
-						name="email"
-						fontSize="14px"
-						placeholder="satoshi@geyser.fund"
-						value={form.email}
-						onChange={handleChange}
-					/>
-				</VStack>
-				<VStack width="100%" alignItems="flex-start">
-					<SectionTitle>Your idea</SectionTitle>
-					<TextArea
-						pr={16}
-						name="description"
-						fontSize="14px"
-						placeholder="Building a peer-to-peer electronic cash system."
-						value={form.email}
-						onChange={handleChange}
-					/>
-				</VStack>
-
-				<ButtonComponent
-					primary
-					standard
-					isFullWidth
-					onClick={handleSubmitForm}
-				>
-                            Submit
-				</ButtonComponent>
-			</VStack>
-		</Card>
-	);
-
 	const Loading = () => (
 		<Card className={classes.cardContainer} height="400px" display="flex" alignItems="center" justifyContent="center">
 
@@ -105,14 +104,14 @@ export const LaunchIdea = () => {
 	);
 
 	return (
-		<Box margin={isMobile ? '10px' : '50px 60px'}>
+		<Box margin={isMobile ? '10px 10px 40px 10px' : '50px 60px'}>
 			<VStack spacing="60px">
 				<VStack width="100%" alignItems="flex-start" spacing="30px">
 					<Text fontSize="44px" fontWeight={700}>Transform your ideas into reality</Text>
 					<Text fontSize="18px">
                 Are you a Bitcoin creator, creative or entrepreneur looking for the funds needed to realize your ideas? No matter where you are in the world, Geyser now makes it easy for you to create and commit to a time-bound crowdfund, and allow supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser below, and we will get back to you soon on how to proceed.
 					</Text>
-					<Stack direction={isMobile ? 'column' : 'row'} width="100%" justifyContent="space-between" spacing="15px">
+					<Stack direction={isMobile ? 'column' : 'row'} width="100%" justifyContent="space-between" spacing={isMobile ? '30px' : '15px'}>
 						<HStack flex="1" spacing="18px">
 							<Box className={classes.iconContainer}>
 								<RopeIcon height="33px" width="33px"/>
@@ -145,7 +144,42 @@ export const LaunchIdea = () => {
 						? <Loading />
 						: submitted
 							? <SuccesfullySubmitted />
-							: <SubmitForm />
+							: <Card className={classes.cardContainer}>
+								<VStack spacing="30px">
+									<Text fontSize="33px" fontWeight={700}>Submit project idea</Text>
+									<VStack width="100%" alignItems="flex-start">
+										<SectionTitle>Your email/contact</SectionTitle>
+										<TextBox
+											type="email"
+											name="email"
+											fontSize="14px"
+											placeholder="satoshi@geyser.fund"
+											value={form.email}
+											onChange={handleChange}
+										/>
+									</VStack>
+									<VStack width="100%" alignItems="flex-start">
+										<SectionTitle>Your idea</SectionTitle>
+										<TextArea
+											pr={16}
+											name="description"
+											fontSize="14px"
+											placeholder="Building a peer-to-peer electronic cash system."
+											value={form.description}
+											onChange={handleChange}
+										/>
+									</VStack>
+
+									<ButtonComponent
+										primary
+										standard
+										isFullWidth
+										onClick={handleSubmitForm}
+									>
+                                            Submit
+									</ButtonComponent>
+								</VStack>
+							</Card>
 				}
 
 			</VStack>
