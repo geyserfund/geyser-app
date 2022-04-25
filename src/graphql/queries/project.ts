@@ -94,63 +94,70 @@ query GetProjectFundingData($where: ProjectQueryInput!) {
 `;
 
 export const QUERY_PROJECTS = gql`
-query projects {
-  projects {
-    id
-    title
-    name
-    type
-    description
-    balance
-    fundingGoal
-    createdAt
-    updatedAt
-    expiresAt
-    active
-    ownerConfirmed
-    fundsClaimed
-    creationConfirmed
-    media
-    owners {
+query projects($where: ProjectQueryInput) {
+  projects(where: $where) {
+    projects {
       id
-      user {
-        id
-        username
-        twitterHandle
-        imageUrl
-      }
-    }
-    funders {
-      id
-      user {
-        id
-        username 
-        twitterHandle
-        imageUrl
-      }
-      confirmed
-    }
-    fundingTxs {
-      id
-      amount
-      paidAt
-      comment
-      onChain
-      funder {
+      title
+      name
+      type
+      description
+      balance
+      fundingGoal
+      createdAt
+      updatedAt
+      expiresAt
+      active
+      ownerConfirmed
+      fundsClaimed
+      creationConfirmed
+      media
+      owners {
         id
         user {
+          id
           username
-          imageUrl
           twitterHandle
-          connectedTwitter
+          imageUrl
+        }
+      }
+      funders {
+        id
+        user {
+          id
+          username 
+          twitterHandle
+          imageUrl
+        }
+        confirmed
+      }
+      fundingTxs {
+        id
+        amount
+        paidAt
+        comment
+        onChain
+        funder {
+          id
+          user {
+            username
+            imageUrl
+            twitterHandle
+            connectedTwitter
+          }
         }
       }
     }
   }
-  summary {
-    projectsCount
-    fundersCount
+}
+`;
+
+export const ALL_PROJECTS_SUMMARY = gql`
+query ProjectsSummary {
+  projectsSummary {
     fundedTotal
+    fundersCount
+    projectsCount
   }
 }
 `;

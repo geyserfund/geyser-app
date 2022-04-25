@@ -17,7 +17,7 @@ import {
 import { createUseStyles } from 'react-jss';
 import { LiveProject } from '../../components/molecules/LiveProject';
 import { useQuery } from '@apollo/client';
-import { QUERY_PROJECTS } from '../../graphql';
+import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules/ProjectBars';
 // Import { useQuery } from '@apollo/client';
 // import { QUERY_PROJECTS } from '../../graphql';
@@ -69,20 +69,31 @@ export const Home = () => {
 	const classes = useStyles({ isMobile: isMobileMode() });
 
 	const { loading, error, data } = useQuery(QUERY_PROJECTS);
+	const { loading: summaryLoading, error: summaryError, data: summaryData } = useQuery(ALL_PROJECTS_SUMMARY);
 
 	useEffect(() => {
 		if (error) {
 			toast({
-				title: 'Something went wrong',
+				title: 'Could not load projects',
 				description: 'Please refresh the page',
 				status: 'error',
 			});
 		}
 	}, [error]);
 
-	const projects = (data && data.projects) || [];
+	useEffect(() => {
+		if (summaryError) {
+			toast({
+				title: 'Could not load summary data',
+				description: 'Please refresh the page',
+				status: 'error',
+			});
+		}
+	}, [error]);
 
-	const summary = data && data.summary;
+	const projects = (data && data.projects.projects) || [];
+
+	const summary = (summaryData && summaryData.projectsSummary) || {};
 
 	const project = projects && projects.length > 0 ? projects[randomIntFromInterval(0, (projects.length - 1))] : null;
 
@@ -125,18 +136,30 @@ export const Home = () => {
 						Geyser is a global crowdfunding platform that helps Bitcoin builders and creators with the funding their projects need to burst out into the world.
 						</Text>
 						<HStack className={classes.pageStats}>
-							<VStack>
-								<Text className={classes.boldText}>3</Text>
-								<Text>Projects</Text>
-							</VStack>
-							<VStack>
-								<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>8,142,299</SatoshiAmount>
-								<Text>Sats</Text>
-							</VStack>
-							<VStack>
-								<Text className={classes.boldText}>17</Text>
-								<Text>Plebs</Text>
-							</VStack>
+							{
+								summaryLoading
+									? <><VStack>
+										<Text className={classes.boldText}>loading state</Text>
+										<Text>Projects</Text>
+									</VStack><VStack>
+										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>loading state</SatoshiAmount>
+										<Text>Sats</Text>
+									</VStack><VStack>
+										<Text className={classes.boldText}>loading state</Text>
+										<Text>Plebs</Text>
+									</VStack></>
+									: <><VStack>
+										<Text className={classes.boldText}>{summary.projectsCount}</Text>
+										<Text>Projects</Text>
+									</VStack><VStack>
+										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>{summary.fundedTotal}</SatoshiAmount>
+										<Text>Sats</Text>
+									</VStack><VStack>
+										<Text className={classes.boldText}>{summary.fundersCount}</Text>
+										<Text>Plebs</Text>
+									</VStack></>
+							}
+
 						</HStack>
 					</VStack>
 					<Box>
