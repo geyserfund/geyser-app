@@ -3,10 +3,10 @@ import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import {
 	// ButtonComponent, Linkin,
 	SatoshiAmount } from '../../components/ui';
-import { Footer,
+import { Footer, SwipeLiveProject,
 	//  ProjectCard, ProjectComingSoon
 } from '../../components/molecules';
-import { isDarkMode, isMobileMode, randomIntFromInterval, useNotification } from '../../utils';
+import { isDarkMode, isMobileMode, useNotification } from '../../utils';
 // Import { fonts } from '../../constants/fonts';
 import {
 	colors,
@@ -15,10 +15,10 @@ import {
 	// StartCrowdFundUrl, SubscribeUrl,
 } from '../../constants';
 import { createUseStyles } from 'react-jss';
-import { LiveProject } from '../../components/molecules/LiveProject';
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules/ProjectBars';
+import { IProject } from '../../interfaces';
 // Import { useQuery } from '@apollo/client';
 // import { QUERY_PROJECTS } from '../../graphql';
 // import Loader from '../../components/ui/Loader';
@@ -95,7 +95,10 @@ export const Home = () => {
 
 	const summary = (summaryData && summaryData.projectsSummary) || {};
 
-	const project = projects && projects.length > 0 ? projects[randomIntFromInterval(0, (projects.length - 1))] : null;
+	// Const project = projects && projects.length > 0 ? projects[randomIntFromInterval(0, (projects.length - 1))] : null;
+
+	const closedProjects = projects.filter((project: IProject) => !project.active);
+	const activeProjects = projects.filter((project: IProject) => project.active);
 
 	console.log('checking summary', summary);
 	return (
@@ -168,11 +171,11 @@ export const Home = () => {
 				</Box>
 				<VStack alignItems="flex-start" width="100%">
 					<Text className={classes.sectionTitle}>LIVE PROJECTS</Text>
-					<LiveProject loading={loading} project={project}/>
+					<SwipeLiveProject loading={loading} projects={[...projects, ...activeProjects]}/>
 				</VStack>
 				<VStack alignItems="flex-start" width="100%" position="relative">
 					<Text className={classes.sectionTitle}>CLOSED PROJECTS</Text>
-					<ProjectBars loading={loading} projects={[...projects]} />
+					<ProjectBars loading={loading} projects={[...closedProjects]} />
 				</VStack>
 				{/* <Box width="100%" display="flex" justifyContent="center">
 					<Image src={geyserHomeLogo} height="250px" />

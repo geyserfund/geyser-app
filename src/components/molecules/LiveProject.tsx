@@ -6,20 +6,14 @@ import { isMobileMode } from '../../utils';
 import { ButtonComponent, SatoshiAmount } from '../ui';
 
 interface ILiveProject {
-    loading: boolean
-    project: IProject | null
+    project: IProject
 
 }
 
-export const LiveProject = ({loading, project}: ILiveProject) => {
+export const LiveProject = ({ project}: ILiveProject) => {
 	const isMobile = isMobileMode();
 	const {btcRate} = useBtcContext();
 
-	if (loading || !project) {
-		return <LiveProjectSkeleton />;
-	}
-
-	console.log('checking media', project);
 	const image = project?.media[0];
 	const owner = project?.owners[0];
 	const goalInSatoshi = project.fundingGoal / btcRate;
@@ -28,48 +22,51 @@ export const LiveProject = ({loading, project}: ILiveProject) => {
 	console.log('checking percentage', goalInSatoshi, btcRate, project, percentage);
 
 	return (
-		<Box
-			display="flex"
-			flexDirection={isMobile ? 'column' : 'row'}
-			spacing="25px"
-			width="100%"
-			maxWidth="925px"
-			alignItems="flex-start"
-		>
-			<Box flex="1" height="100%" borderRadius="4px" overflow="hidden">
-				<Image src={image} width="100%" height="100%"/>
-			</Box>
-			<VStack
-				height="100%"
-				width={isMobile ? '100%' : undefined }
-				flex="1"
+		<Box width="100%" position="relative">
+			<Box
+				display="flex"
+				flexDirection={isMobile ? 'column' : 'row'}
+				spacing="25px"
+				width="100%"
+				maxWidth="925px"
 				alignItems="flex-start"
-				justifyContent="flex-start"
-				padding={isMobile ? '20px 0px' : '0px 20px'}
 			>
-				<Text fontSize="33px" fontWeight={700}>{project.title}</Text>
-				<HStack>
-					<Avatar height="33px" width="33px" name={owner.user.username} src={owner.user.imageUrl}/>
-					<Text fontSize="18px">By</Text>
-					<Text fontSize="18px" fontWeight={700}>{owner.user.username}</Text>
-				</HStack>
-				<Text fontSize="14px">{project.description}</Text>
-				<HStack >
-					<Text fontSize="18px">Raised: </Text>
-					<SatoshiAmount fontSize="18px">{project.balance}</SatoshiAmount>
-					<Text fontSize="18px">{`, ${percentage} % `}</Text>
-					<Text fontSize="18px">of goal</Text>
-				</HStack>
-				<ButtonComponent
-					standard
-					primary
-					isFullWidth
-					fontSize="15px"
+				<Box flex="1" height="100%" borderRadius="4px" overflow="hidden">
+					<Image src={image} width="100%" height="100%"/>
+				</Box>
+				<VStack
+					height="100%"
+					width={isMobile ? '100%' : undefined }
+					flex="1"
+					alignItems="flex-start"
+					justifyContent="flex-start"
+					padding={isMobile ? '20px 0px' : '0px 20px'}
 				>
+					<Text fontSize="33px" fontWeight={700}>{project.title}</Text>
+					<HStack>
+						<Avatar height="33px" width="33px" name={owner.user.username} src={owner.user.imageUrl}/>
+						<Text fontSize="18px">By</Text>
+						<Text fontSize="18px" fontWeight={700}>{owner.user.username}</Text>
+					</HStack>
+					<Text fontSize="14px">{project.description}</Text>
+					<HStack >
+						<Text fontSize="18px">Raised: </Text>
+						<SatoshiAmount fontSize="18px">{project.balance}</SatoshiAmount>
+						<Text fontSize="18px">{`, ${percentage} % `}</Text>
+						<Text fontSize="18px">of goal</Text>
+					</HStack>
+					<ButtonComponent
+						standard
+						primary
+						isFullWidth
+						fontSize="15px"
+					>
 						View Project
-				</ButtonComponent>
-			</VStack>
+					</ButtonComponent>
+				</VStack>
+			</Box>
 		</Box>
+
 	);
 };
 
