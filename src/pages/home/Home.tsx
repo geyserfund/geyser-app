@@ -48,17 +48,21 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 		boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
 		borderRadius: '4px',
 		justifyContent: 'space-between',
-		maxWidth: '690px',
+		maxWidth: '940px',
 	},
-	boldText: {
-		fontSize: '22px',
+	boldText: ({isMobile}) => ({
+		fontSize: isMobile ? '22px' : '24px',
 		fontWeight: '600',
 		color: colors.normalLightGreen,
-	},
+	}),
 	sectionTitle: {
 		fontSize: '16px',
 		color: colors.textGrey,
 	},
+	subtitleText: ({isMobile}) => ({
+		fontSize: isMobile ? '14px' : '16px',
+		fontWeight: 500,
+	}),
 });
 
 export const Home = () => {
@@ -135,7 +139,7 @@ export const Home = () => {
 								Play a part by funding them on Geyser.
 							</Text>
 						</VStack>
-						<Text fontSize={isMobile ? '18px' : '20px'} maxWidth="765px" fontWeight={500}>
+						<Text fontSize={isMobile ? '18px' : '20px'} maxWidth="940px" fontWeight={500}>
 						Geyser is a global crowdfunding platform that helps Bitcoin builders and creators with the funding their projects need to burst out into the world.
 						</Text>
 						<HStack className={classes.pageStats} padding={isMobile ? '50px 20px' : '50px 70px'}>
@@ -143,35 +147,37 @@ export const Home = () => {
 								summaryLoading
 									? <><VStack>
 										<Text className={classes.boldText}>loading state</Text>
-										<Text>Projects</Text>
+										<Text className={classes.subtitleText}>Projects</Text>
 									</VStack><VStack>
 										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>loading state</SatoshiAmount>
-										<Text>Sats</Text>
+										<Text className={classes.subtitleText}>Sats</Text>
 									</VStack><VStack>
 										<Text className={classes.boldText}>loading state</Text>
-										<Text>Plebs</Text>
+										<Text className={classes.subtitleText}>Plebs</Text>
 									</VStack></>
 									: <><VStack>
 										<Text className={classes.boldText}>{summary.projectsCount}</Text>
-										<Text>Projects</Text>
+										<Text className={classes.subtitleText}>Projects</Text>
 									</VStack><VStack>
 										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>{summary.fundedTotal}</SatoshiAmount>
-										<Text>Sats</Text>
+										<Text className={classes.subtitleText}>Sats</Text>
 									</VStack><VStack>
 										<Text className={classes.boldText}>{summary.fundersCount}</Text>
-										<Text>Plebs</Text>
+										<Text className={classes.subtitleText}>Plebs</Text>
 									</VStack></>
 							}
 
 						</HStack>
 					</VStack>
-					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'}>
-						<Image src={LaunchImageUrl} />
+					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'} minWidth="305px" >
+						<Image src={LaunchImageUrl} maxHeight="320px"/>
 					</Box>
 				</Box>
 				<VStack alignItems="flex-start" width="100%">
 					<Text className={classes.sectionTitle}>FEATURED</Text>
-					<SwipeLiveProject loading={loading} projects={[...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects]}/>
+					<HStack width="100%" justifyContent="center">
+						<SwipeLiveProject loading={loading} projects={[...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects]}/>
+					</HStack>
 				</VStack>
 				<VStack alignItems="flex-start" width="100%">
 					<Text className={classes.sectionTitle}>LIVE PROJECTS</Text>
