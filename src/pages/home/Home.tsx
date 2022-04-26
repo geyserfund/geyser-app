@@ -48,7 +48,7 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 		boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
 		borderRadius: '4px',
 		justifyContent: 'space-between',
-		padding: '50px',
+		maxWidth: '690px',
 	},
 	boldText: {
 		fontSize: '22px',
@@ -103,14 +103,14 @@ export const Home = () => {
 	console.log('checking summary', summary);
 	return (
 		<VStack
-			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
+			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
 			padding="0px 0px"
 		>
 			<VStack
 				spacing="40px"
 				width="100%"
-				maxWidth="1280px"
+				maxWidth="1444px"
 				padding={isMobile ? '0px 10px' : '0px 40px'}
 				marginBottom="40px"
 				display="flex"
@@ -128,17 +128,17 @@ export const Home = () => {
 				>
 					<VStack alignItems="flex-start" spacing="25px">
 						<VStack spacing={0} alignItems="flex-start">
-							<Text fontSize="33px">
+							<Text fontSize={isMobile ? '33px' : '37px'} fontWeight={700}>
 								Bitcoin ideas can change the world.
 							</Text>
-							<Text fontSize="33px">
+							<Text fontSize={isMobile ? '33px' : '37px'} fontWeight={700}>
 								Play a part by funding them on Geyser.
 							</Text>
 						</VStack>
-						<Text fontSize="18px" maxWidth="685px">
+						<Text fontSize={isMobile ? '18px' : '20px'} maxWidth="765px" fontWeight={500}>
 						Geyser is a global crowdfunding platform that helps Bitcoin builders and creators with the funding their projects need to burst out into the world.
 						</Text>
-						<HStack className={classes.pageStats}>
+						<HStack className={classes.pageStats} padding={isMobile ? '50px 20px' : '50px 70px'}>
 							{
 								summaryLoading
 									? <><VStack>
@@ -165,13 +165,17 @@ export const Home = () => {
 
 						</HStack>
 					</VStack>
-					<Box>
+					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'}>
 						<Image src={LaunchImageUrl} />
 					</Box>
 				</Box>
 				<VStack alignItems="flex-start" width="100%">
+					<Text className={classes.sectionTitle}>FEATURED</Text>
+					<SwipeLiveProject loading={loading} projects={[...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects]}/>
+				</VStack>
+				<VStack alignItems="flex-start" width="100%">
 					<Text className={classes.sectionTitle}>LIVE PROJECTS</Text>
-					<SwipeLiveProject loading={loading} projects={[...projects, ...activeProjects]}/>
+					<ProjectBars loading={loading} projects={[...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects]} />
 				</VStack>
 				<VStack alignItems="flex-start" width="100%" position="relative">
 					<Text className={classes.sectionTitle}>CLOSED PROJECTS</Text>

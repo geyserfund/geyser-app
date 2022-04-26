@@ -9,6 +9,7 @@ export const colors = {
 	bgGrey: '#F4F4F4',
 	bgGrey2: '#F6F6F6',
 	bgGrey3: '#E9E9E9',
+	bgGrey4: '#FCFCFC',
 	bgGold: '#FFE600',
 	bgGreen: 'rgba(32, 236, 199, 0.2)',
 	bgGreenDark: 'rgba(32, 236, 199, 0.2)',

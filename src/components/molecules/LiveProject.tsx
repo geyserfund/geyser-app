@@ -28,7 +28,7 @@ export const LiveProject = ({ project}: ILiveProject) => {
 				flexDirection={isMobile ? 'column' : 'row'}
 				spacing="25px"
 				width="100%"
-				maxWidth="925px"
+				maxWidth="1280px"
 				alignItems="flex-start"
 			>
 				<Box flex="1" height="100%" borderRadius="4px" overflow="hidden">
