@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Box, Image } from '@chakra-ui/react';
 import { IProject } from '../../interfaces';
@@ -7,7 +7,6 @@ import { createUseStyles } from 'react-jss';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import GeyserArrow from '../../assets/geyserarrow.png';
 import GeyserArrow2 from '../../assets/geyserarrow2.png';
 import { fadeIn, fadeOut, slideInLeftDynamic, slideOutRightDynamic } from '../../css';
 import classNames from 'classnames';
@@ -23,28 +22,33 @@ const useStyles = createUseStyles({
 		paddingBottom: '40px',
 		'& .slick-dots': {
 			bottom: '-50px',
+			'& li': {
+				margin: '0px 10px',
+			},
+			'& button': {
+				'&:before': {
+					fontSize: '15px',
+				},
+			},
 		},
+
 	},
 	arrowContainer: {
-		// BackgroundColor: 'rgba(0,0,0,0.2)',
 		paddingLeft: '5px',
 		flex: 1,
 		height: '40px',
 		width: '40px',
-		backgroundColor: 'transparent',
-		// BoxShadow: '0px 0px 9.51722px rgba(0, 0, 0, 0.11)',
+		background: 'transparent',
 		borderRadius: '50%',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		// Width: '50%',
 		position: 'absolute',
 		right: '-20px',
 		top: 'calc(50% - 20px)',
 		'&:hover': {
-			backgroundColor: 'white',
-			boxShadow: '0px 0px 9.51722px rgba(0, 0, 0, 0.11)',
-			transition: 'background-color 1000s linear',
+			background: 'white',
+			boxShadow: 'rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;',
 			cursor: 'pointer',
 		},
 		overflow: 'hidden',
@@ -52,8 +56,11 @@ const useStyles = createUseStyles({
 	arrowContainerLeft: {
 		left: '-20px',
 		top: 'calc(50% - 20px)',
-		transform: 'rotate(180deg)',
 		zIndex: 9,
+	},
+	clicked: {
+		// BoxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+		boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important',
 	},
 	arrowImage: {
 		height: '30px',
@@ -91,7 +98,6 @@ export const SwipeLiveProject = ({projects, loading}: ISwipeLiveProject) => {
 	}
 
 	return (
-		// <HStack>
 		<Box className={classes.swiper} width={isMobile ? '100%' : '90%'}>
 			<Slider {...settings}>
 				{projects.map((project:IProject) => (
@@ -99,8 +105,6 @@ export const SwipeLiveProject = ({projects, loading}: ISwipeLiveProject) => {
 				))}
 			</Slider>
 		</Box>
-		// 	<SampleNextArrow onClick={handleNextClick}/>
-		// </HStack>
 
 	);
 };
@@ -109,49 +113,23 @@ export const SampleNextArrow = (props:any) => {
 	const { onClick } = props;
 
 	const classes = useStyles();
-	const [hover, setHover] = useState(false);
-
-	const [transition, setTransition] = useState(false);
-
-	useEffect(() => {
-		if (hover && !transition) {
-			setTimeout(() => {
-				setTransition(true);
-			}, 200);
-		}
-
-		if (transition && !hover) {
-			setTimeout(() => {
-				setTransition(false);
-			}, 200);
-		}
-	}, [hover, transition]);
+	const [click, setClick] = useState(false);
 
 	return (
 		<Box
-			// ClassName={className}
-			className={classNames(classes.arrowContainer)}
+			className={classNames(classes.arrowContainer, {
+				[classes.clicked]: click,
+			})}
 			onClick={onClick}
-			onMouseOver={() => setHover(true)}
-			onMouseLeave={() => setHover(false)}
+			onMouseDown={() => setClick(true)}
+			onMouseUp={() => setClick(false)}
 		>
-			{	<Image
-				className={classNames(classes.arrowImage, {
-					[classes.slideInLeftDynamic]: hover && transition,
-					[classes.slideOutRightDynamic]: !hover,
-					[classes.noDisplay]: !transition,
-				})}
-				src={GeyserArrow}
-				height="100%"/>}
 			<Image
-				className={ classNames(classes.arrowImage, {
-					[classes.slideOutRightDynamic]: hover && !transition,
-					[classes.slideInLeftDynamic]: !hover && !transition,
-					[classes.noDisplay]: transition,
-				})}
+				className={classes.arrowImage}
 				src={GeyserArrow2}
-				height="100%"/>
-
+				filter="grayscale(100%)"
+				height="100%"
+			/>
 		</Box>
 	);
 };
@@ -160,49 +138,24 @@ export const SamplePrevArrow = (props:any) => {
 	const { onClick } = props;
 
 	const classes = useStyles();
-	const [hover, setHover] = useState(false);
-
-	const [transition, setTransition] = useState(false);
-
-	useEffect(() => {
-		if (hover && !transition) {
-			setTimeout(() => {
-				setTransition(true);
-			}, 200);
-		}
-
-		if (transition && !hover) {
-			setTimeout(() => {
-				setTransition(false);
-			}, 200);
-		}
-	}, [hover, transition]);
+	const [click, setClick] = useState(false);
 
 	return (
 		<Box
-			// ClassName={className}
-			className={classNames(classes.arrowContainer, classes.arrowContainerLeft)}
+			className={classNames(classes.arrowContainer, classes.arrowContainerLeft, {
+				[classes.clicked]: click,
+			})}
 			onClick={onClick}
-			onMouseOver={() => setHover(true)}
-			onMouseLeave={() => setHover(false)}
+			onMouseDown={() => setClick(true)}
+			onMouseUp={() => setClick(false)}
 		>
-			{	<Image
-				className={classNames(classes.arrowImage, {
-					[classes.slideInLeftDynamic]: hover && transition,
-					[classes.slideOutRightDynamic]: !hover,
-					[classes.noDisplay]: !transition,
-				})}
-				src={GeyserArrow}
-				height="100%"/>}
 			<Image
-				className={ classNames(classes.arrowImage, {
-					[classes.slideOutRightDynamic]: hover && !transition,
-					[classes.slideInLeftDynamic]: !hover && !transition,
-					[classes.noDisplay]: transition,
-				})}
+				className={classes.arrowImage}
+				transform="rotate(180deg)"
 				src={GeyserArrow2}
-				height="100%"/>
-
+				filter="grayscale(100%)"
+				height="100%"
+			/>
 		</Box>
 	);
 };

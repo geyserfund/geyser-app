@@ -126,7 +126,7 @@ export const Home = () => {
 					flexDirection={isMobile ? 'column-reverse' : 'row'}
 					justifyContent="space-between"
 					width="100%"
-					marginTop="10px"
+					marginTop={isMobile ? '15px' : '40px'}
 					marginBottom="45px"
 					alignSelf="center"
 				>
