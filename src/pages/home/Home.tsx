@@ -1,28 +1,19 @@
 import React, { useEffect } from 'react';
 import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import {
-	// ButtonComponent, Linkin,
 	SatoshiAmount } from '../../components/ui';
 import { Footer, SwipeLiveProject,
-	//  ProjectCard, ProjectComingSoon
 } from '../../components/molecules';
 import { isDarkMode, isMobileMode, useNotification } from '../../utils';
-// Import { fonts } from '../../constants/fonts';
 import {
 	colors,
-	// GeyserHomeCoin1, geyserHomeCoin2, geyserHomeLogo,
 	LaunchImageUrl,
-	// StartCrowdFundUrl, SubscribeUrl,
 } from '../../constants';
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules/ProjectBars';
 import { IProject } from '../../interfaces';
-// Import { useQuery } from '@apollo/client';
-// import { QUERY_PROJECTS } from '../../graphql';
-// import Loader from '../../components/ui/Loader';
-// import { IProject } from '../../interfaces';
 
 type RuleNames = string
 

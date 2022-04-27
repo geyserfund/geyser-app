@@ -37,6 +37,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
     }
     ambassadors {
       id
+      confirmed
       user {
         id
         username 
@@ -46,6 +47,9 @@ query GetProject($where: UniqueProjectQueryInput!) {
     }
     sponsors {
       id
+      confirmed
+      url
+      image
       user {
         id
         username 
@@ -130,6 +134,7 @@ query projects($where: ProjectQueryInput) {
           imageUrl
         }
         confirmed
+      }
       }
     }
   }

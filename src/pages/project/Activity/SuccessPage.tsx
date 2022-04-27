@@ -11,7 +11,6 @@ import { IFundForm } from '../../../hooks';
 import { IBadge, IFundingTx, IProject } from '../../../interfaces';
 import { computeFunderBadges } from '../../../helpers/computeBadges';
 import { BotTwitterUrl } from '../../../constants';
-// import { MUTATION_CLAIM_FUNDING } from '../../../graphql';
 
 interface ISuccessPage {
 	state: IFundForm
@@ -29,6 +28,21 @@ export const SuccessPage = ({ state, fundingTx, project, handleCloseButton }: IS
 		navigator.clipboard.writeText(window.location.href);
 		setCopy(true);
 	};
+
+	useEffect(() => {
+		if (state.anonymous) {
+			const badges = computeFunderBadges({
+				project,
+				funder: {
+					...fundingTx.funder,
+					timesFunded: 1,
+					amountFunded: fundingTx.amount,
+					confirmedAt: fundingTx.paidAt,
+				},
+			});
+			setNewBadges(badges);
+		}
+	}, []);
 
 	// const [claimFunding, {
 	// 	data, loading,
