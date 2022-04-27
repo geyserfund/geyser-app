@@ -33,3 +33,5 @@ export const validateFundingAmount = (amount: number, btcRate: number) => {
 		return 'Payment below 1 sats is not allowed at the moment. Please update the amount';
 	}
 };
+
+export const randomIntFromInterval = (min: number, max: number) => Math.floor((Math.random() * (max - min + 1)) + min);

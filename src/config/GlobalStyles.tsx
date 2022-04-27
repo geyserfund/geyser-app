@@ -6,6 +6,7 @@ export const GlobalStyles = () => (
 		styles={`
         @import url('https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap');
         @font-face {
             font-family: 'Myanmar-Khyay';
             src:url('/Myanmar-Khyay.ttf.woff') format('woff'),
@@ -16,21 +17,20 @@ export const GlobalStyles = () => (
             font-style: normal;
             font-display: swap;
         }
-        /* custom scrollbar */
+
+
         ::-webkit-scrollbar {
-        width: 20px;
-        }
-
-        ::-webkit-scrollbar-track {
-        background-color: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-        background-color: #d6dee1;
-        border-radius: 20px;
-        border: 6px solid transparent;
-        background-clip: content-box;
-        }
+            width: 8px;
+            height: 5px;
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: rgba(90, 90, 90,0.2);
+          }
+          
+          ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+          }
 
         button:focus {
             box-shadow: none !important;
@@ -38,6 +38,9 @@ export const GlobalStyles = () => (
 
         ::-webkit-scrollbar-thumb:hover {
         background-color: #a8bbbf;
+        }
+        body {
+            overflow: overlay;
         }
       `}
 	/>
