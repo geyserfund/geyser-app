@@ -8,7 +8,6 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import GeyserArrow2 from '../../assets/geyserarrow2.png';
-import { fadeIn, fadeOut, slideInLeftDynamic, slideOutRightDynamic } from '../../css';
 import classNames from 'classnames';
 import { isMobileMode } from '../../utils';
 interface ISwipeLiveProject {
@@ -44,7 +43,7 @@ const useStyles = createUseStyles({
 		justifyContent: 'center',
 		alignItems: 'center',
 		position: 'absolute',
-		right: '-20px',
+		right: '-40px',
 		top: 'calc(50% - 20px)',
 		'&:hover': {
 			background: 'white',
@@ -54,12 +53,11 @@ const useStyles = createUseStyles({
 		overflow: 'hidden',
 	},
 	arrowContainerLeft: {
-		left: '-20px',
+		left: '-40px',
 		top: 'calc(50% - 20px)',
 		zIndex: 9,
 	},
 	clicked: {
-		// BoxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
 		boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important',
 	},
 	arrowImage: {
@@ -72,11 +70,6 @@ const useStyles = createUseStyles({
 	noDisplay: {
 		display: 'none',
 	},
-	...fadeIn,
-	...fadeOut,
-	...slideInLeftDynamic(100, 0.2),
-	...slideOutRightDynamic(100, 0.2),
-
 });
 
 export const SwipeLiveProject = ({projects, loading}: ISwipeLiveProject) => {
@@ -151,6 +144,7 @@ export const SamplePrevArrow = (props:any) => {
 		>
 			<Image
 				className={classes.arrowImage}
+				paddingLeft="7px"
 				transform="rotate(180deg)"
 				src={GeyserArrow2}
 				filter="grayscale(100%)"

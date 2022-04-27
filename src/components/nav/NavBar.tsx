@@ -61,7 +61,7 @@ export const NavBar = () => {
 				display="flex"
 				width="100%"
 				justifyContent="center"
-				background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
+				background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 				borderBottom={isDark ? '1px solid #464646' : '2px solid #E9E9E9'}
 				boxSizing="border-box"
 			>

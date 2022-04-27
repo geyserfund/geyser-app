@@ -1,5 +1,6 @@
 import { Avatar, Box, HStack, Image, Skeleton, SkeletonCircle, Stack, Text, VStack, Wrap } from '@chakra-ui/react';
 import React from 'react';
+import { useHistory } from 'react-router';
 import { useBtcContext } from '../../context/btc';
 import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
@@ -12,6 +13,7 @@ interface ILiveProject {
 
 export const LiveProject = ({ project}: ILiveProject) => {
 	const isMobile = isMobileMode();
+	const history = useHistory();
 	const {btcRate} = useBtcContext();
 
 	const image = project?.media[0];
@@ -22,6 +24,10 @@ export const LiveProject = ({ project}: ILiveProject) => {
 	console.log('checking percentage', goalInSatoshi, btcRate, project, percentage);
 
 	const getDescription = project.description?.length > 180 ? `${project.description.slice(0, 180)}...` : project.description;
+
+	const handleViewProject = () => {
+		history.push(`/project/${project.name}`);
+	};
 
 	return (
 		<Box width="100%" padding="15px">
@@ -64,6 +70,7 @@ export const LiveProject = ({ project}: ILiveProject) => {
 							primary
 							isFullWidth
 							fontSize="15px"
+							onClick={handleViewProject}
 						>
 						View Project
 						</ButtonComponent>
