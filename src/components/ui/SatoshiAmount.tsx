@@ -22,11 +22,20 @@ export const SatoshiAmount = ({label, extra, fontSize, children, ...rest}: ISato
 		return 0.8;
 	};
 
+	const numberWithCommas = (x:string) => {
+		const pattern = /(-?\d+)(\d{3})/;
+		while (pattern.test(x)) {
+			x = x.replace(pattern, '$1,$2');
+		}
+
+		return x;
+	};
+
 	return (
 		<HStack alignItems="center">
 			{label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
 			<SatoshiIcon color={rest.color} scale={getScale() } />
-			<Text fontSize={fontSize} {...rest}>{`${children} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
+			<Text fontSize={fontSize} {...rest}>{`${numberWithCommas(`${children}`)} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
 		</HStack>
 	);
 };
