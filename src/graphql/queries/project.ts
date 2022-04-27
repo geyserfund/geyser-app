@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_PROJECT_BY_NAME = gql`
-query GetProject($where: ProjectQueryInput!) {
+query GetProject($where: UniqueProjectQueryInput!) {
   project(where: $where) {
     id
     title
@@ -68,7 +68,7 @@ query GetProject($where: ProjectQueryInput!) {
 `;
 
 export const QUERY_PROJECT_FUNDING_DATA = gql`
-query GetProjectFundingData($where: ProjectQueryInput!) {
+query GetProjectFundingData($where: UniqueProjectQueryInput!) {
   project(where: $where) {
     fundingTxs {
       id
@@ -130,22 +130,6 @@ query projects($where: ProjectQueryInput) {
           imageUrl
         }
         confirmed
-      }
-      fundingTxs {
-        id
-        amount
-        paidAt
-        comment
-        onChain
-        funder {
-          id
-          user {
-            username
-            imageUrl
-            twitterHandle
-            connectedTwitter
-          }
-        }
       }
     }
   }

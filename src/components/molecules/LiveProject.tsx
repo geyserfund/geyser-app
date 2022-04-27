@@ -21,7 +21,7 @@ export const LiveProject = ({ project}: ILiveProject) => {
 
 	console.log('checking percentage', goalInSatoshi, btcRate, project, percentage);
 
-	const getDescription = project.description.length > 180 ? `${project.description.slice(0, 180)}...` : project.description;
+	const getDescription = project.description?.length > 180 ? `${project.description.slice(0, 180)}...` : project.description;
 
 	return (
 		<Box width="100%" padding="15px">

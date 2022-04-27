@@ -94,7 +94,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 		}
 	}, [btcRate, project]);
 
-	const getProjectBackers = () => (project && project.fundingTxs) ? project.fundingTxs.length : '';
+	const getProjectBackers = () => (project && project.funders) ? project.funders.length : '';
 
 	const {amount, label} = formatDaysLeft(project.expiresAt);
 
