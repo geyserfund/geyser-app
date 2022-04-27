@@ -12,3 +12,4 @@ export const createCreatorRecord = async (data:any) => {
 		body: JSON.stringify(data),
 	}).then(response => response.json());
 };
+
