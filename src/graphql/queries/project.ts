@@ -135,7 +135,6 @@ query projects($where: ProjectQueryInput) {
         }
         confirmed
       }
-      }
     }
   }
 }
