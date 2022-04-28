@@ -5,6 +5,7 @@ import React from 'react';
 import { Footer } from '../../../components/molecules';
 import { IProject, IProjectBlock, IProjectDetail, IProjectUpdate } from '../../../interfaces';
 import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../ProjectComponent';
+import {Helmet} from 'react-helmet';
 
 export const Yeferson = ({ project }: { project: IProject}) => {
 	const projectBlocks: IProjectBlock[] = [
@@ -110,22 +111,29 @@ export const Yeferson = ({ project }: { project: IProject}) => {
 	};
 
 	return (
-		<VStack alignItems="center" width="100%">
-			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
-				<OwnerSponsorCard
-					images={project.media}
-					owner={project.owners[0]}
-					ambassadors={project.ambassadors}
-					sponsors={project.sponsors}
-					ownerIntro={projectDetails.ownerIntro}
-					problem={projectDetails.problem}
-					idea={projectDetails.idea}
-				/>
-				<DetailsBlock projectDetails={projectDetails} />
-				{ renderUpdates() }
-				<SponsorBlock sponsors={project.sponsors}/>
+		<>
+			<Helmet>
+				<meta property="og:type" content="https://storage.googleapis.com/geyser-projects-media/project/lightning-rebel/image1.png" />
+				<meta property="og:image" content="https://storage.googleapis.com/geyser-projects-media/project/lightning-rebel/image1.png" />
+				<meta property="og:url" content="https://geyser.fund/project/lightning-rebel" />
+			</Helmet>
+			<VStack alignItems="center" width="100%">
+				<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
+					<OwnerSponsorCard
+						images={project.media}
+						owner={project.owners[0]}
+						ambassadors={project.ambassadors}
+						sponsors={project.sponsors}
+						ownerIntro={projectDetails.ownerIntro}
+						problem={projectDetails.problem}
+						idea={projectDetails.idea}
+					/>
+					<DetailsBlock projectDetails={projectDetails} />
+					{ renderUpdates() }
+					<SponsorBlock sponsors={project.sponsors}/>
+				</VStack >
+				<Footer />
 			</VStack >
-			<Footer />
-		</VStack >
+		</>
 	);
 };
