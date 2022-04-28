@@ -30,6 +30,7 @@
     "react-blob": "^2.1.0",
     "react-confetti": "^6.0.1",
     "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
     "react-icons": "^4.3.1",
     "react-image-gallery": "^1.2.7",
     "react-jss": "^10.7.1",
