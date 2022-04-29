@@ -23,3 +23,9 @@ export const AmbassadorUrl = 'https://airtable.com/shreTVU3ZjqJ3PIq8';
 export const AddSponsorUrl = 'https://airtable.com/shrmnAbkAupDx8GPo';
 
 export const ProjectMediaUrl = 'https://storage.googleapis.com/geyser-projects-media/project/';
+
+export const BotTwitterUrl = 'https://twitter.com/geyserfunders';
+
+export const LaunchImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/launch.png';
+
+export const GeyserLignteningNodeUrl = 'https://amboss.space/node/0272e8731c6feda7fb7e2b8dbe0fbf1322f9e3b60cc2727f4ee4ca0f820b9cd169';

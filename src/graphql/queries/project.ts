@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_PROJECT_BY_NAME = gql`
-query GetProject($where: ProjectQueryInput!) {
+query GetProject($where: UniqueProjectQueryInput!) {
   project(where: $where) {
     id
     title
@@ -40,7 +40,7 @@ query GetProject($where: ProjectQueryInput!) {
       confirmed
       user {
         id
-        username 
+        username
         twitterHandle
         imageUrl
       }
@@ -52,7 +52,7 @@ query GetProject($where: ProjectQueryInput!) {
       image
       user {
         id
-        username 
+        username
         twitterHandle
         imageUrl
       }
@@ -72,7 +72,7 @@ query GetProject($where: ProjectQueryInput!) {
 `;
 
 export const QUERY_PROJECT_FUNDING_DATA = gql`
-query GetProjectFundingData($where: ProjectQueryInput!) {
+query GetProjectFundingData($where: UniqueProjectQueryInput!) {
   project(where: $where) {
     fundingTxs {
       id
@@ -98,58 +98,54 @@ query GetProjectFundingData($where: ProjectQueryInput!) {
 `;
 
 export const QUERY_PROJECTS = gql`
-query projects {
-  projects {
-    id
-    title
-    name
-    type
-    description
-    balance
-    fundingGoal
-    createdAt
-    updatedAt
-    expiresAt
-    active
-    ownerConfirmed
-    fundsClaimed
-    creationConfirmed
-    media
-    owners {
+query projects($where: ProjectQueryInput) {
+  projects(where: $where) {
+    projects {
       id
-      user {
-        id
-        username
-        twitterHandle
-        imageUrl
-      }
-    }
-    funders {
-      id
-      confirmed
-      user {
-        id
-        username 
-        twitterHandle
-        imageUrl
-      }
-    }
-    fundingTxs {
-      id
-      amount
-      paidAt
-      comment
-      onChain
-      funder {
+      title
+      name
+      type
+      description
+      balance
+      fundingGoal
+      createdAt
+      updatedAt
+      expiresAt
+      active
+      ownerConfirmed
+      fundsClaimed
+      creationConfirmed
+      media
+      owners {
         id
         user {
+          id
           username
-          imageUrl
           twitterHandle
-          connectedTwitter
+          imageUrl
         }
       }
+      funders {
+        id
+        user {
+          id
+          username
+          twitterHandle
+          imageUrl
+        }
+        confirmed
       }
     }
+  }
+}
+`;
+
+export const ALL_PROJECTS_SUMMARY = gql`
+query ProjectsSummary {
+  projectsSummary {
+    fundedTotal
+    fundersCount
+    projectsCount
+  }
 }
 `;

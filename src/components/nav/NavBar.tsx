@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
-import { ButtonComponent, Linkin } from '../ui';
+import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
 import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
@@ -12,7 +12,7 @@ import { ConnectTwitter } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
-import { StartCrowdFundUrl } from '../../constants';
+// Import { StartCrowdFundUrl } from '../../constants';
 import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
 import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
@@ -27,7 +27,11 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const NavBar = () => {
+interface INavBar {
+	isAtTop: boolean
+}
+
+export const NavBar = ({isAtTop}: INavBar) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
@@ -51,21 +55,25 @@ export const NavBar = () => {
 		}
 	}, [state]);
 
+	const handleLaunch = () => {
+		history.push('/launch');
+	};
+
 	return (
 		<>
 			<Box
 				display="flex"
 				width="100%"
 				justifyContent="center"
-				background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
-				borderBottom={isDark ? '1px solid #464646' : '2px solid #E9E9E9'}
+				background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
+				borderBottom={isAtTop ? '1px solid rgba(0,0,0,0)' : '1px solid #E9E9E9' }
 				boxSizing="border-box"
 			>
 				<Box
 					display="flex"
 					width="100%"
 					justifyContent="space-between"
-					margin={isMobile ? '10px' : '10px 20px 10px 40px'}
+					margin={isMobile ? '10px' : '10px 40px 10px 40px'}
 				>
 					<HStack
 						spacing="25px"
@@ -97,17 +105,16 @@ export const NavBar = () => {
 							<NavMenu user={user} logout={logout} />
 						</> : (
 							<Box>
-								<Linkin href={StartCrowdFundUrl} isExternal >
-									<ButtonComponent
-										leftIcon={<AddIcon />}
-										primary
-										standard
-										marginRight="12px"
-										width="220px"
-									>
-										Start a Crowdfund
-									</ButtonComponent>
-								</Linkin>
+								<ButtonComponent
+									leftIcon={<AddIcon />}
+									primary
+									standard
+									marginRight="12px"
+									width="220px"
+									onClick={handleLaunch}
+								>
+										Launch your idea
+								</ButtonComponent>
 								{
 									user.id
 										? <ButtonComponent
