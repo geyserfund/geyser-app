@@ -27,7 +27,11 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const NavBar = () => {
+interface INavBar {
+	isAtTop: boolean
+}
+
+export const NavBar = ({isAtTop}: INavBar) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
@@ -62,7 +66,7 @@ export const NavBar = () => {
 				width="100%"
 				justifyContent="center"
 				background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
-				borderBottom={isDark ? '1px solid #464646' : '2px solid #E9E9E9'}
+				borderBottom={isAtTop ? '1px solid rgba(0,0,0,0)' : '1px solid #E9E9E9' }
 				boxSizing="border-box"
 			>
 				<Box

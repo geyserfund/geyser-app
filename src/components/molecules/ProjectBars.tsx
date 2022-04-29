@@ -56,7 +56,7 @@ export const ProjectBars = ({projects, loading}:IProjectBars) => {
 
 	return (
 		<Box className={isMobile ? classes.containerMobile : classes.container}>
-			<Wrap paddingY="10px" width="100%" justify="flex-start" spacing="30px" >
+			<Wrap paddingY="0px" width="100%" justify="flex-start" spacing="30px" >
 				{ projects.map((project: IProject) => (
 					<WrapItem key={project.id}>
 						<ProjectCard
@@ -65,6 +65,7 @@ export const ProjectBars = ({projects, loading}:IProjectBars) => {
 							name={project.name}
 							project={project}
 							imgSrc={project.media[0]}
+							marginLeft="0px !important"
 						/>
 					</WrapItem>
 
@@ -82,6 +83,7 @@ export const ProjectBarsSkeleton = () => {
 	return (
 		<Box className={isMobile ? classes.containerMobile : classes.container}>
 			<Wrap paddingY="10px" width="100%" justify="space-around" spacing="30px" >
+				<Skeleton borderRadius="10px" height="240px" width="300px" />
 				<Skeleton borderRadius="10px" height="240px" width="300px" />
 				<Skeleton borderRadius="10px" height="240px" width="300px" />
 				<Skeleton borderRadius="10px" height="240px" width="300px" />
