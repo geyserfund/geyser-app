@@ -164,12 +164,12 @@ export const Home = () => {
 				<VStack alignItems="flex-start" width="100%" spacing="0px">
 					<Text className={classes.sectionTitle}>FEATURED</Text>
 					<HStack width="100%" justifyContent="center" >
-						<SwipeLiveProject loading={loading} projects={[...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects]}/>
+						<SwipeLiveProject loading={loading} projects={[...activeProjects]}/>
 					</HStack>
 				</VStack>
 				<VStack alignItems="flex-start" width="100%" spacing="15px">
 					<Text className={classes.sectionTitle}>LIVE PROJECTS</Text>
-					<ProjectBars loading={loading} projects={[...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects]} />
+					<ProjectBars loading={loading} projects={[...activeProjects]} />
 				</VStack>
 				<VStack alignItems="flex-start" width="100%" position="relative" spacing="15px">
 					<Text className={classes.sectionTitle}>CLOSED PROJECTS</Text>

@@ -97,7 +97,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 	const getProjectBackers = () => (project && project.funders) ? project.funders.length : '';
 
 	const {amount, label} = formatDaysLeft(project.expiresAt);
-
+	console.log(getShortAmountLabel(project.balance));
 	return (
 		<Card
 			className={classNames(classes.container, className)}
@@ -141,8 +141,8 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 						<Text fontSize="12px">received</Text>
 					</VStack>
 					<VStack alignItems="center" justifyContent="center" spacing="0">
-						<Text fontSize="14px" fontWeight={600}>{`${amount}`}</Text>
-						<Text fontSize="12px">{`${label} left`}</Text>
+						<Text fontSize="14px" fontWeight={600}>{project.active ? `${amount}` : 'Closed'}</Text>
+						{project.active && <Text fontSize="12px">{`${label} left`}</Text>}
 					</VStack>
 				</HStack>
 			</VStack>
