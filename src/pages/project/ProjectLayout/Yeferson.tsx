@@ -17,7 +17,7 @@ export const Yeferson = ({ project }: { project: IProject}) => {
 				'The player will control a spaceship that will have to face an army of enemy ships. Each enemy ship counts to accumulate points and claim rewards in Satoshis. All your earnings can be withdrawn directly to any Lightning wallet.',
 				'This game is a space adventure trip with deep retro vibe. Get the thrill of playing to win at any time of the day!',
 			],
-			images: [project.media[1]],
+			images: [project.media[0]],
 			blockType: 'PL',
 		},
 		{

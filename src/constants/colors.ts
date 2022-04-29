@@ -9,6 +9,7 @@ export const colors = {
 	bgGrey: '#F4F4F4',
 	bgGrey2: '#F6F6F6',
 	bgGrey3: '#E9E9E9',
+	bgGrey4: '#FCFCFC',
 	bgGold: '#FFE600',
 	bgGreen: 'rgba(32, 236, 199, 0.2)',
 	bgGreenDark: 'rgba(32, 236, 199, 0.2)',
@@ -28,5 +29,6 @@ export const colors = {
 	gray100: '#EDF2F7',
 	gray200: '#E2E8F0',
 	gray300: '#CBD5E0',
+	gray500: '#5B5B5B',
 	grayPlaceholder: '#a0aec0',
 };

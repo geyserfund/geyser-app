@@ -24,7 +24,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 			' It is a very competitive and thrilling game. Fast and agile. Fun and powerful. And play-to-learn mode is a very innovative method to bring newcomers to Bitcoin and teach them the most important aspects of the technology in a fun way.',
 			'The game concept is based on a ‘Deck-building’ and ‘Push Your Luck’ format, and game modes include: playing against an AI (play-to-learn mode), playing online in a multiplayer mode (1vs1) and tournaments (CUP). ',
 		],
-		images: [project.media[1]],
+		images: [project.media[2]],
 		blockType: 'PL',
 	},
 	{
@@ -57,7 +57,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 		body: [
 			'Achieve some goals to earn medals. They will bring you status and special prizes. Collect 3 different medals from every hero to place yourself on a Tier. There will be 6 Tiers.',
 		],
-		images: [project.media[9]],
+		images: [project.media[10]],
 		blockType: 'PL',
 	},
 	{
@@ -115,7 +115,7 @@ export const Toni = ({ project }: { project: IProject}) => {
 			'**There will be a maximum of 10,000 license issued**',
 		],
 		blockType: 'PL',
-		images: [project.media[8]],
+		images: [project.media[9]],
 	},
 	{
 		key: 'aboutMe',
