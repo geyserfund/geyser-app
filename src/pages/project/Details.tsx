@@ -36,10 +36,9 @@ const useStyles = createUseStyles<Rules, IStyles>({
 		fontSize: '14px',
 	},
 	detailsContainer: ({ isMobile }: IStyles) => ({
-		padding: isMobile ? '20px 10px 10px 10px' : '20px 40px 0px 40px',
-		height: isMobile ? '-webkit-calc(100% - 80px)' : '-webkit-calc(100% - 62px)',
+		height: isMobile ? '-webkit-calc(100% - 69px)' : '-webkit-calc(100% - 62px)',
 		fallbacks: [
-			{ height: isMobile ? 'calc(100% - 80px)' : 'calc(100% - 62px)' },
+			{ height: isMobile ? 'calc(100% - 69px)' : 'calc(100% - 62px)' },
 		],
 		overflowY: 'scroll',
 		WebkitOverflowScrolling: 'touch',
@@ -81,17 +80,9 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 	const isDark = isDarkMode();
 
 	const componentPadding = isMobile ? '5px 0px 5px 10px' : '20px 40px 5px 40px';
-	// Const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)');
-	// const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
-
-	// const [twitterLoading, settwitterLoading] = useState(true);
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
-
-	// Const handleSuccess = () => {
-	// 	settwitterLoading(false);
-	// };
 
 	const handleFundClick = () => {
 		setDetailOpen(false);
@@ -125,7 +116,7 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 				[classes.slideInLeft]: isMobile && detailOpen,
 				[classes.fadeOut]: isMobile && fadeStarted,
 			})}
-			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey2'}
+			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			flex={!isMobile ? 3 : undefined}
 			height="100%"
 			flexDirection="column"
@@ -133,7 +124,7 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 		>
 			<HStack padding={componentPadding} justifyContent="space-between">
 				<Box className={classes.headerContainer} >
-					<Heading fontSize={isMobile ? '18px' : '28px'} fontWeight="normal">
+					<Heading fontSize={isMobile ? '18px' : '28px'} fontWeight={700}>
 						{project.title}
 					</Heading>
 					<Text fontSize={isMobile ? '11px' : '14px'}>{`Created ${getDaysAgo(project.createdAt)} ago`}</Text>

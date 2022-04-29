@@ -15,13 +15,18 @@ import { isMobileMode } from '../../utils';
 import { SubscribeModal } from '../nav/SubscribeModal';
 import { ButtonComponent, Linkin } from '../ui';
 
-export const Footer = () => {
+interface IFooter {
+	wrapperClassName?: string;
+}
+
+export const Footer = ({wrapperClassName}: IFooter) => {
 	const isMobile = isMobileMode();
 
 	const {isOpen, onOpen, onClose} = useDisclosure();
 
 	return (
 		<VStack
+			className={wrapperClassName}
 			width="100%"
 			backgroundColor="brand.bgGrey"
 			alignItems="center"
@@ -65,7 +70,7 @@ export const Footer = () => {
 						</ButtonComponent>
 					</Linkin>
 				</Wrap>
-				<HStack spacing="24px">
+				<HStack spacing="24px" width={isMobile ? '100%' : 'auto'} justifyContent={isMobile ? 'center' : undefined}>
 					<Text color="brand.gray500">
 			Geyser
 					</Text>

@@ -355,7 +355,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				flexDirection="column"
 				justifyContent="flex-start"
 				alignItems="center"
-				backgroundColor={isDark ? 'brand.bgGreyDark' : 'white'}
+				backgroundColor={isDark ? 'brand.bgGreyDark' : 'brand.bgGrey4'}
 				height="100%"
 			>
 				{renderActivity()}

@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
+import {useLocation} from 'react-router';
 import {
-	Router as BrowserRouter,
 	Switch,
 	Route,
 } from 'react-router-dom';
@@ -17,6 +17,7 @@ export const customHistory = createBrowserHistory();
 
 export const Router = () => {
 	const [isAtTop, setIsAtTop] = useState(true);
+	const location = useLocation();
 
 	useEffect(() => {
 		const container = document.getElementById('geyser-landing-page');
@@ -37,31 +38,30 @@ export const Router = () => {
 			}
 		};
 	}, []);
-	console.log('is at top', isAtTop);
+	console.log('chekcing location', location);
+	const showBorder = isAtTop && location.pathname === '/';
 	return (
 		<Box height="100vh">
-			<BrowserRouter history={customHistory}>
-				<NavBar isAtTop={isAtTop}/>
-				<Box id="geyser-landing-page" height="calc(100vh - 62px)" overflowY="auto">
-					<Switch>
-						<Route path="/grants">
-							<GrantsLanding />
-						</Route>
-						<Route path="/launch">
-							<LaunchIdea />
-						</Route>
-						<Route path="/project/:projectId">
-							<Project />
-						</Route>
-						<Route path="/not-found">
-							<NotFound />
-						</Route>
-						<Route path="/">
-							<Home />
-						</Route>
-					</Switch>
-				</Box>
-			</BrowserRouter>
+			<NavBar showBorder={showBorder}/>
+			<Box id="geyser-landing-page" height="calc(100vh - 62px)" overflowY="auto">
+				<Switch>
+					<Route path="/grants">
+						<GrantsLanding />
+					</Route>
+					<Route path="/launch">
+						<LaunchIdea />
+					</Route>
+					<Route path="/project/:projectId">
+						<Project />
+					</Route>
+					<Route path="/not-found">
+						<NotFound />
+					</Route>
+					<Route path="/">
+						<Home />
+					</Route>
+				</Switch>
+			</Box>
 		</Box>
 	);
 };

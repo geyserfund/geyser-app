@@ -216,6 +216,8 @@ export const QrPage = ({
 				<Text ></Text>
 			</Box>}
 
+			<Text fontSize="12px" fontWeight={300}>Your pledge will support an ambitious project that may yet to be developed. There’s a risk that, despite a creator’s best efforts, your reward will not be fulfilled, and we urge you to consider this risk prior to pledging. Geyser is not responsible for project claims or reward fulfillment.</Text>
+
 		</VStack>
 	);
 };

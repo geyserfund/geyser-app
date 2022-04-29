@@ -4,6 +4,7 @@ import {
 import React from 'react';
 import { Footer } from '../../../components/molecules';
 import { IProjectBlock, IProjectDetail, IProjectUpdate, IProject } from '../../../interfaces';
+import { isMobileMode } from '../../../utils';
 import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../ProjectComponent';
 
 const projectUpdates: IProjectUpdate[] = [];
@@ -77,10 +78,18 @@ export const Craig = ({ project }: { project: IProject}) => {
 		}
 	};
 
-	console.log(project.sponsors);
+	const isMobile = isMobileMode();
+
 	return (
 		<VStack alignItems="center" width="100%">
-			<VStack spacing="20px" alignItems="left" marginTop="20px" paddingBottom="50px" maxWidth="780px">
+		,
+			<VStack
+				spacing="20px"
+				alignItems="left"
+				marginTop={isMobile ? '0px' : '20px'}
+				maxWidth="780px"
+				padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
+			>
 				<OwnerSponsorCard
 					images={project.media}
 					owner={project.owners[0]}
@@ -94,7 +103,7 @@ export const Craig = ({ project }: { project: IProject}) => {
 				{ renderUpdates() }
 				<SponsorBlock sponsors={project.sponsors}/>
 			</VStack >
-			<Footer />
+			<Footer/>
 		</VStack >
 	);
 };

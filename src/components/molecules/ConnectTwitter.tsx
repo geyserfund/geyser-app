@@ -18,6 +18,7 @@ interface IConnectTwitter {
 
 const useStyles = createUseStyles({
 	twitterContainer: {
+		marginTop: '20px',
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
@@ -32,7 +33,7 @@ export const ConnectTwitter = ({
 }: IConnectTwitter) => {
 	const classes = useStyles();
 	const history = useHistory();
-	const useTitle = title || 'Link Your Twitter account';
+	const useTitle = title || 'Connect';
 	const useDescription = description || 'Link your twitter account to appear as a project backer when you fund a project.';
 
 	return (
@@ -41,14 +42,13 @@ export const ConnectTwitter = ({
 			<ModalContent display="flex" alignItems="center" padding="20px 15px">
 				{history.location.pathname === '/project/bitcoin-hackathons'
 			&& <BubbleCursor/>}
-				<ModalHeader><Text fontSize="16px" fontWeight="normal">{useTitle}</Text></ModalHeader>
+				<ModalHeader><Text fontSize="16px" fontWeight={600}>{useTitle}</Text></ModalHeader>
 				<ModalCloseButton />
 				<ModalBody >
 					<Text>{useDescription}</Text>
 					<Box className={classes.twitterContainer}>
 						<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
 							<ButtonComponent
-								margin="10px"
 								isFullWidth
 								primary
 								standard
