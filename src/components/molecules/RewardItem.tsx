@@ -9,7 +9,7 @@ import { SatoshiAmount } from '../ui';
 
 const useStyles = createUseStyles({
 	container: {
-
+		backgroundColor: '#FDFDFD',
 		width: '100%',
 		display: 'flex',
 		flexDirection: 'column',
