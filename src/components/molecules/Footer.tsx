@@ -10,10 +10,10 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
-import { AnalyticsUrl, GeyserPrivacyUrl, GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
+import { AnalyticsUrl, GeyserLignteningNodeUrl, GeyserPrivacyUrl, GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
 import { isMobileMode } from '../../utils';
 import { SubscribeModal } from '../nav/SubscribeModal';
-import { ButtonComponent } from '../ui';
+import { ButtonComponent, Linkin } from '../ui';
 
 export const Footer = () => {
 	const isMobile = isMobileMode();
@@ -59,9 +59,11 @@ export const Footer = () => {
 					<ButtonComponent size="sm" minWidth="150px" onClick={onOpen}>
 					Subscribe
 					</ButtonComponent>
-					<ButtonComponent size="sm" minWidth="150px">
-					Copy node address: <Text fontSize={'12px'} color="grey" paddingLeft="5px" display="inline-block">0272e8...</Text>
-					</ButtonComponent>
+					<Linkin href={GeyserLignteningNodeUrl} isExternal>
+						<ButtonComponent size="sm" minWidth="150px">
+							{'Open a channel to Geyser\'s lightning node'}
+						</ButtonComponent>
+					</Linkin>
 				</Wrap>
 				<HStack spacing="24px">
 					<Text color="brand.gray500">

@@ -6,22 +6,25 @@ export const getShortAmountLabel = (amount: number) => {
 		return `${amount}`;
 	}
 
-	if (amount > 1000 && amount < 1000000) {
+	if (amount >= 1000 && amount < 1000000) {
 		const newAmount = Math.round(amount / 1000);
 		return `${newAmount}K`;
 	}
 
-	if (amount > 1000000 && amount < 1000000000) {
+	if (amount >= 1000000 && amount < 1000000000) {
 		const newAmount = Math.round(amount / 1000000);
 		return `${newAmount}M`;
 	}
 
-	if (amount > 1000000000 && amount < 1000000000000) {
-		const newAmount = Math.round(amount / 1000000);
+	if (amount >= 1000000000 && amount < 1000000000000) {
+		const newAmount = Math.round(amount / 1000000000);
 		return `${newAmount}B`;
 	}
 
-	return '';
+	if (amount >= 1000000000000 && amount < 10000000000000000) {
+		const newAmount = Math.round(amount / 1000000000000);
+		return `${newAmount}T`;
+	}
 };
 
 export const validateFundingAmount = (amount: number, btcRate: number) => {

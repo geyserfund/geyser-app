@@ -17,16 +17,13 @@ interface ISwipeLiveProject {
 
 const useStyles = createUseStyles({
 	swiper: {
-		maxWidth: '1280px',
-		paddingBottom: '40px',
+		maxWidth: '980px',
+		paddingBottom: '10px',
 		'& .slick-dots': {
-			bottom: '-50px',
-			'& li': {
-				margin: '0px 10px',
-			},
+			bottom: '-20px',
 			'& button': {
 				'&:before': {
-					fontSize: '15px',
+					fontSize: '10px',
 				},
 			},
 		},

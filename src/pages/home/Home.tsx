@@ -39,7 +39,7 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 		boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
 		borderRadius: '4px',
 		justifyContent: 'space-between',
-		maxWidth: '940px',
+		maxWidth: '890px',
 	},
 	boldText: ({isMobile}) => ({
 		fontSize: isMobile ? '22px' : '24px',
@@ -90,12 +90,9 @@ export const Home = () => {
 
 	const summary = (summaryData && summaryData.projectsSummary) || {};
 
-	// Const project = projects && projects.length > 0 ? projects[randomIntFromInterval(0, (projects.length - 1))] : null;
-
 	const closedProjects = projects.filter((project: IProject) => !project.active);
 	const activeProjects = projects.filter((project: IProject) => project.active);
 
-	console.log('checking summary', summary);
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
@@ -105,7 +102,7 @@ export const Home = () => {
 			<VStack
 				spacing="40px"
 				width="100%"
-				maxWidth="1444px"
+				maxWidth="1370px"
 				padding={isMobile ? '0px 10px' : '0px 40px'}
 				marginBottom="40px"
 				display="flex"
@@ -117,38 +114,38 @@ export const Home = () => {
 					flexDirection={isMobile ? 'column-reverse' : 'row'}
 					justifyContent="space-between"
 					width="100%"
-					marginTop={isMobile ? '15px' : '40px'}
-					marginBottom="45px"
+					marginTop={isMobile ? '15px' : '30px'}
 					alignSelf="center"
+					paddingBottom="20px"
 				>
 					<VStack alignItems="flex-start" spacing="25px">
 						<VStack spacing={0} alignItems="flex-start">
-							<Text fontSize={isMobile ? '33px' : '37px'} fontWeight={700}>
+							<Text lineHeight="40px" fontSize={isMobile ? '33px' : '35px'} fontWeight={700}>
 								Bitcoin ideas can change the world.
 							</Text>
-							<Text fontSize={isMobile ? '33px' : '37px'} fontWeight={700}>
+							<Text lineHeight="40px" fontSize={isMobile ? '33px' : '35px'} fontWeight={700}>
 								Play a part by funding them on Geyser.
 							</Text>
 						</VStack>
-						<Text fontSize={isMobile ? '18px' : '20px'} maxWidth="940px" fontWeight={500}>
+						<Text fontSize={isMobile ? '18px' : '19px'} maxWidth="900px" fontWeight={500} marginTop="15px !important">
 						Geyser is a global crowdfunding platform that helps Bitcoin builders and creators with the funding their projects need to burst out into the world.
 						</Text>
 						<HStack className={classes.pageStats} padding={isMobile ? '50px 20px' : '50px 70px'}>
 							{
 								summaryLoading
 									? <><VStack>
-										<Text className={classes.boldText}>loading state</Text>
-										<Text className={classes.subtitleText}>Projects</Text>
+										<Text className={classes.boldText}>....</Text>
+										<Text className={classes.subtitleText}>Geyser funds</Text>
 									</VStack><VStack>
-										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>loading state</SatoshiAmount>
+										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>....</SatoshiAmount>
 										<Text className={classes.subtitleText}>Sats</Text>
 									</VStack><VStack>
-										<Text className={classes.boldText}>loading state</Text>
+										<Text className={classes.boldText}>....</Text>
 										<Text className={classes.subtitleText}>Plebs</Text>
 									</VStack></>
 									: <><VStack>
 										<Text className={classes.boldText}>{summary.projectsCount}</Text>
-										<Text className={classes.subtitleText}>Projects</Text>
+										<Text className={classes.subtitleText}>Geyser funds</Text>
 									</VStack><VStack>
 										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>{summary.fundedTotal}</SatoshiAmount>
 										<Text className={classes.subtitleText}>Sats</Text>
@@ -161,20 +158,20 @@ export const Home = () => {
 						</HStack>
 					</VStack>
 					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'} minWidth="305px" >
-						<Image src={LaunchImageUrl} maxHeight="320px"/>
+						<Image src={LaunchImageUrl} maxHeight="280px"/>
 					</Box>
 				</Box>
-				<VStack alignItems="flex-start" width="100%">
+				<VStack alignItems="flex-start" width="100%" spacing="0px">
 					<Text className={classes.sectionTitle}>FEATURED</Text>
-					<HStack width="100%" justifyContent="center">
-						<SwipeLiveProject loading={loading} projects={[...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects]}/>
+					<HStack width="100%" justifyContent="center" >
+						<SwipeLiveProject loading={loading} projects={[...activeProjects]}/>
 					</HStack>
 				</VStack>
-				<VStack alignItems="flex-start" width="100%">
+				<VStack alignItems="flex-start" width="100%" spacing="15px">
 					<Text className={classes.sectionTitle}>LIVE PROJECTS</Text>
-					<ProjectBars loading={loading} projects={[...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects, ...activeProjects]} />
+					<ProjectBars loading={loading} projects={[...activeProjects]} />
 				</VStack>
-				<VStack alignItems="flex-start" width="100%" position="relative">
+				<VStack alignItems="flex-start" width="100%" position="relative" spacing="15px">
 					<Text className={classes.sectionTitle}>CLOSED PROJECTS</Text>
 					<ProjectBars loading={loading} projects={[...closedProjects]} />
 				</VStack>
