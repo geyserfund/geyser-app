@@ -28,10 +28,10 @@ const useStyles = createUseStyles({
 });
 
 interface INavBar {
-	isAtTop: boolean
+	showBorder: boolean
 }
 
-export const NavBar = ({isAtTop}: INavBar) => {
+export const NavBar = ({showBorder}: INavBar) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
@@ -66,7 +66,7 @@ export const NavBar = ({isAtTop}: INavBar) => {
 				width="100%"
 				justifyContent="center"
 				background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
-				borderBottom={isAtTop ? '1px solid rgba(0,0,0,0)' : '1px solid #E9E9E9' }
+				borderBottom={showBorder ? '1px solid rgba(0,0,0,0)' : '1px solid #E9E9E9' }
 				boxSizing="border-box"
 			>
 				<Box
