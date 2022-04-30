@@ -14,25 +14,25 @@ export const Badge = ({ badge }: { badge: string }) => {
 				<Box>
 					🏅
 				</Box>
-				<Text color="white" fontSize="8px">$10</Text>
+				<Text color="white" fontSize="9px" fontWeight="medium">$10</Text>
 			</VStack>
 			<VStack spacing={0} rounded="lg" bg="rgba(0, 0, 0, 0.11)" px={3}>
 				<Box>
 					🏆
 				</Box>
-				<Text color="white" fontSize="8px">$100</Text>
+				<Text color="white" fontSize="9px" fontWeight="medium">$100</Text>
 			</VStack>
 			<VStack spacing={0} rounded="lg" bg="rgba(0, 0, 0, 0.11)" px={3}>
 				<Box>
 					👑
 				</Box>
-				<Text color="white" fontSize="8px">$300</Text>
+				<Text color="white" fontSize="9px" fontWeight="medium">$300</Text>
 			</VStack>
 			<VStack spacing={0} rounded="lg" bg="rgba(0, 0, 0, 0.11)" px={3}>
 				<Box>
 					⭐
 				</Box>
-				<Text color="white" fontSize="8px">$500</Text>
+				<Text color="white" fontSize="9px" fontWeight="medium">$500</Text>
 			</VStack>
 		</HStack>
 	</Box>

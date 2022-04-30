@@ -54,9 +54,9 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<Box position="relative">
 								{ownerHover
 	&& <>
-		<Box width="172px" position="absolute" top="-65px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
+		<Box width="172px" position="absolute" top="-82px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
 			<Text fontWeight="bold" color="white" fontSize="10px">Creators</Text>
-			<Text color="white" fontSize="8px" mt={1}>Project creators have verified their Twitter accounts. Go check them out!</Text>
+			<Text color="white" fontSize="9px" fontWeight="medium" mt={1}>Project creators have verified their Twitter accounts. Go check them out!</Text>
 		</Box>
 		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
 	</>
@@ -87,9 +87,9 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<Box position="relative">
 								{ambassadorHover
 	&& <>
-		<Box width="172px" position="absolute" top="-65px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
+		<Box width="172px" position="absolute" top="-81px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
 			<Text fontWeight="bold" color="white" fontSize="10px">Ambassadors</Text>
-			<Text color="white" fontSize="8px" mt={1}>Ambassadors are individuals who vouch for the project and give their go ahead.</Text>
+			<Text color="white" fontSize="9px" fontWeight="medium" mt={1}>Ambassadors are individuals who vouch for the project and give their go ahead.</Text>
 		</Box>
 		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
 	</>
@@ -129,9 +129,9 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<Box position="relative">
 								{sponsorHover
 	&& <>
-		<Box width="172px" position="absolute" top="-89px" left={isMobile ? '-50px' : '-80px'} p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
+		<Box width="172px" position="absolute" top="-108px" left={isMobile ? '-50px' : '-80px'} p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
 			<Text fontWeight="bold" color="white" fontSize="10px">Sponsors</Text>
-			<Text color="white" fontSize="8px" mt={1}>Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences.</Text>
+			<Text color="white" fontSize="9px" fontWeight="medium" mt={1}>Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences.</Text>
 		</Box>
 		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
 	</>
