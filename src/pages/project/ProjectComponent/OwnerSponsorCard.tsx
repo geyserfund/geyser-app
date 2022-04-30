@@ -129,7 +129,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<Box position="relative">
 								{sponsorHover
 	&& <>
-		<Box width="172px" position="absolute" top="-89px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
+		<Box width="172px" position="absolute" top="-89px" left={isMobile ? '-50px' : '-80px'} p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
 			<Text fontWeight="bold" color="white" fontSize="10px">Sponsors</Text>
 			<Text color="white" fontSize="8px" mt={1}>Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences.</Text>
 		</Box>
