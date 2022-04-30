@@ -1,6 +1,6 @@
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, InfoIcon } from '@chakra-ui/icons';
 import { Avatar, Box, HStack, IconButton, Link, Text, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { AddAmbassador, AddSponsor } from '../../../components/molecules';
 import { Card, ImageBar, StatusBar } from '../../../components/ui';
 import { ISponsor, IParticipant } from '../../../interfaces';
@@ -18,6 +18,9 @@ interface IOwnerSponsorCard {
 }
 
 export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images, problem, idea}: IOwnerSponsorCard) => {
+	const [ownerHover, setOwnerHover] = useState(false);
+	const [ambassadorHover, setAmbassadorHover] = useState(false);
+	const [sponsorHover, setSponsorHover] = useState(false);
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 
@@ -46,7 +49,21 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 						<StatusBar variant="idea" message={idea} />
 					</VStack>
 					<Box>
-						<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
+						<HStack>
+							<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
+							<Box position="relative">
+								{ownerHover
+	&& <>
+		<Box width="172px" position="absolute" top="-65px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
+			<Text fontWeight="bold" color="white" fontSize="10px">Creators</Text>
+			<Text color="white" fontSize="8px" mt={1}>Project creators have verified their Twitter accounts. Go check them out!</Text>
+		</Box>
+		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
+	</>
+								}
+								<InfoIcon w={3} h={3} color="#5B5B5B" onMouseEnter={() => setOwnerHover(true)} onMouseLeave={() => setOwnerHover(false)}/>
+							</Box>
+						</HStack>
 						<HStack spacing="30px" alignItems="flex-start">
 							<Link href={`https://twitter.com/${owner.user.twitterHandle}`} isExternal>
 								<Avatar width="75px" height="75px" name={owner.user.username} src={owner.user.imageUrl} />
@@ -65,7 +82,21 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 						</HStack>
 					</Box>
 					<VStack spacing="10px" alignItems="flex-start" >
-						<Text fontSize="10px" color="brand.textGrey">AMBASSADORS</Text>
+						<HStack>
+							<Text fontSize="10px" color="brand.textGrey">AMBASSADORS</Text>
+							<Box position="relative">
+								{ambassadorHover
+	&& <>
+		<Box width="172px" position="absolute" top="-65px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
+			<Text fontWeight="bold" color="white" fontSize="10px">Ambassadors</Text>
+			<Text color="white" fontSize="8px" mt={1}>Ambassadors are individuals who vouch for the project and give their go ahead.</Text>
+		</Box>
+		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
+	</>
+								}
+								<InfoIcon w={3} h={3} color="#5B5B5B" onMouseEnter={() => setAmbassadorHover(true)} onMouseLeave={() => setAmbassadorHover(false)}/>
+							</Box>
+						</HStack>
 						<Wrap>
 							{
 								ambassadors.map((ambassador: IParticipant) => (
@@ -93,7 +124,21 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 
 					</VStack>
 					<VStack spacing="10px" alignItems="flex-start">
-						<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
+						<HStack>
+							<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
+							<Box position="relative">
+								{sponsorHover
+	&& <>
+		<Box width="172px" position="absolute" top="-89px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
+			<Text fontWeight="bold" color="white" fontSize="10px">Sponsors</Text>
+			<Text color="white" fontSize="8px" mt={1}>Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences.</Text>
+		</Box>
+		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
+	</>
+								}
+								<InfoIcon w={3} h={3} color="#5B5B5B" onMouseEnter={() => setSponsorHover(true)} onMouseLeave={() => setSponsorHover(false)}/>
+							</Box>
+						</HStack>
 						<Wrap >
 							{
 								sponsors.map((sponsor: ISponsor) => (
