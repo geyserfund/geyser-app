@@ -95,4 +95,4 @@ const projectDetails: IProjectDetail = {
 
 const projectName: string = 'lightning-rebel';
 
-export const Craig = {projectBlocks, projectDetails, projectName};
+export const Yeferson = {projectBlocks, projectDetails, projectName};
