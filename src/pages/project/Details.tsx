@@ -8,7 +8,7 @@ import { colors } from '../../constants';
 import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { getDaysAgo, isDarkMode, isMobileMode } from '../../utils';
-import { Craig, King, Toni, Yeferson } from './ProjectLayout';
+import { RewardBased } from './ProjectLayout';
 
 type Rules = string
 
@@ -92,24 +92,6 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 		}, 500);
 	};
 
-	const getRender = () => {
-		if (project.name === 'bitcoin-conference-in-lagos') {
-			return <King project={project}/>;
-		}
-
-		if (project.name === 'the-bitcoin-game') {
-			return <Craig project={project}/>;
-		}
-
-		if (project.name === 'day-of-genesis') {
-			return <Toni project={project} />;
-		}
-
-		if (project.name === 'lightning-rebel') {
-			return <Yeferson project={project} />;
-		}
-	};
-
 	return (
 		<Box
 			className={classNames(classes.container, {
@@ -136,9 +118,7 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 
 			<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="1px 0px" />
 			<Box className={classes.detailsContainer} id="project-scoll-container" >
-				{
-					getRender()
-				}
+				<RewardBased project={project}/>
 			</Box>
 		</Box>
 	);
