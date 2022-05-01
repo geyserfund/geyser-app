@@ -158,7 +158,7 @@ export const Home = () => {
 						</HStack>
 					</VStack>
 					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'} minWidth="305px" >
-						<Image src={LaunchImageUrl} maxHeight="280px"/>
+						<Image src={LaunchImageUrl} maxHeight="250px"/>
 					</Box>
 				</Box>
 				<VStack alignItems="flex-start" width="100%" spacing="0px">
