@@ -28,6 +28,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'the-bitcoin-game';
+const projectName: string = 'bitcoin-education-in-nigeria';
 
 export const Apata = {projectBlocks, projectDetails, projectName};
