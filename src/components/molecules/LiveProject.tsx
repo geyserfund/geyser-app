@@ -49,6 +49,9 @@ const useStyles = createUseStyles({
 		width: '100%',
 		opacity: 0.7,
 	},
+	satoshiText: {
+		marginTop: '1px !important',
+	},
 });
 
 export const LiveProject = ({ project}: ILiveProject) => {
@@ -106,7 +109,7 @@ export const LiveProject = ({ project}: ILiveProject) => {
 						<Text fontSize="14px">{getDescription}</Text>
 						<Wrap >
 							<Text fontSize="18px">Raised: </Text>
-							<SatoshiAmount fontSize="18px">{project.balance}</SatoshiAmount>
+							<SatoshiAmount wrapperClassName={classes.satoshiText} fontSize="18px" marginTop="2px !important">{project.balance}</SatoshiAmount>
 							<Text fontSize="18px">{`, ${percentage} % `}</Text>
 							<Text fontSize="18px">of goal</Text>
 						</Wrap>
