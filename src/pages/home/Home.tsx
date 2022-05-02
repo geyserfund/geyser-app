@@ -36,6 +36,7 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 	pageStats: {
 		width: '100%',
 		height: '80px',
+		background: 'white',
 		boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
 		borderRadius: '4px',
 		justifyContent: 'space-between',
@@ -98,6 +99,8 @@ export const Home = () => {
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
 			padding="0px 0px"
+			height="100%"
+			justifyContent="space-between"
 		>
 			<VStack
 				spacing="40px"

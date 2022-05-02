@@ -6,7 +6,7 @@ const projectBlocks: IProjectBlock[] = [{
 	body: [
 		'Bitcoin Ballers was born in April 2021 after falling deep into the Bitcoin rabbit hole. Through numerous Bitcoin themed skill-based competitions, lots of prizes and sats have been given out as rewards for both participating and winning. The end of 2021 saw Bitcoin Ballers host its first ever Winter Cup Festival for young people where they competed to be crowned champions and win the trophy. Ultimately, as promised during the April 2021 launch, Bitcoin Ballers is going to the Moon… But before this happens, we\'ll be orange-pilling and onboarding as many plebs as possible with more competitions, more tournaments, more teams, more cities, more countries…',
 	],
-	images: [1],
+	images: [4],
 	blockType: 'PL',
 },
 {
@@ -29,18 +29,28 @@ const projectBlocks: IProjectBlock[] = [{
 	blockType: 'PL',
 },
 {
+	key: 'demo',
+	title: 'Video',
+	body: [
+		'[Youtube Video](https://www.youtube.com/watch?v=mkTD4OE0pNw)',
+		'[![lightning rebel demo](https://storage.googleapis.com/geyser-projects-media/project/bitcoin-ballers/yt_thumbnail.png)](https://www.youtube.com/watch?v=mkTD4OE0pNw "Bitcoin Ballers video")',
+	],
+	blockType: 'PL',
+},
+{
 	key: 'aboutMe',
 	title: 'About me',
 	body: [
 		' A former football trainee who was fingertips away from a career in the game, always feeling at odds with a settled career in construction. Many years later after climbing the ladder into management, the decision was made in the year of the grand awakening (2020) to take a leap of faith and focus on a mission of health and wellness. This journey led to the 3rd touchpoint of Bitcoin but this time was ready to receive. After many hours of listening, reading, and talking with Bitcoiners, the idea came about to provide value back into the space with something that was close to my heart, football.',
 	],
+	images: [3],
 	blockType: 'PL',
 }];
 
 const projectDetails: IProjectDetail = {
 	problem: 'Increase awareness and understanding of money and Bitcoin, specifically relating to time, energy, value and responsibility.',
 	idea: 'Promoting financial curiosity through information, competition and education using football as a medium, linking the fundamentals and principles of Bitcoin. Mainly DYOR (training), FUD busting (self-belief) & Proof Of Work (performance & personal responsibility)',
-	ownerIntro: 'I\'m a Junior Editor at Bitcoin Magazine with a passion for Bitcoin Education.',
+	ownerIntro: 'I\'m a former football trainee now looking to bring together football, Bitcoin and education.',
 	blocks: projectBlocks,
 };
 

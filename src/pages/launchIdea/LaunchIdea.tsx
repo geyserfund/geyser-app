@@ -1,10 +1,11 @@
-import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Link, Stack, Text, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { createCreatorRecord } from '../../api';
 import { EnvelopeIcon, LighteningIcon, RopeIcon } from '../../components/icons';
 import { ButtonComponent, Card, SectionTitle, TextArea, TextBox } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
+import { GeyserFAQUrl } from '../../constants';
 import { isMobileMode, useNotification } from '../../utils';
 
 const useStyles = createUseStyles({
@@ -104,12 +105,12 @@ export const LaunchIdea = () => {
 	);
 
 	return (
-		<Box margin={isMobile ? '10px 10px 40px 10px' : '50px 60px'}>
-			<VStack spacing="60px">
+		<Box display="flex" justifyContent="center">
+			<VStack spacing="50px" maxWidth="1370px" padding={isMobile ? '10px 10px 40px 10px' : '40px 40px'} >
 				<VStack width="100%" alignItems="flex-start" spacing="30px">
-					<Text fontSize="44px" fontWeight={700}>Transform your ideas into reality</Text>
+					<Text fontSize="35px" fontWeight={700}>Transform your ideas into reality</Text>
 					<Text fontSize="18px">
-                Are you a Bitcoin creator, creative or entrepreneur looking for the funds needed to realize your ideas? No matter where you are in the world, Geyser now makes it easy for you to create and commit to a time-bound crowdfund, and allow supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser below, and we will get back to you soon on how to proceed.
+                Are you a Bitcoin creator, creative or entrepreneur looking for the funds needed to realize your ideas? No matter where you are in the world, Geyser now makes it easy for you to create and commit to a time-bound crowdfund, and allow supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser below, and we will get back to you soon on how to proceed. For more info check out our <Link href={GeyserFAQUrl} isExternal textDecoration="underline">FAQ</Link>.
 					</Text>
 					<Stack direction={isMobile ? 'column' : 'row'} width="100%" justifyContent="space-between" spacing={isMobile ? '30px' : '15px'}>
 						<HStack flex="1" spacing="18px">
