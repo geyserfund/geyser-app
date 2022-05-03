@@ -19,9 +19,11 @@ steps:
       --target build \
       -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
       --build-arg REACT_APP_API_ENDPOINT=${_API_ENDPOINT} \
+      --build-arg REACT_APP_AIR_TABLE_KEY=$$AIRTABLE_API_KEY \
       --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build . \
       && \
       docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build
+    secretEnv: ['AIRTABLE_API_KEY']
   - id: "Update Image: latest"
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -32,12 +34,14 @@ steps:
       -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
       -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
       --build-arg REACT_APP_API_ENDPOINT=${_API_ENDPOINT} \
+      --build-arg REACT_APP_AIR_TABLE_KEY=$$AIRTABLE_API_KEY \
       --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
       --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest . \
       && \
       docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
       && \
       docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA
+    secretEnv: ['AIRTABLE_API_KEY']
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -55,4 +59,8 @@ images:
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build'
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest'
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/airtable-api-key/versions/1
+    env: 'AIRTABLE_API_KEY'
 timeout: 1800s
