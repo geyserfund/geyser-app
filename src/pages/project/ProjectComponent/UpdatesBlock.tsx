@@ -22,9 +22,10 @@ import { getFormattedDate, isMobileMode } from '../../../utils';
 
 interface IUpdatesBlock {
     projectUpdate: IProjectUpdate
+	media: string[]
 }
 
-export const UpdatesBlock = ({projectUpdate}: IUpdatesBlock) => {
+export const UpdatesBlock = ({projectUpdate, media}: IUpdatesBlock) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 
@@ -38,8 +39,9 @@ export const UpdatesBlock = ({projectUpdate}: IUpdatesBlock) => {
 		}
 	};
 
-	const renderImages = (images?: string[]) => {
-		if (images && images.length > 0) {
+	const renderImages = (imageIndex?: number[]) => {
+		if (imageIndex && imageIndex.length > 0) {
+			const images = imageIndex.map((val: number) => media[val]);
 			return (
 				<HStack spacing="30px" overflowX="auto">
 					{

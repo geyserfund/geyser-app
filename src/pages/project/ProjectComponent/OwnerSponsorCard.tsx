@@ -46,7 +46,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 						<StatusBar variant="idea" message={idea} />
 					</VStack>
 					<Box>
-						<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
+						<Text fontSize="10px" color="brand.textGrey">CREATOR</Text>
 						<HStack spacing="30px" alignItems="flex-start">
 							<Link href={`https://twitter.com/${owner.user.twitterHandle}`} isExternal>
 								<Avatar width="75px" height="75px" name={owner.user.username} src={owner.user.imageUrl} />

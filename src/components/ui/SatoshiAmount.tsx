@@ -6,9 +6,10 @@ interface ISatoshiAmountProps extends TextProps {
 	label?: string;
 	extra?: string;
 	loading?: boolean
+	wrapperClassName?: string
 }
 
-export const SatoshiAmount = ({label, extra, fontSize, loading, children, ...rest}: ISatoshiAmountProps) => {
+export const SatoshiAmount = ({label, extra, fontSize, loading, wrapperClassName, children, ...rest}: ISatoshiAmountProps) => {
 	const getScale = () => {
 		if (fontSize) {
 			let size = 0;
@@ -33,7 +34,7 @@ export const SatoshiAmount = ({label, extra, fontSize, loading, children, ...res
 	};
 
 	return (
-		<HStack alignItems="center">
+		<HStack alignItems="center" className={wrapperClassName}>
 			{label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
 			{(Boolean(children) && !loading) &&	<SatoshiIcon color={rest.color} scale={getScale() } />}
 			<Text fontSize={fontSize} {...rest}>{`${numberWithCommas(`${children}`)} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
