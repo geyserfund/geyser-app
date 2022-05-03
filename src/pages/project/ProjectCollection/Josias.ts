@@ -6,7 +6,7 @@ const projectBlocks: IProjectBlock[] = [{
 	body: [
 		'Bitcoin Ballers was born in April 2021 after falling deep into the Bitcoin rabbit hole. Through numerous Bitcoin themed skill-based competitions, lots of prizes and sats have been given out as rewards for both participating and winning. The end of 2021 saw Bitcoin Ballers host its first ever Winter Cup Festival for young people where they competed to be crowned champions and win the trophy. Ultimately, as promised during the April 2021 launch, Bitcoin Ballers is going to the Moon… But before this happens, we\'ll be orange-pilling and onboarding as many plebs as possible with more competitions, more tournaments, more teams, more cities, more countries…',
 	],
-	images: [4],
+	images: [0],
 	blockType: 'PL',
 },
 {
@@ -15,7 +15,7 @@ const projectBlocks: IProjectBlock[] = [{
 	body: [
 		'By becoming a supporter of Bitcoin Ballers and helping fund our initiatives you\'ll initially help us kit out some boys & girls junior teams who will be representing us in football tournaments this summer. In addition to that, you\'ll allow us to create more fun online prize-giveaway competitions and reward participants, host more family friendly festivals, provide more equipment to coach more teams, enter more sides into football tournaments, work with and nurture talented individuals and visit more cities with our pop-up skills workshops. Our ultimate mission is to export the Bitcoin Ballers concept around the globe spreading the Clubs message… \'Bitcoin is for everyone and by studying it, understanding it, living it, you have an opportunity to become a better player, a better person... all for a better world.',
 	],
-	images: [2],
+	images: [3],
 	blockType: 'PL',
 },
 {
@@ -25,7 +25,7 @@ const projectBlocks: IProjectBlock[] = [{
 		'- **Bitcoin Ballers Club replica team shirt with name or number on the back**: The Bitcoin Ballers shirt will be worn this spring/summer by youth and adult teams entering tournaments representing the club.',
 		'- **Company Logo on a Bitcoin Ballers team kit and replica shirt with name and number on the back**: The Bitcoin Ballers shirt will be worn this spring/summer by youth and adult teams entering tournaments representing the club.',
 	],
-	images: [0],
+	images: [1],
 	blockType: 'PL',
 },
 {
@@ -43,7 +43,7 @@ const projectBlocks: IProjectBlock[] = [{
 	body: [
 		' A former football trainee who was fingertips away from a career in the game, always feeling at odds with a settled career in construction. Many years later after climbing the ladder into management, the decision was made in the year of the grand awakening (2020) to take a leap of faith and focus on a mission of health and wellness. This journey led to the 3rd touchpoint of Bitcoin but this time was ready to receive. After many hours of listening, reading, and talking with Bitcoiners, the idea came about to provide value back into the space with something that was close to my heart, football.',
 	],
-	images: [3],
+	images: [4],
 	blockType: 'PL',
 }];
 

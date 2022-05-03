@@ -155,7 +155,7 @@ export const QrPage = ({
 						<VStack alignItems="flex-start" spacing="0px">
 							<SectionTitle>Total</SectionTitle>
 							<SatoshiAmount label="Donation">{amounts.donationAmount}</SatoshiAmount>
-							{amounts.rewardsCost && <SatoshiAmount label="Reward" extra={rewardCountString()}>{amounts.rewardsCost}</SatoshiAmount>}
+							{amounts.rewardsCost && <Text>{`Rewards: ${rewardCountString()}`}</Text>}
 							{amounts.rewardsCost && <SatoshiAmount label="Shipping" >{amounts.shippingCost}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
 							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text> }
