@@ -226,7 +226,7 @@ export const PaymentPage = ({
 					<Text> {`$${getTotalAmount('dollar', name)}`}</Text>
 				</VStack>
 			</HStack>}
-			<Box width="100%">
+			<Box width="100%" paddingBottom="10px">
 				<ButtonComponent
 					isLoading={fundLoading}
 					primary
