@@ -60,6 +60,37 @@ export const slideInLeft = {
 	},
 };
 
+export const slideInLeftDynamic = (distance: number, time: number) => ({
+	'@-webkit-keyframes slide-in-left-dynamic': {
+		from: {
+			webkitTransform: `translateX(-${distance}px)`,
+			transform: `translateX(-${distance}px)`,
+			opacity: 0,
+		},
+		to: {
+			webkitTransform: 'translateX(0)',
+			transform: 'translateX(0)',
+			opacity: 1,
+		},
+	},
+	'@keyframes slide-in-left-dynamic': {
+		from: {
+			webkitTransform: `translateX(-${distance}px)`,
+			transform: `translateX(-${distance}px)`,
+			opacity: 0,
+		},
+		to: {
+			webkitTransform: 'translateX(0)',
+			transform: 'translateX(0)',
+			opacity: 1,
+		},
+	},
+	slideInLeftDynamic: {
+		webkitAnimation: `$slide-in-left-dynamic ${time}s cubic-bezier(0.250, 0.460, 0.450, 0.940) both`,
+		animation: `$slide-in-left-dynamic ${time}s cubic-bezier(0.250, 0.460, 0.450, 0.940) both`,
+	},
+});
+
 export const slideOutRight = {
 	'@-webkit-keyframes slide-out-right': {
 		from: {
@@ -90,6 +121,37 @@ export const slideOutRight = {
 		animation: '$slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
 	},
 };
+
+export const slideOutRightDynamic = (distance: number, time: number) => ({
+	'@-webkit-keyframes slide-out-right-dynamic': {
+		from: {
+			webkitTransform: 'translateX(0)',
+			transform: 'translateX(0)',
+			opacity: 1,
+		},
+		to: {
+			webkitTransform: `translateX(${distance}px)`,
+			transform: `translateX(${distance}px)`,
+			opacity: 0,
+		},
+	},
+	'@keyframes slide-out-right-dynamic': {
+		from: {
+			webkitTransform: 'translateX(0)',
+			transform: 'translateX(0)',
+			opacity: 1,
+		},
+		to: {
+			webkitTransform: `translateX(${distance}px)`,
+			transform: `translateX(${distance}px)`,
+			opacity: 0,
+		},
+	},
+	slideOutRightDynamic: {
+		webkitAnimation: `$slide-out-right-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
+		animation: `$slide-out-right-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
+	},
+});
 
 export const slideOutLeft = {
 	'@-webkit-keyframes slide-out-left': {
@@ -142,5 +204,28 @@ export const fadeOut = {
 	fadeOut: {
 		webkitAnimation: '$fade-out 0.5s ease-out both',
 		animation: '$fade-out 0.5s ease-out both',
+	},
+};
+
+export const fadeIn = {
+	'@-webkit-keyframes fade-in': {
+		from: {
+			opacity: 0,
+		},
+		to: {
+			opacity: 1,
+		},
+	},
+	'@keyframes fade-in': {
+		from: {
+			opacity: 0,
+		},
+		to: {
+			opacity: 1,
+		},
+	},
+	fadeIn: {
+		webkitAnimation: '$fade-in 0.5s ease-out both',
+		animation: '$fade-in 0.5s ease-out both',
 	},
 };

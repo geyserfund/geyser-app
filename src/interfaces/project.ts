@@ -49,7 +49,7 @@ export interface IProjectBlock {
     key: string;
     title: string;
     body: string[];
-    images?: string[];
+    images?: number[];
     blockType: string;
 }
 
@@ -60,7 +60,7 @@ export interface IProjectUpdate {
     type: string;
     bodyTitle?: string;
     body?: string[];
-    images?: string[];
+    images?: number[];
 }
 
 export interface IRewardCount {

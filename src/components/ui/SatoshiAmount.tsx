@@ -5,9 +5,11 @@ import { SatoshiIcon } from '../icons';
 interface ISatoshiAmountProps extends TextProps {
 	label?: string;
 	extra?: string;
+	loading?: boolean
+	wrapperClassName?: string
 }
 
-export const SatoshiAmount = ({label, extra, fontSize, children, ...rest}: ISatoshiAmountProps) => {
+export const SatoshiAmount = ({label, extra, fontSize, loading, wrapperClassName, children, ...rest}: ISatoshiAmountProps) => {
 	const getScale = () => {
 		if (fontSize) {
 			let size = 0;
@@ -22,11 +24,20 @@ export const SatoshiAmount = ({label, extra, fontSize, children, ...rest}: ISato
 		return 0.8;
 	};
 
+	const numberWithCommas = (x:string) => {
+		const pattern = /(-?\d+)(\d{3})/;
+		while (pattern.test(x)) {
+			x = x.replace(pattern, '$1,$2');
+		}
+
+		return x;
+	};
+
 	return (
-		<HStack alignItems="center">
+		<HStack alignItems="center" className={wrapperClassName}>
 			{label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
-			<SatoshiIcon color={rest.color} scale={getScale() } />
-			<Text fontSize={fontSize} {...rest}>{`${children} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
+			{(Boolean(children) && !loading) &&	<SatoshiIcon color={rest.color} scale={getScale() } />}
+			<Text fontSize={fontSize} {...rest}>{`${numberWithCommas(`${children}`)} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
 		</HStack>
 	);
 };

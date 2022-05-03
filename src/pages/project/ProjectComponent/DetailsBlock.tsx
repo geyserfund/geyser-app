@@ -22,16 +22,18 @@ import { useStyles } from './styles';
 
 interface IDetailsBlock {
     projectDetails: IProjectDetail
+	media: string[]
 }
 
-export const DetailsBlock = ({ projectDetails}: IDetailsBlock) => {
+export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 
 	const {blocks} = projectDetails;
 
-	const renderImages = (images?: string[]) => {
-		if (images && images.length > 0) {
+	const renderImages = (imageIndex?: number[]) => {
+		if (imageIndex && imageIndex.length > 0) {
+			const images = imageIndex.map((val: number) => media[val]);
 			return (
 				<HStack spacing="30px" overflowX="auto">
 					{

@@ -113,7 +113,7 @@ export const PaymentPage = ({
 		return `${count} rewards`;
 	};
 
-	const hasShipping = () => name !== 'day-of-genesis' && name !== 'lightning-rebel';
+	const hasShipping = () => name !== 'day-of-genesis' && name !== 'lightning-rebel' && name !== 'bitcoin-ballers';
 
 	console.log('checking state', state);
 	return (
@@ -216,8 +216,8 @@ export const PaymentPage = ({
 			{type === projectTypes.reward && <HStack width="100%" justifyContent="space-between" alignItems="flex-start">
 				<VStack alignItems="flex-start" spacing="0px">
 					<SectionTitle>Total</SectionTitle>
-					<SatoshiAmount label="Donation">{state.donationAmount}</SatoshiAmount>
-					<SatoshiAmount label="Reward" extra={rewardCountString()}>{Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
+					<SatoshiAmount label="Donation">{state.donationAmount + Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
+					{ state.rewardsCost && <Text>{`Rewards: ${rewardCountString()}`}</Text>}
 					{ state.rewardsCost && hasShipping() && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 
 				</VStack>
@@ -226,7 +226,7 @@ export const PaymentPage = ({
 					<Text> {`$${getTotalAmount('dollar', name)}`}</Text>
 				</VStack>
 			</HStack>}
-			<Box width="100%">
+			<Box width="100%" paddingBottom="10px">
 				<ButtonComponent
 					isLoading={fundLoading}
 					primary

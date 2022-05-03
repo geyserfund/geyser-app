@@ -1,6 +1,7 @@
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
 import React from 'react';
+import {ImageProps} from '@chakra-ui/react';
 import StarPng from '../../assets/star.png';
 import CrownPng from '../../assets/crown.png';
 import LighteningPng from '../../assets/lightening.png';
@@ -11,6 +12,8 @@ import HourglassPng from '../../assets/hourglass.png';
 import GiftPng from '../../assets/gift.png';
 import SatoshiPng from '../../assets/satoshi.png';
 import GifSvg from '../../assets/gif.svg';
+import EnvelopePng from '../../assets/envelope.png';
+import RopePng from '../../assets/rope.png';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }: any) => {
 	const getFilter = () => {
@@ -32,56 +35,69 @@ export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }:
 	);
 };
 
-export const StarIcon = () => (
+export const StarIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={StarPng} alt="star" />
+		<Image height="20px" width="20px" src={StarPng} alt="star" {...props} />
 	</Box>
 );
 
-export const MagnifyGlassIcon = () => (
+export const MagnifyGlassIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={MagnifyPng} alt="magnify glass" />
+		<Image height="20px" width="20px" src={MagnifyPng} alt="magnify glass" {...props} />
 	</Box>
 );
 
-export const MedalIcon = () => (
+export const MedalIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={MedalPng} alt="medal" />
+		<Image height="20px" width="20px" src={MedalPng} alt="medal" {...props} />
 	</Box>
 );
 
-export const LighteningIcon = () => (
+export const LighteningIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={LighteningPng} alt="lightening" />
+		<Image height="20px" width="20px" src={LighteningPng} alt="lightening" {...props} />
 	</Box>
 );
 
-export const TrophyIcon = () => (
+export const TrophyIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={TrophyPng} alt="trophy" />
+		<Image height="20px" width="20px" src={TrophyPng} alt="trophy" {...props} />
 	</Box>
 );
 
-export const CrownIcon = () => (
+export const CrownIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={CrownPng} alt="crown" />
+		<Image height="20px" width="20px" src={CrownPng} alt="crown" {...props} />
 	</Box>
 );
 
-export const HourglassIcon = () => (
+export const HourglassIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={HourglassPng} alt="hourglass" />
+		<Image height="20px" width="20px" src={HourglassPng} alt="hourglass" {...props} />
 	</Box>
 );
 
-export const GiftIcon = () => (
+export const GiftIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={GiftPng} alt="gift" />
+		<Image height="20px" width="20px" src={GiftPng} alt="gift" {...props} />
 	</Box>
 );
 
-export const GifIcon = () => (
+export const GifIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={GifSvg} alt="gif" />
+		<Image height="20px" width="20px" src={GifSvg} alt="gif" {...props} />
 	</Box>
 );
+
+export const EnvelopeIcon = (props: ImageProps) => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={EnvelopePng} alt="gif" {...props}/>
+	</Box>
+);
+
+export const RopeIcon = (props: ImageProps) => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={RopePng} alt="gif" {...props}/>
+	</Box>
+);
+

@@ -23,8 +23,8 @@ interface IProjectCardProp extends ICard {
 
 const useStyles = createUseStyles({
 	container: {
-		borderRadius: '10px',
-		height: '240px',
+		borderRadius: '4px',
+		height: '260px',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -94,10 +94,10 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 		}
 	}, [btcRate, project]);
 
-	const getProjectBackers = () => (project && project.fundingTxs) ? project.fundingTxs.length : '';
+	const getProjectBackers = () => (project && project.funders) ? project.funders.length : '';
 
 	const {amount, label} = formatDaysLeft(project.expiresAt);
-
+	console.log(getShortAmountLabel(project.balance));
 	return (
 		<Card
 			className={classNames(classes.container, className)}
@@ -105,7 +105,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 			onClick={handleCardCLick}
 			{...rest}
 		>
-			<Box height="139px" width="100%" position="relative">
+			<Box height="160px" width="100%" position="relative">
 				<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
 				<Box className={classes.viewProject}>
 					<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
@@ -115,7 +115,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 			<VStack spacing="5px" width="100%" padding="10px">
 				<HStack spacing="10px" justifyContent="flex-start" width="100%">
 					<Avatar src={project.owners && project.owners[0].user.imageUrl} height="22px" width="22px" />
-					<Text>{title}</Text>
+					<Text fontSize="16px" fontWeight={600}>{title}</Text>
 				</HStack>
 				<HStack alignItems="center" justifyContent={'space-between'} width="100%">
 					<CircularProgress
@@ -141,8 +141,8 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 						<Text fontSize="12px">received</Text>
 					</VStack>
 					<VStack alignItems="center" justifyContent="center" spacing="0">
-						<Text fontSize="14px" fontWeight={600}>{`${amount}`}</Text>
-						<Text fontSize="12px">{`${label} left`}</Text>
+						<Text fontSize="12px" fontWeight={600}>{project.active ? `${amount}` : 'Completed'}</Text>
+						{project.active && <Text fontSize="12px">{`${label} left`}</Text>}
 					</VStack>
 				</HStack>
 			</VStack>
