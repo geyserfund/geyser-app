@@ -36,12 +36,13 @@ export const RewardBased = ({ project }: { project: IProject}) => {
 	};
 
 	return (
-		<VStack alignItems="center" width="100%" padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}>
+		<VStack alignItems="center" width="100%" >
 			<VStack
 				spacing="20px"
 				alignItems="left"
 				marginTop={isMobile ? '0px' : '20px'}
 				maxWidth="820px"
+				padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
 			>
 				<OwnerSponsorCard
 					images={project.media}
