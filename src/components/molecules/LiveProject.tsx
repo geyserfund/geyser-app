@@ -84,8 +84,8 @@ export const LiveProject = ({ project}: ILiveProject) => {
 					height={isMobile ? undefined : '300px'}
 					alignItems="flex-start"
 				>
-					<Box flex="1" height="100%" borderRadius="4px" overflow="hidden" position="relative" >
-						<Image src={image} width="100%" height="100%" maxHeight="300px" objectFit="cover"/>
+					<Box flex="1" height="100%" width={isMobile ? '100%' : undefined} borderRadius="4px" overflow="hidden" position="relative" >
+						<Image src={image} width="100%" height="100%" maxHeight="300px" objectFit="cover" minHeight={isMobile ? '300px' : undefined} />
 						<Box className={classes.viewProject}>
 							<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
 							<Box className={classes.darkLayout} />
@@ -121,18 +121,6 @@ export const LiveProject = ({ project}: ILiveProject) => {
 	);
 };
 
-export const LiveProjectSkeleton = () => {
-	const isMobile = isMobileMode();
+export const LiveProjectSkeleton = () => (
 
-	return (
-		<Box
-			display="flex"
-			flexDirection={isMobile ? 'column' : 'row'}
-			spacing="25px"
-			width="100%"
-			maxWidth="925px"
-			alignItems="flex-start"
-		>
-			<Skeleton height="290px" width="100%" maxWidth="980px" flex={1}/>
-		</Box>);
-};
+	<Skeleton height="290px" width="100%" maxWidth="925px" flex={1}/>);
