@@ -1,8 +1,8 @@
-import { AddIcon, InfoIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 import { Avatar, Box, HStack, IconButton, Link, Text, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { AddAmbassador, AddSponsor } from '../../../components/molecules';
-import { Card, ImageBar, StatusBar } from '../../../components/ui';
+import { Card, ImageBar, StatusBar, InfoTooltip } from '../../../components/ui';
 import { ISponsor, IParticipant } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { useStyles } from './styles';
@@ -18,9 +18,6 @@ interface IOwnerSponsorCard {
 }
 
 export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images, problem, idea}: IOwnerSponsorCard) => {
-	const [ownerHover, setOwnerHover] = useState(false);
-	const [ambassadorHover, setAmbassadorHover] = useState(false);
-	const [sponsorHover, setSponsorHover] = useState(false);
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 
@@ -51,18 +48,11 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 					<Box>
 						<HStack>
 							<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
-							<Box position="relative">
-								{ownerHover
-	&& <>
-		<Box width="172px" position="absolute" top="-82px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
-			<Text fontWeight="bold" color="white" fontSize="10px">Creators</Text>
-			<Text color="white" fontSize="9px" fontWeight="medium" mt={1}>Project creators have verified their Twitter accounts. Go check them out!</Text>
-		</Box>
-		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
-	</>
-								}
-								<InfoIcon w={3} h={3} color="#5B5B5B" onMouseEnter={() => setOwnerHover(true)} onMouseLeave={() => setOwnerHover(false)}/>
-							</Box>
+							<InfoTooltip
+								title="Owner"
+								description="Project creators have verified their Twitter accounts. Go check them out!"
+								options={ { top: '-82px', left: '-80px' } }
+							/>
 						</HStack>
 						<HStack spacing="30px" alignItems="flex-start">
 							<Link href={`https://twitter.com/${owner.user.twitterHandle}`} isExternal>
@@ -84,18 +74,11 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 					<VStack spacing="10px" alignItems="flex-start" >
 						<HStack>
 							<Text fontSize="10px" color="brand.textGrey">AMBASSADORS</Text>
-							<Box position="relative">
-								{ambassadorHover
-	&& <>
-		<Box width="172px" position="absolute" top="-81px" left="-80px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
-			<Text fontWeight="bold" color="white" fontSize="10px">Ambassadors</Text>
-			<Text color="white" fontSize="9px" fontWeight="medium" mt={1}>Ambassadors are individuals who vouch for the project and give their go ahead.</Text>
-		</Box>
-		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
-	</>
-								}
-								<InfoIcon w={3} h={3} color="#5B5B5B" onMouseEnter={() => setAmbassadorHover(true)} onMouseLeave={() => setAmbassadorHover(false)}/>
-							</Box>
+							<InfoTooltip
+								title="Ambassadors"
+								description="Ambassadors are individuals who vouch for the project and give their go ahead."
+								options={ { top: '-81px', left: '-80px' } }
+							/>
 						</HStack>
 						<Wrap>
 							{
@@ -126,18 +109,11 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 					<VStack spacing="10px" alignItems="flex-start">
 						<HStack>
 							<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
-							<Box position="relative">
-								{sponsorHover
-	&& <>
-		<Box width="172px" position="absolute" top="-108px" left={isMobile ? '-50px' : '-80px'} p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
-			<Text fontWeight="bold" color="white" fontSize="10px">Sponsors</Text>
-			<Text color="white" fontSize="9px" fontWeight="medium" mt={1}>Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences.</Text>
-		</Box>
-		<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
-	</>
-								}
-								<InfoIcon w={3} h={3} color="#5B5B5B" onMouseEnter={() => setSponsorHover(true)} onMouseLeave={() => setSponsorHover(false)}/>
-							</Box>
+							<InfoTooltip
+								title="Sponsors"
+								description="Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences."
+								options={ { top: '-108px', left: isMobile ? '-50px' : '-80px' } }
+							/>
 						</HStack>
 						<Wrap >
 							{
