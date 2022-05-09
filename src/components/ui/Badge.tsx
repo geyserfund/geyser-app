@@ -4,7 +4,11 @@ import React, { useState } from 'react';
 export const Badge = ({ badge }: { badge: string }) => {
 	const [hover, setHover] = useState(false);
 	return (
-		<Box position="relative" as="span" backgroundColor="brand.bgGold" padding="0px 8px" borderRadius="20px" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+		<Box position="relative" as="span" backgroundColor="brand.bgGold" padding="0px 8px" borderRadius="20px" onMouseEnter={() => {
+			if (badge === '🏅' || badge === '🏆' || badge === '👑' || badge === '⭐') {
+				setHover(true);
+			}
+		}} onMouseLeave={() => setHover(false)}>
 			{hover
 && <>
 	<Box position="absolute" top="-85px" left="-93px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
