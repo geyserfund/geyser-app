@@ -77,7 +77,7 @@ export const InfoPage = ({
 			</ButtonComponent>
 			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" flex="1">
 				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
-					{`Project Backers ${fundingTxs.length ? `( ${fundingTxs.length} )` : ''}`}
+					{`Activity ${fundingTxs.length ? `( ${fundingTxs.length} )` : ''}`}
 				</Text>
 				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
 					{
