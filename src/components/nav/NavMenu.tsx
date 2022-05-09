@@ -9,7 +9,7 @@ import React from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 // Import { FaMoon, FaSun } from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
-import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles, HomeUrl, GrantsUrl } from '../../constants';
+import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles, HomeUrl } from '../../constants';
 import { IUser } from '../../interfaces';
 
 const useStyles = createUseStyles({
@@ -88,11 +88,6 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 					<MenuItem className={classes.menuItem}>
 						<Link href={HomeUrl}>
 					Home
-						</Link>
-					</MenuItem>
-					<MenuItem className={classes.menuItem}>
-						<Link href={GrantsUrl}>
-					Grants
 						</Link>
 					</MenuItem>
 				</Show>

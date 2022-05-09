@@ -47,7 +47,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 					</VStack>
 					<Box>
 						<HStack>
-							<Text fontSize="10px" color="brand.textGrey">PROJECT OWNER</Text>
+              <Text fontSize="10px" color="brand.textGrey">CREATOR</Text>
 							<InfoTooltip
 								title="Owner"
 								description="Project creators have verified their Twitter accounts. Go check them out!"

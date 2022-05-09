@@ -23,7 +23,7 @@ interface IProjectCardProp extends ICard {
 
 const useStyles = createUseStyles({
 	container: {
-		borderRadius: '10px',
+		borderRadius: '4px',
 		height: '260px',
 		display: 'flex',
 		flexDirection: 'column',
@@ -141,7 +141,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 						<Text fontSize="12px">received</Text>
 					</VStack>
 					<VStack alignItems="center" justifyContent="center" spacing="0">
-						<Text fontSize="14px" fontWeight={600}>{project.active ? `${amount}` : 'Closed'}</Text>
+						<Text fontSize="12px" fontWeight={600}>{project.active ? `${amount}` : 'Completed'}</Text>
 						{project.active && <Text fontSize="12px">{`${label} left`}</Text>}
 					</VStack>
 				</HStack>

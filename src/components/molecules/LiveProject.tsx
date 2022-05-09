@@ -1,4 +1,4 @@
-import { Avatar, Box, HStack, Image, Skeleton, SkeletonCircle, Stack, Text, VStack, Wrap } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Image, Skeleton, Stack, Text, VStack, Wrap } from '@chakra-ui/react';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
@@ -14,7 +14,7 @@ interface ILiveProject {
 
 const useStyles = createUseStyles({
 	container: {
-		borderRadius: '8px',
+		// BorderRadius: '8px',
 		width: '100%',
 		position: 'relative',
 		backgroundColor: 'white',
@@ -49,6 +49,9 @@ const useStyles = createUseStyles({
 		width: '100%',
 		opacity: 0.7,
 	},
+	satoshiText: {
+		marginTop: '1px !important',
+	},
 });
 
 export const LiveProject = ({ project}: ILiveProject) => {
@@ -78,12 +81,11 @@ export const LiveProject = ({ project}: ILiveProject) => {
 					direction={isMobile ? 'column' : 'row'}
 					spacing="25px"
 					width="100%"
-					maxWidth="1280px"
 					height={isMobile ? undefined : '300px'}
 					alignItems="flex-start"
 				>
-					<Box flex="1" height="100%" borderRadius="4px" overflow="hidden" position="relative" >
-						<Image src={image} width="100%" height="100%" objectFit="cover"/>
+					<Box flex="1" height="100%" width={isMobile ? '100%' : undefined} borderRadius="4px" overflow="hidden" position="relative" >
+						<Image src={image} width="100%" height="100%" maxHeight="300px" objectFit="cover" minHeight={isMobile ? '300px' : undefined} />
 						<Box className={classes.viewProject}>
 							<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
 							<Box className={classes.darkLayout} />
@@ -107,7 +109,7 @@ export const LiveProject = ({ project}: ILiveProject) => {
 						<Text fontSize="14px">{getDescription}</Text>
 						<Wrap >
 							<Text fontSize="18px">Raised: </Text>
-							<SatoshiAmount fontSize="18px">{project.balance}</SatoshiAmount>
+							<SatoshiAmount wrapperClassName={classes.satoshiText} fontSize="18px" marginTop="2px !important">{project.balance}</SatoshiAmount>
 							<Text fontSize="18px">{`, ${percentage} % `}</Text>
 							<Text fontSize="18px">of goal</Text>
 						</Wrap>
@@ -119,30 +121,6 @@ export const LiveProject = ({ project}: ILiveProject) => {
 	);
 };
 
-export const LiveProjectSkeleton = () => {
-	const isMobile = isMobileMode();
+export const LiveProjectSkeleton = () => (
 
-	return (
-		<Box
-			display="flex"
-			flexDirection={isMobile ? 'column' : 'row'}
-			spacing="25px"
-			width="100%"
-			maxWidth="925px"
-			alignItems="flex-start"
-		>
-			<Skeleton height="290px" flex={1}/>
-			<Stack flex="1" spacing="20px" padding={isMobile ? '20px 0px' : '0px 20px'} width={isMobile ? '100%' : undefined}>
-				<Skeleton height="50px" />
-				<HStack>
-					<SkeletonCircle />
-					<Skeleton height="20px" width="100px"/>
-				</HStack>
-				<Stack>
-					<Skeleton height="20px" />
-					<Skeleton height="20px" />
-					<Skeleton height="20px" />
-				</Stack>
-			</Stack>
-		</Box>);
-};
+	<Skeleton height="290px" width="100%" maxWidth="925px" flex={1}/>);

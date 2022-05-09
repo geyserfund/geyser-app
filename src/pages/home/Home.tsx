@@ -36,10 +36,11 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 	pageStats: {
 		width: '100%',
 		height: '80px',
+		background: 'white',
 		boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
 		borderRadius: '4px',
 		justifyContent: 'space-between',
-		maxWidth: '890px',
+		maxWidth: '910px',
 	},
 	boldText: ({isMobile}) => ({
 		fontSize: isMobile ? '22px' : '24px',
@@ -98,6 +99,8 @@ export const Home = () => {
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
 			padding="0px 0px"
+			height="100%"
+			justifyContent="space-between"
 		>
 			<VStack
 				spacing="40px"
@@ -127,15 +130,15 @@ export const Home = () => {
 								Play a part by funding them on Geyser.
 							</Text>
 						</VStack>
-						<Text fontSize={isMobile ? '18px' : '19px'} maxWidth="900px" fontWeight={500} marginTop="15px !important">
-						Geyser is a global crowdfunding platform that helps Bitcoin builders and creators with the funding their projects need to burst out into the world.
+						<Text fontSize={isMobile ? '18px' : '19px'} maxWidth="910px" fontWeight={500} marginTop="15px !important">
+						Geyser is a global crowdfunding platform that helps Bitcoin builders and creators to fund their ideas.
 						</Text>
 						<HStack className={classes.pageStats} padding={isMobile ? '50px 20px' : '50px 70px'}>
 							{
 								summaryLoading
 									? <><VStack>
 										<Text className={classes.boldText}>....</Text>
-										<Text className={classes.subtitleText}>Geyser funds</Text>
+										<Text className={classes.subtitleText}>Projects</Text>
 									</VStack><VStack>
 										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>....</SatoshiAmount>
 										<Text className={classes.subtitleText}>Sats</Text>
@@ -145,9 +148,9 @@ export const Home = () => {
 									</VStack></>
 									: <><VStack>
 										<Text className={classes.boldText}>{summary.projectsCount}</Text>
-										<Text className={classes.subtitleText}>Geyser funds</Text>
+										<Text className={classes.subtitleText}>Projects</Text>
 									</VStack><VStack>
-										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText}>{summary.fundedTotal}</SatoshiAmount>
+										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
 										<Text className={classes.subtitleText}>Sats</Text>
 									</VStack><VStack>
 										<Text className={classes.boldText}>{summary.fundersCount}</Text>
@@ -158,7 +161,7 @@ export const Home = () => {
 						</HStack>
 					</VStack>
 					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'} minWidth="305px" >
-						<Image src={LaunchImageUrl} maxHeight="280px"/>
+						<Image src={LaunchImageUrl} maxHeight="250px"/>
 					</Box>
 				</Box>
 				<VStack alignItems="flex-start" width="100%" spacing="0px">

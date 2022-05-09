@@ -17,7 +17,6 @@ interface ISwipeLiveProject {
 
 const useStyles = createUseStyles({
 	swiper: {
-		maxWidth: '980px',
 		paddingBottom: '10px',
 		'& .slick-dots': {
 			bottom: '-20px',
@@ -88,7 +87,7 @@ export const SwipeLiveProject = ({projects, loading}: ISwipeLiveProject) => {
 	}
 
 	return (
-		<Box className={classes.swiper} width={isMobile ? '100%' : '90%'}>
+		<Box className={classes.swiper} width={isMobile ? '100%' : '90%'} maxWidth ={isMobile ? '540px' : '980px'} >
 			<Slider {...settings}>
 				{projects.map((project:IProject) => (
 					<LiveProject key={project.id} project={project}/>

@@ -62,10 +62,8 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 	const updateReward = ({id, count}:IRewardCount) => {
 		const newRewards = { ...state.rewards };
 
-		if (!state.rewards[id]) {
-			if (count !== 0) {
-				newRewards[id] = count;
-			}
+		if (count !== 0) {
+			newRewards[id] = count;
 		} else if (count === 0) {
 			delete newRewards[id];
 		}
