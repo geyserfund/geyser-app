@@ -55,7 +55,6 @@ export const SubscribeModal = ({isOpen, onClose}:ISubscribeModal) => {
 			onClose();
 			toast({
 				title: 'Succesfully subscribed to geyser',
-				description: 'We will keep you updated about the latest projects',
 				status: 'success',
 			});
 		} catch (error) {

@@ -121,18 +121,6 @@ export const LiveProject = ({ project}: ILiveProject) => {
 	);
 };
 
-export const LiveProjectSkeleton = () => {
-	const isMobile = isMobileMode();
+export const LiveProjectSkeleton = () => (
 
-	return (
-		<Box
-			display="flex"
-			flexDirection={isMobile ? 'column' : 'row'}
-			spacing="25px"
-			width="100%"
-			maxWidth="925px"
-			alignItems="flex-start"
-		>
-			<Skeleton height="290px" width="100%" maxWidth="980px" flex={1}/>
-		</Box>);
-};
+	<Skeleton height="290px" width="100%" maxWidth="925px" flex={1}/>);
