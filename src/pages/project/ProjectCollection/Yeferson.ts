@@ -1,4 +1,4 @@
-import { IProjectBlock, IProjectDetail } from '../../../interfaces';
+import { IProjectBlock, IProjectDetail, IProjectUpdate } from '../../../interfaces';
 
 const projectBlocks: IProjectBlock[] = [
 	{
@@ -41,6 +41,16 @@ const projectBlocks: IProjectBlock[] = [
 			'You’ll be able to access rewards:',
 			'- **Access to first contest:** Be part of a game competition where you can win Sats.',
 			'- **Premium: Access to contest + Early access + More:** Access private beta version of the game weeks before release (June 10) and access to private  Discord channel.',
+		],
+		blockType: 'PL',
+	},
+	{
+		key: 'milestones',
+		title: 'Funding Milestones',
+		body: [
+			'- Milestone 1: $1000. Improve interface',
+			'- Milestone 2:  $2500. Create a movile app',
+			'- Milestone 3: $5000. Marketing and integration of play to earn ',
 		],
 		blockType: 'PL',
 	},
@@ -93,6 +103,27 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
+const projectUpdates: IProjectUpdate[] = [
+	{
+		updateTitle: 'PROJECT UPDATE #01',
+		date: new Date('2022-05-08').getTime(),
+		tweet: '1523078115127406604',
+		type: 'PL',
+	},
+	{
+		updateTitle: 'PROJECT UPDATE #02',
+		date: new Date('2022-05-09').getTime(),
+		bodyTitle: 'INTRODUCING PROJECT MILESTONES',
+		body: [
+			'Each satoshi will take us a step closer to our mission!',
+			'- Milestone 1: $1000. Improve interface',
+			'- Milestone 2:  $2500. Create a movile app',
+			'- Milestone 3: $5000. Marketing and integration of play to earn ',
+		],
+		type: 'PL',
+	},
+];
+
 const projectName: string = 'lightning-rebel';
 
-export const Yeferson = {projectBlocks, projectDetails, projectName};
+export const Yeferson = {projectBlocks, projectDetails, projectName, projectUpdates};
