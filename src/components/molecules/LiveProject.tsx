@@ -84,8 +84,8 @@ export const LiveProject = ({ project}: ILiveProject) => {
 					height={isMobile ? undefined : '300px'}
 					alignItems="flex-start"
 				>
-					<Box flex="1" height="100%" borderRadius="4px" overflow="hidden" position="relative" >
-						<Image src={image} width="100%" height="100%" maxHeight="300px" objectFit="cover"/>
+					<Box flex="1" height="100%" width={isMobile ? '100%' : undefined} borderRadius="4px" overflow="hidden" position="relative" >
+						<Image src={image} width="100%" height="100%" maxHeight="300px" objectFit="cover" minHeight={isMobile ? '300px' : undefined} />
 						<Box className={classes.viewProject}>
 							<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
 							<Box className={classes.darkLayout} />

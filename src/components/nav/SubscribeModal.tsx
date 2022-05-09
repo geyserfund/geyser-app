@@ -52,6 +52,12 @@ export const SubscribeModal = ({isOpen, onClose}:ISubscribeModal) => {
 			}];
 			const value = await createCreatorRecord({records});
 			console.log('checking repsonse value', value);
+			onClose();
+			toast({
+				title: 'Succesfully subscribed to geyser',
+				description: 'We will keep you updated about the latest projects',
+				status: 'success',
+			});
 		} catch (error) {
 			console.log('checking error', error);
 			toast({
