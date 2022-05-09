@@ -47,6 +47,7 @@ export const PaymentPage = ({
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [selectedGif, setSelectedGif] = useState<IGif|null>(null);
 	const [gifHover, setGifHover] = useState(false);
+	const [focus, setFocus] = useState(true);
 
 	useEffect(() => {
 		if (error) {
@@ -125,6 +126,7 @@ export const PaymentPage = ({
 			height="100%"
 			position="relative"
 			alignItems="flex-start"
+			backgroundColor="#FFFFFF"
 		>
 			<CloseButton
 				borderRadius="50%"
@@ -169,13 +171,13 @@ export const PaymentPage = ({
 					onClose();
 				}} isOpen={isOpen} isCentered>
 					<ModalOverlay />
-					<ModalContent>
+					<ModalContent mt={focus && isMobile ? 100 : 0}>
 						<ModalBody p={2}>
 							<InputGroup mb={2}>
 								<InputLeftElement >
 									<SearchIcon/>
 								</InputLeftElement>
-								<Input placeholder="Search" variant="filled" focusBorderColor="brand.primary" bg="#DDFFF8"
+								<Input onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} placeholder="Search" variant="filled" focusBorderColor="brand.primary" bg="#DDFFF8"
 									onChange={e => setGifSearch(e.target.value)}
 								/>
 								<ModalCloseButton mt="5px" ml="7px"/>
