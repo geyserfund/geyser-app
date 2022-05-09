@@ -2,7 +2,6 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { Footer } from '../../../components/molecules';
 import { IProjectUpdate, IProject } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../ProjectComponent';
@@ -57,7 +56,6 @@ export const RewardBased = ({ project }: { project: IProject}) => {
 				{ renderUpdates() }
 				<SponsorBlock sponsors={project.sponsors}/>
 			</VStack >
-			<Footer/>
 		</VStack >
 	);
 };
