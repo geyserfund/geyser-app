@@ -17,3 +17,4 @@ export * from './TextArea';
 export * from './SelectComponent';
 export * from './TextBox';
 export * from './SatoshiAmount';
+export * from './InfoTooltip';

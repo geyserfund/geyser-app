@@ -40,7 +40,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
       confirmed
       user {
         id
-        username 
+        username
         twitterHandle
         imageUrl
       }
@@ -52,7 +52,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
       image
       user {
         id
-        username 
+        username
         twitterHandle
         imageUrl
       }
@@ -129,7 +129,7 @@ query projects($where: ProjectQueryInput) {
         id
         user {
           id
-          username 
+          username
           twitterHandle
           imageUrl
         }
