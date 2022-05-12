@@ -2,7 +2,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { Avatar, Box, HStack, IconButton, Link, Text, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React from 'react';
 import { AddAmbassador, AddSponsor } from '../../../components/molecules';
-import { Card, ImageBar, StatusBar } from '../../../components/ui';
+import { Card, ImageBar, StatusBar, InfoTooltip } from '../../../components/ui';
 import { ISponsor, IParticipant } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { useStyles } from './styles';
@@ -46,7 +46,14 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 						<StatusBar variant="idea" message={idea} />
 					</VStack>
 					<Box>
-						<Text fontSize="10px" color="brand.textGrey">CREATOR</Text>
+						<HStack>
+							<Text fontSize="10px" color="brand.textGrey">CREATOR</Text>
+							<InfoTooltip
+								title="Owner"
+								description="Project creators have verified their Twitter accounts. Go check them out!"
+								options={ { top: '-82px', left: '-80px' } }
+							/>
+						</HStack>
 						<HStack spacing="30px" alignItems="flex-start">
 							<Link href={`https://twitter.com/${owner.user.twitterHandle}`} isExternal>
 								<Avatar width="75px" height="75px" name={owner.user.username} src={owner.user.imageUrl} />
@@ -65,7 +72,14 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 						</HStack>
 					</Box>
 					<VStack spacing="10px" alignItems="flex-start" >
-						<Text fontSize="10px" color="brand.textGrey">AMBASSADORS</Text>
+						<HStack>
+							<Text fontSize="10px" color="brand.textGrey">AMBASSADORS</Text>
+							<InfoTooltip
+								title="Ambassadors"
+								description="Ambassadors are individuals who vouch for the project and give their go ahead."
+								options={ { top: '-81px', left: '-80px' } }
+							/>
+						</HStack>
 						<Wrap>
 							{
 								ambassadors.map((ambassador: IParticipant) => (
@@ -93,7 +107,14 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 
 					</VStack>
 					<VStack spacing="10px" alignItems="flex-start">
-						<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
+						<HStack>
+							<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
+							<InfoTooltip
+								title="Sponsors"
+								description="Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences."
+								options={ { top: '-108px', left: isMobile ? '-50px' : '-80px' } }
+							/>
+						</HStack>
 						<Wrap >
 							{
 								sponsors.map((sponsor: ISponsor) => (
