@@ -49,6 +49,7 @@ export interface IProjectBlock {
     key: string;
     title: string;
     body: string[];
+    tweet?: string;
     images?: number[];
     blockType: string;
 }

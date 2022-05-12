@@ -5,6 +5,7 @@ import {Toni} from './Toni';
 import {Josias} from './Josias';
 import {Apata} from './Apata';
 import {Yeferson} from './Yeferson';
+import {Pedro} from './Pedro';
 
 export interface IProjectData {
     projectBlocks: IProjectBlock[]
@@ -24,6 +25,7 @@ const ProjectColl: IProjectColl = {
 	[Josias.projectName]: Josias,
 	[Apata.projectName]: Apata,
 	[Yeferson.projectName]: Yeferson,
+	[Pedro.projectName]: Pedro,
 };
 
 export default ProjectColl;

@@ -14,7 +14,7 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import { Card } from '../../../components/ui';
+import { Card, TwitterComponent } from '../../../components/ui';
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import ReactMarkdown from 'react-markdown';
@@ -30,6 +30,16 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 	const classes = useStyles({ isMobile });
 
 	const {blocks} = projectDetails;
+
+	const renderTweet = (tweet ?: string) => {
+		if (tweet) {
+			return (
+				<Box width="100%" display="flex" justifyContent="center">
+					<TwitterComponent id={tweet}/>
+				</Box>
+			);
+		}
+	};
 
 	const renderImages = (imageIndex?: number[]) => {
 		if (imageIndex && imageIndex.length > 0) {
@@ -103,6 +113,7 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
 				{ switchBlocks() }
 				{ renderImages(block.images) }
+				{renderTweet(block.tweet) }
 			</VStack>
 
 		);
