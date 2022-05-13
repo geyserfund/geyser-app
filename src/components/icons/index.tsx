@@ -14,6 +14,7 @@ import SatoshiPng from '../../assets/satoshi.png';
 import GifSvg from '../../assets/gif.svg';
 import EnvelopePng from '../../assets/envelope.png';
 import RopePng from '../../assets/rope.png';
+import InfoSvg from '../../assets/i.svg';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }: any) => {
 	const getFilter = () => {
@@ -91,13 +92,18 @@ export const GifIcon = (props: ImageProps) => (
 
 export const EnvelopeIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={EnvelopePng} alt="gif" {...props}/>
+		<Image height="20px" width="20px" src={EnvelopePng} alt="envelope" {...props}/>
 	</Box>
 );
 
 export const RopeIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={RopePng} alt="gif" {...props}/>
+		<Image height="20px" width="20px" src={RopePng} alt="rope" {...props}/>
 	</Box>
 );
 
+export const InfoIcon = (props: ImageProps) => (
+	<Box padding="3px 0px">
+		<Image height="12px" width="12px" src={InfoSvg} alt="info" {...props}/>
+	</Box>
+);

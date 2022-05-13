@@ -1,4 +1,4 @@
-import { InfoIcon } from '@chakra-ui/icons';
+import { InfoIcon } from '../icons';
 import { Box, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
@@ -27,7 +27,7 @@ export const InfoTooltip = ({
 				<Box position="absolute" top="-17px" left="-14px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
 			</>
 		}
-		<InfoIcon w={3} h={3} color="#5B5B5B" onMouseEnter={() => {
+		<InfoIcon backgroundColor="#E9E9E9" rounded="full" p="2px" onMouseEnter={() => {
 			console.log(hover);
 			setHover(true);
 		}} onMouseLeave={() => setHover(false)}/>
