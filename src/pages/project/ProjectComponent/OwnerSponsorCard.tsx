@@ -51,7 +51,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<InfoTooltip
 								title="Owner"
 								description="Project creators have verified their Twitter accounts. Go check them out!"
-								options={ { top: '-82px', left: '-80px' } }
+								options={ { top: '-82px', left: '-60px' } }
 							/>
 						</HStack>
 						<HStack spacing="30px" alignItems="flex-start">
