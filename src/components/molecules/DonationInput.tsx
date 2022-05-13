@@ -66,7 +66,6 @@ export const DonationInput = ({className, onChange, name, inputGroup, ...rest}: 
 
 	const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const val = parseInt(event.target.value, 10);
-		console.log('cehcking btcRate', btcRate);
 		if (isDollar) {
 			setDollar(val);
 			setSatoshi(Math.round(val / btcRate));
@@ -91,7 +90,7 @@ export const DonationInput = ({className, onChange, name, inputGroup, ...rest}: 
 					isSatoshi ? <SatoshiIcon /> : <BiDollar fontSize="25px"/>
 				}
 			</InputLeftElement>
-			<Input value={isSatoshi ? satoshi : dollar} type="number" className={classNames(classes.inputElement, className)} onChange={handleInput} {...rest} />
+			<Input value={satoshi > 0 ? isSatoshi ? satoshi : dollar : undefined} type="number" className={classNames(classes.inputElement, className)} onChange={handleInput} {...rest} placeholder="0" />
 			<InputRightElement width="50px" >
 				<Button className={classes.switchButtton} onClick={onToggle} variant="ghost">
 					<BsArrowRepeat className={classes.switchIcon} />
