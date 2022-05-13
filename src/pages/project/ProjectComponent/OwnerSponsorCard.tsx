@@ -49,7 +49,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 						<HStack>
 							<Text fontSize="10px" color="brand.textGrey">CREATOR</Text>
 							<InfoTooltip
-								title="Owner"
+								title="Creator"
 								description="Project creators have verified their Twitter accounts. Go check them out!"
 								options={ { top: '-82px', left: '-60px' } }
 							/>
@@ -112,7 +112,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<InfoTooltip
 								title="Sponsors"
 								description="Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences."
-								options={ { top: '-108px', left: isMobile ? '-50px' : '-80px' } }
+								options={ { top: '-108px', left: isMobile ? '-50px' : '-70px' } }
 							/>
 						</HStack>
 						<Wrap >
