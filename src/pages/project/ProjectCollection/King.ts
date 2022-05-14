@@ -84,13 +84,13 @@ const projectBlocks: IProjectBlock[] = [{
 const projectUpdates: IProjectUpdate[] = [
 	{
 		updateTitle: 'PROJECT UPDATE #01',
-		date: new Date('2022-02-13').getMilliseconds(),
+		date: new Date('2022-02-13').getTime(),
 		tweet: '1486515536657747969',
 		type: 'PL',
 	},
 	{
 		updateTitle: 'PROJECT UPDATE #02',
-		date: new Date('2022-02-14').getMilliseconds(),
+		date: new Date('2022-02-14').getTime(),
 		bodyTitle: 'LAGOS BITCOIN CONFERENCE UPDATE',
 		body: [
 			'The conference is about tackling a major problem among the youths in Nigeria and Africa as a whole. The aim is to teach youths financial literacy with help of bitcoin and lightning, and taking back their freedom from the system. The aim is also educating the youths to be active and advanced in this information and technology age so we can move from an underdeveloped country to a super developed country.',
@@ -104,7 +104,7 @@ const projectUpdates: IProjectUpdate[] = [
 	},
 	{
 		updateTitle: 'PROJECT UPDATE #03',
-		date: new Date('2022-02-23').getMilliseconds(),
+		date: new Date('2022-02-23').getTime(),
 		bodyTitle: 'Conference date is set to 9 April: what\'s next?',
 		body: [
 			'My friends and I have been working hard handing out the conference fliers and stickers and circulating them in the streets of Lagos. By talking to people on the streets, there seems to be much excitement about this conference: it\'s going to be bigger than I thought! God is helping us!',
