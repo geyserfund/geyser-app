@@ -92,6 +92,7 @@ query GetProjectFundingData($where: UniqueProjectQueryInput!) {
       comment
       media
       onChain
+      source
     }
   }
 }

@@ -15,6 +15,7 @@ export interface IFundingTx {
    funder: IFunder;
    paidAt: string;
    onChain: boolean;
+   source: string;
 }
 
 export interface IFundingReward {

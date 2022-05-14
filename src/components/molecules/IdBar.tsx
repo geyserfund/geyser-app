@@ -15,7 +15,7 @@ interface IIdBar extends HTMLChakraProps<'div'> {
 }
 
 export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
-	const { funder } = fundingTx;
+	const { funder, source, onChain } = fundingTx;
 	const timeAgo = getDaysAgo(fundingTx.paidAt) || '';
 	let anonymous = false;
 	if (funder.user.username === 'anonymous') {
@@ -63,10 +63,8 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 			</Box>
 			<Box marginTop="6px" width="100%">
 				{fundingTx.comment && <Text mb="6px" fontFamily={fonts.solway}>{fundingTx.comment}</Text>}
-				{fundingTx.media
-&& <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" />
-				}
-				{timeAgo && <Text mt="6px" color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>{`${fundingTx.onChain ? '⛓' : '⚡️'} ${timeAgo} ago`}</Text>}
+				{fundingTx.media && <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" />}
+				{timeAgo && <Text mt="6px" color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>{`${onChain ? '⛓' : '⚡️'} ${timeAgo} ago ${source !== 'geyser' && `on ${source}`}`}</Text>}
 			</Box>
 
 		</Box>
