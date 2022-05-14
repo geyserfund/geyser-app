@@ -46,10 +46,9 @@ export const DonationBased = ({
 							variant="unstyled"
 							marginLeft="10px"
 							onChange={handleInput}
-							value={state.donationAmount}
 							onFocus={() => setError('')}
 						>
-							<NumberInputField placeholder={'2000'} fontSize="30px" textAlign="center" />
+							<NumberInputField placeholder={'0'} fontSize="30px" textAlign="center" />
 						</NumberInput>
 						<Box position="absolute" right={-5}>
 							<SatoshiIcon isDark={isDarkMode()} fontSize="30px" marginRight="10px" marginBottom="5px" />
