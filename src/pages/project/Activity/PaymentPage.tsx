@@ -113,7 +113,12 @@ export const PaymentPage = ({
 		return `${count} rewards`;
 	};
 
-	const hasShipping = () => name !== 'day-of-genesis' && name !== 'lightning-rebel' && name !== 'bitcoin-ballers';
+	const hasShipping = () => (
+		name !== 'day-of-genesis'
+		&& name !== 'lightning-rebel'
+		&& name !== 'bitcoin-ballers'
+		&& name !== 'anatomy-of-bitcoin'
+	);
 
 	console.log('checking state', state);
 	return (
