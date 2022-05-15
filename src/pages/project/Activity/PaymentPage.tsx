@@ -11,6 +11,7 @@ import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { IGif } from '@giphy/js-types';
+import { hasShipping } from '../../../utils';
 
 interface IPaymentPageProps {
 	isMobile: boolean
@@ -113,14 +114,6 @@ export const PaymentPage = ({
 		return `${count} rewards`;
 	};
 
-	const hasShipping = () => (
-		name !== 'day-of-genesis'
-		&& name !== 'lightning-rebel'
-		&& name !== 'bitcoin-ballers'
-		&& name !== 'anatomy-of-bitcoin'
-	);
-
-	console.log('checking state', state);
 	return (
 		<VStack
 			padding={isMobile ? '10px 10px' : '10px 20px'}
@@ -197,7 +190,7 @@ export const PaymentPage = ({
 						</ModalBody>
 					</ModalContent>
 				</Modal>
-				{state.rewardsCost && hasShipping() && <Box width="100%" >
+				{state.rewardsCost && hasShipping(name) && <Box width="100%" >
 					<SelectComponent
 						name="shippingDestination"
 						fontSize="14px"
@@ -223,7 +216,7 @@ export const PaymentPage = ({
 					<SectionTitle>Total</SectionTitle>
 					<SatoshiAmount label="Donation">{state.donationAmount + Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
 					{ state.rewardsCost && <Text>{`Rewards: ${rewardCountString()}`}</Text>}
-					{ state.rewardsCost && hasShipping() && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
+					{ state.rewardsCost && hasShipping(name) && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
