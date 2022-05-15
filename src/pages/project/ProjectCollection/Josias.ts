@@ -31,10 +31,8 @@ const projectBlocks: IProjectBlock[] = [{
 {
 	key: 'demo',
 	title: 'Video',
-	body: [
-		'[Youtube Video](https://www.youtube.com/watch?v=mkTD4OE0pNw)',
-		'[![lightning rebel demo](https://storage.googleapis.com/geyser-projects-media/project/bitcoin-ballers/yt_thumbnail.png)](https://www.youtube.com/watch?v=mkTD4OE0pNw "Bitcoin Ballers video")',
-	],
+	body: [''],
+	youtube: 'mkTD4OE0pNw',
 	blockType: 'PL',
 },
 {

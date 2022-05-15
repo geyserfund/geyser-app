@@ -79,10 +79,8 @@ const projectBlocks: IProjectBlock[] = [
 	{
 		key: 'demo',
 		title: 'Demo Video',
-		body: [
-			'[Youtube Demo Video](https://www.youtube.com/watch?v=88QjMXzPPg0&t=14s)',
-			'[![lightning rebel demo](https://storage.googleapis.com/geyser-projects-media/project/lightning-rebel/image4.png)](https://www.youtube.com/watch?v=88QjMXzPPg0 "Lightning Rebel Demo")',
-		],
+		body: [''],
+		youtube: '88QjMXzPPg0',
 		blockType: 'PL',
 	},
 	{

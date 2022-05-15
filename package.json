@@ -45,6 +45,7 @@
     "react-twitter-auth": "^0.0.13",
     "react-twitter-login": "^1.4.0",
     "react-use": "^17.3.2",
+    "react-youtube": "^9.0.1",
     "serve": "^13.0.2",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.5",

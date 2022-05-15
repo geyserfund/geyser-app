@@ -51,6 +51,7 @@ export interface IProjectBlock {
     body: string[];
     tweet?: string;
     images?: number[];
+    youtube?: string;
     blockType: string;
 }
 
@@ -62,6 +63,7 @@ export interface IProjectUpdate {
     bodyTitle?: string;
     body?: string[];
     images?: number[];
+    youtube?: string;
 }
 
 export interface IRewardCount {

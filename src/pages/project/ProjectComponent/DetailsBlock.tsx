@@ -19,6 +19,7 @@ import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import ReactMarkdown from 'react-markdown';
 import { useStyles } from './styles';
+import { YoutubeEmbed } from '../../../components/molecules/YoutubeEmbed';
 
 interface IDetailsBlock {
     projectDetails: IProjectDetail
@@ -53,6 +54,16 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 							</Box>))
 					}
 				</HStack>
+			);
+		}
+	};
+
+	const renderYoutube = (videoId ?: string) => {
+		if (videoId) {
+			return (
+				<Box width="100%" display="flex" justifyContent="center">
+					<YoutubeEmbed videoId={videoId}/>
+				</Box>
 			);
 		}
 	};
@@ -109,11 +120,12 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 		};
 
 		return (
-			<VStack key={block.title} className={classes.containers} space={8}>
+			<VStack key={block.title} className={classes.containers} space={10}>
 				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
 				{ switchBlocks() }
 				{ renderImages(block.images) }
 				{renderTweet(block.tweet) }
+				{renderYoutube(block.youtube)}
 			</VStack>
 
 		);
