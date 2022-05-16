@@ -1,4 +1,4 @@
-import { Avatar, Box, HStack, Image, Skeleton, Stack, Text, VStack, Wrap } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Image, Skeleton, Stack, Text, VStack, Wrap, LinkOverlay, LinkBox } from '@chakra-ui/react';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
@@ -75,47 +75,54 @@ export const LiveProject = ({ project}: ILiveProject) => {
 
 	return (
 		<Box width="100%" padding="15px">
-			<Card className={classes.container} onClick={handleViewProject}>
-				<Stack
-					display="flex"
-					direction={isMobile ? 'column' : 'row'}
-					spacing="25px"
-					width="100%"
-					height={isMobile ? undefined : '300px'}
-					alignItems="flex-start"
-				>
-					<Box flex="1" height="100%" width={isMobile ? '100%' : undefined} borderRadius="4px" overflow="hidden" position="relative" >
-						<Image src={image} width="100%" height="100%" maxHeight="300px" objectFit="cover" minHeight={isMobile ? '300px' : undefined} />
-						<Box className={classes.viewProject}>
-							<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
-							<Box className={classes.darkLayout} />
-						</Box>
-					</Box>
-					<VStack
-						height="100%"
-						width={isMobile ? '100%' : undefined }
-						flex="1"
-						alignItems="flex-start"
-						justifyContent="flex-start"
-						padding={isMobile ? '20px 10px' : '10px 20px'}
-						spacing="15px"
-					>
-						<Text fontSize="33px" fontWeight={700}>{project.title}</Text>
-						<HStack>
-							<Avatar height="33px" width="33px" name={owner.user.username} src={owner.user.imageUrl}/>
-							<Text fontSize="18px">By</Text>
-							<Text fontSize="18px" fontWeight={700}>{owner.user.username}</Text>
-						</HStack>
-						<Text fontSize="14px">{getDescription}</Text>
-						<Wrap >
-							<Text fontSize="18px">Raised: </Text>
-							<SatoshiAmount wrapperClassName={classes.satoshiText} fontSize="18px" marginTop="2px !important">{project.balance}</SatoshiAmount>
-							<Text fontSize="18px">{`, ${percentage} % `}</Text>
-							<Text fontSize="18px">of goal</Text>
-						</Wrap>
-					</VStack>
-				</Stack>
-			</Card>
+			<LinkBox>
+				<LinkOverlay href={`https://geyser.fund/project/${project.name}`} onClick={e => {
+					e.preventDefault();
+					handleViewProject();
+				}}>
+					<Card className={classes.container} onClick={handleViewProject}>
+						<Stack
+							display="flex"
+							direction={isMobile ? 'column' : 'row'}
+							spacing="25px"
+							width="100%"
+							height={isMobile ? undefined : '300px'}
+							alignItems="flex-start"
+						>
+							<Box flex="1" height="100%" width={isMobile ? '100%' : undefined} borderRadius="4px" overflow="hidden" position="relative" >
+								<Image src={image} width="100%" height="100%" maxHeight="300px" objectFit="cover" minHeight={isMobile ? '300px' : undefined} />
+								<Box className={classes.viewProject}>
+									<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
+									<Box className={classes.darkLayout} />
+								</Box>
+							</Box>
+							<VStack
+								height="100%"
+								width={isMobile ? '100%' : undefined }
+								flex="1"
+								alignItems="flex-start"
+								justifyContent="flex-start"
+								padding={isMobile ? '20px 10px' : '10px 20px'}
+								spacing="15px"
+							>
+								<Text fontSize="33px" fontWeight={700}>{project.title}</Text>
+								<HStack>
+									<Avatar height="33px" width="33px" name={owner.user.username} src={owner.user.imageUrl}/>
+									<Text fontSize="18px">By</Text>
+									<Text fontSize="18px" fontWeight={700}>{owner.user.username}</Text>
+								</HStack>
+								<Text fontSize="14px">{getDescription}</Text>
+								<Wrap >
+									<Text fontSize="18px">Raised: </Text>
+									<SatoshiAmount wrapperClassName={classes.satoshiText} fontSize="18px" marginTop="2px !important">{project.balance}</SatoshiAmount>
+									<Text fontSize="18px">{`, ${percentage} % `}</Text>
+									<Text fontSize="18px">of goal</Text>
+								</Wrap>
+							</VStack>
+						</Stack>
+					</Card>
+				</LinkOverlay>
+			</LinkBox>
 		</Box>
 
 	);
