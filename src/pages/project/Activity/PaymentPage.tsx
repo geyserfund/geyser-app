@@ -219,7 +219,6 @@ export const PaymentPage = ({
 					<SatoshiAmount label="Donation">{state.donationAmount + Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
 					{ state.rewardsCost && <Text>{`Rewards: ${rewardCountString()}`}</Text>}
 					{ state.rewardsCost && hasShipping(name) && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
-
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
 					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
