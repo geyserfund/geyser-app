@@ -14,13 +14,43 @@ interface IIdBar extends HTMLChakraProps<'div'> {
 	project: IProject
 }
 
+interface IFundingSourceMetadata {
+	name: string
+	image?: string
+}
+
+const getFundingSourceMetadata = (source: string): IFundingSourceMetadata | undefined => {
+	switch (source) {
+		case 'Fountain':
+			return {
+				name: 'Fountain.fm',
+				image: 'https://fountain.fm/images/fountain-logo-black-small.png',
+			};
+		default:
+	}
+};
+
 export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
-	const { funder, source, onChain } = fundingTx;
-	const timeAgo = getDaysAgo(fundingTx.paidAt) || '';
+	const { funder, source, onChain, paidAt } = fundingTx;
+	const sourceMetadata = getFundingSourceMetadata(source);
+
+	const timeAgo = getDaysAgo(paidAt) || '';
 	let anonymous = false;
 	if (funder.user.username === 'anonymous') {
 		anonymous = true;
 	}
+
+	const getAvatarSource = () => {
+		if (anonymous) {
+			return getRandomOrb(fundingTx.id);
+		}
+
+		if (sourceMetadata) {
+			return sourceMetadata.image;
+		}
+
+		return funder.user.imageUrl;
+	};
 
 	return (
 		<Box
@@ -48,7 +78,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 							</HStack>
 						</Link>
 						: <HStack spacing="5px" display="flex">
-							<Avatar width="30px" height="3	0px" name={anonymous ? 'Anonymous' : funder.user.username} src={anonymous ? getRandomOrb(fundingTx.id) : funder.user.imageUrl} sx={{
+							<Avatar width="30px" height="3	0px" name={anonymous ? 'Anonymous' : funder.user.username} src={getAvatarSource()} sx={{
 								'& .chakra-avatar__initials': {
 									lineHeight: '30px',
 								},
@@ -64,7 +94,10 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 			<Box marginTop="6px" width="100%">
 				{fundingTx.comment && <Text mb="6px" fontFamily={fonts.solway}>{fundingTx.comment}</Text>}
 				{fundingTx.media && <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" />}
-				{timeAgo && <Text mt="6px" color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>{`${onChain ? '⛓' : '⚡️'} ${timeAgo} ago ${source !== 'geyser' && `on ${source}`}`}</Text>}
+				<Text mt="6px" color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>
+					{timeAgo && `${onChain ? '⛓' : '⚡️'} ${timeAgo} ago `}
+					{sourceMetadata && `on ${sourceMetadata.name}`}
+				</Text>
 			</Box>
 
 		</Box>
