@@ -14,7 +14,7 @@ import { MUTATION_FUND, QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
 import { QUERY_GET_FUNDING_STATUS } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
-import { isDarkMode, isMobileMode, useNotification, sha256 } from '../../../utils';
+import { isMobileMode, useNotification, sha256 } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
@@ -69,7 +69,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const {btcRate} = useBtcContext();
 	const { toast } = useNotification();
-	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
 
 	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial);
@@ -356,7 +355,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				flexDirection="column"
 				justifyContent="flex-start"
 				alignItems="center"
-				backgroundColor={isDark ? 'brand.bgGreyDark' : 'brand.bgGrey4'}
+				backgroundColor="#FFFFFF"
 				height="100%"
 			>
 				{renderActivity()}

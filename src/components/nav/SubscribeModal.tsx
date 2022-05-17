@@ -7,10 +7,15 @@ import {
 	ModalHeader,
 	ModalOverlay,
 	Text,
+	Link,
+	IconButton,
+	HStack,
 	VStack} from '@chakra-ui/react';
 import { ButtonComponent, TextBox } from '../ui';
 import { createCreatorRecord } from '../../api';
 import { useNotification, validateEmail } from '../../utils';
+import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
 
     interface ISubscribeModal {
         isOpen: boolean;
@@ -23,6 +28,7 @@ export const SubscribeModal = ({isOpen, onClose}:ISubscribeModal) => {
 	const [submitting, setSubmitting] = useState(false);
 	const [email, setEmail] = useState('');
 	const [error, setError] = useState('');
+	const [success, setSuccess] = useState(false);
 
 	const handleEmail = (event:any) => {
 		if (error) {
@@ -52,7 +58,8 @@ export const SubscribeModal = ({isOpen, onClose}:ISubscribeModal) => {
 			}];
 			const value = await createCreatorRecord({records});
 			console.log('checking repsonse value', value);
-			onClose();
+			setSubmitting(false);
+			setSuccess(true);
 			toast({
 				title: 'Succesfully subscribed to geyser',
 				status: 'success',
@@ -65,25 +72,51 @@ export const SubscribeModal = ({isOpen, onClose}:ISubscribeModal) => {
 				status: 'error',
 			});
 		}
+	};
 
-		setSubmitting(false);
+	const handleClose = () => {
+		setSuccess(false);
+		setEmail('');
+		onClose();
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} isCentered>
+		<Modal isOpen={isOpen} onClose={handleClose} isCentered>
 			<ModalOverlay />
 			<ModalContent display="flex" alignItems="center" padding="20px 15px">
-				<ModalHeader><Text fontSize="16px" fontWeight={600}>Subscribe</Text></ModalHeader>
+				<ModalHeader><Text fontSize="16px" fontWeight={600}>{success ? 'Success!' : 'Subscribe'}</Text></ModalHeader>
 				<ModalCloseButton />
 				<ModalBody width="100%">
 					<VStack spacing="15px" width="100%">
 						<Text>
-            To get information on the latest Geyser projects and product, subscribe by dropping your email below
+							{success ? 'Thanks for signing up. We’ll be sharing more info about Geyser projects and product soon. To join our community find us on Telegram and Twitter.' : 'To get information on the latest Geyser projects and product, subscribe by dropping your email below'}
 						</Text>
-						<TextBox value={email} placeholder="Contact Email" onChange={handleEmail}/>
+						{!success && <TextBox value={email} placeholder="Contact Email" onChange={handleEmail}/>}
 						{error && <Text fontSize={'12px'}>{error}</Text>}
-						<ButtonComponent isFullWidth primary onClick={handleConfirm} disabled={!email} isLoading={submitting}>
-                             Confirm
+						{success
+&& <HStack>
+	<Link href={GeyserTwitterUrl} isExternal>
+		<IconButton
+			size="sm"
+			background={'none'}
+			aria-label="twitter"
+			icon={<FaTwitter fontSize="20px" />}
+			color={'brand.gray500'}
+		/>
+	</Link>
+	<Link href={GeyserTelegramUrl} isExternal>
+		<IconButton
+			size="sm"
+			background={'none'}
+			aria-label="telegram"
+			icon={<FaTelegramPlane fontSize="20px" />}
+			color={'brand.gray500'}
+		/>
+	</Link>
+</HStack>
+						}
+						<ButtonComponent isFullWidth primary onClick={success ? handleClose : handleConfirm} disabled={!email} isLoading={submitting}>
+							{success ? 'Close' : 'Confirm'}
 						</ButtonComponent>
 					</VStack>
 

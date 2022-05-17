@@ -13,6 +13,7 @@ import { BsLightning } from 'react-icons/bs';
 import {GiCrossedChains} from 'react-icons/gi';
 import { colors } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
+import { hasShipping } from '../../../utils';
 
 const useStyles = createUseStyles({
 	blockText: {
@@ -55,7 +56,7 @@ export const QrPage = ({
 	handleCloseButton,
 }: IQrPage) => {
 	const { paymentRequest, address, amount} = fundingTx;
-	const {title} = project;
+	const { title, name } = project;
 
 	const {getTotalAmount, getRewardsQuantity} = useFundCalc(state);
 
@@ -156,7 +157,7 @@ export const QrPage = ({
 							<SectionTitle>Total</SectionTitle>
 							<SatoshiAmount label="Donation">{amounts.donationAmount}</SatoshiAmount>
 							{amounts.rewardsCost && <Text>{`Rewards: ${rewardCountString()}`}</Text>}
-							{amounts.rewardsCost && <SatoshiAmount label="Shipping" >{amounts.shippingCost}</SatoshiAmount>}
+							{amounts.rewardsCost && hasShipping(name) && <SatoshiAmount label="Shipping" >{amounts.shippingCost}</SatoshiAmount>}
 							<Text className={classes.blockText}> {`Project: ${title}`}</Text>
 							{ state.email && <Text className={classes.blockText}> {`Email: ${state.email}`}</Text> }
 							{ state.comment && <Text className={classes.blockText}> {`Comment: ${state.comment}`}</Text> }
