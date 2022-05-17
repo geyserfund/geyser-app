@@ -31,7 +31,7 @@ const specialBadges: IBadges = {
 	},
 };
 
-export const computeFunderBadges = ({ project, funder }: { project: IProject, funder: IFunder}) => {
+export const computeFunderBadges = ({ project, funder }: { project: IProject, funder: IFunder}): IBadge[] => {
 	const funderBadges: IBadge[] = [];
 	const { amountFunded: amount, timesFunded: times } = funder;
 

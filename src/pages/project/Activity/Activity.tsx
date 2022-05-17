@@ -54,6 +54,7 @@ const initialFunding = {
 	media: '',
 	paidAt: '',
 	onChain: false,
+	source: '',
 	funder: {
 		amountFunded: 0,
 		timesFunded: 0,
