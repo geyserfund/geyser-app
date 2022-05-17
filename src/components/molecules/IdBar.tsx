@@ -79,6 +79,18 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const avatarMetadata = getMetadata();
 	const badges = computeFunderBadges({ project, funder }).map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`}/>));
 
+	const getAvatarSource = () => {
+		if (anonymous) {
+			return getRandomOrb(fundingTx.id);
+		}
+
+		if (sourceMetadata) {
+			return sourceMetadata.image;
+		}
+
+		return funder.user.imageUrl;
+	};
+
 	return (
 		<Box
 			padding="10px 25px"
