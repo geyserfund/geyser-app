@@ -12,6 +12,7 @@ query GetFundingTx($id: BigInt!) {
       media
       paidAt
       onChain
+      source
       funder {
         user {
           twitterHandle
