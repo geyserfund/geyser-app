@@ -11,3 +11,4 @@ export * from './sha256';
 export * from './getRandom';
 export * from './need';
 export * from './hasShipping';
+export * from './hasOnChain';
