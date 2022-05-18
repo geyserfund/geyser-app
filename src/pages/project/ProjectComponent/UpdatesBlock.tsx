@@ -19,6 +19,7 @@ import { IProjectUpdate } from '../../../interfaces';
 import ReactMarkdown from 'react-markdown';
 import { useStyles } from './styles';
 import { getFormattedDate, isMobileMode } from '../../../utils';
+import { YoutubeEmbed } from '../../../components/molecules/YoutubeEmbed';
 
 interface IUpdatesBlock {
     projectUpdate: IProjectUpdate
@@ -34,6 +35,16 @@ export const UpdatesBlock = ({projectUpdate, media}: IUpdatesBlock) => {
 			return (
 				<Box width="100%" display="flex" justifyContent="center">
 					<TwitterComponent id={tweet}/>
+				</Box>
+			);
+		}
+	};
+
+	const renderYoutube = (videoId ?: string) => {
+		if (videoId) {
+			return (
+				<Box width="100%" display="flex" justifyContent="center">
+					<YoutubeEmbed videoId={videoId}/>
 				</Box>
 			);
 		}
@@ -90,7 +101,7 @@ export const UpdatesBlock = ({projectUpdate, media}: IUpdatesBlock) => {
 	);
 
 	const renderUpdateBody = () => {
-		const { body, type, updateTitle, bodyTitle, images, tweet } = projectUpdate;
+		const { body, type, updateTitle, bodyTitle, images, tweet, youtube } = projectUpdate;
 		const switchBlocks = () => {
 			if (body && body.length > 0) {
 				switch (type) {
@@ -111,6 +122,7 @@ export const UpdatesBlock = ({projectUpdate, media}: IUpdatesBlock) => {
 				{bodyTitle && <Text fontSize="16px" fontWeight={500}>{bodyTitle}</Text>}
 				{switchBlocks()}
 				{renderImages(images)}
+				{renderYoutube(youtube)}
 				{renderTweet(tweet)}
 			</VStack>
 
