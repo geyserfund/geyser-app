@@ -1,4 +1,4 @@
-import { Avatar, Box, CircularProgress, HStack, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { Avatar, Box, CircularProgress, HStack, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, VStack, LinkBox, LinkOverlay } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 import { createUseStyles } from 'react-jss';
@@ -82,7 +82,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 	const { btcRate} = useBitcoinRates();
 	const [percentage, setPercentage] = useState(0);
 
-	const handleCardCLick = () => {
+	const handleCardClick = () => {
 		history.push(`/project/${name}`);
 	};
 
@@ -99,54 +99,61 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 	const {amount, label} = formatDaysLeft(project.expiresAt);
 	console.log(getShortAmountLabel(project.balance));
 	return (
-		<Card
-			className={classNames(classes.container, className)}
-			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
-			onClick={handleCardCLick}
-			{...rest}
-		>
-			<Box height="160px" width="100%" position="relative">
-				<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
-				<Box className={classes.viewProject}>
-					<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
-					<Box className={classes.darkLayout} />
-				</Box>
-			</Box>
-			<VStack spacing="5px" width="100%" padding="10px">
-				<HStack spacing="10px" justifyContent="flex-start" width="100%">
-					<Avatar src={project.owners && project.owners[0].user.imageUrl} height="22px" width="22px" />
-					<Text fontSize="16px" fontWeight={600}>{title}</Text>
-				</HStack>
-				<HStack alignItems="center" justifyContent={'space-between'} width="100%">
-					<CircularProgress
-						className={classes.circularProgress}
-						value={percentage}
-						size="55px"
-						thickness="10px"
-						color="brand.primary"
-					>
-						<Box position="absolute" fontSize="12px" top="19px">
-							<Text fontSize="12px">{`${percentage}%`}</Text>
+		<LinkBox>
+			<LinkOverlay href={`https://geyser.fund/project/${project.name}`} onClick={e => {
+				e.preventDefault();
+				handleCardClick();
+			}}>
+				<Card
+					className={classNames(classes.container, className)}
+					backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
+					onClick={handleCardClick}
+					{...rest}
+				>
+					<Box height="160px" width="100%" position="relative">
+						<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
+						<Box className={classes.viewProject}>
+							<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
+							<Box className={classes.darkLayout} />
 						</Box>
-					</CircularProgress>
-					<VStack alignItems="center" justifyContent="center" spacing="0">
-						<Text fontSize="14px" fontWeight={600}>{getProjectBackers()}</Text>
-						<Text fontSize="12px">backers</Text>
-					</VStack>
-					<VStack alignItems="center" justifyContent={'center'} spacing="0">
-						<HStack>
-							<SatoshiIcon scale={0.6}/>
-							<Text fontSize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
+					</Box>
+					<VStack spacing="5px" width="100%" padding="10px">
+						<HStack spacing="10px" justifyContent="flex-start" width="100%">
+							<Avatar src={project.owners && project.owners[0].user.imageUrl} height="22px" width="22px" />
+							<Text fontSize="16px" fontWeight={600}>{title}</Text>
 						</HStack>
-						<Text fontSize="12px">received</Text>
+						<HStack alignItems="center" justifyContent={'space-between'} width="100%">
+							<CircularProgress
+								className={classes.circularProgress}
+								value={percentage}
+								size="55px"
+								thickness="10px"
+								color="brand.primary"
+							>
+								<Box position="absolute" fontSize="12px" top="19px">
+									<Text fontSize="12px">{`${percentage}%`}</Text>
+								</Box>
+							</CircularProgress>
+							<VStack alignItems="center" justifyContent="center" spacing="0">
+								<Text fontSize="14px" fontWeight={600}>{getProjectBackers()}</Text>
+								<Text fontSize="12px">backers</Text>
+							</VStack>
+							<VStack alignItems="center" justifyContent={'center'} spacing="0">
+								<HStack>
+									<SatoshiIcon scale={0.6}/>
+									<Text fontSize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
+								</HStack>
+								<Text fontSize="12px">received</Text>
+							</VStack>
+							<VStack alignItems="center" justifyContent="center" spacing="0">
+								<Text fontSize="12px" fontWeight={600}>{project.active ? `${amount}` : 'Completed'}</Text>
+								{project.active && <Text fontSize="12px">{`${label} left`}</Text>}
+							</VStack>
+						</HStack>
 					</VStack>
-					<VStack alignItems="center" justifyContent="center" spacing="0">
-						<Text fontSize="12px" fontWeight={600}>{project.active ? `${amount}` : 'Completed'}</Text>
-						{project.active && <Text fontSize="12px">{`${label} left`}</Text>}
-					</VStack>
-				</HStack>
-			</VStack>
-		</Card>
+				</Card>
+			</LinkOverlay>
+		</LinkBox>
 	);
 };
 
