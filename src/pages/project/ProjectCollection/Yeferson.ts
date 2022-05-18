@@ -79,7 +79,7 @@ const projectBlocks: IProjectBlock[] = [
 	{
 		key: 'demo',
 		title: 'Demo Video',
-		body: [''],
+		body: [],
 		youtube: '88QjMXzPPg0',
 		blockType: 'PL',
 	},
