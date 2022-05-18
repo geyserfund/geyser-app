@@ -13,7 +13,7 @@ import { BsLightning } from 'react-icons/bs';
 import {GiCrossedChains} from 'react-icons/gi';
 import { colors } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
-import { hasShipping } from '../../../utils';
+import { hasShipping, hasOnChain } from '../../../utils';
 
 const useStyles = createUseStyles({
 	blockText: {
@@ -175,7 +175,7 @@ export const QrPage = ({
 				<Tabs variant="enclosed" isFitted onChange={setPlatform}>
 					<TabList >
 						<Tab className={platform === 0 ? classes.tabActive : ''} value="lightning" ><BsLightning/><Text marginLeft="3px">Lightning</Text></Tab>
-						<Tab className={platform === 1 ? classes.tabActive : ''} value="onChain" ><GiCrossedChains /><Text marginLeft="3px">On-chain</Text></Tab>
+						{hasOnChain(name) && <Tab className={platform === 1 ? classes.tabActive : ''} value="onChain" ><GiCrossedChains /><Text marginLeft="3px">On-chain</Text></Tab>}
 					</TabList>
 					<TabPanels>
 						<TabPanel display="flex" flexDirection="column" alignItems="center">
@@ -184,12 +184,12 @@ export const QrPage = ({
 							</Box>
 							<Text paddingTop="15px">Waiting for payment...</Text>
 						</TabPanel>
-						<TabPanel display="flex" flexDirection="column" alignItems="center">
+						{hasOnChain(name) && <TabPanel display="flex" flexDirection="column" alignItems="center">
 							<Box className={classes.qrContainer} backgroundColor={qrBackgroundColor}>
 								<QRCode size={186} bgColor={qrBackgroundColor} className={classes.qr} value={getOnchainAddress()} onClick={handleCopyOnchain} />
 							</Box>
 							<Text paddingTop="15px">Waiting for payment...</Text>
-						</TabPanel>
+						</TabPanel>}
 					</TabPanels>
 				</Tabs>
 
