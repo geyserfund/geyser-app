@@ -50,4 +50,8 @@ export const useStyles = createUseStyles<Labels, Istyles>({
 
 		},
 	},
+	podcastContainer: {
+		borderRadius: '4px',
+		overflow: 'hidden',
+	},
 });
