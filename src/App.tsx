@@ -19,6 +19,5 @@ export const App = () => (
 				</AuthProvider>
 			</ApolloProvider>
 		</BrowserRouter>
-
 	</ChakraProvider>
 );
