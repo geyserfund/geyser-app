@@ -1,5 +1,5 @@
 export * from './IdComponent';
-export * from './CircularFundProgress';
+export * from './ProjecBalanceCircularProgress';
 export * from './IdBar';
 export * from './ConnectTwitter';
 export * from './ProjectCard';
@@ -11,4 +11,4 @@ export * from './AddSponsor';
 export * from './LiveProject';
 export * from './ProjectBars';
 export * from './SwipeLiveProject';
-export * from './NoGoalFundAmount';
+export * from './ProjectBalance';
