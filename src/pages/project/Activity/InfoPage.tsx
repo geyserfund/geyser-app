@@ -43,8 +43,10 @@ export const InfoPage = ({
 			{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
 				<Text fontSize="12px">Project</Text>
 			</Button>}
-			<FundingStatus open={project.active} />
-			{project.active && <Countdown endDate={project.expiresAt}/>}
+			<Box>
+				<FundingStatus open={project.active} />
+				{project.active && <Countdown endDate={project.expiresAt}/>}
+			</Box>
 			{project.fundingGoal
 				? <ProjectBalanceCircularProgress loading={loading} rate={btcRate} goal={project.fundingGoal} balance={project.balance} />
 				: <ProjectBalance balance={project.balance} rate={btcRate}/>
