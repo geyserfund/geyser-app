@@ -2,6 +2,13 @@ import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 
 const projectBlocks: IProjectBlock[] = [
 	{
+		key: 'podcast',
+		title: '',
+		body: [],
+		podcast: 'https://soundcloud.com/user-44010708/bitcoin-education-in-nigeria-004?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
+		blockType: 'PL',
+	},
+	{
 		key: 'title1',
 		title: '',
 		body: [
