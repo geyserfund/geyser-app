@@ -44,7 +44,7 @@ export const InfoPage = ({
 				<Text fontSize="12px">Project</Text>
 			</Button>}
 			<FundingStatus open={project.active} />
-			{project.active && <Countdown endDate={project.expiresAt}/>}
+			{project.active && project.expiresAt > project.createdAt && <Countdown endDate={project.expiresAt}/>}
 			<CircularFundProgress loading={loading} rate={btcRate} goal={project.fundingGoal} amount={project.balance} />
 			{project.active && <ButtonComponent
 				primary

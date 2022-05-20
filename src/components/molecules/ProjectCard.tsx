@@ -141,8 +141,8 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 						<Text fontSize="12px">received</Text>
 					</VStack>
 					<VStack alignItems="center" justifyContent="center" spacing="0">
-						<Text fontSize="12px" fontWeight={600}>{project.active ? `${amount}` : 'Completed'}</Text>
-						{project.active && <Text fontSize="12px">{`${label} left`}</Text>}
+						<Text fontSize="12px" fontWeight={600}>{project.active ? project.expiresAt > project.createdAt && `${amount}` : 'Completed'}</Text>
+						{project.active && <Text fontSize="12px">{project.expiresAt > project.createdAt ? `${label} left` : <strong>Open</strong>}</Text>}
 					</VStack>
 				</HStack>
 			</VStack>
