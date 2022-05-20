@@ -74,6 +74,25 @@ const useStyles = createUseStyles({
 	},
 });
 
+const ProjectCardTime = ({ active, expiresAt }: { active: boolean, expiresAt: string}) => {
+	const {amount, label} = formatDaysLeft(expiresAt);
+
+	if (!active) {
+		return <Text fontSize="12px" fontWeight={600}>{'Completed'}</Text>;
+	}
+
+	if (!expiresAt) {
+		return <Text fontSize="12px" fontWeight={600}>{'Open'}</Text>;
+	}
+
+	return (
+		<VStack alignItems="center" justifyContent="center" spacing="0">
+			<Text fontSize="12px" fontWeight={600}>{`${amount}`}</Text>
+			<Text fontSize="12px">{`${label} left`}</Text>
+		</ VStack>
+	);
+};
+
 export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...rest }: IProjectCardProp) => {
 	const classes = useStyles();
 	const history = useHistory();
@@ -96,7 +115,6 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 
 	const getProjectBackers = () => (project && project.funders) ? project.funders.length : '';
 
-	const {amount, label} = formatDaysLeft(project.expiresAt);
 	console.log(getShortAmountLabel(project.balance));
 	return (
 		<LinkBox>
@@ -150,10 +168,14 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 								{project.active && <Text fontSize="12px">{`${label} left`}</Text>}
 							</VStack>
 						</HStack>
+						<Text fontSize="12px">received</Text>
 					</VStack>
-				</Card>
-			</LinkOverlay>
-		</LinkBox>
+					<ProjectCardTime expiresAt={project.expiresAt} active={project.active}/>
+				</HStack>
+			</VStack>
+		</Card>
+   </LinkOverlay>
+  </LinkBox>
 	);
 };
 
