@@ -110,7 +110,7 @@ export const LaunchIdea = () => {
 				<VStack width="100%" alignItems="flex-start" spacing="30px">
 					<Text fontSize="35px" fontWeight={700}>Transform your ideas into reality</Text>
 					<Text fontSize="18px">
-                Are you a Bitcoin creator, creative or entrepreneur looking for the funds needed to realize your ideas? No matter where you are in the world, Geyser now makes it easy for you to create and commit to a time-bound crowdfund, and allow supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser below, and we will get back to you soon on how to proceed. For more info check out our <Link href={GeyserFAQUrl} isExternal textDecoration="underline">FAQ</Link>.
+                Are you a Bitcoin creator, creative, educator or entrepreneur looking to raise funds from your community? No matter where you are in the world, Geyser now makes it easy for you to create crowdfunding campaigns, and to allow your supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser below, and we will get back to you soon on how to proceed. For more info check out our <Link href={GeyserFAQUrl} isExternal textDecoration="underline">FAQ</Link>.
 					</Text>
 					<Stack direction={isMobile ? 'column' : 'row'} width="100%" justifyContent="space-between" spacing={isMobile ? '30px' : '15px'}>
 						<HStack flex="1" spacing="18px">
@@ -188,4 +188,3 @@ export const LaunchIdea = () => {
 		</Box>
 	);
 };
-

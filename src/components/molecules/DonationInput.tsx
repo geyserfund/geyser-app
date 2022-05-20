@@ -20,7 +20,6 @@ import { SatoshiIcon } from '../icons';
 const useStyles = createUseStyles({
 	inputElement: {
 		borderWidth: '2px',
-		textAlign: 'center',
 		'&:focus': {
 			borderColor: colors.normalLightGreen,
 			boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
