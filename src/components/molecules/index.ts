@@ -11,3 +11,4 @@ export * from './AddSponsor';
 export * from './LiveProject';
 export * from './ProjectBars';
 export * from './SwipeLiveProject';
+export * from './NoGoalFundAmount';

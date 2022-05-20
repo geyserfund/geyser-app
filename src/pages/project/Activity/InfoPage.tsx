@@ -1,7 +1,7 @@
 import { Box, Text, VStack } from '@chakra-ui/layout';
 import React from 'react';
 import { SatoshiIcon } from '../../../components/icons';
-import { CircularFundProgress } from '../../../components/molecules';
+import { CircularFundProgress, NoGoalFundAmount } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { ButtonComponent, FundingStatus } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
@@ -45,7 +45,11 @@ export const InfoPage = ({
 			</Button>}
 			<FundingStatus open={project.active} />
 			{project.active && <Countdown endDate={project.expiresAt}/>}
-			<CircularFundProgress loading={loading} rate={btcRate} goal={project.fundingGoal} amount={project.balance} />
+			{project.fundingGoal
+				? <CircularFundProgress loading={loading} rate={btcRate} goal={project.fundingGoal} amount={project.balance} />
+				: <NoGoalFundAmount balance={project.balance} rate={btcRate}/>
+			}
+
 			{project.active && <ButtonComponent
 				primary
 				standard

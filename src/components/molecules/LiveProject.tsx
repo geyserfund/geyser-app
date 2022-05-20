@@ -115,8 +115,12 @@ export const LiveProject = ({ project}: ILiveProject) => {
 								<Wrap >
 									<Text fontSize="18px">Raised: </Text>
 									<SatoshiAmount wrapperClassName={classes.satoshiText} fontSize="18px" marginTop="2px !important">{project.balance}</SatoshiAmount>
-									<Text fontSize="18px">{`, ${percentage} % `}</Text>
-									<Text fontSize="18px">of goal</Text>
+									{project.fundingGoal
+&& <>
+	<Text fontSize="18px">{`, ${percentage} % `}</Text>
+	<Text fontSize="18px">of goal</Text>
+</>
+									}
 								</Wrap>
 							</VStack>
 						</Stack>
