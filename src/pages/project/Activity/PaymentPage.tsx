@@ -140,7 +140,7 @@ export const PaymentPage = ({
 				<Box width="100%" position="relative">
 					<TextArea
 						pr={16}
-						placeholder="Leave a public message here."
+						placeholder="Leave a comment and drop a GIF."
 						fontSize="14px"
 						resize="none"
 						value={state.comment}
