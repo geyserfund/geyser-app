@@ -3,4 +3,5 @@ export const hasShipping = (name: string) => (
     && name !== 'lightning-rebel'
     && name !== 'bitcoin-ballers'
     && name !== 'anatomy-of-bitcoin'
+    && name !== 'bitcoin-for-fairness'
 );
