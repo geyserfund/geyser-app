@@ -141,7 +141,8 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 							<Text fontSize="16px" fontWeight={600}>{title}</Text>
 						</HStack>
 						<HStack alignItems="center" justifyContent={'space-between'} width="100%">
-							<CircularProgress
+              {project.fundingGoal
+					    && <CircularProgress
 								className={classes.circularProgress}
 								value={percentage}
 								size="55px"
@@ -152,6 +153,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 									<Text fontSize="12px">{`${percentage}%`}</Text>
 								</Box>
 							</CircularProgress>
+              }
 							<VStack alignItems="center" justifyContent="center" spacing="0">
 								<Text fontSize="14px" fontWeight={600}>{getProjectBackers()}</Text>
 								<Text fontSize="12px">backers</Text>

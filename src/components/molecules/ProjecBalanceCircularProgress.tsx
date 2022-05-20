@@ -8,8 +8,8 @@ import { SatoshiIcon } from '../icons';
 import { createUseStyles } from 'react-jss';
 import { commaFormatted } from '../../utils/helperFunctions';
 
-interface ICircularFundProgress {
-	amount: number;
+interface IProjectBalanceCircularProgress {
+	balance: number;
 	goal: number;
 	rate: number
 	loading: boolean;
@@ -34,21 +34,25 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularFundProgress) => {
+const BTCBalance = ({ balance }: { balance: number }) => {
+	const isDark = isDarkMode();
+	const classes = useStyles();
+	const displaySatoshis = balance < 1000000;
+
+	return (
+		displaySatoshis
+			? <><SatoshiIcon isDark={isDark} className={classes.satoshi} /> {commaFormatted(balance)}</>
+			: <><BsCurrencyBitcoin fontSize="30px" />{parseFloat((balance / 100000000).toFixed(4))}</>
+	);
+};
+
+export const ProjectBalanceCircularProgress = ({ goal, rate, balance, loading }: IProjectBalanceCircularProgress) => {
 	const classes = useStyles();
 	const isDark = isDarkMode();
-	const amountUSD = (amount * rate).toFixed(2);
-	const percentage = (parseFloat(amountUSD) / goal) * 100;
+	const balanceUSD = (balance * rate).toFixed(2);
+	const percentage = (parseFloat(balanceUSD) / goal) * 100;
 
 	const [display, setDisplay] = useState(false);
-
-	let bitCoins = 0;
-
-	if (amount >= 1000000) {
-		bitCoins = parseFloat((amount / 100000000).toFixed(4));
-	}
-
-	// Const percentage = 100;
 
 	const getDisplayPercent = (percent: number) => {
 		if (percent < 1) {
@@ -71,20 +75,11 @@ export const CircularFundProgress = ({ goal, rate, amount, loading }: ICircularF
 
 	const getStat = () => (
 		<Stat textAlign="center" borderRadius="50%" >
-			<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Funded</StatLabel>
+			<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Raised</StatLabel>
 			<StatNumber className="amount-label-sat" position="relative" display={!display ? 'flex' : 'none'}>
-				{
-					bitCoins ? <>
-						<BsCurrencyBitcoin fontSize="30px" />{bitCoins}
-					</>
-						: <>
-							<SatoshiIcon isDark={isDark} className={classes.satoshi} /> {commaFormatted(amount)}
-						</>
-
-				}
-
+				<BTCBalance balance={balance}/>
 			</StatNumber>
-			<StatNumber className="amount-label-usd" display={display ? 'block' : 'none'} position="relative">{'$'}{amountUSD} </StatNumber>
+			<StatNumber className="amount-label-usd" display={display ? 'block' : 'none'} position="relative">{'$'}{balanceUSD} </StatNumber>
 			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of $${commaFormatted(goal)}`}</StatHelpText>
 		</Stat>
 	);
