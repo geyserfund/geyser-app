@@ -141,19 +141,19 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 							<Text fontSize="16px" fontWeight={600}>{title}</Text>
 						</HStack>
 						<HStack alignItems="center" justifyContent={'space-between'} width="100%">
-              {project.fundingGoal
-					    && <CircularProgress
-								className={classes.circularProgress}
-								value={percentage}
-								size="55px"
-								thickness="10px"
-								color="brand.primary"
-							>
-								<Box position="absolute" fontSize="12px" top="19px">
-									<Text fontSize="12px">{`${percentage}%`}</Text>
-								</Box>
-							</CircularProgress>
-              }
+							{project.fundingGoal
+								&& <CircularProgress
+									className={classes.circularProgress}
+									value={percentage}
+									size="55px"
+									thickness="10px"
+									color="brand.primary"
+								>
+									<Box position="absolute" fontSize="12px" top="19px">
+										<Text fontSize="12px">{`${percentage}%`}</Text>
+									</Box>
+								</CircularProgress>
+							}
 							<VStack alignItems="center" justifyContent="center" spacing="0">
 								<Text fontSize="14px" fontWeight={600}>{getProjectBackers()}</Text>
 								<Text fontSize="12px">backers</Text>
