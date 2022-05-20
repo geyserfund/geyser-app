@@ -6,6 +6,7 @@ import { IProjectUpdate, IProject } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../ProjectComponent';
 import ProjectColl, { IProjectData } from '../ProjectCollection';
+import { Footer } from '../../../components/molecules';
 
 export const RewardBased = ({ project }: { project: IProject}) => {
 	const [projectData, setProjectData] = useState<IProjectData>();
@@ -56,6 +57,7 @@ export const RewardBased = ({ project }: { project: IProject}) => {
 				{ renderUpdates() }
 				<SponsorBlock sponsors={project.sponsors}/>
 			</VStack >
+			<Footer />
 		</VStack >
 	);
 };
