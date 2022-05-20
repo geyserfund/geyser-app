@@ -75,7 +75,7 @@ export const ProjectBalanceCircularProgress = ({ goal, rate, balance, loading }:
 
 	const getStat = () => (
 		<Stat textAlign="center" borderRadius="50%" >
-			<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Funded</StatLabel>
+			<StatLabel fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>Raised</StatLabel>
 			<StatNumber className="amount-label-sat" position="relative" display={!display ? 'flex' : 'none'}>
 				<BTCBalance balance={balance}/>
 			</StatNumber>
