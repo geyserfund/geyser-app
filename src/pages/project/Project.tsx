@@ -8,7 +8,6 @@ import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
-import { Footer } from '../../components/molecules';
 
 export const Project = () => {
 	const { projectId } = useParams<{ projectId: string }>();
@@ -62,7 +61,6 @@ export const Project = () => {
 					<Activity project={project} {...{detailOpen, setDetailOpen}}/>
 				</Box>
 			</Box>
-			<Footer/>
 		</>
 	);
 };
