@@ -30,6 +30,7 @@ export const InfoPage = ({
 }: IInfoPage) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({isMobile});
+	const showCountdown = () => project.active && project.expiresAt;
 
 	return (
 		<VStack
@@ -43,15 +44,10 @@ export const InfoPage = ({
 			{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
 				<Text fontSize="12px">Project</Text>
 			</Button>}
-			<Box>
-				<FundingStatus open={project.active} />
-				{project.active && <Countdown endDate={project.expiresAt}/>}
-			</Box>
 			{project.fundingGoal
 				? <ProjectBalanceCircularProgress loading={loading} rate={btcRate} goal={project.fundingGoal} balance={project.balance} />
 				: <ProjectBalance balance={project.balance} rate={btcRate}/>
 			}
-
 			{project.active && <ButtonComponent
 				primary
 				standard
