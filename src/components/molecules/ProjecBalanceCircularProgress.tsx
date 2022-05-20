@@ -37,12 +37,12 @@ const useStyles = createUseStyles({
 const BTCBalance = ({ balance }: { balance: number }) => {
 	const isDark = isDarkMode();
 	const classes = useStyles();
-	const displaySatoshis = balance >= 1000000;
+	const displaySatoshis = balance < 1000000;
 
 	return (
 		displaySatoshis
-			? <><BsCurrencyBitcoin fontSize="30px" />{parseFloat((balance / 100000000).toFixed(4))}</>
-			: <><SatoshiIcon isDark={isDark} className={classes.satoshi} /> {commaFormatted(balance)}</>
+			? <><SatoshiIcon isDark={isDark} className={classes.satoshi} /> {commaFormatted(balance)}</>
+			: <><BsCurrencyBitcoin fontSize="30px" />{parseFloat((balance / 100000000).toFixed(4))}</>
 	);
 };
 

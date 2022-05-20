@@ -17,12 +17,12 @@ const USDBalance = ({ balance }: { balance: number }) => (
 
 const BTCBalance = ({ balance }: { balance: number }) => {
 	// Let bitcoins = 0;
-	const displaySatoshis = balance >= 1000000;
+	const displaySatoshis = balance < 1000000;
 
 	return (
 		displaySatoshis
-			? <><BsCurrencyBitcoin fontSize="40px" color="#20ECC7" /><Text color="brand.primary" fontWeight="bold" fontSize="5xl">{parseFloat((balance / 100000000).toFixed(4))}</Text></>
-			: <><SatoshiIcon scale={1.5} color="brand.primary" mr={1} /><Text color="brand.primary" fontWeight="bold" fontSize="5xl">{commaFormatted(balance)}</Text></>
+			? <><SatoshiIcon scale={1.5} color="brand.primary" mr={1} /><Text color="brand.primary" fontWeight="bold" fontSize="5xl">{commaFormatted(balance)}</Text></>
+			: <><BsCurrencyBitcoin fontSize="40px" color="#20ECC7" /><Text color="brand.primary" fontWeight="bold" fontSize="5xl">{parseFloat((balance / 100000000).toFixed(4))}</Text></>
 	);
 };
 
