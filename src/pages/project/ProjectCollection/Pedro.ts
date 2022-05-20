@@ -41,9 +41,9 @@ const projectBlocks: IProjectBlock[] = [{
 	key: 'rewards',
 	title: 'Rewards',
 	body: [
-		'- **REWARD 1: Contributor Credit  Price** 100k Sats. “Special thanks to…” mention',
-		'- **REWARD 2: Sponsor Credit  Price** 10M Sats. “Produced with the support of…” mention',
-		'- **REWARD 3: Executive Producer Credit  Price** 50M Sats. “Produced by” with Logo',
+		'- **Contributor Credit**  Price: 100k Sats. “Special thanks to…” mention',
+		'- **Sponsor Credit**  Price: 10M Sats. “Produced with the support of…” mention',
+		'- **Executive Producer Credit**  Price: 50M Sats. “Produced by” with Logo',
 	],
 	tweet: '1417668364244242436',
 	blockType: 'PL',
