@@ -140,7 +140,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 							<Avatar src={project.owners && project.owners[0].user.imageUrl} height="22px" width="22px" />
 							<Text fontSize="16px" fontWeight={600}>{title}</Text>
 						</HStack>
-						<HStack alignItems="center" justifyContent={'space-between'} width="100%">
+						<HStack alignItems="center" justifyContent={project.fundingGoal ? 'space-between' : 'space-around'} width="100%">
 							{project.fundingGoal
 								&& <CircularProgress
 									className={classes.circularProgress}
