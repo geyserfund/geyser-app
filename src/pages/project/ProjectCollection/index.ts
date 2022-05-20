@@ -3,9 +3,10 @@ import {Craig} from './Craig';
 import {King} from './King';
 import {Toni} from './Toni';
 import {Josias} from './Josias';
-import {Apata} from './Apata';
+import {Anita} from './Anita';
 import {Yeferson} from './Yeferson';
 import {Pedro} from './Pedro';
+import {Apata} from './Apata';
 
 export interface IProjectData {
     projectBlocks: IProjectBlock[]
@@ -26,6 +27,7 @@ const ProjectColl: IProjectColl = {
 	[Apata.projectName]: Apata,
 	[Yeferson.projectName]: Yeferson,
 	[Pedro.projectName]: Pedro,
+	[Anita.projectName]: Anita,
 };
 
 export default ProjectColl;
