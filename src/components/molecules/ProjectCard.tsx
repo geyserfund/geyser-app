@@ -89,7 +89,7 @@ const ProjectCardTime = ({ active, expiresAt }: { active: boolean, expiresAt: st
 		<VStack alignItems="center" justifyContent="center" spacing="0">
 			<Text fontSize="12px" fontWeight={600}>{`${amount}`}</Text>
 			<Text fontSize="12px">{`${label} left`}</Text>
-		</ VStack>
+		</VStack>
 	);
 };
 
@@ -165,19 +165,12 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 								</HStack>
 								<Text fontSize="12px">received</Text>
 							</VStack>
-							<VStack alignItems="center" justifyContent="center" spacing="0">
-								<Text fontSize="12px" fontWeight={600}>{project.active ? `${amount}` : 'Completed'}</Text>
-								{project.active && <Text fontSize="12px">{`${label} left`}</Text>}
-							</VStack>
+							<ProjectCardTime expiresAt={project.expiresAt} active={project.active}/>
 						</HStack>
-						<Text fontSize="12px">received</Text>
 					</VStack>
-					<ProjectCardTime expiresAt={project.expiresAt} active={project.active}/>
-				</HStack>
-			</VStack>
-		</Card>
-   </LinkOverlay>
-  </LinkBox>
+				</Card>
+			</LinkOverlay>
+		</LinkBox>
 	);
 };
 
