@@ -1,31 +1,21 @@
-import { Box, NumberInput, NumberInputField, Text, VStack } from '@chakra-ui/react';
+import { Box, VStack } from '@chakra-ui/react';
+import { AnyAaaaRecord } from 'dns';
 import React from 'react';
-import { SatoshiIcon } from '../../../components/icons';
-import {IFundForm} from '../../../hooks';
-import { isDarkMode } from '../../../utils';
+import { DonationInput } from '../../../components/molecules';
+import { SectionTitle } from '../../../components/ui';
 
 interface IDonationBasedProps {
-	btcRate: number
-	state: IFundForm
-	setTarget: (_: any) => void
-    setError: (_:any) => void
+	setState: AnyAaaaRecord
 }
 
 export const DonationBased = ({
-	btcRate,
-	state,
-	setTarget,
-	setError,
-}: IDonationBasedProps) => {
-	const handleInput = (stringv: string, numberv: number) => {
-		setTarget({target: {name: 'donationAmount', value: numberv || 0}});
-	};
-
-	return (
-		<VStack width="100%" >
-			<Box width="100%" >
-				<Text lineHeight="26px">Send amount</Text>
-				<Box
+	setState,
+}: IDonationBasedProps) => (
+	<VStack width="100%" >
+		<Box width="100%" >
+			<SectionTitle> Send amount</SectionTitle>
+			<DonationInput inputGroup={{padding: '2px', marginBottom: '10px'}} name="donationAmount" onChange={setState}/>
+			{/* <Box
 					backgroundColor="brand.bgGreen"
 					height="85px"
 					borderRadius="12px"
@@ -55,8 +45,7 @@ export const DonationBased = ({
 						</Box>
 					</Box>
 					<Text color="brand.textGrey" fontSize="12px">{`$${(btcRate * state.donationAmount).toFixed(2)}`}</Text>
-				</Box>
+				</Box> */}
 
-			</Box>
-		</VStack>);
-};
+		</Box>
+	</VStack>);
