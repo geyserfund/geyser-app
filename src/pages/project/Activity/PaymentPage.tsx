@@ -88,15 +88,15 @@ export const PaymentPage = ({
 	const renderFundForm = () => {
 		switch (type) {
 			case projectTypes.donation:
-				return <DonationBased
-					{...{btcRate,
-						state,
-						setTarget,
-						setError }}
-				/>;
+				return <DonationBased setState={setState}/>;
 
 			case projectTypes.reward:
-				return <RewardBased {...{rewards, setState, updateReward}}/>;
+				return (
+					<Box>
+						<RewardBased {...{rewards, setState, updateReward}}/>
+						<Divider borderTopWidth="3px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
+					</Box>
+				);
 			default:
 				return null;
 		}
@@ -134,7 +134,6 @@ export const PaymentPage = ({
 				onClick={handleCloseButton}
 			/>
 			{renderFundForm()}
-			<Divider borderTopWidth="3px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
 			<VStack spacing="5px" width="100%" alignItems="flex-start">
 				<SectionTitle>Comment</SectionTitle>
 				<Box width="100%" position="relative">
