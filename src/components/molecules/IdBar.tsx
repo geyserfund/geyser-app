@@ -1,9 +1,9 @@
-import { Box, Text, HStack, Link } from '@chakra-ui/layout';
+import { Box, Text } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
-import React, { ReactElement } from 'react';
-import { Avatar, Image } from '@chakra-ui/react';
-import { Badge } from '../ui';
-import { IFundingTx, IProject } from '../../interfaces';
+import React from 'react';
+import { Image } from '@chakra-ui/react';
+import { Badge, LinkableAvatar, AnonymousAvatar } from '../ui';
+import { IFundingTx, IProject, IAvatarMetadata } from '../../interfaces';
 import { SatoshiIcon } from '../icons';
 import { getDaysAgo, getRandomOrb } from '../../utils';
 import { fonts } from '../../constants/fonts';
@@ -15,42 +15,6 @@ interface IIdBar extends HTMLChakraProps<'div'> {
 	fundingTx: IFundingTx
 	project: IProject
 }
-
-interface IAvatarMetadata {
-	username?: string,
-	appName?: string
-	image?: string
-	link?: string
-}
-
-interface ILinkableAvatar {
-	avatarMetadata: IAvatarMetadata
-	badges: ReactElement[]
-}
-const AnonymousAvatar = ({ seed }: { seed: number }) => (
-	<HStack spacing="5px" display="flex">
-		<Avatar width="30px" height="3	0px" name={'Anonymous'} src={getRandomOrb(seed)} sx={{
-			'& .chakra-avatar__initials': {
-				lineHeight: '30px',
-			},
-		}}/>
-		<Text fontSize="16px"> {''}</Text>
-	</HStack>
-);
-
-const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => (
-	<Link href={avatarMetadata.link} isExternal style={{ textDecoration: 'none' }}>
-		<HStack spacing="5px" display="flex">
-			<Avatar width="30px" height="30px" name={avatarMetadata.username} src={avatarMetadata.image} sx={{
-				'& .chakra-avatar__initials': {
-					lineHeight: '30px',
-				},
-			}}/>
-			<Text fontSize="16px"> {avatarMetadata.username}</Text>
-			{badges}
-		</HStack>
-	</Link>
-);
 
 export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const { funder, onChain, paidAt, source } = fundingTx;
