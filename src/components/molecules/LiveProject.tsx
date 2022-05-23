@@ -65,8 +65,6 @@ export const LiveProject = ({ project}: ILiveProject) => {
 	const goalInSatoshi = project.fundingGoal / btcRate;
 	const percentage = ((project.balance / goalInSatoshi) * 100).toFixed(2);
 
-	console.log('checking percentage', goalInSatoshi, btcRate, project, percentage);
-
 	const getDescription = project.description?.length > 250 ? `${project.description.slice(0, 250)}...` : project.description;
 
 	const handleViewProject = () => {
