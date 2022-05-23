@@ -6,6 +6,7 @@ export interface IParticipant {
 }
 
 export interface IFunder extends IParticipant {
+    id: number;
     amountFunded: number;
     timesFunded: number;
     user: IUser;
@@ -31,4 +32,11 @@ export interface IGrantee {
     id: number;
     url: string;
     name: string;
+}
+
+export interface IAvatarMetadata {
+	username?: string,
+	appName?: string
+	image?: string
+	link?: string
 }

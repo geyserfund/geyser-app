@@ -72,30 +72,43 @@ query GetProject($where: UniqueProjectQueryInput!) {
 `;
 
 export const QUERY_PROJECT_FUNDING_DATA = gql`
-query GetProjectFundingData($where: UniqueProjectQueryInput!) {
-  project(where: $where) {
-    fundingTxs {
-      id
-      funder {
-        amountFunded
-        timesFunded
-        confirmedAt
+  query GetProjectFundingData($where: UniqueProjectQueryInput!) {
+    project(where: $where) {
+      fundingTxs {
+        id
+        funder {
+          id
+          amountFunded
+          timesFunded
+          confirmedAt
+          user {
+            username
+            imageUrl
+            twitterHandle
+            connectedTwitter
+          }
+        }
+        amount
+        paidAt
+        comment
+        media
+        onChain
+        source
+      }
+      funders {
+        id
         user {
           username
           imageUrl
           twitterHandle
           connectedTwitter
         }
+        amountFunded
+        timesFunded
+        confirmedAt
       }
-      amount
-      paidAt
-      comment
-      media
-      onChain
-      source
     }
   }
-}
 `;
 
 export const QUERY_PROJECTS = gql`
