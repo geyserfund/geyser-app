@@ -162,12 +162,5 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 				</AccordionItem>
 			</Accordion>
 		</Card>
-		// <Card className={classes.cardContainer}>
-		// 	<VStack className={classes.containers} spacing="20px">
-		// 		{
-		// 			renderBlocks()
-		// 		}
-		// 	</VStack>
-		// </Card>
 	);
 };

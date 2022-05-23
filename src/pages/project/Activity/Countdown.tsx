@@ -18,6 +18,6 @@ export const Countdown = ({ endDate }: { endDate: string }) => {
 	}, [endDate]);
 
 	return (
-		<Text>{`${countDown}`}</Text>
+		<Text textAlign="center">{`${countDown}`}</Text>
 	);
 };

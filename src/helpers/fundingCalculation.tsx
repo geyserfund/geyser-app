@@ -14,6 +14,7 @@ export const useFundCalc = (state: IFundForm) => {
 			|| name === 'lightning-rebel'
 			|| name === 'bitcoin-ballers'
 			|| name === 'anatomy-of-bitcoin'
+			|| name === 'bitcoin-for-fairness'
 		) ? 0 : getShippingCost();
 
 		if (type === 'sats') {
@@ -47,4 +48,3 @@ export const useFundCalc = (state: IFundForm) => {
 
 	return {getTotalAmount, getShippingCost, getRewardsQuantity, btcRate};
 };
-
