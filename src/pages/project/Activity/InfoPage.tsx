@@ -1,14 +1,15 @@
-import { Box, Text, VStack } from '@chakra-ui/layout';
-import React from 'react';
+import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
+import React, {useState} from 'react';
 import { SatoshiIcon } from '../../../components/icons';
 import { ProjectBalanceCircularProgress, ProjectBalance } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
+import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
 import { ButtonComponent, FundingStatus } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
-import {Button } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 
 import { useStyles } from './styles';
-import { IProject, IFundingTx } from '../../../interfaces';
+import { IProject, IFundingTx, IFunder } from '../../../interfaces';
 import { Countdown } from './Countdown';
 
 interface IInfoPage {
@@ -18,6 +19,7 @@ interface IInfoPage {
     loading: boolean;
     btcRate: number;
     fundingTxs: IFundingTx[]
+    funders: IFunder[]
 }
 
 export const InfoPage = ({
@@ -27,10 +29,28 @@ export const InfoPage = ({
 	project,
 	btcRate,
 	fundingTxs,
+	funders,
 }: IInfoPage) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({isMobile});
 	const showCountdown = () => project.active && project.expiresAt;
+	const [view, setView] = useState('activity');
+
+	const leaderboardSort = (funderA: IFunder, funderB: IFunder) => {
+		if (funderA.amountFunded > funderB.amountFunded) {
+			return -1;
+		}
+
+		if (funderA.amountFunded < funderB.amountFunded) {
+			return 1;
+		}
+
+		return 0;
+	};
+
+	const fundersCopy = [...funders];
+
+	const sortedFunders: IFunder[] = fundersCopy.sort(leaderboardSort);
 
 	return (
 		<VStack
@@ -59,14 +79,21 @@ export const InfoPage = ({
 			>
 				Fund this project
 			</ButtonComponent>}
-			<Box width="100%" display="flex" flexDirection="column" alignItems="start" overflow="hidden" flex="1">
-				<Text fontSize="16px" marginBottom="10px" marginTop="10px">
-					{`Activity ${fundingTxs.length ? `( ${fundingTxs.length} )` : ''}`}
-				</Text>
+			<Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
+				<HStack spacing="10px">
+					<Button fontSize="16px" marginBottom="10px" marginTop="10px" onClick={() => setView('activity')} bg={view === 'activity' ? 'brand.bgGrey' : 'none'} shadow="md">
+						{`Activity ${fundingTxs.length ? `( ${fundingTxs.length} )` : ''}`}
+					</Button>
+					<Button fontSize="16px" marginBottom="10px" marginTop="10px" onClick={() => setView('leaderboard')} bg={view === 'activity' ? 'none' : 'brand.bgGrey'} shadow="md">
+      Leaderboard
+					</Button>
+				</HStack>
 				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
-					{
-						fundingTxs.map((fundingTx, index) => (
+					{ view === 'activity'
+						? fundingTxs.map((fundingTx, index) => (
 							<IdBar key={index} fundingTx={fundingTx} project={project}/>
+						)) : sortedFunders.map((funder, index) => (
+							<IdBarLeaderboard key={index} funder={funder} count={index + 1} project={project}/>
 						))
 					}
 				</VStack>
