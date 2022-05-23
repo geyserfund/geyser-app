@@ -51,14 +51,6 @@ const projectBlocks: IProjectBlock[] = [
 		blockType: 'PL',
 	},
 	{
-		key: 'rewards',
-		title: 'Rewards',
-		body: [
-			'- **Be part of the BFF Community** Price: $10 USD. Access to a monthly community call with hands-on information from the ground with Anita Posch and BFF participants.',
-		],
-		blockType: 'PL',
-	},
-	{
 		key: 'aboutMe',
 		title: 'About me',
 		body: [],
