@@ -45,6 +45,7 @@ const initialFunding = {
 	onChain: false,
 	source: '',
 	funder: {
+		id: 0,
 		amountFunded: 0,
 		timesFunded: 0,
 		confirmed: false,
@@ -191,7 +192,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 						status: 'info',
 					});
 				} else {
-					console.log(error);
 					toast({
 						title: 'Oops! Something went wrong with WebLN.',
 						description: 'Please use the invoice instead.',
