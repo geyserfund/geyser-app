@@ -12,6 +12,7 @@ const useStyles = createUseStyles({
 	cardContainer: {
 		borderRadius: '4px',
 		boxShadow: '0px 3px 12px rgba(0, 0, 0, 0.1)',
+		overflow: 'auto',
 	},
 });
 
@@ -27,4 +28,3 @@ export const Card = ({className, children, ...rest}: ICard) => {
 		</Box>
 	);
 };
-
