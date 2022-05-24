@@ -1,4 +1,4 @@
-import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
+import { Box, Text, VStack } from '@chakra-ui/layout';
 import React, {useState} from 'react';
 import { SatoshiIcon } from '../../../components/icons';
 import { ProjectBalanceCircularProgress, ProjectBalance } from '../../../components/molecules';
@@ -80,14 +80,14 @@ export const InfoPage = ({
 				Fund this project
 			</ButtonComponent>}
 			<Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
-				<HStack spacing="10px">
-					<Button fontSize="16px" marginBottom="10px" marginTop="10px" onClick={() => setView('activity')} bg={view === 'activity' ? 'brand.bgGrey' : 'none'} shadow="md">
-						{`Activity ${fundingTxs.length ? `( ${fundingTxs.length} )` : ''}`}
+				<Box display="flex">
+					<Button _hover={{backgroundColor: 'none'}} w="100%" borderBottom={view === 'activity' ? '3px solid darkgrey' : '3px solid lightgrey'} rounded="none" bg="none" fontWeight={view === 'activity' ? 'bold' : 'normal'} fontSize="16px" marginBottom="10px" marginTop="10px" onClick={() => setView('activity')}>
+						Activity <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>{fundingTxs.length}</Text>
 					</Button>
-					<Button fontSize="16px" marginBottom="10px" marginTop="10px" onClick={() => setView('leaderboard')} bg={view === 'activity' ? 'none' : 'brand.bgGrey'} shadow="md">
-      Leaderboard
+					<Button _hover={{backgroundColor: 'none'}} w="100%" borderBottom={view === 'activity' ? '3px solid lightgrey' : '3px solid darkgrey'} rounded="none" bg="none" fontWeight={view === 'activity' ? 'normal' : 'bold'} fontSize="16px" marginBottom="10px" marginTop="10px" onClick={() => setView('leaderboard')}>
+						Leaderboard <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>{funders.length}</Text>
 					</Button>
-				</HStack>
+				</Box>
 				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
 					{ view === 'activity'
 						? fundingTxs.map((fundingTx, index) => (
