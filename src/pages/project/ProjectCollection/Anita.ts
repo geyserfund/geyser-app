@@ -20,7 +20,7 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'Bitcoin For Fairness is a non-profit initiative raising awareness and understanding of Bitcoin for people in emerging countries and for disadvantaged communities. We connect and boost the profile of local stakeholders, identify and work with educators on the ground to expand Bitcoin adoption locally and Bitcoin awareness globally.', 'Bitcoin brings economic empowerment for billions worldwide who have been excluded from our current money system because of financial repression or authoritarian leadership in their countries. Bitcoin is an excellent long-term store of value and a means of exchanging value that leads to emancipation from financial hierarchy regardless of race, gender, wealth and status. It enables open and permissionless access to a global monetary network that can’t be bent to favor politically powerful or privileged groups.', 'BFF’s goal is to bring Bitcoin to billions of people one community at a time through sharing knowledge and building bridges between emerging countries and the global economy.',
 		],
-		youtube: 'https://www.youtube.com/watch?v=zAvA3iUbpdA',
+		youtube: 'zAvA3iUbpdA',
 		blockType: 'PL',
 	},
 	{
