@@ -16,42 +16,6 @@ interface IIdBar extends HTMLChakraProps<'div'> {
 	project: IProject
 }
 
-interface IAvatarMetadata {
-	username?: string,
-	appName?: string
-	image?: string
-	link?: string
-}
-
-interface ILinkableAvatar {
-	avatarMetadata: IAvatarMetadata
-	badges: ReactElement[]
-}
-const AnonymousAvatar = ({ seed }: { seed: number }) => (
-	<HStack spacing="5px" display="flex">
-		<Avatar width="30px" height="3	0px" name={'Anonymous'} src={getRandomOrb(seed)} sx={{
-			'& .chakra-avatar__initials': {
-				lineHeight: '30px',
-			},
-		}}/>
-		<Text fontSize="16px"> {''}</Text>
-	</HStack>
-);
-
-const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => (
-	<Link href={avatarMetadata.link} isExternal style={{ textDecoration: 'none' }}>
-		<HStack spacing="5px" display="flex">
-			<Avatar width="30px" height="30px" name={avatarMetadata.username} src={avatarMetadata.image} sx={{
-				'& .chakra-avatar__initials': {
-					lineHeight: '30px',
-				},
-			}}/>
-			<Text fontSize="16px"> {avatarMetadata.username}</Text>
-			{badges}
-		</HStack>
-	</Link>
-);
-
 export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const { funder, onChain, paidAt, source } = fundingTx;
 
