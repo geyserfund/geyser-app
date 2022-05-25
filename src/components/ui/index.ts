@@ -18,3 +18,5 @@ export * from './SelectComponent';
 export * from './TextBox';
 export * from './SatoshiAmount';
 export * from './InfoTooltip';
+export * from './LinkableAvatar';
+export * from './AnonymousAvatar';
