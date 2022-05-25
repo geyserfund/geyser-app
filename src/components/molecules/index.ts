@@ -1,6 +1,7 @@
 export * from './IdComponent';
 export * from './ProjecBalanceCircularProgress';
 export * from './IdBar';
+export * from './IdBarLeaderboard';
 export * from './ConnectTwitter';
 export * from './ProjectCard';
 export * from './Footer';

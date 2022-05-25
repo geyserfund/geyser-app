@@ -105,7 +105,6 @@ export const ImageBar = ({images, imageIndex}:IImageBar) => {
 				outerBox[0].addEventListener('click', (event: any) => {
 					let stop = false;
 					event.path.map((val:any) => {
-						console.log(val.localName);
 						if (val.localName === 'button') {
 							stop = true;
 						}

@@ -8,6 +8,7 @@ import {
 	IFundingInput,
 	IRewardFundingInput,
 	IFundingAmounts,
+	IFunder,
 } from '../../../interfaces';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { MUTATION_FUND, QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
@@ -56,6 +57,7 @@ const initialFunding = {
 	onChain: false,
 	source: '',
 	funder: {
+		id: 0,
 		amountFunded: 0,
 		timesFunded: 0,
 		confirmed: false,
@@ -78,6 +80,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const [fundingTx, setFundingTx] = useState<IFundingTx>({ ...initialFunding, funder: { ...initialFunding.funder, user } });
 	const [amounts, setAmounts] = useState<IFundingAmounts>(initialAmounts);
 	const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);
+	const [funders, setFunders] = useState<IFunder[]>([]);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
@@ -104,6 +107,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	useEffect(() => {
 		if (fundingData && fundingData.project.fundingTxs) {
 			setFundingTxs(fundingData.project.fundingTxs);
+			setFunders(fundingData.project.funders);
 		}
 	}, [fundingData]);
 
@@ -303,6 +307,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						loading,
 						btcRate,
 						fundingTxs,
+						funders,
 					}}
 				/>;
 			case fundingStages.form:

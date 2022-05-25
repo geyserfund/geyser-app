@@ -23,7 +23,6 @@ export const Router = () => {
 		const container = document.getElementById('geyser-landing-page');
 		if (container) {
 			container.addEventListener('scroll', (event: any) => {
-				// Console.log('checking isattop', event);
 				if (event && event.target && event.target.scrollTop >= 30) {
 					setIsAtTop(false);
 				} else {
@@ -38,7 +37,7 @@ export const Router = () => {
 			}
 		};
 	}, []);
-	console.log('chekcing location', location);
+
 	const showBorder = isAtTop && location.pathname === '/';
 	return (
 		<Box height="100vh">

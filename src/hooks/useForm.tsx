@@ -46,10 +46,8 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 
 	useEffect(() => {
 		if (!user || !user.connectedTwitter) {
-			console.log('Setting to anon');
 			setState('anonymous', true);
 		} else {
-			console.log('Setting to non-anon');
 			setState('anonymous', false);
 		}
 	}, [user]);
@@ -79,7 +77,6 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 			});
 		}
 
-		console.log('chekcing rewards and rewards cost', newRewards, rewardsCost);
 		const newState = {...state, rewards: newRewards, rewardsCost };
 		_setState(newState);
 	};

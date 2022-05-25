@@ -28,7 +28,6 @@ export const InfoTooltip = ({
 			</>
 		}
 		<InfoIcon backgroundColor="#E9E9E9" rounded="full" p="2px" onMouseEnter={() => {
-			console.log(hover);
 			setHover(true);
 		}} onMouseLeave={() => setHover(false)}/>
 		</Box>
