@@ -2,12 +2,11 @@ import { Box, Text } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { Image } from '@chakra-ui/react';
-import { Badge, LinkableAvatar, AnonymousAvatar } from '../ui';
+import { LinkableAvatar, AnonymousAvatar } from '../ui';
 import { IFundingTx, IProject, IAvatarMetadata } from '../../interfaces';
 import { SatoshiIcon } from '../icons';
 import { getDaysAgo, getRandomOrb } from '../../utils';
 import { fonts } from '../../constants/fonts';
-import { computeFunderBadges } from '../../helpers/computeBadges';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { commaFormatted } from '../../utils/helperFunctions';
 
@@ -42,7 +41,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const anonymous = funder.user.username === 'anonymous';
 	const timeAgo = getDaysAgo(paidAt) || '';
 	const avatarMetadata = getMetadata();
-	const badges = computeFunderBadges({ project, funder }).map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`}/>));
+	const badges = undefined;
 
 	return (
 		<Box
@@ -50,6 +49,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 			mt={2}
 			width="95%"
 			boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"
+			_hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}
 			borderRadius="12px"
 			{...rest}
 		><Box
