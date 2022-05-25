@@ -57,7 +57,7 @@ export const SubscribeModal = ({isOpen, onClose}:ISubscribeModal) => {
 				},
 			}];
 			const value = await createCreatorRecord({records});
-			console.log('checking repsonse value', value);
+			console.log('checking response value', value);
 			setSubmitting(false);
 			setSuccess(true);
 			toast({

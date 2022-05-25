@@ -115,7 +115,6 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 
 	const getProjectBackers = () => (project && project.funders) ? project.funders.length : '';
 
-	console.log(getShortAmountLabel(project.balance));
 	return (
 		<LinkBox>
 			<LinkOverlay href={`https://geyser.fund/project/${project.name}`} onClick={e => {

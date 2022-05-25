@@ -51,7 +51,6 @@ export const SelectComponent = ({name, onChange, className, ...rest}: any) => {
 		onChange(name, option.value);
 	};
 
-	console.log('checking docused', focused);
 	return (
 		<Select
 			onFocus={onFocus}

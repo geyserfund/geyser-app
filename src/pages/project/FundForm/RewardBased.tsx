@@ -21,7 +21,6 @@ export const RewardBased = ({setState, updateReward, rewards}: IRewardBasedProps
 		);
 	}
 
-	console.log('checking the rewards', rewards);
 	return (
 		<VStack marginTop="0px !important" width="100%" spacing="30px" flex="1" overflowY="auto" overflowX="visible">
 			<Box width="100%" >
