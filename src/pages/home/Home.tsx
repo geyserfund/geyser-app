@@ -14,6 +14,7 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules/ProjectBars';
 import { IProject } from '../../interfaces';
+import { SatoshiIconNew } from '../../components/icons';
 
 type RuleNames = string
 
@@ -42,19 +43,20 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 		justifyContent: 'space-between',
 		maxWidth: '910px',
 	},
-	boldText: ({isMobile}) => ({
-		fontSize: isMobile ? '22px' : '24px',
-		fontWeight: '600',
+	boldText: {
+		fontSize: '22px',
+		fontWeight: 'bold',
 		color: colors.normalLightGreen,
-	}),
+	},
 	sectionTitle: {
 		fontSize: '16px',
 		color: colors.textGrey,
 	},
-	subtitleText: ({isMobile}) => ({
-		fontSize: isMobile ? '14px' : '16px',
+	subtitleText: {
+		fontSize: '12px',
 		fontWeight: 500,
-	}),
+		color: '#2B2A2A',
+	},
 });
 
 export const Home = () => {
@@ -138,23 +140,26 @@ export const Home = () => {
 								summaryLoading
 									? <><VStack>
 										<Text className={classes.boldText}>....</Text>
-										<Text className={classes.subtitleText}>Projects</Text>
+										<Text className={classes.subtitleText}>PROJECTS</Text>
 									</VStack><VStack>
 										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>....</SatoshiAmount>
-										<Text className={classes.subtitleText}>Sats</Text>
+										<Text className={classes.subtitleText}>SATS RAISED</Text>
 									</VStack><VStack>
 										<Text className={classes.boldText}>....</Text>
-										<Text className={classes.subtitleText}>Plebs</Text>
+										<Text className={classes.subtitleText}>PLEBS</Text>
 									</VStack></>
 									: <><VStack>
 										<Text className={classes.boldText}>{summary.projectsCount}</Text>
-										<Text className={classes.subtitleText}>Projects</Text>
+										<Text className={classes.subtitleText}>PROJECTS</Text>
 									</VStack><VStack>
-										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
-										<Text className={classes.subtitleText}>Sats</Text>
+										<Box display="flex" alignItems="center">
+											<SatoshiIconNew mr={1} />
+											<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
+										</Box>
+										<Text className={classes.subtitleText}>SATS RAISED</Text>
 									</VStack><VStack>
 										<Text className={classes.boldText}>{summary.fundersCount}</Text>
-										<Text className={classes.subtitleText}>Plebs</Text>
+										<Text className={classes.subtitleText}>PLEBS</Text>
 									</VStack></>
 							}
 
