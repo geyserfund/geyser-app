@@ -9,16 +9,29 @@ interface ILinkableAvatar {
 }
 
 export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
-	let badgesLength = 0;
 	const calculateBadgesLength = () => {
-		if (badges) {
-			badges.forEach(element => {
-				badgesLength = element.props.badge.length + badgesLength;
-			});
+		if (!badges) {
+			return 0;
 		}
+
+		return badges.reduce((length, element) => length + element.props.badge.length, 0);
 	};
 
-	calculateBadgesLength();
+	const getFormattedUsername = () => {
+		if (!avatarMetadata.username) {
+			return;
+		}
+
+		if (!badges && avatarMetadata.username.length > 25) {
+			return `${avatarMetadata.username.slice(0, 23)}...`;
+		}
+
+		if (badges && badges.length && avatarMetadata.username.length + calculateBadgesLength() > 22) {
+			return `${avatarMetadata.username.slice(0, 4)}...`;
+		}
+
+		return avatarMetadata.username;
+	};
 
 	return (
 		<Link
@@ -41,15 +54,7 @@ export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
 				/>
 				<Text fontSize="16px">
 					{' '}
-					{badges && badges.length && avatarMetadata && avatarMetadata.username
-						? avatarMetadata.username.length + badgesLength > 22
-							? `${avatarMetadata.username.slice(0, 4)}...`
-							: avatarMetadata.username
-						: avatarMetadata
-              && avatarMetadata.username
-              && avatarMetadata.username.length > 25
-							? `${avatarMetadata.username.slice(0, 23)}...`
-							: avatarMetadata.username}
+					{getFormattedUsername()}
 				</Text>
 				{badges}
 			</HStack>
