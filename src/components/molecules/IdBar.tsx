@@ -41,7 +41,6 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const anonymous = funder.user.username === 'anonymous';
 	const timeAgo = getDaysAgo(paidAt) || '';
 	const avatarMetadata = getMetadata();
-	const badges = undefined;
 
 	return (
 		<Box
@@ -61,7 +60,6 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 						? <AnonymousAvatar seed={fundingTx.funder.id}/>
 						: <LinkableAvatar
 							avatarMetadata={avatarMetadata}
-							badges={badges}
 						/>
 				}
 
