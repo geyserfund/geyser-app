@@ -11,7 +11,7 @@ export const Badge = ({ badge }: { badge: string }) => {
 		}} onMouseLeave={() => setHover(false)}>
 			{hover
 && <>
-	<Box position="absolute" top="-85px" left="-93px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
+	<Box position="absolute" bottom="-85px" left="-93px" p={2} zIndex={2} bg="#5B5B5B" rounded="lg">
 		<Text color="white" fontWeight="bold" fontSize="10px">Emoji badges</Text>
 		<HStack mt={1}>
 			<VStack spacing={0} rounded="lg" bg="rgba(0, 0, 0, 0.11)" px={3}>
@@ -40,7 +40,7 @@ export const Badge = ({ badge }: { badge: string }) => {
 			</VStack>
 		</HStack>
 	</Box>
-	<Box position="absolute" top="-24px" left="-5px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderTop="20px solid #5B5B5B"/>
+	<Box position="absolute" bottom="-24px" left="-5px" zIndex={1} borderLeft="20px solid transparent" borderRight="20px solid transparent" borderBottom="20px solid #5B5B5B"/>
 </>
 			}
 			<Text fontSize="10px">{badge}</Text>
