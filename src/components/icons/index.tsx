@@ -15,6 +15,7 @@ import GifSvg from '../../assets/gif.svg';
 import EnvelopePng from '../../assets/envelope.png';
 import RopePng from '../../assets/rope.png';
 import InfoSvg from '../../assets/i.svg';
+import SatoshiNew from '../../assets/satoshi.svg';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }: any) => {
 	const getFilter = () => {
@@ -35,6 +36,12 @@ export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }:
 		</Box>
 	);
 };
+
+export const SatoshiIconNew = (props: ImageProps) => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={SatoshiNew} alt="satoshi" {...props} />
+	</Box>
+);
 
 export const StarIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
