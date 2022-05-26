@@ -2,12 +2,11 @@ import { Box, Text } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { Image } from '@chakra-ui/react';
-import { Badge, LinkableAvatar, AnonymousAvatar } from '../ui';
+import { LinkableAvatar, AnonymousAvatar } from '../ui';
 import { IFundingTx, IProject, IAvatarMetadata } from '../../interfaces';
 import { SatoshiIcon } from '../icons';
 import { getDaysAgo, getRandomOrb } from '../../utils';
 import { fonts } from '../../constants/fonts';
-import { computeFunderBadges } from '../../helpers/computeBadges';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { commaFormatted } from '../../utils/helperFunctions';
 
@@ -15,42 +14,6 @@ interface IIdBar extends HTMLChakraProps<'div'> {
 	fundingTx: IFundingTx
 	project: IProject
 }
-
-interface IAvatarMetadata {
-	username?: string,
-	appName?: string
-	image?: string
-	link?: string
-}
-
-interface ILinkableAvatar {
-	avatarMetadata: IAvatarMetadata
-	badges: ReactElement[]
-}
-const AnonymousAvatar = ({ seed }: { seed: number }) => (
-	<HStack spacing="5px" display="flex">
-		<Avatar width="30px" height="3	0px" name={'Anonymous'} src={getRandomOrb(seed)} sx={{
-			'& .chakra-avatar__initials': {
-				lineHeight: '30px',
-			},
-		}}/>
-		<Text fontSize="16px"> {''}</Text>
-	</HStack>
-);
-
-const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => (
-	<Link href={avatarMetadata.link} isExternal style={{ textDecoration: 'none' }}>
-		<HStack spacing="5px" display="flex">
-			<Avatar width="30px" height="30px" name={avatarMetadata.username} src={avatarMetadata.image} sx={{
-				'& .chakra-avatar__initials': {
-					lineHeight: '30px',
-				},
-			}}/>
-			<Text fontSize="16px"> {avatarMetadata.username}</Text>
-			{badges}
-		</HStack>
-	</Link>
-);
 
 export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const { funder, onChain, paidAt, source } = fundingTx;
@@ -78,7 +41,6 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const anonymous = funder.user.username === 'anonymous';
 	const timeAgo = getDaysAgo(paidAt) || '';
 	const avatarMetadata = getMetadata();
-	const badges = computeFunderBadges({ project, funder }).map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`}/>));
 
 	return (
 		<Box
@@ -86,6 +48,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 			mt={2}
 			width="95%"
 			boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"
+			_hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}
 			borderRadius="12px"
 			{...rest}
 		><Box
@@ -97,7 +60,6 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 						? <AnonymousAvatar seed={fundingTx.funder.id}/>
 						: <LinkableAvatar
 							avatarMetadata={avatarMetadata}
-							badges={badges}
 						/>
 				}
 

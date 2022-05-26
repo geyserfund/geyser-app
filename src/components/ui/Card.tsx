@@ -16,12 +16,12 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const Card = ({className, children, ...rest}: ICard) => {
+export const Card = ({className, children, overflow, ...rest}: ICard) => {
 	const classes = useStyles();
 	return (
 		<Box
 			className={classNames(classes.cardContainer, className)}
-			overflow="hidden"
+			overflow={overflow ? overflow : 'hidden'}
 			{...rest}
 		>
 			{children}
