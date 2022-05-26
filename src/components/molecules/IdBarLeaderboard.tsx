@@ -34,6 +34,7 @@ export const IdBarLeaderboard = ({ funder, count, project, ...rest }: IIdBarLead
 			mt={2}
 			width="95%"
 			boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"
+			_hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}
 			borderRadius="12px"
 			{...rest}
 		><Box

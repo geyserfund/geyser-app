@@ -5,7 +5,7 @@ import { IAvatarMetadata } from '../../interfaces';
 
 interface ILinkableAvatar {
 	avatarMetadata: IAvatarMetadata
-	badges: ReactElement[]
+	badges?: ReactElement[]
 }
 
 export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => (

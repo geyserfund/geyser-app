@@ -350,6 +350,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	return (
 		<>
 			<Card
+				overflow="auto"
 				className={classNames(classes.container, {
 					[classes.slideInRight]: isMobile && !detailOpen,
 					[classes.fadeOut]: isMobile && fadeStarted,
