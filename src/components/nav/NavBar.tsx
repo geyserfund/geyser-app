@@ -20,7 +20,6 @@ import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
 const useStyles = createUseStyles({
 	userInfo: {
 		marginRight: '12px',
-		cursor: 'not-allowed',
 		'&:hover': {
 			backgroundColor: 'white',
 		},
@@ -59,6 +58,10 @@ export const NavBar = ({showBorder}: INavBar) => {
 		history.push('/launch');
 	};
 
+	const handleProfileClick = () => {
+		history.push('/profile');
+	};
+
 	return (
 		<>
 			<Box
@@ -89,6 +92,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 										className={classes.userInfo}
 										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
 										standard
+										onClick={handleProfileClick}
 									>
 										{user.twitterHandle}
 									</ButtonComponent>
@@ -121,6 +125,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 											className={classes.userInfo}
 											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
 											standard
+											onClick={handleProfileClick}
 										>
 											{user.twitterHandle}
 										</ButtonComponent>

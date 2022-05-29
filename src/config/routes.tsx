@@ -12,6 +12,7 @@ import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
 import { LaunchIdea } from '../pages/launchIdea';
+import { Profile } from '../pages/profile';
 
 export const customHistory = createBrowserHistory();
 
@@ -49,6 +50,9 @@ export const Router = () => {
 					</Route>
 					<Route path="/launch">
 						<LaunchIdea />
+					</Route>
+					<Route path="/profile">
+						<Profile />
 					</Route>
 					<Route path="/project/:projectId">
 						<Project />
