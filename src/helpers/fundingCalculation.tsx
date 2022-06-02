@@ -15,6 +15,7 @@ export const useFundCalc = (state: IFundForm) => {
 			|| name === 'bitcoin-ballers'
 			|| name === 'anatomy-of-bitcoin'
 			|| name === 'bitcoin-for-fairness'
+			|| name === 'orange-pill'
 		) ? 0 : getShippingCost();
 
 		if (type === 'sats') {
