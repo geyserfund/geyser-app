@@ -16,12 +16,19 @@ const projectBlocks: IProjectBlock[] = [
 		blockType: 'PL',
 	},
 	{
-		key: 'description3',
+		key: 'description3a',
 		title: 'How does the app work?',
 		body: [
 			'Based on your preferences and geolocation we match you with Bitcoiners in your area who we think would like to meet you. After visiting their profile you can send them a message request and wait for their approval. Once your request is approved you will be able to chat away like good old pals.',
 		],
-		images: [4],
+		images: [4, 5],
+		blockType: 'PL',
+	},
+	{
+		key: 'description3b',
+		title: '',
+		body: [],
+		images: [8, 7, 6],
 		blockType: 'PL',
 	},
 	{
@@ -121,6 +128,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'orange-pill';
+const projectName: string = 'orange-pill-app';
 
 export const Matteo = {projectBlocks, projectDetails, projectName};
