@@ -43,7 +43,7 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'description5',
 		title: 'Events',
 		body: [
-			'Have you ever been at a Meetup or Conference and wished there was an easy & quick way to connect with the other attendees? We’re building it.',
+			'Have you ever been at a Meetup or Conference and wished there was an easy & quick way to connect with the other attendees?',
 		],
 		blockType: 'PL',
 	},
@@ -68,9 +68,9 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'description8',
 		title: 'The funds received from this crowdfunding will be used for:',
 		body: [
-			'- Part of App Development',
-			'- Part of App Design & UI',
-			'- Part of Backend Development',
+			'- App Design & UI',
+			'- App Development',
+			'- Backend Development',
 		],
 		blockType: 'PL',
 	},
@@ -78,9 +78,9 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'description9',
 		title: 'Our pledge',
 		body: [
-			'1. we will never take VC money.',
-			'2. we will never take advertiser money.',
-			'3. we will never sell your data. ',
+			'1. we will never take VC money',
+			'2. we will never take Advertiser money',
+			'3. we will never sell your data',
 		],
 		blockType: 'PL',
 	},
@@ -99,8 +99,8 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'rewards',
 		title: 'Rewards',
 		body: [
-			'- **Early access to the beta app** Price: $50 USD. Get access to the app before everyone else. ETA: June 2022.',
-			'- **Forever Laura, forever.** Price: $100 USD. Lifetime access to our app.',
+			'- **[$50 USD] Early access** Get access to the beta app before everyone else.',
+			'- **[$100 USD] Forever Laura, forever.** Lifetime access to our app.',
 		],
 		blockType: 'PL',
 	},
@@ -122,8 +122,8 @@ const projectBlocks: IProjectBlock[] = [
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: 'Bitcoin is much more than an investment, Bitcoin is a way of life. Bitcoiners share a lot of values and we all have been through the same journey, to meet a Bitcoiner is to meet an instant friend. Yet there’s no easy way for us to meet each other in real life.',
-	idea: 'To solve this problem we’re building a mobile app where Bitcoiners can create a profile and use their smartphone geolocation to see who’s nearby.',
+	problem: 'Bitcoin is a way of life. Bitcoiners share a lot of values and we all have been through the same journey, to meet a Bitcoiner is to meet an instant friend. Yet there’s no easy way for us to meet each other in real life.',
+	idea: 'A mobile app that allows Bitcoiners to connect with nearby Bitcoiners. ',
 	ownerIntro: 'My name is Matteo Pellegrini and I’ve been building technology companies since I was 19. In 2016 I discovered Bitcoin and I’ve been going down the rabbit hole since, in 2021 (thanks to Bitcoin) I quit my fiat job and decided to dedicate the rest of my life to my family & Bitcoin. Orange Pill App is my first contribution to the Plebs.',
 	blocks: projectBlocks,
 };
