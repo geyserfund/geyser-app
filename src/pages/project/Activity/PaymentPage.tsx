@@ -92,7 +92,7 @@ export const PaymentPage = ({
 
 			case projectTypes.reward:
 				return (
-					<Box>
+					<Box width="100%">
 						<RewardBased {...{rewards, setState, updateReward}}/>
 						<Divider borderTopWidth="3px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
 					</Box>
