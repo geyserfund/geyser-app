@@ -13,3 +13,4 @@ export * from './LiveProject';
 export * from './ProjectBars';
 export * from './SwipeLiveProject';
 export * from './ProjectBalance';
+export * from './ProfileProjectCard';
