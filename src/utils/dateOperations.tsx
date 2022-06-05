@@ -143,6 +143,5 @@ export const getFormattedDate = (date: number) => {
 export const checkExpired = (date: string) => {
 	const currentDateTime = DateTime.now().toMillis();
 	const numberDate = parseInt(date, 10);
-	console.log('checking dfate', currentDateTime, date);
 	return numberDate <= currentDateTime;
 };

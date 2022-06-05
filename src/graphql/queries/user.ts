@@ -30,13 +30,19 @@ query User {
       isAmbassador
       isFunder
       isSponsor
-      amountFunded
-      timesFunded
+      funder {
+        id
+        amountFunded
+        timesFunded
+        confirmedAt
+      }
       project {
         id
         title
         name
         description
+        media
+        createdAt
       }
     }
     ownerOf {

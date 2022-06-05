@@ -17,7 +17,7 @@ export interface IProfileUser {
         }
         twitterHandle: string;
         connectedTwitter: boolean;
-        contributions :IContributions[];
+        contributions :IContribution[];
         ownerOf: {
           project: IProfileProject
         }[]
@@ -33,7 +33,7 @@ export interface IProfileProject {
     createdAt: string;
     updatedAt: string;
     active: boolean;
-    media: string;
+    media: string[];
     expiresAt: string;
     creationConfirmed: boolean;
     funders: {
@@ -47,16 +47,22 @@ export interface IProfileProject {
       }[]
   }
 
-export interface IContributions {
+export interface IContribution {
     isAmbassador: string;
     isFunder: string;
     isSponsor: string;
-    amountFunded: string;
-    timesFunded: string;
-    project :{
+    funder: {
+      id: string;
+      amountFunded: number;
+      timesFunded: number;
+      confirmedAt: string;
+    };
+    project: {
       id: string;
       title: string;
       name: string;
       description: string;
+      media: string[];
+      createdAt: string;
     }
   }

@@ -1,8 +1,9 @@
 import { useLazyQuery } from '@apollo/client';
 import { Avatar, Box, Button, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
+import { BsTwitter } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
-import { Footer, ProfileProjectCard } from '../../components/molecules';
+import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../components/molecules';
 import Loader from '../../components/ui/Loader';
 import { useAuthContext } from '../../context';
 import { USER_PROFILE_QUERY } from '../../graphql';
@@ -81,14 +82,29 @@ export const Profile = () => {
 							<Avatar height="50px" width="50px" name={user.username} src={user.imageUrl} />
 							<Text fontWeight={600} fontSize="20px">{user.username}</Text>
 						</HStack>
-						<Button>Create</Button>
+						{/* <Button>Create</Button> */}
+					</HStack>
+					<HStack width="100%">
+						<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
+							{userProfile && userProfile.twitterHandle}
+						</Button>
 					</HStack>
 				</VStack>
 				<Box>
 					<Tabs variant="line" colorScheme="brand.textGrey">
 						<TabList>
-							<Tab>Projects</Tab>
-							<Tab>Contributions</Tab>
+							<Tab>
+								<HStack minWidth={'40px'}>
+									<Text fontWeight={500}>Projects</Text>
+									<Text fontSize="12px" backgroundColor="brand.bgGrey3" padding="4px 8px" borderRadius="4px">{userProfile && userProfile.ownerOf.length}</Text>
+								</HStack>
+							</Tab>
+							<Tab>
+								<HStack minWidth={'40px'}>
+									<Text fontWeight={500}>Contributions</Text>
+									<Text fontSize="12px" backgroundColor="brand.bgGrey3" padding="4px 8px" borderRadius="4px">{userProfile && userProfile.contributions.length}</Text>
+								</HStack>
+							</Tab>
 						</TabList>
 						<TabPanels>
 							<TabPanel>
@@ -106,7 +122,6 @@ export const Profile = () => {
 														marginLeft="0px !important"
 													/>
 												</WrapItem>
-
 											);
 										})
 										}
@@ -114,7 +129,20 @@ export const Profile = () => {
 								</Box>
 							</TabPanel>
 							<TabPanel>
-								<p>two!</p>
+								<Box className={isMobile ? classes.containerMobile : classes.container}>
+									<Wrap paddingY="0px" width="100%" justify={ isMobile ? 'center' : 'flex-start'} spacing="30px" >
+										{ userProfile && userProfile.contributions.map(contribute => (
+											<WrapItem key={contribute.project.id}>
+												<ContributionProjectCard
+													marginLeft="0px !important"
+													contribution={contribute}
+												/>
+											</WrapItem>
+
+										))
+										}
+									</Wrap>
+								</Box>
 							</TabPanel>
 						</TabPanels>
 					</Tabs>

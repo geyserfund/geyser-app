@@ -1,8 +1,8 @@
 import { Box, Skeleton, Wrap, WrapItem } from '@chakra-ui/react';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import { IProject } from '../../interfaces';
-import { isMobileMode } from '../../utils';
+import { IProject } from '../../../interfaces';
+import { isMobileMode } from '../../../utils';
 import { ProjectCard } from './ProjectCard';
 interface IProjectBars {
     projects: IProject[]

@@ -1,16 +1,19 @@
 export * from './IdComponent';
-export * from './ProjecBalanceCircularProgress';
 export * from './IdBar';
 export * from './IdBarLeaderboard';
 export * from './ConnectTwitter';
-export * from './ProjectCard';
 export * from './Footer';
 export * from './DonationInput';
 export * from './RewardItem';
 export * from './AddAmbassador';
 export * from './AddSponsor';
-export * from './LiveProject';
-export * from './ProjectBars';
 export * from './SwipeLiveProject';
-export * from './ProjectBalance';
-export * from './ProfileProjectCard';
+
+export * from './projectDisplay/ProjectBalance';
+export * from './projectDisplay/ProfileProjectCard';
+export * from './projectDisplay/ProjectCard';
+export * from './projectDisplay/ProjecBalanceCircularProgress';
+export * from './projectDisplay/ProjectBars';
+export * from './projectDisplay/LiveProject';
+export * from './projectDisplay/ContributionProjectCard';
+
