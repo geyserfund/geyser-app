@@ -136,7 +136,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 					<VStack spacing="5px" width="100%" padding="10px">
 						<HStack spacing="10px" justifyContent="flex-start" width="100%">
 							<Avatar src={project.owners && project.owners[0].user.imageUrl} height="22px" width="22px" />
-							<Text fontSize="16px" fontWeight={600}>{title}</Text>
+							<Text fontSize="16px" fontWeight={600} isTruncated>{title}</Text>
 						</HStack>
 						<HStack alignItems="center" justifyContent={project.fundingGoal ? 'space-between' : 'space-around'} width="100%">
 							{project.fundingGoal
