@@ -92,7 +92,7 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 					</MenuItem>
 				</Show>
 				<Show below="md">
-					<MenuItem className={classes.menuItem}>
+					<MenuItem className={classes.menuItem} bg="brand.primary">
 						<Link href={LaunchUrl}>
 					Launch
 						</Link>
