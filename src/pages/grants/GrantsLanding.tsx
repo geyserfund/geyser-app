@@ -1,30 +1,37 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
-import { ComingSoon } from './components/ComingSoon';
 import { GrantCard } from './components/GrantCard';
+import { ComingSoon } from './components/ComingSoon';
+import BitcoinEducationImage from '../../assets/btcedu.svg';
+import { isMobileMode } from '../../utils';
 
-export const GrantsLanding = () => (
-	<>
+export const GrantsLanding = () => {
+	const isMobile = isMobileMode();
 
-		<Box width="85%" margin="0 auto" mt={10}>
-			<Text fontSize="4xl">Geyser Grants</Text>
-			<Text>Grants makes it easy for anyone to contribute to a particular cause without having to look in detail at every project. The Geyser Fund Board will search within and beyond Geyser fund campaigns to select the most impactful projects.</Text>
-		</Box>
+	return (
+		<>
 
-		<Box display="flex" justifyContent="center" alignItems="center" backgroundColor="brand.bgGrey2" py={20} mt={12} mb={20} mx={[0, 20]} rounded="md">
-			<Box flexWrap="wrap" display="flex" justifyContent="center" alignItems="center">
-
-				<GrantCard title="Bitcoin Hackathons" link="bitcoin-hackathons" color1="rgba(32, 236, 199)" color2="rgba(27, 213, 179)" color3="#E9E9E9" number="#001" status="open" />
-				<ComingSoon title="Bitcoin Education"/>
-				<ComingSoon title="Bitcoin Nonprofits"/>
-				<ComingSoon title="Bitcoin Culture"/>
-				<ComingSoon title="Bitcoin Development"/>
-
+			<Box width={isMobile ? '75%' : '50%'} margin="0 auto" mt={5}>
+				<Text fontSize="4xl" fontWeight="bold">Geyser Grants</Text>
+				<Text>It’s not always easy for individuals and institutions to donate to single geyserfund campaigns. So, with Grants anyone can now contribute to a particular cause without having to look in detail into every specific project and verify the creator’s credentials. The Geyser Fund Board will look at and beyond geyserfund campaigns to select the most impactful projects that support these causes.</Text>
 			</Box>
-		</Box>
 
-		<Footer/>
+			<Box display="flex" justifyContent="center" alignItems="center">
+				<Box overflow="auto" w="100%" display="flex">
 
-	</>
-);
+					<GrantCard link="bitcoin-education-in-emerging-markets" number="#001" />
+					<GrantCard link="bitcoin-education-in-emerging-markets" number="#001" />
+					<GrantCard link="bitcoin-education-in-emerging-markets" number="#001" />
+					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#002" date="6/7/2022"/>
+					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#002" date="6/7/2022"/>
+					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#002" date="6/7/2022"/>
+
+				</Box>
+			</Box>
+
+			<Footer/>
+
+		</>
+	);
+};
