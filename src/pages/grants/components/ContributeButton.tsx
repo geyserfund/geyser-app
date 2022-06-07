@@ -4,7 +4,6 @@ import { useMutation, useLazyQuery } from '@apollo/client';
 import React, { useState, useEffect, useContext } from 'react';
 
 import { QrInvoice } from './QrInvoice';
-import { BubbleCursor } from './BubbleCursor';
 import { PaymentSuccess } from './PaymentSuccess';
 import { ButtonComponent, Linkin } from '../../../components/ui';
 import { AuthContext } from '../../../context';
@@ -253,7 +252,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 			<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
-					<BubbleCursor/>
 					<ModalHeader textAlign="center">Comment and contribute</ModalHeader>
 					<ModalCloseButton onClick={handleCloseButton} />
 					<ModalBody>
@@ -320,7 +318,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<BubbleCursor/>
 				<ModalHeader textAlign="center">⚡ Creating invoice...</ModalHeader>
 				<ModalBody>
 					<Box py={10}>
@@ -335,7 +332,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<BubbleCursor/>
 				<ModalHeader textAlign="center">🌩️ Pay with lightning invoice</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
 				<Text width="90%" fontSize="xs" margin="0 auto">Pay with any lightning wallet by scanning or copying the invoice below, or download the <Link isExternal href="https://getalby.com" textDecoration="underline">Alby</Link> extention to pay directly from your browser.</Text>
@@ -356,7 +352,6 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<BubbleCursor/>
 				<ModalHeader textAlign="center">Success!</ModalHeader>
 				<ModalCloseButton onClick={handleCloseButton} />
 				<PaymentSuccess amount={fundingTx.amount} grant={project.title}/>
