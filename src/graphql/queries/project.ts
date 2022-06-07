@@ -67,6 +67,9 @@ query GetProject($where: UniqueProjectQueryInput!) {
       }
       confirmed
     }
+    grantees {
+      id
+    }
   }
 }
 `;
