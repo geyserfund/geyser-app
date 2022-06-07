@@ -15,7 +15,6 @@ import { AuthContext } from '../../context';
 // Import { StartCrowdFundUrl } from '../../constants';
 import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
-import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -104,37 +103,47 @@ export const NavBar = ({showBorder}: INavBar) => {
 							}
 							<NavMenu user={user} logout={logout} />
 						</> : (
-							<Box>
-								<ButtonComponent
-									leftIcon={<AddIcon />}
-									primary
-									standard
-									marginRight="12px"
-									width="220px"
-									onClick={handleLaunch}
-								>
+							<>
+								<HStack>
+									<ButtonComponent marginRight="5px" onClick={() => {
+										history.push('/home');
+									}}>Projects</ButtonComponent>
+									<ButtonComponent onClick={() => {
+										history.push('/grants');
+									}}>Grants</ButtonComponent>
+								</HStack>
+								<Box>
+									<ButtonComponent
+										leftIcon={<AddIcon />}
+										primary
+										standard
+										marginRight="12px"
+										width="220px"
+										onClick={handleLaunch}
+									>
 										Launch your idea
-								</ButtonComponent>
-								{
-									user.id
-										? <ButtonComponent
-											className={classes.userInfo}
-											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
-											standard
-										>
-											{user.twitterHandle}
-										</ButtonComponent>
-										: <ButtonComponent
-											leftIcon={<Icon as={FiTwitter} />}
-											standard
-											marginRight="12px"
-											onClick={twitterOnOpen}
-										>
+									</ButtonComponent>
+									{
+										user.id
+											? <ButtonComponent
+												className={classes.userInfo}
+												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+												standard
+											>
+												{user.twitterHandle}
+											</ButtonComponent>
+											: <ButtonComponent
+												leftIcon={<Icon as={FiTwitter} />}
+												standard
+												marginRight="12px"
+												onClick={twitterOnOpen}
+											>
 											Log In
-										</ButtonComponent>
-								}
-								<NavMenu user={user} logout={logout} />
-							</Box>
+											</ButtonComponent>
+									}
+									<NavMenu user={user} logout={logout} />
+								</Box>
+							</>
 						)
 					}
 
@@ -144,8 +153,6 @@ export const NavBar = ({showBorder}: INavBar) => {
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent display="flex" alignItems="center" padding="20px 15px">
-					{history.location.pathname === '/project/bitcoin-hackathons'
-		&& <BubbleCursor/>}
 					<ModalHeader><Text fontSize="16px" fontWeight="normal">You have been logged out</Text></ModalHeader>
 					<ModalCloseButton />
 					<ModalBody >
