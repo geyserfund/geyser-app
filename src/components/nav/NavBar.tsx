@@ -59,7 +59,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 	};
 
 	const handleProfileClick = () => {
-		history.push('/profile');
+		history.push(`/profile/${user.id}`);
 	};
 
 	return (

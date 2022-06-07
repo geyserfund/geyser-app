@@ -14,8 +14,8 @@ query Me {
 `;
 
 export const USER_PROFILE_QUERY = gql`
-query User {
-  user {
+query User($where: UserQueryInput) {
+  user(where: $where) {
     id
     username
     imageUrl

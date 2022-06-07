@@ -51,7 +51,7 @@ export const Router = () => {
 					<Route path="/launch">
 						<LaunchIdea />
 					</Route>
-					<Route path="/profile">
+					<Route path="/profile/:userId">
 						<Profile />
 					</Route>
 					<Route path="/project/:projectId">

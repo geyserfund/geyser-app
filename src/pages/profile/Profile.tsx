@@ -3,9 +3,9 @@ import { Avatar, Box, Button, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, T
 import React, { useEffect } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
+import { useParams } from 'react-router';
 import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../components/molecules';
 import Loader from '../../components/ui/Loader';
-import { useAuthContext } from '../../context';
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { IProfileUser } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
@@ -29,17 +29,19 @@ export const Profile = () => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
 
-	const {user, loading } = useAuthContext();
-
+	const params = useParams<{userId: string}>();
 	const [getUserData, { loading: profileLoading, error, data }] = useLazyQuery(USER_PROFILE_QUERY);
+	console.log('checing params', params);
 
 	useEffect(() => {
-		if (!user || !user.id) {
-			return;
+		if (params.userId) {
+			const variables = { where: {
+				id: params.userId,
+			},
+			};
+			getUserData({variables});
 		}
-
-		getUserData();
-	}, [user]);
+	}, [params]);
 
 	if (error) {
 		return (
@@ -47,7 +49,9 @@ export const Profile = () => {
 		);
 	}
 
-	if (loading || profileLoading) {
+	const userProfile: IProfileUser = data && data.user;
+
+	if (!userProfile || profileLoading) {
 		return (
 			<Box>
 				<Loader />
@@ -56,7 +60,6 @@ export const Profile = () => {
 	}
 
 	console.log('checking profile data', data);
-	const userProfile: IProfileUser = data && data.user;
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
@@ -79,8 +82,8 @@ export const Profile = () => {
 				<VStack width="100%">
 					<HStack width="100%" justifyContent="space-between">
 						<HStack spacing="20px">
-							<Avatar height="50px" width="50px" name={user.username} src={user.imageUrl} />
-							<Text fontWeight={600} fontSize="20px">{user.username}</Text>
+							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl} />
+							<Text fontWeight={600} fontSize="20px">{userProfile.username}</Text>
 						</HStack>
 						{/* <Button>Create</Button> */}
 					</HStack>

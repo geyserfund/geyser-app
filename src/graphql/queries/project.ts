@@ -82,6 +82,7 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
           timesFunded
           confirmedAt
           user {
+            id
             username
             imageUrl
             twitterHandle
@@ -98,6 +99,7 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
       funders {
         id
         user {
+          id
           username
           imageUrl
           twitterHandle
