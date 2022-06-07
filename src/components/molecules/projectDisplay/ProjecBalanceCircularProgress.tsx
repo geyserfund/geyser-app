@@ -3,10 +3,10 @@ import { CircularProgress } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/layout';
 import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { BsCurrencyBitcoin } from 'react-icons/bs';
-import { isDarkMode } from '../../utils';
-import { SatoshiIcon } from '../icons';
+import { isDarkMode } from '../../../utils';
+import { SatoshiIcon } from '../../icons';
 import { createUseStyles } from 'react-jss';
-import { commaFormatted } from '../../utils/helperFunctions';
+import { commaFormatted } from '../../../utils/helperFunctions';
 
 interface IProjectBalanceCircularProgress {
 	balance: number;

@@ -1,16 +1,15 @@
-import { Avatar, Box, CircularProgress, HStack, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, VStack, LinkBox, LinkOverlay } from '@chakra-ui/react';
+import { Avatar, Box, CircularProgress, HStack, Image, Text, VStack, LinkBox, LinkOverlay } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
-import {RiRocketLine} from 'react-icons/ri';
 
-import { IProject } from '../../interfaces';
-import { formatDaysLeft, isDarkMode, useBitcoinRates } from '../../utils';
-import { getShortAmountLabel } from '../../utils/helperFunctions';
-import { SatoshiIcon } from '../icons';
-import { ButtonComponent, Card, ICard, Linkin } from '../ui';
-import { StartCrowdFundUrl, SubscribeUrl } from '../../constants';
+import { IProfileProject } from '../../../interfaces';
+import { checkExpired, isDarkMode, useBitcoinRates } from '../../../utils';
+import { getShortAmountLabel } from '../../../utils/helperFunctions';
+import { SatoshiIcon } from '../../icons';
+import { Card, ICard } from '../../ui';
+import { ProjectCardTime } from './ProjectCard';
 
 interface IProjectCardProp extends ICard {
 	title: string
@@ -18,13 +17,13 @@ interface IProjectCardProp extends ICard {
 	name: string
 	className?: string
 	imgSrc?: string
-	project: IProject
+	project: IProfileProject
 }
 
 const useStyles = createUseStyles({
 	container: {
 		borderRadius: '4px',
-		height: '260px',
+		height: '325px',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -74,26 +73,7 @@ const useStyles = createUseStyles({
 	},
 });
 
-const ProjectCardTime = ({ active, expiresAt }: { active: boolean, expiresAt: string}) => {
-	const {amount, label} = formatDaysLeft(expiresAt);
-
-	if (!active) {
-		return <Text fontSize="12px" fontWeight={600}>{'Completed'}</Text>;
-	}
-
-	if (!expiresAt) {
-		return <Text fontSize="12px" fontWeight={600}>{'Open'}</Text>;
-	}
-
-	return (
-		<VStack alignItems="center" justifyContent="center" spacing="0">
-			<Text fontSize="12px" fontWeight={600}>{`${amount}`}</Text>
-			<Text fontSize="12px">{`${label} left`}</Text>
-		</VStack>
-	);
-};
-
-export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...rest }: IProjectCardProp) => {
+export const ProfileProjectCard = ({ title, imgSrc, open, name, className, project, ...rest }: IProjectCardProp) => {
 	const classes = useStyles();
 	const history = useHistory();
 	const isDark = isDarkMode();
@@ -115,6 +95,53 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 
 	const getProjectBackers = () => (project && project.funders) ? project.funders.length : '';
 
+	const getProjectStatus = () => {
+		// TODO after project creation flow
+		// if (!project.creationConfirmed) {
+		// 	return (
+		// 		<Badge variant="solid" colorScheme="gray">
+		// 			Draft Project
+		// 		</Badge>
+		// 	);
+		// }
+		if (checkExpired(project.expiresAt)) {
+			return (
+				<Text variant="subtle" background="brand.bgGrey3" color="textGrey" padding="2px 8px" fontSize="12px" borderRadius="4px">
+					Live Project
+				</Text>
+			);
+		}
+
+		if (project.active) {
+			return (
+				<Text variant="subtle" background="brand.primary" color="black" padding="2px 8px" fontSize="12px" borderRadius="4px">
+					Live Project
+				</Text>
+			);
+		}
+	};
+
+	const getProjectUpdate = () => {
+		// TODO after project creation flow
+		// if (!project.creationConfirmed) {
+		// 	return (
+		// 		<Text>{`Last edited on: ${project.updatedAt}`}</Text>
+		// 	);
+		// }
+
+		if (checkExpired(project.expiresAt)) {
+			return (
+				<Text fontSize="12px" color="brand.textGrey">{`Expired on: ${project.expiresAt}`}</Text>
+			);
+		}
+
+		if (project.active) {
+			return (
+				<Text fontSize="12px" color="brand.textGrey">{`Went live on ${project.createdAt}`}</Text>
+			);
+		}
+	};
+
 	return (
 		<LinkBox>
 			<LinkOverlay href={`https://geyser.fund/project/${project.name}`} onClick={e => {
@@ -124,7 +151,6 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 				<Card
 					className={classNames(classes.container, className)}
 					backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
-					onClick={handleCardClick}
 					{...rest}
 				>
 					<Box height="160px" width="100%" position="relative">
@@ -135,10 +161,8 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 						</Box>
 					</Box>
 					<VStack spacing="5px" width="100%" padding="10px">
-						<HStack spacing="10px" justifyContent="flex-start" width="100%">
-							<Avatar src={project.owners && project.owners[0].user.imageUrl} height="22px" width="22px" />
-							<Text fontSize="16px" fontWeight={600} isTruncated>{title}</Text>
-						</HStack>
+						<Text fontSize="16px" fontWeight={600} width="100%">{title}</Text>
+						<Text fontSize="12px" width="100%" height="30px">{project.description}</Text>
 						<HStack alignItems="center" justifyContent={project.fundingGoal ? 'space-between' : 'space-around'} width="100%">
 							{project.fundingGoal
 								&& <CircularProgress
@@ -166,53 +190,13 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 							</VStack>
 							<ProjectCardTime expiresAt={project.expiresAt} active={project.active}/>
 						</HStack>
+						<HStack sapcing="5px" width="100%">
+							{getProjectStatus()}
+							{getProjectUpdate()}
+						</HStack>
 					</VStack>
 				</Card>
 			</LinkOverlay>
 		</LinkBox>
-	);
-};
-
-export const ProjectComingSoon = ({...rest}: ICard) => {
-	const isDark = isDarkMode();
-	const classes = useStyles();
-
-	const {isOpen, onOpen, onClose} = useDisclosure();
-
-	return (
-		<>
-			<Card
-				className={classes.container}
-				backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
-				{...rest}
-				onClick={onOpen}
-			>
-				<VStack height="100%" width="100%" alignItems="center" justifyContent="center">
-					<RiRocketLine className="rocketicon" fontSize="30px"/>
-					<Text fontSize="14px">More projects coming soon!</Text>
-				</VStack>
-			</Card>
-			<Modal isOpen={isOpen} onClose={onClose} isCentered>
-				<ModalOverlay />
-				<ModalContent paddingX="10px" marginX="10px">
-					<ModalHeader textAlign="center" fontSize="16px" >More projects coming soon</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody fontSize="12px" textAlign="justify">
-					We are releasing projects slowly which will allow us to keep building the best possible crowdfunding experience.  Signup to our mailing list to hear when a new crowdfund project is live on Geyser, and if you have a crowdfund idea drop it in the form.
-					</ModalBody>
-
-					<ModalFooter width="100%">
-						<VStack width="100%">
-							<Linkin href={SubscribeUrl} isExternal width="100%" >
-								<ButtonComponent isFullWidth>Subscribe</ButtonComponent>
-							</Linkin>
-							<Linkin href={StartCrowdFundUrl} isExternal width="100%" >
-								<ButtonComponent primary isFullWidth>Start a crowd fund</ButtonComponent>
-							</Linkin>
-						</VStack>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</>
 	);
 };
