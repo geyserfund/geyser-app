@@ -1,29 +1,36 @@
 /* eslint-disable capitalized-comments */
-import { useMutation } from '@apollo/client';
+
 import React, { useEffect, useState } from 'react';
 import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
-	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input,
+	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea,
 } from '@chakra-ui/react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { BiCopyAlt } from 'react-icons/bi';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
-import { BubbleCursor } from './BubbleCursor';
-import { isMobileMode, useNotification } from '../../../utils';
+import { isMobileMode, isMediumScreen, useNotification } from '../../../utils';
+import Loader from '../../../components/ui/Loader';
+import { createCreatorRecord } from '../../../api';
 
-import {
-	MUTATION_SUBMIT_GRANTEE,
-} from '../../../graphql';
-import { IProject } from '../../../interfaces';
+interface RecipientButtonProps {
+page: string,
+active: boolean,
+title: string,
+}
 
-export const RecipientButton = ({ project }: { project: IProject }) => {
+export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 	const isMobile = isMobileMode();
+	const isMedium = isMediumScreen();
 	const [step, setStep] = useState(0);
 	const [grantee, setGrantee] = useState('');
+	const [description, setDescription] = useState('');
 	const [url, setUrl] = useState('');
+	const [contact, setContact] = useState('');
+	const [submitting, setSubmitting] = useState(false);
 	const { toast } = useNotification();
+
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	// copy link
@@ -41,23 +48,40 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 		}
 	}, [copy]);
 
-	// Mutation to submit grantee
-	const [submitGrantee] = useMutation(MUTATION_SUBMIT_GRANTEE);
-
 	const handleSubmission = async () => {
-		submitGrantee({
-			variables: {
-				projectId: project.id,
-				name: grantee,
-				url,
-			},
-		}).then(() => setStep(1)).catch(e => {
+		try {
+			setSubmitting(true);
+			const records = [{
+				fields: {
+					Name: grantee,
+					Description: description,
+					Link: url,
+					Contact: contact,
+					Type: [
+						'Grant Applicant',
+					],
+				},
+			}];
+			await createCreatorRecord({records});
+			setStep(1);
+		} catch (_) {
 			toast({
 				title: 'Something went wrong',
-				description: e.message,
+				description: 'Please try again',
 				status: 'error',
 			});
-		});
+		}
+
+		setSubmitting(false);
+	};
+
+	const close = () => {
+		setGrantee('');
+		setDescription('');
+		setUrl('');
+		setContact('');
+		setStep(0);
+		onClose();
 	};
 
 	const renderModal = () => {
@@ -72,53 +96,60 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 
 	const renderFormModal = () => (
 		<>
-			{/* <ButtonComponent
-				borderRadius="4px"
-				backgroundColor="brand-bgGrey2"
-				mb={2}
-				onClick={onOpen}
-			>
-			Submit a potential recipient
-			</ButtonComponent> */}
-
-			{/* success modal */}
-			<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+			<Modal onClose={close} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
-					<BubbleCursor/>
-					<ModalHeader>Submit request for a  grant recipient</ModalHeader>
-					<ModalCloseButton onClick={() => {
-						setGrantee('');
-						setUrl('');
-						setStep(0);
-						onClose();
-					}} />
+					<ModalHeader fontWeight="bold" fontSize="2xl">{submitting ? 'Applying' : 'Apply'}</ModalHeader>
+					<ModalCloseButton onClick={close} />
 					<ModalBody>
-						<Text>Drop a name below, and a link that demonstrates the person or organization’s fit to receive this grant.</Text>
-						<Text mt={5}>Name</Text>
-						<Input
-							name="name"
-							placeholder="Recipient"
-							focusBorderColor="#20ECC7"
-							onChange={event => setGrantee(event.target.value)}
-							isRequired={true}
-						/>
-						<Text mt={5}>Link</Text>
-						<Input
-							name="link"
-							placeholder="https://twitter.com/boltfun_btc"
-							focusBorderColor="#20ECC7"
-							onChange={event => setUrl(event.target.value)}
-							value={url}
-							isRequired={true}
-						/>
+						{submitting ? <Loader/> : <>
+							<Text fontWeight="bold" fontSize="md">Are you currently working on a project that supports Bitcoin education in emerging countries? Apply to this grant to receive a donation.</Text>
+							<Text mt={5} fontWeight="bold">What’s your project or initiative called?</Text>
+							<Input
+								name="name"
+								placeholder="Bitcoin for Fairness"
+								focusBorderColor="#20ECC7"
+								onChange={event => setGrantee(event.target.value)}
+								value={grantee}
+								isRequired={true}
+							/>
+							<Text mt={5} fontWeight="bold">How are you supporting Bitcoin Education in emerging markets?</Text>
+							<Textarea
+								name="description"
+								placeholder="Teaching young Africans the basics about Bitcoin."
+								focusBorderColor="#20ECC7"
+								onChange={event => setDescription(event.target.value)}
+								value={description}
+								isRequired={true}
+							/>
+							<Text mt={5} fontWeight="bold">Where can we find more information about your project or initiative? Drop a link to your project, whether it’s on Geyser or elsewhere</Text>
+							<Input
+								name="link"
+								placeholder="https://geyser.fund/project/bitcoin-for-fairness"
+								focusBorderColor="#20ECC7"
+								onChange={event => setUrl(event.target.value)}
+								value={url}
+								isRequired={true}
+							/>
+							<Text mt={5} fontWeight="bold">Your email/contact info</Text>
+							<Input
+								name="contact"
+								placeholder="anita@geyser.fund"
+								focusBorderColor="#20ECC7"
+								onChange={event => setContact(event.target.value)}
+								value={contact}
+								isRequired={true}
+							/>
+						</>
+						}
 					</ModalBody>
 					<ModalFooter>
-						<ButtonComponent
+						{!submitting
+						&& <ButtonComponent
 							primary width="100%"
 							onClick={handleSubmission}
-							disabled={url.length === 0 || grantee.length === 0}
-						>Nominate</ButtonComponent>
+							disabled={grantee.length === 0 || description.length === 0 || url.length === 0 || contact.length === 0}
+						>Submit</ButtonComponent>}
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
@@ -126,17 +157,11 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 	);
 
 	const renderSuccessModal = () => (
-		<Modal closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+		<Modal onClose={close} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<BubbleCursor/>
 				<ModalHeader textAlign="center">Success!</ModalHeader>
-				<ModalCloseButton onClick={() => {
-					setGrantee('');
-					setUrl('');
-					setStep(0);
-					onClose();
-				}} />
+				<ModalCloseButton onClick={close} />
 				<ModalBody>
 					<VStack
 						padding={isMobile ? '10px 10px' : '10px 20px'}
@@ -151,7 +176,7 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 						<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
 							<CheckIcon w={10} h={10}/>
 						</Box>
-						<Text py={5} textAlign="center"><b>{grantee}</b> has been added to the potential recipients!</Text>
+						<Text py={5} textAlign="center"><b>{grantee}</b> has applied to receive this <b>Geyser Grant</b>.</Text>
 					</VStack>
 					<ButtonComponent
 						standard
@@ -164,27 +189,25 @@ export const RecipientButton = ({ project }: { project: IProject }) => {
 					</ButtonComponent>
 				</ModalBody>
 				<ModalFooter>
-					<ButtonComponent primary width="100%" onClick={() => {
-						setGrantee('');
-						setUrl('');
-						setStep(0);
-						onClose();
-					}} >Close</ButtonComponent>
+					<ButtonComponent primary width="100%" onClick={close}>Close</ButtonComponent>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>
 	);
 
 	return (
+
 		<>
 			<ButtonComponent
-				borderRadius="4px"
-				backgroundColor="brand-bgGrey2"
+				disabled={!active}
+				primary
+				standard
+				w={page === 'grants' ? isMedium ? '300px' : '400px' : '100%'}
 				onClick={() => {
 					onOpen();
 				}}
 			>
-			Submit a potential recipient
+				{title}
 			</ButtonComponent>
 			{ renderModal() }
 		</>
