@@ -34,7 +34,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 		return {
 			username: funder.user.username,
 			image: funder.user.imageUrl || getRandomOrb(fundingTx.funder.id),
-			link: `https://twitter.com/${funder.user.twitterHandle}`,
+			link: `/profile/${funder.user.id}`,
 		};
 	};
 

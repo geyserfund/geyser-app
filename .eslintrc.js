@@ -24,6 +24,7 @@ module.exports = {
 		'no-negated-condition': 0,
 		'array-callback-return': 0,
 		'capitalized-comments:': 0,
+		'no-unused-vars': 'warn',
 		'no-restricted-syntax': [
 			'error',
 			{

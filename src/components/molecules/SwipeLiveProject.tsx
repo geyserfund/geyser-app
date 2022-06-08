@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Box, Image } from '@chakra-ui/react';
 import { IProject } from '../../interfaces';
-import { LiveProject, LiveProjectSkeleton } from './LiveProject';
+import { LiveProject, LiveProjectSkeleton } from './projectDisplay/LiveProject';
 import { createUseStyles } from 'react-jss';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
