@@ -100,8 +100,8 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'rewards',
 		title: 'Rewards',
 		body: [
-			'- **[$50 USD] Early access** Get access to the beta app before everyone else.',
-			'- **[$100 USD] Forever Laura, forever.** Lifetime access to our app.',
+			'- **[$25 USD] Early access** Get access to the beta app before everyone else.',
+			'- **[$50 USD] Forever Laura, forever.** Lifetime access to our app.',
 		],
 		blockType: 'PL',
 	},
