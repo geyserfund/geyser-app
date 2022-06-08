@@ -61,7 +61,7 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'Our mission is to connect as many Bitcoiners as possible. If you happen to find your soulmate here, go ahead and bring more Bitcoiners into the world. 🧡',
 		],
-		images: [0],
+		images: [9],
 		blockType: 'PL',
 	},
 	{
