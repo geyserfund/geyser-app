@@ -77,7 +77,7 @@ export const GrantCard = ({link, number}:GrantCardProps) => {
 
 								<Box>
 									<HStack justifyContent="center">
-										<SatoshiIcon scale={0.8}/><Text fontWeight="bold">{project.balance}</Text>
+										<SatoshiIcon scale={0.8}/><Text fontWeight="bold">{project.balance ? project.balance : 0}</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B">COMMITTED</Text>
 								</Box>
