@@ -12,7 +12,7 @@ import {
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
-import { ProjectBars } from '../../components/molecules/ProjectBars';
+import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
 import { SatoshiIconNew } from '../../components/icons';
 

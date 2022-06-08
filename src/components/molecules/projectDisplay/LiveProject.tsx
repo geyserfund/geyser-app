@@ -2,10 +2,10 @@ import { Avatar, Box, HStack, Image, Skeleton, Stack, Text, VStack, Wrap, LinkOv
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
-import { useBtcContext } from '../../context/btc';
-import { IProject } from '../../interfaces';
-import { isMobileMode } from '../../utils';
-import { Card, SatoshiAmount } from '../ui';
+import { useBtcContext } from '../../../context/btc';
+import { IProject } from '../../../interfaces';
+import { isMobileMode } from '../../../utils';
+import { Card, SatoshiAmount } from '../../ui';
 
 interface ILiveProject {
     project: IProject

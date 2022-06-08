@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
+import ReactMarkdown from 'react-markdown';
 // Import { BiError } from 'react-icons/bi';
 // import { FaCheckDouble } from 'react-icons/fa';
 
@@ -37,7 +38,7 @@ export const StatusBar = ({ message, variant }: IStatusBarProp) => {
 				{getIcon()}
 			</Box> */}
 			<Box flex={1} display="flex" flexDirection="column" alignItems={'flex-start'}>
-				<Text fontSize="10px" color="brand.textGrey">{`${getLabel()} `}</Text><Text>{message}</Text>
+				<Text fontSize="10px" color="brand.textGrey">{`${getLabel()} `}</Text><Text><ReactMarkdown>{message}</ReactMarkdown></Text>
 			</Box>
 
 		</Box>

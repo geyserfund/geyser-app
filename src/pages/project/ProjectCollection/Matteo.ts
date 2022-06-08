@@ -61,7 +61,7 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'Our mission is to connect as many Bitcoiners as possible. If you happen to find your soulmate here, go ahead and bring more Bitcoiners into the world. 🧡',
 		],
-		images: [0],
+		images: [9],
 		blockType: 'PL',
 	},
 	{
@@ -80,7 +80,8 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'1. we will never take VC money',
 			'2. we will never take Advertiser money',
-			'3. we will never sell your data',
+			'3. we will never restrict features',
+			'4. we will never store or sell your data',
 		],
 		blockType: 'PL',
 	},
@@ -99,8 +100,8 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'rewards',
 		title: 'Rewards',
 		body: [
-			'- **[$50 USD] Early access** Get access to the beta app before everyone else.',
-			'- **[$100 USD] Forever Laura, forever.** Lifetime access to our app.',
+			'- **[$25 USD] Early access** Get access to the beta app before everyone else.',
+			'- **[$50 USD] Forever Laura, forever.** Lifetime access to our app.',
 		],
 		blockType: 'PL',
 	},
@@ -119,10 +120,17 @@ const projectBlocks: IProjectBlock[] = [
 		],
 		blockType: 'PL',
 	},
+	{
+		key: 'links',
+		title: 'Links',
+		body: [],
+		link: ['https://twitter.com/orangepillapp', 'https://theorangepillapp.com'],
+		blockType: 'LI',
+	},
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: 'Bitcoin is a way of life. Bitcoiners share a lot of values and we all have been through the same journey, to meet a Bitcoiner is to meet an instant friend. Yet there’s no easy way for us to meet each other in real life.',
+	problem: '**Bitcoin** is a way of life. **Bitcoiners** share a lot of values and we all have been through the same journey, to meet a **Bitcoiner** is to meet an instant friend. Yet there’s no easy way for us to meet each other in real life.',
 	idea: 'A mobile app that allows Bitcoiners to connect with nearby Bitcoiners. ',
 	ownerIntro: 'My name is Matteo Pellegrini and I’ve been building technology companies since I was 19. In 2016 I discovered Bitcoin and I’ve been going down the rabbit hole since, in 2021 (thanks to Bitcoin) I quit my fiat job and decided to dedicate the rest of my life to my family & Bitcoin. Orange Pill App is my first contribution to the Plebs.',
 	blocks: projectBlocks,

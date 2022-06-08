@@ -12,6 +12,7 @@ import {
 	Text,
 	UnorderedList,
 	VStack,
+	Link,
 } from '@chakra-ui/react';
 import React from 'react';
 import { Card, TwitterComponent } from '../../../components/ui';
@@ -78,6 +79,16 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 		}
 	};
 
+	const renderLink = (block: IProjectBlock) => {
+		if (block.link && block.link.length > 0) {
+			return block.link.map((link: string) => (
+				<Link isExternal href={link} key={Math.random()} fontWeight="bold">{link}</Link>
+			));
+		}
+
+		return null;
+	};
+
 	const renderParagraphList = (block: IProjectBlock) => {
 		if (block.body && block.body.length > 0) {
 			return block.body.map((body: string) => (
@@ -124,6 +135,8 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 					return renderUnorderedList(block);
 				case 'OL':
 					return renderOrderedList(block);
+				case 'LI':
+					return renderLink(block);
 				default:
 					return null;
 			}
@@ -133,10 +146,10 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 			<VStack key={block.title} className={classes.containers} space={10}>
 				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
 				{ switchBlocks() }
-				{renderPodCast(block.podcast)}
+				{ renderPodCast(block.podcast) }
 				{ renderImages(block.images) }
-				{renderTweet(block.tweet) }
-				{renderYoutube(block.youtube)}
+				{ renderTweet(block.tweet) }
+				{ renderYoutube(block.youtube) }
 			</VStack>
 
 		);

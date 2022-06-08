@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { ApolloError, useLazyQuery } from '@apollo/client';
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { ME } from '../graphql';
 import { IUser } from '../interfaces';
 import { cookieOptions } from '../constants';
@@ -78,3 +78,5 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		</AuthContext.Provider>
 	);
 };
+
+export const useAuthContext = () => useContext(AuthContext);
