@@ -79,7 +79,7 @@ const projectBlocks: IProjectBlock[] = [
 		title: 'Our pledge',
 		body: [
 			'1. we will never take VC money',
-			'2. we will never take Advertiser money',
+			'2. we will never take Advertiser money'
 			'3. we will never restrict features',
 			'4. we will never store or sell your data',
 		],
