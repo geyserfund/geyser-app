@@ -120,6 +120,13 @@ const projectBlocks: IProjectBlock[] = [
 		],
 		blockType: 'PL',
 	},
+	{
+		key: 'links',
+		title: 'Links',
+		body: [],
+		link: ['https://twitter.com/orangepillapp', 'https://theorangepillapp.com'],
+		blockType: 'LI',
+	},
 ];
 
 const projectDetails: IProjectDetail = {
