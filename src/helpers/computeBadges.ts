@@ -31,7 +31,18 @@ const specialBadges: IBadges = {
 	},
 };
 
-export const computeFunderBadges = ({ project, funder }: { project: IProject, funder: IFunder}): IBadge[] => {
+interface IcomputeFunderBadgesProps {
+	project: {
+		createdAt: string
+	},
+	funder: {
+		amountFunded: number;
+		timesFunded: number;
+		confirmedAt: string;
+	}
+}
+
+export const computeFunderBadges = ({ project, funder }: IcomputeFunderBadgesProps): IBadge[] => {
 	const funderBadges: IBadge[] = [];
 	const { amountFunded: amount, timesFunded: times } = funder;
 

@@ -53,6 +53,7 @@ export interface IProjectBlock {
     images?: number[];
     youtube?: string;
     podcast?: string;
+    link?: string[];
     blockType: string;
 }
 
