@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/react';
+import { useQuery } from '@apollo/client';
+
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
+import { QUERY_GRANTS } from '../../graphql';
 import { ComingSoon } from './components/ComingSoon';
 import BitcoinEducationImage from '../../assets/btcedu.svg';
-import { isMobileMode } from '../../utils';
+import { isMobileMode, useNotification } from '../../utils';
+import { IProject } from '../../interfaces';
 
 export const GrantsLanding = () => {
 	const isMobile = isMobileMode();
+	const { toast } = useNotification();
+
+	const { loading, error, data } = useQuery(QUERY_GRANTS, {
+		variables: { where: { type: 'grant' }},
+	});
+
+	const grants = (data && data.projects.projects) || [];
+
+	useEffect(() => {
+		if (error) {
+			toast({
+				title: 'Could not load projects',
+				description: 'Please refresh the page',
+				status: 'error',
+			});
+		}
+	}, [error]);
 
 	return (
 		<>
@@ -19,12 +40,15 @@ export const GrantsLanding = () => {
 
 			<Box display="flex" justifyContent="center" alignItems="center">
 				<Box overflow="auto" w={isMobile ? '75%' : '50%'} display="flex">
+					{(!loading && grants.length > 0) && grants.map((grant: IProject, index: number) => {
+						console.log('GRANT', grant);
+						if (!grant.active) {
+							return;
+						}
 
-					<GrantCard link="bitcoin-education-in-emerging-markets" number="#001" />
-					<GrantCard link="bitcoin-education-in-emerging-markets" number="#001" />
-					<GrantCard link="bitcoin-education-in-emerging-markets" number="#001" />
-					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#002" date="6/7/2022"/>
-					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#002" date="6/7/2022"/>
+						return (<GrantCard key={grant.id} project={grant} number={`#00${index}`} />);
+					})}
+					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#001" date="6/7/2022"/>
 					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#002" date="6/7/2022"/>
 
 				</Box>

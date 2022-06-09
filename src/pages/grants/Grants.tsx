@@ -50,10 +50,12 @@ export const Grants = ({ project }: { project: IProject }) => {
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold" mt={1}>APPLICANTS</Text>
 								</Box>
 
-								<Box>
-									<Box fontWeight="bold" textAlign="center">{showCountdown() ? daysLeft : 0}</Box>
-									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold" textAlign="center" mt={1}>DAYS LEFT</Text>
-								</Box>
+								{ showCountdown()
+									&& <Box>
+										<Box fontWeight="bold" textAlign="center">{daysLeft}</Box>
+										<Text fontSize="sm" color="#5B5B5B" fontWeight="bold" textAlign="center" mt={1}>DAYS LEFT</Text>
+									</Box>
+								}
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
@@ -67,18 +69,16 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Text fontSize="2xl" fontWeight="bold" mb={2}>A trusted board of hardcore Bitcoiners</Text>
 
 					<HStack>
-						{project.owners.map(owner =>
-							<Box key={owner.user.id} display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)">
-								<Box>
-									<Box display="flex" justifyContent="center" alignItems="center">
-										<Link isExternal href={`https://twitter.com/${owner.user.twitterHandle}`}>
-											<Avatar w="75px" h="75px" src={owner.user.imageUrl}/>
-										</Link>
-									</Box>
-									<Text mt={4} fontSize="lg" fontWeight="bold" textAlign="center">{owner.user.username}</Text>
+						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" shadow="md">
+							<Box>
+								<Box display="flex" justifyContent="center" alignItems="center">
+									<Link isExternal href={'https://twitter.com/bradmillsca'}>
+										<Avatar w="75px" h="75px" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
+									</Link>
 								</Box>
-							</Box>,
-						)}
+								<Text mt={4} fontSize="lg" fontWeight="bold" textAlign="center">{'Brad Mills'}</Text>
+							</Box>
+						</Box>,
 					</HStack>
 
 					<Text fontSize="lg" mt={2}>A team of hardcore bitcoiners will be reviewing the applications and distributing the funds. They have brought to you great educational content from movies and podcasts to hard work on the ground, including This Machine Greens, Citadel Dispatch, etc.</Text>
