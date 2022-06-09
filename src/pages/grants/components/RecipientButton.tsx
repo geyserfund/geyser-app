@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
-	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea,
+	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea, Image, HStack,
 } from '@chakra-ui/react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { BiCopyAlt } from 'react-icons/bi';
@@ -13,6 +13,7 @@ import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode, isMediumScreen, useNotification } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
+import GrantEduIcon from '../../../assets/grants-edu-icon.png';
 
 interface RecipientButtonProps {
 page: string,
@@ -99,12 +100,17 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 			<Modal onClose={close} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader fontWeight="bold" fontSize="2xl">{submitting ? 'Applying' : 'Apply'}</ModalHeader>
+					<HStack p={6}>
+						<Image src={GrantEduIcon} alt="icon" rounded="lg" w="100px" mr={1}/>
+						<Box>
+							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>{submitting ? 'Applying' : 'Apply'}</ModalHeader>
+							<Text textAlign="justify">Are you currently working on a project that supports Bitcoin education in emerging countries? Apply to this grant to receive a donation.</Text>
+						</Box>
+					</HStack>
 					<ModalCloseButton onClick={close} />
 					<ModalBody>
 						{submitting ? <Loader/> : <>
-							<Text fontWeight="bold" fontSize="md">Are you currently working on a project that supports Bitcoin education in emerging countries? Apply to this grant to receive a donation.</Text>
-							<Text mt={5} fontWeight="bold">What’s your project or initiative called?</Text>
+							<Text fontWeight="bold">What’s your project or initiative called?</Text>
 							<Input
 								name="name"
 								placeholder="Bitcoin for Fairness"
@@ -164,7 +170,7 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 				<ModalCloseButton onClick={close} />
 				<ModalBody>
 					<VStack
-						padding={isMobile ? '10px 10px' : '10px 20px'}
+						padding={isMobile ? '10px 10px' : '5px 20px'}
 						spacing="12px"
 						width="100%"
 						height="100%"

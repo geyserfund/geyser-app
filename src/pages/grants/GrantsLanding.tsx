@@ -18,7 +18,7 @@ export const GrantsLanding = () => {
 			</Box>
 
 			<Box display="flex" justifyContent="center" alignItems="center">
-				<Box overflow="auto" w="100%" display="flex">
+				<Box overflow="auto" w={isMobile ? '75%' : '50%'} display="flex">
 
 					<GrantCard link="bitcoin-education-in-emerging-markets" number="#001" />
 					<GrantCard link="bitcoin-education-in-emerging-markets" number="#001" />

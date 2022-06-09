@@ -59,48 +59,40 @@ export const GrantCard = ({link, number}:GrantCardProps) => {
 
 	return (
 
-		<Box backgroundColor="white" p={2} boxShadow="lg" rounded="md" m={10}>
+		<Box backgroundColor="white" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="md" my={10} mr={20}>
 
 			<Box w={isMobile ? '275px' : '400px'}>
 				{loading ? <Loader width="100%" h="800px"/>
 					: <>
 						<Box onClick={() => gotoGrant()} cursor="pointer">
 							<Image w={isMobile ? '275px' : '400px'} h={isMobile ? '275px' : '400px'} objectFit="cover" src={project.media && project.media[0]} alt="grant" />
+							<Box p={2}>
+								<Text fontSize="xs" fontWeight="medium" color="#6E6E6E" my={2}>GRANT {number}: {createdDate}</Text>
 
-							<Text fontSize="xs" fontWeight="medium" color="#6E6E6E" my={2}>GRANT {number}: {createdDate}</Text>
+								<Text fontWeight="bold" fontSize="3xl">{project.title}</Text>
 
-							<Text fontWeight="bold" fontSize="3xl">{project.title}</Text>
+								<Text textAlign="justify">{project.description && project.description.length > 119 ? `${project.description.slice(0, 119)}...` : project.description}</Text>
 
-							<Text>{project.description && project.description.length > 119 ? `${project.description.slice(0, 119)}...` : project.description}</Text>
+								<HStack justifyContent="space-between" alignItems="center" my={3}>
 
-							<HStack justifyContent="space-between" alignItems="center" my={3}>
+									<Box>
+										<HStack justifyContent="center">
+											<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{project.balance ? project.balance : 0}</Text>
+										</HStack>
+										<Text fontSize="sm" color="#5B5B5B" fontWeight="medium">COMMITTED</Text>
+									</Box>
 
-								<Box>
-									<HStack justifyContent="center">
-										<SatoshiIcon scale={0.8}/><Text fontWeight="bold">{project.balance ? project.balance : 0}</Text>
-									</HStack>
-									<Text fontSize="sm" color="#5B5B5B">COMMITTED</Text>
-								</Box>
+									<Box>
+										<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.grantees ? project.grantees.length : 0}</Text>
+										<Text fontSize="sm" color="#5B5B5B" mt={1} fontWeight="medium">APPLICANTS</Text>
+									</Box>
 
-								<Box>
-									<Text fontWeight="bold" textAlign="center">{project.grantees ? project.grantees.length : 0}</Text>
-									<Text fontSize="sm" color="#5B5B5B" mt={1}>APPLICANTS</Text>
-								</Box>
+									<Box>
+										<Box fontWeight="bold" textAlign="center" fontSize="lg">{showCountdown() ? daysLeft : 0}</Box>
+										<Text fontSize="sm" color="#5B5B5B" mt={1} fontWeight="medium">DAYS LEFT</Text>
+									</Box>
 
-								<Box>
-									<Box fontWeight="bold" textAlign="center">{showCountdown() ? daysLeft : 0}</Box>
-									<Text fontSize="sm" color="#5B5B5B" mt={1}>DAYS LEFT</Text>
-								</Box>
-
-							</HStack>
-
-							<Box>
-								<Text fontSize="sm" color="#5B5B5B" textAlign="center">SPONSORED BY</Text>
-								{project.sponsors
-									? <HStack justifyContent="center">
-										{project.sponsors.map((sponsor:any) => <Image src={sponsor.image} alt="sponsor" key={sponsor.id} w="25%"/>)}
-									</HStack>
-									: <Text textAlign="center">No sponsors yet.</Text>}
+								</HStack>
 							</Box>
 						</Box>
 						<Box display="flex" justifyContent="center" w="100%" mt={2}>
