@@ -14,7 +14,7 @@ export interface IProfileUser {
           type: string;
           id: string;
           username: string;
-        }
+        }[]
         twitterHandle: string;
         connectedTwitter: boolean;
         contributions :IContribution[];

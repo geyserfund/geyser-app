@@ -132,8 +132,8 @@ export const getCountDown = (date: string) => {
 	return duration.toFormat('d \'days : \' h\'h :\' m\'m : \' s\'s');
 };
 
-export const getFormattedDate = (date: number) => {
-	const dateTime = DateTime.fromMillis(date);
+export const getFormattedDate = (date: number | string) => {
+	const dateTime = DateTime.fromMillis(parseInt(`${date}`, 10));
 
 	const {day, monthShort, year} = dateTime;
 
@@ -144,4 +144,11 @@ export const checkExpired = (date: string) => {
 	const currentDateTime = DateTime.now().toMillis();
 	const numberDate = parseInt(date, 10);
 	return numberDate <= currentDateTime;
+};
+
+export const getFormattedDateWithTime = (date: string) => {
+	const dateTime = DateTime.fromMillis(parseInt(date, 10));
+	const {day, month, year, hour, minute} = dateTime;
+
+	return `${year}/${month}/${day} ${hour}:${minute}`;
 };
