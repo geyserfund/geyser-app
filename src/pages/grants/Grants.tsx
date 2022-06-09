@@ -7,9 +7,9 @@ import { Footer } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import TestImage0 from '../../assets/testimage0.svg';
 import TestImage1 from '../../assets/testimage1.svg';
-import TestImage2 from '../../assets/btcedu.svg';
+import TestImage2 from '../../assets/grants-edu-icon.png';
 import { SatoshiIcon } from '../../components/icons';
-import { isMediumScreen } from '../../utils';
+import { isMediumScreen, isMobileMode } from '../../utils';
 import { IProject } from '../../interfaces';
 import { SubscribeModal } from '../../components/nav/SubscribeModal';
 import { RecipientButton } from './components/RecipientButton';
@@ -19,6 +19,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const createdDate = new Date(parseInt(project.createdAt)).toLocaleDateString();
 	const showCountdown = () => project.active && project.expiresAt;
 	const isMedium = isMediumScreen();
+	const isMobile = isMobileMode();
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	return (
 		<>
@@ -29,12 +30,12 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box w={isMedium ? '100%' : '45%'}>
 						<Text fontSize="xs" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>GRANT #001: {createdDate}</Text>
 						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
-						<Image src={project.media[0] ? project.media[0] : TestImage2} alt="grant" margin={isMedium ? '0 auto' : ''}/>
+						<Image w={isMobile ? '350px' : '425px'} rounded="md" src={project.media[0] ? project.media[0] : TestImage2} alt="grant" margin={isMedium ? '0 auto' : ''}/>
 					</Box>
 
 					<Box w={isMedium ? '90%' : '35%'} margin={isMedium ? '0 auto' : ''}>
-						<Text fontSize="lg">{project.description}</Text>
-						<Box shadow="lg" rounded="lg" p={6} mt={2}>
+						<Text fontSize="lg" textAlign="justify">{project.description}</Text>
+						<Box boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} mt={2}>
 							<HStack justifyContent="space-between" alignItems="center" my={3}>
 
 								<Box>
@@ -67,7 +68,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 					<HStack>
 						{project.owners.map(owner =>
-							<Box key={owner.user.id} display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" shadow="md">
+							<Box key={owner.user.id} display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)">
 								<Box>
 									<Box display="flex" justifyContent="center" alignItems="center">
 										<Link isExternal href={`https://twitter.com/${owner.user.twitterHandle}`}>
@@ -83,7 +84,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Text fontSize="lg" mt={2}>A team of hardcore bitcoiners will be reviewing the applications and distributing the funds. They have brought to you great educational content from movies and podcasts to hard work on the ground, including This Machine Greens, Citadel Dispatch, etc.</Text>
 
 					<HStack mt={2}>
-						<HStack shadow="lg" rounded="lg" p={2}>
+						<HStack boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={2}>
 							{project.media.slice(1).map(image => <Image src={image} alt="media" key={Math.random()}/>)}
 							<Image src={TestImage0} />
 							<Image src={TestImage1} />
@@ -97,7 +98,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Text fontSize="lg">Want to help spread Bitcoin out and wide? Why not support Bitcoin educators through this Geyser Grant? Join the growing number of wales and plebs donating to this Geyser Grant.</Text>
 					</Box>
 
-					<Box w={isMedium ? '97%' : '35%'} shadow="lg" rounded="lg" p={6} margin={isMedium ? '0 auto' : ''}>
+					<Box w={isMedium ? '97%' : '35%'} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} margin={isMedium ? '0 auto' : ''}>
 						<HStack justifyContent="space-between" alignItems="center" my={3}>
 
 							<Box>
