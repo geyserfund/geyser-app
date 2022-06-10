@@ -43,7 +43,7 @@ const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) =>
 				</Button>
 			</Link>);
 		default:
-			return <Button colorScheme="twitter" variant="ghost">{account.username}</Button>;
+			return null;
 	}
 };
 
