@@ -18,7 +18,7 @@ interface IContributionProjectCardProp extends ICard {
 const useStyles = createUseStyles({
 	container: {
 		borderRadius: '4px',
-		height: '275px',
+		height: '280px',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -104,15 +104,19 @@ export const ContributionProjectCard = ({ contribution, open, className, ...rest
 						<HStack spacing="10px" justifyContent="flex-start" width="100%">
 							<Text fontSize="16px" fontWeight={600}>{project.title}</Text>
 						</HStack>
-						<Text fontSize="12px" width="100%" height="30px">{project.description}</Text>
+						<Text fontSize="12px" width="100%" height="35px" noOfLines={2}>{project.description}</Text>
 						<HStack sapcing="5px" width="100%">
 						</HStack>
 					</VStack>
 					<HStack width="100%" paddingX="10px" justifyContent="space-between">
-						{isFunder && getBadges()}
+						<Box>
+							{isFunder && getBadges()}
+						</Box>
 						{
-							isAmbassador && (
+							isAmbassador ? (
 								<Text fontSize="12px" padding="3px 10px" borderRadius="10px" backgroundColor="brand.primary">Ambassador</Text>
+							) : (
+								<Text fontSize="12px" padding="3px 10px" borderRadius="10px" backgroundColor="brand.primary">Funder</Text>
 							)
 						}
 					</HStack>

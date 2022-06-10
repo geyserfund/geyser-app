@@ -1,11 +1,11 @@
-import { Avatar, Box, CircularProgress, HStack, Image, Text, VStack, LinkBox, LinkOverlay } from '@chakra-ui/react';
+import { Box, CircularProgress, HStack, Image, Text, VStack, LinkBox, LinkOverlay } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
 
 import { IProfileProject } from '../../../interfaces';
-import { checkExpired, isDarkMode, useBitcoinRates } from '../../../utils';
+import { checkExpired, getFormattedDate, isDarkMode, useBitcoinRates } from '../../../utils';
 import { getShortAmountLabel } from '../../../utils/helperFunctions';
 import { SatoshiIcon } from '../../icons';
 import { Card, ICard } from '../../ui';
@@ -107,7 +107,7 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 		if (checkExpired(project.expiresAt)) {
 			return (
 				<Text variant="subtle" background="brand.bgGrey3" color="textGrey" padding="2px 8px" fontSize="12px" borderRadius="4px">
-					Live Project
+					Closed
 				</Text>
 			);
 		}
@@ -131,13 +131,13 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 
 		if (checkExpired(project.expiresAt)) {
 			return (
-				<Text fontSize="12px" color="brand.textGrey">{`Expired on: ${project.expiresAt}`}</Text>
+				<Text fontSize="12px" color="brand.textGrey">{`Expired on: ${getFormattedDate(project.expiresAt)}`}</Text>
 			);
 		}
 
 		if (project.active) {
 			return (
-				<Text fontSize="12px" color="brand.textGrey">{`Went live on ${project.createdAt}`}</Text>
+				<Text fontSize="12px" color="brand.textGrey">{`Went live on ${getFormattedDate(project.createdAt)}`}</Text>
 			);
 		}
 	};
@@ -161,8 +161,8 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 						</Box>
 					</Box>
 					<VStack spacing="5px" width="100%" padding="10px">
-						<Text fontSize="16px" fontWeight={600} width="100%">{title}</Text>
-						<Text fontSize="12px" width="100%" height="30px">{project.description}</Text>
+						<Text fontSize="16px" fontWeight={600} width="100%" isTruncated>{title}</Text>
+						<Text fontSize="12px" width="100%" height="40px" noOfLines={2}>{project.description}</Text>
 						<HStack alignItems="center" justifyContent={project.fundingGoal ? 'space-between' : 'space-around'} width="100%">
 							{project.fundingGoal
 								&& <CircularProgress

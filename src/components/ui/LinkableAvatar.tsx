@@ -44,7 +44,7 @@ export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
 				<Avatar
 					width="30px"
 					height="30px"
-					name={avatarMetadata.username}
+					// Name={avatarMetadata.username}
 					src={avatarMetadata.image}
 					sx={{
 						'& .chakra-avatar__initials': {
