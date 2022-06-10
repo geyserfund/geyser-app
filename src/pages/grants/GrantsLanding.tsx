@@ -41,7 +41,6 @@ export const GrantsLanding = () => {
 			<Box display="flex" justifyContent="center" alignItems="center">
 				<Box overflow="auto" w={isMobile ? '75%' : '50%'} display="flex">
 					{(!loading && grants.length > 0) && grants.map((grant: IProject, index: number) => {
-						console.log('GRANT', grant);
 						if (!grant.active) {
 							return;
 						}

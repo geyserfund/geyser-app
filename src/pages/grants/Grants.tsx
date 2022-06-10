@@ -5,8 +5,6 @@ import React from 'react';
 import { Box, Text, HStack, Image, Avatar, VStack, Link, useDisclosure } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
-import TestImage0 from '../../assets/testimage0.svg';
-import TestImage1 from '../../assets/testimage1.svg';
 import TestImage2 from '../../assets/grants-edu-icon.png';
 import { SatoshiIcon } from '../../components/icons';
 import { isMediumScreen, isMobileMode } from '../../utils';
@@ -81,15 +79,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						</Box>,
 					</HStack>
 
-					<Text fontSize="lg" mt={2}>A team of hardcore bitcoiners will be reviewing the applications and distributing the funds. They have brought to you great educational content from movies and podcasts to hard work on the ground, including This Machine Greens, Citadel Dispatch, etc.</Text>
-
-					<HStack mt={2}>
-						<HStack boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={2}>
-							{project.media.slice(1).map(image => <Image src={image} alt="media" key={Math.random()}/>)}
-							<Image src={TestImage0} />
-							<Image src={TestImage1} />
-						</HStack>
-					</HStack>
+					<Text fontSize="lg" mt={2}>A team of hardcore bitcoiners will be reviewing the applications and distributing the funds. To learn more reach out to the Team <Link isExternal href="https://t.me/bradmillscandoit">here</Link>.</Text>
 				</Box>
 
 				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center" mt={20}>
