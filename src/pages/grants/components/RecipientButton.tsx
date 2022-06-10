@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
-	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea, Image, HStack,
+	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea, Image, HStack, Link,
 } from '@chakra-ui/react';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { BiCopyAlt } from 'react-icons/bi';
@@ -104,7 +104,7 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 						<Image src={GrantEduIcon} alt="icon" rounded="lg" w="100px" mr={1}/>
 						<Box>
 							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>{submitting ? 'Applying' : 'Apply'}</ModalHeader>
-							<Text textAlign="justify">Are you currently working on a project that supports Bitcoin education in emerging countries? Apply to this grant to receive a donation.</Text>
+							<Text textAlign="justify">Are you currently working on a project that supports Bitcoin education in emerging countries? Apply to this grant to receive a donation. Click <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f">here</Link> for more info.</Text>
 						</Box>
 					</HStack>
 					<ModalCloseButton onClick={close} />
