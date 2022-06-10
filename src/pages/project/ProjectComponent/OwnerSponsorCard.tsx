@@ -89,10 +89,10 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 												<HStack className={classes.amabassadorBlock} spacing="5px">
 													<Avatar
 														width="24px" height="24px"
-														name={ambassador.user.twitterHandle} src={ambassador.user.imageUrl}
+														name={ambassador.user.username} src={ambassador.user.imageUrl}
 													/>
 													<Text fontSize="14px" >
-														{`${ambassador.user.twitterHandle}`}
+														{`${ambassador.user.username}`}
 													</Text>
 												</HStack>
 											</Link>
@@ -125,10 +125,10 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 													<HStack spacing="5px" className={classes.amabassadorBlock}>
 														<Avatar
 															width="24px" height="24px"
-															name={sponsor.user.twitterHandle}
+															name={sponsor.user.username}
 															src={sponsor.user.imageUrl} />
 														<Text fontSize="14px">
-															{`${sponsor.user?.twitterHandle}`}
+															{`${sponsor.user?.username}`}
 														</Text>
 													</HStack>
 												</Link>

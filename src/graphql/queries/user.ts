@@ -7,8 +7,11 @@ query Me {
     id
     username
     imageUrl
-    twitterHandle
-    connectedTwitter
+    externalAccounts {
+      type
+      id
+      username
+    }
   }
 }
 `;
@@ -24,8 +27,6 @@ query User($where: UserQueryInput) {
       id
       username
     }
-    twitterHandle
-    connectedTwitter
     contributions {
       isAmbassador
       isFunder

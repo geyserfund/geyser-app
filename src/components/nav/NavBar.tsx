@@ -94,7 +94,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 										standard
 										onClick={handleProfileClick}
 									>
-										{user.twitterHandle}
+										{user.username}
 									</ButtonComponent>
 									: <ButtonComponent
 										leftIcon={<Icon as={FiTwitter} />}
@@ -127,7 +127,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 											standard
 											onClick={handleProfileClick}
 										>
-											{user.twitterHandle}
+											{user.username}
 										</ButtonComponent>
 										: <ButtonComponent
 											leftIcon={<Icon as={FiTwitter} />}

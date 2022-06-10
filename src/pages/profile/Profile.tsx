@@ -1,13 +1,14 @@
 import { useLazyQuery } from '@apollo/client';
-import { Avatar, Box, Button, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Avatar, Box, Button, HStack, Link, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { BsTwitter } from 'react-icons/bs';
+import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { createUseStyles } from 'react-jss';
 import { useParams } from 'react-router';
 import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../components/molecules';
 import Loader from '../../components/ui/Loader';
 import { USER_PROFILE_QUERY } from '../../graphql';
-import { IProfileUser } from '../../interfaces';
+import { IProfileUser, IUserExternalAccount } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
 
 const useStyles = createUseStyles({
@@ -23,6 +24,21 @@ const useStyles = createUseStyles({
 		},
 	},
 });
+
+const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) => {
+	const { type, username } = account;
+
+	switch (type) {
+		case 'twitter':
+			return <Link href={`https://twitter.com/${username}`} isExternal>
+				<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost"/>
+			</Link>;
+		case 'Fountain':
+			return <Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost"/>;
+		default:
+			return <Button colorScheme="twitter" variant="ghost"/>;
+	}
+};
 
 export const Profile = () => {
 	const isDark = isDarkMode();
@@ -88,9 +104,9 @@ export const Profile = () => {
 						{/* <Button>Create</Button> */}
 					</HStack>
 					<HStack width="100%">
-						<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
-							{userProfile && userProfile.twitterHandle}
-						</Button>
+						{ userProfile
+							&& userProfile.externalAccounts.map(account => <ProfileExternalAccount key={account.id} account={account}/>)
+						}
 					</HStack>
 				</VStack>
 				<Box>
