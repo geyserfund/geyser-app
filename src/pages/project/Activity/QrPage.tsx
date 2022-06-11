@@ -171,9 +171,9 @@ export const QrPage = ({
 				</VStack>
 
 			</Card>
-			<Card width="100%" borderRadius="5px">
+			<Card width="100%" borderRadius="5px" overflow="auto">
 				<Tabs variant="enclosed" isFitted onChange={setPlatform}>
-					<TabList >
+					<TabList>
 						<Tab className={platform === 0 ? classes.tabActive : ''} value="lightning" ><BsLightning/><Text marginLeft="3px">Lightning</Text></Tab>
 						{hasOnChain(name) && <Tab className={platform === 1 ? classes.tabActive : ''} value="onChain" ><GiCrossedChains /><Text marginLeft="3px">On-chain</Text></Tab>}
 					</TabList>
