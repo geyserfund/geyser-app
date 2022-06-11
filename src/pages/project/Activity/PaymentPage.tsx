@@ -1,7 +1,7 @@
 import { Box, CloseButton, Divider, HStack, Text, VStack, Button, Input, InputGroup, InputLeftElement, Modal, ModalOverlay, ModalBody, ModalCloseButton, ModalContent, useDisclosure, Image } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SatoshiIcon, GifIcon } from '../../../components/icons';
-import { ButtonComponent, ErrorBox, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
+import { ButtonComponent, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
 import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import {IFundForm} from '../../../hooks';
@@ -11,7 +11,7 @@ import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { IGif } from '@giphy/js-types';
-import { hasShipping } from '../../../utils';
+import { hasShipping, useNotification } from '../../../utils';
 
 interface IPaymentPageProps {
 	isMobile: boolean
@@ -42,19 +42,13 @@ export const PaymentPage = ({
 	rewards,
 	name,
 }: IPaymentPageProps) => {
-	const [error, setError] = useState('');
 	const {getShippingCost, getTotalAmount, getRewardsQuantity} = useFundCalc(state);
 	const [gifSearch, setGifSearch] = useState('bitcoin');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [selectedGif, setSelectedGif] = useState<IGif|null>(null);
 	const [gifHover, setGifHover] = useState(false);
 	const [focus, setFocus] = useState(true);
-
-	useEffect(() => {
-		if (error) {
-			setTimeout(() => setError(''), 3000);
-		}
-	}, [error]);
+	const { toast } = useNotification();
 
 	const submit = () => {
 		const valid = validateFundingAmount();
@@ -68,17 +62,29 @@ export const PaymentPage = ({
 
 	const validateFundingAmount = () => {
 		if (getTotalAmount('dollar', name) >= 5000) {
-			setError('Payment above $5000 is not allowed at the moment. Please update the amount, or contact us for donating a higher amount');
+			toast({
+				title: 'Payment above $5000 is not allowed at the moment.',
+				description: 'Please update the amount, or contact us for donating a higher amount.',
+				status: 'error',
+			});
 			return false;
 		}
 
 		if (getTotalAmount('sats', name) < 1) {
-			setError('Payment below 1 sats is not allowed at the moment. Please update the amount');
+			toast({
+				title: 'Payment below 1 sats is not allowed at the moment.',
+				description: 'Please update the amount.',
+				status: 'error',
+			});
 			return false;
 		}
 
 		if (state.rewardsCost && !state.email) {
-			setError('Email is a required field when donating for a reward.');
+			toast({
+				title: 'Email is a required field when donating for a reward.',
+				description: 'Please enter an email.',
+				status: 'error',
+			});
 			return false;
 		}
 
@@ -236,9 +242,6 @@ export const PaymentPage = ({
 					Fund project
 				</ButtonComponent>
 			</Box>
-			{error && <Box width="100%">
-				<ErrorBox message={error} />
-			</Box>}
 
 		</VStack>);
 };
