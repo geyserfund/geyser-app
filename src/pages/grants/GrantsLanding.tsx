@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, Link, VStack, useDisclosure } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
-
+import { ButtonComponent } from '../../components/ui';
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
 import { QUERY_GRANTS } from '../../graphql';
 import { ComingSoon } from './components/ComingSoon';
 import BitcoinEducationImage from '../../assets/btcedu.svg';
-import { isMobileMode, useNotification } from '../../utils';
+import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
+import { SubscribeModal } from '../../components/nav/SubscribeModal';
 
 export const GrantsLanding = () => {
 	const isMobile = isMobileMode();
+	const isMedium = isMediumScreen();
 	const { toast } = useNotification();
+	const {isOpen, onOpen, onClose} = useDisclosure();
 
 	const { loading, error, data } = useQuery(QUERY_GRANTS, {
 		variables: { where: { type: 'grant' }},
@@ -32,27 +35,35 @@ export const GrantsLanding = () => {
 
 	return (
 		<>
-
-			<Box width={isMobile ? '75%' : '50%'} margin="0 auto" mt={5}>
-				<Text fontSize="4xl" fontWeight="bold">Geyser Grants</Text>
-				<Text>It’s not always easy for individuals and institutions to donate to single geyserfund campaigns. So, with Grants anyone can now contribute to a particular cause without having to look in detail into every specific project and verify the creator’s credentials. The Geyser Fund Board will look at and beyond geyserfund campaigns to select the most impactful projects that support these causes.</Text>
-			</Box>
-
-			<Box display="flex" justifyContent="center" alignItems="center">
-				<Box overflow="auto" w={isMobile ? '75%' : '50%'} display="flex">
-					{(!loading && grants.length > 0) && grants.map((grant: IProject, index: number) => {
-						if (!grant.active) {
-							return;
-						}
-
-						return (<GrantCard key={grant.id} project={grant} number={`#00${index}`} />);
-					})}
-					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#001" date="6/7/2022"/>
-					<ComingSoon title="Bitcoin Gaming Grant" image={BitcoinEducationImage} number="#002" date="6/7/2022"/>
-
+			<Box pb={20} pt={isMobile ? 5 : 10}>
+				<Box width={isMobile ? '95%' : '75%'} margin="0 auto" mt={5}>
+					<Text fontSize="4xl" fontWeight="bold">Geyser Grants</Text>
+					<Text fontSize="lg">Funds contributed to Geyser grants will be distributed monthly among the best applicants by the Grant Board based on a criteria focused around impact (read more <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link>), while Geyser campaigns related to the Grant theme will be matched. Geyser will not charge any fees.</Text>
 				</Box>
-			</Box>
 
+				<Box display="flex" justifyContent="center" alignItems="center">
+					<Box overflow="auto" w={isMobile ? '95%' : '75%'} display="flex">
+						{(!loading && grants.length > 0) && grants.map((grant: IProject) => {
+							if (!grant.active) {
+								return;
+							}
+
+							return (<GrantCard key={grant.id} project={grant} number="1" />);
+						})}
+						<ComingSoon title="Bitcoin Culture" image={BitcoinEducationImage} number="1"/>
+						<ComingSoon title="Bitcoin Developers" image={BitcoinEducationImage} number="1"/>
+
+					</Box>
+				</Box>
+				<Box display="flex" justifyContent="center">
+					<VStack mt={10} w={isMedium ? '300px' : '100%'}>
+						<Text fontWeight="bold" fontSize="2xl">Stay up to date with Geyser Grants</Text>
+						<Text>Get news on new and upcoming Grants before anyone else.</Text>
+						<ButtonComponent primary standard w={isMedium ? '300px' : '400px'} onClick={onOpen}>Subscribe</ButtonComponent>
+					</VStack>
+				</Box>
+				<SubscribeModal {...{isOpen, onClose}} />
+			</Box>
 			<Footer/>
 
 		</>

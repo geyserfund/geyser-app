@@ -16,14 +16,12 @@ import { createCreatorRecord } from '../../../api';
 import GrantEduIcon from '../../../assets/grants-edu-icon.png';
 
 interface RecipientButtonProps {
-page: string,
 active: boolean,
 title: string,
 }
 
-export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
+export const RecipientButton = ({active, title}:RecipientButtonProps) => {
 	const isMobile = isMobileMode();
-	const isMedium = isMediumScreen();
 	const [step, setStep] = useState(0);
 	const [grantee, setGrantee] = useState('');
 	const [description, setDescription] = useState('');
@@ -31,7 +29,8 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 	const [contact, setContact] = useState('');
 	const [submitting, setSubmitting] = useState(false);
 	const { toast } = useNotification();
-
+	const isMedium = isMediumScreen();
+	const initialRef = React.useRef(null);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	// copy link
@@ -97,14 +96,14 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 
 	const renderFormModal = () => (
 		<>
-			<Modal onClose={close} isOpen={isOpen} isCentered>
+			<Modal onClose={close} isOpen={isOpen} isCentered initialFocusRef={initialRef}>
 				<ModalOverlay />
 				<ModalContent>
 					<HStack p={6}>
 						<Image src={GrantEduIcon} alt="icon" rounded="lg" w="100px" mr={1}/>
 						<Box>
 							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>{submitting ? 'Applying' : 'Apply'}</ModalHeader>
-							<Text textAlign="justify">Are you currently working on a project that supports Bitcoin education in emerging countries? Apply to this grant to receive a donation. Click <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f">here</Link> for more info.</Text>
+							<Text textAlign="justify">Are you currently working on a project that supports Bitcoin Education? Apply to this grant to receive a donation. Click <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link> for more info.</Text>
 						</Box>
 					</HStack>
 					<ModalCloseButton onClick={close} />
@@ -112,6 +111,7 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 						{submitting ? <Loader/> : <>
 							<Text fontWeight="bold">What’s your project or initiative called?</Text>
 							<Input
+								ref={initialRef}
 								name="name"
 								placeholder="Bitcoin for Fairness"
 								focusBorderColor="#20ECC7"
@@ -119,7 +119,7 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 								value={grantee}
 								isRequired={true}
 							/>
-							<Text mt={5} fontWeight="bold">How are you supporting Bitcoin Education in emerging markets?</Text>
+							<Text mt={5} fontWeight="bold">How are you supporting Bitcoin Education?</Text>
 							<Textarea
 								name="description"
 								placeholder="Teaching young Africans the basics about Bitcoin."
@@ -128,7 +128,7 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 								value={description}
 								isRequired={true}
 							/>
-							<Text mt={5} fontWeight="bold">Where can we find more information about your project or initiative? Drop a link to your project, whether it’s on Geyser or elsewhere</Text>
+							<Text mt={5} fontWeight="bold">Where can we find more information about your project or initiative? Drop a link to your project, whether it’s on Geyser or elsewhere.</Text>
 							<Input
 								name="link"
 								placeholder="https://geyser.fund/project/bitcoin-for-fairness"
@@ -137,7 +137,7 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 								value={url}
 								isRequired={true}
 							/>
-							<Text mt={5} fontWeight="bold">Your email/contact info</Text>
+							<Text mt={5} fontWeight="bold">Your email/contact info:</Text>
 							<Input
 								name="contact"
 								placeholder="anita@geyser.fund"
@@ -208,7 +208,7 @@ export const RecipientButton = ({page, active, title}:RecipientButtonProps) => {
 				disabled={!active}
 				primary
 				standard
-				w={page === 'grants' ? isMedium ? '300px' : '400px' : '100%'}
+				w={isMedium ? '300px' : '400px'}
 				onClick={() => {
 					onOpen();
 				}}

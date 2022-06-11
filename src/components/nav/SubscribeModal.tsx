@@ -89,7 +89,7 @@ export const SubscribeModal = ({isOpen, onClose}:ISubscribeModal) => {
 				<ModalBody width="100%">
 					<VStack spacing="15px" width="100%">
 						<Text>
-							{success ? 'Thanks for signing up. We’ll be sharing more info about Geyser projects and product soon. To join our community find us on Telegram and Twitter.' : 'To get information on the latest Geyser projects and product, subscribe by dropping your email below'}
+							{success ? 'Thanks for signing up. We’ll be sharing more info about Geyser projects and product soon. To join our community find us on Telegram and Twitter.' : 'To get information on the latest Geyser projects and product, subscribe by dropping your email below.'}
 						</Text>
 						{!success && <TextBox value={email} placeholder="Contact Email" onChange={handleEmail}/>}
 						{error && <Text fontSize={'12px'}>{error}</Text>}
