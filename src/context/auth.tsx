@@ -10,8 +10,7 @@ const defaultAuthUser = {
 	id: 0,
 	username: '',
 	imageUrl: '',
-	twitterHandle: '',
-	connectedTwitter: false,
+	externalAccounts: [],
 };
 
 const defaultContext = {

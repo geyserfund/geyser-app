@@ -17,10 +17,9 @@ mutation Fund($input: FundingInput!) {
       address
       funder {
         user {
-          twitterHandle
-          imageUrl
-          username
           id
+          username
+          imageUrl
         }
       }
     }

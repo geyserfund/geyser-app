@@ -1,13 +1,13 @@
 import { useLazyQuery } from '@apollo/client';
-import { Avatar, Box, Button, HStack, LinkOverlay, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Avatar, Box, Button, HStack, Link, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { BsTwitter } from 'react-icons/bs';
+import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { createUseStyles } from 'react-jss';
 import { useParams } from 'react-router';
 import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../components/molecules';
-import { Linkin } from '../../components/ui';
 import { USER_PROFILE_QUERY } from '../../graphql';
-import { IProfileUser } from '../../interfaces';
+import { IProfileUser, IUserExternalAccount } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
 
 const useStyles = createUseStyles({
@@ -24,6 +24,29 @@ const useStyles = createUseStyles({
 	},
 });
 
+const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) => {
+	const { type, username } = account;
+
+	switch (type) {
+		case 'twitter':
+			return (
+				<Link href={`https://twitter.com/${username}`} isExternal style={{ textDecoration: 'none' }}>
+					<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
+						{account.username}
+					</Button>
+				</Link>
+			);
+		case 'Fountain':
+			return (<Link href={`https://www.fountain.fm/${account.username}`} isExternal style={{ textDecoration: 'none' }}>
+				<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
+					{account.username}
+				</Button>
+			</Link>);
+		default:
+			return null;
+	}
+};
+
 export const Profile = () => {
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
@@ -32,7 +55,6 @@ export const Profile = () => {
 
 	const params = useParams<{userId: string}>();
 	const [getUserData, { loading: profileLoading, error, data }] = useLazyQuery(USER_PROFILE_QUERY);
-	console.log('checing params', params);
 
 	useEffect(() => {
 		if (params.userId) {
@@ -51,24 +73,6 @@ export const Profile = () => {
 	}
 
 	const userProfile: IProfileUser = data && data.user;
-
-	const renderExternalAccounts = () => {
-		if (userProfile && userProfile.externalAccounts && userProfile.externalAccounts.length > 0) {
-			userProfile.externalAccounts.map(account => {
-				if (account.type === 'fountain') {
-					return (
-						<LinkOverlay href={`https://www.fountain.fm/${account.username}`} isExternal>
-							<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
-								{account.username}
-							</Button>
-						</LinkOverlay>
-					);
-				}
-
-				return null;
-			});
-		}
-	};
 
 	if (!userProfile || profileLoading) {
 		return (
@@ -104,15 +108,9 @@ export const Profile = () => {
 						{/* <Button>Create</Button> */}
 					</HStack>
 					<HStack width="100%">
-						{userProfile && userProfile.twitterHandle
-						&& <Linkin href={`https://twitter.com/${userProfile.twitterHandle}`} isExternal>
-							<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
-								{userProfile.twitterHandle}
-							</Button>
-						</Linkin>
+						{ userProfile
+							&& userProfile.externalAccounts.map(account => <ProfileExternalAccount key={account.id} account={account}/>)
 						}
-						{renderExternalAccounts()}
-
 					</HStack>
 				</VStack>
 				<Box>

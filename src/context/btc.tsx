@@ -16,8 +16,8 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		const getBitcoinRates = async () => {
-			const response: any = await fetchBitcoinRates();
-			const satoshirate = response.rates.USD * 0.00000001;
+			const usdRate = await fetchBitcoinRates();
+			const satoshirate = usdRate * 0.00000001;
 			setBtcRate(satoshirate);
 		};
 

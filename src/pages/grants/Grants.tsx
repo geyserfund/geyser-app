@@ -178,12 +178,12 @@ export const Grants = ({ project }: { project: IProject }) => {
 										owners.map(owner => (
 											<Link
 												key={owner.user.id}
-												href={`https://twitter.com/${owner.user.twitterHandle}`}
+												href={`https://geyser.fund/user/${owner.user.id}`}
 												isExternal
 												fontSize="sm"
 												color="brand.darkerPrimary"
 												fontWeight="bold"
-											>@{ owner.user.twitterHandle } </Link>
+											>@{ owner.user.username } </Link>
 										))
 									}
 								</Box>

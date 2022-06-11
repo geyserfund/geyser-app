@@ -2,25 +2,23 @@ export interface IUser {
     id: number;
     username: string;
     imageUrl: string;
-    twitterHandle: string;
-    connectedTwitter: boolean;
 }
 
 export interface IProfileUser {
         id: string;
         username: string;
         imageUrl: string;
-        externalAccounts: {
-          type: string;
-          id: string;
-          username: string;
-        }[]
-        twitterHandle: string;
-        connectedTwitter: boolean;
-        contributions :IContribution[];
+        externalAccounts: IUserExternalAccount[];
+        contributions: IContribution[];
         ownerOf: {
           project: IProfileProject
         }[]
+}
+
+export interface IUserExternalAccount {
+	id: string;
+	type: string;
+	username: string
 }
 
 export interface IProfileProject {
