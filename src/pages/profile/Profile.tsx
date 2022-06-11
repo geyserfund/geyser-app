@@ -120,7 +120,7 @@ export const Profile = () => {
 						<TabList>
 							<Tab>
 								<HStack minWidth={'40px'}>
-									<Text fontWeight={500}>Creations</Text>
+									<Text fontWeight={500}>Creations</Text
 									<Text fontSize="12px" backgroundColor="brand.bgGrey3" padding="4px 8px" borderRadius="4px">{userProfile && userProfile.ownerOf.length}</Text>
 								</HStack>
 							</Tab>
