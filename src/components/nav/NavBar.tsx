@@ -93,7 +93,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 										standard
 										onClick={handleProfileClick}
 									>
-										{user.twitterHandle}
+										{user.username}
 									</ButtonComponent>
 									: <ButtonComponent
 										leftIcon={<Icon as={FiTwitter} />}
@@ -126,23 +126,23 @@ export const NavBar = ({showBorder}: INavBar) => {
 										onClick={handleLaunch}
 									>
 										Launch your idea
-									</ButtonComponent>
-									{
-										user.id
-											? <ButtonComponent
-												className={classes.userInfo}
-												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
-												standard
-												onClick={handleProfileClick}
-											>
-												{user.twitterHandle}
-											</ButtonComponent>
-											: <ButtonComponent
-												leftIcon={<Icon as={FiTwitter} />}
-												standard
-												marginRight="12px"
-												onClick={twitterOnOpen}
-											>
+								</ButtonComponent>
+								{
+									user.id
+										? <ButtonComponent
+											className={classes.userInfo}
+											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+											standard
+											onClick={handleProfileClick}
+										>
+											{user.username}
+										</ButtonComponent>
+										: <ButtonComponent
+											leftIcon={<Icon as={FiTwitter} />}
+											standard
+											marginRight="12px"
+											onClick={twitterOnOpen}
+										>
 											Log In
 											</ButtonComponent>
 									}

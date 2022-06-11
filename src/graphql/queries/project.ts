@@ -23,7 +23,6 @@ query GetProject($where: UniqueProjectQueryInput!) {
       user {
         id
         username
-        twitterHandle
         imageUrl
       }
     }
@@ -41,7 +40,6 @@ query GetProject($where: UniqueProjectQueryInput!) {
       user {
         id
         username
-        twitterHandle
         imageUrl
       }
     }
@@ -53,7 +51,6 @@ query GetProject($where: UniqueProjectQueryInput!) {
       user {
         id
         username
-        twitterHandle
         imageUrl
       }
     }
@@ -62,7 +59,6 @@ query GetProject($where: UniqueProjectQueryInput!) {
       user {
         id
         username
-        twitterHandle
         imageUrl
       }
       confirmed
@@ -88,8 +84,6 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
             id
             username
             imageUrl
-            twitterHandle
-            connectedTwitter
           }
         }
         amount
@@ -105,8 +99,6 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
           id
           username
           imageUrl
-          twitterHandle
-          connectedTwitter
         }
         amountFunded
         timesFunded
@@ -159,7 +151,6 @@ query projects($where: ProjectQueryInput) {
         user {
           id
           username
-          twitterHandle
           imageUrl
         }
       }
@@ -168,7 +159,6 @@ query projects($where: ProjectQueryInput) {
         user {
           id
           username
-          twitterHandle
           imageUrl
         }
         confirmed
