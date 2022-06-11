@@ -1,5 +1,5 @@
 import { DateTime, Interval } from 'luxon';
-import { IProject, IFunder, IBadge } from '../interfaces';
+import { IBadge } from '../interfaces';
 
 interface IBadges {
     [threshold: string]: IBadge
