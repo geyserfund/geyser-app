@@ -87,7 +87,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Text fontSize="lg">Want to help spread Bitcoin out and wide? Why not support Bitcoin educators through this Geyser Grant? Join the growing number of whales and plebs donating to this Geyser Grant.</Text>
 					</Box>
 
-					<Box w={isMedium ? '97%' : '35%'} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} margin={isMedium ? '0 auto' : ''}>
+					<Box w={isMedium ? '90%' : '35%'} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} margin={isMedium ? '0 auto' : ''}>
 						<HStack justifyContent="space-around" alignItems="center" my={3}>
 
 							<Box>
