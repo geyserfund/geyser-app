@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Text, Image, HStack } from '@chakra-ui/react';
 import { isMobileMode } from '../../../utils';
 import { SatoshiIcon } from '../../../components/icons';
@@ -12,12 +12,13 @@ marginRight?: boolean,
 
 export const ComingSoon = ({image, number, title, marginRight}:ComingSoonProps) => {
 	const isMobile = isMobileMode();
+	const [imageLoad, setImageLoad] = useState(false);
 	return (
 
 		<Box backgroundColor="white" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="md" my={10} mr={marginRight ? isMobile ? 10 : 20 : 0}>
 
 			<Box w={isMobile ? '275px' : '400px'}>
-				<Image w={isMobile ? '275px' : '400px'} h={isMobile ? '275px' : '400px'} objectFit="cover" opacity={0.5} src={image} alt="grant" />
+				<Image w={isMobile ? '275px' : '400px'} h={isMobile ? '275px' : '400px'} loading="eager" onLoad={() => setImageLoad(true)} bg={imageLoad ? '' : '#a0aec0'} objectFit="cover" opacity={0.5} src={image} alt="grant" />
 				<Box p={2}>
 					<Text fontWeight="bold" fontSize="3xl" opacity={0.5}>{title}</Text>
 					<Text fontSize="xs" fontWeight="medium" color="#6E6E6E" opacity={0.5}>ROUND {number}: COMING SOON</Text>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Text, Link, VStack, useDisclosure } from '@chakra-ui/react';
+import { Box, Text, Link, VStack, Skeleton, useDisclosure } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { ButtonComponent } from '../../components/ui';
 import { Footer } from '../../components/molecules';
@@ -50,9 +50,23 @@ export const GrantsLanding = () => {
 
 							return (<GrantCard key={grant.id} project={grant} number="1" />);
 						})}
-						<ComingSoon title="Bitcoin Culture" image={BitcoinEducationImage} number="1" marginRight={true}/>
-						<ComingSoon title="Bitcoin Developers" image={BitcoinEducationImage} number="1" />
-
+						{loading
+							? <>
+								<Box>
+									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '425px' : '550px'} my={10} mr={isMobile ? 10 : 20}/>
+								</Box>
+								<Box>
+									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '425px' : '550px'} my={10} mr={isMobile ? 10 : 20}/>
+								</Box>
+								<Box>
+									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '425px' : '550px'} my={10} />
+								</Box>
+							</>
+							: <>
+								<ComingSoon title="Bitcoin Culture" image={BitcoinEducationImage} number="1" marginRight={true}/>
+								<ComingSoon title="Bitcoin Developers" image={BitcoinEducationImage} number="1" />
+							</>
+						}
 					</Box>
 				</Box>
 				<Box display="flex" justifyContent="center">
