@@ -7,13 +7,14 @@ interface ComingSoonProps {
 image: string,
 number: string,
 title: string,
+marginRight?: boolean,
 }
 
-export const ComingSoon = ({image, number, title}:ComingSoonProps) => {
+export const ComingSoon = ({image, number, title, marginRight}:ComingSoonProps) => {
 	const isMobile = isMobileMode();
 	return (
 
-		<Box backgroundColor="white" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="md" my={10} mr={isMobile ? 10 : 20}>
+		<Box backgroundColor="white" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="md" my={10} mr={marginRight ? isMobile ? 10 : 20 : 0}>
 
 			<Box w={isMobile ? '275px' : '400px'}>
 				<Image w={isMobile ? '275px' : '400px'} h={isMobile ? '275px' : '400px'} objectFit="cover" opacity={0.5} src={image} alt="grant" />
