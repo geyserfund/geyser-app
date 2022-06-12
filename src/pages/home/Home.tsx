@@ -7,7 +7,6 @@ import { Footer, SwipeLiveProject,
 import { isDarkMode, isMobileMode, useNotification } from '../../utils';
 import {
 	colors,
-	LaunchImageUrl,
 } from '../../constants';
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
@@ -15,6 +14,7 @@ import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
 import { SatoshiIconNew } from '../../components/icons';
+import Dorian from '../../assets/dorian.png';
 
 type RuleNames = string
 
@@ -166,7 +166,7 @@ export const Home = () => {
 						</HStack>
 					</VStack>
 					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'} minWidth="305px" >
-						<Image src={LaunchImageUrl} maxHeight="250px"/>
+						<Image src={Dorian} maxHeight="250px"/>
 					</Box>
 				</Box>
 				<VStack alignItems="flex-start" width="100%" spacing="0px">
