@@ -14,7 +14,7 @@ import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
 import { SatoshiIconNew } from '../../components/icons';
-import Dorian from '../../assets/dorian.svg';
+import Dorian from '../../assets/dorian.png';
 
 type RuleNames = string
 
