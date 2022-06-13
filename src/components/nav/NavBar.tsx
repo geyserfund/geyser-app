@@ -109,12 +109,16 @@ export const NavBar = ({showBorder}: INavBar) => {
 						</> : (
 							<>
 								<HStack>
-									<ButtonComponent marginRight="5px" onClick={() => {
-										history.push('/home');
-									}}>Projects</ButtonComponent>
-									<ButtonComponent onClick={() => {
-										history.push('/grants');
-									}}>Grants</ButtonComponent>
+									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '1px solid #20ECC7' : ''} borderRadius="md" marginRight="5px">
+										<ButtonComponent onClick={() => {
+											history.push('/home');
+										}}>Projects</ButtonComponent>
+									</Box>
+									<Box border={history.location.pathname === '/grants' ? '1px solid #20ECC7' : ''} borderRadius="md">
+										<ButtonComponent onClick={() => {
+											history.push('/grants');
+										}}>Grants</ButtonComponent>
+									</Box>
 								</HStack>
 								<Box>
 									<ButtonComponent
