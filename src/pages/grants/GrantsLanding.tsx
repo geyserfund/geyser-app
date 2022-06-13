@@ -38,7 +38,7 @@ export const GrantsLanding = () => {
 			<Box pb={20} pt={isMobile ? 5 : 10}>
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '60%'} margin="0 auto" my={5}>
 					<Text fontSize="4xl" fontWeight="bold">Geyser Grants</Text>
-					<Text fontSize="lg">Funds contributed to Geyser grants will be distributed monthly among the best applicants by the Grant Board based on a criteria focused around impact (read more <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link>), while Geyser campaigns related to the Grant theme will be matched. Geyser will not charge any fees.</Text>
+					<Text fontSize="lg">It’s not always easy for individuals and institutions to donate to single Geyser campaigns. So, with Grants anyone can now contribute to a particular cause without having to look in detail into every specific project and verify the creator’s credentials. The Geyser Fund Board will look at and beyond Geyser campaigns to select the most impactful projects that support these causes. Read more <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link>.</Text>
 				</Box>
 
 				<Box display="flex" justifyContent="center" alignItems="center" px={isMobile ? 0 : 20}>
@@ -48,7 +48,7 @@ export const GrantsLanding = () => {
 								return;
 							}
 
-							return (<GrantCard key={grant.id} project={grant} number="1" />);
+							return (<GrantCard key={grant.id} project={grant} number="1" date="JULY 1 - 31" distributed={grant.name === 'bitcoin-education' ? (0 / 1000000).toFixed(1) : (0 / 1000000).toFixed(1)} />);
 						})}
 						{loading
 							? <>

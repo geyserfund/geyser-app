@@ -28,14 +28,14 @@ export const ComingSoon = ({image, number, title, marginRight}:ComingSoonProps) 
 
 							<Box>
 								<HStack justifyContent="center">
-									<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">0</Text>
+									<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{(0 / 1000000).toFixed(1)} M</Text>
 								</HStack>
 								<Text fontSize="sm" color="#5B5B5B" fontWeight="medium">CONTRIBUTED</Text>
 							</Box>
 
 							<Box>
 								<HStack justifyContent="center">
-									<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">0</Text>
+									<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{(0 / 1000000).toFixed(1)} M</Text>
 								</HStack>
 								<Text fontSize="sm" color="#5B5B5B" fontWeight="medium">DISTRIBUTED</Text>
 							</Box>

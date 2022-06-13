@@ -1,5 +1,4 @@
 /* eslint-disable complexity */
-/* eslint-disable radix */
 
 import React from 'react';
 import { Box, Text, HStack, Image, Avatar, VStack, Link, useDisclosure } from '@chakra-ui/react';
@@ -13,8 +12,6 @@ import { SubscribeModal } from '../../components/nav/SubscribeModal';
 import { RecipientButton } from './components/RecipientButton';
 
 export const Grants = ({ project }: { project: IProject }) => {
-	const createdDate = new Date(parseInt(project.createdAt)).toLocaleDateString();
-
 	const isMedium = isMediumScreen();
 	const isMobile = isMobileMode();
 	const {isOpen, onOpen, onClose} = useDisclosure();
@@ -25,7 +22,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center">
 
 					<Box w={isMedium ? '100%' : '45%'}>
-						<Text fontSize="xs" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: {createdDate}</Text>
+						<Text fontSize="xs" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: {project.name === 'bitcoin-education' ? 'JULY 1-31' : ''}</Text>
 						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
 						<Image w={isMobile ? '350px' : '425px'} rounded="md" src={project.media[0] ? project.media[0] : TestImage2} alt="grant" margin={isMedium ? '0 auto' : ''}/>
 					</Box>
@@ -37,14 +34,14 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 								<Box>
 									<HStack justifyContent="center" alignItems="center">
-										<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{project.balance}</Text>
+										<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(1)} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
 								</Box>
 
 								<Box>
 									<HStack justifyContent="center">
-										<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.balance ? project.balance : 0}</Text>
+										<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(1) : (0 / 1000000).toFixed(1)} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">DISTRIBUTED</Text>
 								</Box>
@@ -56,7 +53,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={project.active} title="Apply"/>
+								<RecipientButton active={false} title="Apply"/>
 							</Box>
 						</Box>
 					</Box>
@@ -70,21 +67,21 @@ export const Grants = ({ project }: { project: IProject }) => {
 							<Box>
 								<Box display="flex" justifyContent="center" alignItems="center">
 									<Link isExternal href={'https://twitter.com/bradmillsca'}>
-										<Avatar w="75px" h="75px" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
+										<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
 									</Link>
 								</Box>
-								<Text mt={4} fontSize="lg" fontWeight="bold" textAlign="center">{'Brad Mills'}</Text>
+								<Text mt={4} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
 							</Box>
 						</Box>,
 					</HStack>
 
-					<Text fontSize="lg" mt={4}>A team of hardcore bitcoiners will be reviewing the applications and distributing the funds. To learn more reach out to the Team <Link isExternal href="https://t.me/bradmillscandoit" textDecoration="underline">here</Link>.</Text>
+					<Text fontSize="lg" mt={4}>We are bringing together a board of hardcore Bitcoiners that have a history of supporting Bitcoin education and media creation. At the end of the Round they will be reviewing the applications and deciding how the funds should be distributed.</Text>
 				</Box>
 
 				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center" mt={20}>
 					<Box w={isMedium ? '90%' : '45%'} pr={isMedium ? 0 : 20} margin={isMedium ? '0 auto' : ''}>
 						<Text fontSize="2xl" fontWeight="bold" mb={2}>Massive impact</Text>
-						<Text fontSize="lg">Want to help spread Bitcoin out and wide? Why not support Bitcoin educators through this Geyser Grant? Join the growing number of whales and plebs donating to this Geyser Grant.</Text>
+						<Text fontSize="lg">Want to help spread the good work of Bitcoin out and wide? Why not support Bitcoin educators through this Geyser Grant? Join the growing number of whales and plebs donating to this Geyser Grant (currently on-chain only). Learn more <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link>, and reach out to the Team <Link isExternal href="https://t.me/bradmillscandoit" textDecoration="underline">here</Link>.</Text>
 					</Box>
 
 					<Box w={isMedium ? '90%' : '35%'} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} margin={isMedium ? '0 auto' : ''}>
@@ -92,16 +89,9 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							<Box>
 								<HStack justifyContent="center" alignItems="center">
-									<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{project.balance}</Text>
+									<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(1)} M</Text>
 								</HStack>
 								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
-							</Box>
-
-							<Box>
-								<HStack justifyContent="center">
-									<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.balance ? project.balance : 0}</Text>
-								</HStack>
-								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">DISTRIBUTED</Text>
 							</Box>
 
 							<Box>
