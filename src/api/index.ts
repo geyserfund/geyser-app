@@ -1,19 +1,11 @@
 import { REACT_APP_AIR_TABLE_KEY, NODE_ENV } from '../constants';
 
-// Export const fetchBitcoinRates = async () => {
-// 	if (NODE_ENV === 'development') {
-// 		return 50000;
-// 	}
-
-// 	return fetch('https://api.coinbase.com/v2/exchange-rates?currency=BTC').then(response => response.json()).then(response => response.data.rates.USD);
-// };
-
 export const fetchBitcoinRates = async () => {
 	if (NODE_ENV === 'development') {
 		return 50000;
 	}
 
-	return fetch('https://api-pub.bitfinex.com/v2/ticker/tBTCUSD').then(response => response.json()).then(response => response.data[6]);
+	return fetch('https://api.coinbase.com/v2/exchange-rates?currency=BTC').then(response => response.json()).then(response => response.data.rates.USD);
 };
 
 export const createCreatorRecord = async (data:any) => {
