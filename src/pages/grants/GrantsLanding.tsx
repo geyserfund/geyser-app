@@ -6,7 +6,8 @@ import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
 import { QUERY_GRANTS } from '../../graphql';
 import { ComingSoon } from './components/ComingSoon';
-import BitcoinEducationImage from '../../assets/btcedu.svg';
+import BtcDevIcon from '../../assets/btc-dev.png';
+import BtcCultureIcon from '../../assets/btc-culture.png';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
 import { SubscribeModal } from '../../components/nav/SubscribeModal';
@@ -53,18 +54,18 @@ export const GrantsLanding = () => {
 						{loading
 							? <>
 								<Box>
-									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '425px' : '550px'} my={10} mr={isMobile ? 10 : 20}/>
+									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '438px' : '563px'} my={10} mr={isMobile ? 10 : 20}/>
 								</Box>
 								<Box>
-									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '425px' : '550px'} my={10} mr={isMobile ? 10 : 20}/>
+									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '438px' : '563px'} my={10} mr={isMobile ? 10 : 20}/>
 								</Box>
 								<Box>
-									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '425px' : '550px'} my={10} />
+									<Skeleton w={isMobile ? '275px' : '400px'} h={isMobile ? '438px' : '563px'} my={10} />
 								</Box>
 							</>
 							: <>
-								<ComingSoon title="Bitcoin Culture" image={BitcoinEducationImage} number="1" marginRight={true}/>
-								<ComingSoon title="Bitcoin Developers" image={BitcoinEducationImage} number="1" />
+								<ComingSoon title="Bitcoin Culture" image={BtcCultureIcon} number="1" marginRight={true}/>
+								<ComingSoon title="Bitcoin Developers" image={BtcDevIcon} number="1" />
 							</>
 						}
 					</Box>

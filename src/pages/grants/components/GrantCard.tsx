@@ -24,7 +24,7 @@ export const GrantCard = ({ project, number, distributed, date}: {project: IProj
 					<Box p={2}>
 
 						<Text fontWeight="bold" fontSize="3xl">{project.title}</Text>
-						<Text fontSize="xs" fontWeight="medium" color="#6E6E6E">ROUND {number}: {date}</Text>
+						<Text fontSize="xl" fontWeight="medium" color="#6E6E6E">ROUND {number}: {date}</Text>
 
 						<HStack justifyContent="space-around" alignItems="center" my={3}>
 

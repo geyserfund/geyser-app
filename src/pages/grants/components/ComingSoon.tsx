@@ -22,7 +22,7 @@ export const ComingSoon = ({image, number, title, marginRight}:ComingSoonProps) 
 					<Image w={isMobile ? '275px' : '400px'} h={isMobile ? '275px' : '400px'} loading="eager" onLoad={() => setImageLoad(true)} objectFit="cover" opacity={0.5} src={image} alt="grant" />
 					<Box p={2}>
 						<Text fontWeight="bold" fontSize="3xl" opacity={0.5}>{title}</Text>
-						<Text fontSize="xs" fontWeight="medium" color="#6E6E6E" opacity={0.5}>ROUND {number}: COMING SOON</Text>
+						<Text fontSize="xl" fontWeight="medium" color="#6E6E6E" opacity={0.5}>ROUND {number}: COMING SOON</Text>
 
 						<HStack justifyContent="space-around" alignItems="center" my={3} opacity={0.5}>
 

@@ -4,7 +4,6 @@ import React from 'react';
 import { Box, Text, HStack, Image, Avatar, VStack, Link, useDisclosure } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
-import TestImage2 from '../../assets/grants-edu-icon.png';
 import { SatoshiIcon } from '../../components/icons';
 import { isMediumScreen, isMobileMode } from '../../utils';
 import { IProject } from '../../interfaces';
@@ -24,7 +23,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box w={isMedium ? '100%' : '45%'}>
 						<Text fontSize="xs" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: {project.name === 'bitcoin-education' ? 'JULY 1-31' : ''}</Text>
 						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
-						<Image w={isMobile ? '350px' : '425px'} rounded="md" src={project.media[0] ? project.media[0] : TestImage2} alt="grant" margin={isMedium ? '0 auto' : ''}/>
+						<Image w={isMobile ? '350px' : '425px'} rounded="md" src={project.media[0] && project.media[0]} alt="grant" margin={isMedium ? '0 auto' : ''}/>
 					</Box>
 
 					<Box w={isMedium ? '90%' : '35%'} margin={isMedium ? '0 auto' : ''}>

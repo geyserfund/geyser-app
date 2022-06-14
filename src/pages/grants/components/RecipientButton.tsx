@@ -13,7 +13,7 @@ import { ButtonComponent } from '../../../components/ui';
 import { isMobileMode, isMediumScreen, useNotification } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
-import GrantEduIcon from '../../../assets/grants-edu-icon.png';
+import BtcEduIcon from '../../../assets/btc-edu.png';
 
 interface RecipientButtonProps {
 active: boolean,
@@ -100,7 +100,7 @@ export const RecipientButton = ({active, title}:RecipientButtonProps) => {
 				<ModalOverlay />
 				<ModalContent>
 					<HStack p={6}>
-						<Image src={GrantEduIcon} alt="icon" rounded="lg" w="100px" mr={1}/>
+						<Image src={BtcEduIcon} alt="icon" rounded="lg" w="100px" mr={1}/>
 						<Box>
 							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>{submitting ? 'Applying' : 'Apply'}</ModalHeader>
 							<Text textAlign="justify">Are you currently working on a project that supports Bitcoin Education? Apply to this grant to receive a donation. Click <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link> for more info.</Text>
