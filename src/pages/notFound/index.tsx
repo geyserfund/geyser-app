@@ -18,7 +18,7 @@ export const NotFound = () => (
             Oops!
 		</Text>
 		<Text fontSize="20px">
-			This page was not found, Please try again.
+			This page was not found, please try again.
 		</Text>
 		<Text fontSize="20px">
 			If the problem persists let us know via. <Link href="https://t.me/+EZ5otIPhVcxhMmFk" target="_blank">telegram</Link> or this <Link>feedback form.</Link>
