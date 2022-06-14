@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Show } from '@chakra-ui/react';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent } from '../ui';
@@ -108,18 +108,22 @@ export const NavBar = ({showBorder}: INavBar) => {
 							<NavMenu user={user} logout={logout} />
 						</> : (
 							<>
-								<HStack>
-									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '1px solid #20ECC7' : ''} borderRadius="md" marginRight="5px">
-										<ButtonComponent onClick={() => {
-											history.push('/home');
-										}}>Projects</ButtonComponent>
-									</Box>
-									<Box border={history.location.pathname === '/grants' ? '1px solid #20ECC7' : ''} borderRadius="md">
-										<ButtonComponent onClick={() => {
-											history.push('/grants');
-										}}>Grants</ButtonComponent>
-									</Box>
-								</HStack>
+								<Show above="lg">
+									<HStack mt={1}>
+										<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : ''} borderRadius="md" marginRight="5px">
+											<ButtonComponent onClick={() => {
+												history.push('/home');
+											}}>Projects</ButtonComponent>
+										</Box>
+										<Box position="relative" border={history.location.pathname === '/grants' ? '3px solid #20ECC7' : ''} borderRadius="md">
+											<ButtonComponent onClick={() => {
+												history.push('/grants');
+											}}>Grants
+												<Text zIndex={1} p={0.5} pt={1} px={2} bg="brand.primary" borderRadius="full" position="absolute" top="-10px" right="-14px" fontSize="10px" fontWeight="bold" textAlign="center">NEW</Text>
+											</ButtonComponent>
+										</Box>
+									</HStack>
+								</Show>
 								<Box>
 									<ButtonComponent
 										leftIcon={<AddIcon />}

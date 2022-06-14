@@ -84,14 +84,14 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 				sx={styles.buttonCommon}
 			/>
 			<MenuList width="150px" className={classes.menuList}>
-				<Show below="md">
+				<Show below="lg">
 					<MenuItem className={classes.menuItem}>
 						<Link href={HomeUrl}>
 					Projects
 						</Link>
 					</MenuItem>
 				</Show>
-				<Show below="md">
+				<Show below="lg">
 					<MenuItem className={classes.menuItem}>
 						<Link href={GrantsUrl}>
 					Grants
