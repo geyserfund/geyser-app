@@ -160,8 +160,6 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		}
 
 		switch (fundState) {
-			case fundingStages.loading:
-				return <Loader />;
 			case fundingStages.initial:
 				return <InfoPage
 					{...{
