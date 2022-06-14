@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { RejectionError, WebLNProvider } from 'webln';
 import { ConnectTwitter } from '../../../components/molecules';
 import { Card } from '../../../components/ui';
 import {
@@ -7,15 +6,13 @@ import {
 	IProject,
 	IFundingInput,
 	IRewardFundingInput,
-	IFundingAmounts,
 	IFunder,
 } from '../../../interfaces';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { MUTATION_FUND, QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
-import { QUERY_GET_FUNDING_STATUS } from '../../../graphql';
+import { useQuery } from '@apollo/client';
+import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
 import { SuccessPage } from './SuccessPage';
 import { QrPage } from './QrPage';
-import { isMobileMode, useNotification, sha256 } from '../../../utils';
+import { isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
@@ -23,8 +20,8 @@ import { useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage } from './InfoPage';
-import { fundingStages, IFundingStages, stageList } from '../../../constants';
-import { useFundState, IFundForm } from '../../../hooks';
+import { fundingStages } from '../../../constants';
+import { useFundState, IFundForm, useFundingFlow } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
 
 interface IActivityProps {
@@ -33,39 +30,6 @@ interface IActivityProps {
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-let fundInterval: any;
-
-const initialAmounts = {
-	total: 0,
-	donationAmount: 0,
-	shippingCost: 0,
-	rewardsCost: 0,
-};
-
-const initialFunding = {
-	id: 0,
-	uuid: '',
-	invoiceId: '',
-	status: 'unpaid',
-	amount: 0,
-	paymentRequest: '',
-	address: '',
-	canceled: false,
-	comment: '',
-	media: '',
-	paidAt: '',
-	onChain: false,
-	source: '',
-	funder: {
-		id: 0,
-		amountFunded: 0,
-		timesFunded: 0,
-		confirmed: false,
-		confirmedAt: '',
-		badges: [],
-	},
-};
-
 const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
 
@@ -73,14 +37,15 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	const { toast } = useNotification();
 	const isMobile = isMobileMode();
 
-	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial);
-
-	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
-
-	const [fundingTx, setFundingTx] = useState<IFundingTx>({ ...initialFunding, funder: { ...initialFunding.funder, user } });
-	const [amounts, setAmounts] = useState<IFundingAmounts>(initialAmounts);
+	// REquired for activity (recent and leaderboard) visibility
 	const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);
 	const [funders, setFunders] = useState<IFunder[]>([]);
+
+	// required for knowing the rewards and the funds
+	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
+
+	const {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow();
+
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
@@ -93,31 +58,12 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		},
 	);
 
-	const [fundProject, {
-		data, loading: fundLoading,
-	}] = useMutation(MUTATION_FUND);
-
-	const [getFundingStatus, { data: fundingStatus }] = useLazyQuery(QUERY_GET_FUNDING_STATUS,
-		{
-			variables: { id: fundingTx.id },
-			fetchPolicy: 'network-only',
-		},
-	);
-
 	useEffect(() => {
 		if (fundingData && fundingData.project.fundingTxs) {
 			setFundingTxs(fundingData.project.fundingTxs);
 			setFunders(fundingData.project.funders);
 		}
 	}, [fundingData]);
-
-	useEffect(() => {
-		if (loading) {
-			setFundState(fundingStages.loading);
-		} else {
-			setFundState(fundingStages.initial);
-		}
-	}, [loading]);
 
 	useEffect(() => {
 		if (error) {
@@ -142,89 +88,12 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		}
 	}, [state.anonymous]);
 
-	useEffect(() => {
-		if (fundingStatus && fundingStatus.fundingTx && (fundingStatus.fundingTx.status === 'paid' || fundingStatus.fundingTx.status === 'pending')) {
-			const newTx = { ...fundingTx, status: fundingStatus.fundingTx.status };
-			const newTxs = fundingStatus.fundingTx.status === 'pending' ? fundingTxs : [newTx, ...fundingTxs];
-
-			setFundingTx(newTx);
-			setFundingTxs(newTxs);
-			clearInterval(fundInterval);
-			gotoNextStage();
-		}
-	}, [fundingStatus]);
-
-	useEffect(() => {
-		if (fundState === fundingStages.completed || fundState === fundingStages.canceled || fundState) {
-			clearInterval(fundInterval);
-		}
-
-		if (fundState === fundingStages.started) {
-			const requestWebLNPayment = async () => {
-				console.log('Check WebLN');
-
-				const { webln }: { webln: WebLNProvider } = window as any;
-				if (!webln) {
-					throw new Error('no provider');
-				}
-
-				await webln.enable();
-				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
-				const paymentHash = await sha256(preimage);
-				return paymentHash;
-			};
-
-			requestWebLNPayment().then(paymentHash => {
-				// Check preimage
-				if (paymentHash === fundingTx.invoiceId) {
-					gotoNextStage();
-				} else {
-					throw new Error('wrong preimage');
-				}
-			}).catch(error => {
-				if (error.message === 'no provider') {
-					//
-				} else if (error.message === 'wrong preimage') {
-					toast({
-						title: 'Wrong payment preimage',
-						description: 'The payment preimage returned by the WebLN provider did not match the payment hash.',
-						status: 'error',
-					});
-				} else if (error.constructor === RejectionError || error.message === 'User rejected') {
-					toast({
-						title: 'Requested operation declined',
-						description: 'Please use the invoice instead.',
-						status: 'info',
-					});
-				} else {
-					toast({
-						title: 'Oops! Something went wrong with WebLN.',
-						description: 'Please use the invoice instead.',
-						status: 'error',
-					});
-				}
-
-				fundInterval = setInterval(getFundingStatus, 1500);
-			});
-		}
-	}, [fundState]);
-
-	useEffect(() => {
-		if (data && fundState === fundingStages.form) {
-			if (data.fund && data.fund.fundingTx && data.fund.amountSummary) {
-				setFundingTx(data.fund.fundingTx);
-				setAmounts(data.fund.amountSummary);
-				gotoNextStage();
-			}
-		}
-	}, [data]);
-
 	const handleFundProject = () => {
 		gotoNextStage();
 	};
 
 	const handleCloseButton = () => {
-		setFundState(fundingStages.initial);
+		resetFundingFlow();
 		resetForm();
 	};
 
@@ -267,17 +136,8 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	};
 
 	const handleFund = async () => {
-		try {
-			const input = formatFundingInput(state);
-			await fundProject({ variables: { input } });
-			gotoNextStage();
-		} catch (_) {
-			toast({
-				title: 'Something went wrong',
-				description: 'Please refresh the page and try again',
-				status: 'error',
-			});
-		}
+		const input = formatFundingInput(state);
+		requestFunding(input);
 	};
 
 	const handleFundClick = () => {
@@ -288,13 +148,11 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		}, 500);
 	};
 
-	const gotoNextStage = () => {
-		const currentIndex = stageList.indexOf(fundState);
-		const nextState = stageList[currentIndex + 1];
-		setFundState(nextState);
-	};
-
 	const renderActivity = () => {
+		if (loading) {
+			return <Loader />;
+		}
+
 		switch (fundState) {
 			case fundingStages.loading:
 				return <Loader />;
