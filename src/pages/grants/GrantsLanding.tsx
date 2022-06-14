@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { Box, Text, Link, VStack, Skeleton, useDisclosure } from '@chakra-ui/react';
+import { Box, Text, Link, Skeleton } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
-import { ButtonComponent } from '../../components/ui';
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
 import { QUERY_GRANTS } from '../../graphql';
@@ -10,13 +9,12 @@ import BtcDevIcon from '../../assets/btc-dev.png';
 import BtcCultureIcon from '../../assets/btc-culture.png';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
-import { SubscribeModal } from '../../components/nav/SubscribeModal';
+import { Subscribe } from '../../components/nav/Subscribe';
 
 export const GrantsLanding = () => {
 	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
 	const { toast } = useNotification();
-	const {isOpen, onOpen, onClose} = useDisclosure();
 
 	const { loading, error, data } = useQuery(QUERY_GRANTS, {
 		variables: { where: { type: 'grant' }},
@@ -70,15 +68,13 @@ export const GrantsLanding = () => {
 						}
 					</Box>
 				</Box>
-				<Box display="flex" justifyContent="center">
-					<VStack mt={10} w={isMobile ? '90%' : '404px'}>
-						<Text fontWeight="bold" fontSize="2xl">Stay up to date with Geyser Grants</Text>
-						<Text>Get news on new and upcoming Grants before anyone else.</Text>
-						<ButtonComponent primary standard w="100%" onClick={onOpen}>Subscribe</ButtonComponent>
-					</VStack>
+
+				<Box display="flex" justifyContent="center" mt={10} px={2}>
+					<Subscribe style="inline" />
 				</Box>
-				<SubscribeModal {...{isOpen, onClose}} />
+
 			</Box>
+
 			<Footer/>
 
 		</>

@@ -1,19 +1,19 @@
 /* eslint-disable complexity */
 
 import React from 'react';
-import { Box, Text, HStack, Image, Avatar, VStack, Link, useDisclosure } from '@chakra-ui/react';
+import { Box, Text, HStack, Image, Avatar, VStack, Link } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
+import { ButtonComponent, InfoTooltip } from '../../components/ui';
 import { SatoshiIcon } from '../../components/icons';
 import { isMediumScreen, isMobileMode } from '../../utils';
 import { IProject } from '../../interfaces';
-import { SubscribeModal } from '../../components/nav/SubscribeModal';
+import { Subscribe } from '../../components/nav/Subscribe';
 import { RecipientButton } from './components/RecipientButton';
 
 export const Grants = ({ project }: { project: IProject }) => {
 	const isMedium = isMediumScreen();
 	const isMobile = isMobileMode();
-	const {isOpen, onOpen, onClose} = useDisclosure();
+
 	return (
 		<>
 			<Box py={isMedium ? 10 : 20} px={isMedium ? '0px' : '150px'}>
@@ -29,6 +29,14 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Box w={isMedium ? '90%' : '35%'} margin={isMedium ? '0 auto' : ''}>
 						<Text fontSize="lg" textAlign="justify" my={isMobile ? 2 : 0}>{project.description}</Text>
 						<Box boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} mt={6}>
+							<Box display="flex" justifyContent="end">
+								<InfoTooltip
+									title="Applications open July 1"
+									description="Please check back then!"
+									options={ { top: '-55px', left: '-90px' } }
+									width="134px"
+								/>
+							</Box>
 							<HStack justifyContent="space-around" alignItems="center" my={3}>
 
 								<Box>
@@ -62,22 +70,21 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Text fontSize="2xl" fontWeight="bold" mb={2}>A trusted board of hardcore Bitcoiners</Text>
 
 					<HStack>
-						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" shadow="md">
-							<Link isExternal _hover={{textDecoration: 'none'}} href={'https://twitter.com/bradmillsca'}>
-								<Box>
-									<Box display="flex" justifyContent="center" alignItems="center">
-										<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
-									</Box>
-									<Text mt={4} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
-								</Box>
-							</Link>
-						</Box>
-						<Box key="placeholder" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" shadow="md">
+						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
 							<Box>
 								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src="" bg="brand.primary" opacity={0.5} />
+									<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
 								</Box>
-								<Box mt={4} h="27px" w="96px" bg="brand.primary" opacity={0.5} borderRadius="md" />
+								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
+								<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>
+							</Box>
+						</Box>
+						<Box key="placeholder" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+							<Box>
+								<Box display="flex" justifyContent="center" alignItems="center">
+									<Avatar size="xl" src="" bg="brand.bgGrey3" />
+								</Box>
+								<Box mt={4} mb={1} h="43px" w="111px" bg="brand.bgGrey3" borderRadius="md" />
 							</Box>
 						</Box>
 					</HStack>
@@ -114,12 +121,10 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				</Box>
 
-				<VStack margin="0 auto" w={isMedium ? '90%' : '35%'} mt={20}>
-					<Text fontWeight="bold" fontSize="2xl">Stay up to date with Geyser Grants</Text>
-					<Text>Get news on new and upcoming Grants before anyone else.</Text>
-					<ButtonComponent primary standard w={isMedium ? '300px' : '400px'} onClick={onOpen}>Subscribe</ButtonComponent>
+				<VStack margin="0 auto" mt={20} px={4}>
+					<Subscribe style="inline" />
 				</VStack>
-				<SubscribeModal {...{isOpen, onClose}} />
+
 			</Box>
 			<Footer/>
 		</>
