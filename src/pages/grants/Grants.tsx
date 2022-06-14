@@ -31,10 +31,10 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Box boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} mt={6}>
 							<Box display="flex" justifyContent="end">
 								<InfoTooltip
-									title="Applications open July 1"
+									title="APPLICATIONS OPEN JULY 1"
 									description="Please check back then!"
-									options={ { top: '-55px', left: '-90px' } }
-									width="134px"
+									options={ { top: '-55px', left: '-100px' } }
+									width="155px"
 								/>
 							</Box>
 							<HStack justifyContent="space-around" alignItems="center" my={3}>
