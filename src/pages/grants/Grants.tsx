@@ -62,16 +62,24 @@ export const Grants = ({ project }: { project: IProject }) => {
 					<Text fontSize="2xl" fontWeight="bold" mb={2}>A trusted board of hardcore Bitcoiners</Text>
 
 					<HStack>
-						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" shadow="md">
+						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" shadow="md">
+							<Link isExternal _hover={{textDecoration: 'none'}} href={'https://twitter.com/bradmillsca'}>
+								<Box>
+									<Box display="flex" justifyContent="center" alignItems="center">
+										<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
+									</Box>
+									<Text mt={4} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
+								</Box>
+							</Link>
+						</Box>
+						<Box key="placeholder" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" shadow="md">
 							<Box>
 								<Box display="flex" justifyContent="center" alignItems="center">
-									<Link isExternal href={'https://twitter.com/bradmillsca'}>
-										<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
-									</Link>
+									<Avatar size="xl" src="" bg="brand.primary" opacity={0.5} />
 								</Box>
-								<Text mt={4} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
+								<Box mt={4} h="27px" w="96px" bg="brand.primary" opacity={0.5} borderRadius="md" />
 							</Box>
-						</Box>,
+						</Box>
 					</HStack>
 
 					<Text fontSize="lg" mt={4}>We are bringing together a board of hardcore Bitcoiners that have a history of supporting Bitcoin education and media creation. At the end of the Round they will be reviewing the applications and deciding how the funds should be distributed.</Text>
