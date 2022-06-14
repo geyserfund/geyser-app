@@ -110,12 +110,12 @@ export const NavBar = ({showBorder}: INavBar) => {
 							<>
 								<Show above="lg">
 									<HStack mt={1}>
-										<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : ''} borderRadius="md" marginRight="5px">
+										<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="md" marginRight="5px">
 											<ButtonComponent onClick={() => {
 												history.push('/home');
 											}}>Projects</ButtonComponent>
 										</Box>
-										<Box position="relative" border={history.location.pathname === '/grants' ? '3px solid #20ECC7' : ''} borderRadius="md">
+										<Box position="relative" border={history.location.pathname === '/grants' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="md">
 											<ButtonComponent onClick={() => {
 												history.push('/grants');
 											}}>Grants
