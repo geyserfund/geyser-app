@@ -66,6 +66,12 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	}, [fundingData]);
 
 	useEffect(() => {
+		if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
+			setFundingTxs([fundingTx, ...fundingTxs]);
+		}
+	}, [fundingTx]);
+
+	useEffect(() => {
 		if (error) {
 			toast({
 				title: 'Something went wrong',
