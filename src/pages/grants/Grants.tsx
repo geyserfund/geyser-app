@@ -21,7 +21,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center">
 
 					<Box w={isMedium ? '100%' : '45%'}>
-						<Text fontSize="xs" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: {project.name === 'bitcoin-education' ? 'JULY 1-31' : ''}</Text>
+						<Text fontSize="xl" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: {project.name === 'bitcoin-education' ? 'JULY 1-31' : ''}</Text>
 						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
 						<Image w={isMobile ? '350px' : '425px'} rounded="md" src={project.media[0] && project.media[0]} alt="grant" margin={isMedium ? '0 auto' : ''}/>
 					</Box>
