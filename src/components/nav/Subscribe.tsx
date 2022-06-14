@@ -136,7 +136,7 @@ export const Subscribe = ({isOpen, onClose, style}:ISubscribe) => {
 							<CheckIcon w={7} h={7}/>
 						</Box>
 					}
-					<Text textAlign="center" w={isMobile ? '90%' : '400px'}>
+					<Text textAlign={isMobile ? 'left' : 'center'} w={isMobile ? '100%' : '400px'}>
 						{success ? 'Thanks for signing up. We’ll be sharing more info about Geyser Grants soon. To join our community find us on Telegram and Twitter.' : 'Get news on new and upcoming Grants before anyone else.'}
 					</Text>
 					{!success

@@ -69,7 +69,7 @@ export const GrantsLanding = () => {
 					</Box>
 				</Box>
 
-				<Box display="flex" justifyContent="center" mt={10} px={2}>
+				<Box display="flex" justifyContent="center" mt={10} px={4}>
 					<Subscribe style="inline" />
 				</Box>
 

@@ -94,7 +94,7 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 				<Show below="lg">
 					<MenuItem className={classes.menuItem}>
 						<Link href={GrantsUrl}>
-					Grants
+					Grants (NEW)
 						</Link>
 					</MenuItem>
 				</Show>
