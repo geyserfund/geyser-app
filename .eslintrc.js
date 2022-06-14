@@ -25,6 +25,7 @@ module.exports = {
 		'array-callback-return': 0,
 		'capitalized-comments:': 0,
 		'no-unused-vars': 'warn',
+		'capitalized-comments': 0,
 		'no-restricted-syntax': [
 			'error',
 			{
