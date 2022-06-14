@@ -33,7 +33,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								<InfoTooltip
 									title="APPLICATIONS OPEN JULY 1"
 									description="Please check back then!"
-									options={ { top: '-55px', left: '-100px' } }
+									options={ { top: '-55px', left: '-110px' } }
 									width="155px"
 								/>
 							</Box>
