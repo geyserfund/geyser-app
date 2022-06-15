@@ -1,5 +1,3 @@
-/* eslint-disable capitalized-comments */
-
 import React, { useEffect, useState } from 'react';
 import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
