@@ -71,8 +71,21 @@ export const Home = () => {
 	const { loading, error, data } = useQuery(QUERY_PROJECTS);
 	const { loading: summaryLoading, error: summaryError, data: summaryData } = useQuery(ALL_PROJECTS_SUMMARY);
 
-	const [banner, setBanner] = useState(true);
+	/*
+	Banner logic
+	*/
+	const hideBanner = localStorage.getItem('hideBanner');
+	const showBanner = !(hideBanner && hideBanner === 'true');
+	const [banner, setBanner] = useState(showBanner);
 
+	const hideBannerCached = () => {
+		localStorage.setItem('hideBanner', 'true');
+		setBanner(false);
+	};
+
+	/*
+	Error handling logic
+	*/
 	useEffect(() => {
 		if (error) {
 			toast({
@@ -120,7 +133,7 @@ export const Home = () => {
 			>
 				{banner
 && <Box position="relative" marginTop={isMobile ? '15px' : '30px'}>
-	<CloseIcon position="absolute" top="15px" right="15px" cursor="pointer" color="white" onClick={() => setBanner(false)}/>
+	<CloseIcon position="absolute" top="15px" right="15px" cursor="pointer" color="white" onClick={() => hideBannerCached() }/>
 	<Image src={GrantsBanner} alt="geyser grants" borderRadius="sm"/>
 </Box>
 				}
