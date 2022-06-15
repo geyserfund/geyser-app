@@ -14,7 +14,9 @@ import { isMediumScreen, useNotification } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
 import { commaFormatted } from '../../../utils/helperFunctions';
-import { IProject } from '../../../interfaces';
+import { IProject, IFundingInput } from '../../../interfaces';
+import { useFundingFlow } from '../../../hooks';
+import { fundingStages } from '../../../constants';
 
 interface ContributeButtonProps {
 active: boolean,
@@ -23,7 +25,6 @@ project: IProject
 }
 
 export const ContributeButton = ({active, title, project}:ContributeButtonProps) => {
-	const [step, setStep] = useState(0);
 	const [name, setName] = useState('');
 	const [contact, setContact] = useState('');
 	const [amount, setAmount] = useState(0);
@@ -32,6 +33,8 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 	const isMedium = isMediumScreen();
 	const initialRef = React.useRef(null);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow();
 
 	// copy link
 	const shareProjectWithfriends = () => {
@@ -47,6 +50,15 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 			}, 2000);
 		}
 	}, [copy]);
+
+	const handleFund = async () => {
+		const input: IFundingInput = {
+			projectId: Number(project.id),
+			anonymous: true,
+			donationInput: { donationAmount: amount },
+		};
+		requestFunding(input);
+	};
 
 	const handleConfirm = async () => {
 		try {
@@ -65,7 +77,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 				},
 			}];
 			await createCreatorRecord({records});
-			setStep(1);
+			gotoNextStage();
 		} catch (_) {
 			toast({
 				title: 'Something went wrong',
@@ -81,18 +93,8 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 		setName('');
 		setContact('');
 		setAmount(0);
-		setStep(0);
 		onClose();
-	};
-
-	const renderModal = () => {
-		if (step === 0) {
-			return renderFormModal();
-		}
-
-		if (step === 1) {
-			return renderSuccessModal();
-		}
+		resetFundingFlow();
 	};
 
 	const renderFormModal = () => (
@@ -199,21 +201,59 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 		</Modal>
 	);
 
-	return (
+	const renderPaymentModal = () => (
+		<><Modal onClose={close} isOpen={isOpen} isCentered initialFocusRef={initialRef}>
+			<ModalOverlay />
+			<ModalContent>
+				<ModalCloseButton onClick={close} />
+				<ModalBody>
+					<h2>Implement Me!</h2>
+				</ModalBody>
+				<ModalFooter>
+					<ButtonComponent
+						primary width="100%"
+						onClick={gotoNextStage}
+						disabled={!amount || amount <= 0}
+					>
+							Confirm (mock - test only!)
+					</ButtonComponent>
+				</ModalFooter>
+			</ModalContent>
+		</Modal></>
+	);
 
+	const renderModal = () => {
+		console.log('FUND STATE', fundState);
+
+		switch (fundState) {
+			case fundingStages.initial:
+				return null;
+			case fundingStages.form:
+				return renderFormModal();
+			case fundingStages.started:
+				return renderPaymentModal();
+			case fundingStages.completed:
+				return renderSuccessModal();
+			default:
+				return null;
+		}
+	};
+
+	return (
 		<>
 			<ButtonComponent
-				disabled={!active}
+				disabled={active}
 				primary
 				standard
 				w={isMedium ? '300px' : '400px'}
 				onClick={() => {
 					onOpen();
+					gotoNextStage();
 				}}
 			>
 				{title}
 			</ButtonComponent>
-			{ renderModal() }
+			{renderModal()}
 		</>
 	);
 };
