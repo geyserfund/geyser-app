@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Text, HStack, Image, Avatar, VStack, Link } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
@@ -10,8 +10,27 @@ import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
 import { RecipientButton } from './components/RecipientButton';
 import { ContributeButton } from './components/ContributeButton';
+import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
 
 export const Grants = ({ project }: { project: IProject }) => {
+	const [applicants, setApplicants] = useState(['loading']);
+
+	const getGrantApplicants = async () => {
+		fetch('https://api.airtable.com/v0/appyM7XlNIWVypuP5/tbleyJa9ZMqPptvED?fields%5B%5D=Grant&fields%5B%5D=Notes&filterByFormula=FIND(%22Applicant%22%2C+Notes)', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
+				'Content-Type': 'application/json',
+			},
+		}).then(response => response.json()).then(data => {
+			setApplicants(data.records.filter((applicant: any) => applicant.fields.Grant === project.title));
+		});
+	};
+
+	useEffect(() => {
+		getGrantApplicants();
+	}, []);
+
 	const isMedium = isMediumScreen();
 	const isMobile = isMobileMode();
 
@@ -55,7 +74,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 
 								<Box>
-									<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.grantees ? project.grantees.length : 0}</Text>
+									<Text fontWeight="bold" textAlign="center" fontSize="lg">{applicants && applicants[0] === 'loading' ? '...' : applicants.length}</Text>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">APPLICANTS</Text>
 								</Box>
 
