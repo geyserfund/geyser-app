@@ -53,11 +53,14 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 			setSubmitting(true);
 			const records = [{
 				fields: {
-					Name: name,
-					Contact: contact,
+					Title: name,
+					fldGla9o00ogzrquw: contact,
 					Type: [
-						'Grant Contributor',
+						'Subscriber',
 					],
+					fldOWbMeUVrRjXrYu: ['Geyser Grants'],
+					Grant: project.title,
+					fldNsoC4hNwXXYBUZ: amount,
 				},
 			}];
 			await createCreatorRecord({records});

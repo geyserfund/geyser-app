@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Text, Link, Skeleton, Image } from '@chakra-ui/react';
+import { Box, Text, Skeleton, Image } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
@@ -72,7 +72,7 @@ export const GrantsLanding = () => {
 				</Box>
 
 				<Box display="flex" justifyContent="center" mt={10} px={4}>
-					<Subscribe style="inline" />
+					<Subscribe style="inline" interest="grants" />
 				</Box>
 
 			</Box>

@@ -61,7 +61,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={false} title="Apply"/>
+								<RecipientButton active={false} title="Apply" grant={project.title}/>
 							</Box>
 						</Box>
 					</Box>
@@ -123,7 +123,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 				</Box>
 
 				<VStack margin="0 auto" mt={20} px={4}>
-					<Subscribe style="inline" />
+					<Subscribe style="inline" interest="grants" />
 				</VStack>
 
 			</Box>

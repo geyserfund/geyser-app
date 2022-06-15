@@ -16,9 +16,10 @@ import BtcEduIcon from '../../../assets/btc-edu.png';
 interface RecipientButtonProps {
 active: boolean,
 title: string,
+grant: string,
 }
 
-export const RecipientButton = ({active, title}:RecipientButtonProps) => {
+export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => {
 	const isMobile = isMobileMode();
 	const [step, setStep] = useState(0);
 	const [grantee, setGrantee] = useState('');
@@ -51,13 +52,15 @@ export const RecipientButton = ({active, title}:RecipientButtonProps) => {
 			setSubmitting(true);
 			const records = [{
 				fields: {
-					Name: grantee,
-					Description: description,
-					Link: url,
-					Contact: contact,
+					Title: grantee,
+					Project: description,
+					fldAHz4l5w1Nj1n80: url,
+					fldGla9o00ogzrquw: contact,
 					Type: [
-						'Grant Applicant',
+						'Subscriber',
 					],
+					fldOWbMeUVrRjXrYu: ['Geyser Grants'],
+					Grant: grant,
 				},
 			}];
 			await createCreatorRecord({records});

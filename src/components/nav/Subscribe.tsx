@@ -26,9 +26,10 @@ import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
         isOpen?: boolean;
         onClose?: any
 				style: string
+				interest?: string
     }
 
-export const Subscribe = ({isOpen, onClose, style}:ISubscribe) => {
+export const Subscribe = ({isOpen, onClose, style, interest}:ISubscribe) => {
 	const { toast } = useNotification();
 	const isMobile = isMobileMode();
 	const [submitting, setSubmitting] = useState(false);
@@ -54,14 +55,28 @@ export const Subscribe = ({isOpen, onClose, style}:ISubscribe) => {
 
 		try {
 			setSubmitting(true);
-			const records = [{
-				fields: {
-					Email: email,
-					Type: [
-						'Subscriber',
-					],
-				},
-			}];
+			let records;
+			if (interest === 'grants') {
+				records = [{
+					fields: {
+						Email: email,
+						Type: [
+							'Subscriber',
+						],
+						fldOWbMeUVrRjXrYu: ['Geyser Grants'],
+					},
+				}];
+			} else {
+				records = [{
+					fields: {
+						Email: email,
+						Type: [
+							'Subscriber',
+						],
+					},
+				}];
+			}
+
 			await createCreatorRecord({records});
 
 			setSubmitting(false);
@@ -143,7 +158,7 @@ export const Subscribe = ({isOpen, onClose, style}:ISubscribe) => {
 					{!success
 						&& <>
 							<HStack>
-								<Input type="email" isRequired={true} placeholder="satoshi@geyser.fund" value={email} onChange={handleEmail} />
+								<Input focusBorderColor="#20ECC7" type="email" isRequired={true} placeholder="satoshi@geyser.fund" value={email} onChange={handleEmail} />
 								<ButtonComponent primary size="md" disabled={!email} onClick={handleConfirm} isLoading={submitting}>Subscribe</ButtonComponent>
 							</HStack>
 							{error && <Text fontSize={'12px'}>{error}</Text>}
