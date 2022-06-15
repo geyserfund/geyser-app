@@ -13,6 +13,7 @@ import {
 	VStack,
 	Input,
 	Box,
+	Icon,
 } from '@chakra-ui/react';
 import { ButtonComponent, TextBox } from '../ui';
 import { createCreatorRecord } from '../../api';
@@ -137,7 +138,7 @@ export const Subscribe = ({isOpen, onClose, style}:ISubscribe) => {
 						</Box>
 					}
 					<Text textAlign={isMobile ? 'left' : 'center'} w={isMobile ? '100%' : '400px'}>
-						{success ? 'Thanks for signing up. We’ll be sharing more info about Geyser Grants soon. To join our community find us on Telegram and Twitter.' : 'Get news on new and upcoming Grants before anyone else.'}
+						{success ? 'Thanks for signing up. We’ll be sharing more info about Geyser Grants soon.' : 'Get news on recent and upcoming Grants by joining our newsletter or joining our community on Telegram.'}
 					</Text>
 					{!success
 						&& <>
@@ -148,6 +149,15 @@ export const Subscribe = ({isOpen, onClose, style}:ISubscribe) => {
 							{error && <Text fontSize={'12px'}>{error}</Text>}
 						</>
 					}
+					<Link href={GeyserTelegramUrl} _hover={{textDecoration: 'none'}} isExternal bg="black" borderRadius="md" py={2} px={3} color="white" fontWeight="bold" display="flex" justifyContent="center" alignItems="center">
+						<Icon
+							boxSize={8}
+							aria-label="telegram"
+							as={FaTelegramPlane}
+							mr={2}
+						/>
+					Join us on Telegram
+					</Link>
 				</VStack>
 			}
 		</>
