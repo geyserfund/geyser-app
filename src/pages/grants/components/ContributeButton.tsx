@@ -61,6 +61,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 					fldOWbMeUVrRjXrYu: ['Geyser Grants'],
 					Grant: project.title,
 					fldNsoC4hNwXXYBUZ: amount,
+					Notes: 'Contributor',
 				},
 			}];
 			await createCreatorRecord({records});

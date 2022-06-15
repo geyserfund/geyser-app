@@ -61,6 +61,7 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 					],
 					fldOWbMeUVrRjXrYu: ['Geyser Grants'],
 					Grant: grant,
+					Notes: 'Applicant',
 				},
 			}];
 			await createCreatorRecord({records});
