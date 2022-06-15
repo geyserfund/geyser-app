@@ -3,12 +3,13 @@
 import React from 'react';
 import { Box, Text, HStack, Image, Avatar, VStack, Link } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
-import { ButtonComponent, InfoTooltip } from '../../components/ui';
+import { InfoTooltip } from '../../components/ui';
 import { SatoshiIcon } from '../../components/icons';
 import { isMediumScreen, isMobileMode } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
 import { RecipientButton } from './components/RecipientButton';
+import { ContributeButton } from './components/ContributeButton';
 
 export const Grants = ({ project }: { project: IProject }) => {
 	const isMedium = isMediumScreen();
@@ -115,7 +116,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 						</HStack>
 						<Box display="flex" justifyContent="center">
-							<ButtonComponent primary standard w={isMedium ? '300px' : '400px'}>Contribute</ButtonComponent>
+							<ContributeButton active={false} title="Contribute" project={project}/>
 						</Box>
 					</Box>
 
