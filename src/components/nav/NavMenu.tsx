@@ -1,6 +1,6 @@
 import { IconButton } from '@chakra-ui/button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { Link, Show } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 // Import { Box } from '@chakra-ui/layout';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
@@ -9,6 +9,7 @@ import React from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 // Import { FaMoon, FaSun } from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
+import { isMobileMode } from '../../utils';
 import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles, HomeUrl, LaunchUrl, GrantsUrl } from '../../constants';
 import { IUser } from '../../interfaces';
 
@@ -64,6 +65,7 @@ const useStyles = createUseStyles({
 });
 
 export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined }) => {
+	const isMobile = isMobileMode();
 	const classes = useStyles();
 	// Const { colorMode, toggleColorMode } = useColorMode();
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
@@ -84,27 +86,25 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 				sx={styles.buttonCommon}
 			/>
 			<MenuList width="150px" className={classes.menuList}>
-				<Show below="lg">
+				{isMobile
+				&& <>
 					<MenuItem className={classes.menuItem}>
 						<Link href={HomeUrl}>
-					Projects
+									Projects
 						</Link>
 					</MenuItem>
-				</Show>
-				<Show below="lg">
 					<MenuItem className={classes.menuItem}>
 						<Link href={GrantsUrl}>
-					Grants (NEW)
+									Grants (NEW)
 						</Link>
 					</MenuItem>
-				</Show>
-				<Show below="md">
 					<MenuItem className={classes.menuItem} bg="brand.primary">
 						<Link href={LaunchUrl}>
-					Launch
+									Launch
 						</Link>
 					</MenuItem>
-				</Show>
+				</>
+				}
 				<MenuItem className={classes.menuItem}>
 					<Link href={AboutUsUrl} isExternal>
 						About
