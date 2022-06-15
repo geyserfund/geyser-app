@@ -184,7 +184,7 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 						<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
 							<CheckIcon w={10} h={10}/>
 						</Box>
-						<Text py={5} textAlign="center"><b>{grantee}</b> has applied to receive this <b>Geyser Grant</b>.</Text>
+						<Text py={5} textAlign="center"><b>{grantee}</b> has applied to receive the <b>{grant}</b> Geyser Grant.</Text>
 					</VStack>
 					<ButtonComponent
 						standard
