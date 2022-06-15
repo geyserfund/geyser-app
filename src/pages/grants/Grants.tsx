@@ -80,7 +80,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={false} title="Apply" grant={project.title}/>
+								<RecipientButton active={project.active} title="Apply" grant={project.title}/>
 							</Box>
 						</Box>
 					</Box>
@@ -135,7 +135,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 						</HStack>
 						<Box display="flex" justifyContent="center">
-							<ContributeButton active={false} title="Contribute" project={project}/>
+							<ContributeButton active={project.active} title="Contribute" project={project}/>
 						</Box>
 					</Box>
 
