@@ -135,7 +135,7 @@ export const RecipientButton = ({active, title}:RecipientButtonProps) => {
 								value={url}
 								isRequired={true}
 							/>
-							<Text mt={5} fontWeight="bold">Your email/contact info:</Text>
+							<Text mt={5} fontWeight="bold">Your email / contact info:</Text>
 							<Input
 								name="contact"
 								placeholder="anita@geyser.fund"
@@ -164,7 +164,7 @@ export const RecipientButton = ({active, title}:RecipientButtonProps) => {
 		<Modal onClose={close} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader textAlign="center">Success!</ModalHeader>
+				<ModalHeader fontWeight="bold" fontSize="2xl" textAlign="center">Success!</ModalHeader>
 				<ModalCloseButton onClick={close} />
 				<ModalBody>
 					<VStack

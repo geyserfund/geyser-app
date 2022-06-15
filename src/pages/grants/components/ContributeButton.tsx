@@ -168,12 +168,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 		<Modal onClose={close} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<HStack p={6}>
-					<Image src={project.media[0]} alt="icon" rounded="lg" w="100px" mr={1}/>
-					<Box>
-						<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>Successful contribution!</ModalHeader>
-					</Box>
-				</HStack>
+				<ModalHeader fontWeight="bold" fontSize="2xl" textAlign="center">Successful contribution!</ModalHeader>
 				<ModalCloseButton onClick={close} />
 				<ModalBody>
 					<VStack mb={6}>
