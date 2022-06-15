@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Text, Link, Skeleton } from '@chakra-ui/react';
+import { Box, Text, Link, Skeleton, Image } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
@@ -7,6 +7,7 @@ import { QUERY_GRANTS } from '../../graphql';
 import { ComingSoon } from './components/ComingSoon';
 import BtcDevIcon from '../../assets/btc-dev.png';
 import BtcCultureIcon from '../../assets/btc-culture.png';
+import GrantsBanner from '../../assets/grants-banner.png';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
@@ -34,10 +35,11 @@ export const GrantsLanding = () => {
 
 	return (
 		<>
+			<Image src={GrantsBanner} alt="geyser grants" w="100vw"/>
 			<Box pb={20} pt={isMobile ? 5 : 10}>
-				<Box width={isMobile ? '90%' : isMedium ? '75%' : '60%'} margin="0 auto" my={5}>
-					<Text fontSize="4xl" fontWeight="bold">Geyser Grants</Text>
-					<Text fontSize="lg">It’s not always easy for individuals and institutions to donate to single Geyser campaigns. So, with Grants anyone can now contribute to a particular cause without having to look in detail into every specific project and verify the creator’s credentials. The Geyser Fund Board will look at and beyond Geyser campaigns to select the most impactful projects that support these causes. Read more <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link>.</Text>
+				<Box width={isMobile ? '90%' : isMedium ? '75%' : '35%'} margin="0 auto" my={5}>
+					<Text fontSize="4xl" fontWeight="bold" textAlign="center">Apply to Geyser Grants</Text>
+					<Text fontSize="lg" textAlign="center">Apply to grants that can help in your Bitcoin initiatives or contribute to support the growth of the Bitcoin ecosystem, one sat at a time.</Text>
 				</Box>
 
 				<Box display="flex" justifyContent="center" alignItems="center" px={isMobile ? 0 : 20}>

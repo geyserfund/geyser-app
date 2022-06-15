@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
 import {
 	SatoshiAmount } from '../../components/ui';
 import { Footer, SwipeLiveProject,
@@ -15,6 +16,7 @@ import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
 import { SatoshiIconNew } from '../../components/icons';
 import Dorian from '../../assets/dorian.png';
+import GrantsBanner from '../../assets/grants-banner.png';
 
 type RuleNames = string
 
@@ -69,6 +71,8 @@ export const Home = () => {
 	const { loading, error, data } = useQuery(QUERY_PROJECTS);
 	const { loading: summaryLoading, error: summaryError, data: summaryData } = useQuery(ALL_PROJECTS_SUMMARY);
 
+	const [banner, setBanner] = useState(true);
+
 	useEffect(() => {
 		if (error) {
 			toast({
@@ -114,6 +118,12 @@ export const Home = () => {
 				flexDirection="column"
 				alignItems="flex-start"
 			>
+				{banner
+&& <Box position="relative" marginTop={isMobile ? '15px' : '30px'}>
+	<CloseIcon position="absolute" top="15px" right="15px" cursor="pointer" color="white" onClick={() => setBanner(false)}/>
+	<Image src={GrantsBanner} alt="geyser grants" borderRadius="sm"/>
+</Box>
+				}
 				<Box
 					display="flex"
 					flexDirection={isMobile ? 'column-reverse' : 'row'}
