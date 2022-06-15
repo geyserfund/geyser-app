@@ -5,6 +5,7 @@ import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
 	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Image, HStack, InputGroup, InputLeftElement, Link,
 } from '@chakra-ui/react';
+import QRCode from 'react-qr-code';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { BiCopyAlt } from 'react-icons/bi';
 import { CheckIcon } from '@chakra-ui/icons';
@@ -17,6 +18,8 @@ import { commaFormatted } from '../../../utils/helperFunctions';
 import { IProject, IFundingInput } from '../../../interfaces';
 import { useFundingFlow } from '../../../hooks';
 import { fundingStages } from '../../../constants';
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
+import { useBtcContext } from '../../../context/btc';
 
 interface ContributeButtonProps {
 active: boolean,
@@ -27,22 +30,22 @@ project: IProject
 export const ContributeButton = ({active, title, project}:ContributeButtonProps) => {
 	const [name, setName] = useState('');
 	const [contact, setContact] = useState('');
-	const [amount, setAmount] = useState(0);
+	const [contributeAmount, setContributeAmount] = useState(0);
 	const [submitting, setSubmitting] = useState(false);
+	const [message, setMessage] = useState(false);
+	const [copy, setCopy] = useState(false);
 	const { toast } = useNotification();
 	const isMedium = isMediumScreen();
 	const initialRef = React.useRef(null);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {btcRate} = useBtcContext();
+	const {fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow();
 
-	const {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow();
-
-	// copy link
 	const shareProjectWithfriends = () => {
 		navigator.clipboard.writeText(window.location.href);
 		setCopy(true);
 	};
 
-	const [copy, setCopy] = useState(false);
 	useEffect(() => {
 		if (copy) {
 			setTimeout(() => {
@@ -51,50 +54,77 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 		}
 	}, [copy]);
 
+	const { address } = fundingTx;
+
+	const getOnchainAddress = () => {
+		const bitcoins = (parseInt((contributeAmount / btcRate).toFixed(0))) / 100000000;
+		return `bitcoin:${address}?amount=${bitcoins}`;
+	};
+
+	const handleCopyOnchain = () => {
+		navigator.clipboard.writeText(getOnchainAddress());
+		setCopy(true);
+	};
+
 	const handleFund = async () => {
 		const input: IFundingInput = {
 			projectId: Number(project.id),
 			anonymous: true,
-			donationInput: { donationAmount: amount },
+			donationInput: { donationAmount: parseInt((contributeAmount / btcRate).toFixed(0)) },
 		};
 		requestFunding(input);
 	};
 
 	const handleConfirm = async () => {
-		try {
-			setSubmitting(true);
-			const records = [{
-				fields: {
-					Title: name,
-					fldGla9o00ogzrquw: contact,
-					Type: [
-						'Subscriber',
-					],
-					fldOWbMeUVrRjXrYu: ['Geyser Grants'],
-					Grant: project.title,
-					fldNsoC4hNwXXYBUZ: amount,
-					Notes: 'Contributor',
-				},
-			}];
-			await createCreatorRecord({records});
-			gotoNextStage();
-		} catch (_) {
+		if ((parseInt((contributeAmount / btcRate).toFixed(0))) > 15000000) {
+			setMessage(true);
+		} else if (contributeAmount === 0) {
 			toast({
-				title: 'Something went wrong',
-				description: 'Please try again',
+				title: 'Payment below 1 sats is not allowed at the moment.',
+				description: 'Please update the amount.',
 				status: 'error',
 			});
-		}
+		} else {
+			try {
+				setSubmitting(true);
 
-		setSubmitting(false);
+				if (name || contact) {
+					const records = [{
+						fields: {
+							Title: name,
+							fldGla9o00ogzrquw: contact,
+							Type: [
+								'Subscriber',
+							],
+							fldOWbMeUVrRjXrYu: ['Geyser Grants'],
+							Grant: project.title,
+							fldNsoC4hNwXXYBUZ: contributeAmount,
+							Notes: 'Contributor',
+						},
+					}];
+					await createCreatorRecord({records});
+				}
+
+				handleFund();
+			} catch (_) {
+				toast({
+					title: 'Something went wrong',
+					description: 'Please try again',
+					status: 'error',
+				});
+				setSubmitting(false);
+			}
+		}
 	};
 
 	const close = () => {
 		setName('');
 		setContact('');
-		setAmount(0);
-		onClose();
+		setContributeAmount(0);
+		setSubmitting(false);
+		setMessage(false);
 		resetFundingFlow();
+		onClose();
 	};
 
 	const renderFormModal = () => (
@@ -130,8 +160,14 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 							/>
 							<Text mt={5} fontWeight="bold">Amount</Text>
 							<HStack>
-								<ButtonComponent onClick={() => setAmount(100)}>$100</ButtonComponent>
-								<ButtonComponent onClick={() => setAmount(1000)}>$1000</ButtonComponent>
+								<ButtonComponent onClick={() => {
+									setMessage(false);
+									setContributeAmount(100);
+								}}>$100</ButtonComponent>
+								<ButtonComponent onClick={() => {
+									setMessage(false);
+									setContributeAmount(1000);
+								}}>$1000</ButtonComponent>
 								<InputGroup>
 									<InputLeftElement
 										pointerEvents="none"
@@ -147,13 +183,22 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 										focusBorderColor="#20ECC7"
 										fontWeight="bold"
 										onChange={event => {
-											setAmount(parseInt(event.target.value));
+											if (message) {
+												setMessage(false);
+											}
+
+											if (parseInt(event.target.value, 10) > 0) {
+												setContributeAmount(parseInt(event.target.value, 10));
+											} else {
+												setContributeAmount(0);
+											}
 										}}
-										value={amount}
+										value={contributeAmount <= 0 ? '' : contributeAmount}
 										isRequired={true}
 									/>
 								</InputGroup>
 							</HStack>
+							{message && <Text textAlign="justify" mt={5}>Payment above 15,000,000 sats is not allowed at the moment. Please update the amount, or contact us for donating a higher amount</Text>}
 						</>
 						}
 					</ModalBody>
@@ -162,8 +207,43 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 						&& <ButtonComponent
 							primary width="100%"
 							onClick={handleConfirm}
-							disabled={!amount || amount <= 0}
+							disabled={!contributeAmount || contributeAmount <= 0 || submitting || message}
 						>Confirm</ButtonComponent>}
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</>
+	);
+
+	const renderPaymentModal = () => (
+		<>
+			<Modal onClose={close} isOpen={isOpen} isCentered>
+				<ModalOverlay/>
+				<ModalContent>
+					<HStack p={6}>
+						<Image src={project.media[0]} alt="icon" rounded="lg" w="100px" mr={1}/>
+						<Box>
+							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>Contribute</ModalHeader>
+							<Text textAlign="justify">Contribute to this cause to support the Bitcoin ecosystem. Geyser will custody the funds until the recipients are established and then distribute the funds to the best applicants. Donations are non-refundable and not tax deductible.</Text>
+						</Box>
+					</HStack>
+					<ModalCloseButton onClick={close} />
+					<ModalBody>
+						<Text textAlign="center" fontWeight="bold" fontSize="md">Contribute using Bitcoin on-chain</Text>
+						<Box display="flex" justifyContent="center" alignItems="center" pt="15px" cursor="pointer" w="186px" h="186px" margin="0 auto">
+							<QRCode size={186} value={getOnchainAddress()} onClick={handleCopyOnchain}/>
+						</Box>
+						<Text paddingTop="15px" textAlign="center" color="brand.primary" fontWeight="bold">Waiting for payment...</Text>
+					</ModalBody>
+					<ModalFooter>
+						<ButtonComponent
+							isFullWidth
+							primary={copy}
+							onClick={handleCopyOnchain}
+							leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
+						>
+							{!copy ? 'Copy Address' : 'Address Copied'}
+						</ButtonComponent>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
@@ -181,8 +261,8 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 						<Box bg="brand.primary" borderRadius="full" width="75px" height="75px" display="flex" justifyContent="center" alignItems="center">
 							<CheckIcon w={10} h={10}/>
 						</Box>
-						<Text pt={5}>You contributed <b>{`$${commaFormatted(amount)}`}</b> to <b>{project.title}.</b></Text>
-						<Text>Check it out on the <Link isExternal href="" textDecoration="underline"><b>block explorer</b></Link>.</Text>
+						<Text pt={5}>You contributed <b>{`$${commaFormatted(contributeAmount)}`}</b> to <b>{project.title}.</b></Text>
+						<Text>Check it out on the <Link isExternal href={`https://mempool.space/address/${address}`} textDecoration="underline"><b>block explorer</b></Link>.</Text>
 					</VStack>
 					<ButtonComponent
 						standard
@@ -199,27 +279,6 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 				</ModalFooter>
 			</ModalContent>
 		</Modal>
-	);
-
-	const renderPaymentModal = () => (
-		<><Modal onClose={close} isOpen={isOpen} isCentered initialFocusRef={initialRef}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalCloseButton onClick={close} />
-				<ModalBody>
-					<h2>Implement Me!</h2>
-				</ModalBody>
-				<ModalFooter>
-					<ButtonComponent
-						primary width="100%"
-						onClick={gotoNextStage}
-						disabled={!amount || amount <= 0}
-					>
-							Confirm (mock - test only!)
-					</ButtonComponent>
-				</ModalFooter>
-			</ModalContent>
-		</Modal></>
 	);
 
 	const renderModal = () => {
@@ -242,7 +301,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 	return (
 		<>
 			<ButtonComponent
-				disabled={active}
+				disabled={!active}
 				primary
 				standard
 				w={isMedium ? '300px' : '400px'}
