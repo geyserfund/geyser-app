@@ -39,7 +39,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 	const initialRef = React.useRef(null);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const {btcRate} = useBtcContext();
-	const {fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow();
+	const {fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow({ hasWebLN: true });
 
 	const shareProjectWithfriends = () => {
 		navigator.clipboard.writeText(window.location.href);
