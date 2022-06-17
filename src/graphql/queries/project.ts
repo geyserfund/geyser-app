@@ -63,6 +63,9 @@ query GetProject($where: UniqueProjectQueryInput!) {
       }
       confirmed
     }
+    grantees {
+      id
+    }
   }
 }
 `;
@@ -103,6 +106,25 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
       }
     }
   }
+`;
+
+export const QUERY_GRANTS = gql`
+query projects($where: ProjectQueryInput) {
+  projects(where: $where) {
+    projects {
+      id
+      title
+      name
+      description
+      balance
+      fundingGoal
+      createdAt
+      expiresAt
+      active
+      media
+    }
+  }
+}
 `;
 
 export const QUERY_PROJECTS = gql`

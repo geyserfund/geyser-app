@@ -12,7 +12,7 @@ import React from 'react';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
 import { AnalyticsUrl, GeyserLignteningNodeUrl, GeyserPrivacyUrl, GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
 import { isMobileMode } from '../../utils';
-import { SubscribeModal } from '../nav/SubscribeModal';
+import { Subscribe } from '../nav/Subscribe';
 import { ButtonComponent, Linkin } from '../ui';
 
 interface IFooter {
@@ -93,7 +93,7 @@ export const Footer = ({wrapperClassName}: IFooter) => {
 			{/* <Text textAlign="center" color="grey">
 				Made with ❤️ from around the 🌍 by <Link href="https://twitter.com/metamick14" isExternal>@metamick14</Link>, <Link href="https://twitter.com/steliosats" isExternal>@steliosats</Link> & <Link href="https://twitter.com/sajald77" isExternal>@sajald77</Link>
 		</Text> */}
-			<SubscribeModal {...{isOpen, onClose}} />
+			<Subscribe {...{isOpen, onClose}} style="button-modal" />
 
 		</VStack>
 

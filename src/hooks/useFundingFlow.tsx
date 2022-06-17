@@ -43,7 +43,18 @@ const initialFunding = {
 
 let fundInterval: any;
 
-export const useFundingFlow = () => {
+interface IFundingFlowOptions {
+	hasBolt11?: boolean;
+	hasWebLN?: boolean;
+	hasOnChain?: boolean;
+}
+
+export const useFundingFlow = (options?: IFundingFlowOptions) => {
+	const { hasBolt11 = true, hasWebLN = true } = options || {
+		hasBolt11: true,
+		hasWebLN: true,
+		hasOnChain: true,
+	};
 	const { user } = useContext(AuthContext);
 	const { toast } = useNotification();
 
@@ -57,6 +68,58 @@ export const useFundingFlow = () => {
 			fetchPolicy: 'network-only',
 		},
 	);
+
+	const startWebLNFlow = async () => {
+		let succeeded = false;
+
+		const requestWebLNPayment = async () => {
+			const { webln }: { webln: WebLNProvider } = window as any;
+			if (!webln) {
+				throw new Error('no provider');
+			}
+
+			await webln.enable();
+
+			const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
+			const paymentHash = await sha256(preimage);
+			return paymentHash;
+		};
+
+		return requestWebLNPayment().then(paymentHash => {
+			// Check preimage
+			if (paymentHash === fundingTx.invoiceId) {
+				gotoNextStage();
+				succeeded = true;
+				return succeeded;
+			}
+
+			throw new Error('wrong preimage');
+		}).catch(error => {
+			if (error.message === 'no provider') {
+				//
+			} else if (error.message === 'wrong preimage') {
+				toast({
+					title: 'Wrong payment preimage',
+					description: 'The payment preimage returned by the WebLN provider did not match the payment hash.',
+					status: 'error',
+				});
+			} else if (error.constructor === RejectionError || error.message === 'User rejected') {
+				toast({
+					title: 'Requested operation declined',
+					description: 'Please use the invoice instead.',
+					status: 'info',
+				});
+			} else {
+				toast({
+					title: 'Oops! Something went wrong with WebLN.',
+					description: 'Please use the invoice instead.',
+					status: 'error',
+				});
+			}
+
+			return succeeded;
+		});
+	};
 
 	const [fundProject, {
 		data, loading: fundLoading,
@@ -78,52 +141,15 @@ export const useFundingFlow = () => {
 		}
 
 		if (fundState === fundingStages.started) {
-			const requestWebLNPayment = async () => {
-				console.log('Check WebLN');
-
-				const { webln }: { webln: WebLNProvider } = window as any;
-				if (!webln) {
-					throw new Error('no provider');
-				}
-
-				await webln.enable();
-				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
-				const paymentHash = await sha256(preimage);
-				return paymentHash;
-			};
-
-			requestWebLNPayment().then(paymentHash => {
-				// Check preimage
-				if (paymentHash === fundingTx.invoiceId) {
-					gotoNextStage();
-				} else {
-					throw new Error('wrong preimage');
-				}
-			}).catch(error => {
-				if (error.message === 'no provider') {
-					//
-				} else if (error.message === 'wrong preimage') {
-					toast({
-						title: 'Wrong payment preimage',
-						description: 'The payment preimage returned by the WebLN provider did not match the payment hash.',
-						status: 'error',
-					});
-				} else if (error.constructor === RejectionError || error.message === 'User rejected') {
-					toast({
-						title: 'Requested operation declined',
-						description: 'Please use the invoice instead.',
-						status: 'info',
-					});
-				} else {
-					toast({
-						title: 'Oops! Something went wrong with WebLN.',
-						description: 'Please use the invoice instead.',
-						status: 'error',
-					});
-				}
-
+			if (hasBolt11 && hasWebLN) {
+				startWebLNFlow().then(success => {
+					if (!success) {
+						fundInterval = setInterval(getFundingStatus, 1500);
+					}
+				});
+			} else {
 				fundInterval = setInterval(getFundingStatus, 1500);
-			});
+			}
 		}
 	}, [fundState]);
 
@@ -143,7 +169,7 @@ export const useFundingFlow = () => {
 		setFundState(nextState);
 	};
 
-	const requestFunding = async (input:any) => {
+	const requestFunding = async (input: any) => {
 		try {
 			await fundProject({ variables: { input } });
 			gotoNextStage();

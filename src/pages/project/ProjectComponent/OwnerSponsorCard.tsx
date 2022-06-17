@@ -52,6 +52,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 								title="Creator"
 								description="Project creators have verified their Twitter accounts. Go check them out!"
 								options={ { top: '-82px', left: '-60px' } }
+								width="172px"
 							/>
 						</HStack>
 						<HStack spacing="30px" alignItems="flex-start">
@@ -78,6 +79,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 								title="Ambassadors"
 								description="Ambassadors are individuals who vouch for the project and give their go ahead."
 								options={ { top: '-81px', left: '-80px' } }
+								width="172px"
 							/>
 						</HStack>
 						<Wrap>
@@ -113,6 +115,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 								title="Sponsors"
 								description="Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences."
 								options={ { top: '-108px', left: isMobile ? '-50px' : '-70px' } }
+								width="172px"
 							/>
 						</HStack>
 						<Wrap >
