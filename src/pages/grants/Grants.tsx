@@ -1,251 +1,151 @@
-/* eslint-disable capitalized-comments */
-import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
-import Confetti from 'react-confetti';
-import { Box, Text, HStack, Link, Button, VStack, Show, Tooltip, Fade, CloseButton } from '@chakra-ui/react';
+/* eslint-disable complexity */
+
+import React, { useState, useEffect } from 'react';
+import { Box, Text, HStack, Image, Avatar, VStack, Link } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
-import { ContributeButton } from './components/ContributeButton';
-import { RecipientButton } from './components/RecipientButton';
-
-import { Grantee, MemoizedAvatarsBoard } from './components';
+import { InfoTooltip } from '../../components/ui';
 import { SatoshiIcon } from '../../components/icons';
-import { Blob } from 'react-blob';
-import AnimatedCursor from 'react-animated-cursor';
-import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
-
-import { getDaysAgo, isMobileMode, isMediumScreen, getCountDown } from '../../utils';
-import useWindowSize from 'react-use/lib/useWindowSize';
-// import { QUERY_PROJECT_BY_NAME } from '../../graphql';
+import { isMediumScreen, isMobileMode } from '../../utils';
 import { IProject } from '../../interfaces';
+import { Subscribe } from '../../components/nav/Subscribe';
+import { RecipientButton } from './components/RecipientButton';
+import { ContributeButton } from './components/ContributeButton';
+import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
 
-const Countdown = ({ endDate }: { endDate: string}) => {
-	const [countDown, setCountDown] = useState('');
-	const isMedium = isMediumScreen();
+export const Grants = ({ project }: { project: IProject }) => {
+	const [applicants, setApplicants] = useState(['loading']);
 
-	const handleCountDown = () => {
-		const countDown = getCountDown(endDate);
-		setCountDown(countDown);
+	const getGrantApplicants = async () => {
+		fetch('https://api.airtable.com/v0/appyM7XlNIWVypuP5/tbleyJa9ZMqPptvED?fields%5B%5D=Grant&fields%5B%5D=Notes&filterByFormula=FIND(%22Applicant%22%2C+Notes)', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
+				'Content-Type': 'application/json',
+			},
+		}).then(response => response.json()).then(data => {
+			setApplicants(data.records.filter((applicant: any) => applicant.fields.Grant === project.title));
+		});
 	};
 
 	useEffect(() => {
-		const interval = setInterval(handleCountDown, 1000);
-		return () => {
-			clearInterval(interval);
-		};
+		getGrantApplicants();
 	}, []);
 
-	return (
-		<Text textAlign={isMedium ? 'center' : 'left'} fontSize="lg" color="brand.darkerPrimary" fontWeight="bold">{`${countDown}`}</Text>
-	);
-};
-
-const BlobComponent = ({ project, setConfetti }: {
-	project: IProject,
-	setConfetti: Dispatch<SetStateAction<boolean>>
- }) => {
-	const [sats, setSats] = useState(0);
-	const [wobble, makeWobble] = useState(false);
-	const [clearCloseButton, setClearCloseButton] = useState(false);
-
-	const incrementSats = (amount: number) => {
-		setSats(sats + amount);
-	};
-
-	return (
-		<>
-			<Box display="flex" justifyContent="center" height="40px" alignItems="center" mb={3}>
-				{ sats > 0
-					&& <Fade in={sats > 0}>
-						<HStack>
-							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="bubble" sats={sats} setSats={setSats} clearCloseButton={setClearCloseButton}/>
-							{!clearCloseButton
-							&& <CloseButton onClick={() => setSats(0)}/>}
-						</HStack>
-					</Fade>
-				}
-			</Box>
-			<Tooltip label="Contribute sats!" placement="top" bg="brand.primary" color="black" borderRadius="base" hasArrow closeOnMouseDown={true} py={2} isDisabled={sats > 0}>
-				<Box border="1px solid lightgrey" borderRadius="full" p={[10, 25, 25, 50]} width={{base: '75%', md: '50%', xl: '100%'}} margin="0 auto" onMouseEnter={() => makeWobble(!wobble)} onMouseLeave={() => makeWobble(!wobble)}>
-					<Blob id="blob" size="21vh" onMouseDown={() => incrementSats(1000)}
-						style={{
-							backgroundImage: 'radial-gradient(ellipse at right, rgba(32, 236, 199), rgba(27, 213, 179), #E9E9E9)',
-							margin: '0 auto',
-							boxShadow: '0px 0px 30px 10px rgba(91, 91, 91, 0.25)',
-						}}
-					/>
-				</Box>
-			</Tooltip>
-		</>
-	);
-};
-
-const CustomCursor = () => (
-	<AnimatedCursor
-		innerSize={0}
-		outerSize={21}
-		color={'32, 236, 199'}
-		outerAlpha={0.7}
-		innerScale={0}
-		outerScale={2.1}
-		trailingSpeed={1}
-		clickables={[
-			'a',
-			'input[type="text"]',
-			'input[type="email"]',
-			'input[type="number"]',
-			'input[type="submit"]',
-			'input[type="image"]',
-			'label[for]',
-			'select',
-			'textarea',
-			'button',
-			'.link',
-			'img',
-			'#blob',
-		]}
-	/>
-);
-
-export const Grants = ({ project }: { project: IProject }) => {
-	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
-	const [arrowChange, setArrowChange] = useState(false);
-	const [confetti, setConfetti] = useState(false);
-	const { width, height } = useWindowSize();
-	const { owners, grantees, fundingTxs } = project;
+	const isMobile = isMobileMode();
 
 	return (
 		<>
+			<Box py={isMedium ? 10 : 20} px={isMedium ? '0px' : '150px'}>
 
-			{/* bubble cursor */}
-			<CustomCursor />
+				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center">
 
-			{/* confetti effects on invoice payment */}
-			{confetti && <Confetti
-				width={width}
-				height={height}
-				recycle={false}
-				numberOfPieces={1500}
-				tweenDuration={80000}
-				colors={['#1BD5B3', '#20ECC7', '#6BE7CE', '#FFFFFF', '#E9E9E9', '#5B5B5B', '#0F9078', '#F7931A']}
-			/>}
+					<Box w={isMedium ? '100%' : '45%'}>
+						<Text fontSize="xl" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: {project.name === 'bitcoin-education' ? 'JULY 1-31' : ''}</Text>
+						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
+						<Image w={isMobile ? '350px' : '425px'} rounded="md" src={project.media[0] && project.media[0]} alt="grant" margin={isMedium ? '0 auto' : ''}/>
+					</Box>
 
-			{/* hero section */}
-			<Box id="top">
-				<Box display="flex" justifyContent="center" alignItems="center" height={{xl: '85vh'}}>
-					<Box
-						display={isMedium ? 'block' : 'flex'}
-						justifyContent="space-between"
-						alignItems="center"
-						width={isMobile ? '100%' : '75%'}
-						margin="0 auto"
-						px={[2, 100]}
-					>
-
-						{/* bubble section */}
-						<Box mt={{base: 3, xl: 0}}>
-
-							{/* bubble */}
-							<BlobComponent project={project} setConfetti={setConfetti}/>
-
-							{/* info section */}
-							<Text fontSize="lg" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'} color="brand.darkerPrimary" mt={5}>Grant {project.active ? 'open' : 'closed'}</Text>
-							<Countdown endDate={project.expiresAt}/>
-							<Box display="flex" justifyContent="center" alignItems="center">
-								<Box display={isMobile ? 'block' : 'flex'} justifyContent="center" alignItems="center" my={4}>
-									<HStack spacing="10px" mr={isMobile ? 0 : 10}>
-										<SatoshiIcon/><Text fontSize="lg"><b>{project.balance}</b> received</Text>
-									</HStack>
-									<Text fontSize="lg" textAlign={isMobile ? 'right' : 'left'}><b>{project.fundingTxs.length}</b> donations</Text>
-								</Box>
+					<Box w={isMedium ? '90%' : '35%'} margin={isMedium ? '0 auto' : ''}>
+						<Text fontSize="lg" textAlign="justify" my={isMobile ? 2 : 0}>{project.description}</Text>
+						<Box boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} mt={6}>
+							<Box display="flex" justifyContent="end">
+								<InfoTooltip
+									title="APPLICATIONS OPEN JULY 1"
+									description="Please check back then!"
+									options={ { top: '-55px', left: '-110px' } }
+									width="155px"
+								/>
 							</Box>
+							<HStack justifyContent="space-around" alignItems="center" my={3}>
 
-						</Box>
-
-						{/* grant info */}
-						<Box width={{xl: '40%'}}>
-							<Text fontSize="4xl" fontWeight="bold">{project.title}</Text>
-							<Text color="brand.darkerPrimary" fontWeight="bold" fontSize="lg">Grant program to support hackathon events</Text>
-							<Box flexWrap="wrap" display="flex" my={2}>
-								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">#001</Text>
-								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">Hackathons</Text>
-								<Text bg="brand.bgGrey" px={5} py={1} m={1} borderRadius="lg">Building</Text>
-							</Box>
-							<Text>Created <b>{`${getDaysAgo(project.createdAt)} ago`}</b></Text>
-							<HStack my={1} flexWrap="wrap">
-								<Text>The Board:</Text>
 								<Box>
-									{
-										owners.map(owner => (
-											<Link
-												key={owner.user.id}
-												href={`https://geyser.fund/user/${owner.user.id}`}
-												isExternal
-												fontSize="sm"
-												color="brand.darkerPrimary"
-												fontWeight="bold"
-											>@{ owner.user.username } </Link>
-										))
-									}
+									<HStack justifyContent="center" alignItems="center">
+										<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(1)} M</Text>
+									</HStack>
+									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
 								</Box>
+
+								<Box>
+									<HStack justifyContent="center">
+										<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(1) : (0 / 1000000).toFixed(1)} M</Text>
+									</HStack>
+									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">DISTRIBUTED</Text>
+								</Box>
+
+								<Box>
+									<Text fontWeight="bold" textAlign="center" fontSize="lg">{applicants && applicants[0] === 'loading' ? '...' : applicants.length}</Text>
+									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">APPLICANTS</Text>
+								</Box>
+
 							</HStack>
-							<Text textAlign="justify">{project.description}</Text>
-							<ContributeButton project={project} confettiEffects={setConfetti} buttonStyle="main" />
+							<Box display="flex" justifyContent="center">
+								<RecipientButton active={project.active} title="Apply" grant={project.title}/>
+							</Box>
 						</Box>
 					</Box>
 				</Box>
-			</Box>
 
-			{/* arrow icon */}
-			<Show above="xl">
-				<Box display="flex" justifyContent="center">
-					<Link href={arrowChange ? '#bottom' : '#top'}>
-						<Button bg="none" border="1px solid lightgrey" onClick={() => setArrowChange(!arrowChange)}>
-							{ arrowChange ? <ArrowUpIcon/> : <ArrowDownIcon/> }
-						</Button>
-					</Link>
+				<Box w={isMedium ? '90%' : '80%'} margin="0 auto" mt={20}>
+					<Text fontSize="2xl" fontWeight="bold" mb={2}>A trusted board of hardcore Bitcoiners</Text>
+
+					<HStack>
+						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+							<Box>
+								<Box display="flex" justifyContent="center" alignItems="center">
+									<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
+								</Box>
+								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
+								<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>
+							</Box>
+						</Box>
+						<Box key="placeholder" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+							<Box>
+								<Box display="flex" justifyContent="center" alignItems="center">
+									<Avatar size="xl" src="" bg="brand.bgGrey3" />
+								</Box>
+								<Box mt={4} mb={1} h="43px" w="111px" bg="brand.bgGrey3" borderRadius="md" />
+							</Box>
+						</Box>
+					</HStack>
+
+					<Text fontSize="lg" mt={6}>We are bringing together a board of hardcore Bitcoiners that have a history of supporting Bitcoin education and media creation. At the end of the Round they will be reviewing the applications and deciding how the funds should be distributed.</Text>
 				</Box>
-			</Show>
 
-			{/* donation, sponsor, recipient sections */}
-			<Box py={20} id="bottom">
-				<VStack justifyContent="center" alignItems="center" spacing="50px">
+				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center" mt={20}>
+					<Box w={isMedium ? '90%' : '45%'} pr={isMedium ? 0 : 20} margin={isMedium ? '0 auto' : ''}>
+						<Text fontSize="2xl" fontWeight="bold" mb={2}>Massive impact</Text>
+						<Text fontSize="lg" mb={6}>Want to help spread the good work of Bitcoin far and wide? Why not support Bitcoin educators through this Geyser Grant? Join the growing number of whales and plebs donating to this Geyser Grant (currently on-chain only). Learn more <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link>, and reach out to the Team <Link isExternal href="https://t.me/bradmillscandoit" textDecoration="underline">here</Link>.</Text>
+					</Box>
 
-					{/* recent donation */}
-					<MemoizedAvatarsBoard
-						items={fundingTxs.map(({ id, amount, funder, comment }) => ({ id, user: funder.user, comment, amount: Number(amount) }))}
-						itemName="Most recent donations"
-					/>
+					<Box w={isMedium ? '90%' : '35%'} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} margin={isMedium ? '0 auto' : ''}>
+						<HStack justifyContent="space-around" alignItems="center" my={3}>
 
-					{/* sponsors */}
-					{/* <MemoizedAvatarsBoard
-						items={sponsors.map(({ id, image, user }) => ({ id, user: { ...user, image } }))}
-						itemName="Sponsors"
-						callToActionLink="https://airtable.com/shr8X1T7M8SuvHOjD"
-					/> */}
+							<Box>
+								<HStack justifyContent="center" alignItems="center">
+									<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(1)} M</Text>
+								</HStack>
+								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
+							</Box>
 
-					{/* grantees */}
-					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
-						<Text mb={2} fontSize="lg" fontWeight="bold">Potential recipients</Text>
-						<Box flexWrap="wrap" display="flex" alignItems="center">
-							<RecipientButton project={project}/>
-							{
-								grantees.map(grantee => <Grantee key={grantee.id} grantee={grantee}/>)
-							}
+							<Box>
+								<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.funders ? project.funders.length : 0}</Text>
+								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTORS</Text>
+							</Box>
+
+						</HStack>
+						<Box display="flex" justifyContent="center">
+							<ContributeButton active={project.active} title="Contribute" project={project}/>
 						</Box>
 					</Box>
 
-					{/* more info */}
-					<Box border="1px solid lightgrey" borderRadius="lg" boxShadow="md" width={['95%', '75%']} margin="0 auto" p={35}>
-						<Text mb={2} fontSize="lg" fontWeight="bold">More info</Text>
-						<Text>
-						Support your favorite causes through Geyser Grants, and submit your suggested recipients. Once the Grant closes, the Board will select from the relevant initiatives and distribute the funds accordingly. All the data will be presented in an open source way. For more info about the Grants, read <Link isExternal href="https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09" textDecoration="underline">here</Link>.
-						</Text>
-					</Box>
+				</Box>
 
+				<VStack margin="0 auto" mt={20} px={4}>
+					<Subscribe style="inline" interest="grants" />
 				</VStack>
-			</Box>
 
-			{/* footer */}
+			</Box>
 			<Footer/>
 		</>
 	);

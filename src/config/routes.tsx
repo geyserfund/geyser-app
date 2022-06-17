@@ -43,7 +43,7 @@ export const Router = () => {
 	return (
 		<Box height="100vh">
 			<NavBar showBorder={showBorder}/>
-			<Box id="geyser-landing-page" height="calc(100vh - 62px)" overflowY="auto">
+			<Box id="geyser-landing-page" height="calc(100vh - 71px)" overflowY="auto">
 				<Switch>
 					<Route path="/grants">
 						<GrantsLanding />

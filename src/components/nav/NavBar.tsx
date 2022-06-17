@@ -15,7 +15,6 @@ import { AuthContext } from '../../context';
 // Import { StartCrowdFundUrl } from '../../constants';
 import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
-import { BubbleCursor } from '../../pages/grants/components/BubbleCursor';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -76,7 +75,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 					display="flex"
 					width="100%"
 					justifyContent="space-between"
-					margin={isMobile ? '10px' : '10px 40px 10px 40px'}
+					margin={isMobile ? '10px' : '15px 40px 15px 40px'}
 				>
 					<HStack
 						spacing="25px"
@@ -108,38 +107,50 @@ export const NavBar = ({showBorder}: INavBar) => {
 							}
 							<NavMenu user={user} logout={logout} />
 						</> : (
-							<Box>
-								<ButtonComponent
-									leftIcon={<AddIcon />}
-									primary
-									standard
-									marginRight="12px"
-									width="220px"
-									onClick={handleLaunch}
-								>
-										Launch your idea
-								</ButtonComponent>
-								{
-									user.id
-										? <ButtonComponent
-											className={classes.userInfo}
-											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
-											standard
-											onClick={handleProfileClick}
-										>
-											{user.username}
+							<>
+								<HStack position="absolute" top="13px" left="calc(50vw - 96px)">
+									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="md" marginRight="5px">
+										<ButtonComponent onClick={() => {
+											history.push('/home');
+										}}>Projects</ButtonComponent>
+									</Box>
+									<Box position="relative" border={history.location.pathname === '/grants' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="md">
+										<ButtonComponent onClick={() => {
+											history.push('/grants');
+										}}>Grants
+											<Text zIndex={1} p={0.5} pt={1} px={2} bg="brand.primary" borderRadius="full" position="absolute" top="-10px" right="-14px" fontSize="10px" fontWeight="bold" textAlign="center">NEW</Text>
 										</ButtonComponent>
-										: <ButtonComponent
-											leftIcon={<Icon as={FiTwitter} />}
-											standard
-											marginRight="12px"
-											onClick={twitterOnOpen}
-										>
-											Log In
-										</ButtonComponent>
-								}
-								<NavMenu user={user} logout={logout} />
-							</Box>
+									</Box>
+								</HStack>
+								<Box>
+									<ButtonComponent
+										leftIcon={<AddIcon />}
+										primary
+										marginRight="12px"
+										onClick={handleLaunch}
+									>
+										Launch
+									</ButtonComponent>
+									{
+										user.id
+											? <ButtonComponent
+												className={classes.userInfo}
+												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+												standard
+												onClick={handleProfileClick}
+											>
+												{user.username}
+											</ButtonComponent>
+											: <ButtonComponent
+												marginRight="12px"
+												onClick={twitterOnOpen}
+											>
+											Connect
+											</ButtonComponent>
+									}
+									<NavMenu user={user} logout={logout} />
+								</Box>
+							</>
 						)
 					}
 
@@ -149,8 +160,6 @@ export const NavBar = ({showBorder}: INavBar) => {
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent display="flex" alignItems="center" padding="20px 15px">
-					{history.location.pathname === '/project/bitcoin-hackathons'
-		&& <BubbleCursor/>}
 					<ModalHeader><Text fontSize="16px" fontWeight="normal">You have been logged out</Text></ModalHeader>
 					<ModalCloseButton />
 					<ModalBody >

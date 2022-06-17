@@ -8,6 +8,7 @@ import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
+import { Grants } from '../grants/Grants';
 
 export const Project = () => {
 	const { projectId } = useParams<{ projectId: string }>();
@@ -43,24 +44,29 @@ export const Project = () => {
 
 	return (
 		<>
-			<Box
-				display="flex"
-				justifyContent="center"
-				alignItems="center"
-				height="100%"
-			>
-				<Box
-					width="100%"
-					height="100%"
+			{project.type !== 'grant'
+				? <Box
 					display="flex"
-					overflow="hidden"
-					position="relative"
-
+					justifyContent="center"
+					alignItems="center"
+					height="100%"
 				>
-					<Details project={project} {...{detailOpen, setDetailOpen}}/>
-					<Activity project={project} {...{detailOpen, setDetailOpen}}/>
+					<Box
+						width="100%"
+						height="100%"
+						display="flex"
+						overflow="hidden"
+						position="relative"
+
+					>
+						<Details project={project} {...{detailOpen, setDetailOpen}}/>
+						<Activity project={project} {...{detailOpen, setDetailOpen}}/>
+					</Box>
 				</Box>
-			</Box>
+				: <>
+					<Grants project={project}/>
+				</>
+			}
 		</>
 	);
 };

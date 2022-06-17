@@ -11421,11 +11421,6 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
-react-blob@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-blob/-/react-blob-2.1.0.tgz#c8882f96793926d6f771d0e7d09cea75da2f3c74"
-  integrity sha512-U2WxqDLL4BYeg+cbW8oC6ne42qVuHDkNmUJiIctAZoa+dpY4fD9ZYkyIWST34NuZDEGllZnCy8W8H5iknu4C/g==
-
 react-clientside-effect@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/react-clientside-effect/-/react-clientside-effect-1.2.5.tgz#e2c4dc3c9ee109f642fac4f5b6e9bf5bcd2219a3"

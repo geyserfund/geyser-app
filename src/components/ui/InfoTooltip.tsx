@@ -6,12 +6,14 @@ interface IInfoTooltip {
 	title: string;
 	description: string;
 	options: React.CSSProperties
+	width: string
 }
 
 export const InfoTooltip = ({
 	title,
 	description,
 	options,
+	width,
 }: IInfoTooltip) => {
 	const [hover, setHover] = useState(false);
 	const { top, left } = options;
@@ -20,7 +22,7 @@ export const InfoTooltip = ({
 		<Box position="relative">{
 			hover
 			&& <>
-				<Box width="172px" position="absolute" p={2} zIndex={2} bg="#5B5B5B" rounded="lg" top={top} left={left}>
+				<Box width={width} position="absolute" p={2} zIndex={2} bg="#5B5B5B" rounded="lg" top={top} left={left}>
 					<Text fontWeight="bold" color="white" fontSize="10px">{ title }</Text>
 					<Text color="white" fontSize="9px" fontWeight="medium" mt={1}>{ description }</Text>
 				</Box>
