@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Text, HStack, Link } from '@chakra-ui/layout';
+import { Text, HStack, Link, Box } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/react';
 import { IAvatarMetadata } from '../../interfaces';
 
@@ -46,6 +46,7 @@ export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
 					height="30px"
 					// Name={avatarMetadata.username}
 					src={avatarMetadata.image}
+					icon={<Box width="30px" height="30px" backgroundColor="brand.grey"/>}
 					sx={{
 						'& .chakra-avatar__initials': {
 							lineHeight: '30px',
