@@ -44,7 +44,7 @@ export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
 					height="30px"
 					// Name={avatarMetadata.username}
 					src={avatarMetadata.image}
-					icon={<Box width="30px" height="30px" backgroundColor="brand.gray50"/>}
+					icon={<Box width="30px" height="30px" borderRadius="50%" backgroundColor="brand.gray50"/>}
 					sx={{
 						'& .chakra-avatar__initials': {
 							lineHeight: '30px',
