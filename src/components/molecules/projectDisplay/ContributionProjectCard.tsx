@@ -1,8 +1,9 @@
-import { Box, HStack, Image, Text, VStack, LinkBox, LinkOverlay } from '@chakra-ui/react';
+import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import { computeFunderBadges } from '../../../helpers';
 import { IContribution } from '../../../interfaces';
 
@@ -18,7 +19,6 @@ interface IContributionProjectCardProp extends ICard {
 const useStyles = createUseStyles({
 	container: {
 		borderRadius: '4px',
-		height: '280px',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -70,58 +70,48 @@ const useStyles = createUseStyles({
 
 export const ContributionProjectCard = ({ contribution, open, className, ...rest }: IContributionProjectCardProp) => {
 	const classes = useStyles();
-	const history = useHistory();
 	const isDark = isDarkMode();
 
 	const {project, funder, isAmbassador, isFunder} = contribution;
-
-	const handleCardClick = () => {
-		history.push(`/project/${project.name}`);
-	};
 
 	const imgSrc = project.media[0];
 
 	const getBadges = () => computeFunderBadges({ project, funder }).map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`} />));
 	return (
-		<LinkBox>
-			<LinkOverlay href={`https://geyser.fund/project/${project.name}`} onClick={e => {
-				e.preventDefault();
-				handleCardClick();
-			}}>
-				<Card
-					className={classNames(classes.container, className)}
-					backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
-					{...rest}
-				>
-					<Box height="160px" width="100%" position="relative">
-						<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
-						<Box className={classes.viewProject}>
-							<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
-							<Box className={classes.darkLayout} />
-						</Box>
+		<Link to={`/project/${project.name}`}>
+			<Card
+				className={classNames(classes.container, className)}
+				backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
+				{...rest}
+			>
+				<Box height="160px" width="100%" position="relative">
+					<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
+					<Box className={classes.viewProject}>
+						<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
+						<Box className={classes.darkLayout} />
 					</Box>
-					<VStack spacing="5px" width="100%" padding="10px">
-						<HStack spacing="10px" justifyContent="flex-start" width="100%">
-							<Text fontSize="16px" fontWeight={600}>{project.title}</Text>
-						</HStack>
-						<Text fontSize="12px" width="100%" height="35px" noOfLines={2}>{project.description}</Text>
-						<HStack sapcing="5px" width="100%">
-						</HStack>
-					</VStack>
-					<HStack width="100%" paddingX="10px" justifyContent="space-between">
-						<Box>
-							{isFunder && getBadges()}
-						</Box>
-						{
-							isAmbassador ? (
-								<Text fontSize="12px" padding="3px 10px" borderRadius="10px" backgroundColor="brand.primary">Ambassador</Text>
-							) : (
-								<Text fontSize="12px" padding="3px 10px" borderRadius="10px" backgroundColor="brand.primary">Funder</Text>
-							)
-						}
+				</Box>
+				<VStack spacing="5px" width="100%" padding="10px">
+					<HStack spacing="10px" justifyContent="flex-start" width="100%">
+						<Text fontSize="16px" fontWeight={600}>{project.title}</Text>
 					</HStack>
-				</Card>
-			</LinkOverlay>
-		</LinkBox>
+					<Text fontSize="12px" width="100%" height="35px" noOfLines={2}>{project.description}</Text>
+					<HStack sapcing="5px" width="100%">
+					</HStack>
+				</VStack>
+				<HStack width="100%" paddingX="10px" justifyContent="space-between">
+					<Box>
+						{isFunder && getBadges()}
+					</Box>
+					{
+						isAmbassador ? (
+							<Text fontSize="12px" padding="3px 10px" borderRadius="10px" backgroundColor="brand.primary">Ambassador</Text>
+						) : (
+							<Text fontSize="12px" padding="3px 10px" borderRadius="10px" backgroundColor="brand.primary">Funder</Text>
+						)
+					}
+				</HStack>
+			</Card>
+		</Link>
 	);
 };

@@ -1,13 +1,13 @@
-import { Box, CircularProgress, HStack, Image, Text, VStack, LinkBox, LinkOverlay } from '@chakra-ui/react';
+import { Box, CircularProgress, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 import { createUseStyles } from 'react-jss';
-import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { IProfileProject } from '../../../interfaces';
 import { checkExpired, getFormattedDate, isDarkMode, useBitcoinRates } from '../../../utils';
 import { getShortAmountLabel } from '../../../utils/helperFunctions';
-import { SatoshiIcon } from '../../icons';
+import { SatoshiIcon2 } from '../../icons';
 import { Card, ICard } from '../../ui';
 import { ProjectCardTime } from './ProjectCard';
 
@@ -18,12 +18,13 @@ interface IProjectCardProp extends ICard {
 	className?: string
 	imgSrc?: string
 	project: IProfileProject
+	privateUser?: boolean
 }
 
 const useStyles = createUseStyles({
 	container: {
 		borderRadius: '4px',
-		height: '325px',
+		// height: '365px',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -73,17 +74,12 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const ProfileProjectCard = ({ title, imgSrc, open, name, className, project, ...rest }: IProjectCardProp) => {
+export const ProfileProjectCard = ({ title, imgSrc, open, name, className, project, privateUser, ...rest }: IProjectCardProp) => {
 	const classes = useStyles();
-	const history = useHistory();
 	const isDark = isDarkMode();
 
 	const { btcRate} = useBitcoinRates();
 	const [percentage, setPercentage] = useState(0);
-
-	const handleCardClick = () => {
-		history.push(`/project/${name}`);
-	};
 
 	useEffect(() => {
 		if (btcRate && project.balance) {
@@ -106,17 +102,34 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 		// }
 		if (checkExpired(project.expiresAt)) {
 			return (
-				<Text variant="subtle" background="brand.bgGrey3" color="textGrey" padding="2px 8px" fontSize="12px" borderRadius="4px">
-					Closed
-				</Text>
+				<Box background="brand.bgGrey3" padding="2px 8px" borderRadius="4px" width="100%" textAlign="center">
+					<Text variant="subtle" color="textGrey" fontSize="12px" >
+					COMPLETED
+					</Text>
+				</Box>
+
+			);
+		}
+
+		if ((project.balance * btcRate) >= project.fundingGoal) {
+			return (
+				<Box background="brand.primary" padding="2px 8px" borderRadius="4px" width="100%" textAlign="center">
+					<Text width="100%" variant="subtle" color="black" fontSize="12px">
+					GOAL REACHED
+					</Text>
+				</Box>
+
 			);
 		}
 
 		if (project.active) {
 			return (
-				<Text variant="subtle" background="brand.primary" color="black" padding="2px 8px" fontSize="12px" borderRadius="4px">
-					Live Project
-				</Text>
+				<Box background="brand.white" borderWidth="2px" borderColor="brand.primary" padding="2px 8px" borderRadius="4px" width="100%" textAlign="center">
+					<Text width="100%" variant="subtle" color="black" fontSize="12px" >
+					LIVE
+					</Text>
+				</Box>
+
 			);
 		}
 	};
@@ -131,7 +144,7 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 
 		if (checkExpired(project.expiresAt)) {
 			return (
-				<Text fontSize="12px" color="brand.textGrey">{`Expired on: ${getFormattedDate(project.expiresAt)}`}</Text>
+				<Text fontSize="12px" color="brand.textGrey">{`Closed on: ${getFormattedDate(project.expiresAt)}`}</Text>
 			);
 		}
 
@@ -143,28 +156,24 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 	};
 
 	return (
-		<LinkBox>
-			<LinkOverlay href={`https://geyser.fund/project/${project.name}`} onClick={e => {
-				e.preventDefault();
-				handleCardClick();
-			}}>
-				<Card
-					className={classNames(classes.container, className)}
-					backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
-					{...rest}
-				>
-					<Box height="160px" width="100%" position="relative">
-						<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
-						<Box className={classes.viewProject}>
-							<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
-							<Box className={classes.darkLayout} />
-						</Box>
+		<Link to={`/project/${project.name}`}>
+			<Card
+				className={classNames(classes.container, className)}
+				backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
+				{...rest}
+			>
+				<Box height="160px" width="100%" position="relative">
+					<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
+					<Box className={classes.viewProject}>
+						<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
+						<Box className={classes.darkLayout} />
 					</Box>
-					<VStack spacing="5px" width="100%" padding="10px">
-						<Text fontSize="16px" fontWeight={600} width="100%" isTruncated>{title}</Text>
-						<Text fontSize="12px" width="100%" height="40px" noOfLines={2}>{project.description}</Text>
-						<HStack alignItems="center" justifyContent={project.fundingGoal ? 'space-between' : 'space-around'} width="100%">
-							{project.fundingGoal
+				</Box>
+				<VStack spacing="7px" width="100%" padding="10px">
+					<Text fontSize="16px" fontWeight={600} width="100%" isTruncated>{title}</Text>
+					<Text fontSize="12px" width="100%" height="40px" noOfLines={2}>{project.description}</Text>
+					<HStack alignItems="center" justifyContent={'center'} width="100%" spacing="15px">
+						{project.fundingGoal
 								&& <CircularProgress
 									className={classes.circularProgress}
 									value={percentage}
@@ -172,31 +181,35 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 									thickness="10px"
 									color="brand.primary"
 								>
-									<Box position="absolute" fontSize="12px" top="19px">
-										<Text fontSize="12px">{`${percentage}%`}</Text>
+									<Box position="absolute" fontSize="12px" top="19px" display="flex" justifyContent="center">
+										<Text fontSize="12px" fontWeight={500}>{`${percentage}%`}</Text>
 									</Box>
 								</CircularProgress>
-							}
-							<VStack alignItems="center" justifyContent="center" spacing="0">
-								<Text fontSize="14px" fontWeight={600}>{getProjectBackers()}</Text>
-								<Text fontSize="12px">backers</Text>
-							</VStack>
-							<VStack alignItems="center" justifyContent={'center'} spacing="0">
-								<HStack>
-									<SatoshiIcon scale={0.6}/>
-									<Text fontSize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
-								</HStack>
-								<Text fontSize="12px">received</Text>
-							</VStack>
-							<ProjectCardTime expiresAt={project.expiresAt} active={project.active}/>
-						</HStack>
-						<HStack sapcing="5px" width="100%">
-							{getProjectStatus()}
+						}
+						<VStack alignItems="center" justifyContent="center" spacing="0">
+							<Text fontSize="14px" fontWeight={600}>{getProjectBackers()}</Text>
+							<Text fontSize="12px">BACKERS</Text>
+						</VStack>
+						<VStack alignItems="center" justifyContent={'center'} spacing="0">
+							<HStack spacing="2px">
+								<SatoshiIcon2 scale={0.6}/>
+								<Text fontSize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
+							</HStack>
+							<Text fontSize="12px">RECEIVED</Text>
+						</VStack>
+						{
+							project.active && <ProjectCardTime expiresAt={project.expiresAt} active={project.active}/>
+						}
+					</HStack>
+					{getProjectStatus()}
+					{
+						privateUser && <HStack spacing="5px" width="100%">
 							{getProjectUpdate()}
 						</HStack>
-					</VStack>
-				</Card>
-			</LinkOverlay>
-		</LinkBox>
+					}
+
+				</VStack>
+			</Card>
+		</Link>
 	);
 };
