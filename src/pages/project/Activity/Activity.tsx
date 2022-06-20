@@ -19,7 +19,7 @@ import Loader from '../../../components/ui/Loader';
 import { useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
 import { useStyles } from './styles';
-import { InfoPage } from './InfoPage';
+import { InfoPage, InfoPageSkeleton } from './InfoPage';
 import { fundingStages } from '../../../constants';
 import { useFundState, IFundForm, useFundingFlow } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
@@ -156,7 +156,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	const renderActivity = () => {
 		if (loading) {
-			return <Loader />;
+			return <InfoPageSkeleton />;
 		}
 
 		switch (fundState) {
@@ -170,6 +170,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 						btcRate,
 						fundingTxs,
 						funders,
+						test: false,
 					}}
 				/>;
 			case fundingStages.form:
