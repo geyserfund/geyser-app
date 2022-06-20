@@ -1,14 +1,17 @@
+/* eslint-disable complexity */
 import { useLazyQuery } from '@apollo/client';
-import { Avatar, Box, Button, HStack, Link, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { createUseStyles } from 'react-jss';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../components/molecules';
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { IProfileUser, IUserExternalAccount } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { useAuthContext } from '../../context';
 
 const useStyles = createUseStyles({
 	container: {
@@ -50,7 +53,10 @@ const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) =>
 export const Profile = () => {
 	const isDark = isDarkMode();
 	const isMobile = isMobileMode();
+	const history = useHistory();
 	const classes = useStyles();
+
+	const {user} = useAuthContext();
 	const [isLargerThan1080] = useMediaQuery('(min-width: 1080px)');
 
 	const params = useParams<{userId: string}>();
@@ -73,6 +79,7 @@ export const Profile = () => {
 	}
 
 	const userProfile: IProfileUser = data && data.user;
+	const privateProfile = user && `${user.id}` === params.userId;
 
 	if (!userProfile || profileLoading) {
 		return (
@@ -80,6 +87,11 @@ export const Profile = () => {
 		);
 	}
 
+	const handleLaunchIdea = () => {
+		history.push('/launch');
+	};
+
+	console.log('chekcing private profile', privateProfile);
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
@@ -105,7 +117,23 @@ export const Profile = () => {
 							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl} />
 							<Text fontWeight={600} fontSize="20px">{userProfile.username}</Text>
 						</HStack>
-						{/* <Button>Create</Button> */}
+						<Menu>
+							<MenuButton
+								as={Button}
+								rightIcon={<ChevronDownIcon />}
+								borderRadius="4px"
+								bgColor="brand.primary"
+								_hover={{bgColor: 'brand.normalLightGreen'}}
+								_focus={{bgColor: 'brand.normalLightGreen'}}
+								_active={{bgColor: 'brand.normalLightGreen'}}
+							>
+								Create
+							</MenuButton>
+							<MenuList>
+								<MenuItem onClick={handleLaunchIdea}>Launch idea</MenuItem>
+								<MenuItem color="brand.gray300" pointerEvents="none">Write post</MenuItem>
+							</MenuList>
+						</Menu>
 					</HStack>
 					<HStack width="100%">
 						{ userProfile
@@ -113,7 +141,7 @@ export const Profile = () => {
 						}
 					</HStack>
 				</VStack>
-				<Box>
+				<Box width="100%">
 					<Tabs variant="line" colorScheme="brand.textGrey" defaultIndex={userProfile && userProfile.ownerOf.length === 0 ? 1 : 0}>
 						<TabList>
 							<Tab>
@@ -131,41 +159,53 @@ export const Profile = () => {
 						</TabList>
 						<TabPanels>
 							<TabPanel>
-								<Box className={isMobile ? classes.containerMobile : classes.container}>
-									<Wrap paddingY="0px" width="100%" justify={ !isLargerThan1080 ? 'center' : 'flex-start'} spacing="30px" >
-										{ userProfile && userProfile.ownerOf.map(owned => {
-											const {project} = owned;
-											return (
-												<WrapItem key={project.id}>
-													<ProfileProjectCard
-														title={project.title}
-														name={project.name}
-														project={project}
-														imgSrc={project.media[0]}
-														marginLeft="0px !important"
-													/>
-												</WrapItem>
-											);
-										})
-										}
-									</Wrap>
-								</Box>
+								{
+									userProfile && userProfile.ownerOf && userProfile.ownerOf.length > 0
+										? <Box className={isMobile ? classes.containerMobile : classes.container}>
+											<Wrap paddingY="0px" width="100%" justify={ !isLargerThan1080 ? 'center' : 'flex-start'} spacing="30px" >
+												{ userProfile && userProfile.ownerOf.map(owned => {
+													const {project} = owned;
+													return (
+														<WrapItem key={project.id}>
+															<ProfileProjectCard
+																title={project.title}
+																name={project.name}
+																project={project}
+																imgSrc={project.media[0]}
+																marginLeft="0px !important"
+																privateUser={privateProfile}
+															/>
+														</WrapItem>
+													);
+												})
+												}
+											</Wrap>
+										</Box>
+										: <Box width="100%" display="flex" justifyContent="center">
+											<Text >There are no items here.</Text>
+										</Box>
+								}
 							</TabPanel>
 							<TabPanel >
-								<Box className={isMobile ? classes.containerMobile : classes.container}>
-									<Wrap paddingY="0px" width="100%" justify={ isLargerThan1080 ? 'center' : 'flex-start'} spacing="30px" >
-										{ userProfile && userProfile.contributions.map(contribute => (
-											<WrapItem key={contribute.project.id}>
-												<ContributionProjectCard
-													marginLeft="0px !important"
-													contribution={contribute}
-												/>
-											</WrapItem>
-
-										))
-										}
-									</Wrap>
-								</Box>
+								{
+									userProfile && userProfile.contributions && userProfile.contributions.length > 0
+										? <Box className={isMobile ? classes.containerMobile : classes.container}>
+											<Wrap paddingY="0px" width="100%" justify={ !isLargerThan1080 ? 'center' : 'flex-start'} spacing="30px" >
+												{ userProfile && userProfile.contributions.map(contribute => (
+													<WrapItem key={contribute.project.id}>
+														<ContributionProjectCard
+															marginLeft="0px !important"
+															contribution={contribute}
+														/>
+													</WrapItem>
+												))
+												}
+											</Wrap>
+										</Box>
+										: <Box width="100%" display="flex" justifyContent="center">
+											<Text >There are no items here.</Text>
+										</Box>
+								}
 							</TabPanel>
 						</TabPanels>
 					</Tabs>
