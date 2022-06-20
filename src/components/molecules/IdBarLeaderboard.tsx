@@ -20,7 +20,7 @@ export const IdBarLeaderboard = ({ funder, count, project, ...rest }: IIdBarLead
 		return {
 			username,
 			image: funder.user.imageUrl || getRandomOrb(funder.id),
-			link: funder.user.id ? `profile/${funder.user.id}` : '',
+			link: funder.user.id ? `/profile/${funder.user.id}` : '',
 		};
 	};
 
