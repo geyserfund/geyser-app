@@ -51,7 +51,6 @@ export const computeFunderBadges = (props: IcomputeFunderBadgesProps): IBadge[] 
 	const funderBadges: IBadge[] = [];
 	const { project, funder, shortForm = true } = props;
 	const { amountFunded: amount, timesFunded: times } = funder;
-	console.log('SF,', shortForm);
 
 	if (amount === 0) {
 		return funderBadges;
