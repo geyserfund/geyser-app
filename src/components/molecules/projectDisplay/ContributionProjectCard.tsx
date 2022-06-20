@@ -1,14 +1,13 @@
 import { Box, HStack, Image, Text, Tooltip, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import classNames from 'classnames';
-import { DateTime, Interval } from 'luxon';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
 import { computeFunderBadges } from '../../../helpers';
-import { IBadge, IContribution } from '../../../interfaces';
+import { IContribution } from '../../../interfaces';
 
 import { isDarkMode } from '../../../utils';
-import { Badge, Card, ICard } from '../../ui';
+import { Card, ICard } from '../../ui';
 
 interface IContributionProjectCardProp extends ICard {
 	open?: boolean;
@@ -77,7 +76,6 @@ export const ContributionProjectCard = ({ contribution, open, className, ...rest
 
 	const imgSrc = project.media[0];
 
-	const getBadges = () => computeFunderBadges({ project, funder }).map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`} />));
 	return (
 		<Link to={`/project/${project.name}`}>
 			<Card
@@ -108,75 +106,18 @@ export const ContributionProjectCard = ({ contribution, open, className, ...rest
 	);
 };
 
-interface IBadges {
-    [threshold: string]: IBadge
-}
-
-const amountBadges: IBadges = {
-	21000: {
-		badge: '🏅 Funder',
-		description: 'This user funded more than 21,000 sats!',
-	},
-	120000: {
-		badge: '🏆 Funder',
-		description: 'This user funded more than 120,000 sats!',
-	},
-	1000000: {
-		badge: '👑 Funder',
-		description: 'This user funded more than 1,000,000 sats!',
-	},
-	10000000: {
-		badge: '⭐️ Funder',
-		description: 'This user funded more than 10,000,000 sats!',
-	},
-};
-
-const specialBadges: IBadges = {
-	earlyFunder: {
-		badge: 'Early Funder',
-		description: 'This user funded within the first 24 hours of the project start!',
-	},
-};
-
 interface IRenderBadges {
 	funder: IContribution['funder']
 	project: IContribution['project']
 }
 
 const RenderBadges = ({ funder, project}:IRenderBadges) => {
-	const funderBadges: IBadge[] = [];
-	const { amountFunded: amount, timesFunded: times } = funder;
+	const funderBadges = computeFunderBadges({ project, funder, shortForm: false });
 
-	if (amount === 0) {
-		return null;
-	}
-
-	// Check if earned amount badge
-	const amountBadgeIndex: string | undefined = Object.keys(amountBadges).reverse().find(threshold => (amount > Number(threshold)));
-
-	if (amountBadgeIndex) {
-		funderBadges.push(amountBadges[amountBadgeIndex]);
-	} else if (times < 2) {
+	if (funderBadges.length === 0) {
 		funderBadges.push({
 			badge: 'Funder',
 			description: 'The user funded this project!',
-		});
-	}
-
-	// Check if early funder
-	const funderConfirmedAt = DateTime.fromMillis(parseInt(funder.confirmedAt, 10));
-	const projectCreatedAt = DateTime.fromMillis(parseInt(project.createdAt, 10));
-	const interval = Interval.fromDateTimes(projectCreatedAt, funderConfirmedAt);
-
-	if (interval.length('hours') < 24) {
-		funderBadges.push(specialBadges.earlyFunder);
-	}
-
-	// Badge for funding more than once
-	if (times > 1) {
-		funderBadges.push({
-			badge: `${times}x Funder`,
-			description: `This user funded this project ${times} times!`,
 		});
 	}
 
