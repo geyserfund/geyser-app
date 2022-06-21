@@ -53,7 +53,6 @@ export const Subscribe = ({isOpen, onClose, style, interest, parentState, titleS
 
 	const handleConfirm = async () => {
 		const res = validateEmail(email);
-		console.log('checking res', res);
 		if (!res) {
 			setError('Please enter a valid email address.');
 			return;

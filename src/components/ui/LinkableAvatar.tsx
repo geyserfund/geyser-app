@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
-import { Text, HStack, Link } from '@chakra-ui/layout';
+import { Text, HStack, Box } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/react';
 import { IAvatarMetadata } from '../../interfaces';
+import { Link } from 'react-router-dom';
 
 interface ILinkableAvatar {
   avatarMetadata: IAvatarMetadata;
@@ -35,24 +36,22 @@ export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
 
 	return (
 		<Link
-			href={avatarMetadata.link}
-			cursor={avatarMetadata.link ? 'pointer' : 'normal'}
-			isExternal
-			style={{ textDecoration: 'none' }}
+			to={avatarMetadata.link || ''}
 		>
-			<HStack spacing="5px" display="flex">
+			<HStack spacing="5px" display="flex" cursor={avatarMetadata.link ? 'pointer' : 'normal'}>
 				<Avatar
 					width="30px"
 					height="30px"
-					// Name={avatarMetadata.username}
 					src={avatarMetadata.image}
+					icon={<Box width="30px" height="30px" borderRadius="50%" backgroundColor="brand.gray50"/>}
 					sx={{
 						'& .chakra-avatar__initials': {
 							lineHeight: '30px',
 						},
 					}}
+					_focus={{}}
 				/>
-				<Text fontSize="16px">
+				<Text fontSize="16px" _hover={{fontWeight: 500, textDecoration: 'underline'}}>
 					{' '}
 					{getFormattedUsername()}
 				</Text>

@@ -61,6 +61,6 @@ images:
     - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest'
 availableSecrets:
   secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/airtable-api-key/versions/2
+  - versionName: projects/$PROJECT_ID/secrets/airtable-api-key/versions/3
     env: 'AIRTABLE_API_KEY'
 timeout: 1800s

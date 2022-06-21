@@ -287,8 +287,6 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 	);
 
 	const renderModal = () => {
-		console.log('FUND STATE', fundState);
-
 		switch (fundState) {
 			case fundingStages.initial:
 				return null;

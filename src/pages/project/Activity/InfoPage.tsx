@@ -1,4 +1,4 @@
-import { Box, Text, VStack } from '@chakra-ui/layout';
+import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
 import React, {useState} from 'react';
 import { SatoshiIcon } from '../../../components/icons';
 import { ProjectBalanceCircularProgress, ProjectBalance } from '../../../components/molecules';
@@ -6,7 +6,7 @@ import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
 import { ButtonComponent, FundingStatus } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
-import { Button } from '@chakra-ui/react';
+import { Button, Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
 
 import { useStyles } from './styles';
 import { IProject, IFundingTx, IFunder } from '../../../interfaces';
@@ -20,6 +20,7 @@ interface IInfoPage {
     btcRate: number;
     fundingTxs: IFundingTx[]
     funders: IFunder[]
+	test?:boolean
 }
 
 export const InfoPage = ({
@@ -30,6 +31,7 @@ export const InfoPage = ({
 	btcRate,
 	fundingTxs,
 	funders,
+	test,
 }: IInfoPage) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({isMobile});
@@ -51,6 +53,10 @@ export const InfoPage = ({
 	const fundersCopy = [...funders];
 
 	const sortedFunders: IFunder[] = fundersCopy.sort(leaderboardSort);
+
+	if (test) {
+		return <InfoPageSkeleton />;
+	}
 
 	return (
 		<VStack
@@ -102,6 +108,43 @@ export const InfoPage = ({
 							<IdBarLeaderboard key={index} funder={funder} count={index + 1} project={project}/>
 						))
 					}
+				</VStack>
+			</Box>
+		</VStack>
+	);
+};
+
+export const InfoPageSkeleton = () => {
+	const isMobile = isMobileMode();
+
+	return (
+		<VStack
+			padding={isMobile ? '10px 5px 0px 5px' : '10px 20px'}
+			spacing="15px"
+			width="100%"
+			height="100%"
+			overflowY="hidden"
+			position="relative"
+
+		>
+			<SkeletonText noOfLines={3} width="185px" />
+			<SkeletonCircle height="208px" width="208px" marginY="30px"/>
+			<Skeleton height="40px" width="100%" />
+
+			<Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
+				<HStack display="flex" marginBottom="10px" w="95%" spacing="5px">
+					<Box w="50%">
+						<Skeleton w="100%" h="40px"/>
+					</Box>
+					<Box w="50%">
+						<Skeleton w="100%" h="40px"/>
+					</Box>
+				</HStack>
+				<VStack spacing={'8px'} w="95%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
+					<Skeleton width="100%" height="80px" />
+					<Skeleton width="100%" height="80px" />
+					<Skeleton width="100%" height="80px" />
+					<Skeleton width="100%" height="80px" />
 				</VStack>
 			</Box>
 		</VStack>

@@ -24,9 +24,13 @@ const amountBadges: IBadges = {
 	},
 };
 
-const specialBadges: IBadges = {
+const roleBadges: IBadges = {
+	funder: {
+		badge: 'Funder',
+		description: 'The user funded this project!',
+	},
 	earlyFunder: {
-		badge: 'early funder',
+		badge: 'Early Funder',
 		description: 'This user funded within the first 24 hours of the project start!',
 	},
 };
@@ -40,10 +44,12 @@ interface IcomputeFunderBadgesProps {
 		timesFunded: number;
 		confirmedAt: string;
 	}
+	shortForm?: Boolean;
 }
 
-export const computeFunderBadges = ({ project, funder }: IcomputeFunderBadgesProps): IBadge[] => {
+export const computeFunderBadges = (props: IcomputeFunderBadgesProps): IBadge[] => {
 	const funderBadges: IBadge[] = [];
+	const { project, funder, shortForm = true } = props;
 	const { amountFunded: amount, timesFunded: times } = funder;
 
 	if (amount === 0) {
@@ -63,7 +69,7 @@ export const computeFunderBadges = ({ project, funder }: IcomputeFunderBadgesPro
 	const interval = Interval.fromDateTimes(projectCreatedAt, funderConfirmedAt);
 
 	if (interval.length('hours') < 24) {
-		funderBadges.push(specialBadges.earlyFunder);
+		funderBadges.push(roleBadges.earlyFunder);
 	}
 
 	// Badge for funding more than once
@@ -72,6 +78,19 @@ export const computeFunderBadges = ({ project, funder }: IcomputeFunderBadgesPro
 			badge: `${times}x`,
 			description: `This user funded this project ${times} times!`,
 		});
+	}
+
+	if (funderBadges.length === 0) {
+		return [];
+	}
+
+	if (!shortForm) {
+		const longFormBadges = funderBadges.map(funderBadge => ({
+			...funderBadge,
+			badge: funderBadge.badge + ' Funder',
+		}));
+
+		return longFormBadges;
 	}
 
 	return funderBadges;
