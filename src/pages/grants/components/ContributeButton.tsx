@@ -6,12 +6,10 @@ import {
 	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Image, HStack, InputGroup, InputLeftElement, Link,
 } from '@chakra-ui/react';
 import QRCode from 'react-qr-code';
-import { HiOutlineSpeakerphone } from 'react-icons/hi';
-import { BiCopyAlt } from 'react-icons/bi';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
-import { isMediumScreen, useNotification } from '../../../utils';
+import { useNotification, isMobileMode } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
 import { commaFormatted } from '../../../utils/helperFunctions';
@@ -20,6 +18,7 @@ import { useFundingFlow } from '../../../hooks';
 import { fundingStages } from '../../../constants';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { useBtcContext } from '../../../context/btc';
+import { Subscribe } from '../../../components/nav/Subscribe';
 
 interface ContributeButtonProps {
 active: boolean,
@@ -35,16 +34,13 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 	const [message, setMessage] = useState(false);
 	const [copy, setCopy] = useState(false);
 	const { toast } = useNotification();
-	const isMedium = isMediumScreen();
 	const initialRef = React.useRef(null);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const {btcRate} = useBtcContext();
 	const {fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow({ hasWebLN: false });
+	const [subscribed, setSubscribed] = useState(false);
 
-	const shareProjectWithfriends = () => {
-		navigator.clipboard.writeText(window.location.href);
-		setCopy(true);
-	};
+	const isMobile = isMobileMode();
 
 	useEffect(() => {
 		if (copy) {
@@ -53,6 +49,26 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 			}, 2000);
 		}
 	}, [copy]);
+
+	useEffect(() => {
+		if (fundState === 'completed') {
+			if (name || contact) {
+				const records = [{
+					fields: {
+						Title: name,
+						fldGla9o00ogzrquw: contact,
+						Type: [
+							`Grants Contributor - ${project.title.slice(8)}`,
+						],
+						fldOWbMeUVrRjXrYu: ['Geyser Grants'],
+						Grant: project.title,
+						fldNsoC4hNwXXYBUZ: contributeAmount,
+					},
+				}];
+				createCreatorRecord({records});
+			}
+		}
+	}, [fundState]);
 
 	const { address } = fundingTx;
 
@@ -87,24 +103,6 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 		} else {
 			try {
 				setSubmitting(true);
-
-				if (name || contact) {
-					const records = [{
-						fields: {
-							Title: name,
-							fldGla9o00ogzrquw: contact,
-							Type: [
-								'Subscriber',
-							],
-							fldOWbMeUVrRjXrYu: ['Geyser Grants'],
-							Grant: project.title,
-							fldNsoC4hNwXXYBUZ: contributeAmount,
-							Notes: 'Contributor',
-						},
-					}];
-					await createCreatorRecord({records});
-				}
-
 				handleFund();
 			} catch (_) {
 				toast({
@@ -123,6 +121,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 		setContributeAmount(0);
 		setSubmitting(false);
 		setMessage(false);
+		setSubscribed(false);
 		resetFundingFlow();
 		onClose();
 	};
@@ -136,7 +135,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 						<Image src={project.media[0]} alt="icon" rounded="lg" w="100px" mr={1}/>
 						<Box>
 							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>Contribute</ModalHeader>
-							<Text textAlign="justify">Contribute to this cause to support the Bitcoin ecosystem. Geyser will custody the funds until the recipients are established and then distribute the funds to the best applicants. Donations are non-refundable and not tax deductible.</Text>
+							<Text textAlign="justify">Contribute to this grant to support the Bitcoin ecosystem. Donations are non-refundable and not tax deductible.</Text>
 						</Box>
 					</HStack>
 					<ModalCloseButton onClick={close} />
@@ -224,7 +223,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 						<Image src={project.media[0]} alt="icon" rounded="lg" w="100px" mr={1}/>
 						<Box>
 							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>Contribute</ModalHeader>
-							<Text textAlign="justify">Contribute to this cause to support the Bitcoin ecosystem. Geyser will custody the funds until the recipients are established and then distribute the funds to the best applicants. Donations are non-refundable and not tax deductible.</Text>
+							<Text textAlign="justify">Contribute to this grant to support the Bitcoin ecosystem. Donations are non-refundable and not tax deductible.</Text>
 						</Box>
 					</HStack>
 					<ModalCloseButton onClick={close} />
@@ -233,7 +232,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 						<Box display="flex" justifyContent="center" alignItems="center" pt="15px" cursor="pointer" w="186px" h="186px" margin="0 auto">
 							<QRCode size={186} value={getOnchainAddress()} onClick={handleCopyOnchain}/>
 						</Box>
-						<Text paddingTop="15px" textAlign="center" color="brand.primary" fontWeight="bold">Waiting for payment...</Text>
+						<Text paddingTop="15px" textAlign="center" color="#1BD5B3" fontWeight="bold">Waiting for payment...</Text>
 					</ModalBody>
 					<ModalFooter>
 						<ButtonComponent
@@ -257,26 +256,32 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 				<ModalHeader fontWeight="bold" fontSize="2xl" textAlign="center">Successful contribution!</ModalHeader>
 				<ModalCloseButton onClick={close} />
 				<ModalBody>
-					<VStack mb={6}>
-						<Box bg="brand.primary" borderRadius="full" width="75px" height="75px" display="flex" justifyContent="center" alignItems="center">
+					<VStack
+						padding={isMobile ? '10px 10px' : '5px 20px'}
+						spacing="12px"
+						width="100%"
+						height="100%"
+						overflowY="hidden"
+						position="relative"
+						alignItems="center"
+						justifyContent="center"
+					>
+						<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
 							<CheckIcon w={10} h={10}/>
 						</Box>
-						<Text pt={5}>You contributed <b>{`$${commaFormatted(contributeAmount)}`}</b> to <b>{project.title}.</b></Text>
-						<Text>Check it out on the <Link isExternal href={`https://mempool.space/address/${address}`} textDecoration="underline"><b>block explorer</b></Link>.</Text>
+						{!subscribed
+							&& <>
+								<Text>You contributed <b>{`$${commaFormatted(contributeAmount)}`}</b> to <b>{project.title}.</b></Text>
+								<Text>Check it out on the <Link isExternal href={`https://mempool.space/address/${address}`} textDecoration="underline"><b>block explorer</b></Link>.</Text>
+								<Text>Subscribe below to Geyser Grants to receive updates on where the funds are being distributed, the impact they are having, and receive notices on new upcoming grants.</Text>
+							</>
+						}
+						<Box w="100%">
+							<Subscribe style="inline-minimal" interest="grants" parentState={setSubscribed}/>
+						</Box>
+						<ButtonComponent width="100%" onClick={close}>Close</ButtonComponent>
 					</VStack>
-					<ButtonComponent
-						standard
-						primary={copy}
-						leftIcon={copy ? <BiCopyAlt /> : <HiOutlineSpeakerphone />}
-						width="100%"
-						onClick={shareProjectWithfriends}
-					>
-						{copy ? 'Grant Link Copied' : 'Share grant with friends'}
-					</ButtonComponent>
 				</ModalBody>
-				<ModalFooter>
-					<ButtonComponent primary width="100%" onClick={close}>Close</ButtonComponent>
-				</ModalFooter>
 			</ModalContent>
 		</Modal>
 	);
@@ -304,7 +309,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 				disabled={!active}
 				primary
 				standard
-				w={isMedium ? '300px' : '400px'}
+				w="100%"
 				onClick={() => {
 					onOpen();
 					gotoNextStage();
