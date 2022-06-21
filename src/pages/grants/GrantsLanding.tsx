@@ -10,6 +10,7 @@ import GrantsHeader from '../../assets/grants-header.jpg';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
+import Brad from '../../assets/brad.png';
 
 export const GrantsLanding = () => {
 	const isMobile = isMobileMode();
@@ -89,7 +90,7 @@ export const GrantsLanding = () => {
 						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
 							<Box>
 								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
+									<Avatar size="xl" src={Brad}/>
 								</Box>
 								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
 								<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>
