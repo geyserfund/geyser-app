@@ -16,7 +16,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 	const [applicants, setApplicants] = useState(['loading']);
 
 	const getGrantApplicants = async () => {
-		fetch('https://api.airtable.com/v0/appyM7XlNIWVypuP5/tbleyJa9ZMqPptvED?fields%5B%5D=Grant&fields%5B%5D=Notes&filterByFormula=FIND(%22Applicant%22%2C+Notes)', {
+		fetch('https://api.airtable.com/v0/appyM7XlNIWVypuP5/tblwlFBSxMvV0JhzU?fields%5B%5D=Grant', {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
@@ -36,18 +36,18 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 	return (
 		<>
-			<Box py={isMedium ? 10 : 20} px={isMedium ? '0px' : '150px'}>
+			<Box py={isMedium ? 10 : 20} w={isMedium ? 'auto' : '900px'} margin="0 auto">
 
-				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center">
+				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center">
 
-					<Box w={isMedium ? '100%' : '45%'}>
+					<Box w={isMedium ? '100%' : '450px'}>
 						<Text fontSize="xl" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: {project.name === 'bitcoin-education' ? 'JULY 1-31' : ''}</Text>
 						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
-						<Image w={isMobile ? '350px' : '425px'} rounded="md" src={project.media[0] && project.media[0]} alt="grant" margin={isMedium ? '0 auto' : ''}/>
+						<Image w={isMobile ? '300px' : '375px'} rounded="md" src={project.media[0] && project.media[0]} alt="grant" margin={isMedium ? '0 auto' : ''}/>
 					</Box>
 
-					<Box w={isMedium ? '90%' : '35%'} margin={isMedium ? '0 auto' : ''}>
-						<Text fontSize="lg" textAlign="justify" my={isMobile ? 2 : 0}>{project.description}</Text>
+					<Box w={isMobile ? '100%' : isMedium ? '50%' : '450px'} margin={isMedium ? '10px auto' : ''}>
+						<Text fontSize="lg" textAlign="justify" my={isMobile ? 2 : 0} mx={isMobile ? 5 : 0}>{project.description}</Text>
 						<Box boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} mt={6}>
 							<Box display="flex" justifyContent="end">
 								<InfoTooltip
@@ -57,18 +57,18 @@ export const Grants = ({ project }: { project: IProject }) => {
 									width="155px"
 								/>
 							</Box>
-							<HStack justifyContent="space-around" alignItems="center" my={3}>
+							<HStack justifyContent="center" spacing="21px" alignItems="center" my={3}>
 
 								<Box>
 									<HStack justifyContent="center" alignItems="center">
-										<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(1)} M</Text>
+										<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
 								</Box>
 
 								<Box>
 									<HStack justifyContent="center">
-										<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(1) : (0 / 1000000).toFixed(1)} M</Text>
+										<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-development' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">DISTRIBUTED</Text>
 								</Box>
@@ -80,14 +80,44 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={project.active} title="Apply" grant={project.title}/>
+								<RecipientButton active={project.active} title="Apply" grant={project.title} image={project.media[0]}/>
 							</Box>
 						</Box>
 					</Box>
 				</Box>
 
-				<Box w={isMedium ? '90%' : '80%'} margin="0 auto" mt={20}>
-					<Text fontSize="2xl" fontWeight="bold" mb={2}>A trusted board of hardcore Bitcoiners</Text>
+				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center" mt={20}>
+					<Box w={isMobile ? '90%' : isMedium ? '50%' : '450px'} pr={isMedium ? 0 : 20} margin={isMedium ? '0 auto' : ''}>
+						<Text fontSize="2xl" fontWeight="bold" mb={2}>Contribute to this grant</Text>
+						<Text fontSize="lg" mb={6}>Help bootstrap new Bitcoin projects and initiatives by joining the growing number of plebs and whales donating to this grant.<br/><br/>Funds will go directly to supporting {project.title}, and we currently accept on-chain donations only. To learn more, <Link isExternal href="https://t.me/bradmillscandoit" textDecoration="underline">get in touch!</Link></Text>
+					</Box>
+
+					<Box w={isMobile ? '90%' : isMedium ? '50%' : '450px'} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} margin={isMedium ? '0 auto' : ''}>
+						<HStack justifyContent="center" spacing="21px" alignItems="center" my={3}>
+
+							<Box>
+								<HStack justifyContent="center" alignItems="center">
+									<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
+								</HStack>
+								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
+							</Box>
+
+							<Box>
+								<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.funders ? project.funders.length : 0}</Text>
+								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTORS</Text>
+							</Box>
+
+						</HStack>
+						<Box display="flex" justifyContent="center">
+							<ContributeButton active={project.active} title="Contribute" project={project}/>
+						</Box>
+					</Box>
+
+				</Box>
+
+				<Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
+					<Text fontSize="2xl" fontWeight="bold" mb={2}>The board</Text>
+					<Text fontSize="lg" mb={4} textAlign="justify">Meet the board who will help to establish the criteria for grant distribution and review your applications:</Text>
 
 					<HStack>
 						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
@@ -109,40 +139,10 @@ export const Grants = ({ project }: { project: IProject }) => {
 						</Box>
 					</HStack>
 
-					<Text fontSize="lg" mt={6}>We are bringing together a board of hardcore Bitcoiners that have a history of supporting Bitcoin education and media creation. At the end of the Round they will be reviewing the applications and deciding how the funds should be distributed.</Text>
-				</Box>
-
-				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center" mt={20}>
-					<Box w={isMedium ? '90%' : '45%'} pr={isMedium ? 0 : 20} margin={isMedium ? '0 auto' : ''}>
-						<Text fontSize="2xl" fontWeight="bold" mb={2}>Massive impact</Text>
-						<Text fontSize="lg" mb={6}>Want to help spread the good work of Bitcoin far and wide? Why not support Bitcoin educators through this Geyser Grant? Join the growing number of whales and plebs donating to this Geyser Grant (currently on-chain only). Learn more <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link>, and reach out to the Team <Link isExternal href="https://t.me/bradmillscandoit" textDecoration="underline">here</Link>.</Text>
-					</Box>
-
-					<Box w={isMedium ? '90%' : '35%'} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} margin={isMedium ? '0 auto' : ''}>
-						<HStack justifyContent="space-around" alignItems="center" my={3}>
-
-							<Box>
-								<HStack justifyContent="center" alignItems="center">
-									<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(1)} M</Text>
-								</HStack>
-								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
-							</Box>
-
-							<Box>
-								<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.funders ? project.funders.length : 0}</Text>
-								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTORS</Text>
-							</Box>
-
-						</HStack>
-						<Box display="flex" justifyContent="center">
-							<ContributeButton active={project.active} title="Contribute" project={project}/>
-						</Box>
-					</Box>
-
 				</Box>
 
 				<VStack margin="0 auto" mt={20} px={4}>
-					<Subscribe style="inline" interest="grants" />
+					<Subscribe style="inline" interest="grants" titleSize="2xl" />
 				</VStack>
 
 			</Box>
