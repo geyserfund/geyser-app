@@ -74,7 +74,7 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 	// const SwitchIcon = useColorModeValue(FaMoon, FaSun);
 
 	return (
-		<Menu placement="bottom-end" >
+		<Menu placement="bottom-end">
 			<MenuButton
 				as={IconButton}
 				aria-label="options"
@@ -90,7 +90,7 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 				&& <>
 					<MenuItem className={classes.menuItem}>
 						<Link href={HomeUrl}>
-									Projects
+									Campaigns
 						</Link>
 					</MenuItem>
 					<MenuItem className={classes.menuItem}>
