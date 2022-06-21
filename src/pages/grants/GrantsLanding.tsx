@@ -68,13 +68,13 @@ export const GrantsLanding = () => {
 						{loading
 							&& <>
 								<Box>
-									<Skeleton w={isMobile ? '300px' : '350px'} h={isMobile ? '502px' : '552px'} my={10} mr={isMobile ? 10 : 20}/>
+									<Skeleton w={isMobile ? '325px' : '350px'} h={isMobile ? '527px' : '552px'} my={10} mr={isMobile ? 10 : 20}/>
 								</Box>
 								<Box>
-									<Skeleton w={isMobile ? '300px' : '350px'} h={isMobile ? '502px' : '552px'} my={10} mr={isMobile ? 10 : 20}/>
+									<Skeleton w={isMobile ? '325px' : '350px'} h={isMobile ? '527px' : '552px'} my={10} mr={isMobile ? 10 : 20}/>
 								</Box>
 								<Box>
-									<Skeleton w={isMobile ? '300px' : '350px'} h={isMobile ? '502px' : '552px'} my={10} />
+									<Skeleton w={isMobile ? '325px' : '350px'} h={isMobile ? '527px' : '552px'} my={10} />
 								</Box>
 							</>
 						}
