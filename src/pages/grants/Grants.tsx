@@ -41,8 +41,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center">
 
 					<Box w={isMedium ? '100%' : '450px'}>
-						<Text fontSize="xl" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: {project.name === 'bitcoin-education' ? 'JULY 1-31' : ''}</Text>
 						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
+						<Text fontSize="xl" color="#6E6E6E" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>ROUND 1: JULY 1-31</Text>
 						<Image w={isMobile ? '300px' : '375px'} rounded="md" src={project.media[0] && project.media[0]} alt="grant" margin={isMedium ? '0 auto' : ''}/>
 					</Box>
 
@@ -88,7 +88,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="center" mt={20}>
 					<Box w={isMobile ? '90%' : isMedium ? '50%' : '450px'} pr={isMedium ? 0 : 20} margin={isMedium ? '0 auto' : ''}>
-						<Text fontSize="2xl" fontWeight="bold" mb={2}>Contribute to this grant</Text>
+						<Text fontSize="3xl" fontWeight="bold" mb={2}>Contribute to this grant</Text>
 						<Text fontSize="lg" mb={6}>Help bootstrap new Bitcoin projects and initiatives by joining the growing number of plebs and whales donating to this grant.<br/><br/>Funds will go directly to supporting {project.title}, and we currently accept on-chain donations only. To learn more, <Link isExternal href="https://t.me/bradmillscandoit" textDecoration="underline">get in touch!</Link></Text>
 					</Box>
 
@@ -116,7 +116,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 				</Box>
 
 				<Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
-					<Text fontSize="2xl" fontWeight="bold" mb={2}>The board</Text>
+					<Text fontSize="3xl" fontWeight="bold" mb={2}>The board</Text>
 					<Text fontSize="lg" mb={4} textAlign="justify">Meet the board who will help to establish the criteria for grant distribution and review your applications:</Text>
 
 					<HStack>
@@ -142,7 +142,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 				</Box>
 
 				<VStack margin="0 auto" mt={20} px={4}>
-					<Subscribe style="inline" interest="grants" titleSize="2xl" />
+					<Subscribe style="inline" interest="grants" titleSize="3xl" />
 				</VStack>
 
 			</Box>
