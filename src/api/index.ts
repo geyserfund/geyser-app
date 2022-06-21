@@ -12,3 +12,14 @@ export const createCreatorRecord = async (data:any) => {
 		body: JSON.stringify(data),
 	}).then(response => response.json());
 };
+
+export const createApplicantRecord = async (data:any) => {
+	fetch('https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Applicants', {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	}).then(response => response.json());
+};

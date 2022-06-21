@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+
 import React, { useState } from 'react';
 import {
 	Modal,
@@ -14,12 +16,14 @@ import {
 	Input,
 	Box,
 	Icon,
+	InputGroup,
+	InputRightElement,
 } from '@chakra-ui/react';
 import { ButtonComponent, TextBox } from '../ui';
 import { createCreatorRecord } from '../../api';
 import { useNotification, validateEmail, isMobileMode } from '../../utils';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
-import { CheckIcon } from '@chakra-ui/icons';
+import { CheckIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
 
     interface ISubscribe {
@@ -27,9 +31,11 @@ import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
         onClose?: any
 				style: string
 				interest?: string
+				parentState?: React.Dispatch<React.SetStateAction<boolean>>
+				titleSize?: string
     }
 
-export const Subscribe = ({isOpen, onClose, style, interest}:ISubscribe) => {
+export const Subscribe = ({isOpen, onClose, style, interest, parentState, titleSize}:ISubscribe) => {
 	const { toast } = useNotification();
 	const isMobile = isMobileMode();
 	const [submitting, setSubmitting] = useState(false);
@@ -80,6 +86,11 @@ export const Subscribe = ({isOpen, onClose, style, interest}:ISubscribe) => {
 
 			setSubmitting(false);
 			setSuccess(true);
+
+			if (parentState) {
+				parentState(true);
+			}
+
 			toast({
 				title: 'Succesfully subscribed to Geyser',
 				status: 'success',
@@ -144,35 +155,52 @@ export const Subscribe = ({isOpen, onClose, style, interest}:ISubscribe) => {
 						</ModalBody>
 					</ModalContent>
 				</Modal>
-				: <VStack>
-					<Text fontWeight="bold" fontSize="2xl">{success ? 'Success!' : 'Stay up to date with Geyser Grants'}</Text>
+				: style === 'inline' ? <VStack>
+					<Text fontWeight="bold" fontSize={titleSize} textAlign="center">{success ? 'Success!' : 'Stay up to date with Geyser Grants'}</Text>
 					{success
 						&& <Box bg="brand.primary" borderRadius="full" width="75px" height="75px" display="flex" justifyContent="center" alignItems="center">
 							<CheckIcon w={7} h={7}/>
 						</Box>
 					}
-					<Text textAlign={isMobile ? 'left' : 'center'} w={isMobile ? '100%' : '400px'}>
-						{success ? 'Thanks for signing up. We’ll be sharing more info about Geyser Grants soon.' : 'Get news on recent and upcoming Grants by joining our newsletter or joining our community on Telegram.'}
+					<Text textAlign={isMobile ? 'left' : 'center'} w={isMobile ? '80%' : '400px'}>
+						{success ? 'Thanks for signing up. We’ll be sharing more info about Geyser Grants soon.' : 'Receive news on recent and upcoming Grants by joining our newsletter and join our community on Telegram.'}
 					</Text>
-					{!success
+					<Box display={isMobile ? 'block' : 'flex'}>
+						{!success
 						&& <>
-							<HStack>
-								<Input focusBorderColor="#20ECC7" type="email" isRequired={true} placeholder="satoshi@geyser.fund" value={email} onChange={handleEmail} />
-								<ButtonComponent primary size="md" disabled={!email} onClick={handleConfirm} isLoading={submitting}>Subscribe</ButtonComponent>
-							</HStack>
-							{error && <Text fontSize={'12px'}>{error}</Text>}
+							<Box>
+								<InputGroup w={isMobile ? '100%' : '250px'} mr={isMobile ? 0 : 5} mb={isMobile ? 2 : 0}>
+									<Input focusBorderColor="#20ECC7" type="email" isRequired={true} placeholder="satoshi@geyser.fund" value={email} onChange={handleEmail} />
+									<InputRightElement>
+										<ButtonComponent w="100%" primary disabled={!email} onClick={handleConfirm} isLoading={submitting}><ArrowForwardIcon w={6} h={6} /></ButtonComponent>
+									</InputRightElement>
+								</InputGroup>
+								{error && <Text my={isMobile ? 2 : 1} ml={1} fontSize={'12px'}>{error}</Text>}
+							</Box>
 						</>
-					}
-					<Link href={GeyserTelegramUrl} _hover={{textDecoration: 'none'}} isExternal bg="black" borderRadius="md" py={2} px={3} color="white" fontWeight="bold" display="flex" justifyContent="center" alignItems="center">
-						<Icon
-							boxSize={8}
-							aria-label="telegram"
-							as={FaTelegramPlane}
-							mr={2}
-						/>
+						}
+						<Link href={GeyserTelegramUrl} _hover={{textDecoration: 'none'}} isExternal bg="#5B5B5B" borderRadius="md" h="40px" px={3} color="white" fontWeight="bold" display="flex" justifyContent="center" alignItems="center">
+							<Icon
+								boxSize={6}
+								aria-label="telegram"
+								as={FaTelegramPlane}
+								mr={2}
+							/>
 					Join us on Telegram
-					</Link>
+						</Link>
+					</Box>
 				</VStack>
+					: style === 'inline-minimal' ? <>
+						{!success
+							? <VStack>
+								<Input focusBorderColor="#20ECC7" type="email" isRequired={true} placeholder="satoshi@geyser.fund" value={email} onChange={handleEmail} />
+								<ButtonComponent w="100%" primary disabled={!email} onClick={handleConfirm} isLoading={submitting}>Subscribe</ButtonComponent>
+								{error && <Text fontSize={'12px'}>{error}</Text>}
+							</VStack>
+							:	<Text>You successfully subscribed to <strong>Geyser Grants</strong>!</Text>
+						}
+					</>
+						: <></>
 			}
 		</>
 	);
