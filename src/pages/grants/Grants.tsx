@@ -54,7 +54,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								<InfoTooltip
 									title="APPLICATIONS OPEN JULY 1"
 									description="Please check back then!"
-									options={ { top: '-55px', left: '-110px' } }
+									options={ { top: '-55px', left: '-125px' } }
 									width="155px"
 								/>
 							</Box>
@@ -81,7 +81,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={project.active} title="Apply" grant={project.title} image={project.media[0]}/>
+								<RecipientButton active={false} title="Apply" grant={project.title} image={project.media[0]}/>
 							</Box>
 						</Box>
 					</Box>
