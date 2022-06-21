@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
-	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea, Image, HStack, Link,
+	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea, Image, HStack,
 } from '@chakra-ui/react';
-import { HiOutlineSpeakerphone } from 'react-icons/hi';
-import { BiCopyAlt } from 'react-icons/bi';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
-import { isMobileMode, isMediumScreen, useNotification } from '../../../utils';
+import { isMobileMode, useNotification } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
-import { createCreatorRecord } from '../../../api';
-import BtcEduIcon from '../../../assets/btc-edu.png';
+import { createApplicantRecord } from '../../../api';
+import { Subscribe } from '../../../components/nav/Subscribe';
 
 interface RecipientButtonProps {
 active: boolean,
 title: string,
 grant: string,
+image: string,
 }
 
-export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => {
+export const RecipientButton = ({active, title, grant, image}:RecipientButtonProps) => {
 	const isMobile = isMobileMode();
 	const [step, setStep] = useState(0);
 	const [grantee, setGrantee] = useState('');
@@ -28,15 +27,9 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 	const [contact, setContact] = useState('');
 	const [submitting, setSubmitting] = useState(false);
 	const { toast } = useNotification();
-	const isMedium = isMediumScreen();
 	const initialRef = React.useRef(null);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
-	// copy link
-	const shareProjectWithfriends = () => {
-		navigator.clipboard.writeText(window.location.href);
-		setCopy(true);
-	};
+	const [subscribed, setSubscribed] = useState(false);
 
 	const [copy, setCopy] = useState(false);
 	useEffect(() => {
@@ -53,18 +46,13 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 			const records = [{
 				fields: {
 					Title: grantee,
-					Project: description,
-					fldAHz4l5w1Nj1n80: url,
-					fldGla9o00ogzrquw: contact,
-					Type: [
-						'Subscriber',
-					],
-					fldOWbMeUVrRjXrYu: ['Geyser Grants'],
+					fldSKBmoxAUYc1NxQ: description,
+					Links: url,
+					Contact: contact,
 					Grant: grant,
-					Notes: 'Applicant',
 				},
 			}];
-			await createCreatorRecord({records});
+			await createApplicantRecord({records});
 			setStep(1);
 		} catch (_) {
 			toast({
@@ -82,6 +70,7 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 		setDescription('');
 		setUrl('');
 		setContact('');
+		setSubscribed(false);
 		setStep(0);
 		onClose();
 	};
@@ -102,10 +91,10 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 				<ModalOverlay />
 				<ModalContent>
 					<HStack p={6}>
-						<Image src={BtcEduIcon} alt="icon" rounded="lg" w="100px" mr={1}/>
+						<Image src={image} alt="icon" rounded="lg" w="100px" mr={1}/>
 						<Box>
 							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>{submitting ? 'Applying' : 'Apply'}</ModalHeader>
-							<Text textAlign="justify">Are you currently working on a project that supports Bitcoin Education? Apply to this grant to receive a donation. Click <Link isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" textDecoration="underline">here</Link> for more info.</Text>
+							<Text textAlign="justify">Apply to this grant if you are working on a project that supports {grant}.</Text>
 						</Box>
 					</HStack>
 					<ModalCloseButton onClick={close} />
@@ -121,7 +110,7 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 								value={grantee}
 								isRequired={true}
 							/>
-							<Text mt={5} fontWeight="bold">How are you supporting Bitcoin Education?</Text>
+							<Text mt={5} fontWeight="bold">How are you supporting {grant}?</Text>
 							<Textarea
 								name="description"
 								placeholder="Teaching young Africans the basics about Bitcoin."
@@ -184,21 +173,18 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 						<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
 							<CheckIcon w={10} h={10}/>
 						</Box>
-						<Text py={5} textAlign="center"><b>{grantee}</b> has applied to receive the <b>{grant}</b> Geyser Grant.</Text>
+						{!subscribed
+							&& <>
+								<Text><b>{grantee}</b> has applied to receive the <b>{grant}</b> Geyser Grant.</Text>
+								<Text>Subscribe below to Geyser Grants to receive updates on where the funds are being distributed, the impact they are having, and receive notices on new upcoming grants.</Text>
+							</>
+						}
+						<Box w="100%">
+							<Subscribe style="inline-minimal" interest="grants" parentState={setSubscribed}/>
+						</Box>
+						<ButtonComponent width="100%" onClick={close}>Close</ButtonComponent>
 					</VStack>
-					<ButtonComponent
-						standard
-						primary={copy}
-						leftIcon={copy ? <BiCopyAlt /> : <HiOutlineSpeakerphone />}
-						width="100%"
-						onClick={shareProjectWithfriends}
-					>
-						{copy ? 'Grant Link Copied' : 'Share grant with friends'}
-					</ButtonComponent>
 				</ModalBody>
-				<ModalFooter>
-					<ButtonComponent primary width="100%" onClick={close}>Close</ButtonComponent>
-				</ModalFooter>
 			</ModalContent>
 		</Modal>
 	);
@@ -210,7 +196,7 @@ export const RecipientButton = ({active, title, grant}:RecipientButtonProps) => 
 				disabled={!active}
 				primary
 				standard
-				w={isMedium ? '300px' : '400px'}
+				w="100%"
 				onClick={() => {
 					onOpen();
 				}}
