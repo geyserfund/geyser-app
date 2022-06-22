@@ -39,7 +39,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 		<>
 			<Box py={isMedium ? 10 : 20} w={isMedium ? 'auto' : '900px'} margin="0 auto">
 
-				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="end">
+				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center">
 
 					<Box w={isMedium ? '100%' : '450px'}>
 						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
