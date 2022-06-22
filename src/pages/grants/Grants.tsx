@@ -11,6 +11,7 @@ import { Subscribe } from '../../components/nav/Subscribe';
 import { RecipientButton } from './components/RecipientButton';
 import { ContributeButton } from './components/ContributeButton';
 import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
+import Brad from '../../assets/brad.png';
 
 export const Grants = ({ project }: { project: IProject }) => {
 	const [applicants, setApplicants] = useState(['loading']);
@@ -38,7 +39,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 		<>
 			<Box py={isMedium ? 10 : 20} w={isMedium ? 'auto' : '900px'} margin="0 auto">
 
-				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center">
+				<Box display={isMedium ? 'block' : 'flex'} justifyContent="center" alignItems="end">
 
 					<Box w={isMedium ? '100%' : '450px'}>
 						<Text fontSize="4xl" fontWeight="bold" textAlign={isMedium ? 'center' : 'left'}>{project.title}</Text>
@@ -53,7 +54,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								<InfoTooltip
 									title="APPLICATIONS OPEN JULY 1"
 									description="Please check back then!"
-									options={ { top: '-55px', left: '-110px' } }
+									options={ { top: '-55px', left: '-125px' } }
 									width="155px"
 								/>
 							</Box>
@@ -80,7 +81,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={project.active} title="Apply" grant={project.title} image={project.media[0]}/>
+								<RecipientButton active={false} title="Apply" grant={project.title} image={project.media[0]}/>
 							</Box>
 						</Box>
 					</Box>
@@ -123,7 +124,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
 							<Box>
 								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
+									<Avatar size="xl" src={Brad}/>
 								</Box>
 								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
 								<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>
