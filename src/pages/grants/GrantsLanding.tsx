@@ -52,9 +52,9 @@ export const GrantsLanding = () => {
 					<Text fontFamily={fonts.interBlack} fontSize={isMobile ? '3xl' : '5xl'} fontWeight="900" textAlign="center">ROUND 1</Text>
 					<Text fontSize={isMobile ? '3xl' : '5xl'} fontWeight="light" textAlign="center">JULY 1-31</Text>
 					<Text fontSize="4xl" fontWeight="bold" textAlign="center" mt={8}>A new era for Bitcoin grants</Text>
-					<Text textAlign="justify" fontSize="lg">Bitcoin is signal, everything else is noise. We created Geyser Grants to help broadcast loud and clear Bitcoin signal to the world. That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awarenes, enabling Bitcoin culture, and supporting needed development in this space.  Through these grants, we will be supporting Bitcoin educators, developers, entrepreneurs, and creatives with the resources they need to bootstrap their initiatives worldwide.
+					<Text textAlign="justify" fontSize="lg">Bitcoin is signal, everything else is noise. We created Geyser Grants to help broadcast loud and clear Bitcoin signal to the world. That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awareness, enabling Bitcoin culture, and supporting needed development in this space.  Through these grants, we will be supporting Bitcoin educators, developers, entrepreneurs, and creatives with the resources they need to bootstrap their initiatives worldwide.
 						<br/><br/>
-					To bring this vision to life, we accept accept Bitcoin contributions for each individual grant and take no fees at this stage. When the Round goes live, applications will be opened and they will be evaluated once the Rounds close. For more information, see <Link textDecoration="underline" href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f">here</Link>.
+					To bring this vision to life, we accept Bitcoin contributions for each individual grant and take no fees at this stage. When the Round goes live, applications will be opened and they will be evaluated once the Rounds close. For more information, see <Link textDecoration="underline" href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f">here</Link>.
 					</Text>
 				</Box>
 
