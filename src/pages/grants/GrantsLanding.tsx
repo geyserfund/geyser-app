@@ -10,6 +10,8 @@ import GrantsHeader from '../../assets/grants-header.jpg';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
+import Brad from '../../assets/brad.png';
+import { fonts } from '../../constants/fonts';
 
 export const GrantsLanding = () => {
 	const isMobile = isMobileMode();
@@ -46,8 +48,8 @@ export const GrantsLanding = () => {
 		<>
 			<Box pb={20} pt={isMobile ? 5 : 10} backgroundImage={GrantsHeader} backgroundSize="contain" backgroundRepeat="no-repeat">
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '35%'} margin="0 auto" my={5}>
-					<Text fontSize={isMobile ? '4xl' : '6xl'} fontWeight="medium" textAlign="center">Geyser Grants</Text>
-					<Text fontSize={isMobile ? '3xl' : '5xl'} fontWeight="900" textAlign="center">ROUND 1</Text>
+					<Text fontSize={isMobile ? '4xl' : '55px'} fontWeight="medium" textAlign="center">Geyser Grants</Text>
+					<Text fontFamily={fonts.interBlack} fontSize={isMobile ? '3xl' : '5xl'} fontWeight="900" textAlign="center">ROUND 1</Text>
 					<Text fontSize={isMobile ? '3xl' : '5xl'} fontWeight="light" textAlign="center">JULY 1-31</Text>
 					<Text fontSize="4xl" fontWeight="bold" textAlign="center" mt={8}>A new era for Bitcoin grants</Text>
 					<Text textAlign="justify" fontSize="lg">Bitcoin is signal, everything else is noise. We created Geyser Grants to help broadcast loud and clear Bitcoin signal to the world. That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awarenes, enabling Bitcoin culture, and supporting needed development in this space.  Through these grants, we will be supporting Bitcoin educators, developers, entrepreneurs, and creatives with the resources they need to bootstrap their initiatives worldwide.
@@ -89,7 +91,7 @@ export const GrantsLanding = () => {
 						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
 							<Box>
 								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src={'https://pbs.twimg.com/profile_images/1497292658729013259/pKOWQaD2_400x400.jpg'}/>
+									<Avatar size="xl" src={Brad}/>
 								</Box>
 								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
 								<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>

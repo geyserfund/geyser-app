@@ -14,7 +14,7 @@ export const GrantCard = ({ project, number, distributed, date, status, marginRi
 	};
 
 	return (
-		<Box backgroundColor="white" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" borderRadius="4px" my={10} mr={marginRight ? isMobile ? 10 : 20 : 0} onClick={() => gotoGrant()} cursor="pointer">
+		<Box backgroundColor="white" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" borderRadius="4px" my={10} mr={marginRight ? isMobile ? 10 : 20 : 0} onClick={() => gotoGrant()} cursor="pointer">
 
 			<Box w={isMobile ? '325px' : '350px'}>
 				<>

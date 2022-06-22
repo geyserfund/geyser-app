@@ -4,4 +4,5 @@ export const fonts = {
 	solway: '\'Solway\', serif',
 	inter: '\'Inter\', sans-serif;',
 	myanmar: 'Myanmar-Khyay',
+	interBlack: '\'Inter/Black\', sans-serif;',
 };
