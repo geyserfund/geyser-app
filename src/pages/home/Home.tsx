@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
 import {
 	SatoshiAmount } from '../../components/ui';
 import { Footer, SwipeLiveProject,
@@ -7,14 +8,16 @@ import { Footer, SwipeLiveProject,
 import { isDarkMode, isMobileMode, useNotification } from '../../utils';
 import {
 	colors,
-	LaunchImageUrl,
 } from '../../constants';
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
-import { SatoshiIconNew } from '../../components/icons';
+import { SatoshiIconGeyser } from '../../components/icons';
+import Dorian from '../../assets/dorian.png';
+import GrantsBanner from '../../assets/grants-banner.png';
+import { useHistory } from 'react-router';
 
 type RuleNames = string
 
@@ -63,12 +66,27 @@ export const Home = () => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 	const { toast } = useNotification();
-
+	const history = useHistory();
 	const classes = useStyles({ isMobile: isMobileMode() });
 
 	const { loading, error, data } = useQuery(QUERY_PROJECTS);
 	const { loading: summaryLoading, error: summaryError, data: summaryData } = useQuery(ALL_PROJECTS_SUMMARY);
 
+	/*
+	Banner logic
+	*/
+	const hideBanner = localStorage.getItem('hideBanner');
+	const showBanner = !(hideBanner && hideBanner === 'true');
+	const [banner, setBanner] = useState(showBanner);
+
+	const hideBannerCached = () => {
+		localStorage.setItem('hideBanner', 'true');
+		setBanner(false);
+	};
+
+	/*
+	Error handling logic
+	*/
 	useEffect(() => {
 		if (error) {
 			toast({
@@ -114,6 +132,12 @@ export const Home = () => {
 				flexDirection="column"
 				alignItems="flex-start"
 			>
+				{banner
+					&& <Box position="relative" marginTop={isMobile ? '15px' : '30px'}>
+						<CloseIcon position="absolute" top="15px" right="15px" cursor="pointer" color="black" onClick={() => hideBannerCached() }/>
+						<Image src={GrantsBanner} alt="geyser grants" borderRadius="sm" cursor="pointer" onClick={() => history.push('/grants')}/>
+					</Box>
+				}
 				<Box
 					display="flex"
 					flexDirection={isMobile ? 'column-reverse' : 'row'}
@@ -153,7 +177,7 @@ export const Home = () => {
 										<Text className={classes.subtitleText}>PROJECTS</Text>
 									</VStack><VStack>
 										<Box display="flex" alignItems="center">
-											<SatoshiIconNew mr={1} />
+											<SatoshiIconGeyser mr={1} />
 											<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
 										</Box>
 										<Text className={classes.subtitleText}>SATS RAISED</Text>
@@ -166,7 +190,7 @@ export const Home = () => {
 						</HStack>
 					</VStack>
 					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'} minWidth="305px" >
-						<Image src={LaunchImageUrl} maxHeight="250px"/>
+						<Image src={Dorian} maxHeight="250px"/>
 					</Box>
 				</Box>
 				<VStack alignItems="flex-start" width="100%" spacing="0px">

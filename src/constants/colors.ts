@@ -25,7 +25,8 @@ export const colors = {
 	darkerPrimary: '#1BD5B3',
 
 	normalLightGreen: '#1BD5B3',
-
+	gold: '#fae500',
+	gray50: '#F2F2F2',
 	gray100: '#EDF2F7',
 	gray200: '#E2E8F0',
 	gray300: '#CBD5E0',

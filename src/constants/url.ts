@@ -7,7 +7,7 @@ export const LaunchUrl = 'https://geyser.fund/launch';
 export const GrantsUrl = 'https://geyser.fund/grants';
 export const AboutUsUrl = 'https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09';
 export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3';
-export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf';
+export const FeedbackUrl = 'https://geyser.canny.io/';
 
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund';
 export const GeyserTelegramUrl = 'https://t.me/+EZ5otIPhVcxhMmFk';

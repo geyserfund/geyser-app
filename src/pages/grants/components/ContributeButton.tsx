@@ -1,314 +1,247 @@
-/* eslint-disable capitalized-comments */
-import { RejectionError, WebLNProvider } from 'webln';
-import { useMutation, useLazyQuery } from '@apollo/client';
-import React, { useState, useEffect, useContext } from 'react';
+/* eslint-disable radix */
 
-import { QrInvoice } from './QrInvoice';
-import { BubbleCursor } from './BubbleCursor';
-import { PaymentSuccess } from './PaymentSuccess';
-import { ButtonComponent, Linkin } from '../../../components/ui';
-import { AuthContext } from '../../../context';
-import Loader from '../../../components/ui/Loader';
-import { SatoshiIcon } from '../../../components/icons';
-import { REACT_APP_API_ENDPOINT } from '../../../constants';
-import { SiTwitter } from 'react-icons/si';
-import Icon from '@chakra-ui/icon';
-
+import React, { useEffect, useState } from 'react';
 import {
-	MUTATION_FUND,
-	QUERY_GET_FUNDING,
-} from '../../../graphql';
-
-import { fetchBitcoinRates } from '../../../api';
-import { useNotification, validateFundingAmount, sha256 } from '../../../utils';
-import { IDonationFundingInput, IFundingTx, IProject } from '../../../interfaces';
-import { fundingStages, IFundingStages, stageList } from '../../../constants';
-
-import {
-	Text, HStack, Modal, ModalOverlay, ModalContent, NumberInput,
-	ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Textarea,
-	NumberInputField, NumberIncrementStepper, NumberInputStepper, NumberDecrementStepper, Box, Button, Link,
+	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
+	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Image, HStack, InputGroup, InputLeftElement, Link,
 } from '@chakra-ui/react';
+import QRCode from 'react-qr-code';
+import { CheckIcon } from '@chakra-ui/icons';
+import { VStack } from '@chakra-ui/layout';
+import { ButtonComponent } from '../../../components/ui';
+import { useNotification, isMobileMode } from '../../../utils';
+import Loader from '../../../components/ui/Loader';
+import { createCreatorRecord } from '../../../api';
+import { commaFormatted } from '../../../utils/helperFunctions';
+import { IProject, IFundingInput } from '../../../interfaces';
+import { useFundingFlow } from '../../../hooks';
+import { fundingStages } from '../../../constants';
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
+import { useBtcContext } from '../../../context/btc';
+import { Subscribe } from '../../../components/nav/Subscribe';
 
-const initialFunding = {
-	id: 0,
-	uuid: '',
-	invoiceId: '',
-	status: 'unpaid',
-	amount: 0,
-	paymentRequest: '',
-	address: '',
-	canceled: false,
-	comment: '',
-	media: '',
-	paidAt: '',
-	onChain: false,
-	source: '',
-	funder: {
-		id: 0,
-		amountFunded: 0,
-		timesFunded: 0,
-		confirmed: false,
-		confirmedAt: '',
-		badges: [],
-	},
-};
-
-let fundInterval: any;
-
-interface ContributeProps {
-	project: IProject,
-	confettiEffects: React.Dispatch<React.SetStateAction<boolean>>,
-	buttonStyle: string,
-	sats?: number,
-	setSats?: React.Dispatch<React.SetStateAction<number>>,
-	clearCloseButton?: React.Dispatch<React.SetStateAction<boolean>>,
+interface ContributeButtonProps {
+active: boolean,
+title: string,
+project: IProject
 }
 
-export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, setSats, clearCloseButton }: ContributeProps) => {
-	const [amount, setAmount] = useState(sats || 0);
-
-	useEffect(() => {
-		setAmount(sats || 0);
-	}, [sats]);
-
-	const { user } = useContext(AuthContext);
-	// const [comment, setComment] = useState('');
-	const { isOpen, onOpen, onClose } = useDisclosure();
+export const ContributeButton = ({active, title, project}:ContributeButtonProps) => {
+	const [name, setName] = useState('');
+	const [contact, setContact] = useState('');
+	const [contributeAmount, setContributeAmount] = useState(0);
+	const [submitting, setSubmitting] = useState(false);
+	const [message, setMessage] = useState(false);
+	const [copy, setCopy] = useState(false);
 	const { toast } = useNotification();
-	const [fundingTx, setFundingTx] = useState<IFundingTx>({ ...initialFunding, funder: { ...initialFunding.funder, user } });
-	const [fundState, setFundState] = useState<IFundingStages>(fundingStages.form);
-	const [appearAs, setAppearAs] = useState('anonymous');
+	const initialRef = React.useRef(null);
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {btcRate} = useBtcContext();
+	const {fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow({ hasWebLN: false });
+	const [subscribed, setSubscribed] = useState(false);
 
-	const buttonType = buttonStyle;
+	const isMobile = isMobileMode();
 
-	const handleCloseButton = () => {
-		setFundState(fundingStages.form);
-		setAmount(0);
-		// setComment('');
-		clearInterval(fundInterval);
-
-		if (setSats && clearCloseButton) {
-			setSats(0);
-			clearCloseButton(false);
+	useEffect(() => {
+		if (copy) {
+			setTimeout(() => {
+				setCopy(false);
+			}, 2000);
 		}
+	}, [copy]);
 
-		onClose();
-	};
-
-	const gotoNextStage = () => {
-		const currentIndex = stageList.indexOf(fundState);
-		const nextState = stageList[currentIndex + 1];
-		setFundState(nextState);
-	};
-
-	/*
-    * BTC RATE LOGIC
-    */
-	const [btcRate, setBtcRate] = useState(0);
 	useEffect(() => {
-		getBitcoinRates();
-	}, []);
-
-	const getBitcoinRates = async () => {
-		const response: any = await fetchBitcoinRates();
-		const satoshirate = response.rates.USD * 0.00000001;
-		setBtcRate(satoshirate);
-	};
-
-	/*
-    * FUNDING LOGIC
-    */
-	// STATES
-	const [fundProject, {
-		data,
-		// Loading: fundLoading,
-	}] = useMutation(MUTATION_FUND);
-
-	const [getFunding, { data: fundData }] = useLazyQuery(QUERY_GET_FUNDING,
-		{
-			variables: { fundingTxId: fundingTx.id },
-			fetchPolicy: 'network-only',
-		},
-	);
-
-	// EFFECTS
-	useEffect(() => {
-		if (fundData && fundData.getFundingTx) {
-			if (fundData.getFundingTx.status === 'paid') {
-				confettiEffects(true);
-				clearInterval(fundInterval);
-				gotoNextStage();
+		if (fundState === 'completed') {
+			if (name || contact) {
+				const records = [{
+					fields: {
+						Title: name,
+						fldGla9o00ogzrquw: contact,
+						Type: [
+							`Grants Contributor - ${project.title.slice(8)}`,
+						],
+						fldOWbMeUVrRjXrYu: ['Geyser Grants'],
+						Grant: project.title,
+						fldNsoC4hNwXXYBUZ: contributeAmount,
+					},
+				}];
+				createCreatorRecord({records});
 			}
-		}
-	}, [fundData]);
-
-	useEffect(() => {
-		if (data && data.fundProject && data.fundProject.success && fundState !== fundingStages.started) {
-			setFundingTx(data.fundProject.fundingTx);
-			gotoNextStage();
-		}
-	}, [data]);
-
-	useEffect(() => {
-		if (fundState === fundingStages.completed || fundState === fundingStages.canceled) {
-			clearInterval(fundInterval);
-		}
-
-		if (fundState === fundingStages.started) {
-			const requestPayment = async () => {
-				const { webln }: { webln: WebLNProvider } = window as any;
-				if (!webln) {
-					throw new Error('no provider');
-				}
-
-				await webln.enable();
-				const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
-				const paymentHash = await sha256(preimage);
-				return paymentHash;
-			};
-
-			requestPayment().then(paymentHash => {
-				// Check preimage
-				if (paymentHash === fundingTx.invoiceId) {
-					confettiEffects(true);
-					gotoNextStage();
-				} else {
-					throw new Error('wrong preimage');
-				}
-			}).catch(error => {
-				if (error.message === 'no provider') {
-					//
-				} else if (error.message === 'wrong preimage') {
-					toast({
-						title: 'Wrong payment preimage',
-						description: 'The payment preimage returned by the WebLN provider did not match the payment hash.',
-						status: 'error',
-					});
-				} else if (error.constructor === RejectionError || error.message === 'User rejected') {
-					toast({
-						title: 'Requested operation declined',
-						description: 'Please use the invoice instead.',
-						status: 'info',
-					});
-				} else {
-					toast({
-						title: 'Oops! Something went wrong with WebLN.',
-						description: 'Please use the invoice instead.',
-						status: 'error',
-					});
-				}
-
-				fundInterval = setInterval(getFunding, 2000);
-			});
 		}
 	}, [fundState]);
 
+	const { address } = fundingTx;
+
+	const getOnchainAddress = () => {
+		const bitcoins = (parseInt((contributeAmount / btcRate).toFixed(0))) / 100000000;
+		return `bitcoin:${address}?amount=${bitcoins}`;
+	};
+
+	const handleCopyOnchain = () => {
+		navigator.clipboard.writeText(getOnchainAddress());
+		setCopy(true);
+	};
+
 	const handleFund = async () => {
-		try {
-			// eslint-disable-next-line no-warning-comments
-			// TODO: change the variables to an input of type IFundingInput
-			const errorMessage = validateFundingAmount(amount, btcRate);
-			if (errorMessage) {
-				toast({
-					title: 'Bad funding input',
-					description: errorMessage,
-					status: 'error',
-				});
-			}
+		const input: IFundingInput = {
+			projectId: Number(project.id),
+			anonymous: true,
+			donationInput: { donationAmount: parseInt((contributeAmount / btcRate).toFixed(0)) },
+		};
+		requestFunding(input);
+	};
 
-			confettiEffects(false);
-			setFundState(fundingStages.loading);
-
-			const input: IDonationFundingInput = {
-				donationAmount: amount,
-			};
-
-			await fundProject({ variables: { input } });
-			setFundState(fundingStages.form);
-			gotoNextStage();
-		} catch (_) {
+	const handleConfirm = async () => {
+		if ((parseInt((contributeAmount / btcRate).toFixed(0))) > 15000000) {
+			setMessage(true);
+		} else if (contributeAmount === 0) {
 			toast({
-				title: 'Something went wrong',
-				description: 'Please refresh the page and try again',
+				title: 'Payment below 1 sats is not allowed at the moment.',
+				description: 'Please update the amount.',
 				status: 'error',
 			});
+		} else {
+			try {
+				setSubmitting(true);
+				handleFund();
+			} catch (_) {
+				toast({
+					title: 'Something went wrong',
+					description: 'Please try again',
+					status: 'error',
+				});
+				setSubmitting(false);
+			}
 		}
 	};
 
-	/*
-    *   MODALS
-    */
+	const close = () => {
+		setName('');
+		setContact('');
+		setContributeAmount(0);
+		setSubmitting(false);
+		setMessage(false);
+		setSubscribed(false);
+		resetFundingFlow();
+		onClose();
+	};
+
 	const renderFormModal = () => (
 		<>
-			{buttonType === 'main'
-				? <ButtonComponent borderRadius="4px" backgroundColor="brand-bgGrey2" width="100%" my={3} onClick={onOpen}>
-            Contribute to this grant
-				</ButtonComponent> : 	<ButtonComponent primary margin="0 auto" onClick={() => {
-					// setAmount();
-					onOpen();
-				}}>
-					<Box display="flex" justifyContent="center" alignItems="center">Send <SatoshiIcon scale={0.8} mx={1}/> {sats}</Box>
-				</ButtonComponent>}
-			<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
+			<Modal onClose={close} isOpen={isOpen} isCentered initialFocusRef={initialRef}>
 				<ModalOverlay />
 				<ModalContent>
-					<BubbleCursor/>
-					<ModalHeader textAlign="center">Comment and contribute</ModalHeader>
-					<ModalCloseButton onClick={handleCloseButton} />
-					<ModalBody>
-						<HStack>
-							<Text>Amount</Text>
-							<SatoshiIcon/>
-						</HStack>
-						<NumberInput
-							name="amount"
-							onChange={valueString => setAmount(parseInt(valueString, 10))}
-							inputMode="numeric"
-							focusBorderColor="#20ECC7"
-							min={0}
-							isRequired={true}
-							defaultValue={`${amount}`}
-						>
-							<NumberInputField placeholder={'sats'} />
-							<NumberInputStepper id="increments">
-								<NumberIncrementStepper />
-								<NumberDecrementStepper />
-							</NumberInputStepper>
-						</NumberInput>
-						<Text mt={5}>Comment (optional)</Text>
-						<Textarea
-							name="comment"
-							// onChange={event => setComment(event.target.value) }
-							placeholder="Add a comment..."
-							focusBorderColor="#20ECC7"
-							resize="none"
-							size="sm"
-							rounded="md"
-						/>
-						<Box display="flex" justifyContent="center" alignItems="center" mt={4} border="2px solid #E9E9E9" rounded="md">
-							<Button backgroundColor={appearAs === 'anonymous' ? '#E9E9E9' : 'white'} fontSize="xs" width="50%" rounded="none" onClick={() => setAppearAs('anonymous')} >Appear as anonymous</Button>
-							<Linkin width="50%" href={`${REACT_APP_API_ENDPOINT}/auth/twitter`} display="flex" justifyContent="center" alignItems="center">
-								<ButtonComponent width="100%" backgroundColor={appearAs === 'anonymous' ? 'white' : '#E9E9E9'} fontSize="xs" rounded="none" leftIcon={<Icon as={SiTwitter} />} onClick={() => setAppearAs('profile')}>Verify Twitter</ButtonComponent>
-							</Linkin>
+					<HStack p={6}>
+						<Image src={project.media[0]} alt="icon" rounded="lg" w="100px" mr={1}/>
+						<Box>
+							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>Contribute</ModalHeader>
+							<Text textAlign="justify">Contribute to this grant to support the Bitcoin ecosystem. Donations are non-refundable and not tax deductible.</Text>
 						</Box>
-						<Text fontWeight="bold" mt={6}>Where do the funds go?</Text>
-						<Text>The funds are secured by the Grant Board until they are sent to the selected projects at the end of the donation period.</Text>
+					</HStack>
+					<ModalCloseButton onClick={close} />
+					<ModalBody>
+						{submitting ? <Loader/> : <>
+							<HStack><Text fontWeight="bold">Name / Nym</Text> <Text>(optional)</Text></HStack>
+							<Input
+								name="name"
+								placeholder="Satoshi"
+								focusBorderColor="#20ECC7"
+								onChange={event => setName(event.target.value)}
+								value={name}
+							/>
+							<HStack mt={5}><Text fontWeight="bold">Email / Contact</Text> <Text>(optional)</Text></HStack>
+							<Input
+								name="contact"
+								placeholder="satoshi@geyser.fund"
+								focusBorderColor="#20ECC7"
+								onChange={event => setContact(event.target.value)}
+								value={contact}
+							/>
+							<Text mt={5} fontWeight="bold">Amount</Text>
+							<HStack>
+								<ButtonComponent onClick={() => {
+									setMessage(false);
+									setContributeAmount(100);
+								}}>$100</ButtonComponent>
+								<ButtonComponent onClick={() => {
+									setMessage(false);
+									setContributeAmount(1000);
+								}}>$1000</ButtonComponent>
+								<InputGroup>
+									<InputLeftElement
+										pointerEvents="none"
+										fontWeight="bold"
+									>
+									$
+									</InputLeftElement>
+									<Input
+										ref={initialRef}
+										name="amount"
+										type="number"
+										placeholder="0"
+										focusBorderColor="#20ECC7"
+										fontWeight="bold"
+										onChange={event => {
+											if (message) {
+												setMessage(false);
+											}
+
+											if (parseInt(event.target.value, 10) > 0) {
+												setContributeAmount(parseInt(event.target.value, 10));
+											} else {
+												setContributeAmount(0);
+											}
+										}}
+										value={contributeAmount <= 0 ? '' : contributeAmount}
+										isRequired={true}
+									/>
+								</InputGroup>
+							</HStack>
+							{message && <Text textAlign="justify" mt={5}>Payment above 15,000,000 sats is not allowed at the moment. Please update the amount, or contact us for donating a higher amount</Text>}
+						</>
+						}
+					</ModalBody>
+					<ModalFooter>
+						{!submitting
+						&& <ButtonComponent
+							primary width="100%"
+							onClick={handleConfirm}
+							disabled={!contributeAmount || contributeAmount <= 0 || submitting || message}
+						>Confirm</ButtonComponent>}
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</>
+	);
+
+	const renderPaymentModal = () => (
+		<>
+			<Modal onClose={close} isOpen={isOpen} isCentered>
+				<ModalOverlay/>
+				<ModalContent>
+					<HStack p={6}>
+						<Image src={project.media[0]} alt="icon" rounded="lg" w="100px" mr={1}/>
+						<Box>
+							<ModalHeader fontWeight="bold" fontSize="2xl" p={0}>Contribute</ModalHeader>
+							<Text textAlign="justify">Contribute to this grant to support the Bitcoin ecosystem. Donations are non-refundable and not tax deductible.</Text>
+						</Box>
+					</HStack>
+					<ModalCloseButton onClick={close} />
+					<ModalBody>
+						<Text textAlign="center" fontWeight="bold" fontSize="md">Contribute using Bitcoin on-chain</Text>
+						<Box display="flex" justifyContent="center" alignItems="center" pt="15px" cursor="pointer" w="186px" h="186px" margin="0 auto">
+							<QRCode size={186} value={getOnchainAddress()} onClick={handleCopyOnchain}/>
+						</Box>
+						<Text paddingTop="15px" textAlign="center" color="#1BD5B3" fontWeight="bold">Waiting for payment...</Text>
 					</ModalBody>
 					<ModalFooter>
 						<ButtonComponent
-							primary
-							width="100%"
-							onClick={() => {
-								if (clearCloseButton) {
-									clearCloseButton(true);
-								}
-
-								handleFund();
-							}}
-							disabled={amount <= 0}
+							isFullWidth
+							primary={copy}
+							onClick={handleCopyOnchain}
+							leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
 						>
-            Contribute
+							{!copy ? 'Copy Address' : 'Address Copied'}
 						</ButtonComponent>
 					</ModalFooter>
 				</ModalContent>
@@ -316,69 +249,73 @@ export const ContributeButton = ({ project, confettiEffects, buttonStyle, sats, 
 		</>
 	);
 
-	const renderLoadingModal = () => (
-		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
-			<ModalOverlay />
-			<ModalContent>
-				<BubbleCursor/>
-				<ModalHeader textAlign="center">⚡ Creating invoice...</ModalHeader>
-				<ModalBody>
-					<Box py={10}>
-						<Loader/>
-					</Box>
-				</ModalBody>
-			</ModalContent>
-		</Modal>
-	);
-
-	const renderInvoiceModal = () => (
-		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
-			<ModalOverlay />
-			<ModalContent>
-				<BubbleCursor/>
-				<ModalHeader textAlign="center">🌩️ Pay with lightning invoice</ModalHeader>
-				<ModalCloseButton onClick={handleCloseButton} />
-				<Text width="90%" fontSize="xs" margin="0 auto">Pay with any lightning wallet by scanning or copying the invoice below, or download the <Link isExternal href="https://getalby.com" textDecoration="underline">Alby</Link> extention to pay directly from your browser.</Text>
-				<QrInvoice
-					comment={fundingTx.comment}
-					title={project.title}
-					amount={fundingTx.amount}
-					owners={project.owners.map(owner => owner.user.username)}
-					qrCode={fundingTx.paymentRequest}
-					handleCloseButton={handleCloseButton}
-					invoiceCancelled={fundingTx.canceled}
-				/>
-			</ModalContent>
-		</Modal>
-	);
-
 	const renderSuccessModal = () => (
-		<Modal closeOnOverlayClick={false} onClose={handleCloseButton} isOpen={isOpen} isCentered>
+		<Modal onClose={close} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<BubbleCursor/>
-				<ModalHeader textAlign="center">Success!</ModalHeader>
-				<ModalCloseButton onClick={handleCloseButton} />
-				<PaymentSuccess amount={fundingTx.amount} grant={project.title}/>
+				<ModalHeader fontWeight="bold" fontSize="2xl" textAlign="center">Successful contribution!</ModalHeader>
+				<ModalCloseButton onClick={close} />
+				<ModalBody>
+					<VStack
+						padding={isMobile ? '10px 10px' : '5px 20px'}
+						spacing="12px"
+						width="100%"
+						height="100%"
+						overflowY="hidden"
+						position="relative"
+						alignItems="center"
+						justifyContent="center"
+					>
+						<Box bg="brand.primary" borderRadius="full" width="100px" height="100px" display="flex" justifyContent="center" alignItems="center">
+							<CheckIcon w={10} h={10}/>
+						</Box>
+						{!subscribed
+							&& <>
+								<Text>You contributed <b>{`$${commaFormatted(contributeAmount)}`}</b> to <b>{project.title}.</b></Text>
+								<Text>Check it out on the <Link isExternal href={`https://mempool.space/address/${address}`} textDecoration="underline"><b>block explorer</b></Link>.</Text>
+								<Text>Subscribe below to Geyser Grants to receive updates on where the funds are being distributed, the impact they are having, and receive notices on new upcoming grants.</Text>
+							</>
+						}
+						<Box w="100%">
+							<Subscribe style="inline-minimal" interest="grants" parentState={setSubscribed}/>
+						</Box>
+						<ButtonComponent width="100%" onClick={close}>Close</ButtonComponent>
+					</VStack>
+				</ModalBody>
 			</ModalContent>
 		</Modal>
 	);
 
 	const renderModal = () => {
 		switch (fundState) {
-			case fundingStages.loading:
-				return renderLoadingModal();
-
+			case fundingStages.initial:
+				return null;
+			case fundingStages.form:
+				return renderFormModal();
 			case fundingStages.started:
-				return renderInvoiceModal();
-
+				return renderPaymentModal();
 			case fundingStages.completed:
 				return renderSuccessModal();
-
 			default:
-				return renderFormModal();
+				return null;
 		}
 	};
 
-	return renderModal();
+	return (
+		<>
+			<ButtonComponent
+				disabled={!active}
+				primary
+				standard
+				w="100%"
+				onClick={() => {
+					onOpen();
+					gotoNextStage();
+				}}
+			>
+				{title}
+			</ButtonComponent>
+			{renderModal()}
+		</>
+	);
 };

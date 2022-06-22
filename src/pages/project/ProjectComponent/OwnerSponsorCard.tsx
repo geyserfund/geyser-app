@@ -1,6 +1,7 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Avatar, Box, HStack, IconButton, Link, Text, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Avatar, Box, HStack, IconButton, Text, useDisclosure, VStack, Wrap, WrapItem, Link as LinkChakra } from '@chakra-ui/react';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { AddAmbassador, AddSponsor } from '../../../components/molecules';
 import { Card, ImageBar, StatusBar, InfoTooltip } from '../../../components/ui';
 import { ISponsor, IParticipant } from '../../../interfaces';
@@ -52,15 +53,16 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 								title="Creator"
 								description="Project creators have verified their Twitter accounts. Go check them out!"
 								options={ { top: '-82px', left: '-60px' } }
+								width="172px"
 							/>
 						</HStack>
 						<HStack spacing="30px" alignItems="flex-start">
-							<Link href={`/profile/${owner.user.id}`} isExternal>
+							<Link to={`/profile/${owner.user.id}`}>
 								<Avatar width="75px" height="75px" name={owner.user.username} src={owner.user.imageUrl} />
 							</Link>
 							<VStack justifyContent="space-between" alignItems="flex-start">
-								<Link href={`/profile/${owner.user.id}`} isExternal>
-									<Text fontSize="18px">
+								<Link to={`/profile/${owner.user.id}`}>
+									<Text fontSize="18px" _hover={{textdecoration: 'underline', fontWeight: 500}}>
 										{owner.user.username}
 									</Text>
 								</Link>
@@ -78,6 +80,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 								title="Ambassadors"
 								description="Ambassadors are individuals who vouch for the project and give their go ahead."
 								options={ { top: '-81px', left: '-80px' } }
+								width="172px"
 							/>
 						</HStack>
 						<Wrap>
@@ -85,14 +88,14 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 								ambassadors.map((ambassador: IParticipant) => (
 									ambassador.confirmed
 										? <WrapItem key={ambassador.user.username} display="inline-block">
-											<Link href={`/profile/${ambassador.user.id}`} isExternal >
+											<Link to={`/profile/${ambassador.user.id}`} >
 												<HStack className={classes.amabassadorBlock} spacing="5px">
 													<Avatar
 														width="24px" height="24px"
-														name={ambassador.user.twitterHandle} src={ambassador.user.imageUrl}
+														name={ambassador.user.username} src={ambassador.user.imageUrl}
 													/>
 													<Text fontSize="14px" >
-														{`${ambassador.user.twitterHandle}`}
+														{`${ambassador.user.username}`}
 													</Text>
 												</HStack>
 											</Link>
@@ -113,6 +116,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 								title="Sponsors"
 								description="Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences."
 								options={ { top: '-108px', left: isMobile ? '-50px' : '-70px' } }
+								width="172px"
 							/>
 						</HStack>
 						<Wrap >
@@ -121,18 +125,18 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 									sponsor.confirmed
 										? <WrapItem key={sponsor.id} display="inline-block">
 											{ sponsor.user
-												? <Link href={`/profile/${sponsor.user.id}`} isExternal>
+												? <Link to={`/profile/${sponsor.user.id}`}>
 													<HStack spacing="5px" className={classes.amabassadorBlock}>
 														<Avatar
 															width="24px" height="24px"
-															name={sponsor.user.twitterHandle}
+															name={sponsor.user.username}
 															src={sponsor.user.imageUrl} />
 														<Text fontSize="14px">
-															{`${sponsor.user?.twitterHandle}`}
+															{`${sponsor.user?.username}`}
 														</Text>
 													</HStack>
 												</Link>
-												: <Link href={sponsor.url} isExternal>
+												: <LinkChakra href={sponsor.url} isExternal>
 													<HStack spacing="5px" className={classes.amabassadorBlock}>
 														<Avatar
 															width="24px" height="24px"
@@ -142,7 +146,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 															{`${sponsor.name}`}
 														</Text>
 													</HStack>
-												</Link>
+												</LinkChakra>
 											}
 										</WrapItem>
 										: <></>

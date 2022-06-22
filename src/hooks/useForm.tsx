@@ -31,7 +31,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 		comment: '',
 		shippingDestination: shippingTypes.national,
 		shippingCost: 0,
-		anonymous: !(user && user.connectedTwitter),
+		anonymous: !(user && user.id), // The default user has id 0
 		email: '',
 		media: '',
 		rewards: {},
@@ -45,7 +45,7 @@ export const useFundState = ({rewards}: IuseFundStateProps) => {
 	};
 
 	useEffect(() => {
-		if (!user || !user.connectedTwitter) {
+		if (!user || !user.id) {
 			setState('anonymous', true);
 		} else {
 			setState('anonymous', false);
