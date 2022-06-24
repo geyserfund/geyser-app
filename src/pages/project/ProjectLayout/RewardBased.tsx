@@ -8,11 +8,12 @@ import { OwnerSponsorCard, DetailsBlock, SponsorBlock, UpdatesBlock } from '../P
 import ProjectColl, { IProjectData } from '../ProjectCollection';
 import { Footer } from '../../../components/molecules';
 
-export const RewardBased = ({ project }: { project: IProject}) => {
+export const RewardBased = ({ project }: { project: IProject }) => {
 	const [projectData, setProjectData] = useState<IProjectData>();
 
 	useEffect(() => {
 		if (project.name) {
+			console.log('checking project name', projectData, project);
 			const currentProject = ProjectColl[project.name];
 			if (currentProject) {
 				setProjectData(currentProject);
@@ -26,11 +27,11 @@ export const RewardBased = ({ project }: { project: IProject}) => {
 		return null;
 	}
 
-	const {projectDetails, projectUpdates} = projectData;
+	const { projectDetails, projectUpdates } = projectData;
 
 	const renderUpdates = () => {
 		if (projectUpdates && projectUpdates.length > 0) {
-			return projectUpdates.map((update: IProjectUpdate) => <UpdatesBlock key={update.updateTitle} projectUpdate={update} media={project.media}/>,
+			return projectUpdates.map((update: IProjectUpdate) => <UpdatesBlock key={update.updateTitle} projectUpdate={update} media={project.media} />,
 			);
 		}
 	};
@@ -54,8 +55,8 @@ export const RewardBased = ({ project }: { project: IProject}) => {
 					idea={projectDetails.idea}
 				/>
 				<DetailsBlock projectDetails={projectDetails} media={project.media} />
-				{ renderUpdates() }
-				<SponsorBlock sponsors={project.sponsors}/>
+				{renderUpdates()}
+				<SponsorBlock sponsors={project.sponsors} />
 			</VStack >
 			<Footer />
 		</VStack >
