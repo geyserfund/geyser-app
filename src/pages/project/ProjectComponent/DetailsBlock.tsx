@@ -23,21 +23,21 @@ import { useStyles } from './styles';
 import { YoutubeEmbed } from '../../../components/molecules/YoutubeEmbed';
 import ReactPlayer from 'react-player';
 interface IDetailsBlock {
-    projectDetails: IProjectDetail
+	projectDetails: IProjectDetail
 	media: string[]
 }
 
-export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
+export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 
-	const {blocks} = projectDetails;
+	const { blocks } = projectDetails;
 
-	const renderTweet = (tweet ?: string) => {
+	const renderTweet = (tweet?: string) => {
 		if (tweet) {
 			return (
 				<Box width="100%" display="flex" justifyContent="center">
-					<TwitterComponent id={tweet}/>
+					<TwitterComponent id={tweet} />
 				</Box>
 			);
 		}
@@ -59,11 +59,11 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 		}
 	};
 
-	const renderYoutube = (videoId ?: string) => {
+	const renderYoutube = (videoId?: string) => {
 		if (videoId) {
 			return (
 				<Box width="100%" display="flex" justifyContent="center">
-					<YoutubeEmbed videoId={videoId}/>
+					<YoutubeEmbed videoId={videoId} />
 				</Box>
 			);
 		}
@@ -73,7 +73,7 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 		if (url) {
 			return (
 				<Box width="100%" display="flex" justifyContent="center">
-					<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={url}/>
+					<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={url} />
 				</Box>
 			);
 		}
@@ -145,11 +145,11 @@ export const DetailsBlock = ({ projectDetails, media}: IDetailsBlock) => {
 		return (
 			<VStack key={block.title} className={classes.containers} space={10}>
 				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
-				{ switchBlocks() }
-				{ renderPodCast(block.podcast) }
-				{ renderImages(block.images) }
-				{ renderTweet(block.tweet) }
-				{ renderYoutube(block.youtube) }
+				{switchBlocks()}
+				{renderPodCast(block.podcast)}
+				{renderImages(block.images)}
+				{renderTweet(block.tweet)}
+				{renderYoutube(block.youtube)}
 			</VStack>
 
 		);
