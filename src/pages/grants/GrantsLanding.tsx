@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
 import { QUERY_GRANTS } from '../../graphql';
-import GrantsHeader from '../../assets/grants-header.jpg';
+import GrantsHeader from '../../assets/grants-header.webp';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
