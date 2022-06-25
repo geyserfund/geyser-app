@@ -6,6 +6,7 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'The intention of the project is to create a safe, secure, and powerful payment gateway for WooCommerce with Bitcoin on the Lightning Network to reduce friction and incentivise the use of Bitcoin as the future of e-commerce on the internet.',
 		],
+		images: [0],
 		blockType: 'PL',
 	},
 	{
