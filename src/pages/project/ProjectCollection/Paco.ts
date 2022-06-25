@@ -22,6 +22,7 @@ const projectBlocks: IProjectBlock[] = [
 			'You know how the story goes. You guys know it way better than me.',
 			'Throughout my journey, over the years I have seen the plights of citizens in these hyperinflating regions. Folks, running like crazy every day to make their ends meet.',
 		],
+		images: [0],
 		blockType: 'PL',
 	},
 	{
@@ -41,6 +42,7 @@ const projectBlocks: IProjectBlock[] = [
 			'And most importantly I will come and meet with all you Bitcoiners out there in the world and share the love. No matter where you are, I am gonna find you, and I am gonna hug you.',
 
 		],
+		images: [1],
 		blockType: 'PL',
 	},
 	{
@@ -71,7 +73,7 @@ const projectBlocks: IProjectBlock[] = [
 			'I started the journey of Vlogging i.e.Paco de la India and sold masks, gloves & cigarettes during the Lockdown.',
 			'I trekked to Everest Base Camp, Nepal – once in a lifetime experience and started a drop service business to assist folks around the country with videos, logos, websites, etc.	',
 		],
-		images: [],
+		images: [2],
 		blockType: 'PL',
 	},
 ];

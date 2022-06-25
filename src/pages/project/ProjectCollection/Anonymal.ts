@@ -1,6 +1,13 @@
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 const projectBlocks: IProjectBlock[] = [
 	{
+		key: 'podcast',
+		title: '',
+		body: [],
+		podcast: 'https://soundcloud.com/user-44010708/geyser-podcast-007-annonymal?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
+		blockType: 'PL',
+	},
+	{
 		key: 'description1',
 		title: '',
 		body: [
