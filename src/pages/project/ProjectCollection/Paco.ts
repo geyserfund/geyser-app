@@ -1,13 +1,19 @@
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 const projectBlocks: IProjectBlock[] = [
 	{
+		key: 'podcast',
+		title: '',
+		body: [],
+		podcast: 'https://soundcloud.com/user-44010708/geyser-podcast-005-run-with-bitcoin?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
+		blockType: 'PL',
+	},
+	{
 		key: 'description1',
 		title: '',
 		body: [
 			'Namaste Bitcoin Family,',
 			'My name is Paco, and I am crazy enough to want to travel to 40 countries in 400 days, only with Bitcoin. Bear with me please, here’s why.',
 		],
-		youtube: 'twjTUa8njRo',
 		blockType: 'PL',
 	},
 	{
@@ -55,6 +61,7 @@ const projectBlocks: IProjectBlock[] = [
 			'Paco de la India.',
 
 		],
+		youtube: 'twjTUa8njRo',
 		blockType: 'PL',
 	},
 	{
