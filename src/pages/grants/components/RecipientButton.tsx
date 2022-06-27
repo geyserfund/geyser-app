@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
 	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea, Image, HStack,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
-import { ButtonComponent } from '../../../components/ui';
+import { ButtonComponent, Linkin } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createApplicantRecord } from '../../../api';
 import { Subscribe } from '../../../components/nav/Subscribe';
+import { AuthContext } from '../../../context';
+import { SiTwitter } from 'react-icons/si';
+import Icon from '@chakra-ui/icon';
+import { REACT_APP_API_ENDPOINT } from '../../../constants';
 
 interface RecipientButtonProps {
 active: boolean,
@@ -30,6 +34,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 	const initialRef = React.useRef(null);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [subscribed, setSubscribed] = useState(false);
+	const { user } = useContext(AuthContext);
 
 	const [copy, setCopy] = useState(false);
 	useEffect(() => {
@@ -99,54 +104,73 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 					</HStack>
 					<ModalCloseButton onClick={close} />
 					<ModalBody>
-						{submitting ? <Loader/> : <>
-							<Text fontWeight="bold">What’s your project or initiative called?</Text>
-							<Input
-								ref={initialRef}
-								name="name"
-								placeholder="Bitcoin for Fairness"
-								focusBorderColor="#20ECC7"
-								onChange={event => setGrantee(event.target.value)}
-								value={grantee}
-								isRequired={true}
-							/>
-							<Text mt={5} fontWeight="bold">How are you supporting {grant}?</Text>
-							<Textarea
-								name="description"
-								placeholder="Teaching young Africans the basics about Bitcoin."
-								focusBorderColor="#20ECC7"
-								onChange={event => setDescription(event.target.value)}
-								value={description}
-								isRequired={true}
-							/>
-							<Text mt={5} fontWeight="bold">Where can we find more information about your project or initiative? Drop a link to your project, whether it’s on Geyser or elsewhere.</Text>
-							<Input
-								name="link"
-								placeholder="https://geyser.fund/project/bitcoin-for-fairness"
-								focusBorderColor="#20ECC7"
-								onChange={event => setUrl(event.target.value)}
-								value={url}
-								isRequired={true}
-							/>
-							<Text mt={5} fontWeight="bold">Your email / contact info:</Text>
-							<Input
-								name="contact"
-								placeholder="anita@geyser.fund"
-								focusBorderColor="#20ECC7"
-								onChange={event => setContact(event.target.value)}
-								value={contact}
-								isRequired={true}
-							/>
-						</>
+						{user.id
+							? <>
+								{submitting ? <Loader/> : <>
+									<Text fontWeight="bold">What’s your project or initiative called?</Text>
+									<Input
+										ref={initialRef}
+										name="name"
+										placeholder="Bitcoin for Fairness"
+										focusBorderColor="#20ECC7"
+										onChange={event => setGrantee(event.target.value)}
+										value={grantee}
+										isRequired={true}
+									/>
+									<Text mt={5} fontWeight="bold">How are you supporting {grant}?</Text>
+									<Textarea
+										name="description"
+										placeholder="Teaching young Africans the basics about Bitcoin."
+										focusBorderColor="#20ECC7"
+										onChange={event => setDescription(event.target.value)}
+										value={description}
+										isRequired={true}
+									/>
+									<Text mt={5} fontWeight="bold">Where can we find more information about your project or initiative? Drop a link to your project, whether it’s on Geyser or elsewhere.</Text>
+									<Input
+										name="link"
+										placeholder="https://geyser.fund/project/bitcoin-for-fairness"
+										focusBorderColor="#20ECC7"
+										onChange={event => setUrl(event.target.value)}
+										value={url}
+										isRequired={true}
+									/>
+									<Text mt={5} fontWeight="bold">Your email / contact info:</Text>
+									<Input
+										name="contact"
+										placeholder="anita@geyser.fund"
+										focusBorderColor="#20ECC7"
+										onChange={event => setContact(event.target.value)}
+										value={contact}
+										isRequired={true}
+									/>
+								</>
+								}
+							</>
+							: <Box>
+								<Text textAlign="center" mb={4}>You need to link your Twitter account to apply to a Grant.</Text>
+								<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
+									<ButtonComponent
+										isFullWidth
+										primary
+										standard
+										leftIcon={<Icon as={SiTwitter} />}
+									>
+									Login with Twitter
+									</ButtonComponent>
+								</Linkin>
+							</Box>
 						}
 					</ModalBody>
 					<ModalFooter>
-						{!submitting
-						&& <ButtonComponent
-							primary width="100%"
-							onClick={handleSubmission}
-							disabled={grantee.length === 0 || description.length === 0 || url.length === 0 || contact.length === 0}
-						>Submit</ButtonComponent>}
+						{!submitting && user.id
+							? <ButtonComponent
+								primary width="100%"
+								onClick={handleSubmission}
+								disabled={grantee.length === 0 || description.length === 0 || url.length === 0 || contact.length === 0}
+							>Submit</ButtonComponent>
+							: <></>
+						}
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
