@@ -11,6 +11,7 @@ import { Matteo } from './Matteo';
 import { Anonymal } from './Anonymal';
 import { Rapaygo } from './Rapaygo';
 import { Paco } from './Paco';
+import { BitcoinRacing } from './BitcoinRacing';
 
 export interface IProjectData {
 	projectBlocks: IProjectBlock[]
@@ -36,6 +37,7 @@ const ProjectColl: IProjectColl = {
 	[Anonymal.projectName]: Anonymal,
 	[Rapaygo.projectName]: Rapaygo,
 	[Paco.projectName]: Paco,
+	[BitcoinRacing.projectName]: BitcoinRacing,
 };
 
 export default ProjectColl;
