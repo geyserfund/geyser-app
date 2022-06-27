@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import {
-	SatoshiAmount } from '../../components/ui';
-import { Footer, SwipeLiveProject,
+	SatoshiAmount,
+} from '../../components/ui';
+import {
+	Footer, SwipeLiveProject,
 } from '../../components/molecules';
 import { isDarkMode, isMobileMode, useNotification } from '../../utils';
 import {
@@ -134,8 +136,8 @@ export const Home = () => {
 			>
 				{banner
 					&& <Box position="relative" marginTop={isMobile ? '15px' : '30px'}>
-						<CloseIcon position="absolute" top="15px" right="15px" cursor="pointer" color="black" onClick={() => hideBannerCached() }/>
-						<Image src={GrantsBanner} alt="geyser grants" borderRadius="sm" cursor="pointer" onClick={() => history.push('/grants')}/>
+						<CloseIcon position="absolute" top="15px" right="15px" cursor="pointer" color="black" onClick={() => hideBannerCached()} />
+						<Image src={GrantsBanner} alt="geyser grants" borderRadius="sm" cursor="pointer" onClick={() => history.push('/grants')} />
 					</Box>
 				}
 				<Box
@@ -157,56 +159,61 @@ export const Home = () => {
 							</Text>
 						</VStack>
 						<Text fontSize={isMobile ? '18px' : '19px'} maxWidth="910px" fontWeight={500} marginTop="15px !important">
-						Geyser is a global crowdfunding platform that helps Bitcoin builders and creators to fund their ideas.
+							Geyser is a global crowdfunding platform that helps Bitcoin builders and creators to fund their ideas.
 						</Text>
 						<HStack className={classes.pageStats} padding={isMobile ? '50px 20px' : '50px 70px'}>
 							{
 								summaryLoading
-									? <><VStack>
-										<Text className={classes.boldText}>....</Text>
-										<Text className={classes.subtitleText}>PROJECTS</Text>
-									</VStack><VStack>
-										<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>....</SatoshiAmount>
-										<Text className={classes.subtitleText}>SATS RAISED</Text>
-									</VStack><VStack>
-										<Text className={classes.boldText}>....</Text>
-										<Text className={classes.subtitleText}>PLEBS</Text>
-									</VStack></>
-									: <><VStack>
-										<Text className={classes.boldText}>{summary.projectsCount}</Text>
-										<Text className={classes.subtitleText}>PROJECTS</Text>
-									</VStack><VStack>
-										<Box display="flex" alignItems="center">
-											<SatoshiIconGeyser mr={1} />
-											<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
-										</Box>
-										<Text className={classes.subtitleText}>SATS RAISED</Text>
-									</VStack><VStack>
-										<Text className={classes.boldText}>{summary.fundersCount}</Text>
-										<Text className={classes.subtitleText}>PLEBS</Text>
-									</VStack></>
+									? <>
+										<VStack>
+											<Text className={classes.boldText}>....</Text>
+											<Text className={classes.subtitleText}>PROJECTS</Text>
+										</VStack>
+										<VStack>
+											<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>....</SatoshiAmount>
+											<Text className={classes.subtitleText}>SATS RAISED</Text>
+										</VStack><VStack>
+											<Text className={classes.boldText}>....</Text>
+											<Text className={classes.subtitleText}>PLEBS</Text>
+										</VStack></>
+									: <>
+										<VStack>
+											<Text className={classes.boldText}>{summary.projectsCount}</Text>
+											<Text className={classes.subtitleText}>PROJECTS</Text>
+										</VStack>
+										<VStack>
+											<Box display="flex" alignItems="center">
+												<SatoshiIconGeyser mr={1} />
+												<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
+											</Box>
+											<Text className={classes.subtitleText}>SATS RAISED</Text>
+										</VStack><VStack>
+											<Text className={classes.boldText}>{summary.fundersCount}</Text>
+											<Text className={classes.subtitleText}>PLEBS</Text>
+										</VStack>
+									</>
 							}
-
 						</HStack>
 					</VStack>
 					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'} minWidth="305px" >
-						<Image src={Dorian} maxHeight="250px"/>
+						<Image src={Dorian} maxHeight="250px" />
 					</Box>
 				</Box>
 				<VStack alignItems="flex-start" width="100%" spacing="0px">
 					<Text className={classes.sectionTitle}>FEATURED</Text>
 					<HStack width="100%" justifyContent="center" >
-						<SwipeLiveProject loading={loading} projects={[...activeProjects]}/>
+						<SwipeLiveProject loading={loading} projects={[...activeProjects]} />
 					</HStack>
 				</VStack>
 				<VStack alignItems="flex-start" width="100%" spacing="15px">
 					<Text className={classes.sectionTitle}>LIVE PROJECTS</Text>
 					<ProjectBars loading={loading} projects={[...activeProjects]} />
 				</VStack>
-				<VStack alignItems="flex-start" width="100%" position="relative" spacing="15px">
+				{/* Removing the closed projects for now */}
+				{/* <VStack alignItems="flex-start" width="100%" position="relative" spacing="15px">
 					<Text className={classes.sectionTitle}>CLOSED PROJECTS</Text>
 					<ProjectBars loading={loading} projects={[...closedProjects]} />
-				</VStack>
+				</VStack> */}
 			</VStack>
 			<Footer />
 		</VStack >
