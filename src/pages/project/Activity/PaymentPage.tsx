@@ -4,7 +4,7 @@ import { SatoshiIcon, GifIcon } from '../../../components/icons';
 import { ButtonComponent, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
 import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
-import {IFundForm} from '../../../hooks';
+import { IFundForm } from '../../../hooks';
 import { IProjectReward, IProjectType } from '../../../interfaces';
 import { DonationBased, RewardBased } from '../FundForm';
 import { Grid } from '@giphy/react-components';
@@ -20,7 +20,7 @@ interface IPaymentPageProps {
 	btcRate: number
 	state: IFundForm
 	setTarget: (_: any) => void
-	updateReward:any
+	updateReward: any
 	setState: any
 	handleFund: () => void
 	type: IProjectType
@@ -42,10 +42,10 @@ export const PaymentPage = ({
 	rewards,
 	name,
 }: IPaymentPageProps) => {
-	const {getShippingCost, getTotalAmount, getRewardsQuantity} = useFundCalc(state);
+	const { getShippingCost, getTotalAmount, getRewardsQuantity } = useFundCalc(state);
 	const [gifSearch, setGifSearch] = useState('bitcoin');
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const [selectedGif, setSelectedGif] = useState<IGif|null>(null);
+	const [selectedGif, setSelectedGif] = useState<IGif | null>(null);
 	const [gifHover, setGifHover] = useState(false);
 	const [focus, setFocus] = useState(true);
 	const { toast } = useNotification();
@@ -94,12 +94,12 @@ export const PaymentPage = ({
 	const renderFundForm = () => {
 		switch (type) {
 			case projectTypes.donation:
-				return <DonationBased setState={setState}/>;
+				return <DonationBased setState={setState} />;
 
 			case projectTypes.reward:
 				return (
-					<Box width="100%">
-						<RewardBased {...{rewards, setState, updateReward}}/>
+					<Box width="100%" overflowY="auto">
+						<RewardBased {...{ rewards, setState, updateReward }} />
 						<Divider borderTopWidth="3px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
 					</Box>
 				);
@@ -124,7 +124,7 @@ export const PaymentPage = ({
 	return (
 		<VStack
 			padding={isMobile ? '10px 10px' : '10px 20px'}
-			margin="10px 15px"
+			// margin="10px 15px"
 			spacing="12px"
 			width="100%"
 			height="100%"
@@ -154,18 +154,18 @@ export const PaymentPage = ({
 						onChange={setTarget}
 
 					/>
-					{gifHover && selectedGif && <CloseIcon position="absolute" top="31px" right="29px"/>}
+					{gifHover && selectedGif && <CloseIcon position="absolute" top="31px" right="29px" />}
 					{selectedGif
-						?	<Image src={`${selectedGif.images.preview_webp.url}`} alt="gif" width="50px" height="50px" zIndex="10" position="absolute" top="3.5" right="3" cursor="pointer" opacity={gifHover ? '0.25' : '1'} onMouseEnter={() => {
+						? <Image src={`${selectedGif.images.preview_webp.url}`} alt="gif" width="50px" height="50px" zIndex="10" position="absolute" top="3.5" right="3" cursor="pointer" opacity={gifHover ? '0.25' : '1'} onMouseEnter={() => {
 							setGifHover(true);
 						}} onMouseLeave={() => {
 							setGifHover(false);
 						}} onClick={() => {
 							setSelectedGif(null);
 							setGifHover(false);
-						}}/>
+						}} />
 						: <Button zIndex="10" position="absolute" top="20px" right="3" bg="none" p={0} onClick={onOpen}>
-							<GifIcon/>
+							<GifIcon />
 						</Button>
 					}
 				</Box>
@@ -178,12 +178,12 @@ export const PaymentPage = ({
 						<ModalBody p={2}>
 							<InputGroup mb={2}>
 								<InputLeftElement >
-									<SearchIcon/>
+									<SearchIcon />
 								</InputLeftElement>
 								<Input onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} placeholder="Search" variant="filled" focusBorderColor="brand.primary" bg="#DDFFF8"
 									onChange={e => setGifSearch(e.target.value)}
 								/>
-								<ModalCloseButton mt="5px" ml="7px"/>
+								<ModalCloseButton mt="5px" ml="7px" />
 							</InputGroup>
 							<Box height="450px" overflow="auto">
 								<Box display="flex" justifyContent="center" alignItems="center" cursor="pointer">
@@ -204,10 +204,10 @@ export const PaymentPage = ({
 						placeholder={<Text color={colors.grayPlaceholder}>Delivery Rewards...</Text>}
 						options={SelectCountryOptions}
 						onChange={setState}
-						value={SelectCountryOptions.find(val => val.value === state.shippingDestination) }
+						value={SelectCountryOptions.find(val => val.value === state.shippingDestination)}
 					/>
 				</Box>}
-				{state.rewardsCost &&	<Box width="100%">
+				{state.rewardsCost && <Box width="100%">
 					<TextBox
 						type="email"
 						name="email"
@@ -222,8 +222,8 @@ export const PaymentPage = ({
 				<VStack alignItems="flex-start" spacing="0px">
 					<SectionTitle>Total</SectionTitle>
 					<SatoshiAmount label="Donation">{state.donationAmount + Math.round(state.rewardsCost / btcRate)}</SatoshiAmount>
-					{ state.rewardsCost && <Text>{`Rewards: ${rewardCountString()}`}</Text>}
-					{ state.rewardsCost && hasShipping(name) && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
+					{state.rewardsCost && <Text>{`Rewards: ${rewardCountString()}`}</Text>}
+					{state.rewardsCost && hasShipping(name) && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
 					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
