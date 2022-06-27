@@ -5,15 +5,15 @@ import { SectionTitle } from '../../../components/ui';
 import { IProjectReward, IRewardCount } from '../../../interfaces';
 
 interface IRewardBasedProps {
-    setState: any;
-	updateReward: (_:IRewardCount)=> void;
+	setState: any;
+	updateReward: (_: IRewardCount) => void;
 	rewards?: IProjectReward[]
 }
 
-export const RewardBased = ({setState, updateReward, rewards}: IRewardBasedProps) => {
+export const RewardBased = ({ setState, updateReward, rewards }: IRewardBasedProps) => {
 	if (!rewards || !(rewards.length > 0)) {
 		return (
-			<VStack width="100%" spacing="12px" flex="1" overflowY="auto" overflowX="visible">
+			<VStack width="100%" spacing="12px" flex="1" overflowX="visible">
 				<Box width="100%" >
 					<SectionTitle>No any rewards</SectionTitle>
 				</Box>
@@ -22,10 +22,10 @@ export const RewardBased = ({setState, updateReward, rewards}: IRewardBasedProps
 	}
 
 	return (
-		<VStack marginTop="0px !important" width="100%" spacing="30px" flex="1" overflowY="auto" overflowX="visible">
+		<VStack marginTop="0px !important" width="100%" spacing="30px" flex="1" overflowX="visible">
 			<Box width="100%" >
 				<SectionTitle>Donate to this idea</SectionTitle>
-				<DonationInput inputGroup={{padding: '2px'}} name="donationAmount" onChange={setState}/>
+				<DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setState} />
 			</Box>
 			<Box width="100%" >
 				<SectionTitle>Donate to receive a reward</SectionTitle>
@@ -35,7 +35,7 @@ export const RewardBased = ({setState, updateReward, rewards}: IRewardBasedProps
 							<RewardItem
 								key={reward.id}
 								item={reward}
-								updateCount={ updateReward}
+								updateCount={updateReward}
 							/>),
 						)
 					}
