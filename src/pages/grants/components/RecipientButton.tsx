@@ -55,6 +55,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 					Links: url,
 					Contact: contact,
 					Grant: grant,
+					fld0eyFwj2EWLH8Yh: user.username,
 				},
 			}];
 			await createApplicantRecord({records});
