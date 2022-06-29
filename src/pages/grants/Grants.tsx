@@ -83,7 +83,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={false} title="Apply" grant={project.title} image={project.media[0]}/>
+								<RecipientButton active={project.active} title="Apply" grant={project.title} image={project.media[0]}/>
 							</Box>
 						</Box>
 					</Box>
