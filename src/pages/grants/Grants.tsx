@@ -12,6 +12,8 @@ import { RecipientButton } from './components/RecipientButton';
 import { ContributeButton } from './components/ContributeButton';
 import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
 import Brad from '../../assets/brad.png';
+import Zucco from '../../assets/zucco.jpg';
+import Lucas from '../../assets/lucas.jpg';
 
 export const Grants = ({ project }: { project: IProject }) => {
 	const [applicants, setApplicants] = useState(['loading']);
@@ -118,19 +120,43 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				<Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
 					<Text fontSize="3xl" fontWeight="bold" mb={2}>The board</Text>
-					<Text fontSize="lg" mb={4} textAlign="justify">Meet the board who will help to establish the criteria for grant distribution and review your applications:</Text>
+					<Text fontSize="lg" textAlign="justify" mb={2}>Meet the board who will help to establish the criteria for grant distribution and review your applications:</Text>
 
-					<HStack>
-						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+					<Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
+						<Box key="brad" display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
 							<Box>
 								<Box display="flex" justifyContent="center" alignItems="center">
 									<Avatar size="xl" src={Brad}/>
 								</Box>
 								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
-								<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>
+								<Box display="flex" justifyContent="center">
+									<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>
+								</Box>
 							</Box>
 						</Box>
-						<Box key="placeholder" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+						<Box key="zucco" display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+							<Box>
+								<Box display="flex" justifyContent="center" alignItems="center">
+									<Avatar size="xl" src={Zucco}/>
+								</Box>
+								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Giacomo von Zucco</Text>
+								<Box display="flex" justifyContent="center">
+									<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/giacomozucco" color="#4C9AF4">@giacomozucco</Link>
+								</Box>
+							</Box>
+						</Box>
+						<Box key="lucas" display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+							<Box>
+								<Box display="flex" justifyContent="center" alignItems="center">
+									<Avatar size="xl" src={Lucas}/>
+								</Box>
+								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Lucas Ferreira</Text>
+								<Box display="flex" justifyContent="center">
+									<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/lucasdcf" color="#4C9AF4">@lucasdcf</Link>
+								</Box>
+							</Box>
+						</Box>
+						<Box key="placeholder" display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
 							<Box>
 								<Box display="flex" justifyContent="center" alignItems="center">
 									<Avatar size="xl" src="" bg="brand.bgGrey3" />
@@ -138,7 +164,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								<Box mt={4} mb={1} h="43px" w="111px" bg="brand.bgGrey3" borderRadius="md" />
 							</Box>
 						</Box>
-					</HStack>
+					</Box>
 
 				</Box>
 
