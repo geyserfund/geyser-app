@@ -1,18 +1,16 @@
 /* eslint-disable complexity */
 
 import React, { useEffect } from 'react';
-import { Box, Text, Skeleton, Avatar, Link } from '@chakra-ui/react';
+import { Box, Text, Skeleton, Link } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
+import { Board } from './components/Board';
 import { QUERY_GRANTS } from '../../graphql';
 import GrantsHeader from '../../assets/grants-header.webp';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
-import Brad from '../../assets/brad.png';
-import Zucco from '../../assets/zucco.jpg';
-import Lucas from '../../assets/lucas.jpg';
 import { fonts } from '../../constants/fonts';
 import { ButtonComponent } from '../../components/ui';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
@@ -90,51 +88,7 @@ export const GrantsLanding = () => {
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '50%'} margin="0 auto" mt={10} mb={20}>
 					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">A board of principled Bitcoiners</Text>
 					<Text fontSize="lg" textAlign="justify" mb={2}>We are bringing together a board of Bitcoiners that have a history of supporting the Bitcoin ecosystem. At the end of the Round, they will review the applications through a set of criteria, which will be revealed at a later date, and establish how the funds should be distributed.</Text>
-
-					<Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-						<Box key="brad" display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
-							<Box>
-								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src={Brad}/>
-								</Box>
-								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
-								<Box display="flex" justifyContent="center">
-									<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>
-								</Box>
-							</Box>
-						</Box>
-						<Box key="zucco" display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
-							<Box>
-								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src={Zucco}/>
-								</Box>
-								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Giacomo von Zucco</Text>
-								<Box display="flex" justifyContent="center">
-									<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/giacomozucco" color="#4C9AF4">@giacomozucco</Link>
-								</Box>
-							</Box>
-						</Box>
-						<Box key="lucas" display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
-							<Box>
-								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src={Lucas}/>
-								</Box>
-								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Lucas Ferreira</Text>
-								<Box display="flex" justifyContent="center">
-									<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/lucasdcf" color="#4C9AF4">@lucasdcf</Link>
-								</Box>
-							</Box>
-						</Box>
-						<Box key="placeholder" display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
-							<Box>
-								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src="" bg="brand.bgGrey3" />
-								</Box>
-								<Box mt={4} mb={1} h="43px" w="111px" bg="brand.bgGrey3" borderRadius="md" />
-							</Box>
-						</Box>
-					</Box>
-
+					<Board/>
 				</Box>
 
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '50%'} margin="0 auto" mt={10} mb={20}>
