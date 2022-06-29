@@ -84,8 +84,8 @@ export const GrantsLanding = () => {
 				</Box>
 
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '50%'} margin="0 auto" mt={10} mb={20}>
-					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">A board of hardcore Bitcoiners</Text>
-					<Text fontSize="lg" mb={4} textAlign="justify">We are bringing together a board of Bitcoin maxis that have a history of supporting the Bitcoin ecosystem. At the end of the Round, they will review the applications through a set of criteria, which will be revealed at a later date, and establish how the funds should be distributed.</Text>
+					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">A board of principled Bitcoiners</Text>
+					<Text fontSize="lg" mb={4} textAlign="justify">We are bringing together a board of Bitcoiners that have a history of supporting the Bitcoin ecosystem. At the end of the Round, they will review the applications through a set of criteria, which will be revealed at a later date, and establish how the funds should be distributed.</Text>
 
 					<HStack>
 						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
