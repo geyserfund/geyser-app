@@ -58,7 +58,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 						Title: name,
 						fldGla9o00ogzrquw: contact,
 						Type: [
-							`Grants Contributor - ${project.title.slice(8)}`,
+							'Grants Contributor',
 						],
 						fldOWbMeUVrRjXrYu: ['Geyser Grants'],
 						Grant: project.title,
