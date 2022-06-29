@@ -112,7 +112,7 @@ export const GrantsLanding = () => {
 				</Box>
 
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '50%'} margin="0 auto" mt={10} mb={20}>
-					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Questions?</Text>
+					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Have questions?</Text>
 					<Link margin="0 auto" w="87px" _hover={{textDecoration: 'none'}} isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" display="flex" justifyContent="center" alignItems="center">
 						<ButtonComponent fontSize="lg">FAQ <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5}/></ButtonComponent>
 					</Link>
