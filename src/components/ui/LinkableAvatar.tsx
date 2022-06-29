@@ -3,6 +3,7 @@ import { Text, HStack, Box } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/react';
 import { IAvatarMetadata } from '../../interfaces';
 import { Link } from 'react-router-dom';
+import { isMediumScreen, isMobileMode } from '../../utils';
 
 interface ILinkableAvatar {
   avatarMetadata: IAvatarMetadata;
@@ -10,6 +11,9 @@ interface ILinkableAvatar {
 }
 
 export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
+	const isMedium = isMediumScreen();
+	const isMobile = isMobileMode();
+
 	const calculateBadgesLength = () => {
 		if (!badges) {
 			return 0;
@@ -23,12 +27,16 @@ export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
 			return;
 		}
 
-		if (!badges && avatarMetadata.username.length > 25) {
-			return `${avatarMetadata.username.slice(0, 23)}...`;
+		if ((badges && badges.length === 0 && avatarMetadata.username.length > (isMedium ? 12 : 21)) || (!badges && avatarMetadata.username.length > (isMedium ? 12 : 21))) {
+			return `${avatarMetadata.username.slice(0, (isMedium ? 10 : 19))}...`;
 		}
 
-		if (badges && badges.length && avatarMetadata.username.length + calculateBadgesLength() > 22) {
-			return `${avatarMetadata.username.slice(0, 4)}...`;
+		if (badges && badges.length >= (isMobile ? 2 : isMedium ? 1 : 3)) {
+			return;
+		}
+
+		if (badges && badges.length && avatarMetadata.username.length + calculateBadgesLength() > (isMedium ? 13 : 21)) {
+			return `${avatarMetadata.username.slice(0, (isMedium ? 3 : 6))}...`;
 		}
 
 		return avatarMetadata.username;

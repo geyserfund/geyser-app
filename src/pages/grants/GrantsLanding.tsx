@@ -6,12 +6,14 @@ import { useQuery } from '@apollo/client';
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
 import { QUERY_GRANTS } from '../../graphql';
-import GrantsHeader from '../../assets/grants-header.jpeg';
+import GrantsHeader from '../../assets/grants-header.webp';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
 import Brad from '../../assets/brad.png';
 import { fonts } from '../../constants/fonts';
+import { ButtonComponent } from '../../components/ui';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 export const GrantsLanding = () => {
 	const isMobile = isMobileMode();
@@ -84,8 +86,8 @@ export const GrantsLanding = () => {
 				</Box>
 
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '50%'} margin="0 auto" mt={10} mb={20}>
-					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">A board of hardcore Bitcoiners</Text>
-					<Text fontSize="lg" mb={4} textAlign="justify">We are bringing together a board of Bitcoin maxis that have a history of supporting the Bitcoin ecosystem. At the end of the Round, they will review the applications through a set of criteria, which will be revealed at a later date, and establish how the funds should be distributed.</Text>
+					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">A board of principled Bitcoiners</Text>
+					<Text fontSize="lg" mb={4} textAlign="justify">We are bringing together a board of Bitcoiners that have a history of supporting the Bitcoin ecosystem. At the end of the Round, they will review the applications through a set of criteria, which will be revealed at a later date, and establish how the funds should be distributed.</Text>
 
 					<HStack>
 						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
@@ -107,6 +109,13 @@ export const GrantsLanding = () => {
 						</Box>
 					</HStack>
 
+				</Box>
+
+				<Box width={isMobile ? '90%' : isMedium ? '75%' : '50%'} margin="0 auto" mt={10} mb={20}>
+					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Have questions?</Text>
+					<Link margin="0 auto" w="87px" _hover={{textDecoration: 'none'}} isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" display="flex" justifyContent="center" alignItems="center">
+						<ButtonComponent fontSize="lg">FAQ <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5}/></ButtonComponent>
+					</Link>
 				</Box>
 
 				<Box display="flex" justifyContent="center" mt={10} px={4}>

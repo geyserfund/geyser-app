@@ -104,7 +104,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 							</Box>
 
 							<Box>
-								<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.funders ? project.funders.length : 0}</Text>
+								<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.funders ? project.funders.length + 1 : 1}</Text>
 								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTORS</Text>
 							</Box>
 
@@ -142,7 +142,22 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				</Box>
 
-				<VStack margin="0 auto" mt={20} px={4}>
+				{project.sponsors
+		&& <Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
+			<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Grant Sponsors</Text>
+			<Box display={isMobile ? 'block' : 'flex'} flexWrap="wrap" justifyContent="center" alignItems="center">
+				{project.sponsors.map(sponsor => (
+					<Link isExternal href={sponsor.url} key={sponsor.id} mx={project.sponsors.length > 1 ? isMobile ? 0 : 2.5 : 0}>
+						<Box display="flex" justifyContent="center" alignItems="center" w={isMobile ? '100%' : '280px'} py={10} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}} mb={5}>
+							<Image src={sponsor.image} w="200px"/>
+						</Box>
+					</Link>
+				))}
+			</Box>
+		</Box>
+				}
+
+				<VStack margin="0 auto" mt="3.75rem" px={4}>
 					<Subscribe style="inline" interest="grants" titleSize="3xl" />
 				</VStack>
 
