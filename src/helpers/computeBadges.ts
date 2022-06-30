@@ -87,7 +87,7 @@ export const computeFunderBadges = (props: IcomputeFunderBadgesProps): IBadge[] 
 	if (!shortForm) {
 		const longFormBadges = funderBadges.map(funderBadge => ({
 			...funderBadge,
-			badge: funderBadge.badge + ' Funder',
+			badge: funderBadge.badge.includes('Funder') ? funderBadge.badge : funderBadge.badge + ' Funder',
 		}));
 
 		return longFormBadges;

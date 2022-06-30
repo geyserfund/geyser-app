@@ -54,9 +54,9 @@ export const GrantsLanding = () => {
 					<Text fontFamily={fonts.interBlack} fontSize={isMobile ? '3xl' : '5xl'} fontWeight="900" textAlign="center">ROUND 1</Text>
 					<Text fontSize={isMobile ? '3xl' : '5xl'} fontWeight="light" textAlign="center">JULY 1-31</Text>
 					<Text fontSize="4xl" fontWeight="bold" textAlign="center" mt={8}>A new era for Bitcoin grants</Text>
-					<Text textAlign="justify" fontSize="lg">Bitcoin is signal, everything else is noise. We created Geyser Grants to help broadcast loud and clear Bitcoin signal to the world. That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awarenes, enabling Bitcoin culture, and supporting needed development in this space.  Through these grants, we will be supporting Bitcoin educators, developers, entrepreneurs, and creatives with the resources they need to bootstrap their initiatives worldwide.
+					<Text textAlign="justify" fontSize="lg">Bitcoin is signal, everything else is noise. We created Geyser Grants to help broadcast loud and clear Bitcoin signal to the world. That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awareness, enabling Bitcoin culture, and supporting needed development in this space.  Through these grants, we will be supporting Bitcoin educators, developers, entrepreneurs, and creatives with the resources they need to bootstrap their initiatives worldwide.
 						<br/><br/>
-					To bring this vision to life, we accept accept Bitcoin contributions for each individual grant and take no fees at this stage. When the Round goes live, applications will be opened and they will be evaluated once the Rounds close. For more information, see <Link textDecoration="underline" href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f">here</Link>.
+						To bring this vision to life, we accept Bitcoin contributions for each individual grant and take no fees at this stage. When the Round goes live, applications will be opened and they will be evaluated once the Rounds close. Geyser will not charge any fees in the first Rounds but may in the future start charging admin fees to cover expenses. For more information, see <Link textDecoration="underline" href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f">here</Link>.
 					</Text>
 				</Box>
 
@@ -90,7 +90,6 @@ export const GrantsLanding = () => {
 					<Text fontSize="lg" textAlign="justify" mb={2}>We are bringing together a board of Bitcoiners that have a history of supporting the Bitcoin ecosystem. At the end of the Round, they will review the applications through a set of criteria, which will be revealed at a later date, and establish how the funds should be distributed.</Text>
 					<Board/>
 				</Box>
-
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '50%'} margin="0 auto" mt={10} mb={20}>
 					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Have questions?</Text>
 					<Link margin="0 auto" w="87px" _hover={{textDecoration: 'none'}} isExternal href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f" display="flex" justifyContent="center" alignItems="center">
