@@ -1,6 +1,13 @@
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 const projectBlocks: IProjectBlock[] = [
 	{
+		key: 'podcast',
+		title: '',
+		body: [],
+		podcast: 'https://soundcloud.com/user-44010708/bitcoin-racing-008?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
+		blockType: 'PL',
+	},
+	{
 		key: 'description1',
 		title: 'The first race team in the world to be supported by a whole Nation: El Salvador ',
 		body: [
@@ -103,7 +110,7 @@ const projectBlocks: IProjectBlock[] = [
 const projectDetails: IProjectDetail = {
 	problem: 'Bitcoin is underrepresented in motorsports and is missing out on exposure to millions of TV viewers/fans. We are changing this.',
 	idea: 'By entering a fleet of Bitcoin-wrapped cars into some of the UK\'s most prestigious motorsports championships, and utilising our industry-leading partnership with El Salvador, Bitcoin will be seen by millions of live TV viewers and spectators thereby increasing awareness, brand exposure and adoption.',
-	ownerIntro: 'Anonymal is the first Modern Heavy Metal band to sing exclusively about Bitcoin history, philosophy and goals.',
+	ownerIntro: 'BitcoinRacing was launched by a family and friends of Bitcoin and motorsports enthusiasts at the start of 2022',
 	blocks: projectBlocks,
 };
 
