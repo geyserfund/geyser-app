@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 
 import React, { useState, useEffect } from 'react';
-import { Box, Text, HStack, Image, Avatar, VStack, Link } from '@chakra-ui/react';
+import { Box, Text, HStack, Image, VStack, Link } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
 import { SatoshiIcon } from '../../components/icons';
@@ -10,8 +10,8 @@ import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
 import { RecipientButton } from './components/RecipientButton';
 import { ContributeButton } from './components/ContributeButton';
+import { Board } from './components/Board';
 import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
-import Brad from '../../assets/brad.png';
 
 export const Grants = ({ project }: { project: IProject }) => {
 	const [applicants, setApplicants] = useState(['loading']);
@@ -52,10 +52,10 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Box boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} mt={6}>
 							<Box display="flex" justifyContent="end">
 								<InfoTooltip
-									title="APPLICATIONS OPEN JULY 1"
-									description="Please check back then!"
-									options={ { top: '-55px', left: '-125px' } }
-									width="155px"
+									title="APPLICATIONS OPEN JULY 1-31"
+									description="Apply now!"
+									options={ { top: '-55px', left: '-140px' } }
+									width="170px"
 								/>
 							</Box>
 							<HStack justifyContent="center" spacing="21px" alignItems="center" my={3}>
@@ -81,7 +81,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={false} title="Apply" grant={project.title} image={project.media[0]}/>
+								<RecipientButton active={project.active} title="Apply" grant={project.title} image={project.media[0]}/>
 							</Box>
 						</Box>
 					</Box>
@@ -104,7 +104,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 							</Box>
 
 							<Box>
-								<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.funders ? project.funders.length : 0}</Text>
+								<Text fontWeight="bold" textAlign="center" fontSize="lg">{project.funders ? project.funders.length + 1 : 1}</Text>
 								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTORS</Text>
 							</Box>
 
@@ -118,31 +118,28 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				<Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
 					<Text fontSize="3xl" fontWeight="bold" mb={2}>The board</Text>
-					<Text fontSize="lg" mb={4} textAlign="justify">Meet the board who will help to establish the criteria for grant distribution and review your applications:</Text>
+					<Text fontSize="lg" textAlign="justify" mb={2}>Meet the board who will help to establish the criteria for grant distribution and review your applications:</Text>
 
-					<HStack>
-						<Box key="brad" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} mr={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
-							<Box>
-								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src={Brad}/>
-								</Box>
-								<Text mt={4} mb={1} fontSize="lg" fontWeight="bold" textAlign="center">Brad Mills</Text>
-								<Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/bradmillsca" color="#4C9AF4">@bradmillscan</Link>
-							</Box>
-						</Box>
-						<Box key="placeholder" display="flex" flexWrap="wrap" justifyContent="center" alignItems="center" p={2} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
-							<Box>
-								<Box display="flex" justifyContent="center" alignItems="center">
-									<Avatar size="xl" src="" bg="brand.bgGrey3" />
-								</Box>
-								<Box mt={4} mb={1} h="43px" w="111px" bg="brand.bgGrey3" borderRadius="md" />
-							</Box>
-						</Box>
-					</HStack>
+					<Board/>
 
 				</Box>
 
-				<VStack margin="0 auto" mt={20} px={4}>
+				{project.sponsors
+		&& <Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
+			<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Grant Sponsors</Text>
+			<Box display={isMobile ? 'block' : 'flex'} flexWrap="wrap" justifyContent="center" alignItems="center">
+				{project.sponsors.map(sponsor => (
+					<Link isExternal href={sponsor.url} key={sponsor.id} mx={project.sponsors.length > 1 ? isMobile ? 0 : 2.5 : 0}>
+						<Box display="flex" justifyContent="center" alignItems="center" w={isMobile ? '100%' : '280px'} py={10} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}} mb={5}>
+							<Image src={sponsor.image} w="200px"/>
+						</Box>
+					</Link>
+				))}
+			</Box>
+		</Box>
+				}
+
+				<VStack margin="0 auto" mt="3.75rem" px={4}>
 					<Subscribe style="inline" interest="grants" titleSize="3xl" />
 				</VStack>
 

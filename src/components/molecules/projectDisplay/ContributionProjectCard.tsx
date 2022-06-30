@@ -72,7 +72,7 @@ export const ContributionProjectCard = ({ contribution, open, className, ...rest
 	const classes = useStyles();
 	const isDark = isDarkMode();
 
-	const {project, funder} = contribution;
+	const {project} = contribution;
 
 	const imgSrc = project.media[0];
 
@@ -99,32 +99,47 @@ export const ContributionProjectCard = ({ contribution, open, className, ...rest
 					</HStack>
 				</VStack>
 				<Box width="100%" paddingX="10px">
-					<RenderBadges funder={funder} project={project}/>
+					<RenderBadges contribution={contribution}/>
 				</Box>
 			</Card>
 		</Link>
 	);
 };
 
-interface IRenderBadges {
-	funder: IContribution['funder']
-	project: IContribution['project']
-}
+// interface IRenderBadges {
+// 	funder: IContribution['funder']
+// 	project: IContribution['project']
+// }
 
-const RenderBadges = ({ funder, project}:IRenderBadges) => {
-	const funderBadges = computeFunderBadges({ project, funder, shortForm: false });
+const RenderBadges = ({contribution}: { contribution: IContribution }) => {
+	const { project, funder, isAmbassador, isSponsor, isFunder } = contribution;
+	const badges = (isFunder && funder) ? computeFunderBadges({ project, funder, shortForm: false }) : [];
 
-	if (funderBadges.length === 0) {
-		funderBadges.push({
+	if (badges.length === 0) {
+		badges.push({
 			badge: 'Funder',
 			description: 'The user funded this project!',
+		});
+	}
+
+	if (isAmbassador) {
+		badges.push({
+			badge: 'Ambassador',
+			description: 'The user endorses this project!',
+		});
+	}
+
+	if (isSponsor) {
+		badges.push({
+			badge: 'Sponsor',
+			description: 'The user is a sponsor of this project!',
 		});
 	}
 
 	return (
 		<Wrap>
 			{
-				funderBadges.map(badge => (
+				badges.map(badge => (
 					<WrapItem key={badge.badge}>
 						<Tooltip label={badge.description}>
 							<Box backgroundColor="brand.gold" padding="2px 10px" borderRadius="7px">

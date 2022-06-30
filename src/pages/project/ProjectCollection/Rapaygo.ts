@@ -47,6 +47,7 @@ const projectBlocks: IProjectBlock[] = [
 		title: 'About me',
 		body: [
 			'My name is Clay Graham, and I am one of the founders of rapaygo.com, and our passion is to enable Bitcoin on the Lightning Network as the easiest, fastest and cheapest way for merchants and sellers to accept payment. I am a software developer, designer and architect who has been involved in numerous startups and ventures, not with the potential to improve people\'s lives all over the world as the work we are doing now.',
+			'Find out more about Rapaygo here: https://rapaygo.com/',
 		],
 		blockType: 'PL',
 	},
