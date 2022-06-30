@@ -120,7 +120,7 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 						Feedback
 					</Link>
 				</MenuItem>
-				{user && user.id ? <MenuItem MenuItem className={classes.menuItem} onClick={logout}>
+				{user && user.id ? <MenuItem className={classes.menuItem} onClick={logout}>
 					Log Out
 				</MenuItem> : null}
 				{/* <Box className={classes.switchContainer}>
