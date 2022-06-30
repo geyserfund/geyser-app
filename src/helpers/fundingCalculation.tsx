@@ -1,6 +1,7 @@
 import { NODE_ENV } from '../constants';
 import { useBtcContext } from '../context/btc';
 import { IFundForm } from '../hooks';
+import { hasShipping } from '../utils';
 
 const nationalShippingCost = NODE_ENV === 'production' ? 15 : 0.015;
 const internationalShippingCost = NODE_ENV === 'production' ? 60 : 0.060;
@@ -9,14 +10,7 @@ export const useFundCalc = (state: IFundForm) => {
 	const {btcRate} = useBtcContext();
 
 	const getTotalAmount = (type: 'sats' | 'dollar', name: string) => {
-		const shippingAmount = (
-			name === 'day-of-genesis'
-			|| name === 'lightning-rebel'
-			|| name === 'bitcoin-ballers'
-			|| name === 'anatomy-of-bitcoin'
-			|| name === 'bitcoin-for-fairness'
-			|| name === 'orange-pill-app'
-		) ? 0 : getShippingCost();
+		const shippingAmount = hasShipping(name) ? getShippingCost() : 0;
 
 		if (type === 'sats') {
 			return Math.round(state.rewardsCost / btcRate) + state.donationAmount + shippingAmount;

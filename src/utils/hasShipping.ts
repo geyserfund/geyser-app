@@ -5,4 +5,7 @@ export const hasShipping = (name: string) => (
   && name !== 'anatomy-of-bitcoin'
   && name !== 'bitcoin-for-fairness'
 	&& name !== 'orange-pill-app'
+  && name !== 'anonymal'
+  && name !== 'rapaygo'
+  && name !== 'bitcoin-racing'
 );
