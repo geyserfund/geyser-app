@@ -48,6 +48,8 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 	const handleSubmission = async () => {
 		try {
 			setSubmitting(true);
+			const userCopy = JSON.parse(JSON.stringify(user));
+			const twitterID = userCopy.externalAccounts.find((account:any) => account.type === 'twitter').id;
 			const records = [{
 				fields: {
 					Title: grantee,
@@ -55,7 +57,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 					Links: url,
 					Contact: contact,
 					Grant: grant,
-					fld0eyFwj2EWLH8Yh: user.username,
+					fld0eyFwj2EWLH8Yh: twitterID,
 				},
 			}];
 			await createApplicantRecord({records});
@@ -149,7 +151,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 								}
 							</>
 							: <Box>
-								<Text textAlign="center" mb={4}>You need to link your Twitter account to apply to a Grant.</Text>
+								<Text textAlign="center" mb={4}>You need to link your Twitter account to apply for a Grant.</Text>
 								<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
 									<ButtonComponent
 										isFullWidth

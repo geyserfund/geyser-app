@@ -48,7 +48,9 @@ export const Grants = ({ project }: { project: IProject }) => {
 					</Box>
 
 					<Box w={isMobile ? '100%' : isMedium ? '50%' : '450px'} margin={isMedium ? '10px auto' : ''}>
-						<Text fontSize="lg" textAlign="justify" my={isMobile ? 2 : 0} mx={isMobile ? 5 : 0}>{project.description}</Text>
+						<Text fontSize="lg" textAlign="justify" my={isMobile ? 2 : 0} mx={isMobile ? 5 : 0}>
+							{project.description} For more information, see <Link textDecoration="underline" href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f">here</Link>.
+						</Text>
 						<Box boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} mt={6}>
 							<Box display="flex" justifyContent="end">
 								<InfoTooltip
@@ -124,7 +126,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				</Box>
 
-				{project.sponsors
+				{project.sponsors && project.sponsors.length > 0
 		&& <Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
 			<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Grant Sponsors</Text>
 			<Box display={isMobile ? 'block' : 'flex'} flexWrap="wrap" justifyContent="center" alignItems="center">

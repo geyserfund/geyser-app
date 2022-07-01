@@ -67,7 +67,7 @@ export const GrantsLanding = () => {
 								return;
 							}
 
-							return (<GrantCard key={grant.id} project={grant} number="1" date="JULY 1 - 31" distributed={grant.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : grant.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : grant.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : ''} status={'pending'} marginRight={grant.name !== 'bitcoin-culture' && true} />);
+							return (<GrantCard key={grant.id} project={grant} number="1" date="JULY 1 - 31" distributed={grant.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : grant.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : grant.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : ''} status={'open'} marginRight={grant.name !== 'bitcoin-culture' && true} />);
 						})}
 						{loading
 							&& <>
