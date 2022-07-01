@@ -151,7 +151,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 								}
 							</>
 							: <Box>
-								<Text textAlign="center" mb={4}>You need to link your Twitter account to apply to a Grant.</Text>
+								<Text textAlign="center" mb={4}>You need to link your Twitter account to apply for a Grant.</Text>
 								<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
 									<ButtonComponent
 										isFullWidth

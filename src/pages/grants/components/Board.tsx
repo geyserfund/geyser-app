@@ -30,7 +30,7 @@ export const Board = () => (
 
 		<BoardMember image={Brad} name="Brad Mills" link="https://twitter.com/bradmillsca" handle="bradmillscan"/>
 
-		<BoardMember image={Zucco} name="Giacomo von Zucco" link="https://twitter.com/giacomozucco" handle="giacomozucco"/>
+		<BoardMember image={Zucco} name="Giacomo Zucco" link="https://twitter.com/giacomozucco" handle="giacomozucco"/>
 
 		<BoardMember image={Lucas} name="Lucas Ferreira" link="https://twitter.com/lucasdcf" handle="lucasdcf"/>
 
