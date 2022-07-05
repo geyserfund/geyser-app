@@ -136,7 +136,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				{project.sponsors
 		&& <Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
-			<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Grant Sponsors</Text>
+			<Text fontSize="3xl" fontWeight="bold" mb={6} textAlign="center">Grant Sponsors</Text>
 			<Box display={isMobile ? 'block' : 'flex'} flexWrap="wrap" justifyContent="center" alignItems="center">
 				{project.sponsors.map(sponsor => (
 					<Link isExternal href={sponsor.url} key={sponsor.id} mx={project.sponsors.length > 1 ? isMobile ? 0 : 2.5 : 0}>
@@ -149,8 +149,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 		</Box>
 				}
 
-				<Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
-					<Text fontSize="3xl" fontWeight="bold" textAlign="center" mb={2}>Applicants</Text>
+				<Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt="3.75rem">
+					<Text fontSize="3xl" fontWeight="bold" textAlign="center" mb={6}>Applicants</Text>
 					{project.name === 'bitcoin-education'
 						? <iframe className={`airtable-embed ${classes.iframe}`} src="https://airtable.com/embed/shrLwYSAvD5pO9gjG?backgroundColor=teal" frameBorder="0" width="100%" height="533"></iframe>
 						: project.name === 'bitcoin-builders'
@@ -160,7 +160,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</>}
 				</Box>
 
-				<VStack margin="0 auto" mt="3.75rem" px={4}>
+				<VStack margin="0 auto" mt={20} px={4}>
 					<Subscribe style="inline" interest="grants" titleSize="3xl" />
 				</VStack>
 
