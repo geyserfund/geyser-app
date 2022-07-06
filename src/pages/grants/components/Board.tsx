@@ -25,7 +25,7 @@ const BoardMember = ({image, name, link, handle}:BoardMemberProps) => (
 	</Box>
 );
 
-const boardMembers = [{name: 'Brad Mills', handle: 'bradmillscan', link: 'https://twitter.com/bradmillsca', image: Brad}, {name: 'Giacomo von Zucco', handle: 'giacomozucco', link: 'https://twitter.com/giacomozucco', image: Zucco}, {name: 'Lucas Ferreira', handle: 'lucasdcf', link: 'https://twitter.com/lucasdcf', image: Lucas}];
+const boardMembers = [{name: 'Brad Mills', handle: 'bradmillscan', link: 'https://twitter.com/bradmillscan', image: Brad}, {name: 'Giacomo von Zucco', handle: 'giacomozucco', link: 'https://twitter.com/giacomozucco', image: Zucco}, {name: 'Lucas Ferreira', handle: 'lucasdcf', link: 'https://twitter.com/lucasdcf', image: Lucas}];
 
 export const Board = () => (
 	<Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
