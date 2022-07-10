@@ -12,6 +12,8 @@ import { Anonymal } from './Anonymal';
 import { Rapaygo } from './Rapaygo';
 import { Paco } from './Paco';
 import { BitcoinRacing } from './BitcoinRacing';
+import { BitcoinTwitter } from './BitcoinTwitter';
+import { BinkBankBonk } from './BinkBankBonk';
 
 export interface IProjectData {
 	projectBlocks: IProjectBlock[]
@@ -38,6 +40,8 @@ const ProjectColl: IProjectColl = {
 	[Rapaygo.projectName]: Rapaygo,
 	[Paco.projectName]: Paco,
 	[BitcoinRacing.projectName]: BitcoinRacing,
+	[BitcoinTwitter.projectName]: BitcoinTwitter,
+	[BinkBankBonk.projectName]: BinkBankBonk,
 };
 
 export default ProjectColl;
