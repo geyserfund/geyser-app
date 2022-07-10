@@ -9,21 +9,22 @@ import { isMobileMode } from '../../../utils';
 import { useStyles } from './styles';
 
 interface IOwnerSponsorCard {
-    owner: IParticipant
-    ambassadors: IParticipant[]
-    sponsors: ISponsor[]
-    ownerIntro: string
+	owner: IParticipant
+	ambassadors: IParticipant[]
+	sponsors: ISponsor[]
+	ownerIntro: string
 	problem: string
-    idea: string
+	idea: string
 	images: string[]
+	hasAboutMe?: boolean
 }
 
-export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, images, problem, idea}: IOwnerSponsorCard) => {
+export const OwnerSponsorCard = ({ owner, ambassadors, sponsors, ownerIntro, images, problem, idea, hasAboutMe }: IOwnerSponsorCard) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 
-	const {isOpen: ambassadorOpen, onOpen: onAmbassadorOpen, onClose: onAmbassadorClose} = useDisclosure();
-	const {isOpen: sponsorOpen, onOpen: onSponsorOpen, onClose: onSponsorClose} = useDisclosure();
+	const { isOpen: ambassadorOpen, onOpen: onAmbassadorOpen, onClose: onAmbassadorClose } = useDisclosure();
+	const { isOpen: sponsorOpen, onOpen: onSponsorOpen, onClose: onSponsorClose } = useDisclosure();
 
 	const handleScroll = () => {
 		const element = document.getElementById('aboutMe');
@@ -43,7 +44,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 				<VStack spacing="15px" alignItems="flex-start">
 					<VStack spacing="10px" >
 						<ImageBar images={images} />
-						{ problem && <StatusBar variant="problem" message={problem} />}
+						{problem && <StatusBar variant="problem" message={problem} />}
 						<StatusBar variant="idea" message={idea} />
 					</VStack>
 					<Box>
@@ -52,7 +53,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<InfoTooltip
 								title="Creator"
 								description="Project creators have verified their Twitter accounts. Go check them out!"
-								options={ { top: '-82px', left: '-60px' } }
+								options={{ top: '-82px', left: '-60px' }}
 								width="172px"
 							/>
 						</HStack>
@@ -62,13 +63,13 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							</Link>
 							<VStack justifyContent="space-between" alignItems="flex-start">
 								<Link to={`/profile/${owner.user.id}`}>
-									<Text fontSize="18px" _hover={{textdecoration: 'underline', fontWeight: 500}}>
+									<Text fontSize="18px" _hover={{ textdecoration: 'underline', fontWeight: 500 }}>
 										{owner.user.username}
 									</Text>
 								</Link>
 								<Text fontSize="12px" >
-									{isMobile ? ownerIntro.slice(0, 84) : ownerIntro.slice(0, 180) }
-									<span className={classes.readmore} onClick={handleScroll}>...read more</span>
+									{isMobile ? ownerIntro.slice(0, 84) : ownerIntro.slice(0, 180)}
+									{hasAboutMe && <span className={classes.readmore} onClick={handleScroll}>...read more</span>}
 								</Text>
 							</VStack>
 						</HStack>
@@ -79,7 +80,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<InfoTooltip
 								title="Ambassadors"
 								description="Ambassadors are individuals who vouch for the project and give their go ahead."
-								options={ { top: '-81px', left: '-80px' } }
+								options={{ top: '-81px', left: '-80px' }}
 								width="172px"
 							/>
 						</HStack>
@@ -115,7 +116,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 							<InfoTooltip
 								title="Sponsors"
 								description="Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences."
-								options={ { top: '-108px', left: isMobile ? '-50px' : '-70px' } }
+								options={{ top: '-108px', left: isMobile ? '-50px' : '-70px' }}
 								width="172px"
 							/>
 						</HStack>
@@ -124,7 +125,7 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 								sponsors.map((sponsor: ISponsor) => (
 									sponsor.confirmed
 										? <WrapItem key={sponsor.id} display="inline-block">
-											{ sponsor.user
+											{sponsor.user
 												? <Link to={`/profile/${sponsor.user.id}`}>
 													<HStack spacing="5px" className={classes.amabassadorBlock}>
 														<Avatar
@@ -161,8 +162,8 @@ export const OwnerSponsorCard = ({owner, ambassadors, sponsors, ownerIntro, imag
 				</VStack>
 
 			</Card>
-			<AddAmbassador isOpen={ambassadorOpen} onClose={onAmbassadorClose}/>
-			<AddSponsor isOpen={sponsorOpen} onClose={onSponsorClose}/>
+			<AddAmbassador isOpen={ambassadorOpen} onClose={onAmbassadorClose} />
+			<AddSponsor isOpen={sponsorOpen} onClose={onSponsorClose} />
 		</>
 	);
 };
