@@ -81,7 +81,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 				{fundingTx.media && <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" />}
 				<Text mt="6px" color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>
 					{timeAgo && `${onChain ? '⛓' : '⚡️'} ${timeAgo} ago `}
-					{avatarMetadata.appName ? `from ${avatarMetadata.appName}` : `from ${source}`}
+					{avatarMetadata.appName ? `from ${avatarMetadata.appName}` : source !== 'geyser' && `from ${source}`}
 				</Text>
 			</Box>
 
