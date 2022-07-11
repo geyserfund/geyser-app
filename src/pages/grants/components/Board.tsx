@@ -25,14 +25,12 @@ const BoardMember = ({image, name, link, handle}:BoardMemberProps) => (
 	</Box>
 );
 
+const boardMembers = [{name: 'Brad Mills', handle: 'bradmillscan', link: 'https://twitter.com/bradmillscan', image: Brad}, {name: 'Giacomo von Zucco', handle: 'giacomozucco', link: 'https://twitter.com/giacomozucco', image: Zucco}, {name: 'Lucas Ferreira', handle: 'lucasdcf', link: 'https://twitter.com/lucasdcf', image: Lucas}];
+
 export const Board = () => (
 	<Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
 
-		<BoardMember image={Brad} name="Brad Mills" link="https://twitter.com/bradmillsca" handle="bradmillscan"/>
-
-		<BoardMember image={Zucco} name="Giacomo von Zucco" link="https://twitter.com/giacomozucco" handle="giacomozucco"/>
-
-		<BoardMember image={Lucas} name="Lucas Ferreira" link="https://twitter.com/lucasdcf" handle="lucasdcf"/>
+		{boardMembers.map((member:BoardMemberProps) => <BoardMember key={member.handle} image={member.image} name={member.name} link={member.link} handle={member.handle}/>)}
 
 		<Box display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
 			<Box>

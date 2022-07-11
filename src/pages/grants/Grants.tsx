@@ -12,9 +12,19 @@ import { RecipientButton } from './components/RecipientButton';
 import { ContributeButton } from './components/ContributeButton';
 import { Board } from './components/Board';
 import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
+import { createUseStyles } from 'react-jss';
+
+const useStyles = createUseStyles({
+	iframe: {
+		background: 'transparent',
+		border: '1px solid #ccc',
+	},
+
+});
 
 export const Grants = ({ project }: { project: IProject }) => {
 	const [applicants, setApplicants] = useState(['loading']);
+	const classes = useStyles();
 
 	const getGrantApplicants = async () => {
 		fetch('https://api.airtable.com/v0/appyM7XlNIWVypuP5/tblwlFBSxMvV0JhzU?fields%5B%5D=Grant', {
@@ -126,7 +136,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				{project.sponsors
 		&& <Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt={20}>
-			<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">Grant Sponsors</Text>
+			<Text fontSize="3xl" fontWeight="bold" mb={6} textAlign="center">Grant Sponsors</Text>
 			<Box display={isMobile ? 'block' : 'flex'} flexWrap="wrap" justifyContent="center" alignItems="center">
 				{project.sponsors.map(sponsor => (
 					<Link isExternal href={sponsor.url} key={sponsor.id} mx={project.sponsors.length > 1 ? isMobile ? 0 : 2.5 : 0}>
@@ -139,7 +149,18 @@ export const Grants = ({ project }: { project: IProject }) => {
 		</Box>
 				}
 
-				<VStack margin="0 auto" mt="3.75rem" px={4}>
+				<Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt="3.75rem">
+					<Text fontSize="3xl" fontWeight="bold" textAlign="center" mb={6}>Applicants</Text>
+					{project.name === 'bitcoin-education'
+						? <iframe className={`airtable-embed ${classes.iframe}`} src="https://airtable.com/embed/shrLwYSAvD5pO9gjG?backgroundColor=teal" frameBorder="0" width="100%" height="533"></iframe>
+						: project.name === 'bitcoin-builders'
+							? <iframe className={`airtable-embed ${classes.iframe}`} src="https://airtable.com/embed/shrqwATwHR5zQRRBH?backgroundColor=teal" frameBorder="0" width="100%" height="533"></iframe>
+							: project.name === 'bitcoin-culture' ? <iframe className={`airtable-embed ${classes.iframe}`} src="https://airtable.com/embed/shrXmWODPPC613gtz?backgroundColor=teal" frameBorder="0" width="100%" height="533"></iframe>
+								: <>
+								</>}
+				</Box>
+
+				<VStack margin="0 auto" mt={20} px={4}>
 					<Subscribe style="inline" interest="grants" titleSize="3xl" />
 				</VStack>
 
