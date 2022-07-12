@@ -89,7 +89,7 @@ export const InfoPage = ({
 				<Box display="flex" marginBottom="10px" w="95%">
 					<Box w="50%">
 						<Button _hover={{backgroundColor: 'none'}} w="100%" rounded="none" bg="none" fontWeight={view === 'activity' ? 'bold' : 'normal'} fontSize="16px" marginTop="10px" onClick={() => setView('activity')}>
-						Activity <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>{fundingTxs.length}</Text>
+						Contributions <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>{fundingTxs.length}</Text>
 						</Button>
 						<Box bg={view === 'activity' ? 'darkgrey' : 'lightgrey'} w="100%" h="3px" rounded="lg"></Box>
 					</Box>

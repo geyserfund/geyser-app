@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
-	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea, Image, HStack,
+	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Textarea, Image, HStack, Select,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
@@ -28,6 +28,8 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 	const [grantee, setGrantee] = useState('');
 	const [description, setDescription] = useState('');
 	const [url, setUrl] = useState('');
+	const [stage, setStage] = useState('');
+	const [region, setRegion] = useState('');
 	const [contact, setContact] = useState('');
 	const [submitting, setSubmitting] = useState(false);
 	const { toast } = useNotification();
@@ -55,6 +57,8 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 					Title: grantee,
 					fldSKBmoxAUYc1NxQ: description,
 					Links: url,
+					fldBXbm6GY73CQwgL: stage,
+					Region: region,
 					Contact: contact,
 					Grant: grant,
 					fld0eyFwj2EWLH8Yh: twitterID,
@@ -77,6 +81,8 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 		setGrantee('');
 		setDescription('');
 		setUrl('');
+		setStage('');
+		setRegion('');
 		setContact('');
 		setSubscribed(false);
 		setStep(0);
@@ -138,6 +144,25 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 										value={url}
 										isRequired={true}
 									/>
+									<Text fontWeight="bold" mt={5}>At what stage is your project?</Text>
+									<Input
+										name="stage"
+										placeholder="Implementation stage"
+										focusBorderColor="#20ECC7"
+										onChange={event => setStage(event.target.value)}
+										value={stage}
+										isRequired={true}
+									/>
+									<Text fontWeight="bold" mt={5}>Which region or country will this project impact?</Text>
+									<Select name="region" placeholder="Select option" focusBorderColor="#20ECC7" onChange={event => setRegion(event.target.value)} isRequired={true}>
+										<option value="North America">North America</option>
+										<option value="South America">South America</option>
+										<option value="Europe">Europe</option>
+										<option value="Africa">Africa</option>
+										<option value="Asia">Asia</option>
+										<option value="Oceania">Oceania</option>
+										<option value="Online">Online</option>
+									</Select>
 									<Text mt={5} fontWeight="bold">Your email / contact info:</Text>
 									<Input
 										name="contact"
@@ -170,7 +195,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 							? <ButtonComponent
 								primary width="100%"
 								onClick={handleSubmission}
-								disabled={grantee.length === 0 || description.length === 0 || url.length === 0 || contact.length === 0}
+								disabled={grantee.length === 0 || description.length === 0 || url.length === 0 || contact.length === 0 || stage.length === 0 || region.length === 0}
 							>Submit</ButtonComponent>
 							: <></>
 						}

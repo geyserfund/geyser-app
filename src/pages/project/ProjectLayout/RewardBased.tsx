@@ -53,6 +53,7 @@ export const RewardBased = ({ project }: { project: IProject }) => {
 					ownerIntro={projectDetails.ownerIntro}
 					problem={projectDetails.problem}
 					idea={projectDetails.idea}
+					hasAboutMe={Boolean(projectDetails.blocks.find(val => val.key === 'aboutMe'))}
 				/>
 				<DetailsBlock projectDetails={projectDetails} media={project.media} />
 				{renderUpdates()}

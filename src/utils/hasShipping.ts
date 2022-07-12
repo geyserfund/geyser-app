@@ -8,4 +8,6 @@ export const hasShipping = (name: string) => (
   && name !== 'anonymal'
   && name !== 'rapaygo'
   && name !== 'bitcoin-racing'
+  && name !== 'bitcoin-twitter'
+  && name !== 'binkbonkbank'
 );

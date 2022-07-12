@@ -8,6 +8,7 @@ import { SatoshiIcon } from '../icons';
 import { getDaysAgo, getRandomOrb } from '../../utils';
 import { fonts } from '../../constants/fonts';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
+import BreezLogo from '../../assets/breez-logo.png';
 import { commaFormatted } from '../../utils/helperFunctions';
 
 interface IIdBar extends HTMLChakraProps<'div'> {
@@ -27,6 +28,14 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 					appName: 'Fountain.fm',
 					image: FountainLogo,
 					link: ` https://fountain.fm/${username}`,
+				};
+			}
+
+			if (source === 'Breez') {
+				return {
+					appName: source,
+					image: BreezLogo,
+					link: 'https://breez.technology/',
 				};
 			}
 		}
@@ -57,7 +66,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 			>
 				{
 					anonymous
-						? <AnonymousAvatar seed={fundingTx.funder.id}/>
+						? <AnonymousAvatar seed={fundingTx.funder.id} image={avatarMetadata.image}/>
 						: <LinkableAvatar
 							avatarMetadata={avatarMetadata}
 						/>
@@ -72,7 +81,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 				{fundingTx.media && <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" />}
 				<Text mt="6px" color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>
 					{timeAgo && `${onChain ? '⛓' : '⚡️'} ${timeAgo} ago `}
-					{!anonymous && avatarMetadata.appName && `from ${avatarMetadata.appName}`}
+					{avatarMetadata.appName ? `from ${avatarMetadata.appName}` : source !== 'geyser' && `from ${source}`}
 				</Text>
 			</Box>
 
