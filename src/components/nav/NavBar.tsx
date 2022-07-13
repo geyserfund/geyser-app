@@ -92,6 +92,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
 										standard
 										onClick={handleProfileClick}
+										border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
 									>
 										{user.username}
 									</ButtonComponent>
@@ -134,6 +135,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 									{
 										user.id
 											? <ButtonComponent
+												border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
 												className={classes.userInfo}
 												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
 												standard
