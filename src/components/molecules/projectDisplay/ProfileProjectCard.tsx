@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { IProfileProject } from '../../../interfaces';
 import { checkExpired, getFormattedDate, isDarkMode, useBitcoinRates } from '../../../utils';
 import { getShortAmountLabel } from '../../../utils/helperFunctions';
-import { SatoshiIcon2 } from '../../icons';
+import { SatoshiIconTilted } from '../../icons';
 import { Card, ICard } from '../../ui';
 import { ProjectCardTime } from './ProjectCard';
 
@@ -192,7 +192,7 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 						</VStack>
 						<VStack alignItems="center" justifyContent={'center'} spacing="0">
 							<HStack spacing="2px">
-								<SatoshiIcon2 scale={0.6}/>
+								<SatoshiIconTilted scale={0.6}/>
 								<Text fontSize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
 							</HStack>
 							<Text fontSize="12px">RECEIVED</Text>

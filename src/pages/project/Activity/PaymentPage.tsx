@@ -1,6 +1,6 @@
 import { Box, CloseButton, Divider, HStack, Text, VStack, Button, Input, InputGroup, InputLeftElement, Modal, ModalOverlay, ModalBody, ModalCloseButton, ModalContent, useDisclosure, Image } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { SatoshiIcon, GifIcon } from '../../../components/icons';
+import { SatoshiIconTilted, GifIcon } from '../../../components/icons';
 import { ButtonComponent, SatoshiAmount, SectionTitle, SelectComponent, TextArea, TextBox } from '../../../components/ui';
 import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
@@ -235,7 +235,7 @@ export const PaymentPage = ({
 					isLoading={fundLoading}
 					primary
 					standard
-					leftIcon={<SatoshiIcon />}
+					leftIcon={<SatoshiIconTilted />}
 					width="100%"
 					onClick={submit}
 				>

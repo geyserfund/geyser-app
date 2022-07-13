@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Text, HStack, Image, VStack, Link } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
-import { SatoshiIcon } from '../../components/icons';
+import { SatoshiIconTilted } from '../../components/icons';
 import { isMediumScreen, isMobileMode } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
@@ -73,15 +73,15 @@ export const Grants = ({ project }: { project: IProject }) => {
 							<HStack justifyContent="center" spacing="21px" alignItems="center" my={3}>
 
 								<Box>
-									<HStack justifyContent="center" alignItems="center">
-										<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
+									<HStack justifyContent="center" alignItems="center" spacing="2px">
+										<SatoshiIconTilted scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
 								</Box>
 
 								<Box>
-									<HStack justifyContent="center">
-										<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
+									<HStack justifyContent="center" spacing="2px">
+										<SatoshiIconTilted scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">DISTRIBUTED</Text>
 								</Box>
@@ -109,8 +109,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<HStack justifyContent="center" spacing="21px" alignItems="center" my={3}>
 
 							<Box>
-								<HStack justifyContent="center" alignItems="center">
-									<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
+								<HStack justifyContent="center" alignItems="center" spacing="2px">
+									<SatoshiIconTilted scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
 								</HStack>
 								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
 							</Box>
