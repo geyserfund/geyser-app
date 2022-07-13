@@ -12,7 +12,7 @@ handle: string,
 }
 
 const BoardMember = ({image, name, link, handle}:BoardMemberProps) => (
-	<Box display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+	<Box display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" _hover={{boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px'}} boxShadow="rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px" transition="box-shadow 0.3s ease-in-out">
 		<Box>
 			<Box display="flex" justifyContent="center" alignItems="center">
 				<Avatar size="xl" src={image}/>
@@ -32,7 +32,7 @@ export const Board = () => (
 
 		{boardMembers.map((member:BoardMemberProps) => <BoardMember key={member.handle} image={member.image} name={member.name} link={member.link} handle={member.handle}/>)}
 
-		<Box display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}>
+		<Box display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" _hover={{boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px'}} boxShadow="rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px" transition="box-shadow 0.3s ease-in-out">
 			<Box>
 				<Box display="flex" justifyContent="center" alignItems="center">
 					<Avatar size="xl" src="" bg="brand.bgGrey3" />

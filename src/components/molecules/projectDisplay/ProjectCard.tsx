@@ -32,13 +32,10 @@ const useStyles = createUseStyles({
 		width: '300px',
 		minWidth: '300px',
 		marginLeft: '15px',
-		boxShadow: 'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
+		boxShadow: 'rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px',
 		'&:hover': {
 			cursor: 'pointer',
-			boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
-			'& $viewProject': {
-				opacity: 1,
-			},
+			boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
 			'.rocketicon': {
 				color: 'brand.primary',
 			},
@@ -53,25 +50,6 @@ const useStyles = createUseStyles({
 		justifyContent: 'center',
 		alignItems: 'center',
 		filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))',
-	},
-	viewProject: {
-		position: 'absolute',
-		height: '100%',
-		width: '100%',
-		top: '0px',
-		left: '0px',
-		display: 'flex',
-		opacity: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
-		transition: 'opacity 0.3s ease-in-out',
-	},
-	darkLayout: {
-		position: 'absolute',
-		backgroundColor: 'black',
-		height: '100%',
-		width: '100%',
-		opacity: 0.7,
 	},
 });
 
@@ -125,10 +103,6 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 			>
 				<Box height="160px" width="100%" position="relative">
 					<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
-					<Box className={classes.viewProject}>
-						<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
-						<Box className={classes.darkLayout} />
-					</Box>
 				</Box>
 				<VStack spacing="5px" width="100%" padding="10px">
 					<HStack spacing="10px" justifyContent="flex-start" width="100%">
