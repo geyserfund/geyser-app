@@ -48,7 +48,7 @@ export const GrantsLanding = () => {
 
 	return (
 		<>
-			<Box pb={20} pt={isMobile ? 5 : 10} backgroundImage={GrantsHeader} backgroundSize="contain" backgroundRepeat="no-repeat">
+			<Box pb={20} paddingTop={isMobile ? '81px' : '91px'} backgroundImage={GrantsHeader} backgroundSize="contain" backgroundRepeat="no-repeat">
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '35%'} margin="0 auto" my={5}>
 					<Text fontSize={isMobile ? '4xl' : '55px'} fontWeight="medium" textAlign="center">Geyser Grants</Text>
 					<Text fontFamily={fonts.interBlack} fontSize={isMobile ? '3xl' : '5xl'} fontWeight="900" textAlign="center">ROUND 1</Text>

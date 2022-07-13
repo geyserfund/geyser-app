@@ -14,7 +14,6 @@ import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
 import { LaunchIdea } from '../pages/launchIdea';
 import { Profile } from '../pages/profile';
-import { isMobileMode } from '../utils';
 import { REACT_APP_API_ENDPOINT } from '../constants';
 
 export const customHistory = createBrowserHistory();
@@ -22,7 +21,6 @@ export const customHistory = createBrowserHistory();
 export const Router = () => {
 	const [isAtTop, setIsAtTop] = useState(true);
 	const location = useLocation();
-	const isMobile = isMobileMode();
 
 	useEffect(() => {
 		const container = document.getElementById('geyser-landing-page');
@@ -47,7 +45,7 @@ export const Router = () => {
 	return (
 		<Box height="100vh">
 			<NavBar showBorder={showBorder} />
-			<Box id="geyser-landing-page" height={isMobile ? 'calc(100vh - 61px)' : 'calc(100vh - 71px)'} overflowY="auto">
+			<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 				<Switch>
 					<Route path="/.well-known/lnurlp/:username" component={() => {
 						const { username } = useParams<{username: string}>();
