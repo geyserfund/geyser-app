@@ -91,7 +91,26 @@ export const Profile = () => {
 		history.push('/launch');
 	};
 
-	console.log('chekcing private profile', privateProfile);
+	const creationSort = (creationA:any, creationB:any) => {
+		if (creationA.project.createdAt > creationB.project.createdAt) {
+			return -1;
+		}
+
+		return 0;
+	};
+
+	const creationsSorted = [...userProfile.ownerOf].sort(creationSort);
+
+	const contributionSort = (contributionA:any, contributionB:any) => {
+		if (contributionA.funder.confirmedAt > contributionB.funder.confirmedAt) {
+			return -1;
+		}
+
+		return 0;
+	};
+
+	const contributionsSorted = [...userProfile.contributions].sort(contributionSort);
+
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
@@ -163,7 +182,7 @@ export const Profile = () => {
 									userProfile && userProfile.ownerOf && userProfile.ownerOf.length > 0
 										? <Box className={isMobile ? classes.containerMobile : classes.container}>
 											<Wrap paddingY="0px" width="100%" justify={ !isLargerThan1080 ? 'center' : 'flex-start'} spacing="30px" >
-												{ userProfile && userProfile.ownerOf.map(owned => {
+												{ userProfile && creationsSorted.map(owned => {
 													const {project} = owned;
 													return (
 														<WrapItem key={project.id}>
@@ -191,7 +210,7 @@ export const Profile = () => {
 									userProfile && userProfile.contributions && userProfile.contributions.length > 0
 										? <Box className={isMobile ? classes.containerMobile : classes.container}>
 											<Wrap paddingY="0px" width="100%" justify={ !isLargerThan1080 ? 'center' : 'flex-start'} spacing="30px" >
-												{ userProfile && userProfile.contributions.map(contribute => (
+												{ userProfile && contributionsSorted.map(contribute => (
 													<WrapItem key={contribute.project.id}>
 														<ContributionProjectCard
 															marginLeft="0px !important"
