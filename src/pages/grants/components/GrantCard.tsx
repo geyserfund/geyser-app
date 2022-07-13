@@ -15,7 +15,7 @@ export const GrantCard = ({ project, number, distributed, date, status, marginRi
 
 	return (
 
-		<Box backgroundColor="white" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" borderRadius="4px" my={10} mr={marginRight ? isMobile ? 10 : 20 : 0} cursor="pointer">
+		<Box backgroundColor="white" _hover={{boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px'}} boxShadow="rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px" transition="box-shadow 0.3s ease-in-out" borderRadius="4px" my={10} mr={marginRight ? isMobile ? 10 : 20 : 0} cursor="pointer">
 
 			<Box w={isMobile ? '325px' : '350px'}>
 				<LinkBox>
