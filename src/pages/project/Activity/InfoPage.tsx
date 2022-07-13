@@ -1,6 +1,6 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
 import React, {useState} from 'react';
-import { SatoshiIcon } from '../../../components/icons';
+import { SatoshiIconTilted } from '../../../components/icons';
 import { ProjectBalanceCircularProgress, ProjectBalance } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
@@ -79,7 +79,7 @@ export const InfoPage = ({
 			{project.active && <ButtonComponent
 				primary
 				standard
-				leftIcon={<SatoshiIcon />}
+				leftIcon={<SatoshiIconTilted />}
 				width="100%"
 				onClick={handleFundProject}
 			>

@@ -4,7 +4,7 @@ import React from 'react';
 import { Image } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar } from '../ui';
 import { IFundingTx, IProject, IAvatarMetadata } from '../../interfaces';
-import { SatoshiIcon } from '../icons';
+import { SatoshiIconTilted } from '../icons';
 import { getDaysAgo, getRandomOrb } from '../../utils';
 import { fonts } from '../../constants/fonts';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
@@ -64,7 +64,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 				}
 
 				<Box display="flex" alignItems="center">
-					<SatoshiIcon scale={0.7}/><Text marginLeft="5px">{`${commaFormatted(fundingTx.amount)}`} </Text>
+					<SatoshiIconTilted scale={0.7}/><Text>{`${commaFormatted(fundingTx.amount)}`} </Text>
 				</Box>
 			</Box>
 			<Box marginTop="6px" width="100%">
