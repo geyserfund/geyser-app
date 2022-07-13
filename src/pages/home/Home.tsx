@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Image, Text, VStack, Skeleton } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import {
 	SatoshiAmount,
@@ -166,14 +166,14 @@ export const Home = () => {
 								summaryLoading
 									? <>
 										<VStack>
-											<Text className={classes.boldText}>....</Text>
+											<Skeleton w="50px" h="25px"/>
 											<Text className={classes.subtitleText}>PROJECTS</Text>
 										</VStack>
 										<VStack>
-											<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>....</SatoshiAmount>
+											<Skeleton w="100px" h="25px"/>
 											<Text className={classes.subtitleText}>SATS RAISED</Text>
 										</VStack><VStack>
-											<Text className={classes.boldText}>....</Text>
+											<Skeleton w="50px" h="25px"/>
 											<Text className={classes.subtitleText}>PLEBS</Text>
 										</VStack></>
 									: <>
