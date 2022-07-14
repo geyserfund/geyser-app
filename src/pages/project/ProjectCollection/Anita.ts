@@ -82,6 +82,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'bitcoin-for-fairness';
+const projectName: string = 'bitcoinforfairness';
 
 export const Anita = {projectBlocks, projectDetails, projectName};

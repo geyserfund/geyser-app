@@ -124,6 +124,6 @@ const projectDetails: IProjectDetail = {
 	ownerIntro: 'I’m a former professional football player with an entrepreneurial heart and passionate about Bitcoin since 2013',
 	blocks: projectBlocks,
 };
-const projectName: string = 'day-of-genesis';
+const projectName: string = 'dayofgenesis';
 
 export const Toni = {projectBlocks, projectDetails, projectName};

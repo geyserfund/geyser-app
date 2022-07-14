@@ -18,36 +18,14 @@ const useStyles = createUseStyles({
 		width: '100%',
 		position: 'relative',
 		backgroundColor: 'white',
-		boxShadow: 'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
+		boxShadow: 'rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px',
 		'&:hover': {
 			cursor: 'pointer',
-			boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
-			'& $viewProject': {
-				opacity: 1,
-			},
+			boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
 			'.rocketicon': {
 				color: 'brand.primary',
 			},
 		},
-	},
-	viewProject: {
-		position: 'absolute',
-		height: '100%',
-		width: '100%',
-		top: '0px',
-		left: '0px',
-		display: 'flex',
-		opacity: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
-		transition: 'opacity 0.3s ease-in-out',
-	},
-	darkLayout: {
-		position: 'absolute',
-		backgroundColor: 'black',
-		height: '100%',
-		width: '100%',
-		opacity: 0.7,
 	},
 	satoshiText: {
 		marginTop: '1px !important',
@@ -89,10 +67,6 @@ export const LiveProject = ({ project}: ILiveProject) => {
 						>
 							<Box flex="1" height="100%" width={isMobile ? '100%' : undefined} borderRadius="4px" overflow="hidden" position="relative" >
 								<Image src={image} width="100%" height="100%" maxHeight="300px" objectFit="cover" minHeight={isMobile ? '300px' : undefined} />
-								<Box className={classes.viewProject}>
-									<Text fontSize="14px" color="brand.primary" zIndex={20}>View Project</Text>
-									<Box className={classes.darkLayout} />
-								</Box>
 							</Box>
 							<VStack
 								height="100%"
@@ -115,8 +89,7 @@ export const LiveProject = ({ project}: ILiveProject) => {
 									<SatoshiAmount wrapperClassName={classes.satoshiText} fontSize="18px" marginTop="2px !important">{project.balance}</SatoshiAmount>
 									{project.fundingGoal
 && <>
-	<Text fontSize="18px">{`, ${percentage} % `}</Text>
-	<Text fontSize="18px">of goal</Text>
+	<Text fontSize="18px">{`- ${percentage}% of goal`}</Text>
 </>
 									}
 								</Wrap>

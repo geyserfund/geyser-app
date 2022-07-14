@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
 
 import React, { useState, useEffect } from 'react';
-import { Box, Text, HStack, Image, VStack, Link } from '@chakra-ui/react';
+import { Box, Text, HStack, Image, VStack, Link, Skeleton } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
-import { SatoshiIcon } from '../../components/icons';
+import { SatoshiIconTilted } from '../../components/icons';
 import { isMediumScreen, isMobileMode } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
@@ -73,21 +73,23 @@ export const Grants = ({ project }: { project: IProject }) => {
 							<HStack justifyContent="center" spacing="21px" alignItems="center" my={3}>
 
 								<Box>
-									<HStack justifyContent="center" alignItems="center">
-										<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
+									<HStack justifyContent="center" alignItems="center" spacing="2px">
+										<SatoshiIconTilted scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
 								</Box>
 
 								<Box>
-									<HStack justifyContent="center">
-										<SatoshiIcon scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
+									<HStack justifyContent="center" spacing="2px">
+										<SatoshiIconTilted scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">DISTRIBUTED</Text>
 								</Box>
 
 								<Box>
-									<Text fontWeight="bold" textAlign="center" fontSize="lg">{applicants && applicants[0] === 'loading' ? '...' : applicants.length}</Text>
+									{applicants && applicants[0] === 'loading' ? <Skeleton w="89px" h="25px"/>
+										: <Text fontWeight="bold" textAlign="center" fontSize="lg">{applicants.length}</Text>
+									}
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">APPLICANTS</Text>
 								</Box>
 
@@ -109,8 +111,8 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<HStack justifyContent="center" spacing="21px" alignItems="center" my={3}>
 
 							<Box>
-								<HStack justifyContent="center" alignItems="center">
-									<SatoshiIcon scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
+								<HStack justifyContent="center" alignItems="center" spacing="2px">
+									<SatoshiIconTilted scale={0.8}/><Text fontWeight="bold" fontSize="lg">{(project.balance / 1000000).toFixed(project.balance === 0 ? 0 : 1)} M</Text>
 								</HStack>
 								<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">CONTRIBUTED</Text>
 							</Box>
@@ -142,7 +144,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 			<Box display={isMobile ? 'block' : 'flex'} flexWrap="wrap" justifyContent="center" alignItems="center">
 				{project.sponsors.map(sponsor => (
 					<Link isExternal href={sponsor.url} key={sponsor.id} mx={project.sponsors.length > 1 ? isMobile ? 0 : 2.5 : 0}>
-						<Box display="flex" justifyContent="center" alignItems="center" w={isMobile ? '100%' : '280px'} py={10} boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" _hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}} mb={5}>
+						<Box display="flex" justifyContent="center" alignItems="center" w={isMobile ? '100%' : '280px'} py={10} _hover={{boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px'}} boxShadow="rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px" transition="box-shadow 0.3s ease-in-out" mb={5}>
 							<Image src={sponsor.image} w="200px"/>
 						</Box>
 					</Link>

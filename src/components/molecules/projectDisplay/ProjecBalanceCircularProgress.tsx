@@ -4,7 +4,7 @@ import { Box } from '@chakra-ui/layout';
 import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { BsCurrencyBitcoin } from 'react-icons/bs';
 import { isDarkMode } from '../../../utils';
-import { SatoshiIcon } from '../../icons';
+import { SatoshiIconTilted } from '../../icons';
 import { createUseStyles } from 'react-jss';
 import { commaFormatted } from '../../../utils/helperFunctions';
 
@@ -29,19 +29,15 @@ const useStyles = createUseStyles({
 		},
 
 	},
-	satoshi: {
-		marginRight: '5px',
-	},
 });
 
 const BTCBalance = ({ balance }: { balance: number }) => {
 	const isDark = isDarkMode();
-	const classes = useStyles();
 	const displaySatoshis = balance < 1000000;
 
 	return (
 		displaySatoshis
-			? <><SatoshiIcon isDark={isDark} className={classes.satoshi} /> {commaFormatted(balance)}</>
+			? <><SatoshiIconTilted isDark={isDark} /> {commaFormatted(balance)}</>
 			: <><BsCurrencyBitcoin fontSize="30px" />{parseFloat((balance / 100000000).toFixed(4))}</>
 	);
 };

@@ -39,6 +39,8 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 	const {btcRate} = useBtcContext();
 	const {fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow({ hasWebLN: false });
 	const [subscribed, setSubscribed] = useState(false);
+	const [thousandAmount, setThousandAmount] = useState(false);
+	const [hundredAmount, setHundredAmount] = useState(false);
 
 	const isMobile = isMobileMode();
 
@@ -119,6 +121,8 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 		setName('');
 		setContact('');
 		setContributeAmount(0);
+		setThousandAmount(false);
+		setHundredAmount(false);
 		setSubmitting(false);
 		setMessage(false);
 		setSubscribed(false);
@@ -159,13 +163,23 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 							/>
 							<Text mt={5} fontWeight="bold">Amount</Text>
 							<HStack>
-								<ButtonComponent onClick={() => {
+								<ButtonComponent border={hundredAmount ? '3px solid #20ECC7' : ''} onClick={() => {
+									if (thousandAmount) {
+										setThousandAmount(false);
+									}
+
 									setMessage(false);
 									setContributeAmount(100);
+									setHundredAmount(true);
 								}}>$100</ButtonComponent>
-								<ButtonComponent onClick={() => {
+								<ButtonComponent border={thousandAmount ? '3px solid #20ECC7' : ''} onClick={() => {
+									if (hundredAmount) {
+										setHundredAmount(false);
+									}
+
 									setMessage(false);
 									setContributeAmount(1000);
+									setThousandAmount(true);
 								}}>$1000</ButtonComponent>
 								<InputGroup>
 									<InputLeftElement
@@ -184,6 +198,11 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 										onChange={event => {
 											if (message) {
 												setMessage(false);
+											}
+
+											if (thousandAmount || hundredAmount) {
+												setThousandAmount(false);
+												setHundredAmount(false);
 											}
 
 											if (parseInt(event.target.value, 10) > 0) {

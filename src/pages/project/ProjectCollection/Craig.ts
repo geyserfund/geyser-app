@@ -70,6 +70,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'the-bitcoin-game';
+const projectName: string = 'thebitcoingame';
 
 export const Craig = {projectBlocks, projectDetails, projectName};

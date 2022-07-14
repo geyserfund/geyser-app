@@ -61,6 +61,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'bitcoin-ballers';
+const projectName: string = 'bitcoinballers';
 
 export const Josias = {projectBlocks, projectDetails, projectName};
