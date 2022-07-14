@@ -86,20 +86,13 @@ export const ContributionProjectCard = ({ contribution, open, className, ...rest
 // }
 
 const RenderBadges = ({contribution}: { contribution: IContribution }) => {
-	const { project, funder, isAmbassador, isSponsor, isFunder } = contribution;
+	const { project, funder, isSponsor, isFunder } = contribution;
 	const badges = (isFunder && funder) ? computeFunderBadges({ project, funder, shortForm: false }) : [];
 
 	if (badges.length === 0) {
 		badges.push({
 			badge: 'Funder',
 			description: 'The user funded this project!',
-		});
-	}
-
-	if (isAmbassador) {
-		badges.push({
-			badge: 'Ambassador',
-			description: 'The user endorses this project!',
 		});
 	}
 
