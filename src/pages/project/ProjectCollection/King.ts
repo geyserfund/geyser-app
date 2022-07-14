@@ -123,6 +123,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'bitcoin-conference-in-lagos';
+const projectName: string = 'bitcoinconferenceinlagos';
 
 export const King = {projectBlocks, projectDetails, projectName, projectUpdates};

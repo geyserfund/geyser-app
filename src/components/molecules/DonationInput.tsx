@@ -15,7 +15,7 @@ import { BsArrowRepeat } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { useBtcContext } from '../../context/btc';
-import { SatoshiIcon } from '../icons';
+import { SatoshiIconTilted } from '../icons';
 
 const useStyles = createUseStyles({
 	inputElement: {
@@ -86,7 +86,7 @@ export const DonationInput = ({className, onChange, name, inputGroup, ...rest}: 
 		<InputGroup {...inputGroup}>
 			<InputLeftElement>
 				{
-					isSatoshi ? <SatoshiIcon /> : <BiDollar fontSize="25px"/>
+					isSatoshi ? <SatoshiIconTilted /> : <BiDollar fontSize="25px"/>
 				}
 			</InputLeftElement>
 			<Input value={satoshi > 0 ? isSatoshi ? satoshi : dollar : undefined} type="number" className={classNames(classes.inputElement, className)} onChange={handleInput} {...rest} placeholder="0" />
@@ -95,7 +95,7 @@ export const DonationInput = ({className, onChange, name, inputGroup, ...rest}: 
 					<BsArrowRepeat className={classes.switchIcon} />
 					{
 						isSatoshi ? <BiDollar className={classes.insideIcon}/>
-							: <SatoshiIcon wrapperClass={classes.insideIcon} scale={0.7}/>
+							: <SatoshiIconTilted wrapperClass={classes.insideIcon} scale={0.7}/>
 					}
 
 				</Button>

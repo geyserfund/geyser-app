@@ -67,10 +67,16 @@ export const NavBar = ({showBorder}: INavBar) => {
 				display="flex"
 				width="100%"
 				justifyContent="center"
-				background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
-				borderBottom={showBorder ? '1px solid rgba(0,0,0,0)' : '1px solid #E9E9E9' }
+				background={isDark ? 'brand.bgHeavyDarkMode' : 'rgba(252,252,252,0.9)'}
+				borderBottom={showBorder ? '1px solid rgba(0,0,0,0)' : '1px solid rgba(233,233,233,0.9)' }
 				boxSizing="border-box"
+				position="fixed"
+				backdropFilter="blur(2px)"
+				top={0}
+				left={0}
+				zIndex={1000}
 			>
+
 				<Box
 					display="flex"
 					width="100%"
@@ -92,6 +98,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
 										standard
 										onClick={handleProfileClick}
+										border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
 									>
 										{user.username}
 									</ButtonComponent>
@@ -134,6 +141,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 									{
 										user.id
 											? <ButtonComponent
+												border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
 												className={classes.userInfo}
 												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
 												standard

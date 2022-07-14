@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Image, Text, VStack, Skeleton } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import {
 	SatoshiAmount,
@@ -16,7 +16,7 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
-import { SatoshiIconGeyser } from '../../components/icons';
+import { SatoshiIconTilted } from '../../components/icons';
 import Dorian from '../../assets/dorian.png';
 import GrantsBanner from '../../assets/grants-banner.png';
 import { useHistory } from 'react-router';
@@ -120,7 +120,7 @@ export const Home = () => {
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
-			padding="0px 0px"
+			paddingTop={isMobile ? '61px' : '71px'}
 			height="100%"
 			justifyContent="space-between"
 		>
@@ -166,14 +166,14 @@ export const Home = () => {
 								summaryLoading
 									? <>
 										<VStack>
-											<Text className={classes.boldText}>....</Text>
+											<Skeleton w="50px" h="25px"/>
 											<Text className={classes.subtitleText}>PROJECTS</Text>
 										</VStack>
 										<VStack>
-											<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>....</SatoshiAmount>
+											<Skeleton w="100px" h="25px"/>
 											<Text className={classes.subtitleText}>SATS RAISED</Text>
 										</VStack><VStack>
-											<Text className={classes.boldText}>....</Text>
+											<Skeleton w="50px" h="25px"/>
 											<Text className={classes.subtitleText}>PLEBS</Text>
 										</VStack></>
 									: <>
@@ -183,7 +183,7 @@ export const Home = () => {
 										</VStack>
 										<VStack>
 											<Box display="flex" alignItems="center">
-												<SatoshiIconGeyser mr={1} />
+												<SatoshiIconTilted color="brand.primary" />
 												<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
 											</Box>
 											<Text className={classes.subtitleText}>SATS RAISED</Text>

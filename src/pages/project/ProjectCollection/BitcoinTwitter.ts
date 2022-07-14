@@ -40,6 +40,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'bitcoin-twitter';
+const projectName: string = 'bitcointwitter';
 
 export const BitcoinTwitter = { projectBlocks, projectDetails, projectName };

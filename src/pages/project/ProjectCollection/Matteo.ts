@@ -136,6 +136,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'orange-pill-app';
+const projectName: string = 'orangepillapp';
 
 export const Matteo = {projectBlocks, projectDetails, projectName};

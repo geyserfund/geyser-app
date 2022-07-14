@@ -1,6 +1,6 @@
 import { HStack, Text, TextProps } from '@chakra-ui/react';
 import React from 'react';
-import { SatoshiIcon } from '../icons';
+import { SatoshiIconTilted } from '../icons';
 
 interface ISatoshiAmountProps extends TextProps {
 	label?: string;
@@ -34,9 +34,9 @@ export const SatoshiAmount = ({label, extra, fontSize, loading, wrapperClassName
 	};
 
 	return (
-		<HStack alignItems="center" className={wrapperClassName}>
+		<HStack spacing="2px" alignItems="center" className={wrapperClassName}>
 			{label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
-			{(Boolean(children) && !loading) &&	<SatoshiIcon color={rest.color} scale={getScale() } />}
+			{(Boolean(children) && !loading) &&	<SatoshiIconTilted color={rest.color} scale={getScale() } />}
 			<Text fontSize={fontSize} {...rest}>{`${numberWithCommas(`${children}`)} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
 		</HStack>
 	);
