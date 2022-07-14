@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
-import { Text, HStack, Box } from '@chakra-ui/layout';
+import { Text, HStack, Box, Link } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/react';
 import { IAvatarMetadata } from '../../interfaces';
-import { Link } from 'react-router-dom';
 import { isMediumScreen, isMobileMode } from '../../utils';
+import { useHistory } from 'react-router';
 
 interface ILinkableAvatar {
   avatarMetadata: IAvatarMetadata;
@@ -13,6 +13,7 @@ interface ILinkableAvatar {
 export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
 	const isMedium = isMediumScreen();
 	const isMobile = isMobileMode();
+	const history = useHistory();
 
 	const calculateBadgesLength = () => {
 		if (!badges) {
@@ -44,7 +45,12 @@ export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
 
 	return (
 		<Link
-			to={avatarMetadata.link || ''}
+			isExternal={Boolean(avatarMetadata.link && avatarMetadata.link.includes('https'))} href={avatarMetadata.link || ''} onClick={e => {
+				if (avatarMetadata.link && !avatarMetadata.link.includes('https')) {
+					e.preventDefault();
+					history.push(avatarMetadata.link);
+				}
+			}}
 		>
 			<HStack spacing="5px" display="flex" cursor={avatarMetadata.link ? 'pointer' : 'normal'}>
 				<Avatar
