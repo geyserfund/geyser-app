@@ -27,7 +27,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 					username,
 					appName: 'Fountain.fm',
 					image: FountainLogo,
-					link: ` https://fountain.fm/${username}`,
+					link: `https://fountain.fm/${username}`,
 				};
 			}
 
