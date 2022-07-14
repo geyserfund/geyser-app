@@ -122,6 +122,6 @@ const projectUpdates: IProjectUpdate[] = [
 	},
 ];
 
-const projectName: string = 'lightning-rebel';
+const projectName: string = 'lightningrebel';
 
 export const Yeferson = {projectBlocks, projectDetails, projectName, projectUpdates};

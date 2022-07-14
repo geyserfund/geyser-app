@@ -73,6 +73,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'anatomy-of-bitcoin';
+const projectName: string = 'anatomyofbitcoin';
 
 export const Pedro = {projectBlocks, projectDetails, projectName};

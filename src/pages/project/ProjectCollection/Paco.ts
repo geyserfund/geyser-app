@@ -92,6 +92,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'run-with-bitcoin';
+const projectName: string = 'runwithbitcoin';
 
 export const Paco = { projectBlocks, projectDetails, projectName };

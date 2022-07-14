@@ -46,6 +46,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'bitcoin-education-in-nigeria';
+const projectName: string = 'bitcoineducationinnigeria';
 
 export const Apata = { projectBlocks, projectDetails, projectName };
