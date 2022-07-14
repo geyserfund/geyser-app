@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 
 import React, { useState, useEffect } from 'react';
-import { Box, Text, HStack, Image, VStack, Link } from '@chakra-ui/react';
+import { Box, Text, HStack, Image, VStack, Link, Skeleton } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
 import { SatoshiIcon } from '../../components/icons';
@@ -85,7 +85,9 @@ export const Grants = ({ project }: { project: IProject }) => {
 								</Box>
 
 								<Box>
-									<Text fontWeight="bold" textAlign="center" fontSize="lg">{applicants && applicants[0] === 'loading' ? '...' : applicants.length}</Text>
+									{applicants && applicants[0] === 'loading' ? <Skeleton w="89px" h="25px"/>
+										: <Text fontWeight="bold" textAlign="center" fontSize="lg">{applicants.length}</Text>
+									}
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">APPLICANTS</Text>
 								</Box>
 
