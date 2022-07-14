@@ -37,7 +37,7 @@ export const GrantsLanding = () => {
 	}, [error]);
 
 	const grantsSort = (grantA: IProject) => {
-		if (grantA.name === 'bitcoin-education') {
+		if (grantA.name === 'bitcoineducation') {
 			return -1;
 		}
 
@@ -67,7 +67,7 @@ export const GrantsLanding = () => {
 								return;
 							}
 
-							return (<GrantCard key={grant.id} project={grant} number="1" date="JULY 1 - 31" distributed={grant.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : grant.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : grant.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : ''} status={'open'} marginRight={grant.name !== 'bitcoin-culture' && true} />);
+							return (<GrantCard key={grant.id} project={grant} number="1" date="JULY 1 - 31" distributed={grant.name === 'bitcoineducation' ? (0 / 1000000).toFixed(0) : grant.name === 'bitcoinculture' ? (0 / 1000000).toFixed(0) : grant.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : ''} status={'open'} marginRight={grant.name !== 'bitcoinculture' && true} />);
 						})}
 						{loading
 							&& <>
