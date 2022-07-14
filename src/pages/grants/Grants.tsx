@@ -81,7 +81,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 								<Box>
 									<HStack justifyContent="center" spacing="2px">
-										<SatoshiIconTilted scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoin-education' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-culture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
+										<SatoshiIconTilted scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoineducation' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoinculture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">DISTRIBUTED</Text>
 								</Box>
@@ -155,11 +155,11 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 				<Box w={isMobile ? '90%' : isMedium ? '50%' : '100%'} margin="0 auto" mt="3.75rem">
 					<Text fontSize="3xl" fontWeight="bold" textAlign="center" mb={6}>Applicants</Text>
-					{project.name === 'bitcoin-education'
+					{project.name === 'bitcoineducation'
 						? <iframe className={`airtable-embed ${classes.iframe}`} src="https://airtable.com/embed/shrLwYSAvD5pO9gjG?backgroundColor=teal" frameBorder="0" width="100%" height="533"></iframe>
-						: project.name === 'bitcoin-builders'
+						: project.name === 'bitcoinbuilders'
 							? <iframe className={`airtable-embed ${classes.iframe}`} src="https://airtable.com/embed/shrqwATwHR5zQRRBH?backgroundColor=teal" frameBorder="0" width="100%" height="533"></iframe>
-							: project.name === 'bitcoin-culture' ? <iframe className={`airtable-embed ${classes.iframe}`} src="https://airtable.com/embed/shrXmWODPPC613gtz?backgroundColor=teal" frameBorder="0" width="100%" height="533"></iframe>
+							: project.name === 'bitcoinculture' ? <iframe className={`airtable-embed ${classes.iframe}`} src="https://airtable.com/embed/shrXmWODPPC613gtz?backgroundColor=teal" frameBorder="0" width="100%" height="533"></iframe>
 								: <>
 								</>}
 				</Box>
