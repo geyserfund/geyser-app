@@ -120,7 +120,7 @@ export const Home = () => {
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
-			padding="0px 0px"
+			paddingTop={isMobile ? '61px' : '71px'}
 			height="100%"
 			justifyContent="space-between"
 		>
