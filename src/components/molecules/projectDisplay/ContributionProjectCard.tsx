@@ -109,7 +109,7 @@ const RenderBadges = ({contribution}: { contribution: IContribution }) => {
 				badges.map(badge => (
 					<WrapItem key={badge.badge}>
 						<Tooltip label={badge.description}>
-							<Box backgroundColor="brand.gold" padding="2px 10px" borderRadius="7px">
+							<Box backgroundColor="#C9FFF5" padding="2px 10px" borderRadius="7px">
 								<Text fontSize="12px" fontWeight={500}>{badge.badge}</Text>
 							</Box>
 						</Tooltip>
