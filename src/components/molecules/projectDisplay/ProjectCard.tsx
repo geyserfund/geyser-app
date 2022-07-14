@@ -8,7 +8,7 @@ import {RiRocketLine} from 'react-icons/ri';
 import { IProject } from '../../../interfaces';
 import { formatDaysLeft, isDarkMode, useBitcoinRates } from '../../../utils';
 import { getShortAmountLabel } from '../../../utils/helperFunctions';
-import { SatoshiIcon } from '../../icons';
+import { SatoshiIconTilted } from '../../icons';
 import { ButtonComponent, Card, ICard, Linkin } from '../../ui';
 import { StartCrowdFundUrl, SubscribeUrl } from '../../../constants';
 import { Link } from 'react-router-dom';
@@ -128,8 +128,8 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 							<Text fontSize="12px">BACKERS</Text>
 						</VStack>
 						<VStack alignItems="center" justifyContent={'center'} spacing="0">
-							<HStack>
-								<SatoshiIcon scale={0.6}/>
+							<HStack spacing="2px">
+								<SatoshiIconTilted scale={0.6}/>
 								<Text fontSize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
 							</HStack>
 							<Text fontSize="12px">RECEIVED</Text>

@@ -3,7 +3,7 @@ import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { Badge, LinkableAvatar, AnonymousAvatar } from '../ui';
 import { IProject, IFunder, IAvatarMetadata } from '../../interfaces';
-import { SatoshiIcon } from '../icons';
+import { SatoshiIconTilted } from '../icons';
 import { getRandomOrb } from '../../utils';
 import { computeFunderBadges } from '../../helpers/computeBadges';
 import { commaFormatted } from '../../utils/helperFunctions';
@@ -53,7 +53,7 @@ export const IdBarLeaderboard = ({ funder, count, project, ...rest }: IIdBarLead
 					}
 				</HStack>
 				<Box display="flex" alignItems="center">
-					<SatoshiIcon scale={0.7} /><Text marginLeft="5px">{`${commaFormatted(funder.amountFunded)}`} </Text>
+					<SatoshiIconTilted scale={0.7} /><Text>{`${commaFormatted(funder.amountFunded)}`} </Text>
 				</Box>
 			</Box>
 		</Box>

@@ -16,7 +16,7 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
-import { SatoshiIconGeyser } from '../../components/icons';
+import { SatoshiIconTilted } from '../../components/icons';
 import Dorian from '../../assets/dorian.png';
 import GrantsBanner from '../../assets/grants-banner.png';
 import { useHistory } from 'react-router';
@@ -183,7 +183,7 @@ export const Home = () => {
 										</VStack>
 										<VStack>
 											<Box display="flex" alignItems="center">
-												<SatoshiIconGeyser mr={1} />
+												<SatoshiIconTilted color="brand.primary" />
 												<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
 											</Box>
 											<Text className={classes.subtitleText}>SATS RAISED</Text>
