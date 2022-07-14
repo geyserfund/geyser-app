@@ -9,8 +9,8 @@ import {
 	Wrap,
 } from '@chakra-ui/react';
 import React from 'react';
-import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
-import { AnalyticsUrl, GeyserLignteningNodeUrl, GeyserPrivacyUrl, GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
+import { FaTelegramPlane, FaTwitter, FaPodcast } from 'react-icons/fa';
+import { AnalyticsUrl, GeyserLignteningNodeUrl, GeyserPrivacyUrl, GeyserTelegramUrl, GeyserTwitterUrl, GeyserPodcastUrl } from '../../constants';
 import { isMobileMode } from '../../utils';
 import { Subscribe } from '../nav/Subscribe';
 import { ButtonComponent, Linkin } from '../ui';
@@ -57,6 +57,16 @@ export const Footer = ({wrapperClassName}: IFooter) => {
 							background={'none'}
 							aria-label="telegram"
 							icon={<FaTelegramPlane fontSize="20px" />}
+							marginLeft="5px"
+							color={'brand.gray500'}
+						/>
+					</Link>
+					<Link href={GeyserPodcastUrl} isExternal>
+						<IconButton
+							size="sm"
+							background={'none'}
+							aria-label="podcast"
+							icon={<FaPodcast fontSize="20px" />}
 							marginLeft="5px"
 							color={'brand.gray500'}
 						/>
