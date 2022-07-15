@@ -12,3 +12,4 @@ export * from './getRandom';
 export * from './need';
 export * from './hasShipping';
 export * from './hasOnChain';
+export * from './lnurlEncode';

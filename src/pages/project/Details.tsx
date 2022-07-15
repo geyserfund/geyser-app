@@ -7,8 +7,9 @@ import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
-import { getDaysAgo, isDarkMode, isMobileMode } from '../../utils';
+import { getDaysAgo, isDarkMode, isMobileMode, encode } from '../../utils';
 import { RewardBased } from './ProjectLayout';
+import { REACT_APP_API_ENDPOINT } from '../../constants';
 
 type Rules = string
 
@@ -91,6 +92,9 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 			setFadeStarted(false);
 		}, 500);
 	};
+
+	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${project.id}`);
+	console.log('new', lnurlPayUrl);
 
 	return (
 		<Box
