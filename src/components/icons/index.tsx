@@ -16,6 +16,7 @@ import RopePng from '../../assets/rope.png';
 import InfoSvg from '../../assets/i.svg';
 import SatoshiPng from '../../assets/satoshi.png';
 import SatoshiTilted from '../../assets/satoshi-tilted.svg';
+import QrSvg from '../../assets/qr.svg';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }: any) => {
 	const getFilter = () => {
@@ -126,5 +127,11 @@ export const RopeIcon = (props: ImageProps) => (
 export const InfoIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
 		<Image height="12px" width="12px" src={InfoSvg} alt="info" {...props}/>
+	</Box>
+);
+
+export const QrIcon = (props: ImageProps) => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={QrSvg} alt="info" {...props}/>
 	</Box>
 );
