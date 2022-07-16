@@ -99,7 +99,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund projects from anywhere.</Text>
 
 						<Box display={isMobile ? 'block' : 'flex'} w="100%" bg="brand.bgGrey" p={5} borderRadius="lg">
-							<Image borderLeftRadius={isMobile ? '' : 'lg'} borderTopRadius={isMobile ? 'lg' : ''} borderTopLeftRadius="lg" src={images[0]} w={isMobile ? '100%' : '50%'} h={isMobile ? 'auto' : '273px'} objectFit="cover"/>
+							<Image borderLeftRadius={isMobile ? '' : 'lg'} borderTopRadius={isMobile ? 'lg' : ''} borderTopLeftRadius="lg" src={images[0]} w={isMobile ? '100%' : '50%'} objectFit="cover"/>
 
 							<Box bg="brand.primary" w={isMobile ? '100%' : '50%'} p={5} borderRightRadius={isMobile ? '' : 'lg'} borderBottomRadius={isMobile ? 'lg' : ''} borderBottomRightRadius="lg" display="flex" justifyContent="center" alignItems="center">
 								<Box cursor="pointer" onClick={handleAddressCopy}>
@@ -109,7 +109,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 
 									<Text mt={2} fontSize="xs" color="brand.textGrey" textAlign="center">⚡ LIGHTNING ADDRESS</Text>
 
-									<Text fontWeight="medium" wordBreak="break-all" textAlign="center">{name}@geyser.fund</Text>
+									<Text fontSize="xs" fontWeight="medium" wordBreak="break-all" textAlign="center">{name}@geyser.fund</Text>
 								</Box>
 							</Box>
 						</Box>
