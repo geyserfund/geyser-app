@@ -65,7 +65,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					</Link>
 				</HStack>
 
-				<Box display={isMobile ? 'block' : 'flex'}>
+				<Box display={isMobile ? 'block' : 'flex'} flexWrap="wrap">
 					<Text w={isMobile ? '70%' : 'auto'} textAlign="center" fontSize="md" bg="brand.bgGrey3" px={isMobile ? 0 : 4} py="8px" rounded="md">{getFormattedDate(date)}</Text>
 
 					<Tooltip hasArrow label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false} bg="brand.primary" color="black">
