@@ -3,13 +3,12 @@ import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { Image } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar } from '../ui';
-import { IFundingTx, IProject, IAvatarMetadata } from '../../interfaces';
+import { IFundingTx, IProject } from '../../interfaces';
 import { SatoshiIconTilted } from '../icons';
-import { getDaysAgo, getRandomOrb } from '../../utils';
+import { getDaysAgo } from '../../utils';
 import { fonts } from '../../constants/fonts';
-import FountainLogo from '../../assets/fountain-logo-black-small.png';
-import BreezLogo from '../../assets/breez-logo.png';
 import { commaFormatted } from '../../utils/helperFunctions';
+import { getAvatarMetadata } from '../../helpers';
 
 interface IIdBar extends HTMLChakraProps<'div'> {
 	fundingTx: IFundingTx
@@ -19,37 +18,9 @@ interface IIdBar extends HTMLChakraProps<'div'> {
 export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 	const { funder, onChain, paidAt, source } = fundingTx;
 
-	const getMetadata = (): IAvatarMetadata => {
-		if (source) {
-			if (source === 'Fountain') {
-				const username = funder.user.username.replace('@', '');
-				return {
-					username,
-					appName: 'Fountain.fm',
-					image: FountainLogo,
-					link: `https://fountain.fm/${username}`,
-				};
-			}
-
-			if (source === 'Breez') {
-				return {
-					appName: source,
-					image: BreezLogo,
-					link: 'https://breez.technology/',
-				};
-			}
-		}
-
-		return {
-			username: funder.user.username,
-			image: funder.user.imageUrl || getRandomOrb(fundingTx.funder.id),
-			link: `/profile/${funder.user.id}`,
-		};
-	};
-
-	const anonymous = funder.user.username === 'anonymous';
+	const anonymous = !funder.user;
 	const timeAgo = getDaysAgo(paidAt) || '';
-	const avatarMetadata = getMetadata();
+	const avatarMetadata = getAvatarMetadata({ funder, source });
 
 	return (
 		<Box
@@ -81,7 +52,15 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 				{fundingTx.media && <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" />}
 				<Text mt="6px" color="brand.textGrey" fontSize="10px" fontFamily={fonts.solway}>
 					{timeAgo && `${onChain ? '⛓' : '⚡️'} ${timeAgo} ago `}
-					{avatarMetadata.appName ? `from ${avatarMetadata.appName}` : source !== 'geyser' && `from ${source}`}
+					{() => {
+						if (avatarMetadata.appName) {
+							return `from ${avatarMetadata.appName}`;
+						}
+
+						if (source && source !== 'geyser') {
+							return `from ${source}`;
+						}
+					}}
 				</Text>
 			</Box>
 

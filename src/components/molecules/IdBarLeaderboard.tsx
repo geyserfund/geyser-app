@@ -2,9 +2,9 @@ import { Box, Text, HStack } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { Badge, LinkableAvatar, AnonymousAvatar } from '../ui';
-import { IProject, IFunder, IAvatarMetadata } from '../../interfaces';
+import { IProject, IFunder } from '../../interfaces';
 import { SatoshiIconTilted } from '../icons';
-import { getRandomOrb } from '../../utils';
+import { getAvatarMetadata } from '../../helpers';
 import { computeFunderBadges } from '../../helpers/computeBadges';
 import { commaFormatted } from '../../utils/helperFunctions';
 
@@ -15,17 +15,8 @@ interface IIdBarLeaderboard extends HTMLChakraProps<'div'> {
 }
 
 export const IdBarLeaderboard = ({ funder, count, project, ...rest }: IIdBarLeaderboard) => {
-	const getMetadata = (): IAvatarMetadata => {
-		const username = funder.user.username.replace('@', '');
-		return {
-			username,
-			image: funder.user.imageUrl || getRandomOrb(funder.id),
-			link: funder.user.id ? `/profile/${funder.user.id}` : '',
-		};
-	};
-
-	const anonymous = funder.user.username === 'anonymous';
-	const avatarMetadata = getMetadata();
+	const anonymous = !funder.user;
+	const avatarMetadata = getAvatarMetadata({ funder });
 	const badges = computeFunderBadges({ project, funder }).map(badge => (<Badge key={`${badge.badge}`} badge={`${badge.badge}`} />));
 
 	return (

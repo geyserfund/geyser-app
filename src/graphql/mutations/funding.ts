@@ -15,6 +15,7 @@ mutation Fund($input: FundingInput!) {
       paidAt
       onChain
       address
+      source
       funder {
         user {
           id
