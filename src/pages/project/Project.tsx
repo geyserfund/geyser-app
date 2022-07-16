@@ -57,6 +57,7 @@ export const Project = () => {
 						display="flex"
 						overflow="hidden"
 						position="relative"
+						bg="brand.bgGrey4"
 
 					>
 						<Details project={project} {...{detailOpen, setDetailOpen}}/>
