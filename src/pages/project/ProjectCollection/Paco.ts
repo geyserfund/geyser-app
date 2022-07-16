@@ -14,6 +14,7 @@ const projectBlocks: IProjectBlock[] = [
 			'Namaste Bitcoin Family,',
 			'My name is Paco, and I am crazy enough to want to travel to 40 countries in 400 days, only with Bitcoin. Bear with me please, here’s why.',
 		],
+		tweet: '1547314758491246593',
 		blockType: 'PL',
 	},
 	{
@@ -194,7 +195,7 @@ const projectBlocks: IProjectBlock[] = [
 const projectDetails: IProjectDetail = {
 	problem: '',
 	idea: 'Travel 40 countries by using Bitcoin. The purpose of the journey is to show through travel vlogs that there is mass adoption and host bitcoin meetups for mass awareness and to show humans are kind.',
-	ownerIntro: 'Anonymal is the first Modern Heavy Metal band to sing exclusively about Bitcoin history, philosophy and goals.',
+	ownerIntro: 'My name is Paco, and I am crazy enough to want to travel to 40 countries only with Bitcoin.',
 	blocks: projectBlocks,
 };
 
