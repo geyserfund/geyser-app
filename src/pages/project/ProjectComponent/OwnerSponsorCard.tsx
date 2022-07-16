@@ -22,9 +22,9 @@ interface IOwnerSponsorCard {
 	ambassadors: IParticipant[]
 	images: string[]
 	projectDetails: IProjectDetail
-  date: string
-  name: string
-  id: string
+    date: string
+    name: string
+    id: string
 }
 
 export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, date, name, id }: IOwnerSponsorCard) => {
@@ -68,7 +68,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 				<Box display={isMobile ? 'block' : 'flex'}>
 					<Text w={isMobile ? '70%' : 'auto'} textAlign="center" fontSize="md" bg="brand.bgGrey3" px={isMobile ? 0 : 4} py="8px" rounded="md">{getFormattedDate(date)}</Text>
 
-					<Tooltip hasArrow label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
+					<Tooltip hasArrow label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false} bg="brand.primary" color="black">
 						<Button my={isMobile ? 2 : 0} mx={isMobile ? 0 : 2} display="block" bg="brand.bgGrey3" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
 					</Tooltip>
 
