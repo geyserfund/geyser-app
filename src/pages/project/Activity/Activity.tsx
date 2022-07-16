@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ConnectTwitter } from '../../../components/molecules';
-import { Card } from '../../../components/ui';
 import {
 	IFundingTx,
 	IProject,
@@ -16,7 +15,7 @@ import { isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
 import Loader from '../../../components/ui/Loader';
-import { useDisclosure } from '@chakra-ui/react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage, InfoPageSkeleton } from './InfoPage';
@@ -212,7 +211,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	return (
 		<>
-			<Card
+			<Box
 				overflow="auto"
 				className={classNames(classes.container, {
 					[classes.slideInRight]: isMobile && !detailOpen,
@@ -225,10 +224,13 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				justifyContent="flex-start"
 				alignItems="center"
 				backgroundColor="#FFFFFF"
+				marginTop={isMobile ? '61px' : '90px'}
 				height="100%"
+				borderTopLeftRadius={isMobile ? '' : '22px'}
+				boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
 			>
 				{renderActivity()}
-			</Card>
+			</Box>
 			<ConnectTwitter
 				isOpen={twitterisOpen}
 				onClose={twitterOnClose}

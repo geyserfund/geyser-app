@@ -13,7 +13,6 @@ export const RewardBased = ({ project }: { project: IProject }) => {
 
 	useEffect(() => {
 		if (project.name) {
-			console.log('checking project name', projectData, project);
 			const currentProject = ProjectColl[project.name];
 			if (currentProject) {
 				setProjectData(currentProject);
@@ -49,11 +48,10 @@ export const RewardBased = ({ project }: { project: IProject }) => {
 					images={project.media}
 					owner={project.owners[0]}
 					ambassadors={project.ambassadors}
-					sponsors={project.sponsors}
-					ownerIntro={projectDetails.ownerIntro}
-					problem={projectDetails.problem}
-					idea={projectDetails.idea}
-					hasAboutMe={Boolean(projectDetails.blocks.find(val => val.key === 'aboutMe'))}
+					date={project.createdAt}
+					name={project.name}
+					id={project.id}
+					projectDetails={projectDetails}
 				/>
 				<DetailsBlock projectDetails={projectDetails} media={project.media} />
 				{renderUpdates()}

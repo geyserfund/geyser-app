@@ -1,169 +1,126 @@
-import { AddIcon } from '@chakra-ui/icons';
-import { Avatar, Box, HStack, IconButton, Text, useDisclosure, VStack, Wrap, WrapItem, Link as LinkChakra } from '@chakra-ui/react';
-import React from 'react';
+import { Avatar, Box, HStack, Text, VStack, Image, Button, IconButton, Tooltip, Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalFooter,
+	ModalBody, useDisclosure,
+	ModalCloseButton } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AddAmbassador, AddSponsor } from '../../../components/molecules';
-import { Card, ImageBar, StatusBar, InfoTooltip } from '../../../components/ui';
-import { ISponsor, IParticipant } from '../../../interfaces';
-import { isMobileMode } from '../../../utils';
+import { IParticipant, IProjectDetail } from '../../../interfaces';
+import { ButtonComponent } from '../../../components/ui';
+import ReactPlayer from 'react-player';
+import { isMobileMode, getFormattedDate, encode } from '../../../utils';
 import { useStyles } from './styles';
+import { QrIcon } from '../../../components/icons';
+import { CopyIcon } from '@chakra-ui/icons';
+import QRCode from 'react-qr-code';
+import { REACT_APP_API_ENDPOINT } from '../../../constants';
 
 interface IOwnerSponsorCard {
 	owner: IParticipant
 	ambassadors: IParticipant[]
-	sponsors: ISponsor[]
-	ownerIntro: string
-	problem: string
-	idea: string
 	images: string[]
-	hasAboutMe?: boolean
+	projectDetails: IProjectDetail
+  date: string
+  name: string
+  id: string
 }
 
-export const OwnerSponsorCard = ({ owner, ambassadors, sponsors, ownerIntro, images, problem, idea, hasAboutMe }: IOwnerSponsorCard) => {
+export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, date, name, id }: IOwnerSponsorCard) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
+	const podcast = projectDetails.blocks.find(block => block.key === 'podcast');
+	const { problem, idea } = projectDetails;
+	const [copy, setCopy] = useState(false);
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const { isOpen: ambassadorOpen, onOpen: onAmbassadorOpen, onClose: onAmbassadorClose } = useDisclosure();
-	const { isOpen: sponsorOpen, onOpen: onSponsorOpen, onClose: onSponsorClose } = useDisclosure();
+	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
 
-	const handleScroll = () => {
-		const element = document.getElementById('aboutMe');
-
-		if (element) {
-			const scrollElement = document.getElementById('project-scoll-container');
-			if (scrollElement) {
-				const scrollValue = element.offsetTop - scrollElement.offsetTop;
-				scrollElement?.scrollTo({ top: scrollValue, behavior: 'smooth' });
-			}
+	useEffect(() => {
+		if (copy) {
+			setTimeout(() => {
+				setCopy(false);
+			}, 2000);
 		}
+	}, [copy]);
+
+	const handleAddressCopy = () => {
+		navigator.clipboard.writeText(`${name}@geyser.fund`);
+		setCopy(true);
 	};
 
 	return (
 		<>
-			<Card className={classes.cardContainer}>
-				<VStack spacing="15px" alignItems="flex-start">
-					<VStack spacing="10px" >
-						<ImageBar images={images} />
-						{problem && <StatusBar variant="problem" message={problem} />}
-						<StatusBar variant="idea" message={idea} />
-					</VStack>
-					<Box>
-						<HStack>
-							<Text fontSize="10px" color="brand.textGrey">CREATOR</Text>
-							<InfoTooltip
-								title="Creator"
-								description="Project creators have verified their Twitter accounts. Go check them out!"
-								options={{ top: '-82px', left: '-60px' }}
-								width="172px"
-							/>
-						</HStack>
-						<HStack spacing="30px" alignItems="flex-start">
-							<Link to={`/profile/${owner.user.id}`}>
-								<Avatar width="75px" height="75px" name={owner.user.username} src={owner.user.imageUrl} />
-							</Link>
-							<VStack justifyContent="space-between" alignItems="flex-start">
-								<Link to={`/profile/${owner.user.id}`}>
-									<Text fontSize="18px" _hover={{ textdecoration: 'underline', fontWeight: 500 }}>
-										{owner.user.username}
-									</Text>
-								</Link>
-								<Text fontSize="12px" >
-									{isMobile ? ownerIntro.slice(0, 84) : ownerIntro.slice(0, 180)}
-									{hasAboutMe && <span className={classes.readmore} onClick={handleScroll}>...read more</span>}
-								</Text>
-							</VStack>
-						</HStack>
-					</Box>
-					<VStack spacing="10px" alignItems="flex-start" >
-						<HStack>
-							<Text fontSize="10px" color="brand.textGrey">AMBASSADORS</Text>
-							<InfoTooltip
-								title="Ambassadors"
-								description="Ambassadors are individuals who vouch for the project and give their go ahead."
-								options={{ top: '-81px', left: '-80px' }}
-								width="172px"
-							/>
-						</HStack>
-						<Wrap>
-							{
-								ambassadors.map((ambassador: IParticipant) => (
-									ambassador.confirmed
-										? <WrapItem key={ambassador.user.username} display="inline-block">
-											<Link to={`/profile/${ambassador.user.id}`} >
-												<HStack className={classes.amabassadorBlock} spacing="5px">
-													<Avatar
-														width="24px" height="24px"
-														name={ambassador.user.username} src={ambassador.user.imageUrl}
-													/>
-													<Text fontSize="14px" >
-														{`${ambassador.user.username}`}
-													</Text>
-												</HStack>
-											</Link>
-										</WrapItem>
-										: <></>
-								))
-							}
-							<WrapItem>
-								<IconButton aria-label="add-ambassador" icon={<AddIcon />} onClick={onAmbassadorOpen} />
-							</WrapItem>
-						</Wrap>
+			<VStack spacing="15px" alignItems="flex-start">
+				<HStack alignItems="center">
+					<Link to={`/profile/${owner.user.id}`}>
+						<Avatar width="50px" height="50px" name={owner.user.username} src={owner.user.imageUrl} />
+					</Link>
 
-					</VStack>
-					<VStack spacing="10px" alignItems="flex-start">
-						<HStack>
-							<Text fontSize="10px" color="brand.textGrey">SPONSORS</Text>
-							<InfoTooltip
-								title="Sponsors"
-								description="Sponsors pledge an amount set by the creator in order to support the project. In turn they may be featured in different ways based on creator preferences."
-								options={{ top: '-108px', left: isMobile ? '-50px' : '-70px' }}
-								width="172px"
-							/>
-						</HStack>
-						<Wrap >
-							{
-								sponsors.map((sponsor: ISponsor) => (
-									sponsor.confirmed
-										? <WrapItem key={sponsor.id} display="inline-block">
-											{sponsor.user
-												? <Link to={`/profile/${sponsor.user.id}`}>
-													<HStack spacing="5px" className={classes.amabassadorBlock}>
-														<Avatar
-															width="24px" height="24px"
-															name={sponsor.user.username}
-															src={sponsor.user.imageUrl} />
-														<Text fontSize="14px">
-															{`${sponsor.user?.username}`}
-														</Text>
-													</HStack>
-												</Link>
-												: <LinkChakra href={sponsor.url} isExternal>
-													<HStack spacing="5px" className={classes.amabassadorBlock}>
-														<Avatar
-															width="24px" height="24px"
-															name={sponsor.name}
-															src={sponsor.image} />
-														<Text fontSize="14px">
-															{`${sponsor.name}`}
-														</Text>
-													</HStack>
-												</LinkChakra>
-											}
-										</WrapItem>
-										: <></>
-								))
-							}
-							<WrapItem>
-								<IconButton aria-label="add-sponsor" icon={<AddIcon />} onClick={onSponsorOpen} />
-							</WrapItem>
-						</Wrap>
+					<Link to={`/profile/${owner.user.id}`}>
+						<Text fontSize="18px" _hover={{ textdecoration: 'underline', fontWeight: 500 }}>
+							{owner.user.username}
+						</Text>
+					</Link>
+				</HStack>
 
-					</VStack>
+				<Box display={isMobile ? 'block' : 'flex'}>
+					<Text w={isMobile ? '70%' : 'auto'} textAlign="center" fontSize="md" bg="brand.bgGrey3" px={isMobile ? 0 : 4} py="8px" rounded="md">{getFormattedDate(date)}</Text>
+
+					<Tooltip hasArrow label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
+						<Button my={isMobile ? 2 : 0} mx={isMobile ? 0 : 2} display="block" bg="brand.bgGrey3" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
+					</Tooltip>
+
+					<IconButton bg="brand.bgGrey3" icon={<QrIcon/>} aria-label="qr" onClick={onOpen}/>
+				</Box>
+
+				<VStack spacing="10px">
+					<Image src={images[0]} w="100%" borderRadius="md"/>
+
+					<Text fontSize="3xl" fontWeight="bold" textAlign="left" w="100%">{owner.user.username}</Text>
+
+					{problem && <Text w="100%" fontSize="lg" fontWeight="medium">{problem}</Text>}
+
+					<Text w="100%" fontSize="lg" fontWeight="medium">{idea}</Text>
 				</VStack>
 
-			</Card>
-			<AddAmbassador isOpen={ambassadorOpen} onClose={onAmbassadorClose} />
-			<AddSponsor isOpen={sponsorOpen} onClose={onSponsorClose} />
+				{podcast && <Box width="100%" mt={10}>
+					<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={podcast.podcast} />
+				</Box>}
+			</VStack>
+
+			<Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader><Text fontSize="3xl">Project QR code</Text></ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund projects from anywhere.</Text>
+
+						<Box display={isMobile ? 'block' : 'flex'} w="100%" bg="brand.bgGrey" p={5} borderRadius="lg">
+							<Image borderLeftRadius={isMobile ? '' : 'lg'} borderTopRadius={isMobile ? 'lg' : ''} borderTopLeftRadius="lg" src={images[0]} w={isMobile ? '100%' : '50%'} h={isMobile ? 'auto' : '273px'} objectFit="cover"/>
+
+							<Box bg="brand.primary" w={isMobile ? '100%' : '50%'} p={5} borderRightRadius={isMobile ? '' : 'lg'} borderBottomRadius={isMobile ? 'lg' : ''} borderBottomRightRadius="lg" display="flex" justifyContent="center" alignItems="center">
+								<Box cursor="pointer" onClick={handleAddressCopy}>
+									<Box display="flex" justifyContent="center">
+										<QRCode bgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
+									</Box>
+
+									<Text mt={2} fontSize="xs" color="brand.textGrey" textAlign="center">⚡ LIGHTNING ADDRESS</Text>
+
+									<Text fontWeight="medium" wordBreak="break-all" textAlign="center">{name}@geyser.fund</Text>
+								</Box>
+							</Box>
+						</Box>
+					</ModalBody>
+					<ModalFooter>
+						<ButtonComponent w="100%" primary onClick={handleAddressCopy}>
+							<CopyIcon mr={2}/> {copy ? 'Copied!' : 'Copy'}
+						</ButtonComponent>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</>
 	);
 };
