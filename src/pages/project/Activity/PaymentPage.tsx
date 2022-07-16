@@ -136,7 +136,9 @@ export const PaymentPage = ({
 				borderRadius="50%"
 				position="absolute"
 				right="0px"
-				top="-10px"
+				top="-5px"
+				_hover={{bg: 'none'}}
+				_active={{bg: 'none'}}
 				onClick={handleCloseButton}
 			/>
 			{renderFundForm()}
