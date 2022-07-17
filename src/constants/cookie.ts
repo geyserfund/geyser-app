@@ -1,12 +1,6 @@
-/* Commented out after dockerisation
-import { NODE_ENV } from '.';
-
-export const cookieOptions = NODE_ENV === 'development' ? {} : {
-	domain: 'geyser.fund',
-	secure: true,
-}; */
+import { NODE_ENV } from './env';
 
 export const cookieOptions = {
-	domain: 'geyser.fund',
+	domain: NODE_ENV === 'development' ? 'localhost' : 'geyser.fund',
 	secure: true,
 };
