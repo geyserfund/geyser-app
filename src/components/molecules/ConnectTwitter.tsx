@@ -6,6 +6,7 @@ import { ButtonComponent, Linkin } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 import { REACT_APP_API_ENDPOINT } from '../../constants';
+import { useLocation } from 'react-router';
 
 interface IConnectTwitter {
 	isOpen: boolean,
@@ -29,10 +30,12 @@ export const ConnectTwitter = ({
 	title,
 	description,
 }: IConnectTwitter) => {
+	const location = useLocation();
+
 	const classes = useStyles();
 	const useTitle = title || 'Connect';
 	const useDescription = description || 'Link your twitter account to appear as a project backer when you fund a project.';
-
+	const pathName = location.pathname || '';
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
@@ -42,7 +45,7 @@ export const ConnectTwitter = ({
 				<ModalBody >
 					<Text>{useDescription}</Text>
 					<Box className={classes.twitterContainer}>
-						<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
+						<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${pathName}`}>
 							<ButtonComponent
 								isFullWidth
 								primary
