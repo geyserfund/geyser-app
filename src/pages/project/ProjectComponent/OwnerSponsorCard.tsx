@@ -30,14 +30,11 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 	const [copy, setCopy] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [imageDownload, setImageDownload] = useState('');
-	const [loading, setLoading] = useState(false);
 
 	const capture = () => {
-		if (!imageDownload) {
-			html2canvas(document.getElementById('lnaddress-qr')!).then(canvas => {
-				setImageDownload(canvas.toDataURL('image/png', 1.0));
-			});
-		}
+		html2canvas(document.getElementById('lnaddress-qr')!).then(canvas => {
+			setImageDownload(canvas.toDataURL('image/png', 1.0));
+		});
 	};
 
 	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
@@ -77,11 +74,13 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 						<Button my={isMobile ? 2 : 0} mr={2} bg="brand.bgGrey3" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
 					</Tooltip>
 
-					<IconButton isLoading={loading} bg="brand.bgGrey3" icon={<QrIcon/>} aria-label="qr" onClick={async () => {
-						setLoading(true);
-						await	onOpen();
-						capture();
-						setLoading(false);
+					<IconButton bg="brand.bgGrey3" icon={<QrIcon/>} aria-label="qr" onClick={() => {
+						onOpen();
+						if (imageDownload.length === 0) {
+							setTimeout(() => {
+								capture();
+							}, 2100);
+						}
 					}}/>
 				</Box>
 
@@ -129,11 +128,17 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 							<ButtonComponent w="100%" primary onClick={handleAddressCopy}>
 								<CopyIcon mr={2}/> {copy ? 'Copied!' : 'Copy'}
 							</ButtonComponent>
-							<LinkChakra w="100%" h="100%" _hover={{textDecoration: 'none'}} href={imageDownload} download={`${name}-lnaddress-qr.png`} isExternal>
-								<ButtonComponent w="100%" primary>
+
+							{imageDownload.length === 0
+								? <ButtonComponent disabled={true} isLoading={true} w="100%" primary>
 									<DownloadIcon mr={2}/> Download
 								</ButtonComponent>
-							</LinkChakra>
+								: <LinkChakra w="100%" h="100%" _hover={{textDecoration: 'none'}} href={imageDownload} download={`${name}-lnaddress-qr.png`} isExternal>
+									<ButtonComponent w="100%" primary>
+										<DownloadIcon mr={2}/> Download
+									</ButtonComponent>
+								</LinkChakra>
+							}
 						</VStack>
 					</ModalFooter>
 				</ModalContent>
