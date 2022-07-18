@@ -70,13 +70,13 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 				</HStack>
 
 				<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
-					<Text textAlign="center" fontSize="md" bg="brand.bgGrey3" mr={2} px={4} py="8px" rounded="md">{getFormattedDate(date)}</Text>
+					<Text textAlign="center" fontSize="md" mr={2} px={4} py="8px">{getFormattedDate(date)}</Text>
 
-					<Tooltip hasArrow label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false} bg="brand.primary" color="black">
-						<Button my={isMobile ? 2 : 0} mr={2} bg="brand.bgGrey3" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
+					<Tooltip label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
+						<Button my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
 					</Tooltip>
 
-					<IconButton bg="brand.bgGrey3" icon={<QrIcon/>} aria-label="qr" onClick={() => {
+					<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
 						onOpen();
 						if (imageDownload.length === 0) {
 							setTimeout(() => {
