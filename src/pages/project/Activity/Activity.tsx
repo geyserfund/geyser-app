@@ -225,7 +225,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				alignItems="center"
 				backgroundColor="#FFFFFF"
 				marginTop={isMobile ? '61px' : '90px'}
-				height="100%"
+				height={isMobile ? 'calc(100% - 61px)' : 'calc(100% - 90px)'}
 				borderTopLeftRadius={isMobile ? '' : '22px'}
 				boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
 			>
