@@ -6,7 +6,7 @@ import { ButtonComponent } from '../../../components/ui';
 import ReactPlayer from 'react-player';
 import { isMobileMode, getFormattedDate, encode } from '../../../utils';
 import { useStyles } from './styles';
-import { QrIcon } from '../../../components/icons';
+import { QrIcon, BoltIcon } from '../../../components/icons';
 import { DownloadIcon, CopyIcon } from '@chakra-ui/icons';
 import QRCode from 'react-qr-code';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
@@ -73,7 +73,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					<Text textAlign="center" fontSize="md" mr={2} px={4} py="8px">{getFormattedDate(date)}</Text>
 
 					<Tooltip label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
-						<Button my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
+						<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
 					</Tooltip>
 
 					<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
