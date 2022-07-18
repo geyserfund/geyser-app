@@ -6,7 +6,7 @@ import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
 import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
-import { isDarkMode, isMobileMode } from '../../utils';
+import { isDarkMode, isMobileMode, isMediumScreen } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { ConnectTwitter } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
@@ -32,6 +32,7 @@ interface INavBar {
 export const NavBar = ({showBorder}: INavBar) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
+	const isMedium = isMediumScreen();
 	const isDark = isDarkMode();
 
 	const { user, getUser, logout, twitterisOpen, twitterOnOpen, twitterOnClose } = useContext(AuthContext);
@@ -115,7 +116,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 							<NavMenu user={user} logout={logout} />
 						</> : (
 							<>
-								<HStack position="absolute" top="13px" left="calc(50vw - 96px)">
+								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="13px" left="calc(50vw - 96px)">
 									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg" marginRight="5px">
 										<ButtonComponent onClick={() => {
 											history.push('/home');
