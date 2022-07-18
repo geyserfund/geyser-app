@@ -32,9 +32,11 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 	const [imageDownload, setImageDownload] = useState('');
 
 	const capture = () => {
-		html2canvas(document.getElementById('lnaddress-qr')!).then(canvas => {
-			setImageDownload(canvas.toDataURL('image/png', 1.0));
-		});
+		if (document.getElementById('lnaddress-qr')) {
+			html2canvas(document.getElementById('lnaddress-qr')!).then(canvas => {
+				setImageDownload(canvas.toDataURL('image/png', 1.0));
+			});
+		}
 	};
 
 	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
