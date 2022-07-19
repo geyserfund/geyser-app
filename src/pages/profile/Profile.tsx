@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+/* eslint-disable radix */
 import { useLazyQuery } from '@apollo/client';
 import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
@@ -91,7 +92,6 @@ export const Profile = () => {
 		history.push('/launch');
 	};
 
-	console.log('chekcing private profile', privateProfile);
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
@@ -117,7 +117,8 @@ export const Profile = () => {
 							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl} />
 							<Text fontWeight={600} fontSize="20px">{userProfile.username}</Text>
 						</HStack>
-						<Menu>
+						{user.id && user.id === parseInt(userProfile.id)
+						&& <Menu>
 							<MenuButton
 								as={Button}
 								rightIcon={<ChevronDownIcon />}
@@ -134,6 +135,7 @@ export const Profile = () => {
 								<MenuItem color="brand.gray300" pointerEvents="none">Write post</MenuItem>
 							</MenuList>
 						</Menu>
+						}
 					</HStack>
 					<HStack width="100%">
 						{ userProfile
