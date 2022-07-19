@@ -20,9 +20,9 @@ const defaultContext = {
 	error: undefined,
 	logout: () => { },
 	twitterisOpen: false,
-	twitterOnOpen: () => {},
-	twitterOnClose: () => {},
-	getUser: () => {},
+	twitterOnOpen: () => { },
+	twitterOnClose: () => { },
+	getUser: () => { },
 };
 
 interface IAuthContext {
@@ -32,7 +32,7 @@ interface IAuthContext {
 	error?: ApolloError,
 	logout: any
 	twitterisOpen: boolean
-	twitterOnOpen:() => void
+	twitterOnOpen: () => void
 	twitterOnClose: () => void
 	getUser: any
 }
@@ -52,9 +52,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [initialLoad, setInitialLoad] = useState(false);
 
 	const [user, setUser] = useState<IUser>(defaultAuthUser);
-	const [getUser, { loading, error, data }] = useLazyQuery(ME);
+	const [getUser, { loading: loadingUser, error, data }] = useLazyQuery(ME);
 	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 
 	useEffect(() => {
@@ -63,7 +65,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		} catch (_) {
 			setIsLoggedIn(false);
 		}
+
+		setInitialLoad(true);
 	}, []);
+
+	useEffect(() => {
+		if (initialLoad) {
+			setLoading(loadingUser);
+		}
+	}, [loadingUser]);
 
 	useEffect(() => {
 		if (data && data.me) {

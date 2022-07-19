@@ -4,7 +4,6 @@ import { useLocation, useParams } from 'react-router';
 import {
 	Switch,
 	Route,
-	Redirect,
 } from 'react-router-dom';
 import { NavBar } from '../components/nav';
 import { Home } from '../pages/home';
@@ -15,10 +14,15 @@ import { GrantsLanding } from '../pages/grants/GrantsLanding';
 import { LaunchIdea } from '../pages/launchIdea';
 import { Profile } from '../pages/profile';
 import { REACT_APP_API_ENDPOINT } from '../constants';
+import { useAuthContext } from '../context';
+import { LoadingPage } from '../pages/loading';
+import { Fade } from '@chakra-ui/react';
 
 export const customHistory = createBrowserHistory();
 
 export const Router = () => {
+	const { loading } = useAuthContext();
+
 	const [isAtTop, setIsAtTop] = useState(true);
 	const location = useLocation();
 
@@ -42,37 +46,44 @@ export const Router = () => {
 	}, []);
 
 	const showBorder = isAtTop && location.pathname === '/';
+
+	if (loading) {
+		return <LoadingPage />;
+	}
+
 	return (
-		<Box height="100vh">
-			<NavBar showBorder={showBorder} />
-			<Box id="geyser-landing-page" height="100vh" overflowY="auto">
-				<Switch>
-					<Route path="/.well-known/lnurlp/:username" component={() => {
-						const { username } = useParams<{username: string}>();
-						window.location.replace(`${REACT_APP_API_ENDPOINT}/.well-known/lnurlp/${username}`);
-						return null;
-					}}>
-					</Route>
-					<Route path="/grants">
-						<GrantsLanding />
-					</Route>
-					<Route path="/launch">
-						<LaunchIdea />
-					</Route>
-					<Route path="/profile/:userId">
-						<Profile />
-					</Route>
-					<Route path="/project/:projectId">
-						<Project />
-					</Route>
-					<Route path="/not-found">
-						<NotFound />
-					</Route>
-					<Route path="/">
-						<Home />
-					</Route>
-				</Switch>
+		<Fade in={true}>
+			<Box height="100vh">
+				<NavBar showBorder={showBorder} />
+				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
+					<Switch>
+						<Route path="/.well-known/lnurlp/:username" component={() => {
+							const { username } = useParams<{ username: string }>();
+							window.location.replace(`${REACT_APP_API_ENDPOINT}/.well-known/lnurlp/${username}`);
+							return null;
+						}}>
+						</Route>
+						<Route path="/grants">
+							<GrantsLanding />
+						</Route>
+						<Route path="/launch">
+							<LaunchIdea />
+						</Route>
+						<Route path="/profile/:userId">
+							<Profile />
+						</Route>
+						<Route path="/project/:projectId">
+							<Project />
+						</Route>
+						<Route path="/not-found">
+							<NotFound />
+						</Route>
+						<Route path="/">
+							<Home />
+						</Route>
+					</Switch>
+				</Box>
 			</Box>
-		</Box>
+		</Fade>
 	);
 };
