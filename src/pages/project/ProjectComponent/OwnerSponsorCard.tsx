@@ -30,6 +30,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 	const [copy, setCopy] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [imageDownload, setImageDownload] = useState('');
+	const finalRef = React.useRef(null);
 
 	const capture = () => {
 		if (document.getElementById('lnaddress-qr')) {
@@ -89,7 +90,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 				</Box>
 
 				<VStack spacing="10px" w="100%">
-					<Image src={images[0]} w="100%" maxHeight="40vh" objectFit="cover" borderRadius="md"/>
+					<Image ref={finalRef} src={images[0]} w="100%" maxHeight="40vh" objectFit="cover" borderRadius="md"/>
 
 					<Text fontSize="3xl" fontWeight="bold" textAlign="left" w="100%">{owner.user.username}</Text>
 
@@ -103,7 +104,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 				</Box>}
 			</Box>
 
-			<Modal isOpen={isOpen} onClose={onClose} size={isMobile ? 'md' : 'xl'} isCentered>
+			<Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} size={isMobile ? 'md' : 'xl'} isCentered>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader><Text fontSize="3xl">Campaign QR code</Text></ModalHeader>
