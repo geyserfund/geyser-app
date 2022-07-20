@@ -1,9 +1,4 @@
 import {
-	Accordion,
-	AccordionButton,
-	AccordionIcon,
-	AccordionItem,
-	AccordionPanel,
 	UnorderedList,
 	ListItem,
 	OrderedList,
@@ -130,22 +125,16 @@ export const UpdatesBlock = ({projectUpdate, media}: IUpdatesBlock) => {
 	};
 
 	return (
-		<Accordion allowMultiple>
-			<AccordionItem border="none">
-				<h2>
-					<AccordionButton >
-						<Box flex="1" textAlign="left">
-							<Text fontSize="12px" color="brand.textGrey">{projectUpdate.updateTitle}</Text>
-							<Text fontSize="10px" color="brand.textGrey">{getFormattedDate(projectUpdate.date)}</Text>
-						</Box>
-						<AccordionIcon />
-					</AccordionButton>
-				</h2>
-				<AccordionPanel pb={4} display="flex" flexDirection="column" alignItems="center" width="100%">
-					{renderUpdateBody()}
-				</AccordionPanel>
-			</AccordionItem>
-		</Accordion>
-
+		<>
+			<h2>
+				<Box flex="1" textAlign="left">
+					<Text fontSize="12px" color="brand.textGrey">{projectUpdate.updateTitle}</Text>
+					<Text fontSize="10px" color="brand.textGrey">{getFormattedDate(projectUpdate.date)}</Text>
+				</Box>
+			</h2>
+			<Box pb={4} display="flex" flexDirection="column" alignItems="center" width="100%">
+				{renderUpdateBody()}
+			</Box>
+		</>
 	);
 };

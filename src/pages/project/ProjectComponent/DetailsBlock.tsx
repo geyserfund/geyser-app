@@ -1,9 +1,4 @@
 import {
-	Accordion,
-	AccordionButton,
-	AccordionIcon,
-	AccordionItem,
-	AccordionPanel,
 	Box,
 	HStack,
 	Image,
@@ -144,22 +139,8 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 	});
 
 	return (
-		<Accordion allowMultiple defaultIndex={0} allowToggle>
-			<AccordionItem border="none">
-				<h2>
-					<AccordionButton >
-						<Box flex="1" textAlign="left">
-							<Text fontSize="12px" color="brand.textGrey">DESCRIPTION</Text>
-						</Box>
-						<AccordionIcon />
-					</AccordionButton>
-				</h2>
-				<AccordionPanel pb={4} width="100%">
-					<VStack alignItems="center" width="100%" spacing="15px">
-						{renderBlocks()}
-					</VStack>
-				</AccordionPanel>
-			</AccordionItem>
-		</Accordion>
+		<VStack pb={4} alignItems="center" width="100%" spacing="15px">
+			{renderBlocks()}
+		</VStack>
 	);
 };

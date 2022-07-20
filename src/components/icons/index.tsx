@@ -18,6 +18,7 @@ import SatoshiPng from '../../assets/satoshi.png';
 import SatoshiTilted from '../../assets/satoshi-tilted.svg';
 import QrSvg from '../../assets/qr.svg';
 import BoltSvg from '../../assets/bolt.svg';
+import ShareSvg from '../../assets/share.svg';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }: any) => {
 	const getFilter = () => {
@@ -140,5 +141,11 @@ export const QrIcon = (props: ImageProps) => (
 export const BoltIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
 		<Image height="20px" width="20px" src={BoltSvg} alt="bolt" {...props}/>
+	</Box>
+);
+
+export const ShareIcon = (props: ImageProps) => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={ShareSvg} alt="share" {...props}/>
 	</Box>
 );

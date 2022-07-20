@@ -6,7 +6,7 @@ import { ButtonComponent } from '../../../components/ui';
 import ReactPlayer from 'react-player';
 import { isMobileMode, getFormattedDate, encode } from '../../../utils';
 import { useStyles } from './styles';
-import { QrIcon, BoltIcon } from '../../../components/icons';
+import { QrIcon, BoltIcon, ShareIcon } from '../../../components/icons';
 import { DownloadIcon, CopyIcon } from '@chakra-ui/icons';
 import QRCode from 'react-qr-code';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
@@ -55,6 +55,11 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 		setCopy(true);
 	};
 
+	const handleShare = () => {
+		navigator.clipboard.writeText(`https://geyser.fund/project/${name}`);
+		setCopy(true);
+	};
+
 	return (
 		<>
 			<Box>
@@ -71,14 +76,15 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 				</HStack>
 
 				<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center" marginTop="8px" marginBottom="16px">
-					<Text textAlign="center" fontSize="md" mr={2} px={4} py="8px">{getFormattedDate(date)}</Text>
+					<Text fontSize="md" mr={2} px={4} py="8px">{getFormattedDate(date)}</Text>
 
 					<Tooltip label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
 						<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
 					</Tooltip>
 
-					<Tooltip label="View Project QR Code" placement="top">
-						<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
+					<Tooltip label="View Campaign QR Code" placement="top">
+						<IconButton mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
+							setCopy(false);
 							onOpen();
 							if (imageDownload.length === 0) {
 								setTimeout(() => {
@@ -86,6 +92,10 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 								}, 2100);
 							}
 						}}/>
+					</Tooltip>
+
+					<Tooltip label={copy ? 'Copied!' : 'Share Campaign'} placement="top" closeOnClick={false}>
+						<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<ShareIcon/>} aria-label="share" onClick={handleShare}/>
 					</Tooltip>
 				</Box>
 
@@ -104,7 +114,10 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 				</Box>}
 			</Box>
 
-			<Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} size={isMobile ? 'md' : 'xl'} isCentered>
+			<Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={() => {
+				setCopy(false);
+				onClose();
+			}} size={isMobile ? 'md' : 'xl'} isCentered>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader><Text fontSize="3xl">Campaign QR code</Text></ModalHeader>
@@ -123,10 +136,10 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 
 									<HStack mt={2}>
 										<BoltIcon/>
-										<Text fontSize="xs" fontWeight="light">LIGHTNING ADDRESS</Text>
+										<Text fontSize="10px" fontWeight="light">LIGHTNING ADDRESS</Text>
 									</HStack>
 
-									<Text fontSize="xs" fontWeight="medium" wordBreak="break-all">{name}@geyser.fund</Text>
+									<Text fontWeight="medium" wordBreak="break-all">{name}@geyser.fund</Text>
 								</Box>
 							</Box>
 						</Box>
