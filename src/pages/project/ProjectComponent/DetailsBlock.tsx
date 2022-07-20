@@ -133,7 +133,7 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 
 		return (
 			<VStack key={block.title} className={classes.containers} space={10}>
-				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
+				<Text fontWeight="bold" fontSize={'24px'}>{block.title}</Text>
 				{switchBlocks()}
 				{renderImages(block.images)}
 				{renderTweet(block.tweet)}

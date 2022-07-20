@@ -56,10 +56,10 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 
 	return (
 		<>
-			<VStack spacing="15px" alignItems="flex-start">
+			<Box>
 				<HStack alignItems="center">
 					<Link to={`/profile/${owner.user.id}`}>
-						<Avatar width="50px" height="50px" name={owner.user.username} src={owner.user.imageUrl} />
+						<Avatar width="40px" height="40px" name={owner.user.username} src={owner.user.imageUrl} />
 					</Link>
 
 					<Link to={`/profile/${owner.user.id}`}>
@@ -69,25 +69,27 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					</Link>
 				</HStack>
 
-				<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
+				<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center" marginTop="8px" marginBottom="16px">
 					<Text textAlign="center" fontSize="md" mr={2} px={4} py="8px">{getFormattedDate(date)}</Text>
 
 					<Tooltip label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
 						<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
 					</Tooltip>
 
-					<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
-						onOpen();
-						if (imageDownload.length === 0) {
-							setTimeout(() => {
-								capture();
-							}, 2100);
-						}
-					}}/>
+					<Tooltip label="View Project QR Code" placement="top">
+						<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
+							onOpen();
+							if (imageDownload.length === 0) {
+								setTimeout(() => {
+									capture();
+								}, 2100);
+							}
+						}}/>
+					</Tooltip>
 				</Box>
 
-				<VStack spacing="10px">
-					<Image src={images[0]} w="100%" borderRadius="md"/>
+				<VStack spacing="10px" w="100%">
+					<Image src={images[0]} w="100%" maxHeight="40vh" objectFit="cover" borderRadius="md"/>
 
 					<Text fontSize="3xl" fontWeight="bold" textAlign="left" w="100%">{owner.user.username}</Text>
 
@@ -99,7 +101,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 				{podcast && <Box width="100%" mt={10}>
 					<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={podcast.podcast} />
 				</Box>}
-			</VStack>
+			</Box>
 
 			<Modal isOpen={isOpen} onClose={onClose} size={isMobile ? 'md' : 'xl'} isCentered>
 				<ModalOverlay />
@@ -109,18 +111,21 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					<ModalBody>
 						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund campaigns from anywhere.</Text>
 
-						<Box display={isMobile ? 'block' : 'flex'} w="100%">
+						<Box display={isMobile ? 'block' : 'flex'} w="100%" p={5} bg="brand.bgGrey" borderRadius="lg">
 							<Image display={isMobile ? 'none' : 'block'} borderLeftRadius="lg" borderRightRadius="0" src={images[0]} w="50%" objectFit="cover"/>
 
 							<Box bg="brand.primary" w={isMobile ? '100%' : '50%'} p={5} borderRadius="lg" borderLeftRadius={isMobile ? 'lg' : '0'} display="flex" justifyContent="center" alignItems="center">
 								<Box cursor="pointer" onClick={handleAddressCopy}>
-									<Box display="flex" justifyContent="center" id="lnaddress-qr">
-										<QRCode bgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
+									<Box display="flex" justifyContent="center" id="lnaddress-qr" p={2} bgColor="#fff" borderRadius="lg">
+										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
 									</Box>
 
-									<Text mt={2} fontSize="xs" color="brand.textGrey" textAlign="center">⚡ LIGHTNING ADDRESS</Text>
+									<HStack mt={2}>
+										<BoltIcon/>
+										<Text fontSize="xs" fontWeight="light">LIGHTNING ADDRESS</Text>
+									</HStack>
 
-									<Text fontSize="xs" fontWeight="medium" wordBreak="break-all" textAlign="center">{name}@geyser.fund</Text>
+									<Text fontSize="xs" fontWeight="medium" wordBreak="break-all">{name}@geyser.fund</Text>
 								</Box>
 							</Box>
 						</Box>

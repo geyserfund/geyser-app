@@ -41,7 +41,8 @@ export const RewardBased = ({ project }: { project: IProject }) => {
 				spacing="20px"
 				alignItems="left"
 				marginTop={isMobile ? '0px' : '20px'}
-				maxWidth="820px"
+				maxWidth="1000px"
+				w="100%"
 				padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
 			>
 				<OwnerSponsorCard
