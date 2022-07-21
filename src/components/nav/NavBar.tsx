@@ -3,7 +3,7 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOve
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent } from '../ui';
-import { AnimatedLogo } from './AnimatedLogo';
+import { Logo } from './Logo';
 import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
 import { isDarkMode, isMobileMode, isMediumScreen } from '../../utils';
@@ -82,13 +82,13 @@ export const NavBar = ({showBorder}: INavBar) => {
 					display="flex"
 					width="100%"
 					justifyContent="space-between"
-					margin={isMobile ? '10px' : '15px 40px 15px 40px'}
+					margin={isMobile ? '9.5px 10px' : '9.5px 40px'}
 				>
 					<HStack
 						spacing="25px"
 						justifyContent="center"
 						alignItems="center">
-						<AnimatedLogo />
+						<Logo mr={isMobile ? 0 : 5} />
 					</HStack>
 					{
 						isMobile ? <>
@@ -116,7 +116,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 							<NavMenu user={user} logout={logout} />
 						</> : (
 							<>
-								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="13px" left="calc(50vw - 96px)">
+								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="6.5px" left="calc(50vw - 96px)">
 									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg" marginRight="5px">
 										<ButtonComponent onClick={() => {
 											history.push('/home');
@@ -126,7 +126,6 @@ export const NavBar = ({showBorder}: INavBar) => {
 										<ButtonComponent onClick={() => {
 											history.push('/grants');
 										}}>Grants
-											<Text zIndex={1} p={0.5} pt={1} px={2} bg="brand.primary" borderRadius="full" position="absolute" top="-10px" right="-14px" fontSize="10px" fontWeight="bold" textAlign="center">NEW</Text>
 										</ButtonComponent>
 									</Box>
 								</HStack>

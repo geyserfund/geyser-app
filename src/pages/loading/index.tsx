@@ -14,8 +14,8 @@ export const LoadingPage = () => {
 			spacing="20px"
 		>
 
-			<Image height="100px" src={LogoNameLight} alt="geyser logo image" objectFit="contain" />
-			<Box maxWidth="380px" width="100%">
+			<Image height="75px" src={LogoNameLight} alt="geyser logo image" objectFit="contain" />
+			<Box maxWidth="285px" width="100%">
 				<Progress size="xs" isIndeterminate colorScheme="teal" />
 			</Box>
 		</VStack>
