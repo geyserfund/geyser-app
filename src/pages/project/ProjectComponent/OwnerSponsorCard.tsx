@@ -79,11 +79,11 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					<Text fontSize="md" mr={2} px={4} py="8px">{getFormattedDate(date)}</Text>
 
 					<Tooltip label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
-						<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
+						<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
 					</Tooltip>
 
 					<Tooltip label="View Campaign QR Code" placement="top">
-						<IconButton mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
+						<IconButton mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
 							setCopy(false);
 							onOpen();
 							if (imageDownload.length === 0) {
@@ -95,7 +95,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					</Tooltip>
 
 					<Tooltip label={copy ? 'Copied!' : 'Share Campaign'} placement="top" closeOnClick={false}>
-						<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} bg="none" icon={<ShareIcon/>} aria-label="share" onClick={handleShare}/>
+						<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<ShareIcon/>} aria-label="share" onClick={handleShare}/>
 					</Tooltip>
 				</Box>
 
