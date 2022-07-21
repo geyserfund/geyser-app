@@ -3,7 +3,7 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOve
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { FiTwitter } from 'react-icons/fi';
 import { ButtonComponent } from '../ui';
-import { Logo } from './Logo';
+import { AnimatedLogo } from './AnimatedLogo';
 import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
 import { isDarkMode, isMobileMode, isMediumScreen } from '../../utils';
@@ -88,7 +88,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 						spacing="25px"
 						justifyContent="center"
 						alignItems="center">
-						<Logo mr={isMobile ? 0 : 5} />
+						<AnimatedLogo />
 					</HStack>
 					{
 						isMobile ? <>
