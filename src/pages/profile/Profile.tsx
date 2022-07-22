@@ -96,7 +96,7 @@ export const Profile = () => {
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
-			paddingTop={isMobile ? '61px' : '71px'}
+			paddingTop="60px"
 			height="100%"
 			justifyContent="space-between"
 		>
@@ -227,7 +227,7 @@ const ProjectSkeleton = () => {
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
-			paddingTop={isMobile ? '61px' : '71px'}
+			paddingTop="60px"
 			height="100%"
 			justifyContent="space-between"
 		>

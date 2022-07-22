@@ -9,10 +9,8 @@ import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
 import { Grants } from '../grants/Grants';
-import { isMobileMode } from '../../utils';
 
 export const Project = () => {
-	const isMobile = isMobileMode();
 	const { projectId } = useParams<{ projectId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
 
@@ -52,7 +50,7 @@ export const Project = () => {
 					justifyContent="center"
 					alignItems="center"
 					height="100%"
-					paddingTop={isMobile ? '61px' : '71px'}
+					paddingTop="60px"
 				>
 					<Box
 						width="100%"
