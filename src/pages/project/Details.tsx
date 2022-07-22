@@ -1,14 +1,14 @@
-import { Box, Divider, Heading, HStack } from '@chakra-ui/layout';
-// Import { useMediaQuery } from '@chakra-ui/media-query';
+import { Box } from '@chakra-ui/layout';
 import { Button, Text } from '@chakra-ui/react';
+// Import { useMediaQuery } from '@chakra-ui/media-query';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
 import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
-import { getDaysAgo, isDarkMode, isMobileMode } from '../../utils';
+import { isDarkMode, isMobileMode } from '../../utils';
 import { RewardBased } from './ProjectLayout';
+import { colors } from '../../constants';
 
 type Rules = string
 
@@ -36,20 +36,10 @@ const useStyles = createUseStyles<Rules, IStyles>({
 		fontSize: '14px',
 	},
 	detailsContainer: ({ isMobile }: IStyles) => ({
-		height: isMobile ? '-webkit-calc(100% - 69px)' : '-webkit-calc(100% - 62px)',
-		fallbacks: [
-			{ height: isMobile ? 'calc(100% - 69px)' : 'calc(100% - 62px)' },
-		],
+		height: '100%',
+		paddingTop: isMobile ? '61px' : '71px',
 		overflowY: 'scroll',
 		WebkitOverflowScrolling: 'touch',
-	}),
-	headerContainer: ({ isMobile }: IStyles) => ({
-		display: 'flex',
-		width: '100%',
-		flexDirection: isMobile ? 'column' : 'row',
-		alignItems: isMobile ? 'flex-start' : 'center',
-		justifyContent: 'space-between',
-		flexWrap: 'wrap',
 	}),
 	fundButton: {
 		height: '55px',
@@ -63,6 +53,8 @@ const useStyles = createUseStyles<Rules, IStyles>({
 		textAlign: 'center',
 		display: 'flex',
 		flexDirection: 'column',
+		marginLeft: 'auto',
+		marginTop: '5px',
 		boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
 	},
 	...slideInLeft,
@@ -79,7 +71,6 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 
-	const componentPadding = isMobile ? '5px 0px 5px 10px' : '20px 40px 5px 40px';
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
@@ -101,23 +92,14 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			flex={!isMobile ? 3 : undefined}
 			height="100%"
+			w="100%"
 			flexDirection="column"
 			overflow="hidden"
 		>
-			<HStack padding={componentPadding} justifyContent="space-between">
-				<Box className={classes.headerContainer} >
-					<Heading fontSize={isMobile ? '18px' : '28px'} fontWeight={700}>
-						{project.title}
-					</Heading>
-					<Text fontSize={isMobile ? '11px' : '14px'}>{`Created ${getDaysAgo(project.createdAt)} ago`}</Text>
-				</Box>
+			<Box className={classes.detailsContainer} id="project-scroll-container">
 				{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
 					<Text fontSize="12px">Fund now</Text>
 				</Button>}
-			</HStack>
-
-			<Divider orientation="horizontal" borderBottomWidth="2px" borderColor="rgba(196, 196, 196, 0.4)" margin="1px 0px" />
-			<Box className={classes.detailsContainer} id="project-scoll-container" >
 				<RewardBased project={project}/>
 			</Box>
 		</Box>

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { CircularProgress } from '@chakra-ui/react';
+import { CircularProgress, HStack, Text } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/layout';
-import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
+import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { BsCurrencyBitcoin } from 'react-icons/bs';
 import { isDarkMode } from '../../../utils';
 import { SatoshiIconTilted } from '../../icons';
 import { createUseStyles } from 'react-jss';
 import { commaFormatted } from '../../../utils/helperFunctions';
+import { IconBaseProps } from 'react-icons';
 
 interface IProjectBalanceCircularProgress {
 	balance: number;
@@ -31,14 +32,14 @@ const useStyles = createUseStyles({
 	},
 });
 
-const BTCBalance = ({ balance }: { balance: number }) => {
-	const isDark = isDarkMode();
+const BTCBalance = (params: { balance: number, pixelFontSize?: number, color?: IconBaseProps['color'] }) => {
+	const { balance, pixelFontSize } = params;
 	const displaySatoshis = balance < 1000000;
 
 	return (
 		displaySatoshis
-			? <><SatoshiIconTilted isDark={isDark} /> {commaFormatted(balance)}</>
-			: <><BsCurrencyBitcoin fontSize="30px" />{parseFloat((balance / 100000000).toFixed(4))}</>
+			? <><SatoshiIconTilted scale={pixelFontSize ? pixelFontSize / 26 : 1}/>{commaFormatted(balance)}</>
+			: <><BsCurrencyBitcoin />{parseFloat((balance / 100000000).toFixed(4))}</>
 	);
 };
 
@@ -46,7 +47,7 @@ export const ProjectBalanceCircularProgress = ({ goal, rate, balance, loading }:
 	const classes = useStyles();
 	const isDark = isDarkMode();
 	const balanceUSD = (balance * rate).toFixed(2);
-	const percentage = (parseFloat(balanceUSD) / goal) * 100;
+	const percentage = (balance / goal) * 100;
 
 	const [display, setDisplay] = useState(false);
 
@@ -76,7 +77,11 @@ export const ProjectBalanceCircularProgress = ({ goal, rate, balance, loading }:
 				<BTCBalance balance={balance}/>
 			</StatNumber>
 			<StatNumber className="amount-label-usd" display={display ? 'block' : 'none'} position="relative">{'$'}{balanceUSD} </StatNumber>
-			<StatHelpText fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>{`${getDisplayPercent(percentage)}% of $${commaFormatted(goal)}`}</StatHelpText>
+			<HStack justify="center" spacing={0} fontSize="12px" color={isDark ? 'brand.textWhite' : 'brand.textGrey'}>
+				<Text fontSize="12px">{getDisplayPercent(percentage)}% of</Text>
+				<BTCBalance balance={goal} pixelFontSize={12}/>
+			</HStack>
+
 		</Stat>
 	);
 

@@ -12,7 +12,7 @@ export const GlobalStyles = () => (
             src:url('/Myanmar-Khyay.ttf.woff') format('woff'),
                 url('/Myanmar-Khyay.ttf.svg#Myanmar-Khyay') format('svg'),
                 url('/Myanmar-Khyay.ttf.eot'),
-                url('/Myanmar-Khyay.ttf.eot?#iefix') format('embedded-opentype'); 
+                url('/Myanmar-Khyay.ttf.eot?#iefix') format('embedded-opentype');
             font-weight: 400;
             font-style: normal;
             font-display: swap;
@@ -23,11 +23,11 @@ export const GlobalStyles = () => (
             width: 8px;
             height: 5px;
           }
-          
+
           ::-webkit-scrollbar-thumb {
             background: rgba(90, 90, 90,0.2);
           }
-          
+
           ::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.1);
           }
@@ -41,6 +41,10 @@ export const GlobalStyles = () => (
         }
         body {
             overflow: overlay;
+        }
+
+        #project-scroll-container::-webkit-scrollbar {
+            display: none
         }
       `}
 	/>
