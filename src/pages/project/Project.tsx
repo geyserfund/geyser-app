@@ -50,7 +50,6 @@ export const Project = () => {
 					justifyContent="center"
 					alignItems="center"
 					height="100%"
-					paddingTop="60px"
 				>
 					<Box
 						width="100%"
@@ -58,6 +57,7 @@ export const Project = () => {
 						display="flex"
 						overflow="hidden"
 						position="relative"
+						bg="brand.bgGrey4"
 
 					>
 						<Details project={project} {...{detailOpen, setDetailOpen}}/>
