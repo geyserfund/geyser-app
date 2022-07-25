@@ -228,7 +228,7 @@ export const PaymentPage = ({
 					{state.rewardsCost && hasShipping(name) && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
-					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
+					<SatoshiAmount color="#1A1A1A" fontWeight="bold" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
 					<Text> {`$${getTotalAmount('dollar', name)}`}</Text>
 				</VStack>
 			</HStack>}

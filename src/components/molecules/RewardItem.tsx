@@ -77,10 +77,10 @@ export const RewardItem = ({item, updateCount}: IRewardItemProps) => {
 			<HStack className={classes.upperContainer} >
 				<VStack spacing={0}>
 					{ currency === 'usd'
-						? <Text fontSize="14px" color={colors.normalLightGreen}>{`$${cost}`}</Text>
+						? <Text fontSize="14px" color="#1A1A1A" fontWeight="bold">{`$${cost}`}</Text>
 						: <SatoshiAmount>{`${cost}`}</SatoshiAmount>
 					}
-					<Text fontSize="10px" color={colors.normalLightGreen}>per item</Text>
+					<Text fontSize="10px" color="#1A1A1A" fontWeight="bold">per item</Text>
 				</VStack>
 				<VStack alignItems="flex-start" flex={1} spacing="0px">
 					<Text fontSize="14px">{name}</Text>

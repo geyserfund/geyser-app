@@ -3,7 +3,8 @@ import React, { useState, useRef } from 'react';
 import { ProjectBalanceCircularProgress, ProjectBalance, ProjectMobileMenu } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
-import { FundingStatus } from '../../../components/ui';
+import { FundingStatus, ButtonComponent } from '../../../components/ui';
+import { SatoshiIconTilted } from '../../../components/icons';
 import { isMobileMode } from '../../../utils';
 import { Button, Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
 
@@ -77,6 +78,15 @@ export const InfoPage = ({
 				? <ProjectBalanceCircularProgress loading={loading} rate={btcRate} goal={project.fundingGoal} balance={project.balance} />
 				: <ProjectBalance balance={project.balance} rate={btcRate}/>
 			}
+			{project.active && !isMobile && <ButtonComponent
+				primary
+				standard
+				leftIcon={<SatoshiIconTilted />}
+				width="100%"
+				onClick={handleFundProject}
+			>
+				Fund this project
+			</ButtonComponent>}
 			<Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
 				<Box display="flex" marginBottom="10px" w="95%">
 					<Box w="50%">
