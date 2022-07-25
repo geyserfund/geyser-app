@@ -183,7 +183,7 @@ export const Home = () => {
 										</VStack>
 										<VStack>
 											<Box display="flex" alignItems="center">
-												<SatoshiIconTilted color="brand.primary" />
+												<SatoshiIconTilted dash={true} />
 												<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
 											</Box>
 											<Text className={classes.subtitleText}>SATS RAISED</Text>

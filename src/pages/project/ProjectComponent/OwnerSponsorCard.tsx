@@ -76,10 +76,10 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 				</HStack>
 
 				<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center" marginTop="8px" marginBottom="16px">
-					<Text fontSize="md" mr={2} px={4} py="8px">{getFormattedDate(date)}</Text>
+					<Text fontSize="md" mr={2} py="8px">{getFormattedDate(date)}</Text>
 
 					<Tooltip label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
-						<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" fontWeight="medium" onClick={handleAddressCopy}>{name}@geyser.fund</Button>
+						<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" fontWeight="medium" onClick={handleAddressCopy} color="#2F423E">{name}@geyser.fund</Button>
 					</Tooltip>
 
 					<Tooltip label="View Campaign QR Code" placement="top">
@@ -129,8 +129,8 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 							<Image display={isMobile ? 'none' : 'block'} borderLeftRadius="lg" borderRightRadius="0" src={images[0]} w="50%" objectFit="cover"/>
 
 							<Box bg="brand.primary" w={isMobile ? '100%' : '50%'} p={5} borderRadius="lg" borderLeftRadius={isMobile ? 'lg' : '0'} display="flex" justifyContent="center" alignItems="center">
-								<Box cursor="pointer" onClick={handleAddressCopy}>
-									<Box display="flex" justifyContent="center" id="lnaddress-qr" p={2} bgColor="#fff" borderRadius="lg">
+								<Box cursor="pointer" onClick={handleAddressCopy} id="lnaddress-qr" p={2}>
+									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg">
 										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
 									</Box>
 
