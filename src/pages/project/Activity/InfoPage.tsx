@@ -1,10 +1,9 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
-import React, {useState} from 'react';
-import { SatoshiIconTilted } from '../../../components/icons';
-import { ProjectBalanceCircularProgress, ProjectBalance } from '../../../components/molecules';
+import React, { useState, useRef } from 'react';
+import { ProjectBalanceCircularProgress, ProjectBalance, ProjectMobileMenu } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
-import { ButtonComponent, FundingStatus } from '../../../components/ui';
+import { FundingStatus } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { Button, Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
 
@@ -38,6 +37,10 @@ export const InfoPage = ({
 	const showCountdown = () => project.active && project.expiresAt;
 	const [view, setView] = useState('activity');
 
+	const [scrollPosition, setScrollPosition] = useState(0);
+	const [showMobileMenu, setShowMobileMenu] = useState(true);
+	const scrollDiv = useRef(document.createElement('div'));
+
 	const leaderboardSort = (funderA: IFunder, funderB: IFunder) => {
 		if (funderA.amountFunded > funderB.amountFunded) {
 			return -1;
@@ -67,24 +70,13 @@ export const InfoPage = ({
 			overflowY="hidden"
 			position="relative"
 		>
-			{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
-				<Text fontSize="12px">Project</Text>
-			</Button>}
+			<ProjectMobileMenu showMobileMenu={showMobileMenu} fundButtonFunction={handleFundProject} handleFundClick={handleFundClick} viewName="Description" />
 			<FundingStatus open={project.active} />
 			{showCountdown() && <Countdown endDate={project.expiresAt}/>}
 			{project.fundingGoal
 				? <ProjectBalanceCircularProgress loading={loading} rate={btcRate} goal={project.fundingGoal} balance={project.balance} />
 				: <ProjectBalance balance={project.balance} rate={btcRate}/>
 			}
-			{project.active && <ButtonComponent
-				primary
-				standard
-				leftIcon={<SatoshiIconTilted />}
-				width="100%"
-				onClick={handleFundProject}
-			>
-				Fund this project
-			</ButtonComponent>}
 			<Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
 				<Box display="flex" marginBottom="10px" w="95%">
 					<Box w="50%">
@@ -100,7 +92,17 @@ export const InfoPage = ({
 						<Box bg={view === 'activity' ? 'lightgrey' : 'darkgrey'} w="100%" h="3px" rounded="lg"></Box>
 					</Box>
 				</Box>
-				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
+				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px" ref={scrollDiv}	onScroll={() => {
+					if (isMobile) {
+						if (scrollDiv.current.scrollTop > scrollPosition) {
+							setShowMobileMenu(false);
+						} else {
+							setShowMobileMenu(true);
+						}
+
+						setScrollPosition(scrollDiv.current.scrollTop);
+					}
+				}}>
 					{ view === 'activity'
 						? fundingTxs.map((fundingTx, index) => (
 							<IdBar key={index} fundingTx={fundingTx} project={project}/>
