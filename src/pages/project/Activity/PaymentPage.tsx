@@ -135,8 +135,8 @@ export const PaymentPage = ({
 			<CloseButton
 				borderRadius="50%"
 				position="absolute"
-				right="0px"
-				top="-5px"
+				right={isMobile ? '20px' : '5px'}
+				top={isMobile ? 0 : '5px'}
 				_hover={{bg: 'none'}}
 				_active={{bg: 'none'}}
 				onClick={handleCloseButton}
