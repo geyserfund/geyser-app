@@ -8,7 +8,7 @@ import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
 import { isDarkMode, isMobileMode, isMediumScreen } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
-import { ConnectTwitter } from '../molecules';
+import { LoginModal } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
@@ -35,7 +35,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 	const isMedium = isMediumScreen();
 	const isDark = isDarkMode();
 
-	const { user, getUser, logout, twitterisOpen, twitterOnOpen, twitterOnClose } = useContext(AuthContext);
+	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose } = useContext(AuthContext);
 
 	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -108,7 +108,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 										standard
 										circular
 										marginRight="12px"
-										onClick={twitterOnOpen}
+										onClick={loginOnOpen}
 									>
 										Log In
 									</ButtonComponent>
@@ -151,7 +151,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 											</ButtonComponent>
 											: <ButtonComponent
 												marginRight="12px"
-												onClick={twitterOnOpen}
+												onClick={loginOnOpen}
 											>
 											Connect
 											</ButtonComponent>
@@ -175,7 +175,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 							Please log back in with your profile, or press continue if you want to stay anonymous.
 						</Text>
 						<Box display="flex" justifyContent="space-between" paddingTop="20px">
-							<ButtonComponent width="50%" mx={1} primary onClick={twitterOnOpen}>
+							<ButtonComponent width="50%" mx={1} primary onClick={loginOnOpen}>
 								Log In
 							</ButtonComponent>
 							<ButtonComponent width="50%" mx={1} onClick={onClose}>
@@ -185,7 +185,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 					</ModalBody>
 				</ModalContent>
 			</Modal>
-			<ConnectTwitter isOpen={twitterisOpen} onClose={twitterOnClose} />
+			<LoginModal isOpen={loginIsOpen} onClose={loginOnClose} />
 		</>
 	);
 };

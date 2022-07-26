@@ -35,7 +35,7 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const ButtonComponent = ({ className, variant, primary, children, standard, circular, backgroundColor, ...rest }: IButtonComponentP) => {
+export const ButtonComponent = ({ className, variant, primary, children, standard, circular, backgroundColor, _hover, ...rest }: IButtonComponentP) => {
 	const classes = useStyles();
 	const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark);
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
@@ -46,7 +46,7 @@ export const ButtonComponent = ({ className, variant, primary, children, standar
 			minWidth={standard ? '200px' : ''}
 			backgroundColor={backgroundColor ? backgroundColor : primary ? 'brand.primary' : bgColor}
 			borderRadius={circular ? '50px' : standard ? '4px' : undefined}
-			_hover={primary ? { bg: 'brand.primaryTint' } : undefined}
+			_hover={_hover ? _hover : primary ? { bg: 'brand.primaryTint' } : undefined}
 			fontSize="12px"
 			fontWeight="medium"
 			{...rest}

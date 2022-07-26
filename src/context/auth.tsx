@@ -19,9 +19,9 @@ const defaultContext = {
 	loading: false,
 	error: undefined,
 	logout: () => { },
-	twitterisOpen: false,
-	twitterOnOpen: () => { },
-	twitterOnClose: () => { },
+	loginIsOpen: false,
+	loginOnOpen: () => { },
+	loginOnClose: () => { },
 	getUser: () => { },
 };
 
@@ -31,9 +31,9 @@ interface IAuthContext {
 	loading: boolean,
 	error?: ApolloError,
 	logout: any
-	twitterisOpen: boolean
-	twitterOnOpen: () => void
-	twitterOnClose: () => void
+	loginIsOpen: boolean
+	loginOnOpen: () => void
+	loginOnClose: () => void
 	getUser: any
 }
 
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const [user, setUser] = useState<IUser>(defaultAuthUser);
 	const [getUser, { loading: loadingUser, error, data }] = useLazyQuery(ME);
-	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
+	const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
 
 	useEffect(() => {
 		try {
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [data]);
 
 	return (
-		<AuthContext.Provider value={{ user, getUser, loading, error, isLoggedIn, logout, twitterisOpen, twitterOnOpen, twitterOnClose }}>
+		<AuthContext.Provider value={{ user, getUser, loading, error, isLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>
 			{children}
 		</AuthContext.Provider>
 	);
