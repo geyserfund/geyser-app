@@ -1,5 +1,6 @@
 import { Box, Text } from '@chakra-ui/layout';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
+import QRCode from 'react-qr-code';
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { ButtonComponent, Linkin } from '../ui';
@@ -8,6 +9,7 @@ import Icon from '@chakra-ui/icon';
 import { REACT_APP_API_ENDPOINT } from '../../constants';
 import { useLocation } from 'react-router';
 import { BsLightningChargeFill } from 'react-icons/bs';
+import { useAuthContext } from '../../context';
 
 interface ILoginModal {
 	isOpen: boolean,
@@ -39,6 +41,7 @@ export const LoginModal = ({
 	const pathName = location.pathname || '';
 	const [showQr, setShowQr] = useState(false);
 	const [qrContent, setQrContent] = useState('');
+	const { setUser } = useAuthContext();
 
 	useEffect(() => {
 		console.log('showQr', showQr);
@@ -48,9 +51,14 @@ export const LoginModal = ({
 
 			const id = setInterval(() => {
 				console.log('fetching access-token...');
-				fetch(`${REACT_APP_API_ENDPOINT}/auth/access-token`);
+				fetch(`${REACT_APP_API_ENDPOINT}/auth/access-token`)
+					.then(response => response.json())
+					.then(({ user }) => {
+						console.log('return user:', user);
+						setUser(user);
+					});
+				// TODO: implement error handling and display a toast message
 			}, 1000);
-			console.log('ID', id);
 
 			return () => clearInterval(id);
 		}
@@ -63,6 +71,9 @@ export const LoginModal = ({
 				console.log(url);
 				setQrContent(url);
 				setShowQr(true);
+			})
+			.catch(err => {
+				console.log(err);
 			});
 	};
 
@@ -79,32 +90,37 @@ export const LoginModal = ({
 				<ModalCloseButton />
 				<ModalBody >
 					{ showQr
-						? <Box><Text>Ok</Text></Box>
-						:					<><Text>{useDescription}</Text><Box className={classes.twitterContainer}>
-							<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${pathName}`}>
+						? <Box>
+							{/* TODO: IMPLEMENT PROPER QR CODE UIs */}
+							<QRCode size={186} value={qrContent} />
+						</Box>
+						: <>
+							<Text>{useDescription}</Text><Box className={classes.twitterContainer}>
+								<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${pathName}`}>
+									<ButtonComponent
+										isFullWidth
+										primary
+										standard
+										leftIcon={<Icon as={SiTwitter} />}
+
+									>
+									Login with Twitter
+									</ButtonComponent>
+								</Linkin>
+							</Box><Box className={classes.twitterContainer}>
 								<ButtonComponent
 									isFullWidth
 									primary
 									standard
-									leftIcon={<Icon as={SiTwitter} />}
-
+									backgroundColor="#fada5e"
+									_hover={{ bg: '#e3c552' }}
+									leftIcon={<Icon as={BsLightningChargeFill} />}
+									onClick={async () => handleLnurlLogin()}
 								>
-									Login with Twitter
+										Login with Lightning
 								</ButtonComponent>
-							</Linkin>
-						</Box><Box className={classes.twitterContainer}>
-							<ButtonComponent
-								isFullWidth
-								primary
-								standard
-								backgroundColor="#fada5e"
-								_hover={{ bg: '#e3c552' }}
-								leftIcon={<Icon as={BsLightningChargeFill} />}
-								onClick={async () => handleLnurlLogin()}
-							>
-									Login with Lightning
-							</ButtonComponent>
-						</Box></>
+							</Box>
+						</>
 					}
 				</ModalBody>
 			</ModalContent>

@@ -23,6 +23,7 @@ const defaultContext = {
 	loginOnOpen: () => { },
 	loginOnClose: () => { },
 	getUser: () => { },
+	setUser: () => { },
 };
 
 interface IAuthContext {
@@ -35,6 +36,7 @@ interface IAuthContext {
 	loginOnOpen: () => void
 	loginOnClose: () => void
 	getUser: any
+	setUser: any
 }
 
 export const AuthContext = createContext<IAuthContext>(defaultContext);
@@ -82,7 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [data]);
 
 	return (
-		<AuthContext.Provider value={{ user, getUser, loading, error, isLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>
+		<AuthContext.Provider value={{ user, getUser, setUser, loading, error, isLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>
 			{children}
 		</AuthContext.Provider>
 	);
