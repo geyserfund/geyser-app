@@ -22,12 +22,14 @@ interface IOwnerSponsorCard {
     id: string
 }
 
-const ModalProjectImage = React.memo(function ModalProjectImage({ image }:{image: string}) {
+function ModalProjectImage({ image }:{image: string}) {
 	const isMobile = isMobileMode();
 	return (
-		<Box display={isMobile ? 'none' : 'block'} borderLeftRadius="lg" borderRightRadius="0" backgroundImage={`${image}?${Date.now()}`} w="50%" backgroundSize="cover"/>
+		<Box display={isMobile ? 'none' : 'block'} borderLeftRadius="lg" borderRightRadius="0" backgroundImage={image} w="50%" backgroundSize="cover" id="modal-image"/>
 	);
-});
+}
+
+const ModalImage = React.memo(ModalProjectImage);
 
 export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, date, name, id }: IOwnerSponsorCard) => {
 	const isMobile = isMobileMode();
@@ -41,7 +43,9 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 
 	const capture = () => {
 		if (document.getElementById('lnaddress-qr')) {
-			html2canvas(document.getElementById('lnaddress-qr')!, { useCORS: true }).then(canvas => {
+			html2canvas(document.getElementById('lnaddress-qr')!, { useCORS: true, onclone: () => {
+				document.getElementById('modal-image')!.style.backgroundImage = images[0];
+			} }).then(canvas => {
 				setImageDownload(canvas.toDataURL('image/png', 1.0));
 			});
 		}
@@ -133,7 +137,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund campaigns from anywhere.</Text>
 
 						<Box display={isMobile ? 'block' : 'flex'} w="100%" p={5} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
-							<ModalProjectImage image={images[0]}/>
+							<ModalImage image={images[0]}/>
 
 							<Box bg="brand.primary" w={isMobile ? '100%' : '50%'} p={5} borderRadius="lg" borderLeftRadius={isMobile ? 'lg' : '0'} display="flex" justifyContent="center" alignItems="center">
 								<Box>
@@ -141,12 +145,12 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
 									</Box>
 
-									<HStack mt={2}>
+									<Box display="flex" justifyContent="center" alignItems="center" mt={2}>
 										<BoltIcon/>
-										<Text fontSize="10px" fontWeight="light">LIGHTNING ADDRESS</Text>
-									</HStack>
+										<Text ml={1} fontSize="10px" fontWeight="light">LIGHTNING ADDRESS</Text>
+									</Box>
 
-									<Text fontWeight="medium" wordBreak="break-all">{name}@geyser.fund</Text>
+									<Text textAlign="center" fontWeight="medium" wordBreak="break-all">{name}@geyser.fund</Text>
 								</Box>
 							</Box>
 						</Box>
