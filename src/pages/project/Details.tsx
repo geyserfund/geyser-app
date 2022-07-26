@@ -1,14 +1,14 @@
 import { Box } from '@chakra-ui/layout';
-import { Button, Text } from '@chakra-ui/react';
 // Import { useMediaQuery } from '@chakra-ui/media-query';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { RewardBased } from './ProjectLayout';
 import { colors } from '../../constants';
+import { ProjectMobileMenu } from '../../components/molecules';
 
 type Rules = string
 
@@ -41,22 +41,6 @@ const useStyles = createUseStyles<Rules, IStyles>({
 		overflowY: 'scroll',
 		WebkitOverflowScrolling: 'touch',
 	}),
-	fundButton: {
-		height: '55px',
-		width: '100px',
-		paddingLeft: '25px',
-		borderBottomLeftRadius: '40px',
-		borderTopLeftRadius: '40px',
-		borderBottomRightRadius: 0,
-		borderTopRightRadius: 0,
-		backgroundColor: colors.primary,
-		textAlign: 'center',
-		display: 'flex',
-		flexDirection: 'column',
-		marginLeft: 'auto',
-		marginTop: '5px',
-		boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-	},
 	...slideInLeft,
 	...fadeOut,
 });
@@ -72,6 +56,9 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 	const isDark = isDarkMode();
 
 	const [fadeStarted, setFadeStarted] = useState(false);
+	const [scrollPosition, setScrollPosition] = useState(0);
+	const [showMobileMenu, setShowMobileMenu] = useState(true);
+	const scrollDiv = useRef(document.createElement('div'));
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
@@ -96,10 +83,18 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 			flexDirection="column"
 			overflow="hidden"
 		>
-			<Box className={classes.detailsContainer} id="project-scroll-container">
-				{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
-					<Text fontSize="12px">Fund now</Text>
-				</Button>}
+			<Box className={classes.detailsContainer} id="project-scroll-container" ref={scrollDiv} onScroll={() => {
+				if (isMobile) {
+					if (scrollDiv.current.scrollTop > scrollPosition) {
+						setShowMobileMenu(false);
+					} else {
+						setShowMobileMenu(true);
+					}
+
+					setScrollPosition(scrollDiv.current.scrollTop);
+				}
+			}}>
+				<ProjectMobileMenu showMobileMenu={showMobileMenu} fundButtonFunction={handleFundClick} handleFundClick={handleFundClick} viewName="Activity" />
 				<RewardBased project={project}/>
 			</Box>
 		</Box>
