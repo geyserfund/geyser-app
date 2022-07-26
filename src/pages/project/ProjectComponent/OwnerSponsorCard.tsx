@@ -7,7 +7,7 @@ import ReactPlayer from 'react-player';
 import { isMobileMode, getFormattedDate, encode } from '../../../utils';
 import { useStyles } from './styles';
 import { QrIcon, BoltIcon, ShareIcon } from '../../../components/icons';
-import { DownloadIcon, CopyIcon } from '@chakra-ui/icons';
+import { DownloadIcon } from '@chakra-ui/icons';
 import QRCode from 'react-qr-code';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
 import html2canvas from 'html2canvas';
@@ -22,6 +22,13 @@ interface IOwnerSponsorCard {
     id: string
 }
 
+const ModalProjectImage = React.memo(function ModalProjectImage({ image }:{image: string}) {
+	const isMobile = isMobileMode();
+	return (
+		<Box display={isMobile ? 'none' : 'block'} borderLeftRadius="lg" borderRightRadius="0" backgroundImage={`${image}?${Date.now()}`} w="50%" backgroundSize="cover"/>
+	);
+});
+
 export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, date, name, id }: IOwnerSponsorCard) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
@@ -34,7 +41,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 
 	const capture = () => {
 		if (document.getElementById('lnaddress-qr')) {
-			html2canvas(document.getElementById('lnaddress-qr')!).then(canvas => {
+			html2canvas(document.getElementById('lnaddress-qr')!, { useCORS: true }).then(canvas => {
 				setImageDownload(canvas.toDataURL('image/png', 1.0));
 			});
 		}
@@ -89,7 +96,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 							if (imageDownload.length === 0) {
 								setTimeout(() => {
 									capture();
-								}, 2100);
+								}, 1000);
 							}
 						}}/>
 					</Tooltip>
@@ -125,11 +132,11 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					<ModalBody>
 						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund campaigns from anywhere.</Text>
 
-						<Box display={isMobile ? 'block' : 'flex'} w="100%" p={5} bg="brand.bgGrey" borderRadius="lg">
-							<Image display={isMobile ? 'none' : 'block'} borderLeftRadius="lg" borderRightRadius="0" src={images[0]} w="50%" objectFit="cover"/>
+						<Box display={isMobile ? 'block' : 'flex'} w="100%" p={5} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
+							<ModalProjectImage image={images[0]}/>
 
 							<Box bg="brand.primary" w={isMobile ? '100%' : '50%'} p={5} borderRadius="lg" borderLeftRadius={isMobile ? 'lg' : '0'} display="flex" justifyContent="center" alignItems="center">
-								<Box cursor="pointer" onClick={handleAddressCopy} id="lnaddress-qr" p={2}>
+								<Box>
 									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg">
 										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
 									</Box>
@@ -145,11 +152,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 						</Box>
 					</ModalBody>
 					<ModalFooter>
-						<VStack w="100%">
-							<ButtonComponent w="100%" primary onClick={handleAddressCopy}>
-								<CopyIcon mr={2}/> {copy ? 'Copied!' : 'Copy'}
-							</ButtonComponent>
-
+						<Box w="100%">
 							{imageDownload.length === 0
 								? <ButtonComponent disabled={true} isLoading={true} w="100%" primary>
 									<DownloadIcon mr={2}/> Download
@@ -160,7 +163,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 									</ButtonComponent>
 								</LinkChakra>
 							}
-						</VStack>
+						</Box>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
