@@ -23,9 +23,8 @@ interface IOwnerSponsorCard {
 }
 
 function ModalProjectImage({ image }:{image: string}) {
-	const isMobile = isMobileMode();
 	return (
-		<Box display={isMobile ? 'none' : 'block'} borderLeftRadius="lg" borderRightRadius="0" backgroundImage={image} w="50%" backgroundSize="cover" id="modal-image"/>
+		<Box borderLeftRadius="lg" backgroundImage={image} w="50%" backgroundSize="cover" id="modal-image"/>
 	);
 }
 
@@ -134,21 +133,21 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					<ModalBody>
 						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund campaigns from anywhere.</Text>
 
-						<Box display={isMobile ? 'block' : 'flex'} w="100%" p={5} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
+						<Box display="flex" w="100%" p={5} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
 							<ModalImage image={images[0]}/>
 
-							<Box bg="brand.primary" w={isMobile ? '100%' : '50%'} p={5} borderRadius="lg" borderLeftRadius={isMobile ? 'lg' : '0'} display="flex" justifyContent="center" alignItems="center">
+							<Box bg="brand.primary" w="50%" p={5} borderRightRadius="lg" display="flex" justifyContent="center" alignItems="center">
 								<Box>
 									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg">
-										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
+										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 100 : 186} value={lnurlPayUrl} />
 									</Box>
 
 									<Box display="flex" justifyContent="center" alignItems="center" mt={2}>
 										<BoltIcon/>
-										<Text ml={1} fontSize="10px" fontWeight="light">LIGHTNING ADDRESS</Text>
+										<Text ml={1} fontSize={isMobile ? '8px' : '10px'} fontWeight="light">LIGHTNING ADDRESS</Text>
 									</Box>
 
-									<Text textAlign="center" fontWeight="medium" wordBreak="break-all">{name}@geyser.fund</Text>
+									<Text textAlign="center" fontWeight="medium" wordBreak="break-all" fontSize={isMobile ? 'xs' : 'sm'}>{name}@geyser.fund</Text>
 								</Box>
 							</Box>
 						</Box>
