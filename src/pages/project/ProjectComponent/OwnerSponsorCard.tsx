@@ -8,8 +8,9 @@ import { isMobileMode, getFormattedDate, encode } from '../../../utils';
 import { useStyles } from './styles';
 import { QrIcon, BoltIcon, ShareIcon } from '../../../components/icons';
 import { DownloadIcon } from '@chakra-ui/icons';
-import QRCode from 'react-qr-code';
+import { QRCode } from 'react-qrcode-logo';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
+import LogoLight from '../../../assets/logo-qr-code.jpg';
 import html2canvas from 'html2canvas';
 
 interface IOwnerSponsorCard {
@@ -45,8 +46,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 		}
 	};
 
-	const lnurlPayUrl = encode(`https://8b6c-80-113-228-11.ngrok.io/lnurl/pay?projectId=${id}`);
-	// const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
+	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
 
 	useEffect(() => {
 		if (copy) {
@@ -123,7 +123,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 			<Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={() => {
 				setCopy(false);
 				onClose();
-			}} size={isMobile ? 'md' : '2xl'} isCentered>
+			}} size={isMobile ? 'md' : 'xl'} isCentered>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader><Text fontSize="3xl">Campaign QR code</Text></ModalHeader>
@@ -131,26 +131,31 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 					<ModalBody>
 						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund campaigns from anywhere.</Text>
 
-						<Box display="flex" w="100%" p={5} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
+						<Box display="flex" w="100%" p={4} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
 							<ModalImage image={images[0]}/>
 
 							<Box bg="brand.primary" w="50%" p={5} borderRightRadius="lg" display="flex" justifyContent="center" alignItems="center">
 								<Box>
 									<Text textAlign="center" fontWeight="bold" fontSize="1xl">{title}</Text>
-									<Text textAlign="center" fontSize="11px">
+									<Text textAlign="center" fontSize={isMobile ? '6px' : '10px'}>
 										CONTRIBUTE TO THIS PROJECT WITH A LIGHTNING QR CODE OR LIGHTNING ADDRESS
 									</Text>
 
-									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg" padding={2}>
-										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
+									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg" marginTop={2} marginBottom={2}>
+										<QRCode
+											qrStyle="dots"
+											logoImage={LogoLight}
+											eyeRadius={2}
+											// removeQrCodeBehindLogo={true}
+											bgColor="#fff"
+											fgColor="#20ECC7"
+											size={isMobile ? 121 : 186}
+											value={lnurlPayUrl}
+										/>
 									</Box>
-
-									<Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-										<BoltIcon/>
-										<Text ml={1} fontSize={isMobile ? '8px' : '10px'} fontWeight="light">LIGHTNING ADDRESS</Text>
+									<Box display="flex" justifyContent="center" alignItems="center" paddingTop={1}>
+										<Text textAlign="center" fontWeight="bold" wordBreak="break-all" fontSize={isMobile ? '8px' : '12px'}>{name}@geyser.fund</Text>
 									</Box>
-
-									<Text textAlign="center" fontWeight="medium" wordBreak="break-all" fontSize={isMobile ? 'xs' : 'sm'}>{name}@geyser.fund</Text>
 								</Box>
 							</Box>
 						</Box>

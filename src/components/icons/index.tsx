@@ -139,11 +139,21 @@ export const QrIcon = (props: ImageProps) => (
 	</Box>
 );
 
-export const BoltIcon = (props: ImageProps) => (
-	<Box padding="3px 0px">
-		<Image height="20px" width="20px" src={BoltSvg} alt="bolt" {...props}/>
-	</Box>
-);
+export const BoltIcon = (props: ImageProps) => {
+	const scale = props.scale as number;
+
+	return (
+		<Box padding="3px 0px">
+			<Image
+				height={scale ? (scale * 20).toString() + 'px' : '20px'}
+				width={scale ? (scale * 20).toString() + 'px' : '20px'}
+				src={BoltSvg}
+				alt="bolt"
+				{...props}
+			/>
+		</Box>
+	);
+};
 
 export const ShareIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
