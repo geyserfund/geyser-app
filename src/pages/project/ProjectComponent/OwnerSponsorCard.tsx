@@ -1,7 +1,7 @@
 import { Avatar, Box, HStack, Text, VStack, Image, Button, IconButton, Tooltip, Modal, ModalOverlay, ModalContent,	ModalHeader,	ModalFooter,	ModalBody, useDisclosure,	ModalCloseButton, Link as LinkChakra } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { IParticipant, IProjectDetail } from '../../../interfaces';
+import { IParticipant, IProject, IProjectDetail } from '../../../interfaces';
 import { ButtonComponent } from '../../../components/ui';
 import ReactPlayer from 'react-player';
 import { isMobileMode, getFormattedDate, encode } from '../../../utils';
@@ -13,13 +13,8 @@ import { REACT_APP_API_ENDPOINT } from '../../../constants';
 import html2canvas from 'html2canvas';
 
 interface IOwnerSponsorCard {
-	owner: IParticipant
-	ambassadors: IParticipant[]
-	images: string[]
+	project: IProject
 	projectDetails: IProjectDetail
-    date: string
-    name: string
-    id: string
 }
 
 function ModalProjectImage({ image }:{image: string}) {
@@ -30,7 +25,9 @@ function ModalProjectImage({ image }:{image: string}) {
 
 const ModalImage = React.memo(ModalProjectImage);
 
-export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, date, name, id }: IOwnerSponsorCard) => {
+export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard) => {
+	const { id, media: images, name, title, owners, createdAt: date } = project;
+	const owner = owners[0];
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 	const podcast = projectDetails.blocks.find(block => block.key === 'podcast');
@@ -48,7 +45,8 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 		}
 	};
 
-	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
+	const lnurlPayUrl = encode(`https://8b6c-80-113-228-11.ngrok.io/lnurl/pay?projectId=${id}`);
+	// const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
 
 	useEffect(() => {
 		if (copy) {
@@ -125,7 +123,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 			<Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={() => {
 				setCopy(false);
 				onClose();
-			}} size={isMobile ? 'md' : 'xl'} isCentered>
+			}} size={isMobile ? 'md' : '2xl'} isCentered>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader><Text fontSize="3xl">Campaign QR code</Text></ModalHeader>
@@ -138,8 +136,13 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 
 							<Box bg="brand.primary" w="50%" p={5} borderRightRadius="lg" display="flex" justifyContent="center" alignItems="center">
 								<Box>
-									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg">
-										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 100 : 186} value={lnurlPayUrl} />
+									<Text textAlign="center" fontWeight="bold" fontSize="1xl">{title}</Text>
+									<Text textAlign="center" fontSize="11px">
+										CONTRIBUTE TO THIS PROJECT WITH A LIGHTNING QR CODE OR LIGHTNING ADDRESS
+									</Text>
+
+									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg" padding={2}>
+										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
 									</Box>
 
 									<Box display="flex" justifyContent="center" alignItems="center" mt={2}>
