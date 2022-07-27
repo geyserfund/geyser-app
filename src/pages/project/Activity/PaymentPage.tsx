@@ -135,8 +135,8 @@ export const PaymentPage = ({
 			<CloseButton
 				borderRadius="50%"
 				position="absolute"
-				right="0px"
-				top="-5px"
+				right={isMobile ? '20px' : '5px'}
+				top={isMobile ? 0 : '5px'}
 				_hover={{bg: 'none'}}
 				_active={{bg: 'none'}}
 				onClick={handleCloseButton}
@@ -228,7 +228,7 @@ export const PaymentPage = ({
 					{state.rewardsCost && hasShipping(name) && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
-					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
+					<SatoshiAmount color="#1A1A1A" fontWeight="bold" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
 					<Text> {`$${getTotalAmount('dollar', name)}`}</Text>
 				</VStack>
 			</HStack>}
@@ -241,7 +241,7 @@ export const PaymentPage = ({
 					width="100%"
 					onClick={submit}
 				>
-					Fund project
+					Fund campaign
 				</ButtonComponent>
 			</Box>
 

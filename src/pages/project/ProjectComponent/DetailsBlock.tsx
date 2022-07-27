@@ -41,11 +41,11 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 		if (imageIndex && imageIndex.length > 0) {
 			const images = imageIndex.map((val: number) => media[val]);
 			return (
-				<HStack spacing="30px" overflowX="auto">
+				<HStack spacing="30px" overflowX="auto" w="100%">
 					{
 						images.map((image: string) => (
-							<Box key={image} maxWidth="400px">
-								<Image src={image} />
+							<Box key={image} w="100%">
+								<Image src={image} w="100%"/>
 							</Box>))
 					}
 				</HStack>
