@@ -43,9 +43,7 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 
 	const capture = () => {
 		if (document.getElementById('lnaddress-qr')) {
-			html2canvas(document.getElementById('lnaddress-qr')!, { useCORS: true, onclone: () => {
-				document.getElementById('modal-image')!.style.backgroundImage = images[0];
-			} }).then(canvas => {
+			html2canvas(document.getElementById('lnaddress-qr')!, { useCORS: true }).then(canvas => {
 				setImageDownload(canvas.toDataURL('image/png', 1.0));
 			});
 		}
