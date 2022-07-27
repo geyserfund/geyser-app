@@ -26,6 +26,7 @@ module.exports = {
 		'capitalized-comments:': 0,
 		'no-unused-vars': 'warn',
 		'capitalized-comments': 0,
+		camelcase: 'warn',
 		'no-restricted-syntax': [
 			'error',
 			{
