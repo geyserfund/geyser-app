@@ -46,12 +46,7 @@ export const RewardBased = ({ project }: { project: IProject }) => {
 				padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
 			>
 				<OwnerSponsorCard
-					images={project.media}
-					owner={project.owners[0]}
-					ambassadors={project.ambassadors}
-					date={project.createdAt}
-					name={project.name}
-					id={project.id}
+					project={project}
 					projectDetails={projectDetails}
 				/>
 				<DetailsBlock projectDetails={projectDetails} media={project.media} />

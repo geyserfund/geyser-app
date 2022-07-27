@@ -1,37 +1,34 @@
 import { Avatar, Box, HStack, Text, VStack, Image, Button, IconButton, Tooltip, Modal, ModalOverlay, ModalContent,	ModalHeader,	ModalFooter,	ModalBody, useDisclosure,	ModalCloseButton, Link as LinkChakra } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { IParticipant, IProjectDetail } from '../../../interfaces';
+import { IParticipant, IProject, IProjectDetail } from '../../../interfaces';
 import { ButtonComponent } from '../../../components/ui';
 import ReactPlayer from 'react-player';
 import { isMobileMode, getFormattedDate, encode } from '../../../utils';
 import { useStyles } from './styles';
 import { QrIcon, BoltIcon, ShareIcon } from '../../../components/icons';
 import { DownloadIcon } from '@chakra-ui/icons';
-import QRCode from 'react-qr-code';
+import { QRCode } from 'react-qrcode-logo';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
+import LogoLight from '../../../assets/logo-qr-code.jpg';
 import html2canvas from 'html2canvas';
 
 interface IOwnerSponsorCard {
-	owner: IParticipant
-	ambassadors: IParticipant[]
-	images: string[]
+	project: IProject
 	projectDetails: IProjectDetail
-    date: string
-    name: string
-    id: string
 }
 
 function ModalProjectImage({ image }:{image: string}) {
-	const isMobile = isMobileMode();
 	return (
-		<Box display={isMobile ? 'none' : 'block'} borderLeftRadius="lg" borderRightRadius="0" backgroundImage={image} w="50%" backgroundSize="cover" id="modal-image"/>
+		<Box borderLeftRadius="lg" backgroundImage={image} w="50%" backgroundSize="cover" id="modal-image"/>
 	);
 }
 
 const ModalImage = React.memo(ModalProjectImage);
 
-export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, date, name, id }: IOwnerSponsorCard) => {
+export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard) => {
+	const { id, media: images, name, title, owners, createdAt: date } = project;
+	const owner = owners[0];
 	const isMobile = isMobileMode();
 	const classes = useStyles({ isMobile });
 	const podcast = projectDetails.blocks.find(block => block.key === 'podcast');
@@ -134,21 +131,31 @@ export const OwnerSponsorCard = ({ owner, ambassadors, images, projectDetails, d
 					<ModalBody>
 						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund campaigns from anywhere.</Text>
 
-						<Box display={isMobile ? 'block' : 'flex'} w="100%" p={5} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
+						<Box display="flex" w="100%" p={4} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
 							<ModalImage image={images[0]}/>
 
-							<Box bg="brand.primary" w={isMobile ? '100%' : '50%'} p={5} borderRadius="lg" borderLeftRadius={isMobile ? 'lg' : '0'} display="flex" justifyContent="center" alignItems="center">
+							<Box bg="brand.primary" w="50%" p={5} borderRightRadius="lg" display="flex" justifyContent="center" alignItems="center">
 								<Box>
-									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg">
-										<QRCode bgColor="#fff" fgColor="#20ECC7" size={isMobile ? 121 : 186} value={lnurlPayUrl} />
-									</Box>
+									<Text textAlign="center" fontWeight="bold" fontSize="1xl">{title}</Text>
+									<Text textAlign="center" fontSize={isMobile ? '6px' : '10px'}>
+										CONTRIBUTE TO THIS PROJECT WITH A LIGHTNING QR CODE OR LIGHTNING ADDRESS
+									</Text>
 
-									<Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-										<BoltIcon/>
-										<Text ml={1} fontSize="10px" fontWeight="light">LIGHTNING ADDRESS</Text>
+									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg" marginTop={2} marginBottom={2}>
+										<QRCode
+											qrStyle="dots"
+											logoImage={LogoLight}
+											eyeRadius={2}
+											// removeQrCodeBehindLogo={true}
+											bgColor="#fff"
+											fgColor="#20ECC7"
+											size={isMobile ? 121 : 186}
+											value={lnurlPayUrl}
+										/>
 									</Box>
-
-									<Text textAlign="center" fontWeight="medium" wordBreak="break-all">{name}@geyser.fund</Text>
+									<Box display="flex" justifyContent="center" alignItems="center" paddingTop={1}>
+										<Text textAlign="center" fontWeight="bold" wordBreak="break-all" fontSize={isMobile ? '8px' : '12px'}>{name}@geyser.fund</Text>
+									</Box>
 								</Box>
 							</Box>
 						</Box>
