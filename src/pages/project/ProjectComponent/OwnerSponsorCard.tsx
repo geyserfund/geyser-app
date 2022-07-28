@@ -46,7 +46,8 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 		}
 	};
 
-	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
+	// const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
+	const lnurlPayUrl = encode(`https://7fb8-80-113-228-11.ngrok.io/lnurl/pay?projectId=${id}`);
 
 	useEffect(() => {
 		if (copy) {
