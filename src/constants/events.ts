@@ -18,7 +18,23 @@ canceled:IFundingStages;
 
 export const stageList: IFundingStages[] = ['loading', 'initial', 'form', 'started', 'completed', 'canceled'];
 
-export type IFundingStages = 'loading'|'initial' | 'form' | 'started' | 'completed' | 'canceled'
+export type IFundingStages = 'loading' | 'initial' | 'form' | 'started' | 'completed' | 'canceled'
+
+export const loginStages:{
+	loading: ILoginStages;
+	initial: ILoginStages;
+	qr: ILoginStages;
+	connect: ILoginStages;
+	completed: ILoginStages;
+	} = {
+		loading: 'loading',
+		initial: 'initial',
+		qr: 'qr',
+		connect: 'connect',
+		completed: 'completed',
+	};
+
+export type ILoginStages = 'loading' | 'initial' | 'qr' | 'completed' | 'connect'
 
 export const projectTypes = {
 	donation: 'donation' as IProjectType,

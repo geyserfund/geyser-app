@@ -10,7 +10,7 @@ import { QrIcon, BoltIcon, ShareIcon } from '../../../components/icons';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { QRCode } from 'react-qrcode-logo';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
-import LogoLight from '../../../assets/logo-qr-code.jpg';
+import LogoLight from '../../../assets/logo-dark-green.svg';
 import html2canvas from 'html2canvas';
 
 interface IOwnerSponsorCard {
