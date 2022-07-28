@@ -11,7 +11,7 @@ import { useLocation } from 'react-router';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
 import { useNotification, isMobileMode } from '../../utils';
-import LogoDarkGreen from '../../assets/logo-qr-code.svg';
+import LogoDarkGreen from '../../assets/logo-dark-green.svg';
 
 interface ILoginModal {
 	isOpen: boolean,
