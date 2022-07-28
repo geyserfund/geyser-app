@@ -45,7 +45,7 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 
 	const {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = fundingFlow;
 	const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
-    
+
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
