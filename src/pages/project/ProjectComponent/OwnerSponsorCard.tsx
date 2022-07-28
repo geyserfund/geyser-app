@@ -10,7 +10,7 @@ import { QrIcon, BoltIcon, ShareIcon } from '../../../components/icons';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { QRCode } from 'react-qrcode-logo';
 import { REACT_APP_API_ENDPOINT } from '../../../constants';
-import LogoLight from '../../../assets/logo-qr-code.jpg';
+import LogoLight from '../../../assets/logo-dark-green.svg';
 import html2canvas from 'html2canvas';
 
 interface IOwnerSponsorCard {
@@ -46,8 +46,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 		}
 	};
 
-	// const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
-	const lnurlPayUrl = encode(`https://7fb8-80-113-228-11.ngrok.io/lnurl/pay?projectId=${id}`);
+	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
 
 	useEffect(() => {
 		if (copy) {
@@ -147,9 +146,11 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 											qrStyle="dots"
 											logoImage={LogoLight}
 											eyeRadius={2}
-											// removeQrCodeBehindLogo={true}
+											logoHeight={30}
+											logoWidth={30}
+											removeQrCodeBehindLogo={true}
 											bgColor="#fff"
-											fgColor="#20ECC7"
+											fgColor="#004236"
 											size={isMobile ? 121 : 186}
 											value={lnurlPayUrl}
 										/>
