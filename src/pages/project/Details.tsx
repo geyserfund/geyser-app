@@ -7,8 +7,9 @@ import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { RewardBased } from './ProjectLayout';
-import { colors } from '../../constants';
+import { IFundingStages } from '../../constants';
 import { ProjectMobileMenu } from '../../components/molecules';
+import { fundingStages } from '../../constants';
 
 type Rules = string
 
@@ -49,9 +50,10 @@ interface IActivityProps {
 	project: IProject
 	detailOpen: boolean
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+	setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
 }
 
-export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
+export const Details = ({ project, detailOpen, setDetailOpen, setFundState }: IActivityProps) => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 
@@ -63,6 +65,7 @@ export const Details = ({ project, detailOpen, setDetailOpen }: IActivityProps) 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
 	const handleFundClick = () => {
+		setFundState(fundingStages.form);
 		setDetailOpen(false);
 		setFadeStarted(true);
 		setTimeout(() => {

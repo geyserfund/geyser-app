@@ -8,6 +8,7 @@ import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
+import { useFundingFlow } from '../../hooks';
 import { Grants } from '../grants/Grants';
 
 export const Project = () => {
@@ -15,6 +16,8 @@ export const Project = () => {
 	const { state } = useLocation<{ loggedOut?: boolean }>();
 
 	const [detailOpen, setDetailOpen] = useState(true);
+	const fundingFlow = useFundingFlow();
+	const { setFundState } = fundingFlow;
 
 	useEffect(() => {
 		try {
@@ -60,8 +63,8 @@ export const Project = () => {
 						bg="brand.bgGrey4"
 
 					>
-						<Details project={project} {...{detailOpen, setDetailOpen}}/>
-						<Activity project={project} {...{detailOpen, setDetailOpen}}/>
+						<Details project={project} {...{detailOpen, setDetailOpen, setFundState }}/>
+						<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}/>
 					</Box>
 				</Box>
 				: <>

@@ -188,5 +188,5 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 		setAmounts(initialAmounts);
 	};
 
-	return {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding};
+	return {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding, setFundState};
 };
