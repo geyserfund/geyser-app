@@ -105,7 +105,7 @@ export const LaunchIdea = () => {
 	);
 
 	return (
-		<Box display="flex" justifyContent="center" paddingTop={isMobile ? '61px' : '71px'}>
+		<Box display="flex" justifyContent="center" paddingTop="60px">
 			<VStack spacing="50px" maxWidth="1370px" padding={isMobile ? '10px 10px 40px 10px' : '40px 40px'} >
 				<VStack width="100%" alignItems="flex-start" spacing="30px">
 					<Text fontSize="35px" fontWeight={700}>Transform your ideas into reality</Text>

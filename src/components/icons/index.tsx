@@ -16,6 +16,10 @@ import RopePng from '../../assets/rope.png';
 import InfoSvg from '../../assets/i.svg';
 import SatoshiPng from '../../assets/satoshi.png';
 import SatoshiTilted from '../../assets/satoshi-tilted.svg';
+import SatoshiTiltedDash from '../../assets/satoshi-tilted-dash.svg';
+import QrSvg from '../../assets/qr.svg';
+import BoltSvg from '../../assets/bolt.svg';
+import ShareSvg from '../../assets/share.svg';
 
 export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }: any) => {
 	const getFilter = () => {
@@ -37,7 +41,7 @@ export const SatoshiIcon = ({ scale = 1, wrapperClass, isDark, color, ...rest }:
 	);
 };
 
-export const SatoshiIconTilted = ({scale = 1, wrapperClass, isDark, color, ...rest}:any) => {
+export const SatoshiIconTilted = ({scale = 1, wrapperClass, isDark, color, dash, ...rest}:any) => {
 	const getFilter = () => {
 		if (color === 'brand.primary') {
 			return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)';
@@ -52,7 +56,7 @@ export const SatoshiIconTilted = ({scale = 1, wrapperClass, isDark, color, ...re
 
 	return (
 		<Box padding="3px 0px" className={wrapperClass}>
-			<Image filter={getFilter()} height={`${26 * scale}px`} width={`${26 * scale}px`} src={SatoshiTilted} alt="satoshi" {...rest} />
+			<Image filter={getFilter()} height={`${26 * scale}px`} width={`${26 * scale}px`} src={dash ? SatoshiTiltedDash : SatoshiTilted} alt="satoshi" {...rest} />
 		</Box>
 	);
 };
@@ -126,5 +130,33 @@ export const RopeIcon = (props: ImageProps) => (
 export const InfoIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
 		<Image height="12px" width="12px" src={InfoSvg} alt="info" {...props}/>
+	</Box>
+);
+
+export const QrIcon = (props: ImageProps) => (
+	<Box padding="3px 0px">
+		<Image height="20px" width="20px" src={QrSvg} alt="qr" {...props}/>
+	</Box>
+);
+
+export const BoltIcon = (props: ImageProps) => {
+	const scale = props.scale as number;
+
+	return (
+		<Box padding="3px 0px">
+			<Image
+				height={scale ? (scale * 20).toString() + 'px' : '20px'}
+				width={scale ? (scale * 20).toString() + 'px' : '20px'}
+				src={BoltSvg}
+				alt="bolt"
+				{...props}
+			/>
+		</Box>
+	);
+};
+
+export const ShareIcon = (props: ImageProps) => (
+	<Box padding="3px 0px">
+		<Image src={ShareSvg} alt="share" {...props}/>
 	</Box>
 );

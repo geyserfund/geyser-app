@@ -51,7 +51,8 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 	boldText: {
 		fontSize: '22px',
 		fontWeight: 'bold',
-		color: colors.normalLightGreen,
+		color: '#1A1A1A',
+		textShadow: '1px 1px #20ECC7',
 	},
 	sectionTitle: {
 		fontSize: '16px',
@@ -120,7 +121,7 @@ export const Home = () => {
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
-			paddingTop={isMobile ? '61px' : '71px'}
+			paddingTop="60px"
 			height="100%"
 			justifyContent="space-between"
 		>
@@ -183,8 +184,8 @@ export const Home = () => {
 										</VStack>
 										<VStack>
 											<Box display="flex" alignItems="center">
-												<SatoshiIconTilted color="brand.primary" />
-												<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
+												<SatoshiIconTilted dash={true} />
+												<SatoshiAmount fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
 											</Box>
 											<Text className={classes.subtitleText}>SATS RAISED</Text>
 										</VStack><VStack>

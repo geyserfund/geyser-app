@@ -20,6 +20,7 @@
     "@types/react-image-gallery": "^1.0.5",
     "@types/react-show-more-text": "^1.4.1",
     "apollo-link": "^1.2.14",
+    "bech32": "^2.0.0",
     "classnames": "^2.3.1",
     "framer-motion": "4.1.17",
     "graphql": "^15.5.2",
@@ -36,6 +37,7 @@
     "react-markdown": "^8.0.0",
     "react-player": "^2.10.1",
     "react-qr-code": "^2.0.3",
+    "react-qrcode-logo": "^2.7.0",
     "react-router-dom": "^5.2.1",
     "react-scripts": "4.0.3",
     "react-select": "^5.2.2",
@@ -87,6 +89,7 @@
     "eslint": "^7.32.0",
     "eslint-config-xo": "^0.38.0",
     "eslint-plugin-jest": "^24.4.0",
-    "eslint-plugin-react": "^7.25.1"
+    "eslint-plugin-react": "^7.25.1",
+    "html2canvas": "^1.4.1"
   }
 }
