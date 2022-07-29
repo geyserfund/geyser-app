@@ -13,6 +13,8 @@ import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
 import { useNotification, isMobileMode } from '../../utils';
 import LogoDarkGreen from '../../assets/logo-dark-green.svg';
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
+import { HStack, Link, Spinner, VStack } from '@chakra-ui/react';
 
 interface ILoginModal {
 	isOpen: boolean,
@@ -30,6 +32,19 @@ const useStyles = createUseStyles({
 	},
 });
 
+const TwitterLogin = ({ nextPath }: { nextPath: string}) => (
+	<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${nextPath}`}>
+		<ButtonComponent
+			isFullWidth
+			primary
+			standard
+			leftIcon={<Icon as={SiTwitter} />}
+
+		>
+								Twitter
+		</ButtonComponent>
+	</Linkin>
+);
 export const LoginModal = ({
 	isOpen,
 	onClose,
@@ -43,20 +58,23 @@ export const LoginModal = ({
 	const classes = useStyles();
 	const [modalTitle, setModalTitle] = useState(title || 'Connect');
 	const useDescription = description || 'Link your twitter account to appear as a project backer when you fund a project.';
-	const pathName = location.pathname || '';
+	const nextPath = location.pathname || '';
 	// const [showQr, setShowQr] = useState(false);
 	const [qrContent, setQrContent] = useState('');
 	const { setUser } = useAuthContext();
 	const [loginState, setLoginState] = useState<ILoginStages>(loginStages.initial);
 
+	const [copy, setcopy] = useState(false);
+	const handleCopy = () => {
+		navigator.clipboard.writeText(qrContent);
+		setcopy(true);
+		setTimeout(() => {
+			setcopy(false);
+		}, 2000);
+	};
+
 	useEffect(() => {
 		if (loginState === 'qr') {
-			setTimeout(() => {
-				setModalTitle('Connected!');
-				setLoginState(loginStages.connect);
-			}, 1000);
-
-			return;
 			const id = setInterval(() => {
 				console.log('fetching access-token...');
 				let hasError = false;
@@ -78,6 +96,8 @@ export const LoginModal = ({
 
 						if (user) {
 							setUser(user);
+							setLoginState(loginStages.connect);
+							setModalTitle('Connected!');
 						}
 					}).catch(err => {
 						setLoginState(loginStages.initial);
@@ -113,32 +133,56 @@ export const LoginModal = ({
 	};
 
 	const renderModalBody = () => {
+		const elem = document.getElementById('lnurl-auth-qr-code');
+		const bounds = elem?.getBoundingClientRect();
+		console.log(bounds);
+
 		switch (loginState) {
 			case 'qr':
 				return (
 					<Box justifyContent="center" alignItems="center">
-						{/* TODO: IMPLEMENT PROPER QR CODE UIs */}
-						<Text>Scan the QR code to connect to your Lightning wallet. Check if my wallet supports LNURL-auth here.</Text>
-						<QRCode
-							qrStyle="dots"
-							logoImage={LogoDarkGreen}
-							logoHeight={30}
-							logoWidth={30}
-							eyeRadius={2}
-							removeQrCodeBehindLogo={true}
-							bgColor="#fff"
-							fgColor="#004236"
-							size={isMobile ? 121 : 186}
-							value={qrContent}
-						/>
+						<Text>Scan the QR code to connect to your Lightning wallet.</Text>
+						<Link href="https://github.com/fiatjaf/lnurl-rfc#lnurl-documents" isExternal color="grey">
+							<Text>
+								Check if your wallet supports LNURL-auth here.
+							</Text>
+						</Link>
+						<VStack marginTop={3} marginBottom={6}>
+							<QRCode
+								qrStyle="dots"
+								logoImage={LogoDarkGreen}
+								logoHeight={30}
+								logoWidth={30}
+								eyeRadius={2}
+								removeQrCodeBehindLogo={true}
+								bgColor="#fff"
+								fgColor="#004236"
+								size={186}
+								value={qrContent}
+								id="lnurl-auth-qr-code"
+								style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+							/>
+							<HStack justifyContent="center" alignItems="center" marginTop={1}>
+								<Spinner size="sm" speed="1s" thickness="1px"/>
+								<Text fontSize={10}>Waiting for authentication to complete...</Text>
+							</HStack>
+						</VStack>
+						<ButtonComponent
+							isFullWidth
+							primary={copy}
+							onClick={handleCopy}
+							leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
+						>
+							{!copy ? 'Copy Authentication Link' : 'Url Copied'}
+						</ButtonComponent>
 					</Box>
 				);
 
 			case 'connect':
 				return (
 					<Box justifyContent="center" alignItems="center">
-						{/* TODO: IMPLEMENT PROPER QR CODE UIs */}
-						<Text>You can also bridge your Geyser activity by linking your Twitter profile.</Text>
+						<Text marginBottom={2}>You can also bridge your Geyser activity by linking your Twitter profile.</Text>
+						<TwitterLogin nextPath={nextPath}/>
 					</Box>
 				);
 
@@ -147,17 +191,7 @@ export const LoginModal = ({
 					<>
 						<Text>{useDescription}</Text>
 						<Box className={classes.twitterContainer}>
-							<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${pathName}`}>
-								<ButtonComponent
-									isFullWidth
-									primary
-									standard
-									leftIcon={<Icon as={SiTwitter} />}
-
-								>
-								Twitter
-								</ButtonComponent>
-							</Linkin>
+							<TwitterLogin nextPath={nextPath}/>
 						</Box>
 						<Box className={classes.twitterContainer}>
 							<ButtonComponent
