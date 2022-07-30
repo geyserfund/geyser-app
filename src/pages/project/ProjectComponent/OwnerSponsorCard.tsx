@@ -137,11 +137,11 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 							<Box bg="brand.primary" w="50%" p={5} borderRightRadius="lg" display="flex" justifyContent="center" alignItems="center">
 								<Box>
 									<Text textAlign="center" fontWeight="bold" fontSize="1xl">{title}</Text>
-									<Text textAlign="center" fontSize={isMobile ? '6px' : '10px'}>
+									<Text textAlign="center" fontSize={isMobile ? '6px' : '8px'}>
 										CONTRIBUTE TO THIS PROJECT WITH A LIGHTNING QR CODE OR LIGHTNING ADDRESS
 									</Text>
 
-									<Box display="flex" justifyContent="center" p={2} bgColor="#fff" borderRadius="lg" marginTop={2} marginBottom={2}>
+									<Box display="flex" justifyContent="center" p={1} bgColor="#fff" borderRadius="lg" marginTop={2} marginBottom={2}>
 										<QRCode
 											qrStyle="dots"
 											logoImage={LogoLight}
@@ -151,7 +151,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 											removeQrCodeBehindLogo={true}
 											bgColor="#fff"
 											fgColor="#004236"
-											size={isMobile ? 121 : 186}
+											size={isMobile ? 121 : 165}
 											value={lnurlPayUrl}
 										/>
 									</Box>
