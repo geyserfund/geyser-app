@@ -42,7 +42,6 @@ const projectBlocks: IProjectBlock[] = [
 			'promotion',
 			'course development',
 		],
-		images: [3],
 		blockType: 'UL',
 	},
 	{
