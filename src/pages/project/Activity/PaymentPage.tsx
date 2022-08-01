@@ -241,7 +241,7 @@ export const PaymentPage = ({
 					width="100%"
 					onClick={submit}
 				>
-					Fund campaign
+					Fund project
 				</ButtonComponent>
 			</Box>
 
