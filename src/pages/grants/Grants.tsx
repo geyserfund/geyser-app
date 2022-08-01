@@ -64,9 +64,9 @@ export const Grants = ({ project }: { project: IProject }) => {
 						<Box boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)" rounded="lg" p={6} mt={6}>
 							<Box display="flex" justifyContent="end">
 								<InfoTooltip
-									title="APPLICATIONS OPEN JULY 1-31"
-									description="Apply now!"
-									options={ { top: '-55px', left: '-140px' } }
+									title="ROUND 1 APPLICATIONS CLOSED"
+									description="Check back for future Geyser Grants!"
+									options={ { top: '-83px', left: '-140px' } }
 									width="170px"
 								/>
 							</Box>
@@ -81,7 +81,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 								<Box>
 									<HStack justifyContent="center" spacing="2px">
-										<SatoshiIconTilted scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoineducation' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoin-builders' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoinculture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
+										<SatoshiIconTilted scale={0.8} /><Text fontWeight="bold" fontSize="lg">{project.name === 'bitcoineducation' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoinbuilders' ? (0 / 1000000).toFixed(0) : project.name === 'bitcoinculture' ? (0 / 1000000).toFixed(0) : ''} M</Text>
 									</HStack>
 									<Text fontSize="sm" color="#5B5B5B" fontWeight="bold">DISTRIBUTED</Text>
 								</Box>
@@ -95,7 +95,7 @@ export const Grants = ({ project }: { project: IProject }) => {
 
 							</HStack>
 							<Box display="flex" justifyContent="center">
-								<RecipientButton active={project.active} title="Apply" grant={project.title} image={project.media[0]}/>
+								<RecipientButton active={false} title="Apply" grant={project.title} image={project.media[0]}/>
 							</Box>
 						</Box>
 					</Box>
