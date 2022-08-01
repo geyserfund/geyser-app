@@ -20,7 +20,7 @@ export const ProjectMobileMenu = ({ showMobileMenu, fundButtonFunction, handleFu
 && <HStack position="absolute" top={showMobileMenu ? window.innerHeight - 56 : window.innerHeight + 56} transition="all 0.5s ease-in-out" left={0} w="100%" p={2} bg="white" zIndex={100}>
 	<ButtonComponent primary onClick={fundButtonFunction} w="75%">
 		<HStack>
-			<BoltIcon/>	<Text fontSize="xs">Fund campaign</Text>
+			<BoltIcon/>	<Text fontSize="xs">Fund project</Text>
 		</HStack>
 	</ButtonComponent>
 	<ButtonComponent w="25%" onClick={handleFundClick}>
