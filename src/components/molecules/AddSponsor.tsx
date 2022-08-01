@@ -26,7 +26,7 @@ export const AddSponsor = ({
 }: IConnectTwitter) => {
 	const classes = useStyles();
 	const useTitle = 'Become a sponsor';
-	const useDescription = 'Interested in sponsoring this campaign? Click continue to let us know your details and we can quickly add you as a sponsor.';
+	const useDescription = 'Interested in sponsoring this project? Click continue to let us know your details and we can quickly add you as a sponsor.';
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered>
