@@ -116,7 +116,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg" marginRight="5px">
 										<ButtonComponent onClick={() => {
 											history.push('/home');
-										}}>Campaigns</ButtonComponent>
+										}}>Projects</ButtonComponent>
 									</Box>
 									<Box position="relative" border={history.location.pathname === '/grants' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg">
 										<ButtonComponent onClick={() => {

@@ -88,19 +88,19 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 						<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" fontWeight="medium" onClick={handleAddressCopy} color="#2F423E">{name}@geyser.fund</Button>
 					</Tooltip>
 
-					<Tooltip label="View Campaign QR Code" placement="top">
+					<Tooltip label="View Project QR Code" placement="top">
 						<IconButton mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
 							setCopy(false);
 							onOpen();
 							if (imageDownload.length === 0) {
 								setTimeout(() => {
 									capture();
-								}, 1000);
+								}, 2100);
 							}
 						}}/>
 					</Tooltip>
 
-					<Tooltip label={copy ? 'Copied!' : 'Share Campaign'} placement="top" closeOnClick={false}>
+					<Tooltip label={copy ? 'Copied!' : 'Share Project'} placement="top" closeOnClick={false}>
 						<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<ShareIcon/>} aria-label="share" onClick={handleShare}/>
 					</Tooltip>
 				</Box>
@@ -126,12 +126,12 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 			}} size={isMobile ? 'md' : 'xl'} isCentered>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader><Text fontSize="3xl">Campaign QR code</Text></ModalHeader>
+					<ModalHeader><Text fontSize="3xl">Project QR code</Text></ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund campaigns from anywhere.</Text>
+						<Text mb={5} fontWeight="medium">Lightning addresses and QR codes make it possible for anyone to fund projects from anywhere.</Text>
 
-						<Box display="flex" w="100%" p={4} bg="brand.bgGrey" borderRadius="lg" id="lnaddress-qr">
+						<Box display="flex" w="100%" id="lnaddress-qr">
 							<ModalImage image={images[0]}/>
 
 							<Box bg="brand.primary" w="50%" p={5} borderRightRadius="lg" display="flex" justifyContent="center" alignItems="center">
