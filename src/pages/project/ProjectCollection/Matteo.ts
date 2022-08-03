@@ -130,7 +130,7 @@ const projectBlocks: IProjectBlock[] = [
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: '**Bitcoin** is a way of life. **Bitcoiners** share a lot of values and we all have been through the same journey, to meet a **Bitcoiner** is to meet an instant friend. Yet there’s no easy way for us to meet each other in real life.',
+	problem: 'Bitcoin is a way of life. Bitcoiners share a lot of values and we all have been through the same journey, to meet a Bitcoiner is to meet an instant friend. Yet there’s no easy way for us to meet each other in real life.',
 	idea: 'A mobile app that allows Bitcoiners to connect with nearby Bitcoiners. ',
 	ownerIntro: 'My name is Matteo Pellegrini and I’ve been building technology companies since I was 19. In 2016 I discovered Bitcoin and I’ve been going down the rabbit hole since, in 2021 I quit my fiat job and decided to dedicate the rest of my life to my family & Bitcoin. Orange Pill App is my first contribution to the Plebs.',
 	blocks: projectBlocks,
