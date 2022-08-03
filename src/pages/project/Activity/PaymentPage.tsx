@@ -123,7 +123,7 @@ export const PaymentPage = ({
 
 	return (
 		<VStack
-			padding={isMobile ? '10px 10px' : '10px 20px'}
+			padding={isMobile ? '20px 10px' : '20px'}
 			// margin="10px 15px"
 			spacing="12px"
 			width="100%"
@@ -133,10 +133,9 @@ export const PaymentPage = ({
 			backgroundColor="#FFFFFF"
 		>
 			<CloseButton
-				borderRadius="50%"
 				position="absolute"
-				right={isMobile ? '20px' : '5px'}
-				top={isMobile ? 0 : '5px'}
+				right={0}
+				top={0}
 				_hover={{bg: 'none'}}
 				_active={{bg: 'none'}}
 				onClick={handleCloseButton}
