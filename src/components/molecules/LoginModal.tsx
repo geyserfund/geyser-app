@@ -35,8 +35,6 @@ const useStyles = createUseStyles({
 });
 
 const hasTwitterAccount = (user: IUser) => {
-	console.log(user);
-
 	if (!user) {
 		return false;
 	}
@@ -104,11 +102,6 @@ export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
 				setPollAuthStatus(true);
 				getUser();
 				window.open(`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${nextPath}`, '_blank', 'noopener,noreferrer');
-			// 	if (statusRes.status === 400) {
-			// 		console.log('check auth status failed', await statusRes.json());
-			// 	}
-			// } else {
-			// 	console.log('Failed', await response.json());
 			} else {
 				toast({
 					title: 'Something went wrong',
