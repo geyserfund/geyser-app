@@ -89,7 +89,7 @@ export const ProfileProjectCard = ({ title, imgSrc, open, name, className, proje
 			);
 		}
 
-		if ((project.balance * btcRate) >= project.fundingGoal) {
+		if (project.fundingGoal > 0 && (project.balance * btcRate) >= project.fundingGoal) {
 			return (
 				<Box background="brand.primary" padding="2px 8px" borderRadius="4px" width="100%" textAlign="center">
 					<Text width="100%" variant="subtle" color="black" fontSize="12px">
