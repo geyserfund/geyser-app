@@ -1,5 +1,5 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { ProjectBalanceCircularProgress, ProjectBalance, ProjectMobileMenu } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
@@ -14,7 +14,7 @@ import { Countdown } from './Countdown';
 
 interface IInfoPage {
     project: IProject;
-    handleFundClick: () => void;
+    handleViewClick: () => void;
     handleFundProject: () => void;
     loading: boolean;
     btcRate: number;
@@ -24,7 +24,7 @@ interface IInfoPage {
 }
 
 export const InfoPage = ({
-	handleFundClick,
+	handleViewClick,
 	handleFundProject,
 	loading,
 	project,
@@ -37,10 +37,6 @@ export const InfoPage = ({
 	const classes = useStyles({isMobile});
 	const showCountdown = () => project.active && project.expiresAt;
 	const [view, setView] = useState('activity');
-
-	const [scrollPosition, setScrollPosition] = useState(0);
-	const [showMobileMenu, setShowMobileMenu] = useState(true);
-	const scrollDiv = useRef(document.createElement('div'));
 
 	const leaderboardSort = (funderA: IFunder, funderB: IFunder) => {
 		if (funderA.amountFunded > funderB.amountFunded) {
@@ -71,7 +67,6 @@ export const InfoPage = ({
 			overflowY="hidden"
 			position="relative"
 		>
-			<ProjectMobileMenu showMobileMenu={showMobileMenu} fundButtonFunction={handleFundProject} handleFundClick={handleFundClick} viewName="Description" />
 			<FundingStatus open={project.active} />
 			{showCountdown() && <Countdown endDate={project.expiresAt}/>}
 			{project.fundingGoal
@@ -87,6 +82,7 @@ export const InfoPage = ({
 			>
 				Fund this project
 			</ButtonComponent>}
+			<ProjectMobileMenu fundButtonFunction={handleFundProject} handleViewClick={handleViewClick} viewName="Description" />
 			<Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
 				<Box display="flex" marginBottom="10px" w="95%">
 					<Box w="50%">
@@ -102,17 +98,7 @@ export const InfoPage = ({
 						<Box bg={view === 'activity' ? 'lightgrey' : 'darkgrey'} w="100%" h="3px" rounded="lg"></Box>
 					</Box>
 				</Box>
-				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px" ref={scrollDiv}	onScroll={() => {
-					if (isMobile) {
-						if (scrollDiv.current.scrollTop > scrollPosition) {
-							setShowMobileMenu(false);
-						} else {
-							setShowMobileMenu(true);
-						}
-
-						setScrollPosition(scrollDiv.current.scrollTop);
-					}
-				}}>
+				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
 					{ view === 'activity'
 						? fundingTxs.map((fundingTx, index) => (
 							<IdBar key={index} fundingTx={fundingTx} project={project}/>

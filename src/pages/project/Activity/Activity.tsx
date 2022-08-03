@@ -143,7 +143,7 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 		requestFunding(input);
 	};
 
-	const handleFundClick = () => {
+	const handleViewClick = () => {
 		setFadeStarted(true);
 		setDetailOpen(true);
 		setTimeout(() => {
@@ -161,7 +161,7 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 				return <InfoPage
 					{...{
 						project,
-						handleFundClick,
+						handleViewClick,
 						handleFundProject,
 						loading,
 						btcRate,

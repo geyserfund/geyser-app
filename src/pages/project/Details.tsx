@@ -64,7 +64,7 @@ export const Details = ({ project, detailOpen, setDetailOpen, setFundState }: IA
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
-	const handleDescriptionClick = () => {
+	const handleViewClick = () => {
 		setDetailOpen(false);
 		setFadeStarted(true);
 		setTimeout(() => {
@@ -105,7 +105,7 @@ export const Details = ({ project, detailOpen, setDetailOpen, setFundState }: IA
 					setScrollPosition(scrollDiv.current.scrollTop);
 				}
 			}}>
-				<ProjectMobileMenu showMobileMenu={showMobileMenu} fundButtonFunction={handleFundClick} handleFundClick={handleDescriptionClick} viewName="Activity" />
+				<ProjectMobileMenu showMobileMenu={showMobileMenu} fundButtonFunction={handleFundClick} handleViewClick={handleViewClick} viewName="Activity" />
 				<RewardBased project={project}/>
 			</Box>
 		</Box>
