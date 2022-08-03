@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		Cookies.remove('accessToken', cookieOptions);
 		Cookies.remove('refreshToken', cookieOptions);
 		Object.keys(Cookies.get()).forEach(cookieName => {
-			Cookies.remove(cookieName);
+			Cookies.remove(cookieName, cookieOptions);
 		});
 		fetch('auth/logout');
 	};
@@ -58,7 +58,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const [initialLoad, setInitialLoad] = useState(false);
 
 	const [user, setUser] = useState<IUser>(defaultAuthUser);
-	const [getUser, { loading: loadingUser, error, data }] = useLazyQuery(ME);
+	const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
+		onCompleted: (data: any) => {
+			if (data && data.me) {
+				setUser(data.me);
+				setIsLoggedIn(true);
+			}
+		},
+	});
+
 	const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
 
 	useEffect(() => {
@@ -72,16 +80,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, []);
 
 	useEffect(() => {
+		console.log(initialLoad);
+
 		if (initialLoad) {
 			setLoading(loadingUser);
 		}
 	}, [loadingUser]);
-
-	useEffect(() => {
-		if (data && data.me) {
-			setUser(data.me);
-		}
-	}, [data]);
 
 	return (
 		<AuthContext.Provider value={{ user, getUser, setUser, loading, error, isLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>

@@ -40,6 +40,10 @@ const errorLink = onError(({ graphQLErrors,
 	if (graphQLErrors) {
 		for (const err of graphQLErrors) {
 			if (err && err.extensions && err.extensions.code) {
+				// if (err.extensions.code === 'INTERNAL_SERVER_ERROR') {
+				// 	forward(operation);
+				// }
+
 				const refreshToken = Cookies.get('refreshToken');
 				if (err.extensions.code === 'UNAUTHENTICATED' && refreshToken && !onProcess) {
 					return new Observable(observer => {

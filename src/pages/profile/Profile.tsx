@@ -13,6 +13,8 @@ import { IProfileUser, IUserExternalAccount } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
+import { ButtonComponent } from '../../components/ui';
+import { BoltIcon } from '../../components/icons';
 
 const useStyles = createUseStyles({
 	container: {
@@ -46,6 +48,13 @@ const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) =>
 					{account.username}
 				</Button>
 			</Link>);
+		case 'lnurl':
+			return (
+				<Button leftIcon={<BoltIcon />} variant="ghost">
+					{account.username}
+				</Button>
+			);
+
 		default:
 			return null;
 	}
@@ -57,7 +66,7 @@ export const Profile = () => {
 	const history = useHistory();
 	const classes = useStyles();
 
-	const {user} = useAuthContext();
+	const {user, loginOnOpen} = useAuthContext();
 	const [isLargerThan1080] = useMediaQuery('(min-width: 1080px)');
 
 	const params = useParams<{userId: string}>();
@@ -80,7 +89,7 @@ export const Profile = () => {
 	}
 
 	const userProfile: IProfileUser = data && data.user;
-	const privateProfile = user && `${user.id}` === params.userId;
+	const myProfile = user && `${user.id}` === params.userId;
 
 	if (!userProfile || profileLoading) {
 		return (
@@ -117,7 +126,7 @@ export const Profile = () => {
 							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl} />
 							<Text fontWeight={600} fontSize="20px">{userProfile.username}</Text>
 						</HStack>
-						{user.id && user.id === parseInt(userProfile.id)
+						{myProfile
 						&& <Menu>
 							<MenuButton
 								as={Button}
@@ -139,7 +148,22 @@ export const Profile = () => {
 					</HStack>
 					<HStack width="100%">
 						{ userProfile
-							&& userProfile.externalAccounts.map(account => <ProfileExternalAccount key={account.id} account={account}/>)
+							&& userProfile.externalAccounts.map(account => {
+								if (myProfile || account.public) {
+									return <ProfileExternalAccount key={account.id} account={account}/>;
+								}
+							})
+						}
+						{ user.id && user.id === parseInt(userProfile.id)
+							&& <ButtonComponent
+								standard
+								// circular
+								variant="ghost"
+								// marginRight="12px"
+								onClick={loginOnOpen}
+							>
+										Connect more accounts
+							</ButtonComponent>
 						}
 					</HStack>
 				</VStack>
@@ -175,7 +199,7 @@ export const Profile = () => {
 																project={project}
 																imgSrc={project.media[0]}
 																marginLeft="0px !important"
-																privateUser={privateProfile}
+																privateUser={myProfile}
 															/>
 														</WrapItem>
 													);

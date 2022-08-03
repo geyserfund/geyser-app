@@ -23,18 +23,18 @@ export type IFundingStages = 'loading' | 'initial' | 'form' | 'started' | 'compl
 export const loginStages:{
 	loading: ILoginStages;
 	initial: ILoginStages;
-	qr: ILoginStages;
+	lnurl: ILoginStages;
 	connect: ILoginStages;
 	completed: ILoginStages;
 	} = {
 		loading: 'loading',
 		initial: 'initial',
-		qr: 'qr',
+		lnurl: 'lnurl',
 		connect: 'connect',
 		completed: 'completed',
 	};
 
-export type ILoginStages = 'loading' | 'initial' | 'qr' | 'completed' | 'connect'
+export type ILoginStages = 'loading' | 'initial' | 'lnurl' | 'completed' | 'connect'
 
 export const projectTypes = {
 	donation: 'donation' as IProjectType,

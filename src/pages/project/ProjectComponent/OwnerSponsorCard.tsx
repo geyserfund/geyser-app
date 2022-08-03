@@ -155,7 +155,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 										/>
 									</Box>
 									<Box display="flex" justifyContent="center" alignItems="center" paddingTop={1}>
-										<Text textAlign="center" fontWeight="bold" wordBreak="break-all" fontSize={isMobile ? '8px' : '12px'}>{name}@geyser.fund</Text>
+										<Text id="lightning-address" textAlign="center" fontWeight="bold" wordBreak="break-all" fontSize={isMobile ? '8px' : '12px'}>{name}@geyser.fund</Text>
 									</Box>
 								</Box>
 							</Box>

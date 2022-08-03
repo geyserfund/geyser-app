@@ -1,20 +1,22 @@
-/* eslint-disable no-unreachable */
 import { Box, Text } from '@chakra-ui/layout';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import { QRCode } from 'react-qrcode-logo';
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { ButtonComponent, Linkin } from '../ui';
+import { ButtonComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 import { REACT_APP_API_ENDPOINT, ILoginStages, loginStages } from '../../constants';
 import { useLocation } from 'react-router';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
-import { useNotification, isMobileMode } from '../../utils';
+import { useNotification } from '../../utils';
 import LogoDarkGreen from '../../assets/logo-dark-green.svg';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { HStack, Link, Spinner, VStack } from '@chakra-ui/react';
+import { useLazyQuery } from '@apollo/client';
+import { ME } from '../../graphql';
+import { IUser, IUserExternalAccount } from '../../interfaces';
 
 interface ILoginModal {
 	isOpen: boolean,
@@ -32,19 +34,116 @@ const useStyles = createUseStyles({
 	},
 });
 
-const TwitterLogin = ({ nextPath }: { nextPath: string}) => (
-	<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${nextPath}`}>
+const hasTwitterAccount = (user: IUser) => {
+	console.log(user);
+
+	if (!user) {
+		return false;
+	}
+
+	return user.externalAccounts.some((account: IUserExternalAccount) => account.type === 'twitter');
+};
+
+export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
+	const { setUser, loginOnClose } = useAuthContext();
+	const { toast } = useNotification();
+
+	const [getUser, { stopPolling }] = useLazyQuery(ME, {
+		onCompleted: (data: any) => {
+			if (data && data.me) {
+				console.log('user', data.me);
+				const hasTwitter = hasTwitterAccount(data.me);
+				console.log('hasTwitter', hasTwitter);
+
+				if (hasTwitter) {
+					console.log('stopping poll');
+					stopPolling();
+					loginOnClose();
+					setUser(data.me);
+				}
+			}
+		},
+		fetchPolicy: 'cache-and-network',
+		pollInterval: 1000,
+	});
+
+	const [pollAuthStatus, setPollAuthStatus] = useState(false);
+
+	useEffect(() => {
+		if (pollAuthStatus) {
+			const id = setInterval(async () => {
+				const statusRes = await fetch(`${REACT_APP_API_ENDPOINT}/auth/status`, { credentials: 'include' });
+				if (statusRes.status === 200) {
+					const { status: authStatus, reason } = await statusRes.json();
+
+					if (authStatus === 'success') {
+						setPollAuthStatus(false);
+						loginOnClose();
+					} else if (authStatus === 'failed') {
+						stopPolling();
+						setPollAuthStatus(false);
+
+						toast({
+							title: 'Something went wrong',
+							description: `The authentication request failed: ${reason}.`,
+							status: 'error',
+						});
+					}
+				}
+			}, 1000);
+
+			return () => clearInterval(id);
+		}
+	}, [pollAuthStatus]);
+
+	const checkAuthStatus = async () => {
+		try {
+			const response = await fetch(`${REACT_APP_API_ENDPOINT}/auth/auth-token`, { credentials: 'include' });
+
+			if (response.status === 200) {
+				setPollAuthStatus(true);
+			// 	if (statusRes.status === 400) {
+			// 		console.log('check auth status failed', await statusRes.json());
+			// 	}
+			// } else {
+			// 	console.log('Failed', await response.json());
+			}
+		} catch (err) {
+			console.log('err', err);
+		}
+	};
+
+	const handleClick = async () => {
+		getUser();
+		window.open(`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${nextPath}`, '_blank', 'noopener,noreferrer');
+		await checkAuthStatus();
+	};
+
+	return (
 		<ButtonComponent
 			isFullWidth
 			primary
 			standard
-			leftIcon={<Icon as={SiTwitter} />}
-
+			leftIcon={<Icon as={SiTwitter}/>}
+			onClick={handleClick}
 		>
-								Twitter
+			Twitter
 		</ButtonComponent>
-	</Linkin>
-);
+	);
+};
+
+export const LnurlLogin = ({ handleClick }: { handleClick: any}) => (<ButtonComponent
+	isFullWidth
+	primary
+	standard
+	backgroundColor="#ffe600"
+	_hover={{ bg: '#e3c552' }}
+	leftIcon={<Icon as={BsLightningChargeFill} />}
+	onClick={async () => handleClick()}
+>
+									Lightning
+</ButtonComponent>);
+
 export const LoginModal = ({
 	isOpen,
 	onClose,
@@ -53,15 +152,23 @@ export const LoginModal = ({
 }: ILoginModal) => {
 	const location = useLocation();
 	const { toast } = useNotification();
-	const isMobile = isMobileMode();
-
+	const { user, setUser, isLoggedIn } = useAuthContext();
 	const classes = useStyles();
+
 	const [modalTitle, setModalTitle] = useState(title || 'Connect');
-	const useDescription = description || 'Link your twitter account to appear as a project backer when you fund a project.';
+
+	const setDescription = () => {
+		if (isLoggedIn) {
+			return 'Select an account you would like to link to your profile.';
+		}
+
+		return 'Select an authentication method.';
+	};
+
+	const useDescription = description || setDescription();
 	const nextPath = location.pathname || '';
-	// const [showQr, setShowQr] = useState(false);
+
 	const [qrContent, setQrContent] = useState('');
-	const { setUser } = useAuthContext();
 	const [loginState, setLoginState] = useState<ILoginStages>(loginStages.initial);
 
 	const [copy, setcopy] = useState(false);
@@ -74,7 +181,7 @@ export const LoginModal = ({
 	};
 
 	useEffect(() => {
-		if (loginState === 'qr') {
+		if (loginState === 'lnurl') {
 			const id = setInterval(() => {
 				console.log('fetching access-token...');
 				let hasError = false;
@@ -96,8 +203,12 @@ export const LoginModal = ({
 
 						if (user) {
 							setUser(user);
-							setLoginState(loginStages.connect);
-							setModalTitle('Connected!');
+							if (hasTwitterAccount(user)) {
+								onLoginClose();
+							} else {
+								setLoginState(loginStages.connect);
+								setModalTitle('Connected!');
+							}
 						}
 					}).catch(err => {
 						setLoginState(loginStages.initial);
@@ -120,7 +231,7 @@ export const LoginModal = ({
 			.then(({ url }) => {
 				console.log(url);
 				setQrContent(url);
-				setLoginState(loginStages.qr);
+				setLoginState(loginStages.lnurl);
 			})
 			.catch(err => {
 				console.log(err);
@@ -133,12 +244,8 @@ export const LoginModal = ({
 	};
 
 	const renderModalBody = () => {
-		const elem = document.getElementById('lnurl-auth-qr-code');
-		const bounds = elem?.getBoundingClientRect();
-		console.log(bounds);
-
 		switch (loginState) {
-			case 'qr':
+			case 'lnurl':
 				return (
 					<Box justifyContent="center" alignItems="center">
 						<Text>Scan the QR code to connect to your Lightning wallet.</Text>
@@ -190,21 +297,13 @@ export const LoginModal = ({
 				return (
 					<>
 						<Text>{useDescription}</Text>
+						{ !hasTwitterAccount(user)
+							&& <Box className={classes.twitterContainer}>
+								<TwitterLogin nextPath={nextPath}/>
+							</Box>
+						}
 						<Box className={classes.twitterContainer}>
-							<TwitterLogin nextPath={nextPath}/>
-						</Box>
-						<Box className={classes.twitterContainer}>
-							<ButtonComponent
-								isFullWidth
-								primary
-								standard
-								backgroundColor="#ffe600"
-								_hover={{ bg: '#e3c552' }}
-								leftIcon={<Icon as={BsLightningChargeFill} />}
-								onClick={async () => handleLnurlLogin()}
-							>
-									Lightning
-							</ButtonComponent>
+							<LnurlLogin handleClick={handleLnurlLogin}></LnurlLogin>
 						</Box>
 					</>
 				);
