@@ -5,6 +5,8 @@ import Zucco from '../../../assets/zucco.jpg';
 import Lucas from '../../../assets/lucas.jpg';
 import Conor from '../../../assets/conor.jpg';
 import Des from '../../../assets/des.jpg';
+import Prince from '../../../assets/prince.jpg';
+import Crypto from '../../../assets/crypto.jpg';
 
 interface BoardMemberProps {
 image: string,
@@ -27,7 +29,7 @@ const BoardMember = ({image, name, link, handle}:BoardMemberProps) => (
 	</Box>
 );
 
-const boardMembers = [{name: 'Brad Mills', handle: 'bradmillscan', link: 'https://twitter.com/bradmillscan', image: Brad}, {name: 'Giacomo von Zucco', handle: 'giacomozucco', link: 'https://twitter.com/giacomozucco', image: Zucco}, {name: 'Lucas Ferreira', handle: 'lucasdcf', link: 'https://twitter.com/lucasdcf', image: Lucas}, {name: 'Conor Okus', handle: 'ConorOkus', link: 'https://twitter.com/ConorOkus', image: Conor}, {name: 'Desiree Dickerson', handle: 'dickerson_des', link: 'https://twitter.com/dickerson_des', image: Des}];
+const boardMembers = [{name: 'Brad Mills', handle: 'bradmillscan', link: 'https://twitter.com/bradmillscan', image: Brad}, {name: 'Giacomo von Zucco', handle: 'giacomozucco', link: 'https://twitter.com/giacomozucco', image: Zucco}, {name: 'Lucas Ferreira', handle: 'lucasdcf', link: 'https://twitter.com/lucasdcf', image: Lucas}, {name: 'Conor Okus', handle: 'ConorOkus', link: 'https://twitter.com/ConorOkus', image: Conor}, {name: 'Desiree Dickerson', handle: 'dickerson_des', link: 'https://twitter.com/dickerson_des', image: Des}, {name: 'Daniel Prince', handle: 'PrinceySOV', link: 'https://twitter.com/PrinceySOV', image: Prince}, {name: 'cryptograffiti', handle: 'cryptograffiti', link: 'https://twitter.com/cryptograffiti', image: Crypto}];
 
 export const Board = () => (
 	<Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
