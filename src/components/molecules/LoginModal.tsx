@@ -96,27 +96,29 @@ export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
 		}
 	}, [pollAuthStatus]);
 
-	const checkAuthStatus = async () => {
+	const handleClick = async () => {
 		try {
 			const response = await fetch(`${REACT_APP_API_ENDPOINT}/auth/auth-token`, { credentials: 'include' });
 
-			if (response.status === 200) {
+			if (response.status >= 200 && response.status < 400) {
 				setPollAuthStatus(true);
+				getUser();
+				window.open(`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${nextPath}`, '_blank', 'noopener,noreferrer');
 			// 	if (statusRes.status === 400) {
 			// 		console.log('check auth status failed', await statusRes.json());
 			// 	}
 			// } else {
 			// 	console.log('Failed', await response.json());
+			} else {
+				toast({
+					title: 'Something went wrong',
+					description: 'The authentication request failed: could not get authentication token.',
+					status: 'error',
+				});
 			}
 		} catch (err) {
 			console.log('err', err);
 		}
-	};
-
-	const handleClick = async () => {
-		getUser();
-		window.open(`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${nextPath}`, '_blank', 'noopener,noreferrer');
-		await checkAuthStatus();
 	};
 
 	return (

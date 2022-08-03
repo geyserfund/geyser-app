@@ -50,7 +50,7 @@ const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) =>
 			</Link>);
 		case 'lnurl':
 			return (
-				<Button leftIcon={<BoltIcon />} variant="ghost">
+				<Button leftIcon={<BoltIcon />} variant="ghost" fontSize={14}>
 					{account.username}
 				</Button>
 			);
