@@ -135,12 +135,12 @@ export const Home = () => {
 				flexDirection="column"
 				alignItems="flex-start"
 			>
-				{banner
+				{/* banner
 					&& <Box position="relative" marginTop={isMobile ? '15px' : '30px'}>
 						<CloseIcon position="absolute" top="15px" right="15px" cursor="pointer" color="black" onClick={() => hideBannerCached()} />
 						<Image src={GrantsBanner} alt="geyser grants" borderRadius="sm" cursor="pointer" onClick={() => history.push('/grants')} />
 					</Box>
-				}
+				*/}
 				<Box
 					display="flex"
 					flexDirection={isMobile ? 'column-reverse' : 'row'}
