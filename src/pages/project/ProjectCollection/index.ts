@@ -15,6 +15,7 @@ import { BitcoinRacing } from './BitcoinRacing';
 import { BitcoinTwitter } from './BitcoinTwitter';
 import { BinkBankBonk } from './BinkBankBonk';
 import { Rastgelesurf } from './Rastgelesurf';
+import { NoShackles } from './NoShackles';
 
 export interface IProjectData {
 	projectBlocks: IProjectBlock[]
@@ -44,6 +45,7 @@ const ProjectColl: IProjectColl = {
 	[BitcoinTwitter.projectName]: BitcoinTwitter,
 	[BinkBankBonk.projectName]: BinkBankBonk,
 	[Rastgelesurf.projectName]: Rastgelesurf,
+	[NoShackles.projectName]: NoShackles,
 };
 
 export default ProjectColl;
