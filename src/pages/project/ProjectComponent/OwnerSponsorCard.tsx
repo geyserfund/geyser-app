@@ -108,7 +108,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 				<VStack spacing="10px" w="100%">
 					<Image ref={finalRef} src={images[0]} w="100%" maxHeight="40vh" objectFit="cover" borderRadius="md"/>
 
-					<Text fontSize="3xl" fontWeight="bold" textAlign="left" w="100%">{owner.user.username}</Text>
+					<Text fontSize="3xl" fontWeight="bold" textAlign="left" w="100%">{title}</Text>
 
 					{problem && <Text w="100%" fontSize="lg" fontWeight="medium">{problem}</Text>}
 
