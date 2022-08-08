@@ -115,9 +115,17 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 					<Text w="100%" fontSize="lg" fontWeight="medium">{idea}</Text>
 				</VStack>
 
-				{podcast && <Box width="100%" mt={10}>
-					<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={podcast.podcast} />
-				</Box>}
+				{podcast && podcast.podcast && podcast.podcast.includes('soundcloud')
+					? <Box width="100%" mt={10}>
+						<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={podcast.podcast} />
+					</Box>
+					: podcast && podcast.podcast
+						? <Box width="100%" mt={10}>
+							<iframe src={podcast.podcast} width="100%" frameBorder="0" scrolling="no"></iframe>
+						</Box>
+						: <></>
+				}
+
 			</Box>
 
 			<Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={() => {
