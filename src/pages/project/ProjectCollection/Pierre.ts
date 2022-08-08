@@ -59,7 +59,6 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'The last scene will be focused on presenting a future with bitcoin. What would our world look like with Bitcoin. It will cover all aspects of bitcoin’s impact on our world: monetary, inflation, freedom, low time preference and the impacts this can have on consumption and growth, energy, etc. This scene will take inspiration from the short film Bitcoin is Generational Wealth directed by Matt Hornick.',
 		],
-		images: [4],
 		blockType: 'PL',
 	},
 	{
@@ -68,6 +67,7 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'My name is Pierre Corbin and I am the writer, director and producer of the bitcoin documentary “The Great Reset and the Rise of Bitcoin”. I used to be a tech consultant, with an educational background in finance. After finding and understanding bitcoin, I knew I had to try and bring value to the network and to the community. My first attempt in doing so has been through the production of a documentary to help people understand how bitcoin fits in the context of our economical situation.',
 		],
+		images: [4],
 		blockType: 'PL',
 	},
 ];
