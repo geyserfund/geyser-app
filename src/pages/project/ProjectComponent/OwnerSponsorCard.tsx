@@ -71,7 +71,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 			<Box>
 				<HStack alignItems="center">
 					<Link to={`/profile/${owner.user.id}`}>
-						<Avatar width="40px" height="40px" name={owner.user.username} src={owner.user.imageUrl} />
+						<Avatar id="project-avatar" width="40px" height="40px" name={owner.user.username} src={owner.user.imageUrl} />
 					</Link>
 
 					<Link to={`/profile/${owner.user.id}`}>
@@ -108,16 +108,24 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 				<VStack spacing="10px" w="100%">
 					<Image ref={finalRef} src={images[0]} w="100%" maxHeight="40vh" objectFit="cover" borderRadius="md"/>
 
-					<Text fontSize="3xl" fontWeight="bold" textAlign="left" w="100%">{title}</Text>
+					<Text id="project-title" fontSize="3xl" fontWeight="bold" textAlign="left" w="100%">{title}</Text>
 
 					{problem && <Text w="100%" fontSize="lg" fontWeight="medium">{problem}</Text>}
 
 					<Text w="100%" fontSize="lg" fontWeight="medium">{idea}</Text>
 				</VStack>
 
-				{podcast && <Box width="100%" mt={10}>
-					<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={podcast.podcast} />
-				</Box>}
+				{podcast && podcast.podcast && podcast.podcast.includes('soundcloud')
+					? <Box width="100%" mt={10}>
+						<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={podcast.podcast} />
+					</Box>
+					: podcast && podcast.podcast
+						? <Box width="100%" mt={10}>
+							<iframe src={podcast.podcast} width="100%" frameBorder="0" scrolling="no"></iframe>
+						</Box>
+						: <></>
+				}
+
 			</Box>
 
 			<Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={() => {
