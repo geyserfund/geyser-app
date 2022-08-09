@@ -23,6 +23,7 @@ export const colors = {
 	bgStatusProblem: '#FFE9E9',
 	bgStatusIdea: '#DCF7FF',
 	darkerPrimary: '#1BD5B3',
+	error: '#DF3634',
 
 	normalLightGreen: '#1BD5B3',
 	gold: '#fae500',
