@@ -1,5 +1,5 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
-import { CloseButton, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { CloseButton, Tab, TabList, TabPanel, TabPanels, Tabs, IconButton, Link } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import QRCode from 'react-qr-code';
@@ -10,8 +10,9 @@ import { IFundingTx, IFundingAmounts, IProject, IProjectReward } from '../../../
 import { IFundForm } from '../../../hooks';
 import { GiftIcon } from '../../../components/icons';
 import { BsLightning } from 'react-icons/bs';
-import {GiCrossedChains} from 'react-icons/gi';
-import { colors } from '../../../constants';
+import { GiCrossedChains } from 'react-icons/gi';
+import { FaTelegramPlane } from 'react-icons/fa';
+import { colors, GeyserTelegramUrl } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { hasShipping, hasOnChain } from '../../../utils';
 
@@ -216,6 +217,18 @@ export const QrPage = ({
 				</ButtonComponent>
 				<Text ></Text>
 			</Box>}
+
+			<HStack px={1}>
+				<Text>If you’re experiencing any issues with this payment please reach out to us on Telegram.</Text>
+				<Link href={GeyserTelegramUrl} isExternal>
+					<IconButton
+						background={'none'}
+						aria-label="telegram"
+						icon={<FaTelegramPlane fontSize="20px" />}
+						color={'#6C757D'}
+					/>
+				</Link>
+			</HStack>
 
 			<Text fontSize="12px" fontWeight={300}>Your pledge will support an ambitious project that may yet to be developed. There’s a risk that, despite a creator’s best efforts, your reward will not be fulfilled, and we urge you to consider this risk prior to pledging. Geyser is not responsible for project claims or reward fulfillment.</Text>
 
