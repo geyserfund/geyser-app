@@ -10,13 +10,14 @@ import { REACT_APP_API_ENDPOINT, ILoginStages, loginStages } from '../../constan
 import { useLocation } from 'react-router';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
-import { useNotification } from '../../utils';
+import { useNotification, isMobileMode } from '../../utils';
 import LogoDarkGreen from '../../assets/logo-dark-green.svg';
-import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import { HStack, Link, Spinner, VStack } from '@chakra-ui/react';
+import { HStack, Link, VStack, Avatar } from '@chakra-ui/react';
 import { useLazyQuery } from '@apollo/client';
 import { ME } from '../../graphql';
 import { IUser, IUserExternalAccount } from '../../interfaces';
+import Loader from '../ui/Loader';
+import { colors } from '../../constants';
 
 interface ILoginModal {
 	isOpen: boolean,
@@ -42,10 +43,17 @@ const hasTwitterAccount = (user: IUser) => {
 	return user.externalAccounts.some((account: IUserExternalAccount) => account.type === 'twitter');
 };
 
-export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
-	const { setUser, loginOnClose } = useAuthContext();
-	const { toast } = useNotification();
+const hasLnurlAccount = (user: IUser) => {
+	if (!user) {
+		return false;
+	}
 
+	return user.externalAccounts.some((account: IUserExternalAccount) => account.type === 'lnurl');
+};
+
+export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
+	const { setUser } = useAuthContext();
+	const { toast } = useNotification();
 	const [getUser, { stopPolling }] = useLazyQuery(ME, {
 		onCompleted: (data: any) => {
 			if (data && data.me) {
@@ -56,7 +64,6 @@ export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
 				if (hasTwitter) {
 					console.log('stopping poll');
 					stopPolling();
-					loginOnClose();
 					setUser(data.me);
 				}
 			}
@@ -76,7 +83,6 @@ export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
 
 					if (authStatus === 'success') {
 						setPollAuthStatus(false);
-						loginOnClose();
 					} else if (authStatus === 'failed') {
 						stopPolling();
 						setPollAuthStatus(false);
@@ -101,7 +107,7 @@ export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
 			if (response.status >= 200 && response.status < 400) {
 				setPollAuthStatus(true);
 				getUser();
-				window.open(`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=${nextPath}`, '_blank', 'noopener,noreferrer');
+				window.open(`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=/auth/twitter`, '_blank', 'noopener,noreferrer');
 			} else {
 				toast({
 					title: 'Something went wrong',
@@ -149,6 +155,7 @@ export const LoginModal = ({
 	const { toast } = useNotification();
 	const { user, setUser, isLoggedIn } = useAuthContext();
 	const classes = useStyles();
+	const isMobile = isMobileMode();
 
 	const [modalTitle, setModalTitle] = useState(title || 'Connect');
 
@@ -157,7 +164,7 @@ export const LoginModal = ({
 			return 'Select an account you would like to link to your profile.';
 		}
 
-		return 'Select an authentication method.';
+		return 'Connect to launch your idea and to appear as a contributor when you fund an initiative.';
 	};
 
 	const useDescription = description || setDescription();
@@ -177,6 +184,7 @@ export const LoginModal = ({
 
 	useEffect(() => {
 		if (loginState === 'lnurl') {
+			setModalTitle('Connect with Lightning');
 			const id = setInterval(() => {
 				console.log('fetching access-token...');
 				let hasError = false;
@@ -198,12 +206,8 @@ export const LoginModal = ({
 
 						if (user) {
 							setUser(user);
-							if (hasTwitterAccount(user)) {
-								onLoginClose();
-							} else {
-								setLoginState(loginStages.connect);
-								setModalTitle('Connected!');
-							}
+							setLoginState(loginStages.connect);
+							setModalTitle('Connected!');
 						}
 					}).catch(err => {
 						setLoginState(loginStages.initial);
@@ -235,6 +239,7 @@ export const LoginModal = ({
 
 	const onLoginClose = () => {
 		setLoginState(loginStages.initial);
+		setModalTitle('Connect');
 		onClose();
 	};
 
@@ -244,46 +249,60 @@ export const LoginModal = ({
 				return (
 					<Box justifyContent="center" alignItems="center">
 						<Text>Scan the QR code to connect to your Lightning wallet.</Text>
-						<Link href="https://github.com/fiatjaf/lnurl-rfc#lnurl-documents" isExternal color="grey">
-							<Text>
+						<Link href="https://github.com/fiatjaf/lnurl-rfc#lnurl-documents" isExternal fontSize="sm" textDecoration="underline">
+
 								Check if your wallet supports LNURL-auth here.
-							</Text>
+
 						</Link>
-						<VStack marginTop={3} marginBottom={6}>
-							<QRCode
-								qrStyle="dots"
-								logoImage={LogoDarkGreen}
-								logoHeight={30}
-								logoWidth={30}
-								eyeRadius={2}
-								removeQrCodeBehindLogo={true}
-								bgColor="#fff"
-								fgColor="#004236"
-								size={186}
-								value={qrContent}
-								id="lnurl-auth-qr-code"
-								style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-							/>
-							<HStack justifyContent="center" alignItems="center" marginTop={1}>
-								<Spinner size="sm" speed="1s" thickness="1px"/>
-								<Text fontSize={10}>Waiting for authentication to complete...</Text>
+						<VStack marginTop={3} marginBottom={3}>
+							<Box border="4px solid #20ECC7" borderRadius={4}>
+								<QRCode
+									qrStyle="dots"
+									logoImage={LogoDarkGreen}
+									logoHeight={30}
+									logoWidth={30}
+									eyeRadius={2}
+									removeQrCodeBehindLogo={true}
+									bgColor="#fff"
+									fgColor="#004236"
+									size={186}
+									value={qrContent}
+									id="lnurl-auth-qr-code"
+									style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+								/>
+							</Box>
+							<HStack justifyContent="center" alignItems="center" marginTop={3}>
+								<Loader size="lg" />
+								<Text>Waiting to connect...</Text>
 							</HStack>
 						</VStack>
-						<ButtonComponent
-							isFullWidth
-							primary={copy}
-							onClick={handleCopy}
-							leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
-						>
-							{!copy ? 'Copy Authentication Link' : 'Url Copied'}
-						</ButtonComponent>
+						<Box display="flex" justifyContent="between" alignItems="center" border="1px solid lightgrey" borderRadius={4} p={2}>
+							<Text w="75%" color="brand.textGrey" cursor="default">{qrContent.slice(0, isMobile ? 21 : 30)}...</Text>
+							<ButtonComponent
+								w="25%"
+								primary
+								onClick={handleCopy}
+								fontWeight="bold"
+								fontSize="md"
+							>
+								{!copy ? 'Copy' : 'Copied!'}
+							</ButtonComponent>
+
+						</Box>
 					</Box>
 				);
 
 			case 'connect':
 				return (
 					<Box justifyContent="center" alignItems="center">
-						<Text marginBottom={2}>You can also bridge your Geyser activity by linking your Twitter profile.</Text>
+						<Text marginBottom={5}>You connected with Lightning, you can also connect with Twitter to pull your social profile.</Text>
+						<HStack ml="calc(50% - 124px)" w="100%" spacing="25px" mb={5}>
+							<Avatar name={user.username} src={user.imageUrl} />
+							<Box w="200px" display="flex" justifyContent="center" alignItems="center" border="2px solid #20ECC7" borderRadius={4} py={2}>
+								<Icon mr={2} as={BsLightningChargeFill} />
+								<Text>{user.username}</Text>
+							</Box>
+						</HStack>
 						<TwitterLogin nextPath={nextPath}/>
 					</Box>
 				);
@@ -292,10 +311,16 @@ export const LoginModal = ({
 				return (
 					<>
 						<Text>{useDescription}</Text>
-						{ !hasTwitterAccount(user)
-							&& <Box className={classes.twitterContainer}>
-								<TwitterLogin nextPath={nextPath}/>
-							</Box>
+						{ !hasTwitterAccount(user) ? <Box className={classes.twitterContainer}>
+							<TwitterLogin nextPath={nextPath}/>
+						</Box>
+							: <HStack ml="calc(50% - 124px)" w="100%" spacing="25px" my={5}>
+								<Avatar name={user.username} src={user.imageUrl} />
+								<Box w="200px" display="flex" justifyContent="center" alignItems="center" border="2px solid #20ECC7" borderRadius={4} py={2}>
+									<Icon mr={2} as={SiTwitter} />
+									<Text>{user.username}</Text>
+								</Box>
+							</HStack>
 						}
 						<Box className={classes.twitterContainer}>
 							<LnurlLogin handleClick={handleLnurlLogin}></LnurlLogin>
@@ -309,7 +334,7 @@ export const LoginModal = ({
 		<Modal isOpen={isOpen} onClose={onLoginClose}>
 			<ModalOverlay />
 			<ModalContent display="flex" alignItems="center" padding="20px 15px">
-				<ModalHeader><Text fontSize="16px" fontWeight={600}>{modalTitle}</Text></ModalHeader>
+				<ModalHeader><Text fontSize="lg" fontWeight="bold">{modalTitle}</Text></ModalHeader>
 				<ModalCloseButton />
 				<ModalBody >
 					{renderModalBody()}
