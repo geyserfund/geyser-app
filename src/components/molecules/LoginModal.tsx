@@ -27,7 +27,7 @@ interface ILoginModal {
 }
 
 const useStyles = createUseStyles({
-	twitterContainer: {
+	container: {
 		marginTop: '20px',
 		display: 'flex',
 		flexDirection: 'column',
@@ -51,18 +51,14 @@ const hasLnurlAccount = (user: IUser) => {
 	return user.externalAccounts.some((account: IUserExternalAccount) => account.type === 'lnurl');
 };
 
-export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
+export const TwitterLogin = () => {
 	const { setUser } = useAuthContext();
 	const { toast } = useNotification();
 	const [getUser, { stopPolling }] = useLazyQuery(ME, {
 		onCompleted: (data: any) => {
 			if (data && data.me) {
-				console.log('user', data.me);
 				const hasTwitter = hasTwitterAccount(data.me);
-				console.log('hasTwitter', hasTwitter);
-
 				if (hasTwitter) {
-					console.log('stopping poll');
 					stopPolling();
 					setUser(data.me);
 				}
@@ -80,7 +76,6 @@ export const TwitterLogin = ({ nextPath }: { nextPath: string }) => {
 				const statusRes = await fetch(`${REACT_APP_API_ENDPOINT}/auth/status`, { credentials: 'include' });
 				if (statusRes.status === 200) {
 					const { status: authStatus, reason } = await statusRes.json();
-
 					if (authStatus === 'success') {
 						setPollAuthStatus(false);
 					} else if (authStatus === 'failed') {
@@ -145,6 +140,24 @@ export const LnurlLogin = ({ handleClick }: { handleClick: any}) => (<ButtonComp
 									Lightning
 </ButtonComponent>);
 
+interface IAccountConnection {
+	username: string|undefined,
+  avatar: string|undefined,
+  icon: any,
+  key?: string;
+}
+
+export const AccountConnection = ({username, avatar, icon, key}: IAccountConnection) => (
+	<HStack w="100%" spacing="25px" my={5} key={key}>
+		<Avatar name={username} src={avatar} />
+		<Box w="200px" display="flex" justifyContent="center" alignItems="center" border="2px solid #20ECC7" borderRadius={4} py={2}>
+			<Icon mr={2} as={icon} />
+			<Text>{username}</Text>
+		</Box>
+	</HStack>
+
+);
+
 export const LoginModal = ({
 	isOpen,
 	onClose,
@@ -160,6 +173,10 @@ export const LoginModal = ({
 	const [modalTitle, setModalTitle] = useState(title || 'Connect');
 
 	const setDescription = () => {
+		if (hasTwitterAccount(user) && hasLnurlAccount(user)) {
+			return 'You connected via Twitter and Lightning.';
+		}
+
 		if (isLoggedIn) {
 			return 'Select an account you would like to link to your profile.';
 		}
@@ -168,7 +185,6 @@ export const LoginModal = ({
 	};
 
 	const useDescription = description || setDescription();
-	const nextPath = location.pathname || '';
 
 	const [qrContent, setQrContent] = useState('');
 	const [loginState, setLoginState] = useState<ILoginStages>(loginStages.initial);
@@ -183,10 +199,15 @@ export const LoginModal = ({
 	};
 
 	useEffect(() => {
+		if (hasTwitterAccount(user) || hasLnurlAccount(user)) {
+			setModalTitle('Connected!');
+		}
+	}, [user]);
+
+	useEffect(() => {
 		if (loginState === 'lnurl') {
 			setModalTitle('Connect with Lightning');
 			const id = setInterval(() => {
-				console.log('fetching access-token...');
 				let hasError = false;
 
 				fetch(`${REACT_APP_API_ENDPOINT}/auth/access-token`, { credentials: 'include'})
@@ -228,7 +249,6 @@ export const LoginModal = ({
 		fetch(`${REACT_APP_API_ENDPOINT}/auth/lnurl`, { credentials: 'include' })
 			.then(response => response.json())
 			.then(({ url }) => {
-				console.log(url);
 				setQrContent(url);
 				setLoginState(loginStages.lnurl);
 			})
@@ -250,9 +270,7 @@ export const LoginModal = ({
 					<Box justifyContent="center" alignItems="center">
 						<Text>Scan the QR code to connect to your Lightning wallet.</Text>
 						<Link href="https://github.com/fiatjaf/lnurl-rfc#lnurl-documents" isExternal fontSize="sm" textDecoration="underline">
-
 								Check if your wallet supports LNURL-auth here.
-
 						</Link>
 						<VStack marginTop={3} marginBottom={3}>
 							<Box border="4px solid #20ECC7" borderRadius={4}>
@@ -287,7 +305,6 @@ export const LoginModal = ({
 							>
 								{!copy ? 'Copy' : 'Copied!'}
 							</ButtonComponent>
-
 						</Box>
 					</Box>
 				);
@@ -295,15 +312,17 @@ export const LoginModal = ({
 			case 'connect':
 				return (
 					<Box justifyContent="center" alignItems="center">
-						<Text marginBottom={5}>You connected with Lightning, you can also connect with Twitter to pull your social profile.</Text>
-						<HStack ml="calc(50% - 124px)" w="100%" spacing="25px" mb={5}>
-							<Avatar name={user.username} src={user.imageUrl} />
-							<Box w="200px" display="flex" justifyContent="center" alignItems="center" border="2px solid #20ECC7" borderRadius={4} py={2}>
-								<Icon mr={2} as={BsLightningChargeFill} />
-								<Text>{user.username}</Text>
-							</Box>
-						</HStack>
-						<TwitterLogin nextPath={nextPath}/>
+						<Text marginBottom={5}>{!hasTwitterAccount(user) ? 'You connected with Lightning, you can also connect with Twitter to pull your social profile.' : 'You connected via Lightning and Twitter.'}</Text>
+						{user.externalAccounts.filter(account => account.type === 'lnurl').map(account => (
+							<AccountConnection key={account.id} username={user?.externalAccounts?.find(account => account.type === 'lnurl')?.username} avatar={undefined} icon={BsLightningChargeFill}/>
+						))}
+						{
+							!hasTwitterAccount(user) ? <TwitterLogin/>
+								: <>
+									<AccountConnection username={user?.externalAccounts?.find(account => account.type === 'twitter')?.username} avatar={user.imageUrl} icon={SiTwitter}/>
+									<ButtonComponent w="100%" standard onClick={onLoginClose}>Close</ButtonComponent>
+								</>
+						}
 					</Box>
 				);
 
@@ -311,20 +330,21 @@ export const LoginModal = ({
 				return (
 					<>
 						<Text>{useDescription}</Text>
-						{ !hasTwitterAccount(user) ? <Box className={classes.twitterContainer}>
-							<TwitterLogin nextPath={nextPath}/>
+						{ !hasTwitterAccount(user) ? <Box className={classes.container}>
+							<TwitterLogin/>
 						</Box>
-							: <HStack ml="calc(50% - 124px)" w="100%" spacing="25px" my={5}>
-								<Avatar name={user.username} src={user.imageUrl} />
-								<Box w="200px" display="flex" justifyContent="center" alignItems="center" border="2px solid #20ECC7" borderRadius={4} py={2}>
-									<Icon mr={2} as={SiTwitter} />
-									<Text>{user.username}</Text>
-								</Box>
-							</HStack>
+							: <AccountConnection username={user?.externalAccounts?.find(account => account.type === 'twitter')?.username} avatar={user.imageUrl} icon={SiTwitter}/>
 						}
-						<Box className={classes.twitterContainer}>
+						{ !hasLnurlAccount(user) ? <Box className={classes.container}>
 							<LnurlLogin handleClick={handleLnurlLogin}></LnurlLogin>
 						</Box>
+							: <>
+								{user.externalAccounts.filter(account => account.type === 'lnurl').map(account => (
+									<AccountConnection key={account.id} username={account.username} avatar={undefined} icon={BsLightningChargeFill} />
+								))}
+								<ButtonComponent w="100%" standard onClick={onLoginClose}>Close</ButtonComponent>
+							</>
+						}
 					</>
 				);
 		}
