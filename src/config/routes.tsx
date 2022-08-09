@@ -13,6 +13,7 @@ import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
 import { LaunchIdea } from '../pages/launchIdea';
 import { Profile } from '../pages/profile';
+import { TwitterSuccess } from '../pages/auth';
 import { REACT_APP_API_ENDPOINT } from '../constants';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
@@ -62,6 +63,9 @@ export const Router = () => {
 							window.location.replace(`${REACT_APP_API_ENDPOINT}/.well-known/lnurlp/${username}`);
 							return null;
 						}}>
+						</Route>
+						<Route path="/auth/twitter">
+							<TwitterSuccess />
 						</Route>
 						<Route path="/grants">
 							<GrantsLanding />
