@@ -96,7 +96,6 @@ export const Subscribe = ({isOpen, onClose, style, interest, parentState, titleS
 				status: 'success',
 			});
 		} catch (error) {
-			console.log('checking error', error);
 			toast({
 				title: 'Something went wrong',
 				description: 'Please try again',

@@ -73,9 +73,7 @@ export const LaunchIdea = () => {
 			}];
 			const value = await createCreatorRecord({records});
 			setSubmitted(true);
-			console.log('checking response value', value);
 		} catch (error) {
-			console.log('checking  error', error);
 			toast({
 				title: 'Something went wrong',
 				description: 'Please try again',
