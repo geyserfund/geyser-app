@@ -20,7 +20,7 @@ interface IOwnerSponsorCard {
 
 function ModalProjectImage({ image }:{image: string}) {
 	return (
-		<Box borderLeftRadius="lg" backgroundImage={image} w="50%" backgroundSize="cover" id="modal-image"/>
+		<Box borderLeftRadius="lg" backgroundImage={image} w="50%" backgroundSize="cover" backgroundPosition="center" id="modal-image"/>
 	);
 }
 
