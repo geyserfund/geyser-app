@@ -7,17 +7,18 @@ import { ButtonComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 import { REACT_APP_API_ENDPOINT, ILoginStages, loginStages } from '../../constants';
-import { useLocation } from 'react-router';
+import { useLocation, useHistory } from 'react-router';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
 import { useNotification, isMobileMode } from '../../utils';
 import LogoDarkGreen from '../../assets/logo-dark-green.svg';
-import { HStack, Link, VStack, Avatar } from '@chakra-ui/react';
+import { HStack, Link, VStack, Avatar, IconButton } from '@chakra-ui/react';
 import { useLazyQuery } from '@apollo/client';
 import { ME } from '../../graphql';
 import { IUser, IUserExternalAccount } from '../../interfaces';
 import Loader from '../ui/Loader';
 import { colors } from '../../constants';
+import { SmallCloseIcon } from '@chakra-ui/icons';
 
 interface ILoginModal {
 	isOpen: boolean,
@@ -137,7 +138,7 @@ export const LnurlLogin = ({ handleClick }: { handleClick: any}) => (<ButtonComp
 	leftIcon={<Icon as={BsLightningChargeFill} />}
 	onClick={async () => handleClick()}
 >
-									Lightning
+Lightning
 </ButtonComponent>);
 
 interface IAccountConnection {
@@ -145,15 +146,23 @@ interface IAccountConnection {
   avatar: string|undefined,
   icon: any,
   key?: string;
+  manage?: boolean
 }
 
-export const AccountConnection = ({username, avatar, icon, key}: IAccountConnection) => (
+export const AccountConnection = ({username, avatar, icon, key, manage}: IAccountConnection) => (
 	<HStack w="100%" spacing="25px" my={5} key={key}>
-		<Avatar name={username} src={avatar} />
+		{!manage
+		&& <Avatar name={username} src={avatar} />}
 		<Box w="200px" display="flex" justifyContent="center" alignItems="center" border="2px solid #20ECC7" borderRadius={4} py={2}>
 			<Icon mr={2} as={icon} />
 			<Text>{username}</Text>
 		</Box>
+		{manage && <IconButton
+			size="sm"
+			background={'none'}
+			aria-label="disconnect"
+			icon={<SmallCloseIcon fontSize="20px" />}
+		/>}
 	</HStack>
 
 );
@@ -169,8 +178,9 @@ export const LoginModal = ({
 	const { user, setUser, isLoggedIn } = useAuthContext();
 	const classes = useStyles();
 	const isMobile = isMobileMode();
+	const history = useHistory();
 
-	const [modalTitle, setModalTitle] = useState(title || 'Connect');
+	const [modalTitle, setModalTitle] = useState(title || (history.location.pathname === `/profile/${user.id}` ? 'Manage accounts' : 'Connect'));
 
 	const setDescription = () => {
 		if (hasTwitterAccount(user) && hasLnurlAccount(user)) {
@@ -199,10 +209,10 @@ export const LoginModal = ({
 	};
 
 	useEffect(() => {
-		if (hasTwitterAccount(user) || hasLnurlAccount(user)) {
-			setModalTitle('Connected!');
+		if (window.location.pathname === `/profile/${user.id}`) {
+			setModalTitle('Manage accounts');
 		}
-	}, [user]);
+	}, [window.location.pathname]);
 
 	useEffect(() => {
 		if (loginState === 'lnurl') {
@@ -220,6 +230,7 @@ export const LoginModal = ({
 					})
 					.then(response => {
 						if (hasError) {
+							setModalTitle('Please try again.');
 							throw new Error(response.reason);
 						}
 
@@ -227,12 +238,12 @@ export const LoginModal = ({
 
 						if (user) {
 							setUser(user);
-							setLoginState(loginStages.connect);
+							setLoginState(history.location.pathname === `/profile/${user.id}` ? loginStages.initial : loginStages.connect);
 							setModalTitle('Connected!');
 						}
 					}).catch(err => {
 						setLoginState(loginStages.initial);
-
+						setModalTitle('Please try again.');
 						toast({
 							title: 'Something went wrong',
 							description: `The authentication request failed: ${err.message}.`,
@@ -259,7 +270,7 @@ export const LoginModal = ({
 
 	const onLoginClose = () => {
 		setLoginState(loginStages.initial);
-		setModalTitle('Connect');
+		setModalTitle(window.location.pathname === `/profile/${user.id}` ? 'Manage accounts' : 'Connect');
 		onClose();
 	};
 
@@ -329,20 +340,47 @@ export const LoginModal = ({
 			default:
 				return (
 					<>
-						<Text>{useDescription}</Text>
-						{ !hasTwitterAccount(user) ? <Box className={classes.container}>
-							<TwitterLogin/>
-						</Box>
-							: <AccountConnection username={user?.externalAccounts?.find(account => account.type === 'twitter')?.username} avatar={user.imageUrl} icon={SiTwitter}/>
-						}
-						{ !hasLnurlAccount(user) ? <Box className={classes.container}>
-							<LnurlLogin handleClick={handleLnurlLogin}></LnurlLogin>
-						</Box>
+
+						{history.location.pathname === `/profile/${user.id}`
+							? <>
+								<Box borderBottom="1px solid lightgrey" pb={5}>
+									<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
+									<Text color="brand.textGrey2">Connect more profiles.</Text>
+									{!hasTwitterAccount(user) && <Box className={classes.container}>
+										<TwitterLogin/>
+									</Box>
+									}
+									<Box className={classes.container}>
+										<LnurlLogin handleClick={handleLnurlLogin}></LnurlLogin>
+									</Box>
+								</Box>
+								<Box>
+									<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mt={4} mb={1}>Disconnect</Text>
+									<Text color="brand.textGrey2">Disconnect accounts you&apos;re logged into.</Text>
+									{hasTwitterAccount(user) && <AccountConnection manage={true} username={user?.externalAccounts?.find(account => account.type === 'twitter')?.username} avatar={user.imageUrl} icon={SiTwitter}/>
+									}
+									{user.externalAccounts.filter(account => account.type === 'lnurl').map(account => (
+										<AccountConnection key={account.id} manage={true} username={account.username} avatar={undefined} icon={BsLightningChargeFill} />
+									))}
+								</Box>
+							</>
 							: <>
-								{user.externalAccounts.filter(account => account.type === 'lnurl').map(account => (
-									<AccountConnection key={account.id} username={account.username} avatar={undefined} icon={BsLightningChargeFill} />
-								))}
-								<ButtonComponent w="100%" standard onClick={onLoginClose}>Close</ButtonComponent>
+								<Text>{useDescription}</Text>
+								{!hasTwitterAccount(user) ? <Box className={classes.container}>
+									<TwitterLogin/>
+								</Box>
+									: <AccountConnection username={user?.externalAccounts?.find(account => account.type === 'twitter')?.username} avatar={user.imageUrl} icon={SiTwitter}/>
+								}
+								{!hasLnurlAccount(user) ? <Box className={classes.container}>
+									<LnurlLogin handleClick={handleLnurlLogin}></LnurlLogin>
+								</Box>
+									: <>
+										{user.externalAccounts.filter(account => account.type === 'lnurl').map(account => (
+											<AccountConnection key={account.id} username={account.username} avatar={undefined} icon={BsLightningChargeFill} />
+										))}
+										<ButtonComponent w="100%" standard onClick={onLoginClose}>Close</ButtonComponent>
+									</>
+								}
 							</>
 						}
 					</>

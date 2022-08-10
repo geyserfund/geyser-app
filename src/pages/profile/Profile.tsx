@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 /* eslint-disable radix */
 import { useLazyQuery } from '@apollo/client';
-import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem, IconButton } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
@@ -11,10 +11,9 @@ import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../compo
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { IProfileUser, IUserExternalAccount } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
-import { ButtonComponent } from '../../components/ui';
-import { BoltIcon } from '../../components/icons';
+import { BsLightningChargeFill } from 'react-icons/bs';
 
 const useStyles = createUseStyles({
 	container: {
@@ -36,21 +35,22 @@ const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) =>
 	switch (type) {
 		case 'twitter':
 			return (
-				<Link href={`https://twitter.com/${username}`} isExternal style={{ textDecoration: 'none' }}>
+				<Link href={`https://twitter.com/${username}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
 					<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
 						{account.username}
 					</Button>
 				</Link>
 			);
 		case 'Fountain':
-			return (<Link href={`https://www.fountain.fm/${account.username}`} isExternal style={{ textDecoration: 'none' }}>
-				<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
-					{account.username}
-				</Button>
-			</Link>);
+			return (
+				<Link href={`https://www.fountain.fm/${account.username}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
+					<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
+						{account.username}
+					</Button>
+				</Link>);
 		case 'lnurl':
 			return (
-				<Button leftIcon={<BoltIcon />} variant="ghost" fontSize={14}>
+				<Button leftIcon={<BsLightningChargeFill />} variant="ghost" fontSize={14} cursor="default" mr={2} mb={2}>
 					{account.username}
 				</Button>
 			);
@@ -146,7 +146,7 @@ export const Profile = () => {
 						</Menu>
 						}
 					</HStack>
-					<HStack width="100%">
+					<Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
 						{ userProfile
 							&& userProfile.externalAccounts.map(account => {
 								if (myProfile || account.public) {
@@ -155,17 +155,19 @@ export const Profile = () => {
 							})
 						}
 						{ user.id && user.id === parseInt(userProfile.id)
-							&& <ButtonComponent
-								standard
-								// circular
-								variant="ghost"
-								// marginRight="12px"
+							?	<IconButton
+								size="sm"
+								background={'none'}
+								aria-label="connect"
+								icon={<SettingsIcon fontSize="20px" />}
+								border="1px solid lightgrey"
 								onClick={loginOnOpen}
-							>
-										Connect more accounts
-							</ButtonComponent>
+								mr={2}
+								mb={2}
+							/>
+							: <></>
 						}
-					</HStack>
+					</Box>
 				</VStack>
 				<Box width="100%">
 					<Tabs variant="line" colorScheme="brand.textGrey" defaultIndex={userProfile && userProfile.ownerOf.length === 0 ? 1 : 0}>
