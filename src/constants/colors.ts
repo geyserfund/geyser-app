@@ -4,6 +4,7 @@ export const colors = {
 	textBlack: '#000000',
 	textWhite: '#FFFFFF',
 	textGrey: '#6E6E6E',
+	textGrey2: '#1A1A1A',
 	bgWhite: '#FFFFFF',
 	bgDark: '#393939',
 	bgGrey: '#F4F4F4',
@@ -23,6 +24,7 @@ export const colors = {
 	bgStatusProblem: '#FFE9E9',
 	bgStatusIdea: '#DCF7FF',
 	darkerPrimary: '#1BD5B3',
+	error: '#DF3634',
 
 	normalLightGreen: '#1BD5B3',
 	gold: '#fae500',

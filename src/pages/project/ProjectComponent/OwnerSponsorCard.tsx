@@ -20,7 +20,7 @@ interface IOwnerSponsorCard {
 
 function ModalProjectImage({ image }:{image: string}) {
 	return (
-		<Box borderLeftRadius="lg" backgroundImage={image} w="50%" backgroundSize="cover" id="modal-image"/>
+		<Box borderLeftRadius="lg" backgroundImage={image} w="50%" backgroundSize="cover" backgroundPosition="center" id="modal-image"/>
 	);
 }
 
@@ -164,7 +164,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 										/>
 									</Box>
 									<Box display="flex" justifyContent="center" alignItems="center" paddingTop={1}>
-										<Text textAlign="center" fontWeight="bold" wordBreak="break-all" fontSize={isMobile ? '8px' : '12px'}>{name}@geyser.fund</Text>
+										<Text id="lightning-address" textAlign="center" fontWeight="bold" wordBreak="break-all" fontSize={isMobile ? '8px' : '12px'}>{name}@geyser.fund</Text>
 									</Box>
 								</Box>
 							</Box>

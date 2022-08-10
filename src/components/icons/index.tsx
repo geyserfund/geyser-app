@@ -79,7 +79,7 @@ export const MedalIcon = (props: ImageProps) => (
 	</Box>
 );
 
-export const LighteningIcon = (props: ImageProps) => (
+export const LightningIcon = (props: ImageProps) => (
 	<Box padding="3px 0px">
 		<Image height="20px" width="20px" src={LighteningPng} alt="lightening" {...props} />
 	</Box>
