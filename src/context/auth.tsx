@@ -19,10 +19,11 @@ const defaultContext = {
 	loading: false,
 	error: undefined,
 	logout: () => { },
-	twitterisOpen: false,
-	twitterOnOpen: () => { },
-	twitterOnClose: () => { },
+	loginIsOpen: false,
+	loginOnOpen: () => { },
+	loginOnClose: () => { },
 	getUser: () => { },
+	setUser: () => { },
 };
 
 interface IAuthContext {
@@ -31,10 +32,11 @@ interface IAuthContext {
 	loading: boolean,
 	error?: ApolloError,
 	logout: any
-	twitterisOpen: boolean
-	twitterOnOpen: () => void
-	twitterOnClose: () => void
+	loginIsOpen: boolean
+	loginOnOpen: () => void
+	loginOnClose: () => void
 	getUser: any
+	setUser: any
 }
 
 export const AuthContext = createContext<IAuthContext>(defaultContext);
@@ -46,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		Cookies.remove('accessToken', cookieOptions);
 		Cookies.remove('refreshToken', cookieOptions);
 		Object.keys(Cookies.get()).forEach(cookieName => {
-			Cookies.remove(cookieName);
+			Cookies.remove(cookieName, cookieOptions);
 		});
 		fetch('auth/logout');
 	};
@@ -56,8 +58,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const [initialLoad, setInitialLoad] = useState(false);
 
 	const [user, setUser] = useState<IUser>(defaultAuthUser);
-	const [getUser, { loading: loadingUser, error, data }] = useLazyQuery(ME);
-	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
+	const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
+		onCompleted: (data: any) => {
+			if (data && data.me) {
+				setUser(data.me);
+				setIsLoggedIn(true);
+			}
+		},
+	});
+
+	const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
 
 	useEffect(() => {
 		try {
@@ -75,14 +85,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [loadingUser]);
 
-	useEffect(() => {
-		if (data && data.me) {
-			setUser(data.me);
-		}
-	}, [data]);
-
 	return (
-		<AuthContext.Provider value={{ user, getUser, loading, error, isLoggedIn, logout, twitterisOpen, twitterOnOpen, twitterOnClose }}>
+		<AuthContext.Provider value={{ user, getUser, setUser, loading, error, isLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>
 			{children}
 		</AuthContext.Provider>
 	);

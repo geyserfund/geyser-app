@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 /* eslint-disable radix */
 import { useLazyQuery } from '@apollo/client';
-import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem, IconButton } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
@@ -11,8 +11,9 @@ import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../compo
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { IProfileUser, IUserExternalAccount } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
+import { BsLightningChargeFill } from 'react-icons/bs';
 
 const useStyles = createUseStyles({
 	container: {
@@ -34,18 +35,26 @@ const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) =>
 	switch (type) {
 		case 'twitter':
 			return (
-				<Link href={`https://twitter.com/${username}`} isExternal style={{ textDecoration: 'none' }}>
+				<Link href={`https://twitter.com/${username}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
 					<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
 						{account.username}
 					</Button>
 				</Link>
 			);
 		case 'Fountain':
-			return (<Link href={`https://www.fountain.fm/${account.username}`} isExternal style={{ textDecoration: 'none' }}>
-				<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
+			return (
+				<Link href={`https://www.fountain.fm/${account.username}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
+					<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
+						{account.username}
+					</Button>
+				</Link>);
+		case 'lnurl':
+			return (
+				<Button leftIcon={<BsLightningChargeFill />} variant="ghost" fontSize={14} cursor="default" mr={2} mb={2}>
 					{account.username}
 				</Button>
-			</Link>);
+			);
+
 		default:
 			return null;
 	}
@@ -57,7 +66,7 @@ export const Profile = () => {
 	const history = useHistory();
 	const classes = useStyles();
 
-	const {user} = useAuthContext();
+	const {user, loginOnOpen} = useAuthContext();
 	const [isLargerThan1080] = useMediaQuery('(min-width: 1080px)');
 
 	const params = useParams<{userId: string}>();
@@ -80,7 +89,7 @@ export const Profile = () => {
 	}
 
 	const userProfile: IProfileUser = data && data.user;
-	const privateProfile = user && `${user.id}` === params.userId;
+	const myProfile = user && `${user.id}` === params.userId;
 
 	if (!userProfile || profileLoading) {
 		return (
@@ -117,7 +126,7 @@ export const Profile = () => {
 							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl} />
 							<Text fontWeight={600} fontSize="20px">{userProfile.username}</Text>
 						</HStack>
-						{user.id && user.id === parseInt(userProfile.id)
+						{myProfile
 						&& <Menu>
 							<MenuButton
 								as={Button}
@@ -137,11 +146,28 @@ export const Profile = () => {
 						</Menu>
 						}
 					</HStack>
-					<HStack width="100%">
+					<Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
 						{ userProfile
-							&& userProfile.externalAccounts.map(account => <ProfileExternalAccount key={account.id} account={account}/>)
+							&& userProfile.externalAccounts.map(account => {
+								if (myProfile || account.public) {
+									return <ProfileExternalAccount key={account.id} account={account}/>;
+								}
+							})
 						}
-					</HStack>
+						{ user.id && user.id === parseInt(userProfile.id)
+							?	<IconButton
+								size="sm"
+								background={'none'}
+								aria-label="connect"
+								icon={<SettingsIcon fontSize="20px" />}
+								border="1px solid lightgrey"
+								onClick={loginOnOpen}
+								mr={2}
+								mb={2}
+							/>
+							: <></>
+						}
+					</Box>
 				</VStack>
 				<Box width="100%">
 					<Tabs variant="line" colorScheme="brand.textGrey" defaultIndex={userProfile && userProfile.ownerOf.length === 0 ? 1 : 0}>
@@ -175,7 +201,7 @@ export const Profile = () => {
 																project={project}
 																imgSrc={project.media[0]}
 																marginLeft="0px !important"
-																privateUser={privateProfile}
+																privateUser={myProfile}
 															/>
 														</WrapItem>
 													);

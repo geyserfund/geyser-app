@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ConnectTwitter } from '../../../components/molecules';
+import { LoginModal } from '../../../components/molecules';
 import {
 	IFundingTx,
 	IProject,
@@ -42,8 +42,10 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 
 	// required for knowing the rewards and the funds
 	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
+
 	const {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = fundingFlow;
-	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
+	const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
+
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
@@ -86,7 +88,7 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 
 	useEffect(() => {
 		if (!state.anonymous && (!user || !user.id)) {
-			twitterOnOpen();
+			loginOnOpen();
 			setState('anonymous', true);
 		}
 	}, [state.anonymous]);
@@ -229,9 +231,9 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 			>
 				{renderActivity()}
 			</Box>
-			<ConnectTwitter
-				isOpen={twitterisOpen}
-				onClose={twitterOnClose}
+			<LoginModal
+				isOpen={loginIsOpen}
+				onClose={loginOnClose}
 			/>
 		</>
 	);

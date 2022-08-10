@@ -11,6 +11,7 @@ query Me {
       type
       id
       username
+      public
     }
   }
 }
@@ -26,6 +27,7 @@ query User($where: UserQueryInput) {
       type
       id
       username
+      public
     }
     contributions {
       isAmbassador
