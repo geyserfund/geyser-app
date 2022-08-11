@@ -6,7 +6,7 @@ export interface IUser {
 }
 
 export interface IProfileUser {
-        id: string;
+        id: number;
         username: string;
         imageUrl: string;
         externalAccounts: IUserExternalAccount[];

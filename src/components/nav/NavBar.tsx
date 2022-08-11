@@ -12,7 +12,7 @@ import { AuthModal } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
-// Import { StartCrowdFundUrl } from '../../constants';
+import { getRandomOrb } from '../../utils';
 import { useLocation, useHistory } from 'react-router';
 import { customHistory } from '../../config';
 
@@ -97,7 +97,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 								user.id
 									? <ButtonComponent
 										className={classes.userInfo}
-										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl ? user.imageUrl : getRandomOrb(user.id)} />}
 										standard
 										onClick={handleProfileClick}
 										border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}

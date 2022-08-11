@@ -10,7 +10,7 @@ import { useHistory, useParams } from 'react-router';
 import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../components/molecules';
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { IProfileUser, IUserExternalAccount } from '../../interfaces';
-import { isDarkMode, isMobileMode } from '../../utils';
+import { isDarkMode, isMobileMode, getRandomOrb } from '../../utils';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
 import { BsLightningChargeFill } from 'react-icons/bs';
@@ -123,7 +123,7 @@ export const Profile = () => {
 				<VStack width="100%">
 					<HStack width="100%" justifyContent="space-between">
 						<HStack spacing="20px">
-							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl} />
+							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl ? userProfile.imageUrl : getRandomOrb(userProfile.id)} />
 							<Text fontWeight={600} fontSize="20px">{userProfile.username}</Text>
 						</HStack>
 						{myProfile
@@ -154,7 +154,7 @@ export const Profile = () => {
 								}
 							})
 						}
-						{ user.id && user.id === parseInt(userProfile.id)
+						{ user.id && user.id === userProfile.id
 							?	<IconButton
 								size="sm"
 								background={'none'}
