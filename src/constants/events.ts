@@ -20,21 +20,23 @@ export const stageList: IFundingStages[] = ['loading', 'initial', 'form', 'start
 
 export type IFundingStages = 'loading' | 'initial' | 'form' | 'started' | 'completed' | 'canceled'
 
-export const loginStages:{
-	loading: ILoginStages;
-	initial: ILoginStages;
-	lnurl: ILoginStages;
-	connect: ILoginStages;
-	completed: ILoginStages;
+export const authModalStates:{
+	loading: IAuthModalState;
+	initial: IAuthModalState;
+	lnurl: IAuthModalState;
+	connect: IAuthModalState;
+	completed: IAuthModalState;
+	manage: IAuthModalState;
 	} = {
 		loading: 'loading',
 		initial: 'initial',
 		lnurl: 'lnurl',
 		connect: 'connect',
 		completed: 'completed',
+		manage: 'manage',
 	};
 
-export type ILoginStages = 'loading' | 'initial' | 'lnurl' | 'completed' | 'connect'
+export type IAuthModalState = 'loading' | 'initial' | 'lnurl' | 'completed' | 'connect' | 'manage'
 
 export const projectTypes = {
 	donation: 'donation' as IProjectType,

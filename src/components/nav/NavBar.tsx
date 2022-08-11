@@ -8,7 +8,7 @@ import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
 import { isDarkMode, isMobileMode, isMediumScreen } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
-import { LoginModal } from '../molecules';
+import { AuthModal } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
@@ -62,6 +62,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 		history.push(`/profile/${user.id}`);
 	};
 
+	console.log(user);
 	return (
 		<>
 			<Box
@@ -185,7 +186,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 					</ModalBody>
 				</ModalContent>
 			</Modal>
-			<LoginModal isOpen={loginIsOpen} onClose={loginOnClose} />
+			<AuthModal isOpen={loginIsOpen} onClose={loginOnClose} />
 		</>
 	);
 };

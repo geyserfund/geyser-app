@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { ApolloError, useLazyQuery } from '@apollo/client';
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, Dispatch, SetStateAction } from 'react';
 import { ME } from '../graphql';
 import { IUser } from '../interfaces';
 import { cookieOptions } from '../constants';
@@ -22,6 +22,7 @@ const defaultContext = {
 	loginIsOpen: false,
 	loginOnOpen: () => { },
 	loginOnClose: () => { },
+	setIsLoggedIn: () => { },
 	getUser: () => { },
 	setUser: () => { },
 };
@@ -35,6 +36,7 @@ interface IAuthContext {
 	loginIsOpen: boolean
 	loginOnOpen: () => void
 	loginOnClose: () => void
+	setIsLoggedIn: Dispatch<SetStateAction<boolean>>,
 	getUser: any
 	setUser: any
 }
@@ -80,13 +82,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, []);
 
 	useEffect(() => {
+		if (user.id === 0) {
+			setIsLoggedIn(false);
+		}
+
+		setIsLoggedIn(true);
+	}, [user]);
+
+	useEffect(() => {
 		if (initialLoad) {
 			setLoading(loadingUser);
 		}
 	}, [loadingUser]);
 
 	return (
-		<AuthContext.Provider value={{ user, getUser, setUser, loading, error, isLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>
+		<AuthContext.Provider value={{ user, getUser, setUser, loading, error, isLoggedIn, setIsLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>
 			{children}
 		</AuthContext.Provider>
 	);

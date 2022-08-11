@@ -30,28 +30,28 @@ const useStyles = createUseStyles({
 });
 
 const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) => {
-	const { type, username } = account;
+	const { type, externalUsername } = account;
 
 	switch (type) {
 		case 'twitter':
 			return (
-				<Link href={`https://twitter.com/${username}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
+				<Link href={`https://twitter.com/${externalUsername}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
 					<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
-						{account.username}
+						{account.externalUsername}
 					</Button>
 				</Link>
 			);
 		case 'Fountain':
 			return (
-				<Link href={`https://www.fountain.fm/${account.username}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
+				<Link href={`https://www.fountain.fm/${account.externalUsername}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
 					<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
-						{account.username}
+						{account.externalUsername}
 					</Button>
 				</Link>);
 		case 'lnurl':
 			return (
 				<Button leftIcon={<BsLightningChargeFill />} variant="ghost" fontSize={14} cursor="default" mr={2} mb={2}>
-					{account.username}
+					{account.externalUsername}
 				</Button>
 			);
 
