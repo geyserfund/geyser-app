@@ -153,7 +153,7 @@ export const AccountConnection = ({username, avatar, icon, key, manage}: IAccoun
 	<HStack w="100%" spacing="25px" my={5} key={key}>
 		{!manage
 		&& <Avatar name={username} src={avatar} />}
-		<Box w="200px" display="flex" justifyContent="center" alignItems="center" border="2px solid #20ECC7" borderRadius={4} py={2}>
+		<Box px={4} display="flex" justifyContent="center" alignItems="center" border="2px solid #20ECC7" borderRadius={4} py={2}>
 			<Icon mr={2} as={icon} />
 			<Text>{username}</Text>
 		</Box>
@@ -394,7 +394,7 @@ export const LoginModal = ({
 			<ModalContent display="flex" alignItems="center" padding="20px 15px">
 				<ModalHeader><Text fontSize="lg" fontWeight="bold">{modalTitle}</Text></ModalHeader>
 				<ModalCloseButton />
-				<ModalBody >
+				<ModalBody w="100%">
 					{renderModalBody()}
 				</ModalBody>
 			</ModalContent>
