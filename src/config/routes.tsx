@@ -58,12 +58,6 @@ export const Router = () => {
 				<NavBar showBorder={showBorder} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
-						<Route path="/.well-known/lnurlp/:username" component={() => {
-							const { username } = useParams<{ username: string }>();
-							window.location.replace(`${REACT_APP_API_ENDPOINT}/.well-known/lnurlp/${username}`);
-							return null;
-						}}>
-						</Route>
 						<Route path="/auth/twitter">
 							<TwitterSuccess />
 						</Route>
