@@ -14,6 +14,7 @@ import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { defaultUser } from '../../defaults';
+import { cookieOptions } from '../../constants';
 
 const useStyles = createUseStyles({
 	container: {
@@ -78,6 +79,7 @@ export const Profile = () => {
 		contributions: [],
 		ownerOf: [],
 	});
+	console.log('cookieOptions', cookieOptions);
 
 	/*
 	useEffect functions
@@ -101,8 +103,6 @@ export const Profile = () => {
 
 	useEffect(() => {
 		if (isMe()) {
-			console.log('user in profile', user);
-
 			setUserProfile({
 				...userProfile,
 				...user,
@@ -176,8 +176,6 @@ export const Profile = () => {
 					<Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
 						{ userProfile
 							&& userProfile.externalAccounts.map(account => {
-								console.log('ACCOUNT', account);
-
 								if (myProfile || account.public) {
 									return <ProfileExternalAccount key={account.id} account={account}/>;
 								}

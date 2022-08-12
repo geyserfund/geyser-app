@@ -319,7 +319,6 @@ export const AuthModal = ({
 							setModalStates={[setLnurlState, setInitialState, setManageState]} />
 						<Box borderBottom="1px solid lightgrey" pb={5}></Box>
 						<DisconnectAccounts />
-						<ButtonComponent w="100%" standard onClick={onModalClose}>Close</ButtonComponent>
 					</>
 
 				);
@@ -332,7 +331,6 @@ export const AuthModal = ({
 							onLoginClose={onClose}
 							setModalStates={[setLnurlState, setInitialState, setManageState]}
 						/>
-						<ButtonComponent w="100%" standard onClick={onModalClose}>Close</ButtonComponent>
 					</Box>
 				);
 		}

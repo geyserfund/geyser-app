@@ -75,7 +75,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, []);
 
 	useEffect(() => {
-		console.log('user', user);
 		if (user.id === 0) {
 			setIsLoggedIn(false);
 		} else {
