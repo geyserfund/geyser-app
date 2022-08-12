@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { cookieOptions, REACT_APP_API_ENDPOINT } from '../constants';
 import { onError } from '@apollo/client/link/error';
 import { customHistory } from '.';
+import { useNotification } from '../utils';
 
 const httpLink = createHttpLink({
 	uri: `${REACT_APP_API_ENDPOINT}/graphql`,
@@ -20,7 +21,6 @@ const authLink = setContext((_, { headers }) => {
 		return {
 			headers: {
 				...headers,
-				'access-token': token ? `Bearer ${token}` : '',
 				authorization: token ? `Bearer ${token}` : '',
 			},
 		};
@@ -70,7 +70,6 @@ const errorLink = onError(({ graphQLErrors,
 									headers: {
 										...oldHeaders,
 										authorization: `Bearer ${response.accessToken}`,
-										'access-token': `Bearer ${response.accessToken}`,
 									},
 								});
 								const subscriber = {

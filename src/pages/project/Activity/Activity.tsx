@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { LoginModal } from '../../../components/molecules';
+import { AuthModal } from '../../../components/molecules';
 import {
 	IFundingTx,
 	IProject,
@@ -231,7 +231,7 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 			>
 				{renderActivity()}
 			</Box>
-			<LoginModal
+			<AuthModal
 				isOpen={loginIsOpen}
 				onClose={loginOnClose}
 			/>
