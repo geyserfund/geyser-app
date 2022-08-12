@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/layout';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { HStack, IconButton } from '@chakra-ui/react';
-import { ApolloError, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { MUTATION_UNLINK_ACCOUNT } from '../../graphql';
 import { ExternalAccountComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';

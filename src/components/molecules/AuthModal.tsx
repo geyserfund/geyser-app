@@ -35,7 +35,7 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
+const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 	const { setUser, setIsLoggedIn } = useAuthContext();
 	const { toast } = useNotification();
 	const [getUser, { stopPolling }] = useLazyQuery(ME, {
@@ -113,16 +113,14 @@ export const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 	);
 };
 
-export const LnurlConnect = ({ setQrContent, setModalState, setModalTitle, setModalDescription }:
-	{ setQrContent: any, setModalState: any, setModalTitle: any, setModalDescription: any, onLoginClose: any }) => {
+const LnurlConnect = ({ setQrContent, setLnurlState }:
+	{ setQrContent: any, setLnurlState: any }) => {
 	const handleLnurlLogin = async () => {
 		fetch(`${REACT_APP_API_ENDPOINT}/auth/lnurl`, { credentials: 'include' })
 			.then(response => response.json())
 			.then(({ lnurl }) => {
 				setQrContent(lnurl);
-				setModalTitle('Connect with Lightning');
-				setModalDescription('Scan the QR code to connect to your Lightning wallet.');
-				setModalState(authModalStates.lnurl);
+				setLnurlState();
 			})
 			.catch(err => {
 				console.log(err);
@@ -144,16 +142,16 @@ export const LnurlConnect = ({ setQrContent, setModalState, setModalTitle, setMo
 	);
 };
 
-const ConnectAccounts = ({ setModalState, setModalTitle, setModalDescription, setQrContent, onLoginClose }: any) => {
+const ConnectAccounts = ({ setModalStates, setQrContent, onLoginClose }: any) => {
 	const { user } = useAuthContext();
 	const classes = useStyles();
-
+	const [setLnurlState] = setModalStates;
 	return (<Box justifyContent="center" alignItems="center">
 		<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
 		<Text color="brand.textGrey2">Connect more profiles.</Text>
 		<Box className={classes.container}>
 			{!hasTwitterAccount(user) && <TwitterConnect onLoginClose={onLoginClose}/>}
-			<LnurlConnect onLoginClose={onLoginClose} setModalState={setModalState} setQrContent={setQrContent} setModalTitle={setModalTitle} setModalDescription={setModalDescription}/>
+			<LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent}/>
 		</Box>
 	</Box>);
 };
@@ -174,8 +172,11 @@ export const AuthModal = ({
 	const [modalState, setModalState] = useState<IAuthModalState>(isMe() ? authModalStates.manage : authModalStates.initial);
 	const [modalTitle, setModalTitle] = useState(title || modalState === authModalStates.manage ? 'Manage accounts' : 'Connect');
 	const [modalDescription, setModalDescription] = useState(description);
-
 	const [copy, setcopy] = useState(false);
+
+	/*
+	Handler Functions
+	*/
 	const handleCopy = () => {
 		navigator.clipboard.writeText(qrContent);
 		setcopy(true);
@@ -184,15 +185,44 @@ export const AuthModal = ({
 		}, 2000);
 	};
 
+	const onModalClose = () => {
+		onClose();
+		if (isMe()) {
+			setManageState();
+		} else {
+			setInitialState();
+		}
+	};
+
+	/*
+	Set Modal State Functions
+	*/
+	const setLnurlState = () => {
+		setModalTitle('Connect with Lightning');
+		setModalDescription('Scan the QR code to connect to your Lightning wallet.');
+		setModalState(authModalStates.lnurl);
+	};
+
+	const setManageState = () => {
+		setModalTitle('Manage Accounts');
+		setModalDescription('');
+		setModalState(authModalStates.manage);
+	};
+
+	const setInitialState = () => {
+		setModalTitle('Connect');
+		setModalDescription('Connect to launch your idea and to appear as a contributor when you fund an initiative.');
+		setModalState(authModalStates.initial);
+	};
+
+	/*
+	useEffect Functions
+	*/
 	useEffect(() => {
 		if (isLoggedIn && isMe()) {
-			setModalTitle('Manage Accounts');
-			setModalDescription('');
-			setModalState(authModalStates.manage);
+			setManageState();
 		} else {
-			setModalTitle('Connect');
-			setModalDescription('Connect to launch your idea and to appear as a contributor when you fund an initiative.');
-			setModalState(authModalStates.initial);
+			setInitialState();
 		}
 	}, [isLoggedIn]);
 
@@ -216,11 +246,11 @@ export const AuthModal = ({
 							throw new Error(response.reason);
 						}
 
-						const { user } = response;
+						const { user: newUser } = response;
 
-						if (user) {
-							setUser(user);
-							onClose();
+						if (newUser) {
+							setUser({ ...newUser });
+							onModalClose();
 						}
 					}).catch(err => {
 						setModalTitle('Please try again.');
@@ -284,12 +314,10 @@ export const AuthModal = ({
 						<ConnectAccounts
 							setQrContent={setQrContent}
 							onLoginClose={onClose}
-							setModalState={setModalState}
-							setModalTitle={setModalTitle}
-							setModalDescription={setModalDescription} />
+							setModalStates={[setLnurlState, setInitialState, setManageState]} />
 						<Box borderBottom="1px solid lightgrey" pb={5}></Box>
 						<DisconnectAccounts />
-						<ButtonComponent w="100%" standard onClick={onClose}>Close</ButtonComponent>
+						<ButtonComponent w="100%" standard onClick={onModalClose}>Close</ButtonComponent>
 					</>
 
 				);
@@ -300,18 +328,16 @@ export const AuthModal = ({
 						<ConnectAccounts
 							setQrContent={setQrContent}
 							onLoginClose={onClose}
-							setModalState={setModalState}
-							setModalTitle={setModalTitle}
-							setModalDescription={setModalDescription}
+							setModalStates={[setLnurlState, setInitialState, setManageState]}
 						/>
-						<ButtonComponent w="100%" standard onClick={onClose}>Close</ButtonComponent>
+						<ButtonComponent w="100%" standard onClick={onModalClose}>Close</ButtonComponent>
 					</Box>
 				);
 		}
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal isOpen={isOpen} onClose={onModalClose}>
 			<ModalOverlay />
 			<ModalContent display="flex" alignItems="center" padding="20px 15px">
 				<ModalHeader><Text fontSize="lg" fontWeight="bold">{modalTitle}</Text></ModalHeader>

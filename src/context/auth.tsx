@@ -4,18 +4,12 @@ import React, { createContext, useState, useEffect, useContext, Dispatch, SetSta
 import { ME } from '../graphql';
 import { IUser } from '../interfaces';
 import { cookieOptions } from '../constants';
+import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
-
-const defaultAuthUser = {
-	id: 0,
-	username: '',
-	imageUrl: '',
-	externalAccounts: [],
-};
 
 const defaultContext = {
 	isLoggedIn: false,
-	user: defaultAuthUser,
+	user: defaultUser,
 	loading: false,
 	error: undefined,
 	logout: () => { },
@@ -45,8 +39,7 @@ export const AuthContext = createContext<IAuthContext>(defaultContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const logout = () => {
-		setUser(defaultAuthUser);
-		// setIsLoggedIn(false);
+		setUser(defaultUser);
 		Cookies.remove('accessToken', cookieOptions);
 		Cookies.remove('refreshToken', cookieOptions);
 		Object.keys(Cookies.get()).forEach(cookieName => {
@@ -58,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const [loading, setLoading] = useState(true);
 	const [initialLoad, setInitialLoad] = useState(false);
 
-	const [user, setUser] = useState<IUser>(defaultAuthUser);
+	const [user, setUser] = useState<IUser>(defaultUser);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
 		onCompleted: (data: any) => {
@@ -82,6 +75,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, []);
 
 	useEffect(() => {
+		console.log('user', user);
 		if (user.id === 0) {
 			setIsLoggedIn(false);
 		} else {

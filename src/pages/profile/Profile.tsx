@@ -1,8 +1,7 @@
 /* eslint-disable complexity */
-/* eslint-disable radix */
 import { useLazyQuery } from '@apollo/client';
 import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem, IconButton } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { createUseStyles } from 'react-jss';
@@ -14,6 +13,7 @@ import { isDarkMode, isMobileMode, getRandomOrb } from '../../utils';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
 import { BsLightningChargeFill } from 'react-icons/bs';
+import { defaultUser } from '../../defaults';
 
 const useStyles = createUseStyles({
 	container: {
@@ -71,7 +71,17 @@ export const Profile = () => {
 
 	const params = useParams<{userId: string}>();
 	const [getUserData, { loading: profileLoading, error, data }] = useLazyQuery(USER_PROFILE_QUERY);
+	const isMe = () => history.location.pathname === `/profile/${user.id}`;
 
+	const [userProfile, setUserProfile] = useState<IProfileUser>({
+		...defaultUser,
+		contributions: [],
+		ownerOf: [],
+	});
+
+	/*
+	useEffect functions
+	*/
 	useEffect(() => {
 		if (params.userId) {
 			const variables = { where: {
@@ -82,16 +92,33 @@ export const Profile = () => {
 		}
 	}, [params]);
 
+	useEffect(() => {
+		if (data && data.user) {
+			const user = data.user as IProfileUser;
+			setUserProfile(user);
+		}
+	}, [data]);
+
+	useEffect(() => {
+		if (isMe()) {
+			console.log('user in profile', user);
+
+			setUserProfile({
+				...userProfile,
+				...user,
+			});
+		}
+	}, [user]);
+
 	if (error) {
 		return (
 			<Text> Error loading page, Please refresh</Text>
 		);
 	}
 
-	const userProfile: IProfileUser = data && data.user;
 	const myProfile = user && `${user.id}` === params.userId;
 
-	if (!userProfile || profileLoading) {
+	if (userProfile.id === 0 || profileLoading) {
 		return (
 			<ProjectSkeleton />
 		);
@@ -149,6 +176,8 @@ export const Profile = () => {
 					<Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
 						{ userProfile
 							&& userProfile.externalAccounts.map(account => {
+								console.log('ACCOUNT', account);
+
 								if (myProfile || account.public) {
 									return <ProfileExternalAccount key={account.id} account={account}/>;
 								}
