@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/layout';
+import { Box, Text, Stack } from '@chakra-ui/layout';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import { QRCode } from 'react-qrcode-logo';
 import React, { useEffect, useState } from 'react';
@@ -148,11 +148,13 @@ const ConnectAccounts = ({ setModalStates, setQrContent, onLoginClose }: any) =>
 	const [setLnurlState] = setModalStates;
 	return (<Box justifyContent="center" alignItems="center">
 		<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
-		<Text color="brand.textGrey2">Connect more profiles.</Text>
-		<Box className={classes.container}>
+		<Text color="brand.textGrey2" marginBottom={5}>Connect more profiles.</Text>
+		{/* <Box className={classes.container}> */}
+		<Stack w="100%">
 			{!hasTwitterAccount(user) && <TwitterConnect onLoginClose={onLoginClose}/>}
 			<LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent}/>
-		</Box>
+		</Stack>
+		{/* </Box> */}
 	</Box>);
 };
 
