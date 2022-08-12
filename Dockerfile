@@ -33,6 +33,7 @@ COPY tsconfig.json .eslintrc.js ./
 
 ARG REACT_APP_API_ENDPOINT
 ARG REACT_APP_AIR_TABLE_KEY
+ARG REACT_APP_ENV
 RUN /bin/sh -c "printenv > .env && yarn build"
 RUN rm -rf ./src
 
