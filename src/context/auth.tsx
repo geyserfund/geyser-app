@@ -46,7 +46,7 @@ export const AuthContext = createContext<IAuthContext>(defaultContext);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const logout = () => {
 		setUser(defaultAuthUser);
-		setIsLoggedIn(false);
+		// setIsLoggedIn(false);
 		Cookies.remove('accessToken', cookieOptions);
 		Cookies.remove('refreshToken', cookieOptions);
 		Object.keys(Cookies.get()).forEach(cookieName => {
@@ -55,11 +55,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		fetch('auth/logout');
 	};
 
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [initialLoad, setInitialLoad] = useState(false);
 
 	const [user, setUser] = useState<IUser>(defaultAuthUser);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
 		onCompleted: (data: any) => {
 			if (data && data.me) {
@@ -84,9 +84,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		if (user.id === 0) {
 			setIsLoggedIn(false);
+		} else {
+			setIsLoggedIn(true);
 		}
-
-		setIsLoggedIn(true);
 	}, [user]);
 
 	useEffect(() => {

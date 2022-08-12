@@ -3,19 +3,18 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOve
 import { QRCode } from 'react-qrcode-logo';
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { ButtonComponent, ExternalAccountComponent } from '../ui';
+import { ButtonComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 import { REACT_APP_API_ENDPOINT, IAuthModalState, authModalStates } from '../../constants';
-import { useLocation, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
-import { useNotification, isMobileMode, hasTwitterAccount, hasLnurlAccount } from '../../utils';
+import { useNotification, isMobileMode, hasTwitterAccount } from '../../utils';
 import LogoDarkGreen from '../../assets/logo-dark-green.svg';
 import { HStack, Link, VStack } from '@chakra-ui/react';
 import { useLazyQuery } from '@apollo/client';
 import { ME } from '../../graphql';
-import { CheckIcon } from '@chakra-ui/icons';
 
 import Loader from '../ui/Loader';
 import { DisconnectAccounts } from '.';
@@ -36,7 +35,7 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const TwitterConnect = ({ setModalState, setModalTitle, setModalDescription }: { setModalState: any, setModalTitle: any, setModalDescription: any }) => {
+export const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 	const { setUser, setIsLoggedIn } = useAuthContext();
 	const { toast } = useNotification();
 	const [getUser, { stopPolling }] = useLazyQuery(ME, {
@@ -44,13 +43,10 @@ export const TwitterConnect = ({ setModalState, setModalTitle, setModalDescripti
 			if (data && data.me) {
 				const hasTwitter = hasTwitterAccount(data.me);
 				if (hasTwitter) {
+					onLoginClose();
 					stopPolling();
-					console.log('setUser with', data.me);
 					setUser(data.me);
-					setModalTitle('Connected!');
-					setModalDescription('You successfully connected your Twitter account.');
 					setIsLoggedIn(true);
-					setModalState(authModalStates.connect);
 				}
 			}
 		},
@@ -118,7 +114,7 @@ export const TwitterConnect = ({ setModalState, setModalTitle, setModalDescripti
 };
 
 export const LnurlConnect = ({ setQrContent, setModalState, setModalTitle, setModalDescription }:
-	{ setQrContent: any, setModalState: any, setModalTitle: any, setModalDescription: any }) => {
+	{ setQrContent: any, setModalState: any, setModalTitle: any, setModalDescription: any, onLoginClose: any }) => {
 	const handleLnurlLogin = async () => {
 		fetch(`${REACT_APP_API_ENDPOINT}/auth/lnurl`, { credentials: 'include' })
 			.then(response => response.json())
@@ -148,42 +144,7 @@ export const LnurlConnect = ({ setQrContent, setModalState, setModalTitle, setMo
 	);
 };
 
-const GreenCircleCheck = () => (
-	<Box bg="brand.primary" borderRadius="full" width="25px" height="25px" display="flex" justifyContent="center" alignItems="center">
-		<CheckIcon w={3} h={3}/>
-	</Box>
-);
-
-const ConnectedAccounts = () => {
-	const { user } = useAuthContext();
-	const render = () => user.externalAccounts.map(({ id, type, externalUsername }) => {
-		if (type === 'lnurl') {
-			return (
-				<HStack w="100%" spacing="25px" justifyContent="center" alignItems="center">
-					<GreenCircleCheck key={`check-${id}`}/>
-					<ExternalAccountComponent key={id} icon={BsLightningChargeFill} username={externalUsername} w="100%"/>
-				</HStack>
-			);
-		}
-
-		if (type === 'twitter') {
-			return (
-				<HStack w="100%" spacing="25px" my={5} justifyContent="center" alignItems="center">
-					<GreenCircleCheck key={`check-${id}`}/>
-					<ExternalAccountComponent key={id} icon={SiTwitter} username={externalUsername} w="100%"/>
-				</HStack>
-			);
-		}
-	});
-
-	return (
-		<Box justifyContent="center" alignItems="center">
-			{render()}
-		</Box>
-	);
-};
-
-const ConnectAccounts = ({ setModalState, setModalTitle, setModalDescription, setQrContent }: any) => {
+const ConnectAccounts = ({ setModalState, setModalTitle, setModalDescription, setQrContent, onLoginClose }: any) => {
 	const { user } = useAuthContext();
 	const classes = useStyles();
 
@@ -191,8 +152,8 @@ const ConnectAccounts = ({ setModalState, setModalTitle, setModalDescription, se
 		<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
 		<Text color="brand.textGrey2">Connect more profiles.</Text>
 		<Box className={classes.container}>
-			{!hasTwitterAccount(user) && <TwitterConnect setModalState={setModalState} setModalTitle={setModalTitle} setModalDescription={setModalDescription}/>}
-			<LnurlConnect setModalState={setModalState} setQrContent={setQrContent} setModalTitle={setModalTitle} setModalDescription={setModalDescription}/>
+			{!hasTwitterAccount(user) && <TwitterConnect onLoginClose={onLoginClose}/>}
+			<LnurlConnect onLoginClose={onLoginClose} setModalState={setModalState} setQrContent={setQrContent} setModalTitle={setModalTitle} setModalDescription={setModalDescription}/>
 		</Box>
 	</Box>);
 };
@@ -214,35 +175,6 @@ export const AuthModal = ({
 	const [modalTitle, setModalTitle] = useState(title || modalState === authModalStates.manage ? 'Manage accounts' : 'Connect');
 	const [modalDescription, setModalDescription] = useState(description);
 
-	const setInitialState = () => {
-		if (isMe()) {
-			setModalTitle('Manage Accounts');
-			setModalDescription('');
-			setModalState(authModalStates.manage);
-		} else {
-			setModalTitle('Connect');
-			setModalDescription('Connect to launch your idea and to appear as a contributor when you fund an initiative.');
-			setModalState(authModalStates.initial);
-		}
-	};
-
-	useEffect(() => {
-		console.log('isLoggedIn', isLoggedIn);
-
-		if (!isLoggedIn) {
-			setInitialState();
-		}
-	}, [isLoggedIn]);
-
-	// DEBUG
-	useEffect(() => {
-		console.log('modalState', modalState);
-	});
-
-	useEffect(() => {
-		console.log('user', user);
-	}, [user]);
-
 	const [copy, setcopy] = useState(false);
 	const handleCopy = () => {
 		navigator.clipboard.writeText(qrContent);
@@ -251,6 +183,18 @@ export const AuthModal = ({
 			setcopy(false);
 		}, 2000);
 	};
+
+	useEffect(() => {
+		if (isLoggedIn && isMe()) {
+			setModalTitle('Manage Accounts');
+			setModalDescription('');
+			setModalState(authModalStates.manage);
+		} else {
+			setModalTitle('Connect');
+			setModalDescription('Connect to launch your idea and to appear as a contributor when you fund an initiative.');
+			setModalState(authModalStates.initial);
+		}
+	}, [isLoggedIn]);
 
 	useEffect(() => {
 		if (modalState === 'lnurl') {
@@ -276,9 +220,7 @@ export const AuthModal = ({
 
 						if (user) {
 							setUser(user);
-							setModalTitle('Connected!');
-							setModalDescription('You successfully connected with your lightning wallet.');
-							setModalState(authModalStates.connect);
+							onClose();
 						}
 					}).catch(err => {
 						setModalTitle('Please try again.');
@@ -295,13 +237,6 @@ export const AuthModal = ({
 			return () => clearInterval(id);
 		}
 	}, [modalState]);
-
-	const onLoginClose = () => {
-		console.log('isMe', isMe());
-		console.log('in login close');
-		setInitialState();
-		onClose();
-	};
 
 	const renderModalBody = () => {
 		switch (modalState) {
@@ -343,26 +278,19 @@ export const AuthModal = ({
 					</Box></>
 				);
 
-			case 'connect':
-				return (
-					<Box margin={2}>
-						<ConnectedAccounts/>
-						<ConnectAccounts
-							setQrContent={setQrContent}
-							setModalState={setModalState}
-							setModalTitle={setModalTitle}
-							setModalDescription={setModalDescription}
-						/>
-					</Box>
-				);
-
 			case 'manage':
 				return (
-					<><ConnectAccounts
-						setQrContent={setQrContent}
-						setModalState={setModalState}
-						setModalTitle={setModalTitle}
-						setModalDescription={setModalDescription} /><Box borderBottom="1px solid lightgrey" pb={5}></Box><DisconnectAccounts /><ButtonComponent w="100%" standard onClick={onLoginClose}>Close</ButtonComponent></>
+					<>
+						<ConnectAccounts
+							setQrContent={setQrContent}
+							onLoginClose={onClose}
+							setModalState={setModalState}
+							setModalTitle={setModalTitle}
+							setModalDescription={setModalDescription} />
+						<Box borderBottom="1px solid lightgrey" pb={5}></Box>
+						<DisconnectAccounts />
+						<ButtonComponent w="100%" standard onClick={onClose}>Close</ButtonComponent>
+					</>
 
 				);
 
@@ -371,18 +299,19 @@ export const AuthModal = ({
 					<Box>
 						<ConnectAccounts
 							setQrContent={setQrContent}
+							onLoginClose={onClose}
 							setModalState={setModalState}
 							setModalTitle={setModalTitle}
 							setModalDescription={setModalDescription}
 						/>
-						<ButtonComponent w="100%" standard onClick={onLoginClose}>Close</ButtonComponent>
+						<ButtonComponent w="100%" standard onClick={onClose}>Close</ButtonComponent>
 					</Box>
 				);
 		}
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onLoginClose}>
+		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent display="flex" alignItems="center" padding="20px 15px">
 				<ModalHeader><Text fontSize="lg" fontWeight="bold">{modalTitle}</Text></ModalHeader>

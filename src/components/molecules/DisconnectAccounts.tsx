@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/layout';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { HStack, IconButton } from '@chakra-ui/react';
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import { MUTATION_UNLINK_ACCOUNT } from '../../graphql';
 import { ExternalAccountComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
+import { useNotification } from '../../utils';
 
 interface IAccountConnection {
     id: number
@@ -18,17 +19,27 @@ interface IAccountConnection {
 
 const DisconnectAccount = ({ id, icon, username }: IAccountConnection) => {
 	const { setUser } = useAuthContext();
+	const { toast } = useNotification();
 	const [unlinkAccount, {
-		data, loading: unlinkLoading,
+		data, loading: unlinkLoading, error,
 	}] = useMutation(MUTATION_UNLINK_ACCOUNT);
 
-	const handleAccountDisconnect = () => {
+	const handleAccountDisconnect = async () => {
 		try {
-			unlinkAccount({ variables: { id }});
-		} catch (error) {
-			console.log(error);
+			await unlinkAccount({ variables: { id }});
+		} catch (_) {
 		}
 	};
+
+	useEffect(() => {
+		if (error) {
+			toast({
+				title: 'Failed to unlink account',
+				description: `${error.message}`,
+				status: 'error',
+			});
+		}
+	}, [error]);
 
 	useEffect(() => {
 		if (data && !unlinkLoading) {

@@ -40,11 +40,6 @@ const errorLink = onError(({ graphQLErrors,
 	if (graphQLErrors) {
 		for (const err of graphQLErrors) {
 			if (err && err.extensions && err.extensions.code) {
-				console.log('IN ERROR HANDLER');
-				if (err.extensions.code === 'BAD_USER_INPUT') {
-					forward(operation);
-				}
-
 				// if (err.extensions.code === 'INTERNAL_SERVER_ERROR') {
 				// 	forward(operation);
 				// }
