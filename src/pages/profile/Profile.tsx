@@ -1,8 +1,7 @@
 /* eslint-disable complexity */
-/* eslint-disable radix */
 import { useLazyQuery } from '@apollo/client';
 import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem, IconButton } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { createUseStyles } from 'react-jss';
@@ -10,10 +9,11 @@ import { useHistory, useParams } from 'react-router';
 import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../components/molecules';
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { IProfileUser, IUserExternalAccount } from '../../interfaces';
-import { isDarkMode, isMobileMode } from '../../utils';
+import { isDarkMode, isMobileMode, getRandomOrb } from '../../utils';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
 import { BsLightningChargeFill } from 'react-icons/bs';
+import { defaultUser } from '../../defaults';
 
 const useStyles = createUseStyles({
 	container: {
@@ -30,28 +30,28 @@ const useStyles = createUseStyles({
 });
 
 const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) => {
-	const { type, username } = account;
+	const { type, externalUsername } = account;
 
 	switch (type) {
 		case 'twitter':
 			return (
-				<Link href={`https://twitter.com/${username}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
+				<Link href={`https://twitter.com/${externalUsername}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
 					<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
-						{account.username}
+						{account.externalUsername}
 					</Button>
 				</Link>
 			);
 		case 'Fountain':
 			return (
-				<Link href={`https://www.fountain.fm/${account.username}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
+				<Link href={`https://www.fountain.fm/${account.externalUsername}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
 					<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
-						{account.username}
+						{account.externalUsername}
 					</Button>
 				</Link>);
 		case 'lnurl':
 			return (
 				<Button leftIcon={<BsLightningChargeFill />} variant="ghost" fontSize={14} cursor="default" mr={2} mb={2}>
-					{account.username}
+					{account.externalUsername}
 				</Button>
 			);
 
@@ -71,7 +71,17 @@ export const Profile = () => {
 
 	const params = useParams<{userId: string}>();
 	const [getUserData, { loading: profileLoading, error, data }] = useLazyQuery(USER_PROFILE_QUERY);
+	const isMe = () => history.location.pathname === `/profile/${user.id}`;
 
+	const [userProfile, setUserProfile] = useState<IProfileUser>({
+		...defaultUser,
+		contributions: [],
+		ownerOf: [],
+	});
+
+	/*
+	useEffect functions
+	*/
 	useEffect(() => {
 		if (params.userId) {
 			const variables = { where: {
@@ -82,16 +92,33 @@ export const Profile = () => {
 		}
 	}, [params]);
 
+	useEffect(() => {
+		if (data && data.user) {
+			const user = data.user as IProfileUser;
+			setUserProfile(user);
+		}
+	}, [data]);
+
+	useEffect(() => {
+		if (isMe()) {
+			console.log('user in profile', user);
+
+			setUserProfile({
+				...userProfile,
+				...user,
+			});
+		}
+	}, [user]);
+
 	if (error) {
 		return (
 			<Text> Error loading page, Please refresh</Text>
 		);
 	}
 
-	const userProfile: IProfileUser = data && data.user;
 	const myProfile = user && `${user.id}` === params.userId;
 
-	if (!userProfile || profileLoading) {
+	if (userProfile.id === 0 || profileLoading) {
 		return (
 			<ProjectSkeleton />
 		);
@@ -123,7 +150,7 @@ export const Profile = () => {
 				<VStack width="100%">
 					<HStack width="100%" justifyContent="space-between">
 						<HStack spacing="20px">
-							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl} />
+							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl ? userProfile.imageUrl : getRandomOrb(userProfile.id)} />
 							<Text fontWeight={600} fontSize="20px">{userProfile.username}</Text>
 						</HStack>
 						{myProfile
@@ -149,12 +176,14 @@ export const Profile = () => {
 					<Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
 						{ userProfile
 							&& userProfile.externalAccounts.map(account => {
+								console.log('ACCOUNT', account);
+
 								if (myProfile || account.public) {
 									return <ProfileExternalAccount key={account.id} account={account}/>;
 								}
 							})
 						}
-						{ user.id && user.id === parseInt(userProfile.id)
+						{ user.id && user.id === userProfile.id
 							?	<IconButton
 								size="sm"
 								background={'none'}

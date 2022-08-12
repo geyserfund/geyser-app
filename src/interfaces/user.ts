@@ -6,7 +6,7 @@ export interface IUser {
 }
 
 export interface IProfileUser {
-        id: string;
+        id: number;
         username: string;
         imageUrl: string;
         externalAccounts: IUserExternalAccount[];
@@ -17,9 +17,10 @@ export interface IProfileUser {
 }
 
 export interface IUserExternalAccount {
-	id: string;
+	id: number;
 	type: string;
-	username: string
+	externalUsername: string;
+  externalId: string;
   public: boolean
 }
 

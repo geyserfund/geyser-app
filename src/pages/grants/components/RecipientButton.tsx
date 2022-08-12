@@ -51,7 +51,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 		try {
 			setSubmitting(true);
 			const userCopy = JSON.parse(JSON.stringify(user));
-			const twitterID = userCopy.externalAccounts.find((account:any) => account.type === 'twitter').id;
+			const twitterID = userCopy.externalAccounts.find((account:any) => account.type === 'twitter').externalId;
 			const records = [{
 				fields: {
 					Title: grantee,
