@@ -149,12 +149,10 @@ const ConnectAccounts = ({ setModalStates, setQrContent, onLoginClose }: any) =>
 	return (<Box justifyContent="center" alignItems="center">
 		<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
 		<Text color="brand.textGrey2" marginBottom={5}>Connect more profiles.</Text>
-		{/* <Box className={classes.container}> */}
 		<Stack w="100%">
 			{!hasTwitterAccount(user) && <TwitterConnect onLoginClose={onLoginClose}/>}
 			<LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent}/>
 		</Stack>
-		{/* </Box> */}
 	</Box>);
 };
 
@@ -316,7 +314,7 @@ export const AuthModal = ({
 						<ConnectAccounts
 							setQrContent={setQrContent}
 							onLoginClose={onClose}
-							setModalStates={[setLnurlState, setInitialState, setManageState]} />
+							setModalStates={[setLnurlState]} />
 						<Box borderBottom="1px solid lightgrey" pb={5}></Box>
 						<DisconnectAccounts />
 						<ButtonComponent w="100%" standard onClick={onModalClose}>Close</ButtonComponent>
@@ -330,7 +328,7 @@ export const AuthModal = ({
 						<ConnectAccounts
 							setQrContent={setQrContent}
 							onLoginClose={onClose}
-							setModalStates={[setLnurlState, setInitialState, setManageState]}
+							setModalStates={[setLnurlState]}
 						/>
 						<ButtonComponent w="100%" standard onClick={onModalClose}>Close</ButtonComponent>
 					</Box>
