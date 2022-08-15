@@ -50,6 +50,7 @@ const errorLink = onError(({ graphQLErrors,
 						fetch(`${AUTH_SERVICE_ENDPOINT}/refresh-token`, {
 							method: 'get',
 							headers: { Authorization: `Bearer ${refreshToken}` },
+							redirect: 'follow',
 						}).then(response => {
 							onProcess = true;
 							if (response.status === 401) {

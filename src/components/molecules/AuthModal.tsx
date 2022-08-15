@@ -59,7 +59,7 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 	useEffect(() => {
 		if (pollAuthStatus) {
 			const id = setInterval(async () => {
-				const statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, { credentials: 'include' });
+				const statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, { credentials: 'include', redirect: 'follow' });
 				if (statusRes.status === 200) {
 					const { status: authStatus, reason } = await statusRes.json();
 					if (authStatus === 'success') {
@@ -82,7 +82,7 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 
 	const handleClick = async () => {
 		try {
-			const response = await fetch(`${AUTH_SERVICE_ENDPOINT}/auth-token`, { credentials: 'include' });
+			const response = await fetch(`${AUTH_SERVICE_ENDPOINT}/auth-token`, { credentials: 'include', redirect: 'follow' });
 
 			if (response.status >= 200 && response.status < 400) {
 				setPollAuthStatus(true);
@@ -116,7 +116,7 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 const LnurlConnect = ({ setQrContent, setLnurlState }:
 	{ setQrContent: any, setLnurlState: any }) => {
 	const handleLnurlLogin = async () => {
-		fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, { credentials: 'include' })
+		fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, { credentials: 'include', redirect: 'follow' })
 			.then(response => response.json())
 			.then(({ lnurl }) => {
 				setQrContent(lnurl);
@@ -230,7 +230,7 @@ export const AuthModal = ({
 			const id = setInterval(() => {
 				let hasError = false;
 
-				fetch(`${AUTH_SERVICE_ENDPOINT}/access-token`, { credentials: 'include'})
+				fetch(`${AUTH_SERVICE_ENDPOINT}/access-token`, { credentials: 'include', redirect: 'follow' })
 					.then(response => {
 						if (!(response.status >= 200 && response.status < 400)) {
 							hasError = true;
