@@ -1,5 +1,8 @@
 type ExtendProcessEnv = 'production' | 'staging' | 'development' | 'test'
 
+/*
+ App Environment
+*/
 const REACT_APP_ENV = process.env.REACT_APP_ENV as ExtendProcessEnv;
 
 export const __production__ = REACT_APP_ENV === 'production';
@@ -10,5 +13,16 @@ if (!(__staging__ || __production__ || __staging__)) {
 	throw new Error('REACT_APP_ENV variable has invalid value');
 }
 
-export const { REACT_APP_API_ENDPOINT, REACT_APP_AIR_TABLE_KEY } = process.env;
+/*
+ Service Endpoints
+*/
+export const API_SERVICE_ENDPOINT = process.env.REACT_APP_API_ENDPOINT as ExtendProcessEnv;
+export const AUTH_SERVICE_ENDPOINT = __production__ ? process.env.REACT_APP_AUTH_ENDPOINT : `${API_SERVICE_ENDPOINT}/auth`;
+
+/*
+ Other environment vars
+*/
+export const {
+	REACT_APP_AIR_TABLE_KEY,
+} = process.env;
 

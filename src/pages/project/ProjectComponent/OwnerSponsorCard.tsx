@@ -9,7 +9,7 @@ import { useStyles } from './styles';
 import { QrIcon, BoltIcon, ShareIcon } from '../../../components/icons';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { QRCode } from 'react-qrcode-logo';
-import { REACT_APP_API_ENDPOINT } from '../../../constants';
+import { API_SERVICE_ENDPOINT } from '../../../constants';
 import LogoLight from '../../../assets/logo-dark-green.svg';
 import html2canvas from 'html2canvas';
 
@@ -46,7 +46,7 @@ export const OwnerSponsorCard = ({ project, projectDetails }: IOwnerSponsorCard)
 		}
 	};
 
-	const lnurlPayUrl = encode(`${REACT_APP_API_ENDPOINT}/lnurl/pay?projectId=${id}`);
+	const lnurlPayUrl = encode(`${API_SERVICE_ENDPOINT}/lnurl/pay?projectId=${id}`);
 
 	useEffect(() => {
 		if (copy) {

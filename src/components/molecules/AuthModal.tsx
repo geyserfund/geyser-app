@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { ButtonComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
-import { REACT_APP_API_ENDPOINT, IAuthModalState, authModalStates } from '../../constants';
+import { AUTH_SERVICE_ENDPOINT, IAuthModalState, authModalStates } from '../../constants';
 import { useHistory } from 'react-router';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
@@ -59,7 +59,7 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 	useEffect(() => {
 		if (pollAuthStatus) {
 			const id = setInterval(async () => {
-				const statusRes = await fetch(`${REACT_APP_API_ENDPOINT}/auth/status`, { credentials: 'include' });
+				const statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, { credentials: 'include' });
 				if (statusRes.status === 200) {
 					const { status: authStatus, reason } = await statusRes.json();
 					if (authStatus === 'success') {
@@ -82,12 +82,12 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 
 	const handleClick = async () => {
 		try {
-			const response = await fetch(`${REACT_APP_API_ENDPOINT}/auth/auth-token`, { credentials: 'include' });
+			const response = await fetch(`${AUTH_SERVICE_ENDPOINT}/auth-token`, { credentials: 'include' });
 
 			if (response.status >= 200 && response.status < 400) {
 				setPollAuthStatus(true);
 				getUser();
-				window.open(`${REACT_APP_API_ENDPOINT}/auth/twitter?nextPath=/auth/twitter`, '_blank', 'noopener,noreferrer');
+				window.open(`${AUTH_SERVICE_ENDPOINT}/twitter?nextPath=/auth/twitter`, '_blank', 'noopener,noreferrer');
 			} else {
 				toast({
 					title: 'Something went wrong',
@@ -116,7 +116,7 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 const LnurlConnect = ({ setQrContent, setLnurlState }:
 	{ setQrContent: any, setLnurlState: any }) => {
 	const handleLnurlLogin = async () => {
-		fetch(`${REACT_APP_API_ENDPOINT}/auth/lnurl`, { credentials: 'include' })
+		fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, { credentials: 'include' })
 			.then(response => response.json())
 			.then(({ lnurl }) => {
 				setQrContent(lnurl);
@@ -230,7 +230,7 @@ export const AuthModal = ({
 			const id = setInterval(() => {
 				let hasError = false;
 
-				fetch(`${REACT_APP_API_ENDPOINT}/auth/access-token`, { credentials: 'include'})
+				fetch(`${AUTH_SERVICE_ENDPOINT}/access-token`, { credentials: 'include'})
 					.then(response => {
 						if (!(response.status >= 200 && response.status < 400)) {
 							hasError = true;

@@ -14,7 +14,7 @@ import { GrantsLanding } from '../pages/grants/GrantsLanding';
 import { LaunchIdea } from '../pages/launchIdea';
 import { Profile } from '../pages/profile';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
-import { REACT_APP_API_ENDPOINT } from '../constants';
+import { API_SERVICE_ENDPOINT } from '../constants';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
