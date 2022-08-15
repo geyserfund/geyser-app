@@ -17,7 +17,7 @@ if (!(__staging__ || __production__ || __staging__)) {
  Service Endpoints
 */
 export const API_SERVICE_ENDPOINT = process.env.REACT_APP_API_ENDPOINT as ExtendProcessEnv;
-export const AUTH_SERVICE_ENDPOINT = __production__ ? process.env.REACT_APP_AUTH_ENDPOINT : `${API_SERVICE_ENDPOINT}/auth`;
+export const AUTH_SERVICE_ENDPOINT = __production__ ? process.env.REACT_APP_AUTH_SERVICE_ENDPOINT : `${API_SERVICE_ENDPOINT}/auth`;
 
 /*
  Other environment vars
