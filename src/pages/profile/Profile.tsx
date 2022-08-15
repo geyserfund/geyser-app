@@ -101,8 +101,6 @@ export const Profile = () => {
 
 	useEffect(() => {
 		if (isMe()) {
-			console.log('user in profile', user);
-
 			setUserProfile({
 				...userProfile,
 				...user,
@@ -176,8 +174,6 @@ export const Profile = () => {
 					<Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
 						{ userProfile
 							&& userProfile.externalAccounts.map(account => {
-								console.log('ACCOUNT', account);
-
 								if (myProfile || account.public) {
 									return <ProfileExternalAccount key={account.id} account={account}/>;
 								}
