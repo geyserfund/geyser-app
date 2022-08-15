@@ -2,12 +2,12 @@
 import { ApolloClient, createHttpLink, from, InMemoryCache, Observable } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import Cookies from 'js-cookie';
-import { cookieOptions, REACT_APP_API_ENDPOINT } from '../constants';
+import { cookieOptions, API_SERVICE_ENDPOINT, AUTH_SERVICE_ENDPOINT } from '../constants';
 import { onError } from '@apollo/client/link/error';
 import { customHistory } from '.';
 
 const httpLink = createHttpLink({
-	uri: `${REACT_APP_API_ENDPOINT}/graphql`,
+	uri: `${API_SERVICE_ENDPOINT}/graphql`,
 	credentials: 'include',
 });
 
@@ -20,7 +20,6 @@ const authLink = setContext((_, { headers }) => {
 		return {
 			headers: {
 				...headers,
-				'access-token': token ? `Bearer ${token}` : '',
 				authorization: token ? `Bearer ${token}` : '',
 			},
 		};
@@ -40,11 +39,15 @@ const errorLink = onError(({ graphQLErrors,
 	if (graphQLErrors) {
 		for (const err of graphQLErrors) {
 			if (err && err.extensions && err.extensions.code) {
+				// if (err.extensions.code === 'INTERNAL_SERVER_ERROR') {
+				// 	forward(operation);
+				// }
+
 				const refreshToken = Cookies.get('refreshToken');
 				if (err.extensions.code === 'UNAUTHENTICATED' && refreshToken && !onProcess) {
 					return new Observable(observer => {
 						onProcess = true;
-						fetch(`${REACT_APP_API_ENDPOINT}/auth/refresh-token`, {
+						fetch(`${AUTH_SERVICE_ENDPOINT}/refresh-token`, {
 							method: 'get',
 							headers: { Authorization: `Bearer ${refreshToken}` },
 						}).then(response => {
@@ -66,7 +69,6 @@ const errorLink = onError(({ graphQLErrors,
 									headers: {
 										...oldHeaders,
 										authorization: `Bearer ${response.accessToken}`,
-										'access-token': `Bearer ${response.accessToken}`,
 									},
 								});
 								const subscriber = {

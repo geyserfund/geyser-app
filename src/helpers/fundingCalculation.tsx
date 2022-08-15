@@ -1,10 +1,10 @@
-import { NODE_ENV } from '../constants';
+import { __production__ } from '../constants';
 import { useBtcContext } from '../context/btc';
 import { IFundForm } from '../hooks';
 import { hasShipping } from '../utils';
 
-const nationalShippingCost = NODE_ENV === 'production' ? 15 : 0.015;
-const internationalShippingCost = NODE_ENV === 'production' ? 60 : 0.060;
+const nationalShippingCost = __production__ ? 15 : 0.015;
+const internationalShippingCost = __production__ ? 60 : 0.060;
 
 export const useFundCalc = (state: IFundForm) => {
 	const {btcRate} = useBtcContext();

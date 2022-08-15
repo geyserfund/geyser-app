@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import {
 	Text,	Modal, ModalOverlay, ModalContent, ModalHeader, Box,
-	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Image, HStack, InputGroup, InputLeftElement, Link,
+	ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, Image, HStack, InputGroup, InputLeftElement, Link, IconButton,
 } from '@chakra-ui/react';
 import QRCode from 'react-qr-code';
 import { CheckIcon } from '@chakra-ui/icons';
@@ -15,10 +15,11 @@ import { createCreatorRecord } from '../../../api';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { IProject, IFundingInput } from '../../../interfaces';
 import { useFundingFlow } from '../../../hooks';
-import { fundingStages } from '../../../constants';
+import { fundingStages, GeyserTelegramUrl } from '../../../constants';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { useBtcContext } from '../../../context/btc';
 import { Subscribe } from '../../../components/nav/Subscribe';
+import { FaTelegramPlane } from 'react-icons/fa';
 
 interface ContributeButtonProps {
 active: boolean,
@@ -253,7 +254,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 						</Box>
 						<Text paddingTop="15px" textAlign="center" color="#1BD5B3" fontWeight="bold">Waiting for payment...</Text>
 					</ModalBody>
-					<ModalFooter>
+					<ModalFooter display="block">
 						<ButtonComponent
 							isFullWidth
 							primary={copy}
@@ -262,6 +263,17 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 						>
 							{!copy ? 'Copy Address' : 'Address Copied'}
 						</ButtonComponent>
+						<HStack mt={5}>
+							<Text>If you’re experiencing any issues with this payment please reach out to us on Telegram.</Text>
+							<Link href={GeyserTelegramUrl} isExternal>
+								<IconButton
+									background={'none'}
+									aria-label="telegram"
+									icon={<FaTelegramPlane fontSize="20px" />}
+									color={'#6C757D'}
+								/>
+							</Link>
+						</HStack>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
