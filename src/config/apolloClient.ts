@@ -2,13 +2,13 @@
 import { ApolloClient, createHttpLink, from, InMemoryCache, Observable } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import Cookies from 'js-cookie';
-import { cookieOptions, REACT_APP_API_ENDPOINT } from '../constants';
+import { cookieOptions, API_SERVICE_ENDPOINT, AUTH_SERVICE_ENDPOINT } from '../constants';
 import { onError } from '@apollo/client/link/error';
 import { customHistory } from '.';
 import { useNotification } from '../utils';
 
 const httpLink = createHttpLink({
-	uri: `${REACT_APP_API_ENDPOINT}/graphql`,
+	uri: `${API_SERVICE_ENDPOINT}/graphql`,
 	credentials: 'include',
 });
 
@@ -48,7 +48,7 @@ const errorLink = onError(({ graphQLErrors,
 				if (err.extensions.code === 'UNAUTHENTICATED' && refreshToken && !onProcess) {
 					return new Observable(observer => {
 						onProcess = true;
-						fetch(`${REACT_APP_API_ENDPOINT}/auth/refresh-token`, {
+						fetch(`${AUTH_SERVICE_ENDPOINT}/refresh-token`, {
 							method: 'get',
 							headers: { Authorization: `Bearer ${refreshToken}` },
 						}).then(response => {
