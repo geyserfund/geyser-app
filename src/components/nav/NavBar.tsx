@@ -104,7 +104,6 @@ export const NavBar = ({showBorder}: INavBar) => {
 										{user.username}
 									</ButtonComponent>
 									: <ButtonComponent
-										leftIcon={<Icon as={FiTwitter} />}
 										standard
 										circular
 										marginRight="12px"
