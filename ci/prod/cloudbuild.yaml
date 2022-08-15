@@ -19,7 +19,7 @@ steps:
       --target build \
       -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
       --build-arg REACT_APP_API_ENDPOINT=${_API_ENDPOINT} \
-      --build-arg REACT_AUTH_SERVICE_ENDPOINT=${_AUTH_SERVICE_ENDPOINT} \
+      --build-arg REACT_APP_AUTH_SERVICE_ENDPOINT=${_AUTH_SERVICE_ENDPOINT} \
       --build-arg REACT_APP_AIR_TABLE_KEY=$$AIRTABLE_API_KEY \
       --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build . \
       && \

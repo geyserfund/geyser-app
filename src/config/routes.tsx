@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import {
 	Switch,
 	Route,
@@ -14,7 +14,6 @@ import { GrantsLanding } from '../pages/grants/GrantsLanding';
 import { LaunchIdea } from '../pages/launchIdea';
 import { Profile } from '../pages/profile';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
-import { API_SERVICE_ENDPOINT } from '../constants';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
