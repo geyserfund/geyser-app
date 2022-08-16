@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -15,8 +15,8 @@ const useStyles = createUseStyles({
 		// flexDirection: 'column',
 		// alignItems: 'center',
 		'& .ql-toolbar': {
-			position: 'absolute',
-			bottom: '-60px',
+			position: 'fixed',
+			bottom: '20px',
 			float: 'center',
 			zIndex: 99,
 			background: 'white',
@@ -44,15 +44,20 @@ const useStyles = createUseStyles({
 	},
 });
 
-export const Editor = () => {
-	const [value, setValue] = useState('');
+interface IEditorProps {
+	name: string
+	value?: string
+	handleChange: (name: string, value: string) => void
+}
+
+export const Editor = ({ name, value, handleChange }: IEditorProps) => {
 	const quillObj = useRef(null);
 
 	const classes = useStyles();
 
-	const handleChange = (content: string) => {
-		console.log(content);
-		setValue('');
+	const onChange = (content: string) => {
+		console.log(typeof content);
+		handleChange(name, content);
 	};
 
 	// TODO - IMage
@@ -111,7 +116,7 @@ export const Editor = () => {
 			className={classes.container}
 			theme="snow"
 			value={value}
-			onChange={handleChange}
+			onChange={onChange}
 			modules={modules}
 			formats={formats}
 		/>
