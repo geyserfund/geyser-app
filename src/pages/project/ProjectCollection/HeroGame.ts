@@ -136,7 +136,7 @@ const projectBlocks: IProjectBlock[] = [
 
 const projectDetails: IProjectDetail = {
 	problem: '',
-	idea: 'Creating a Bitcoin inspired video game that works on a real Gameboy, as well as android and Desktop.',
+	idea: 'Creating a Bitcoin inspired video game that works on a real Gameboy, as well as android and desktop.',
 	ownerIntro: 'Hero of Bitcoin is a bitcoin maximalist who believes that we need to bring back the golden age of gaming',
 	blocks: projectBlocks,
 };
