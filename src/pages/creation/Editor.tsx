@@ -28,6 +28,10 @@ const useStyles = createUseStyles({
 			width: '100%',
 			border: 'none',
 		},
+		'& .ql-editor': {
+			paddingBottom: '70px !important',
+		},
+
 		'& p': {
 			fontFamily: fonts.inter,
 		},

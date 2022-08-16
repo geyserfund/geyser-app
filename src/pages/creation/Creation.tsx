@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
 
 import { Editor } from './Editor';
-import { debounce, isMobileMode } from '../../utils';
+import { isMobileMode, useNotification } from '../../utils';
 import { CreateNav } from './CreateNav';
 import { BsImage } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
 import { useMutation } from '@apollo/client';
-import { MUTATION_CREATE_POST } from '../../graphql/mutations/posts';
+import { MUTATION_CREATE_POST, MUTATION_UPDATE_POST } from '../../graphql/mutations/posts';
 import { IPostCreateInput, IPostUpdateInput } from '../../interfaces/posts';
-import { TcreateEntry } from './types';
+import { TcreateEntry, TEntry } from './types';
+import { useDebounce } from '../../hooks';
 
 interface IPost {
 	id?: string;
@@ -21,8 +22,10 @@ interface IPost {
 
 export const Creation = () => {
 	const isMobile = isMobileMode();
+	const { toast } = useNotification();
 
-	const [form, setForm] = useState<IPost>({});
+	const [form, setForm] = useState<IPost>({ title: '', description: '', image: '', content: '' });
+	const [entry, setEntry] = useState<TEntry>();
 
 	const [createPost, {
 		data: createData, loading: createPostLoading,
@@ -30,26 +33,46 @@ export const Creation = () => {
 
 	const [updatePost, {
 		data: updateData, loading: updatePostLoading,
-	}] = useMutation(MUTATION_CREATE_POST);
+	}] = useMutation(MUTATION_UPDATE_POST);
 
 	const projectId = 1;
 
-	const handleCreateEntry = (params: TcreateEntry) => {
+	const handleCreateEntry = async (params: TcreateEntry) => {
 		const input: IPostCreateInput = {
 			projectIds: [projectId],
-			type: 'post',
+			type: 'article',
 			...params,
 		};
-		createPost({ variables: { input } });
+		try {
+			await createPost({ variables: { input } });
+		} catch (error) {
+			toast({
+				title: 'Post creation failed',
+				description: 'Please try again later',
+				status: 'error',
+			});
+		}
 	};
 
-	const handleUpdateEntry = (params: TcreateEntry) => {
-		const input: IPostUpdateInput = {
-			entryId: createData.id,
-			...params,
-		};
-		updatePost({ variables: { input } });
+	const handleUpdateEntry = async (params: TcreateEntry) => {
+		if (entry) {
+			const input: IPostUpdateInput = {
+				entryId: entry.id,
+				...params,
+			};
+			try {
+				await updatePost({ variables: { input } });
+			} catch (error) {
+				toast({
+					title: 'Post update failed',
+					description: 'Please try again later',
+					status: 'error',
+				});
+			}
+		}
 	};
+
+	const debouncedUpdateEntry = useDebounce(form, 1000);
 
 	const handleContentUpdate = (name: string, value: string) => {
 		setForm({ ...form, [name]: value });
@@ -63,14 +86,24 @@ export const Creation = () => {
 	};
 
 	useEffect(() => {
-		if (!form.id) {
+		if (!entry || !entry.id) {
 			if (form.content || form.title || form.description || form.image) {
 				handleCreateEntry(form);
 			}
-		} else {
-			debounce(() => handleUpdateEntry, 1000);
 		}
 	}, [form]);
+
+	useEffect(() => {
+		if (createData) {
+			setEntry(createData.createEntry);
+		}
+	}, [createData]);
+
+	useEffect(() => {
+		if (debouncedUpdateEntry) {
+			handleUpdateEntry(debouncedUpdateEntry);
+		}
+	}, [debouncedUpdateEntry]);
 
 	return (
 		<>
@@ -100,7 +133,7 @@ export const Creation = () => {
 						alignItems="flex-start"
 						paddingBottom="80px"
 					>
-						<HStack marginTop="20px" width="100%" height="65px" borderRaidus="4px" backgroundColor="brand.bgGrey" justifyContent="center">
+						<HStack marginTop="20px" width="100%" minHeight="65px" borderRadius="4px" backgroundColor="brand.bgGrey" justifyContent="center">
 							<BsImage />
 							<Text> Select a header image</Text>
 						</HStack>
