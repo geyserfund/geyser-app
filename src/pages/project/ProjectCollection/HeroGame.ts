@@ -141,6 +141,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'hero-game';
+const projectName: string = 'heroofbitcoin';
 
 export const HeroGame = { projectBlocks, projectDetails, projectName };
