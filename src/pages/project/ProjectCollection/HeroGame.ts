@@ -2,13 +2,6 @@ import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 
 const projectBlocks: IProjectBlock[] = [
 	{
-		key: 'podcast',
-		title: '',
-		body: [],
-		podcast: 'https://soundcloud.com/user-44010708/the-geyser-podcast-002?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
-		blockType: 'PL',
-	},
-	{
 		key: 'heading',
 		title: 'HERO OF BITCOIN - The Game',
 		body: [],
@@ -56,9 +49,17 @@ const projectBlocks: IProjectBlock[] = [
 		title: '',
 		body: [
 			'You will meet famous bitcoiners on your journey. (eg Greg Foss, Max Keiser and Stacy Herbert)',
+		],
+		images: [7, 8, 9],
+		blockType: 'PL',
+	},
+	{
+		key: 'features3',
+		title: '',
+		body: [
 			'Your weapon and armor will become stronger as the story progresses.',
 		],
-		images: [7, 8, 9, 5],
+		images: [5],
 		blockType: 'PL',
 	},
 	{
@@ -82,7 +83,6 @@ const projectBlocks: IProjectBlock[] = [
 			'PHASE 2: An android, iphone and Windows version will be created along with a kid-friendly version. ',
 			'PHASE 3: If there is enough interest the game will be translated into Spanish which may also have a physical release. Anything is possible here, this can be expanded to other languages and platforms as needed.',
 		],
-		images: [2, 1],
 		blockType: 'PL',
 	},
 	{
@@ -110,8 +110,8 @@ const projectBlocks: IProjectBlock[] = [
 		blockType: 'PL',
 	},
 	{
-		key: 'sponsors',
-		title: 'SPONSORS',
+		key: 'sponsors2',
+		title: '',
 		body: [
 			'Special thanks to Lightning Prints for sponsoring this project with their amazing stickers!',
 			'Please support them here:',
@@ -141,6 +141,6 @@ const projectDetails: IProjectDetail = {
 	blocks: projectBlocks,
 };
 
-const projectName: string = 'hero-game';
+const projectName: string = 'heroofbitcoin';
 
 export const HeroGame = { projectBlocks, projectDetails, projectName };
