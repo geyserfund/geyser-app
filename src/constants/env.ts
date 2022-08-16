@@ -9,7 +9,7 @@ export const __production__ = REACT_APP_ENV === 'production';
 export const __development__ = REACT_APP_ENV === 'development';
 export const __staging__ = REACT_APP_ENV === 'staging';
 
-if (!(__staging__ || __production__ || __staging__)) {
+if (!(__staging__ || __production__ || __development__)) {
 	throw new Error('REACT_APP_ENV variable has invalid value');
 }
 
