@@ -115,8 +115,8 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'Special thanks to Lightning Prints for sponsoring this project with their amazing stickers!',
 			'Please support them here:',
-			'Twitter: https://twitter.com/ln_prints',
-			'Website: https://lightning-prints.com/',
+			'[Twitter:](https://twitter.com/ln_prints)',
+			'[Website:](https://lightning-prints.com/)',
 
 		],
 		images: [14],
