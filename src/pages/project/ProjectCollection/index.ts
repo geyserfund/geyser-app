@@ -18,6 +18,7 @@ import { Rastgelesurf } from './Rastgelesurf';
 import { BitcoinJune } from './BitcoinJune';
 import { NoShackles } from './NoShackles';
 import { Pierre } from './Pierre';
+import { HeroGame } from './HeroGame';
 
 export interface IProjectData {
 	projectBlocks: IProjectBlock[]
@@ -50,6 +51,7 @@ const ProjectColl: IProjectColl = {
 	[BitcoinJune.projectName]: BitcoinJune,
 	[NoShackles.projectName]: NoShackles,
 	[Pierre.projectName]: Pierre,
+	[HeroGame.projectName]: HeroGame,
 };
 
 export default ProjectColl;
