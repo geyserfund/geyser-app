@@ -6,7 +6,7 @@ const projectBlocks: IProjectBlock[] = [
 		title: 'HERO OF BITCOIN - The Game',
 		body: [],
 		blockType: 'PL',
-		images: [0],
+		images: [1],
 	},
 	{
 		key: 'story',
@@ -15,7 +15,7 @@ const projectBlocks: IProjectBlock[] = [
 			'Hero of Bitcoin the game is a story inspired by Bitcoin culture and is set in the beautiful Bitcoin-sovereign nation of El Salvador. You will be taken to iconic places such as Bitcoin Beach, the volcano and more, all the way to the bank\'s doorstep.',
 			'The game follows the journey of a young man called Hero, a new bitcoiner, who journeys to El Salvador wanting to help the Bitcoin fight on the frontlines. You will need to help President Bukele and other bitcoiners to ensure sh*tcoiners, bears, bankers and more do not stand in the way of Bitcoin adoption.',
 		],
-		images: [12, 10],
+		images: [13, 11],
 		blockType: 'PL',
 	},
 	{
@@ -41,7 +41,7 @@ const projectBlocks: IProjectBlock[] = [
 			'There will be 21 bitcoin hidden throughout the game, what happens when you collect them all? You will have to find out.',
 			'Story elements will have hand drawn pixel art pictures.',
 		],
-		images: [14, 3, 11],
+		images: [15, 4, 12],
 		blockType: 'PL',
 	},
 	{
@@ -50,7 +50,7 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'You will meet famous bitcoiners on your journey. (eg Greg Foss, Max Keiser and Stacy Herbert)',
 		],
-		images: [7, 8, 9],
+		images: [8, 9, 10],
 		blockType: 'PL',
 	},
 	{
@@ -59,7 +59,7 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'Your weapon and armor will become stronger as the story progresses.',
 		],
-		images: [5],
+		images: [6],
 		blockType: 'PL',
 	},
 	{
@@ -70,7 +70,7 @@ const projectBlocks: IProjectBlock[] = [
 			'The game cart will work on a Gameboy, Pocket, Color, Advanced, SP and even on the Super Gameboy for the Super Nintendo. It will be 4 shades of gray on the Gameboy and Pocket, but for those with a color screen it will display in color.',
 			'There are more features planned and will be announced over the games development. Please look forward to it!',
 		],
-		images: [2, 1],
+		images: [3, 2],
 		blockType: 'PL',
 	},
 	{
@@ -106,7 +106,7 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'If you would like to sponsor this project early in some way please contact me at heroofbtc@gmail.com',
 		],
-		images: [4],
+		images: [5],
 		blockType: 'PL',
 	},
 	{
@@ -119,7 +119,7 @@ const projectBlocks: IProjectBlock[] = [
 			'Website: https://lightning-prints.com/',
 
 		],
-		images: [13],
+		images: [14],
 		blockType: 'PL',
 	},
 	{
@@ -129,7 +129,7 @@ const projectBlocks: IProjectBlock[] = [
 			'Hero of Bitcoin is a bitcoin maximalist who believes that we need to bring back the golden age of gaming for the golden age of money, which is Bitcoin. Before creating this game, he was a Bitcoin only artist. His skills and knowledge of Bitcoin serve him well in his journey to create this unique, entertaining, nostalgic and at times educational game. You can find me on twitter at https://twitter.com/HeroOfBitcoin or contact me by email at heroofbtc@gmail.com',
 			'Twitter QR Code',
 		],
-		images: [6],
+		images: [7],
 		blockType: 'PL',
 	},
 ];
