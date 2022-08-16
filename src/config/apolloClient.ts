@@ -5,7 +5,6 @@ import Cookies from 'js-cookie';
 import { cookieOptions, API_SERVICE_ENDPOINT, AUTH_SERVICE_ENDPOINT } from '../constants';
 import { onError } from '@apollo/client/link/error';
 import { customHistory } from '.';
-import { useNotification } from '../utils';
 
 const httpLink = createHttpLink({
 	uri: `${API_SERVICE_ENDPOINT}/graphql`,

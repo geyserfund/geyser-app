@@ -6,7 +6,7 @@ const domain = (__production__ && 'geyser.fund')
 	|| 'dev.geyser.fund';
 
 export const cookieOptions = {
-	domain,
+	...(domain && { domain }),
 	path: '/',
 	secure: true,
 };

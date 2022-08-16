@@ -14,6 +14,7 @@ import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { defaultUser } from '../../defaults';
+import { cookieOptions } from '../../constants';
 
 const useStyles = createUseStyles({
 	container: {
@@ -78,6 +79,7 @@ export const Profile = () => {
 		contributions: [],
 		ownerOf: [],
 	});
+	console.log('cookieOptions', cookieOptions);
 
 	/*
 	useEffect functions
