@@ -60,7 +60,7 @@ export const Router = () => {
 					<Switch>
 						<Route path="/.well-known/lnurlp/:username" component={() => {
 							const { username } = useParams<{ username: string }>();
-							window.location.replace(`${REACT_APP_API_ENDPOINT}/.well-known/lnurlp/${username}`);
+							window.location.replace(`${API_SERVICE_ENDPOINT}/.well-known/lnurlp/${username}`);
 							return null;
 						}}>
 						</Route>
