@@ -3,7 +3,7 @@ import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 const projectBlocks: IProjectBlock[] = [
 	{
 		key: 'heading',
-		title: 'HERO OF BITCOIN - The Game',
+		title: '',
 		body: [],
 		blockType: 'PL',
 		images: [1],
@@ -113,10 +113,10 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'sponsors2',
 		title: '',
 		body: [
-			'Special thanks to Lightning Prints for sponsoring this project with their amazing stickers!',
+			'Special thanks to Lightning Prints for sponsoring this project with their amazing cart labels',
 			'Please support them here:',
-			'[Twitter:](https://twitter.com/ln_prints)',
-			'[Website:](https://lightning-prints.com/)',
+			'Twitter: [https://twitter.com/ln_prints](https://twitter.com/ln_prints)',
+			'Website: [https://lightning-prints.com/](https://lightning-prints.com/)',
 
 		],
 		images: [14],
