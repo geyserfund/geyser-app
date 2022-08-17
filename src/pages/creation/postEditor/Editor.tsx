@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { colors } from '../../constants';
-import { fonts } from '../../constants/fonts';
+import { colors } from '../../../constants';
+import { fonts } from '../../../constants/fonts';
 
 const useStyles = createUseStyles({
 	container: {

@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
 
 import { Editor } from './Editor';
-import { isMobileMode, useNotification } from '../../utils';
+import { isMobileMode, useNotification } from '../../../utils';
 import { CreateNav } from './CreateNav';
 import { BsImage } from 'react-icons/bs';
-import { useAuthContext } from '../../context';
 import { useMutation } from '@apollo/client';
-import { MUTATION_CREATE_POST, MUTATION_UPDATE_POST } from '../../graphql/mutations/posts';
-import { IPostCreateInput, IPostUpdateInput } from '../../interfaces/posts';
+import { MUTATION_CREATE_POST, MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
+import { IPostCreateInput, IPostUpdateInput } from '../../../interfaces/posts';
 import { TcreateEntry, TEntry } from './types';
-import { useDebounce } from '../../hooks';
+import { useDebounce } from '../../../hooks';
 
 interface IPost {
 	id?: string;

@@ -17,7 +17,7 @@ import { REACT_APP_API_ENDPOINT } from '../constants';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
-import { Creation } from '../pages/creation';
+import { Creation } from '../pages/creation/postEditor';
 
 export const customHistory = createBrowserHistory();
 

@@ -1,11 +1,11 @@
 import { Avatar, Box, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { ConnectTwitter } from '../../components/molecules';
-import { LogoBlack } from '../../components/nav';
-import { ButtonComponent } from '../../components/ui';
-import { useAuthContext } from '../../context';
-import { isMobileMode } from '../../utils';
+import { ConnectTwitter } from '../../../components/molecules';
+import { LogoBlack } from '../../../components/nav';
+import { ButtonComponent } from '../../../components/ui';
+import { useAuthContext } from '../../../context';
+import { isMobileMode } from '../../../utils';
 
 export const CreateNav = () => {
 	const isMobile = isMobileMode();
