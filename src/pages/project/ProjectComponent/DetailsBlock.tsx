@@ -45,7 +45,7 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 					{
 						images.map((image: string) => (
 							<Box key={image} w="100%">
-								<Image src={image} w="100%"/>
+								<Image src={image} maxHeight="500px" />
 							</Box>))
 					}
 				</HStack>
