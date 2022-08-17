@@ -13,7 +13,7 @@ import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
 // Import { StartCrowdFundUrl } from '../../constants';
-import { useLocation, useHistory } from 'react-router';
+import { useLocation, useHistory, useRouteMatch } from 'react-router';
 import { customHistory } from '../../config';
 
 const useStyles = createUseStyles({
@@ -63,8 +63,17 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 		history.push(`/profile/${user.id}`);
 	};
 
-	if (skipRoutes && skipRoutes.includes(location.pathname)) {
-		return null;
+	if (skipRoutes) {
+		let skip = false;
+		skipRoutes.map((route: string) => {
+			const match = useRouteMatch(route);
+			if (match?.isExact) {
+				skip = true;
+			}
+		});
+		if (skip) {
+			return null;
+		}
 	}
 
 	return (

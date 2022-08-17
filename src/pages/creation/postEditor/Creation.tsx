@@ -8,20 +8,14 @@ import { BsImage } from 'react-icons/bs';
 import { useMutation } from '@apollo/client';
 import { MUTATION_CREATE_POST, MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
 import { IPostCreateInput, IPostUpdateInput } from '../../../interfaces/posts';
-import { TcreateEntry, TEntry } from './types';
+import { IPost, TcreateEntry, TEntry } from './types';
 import { useDebounce } from '../../../hooks';
-
-interface IPost {
-	id?: string;
-	title?: string;
-	content?: string;
-	description?: string;
-	image?: string
-}
+import { useHistory } from 'react-router';
 
 export const Creation = () => {
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
+	const history = useHistory();
 
 	const [form, setForm] = useState<IPost>({ title: '', description: '', image: '', content: '' });
 	const [entry, setEntry] = useState<TEntry>();
@@ -104,9 +98,25 @@ export const Creation = () => {
 		}
 	}, [debouncedUpdateEntry]);
 
+	const onSave = () => {
+		handleUpdateEntry(form);
+	};
+
+	const onPreview = () => {
+		if (entry && entry.id) {
+			history.push(`/create/${entry.id}/preview`);
+		} else {
+			toast({
+				title: 'Cannot preview',
+				description: 'Please edit your content before preview',
+				status: 'info',
+			});
+		}
+	};
+
 	return (
 		<>
-			<CreateNav />
+			<CreateNav isSaving={createPostLoading || updatePostLoading} onSave={onSave} onPreview={onPreview} />
 			<VStack
 				background={'brand.bgGrey4'}
 				position="relative"

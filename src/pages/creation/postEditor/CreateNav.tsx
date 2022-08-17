@@ -7,7 +7,13 @@ import { ButtonComponent } from '../../../components/ui';
 import { useAuthContext } from '../../../context';
 import { isMobileMode } from '../../../utils';
 
-export const CreateNav = () => {
+interface ICreateNavProps {
+	isSaving: boolean;
+	onSave: () => void;
+	onPreview?: () => void;
+}
+
+export const CreateNav = ({ isSaving, onSave, onPreview }: ICreateNavProps) => {
 	const isMobile = isMobileMode();
 	const history = useHistory();
 
@@ -56,12 +62,16 @@ export const CreateNav = () => {
 						<Text fontWeight={600} fontSize="16px">{user.username}</Text>
 					</HStack>
 					<HStack>
-						<ButtonComponent>
-							Save
+						<ButtonComponent isLoading={isSaving} onClick={onSave}>
+							Save Draft
 						</ButtonComponent>
-						<ButtonComponent primary>
-							Preview
-						</ButtonComponent>
+						{
+							onPreview
+							&& <ButtonComponent primary onClick={onPreview}>
+								Preview
+							</ButtonComponent>
+						}
+
 					</HStack>
 				</Box>
 			</Box>

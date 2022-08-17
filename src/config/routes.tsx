@@ -18,6 +18,7 @@ import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
 import { Creation } from '../pages/creation/postEditor';
+import { PostPreview } from '../pages/creation/postPreview';
 
 export const customHistory = createBrowserHistory();
 
@@ -55,7 +56,7 @@ export const Router = () => {
 	return (
 		<Fade in={true}>
 			<Box height="100vh">
-				<NavBar showBorder={showBorder} skipRoutes={['/create']} />
+				<NavBar showBorder={showBorder} skipRoutes={['/create', '/create/:postId/preview']} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
 						<Route path="/.well-known/lnurlp/:username" component={() => {
@@ -69,6 +70,9 @@ export const Router = () => {
 						</Route>
 						<Route path="/launch">
 							<LaunchIdea />
+						</Route>
+						<Route path="/create/:postId/preview">
+							<PostPreview />
 						</Route>
 						<Route path="/create">
 							<Creation />
