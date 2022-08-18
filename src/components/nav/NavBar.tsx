@@ -6,13 +6,13 @@ import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
 import { Box, HStack } from '@chakra-ui/layout';
 import { NavMenu } from './NavMenu';
-import { isDarkMode, isMobileMode } from '../../utils';
+import { isDarkMode, isMobileMode, isMediumScreen } from '../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
-import { ConnectTwitter } from '../molecules';
+import { AuthModal } from '../molecules';
 import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
-// Import { StartCrowdFundUrl } from '../../constants';
+import { getRandomOrb } from '../../utils';
 import { useLocation, useHistory, useRouteMatch } from 'react-router';
 import { customHistory } from '../../config';
 
@@ -33,9 +33,10 @@ interface INavBar {
 export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
+	const isMedium = isMediumScreen();
 	const isDark = isDarkMode();
 
-	const { user, getUser, logout, twitterisOpen, twitterOnOpen, twitterOnClose } = useContext(AuthContext);
+	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose } = useContext(AuthContext);
 
 	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -96,7 +97,7 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 					display="flex"
 					width="100%"
 					justifyContent="space-between"
-					margin={isMobile ? '10px' : '15px 40px 15px 40px'}
+					margin={isMobile ? '9.5px 10px' : '9.5px 40px'}
 				>
 					<HStack
 						spacing="25px"
@@ -110,7 +111,7 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 								user.id
 									? <ButtonComponent
 										className={classes.userInfo}
-										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl ? user.imageUrl : getRandomOrb(user.id)} />}
 										standard
 										onClick={handleProfileClick}
 										border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
@@ -118,29 +119,27 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 										{user.username}
 									</ButtonComponent>
 									: <ButtonComponent
-										leftIcon={<Icon as={FiTwitter} />}
 										standard
 										circular
 										marginRight="12px"
-										onClick={twitterOnOpen}
+										onClick={loginOnOpen}
 									>
-										Log In
+										Connect
 									</ButtonComponent>
 							}
 							<NavMenu user={user} logout={logout} />
 						</> : (
 							<>
-								<HStack position="absolute" top="13px" left="calc(50vw - 96px)">
+								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="6.5px" left="calc(50vw - 96px)">
 									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg" marginRight="5px">
 										<ButtonComponent onClick={() => {
 											history.push('/home');
-										}}>Campaigns</ButtonComponent>
+										}}>Projects</ButtonComponent>
 									</Box>
 									<Box position="relative" border={history.location.pathname === '/grants' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg">
 										<ButtonComponent onClick={() => {
 											history.push('/grants');
 										}}>Grants
-											<Text zIndex={1} p={0.5} pt={1} px={2} bg="brand.primary" borderRadius="full" position="absolute" top="-10px" right="-14px" fontSize="10px" fontWeight="bold" textAlign="center">NEW</Text>
 										</ButtonComponent>
 									</Box>
 								</HStack>
@@ -166,7 +165,7 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 											</ButtonComponent>
 											: <ButtonComponent
 												marginRight="12px"
-												onClick={twitterOnOpen}
+												onClick={loginOnOpen}
 											>
 												Connect
 											</ButtonComponent>
@@ -190,7 +189,7 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 							Please log back in with your profile, or press continue if you want to stay anonymous.
 						</Text>
 						<Box display="flex" justifyContent="space-between" paddingTop="20px">
-							<ButtonComponent width="50%" mx={1} primary onClick={twitterOnOpen}>
+							<ButtonComponent width="50%" mx={1} primary onClick={loginOnOpen}>
 								Log In
 							</ButtonComponent>
 							<ButtonComponent width="50%" mx={1} onClick={onClose}>
@@ -200,7 +199,7 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 					</ModalBody>
 				</ModalContent>
 			</Modal>
-			<ConnectTwitter isOpen={twitterisOpen} onClose={twitterOnClose} />
+			<AuthModal isOpen={loginIsOpen} onClose={loginOnClose} />
 		</>
 	);
 };

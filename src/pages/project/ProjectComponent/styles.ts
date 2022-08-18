@@ -21,7 +21,7 @@ export const useStyles = createUseStyles<Labels, Istyles>({
 		},
 	},
 	texts: {
-		textAlign: 'justify',
+		fontSize: '16px',
 		'& ul, & ol': {
 			paddingLeft: '18px',
 		},

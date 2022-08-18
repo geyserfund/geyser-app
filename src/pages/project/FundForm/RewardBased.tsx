@@ -15,7 +15,7 @@ export const RewardBased = ({ setState, updateReward, rewards }: IRewardBasedPro
 		return (
 			<VStack width="100%" spacing="12px" flex="1" overflowX="visible">
 				<Box width="100%" >
-					<SectionTitle>No any rewards</SectionTitle>
+					<SectionTitle>Not any rewards</SectionTitle>
 				</Box>
 			</VStack>
 		);

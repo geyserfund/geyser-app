@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import { useLazyQuery } from '@apollo/client';
-import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import { Avatar, Box, Button, HStack, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery, VStack, Wrap, WrapItem, IconButton } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { createUseStyles } from 'react-jss';
@@ -9,9 +9,12 @@ import { useHistory, useParams } from 'react-router';
 import { ContributionProjectCard, Footer, ProfileProjectCard } from '../../components/molecules';
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { IProfileUser, IUserExternalAccount } from '../../interfaces';
-import { isDarkMode, isMobileMode } from '../../utils';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { isDarkMode, isMobileMode, getRandomOrb } from '../../utils';
+import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
+import { BsLightningChargeFill } from 'react-icons/bs';
+import { defaultUser } from '../../defaults';
+import { cookieOptions } from '../../constants';
 
 const useStyles = createUseStyles({
 	container: {
@@ -28,23 +31,31 @@ const useStyles = createUseStyles({
 });
 
 const ProfileExternalAccount = ({account} : {account: IUserExternalAccount }) => {
-	const { type, username } = account;
+	const { type, externalUsername } = account;
 
 	switch (type) {
 		case 'twitter':
 			return (
-				<Link href={`https://twitter.com/${username}`} isExternal style={{ textDecoration: 'none' }}>
+				<Link href={`https://twitter.com/${externalUsername}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
 					<Button leftIcon={<BsTwitter />} colorScheme="twitter" variant="ghost">
-						{account.username}
+						{account.externalUsername}
 					</Button>
 				</Link>
 			);
 		case 'Fountain':
-			return (<Link href={`https://www.fountain.fm/${account.username}`} isExternal style={{ textDecoration: 'none' }}>
-				<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
-					{account.username}
+			return (
+				<Link href={`https://www.fountain.fm/${account.externalUsername}`} isExternal style={{ textDecoration: 'none' }} mr={2} mb={2}>
+					<Button leftIcon={<FountainLogo />} colorScheme="twitter" variant="ghost">
+						{account.externalUsername}
+					</Button>
+				</Link>);
+		case 'lnurl':
+			return (
+				<Button leftIcon={<BsLightningChargeFill />} variant="ghost" fontSize={14} cursor="default" mr={2} mb={2}>
+					{account.externalUsername}
 				</Button>
-			</Link>);
+			);
+
 		default:
 			return null;
 	}
@@ -56,12 +67,23 @@ export const Profile = () => {
 	const history = useHistory();
 	const classes = useStyles();
 
-	const {user} = useAuthContext();
+	const {user, loginOnOpen} = useAuthContext();
 	const [isLargerThan1080] = useMediaQuery('(min-width: 1080px)');
 
 	const params = useParams<{userId: string}>();
 	const [getUserData, { loading: profileLoading, error, data }] = useLazyQuery(USER_PROFILE_QUERY);
+	const isMe = () => history.location.pathname === `/profile/${user.id}`;
 
+	const [userProfile, setUserProfile] = useState<IProfileUser>({
+		...defaultUser,
+		contributions: [],
+		ownerOf: [],
+	});
+	console.log('cookieOptions', cookieOptions);
+
+	/*
+	useEffect functions
+	*/
 	useEffect(() => {
 		if (params.userId) {
 			const variables = { where: {
@@ -72,16 +94,31 @@ export const Profile = () => {
 		}
 	}, [params]);
 
+	useEffect(() => {
+		if (data && data.user) {
+			const user = data.user as IProfileUser;
+			setUserProfile(user);
+		}
+	}, [data]);
+
+	useEffect(() => {
+		if (isMe()) {
+			setUserProfile({
+				...userProfile,
+				...user,
+			});
+		}
+	}, [user]);
+
 	if (error) {
 		return (
 			<Text> Error loading page, Please refresh</Text>
 		);
 	}
 
-	const userProfile: IProfileUser = data && data.user;
-	const privateProfile = user && `${user.id}` === params.userId;
+	const myProfile = user && `${user.id}` === params.userId;
 
-	if (!userProfile || profileLoading) {
+	if (userProfile.id === 0 || profileLoading) {
 		return (
 			<ProjectSkeleton />
 		);
@@ -91,12 +128,11 @@ export const Profile = () => {
 		history.push('/launch');
 	};
 
-	console.log('chekcing private profile', privateProfile);
 	return (
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
-			paddingTop={isMobile ? '61px' : '71px'}
+			paddingTop="60px"
 			height="100%"
 			justifyContent="space-between"
 		>
@@ -114,10 +150,11 @@ export const Profile = () => {
 				<VStack width="100%">
 					<HStack width="100%" justifyContent="space-between">
 						<HStack spacing="20px">
-							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl} />
+							<Avatar height="50px" width="50px" name={userProfile.username} src={userProfile.imageUrl ? userProfile.imageUrl : getRandomOrb(userProfile.id)} />
 							<Text fontWeight={600} fontSize="20px">{userProfile.username}</Text>
 						</HStack>
-						<Menu>
+						{myProfile
+						&& <Menu>
 							<MenuButton
 								as={Button}
 								rightIcon={<ChevronDownIcon />}
@@ -134,12 +171,30 @@ export const Profile = () => {
 								<MenuItem color="brand.gray300" pointerEvents="none">Write post</MenuItem>
 							</MenuList>
 						</Menu>
-					</HStack>
-					<HStack width="100%">
-						{ userProfile
-							&& userProfile.externalAccounts.map(account => <ProfileExternalAccount key={account.id} account={account}/>)
 						}
 					</HStack>
+					<Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
+						{ userProfile
+							&& userProfile.externalAccounts.map(account => {
+								if (myProfile || account.public) {
+									return <ProfileExternalAccount key={account.id} account={account}/>;
+								}
+							})
+						}
+						{ user.id && user.id === userProfile.id
+							?	<IconButton
+								size="sm"
+								background={'none'}
+								aria-label="connect"
+								icon={<SettingsIcon fontSize="20px" />}
+								border="1px solid lightgrey"
+								onClick={loginOnOpen}
+								mr={2}
+								mb={2}
+							/>
+							: <></>
+						}
+					</Box>
 				</VStack>
 				<Box width="100%">
 					<Tabs variant="line" colorScheme="brand.textGrey" defaultIndex={userProfile && userProfile.ownerOf.length === 0 ? 1 : 0}>
@@ -173,7 +228,7 @@ export const Profile = () => {
 																project={project}
 																imgSrc={project.media[0]}
 																marginLeft="0px !important"
-																privateUser={privateProfile}
+																privateUser={myProfile}
 															/>
 														</WrapItem>
 													);
@@ -225,7 +280,7 @@ const ProjectSkeleton = () => {
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
-			paddingTop={isMobile ? '61px' : '71px'}
+			paddingTop="60px"
 			height="100%"
 			justifyContent="space-between"
 		>

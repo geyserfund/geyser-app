@@ -1,28 +1,24 @@
 import Cookies from 'js-cookie';
 import { ApolloError, useLazyQuery } from '@apollo/client';
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, Dispatch, SetStateAction } from 'react';
 import { ME } from '../graphql';
 import { IUser } from '../interfaces';
 import { cookieOptions } from '../constants';
+import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
-
-const defaultAuthUser = {
-	id: 0,
-	username: '',
-	imageUrl: '',
-	externalAccounts: [],
-};
 
 const defaultContext = {
 	isLoggedIn: false,
-	user: defaultAuthUser,
+	user: defaultUser,
 	loading: false,
 	error: undefined,
 	logout: () => { },
-	twitterisOpen: false,
-	twitterOnOpen: () => { },
-	twitterOnClose: () => { },
+	loginIsOpen: false,
+	loginOnOpen: () => { },
+	loginOnClose: () => { },
+	setIsLoggedIn: () => { },
 	getUser: () => { },
+	setUser: () => { },
 };
 
 interface IAuthContext {
@@ -31,33 +27,42 @@ interface IAuthContext {
 	loading: boolean,
 	error?: ApolloError,
 	logout: any
-	twitterisOpen: boolean
-	twitterOnOpen: () => void
-	twitterOnClose: () => void
+	loginIsOpen: boolean
+	loginOnOpen: () => void
+	loginOnClose: () => void
+	setIsLoggedIn: Dispatch<SetStateAction<boolean>>,
 	getUser: any
+	setUser: any
 }
 
 export const AuthContext = createContext<IAuthContext>(defaultContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const logout = () => {
-		setUser(defaultAuthUser);
-		setIsLoggedIn(false);
+		setUser(defaultUser);
 		Cookies.remove('accessToken', cookieOptions);
 		Cookies.remove('refreshToken', cookieOptions);
 		Object.keys(Cookies.get()).forEach(cookieName => {
-			Cookies.remove(cookieName);
+			Cookies.remove(cookieName, cookieOptions);
 		});
 		fetch('auth/logout');
 	};
 
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [initialLoad, setInitialLoad] = useState(false);
 
-	const [user, setUser] = useState<IUser>(defaultAuthUser);
-	const [getUser, { loading: loadingUser, error, data }] = useLazyQuery(ME);
-	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
+	const [user, setUser] = useState<IUser>(defaultUser);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
+		onCompleted: (data: any) => {
+			if (data && data.me) {
+				setUser(data.me);
+				setIsLoggedIn(true);
+			}
+		},
+	});
+
+	const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
 
 	useEffect(() => {
 		try {
@@ -70,19 +75,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, []);
 
 	useEffect(() => {
+		if (user.id === 0) {
+			setIsLoggedIn(false);
+		} else {
+			setIsLoggedIn(true);
+		}
+	}, [user]);
+
+	useEffect(() => {
 		if (initialLoad) {
 			setLoading(loadingUser);
 		}
 	}, [loadingUser]);
 
-	useEffect(() => {
-		if (data && data.me) {
-			setUser(data.me);
-		}
-	}, [data]);
-
 	return (
-		<AuthContext.Provider value={{ user, getUser, loading, error, isLoggedIn, logout, twitterisOpen, twitterOnOpen, twitterOnClose }}>
+		<AuthContext.Provider value={{ user, getUser, setUser, loading, error, isLoggedIn, setIsLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>
 			{children}
 		</AuthContext.Provider>
 	);

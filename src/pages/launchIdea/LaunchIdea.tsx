@@ -2,7 +2,7 @@ import { Box, HStack, Link, Stack, Text, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { createCreatorRecord } from '../../api';
-import { EnvelopeIcon, LighteningIcon, RopeIcon } from '../../components/icons';
+import { EnvelopeIcon, LightningIcon, RopeIcon } from '../../components/icons';
 import { ButtonComponent, Card, SectionTitle, TextArea, TextBox } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { GeyserFAQUrl } from '../../constants';
@@ -73,9 +73,7 @@ export const LaunchIdea = () => {
 			}];
 			const value = await createCreatorRecord({records});
 			setSubmitted(true);
-			console.log('checking response value', value);
 		} catch (error) {
-			console.log('checking  error', error);
 			toast({
 				title: 'Something went wrong',
 				description: 'Please try again',
@@ -105,12 +103,12 @@ export const LaunchIdea = () => {
 	);
 
 	return (
-		<Box display="flex" justifyContent="center" paddingTop={isMobile ? '61px' : '71px'}>
+		<Box display="flex" justifyContent="center" paddingTop="60px">
 			<VStack spacing="50px" maxWidth="1370px" padding={isMobile ? '10px 10px 40px 10px' : '40px 40px'} >
 				<VStack width="100%" alignItems="flex-start" spacing="30px">
 					<Text fontSize="35px" fontWeight={700}>Transform your ideas into reality</Text>
 					<Text fontSize="18px">
-                Are you a Bitcoin creator, creative, educator or entrepreneur looking to raise funds from your community? No matter where you are in the world, Geyser now makes it easy for you to create crowdfunding campaigns, and to allow your supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser below, and we will get back to you soon on how to proceed. For more info check out our <Link href={GeyserFAQUrl} isExternal textDecoration="underline">FAQ</Link>.
+                Are you a Bitcoin creator, creative, educator or entrepreneur looking to raise funds from your community? No matter where you are in the world, Geyser now makes it easy for you to create crowdfunding projects, and to allow your supporters to fund and keep track of your project. Get started by submitting an idea to crowdfund on Geyser below, and we will get back to you soon on how to proceed. For more info check out our <Link href={GeyserFAQUrl} isExternal textDecoration="underline">FAQ</Link>.
 					</Text>
 					<Stack direction={isMobile ? 'column' : 'row'} width="100%" justifyContent="space-between" spacing={isMobile ? '30px' : '15px'}>
 						<HStack flex="1" spacing="18px">
@@ -123,7 +121,7 @@ export const LaunchIdea = () => {
 						</HStack>
 						<HStack flex="1" spacing="18px">
 							<Box className={classes.iconContainer}>
-								<LighteningIcon height="33px" width="33px"/>
+								<LightningIcon height="33px" width="33px"/>
 							</Box>
 							<Text fontSize="18px">
                                 Give back to your funders with rewards and badges.

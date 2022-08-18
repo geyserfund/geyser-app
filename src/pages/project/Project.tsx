@@ -8,15 +8,16 @@ import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from './Activity/Activity';
 import Details from './Details';
+import { useFundingFlow } from '../../hooks';
 import { Grants } from '../grants/Grants';
-import { isMobileMode } from '../../utils';
 
 export const Project = () => {
-	const isMobile = isMobileMode();
 	const { projectId } = useParams<{ projectId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
 
 	const [detailOpen, setDetailOpen] = useState(true);
+	const fundingFlow = useFundingFlow();
+	const { setFundState } = fundingFlow;
 
 	useEffect(() => {
 		try {
@@ -52,7 +53,6 @@ export const Project = () => {
 					justifyContent="center"
 					alignItems="center"
 					height="100%"
-					paddingTop={isMobile ? '61px' : '71px'}
 				>
 					<Box
 						width="100%"
@@ -60,10 +60,11 @@ export const Project = () => {
 						display="flex"
 						overflow="hidden"
 						position="relative"
+						bg="brand.bgGrey4"
 
 					>
-						<Details project={project} {...{detailOpen, setDetailOpen}}/>
-						<Activity project={project} {...{detailOpen, setDetailOpen}}/>
+						<Details project={project} {...{detailOpen, setDetailOpen, setFundState }}/>
+						<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}/>
 					</Box>
 				</Box>
 				: <>

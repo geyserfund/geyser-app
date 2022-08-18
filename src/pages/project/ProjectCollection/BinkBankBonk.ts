@@ -1,19 +1,13 @@
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 const projectBlocks: IProjectBlock[] = [
 	{
-		key: 'description1',
-		title: '',
-		body: [],
-		images: [0],
-		blockType: 'PL',
-	},
-	{
 		key: 'description2',
 		title: '',
 		body: [
 			'The global bitcoin adoption rate is predicted to surpass 10% of the world’s population level by 2030. Today there are 81 million bitcoin wallet holders. So by 2030 there will be 800 million bitcoin wallets.',
-			'For Bitcoin to grow, users need the education to protect their wallets from theft, loss, or damage. In 2022 bitcoin wallet holders will lose $585m and lost seed phrases are a major culprit. ',
-			'BinkBonkBank is a simple course to create a brain wallet that is secret, safe, and secure. It’s a backup copy in your head. ',
+			'For Bitcoin to grow, users need the education to protect their wallets from theft, loss, or damage. In 2022 bitcoin wallet holders will lose $585m and lost seed phrases are a major culprit.',
+			'BinkBonkBank is a simple course to create a brain wallet that is secret, safe, and secure. It’s a backup copy in your head.',
+			'**And to be even safer, why not learn how to write it down so that even if someone read it they couldn’t drain your wallet? We\'ll show you a way to scramble your seed phrase. There are over a billion trillion combinations. Only you will know the correct order.**',
 			'Poor memory is caused by a lack of formal training. It is astonishing how easy it is to memorize a 24-word seed phrase, once you are shown how.',
 		],
 		images: [1],
@@ -48,7 +42,6 @@ const projectBlocks: IProjectBlock[] = [
 			'promotion',
 			'course development',
 		],
-		images: [3],
 		blockType: 'UL',
 	},
 	{

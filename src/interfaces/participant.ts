@@ -5,11 +5,11 @@ export interface IParticipant {
     confirmed: boolean;
 }
 
-export interface IFunder extends IParticipant {
+export interface IFunder {
     id: number;
     amountFunded: number;
     timesFunded: number;
-    user: IUser;
+    user?: IUser;
     badges: IBadge[];
     confirmedAt: string;
 }

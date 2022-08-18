@@ -1,9 +1,4 @@
 import {
-	Accordion,
-	AccordionButton,
-	AccordionIcon,
-	AccordionItem,
-	AccordionPanel,
 	Box,
 	HStack,
 	Image,
@@ -15,13 +10,12 @@ import {
 	Link,
 } from '@chakra-ui/react';
 import React from 'react';
-import { Card, TwitterComponent } from '../../../components/ui';
+import { TwitterComponent } from '../../../components/ui';
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import ReactMarkdown from 'react-markdown';
 import { useStyles } from './styles';
 import { YoutubeEmbed } from '../../../components/molecules/YoutubeEmbed';
-import ReactPlayer from 'react-player';
 interface IDetailsBlock {
 	projectDetails: IProjectDetail
 	media: string[]
@@ -47,11 +41,11 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 		if (imageIndex && imageIndex.length > 0) {
 			const images = imageIndex.map((val: number) => media[val]);
 			return (
-				<HStack spacing="30px" overflowX="auto">
+				<HStack spacing="30px" overflowX="auto" w="100%">
 					{
 						images.map((image: string) => (
-							<Box key={image} maxWidth="400px">
-								<Image src={image} />
+							<Box key={image} w="100%">
+								<Image src={image} maxHeight="500px" />
 							</Box>))
 					}
 				</HStack>
@@ -64,16 +58,6 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 			return (
 				<Box width="100%" display="flex" justifyContent="center">
 					<YoutubeEmbed videoId={videoId} />
-				</Box>
-			);
-		}
-	};
-
-	const renderPodCast = (url?: string) => {
-		if (url) {
-			return (
-				<Box width="100%" display="flex" justifyContent="center">
-					<ReactPlayer className={classes.podcastContainer} height="200px" width="100%" url={url} />
 				</Box>
 			);
 		}
@@ -144,9 +128,8 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 
 		return (
 			<VStack key={block.title} className={classes.containers} space={10}>
-				<Text fontWeight={600} fontSize={'1.25em'}>{block.title}</Text>
+				<Text fontWeight="bold" fontSize={'24px'}>{block.title}</Text>
 				{switchBlocks()}
-				{renderPodCast(block.podcast)}
 				{renderImages(block.images)}
 				{renderTweet(block.tweet)}
 				{renderYoutube(block.youtube)}
@@ -156,24 +139,8 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 	});
 
 	return (
-		<Card className={classes.cardContainer}>
-			<Accordion allowMultiple defaultIndex={0} allowToggle>
-				<AccordionItem border="none">
-					<h2>
-						<AccordionButton >
-							<Box flex="1" textAlign="left">
-								<Text fontSize="12px" color="brand.textGrey">DESCRIPTION</Text>
-							</Box>
-							<AccordionIcon />
-						</AccordionButton>
-					</h2>
-					<AccordionPanel pb={4} width="100%">
-						<VStack alignItems="center" width="100%" spacing="15px">
-							{renderBlocks()}
-						</VStack>
-					</AccordionPanel>
-				</AccordionItem>
-			</Accordion>
-		</Card>
+		<VStack pb={4} alignItems="center" width="100%" spacing="15px">
+			{renderBlocks()}
+		</VStack>
 	);
 };

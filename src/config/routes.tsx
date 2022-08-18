@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import {
 	Switch,
 	Route,
@@ -13,7 +13,7 @@ import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
 import { LaunchIdea } from '../pages/launchIdea';
 import { Profile } from '../pages/profile';
-import { REACT_APP_API_ENDPOINT } from '../constants';
+import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
@@ -59,11 +59,11 @@ export const Router = () => {
 				<NavBar showBorder={showBorder} skipRoutes={['/create', '/create/:postId', '/create/:postId/preview']} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
-						<Route path="/.well-known/lnurlp/:username" component={() => {
-							const { username } = useParams<{ username: string }>();
-							window.location.replace(`${REACT_APP_API_ENDPOINT}/.well-known/lnurlp/${username}`);
-							return null;
-						}}>
+						<Route path="/auth/twitter">
+							<TwitterSuccess />
+						</Route>
+						<Route path="/failed-authentication">
+							<FailedAuth />
 						</Route>
 						<Route path="/grants">
 							<GrantsLanding />

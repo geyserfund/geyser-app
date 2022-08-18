@@ -13,7 +13,7 @@ import { Subscribe } from '../../../components/nav/Subscribe';
 import { AuthContext } from '../../../context';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
-import { REACT_APP_API_ENDPOINT } from '../../../constants';
+import { AUTH_SERVICE_ENDPOINT } from '../../../constants';
 
 interface RecipientButtonProps {
 active: boolean,
@@ -51,7 +51,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 		try {
 			setSubmitting(true);
 			const userCopy = JSON.parse(JSON.stringify(user));
-			const twitterID = userCopy.externalAccounts.find((account:any) => account.type === 'twitter').id;
+			const twitterID = userCopy.externalAccounts.find((account:any) => account.type === 'twitter').externalId;
 			const records = [{
 				fields: {
 					Title: grantee,
@@ -177,7 +177,7 @@ export const RecipientButton = ({active, title, grant, image}:RecipientButtonPro
 							</>
 							: <Box>
 								<Text textAlign="center" mb={4}>You need to link your Twitter account to apply for a Grant.</Text>
-								<Linkin href={`${REACT_APP_API_ENDPOINT}/auth/twitter`}>
+								<Linkin href={`${AUTH_SERVICE_ENDPOINT}/twitter`}>
 									<ButtonComponent
 										isFullWidth
 										primary

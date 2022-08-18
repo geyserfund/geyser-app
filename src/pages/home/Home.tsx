@@ -17,7 +17,7 @@ import { QUERY_PROJECTS, ALL_PROJECTS_SUMMARY } from '../../graphql';
 import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
 import { SatoshiIconTilted } from '../../components/icons';
-import Dorian from '../../assets/dorian.png';
+import SatsFlow from '../../assets/sats-flow.svg';
 import GrantsBanner from '../../assets/grants-banner.png';
 import { useHistory } from 'react-router';
 
@@ -51,7 +51,8 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 	boldText: {
 		fontSize: '22px',
 		fontWeight: 'bold',
-		color: colors.normalLightGreen,
+		color: '#1A1A1A',
+		textShadow: '1px 1px #20ECC7',
 	},
 	sectionTitle: {
 		fontSize: '16px',
@@ -120,7 +121,7 @@ export const Home = () => {
 		<VStack
 			background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
 			position="relative"
-			paddingTop={isMobile ? '61px' : '71px'}
+			paddingTop="60px"
 			height="100%"
 			justifyContent="space-between"
 		>
@@ -134,12 +135,12 @@ export const Home = () => {
 				flexDirection="column"
 				alignItems="flex-start"
 			>
-				{banner
+				{/* banner
 					&& <Box position="relative" marginTop={isMobile ? '15px' : '30px'}>
 						<CloseIcon position="absolute" top="15px" right="15px" cursor="pointer" color="black" onClick={() => hideBannerCached()} />
 						<Image src={GrantsBanner} alt="geyser grants" borderRadius="sm" cursor="pointer" onClick={() => history.push('/grants')} />
 					</Box>
-				}
+				*/}
 				<Box
 					display="flex"
 					flexDirection={isMobile ? 'column-reverse' : 'row'}
@@ -183,8 +184,8 @@ export const Home = () => {
 										</VStack>
 										<VStack>
 											<Box display="flex" alignItems="center">
-												<SatoshiIconTilted color="brand.primary" />
-												<SatoshiAmount color="brand.primary" fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
+												<SatoshiIconTilted dash={true} />
+												<SatoshiAmount fontSize="22px" className={classes.boldText} loading>{summary.fundedTotal}</SatoshiAmount>
 											</Box>
 											<Text className={classes.subtitleText}>SATS RAISED</Text>
 										</VStack><VStack>
@@ -196,7 +197,7 @@ export const Home = () => {
 						</HStack>
 					</VStack>
 					<Box display="flex" justifyContent={isMobile ? 'flex-start' : 'flex-end'} minWidth="305px" >
-						<Image src={Dorian} maxHeight="250px" />
+						<Image src={SatsFlow} maxHeight="250px" />
 					</Box>
 				</Box>
 				<VStack alignItems="flex-start" width="100%" spacing="0px">

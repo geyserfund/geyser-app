@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ConnectTwitter } from '../../../components/molecules';
-import { Card } from '../../../components/ui';
+import { AuthModal } from '../../../components/molecules';
 import {
 	IFundingTx,
 	IProject,
@@ -15,22 +14,22 @@ import { QrPage } from './QrPage';
 import { isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
-import Loader from '../../../components/ui/Loader';
-import { useDisclosure } from '@chakra-ui/react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage, InfoPageSkeleton } from './InfoPage';
 import { fundingStages } from '../../../constants';
-import { useFundState, IFundForm, useFundingFlow } from '../../../hooks';
+import { useFundState, IFundForm } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
 
 interface IActivityProps {
 	project: IProject
 	detailOpen: boolean
+	fundingFlow: any
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
+const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
 
 	const {btcRate} = useBtcContext();
@@ -44,9 +43,9 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 	// required for knowing the rewards and the funds
 	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
 
-	const {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = useFundingFlow();
+	const {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = fundingFlow;
+	const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
 
-	const { isOpen: twitterisOpen, onOpen: twitterOnOpen, onClose: twitterOnClose } = useDisclosure();
 	const [fadeStarted, setFadeStarted] = useState(false);
 
 	const classes = useStyles({ isMobile, detailOpen, fadeStarted });
@@ -89,7 +88,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	useEffect(() => {
 		if (!state.anonymous && (!user || !user.id)) {
-			twitterOnOpen();
+			loginOnOpen();
 			setState('anonymous', true);
 		}
 	}, [state.anonymous]);
@@ -146,7 +145,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 		requestFunding(input);
 	};
 
-	const handleFundClick = () => {
+	const handleViewClick = () => {
 		setFadeStarted(true);
 		setDetailOpen(true);
 		setTimeout(() => {
@@ -164,7 +163,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				return <InfoPage
 					{...{
 						project,
-						handleFundClick,
+						handleViewClick,
 						handleFundProject,
 						loading,
 						btcRate,
@@ -212,7 +211,7 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 
 	return (
 		<>
-			<Card
+			<Box
 				overflow="auto"
 				className={classNames(classes.container, {
 					[classes.slideInRight]: isMobile && !detailOpen,
@@ -225,13 +224,16 @@ const Activity = ({ project, detailOpen, setDetailOpen }: IActivityProps) => {
 				justifyContent="flex-start"
 				alignItems="center"
 				backgroundColor="#FFFFFF"
-				height="100%"
+				marginTop={isMobile ? '61px' : '90px'}
+				height={isMobile ? 'calc(100% - 61px)' : 'calc(100% - 90px)'}
+				borderTopLeftRadius={isMobile ? '' : '22px'}
+				boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
 			>
 				{renderActivity()}
-			</Card>
-			<ConnectTwitter
-				isOpen={twitterisOpen}
-				onClose={twitterOnClose}
+			</Box>
+			<AuthModal
+				isOpen={loginIsOpen}
+				onClose={loginOnClose}
 			/>
 		</>
 	);

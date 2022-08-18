@@ -18,7 +18,25 @@ canceled:IFundingStages;
 
 export const stageList: IFundingStages[] = ['loading', 'initial', 'form', 'started', 'completed', 'canceled'];
 
-export type IFundingStages = 'loading'|'initial' | 'form' | 'started' | 'completed' | 'canceled'
+export type IFundingStages = 'loading' | 'initial' | 'form' | 'started' | 'completed' | 'canceled'
+
+export const authModalStates:{
+	loading: IAuthModalState;
+	initial: IAuthModalState;
+	lnurl: IAuthModalState;
+	connect: IAuthModalState;
+	completed: IAuthModalState;
+	manage: IAuthModalState;
+	} = {
+		loading: 'loading',
+		initial: 'initial',
+		lnurl: 'lnurl',
+		connect: 'connect',
+		completed: 'completed',
+		manage: 'manage',
+	};
+
+export type IAuthModalState = 'loading' | 'initial' | 'lnurl' | 'completed' | 'connect' | 'manage'
 
 export const projectTypes = {
 	donation: 'donation' as IProjectType,

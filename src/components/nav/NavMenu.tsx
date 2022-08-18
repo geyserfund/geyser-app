@@ -9,7 +9,7 @@ import React from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 // Import { FaMoon, FaSun } from 'react-icons/fa';
 import { createUseStyles } from 'react-jss';
-import { isMobileMode } from '../../utils';
+import { isMobileMode, isMediumScreen } from '../../utils';
 import { AboutUsUrl, colors, FAQUrl, FeedbackUrl, styles, HomeUrl, LaunchUrl, GrantsUrl } from '../../constants';
 import { IUser } from '../../interfaces';
 
@@ -66,6 +66,7 @@ const useStyles = createUseStyles({
 
 export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined }) => {
 	const isMobile = isMobileMode();
+	const isMedium = isMediumScreen();
 	const classes = useStyles();
 	// Const { colorMode, toggleColorMode } = useColorMode();
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
@@ -86,18 +87,22 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 				sx={styles.buttonCommon}
 			/>
 			<MenuList width="150px" className={classes.menuList}>
+				{isMedium
+&& <>
+	<MenuItem className={classes.menuItem}>
+		<Link href={HomeUrl}>
+									Projects
+		</Link>
+	</MenuItem>
+	<MenuItem className={classes.menuItem}>
+		<Link href={GrantsUrl}>
+									Grants
+		</Link>
+	</MenuItem>
+</>
+				}
 				{isMobile
 				&& <>
-					<MenuItem className={classes.menuItem}>
-						<Link href={HomeUrl}>
-									Campaigns
-						</Link>
-					</MenuItem>
-					<MenuItem className={classes.menuItem}>
-						<Link href={GrantsUrl}>
-									Grants (NEW)
-						</Link>
-					</MenuItem>
 					<MenuItem className={classes.menuItem} bg="brand.primary">
 						<Link href={LaunchUrl}>
 									Launch

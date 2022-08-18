@@ -123,7 +123,7 @@ export const PaymentPage = ({
 
 	return (
 		<VStack
-			padding={isMobile ? '10px 10px' : '10px 20px'}
+			padding={isMobile ? '20px 10px' : '20px'}
 			// margin="10px 15px"
 			spacing="12px"
 			width="100%"
@@ -133,10 +133,11 @@ export const PaymentPage = ({
 			backgroundColor="#FFFFFF"
 		>
 			<CloseButton
-				borderRadius="50%"
 				position="absolute"
-				right="0px"
-				top="-10px"
+				right={0}
+				top={0}
+				_hover={{bg: 'none'}}
+				_active={{bg: 'none'}}
 				onClick={handleCloseButton}
 			/>
 			{renderFundForm()}
@@ -226,7 +227,7 @@ export const PaymentPage = ({
 					{state.rewardsCost && hasShipping(name) && <SatoshiAmount label="Shipping" >{getShippingCost()}</SatoshiAmount>}
 				</VStack>
 				<VStack alignItems="flex-end" spacing="0px">
-					<SatoshiAmount color="brand.primary" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
+					<SatoshiAmount color="#1A1A1A" fontWeight="bold" fontSize="24px">{getTotalAmount('sats', name)}</SatoshiAmount>
 					<Text> {`$${getTotalAmount('dollar', name)}`}</Text>
 				</VStack>
 			</HStack>}

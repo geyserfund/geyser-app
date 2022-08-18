@@ -1,10 +1,10 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
-import React, {useState} from 'react';
-import { SatoshiIconTilted } from '../../../components/icons';
-import { ProjectBalanceCircularProgress, ProjectBalance } from '../../../components/molecules';
+import React, { useState } from 'react';
+import { ProjectBalanceCircularProgress, ProjectBalance, ProjectMobileMenu } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
-import { ButtonComponent, FundingStatus } from '../../../components/ui';
+import { FundingStatus, ButtonComponent } from '../../../components/ui';
+import { SatoshiIconTilted } from '../../../components/icons';
 import { isMobileMode } from '../../../utils';
 import { Button, Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
 
@@ -14,7 +14,7 @@ import { Countdown } from './Countdown';
 
 interface IInfoPage {
     project: IProject;
-    handleFundClick: () => void;
+    handleViewClick: () => void;
     handleFundProject: () => void;
     loading: boolean;
     btcRate: number;
@@ -24,7 +24,7 @@ interface IInfoPage {
 }
 
 export const InfoPage = ({
-	handleFundClick,
+	handleViewClick,
 	handleFundProject,
 	loading,
 	project,
@@ -67,16 +67,13 @@ export const InfoPage = ({
 			overflowY="hidden"
 			position="relative"
 		>
-			{isMobile && <Button className={classes.fundButton} onClick={handleFundClick}>
-				<Text fontSize="12px">Project</Text>
-			</Button>}
 			<FundingStatus open={project.active} />
 			{showCountdown() && <Countdown endDate={project.expiresAt}/>}
 			{project.fundingGoal
 				? <ProjectBalanceCircularProgress loading={loading} rate={btcRate} goal={project.fundingGoal} balance={project.balance} />
 				: <ProjectBalance balance={project.balance} rate={btcRate}/>
 			}
-			{project.active && <ButtonComponent
+			{project.active && !isMobile && <ButtonComponent
 				primary
 				standard
 				leftIcon={<SatoshiIconTilted />}
@@ -85,6 +82,7 @@ export const InfoPage = ({
 			>
 				Fund this project
 			</ButtonComponent>}
+			<ProjectMobileMenu fundButtonFunction={handleFundProject} handleViewClick={handleViewClick} viewName="Description" />
 			<Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
 				<Box display="flex" marginBottom="10px" w="95%">
 					<Box w="50%">

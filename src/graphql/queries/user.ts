@@ -8,9 +8,11 @@ query Me {
     username
     imageUrl
     externalAccounts {
-      type
       id
-      username
+      type
+      externalUsername
+      externalId
+      public
     }
   }
 }
@@ -23,9 +25,11 @@ query User($where: UserQueryInput) {
     username
     imageUrl
     externalAccounts {
-      type
       id
-      username
+      type
+      externalUsername
+      externalId
+      public
     }
     contributions {
       isAmbassador
