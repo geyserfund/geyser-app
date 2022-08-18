@@ -56,7 +56,7 @@ export const Router = () => {
 	return (
 		<Fade in={true}>
 			<Box height="100vh">
-				<NavBar showBorder={showBorder} skipRoutes={['/create', '/create/:postId/preview']} />
+				<NavBar showBorder={showBorder} skipRoutes={['/create', '/create/:postId', '/create/:postId/preview']} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
 						<Route path="/.well-known/lnurlp/:username" component={() => {
@@ -73,6 +73,9 @@ export const Router = () => {
 						</Route>
 						<Route path="/create/:postId/preview">
 							<PostPreview />
+						</Route>
+						<Route path="/create/:postId">
+							<Creation />
 						</Route>
 						<Route path="/create">
 							<Creation />

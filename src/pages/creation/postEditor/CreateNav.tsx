@@ -3,17 +3,19 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { ConnectTwitter } from '../../../components/molecules';
 import { LogoBlack } from '../../../components/nav';
-import { ButtonComponent } from '../../../components/ui';
+import { ButtonComponent, IconButtonComponent } from '../../../components/ui';
 import { useAuthContext } from '../../../context';
 import { isMobileMode } from '../../../utils';
+import { MdOutlineArrowBackIos } from 'react-icons/md';
 
 interface ICreateNavProps {
 	isSaving: boolean;
 	onSave: () => void;
 	onPreview?: () => void;
+	onBack?: () => void
 }
 
-export const CreateNav = ({ isSaving, onSave, onPreview }: ICreateNavProps) => {
+export const CreateNav = ({ isSaving, onSave, onPreview, onBack }: ICreateNavProps) => {
 	const isMobile = isMobileMode();
 	const history = useHistory();
 
@@ -62,6 +64,9 @@ export const CreateNav = ({ isSaving, onSave, onPreview }: ICreateNavProps) => {
 						<Text fontWeight={600} fontSize="16px">{user.username}</Text>
 					</HStack>
 					<HStack>
+						{onBack && <ButtonComponent paddingX="6px" aria-label="back" onClick={onBack} >
+							<MdOutlineArrowBackIos />
+						</ButtonComponent>}
 						<ButtonComponent isLoading={isSaving} onClick={onSave}>
 							Save Draft
 						</ButtonComponent>

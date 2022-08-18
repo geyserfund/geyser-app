@@ -11,7 +11,7 @@ export type TEntry = {
 	description: string,
 	image: string,
 	content: string,
-	published: string,
+	published: boolean,
 	type: string,
 }
 
