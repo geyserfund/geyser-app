@@ -1,7 +1,6 @@
 import { Avatar, Box, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { ConnectTwitter } from '../../../components/molecules';
 import { LogoBlack } from '../../../components/nav';
 import { ButtonComponent, IconButtonComponent } from '../../../components/ui';
 import { useAuthContext } from '../../../context';
@@ -17,21 +16,8 @@ interface ICreateNavProps {
 
 export const CreateNav = ({ isSaving, onSave, onPreview, onBack }: ICreateNavProps) => {
 	const isMobile = isMobileMode();
-	const history = useHistory();
 
 	const { user } = useAuthContext();
-	const { isOpen, onClose, onOpen } = useDisclosure();
-
-	useEffect(() => {
-		if (user && !user.id) {
-			onOpen();
-		}
-	}, [user]);
-
-	const handleClose = () => {
-		history.push('/');
-		onClose();
-	};
 
 	return (
 		<>
@@ -80,13 +66,6 @@ export const CreateNav = ({ isSaving, onSave, onPreview, onBack }: ICreateNavPro
 					</HStack>
 				</Box>
 			</Box>
-			<ConnectTwitter
-				isOpen={isOpen}
-				onClose={handleClose}
-				title={'You are not Logged in'}
-				description={'Please log in to create crowsfunds with geyser.'}
-
-			/>
 		</>
 	);
 };

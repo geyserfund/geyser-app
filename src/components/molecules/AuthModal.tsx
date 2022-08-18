@@ -44,7 +44,10 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 				const hasTwitter = hasTwitterAccount(data.me);
 				if (hasTwitter) {
 					onLoginClose();
-					stopPolling();
+					if (stopPolling) {
+						stopPolling();
+					}
+
 					setUser(data.me);
 					setIsLoggedIn(true);
 				}
@@ -65,7 +68,10 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 					if (authStatus === 'success') {
 						setPollAuthStatus(false);
 					} else if (authStatus === 'failed') {
-						stopPolling();
+						if (stopPolling) {
+							stopPolling();
+						}
+
 						setPollAuthStatus(false);
 						toast({
 							title: 'Something went wrong',
@@ -105,7 +111,7 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 			isFullWidth
 			primary
 			standard
-			leftIcon={<Icon as={SiTwitter}/>}
+			leftIcon={<Icon as={SiTwitter} />}
 			onClick={handleClick}
 		>
 			Twitter
@@ -150,8 +156,8 @@ const ConnectAccounts = ({ setModalStates, setQrContent, onLoginClose }: any) =>
 			<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
 			<Text color="brand.textGrey2" marginBottom={5}>Connect more profiles.</Text>
 			<Stack>
-				{!hasTwitterAccount(user) && <TwitterConnect onLoginClose={onLoginClose}/>}
-				<LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent}/>
+				{!hasTwitterAccount(user) && <TwitterConnect onLoginClose={onLoginClose} />}
+				<LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent} />
 			</Stack>
 		</Box>
 	);
@@ -230,7 +236,7 @@ export const AuthModal = ({
 			const id = setInterval(() => {
 				let hasError = false;
 
-				fetch(`${AUTH_SERVICE_ENDPOINT}/access-token`, { credentials: 'include'})
+				fetch(`${AUTH_SERVICE_ENDPOINT}/access-token`, { credentials: 'include' })
 					.then(response => {
 						if (!(response.status >= 200 && response.status < 400)) {
 							hasError = true;
@@ -339,7 +345,7 @@ export const AuthModal = ({
 				<ModalCloseButton />
 				<ModalBody width="100%">
 					<Box justifyContent="center" alignItems="center" margin={2}>
-						{ modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
+						{modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
 						{renderModalBody()}
 					</Box>
 				</ModalBody>
