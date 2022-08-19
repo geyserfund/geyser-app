@@ -75,10 +75,14 @@ export const Creation = () => {
 	const handleCreateEntry = async (params: TcreateEntry) => {
 		if (!form.current || !form.current.id) {
 			if (form.current.content || form.current.title || form.current.description || form.current.image) {
+				const { image, title, description, content } = params;
 				const input: IPostCreateInput = {
 					projectIds: [projectId],
 					type: 'article',
-					...params,
+					title,
+					description,
+					content,
+					image,
 				};
 				try {
 					await createPost({ variables: { input } });

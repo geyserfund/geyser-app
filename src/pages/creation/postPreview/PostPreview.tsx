@@ -5,12 +5,15 @@ import { BsCheckLg } from 'react-icons/bs';
 import { useHistory, useParams } from 'react-router';
 import { ButtonComponent, TextBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
-import { MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
+import { MUTATION_PUBLISH_POST, MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
 import { QUERY_GET_POST } from '../../../graphql/queries/posts';
+import { IPostUpdateInput } from '../../../interfaces/posts';
 import { isMobileMode, useNotification } from '../../../utils';
 import { defaultEntry } from '../postEditor';
 import { CreateNav } from '../postEditor/CreateNav';
 import { TEntry } from '../postEditor/types';
+
+let isEdited = false;
 
 export const PostPreview = () => {
 	const params = useParams<{ postId: string }>();
@@ -27,6 +30,8 @@ export const PostPreview = () => {
 		data: updateData, loading: updatePostLoading,
 	}] = useMutation(MUTATION_UPDATE_POST);
 
+	const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_POST);
+
 	useEffect(() => {
 		if (params && params.postId) {
 			getPost({ variables: { id: params.postId } });
@@ -39,10 +44,19 @@ export const PostPreview = () => {
 		}
 	}, [entryData]);
 
-	const handleUpdateEntry = async (params: TEntry) => {
+	const handleUpdateEntry = async () => {
 		if (entry) {
+			const { image, title, description, content, id } = entry;
 			try {
-				await updatePost({ variables: { input: params } });
+				const input: IPostUpdateInput = {
+					entryId: id,
+					title,
+					description,
+					content,
+					image,
+				};
+				await updatePost({ variables: { input } });
+				isEdited = false;
 			} catch (error) {
 				toast({
 					title: 'Post update failed',
@@ -55,7 +69,7 @@ export const PostPreview = () => {
 
 	const onSave = () => {
 		if (entry) {
-			handleUpdateEntry(entry);
+			handleUpdateEntry();
 		}
 	};
 
@@ -69,10 +83,25 @@ export const PostPreview = () => {
 			const newForm = { ...entry, [name]: value };
 			console.log('checking handleContent handleInput Data', newForm);
 			setEntry(newForm);
+			isEdited = true;
 		}
 	};
 
-	const handlePublish = () => {
+	const handlePublish = async () => {
+		try {
+			if (isEdited) {
+				await handleUpdateEntry();
+			}
+
+			await publishPost({variables: {id: entry.id}});
+		} catch (error) {
+			toast({
+				title: 'Post publish failed',
+				description: 'Please try again later',
+				status: 'error',
+			});
+		}
+
 		setIsPublished(true);
 	};
 
@@ -86,7 +115,7 @@ export const PostPreview = () => {
 			<VStack
 				background={'brand.bgGrey4'}
 				position="relative"
-				paddingTop={isMobile ? '61px' : '71px'}
+				paddingTop={isMobile ? '150px' : '130px'}
 				height="100%"
 				alignItems="center"
 				justifyContent="center"

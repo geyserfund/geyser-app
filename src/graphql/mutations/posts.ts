@@ -10,6 +10,7 @@ mutation Mutation($input: CreateEntryInput!) {
 	  title
 	  description
 	  image
+	  content
 	  publishedAt
 	  projects {
 		id
@@ -31,6 +32,29 @@ mutation UpdateEntry($input: UpdateEntryInput!) {
 		title
 		description
 		image
+		content
+		publishedAt
+		projects {
+		  id
+		  title
+		  name
+		}	  
+	}
+}
+`;
+
+export const MUTATION_PUBLISH_POST = gql`
+
+mutation Mutation($id: BigInt!) {
+	publishEntry(id: $id) {
+		id
+		published
+		createdAt
+		type
+		title
+		description
+		image
+		content
 		publishedAt
 		projects {
 		  id
