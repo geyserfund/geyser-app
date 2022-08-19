@@ -59,8 +59,20 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 	useEffect(() => {
 		if (pollAuthStatus) {
 			const id = setInterval(async () => {
-				const statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, { credentials: 'include' });
-				if (statusRes.status === 200) {
+				let statusRes;
+				try {
+					statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, { credentials: 'include' });
+				} catch (error: any) {
+					stopPolling();
+					setPollAuthStatus(false);
+					toast({
+						title: 'Something went wrong',
+						description: `The authentication request failed: ${error.message}.`,
+						status: 'error',
+					});
+				}
+
+				if (statusRes && statusRes.status === 200) {
 					const { status: authStatus, reason } = await statusRes.json();
 					if (authStatus === 'success') {
 						setPollAuthStatus(false);
