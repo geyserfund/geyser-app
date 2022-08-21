@@ -62,12 +62,12 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 				let statusRes;
 				try {
 					statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, { credentials: 'include' });
-				} catch (error: any) {
+				} catch (error) {
 					stopPolling();
 					setPollAuthStatus(false);
 					toast({
 						title: 'Something went wrong',
-						description: `The authentication request failed: ${error.message}.`,
+						description: `The authentication request failed: ${(error as Error).message}.`,
 						status: 'error',
 					});
 				}
