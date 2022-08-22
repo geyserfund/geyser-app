@@ -1,11 +1,11 @@
-import Cookies from 'js-cookie';
 import { ApolloError, useLazyQuery } from '@apollo/client';
 import React, { createContext, useState, useEffect, useContext, Dispatch, SetStateAction } from 'react';
 import { ME } from '../graphql';
 import { IUser } from '../interfaces';
-import { cookieOptions, AUTH_SERVICE_ENDPOINT } from '../constants';
+import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
+import { useLocation } from 'react-router';
 
 const defaultContext = {
 	isLoggedIn: false,
@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const [loading, setLoading] = useState(true);
 	const [initialLoad, setInitialLoad] = useState(false);
+	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 
 	const [user, setUser] = useState<IUser>(defaultUser);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -74,6 +75,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			setIsLoggedIn(false);
 		} else {
 			setIsLoggedIn(true);
+			state.loggedOut = false;
 		}
 	}, [user]);
 
