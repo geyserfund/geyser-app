@@ -12,8 +12,7 @@ const useStyles = createUseStyles({
 		position: 'relative',
 		display: 'flex',
 		justifyContent: 'center',
-		// flexDirection: 'column',
-		// alignItems: 'center',
+		minHeight: '350px',
 		'& .ql-toolbar': {
 			position: 'fixed',
 			bottom: '20px',
@@ -93,9 +92,9 @@ export const Editor = ({ name, value, handleChange }: IEditorProps) => {
 			[{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
 			['link', 'image'],
 		],
-		// handlers: {
-		// 	image: imageHandler,
-		// },
+		handlers: {
+			image: imageHandler,
+		},
 	};
 
 	const formats = [

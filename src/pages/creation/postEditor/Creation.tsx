@@ -8,10 +8,30 @@ import { BsImage } from 'react-icons/bs';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_CREATE_POST, MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
 import { IPostCreateInput, IPostUpdateInput } from '../../../interfaces/posts';
-import { IPost, TcreateEntry, TEntry } from './types';
+import { TcreateEntry, TEntry } from './types';
 import { useDebounce } from '../../../hooks';
 import { useHistory, useParams } from 'react-router';
 import { QUERY_GET_POST } from '../../../graphql/queries/posts';
+import { FileUpload } from '../../../components/molecules';
+import { createUseStyles } from 'react-jss';
+import { colors } from '../../../constants';
+import { ImageWithReload } from '../../../components/ui';
+
+const useStyles = createUseStyles({
+	uploadContainer: {
+		width: '100%',
+		minHeight: '65px',
+		borderRadius: '4px',
+		backgroundColor: colors.bgGrey,
+		justifyContent: 'center',
+		transition: 'background-color 0.5s ease',
+		'&:hover': {
+			cursor: 'pointer',
+			backgroundColor: colors.gray300,
+			transition: 'background-color 0.5s ease',
+		},
+	},
+});
 
 export const defaultEntry = { id: 0, title: '', description: '', image: '', content: '', published: false, type: 'article' };
 
@@ -20,6 +40,8 @@ export const Creation = () => {
 	const { toast } = useNotification();
 	const history = useHistory();
 	const params = useParams<{ postId: string }>();
+
+	const classes = useStyles();
 
 	const [_form, _setForm] = useState<TEntry>(defaultEntry);
 	const form = useRef(_form);
@@ -152,6 +174,10 @@ export const Creation = () => {
 		}
 	};
 
+	const onImageUpload = (url: string) => {
+		setForm({...form.current, image: `https://storage.googleapis.com/${url}`});
+	};
+
 	console.log('checking form', form);
 	return (
 		<>
@@ -181,10 +207,25 @@ export const Creation = () => {
 						alignItems="flex-start"
 						paddingBottom="80px"
 					>
-						<HStack marginTop="20px" width="100%" minHeight="65px" borderRadius="4px" backgroundColor="brand.bgGrey" justifyContent="center">
-							<BsImage />
-							<Text> Select a header image</Text>
-						</HStack>
+						<Box marginTop="20px" width="100%" >
+							<FileUpload onUploadComplete={onImageUpload}>
+								<>
+									{
+										form.current.image
+											? <HStack justifyContent="center" maxHeight="500px">
+												<ImageWithReload src={form.current.image}/>
+											</HStack>
+											: 									(
+												<HStack className={classes.uploadContainer}>
+													<BsImage />
+													<Text> Select a header image</Text>
+												</HStack>
+											)
+									}
+								</>
+							</FileUpload>
+
+						</Box>
 						<Input
 							border="none"
 							_focus={{ border: 'none' }}

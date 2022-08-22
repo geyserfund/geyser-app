@@ -15,11 +15,10 @@ query Entry($id: BigInt!) {
 `;
 
 export const QUERY_GET_SIGNED_URL = gql`
-	query Query {
-		getSignedUploadUrl {
+query GetSignedUploadUrl($input: FileUploadInput!) {
+	getSignedUploadUrl(input: $input) {
 		uploadUrl
 		distributionUrl
 		}
 	}
 `;
-

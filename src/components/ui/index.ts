@@ -21,3 +21,4 @@ export * from './InfoTooltip';
 export * from './LinkableAvatar';
 export * from './AnonymousAvatar';
 export * from './ExternalAccountComponent';
+export * from './ImageWithReload';

@@ -10,6 +10,7 @@ export * from './AddSponsor';
 export * from './SwipeLiveProject';
 export * from './ProjectMobileMenu';
 export * from './DisconnectAccounts';
+export * from './FileUpload';
 
 export * from './projectDisplay/ProjectBalance';
 export * from './projectDisplay/ProfileProjectCard';
