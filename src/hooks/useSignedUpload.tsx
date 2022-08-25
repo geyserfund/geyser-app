@@ -1,9 +1,10 @@
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { API_SERVICE_ENDPOINT, GeyserAssetDomainUrl } from '../constants';
 import { QUERY_GET_SIGNED_URL } from '../graphql/queries/posts';
-import { useNotification } from '../utils';
+import { testImage, useNotification } from '../utils';
 
-export const useSignedUpload = ({onUpload}:{onUpload: (url: string) => void}) => {
+export const useSignedUpload = ({onUpload}:{onUpload: (url: string, file?: any) => void}) => {
 	const {toast} = useNotification();
 
 	const [getSignedUrl, {data: urlData}] = useLazyQuery(QUERY_GET_SIGNED_URL);
@@ -24,7 +25,9 @@ export const useSignedUpload = ({onUpload}:{onUpload: (url: string) => void}) =>
 					headers: {
 						'Content-Type': currentFile.type,
 					},
-				}).then(() => onUpload(urlData.getSignedUploadUrl.distributionUrl));
+				}).then(() => {
+					onUpload(urlData.getSignedUploadUrl.distributionUrl, currentFile);
+				});
 				// console.log('checking urlData', urlData);
 				// onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
 			} catch (error) {
@@ -44,4 +47,27 @@ export const useSignedUpload = ({onUpload}:{onUpload: (url: string) => void}) =>
 	};
 
 	return uploadFile;
+};
+
+export const useSignedUploadAPI = async (file: any): Promise<string> => {
+	// const data:any = {name: file.name, type: file.type};
+
+	const response = await fetch(`${API_SERVICE_ENDPOINT}/upload_url?name=${file.name}&type=${file.type}`).then(response => response.json());
+
+	const uploadRes = await fetch(response.uploadUrl, {
+		method: 'PUT',
+		body: file,
+		headers: {
+			'Content-Type': file.type,
+		},
+	});
+
+	const newValue = `${GeyserAssetDomainUrl}${response.distributionUrl}`;
+
+	const test = await testImage(newValue);
+	console.log('checking urlData', test, uploadRes);
+	// onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
+
+	console.log('checking resopnse', response);
+	return newValue;
 };

@@ -19,6 +19,8 @@
 		"js-cookie": "^3.0.1",
 		"luxon": "^2.1.1",
 		"quill": "^1.3.7",
+		"quill-image-edit-module": "^0.1.6",
+		"quill-image-uploader": "^1.2.3",
 		"react": "^17.0.2",
 		"react-animated-cursor": "^2.4.0",
 		"react-confetti": "^6.0.1",

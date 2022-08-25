@@ -143,7 +143,7 @@ export const PostPreview = () => {
 					<VStack alignItems="flex-start">
 						<Text color="brand.gray500">Edit Social Preview </Text>
 						<Box height="220px" width="350px" overflow="hidden">
-							<Image src="https://picsum.photos/200/300" height="350px" width="350px" objectFit="cover" />
+							<Image src={entry.image} height="350px" width="350px" objectFit="cover" />
 						</Box>
 						<Text fontSize="11px" color="brand.gray500">geyser.fund/bellicosian</Text>
 						<Input

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
 
-import { Editor } from './Editor';
+// import { Editor } from './Editor';
 import { isMobileMode, useNotification } from '../../../utils';
 import { CreateNav } from './CreateNav';
 import { BsImage } from 'react-icons/bs';
@@ -16,6 +16,8 @@ import { FileUpload } from '../../../components/molecules';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
 import { ImageWithReload } from '../../../components/ui';
+import { Editor } from './Editor';
+import Loader from '../../../components/ui/Loader';
 
 const useStyles = createUseStyles({
 	uploadContainer: {
@@ -178,7 +180,10 @@ export const Creation = () => {
 		setForm({...form.current, image: `https://storage.googleapis.com/${url}`});
 	};
 
-	console.log('checking form', form);
+	if (params.postId && !form.current.id) {
+		return <Loader />;
+	}
+
 	return (
 		<>
 			<CreateNav isSaving={createPostLoading || updatePostLoading} onSave={onSave} onPreview={onPreview} />
@@ -251,7 +256,7 @@ export const Creation = () => {
 						/>
 
 						<Box flex={1} width="100%" >
-							<Editor handleChange={handleContentUpdate} value={form.current.content} name="content" />
+							<Editor name="content" handleChange={handleContentUpdate} value={form.current.content}/>
 						</Box>
 					</VStack>
 				</Box>

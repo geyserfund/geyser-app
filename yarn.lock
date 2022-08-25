@@ -11438,6 +11438,18 @@ quill-delta@^3.6.2:
     extend "^3.0.2"
     fast-diff "1.1.2"
 
+quill-image-edit-module@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/quill-image-edit-module/-/quill-image-edit-module-0.1.6.tgz#0a6344d1156c146cab065408d89dedfa0327ae20"
+  integrity sha512-yB5YiXqX8Scxxk9AaqKRAekqUB/WHFqrFHWDq6E1+Q/KjIFAmYTB8az1XuXiz8M7M/LL5689p5ZdqyYppS8R/Q==
+  dependencies:
+    deepmerge "^4.2.2"
+
+quill-image-uploader@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/quill-image-uploader/-/quill-image-uploader-1.2.3.tgz#b04ec455300d295e7ae5eac3b7336239e5a49028"
+  integrity sha512-V4/JkqvuWoUZ+Bm41U7JHMge2BtSGJ/edY/Z4nrROTQJv2pVK75sj+XDP/osKRc+yB7/s2SvOzVa2FlOrJT8zA==
+
 quill@^1.3.7:
   version "1.3.7"
   resolved "https://registry.yarnpkg.com/quill/-/quill-1.3.7.tgz#da5b2f3a2c470e932340cdbf3668c9f21f9286e8"

@@ -1,9 +1,14 @@
-import React, { useRef } from 'react';
+import Quill from 'quill';
+import React, { useEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { colors } from '../../../constants';
+import { colors, GeyserAssetDomainUrl } from '../../../constants';
 import { fonts } from '../../../constants/fonts';
+import { useSignedUpload, useSignedUploadAPI } from '../../../hooks';
+import { testImage, useNotification } from '../../../utils';
+// @ts-ignore
+import ImageUploader from 'quill-image-uploader';
+import ImageEdit from 'quill-image-edit-module';
 
 const useStyles = createUseStyles({
 	container: {
@@ -40,6 +45,14 @@ const useStyles = createUseStyles({
 		'& h2': {
 			fontFamily: fonts.inter,
 		},
+		'& img': {
+			borderRadius: '4px',
+			display: 'block',
+			margin: 'auto',
+		},
+		'& .image-uploading': {
+			display: 'block',
+		},
 		'& .ql-syntax': {
 			backgroundColor: `${colors.bgGrey} !important`,
 			color: `${colors.textGrey} !important`,
@@ -47,81 +60,79 @@ const useStyles = createUseStyles({
 	},
 });
 
-interface IEditorProps {
+interface IEditor {
 	name: string
-	value?: string
-	handleChange: (name: string, value: string) => void
+	value: string
+	handleChange: (name: string, content: string) => void
 }
 
-export const Editor = ({ name, value, handleChange }: IEditorProps) => {
-	const quillObj = useRef(null);
+export const Editor = ({name, value, handleChange}:IEditor) => {
+	const [_quillObj, _setQuillObj] = useState<Quill>();
+	const quillObj = useRef(_quillObj);
+	const setQuillObj = (value: Quill) => {
+		quillObj.current = value;
+		_setQuillObj(value);
+	};
+
+	const {toast} = useNotification();
 
 	const classes = useStyles();
 
-	const onChange = (content: string) => {
-		console.log(typeof content);
-		handleChange(name, content);
-	};
+	useEffect(() => {
+		Quill.register('modules/imageUploader', ImageUploader);
+		Quill.register('modules/imageEdit', ImageEdit);
+		const editor = new Quill('#editor', {
+			modules: {
+				toolbar: {
+					container: [
+						['bold', 'italic', 'blockquote', 'code-block'],
+						[{ header: 1 }, { header: 2 }],
+						[{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+						['link', 'image'],
+					],
+				},
+				imageUploader: {
+					upload: async (file:any) => {
+						try {
+							const response = await useSignedUploadAPI(file);
+							return response;
+						} catch (error) {
+							toast({
+								title: 'Something went wrong',
+								description: 'Image upload failed, please try again.',
+								status: 'error',
+							});
+							return false;
+						}
+					},
+				},
+				imageEdit: {
+					modules: ['Resize', 'DisplaySize'],
+				},
 
-	// TODO - IMage
-	// const imageHandler = () => {
-	// 	const input = document.createElement('input');
+			},
+			theme: 'snow',
+		});
 
-	// 	input.setAttribute('type', 'file');
-	// 	input.setAttribute('accept', 'image/*');
-	// 	input.click();
+		if (value) {
+			const textValue = JSON.parse(value);
+			editor.updateContents(textValue, 'api');
+		}
 
-	// 	input.onchange = async () => {
-	// 		if (input.files) {
-	// 			const file: any = input.files[0];
-	// 			const formData = new FormData();
+		editor.on('text-change', () => {
+			const contents = quillObj.current?.getContents();
+			handleChange(name, JSON.stringify(contents));
+		});
 
-	// 			formData.append('image', file);
+		setQuillObj(editor);
+	}, []);
 
-	// 			const fileName = file.name;
-
-	// 			const res = await uploadFiles(file, fileName, quillObj);
-	// 		}
-	// 	};
-	// };
-
-	const modules = {
-		toolbar: [
-			['bold', 'italic', 'blockquote', 'code-block'],
-			[{ header: 1 }, { header: 2 }],
-			[{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-			['link', 'image'],
-		],
-		handlers: {
-			image: imageHandler,
-		},
-	};
-
-	const formats = [
-		'header',
-		'bold',
-		'italic',
-		'underline',
-		'strike',
-		'blockquote',
-		'code-block',
-		'list',
-		'bullet',
-		'indent',
-		'link',
-		'image',
-	];
-
-	console.log('checking value', value);
 	return (
-		<ReactQuill
-			ref={quillObj}
-			className={classes.container}
-			theme="snow"
-			value={value}
-			onChange={onChange}
-			modules={modules}
-			formats={formats}
-		/>
+		<div className={classes.container}>
+			<div id="editor" >
+				<div id="drag-and-drop-container"></div>
+			</div>
+		</div>
+
 	);
 };

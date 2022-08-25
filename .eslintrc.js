@@ -27,6 +27,7 @@ module.exports = {
 		'no-unused-vars': 'warn',
 		'capitalized-comments': 0,
 		camelcase: 'warn',
+		'react/prop-types': 0,
 		'no-restricted-syntax': [
 			'error',
 			{
