@@ -75,7 +75,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			setIsLoggedIn(false);
 		} else {
 			setIsLoggedIn(true);
-			state.loggedOut = false;
 		}
 	}, [user]);
 
