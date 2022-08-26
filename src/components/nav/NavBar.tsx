@@ -183,7 +183,11 @@ export const NavBar = ({showBorder}: INavBar) => {
 					</ModalBody>
 				</ModalContent>
 			</Modal>
-			<AuthModal isOpen={loginIsOpen} onClose={loginOnClose}/>
+			<AuthModal isOpen={loginIsOpen} onClose={() => {
+				loginOnClose();
+				onClose();
+			}
+			}/>
 		</>
 	);
 };

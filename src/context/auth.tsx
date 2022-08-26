@@ -5,7 +5,6 @@ import { IUser } from '../interfaces';
 import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
-import { useLocation } from 'react-router';
 
 const defaultContext = {
 	isLoggedIn: false,
@@ -45,7 +44,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const [loading, setLoading] = useState(true);
 	const [initialLoad, setInitialLoad] = useState(false);
-	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 
 	const [user, setUser] = useState<IUser>(defaultUser);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);

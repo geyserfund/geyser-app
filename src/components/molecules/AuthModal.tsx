@@ -35,15 +35,15 @@ interface IAuthModal {
 // 	},
 // });
 
-const TwitterConnect = () => {
-	const { setUser, setIsLoggedIn, loginOnClose } = useAuthContext();
+const TwitterConnect = ({ onClose }: { onClose: () => {}}) => {
+	const { setUser, setIsLoggedIn } = useAuthContext();
 	const { toast } = useNotification();
 	const [getUser, { stopPolling }] = useLazyQuery(ME, {
 		onCompleted: (data: any) => {
 			if (data && data.me) {
 				const hasTwitter = hasTwitterAccount(data.me);
 				if (hasTwitter) {
-					loginOnClose();
+					onClose();
 					stopPolling();
 					setUser(data.me);
 					setIsLoggedIn(true);
@@ -154,7 +154,7 @@ const LnurlConnect = ({ setQrContent, setLnurlState }:
 	);
 };
 
-const ConnectAccounts = ({ setModalStates, setQrContent }: any) => {
+const ConnectAccounts = ({ setModalStates, setQrContent, onClose }: any) => {
 	const { user } = useAuthContext();
 	const [setLnurlState] = setModalStates;
 	return (
@@ -162,7 +162,7 @@ const ConnectAccounts = ({ setModalStates, setQrContent }: any) => {
 			<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
 			<Text color="brand.textGrey2" marginBottom={5}>Connect more profiles.</Text>
 			<Stack>
-				{!hasTwitterAccount(user) && <TwitterConnect/>}
+				{!hasTwitterAccount(user) && <TwitterConnect onClose={onClose}/>}
 				<LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent}/>
 			</Stack>
 		</Box>
@@ -323,7 +323,9 @@ export const AuthModal = ({
 					<>
 						<ConnectAccounts
 							setQrContent={setQrContent}
-							setModalStates={[setLnurlState]} />
+							setModalStates={[setLnurlState]}
+							onClose={onClose}
+						/>
 						<Box borderBottom="1px solid lightgrey" pb={5}></Box>
 						<DisconnectAccounts />
 					</>
@@ -335,6 +337,7 @@ export const AuthModal = ({
 						<ConnectAccounts
 							setQrContent={setQrContent}
 							setModalStates={[setLnurlState]}
+							onClose={onClose}
 						/>
 					</Box>
 				);
