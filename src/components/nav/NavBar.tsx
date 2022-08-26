@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
-import { AddIcon, Icon } from '@chakra-ui/icons';
-import { FiTwitter } from 'react-icons/fi';
+import { AddIcon } from '@chakra-ui/icons';
 import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
 import { Box, HStack } from '@chakra-ui/layout';
@@ -184,7 +183,11 @@ export const NavBar = ({showBorder}: INavBar) => {
 					</ModalBody>
 				</ModalContent>
 			</Modal>
-			<AuthModal isOpen={loginIsOpen} onClose={loginOnClose}/>
+			<AuthModal isOpen={loginIsOpen} onClose={() => {
+				loginOnClose();
+				onClose();
+			}
+			}/>
 		</>
 	);
 };
