@@ -13,7 +13,6 @@ const errorLink = onError(({ graphQLErrors }) => {
 	if (graphQLErrors) {
 		for (const err of graphQLErrors) {
 			if (err && err.extensions && err.extensions.code) {
-				console.error(err);
 				if (err.extensions.code === 'UNAUTHENTICATED') {
 					customHistory.push(customHistory.location.pathname, { loggedOut: true });
 				}
