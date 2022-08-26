@@ -17,8 +17,9 @@ import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
-import { Creation } from '../pages/creation/postEditor';
+import { PostCreateEdit } from '../pages/creation/postEditor';
 import { PostPreview } from '../pages/creation/postPreview';
+import { ProjectCreate } from '../pages/creation/projectCreate';
 
 export const customHistory = createBrowserHistory();
 
@@ -56,7 +57,7 @@ export const Router = () => {
 	return (
 		<Fade in={true}>
 			<Box height="100vh">
-				<NavBar showBorder={showBorder} skipRoutes={['/create', '/create/:postId', '/create/:postId/preview']} />
+				<NavBar showBorder={showBorder} skipRoutes={['/posts', '/posts/:postId', '/posts/:postId/preview']} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
 						<Route path="/auth/twitter">
@@ -71,14 +72,17 @@ export const Router = () => {
 						<Route path="/launch">
 							<LaunchIdea />
 						</Route>
-						<Route path="/create/:postId/preview">
+						<Route path="/posts/:postId/preview">
 							<PostPreview />
 						</Route>
-						<Route path="/create/:postId">
-							<Creation />
+						<Route path="/posts/:postId">
+							<PostCreateEdit />
 						</Route>
-						<Route path="/create">
-							<Creation />
+						<Route path="/posts">
+							<PostCreateEdit />
+						</Route>
+						<Route path="/projects">
+							<ProjectCreate />
 						</Route>
 						<Route path="/profile/:userId">
 							<Profile />

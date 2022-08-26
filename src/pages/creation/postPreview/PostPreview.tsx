@@ -74,7 +74,7 @@ export const PostPreview = () => {
 	};
 
 	const onBack = () => {
-		history.push(`/create/${params.postId}`);
+		history.push(`/posts/${params.postId}`);
 	};
 
 	const handleInput = (event: any) => {

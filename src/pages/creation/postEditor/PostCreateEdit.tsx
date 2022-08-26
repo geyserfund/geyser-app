@@ -37,7 +37,7 @@ const useStyles = createUseStyles({
 
 export const defaultEntry = { id: 0, title: '', description: '', image: '', content: '', published: false, type: 'article' };
 
-export const Creation = () => {
+export const PostCreateEdit = () => {
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
 	const history = useHistory();
@@ -166,7 +166,7 @@ export const Creation = () => {
 
 	const onPreview = () => {
 		if (form.current && form.current.id) {
-			history.push(`/create/${form.current.id}/preview`);
+			history.push(`/posts/${form.current.id}/preview`);
 		} else {
 			toast({
 				title: 'Cannot preview',
