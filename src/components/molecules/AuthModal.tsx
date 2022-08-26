@@ -35,15 +35,15 @@ interface IAuthModal {
 // 	},
 // });
 
-const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
-	const { setUser, setIsLoggedIn } = useAuthContext();
+const TwitterConnect = () => {
+	const { setUser, setIsLoggedIn, loginOnClose } = useAuthContext();
 	const { toast } = useNotification();
 	const [getUser, { stopPolling }] = useLazyQuery(ME, {
 		onCompleted: (data: any) => {
 			if (data && data.me) {
 				const hasTwitter = hasTwitterAccount(data.me);
 				if (hasTwitter) {
-					onLoginClose();
+					loginOnClose();
 					stopPolling();
 					setUser(data.me);
 					setIsLoggedIn(true);
@@ -59,8 +59,20 @@ const TwitterConnect = ({ onLoginClose }: { onLoginClose: any }) => {
 	useEffect(() => {
 		if (pollAuthStatus) {
 			const id = setInterval(async () => {
-				const statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, { credentials: 'include' });
-				if (statusRes.status === 200) {
+				let statusRes;
+				try {
+					statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, { credentials: 'include' });
+				} catch (error) {
+					stopPolling();
+					setPollAuthStatus(false);
+					toast({
+						title: 'Something went wrong',
+						description: `The authentication request failed: ${(error as Error).message}.`,
+						status: 'error',
+					});
+				}
+
+				if (statusRes && statusRes.status === 200) {
 					const { status: authStatus, reason } = await statusRes.json();
 					if (authStatus === 'success') {
 						setPollAuthStatus(false);
@@ -142,7 +154,7 @@ const LnurlConnect = ({ setQrContent, setLnurlState }:
 	);
 };
 
-const ConnectAccounts = ({ setModalStates, setQrContent, onLoginClose }: any) => {
+const ConnectAccounts = ({ setModalStates, setQrContent }: any) => {
 	const { user } = useAuthContext();
 	const [setLnurlState] = setModalStates;
 	return (
@@ -150,7 +162,7 @@ const ConnectAccounts = ({ setModalStates, setQrContent, onLoginClose }: any) =>
 			<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
 			<Text color="brand.textGrey2" marginBottom={5}>Connect more profiles.</Text>
 			<Stack>
-				{!hasTwitterAccount(user) && <TwitterConnect onLoginClose={onLoginClose}/>}
+				{!hasTwitterAccount(user) && <TwitterConnect/>}
 				<LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent}/>
 			</Stack>
 		</Box>
@@ -311,7 +323,6 @@ export const AuthModal = ({
 					<>
 						<ConnectAccounts
 							setQrContent={setQrContent}
-							onLoginClose={onClose}
 							setModalStates={[setLnurlState]} />
 						<Box borderBottom="1px solid lightgrey" pb={5}></Box>
 						<DisconnectAccounts />
@@ -323,7 +334,6 @@ export const AuthModal = ({
 					<Box>
 						<ConnectAccounts
 							setQrContent={setQrContent}
-							onLoginClose={onClose}
 							setModalStates={[setLnurlState]}
 						/>
 					</Box>
