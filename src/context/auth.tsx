@@ -5,7 +5,6 @@ import { IUser } from '../interfaces';
 import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
-import { customHistory } from '../config';
 
 const defaultContext = {
 	isLoggedIn: false,
@@ -74,9 +73,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			setIsLoggedIn(false);
 		} else {
 			setIsLoggedIn(true);
-			console.log(customHistory);
-			console.log(JSON.stringify(customHistory));
-			customHistory.push(customHistory.location.pathname, { loggedOut: false });
 		}
 	}, [user]);
 
