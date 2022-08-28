@@ -2,7 +2,6 @@ export const checkMacaroonPermissions = (macaroon: string) => {
 	// Buffer can be used server-side and atob client side
 	// const utf8Encoded = Buffer.from(macaroon, 'base64').toString('utf8');
 	const utf8Encoded = atob(macaroon);
-	console.log('utf8Encoded', utf8Encoded);
 
 	const chunks = utf8Encoded.split('\n').map(a => a.split('\t')).flat();
 
@@ -10,7 +9,6 @@ export const checkMacaroonPermissions = (macaroon: string) => {
 	const cleanedChunks = chunks.map(chunk => chunk.replace(/[^\x0-\x7F]/g, '').replace(/[^a-z]/gi, ''));
 
 	const permissions = cleanedChunks.filter(chunk => chunk.includes('read') || chunk.includes('write'));
-	console.log(permissions);
 
 	const requiredPermissions = ['addressreadwrite', 'invoicesreadwrite', 'onchainread'];
 
