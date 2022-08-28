@@ -36,12 +36,18 @@ interface IFundingRewardWithoutCost {
     quantity: number;
 }
 
+interface ISourceResourceInput {
+    resourceId: number;
+    resourceType: string;
+}
+
 export interface IFundingInput {
     projectId: number;
     anonymous: boolean;
     donationInput?: IDonationFundingInput;
     rewardInput?: IRewardFundingInput;
     metadataInput?: IMetadataFundingInput;
+    sourceResourceInput: ISourceResourceInput;
 }
 
 export interface IDonationFundingInput {
