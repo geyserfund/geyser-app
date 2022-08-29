@@ -4,7 +4,7 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'podcast',
 		title: '',
 		body: [],
-		podcast: 'https://soundcloud.com/user-44010708/the-anatomy-of-bitcoin-006?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
+		podcast: 'https://anchor.fm/geyser-fund/embed/episodes/The-Anatomy-of-Bitcoin-006-e1k6kme',
 		blockType: 'PL',
 	},
 	{
