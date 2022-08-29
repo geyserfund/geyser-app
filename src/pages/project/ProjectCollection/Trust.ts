@@ -98,6 +98,12 @@ const projectBlocks: IProjectBlock[] = [
 		blockType: 'PL',
 	},
 	{
+		key: 'rewards-2',
+		title: '',
+		body: ['For larger amounts other options are available reach out to the creators directly'],
+		blockType: 'PL',
+	},
+	{
 		key: 'sponsors',
 		title: 'Sponsors',
 		body: [
