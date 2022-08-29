@@ -27,10 +27,18 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 
 	const { blocks } = projectDetails;
 
+	const renderVimeoIFrame = (id?: string) => {
+		if (id) {
+			return (<Box width="100%" mt={10}>
+				<iframe title="vimeo-player" src={`https://player.vimeo.com/video/${id}`} width="640" height="360"></iframe>
+			</Box>);
+		}
+	};
+
 	const renderTweet = (tweet?: string) => {
 		if (tweet) {
 			return (
-				<Box width="100%" display="flex" justifyContent="center">
+				<Box width="100%" display="flex" justifyContent="center" justifyItems="center">
 					<TwitterComponent id={tweet} />
 				</Box>
 			);
@@ -133,6 +141,7 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
 				{renderImages(block.images)}
 				{renderTweet(block.tweet)}
 				{renderYoutube(block.youtube)}
+				{renderVimeoIFrame(block.vimeo)}
 			</VStack>
 
 		);
