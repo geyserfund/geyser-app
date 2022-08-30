@@ -11,14 +11,11 @@ export const checkMacaroonPermissions = (macaroon: string) => {
 		.filter(chunk => chunk.includes('read') || chunk.includes('write'))
 		.map(chunk => chunk.split('  '));
 
-	console.log(chunks);
-
 	const requiredPermissions: { [key: string]: string[] } = {
 		address: ['read', 'write'],
 		invoices: ['read', 'write'],
 		onchain: ['read'],
 	};
-	console.log('requiredPermissions', requiredPermissions);
 
 	const permissions = chunks.reduce((prev: any, chunk: any) => {
 		const newPrev = { ...prev };
