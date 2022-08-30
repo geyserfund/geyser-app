@@ -14,7 +14,7 @@ import { useHistory, useParams } from 'react-router';
 import { QUERY_GET_POST } from '../../../graphql/queries/posts';
 import { FileUpload } from '../../../components/molecules';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
+import { colors, GeyserAssetDomainUrl } from '../../../constants';
 import { ImageWithReload } from '../../../components/ui';
 import { Editor } from './Editor';
 import Loader from '../../../components/ui/Loader';
@@ -177,7 +177,7 @@ export const PostCreateEdit = () => {
 	};
 
 	const onImageUpload = (url: string) => {
-		setForm({...form.current, image: `https://storage.googleapis.com/${url}`});
+		setForm({...form.current, image: `${GeyserAssetDomainUrl}${url}`});
 	};
 
 	if (params.postId && !form.current.id) {

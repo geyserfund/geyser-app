@@ -17,7 +17,7 @@ export const FileUpload = ({children, onUploadComplete }:IFileUpload) => {
 	const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, maxFiles: 1, accept: {'image/*': []}});
 
 	return (
-		<Box {...getRootProps()} width="100%">
+		<Box {...getRootProps()} width="100%" _hover={{cursor: 'pointer'}}>
 			<input {...getInputProps()} />
 			{children}
 		</Box>

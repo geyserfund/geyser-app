@@ -34,3 +34,4 @@ export const GeyserLignteningNodeUrl = 'https://amboss.space/node/0272e8731c6fed
 export const GeyserFAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3';
 
 export const GeyserAssetDomainUrl = 'https://storage.googleapis.com/';
+export const GeyserSkeletonUrl = 'https://storage.googleapis.com/geyser-projects-media/app/imageskelton.gif';

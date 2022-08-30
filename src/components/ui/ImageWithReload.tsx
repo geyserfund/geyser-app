@@ -1,7 +1,6 @@
 import { Image, ImageProps, Skeleton } from '@chakra-ui/react';
-import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Loader from './Loader';
+import { GeyserSkeletonUrl } from '../../constants';
 
 interface IImageWithReload extends ImageProps{
 
@@ -37,10 +36,10 @@ export const ImageWithReload = ({src, ...rest}: IImageWithReload) => {
 	return (
 		<>
 			{
-				error && <Skeleton height="300px" width="500px"/>
+				error && <Skeleton height={rest.height || '300px'} width={rest.width || '500px'}/>
 			}
 			<Image
-				display={error ? 'hidden' : undefined}
+				display={error ? 'none' : undefined}
 				src={src}
 				maxHeight="500px"
 				onError={handleError}
