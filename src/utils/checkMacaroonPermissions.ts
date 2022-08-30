@@ -3,26 +3,64 @@ export const checkMacaroonPermissions = (macaroon: string) => {
 	// const utf8Encoded = Buffer.from(macaroon, 'base64').toString('utf8');
 	const utf8Encoded = atob(macaroon);
 
-	const chunks = utf8Encoded.split('\n').map(a => a.split('\t')).flat();
+	const chunks = utf8Encoded
+		.split('\n')
+		.map(line => line.replace(/[^\x0-\x7F]/g, ' ').split('   ')) // Remove ASCII control characters and split on triple space
+		.flat()
+		.map(chunk => chunk.replace(/[^a-z ]/gi, '').trim())
+		.filter(chunk => chunk.includes('read') || chunk.includes('write'))
+		.map(chunk => chunk.split('  '));
 
-	// Remove ASCII control characters and non-alphabetical characters
-	const cleanedChunks = chunks.map(chunk => chunk.replace(/[^\x0-\x7F]/g, '').replace(/[^a-z]/gi, ''));
+	console.log(chunks);
 
-	const permissions = cleanedChunks.filter(chunk => chunk.includes('read') || chunk.includes('write'));
+	const requiredPermissions: { [key: string]: string[] } = {
+		address: ['read', 'write'],
+		invoices: ['read', 'write'],
+		onchain: ['read'],
+	};
+	console.log('requiredPermissions', requiredPermissions);
 
-	const requiredPermissions = ['addressreadwrite', 'invoicesreadwrite', 'onchainread'];
+	const permissions = chunks.reduce((prev: any, chunk: any) => {
+		const newPrev = { ...prev };
+		const keyParts = chunk.filter((word: string) => !['read', 'write'].includes(word));
+		const key = keyParts.join('');
+		newPrev[key] = chunk.slice(keyParts.length);
+		return newPrev;
+	}, {});
 
 	// 1. check that permissions contains all required permissions
-	const missingPermissions = requiredPermissions.filter(permission => !permissions.includes(permission)); // permissions.pop() });
+	const missingPermissions: string[] = [];
+
+	Object.keys(requiredPermissions).forEach(key => {
+		if (!permissions[key]) {
+			missingPermissions.push(`${key}: ${requiredPermissions[key].join()}`);
+		} else {
+			const missingPermission = requiredPermissions[key].filter(permission => !permissions[key].includes(permission)).join();
+			if (missingPermission) {
+				missingPermissions.push(`${key}: ${missingPermission}`);
+			}
+		}
+	});
+
 	if (missingPermissions.length > 0) {
-		throw new Error(`macaroon is missing the following permissions: ${JSON.stringify(Array.from(missingPermissions))}`);
+		throw new Error(`macaroon is missing the following permissions: ${JSON.stringify(missingPermissions)}`);
 	}
 
-	// 2. check that macaroon does not contains additional permissions
-	const extraPermissions = permissions.filter(permission => !requiredPermissions.includes(permission));
+	const extraPermissions: string[] = [];
+
+	Object.keys(permissions).forEach(key => {
+		if (!requiredPermissions[key]) {
+			extraPermissions.push(`${key}: ${permissions[key].join()}`);
+		} else {
+			const extraPermission = permissions[key].filter((permission: string) => !requiredPermissions[key].includes(permission)).join();
+			if (extraPermission) {
+				missingPermissions.push(`${key}: ${extraPermission}`);
+			}
+		}
+	});
 	if (extraPermissions.length > 0) {
 		throw new Error(
-			`macaroon has the following unnecessary permissions: ${JSON.stringify(Array.from(extraPermissions))}. Make sure you did not paste an admin macaroon`,
+			`macaroon has the following unnecessary permissions: ${JSON.stringify(extraPermissions)}. Make sure you did not paste an admin macaroon`,
 		);
 	}
 };
