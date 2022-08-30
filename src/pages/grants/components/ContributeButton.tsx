@@ -90,6 +90,7 @@ export const ContributeButton = ({active, title, project}:ContributeButtonProps)
 			projectId: Number(project.id),
 			anonymous: true,
 			donationInput: { donationAmount: parseInt((contributeAmount / btcRate).toFixed(0)) },
+			sourceResourceInput: { resourceId: Number(project.id), resourceType: 'project' },
 		};
 		requestFunding(input);
 	};

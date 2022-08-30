@@ -15,9 +15,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
     expiresAt
     media
     active
-    ownerConfirmed
-    fundsClaimed
-    creationConfirmed
+    draft
     owners {
       id
       user {
@@ -30,7 +28,6 @@ query GetProject($where: UniqueProjectQueryInput!) {
       id
       cost
       description
-      currency
       name
       backers
     }
@@ -142,9 +139,7 @@ query projects($where: ProjectQueryInput) {
       updatedAt
       expiresAt
       active
-      ownerConfirmed
-      fundsClaimed
-      creationConfirmed
+      draft
       media
       owners {
         id

@@ -124,6 +124,10 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 				...(media && { media }),
 				...(comment && { comment }),
 			},
+			sourceResourceInput: {
+				resourceId: Number(project.id),
+				resourceType: 'project',
+			},
 		};
 
 		if (Object.entries(state.rewards).length > 0) {
