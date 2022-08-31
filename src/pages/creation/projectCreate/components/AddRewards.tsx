@@ -49,17 +49,16 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 		_setRewards(value);
 	};
 
+	const [formError, setFormError] = useState<any>({});
+
 	useEffect(() => {
 		if (availableReward && availableReward !== rewards.current) {
 			setRewards(availableReward);
 		}
 	}, [availableReward]);
 
-	const handleAmountChange = (value: any) => {
-		setRewards({...rewards.current, cost: value});
-	};
-
 	const handleTextChange = (event: any) => {
+		setFormError({});
 		if (event) {
 			const {name, value} = event.target;
 			if (name) {
@@ -69,6 +68,11 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 	};
 
 	const handleConfirmReward = () => {
+		const isValid = validateReward();
+		if (!isValid) {
+			return;
+		}
+
 		const id = rewards.current.id || new Date().toISOString();
 		onSubmit({...rewards.current, id});
 		onClose();
@@ -76,6 +80,31 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 
 	const handleUpload = (url: string) => {
 		setRewards({...rewards.current, image: `${GeyserAssetDomainUrl}${url}`});
+	};
+
+	const validateReward = () => {
+		const errors: any = {};
+		let isValid = true;
+		if (!rewards.current.name) {
+			errors.name = 'Name is a required field';
+			isValid = false;
+		}
+
+		if (!rewards.current.cost) {
+			errors.cost = 'Cost needs to be greater than 1';
+			isValid = false;
+		}
+
+		if (rewards.current.description && rewards.current.description.length > 280) {
+			errors.cost = 'description must be less than 280 characters';
+			isValid = false;
+		}
+
+		if (!isValid) {
+			setFormError(errors);
+		}
+
+		return isValid;
 	};
 
 	console.log('checking rewards');
@@ -102,6 +131,7 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 								value={rewards.current.name}
 								name="name"
 								onChange={handleTextChange}
+								error={formError.name}
 							/>
 						</VStack>
 
@@ -150,14 +180,12 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 									name="cost"
 									type="number"
 									onChange={handleTextChange}
+									vaalue={rewards.current.cost}
+									isInvalid={formError.cost}
 								/>
 							</InputGroup>
-							{/* <DonationInputWithSatoshi
-								amountSatoshi={isSatoshi}
-								onChangeSatoshi={setIsSatoshi}
-								value={rewards.current.cost}
-								onChange={(_:any, value: number) => handleAmountChange(value)}
-							/> */}
+							{formError.cost && <Text fontSize="12px" color="red.500">{formError.cost}</Text>}
+							{!formError.cost && <Text fontSize="12px">Reward currency is the same as milestone</Text>}
 						</VStack>
 
 					</VStack>

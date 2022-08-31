@@ -1,16 +1,18 @@
 import { Box, Grid, GridItem, HStack, Text, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { ButtonComponent, Card, IconButtonComponent, ImageWithReload, SatoshiAmount, TextBox } from '../../../components/ui';
+import { ButtonComponent, Card, IconButtonComponent, ImageWithReload, SatoshiAmount } from '../../../components/ui';
 import { isMobileMode, validateEmail } from '../../../utils';
 import { TMilestone, TProjectDetails, TRewards } from './types';
 import { BiCrosshair, BiLeftArrowAlt, BiPencil } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors, GeyserAssetDomainUrl } from '../../../constants';
+import { colors } from '../../../constants';
 import { useHistory } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddMilestones, defaultMilestone } from './components';
 import { EditIcon } from '@chakra-ui/icons';
 import { AddRewards } from './components/AddRewards';
+import { CalendarButton } from '../../../components/molecules';
+import { DateTime } from 'luxon';
 
 const useStyles = createUseStyles({
 	backIcon: {
@@ -23,8 +25,10 @@ export const MilestoneAndRewards = () => {
 	const classes = useStyles();
 	const history = useHistory();
 
-	const [form, setForm] = useState<TProjectDetails>({title: '', description: '', image: '', email: ''});
-	const [formError, setFormError] = useState<{[key: string]: string}>({});
+	const [selectedButton, setSelectedButton] = useState('ongoing');
+	const [selectedDate, setSelectedDate] = useState<Date>();
+
+	const [finalDate, setFinalDate] = useState<string>('');
 
 	const [milestones, setMilestones] = useState<TMilestone[]>([]);
 	const [rewards, setRewards] = useState<TRewards[]>([]);
@@ -33,20 +37,6 @@ export const MilestoneAndRewards = () => {
 	const {isOpen: isMilestoneOpen, onClose: onMilestoneClose, onOpen: openMilestone} = useDisclosure();
 	const {isOpen: isRewardOpen, onClose: onRewardClose, onOpen: openReward} = useDisclosure();
 	const [isSatoshi, setIsSatoshi] = useState(true);
-
-	const handleChange = (event: any) => {
-		if (event) {
-			const {name, value} = event.target;
-			setForm({...form, [name]: value || ''});
-			setFormError({});
-		}
-	};
-
-	const lighteningAddressPreview = form.title.split(' ').join('').toLowerCase() + '@geyser.fund';
-
-	const handleUpload = (url: string) => {
-		setForm({...form, image: `${GeyserAssetDomainUrl}${url}`});
-	};
 
 	const handleMilestoneSubmit = (milestones: TMilestone[]) => {
 		setMilestones(milestones);
@@ -69,39 +59,7 @@ export const MilestoneAndRewards = () => {
 	};
 
 	const handleNext = () => {
-		const isValid = validateForm();
 
-		if (isValid) {
-			console.log('Add the graphql mutation trigger here');
-		}
-	};
-
-	const validateForm = () => {
-		const errors: any = {};
-		let isValid = true;
-		if (!form.title) {
-			errors.title = 'title is a required field';
-			isValid = false;
-		}
-
-		if (!form.description) {
-			errors.description = 'Project objective is a required field';
-			isValid = false;
-		}
-
-		if (!form.email) {
-			errors.description = 'Email address is a required field.';
-			isValid = false;
-		} else if (!validateEmail(form.email)) {
-			errors.email = 'Please enter a valid email address.';
-			isValid = false;
-		}
-
-		if (!isValid) {
-			setFormError(errors);
-		}
-
-		return isValid;
 	};
 
 	const handleBack = () => {
@@ -117,9 +75,26 @@ export const MilestoneAndRewards = () => {
 		setRewards(newRewards);
 	};
 
-	const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+	const handleDateChange = (value: Date) => {
+		setSelectedButton('custom');
+		setSelectedDate(value);
+		setFinalDate(`${value.getTime()}`);
+	};
 
-	console.log('checking reward list', rewards);
+	const handleMonthSelect = () => {
+		setSelectedButton('month');
+		const dateMonth = DateTime.now().plus({months: 1});
+		setSelectedDate(undefined);
+		setFinalDate(`${dateMonth.toJSDate().getTime()}`);
+	};
+
+	const handleOngoingSelect = () => {
+		setSelectedButton('ongoing');
+		setSelectedDate(undefined);
+		setFinalDate('');
+	};
+
+	const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
 	return (
 		<Box
@@ -166,9 +141,31 @@ export const MilestoneAndRewards = () => {
 							<VStack width="100%" alignItems="flex-start">
 								<Text>Fundraising deadline</Text>
 								<HStack width="100%" justifyContent="space-around">
-									<ButtonComponent>Ongoing</ButtonComponent>
-									<ButtonComponent>1 Month</ButtonComponent>
-									<ButtonComponent>Custom</ButtonComponent>
+									<ButtonComponent
+										primary={selectedButton === 'ongoing'}
+										onClick={handleOngoingSelect}
+									>
+										Ongoing
+									</ButtonComponent>
+									<ButtonComponent
+										primary={selectedButton === 'month'}
+										onClick={handleMonthSelect}
+									>
+										1 Month
+									</ButtonComponent>
+									{/* <ButtonComponent
+										primary={selectedButton === 'custom'}
+										onClick={() => setSelectedButton('custom')}
+									>
+										Custom
+									</ButtonComponent> */}
+									<CalendarButton
+										primary={selectedButton === 'custom'}
+										value={selectedDate}
+										onChange={handleDateChange}
+									>
+										Custom
+									</CalendarButton>
 								</HStack>
 								<Text fontSize="12px">Add a deadline for your project if you have one, or just keep it as ongoing.</Text>
 							</VStack>
@@ -179,17 +176,6 @@ export const MilestoneAndRewards = () => {
 									openReward();
 								}}>Add a reward</ButtonComponent>
 								<Text fontSize="12px">Rewards are a powerful way of exchanging value with your community</Text>
-							</VStack>
-
-							<VStack width="100%" alignItems="flex-start">
-								<Text>Project E-mail</Text>
-								<TextBox
-									name="email"
-									value={form.email}
-									onChange={handleChange}
-									error={formError.email}
-								/>
-								<Text fontSize="12px">This is where you will receive your funding notifications.</Text>
 							</VStack>
 							<ButtonComponent primary isFullWidth onClick={handleNext}>Continue</ButtonComponent>
 						</VStack>

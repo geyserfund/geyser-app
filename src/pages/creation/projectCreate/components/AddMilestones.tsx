@@ -46,6 +46,8 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 		_setMilestones(value);
 	};
 
+	const [amountSatoshi, setAmountSatoshi] = useState(isSatoshi);
+
 	const handleAddMilestone = () => {
 		setMilestones([...milestones.current, defaultMilestone]);
 	};
@@ -78,6 +80,7 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 
 	const handleConfirmMilestone = () => {
 		const filetMilestones = milestones.current.filter(milestone => milestone.amount > 0 && milestone.name);
+		setIsSatoshi(amountSatoshi);
 		onSubmit(filetMilestones);
 		onClose();
 	};
@@ -124,8 +127,8 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 										onChange={(event: any) => handleTextChange(event, index)}
 									/>
 									<DonationInputWithSatoshi
-										amountSatoshi={isSatoshi}
-										onChangeSatoshi={setIsSatoshi}
+										amountSatoshi={amountSatoshi}
+										onChangeSatoshi={setAmountSatoshi}
 										value={milestone.amount}
 										onChange={(_:any, value: number) => handleAmountChange(value, index)}
 									/>

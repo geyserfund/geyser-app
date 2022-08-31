@@ -1,7 +1,7 @@
 import { Box, Grid, GridItem, HStack, Image, Text, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { FileUpload } from '../../../components/molecules';
-import { ButtonComponent, Card, ImageWithReload, ProgressBar, TextArea, TextBox } from '../../../components/ui';
+import { ButtonComponent, Card, ImageWithReload, TextArea, TextBox } from '../../../components/ui';
 import { isMobileMode, validateEmail } from '../../../utils';
 import {AiOutlineUpload} from 'react-icons/ai';
 import { TProjectDetails } from './types';
@@ -61,7 +61,7 @@ export const ProjectCreate = () => {
 		}
 
 		if (!form.email) {
-			errors.description = 'Email address is a required field.';
+			errors.email = 'Email address is a required field.';
 			isValid = false;
 		} else if (!validateEmail(form.email)) {
 			errors.email = 'Please enter a valid email address.';
@@ -80,6 +80,8 @@ export const ProjectCreate = () => {
 	};
 
 	const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+
+	console.log('checking project', form);
 
 	return (
 		<Box
