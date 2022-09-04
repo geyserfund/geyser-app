@@ -24,7 +24,7 @@ export const TextBox = ({children, error, ...rest}: ITextBoxProps) => {
 			<Input isInvalid={Boolean(error)} className={classes.inputElement} {...rest}>
 				{children}
 			</Input>
-			{error && <Text color="brand.error">{error}</Text>}
+			{error && <Text color="brand.error" fontSize="12px">{error}</Text>}
 		</Box>
 
 	);

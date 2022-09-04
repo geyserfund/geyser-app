@@ -33,6 +33,7 @@ const useStyles = createUseStyles({
 		display: 'flex',
 		width: '100%',
 		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });
 

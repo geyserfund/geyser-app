@@ -91,7 +91,7 @@ export const ProjectCreate = () => {
 			height="100%"
 			justifyContent="space-between"
 		>
-			<Grid width="100%" templateColumns={isMobile ? 'repeat(2, 1fr)' : 'repeat(6, 1fr)'} padding={isMobile ? '10px' : '40px 40px 20px 40px'} >
+			<Grid width="100%" templateColumns={isLargerThan1280 ? 'repeat(6, 1fr)' : isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)' } padding={isMobile ? '10px' : '40px 40px 20px 40px'} >
 				<GridItem colSpan={isLargerThan1280 ? 2 : 1} display="flex" justifyContent="flex-start">
 					<ButtonComponent leftIcon={<BiLeftArrowAlt className={classes.backIcon} onClick={handleBack} />}>Back</ButtonComponent>
 				</GridItem>
@@ -117,11 +117,7 @@ export const ProjectCreate = () => {
 						</VStack>
 						<VStack width="100%" alignItems="flex-start">
 							<VStack width="100%" alignItems="flex-start">
-								<Text
-									name="title"
-									value={form.title}
-									onChange={handleChange}
-								>
+								<Text>
 								Project Title
 								</Text>
 								<TextBox

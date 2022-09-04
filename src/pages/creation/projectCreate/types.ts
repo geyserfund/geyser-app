@@ -20,3 +20,13 @@ export type TRewards = {
 	cost: number;
 	image?: string;
 }
+
+export type TNodeInput = {
+	name: string;
+	isVoltage?: boolean;
+	hostname: string;
+	publicKey: string;
+	invoiceMacaroon: string;
+	tlsCert: string;
+	grpc: string;
+}

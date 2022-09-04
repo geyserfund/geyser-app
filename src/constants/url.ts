@@ -35,3 +35,5 @@ export const GeyserFAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa90
 
 export const GeyserAssetDomainUrl = 'https://storage.googleapis.com/';
 export const GeyserSkeletonUrl = 'https://storage.googleapis.com/geyser-projects-media/app/imageskelton.gif';
+
+export const VoltageLogoUrl = 'https://storage.googleapis.com/geyser-projects-media/app/voltage_logo.png';

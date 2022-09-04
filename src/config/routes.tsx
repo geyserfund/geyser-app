@@ -19,7 +19,7 @@ import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
 import { PostCreateEdit } from '../pages/creation/postEditor';
 import { PostPreview } from '../pages/creation/postPreview';
-import { MilestoneAndRewards, ProjectCreate } from '../pages/creation/projectCreate';
+import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
 
 export const customHistory = createBrowserHistory();
 
@@ -80,6 +80,9 @@ export const Router = () => {
 						</Route>
 						<Route path="/posts">
 							<PostCreateEdit />
+						</Route>
+						<Route path="/projects/:projectId/node">
+							<Wallet />
 						</Route>
 						<Route path="/projects/:projectId/milestones">
 							<MilestoneAndRewards />
