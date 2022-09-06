@@ -109,7 +109,7 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 					>
 						{
 							milestones.current.map((milestone, index) => (
-								<VStack key={index} width="100%" alignItems="flex-start">
+								<VStack key={index} width="100%" alignItems="flex-start" paddingX="2px">
 									<HStack justifyContent="space-between" width="100%">
 										<Text marginTop="10px" marginBottoim="5px">{`Milestone ${index + 1}`}</Text>
 										<ButtonComponent

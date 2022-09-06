@@ -7,9 +7,11 @@ import { TNodeInput } from './types';
 import { BiLeftArrowAlt, BiPencil } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { colors, VoltageLogoUrl } from '../../../constants';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddNode } from './components/AddNode';
+import { useMutation } from '@apollo/client';
+import { MUTATION_CREATE_POST, MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
 
 const useStyles = createUseStyles({
 	backIcon: {
@@ -21,17 +23,40 @@ export const Wallet = () => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
 	const history = useHistory();
+	const params = useParams<{projectId: string}>();
 
 	const [node, setNode] = useState<TNodeInput>();
 
 	const {isOpen: isWalletOpen, onClose: onWalletClose, onOpen: openWallet} = useDisclosure();
 
+	const [createWallet, {
+		loading: createWalletLoading,
+	}] = useMutation(MUTATION_CREATE_WALLET);
+
 	const handleBack = () => {
 		history.push('/');
 	};
 
-	const handleNext = () => {
+	const handleNext = async () => {
+		try {
+			const createWalletInput = {
+				resourceInput: {
+					resourceId: null,
+					resourceType: params.projectId,
+				},
+				lndConnectionDetailsInput: {
+					macaroon: node?.invoiceMacaroon,
+					tlsCertificate: node?.tlsCert,
+					hostname: node?.hostname,
+					grpcPort: node?.grpc,
+					lndNodeType: node?.isVoltage ? 'voltage' : 'custom',
+				},
+			};
 
+			const value = await createWallet({variables: {input: createWalletInput}});
+		} catch (error) {
+
+		}
 	};
 
 	const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
@@ -89,7 +114,7 @@ export const Wallet = () => {
 								<ButtonComponent isFullWidth disabled>Coming Soon</ButtonComponent>
 							</VStack>
 
-							<ButtonComponent primary isFullWidth onClick={handleNext}>Next</ButtonComponent>
+							<ButtonComponent primary isFullWidth onClick={handleNext} isLoading={createWalletLoading}>Next</ButtonComponent>
 						</VStack>
 
 					</VStack>

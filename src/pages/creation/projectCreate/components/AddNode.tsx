@@ -62,7 +62,7 @@ export const AddNode = ({isOpen, onClose, node, onSubmit }:IAddNode) => {
 	const handleSubmit = () => {
 		const isValid = validateForm();
 		if (isValid) {
-			onSubmit(form);
+			onSubmit({...form, isVoltage});
 			onClose();
 		}
 	};

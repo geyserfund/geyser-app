@@ -10,6 +10,8 @@ import { createUseStyles } from 'react-jss';
 import { GeyserAssetDomainUrl, GeyserSkeletonUrl } from '../../../constants';
 import { useHistory } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
+import { useMutation } from '@apollo/client';
+import { MUTATION_CREATE_PROJECT } from '../../../graphql/mutations';
 
 const useStyles = createUseStyles({
 	backIcon: {
@@ -25,24 +27,45 @@ export const ProjectCreate = () => {
 	const [form, setForm] = useState<TProjectDetails>({title: '', description: '', image: '', email: ''});
 	const [formError, setFormError] = useState<{[key: string]: string}>({});
 
+	const [createProject, {
+		data, loading,
+	}] = useMutation(MUTATION_CREATE_PROJECT);
+
 	const handleChange = (event: any) => {
 		if (event) {
 			const {name, value} = event.target;
 			setForm({...form, [name]: value || ''});
-			setFormError({});
+			if (name === 'description' && value.length > 280) {
+				setFormError({description: `max character allowed is 280/${value.length}`});
+			} else {
+				setFormError({});
+			}
 		}
 	};
 
-	const lighteningAddressPreview = form.title.split(' ').join('').toLowerCase() + '@geyser.fund';
+	const projectName = form.title.split(' ').join('').toLowerCase();
+	const lighteningAddressPreview = projectName + '@geyser.fund';
 
 	const handleUpload = (url: string) => {
 		setForm({...form, image: `${GeyserAssetDomainUrl}${url}`});
 	};
 
-	const handleNext = () => {
+	const handleNext = async () => {
 		const isValid = validateForm();
 
 		if (isValid) {
+			const input = {
+				...form,
+				name: projectName,
+			};
+			try {
+				const {data} = await createProject({ variables: { input } });
+				console.log('checking create project value', data);
+				history.push(`/projects/${data.createProject.id}/milestones`);
+			} catch (error) {
+
+			}
+
 			console.log('Add the graphql mutation trigger here');
 		}
 	};
@@ -167,7 +190,7 @@ export const ProjectCreate = () => {
 									error={formError.email}
 								/>
 							</VStack>
-							<ButtonComponent primary isFullWidth onClick={handleNext}>Next</ButtonComponent>
+							<ButtonComponent isLoading={loading} primary isFullWidth onClick={handleNext}>Next</ButtonComponent>
 						</VStack>
 
 					</VStack>
@@ -175,7 +198,7 @@ export const ProjectCreate = () => {
 				<GridItem colSpan={2} display="flex" justifyContent="center">
 					<VStack justifyContent="center" alignItems="flex-start" maxWidth="370px" spacing="10px">
 						<Text>Preview</Text>
-						<Card padding="16px 10px" >
+						<Card padding="16px 10px" overflow="hidden" width="100%">
 							{
 								form.image ? <ImageWithReload src={form.image} height="222px" width="350px"/>
 									: <Image
@@ -187,7 +210,7 @@ export const ProjectCreate = () => {
 							}
 							<Text>geyser.fund/project</Text>
 							<Text fontSize="28px" fontWeight={700} >{form.title || 'Project Title'}</Text>
-							<Text fontSize="16px" color="brand.textGrey">{form.description || 'project description'}</Text>
+							<Text fontSize="16px" color="brand.textGrey" wordBreak="break-word" isTruncated>{form.description || 'project description'}</Text>
 
 						</Card>
 					</VStack>

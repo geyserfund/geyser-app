@@ -1,18 +1,20 @@
 import { Box, Grid, GridItem, HStack, Text, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { ButtonComponent, Card, IconButtonComponent, ImageWithReload, SatoshiAmount } from '../../../components/ui';
-import { isMobileMode, validateEmail } from '../../../utils';
+import { isMobileMode, useNotification, validateEmail } from '../../../utils';
 import { TMilestone, TProjectDetails, TRewards } from './types';
 import { BiCrosshair, BiLeftArrowAlt, BiPencil } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddMilestones, defaultMilestone } from './components';
 import { EditIcon } from '@chakra-ui/icons';
 import { AddRewards } from './components/AddRewards';
 import { CalendarButton } from '../../../components/molecules';
 import { DateTime } from 'luxon';
+import { useMutation } from '@apollo/client';
+import { MUTATION_CREATE_PROJECT_MILESTONE, MUTATION_CREATE_PROJECT_REWARD, MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations';
 
 const useStyles = createUseStyles({
 	backIcon: {
@@ -24,6 +26,9 @@ export const MilestoneAndRewards = () => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
 	const history = useHistory();
+	const params = useParams<{projectId: string}>();
+
+	const {toast} = useNotification();
 
 	const [selectedButton, setSelectedButton] = useState('ongoing');
 	const [selectedDate, setSelectedDate] = useState<Date>();
@@ -37,6 +42,16 @@ export const MilestoneAndRewards = () => {
 	const {isOpen: isMilestoneOpen, onClose: onMilestoneClose, onOpen: openMilestone} = useDisclosure();
 	const {isOpen: isRewardOpen, onClose: onRewardClose, onOpen: openReward} = useDisclosure();
 	const [isSatoshi, setIsSatoshi] = useState(true);
+
+	const [updateProject, {
+		loading: updateProjectLoading,
+	}] = useMutation(MUTATION_UPDATE_PROJECT);
+	const [createMilestone, {
+		loading: createMilestoneLoading,
+	}] = useMutation(MUTATION_CREATE_PROJECT_MILESTONE);
+	const [createReward, {
+		loading: createRewardLoading,
+	}] = useMutation(MUTATION_CREATE_PROJECT_REWARD);
 
 	const handleMilestoneSubmit = (milestones: TMilestone[]) => {
 		setMilestones(milestones);
@@ -58,8 +73,54 @@ export const MilestoneAndRewards = () => {
 		}
 	};
 
-	const handleNext = () => {
+	const handleNext = async () => {
+		try {
+			const updateProjectInput: any = {
+				projectId: params.projectId,
+				rewardCurrency: isSatoshi ? 'btc' : 'usd',
+				expiresAt: finalDate || undefined,
 
+			};
+			if (rewards.length > 0) {
+				updateProjectInput.type = 'reward';
+			}
+
+			const value = await updateProject({variables: {input: updateProjectInput}});
+			console.log('Checking updateProject', value);
+
+			if (milestones.length > 0) {
+				milestones.map(async milestone => {
+					const createMilestoneInput = {
+						...milestone,
+						projectId: params.projectId,
+
+					};
+					const value = await createMilestone({variables: {input: createMilestoneInput}});
+					console.log('Checking creteMilestone', value);
+				});
+			}
+
+			if (rewards.length > 0) {
+				rewards.map(async reward => {
+					const createRewardsInput = {
+						...reward,
+						id: undefined,
+						projectId: params.projectId,
+
+					};
+					const value = await createReward({variables: {input: createRewardsInput}});
+					console.log('Checking createReward', value);
+				});
+			}
+
+			history.push(`/projects/${params.projectId}/node`);
+		} catch (error) {
+			toast({
+				title: 'Something went wrong',
+				description: 'Please try again.',
+				status: 'error',
+			});
+		}
 	};
 
 	const handleBack = () => {
@@ -177,7 +238,9 @@ export const MilestoneAndRewards = () => {
 								}}>Add a reward</ButtonComponent>
 								<Text fontSize="12px">Rewards are a powerful way of exchanging value with your community</Text>
 							</VStack>
-							<ButtonComponent primary isFullWidth onClick={handleNext}>Continue</ButtonComponent>
+							<ButtonComponent primary isFullWidth onClick={handleNext}
+								isLoading={updateProjectLoading || createMilestoneLoading || createRewardLoading}
+							>Continue</ButtonComponent>
 						</VStack>
 
 					</VStack>
@@ -187,7 +250,7 @@ export const MilestoneAndRewards = () => {
 						{milestones.length > 0
 							&& <>
 								<HStack justifyContent="space-between" width="100%">
-									<Text fontSize="18px" fontWieght={500}>
+									<Text fontSize="18px" fontWeight={500}>
 										MILESTONES
 									</Text>
 									<IconButtonComponent aria-label="edit" onClick={openMilestone} ><EditIcon /></IconButtonComponent>
@@ -218,7 +281,7 @@ export const MilestoneAndRewards = () => {
 						{rewards.length > 0
 						&& <>
 							<HStack justifyContent="space-between" width="100%">
-								<Text fontSize="18px" fontWieght={500}>
+								<Text fontSize="18px" fontWeight={500}>
 									Rewards
 								</Text>
 							</HStack>
@@ -269,9 +332,9 @@ export const MilestoneAndRewards = () => {
 														/>
 													</HStack>
 												</HStack>
-												<Box>
+												{reward.image && <Box>
 													<ImageWithReload borderRadius="4px" src={reward.image} width="335px" height="192px" objectFit="cover"/>
-												</Box>
+												</Box>}
 
 												<Text width="100%" paddingX="5px">{reward.description}</Text>
 											</VStack>
