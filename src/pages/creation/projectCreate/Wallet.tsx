@@ -1,7 +1,7 @@
 import { Box, Grid, GridItem, HStack, Image, Link, Text, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { ButtonComponent, IconButtonComponent} from '../../../components/ui';
-import { isMobileMode } from '../../../utils';
+import { isMobileMode, useNotification } from '../../../utils';
 import {AiOutlineSetting } from 'react-icons/ai';
 import { TNodeInput } from './types';
 import { BiLeftArrowAlt, BiPencil } from 'react-icons/bi';
@@ -25,6 +25,8 @@ export const Wallet = () => {
 	const history = useHistory();
 	const params = useParams<{projectId: string}>();
 
+	const {toast} = useNotification();
+
 	const [node, setNode] = useState<TNodeInput>();
 
 	const {isOpen: isWalletOpen, onClose: onWalletClose, onOpen: openWallet} = useDisclosure();
@@ -41,21 +43,25 @@ export const Wallet = () => {
 		try {
 			const createWalletInput = {
 				resourceInput: {
-					resourceId: null,
-					resourceType: params.projectId,
+					resourceId: params.projectId,
+					resourceType: 'project',
 				},
 				lndConnectionDetailsInput: {
 					macaroon: node?.invoiceMacaroon,
 					tlsCertificate: node?.tlsCert,
 					hostname: node?.hostname,
-					grpcPort: node?.grpc,
+					grpcPort: node?.grpc ? parseInt(node.grpc, 10) : undefined,
 					lndNodeType: node?.isVoltage ? 'voltage' : 'custom',
 				},
 			};
 
-			const value = await createWallet({variables: {input: createWalletInput}});
+			await createWallet({variables: {input: createWalletInput}});
 		} catch (error) {
-
+			toast({
+				title: 'Something went wrong',
+				description: `${error}`,
+				status: 'error',
+			});
 		}
 	};
 

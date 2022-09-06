@@ -20,6 +20,7 @@ import { Fade } from '@chakra-ui/react';
 import { PostCreateEdit } from '../pages/creation/postEditor';
 import { PostPreview } from '../pages/creation/postPreview';
 import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
+import { PrivateRoute } from './PrivateRoute';
 
 export const customHistory = createBrowserHistory();
 
@@ -73,22 +74,34 @@ export const Router = () => {
 							<LaunchIdea />
 						</Route>
 						<Route path="/posts/:postId/preview">
-							<PostPreview />
+							<PrivateRoute>
+								<PostPreview />
+							</PrivateRoute>
 						</Route>
 						<Route path="/posts/:postId">
-							<PostCreateEdit />
+							<PrivateRoute>
+								<PostCreateEdit />
+							</PrivateRoute>
 						</Route>
 						<Route path="/posts">
-							<PostCreateEdit />
+							<PrivateRoute>
+								<PostCreateEdit />
+							</PrivateRoute>
 						</Route>
 						<Route path="/projects/:projectId/node">
-							<Wallet />
+							<PrivateRoute>
+								<Wallet />
+							</PrivateRoute>
 						</Route>
 						<Route path="/projects/:projectId/milestones">
-							<MilestoneAndRewards />
+							<PrivateRoute>
+								<MilestoneAndRewards />
+							</PrivateRoute>
 						</Route>
 						<Route path="/projects">
-							<ProjectCreate />
+							<PrivateRoute>
+								<ProjectCreate />
+							</PrivateRoute>
 						</Route>
 						<Route path="/profile/:userId">
 							<Profile />

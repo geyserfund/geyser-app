@@ -199,6 +199,7 @@ export const AddNode = ({isOpen, onClose, node, onSubmit }:IAddNode) => {
 								</Text>
 								<TextBox
 									name="grpc"
+									type="number"
 									onChange={handleTextChange}
 									value={form.grpc}
 									error={formError.grpc}

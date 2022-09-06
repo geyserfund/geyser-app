@@ -2,7 +2,7 @@ import { Box, Grid, GridItem, HStack, Image, Text, useMediaQuery, VStack } from 
 import React, { useState } from 'react';
 import { FileUpload } from '../../../components/molecules';
 import { ButtonComponent, Card, ImageWithReload, TextArea, TextBox } from '../../../components/ui';
-import { isMobileMode, validateEmail } from '../../../utils';
+import { isMobileMode, useNotification, validateEmail } from '../../../utils';
 import {AiOutlineUpload} from 'react-icons/ai';
 import { TProjectDetails } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
@@ -23,6 +23,7 @@ export const ProjectCreate = () => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
 	const history = useHistory();
+	const {toast} = useNotification();
 
 	const [form, setForm] = useState<TProjectDetails>({title: '', description: '', image: '', email: ''});
 	const [formError, setFormError] = useState<{[key: string]: string}>({});
@@ -63,10 +64,12 @@ export const ProjectCreate = () => {
 				console.log('checking create project value', data);
 				history.push(`/projects/${data.createProject.id}/milestones`);
 			} catch (error) {
-
+				toast({
+					title: 'project creation failed!',
+					description: `${error}`,
+					status: 'error',
+				});
 			}
-
-			console.log('Add the graphql mutation trigger here');
 		}
 	};
 
@@ -103,8 +106,6 @@ export const ProjectCreate = () => {
 	};
 
 	const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
-
-	console.log('checking project', form);
 
 	return (
 		<Box

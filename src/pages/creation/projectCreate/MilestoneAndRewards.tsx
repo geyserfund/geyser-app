@@ -214,12 +214,6 @@ export const MilestoneAndRewards = () => {
 									>
 										1 Month
 									</ButtonComponent>
-									{/* <ButtonComponent
-										primary={selectedButton === 'custom'}
-										onClick={() => setSelectedButton('custom')}
-									>
-										Custom
-									</ButtonComponent> */}
 									<CalendarButton
 										primary={selectedButton === 'custom'}
 										value={selectedDate}
