@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 
 import React, { useEffect } from 'react';
-import { Box, Text, Skeleton, Link } from '@chakra-ui/react';
+import { Box, Text, Skeleton, Link, Image, VStack } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { Footer } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
@@ -12,8 +12,9 @@ import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
 import { fonts } from '../../constants/fonts';
-import { ButtonComponent } from '../../components/ui';
+import { ButtonComponent, TwitterComponent } from '../../components/ui';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { ContributeButton } from './components/ContributeButton';
 
 export const GrantsLanding = () => {
 	const isMobile = isMobileMode();
@@ -59,7 +60,6 @@ export const GrantsLanding = () => {
 						To bring this vision to life, we accept Bitcoin contributions for each individual grant and take no fees at this stage. When the Round goes live, applications will be opened and they will be evaluated once the Rounds close. Geyser will not charge any fees in the first Rounds but may in the future start charging admin fees to cover expenses. For more information, see <Link textDecoration="underline" href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f">here</Link>.
 					</Text>
 				</Box>
-
 				<Box display="flex" justifyContent="center" alignItems="center" px={isMobile ? 0 : 20}>
 					<Box overflow="auto" w={isMobile ? '95%' : '1226px'} display="flex" px={2}>
 						{(!loading && grants.length > 0) && grantsSorted.map((grant: IProject) => {
@@ -82,9 +82,19 @@ export const GrantsLanding = () => {
 								</Box>
 							</>
 						}
+						{/* <ContributeButton active={grants[0].active} title="Contribute" project={grants[0]}/> */}
 					</Box>
 				</Box>
-
+				<Box width={isMobile ? '90%' : isMedium ? '75%' : '35%'} display="flex" justifyContent="center" justifyItems="center" margin="0 auto">
+					<VStack>
+						<Text fontSize="4xl" fontWeight="bold" textAlign="center" mt={8}>Round 1 Announcement</Text>
+						<Text textAlign="justify" fontSize="lg">The Geyser Grant Round 1 winners have been released. <Link _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/geyserfund/status/1567537222005530625?s=20&t=ubMlkMfNudkbogo-IKhkHw">Check out our Twitter announcement.</Link></Text>
+						<Image htmlHeight={450} htmlWidth={800} src="https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-1-results.jpeg"></Image>
+						<Link margin="0 auto" w="87px" _hover={{textDecoration: 'none'}} isExternal href="https://twitter.com/geyserfund/status/1567537222005530625" display="flex" justifyContent="center" alignItems="center">
+							<ButtonComponent fontSize="lg">Announcement<ExternalLinkIcon w={4} h={4} ml={1} mt={0.5}/></ButtonComponent>
+						</Link>
+					</VStack>
+				</Box>
 				<Box width={isMobile ? '90%' : isMedium ? '75%' : '50%'} margin="0 auto" mt={10} mb={20}>
 					<Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">A board of principled Bitcoiners</Text>
 					<Text fontSize="lg" textAlign="justify" mb={2}>We are bringing together a board of Bitcoiners that have a history of supporting the Bitcoin ecosystem. At the end of the Round, they will review the applications through a set of criteria, which will be revealed at a later date, and establish how the funds should be distributed.</Text>
@@ -100,7 +110,6 @@ export const GrantsLanding = () => {
 				<Box display="flex" justifyContent="center" mt={10} px={4}>
 					<Subscribe style="inline" interest="grants" titleSize="3xl"/>
 				</Box>
-
 			</Box>
 
 			<Footer/>
