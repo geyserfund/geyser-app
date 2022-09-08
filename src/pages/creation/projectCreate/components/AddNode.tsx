@@ -14,6 +14,8 @@ import { useParams } from 'react-router';
 import { ButtonComponent, TextArea, TextBox } from '../../../../components/ui';
 import { isMobileMode } from '../../../../utils';
 import { checkMacaroonPermissions } from '../../../../utils/checkMacaroonPermissions';
+import { isSecp256k1Compressed } from '../../../../utils/isSecp256k1Compressed';
+import { isTorV3Address } from '../../../../utils/isTorV3Address';
 import { TNodeInput } from '../types';
 
 interface IAddNode {
@@ -81,11 +83,23 @@ export const AddNode = ({isOpen, onClose, node, onSubmit }:IAddNode) => {
 		if (!form.hostname) {
 			errors.hostname = 'Host name' + additionalText;
 			isValid = false;
+		} else {
+			const val = isTorV3Address(form.hostname);
+			if (val) {
+				errors.hostname = 'Tor addresses are currently not supported';
+				isValid = false;
+			}
 		}
 
 		if (!form.publicKey) {
 			errors.publicKey = 'Public Key' + additionalText;
 			isValid = false;
+		} else {
+			const val = isSecp256k1Compressed(form.publicKey);
+			if (!val) {
+				errors.publicKey = 'The pubkey is wrongly formatted';
+				isValid = false;
+			}
 		}
 
 		if (!form.invoiceMacaroon) {
