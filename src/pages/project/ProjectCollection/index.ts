@@ -20,6 +20,7 @@ import { NoShackles } from './NoShackles';
 import { Pierre } from './Pierre';
 import { HeroGame } from './HeroGame';
 import { Trust } from './Trust';
+import { Tatum } from './Tatum';
 
 export interface IProjectData {
 	projectBlocks: IProjectBlock[]
@@ -54,6 +55,7 @@ const ProjectColl: IProjectColl = {
 	[Pierre.projectName]: Pierre,
 	[HeroGame.projectName]: HeroGame,
 	[Trust.projectName]: Trust,
+	[Tatum.projectName]: Tatum,
 };
 
 export default ProjectColl;
