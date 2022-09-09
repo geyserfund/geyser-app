@@ -62,7 +62,7 @@ export const ProjectCreate = () => {
 			try {
 				const {data} = await createProject({ variables: { input } });
 				console.log('checking create project value', data);
-				history.push(`/projects/${data.createProject.id}/milestones`);
+				history.push(`/launch/${data.createProject.id}/milestones`);
 			} catch (error) {
 				toast({
 					title: 'project creation failed!',

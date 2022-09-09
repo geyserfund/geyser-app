@@ -21,6 +21,7 @@ import { PostCreateEdit } from '../pages/creation/postEditor';
 import { PostPreview } from '../pages/creation/postPreview';
 import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
+import { ProjectView } from '../pages/projectView';
 
 export const customHistory = createBrowserHistory();
 
@@ -70,9 +71,9 @@ export const Router = () => {
 						<Route path="/grants">
 							<GrantsLanding />
 						</Route>
-						<Route path="/launch">
+						{/* <Route path="/launch">
 							<LaunchIdea />
-						</Route>
+						</Route> */}
 						<Route path="/posts/:postId/preview">
 							<PrivateRoute>
 								<PostPreview />
@@ -88,26 +89,29 @@ export const Router = () => {
 								<PostCreateEdit />
 							</PrivateRoute>
 						</Route>
-						<Route path="/projects/:projectId/node">
-							<PrivateRoute>
-								<Wallet />
-							</PrivateRoute>
+						<Route path="/launch/:projectId/node">
+							{/* <PrivateRoute> */}
+							<Wallet />
+							{/* </PrivateRoute> */}
 						</Route>
-						<Route path="/projects/:projectId/milestones">
-							<PrivateRoute>
-								<MilestoneAndRewards />
-							</PrivateRoute>
+						<Route path="/launch/:projectId/milestones">
+							{/* <PrivateRoute> */}
+							<MilestoneAndRewards />
+							{/* </PrivateRoute> */}
 						</Route>
-						<Route path="/projects">
-							<PrivateRoute>
-								<ProjectCreate />
-							</PrivateRoute>
+						<Route path="/launch">
+							{/* <PrivateRoute> */}
+							<ProjectCreate />
+							{/* </PrivateRoute> */}
 						</Route>
 						<Route path="/profile/:userId">
 							<Profile />
 						</Route>
 						<Route path="/project/:projectId">
 							<Project />
+						</Route>
+						<Route path="/projects/:projectId">
+							<ProjectView />
 						</Route>
 						<Route path="/not-found">
 							<NotFound />

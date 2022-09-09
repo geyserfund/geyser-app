@@ -101,7 +101,7 @@ export const PostCreateEdit = () => {
 			if (form.current.content || form.current.title || form.current.description || form.current.image) {
 				const { image, title, description, content } = params;
 				const input: IPostCreateInput = {
-					projectIds: [projectId],
+					projectId,
 					type: 'article',
 					title,
 					description,

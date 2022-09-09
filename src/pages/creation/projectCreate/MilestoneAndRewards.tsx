@@ -9,9 +9,9 @@ import { colors } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddMilestones, defaultMilestone } from './components';
-import { EditIcon } from '@chakra-ui/icons';
+import { CloseIcon, EditIcon } from '@chakra-ui/icons';
 import { AddRewards } from './components/AddRewards';
-import { CalendarButton } from '../../../components/molecules';
+import { CalendarButton, RewardCard } from '../../../components/molecules';
 import { DateTime } from 'luxon';
 import { useMutation } from '@apollo/client';
 import { MUTATION_CREATE_PROJECT_MILESTONE, MUTATION_CREATE_PROJECT_REWARD, MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations';
@@ -113,7 +113,7 @@ export const MilestoneAndRewards = () => {
 				});
 			}
 
-			history.push(`/projects/${params.projectId}/node`);
+			history.push(`/launch/${params.projectId}/node`);
 		} catch (error) {
 			toast({
 				title: 'Something went wrong',
@@ -282,58 +282,18 @@ export const MilestoneAndRewards = () => {
 							<VStack width="100%">
 								{
 									rewards.map((reward, index) => (
-										<Card
-											key={index}
+										<RewardCard
+											key="index"
 											width="100%"
-											borderRadius="4px"
-											alignItems="flex-start"
-											padding="10px"
-										>
-											<VStack width="100%">
-												<HStack width="100%" justifyContent={'space-between'} paddingX="4px">
-													<HStack>
-														<VStack spacing="0px">
-															{
-																isSatoshi
-																	? <SatoshiAmount color="brand.primary">{reward.cost}</SatoshiAmount>
-																	: <Text color="brand.primary">{`$ ${reward.cost}`}</Text>
-															}
-															<Text fontSize="12px" color="brand.primary">per item</Text>
-														</VStack>
-														<VStack spacing="0px">
-															<Text fontWeight={500}>{reward.name}</Text>
-															<Text><b>2</b> collected</Text>
-														</VStack>
-													</HStack>
+											reward={reward}
+											isSatoshi={isSatoshi}
+											handleEdit={() => {
+												setSelectedReward(reward);
+												openReward();
+											}}
+											handleRemove={() => handleRemoveReward(reward.id)}
+										/>
 
-													<HStack>
-														<IconButtonComponent
-															aria-label="edit-reward"
-															size="sm"
-															icon={<BiPencil />}
-															onClick={() => {
-																setSelectedReward(reward);
-																openReward();
-															}}
-														/>
-														<IconButtonComponent
-															aria-label="edit-reward"
-															size="sm"
-															icon={<BiCrosshair />}
-															backgroundColor="red.100"
-															_hover={{backgroundColor: 'red.300'}}
-															onClick={() => handleRemoveReward(reward.id)}
-														/>
-													</HStack>
-												</HStack>
-												{reward.image && <Box>
-													<ImageWithReload borderRadius="4px" src={reward.image} width="335px" height="192px" objectFit="cover"/>
-												</Box>}
-
-												<Text width="100%" paddingX="5px">{reward.description}</Text>
-											</VStack>
-
-										</Card>
 									))
 								}
 							</VStack>

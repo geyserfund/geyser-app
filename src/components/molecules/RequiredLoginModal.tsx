@@ -18,7 +18,6 @@ export const RequiredLoginModal = ({isOpen, onClose, handleClick}: IRequiredLogi
 			<ModalOverlay />
 			<ModalContent paddingX="10px" marginX="10px">
 				<ModalHeader textAlign="center" fontSize="16px" >Oops! Looks like you are not logged in</ModalHeader>
-				<ModalCloseButton />
 				<ModalBody fontSize="12px" textAlign="justify">
 					The page you are trying to access required authorization.
 				</ModalBody>

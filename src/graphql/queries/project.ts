@@ -30,6 +30,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
       description
       name
       backers
+	  image
     }
     ambassadors {
       id
@@ -63,6 +64,24 @@ query GetProject($where: UniqueProjectQueryInput!) {
     grantees {
       id
     }
+	milestones {
+		id
+		name
+		description
+		amount
+	}
+	entries {
+		id
+		title
+		description
+		image
+		type
+		creator {
+			id
+			username
+			imageUrl
+		}
+	}
   }
 }
 `;

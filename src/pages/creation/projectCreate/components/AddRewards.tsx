@@ -180,7 +180,7 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 									name="cost"
 									type="number"
 									onChange={handleTextChange}
-									vaalue={rewards.current.cost}
+									value={rewards.current.cost}
 									isInvalid={formError.cost}
 								/>
 							</InputGroup>

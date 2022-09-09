@@ -1,7 +1,7 @@
 import { Avatar, Box, HStack, Text, VStack, Image, Button, IconButton, Tooltip, Modal, ModalOverlay, ModalContent,	ModalHeader,	ModalFooter,	ModalBody, useDisclosure,	ModalCloseButton, Link as LinkChakra } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { IParticipant, IProject, IProjectDetail } from '../../../interfaces';
+import { IProject, IProjectDetail } from '../../../interfaces';
 import { ButtonComponent } from '../../../components/ui';
 import ReactPlayer from 'react-player';
 import { isMobileMode, getFormattedDate, encode } from '../../../utils';

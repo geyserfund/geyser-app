@@ -122,14 +122,14 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 										</ButtonComponent>
 									</HStack>
 									<TextBox
-										placeholder ={`milestone ${index + 1}...`}
+										placeholder ={'title ...'}
 										value={milestone.name}
 										onChange={(event: any) => handleTextChange(event, index)}
 									/>
 									<DonationInputWithSatoshi
 										amountSatoshi={amountSatoshi}
 										onChangeSatoshi={setAmountSatoshi}
-										value={milestone.amount}
+										value={milestone.amount || undefined}
 										onChange={(_:any, value: number) => handleAmountChange(value, index)}
 									/>
 								</VStack>

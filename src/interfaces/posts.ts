@@ -1,5 +1,5 @@
 export interface IPostCreateInput {
-	projectIds?: number[];
+	projectId?: number;
 	type: string;
 	content?: string;
 	image?: string;

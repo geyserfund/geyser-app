@@ -38,12 +38,17 @@ const useStyles = createUseStyles({
 
 		'& p': {
 			fontFamily: fonts.inter,
+			fontSize: '18px',
 		},
 		'& h1': {
 			fontFamily: fonts.inter,
+			fontSize: '22px',
+			fontWeight: '500px',
 		},
 		'& h2': {
 			fontFamily: fonts.inter,
+			fontSize: '28px',
+			fontWeight: '500px',
 		},
 		'& img': {
 			borderRadius: '4px',

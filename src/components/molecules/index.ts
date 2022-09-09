@@ -15,6 +15,7 @@ export * from './TitleWithProgressBar';
 export * from './DonationInputWithSatoshi';
 export * from './CalendarButton';
 export * from './RequiredLoginModal';
+export * from './ProjectSectionBar';
 
 export * from './projectDisplay/ProjectBalance';
 export * from './projectDisplay/ProfileProjectCard';
@@ -23,3 +24,4 @@ export * from './projectDisplay/ProjectBalanceCircularProgress';
 export * from './projectDisplay/ProjectBars';
 export * from './projectDisplay/LiveProject';
 export * from './projectDisplay/ContributionProjectCard';
+export * from './projectDisplay/RewardCard';

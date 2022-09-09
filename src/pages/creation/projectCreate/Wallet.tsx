@@ -50,7 +50,7 @@ export const Wallet = () => {
 					macaroon: node?.invoiceMacaroon,
 					tlsCertificate: node?.tlsCert,
 					hostname: node?.hostname,
-					grpcPort: node?.grpc ? parseInt(node.grpc, 10) : undefined,
+					grpcPort: node?.grpc ? parseInt(node.grpc, 10) : 10009,
 					lndNodeType: node?.isVoltage ? 'voltage' : 'custom',
 				},
 			};
@@ -137,7 +137,7 @@ export const Wallet = () => {
 						>
 							<HStack width="100%" justifyContent="space-between">
 								<Text fontWeight={500}>{node?.name}</Text>
-								<IconButtonComponent aria-label="edit-node" icon={<BiPencil />}/>
+								<IconButtonComponent aria-label="edit-node" icon={<BiPencil />} onClick={openWallet}/>
 							</HStack>
 
 							<VStack width="100%" alignItems="flex-start">
