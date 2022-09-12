@@ -76,8 +76,6 @@ query GetProject($where: UniqueProjectQueryInput!) {
 		description
 		image
 		type
-		fundersCount
-		amountFunded
 		creator {
 			id
 			username

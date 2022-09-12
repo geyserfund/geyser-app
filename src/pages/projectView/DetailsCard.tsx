@@ -16,10 +16,13 @@ import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
 import { colors, fundingStages, IFundingStages, LaunchImageUrl } from '../../constants';
 import { useHistory } from 'react-router';
+import { useAuthContext } from '../../context';
 
 export const DetailsCard = ({ project, setFundState }: { project: IProject, setFundState: React.Dispatch<React.SetStateAction<IFundingStages>> }) => {
 	const isMobile = isMobileMode();
 	const history = useHistory();
+
+	const {user} = useAuthContext();
 
 	// const { projectDetails, projectUpdates } = projectData;
 	console.log(project);
@@ -45,6 +48,25 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 				</HStack>
 			</VStack>
 		);
+	};
+
+	const renderYourFunding = () => {
+		if (project.funders.length > 0) {
+			const currentFund = project.funders.find(funder => funder.user?.id === user.id);
+			if (!currentFund) {
+				return null;
+			}
+
+			return (
+				<HStack width="100%" justifyContent="center">
+					<Text color="brand.primary800">{'You contributed'}</Text>
+					<SatoshiAmount color="brand.primary800">{currentFund.amountFunded}</SatoshiAmount>
+					<Text color="brand.primary800">{' towards this project'}</Text>
+				</HStack>
+			);
+		}
+
+		return null;
 	};
 
 	const handleFundProject = () => {
@@ -76,6 +98,7 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 					<Text color="brand.neutral800">{project.description}</Text>
 				</VStack>
 				{renderMilestone()}
+				{renderYourFunding()}
 				<Button isFullWidth backgroundColor="brand.primary" leftIcon={<BoltIcon />} onClick={handleFundProject}>Fund this project</Button>
 			</VStack>
 		</Card>

@@ -1,19 +1,21 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from '../project/Activity/Activity';
-import {DetailsContainer} from './DetailsContainer';
 import { useFundingFlow } from '../../hooks';
 import { useAuthContext } from '../../context';
+import { QUERY_GET_POST } from '../../graphql/queries/posts';
+import { EntryContainer } from './EntryContainer';
 
-export const ProjectView = () => {
-	const { projectId } = useParams<{ projectId: string }>();
+export const EntryPage = () => {
+	const { postId } = useParams<{ postId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
+	const history = useHistory();
 
 	const {setNavTitle} = useAuthContext();
 
@@ -22,33 +24,44 @@ export const ProjectView = () => {
 	const { setFundState } = fundingFlow;
 
 	useEffect(() => {
-		try {
-			getProject();
-		} catch (_) {
-			customHistory.push('/not-found');
+		if (postId) {
+			getEntry({variables: { id: postId }});
 		}
-	}, [state]);
+	}, [postId]);
 
-	const [getProject, { loading, error, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
+	const [getEntry, { loading: loadingPosts, error, data: entryData }] = useLazyQuery(QUERY_GET_POST,
 		{
-			variables: { where: { name: projectId } },
+			onCompleted(data) {
+				const {entry} = data;
+
+				getProject({variables: { where: { id: entry.project.id } }});
+			},
+			onError(error) {
+				history.push('/404');
+			},
+		},
+	);
+
+	const [getProject, { loading, error: projectError, data: projectData }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
+		{
 			onCompleted(data) {
 				setNavTitle(data.project.title);
 			},
 		},
 	);
 
-	if (loading) {
+	if (loadingPosts || loading || !projectData) {
 		return (
 			<Loader />
 		);
 	}
 
-	if (error || !data || !data.project) {
+	if (error || !entryData || !entryData.entry || projectError) {
 		return <NotFound />;
 	}
 
-	const { project } = data;
+	const project = projectData && projectData.project;
+	const entry = entryData && entryData.entry;
 
 	console.log('checking project data', project);
 
@@ -66,9 +79,8 @@ export const ProjectView = () => {
 				overflow="hidden"
 				position="relative"
 				bg="brand.bgGrey4"
-
 			>
-				<DetailsContainer project={project} {...{detailOpen, setDetailOpen, setFundState }}/>
+				<EntryContainer entry={entry} {...{detailOpen, setDetailOpen, setFundState }}/>
 				<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}/>
 			</Box>
 		</Box>

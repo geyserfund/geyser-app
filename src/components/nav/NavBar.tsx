@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
-import { AddIcon, Icon } from '@chakra-ui/icons';
-import { FiTwitter } from 'react-icons/fi';
+import { AddIcon } from '@chakra-ui/icons';
 import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
 import { Box, HStack } from '@chakra-ui/layout';
@@ -30,18 +29,19 @@ interface INavBar {
 	skipRoutes?: string[]
 }
 
+const customTitleRoutes = ['/projects/:projectId', '/projects/:projectId/post', '/posts/:postId'];
+
 export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
 	const isDark = isDarkMode();
 
-	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose } = useContext(AuthContext);
+	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose, navTitle } = useContext(AuthContext);
 
-	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
+	const { pathname, state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const history = useHistory();
-	const location = useLocation();
 
 	useEffect(() => {
 		if (state && state.loggedOut) {
@@ -55,6 +55,8 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 			customHistory.replace(customHistory.location.pathname, {});
 		}
 	}, [state]);
+
+	const routeMatch = customTitleRoutes.map(route => useRouteMatch(route)).find(val => val?.isExact)?.isExact;
 
 	const handleLaunch = () => {
 		history.push('/launch');
@@ -129,8 +131,11 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 							}
 							<NavMenu user={user} logout={logout} />
 						</> : (
-							<>
-								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="6.5px" left="calc(50vw - 96px)">
+							<>{routeMatch
+								? <Box display="flex" alignItems="center">
+									<Text fontSize="18px" fontWeight={600} color="brand.neutral900">{navTitle}</Text>
+								</Box>
+								:								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="6.5px" left="calc(50vw - 96px)">
 									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg" marginRight="5px">
 										<ButtonComponent onClick={() => {
 											history.push('/home');
@@ -142,36 +147,36 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 										}}>Grants
 										</ButtonComponent>
 									</Box>
-								</HStack>
-								<Box>
-									<ButtonComponent
-										leftIcon={<AddIcon />}
-										primary
-										marginRight="12px"
-										onClick={handleLaunch}
-									>
+								</HStack>}
+							<Box>
+								<ButtonComponent
+									leftIcon={<AddIcon />}
+									primary
+									marginRight="12px"
+									onClick={handleLaunch}
+								>
 										Launch
-									</ButtonComponent>
-									{
-										user.id
-											? <ButtonComponent
-												border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
-												className={classes.userInfo}
-												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
-												standard
-												onClick={handleProfileClick}
-											>
-												{user.username}
-											</ButtonComponent>
-											: <ButtonComponent
-												marginRight="12px"
-												onClick={loginOnOpen}
-											>
+								</ButtonComponent>
+								{
+									user.id
+										? <ButtonComponent
+											border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
+											className={classes.userInfo}
+											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+											standard
+											onClick={handleProfileClick}
+										>
+											{user.username}
+										</ButtonComponent>
+										: <ButtonComponent
+											marginRight="12px"
+											onClick={loginOnOpen}
+										>
 												Connect
-											</ButtonComponent>
-									}
-									<NavMenu user={user} logout={logout} />
-								</Box>
+										</ButtonComponent>
+								}
+								<NavMenu user={user} logout={logout} />
+							</Box>
 							</>
 						)
 					}
@@ -203,5 +208,3 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 		</>
 	);
 };
-
-// 161616

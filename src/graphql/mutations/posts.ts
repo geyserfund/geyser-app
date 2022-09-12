@@ -12,7 +12,7 @@ mutation Mutation($input: CreateEntryInput!) {
 	  image
 	  content
 	  publishedAt
-	  projects {
+	  project {
 		id
 		title
 		name
@@ -34,7 +34,7 @@ mutation UpdateEntry($input: UpdateEntryInput!) {
 		image
 		content
 		publishedAt
-		projects {
+		project {
 		  id
 		  title
 		  name
@@ -56,7 +56,7 @@ mutation Mutation($id: BigInt!) {
 		image
 		content
 		publishedAt
-		projects {
+		project {
 		  id
 		  title
 		  name

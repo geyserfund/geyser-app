@@ -22,6 +22,7 @@ import { PostPreview } from '../pages/creation/postPreview';
 import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
 import { ProjectView } from '../pages/projectView';
+import { EntryPage } from '../pages/entry/EntryPage';
 
 export const customHistory = createBrowserHistory();
 
@@ -59,7 +60,7 @@ export const Router = () => {
 	return (
 		<Fade in={true}>
 			<Box height="100vh">
-				<NavBar showBorder={showBorder} skipRoutes={['/posts', '/posts/:postId', '/posts/:postId/preview']} />
+				<NavBar showBorder={showBorder} skipRoutes={['/projects/:projectId/posts', '/projects/:projectId/posts/:postId/edit', '/posts/:postId/preview']} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
 						<Route path="/auth/twitter">
@@ -74,21 +75,6 @@ export const Router = () => {
 						{/* <Route path="/launch">
 							<LaunchIdea />
 						</Route> */}
-						<Route path="/posts/:postId/preview">
-							<PrivateRoute>
-								<PostPreview />
-							</PrivateRoute>
-						</Route>
-						<Route path="/posts/:postId">
-							<PrivateRoute>
-								<PostCreateEdit />
-							</PrivateRoute>
-						</Route>
-						<Route path="/posts">
-							<PrivateRoute>
-								<PostCreateEdit />
-							</PrivateRoute>
-						</Route>
 						<Route path="/launch/:projectId/node">
 							<PrivateRoute>
 								<Wallet />
@@ -115,8 +101,26 @@ export const Router = () => {
 						<Route path="/project/:projectId">
 							<Project />
 						</Route>
+						<Route path="/projects/:projectId/posts/:postId/preview">
+							<PrivateRoute>
+								<PostPreview />
+							</PrivateRoute>
+						</Route>
+						<Route path="/projects/:projectId/posts/:postId/edit">
+							<PrivateRoute>
+								<PostCreateEdit />
+							</PrivateRoute>
+						</Route>
+						<Route path="/projects/:projectId/posts">
+							<PrivateRoute>
+								<PostCreateEdit />
+							</PrivateRoute>
+						</Route>
 						<Route path="/projects/:projectId">
 							<ProjectView />
+						</Route>
+						<Route path="/posts/:postId">
+							<EntryPage />
 						</Route>
 						<Route path="/not-found">
 							<NotFound />
