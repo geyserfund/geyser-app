@@ -2,11 +2,12 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { BiPencil } from 'react-icons/bi';
+import { IProjectReward } from '../../../interfaces';
 import { TRewards } from '../../../pages/creation/projectCreate/types';
 import { Card, ICard, IconButtonComponent, ImageWithReload, SatoshiAmount } from '../../ui';
 
 interface IRewardCard extends ICard {
-	reward: TRewards,
+	reward: TRewards | IProjectReward,
 	isSatoshi: boolean,
 	handleEdit?: any,
 	handleRemove?: any,

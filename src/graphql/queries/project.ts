@@ -76,10 +76,26 @@ query GetProject($where: UniqueProjectQueryInput!) {
 		description
 		image
 		type
+		fundersCount
+		amountFunded
 		creator {
 			id
 			username
 			imageUrl
+		}
+	}
+	wallets {
+		id
+		name
+		connectionDetails {
+		  ... on LndConnectionDetails {
+			macaroon
+			tlsCertificate
+			hostname
+			grpcPort
+			lndNodeType
+			pubkey
+		  }
 		}
 	}
   }

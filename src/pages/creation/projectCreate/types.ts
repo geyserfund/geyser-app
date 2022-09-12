@@ -1,11 +1,14 @@
+
 export type TProjectDetails = {
 	title: string
+	name: string
 	image: string
 	description: string
 	email: string
 }
 
 export type TMilestone = {
+	id?: string;
 	name: string;
 	projectId: string;
 	description: string;

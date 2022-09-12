@@ -90,19 +90,24 @@ export const Router = () => {
 							</PrivateRoute>
 						</Route>
 						<Route path="/launch/:projectId/node">
-							{/* <PrivateRoute> */}
-							<Wallet />
-							{/* </PrivateRoute> */}
+							<PrivateRoute>
+								<Wallet />
+							</PrivateRoute>
 						</Route>
 						<Route path="/launch/:projectId/milestones">
-							{/* <PrivateRoute> */}
-							<MilestoneAndRewards />
-							{/* </PrivateRoute> */}
+							<PrivateRoute>
+								<MilestoneAndRewards />
+							</PrivateRoute>
+						</Route>
+						<Route path="/launch/:projectId">
+							<PrivateRoute>
+								<ProjectCreate />
+							</PrivateRoute>
 						</Route>
 						<Route path="/launch">
-							{/* <PrivateRoute> */}
-							<ProjectCreate />
-							{/* </PrivateRoute> */}
+							<PrivateRoute>
+								<ProjectCreate />
+							</PrivateRoute>
 						</Route>
 						<Route path="/profile/:userId">
 							<Profile />

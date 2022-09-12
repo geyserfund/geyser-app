@@ -13,7 +13,7 @@ export const MilestoneComponent = ({name, description, amount, checked}: IMilest
 	console.log('mielsont');
 	return (
 		<HStack>
-			<Checkbox checked={checked}><Text color="brand.neutral800">{`${name}: ${description} - `}</Text></Checkbox>
+			<Checkbox isChecked={checked}><Text color="brand.neutral800">{`${name}: ${description} - `}</Text></Checkbox>
 			<SatoshiAmount>{amount}</SatoshiAmount>
 			<Text color="brand.neutral800"> to go.</Text>
 		</HStack>

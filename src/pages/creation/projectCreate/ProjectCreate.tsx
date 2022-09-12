@@ -1,5 +1,5 @@
-import { Box, Grid, GridItem, HStack, Image, Text, useMediaQuery, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Box, Grid, GridItem, HStack, Image, Input, InputGroup, InputRightAddon, Text, useMediaQuery, VStack } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { FileUpload } from '../../../components/molecules';
 import { ButtonComponent, Card, ImageWithReload, TextArea, TextBox } from '../../../components/ui';
 import { isMobileMode, useNotification, validateEmail } from '../../../utils';
@@ -7,11 +7,13 @@ import {AiOutlineUpload} from 'react-icons/ai';
 import { TProjectDetails } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { GeyserAssetDomainUrl, GeyserSkeletonUrl } from '../../../constants';
-import { useHistory } from 'react-router';
+import { colors, GeyserAssetDomainUrl, GeyserSkeletonUrl } from '../../../constants';
+import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
-import { useMutation } from '@apollo/client';
-import { MUTATION_CREATE_PROJECT } from '../../../graphql/mutations';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { MUTATION_CREATE_PROJECT, MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations';
+import { useAuthContext } from '../../../context';
+import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 
 const useStyles = createUseStyles({
 	backIcon: {
@@ -22,20 +24,87 @@ const useStyles = createUseStyles({
 export const ProjectCreate = () => {
 	const isMobile = isMobileMode();
 	const classes = useStyles();
+
+	const params = useParams<{projectId: string}>();
+	const isEdit = Boolean(params.projectId);
+
 	const history = useHistory();
 	const {toast} = useNotification();
 
-	const [form, setForm] = useState<TProjectDetails>({title: '', description: '', image: '', email: ''});
+	const {user} = useAuthContext();
+
+	const [form, setForm] = useState<TProjectDetails>({title: '', description: '', image: '', email: '', name: ''});
 	const [formError, setFormError] = useState<{[key: string]: string}>({});
 
-	const [createProject, {
-		data, loading,
-	}] = useMutation(MUTATION_CREATE_PROJECT);
+	const [createProject, { loading: createLoading}] = useMutation(MUTATION_CREATE_PROJECT, {
+		onCompleted(data) {
+			history.push(`/launch/${data.createProject.id}/milestones`);
+		},
+		onError(error) {
+			toast({
+				title: 'project creation failed!',
+				description: `${error}`,
+				status: 'error',
+			});
+		},
+	});
+
+	const [updateProject, { loading: updateLoading}] = useMutation(MUTATION_UPDATE_PROJECT, {
+		onCompleted() {
+			history.push(`/launch/${params.projectId}/milestones`);
+		},
+		onError(error) {
+			toast({
+				title: 'project update failed!',
+				description: `${error}`,
+				status: 'error',
+			});
+		},
+	});
+
+	const [getProject, { loading: getProjectLoading }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
+		{
+			variables: { where: { name: form.name } },
+			onCompleted(data) {
+				console.log('chekcing data', data);
+				if (data && data.project && data.project.id) {
+					setFormError({...formError, name: 'This lightening address is already taken.' });
+				}
+			},
+		},
+	);
+
+	const [getProjectById, { loading }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
+		{
+			variables: { where: { id: params.projectId } },
+			onCompleted(data) {
+				setForm({
+					title: data.project.title,
+					name: data.project.name,
+					image: data.project.media[0],
+					description: data.project.description,
+					email: user.email || '',
+				});
+			},
+		},
+	);
+
+	useEffect(() => {
+		getProjectById();
+	}, [params.projectId]);
 
 	const handleChange = (event: any) => {
 		if (event) {
 			const {name, value} = event.target;
-			setForm({...form, [name]: value || ''});
+
+			const newForm = {...form, [name]: value || ''};
+
+			if (name === 'title') {
+				newForm.name = value.split(' ').join('').toLowerCase();
+			}
+
+			setForm(newForm);
+
 			if (name === 'description' && value.length > 280) {
 				setFormError({description: `max character allowed is 280/${value.length}`});
 			} else {
@@ -45,30 +114,26 @@ export const ProjectCreate = () => {
 	};
 
 	const projectName = form.title.split(' ').join('').toLowerCase();
-	const lighteningAddressPreview = projectName + '@geyser.fund';
 
 	const handleUpload = (url: string) => {
 		setForm({...form, image: `${GeyserAssetDomainUrl}${url}`});
 	};
 
-	const handleNext = async () => {
+	const handleNext = () => {
 		const isValid = validateForm();
 
+		const newForm = form;
+		newForm.email = user.email || form.email;
 		if (isValid) {
-			const input = {
-				...form,
-				name: projectName,
-			};
-			try {
-				const {data} = await createProject({ variables: { input } });
-				console.log('checking create project value', data);
-				history.push(`/launch/${data.createProject.id}/milestones`);
-			} catch (error) {
-				toast({
-					title: 'project creation failed!',
-					description: `${error}`,
-					status: 'error',
-				});
+			if (isEdit) {
+				updateProject({ variables: { input: {
+					projectId: params.projectId,
+					title: form.title,
+					image: form.image,
+					description: form.description,
+				} } });
+			} else {
+				createProject({ variables: { input: form } });
 			}
 		}
 	};
@@ -79,6 +144,9 @@ export const ProjectCreate = () => {
 		if (!form.title) {
 			errors.title = 'title is a required field';
 			isValid = false;
+		} else if (form.title.length < 5 || form.title.length > 50) {
+			errors.title = 'title should be between 5 and 50 characters';
+			isValid = false;
 		}
 
 		if (!form.description) {
@@ -86,10 +154,10 @@ export const ProjectCreate = () => {
 			isValid = false;
 		}
 
-		if (!form.email) {
+		if (!form.email && !user.email) {
 			errors.email = 'Email address is a required field.';
 			isValid = false;
-		} else if (!validateEmail(form.email)) {
+		} else if (!user.email && !validateEmail(form.email)) {
 			errors.email = 'Please enter a valid email address.';
 			isValid = false;
 		}
@@ -149,11 +217,24 @@ export const ProjectCreate = () => {
 									onChange={handleChange}
 									value={form.title}
 									error={formError.title}
+									onBlur={() => getProject()}
 								/>
 							</VStack>
 							<VStack width="100%" alignItems="flex-start">
 								<Text>Lightening Address Preview</Text>
-								<Text>{lighteningAddressPreview}</Text>
+								<InputGroup size="md" borderRadius="4px">
+									<Input
+										name="name"
+										onChange={handleChange}
+										value={form.name}
+										isInvalid={Boolean(formError.name)}
+										focusBorderColor={colors.primary}
+										disabled={isEdit}
+										onBlur={() => getProject()}
+									/>
+									<InputRightAddon>@geyser.fund</InputRightAddon>
+								</InputGroup>
+								{formError.name && <Text color="brand.error" fontSize="12px">{formError.name}</Text>}
 							</VStack>
 							<VStack width="100%" alignItems="flex-start">
 								<Text>Project Image</Text>
@@ -186,9 +267,10 @@ export const ProjectCreate = () => {
 								<Text>Project E-mail</Text>
 								<TextBox
 									name="email"
-									value={form.email}
+									value={user.email || form.email}
 									onChange={handleChange}
 									error={formError.email}
+									isDisabled={Boolean(user.email)}
 								/>
 							</VStack>
 							<ButtonComponent isLoading={loading} primary isFullWidth onClick={handleNext}>Next</ButtonComponent>
@@ -212,7 +294,6 @@ export const ProjectCreate = () => {
 							<Text>geyser.fund/project</Text>
 							<Text fontSize="28px" fontWeight={700} >{form.title || 'Project Title'}</Text>
 							<Text fontSize="16px" color="brand.textGrey" wordBreak="break-word" isTruncated>{form.description || 'project description'}</Text>
-
 						</Card>
 					</VStack>
 				</GridItem>

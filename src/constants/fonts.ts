@@ -5,4 +5,5 @@ export const fonts = {
 	inter: '\'Inter\', sans-serif;',
 	myanmar: 'Myanmar-Khyay',
 	interBlack: '\'Inter/Black\', sans-serif;',
+	mono: '\'Courier Prime\', monospace;',
 };

@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import {
 	Box,
 	HStack,
@@ -18,10 +19,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { BiDollar } from 'react-icons/bi';
 import { useParams } from 'react-router';
+import { textSpanContainsTextSpan } from 'typescript';
 import { SatoshiIcon, SatoshiIconTilted } from '../../../../components/icons';
 import { DonationInput, DonationInputWithSatoshi, FileUpload } from '../../../../components/molecules';
 import { ButtonComponent, ImageWithReload, TextArea, TextBox } from '../../../../components/ui';
 import { colors, GeyserAssetDomainUrl } from '../../../../constants';
+import { MUTATION_CREATE_PROJECT_REWARD, MUTATION_UPDATE_PROJECT_REWARD } from '../../../../graphql/mutations';
+import { useNotification } from '../../../../utils';
 import { TRewards } from '../types';
 
 interface IAddRewards {
@@ -42,6 +46,9 @@ export const defaultReward = {
 };
 
 export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit, isSatoshi, setIsSatoshi}:IAddRewards) => {
+	const params = useParams<{projectId: string}>();
+	const {toast} = useNotification();
+
 	const [_rewards, _setRewards] = useState<TRewards>(availableReward || defaultReward);
 	const rewards = useRef(_rewards);
 	const setRewards = (value: TRewards) => {
@@ -50,6 +57,48 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 	};
 
 	const [formError, setFormError] = useState<any>({});
+
+	const [createReward, {
+		loading: createRewardLoading,
+	}] = useMutation(MUTATION_CREATE_PROJECT_REWARD, {
+		onCompleted(data) {
+			toast({
+				title: 'Successfully created!',
+				description: `Reward ${data.createProjectReward.name} was successfully created`,
+				status: 'success',
+			});
+			onSubmit(data.createProjectReward);
+			onClose();
+		},
+		onError(error) {
+			toast({
+				title: 'Failed to create reward',
+				description: `${error}`,
+				status: 'error',
+			});
+		},
+	});
+
+	const [updateReward, {
+		loading: updateRewardLoading,
+	}] = useMutation(MUTATION_UPDATE_PROJECT_REWARD, {
+		onCompleted(data) {
+			toast({
+				title: 'Successfully updated!',
+				description: `Reward ${data.createProjectReward.name} was successfully updated`,
+				status: 'success',
+			});
+			onSubmit(data.updateProjectReward);
+			onClose();
+		},
+		onError(error) {
+			toast({
+				title: 'Failed to update reward',
+				description: `${error}`,
+				status: 'error',
+			});
+		},
+	});
 
 	useEffect(() => {
 		if (availableReward && availableReward !== rewards.current) {
@@ -73,9 +122,23 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 			return;
 		}
 
-		const id = rewards.current.id || new Date().toISOString();
-		onSubmit({...rewards.current, id});
-		onClose();
+		if (rewards.current.id) {
+			const updateRewardsInput = {
+				projectRewardId: rewards.current.id,
+				name: rewards.current.name,
+				description: rewards.current.description,
+				cost: rewards.current.cost,
+				image: rewards.current.image,
+			};
+			updateReward({variables: {input: updateRewardsInput}});
+		} else {
+			const createRewardsInput = {
+				...rewards.current,
+				projectId: params.projectId,
+
+			};
+			createReward({variables: {input: createRewardsInput}});
+		}
 	};
 
 	const handleUpload = (url: string) => {
@@ -107,7 +170,6 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 		return isValid;
 	};
 
-	console.log('checking rewards');
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
 			<ModalOverlay />
@@ -190,7 +252,7 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 
 					</VStack>
 					<VStack spacing="10px">
-						<ButtonComponent isFullWidth primary onClick={handleConfirmReward}>Confirm</ButtonComponent>
+						<ButtonComponent isLoading={createRewardLoading || updateRewardLoading} isFullWidth primary onClick={handleConfirmReward}>Confirm</ButtonComponent>
 					</VStack>
 				</ModalBody>
 			</ModalContent>
