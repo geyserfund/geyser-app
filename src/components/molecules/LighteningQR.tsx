@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Tooltip } from '@chakra-ui/react';
+import { Box, Button, HStack, IconButton, Tooltip } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import React, { useState } from 'react';
 import { isMobileMode } from '../../utils';
@@ -32,14 +32,14 @@ export const LighteningQR = ({name}: ILighteningQR) => {
 	};
 
 	return (
-		<Box display="flex" flexWrap="wrap" justifyContent="start" alignItems="center" marginTop="8px" marginBottom="16px">
+		<HStack flexWrap="wrap" justifyContent="start" alignItems="center" spacing="4px">
 
 			<Tooltip label={copy ? 'Copied!' : 'Copy Lightning Address'} placement="top" closeOnClick={false}>
-				<Button leftIcon={<BoltIcon/>} my={isMobile ? 2 : 0} mr={2} border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" fontWeight="medium" onClick={handleAddressCopy} color="#2F423E" id="lightning-address">{name}@geyser.fund</Button>
+				<Button size="sm" leftIcon={<BoltIcon scale={0.8}/>} _hover={{backgroundColor: 'none', border: '1px solid #20ECC7'}} _active={{backgroundColor: 'brand.primary'}} bg="none" fontWeight="medium" onClick={handleAddressCopy} color="#2F423E" id="lightning-address">{name}@geyser.fund</Button>
 			</Tooltip>
 
 			<Tooltip label="View Project QR Code" placement="top">
-				<IconButton mr={2} _hover={{backgroundColor: 'none', border: '1px solid #20ECC7'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
+				<IconButton _hover={{backgroundColor: 'none', border: '1px solid #20ECC7'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
 					setCopy(false);
 					if (imageDownload.length === 0) {
 						setTimeout(() => {
@@ -50,8 +50,8 @@ export const LighteningQR = ({name}: ILighteningQR) => {
 			</Tooltip>
 
 			<Tooltip label={copy ? 'Copied!' : 'Share Project'} placement="top" closeOnClick={false}>
-				<IconButton border="1px solid #20ECC7" _hover={{backgroundColor: 'none'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<ShareIcon/>} aria-label="share" onClick={handleShare}/>
+				<IconButton _hover={{backgroundColor: 'none', border: '1px solid #20ECC7'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<ShareIcon/>} aria-label="share" onClick={handleShare}/>
 			</Tooltip>
-		</Box>
+		</HStack>
 	);
 };

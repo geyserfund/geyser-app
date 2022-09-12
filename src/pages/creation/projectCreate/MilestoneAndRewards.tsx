@@ -1,20 +1,22 @@
 import { Box, Grid, GridItem, HStack, Text, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { ButtonComponent, Card, IconButtonComponent, ImageWithReload, SatoshiAmount } from '../../../components/ui';
-import { isMobileMode, useNotification, validateEmail } from '../../../utils';
-import { TMilestone, TProjectDetails, TRewards } from './types';
-import { BiCrosshair, BiLeftArrowAlt, BiPencil } from 'react-icons/bi';
+import { ButtonComponent, IconButtonComponent, SatoshiAmount } from '../../../components/ui';
+import { isMobileMode, useNotification } from '../../../utils';
+import { TMilestone, TRewards } from './types';
+import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddMilestones, defaultMilestone } from './components';
-import { CloseIcon, EditIcon } from '@chakra-ui/icons';
+import { EditIcon } from '@chakra-ui/icons';
 import { AddRewards } from './components/AddRewards';
-import { CalendarButton, RewardCard } from '../../../components/molecules';
+import { CalendarButton, DeleteConfirmModal, RewardCard } from '../../../components/molecules';
 import { DateTime } from 'luxon';
-import { useMutation } from '@apollo/client';
-import { MUTATION_CREATE_PROJECT_MILESTONE, MUTATION_CREATE_PROJECT_REWARD, MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations';
+import { useMutation, useQuery } from '@apollo/client';
+import { MUTATION_UPDATE_PROJECT, MUTATION_UPDATE_PROJECT_REWARD } from '../../../graphql/mutations';
+import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import Loader from '../../../components/ui/Loader';
 
 const useStyles = createUseStyles({
 	backIcon: {
@@ -41,17 +43,49 @@ export const MilestoneAndRewards = () => {
 
 	const {isOpen: isMilestoneOpen, onClose: onMilestoneClose, onOpen: openMilestone} = useDisclosure();
 	const {isOpen: isRewardOpen, onClose: onRewardClose, onOpen: openReward} = useDisclosure();
+	const {isOpen: isRewardDeleteOpen, onClose: onRewardDeleteClose, onOpen: openRewardDelete} = useDisclosure();
 	const [isSatoshi, setIsSatoshi] = useState(true);
 
 	const [updateProject, {
 		loading: updateProjectLoading,
-	}] = useMutation(MUTATION_UPDATE_PROJECT);
-	const [createMilestone, {
-		loading: createMilestoneLoading,
-	}] = useMutation(MUTATION_CREATE_PROJECT_MILESTONE);
-	const [createReward, {
-		loading: createRewardLoading,
-	}] = useMutation(MUTATION_CREATE_PROJECT_REWARD);
+	}] = useMutation(MUTATION_UPDATE_PROJECT, {
+		onCompleted() {
+			history.push(`/launch/${params.projectId}/node`);
+		},
+		onError(error) {
+			toast({
+				title: 'Something went wrong',
+				description: `${error}`,
+				status: 'error',
+			});
+		},
+	});
+
+	const [updateReward, {
+		loading: updateRewardLoading,
+	}] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
+
+	const { loading } = useQuery(QUERY_PROJECT_BY_NAME,
+		{
+			variables: { where: { id: params.projectId } },
+			onError() {
+				toast({
+					title: 'Error fetching project',
+					status: 'error',
+				});
+			},
+			onCompleted(data) {
+				console.log('checking data', data);
+				if (data.project.milestones && data.project.milestones.length > 0) {
+					setMilestones(data.project.milestones);
+				}
+
+				if (data.project.rewards && data.project.rewards.length > 0) {
+					setRewards(data.project.rewards);
+				}
+			},
+		},
+	);
 
 	const handleMilestoneSubmit = (milestones: TMilestone[]) => {
 		setMilestones(milestones);
@@ -73,67 +107,57 @@ export const MilestoneAndRewards = () => {
 		}
 	};
 
-	const handleNext = async () => {
+	const handleNext = () => {
+		const updateProjectInput: any = {
+			projectId: params.projectId,
+			rewardCurrency: isSatoshi ? 'btc' : 'usd',
+			expiresAt: finalDate || undefined,
+
+		};
+		if (rewards.length > 0) {
+			updateProjectInput.type = 'reward';
+		}
+
+		updateProject({variables: {input: updateProjectInput}});
+	};
+
+	const handleBack = () => {
+		history.push(`/launch/${params.projectId}`);
+	};
+
+	const handleRemoveReward = async (id?: string) => {
+		if (!id) {
+			return;
+		}
+
 		try {
-			const updateProjectInput: any = {
-				projectId: params.projectId,
-				rewardCurrency: isSatoshi ? 'btc' : 'usd',
-				expiresAt: finalDate || undefined,
-
-			};
-			if (rewards.length > 0) {
-				updateProjectInput.type = 'reward';
-			}
-
-			const value = await updateProject({variables: {input: updateProjectInput}});
-			console.log('Checking updateProject', value);
-
-			if (milestones.length > 0) {
-				milestones.map(async milestone => {
-					const createMilestoneInput = {
-						...milestone,
-						projectId: params.projectId,
-
-					};
-					const value = await createMilestone({variables: {input: createMilestoneInput}});
-					console.log('Checking creteMilestone', value);
-				});
-			}
-
-			if (rewards.length > 0) {
-				rewards.map(async reward => {
-					const createRewardsInput = {
-						...reward,
-						id: undefined,
-						projectId: params.projectId,
-
-					};
-					const value = await createReward({variables: {input: createRewardsInput}});
-					console.log('Checking createReward', value);
-				});
-			}
-
-			history.push(`/launch/${params.projectId}/node`);
+			const currentReward = rewards.find(reward => reward.id === id);
+			await updateReward({variables: {input: {projectRewardId: id, deleted: true, name: currentReward?.name, cost: currentReward?.cost}}});
+			const newRewards = rewards.filter(reward => reward.id !== id);
+			setRewards(newRewards);
+			onRewardDeleteClose();
+			toast({
+				title: 'Successfully removed!',
+				description: `Reward ${currentReward?.name} was successfully removed`,
+				status: 'success',
+			});
 		} catch (error) {
 			toast({
-				title: 'Something went wrong',
-				description: 'Please try again.',
+				title: 'Failed to remove reward',
+				description: `${error}`,
 				status: 'error',
 			});
 		}
 	};
 
-	const handleBack = () => {
-		history.push('/');
-	};
-
-	const handleRemoveReward = (id?: string) => {
-		if (!id) {
+	const triggerRewardRemoval = (id?: string) => {
+		const currentReward = rewards.find(reward => reward.id === id);
+		if (!currentReward) {
 			return;
 		}
 
-		const newRewards = rewards.filter(reward => reward.id !== id);
-		setRewards(newRewards);
+		setSelectedReward(currentReward);
+		openRewardDelete();
 	};
 
 	const handleDateChange = (value: Date) => {
@@ -156,6 +180,10 @@ export const MilestoneAndRewards = () => {
 	};
 
 	const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+
+	if (loading) {
+		return <Loader />;
+	}
 
 	return (
 		<Box
@@ -233,7 +261,7 @@ export const MilestoneAndRewards = () => {
 								<Text fontSize="12px">Rewards are a powerful way of exchanging value with your community</Text>
 							</VStack>
 							<ButtonComponent primary isFullWidth onClick={handleNext}
-								isLoading={updateProjectLoading || createMilestoneLoading || createRewardLoading}
+								isLoading={updateProjectLoading}
 							>Continue</ButtonComponent>
 						</VStack>
 
@@ -291,7 +319,7 @@ export const MilestoneAndRewards = () => {
 												setSelectedReward(reward);
 												openReward();
 											}}
-											handleRemove={() => handleRemoveReward(reward.id)}
+											handleRemove={() => triggerRewardRemoval(reward.id)}
 										/>
 
 									))
@@ -321,7 +349,13 @@ export const MilestoneAndRewards = () => {
 				isSatoshi={isSatoshi}
 				setIsSatoshi={setIsSatoshi}
 			/>}
-
+			<DeleteConfirmModal
+				isOpen={isRewardDeleteOpen}
+				onClose={onRewardDeleteClose}
+				title={`Delete reward ${selectedReward?.name}`}
+				description={'Are you sure you want to remove the reward'}
+				confirm={() => handleRemoveReward(selectedReward?.id)}
+			/>
 		</Box>
 	);
 };

@@ -5,14 +5,6 @@ mutation UpdateProject($input: CreateWalletInput) {
 	createWallet(input: $input) {
 	  id
 	  name
-	  connectionDetails {
-		... on LndConnectionDetails {
-		  macaroon
-		  tlsCertificate
-		  hostname
-		  grpcPort
-		}
-	  }
 	}
   }
 `;
@@ -28,9 +20,35 @@ mutation UpdateProject($input: CreateWalletInput) {
       "tlsCertificate": null,
       "hostname": null,
       "grpcPort": null,
-      "lndNodeType": null
+      "lndNodeType": null,
+	  "pubkey": null
     },
     "name": null
   }
 }
 */
+
+export const MUTATION_UPDATE_WALLET = gql`
+mutation UpdateWallet($input: UpdateWalletInput) {
+	updateWallet(input: $input) {
+	  id
+	  name
+	}
+  }
+`;
+/*
+{
+	"input": {
+	  "id": null,
+	  "name": null,
+	  "lndConnectionDetailsInput": {
+		"macaroon": null,
+		"tlsCertificate": null,
+		"hostname": null,
+		"grpcPort": null,
+		"pubkey": null
+	  }
+	}
+  }
+
+  */

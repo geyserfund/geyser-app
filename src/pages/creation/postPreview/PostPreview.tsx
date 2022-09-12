@@ -1,10 +1,12 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Box, Image, Input, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BsCheckLg } from 'react-icons/bs';
 import { useHistory, useParams } from 'react-router';
 import { ButtonComponent, TextBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
+import { useAuthContext } from '../../../context';
+import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import { MUTATION_PUBLISH_POST, MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
 import { QUERY_GET_POST } from '../../../graphql/queries/posts';
 import { IPostUpdateInput } from '../../../interfaces/posts';
@@ -16,11 +18,12 @@ import { TEntry } from '../postEditor/types';
 let isEdited = false;
 
 export const PostPreview = () => {
-	const params = useParams<{ postId: string }>();
+	const params = useParams<{ postId: string, projectId: string }>();
 
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
 	const history = useHistory();
+	const {setNavTitle} = useAuthContext();
 
 	const [isPublished, setIsPublished] = useState(false);
 
@@ -31,6 +34,18 @@ export const PostPreview = () => {
 	}] = useMutation(MUTATION_UPDATE_POST);
 
 	const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_POST);
+
+	const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME,
+		{
+			variables: { where: { name: params.projectId } },
+			onCompleted(data) {
+				setNavTitle(data.project.title);
+			},
+			onError() {
+				history.push('/404');
+			},
+		},
+	);
 
 	useEffect(() => {
 		if (params && params.postId) {
@@ -74,7 +89,7 @@ export const PostPreview = () => {
 	};
 
 	const onBack = () => {
-		history.push(`/posts/${params.postId}`);
+		history.push(`/projects/${params.projectId}/posts/${params.postId}`);
 	};
 
 	const handleInput = (event: any) => {
@@ -105,7 +120,7 @@ export const PostPreview = () => {
 		setIsPublished(true);
 	};
 
-	if (loadingPosts) {
+	if (loadingPosts || loading) {
 		return <Loader />;
 	}
 
@@ -178,7 +193,10 @@ export const PostPreview = () => {
 					{!isPublished && <VStack alignItems="flex-start" width="100%">
 						<Text>Linked project</Text>
 						<Text>Where should Satoshi donations go to?</Text>
-						<TextBox />
+						<TextBox
+							isDisabled
+							value={`${projectData.project.name}@geyser.fund`}
+						/>
 					</VStack>}
 					{isPublished
 						? <VStack width="100%">

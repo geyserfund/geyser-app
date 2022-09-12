@@ -47,6 +47,10 @@ export const SatoshiIconTilted = ({scale = 1, wrapperClass, isDark, color, dash,
 			return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)';
 		}
 
+		if (color === 'brand.primary800') {
+			return 'invert(31%) sepia(17%) saturate(2529%) hue-rotate(123deg) brightness(93%) contrast(102%)';
+		}
+
 		if (isDark) {
 			return 'invert(100%)';
 		}

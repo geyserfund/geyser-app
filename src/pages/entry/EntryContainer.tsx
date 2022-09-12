@@ -3,13 +3,12 @@ import classNames from 'classnames';
 import React, { useState, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { fadeOut, slideInLeft } from '../../css';
-import { IProject } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { IFundingStages } from '../../constants';
 import { Footer, ProjectMobileMenu } from '../../components/molecules';
 import { fundingStages } from '../../constants';
-import { DetailsCard } from './DetailsCard';
-import { ProjectAccesories } from './ProjectAccesories';
+import { TPostData } from '../../interfaces/posts';
+import { EntryDetails } from './EntryDetails';
 
 type Rules = string
 
@@ -49,13 +48,13 @@ const useStyles = createUseStyles<Rules, IStyles>({
 });
 
 interface IActivityProps {
-	project: IProject
+	entry: TPostData
 	detailOpen: boolean
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 	setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
 }
 
-export const DetailsContainer = ({ project, detailOpen, setDetailOpen, setFundState }: IActivityProps) => {
+export const EntryContainer = ({ entry, detailOpen, setDetailOpen, setFundState }: IActivityProps) => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 
@@ -117,8 +116,7 @@ export const DetailsContainer = ({ project, detailOpen, setDetailOpen, setFundSt
 						w="100%"
 						padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
 					>
-						<DetailsCard project={project} setFundState={setFundState}/>
-						<ProjectAccesories project={project}/>
+						<EntryDetails entry={entry}/>
 					</VStack >
 				</VStack >
 				<Footer />

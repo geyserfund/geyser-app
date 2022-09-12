@@ -36,7 +36,7 @@ export const ImageWithReload = ({src, ...rest}: IImageWithReload) => {
 	return (
 		<>
 			{
-				error && <Skeleton height={rest.height || '300px'} width={rest.width || '500px'}/>
+				error && <Skeleton height={rest.height || '300px'} width={rest.width || '500px'} maxHeight={rest.maxHeight || '500px'}/>
 			}
 			<Image
 				display={error ? 'none' : undefined}

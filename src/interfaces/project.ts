@@ -27,6 +27,8 @@ export interface IProject {
     grantees: IGrantee[];
     fundingTxs: IFundingTx[];
     rewards?: IProjectReward[]
+	milestones?: IProjectMilestone[]
+	entries?: IProjectListEntryItem[]
 }
 
 export interface IProjectReward {
@@ -84,6 +86,8 @@ export interface IProjectListEntryItem {
 	image: string;
 	type: string;
 	creator: IUser;
+	fundersCount: number;
+	amountFunded: number;
 }
 
 export interface IRewardCount {

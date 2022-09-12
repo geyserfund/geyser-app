@@ -7,6 +7,7 @@ export const GlobalStyles = () => (
         @import url('https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
         @font-face {
             font-family: 'Myanmar-Khyay';
             src:url('/Myanmar-Khyay.ttf.woff') format('woff'),

@@ -10,8 +10,9 @@ import { colors, VoltageLogoUrl } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddNode } from './components/AddNode';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { MUTATION_CREATE_POST, MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
+import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 
 const useStyles = createUseStyles({
 	backIcon: {
@@ -35,8 +36,23 @@ export const Wallet = () => {
 		loading: createWalletLoading,
 	}] = useMutation(MUTATION_CREATE_WALLET);
 
+	const { loading } = useQuery(QUERY_PROJECT_BY_NAME,
+		{
+			variables: { where: { id: params.projectId } },
+			onError() {
+				toast({
+					title: 'Error fetching project',
+					status: 'error',
+				});
+			},
+			onCompleted(data) {
+				console.log('checking data', data);
+			},
+		},
+	);
+
 	const handleBack = () => {
-		history.push('/');
+		history.push(`/launch/${params.projectId}/milestones`);
 	};
 
 	const handleNext = async () => {
@@ -50,8 +66,9 @@ export const Wallet = () => {
 					macaroon: node?.invoiceMacaroon,
 					tlsCertificate: node?.tlsCert,
 					hostname: node?.hostname,
-					grpcPort: node?.grpc ? parseInt(node.grpc, 10) : 10009,
+					grpcPort: node?.isVoltage ? 10009 : node?.grpc ? parseInt(node.grpc, 10) : '',
 					lndNodeType: node?.isVoltage ? 'voltage' : 'custom',
+					pubkey: node?.publicKey,
 				},
 			};
 
@@ -79,7 +96,7 @@ export const Wallet = () => {
 		>
 			<Grid width="100%" templateColumns={isLargerThan1280 ? 'repeat(6, 1fr)' : isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)' } padding={isMobile ? '10px' : '40px 40px 20px 40px'} >
 				<GridItem colSpan={isLargerThan1280 ? 2 : 1} display="flex" justifyContent="flex-start">
-					<ButtonComponent leftIcon={<BiLeftArrowAlt className={classes.backIcon} onClick={handleBack} />}>Back</ButtonComponent>
+					<ButtonComponent onClick={handleBack} leftIcon={<BiLeftArrowAlt className={classes.backIcon} />}>Back</ButtonComponent>
 				</GridItem>
 				<GridItem colSpan={2} display="flex" justifyContent="center">
 					<VStack

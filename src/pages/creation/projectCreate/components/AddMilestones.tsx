@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import {
 	Box,
@@ -18,6 +19,8 @@ import { useParams } from 'react-router';
 import { DonationInput, DonationInputWithSatoshi } from '../../../../components/molecules';
 import { ButtonComponent, IconButtonComponent, TextBox } from '../../../../components/ui';
 import { colors } from '../../../../constants';
+import { MUTATION_CREATE_PROJECT_MILESTONE, MUTATION_DELETE_PROJECT_MILESTONE, MUTATION_UPDATE_PROJECT_MILESTONE } from '../../../../graphql/mutations';
+import { useNotification } from '../../../../utils';
 import { TMilestone } from '../types';
 
 interface IAddMilestones {
@@ -38,6 +41,7 @@ export const defaultMilestone = {
 
 export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones, onSubmit, isSatoshi, setIsSatoshi}:IAddMilestones) => {
 	const params = useParams<{projectId: string}>();
+	const {toast} = useNotification();
 
 	const [_milestones, _setMilestones] = useState<TMilestone[]>(availableMilestones);
 	const milestones = useRef(_milestones);
@@ -81,16 +85,69 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 	const handleConfirmMilestone = () => {
 		const filetMilestones = milestones.current.filter(milestone => milestone.amount > 0 && milestone.name);
 		setIsSatoshi(amountSatoshi);
+
+		try {
+			filetMilestones.map(async milestone => {
+				const createMilestoneInput = {
+					...milestone,
+					projectId: params.projectId,
+
+				};
+				if (milestone.id) {
+					await updateMilestone({variables: {input: {
+						projectMilestoneId: milestone.id,
+						name: milestone.name,
+						description: milestone.description,
+						amount: milestone.amount,
+					}}});
+				} else {
+					await createMilestone({variables: {input: createMilestoneInput}});
+				}
+			});
+		} catch (error) {
+			toast({
+				title: 'Something went wrong',
+				description: 'Please try again.',
+				status: 'error',
+			});
+		}
+
 		onSubmit(filetMilestones);
 		onClose();
 	};
 
-	const handleRemoveMilestone = (itemIndex: number) => {
+	const handleRemoveMilestone = async (itemIndex: number) => {
+		const currentMilestone = milestones.current.find((milestone, index) => index === itemIndex);
 		const newMilestones = milestones.current.filter((milestone, index) => index !== itemIndex);
-		setMilestones(newMilestones);
+
+		if (currentMilestone && currentMilestone.id) {
+			try {
+				await removeMilestone({variables: {projectMilestoneId: currentMilestone.id}});
+				setMilestones(newMilestones);
+			} catch (error) {
+				toast({
+					title: 'Something went wrong',
+					description: `${error}`,
+					status: 'error',
+				});
+			}
+		} else {
+			setMilestones(newMilestones);
+		}
 	};
 
-	console.log('checking milestones');
+	const [createMilestone, {
+		loading: createMilestoneLoading,
+	}] = useMutation(MUTATION_CREATE_PROJECT_MILESTONE);
+
+	const [updateMilestone, {
+		loading: updateMilestoneLoading,
+	}] = useMutation(MUTATION_UPDATE_PROJECT_MILESTONE);
+
+	const [removeMilestone, {
+		loading: removeMilestoneLoading,
+	}] = useMutation(MUTATION_DELETE_PROJECT_MILESTONE);
+
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
 			<ModalOverlay />
@@ -138,7 +195,14 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 					</VStack>
 					<VStack spacing="10px">
 						<ButtonComponent isFullWidth onClick={handleAddMilestone}>Add a milestone</ButtonComponent>
-						<ButtonComponent isFullWidth primary onClick={handleConfirmMilestone}>Confirm</ButtonComponent>
+						<ButtonComponent
+							isFullWidth
+							primary
+							isLoading={createMilestoneLoading || updateMilestoneLoading || removeMilestoneLoading}
+							onClick={handleConfirmMilestone}
+						>
+								Confirm
+						</ButtonComponent>
 					</VStack>
 				</ModalBody>
 			</ModalContent>

@@ -82,6 +82,20 @@ query GetProject($where: UniqueProjectQueryInput!) {
 			imageUrl
 		}
 	}
+	wallets {
+		id
+		name
+		connectionDetails {
+		  ... on LndConnectionDetails {
+			macaroon
+			tlsCertificate
+			hostname
+			grpcPort
+			lndNodeType
+			pubkey
+		  }
+		}
+	}
   }
 }
 `;

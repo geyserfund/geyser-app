@@ -3,13 +3,26 @@ import { gql } from '@apollo/client';
 export const QUERY_GET_POST = gql`
 query Entry($id: BigInt!) {
 	entry(id: $id) {
-	  id
-	  title
-	  description
-	  image
+		id
+		title
+		description
+		image
+		published
 	  content
-	  published
-	  type
+		createdAt
+		updatedAt
+		publishedAt
+		type
+		creator {
+		  id
+		  username
+		  imageUrl
+		}
+		project {
+		  id
+		  title
+		  name
+		}
 	}
   }
 `;

@@ -19,6 +19,8 @@ const defaultContext = {
 	setIsLoggedIn: () => { },
 	getUser: () => { },
 	setUser: () => { },
+	navTitle: '',
+	setNavTitle: () => {},
 };
 
 interface IAuthContext {
@@ -33,6 +35,8 @@ interface IAuthContext {
 	setIsLoggedIn: Dispatch<SetStateAction<boolean>>,
 	getUser: any
 	setUser: any
+	navTitle: string;
+	setNavTitle: any;
 }
 
 export const AuthContext = createContext<IAuthContext>(defaultContext);
@@ -50,6 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const [loading, setLoading] = useState(true);
 	const [initialLoad, setInitialLoad] = useState(false);
+	const [navTitle, setNavTitle] = useState('');
 
 	const [user, setUser] = useState<IUser>(defaultUser);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -89,7 +94,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [loadingUser]);
 
 	return (
-		<AuthContext.Provider value={{ user, getUser, setUser, loading, error, isLoggedIn, setIsLoggedIn, logout, loginIsOpen, loginOnOpen, loginOnClose }}>
+		<AuthContext.Provider
+			value={{
+				user,
+				getUser,
+				setUser,
+				loading,
+				error,
+				isLoggedIn,
+				setIsLoggedIn,
+				logout,
+				loginIsOpen,
+				loginOnOpen,
+				loginOnClose,
+				navTitle,
+				setNavTitle,
+			}}
+		>
 			{children}
 		</AuthContext.Provider>
 	);

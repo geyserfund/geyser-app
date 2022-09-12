@@ -10,8 +10,14 @@ import { testImage, useNotification } from '../../../utils';
 import ImageUploader from 'quill-image-uploader';
 import ImageEdit from 'quill-image-edit-module';
 
-const useStyles = createUseStyles({
-	container: {
+type Rules = string
+
+interface IStyles {
+	readOnly?: boolean;
+}
+
+const useStyles = createUseStyles<Rules, IStyles>({
+	container: ({readOnly}: IStyles) => ({
 		width: '100%',
 		height: '100%',
 		position: 'relative',
@@ -20,6 +26,7 @@ const useStyles = createUseStyles({
 		minHeight: '350px',
 		'& .ql-toolbar': {
 			position: 'fixed',
+			display: readOnly ? 'none' : 'block',
 			bottom: '20px',
 			float: 'center',
 			zIndex: 99,
@@ -62,16 +69,17 @@ const useStyles = createUseStyles({
 			backgroundColor: `${colors.bgGrey} !important`,
 			color: `${colors.textGrey} !important`,
 		},
-	},
+	}),
 });
 
 interface IEditor {
 	name: string
 	value: string
-	handleChange: (name: string, content: string) => void
+	handleChange?: (name: string, content: string) => void
+	readOnly?: boolean
 }
 
-export const Editor = ({name, value, handleChange}:IEditor) => {
+export const Editor = ({name, value, handleChange, readOnly}:IEditor) => {
 	const [_quillObj, _setQuillObj] = useState<Quill>();
 	const quillObj = useRef(_quillObj);
 	const setQuillObj = (value: Quill) => {
@@ -81,7 +89,7 @@ export const Editor = ({name, value, handleChange}:IEditor) => {
 
 	const {toast} = useNotification();
 
-	const classes = useStyles();
+	const classes = useStyles({readOnly});
 
 	useEffect(() => {
 		Quill.register('modules/imageUploader', ImageUploader);
@@ -116,6 +124,7 @@ export const Editor = ({name, value, handleChange}:IEditor) => {
 				},
 
 			},
+			readOnly,
 			theme: 'snow',
 		});
 
@@ -126,7 +135,9 @@ export const Editor = ({name, value, handleChange}:IEditor) => {
 
 		editor.on('text-change', () => {
 			const contents = quillObj.current?.getContents();
-			handleChange(name, JSON.stringify(contents));
+			if (handleChange) {
+				handleChange(name, JSON.stringify(contents));
+			}
 		});
 
 		setQuillObj(editor);
