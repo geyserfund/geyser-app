@@ -117,7 +117,7 @@ export const DetailsContainer = ({ project, detailOpen, setDetailOpen, setFundSt
 						w="100%"
 						padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
 					>
-						<DetailsCard project={project}/>
+						<DetailsCard project={project} setFundState={setFundState}/>
 						<ProjectAccesories project={project}/>
 					</VStack >
 				</VStack >

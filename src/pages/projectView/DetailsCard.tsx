@@ -14,10 +14,12 @@ import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { LighteningQR } from '../../components/molecules/LighteningQR';
 import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
-import { colors, LaunchImageUrl } from '../../constants';
+import { colors, fundingStages, IFundingStages, LaunchImageUrl } from '../../constants';
+import { useHistory } from 'react-router';
 
-export const DetailsCard = ({ project }: { project: IProject }) => {
+export const DetailsCard = ({ project, setFundState }: { project: IProject, setFundState: React.Dispatch<React.SetStateAction<IFundingStages>> }) => {
 	const isMobile = isMobileMode();
+	const history = useHistory();
 
 	// const { projectDetails, projectUpdates } = projectData;
 	console.log(project);
@@ -45,6 +47,10 @@ export const DetailsCard = ({ project }: { project: IProject }) => {
 		);
 	};
 
+	const handleFundProject = () => {
+		setFundState(fundingStages.form);
+	};
+
 	return (
 		<Card padding="24px">
 			<VStack alignItems="flex-start" width="100%" spacing="18px">
@@ -70,7 +76,7 @@ export const DetailsCard = ({ project }: { project: IProject }) => {
 					<Text color="brand.neutral800">{project.description}</Text>
 				</VStack>
 				{renderMilestone()}
-				<Button isFullWidth backgroundColor="brand.primary" leftIcon={<BoltIcon />}>Fund this project</Button>
+				<Button isFullWidth backgroundColor="brand.primary" leftIcon={<BoltIcon />} onClick={handleFundProject}>Fund this project</Button>
 			</VStack>
 		</Card>
 	);
