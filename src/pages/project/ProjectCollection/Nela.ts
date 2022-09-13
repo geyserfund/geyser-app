@@ -28,6 +28,7 @@ const projectBlocks: IProjectBlock[] = [
 			'In the style of Cinéma vérité interview partners answer key questions and share their truth about bitcoin and its possible future. ',
 
 		],
+		images: [9],
 		blockType: 'PL',
 	},
 	{
@@ -85,8 +86,15 @@ const projectBlocks: IProjectBlock[] = [
 		blockType: 'PL',
 	},
 	{
-		key: 'description5',
+		key: 'aboutmephotos',
 		title: 'About Me',
+		body: [],
+		images: [10],
+		blockType: 'PL',
+	},
+	{
+		key: 'description5',
+		title: '',
 		body: [
 
 			'I wished for nothing more than that 2022 would finally begin and the ballast of the previous year would dissolve into goodwill. My dragon tree, which I christened Lill Covid on May 7, 2020, cares little. I water, it grows, that\'s the deal. This date was my prelude to a personal wake up call.',
@@ -122,13 +130,6 @@ const projectBlocks: IProjectBlock[] = [
 			'Filmbewertungsstelle Wiesbaden FBW- Short of the month',
 			'Internationaler NOMOS/Shotgun festival - First place ',
 		],
-		images: [9, 10],
-		blockType: 'PL',
-	},
-	{
-		key: 'aboutme2',
-		title: '',
-		body: [],
 		images: [7, 8],
 		blockType: 'PL',
 	},
