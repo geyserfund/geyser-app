@@ -7,6 +7,7 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
 import { Card, SatoshiAmount } from '../../components/ui';
@@ -23,6 +24,7 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 	const history = useHistory();
 
 	const {user} = useAuthContext();
+	const owner = project.owners[0];
 
 	// const { projectDetails, projectUpdates } = projectData;
 	console.log(project);
@@ -91,7 +93,9 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 				</VStack>
 				<HStack>
 					<Text color="brand.neutral600">Creator</Text>
-					<AvatarElement username="Paco de la India" image={LaunchImageUrl}/>
+					<Link to={`/profile/${owner.user.id}`}>
+						<AvatarElement username={owner.user.username} image={owner.user.imageUrl}/>
+					</Link>
 				</HStack>
 				<VStack alignItems="flex-start">
 					<Text color="brand.neutral600" textAlign="left">Objective</Text>
