@@ -8,7 +8,7 @@ query Entry($id: BigInt!) {
 		description
 		image
 		published
-	  content
+	  	content
 		createdAt
 		updatedAt
 		publishedAt

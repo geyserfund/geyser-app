@@ -66,6 +66,7 @@ export const ProjectAccesories = ({ project }: { project: IProject }) => {
 
 	const renderMilestones = () => {
 		if (project.milestones && project.milestones.length > 0) {
+			console.log('project mielstones', project.milestones);
 			return (
 				project.milestones.map(milestone =>
 					<MilestoneComponent

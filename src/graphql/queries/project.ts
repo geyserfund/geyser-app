@@ -86,14 +86,17 @@ query GetProject($where: UniqueProjectQueryInput!) {
 		id
 		name
 		connectionDetails {
-		  ... on LndConnectionDetails {
-			macaroon
-			tlsCertificate
-			hostname
-			grpcPort
-			lndNodeType
-			pubkey
-		  }
+			... on LndConnectionDetailsPrivate {
+			  macaroon
+			  tlsCertificate
+			  hostname
+			  grpcPort
+			  lndNodeType
+			  pubkey
+			}
+			... on LndConnectionDetailsPublic {
+			  pubkey
+			}
 		}
 	}
   }

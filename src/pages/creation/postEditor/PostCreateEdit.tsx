@@ -114,7 +114,7 @@ export const PostCreateEdit = () => {
 			if (form.current.content || form.current.title || form.current.description || form.current.image) {
 				const { image, title, description, content } = value;
 				const input: IPostCreateInput = {
-					projectId: projectData.project.id,
+					projectId: projectData && projectData.project.id,
 					type: 'article',
 					title,
 					description,

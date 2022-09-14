@@ -81,7 +81,10 @@ export const EntryPage = () => {
 				bg="brand.bgGrey4"
 			>
 				<EntryContainer entry={entry} {...{detailOpen, setDetailOpen, setFundState }}/>
-				<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}/>
+				<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}
+					resourceType="entry"
+					resourceId={parseInt(postId, 10)}
+				/>
 			</Box>
 		</Box>
 

@@ -28,9 +28,11 @@ interface IActivityProps {
 	detailOpen: boolean
 	fundingFlow: any
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+	resourceType?: string;
+	resourceId?: number;
 }
 
-const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivityProps) => {
+const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow, resourceType, resourceId }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
 
 	// const location = useLocation<any>();
@@ -134,8 +136,8 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 				...(comment && { comment }),
 			},
 			sourceResourceInput: {
-				resourceId: Number(project.id),
-				resourceType: 'project',
+				resourceId: resourceId || Number(project.id),
+				resourceType: resourceType || 'project',
 			},
 		};
 

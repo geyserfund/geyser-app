@@ -24,8 +24,8 @@ export const EntryDetails = ({entry}:{entry: TPostData}) => {
 					<BsHeartFill color={colors.neutral500}/>
 				</HStack>
 			</HStack>
-			<HStack width={'100%'} justifyContent="center" maxHeight="500px">
-				<Image src={entry.image} />
+			<HStack width={'100%'} justifyContent="center" maxHeight="400px" overflow="hidden">
+				<Image width="100%" src={entry.image} />
 			</HStack>
 			<Text fontSize="18px" fontWeight={600}>{entry.description}</Text>
 			<Box flex={1} width="100%" >

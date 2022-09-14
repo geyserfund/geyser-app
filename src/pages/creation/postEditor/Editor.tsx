@@ -69,6 +69,11 @@ const useStyles = createUseStyles<Rules, IStyles>({
 			backgroundColor: `${colors.bgGrey} !important`,
 			color: `${colors.textGrey} !important`,
 		},
+		'& .ql-video': {
+			width: '100%',
+			height: '100%',
+			maxHeight: '500px',
+		},
 	}),
 });
 
@@ -101,7 +106,7 @@ export const Editor = ({name, value, handleChange, readOnly}:IEditor) => {
 						['bold', 'italic', 'blockquote', 'code-block'],
 						[{ header: 1 }, { header: 2 }],
 						[{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-						['link', 'image'],
+						['link', 'image', 'video'],
 					],
 				},
 				imageUploader: {
@@ -124,6 +129,7 @@ export const Editor = ({name, value, handleChange, readOnly}:IEditor) => {
 				},
 
 			},
+			formats: ['video'],
 			readOnly,
 			theme: 'snow',
 		});
