@@ -36,7 +36,7 @@ const projectBlocks: IProjectBlock[] = [
 		title: 'Rewards',
 		body: [
 			'**$50**: help a kid catch her/his first wave (a video of a kid riding a wave and saying thank you mentioning your name)',
-			'**$500**: gift a Surfboard for those in need locally produced with your logo on it ',
+			'**$500 to $800**: gift a Surfboard for those in need locally produced with your logo on it, from 5\'0 to 8\'0 boards.',
 		],
 		images: [4],
 		blockType: 'PL',

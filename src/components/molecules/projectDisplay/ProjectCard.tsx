@@ -86,8 +86,7 @@ export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...
 
 	useEffect(() => {
 		if (btcRate && project.balance) {
-			const amountUSD = (project.balance * btcRate).toFixed(2);
-			const percent = Math.ceil((parseFloat(amountUSD) / project.fundingGoal) * 100);
+			const percent = Math.ceil((project.balance / project.fundingGoal) * 100);
 			setPercentage(percent);
 		}
 	}, [btcRate, project]);

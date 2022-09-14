@@ -1,9 +1,8 @@
-import Cookies from 'js-cookie';
 import { ApolloError, useLazyQuery } from '@apollo/client';
 import React, { createContext, useState, useEffect, useContext, Dispatch, SetStateAction } from 'react';
 import { ME } from '../graphql';
 import { IUser } from '../interfaces';
-import { cookieOptions } from '../constants';
+import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
 
@@ -44,12 +43,7 @@ export const AuthContext = createContext<IAuthContext>(defaultContext);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const logout = () => {
 		setUser(defaultUser);
-		Cookies.remove('accessToken', cookieOptions);
-		Cookies.remove('refreshToken', cookieOptions);
-		Object.keys(Cookies.get()).forEach(cookieName => {
-			Cookies.remove(cookieName, cookieOptions);
-		});
-		fetch('auth/logout');
+		fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, { credentials: 'include' }).catch((error => console.error(error)));
 	};
 
 	const [loading, setLoading] = useState(true);
