@@ -34,6 +34,40 @@ mutation Fund($input: FundingInput!) {
 }
 `;
 
+/*
+{
+  "input": {
+    "sourceResourceInput": {
+      "resourceId": null,
+      "resourceType": null
+    },
+    "projectId": null,
+    "anonymous": null,
+    "donationInput": {
+      "donationAmount": null
+    },
+    "rewardInput": {
+      "rewardsCost": null,
+      "shipping": {
+        "destination": null,
+        "cost": null
+      },
+      "rewards": [
+        {
+          "quantity": null,
+          "id": null
+        }
+      ]
+    },
+    "metadataInput": {
+      "email": null,
+      "comment": null,
+      "media": null
+    }
+  }
+}
+*/
+
 export const MUTATION_CLAIM_FUNDING = gql`
 mutation ClaimAnonymousFunding($uuid: String!) {
   claimAnonymousFunding(uuid: $uuid) {

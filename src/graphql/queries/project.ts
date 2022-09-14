@@ -15,9 +15,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
     expiresAt
     media
     active
-    ownerConfirmed
-    fundsClaimed
-    creationConfirmed
+    draft
     owners {
       id
       user {
@@ -30,9 +28,9 @@ query GetProject($where: UniqueProjectQueryInput!) {
       id
       cost
       description
-      currency
       name
       backers
+	  image
     }
     ambassadors {
       id
@@ -66,6 +64,41 @@ query GetProject($where: UniqueProjectQueryInput!) {
     grantees {
       id
     }
+	milestones {
+		id
+		name
+		description
+		amount
+	}
+	entries {
+		id
+		title
+		description
+		image
+		type
+		creator {
+			id
+			username
+			imageUrl
+		}
+	}
+	wallets {
+		id
+		name
+		connectionDetails {
+			... on LndConnectionDetailsPrivate {
+			  macaroon
+			  tlsCertificate
+			  hostname
+			  grpcPort
+			  lndNodeType
+			  pubkey
+			}
+			... on LndConnectionDetailsPublic {
+			  pubkey
+			}
+		}
+	}
   }
 }
 `;
@@ -142,9 +175,7 @@ query projects($where: ProjectQueryInput) {
       updatedAt
       expiresAt
       active
-      ownerConfirmed
-      fundsClaimed
-      creationConfirmed
+      draft
       media
       owners {
         id

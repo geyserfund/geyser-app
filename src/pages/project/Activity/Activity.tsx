@@ -21,16 +21,27 @@ import { InfoPage, InfoPageSkeleton } from './InfoPage';
 import { fundingStages } from '../../../constants';
 import { useFundState, IFundForm } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
+import { useLocation } from 'react-router';
 
 interface IActivityProps {
 	project: IProject
 	detailOpen: boolean
 	fundingFlow: any
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+	resourceType?: string;
+	resourceId?: number;
 }
 
-const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivityProps) => {
+const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow, resourceType, resourceId }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
+
+	// const location = useLocation<any>();
+
+	// useEffect(() => {
+	// 	if(location.state && location.state.fund === true){
+	// 		setState()
+	// 	}
+	// }, [location]);
 
 	const {btcRate} = useBtcContext();
 	const { toast } = useNotification();
@@ -123,6 +134,10 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow }: IActivity
 				...(email && { email }),
 				...(media && { media }),
 				...(comment && { comment }),
+			},
+			sourceResourceInput: {
+				resourceId: resourceId || Number(project.id),
+				resourceType: resourceType || 'project',
 			},
 		};
 

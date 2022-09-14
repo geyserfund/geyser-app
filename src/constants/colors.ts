@@ -34,4 +34,18 @@ export const colors = {
 	gray300: '#CBD5E0',
 	gray500: '#5B5B5B',
 	grayPlaceholder: '#a0aec0',
+
+	gray2: '#F4F4F4',
+
+	primary400: '#6BE7CE',
+	primary700: '#00866D',
+	primary800: '#006452',
+
+	neutral200: '#E9ECEF',
+	neutral300: '#DEE2E6',
+	neutral500: '#ADB5BD',
+	neutral600: '#6C757D',
+	neutral800: '#343A40',
+	neutral900: '#212529',
+
 };

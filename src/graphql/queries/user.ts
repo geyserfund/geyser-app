@@ -7,6 +7,12 @@ query Me {
     id
     username
     imageUrl
+	email
+  }
+}
+`;
+
+/*
     externalAccounts {
       id
       type
@@ -14,9 +20,7 @@ query Me {
       externalId
       public
     }
-  }
-}
-`;
+*/
 
 export const USER_PROFILE_QUERY = gql`
 query User($where: UserQueryInput) {

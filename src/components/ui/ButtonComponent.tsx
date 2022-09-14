@@ -12,6 +12,7 @@ interface IButtonComponentP extends ButtonProps {
 	primary?: boolean;
 	standard?: boolean;
 	circular?: boolean;
+	ref?: any
 }
 
 const useStyles = createUseStyles({
@@ -32,15 +33,17 @@ const useStyles = createUseStyles({
 		display: 'flex',
 		width: '100%',
 		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });
 
-export const ButtonComponent = ({ className, variant, primary, children, standard, circular, backgroundColor, _hover, ...rest }: IButtonComponentP) => {
+export const ButtonComponent = ({ ref, className, variant, primary, children, standard, circular, backgroundColor, _hover, ...rest }: IButtonComponentP) => {
 	const classes = useStyles();
 	const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark);
 	const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
 	return (
 		<Button
+			ref={ref}
 			className={classNames(className, { [classes.container]: standard }, { primary })}
 			variant={variant || 'solid'}
 			minWidth={standard ? '200px' : ''}

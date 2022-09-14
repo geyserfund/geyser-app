@@ -1,6 +1,6 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
 import React, { useState } from 'react';
-import { ProjectBalanceCircularProgress, ProjectBalance, ProjectMobileMenu } from '../../../components/molecules';
+import { ProjectBalanceCircularProgress, ProjectBalance, ProjectMobileMenu, ActivityBrief } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
 import { FundingStatus, ButtonComponent } from '../../../components/ui';
@@ -35,7 +35,6 @@ export const InfoPage = ({
 }: IInfoPage) => {
 	const isMobile = isMobileMode();
 	const classes = useStyles({isMobile});
-	const showCountdown = () => project.active && project.expiresAt;
 	const [view, setView] = useState('activity');
 
 	const leaderboardSort = (funderA: IFunder, funderB: IFunder) => {
@@ -67,12 +66,15 @@ export const InfoPage = ({
 			overflowY="hidden"
 			position="relative"
 		>
-			<FundingStatus open={project.active} />
-			{showCountdown() && <Countdown endDate={project.expiresAt}/>}
-			{project.fundingGoal
-				? <ProjectBalanceCircularProgress loading={loading} rate={btcRate} goal={project.fundingGoal} balance={project.balance} />
-				: <ProjectBalance balance={project.balance} rate={btcRate}/>
-			}
+			{/* <FundingStatus open={project.active} /> */}
+
+			{/* {project.fundingGoal
+				?  */}
+			<ActivityBrief
+				loading={loading}
+				project={project}
+			/>
+
 			{project.active && !isMobile && <ButtonComponent
 				primary
 				standard

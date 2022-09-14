@@ -12,7 +12,7 @@ import { Avatar } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { AuthContext } from '../../context';
 import { getRandomOrb } from '../../utils';
-import { useLocation, useHistory } from 'react-router';
+import { useLocation, useHistory, useRouteMatch } from 'react-router';
 import { customHistory } from '../../config';
 
 const useStyles = createUseStyles({
@@ -26,17 +26,20 @@ const useStyles = createUseStyles({
 
 interface INavBar {
 	showBorder: boolean
+	skipRoutes?: string[]
 }
 
-export const NavBar = ({showBorder}: INavBar) => {
+const customTitleRoutes = ['/projects/:projectId', '/projects/:projectId/post', '/posts/:postId'];
+
+export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
 	const isMedium = isMediumScreen();
 	const isDark = isDarkMode();
 
-	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose } = useContext(AuthContext);
+	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose, navTitle } = useContext(AuthContext);
 
-	const { state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
+	const { pathname, state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const history = useHistory();
 
@@ -53,6 +56,8 @@ export const NavBar = ({showBorder}: INavBar) => {
 		}
 	}, [state]);
 
+	const routeMatch = customTitleRoutes.map(route => useRouteMatch(route)).find(val => val?.isExact)?.isExact;
+
 	const handleLaunch = () => {
 		history.push('/launch');
 	};
@@ -61,6 +66,19 @@ export const NavBar = ({showBorder}: INavBar) => {
 		history.push(`/profile/${user.id}`);
 	};
 
+	if (skipRoutes) {
+		let skip = false;
+		skipRoutes.map((route: string) => {
+			const match = useRouteMatch(route);
+			if (match?.isExact) {
+				skip = true;
+			}
+		});
+		if (skip) {
+			return null;
+		}
+	}
+
 	return (
 		<>
 			<Box
@@ -68,7 +86,7 @@ export const NavBar = ({showBorder}: INavBar) => {
 				width="100%"
 				justifyContent="center"
 				background={isDark ? 'brand.bgHeavyDarkMode' : 'rgba(252,252,252,0.9)'}
-				borderBottom={showBorder ? '1px solid rgba(0,0,0,0)' : '1px solid rgba(233,233,233,0.9)' }
+				borderBottom={showBorder ? '1px solid rgba(0,0,0,0)' : '1px solid rgba(233,233,233,0.9)'}
 				boxSizing="border-box"
 				position="fixed"
 				backdropFilter="blur(2px)"
@@ -113,8 +131,11 @@ export const NavBar = ({showBorder}: INavBar) => {
 							}
 							<NavMenu user={user} logout={logout} />
 						</> : (
-							<>
-								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="6.5px" left="calc(50vw - 96px)">
+							<>{routeMatch
+								? <Box display="flex" alignItems="center">
+									<Text fontSize="18px" fontWeight={600} color="brand.neutral900">{navTitle}</Text>
+								</Box>
+								:								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="6.5px" left="calc(50vw - 96px)">
 									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg" marginRight="5px">
 										<ButtonComponent onClick={() => {
 											history.push('/home');
@@ -126,36 +147,36 @@ export const NavBar = ({showBorder}: INavBar) => {
 										}}>Grants
 										</ButtonComponent>
 									</Box>
-								</HStack>
-								<Box>
-									<ButtonComponent
-										leftIcon={<AddIcon />}
-										primary
-										marginRight="12px"
-										onClick={handleLaunch}
-									>
+								</HStack>}
+							<Box>
+								<ButtonComponent
+									leftIcon={<AddIcon />}
+									primary
+									marginRight="12px"
+									onClick={handleLaunch}
+								>
 										Launch
-									</ButtonComponent>
-									{
-										user.id
-											? <ButtonComponent
-												border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
-												className={classes.userInfo}
-												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
-												standard
-												onClick={handleProfileClick}
-											>
-												{user.username}
-											</ButtonComponent>
-											: <ButtonComponent
-												marginRight="12px"
-												onClick={loginOnOpen}
-											>
-											Connect
-											</ButtonComponent>
-									}
-									<NavMenu user={user} logout={logout} />
-								</Box>
+								</ButtonComponent>
+								{
+									user.id
+										? <ButtonComponent
+											border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
+											className={classes.userInfo}
+											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+											standard
+											onClick={handleProfileClick}
+										>
+											{user.username}
+										</ButtonComponent>
+										: <ButtonComponent
+											marginRight="12px"
+											onClick={loginOnOpen}
+										>
+												Connect
+										</ButtonComponent>
+								}
+								<NavMenu user={user} logout={logout} />
+							</Box>
 							</>
 						)
 					}
@@ -191,5 +212,3 @@ export const NavBar = ({showBorder}: INavBar) => {
 		</>
 	);
 };
-
-// 161616

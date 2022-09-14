@@ -1,6 +1,7 @@
-import { Text } from '@chakra-ui/react';
+import { Box, Text, HStack } from '@chakra-ui/react';
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { fonts } from '../../../constants/fonts';
 import { getCountDown } from '../../../utils';
 
 export const Countdown = ({ endDate }: { endDate: string }) => {
@@ -18,6 +19,10 @@ export const Countdown = ({ endDate }: { endDate: string }) => {
 	}, [endDate]);
 
 	return (
-		<Text textAlign="center">{`${countDown}`}</Text>
+		<HStack>
+			{countDown && <Box height="5px" width="5px" borderRadius="50%" backgroundColor="brand.primary"/>}
+			<Text textAlign="center" fontSize="14px" fontFamily={fonts.mono} color="brand.neutral600">{`${countDown}`}</Text>
+		</HStack>
+
 	);
 };

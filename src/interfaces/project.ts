@@ -1,5 +1,6 @@
 import { IParticipant, IFunder, ISponsor, IGrantee } from './participant';
 import { IFundingTx } from './funding';
+import { IUser } from './user';
 
 export type IProjectType = 'reward' | 'grant' | 'donation'
 
@@ -26,6 +27,8 @@ export interface IProject {
     grantees: IGrantee[];
     fundingTxs: IFundingTx[];
     rewards?: IProjectReward[]
+	milestones?: IProjectMilestone[]
+	entries?: IProjectListEntryItem[]
 }
 
 export interface IProjectReward {
@@ -35,6 +38,7 @@ export interface IProjectReward {
     name: string;
     description: string;
     backers: number;
+	image?: string
 }
 
 export interface IProjectDetail {
@@ -67,6 +71,24 @@ export interface IProjectUpdate {
     body?: string[];
     images?: number[];
     youtube?: string;
+}
+
+export interface IProjectMilestone {
+	id: number;
+	name: string;
+	description: string;
+	amount: number;
+}
+
+export interface IProjectListEntryItem {
+	id: number;
+	title: string;
+	description: string;
+	image: string;
+	type: string;
+	creator: IUser;
+	fundersCount: number;
+	amountFunded: number;
 }
 
 export interface IRewardCount {

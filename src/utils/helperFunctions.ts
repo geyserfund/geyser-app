@@ -28,8 +28,8 @@ export const getShortAmountLabel = (amount: number) => {
 };
 
 export const validateFundingAmount = (amount: number, btcRate: number) => {
-	if (amount * btcRate >= 5000) {
-		return 'Payment above $5000 is not allowed at the moment. Please update the amount, or contact us for donating a higher amount';
+	if (amount * btcRate >= 10000) {
+		return 'Payment above $10000 is not allowed at the moment. Please update the amount, or contact us for donating a higher amount';
 	}
 
 	if (amount < 1) {

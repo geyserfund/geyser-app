@@ -26,6 +26,8 @@ export const Footer = ({wrapperClassName}: IFooter) => {
 
 	return (
 		<VStack
+			position="static"
+			bottom={0}
 			className={wrapperClassName}
 			width="100%"
 			backgroundColor="brand.bgGrey"

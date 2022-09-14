@@ -77,7 +77,10 @@ const TwitterConnect = ({ onClose }: { onClose: () => {}}) => {
 					if (authStatus === 'success') {
 						setPollAuthStatus(false);
 					} else if (authStatus === 'failed') {
-						stopPolling();
+						if (stopPolling) {
+							stopPolling();
+						}
+
 						setPollAuthStatus(false);
 						toast({
 							title: 'Something went wrong',
@@ -117,7 +120,7 @@ const TwitterConnect = ({ onClose }: { onClose: () => {}}) => {
 			isFullWidth
 			primary
 			standard
-			leftIcon={<Icon as={SiTwitter}/>}
+			leftIcon={<Icon as={SiTwitter} />}
 			onClick={handleClick}
 		>
 			Twitter
@@ -352,7 +355,7 @@ export const AuthModal = ({
 				<ModalCloseButton />
 				<ModalBody width="100%">
 					<Box justifyContent="center" alignItems="center" margin={2}>
-						{ modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
+						{modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
 						{renderModalBody()}
 					</Box>
 				</ModalBody>

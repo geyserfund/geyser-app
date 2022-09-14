@@ -17,6 +17,12 @@ import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
+import { PostCreateEdit } from '../pages/creation/postEditor';
+import { PostPreview } from '../pages/creation/postPreview';
+import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
+import { PrivateRoute } from './PrivateRoute';
+import { ProjectView } from '../pages/projectView';
+import { EntryPage } from '../pages/entry/EntryPage';
 
 export const customHistory = createBrowserHistory();
 
@@ -54,7 +60,7 @@ export const Router = () => {
 	return (
 		<Fade in={true}>
 			<Box height="100vh">
-				<NavBar showBorder={showBorder} />
+				<NavBar showBorder={showBorder} skipRoutes={['/projects/:projectId/posts', '/projects/:projectId/posts/:postId/edit', '/posts/:postId/preview']} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
 						<Route path="/auth/twitter">
@@ -66,14 +72,55 @@ export const Router = () => {
 						<Route path="/grants">
 							<GrantsLanding />
 						</Route>
-						<Route path="/launch">
+						{/* <Route path="/launch">
 							<LaunchIdea />
+						</Route> */}
+						<Route path="/launch/:projectId/node">
+							<PrivateRoute>
+								<Wallet />
+							</PrivateRoute>
+						</Route>
+						<Route path="/launch/:projectId/milestones">
+							<PrivateRoute>
+								<MilestoneAndRewards />
+							</PrivateRoute>
+						</Route>
+						<Route path="/launch/:projectId">
+							<PrivateRoute>
+								<ProjectCreate />
+							</PrivateRoute>
+						</Route>
+						<Route path="/launch">
+							<PrivateRoute>
+								<ProjectCreate />
+							</PrivateRoute>
 						</Route>
 						<Route path="/profile/:userId">
 							<Profile />
 						</Route>
 						<Route path="/project/:projectId">
 							<Project />
+						</Route>
+						<Route path="/projects/:projectId/posts/:postId/preview">
+							<PrivateRoute>
+								<PostPreview />
+							</PrivateRoute>
+						</Route>
+						<Route path="/projects/:projectId/posts/:postId/edit">
+							<PrivateRoute>
+								<PostCreateEdit />
+							</PrivateRoute>
+						</Route>
+						<Route path="/projects/:projectId/posts">
+							<PrivateRoute>
+								<PostCreateEdit />
+							</PrivateRoute>
+						</Route>
+						<Route path="/projects/:projectId">
+							<ProjectView />
+						</Route>
+						<Route path="/posts/:postId">
+							<EntryPage />
 						</Route>
 						<Route path="/not-found">
 							<NotFound />
