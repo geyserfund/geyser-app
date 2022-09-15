@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { NavBar } from '../components/nav';
 import { Home } from '../pages/home';
+import { Landing } from '../pages/landing';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
@@ -126,7 +127,8 @@ export const Router = () => {
 							<NotFound />
 						</Route>
 						<Route path="/">
-							<Home />
+							{/* <Home /> */}
+							<Landing />
 						</Route>
 					</Switch>
 				</Box>

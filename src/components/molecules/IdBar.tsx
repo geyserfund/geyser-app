@@ -29,7 +29,7 @@ export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
 			width="95%"
 			boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"
 			_hover={{boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)'}}
-			borderRadius="12px"
+			borderRadius="4px"
 			{...rest}
 		><Box
 				display="flex"

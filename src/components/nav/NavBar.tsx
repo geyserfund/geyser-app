@@ -149,14 +149,16 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 									</Box>
 								</HStack>}
 							<Box>
-								<ButtonComponent
-									leftIcon={<AddIcon />}
-									primary
-									marginRight="12px"
-									onClick={handleLaunch}
-								>
+								{
+									!['/', '/home', '/index', '/launch'].includes(history.location.pathname) && <ButtonComponent
+										leftIcon={<AddIcon />}
+										primary
+										marginRight="12px"
+										onClick={handleLaunch}
+									>
 										Launch
-								</ButtonComponent>
+									</ButtonComponent>
+								}
 								{
 									user.id
 										? <ButtonComponent
