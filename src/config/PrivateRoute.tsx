@@ -17,36 +17,44 @@ export const PrivateRoute = ({children}: IPrivateRoute) => {
 		return <LoadingPage />;
 	}
 
+	const isEntryCreationPath = /\/projects\/([a-z-_0-9])*\/posts/.test(history.location.pathname);
+	const isProjectCreationPath = /\/launch/.test(history.location.pathname);
+
 	useEffect(() => {
-		if (!loading && (!user || (user && !user.id) || (user && !hasTwitterAccount(user)))) {
-			loginOnOpen();
+		if (!loading) {
+			if (!user || (user && !user.id) || (isProjectCreationPath && (user && !hasTwitterAccount(user)))) {
+				loginOnOpen();
+			}
 		}
 	}, [user, loading]);
 
-	const getAuthModalTitleAndDescription = () => {
-		// TODO adapt regex for correct private routes
-		if (history.location.pathname.includes('/launch')) {
-			return {
-				title: 'Connect Twitter',
-				description: 'Connect your Twitter social profile to create a project. We require creators to login with twitter to start their Geyser projects.',
-			};
+	const modalTitle = () => {
+		if (isProjectCreationPath && (user && !hasTwitterAccount(user))) {
+			return 'Connect Twitter';
 		}
 
-		return {
-			title: 'The page you are trying to access required authorization.',
-			description: 'Login to continue',
-		};
+		return 'The page you are trying to access required authorization.';
 	};
 
-	const authModalTitleAndDescription = getAuthModalTitleAndDescription();
+	const modalDescription = () => {
+		if (isProjectCreationPath && (user && !hasTwitterAccount(user))) {
+			return 'Connect your Twitter social profile to create a project. We require creators to login with twitter to start their Geyser projects.';
+		}
+
+		if (isEntryCreationPath) {
+			return 'You must be logged in to create an entry.';
+		}
+
+		return 'Login to continue';
+	};
 
 	return (
 		<>
 			{children}
 			<AuthModal
-				title={authModalTitleAndDescription.title}
-				description={authModalTitleAndDescription.description}
-				showLightning={false}
+				title={modalTitle()}
+				description={modalDescription()}
+				showLightning={!isProjectCreationPath}
 				isOpen={loginIsOpen}
 				privateRoute={true}
 				onClose={loginOnClose}
