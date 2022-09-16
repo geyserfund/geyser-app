@@ -217,43 +217,43 @@ export const MilestoneAndRewards = () => {
 								percentage={67}
 							/>
 						</VStack>
+						<VStack width="100%" alignItems="flex-start">
+							<Text>Fundraising deadline</Text>
+							<HStack width="100%" justifyContent="space-around">
+								<ButtonComponent
+									primary={selectedButton === 'ongoing'}
+									onClick={handleOngoingSelect}
+								>
+										Ongoing
+								</ButtonComponent>
+								<ButtonComponent
+									primary={selectedButton === 'month'}
+									onClick={handleMonthSelect}
+								>
+										1 Month
+								</ButtonComponent>
+								<CalendarButton
+									primary={selectedButton === 'custom'}
+									value={selectedDate}
+									onChange={handleDateChange}
+								>
+										Custom
+								</CalendarButton>
+							</HStack>
+							<Text fontSize="12px">Add a deadline for your project if you have one, or just keep it as ongoing.</Text>
+						</VStack>
 						<VStack width="100%" alignItems="flex-start" spacing="40px">
 							<VStack width="100%" alignItems="flex-start">
 								<Text
 									name="title"
 								>
-								Project Milestones
+								Project Milestones (optional)
 								</Text>
 								<ButtonComponent isFullWidth onClick={openMilestone}>Add a milestone</ButtonComponent>
 								<Text fontSize="12px">Milestones help you and your community keep track of your progress and set your expectations.</Text>
 							</VStack>
 							<VStack width="100%" alignItems="flex-start">
-								<Text>Fundraising deadline</Text>
-								<HStack width="100%" justifyContent="space-around">
-									<ButtonComponent
-										primary={selectedButton === 'ongoing'}
-										onClick={handleOngoingSelect}
-									>
-										Ongoing
-									</ButtonComponent>
-									<ButtonComponent
-										primary={selectedButton === 'month'}
-										onClick={handleMonthSelect}
-									>
-										1 Month
-									</ButtonComponent>
-									<CalendarButton
-										primary={selectedButton === 'custom'}
-										value={selectedDate}
-										onChange={handleDateChange}
-									>
-										Custom
-									</CalendarButton>
-								</HStack>
-								<Text fontSize="12px">Add a deadline for your project if you have one, or just keep it as ongoing.</Text>
-							</VStack>
-							<VStack width="100%" alignItems="flex-start">
-								<Text>Rewards</Text>
+								<Text>Rewards (optional)</Text>
 								<ButtonComponent isFullWidth onClick={() => {
 									setSelectedReward(undefined);
 									openReward();
