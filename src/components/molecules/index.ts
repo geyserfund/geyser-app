@@ -14,7 +14,6 @@ export * from './FileUpload';
 export * from './TitleWithProgressBar';
 export * from './DonationInputWithSatoshi';
 export * from './CalendarButton';
-export * from './RequiredLoginModal';
 export * from './ProjectSectionBar';
 export * from './DeleteConfirmModal';
 

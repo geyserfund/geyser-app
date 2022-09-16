@@ -8,6 +8,13 @@ query Me {
     username
     imageUrl
 	email
+  externalAccounts {
+      id
+      type
+      externalUsername
+      externalId
+      public
+    }
   }
 }
 `;

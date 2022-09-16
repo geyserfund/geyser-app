@@ -67,18 +67,11 @@ export const TopBanner = () => {
                     Geyser is a global crowdfunding platform that helps Bitcoin creators change the world with their communities
 			</Text>
 			{ summaryLoading
-				? <>
-					<VStack>
-						<Skeleton w="50px" h="25px"/>
-						<Text className={classes.subtitleText}>PROJECTS</Text>
-					</VStack>
-					<VStack>
-						<Skeleton w="100px" h="25px"/>
-						<Text className={classes.subtitleText}>SATS RAISED</Text>
-					</VStack><VStack>
-						<Skeleton w="50px" h="25px"/>
-						<Text className={classes.subtitleText}>PLEBS</Text>
-					</VStack></>
+				? <HStack>
+					<HStack><Skeleton w="25px" h="25px"/><Text className={classes.subtitleText}>PROJECTS</Text></HStack>
+					<HStack><Skeleton w="25px" h="25px"/><Text className={classes.subtitleText}>SATS RAISED</Text></HStack>
+					<HStack><Skeleton w="25px" h="25px"/><Text className={classes.subtitleText}>PLEBS</Text></HStack>
+				</HStack>
 				: <HStack>
 					<HStack><Text fontWeight={500} textColor={colors.neutral900}>{summary.projectsCount}</Text><Text textColor={colors.neutral700}>PROJECTS</Text></HStack>
 					<HStack><Text fontWeight={500} textColor={colors.neutral900}>{summary.fundedTotal}</Text><Text textColor={colors.neutral700}>SATS RAISED</Text></HStack>

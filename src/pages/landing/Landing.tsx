@@ -9,6 +9,8 @@ import { Footer } from '../../components/molecules';
 
 import { ActivityView, ProjectsList, TopBanner } from './components';
 import SatsFlow from '../../assets/sats-flow.svg';
+import { ButtonComponent } from '../../components/ui';
+import { useHistory } from 'react-router';
 
 type RuleNames = string
 
@@ -56,7 +58,7 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 
 export const Landing = () => {
 	const isMobile = isMobileMode();
-
+	const history = useHistory();
 	console.log('here');
 
 	return (
@@ -71,6 +73,7 @@ export const Landing = () => {
 				<Box width="full" height="full">
 					<ActivityView />
 				</Box>
+				<ButtonComponent onClick={() => history.push('/projects/thebitcoingame/posts')}>Entry</ButtonComponent>
 				<Divider orientation="vertical"/>
 				<Box width="full" maxWidth={400} height="full">
 					<ProjectsList />

@@ -1,36 +1,56 @@
-import { useDisclosure } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { RequiredLoginModal } from '../components/molecules';
+import { AuthModal } from '../components/molecules';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
+import { hasTwitterAccount } from '../utils';
 
 interface IPrivateRoute {
   children: React.ReactNode;
 }
 
 export const PrivateRoute = ({children}: IPrivateRoute) => {
-	const {loading, user, isLoggedIn, loginOnOpen} = useAuthContext();
+	const {loading, user, loginOnClose, loginIsOpen, loginOnOpen} = useAuthContext();
 	const history = useHistory();
-
-	const {isOpen, onOpen, onClose} = useDisclosure();
 
 	if (loading) {
 		return <LoadingPage />;
 	}
 
 	useEffect(() => {
-		if (!loading && (!user || (user && !user.id))) {
-			onOpen();
-		} else if (!loading && user && user.id) {
-			onClose();
+		if (!loading && (!user || (user && !user.id) || (user && !hasTwitterAccount(user)))) {
+			loginOnOpen();
 		}
 	}, [user, loading]);
+
+	const getAuthModalTitleAndDescription = () => {
+		// TODO adapt regex for correct private routes
+		if (history.location.pathname.includes('/launch')) {
+			return {
+				title: 'Connect Twitter',
+				description: 'Connect your Twitter social profile to create a project. We require creators to login with twitter to start their Geyser projects.',
+			};
+		}
+
+		return {
+			title: 'The page you are trying to access required authorization.',
+			description: 'Login to continue',
+		};
+	};
+
+	const authModalTitleAndDescription = getAuthModalTitleAndDescription();
 
 	return (
 		<>
 			{children}
-			<RequiredLoginModal isOpen={isOpen} onClose={() => {}} handleClick={loginOnOpen}/>
+			<AuthModal
+				title={authModalTitleAndDescription.title}
+				description={authModalTitleAndDescription.description}
+				showLightning={false}
+				isOpen={loginIsOpen}
+				privateRoute={true}
+				onClose={loginOnClose}
+			/>
 		</>
 	);
 };
