@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-	HStack, Text, VStack, Skeleton, Divider, Link, Avatar, Box,
+	HStack, Text, VStack, Skeleton, Divider, Avatar, Box,
 } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client';
 import { colors } from '../../../constants';
 import { isMobileMode, useNotification } from '../../../utils';
 import { QUERY_PROJECTS } from '../../../graphql';
+import { Link } from 'react-router-dom';
 
 type RuleNames = string
 
