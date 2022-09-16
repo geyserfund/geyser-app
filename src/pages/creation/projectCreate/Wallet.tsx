@@ -6,14 +6,14 @@ import {AiOutlineSetting } from 'react-icons/ai';
 import { TNodeInput } from './types';
 import { BiLeftArrowAlt, BiPencil } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors, VoltageLogoUrl } from '../../../constants';
+import { colors } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddNode } from './components/AddNode';
 import { useMutation, useQuery } from '@apollo/client';
 import { MUTATION_CREATE_POST, MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
-
+import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
 const useStyles = createUseStyles({
 	backIcon: {
 		fontSize: '25px',
@@ -128,8 +128,8 @@ export const Wallet = () => {
 									{'Connect your Lightning node if you have one, and the funds will be sent directly to your account at no charge. Don\'t have one? No problem, you can create one in 2 minutes using Voltage.cloud.'}
 								</Text>
 								<HStack padding="10px" spacing="20px">
-									<Image src={VoltageLogoUrl}/>
-									<Link isExternal href="https://geyser.fund" fontSize="12px">Get 20% off of a Voltage node by using this referral link.</Link>
+									<Image src={VoltageLogoSmall}/>
+									<Link isExternal href="https://voltage.cloud/geyser" fontSize="12px">Create a node quick and easy with Voltage.</Link>
 								</HStack>
 							</VStack>
 							<VStack width="100%" alignItems="flex-start">

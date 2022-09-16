@@ -108,81 +108,71 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 						<Logo mr={isMobile ? 0 : 5} />
 					</HStack>
 					{
-						isMobile ? <>
-							{
-								user.id
-									? <ButtonComponent
-										className={classes.userInfo}
-										leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl ? user.imageUrl : getRandomOrb(user.id)} />}
-										standard
-										onClick={handleProfileClick}
-										border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
-									>
-										{user.username}
-									</ButtonComponent>
-									: <ButtonComponent
-										standard
-										circular
-										marginRight="12px"
-										onClick={loginOnOpen}
-									>
-										Connect
-									</ButtonComponent>
-							}
-							<NavMenu user={user} logout={logout} />
-						</> : (
-							<>{routeMatch
-								? <Box display="flex" alignItems="center">
-									<Text fontSize="18px" fontWeight={600} color="brand.neutral900">{navTitle}</Text>
-								</Box>
-								:								<HStack display={isMedium ? 'none' : 'flex'} position="absolute" top="6.5px" left="calc(50vw - 96px)">
-									<Box border={history.location.pathname === '/home' || history.location.pathname === '/' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg" marginRight="5px">
-										<ButtonComponent onClick={() => {
-											history.push('/home');
-										}}>Projects</ButtonComponent>
-									</Box>
-									<Box position="relative" border={history.location.pathname === '/grants' ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'} borderRadius="lg">
-										<ButtonComponent onClick={() => {
-											history.push('/grants');
-										}}>Grants
-										</ButtonComponent>
-									</Box>
-								</HStack>}
-							<Box>
-								<ButtonComponent
-									leftIcon={<AddIcon />}
-									primary
-									marginRight="12px"
-									onClick={handleLaunch}
-								>
-										Launch
-								</ButtonComponent>
+						isMobile
+							? <>
 								{
 									user.id
 										? <ButtonComponent
-											border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
 											className={classes.userInfo}
-											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl ? user.imageUrl : getRandomOrb(user.id)} />}
 											standard
 											onClick={handleProfileClick}
+											border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
 										>
 											{user.username}
 										</ButtonComponent>
 										: <ButtonComponent
+											standard
+											circular
 											marginRight="12px"
 											onClick={loginOnOpen}
 										>
-												Connect
+										Connect
 										</ButtonComponent>
 								}
 								<NavMenu user={user} logout={logout} />
-							</Box>
 							</>
-						)
+							: <>
+								{
+									routeMatch
+									&& <Box display="flex" alignItems="center">
+										<Text fontSize="18px" fontWeight={600} color="brand.neutral900">{navTitle}</Text>
+									</Box>
+								}
+								<Box>
+									{
+										!['/', '/home', '/index', '/launch'].includes(history.location.pathname) && <ButtonComponent
+											leftIcon={<AddIcon />}
+											primary
+											marginRight="12px"
+											onClick={handleLaunch}
+										>
+										Launch
+										</ButtonComponent>
+									}
+									{
+										user.id
+											? <ButtonComponent
+												border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
+												className={classes.userInfo}
+												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
+												standard
+												onClick={handleProfileClick}
+											>
+												{user.username}
+											</ButtonComponent>
+											: <ButtonComponent
+												marginRight="12px"
+												onClick={loginOnOpen}
+											>
+												Connect
+											</ButtonComponent>
+									}
+									<NavMenu user={user} logout={logout} />
+								</Box>
+							</>
 					}
-
 				</Box>
-
 			</Box>
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />

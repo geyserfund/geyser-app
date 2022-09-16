@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, HStack, Image, Text, VStack, Skeleton } from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
 import {
 	SatoshiAmount,
 } from '../../components/ui';
@@ -18,8 +17,6 @@ import { ProjectBars } from '../../components/molecules';
 import { IProject } from '../../interfaces';
 import { SatoshiIconTilted } from '../../components/icons';
 import SatsFlow from '../../assets/sats-flow.svg';
-import GrantsBanner from '../../assets/grants-banner.png';
-import { useHistory } from 'react-router';
 
 type RuleNames = string
 
@@ -69,7 +66,6 @@ export const Home = () => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 	const { toast } = useNotification();
-	const history = useHistory();
 	const classes = useStyles({ isMobile: isMobileMode() });
 
 	const { loading, error, data } = useQuery(QUERY_PROJECTS);
@@ -78,14 +74,14 @@ export const Home = () => {
 	/*
 	Banner logic
 	*/
-	const hideBanner = localStorage.getItem('hideBanner');
-	const showBanner = !(hideBanner && hideBanner === 'true');
-	const [banner, setBanner] = useState(showBanner);
+	// const hideBanner = localStorage.getItem('hideBanner');
+	// const showBanner = !(hideBanner && hideBanner === 'true');
+	// const [banner, setBanner] = useState(showBanner);
 
-	const hideBannerCached = () => {
-		localStorage.setItem('hideBanner', 'true');
-		setBanner(false);
-	};
+	// const hideBannerCached = () => {
+	// 	localStorage.setItem('hideBanner', 'true');
+	// 	setBanner(false);
+	// };
 
 	/*
 	Error handling logic
@@ -111,10 +107,9 @@ export const Home = () => {
 	}, [error]);
 
 	const projects = (data && data.projects.projects) || [];
-
 	const summary = (summaryData && summaryData.projectsSummary) || {};
 
-	const closedProjects = projects.filter((project: IProject) => !project.active);
+	// const closedProjects = projects.filter((project: IProject) => !project.active);
 	const activeProjects = projects.filter((project: IProject) => project.active);
 
 	return (

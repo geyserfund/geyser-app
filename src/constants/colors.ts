@@ -38,13 +38,17 @@ export const colors = {
 	gray2: '#F4F4F4',
 
 	primary400: '#6BE7CE',
+	primary500: '#10CAA8',
 	primary700: '#00866D',
 	primary800: '#006452',
+
+	secondaryPink: '#FC257A',
 
 	neutral200: '#E9ECEF',
 	neutral300: '#DEE2E6',
 	neutral500: '#ADB5BD',
 	neutral600: '#6C757D',
+	neutral700: '#495057',
 	neutral800: '#343A40',
 	neutral900: '#212529',
 
