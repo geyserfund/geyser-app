@@ -59,6 +59,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
         username
         imageUrl
       }
+      amountFunded
       confirmed
     }
     grantees {

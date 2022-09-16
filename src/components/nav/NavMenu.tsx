@@ -87,32 +87,34 @@ export const NavMenu = ({ logout, user }: { logout: any, user: IUser | undefined
 				sx={styles.buttonCommon}
 			/>
 			<MenuList width="150px" className={classes.menuList}>
-				{isMedium
-&& <>
-	<MenuItem className={classes.menuItem}>
-		<Link href={HomeUrl}>
-									Projects
-		</Link>
-	</MenuItem>
-	<MenuItem className={classes.menuItem}>
-		<Link href={GrantsUrl}>
-									Grants
-		</Link>
-	</MenuItem>
-</>
+				{
+					isMedium
+					&& <>
+						<MenuItem className={classes.menuItem}>
+							<Link href={HomeUrl}>
+														Projects
+							</Link>
+						</MenuItem>
+					</>
 				}
-				{isMobile
-				&& <>
-					<MenuItem className={classes.menuItem} bg="brand.primary">
-						<Link href={LaunchUrl}>
-									Launch
-						</Link>
-					</MenuItem>
-				</>
+				{
+					isMobile
+					&& <>
+						<MenuItem className={classes.menuItem} bg="brand.primary">
+							<Link href={LaunchUrl}>
+										Launch
+							</Link>
+						</MenuItem>
+					</>
 				}
 				<MenuItem className={classes.menuItem}>
 					<Link href={AboutUsUrl} isExternal>
 						About
+					</Link>
+				</MenuItem>
+				<MenuItem className={classes.menuItem}>
+					<Link href={GrantsUrl}>
+						Grants
 					</Link>
 				</MenuItem>
 				<MenuItem className={classes.menuItem}>

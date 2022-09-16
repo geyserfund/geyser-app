@@ -53,20 +53,29 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 	const renderYourFunding = () => {
 		if (project.funders.length > 0) {
 			const currentFund = project.funders.find(funder => funder.user?.id === user.id);
+			console.log(currentFund);
+
 			if (!currentFund) {
 				return null;
 			}
 
 			return (
-				<HStack width="100%" justifyContent="center">
-					<Text color="brand.primary800">{'You contributed'}</Text>
-					<SatoshiAmount color="brand.primary800">{currentFund.amountFunded}</SatoshiAmount>
-					<Text color="brand.primary800">{' towards this project'}</Text>
+				<HStack>
+					<Text color="brand.primary800" fontWeight={500}>{'You contributed'}</Text>
+					<SatoshiAmount color="brand.primary800" fontWeight={500}>{currentFund.amountFunded}</SatoshiAmount>
+					<Text color="brand.primary800" fontWeight={500}>{' towards this project'}</Text>
 				</HStack>
 			);
 		}
 
 		return null;
+	};
+
+	const renderContributorsCount = () => {
+		const contributorsCount = project.funders.length;
+		return (
+			<Text color="brand.primary800" fontWeight={500}>{contributorsCount} {contributorsCount === 1 ? 'contributor' : 'contributors'} |</Text>
+		);
 	};
 
 	const handleFundProject = () => {
@@ -98,7 +107,12 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 					<Text color="brand.neutral800">{project.description}</Text>
 				</VStack>
 				{renderMilestone()}
-				{renderYourFunding()}
+				{ project.funders.length > 0
+					&& <HStack width="100%" justifyContent="center">
+						<>{renderContributorsCount()}</>
+						<>{renderYourFunding()}</>
+					</HStack>
+				}
 				<Button isFullWidth backgroundColor="brand.primary" leftIcon={<BoltIcon />} onClick={handleFundProject}>Fund this project</Button>
 			</VStack>
 		</Card>
