@@ -46,14 +46,15 @@ const useStyles = createUseStyles({
 interface IRewardItemProps {
     item: IProjectReward
 	updateCount: (_:IRewardCount)=> void
+	count?: number
 }
 
-export const RewardItem = ({item, updateCount}: IRewardItemProps) => {
+export const RewardItem = ({item, updateCount, count: initialCount}: IRewardItemProps) => {
 	const classes = useStyles();
 
 	const {cost, name, backers, description, currency } = item;
 
-	const [count, setCount] = useState(0);
+	const [count, setCount] = useState(initialCount || 0);
 	const {isOpen: focus, onOpen: setFocus, onClose: setBlur} = useDisclosure();
 
 	const handleAdd = () => {

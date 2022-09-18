@@ -21,6 +21,16 @@ export interface IuseFundStateProps {
 	rewards?: IProjectReward[]
 }
 
+export type TupdateReward = ({ id, count }: IRewardCount) => void
+
+export interface IFundFormState {
+	state: IFundForm,
+	setTarget: (event: any) => void
+	setState: (name: string, value: any) => void
+	updateReward: TupdateReward
+	resetForm: () => void
+}
+
 export const useFundState = ({rewards}: IuseFundStateProps) => {
 	const { user } = useContext(AuthContext);
 

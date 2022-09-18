@@ -2,24 +2,24 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
 
 // import { Editor } from './Editor';
-import { isMobileMode, useNotification } from '../../../utils';
+import { isMobileMode, useNotification } from '../../../../utils';
 import { CreateNav } from './CreateNav';
 import { BsImage } from 'react-icons/bs';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { MUTATION_CREATE_POST, MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
-import { IPostCreateInput, IPostUpdateInput } from '../../../interfaces/posts';
-import { TcreateEntry, TEntry } from './types';
-import { useDebounce } from '../../../hooks';
+import { MUTATION_CREATE_POST, MUTATION_UPDATE_POST } from '../../../../graphql/mutations/posts';
+import { IEntryCreateInput, IEntryUpdateInput } from '../../../../interfaces/entry';
+import { TcreateEntry, TEntry } from '../types';
+import { useDebounce } from '../../../../hooks';
 import { useHistory, useParams } from 'react-router';
-import { QUERY_GET_POST } from '../../../graphql/queries/posts';
-import { FileUpload } from '../../../components/molecules';
+import { QUERY_GET_POST } from '../../../../graphql/queries/posts';
+import { FileUpload } from '../../../../components/molecules';
 import { createUseStyles } from 'react-jss';
-import { colors, GeyserAssetDomainUrl } from '../../../constants';
-import { ImageWithReload } from '../../../components/ui';
+import { colors, GeyserAssetDomainUrl } from '../../../../constants';
+import { ImageWithReload } from '../../../../components/ui';
 import { Editor } from './Editor';
-import Loader from '../../../components/ui/Loader';
-import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
-import { useAuthContext } from '../../../context';
+import Loader from '../../../../components/ui/Loader';
+import { QUERY_PROJECT_BY_NAME } from '../../../../graphql';
+import { useAuthContext } from '../../../../context';
 
 const useStyles = createUseStyles({
 	uploadContainer: {
@@ -39,7 +39,7 @@ const useStyles = createUseStyles({
 
 export const defaultEntry = { id: 0, title: '', description: '', image: '', content: '', published: false, type: 'article' };
 
-export const PostCreateEdit = () => {
+export const EntryCreateEdit = () => {
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
 	const history = useHistory();
@@ -113,7 +113,7 @@ export const PostCreateEdit = () => {
 		if (!form.current || !form.current.id) {
 			if (form.current.content || form.current.title || form.current.description || form.current.image) {
 				const { image, title, description, content } = value;
-				const input: IPostCreateInput = {
+				const input: IEntryCreateInput = {
 					projectId: projectData && projectData.project.id,
 					type: 'article',
 					title,
@@ -137,7 +137,7 @@ export const PostCreateEdit = () => {
 	const handleUpdateEntry = async (params: TcreateEntry) => {
 		const { image, title, description, content } = params;
 		if (form) {
-			const input: IPostUpdateInput = {
+			const input: IEntryUpdateInput = {
 				entryId: form.current.id,
 				title,
 				description,
