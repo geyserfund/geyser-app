@@ -8,8 +8,9 @@ import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from '../project/Activity/Activity';
 import {DetailsContainer} from './DetailsContainer';
-import { useFundingFlow } from '../../hooks';
+import { useFundingFlow, useFundState } from '../../hooks';
 import { useAuthContext } from '../../context';
+import { IProject } from '../../interfaces';
 
 export const ProjectView = () => {
 	const { projectId } = useParams<{ projectId: string }>();
@@ -19,7 +20,6 @@ export const ProjectView = () => {
 
 	const [detailOpen, setDetailOpen] = useState(true);
 	const fundingFlow = useFundingFlow();
-	const { setFundState } = fundingFlow;
 
 	useEffect(() => {
 		try {
@@ -50,8 +50,6 @@ export const ProjectView = () => {
 
 	const { project } = data;
 
-	console.log('checking project data', project);
-
 	return (
 		<Box
 			display="flex"
@@ -68,10 +66,31 @@ export const ProjectView = () => {
 				bg="brand.bgGrey4"
 
 			>
-				<DetailsContainer project={project} {...{detailOpen, setDetailOpen, setFundState }}/>
-				<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}/>
+				<ProjectViewContainer {...{project, detailOpen, setDetailOpen, fundingFlow }}/>
 			</Box>
 		</Box>
 
+	);
+};
+
+interface IProjectViewContainer {
+	project: IProject
+	detailOpen: boolean
+	fundingFlow: any
+	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+	resourceType?: string;
+	resourceId?: number;
+}
+
+const ProjectViewContainer = ({project, detailOpen, setDetailOpen, fundingFlow}: IProjectViewContainer) => {
+	const fundForm = useFundState({rewards: project.rewards});
+	const { setFundState } = fundingFlow;
+	const {updateReward} = fundForm;
+	console.log('chekcing dundform', fundForm);
+	return (
+		<>
+			<DetailsContainer project={project} {...{detailOpen, setDetailOpen, setFundState, updateReward }}/>
+			<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow, fundForm }}/>
+		</>
 	);
 };

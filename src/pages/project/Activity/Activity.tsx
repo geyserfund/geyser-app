@@ -19,7 +19,7 @@ import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage, InfoPageSkeleton } from './InfoPage';
 import { fundingStages } from '../../../constants';
-import { useFundState, IFundForm } from '../../../hooks';
+import { useFundState, IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
 import { useLocation } from 'react-router';
 
@@ -30,9 +30,10 @@ interface IActivityProps {
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 	resourceType?: string;
 	resourceId?: number;
+	fundForm: IFundFormState
 }
 
-const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow, resourceType, resourceId }: IActivityProps) => {
+const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow, resourceType, resourceId, fundForm }: IActivityProps) => {
 	const { user } = useContext(AuthContext);
 
 	// const location = useLocation<any>();
@@ -52,7 +53,7 @@ const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow, resourceTyp
 	const [funders, setFunders] = useState<IFunder[]>([]);
 
 	// required for knowing the rewards and the funds
-	const {state, setTarget, setState, updateReward, resetForm} = useFundState({rewards: project.rewards});
+	const {state, setTarget, setState, updateReward, resetForm} = fundForm;
 
 	const {fundState, amounts, fundLoading, fundingTx, gotoNextStage, resetFundingFlow, requestFunding} = fundingFlow;
 	const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
