@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import {
 	HStack, Text, VStack, Skeleton, Divider, Link, Avatar, Button, Box, Image,
 } from '@chakra-ui/react';
-import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
 
 import { IdBar } from '../../../components/molecules/IdBar';
 import { isMobileMode, useNotification } from '../../../utils';
 import { QUERY_GET_FUNDING_TXS_LANDING, QUERY_ENTRIES_LANDING } from '../../../graphql';
 
-import { AvatarElement } from '../../projectView/components/AvatarElement';
 import { colors } from '../../../constants';
 
 const Entry = ({ entry }: { entry: any }) => {
@@ -29,7 +27,10 @@ const Entry = ({ entry }: { entry: any }) => {
 					<Text>{entry.fundersCount} likes</Text>
 				</HStack>
 				<HStack>
-					<AvatarElement username={entry.project.title.toUpperCase()} image={entry.project.imageUrl}/>
+					<HStack >
+						<Avatar size="xs" borderRadius="4px" src={entry.project.imageUrl}/>
+						<Text color="brand.neutral600">{entry.project.title.toUpperCase()}</Text>
+					</HStack>
 					<Text>{entry.amountFunded}</Text>
 				</HStack>
 			</VStack>

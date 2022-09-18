@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const QUERY_GET_POST = gql`
+export const QUERY_GET_ENTRY = gql`
 query Entry($id: BigInt!) {
 	entry(id: $id) {
 		id

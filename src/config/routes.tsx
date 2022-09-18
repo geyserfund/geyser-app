@@ -18,8 +18,8 @@ import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
-import { EntryCreateEdit } from '../pages/creation/entry/editor';
-import { EntryPreview } from '../pages/creation/entry';
+import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit';
+import { EntryPreview } from '../pages/creation/entry/EntryPreview';
 import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
 import { ProjectView } from '../pages/projectView';
@@ -61,7 +61,7 @@ export const Router = () => {
 	return (
 		<Fade in={true}>
 			<Box height="100vh">
-				<NavBar showBorder={showBorder} skipRoutes={['/projects/:projectId/entry', '/projects/:projectId/entry/:entryId/edit', '/entry/:entryId/preview']} />
+				<NavBar showBorder={showBorder} skipRoutes={['/projects/:projectId/entry', '/projects/:projectId/entry/:entryId', '/projects/:projectId/entry/:entryId/preview']} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
 						<Route path="/auth/twitter">
@@ -107,7 +107,7 @@ export const Router = () => {
 								<EntryPreview />
 							</PrivateRoute>
 						</Route>
-						<Route path="/projects/:projectId/entry/:entryId/edit">
+						<Route path="/projects/:projectId/entry/:entryId">
 							<PrivateRoute>
 								<EntryCreateEdit />
 							</PrivateRoute>

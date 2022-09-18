@@ -1,7 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { API_SERVICE_ENDPOINT, GeyserAssetDomainUrl } from '../constants';
-import { QUERY_GET_SIGNED_URL } from '../graphql/queries/posts';
+import { QUERY_GET_SIGNED_URL } from '../graphql/queries/entries';
 import { testImage, useNotification } from '../utils';
 
 export const useSignedUpload = ({onUpload}:{onUpload: (url: string, file?: any) => void}) => {

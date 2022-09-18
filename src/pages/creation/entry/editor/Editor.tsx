@@ -129,7 +129,6 @@ export const Editor = ({name, value, handleChange, readOnly}:IEditor) => {
 				},
 
 			},
-			formats: ['video'],
 			readOnly,
 			theme: 'snow',
 		});

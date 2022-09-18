@@ -98,7 +98,7 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 				<HStack>
 					<Text color="brand.neutral600">Creator</Text>
 					<Link to={`/profile/${owner.user.id}`}>
-						<AvatarElement username={owner.user.username} image={owner.user.imageUrl}/>
+						<AvatarElement user={owner.user} />
 					</Link>
 				</HStack>
 				<VStack alignItems="flex-start">
