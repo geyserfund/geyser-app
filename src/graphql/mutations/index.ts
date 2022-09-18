@@ -1,5 +1,5 @@
 export * from './funding';
-export * from './posts';
+export * from './entries';
 export * from './user';
 export * from './project';
 export * from './wallet';

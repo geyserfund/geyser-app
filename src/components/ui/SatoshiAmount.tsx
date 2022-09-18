@@ -36,7 +36,7 @@ export const SatoshiAmount = ({label, extra, fontSize, loading, wrapperClassName
 	return (
 		<HStack spacing="2px" alignItems="center" className={wrapperClassName}>
 			{label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
-			{(Boolean(children) && !loading) &&	<SatoshiIconTilted color={rest.color} scale={getScale() } />}
+			{ !loading &&	<SatoshiIconTilted color={rest.color} scale={getScale() } />}
 			<Text fontSize={fontSize} {...rest}>{`${numberWithCommas(`${children}`)} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
 		</HStack>
 	);

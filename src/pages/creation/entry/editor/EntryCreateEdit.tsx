@@ -6,12 +6,12 @@ import { isMobileMode, useNotification } from '../../../../utils';
 import { CreateNav } from './CreateNav';
 import { BsImage } from 'react-icons/bs';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { MUTATION_CREATE_POST, MUTATION_UPDATE_POST } from '../../../../graphql/mutations/posts';
+import { MUTATION_CREATE_ENTRY, MUTATION_UPDATE_ENTRY } from '../../../../graphql/mutations/entries';
 import { IEntryCreateInput, IEntryUpdateInput } from '../../../../interfaces/entry';
 import { TcreateEntry, TEntry } from '../types';
 import { useDebounce } from '../../../../hooks';
 import { useHistory, useParams } from 'react-router';
-import { QUERY_GET_POST } from '../../../../graphql/queries/posts';
+import { QUERY_GET_ENTRY } from '../../../../graphql/queries/entries';
 import { FileUpload } from '../../../../components/molecules';
 import { createUseStyles } from 'react-jss';
 import { colors, GeyserAssetDomainUrl } from '../../../../constants';
@@ -43,7 +43,7 @@ export const EntryCreateEdit = () => {
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
 	const history = useHistory();
-	const params = useParams<{ postId: string, projectId: string; }>();
+	const params = useParams<{ entryId: string, projectId: string; }>();
 	const {setNavTitle} = useAuthContext();
 
 	const classes = useStyles();
@@ -59,13 +59,13 @@ export const EntryCreateEdit = () => {
 
 	const [createPost, {
 		data: createData, loading: createPostLoading,
-	}] = useMutation(MUTATION_CREATE_POST);
+	}] = useMutation(MUTATION_CREATE_ENTRY);
 
 	const [updatePost, {
 		data: updateData, loading: updatePostLoading,
-	}] = useMutation(MUTATION_UPDATE_POST);
+	}] = useMutation(MUTATION_UPDATE_ENTRY);
 
-	const [getPost, { loading: loadingPosts, error, data: entryData }] = useLazyQuery(QUERY_GET_POST);
+	const [getPost, { loading: loadingPosts, error, data: entryData }] = useLazyQuery(QUERY_GET_ENTRY);
 
 	const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME,
 		{
@@ -80,9 +80,9 @@ export const EntryCreateEdit = () => {
 	);
 
 	useEffect(() => {
-		if (params && params.postId) {
+		if (params && params.entryId) {
 			try {
-				getPost({ variables: { id: parseInt(params.postId, 10) } });
+				getPost({ variables: { id: parseInt(params.entryId, 10) } });
 			} catch (error) {
 				history.push('/404');
 			}
@@ -179,7 +179,7 @@ export const EntryCreateEdit = () => {
 
 	const onPreview = () => {
 		if (form.current && form.current.id) {
-			history.push(`/projects/${params.projectId}/posts/${form.current.id}/preview`);
+			history.push(`/projects/${params.projectId}/entry/${form.current.id}/preview`);
 		} else {
 			toast({
 				title: 'Cannot preview',
@@ -193,13 +193,19 @@ export const EntryCreateEdit = () => {
 		setForm({...form.current, image: `${GeyserAssetDomainUrl}${url}`});
 	};
 
-	if (params.postId && !form.current.id) {
+	if (params.entryId && !form.current.id) {
 		return <Loader />;
 	}
 
+	const isEdit = Boolean(createData?.createEntry?.id) || Boolean(params.entryId);
+
 	return (
 		<>
-			<CreateNav isSaving={createPostLoading || updatePostLoading} onSave={onSave} onPreview={onPreview} />
+			<CreateNav
+				isSaving={createPostLoading || updatePostLoading}
+				saveText={(createPostLoading || updatePostLoading) ? 'Saving' : isEdit ? 'Saved' : 'Save draft'}
+				onSave={onSave} onPreview={onPreview}
+			/>
 			<VStack
 				background={'brand.bgGrey4'}
 				position="relative"

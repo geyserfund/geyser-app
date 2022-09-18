@@ -29,7 +29,7 @@ interface INavBar {
 	skipRoutes?: string[]
 }
 
-const customTitleRoutes = ['/projects/:projectId', '/projects/:projectId/post', '/posts/:postId'];
+const customTitleRoutes = ['/projects/:projectId', '/projects/:projectId/entry', '/entry/:entryId'];
 
 export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 	const classes = useStyles();
