@@ -18,8 +18,8 @@ import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
-import { PostCreateEdit } from '../pages/creation/postEditor';
-import { PostPreview } from '../pages/creation/postPreview';
+import { EntryCreateEdit } from '../pages/creation/entry/editor';
+import { EntryPreview } from '../pages/creation/entry';
 import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
 import { ProjectView } from '../pages/projectView';
@@ -61,7 +61,7 @@ export const Router = () => {
 	return (
 		<Fade in={true}>
 			<Box height="100vh">
-				<NavBar showBorder={showBorder} skipRoutes={['/projects/:projectId/posts', '/projects/:projectId/posts/:postId/edit', '/posts/:postId/preview']} />
+				<NavBar showBorder={showBorder} skipRoutes={['/projects/:projectId/entry', '/projects/:projectId/entry/:entryId/edit', '/entry/:entryId/preview']} />
 				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
 					<Switch>
 						<Route path="/auth/twitter">
@@ -102,25 +102,25 @@ export const Router = () => {
 						<Route path="/project/:projectId">
 							<Project />
 						</Route>
-						<Route path="/projects/:projectId/posts/:postId/preview">
+						<Route path="/projects/:projectId/entry/:entryId/preview">
 							<PrivateRoute>
-								<PostPreview />
+								<EntryPreview />
 							</PrivateRoute>
 						</Route>
-						<Route path="/projects/:projectId/posts/:postId/edit">
+						<Route path="/projects/:projectId/entry/:entryId/edit">
 							<PrivateRoute>
-								<PostCreateEdit />
+								<EntryCreateEdit />
 							</PrivateRoute>
 						</Route>
-						<Route path="/projects/:projectId/posts">
+						<Route path="/projects/:projectId/entry">
 							<PrivateRoute>
-								<PostCreateEdit />
+								<EntryCreateEdit />
 							</PrivateRoute>
 						</Route>
 						<Route path="/projects/:projectId">
 							<ProjectView />
 						</Route>
-						<Route path="/posts/:postId">
+						<Route path="/entry/:entryId">
 							<EntryPage />
 						</Route>
 						<Route path="/not-found">

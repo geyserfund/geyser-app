@@ -9,16 +9,16 @@ import { useAuthContext } from '../../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import { MUTATION_PUBLISH_POST, MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
 import { QUERY_GET_POST } from '../../../graphql/queries/posts';
-import { IPostUpdateInput } from '../../../interfaces/posts';
+import { IEntryUpdateInput } from '../../../interfaces/entry';
 import { isMobileMode, useNotification } from '../../../utils';
-import { defaultEntry } from '../postEditor';
-import { CreateNav } from '../postEditor/CreateNav';
-import { TEntry } from '../postEditor/types';
+import { defaultEntry } from './editor';
+import { CreateNav } from './editor/CreateNav';
+import { TEntry } from './types';
 
 let isEdited = false;
 
-export const PostPreview = () => {
-	const params = useParams<{ postId: string, projectId: string }>();
+export const EntryPreview = () => {
+	const params = useParams<{ entryId: string, projectId: string }>();
 
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
@@ -48,8 +48,8 @@ export const PostPreview = () => {
 	);
 
 	useEffect(() => {
-		if (params && params.postId) {
-			getPost({ variables: { id: params.postId } });
+		if (params && params.entryId) {
+			getPost({ variables: { id: params.entryId } });
 		}
 	}, [params]);
 
@@ -63,7 +63,7 @@ export const PostPreview = () => {
 		if (entry) {
 			const { image, title, description, content, id } = entry;
 			try {
-				const input: IPostUpdateInput = {
+				const input: IEntryUpdateInput = {
 					entryId: id,
 					title,
 					description,
@@ -89,7 +89,7 @@ export const PostPreview = () => {
 	};
 
 	const onBack = () => {
-		history.push(`/projects/${params.projectId}/posts/${params.postId}`);
+		history.push(`/projects/${params.projectId}/posts/${params.entryId}`);
 	};
 
 	const handleInput = (event: any) => {

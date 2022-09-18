@@ -1,10 +1,10 @@
 import { Avatar, Box, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { LogoBlack } from '../../../components/nav';
-import { ButtonComponent, IconButtonComponent } from '../../../components/ui';
-import { useAuthContext } from '../../../context';
-import { isMobileMode } from '../../../utils';
+import { LogoBlack } from '../../../../components/nav';
+import { ButtonComponent, IconButtonComponent } from '../../../../components/ui';
+import { useAuthContext } from '../../../../context';
+import { isMobileMode } from '../../../../utils';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
 
 interface ICreateNavProps {

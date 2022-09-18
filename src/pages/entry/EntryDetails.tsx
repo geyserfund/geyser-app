@@ -3,10 +3,10 @@ import { DateTime } from 'luxon';
 import React from 'react';
 import { BsHeartFill } from 'react-icons/bs';
 import { colors } from '../../constants';
-import { TPostData } from '../../interfaces/posts';
-import { Editor } from '../creation/postEditor';
+import { TEntryData } from '../../interfaces/entry';
+import { Editor } from '../creation/entry/editor';
 
-export const EntryDetails = ({entry}:{entry: TPostData}) => {
+export const EntryDetails = ({entry}:{entry: TEntryData}) => {
 	console.log('checking somehitng');
 	return (
 		<VStack width="100%" alignItems="flex-start">
