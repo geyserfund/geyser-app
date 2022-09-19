@@ -10,33 +10,7 @@ import { QUERY_GET_FUNDING_TXS_LANDING, QUERY_ENTRIES_LANDING } from '../../../g
 
 import { colors } from '../../../constants';
 
-const Entry = ({ entry }: { entry: any }) => {
-	console.log(entry);
-
-	// TODO: implement skeleton
-	return (
-		<HStack justifyItems="left" spacing={5}>
-			<Box maxWidth={200} maxHeight={150}>
-				<Image src={entry.image}></Image>
-			</Box>
-			<VStack maxHeight={150} height="full" justifyItems="left">
-				{/* display="flex" justifyItems="left" */}
-				<Text>{entry.title}</Text>
-				<HStack>
-					<Text>{entry.description}</Text>
-					<Text>{entry.fundersCount} likes</Text>
-				</HStack>
-				<HStack>
-					<HStack >
-						<Avatar size="xs" borderRadius="4px" src={entry.project.imageUrl}/>
-						<Text color="brand.neutral600">{entry.project.title.toUpperCase()}</Text>
-					</HStack>
-					<Text>{entry.amountFunded}</Text>
-				</HStack>
-			</VStack>
-		</HStack>
-	);
-};
+import { EntryCard } from '../../projectView/components/EntryCard';
 
 const Contribution = ({ contribution }: { contribution: any }) => {
 	console.log(contribution);
@@ -103,7 +77,7 @@ export const ActivityView = () => {
 				justifyItems="left"
 			>
 				{ view === 'entries'
-					? (!entriesLoading && entries.length > 0) && entries.map((entry: any, index: number) => (<Entry key={index} entry={entry}/>))
+					? (!entriesLoading && entries.length > 0) && entries.map((entry: any, index: number) => (<EntryCard key={index} entry={entry}/>))
 					: (!fundingTxsLoading && contributions.length > 0 && contributions.map((contribution, index) => (<Contribution key={index} contribution={contribution}/>)))
 				}
 			</VStack>
