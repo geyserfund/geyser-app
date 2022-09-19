@@ -22,9 +22,10 @@ import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
 import { EntryPreview } from '../pages/creation/entry/EntryPreview';
 import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
-import { ProjectDashboard, ProjectView } from '../pages/projectView';
+import { ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
+import { ProjectDashboard } from '../pages/projectDashboard';
 
 export const customHistory = createBrowserHistory();
 

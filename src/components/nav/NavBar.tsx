@@ -80,6 +80,9 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 		}
 	}
 
+	const showLaunch = ['/projects/:projectId'];
+	const launchMatch = showLaunch.map(route => useRouteMatch(route)).find(val => val?.isExact)?.isExact;
+
 	return (
 		<>
 			<Box
@@ -153,7 +156,10 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 										Launch
 										</ButtonComponent>
 									} */}
-									{ nav?.projectOwnerId && nav.projectOwnerId === user.id && <ButtonComponent marginRight="12px" backgroundColor="brand.primary100" >Dashboard</ButtonComponent>}
+									{ launchMatch && nav?.projectOwnerId && nav.projectOwnerId === user.id
+									&& <ButtonComponent marginRight="12px" backgroundColor="brand.primary100" onClick={() => history.push(`${customHistory.location.pathname}/dashboard`)}>
+										Dashboard
+									</ButtonComponent>}
 									{
 										user.id
 											? <ButtonComponent
