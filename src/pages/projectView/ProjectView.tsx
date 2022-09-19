@@ -16,7 +16,7 @@ export const ProjectView = () => {
 	const { projectId } = useParams<{ projectId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
 
-	const {setNavTitle} = useAuthContext();
+	const {setNav} = useAuthContext();
 
 	const [detailOpen, setDetailOpen] = useState(true);
 	const fundingFlow = useFundingFlow();
@@ -33,7 +33,7 @@ export const ProjectView = () => {
 		{
 			variables: { where: { name: projectId } },
 			onCompleted(data) {
-				setNavTitle(data.project.title);
+				setNav({title: data.project.title, path: `/projects/${data.project.name}`});
 			},
 		},
 	);

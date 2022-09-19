@@ -13,11 +13,10 @@ import {
 	Text,
 	VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import { RiCloseCircleFill } from 'react-icons/ri';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { DonationInput, DonationInputWithSatoshi } from '../../../../components/molecules';
-import { ButtonComponent, IconButtonComponent, TextBox } from '../../../../components/ui';
+import { DonationInputWithSatoshi } from '../../../../components/molecules';
+import { ButtonComponent, TextBox } from '../../../../components/ui';
 import { colors } from '../../../../constants';
 import { MUTATION_CREATE_PROJECT_MILESTONE, MUTATION_DELETE_PROJECT_MILESTONE, MUTATION_UPDATE_PROJECT_MILESTONE } from '../../../../graphql/mutations';
 import { useNotification } from '../../../../utils';

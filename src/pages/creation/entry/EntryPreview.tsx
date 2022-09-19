@@ -23,7 +23,7 @@ export const EntryPreview = () => {
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
 	const history = useHistory();
-	const {setNavTitle} = useAuthContext();
+	const {setNav} = useAuthContext();
 
 	const [isPublished, setIsPublished] = useState(false);
 
@@ -39,7 +39,7 @@ export const EntryPreview = () => {
 		{
 			variables: { where: { name: params.projectId } },
 			onCompleted(data) {
-				setNavTitle(data.project.title);
+				setNav({title: data.project.title, path: `/projects/${data.project.name}`});
 			},
 			onError() {
 				history.push('/404');

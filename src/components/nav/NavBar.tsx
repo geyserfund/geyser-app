@@ -14,6 +14,7 @@ import { AuthContext } from '../../context';
 import { getRandomOrb } from '../../utils';
 import { useLocation, useHistory, useRouteMatch } from 'react-router';
 import { customHistory } from '../../config';
+import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
 	userInfo: {
@@ -37,7 +38,7 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 	const isMedium = isMediumScreen();
 	const isDark = isDarkMode();
 
-	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose, navTitle } = useContext(AuthContext);
+	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose, nav } = useContext(AuthContext);
 
 	const { pathname, state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -136,7 +137,9 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 								{
 									routeMatch
 									&& <Box display="flex" alignItems="center">
-										<Text fontSize="18px" fontWeight={600} color="brand.neutral900">{navTitle}</Text>
+										<Link to={nav.path}>
+											<Text fontSize="18px" fontWeight={600} color="brand.neutral900">{nav.title}</Text>
+										</Link>
 									</Box>
 								}
 								<Box>

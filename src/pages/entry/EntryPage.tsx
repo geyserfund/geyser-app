@@ -18,7 +18,7 @@ export const EntryPage = () => {
 	const { state } = useLocation<{ loggedOut?: boolean }>();
 	const history = useHistory();
 
-	const {setNavTitle} = useAuthContext();
+	const {setNav} = useAuthContext();
 
 	const [detailOpen, setDetailOpen] = useState(true);
 	const fundingFlow = useFundingFlow();
@@ -33,7 +33,7 @@ export const EntryPage = () => {
 	const [getProject, { loading, error: projectError, data: projectData }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
 		{
 			onCompleted(data) {
-				setNavTitle(data.project.title);
+				setNav({title: data.project.title, path: `/projects/${data.project.name}`});
 			},
 		},
 	);
