@@ -143,7 +143,7 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 									</Box>
 								}
 								<Box>
-									{
+									{/* {
 										!['/', '/home', '/index', '/launch'].includes(history.location.pathname) && <ButtonComponent
 											leftIcon={<AddIcon />}
 											primary
@@ -152,7 +152,8 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 										>
 										Launch
 										</ButtonComponent>
-									}
+									} */}
+									{ nav?.projectOwnerId && nav.projectOwnerId === user.id && <ButtonComponent marginRight="12px" backgroundColor="brand.primary100" >Dashboard</ButtonComponent>}
 									{
 										user.id
 											? <ButtonComponent

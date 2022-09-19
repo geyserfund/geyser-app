@@ -22,8 +22,9 @@ import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
 import { EntryPreview } from '../pages/creation/entry/EntryPreview';
 import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
-import { ProjectView } from '../pages/projectView';
+import { ProjectDashboard, ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
+import { NotAuthorized } from '../pages/notAuthorized';
 
 export const customHistory = createBrowserHistory();
 
@@ -117,6 +118,11 @@ export const Router = () => {
 								<EntryCreateEdit />
 							</PrivateRoute>
 						</Route>
+						<Route path="/projects/:projectId/dashboard">
+							<PrivateRoute>
+								<ProjectDashboard />
+							</PrivateRoute>
+						</Route>
 						<Route path="/projects/:projectId">
 							<ProjectView />
 						</Route>
@@ -125,6 +131,9 @@ export const Router = () => {
 						</Route>
 						<Route path="/not-found">
 							<NotFound />
+						</Route>
+						<Route path="/not-authorized">
+							<NotAuthorized />
 						</Route>
 						<Route path="/">
 							{/* <Home /> */}
