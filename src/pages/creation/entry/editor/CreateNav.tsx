@@ -55,7 +55,7 @@ export const CreateNav = ({ isSaving, saveText, onSave, onPreview, onBack }: ICr
 							<MdOutlineArrowBackIos />
 						</ButtonComponent>}
 						<ButtonComponent isDisabled={isSaving} onClick={onSave}>
-							{saveText}
+							{saveText || 'Save draft'}
 						</ButtonComponent>
 						{
 							onPreview

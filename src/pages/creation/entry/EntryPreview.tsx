@@ -130,7 +130,7 @@ export const EntryPreview = () => {
 
 	return (
 		<>
-			<CreateNav isSaving={updatePostLoading} onSave={onSave} onBack={onBack} />
+			<CreateNav isSaving={updatePostLoading} saveText={updatePostLoading ? 'Saving...' : 'Saved'} onSave={onSave} onBack={onBack} />
 			<VStack
 				background={'brand.bgGrey4'}
 				position="relative"
