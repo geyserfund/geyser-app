@@ -1,20 +1,21 @@
 import { Avatar, Box, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { LogoBlack } from '../../../components/nav';
-import { ButtonComponent, IconButtonComponent } from '../../../components/ui';
-import { useAuthContext } from '../../../context';
-import { isMobileMode } from '../../../utils';
+import { LogoBlack } from '../../../../components/nav';
+import { ButtonComponent, IconButtonComponent } from '../../../../components/ui';
+import { useAuthContext } from '../../../../context';
+import { isMobileMode } from '../../../../utils';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
 
 interface ICreateNavProps {
 	isSaving: boolean;
 	onSave: () => void;
+	saveText?: string;
 	onPreview?: () => void;
 	onBack?: () => void
 }
 
-export const CreateNav = ({ isSaving, onSave, onPreview, onBack }: ICreateNavProps) => {
+export const CreateNav = ({ isSaving, saveText, onSave, onPreview, onBack }: ICreateNavProps) => {
 	const isMobile = isMobileMode();
 
 	const { user } = useAuthContext();
@@ -53,8 +54,8 @@ export const CreateNav = ({ isSaving, onSave, onPreview, onBack }: ICreateNavPro
 						{onBack && <ButtonComponent paddingX="6px" aria-label="back" onClick={onBack} >
 							<MdOutlineArrowBackIos />
 						</ButtonComponent>}
-						<ButtonComponent isLoading={isSaving} onClick={onSave}>
-							Save Draft
+						<ButtonComponent isDisabled={isSaving} onClick={onSave}>
+							{saveText}
 						</ButtonComponent>
 						{
 							onPreview

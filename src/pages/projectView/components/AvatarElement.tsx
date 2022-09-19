@@ -1,15 +1,17 @@
 import { Avatar, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { IUser } from '../../../interfaces';
 
 interface IAvatarElement {
-	username: string;
-	image: string
+	user: IUser
 }
 
-export const AvatarElement = ({username, image}:IAvatarElement) => (
-	<HStack>
-		<Avatar size="xs" borderRadius="4px" src={image}/>
-		<Text color="brand.neutral600">{username}</Text>
-	</HStack>
-
+export const AvatarElement = ({user}:IAvatarElement) => (
+	<Link to={`/profile/${user.id}`}>
+		<HStack >
+			<Avatar size="xs" borderRadius="4px" src={user.imageUrl}/>
+			<Text color="brand.neutral600">{user.username}</Text>
+		</HStack>
+	</Link>
 );

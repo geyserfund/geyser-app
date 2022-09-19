@@ -73,7 +73,6 @@ export const Landing = () => {
 				<Box width="full" height="full">
 					<ActivityView />
 				</Box>
-				<ButtonComponent onClick={() => history.push('/projects/thebitcoingame/posts')}>Entry</ButtonComponent>
 				<Divider orientation="vertical"/>
 				<Box width="full" maxWidth={400} height="full">
 					<ProjectsList />

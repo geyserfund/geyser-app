@@ -2,10 +2,10 @@ import Quill from 'quill';
 import React, { useEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import 'react-quill/dist/quill.snow.css';
-import { colors, GeyserAssetDomainUrl } from '../../../constants';
-import { fonts } from '../../../constants/fonts';
-import { useSignedUpload, useSignedUploadAPI } from '../../../hooks';
-import { testImage, useNotification } from '../../../utils';
+import { colors, GeyserAssetDomainUrl } from '../../../../constants';
+import { fonts } from '../../../../constants/fonts';
+import { useSignedUpload, useSignedUploadAPI } from '../../../../hooks';
+import { testImage, useNotification } from '../../../../utils';
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader';
 import ImageEdit from 'quill-image-edit-module';
@@ -129,7 +129,6 @@ export const Editor = ({name, value, handleChange, readOnly}:IEditor) => {
 				},
 
 			},
-			formats: ['video'],
 			readOnly,
 			theme: 'snow',
 		});

@@ -2,7 +2,7 @@ import { Box, Grid, GridItem, HStack, Image, Input, InputGroup, InputRightAddon,
 import React, { useEffect, useState } from 'react';
 import { FileUpload } from '../../../components/molecules';
 import { ButtonComponent, Card, ImageWithReload, TextArea, TextBox } from '../../../components/ui';
-import { isMobileMode, useNotification, validateEmail } from '../../../utils';
+import { isMobileMode, isValidLighteningAddress, useNotification, validateEmail, validLighteningAddress } from '../../../utils';
 import {AiOutlineUpload} from 'react-icons/ai';
 import { TProjectDetails } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
@@ -98,14 +98,18 @@ export const ProjectCreate = () => {
 			const {name, value} = event.target;
 
 			const newForm = {...form, [name]: value || ''};
+			console.log('checkign is edit', isEdit);
+			if (name === 'title' && !isEdit) {
+				const projectName: string = value.split(' ').join('').toLowerCase();
+				const sanitizedName = projectName.replaceAll(validLighteningAddress, '');
 
-			if (name === 'title') {
-				newForm.name = value.split(' ').join('').toLowerCase();
+				newForm.name = sanitizedName;
 			}
 
 			setForm(newForm);
-
-			if (name === 'description' && value.length > 280) {
+			if (name === 'title' && value.length > 50) {
+				setFormError({title: `max character allowed is 50/${value.length}`});
+			} else if (name === 'description' && value.length > 280) {
 				setFormError({description: `max character allowed is 280/${value.length}`});
 			} else {
 				setFormError({});
@@ -185,7 +189,7 @@ export const ProjectCreate = () => {
 		>
 			<Grid width="100%" templateColumns={isLargerThan1280 ? 'repeat(6, 1fr)' : isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)' } padding={isMobile ? '10px' : '40px 40px 20px 40px'} >
 				<GridItem colSpan={isLargerThan1280 ? 2 : 1} display="flex" justifyContent="flex-start">
-					<ButtonComponent leftIcon={<BiLeftArrowAlt className={classes.backIcon} onClick={handleBack} />}>Back</ButtonComponent>
+					<ButtonComponent onClick={handleBack} leftIcon={<BiLeftArrowAlt className={classes.backIcon} />}>  Back</ButtonComponent>
 				</GridItem>
 				<GridItem colSpan={2} display="flex" justifyContent="center">
 					<VStack
@@ -217,7 +221,7 @@ export const ProjectCreate = () => {
 									onChange={handleChange}
 									value={form.title}
 									error={formError.title}
-									onBlur={() => getProject()}
+									onBlur={() => !isEdit && getProject()}
 								/>
 							</VStack>
 							<VStack width="100%" alignItems="flex-start">
@@ -230,7 +234,7 @@ export const ProjectCreate = () => {
 										isInvalid={Boolean(formError.name)}
 										focusBorderColor={colors.primary}
 										disabled={isEdit}
-										onBlur={() => getProject()}
+										onBlur={() => !isEdit && getProject()}
 									/>
 									<InputRightAddon>@geyser.fund</InputRightAddon>
 								</InputGroup>

@@ -9,20 +9,15 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { IProject } from '../../interfaces';
-import { isMobileMode } from '../../utils';
 import { Card, SatoshiAmount } from '../../components/ui';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
-import { LighteningQR } from '../../components/molecules/LighteningQR';
+import { LighteningQR } from './components/LighteningQR';
 import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
-import { colors, fundingStages, IFundingStages, LaunchImageUrl } from '../../constants';
-import { useHistory } from 'react-router';
+import { colors, fundingStages, IFundingStages } from '../../constants';
 import { useAuthContext } from '../../context';
 
 export const DetailsCard = ({ project, setFundState }: { project: IProject, setFundState: React.Dispatch<React.SetStateAction<IFundingStages>> }) => {
-	const isMobile = isMobileMode();
-	const history = useHistory();
-
 	const {user} = useAuthContext();
 	const owner = project.owners[0];
 
@@ -98,12 +93,12 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 							<BsFillCheckCircleFill color={colors.primary800}/>
 						</HStack>
 					</HStack>
-					<LighteningQR name={'runningwithbitcoin'}/>
+					<LighteningQR project={project}/>
 				</VStack>
 				<HStack>
 					<Text color="brand.neutral600">Creator</Text>
 					<Link to={`/profile/${owner.user.id}`}>
-						<AvatarElement username={owner.user.username} image={owner.user.imageUrl}/>
+						<AvatarElement user={owner.user} />
 					</Link>
 				</HStack>
 				<VStack alignItems="flex-start">

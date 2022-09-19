@@ -17,7 +17,7 @@ export const PrivateRoute = ({children}: IPrivateRoute) => {
 		return <LoadingPage />;
 	}
 
-	const isEntryCreationPath = /\/projects\/([a-z-_0-9])*\/posts/.test(history.location.pathname);
+	const isEntryCreationPath = /\/projects\/([a-z-_0-9])*\/entry/.test(history.location.pathname);
 	const isProjectCreationPath = /\/launch/.test(history.location.pathname);
 
 	useEffect(() => {

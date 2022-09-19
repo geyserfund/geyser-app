@@ -3,14 +3,16 @@ import { Box, VStack } from '@chakra-ui/react';
 import { DonationInput, RewardItem } from '../../../components/molecules';
 import { SectionTitle } from '../../../components/ui';
 import { IProjectReward, IRewardCount } from '../../../interfaces';
+import { IFundForm } from '../../../hooks';
 
 interface IRewardBasedProps {
 	setState: any;
 	updateReward: (_: IRewardCount) => void;
 	rewards?: IProjectReward[]
+	state?: IFundForm
 }
 
-export const RewardBased = ({ setState, updateReward, rewards }: IRewardBasedProps) => {
+export const RewardBased = ({ setState, updateReward, rewards, state }: IRewardBasedProps) => {
 	if (!rewards || !(rewards.length > 0)) {
 		return (
 			<VStack width="100%" spacing="12px" flex="1" overflowX="visible">
@@ -20,6 +22,8 @@ export const RewardBased = ({ setState, updateReward, rewards }: IRewardBasedPro
 			</VStack>
 		);
 	}
+
+	const getRewardCount = (rewardId: number) => state?.rewards[`${rewardId}`];
 
 	return (
 		<VStack marginTop="0px !important" width="100%" spacing="30px" flex="1" overflowX="visible">
@@ -35,6 +39,7 @@ export const RewardBased = ({ setState, updateReward, rewards }: IRewardBasedPro
 							<RewardItem
 								key={reward.id}
 								item={reward}
+								count={getRewardCount(reward.id)}
 								updateCount={updateReward}
 							/>),
 						)

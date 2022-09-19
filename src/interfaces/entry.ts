@@ -1,6 +1,6 @@
 import { IUser } from './user';
 
-export interface IPostCreateInput {
+export interface IEntryCreateInput {
 	projectId?: number;
 	type: string;
 	content?: string;
@@ -9,7 +9,7 @@ export interface IPostCreateInput {
 	title?: string;
 }
 
-export interface IPostUpdateInput {
+export interface IEntryUpdateInput {
 	entryId: number;
 	title?: string;
 	description?: string;
@@ -17,7 +17,7 @@ export interface IPostUpdateInput {
 	content?: string;
 }
 
-export type TPostData = {
+export type TEntryData = {
 	id: number
     title: string;
     description: string;

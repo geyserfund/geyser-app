@@ -11,7 +11,7 @@ import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddNode } from './components/AddNode';
 import { useMutation, useQuery } from '@apollo/client';
-import { MUTATION_CREATE_POST, MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
+import { MUTATION_CREATE_ENTRY, MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
 const useStyles = createUseStyles({
