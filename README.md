@@ -26,7 +26,7 @@ We temporarily use the staging API as a quick-start backend for contributors of 
 requests to go through, you will need to add the following line to your `/etc/hosts` file:
 
 ```
-yarn install
+127.0.0.1 staging.geyser.fund
 ```
 
 ### Environment Variables
