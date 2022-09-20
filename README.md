@@ -1,26 +1,61 @@
 # Geyser App
 
-The Geyser Front-End
+Repository containing all source code for the `geyser-app` frontend.
 
-## Development
+## Local Development
 
-To get started:
+
+### Pre-requisites
+
+
+We use `docker` and `docker compose` for local development of the `geyser-app`.
+
+Make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
+
+### Hosts configuration
+
+
+We temporarily use the staging API as a quick-start backend for contributors of the `geyser-app`. In order for the 
+requests to go through, you will need to add the following line to your `/etc/hosts` file: 
 
 ```
-yarn install
+127.0.0.1 api.staging.geyser.fund
 ```
 
+### Environment Variables
+
+The app requires some environment variables to be set. We provide an `example.env` file, copy to the file content to a `.env` file before populating the following values:
+
 ```
-yarn dev
+REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
+REACT_APP_ENV=development
 ```
 
-## Environment Variables
+### Running the app
 
-### Front-End
+After completing the above steps, you can run the app by running the following command in the project directory:
 
-`REACT_APP_API_ENDPOINT=<API_URL>`
+```
+docker compose up -d
+```
 
-`NODE_ENV=<environment>`
+Or, if you are running an older version of docker and have docker-compose installed separately:
+
+```
+docker-compose up -d
+```
+
+To see the react app logs use the following command:
+
+```
+docker compose logs -f geyser-app
+```
+
+or 
+```
+docker-compose logs -f geyser-app
+```
+
 
 ## `Use eslint in VS code`
 
