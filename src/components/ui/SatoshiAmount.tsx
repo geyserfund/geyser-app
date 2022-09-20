@@ -1,5 +1,6 @@
 import { HStack, Text, TextProps } from '@chakra-ui/react';
 import React from 'react';
+import { numberWithCommas } from '../../utils';
 import { SatoshiIconTilted } from '../icons';
 
 interface ISatoshiAmountProps extends TextProps {
@@ -22,15 +23,6 @@ export const SatoshiAmount = ({label, extra, fontSize, loading, wrapperClassName
 		}
 
 		return 0.8;
-	};
-
-	const numberWithCommas = (x:string) => {
-		const pattern = /(-?\d+)(\d{3})/;
-		while (pattern.test(x)) {
-			x = x.replace(pattern, '$1,$2');
-		}
-
-		return x;
 	};
 
 	return (

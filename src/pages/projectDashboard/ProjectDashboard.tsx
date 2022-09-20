@@ -6,9 +6,12 @@ import { BiLeftArrowAlt } from 'react-icons/bi';
 import { useHistory, useLocation, useParams } from 'react-router';
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar';
 import { ButtonComponent, TextBox } from '../../components/ui';
+import Loader from '../../components/ui/Loader';
 import { useAuthContext } from '../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { isMobileMode } from '../../utils';
+import { NotAuthorized } from '../notAuthorized';
+import { NotFound } from '../notFound';
 import { Entries } from './Entries';
 import { FundSettings } from './FundSettings';
 import { ProjectSettings } from './ProjectSettings';
@@ -37,33 +40,45 @@ export const ProjectDashboard = () => {
 		{
 			variables: { where: { name: projectId } },
 			onCompleted(data) {
-				if (data.project.owners[0].user.id !== user.id) {
-					history.push('/not-authorized');
-				}
-
 				setNav({title: data.project.title, path: `/projects/${data.project.name}`, projectOwnerId: data.project.owners[0].user.id});
 			},
 		},
 	);
-
-	const renderTabs = () => {
-		switch (view) {
-			case 'entries':
-				return <Entries />;
-			case 'fundingSettings':
-				return <FundSettings />;
-			case 'projectSettings':
-				return <ProjectSettings />;
-			default:
-				return <Entries />;
-		}
-	};
 
 	const handleBack = () => {
 		history.push(`/projects/${projectId}`);
 	};
 
 	const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+
+	if (loading) {
+		return (
+			<Loader />
+		);
+	}
+
+	if (error || !data || !data.project) {
+		return <NotFound />;
+	}
+
+	if (data.project.owners[0].user.id !== user.id) {
+		return <NotAuthorized />;
+	}
+
+	const { project } = data;
+
+	const renderTabs = () => {
+		switch (view) {
+			case 'entries':
+				return <Entries project={project}/>;
+			case 'fundingSettings':
+				return <FundSettings />;
+			case 'projectSettings':
+				return <ProjectSettings />;
+			default:
+				return <Entries project={project}/>;
+		}
+	};
 
 	return (
 		<Box
@@ -75,22 +90,21 @@ export const ProjectDashboard = () => {
 		>
 			<Grid
 				width="100%"
-				templateColumns={isLargerThan1280 ? 'repeat(6, 1fr)' : isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)' }
+				templateColumns={isLargerThan1280 ? 'repeat(18, 1fr)' : isMobile ? 'repeat(6, 1fr)' : 'repeat(15, 1fr)' }
 				padding={isMobile ? '10px' : '40px 40px 20px 40px'}
 			>
-				<GridItem colSpan={isLargerThan1280 ? 2 : 1} display="flex" justifyContent="flex-start">
+				<GridItem colSpan={isLargerThan1280 ? 5 : 2} display="flex" justifyContent="flex-start">
 					<ButtonComponent onClick={handleBack} leftIcon={<BiLeftArrowAlt style={{fontSize: '25px'}} />}>  Back</ButtonComponent>
 				</GridItem>
-				<GridItem colSpan={2} display="flex" justifyContent="center">
+				<GridItem colSpan={8} display="flex" justifyContent="center">
 					<VStack
 						spacing="30px"
 						width="100%"
-						maxWidth="400px"
 						minWidth="350px"
 						marginBottom="40px"
 						display="flex"
 						flexDirection="column"
-						alignItems="flex-start"
+						alignItems="center"
 					>
 						<Box display="flex">
 							<Box borderBottom="3px solid" borderColor={view === 'entries' ? 'brand.primary' : 'brand.neutral500'}>
@@ -115,7 +129,7 @@ export const ProjectDashboard = () => {
 
 					</VStack>
 				</GridItem>
-				<GridItem colSpan={2} display="flex" justifyContent="center">
+				<GridItem colSpan={5} display="flex" justifyContent="center">
 					<VStack justifyContent="center" alignItems="flex-start" maxWidth="370px" spacing="10px">
 
 					</VStack>

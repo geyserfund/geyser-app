@@ -79,6 +79,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
 		type
     fundersCount
     amountFunded
+    published
 		creator {
 			id
 			username

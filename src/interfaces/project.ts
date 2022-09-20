@@ -89,6 +89,7 @@ export interface IProjectListEntryItem {
 	creator: IUser;
 	fundersCount: number;
 	amountFunded: number;
+    published: boolean;
 }
 
 export interface IRewardCount {
