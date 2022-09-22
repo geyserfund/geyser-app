@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const QUERY_GET_POST = gql`
+export const QUERY_GET_ENTRY = gql`
 query Entry($id: BigInt!) {
 	entry(id: $id) {
 		id
@@ -26,6 +26,23 @@ query Entry($id: BigInt!) {
 	}
   }
 `;
+
+export const QUERY_ENTRIES_LANDING = gql`
+query GetEntries {
+  getEntries {
+    id
+    title
+    description
+    image
+	fundersCount
+	amountFunded
+    project {
+      title
+      name
+      image
+    }
+  }
+}`;
 
 export const QUERY_GET_SIGNED_URL = gql`
 query GetSignedUploadUrl($input: FileUploadInput!) {

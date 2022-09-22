@@ -1,6 +1,6 @@
 import { Box, Grid, GridItem, HStack, Text, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { ButtonComponent, IconButtonComponent, SatoshiAmount } from '../../../components/ui';
+import React, { useEffect, useState } from 'react';
+import { ButtonComponent, IconButtonComponent, Linkin, SatoshiAmount } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import { TMilestone, TRewards } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
@@ -13,7 +13,7 @@ import { EditIcon } from '@chakra-ui/icons';
 import { AddRewards } from './components/AddRewards';
 import { CalendarButton, DeleteConfirmModal, RewardCard } from '../../../components/molecules';
 import { DateTime } from 'luxon';
-import { useMutation, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { MUTATION_UPDATE_PROJECT, MUTATION_UPDATE_PROJECT_REWARD } from '../../../graphql/mutations';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
@@ -65,7 +65,7 @@ export const MilestoneAndRewards = () => {
 		loading: updateRewardLoading,
 	}] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
 
-	const { loading } = useQuery(QUERY_PROJECT_BY_NAME,
+	const [getProject, { loading }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
 		{
 			variables: { where: { id: params.projectId } },
 			onError() {
@@ -86,6 +86,12 @@ export const MilestoneAndRewards = () => {
 			},
 		},
 	);
+
+	useEffect(() => {
+		if (params && params.projectId) {
+			getProject();
+		}
+	}, [params.projectId]);
 
 	const handleMilestoneSubmit = (milestones: TMilestone[]) => {
 		setMilestones(milestones);
@@ -195,7 +201,7 @@ export const MilestoneAndRewards = () => {
 		>
 			<Grid width="100%" templateColumns={isLargerThan1280 ? 'repeat(6, 1fr)' : isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)' } padding={isMobile ? '10px' : '40px 40px 20px 40px'} >
 				<GridItem colSpan={ isLargerThan1280 ? 2 : 1} display="flex" justifyContent="flex-start">
-					<ButtonComponent leftIcon={<BiLeftArrowAlt className={classes.backIcon} onClick={handleBack} />}>Back</ButtonComponent>
+					<Linkin href={`/launch/${params.projectId}`}><ButtonComponent leftIcon={<BiLeftArrowAlt className={classes.backIcon} onClick={handleBack} />}>Back</ButtonComponent></Linkin>
 				</GridItem>
 				<GridItem colSpan={2} display="flex" justifyContent={isMobile ? 'center' : 'flex-start'}>
 					<VStack
@@ -217,43 +223,43 @@ export const MilestoneAndRewards = () => {
 								percentage={67}
 							/>
 						</VStack>
+						<VStack width="100%" alignItems="flex-start">
+							<Text>Fundraising deadline</Text>
+							<HStack width="100%" justifyContent="space-around">
+								<ButtonComponent
+									primary={selectedButton === 'ongoing'}
+									onClick={handleOngoingSelect}
+								>
+										Ongoing
+								</ButtonComponent>
+								<ButtonComponent
+									primary={selectedButton === 'month'}
+									onClick={handleMonthSelect}
+								>
+										1 Month
+								</ButtonComponent>
+								<CalendarButton
+									primary={selectedButton === 'custom'}
+									value={selectedDate}
+									onChange={handleDateChange}
+								>
+										Custom
+								</CalendarButton>
+							</HStack>
+							<Text fontSize="12px">Add a deadline for your project if you have one, or just keep it as ongoing.</Text>
+						</VStack>
 						<VStack width="100%" alignItems="flex-start" spacing="40px">
 							<VStack width="100%" alignItems="flex-start">
 								<Text
 									name="title"
 								>
-								Project Milestones
+								Project Milestones (optional)
 								</Text>
 								<ButtonComponent isFullWidth onClick={openMilestone}>Add a milestone</ButtonComponent>
 								<Text fontSize="12px">Milestones help you and your community keep track of your progress and set your expectations.</Text>
 							</VStack>
 							<VStack width="100%" alignItems="flex-start">
-								<Text>Fundraising deadline</Text>
-								<HStack width="100%" justifyContent="space-around">
-									<ButtonComponent
-										primary={selectedButton === 'ongoing'}
-										onClick={handleOngoingSelect}
-									>
-										Ongoing
-									</ButtonComponent>
-									<ButtonComponent
-										primary={selectedButton === 'month'}
-										onClick={handleMonthSelect}
-									>
-										1 Month
-									</ButtonComponent>
-									<CalendarButton
-										primary={selectedButton === 'custom'}
-										value={selectedDate}
-										onChange={handleDateChange}
-									>
-										Custom
-									</CalendarButton>
-								</HStack>
-								<Text fontSize="12px">Add a deadline for your project if you have one, or just keep it as ongoing.</Text>
-							</VStack>
-							<VStack width="100%" alignItems="flex-start">
-								<Text>Rewards</Text>
+								<Text>Rewards (optional)</Text>
 								<ButtonComponent isFullWidth onClick={() => {
 									setSelectedReward(undefined);
 									openReward();

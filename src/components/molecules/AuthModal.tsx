@@ -24,6 +24,9 @@ interface IAuthModal {
 	onClose: () => void,
 	title?: string,
 	description?: string;
+	showTwitter?: boolean,
+	showLightning?: boolean,
+	privateRoute?: boolean,
 }
 
 // const useStyles = createUseStyles({
@@ -41,6 +44,7 @@ const TwitterConnect = ({ onClose }: { onClose: () => {}}) => {
 	const [getUser, { stopPolling }] = useLazyQuery(ME, {
 		onCompleted: (data: any) => {
 			if (data && data.me) {
+				console.log('DATA ME', data.me);
 				const hasTwitter = hasTwitterAccount(data.me);
 				if (hasTwitter) {
 					onClose();
@@ -157,7 +161,7 @@ const LnurlConnect = ({ setQrContent, setLnurlState }:
 	);
 };
 
-const ConnectAccounts = ({ setModalStates, setQrContent, onClose }: any) => {
+const ConnectAccounts = ({ setModalStates, setQrContent, onClose, showTwitter, showLightning }: any) => {
 	const { user } = useAuthContext();
 	const [setLnurlState] = setModalStates;
 	return (
@@ -165,19 +169,24 @@ const ConnectAccounts = ({ setModalStates, setQrContent, onClose }: any) => {
 			<Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>Connect</Text>
 			<Text color="brand.textGrey2" marginBottom={5}>Connect more profiles.</Text>
 			<Stack>
-				{!hasTwitterAccount(user) && <TwitterConnect onClose={onClose}/>}
-				<LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent}/>
+				{!hasTwitterAccount(user) && showTwitter && <TwitterConnect onClose={onClose}/>}
+				{showLightning && <LnurlConnect setLnurlState={setLnurlState} setQrContent={setQrContent}/>}
 			</Stack>
 		</Box>
 	);
 };
 
-export const AuthModal = ({
-	isOpen,
-	onClose,
-	title,
-	description,
-}: IAuthModal) => {
+export const AuthModal = (authModalProps: IAuthModal) => {
+	const {
+		isOpen,
+		onClose,
+		title,
+		description,
+		showTwitter = true,
+		showLightning = true,
+		privateRoute = false,
+	} = authModalProps;
+
 	const { user, setUser, isLoggedIn, loginIsOpen } = useAuthContext();
 	const { toast } = useNotification();
 	const isMobile = isMobileMode();
@@ -186,7 +195,7 @@ export const AuthModal = ({
 
 	const [qrContent, setQrContent] = useState('');
 	const [modalState, setModalState] = useState<IAuthModalState>(isMe() ? authModalStates.manage : authModalStates.initial);
-	const [modalTitle, setModalTitle] = useState(title || modalState === authModalStates.manage ? 'Manage accounts' : 'Connect');
+	const [modalTitle, setModalTitle] = useState(title || (modalState === authModalStates.manage ? 'Manage accounts' : 'Connect'));
 	const [modalDescription, setModalDescription] = useState(description);
 	const [copy, setcopy] = useState(false);
 
@@ -328,6 +337,8 @@ export const AuthModal = ({
 							setQrContent={setQrContent}
 							setModalStates={[setLnurlState]}
 							onClose={onClose}
+							showTwitter={showTwitter}
+							showLightning={showLightning}
 						/>
 						<Box borderBottom="1px solid lightgrey" pb={5}></Box>
 						<DisconnectAccounts />
@@ -341,22 +352,42 @@ export const AuthModal = ({
 							setQrContent={setQrContent}
 							setModalStates={[setLnurlState]}
 							onClose={onClose}
+							showTwitter={showTwitter}
+							showLightning={showLightning}
 						/>
 					</Box>
 				);
 		}
 	};
 
+	// TODO: Fix the line below. This is intended to check if the previous route was internal. Replace the "Go Back" button
+	// with a "Go To Home" button if the previous route was external.
+	// const previousInternal = document.referrer && new URL(document.referrer).origin === new URL(history.location.pathname).origin;
+
+	const handlePrivateRouteModalClose = () => {
+		if (privateRoute) {
+			history.goBack();
+			onClose();
+		}
+	};
+
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal
+			isOpen={isOpen} onClose={onClose} closeOnOverlayClick={!privateRoute} closeOnEsc={!privateRoute}
+			onOverlayClick={handlePrivateRouteModalClose}
+			onEsc={handlePrivateRouteModalClose}
+		>
 			<ModalOverlay />
 			<ModalContent display="flex" alignItems="center" padding="20px 15px">
 				<ModalHeader><Text fontSize="lg" fontWeight="bold">{modalTitle}</Text></ModalHeader>
-				<ModalCloseButton />
+				{privateRoute || <ModalCloseButton />}
 				<ModalBody width="100%">
-					<Box justifyContent="center" alignItems="center" margin={2}>
+					<Box justifyContent="center" alignItems="center" marginTop={2} marginLeft={2} marginRight={2}>
 						{modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
 						{renderModalBody()}
+					</Box>
+					<Box display="flex" justifyContent="center" alignItems="center" marginTop={5}>
+						{privateRoute && <ButtonComponent onClick={handlePrivateRouteModalClose}>Go Back</ButtonComponent>}
 					</Box>
 				</ModalBody>
 			</ModalContent>

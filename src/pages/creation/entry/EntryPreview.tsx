@@ -7,18 +7,18 @@ import { ButtonComponent, TextBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { useAuthContext } from '../../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
-import { MUTATION_PUBLISH_POST, MUTATION_UPDATE_POST } from '../../../graphql/mutations/posts';
-import { QUERY_GET_POST } from '../../../graphql/queries/posts';
-import { IPostUpdateInput } from '../../../interfaces/posts';
+import { MUTATION_PUBLISH_ENTRY, MUTATION_UPDATE_ENTRY } from '../../../graphql/mutations/entries';
+import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
+import { IEntryUpdateInput } from '../../../interfaces/entry';
 import { isMobileMode, useNotification } from '../../../utils';
-import { defaultEntry } from '../postEditor';
-import { CreateNav } from '../postEditor/CreateNav';
-import { TEntry } from '../postEditor/types';
+import { defaultEntry } from './editor';
+import { CreateNav } from './editor/CreateNav';
+import { TEntry } from './types';
 
 let isEdited = false;
 
-export const PostPreview = () => {
-	const params = useParams<{ postId: string, projectId: string }>();
+export const EntryPreview = () => {
+	const params = useParams<{ entryId: string, projectId: string }>();
 
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
@@ -28,12 +28,12 @@ export const PostPreview = () => {
 	const [isPublished, setIsPublished] = useState(false);
 
 	const [entry, setEntry] = useState<TEntry>(defaultEntry);
-	const [getPost, { loading: loadingPosts, error, data: entryData }] = useLazyQuery(QUERY_GET_POST);
+	const [getPost, { loading: loadingPosts, error, data: entryData }] = useLazyQuery(QUERY_GET_ENTRY);
 	const [updatePost, {
 		data: updateData, loading: updatePostLoading,
-	}] = useMutation(MUTATION_UPDATE_POST);
+	}] = useMutation(MUTATION_UPDATE_ENTRY);
 
-	const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_POST);
+	const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_ENTRY);
 
 	const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME,
 		{
@@ -48,8 +48,8 @@ export const PostPreview = () => {
 	);
 
 	useEffect(() => {
-		if (params && params.postId) {
-			getPost({ variables: { id: params.postId } });
+		if (params && params.entryId) {
+			getPost({ variables: { id: params.entryId } });
 		}
 	}, [params]);
 
@@ -63,7 +63,7 @@ export const PostPreview = () => {
 		if (entry) {
 			const { image, title, description, content, id } = entry;
 			try {
-				const input: IPostUpdateInput = {
+				const input: IEntryUpdateInput = {
 					entryId: id,
 					title,
 					description,
@@ -89,7 +89,7 @@ export const PostPreview = () => {
 	};
 
 	const onBack = () => {
-		history.push(`/projects/${params.projectId}/posts/${params.postId}`);
+		history.push(`/projects/${params.projectId}/entry/${params.entryId}`);
 	};
 
 	const handleInput = (event: any) => {
@@ -120,6 +120,10 @@ export const PostPreview = () => {
 		setIsPublished(true);
 	};
 
+	const handleGotoPost = () => {
+		history.push(`/entry/${params.entryId}`);
+	};
+
 	if (loadingPosts || loading) {
 		return <Loader />;
 	}
@@ -146,21 +150,21 @@ export const PostPreview = () => {
 					alignItems="flex-start"
 					paddingBottom="80px"
 				>
-					<Text fontSize="33px" fontWeight={600} color="brand.gray500">{isPublished ? 'Share post' : 'Publish Post'}</Text>
+					<Text fontSize="33px" fontWeight={600} color="brand.gray500">{isPublished ? 'Share entry' : 'Publish entry'}</Text>
 					{
 						isPublished && <VStack width="100%" alignItems="center">
 							<Box borderRadius="50%" backgroundColor="brand.primary" padding="10px">
 								<BsCheckLg />
 							</Box>
-							<Text>Your post is live!</Text>
+							<Text>Your entry is live!</Text>
 						</VStack>
 					}
 					<VStack alignItems="flex-start">
 						<Text color="brand.gray500">Edit Social Preview </Text>
-						<Box height="220px" width="350px" overflow="hidden">
+						{entry.image && <Box height="220px" width="350px" overflow="hidden">
 							<Image src={entry.image} height="350px" width="350px" objectFit="cover" />
-						</Box>
-						<Text fontSize="11px" color="brand.gray500">geyser.fund/bellicosian</Text>
+						</Box>}
+						<Text fontSize="11px" color="brand.gray500">{`geyser.fund/${projectData?.project?.name}`}</Text>
 						<Input
 							border="none"
 							_focus={{ border: 'none' }}
@@ -201,7 +205,7 @@ export const PostPreview = () => {
 					{isPublished
 						? <VStack width="100%">
 							<ButtonComponent isFullWidth onClick={handlePublish}>Share on Twitter</ButtonComponent>
-							<ButtonComponent primary isFullWidth onClick={handlePublish}>Go to Post</ButtonComponent>
+							<ButtonComponent primary isFullWidth onClick={handleGotoPost}>Go to Post</ButtonComponent>
 						</VStack>
 						: <ButtonComponent primary isFullWidth onClick={handlePublish}>
 							Publish

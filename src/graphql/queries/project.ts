@@ -59,6 +59,7 @@ query GetProject($where: UniqueProjectQueryInput!) {
         username
         imageUrl
       }
+      amountFunded
       confirmed
     }
     grantees {
@@ -76,6 +77,8 @@ query GetProject($where: UniqueProjectQueryInput!) {
 		description
 		image
 		type
+    fundersCount
+    amountFunded
 		creator {
 			id
 			username

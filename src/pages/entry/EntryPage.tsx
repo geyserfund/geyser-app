@@ -3,17 +3,18 @@ import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
-import { customHistory } from '../../config';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from '../project/Activity/Activity';
-import { useFundingFlow } from '../../hooks';
+import { useFundingFlow, useFundState } from '../../hooks';
 import { useAuthContext } from '../../context';
-import { QUERY_GET_POST } from '../../graphql/queries/posts';
+import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
 import { EntryContainer } from './EntryContainer';
+import { IProject } from '../../interfaces';
+import { TEntryData } from '../../interfaces/entry';
 
 export const EntryPage = () => {
-	const { postId } = useParams<{ postId: string }>();
+	const { entryId } = useParams<{ entryId: string }>();
 	const { state } = useLocation<{ loggedOut?: boolean }>();
 	const history = useHistory();
 
@@ -24,12 +25,20 @@ export const EntryPage = () => {
 	const { setFundState } = fundingFlow;
 
 	useEffect(() => {
-		if (postId) {
-			getEntry({variables: { id: postId }});
+		if (entryId) {
+			getEntry({variables: { id: entryId }});
 		}
-	}, [postId]);
+	}, [entryId]);
 
-	const [getEntry, { loading: loadingPosts, error, data: entryData }] = useLazyQuery(QUERY_GET_POST,
+	const [getProject, { loading, error: projectError, data: projectData }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
+		{
+			onCompleted(data) {
+				setNavTitle(data.project.title);
+			},
+		},
+	);
+
+	const [getEntry, { loading: loadingPosts, error, data: entryData }] = useLazyQuery(QUERY_GET_ENTRY,
 		{
 			onCompleted(data) {
 				const {entry} = data;
@@ -38,14 +47,6 @@ export const EntryPage = () => {
 			},
 			onError(error) {
 				history.push('/404');
-			},
-		},
-	);
-
-	const [getProject, { loading, error: projectError, data: projectData }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
-		{
-			onCompleted(data) {
-				setNavTitle(data.project.title);
 			},
 		},
 	);
@@ -80,13 +81,34 @@ export const EntryPage = () => {
 				position="relative"
 				bg="brand.bgGrey4"
 			>
-				<EntryContainer entry={entry} {...{detailOpen, setDetailOpen, setFundState }}/>
-				<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}
-					resourceType="entry"
-					resourceId={parseInt(postId, 10)}
-				/>
+				<EntryViewWrapper {...{project, entry, detailOpen, setDetailOpen, fundingFlow }}/>
+
 			</Box>
 		</Box>
 
+	);
+};
+
+interface IEntryViewWrapper{
+	project: IProject
+	entry: TEntryData
+	detailOpen: boolean
+	fundingFlow: any
+	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+	resourceType?: string;
+	resourceId?: number;
+}
+
+const EntryViewWrapper = ({project, entry, detailOpen, setDetailOpen, fundingFlow}: IEntryViewWrapper) => {
+	const fundForm = useFundState({rewards: project.rewards});
+	const { setFundState } = fundingFlow;
+	return (
+		<>
+			<EntryContainer entry={entry} {...{detailOpen, setDetailOpen, setFundState }}/>
+			<Activity {...{detailOpen, setDetailOpen, project, fundingFlow, fundForm }}
+				resourceType="entry"
+				resourceId={entry.id}
+			/>
+		</>
 	);
 };

@@ -7,7 +7,7 @@ import { isDarkMode, isMobileMode } from '../../utils';
 import { IFundingStages } from '../../constants';
 import { Footer, ProjectDetailsMobileMenu } from '../../components/molecules';
 import { fundingStages } from '../../constants';
-import { TPostData } from '../../interfaces/posts';
+import { TEntryData } from '../../interfaces/entry';
 import { EntryDetails } from './EntryDetails';
 
 type Rules = string
@@ -48,7 +48,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
 });
 
 interface IActivityProps {
-	entry: TPostData
+	entry: TEntryData
 	detailOpen: boolean
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 	setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>

@@ -1,9 +1,12 @@
-import { Badge, Box, Button, Checkbox, Grid, GridItem, HStack, Text, VStack } from '@chakra-ui/react';
+import { Badge, Button, Grid, GridItem, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
+import { useHistory } from 'react-router';
 import { ProjectSectionBar, RewardCard } from '../../components/molecules';
-import { SatoshiAmount } from '../../components/ui';
-import { LaunchImageUrl, projectTypes } from '../../constants';
+import { ButtonComponent } from '../../components/ui';
+import { fundingStages, IFundingStages, projectTypes } from '../../constants';
+import { useAuthContext } from '../../context';
+import { TupdateReward } from '../../hooks';
 import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
 import { EntryCard } from './components/EntryCard';
@@ -16,9 +19,18 @@ const useStyles = createUseStyles({
 
 });
 
-export const ProjectAccesories = ({ project }: { project: IProject }) => {
+interface IProjectAccesories {
+	project: IProject
+	setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
+	updateReward:TupdateReward
+}
+
+export const ProjectAccesories = ({ project, setFundState, updateReward }: IProjectAccesories) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
+	const history = useHistory();
+
+	const {user} = useAuthContext();
 
 	const entriesRef = useRef<any>(null);
 	const rewardsRef = useRef<any>(null);
@@ -27,6 +39,8 @@ export const ProjectAccesories = ({ project }: { project: IProject }) => {
 	const entriesLength = project.entries && project.entries.length;
 	const rewardsLength = project.rewards && project.rewards.length;
 	const milestoneLength = project.milestones && project.milestones.length;
+
+	const [isSmallerThan1265] = useMediaQuery('(min-width: 1265px)');
 
 	const renderEntries = () => {
 		if (project.entries && project.entries.length > 0) {
@@ -44,9 +58,13 @@ export const ProjectAccesories = ({ project }: { project: IProject }) => {
 		if (project.rewards && project.rewards.length > 0) {
 			return (
 				project.rewards.map(reward => (
-					<GridItem key={reward.id} colSpan={isMobile ? 2 : 1}>
+					<GridItem key={reward.id} colSpan={isSmallerThan1265 ? 1 : 2}>
 						<RewardCard
 							reward={reward}
+							onClick={() => {
+								updateReward({id: reward.id, count: 1});
+								setFundState(fundingStages.form);
+							}}
 							isSatoshi={true}
 							minWidth="350px"
 							maxWidth="350px"
@@ -102,6 +120,10 @@ export const ProjectAccesories = ({ project }: { project: IProject }) => {
 		}
 	};
 
+	const handleCreateNewEntry = () => [
+		history.push(`/projects/${project.name}/entry`),
+	];
+
 	const isRewardBased = project.type === projectTypes.reward;
 
 	return (
@@ -135,7 +157,16 @@ export const ProjectAccesories = ({ project }: { project: IProject }) => {
 				alignItems="flex-start"
 				spacing="20px"
 			>
-				<ProjectSectionBar name={'Entries'} number={entriesLength}/>
+				<ProjectSectionBar
+					name={'Entries'}
+					number={entriesLength}
+					rightSection={
+						user?.id && user.id === project.owners[0].user.id
+						&& <ButtonComponent primary onClick={handleCreateNewEntry}>
+							Create new entry
+						</ButtonComponent>
+					}
+				/>
 				{renderEntries()}
 			</VStack>
 			{

@@ -10,6 +10,7 @@ import { Footer, ProjectDetailsMobileMenu } from '../../components/molecules';
 import { fundingStages } from '../../constants';
 import { DetailsCard } from './DetailsCard';
 import { ProjectAccesories } from './ProjectAccesories';
+import { TupdateReward } from '../../hooks';
 
 type Rules = string
 
@@ -53,9 +54,10 @@ interface IActivityProps {
 	detailOpen: boolean
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
 	setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
+	updateReward: TupdateReward
 }
 
-export const DetailsContainer = ({ project, detailOpen, setDetailOpen, setFundState }: IActivityProps) => {
+export const DetailsContainer = ({ project, detailOpen, setDetailOpen, setFundState, updateReward }: IActivityProps) => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 
@@ -123,8 +125,8 @@ export const DetailsContainer = ({ project, detailOpen, setDetailOpen, setFundSt
 						w="100%"
 						padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
 					>
-						<DetailsCard project={project} setFundState={setFundState}/>
-						<ProjectAccesories project={project}/>
+						<DetailsCard project={project} setFundState={setFundState} />
+						<ProjectAccesories project={project} setFundState={setFundState} updateReward={updateReward}/>
 					</VStack >
 				</VStack >
 				<Footer />
