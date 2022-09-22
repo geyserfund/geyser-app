@@ -20,6 +20,7 @@ import { SatoshiIconTilted } from '../../components/icons';
 import SatsFlow from '../../assets/sats-flow.svg';
 import GrantsBanner from '../../assets/grants-banner.png';
 import { useHistory } from 'react-router';
+import previewProject from '../../utils/previewData/previewProject';
 
 type RuleNames = string
 
@@ -115,6 +116,7 @@ export const Home = () => {
 	const summary = (summaryData && summaryData.projectsSummary) || {};
 
 	const closedProjects = projects.filter((project: IProject) => !project.active);
+
 	const activeProjects = projects.filter((project: IProject) => project.active);
 
 	return (
@@ -203,7 +205,7 @@ export const Home = () => {
 				<VStack alignItems="flex-start" width="100%" spacing="0px">
 					<Text className={classes.sectionTitle}>FEATURED</Text>
 					<HStack width="100%" justifyContent="center" >
-						<SwipeLiveProject loading={loading} projects={[...activeProjects]} />
+						<SwipeLiveProject loading={loading} projects={[...activeProjects, previewProject]} />
 					</HStack>
 				</VStack>
 				<VStack alignItems="flex-start" width="100%" spacing="15px">

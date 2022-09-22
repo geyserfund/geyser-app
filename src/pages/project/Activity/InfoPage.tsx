@@ -1,6 +1,6 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
 import React, { useState } from 'react';
-import { ProjectBalanceCircularProgress, ProjectBalance, ProjectMobileMenu, ActivityBrief } from '../../../components/molecules';
+import { ProjectBalanceCircularProgress, ProjectBalance, ActivityBrief, ProjectActivityActionsToolbar } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
 import { FundingStatus, ButtonComponent } from '../../../components/ui';
@@ -75,39 +75,98 @@ export const InfoPage = ({
 				project={project}
 			/>
 
-			{project.active && !isMobile && <ButtonComponent
-				primary
-				standard
-				leftIcon={<SatoshiIconTilted />}
+			{project.active && !isMobile && (
+				<ButtonComponent
+					primary
+					standard
+					leftIcon={<SatoshiIconTilted />}
+					width="100%"
+					onClick={handleFundProject}
+				>
+          Fund this project
+				</ButtonComponent>
+			)}
+
+			<ProjectActivityActionsToolbar
+				fundButtonFunction={handleFundProject}
+				transitionButtonFunction={handleViewClick}
+			/>
+
+			<Box
 				width="100%"
-				onClick={handleFundProject}
+				display="flex"
+				flexDirection="column"
+				alignItems="center"
+				overflow="hidden"
+				flex="1"
 			>
-				Fund this project
-			</ButtonComponent>}
-			<ProjectMobileMenu fundButtonFunction={handleFundProject} handleViewClick={handleViewClick} viewName="Description" />
-			<Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
 				<Box display="flex" marginBottom="10px" w="95%">
 					<Box w="50%">
-						<Button _hover={{backgroundColor: 'none'}} w="100%" rounded="none" bg="none" fontWeight={view === 'activity' ? 'bold' : 'normal'} fontSize="16px" marginTop="10px" onClick={() => setView('activity')}>
-						Contributions <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>{fundingTxs.length}</Text>
+						<Button
+							_hover={{ backgroundColor: 'none' }}
+							w="100%"
+							rounded="none"
+							bg="none"
+							fontWeight={view === 'activity' ? 'bold' : 'normal'}
+							fontSize="16px"
+							marginTop="10px"
+							onClick={() => setView('activity')}
+						>
+              Contributions{' '}
+							<Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+								{fundingTxs.length}
+							</Text>
 						</Button>
-						<Box bg={view === 'activity' ? 'darkgrey' : 'lightgrey'} w="100%" h="3px" rounded="lg"></Box>
+						<Box
+							bg={view === 'activity' ? 'darkgrey' : 'lightgrey'}
+							w="100%"
+							h="3px"
+							rounded="lg"
+						></Box>
 					</Box>
 					<Box w="50%">
-						<Button _hover={{backgroundColor: 'none'}} w="100%" rounded="none" bg="none" fontWeight={view === 'activity' ? 'normal' : 'bold'} fontSize="16px" marginTop="10px" onClick={() => setView('leaderboard')}>
-						Leaderboard <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>{funders.length}</Text>
+						<Button
+							_hover={{ backgroundColor: 'none' }}
+							w="100%"
+							rounded="none"
+							bg="none"
+							fontWeight={view === 'activity' ? 'normal' : 'bold'}
+							fontSize="16px"
+							marginTop="10px"
+							onClick={() => setView('leaderboard')}
+						>
+              Leaderboard{' '}
+							<Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+								{funders.length}
+							</Text>
 						</Button>
-						<Box bg={view === 'activity' ? 'lightgrey' : 'darkgrey'} w="100%" h="3px" rounded="lg"></Box>
+						<Box
+							bg={view === 'activity' ? 'lightgrey' : 'darkgrey'}
+							w="100%"
+							h="3px"
+							rounded="lg"
+						></Box>
 					</Box>
 				</Box>
-				<VStack spacing={'8px'} width="100%" overflow="auto" height={isMobile ? 'calc(100% - 44px)' : '100%'} paddingBottom="10px">
-					{ view === 'activity'
+				<VStack
+					spacing={'8px'}
+					width="100%"
+					overflow="auto"
+					height={isMobile ? 'calc(100% - 44px)' : '100%'}
+					paddingBottom="10px"
+				>
+					{view === 'activity'
 						? fundingTxs.map((fundingTx, index) => (
-							<IdBar key={index} fundingTx={fundingTx} project={project}/>
-						)) : sortedFunders.map((funder, index) => (
-							<IdBarLeaderboard key={index} funder={funder} count={index + 1} project={project}/>
+							<IdBar key={index} fundingTx={fundingTx} project={project} />
 						))
-					}
+						: sortedFunders.map((funder, index) => (
+							<IdBarLeaderboard
+								key={index}
+								funder={funder}
+								count={index + 1}
+								project={project}
+							/>
+						))}
 				</VStack>
 			</Box>
 		</VStack>

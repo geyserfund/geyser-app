@@ -10,6 +10,7 @@ import Activity from './Activity/Activity';
 import Details from './Details';
 import { useFundingFlow } from '../../hooks';
 import { Grants } from '../grants/Grants';
+import previewProject from '../../utils/previewData/previewProject';
 
 export const Project = () => {
 	const { projectId } = useParams<{ projectId: string }>();
@@ -39,16 +40,19 @@ export const Project = () => {
 		);
 	}
 
-	if (error || !data || !data.project) {
-		return <NotFound />;
-	}
+	// 📝 Commented-out due to Apollo errors
+	// if (error || !data || !data.project) {
+	// 	return <NotFound />;
+	// }
 
-	const { project } = data;
+	// const { project } = data;
+
+	const project = previewProject;
 
 	return (
 		<>
-			{project.type !== 'grant'
-				? <Box
+			{project.type !== 'grant' ? (
+				<Box
 					display="flex"
 					justifyContent="center"
 					alignItems="center"
@@ -61,16 +65,23 @@ export const Project = () => {
 						overflow="hidden"
 						position="relative"
 						bg="brand.bgGrey4"
-
 					>
-						<Details project={project} {...{detailOpen, setDetailOpen, setFundState }}/>
-						<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}/>
+						<Details
+							project={project}
+							{...{ detailOpen, setDetailOpen, setFundState }}
+						/>
+
+						<Activity
+							project={project}
+							{...{ detailOpen, setDetailOpen, fundingFlow }}
+						/>
 					</Box>
 				</Box>
-				: <>
-					<Grants project={project}/>
+			) : (
+				<>
+					<Grants project={project} />
 				</>
-			}
+			)}
 		</>
 	);
 };

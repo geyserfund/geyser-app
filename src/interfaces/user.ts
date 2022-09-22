@@ -2,7 +2,7 @@ export interface IUser {
     id: number;
     username: string;
     imageUrl: string;
-	email?: string;
+  	email?: string;
     externalAccounts: IUserExternalAccount[];
 }
 

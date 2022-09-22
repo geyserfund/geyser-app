@@ -25,8 +25,8 @@ Make sure to have them installed on your local development machine, see [here](h
 We temporarily use the staging API as a quick-start backend for contributors of the `geyser-app`. In order for the
 requests to go through, you will need to add the following line to your `/etc/hosts` file:
 
-```
-127.0.0.1 api.staging.geyser.fund
+```shell
+127.0.0.1 staging.geyser.fund
 ```
 
 ### Environment Variables
