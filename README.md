@@ -2,16 +2,12 @@
 
 The Geyser Front-End
 
-## Development
+## Project Setup
 
 ### Installing Dependencies
 
 ```shell
 yarn install
-```
-
-```shell
-yarn dev
 ```
 
 ### Pre-requisites
@@ -20,12 +16,12 @@ We use `docker` and `docker compose` for local development of the `geyser-app`.
 
 Make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
 
-### Hosts configuration
+### Hosts Configuration
 
 We temporarily use the staging API as a quick-start backend for contributors of the `geyser-app`. In order for the
 requests to go through, you will need to add the following line to your `/etc/hosts` file:
 
-```
+```shell
 127.0.0.1 staging.geyser.fund
 ```
 
@@ -41,12 +37,14 @@ From there, populate the new file with the following values:
 
 ```shell
 REACT_APP_ENV=development
-REACT_APP_API_ENDPOINT=<API_URL>
+REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
 ```
 
-## Environment Variables
+## Running the App Locally
 
-### Front-End
+### Starting Docker
+
+After completing the above steps, you can run the app by running the following command in the project directory:
 
 ```shell
 docker compose up -d
@@ -70,13 +68,17 @@ or
 docker-compose logs -f geyser-app
 ```
 
+### Opening in the Browser
+
+With Docker running, navigate to <http://staging.geyser.fund/>.
+
 ## `Using ESLint in VSCode`
 
 **Note: This is to be used for consistent code formatting and adhering to certain coding practice!**
 
-step 1: Make sure you have eslint extension installed in your vscode environment.
+1. Make sure you have eslint extension installed in your vscode environment.
 
-step 2: Add these variables to your VScode settings
+2. Add these variables to your VScode settings:
 
 ```json
 "editor.formatOnSave": true,
