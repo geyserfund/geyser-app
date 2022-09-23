@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/layout';
-// Import { useMediaQuery } from '@chakra-ui/media-query';
 import classNames from 'classnames';
 import React, { useState, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
@@ -8,7 +7,7 @@ import { IProject } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { RewardBased } from './ProjectLayout';
 import { IFundingStages } from '../../constants';
-import { ProjectMobileMenu } from '../../components/molecules';
+import { ProjectDetailsMobileMenu } from '../../components/molecules';
 import { fundingStages } from '../../constants';
 
 type Rules = string
@@ -82,33 +81,48 @@ export const Details = ({ project, detailOpen, setDetailOpen, setFundState }: IA
 	};
 
 	return (
-		<Box
-			className={classNames(classes.container, {
-				[classes.slideInLeft]: isMobile && detailOpen,
-				[classes.fadeOut]: isMobile && fadeStarted,
-			})}
-			backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
-			flex={!isMobile ? 3 : undefined}
-			height="100%"
-			w="100%"
-			flexDirection="column"
-			overflow="hidden"
-		>
-			<Box className={classes.detailsContainer} id="project-scroll-container" ref={scrollDiv} onScroll={() => {
-				if (isMobile) {
-					if (scrollDiv.current.scrollTop > scrollPosition) {
-						setShowMobileMenu(false);
-					} else {
-						setShowMobileMenu(true);
-					}
+		<>
+			<Box
+				className={classNames(classes.container, {
+					[classes.slideInLeft]: isMobile && detailOpen,
+					[classes.fadeOut]: isMobile && fadeStarted,
+				})}
+				backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
+				flex={!isMobile ? 3 : undefined}
+				height="100%"
+				w="100%"
+				flexDirection="column"
+				overflow="hidden"
+			>
+				<Box
+					className={classes.detailsContainer}
+					id="project-scroll-container"
+					ref={scrollDiv}
+					onScroll={() => {
+						if (isMobile) {
+							if (scrollDiv.current.scrollTop > scrollPosition) {
+								setShowMobileMenu(false);
+							} else {
+								setShowMobileMenu(true);
+							}
 
-					setScrollPosition(scrollDiv.current.scrollTop);
-				}
-			}}>
-				<ProjectMobileMenu showMobileMenu={showMobileMenu} fundButtonFunction={handleFundClick} handleViewClick={handleViewClick} viewName="Activity" />
-				<RewardBased project={project}/>
+							setScrollPosition(scrollDiv.current.scrollTop);
+						}
+					}}
+				>
+					<RewardBased project={project} />
+				</Box>
+
 			</Box>
-		</Box>
+
+			{detailOpen && (
+				<ProjectDetailsMobileMenu
+					showMobileMenu={showMobileMenu}
+					fundButtonFunction={handleFundClick}
+					transitionButtonFunction={handleViewClick}
+				/>
+			)}
+		</>
 	);
 };
 

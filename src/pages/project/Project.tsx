@@ -47,8 +47,8 @@ export const Project = () => {
 
 	return (
 		<>
-			{project.type !== 'grant'
-				? <Box
+			{project.type !== 'grant' ? (
+				<Box
 					display="flex"
 					justifyContent="center"
 					alignItems="center"
@@ -61,16 +61,23 @@ export const Project = () => {
 						overflow="hidden"
 						position="relative"
 						bg="brand.bgGrey4"
-
 					>
-						<Details project={project} {...{detailOpen, setDetailOpen, setFundState }}/>
-						<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}/>
+						<Details
+							project={project}
+							{...{ detailOpen, setDetailOpen, setFundState }}
+						/>
+
+						<Activity
+							project={project}
+							{...{ detailOpen, setDetailOpen, fundingFlow }}
+						/>
 					</Box>
 				</Box>
-				: <>
-					<Grants project={project}/>
+			) : (
+				<>
+					<Grants project={project} />
 				</>
-			}
+			)}
 		</>
 	);
 };
