@@ -17,3 +17,4 @@ export * from './hasLnurlAccount';
 export * from './hasTwitterAccount';
 export * from './testImage';
 export * from './regex';
+export * from './previewData/projectEntryListItems';
