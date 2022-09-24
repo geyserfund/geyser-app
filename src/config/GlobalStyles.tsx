@@ -2,8 +2,8 @@ import React from 'react';
 import { Global } from '@emotion/react';
 
 export const GlobalStyles = () => (
-	<Global
-		styles={`
+  <Global
+    styles={`
         @import url('https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap');
@@ -48,5 +48,5 @@ export const GlobalStyles = () => (
             display: none
         }
       `}
-	/>
+  />
 );

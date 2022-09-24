@@ -1,22 +1,21 @@
-
 import { gql } from '@apollo/client';
 
 export const ME = gql`
-query Me {
-  me {
-    id
-    username
-    imageUrl
-	email
-  externalAccounts {
+  query Me {
+    me {
       id
-      type
-      externalUsername
-      externalId
-      public
+      username
+      imageUrl
+      email
+      externalAccounts {
+        id
+        type
+        externalUsername
+        externalId
+        public
+      }
     }
   }
-}
 `;
 
 /*
@@ -30,61 +29,62 @@ query Me {
 */
 
 export const USER_PROFILE_QUERY = gql`
-query User($where: UserQueryInput) {
-  user(where: $where) {
-    id
-    username
-    imageUrl
-    externalAccounts {
+  query User($where: UserQueryInput) {
+    user(where: $where) {
       id
-      type
-      externalUsername
-      externalId
-      public
-    }
-    contributions {
-      isAmbassador
-      isFunder
-      isSponsor
-      funder {
+      username
+      imageUrl
+      externalAccounts {
         id
-        amountFunded
-        timesFunded
-        confirmedAt
+        type
+        externalUsername
+        externalId
+        public
       }
-      project {
-        id
-        title
-        name
-        description
-        media
-        createdAt
-      }
-    }
-    ownerOf {
-      project {
-        id
-        title
-        name
-        description
-        balance
-        fundingGoal
-        createdAt
-        updatedAt
-        active
-        media
-        expiresAt
-        creationConfirmed
-        funders {
+      contributions {
+        isAmbassador
+        isFunder
+        isSponsor
+        funder {
           id
+          amountFunded
+          timesFunded
+          confirmedAt
         }
-        owners {
+        project {
           id
-          user {
-            imageUrl
+          title
+          name
+          description
+          media
+          createdAt
+        }
+      }
+      ownerOf {
+        project {
+          id
+          title
+          name
+          description
+          balance
+          fundingGoal
+          createdAt
+          updatedAt
+          active
+          media
+          expiresAt
+          creationConfirmed
+          funders {
+            id
+          }
+          owners {
+            id
+            user {
+              imageUrl
+            }
           }
         }
       }
     }
   }
-}`;
+`;

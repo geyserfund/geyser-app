@@ -33,6 +33,7 @@ module.exports = {
 		'plugin:prettier/recommended',
 	],
 	rules: {
+		'prettier/prettier': ['error'],
 		'object-curly-spacing': 0,
 		'no-negated-condition': 0,
 		'array-callback-return': 0,
