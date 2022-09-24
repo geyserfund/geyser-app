@@ -9,7 +9,7 @@ import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
-import { LaunchIdea } from '../pages/launchIdea';
+import { Launch } from '../pages/launch';
 import { Profile } from '../pages/profile';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
@@ -143,4 +143,81 @@ export const Router = () => {
       </Box>
     </Fade>
   );
+	return (
+		<Fade in={true}>
+			<Box height="100vh">
+				<NavBar showBorder={showBorder} skipRoutes={['/projects/:projectId/entry', '/projects/:projectId/entry/:entryId', '/projects/:projectId/entry/:entryId/preview']} />
+				<Box id="geyser-landing-page" height="100vh" overflowY="auto">
+					<Switch>
+						<Route path="/auth/twitter">
+							<TwitterSuccess />
+						</Route>
+						<Route path="/failed-authentication">
+							<FailedAuth />
+						</Route>
+						<Route path="/grants">
+							<GrantsLanding />
+						</Route>
+						<Route path="/launch/start">
+							<PrivateRoute>
+								<ProjectCreate />
+							</PrivateRoute>
+						</Route>
+						<Route path="/launch/:projectId/node">
+							<PrivateRoute>
+								<Wallet />
+							</PrivateRoute>
+						</Route>
+						<Route path="/launch/:projectId/milestones">
+							<PrivateRoute>
+								<MilestoneAndRewards />
+							</PrivateRoute>
+						</Route>
+						<Route path="/launch/:projectId">
+							<PrivateRoute>
+								<ProjectCreate />
+							</PrivateRoute>
+						</Route>
+						<Route path="/launch">
+							<Launch />
+						</Route>
+						<Route path="/profile/:userId">
+							<Profile />
+						</Route>
+						<Route path="/project/:projectId">
+							<Project />
+						</Route>
+						<Route path="/projects/:projectId/entry/:entryId/preview">
+							<PrivateRoute>
+								<EntryPreview />
+							</PrivateRoute>
+						</Route>
+						<Route path="/projects/:projectId/entry/:entryId">
+							<PrivateRoute>
+								<EntryCreateEdit />
+							</PrivateRoute>
+						</Route>
+						<Route path="/projects/:projectId/entry">
+							<PrivateRoute>
+								<EntryCreateEdit />
+							</PrivateRoute>
+						</Route>
+						<Route path="/projects/:projectId">
+							<ProjectView />
+						</Route>
+						<Route path="/entry/:entryId">
+							<EntryPage />
+						</Route>
+						<Route path="/not-found">
+							<NotFound />
+						</Route>
+						<Route path="/">
+							{/* <Home /> */}
+							<Landing />
+						</Route>
+					</Switch>
+				</Box>
+			</Box>
+		</Fade>
+	);
 };
