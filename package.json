@@ -58,7 +58,8 @@
 		"build": "react-scripts --max_old_space_size=3072 build",
 		"start": "react-scripts start",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"format": "prettier --write --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\""
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -95,9 +96,12 @@
 		"@typescript-eslint/eslint-plugin": "^4.30.0",
 		"@typescript-eslint/parser": "^4.30.0",
 		"eslint": "^7.32.0",
+		"eslint-config-prettier": "^8.5.0",
 		"eslint-config-xo": "^0.38.0",
 		"eslint-plugin-jest": "^24.4.0",
-		"eslint-plugin-react": "^7.25.1"
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-react": "^7.25.1",
+		"prettier": "^2.7.1"
 	},
 	"resolutions": {
 		"@types/react": "17.0.2",

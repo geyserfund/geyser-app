@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { IUser } from '../../../interfaces';
 
 interface IAvatarElement {
-	user: IUser
+  user: IUser;
 }
 
-export const AvatarElement = ({user}:IAvatarElement) => (
-	<Link to={`/profile/${user.id}`}>
-		<HStack >
-			<Avatar size="xs" borderRadius="4px" src={user.imageUrl}/>
-			<Text color="brand.neutral600">{user.username}</Text>
-		</HStack>
-	</Link>
+export const AvatarElement = ({ user }: IAvatarElement) => (
+  <Link to={`/profile/${user.id}`}>
+    <HStack>
+      <Avatar size="xs" borderRadius="4px" src={user.imageUrl} />
+      <Text color="brand.neutral600">{user.username}</Text>
+    </HStack>
+  </Link>
 );
