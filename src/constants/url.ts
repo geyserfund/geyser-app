@@ -29,6 +29,7 @@ export const ProjectMediaUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const BotTwitterUrl = 'https://twitter.com/geyserfunders';
 
 export const LaunchImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/launch.png';
+export const LaunchProjectRocketUrl = 'https://storage.googleapis.com/geyser-projects-media/app/launch-project-rocket.png';
 
 export const GeyserLignteningNodeUrl = 'https://amboss.space/node/0272e8731c6feda7fb7e2b8dbe0fbf1322f9e3b60cc2727f4ee4ca0f820b9cd169';
 export const GeyserFAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3';

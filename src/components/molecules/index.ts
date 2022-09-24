@@ -16,6 +16,7 @@ export * from './DonationInputWithSatoshi';
 export * from './CalendarButton';
 export * from './ProjectSectionBar';
 export * from './DeleteConfirmModal';
+export * from './TwitterConnect';
 
 export * from './projectDisplay/ProjectBalance';
 export * from './projectDisplay/ProfileProjectCard';
