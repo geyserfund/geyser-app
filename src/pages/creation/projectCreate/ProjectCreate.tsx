@@ -167,7 +167,7 @@ export const ProjectCreate = () => {
     }
   };
 
-	// const projectName = form.title.split(' ').join('').toLowerCase();
+  // const projectName = form.title.split(' ').join('').toLowerCase();
 
   const handleUpload = (url: string) => {
     setForm({ ...form, image: `${GeyserAssetDomainUrl}${url}` });
@@ -227,9 +227,9 @@ export const ProjectCreate = () => {
     return isValid;
   };
 
-	const handleBack = () => {
-		history.push('/launch');
-	};
+  const handleBack = () => {
+    history.push('/launch');
+  };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 

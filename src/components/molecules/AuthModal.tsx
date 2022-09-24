@@ -46,19 +46,27 @@ interface IAuthModal {
 // 	},
 // });
 
-const LnurlConnect = ({ setQrContent, setLnurlState }:
-	{ setQrContent: any, setLnurlState: any }) => {
-	const handleLnurlLogin = async () => {
-		fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, { credentials: 'include', redirect: 'follow' })
-			.then(response => response.json())
-			.then(({ lnurl }) => {
-				setQrContent(lnurl);
-				setLnurlState();
-			})
-			.catch(err => {
-				console.log(err);
-			});
-	};
+const LnurlConnect = ({
+  setQrContent,
+  setLnurlState,
+}: {
+  setQrContent: any;
+  setLnurlState: any;
+}) => {
+  const handleLnurlLogin = async () => {
+    fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, {
+      credentials: 'include',
+      redirect: 'follow',
+    })
+      .then((response) => response.json())
+      .then(({ lnurl }) => {
+        setQrContent(lnurl);
+        setLnurlState();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <ButtonComponent
