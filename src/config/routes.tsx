@@ -12,7 +12,7 @@ import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
-import { Launch } from '../pages/launch';
+import { LaunchIdea } from '../pages/launchIdea';
 import { Profile } from '../pages/profile';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
@@ -73,11 +73,9 @@ export const Router = () => {
 						<Route path="/grants">
 							<GrantsLanding />
 						</Route>
-						<Route path="/launch/start">
-							<PrivateRoute>
-								<ProjectCreate />
-							</PrivateRoute>
-						</Route>
+						{/* <Route path="/launch">
+							<LaunchIdea />
+						</Route> */}
 						<Route path="/launch/:projectId/node">
 							<PrivateRoute>
 								<Wallet />
@@ -94,7 +92,9 @@ export const Router = () => {
 							</PrivateRoute>
 						</Route>
 						<Route path="/launch">
-							<Launch />
+							<PrivateRoute>
+								<ProjectCreate />
+							</PrivateRoute>
 						</Route>
 						<Route path="/profile/:userId">
 							<Profile />
