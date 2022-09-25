@@ -5,17 +5,19 @@ import { DonationInput } from '../../../components/molecules';
 import { SectionTitle } from '../../../components/ui';
 
 interface IDonationBasedProps {
-	setState: AnyAaaaRecord
+  setState: AnyAaaaRecord;
 }
 
-export const DonationBased = ({
-	setState,
-}: IDonationBasedProps) => (
-	<VStack width="100%" >
-		<Box width="100%" >
-			<SectionTitle> Send amount</SectionTitle>
-			<DonationInput inputGroup={{padding: '2px', marginBottom: '10px'}} name="donationAmount" onChange={setState}/>
-			{/* <Box
+export const DonationBased = ({ setState }: IDonationBasedProps) => (
+  <VStack width="100%">
+    <Box width="100%">
+      <SectionTitle> Send amount</SectionTitle>
+      <DonationInput
+        inputGroup={{ padding: '2px', marginBottom: '10px' }}
+        name="donationAmount"
+        onChange={setState}
+      />
+      {/* <Box
 					backgroundColor="brand.bgGreen"
 					height="85px"
 					borderRadius="12px"
@@ -46,6 +48,6 @@ export const DonationBased = ({
 					</Box>
 					<Text color="brand.textGrey" fontSize="12px">{`$${(btcRate * state.donationAmount).toFixed(2)}`}</Text>
 				</Box> */}
-
-		</Box>
-	</VStack>);
+    </Box>
+  </VStack>
+);
