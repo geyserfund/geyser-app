@@ -58,18 +58,22 @@ export const RewardItem = ({item, updateCount, count: initialCount}: IRewardItem
 	const {isOpen: focus, onOpen: setFocus, onClose: setBlur} = useDisclosure();
 
 	const handleAdd = () => {
-		setCount(count + 1);
+		const newCount = count + 1;
+		setCount(newCount);
+		updateCount({id: item.id, count: newCount});
 	};
 
 	const handleRemove = () => {
 		if (count > 0) {
-			setCount(count - 1);
+			const newCount = count - 1;
+			setCount(newCount);
+			updateCount({id: item.id, count: newCount});
 		}
 	};
 
-	useEffect(() => {
-		updateCount({id: item.id, count});
-	}, [count]);
+	// useEffect(() => {
+	// 	updateCount({id: item.id, count});
+	// }, [count]);
 
 	const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
 

@@ -85,11 +85,9 @@ interface IProjectViewContainer {
 const ProjectViewContainer = ({project, detailOpen, setDetailOpen, fundingFlow}: IProjectViewContainer) => {
 	const fundForm = useFundState({rewards: project.rewards});
 	const { setFundState } = fundingFlow;
-	const {updateReward} = fundForm;
-	console.log('chekcing dundform', fundForm);
 	return (
 		<>
-			<DetailsContainer project={project} {...{detailOpen, setDetailOpen, setFundState, updateReward }}/>
+			<DetailsContainer project={project} {...{detailOpen, setDetailOpen, setFundState, updateReward: fundForm.updateReward }}/>
 			<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow, fundForm }}/>
 		</>
 	);
