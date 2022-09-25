@@ -71,32 +71,3 @@ docker-compose logs -f geyser-app
 ### Opening in the Browser
 
 With Docker running, navigate to <http://staging.geyser.fund/>.
-
-## `Using ESLint in VSCode`
-
-**Note: This is to be used for consistent code formatting and adhering to certain coding practice!**
-
-1. Make sure you have eslint extension installed in your vscode environment.
-
-2. Add these variables to your VScode settings:
-
-```json
-"editor.formatOnSave": true,
-
-// turn it off for JS and JSX, we will do this via eslint
-"[javascript]": {
-  "editor.formatOnSave": false
-},
-
-"[javascriptreact]": {
-  "editor.formatOnSave": false
-},
-
-// show eslint icon at bottom toolbar
-"eslint.alwaysShowStatus": true,
-
-// tell the ESLint plugin to run on save
-"editor.codeActionsOnSave": {
-  "source.fixAll": true
-}
-```
