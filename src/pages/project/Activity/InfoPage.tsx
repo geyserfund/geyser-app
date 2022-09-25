@@ -1,14 +1,12 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
 import React, { useState } from 'react';
 import {
-  ProjectBalanceCircularProgress,
-  ProjectBalance,
-  ProjectMobileMenu,
+  ProjectActivityActionsToolbar,
   ActivityBrief,
 } from '../../../components/molecules';
 import { IdBar } from '../../../components/molecules/IdBar';
 import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
-import { FundingStatus, ButtonComponent } from '../../../components/ui';
+import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
 import { isMobileMode } from '../../../utils';
 import {
@@ -20,7 +18,6 @@ import {
 
 import { useStyles } from './styles';
 import { IProject, IFundingTx, IFunder } from '../../../interfaces';
-import { Countdown } from './Countdown';
 
 interface IInfoPage {
   project: IProject;
@@ -93,11 +90,12 @@ export const InfoPage = ({
           Fund this project
         </ButtonComponent>
       )}
-      <ProjectMobileMenu
+
+      <ProjectActivityActionsToolbar
         fundButtonFunction={handleFundProject}
-        handleViewClick={handleViewClick}
-        viewName="Description"
+        transitionButtonFunction={handleViewClick}
       />
+
       <Box
         width="100%"
         display="flex"

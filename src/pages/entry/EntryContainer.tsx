@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss';
 import { fadeOut, slideInLeft } from '../../css';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { IFundingStages } from '../../constants';
-import { Footer, ProjectMobileMenu } from '../../components/molecules';
+import { Footer, ProjectDetailsMobileMenu } from '../../components/molecules';
 import { fundingStages } from '../../constants';
 import { TEntryData } from '../../interfaces/entry';
 import { EntryDetails } from './EntryDetails';
@@ -116,12 +116,12 @@ export const EntryContainer = ({
           }
         }}
       >
-        <ProjectMobileMenu
+        <ProjectDetailsMobileMenu
           showMobileMenu={showMobileMenu}
           fundButtonFunction={handleFundClick}
-          handleViewClick={handleViewClick}
-          viewName="Activity"
+          transitionButtonFunction={handleViewClick}
         />
+
         <VStack alignItems="center" width="100%" flex="1">
           <VStack
             spacing="20px"
