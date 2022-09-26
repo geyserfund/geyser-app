@@ -8,7 +8,8 @@ export * from './RewardItem';
 export * from './AddAmbassador';
 export * from './AddSponsor';
 export * from './SwipeLiveProject';
-export * from './ProjectMobileMenu';
+export * from './ProjectActivityActionsToolbar';
+export * from './ProjectDetailsMobileMenu';
 export * from './DisconnectAccounts';
 export * from './FileUpload';
 export * from './TitleWithProgressBar';
@@ -16,6 +17,7 @@ export * from './DonationInputWithSatoshi';
 export * from './CalendarButton';
 export * from './ProjectSectionBar';
 export * from './DeleteConfirmModal';
+export * from './TwitterConnect';
 
 export * from './projectDisplay/ProjectBalance';
 export * from './projectDisplay/ProfileProjectCard';

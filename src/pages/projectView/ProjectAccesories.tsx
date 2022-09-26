@@ -1,4 +1,13 @@
-import { Badge, Button, Grid, GridItem, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react';
+import {
+  Badge,
+  Button,
+  Grid,
+  GridItem,
+  HStack,
+  Text,
+  useMediaQuery,
+  VStack,
+} from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
@@ -13,46 +22,47 @@ import { EntryCard } from './components/EntryCard';
 import { MilestoneComponent } from './components/MilestoneComponent';
 
 const useStyles = createUseStyles({
-	navButton: {
-		background: 'none',
-	},
-
+  navButton: {
+    background: 'none',
+  },
 });
 
 interface IProjectAccesories {
-	project: IProject
-	setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
-	updateReward:TupdateReward
+  project: IProject;
+  setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
+  updateReward: TupdateReward;
 }
 
-export const ProjectAccesories = ({ project, setFundState, updateReward }: IProjectAccesories) => {
-	const classes = useStyles();
-	const isMobile = isMobileMode();
-	const history = useHistory();
+export const ProjectAccesories = ({
+  project,
+  setFundState,
+  updateReward,
+}: IProjectAccesories) => {
+  const classes = useStyles();
+  const isMobile = isMobileMode();
+  const history = useHistory();
 
-	const {user} = useAuthContext();
+  const { user } = useAuthContext();
 
-	const entriesRef = useRef<any>(null);
-	const rewardsRef = useRef<any>(null);
-	const milestonesRef = useRef<any>(null);
+  const entriesRef = useRef<any>(null);
+  const rewardsRef = useRef<any>(null);
+  const milestonesRef = useRef<any>(null);
 
-	const entriesLength = project.entries && project.entries.length;
-	const rewardsLength = project.rewards && project.rewards.length;
-	const milestoneLength = project.milestones && project.milestones.length;
+  const entriesLength = project.entries && project.entries.length;
+  const rewardsLength = project.rewards && project.rewards.length;
+  const milestoneLength = project.milestones && project.milestones.length;
 
-	const [isSmallerThan1265] = useMediaQuery('(min-width: 1265px)');
+  const [isSmallerThan1265] = useMediaQuery('(min-width: 1265px)');
 
-	const renderEntries = () => {
-		if (project.entries && project.entries.length > 0) {
-			return (
-				project.entries.map(entry => <EntryCard entry={entry} key={entry.id}/>)
-			);
-		}
+  const renderEntries = () => {
+    if (project.entries && project.entries.length > 0) {
+      return project.entries.map((entry) => (
+        <EntryCard entry={entry} key={entry.id} />
+      ));
+    }
 
-		return (
-			<Text>There are no any entries available </Text>
-		);
-	};
+    return <Text>There are no any entries available </Text>;
+  };
 
 	const renderRewards = () => {
 		if (project.rewards && project.rewards.length > 0) {
@@ -83,12 +93,12 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 			);
 		}
 
-		return (
-			<GridItem colSpan={isMobile ? 2 : 1}>
-				<Text>There are no any rewards available </Text>
-			</GridItem>
-		);
-	};
+    return (
+      <GridItem colSpan={isMobile ? 2 : 1}>
+        <Text>There are no any rewards available </Text>
+      </GridItem>
+    );
+  };
 
 	const renderMilestones = () => {
 		console.log('project mielstones', project.milestones);
@@ -105,32 +115,30 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 			);
 		}
 
-		return (
-			<Text>There are no any milestones available </Text>
-		);
-	};
+    return <Text>There are no any milestones available </Text>;
+  };
 
-	const handleEntriesClick = () => {
-		if (entriesRef) {
-			entriesRef.current?.scrollIntoView({behavior: 'smooth'});
-		}
-	};
+  const handleEntriesClick = () => {
+    if (entriesRef) {
+      entriesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-	const handleRewardsClick = () => {
-		if (rewardsRef) {
-			rewardsRef.current?.scrollIntoView({behavior: 'smooth'});
-		}
-	};
+  const handleRewardsClick = () => {
+    if (rewardsRef) {
+      rewardsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-	const handleMielstonesClick = () => {
-		if (milestonesRef) {
-			milestonesRef.current?.scrollIntoView({behavior: 'smooth'});
-		}
-	};
+  const handleMielstonesClick = () => {
+    if (milestonesRef) {
+      milestonesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-	const handleCreateNewEntry = () => [
-		history.push(`/projects/${project.name}/entry`),
-	];
+  const handleCreateNewEntry = () => [
+    history.push(`/projects/${project.name}/entry`),
+  ];
 
 	const isRewardBased = project.type === projectTypes.reward;
 	const hasMilestones = project.milestones && project.milestones.length > 0;

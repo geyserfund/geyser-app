@@ -4,13 +4,19 @@ import React from 'react';
 import { BiPencil } from 'react-icons/bi';
 import { IProjectReward } from '../../../interfaces';
 import { TRewards } from '../../../pages/creation/projectCreate/types';
-import { Card, ICard, IconButtonComponent, ImageWithReload, SatoshiAmount } from '../../ui';
+import {
+  Card,
+  ICard,
+  IconButtonComponent,
+  ImageWithReload,
+  SatoshiAmount,
+} from '../../ui';
 
 interface IRewardCard extends ICard {
-	reward: TRewards | IProjectReward,
-	isSatoshi: boolean,
-	handleEdit?: any,
-	handleRemove?: any,
+  reward: TRewards | IProjectReward;
+  isSatoshi: boolean;
+  handleEdit?: any;
+  handleRemove?: any;
 }
 
 export const RewardCard = ({reward, isSatoshi, handleEdit, handleRemove, ...rest}: IRewardCard) => {
@@ -46,30 +52,43 @@ export const RewardCard = ({reward, isSatoshi, handleEdit, handleRemove, ...rest
 						</VStack>
 					</HStack>
 
-					<HStack>
-						{handleEdit &&	<IconButtonComponent
-							aria-label="edit-reward"
-							size="sm"
-							icon={<BiPencil />}
-							onClick={handleEdit}
-						/>}
-						{handleRemove && <IconButtonComponent
-							aria-label="edit-reward"
-							size="sm"
-							icon={<CloseIcon />}
-							backgroundColor="red.100"
-							_hover={{backgroundColor: 'red.300'}}
-							onClick={handleRemove}
-						/>}
-					</HStack>
-				</HStack>
-				{reward.image && <Box>
-					<ImageWithReload borderRadius="4px" src={reward.image} width="335px" height="192px" objectFit="cover"/>
-				</Box>}
+          <HStack>
+            {handleEdit && (
+              <IconButtonComponent
+                aria-label="edit-reward"
+                size="sm"
+                icon={<BiPencil />}
+                onClick={handleEdit}
+              />
+            )}
+            {handleRemove && (
+              <IconButtonComponent
+                aria-label="edit-reward"
+                size="sm"
+                icon={<CloseIcon />}
+                backgroundColor="red.100"
+                _hover={{ backgroundColor: 'red.300' }}
+                onClick={handleRemove}
+              />
+            )}
+          </HStack>
+        </HStack>
+        {reward.image && (
+          <Box>
+            <ImageWithReload
+              borderRadius="4px"
+              src={reward.image}
+              width="335px"
+              height="192px"
+              objectFit="cover"
+            />
+          </Box>
+        )}
 
-				<Text width="100%" paddingX="5px">{reward.description}</Text>
-			</VStack>
-
-		</Card>
-	);
+        <Text width="100%" paddingX="5px">
+          {reward.description}
+        </Text>
+      </VStack>
+    </Card>
+  );
 };

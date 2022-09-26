@@ -1,24 +1,28 @@
 import { useMutation } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import {
-	Box,
-	HStack,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-	Text,
-	VStack,
+  Box,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { DonationInputWithSatoshi } from '../../../../components/molecules';
 import { ButtonComponent, TextBox } from '../../../../components/ui';
 import { colors } from '../../../../constants';
-import { MUTATION_CREATE_PROJECT_MILESTONE, MUTATION_DELETE_PROJECT_MILESTONE, MUTATION_UPDATE_PROJECT_MILESTONE } from '../../../../graphql/mutations';
+import {
+  MUTATION_CREATE_PROJECT_MILESTONE,
+  MUTATION_DELETE_PROJECT_MILESTONE,
+  MUTATION_UPDATE_PROJECT_MILESTONE,
+} from '../../../../graphql/mutations';
 import { useNotification } from '../../../../utils';
 import { TMilestone } from '../types';
 
@@ -42,48 +46,51 @@ export const defaultMilestone = {
 export const AddMilestones = ({isOpen, projectId, onClose, milestones: availableMilestones, onSubmit, isSatoshi, setIsSatoshi}:IAddMilestones) => {
 	const {toast} = useNotification();
 
-	const [_milestones, _setMilestones] = useState<TMilestone[]>(availableMilestones);
-	const milestones = useRef(_milestones);
-	const setMilestones = (value: TMilestone[]) => {
-		milestones.current = value;
-		_setMilestones(value);
-	};
+  const [_milestones, _setMilestones] =
+    useState<TMilestone[]>(availableMilestones);
+  const milestones = useRef(_milestones);
+  const setMilestones = (value: TMilestone[]) => {
+    milestones.current = value;
+    _setMilestones(value);
+  };
 
-	const [amountSatoshi, setAmountSatoshi] = useState(isSatoshi);
+  const [amountSatoshi, setAmountSatoshi] = useState(isSatoshi);
 
-	const handleAddMilestone = () => {
-		setMilestones([...milestones.current, defaultMilestone]);
-	};
+  const handleAddMilestone = () => {
+    setMilestones([...milestones.current, defaultMilestone]);
+  };
 
-	const handleAmountChange = (value: any, itemIndex: number) => {
-		const newMilestones = milestones.current.map((milestone, index) => {
-			if (index === itemIndex) {
-				return { ...milestone, amount: value};
-			}
+  const handleAmountChange = (value: any, itemIndex: number) => {
+    const newMilestones = milestones.current.map((milestone, index) => {
+      if (index === itemIndex) {
+        return { ...milestone, amount: value };
+      }
 
-			return milestone;
-		});
+      return milestone;
+    });
 
-		setMilestones(newMilestones);
-	};
+    setMilestones(newMilestones);
+  };
 
-	const handleTextChange = (event: any, itemIndex: number) => {
-		if (event) {
-			const newMilestones = milestones.current.map((milestone, index) => {
-				if (index === itemIndex) {
-					return { ...milestone, name: event.target.value};
-				}
+  const handleTextChange = (event: any, itemIndex: number) => {
+    if (event) {
+      const newMilestones = milestones.current.map((milestone, index) => {
+        if (index === itemIndex) {
+          return { ...milestone, name: event.target.value };
+        }
 
-				return milestone;
-			});
+        return milestone;
+      });
 
-			setMilestones(newMilestones);
-		}
-	};
+      setMilestones(newMilestones);
+    }
+  };
 
-	const handleConfirmMilestone = () => {
-		const filetMilestones = milestones.current.filter(milestone => milestone.amount > 0 && milestone.name);
-		setIsSatoshi(amountSatoshi);
+  const handleConfirmMilestone = () => {
+    const filetMilestones = milestones.current.filter(
+      (milestone) => milestone.amount > 0 && milestone.name,
+    );
+    setIsSatoshi(amountSatoshi);
 
 		try {
 			filetMilestones.map(async milestone => {
@@ -91,57 +98,47 @@ export const AddMilestones = ({isOpen, projectId, onClose, milestones: available
 					...milestone,
 					projectId,
 
-				};
-				if (milestone.id) {
-					await updateMilestone({variables: {input: {
-						projectMilestoneId: milestone.id,
-						name: milestone.name,
-						description: milestone.description,
-						amount: milestone.amount,
-					}}});
-				} else {
-					await createMilestone({variables: {input: createMilestoneInput}});
-				}
-			});
-		} catch (error) {
-			toast({
-				title: 'Something went wrong',
-				description: 'Please try again.',
-				status: 'error',
-			});
-		}
+    onSubmit(filetMilestones);
+    onClose();
+  };
 
-		onSubmit(filetMilestones);
-		onClose();
-	};
+  const handleRemoveMilestone = async (itemIndex: number) => {
+    const currentMilestone = milestones.current.find(
+      (milestone, index) => index === itemIndex,
+    );
+    const newMilestones = milestones.current.filter(
+      (milestone, index) => index !== itemIndex,
+    );
 
-	const handleRemoveMilestone = async (itemIndex: number) => {
-		const currentMilestone = milestones.current.find((milestone, index) => index === itemIndex);
-		const newMilestones = milestones.current.filter((milestone, index) => index !== itemIndex);
+    if (currentMilestone && currentMilestone.id) {
+      try {
+        await removeMilestone({
+          variables: { projectMilestoneId: currentMilestone.id },
+        });
+        setMilestones(newMilestones);
+      } catch (error) {
+        toast({
+          title: 'Something went wrong',
+          description: `${error}`,
+          status: 'error',
+        });
+      }
+    } else {
+      setMilestones(newMilestones);
+    }
+  };
 
-		if (currentMilestone && currentMilestone.id) {
-			try {
-				await removeMilestone({variables: {projectMilestoneId: currentMilestone.id}});
-				setMilestones(newMilestones);
-			} catch (error) {
-				toast({
-					title: 'Something went wrong',
-					description: `${error}`,
-					status: 'error',
-				});
-			}
-		} else {
-			setMilestones(newMilestones);
-		}
-	};
+  const [createMilestone, { loading: createMilestoneLoading }] = useMutation(
+    MUTATION_CREATE_PROJECT_MILESTONE,
+  );
 
-	const [createMilestone, {
-		loading: createMilestoneLoading,
-	}] = useMutation(MUTATION_CREATE_PROJECT_MILESTONE);
+  const [updateMilestone, { loading: updateMilestoneLoading }] = useMutation(
+    MUTATION_UPDATE_PROJECT_MILESTONE,
+  );
 
-	const [updateMilestone, {
-		loading: updateMilestoneLoading,
-	}] = useMutation(MUTATION_UPDATE_PROJECT_MILESTONE);
+  const [removeMilestone, { loading: removeMilestoneLoading }] = useMutation(
+    MUTATION_DELETE_PROJECT_MILESTONE,
+  );
 
 	const [removeMilestone, {
 		loading: removeMilestoneLoading,
@@ -208,4 +205,3 @@ export const AddMilestones = ({isOpen, projectId, onClose, milestones: available
 		</Modal>
 	);
 };
-

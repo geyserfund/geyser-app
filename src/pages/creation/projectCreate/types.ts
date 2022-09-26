@@ -1,11 +1,10 @@
-
 export type TProjectDetails = {
-	title: string
-	name: string
-	image: string
-	description: string
-	email: string
-}
+  title: string;
+  name: string;
+  image: string;
+  description: string;
+  email: string;
+};
 
 export type TMilestone = {
 	id?: number;
@@ -26,11 +25,11 @@ export type TRewards = {
 }
 
 export type TNodeInput = {
-	name: string;
-	isVoltage?: boolean;
-	hostname: string;
-	publicKey: string;
-	invoiceMacaroon: string;
-	tlsCert: string;
-	grpc: string;
-}
+  name: string;
+  isVoltage?: boolean;
+  hostname: string;
+  publicKey: string;
+  invoiceMacaroon: string;
+  tlsCert: string;
+  grpc: string;
+};

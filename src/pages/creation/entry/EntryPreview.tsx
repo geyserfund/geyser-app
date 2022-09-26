@@ -7,7 +7,10 @@ import { ButtonComponent, TextBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { useAuthContext } from '../../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
-import { MUTATION_PUBLISH_ENTRY, MUTATION_UPDATE_ENTRY } from '../../../graphql/mutations/entries';
+import {
+  MUTATION_PUBLISH_ENTRY,
+  MUTATION_UPDATE_ENTRY,
+} from '../../../graphql/mutations/entries';
 import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
 import { IEntryUpdateInput } from '../../../interfaces/entry';
 import { isMobileMode, useNotification } from '../../../utils';
@@ -18,22 +21,22 @@ import { TEntry } from './types';
 let isEdited = false;
 
 export const EntryPreview = () => {
-	const params = useParams<{ entryId: string, projectId: string }>();
+  const params = useParams<{ entryId: string; projectId: string }>();
 
 	const isMobile = isMobileMode();
 	const { toast } = useNotification();
 	const history = useHistory();
 	const {setNav} = useAuthContext();
 
-	const [isPublished, setIsPublished] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
 
-	const [entry, setEntry] = useState<TEntry>(defaultEntry);
-	const [getPost, { loading: loadingPosts, error, data: entryData }] = useLazyQuery(QUERY_GET_ENTRY);
-	const [updatePost, {
-		data: updateData, loading: updatePostLoading,
-	}] = useMutation(MUTATION_UPDATE_ENTRY);
+  const [entry, setEntry] = useState<TEntry>(defaultEntry);
+  const [getPost, { loading: loadingPosts, error, data: entryData }] =
+    useLazyQuery(QUERY_GET_ENTRY);
+  const [updatePost, { data: updateData, loading: updatePostLoading }] =
+    useMutation(MUTATION_UPDATE_ENTRY);
 
-	const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_ENTRY);
+  const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_ENTRY);
 
 	const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME,
 		{
@@ -47,86 +50,86 @@ export const EntryPreview = () => {
 		},
 	);
 
-	useEffect(() => {
-		if (params && params.entryId) {
-			getPost({ variables: { id: params.entryId } });
-		}
-	}, [params]);
+  useEffect(() => {
+    if (params && params.entryId) {
+      getPost({ variables: { id: params.entryId } });
+    }
+  }, [params]);
 
-	useEffect(() => {
-		if (entryData && entryData.entry) {
-			setEntry(entryData.entry);
-		}
-	}, [entryData]);
+  useEffect(() => {
+    if (entryData && entryData.entry) {
+      setEntry(entryData.entry);
+    }
+  }, [entryData]);
 
-	const handleUpdateEntry = async () => {
-		if (entry) {
-			const { image, title, description, content, id } = entry;
-			try {
-				const input: IEntryUpdateInput = {
-					entryId: id,
-					title,
-					description,
-					content,
-					image,
-				};
-				await updatePost({ variables: { input } });
-				isEdited = false;
-			} catch (error) {
-				toast({
-					title: 'Post update failed',
-					description: 'Please try again later',
-					status: 'error',
-				});
-			}
-		}
-	};
+  const handleUpdateEntry = async () => {
+    if (entry) {
+      const { image, title, description, content, id } = entry;
+      try {
+        const input: IEntryUpdateInput = {
+          entryId: id,
+          title,
+          description,
+          content,
+          image,
+        };
+        await updatePost({ variables: { input } });
+        isEdited = false;
+      } catch (error) {
+        toast({
+          title: 'Post update failed',
+          description: 'Please try again later',
+          status: 'error',
+        });
+      }
+    }
+  };
 
-	const onSave = () => {
-		if (entry) {
-			handleUpdateEntry();
-		}
-	};
+  const onSave = () => {
+    if (entry) {
+      handleUpdateEntry();
+    }
+  };
 
-	const onBack = () => {
-		history.push(`/projects/${params.projectId}/entry/${params.entryId}`);
-	};
+  const onBack = () => {
+    history.push(`/projects/${params.projectId}/entry/${params.entryId}`);
+  };
 
-	const handleInput = (event: any) => {
-		const { name, value } = event.target;
-		if (name) {
-			const newForm = { ...entry, [name]: value };
-			console.log('checking handleContent handleInput Data', newForm);
-			setEntry(newForm);
-			isEdited = true;
-		}
-	};
+  const handleInput = (event: any) => {
+    const { name, value } = event.target;
+    if (name) {
+      const newForm = { ...entry, [name]: value };
+      console.log('checking handleContent handleInput Data', newForm);
+      setEntry(newForm);
+      isEdited = true;
+    }
+  };
 
-	const handlePublish = async () => {
-		try {
-			if (isEdited) {
-				await handleUpdateEntry();
-			}
+  const handlePublish = async () => {
+    try {
+      if (isEdited) {
+        await handleUpdateEntry();
+      }
 
-			await publishPost({variables: {id: entry.id}});
-		} catch (error) {
-			toast({
-				title: 'Post publish failed',
-				description: 'Please try again later',
-				status: 'error',
-			});
-		}
+      await publishPost({ variables: { id: entry.id } });
+    } catch (error) {
+      toast({
+        title: 'Post publish failed',
+        description: 'Please try again later',
+        status: 'error',
+      });
+    }
 
-		setIsPublished(true);
-	};
+    setIsPublished(true);
+  };
 
-	const handleGotoPost = () => {
-		history.push(`/entry/${params.entryId}`);
-	};
+  const handleGotoPost = () => {
+    history.push(`/entry/${params.entryId}`);
+  };
 
-	if (loadingPosts || loading) {
-		return <Loader />;
-	}
+  if (loadingPosts || loading) {
+    return <Loader />;
+  }
 
 	return (
 		<>

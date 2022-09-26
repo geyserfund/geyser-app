@@ -1,11 +1,4 @@
-import {
-	Box,
-	Button,
-	HStack,
-	Image,
-	Text,
-	VStack,
-} from '@chakra-ui/react';
+import { Box, Button, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { IProject } from '../../interfaces';
@@ -17,67 +10,88 @@ import { AvatarElement } from './components/AvatarElement';
 import { colors, fundingStages, IFundingStages } from '../../constants';
 import { useAuthContext } from '../../context';
 
-export const DetailsCard = ({ project, setFundState }: { project: IProject, setFundState: React.Dispatch<React.SetStateAction<IFundingStages>> }) => {
-	const {user} = useAuthContext();
-	const owner = project.owners[0];
+export const DetailsCard = ({
+  project,
+  setFundState,
+}: {
+  project: IProject;
+  setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
+}) => {
+  const { user } = useAuthContext();
+  const owner = project.owners[0];
 
-	// const { projectDetails, projectUpdates } = projectData;
-	console.log(project);
+  // const { projectDetails, projectUpdates } = projectData;
+  console.log(project);
 
-	const renderMilestone = () => {
-		if (!project.milestones) {
-			return null;
-		}
+  const renderMilestone = () => {
+    if (!project.milestones) {
+      return null;
+    }
 
-		const currentMilestone = project.milestones.find(milestone => milestone.amount > project.balance);
+    const currentMilestone = project.milestones.find(
+      (milestone) => milestone.amount > project.balance,
+    );
 
-		if (!currentMilestone) {
-			return null;
-		}
+    if (!currentMilestone) {
+      return null;
+    }
 
-		return (
-			<VStack alignItems="flex-start">
-				<Text color="brand.neutral600">Next Milestone</Text>
-				<HStack>
-					<Text color="brand.neutral800">{`${currentMilestone?.name}: ${currentMilestone?.description} - `}</Text>
-					<SatoshiAmount>{currentMilestone.amount - project.balance}</SatoshiAmount>
-					<Text color="brand.neutral800"> to go.</Text>
-				</HStack>
-			</VStack>
-		);
-	};
+    return (
+      <VStack alignItems="flex-start">
+        <Text color="brand.neutral600">Next Milestone</Text>
+        <HStack>
+          <Text color="brand.neutral800">{`${currentMilestone?.name}: ${currentMilestone?.description} - `}</Text>
+          <SatoshiAmount>
+            {currentMilestone.amount - project.balance}
+          </SatoshiAmount>
+          <Text color="brand.neutral800"> to go.</Text>
+        </HStack>
+      </VStack>
+    );
+  };
 
-	const renderYourFunding = () => {
-		if (project.funders.length > 0) {
-			const currentFund = project.funders.find(funder => funder.user?.id === user.id);
-			console.log(currentFund);
+  const renderYourFunding = () => {
+    if (project.funders.length > 0) {
+      const currentFund = project.funders.find(
+        (funder) => funder.user?.id === user.id,
+      );
+      console.log(currentFund);
 
-			if (!currentFund) {
-				return null;
-			}
+      if (!currentFund) {
+        return null;
+      }
 
-			return (
-				<HStack>
-					<Text color="brand.primary800" fontWeight={500}>{'You contributed'}</Text>
-					<SatoshiAmount color="brand.primary800" fontWeight={500}>{currentFund.amountFunded}</SatoshiAmount>
-					<Text color="brand.primary800" fontWeight={500}>{' towards this project'}</Text>
-				</HStack>
-			);
-		}
+      return (
+        <HStack>
+          <Text color="brand.primary800" fontWeight={500}>
+            {'You contributed'}
+          </Text>
+          <SatoshiAmount color="brand.primary800" fontWeight={500}>
+            {currentFund.amountFunded}
+          </SatoshiAmount>
+          <Text color="brand.primary800" fontWeight={500}>
+            {' towards this project'}
+          </Text>
+        </HStack>
+      );
+    }
 
-		return null;
-	};
+    return null;
+  };
 
-	const renderContributorsCount = () => {
-		const contributorsCount = project.funders.length;
-		return (
-			<Text color="brand.primary800" fontWeight={500}>{contributorsCount} {contributorsCount === 1 ? 'contributor' : 'contributors'} |</Text>
-		);
-	};
+  const renderContributorsCount = () => {
+    const contributorsCount = project.funders.length;
+    return (
+      <Text color="brand.primary800" fontWeight={500}>
+        {contributorsCount}{' '}
+        {contributorsCount === 1 ? 'contributor' : 'contributors'} |
+      </Text>
+    );
+  };
 
-	const handleFundProject = () => {
-		setFundState(fundingStages.form);
-	};
+  const handleFundProject = () => {
+    setFundState(fundingStages.form);
+  };
 
 	return (
 		<Card padding="24px">

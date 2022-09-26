@@ -1,5 +1,12 @@
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
-import { Box, HStack, IconButton, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  HStack,
+  IconButton,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
@@ -55,10 +62,10 @@ interface IRewardItemProps {
 export const RewardItem = ({item, updateCount, count: initialCount, readOnly, onClick}: IRewardItemProps) => {
 	const classes = useStyles();
 
-	const {cost, name, backers, description, currency } = item;
+  const { cost, name, backers, description, currency } = item;
 
-	const [count, setCount] = useState(initialCount || 0);
-	const {isOpen: focus, onOpen: setFocus, onClose: setBlur} = useDisclosure();
+  const [count, setCount] = useState(initialCount || 0);
+  const { isOpen: focus, onOpen: setFocus, onClose: setBlur } = useDisclosure();
 
 	const handleAdd = () => {
 		const newCount = count + 1;
@@ -82,7 +89,7 @@ export const RewardItem = ({item, updateCount, count: initialCount, readOnly, on
 	// 	updateCount({id: item.id, count});
 	// }, [count]);
 
-	const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
+  const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
 
 	return (
 		<Box tabIndex={-1} onFocus={setFocus} onBlur={setBlur} className={classNames(classes.container, {[classes.focused]: focus })} onClick={onClick}>

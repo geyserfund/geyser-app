@@ -1,5 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+} from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { ButtonComponent } from '../ui';
 import { Logo } from './Logo';
@@ -17,68 +25,77 @@ import { customHistory } from '../../config';
 import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
-	userInfo: {
-		marginRight: '12px',
-		'&:hover': {
-			backgroundColor: 'white',
-		},
-	},
+  userInfo: {
+    marginRight: '12px',
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+  },
 });
 
 interface INavBar {
-	showBorder: boolean
-	skipRoutes?: string[]
+  showBorder: boolean;
+  skipRoutes?: string[];
 }
 
-const customTitleRoutes = ['/projects/:projectId', '/projects/:projectId/entry', '/entry/:entryId'];
+const customTitleRoutes = [
+  '/projects/:projectId',
+  '/projects/:projectId/entry',
+  '/entry/:entryId',
+];
 
 export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
-	const classes = useStyles();
-	const isMobile = isMobileMode();
-	const isMedium = isMediumScreen();
-	const isDark = isDarkMode();
+  const classes = useStyles();
+  const isMobile = isMobileMode();
+  const isMedium = isMediumScreen();
+  const isDark = isDarkMode();
 
 	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose, nav } = useContext(AuthContext);
 
-	const { pathname, state } = useLocation<{ loggedOut?: boolean, refresh?: boolean }>();
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	const history = useHistory();
+  const { pathname, state } = useLocation<{
+    loggedOut?: boolean;
+    refresh?: boolean;
+  }>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const history = useHistory();
 
-	useEffect(() => {
-		if (state && state.loggedOut) {
-			logout();
-			onOpen();
-			customHistory.replace(customHistory.location.pathname, {});
-		}
+  useEffect(() => {
+    if (state && state.loggedOut) {
+      logout();
+      onOpen();
+      customHistory.replace(customHistory.location.pathname, {});
+    }
 
-		if (state && state.refresh) {
-			getUser();
-			customHistory.replace(customHistory.location.pathname, {});
-		}
-	}, [state]);
+    if (state && state.refresh) {
+      getUser();
+      customHistory.replace(customHistory.location.pathname, {});
+    }
+  }, [state]);
 
-	const routeMatch = customTitleRoutes.map(route => useRouteMatch(route)).find(val => val?.isExact)?.isExact;
+  const routeMatch = customTitleRoutes
+    .map((route) => useRouteMatch(route))
+    .find((val) => val?.isExact)?.isExact;
 
-	const handleLaunch = () => {
-		history.push('/launch');
-	};
+  const handleLaunch = () => {
+    history.push('/launch');
+  };
 
-	const handleProfileClick = () => {
-		history.push(`/profile/${user.id}`);
-	};
+  const handleProfileClick = () => {
+    history.push(`/profile/${user.id}`);
+  };
 
-	if (skipRoutes) {
-		let skip = false;
-		skipRoutes.map((route: string) => {
-			const match = useRouteMatch(route);
-			if (match?.isExact) {
-				skip = true;
-			}
-		});
-		if (skip) {
-			return null;
-		}
-	}
+  if (skipRoutes) {
+    let skip = false;
+    skipRoutes.map((route: string) => {
+      const match = useRouteMatch(route);
+      if (match?.isExact) {
+        skip = true;
+      }
+    });
+    if (skip) {
+      return null;
+    }
+  }
 
 	const showLaunch = ['/projects/:projectId'];
 	const launchMatch = showLaunch.map(route => useRouteMatch(route)).find(val => val?.isExact)?.isExact;

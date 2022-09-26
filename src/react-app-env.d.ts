@@ -1,2 +1,2 @@
 /// <reference types="react-scripts" />
-declare module 'react-animated-cursor'
+declare module 'react-animated-cursor';

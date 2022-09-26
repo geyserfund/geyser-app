@@ -6,7 +6,7 @@ import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from '../project/Activity/Activity';
-import {DetailsContainer} from './DetailsContainer';
+import { DetailsContainer } from './DetailsContainer';
 import { useFundingFlow, useFundState } from '../../hooks';
 import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
@@ -18,8 +18,8 @@ export const ProjectView = () => {
 
 	const {setNav} = useAuthContext();
 
-	const [detailOpen, setDetailOpen] = useState(true);
-	const fundingFlow = useFundingFlow();
+  const [detailOpen, setDetailOpen] = useState(true);
+  const fundingFlow = useFundingFlow();
 
 	useEffect(() => {
 		try {
@@ -38,48 +38,46 @@ export const ProjectView = () => {
 		},
 	);
 
-	if (loading) {
-		return (
-			<Loader />
-		);
-	}
+  if (loading) {
+    return <Loader />;
+  }
 
-	if (error || !data || !data.project) {
-		return <NotFound />;
-	}
+  if (error || !data || !data.project) {
+    return <NotFound />;
+  }
 
-	const { project } = data;
+  const { project } = data;
 
-	return (
-		<Box
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
-			height="100%"
-		>
-			<Box
-				width="100%"
-				height="100%"
-				display="flex"
-				overflow="hidden"
-				position="relative"
-				bg="brand.bgGrey4"
-
-			>
-				<ProjectViewContainer {...{project, detailOpen, setDetailOpen, fundingFlow }}/>
-			</Box>
-		</Box>
-
-	);
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100%"
+    >
+      <Box
+        width="100%"
+        height="100%"
+        display="flex"
+        overflow="hidden"
+        position="relative"
+        bg="brand.bgGrey4"
+      >
+        <ProjectViewContainer
+          {...{ project, detailOpen, setDetailOpen, fundingFlow }}
+        />
+      </Box>
+    </Box>
+  );
 };
 
 interface IProjectViewContainer {
-	project: IProject
-	detailOpen: boolean
-	fundingFlow: any
-	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
-	resourceType?: string;
-	resourceId?: number;
+  project: IProject;
+  detailOpen: boolean;
+  fundingFlow: any;
+  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  resourceType?: string;
+  resourceId?: number;
 }
 
 const ProjectViewContainer = ({project, detailOpen, setDetailOpen, fundingFlow}: IProjectViewContainer) => {

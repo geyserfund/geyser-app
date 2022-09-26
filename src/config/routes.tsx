@@ -1,18 +1,14 @@
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import {
-	Switch,
-	Route,
-} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { NavBar } from '../components/nav';
-import { Home } from '../pages/home';
 import { Landing } from '../pages/landing';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
-import { LaunchIdea } from '../pages/launchIdea';
+import { Launch } from '../pages/launch';
 import { Profile } from '../pages/profile';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
@@ -20,7 +16,11 @@ import { LoadingPage } from '../pages/loading';
 import { Fade } from '@chakra-ui/react';
 import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit';
 import { EntryPreview } from '../pages/creation/entry/EntryPreview';
-import { MilestoneAndRewards, ProjectCreate, Wallet } from '../pages/creation/projectCreate';
+import {
+  MilestoneAndRewards,
+  ProjectCreate,
+  Wallet,
+} from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
 import { ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
@@ -30,35 +30,35 @@ import { ProjectDashboard } from '../pages/projectDashboard';
 export const customHistory = createBrowserHistory();
 
 export const Router = () => {
-	const { loading } = useAuthContext();
+  const { loading } = useAuthContext();
 
-	const [isAtTop, setIsAtTop] = useState(true);
-	const location = useLocation();
+  const [isAtTop, setIsAtTop] = useState(true);
+  const location = useLocation();
 
-	useEffect(() => {
-		const container = document.getElementById('geyser-landing-page');
-		if (container) {
-			container.addEventListener('scroll', (event: any) => {
-				if (event && event.target && event.target.scrollTop >= 30) {
-					setIsAtTop(false);
-				} else {
-					setIsAtTop(true);
-				}
-			});
-		}
+  useEffect(() => {
+    const container = document.getElementById('geyser-landing-page');
+    if (container) {
+      container.addEventListener('scroll', (event: any) => {
+        if (event && event.target && event.target.scrollTop >= 30) {
+          setIsAtTop(false);
+        } else {
+          setIsAtTop(true);
+        }
+      });
+    }
 
-		return () => {
-			if (container) {
-				container.removeEventListener('scroll', () => null);
-			}
-		};
-	}, []);
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', () => null);
+      }
+    };
+  }, []);
 
-	const showBorder = isAtTop && location.pathname === '/';
+  const showBorder = isAtTop && location.pathname === '/';
 
-	if (loading) {
-		return <LoadingPage />;
-	}
+  if (loading) {
+    return <LoadingPage />;
+  }
 
 	return (
 		<Fade in={true}>

@@ -3,10 +3,10 @@ import React from 'react';
 import { SatoshiAmount } from '../../../components/ui';
 
 interface IMilestoneComponent {
-	name: string;
-	description: string;
-	amount: number
-	checked?: boolean
+  name: string;
+  description: string;
+  amount: number;
+  checked?: boolean;
 }
 
 export const MilestoneComponent = ({name, description, amount, checked}: IMilestoneComponent) => (

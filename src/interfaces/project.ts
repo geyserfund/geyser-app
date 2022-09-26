@@ -2,7 +2,7 @@ import { IParticipant, IFunder, ISponsor, IGrantee } from './participant';
 import { IFundingTx } from './funding';
 import { IUser } from './user';
 
-export type IProjectType = 'reward' | 'grant' | 'donation'
+export type IProjectType = 'reward' | 'grant' | 'donation';
 
 export interface IProject {
     id: string;
@@ -46,52 +46,52 @@ export interface IProjectWallet {
 }
 
 export interface IProjectReward {
-    id: number;
-    cost: number;
-    currency: string;
-    name: string;
-    description: string;
-    backers: number;
-	image?: string
+  id: number;
+  cost: number;
+  currency: string;
+  name: string;
+  description: string;
+  backers: number;
+  image?: string;
 }
 
 export interface IProjectDetail {
-    problem: string;
-    idea: string;
-    blocks: IProjectBlock[];
-    ownerIntro: string;
-    images?: string[];
+  problem: string;
+  idea: string;
+  blocks: IProjectBlock[];
+  ownerIntro: string;
+  images?: string[];
 }
 
 export interface IProjectBlock {
-    key: string;
-    title: string;
-    body: string[];
-    tweet?: string;
-    images?: number[];
-    youtube?: string;
-    podcast?: string;
-    vimeo?: string;
-    link?: string[];
-    blockType: string;
+  key: string;
+  title: string;
+  body: string[];
+  tweet?: string;
+  images?: number[];
+  youtube?: string;
+  podcast?: string;
+  vimeo?: string;
+  link?: string[];
+  blockType: string;
 }
 
 export interface IProjectUpdate {
-    updateTitle: string;
-    date: number;
-    tweet?: string;
-    type: string;
-    bodyTitle?: string;
-    body?: string[];
-    images?: number[];
-    youtube?: string;
+  updateTitle: string;
+  date: number;
+  tweet?: string;
+  type: string;
+  bodyTitle?: string;
+  body?: string[];
+  images?: number[];
+  youtube?: string;
 }
 
 export interface IProjectMilestone {
-	id: number;
-	name: string;
-	description: string;
-	amount: number;
+  id: number;
+  name: string;
+  description: string;
+  amount: number;
 }
 
 export interface IProjectListEntryItem {
@@ -107,6 +107,6 @@ export interface IProjectListEntryItem {
 }
 
 export interface IRewardCount {
-    id: number;
-    count: number;
+  id: number;
+  count: number;
 }
