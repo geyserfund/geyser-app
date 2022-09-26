@@ -92,14 +92,15 @@ const ProjectViewContainer = ({
   fundingFlow,
 }: IProjectViewContainer) => {
   const fundForm = useFundState({ rewards: project.rewards });
-  const { setFundState } = fundingFlow;
+  const { setFundState, fundState } = fundingFlow;
   return (
     <>
       <DetailsContainer
-        project={project}
         {...{
+          project,
           detailOpen,
           setDetailOpen,
+          fundState,
           setFundState,
           updateReward: fundForm.updateReward,
         }}

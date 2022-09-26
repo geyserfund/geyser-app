@@ -53,6 +53,7 @@ interface IActivityProps {
   project: IProject;
   detailOpen: boolean;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  fundState: IFundingStages;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
   updateReward: TupdateReward;
 }
@@ -61,6 +62,7 @@ export const DetailsContainer = ({
   project,
   detailOpen,
   setDetailOpen,
+  fundState,
   setFundState,
   updateReward,
 }: IActivityProps) => {
@@ -137,6 +139,7 @@ export const DetailsContainer = ({
             <DetailsCard project={project} setFundState={setFundState} />
             <ProjectAccesories
               project={project}
+              fundState={fundState}
               setFundState={setFundState}
               updateReward={updateReward}
             />
