@@ -32,12 +32,20 @@ interface IActivityProps {
   fundForm: IFundFormState;
 }
 
-const Activity = ({ project, detailOpen, setDetailOpen, fundingFlow, fundForm, resourceType, resourceId }: IActivityProps) => {
-	const { user } = useContext(AuthContext);
+const Activity = ({
+  project,
+  detailOpen,
+  setDetailOpen,
+  fundingFlow,
+  fundForm,
+  resourceType,
+  resourceId,
+}: IActivityProps) => {
+  const { user } = useContext(AuthContext);
 
-	const {btcRate} = useBtcContext();
-	const { toast } = useNotification();
-	const isMobile = isMobileMode();
+  const { btcRate } = useBtcContext();
+  const { toast } = useNotification();
+  const isMobile = isMobileMode();
 
   // REquired for activity (recent and leaderboard) visibility
   const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);

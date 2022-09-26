@@ -37,11 +37,11 @@ export const colors = {
 
   gray2: '#F4F4F4',
 
-	primary100: '#B7FFF2',
-	primary400: '#6BE7CE',
-	primary500: '#10CAA8',
-	primary700: '#00866D',
-	primary800: '#006452',
+  primary100: '#B7FFF2',
+  primary400: '#6BE7CE',
+  primary500: '#10CAA8',
+  primary700: '#00866D',
+  primary800: '#006452',
 
   secondaryPink: '#FC257A',
 

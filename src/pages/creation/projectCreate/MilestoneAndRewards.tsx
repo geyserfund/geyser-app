@@ -99,20 +99,19 @@ export const MilestoneAndRewards = () => {
     MUTATION_UPDATE_PROJECT_REWARD,
   );
 
-	const [getProject, { loading, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
-		{
-			variables: { where: { name: params.projectId } },
-			onError() {
-				toast({
-					title: 'Error fetching project',
-					status: 'error',
-				});
-			},
-			onCompleted(data) {
-				console.log('checking data', data);
-				if (data.project.milestones && data.project.milestones.length > 0) {
-					setMilestones(data.project.milestones);
-				}
+  const [getProject, { loading, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
+    variables: { where: { name: params.projectId } },
+    onError() {
+      toast({
+        title: 'Error fetching project',
+        status: 'error',
+      });
+    },
+    onCompleted(data) {
+      console.log('checking data', data);
+      if (data.project.milestones && data.project.milestones.length > 0) {
+        setMilestones(data.project.milestones);
+      }
 
       if (data.project.rewards && data.project.rewards.length > 0) {
         setRewards(data.project.rewards);
@@ -146,11 +145,15 @@ export const MilestoneAndRewards = () => {
     }
   };
 
-	const handleNext = () => {
-		const updateProjectInput: any = {
-			projectId: data?.project?.id,
-			rewardCurrency: isSatoshi ? 'btc' : 'usd',
-			expiresAt: finalDate || undefined,
+  const handleNext = () => {
+    const updateProjectInput: any = {
+      projectId: data?.project?.id,
+      rewardCurrency: isSatoshi ? 'btc' : 'usd',
+      expiresAt: finalDate || undefined,
+    };
+    if (rewards.length > 0) {
+      updateProjectInput.type = 'reward';
+    }
 
     updateProject({ variables: { input: updateProjectInput } });
   };
@@ -159,27 +162,49 @@ export const MilestoneAndRewards = () => {
     history.push(`/launch/${params.projectId}`);
   };
 
-  const handleRemoveReward = async (id?: string) => {
+  const handleRemoveReward = async (id?: number) => {
     if (!id) {
       return;
     }
 
-	const handleRemoveReward = async (id?: number) => {
-		if (!id) {
-			return;
-		}
+    try {
+      const currentReward = rewards.find((reward) => reward.id === id);
+      await updateReward({
+        variables: {
+          input: {
+            projectRewardId: id,
+            deleted: true,
+            name: currentReward?.name,
+            cost: currentReward?.cost,
+          },
+        },
+      });
+      const newRewards = rewards.filter((reward) => reward.id !== id);
+      setRewards(newRewards);
+      onRewardDeleteClose();
+      toast({
+        title: 'Successfully removed!',
+        description: `Reward ${currentReward?.name} was successfully removed`,
+        status: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Failed to remove reward',
+        description: `${error}`,
+        status: 'error',
+      });
+    }
+  };
 
-  const triggerRewardRemoval = (id?: string) => {
+  const triggerRewardRemoval = (id?: number) => {
     const currentReward = rewards.find((reward) => reward.id === id);
     if (!currentReward) {
       return;
     }
 
-	const triggerRewardRemoval = (id?: number) => {
-		const currentReward = rewards.find(reward => reward.id === id);
-		if (!currentReward) {
-			return;
-		}
+    setSelectedReward(currentReward);
+    openRewardDelete();
+  };
 
   const handleDateChange = (value: Date) => {
     setSelectedButton('custom');
@@ -412,102 +437,28 @@ export const MilestoneAndRewards = () => {
           onSubmit={handleMilestoneSubmit}
           isSatoshi={isSatoshi}
           setIsSatoshi={setIsSatoshi}
+          projectId={data?.project?.id}
         />
       )}
 
-					</VStack>
-				</GridItem>
-				<GridItem colSpan={2} display="flex" justifyContent="center">
-					<VStack alignItems="flex-start" maxWidth="370px" spacing="10px" width="100%">
-						{milestones.length > 0
-							&& <>
-								<HStack justifyContent="space-between" width="100%">
-									<Text fontSize="18px" fontWeight={500}>
-										MILESTONES
-									</Text>
-									<IconButtonComponent aria-label="edit" onClick={openMilestone} ><EditIcon /></IconButtonComponent>
-								</HStack>
-
-								{
-									milestones.map((milestone, index) => (
-										<VStack
-											key={index}
-											width="100%"
-											border="1px solid"
-											borderColor={colors.gray300}
-											borderRadius="4px"
-											alignItems="flex-start"
-											padding="10px"
-										>
-											<Text>{milestone.name}</Text>
-											{
-												isSatoshi ? <SatoshiAmount>{milestone.amount}</SatoshiAmount>
-													: <Text>{`$ ${milestone.amount}`}</Text>
-											}
-
-										</VStack>
-									))
-								}
-							</>
-						}
-						{rewards.length > 0
-						&& <>
-							<HStack justifyContent="space-between" width="100%">
-								<Text fontSize="18px" fontWeight={500}>
-									Rewards
-								</Text>
-							</HStack>
-							<VStack width="100%">
-								{
-									rewards.map((reward, index) => (
-										<RewardCard
-											key="index"
-											width="100%"
-											reward={reward}
-											isSatoshi={isSatoshi}
-											handleEdit={() => {
-												setSelectedReward(reward);
-												openReward();
-											}}
-											handleRemove={() => triggerRewardRemoval(reward.id)}
-										/>
-
-									))
-								}
-							</VStack>
-
-						</>
-						}
-					</VStack>
-
-				</GridItem>
-			</Grid>
-			{isMilestoneOpen && <AddMilestones
-				isOpen={isMilestoneOpen}
-				onClose={onMilestoneClose}
-				milestones={milestones.length > 0 ? milestones : [defaultMilestone] }
-				onSubmit={handleMilestoneSubmit}
-				isSatoshi={isSatoshi}
-				setIsSatoshi={setIsSatoshi}
-				projectId={data?.project?.id}
-			/>}
-
-			{isRewardOpen && <AddRewards
-				isOpen={isRewardOpen}
-				onClose={onRewardClose}
-				rewards={selectedReward}
-				onSubmit={handleRewardUpdate}
-				isSatoshi={isSatoshi}
-				setIsSatoshi={setIsSatoshi}
-				projectId={data?.project?.id}
-			/>}
-			<DeleteConfirmModal
-				isOpen={isRewardDeleteOpen}
-				onClose={onRewardDeleteClose}
-				title={`Delete reward ${selectedReward?.name}`}
-				description={'Are you sure you want to remove the reward'}
-				confirm={() => handleRemoveReward(selectedReward?.id)}
-			/>
-		</Box>
-	);
+      {isRewardOpen && (
+        <AddRewards
+          isOpen={isRewardOpen}
+          onClose={onRewardClose}
+          rewards={selectedReward}
+          onSubmit={handleRewardUpdate}
+          isSatoshi={isSatoshi}
+          setIsSatoshi={setIsSatoshi}
+          projectId={data?.project?.id}
+        />
+      )}
+      <DeleteConfirmModal
+        isOpen={isRewardDeleteOpen}
+        onClose={onRewardDeleteClose}
+        title={`Delete reward ${selectedReward?.name}`}
+        description={'Are you sure you want to remove the reward'}
+        confirm={() => handleRemoveReward(selectedReward?.id)}
+      />
+    </Box>
+  );
 };

@@ -14,41 +14,41 @@ import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
 
 const defaultContext = {
-	isLoggedIn: false,
-	user: defaultUser,
-	loading: false,
-	error: undefined,
-	logout: () => { },
-	loginIsOpen: false,
-	loginOnOpen: () => { },
-	loginOnClose: () => { },
-	setIsLoggedIn: () => { },
-	getUser: () => { },
-	setUser: () => { },
-	nav: {title: '', path: ''},
-	setNav: () => {},
+  isLoggedIn: false,
+  user: defaultUser,
+  loading: false,
+  error: undefined,
+  logout: () => {},
+  loginIsOpen: false,
+  loginOnOpen: () => {},
+  loginOnClose: () => {},
+  setIsLoggedIn: () => {},
+  getUser: () => {},
+  setUser: () => {},
+  nav: { title: '', path: '' },
+  setNav: () => {},
 };
 
-export type Tnav ={
-	title: string;
-	path: string;
-	projectOwnerId?: number;
-}
+export type Tnav = {
+  title: string;
+  path: string;
+  projectOwnerId?: number;
+};
 
 interface IAuthContext {
-	isLoggedIn: boolean,
-	user: IUser,
-	loading: boolean,
-	error?: ApolloError,
-	logout: any
-	loginIsOpen: boolean
-	loginOnOpen: () => void
-	loginOnClose: () => void
-	setIsLoggedIn: Dispatch<SetStateAction<boolean>>,
-	getUser: any
-	setUser: any
-	nav: Tnav;
-	setNav: React.Dispatch<React.SetStateAction<Tnav>>;
+  isLoggedIn: boolean;
+  user: IUser;
+  loading: boolean;
+  error?: ApolloError;
+  logout: any;
+  loginIsOpen: boolean;
+  loginOnOpen: () => void;
+  loginOnClose: () => void;
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  getUser: any;
+  setUser: any;
+  nav: Tnav;
+  setNav: React.Dispatch<React.SetStateAction<Tnav>>;
 }
 
 export const AuthContext = createContext<IAuthContext>(defaultContext);
@@ -61,9 +61,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-	const [loading, setLoading] = useState(true);
-	const [initialLoad, setInitialLoad] = useState(false);
-	const [nav, setNav] = useState<Tnav>({title: '', path: ''});
+  const [loading, setLoading] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(false);
+  const [nav, setNav] = useState<Tnav>({ title: '', path: '' });
 
   const [user, setUser] = useState<IUser>(defaultUser);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -106,27 +106,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [loadingUser]);
 
-	return (
-		<AuthContext.Provider
-			value={{
-				user,
-				getUser,
-				setUser,
-				loading,
-				error,
-				isLoggedIn,
-				setIsLoggedIn,
-				logout,
-				loginIsOpen,
-				loginOnOpen,
-				loginOnClose,
-				nav,
-				setNav,
-			}}
-		>
-			{children}
-		</AuthContext.Provider>
-	);
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        getUser,
+        setUser,
+        loading,
+        error,
+        isLoggedIn,
+        setIsLoggedIn,
+        logout,
+        loginIsOpen,
+        loginOnOpen,
+        loginOnClose,
+        nav,
+        setNav,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuthContext = () => useContext(AuthContext);

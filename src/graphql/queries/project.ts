@@ -127,44 +127,44 @@ export const QUERY_PROJECT_BY_NAME = gql`
     grantees {
       id
     }
-	milestones {
-		id
-		name
-		description
-		amount
-	}
-	entries {
-		id
-		title
-		description
-		image
-		type
-    fundersCount
-    amountFunded
-    published
-		creator {
-			id
-			username
-			imageUrl
-		}
-	}
-	wallets {
-		id
-		name
-		connectionDetails {
-			... on LndConnectionDetailsPrivate {
-			  macaroon
-			  tlsCertificate
-			  hostname
-			  grpcPort
-			  lndNodeType
-			  pubkey
-			}
-			... on LndConnectionDetailsPublic {
-			  pubkey
-			}
-		}
-	}
+    milestones {
+      id
+      name
+      description
+      amount
+    }
+    entries {
+      id
+      title
+      description
+      image
+      type
+      fundersCount
+      amountFunded
+      published
+      creator {
+        id
+        username
+        imageUrl
+      }
+    }
+    wallets {
+      id
+      name
+      connectionDetails {
+        ... on LndConnectionDetailsPrivate {
+          macaroon
+          tlsCertificate
+          hostname
+          grpcPort
+          lndNodeType
+          pubkey
+        }
+        ... on LndConnectionDetailsPublic {
+          pubkey
+        }
+      }
+    }
   }
 `;
 

@@ -73,18 +73,21 @@ export const ProjectCreate = () => {
   });
   const [formError, setFormError] = useState<{ [key: string]: string }>({});
 
-	const [createProject, { loading: createLoading}] = useMutation(MUTATION_CREATE_PROJECT, {
-		onCompleted(data) {
-			history.push(`/launch/${data.createProject.name}/milestones`);
-		},
-		onError(error) {
-			toast({
-				title: 'project creation failed!',
-				description: `${error}`,
-				status: 'error',
-			});
-		},
-	});
+  const [createProject, { loading: createLoading }] = useMutation(
+    MUTATION_CREATE_PROJECT,
+    {
+      onCompleted(data) {
+        history.push(`/launch/${data.createProject.name}/milestones`);
+      },
+      onError(error) {
+        toast({
+          title: 'project creation failed!',
+          description: `${error}`,
+          status: 'error',
+        });
+      },
+    },
+  );
 
   const [updateProject, { loading: updateLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,
@@ -118,20 +121,21 @@ export const ProjectCreate = () => {
     },
   );
 
-	const [getProjectById, { loading, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
-		{
-			variables: { where: { name: params.projectId } },
-			onCompleted(data) {
-				setForm({
-					title: data.project.title,
-					name: data.project.name,
-					image: data.project.media[0],
-					description: data.project.description,
-					email: user.email || '',
-				});
-			},
-		},
-	);
+  const [getProjectById, { loading, data }] = useLazyQuery(
+    QUERY_PROJECT_BY_NAME,
+    {
+      variables: { where: { name: params.projectId } },
+      onCompleted(data) {
+        setForm({
+          title: data.project.title,
+          name: data.project.name,
+          image: data.project.media[0],
+          description: data.project.description,
+          email: user.email || '',
+        });
+      },
+    },
+  );
 
   useEffect(() => {
     getProjectById();
@@ -175,21 +179,25 @@ export const ProjectCreate = () => {
   const handleNext = () => {
     const isValid = validateForm();
 
-		const newForm = form;
-		newForm.email = user.email || form.email;
-		if (isValid) {
-			if (isEdit) {
-				updateProject({ variables: { input: {
-					projectId: data?.project?.id,
-					title: form.title,
-					image: form.image,
-					description: form.description,
-				} } });
-			} else {
-				createProject({ variables: { input: form } });
-			}
-		}
-	};
+    const newForm = form;
+    newForm.email = user.email || form.email;
+    if (isValid) {
+      if (isEdit) {
+        updateProject({
+          variables: {
+            input: {
+              projectId: data?.project?.id,
+              title: form.title,
+              image: form.image,
+              description: form.description,
+            },
+          },
+        });
+      } else {
+        createProject({ variables: { input: form } });
+      }
+    }
+  };
 
   const validateForm = () => {
     const errors: any = {};

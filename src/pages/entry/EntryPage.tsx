@@ -18,7 +18,7 @@ export const EntryPage = () => {
   const { state } = useLocation<{ loggedOut?: boolean }>();
   const history = useHistory();
 
-	const {setNav} = useAuthContext();
+  const { setNav } = useAuthContext();
 
   const [detailOpen, setDetailOpen] = useState(true);
   const fundingFlow = useFundingFlow();
@@ -30,13 +30,15 @@ export const EntryPage = () => {
     }
   }, [entryId]);
 
-	const [getProject, { loading, error: projectError, data: projectData }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
-		{
-			onCompleted(data) {
-				setNav({title: data.project.title, path: `/projects/${data.project.name}`});
-			},
-		},
-	);
+  const [getProject, { loading, error: projectError, data: projectData }] =
+    useLazyQuery(QUERY_PROJECT_BY_NAME, {
+      onCompleted(data) {
+        setNav({
+          title: data.project.title,
+          path: `/projects/${data.project.name}`,
+        });
+      },
+    });
 
   const [getEntry, { loading: loadingPosts, error, data: entryData }] =
     useLazyQuery(QUERY_GET_ENTRY, {

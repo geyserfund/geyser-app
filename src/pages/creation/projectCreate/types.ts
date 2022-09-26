@@ -7,22 +7,22 @@ export type TProjectDetails = {
 };
 
 export type TMilestone = {
-	id?: number;
-	name: string;
-	projectId?: number;
-	description: string;
-	amount: number
-}
+  id?: number;
+  name: string;
+  projectId?: number;
+  description: string;
+  amount: number;
+};
 
 export type TRewards = {
-	id?: number;
-	name: string;
-	description: string;
-	projectId?: number;
-	cost: number;
-	image?: string;
-	backers?: number;
-}
+  id?: number;
+  name: string;
+  description: string;
+  projectId?: number;
+  cost: number;
+  image?: string;
+  backers?: number;
+};
 
 export type TNodeInput = {
   name: string;

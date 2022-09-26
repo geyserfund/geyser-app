@@ -50,7 +50,8 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
   const isMedium = isMediumScreen();
   const isDark = isDarkMode();
 
-	const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose, nav } = useContext(AuthContext);
+  const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose, nav } =
+    useContext(AuthContext);
 
   const { pathname, state } = useLocation<{
     loggedOut?: boolean;
@@ -97,73 +98,93 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
     }
   }
 
-	const showLaunch = ['/projects/:projectId'];
-	const launchMatch = showLaunch.map(route => useRouteMatch(route)).find(val => val?.isExact)?.isExact;
+  const showLaunch = ['/projects/:projectId'];
+  const launchMatch = showLaunch
+    .map((route) => useRouteMatch(route))
+    .find((val) => val?.isExact)?.isExact;
 
-	return (
-		<>
-			<Box
-				display="flex"
-				width="100%"
-				justifyContent="center"
-				background={isDark ? 'brand.bgHeavyDarkMode' : 'rgba(252,252,252,0.9)'}
-				borderBottom={showBorder ? '1px solid rgba(0,0,0,0)' : '1px solid rgba(233,233,233,0.9)'}
-				boxSizing="border-box"
-				position="fixed"
-				backdropFilter="blur(2px)"
-				top={0}
-				left={0}
-				zIndex={1000}
-			>
-
-				<Box
-					display="flex"
-					width="100%"
-					justifyContent="space-between"
-					margin={isMobile ? '9.5px 10px' : '9.5px 40px'}
-				>
-					<HStack
-						spacing="25px"
-						justifyContent="center"
-						alignItems="center">
-						<Logo mr={isMobile ? 0 : 5} />
-					</HStack>
-					{
-						isMobile
-							? <>
-								{
-									user.id
-										? <ButtonComponent
-											className={classes.userInfo}
-											leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl ? user.imageUrl : getRandomOrb(user.id)} />}
-											standard
-											onClick={handleProfileClick}
-											border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
-										>
-											{user.username}
-										</ButtonComponent>
-										: <ButtonComponent
-											standard
-											circular
-											marginRight="12px"
-											onClick={loginOnOpen}
-										>
-										Connect
-										</ButtonComponent>
-								}
-								<NavMenu user={user} logout={logout} />
-							</>
-							: <>
-								{
-									routeMatch
-									&& <Box display="flex" alignItems="center">
-										<Link to={nav.path}>
-											<Text fontSize="18px" fontWeight={600} color="brand.neutral900">{nav.title}</Text>
-										</Link>
-									</Box>
-								}
-								<Box>
-									{/* {
+  return (
+    <>
+      <Box
+        display="flex"
+        width="100%"
+        justifyContent="center"
+        background={isDark ? 'brand.bgHeavyDarkMode' : 'rgba(252,252,252,0.9)'}
+        borderBottom={
+          showBorder
+            ? '1px solid rgba(0,0,0,0)'
+            : '1px solid rgba(233,233,233,0.9)'
+        }
+        boxSizing="border-box"
+        position="fixed"
+        backdropFilter="blur(2px)"
+        top={0}
+        left={0}
+        zIndex={1000}
+      >
+        <Box
+          display="flex"
+          width="100%"
+          justifyContent="space-between"
+          margin={isMobile ? '9.5px 10px' : '9.5px 40px'}
+        >
+          <HStack spacing="25px" justifyContent="center" alignItems="center">
+            <Logo mr={isMobile ? 0 : 5} />
+          </HStack>
+          {isMobile ? (
+            <>
+              {user.id ? (
+                <ButtonComponent
+                  className={classes.userInfo}
+                  leftIcon={
+                    <Avatar
+                      left="-20px"
+                      size="sm"
+                      name={user.username}
+                      src={
+                        user.imageUrl ? user.imageUrl : getRandomOrb(user.id)
+                      }
+                    />
+                  }
+                  standard
+                  onClick={handleProfileClick}
+                  border={
+                    history.location.pathname === `/profile/${user.id}`
+                      ? '3px solid #20ECC7'
+                      : '3px solid rgba(0, 0, 0, 0)'
+                  }
+                >
+                  {user.username}
+                </ButtonComponent>
+              ) : (
+                <ButtonComponent
+                  standard
+                  circular
+                  marginRight="12px"
+                  onClick={loginOnOpen}
+                >
+                  Connect
+                </ButtonComponent>
+              )}
+              <NavMenu user={user} logout={logout} />
+            </>
+          ) : (
+            <>
+              {routeMatch && (
+                <Box display="flex" alignItems="center">
+                  <Link to={nav.path}>
+                    <Text
+                      fontSize="18px"
+                      fontWeight={600}
+                      color="brand.neutral900"
+                    >
+                      {nav.title}
+                    </Text>
+                  </Link>
+                </Box>
+              )}
+              <Box>
+                {/* {
 										!['/', '/home', '/index', '/launch'].includes(history.location.pathname) && <ButtonComponent
 											leftIcon={<AddIcon />}
 											primary
@@ -173,59 +194,89 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
 										Launch
 										</ButtonComponent>
 									} */}
-									{ launchMatch && nav?.projectOwnerId && nav.projectOwnerId === user.id
-									&& <ButtonComponent marginRight="12px" backgroundColor="brand.primary100" onClick={() => history.push(`${customHistory.location.pathname}/dashboard`)}>
-										Dashboard
-									</ButtonComponent>}
-									{
-										user.id
-											? <ButtonComponent
-												border={history.location.pathname === `/profile/${user.id}` ? '3px solid #20ECC7' : '3px solid rgba(0, 0, 0, 0)'}
-												className={classes.userInfo}
-												leftIcon={<Avatar left="-20px" size="sm" name={user.username} src={user.imageUrl} />}
-												standard
-												onClick={handleProfileClick}
-											>
-												{user.username}
-											</ButtonComponent>
-											: <ButtonComponent
-												marginRight="12px"
-												onClick={loginOnOpen}
-											>
-												Connect
-											</ButtonComponent>
-									}
-									<NavMenu user={user} logout={logout} />
-								</Box>
-							</>
-					}
-				</Box>
-			</Box>
-			<Modal isOpen={isOpen} onClose={onClose}>
-				<ModalOverlay />
-				<ModalContent display="flex" alignItems="center" padding="20px 15px">
-					<ModalHeader><Text fontSize="16px" fontWeight="normal">You have been logged out</Text></ModalHeader>
-					<ModalCloseButton />
-					<ModalBody >
-						<Text>
-							Please log back in with your profile, or press continue if you want to stay anonymous.
-						</Text>
-						<Box display="flex" justifyContent="space-between" paddingTop="20px">
-							<ButtonComponent width="50%" mx={1} primary onClick={loginOnOpen}>
-								Log In
-							</ButtonComponent>
-							<ButtonComponent width="50%" mx={1} onClick={onClose}>
-								Continue
-							</ButtonComponent>
-						</Box>
-					</ModalBody>
-				</ModalContent>
-			</Modal>
-			<AuthModal isOpen={loginIsOpen} onClose={() => {
-				loginOnClose();
-				onClose();
-			}
-			}/>
-		</>
-	);
+                {launchMatch &&
+                  nav?.projectOwnerId &&
+                  nav.projectOwnerId === user.id && (
+                    <ButtonComponent
+                      marginRight="12px"
+                      backgroundColor="brand.primary100"
+                      onClick={() =>
+                        history.push(
+                          `${customHistory.location.pathname}/dashboard`,
+                        )
+                      }
+                    >
+                      Dashboard
+                    </ButtonComponent>
+                  )}
+                {user.id ? (
+                  <ButtonComponent
+                    border={
+                      history.location.pathname === `/profile/${user.id}`
+                        ? '3px solid #20ECC7'
+                        : '3px solid rgba(0, 0, 0, 0)'
+                    }
+                    className={classes.userInfo}
+                    leftIcon={
+                      <Avatar
+                        left="-20px"
+                        size="sm"
+                        name={user.username}
+                        src={user.imageUrl}
+                      />
+                    }
+                    standard
+                    onClick={handleProfileClick}
+                  >
+                    {user.username}
+                  </ButtonComponent>
+                ) : (
+                  <ButtonComponent marginRight="12px" onClick={loginOnOpen}>
+                    Connect
+                  </ButtonComponent>
+                )}
+                <NavMenu user={user} logout={logout} />
+              </Box>
+            </>
+          )}
+        </Box>
+      </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent display="flex" alignItems="center" padding="20px 15px">
+          <ModalHeader>
+            <Text fontSize="16px" fontWeight="normal">
+              You have been logged out
+            </Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Please log back in with your profile, or press continue if you
+              want to stay anonymous.
+            </Text>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              paddingTop="20px"
+            >
+              <ButtonComponent width="50%" mx={1} primary onClick={loginOnOpen}>
+                Log In
+              </ButtonComponent>
+              <ButtonComponent width="50%" mx={1} onClick={onClose}>
+                Continue
+              </ButtonComponent>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <AuthModal
+        isOpen={loginIsOpen}
+        onClose={() => {
+          loginOnClose();
+          onClose();
+        }}
+      />
+    </>
+  );
 };

@@ -23,10 +23,10 @@ let isEdited = false;
 export const EntryPreview = () => {
   const params = useParams<{ entryId: string; projectId: string }>();
 
-	const isMobile = isMobileMode();
-	const { toast } = useNotification();
-	const history = useHistory();
-	const {setNav} = useAuthContext();
+  const isMobile = isMobileMode();
+  const { toast } = useNotification();
+  const history = useHistory();
+  const { setNav } = useAuthContext();
 
   const [isPublished, setIsPublished] = useState(false);
 
@@ -38,17 +38,18 @@ export const EntryPreview = () => {
 
   const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_ENTRY);
 
-	const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME,
-		{
-			variables: { where: { name: params.projectId } },
-			onCompleted(data) {
-				setNav({title: data.project.title, path: `/projects/${data.project.name}`});
-			},
-			onError() {
-				history.push('/404');
-			},
-		},
-	);
+  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
+    variables: { where: { name: params.projectId } },
+    onCompleted(data) {
+      setNav({
+        title: data.project.title,
+        path: `/projects/${data.project.name}`,
+      });
+    },
+    onError() {
+      history.push('/404');
+    },
+  });
 
   useEffect(() => {
     if (params && params.entryId) {
@@ -131,93 +132,119 @@ export const EntryPreview = () => {
     return <Loader />;
   }
 
-	return (
-		<>
-			<CreateNav isSaving={updatePostLoading} saveText={updatePostLoading ? 'Saving...' : 'Saved'} onSave={onSave} onBack={onBack} />
-			<VStack
-				background={'brand.bgGrey4'}
-				position="relative"
-				paddingTop={isMobile ? '150px' : '130px'}
-				height="100%"
-				alignItems="center"
-				justifyContent="center"
-			>
-				<VStack
-					spacing="20px"
-					width="100%"
-					// height="100%"
-					maxWidth="400px"
-					padding={'0px 10px'}
-					display="flex"
-					flexDirection="column"
-					alignItems="flex-start"
-					paddingBottom="80px"
-				>
-					<Text fontSize="33px" fontWeight={600} color="brand.gray500">{isPublished ? 'Share entry' : 'Publish entry'}</Text>
-					{
-						isPublished && <VStack width="100%" alignItems="center">
-							<Box borderRadius="50%" backgroundColor="brand.primary" padding="10px">
-								<BsCheckLg />
-							</Box>
-							<Text>Your entry is live!</Text>
-						</VStack>
-					}
-					<VStack alignItems="flex-start">
-						<Text color="brand.gray500">Edit Social Preview </Text>
-						{entry.image && <Box height="220px" width="350px" overflow="hidden">
-							<Image src={entry.image} height="350px" width="350px" objectFit="cover" />
-						</Box>}
-						<Text fontSize="11px" color="brand.gray500">{`geyser.fund/${projectData?.project?.name}`}</Text>
-						<Input
-							border="none"
-							_focus={{ border: 'none' }}
-							placeholder="Title"
-							color="brand.gray500"
-							fontSize="28px"
-							fontWeight={700}
-							marginTop="20px"
-							paddingX="0"
-							name="title"
-							value={entry.title}
-							onChange={handleInput}
-							disabled={isPublished}
-						/>
-						<Input
-							border="none"
-							_focus={{ border: 'none' }}
-							placeholder="Title"
-							color="brand.gray500"
-							fontSize="16px"
-							fontWeight={700}
-							marginTop="0px"
-							paddingX="0"
-							name="description"
-							value={entry.description}
-							onChange={handleInput}
-							disabled={isPublished}
-						/>
-					</VStack>
-					{!isPublished && <VStack alignItems="flex-start" width="100%">
-						<Text>Linked project</Text>
-						<Text>Where should Satoshi donations go to?</Text>
-						<TextBox
-							isDisabled
-							value={`${projectData.project.name}@geyser.fund`}
-						/>
-					</VStack>}
-					{isPublished
-						? <VStack width="100%">
-							<ButtonComponent isFullWidth onClick={handlePublish}>Share on Twitter</ButtonComponent>
-							<ButtonComponent primary isFullWidth onClick={handleGotoPost}>Go to Post</ButtonComponent>
-						</VStack>
-						: <ButtonComponent primary isFullWidth onClick={handlePublish}>
-							Publish
-						</ButtonComponent>
-					}
-
-				</VStack>
-			</VStack >
-
-		</>
-	);
+  return (
+    <>
+      <CreateNav
+        isSaving={updatePostLoading}
+        saveText={updatePostLoading ? 'Saving...' : 'Saved'}
+        onSave={onSave}
+        onBack={onBack}
+      />
+      <VStack
+        background={'brand.bgGrey4'}
+        position="relative"
+        paddingTop={isMobile ? '150px' : '130px'}
+        height="100%"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <VStack
+          spacing="20px"
+          width="100%"
+          // height="100%"
+          maxWidth="400px"
+          padding={'0px 10px'}
+          display="flex"
+          flexDirection="column"
+          alignItems="flex-start"
+          paddingBottom="80px"
+        >
+          <Text fontSize="33px" fontWeight={600} color="brand.gray500">
+            {isPublished ? 'Share entry' : 'Publish entry'}
+          </Text>
+          {isPublished && (
+            <VStack width="100%" alignItems="center">
+              <Box
+                borderRadius="50%"
+                backgroundColor="brand.primary"
+                padding="10px"
+              >
+                <BsCheckLg />
+              </Box>
+              <Text>Your entry is live!</Text>
+            </VStack>
+          )}
+          <VStack alignItems="flex-start">
+            <Text color="brand.gray500">Edit Social Preview </Text>
+            {entry.image && (
+              <Box height="220px" width="350px" overflow="hidden">
+                <Image
+                  src={entry.image}
+                  height="350px"
+                  width="350px"
+                  objectFit="cover"
+                />
+              </Box>
+            )}
+            <Text
+              fontSize="11px"
+              color="brand.gray500"
+            >{`geyser.fund/${projectData?.project?.name}`}</Text>
+            <Input
+              border="none"
+              _focus={{ border: 'none' }}
+              placeholder="Title"
+              color="brand.gray500"
+              fontSize="28px"
+              fontWeight={700}
+              marginTop="20px"
+              paddingX="0"
+              name="title"
+              value={entry.title}
+              onChange={handleInput}
+              disabled={isPublished}
+            />
+            <Input
+              border="none"
+              _focus={{ border: 'none' }}
+              placeholder="Title"
+              color="brand.gray500"
+              fontSize="16px"
+              fontWeight={700}
+              marginTop="0px"
+              paddingX="0"
+              name="description"
+              value={entry.description}
+              onChange={handleInput}
+              disabled={isPublished}
+            />
+          </VStack>
+          {!isPublished && (
+            <VStack alignItems="flex-start" width="100%">
+              <Text>Linked project</Text>
+              <Text>Where should Satoshi donations go to?</Text>
+              <TextBox
+                isDisabled
+                value={`${projectData.project.name}@geyser.fund`}
+              />
+            </VStack>
+          )}
+          {isPublished ? (
+            <VStack width="100%">
+              <ButtonComponent isFullWidth onClick={handlePublish}>
+                Share on Twitter
+              </ButtonComponent>
+              <ButtonComponent primary isFullWidth onClick={handleGotoPost}>
+                Go to Post
+              </ButtonComponent>
+            </VStack>
+          ) : (
+            <ButtonComponent primary isFullWidth onClick={handlePublish}>
+              Publish
+            </ButtonComponent>
+          )}
+        </VStack>
+      </VStack>
+    </>
+  );
 };

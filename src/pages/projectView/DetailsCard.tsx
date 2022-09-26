@@ -93,41 +93,54 @@ export const DetailsCard = ({
     setFundState(fundingStages.form);
   };
 
-	return (
-		<Card padding="24px">
-			<VStack alignItems="flex-start" width="100%" spacing="18px">
-				<Box maxH="210px" width="100%" overflow="hidden">
-					<Image width="100%" height="100%" src={project.media[0]}/>
-				</Box>
-				<VStack width="100%" spacing={0} alignItems="flex-start">
-					<HStack justifyContent="space-between" width="100%">
-						<Text fontSize="30px" fontWeight={700}>{project.title}</Text>
-						<HStack>
-							<Text fontSize="12px" color="brand.primary800">RUNNING</Text>
-							<BsFillCheckCircleFill color={colors.primary800}/>
-						</HStack>
-					</HStack>
-					<LighteningQR project={project}/>
-				</VStack>
-				<HStack>
-					<Text color="brand.neutral600">Creator</Text>
-					<Link to={`/profile/${owner.user.id}`}>
-						<AvatarElement user={owner.user} />
-					</Link>
-				</HStack>
-				<VStack alignItems="flex-start">
-					<Text color="brand.neutral600" textAlign="left">Objective</Text>
-					<Text color="brand.neutral800">{project.description}</Text>
-				</VStack>
-				{renderMilestone()}
-				{ project.funders.length > 0
-					&& <HStack width="100%" justifyContent="center">
-						{renderContributorsCount()}
-						{renderYourFunding()}
-					</HStack>
-				}
-				<Button isFullWidth backgroundColor="brand.primary" leftIcon={<BoltIcon />} onClick={handleFundProject}>Fund this project</Button>
-			</VStack>
-		</Card>
-	);
+  return (
+    <Card padding="24px">
+      <VStack alignItems="flex-start" width="100%" spacing="18px">
+        <Box maxH="210px" width="100%" overflow="hidden">
+          <Image width="100%" height="100%" src={project.media[0]} />
+        </Box>
+        <VStack width="100%" spacing={0} alignItems="flex-start">
+          <HStack justifyContent="space-between" width="100%">
+            <Text fontSize="30px" fontWeight={700}>
+              {project.title}
+            </Text>
+            <HStack>
+              <Text fontSize="12px" color="brand.primary800">
+                RUNNING
+              </Text>
+              <BsFillCheckCircleFill color={colors.primary800} />
+            </HStack>
+          </HStack>
+          <LighteningQR project={project} />
+        </VStack>
+        <HStack>
+          <Text color="brand.neutral600">Creator</Text>
+          <Link to={`/profile/${owner.user.id}`}>
+            <AvatarElement user={owner.user} />
+          </Link>
+        </HStack>
+        <VStack alignItems="flex-start">
+          <Text color="brand.neutral600" textAlign="left">
+            Objective
+          </Text>
+          <Text color="brand.neutral800">{project.description}</Text>
+        </VStack>
+        {renderMilestone()}
+        {project.funders.length > 0 && (
+          <HStack width="100%" justifyContent="center">
+            {renderContributorsCount()}
+            {renderYourFunding()}
+          </HStack>
+        )}
+        <Button
+          isFullWidth
+          backgroundColor="brand.primary"
+          leftIcon={<BoltIcon />}
+          onClick={handleFundProject}
+        >
+          Fund this project
+        </Button>
+      </VStack>
+    </Card>
+  );
 };

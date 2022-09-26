@@ -41,25 +41,32 @@ import { useNotification } from '../../../../utils';
 import { TRewards } from '../types';
 
 interface IAddRewards {
-	isOpen: boolean;
-	onClose: () => void;
-	onSubmit: (rewards: TRewards) => void
-	rewards?: TRewards;
-	isSatoshi: boolean;
-	setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>
-	projectId?: number;
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (rewards: TRewards) => void;
+  rewards?: TRewards;
+  isSatoshi: boolean;
+  setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
+  projectId?: number;
 }
 
 export const defaultReward = {
-	name: '',
-	projectId: 0,
-	description: '',
-	cost: 0,
-	image: '',
+  name: '',
+  projectId: 0,
+  description: '',
+  cost: 0,
+  image: '',
 };
 
-export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit, projectId, isSatoshi}:IAddRewards) => {
-	const {toast} = useNotification();
+export const AddRewards = ({
+  isOpen,
+  onClose,
+  rewards: availableReward,
+  onSubmit,
+  projectId,
+  isSatoshi,
+}: IAddRewards) => {
+  const { toast } = useNotification();
 
   const [_rewards, _setRewards] = useState<TRewards>(
     availableReward || defaultReward,
@@ -138,19 +145,23 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
       return;
     }
 
-		if (rewards.current.id) {
-			const updateRewardsInput = {
-				projectRewardId: rewards.current.id,
-				name: rewards.current.name,
-				description: rewards.current.description,
-				cost: rewards.current.cost,
-				image: rewards.current.image,
-			};
-			updateReward({variables: {input: updateRewardsInput}});
-		} else {
-			const createRewardsInput = {
-				...rewards.current,
-				projectId,
+    if (rewards.current.id) {
+      const updateRewardsInput = {
+        projectRewardId: rewards.current.id,
+        name: rewards.current.name,
+        description: rewards.current.description,
+        cost: rewards.current.cost,
+        image: rewards.current.image,
+      };
+      updateReward({ variables: { input: updateRewardsInput } });
+    } else {
+      const createRewardsInput = {
+        ...rewards.current,
+        projectId,
+      };
+      createReward({ variables: { input: createRewardsInput } });
+    }
+  };
 
   const handleUpload = (url: string) => {
     setRewards({ ...rewards.current, image: `${GeyserAssetDomainUrl}${url}` });
@@ -216,32 +227,15 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
               />
             </VStack>
 
-	return (
-		<Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
-			<ModalOverlay />
-			<ModalContent display="flex" alignItems="flex-start" padding="20px 0px" >
-				<ModalHeader paddingX="20px"><Text fontSize="18px" fontWeight={600}>Add a Reward</Text></ModalHeader>
-				<ModalCloseButton />
-				<ModalBody width="100%" >
-					<VStack
-						width="100%"
-						paddingBottom="20px"
-						marginBottom="20px"
-						maxHeight="600px" overflowY="auto"
-						alignItems="flex-start"
-						spacing="10px"
-						paddingX="2px"
-					>
-						<VStack width="100%" alignItems="flex-start">
-							<Text>Name</Text>
-							<TextBox
-								placeholder ={'T - Shirt ...'}
-								value={rewards.current.name}
-								name="name"
-								onChange={handleTextChange}
-								error={formError.name}
-							/>
-						</VStack>
+            <VStack width="100%" alignItems="flex-start">
+              <Text>Description</Text>
+              <TextArea
+                placeholder={' ...'}
+                value={rewards.current.description}
+                name="description"
+                onChange={handleTextChange}
+              />
+            </VStack>
 
             <VStack width="100%" alignItems="flex-start">
               <FileUpload onUploadComplete={handleUpload}>

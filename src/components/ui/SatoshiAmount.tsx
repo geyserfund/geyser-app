@@ -33,11 +33,13 @@ export const SatoshiAmount = ({
     return 0.8;
   };
 
-	return (
-		<HStack spacing="2px" alignItems="center" className={wrapperClassName}>
-			{label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
-			{ !loading &&	<SatoshiIconTilted color={rest.color} scale={getScale() } />}
-			<Text fontSize={fontSize} {...rest}>{`${numberWithCommas(`${children}`)} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
-		</HStack>
-	);
+  return (
+    <HStack spacing="2px" alignItems="center" className={wrapperClassName}>
+      {label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
+      {!loading && <SatoshiIconTilted color={rest.color} scale={getScale()} />}
+      <Text fontSize={fontSize} {...rest}>{`${numberWithCommas(
+        `${children}`,
+      )} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
+    </HStack>
+  );
 };

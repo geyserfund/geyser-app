@@ -112,24 +112,30 @@ export const EntryContainer = ({
               setShowMobileMenu(true);
             }
 
-					setScrollPosition(scrollDiv.current.scrollTop);
-				}
-			}}>
-				<ProjectMobileMenu showMobileMenu={showMobileMenu} fundButtonFunction={handleFundClick} handleViewClick={handleViewClick} viewName="Activity" />
-				<VStack alignItems="center" width="100%" flex="1">
-					<VStack
-						spacing="20px"
-						alignItems="left"
-						marginTop={isMobile ? '0px' : '20px'}
-						maxWidth="1000px"
-						w="100%"
-						padding={isMobile ? '20px 10px 50px 10px' : '0px 40px 70px 40px'}
-					>
-						<EntryDetails entry={entry}/>
-					</VStack >
-				</VStack >
-				<Footer />
-			</Box>
-		</Box>
-	);
+            setScrollPosition(scrollDiv.current.scrollTop);
+          }
+        }}
+      >
+        <ProjectDetailsMobileMenu
+          showMobileMenu={showMobileMenu}
+          fundButtonFunction={handleFundClick}
+          transitionButtonFunction={handleViewClick}
+        />
+
+        <VStack alignItems="center" width="100%" flex="1">
+          <VStack
+            spacing="20px"
+            alignItems="left"
+            marginTop={isMobile ? '0px' : '20px'}
+            maxWidth="1000px"
+            w="100%"
+            padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
+          >
+            <EntryDetails entry={entry} />
+          </VStack>
+        </VStack>
+        <Footer />
+      </Box>
+    </Box>
+  );
 };

@@ -76,23 +76,26 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
       delete newRewards[id];
     }
 
-		let rewardsCost = 0;
-		if (rewards) {
-			Object.keys(newRewards).map((key:string) => {
-				const id = parseInt(key, 10);
-				const reward = rewards.find((reward: IProjectReward) => reward.id === id || `${reward.id}` === key);
-				console.log('checking this', reward, rewards, key);
-				if (reward && reward.id) {
-					rewardsCost += reward.cost * newRewards[key];
-				}
-			});
-		}
+    let rewardsCost = 0;
+    if (rewards) {
+      Object.keys(newRewards).map((key: string) => {
+        const id = parseInt(key, 10);
+        const reward = rewards.find(
+          (reward: IProjectReward) =>
+            reward.id === id || `${reward.id}` === key,
+        );
+        console.log('checking this', reward, rewards, key);
+        if (reward && reward.id) {
+          rewardsCost += reward.cost * newRewards[key];
+        }
+      });
+    }
 
-		console.log('chekcing update reward', rewardsCost);
+    console.log('chekcing update reward', rewardsCost);
 
-		const newState = {...state, rewards: newRewards, rewardsCost };
-		_setState(newState);
-	};
+    const newState = { ...state, rewards: newRewards, rewardsCost };
+    _setState(newState);
+  };
 
   const resetForm = () => {
     _setState(intialState);

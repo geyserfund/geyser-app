@@ -12,31 +12,36 @@ import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
 
 export const ProjectView = () => {
-	const { projectId } = useParams<{ projectId: string }>();
-	const { state } = useLocation<{ loggedOut?: boolean }>();
-	const history = useHistory();
+  const { projectId } = useParams<{ projectId: string }>();
+  const { state } = useLocation<{ loggedOut?: boolean }>();
+  const history = useHistory();
 
-	const {setNav} = useAuthContext();
+  const { setNav } = useAuthContext();
 
   const [detailOpen, setDetailOpen] = useState(true);
   const fundingFlow = useFundingFlow();
 
-	useEffect(() => {
-		try {
-			getProject();
-		} catch (_) {
-			history.push('/not-found');
-		}
-	}, [state]);
+  useEffect(() => {
+    try {
+      getProject();
+    } catch (_) {
+      history.push('/not-found');
+    }
+  }, [state]);
 
-	const [getProject, { loading, error, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
-		{
-			variables: { where: { name: projectId } },
-			onCompleted(data) {
-				setNav({title: data.project.title, path: `/projects/${data.project.name}`, projectOwnerId: data.project.owners[0].user.id});
-			},
-		},
-	);
+  const [getProject, { loading, error, data }] = useLazyQuery(
+    QUERY_PROJECT_BY_NAME,
+    {
+      variables: { where: { name: projectId } },
+      onCompleted(data) {
+        setNav({
+          title: data.project.title,
+          path: `/projects/${data.project.name}`,
+          projectOwnerId: data.project.owners[0].user.id,
+        });
+      },
+    },
+  );
 
   if (loading) {
     return <Loader />;
@@ -80,13 +85,29 @@ interface IProjectViewContainer {
   resourceId?: number;
 }
 
-const ProjectViewContainer = ({project, detailOpen, setDetailOpen, fundingFlow}: IProjectViewContainer) => {
-	const fundForm = useFundState({rewards: project.rewards});
-	const { setFundState } = fundingFlow;
-	return (
-		<>
-			<DetailsContainer project={project} {...{detailOpen, setDetailOpen, setFundState, updateReward: fundForm.updateReward }}/>
-			<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow, fundForm }}/>
-		</>
-	);
+const ProjectViewContainer = ({
+  project,
+  detailOpen,
+  setDetailOpen,
+  fundingFlow,
+}: IProjectViewContainer) => {
+  const fundForm = useFundState({ rewards: project.rewards });
+  const { setFundState } = fundingFlow;
+  return (
+    <>
+      <DetailsContainer
+        project={project}
+        {...{
+          detailOpen,
+          setDetailOpen,
+          setFundState,
+          updateReward: fundForm.updateReward,
+        }}
+      />
+      <Activity
+        project={project}
+        {...{ detailOpen, setDetailOpen, fundingFlow, fundForm }}
+      />
+    </>
+  );
 };

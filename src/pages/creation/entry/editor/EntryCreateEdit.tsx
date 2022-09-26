@@ -54,11 +54,11 @@ export const defaultEntry = {
 };
 
 export const EntryCreateEdit = () => {
-	const isMobile = isMobileMode();
-	const { toast } = useNotification();
-	const history = useHistory();
-	const params = useParams<{ entryId: string, projectId: string; }>();
-	const {setNav} = useAuthContext();
+  const isMobile = isMobileMode();
+  const { toast } = useNotification();
+  const history = useHistory();
+  const params = useParams<{ entryId: string; projectId: string }>();
+  const { setNav } = useAuthContext();
 
   const classes = useStyles();
 
@@ -80,17 +80,18 @@ export const EntryCreateEdit = () => {
   const [getPost, { loading: loadingPosts, error, data: entryData }] =
     useLazyQuery(QUERY_GET_ENTRY);
 
-	const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME,
-		{
-			variables: { where: { name: params.projectId } },
-			onCompleted(data) {
-				setNav({title: data.project.title, path: `/projects/${data.project.name}`});
-			},
-			onError() {
-				history.push('/404');
-			},
-		},
-	);
+  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
+    variables: { where: { name: params.projectId } },
+    onCompleted(data) {
+      setNav({
+        title: data.project.title,
+        path: `/projects/${data.project.name}`,
+      });
+    },
+    onError() {
+      history.push('/404');
+    },
+  });
 
   useEffect(() => {
     if (params && params.entryId) {
