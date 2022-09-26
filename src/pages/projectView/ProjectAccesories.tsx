@@ -2,7 +2,7 @@ import { Badge, Button, Grid, GridItem, HStack, Text, useMediaQuery, VStack } fr
 import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
-import { ProjectSectionBar, RewardCard } from '../../components/molecules';
+import { ProjectSectionBar, RewardCard, RewardItem } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages, IFundingStages, projectTypes } from '../../constants';
 import { useAuthContext } from '../../context';
@@ -59,7 +59,7 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 			return (
 				project.rewards.map(reward => (
 					<GridItem key={reward.id} colSpan={isSmallerThan1265 ? 1 : 2}>
-						<RewardCard
+						{/* <RewardCard
 							reward={reward}
 							onClick={() => {
 								updateReward({id: reward.id, count: 1});
@@ -69,6 +69,14 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 							minWidth="350px"
 							maxWidth="350px"
 							minHeight="155px"
+						/> */}
+						<RewardItem
+							onClick={() => {
+								updateReward({id: reward.id, count: 1});
+								setFundState(fundingStages.form);
+							}}
+							item={reward}
+							readOnly
 						/>
 					</GridItem>),
 				)

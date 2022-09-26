@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { IRewardCount, IProjectReward } from '../../interfaces';
-import { SatoshiAmount } from '../ui';
+import { ImageWithReload, SatoshiAmount } from '../ui';
 
 const useStyles = createUseStyles({
 	container: {
@@ -18,6 +18,7 @@ const useStyles = createUseStyles({
 		borderColor: colors.bgLightGrey,
 		borderRadius: '12px',
 		'&:hover': {
+			cursor: 'pointer',
 			borderColor: colors.gray300,
 			// BoxShadow: `0 0 0 1px ${colors.gray300}`,
 		},
@@ -45,11 +46,13 @@ const useStyles = createUseStyles({
 
 interface IRewardItemProps {
     item: IProjectReward
-	updateCount: (_:IRewardCount)=> void
+	updateCount?: (_:IRewardCount)=> void
 	count?: number
+	readOnly?: boolean
+	onClick?: any
 }
 
-export const RewardItem = ({item, updateCount, count: initialCount}: IRewardItemProps) => {
+export const RewardItem = ({item, updateCount, count: initialCount, readOnly, onClick}: IRewardItemProps) => {
 	const classes = useStyles();
 
 	const {cost, name, backers, description, currency } = item;
@@ -60,14 +63,18 @@ export const RewardItem = ({item, updateCount, count: initialCount}: IRewardItem
 	const handleAdd = () => {
 		const newCount = count + 1;
 		setCount(newCount);
-		updateCount({id: item.id, count: newCount});
+		if (updateCount) {
+			updateCount({id: item.id, count: newCount});
+		}
 	};
 
 	const handleRemove = () => {
 		if (count > 0) {
 			const newCount = count - 1;
 			setCount(newCount);
-			updateCount({id: item.id, count: newCount});
+			if (updateCount) {
+				updateCount({id: item.id, count: newCount});
+			}
 		}
 	};
 
@@ -78,7 +85,7 @@ export const RewardItem = ({item, updateCount, count: initialCount}: IRewardItem
 	const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
 
 	return (
-		<Box tabIndex={-1} onFocus={setFocus} onBlur={setBlur} className={classNames(classes.container, {[classes.focused]: focus })} >
+		<Box tabIndex={-1} onFocus={setFocus} onBlur={setBlur} className={classNames(classes.container, {[classes.focused]: focus })} onClick={onClick}>
 			<HStack className={classes.upperContainer} >
 				<VStack spacing={0}>
 					{ currency === 'usd'
@@ -91,7 +98,7 @@ export const RewardItem = ({item, updateCount, count: initialCount}: IRewardItem
 					<Text fontSize="14px">{name}</Text>
 					<Box className={classes.backer}>{ backers === 1 ? `${backers} backer` : `${backers} backers` }</Box>
 				</VStack>
-				<HStack>
+				{!readOnly && <HStack>
 					{count
 						&& <HStack spacing="2px">
 							<IconButton onFocus={setFocus} onBlur={setBlur} size="xs" className={classes.extraIcons} aria-label="add-reward" icon={<MinusIcon />} onClick={handleRemove} />
@@ -99,8 +106,11 @@ export const RewardItem = ({item, updateCount, count: initialCount}: IRewardItem
 						</HStack>
 					}
 					<IconButton onFocus={setFocus} onBlur={setBlur} backgroundColor={count ? colors.primary : undefined} aria-label="select-reward" icon={renderIcon} onClick={handleAdd} />
-				</HStack>
+				</HStack>}
 			</HStack>
+			{item.image && <Box>
+				<ImageWithReload borderRadius="4px" src={item.image} width="100%" height="192px" objectFit="cover"/>
+			</Box>}
 			<Text marginTop="5px">{description}</Text>
 
 		</Box>
