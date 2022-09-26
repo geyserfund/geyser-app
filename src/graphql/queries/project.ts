@@ -103,68 +103,6 @@ export const QUERY_PROJECT_BY_NAME = gql`
         }
       }
     }
-    sponsors {
-      id
-      confirmed
-      url
-      image
-      user {
-        id
-        username
-        imageUrl
-      }
-    }
-    funders {
-      id
-      user {
-        id
-        username
-        imageUrl
-      }
-      amountFunded
-      confirmed
-    }
-    grantees {
-      id
-    }
-    milestones {
-      id
-      name
-      description
-      amount
-    }
-    entries {
-      id
-      title
-      description
-      image
-      type
-      fundersCount
-      amountFunded
-      published
-      creator {
-        id
-        username
-        imageUrl
-      }
-    }
-    wallets {
-      id
-      name
-      connectionDetails {
-        ... on LndConnectionDetailsPrivate {
-          macaroon
-          tlsCertificate
-          hostname
-          grpcPort
-          lndNodeType
-          pubkey
-        }
-        ... on LndConnectionDetailsPublic {
-          pubkey
-        }
-      }
-    }
   }
 `;
 
