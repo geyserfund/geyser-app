@@ -108,8 +108,8 @@ export const DetailsCard = ({ project, setFundState }: { project: IProject, setF
 				{renderMilestone()}
 				{ project.funders.length > 0
 					&& <HStack width="100%" justifyContent="center">
-						<>{renderContributorsCount()}</>
-						<>{renderYourFunding()}</>
+						{renderContributorsCount()}
+						{renderYourFunding()}
 					</HStack>
 				}
 				<Button isFullWidth backgroundColor="brand.primary" leftIcon={<BoltIcon />} onClick={handleFundProject}>Fund this project</Button>

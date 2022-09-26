@@ -72,9 +72,9 @@ export const ProjectDashboard = () => {
 			case 'entries':
 				return <Entries project={project}/>;
 			case 'fundingSettings':
-				return <FundSettings />;
+				return <FundSettings project={project}/>;
 			case 'projectSettings':
-				return <ProjectSettings />;
+				return <ProjectSettings project={project}/>;
 			default:
 				return <Entries project={project}/>;
 		}
@@ -101,7 +101,6 @@ export const ProjectDashboard = () => {
 						spacing="30px"
 						width="100%"
 						minWidth="350px"
-						marginBottom="40px"
 						display="flex"
 						flexDirection="column"
 						alignItems="center"
@@ -123,9 +122,6 @@ export const ProjectDashboard = () => {
 								</Button>
 							</Box>
 						</Box>
-						<Box width="100%" flex="1">
-							{renderTabs()}
-						</Box>
 
 					</VStack>
 				</GridItem>
@@ -134,6 +130,15 @@ export const ProjectDashboard = () => {
 
 					</VStack>
 				</GridItem>
+			</Grid>
+			<Grid
+				width="100%"
+				templateColumns={isLargerThan1280 ? 'repeat(18, 1fr)' : isMobile ? 'repeat(6, 1fr)' : 'repeat(15, 1fr)' }
+				padding={isMobile ? '10px' : '40px 40px 20px 40px'}
+			>
+				<GridItem colSpan={isLargerThan1280 ? 5 : 2} display="flex" justifyContent="flex-start">
+				</GridItem>
+				{renderTabs()}
 			</Grid>
 
 		</Box>

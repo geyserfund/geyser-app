@@ -29,17 +29,17 @@ interface IAddMilestones {
 	milestones: TMilestone[]
 	isSatoshi: boolean;
 	setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>
+	projectId?: number;
 }
 
 export const defaultMilestone = {
 	name: '',
-	projectId: '',
+	projectId: 0,
 	description: '',
 	amount: 0,
 };
 
-export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones, onSubmit, isSatoshi, setIsSatoshi}:IAddMilestones) => {
-	const params = useParams<{projectId: string}>();
+export const AddMilestones = ({isOpen, projectId, onClose, milestones: availableMilestones, onSubmit, isSatoshi, setIsSatoshi}:IAddMilestones) => {
 	const {toast} = useNotification();
 
 	const [_milestones, _setMilestones] = useState<TMilestone[]>(availableMilestones);
@@ -89,7 +89,7 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 			filetMilestones.map(async milestone => {
 				const createMilestoneInput = {
 					...milestone,
-					projectId: params.projectId,
+					projectId,
 
 				};
 				if (milestone.id) {
@@ -151,7 +151,7 @@ export const AddMilestones = ({isOpen, onClose, milestones: availableMilestones,
 		<Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
 			<ModalOverlay />
 			<ModalContent display="flex" alignItems="flex-start" padding="20px 0px" >
-				<ModalHeader paddinX="20px"><Text fontSize="18px" fontWeight={600}>Select Milestones</Text></ModalHeader>
+				<ModalHeader paddingX="20px"><Text fontSize="18px" fontWeight={600}>Select Milestones</Text></ModalHeader>
 				<ModalCloseButton />
 				<ModalBody width="100%" >
 					<VStack

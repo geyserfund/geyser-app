@@ -29,6 +29,7 @@ module.exports = {
 		camelcase: 'warn',
 		'react/prop-types': 0,
 		'react/display-name': 0,
+		complexity: 0,
 		'no-restricted-syntax': [
 			'error',
 			{

@@ -35,18 +35,18 @@ interface IAddRewards {
 	rewards?: TRewards;
 	isSatoshi: boolean;
 	setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>
+	projectId?: number;
 }
 
 export const defaultReward = {
 	name: '',
-	projectId: '',
+	projectId: 0,
 	description: '',
 	cost: 0,
 	image: '',
 };
 
-export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit, isSatoshi, setIsSatoshi}:IAddRewards) => {
-	const params = useParams<{projectId: string}>();
+export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit, projectId, isSatoshi}:IAddRewards) => {
 	const {toast} = useNotification();
 
 	const [_rewards, _setRewards] = useState<TRewards>(availableReward || defaultReward);
@@ -134,7 +134,7 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 		} else {
 			const createRewardsInput = {
 				...rewards.current,
-				projectId: params.projectId,
+				projectId,
 
 			};
 			createReward({variables: {input: createRewardsInput}});
@@ -174,7 +174,7 @@ export const AddRewards = ({isOpen, onClose, rewards: availableReward, onSubmit,
 		<Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
 			<ModalOverlay />
 			<ModalContent display="flex" alignItems="flex-start" padding="20px 0px" >
-				<ModalHeader paddinX="20px"><Text fontSize="18px" fontWeight={600}>Add a Reward</Text></ModalHeader>
+				<ModalHeader paddingX="20px"><Text fontSize="18px" fontWeight={600}>Add a Reward</Text></ModalHeader>
 				<ModalCloseButton />
 				<ModalBody width="100%" >
 					<VStack

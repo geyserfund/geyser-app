@@ -83,15 +83,15 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 	};
 
 	const renderMilestones = () => {
+		console.log('project mielstones', project.milestones);
 		if (project.milestones && project.milestones.length > 0) {
-			console.log('project mielstones', project.milestones);
 			return (
 				project.milestones.map(milestone =>
 					<MilestoneComponent
 						key={milestone.id}
 						name={milestone.name}
 						description={milestone.description}
-						checked={milestone.amount >= project.balance}
+						checked={milestone.amount <= project.balance}
 						amount={milestone.amount - project.balance}
 					/>)
 			);
@@ -182,7 +182,7 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 			<VStack ref={milestonesRef} width="100%" alignItems="flex-start" spacing="10px">
 				<ProjectSectionBar name={'Milestones'} number={milestoneLength}/>
 				<VStack alignItems="flex-start">
-					{renderMilestones}
+					{renderMilestones()}
 				</VStack>
 			</VStack>
 
