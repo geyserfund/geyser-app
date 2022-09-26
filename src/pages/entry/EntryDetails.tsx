@@ -22,7 +22,7 @@ export const EntryDetails = ({entry}:{entry: TEntryData}) => {
 				</HStack>
 				<LikeHeart count={entry.fundersCount} />
 			</HStack>
-			<HStack width={'100%'} justifyContent="center" maxHeight="400px" overflow="hidden">
+			<HStack width={'100%'} justifyContent="center" maxHeight="400px" borderRadius="4px" overflow="hidden">
 				<Image width="100%" src={entry.image} />
 			</HStack>
 			<Text fontSize="18px" fontWeight={600}>{entry.description}</Text>

@@ -133,17 +133,20 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 	];
 
 	const isRewardBased = project.type === projectTypes.reward;
+	const hasMilestones = project.milestones && project.milestones.length > 0;
+	const hasEntries = project.entries && project.entries.length > 0;
+	const isOwner = user?.id && user.id === project.owners[0].user.id;
 
 	return (
 		<VStack w="100%" spacing="40px">
 			<HStack justifyContent="center" spacing="13px">
-				<Button
+				{hasEntries && <Button
 					className={classes.navButton}
 					rightIcon={ entriesLength ? <Badge>{entriesLength}</Badge> : undefined}
 					onClick={handleEntriesClick}
 				>
 					Entries
-				</Button>
+				</Button>}
 				{isRewardBased && <Button
 					className={classes.navButton}
 					rightIcon={ rewardsLength ? <Badge>{rewardsLength}</Badge> : undefined}
@@ -151,15 +154,15 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 				>
 					Rewards
 				</Button>}
-				<Button
+				{hasMilestones && <Button
 					className={classes.navButton}
 					rightIcon={ milestoneLength ? <Badge>{milestoneLength}</Badge> : undefined}
 					onClick={handleMielstonesClick}
 				>
 					Milestones
-				</Button>
+				</Button>}
 			</HStack>
-			<VStack
+			{(hasEntries || isOwner) && <VStack
 				ref={entriesRef}
 				width="100%"
 				alignItems="flex-start"
@@ -169,14 +172,14 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 					name={'Entries'}
 					number={entriesLength}
 					rightSection={
-						user?.id && user.id === project.owners[0].user.id
+						isOwner
 						&& <ButtonComponent primary onClick={handleCreateNewEntry}>
 							Create new entry
 						</ButtonComponent>
 					}
 				/>
 				{renderEntries()}
-			</VStack>
+			</VStack>}
 			{
 				isRewardBased
 					&& <VStack ref={rewardsRef} width="100%" alignItems="flex-start" spacing="20px">
@@ -187,12 +190,12 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 					</VStack>
 			}
 
-			<VStack ref={milestonesRef} width="100%" alignItems="flex-start" spacing="10px">
+			{hasMilestones && <VStack ref={milestonesRef} width="100%" alignItems="flex-start" spacing="10px">
 				<ProjectSectionBar name={'Milestones'} number={milestoneLength}/>
 				<VStack alignItems="flex-start">
 					{renderMilestones()}
 				</VStack>
-			</VStack>
+			</VStack>}
 
 		</VStack>
 	);
