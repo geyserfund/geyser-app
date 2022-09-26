@@ -42,7 +42,7 @@ export const RewardCard = ({reward, isSatoshi, handleEdit, handleRemove, ...rest
 						</VStack>
 						<VStack spacing="0px" alignItems="flex-start">
 							<Text fontWeight={500} color="brand.neutral900">{reward.name}</Text>
-							<Text fontSize="12px" backgroundColor="brand.neutral200" padding="2px 5px" borderRadius="4px"><b>2</b> collected</Text>
+							<Text fontSize="12px" backgroundColor="brand.neutral200" padding="2px 5px" borderRadius="4px"><b>{reward.backers || 0}</b> collected</Text>
 						</VStack>
 					</HStack>
 
