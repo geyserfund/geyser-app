@@ -42,7 +42,7 @@ export const LighteningQR = ({project}: ILighteningQR) => {
 				</Tooltip>
 
 				<Tooltip label="View Project QR Code" placement="top">
-					<IconButton _hover={{backgroundColor: 'none', border: '1px solid #20ECC7'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
+					<IconButton size="sm" _hover={{backgroundColor: 'none', border: '1px solid #20ECC7'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<QrIcon/>} aria-label="qr" onClick={() => {
 						setCopy(false);
 						onOpen();
 						if (imageDownload.length === 0) {
@@ -54,7 +54,7 @@ export const LighteningQR = ({project}: ILighteningQR) => {
 				</Tooltip>
 
 				<Tooltip label={copy ? 'Copied!' : 'Share Project'} placement="top" closeOnClick={false}>
-					<IconButton _hover={{backgroundColor: 'none', border: '1px solid #20ECC7'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<ShareIcon/>} aria-label="share" onClick={handleShare}/>
+					<IconButton size="sm" _hover={{backgroundColor: 'none', border: '1px solid #20ECC7'}} _active={{backgroundColor: 'brand.primary'}} bg="none" icon={<ShareIcon/>} aria-label="share" onClick={handleShare}/>
 				</Tooltip>
 			</HStack>
 			<QRModal
