@@ -2,7 +2,7 @@ version: "3.9"
 services:
 
   geyser-app:
-    container_name: geyser-app
+    container_name: geyser-app-standalone
     build:
       context: .
       target: base
@@ -11,7 +11,7 @@ services:
     image:  geyser-app
     env_file: .env
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
       - .:/usr/app:cached
 
@@ -29,7 +29,7 @@ services:
     command: graphql-faker <(rover graph fetch geyser-graph@development)
 
   caddy:
-    container_name: geyser-caddy
+    container_name: geyser-caddy-standalone
     image: caddy:2-alpine
     restart: unless-stopped
     ports:

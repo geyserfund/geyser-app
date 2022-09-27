@@ -40,6 +40,25 @@ REACT_APP_ENV=development
 REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
 ```
 
+### Configuring GraphQL-Faker
+
+**Note: when we open source, the schema introspection will be turned on in production and the `@current` schema will
+be available without authorization**
+
+1. Install Rover CLI
+
+See instruction to install the Rover CLI [here](https://www.apollographql.com/docs/rover/getting-started)
+
+2. Authenticate with Rover
+
+Configure the Rover CLI by running the following command and entering your `API key`:
+
+```
+rover config auth
+```
+
+[Contact us](email:admin@geyser.fund), if you don't have an `API key` yet.
+
 ## Running the App Locally
 
 ### Starting Docker
