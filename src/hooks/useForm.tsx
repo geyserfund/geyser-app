@@ -78,16 +78,20 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
 
     let rewardsCost = 0;
     if (rewards) {
-      Object.keys(newRewards).map((value: string) => {
-        const id = parseInt(value, 10);
+      Object.keys(newRewards).map((key: string) => {
+        const id = parseInt(key, 10);
         const reward = rewards.find(
-          (reward: IProjectReward) => reward.id === id,
+          (reward: IProjectReward) =>
+            reward.id === id || `${reward.id}` === key,
         );
+        console.log('checking this', reward, rewards, key);
         if (reward && reward.id) {
-          rewardsCost += reward.cost * newRewards[value];
+          rewardsCost += reward.cost * newRewards[key];
         }
       });
     }
+
+    console.log('chekcing update reward', rewardsCost);
 
     const newState = { ...state, rewards: newRewards, rewardsCost };
     _setState(newState);

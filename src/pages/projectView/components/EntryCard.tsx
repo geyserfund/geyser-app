@@ -1,19 +1,38 @@
-import { Badge, Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import {
+  Badge,
+  Box,
+  HStack,
+  IconButton,
+  Image,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import React from 'react';
-import { BsHeartFill } from 'react-icons/bs';
+import { BsPencil } from 'react-icons/bs';
 import { useHistory } from 'react-router';
 import { LikeHeart } from '../../../components/molecules';
 import { SatoshiAmount } from '../../../components/ui';
-import { colors } from '../../../constants';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { AvatarElement } from './AvatarElement';
 
-export const EntryCard = ({ entry }: { entry: IProjectListEntryItem }) => {
+interface IEntryCard {
+  entry: IProjectListEntryItem;
+  onEdit?: () => void;
+}
+
+export const EntryCard = ({ entry, onEdit }: IEntryCard) => {
   const isMobile = isMobileMode();
   const history = useHistory();
   const handleClick = () => {
     history.push(`/entry/${entry.id}`);
+  };
+
+  const handleEdit = (event: any) => {
+    event.stopPropagation();
+    if (onEdit) {
+      onEdit();
+    }
   };
 
   return (
@@ -25,9 +44,6 @@ export const EntryCard = ({ entry }: { entry: IProjectListEntryItem }) => {
       borderRadius="4px"
       _hover={{
         cursor: 'pointer',
-        boxShadow:
-          'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
-        transition: 'box-shadow 0.3s ease-in-out',
       }}
       onClick={handleClick}
     >
@@ -36,7 +52,12 @@ export const EntryCard = ({ entry }: { entry: IProjectListEntryItem }) => {
         maxWidth={isMobile ? '100%' : '200px'}
         overflow="hidden"
       >
-        <Image height="100%" width="100%" src={entry.image} />
+        <Image
+          borderRadius="4px"
+          height="100%"
+          width="100%"
+          src={entry.image}
+        />
       </Box>
       <VStack alignItems="flex-start" flex="1">
         <Text fontSize="30px" fontWeight={700} color="brand.neutral900">
@@ -52,7 +73,19 @@ export const EntryCard = ({ entry }: { entry: IProjectListEntryItem }) => {
         </HStack>
       </VStack>
       <VStack justifyContent="center" height="100%" paddingRight="10px">
-        <LikeHeart count={entry.fundersCount} />
+        {onEdit ? (
+          <Box
+            _hover={{ cursor: 'pointer', backgroundColor: 'brand.neutral200' }}
+            as="span"
+            borderRadius="50%"
+            padding="8px"
+            onClick={handleEdit}
+          >
+            <BsPencil />
+          </Box>
+        ) : (
+          <LikeHeart count={entry.fundersCount} />
+        )}
       </VStack>
     </HStack>
   );

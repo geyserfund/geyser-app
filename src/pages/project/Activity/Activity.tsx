@@ -19,9 +19,8 @@ import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage, InfoPageSkeleton } from './InfoPage';
 import { fundingStages } from '../../../constants';
-import { useFundState, IFundForm, IFundFormState } from '../../../hooks';
+import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
-import { useLocation } from 'react-router';
 
 interface IActivityProps {
   project: IProject;
@@ -38,19 +37,11 @@ const Activity = ({
   detailOpen,
   setDetailOpen,
   fundingFlow,
+  fundForm,
   resourceType,
   resourceId,
-  fundForm,
 }: IActivityProps) => {
   const { user } = useContext(AuthContext);
-
-  // const location = useLocation<any>();
-
-  // useEffect(() => {
-  // 	if(location.state && location.state.fund === true){
-  // 		setState()
-  // 	}
-  // }, [location]);
 
   const { btcRate } = useBtcContext();
   const { toast } = useNotification();

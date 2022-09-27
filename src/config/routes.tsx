@@ -24,6 +24,8 @@ import {
 import { PrivateRoute } from './PrivateRoute';
 import { ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
+import { NotAuthorized } from '../pages/notAuthorized';
+import { ProjectDashboard } from '../pages/projectDashboard';
 
 export const customHistory = createBrowserHistory();
 
@@ -80,11 +82,9 @@ export const Router = () => {
             <Route path="/grants">
               <GrantsLanding />
             </Route>
-            <Route path="/launch/start">
-              <PrivateRoute>
-                <ProjectCreate />
-              </PrivateRoute>
-            </Route>
+            {/* <Route path="/launch">
+							<LaunchIdea />
+						</Route> */}
             <Route path="/launch/:projectId/node">
               <PrivateRoute>
                 <Wallet />
@@ -101,7 +101,9 @@ export const Router = () => {
               </PrivateRoute>
             </Route>
             <Route path="/launch">
-              <Launch />
+              <PrivateRoute>
+                <ProjectCreate />
+              </PrivateRoute>
             </Route>
             <Route path="/profile/:userId">
               <Profile />
@@ -124,6 +126,11 @@ export const Router = () => {
                 <EntryCreateEdit />
               </PrivateRoute>
             </Route>
+            <Route path="/projects/:projectId/dashboard">
+              <PrivateRoute>
+                <ProjectDashboard />
+              </PrivateRoute>
+            </Route>
             <Route path="/projects/:projectId">
               <ProjectView />
             </Route>
@@ -132,6 +139,9 @@ export const Router = () => {
             </Route>
             <Route path="/not-found">
               <NotFound />
+            </Route>
+            <Route path="/not-authorized">
+              <NotAuthorized />
             </Route>
             <Route path="/">
               {/* <Home /> */}

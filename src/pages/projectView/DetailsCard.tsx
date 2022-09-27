@@ -128,8 +128,8 @@ export const DetailsCard = ({
         {renderMilestone()}
         {project.funders.length > 0 && (
           <HStack width="100%" justifyContent="center">
-            <>{renderContributorsCount()}</>
-            <>{renderYourFunding()}</>
+            {renderContributorsCount()}
+            {renderYourFunding()}
           </HStack>
         )}
         <Button

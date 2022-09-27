@@ -53,6 +53,7 @@ interface IActivityProps {
   project: IProject;
   detailOpen: boolean;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  fundState: IFundingStages;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
   updateReward: TupdateReward;
 }
@@ -61,6 +62,7 @@ export const DetailsContainer = ({
   project,
   detailOpen,
   setDetailOpen,
+  fundState,
   setFundState,
   updateReward,
 }: IActivityProps) => {
@@ -125,7 +127,6 @@ export const DetailsContainer = ({
           fundButtonFunction={handleFundClick}
           transitionButtonFunction={handleViewClick}
         />
-
         <VStack alignItems="center" width="100%" flex="1">
           <VStack
             spacing="20px"
@@ -133,11 +134,12 @@ export const DetailsContainer = ({
             marginTop={isMobile ? '0px' : '20px'}
             maxWidth="1000px"
             w="100%"
-            padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
+            padding={isMobile ? '20px 10px 50px 10px' : '0px 40px 70px 40px'}
           >
             <DetailsCard project={project} setFundState={setFundState} />
             <ProjectAccesories
               project={project}
+              fundState={fundState}
               setFundState={setFundState}
               updateReward={updateReward}
             />

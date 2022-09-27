@@ -67,7 +67,7 @@ export const RewardCard = ({
                 padding="2px 5px"
                 borderRadius="4px"
               >
-                <b>2</b> collected
+                <b>{reward.backers || 0}</b> collected
               </Text>
             </VStack>
           </HStack>

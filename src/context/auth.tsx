@@ -25,8 +25,14 @@ const defaultContext = {
   setIsLoggedIn: () => {},
   getUser: () => {},
   setUser: () => {},
-  navTitle: '',
-  setNavTitle: () => {},
+  nav: { title: '', path: '' },
+  setNav: () => {},
+};
+
+export type Tnav = {
+  title: string;
+  path: string;
+  projectOwnerId?: number;
 };
 
 interface IAuthContext {
@@ -41,8 +47,8 @@ interface IAuthContext {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
   getUser: any;
   setUser: any;
-  navTitle: string;
-  setNavTitle: any;
+  nav: Tnav;
+  setNav: React.Dispatch<React.SetStateAction<Tnav>>;
 }
 
 export const AuthContext = createContext<IAuthContext>(defaultContext);
@@ -57,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [loading, setLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(false);
-  const [navTitle, setNavTitle] = useState('');
+  const [nav, setNav] = useState<Tnav>({ title: '', path: '' });
 
   const [user, setUser] = useState<IUser>(defaultUser);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -114,8 +120,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loginIsOpen,
         loginOnOpen,
         loginOnClose,
-        navTitle,
-        setNavTitle,
+        nav,
+        setNav,
       }}
     >
       {children}
