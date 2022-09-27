@@ -3,7 +3,7 @@ import { Box, Flex, Text, Divider, Image } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { isMobileMode } from '../../utils';
-import { Footer } from '../../components/molecules';
+import { AppFooter } from '../../components/molecules';
 
 import { ActivityView, ProjectsList, TopBanner } from './components';
 import SatsFlow from '../../assets/sats-flow.svg';
@@ -78,7 +78,7 @@ export const Landing = () => {
       <Box display="flex" justifyContent="center" minWidth="305px">
         <Image src={SatsFlow} maxHeight="80px" />
       </Box>
-      <Footer />
+      <AppFooter />
     </Flex>
   );
 };

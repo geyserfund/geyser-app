@@ -10,7 +10,7 @@ import {
   Link,
   Skeleton,
 } from '@chakra-ui/react';
-import { Footer } from '../../components/molecules';
+import { AppFooter } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
 import { SatoshiIconTilted } from '../../components/icons';
 import { isMediumScreen, isMobileMode } from '../../utils';
@@ -379,7 +379,7 @@ export const Grants = ({ project }: { project: IProject }) => {
           <Subscribe style="inline" interest="grants" titleSize="3xl" />
         </VStack>
       </Box>
-      <Footer />
+      <AppFooter />
     </>
   );
 };

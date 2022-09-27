@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { Box, Text, Skeleton, Link, Image, VStack } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
-import { Footer } from '../../components/molecules';
+import { AppFooter } from '../../components/molecules';
 import { GrantCard } from './components/GrantCard';
 import { Board } from './components/Board';
 import { QUERY_GRANTS } from '../../graphql';
@@ -272,7 +272,7 @@ export const GrantsLanding = () => {
         </Box>
       </Box>
 
-      <Footer />
+      <AppFooter />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, HStack, Image, Text, VStack, Skeleton } from '@chakra-ui/react';
 import { SatoshiAmount } from '../../components/ui';
-import { Footer, SwipeLiveProject } from '../../components/molecules';
+import { AppFooter, SwipeLiveProject } from '../../components/molecules';
 import { isDarkMode, isMobileMode, useNotification } from '../../utils';
 import { colors } from '../../constants';
 import { createUseStyles } from 'react-jss';
@@ -245,7 +245,7 @@ export const Home = () => {
 					<ProjectBars loading={loading} projects={[...closedProjects]} />
 				</VStack> */}
       </VStack>
-      <Footer />
+      <AppFooter />
     </VStack>
   );
 };

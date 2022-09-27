@@ -2,7 +2,7 @@ export * from './IdComponent';
 export * from './IdBar';
 export * from './IdBarLeaderboard';
 export * from './AuthModal';
-export * from './Footer';
+export * from './AppFooter';
 export * from './DonationInput';
 export * from './RewardItem';
 export * from './AddAmbassador';

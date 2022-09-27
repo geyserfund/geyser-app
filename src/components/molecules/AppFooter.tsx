@@ -26,7 +26,7 @@ interface IFooter {
   wrapperClassName?: string;
 }
 
-export const Footer = ({ wrapperClassName }: IFooter) => {
+export const AppFooter = ({ wrapperClassName }: IFooter) => {
   const isMobile = isMobileMode();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,7 +37,7 @@ export const Footer = ({ wrapperClassName }: IFooter) => {
       bottom={0}
       className={wrapperClassName}
       width="100%"
-      backgroundColor="brand.bgGrey"
+      backgroundColor="brand.appFooter"
       alignItems="center"
       justifyContent="center"
       padding={isMobile ? '10px 10px' : '25px 32px'}
