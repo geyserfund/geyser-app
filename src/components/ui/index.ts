@@ -8,7 +8,7 @@ export * from './Fallback';
 export * from './ImageBar';
 export * from './CustomToggle';
 export * from './FundingStatus';
-export * from './ErrorBox';
+export * from './AlertBox';
 export * from './StatusBar';
 export * from './Linkin';
 export * from './TwitterComponent';

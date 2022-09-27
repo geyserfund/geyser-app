@@ -35,6 +35,6 @@ export const useAllProjectEntries = (options?: OptionsProps): Result => {
   return {
     isLoading,
     error,
-    data: entriesData.getEntries,
+    data: entriesData?.getEntries || [],
   };
 };

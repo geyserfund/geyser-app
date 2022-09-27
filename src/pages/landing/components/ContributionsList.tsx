@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ListItem, List } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
 
-import { isMobileMode, useNotification } from '../../../utils';
+import { isMobileMode } from '../../../utils';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
 import { IdBar } from '../../../components/molecules';
+import { AlertBox } from '../../../components/ui';
 
 type RuleNames = string;
 
@@ -21,15 +22,14 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
   }),
 });
 
-const Contribution = ({ contribution }: { contribution: any }) => {
-  console.log(contribution);
+const ContributionItem = ({ contribution }: { contribution: any }) => {
   const { sourceResource: project, ...fundingTx } = contribution;
+
   return <IdBar fundingTx={fundingTx} project={project} maxWidth="60%" />;
 };
 
 export const ContributionsList = () => {
   const classes = useStyles({ isMobile: isMobileMode() });
-  const { toast } = useNotification();
 
   const {
     loading: isLoading,
@@ -39,19 +39,15 @@ export const ContributionsList = () => {
 
   const contributions = (fundingTxsData && fundingTxsData.getFundingTxs) || [];
 
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: 'Could not load contributions',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    }
-  }, [error]);
-
   if (error) {
-    // return <ErrorState />;
-    return <p>Error</p>;
+    return (
+      <AlertBox
+        height="200px"
+        status="error"
+        title="An error occurred while attempting to fetch contributions."
+        message="Please try refreshing the page."
+      />
+    );
   }
 
   if (isLoading && !contributions) {
@@ -59,8 +55,15 @@ export const ContributionsList = () => {
   }
 
   if (contributions?.length === 0) {
-    // return <EmptyState />;
-    return <p>EmptyState</p>;
+    return (
+      <AlertBox
+        height="200px"
+        status="info"
+        colorScheme={'gray'}
+        title="No project contributions items could be found."
+        // message="Please try refreshing the page."
+      />
+    );
   }
 
   return (
@@ -70,7 +73,7 @@ export const ContributionsList = () => {
       <List spacing={3}>
         {contributions.map((contribution: any, index: number) => (
           <ListItem key={index}>
-            <Contribution contribution={contribution} />
+            <ContributionItem contribution={contribution} />
           </ListItem>
         ))}
       </List>

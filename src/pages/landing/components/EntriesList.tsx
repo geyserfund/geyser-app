@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ListItem, List } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 
-import { isMobileMode, useNotification } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { ProjectEntryCard } from '../../../components/molecules/projectDisplay/ProjectEntryCard';
 import { useAllProjectEntries } from '../../../hooks';
+import { AlertBox } from '../../../components/ui';
 
 type RuleNames = string;
 
@@ -22,29 +22,23 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 });
 
 export const EntriesList = () => {
-  const { toast } = useNotification();
-
   const {
     isLoading,
     error,
     data: entries,
   } = useAllProjectEntries({
-    usePreviewData: true,
+    // usePreviewData: true,
   });
 
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: 'Could not load entries',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    }
-  }, [error]);
-
   if (error) {
-    // return <ErrorState />;
-    return <p>Error</p>;
+    return (
+      <AlertBox
+        height="200px"
+        status="error"
+        title="An error occurred while attempting to fetch entries."
+        message="Please try refreshing the page."
+      />
+    );
   }
 
   if (isLoading && !entries) {
@@ -52,8 +46,15 @@ export const EntriesList = () => {
   }
 
   if (entries?.length === 0) {
-    // return <EmptyState />;
-    return <p>EmptyState</p>;
+    return (
+      <AlertBox
+        height="200px"
+        status="info"
+        colorScheme={'gray'}
+        title="No project entries items could be found."
+        // message="Please try refreshing the page."
+      />
+    );
   }
 
   return (
