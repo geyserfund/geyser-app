@@ -59,10 +59,10 @@ export const ProjectEntryCard = ({ entry, onClick }: Props) => {
         alignItems="flex-start"
         flexDirection={'column'}
         justifyContent="space-between"
-        height={'full'}
+        height="full"
         overflow="hidden"
       >
-        <VStack justify={'space-between'} align="start">
+        <VStack justify={'space-between'} align="start" height="full">
           <Heading
             as={'h2'}
             isTruncated={isMobile === false}

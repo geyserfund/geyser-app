@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Switch, Route } from 'react-router-dom';
 import { NavBar } from '../components/nav';
-import { Landing } from '../pages/landing';
+import { LandingPage } from '../pages/landing';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
@@ -135,7 +135,7 @@ export const Router = () => {
             </Route>
             <Route path="/">
               {/* <Home /> */}
-              <Landing />
+              <LandingPage />
             </Route>
           </Switch>
         </Box>

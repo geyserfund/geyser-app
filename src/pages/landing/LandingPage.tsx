@@ -4,7 +4,7 @@ import { Footer } from '../../components/molecules';
 
 import { ActivityView, ProjectsList, TopBanner } from './components';
 
-export const Landing = () => {
+export const LandingPage = () => {
   return (
     <Box position="relative" paddingTop="60px" width="full" height="full">
       <TopBanner />

@@ -27,7 +27,7 @@ export const EntriesList = () => {
     error,
     data: entries,
   } = useAllProjectEntries({
-    // usePreviewData: true,
+    usePreviewData: true,
   });
 
   if (error) {
