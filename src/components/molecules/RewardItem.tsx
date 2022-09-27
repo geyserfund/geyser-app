@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { IRewardCount, IProjectReward } from '../../interfaces';
-import { SatoshiAmount } from '../ui';
+import { ImageWithReload, SatoshiAmount } from '../ui';
 
 const useStyles = createUseStyles({
   container: {
@@ -25,6 +25,7 @@ const useStyles = createUseStyles({
     borderColor: colors.bgLightGrey,
     borderRadius: '12px',
     '&:hover': {
+      cursor: 'pointer',
       borderColor: colors.gray300,
       // BoxShadow: `0 0 0 1px ${colors.gray300}`,
     },
@@ -52,14 +53,18 @@ const useStyles = createUseStyles({
 
 interface IRewardItemProps {
   item: IProjectReward;
-  updateCount: (_: IRewardCount) => void;
+  updateCount?: (_: IRewardCount) => void;
   count?: number;
+  readOnly?: boolean;
+  onClick?: any;
 }
 
 export const RewardItem = ({
   item,
   updateCount,
   count: initialCount,
+  readOnly,
+  onClick,
 }: IRewardItemProps) => {
   const classes = useStyles();
 
@@ -69,18 +74,26 @@ export const RewardItem = ({
   const { isOpen: focus, onOpen: setFocus, onClose: setBlur } = useDisclosure();
 
   const handleAdd = () => {
-    setCount(count + 1);
+    const newCount = count + 1;
+    setCount(newCount);
+    if (updateCount) {
+      updateCount({ id: item.id, count: newCount });
+    }
   };
 
   const handleRemove = () => {
     if (count > 0) {
-      setCount(count - 1);
+      const newCount = count - 1;
+      setCount(newCount);
+      if (updateCount) {
+        updateCount({ id: item.id, count: newCount });
+      }
     }
   };
 
-  useEffect(() => {
-    updateCount({ id: item.id, count });
-  }, [count]);
+  // useEffect(() => {
+  // 	updateCount({id: item.id, count});
+  // }, [count]);
 
   const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
 
@@ -90,6 +103,7 @@ export const RewardItem = ({
       onFocus={setFocus}
       onBlur={setBlur}
       className={classNames(classes.container, { [classes.focused]: focus })}
+      onClick={onClick}
     >
       <HStack className={classes.upperContainer}>
         <VStack spacing={0}>
@@ -112,39 +126,52 @@ export const RewardItem = ({
             {backers === 1 ? `${backers} backer` : `${backers} backers`}
           </Box>
         </VStack>
-        <HStack>
-          {count && (
-            <HStack spacing="2px">
-              <IconButton
-                onFocus={setFocus}
-                onBlur={setBlur}
-                size="xs"
-                className={classes.extraIcons}
-                aria-label="add-reward"
-                icon={<MinusIcon />}
-                onClick={handleRemove}
-              />
-              <IconButton
-                onFocus={setFocus}
-                onBlur={setBlur}
-                size="xs"
-                className={classes.extraIcons}
-                aria-label="remove-reward"
-                icon={<AddIcon />}
-                onClick={handleAdd}
-              />
-            </HStack>
-          )}
-          <IconButton
-            onFocus={setFocus}
-            onBlur={setBlur}
-            backgroundColor={count ? colors.primary : undefined}
-            aria-label="select-reward"
-            icon={renderIcon}
-            onClick={handleAdd}
-          />
-        </HStack>
+        {!readOnly && (
+          <HStack>
+            {count && (
+              <HStack spacing="2px">
+                <IconButton
+                  onFocus={setFocus}
+                  onBlur={setBlur}
+                  size="xs"
+                  className={classes.extraIcons}
+                  aria-label="add-reward"
+                  icon={<MinusIcon />}
+                  onClick={handleRemove}
+                />
+                <IconButton
+                  onFocus={setFocus}
+                  onBlur={setBlur}
+                  size="xs"
+                  className={classes.extraIcons}
+                  aria-label="remove-reward"
+                  icon={<AddIcon />}
+                  onClick={handleAdd}
+                />
+              </HStack>
+            )}
+            <IconButton
+              onFocus={setFocus}
+              onBlur={setBlur}
+              backgroundColor={count ? colors.primary : undefined}
+              aria-label="select-reward"
+              icon={renderIcon}
+              onClick={handleAdd}
+            />
+          </HStack>
+        )}
       </HStack>
+      {item.image && (
+        <Box>
+          <ImageWithReload
+            borderRadius="4px"
+            src={item.image}
+            width="100%"
+            height="192px"
+            objectFit="cover"
+          />
+        </Box>
+      )}
       <Text marginTop="5px">{description}</Text>
     </Box>
   );

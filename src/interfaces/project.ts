@@ -29,6 +29,20 @@ export interface IProject {
   rewards?: IProjectReward[];
   milestones?: IProjectMilestone[];
   entries?: IProjectListEntryItem[];
+  wallets?: IProjectWallet[];
+}
+
+export interface IProjectWallet {
+  id: number;
+  name: string;
+  connectionDetails: {
+    macaroon: string;
+    tlsCertificate: string;
+    hostname: string;
+    grpcPort: string;
+    lndNodeType: string;
+    pubkey: string;
+  };
 }
 
 export interface IProjectReward {
@@ -101,6 +115,7 @@ export interface IProjectListEntryItem {
   creator: IUser;
   fundersCount: number;
   amountFunded: number;
+  published: boolean;
 }
 
 export interface IRewardCount {

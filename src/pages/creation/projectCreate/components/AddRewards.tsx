@@ -47,11 +47,12 @@ interface IAddRewards {
   rewards?: TRewards;
   isSatoshi: boolean;
   setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
+  projectId?: number;
 }
 
 export const defaultReward = {
   name: '',
-  projectId: '',
+  projectId: 0,
   description: '',
   cost: 0,
   image: '',
@@ -62,10 +63,9 @@ export const AddRewards = ({
   onClose,
   rewards: availableReward,
   onSubmit,
+  projectId,
   isSatoshi,
-  setIsSatoshi,
 }: IAddRewards) => {
-  const params = useParams<{ projectId: string }>();
   const { toast } = useNotification();
 
   const [_rewards, _setRewards] = useState<TRewards>(
@@ -157,7 +157,7 @@ export const AddRewards = ({
     } else {
       const createRewardsInput = {
         ...rewards.current,
-        projectId: params.projectId,
+        projectId,
       };
       createReward({ variables: { input: createRewardsInput } });
     }

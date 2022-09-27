@@ -1,9 +1,8 @@
 import { useLazyQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
-import { customHistory } from '../../config';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from '../project/Activity/Activity';
@@ -15,8 +14,9 @@ import { IProject } from '../../interfaces';
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const { state } = useLocation<{ loggedOut?: boolean }>();
+  const history = useHistory();
 
-  const { setNavTitle } = useAuthContext();
+  const { setNav } = useAuthContext();
 
   const [detailOpen, setDetailOpen] = useState(true);
   const fundingFlow = useFundingFlow();
@@ -25,7 +25,7 @@ export const ProjectView = () => {
     try {
       getProject();
     } catch (_) {
-      customHistory.push('/not-found');
+      history.push('/not-found');
     }
   }, [state]);
 
@@ -34,7 +34,11 @@ export const ProjectView = () => {
     {
       variables: { where: { name: projectId } },
       onCompleted(data) {
-        setNavTitle(data.project.title);
+        setNav({
+          title: data.project.title,
+          path: `/projects/${data.project.name}`,
+          projectOwnerId: data.project.owners[0].user.id,
+        });
       },
     },
   );
@@ -88,14 +92,18 @@ const ProjectViewContainer = ({
   fundingFlow,
 }: IProjectViewContainer) => {
   const fundForm = useFundState({ rewards: project.rewards });
-  const { setFundState } = fundingFlow;
-  const { updateReward } = fundForm;
-  console.log('chekcing dundform', fundForm);
+  const { setFundState, fundState } = fundingFlow;
   return (
     <>
       <DetailsContainer
-        project={project}
-        {...{ detailOpen, setDetailOpen, setFundState, updateReward }}
+        {...{
+          project,
+          detailOpen,
+          setDetailOpen,
+          fundState,
+          setFundState,
+          updateReward: fundForm.updateReward,
+        }}
       />
       <Activity
         project={project}

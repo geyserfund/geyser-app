@@ -32,6 +32,7 @@ export const EntryDetails = ({ entry }: { entry: TEntryData }) => {
         width={'100%'}
         justifyContent="center"
         maxHeight="400px"
+        borderRadius="4px"
         overflow="hidden"
       >
         <Image width="100%" src={entry.image} />

@@ -11,7 +11,11 @@ import {
 import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
-import { ProjectSectionBar, RewardCard } from '../../components/molecules';
+import {
+  ProjectSectionBar,
+  RewardCard,
+  RewardItem,
+} from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages, IFundingStages, projectTypes } from '../../constants';
 import { useAuthContext } from '../../context';
@@ -31,12 +35,14 @@ interface IProjectAccesories {
   project: IProject;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
   updateReward: TupdateReward;
+  fundState: IFundingStages;
 }
 
 export const ProjectAccesories = ({
   project,
   setFundState,
   updateReward,
+  fundState,
 }: IProjectAccesories) => {
   const classes = useStyles();
   const isMobile = isMobileMode();
@@ -68,16 +74,15 @@ export const ProjectAccesories = ({
     if (project.rewards && project.rewards.length > 0) {
       return project.rewards.map((reward) => (
         <GridItem key={reward.id} colSpan={isSmallerThan1265 ? 1 : 2}>
-          <RewardCard
-            reward={reward}
+          <RewardItem
             onClick={() => {
-              updateReward({ id: reward.id, count: 1 });
-              setFundState(fundingStages.form);
+              if (fundState === fundingStages.initial) {
+                updateReward({ id: reward.id, count: 1 });
+                setFundState(fundingStages.form);
+              }
             }}
-            isSatoshi={true}
-            minWidth="350px"
-            maxWidth="350px"
-            minHeight="155px"
+            item={reward}
+            readOnly
           />
         </GridItem>
       ));
@@ -91,14 +96,14 @@ export const ProjectAccesories = ({
   };
 
   const renderMilestones = () => {
+    console.log('project mielstones', project.milestones);
     if (project.milestones && project.milestones.length > 0) {
-      console.log('project mielstones', project.milestones);
       return project.milestones.map((milestone) => (
         <MilestoneComponent
           key={milestone.id}
           name={milestone.name}
           description={milestone.description}
-          checked={milestone.amount >= project.balance}
+          checked={milestone.amount <= project.balance}
           amount={milestone.amount - project.balance}
         />
       ));
@@ -130,17 +135,24 @@ export const ProjectAccesories = ({
   ];
 
   const isRewardBased = project.type === projectTypes.reward;
+  const hasMilestones = project.milestones && project.milestones.length > 0;
+  const hasEntries = project.entries && project.entries.length > 0;
+  const isOwner = user?.id && user.id === project.owners[0].user.id;
 
   return (
     <VStack w="100%" spacing="40px">
       <HStack justifyContent="center" spacing="13px">
-        <Button
-          className={classes.navButton}
-          rightIcon={entriesLength ? <Badge>{entriesLength}</Badge> : undefined}
-          onClick={handleEntriesClick}
-        >
-          Entries
-        </Button>
+        {hasEntries && (
+          <Button
+            className={classes.navButton}
+            rightIcon={
+              entriesLength ? <Badge>{entriesLength}</Badge> : undefined
+            }
+            onClick={handleEntriesClick}
+          >
+            Entries
+          </Button>
+        )}
         {isRewardBased && (
           <Button
             className={classes.navButton}
@@ -152,36 +164,39 @@ export const ProjectAccesories = ({
             Rewards
           </Button>
         )}
-        <Button
-          className={classes.navButton}
-          rightIcon={
-            milestoneLength ? <Badge>{milestoneLength}</Badge> : undefined
-          }
-          onClick={handleMielstonesClick}
-        >
-          Milestones
-        </Button>
+        {hasMilestones && (
+          <Button
+            className={classes.navButton}
+            rightIcon={
+              milestoneLength ? <Badge>{milestoneLength}</Badge> : undefined
+            }
+            onClick={handleMielstonesClick}
+          >
+            Milestones
+          </Button>
+        )}
       </HStack>
-      <VStack
-        ref={entriesRef}
-        width="100%"
-        alignItems="flex-start"
-        spacing="20px"
-      >
-        <ProjectSectionBar
-          name={'Entries'}
-          number={entriesLength}
-          rightSection={
-            user?.id &&
-            user.id === project.owners[0].user.id && (
-              <ButtonComponent primary onClick={handleCreateNewEntry}>
-                Create new entry
-              </ButtonComponent>
-            )
-          }
-        />
-        {renderEntries()}
-      </VStack>
+      {(hasEntries || isOwner) && (
+        <VStack
+          ref={entriesRef}
+          width="100%"
+          alignItems="flex-start"
+          spacing="20px"
+        >
+          <ProjectSectionBar
+            name={'Entries'}
+            number={entriesLength}
+            rightSection={
+              isOwner && (
+                <ButtonComponent primary onClick={handleCreateNewEntry}>
+                  Create new entry
+                </ButtonComponent>
+              )
+            }
+          />
+          {renderEntries()}
+        </VStack>
+      )}
       {isRewardBased && (
         <VStack
           ref={rewardsRef}
@@ -196,15 +211,17 @@ export const ProjectAccesories = ({
         </VStack>
       )}
 
-      <VStack
-        ref={milestonesRef}
-        width="100%"
-        alignItems="flex-start"
-        spacing="10px"
-      >
-        <ProjectSectionBar name={'Milestones'} number={milestoneLength} />
-        <VStack alignItems="flex-start">{renderMilestones}</VStack>
-      </VStack>
+      {hasMilestones && (
+        <VStack
+          ref={milestonesRef}
+          width="100%"
+          alignItems="flex-start"
+          spacing="10px"
+        >
+          <ProjectSectionBar name={'Milestones'} number={milestoneLength} />
+          <VStack alignItems="flex-start">{renderMilestones()}</VStack>
+        </VStack>
+      )}
     </VStack>
   );
 };

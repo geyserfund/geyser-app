@@ -16,13 +16,15 @@ import { ICard, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { AvatarElement } from '../../../pages/projectView/components/AvatarElement';
+import { BsPencil } from 'react-icons/bs';
 
 type Props = ICard & {
   entry: IProjectListEntryItem;
   onClick?: () => void;
+  onEdit?: () => void;
 };
 
-export const ProjectEntryCard = ({ entry, onClick }: Props) => {
+export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
   const isMobile = isMobileMode();
   const history = useHistory();
 
@@ -31,6 +33,13 @@ export const ProjectEntryCard = ({ entry, onClick }: Props) => {
     (() => {
       history.push(`/entry/${entry.id}`);
     });
+
+  const handleEdit = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    if (onEdit) {
+      onEdit();
+    }
+  };
 
   return (
     <Stack
@@ -54,46 +63,51 @@ export const ProjectEntryCard = ({ entry, onClick }: Props) => {
         />
       </Box>
 
-      <Box
-        flex={1}
-        alignItems="flex-start"
-        flexDirection={'column'}
-        justifyContent="space-between"
+      <VStack
+        justify={'space-between'}
+        align="start"
         height="full"
+        flex={1}
         overflow="hidden"
       >
-        <VStack justify={'space-between'} align="start" height="full">
-          <Heading
-            as={'h2'}
-            isTruncated={isMobile === false}
-            noOfLines={[0, 1]}
+        <Heading as={'h2'} isTruncated={isMobile === false} noOfLines={[0, 1]}>
+          {entry.title}
+        </Heading>
+
+        <Text color="brand.neutral600" as={'p'} noOfLines={[0, 2]}>
+          {entry.description}
+        </Text>
+
+        <Spacer />
+
+        <HStack>
+          {entry.creator && <AvatarElement user={entry.creator} />}
+
+          <SatoshiAmount color="brand.primary" fontWeight="bold">
+            {entry.amountFunded}
+          </SatoshiAmount>
+
+          <Badge textTransform="uppercase" padding={1} borderRadius={0.5}>
+            {entry.type}
+          </Badge>
+        </HStack>
+      </VStack>
+
+      <VStack justifyContent="center" height="100%" paddingRight="10px">
+        {onEdit ? (
+          <Box
+            _hover={{ cursor: 'pointer', backgroundColor: 'brand.neutral200' }}
+            as="span"
+            borderRadius="50%"
+            padding="8px"
+            onClick={handleEdit}
           >
-            {entry.title}
-          </Heading>
-
-          <Text color="brand.neutral600" as={'p'} noOfLines={[0, 2]}>
-            {entry.description}
-          </Text>
-
-          <Spacer />
-
-          <HStack>
-            {entry.creator && <AvatarElement user={entry.creator} />}
-
-            <SatoshiAmount color="brand.primary" fontWeight="bold">
-              {entry.amountFunded}
-            </SatoshiAmount>
-
-            <Badge textTransform="uppercase" padding={1} borderRadius={0.5}>
-              {entry.type}
-            </Badge>
-          </HStack>
-        </VStack>
-      </Box>
-
-      <Box flexShrink={0}>
-        <LikeHeart count={entry.fundersCount} />
-      </Box>
+            <BsPencil />
+          </Box>
+        ) : (
+          <LikeHeart count={entry.fundersCount} />
+        )}
+      </VStack>
     </Stack>
   );
 };

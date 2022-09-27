@@ -14,15 +14,12 @@ export const MilestoneComponent = ({
   description,
   amount,
   checked,
-}: IMilestoneComponent) => {
-  console.log('mielsont');
-  return (
-    <HStack>
-      <Checkbox isChecked={checked}>
-        <Text color="brand.neutral800">{`${name}: ${description} - `}</Text>
-      </Checkbox>
-      <SatoshiAmount>{amount}</SatoshiAmount>
-      <Text color="brand.neutral800"> to go.</Text>
-    </HStack>
-  );
-};
+}: IMilestoneComponent) => (
+  <HStack>
+    <Checkbox isChecked={checked} colorScheme="gray">
+      <Text color="brand.neutral800">{`${name}: ${description} - `}</Text>
+    </Checkbox>
+    <SatoshiAmount>{amount}</SatoshiAmount>
+    <Text color="brand.neutral800"> to go.</Text>
+  </HStack>
+);

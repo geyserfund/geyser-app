@@ -77,7 +77,7 @@ export const ProjectCreate = () => {
     MUTATION_CREATE_PROJECT,
     {
       onCompleted(data) {
-        history.push(`/launch/${data.createProject.id}/milestones`);
+        history.push(`/launch/${data.createProject.name}/milestones`);
       },
       onError(error) {
         toast({
@@ -121,18 +121,21 @@ export const ProjectCreate = () => {
     },
   );
 
-  const [getProjectById, { loading }] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { id: params.projectId } },
-    onCompleted(data) {
-      setForm({
-        title: data.project.title,
-        name: data.project.name,
-        image: data.project.media[0],
-        description: data.project.description,
-        email: user.email || '',
-      });
+  const [getProjectById, { loading, data }] = useLazyQuery(
+    QUERY_PROJECT_BY_NAME,
+    {
+      variables: { where: { name: params.projectId } },
+      onCompleted(data) {
+        setForm({
+          title: data.project.title,
+          name: data.project.name,
+          image: data.project.media[0],
+          description: data.project.description,
+          email: user.email || '',
+        });
+      },
     },
-  });
+  );
 
   useEffect(() => {
     getProjectById();
@@ -183,7 +186,7 @@ export const ProjectCreate = () => {
         updateProject({
           variables: {
             input: {
-              projectId: params.projectId,
+              projectId: data?.project?.id,
               title: form.title,
               image: form.image,
               description: form.description,

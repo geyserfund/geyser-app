@@ -13,18 +13,10 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import { RiCloseCircleFill } from 'react-icons/ri';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import {
-  DonationInput,
-  DonationInputWithSatoshi,
-} from '../../../../components/molecules';
-import {
-  ButtonComponent,
-  IconButtonComponent,
-  TextBox,
-} from '../../../../components/ui';
+import { DonationInputWithSatoshi } from '../../../../components/molecules';
+import { ButtonComponent, TextBox } from '../../../../components/ui';
 import { colors } from '../../../../constants';
 import {
   MUTATION_CREATE_PROJECT_MILESTONE,
@@ -41,17 +33,19 @@ interface IAddMilestones {
   milestones: TMilestone[];
   isSatoshi: boolean;
   setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
+  projectId?: number;
 }
 
 export const defaultMilestone = {
   name: '',
-  projectId: '',
+  projectId: 0,
   description: '',
   amount: 0,
 };
 
 export const AddMilestones = ({
   isOpen,
+  projectId,
   onClose,
   milestones: availableMilestones,
   onSubmit,
@@ -182,7 +176,7 @@ export const AddMilestones = ({
     <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
       <ModalOverlay />
       <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
-        <ModalHeader paddinX="20px">
+        <ModalHeader paddingX="20px">
           <Text fontSize="18px" fontWeight={600}>
             Select Milestones
           </Text>

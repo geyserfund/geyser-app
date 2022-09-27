@@ -58,7 +58,7 @@ export const EntryCreateEdit = () => {
   const { toast } = useNotification();
   const history = useHistory();
   const params = useParams<{ entryId: string; projectId: string }>();
-  const { setNavTitle } = useAuthContext();
+  const { setNav } = useAuthContext();
 
   const classes = useStyles();
 
@@ -83,7 +83,10 @@ export const EntryCreateEdit = () => {
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
-      setNavTitle(data.project.title);
+      setNav({
+        title: data.project.title,
+        path: `/projects/${data.project.name}`,
+      });
     },
     onError() {
       history.push('/404');

@@ -64,7 +64,7 @@ export const EntriesList = () => {
       <List spacing={4}>
         {entries.map((entry: IProjectListEntryItem) => (
           <ListItem key={entry.id}>
-            <ProjectEntryCard entry={entry} />
+            <ProjectEntryCard entry={entry} onEdit={() => {}} />
           </ListItem>
         ))}
       </List>

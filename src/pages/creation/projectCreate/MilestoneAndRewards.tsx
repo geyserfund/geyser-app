@@ -99,8 +99,8 @@ export const MilestoneAndRewards = () => {
     MUTATION_UPDATE_PROJECT_REWARD,
   );
 
-  const [getProject, { loading }] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { id: params.projectId } },
+  const [getProject, { loading, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
+    variables: { where: { name: params.projectId } },
     onError() {
       toast({
         title: 'Error fetching project',
@@ -147,7 +147,7 @@ export const MilestoneAndRewards = () => {
 
   const handleNext = () => {
     const updateProjectInput: any = {
-      projectId: params.projectId,
+      projectId: data?.project?.id,
       rewardCurrency: isSatoshi ? 'btc' : 'usd',
       expiresAt: finalDate || undefined,
     };
@@ -162,7 +162,7 @@ export const MilestoneAndRewards = () => {
     history.push(`/launch/${params.projectId}`);
   };
 
-  const handleRemoveReward = async (id?: string) => {
+  const handleRemoveReward = async (id?: number) => {
     if (!id) {
       return;
     }
@@ -196,7 +196,7 @@ export const MilestoneAndRewards = () => {
     }
   };
 
-  const triggerRewardRemoval = (id?: string) => {
+  const triggerRewardRemoval = (id?: number) => {
     const currentReward = rewards.find((reward) => reward.id === id);
     if (!currentReward) {
       return;
@@ -437,6 +437,7 @@ export const MilestoneAndRewards = () => {
           onSubmit={handleMilestoneSubmit}
           isSatoshi={isSatoshi}
           setIsSatoshi={setIsSatoshi}
+          projectId={data?.project?.id}
         />
       )}
 
@@ -448,6 +449,7 @@ export const MilestoneAndRewards = () => {
           onSubmit={handleRewardUpdate}
           isSatoshi={isSatoshi}
           setIsSatoshi={setIsSatoshi}
+          projectId={data?.project?.id}
         />
       )}
       <DeleteConfirmModal

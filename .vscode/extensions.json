@@ -4,6 +4,7 @@
     "skyran.js-jsx-snippets",
     "mhutchie.git-graph",
     "apollographql.vscode-apollo",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker"
   ]
 }

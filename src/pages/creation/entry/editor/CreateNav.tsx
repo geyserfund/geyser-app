@@ -69,7 +69,7 @@ export const CreateNav = ({
               </ButtonComponent>
             )}
             <ButtonComponent isDisabled={isSaving} onClick={onSave}>
-              {saveText}
+              {saveText || 'Save draft'}
             </ButtonComponent>
             {onPreview && (
               <ButtonComponent primary onClick={onPreview}>

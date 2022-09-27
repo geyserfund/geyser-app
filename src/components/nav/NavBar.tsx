@@ -22,6 +22,7 @@ import { AuthContext } from '../../context';
 import { getRandomOrb } from '../../utils';
 import { useLocation, useHistory, useRouteMatch } from 'react-router';
 import { customHistory } from '../../config';
+import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
   userInfo: {
@@ -49,15 +50,8 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
   const isMedium = isMediumScreen();
   const isDark = isDarkMode();
 
-  const {
-    user,
-    getUser,
-    logout,
-    loginIsOpen,
-    loginOnOpen,
-    loginOnClose,
-    navTitle,
-  } = useContext(AuthContext);
+  const { user, getUser, logout, loginIsOpen, loginOnOpen, loginOnClose, nav } =
+    useContext(AuthContext);
 
   const { pathname, state } = useLocation<{
     loggedOut?: boolean;
@@ -103,6 +97,11 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
       return null;
     }
   }
+
+  const showLaunch = ['/projects/:projectId'];
+  const launchMatch = showLaunch
+    .map((route) => useRouteMatch(route))
+    .find((val) => val?.isExact)?.isExact;
 
   return (
     <>
@@ -173,28 +172,43 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
             <>
               {routeMatch && (
                 <Box display="flex" alignItems="center">
-                  <Text
-                    fontSize="18px"
-                    fontWeight={600}
-                    color="brand.neutral900"
-                  >
-                    {navTitle}
-                  </Text>
+                  <Link to={nav.path}>
+                    <Text
+                      fontSize="18px"
+                      fontWeight={600}
+                      color="brand.neutral900"
+                    >
+                      {nav.title}
+                    </Text>
+                  </Link>
                 </Box>
               )}
               <Box>
-                {!['/', '/home', '/index', '/launch'].includes(
-                  history.location.pathname,
-                ) && (
-                  <ButtonComponent
-                    leftIcon={<AddIcon />}
-                    primary
-                    marginRight="12px"
-                    onClick={handleLaunch}
-                  >
-                    Launch
-                  </ButtonComponent>
-                )}
+                {/* {
+										!['/', '/home', '/index', '/launch'].includes(history.location.pathname) && <ButtonComponent
+											leftIcon={<AddIcon />}
+											primary
+											marginRight="12px"
+											onClick={handleLaunch}
+										>
+										Launch
+										</ButtonComponent>
+									} */}
+                {launchMatch &&
+                  nav?.projectOwnerId &&
+                  nav.projectOwnerId === user.id && (
+                    <ButtonComponent
+                      marginRight="12px"
+                      backgroundColor="brand.primary100"
+                      onClick={() =>
+                        history.push(
+                          `${customHistory.location.pathname}/dashboard`,
+                        )
+                      }
+                    >
+                      Dashboard
+                    </ButtonComponent>
+                  )}
                 {user.id ? (
                   <ButtonComponent
                     border={

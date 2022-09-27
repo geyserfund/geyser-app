@@ -88,12 +88,33 @@ export const LighteningQR = ({ project }: ILighteningQR) => {
           />
         </Tooltip>
 
+        <Tooltip label="View Project QR Code" placement="top">
+          <IconButton
+            size="sm"
+            _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
+            _active={{ backgroundColor: 'brand.primary' }}
+            bg="none"
+            icon={<QrIcon />}
+            aria-label="qr"
+            onClick={() => {
+              setCopy(false);
+              onOpen();
+              if (imageDownload.length === 0) {
+                setTimeout(() => {
+                  capture();
+                }, 2100);
+              }
+            }}
+          />
+        </Tooltip>
+
         <Tooltip
           label={copy ? 'Copied!' : 'Share Project'}
           placement="top"
           closeOnClick={false}
         >
           <IconButton
+            size="sm"
             _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
             _active={{ backgroundColor: 'brand.primary' }}
             bg="none"
