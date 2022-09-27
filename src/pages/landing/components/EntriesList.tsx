@@ -27,7 +27,7 @@ export const EntriesList = () => {
     error,
     data: entries,
   } = useAllProjectEntries({
-    usePreviewData: true,
+    usePreviewData: false,
   });
 
   if (error) {
@@ -36,7 +36,7 @@ export const EntriesList = () => {
         height="200px"
         status="error"
         title="An error occurred while attempting to fetch entries."
-        message="Please try refreshing the page."
+        message="Please try refreshing the page. You may also want to contact support if the problem persists."
       />
     );
   }
@@ -51,8 +51,8 @@ export const EntriesList = () => {
         height="200px"
         status="info"
         colorScheme={'gray'}
-        title="No project entries items could be found."
-        // message="Please try refreshing the page."
+        title="There are currently no project entries."
+        message="Please try refreshing the page. You may also want to contact support if the problem persists."
       />
     );
   }
