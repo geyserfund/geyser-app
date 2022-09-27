@@ -1,33 +1,33 @@
 import React from 'react';
-import { Box, Flex, Divider, Image } from '@chakra-ui/react';
+import { Box, Divider, Stack } from '@chakra-ui/react';
 import { Footer } from '../../components/molecules';
 
 import { ActivityView, ProjectsList, TopBanner } from './components';
-import SatsFlow from '../../assets/sats-flow.svg';
 
 export const Landing = () => {
   return (
-    <Flex
-      position="relative"
-      paddingTop="60px"
-      direction="column"
-      height="full"
-    >
+    <Box position="relative" paddingTop="60px" width="full" height="full">
       <TopBanner />
 
-      <Flex direction="row" paddingY="30px" paddingX="60px">
-        <Box width="full" height="full">
+      <Stack
+        direction="row"
+        paddingY="30px"
+        paddingX="60px"
+        width="full"
+        height="full"
+      >
+        <Box height="full" flex="1">
           <ActivityView />
         </Box>
 
-        <Divider orientation="vertical" marginLeft={30} />
+        <Divider orientation="vertical" marginLeft={30} borderWidth={'1px'} />
 
-        <Box width="full" maxWidth={400} height="full">
+        <Box width="400px" minWidth="400px" flexBasis={1} height="full">
           <ProjectsList />
         </Box>
-      </Flex>
+      </Stack>
 
       <Footer />
-    </Flex>
+    </Box>
   );
 };

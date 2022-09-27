@@ -84,8 +84,20 @@ export interface IProjectListEntryItem {
   id: number;
   title: string;
   description: string;
+
+  /**
+   * A URL path for the image source.
+   */
   image: string;
+
+  /**
+   * The type of the entry.
+   *
+   * TODO: These should be strongly-typed as a set
+   * of constants.
+   */
   type: string;
+
   creator: IUser;
   fundersCount: number;
   amountFunded: number;

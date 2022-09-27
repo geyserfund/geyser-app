@@ -22,7 +22,6 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 });
 
 export const EntriesList = () => {
-  const classes = useStyles({ isMobile: isMobileMode() });
   const { toast } = useNotification();
 
   const {
@@ -61,7 +60,7 @@ export const EntriesList = () => {
     <>
       {isLoading && <Loader />}
 
-      <List spacing={3}>
+      <List spacing={4}>
         {entries.map((entry: IProjectListEntryItem) => (
           <ListItem key={entry.id}>
             <ProjectEntryCard entry={entry} />

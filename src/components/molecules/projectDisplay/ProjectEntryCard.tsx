@@ -1,70 +1,99 @@
-import { Badge, Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import {
+  Badge,
+  Box,
+  Heading,
+  HStack,
+  Image,
+  Spacer,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import React from 'react';
-import { BsHeartFill } from 'react-icons/bs';
 import { useHistory } from 'react-router';
 import { LikeHeart } from '..';
-import { SatoshiAmount } from '../../ui';
-import { colors } from '../../../constants';
+import { ICard, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { AvatarElement } from '../../../pages/projectView/components/AvatarElement';
 
-export const ProjectEntryCard = ({
-  entry,
-}: {
+type Props = ICard & {
   entry: IProjectListEntryItem;
-}) => {
+  onClick?: () => void;
+};
+
+export const ProjectEntryCard = ({ entry, onClick }: Props) => {
   const isMobile = isMobileMode();
   const history = useHistory();
 
-  const handleClick = () => {
-    history.push(`/entry/${entry.id}`);
-  };
+  const handleClick =
+    onClick ||
+    (() => {
+      history.push(`/entry/${entry.id}`);
+    });
 
   return (
-    <HStack
-      flexDirection={isMobile ? 'column' : 'row'}
+    <Stack
+      height={'166px'}
+      direction={isMobile ? 'column' : 'row'}
       spacing={isMobile ? '0px' : '20px'}
-      width="100%"
-      alignItems="flex-start"
-      borderRadius="4px"
-      _hover={{
-        cursor: 'pointer',
-        boxShadow:
-          'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
-        transition: 'box-shadow 0.3s ease-in-out',
-      }}
+      align="center"
+      justify="start"
+      maxWidth={'100%'}
+      p={2}
       onClick={handleClick}
     >
-      <Box
-        maxHeight="150px"
-        maxWidth={isMobile ? '100%' : '200px'}
-        overflow="hidden"
-      >
-        <Image height="100%" width="100%" src={entry.image} />
+      <Box flexShrink={0}>
+        <Image
+          height="142px"
+          width="196px"
+          src={entry.image}
+          fit="cover"
+          alt={entry.title}
+          borderRadius="0.25rem"
+        />
       </Box>
 
-      <VStack alignItems="flex-start" flex="1">
-        <Text fontSize="30px" fontWeight={700} color="brand.neutral900">
-          {entry.title}
-        </Text>
+      <Box
+        flex={1}
+        alignItems="flex-start"
+        flexDirection={'column'}
+        justifyContent="space-between"
+        height={'full'}
+        overflow="hidden"
+      >
+        <VStack justify={'space-between'} align="start">
+          <Heading
+            as={'h2'}
+            isTruncated={isMobile === false}
+            noOfLines={[0, 1]}
+          >
+            {entry.title}
+          </Heading>
 
-        <Text color="brand.neutral600">{entry.description}</Text>
+          <Text color="brand.neutral600" as={'p'} noOfLines={[0, 2]}>
+            {entry.description}
+          </Text>
 
-        <HStack>
-          {entry.creator && <AvatarElement user={entry.creator} />}
+          <Spacer />
 
-          <SatoshiAmount color="brand.primary">
-            {entry.amountFunded}
-          </SatoshiAmount>
+          <HStack>
+            {entry.creator && <AvatarElement user={entry.creator} />}
 
-          <Badge>ARTICLE</Badge>
-        </HStack>
-      </VStack>
+            <SatoshiAmount color="brand.primary" fontWeight="bold">
+              {entry.amountFunded}
+            </SatoshiAmount>
 
-      <VStack justifyContent="center" height="100%" paddingRight="10px">
+            <Badge textTransform="uppercase" padding={1} borderRadius={0.5}>
+              {entry.type}
+            </Badge>
+          </HStack>
+        </VStack>
+      </Box>
+
+      <Box flexShrink={0}>
         <LikeHeart count={entry.fundersCount} />
-      </VStack>
-    </HStack>
+      </Box>
+    </Stack>
   );
 };
