@@ -6,8 +6,9 @@ import { useQuery } from '@apollo/client';
 import { isMobileMode } from '../../../utils';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
-import { IdBar } from '../../../components/molecules';
+import { ProjectFundingContributionFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
+import { IProjectContribution } from '../../../interfaces';
 
 type RuleNames = string;
 
@@ -25,7 +26,13 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 const ContributionItem = ({ contribution }: { contribution: any }) => {
   const { sourceResource: project, ...fundingTx } = contribution;
 
-  return <IdBar fundingTx={fundingTx} project={project} maxWidth="60%" />;
+  return (
+    <ProjectFundingContributionFeedItem
+      fundingTx={fundingTx}
+      project={project}
+      maxWidth="60%"
+    />
+  );
 };
 
 export const ContributionsList = () => {
@@ -71,11 +78,14 @@ export const ContributionsList = () => {
       {isLoading && <Loader />}
 
       <List spacing={3}>
-        {contributions.map((contribution: any, index: number) => (
-          <ListItem key={index}>
-            <ContributionItem contribution={contribution} />
-          </ListItem>
-        ))}
+        {contributions.map(
+          (contribution: IProjectContribution, index: number) => (
+            <ListItem key={index}>
+              <ContributionItem contribution={contribution} />
+              {/* <ProjectContributionCard contribution={contribution} /> */}
+            </ListItem>
+          ),
+        )}
       </List>
     </>
   );
