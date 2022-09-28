@@ -1,9 +1,9 @@
 import React from 'react';
-import { isMobileMode } from '../../utils';
+import { isMobileMode } from '../../../utils';
 import { HStack, Text } from '@chakra-ui/react';
-import { ButtonComponent } from '../ui';
-import { BoltIcon } from '../icons';
-import { dimensions } from '../../constants';
+import { ButtonComponent } from '../../ui';
+import { BoltIcon } from '../../icons';
+import { dimensions } from '../../../constants';
 
 const { mobileNavbar } = dimensions;
 

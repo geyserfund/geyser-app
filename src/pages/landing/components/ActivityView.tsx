@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 
-import { IdBar } from '../../../components/molecules/IdBar';
 import { isMobileMode, useNotification } from '../../../utils';
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
@@ -23,11 +22,18 @@ import {
 import { colors } from '../../../constants';
 
 import { EntryCard } from '../../projectView/components/EntryCard';
+import { ProjectFundingContributionFeedItem } from '../../../components/molecules';
 
 const Contribution = ({ contribution }: { contribution: any }) => {
   console.log(contribution);
   const { sourceResource: project, ...fundingTx } = contribution;
-  return <IdBar fundingTx={fundingTx} project={project} maxWidth="60%" />;
+  return (
+    <ProjectFundingContributionFeedItem
+      fundingTx={fundingTx}
+      project={project}
+      maxWidth="60%"
+    />
+  );
 };
 
 export const ActivityView = () => {

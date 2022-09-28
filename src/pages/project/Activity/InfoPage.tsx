@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import {
   ProjectActivityActionsToolbar,
   ActivityBrief,
+  ProjectFundingContributionFeedItem,
+  ProjectFundingLeaderboardFeed,
 } from '../../../components/molecules';
-import { IdBar } from '../../../components/molecules/IdBar';
-import { IdBarLeaderboard } from '../../../components/molecules/IdBarLeaderboard';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
 import { isMobileMode } from '../../../utils';
@@ -161,10 +161,14 @@ export const InfoPage = ({
         >
           {view === 'activity'
             ? fundingTxs.map((fundingTx, index) => (
-                <IdBar key={index} fundingTx={fundingTx} project={project} />
+                <ProjectFundingContributionFeedItem
+                  key={index}
+                  fundingTx={fundingTx}
+                  project={project}
+                />
               ))
             : sortedFunders.map((funder, index) => (
-                <IdBarLeaderboard
+                <ProjectFundingLeaderboardFeed
                   key={index}
                   funder={funder}
                   count={index + 1}

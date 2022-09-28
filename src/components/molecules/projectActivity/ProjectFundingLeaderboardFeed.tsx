@@ -1,25 +1,25 @@
 import { Box, Text, HStack } from '@chakra-ui/layout';
+import { Badge } from '@chakra-ui/react';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
-import { Badge, LinkableAvatar, AnonymousAvatar } from '../ui';
-import { IProject, IFunder } from '../../interfaces';
-import { SatoshiIconTilted } from '../icons';
-import { getAvatarMetadata } from '../../helpers';
-import { computeFunderBadges } from '../../helpers/computeBadges';
-import { commaFormatted } from '../../utils/helperFunctions';
+import { getAvatarMetadata, computeFunderBadges } from '../../../helpers';
+import { IProject, IFunder } from '../../../interfaces';
+import { commaFormatted } from '../../../utils';
+import { SatoshiIconTilted } from '../../icons';
+import { AnonymousAvatar, LinkableAvatar } from '../../ui';
 
-interface IIdBarLeaderboard extends HTMLChakraProps<'div'> {
+type Props = HTMLChakraProps<'div'> & {
   project: IProject;
   funder: IFunder;
   count: number;
-}
+};
 
-export const IdBarLeaderboard = ({
+export const ProjectFundingLeaderboardFeed = ({
   funder,
   count,
   project,
   ...rest
-}: IIdBarLeaderboard) => {
+}: Props) => {
   const anonymous = !funder.user;
   const avatarMetadata = getAvatarMetadata({ funder });
   const badges = computeFunderBadges({ project, funder }).map((badge) => (
