@@ -2,20 +2,24 @@ import { Box, Text } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { Image } from '@chakra-ui/react';
-import { LinkableAvatar, AnonymousAvatar } from '../ui';
-import { IFundingTx, IProject } from '../../interfaces';
-import { SatoshiIconTilted } from '../icons';
-import { getDaysAgo } from '../../utils';
-import { fonts } from '../../constants/fonts';
-import { commaFormatted } from '../../utils/helperFunctions';
-import { getAvatarMetadata } from '../../helpers';
+import { LinkableAvatar, AnonymousAvatar } from '../../ui';
+import { IFundingTx, IProject } from '../../../interfaces';
+import { SatoshiIconTilted } from '../../icons';
+import { getDaysAgo } from '../../../utils';
+import { fonts } from '../../../constants/fonts';
+import { commaFormatted } from '../../../utils/helperFunctions';
+import { getAvatarMetadata } from '../../../helpers';
 
-interface IIdBar extends HTMLChakraProps<'div'> {
+type Props = HTMLChakraProps<'div'> & {
   fundingTx: IFundingTx;
   project: IProject;
-}
+};
 
-export const IdBar = ({ fundingTx, project, ...rest }: IIdBar) => {
+export const ProjectFundingContributionFeedItem = ({
+  fundingTx,
+  project,
+  ...rest
+}: Props) => {
   const { funder, onChain, paidAt, source } = fundingTx;
 
   const anonymous = !funder.user;
