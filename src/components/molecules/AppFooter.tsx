@@ -17,6 +17,7 @@ import {
   GeyserTelegramUrl,
   GeyserTwitterUrl,
   GeyserPodcastUrl,
+  GeyserHomepageUrl,
 } from '../../constants';
 import { isMobileMode } from '../../utils';
 import { Subscribe } from '../nav/Subscribe';
@@ -37,7 +38,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
       bottom={0}
       className={wrapperClassName}
       width="100%"
-      backgroundColor="brand.appFooter"
+      backgroundColor="brand.primary50"
       alignItems="center"
       justifyContent="center"
       padding={isMobile ? '10px 10px' : '25px 32px'}
@@ -94,17 +95,25 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
             </ButtonComponent>
           </Linkin>
         </Wrap>
+
         <HStack
           spacing="24px"
           width={isMobile ? '100%' : 'auto'}
           justifyContent={isMobile ? 'center' : undefined}
+          color="brand.gray500"
         >
-          <Text color="brand.gray500">Geyser</Text>
-          <Link color="brand.gray500" href={GeyserPrivacyUrl} isExternal>
-            <Text color="brand.gray500">Privacy</Text>
+          <Link href={GeyserHomepageUrl} isExternal>
+            <Text>Geyser</Text>
           </Link>
-          <Link color="brand.gray500" href={AnalyticsUrl} isExternal>
-            <Text color="brand.gray500">Analytics</Text>
+
+          <Link href={GeyserPrivacyUrl} isExternal>
+            <Text>Privacy</Text>
+          </Link>
+
+          <Text>T&amp;C</Text>
+
+          <Link href={AnalyticsUrl} isExternal>
+            <Text>Analytics</Text>
           </Link>
         </HStack>
       </Stack>
