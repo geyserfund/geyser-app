@@ -144,7 +144,6 @@ export const Router = () => {
               <NotAuthorized />
             </Route>
             <Route path="/">
-              {/* <Home /> */}
               <Landing />
             </Route>
           </Switch>
