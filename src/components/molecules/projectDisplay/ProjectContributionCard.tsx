@@ -13,16 +13,15 @@ import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
 import { computeFunderBadges } from '../../../helpers';
-import { IContribution } from '../../../interfaces';
+import { IProjectContribution } from '../../../interfaces';
 
 import { isDarkMode } from '../../../utils';
 import { Card, ICard } from '../../ui';
 
-interface IContributionProjectCardProp extends ICard {
-  open?: boolean;
+type Props = ICard & {
   className?: string;
-  contribution: IContribution;
-}
+  contribution: IProjectContribution;
+};
 
 const useStyles = createUseStyles({
   container: {
@@ -57,12 +56,11 @@ const useStyles = createUseStyles({
   },
 });
 
-export const ContributionProjectCard = ({
+export const ProjectContributionCard = ({
   contribution,
-  open,
   className,
   ...rest
-}: IContributionProjectCardProp) => {
+}: Props) => {
   const classes = useStyles();
   const isDark = isDarkMode();
 
@@ -100,11 +98,15 @@ export const ContributionProjectCard = ({
 };
 
 // interface IRenderBadges {
-// 	funder: IContribution['funder']
-// 	project: IContribution['project']
+// 	funder: IProjectContribution['funder']
+// 	project: IProjectContribution['project']
 // }
 
-const RenderBadges = ({ contribution }: { contribution: IContribution }) => {
+const RenderBadges = ({
+  contribution,
+}: {
+  contribution: IProjectContribution;
+}) => {
   const { project, funder, isSponsor, isFunder } = contribution;
   const badges =
     isFunder && funder
