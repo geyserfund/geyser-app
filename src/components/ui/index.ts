@@ -23,3 +23,4 @@ export * from './AnonymousAvatar';
 export * from './ExternalAccountComponent';
 export * from './ImageWithReload';
 export * from './ProgressBar';
+export * from './ProjectAvatarLink';

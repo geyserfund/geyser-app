@@ -14,13 +14,15 @@ export const LandingPage = () => {
         paddingY="30px"
         paddingX="60px"
         width="full"
-        height="full"
+        height="auto"
+        minH={'full'}
+        spacing={30}
       >
         <Box height="full" flex="1">
           <ActivityView />
         </Box>
 
-        <Divider orientation="vertical" marginLeft={30} borderWidth={'1px'} />
+        <Divider orientation="vertical" borderWidth={'1px'} height="auto" />
 
         <Box width="400px" minWidth="400px" flexBasis={1} height="full">
           <ProjectsList />

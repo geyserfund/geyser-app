@@ -1,37 +1,46 @@
 import React from 'react';
-import { ListItem, List } from '@chakra-ui/react';
+import { ListItem, List, Container } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
 
 import { isMobileMode } from '../../../utils';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
-import { ProjectFundingContributionFeedItem } from '../../../components/molecules';
+import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
 import { IProjectContribution } from '../../../interfaces';
 
 type RuleNames = string;
 
-interface IStyleProps {
+type StyleProps = {
   isMobile?: boolean;
-}
+};
 
-const useStyles = createUseStyles<RuleNames, IStyleProps>({
-  titles: ({ isMobile }: IStyleProps) => ({
+const useStyles = createUseStyles<RuleNames, StyleProps>({
+  titles: ({ isMobile }: StyleProps) => ({
     fontSize: isMobile ? '12px' : '14px',
     fontWeight: 500,
   }),
 });
 
-const ContributionItem = ({ contribution }: { contribution: any }) => {
-  const { sourceResource: project, ...fundingTx } = contribution;
+const ContributionItem = ({
+  transactionResponsePayload,
+}: {
+  transactionResponsePayload: any;
+}) => {
+  const { sourceResource: project, ...fundingTx } = transactionResponsePayload;
 
   return (
-    <ProjectFundingContributionFeedItem
-      fundingTx={fundingTx}
-      project={project}
-      maxWidth="60%"
-    />
+    <Container
+      justifyContent={'center'}
+      minWidth={'308'}
+      maxWidth={['full', '77%', '67%']}
+    >
+      <ProjectFundingContributionsFeedItem
+        fundingTx={fundingTx}
+        project={project}
+      />
+    </Container>
   );
 };
 
@@ -78,14 +87,11 @@ export const ContributionsList = () => {
       {isLoading && <Loader />}
 
       <List spacing={3}>
-        {contributions.map(
-          (contribution: IProjectContribution, index: number) => (
-            <ListItem key={index}>
-              <ContributionItem contribution={contribution} />
-              {/* <ProjectContributionCard contribution={contribution} /> */}
-            </ListItem>
-          ),
-        )}
+        {contributions.map((contribution: any, index: number) => (
+          <ListItem key={index} justifyContent="center">
+            <ContributionItem transactionResponsePayload={contribution} />
+          </ListItem>
+        ))}
       </List>
     </>
   );

@@ -40,6 +40,7 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
       sourceResource {
         ... on Project {
           title
+          media
         }
       }
     }
