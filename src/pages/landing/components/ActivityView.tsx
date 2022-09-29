@@ -1,7 +1,5 @@
 import React from 'react';
 import { TabList, Tab, Tabs, TabPanel, TabPanels } from '@chakra-ui/react';
-import { isMobileMode } from '../../../utils';
-
 import { EntriesList } from './EntriesList';
 import { ContributionsList } from './ContributionsList';
 
@@ -15,8 +13,6 @@ const styles = {
 };
 
 export const ActivityView = () => {
-  const isMobile = isMobileMode();
-
   return (
     <Tabs variant={'line'} height="full" width="full">
       <TabList>
