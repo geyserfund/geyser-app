@@ -1,13 +1,11 @@
 import React from 'react';
-import { Box, Flex, Text, Divider, Image } from '@chakra-ui/react';
+import { Box, Flex, Divider } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { isMobileMode } from '../../utils';
 import { AppFooter } from '../../components/molecules';
 
 import { ActivityView, ProjectsList, TopBanner } from './components';
-import SatsFlow from '../../assets/sats-flow.svg';
-import { ButtonComponent } from '../../components/ui';
 import { useHistory } from 'react-router';
 
 type RuleNames = string;
@@ -24,9 +22,6 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
     fontSize: isMobile ? '20px' : '25px',
     fontWeight: 600,
   }),
-  // texts: ({ isMobile }: IStyleProps) => ({
-  // 	fontSize: isMobile ? '15px' : '20px',
-  // }),
   pageStats: {
     width: '100%',
     height: '80px',
@@ -56,7 +51,6 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
 export const Landing = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
-  console.log('here');
 
   return (
     <Flex
@@ -75,9 +69,7 @@ export const Landing = () => {
           <ProjectsList />
         </Box>
       </Flex>
-      <Box display="flex" justifyContent="center" minWidth="305px">
-        <Image src={SatsFlow} maxHeight="80px" />
-      </Box>
+
       <AppFooter />
     </Flex>
   );

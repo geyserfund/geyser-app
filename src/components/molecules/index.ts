@@ -1,6 +1,4 @@
 export * from './IdComponent';
-export * from './IdBar';
-export * from './IdBarLeaderboard';
 export * from './AuthModal';
 export * from './AppFooter';
 export * from './DonationInput';
@@ -8,7 +6,6 @@ export * from './RewardItem';
 export * from './AddAmbassador';
 export * from './AddSponsor';
 export * from './SwipeLiveProject';
-export * from './ProjectActivityActionsToolbar';
 export * from './ProjectDetailsMobileMenu';
 export * from './DisconnectAccounts';
 export * from './FileUpload';
@@ -18,6 +15,8 @@ export * from './CalendarButton';
 export * from './ProjectSectionBar';
 export * from './DeleteConfirmModal';
 export * from './TwitterConnect';
+
+export * from './projectActivity';
 
 export * from './projectDisplay/ProjectBalance';
 export * from './projectDisplay/ProfileProjectCard';
