@@ -3,9 +3,7 @@ import {
   Box,
   Heading,
   HStack,
-  HTMLChakraProps,
   Image,
-  SkeletonCircle,
   Spacer,
   Stack,
   Text,
@@ -13,10 +11,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useHistory } from 'react-router';
-import {
-  ProjectFundersCountIndicator,
-  ProjectImageListItemPlaceholder,
-} from '..';
+import { ProjectFundersCountIndicator, ProjectListItemImage } from '..';
 import { ICard, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
@@ -37,33 +32,6 @@ const useStyles = createUseStyles({
     borderRadius: '0.5em',
   },
 });
-
-type ProjectImageProps = HTMLChakraProps<'div'> & {
-  entry: IProjectListEntryItem;
-};
-
-const ProjectImage = ({ entry, ...rest }: ProjectImageProps) => {
-  const imageSrc = entry.project.image;
-
-  return (
-    <Box {...rest}>
-      {imageSrc && imageSrc.length > 0 ? (
-        <Image
-          flexShrink={0}
-          src={imageSrc}
-          boxSize="42px"
-          borderRadius="md"
-          objectFit="cover"
-          fallback={<ProjectImageListItemPlaceholder />}
-          fit="cover"
-          alt={`Main image for ${entry.project.name}`}
-        />
-      ) : (
-        <SkeletonCircle size="full" speed={0} borderRadius={'4px'} />
-      )}
-    </Box>
-  );
-};
 
 export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
   const isMobile = isMobileMode();
@@ -130,7 +98,7 @@ export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
 
             <HStack flex={0}>
               <HStack spacing={2}>
-                <ProjectImage entry={entry} flexShrink={0} />
+                <ProjectListItemImage project={entry.project} flexShrink={0} />
 
                 <Text
                   color="brand.neutral600"

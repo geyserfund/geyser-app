@@ -10,8 +10,13 @@ interface IPrivateRoute {
 }
 
 export const PrivateRoute = ({ children }: IPrivateRoute) => {
-  const { loading, user, loginOnClose, loginIsOpen, loginOnOpen } =
-    useAuthContext();
+  const {
+    loading,
+    user,
+    loginOnClose,
+    isAuthModalOpen: loginIsOpen,
+    loginOnOpen,
+  } = useAuthContext();
   const history = useHistory();
 
   if (loading) {

@@ -52,6 +52,7 @@ export const ButtonComponent = ({
   const classes = useStyles();
   const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark);
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
+
   return (
     <Button
       ref={ref}

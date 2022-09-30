@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
 
-import { IProfileProject } from '../../../interfaces';
+import { IProject } from '../../../interfaces';
 import {
   checkExpired,
   getFormattedDate,
@@ -29,7 +29,7 @@ interface IProjectCardProp extends ICard {
   name: string;
   className?: string;
   imgSrc?: string;
-  project: IProfileProject;
+  project: IProject;
   privateUser?: boolean;
 }
 
