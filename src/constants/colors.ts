@@ -37,6 +37,7 @@ export const colors = {
 
   gray2: '#F4F4F4',
 
+  primary50: '#E9FFFB',
   primary100: '#B7FFF2',
   primary400: '#6BE7CE',
   primary500: '#10CAA8',

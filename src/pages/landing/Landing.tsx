@@ -3,7 +3,7 @@ import { Box, Flex, Divider } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { isMobileMode } from '../../utils';
-import { Footer } from '../../components/molecules';
+import { AppFooter } from '../../components/molecules';
 
 import { ActivityView, ProjectsList, TopBanner } from './components';
 import { useHistory } from 'react-router';
@@ -69,7 +69,8 @@ export const Landing = () => {
           <ProjectsList />
         </Box>
       </Flex>
-      <Footer />
+
+      <AppFooter />
     </Flex>
   );
 };

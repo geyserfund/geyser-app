@@ -6,7 +6,10 @@ import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { IFundingStages } from '../../constants';
-import { Footer, ProjectDetailsMobileMenu } from '../../components/molecules';
+import {
+  AppFooter,
+  ProjectDetailsMobileMenu,
+} from '../../components/molecules';
 import { fundingStages } from '../../constants';
 import { DetailsCard } from './DetailsCard';
 import { ProjectAccesories } from './ProjectAccesories';
@@ -145,7 +148,7 @@ export const DetailsContainer = ({
             />
           </VStack>
         </VStack>
-        <Footer />
+        <AppFooter />
       </Box>
     </Box>
   );

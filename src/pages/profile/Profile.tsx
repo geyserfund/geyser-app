@@ -30,7 +30,7 @@ import { createUseStyles } from 'react-jss';
 import { useHistory, useParams } from 'react-router';
 import {
   ContributionProjectCard,
-  Footer,
+  AppFooter,
   ProfileProjectCard,
 } from '../../components/molecules';
 import { USER_PROFILE_QUERY } from '../../graphql';
@@ -382,7 +382,7 @@ export const Profile = () => {
           </Tabs>
         </Box>
       </VStack>
-      <Footer />
+      <AppFooter />
     </VStack>
   );
 };
