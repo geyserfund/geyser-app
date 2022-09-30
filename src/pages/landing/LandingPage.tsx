@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Divider, Stack } from '@chakra-ui/react';
-import { Footer } from '../../components/molecules';
+import { AppFooter } from '../../components/molecules';
 
 import { ActivityView, ProjectsList, TopBanner } from './components';
 
@@ -29,7 +29,7 @@ export const LandingPage = () => {
         </Box>
       </Stack>
 
-      <Footer />
+      <AppFooter />
     </Box>
   );
 };

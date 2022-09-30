@@ -1,6 +1,6 @@
 export * from './IdComponent';
 export * from './AuthModal';
-export * from './Footer';
+export * from './AppFooter';
 export * from './DonationInput';
 export * from './RewardItem';
 export * from './AddAmbassador';

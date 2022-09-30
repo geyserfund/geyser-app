@@ -5,7 +5,10 @@ import { createUseStyles } from 'react-jss';
 import { fadeOut, slideInLeft } from '../../css';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { IFundingStages } from '../../constants';
-import { Footer, ProjectDetailsMobileMenu } from '../../components/molecules';
+import {
+  AppFooter,
+  ProjectDetailsMobileMenu,
+} from '../../components/molecules';
 import { fundingStages } from '../../constants';
 import { TEntryData } from '../../interfaces/entry';
 import { EntryDetails } from './EntryDetails';
@@ -134,7 +137,7 @@ export const EntryContainer = ({
             <EntryDetails entry={entry} />
           </VStack>
         </VStack>
-        <Footer />
+        <AppFooter />
       </Box>
     </Box>
   );
