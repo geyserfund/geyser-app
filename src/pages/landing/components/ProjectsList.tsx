@@ -7,14 +7,16 @@ import {
   Divider,
   Avatar,
   Box,
+  Link,
+  Heading,
 } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 import { colors } from '../../../constants';
 import { isMobileMode, useNotification } from '../../../utils';
 import { QUERY_PROJECTS } from '../../../graphql';
-import { Link } from 'react-router-dom';
 
 type RuleNames = string;
 
@@ -22,15 +24,15 @@ interface IStyleProps {
   isMobile?: boolean;
 }
 
-const useStyles = createUseStyles<RuleNames, IStyleProps>({
-  titles: ({ isMobile }: IStyleProps) => ({
-    fontSize: isMobile ? '12px' : '14px',
-    fontWeight: 500,
-  }),
-});
+// const useStyles = createUseStyles<RuleNames, IStyleProps>({
+//   titles: ({ isMobile }: IStyleProps) => ({
+//     fontSize: isMobile ? '12px' : '14px',
+//     fontWeight: 500,
+//   }),
+// });
 
 export const ProjectsList = () => {
-  const classes = useStyles({ isMobile: isMobileMode() });
+  // const classes = useStyles({ isMobile: isMobileMode() });
   const { toast } = useNotification();
   const { loading, error, data } = useQuery(QUERY_PROJECTS);
 
@@ -48,8 +50,28 @@ export const ProjectsList = () => {
 
   return (
     <VStack alignItems="left" paddingLeft={30} paddingRight={30}>
-      <Text className={classes.titles}>Top Live Projects</Text>
+      <HStack justify="space-between" align="center">
+        <Heading as="h4" fontWeight={600} size="xl" lineHeight={'110%'}>
+          Top Projects
+        </Heading>
+
+        <Link
+          as={ReactRouterLink}
+          // px={2}
+          // py={1}
+          // rounded={'md'}
+          _hover={{
+            textDecoration: 'none',
+            // bg: useColorModeValue('gray.200', 'gray.700'),
+          }}
+          to={'/project-discovery'}
+        >
+          <Text>See All Projects</Text>
+        </Link>
+      </HStack>
+
       <Divider />
+
       {projects.length > 0 &&
         projects.map((project: any) => (
           <HStack key={project.id} spacing={10}>

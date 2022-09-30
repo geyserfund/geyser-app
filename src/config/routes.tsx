@@ -26,6 +26,7 @@ import { ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
+import { ProjectDiscoveryPage } from '../pages/project-discovery';
 
 export const customHistory = createBrowserHistory();
 
@@ -143,6 +144,7 @@ export const Router = () => {
             <Route path="/not-authorized">
               <NotAuthorized />
             </Route>
+            <Route path="/project-discovery" component={ProjectDiscoveryPage} />
             <Route path="/">
               <LandingPage />
             </Route>

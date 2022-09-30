@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Divider, Stack } from '@chakra-ui/react';
 import { AppFooter } from '../../components/molecules';
-
 import { ActivityView, ProjectsList, TopBanner } from './components';
 
 export const LandingPage = () => {
