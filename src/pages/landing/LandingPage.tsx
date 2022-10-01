@@ -15,10 +15,18 @@ import { AppFooter } from '../../components/molecules';
 
 import { ActivityView, LandingPageProjectsList, TopBanner } from './components';
 import { BsArrowRight } from 'react-icons/bs';
+import { dimensions } from '../../constants';
+
+const { topNavBar: topNavBarDimensions } = dimensions;
 
 export const LandingPage = () => {
   return (
-    <Box position="relative" paddingTop="60px" width="full" height="full">
+    <Box
+      position="relative"
+      paddingTop={topNavBarDimensions.desktop.height}
+      width="full"
+      height="full"
+    >
       <TopBanner />
 
       <Stack

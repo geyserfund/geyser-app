@@ -2,14 +2,36 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS } from '../graphql';
 import { IProject } from '../interfaces';
 
+export type OrderBy = 'createdAt' | 'projectTitle' | 'contributionsCount';
+
 type OptionsProps = {
   itemLimit?: number;
+  orderBy?: OrderBy;
 };
 
 type ResponseData = IProject[];
 
 export const useProjects = (options?: OptionsProps) => {
-  const { itemLimit = 14 } = options || {};
+  const { itemLimit = 14, orderBy = 'createdAt' } = options || {};
+
+  function orderByParams(orderByOption: OrderBy) {
+    switch (orderByOption) {
+      case 'createdAt':
+        return {
+          createdAt: null,
+        };
+      case 'contributionsCount':
+        return {
+          contributions: null,
+        };
+      case 'projectTitle':
+        return {
+          projectTitle: null,
+        };
+      default:
+        break;
+    }
+  }
 
   const {
     loading: isLoading,
@@ -20,11 +42,7 @@ export const useProjects = (options?: OptionsProps) => {
     variables: {
       input: {
         pagination: { take: itemLimit },
-
-        // TODO: In the future, tt will probably be helpful to make these options more configurable to callers.
-        orderBy: {
-          createdAt: null,
-        },
+        orderBy: orderByParams(orderBy),
       },
     },
   });

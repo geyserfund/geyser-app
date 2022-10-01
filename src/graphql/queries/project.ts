@@ -179,6 +179,7 @@ export const QUERY_PROJECTS = gql`
         createdAt
         updatedAt
         expiresAt
+        image
         active
         draft
         media
