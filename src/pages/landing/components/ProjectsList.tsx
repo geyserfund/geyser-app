@@ -6,33 +6,16 @@ import {
   Skeleton,
   Divider,
   Avatar,
-  Box,
   Link,
   Heading,
+  Icon,
 } from '@chakra-ui/react';
-import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
-import { Link as ReactRouterLink } from 'react-router-dom';
-
-import { colors } from '../../../constants';
-import { isMobileMode, useNotification } from '../../../utils';
+import { useNotification } from '../../../utils';
 import { QUERY_PROJECTS } from '../../../graphql';
-
-type RuleNames = string;
-
-interface IStyleProps {
-  isMobile?: boolean;
-}
-
-// const useStyles = createUseStyles<RuleNames, IStyleProps>({
-//   titles: ({ isMobile }: IStyleProps) => ({
-//     fontSize: isMobile ? '12px' : '14px',
-//     fontWeight: 500,
-//   }),
-// });
+import { BsArrowRight } from 'react-icons/bs';
 
 export const ProjectsList = () => {
-  // const classes = useStyles({ isMobile: isMobileMode() });
   const { toast } = useNotification();
   const { loading, error, data } = useQuery(QUERY_PROJECTS);
 
@@ -51,22 +34,21 @@ export const ProjectsList = () => {
   return (
     <VStack alignItems="left" paddingLeft={30} paddingRight={30}>
       <HStack justify="space-between" align="center">
-        <Heading as="h4" fontWeight={600} size="xl" lineHeight={'110%'}>
+        <Heading as="h5" size="sm">
           Top Projects
         </Heading>
 
         <Link
-          as={ReactRouterLink}
-          // px={2}
-          // py={1}
-          // rounded={'md'}
-          _hover={{
-            textDecoration: 'none',
-            // bg: useColorModeValue('gray.200', 'gray.700'),
-          }}
-          to={'/project-discovery'}
+          href={'/project-discovery'}
+          display="flex"
+          flexDirection={'row'}
+          alignItems="center"
+          color={'brand.neutral600'}
+          fontSize="12px"
         >
-          <Text>See All Projects</Text>
+          <Text size="sm">See All Projects</Text>
+
+          <Icon as={BsArrowRight} marginLeft={1} />
         </Link>
       </HStack>
 
