@@ -1,14 +1,11 @@
 import { Avatar, Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import React from 'react';
-import { BsHeartFill } from 'react-icons/bs';
-import { LikeHeart } from '../../components/molecules';
-import { colors } from '../../constants';
+import { ProjectFundersCountIndicator } from '../../components/molecules';
 import { TEntryData } from '../../interfaces/entry';
 import { Editor } from '../creation/entry/editor';
 
 export const EntryDetails = ({ entry }: { entry: TEntryData }) => {
-  console.log('checking somehitng');
   return (
     <VStack width="100%" alignItems="flex-start">
       <Box>
@@ -26,7 +23,7 @@ export const EntryDetails = ({ entry }: { entry: TEntryData }) => {
             )}
           </Text>
         </HStack>
-        <LikeHeart count={entry.fundersCount} />
+        <ProjectFundersCountIndicator count={entry.fundersCount} />
       </HStack>
       <HStack
         width={'100%'}

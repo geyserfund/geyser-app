@@ -5,7 +5,9 @@ import { ButtonComponent } from '../ui';
 import { BoltIcon } from '../icons';
 import { dimensions } from '../../constants';
 
-const { mobileNavbar } = dimensions;
+const {
+  topNavBar: { mobile: mobileNavBarDimensions },
+} = dimensions;
 
 interface IProjectDetailsMobileMenuProps {
   showMobileMenu?: boolean;
@@ -26,7 +28,7 @@ export const ProjectDetailsMobileMenu = ({
         position={'fixed'}
         bottom={0}
         transform={`translateY(${
-          showMobileMenu ? 0 : `${mobileNavbar.height}px`
+          showMobileMenu ? 0 : `${mobileNavBarDimensions.height}px`
         })`}
         transition="all 0.35s ease-in-out"
         left={0}

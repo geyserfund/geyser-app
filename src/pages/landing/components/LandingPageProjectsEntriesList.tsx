@@ -1,5 +1,5 @@
-import React from 'react';
-import { ListItem, List } from '@chakra-ui/react';
+import React, { useMemo, useState } from 'react';
+import { ListItem, List, Button, VStack, Divider } from '@chakra-ui/react';
 import { createUseStyles } from 'react-jss';
 
 import Loader from '../../../components/ui/Loader';
@@ -27,8 +27,22 @@ export const LandingPageProjectsEntriesList = () => {
     error,
     data: entries,
   } = useAllProjectEntries({
-    usePreviewData: false,
+    // usePreviewData: true,
   });
+
+  const [shouldShowAllEntries, setShouldShowAllEntries] = useState(false);
+
+  const maxItemCount: number = useMemo(() => {
+    return shouldShowAllEntries ? Infinity : 10;
+  }, [shouldShowAllEntries, entries]);
+
+  const entriesToShow: IProjectListEntryItem[] = useMemo(() => {
+    return entries.slice(0, maxItemCount);
+  }, [maxItemCount, entries]);
+
+  const isShowingAllEntries: boolean = useMemo(() => {
+    return shouldShowAllEntries || entriesToShow.length <= maxItemCount;
+  }, [shouldShowAllEntries, entriesToShow]);
 
   if (error) {
     return (
@@ -58,16 +72,30 @@ export const LandingPageProjectsEntriesList = () => {
   }
 
   return (
-    <>
+    <VStack flexDirection={'column'} spacing={6}>
       {isLoading && <Loader />}
 
-      <List spacing={4}>
-        {entries.map((entry: IProjectListEntryItem) => (
+      <List spacing={6}>
+        {entriesToShow.map((entry: IProjectListEntryItem) => (
           <ListItem key={entry.id}>
-            <ProjectEntryCard entry={entry} onEdit={() => {}} />
+            <ProjectEntryCard entry={entry} />
           </ListItem>
         ))}
       </List>
-    </>
+
+      {isShowingAllEntries === false ? (
+        <>
+          <Divider />
+
+          <Button
+            onClick={() => {
+              setShouldShowAllEntries(true);
+            }}
+          >
+            View More
+          </Button>
+        </>
+      ) : null}
+    </VStack>
   );
 };

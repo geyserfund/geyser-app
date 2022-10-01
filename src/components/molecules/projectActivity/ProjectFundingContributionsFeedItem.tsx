@@ -33,11 +33,7 @@ export const ProjectFundingContributionsFeedItem = ({
   const avatarMetadata = getAvatarMetadata({ funder, source });
 
   return (
-    <Center
-      // py={6}
-      flexDirection={'column'}
-      {...rest}
-    >
+    <Center flexDirection={'column'} {...rest}>
       <Box
         w={'full'}
         bg={useColorModeValue('white', 'gray.900')}

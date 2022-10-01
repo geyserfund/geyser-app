@@ -17,14 +17,4 @@ export * from './DeleteConfirmModal';
 export * from './TwitterConnect';
 
 export * from './projectActivity';
-
-export * from './projectDisplay/ProjectBalance';
-export * from './projectDisplay/ProfileProjectCard';
-export * from './projectDisplay/ProjectCard';
-export * from './projectDisplay/ProjectBalanceCircularProgress';
-export * from './projectDisplay/ProjectBars';
-export * from './projectDisplay/LiveProject';
-export * from './projectDisplay/ProjectContributionCard';
-export * from './projectDisplay/RewardCard';
-export * from './projectDisplay/ActivityBrief';
-export * from './projectDisplay/LikeHeart';
+export * from './projectDisplay';

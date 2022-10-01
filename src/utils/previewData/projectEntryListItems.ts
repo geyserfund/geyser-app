@@ -17,6 +17,12 @@ export const entry1: IProjectListEntryItem = {
   },
   fundersCount: 1,
   amountFunded: 1,
+  published: false,
+  project: {
+    title: 'Running With Bitcoin',
+    name: '',
+    image: null,
+  },
 };
 
 export const entry2: IProjectListEntryItem = {
@@ -34,6 +40,12 @@ export const entry2: IProjectListEntryItem = {
   },
   fundersCount: 221,
   amountFunded: 210000000,
+  published: false,
+  project: {
+    title: 'Bitcoin Racing',
+    name: '',
+    image: null,
+  },
 };
 
 export const projectEntryListItems: IProjectListEntryItem[] = [entry1, entry2];

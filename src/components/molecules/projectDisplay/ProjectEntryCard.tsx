@@ -3,7 +3,9 @@ import {
   Box,
   Heading,
   HStack,
+  HTMLChakraProps,
   Image,
+  SkeletonCircle,
   Spacer,
   Stack,
   Text,
@@ -11,12 +13,13 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useHistory } from 'react-router';
-import { LikeHeart } from '..';
+import { ProjectFundersCountIndicator } from '..';
 import { ICard, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
-import { AvatarElement } from '../../../pages/projectView/components/AvatarElement';
 import { BsPencil } from 'react-icons/bs';
+import { createUseStyles } from 'react-jss';
+import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
 
 type Props = ICard & {
   entry: IProjectListEntryItem;
@@ -24,9 +27,41 @@ type Props = ICard & {
   onEdit?: () => void;
 };
 
+const useStyles = createUseStyles({
+  thumbnailImage: {
+    height: '142px',
+    width: '196px',
+    borderRadius: '0.5em',
+  },
+});
+
+type ProjectImageProps = HTMLChakraProps<'div'> & {
+  entry: IProjectListEntryItem;
+};
+
+const ProjectImage = ({ entry, ...rest }: ProjectImageProps) => {
+  const imageSrc = entry.project.image;
+
+  return (
+    <Box {...rest}>
+      {imageSrc && imageSrc.length > 0 ? (
+        <Image
+          size="full"
+          src={imageSrc}
+          padding={2}
+          backgroundColor={'brand.neutral500'}
+        />
+      ) : (
+        <SkeletonCircle size="full" speed={0} borderRadius={'4px'} />
+      )}
+    </Box>
+  );
+};
+
 export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
   const isMobile = isMobileMode();
   const history = useHistory();
+  const styles = useStyles();
 
   const handleClick =
     onClick ||
@@ -51,15 +86,15 @@ export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
       maxWidth={'100%'}
       p={2}
       onClick={handleClick}
+      cursor="pointer"
     >
       <Box flexShrink={0}>
         <Image
-          height="142px"
-          width="196px"
+          className={styles.thumbnailImage}
           src={entry.image}
+          fallback={<ProjectEntryCardThumbnailPlaceholder />}
           fit="cover"
           alt={entry.title}
-          borderRadius="0.25rem"
         />
       </Box>
 
@@ -80,8 +115,24 @@ export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
 
         <Spacer />
 
-        <HStack>
-          {entry.creator && <AvatarElement user={entry.creator} />}
+        <HStack flex={0}>
+          <HStack spacing={2} maxWidth="33%">
+            <ProjectImage
+              entry={entry}
+              width="28px"
+              height="28px"
+              flexShrink={0}
+            />
+
+            <Text
+              color="brand.neutral600"
+              textTransform={'uppercase'}
+              noOfLines={1}
+              isTruncated
+            >
+              {entry.project.title}
+            </Text>
+          </HStack>
 
           <SatoshiAmount color="brand.primary" fontWeight="bold">
             {entry.amountFunded}
@@ -105,7 +156,7 @@ export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
             <BsPencil />
           </Box>
         ) : (
-          <LikeHeart count={entry.fundersCount} />
+          <ProjectFundersCountIndicator count={entry.fundersCount} />
         )}
       </VStack>
     </Stack>

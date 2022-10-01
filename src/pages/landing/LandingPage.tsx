@@ -26,6 +26,7 @@ export const LandingPage = () => {
         width="full"
         height="auto"
         minH={'full'}
+        overflow="hidden"
         spacing={30}
       >
         <Box height="full" flex="1">

@@ -36,6 +36,8 @@ export const QUERY_ENTRIES_LANDING = gql`
       image
       fundersCount
       amountFunded
+      type
+
       project {
         title
         name

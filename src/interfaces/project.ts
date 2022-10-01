@@ -116,6 +116,11 @@ export interface IProjectListEntryItem {
   fundersCount: number;
   amountFunded: number;
   published: boolean;
+  project: {
+    title: string;
+    name: string;
+    image: string | null;
+  };
 }
 
 export interface IRewardCount {
