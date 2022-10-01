@@ -29,7 +29,7 @@ export const AlertBox = ({ title, message, ...rest }: Props) => (
     {...rest}
   >
     <AlertIcon boxSize="40px" mr={0} as={MdOutlineReportGmailerrorred} />
-    <AlertTitle mt={4} mb={1} fontSize="lg">
+    <AlertTitle mt={4} mb={2} fontSize="lg">
       {title}
     </AlertTitle>
     <AlertDescription maxWidth="sm">{message}</AlertDescription>

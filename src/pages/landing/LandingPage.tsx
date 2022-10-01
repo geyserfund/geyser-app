@@ -1,7 +1,18 @@
 import React from 'react';
-import { Box, Divider, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Divider,
+  Heading,
+  HStack,
+  Icon,
+  Link,
+  Stack,
+  VStack,
+  Text,
+} from '@chakra-ui/react';
 import { AppFooter } from '../../components/molecules';
-import { ActivityView, ProjectsList, TopBanner } from './components';
+import { ActivityView, LandingPageProjectsList, TopBanner } from './components';
+import { BsArrowRight } from 'react-icons/bs';
 
 export const LandingPage = () => {
   return (
@@ -24,7 +35,35 @@ export const LandingPage = () => {
         <Divider orientation="vertical" borderWidth={'1px'} height="auto" />
 
         <Box width="400px" minWidth="400px" flexBasis={1} height="full">
-          <ProjectsList />
+          <VStack
+            alignItems="left"
+            paddingLeft={30}
+            paddingRight={30}
+            spacing={4}
+          >
+            <HStack justify="space-between" align="center">
+              <Heading as="h5" size="sm">
+                Top Projects
+              </Heading>
+
+              <Link
+                href={'/project-discovery'}
+                display="flex"
+                flexDirection={'row'}
+                alignItems="center"
+                color={'brand.neutral600'}
+                fontSize="12px"
+              >
+                <Text size="sm">See All Projects</Text>
+
+                <Icon as={BsArrowRight} marginLeft={1} />
+              </Link>
+            </HStack>
+
+            <Divider borderWidth="2px" borderRadius="full" />
+
+            <LandingPageProjectsList />
+          </VStack>
         </Box>
       </Stack>
 

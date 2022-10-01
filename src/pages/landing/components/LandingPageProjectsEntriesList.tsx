@@ -21,7 +21,7 @@ const useStyles = createUseStyles<RuleNames, IStyleProps>({
   }),
 });
 
-export const EntriesList = () => {
+export const LandingPageProjectsEntriesList = () => {
   const {
     isLoading,
     error,

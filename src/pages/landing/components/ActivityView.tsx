@@ -1,7 +1,7 @@
 import React from 'react';
 import { TabList, Tab, Tabs, TabPanel, TabPanels } from '@chakra-ui/react';
-import { EntriesList } from './EntriesList';
-import { ContributionsList } from './ContributionsList';
+import { LandingPageProjectsEntriesList } from './LandingPageProjectsEntriesList';
+import { LandingPageContributionsList } from './LandingPageContributionsList';
 
 type ActivityViewTab = 'Entries' | 'Contributions';
 
@@ -22,10 +22,10 @@ export const ActivityView = () => {
 
       <TabPanels width="100%">
         <TabPanel>
-          <EntriesList />
+          <LandingPageProjectsEntriesList />
         </TabPanel>
         <TabPanel>
-          <ContributionsList />
+          <LandingPageContributionsList />
         </TabPanel>
       </TabPanels>
     </Tabs>

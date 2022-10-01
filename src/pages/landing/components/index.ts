@@ -1,3 +1,5 @@
 export * from './ActivityView';
-export * from './ProjectsList';
+export * from './LandingPageContributionsList';
+export * from './LandingPageProjectsList';
+export * from './LandingPageProjectsListItem';
 export * from './TopBanner';

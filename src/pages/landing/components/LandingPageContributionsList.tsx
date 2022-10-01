@@ -1,27 +1,11 @@
 import React from 'react';
 import { ListItem, List, Container } from '@chakra-ui/react';
-import { createUseStyles } from 'react-jss';
 import { useQuery } from '@apollo/client';
 
-import { isMobileMode } from '../../../utils';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
-import { IProjectContribution } from '../../../interfaces';
-
-type RuleNames = string;
-
-type StyleProps = {
-  isMobile?: boolean;
-};
-
-const useStyles = createUseStyles<RuleNames, StyleProps>({
-  titles: ({ isMobile }: StyleProps) => ({
-    fontSize: isMobile ? '12px' : '14px',
-    fontWeight: 500,
-  }),
-});
 
 const ContributionItem = ({
   transactionResponsePayload,
@@ -44,9 +28,7 @@ const ContributionItem = ({
   );
 };
 
-export const ContributionsList = () => {
-  const classes = useStyles({ isMobile: isMobileMode() });
-
+export const LandingPageContributionsList = () => {
   const {
     loading: isLoading,
     error,
