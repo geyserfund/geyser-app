@@ -1,11 +1,10 @@
 import React from 'react';
 import { List, ListItem } from '@chakra-ui/react';
-import { useQuery } from '@apollo/client';
-import { QUERY_PROJECTS } from '../../../graphql';
 import { AlertBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { IProject } from '../../../interfaces';
 import { LandingPageProjectsListItem } from './LandingPageProjectsListItem';
+import { useProjects } from '../../../hooks';
 
 type Props = {
   itemLimit?: number;
@@ -13,13 +12,13 @@ type Props = {
 
 export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
   const {
-    loading: isLoading,
+    isLoading,
     error,
-    data: projectsData,
-  } = useQuery(QUERY_PROJECTS);
-
-  const projects: IProject[] =
-    projectsData?.projects.projects.slice(0, itemLimit) || [];
+    data: projects,
+  } = useProjects({
+    // usePreviewData: true,
+    itemLimit,
+  });
 
   if (error) {
     return (
@@ -32,11 +31,11 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
     );
   }
 
-  if (isLoading && !projects) {
+  if (isLoading) {
     return <Loader />;
   }
 
-  if (projects?.length === 0) {
+  if (projects.length === 0) {
     return (
       <AlertBox
         height="200px"

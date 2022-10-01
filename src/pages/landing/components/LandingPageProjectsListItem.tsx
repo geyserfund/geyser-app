@@ -15,7 +15,7 @@ type Props = HTMLChakraProps<'div'> & {
 };
 
 export const LandingPageProjectsListItem = ({ project, ...rest }: Props) => {
-  const projectImageSrc = project.media[0];
+  const projectImageSrc = project.media[0] || '';
 
   return (
     <Link

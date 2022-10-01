@@ -1,3 +1,4 @@
+export * from './useProjects';
 export * from './useAllProjectEntries';
 export * from './useForm';
 export * from './useFundingFlow';
