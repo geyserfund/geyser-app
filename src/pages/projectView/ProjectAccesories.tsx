@@ -23,9 +23,10 @@ interface IProjectAccesories {
 	project: IProject
 	setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
 	updateReward:TupdateReward
+	fundState: IFundingStages;
 }
 
-export const ProjectAccesories = ({ project, setFundState, updateReward }: IProjectAccesories) => {
+export const ProjectAccesories = ({ project, setFundState, updateReward, fundState }: IProjectAccesories) => {
 	const classes = useStyles();
 	const isMobile = isMobileMode();
 	const history = useHistory();
@@ -59,21 +60,12 @@ export const ProjectAccesories = ({ project, setFundState, updateReward }: IProj
 			return (
 				project.rewards.map(reward => (
 					<GridItem key={reward.id} colSpan={isSmallerThan1265 ? 1 : 2}>
-						{/* <RewardCard
-							reward={reward}
-							onClick={() => {
-								updateReward({id: reward.id, count: 1});
-								setFundState(fundingStages.form);
-							}}
-							isSatoshi={true}
-							minWidth="350px"
-							maxWidth="350px"
-							minHeight="155px"
-						/> */}
 						<RewardItem
 							onClick={() => {
-								updateReward({id: reward.id, count: 1});
-								setFundState(fundingStages.form);
+								if (fundState === fundingStages.initial) {
+									updateReward({ id: reward.id, count: 1 });
+									setFundState(fundingStages.form);
+								}
 							}}
 							item={reward}
 							readOnly

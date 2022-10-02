@@ -38,7 +38,7 @@ export const Wallet = () => {
 
 	const { loading } = useQuery(QUERY_PROJECT_BY_NAME,
 		{
-			variables: { where: { id: params.projectId } },
+			variables: { where: { name: params.projectId } },
 			onError() {
 				toast({
 					title: 'Error fetching project',

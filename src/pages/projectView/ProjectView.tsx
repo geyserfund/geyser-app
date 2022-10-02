@@ -84,10 +84,10 @@ interface IProjectViewContainer {
 
 const ProjectViewContainer = ({project, detailOpen, setDetailOpen, fundingFlow}: IProjectViewContainer) => {
 	const fundForm = useFundState({rewards: project.rewards});
-	const { setFundState } = fundingFlow;
+	const { setFundState, fundState } = fundingFlow;
 	return (
 		<>
-			<DetailsContainer project={project} {...{detailOpen, setDetailOpen, setFundState, updateReward: fundForm.updateReward }}/>
+			<DetailsContainer project={project} {...{detailOpen, setDetailOpen, fundState, setFundState, updateReward: fundForm.updateReward }}/>
 			<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow, fundForm }}/>
 		</>
 	);

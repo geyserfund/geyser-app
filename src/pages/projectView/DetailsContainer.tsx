@@ -53,11 +53,12 @@ interface IActivityProps {
 	project: IProject
 	detailOpen: boolean
 	setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+  fundState: IFundingStages;
 	setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
 	updateReward: TupdateReward
 }
 
-export const DetailsContainer = ({ project, detailOpen, setDetailOpen, setFundState, updateReward }: IActivityProps) => {
+export const DetailsContainer = ({ project, detailOpen, setDetailOpen, fundState, setFundState, updateReward }: IActivityProps) => {
 	const isMobile = isMobileMode();
 	const isDark = isDarkMode();
 
@@ -120,7 +121,7 @@ export const DetailsContainer = ({ project, detailOpen, setDetailOpen, setFundSt
 						padding={isMobile ? '20px 10px 50px 10px' : '0px 40px 70px 40px'}
 					>
 						<DetailsCard project={project} setFundState={setFundState} />
-						<ProjectAccesories project={project} setFundState={setFundState} updateReward={updateReward}/>
+						<ProjectAccesories project={project} fundState={fundState} setFundState={setFundState} updateReward={updateReward}/>
 					</VStack >
 				</VStack >
 				<Footer />
