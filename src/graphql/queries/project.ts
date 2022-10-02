@@ -164,8 +164,8 @@ export const QUERY_GRANTS = gql`
 `;
 
 export const QUERY_PROJECTS = gql`
-  query projects($where: ProjectQueryInput) {
-    projects(where: $where) {
+  query projects($input: ProjectsGetQueryInput) {
+    projects(input: $input) {
       projects {
         id
         title
