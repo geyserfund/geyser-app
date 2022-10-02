@@ -10,7 +10,9 @@ import {
   VStack,
   Text,
 } from '@chakra-ui/react';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { AppFooter } from '../../components/molecules';
+
 import { ActivityView, LandingPageProjectsList, TopBanner } from './components';
 import { BsArrowRight } from 'react-icons/bs';
 
@@ -48,7 +50,8 @@ export const LandingPage = () => {
               </Heading>
 
               <Link
-                href={'/project-discovery'}
+                as={ReactRouterLink}
+                to={'/project-discovery'}
                 display="flex"
                 flexDirection={'row'}
                 alignItems="center"
