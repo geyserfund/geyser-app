@@ -114,7 +114,7 @@ export const EntryCreateEdit = () => {
 			if (form.current.content || form.current.title || form.current.description || form.current.image) {
 				const { image, title, description, content } = value;
 				const input: IEntryCreateInput = {
-					projectId: projectData && projectData.project.id,
+					projectId: projectData && projectData.project && projectData.project.id,
 					type: 'article',
 					title,
 					description,
@@ -158,7 +158,6 @@ export const EntryCreateEdit = () => {
 
 	const handleContentUpdate = (name: string, value: string) => {
 		const newForm = { ...form.current, [name]: value };
-		console.log('checking handleContent update Data', newForm);
 		setForm(newForm);
 		handleCreateEntry(newForm);
 	};
@@ -167,7 +166,6 @@ export const EntryCreateEdit = () => {
 		const { name, value } = event.target;
 		if (name) {
 			const newForm = { ...form.current, [name]: value };
-			console.log('checking handleContent handleInput Data', newForm);
 			setForm(newForm);
 			handleCreateEntry(newForm);
 		}
