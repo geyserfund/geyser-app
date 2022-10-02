@@ -38,7 +38,10 @@ From there, populate the new file with the following values:
 ```shell
 REACT_APP_ENV=development
 REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
+APOLLO_KEY=<you Apollo Studio API key>
 ```
+[Contact us](email:admin@geyser.fund), if you don't have an `APOLLO_KEY` yet.
+
 
 ## Running the App Locally
 
