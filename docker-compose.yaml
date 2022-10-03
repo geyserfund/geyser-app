@@ -26,7 +26,7 @@ services:
     env_file: ../.env
     ports:
       - "9002:9002"
-    command: graphql-faker <(rover graph fetch geyser-graph@development)
+    command: graphql-faker -p 9002 <(rover graph fetch geyser-graph@development)
 
   caddy:
     container_name: geyser-caddy-standalone
