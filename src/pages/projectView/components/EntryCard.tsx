@@ -12,6 +12,7 @@ import { BsPencil } from 'react-icons/bs';
 import { useHistory } from 'react-router';
 import { LikeHeart } from '../../../components/molecules';
 import { SatoshiAmount } from '../../../components/ui';
+import { GeyserSkeletonUrl } from '../../../constants';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { AvatarElement } from './AvatarElement';
@@ -57,6 +58,7 @@ export const EntryCard = ({ entry, onEdit }: IEntryCard) => {
           height="100%"
           width="100%"
           src={entry.image}
+          fallbackSrc={GeyserSkeletonUrl}
         />
       </Box>
       <VStack alignItems="flex-start" flex="1">

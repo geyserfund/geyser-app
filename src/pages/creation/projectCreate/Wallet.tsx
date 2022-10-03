@@ -54,7 +54,7 @@ export const Wallet = () => {
     MUTATION_CREATE_WALLET,
   );
 
-  const { loading } = useQuery(QUERY_PROJECT_BY_NAME, {
+  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
     variables: { where: { name: params.projectId } },
     onError() {
       toast({
@@ -75,7 +75,7 @@ export const Wallet = () => {
     try {
       const createWalletInput = {
         resourceInput: {
-          resourceId: params.projectId,
+          resourceId: projectData?.project?.id,
           resourceType: 'project',
         },
         lndConnectionDetailsInput: {
