@@ -36,8 +36,6 @@ export const defaultNode = {
 };
 
 export const AddNode = ({ isOpen, onClose, node, onSubmit }: IAddNode) => {
-  const params = useParams<{ projectId: string }>();
-
   const isMobile = isMobileMode();
 
   const [isVoltage, setIsVoltage] = useState(false);

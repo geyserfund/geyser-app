@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
+import { fonts } from '../../constants/fonts';
 import { IRewardCount, IProjectReward } from '../../interfaces';
 import { ImageWithReload, SatoshiAmount } from '../ui';
 
@@ -114,7 +115,10 @@ export const RewardItem = ({
               fontWeight="bold"
             >{`$${cost}`}</Text>
           ) : (
-            <SatoshiAmount>{`${cost}`}</SatoshiAmount>
+            <SatoshiAmount
+              fontFamily={fonts.mono}
+              fontWeight={600}
+            >{`${cost}`}</SatoshiAmount>
           )}
           <Text fontSize="10px" color="#1A1A1A" fontWeight="bold">
             per item

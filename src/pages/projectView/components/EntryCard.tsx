@@ -10,11 +10,15 @@ import {
 import React from 'react';
 import { BsPencil } from 'react-icons/bs';
 import { useHistory } from 'react-router';
+import { SatoshiIconTilted } from '../../../components/icons';
 import { LikeHeart } from '../../../components/molecules';
 import { SatoshiAmount } from '../../../components/ui';
+import { GeyserSkeletonUrl } from '../../../constants';
+import { fonts } from '../../../constants/fonts';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { AvatarElement } from './AvatarElement';
+import entryPlaceholder from '../../../assets/images/entry-placeholder.png';
 
 interface IEntryCard {
   entry: IProjectListEntryItem;
@@ -35,6 +39,7 @@ export const EntryCard = ({ entry, onEdit }: IEntryCard) => {
     }
   };
 
+  console.log('checking entry', entry);
   return (
     <HStack
       flexDirection={isMobile ? 'column' : 'row'}
@@ -56,7 +61,8 @@ export const EntryCard = ({ entry, onEdit }: IEntryCard) => {
           borderRadius="4px"
           height="100%"
           width="100%"
-          src={entry.image}
+          src={entry.image ? entry.image : entryPlaceholder}
+          fallbackSrc={GeyserSkeletonUrl}
         />
       </Box>
       <VStack alignItems="flex-start" flex="1">
@@ -65,10 +71,29 @@ export const EntryCard = ({ entry, onEdit }: IEntryCard) => {
         </Text>
         <Text color="brand.neutral600">{entry.description}</Text>
         <HStack>
-          <SatoshiAmount color="brand.primary">
-            {entry.amountFunded}
-          </SatoshiAmount>
           {entry.creator && <AvatarElement user={entry.creator} />}
+
+          <HStack alignItems="center">
+            <Box
+              backgroundColor="brand.primary"
+              borderRadius="50%"
+              h="20px"
+              w="20px"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <SatoshiIconTilted scale="0.7" isDark />
+            </Box>
+            <Text
+              color="brand.primary"
+              fontFamily={fonts.mono}
+              fontWeight={600}
+              fontSize="16px"
+            >
+              {entry.amountFunded}
+            </Text>
+          </HStack>
           <Badge>ARTICLE</Badge>
         </HStack>
       </VStack>

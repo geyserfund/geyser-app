@@ -4,7 +4,7 @@ import React from 'react';
 import LogoLight from '../../assets/logo.png';
 import LogoDark from '../../assets/logo-dark.png';
 import LogoNameLight from '../../assets/logo-name.png';
-import geyserBlack from '../../assets/geyserBlack.png';
+import geyserBlack from '../../assets/geyser-single-black.svg';
 import { useColorMode } from '@chakra-ui/color-mode';
 import { useMediaQuery } from '@chakra-ui/media-query';
 import { HTMLChakraProps } from '@chakra-ui/system';

@@ -74,6 +74,15 @@ const useStyles = createUseStyles<Rules, IStyles>({
       height: '100%',
       maxHeight: '500px',
     },
+    '& button.ql-active': {
+      color: `${colors.primary} !important`,
+    },
+    '& button.ql-active .ql-stroke': {
+      stroke: `${colors.primary} !important`,
+    },
+    '& button.ql-active .ql-fill': {
+      fill: `${colors.primary} !important`,
+    },
   }),
 });
 
@@ -142,8 +151,19 @@ export const Editor = ({ name, value, handleChange, readOnly }: IEditor) => {
       editor.updateContents(textValue, 'api');
     }
 
-    editor.on('text-change', () => {
+    editor.on('text-change', (delta) => {
       const contents = quillObj.current?.getContents();
+
+      if (
+        delta &&
+        delta.ops &&
+        delta.ops[2] &&
+        delta.ops[2].attributes &&
+        delta.ops[2].attributes.imageBlot
+      ) {
+        return;
+      }
+
       if (handleChange) {
         handleChange(name, JSON.stringify(contents));
       }
