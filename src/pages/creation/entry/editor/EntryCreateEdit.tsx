@@ -220,9 +220,15 @@ export const EntryCreateEdit = () => {
   const isEdit =
     Boolean(createData?.createEntry?.id) || Boolean(params.entryId);
 
-  window.onbeforeunload = (event: BeforeUnloadEvent) => {
+  const handleEvent = (event: BeforeUnloadEvent) => {
     event.preventDefault();
+    event.returnValue = 'are you there';
+    return event;
   };
+
+  useEffect(() => {
+    addEventListener('beforeunload', handleEvent, { once: true });
+  }, []);
 
   return (
     <>
