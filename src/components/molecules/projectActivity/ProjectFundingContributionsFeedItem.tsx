@@ -46,11 +46,14 @@ export const ProjectFundingContributionsFeedItem = ({
 
         <Box display="flex" justifyContent="space-between">
           {isFunderAnonymous ? (
-            <AnonymousAvatar
-              seed={fundingTx.funder.id}
-              image={avatarMetadata.image}
-              imageSize={'20px'}
-            />
+            <HStack spacing={2}>
+              <AnonymousAvatar
+                seed={fundingTx.funder.id}
+                image={avatarMetadata.image}
+                imageSize={'20px'}
+              />
+              <Text>Anonymous Funder</Text>
+            </HStack>
           ) : (
             <LinkableAvatar
               avatarMetadata={avatarMetadata}

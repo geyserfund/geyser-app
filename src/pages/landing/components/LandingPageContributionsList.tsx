@@ -22,14 +22,11 @@ const ContributionItem = ({
   const { sourceResource: project, ...fundingTx } = transactionResponsePayload;
 
   return (
-    <Container
-      justifyContent={'center'}
-      minWidth={'308'}
-      maxWidth={['full', '77%', '67%']}
-    >
+    <Container justifyContent={'center'} width={['308px', '536px']}>
       <ProjectFundingContributionsFeedItem
         fundingTx={fundingTx}
         project={project}
+        width="full"
       />
     </Container>
   );
