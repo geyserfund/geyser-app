@@ -1,6 +1,5 @@
 import { Image, ImageProps, Skeleton } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { GeyserSkeletonUrl } from '../../constants';
 
 interface IImageWithReload extends ImageProps {}
 

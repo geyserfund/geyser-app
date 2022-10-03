@@ -52,7 +52,6 @@ export const AddMilestones = ({
   isSatoshi,
   setIsSatoshi,
 }: IAddMilestones) => {
-  const params = useParams<{ projectId: string }>();
   const { toast } = useNotification();
 
   const [_milestones, _setMilestones] =
@@ -105,7 +104,7 @@ export const AddMilestones = ({
       filetMilestones.map(async (milestone) => {
         const createMilestoneInput = {
           ...milestone,
-          projectId: params.projectId,
+          projectId,
         };
         if (milestone.id) {
           await updateMilestone({

@@ -99,7 +99,7 @@ export const MilestoneAndRewards = () => {
     MUTATION_UPDATE_PROJECT_REWARD,
   );
 
-  const [getProject, { loading, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
+  const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
     variables: { where: { name: params.projectId } },
     onError() {
       toast({
@@ -109,21 +109,23 @@ export const MilestoneAndRewards = () => {
     },
     onCompleted(data) {
       console.log('checking data', data);
-      if (data.project.milestones && data.project.milestones.length > 0) {
+      if (
+        data.project &&
+        data.project.milestones &&
+        data.project.milestones.length > 0
+      ) {
         setMilestones(data.project.milestones);
       }
 
-      if (data.project.rewards && data.project.rewards.length > 0) {
+      if (
+        data.project &&
+        data.project.rewards &&
+        data.project.rewards.length > 0
+      ) {
         setRewards(data.project.rewards);
       }
     },
   });
-
-  useEffect(() => {
-    if (params && params.projectId) {
-      getProject();
-    }
-  }, [params.projectId]);
 
   const handleMilestoneSubmit = (milestones: TMilestone[]) => {
     setMilestones(milestones);

@@ -133,7 +133,8 @@ export const EntryCreateEdit = () => {
       ) {
         const { image, title, description, content } = value;
         const input: IEntryCreateInput = {
-          projectId: projectData && projectData.project.id,
+          projectId:
+            projectData && projectData.project && projectData.project.id,
           type: 'article',
           title,
           description,
@@ -177,7 +178,6 @@ export const EntryCreateEdit = () => {
 
   const handleContentUpdate = (name: string, value: string) => {
     const newForm = { ...form.current, [name]: value };
-    console.log('checking handleContent update Data', newForm);
     setForm(newForm);
     handleCreateEntry(newForm);
   };
@@ -186,7 +186,6 @@ export const EntryCreateEdit = () => {
     const { name, value } = event.target;
     if (name) {
       const newForm = { ...form.current, [name]: value };
-      console.log('checking handleContent handleInput Data', newForm);
       setForm(newForm);
       handleCreateEntry(newForm);
     }
@@ -220,6 +219,16 @@ export const EntryCreateEdit = () => {
 
   const isEdit =
     Boolean(createData?.createEntry?.id) || Boolean(params.entryId);
+
+  const handleEvent = (event: BeforeUnloadEvent) => {
+    event.preventDefault();
+    event.returnValue = 'are you there';
+    return event;
+  };
+
+  useEffect(() => {
+    addEventListener('beforeunload', handleEvent, { once: true });
+  }, []);
 
   return (
     <>
@@ -279,7 +288,7 @@ export const EntryCreateEdit = () => {
             <Input
               border="none"
               _focus={{ border: 'none' }}
-              placeholder="Title"
+              placeholder="The Entry Title"
               color="brand.gray500"
               fontSize="40px"
               fontWeight={700}
@@ -291,7 +300,7 @@ export const EntryCreateEdit = () => {
             <Input
               border="none"
               _focus={{ border: 'none' }}
-              placeholder="Summary of your project idea"
+              placeholder="The summary of this entry"
               color="brand.gray500"
               fontSize="26px"
               fontWeight={600}
