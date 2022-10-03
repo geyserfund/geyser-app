@@ -1,48 +1,33 @@
 import React, { useMemo, useState } from 'react';
 import { ListItem, List, Button, VStack, Divider } from '@chakra-ui/react';
-import { createUseStyles } from 'react-jss';
 
 import Loader from '../../../components/ui/Loader';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { ProjectEntryCard } from '../../../components/molecules/projectDisplay/ProjectEntryCard';
-import { useAllProjectEntries } from '../../../hooks';
+import { useProjectEntries } from '../../../hooks';
 import { AlertBox } from '../../../components/ui';
 
-type RuleNames = string;
+type Props = {
+  itemLimit?: number;
+};
 
-interface IStyleProps {
-  isMobile?: boolean;
-}
-
-const useStyles = createUseStyles<RuleNames, IStyleProps>({
-  titles: ({ isMobile }: IStyleProps) => ({
-    fontSize: isMobile ? '12px' : '14px',
-    fontWeight: 500,
-  }),
-});
-
-export const LandingPageProjectsEntriesList = () => {
+export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
   const {
     isLoading,
     error,
     data: entries,
-  } = useAllProjectEntries({
+    fetchMore,
+  } = useProjectEntries({
     // usePreviewData: true,
+    itemLimit,
   });
 
-  const [shouldShowAllEntries, setShouldShowAllEntries] = useState(false);
-
-  const maxItemCount: number = useMemo(() => {
-    return shouldShowAllEntries ? Infinity : 10;
-  }, [shouldShowAllEntries, entries]);
-
-  const entriesToShow: IProjectListEntryItem[] = useMemo(() => {
-    return entries.slice(0, maxItemCount);
-  }, [maxItemCount, entries]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const isShowingAllEntries: boolean = useMemo(() => {
-    return shouldShowAllEntries || entriesToShow.length <= maxItemCount;
-  }, [shouldShowAllEntries, entriesToShow]);
+    // return entries.length <= itemLimit;
+    return false;
+  }, [entries, itemLimit]);
 
   if (error) {
     return (
@@ -76,7 +61,7 @@ export const LandingPageProjectsEntriesList = () => {
       {isLoading && <Loader />}
 
       <List spacing={6}>
-        {entriesToShow.map((entry: IProjectListEntryItem) => (
+        {entries.map((entry: IProjectListEntryItem) => (
           <ListItem key={entry.id}>
             <ProjectEntryCard entry={entry} />
           </ListItem>
@@ -87,13 +72,26 @@ export const LandingPageProjectsEntriesList = () => {
         <>
           <Divider />
 
-          <Button
-            onClick={() => {
-              setShouldShowAllEntries(true);
-            }}
-          >
-            View More
-          </Button>
+          {isLoadingMore === false ? (
+            <Button
+              onClick={async () => {
+                setIsLoadingMore(true);
+                await fetchMore({
+                  variables: {
+                    input: { pagination: { take: itemLimit } },
+                    // offset: fundingTxsData.getFundingTxs.length,
+                  },
+                });
+                console.log(entries);
+
+                setIsLoadingMore(false);
+              }}
+            >
+              View More
+            </Button>
+          ) : (
+            <Loader />
+          )}
         </>
       ) : null}
     </VStack>

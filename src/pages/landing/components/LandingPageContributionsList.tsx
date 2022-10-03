@@ -1,5 +1,12 @@
-import React from 'react';
-import { ListItem, List, Container } from '@chakra-ui/react';
+import React, { useMemo, useState } from 'react';
+import {
+  ListItem,
+  List,
+  Container,
+  Button,
+  Divider,
+  VStack,
+} from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
@@ -28,14 +35,27 @@ const ContributionItem = ({
   );
 };
 
-export const LandingPageContributionsList = () => {
+type Props = {
+  itemLimit?: number;
+};
+
+export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   const {
     loading: isLoading,
     error,
-    data: fundingTxsData,
-  } = useQuery(QUERY_GET_FUNDING_TXS_LANDING, { variables: {} });
+    data: responseData,
+    fetchMore,
+  } = useQuery(QUERY_GET_FUNDING_TXS_LANDING, {
+    variables: { input: { pagination: { take: itemLimit } } },
+  });
 
-  const contributions = (fundingTxsData && fundingTxsData.getFundingTxs) || [];
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const contributions = (responseData && responseData.getFundingTxs) || [];
+
+  const isShowingAllContributions: boolean = useMemo(() => {
+    // return contributions.length <= itemLimit;
+    return false;
+  }, [responseData, itemLimit]);
 
   if (error) {
     return (
@@ -65,7 +85,7 @@ export const LandingPageContributionsList = () => {
   }
 
   return (
-    <>
+    <VStack flexDirection={'column'} spacing={6}>
       {isLoading && <Loader />}
 
       <List spacing={3}>
@@ -75,6 +95,33 @@ export const LandingPageContributionsList = () => {
           </ListItem>
         ))}
       </List>
-    </>
+
+      {isShowingAllContributions === false ? (
+        <>
+          <Divider />
+
+          {isLoadingMore === false ? (
+            <Button
+              onClick={async () => {
+                setIsLoadingMore(true);
+                await fetchMore({
+                  variables: {
+                    input: { pagination: { take: itemLimit } },
+                    // offset: fundingTxsData.getFundingTxs.length,
+                  },
+                });
+                console.log(contributions);
+
+                setIsLoadingMore(false);
+              }}
+            >
+              View More
+            </Button>
+          ) : (
+            <Loader />
+          )}
+        </>
+      ) : null}
+    </VStack>
   );
 };

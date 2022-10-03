@@ -1,28 +1,24 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_ENTRIES_LANDING } from '../graphql';
-import { IProjectListEntryItem } from '../interfaces';
 import { projectEntryListItems as previewItems } from '../utils/previewData/projectEntryListItems';
 
-type Result = {
-  isLoading: boolean;
-  error: any;
-  data: IProjectListEntryItem[];
-};
-
 type OptionsProps = {
+  itemLimit?: number;
   usePreviewData?: boolean;
 };
 
-export const useAllProjectEntries = (options?: OptionsProps): Result => {
-  const { usePreviewData } = options || {
-    usePreviewData: false,
-  };
+/**
+ * Hook for fetching project entries across the entire Geyser platform.
+ */
+export const useProjectEntries = (options?: OptionsProps) => {
+  const { usePreviewData = false, itemLimit = 10 } = options || {};
 
   if (usePreviewData) {
     return {
       isLoading: false,
       error: null,
       data: previewItems,
+      fetchMore: () => {},
     };
   }
 
@@ -30,11 +26,15 @@ export const useAllProjectEntries = (options?: OptionsProps): Result => {
     loading: isLoading,
     error,
     data: entriesData,
-  } = useQuery(QUERY_ENTRIES_LANDING);
+    fetchMore,
+  } = useQuery(QUERY_ENTRIES_LANDING, {
+    variables: { input: { pagination: { take: itemLimit } } },
+  });
 
   return {
     isLoading,
     error,
     data: entriesData?.getEntries || [],
+    fetchMore,
   };
 };
