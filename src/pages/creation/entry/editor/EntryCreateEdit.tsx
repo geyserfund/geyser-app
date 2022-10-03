@@ -251,7 +251,7 @@ export const EntryCreateEdit = () => {
 						<Input
 							border="none"
 							_focus={{ border: 'none' }}
-							placeholder="Title"
+							placeholder="The Entry Title"
 							color="brand.gray500"
 							fontSize="40px"
 							fontWeight={700}
@@ -263,7 +263,7 @@ export const EntryCreateEdit = () => {
 						<Input
 							border="none"
 							_focus={{ border: 'none' }}
-							placeholder="Summary of your project idea"
+							placeholder="The summary of this entry"
 							color="brand.gray500"
 							fontSize="26px"
 							fontWeight={600}

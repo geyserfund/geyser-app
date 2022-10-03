@@ -74,6 +74,15 @@ const useStyles = createUseStyles<Rules, IStyles>({
 			height: '100%',
 			maxHeight: '500px',
 		},
+		'& button.ql-active': {
+			color: `${colors.primary} !important`,
+		},
+		'& button.ql-active .ql-stroke': {
+			stroke: `${colors.primary} !important`,
+		},
+		'& button.ql-active .ql-fill': {
+			fill: `${colors.primary} !important`,
+		},
 	}),
 });
 
