@@ -29,7 +29,9 @@ export const useProjects = (options?: OptionsProps): Result => {
     loading: isLoading,
     error,
     data: projectsData,
-  } = useQuery(QUERY_PROJECTS);
+  } = useQuery(QUERY_PROJECTS, {
+    variables: {},
+  });
 
   const projects: IProject[] = projectsData?.projects.projects || [];
 
