@@ -15,6 +15,7 @@ export interface IProject {
   createdAt: string;
   updatedAt: string;
   expiresAt: string;
+  image?: string;
   active: boolean;
   ownerConfirmed: string;
   fundsClaimed: string;

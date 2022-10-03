@@ -9,3 +9,4 @@ export * from './RewardCard';
 export * from './ActivityBrief';
 export * from './ProjectFundersCountIndicator';
 export * from './ProjectEntryCardThumbnailPlaceholder';
+export * from './ProjectImageListItemPlaceholder';
