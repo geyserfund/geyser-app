@@ -220,6 +220,10 @@ export const EntryCreateEdit = () => {
   const isEdit =
     Boolean(createData?.createEntry?.id) || Boolean(params.entryId);
 
+  window.onbeforeunload = (event: BeforeUnloadEvent) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <CreateNav
