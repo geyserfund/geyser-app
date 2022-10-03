@@ -18,6 +18,7 @@ import { fonts } from '../../../constants/fonts';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { AvatarElement } from './AvatarElement';
+import entryPlaceholder from '../../../assets/images/entry-placeholder.png';
 
 interface IEntryCard {
   entry: IProjectListEntryItem;
@@ -60,7 +61,7 @@ export const EntryCard = ({ entry, onEdit }: IEntryCard) => {
           borderRadius="4px"
           height="100%"
           width="100%"
-          src={entry.image}
+          src={entry.image ? entry.image : entryPlaceholder}
           fallbackSrc={GeyserSkeletonUrl}
         />
       </Box>
