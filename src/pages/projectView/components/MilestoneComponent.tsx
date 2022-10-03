@@ -3,16 +3,23 @@ import React from 'react';
 import { SatoshiAmount } from '../../../components/ui';
 
 interface IMilestoneComponent {
-	name: string;
-	description: string;
-	amount: number
-	checked?: boolean
+  name: string;
+  description: string;
+  amount: number;
+  checked?: boolean;
 }
 
-export const MilestoneComponent = ({name, description, amount, checked}: IMilestoneComponent) => (
-	<HStack>
-		<Checkbox isChecked={checked} colorScheme="gray"><Text color="brand.neutral800">{`${name}: ${description} - `}</Text></Checkbox>
-		<SatoshiAmount>{amount}</SatoshiAmount>
-		<Text color="brand.neutral800"> to go.</Text>
-	</HStack>
+export const MilestoneComponent = ({
+  name,
+  description,
+  amount,
+  checked,
+}: IMilestoneComponent) => (
+  <HStack>
+    <Checkbox isChecked={checked} colorScheme="gray">
+      <Text color="brand.neutral800">{`${name}: ${description} - `}</Text>
+    </Checkbox>
+    <SatoshiAmount>{amount}</SatoshiAmount>
+    <Text color="brand.neutral800"> to go.</Text>
+  </HStack>
 );

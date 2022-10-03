@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_GET_FUNDING = gql`
-query GetFundingTx($id: BigInt!) {
+  query GetFundingTx($id: BigInt!) {
     fundingTx(id: $id) {
       id
       invoiceId
@@ -47,9 +47,9 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
 `;
 
 export const QUERY_GET_FUNDING_STATUS = gql`
-query GetFundingTxStatus($id: BigInt!) {
+  query GetFundingTxStatus($id: BigInt!) {
     fundingTx(id: $id) {
       status
+    }
   }
-}
 `;

@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const MUTATION_CREATE_WALLET = gql`
-mutation UpdateProject($input: CreateWalletInput) {
-	createWallet(input: $input) {
-	  id
-	  name
-	}
+  mutation UpdateProject($input: CreateWalletInput) {
+    createWallet(input: $input) {
+      id
+      name
+    }
   }
 `;
 /*
@@ -29,11 +29,11 @@ mutation UpdateProject($input: CreateWalletInput) {
 */
 
 export const MUTATION_UPDATE_WALLET = gql`
-mutation UpdateWallet($input: UpdateWalletInput) {
-	updateWallet(input: $input) {
-	  id
-	  name
-	}
+  mutation UpdateWallet($input: UpdateWalletInput) {
+    updateWallet(input: $input) {
+      id
+      name
+    }
   }
 `;
 /*

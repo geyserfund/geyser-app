@@ -1,3 +1,10 @@
 {
-  "recommendations": ["dbaeumer.vscode-eslint"]
+  "recommendations": [
+    "jawandarajbir.react-vscode-extension-pack",
+    "skyran.js-jsx-snippets",
+    "mhutchie.git-graph",
+    "apollographql.vscode-apollo",
+    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker"
+  ]
 }

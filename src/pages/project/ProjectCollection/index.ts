@@ -1,4 +1,8 @@
-import { IProjectBlock, IProjectDetail, IProjectUpdate } from '../../../interfaces';
+import {
+  IProjectBlock,
+  IProjectDetail,
+  IProjectUpdate,
+} from '../../../interfaces';
 import { Craig } from './Craig';
 import { King } from './King';
 import { Toni } from './Toni';
@@ -24,40 +28,40 @@ import { Tatum } from './Tatum';
 import { Nela } from './Nela';
 
 export interface IProjectData {
-	projectBlocks: IProjectBlock[]
-	projectDetails: IProjectDetail
-	projectName: string
-	projectUpdates?: IProjectUpdate[]
+  projectBlocks: IProjectBlock[];
+  projectDetails: IProjectDetail;
+  projectName: string;
+  projectUpdates?: IProjectUpdate[];
 }
 
 export interface IProjectColl {
-	[key: string]: IProjectData
+  [key: string]: IProjectData;
 }
 
 const ProjectColl: IProjectColl = {
-	[Craig.projectName]: Craig,
-	[King.projectName]: King,
-	[Toni.projectName]: Toni,
-	[Josias.projectName]: Josias,
-	[Apata.projectName]: Apata,
-	[Yeferson.projectName]: Yeferson,
-	[Pedro.projectName]: Pedro,
-	[Anita.projectName]: Anita,
-	[Matteo.projectName]: Matteo,
-	[Anonymal.projectName]: Anonymal,
-	[Rapaygo.projectName]: Rapaygo,
-	[Paco.projectName]: Paco,
-	[BitcoinRacing.projectName]: BitcoinRacing,
-	[BitcoinTwitter.projectName]: BitcoinTwitter,
-	[BinkBankBonk.projectName]: BinkBankBonk,
-	[Rastgelesurf.projectName]: Rastgelesurf,
-	[BitcoinJune.projectName]: BitcoinJune,
-	[NoShackles.projectName]: NoShackles,
-	[Pierre.projectName]: Pierre,
-	[HeroGame.projectName]: HeroGame,
-	[Trust.projectName]: Trust,
-	[Tatum.projectName]: Tatum,
-	[Nela.projectName]: Nela,
+  [Craig.projectName]: Craig,
+  [King.projectName]: King,
+  [Toni.projectName]: Toni,
+  [Josias.projectName]: Josias,
+  [Apata.projectName]: Apata,
+  [Yeferson.projectName]: Yeferson,
+  [Pedro.projectName]: Pedro,
+  [Anita.projectName]: Anita,
+  [Matteo.projectName]: Matteo,
+  [Anonymal.projectName]: Anonymal,
+  [Rapaygo.projectName]: Rapaygo,
+  [Paco.projectName]: Paco,
+  [BitcoinRacing.projectName]: BitcoinRacing,
+  [BitcoinTwitter.projectName]: BitcoinTwitter,
+  [BinkBankBonk.projectName]: BinkBankBonk,
+  [Rastgelesurf.projectName]: Rastgelesurf,
+  [BitcoinJune.projectName]: BitcoinJune,
+  [NoShackles.projectName]: NoShackles,
+  [Pierre.projectName]: Pierre,
+  [HeroGame.projectName]: HeroGame,
+  [Trust.projectName]: Trust,
+  [Tatum.projectName]: Tatum,
+  [Nela.projectName]: Nela,
 };
 
 export default ProjectColl;
