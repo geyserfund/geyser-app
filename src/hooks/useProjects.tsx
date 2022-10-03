@@ -30,7 +30,7 @@ export const useProjects = (options?: OptionsProps): Result => {
     error,
     data: projectsData,
   } = useQuery(QUERY_PROJECTS, {
-    variables: {},
+    variables: { input: { pagination: { take: itemLimit } } },
   });
 
   const projects: IProject[] = projectsData?.projects.projects || [];
