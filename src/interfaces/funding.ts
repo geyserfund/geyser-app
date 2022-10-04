@@ -1,5 +1,6 @@
 import { ShippingDestination } from '../constants';
 import { IFunder } from './participant';
+import { IProject, IProjectListEntryItem } from './project';
 
 export interface IFundingTx {
   id: number;
@@ -16,6 +17,7 @@ export interface IFundingTx {
   paidAt: string;
   onChain: boolean;
   source: string;
+  sourceResource: IProject | IProjectListEntryItem;
 }
 
 export interface IFundingReward {

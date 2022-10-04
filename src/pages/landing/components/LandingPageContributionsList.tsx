@@ -83,7 +83,7 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     <VStack flexDirection={'column'} spacing={6}>
       {isLoading && <Loader />}
 
-      <List spacing={3} alignSelf="flex-start">
+      <List spacing={3}>
         {contributions.map((contribution: any) => (
           <ListItem key={contribution.id} justifyContent="center">
             <ContributionItem transactionResponsePayload={contribution} />

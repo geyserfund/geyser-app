@@ -137,7 +137,7 @@ export const TopBanner = () => {
               bg: 'brand.primaryTint',
             }}
           >
-            🚀 Launch Your Project
+            Launch Your Project
           </ButtonComponent>
         </Stack>
       </Container>

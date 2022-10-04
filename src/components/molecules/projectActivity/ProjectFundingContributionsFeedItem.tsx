@@ -37,7 +37,8 @@ export const ProjectFundingContributionsFeedItem = ({
       <Box
         w={'full'}
         bg={useColorModeValue('white', 'gray.900')}
-        boxShadow={'2xl'}
+        boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"
+        _hover={{ boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)' }}
         rounded={'md'}
         p={6}
         overflow={'hidden'}

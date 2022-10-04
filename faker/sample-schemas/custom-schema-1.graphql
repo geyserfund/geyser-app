@@ -352,7 +352,6 @@ type FundingTx {
   amount: Int!
   status: FundingStatus!
   comment: String
-  # media: String
   media: String @fake(type: imageUrl, options: { randomizeImageUrl: true })
   paidAt: Date
   funder: Funder!
