@@ -1,12 +1,8 @@
-import {
-  ApolloClient,
-  createHttpLink,
-  from,
-  InMemoryCache,
-} from '@apollo/client';
-import { API_SERVICE_ENDPOINT } from '../constants';
+import { ApolloClient, createHttpLink, from } from '@apollo/client';
+import { API_SERVICE_ENDPOINT } from '../../constants';
 import { onError } from '@apollo/client/link/error';
-import { customHistory } from '.';
+import { customHistory } from '..';
+import { cache } from './apollo-client-cache';
 
 const httpLink = createHttpLink({
   uri: `${API_SERVICE_ENDPOINT}/graphql`,
@@ -29,5 +25,5 @@ const errorLink = onError(({ graphQLErrors }) => {
 
 export const client = new ApolloClient({
   link: from([errorLink, httpLink]),
-  cache: new InMemoryCache(),
+  cache,
 });

@@ -1,4 +1,4 @@
-# Geyser App
+# Geyser App Frontend 🌊
 
 The Geyser Front-End
 
@@ -7,7 +7,7 @@ The Geyser Front-End
 ### Installing Dependencies
 
 ```shell
-yarn install
+yarn
 ```
 
 ### Pre-requisites
@@ -59,6 +59,13 @@ In order for the requests to go through to the staging backend API, you will nee
 127.0.0.1 staging.geyser.fund
 ```
 
+If running against the GraphQL Faker server, you'll also need these in the same `/etc/hosts` file:
+
+```shell
+127.0.0.1 dev.geyser.fund
+127.0.0.1 api.dev.geyser.fund
+```
+
 ## Running the App Locally
 
 ### Starting Docker
@@ -89,4 +96,14 @@ docker-compose logs -f geyser-app
 
 ### Opening in the Browser
 
-With Docker running, navigate to <https://staging.geyser.fund/>.
+With Docker running, navigate to the URL that's appropriate for the development-environment configuration in your `.env` file:
+
+#### Staging
+
+<https://staging.geyser.fund/>
+
+#### GraphQL Faker
+
+<https://dev.geyser.fund/>
+
+### GraphQL Faker

@@ -35,6 +35,7 @@ export const QUERY_GET_FUNDING = gql`
 export const QUERY_GET_FUNDING_TXS_LANDING = gql`
   query GetFundingTxs($input: GetFundingTxsInput) {
     getFundingTxs(input: $input) {
+      id
       comment
       amount
       funder {
@@ -51,6 +52,10 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
           name
           title
           media
+        }
+        ... on Entry {
+          id
+          image
         }
       }
     }

@@ -18,7 +18,6 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
     data: entries,
     fetchMore,
   } = useProjectEntries({
-    // usePreviewData: true,
     itemLimit,
   });
 
@@ -60,7 +59,7 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
     <VStack flexDirection={'column'} spacing={6}>
       {isLoading && <Loader />}
 
-      <List spacing={6}>
+      <List spacing={6} alignSelf="flex-start">
         {entries.map((entry: IProjectListEntryItem) => (
           <ListItem key={entry.id}>
             <ProjectEntryCard entry={entry} />
@@ -76,12 +75,13 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
             <Button
               onClick={async () => {
                 setIsLoadingMore(true);
+
                 await fetchMore({
                   variables: {
                     input: { pagination: { take: itemLimit } },
-                    // offset: fundingTxsData.getFundingTxs.length,
                   },
                 });
+
                 console.log(entries);
 
                 setIsLoadingMore(false);

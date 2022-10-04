@@ -87,7 +87,7 @@ export const ProjectFundingContributionsFeedItem = ({
               <Image
                 src={fundingTx.media}
                 alt="Contribution media attachment"
-                objectFit={'contain'}
+                objectFit={'cover'}
                 width="full"
                 height="full"
                 borderRadius="4px"

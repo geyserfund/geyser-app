@@ -7,12 +7,11 @@ import {
   Divider,
   VStack,
 } from '@chakra-ui/react';
-import { useQuery } from '@apollo/client';
 
-import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
+import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingTransactions';
 
 const ContributionItem = ({
   transactionResponsePayload,
@@ -38,21 +37,20 @@ type Props = {
 
 export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   const {
-    loading: isLoading,
+    isLoading,
     error,
-    data: responseData,
+    data: contributions,
     fetchMore,
-  } = useQuery(QUERY_GET_FUNDING_TXS_LANDING, {
-    variables: { input: { pagination: { take: itemLimit } } },
+  } = useProjectFundingTransactions({
+    itemLimit,
   });
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const contributions = (responseData && responseData.getFundingTxs) || [];
 
   const isShowingAllContributions: boolean = useMemo(() => {
     // return contributions.length <= itemLimit;
     return false;
-  }, [responseData, itemLimit]);
+  }, [contributions, itemLimit]);
 
   if (error) {
     return (
@@ -85,9 +83,9 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     <VStack flexDirection={'column'} spacing={6}>
       {isLoading && <Loader />}
 
-      <List spacing={3}>
-        {contributions.map((contribution: any, index: number) => (
-          <ListItem key={index} justifyContent="center">
+      <List spacing={3} alignSelf="flex-start">
+        {contributions.map((contribution: any) => (
+          <ListItem key={contribution.id} justifyContent="center">
             <ContributionItem transactionResponsePayload={contribution} />
           </ListItem>
         ))}
@@ -101,13 +99,12 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
             <Button
               onClick={async () => {
                 setIsLoadingMore(true);
+
                 await fetchMore({
                   variables: {
                     input: { pagination: { take: itemLimit } },
-                    // offset: fundingTxsData.getFundingTxs.length,
                   },
                 });
-                console.log(contributions);
 
                 setIsLoadingMore(false);
               }}

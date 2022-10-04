@@ -6,7 +6,7 @@ export interface IFundingTx {
   uuid: string;
   invoiceId: string;
   comment: string;
-  media: string;
+  media?: string;
   status: string;
   amount: number;
   paymentRequest: string;

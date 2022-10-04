@@ -13,7 +13,7 @@ export const ProjectAvatarLink = ({
   project,
   textColor = 'brand.neutral700',
 }: Props) => {
-  const avatarSrc = project.media.length > 0 ? project.media[0] : '';
+  const avatarSrc = project.image;
 
   return (
     <Link

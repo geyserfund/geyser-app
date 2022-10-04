@@ -16,7 +16,6 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
     error,
     data: projects,
   } = useProjects({
-    // usePreviewData: true,
     itemLimit,
   });
 
