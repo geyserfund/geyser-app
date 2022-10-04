@@ -16,15 +16,6 @@ We use `docker` and `docker compose` for local development of the `geyser-app`.
 
 Make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
 
-### Hosts Configuration
-
-We temporarily use the staging API as a quick-start backend for contributors of the `geyser-app`. In order for the
-requests to go through, you will need to add the following line to your `/etc/hosts` file:
-
-```shell
-127.0.0.1 staging.geyser.fund
-```
-
 ### Environment Variables
 
 The app requires some environment variables to be set. We provide an `example.env` file that you can copy to the a local `.env` file:
@@ -33,15 +24,40 @@ The app requires some environment variables to be set. We provide an `example.en
 cp .env.example .env
 ```
 
-From there, populate the new file with the following values:
+From there, populate the new file with the correct values. You have two development environment options:
+
+**Option A: use the staging API**
+
+Currently, the staging API is the only way to get a functional authentication flow in standalone `geyser-app` development environmnent.
+
+To use the staging API, fill in the following value in the `.env` file:
 
 ```shell
-REACT_APP_ENV=development
+[OPTION A: STAGING]
 REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
-APOLLO_KEY=<you Apollo Studio API key>
+```
+
+Then, complete the instructions described in [Hosts Configuration](#hosts-configuration).
+
+**Option B: use the GraphQL-Faker config**
+
+If you do not require a functional authentication flow for this task, you may use this option.
+
+```shell
+[OPTION B: GRAPHQL_FAKER]
+REACT_APP_API_ENDPOINT=https://api.dev.geyser.fund
+APOLLO_KEY=<your Apollo Studio API key>
 ```
 
 [Contact us](email:admin@geyser.fund), if you don't have an `APOLLO_KEY` yet.
+
+### Hosts Configuration
+
+In order for the requests to go through to the staging backend API, you will need to add the following line to your `/etc/hosts` file:
+
+```shell
+127.0.0.1 staging.geyser.fund
+```
 
 ## Running the App Locally
 
@@ -53,7 +69,7 @@ After completing the above steps, you can run the app by running the following c
 docker compose up -d
 ```
 
-Or, if you are running an older version of docker and have docker-compose installed separately:
+Or, if you are running an older version of docker and have docker-compose installed separately, run:
 
 ```shell
 docker-compose up -d
@@ -73,4 +89,4 @@ docker-compose logs -f geyser-app
 
 ### Opening in the Browser
 
-With Docker running, navigate to <http://staging.geyser.fund/>.
+With Docker running, navigate to <https://staging.geyser.fund/>.
