@@ -24,8 +24,6 @@ export const useProjectFundingTransactions = (options?: OptionsProps) => {
     variables: { input: { pagination: { take: itemLimit } } },
   });
 
-  // eslint-disable-next-line no-debugger
-  debugger;
   return {
     isLoading,
     error,
