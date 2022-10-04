@@ -4,70 +4,78 @@ import { API_SERVICE_ENDPOINT, GeyserAssetDomainUrl } from '../constants';
 import { QUERY_GET_SIGNED_URL } from '../graphql/queries/entries';
 import { testImage, useNotification } from '../utils';
 
-export const useSignedUpload = ({onUpload}:{onUpload: (url: string, file?: any) => void}) => {
-	const {toast} = useNotification();
+export const useSignedUpload = ({
+  onUpload,
+}: {
+  onUpload: (url: string, file?: any) => void;
+}) => {
+  const { toast } = useNotification();
 
-	const [getSignedUrl, {data: urlData}] = useLazyQuery(QUERY_GET_SIGNED_URL);
-	const [currentFile, setCurrentFile] = useState<any>();
+  const [getSignedUrl, { data: urlData }] = useLazyQuery(QUERY_GET_SIGNED_URL);
+  const [currentFile, setCurrentFile] = useState<any>();
 
-	useEffect(() => {
-		if (urlData && urlData.getSignedUploadUrl && currentFile) {
-			handleFileUpload();
-		}
-	}, [urlData, currentFile]);
+  useEffect(() => {
+    if (urlData && urlData.getSignedUploadUrl && currentFile) {
+      handleFileUpload();
+    }
+  }, [urlData, currentFile]);
 
-	const handleFileUpload = () => {
-		if (urlData && urlData.getSignedUploadUrl && currentFile) {
-			try {
-				fetch(urlData.getSignedUploadUrl.uploadUrl, {
-					method: 'PUT',
-					body: currentFile,
-					headers: {
-						'Content-Type': currentFile.type,
-					},
-				}).then(() => {
-					onUpload(urlData.getSignedUploadUrl.distributionUrl, currentFile);
-				});
-				// console.log('checking urlData', urlData);
-				// onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
-			} catch (error) {
-				console.log('checking error', error);
-				toast({
-					title: 'failed to upload image',
-					description: 'Please try again',
-					status: 'error',
-				});
-			}
-		}
-	};
+  const handleFileUpload = () => {
+    if (urlData && urlData.getSignedUploadUrl && currentFile) {
+      try {
+        fetch(urlData.getSignedUploadUrl.uploadUrl, {
+          method: 'PUT',
+          body: currentFile,
+          headers: {
+            'Content-Type': currentFile.type,
+          },
+        }).then(() => {
+          onUpload(urlData.getSignedUploadUrl.distributionUrl, currentFile);
+        });
+        // console.log('checking urlData', urlData);
+        // onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
+      } catch (error) {
+        console.log('checking error', error);
+        toast({
+          title: 'failed to upload image',
+          description: 'Please try again',
+          status: 'error',
+        });
+      }
+    }
+  };
 
-	const uploadFile = (file: any) => {
-		setCurrentFile(file);
-		getSignedUrl({variables: {input: {name: file.name, type: file.type}}});
-	};
+  const uploadFile = (file: any) => {
+    setCurrentFile(file);
+    getSignedUrl({
+      variables: { input: { name: file.name, type: file.type } },
+    });
+  };
 
-	return uploadFile;
+  return uploadFile;
 };
 
 export const useSignedUploadAPI = async (file: any): Promise<string> => {
-	// const data:any = {name: file.name, type: file.type};
+  // const data:any = {name: file.name, type: file.type};
 
-	const response = await fetch(`${API_SERVICE_ENDPOINT}/upload_url?name=${file.name}&type=${file.type}`).then(response => response.json());
+  const response = await fetch(
+    `${API_SERVICE_ENDPOINT}/upload_url?name=${file.name}&type=${file.type}`,
+  ).then((response) => response.json());
 
-	const uploadRes = await fetch(response.uploadUrl, {
-		method: 'PUT',
-		body: file,
-		headers: {
-			'Content-Type': file.type,
-		},
-	});
+  const uploadRes = await fetch(response.uploadUrl, {
+    method: 'PUT',
+    body: file,
+    headers: {
+      'Content-Type': file.type,
+    },
+  });
 
-	const newValue = `${GeyserAssetDomainUrl}${response.distributionUrl}`;
+  const newValue = `${GeyserAssetDomainUrl}${response.distributionUrl}`;
 
-	const test = await testImage(newValue);
-	console.log('checking urlData', test, uploadRes);
-	// onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
+  const test = await testImage(newValue);
+  console.log('checking urlData', test, uploadRes);
+  // onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
 
-	console.log('checking resopnse', response);
-	return newValue;
+  console.log('checking resopnse', response);
+  return newValue;
 };

@@ -1,7 +1,11 @@
 import { gql } from '@apollo/client';
 
+/**
+ * - https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts
+ * - [`FundingTx` type](https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts#L44)
+ */
 export const QUERY_GET_FUNDING = gql`
-query GetFundingTx($id: BigInt!) {
+  query GetFundingTx($id: BigInt!) {
     fundingTx(id: $id) {
       id
       invoiceId
@@ -24,9 +28,14 @@ query GetFundingTx($id: BigInt!) {
   }
 `;
 
+/**
+ * - https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts
+ * - [`FundingTx` type](https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts#L44)
+ */
 export const QUERY_GET_FUNDING_TXS_LANDING = gql`
   query GetFundingTxs($input: GetFundingTxsInput) {
     getFundingTxs(input: $input) {
+      id
       comment
       amount
       funder {
@@ -39,7 +48,14 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
       media
       sourceResource {
         ... on Project {
+          id
+          name
           title
+          media
+        }
+        ... on Entry {
+          id
+          image
         }
       }
     }
@@ -47,9 +63,9 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
 `;
 
 export const QUERY_GET_FUNDING_STATUS = gql`
-query GetFundingTxStatus($id: BigInt!) {
+  query GetFundingTxStatus($id: BigInt!) {
     fundingTx(id: $id) {
       status
+    }
   }
-}
 `;

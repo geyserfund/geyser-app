@@ -1,35 +1,35 @@
-
 export type TProjectDetails = {
-	title: string
-	name: string
-	image: string
-	description: string
-	email: string
-}
+  title: string;
+  name: string;
+  image: string;
+  description: string;
+  email: string;
+};
 
 export type TMilestone = {
-	id?: string;
-	name: string;
-	projectId: string;
-	description: string;
-	amount: number
-}
+  id?: number;
+  name: string;
+  projectId?: number;
+  description: string;
+  amount: number;
+};
 
 export type TRewards = {
-	id?: string;
-	name: string;
-	description: string;
-	projectId: string;
-	cost: number;
-	image?: string;
-}
+  id?: number;
+  name: string;
+  description: string;
+  projectId?: number;
+  cost: number;
+  image?: string;
+  backers?: number;
+};
 
 export type TNodeInput = {
-	name: string;
-	isVoltage?: boolean;
-	hostname: string;
-	publicKey: string;
-	invoiceMacaroon: string;
-	tlsCert: string;
-	grpc: string;
-}
+  name: string;
+  isVoltage?: boolean;
+  hostname: string;
+  publicKey: string;
+  invoiceMacaroon: string;
+  tlsCert: string;
+  grpc: string;
+};

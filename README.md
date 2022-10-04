@@ -1,46 +1,118 @@
-# Geyser App
+# Geyser App Frontend 🌊
 
 The Geyser Front-End
 
-## Development
+## Project Setup
 
-To get started:
+### Installing Dependencies
 
-```
-yarn install
-```
-
-```
-yarn dev
+```shell
+yarn
 ```
 
-## Environment Variables
+### Pre-requisites
 
-### Front-End
+We use `docker` and `docker compose` for local development of the `geyser-app`.
 
-`REACT_APP_API_ENDPOINT=<API_URL>`
+Make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
 
-`NODE_ENV=<environment>`
+### Environment Variables
 
-## `Use eslint in VS code`
+The app requires some environment variables to be set. We provide an `example.env` file that you can copy to the a local `.env` file:
 
-**Note: This is to be used for consistent placing and adering to certain coding practice!**
+```shell
+cp .env.example .env
+```
 
-step 1: Make sure you have eslint extension installed in your vscode environment.
+From there, populate the new file with the correct values. You have two development environment options:
 
-step 2: Add these variables to your VScode settings
+**Option A: use the staging API**
 
-"editor.formatOnSave": true,
-// turn it off for JS and JSX, we will do this via eslint
-"[javascript]": {
-"editor.formatOnSave": false
-},
-"[javascriptreact]": {
-"editor.formatOnSave": false
-},
-// show eslint icon at bottom toolbar
-"eslint.alwaysShowStatus": true,
-// tell the ESLint plugin to run on save
-"editor.codeActionsOnSave": {
-"source.fixAll": true
-},
+Currently, the staging API is the only way to get a functional authentication flow in standalone `geyser-app` development environmnent.
+
+To use the staging API, fill in the following value in the `.env` file:
+
+```shell
+[OPTION A: STAGING]
+REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
+```
+
+Then, complete the instructions described in [Hosts Configuration](#hosts-configuration).
+
+**Option B: use the GraphQL-Faker config**
+
+If you do not require a functional authentication flow for this task, you may use this option.
+
+```shell
+[OPTION B: GRAPHQL_FAKER]
+REACT_APP_API_ENDPOINT=https://api.dev.geyser.fund
+APOLLO_KEY=<your Apollo Studio API key>
+```
+
+[Contact us](email:admin@geyser.fund), if you don't have an `APOLLO_KEY` yet.
+
+### Hosts Configuration
+
+In order for the requests to go through to the staging backend API, you will need to add the following line to your `/etc/hosts` file:
+
+```shell
+127.0.0.1 staging.geyser.fund
+```
+
+If running against the GraphQL Faker server, you'll also need these in the same `/etc/hosts` file:
+
+```shell
+127.0.0.1 dev.geyser.fund
+127.0.0.1 api.dev.geyser.fund
+```
+
+## Running the App Locally
+
+### Starting Docker
+
+After completing the above steps, you can run the app by running the following command in the project directory:
+
+```shell
+docker compose up -d
+```
+
+Or, if you are running an older version of docker and have docker-compose installed separately, run:
+
+```shell
+docker-compose up -d
+```
+
+To see the react app logs use the following command:
+
+```shell
+docker compose logs -f geyser-app
+```
+
+or
+
+```shell
+docker-compose logs -f geyser-app
+```
+
+### Opening in the Browser
+
+With Docker running, navigate to the URL that's appropriate for the development-environment configuration in your `.env` file:
+
+#### Staging
+
+<https://staging.geyser.fund/>
+
+#### GraphQL Faker
+
+<https://dev.geyser.fund/>
+
+### Running with GraphQL Faker
+
+After starting up Docker with a GraphQL Faker configuration, a number of URLs will be
+useful for debugging and making customizations to the GraphQL schema:
+
+- Interactive Editor: <http://localhost:9002/editor>
+- GraphQL API: <http://localhost:9002/graphql>
+- GraphQL Voyager: <http://localhost:9002/voyager>
+
+Furthermore, a [folder of sample schemas](./faker/sample-schemas/) exists to help get started with potential changes to the schema that will be generated at <http://localhost:9002/editor>. Feel free to add more here as needed.

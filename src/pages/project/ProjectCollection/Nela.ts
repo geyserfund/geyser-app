@@ -96,7 +96,6 @@ const projectBlocks: IProjectBlock[] = [
 		key: 'description5',
 		title: '',
 		body: [
-
 			'I wished for nothing more than that 2022 would finally begin and the ballast of the previous year would dissolve into goodwill. My dragon tree, which I christened Lill Covid on May 7, 2020, cares little. I water, it grows, that\'s the deal. This date was my prelude to a personal wake up call.',
 			'An accident and chaos provoked by Covid are put into perspective in the face of the Russia - Ukraine war. ',
 			'I have questions. Quo vadis humanity, quo vadis homo economicus?',
@@ -136,10 +135,11 @@ const projectBlocks: IProjectBlock[] = [
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: '',
-	idea: 'We need your help to be  cinematic chroniclers and to create extraordinary interviews and images of  this unique moment in history: a possible socio- economic revolution.',
-	ownerIntro: 'I recently gave up a secure job in a large cultural institution to focus on implementing my own ideas.',
-	blocks: projectBlocks,
+  problem: '',
+  idea: 'We need your help to be  cinematic chroniclers and to create extraordinary interviews and images of  this unique moment in history: a possible socio- economic revolution.',
+  ownerIntro:
+    'I recently gave up a secure job in a large cultural institution to focus on implementing my own ideas.',
+  blocks: projectBlocks,
 };
 
 const projectName: string = 'thelastrevolution';
