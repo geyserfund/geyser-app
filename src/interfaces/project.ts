@@ -95,6 +95,9 @@ export interface IProjectMilestone {
   amount: number;
 }
 
+/**
+ * Corresponds to https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/entry.ts#L47
+ */
 export interface IProjectListEntryItem {
   id: number;
   title: string;
