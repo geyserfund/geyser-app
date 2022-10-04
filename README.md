@@ -106,4 +106,13 @@ With Docker running, navigate to the URL that's appropriate for the development-
 
 <https://dev.geyser.fund/>
 
-### GraphQL Faker
+### Running with GraphQL Faker
+
+After starting up Docker with a GraphQL Faker configuration, a number of URLs will be
+useful for debugging and making customizations to the GraphQL schema:
+
+- Interactive Editor: <http://localhost:9002/editor>
+- GraphQL API: <http://localhost:9002/graphql>
+- GraphQL Voyager: <http://localhost:9002/voyager>
+
+Furthermore, a [folder of sample schemas](./faker/sample-schemas/) exists to help get started with potential changes to the schema that will be generated at <http://localhost:9002/editor>. Feel free to add more here as needed.

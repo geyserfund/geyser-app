@@ -6,27 +6,33 @@ type OptionsProps = {
   itemLimit?: number;
 };
 
+type ResponseData = IProject[];
+
 export const useProjects = (options?: OptionsProps) => {
   const { itemLimit = 14 } = options || {};
 
   const {
     loading: isLoading,
     error,
-    data: projectsData,
+    data: responseData,
+    fetchMore,
   } = useQuery(QUERY_PROJECTS, {
-    variables: { input: { pagination: { take: itemLimit } } },
-  });
+    variables: {
+      input: {
+        pagination: { take: itemLimit },
 
-  const projects: IProject[] = projectsData?.projects.projects || [];
+        // TODO: In the future, tt will probably be helpful to make these options more configurable to callers.
+        orderBy: {
+          createdAt: null,
+        },
+      },
+    },
+  });
 
   return {
     isLoading,
     error,
-
-    // TODO: This could be improved by having the hook
-    // accept a custom sorting function
-    data: projects.slice(0, itemLimit).sort((a, b) => {
-      return new Date(b.updatedAt).valueOf() - new Date(a.updatedAt).valueOf();
-    }),
+    data: (responseData?.projects.projects || []) as ResponseData,
+    fetchMore,
   };
 };

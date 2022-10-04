@@ -1,9 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_ENTRIES_LANDING } from '../graphql';
+import { IProjectListEntryItem } from '../interfaces';
 
 type OptionsProps = {
   itemLimit?: number;
 };
+
+type ResponseData = IProjectListEntryItem[];
 
 /**
  * Hook for fetching project entries across the entire Geyser platform.
@@ -14,7 +17,7 @@ export const useProjectEntries = (options?: OptionsProps) => {
   const {
     loading: isLoading,
     error,
-    data: entriesData,
+    data: responseData,
     fetchMore,
   } = useQuery(QUERY_ENTRIES_LANDING, {
     variables: { input: { pagination: { take: itemLimit } } },
@@ -23,7 +26,7 @@ export const useProjectEntries = (options?: OptionsProps) => {
   return {
     isLoading,
     error,
-    data: entriesData?.getEntries || [],
+    data: (responseData?.getEntries || []) as ResponseData,
     fetchMore,
   };
 };

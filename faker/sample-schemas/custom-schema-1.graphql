@@ -125,7 +125,6 @@ input UpdateProjectInput {
 }
 
 type Project {
-  # id: BigInt!
   id: BigInt! @fake(type: number)
   title: String!
   name: String!
@@ -603,7 +602,6 @@ input UpdateEntryInput {
 }
 
 type Entry {
-  # id: BigInt!
   id: BigInt! @fake(type: number)
   title: String! @fake(type: productName)
   description: String!

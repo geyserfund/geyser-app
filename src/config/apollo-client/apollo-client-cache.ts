@@ -1,6 +1,7 @@
 import { InMemoryCache, makeVar } from '@apollo/client';
 
 export const cache: InMemoryCache = new InMemoryCache({
+  // See https://www.apollographql.com/docs/react/pagination/core-api/#defining-a-field-policy for tips on defining custom GraphQL field policies.
   typePolicies: {
     Query: {
       fields: {

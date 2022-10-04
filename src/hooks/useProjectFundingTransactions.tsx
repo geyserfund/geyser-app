@@ -1,9 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../graphql';
+import { IFundingTx } from '../interfaces';
 
 type OptionsProps = {
   itemLimit?: number;
 };
+
+type ResponseData = IFundingTx[];
 
 /**
  * Hook for fetching project funding transactions
@@ -24,7 +27,7 @@ export const useProjectFundingTransactions = (options?: OptionsProps) => {
   return {
     isLoading,
     error,
-    data: responseData?.getFundingTxs || [],
+    data: (responseData?.getFundingTxs || []) as ResponseData,
     fetchMore,
   };
 };
