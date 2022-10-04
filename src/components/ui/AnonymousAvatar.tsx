@@ -1,34 +1,35 @@
 import React from 'react';
-import { Avatar, Box, Text, HStack } from '@chakra-ui/react';
+import { Avatar, Stack } from '@chakra-ui/react';
 import { getRandomOrb } from '../../utils';
 
-export const AnonymousAvatar = ({
-  seed,
-  image,
-}: {
+type Props = {
   seed: number;
   image?: string;
-}) => (
-  <HStack spacing="5px" display="flex">
+  imageSize?: number | string;
+};
+
+export const AnonymousAvatar = ({ seed, image, imageSize = '30px' }: Props) => (
+  <Stack
+    width={imageSize}
+    height={imageSize}
+    borderRadius="50%"
+    align="center"
+    justify="center"
+    p={'4px'}
+    backgroundColor="brand.gray50"
+  >
     <Avatar
-      icon={
-        <Box
-          width="30px"
-          height="30px"
-          borderRadius="50%"
-          backgroundColor="brand.gray50"
-        />
-      }
-      width="30px"
-      height="3	0px"
+      width={imageSize}
+      height={imageSize}
+      scale={0.8}
+      backgroundColor="transparent"
       name={'Anonymous'}
       src={image ? image : getRandomOrb(seed)}
       sx={{
         '& .chakra-avatar__initials': {
-          lineHeight: '30px',
+          lineHeight: `${imageSize}`,
         },
       }}
     />
-    <Text fontSize="16px"> {''}</Text>
-  </HStack>
+  </Stack>
 );

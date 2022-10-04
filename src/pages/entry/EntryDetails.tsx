@@ -1,11 +1,11 @@
 import { Avatar, Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import React from 'react';
-import { BiLeftArrowAlt } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
-import { LikeHeart } from '../../components/molecules';
+import { ProjectFundersCountIndicator } from '../../components/molecules';
 import { TEntryData } from '../../interfaces/entry';
 import { Editor } from '../creation/entry/editor';
+import { BiLeftArrowAlt } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 
 export const EntryDetails = ({ entry }: { entry: TEntryData }) => (
   <VStack width="100%" alignItems="flex-start">
@@ -39,7 +39,7 @@ export const EntryDetails = ({ entry }: { entry: TEntryData }) => (
           </Text>
         </HStack>
       </Link>
-      <LikeHeart count={entry.fundersCount} />
+      <ProjectFundersCountIndicator count={entry.fundersCount} />
     </HStack>
     <HStack
       width={'100%'}

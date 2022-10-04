@@ -46,6 +46,7 @@ export const colors = {
 
   secondaryPink: '#FC257A',
 
+  neutral100: '#F4F4F4',
   neutral200: '#E9ECEF',
   neutral300: '#DEE2E6',
   neutral500: '#ADB5BD',

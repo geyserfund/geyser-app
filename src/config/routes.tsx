@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Switch, Route } from 'react-router-dom';
 import { NavBar } from '../components/nav';
-import { Landing } from '../pages/landing';
+import { LandingPage } from '../pages/landing';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
@@ -26,6 +26,7 @@ import { ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
+import { ProjectDiscoveryPage } from '../pages/project-discovery';
 
 export const customHistory = createBrowserHistory();
 
@@ -143,8 +144,9 @@ export const Router = () => {
             <Route path="/not-authorized">
               <NotAuthorized />
             </Route>
+            <Route path="/project-discovery" component={ProjectDiscoveryPage} />
             <Route path="/">
-              <Landing />
+              <LandingPage />
             </Route>
           </Switch>
         </Box>

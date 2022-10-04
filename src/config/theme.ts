@@ -1,5 +1,4 @@
 import { extendTheme } from '@chakra-ui/react';
-import { GiBrandyBottle } from 'react-icons/gi';
 import { colors } from '../constants';
 import { fonts } from '../constants/fonts';
 

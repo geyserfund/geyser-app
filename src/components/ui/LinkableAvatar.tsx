@@ -5,12 +5,19 @@ import { IAvatarMetadata } from '../../interfaces';
 import { isMediumScreen, isMobileMode } from '../../utils';
 import { useHistory } from 'react-router';
 
-interface ILinkableAvatar {
+type Props = {
   avatarMetadata: IAvatarMetadata;
   badges?: ReactElement[];
-}
+  fontSize?: number | string;
+  imageSize?: number | string;
+};
 
-export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
+export const LinkableAvatar = ({
+  avatarMetadata,
+  badges,
+  fontSize = '16px',
+  imageSize = '30px',
+}: Props) => {
   const isMedium = isMediumScreen();
   const isMobile = isMobileMode();
   const history = useHistory();
@@ -75,26 +82,20 @@ export const LinkableAvatar = ({ avatarMetadata, badges }: ILinkableAvatar) => {
         cursor={avatarMetadata.link ? 'pointer' : 'normal'}
       >
         <Avatar
-          width="30px"
-          height="30px"
+          width={imageSize}
+          height={imageSize}
+          scale={0.8}
+          backgroundColor="transparent"
+          name={'Anonymous'}
           src={avatarMetadata.image}
-          icon={
-            <Box
-              width="30px"
-              height="30px"
-              borderRadius="50%"
-              backgroundColor="brand.gray50"
-            />
-          }
           sx={{
             '& .chakra-avatar__initials': {
-              lineHeight: '30px',
+              lineHeight: `${imageSize}`,
             },
           }}
-          _focus={{}}
         />
         <Text
-          fontSize="16px"
+          fontSize={fontSize}
           _hover={{ fontWeight: 500, textDecoration: 'underline' }}
         >
           {' '}

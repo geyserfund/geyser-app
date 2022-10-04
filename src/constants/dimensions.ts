@@ -1,5 +1,10 @@
 export const dimensions = {
-  mobileNavbar: {
-    height: 56,
+  topNavBar: {
+    desktop: {
+      height: 60,
+    },
+    mobile: {
+      height: 56,
+    },
   },
 };

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {
   ProjectActivityActionsToolbar,
   ActivityBrief,
-  ProjectFundingContributionFeedItem,
+  ProjectFundingContributionsFeedItem,
   ProjectFundingLeaderboardFeed,
 } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
@@ -161,7 +161,7 @@ export const InfoPage = ({
         >
           {view === 'activity'
             ? fundingTxs.map((fundingTx, index) => (
-                <ProjectFundingContributionFeedItem
+                <ProjectFundingContributionsFeedItem
                   key={index}
                   fundingTx={fundingTx}
                   project={project}

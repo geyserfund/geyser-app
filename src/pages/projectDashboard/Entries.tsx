@@ -4,12 +4,12 @@ import { BiPlus } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
 import { ProjectSectionBar } from '../../components/molecules';
+import { ProjectEntryCard } from '../../components/molecules/projectDisplay/ProjectEntryCard';
 import { SatoshiAmount } from '../../components/ui';
 import { colors } from '../../constants';
 import { fonts } from '../../constants/fonts';
 import { IProject } from '../../interfaces';
 import { numberWithCommas } from '../../utils';
-import { EntryCard } from '../projectView/components/EntryCard';
 
 const useStyles = createUseStyles({
   statBox: {
@@ -88,7 +88,7 @@ export const Entries = ({ project }: { project: IProject }) => {
               />
               <VStack w="100%">
                 {liveEntries?.map((entry) => (
-                  <EntryCard
+                  <ProjectEntryCard
                     key={entry.id}
                     entry={entry}
                     onEdit={() =>
@@ -114,7 +114,7 @@ export const Entries = ({ project }: { project: IProject }) => {
               />
               <VStack>
                 {draftEntries?.map((entry) => (
-                  <EntryCard
+                  <ProjectEntryCard
                     key={entry.id}
                     entry={entry}
                     onEdit={() =>

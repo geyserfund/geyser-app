@@ -15,6 +15,7 @@ export interface IProject {
   createdAt: string;
   updatedAt: string;
   expiresAt: string;
+  image?: string;
   active: boolean;
   ownerConfirmed: string;
   fundsClaimed: string;
@@ -98,12 +99,29 @@ export interface IProjectListEntryItem {
   id: number;
   title: string;
   description: string;
+
+  /**
+   * A URL path for the image source.
+   */
   image: string;
+
+  /**
+   * The type of the entry.
+   *
+   * TODO: These should be strongly-typed as a set
+   * of constants.
+   */
   type: string;
+
   creator: IUser;
   fundersCount: number;
   amountFunded: number;
   published: boolean;
+  project: {
+    title: string;
+    name: string;
+    image: string | null;
+  };
 }
 
 export interface IRewardCount {

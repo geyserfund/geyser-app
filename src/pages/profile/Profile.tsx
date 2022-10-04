@@ -29,7 +29,7 @@ import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { createUseStyles } from 'react-jss';
 import { useHistory, useParams } from 'react-router';
 import {
-  ContributionProjectCard,
+  ProjectContributionCard,
   AppFooter,
   ProfileProjectCard,
 } from '../../components/molecules';
@@ -364,7 +364,7 @@ export const Profile = () => {
                       {userProfile &&
                         userProfile.contributions.map((contribute) => (
                           <WrapItem key={contribute.project.id}>
-                            <ContributionProjectCard
+                            <ProjectContributionCard
                               marginLeft="0px !important"
                               contribution={contribute}
                             />
@@ -382,6 +382,7 @@ export const Profile = () => {
           </Tabs>
         </Box>
       </VStack>
+
       <AppFooter />
     </VStack>
   );

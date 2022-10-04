@@ -22,7 +22,7 @@ import { useAuthContext } from '../../context';
 import { TupdateReward } from '../../hooks';
 import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
-import { EntryCard } from './components/EntryCard';
+import { ProjectEntryCard } from '../../components/molecules/projectDisplay/ProjectEntryCard';
 import { MilestoneComponent } from './components/MilestoneComponent';
 
 const useStyles = createUseStyles({
@@ -63,7 +63,7 @@ export const ProjectAccesories = ({
   const renderEntries = () => {
     if (project.entries && project.entries.length > 0) {
       return project.entries.map((entry) => (
-        <EntryCard entry={entry} key={entry.id} />
+        <ProjectEntryCard entry={entry} key={entry.id} />
       ));
     }
 

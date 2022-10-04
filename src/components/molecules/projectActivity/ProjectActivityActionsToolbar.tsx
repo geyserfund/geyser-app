@@ -5,7 +5,9 @@ import { ButtonComponent } from '../../ui';
 import { BoltIcon } from '../../icons';
 import { dimensions } from '../../../constants';
 
-const { mobileNavbar } = dimensions;
+const {
+  topNavBar: { mobile: mobileNavBarDimensions },
+} = dimensions;
 
 interface IProjectActivityActionsToolbarProps {
   fundButtonFunction: any;
@@ -22,7 +24,7 @@ export const ProjectActivityActionsToolbar = ({
     return (
       <HStack
         position={'static'}
-        top={window.innerHeight + mobileNavbar.height}
+        top={window.innerHeight + mobileNavBarDimensions.height}
         transition="all 0.35s ease-in-out"
         left={0}
         w="100%"

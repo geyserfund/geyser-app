@@ -27,15 +27,20 @@ export const QUERY_GET_ENTRY = gql`
   }
 `;
 
+/**
+ * [`Entry` type](https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/entry.ts#L47)
+ */
 export const QUERY_ENTRIES_LANDING = gql`
-  query GetEntries {
-    getEntries {
+  query GetEntries($input: GetEntriesInput!) {
+    getEntries(input: $input) {
       id
       title
       description
       image
       fundersCount
       amountFunded
+      type
+
       project {
         title
         name

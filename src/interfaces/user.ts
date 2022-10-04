@@ -1,3 +1,5 @@
+import { IProjectContribution } from '.';
+
 export interface IUser {
   id: number;
   username: string;
@@ -11,7 +13,7 @@ export interface IProfileUser {
   username: string;
   imageUrl: string;
   externalAccounts: IUserExternalAccount[];
-  contributions: IContribution[];
+  contributions: IProjectContribution[];
   ownerOf: {
     project: IProfileProject;
   }[];
@@ -47,24 +49,4 @@ export interface IProfileProject {
       imageUrl: string;
     };
   }[];
-}
-
-export interface IContribution {
-  isAmbassador: string;
-  isFunder: string;
-  isSponsor: string;
-  funder: {
-    id: string;
-    amountFunded: number;
-    timesFunded: number;
-    confirmedAt: string;
-  };
-  project: {
-    id: string;
-    title: string;
-    name: string;
-    description: string;
-    media: string[];
-    createdAt: string;
-  };
 }
