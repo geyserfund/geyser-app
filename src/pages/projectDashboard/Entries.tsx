@@ -32,8 +32,6 @@ export const Entries = ({ project }: { project: IProject }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { entries } = project;
-
   const liveEntries = project?.entries?.filter((entry) => entry.published);
   const draftEntries = project?.entries?.filter((entry) => !entry.published);
 
@@ -87,17 +85,21 @@ export const Entries = ({ project }: { project: IProject }) => {
                 number={liveEntries && liveEntries.length}
               />
               <VStack w="100%">
-                {liveEntries?.map((entry) => (
-                  <ProjectEntryCard
-                    key={entry.id}
-                    entry={entry}
-                    onEdit={() =>
-                      history.push(
-                        `/projects/${project.name}/entry/${entry.id}`,
-                      )
-                    }
-                  />
-                ))}
+                {liveEntries?.map((entry) => {
+                  // TODO: getting the entries should be refactored. We should move the data fetching closer to the componenet itself
+                  const entryWithProject = { ...entry, project };
+                  return (
+                    <ProjectEntryCard
+                      key={entry.id}
+                      entry={entryWithProject}
+                      onEdit={() =>
+                        history.push(
+                          `/projects/${project.name}/entry/${entry.id}`,
+                        )
+                      }
+                    />
+                  );
+                })}
               </VStack>
               <Button
                 isFullWidth
@@ -113,17 +115,20 @@ export const Entries = ({ project }: { project: IProject }) => {
                 number={draftEntries && draftEntries.length}
               />
               <VStack>
-                {draftEntries?.map((entry) => (
-                  <ProjectEntryCard
-                    key={entry.id}
-                    entry={entry}
-                    onEdit={() =>
-                      history.push(
-                        `/projects/${project.name}/entry/${entry.id}`,
-                      )
-                    }
-                  />
-                ))}
+                {draftEntries?.map((entry) => {
+                  const entryWithProject = { ...entry, project };
+                  return (
+                    <ProjectEntryCard
+                      key={entry.id}
+                      entry={entryWithProject}
+                      onEdit={() =>
+                        history.push(
+                          `/projects/${project.name}/entry/${entry.id}`,
+                        )
+                      }
+                    />
+                  );
+                })}
               </VStack>
             </VStack>
           </VStack>

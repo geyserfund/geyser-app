@@ -79,6 +79,8 @@ export const QUERY_PROJECT_BY_NAME = gql`
         type
         fundersCount
         amountFunded
+        published
+
         creator {
           id
           username
