@@ -62,9 +62,10 @@ export const ProjectAccesories = ({
 
   const renderEntries = () => {
     if (project.entries && project.entries.length > 0) {
-      return project.entries.map((entry) => (
-        <ProjectEntryCard entry={entry} key={entry.id} />
-      ));
+      return project.entries.map((entry) => {
+        const entryWithProject = { ...entry, project };
+        return <ProjectEntryCard entry={entryWithProject} key={entry.id} />;
+      });
     }
 
     return <Text>There are no any entries available </Text>;
