@@ -61,9 +61,9 @@ export const PaymentPage = ({
 	const fetchGifs = (offset: number) => gf.search(gifSearch, { offset, sort: 'relevant', limit: 9 });
 
 	const validateFundingAmount = () => {
-		if (getTotalAmount('dollar', name) >= 5000) {
+		if (getTotalAmount('dollar', name) > 10000) {
 			toast({
-				title: 'Payment above $5000 is not allowed at the moment.',
+				title: 'Payment above $10000 is not allowed at the moment.',
 				description: 'Please update the amount, or contact us for donating a higher amount.',
 				status: 'error',
 			});
