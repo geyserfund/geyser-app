@@ -26,6 +26,7 @@ import { Editor } from './Editor';
 import Loader from '../../../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../../../graphql';
 import { useAuthContext } from '../../../../context';
+import { ENETDOWN } from 'constants';
 
 const useStyles = createUseStyles({
   uploadContainer: {
@@ -68,6 +69,8 @@ export const EntryCreateEdit = () => {
     form.current = value;
     _setForm(value);
   };
+
+  const [focusFlag, setFocusFlag] = useState('');
 
   const debouncedUpdateEntry = useDebounce(form.current, 1000);
 
@@ -213,10 +216,6 @@ export const EntryCreateEdit = () => {
     setForm({ ...form.current, image: `${GeyserAssetDomainUrl}${url}` });
   };
 
-  if (params.entryId && !form.current.id) {
-    return <Loader />;
-  }
-
   const isEdit =
     Boolean(createData?.createEntry?.id) || Boolean(params.entryId);
 
@@ -229,6 +228,30 @@ export const EntryCreateEdit = () => {
   useEffect(() => {
     addEventListener('beforeunload', handleEvent, { once: true });
   }, []);
+
+  const handleKeyDown = (event: any) => {
+    if (event) {
+      if (event.target.name === 'title') {
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          document.getElementById('entry-description-input')?.focus();
+        }
+      } else if (event.target.name === 'description') {
+        if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          document.getElementById('entry-title-input')?.focus();
+        } else if (event.key === 'ArrowDown' || event.key === 'Tab') {
+          event.preventDefault();
+          const newDate = new Date();
+          setFocusFlag(newDate.toISOString());
+        }
+      }
+    }
+  };
+
+  if (params.entryId && !form.current.id) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -273,8 +296,18 @@ export const EntryCreateEdit = () => {
               <FileUpload onUploadComplete={onImageUpload}>
                 <>
                   {form.current.image ? (
-                    <HStack justifyContent="center" maxHeight="500px">
-                      <ImageWithReload src={form.current.image} />
+                    <HStack
+                      width={'100%'}
+                      justifyContent="center"
+                      maxHeight="400px"
+                      borderRadius="4px"
+                      overflow="hidden"
+                    >
+                      <ImageWithReload
+                        width="100%"
+                        objectFit="cover"
+                        src={form.current.image}
+                      />
                     </HStack>
                   ) : (
                     <HStack className={classes.uploadContainer}>
@@ -285,35 +318,43 @@ export const EntryCreateEdit = () => {
                 </>
               </FileUpload>
             </Box>
-            <Input
-              border="none"
-              _focus={{ border: 'none' }}
-              placeholder="The Entry Title"
-              color="brand.gray500"
-              fontSize="40px"
-              fontWeight={700}
-              marginTop="20px"
-              name="title"
-              value={form.current.title}
-              onChange={handleInput}
-            />
-            <Input
-              border="none"
-              _focus={{ border: 'none' }}
-              placeholder="The summary of this entry"
-              color="brand.gray500"
-              fontSize="26px"
-              fontWeight={600}
-              name="description"
-              value={form.current.description}
-              onChange={handleInput}
-            />
+            <VStack width="100%">
+              <Input
+                id={'entry-title-input'}
+                border="none"
+                _focus={{ border: 'none' }}
+                placeholder="The Entry Title"
+                color="brand.gray500"
+                fontSize="40px"
+                fontWeight={700}
+                marginTop="20px"
+                paddingBottom="5px"
+                name="title"
+                value={form.current.title}
+                onChange={handleInput}
+                onKeyDown={handleKeyDown}
+              />
+              <Input
+                id={'entry-description-input'}
+                border="none"
+                _focus={{ border: 'none' }}
+                placeholder="The summary of this entry"
+                color="brand.gray500"
+                fontSize="26px"
+                fontWeight={600}
+                name="description"
+                value={form.current.description}
+                onChange={handleInput}
+                onKeyDown={handleKeyDown}
+              />
+            </VStack>
 
             <Box flex={1} width="100%">
               <Editor
                 name="content"
                 handleChange={handleContentUpdate}
                 value={form.current.content}
+                focusFlag={focusFlag}
               />
             </Box>
           </VStack>
