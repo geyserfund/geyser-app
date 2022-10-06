@@ -17,6 +17,9 @@ export interface IEntryUpdateInput {
   content?: string;
 }
 
+/**
+ * Corresponds to https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/entry.ts#L47
+ */
 export type TEntryData = {
   id: number;
   title: string;
