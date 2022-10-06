@@ -2,10 +2,10 @@ import Quill from 'quill';
 import React, { useEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import 'react-quill/dist/quill.snow.css';
-import { colors, GeyserAssetDomainUrl } from '../../../../constants';
+import { colors } from '../../../../constants';
 import { fonts } from '../../../../constants/fonts';
-import { useSignedUpload, useSignedUploadAPI } from '../../../../hooks';
-import { testImage, useNotification } from '../../../../utils';
+import { useSignedUploadAPI } from '../../../../hooks';
+import { useNotification } from '../../../../utils';
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader';
 import ImageEdit from 'quill-image-edit-module';
@@ -91,9 +91,16 @@ interface IEditor {
   value: string;
   handleChange?: (name: string, content: string) => void;
   readOnly?: boolean;
+  focusFlag?: string;
 }
 
-export const Editor = ({ name, value, handleChange, readOnly }: IEditor) => {
+export const Editor = ({
+  name,
+  value,
+  handleChange,
+  readOnly,
+  focusFlag,
+}: IEditor) => {
   const [_quillObj, _setQuillObj] = useState<Quill>();
   const quillObj = useRef(_quillObj);
   const setQuillObj = (value: Quill) => {
@@ -140,6 +147,16 @@ export const Editor = ({ name, value, handleChange, readOnly }: IEditor) => {
         },
         imageEdit: {
           modules: ['Resize', 'DisplaySize'],
+          overlayStyles: {
+            border: '2px solid',
+            borderColor: colors.primary400,
+            boxShadow: `0px 0px 0px 2px ${colors.primary400}`,
+            borderRadius: '4px',
+          },
+          handleStyles: {
+            backgroundColor: 'transparent',
+            border: 'none',
+          },
         },
       },
       readOnly,
@@ -169,8 +186,29 @@ export const Editor = ({ name, value, handleChange, readOnly }: IEditor) => {
       }
     });
 
+    editor.keyboard.addBinding(
+      {
+        key: 'up',
+      },
+      function (range) {
+        console.log('checking range', range);
+        if (range.index === 0 && range.length === 0) {
+          document.getElementById('entry-description-input')?.focus();
+          return false;
+        }
+
+        return true;
+      },
+    );
+
     setQuillObj(editor);
   }, []);
+
+  useEffect(() => {
+    if (focusFlag) {
+      quillObj.current?.focus();
+    }
+  }, [focusFlag]);
 
   return (
     <div className={classes.container}>
