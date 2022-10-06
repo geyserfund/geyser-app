@@ -29,7 +29,7 @@ export const LandingPage = () => {
         height="auto"
         minH={'full'}
         overflow="hidden"
-        spacing={30}
+        spacing={'64px'}
       >
         <Box height="full" flex="1">
           <ActivityView />
@@ -38,12 +38,7 @@ export const LandingPage = () => {
         <Divider orientation="vertical" borderWidth={'1px'} height="auto" />
 
         <Box width="400px" minWidth="400px" flexBasis={1} height="full">
-          <VStack
-            alignItems="left"
-            paddingLeft={30}
-            paddingRight={30}
-            spacing={4}
-          >
+          <VStack alignItems="left" paddingRight={30} spacing={4}>
             <HStack justify="space-between" align="center">
               <Heading as="h5" size="sm">
                 Top Projects
