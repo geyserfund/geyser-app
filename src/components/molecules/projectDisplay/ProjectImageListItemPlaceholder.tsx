@@ -16,8 +16,8 @@ export const ProjectImageListItemPlaceholder = ({
   return (
     <Box
       padding={padding}
-      width={'full'}
-      height={'full'}
+      width="full"
+      height="full"
       display="flex"
       justifyContent="center"
       alignItems="center"
