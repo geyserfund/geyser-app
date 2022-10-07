@@ -94,28 +94,6 @@ export const TopNavBar = () => {
     refresh?: boolean;
   }>();
 
-  const [isAtTop, setIsAtTop] = useState(true);
-
-  useEffect(() => {
-    const container = document.getElementById('app-route-content-root');
-
-    if (container) {
-      container.addEventListener('scroll', (event: any) => {
-        if (event && event.target && event.target.scrollTop >= 30) {
-          setIsAtTop(false);
-        } else {
-          setIsAtTop(true);
-        }
-      });
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener('scroll', () => null);
-      }
-    };
-  }, []);
-
   useEffect(() => {
     if (state && state.loggedOut) {
       logout();
@@ -196,10 +174,6 @@ export const TopNavBar = () => {
     return routesForHidingDropdownMenu.includes(pathname) === false;
   }, [routesForHidingDropdownMenu, pathname]);
 
-  const shouldShowNavBarBorder: boolean = useMemo(() => {
-    return isAtTop && pathname === '/';
-  }, [pathname, isAtTop]);
-
   const isUserAProjectCreator: boolean = useMemo(() => {
     return userProfile.ownerOf.length > 0;
   }, [userProfile]);
@@ -244,8 +218,8 @@ export const TopNavBar = () => {
       <Box
         bg={useColorModeValue('brand.bgWhite', 'brand.bgDark')}
         px={4}
-        borderBottom={shouldShowNavBarBorder ? '1px solid' : '1px solid'}
-        borderBottomColor={shouldShowNavBarBorder ? 'black' : 'brand.bgGrey3'}
+        borderBottom={'1px solid'}
+        borderBottomColor={'brand.bgGrey3'}
         backdropFilter="blur(2px)"
         position="fixed"
         top={0}
