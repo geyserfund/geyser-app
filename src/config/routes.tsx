@@ -38,14 +38,6 @@ export const Router = () => {
   return (
     <Fade in={true}>
       <Box height="100vh">
-        {/* <TopNavBarOld
-          showBorder={showBorder}
-          skipRoutes={[
-            '/projects/:projectId/entry',
-            '/projects/:projectId/entry/:entryId',
-            '/projects/:projectId/entry/:entryId/preview',
-          ]}
-        /> */}
         <TopNavBar />
 
         <Box id="app-route-content-root" height="100vh" overflowY="auto">

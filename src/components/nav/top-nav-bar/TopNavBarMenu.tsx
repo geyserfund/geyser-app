@@ -30,7 +30,9 @@ type Props = {
 export const TopNavBarMenu = ({
   userProfile,
   shouldShowSignInMenuItem,
+  shouldShowDashboardMenuItem,
   onSignInSelected,
+  onDashboardSelected,
   onSignOutSelected,
   isUserAProjectCreator,
 }: Props) => {
@@ -76,6 +78,21 @@ export const TopNavBarMenu = ({
               py={2}
             >
               Connect
+            </MenuItem>
+
+            <MenuDivider />
+          </>
+        ) : null}
+
+        {shouldShowDashboardMenuItem ? (
+          <>
+            <MenuItem
+              onClick={onDashboardSelected}
+              color="brand.primary700"
+              px={4}
+              py={2}
+            >
+              Dashboard
             </MenuItem>
 
             <MenuDivider />
