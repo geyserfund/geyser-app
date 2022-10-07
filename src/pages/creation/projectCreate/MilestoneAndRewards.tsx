@@ -101,6 +101,7 @@ export const MilestoneAndRewards = () => {
 
   const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
     variables: { where: { name: params.projectId } },
+    fetchPolicy: 'network-only',
     onError() {
       toast({
         title: 'Error fetching project',

@@ -22,7 +22,6 @@ import {
 } from '../../../components/ui';
 import {
   isMobileMode,
-  isValidLighteningAddress,
   useNotification,
   validateEmail,
   validLighteningAddress,
@@ -31,11 +30,8 @@ import { AiOutlineUpload } from 'react-icons/ai';
 import { TProjectDetails } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import {
-  colors,
-  GeyserAssetDomainUrl,
-  GeyserSkeletonUrl,
-} from '../../../constants';
+import { colors, GeyserAssetDomainUrl } from '../../../constants';
+import GeyserTempImage from '../../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { useLazyQuery, useMutation } from '@apollo/client';
@@ -387,7 +383,7 @@ export const ProjectCreate = () => {
                 />
               ) : (
                 <Image
-                  src={GeyserSkeletonUrl}
+                  src={GeyserTempImage}
                   maxHeight="500px"
                   height="222px"
                   width="350px"
