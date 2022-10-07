@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import {
   HStack,
   Text,
@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { FileUpload } from '../../components/molecules';
 import {
   ButtonComponent,
@@ -20,20 +20,12 @@ import {
   TextArea,
   TextBox,
 } from '../../components/ui';
-import {
-  colors,
-  GeyserAssetDomainUrl,
-  GeyserSkeletonUrl,
-} from '../../constants';
+import { colors, GeyserAssetDomainUrl } from '../../constants';
+import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useAuthContext } from '../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../graphql';
-import {
-  MUTATION_CREATE_PROJECT,
-  MUTATION_UPDATE_PROJECT,
-} from '../../graphql/mutations';
+import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
 import { IProject } from '../../interfaces';
 import {
-  isMobileMode,
   useNotification,
   validateEmail,
   validLighteningAddress,
@@ -41,12 +33,9 @@ import {
 import { TProjectDetails } from '../creation/projectCreate/types';
 
 export const ProjectSettings = ({ project }: { project: IProject }) => {
-  const isMobile = isMobileMode();
-
   const params = useParams<{ projectId: string }>();
   const isEdit = Boolean(params.projectId);
 
-  const history = useHistory();
   const { toast } = useNotification();
 
   const { user } = useAuthContext();
@@ -96,7 +85,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       const { name, value } = event.target;
 
       const newForm = { ...form, [name]: value || '' };
-      console.log('checkign is edit', isEdit);
+
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase();
         const sanitizedName = projectName.replaceAll(
@@ -277,7 +266,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
               <ImageWithReload src={form.image} height="222px" width="350px" />
             ) : (
               <Image
-                src={GeyserSkeletonUrl}
+                src={GeyserTempImage}
                 maxHeight="500px"
                 height="222px"
                 width="350px"
