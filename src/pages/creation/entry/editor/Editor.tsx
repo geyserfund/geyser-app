@@ -41,6 +41,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
     },
     '& .ql-editor': {
       paddingBottom: '70px !important',
+      overflow: 'hidden',
     },
 
     '& p': {
