@@ -162,28 +162,6 @@ export const ProjectDashboard = () => {
               <Box
                 borderBottom="3px solid"
                 borderColor={
-                  view === 'fundingSettings'
-                    ? 'brand.primary'
-                    : 'brand.neutral500'
-                }
-              >
-                <Button
-                  borderRadius="4px"
-                  _hover={{ backgroundColor: 'none' }}
-                  w="100%"
-                  rounded="none"
-                  bg="none"
-                  fontWeight={view === 'fundingSettings' ? 'bold' : 'normal'}
-                  fontSize="16px"
-                  marginTop="10px"
-                  onClick={() => setView('fundingSettings')}
-                >
-                  Funding Settings
-                </Button>
-              </Box>
-              <Box
-                borderBottom="3px solid"
-                borderColor={
                   view === 'projectSettings'
                     ? 'brand.primary'
                     : 'brand.neutral500'
@@ -201,6 +179,28 @@ export const ProjectDashboard = () => {
                   onClick={() => setView('projectSettings')}
                 >
                   Project Settings
+                </Button>
+              </Box>
+              <Box
+                borderBottom="3px solid"
+                borderColor={
+                  view === 'fundingSettings'
+                    ? 'brand.primary'
+                    : 'brand.neutral500'
+                }
+              >
+                <Button
+                  borderRadius="4px"
+                  _hover={{ backgroundColor: 'none' }}
+                  w="100%"
+                  rounded="none"
+                  bg="none"
+                  fontWeight={view === 'fundingSettings' ? 'bold' : 'normal'}
+                  fontSize="16px"
+                  marginTop="10px"
+                  onClick={() => setView('fundingSettings')}
+                >
+                  Funding Settings
                 </Button>
               </Box>
             </Box>

@@ -199,12 +199,14 @@ export const NavBar = ({ showBorder, skipRoutes }: INavBar) => {
                   nav.projectOwnerId === user.id && (
                     <ButtonComponent
                       marginRight="12px"
-                      backgroundColor="brand.primary100"
+                      backgroundColor="brand.neutral800"
+                      color="white"
                       onClick={() =>
                         history.push(
                           `${customHistory.location.pathname}/dashboard`,
                         )
                       }
+                      _hover={{ backgroundColor: 'brand.neutral600' }}
                     >
                       Dashboard
                     </ButtonComponent>
