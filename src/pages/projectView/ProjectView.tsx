@@ -8,6 +8,7 @@ import { NotFound } from '../notFound';
 import Activity from '../project/Activity/Activity';
 import { DetailsContainer } from './DetailsContainer';
 import { useFundingFlow, useFundState } from '../../hooks';
+import { Head } from '../../utils/Head';
 import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
 
@@ -95,6 +96,12 @@ const ProjectViewContainer = ({
   const { setFundState, fundState } = fundingFlow;
   return (
     <>
+      <Head
+        title={project.title}
+        description={project.description}
+        image={project.media[0]}
+        type="article"
+      />
       <DetailsContainer
         {...{
           project,
