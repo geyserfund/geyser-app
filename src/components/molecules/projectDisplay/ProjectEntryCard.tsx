@@ -98,7 +98,11 @@ export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
 
             <HStack flex={0}>
               <HStack spacing={2}>
-                <ProjectListItemImage project={entry.project} flexShrink={0} />
+                <ProjectListItemImage
+                  imageSrc={entry.image}
+                  project={entry.project}
+                  flexShrink={0}
+                />
 
                 <Text
                   color="brand.neutral600"
