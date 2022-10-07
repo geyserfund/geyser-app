@@ -292,7 +292,7 @@ export const EntryCreateEdit = () => {
             alignItems="flex-start"
             paddingBottom="80px"
           >
-            <Box marginTop="20px" width="100%">
+            <Box marginTop="20px" width="100%" px="16px">
               <FileUpload onUploadComplete={onImageUpload}>
                 <>
                   {form.current.image ? (
