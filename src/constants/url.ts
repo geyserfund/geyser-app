@@ -20,6 +20,8 @@ export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4';
 export const GeyserHomepageUrl = 'https://geyser.fund/';
 export const GeyserPrivacyUrl =
   'https://geyser.notion.site/Geyser-Privacy-Policy-7d008651271249b18d6886edbb2edaba';
+export const GeyserTermsAndConditionsURL =
+  'https://geyser.notion.site/Terms-Conditions-815ff42c97af4cdf8861011a8a4c1fe0';
 
 export const SubscribeUrl = 'https://airtable.com/shrE0ffCRdX6CkYYw';
 export const StartCrowdFundUrl = 'https://airtable.com/shrOzN3U8ePy4Y0uf';
