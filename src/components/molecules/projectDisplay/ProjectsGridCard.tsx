@@ -40,8 +40,6 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
       bg={useColorModeValue('white', 'gray.900')}
       borderWidth="3px"
       borderColor={'brand.neutral300'}
-      boxShadow="0px 0px 20px rgba(0, 0, 0, 0.10)"
-      _hover={{ boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)' }}
       rounded={'md'}
       overflow={'hidden'}
       onClick={handleClick}
@@ -67,7 +65,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
       </Box>
 
       <Box paddingX={6} paddingY={4}>
-        <VStack spacing={4}>
+        <VStack spacing={4} alignItems="flex-start">
           <Heading
             color={useColorModeValue('gray.700', 'white')}
             fontSize={'2xl'}
