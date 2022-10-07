@@ -152,7 +152,7 @@ export const EntryPreview = () => {
           spacing="20px"
           width="100%"
           // height="100%"
-          maxWidth="400px"
+          maxWidth="380px"
           padding={'0px 10px'}
           display="flex"
           flexDirection="column"
@@ -174,8 +174,17 @@ export const EntryPreview = () => {
               <Text>Your entry is live!</Text>
             </VStack>
           )}
-          <VStack alignItems="flex-start">
-            <Text color="brand.gray500">Edit Social Preview </Text>
+          <Text fontSize="14px" color="brand.neutral800">
+            {!isPublished ? 'Edit Social Preview' : 'Preview'}{' '}
+          </Text>
+          <VStack
+            alignItems="flex-start"
+            backgroundColor="white"
+            border="1px solid"
+            borderColor="brand.neutral200"
+            borderRadius="4px"
+            padding="3px"
+          >
             {entry.image && (
               <Box height="220px" width="350px" overflow="hidden">
                 <Image
@@ -221,7 +230,9 @@ export const EntryPreview = () => {
           </VStack>
           {!isPublished && (
             <VStack alignItems="flex-start" width="100%">
-              <Text>Linked project</Text>
+              <Text fontSize="14px" color="brand.neutral800">
+                Linked project
+              </Text>
               <Text>Where should Satoshi donations go to?</Text>
               <TextBox
                 isDisabled
@@ -235,7 +246,7 @@ export const EntryPreview = () => {
                 Share on Twitter
               </ButtonComponent>
               <ButtonComponent primary isFullWidth onClick={handleGotoPost}>
-                Go to Post
+                Go to Entry
               </ButtonComponent>
             </VStack>
           ) : (

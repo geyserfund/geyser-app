@@ -3,14 +3,12 @@ import React from 'react';
 import { colors } from '../../../constants';
 
 type Props = {
-  size?: string;
   borderRadius?: string;
   backgroundColor?: string;
   padding?: string;
 };
 
 export const ProjectImageListItemPlaceholder = ({
-  size = '42px',
   borderRadius = 'md',
   backgroundColor = colors.neutral100,
   padding = '0.5em',
@@ -18,8 +16,8 @@ export const ProjectImageListItemPlaceholder = ({
   return (
     <Box
       padding={padding}
-      width={size}
-      height={size}
+      width="full"
+      height="full"
       display="flex"
       justifyContent="center"
       alignItems="center"
