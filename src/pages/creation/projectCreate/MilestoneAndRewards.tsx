@@ -151,7 +151,7 @@ export const MilestoneAndRewards = () => {
     const updateProjectInput: any = {
       projectId: data?.project?.id,
       rewardCurrency: isSatoshi ? 'btc' : 'usd',
-      expiresAt: finalDate || undefined,
+      expiresAt: finalDate || null,
     };
     if (rewards.length > 0) {
       updateProjectInput.type = 'reward';
