@@ -17,6 +17,7 @@ interface ILighteningQR {
 
 export const LighteningQR = ({ project }: ILighteningQR) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { name } = project;
 
   const [copy, setCopy] = useState(false);
   const [imageDownload, setImageDownload] = useState('');
