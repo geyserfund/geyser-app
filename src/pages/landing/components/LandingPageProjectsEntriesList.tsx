@@ -11,7 +11,7 @@ type Props = {
   itemLimit?: number;
 };
 
-export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
+export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
   const {
     isLoading,
     error,
@@ -23,10 +23,13 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const isShowingAllEntries: boolean = useMemo(() => {
-    // return entries.length <= itemLimit;
-    return false;
-  }, [entries, itemLimit]);
+  // const isShowingAllEntries: boolean = useMemo(() => {
+  //   return false;
+  // }, [entries, itemLimit]);
+
+  const [isShowingAllEntries, setIsShowingAllEntries] = useState(
+    entries.length < itemLimit,
+  );
 
   if (error) {
     return (
