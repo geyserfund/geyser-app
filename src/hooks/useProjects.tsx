@@ -2,6 +2,8 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS } from '../graphql';
 import { IProject } from '../interfaces';
 
+// TODO: There should be a way to have this use the auto-generated
+// types here: https://github.com/geyserfund/geyser-server/blob/development/src/types/generated/graphql.ts
 export type OrderBy = 'createdAt' | 'projectTitle' | 'contributionsCount';
 
 type OptionsProps = {

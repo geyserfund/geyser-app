@@ -1,3 +1,15 @@
+export const routerPathNames = {
+  projectDiscovery: 'project-discovery',
+  grants: 'grants',
+  entry: 'entry',
+  notFound: 'not-found',
+  notAuthorized: 'not-authorized',
+  project: 'project',
+  projects: 'projects',
+  launchProject: 'launch',
+  userProfile: 'profile',
+};
+
 // TODO: These definitions are currently a WIP.
 // (Getting them started as part of the changes for
 // https://geyserteam.atlassian.net/browse/GT-207.)
@@ -5,13 +17,17 @@
 const pathsMap = {
   index: () => '/',
   landingPage: () => '/',
-  projectDiscovery: () => '/project-discovery',
-  grants: () => '/grants',
-  projects: () => '/projects',
-  project: (projectName: string) => `/project/${projectName}`,
-  projectEntry: (projectName: string) => `/projects/${projectName}/entry`,
-  launchProject: (projectName: string) => `/launch/${projectName}`,
-  userProfile: (userID: string) => `/launch/${userID}`,
+  projectDiscovery: () => `/${routerPathNames.projectDiscovery}`,
+  grants: () => `/${routerPathNames.grants}`,
+  notFound: () => `/${routerPathNames.notFound}`,
+  notAuthorized: () => `/${routerPathNames.notAuthorized}`,
+  project: (projectName: string) =>
+    `/${routerPathNames.project}/${projectName}`,
+  projectEntry: (projectName: string) =>
+    `/${routerPathNames.projects}/${projectName}/entry`,
+  launchProject: (projectName: string) =>
+    `/${routerPathNames.launchProject}/${projectName}`,
+  userProfile: (userID: string) => `/${routerPathNames.userProfile}/${userID}`,
 };
 
 type PathsMap = typeof pathsMap;

@@ -59,7 +59,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
           src={project.image}
           width="full"
           height="full"
-          fallback={<ProjectImageListItemPlaceholder size="42%" />}
+          fallback={<ProjectImageListItemPlaceholder padding="3em" />}
           objectFit="cover"
         />
       </Box>
