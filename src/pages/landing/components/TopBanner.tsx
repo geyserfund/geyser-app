@@ -53,71 +53,47 @@ export const TopBanner = () => {
           textAlign={'center'}
           align={'center'}
           spacing={{ base: 6, md: 8 }}
-          py={{ base: 8, md: 12 }}
+          py={{ base: 6, md: 8 }}
         >
           <VStack spacing={3}>
-            <Image src={SatsFlowSVG} maxHeight="80px" />
+            <Image src={SatsFlowSVG} maxHeight="76px" />
 
-            <Heading as="h1" fontWeight={600} size="xl" lineHeight={'110%'}>
+            <Heading as="h1" fontWeight={'bold'} size="lg" lineHeight={'110%'}>
               Play a part in world-changing ideas by contributing to them and
               launching them on Geyser!
             </Heading>
           </VStack>
 
-          <HStack fontSize={'md'} spacing={4}>
-            <HStack spacing={2}>
-              {isSummaryLoading ? (
-                <Skeleton w="25px" h="25px" />
-              ) : (
-                <Text fontWeight={'bold'} textColor={colors.neutral900}>
-                  {projectsSummaryData.projectsCount}
-                </Text>
-              )}
-              <Text
-                textAlign={'start'}
-                textColor={colors.neutral700}
-                fontSize="md"
-                textTransform={'uppercase'}
-              >
-                Projects
-              </Text>
-            </HStack>
+          <HStack fontSize={'sm'} spacing={4} textColor={'brand.neutral700'}>
+            {[
+              [projectsSummaryData.projectsCount, 'Projects'],
+              [projectsSummaryData.fundedTotal, 'Sats Raised'],
+              [projectsSummaryData.fundersCount, 'Pleb Contributors'],
+            ].map((statsData, index) => {
+              return (
+                <HStack
+                  spacing={1.5}
+                  key={index}
+                  justifyContent="flex-start"
+                  alignItems={'center'}
+                >
+                  {isSummaryLoading ? (
+                    <Skeleton w="25px" h="25px" />
+                  ) : (
+                    <Text fontWeight={'bold'} textColor={colors.neutral900}>
+                      {statsData[0]}
+                    </Text>
+                  )}
 
-            <HStack spacing={2}>
-              {isSummaryLoading ? (
-                <Skeleton w="25px" h="25px" />
-              ) : (
-                <Text fontWeight={'bold'} textColor={colors.neutral900}>
-                  {projectsSummaryData.fundedTotal}
-                </Text>
-              )}
-              <Text
-                textAlign={'start'}
-                textColor={colors.neutral700}
-                fontSize="md"
-                textTransform={'uppercase'}
-              >
-                Sats Raised
-              </Text>
-            </HStack>
-
-            <HStack spacing={2}>
-              {isSummaryLoading ? (
-                <Skeleton w="25px" h="25px" />
-              ) : (
-                <Text fontWeight={'bold'} textColor={colors.neutral900}>
-                  {projectsSummaryData.fundersCount}
-                </Text>
-              )}
-              <Text
-                textAlign={'start'}
-                textColor={colors.neutral700}
-                fontSize="md"
-                textTransform={'uppercase'}
-              >
-                Pleb Contributors
-              </Text>
-            </HStack>
+                  <Text
+                    textColor={colors.neutral700}
+                    textTransform={'uppercase'}
+                  >
+                    {statsData[1]}
+                  </Text>
+                </HStack>
+              );
+            })}
           </HStack>
 
           {/* TODO: Make this the basis for a re-useable "Primary"/CTA button component */}

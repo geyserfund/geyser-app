@@ -46,19 +46,25 @@ export const RewardBased = ({
           onChange={setState}
         />
       </Box>
-      <Box width="100%">
-        <SectionTitle>Donate to receive a reward</SectionTitle>
-        <VStack padding="2px">
-          {rewards.map((reward: IProjectReward) => (
-            <RewardItem
-              key={reward.id}
-              item={reward}
-              count={getRewardCount(reward.id)}
-              updateCount={updateReward}
-            />
-          ))}
-        </VStack>
-      </Box>
+      {!rewards || !(rewards.length > 0) ? (
+        <Box width="100%">
+          <SectionTitle>Not any rewards</SectionTitle>
+        </Box>
+      ) : (
+        <Box width="100%">
+          <SectionTitle>Donate to receive a reward</SectionTitle>
+          <VStack padding="2px">
+            {rewards.map((reward: IProjectReward) => (
+              <RewardItem
+                key={reward.id}
+                item={reward}
+                count={getRewardCount(reward.id)}
+                updateCount={updateReward}
+              />
+            ))}
+          </VStack>
+        </Box>
+      )}
     </VStack>
   );
 };

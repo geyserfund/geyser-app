@@ -14,6 +14,7 @@ export const QUERY_PROJECT_BY_NAME = gql`
       updatedAt
       expiresAt
       media
+      image
       active
       draft
       owners {

@@ -12,16 +12,16 @@ import React from 'react';
 import { FaTelegramPlane, FaTwitter, FaPodcast } from 'react-icons/fa';
 import {
   AnalyticsUrl,
-  GeyserLignteningNodeUrl,
   GeyserPrivacyUrl,
   GeyserTelegramUrl,
   GeyserTwitterUrl,
   GeyserPodcastUrl,
   GeyserHomepageUrl,
+  GeyserTermsAndConditionsURL,
 } from '../../constants';
 import { isMobileMode } from '../../utils';
 import { Subscribe } from '../nav/Subscribe';
-import { ButtonComponent, Linkin } from '../ui';
+import { ButtonComponent } from '../ui';
 
 interface IFooter {
   wrapperClassName?: string;
@@ -53,64 +53,66 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
         <Wrap
           spacing={isMobile ? '10px' : '24px'}
           justify={isMobile ? 'center' : ' flex-start'}
+          color={'brand.neutral600'}
+          flex={isMobile ? 0 : 1}
         >
-          <Text lineHeight="30px" fontWeight={600} color="brand.gray500">
-            Connect:{' '}
-          </Text>
           <Link href={GeyserTwitterUrl} isExternal>
             <IconButton
               size="sm"
               background={'none'}
-              aria-label="twitter"
+              aria-label="Geyser on Twitter"
               icon={<FaTwitter fontSize="20px" />}
-              color={'brand.gray500'}
             />
           </Link>
+
           <Link href={GeyserTelegramUrl} isExternal>
             <IconButton
               size="sm"
               background={'none'}
-              aria-label="telegram"
+              aria-label="Geyser on Telegram"
               icon={<FaTelegramPlane fontSize="20px" />}
               marginLeft="5px"
-              color={'brand.gray500'}
             />
           </Link>
+
           <Link href={GeyserPodcastUrl} isExternal>
             <IconButton
               size="sm"
               background={'none'}
-              aria-label="podcast"
+              aria-label="Geyser Podcasts"
               icon={<FaPodcast fontSize="20px" />}
               marginLeft="5px"
-              color={'brand.gray500'}
             />
           </Link>
+
           <ButtonComponent size="sm" minWidth="150px" onClick={onOpen}>
             Subscribe
           </ButtonComponent>
-          <Linkin href={GeyserLignteningNodeUrl} isExternal>
-            <ButtonComponent size="sm" minWidth="150px">
-              {"Open a channel to Geyser's lightning node"}
-            </ButtonComponent>
-          </Linkin>
         </Wrap>
 
         <HStack
           spacing="24px"
           width={isMobile ? '100%' : 'auto'}
           justifyContent={isMobile ? 'center' : undefined}
-          color="brand.gray500"
+          color="brand.neutral600"
+          fontWeight={'medium'}
+          fontSize="14px"
         >
           <Link href={GeyserHomepageUrl} isExternal>
             <Text>Geyser</Text>
+          </Link>
+
+          <Link href={GeyserHomepageUrl} isExternal>
+            <Text>₿ = ❤</Text>
           </Link>
 
           <Link href={GeyserPrivacyUrl} isExternal>
             <Text>Privacy</Text>
           </Link>
 
-          <Text>T&amp;C</Text>
+          <Link href={GeyserTermsAndConditionsURL} isExternal>
+            <Text>T&amp;C</Text>
+          </Link>
 
           <Link href={AnalyticsUrl} isExternal>
             <Text>Analytics</Text>

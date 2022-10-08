@@ -47,11 +47,14 @@ export const ButtonComponent = ({
   circular,
   backgroundColor,
   _hover,
+  color,
   ...rest
 }: IButtonComponentP) => {
   const classes = useStyles();
   const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark);
-  const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
+  const textColor =
+    color || useColorModeValue(colors.textBlack, colors.textWhite);
+
   return (
     <Button
       ref={ref}
@@ -71,6 +74,7 @@ export const ButtonComponent = ({
       }
       fontSize="12px"
       fontWeight="medium"
+      color={color}
       {...rest}
       sx={styles.buttonCommon}
     >

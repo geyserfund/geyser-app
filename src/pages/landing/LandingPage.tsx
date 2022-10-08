@@ -66,9 +66,11 @@ export const LandingPage = () => {
                 color={'brand.neutral600'}
                 fontSize="12px"
               >
-                <Text size="sm">See All Projects</Text>
+                <Text size="sm" marginRight={3}>
+                  All Projects
+                </Text>
 
-                <Icon as={BsArrowRight} marginLeft={1} />
+                <Icon as={BsArrowRight} strokeWidth={'1px'} fontSize="1.5em" />
               </Link>
             </HStack>
 

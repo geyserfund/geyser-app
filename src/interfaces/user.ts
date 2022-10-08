@@ -1,4 +1,4 @@
-import { IProjectContribution } from '.';
+import { IProject, IProjectContribution } from '.';
 
 export interface IUser {
   id: number;
@@ -8,14 +8,14 @@ export interface IUser {
   externalAccounts: IUserExternalAccount[];
 }
 
-export interface IProfileUser {
+export interface IUserProfile {
   id: number;
   username: string;
   imageUrl: string;
   externalAccounts: IUserExternalAccount[];
   contributions: IProjectContribution[];
   ownerOf: {
-    project: IProfileProject;
+    project: IProject;
   }[];
 }
 
@@ -25,28 +25,4 @@ export interface IUserExternalAccount {
   externalUsername: string;
   externalId: string;
   public: boolean;
-}
-
-export interface IProfileProject {
-  id: string;
-  title: string;
-  name: string;
-  description: string;
-  balance: number;
-  fundingGoal: number;
-  createdAt: string;
-  updatedAt: string;
-  active: boolean;
-  media: string[];
-  expiresAt: string;
-  creationConfirmed: boolean;
-  funders: {
-    id: string;
-  }[];
-  owners: {
-    id: string;
-    user: {
-      imageUrl: string;
-    };
-  }[];
 }

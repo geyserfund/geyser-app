@@ -17,6 +17,7 @@ interface ILighteningQR {
 
 export const LighteningQR = ({ project }: ILighteningQR) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { name } = project;
 
   const [copy, setCopy] = useState(false);
   const [imageDownload, setImageDownload] = useState('');
@@ -88,26 +89,6 @@ export const LighteningQR = ({ project }: ILighteningQR) => {
           />
         </Tooltip>
 
-        <Tooltip label="View Project QR Code" placement="top">
-          <IconButton
-            size="sm"
-            _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
-            _active={{ backgroundColor: 'brand.primary' }}
-            bg="none"
-            icon={<QrIcon />}
-            aria-label="qr"
-            onClick={() => {
-              setCopy(false);
-              onOpen();
-              if (imageDownload.length === 0) {
-                setTimeout(() => {
-                  capture();
-                }, 2100);
-              }
-            }}
-          />
-        </Tooltip>
-
         <Tooltip
           label={copy ? 'Copied!' : 'Share Project'}
           placement="top"
@@ -128,7 +109,8 @@ export const LighteningQR = ({ project }: ILighteningQR) => {
         isOpen={isOpen}
         onClose={onClose}
         setCopy={setCopy}
-        images={project.media}
+        name={project.name}
+        image={project.image}
         projectId={project.id}
         title={project.title}
         imageDownload={imageDownload}
