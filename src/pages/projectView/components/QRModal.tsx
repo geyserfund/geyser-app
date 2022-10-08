@@ -37,7 +37,8 @@ const ModalImage = React.memo(ModalProjectImage);
 interface IQRModal {
   isOpen: boolean;
   onClose: () => void;
-  images: string[];
+  name: string;
+  image?: string;
   projectId: string;
   title: string;
   setCopy: any;
@@ -47,7 +48,8 @@ interface IQRModal {
 export const QRModal = ({
   isOpen,
   onClose,
-  images,
+  name,
+  image,
   projectId,
   title,
   setCopy,
@@ -82,7 +84,7 @@ export const QRModal = ({
           </Text>
 
           <Box display="flex" w="100%" id="lnaddress-qr">
-            <ModalImage image={images[0]} />
+            {image && <ModalImage image={image} />}
 
             <Box
               bg="brand.primary"
