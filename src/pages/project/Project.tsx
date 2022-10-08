@@ -50,7 +50,7 @@ export const Project = () => {
       <Head
         title={project.title}
         description={project.description}
-        image={project.media[0]}
+        image={project.image}
         type="article"
       />
       {project.type !== 'grant' ? (
