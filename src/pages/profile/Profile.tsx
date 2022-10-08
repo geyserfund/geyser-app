@@ -34,13 +34,12 @@ import {
   ProfileProjectCard,
 } from '../../components/molecules';
 import { USER_PROFILE_QUERY } from '../../graphql';
-import { IProfileUser, IUserExternalAccount } from '../../interfaces';
+import { IUserProfile, IUserExternalAccount } from '../../interfaces';
 import { isDarkMode, isMobileMode, getRandomOrb } from '../../utils';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { defaultUser } from '../../defaults';
-import { cookieOptions } from '../../constants';
 
 const useStyles = createUseStyles({
   container: {
@@ -129,16 +128,17 @@ export const Profile = () => {
   const [isLargerThan1080] = useMediaQuery('(min-width: 1080px)');
 
   const params = useParams<{ userId: string }>();
+
   const [getUserData, { loading: profileLoading, error, data }] =
     useLazyQuery(USER_PROFILE_QUERY);
+
   const isMe = () => history.location.pathname === `/profile/${user.id}`;
 
-  const [userProfile, setUserProfile] = useState<IProfileUser>({
+  const [userProfile, setUserProfile] = useState<IUserProfile>({
     ...defaultUser,
     contributions: [],
     ownerOf: [],
   });
-  console.log('cookieOptions', cookieOptions);
 
   /*
 	useEffect functions
@@ -156,7 +156,7 @@ export const Profile = () => {
 
   useEffect(() => {
     if (data && data.user) {
-      const user = data.user as IProfileUser;
+      const user = data.user as IUserProfile;
       setUserProfile(user);
     }
   }, [data]);

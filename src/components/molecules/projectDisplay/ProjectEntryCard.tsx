@@ -3,7 +3,6 @@ import {
   Box,
   Heading,
   HStack,
-  HTMLChakraProps,
   Image,
   Spacer,
   Text,
@@ -12,16 +11,14 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useHistory } from 'react-router';
-import {
-  ProjectFundersCountIndicator,
-  ProjectImageListItemPlaceholder,
-} from '..';
 import { ICard, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { isMobileMode } from '../../../utils';
 import { BsPencil } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
+import { ProjectFundersCountIndicator } from './ProjectFundersCountIndicator';
+import { ProjectListItemImage } from './ProjectListItemImage';
 
 type Props = ICard & {
   entry: IProjectListEntryItem;
@@ -36,29 +33,6 @@ const useStyles = createUseStyles({
     borderRadius: '0.5em',
   },
 });
-
-type ProjectImageProps = HTMLChakraProps<'div'> & {
-  entry: IProjectListEntryItem;
-};
-
-const ProjectImage = ({ entry, ...rest }: ProjectImageProps) => {
-  const imageSrc = entry.image;
-
-  return (
-    <Box {...rest}>
-      <Image
-        flexShrink={0}
-        src={imageSrc}
-        boxSize="42px"
-        borderRadius="md"
-        objectFit="cover"
-        fallback={<ProjectImageListItemPlaceholder />}
-        fit="cover"
-        alt={`Main image for ${entry.project.name}`}
-      />
-    </Box>
-  );
-};
 
 export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
   const isMobile = isMobileMode();
@@ -148,7 +122,11 @@ export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
               flexShrink={1}
               maxWidth="66%"
             >
-              <ProjectImage entry={entry} flexShrink={0} />
+              <ProjectListItemImage
+                imageSrc={entry.image}
+                project={entry.project}
+                flexShrink={0}
+              />
 
               <Text
                 as={'p'}
