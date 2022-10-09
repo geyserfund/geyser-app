@@ -36,15 +36,16 @@ import { AddRewards } from '../creation/projectCreate/components/AddRewards';
 import { TMilestone, TRewards } from '../creation/projectCreate/types';
 
 export const FundSettings = ({ project }: { project: IProject }) => {
-  console.log('FundSettings');
-  const params = useParams<{ projectId: string }>();
-  const history = useHistory();
   const { toast } = useNotification();
 
-  const [selectedButton, setSelectedButton] = useState('ongoing');
-  const [selectedDate, setSelectedDate] = useState<Date>();
-
-  const [finalDate, setFinalDate] = useState<string>('');
+  const [selectedButton, setSelectedButton] = useState(
+    project.expiresAt ? 'custom' : 'ongoing',
+  );
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    project.expiresAt
+      ? DateTime.fromMillis(parseInt(project.expiresAt, 10)).toJSDate()
+      : undefined,
+  );
 
   const [milestones, setMilestones] = useState<TMilestone[]>([]);
   const [rewards, setRewards] = useState<TRewards[]>([]);
@@ -164,28 +165,30 @@ export const FundSettings = ({ project }: { project: IProject }) => {
   const handleDateChange = (value: Date) => {
     setSelectedButton('custom');
     setSelectedDate(value);
-    setFinalDate(`${value.getTime()}`);
+    const expiredAt = `${value.getTime()}`;
+    handleUpdateProject({ expiredAt });
   };
 
   const handleMonthSelect = () => {
     setSelectedButton('month');
     const dateMonth = DateTime.now().plus({ months: 1 });
     setSelectedDate(undefined);
-    setFinalDate(`${dateMonth.toJSDate().getTime()}`);
+    const expiredAt = `${dateMonth.toJSDate().getTime()}`;
+    handleUpdateProject({ expiredAt });
   };
 
   const handleOngoingSelect = () => {
     setSelectedButton('ongoing');
     setSelectedDate(undefined);
-    setFinalDate('');
+    const expiredAt = '';
+    handleUpdateProject({ expiredAt });
   };
 
-  useEffect(() => {
+  const handleUpdateProject = ({ expiredAt }: { expiredAt: string }) => {
     if (project.id) {
       const updateProjectInput: any = {
         projectId: project.id,
-        rewardCurrency: isSatoshi ? 'btc' : 'usd',
-        expiresAt: finalDate || null,
+        expiresAt: expiredAt || null,
       };
       if (rewards.length > 0) {
         updateProjectInput.type = 'reward';
@@ -193,7 +196,7 @@ export const FundSettings = ({ project }: { project: IProject }) => {
 
       updateProject({ variables: { input: updateProjectInput } });
     }
-  }, [finalDate, isSatoshi]);
+  };
 
   const node = project.wallets && project.wallets[0];
 
