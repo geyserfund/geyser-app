@@ -68,6 +68,7 @@ export const ProjectEntryCard = ({
       transition={'background-color 0.3s ease-in-out'}
       padding={4}
       cursor={'pointer'}
+      overflow="hidden"
       onClick={handleClick}
       {...rest}
     >
@@ -128,24 +129,24 @@ export const ProjectEntryCard = ({
           direction={'row'}
           spacing={'22px'}
         >
-          <HStack spacing={1}>
-            <Text color="brand.primary500" fontWeight={'bold'}>
-              {entry.fundersCount}
-            </Text>
-            <BsHeartFill color={colors.primary500} />
+          <HStack spacing={'12px'} align={'center'}>
+            <HStack spacing={1}>
+              <Text color="brand.primary500" fontWeight={'bold'}>
+                {entry.fundersCount}
+              </Text>
+              <BsHeartFill color={colors.primary500} />
+            </HStack>
+
+            <SatoshiAmount color="brand.primary500" fontWeight="bold">
+              {entry.amountFunded}
+            </SatoshiAmount>
           </HStack>
 
-          <SatoshiAmount color="brand.primary500" fontWeight="bold">
-            {entry.amountFunded}
-          </SatoshiAmount>
-
           <HStack
-            spacing={0.5}
+            spacing={1}
             alignItems="center"
             justifyContent="flex-start"
-            flexGrow={0}
-            flexShrink={1}
-            maxWidth="66%"
+            maxWidth="50%"
           >
             <ProjectListItemImage
               imageSrc={entry.image}
@@ -158,7 +159,6 @@ export const ProjectEntryCard = ({
               color="brand.neutral600"
               textTransform={'uppercase'}
               noOfLines={1}
-              isTruncated
             >
               {entry.project.title}
             </Text>
@@ -166,6 +166,8 @@ export const ProjectEntryCard = ({
 
           <Badge
             textTransform="uppercase"
+            fontSize={'10px'}
+            fontWeight="regular"
             padding={1}
             borderRadius={0.5}
             display="flex"
