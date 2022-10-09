@@ -2,33 +2,45 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS } from '../graphql';
 import { IProject } from '../interfaces';
 
-// TODO: There should be a way to have this use the auto-generated
-// types here: https://github.com/geyserfund/geyser-server/blob/development/src/types/generated/graphql.ts
-export type OrderBy = 'createdAt' | 'projectTitle' | 'contributionsCount';
+export type OrderByOption =
+  | 'Newest Projects'
+  | 'Oldest Projects'
+  | 'Amount Funded';
 
 type OptionsProps = {
   itemLimit?: number;
-  orderBy?: OrderBy;
+  orderBy?: OrderByOption;
 };
 
 type ResponseData = IProject[];
 
-export const useProjects = (options?: OptionsProps) => {
-  const { itemLimit = 14, orderBy = 'createdAt' } = options || {};
+// TODO: Leverage auto-generated schema types after
+// https://github.com/geyserfund/geyser-app/pull/346 is merged.
 
-  function orderByParams(orderByOption: OrderBy) {
+// export const useProjects = (options?: OptionsProps) => {
+export const useProjects = ({
+  itemLimit = 14,
+  orderBy = 'Newest Projects',
+}: OptionsProps) => {
+  // const { itemLimit = 14, orderBy = 'createdAt' } = options || {};
+
+  // function orderByParams(orderByOption: OrderBy): ProjectsOrderByInput {
+  function orderByParams(orderByOption: OrderByOption) {
     switch (orderByOption) {
-      case 'createdAt':
+      case 'Newest Projects':
         return {
-          createdAt: null,
+          // createdAt: OrderByOptions.desc,
+          createdAt: 'desc',
         };
-      case 'contributionsCount':
+      case 'Oldest Projects':
         return {
-          contributions: null,
+          // createdAt: OrderByOptions.asc,
+          createdAt: 'asc',
         };
-      case 'projectTitle':
+      case 'Amount Funded':
         return {
-          projectTitle: null,
+          // balance: OrderByOptions.desc,
+          balance: 'desc',
         };
       default:
         break;

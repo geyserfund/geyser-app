@@ -20,7 +20,7 @@ import { History } from 'history';
 import { dimensions } from '../../constants';
 import { AlertBox } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
-import { OrderBy, useProjects } from '../../hooks';
+import { OrderByOption, useProjects } from '../../hooks';
 import { IProject } from '../../interfaces';
 import { ProjectsGridCard } from '../../components/molecules/projectDisplay/ProjectsGridCard';
 import { RiSortDesc } from 'react-icons/ri';
@@ -35,14 +35,15 @@ type Props = {
 const { topNavBar: topNavBarDimensions } = dimensions;
 
 export const ProjectDiscoveryPage = ({ match, history }: Props) => {
-  const [orderBy, setOrderBy] = React.useState<OrderBy>('createdAt');
+  const [orderByOption, setOrderByOption] =
+    React.useState<OrderByOption>('Newest Projects');
 
   const {
     isLoading,
     error,
     data: projects,
   } = useProjects({
-    orderBy,
+    orderBy: orderByOption,
   });
 
   if (error) {
@@ -168,28 +169,28 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
                     <MenuItem
                       fontWeight={'semibold'}
                       onClick={() => {
-                        setOrderBy('projectTitle');
+                        setOrderByOption('Newest Projects');
                       }}
                     >
-                      Project Name
+                      Newest Projects
                     </MenuItem>
 
                     <MenuItem
                       fontWeight={'semibold'}
                       onClick={() => {
-                        setOrderBy('contributionsCount');
+                        setOrderByOption('Oldest Projects');
                       }}
                     >
-                      Contributions
+                      Oldest Projects
                     </MenuItem>
 
                     <MenuItem
                       fontWeight={'semibold'}
                       onClick={() => {
-                        setOrderBy('createdAt');
+                        setOrderByOption('Amount Funded');
                       }}
                     >
-                      Newest Project
+                      Amount Funded
                     </MenuItem>
                   </MenuList>
                 </Menu>
