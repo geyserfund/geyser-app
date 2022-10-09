@@ -12,8 +12,8 @@ import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
 import {
+  ProjectEntryCard,
   ProjectSectionBar,
-  RewardCard,
   RewardItem,
 } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
@@ -22,7 +22,6 @@ import { useAuthContext } from '../../context';
 import { TupdateReward } from '../../hooks';
 import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
-import { ProjectEntryCard } from '../../components/molecules/projectDisplay/ProjectEntryCard';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
 
