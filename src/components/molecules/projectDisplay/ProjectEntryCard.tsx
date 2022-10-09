@@ -4,7 +4,6 @@ import {
   Flex,
   Heading,
   HStack,
-  HTMLChakraProps,
   Image,
   Spacer,
   Stack,
@@ -13,13 +12,13 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useHistory } from 'react-router';
-import { ProjectImageListItemPlaceholder } from '..';
 import { ICard, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { BsHeartFill, BsPencil } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
 import { colors } from '../../../constants';
+import { ProjectListItemImage } from './ProjectListItemImage';
 
 type Props = ICard & {
   entry: IProjectListEntryItem;
@@ -34,28 +33,6 @@ const useStyles = createUseStyles({
     borderRadius: '0.5em',
   },
 });
-
-type ProjectImageProps = HTMLChakraProps<'div'> & {
-  entry: IProjectListEntryItem;
-};
-
-const ProjectImage = ({ entry, ...rest }: ProjectImageProps) => {
-  const imageSrc = entry.image;
-
-  return (
-    <Box width="28px" height="28px" {...rest}>
-      <Image
-        flexShrink={0}
-        src={imageSrc}
-        boxSize="28px"
-        borderRadius="md"
-        objectFit="cover"
-        fallback={<ProjectImageListItemPlaceholder />}
-        alt={`Main image for ${entry.project.name}`}
-      />
-    </Box>
-  );
-};
 
 export const ProjectEntryCard = ({
   entry,
@@ -170,7 +147,11 @@ export const ProjectEntryCard = ({
             flexShrink={1}
             maxWidth="66%"
           >
-            <ProjectImage entry={entry} flexShrink={0} />
+            <ProjectListItemImage
+              imageSrc={entry.image}
+              project={entry.project}
+              flexShrink={0}
+            />
 
             <Text
               as={'p'}

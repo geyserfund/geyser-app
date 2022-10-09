@@ -23,6 +23,7 @@ import { TupdateReward } from '../../hooks';
 import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
+import { BiPlus } from 'react-icons/bi';
 
 const useStyles = createUseStyles({
   navButton: {
@@ -183,18 +184,14 @@ export const ProjectAccesories = ({
           alignItems="flex-start"
           spacing="20px"
         >
-          <ProjectSectionBar
-            name={'Entries'}
-            number={entriesLength}
-            rightSection={
-              isOwner && (
-                <ButtonComponent primary onClick={handleCreateNewEntry}>
-                  Create new entry
-                </ButtonComponent>
-              )
-            }
-          />
+          <ProjectSectionBar name={'Entries'} number={entriesLength} />
           {renderEntries()}
+          {isOwner && (
+            <ButtonComponent onClick={handleCreateNewEntry} isFullWidth>
+              <BiPlus style={{ marginRight: '10px' }} />
+              Create new entry
+            </ButtonComponent>
+          )}
         </VStack>
       )}
       {isRewardBased && (

@@ -126,7 +126,12 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     privateRoute = false,
   } = authModalProps;
 
-  const { user, setUser, isLoggedIn, loginIsOpen } = useAuthContext();
+  const {
+    user,
+    setUser,
+    isLoggedIn,
+    isAuthModalOpen: loginIsOpen,
+  } = useAuthContext();
   const { toast } = useNotification();
   const isMobile = isMobileMode();
   const history = useHistory();

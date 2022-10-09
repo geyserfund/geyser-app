@@ -101,6 +101,7 @@ export const MilestoneAndRewards = () => {
 
   const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
     variables: { where: { name: params.projectId } },
+    fetchPolicy: 'network-only',
     onError() {
       toast({
         title: 'Error fetching project',
@@ -151,7 +152,7 @@ export const MilestoneAndRewards = () => {
     const updateProjectInput: any = {
       projectId: data?.project?.id,
       rewardCurrency: isSatoshi ? 'btc' : 'usd',
-      expiresAt: finalDate || undefined,
+      expiresAt: finalDate || null,
     };
     if (rewards.length > 0) {
       updateProjectInput.type = 'reward';

@@ -23,6 +23,7 @@ export const LandingPageProjectsListItem = ({ project, ...rest }: Props) => {
       as={ReactRouterLink}
       to={`/projects/${project.name}`}
       _hover={{ textDecoration: 'none' }}
+      _focus={{ boxShadow: 'none' }}
     >
       <HStack
         spacing={3}

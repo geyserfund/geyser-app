@@ -11,11 +11,11 @@ import { HTMLChakraProps } from '@chakra-ui/system';
 import { useHistory } from 'react-router';
 import { createUseStyles } from 'react-jss';
 
-interface ILogoP extends HTMLChakraProps<'div'> {
+type Props = HTMLChakraProps<'div'> & {
   className?: string;
   imageClassName?: string;
   full?: boolean;
-}
+};
 
 const useStyles = createUseStyles({
   container: {
@@ -25,7 +25,12 @@ const useStyles = createUseStyles({
   },
 });
 
-export const Logo = ({ className, imageClassName, full, ...rest }: ILogoP) => {
+export const NavBarLogo = ({
+  className,
+  imageClassName,
+  full,
+  ...rest
+}: Props) => {
   const classes = useStyles();
   const { colorMode } = useColorMode();
   const history = useHistory();
