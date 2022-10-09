@@ -1,17 +1,24 @@
-import { GridItem, HStack, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
+import {
+  GridItem,
+  HStack,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
 import {
+  DeleteConfirmModal,
   ProjectEntryCard,
   ProjectSectionBar,
 } from '../../components/molecules';
 import { ButtonComponent, SatoshiAmount } from '../../components/ui';
 import { colors } from '../../constants';
 import { fonts } from '../../constants/fonts';
-import { IProject } from '../../interfaces';
-import { numberWithCommas } from '../../utils';
+import { IProject, IProjectListEntryItem } from '../../interfaces';
+import { numberWithCommas, useNotification } from '../../utils';
 
 const useStyles = createUseStyles({
   statBox: {
@@ -33,12 +40,40 @@ const useStyles = createUseStyles({
 export const Entries = ({ project }: { project: IProject }) => {
   const classes = useStyles();
   const history = useHistory();
+  const { toast } = useNotification();
 
   const liveEntries = project?.entries?.filter((entry) => entry.published);
   const draftEntries = project?.entries?.filter((entry) => !entry.published);
 
+  const {
+    isOpen: isDeleteEntryOpen,
+    onClose: closeDeleteEntry,
+    onOpen: openDeleteEntry,
+  } = useDisclosure();
+
+  const [selectedEntry, setSelectedEntry] = useState<IProjectListEntryItem>();
+
   const handleCreateEntry = () => {
     history.push(`/projects/${project.name}/entry`);
+  };
+
+  const triggerDeleteEntry = (entry: IProjectListEntryItem) => {
+    setSelectedEntry(entry);
+    openDeleteEntry();
+  };
+
+  const handleRemoveEntry = async (id?: number) => {
+    // if (!id) {
+    //   return;
+    // }
+    // try {
+    // } catch (error) {
+    //   toast({
+    //     title: 'Failed to remove reward',
+    //     description: `${error}`,
+    //     status: 'error',
+    //   });
+    // }
   };
 
   return (
@@ -99,6 +134,7 @@ export const Entries = ({ project }: { project: IProject }) => {
                           `/projects/${project.name}/entry/${entry.id}`,
                         )
                       }
+                      onDelete={() => triggerDeleteEntry(entry)}
                     />
                   );
                 })}
@@ -125,6 +161,7 @@ export const Entries = ({ project }: { project: IProject }) => {
                           `/projects/${project.name}/entry/${entry.id}`,
                         )
                       }
+                      onDelete={() => triggerDeleteEntry(entry)}
                     />
                   );
                 })}
@@ -141,6 +178,13 @@ export const Entries = ({ project }: { project: IProject }) => {
           spacing="10px"
         ></VStack>
       </GridItem>
+      <DeleteConfirmModal
+        isOpen={isDeleteEntryOpen}
+        onClose={closeDeleteEntry}
+        title={`Delete reward ${selectedEntry?.title}`}
+        description={'Are you sure you want to remove the entry'}
+        confirm={() => handleRemoveEntry(selectedEntry?.id)}
+      />
     </>
   );
 };
