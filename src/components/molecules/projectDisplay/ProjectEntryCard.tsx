@@ -90,7 +90,7 @@ export const ProjectEntryCard = ({
         p={1}
         pt={2}
       >
-        <HStack width={'full'} justifyContent={'space-between'}>
+        <HStack justifyContent={'flex-start'}>
           <Heading fontSize={'2xl'} fontFamily={'body'} noOfLines={[0, 1]}>
             {entry.title}
           </Heading>
@@ -129,7 +129,7 @@ export const ProjectEntryCard = ({
           direction={'row'}
           spacing={'22px'}
         >
-          <HStack spacing={'12px'} align={'center'}>
+          <HStack spacing={'12px'} align={'center'} flex={0}>
             <HStack spacing={1}>
               <Text color="brand.primary500" fontWeight={'bold'}>
                 {entry.fundersCount}
@@ -146,7 +146,7 @@ export const ProjectEntryCard = ({
             spacing={1}
             alignItems="center"
             justifyContent="flex-start"
-            maxWidth="50%"
+            flex={0}
           >
             <ProjectListItemImage
               imageSrc={entry.image}
@@ -165,6 +165,7 @@ export const ProjectEntryCard = ({
           </HStack>
 
           <Badge
+            flex={0}
             textTransform="uppercase"
             fontSize={'10px'}
             fontWeight="regular"
