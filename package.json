@@ -10,6 +10,7 @@
     "@emotion/styled": "^11.6.0",
     "@giphy/js-fetch-api": "^4.1.2",
     "@giphy/react-components": "^5.6.1",
+    "@graphql-codegen/typescript-resolvers": "^2.7.3",
     "apollo-link": "^1.2.14",
     "bech32": "^2.0.0",
     "classnames": "^2.3.1",
@@ -60,7 +61,8 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\""
+    "format": "prettier --write --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
+    "codegen": "rover graph fetch geyser-graph@staging > ./schema.graphql && graphql-codegen --config codegen.yaml && rm schema.graphql"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -78,6 +80,8 @@
     ]
   },
   "devDependencies": {
+    "@apollo/rover": "^0.9.1",
+    "@graphql-codegen/cli": "^2.13.5",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^10.4.9",
     "@testing-library/user-event": "^12.8.3",
