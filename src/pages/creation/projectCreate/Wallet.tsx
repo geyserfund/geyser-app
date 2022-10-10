@@ -1,5 +1,6 @@
 import {
   Box,
+  Checkbox,
   Grid,
   GridItem,
   HStack,
@@ -15,9 +16,9 @@ import { ButtonComponent, IconButtonComponent } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { TNodeInput } from './types';
-import { BiLeftArrowAlt, BiPencil } from 'react-icons/bi';
+import { BiLeftArrowAlt, BiPencil, BiRocket } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
+import { colors, GeyserTermsAndConditionsURL } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddNode } from './components/AddNode';
@@ -25,9 +26,11 @@ import { useMutation, useQuery } from '@apollo/client';
 import {
   MUTATION_CREATE_ENTRY,
   MUTATION_CREATE_WALLET,
+  MUTATION_UPDATE_PROJECT,
 } from '../../../graphql/mutations';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
+import { notEqual } from 'assert';
 const useStyles = createUseStyles({
   backIcon: {
     fontSize: '25px',
@@ -43,6 +46,7 @@ export const Wallet = () => {
   const { toast } = useNotification();
 
   const [node, setNode] = useState<TNodeInput>();
+  const [tc, setTc] = useState(false);
 
   const {
     isOpen: isWalletOpen,
@@ -52,6 +56,19 @@ export const Wallet = () => {
 
   const [createWallet, { loading: createWalletLoading }] = useMutation(
     MUTATION_CREATE_WALLET,
+  );
+
+  const [updateProject, { loading: updateProjectLoading }] = useMutation(
+    MUTATION_UPDATE_PROJECT,
+    {
+      onError(error) {
+        toast({
+          title: 'Something went wrong',
+          description: `${error}`,
+          status: 'error',
+        });
+      },
+    },
   );
 
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
@@ -72,39 +89,66 @@ export const Wallet = () => {
   };
 
   const handleNext = async () => {
-    try {
-      const createWalletInput = {
-        resourceInput: {
-          resourceId: projectData?.project?.id,
-          resourceType: 'project',
-        },
-        lndConnectionDetailsInput: {
-          macaroon: node?.invoiceMacaroon,
-          tlsCertificate: node?.tlsCert,
-          hostname: node?.hostname,
-          grpcPort: node?.isVoltage
-            ? 10009
-            : node?.grpc
-            ? parseInt(node.grpc, 10)
-            : '',
-          lndNodeType: node?.isVoltage ? 'voltage' : 'custom',
-          pubkey: node?.publicKey,
-        },
-      };
+    if (node?.name) {
+      try {
+        const createWalletInput = {
+          resourceInput: {
+            resourceId: projectData?.project?.id,
+            resourceType: 'project',
+          },
+          lndConnectionDetailsInput: {
+            macaroon: node?.invoiceMacaroon,
+            tlsCertificate: node?.tlsCert,
+            hostname: node?.hostname,
+            grpcPort: node?.isVoltage
+              ? 10009
+              : node?.grpc
+              ? parseInt(node.grpc, 10)
+              : '',
+            lndNodeType: node?.isVoltage ? 'voltage' : 'custom',
+            pubkey: node?.publicKey,
+          },
+        };
 
-      await createWallet({ variables: { input: createWalletInput } });
-    } catch (error) {
-      toast({
-        title: 'Something went wrong',
-        description: `${error}`,
-        status: 'error',
-      });
+        await createWallet({ variables: { input: createWalletInput } });
+        history.push(`/projects/${params.projectId}`);
+      } catch (error) {
+        toast({
+          title: 'Something went wrong',
+          description: `${error}`,
+          status: 'error',
+        });
+      }
+    } else {
+      try {
+        await updateProject({
+          variables: {
+            input: {
+              projectId: projectData?.project?.id,
+              draft: false,
+            },
+          },
+        });
+        history.push(`/projects/${params.projectId}`);
+      } catch (error) {
+        toast({
+          title: 'Something went wrong',
+          description: `${error}`,
+          status: 'error',
+        });
+      }
     }
   };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
-  console.log('checking form', node);
+  const handleTC = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event) {
+      setTc(event.target.checked);
+    }
+  };
+
+  console.log('checking tc', tc);
 
   return (
     <Box
@@ -173,7 +217,7 @@ export const Wallet = () => {
                 </ButtonComponent>
                 <Text fontSize="14px">
                   {
-                    "Connect your Lightning node if you have one, and the funds will be sent directly to your account at no charge. Don't have one? No problem, you can create one in 2 minutes using Voltage.cloud."
+                    "Connect your Lightning node if you have one, and the funds will be sent directly to your account at no charge. If you don't have one yet, don't worry, you can add this later in the Admin Dashboard."
                   }
                 </Text>
                 <HStack padding="10px" spacing="20px">
@@ -194,14 +238,28 @@ export const Wallet = () => {
                 </ButtonComponent>
               </VStack>
 
-              <ButtonComponent
-                primary
-                isFullWidth
-                onClick={handleNext}
-                isLoading={createWalletLoading}
-              >
-                Next
-              </ButtonComponent>
+              <VStack width="100%" alignItems="flex-start">
+                <Checkbox checked={tc} onChange={handleTC}>
+                  I agree with geysers&apos;s{' '}
+                  <Link
+                    href={GeyserTermsAndConditionsURL}
+                    isExternal
+                    textDecoration="underline"
+                  >
+                    Terms & Conditions
+                  </Link>
+                </Checkbox>
+                <ButtonComponent
+                  primary
+                  isFullWidth
+                  onClick={handleNext}
+                  isLoading={createWalletLoading || updateProjectLoading}
+                  disabled={!tc}
+                >
+                  <BiRocket style={{ marginRight: '10px' }} />
+                  Launch Project
+                </ButtonComponent>
+              </VStack>
             </VStack>
           </VStack>
         </GridItem>

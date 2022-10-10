@@ -242,6 +242,7 @@ export const FundSettings = ({ project }: { project: IProject }) => {
                 as ongoing.
               </Text>
             </VStack>
+
             <VStack width="100%" alignItems="flex-start" spacing="40px">
               <VStack width="100%" alignItems="flex-start">
                 <Text name="title">Project Milestones (optional)</Text>

@@ -28,9 +28,17 @@ import { NotAuthorized } from '../notAuthorized';
 import { NotFound } from '../notFound';
 import { Entries } from './Entries';
 import { FundSettings } from './FundSettings';
+import { MilestoneSettings } from './MilestoneSettings';
+import { NodeSettings } from './NodeSettings';
 import { ProjectSettings } from './ProjectSettings';
+import { RewardSettings } from './RewardSettings';
 
-export type TDashboardTabs = 'entries' | 'fundingSettings' | 'projectSettings';
+export type TDashboardTabs =
+  | 'entries'
+  | 'milestones'
+  | 'rewards'
+  | 'node'
+  | 'project';
 
 export const ProjectDashboard = () => {
   const isMobile = isMobileMode();
@@ -88,14 +96,50 @@ export const ProjectDashboard = () => {
     switch (view) {
       case 'entries':
         return <Entries project={project} />;
-      case 'fundingSettings':
-        return <FundSettings project={project} />;
-      case 'projectSettings':
+      case 'milestones':
+        return <MilestoneSettings project={project} />;
+      case 'rewards':
+        return <RewardSettings project={project} />;
+      case 'node':
+        return <NodeSettings project={project} />;
+      case 'project':
         return <ProjectSettings project={project} />;
       default:
         return <Entries project={project} />;
     }
   };
+
+  const renderButton = (nav: TDashboardTabs) => {
+    return (
+      <Box
+        borderBottom="3px solid"
+        borderColor={view === nav ? 'brand.primary' : 'brand.neutral500'}
+      >
+        <Button
+          borderRadius="4px"
+          _hover={{ backgroundColor: 'none' }}
+          w="100%"
+          rounded="none"
+          bg="none"
+          fontWeight={view === nav ? 'bold' : 'normal'}
+          fontSize="16px"
+          marginTop="10px"
+          onClick={() => setView(nav)}
+          textTransform="capitalize"
+        >
+          {nav}
+        </Button>
+      </Box>
+    );
+  };
+
+  const navList: TDashboardTabs[] = [
+    'entries',
+    'milestones',
+    'rewards',
+    'node',
+    'project',
+  ];
 
   return (
     <Box
@@ -138,72 +182,7 @@ export const ProjectDashboard = () => {
             flexDirection="column"
             alignItems="center"
           >
-            <Box display="flex">
-              <Box
-                borderBottom="3px solid"
-                borderColor={
-                  view === 'entries' ? 'brand.primary' : 'brand.neutral500'
-                }
-              >
-                <Button
-                  borderRadius="4px"
-                  _hover={{ backgroundColor: 'none' }}
-                  w="100%"
-                  rounded="none"
-                  bg="none"
-                  fontWeight={view === 'entries' ? 'bold' : 'normal'}
-                  fontSize="16px"
-                  marginTop="10px"
-                  onClick={() => setView('entries')}
-                >
-                  Entries
-                </Button>
-              </Box>
-              <Box
-                borderBottom="3px solid"
-                borderColor={
-                  view === 'projectSettings'
-                    ? 'brand.primary'
-                    : 'brand.neutral500'
-                }
-              >
-                <Button
-                  borderRadius="4px"
-                  _hover={{ backgroundColor: 'none' }}
-                  w="100%"
-                  rounded="none"
-                  bg="none"
-                  fontWeight={view === 'projectSettings' ? 'bold' : 'normal'}
-                  fontSize="16px"
-                  marginTop="10px"
-                  onClick={() => setView('projectSettings')}
-                >
-                  Project Settings
-                </Button>
-              </Box>
-              <Box
-                borderBottom="3px solid"
-                borderColor={
-                  view === 'fundingSettings'
-                    ? 'brand.primary'
-                    : 'brand.neutral500'
-                }
-              >
-                <Button
-                  borderRadius="4px"
-                  _hover={{ backgroundColor: 'none' }}
-                  w="100%"
-                  rounded="none"
-                  bg="none"
-                  fontWeight={view === 'fundingSettings' ? 'bold' : 'normal'}
-                  fontSize="16px"
-                  marginTop="10px"
-                  onClick={() => setView('fundingSettings')}
-                >
-                  Funding Settings
-                </Button>
-              </Box>
-            </Box>
+            <Box display="flex">{navList.map((nav) => renderButton(nav))}</Box>
           </VStack>
         </GridItem>
         <GridItem colSpan={5} display="flex" justifyContent="center">
