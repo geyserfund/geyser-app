@@ -2,14 +2,48 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS } from '../graphql';
 import { IProject } from '../interfaces';
 
+export type OrderByOption =
+  | 'Newest Projects'
+  | 'Oldest Projects'
+  | 'Amount Funded';
+
 type OptionsProps = {
   itemLimit?: number;
+  orderBy?: OrderByOption;
 };
 
 type ResponseData = IProject[];
 
-export const useProjects = (options?: OptionsProps) => {
-  const { itemLimit = 14 } = options || {};
+// TODO: Leverage auto-generated schema types after
+// https://github.com/geyserfund/geyser-app/pull/346 is merged.
+
+// export const useProjects = (options?: OptionsProps) => {
+export const useProjects = ({
+  itemLimit = 14,
+  orderBy = 'Newest Projects',
+}: OptionsProps) => {
+  // function orderByParams(orderByOption: OrderBy): ProjectsOrderByInput {
+  function orderByParams(orderByOption: OrderByOption) {
+    switch (orderByOption) {
+      case 'Newest Projects':
+        return {
+          // createdAt: OrderByOptions.desc,
+          createdAt: 'desc',
+        };
+      case 'Oldest Projects':
+        return {
+          // createdAt: OrderByOptions.asc,
+          createdAt: 'asc',
+        };
+      case 'Amount Funded':
+        return {
+          // balance: OrderByOptions.desc,
+          balance: 'desc',
+        };
+      default:
+        break;
+    }
+  }
 
   const {
     loading: isLoading,
@@ -20,11 +54,7 @@ export const useProjects = (options?: OptionsProps) => {
     variables: {
       input: {
         pagination: { take: itemLimit },
-
-        // TODO: In the future, tt will probably be helpful to make these options more configurable to callers.
-        orderBy: {
-          createdAt: null,
-        },
+        orderBy: orderByParams(orderBy),
       },
     },
   });

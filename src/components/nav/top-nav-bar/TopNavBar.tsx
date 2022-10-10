@@ -27,32 +27,38 @@ import { useLazyQuery } from '@apollo/client';
 import { defaultUser } from '../../../defaults';
 import { USER_PROFILE_QUERY } from '../../../graphql';
 import { IUserProfile } from '../../../interfaces';
+import { getPath, routerPathNames } from '../../../constants';
 
-// TODO: Strong-type route paths
-// and/or abstract them out to constants.
+// TODO: Leverage strongly-typed constants for these.
 const customTitleRoutes = [
   '/projects/:projectId',
   '/projects/:projectId/entry',
   '/entry/:entryId',
 ];
 
+// TODO: Leverage strongly-typed constants for these.
 const routesForHidingDropdownMenu = [
   '/projects/:projectId/entry',
   '/projects/:projectId/entry/:entryId',
   '/projects/:projectId/entry/:entryId/preview',
 ];
 
+// TODO: Leverage strongly-typed constants for these.
 const routesForHidingDashboardButton = ['/projects/:projectId/dashboard/'];
 
 const routesForEnablingSignInButton = [
-  '/',
-  '/discover',
-  '/grants',
-  '/entry/:entryId',
-  '/projects/:projectId',
-  '/projects/:projectId/entry',
-  '/projects/:projectId/entry/:entryId',
-  '/projects/:projectId/entry/:entryId/preview',
+  getPath('index'),
+  getPath('landingPage'),
+  routerPathNames.projectDiscovery,
+  routerPathNames.grants,
+  routerPathNames.notFound,
+  routerPathNames.notAuthorized,
+  routerPathNames.userProfile,
+  `/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/preview`,
 ];
 
 const routesForEnablingProjectLaunchButton = ['/', '/discover', '/grants'];

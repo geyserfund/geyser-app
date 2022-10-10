@@ -48,7 +48,9 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const isShowingAllContributions: boolean = useMemo(() => {
-    // return contributions.length <= itemLimit;
+    // TODO: Implement the right logic for this
+    // based upon data returned
+    // from fetching (and fetching more).
     return false;
   }, [contributions, itemLimit]);
 
