@@ -175,7 +175,7 @@ export const AddRewards = ({
       isValid = false;
     }
 
-    if (!rewards.current.cost) {
+    if (!rewards.current.cost || !(rewards.current.cost > 0)) {
       errors.cost = 'Cost needs to be greater than 1';
       isValid = false;
     }
