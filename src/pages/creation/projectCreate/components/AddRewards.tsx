@@ -107,7 +107,7 @@ export const AddRewards = ({
       onCompleted(data) {
         toast({
           title: 'Successfully updated!',
-          description: `Reward ${data.createProjectReward.name} was successfully updated`,
+          description: `Reward ${data.updateProjectReward.name} was successfully updated`,
           status: 'success',
         });
         onSubmit(data.updateProjectReward);
