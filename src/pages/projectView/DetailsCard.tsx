@@ -122,9 +122,7 @@ export const DetailsCard = ({
         </VStack>
         <HStack>
           <Text color="brand.neutral600">Creator</Text>
-          <Link to={`/profile/${owner.user.id}`}>
-            <AvatarElement user={owner.user} />
-          </Link>
+          <AvatarElement user={owner.user} />
         </HStack>
         <VStack alignItems="flex-start">
           <Text color="brand.neutral600" textAlign="left">

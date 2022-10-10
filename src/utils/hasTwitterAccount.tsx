@@ -1,6 +1,6 @@
-import { IUserExternalAccount, IUser } from '../interfaces';
+import { IUserExternalAccount, IUserProfile } from '../interfaces';
 
-export const hasTwitterAccount = (user: IUser) => {
+export const hasTwitterAccount = (user: IUserProfile) => {
   if (!user) {
     return false;
   }

@@ -1,7 +1,7 @@
-import { IUser } from './user';
+import { IUserProfile } from './user';
 
 export interface IParticipant {
-  user: IUser;
+  user: IUserProfile;
   confirmed: boolean;
 }
 
@@ -9,7 +9,7 @@ export interface IFunder {
   id: number;
   amountFunded: number;
   timesFunded: number;
-  user?: IUser;
+  user?: IUserProfile;
   badges: IBadge[];
   confirmedAt: string;
 }
@@ -22,7 +22,7 @@ export interface IBadge {
 export interface ISponsor {
   id: number;
   name: string;
-  user?: IUser;
+  user?: IUserProfile;
   image?: string;
   url?: string;
   confirmed: boolean;

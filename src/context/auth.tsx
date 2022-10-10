@@ -8,7 +8,7 @@ import React, {
   SetStateAction,
 } from 'react';
 import { ME } from '../graphql';
-import { IUser } from '../interfaces';
+import { IUserProfile } from '../interfaces';
 import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
@@ -20,11 +20,12 @@ const defaultContext: AuthContextProps = {
   error: undefined,
   logout: () => {},
   isAuthModalOpen: false,
+  isUserAProjectCreator: false,
   loginOnOpen: () => {},
   loginOnClose: () => {},
   setIsLoggedIn: () => {},
   getUser: () => {},
-  setUser: () => {},
+  setUser: (user: IUserProfile) => {},
   navigationContext: { title: '', path: '' },
   setNav: () => {},
 };
@@ -37,16 +38,21 @@ export type NavigationContextProps = {
 
 type AuthContextProps = {
   isLoggedIn: boolean;
-  user: IUser;
+
+  /**
+   * User Profile information
+   */
+  user: IUserProfile;
   loading: boolean;
   error?: ApolloError;
   logout: any;
   isAuthModalOpen: boolean;
   loginOnOpen: () => void;
   loginOnClose: () => void;
+  isUserAProjectCreator: boolean;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
   getUser: any;
-  setUser: any;
+  setUser: (userData: IUserProfile) => void;
   navigationContext: NavigationContextProps;
   setNav: React.Dispatch<React.SetStateAction<NavigationContextProps>>;
 };
@@ -68,13 +74,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     path: '',
   });
 
-  const [user, setUser] = useState<IUser>(defaultUser);
+  const [user, setUser] = useState<IUserProfile>(defaultUser);
+  const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
-    onCompleted: (data: any) => {
+    onCompleted: (data: { me: IUserProfile }) => {
       if (data && data.me) {
         setUser(data.me);
         setIsLoggedIn(true);
+        setIsUserAProjectCreator(data.me.ownerOf.length > 0);
       }
     },
   });
@@ -119,6 +128,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         error,
         isLoggedIn,
         setIsLoggedIn,
+        isUserAProjectCreator,
         logout,
         isAuthModalOpen: loginIsOpen,
         loginOnOpen,

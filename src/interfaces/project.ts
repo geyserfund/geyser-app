@@ -1,6 +1,6 @@
 import { IParticipant, IFunder, ISponsor, IGrantee } from './participant';
 import { IFundingTx } from './funding';
-import { IUser } from './user';
+import { IUserProfile } from './user';
 
 export type IProjectType = 'reward' | 'grant' | 'donation';
 
@@ -19,7 +19,6 @@ export interface IProject {
   active: boolean;
   ownerConfirmed: string;
   fundsClaimed: string;
-  creationConfirmed: string;
   media: string[];
   owners: IParticipant[];
   ambassadors: IParticipant[];
@@ -116,7 +115,7 @@ export interface IProjectListEntryItem {
    */
   type: string;
 
-  creator: IUser;
+  creator: IUserProfile;
   fundersCount: number;
   amountFunded: number;
   published: boolean;

@@ -1,17 +1,10 @@
 import { IProject, IProjectContribution } from '.';
 
-export interface IUser {
-  id: number;
-  username: string;
-  imageUrl: string;
-  email?: string;
-  externalAccounts: IUserExternalAccount[];
-}
-
 export interface IUserProfile {
   id: number;
   username: string;
   imageUrl: string;
+  email?: string;
   externalAccounts: IUserExternalAccount[];
   contributions: IProjectContribution[];
   ownerOf: {

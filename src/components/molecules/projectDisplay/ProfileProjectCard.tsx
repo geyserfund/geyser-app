@@ -96,14 +96,6 @@ export const ProfileProjectCard = ({
     project && project.funders ? project.funders.length : '';
 
   const getProjectStatus = () => {
-    // TODO after project creation flow
-    // if (!project.creationConfirmed) {
-    // 	return (
-    // 		<Badge variant="solid" colorScheme="gray">
-    // 			Draft Project
-    // 		</Badge>
-    // 	);
-    // }
     if (checkExpired(project.expiresAt)) {
       return (
         <Box
@@ -159,13 +151,6 @@ export const ProfileProjectCard = ({
   };
 
   const getProjectUpdate = () => {
-    // TODO after project creation flow
-    // if (!project.creationConfirmed) {
-    // 	return (
-    // 		<Text>{`Last edited on: ${project.updatedAt}`}</Text>
-    // 	);
-    // }
-
     if (checkExpired(project.expiresAt)) {
       return (
         <Text

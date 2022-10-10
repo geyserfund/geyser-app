@@ -1,4 +1,4 @@
-import { IUser } from './user';
+import { IUserProfile } from './user';
 
 export interface IEntryCreateInput {
   projectId?: number;
@@ -33,7 +33,7 @@ export type TEntryData = {
   updatedAt: string;
   publishedAt: string;
   type: string;
-  creator: IUser;
+  creator: IUserProfile;
   project: {
     id: number;
     title: string;

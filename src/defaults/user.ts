@@ -1,8 +1,10 @@
-import { IUser } from '../interfaces';
+import { IUserProfile } from '../interfaces';
 
-export const defaultUser: IUser = {
+export const defaultUser: IUserProfile = {
   id: 0,
   username: '',
   imageUrl: '',
   externalAccounts: [],
+  contributions: [],
+  ownerOf: [],
 };

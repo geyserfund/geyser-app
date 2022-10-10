@@ -10,7 +10,7 @@ The Geyser Front-End
 yarn
 ```
 
-### Pre-requisites
+### Prerequisites
 
 We use `docker` and `docker compose` for local development of the `geyser-app`.
 
@@ -26,9 +26,9 @@ cp .env.example .env
 
 From there, populate the new file with the correct values. You have two development environment options:
 
-**Option A: use the staging API**
+#### Option A: use the staging API
 
-Currently, the staging API is the only way to get a functional authentication flow in standalone `geyser-app` development environmnent.
+Currently, the staging API is the only way to get a functional authentication flow in standalone `geyser-app` development environment.
 
 To use the staging API, fill in the following value in the `.env` file:
 
@@ -39,7 +39,7 @@ REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
 
 Then, complete the instructions described in [Hosts Configuration](#hosts-configuration).
 
-**Option B: use the GraphQL-Faker config**
+#### Option B: use the GraphQL-Faker config
 
 If you do not require a functional authentication flow for this task, you may use this option.
 
@@ -49,7 +49,7 @@ REACT_APP_API_ENDPOINT=https://api.dev.geyser.fund
 APOLLO_KEY=<your Apollo Studio API key>
 ```
 
-[Contact us](email:admin@geyser.fund), if you don't have an `APOLLO_KEY` yet.
+[Contact us](email:admin@geyser.fund) if you don't have an `APOLLO_KEY` yet.
 
 ### Hosts Configuration
 

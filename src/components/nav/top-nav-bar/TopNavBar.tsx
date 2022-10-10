@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import {
-  Flex,
   Heading,
   HStack,
   Modal,
@@ -22,11 +21,6 @@ import { useLocation, useHistory, useRouteMatch, match } from 'react-router';
 import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
-import { useParams } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
-import { defaultUser } from '../../../defaults';
-import { USER_PROFILE_QUERY } from '../../../graphql';
-import { IUserProfile } from '../../../interfaces';
 
 // TODO: Strong-type route paths
 // and/or abstract them out to constants.
@@ -72,18 +66,16 @@ export const TopNavBar = () => {
   } = useDisclosure();
 
   const {
+    user,
     isLoggedIn,
     getUser,
     logout,
+    isUserAProjectCreator,
     isAuthModalOpen,
     loginOnOpen,
     loginOnClose,
     navigationContext,
   } = useContext(AuthContext);
-
-  const params = useParams<{ userId: string }>();
-
-  const [getUserData, { data }] = useLazyQuery(USER_PROFILE_QUERY);
 
   const { state } = useLocation<{
     loggedOut?: boolean;
@@ -118,36 +110,6 @@ export const TopNavBar = () => {
       customHistory.replace(customHistory.location.pathname, {});
     }
   }, [state]);
-
-  // TODO: This should be abstracted to its own hook and reused here and
-  // in pages/Profile.tsx
-  const [userProfile, setUserProfile] = useState<IUserProfile>({
-    ...defaultUser,
-    contributions: [],
-    ownerOf: [],
-  });
-
-  // TODO: This should be abstracted to its own hook and reused here and
-  // in pages/Profile.tsx
-  useEffect(() => {
-    if (params.userId) {
-      const variables = {
-        where: {
-          id: params.userId,
-        },
-      };
-      getUserData({ variables });
-    }
-  }, [params]);
-
-  // TODO: This should be abstracted to its own hook and reused here and
-  // in pages/Profile.tsx
-  useEffect(() => {
-    if (data && data.user) {
-      const user = data.user as IUserProfile;
-      setUserProfile(user);
-    }
-  }, [data]);
 
   const handleProjectLaunchButtonPress = () => {
     history.push('/launch');
@@ -199,10 +161,6 @@ export const TopNavBar = () => {
     );
   }, [routeMatchesForHidingDropdownMenu]);
 
-  const isUserAProjectCreator: boolean = useMemo(() => {
-    return userProfile.ownerOf.length > 0;
-  }, [userProfile]);
-
   /**
    * Logic:
    *  - Available to a logged-in creator of a live or draft project.
@@ -218,7 +176,7 @@ export const TopNavBar = () => {
       routeMatchesForHidingDashboardButton.some((routeMatch) => {
         return Boolean(routeMatch);
       }) === false &&
-      navigationContext.projectOwnerId !== userProfile.id
+      navigationContext.projectOwnerId !== user.id
     );
   }, [
     routeMatchesForHidingDashboardButton,
@@ -235,7 +193,7 @@ export const TopNavBar = () => {
       routeMatchesForHidingDashboardButton.some((routeMatch) => {
         return Boolean(routeMatch);
       }) === false &&
-      navigationContext.projectOwnerId !== userProfile.id
+      navigationContext.projectOwnerId !== user.id
     );
   }, [
     routeMatchesForHidingDashboardButton,
@@ -282,11 +240,16 @@ export const TopNavBar = () => {
         width="full"
         zIndex={1000}
       >
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+        <HStack
+          h={16}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          overflow="hidden"
+        >
           <NavBarLogo marginRight={isMobile ? 0 : 5} />
 
           {shouldShowCustomTitle ? (
-            <Heading as={'h3'} isTruncated={isMobile} noOfLines={1}>
+            <Heading as={'h3'} noOfLines={1} size="sm">
               {navigationContext.title}
             </Heading>
           ) : null}
@@ -329,8 +292,6 @@ export const TopNavBar = () => {
 
             {shouldShowDropdownMenuButton ? (
               <TopNavBarMenu
-                userProfile={userProfile}
-                isUserAProjectCreator={isUserAProjectCreator}
                 shouldShowDashboardMenuItem={
                   shouldShowDashboardButtonInsideDropdownMenu
                 }
@@ -343,7 +304,7 @@ export const TopNavBar = () => {
               />
             ) : null}
           </HStack>
-        </Flex>
+        </HStack>
       </Box>
 
       <Modal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose}>

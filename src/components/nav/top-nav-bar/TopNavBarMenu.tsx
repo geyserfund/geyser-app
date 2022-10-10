@@ -15,11 +15,8 @@ import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem';
 import { AuthContext } from '../../../context';
 import { getPath } from '../../../constants/router-paths';
 import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem';
-import { IUserProfile } from '../../../interfaces';
 
 type Props = {
-  userProfile: IUserProfile;
-  isUserAProjectCreator: boolean;
   shouldShowDashboardMenuItem: boolean;
   shouldShowSignInMenuItem: boolean;
   onDashboardSelected: () => void;
@@ -28,17 +25,15 @@ type Props = {
 };
 
 export const TopNavBarMenu = ({
-  userProfile,
   shouldShowSignInMenuItem,
   shouldShowDashboardMenuItem,
   onSignInSelected,
   onDashboardSelected,
   onSignOutSelected,
-  isUserAProjectCreator,
 }: Props) => {
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
 
-  const { user, isLoggedIn } = useContext(AuthContext);
+  const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext);
 
   return (
     <Menu placement="bottom-end">
@@ -104,9 +99,7 @@ export const TopNavBarMenu = ({
             <NavBarUserProfileMenuItem />
 
             {isUserAProjectCreator ? (
-              <NavBarUserProjectMenuItem
-                project={userProfile.ownerOf[0].project}
-              />
+              <NavBarUserProjectMenuItem project={user.ownerOf[0].project} />
             ) : null}
 
             <MenuDivider />
