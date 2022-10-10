@@ -8,11 +8,6 @@ dev.geyser.fund {
 	reverse_proxy geyser-app-standalone:3001
 }
 
-staging.geyser.fund {
-	tls internal
-	reverse_proxy geyser-app-standalone:3001
-}
-
 api.dev.geyser.fund {
 	tls internal
 	reverse_proxy graphql-faker:9002
