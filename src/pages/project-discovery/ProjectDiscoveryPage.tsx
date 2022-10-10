@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Container,
   Divider,
@@ -15,6 +15,8 @@ import {
   Box,
   SimpleGrid,
   Center,
+  Button,
+  VStack,
 } from '@chakra-ui/react';
 import { History } from 'history';
 import { dimensions } from '../../constants';
@@ -35,16 +37,28 @@ type Props = {
 const { topNavBar: topNavBarDimensions } = dimensions;
 
 export const ProjectDiscoveryPage = ({ match, history }: Props) => {
+  const pagingItemLimit = 12;
   const [orderByOption, setOrderByOption] =
     React.useState<OrderByOption>('Newest Projects');
+
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const {
     isLoading,
     error,
     data: projects,
+    fetchMore,
   } = useProjects({
     orderBy: orderByOption,
+    itemLimit: pagingItemLimit,
   });
+
+  const isShowingAllProjects: boolean = useMemo(() => {
+    // TODO: Implement the right logic for this
+    // based upon data returned
+    // from fetching (and fetching more).
+    return false;
+  }, [projects]);
 
   if (error) {
     return (
@@ -198,15 +212,41 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
             </GridItem>
 
             <GridItem area={'main'}>
-              <Divider marginBottom={8} borderWidth="2px" />
+              <VStack spacing={16}>
+                <Divider borderWidth="2px" />
 
-              <SimpleGrid columns={3} spacingX={7} spacingY={8}>
-                {projects.map((project: IProject) => (
-                  <GridItem key={project.id} colSpan={[3, 1]}>
-                    <ProjectsGridCard project={project} height="100%" />
-                  </GridItem>
-                ))}
-              </SimpleGrid>
+                <SimpleGrid columns={3} spacingX={7} spacingY={8}>
+                  {projects.map((project: IProject) => (
+                    <GridItem key={project.id} colSpan={[3, 1]}>
+                      <ProjectsGridCard project={project} height="100%" />
+                    </GridItem>
+                  ))}
+                </SimpleGrid>
+
+                {isShowingAllProjects === false ? (
+                  <>
+                    {isLoadingMore === false ? (
+                      <Button
+                        onClick={async () => {
+                          setIsLoadingMore(true);
+
+                          await fetchMore({
+                            variables: {
+                              input: { pagination: { take: pagingItemLimit } },
+                            },
+                          });
+
+                          setIsLoadingMore(false);
+                        }}
+                      >
+                        View More
+                      </Button>
+                    ) : (
+                      <Loader />
+                    )}
+                  </>
+                ) : null}
+              </VStack>
             </GridItem>
           </Grid>
         </Center>

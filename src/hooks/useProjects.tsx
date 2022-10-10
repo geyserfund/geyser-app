@@ -22,8 +22,6 @@ export const useProjects = ({
   itemLimit = 14,
   orderBy = 'Newest Projects',
 }: OptionsProps) => {
-  // const { itemLimit = 14, orderBy = 'createdAt' } = options || {};
-
   // function orderByParams(orderByOption: OrderBy): ProjectsOrderByInput {
   function orderByParams(orderByOption: OrderByOption) {
     switch (orderByOption) {

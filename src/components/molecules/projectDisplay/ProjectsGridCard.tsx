@@ -75,7 +75,13 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
             {project.title}
           </Heading>
 
-          <HStack mt={6} direction={'row'} spacing={0} align={'center'}>
+          <HStack
+            mt={6}
+            direction={'row'}
+            spacing={0}
+            align={'center'}
+            alignSelf="center"
+          >
             <VStack spacing={0.25} align={'center'} paddingX={2}>
               <Text fontWeight={600}>{project.funders.length}</Text>
 
@@ -131,7 +137,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
             )}
           </HStack>
 
-          <Text as={'caption'} noOfLines={5} textAlign="left">
+          <Text noOfLines={5} textAlign="left" size="sm">
             {project.description}
           </Text>
         </VStack>
