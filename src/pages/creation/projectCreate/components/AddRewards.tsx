@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client';
 import {
-  Box,
   HStack,
   Input,
   InputGroup,
@@ -9,7 +8,6 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Text,
@@ -18,21 +16,15 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { BiDollar } from 'react-icons/bi';
-import { useParams } from 'react-router';
-import { textSpanContainsTextSpan } from 'typescript';
-import { SatoshiIcon, SatoshiIconTilted } from '../../../../components/icons';
-import {
-  DonationInput,
-  DonationInputWithSatoshi,
-  FileUpload,
-} from '../../../../components/molecules';
+import { SatoshiIconTilted } from '../../../../components/icons';
+import { FileUpload } from '../../../../components/molecules';
 import {
   ButtonComponent,
   ImageWithReload,
   TextArea,
   TextBox,
 } from '../../../../components/ui';
-import { colors, GeyserAssetDomainUrl } from '../../../../constants';
+import { GeyserAssetDomainUrl } from '../../../../constants';
 import {
   MUTATION_CREATE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,

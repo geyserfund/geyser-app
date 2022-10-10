@@ -59,7 +59,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       : undefined,
   );
   const [finalDate, setFinalDate] = useState<string>();
-  const [active, setActive] = useState(true);
+  const [deactivate, setDeactivate] = useState(!project.active);
 
   const [updateProject, { loading: updateLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,
@@ -146,7 +146,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
 
   const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event) {
-      setActive(event.target.checked);
+      setDeactivate(event.target.checked);
     }
   };
 
@@ -164,7 +164,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
             image: form.image,
             description: form.description,
             expiresAt: finalDate || null,
-            active,
+            active: !deactivate,
           },
         },
       });
@@ -304,7 +304,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
             <VStack width="100%" alignItems="flex-start">
               <Text>Deactivate</Text>
               <Checkbox
-                checked={!active}
+                defaultChecked={deactivate}
                 onChange={handleDeactivate}
                 colorScheme="red"
               >
