@@ -187,14 +187,6 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       isValid = false;
     }
 
-    if (!form.email && !user.email) {
-      errors.email = 'Email address is a required field.';
-      isValid = false;
-    } else if (!user.email && !validateEmail(form.email)) {
-      errors.email = 'Please enter a valid email address.';
-      isValid = false;
-    }
-
     if (!isValid) {
       setFormError(errors);
     }
