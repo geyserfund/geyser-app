@@ -4,6 +4,7 @@ import {
   Flex,
   Heading,
   HStack,
+  IconButton,
   Image,
   Spacer,
   Stack,
@@ -12,18 +13,21 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useHistory } from 'react-router';
-import { ICard, SatoshiAmount } from '../../ui';
+import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { BsHeartFill, BsPencil } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
 import { colors } from '../../../constants';
 import { ProjectListItemImage } from './ProjectListItemImage';
+import { CloseIcon } from '@chakra-ui/icons';
+import { BiPencil } from 'react-icons/bi';
 
 type Props = ICard & {
   entry: IProjectListEntryItem;
   onClick?: () => void;
   onEdit?: () => void;
+  onDelete?: () => void;
 };
 
 const useStyles = createUseStyles({
@@ -38,6 +42,7 @@ export const ProjectEntryCard = ({
   entry,
   onClick,
   onEdit,
+  onDelete,
   ...rest
 }: Props) => {
   const history = useHistory();
@@ -49,10 +54,17 @@ export const ProjectEntryCard = ({
       history.push(`/entry/${entry.id}`);
     });
 
-  const handleEdit = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     if (onEdit) {
       onEdit();
+    }
+  };
+
+  const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (onDelete) {
+      onDelete();
     }
   };
 
@@ -90,25 +102,30 @@ export const ProjectEntryCard = ({
         p={1}
         pt={2}
       >
-        <HStack justifyContent={'flex-start'}>
+        <HStack w="100%" justifyContent="space-between">
           <Heading fontSize={'2xl'} fontFamily={'body'} noOfLines={[0, 1]}>
             {entry.title}
           </Heading>
-
-          {onEdit ? (
-            <Box
-              _hover={{
-                cursor: 'pointer',
-                backgroundColor: 'brand.neutral200',
-              }}
-              as="span"
-              borderRadius="50%"
-              padding="8px"
-              onClick={handleEdit}
-            >
-              <BsPencil />
-            </Box>
-          ) : null}
+          <HStack>
+            {onEdit && (
+              <IconButtonComponent
+                aria-label="edit-entry"
+                size="sm"
+                icon={<BiPencil />}
+                onClick={handleEdit}
+              />
+            )}
+            {onDelete && (
+              <IconButtonComponent
+                aria-label="remove-entry"
+                size="sm"
+                icon={<CloseIcon />}
+                backgroundColor="red.100"
+                _hover={{ backgroundColor: 'red.300' }}
+                onClick={handleDelete}
+              />
+            )}
+          </HStack>
         </HStack>
 
         <Text
