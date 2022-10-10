@@ -147,7 +147,7 @@ export const RewardSettings = ({ project }: { project: IProject }) => {
                   <VStack width="100%">
                     {rewards.map((reward, index) => (
                       <RewardCard
-                        key="index"
+                        key={index}
                         width="100%"
                         reward={reward}
                         isSatoshi={isSatoshi}

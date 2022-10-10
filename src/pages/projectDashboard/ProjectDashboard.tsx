@@ -4,22 +4,13 @@ import {
   Button,
   Grid,
   GridItem,
-  HStack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
-import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { useHistory, useLocation, useParams } from 'react-router';
-import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar';
-import { ButtonComponent, TextBox } from '../../components/ui';
+import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { useAuthContext } from '../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
@@ -27,7 +18,6 @@ import { isMobileMode } from '../../utils';
 import { NotAuthorized } from '../notAuthorized';
 import { NotFound } from '../notFound';
 import { Entries } from './Entries';
-import { FundSettings } from './FundSettings';
 import { MilestoneSettings } from './MilestoneSettings';
 import { NodeSettings } from './NodeSettings';
 import { ProjectSettings } from './ProjectSettings';

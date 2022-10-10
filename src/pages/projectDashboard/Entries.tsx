@@ -62,8 +62,7 @@ export const Entries = ({ project }: { project: IProject }) => {
     onOpen: openDeleteEntry,
   } = useDisclosure();
 
-  const [deleteEntry, { data: deleteEntryData, loading: deleteEntryLoading }] =
-    useMutation(MUTATION_DELETE_ENTRY);
+  const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY);
 
   const [selectedEntry, setSelectedEntry] = useState<IProjectListEntryItem>();
 
