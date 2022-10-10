@@ -29,25 +29,14 @@ export const LandingPage = () => {
         height="auto"
         minH={'full'}
         overflow="hidden"
-        spacing={30}
+        spacing={'64px'}
       >
         <ActivityView overflow={'hidden'} flexGrow={1} />
 
         <Divider orientation="vertical" borderWidth={'1px'} height="auto" />
 
-        <Box
-          width="400px"
-          minWidth="400px"
-          flexBasis={1}
-          flexShrink={0}
-          height="full"
-        >
-          <VStack
-            alignItems="left"
-            paddingLeft={30}
-            paddingRight={30}
-            spacing={4}
-          >
+        <Box width="400px" minWidth="400px" flexBasis={1} height="full">
+          <VStack alignItems="left" paddingRight={30} spacing={4}>
             <HStack justify="space-between" align="center">
               <Heading as="h5" size="sm">
                 Top Projects
