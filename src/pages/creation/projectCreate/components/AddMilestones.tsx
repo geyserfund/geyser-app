@@ -1,20 +1,17 @@
 import { useMutation } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import {
-  Box,
   HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Text,
   VStack,
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
-import { useParams } from 'react-router';
 import { DonationInputWithSatoshi } from '../../../../components/molecules';
 import { ButtonComponent, TextBox } from '../../../../components/ui';
 import { colors } from '../../../../constants';
@@ -63,6 +60,7 @@ export const AddMilestones = ({
   };
 
   const [amountSatoshi, setAmountSatoshi] = useState(isSatoshi);
+  const [formError, setFormError] = useState<any>([]);
 
   const handleAddMilestone = () => {
     setMilestones([...milestones.current, defaultMilestone]);
@@ -76,7 +74,7 @@ export const AddMilestones = ({
 
       return milestone;
     });
-
+    setFormError([]);
     setMilestones(newMilestones);
   };
 
@@ -89,12 +87,17 @@ export const AddMilestones = ({
 
         return milestone;
       });
-
+      setFormError([]);
       setMilestones(newMilestones);
     }
   };
 
   const handleConfirmMilestone = () => {
+    const isValid = validateMilestones();
+    if (!isValid) {
+      return;
+    }
+
     const filetMilestones = milestones.current.filter(
       (milestone) => milestone.amount > 0 && milestone.name,
     );
@@ -171,6 +174,32 @@ export const AddMilestones = ({
     MUTATION_DELETE_PROJECT_MILESTONE,
   );
 
+  const validateMilestones = () => {
+    let isValid = true;
+    const totalErrors: any = [];
+
+    milestones.current.map((milestone) => {
+      const errors: any = {};
+      if (!milestone.name) {
+        errors.name = 'Name is a required field';
+        isValid = false;
+      }
+
+      if (!milestone.amount || !(milestone.amount > 0)) {
+        errors.amount = 'amount needs to be greater than 1';
+        isValid = false;
+      }
+
+      totalErrors.push(errors);
+    });
+
+    if (!isValid) {
+      setFormError(totalErrors);
+    }
+
+    return isValid;
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
       <ModalOverlay />
@@ -216,6 +245,7 @@ export const AddMilestones = ({
                   placeholder={'title ...'}
                   value={milestone.name}
                   onChange={(event: any) => handleTextChange(event, index)}
+                  error={formError[index] && formError[index].name}
                 />
                 <DonationInputWithSatoshi
                   amountSatoshi={amountSatoshi}
@@ -224,6 +254,7 @@ export const AddMilestones = ({
                   onChange={(_: any, value: number) =>
                     handleAmountChange(value, index)
                   }
+                  error={formError[index] && formError[index].amount}
                 />
               </VStack>
             ))}

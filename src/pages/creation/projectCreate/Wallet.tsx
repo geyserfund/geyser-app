@@ -24,13 +24,11 @@ import TitleWithProgressBar from '../../../components/molecules/TitleWithProgres
 import { AddNode } from './components/AddNode';
 import { useMutation, useQuery } from '@apollo/client';
 import {
-  MUTATION_CREATE_ENTRY,
   MUTATION_CREATE_WALLET,
   MUTATION_UPDATE_PROJECT,
 } from '../../../graphql/mutations';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
-import { notEqual } from 'assert';
 const useStyles = createUseStyles({
   backIcon: {
     fontSize: '25px',
@@ -239,25 +237,33 @@ export const Wallet = () => {
               </VStack>
 
               <VStack width="100%" alignItems="flex-start">
-                <Checkbox checked={tc} onChange={handleTC}>
-                  I agree with geysers&apos;s{' '}
-                  <Link
-                    href={GeyserTermsAndConditionsURL}
-                    isExternal
-                    textDecoration="underline"
-                  >
-                    Terms & Conditions
-                  </Link>
-                </Checkbox>
+                {node?.name && (
+                  <Checkbox checked={tc} onChange={handleTC}>
+                    I agree with geysers&apos;s{' '}
+                    <Link
+                      href={GeyserTermsAndConditionsURL}
+                      isExternal
+                      textDecoration="underline"
+                    >
+                      Terms & Conditions
+                    </Link>
+                  </Checkbox>
+                )}
                 <ButtonComponent
                   primary
                   isFullWidth
                   onClick={handleNext}
                   isLoading={createWalletLoading || updateProjectLoading}
-                  disabled={!tc}
+                  disabled={Boolean(node?.name) && !tc}
                 >
-                  <BiRocket style={{ marginRight: '10px' }} />
-                  Launch Project
+                  {node?.name ? (
+                    <>
+                      <BiRocket style={{ marginRight: '10px' }} />
+                      Launch Project
+                    </>
+                  ) : (
+                    <>Skip for now</>
+                  )}
                 </ButtonComponent>
               </VStack>
             </VStack>
