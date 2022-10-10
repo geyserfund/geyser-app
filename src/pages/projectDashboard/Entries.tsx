@@ -1,11 +1,13 @@
-import { Button, GridItem, HStack, Text, VStack } from '@chakra-ui/react';
+import { GridItem, HStack, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
-import { ProjectSectionBar } from '../../components/molecules';
-import { ProjectEntryCard } from '../../components/molecules/projectDisplay/ProjectEntryCard';
-import { SatoshiAmount } from '../../components/ui';
+import {
+  ProjectEntryCard,
+  ProjectSectionBar,
+} from '../../components/molecules';
+import { ButtonComponent, SatoshiAmount } from '../../components/ui';
 import { colors } from '../../constants';
 import { fonts } from '../../constants/fonts';
 import { IProject } from '../../interfaces';
@@ -101,13 +103,10 @@ export const Entries = ({ project }: { project: IProject }) => {
                   );
                 })}
               </VStack>
-              <Button
-                isFullWidth
-                leftIcon={<BiPlus />}
-                onClick={handleCreateEntry}
-              >
+              <ButtonComponent isFullWidth onClick={handleCreateEntry}>
+                <BiPlus style={{ marginRight: '10px' }} />
                 Create a new Entry
-              </Button>
+              </ButtonComponent>
             </VStack>
             <VStack w="100%">
               <ProjectSectionBar

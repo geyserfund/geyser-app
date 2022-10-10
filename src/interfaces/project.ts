@@ -95,6 +95,9 @@ export interface IProjectMilestone {
   amount: number;
 }
 
+/**
+ * Corresponds to https://github.com/geyserfund/geyser-server/blob/development/src/typeDefs/entry.ts
+ */
 export interface IProjectListEntryItem {
   id: number;
   title: string;
@@ -103,7 +106,7 @@ export interface IProjectListEntryItem {
   /**
    * A URL path for the image source.
    */
-  image: string;
+  image?: string;
 
   /**
    * The type of the entry.

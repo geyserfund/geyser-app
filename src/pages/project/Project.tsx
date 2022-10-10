@@ -6,6 +6,7 @@ import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
+import { Head } from '../../utils/Head';
 import Activity from './Activity/Activity';
 import Details from './Details';
 import { useFundingFlow } from '../../hooks';
@@ -46,6 +47,12 @@ export const Project = () => {
 
   return (
     <>
+      <Head
+        title={project.title}
+        description={project.description}
+        image={project.image}
+        type="article"
+      />
       {project.type !== 'grant' ? (
         <Box
           display="flex"

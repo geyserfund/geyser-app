@@ -96,8 +96,15 @@ export const DetailsCard = ({
   return (
     <Card padding="24px">
       <VStack alignItems="flex-start" width="100%" spacing="18px">
-        <Box maxH="210px" width="100%" overflow="hidden">
-          <Image width="100%" height="100%" src={project.media[0]} />
+        <Box width="100%" overflow="hidden">
+          <Image
+            borderRadius="4px"
+            width="100%"
+            height="100%"
+            src={project.image}
+            maxH="210px"
+            objectFit="cover"
+          />
         </Box>
         <VStack width="100%" spacing={0} alignItems="flex-start">
           <HStack justifyContent="space-between" width="100%">

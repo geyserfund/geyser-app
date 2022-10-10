@@ -43,6 +43,7 @@ export const ImageWithReload = ({ src, ...rest }: IImageWithReload) => {
         display={error ? 'none' : undefined}
         src={src}
         maxHeight="500px"
+        objectFit="cover"
         onError={handleError}
         onLoad={handleLoad}
         {...rest}

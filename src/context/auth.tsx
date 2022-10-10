@@ -13,45 +13,45 @@ import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
 
-const defaultContext = {
+const defaultContext: AuthContextProps = {
   isLoggedIn: false,
   user: defaultUser,
   loading: false,
   error: undefined,
   logout: () => {},
-  loginIsOpen: false,
+  isAuthModalOpen: false,
   loginOnOpen: () => {},
   loginOnClose: () => {},
   setIsLoggedIn: () => {},
   getUser: () => {},
   setUser: () => {},
-  nav: { title: '', path: '' },
+  navigationContext: { title: '', path: '' },
   setNav: () => {},
 };
 
-export type Tnav = {
+export type NavigationContextProps = {
   title: string;
   path: string;
   projectOwnerId?: number;
 };
 
-interface IAuthContext {
+type AuthContextProps = {
   isLoggedIn: boolean;
   user: IUser;
   loading: boolean;
   error?: ApolloError;
   logout: any;
-  loginIsOpen: boolean;
+  isAuthModalOpen: boolean;
   loginOnOpen: () => void;
   loginOnClose: () => void;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
   getUser: any;
   setUser: any;
-  nav: Tnav;
-  setNav: React.Dispatch<React.SetStateAction<Tnav>>;
-}
+  navigationContext: NavigationContextProps;
+  setNav: React.Dispatch<React.SetStateAction<NavigationContextProps>>;
+};
 
-export const AuthContext = createContext<IAuthContext>(defaultContext);
+export const AuthContext = createContext<AuthContextProps>(defaultContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
@@ -63,7 +63,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [loading, setLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(false);
-  const [nav, setNav] = useState<Tnav>({ title: '', path: '' });
+  const [nav, setNav] = useState<NavigationContextProps>({
+    title: '',
+    path: '',
+  });
 
   const [user, setUser] = useState<IUser>(defaultUser);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -117,10 +120,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoggedIn,
         setIsLoggedIn,
         logout,
-        loginIsOpen,
+        isAuthModalOpen: loginIsOpen,
         loginOnOpen,
         loginOnClose,
-        nav,
+        navigationContext: nav,
         setNav,
       }}
     >

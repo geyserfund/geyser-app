@@ -12,8 +12,8 @@ import React, { useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
 import {
+  ProjectEntryCard,
   ProjectSectionBar,
-  RewardCard,
   RewardItem,
 } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
@@ -22,8 +22,8 @@ import { useAuthContext } from '../../context';
 import { TupdateReward } from '../../hooks';
 import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
-import { ProjectEntryCard } from '../../components/molecules/projectDisplay/ProjectEntryCard';
 import { MilestoneComponent } from './components/MilestoneComponent';
+import { BiPlus } from 'react-icons/bi';
 
 const useStyles = createUseStyles({
   navButton: {
@@ -184,18 +184,14 @@ export const ProjectAccesories = ({
           alignItems="flex-start"
           spacing="20px"
         >
-          <ProjectSectionBar
-            name={'Entries'}
-            number={entriesLength}
-            rightSection={
-              isOwner && (
-                <ButtonComponent primary onClick={handleCreateNewEntry}>
-                  Create new entry
-                </ButtonComponent>
-              )
-            }
-          />
+          <ProjectSectionBar name={'Entries'} number={entriesLength} />
           {renderEntries()}
+          {isOwner && (
+            <ButtonComponent onClick={handleCreateNewEntry} isFullWidth>
+              <BiPlus style={{ marginRight: '10px' }} />
+              Create new entry
+            </ButtonComponent>
+          )}
         </VStack>
       )}
       {isRewardBased && (
