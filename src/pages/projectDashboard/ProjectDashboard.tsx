@@ -53,7 +53,7 @@ export const ProjectDashboard = () => {
   const [getProject, { loading, error, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME,
     {
-      variables: { where: { name: projectId } },
+      variables: { where: { name: projectId }, input: {} },
       onCompleted(data) {
         setNav({
           title: data.project.title,

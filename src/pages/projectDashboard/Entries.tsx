@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import {
   GridItem,
   HStack,
@@ -5,7 +6,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
@@ -17,6 +18,7 @@ import {
 import { ButtonComponent, SatoshiAmount } from '../../components/ui';
 import { colors } from '../../constants';
 import { fonts } from '../../constants/fonts';
+import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations';
 import { IProject, IProjectListEntryItem } from '../../interfaces';
 import { numberWithCommas, useNotification } from '../../utils';
 
@@ -42,14 +44,26 @@ export const Entries = ({ project }: { project: IProject }) => {
   const history = useHistory();
   const { toast } = useNotification();
 
-  const liveEntries = project?.entries?.filter((entry) => entry.published);
-  const draftEntries = project?.entries?.filter((entry) => !entry.published);
+  const [liveEntries, setLiveEntries] = useState<IProjectListEntryItem[]>([]);
+  const [draftEntries, setDraftEntries] = useState<IProjectListEntryItem[]>([]);
+
+  useEffect(() => {
+    if (project && project.entries) {
+      const live = project?.entries?.filter((entry) => entry.published);
+      const draft = project?.entries?.filter((entry) => !entry.published);
+      setLiveEntries(live);
+      setDraftEntries(draft);
+    }
+  }, [project?.entries]);
 
   const {
     isOpen: isDeleteEntryOpen,
     onClose: closeDeleteEntry,
     onOpen: openDeleteEntry,
   } = useDisclosure();
+
+  const [deleteEntry, { data: deleteEntryData, loading: deleteEntryLoading }] =
+    useMutation(MUTATION_DELETE_ENTRY);
 
   const [selectedEntry, setSelectedEntry] = useState<IProjectListEntryItem>();
 
@@ -62,18 +76,39 @@ export const Entries = ({ project }: { project: IProject }) => {
     openDeleteEntry();
   };
 
-  const handleRemoveEntry = async (id?: number) => {
-    // if (!id) {
-    //   return;
-    // }
-    // try {
-    // } catch (error) {
-    //   toast({
-    //     title: 'Failed to remove reward',
-    //     description: `${error}`,
-    //     status: 'error',
-    //   });
-    // }
+  const handleRemoveEntry = async () => {
+    if (!selectedEntry || !selectedEntry.id) {
+      return;
+    }
+
+    try {
+      await deleteEntry({ variables: { deleteEntryId: selectedEntry.id } });
+
+      if (selectedEntry.published) {
+        const newLive = liveEntries.filter(
+          (entry) => entry.id !== selectedEntry.id,
+        );
+        setLiveEntries(newLive);
+      } else {
+        const newDraft = liveEntries.filter(
+          (entry) => entry.id !== selectedEntry.id,
+        );
+        setDraftEntries(newDraft);
+      }
+
+      toast({
+        title: 'Successfully removed entry',
+        status: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Failed to remove entry',
+        description: `${error}`,
+        status: 'error',
+      });
+    }
+
+    closeDeleteEntry();
   };
 
   return (
@@ -183,7 +218,7 @@ export const Entries = ({ project }: { project: IProject }) => {
         onClose={closeDeleteEntry}
         title={`Delete reward ${selectedEntry?.title}`}
         description={'Are you sure you want to remove the entry'}
-        confirm={() => handleRemoveEntry(selectedEntry?.id)}
+        confirm={handleRemoveEntry}
       />
     </>
   );
