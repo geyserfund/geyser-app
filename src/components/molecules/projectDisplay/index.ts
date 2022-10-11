@@ -1,6 +1,7 @@
 export * from './ProjectBalance';
 export * from './ProfileProjectCard';
 export * from './ProjectCard';
+export * from './ProjectEntryCard';
 export * from './ProjectBalanceCircularProgress';
 export * from './ProjectBars';
 export * from './LiveProject';
@@ -9,4 +10,5 @@ export * from './RewardCard';
 export * from './ActivityBrief';
 export * from './ProjectFundersCountIndicator';
 export * from './ProjectEntryCardThumbnailPlaceholder';
+export * from './ProjectListItemImage';
 export * from './ProjectImageListItemPlaceholder';

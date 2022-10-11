@@ -5,9 +5,8 @@ import {
   InputProps,
   InputRightElement,
   Button,
-  useDisclosure,
   InputGroupProps,
-  DarkMode,
+  Text,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
@@ -25,6 +24,10 @@ const useStyles = createUseStyles({
       borderColor: colors.normalLightGreen,
       boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
     },
+  },
+  inputError: {
+    borderColor: colors.error,
+    boxShadow: `0 0 0 1px ${colors.error}`,
   },
   switchButtton: {
     width: '100%',
@@ -53,6 +56,7 @@ interface IDonationInputWithSatoshiProps extends InputProps {
   onChangeSatoshi: (_: boolean) => void;
   amountSatoshi: boolean;
   inputGroup?: InputGroupProps;
+  error?: string;
 }
 
 export const DonationInputWithSatoshi = ({
@@ -63,6 +67,7 @@ export const DonationInputWithSatoshi = ({
   amountSatoshi,
   onChangeSatoshi,
   value,
+  error,
   ...rest
 }: IDonationInputWithSatoshiProps) => {
   const { btcRate } = useBtcContext();
@@ -114,35 +119,49 @@ export const DonationInputWithSatoshi = ({
   }, [value]);
 
   return (
-    <InputGroup {...inputGroup}>
-      <InputLeftElement>
-        {amountSatoshi ? <SatoshiIconTilted /> : <BiDollar fontSize="25px" />}
-      </InputLeftElement>
-      <Input
-        value={value}
-        type="number"
-        className={classNames(classes.inputElement, className)}
-        onChange={handleInput}
-        {...rest}
-        placeholder="0"
-      />
-      <InputRightElement width="50px">
-        <Button
-          className={classes.switchButtton}
-          onClick={() => {
-            console.log('checking onclick event');
-            onChangeSatoshi(!amountSatoshi);
-          }}
-          variant="ghost"
-        >
-          <BsArrowRepeat className={classes.switchIcon} />
-          {amountSatoshi ? (
-            <BiDollar className={classes.insideIcon} />
-          ) : (
-            <SatoshiIconTilted wrapperClass={classes.insideIcon} scale={0.7} />
+    <>
+      <InputGroup {...inputGroup}>
+        <InputLeftElement>
+          {amountSatoshi ? <SatoshiIconTilted /> : <BiDollar fontSize="25px" />}
+        </InputLeftElement>
+        <Input
+          value={value}
+          type="number"
+          className={classNames(
+            classes.inputElement,
+            { [classes.inputError]: Boolean(error) },
+            className,
           )}
-        </Button>
-      </InputRightElement>
-    </InputGroup>
+          onChange={handleInput}
+          {...rest}
+          placeholder="0"
+        />
+        <InputRightElement width="50px">
+          <Button
+            className={classes.switchButtton}
+            onClick={() => {
+              console.log('checking onclick event');
+              onChangeSatoshi(!amountSatoshi);
+            }}
+            variant="ghost"
+          >
+            <BsArrowRepeat className={classes.switchIcon} />
+            {amountSatoshi ? (
+              <BiDollar className={classes.insideIcon} />
+            ) : (
+              <SatoshiIconTilted
+                wrapperClass={classes.insideIcon}
+                scale={0.7}
+              />
+            )}
+          </Button>
+        </InputRightElement>
+      </InputGroup>
+      {error && (
+        <Text color="brand.error" fontSize="12px">
+          {error}
+        </Text>
+      )}
+    </>
   );
 };

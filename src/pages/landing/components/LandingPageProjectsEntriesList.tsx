@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { ListItem, List, Button, VStack, Divider } from '@chakra-ui/react';
+import { Button, VStack, Divider } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
 import { IProjectListEntryItem } from '../../../interfaces';
-import { ProjectEntryCard } from '../../../components/molecules/projectDisplay/ProjectEntryCard';
 import { useProjectEntries } from '../../../hooks';
 import { AlertBox } from '../../../components/ui';
+import { ProjectEntryCard } from '../../../components/molecules';
 
 type Props = {
   itemLimit?: number;
@@ -23,13 +23,14 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  // const isShowingAllEntries: boolean = useMemo(() => {
-  //   return false;
-  // }, [entries, itemLimit]);
+  const isShowingAllEntries: boolean = useMemo(() => {
+    // TODO: Implement the right logic for this
+    // based upon data returned
+    // from fetching (and fetching more).
 
-  const [isShowingAllEntries, setIsShowingAllEntries] = useState(
-    entries.length < itemLimit,
-  );
+    // entries.length < itemLimit,
+    return false;
+  }, [entries, itemLimit]);
 
   if (error) {
     return (
@@ -59,16 +60,14 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
   }
 
   return (
-    <VStack flexDirection={'column'} spacing={6}>
+    <VStack flexDirection={'column'} spacing={6} width="full">
       {isLoading && <Loader />}
 
-      <List spacing={6} alignSelf="flex-start">
+      <VStack alignItems={'flex-start'} width="full">
         {entries.map((entry: IProjectListEntryItem) => (
-          <ListItem key={entry.id}>
-            <ProjectEntryCard entry={entry} />
-          </ListItem>
+          <ProjectEntryCard entry={entry} key={entry.id} />
         ))}
-      </List>
+      </VStack>
 
       {isShowingAllEntries === false ? (
         <>
@@ -84,8 +83,6 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
                     input: { pagination: { take: itemLimit } },
                   },
                 });
-
-                console.log(entries);
 
                 setIsLoadingMore(false);
               }}

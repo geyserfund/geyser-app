@@ -18,13 +18,13 @@ export interface IEntryUpdateInput {
 }
 
 /**
- * Corresponds to https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/entry.ts#L47
+ * Corresponds to https://github.com/geyserfund/geyser-server/blob/development/src/typeDefs/entry.ts
  */
 export type TEntryData = {
   id: number;
   title: string;
   description: string;
-  image: string;
+  image?: string;
   published: string;
   content: string;
   fundersCount: number;

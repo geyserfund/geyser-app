@@ -62,3 +62,12 @@ export const MUTATION_PUBLISH_ENTRY = gql`
     }
   }
 `;
+
+export const MUTATION_DELETE_ENTRY = gql`
+  mutation DeleteEntry($deleteEntryId: BigInt!) {
+    deleteEntry(id: $deleteEntryId) {
+      id
+      title
+    }
+  }
+`;

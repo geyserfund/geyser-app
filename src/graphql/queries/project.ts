@@ -1,7 +1,10 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_PROJECT_BY_NAME = gql`
-  query GetProject($where: UniqueProjectQueryInput!) {
+  query GetProject(
+    $where: UniqueProjectQueryInput!
+    $input: ProjectEntriesGetInput
+  ) {
     project(where: $where) {
       id
       title
@@ -72,7 +75,7 @@ export const QUERY_PROJECT_BY_NAME = gql`
         description
         amount
       }
-      entries {
+      entries(input: $input) {
         id
         title
         description
@@ -180,6 +183,7 @@ export const QUERY_PROJECTS = gql`
         createdAt
         updatedAt
         expiresAt
+        image
         active
         draft
         media

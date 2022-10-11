@@ -8,6 +8,7 @@ import { NotFound } from '../notFound';
 import Activity from '../project/Activity/Activity';
 import { DetailsContainer } from './DetailsContainer';
 import { useFundingFlow, useFundState } from '../../hooks';
+import { Head } from '../../utils/Head';
 import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
 
@@ -21,7 +22,7 @@ export const ProjectView = () => {
   const fundingFlow = useFundingFlow();
 
   const { loading, error, data } = useQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { name: projectId } },
+    variables: { where: { name: projectId }, input: {} },
     fetchPolicy: 'network-only',
     onError() {
       history.push('/not-found');
@@ -87,6 +88,12 @@ const ProjectViewContainer = ({
   const { setFundState, fundState } = fundingFlow;
   return (
     <>
+      <Head
+        title={project.title}
+        description={project.description}
+        image={project.image}
+        type="article"
+      />
       <DetailsContainer
         {...{
           project,
