@@ -1,5 +1,5 @@
 import { HTMLChakraProps } from '@chakra-ui/system';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   Center,
   Image,
@@ -9,23 +9,30 @@ import {
   useColorModeValue,
   HStack,
   VStack,
+  Badge,
 } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
 import { SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
-import { getAvatarMetadata } from '../../../helpers';
+import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
-import { IFundingTx, IProject } from '../../../interfaces';
+import { IBadge, IFundingTx, IProject } from '../../../interfaces';
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx | IFundingTx;
   project: Project | IProject;
+  showsProjectLink?: boolean;
+};
+
+const renderFunderBadges = (badges: IBadge[]): ReactElement[] => {
+  return badges.map((badge, index) => <Badge key={index}>{badge.badge}</Badge>);
 };
 
 export const ProjectFundingContributionsFeedItem = ({
   fundingTx,
   project,
+  showsProjectLink = false,
   ...rest
 }: Props) => {
   const { funder, onChain, paidAt, source } = fundingTx;
@@ -33,6 +40,7 @@ export const ProjectFundingContributionsFeedItem = ({
   const isFunderAnonymous = !funder.user;
   const timeAgo = getDaysAgo(paidAt) || '';
   const avatarMetadata = getAvatarMetadata({ funder, source });
+  const funderBadges = computeFunderBadges({ project, funder });
 
   return (
     <VStack
@@ -66,6 +74,7 @@ export const ProjectFundingContributionsFeedItem = ({
             avatarMetadata={avatarMetadata}
             fontSize={'14px'}
             imageSize={'20px'}
+            badges={renderFunderBadges(funderBadges)}
           />
         )}
 
@@ -111,9 +120,12 @@ export const ProjectFundingContributionsFeedItem = ({
               : 'Some time ago'}
           </Text>
 
-          <Text>▶</Text>
-
-          <ProjectAvatarLink project={project} />
+          {showsProjectLink ? (
+            <>
+              <Text>▶</Text>
+              <ProjectAvatarLink project={project} />
+            </>
+          ) : null}
         </HStack>
       </Stack>
     </VStack>

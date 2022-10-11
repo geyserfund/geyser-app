@@ -1,3 +1,3 @@
 export * from './ProjectFundingContributionsFeedItem';
-export * from './ProjectFundingLeaderboardFeed';
+export * from './ProjectFundingLeaderboardFeedItem';
 export * from './ProjectActivityActionsToolbar';

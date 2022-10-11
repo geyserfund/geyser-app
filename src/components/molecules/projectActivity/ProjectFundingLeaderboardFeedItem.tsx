@@ -11,17 +11,20 @@ import { AnonymousAvatar, LinkableAvatar } from '../../ui';
 type Props = HTMLChakraProps<'div'> & {
   project: IProject;
   funder: IFunder;
-  count: number;
+  leaderboardPosition: number;
 };
 
-export const ProjectFundingLeaderboardFeed = ({
+export const ProjectFundingLeaderboardFeedItem = ({
   funder,
-  count,
+  leaderboardPosition,
   project,
   ...rest
 }: Props) => {
   const anonymous = !funder.user;
   const avatarMetadata = getAvatarMetadata({ funder });
+
+  // TODO: The `Badge` component should take the `badge.badge` string
+  // as inner child content: https://v1.chakra-ui.com/docs/components/data-display/badge
   const badges = computeFunderBadges({ project, funder }).map((badge) => (
     <Badge key={`${badge.badge}`} badge={`${badge.badge}`} />
   ));
@@ -39,14 +42,16 @@ export const ProjectFundingLeaderboardFeed = ({
       <Box display="flex" justifyContent="space-between">
         <HStack>
           <Text fontWeight="bold" mr={2}>
-            {count}
+            {leaderboardPosition}
           </Text>
+
           {anonymous ? (
             <AnonymousAvatar seed={funder.id} />
           ) : (
             <LinkableAvatar avatarMetadata={avatarMetadata} badges={badges} />
           )}
         </HStack>
+
         <Box display="flex" alignItems="center">
           <SatoshiIconTilted scale={0.7} />
           <Text>{`${commaFormatted(funder.amountFunded)}`} </Text>
