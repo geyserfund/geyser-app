@@ -1,10 +1,8 @@
 import {
   Badge,
-  Box,
   Flex,
   Heading,
   HStack,
-  IconButton,
   Image,
   Spacer,
   Stack,
@@ -15,16 +13,17 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
-import { BsHeartFill, BsPencil } from 'react-icons/bs';
+import { BsHeartFill } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
 import { colors } from '../../../constants';
 import { ProjectListItemImage } from './ProjectListItemImage';
 import { CloseIcon } from '@chakra-ui/icons';
 import { BiPencil } from 'react-icons/bi';
+import { Entry } from '../../../types/generated/graphql';
 
 type Props = ICard & {
-  entry: IProjectListEntryItem;
+  entry: Entry | IProjectListEntryItem;
   onClick?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -87,7 +86,7 @@ export const ProjectEntryCard = ({
       <Flex>
         <Image
           className={styles.thumbnailImage}
-          src={entry.image}
+          src={entry.image || ''}
           fallback={<ProjectEntryCardThumbnailPlaceholder />}
           fit="cover"
           alt={entry.title}
@@ -177,7 +176,7 @@ export const ProjectEntryCard = ({
               textTransform={'uppercase'}
               noOfLines={1}
             >
-              {entry.project.title}
+              {entry.project?.title}
             </Text>
           </HStack>
 

@@ -12,12 +12,12 @@ import React from 'react';
 import { BsFillCheckCircleFill, BsXCircleFill } from 'react-icons/bs';
 import { useHistory } from 'react-router';
 
-import { IProject } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
 import { ICard, SatoshiAmount } from '../../ui';
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
 
 type Props = ICard & {
-  project: IProject;
+  project: Project;
   onClick?: () => void;
 };
 
@@ -56,7 +56,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
         alignItems="center"
       >
         <Image
-          src={project.image}
+          src={project.image || ''}
           width="full"
           height="full"
           fallback={<ProjectImageListItemPlaceholder padding="3em" />}

@@ -1,44 +1,59 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS } from '../graphql';
-import { IProject } from '../interfaces';
+import {
+  OrderByOptions,
+  PaginationInput,
+  Project,
+  ProjectsGetQueryInput,
+} from '../types/generated/graphql';
+
+type ResponseData = {
+  projects: {
+    projects: Project[];
+  };
+};
+
+type QueryVariables = {
+  input: ProjectsGetQueryInput;
+};
+
+type OptionsProps = {
+  itemLimit?: number;
+  cursorID?: number;
+  orderBy?: OrderByOption;
+};
 
 export type OrderByOption =
   | 'Newest Projects'
   | 'Oldest Projects'
   | 'Amount Funded';
 
-type OptionsProps = {
-  itemLimit?: number;
-  orderBy?: OrderByOption;
-};
-
-type ResponseData = IProject[];
-
-// TODO: Leverage auto-generated schema types after
-// https://github.com/geyserfund/geyser-app/pull/346 is merged.
-
-// export const useProjects = (options?: OptionsProps) => {
 export const useProjects = ({
   itemLimit = 14,
   orderBy = 'Newest Projects',
+  cursorID,
 }: OptionsProps) => {
-  // function orderByParams(orderByOption: OrderBy): ProjectsOrderByInput {
+  const paginationOptions: PaginationInput = {
+    take: itemLimit,
+  };
+
+  if (cursorID !== undefined) {
+    paginationOptions.cursor = { id: cursorID };
+  }
+
   function orderByParams(orderByOption: OrderByOption) {
     switch (orderByOption) {
       case 'Newest Projects':
         return {
-          // createdAt: OrderByOptions.desc,
-          createdAt: 'desc',
+          createdAt: OrderByOptions.Desc,
         };
       case 'Oldest Projects':
         return {
-          // createdAt: OrderByOptions.asc,
-          createdAt: 'asc',
+          createdAt: OrderByOptions.Asc,
         };
       case 'Amount Funded':
         return {
-          // balance: OrderByOptions.desc,
-          balance: 'desc',
+          balance: OrderByOptions.Desc,
         };
       default:
         break;
@@ -50,10 +65,10 @@ export const useProjects = ({
     error,
     data: responseData,
     fetchMore,
-  } = useQuery(QUERY_PROJECTS, {
+  } = useQuery<ResponseData, QueryVariables>(QUERY_PROJECTS, {
     variables: {
       input: {
-        pagination: { take: itemLimit },
+        pagination: paginationOptions,
         orderBy: orderByParams(orderBy),
       },
     },
@@ -62,7 +77,7 @@ export const useProjects = ({
   return {
     isLoading,
     error,
-    data: (responseData?.projects.projects || []) as ResponseData,
+    data: responseData?.projects.projects || [],
     fetchMore,
   };
 };
