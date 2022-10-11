@@ -12,24 +12,7 @@ import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
 import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingTransactions';
-
-const ContributionItem = ({
-  transactionResponsePayload,
-}: {
-  transactionResponsePayload: any;
-}) => {
-  const { sourceResource: project, ...fundingTx } = transactionResponsePayload;
-
-  return (
-    <Container justifyContent={'center'} width={['308px', '536px']}>
-      <ProjectFundingContributionsFeedItem
-        fundingTx={fundingTx}
-        project={project}
-        width="full"
-      />
-    </Container>
-  );
-};
+import { FundingTx } from '../../../types/generated/graphql';
 
 type Props = {
   itemLimit?: number;
@@ -82,16 +65,24 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   }
 
   return (
-    <VStack flexDirection={'column'} spacing={6}>
+    <VStack flexDirection={'column'} spacing={6} width="full">
       {isLoading && <Loader />}
 
-      <List spacing={3}>
-        {contributions.map((contribution: any) => (
-          <ListItem key={contribution.id} justifyContent="center">
-            <ContributionItem transactionResponsePayload={contribution} />
-          </ListItem>
-        ))}
-      </List>
+      <VStack alignItems={'center'} width="full" spacing={'24px'}>
+        {contributions.map((contribution: FundingTx) => {
+          if (contribution.sourceResource?.__typename === 'Project') {
+            return (
+              <ProjectFundingContributionsFeedItem
+                key={contribution.id}
+                fundingTx={contribution}
+                project={contribution.sourceResource}
+              />
+            );
+          }
+
+          return null;
+        })}
+      </VStack>
 
       {isShowingAllContributions === false ? (
         <>

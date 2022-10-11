@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../graphql';
-import { IFundingTx } from '../interfaces';
+import { FundingTx } from '../types/generated/graphql';
 
 type OptionsProps = {
   itemLimit?: number;
 };
 
-type ResponseData = IFundingTx[];
+type ResponseData = FundingTx[];
 
 /**
  * Hook for fetching project funding transactions

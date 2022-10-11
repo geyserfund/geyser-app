@@ -3,9 +3,10 @@ import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 import { IProject } from '../../interfaces';
+import { Project } from '../../types/generated/graphql';
 
 type Props = {
-  project: IProject;
+  project: IProject | Project;
   textColor?: string;
 };
 
