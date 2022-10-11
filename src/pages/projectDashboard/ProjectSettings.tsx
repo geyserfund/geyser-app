@@ -8,11 +8,12 @@ import {
   Input,
   InputRightAddon,
   Image,
+  Checkbox,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { useParams } from 'react-router';
-import { FileUpload } from '../../components/molecules';
+import { CalendarButton, FileUpload } from '../../components/molecules';
 import {
   ButtonComponent,
   Card,
@@ -31,6 +32,7 @@ import {
   validLighteningAddress,
 } from '../../utils';
 import { TProjectDetails } from '../creation/projectCreate/types';
+import { DateTime } from 'luxon';
 
 export const ProjectSettings = ({ project }: { project: IProject }) => {
   const params = useParams<{ projectId: string }>();
@@ -48,6 +50,16 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
     name: '',
   });
   const [formError, setFormError] = useState<{ [key: string]: string }>({});
+  const [selectedButton, setSelectedButton] = useState(
+    project.expiresAt ? 'custom' : 'ongoing',
+  );
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    project.expiresAt
+      ? DateTime.fromMillis(parseInt(project.expiresAt, 10)).toJSDate()
+      : undefined,
+  );
+  const [finalDate, setFinalDate] = useState<string>();
+  const [deactivate, setDeactivate] = useState(!project.active);
 
   const [updateProject, { loading: updateLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,
@@ -109,8 +121,33 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
     }
   };
 
+  const handleDateChange = (value: Date) => {
+    setSelectedButton('custom');
+    setSelectedDate(value);
+    setFinalDate(`${value.getTime()}`);
+  };
+
+  const handleMonthSelect = () => {
+    setSelectedButton('month');
+    const dateMonth = DateTime.now().plus({ months: 1 });
+    setSelectedDate(undefined);
+    setFinalDate(`${dateMonth.toJSDate().getTime()}`);
+  };
+
+  const handleOngoingSelect = () => {
+    setSelectedButton('ongoing');
+    setSelectedDate(undefined);
+    setFinalDate('');
+  };
+
   const handleUpload = (url: string) => {
     setForm({ ...form, image: `${GeyserAssetDomainUrl}${url}` });
+  };
+
+  const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event) {
+      setDeactivate(event.target.checked);
+    }
   };
 
   const handleNext = () => {
@@ -126,6 +163,8 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
             title: form.title,
             image: form.image,
             description: form.description,
+            expiresAt: finalDate || null,
+            active: !deactivate,
           },
         },
       });
@@ -145,14 +184,6 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
 
     if (!form.description) {
       errors.description = 'Project objective is a required field';
-      isValid = false;
-    }
-
-    if (!form.email && !user.email) {
-      errors.email = 'Email address is a required field.';
-      isValid = false;
-    } else if (!user.email && !validateEmail(form.email)) {
-      errors.email = 'Please enter a valid email address.';
       isValid = false;
     }
 
@@ -241,6 +272,50 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
                 error={formError.email}
                 isDisabled={Boolean(user.email)}
               />
+            </VStack>
+            <VStack width="100%" alignItems="flex-start">
+              <Text>Fundraising deadline</Text>
+              <HStack width="100%" justifyContent="space-around">
+                <ButtonComponent
+                  primary={selectedButton === 'ongoing'}
+                  onClick={handleOngoingSelect}
+                >
+                  Ongoing
+                </ButtonComponent>
+                <ButtonComponent
+                  primary={selectedButton === 'month'}
+                  onClick={handleMonthSelect}
+                >
+                  1 Month
+                </ButtonComponent>
+                <CalendarButton
+                  primary={selectedButton === 'custom'}
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                >
+                  Custom
+                </CalendarButton>
+              </HStack>
+              <Text fontSize="12px">
+                Add a deadline for your project if you have one, or just keep it
+                as ongoing.
+              </Text>
+            </VStack>
+            <VStack width="100%" alignItems="flex-start">
+              <Text>Deactivate</Text>
+              <Checkbox
+                defaultChecked={deactivate}
+                onChange={handleDeactivate}
+                colorScheme="red"
+              >
+                {' '}
+                Deactivate Project
+              </Checkbox>
+              <Text fontSize="12px">
+                Deactivating your project would not allow others to fund your
+                project, but your project will still be visible to everyone
+                else. You will be able to re-activate your project at any time.
+              </Text>
             </VStack>
             <ButtonComponent
               isLoading={updateLoading}
