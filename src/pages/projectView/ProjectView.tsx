@@ -22,7 +22,7 @@ export const ProjectView = () => {
   const fundingFlow = useFundingFlow();
 
   const { loading, error, data } = useQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { name: projectId } },
+    variables: { where: { name: projectId }, input: {} },
     fetchPolicy: 'network-only',
     onError() {
       history.push('/not-found');

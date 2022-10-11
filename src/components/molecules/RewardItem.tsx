@@ -139,7 +139,7 @@ export const RewardItem = ({
                   onBlur={setBlur}
                   size="xs"
                   className={classes.extraIcons}
-                  aria-label="add-reward"
+                  aria-label="remove-reward"
                   icon={<MinusIcon />}
                   onClick={handleRemove}
                 />
@@ -148,7 +148,7 @@ export const RewardItem = ({
                   onBlur={setBlur}
                   size="xs"
                   className={classes.extraIcons}
-                  aria-label="remove-reward"
+                  aria-label="add-reward"
                   icon={<AddIcon />}
                   onClick={handleAdd}
                 />
