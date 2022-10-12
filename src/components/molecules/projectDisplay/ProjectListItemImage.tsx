@@ -1,4 +1,4 @@
-import { Box, HTMLChakraProps, Image, SkeletonCircle } from '@chakra-ui/react';
+import { Box, HTMLChakraProps, Image } from '@chakra-ui/react';
 import React from 'react';
 import { ProjectImageListItemPlaceholder } from '..';
 import { IProject } from '../../../interfaces';

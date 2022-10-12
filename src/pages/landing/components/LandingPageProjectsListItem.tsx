@@ -7,12 +7,12 @@ import {
   Box,
 } from '@chakra-ui/react';
 import React from 'react';
-import { IProject } from '../../../interfaces';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { ProjectImageListItemPlaceholder } from '../../../components/molecules';
+import { Project } from '../../../types/generated/graphql';
 
 type Props = HTMLChakraProps<'div'> & {
-  project: IProject;
+  project: Project;
 };
 
 export const LandingPageProjectsListItem = ({ project, ...rest }: Props) => {

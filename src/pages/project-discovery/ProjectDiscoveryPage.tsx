@@ -23,11 +23,11 @@ import { dimensions } from '../../constants';
 import { AlertBox } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { OrderByOption, useProjects } from '../../hooks';
-import { IProject } from '../../interfaces';
 import { ProjectsGridCard } from '../../components/molecules/projectDisplay/ProjectsGridCard';
 import { RiSortDesc } from 'react-icons/ri';
 import { TopBanner } from '../landing/components';
 import { AppFooter } from '../../components/molecules';
+import { PaginationInput, Project } from '../../types/generated/graphql';
 
 type Props = {
   match: any;
@@ -41,8 +41,6 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
   const [orderByOption, setOrderByOption] =
     React.useState<OrderByOption>('Newest Projects');
 
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-
   const {
     isLoading,
     error,
@@ -53,12 +51,48 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
     itemLimit: pagingItemLimit,
   });
 
-  const isShowingAllProjects: boolean = useMemo(() => {
-    // TODO: Implement the right logic for this
-    // based upon data returned
-    // from fetching (and fetching more).
-    return false;
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const [isShowingAllProjects, setIsShowingAllProjects] = useState(false);
+
+  const paginationInput: PaginationInput = useMemo(() => {
+    const options: PaginationInput = {};
+
+    if (projects.length > 0) {
+      options.cursor = {
+        id: Number(projects[projects.length - 1].id),
+      };
+    }
+
+    return options;
   }, [projects]);
+
+  const handleLoadMoreButtonTapped = async () => {
+    setIsLoadingMore(true);
+
+    await fetchMore({
+      variables: {
+        input: {
+          pagination: paginationInput,
+        },
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (fetchMoreResult.projects.projects.length < pagingItemLimit) {
+          setIsShowingAllProjects(true);
+        }
+
+        // return the result and let our `InMemoryCache` type policies handle
+        // the merging logic.
+        return {
+          projects: {
+            projects: fetchMoreResult.projects.projects,
+          },
+        };
+      },
+    });
+
+    setIsLoadingMore(false);
+  };
 
   if (error) {
     return (
@@ -216,7 +250,7 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
                 <Divider borderWidth="2px" />
 
                 <SimpleGrid columns={3} spacingX={7} spacingY={8}>
-                  {projects.map((project: IProject) => (
+                  {projects.map((project: Project) => (
                     <GridItem key={project.id} colSpan={[3, 1]}>
                       <ProjectsGridCard project={project} height="100%" />
                     </GridItem>
@@ -226,19 +260,7 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
                 {isShowingAllProjects === false ? (
                   <>
                     {isLoadingMore === false ? (
-                      <Button
-                        onClick={async () => {
-                          setIsLoadingMore(true);
-
-                          await fetchMore({
-                            variables: {
-                              input: { pagination: { take: pagingItemLimit } },
-                            },
-                          });
-
-                          setIsLoadingMore(false);
-                        }}
-                      >
+                      <Button onClick={handleLoadMoreButtonTapped}>
                         View More
                       </Button>
                     ) : (

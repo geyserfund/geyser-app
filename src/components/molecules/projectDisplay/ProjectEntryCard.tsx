@@ -86,7 +86,7 @@ export const ProjectEntryCard = ({
       <Flex>
         <Image
           className={styles.thumbnailImage}
-          src={entry.image}
+          src={entry.image || ''}
           fallback={<ProjectEntryCardThumbnailPlaceholder />}
           fit="cover"
           alt={entry.title}
@@ -177,7 +177,7 @@ export const ProjectEntryCard = ({
                 textTransform={'uppercase'}
                 noOfLines={1}
               >
-                {entry.project.title}
+                {entry.project?.title}
               </Text>
             </HStack>
           ) : null}
