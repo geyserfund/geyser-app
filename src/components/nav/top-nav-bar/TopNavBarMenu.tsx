@@ -98,7 +98,7 @@ export const TopNavBarMenu = ({
           <>
             <NavBarUserProfileMenuItem />
 
-            {isUserAProjectCreator ? (
+            {isUserAProjectCreator && user.ownerOf[0]?.project ? (
               <NavBarUserProjectMenuItem project={user.ownerOf[0].project} />
             ) : null}
 

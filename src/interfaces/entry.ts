@@ -1,4 +1,4 @@
-import { IUserProfile } from './user';
+import { User } from '../types/generated/graphql';
 
 export interface IEntryCreateInput {
   projectId?: number;
@@ -33,7 +33,7 @@ export type TEntryData = {
   updatedAt: string;
   publishedAt: string;
   type: string;
-  creator: IUserProfile;
+  creator: User;
   project: {
     id: number;
     title: string;

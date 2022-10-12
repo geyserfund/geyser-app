@@ -1,6 +1,6 @@
 import { IParticipant, IFunder, ISponsor, IGrantee } from './participant';
 import { IFundingTx } from './funding';
-import { IUserProfile } from './user';
+import { User } from '../types/generated/graphql';
 
 export type IProjectType = 'reward' | 'grant' | 'donation';
 
@@ -115,7 +115,7 @@ export interface IProjectListEntryItem {
    */
   type: string;
 
-  creator: IUserProfile;
+  creator: User;
   fundersCount: number;
   amountFunded: number;
   published: boolean;

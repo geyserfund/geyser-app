@@ -1,6 +1,6 @@
-import { IUserProfile } from '../interfaces';
+import { User } from '../types/generated/graphql';
 
-export const defaultUser: IUserProfile = {
+export const defaultUser: User = {
   id: 0,
   username: '',
   imageUrl: '',

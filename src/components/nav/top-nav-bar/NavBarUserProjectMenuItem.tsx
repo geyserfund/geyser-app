@@ -1,10 +1,10 @@
 import { Heading, HStack, VStack, Text } from '@chakra-ui/react';
 import React from 'react';
-import { IProject } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
 import { ProjectListItemImage } from '../../molecules';
 
 type Props = {
-  project: IProject;
+  project: Project;
 };
 
 export const NavBarUserProjectMenuItem = ({ project }: Props) => {

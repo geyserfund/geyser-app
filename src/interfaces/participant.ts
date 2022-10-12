@@ -1,7 +1,7 @@
-import { IUserProfile } from './user';
+import { User } from '../types/generated/graphql';
 
 export interface IParticipant {
-  user: IUserProfile;
+  user: User;
   confirmed: boolean;
 }
 
@@ -9,7 +9,7 @@ export interface IFunder {
   id: number;
   amountFunded: number;
   timesFunded: number;
-  user?: IUserProfile;
+  user?: User;
   badges: IBadge[];
   confirmedAt: string;
 }
@@ -22,7 +22,7 @@ export interface IBadge {
 export interface ISponsor {
   id: number;
   name: string;
-  user?: IUserProfile;
+  user?: User;
   image?: string;
   url?: string;
   confirmed: boolean;

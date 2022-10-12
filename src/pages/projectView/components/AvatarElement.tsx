@@ -1,10 +1,10 @@
 import { Avatar, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { IUserProfile } from '../../../interfaces';
+import { User } from '../../../types/generated/graphql';
 
 interface IAvatarElement {
-  user: IUserProfile;
+  user: User;
 }
 
 export const AvatarElement = ({ user }: IAvatarElement) => (

@@ -8,10 +8,10 @@ import React, {
   SetStateAction,
 } from 'react';
 import { ME } from '../graphql';
-import { IUserProfile } from '../interfaces';
 import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
+import { User } from '../types/generated/graphql';
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
@@ -25,7 +25,7 @@ const defaultContext: AuthContextProps = {
   loginOnClose: () => {},
   setIsLoggedIn: () => {},
   getUser: () => {},
-  setUser: (user: IUserProfile) => {},
+  setUser: (user: User) => {},
   navigationContext: { title: '', path: '' },
   setNav: () => {},
 };
@@ -42,17 +42,17 @@ type AuthContextProps = {
   /**
    * User Profile information
    */
-  user: IUserProfile;
+  user: User;
   loading: boolean;
   error?: ApolloError;
-  logout: any;
+  logout: () => void;
   isAuthModalOpen: boolean;
   loginOnOpen: () => void;
   loginOnClose: () => void;
   isUserAProjectCreator: boolean;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
   getUser: any;
-  setUser: (userData: IUserProfile) => void;
+  setUser: (userData: User) => void;
   navigationContext: NavigationContextProps;
   setNav: React.Dispatch<React.SetStateAction<NavigationContextProps>>;
 };
@@ -62,6 +62,7 @@ export const AuthContext = createContext<AuthContextProps>(defaultContext);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     setUser(defaultUser);
+
     fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, { credentials: 'include' }).catch(
       (error) => console.error(error),
     );
@@ -74,12 +75,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     path: '',
   });
 
-  const [user, setUser] = useState<IUserProfile>(defaultUser);
+  const [user, setUser] = useState<User>(defaultUser);
   const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
-    onCompleted: (data: { me: IUserProfile }) => {
+    onCompleted: (data: { me: User }) => {
       if (data && data.me) {
         setUser(data.me);
         setIsLoggedIn(true);
