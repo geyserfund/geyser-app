@@ -47,7 +47,7 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
         },
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        if (fetchMoreResult.getEntries.length === 0) {
+        if (fetchMoreResult.getEntries.length < itemLimit) {
           setIsShowingAllEntries(true);
         }
 

@@ -77,7 +77,7 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
         },
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        if (fetchMoreResult.projects.projects.length === 0) {
+        if (fetchMoreResult.projects.projects.length < pagingItemLimit) {
           setIsShowingAllProjects(true);
         }
 

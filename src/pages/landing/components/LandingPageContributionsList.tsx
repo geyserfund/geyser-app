@@ -73,7 +73,7 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
         },
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        if (fetchMoreResult.getFundingTxs.length === 0) {
+        if (fetchMoreResult.getFundingTxs.length < itemLimit) {
           setIsShowingAllContributions(true);
         }
 
