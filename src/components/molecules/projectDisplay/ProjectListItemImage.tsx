@@ -1,11 +1,12 @@
-import { Box, HTMLChakraProps, Image, SkeletonCircle } from '@chakra-ui/react';
+import { Box, HTMLChakraProps, Image } from '@chakra-ui/react';
 import React from 'react';
 import { ProjectImageListItemPlaceholder } from '..';
 import { IProject } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
 
 type Props = HTMLChakraProps<'div'> & {
   imageSrc?: string;
-  project: IProject;
+  project: Project | IProject;
   boxSize?: string;
   borderRadius?: string;
 };
