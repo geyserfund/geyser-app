@@ -2,16 +2,16 @@ import React, { useMemo, useState } from 'react';
 import { Button, VStack, Divider } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
-import { IProjectListEntryItem } from '../../../interfaces';
 import { useProjectEntries } from '../../../hooks';
 import { AlertBox } from '../../../components/ui';
 import { ProjectEntryCard } from '../../../components/molecules';
+import { Entry, PaginationInput } from '../../../types/generated/graphql';
 
 type Props = {
   itemLimit?: number;
 };
 
-export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
+export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
   const {
     isLoading,
     error,
@@ -23,12 +23,44 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const isShowingAllEntries: boolean = useMemo(() => {
-    // TODO: Implement the right logic for this
-    // based upon data returned
-    // from fetching (and fetching more).
-    return false;
-  }, [entries, itemLimit]);
+  const [isShowingAllEntries, setIsShowingAllEntries] = useState(false);
+
+  const paginationInput: PaginationInput = useMemo(() => {
+    const options: PaginationInput = {};
+
+    if (entries.length > 0) {
+      options.cursor = {
+        id: Number(entries[entries.length - 1].id),
+      };
+    }
+
+    return options;
+  }, [entries]);
+
+  const handleLoadMoreButtonTapped = async () => {
+    setIsLoadingMore(true);
+
+    await fetchMore({
+      variables: {
+        input: {
+          pagination: paginationInput,
+        },
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (fetchMoreResult.getEntries.length < itemLimit) {
+          setIsShowingAllEntries(true);
+        }
+
+        // return the result and let our `InMemoryCache` type policies handle
+        // the merging logic.
+        return {
+          getEntries: fetchMoreResult.getEntries,
+        };
+      },
+    });
+
+    setIsLoadingMore(false);
+  };
 
   if (error) {
     return (
@@ -61,8 +93,8 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
     <VStack flexDirection={'column'} spacing={6} width="full">
       {isLoading && <Loader />}
 
-      <VStack alignItems={'flex-start'} width="full" spacing={'24px'}>
-        {entries.map((entry: IProjectListEntryItem) => (
+      <VStack alignItems={'flex-start'} width="full">
+        {entries.map((entry: Entry) => (
           <ProjectEntryCard entry={entry} key={entry.id} />
         ))}
       </VStack>
@@ -72,21 +104,7 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 10 }: Props) => {
           <Divider />
 
           {isLoadingMore === false ? (
-            <Button
-              onClick={async () => {
-                setIsLoadingMore(true);
-
-                await fetchMore({
-                  variables: {
-                    input: { pagination: { take: itemLimit } },
-                  },
-                });
-
-                setIsLoadingMore(false);
-              }}
-            >
-              View More
-            </Button>
+            <Button onClick={handleLoadMoreButtonTapped}>View More</Button>
           ) : (
             <Loader />
           )}

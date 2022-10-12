@@ -28,9 +28,9 @@ export const QUERY_GET_ENTRY = gql`
 `;
 
 /**
- * [`Entry` type](https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/entry.ts#L47)
+ * @returns `Entry`
  */
-export const QUERY_ENTRIES_LANDING = gql`
+export const QUERY_ENTRIES_LANDING_PAGE = gql`
   query GetEntries($input: GetEntriesInput!) {
     getEntries(input: $input) {
       id

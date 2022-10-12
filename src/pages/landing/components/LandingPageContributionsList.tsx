@@ -1,18 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import {
-  ListItem,
-  List,
-  Container,
-  Button,
-  Divider,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, Divider, VStack } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
 import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingTransactions';
 import { FundingTx } from '../../../types/generated/graphql';
+import { PaginationInput } from '../../../types/generated/graphql';
 
 type Props = {
   itemLimit?: number;
@@ -30,12 +24,45 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const isShowingAllContributions: boolean = useMemo(() => {
-    // TODO: Implement the right logic for this
-    // based upon data returned
-    // from fetching (and fetching more).
-    return false;
-  }, [contributions, itemLimit]);
+  const [isShowingAllContributions, setIsShowingAllContributions] =
+    useState(false);
+
+  const paginationInput: PaginationInput = useMemo(() => {
+    const options: PaginationInput = {};
+
+    if (contributions.length > 0) {
+      options.cursor = {
+        id: Number(contributions[contributions.length - 1].id),
+      };
+    }
+
+    return options;
+  }, [contributions]);
+
+  const handleLoadMoreButtonTapped = async () => {
+    setIsLoadingMore(true);
+
+    await fetchMore({
+      variables: {
+        input: {
+          pagination: paginationInput,
+        },
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (fetchMoreResult.getFundingTxs.length < itemLimit) {
+          setIsShowingAllContributions(true);
+        }
+
+        // return the result and let our `InMemoryCache` type policies handle
+        // the merging logic.
+        return {
+          getFundingTxs: fetchMoreResult.getFundingTxs,
+        };
+      },
+    });
+
+    setIsLoadingMore(false);
+  };
 
   if (error) {
     return (
@@ -89,21 +116,7 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
           <Divider />
 
           {isLoadingMore === false ? (
-            <Button
-              onClick={async () => {
-                setIsLoadingMore(true);
-
-                await fetchMore({
-                  variables: {
-                    input: { pagination: { take: itemLimit } },
-                  },
-                });
-
-                setIsLoadingMore(false);
-              }}
-            >
-              View More
-            </Button>
+            <Button onClick={handleLoadMoreButtonTapped}>View More</Button>
           ) : (
             <Loader />
           )}
