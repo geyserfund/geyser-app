@@ -58,7 +58,7 @@ export const TopNavBarMenu = ({
           <HamburgerIcon />
 
           {isLoggedIn ? (
-            <Avatar height="22px" width="22px" src={user.imageUrl} />
+            <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
           ) : null}
         </HStack>
       </MenuButton>
@@ -148,7 +148,12 @@ export const TopNavBarMenu = ({
           <>
             <MenuDivider />
 
-            <MenuItem onClick={onSignOutSelected} color={'brand.gray500'}>
+            <MenuItem
+              onClick={onSignOutSelected}
+              color={'brand.gray500'}
+              px={4}
+              py={2}
+            >
               Sign Out
             </MenuItem>
           </>

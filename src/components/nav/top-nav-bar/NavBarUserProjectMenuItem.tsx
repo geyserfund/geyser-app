@@ -17,7 +17,6 @@ export const NavBarUserProjectMenuItem = ({ project }: Props) => {
       borderRadius="sm"
     >
       <Text
-        as="caption"
         textTransform={'uppercase'}
         fontSize="xs"
         fontWeight={'bold'}

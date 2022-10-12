@@ -1,7 +1,7 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
-import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
@@ -11,6 +11,7 @@ import { useFundingFlow, useFundState } from '../../hooks';
 import { Head } from '../../utils/Head';
 import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
+import { Project } from '../../types/generated/graphql';
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -28,11 +29,19 @@ export const ProjectView = () => {
       history.push('/not-found');
     },
     onCompleted(data) {
-      setNav({
-        title: data.project.title,
-        path: `/projects/${data.project.name}`,
-        projectOwnerId: data.project.owners[0].user.id,
-      });
+      if (data.project && data.project.__typename === 'Project') {
+        const { project }: { project: Project } = data;
+        const projectOwnerID =
+          project.owners && project.owners.length > 0
+            ? project.owners[0]?.user.id
+            : '';
+
+        setNav({
+          title: project.title,
+          path: `/projects/${project.name}`,
+          projectOwnerId: projectOwnerID,
+        });
+      }
     },
   });
 

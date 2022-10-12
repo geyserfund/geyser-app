@@ -9,6 +9,7 @@ import { SiTwitter } from 'react-icons/si';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
 import { useNotification } from '../../utils';
+import { defaultUser } from '../../defaults';
 
 interface IAccountConnection {
   id: number;
@@ -42,7 +43,7 @@ const DisconnectAccount = ({ id, icon, username }: IAccountConnection) => {
 
   useEffect(() => {
     if (data && !unlinkLoading) {
-      setUser(data.unlinkExternalAccount);
+      setUser({ ...defaultUser, ...data.unlinkExternalAccount });
     }
   }, [data]);
 
@@ -70,10 +71,10 @@ const DisconnectAccount = ({ id, icon, username }: IAccountConnection) => {
 export const DisconnectAccounts = () => {
   const { user } = useAuthContext();
   const twitterAccount = user.externalAccounts.find(
-    (account) => account.type === 'twitter',
+    (account) => account?.type === 'twitter',
   );
   const lnurlAccounts = user.externalAccounts.filter(
-    (account) => account.type === 'lnurl',
+    (account) => account?.type === 'lnurl',
   );
 
   return (
@@ -92,9 +93,9 @@ export const DisconnectAccounts = () => {
       </Text>
       {lnurlAccounts.map((account) => (
         <DisconnectAccount
-          key={account.id}
-          id={account.id}
-          username={account.externalUsername}
+          key={account?.id}
+          id={account?.id}
+          username={account?.externalUsername || ''}
           icon={BsLightningChargeFill}
         />
       ))}

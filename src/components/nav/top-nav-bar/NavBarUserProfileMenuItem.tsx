@@ -8,7 +8,6 @@ export const NavBarUserProfileMenuItem = () => {
   return (
     <VStack spacing={1} padding={4} alignItems="flex-start">
       <Text
-        as="caption"
         textTransform={'uppercase'}
         fontSize="xs"
         fontWeight={'bold'}
@@ -18,7 +17,7 @@ export const NavBarUserProfileMenuItem = () => {
       </Text>
 
       <HStack spacing={1}>
-        <Avatar height="22px" width="22px" src={user.imageUrl} />
+        <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
 
         <Heading fontWeight={600} fontSize="16px" as={'h6'}>
           {user.username}

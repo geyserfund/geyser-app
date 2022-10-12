@@ -125,7 +125,7 @@ export const Profile = () => {
 
   const params = useParams<{ userId: string }>();
 
-  const [getUserData, { loading: profileLoading, error, data }] =
+  const [queryCurrentUser, { loading: profileLoading, error, data }] =
     useLazyQuery(USER_PROFILE_QUERY);
 
   const isMe = () => history.location.pathname === `/profile/${user.id}`;
@@ -146,7 +146,7 @@ export const Profile = () => {
           id: params.userId,
         },
       };
-      getUserData({ variables });
+      queryCurrentUser({ variables });
     }
   }, [params]);
 
@@ -331,7 +331,7 @@ export const Profile = () => {
                                   title={project.title}
                                   name={project.name}
                                   project={project}
-                                  imgSrc={project.media[0]}
+                                  imgSrc={project.media[0] || ''}
                                   marginLeft="0px !important"
                                   privateUser={myProfile}
                                 />
