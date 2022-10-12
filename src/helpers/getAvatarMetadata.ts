@@ -3,12 +3,13 @@ import { getRandomOrb } from '../utils';
 
 import FountainLogo from '../assets/fountain-logo-black-small.png';
 import BreezLogo from '../assets/breez-logo.png';
+import { Funder } from '../types/generated/graphql';
 
 export const getAvatarMetadata = ({
   funder,
   source,
 }: {
-  funder: IFunder;
+  funder: IFunder | Funder;
   source?: string;
 }) => {
   if (!funder.user) {

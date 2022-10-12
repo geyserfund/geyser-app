@@ -4,7 +4,7 @@ import {
   ProjectActivityActionsToolbar,
   ActivityBrief,
   ProjectFundingContributionsFeedItem,
-  ProjectFundingLeaderboardFeed,
+  ProjectFundingLeaderboardFeedItem,
 } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
@@ -168,10 +168,10 @@ export const InfoPage = ({
                 />
               ))
             : sortedFunders.map((funder, index) => (
-                <ProjectFundingLeaderboardFeed
+                <ProjectFundingLeaderboardFeedItem
                   key={index}
                   funder={funder}
-                  count={index + 1}
+                  leaderboardPosition={index + 1}
                   project={project}
                 />
               ))}

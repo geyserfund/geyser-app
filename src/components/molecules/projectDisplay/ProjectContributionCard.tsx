@@ -110,7 +110,7 @@ const RenderBadges = ({
   const { project, funder, isSponsor, isFunder } = contribution;
   const badges =
     isFunder && funder
-      ? computeFunderBadges({ project, funder, shortForm: false })
+      ? computeFunderBadges({ project, funder, useShortForm: false })
       : [];
 
   if (badges.length === 0) {
