@@ -14,7 +14,6 @@ import { useHistory } from 'react-router';
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
 import { BsHeartFill } from 'react-icons/bs';
-import { createUseStyles } from 'react-jss';
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
 import { colors } from '../../../constants';
 import { ProjectListItemImage } from './ProjectListItemImage';
@@ -29,14 +28,6 @@ type Props = ICard & {
   onDelete?: () => void;
 };
 
-const useStyles = createUseStyles({
-  thumbnailImage: {
-    height: '142px',
-    width: '196px',
-    borderRadius: '0.5em',
-  },
-});
-
 export const ProjectEntryCard = ({
   entry,
   onClick,
@@ -45,7 +36,6 @@ export const ProjectEntryCard = ({
   ...rest
 }: Props) => {
   const history = useHistory();
-  const styles = useStyles();
 
   const handleClick =
     onClick ||
@@ -70,7 +60,11 @@ export const ProjectEntryCard = ({
   return (
     <Stack
       borderRadius="lg"
-      width={{ sm: '100%', md: '798px' }}
+      width={{
+        base: '100%',
+        xl: '798px',
+      }}
+      maxWidth={'798px'}
       direction={{ base: 'column', md: 'row' }}
       backgroundColor={useColorModeValue('white', 'gray.900')}
       _hover={{
@@ -85,10 +79,11 @@ export const ProjectEntryCard = ({
     >
       <Flex>
         <Image
-          className={styles.thumbnailImage}
+          width={'full'}
+          height="142px"
           src={entry.image || ''}
           fallback={<ProjectEntryCardThumbnailPlaceholder />}
-          fit="cover"
+          objectFit="cover"
           alt={entry.title}
         />
       </Flex>
@@ -105,6 +100,7 @@ export const ProjectEntryCard = ({
           <Heading fontSize={'2xl'} fontFamily={'body'} noOfLines={[0, 1]}>
             {entry.title}
           </Heading>
+
           <HStack>
             {onEdit && (
               <IconButtonComponent
@@ -144,6 +140,10 @@ export const ProjectEntryCard = ({
           justify={'start'}
           direction={'row'}
           spacing={'22px'}
+          wrap={{
+            base: 'wrap',
+            sm: 'nowrap',
+          }}
         >
           <HStack spacing={'12px'} align={'center'} flex={0}>
             <HStack spacing={1}>
@@ -165,7 +165,7 @@ export const ProjectEntryCard = ({
             flex={0}
           >
             <ProjectListItemImage
-              imageSrc={entry.image}
+              imageSrc={entry.image || ''}
               project={entry.project}
               flexShrink={0}
             />

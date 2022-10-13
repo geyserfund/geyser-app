@@ -7,6 +7,8 @@ import {
   TabPanels,
   Divider,
   Stack,
+  HTMLChakraProps,
+  Box,
 } from '@chakra-ui/react';
 import { LandingPageProjectsEntriesList } from './LandingPageProjectsEntriesList';
 import { LandingPageContributionsList } from './LandingPageContributionsList';
@@ -16,6 +18,8 @@ type ActivityViewTab = {
   component: React.ElementType;
 };
 
+type Props = HTMLChakraProps<'div'> & {};
+
 const styles = {
   selectedTab: {
     borderBottom: '4px solid',
@@ -24,7 +28,7 @@ const styles = {
   },
 };
 
-export const ActivityView = () => {
+export const ActivityView = ({ ...rest }: Props) => {
   const tabs: ActivityViewTab[] = [
     {
       title: 'Contributions',
@@ -37,26 +41,28 @@ export const ActivityView = () => {
   ];
 
   return (
-    <Tabs variant={'line'} height="full" width="full" isLazy>
-      <Stack spacing={'-0.125em'} zIndex={1}>
-        <TabList borderBottomWidth={0} borderRadius="sm" zIndex={1}>
+    <Box {...rest}>
+      <Tabs variant={'line'} height="full" width="full" isLazy>
+        <Stack spacing={'-0.125em'} zIndex={1}>
+          <TabList borderBottomWidth={0} borderRadius="sm" zIndex={1}>
+            {tabs.map((tab, index) => (
+              <Tab _selected={styles.selectedTab} key={index}>
+                {tab.title}
+              </Tab>
+            ))}
+          </TabList>
+
+          <Divider borderWidth={'2px'} zIndex={-1} borderRadius="full" />
+        </Stack>
+
+        <TabPanels width="100%">
           {tabs.map((tab, index) => (
-            <Tab _selected={styles.selectedTab} key={index}>
-              {tab.title}
-            </Tab>
+            <TabPanel key={index} mt={6} p={0}>
+              <tab.component></tab.component>
+            </TabPanel>
           ))}
-        </TabList>
-
-        <Divider borderWidth={'2px'} zIndex={-1} borderRadius="full" />
-      </Stack>
-
-      <TabPanels width="100%">
-        {tabs.map((tab, index) => (
-          <TabPanel key={index} mt={6} p={0}>
-            <tab.component></tab.component>
-          </TabPanel>
-        ))}
-      </TabPanels>
-    </Tabs>
+        </TabPanels>
+      </Tabs>
+    </Box>
   );
 };
