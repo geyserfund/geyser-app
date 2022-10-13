@@ -7,7 +7,7 @@ import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFound } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
-import { Profile } from '../pages/profile';
+import { ProfilePage } from '../pages/profile';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
@@ -72,7 +72,7 @@ export const Router = () => {
               </PrivateRoute>
             </Route>
             <Route path="/profile/:userId">
-              <Profile />
+              <ProfilePage />
             </Route>
             <Route path="/project/:projectId">
               <Project />

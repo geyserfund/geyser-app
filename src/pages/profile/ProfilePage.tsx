@@ -22,6 +22,8 @@ import {
   Wrap,
   WrapItem,
   IconButton,
+  Center,
+  Container,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BsTwitter } from 'react-icons/bs';
@@ -40,6 +42,11 @@ import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { defaultUser } from '../../defaults';
+import { AlertBox } from '../../components/ui';
+import { dimensions } from '../../constants';
+import { User, UserQueryInput } from '../../types/generated/graphql';
+
+const { topNavBar: topNavBarDimensions } = dimensions;
 
 const useStyles = createUseStyles({
   container: {
@@ -118,7 +125,15 @@ const ProfileExternalAccount = ({
   }
 };
 
-export const Profile = () => {
+type ResponseData = {
+  user: User;
+};
+
+type QueryVariables = {
+  where: UserQueryInput;
+};
+
+export const ProfilePage = () => {
   const isDark = isDarkMode();
   const isMobile = isMobileMode();
   const history = useHistory();
@@ -129,12 +144,15 @@ export const Profile = () => {
 
   const params = useParams<{ userId: string }>();
 
-  const [getUserData, { loading: profileLoading, error, data }] =
-    useLazyQuery(USER_PROFILE_QUERY);
+  const [
+    getUserData,
+    { loading: profileLoading, error, data: userProfileData },
+  ] = useLazyQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY);
 
-  const isMe = () => history.location.pathname === `/profile/${user.id}`;
+  const isViewingOwnProfile = () =>
+    history.location.pathname === `/profile/${user.id}`;
 
-  const [userProfile, setUserProfile] = useState<IUserProfile>({
+  const [userProfile, setUserProfile] = useState<User>({
     ...defaultUser,
     contributions: [],
     ownerOf: [],
@@ -145,7 +163,7 @@ export const Profile = () => {
 	*/
   useEffect(() => {
     if (params.userId) {
-      const variables = {
+      const variables: QueryVariables = {
         where: {
           id: params.userId,
         },
@@ -155,14 +173,13 @@ export const Profile = () => {
   }, [params]);
 
   useEffect(() => {
-    if (data && data.user) {
-      const user = data.user as IUserProfile;
-      setUserProfile(user);
+    if (userProfileData && userProfileData.user) {
+      setUserProfile(userProfileData.user);
     }
-  }, [data]);
+  }, [userProfileData]);
 
   useEffect(() => {
-    if (isMe()) {
+    if (isViewingOwnProfile()) {
       setUserProfile({
         ...userProfile,
         ...user,
@@ -171,7 +188,26 @@ export const Profile = () => {
   }, [user]);
 
   if (error) {
-    return <Text> Error loading page, Please refresh</Text>;
+    // return <Text> Error loading page, Please refresh</Text>;
+    return (
+      <Container
+        position="relative"
+        paddingTop={`${topNavBarDimensions.desktop.height}px`}
+        height="100%"
+        display={'flex'}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Center>
+          <AlertBox
+            height="200px"
+            status="error"
+            title="An error occurred while attempting to load the profile page."
+            message="Please try refreshing the page. You may also want to contact support if the problem persists."
+          />
+        </Center>
+      </Container>
+    );
   }
 
   const myProfile = user && `${user.id}` === params.userId;
@@ -185,10 +221,10 @@ export const Profile = () => {
   };
 
   return (
-    <VStack
+    <Box
       background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
+      paddingTop={`${topNavBarDimensions.desktop.height}px`}
       height="100%"
       justifyContent="space-between"
     >
@@ -384,7 +420,207 @@ export const Profile = () => {
       </VStack>
 
       <AppFooter />
-    </VStack>
+    </Box>
+    // <VStack
+    //   background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
+    //   position="relative"
+    //   paddingTop="60px"
+    //   height="100%"
+    //   justifyContent="space-between"
+    // >
+    //   <VStack
+    //     spacing="40px"
+    //     width="100%"
+    //     maxWidth="1080px"
+    //     padding={isMobile ? '0px 10px' : '0px 40px'}
+    //     marginBottom="40px"
+    //     marginTop={isMobile ? '40px' : '80px'}
+    //     display="flex"
+    //     flexDirection="column"
+    //     alignItems="flex-start"
+    //   >
+    //     <VStack width="100%">
+    //       <HStack width="100%" justifyContent="space-between">
+    //         <HStack spacing="20px">
+    //           <Avatar
+    //             height="50px"
+    //             width="50px"
+    //             name={userProfile.username}
+    //             src={
+    //               userProfile.imageUrl
+    //                 ? userProfile.imageUrl
+    //                 : getRandomOrb(userProfile.id)
+    //             }
+    //           />
+    //           <Text fontWeight={600} fontSize="20px">
+    //             {userProfile.username}
+    //           </Text>
+    //         </HStack>
+    //         {myProfile && (
+    //           <Menu>
+    //             <MenuButton
+    //               as={Button}
+    //               rightIcon={<ChevronDownIcon />}
+    //               borderRadius="4px"
+    //               bgColor="brand.primary"
+    //               _hover={{ bgColor: 'brand.normalLightGreen' }}
+    //               _focus={{ bgColor: 'brand.normalLightGreen' }}
+    //               _active={{ bgColor: 'brand.normalLightGreen' }}
+    //             >
+    //               Create
+    //             </MenuButton>
+    //             <MenuList>
+    //               <MenuItem onClick={handleLaunchIdea}>Launch idea</MenuItem>
+    //               <MenuItem color="brand.gray300" pointerEvents="none">
+    //                 Write post
+    //               </MenuItem>
+    //             </MenuList>
+    //           </Menu>
+    //         )}
+    //       </HStack>
+    //       <Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
+    //         {userProfile &&
+    //           userProfile.externalAccounts.map((account) => {
+    //             if (myProfile || account.public) {
+    //               return (
+    //                 <ProfileExternalAccount
+    //                   key={account.id}
+    //                   account={account}
+    //                 />
+    //               );
+    //             }
+    //           })}
+    //         {user.id && user.id === userProfile.id ? (
+    //           <IconButton
+    //             size="sm"
+    //             background={'none'}
+    //             aria-label="connect"
+    //             icon={<SettingsIcon fontSize="20px" />}
+    //             border="1px solid lightgrey"
+    //             onClick={loginOnOpen}
+    //             mr={2}
+    //             mb={2}
+    //           />
+    //         ) : (
+    //           <></>
+    //         )}
+    //       </Box>
+    //     </VStack>
+    //     <Box width="100%">
+    //       <Tabs
+    //         variant="line"
+    //         colorScheme="brand.textGrey"
+    //         defaultIndex={
+    //           userProfile && userProfile.ownerOf.length === 0 ? 1 : 0
+    //         }
+    //       >
+    //         <TabList>
+    //           <Tab>
+    //             <HStack minWidth={'40px'}>
+    //               <Text fontWeight={500}>EntryCreateEdits</Text>
+    //               <Text
+    //                 fontSize="12px"
+    //                 backgroundColor="brand.bgGrey3"
+    //                 padding="4px 8px"
+    //                 borderRadius="4px"
+    //               >
+    //                 {userProfile && userProfile.ownerOf.length}
+    //               </Text>
+    //             </HStack>
+    //           </Tab>
+    //           <Tab>
+    //             <HStack minWidth={'40px'}>
+    //               <Text fontWeight={500}>Contributions</Text>
+    //               <Text
+    //                 fontSize="12px"
+    //                 backgroundColor="brand.bgGrey3"
+    //                 padding="4px 8px"
+    //                 borderRadius="4px"
+    //               >
+    //                 {userProfile && userProfile.contributions.length}
+    //               </Text>
+    //             </HStack>
+    //           </Tab>
+    //         </TabList>
+    //         <TabPanels>
+    //           <TabPanel>
+    //             {userProfile &&
+    //             userProfile.ownerOf &&
+    //             userProfile.ownerOf.length > 0 ? (
+    //               <Box
+    //                 className={
+    //                   isMobile ? classes.containerMobile : classes.container
+    //                 }
+    //               >
+    //                 <Wrap
+    //                   paddingY="0px"
+    //                   width="100%"
+    //                   justify={!isLargerThan1080 ? 'center' : 'flex-start'}
+    //                   spacing="30px"
+    //                 >
+    //                   {userProfile &&
+    //                     userProfile.ownerOf.map((owned) => {
+    //                       const { project } = owned;
+    //                       return (
+    //                         <WrapItem key={project.id}>
+    //                           <ProfileProjectCard
+    //                             title={project.title}
+    //                             name={project.name}
+    //                             project={project}
+    //                             imgSrc={project.media[0]}
+    //                             marginLeft="0px !important"
+    //                             privateUser={myProfile}
+    //                           />
+    //                         </WrapItem>
+    //                       );
+    //                     })}
+    //                 </Wrap>
+    //               </Box>
+    //             ) : (
+    //               <Box width="100%" display="flex" justifyContent="center">
+    //                 <Text>There are no items here.</Text>
+    //               </Box>
+    //             )}
+    //           </TabPanel>
+    //           <TabPanel>
+    //             {userProfile &&
+    //             userProfile.contributions &&
+    //             userProfile.contributions.length > 0 ? (
+    //               <Box
+    //                 className={
+    //                   isMobile ? classes.containerMobile : classes.container
+    //                 }
+    //               >
+    //                 <Wrap
+    //                   paddingY="0px"
+    //                   width="100%"
+    //                   justify={!isLargerThan1080 ? 'center' : 'flex-start'}
+    //                   spacing="30px"
+    //                 >
+    //                   {userProfile &&
+    //                     userProfile.contributions.map((contribute) => (
+    //                       <WrapItem key={contribute.project.id}>
+    //                         <ProjectContributionCard
+    //                           marginLeft="0px !important"
+    //                           contribution={contribute}
+    //                         />
+    //                       </WrapItem>
+    //                     ))}
+    //                 </Wrap>
+    //               </Box>
+    //             ) : (
+    //               <Box width="100%" display="flex" justifyContent="center">
+    //                 <Text>There are no items here.</Text>
+    //               </Box>
+    //             )}
+    //           </TabPanel>
+    //         </TabPanels>
+    //       </Tabs>
+    //     </Box>
+    //   </VStack>
+
+    //   <AppFooter />
+    // </VStack>
   );
 };
 
