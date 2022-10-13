@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import {
-  Flex,
   Heading,
   HStack,
   Modal,
@@ -22,29 +21,23 @@ import { useLocation, useHistory, useRouteMatch, match } from 'react-router';
 import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
-import { useParams } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
-import { defaultUser } from '../../../defaults';
-import { USER_PROFILE_QUERY } from '../../../graphql';
-import { IUserProfile } from '../../../interfaces';
 import { getPath, routerPathNames } from '../../../constants';
 
-// TODO: Leverage strongly-typed constants for these.
 const customTitleRoutes = [
-  '/projects/:projectId',
-  '/projects/:projectId/entry',
-  '/entry/:entryId',
+  `/${routerPathNames.projects}/:projectId/`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.entry}/:entryId`,
 ];
 
-// TODO: Leverage strongly-typed constants for these.
 const routesForHidingDropdownMenu = [
-  '/projects/:projectId/entry',
-  '/projects/:projectId/entry/:entryId',
-  '/projects/:projectId/entry/:entryId/preview',
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
-// TODO: Leverage strongly-typed constants for these.
-const routesForHidingDashboardButton = ['/projects/:projectId/dashboard/'];
+const routesForHidingDashboardButton = [
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`,
+];
 
 const routesForEnablingSignInButton = [
   getPath('index'),
@@ -58,10 +51,14 @@ const routesForEnablingSignInButton = [
   `/${routerPathNames.projects}/:projectId/`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/preview`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
-const routesForEnablingProjectLaunchButton = ['/', '/discover', '/grants'];
+const routesForEnablingProjectLaunchButton = [
+  getPath('index'),
+  `/${routerPathNames.projectDiscovery}`,
+  `/${routerPathNames.grants}`,
+];
 
 /**
  * "Container" component for elements and appearance of
@@ -78,18 +75,16 @@ export const TopNavBar = () => {
   } = useDisclosure();
 
   const {
+    user,
     isLoggedIn,
-    getUser,
+    queryCurrentUser,
     logout,
+    isUserAProjectCreator,
     isAuthModalOpen,
     loginOnOpen,
     loginOnClose,
     navigationContext,
   } = useContext(AuthContext);
-
-  const params = useParams<{ userId: string }>();
-
-  const [getUserData, { data }] = useLazyQuery(USER_PROFILE_QUERY);
 
   const { state } = useLocation<{
     loggedOut?: boolean;
@@ -120,40 +115,10 @@ export const TopNavBar = () => {
     }
 
     if (state && state.refresh) {
-      getUser();
+      queryCurrentUser();
       customHistory.replace(customHistory.location.pathname, {});
     }
   }, [state]);
-
-  // TODO: This should be abstracted to its own hook and reused here and
-  // in pages/Profile.tsx
-  const [userProfile, setUserProfile] = useState<IUserProfile>({
-    ...defaultUser,
-    contributions: [],
-    ownerOf: [],
-  });
-
-  // TODO: This should be abstracted to its own hook and reused here and
-  // in pages/Profile.tsx
-  useEffect(() => {
-    if (params.userId) {
-      const variables = {
-        where: {
-          id: params.userId,
-        },
-      };
-      getUserData({ variables });
-    }
-  }, [params]);
-
-  // TODO: This should be abstracted to its own hook and reused here and
-  // in pages/Profile.tsx
-  useEffect(() => {
-    if (data && data.user) {
-      const user = data.user as IUserProfile;
-      setUserProfile(user);
-    }
-  }, [data]);
 
   const handleProjectLaunchButtonPress = () => {
     history.push('/launch');
@@ -198,16 +163,10 @@ export const TopNavBar = () => {
    *  - Viewable to all users at all times except when: Creating a Project + Entry
    */
   const shouldShowDropdownMenuButton: boolean = useMemo(() => {
-    return (
-      routeMatchesForHidingDropdownMenu.some((routeMatch) => {
-        return Boolean(routeMatch);
-      }) === false
-    );
+    return routeMatchesForHidingDropdownMenu.every((routeMatch) => {
+      return Boolean(routeMatch) === false;
+    });
   }, [routeMatchesForHidingDropdownMenu]);
-
-  const isUserAProjectCreator: boolean = useMemo(() => {
-    return userProfile.ownerOf.length > 0;
-  }, [userProfile]);
 
   /**
    * Logic:
@@ -221,16 +180,17 @@ export const TopNavBar = () => {
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      routeMatchesForHidingDashboardButton.some((routeMatch) => {
-        return Boolean(routeMatch);
-      }) === false &&
-      navigationContext.projectOwnerId !== userProfile.id
+      routeMatchesForHidingDashboardButton.every((routeMatch) => {
+        return Boolean(routeMatch) === false;
+      }) &&
+      navigationContext.projectOwnerId !== user.id
     );
   }, [
     routeMatchesForHidingDashboardButton,
     isMobile,
     isLoggedIn,
     navigationContext,
+    isUserAProjectCreator,
   ]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -238,16 +198,17 @@ export const TopNavBar = () => {
       isMobile === true &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      routeMatchesForHidingDashboardButton.some((routeMatch) => {
-        return Boolean(routeMatch);
-      }) === false &&
-      navigationContext.projectOwnerId !== userProfile.id
+      routeMatchesForHidingDashboardButton.every((routeMatch) => {
+        return Boolean(routeMatch) === false;
+      }) &&
+      navigationContext.projectOwnerId !== user.id
     );
   }, [
     routeMatchesForHidingDashboardButton,
     isMobile,
     isLoggedIn,
     navigationContext,
+    isUserAProjectCreator,
   ]);
 
   /**
@@ -288,11 +249,16 @@ export const TopNavBar = () => {
         width="full"
         zIndex={1000}
       >
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+        <HStack
+          h={16}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          overflow="hidden"
+        >
           <NavBarLogo marginRight={isMobile ? 0 : 5} />
 
           {shouldShowCustomTitle ? (
-            <Heading as={'h3'} isTruncated={isMobile} noOfLines={1}>
+            <Heading as={'h3'} noOfLines={1} size="sm">
               {navigationContext.title}
             </Heading>
           ) : null}
@@ -335,8 +301,6 @@ export const TopNavBar = () => {
 
             {shouldShowDropdownMenuButton ? (
               <TopNavBarMenu
-                userProfile={userProfile}
-                isUserAProjectCreator={isUserAProjectCreator}
                 shouldShowDashboardMenuItem={
                   shouldShowDashboardButtonInsideDropdownMenu
                 }
@@ -349,7 +313,7 @@ export const TopNavBar = () => {
               />
             ) : null}
           </HStack>
-        </Flex>
+        </HStack>
       </Box>
 
       <Modal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose}>

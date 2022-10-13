@@ -7,22 +7,25 @@ import { useAuthContext } from '../../context';
 import { useNotification, hasTwitterAccount } from '../../utils';
 import { useLazyQuery } from '@apollo/client';
 import { ME } from '../../graphql';
+import { User } from '../../types/generated/graphql';
+import { defaultUser } from '../../defaults';
 
 export const TwitterConnect = ({ onClose }: { onClose?: () => {} }) => {
   const { setUser, setIsLoggedIn } = useAuthContext();
   const { toast } = useNotification();
-  const [getUser, { stopPolling }] = useLazyQuery(ME, {
-    onCompleted: (data: any) => {
+
+  const [queryCurrentUser, { stopPolling }] = useLazyQuery(ME, {
+    onCompleted: (data: { me: User }) => {
       if (data && data.me) {
-        console.log('DATA ME', data.me);
         const hasTwitter = hasTwitterAccount(data.me);
+
         if (hasTwitter) {
           if (onClose !== undefined) {
             onClose();
           }
 
           stopPolling();
-          setUser(data.me);
+          setUser({ ...defaultUser, ...data.me });
           setIsLoggedIn(true);
         }
       }
@@ -86,7 +89,7 @@ export const TwitterConnect = ({ onClose }: { onClose?: () => {} }) => {
 
       if (response.status >= 200 && response.status < 400) {
         setPollAuthStatus(true);
-        getUser();
+        queryCurrentUser();
         window.open(
           `${AUTH_SERVICE_ENDPOINT}/twitter?nextPath=/auth/twitter`,
           '_blank',

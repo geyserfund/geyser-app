@@ -158,27 +158,29 @@ export const ProjectEntryCard = ({
             </SatoshiAmount>
           </HStack>
 
-          <HStack
-            spacing={1}
-            alignItems="center"
-            justifyContent="flex-start"
-            flex={0}
-          >
-            <ProjectListItemImage
-              imageSrc={entry.image}
-              project={entry.project}
-              flexShrink={0}
-            />
-
-            <Text
-              as={'p'}
-              color="brand.neutral600"
-              textTransform={'uppercase'}
-              noOfLines={1}
+          {entry.project ? (
+            <HStack
+              spacing={1}
+              alignItems="center"
+              justifyContent="flex-start"
+              flex={0}
             >
-              {entry.project?.title}
-            </Text>
-          </HStack>
+              <ProjectListItemImage
+                imageSrc={entry.image || ''}
+                project={entry.project}
+                flexShrink={0}
+              />
+
+              <Text
+                as={'p'}
+                color="brand.neutral600"
+                textTransform={'uppercase'}
+                noOfLines={1}
+              >
+                {entry.project?.title}
+              </Text>
+            </HStack>
+          ) : null}
 
           <Badge
             flex={0}

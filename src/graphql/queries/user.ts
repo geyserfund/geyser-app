@@ -14,19 +14,14 @@ export const ME = gql`
         externalId
         public
       }
+      ownerOf {
+        project {
+          id
+        }
+      }
     }
   }
 `;
-
-/*
-    externalAccounts {
-      id
-      type
-      externalUsername
-      externalId
-      public
-    }
-*/
 
 export const USER_PROFILE_QUERY = gql`
   query User($where: UserQueryInput) {
@@ -73,7 +68,6 @@ export const USER_PROFILE_QUERY = gql`
           active
           media
           expiresAt
-          creationConfirmed
           funders {
             id
           }

@@ -8,6 +8,8 @@ export const routerPathNames = {
   projects: 'projects',
   launchProject: 'launch',
   userProfile: 'profile',
+  dashboard: 'dashboard',
+  preview: 'preview',
 };
 
 // TODO: These definitions are currently a WIP.
