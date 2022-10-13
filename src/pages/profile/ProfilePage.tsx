@@ -11,16 +11,9 @@ import {
   MenuItem,
   MenuList,
   Skeleton,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
   useMediaQuery,
   VStack,
-  Wrap,
-  WrapItem,
   IconButton,
   Center,
   Container,
@@ -30,11 +23,7 @@ import { BsTwitter } from 'react-icons/bs';
 import FountainLogo from '../../assets/fountain-logo-black-small.png';
 import { createUseStyles } from 'react-jss';
 import { useHistory, useParams } from 'react-router';
-import {
-  ProjectContributionCard,
-  AppFooter,
-  ProfileProjectCard,
-} from '../../components/molecules';
+import { AppFooter } from '../../components/molecules';
 import { isDarkMode, isMobileMode, getRandomOrb } from '../../utils';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
@@ -48,6 +37,7 @@ import {
   ExternalAccount,
 } from '../../types/generated/graphql';
 import { USER_PROFILE_QUERY } from '../../graphql';
+import { UserProfilePageTabs } from './components';
 
 const { topNavBar: topNavBarDimensions } = dimensions;
 
@@ -138,7 +128,7 @@ export const ProfilePage = () => {
   const history = useHistory();
   const classes = useStyles();
 
-  const { user, loginOnOpen } = useAuthContext();
+  const { user: currentAppUser, loginOnOpen } = useAuthContext();
   const [isLargerThan1080] = useMediaQuery('(min-width: 1080px)');
 
   const params = useParams<{ userId: string }>();
@@ -149,13 +139,9 @@ export const ProfilePage = () => {
   ] = useLazyQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY);
 
   const isViewingOwnProfile = () =>
-    history.location.pathname === `/profile/${user.id}`;
+    history.location.pathname === `/profile/${currentAppUser.id}`;
 
-  const [userProfile, setUserProfile] = useState<User>({
-    ...defaultUser,
-    contributions: [],
-    ownerOf: [],
-  });
+  const [userProfile, setUserProfile] = useState<User>({ ...defaultUser });
 
   /*
 	useEffect functions
@@ -173,6 +159,8 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     if (userProfileData && userProfileData.user) {
+      // eslint-disable-next-line no-debugger
+      debugger;
       const user = userProfileData.user as User;
       setUserProfile(user);
     }
@@ -180,12 +168,14 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     if (isViewingOwnProfile()) {
+      // eslint-disable-next-line no-debugger
+      debugger;
       setUserProfile({
         ...userProfile,
-        ...user,
+        ...currentAppUser,
       });
     }
-  }, [user]);
+  }, [currentAppUser]);
 
   if (error) {
     // return <Text> Error loading page, Please refresh</Text>;
@@ -210,7 +200,7 @@ export const ProfilePage = () => {
     );
   }
 
-  const myProfile = user && `${user.id}` === params.userId;
+  const myProfile = currentAppUser && `${currentAppUser.id}` === params.userId;
 
   if (userProfile.id === 0 || profileLoading) {
     return <ProjectSkeleton />;
@@ -292,7 +282,7 @@ export const ProfilePage = () => {
                   }
                 }
               })}
-            {user.id && user.id === userProfile.id ? (
+            {currentAppUser.id && currentAppUser.id === userProfile.id ? (
               <IconButton
                 size="sm"
                 background={'none'}
@@ -308,7 +298,12 @@ export const ProfilePage = () => {
             )}
           </Box>
         </VStack>
+
+        {/* <UserProfilePageHeader userProfile={userProfile} /> */}
+
         <Box width="100%">
+          <UserProfilePageTabs profileUser={userProfile} />
+          {/*
           <Tabs
             variant="line"
             colorScheme="brand.textGrey"
@@ -320,6 +315,7 @@ export const ProfilePage = () => {
               <Tab>
                 <HStack minWidth={'40px'}>
                   <Text fontWeight={500}>EntryCreateEdits</Text>
+
                   <Text
                     fontSize="12px"
                     backgroundColor="brand.bgGrey3"
@@ -344,6 +340,7 @@ export const ProfilePage = () => {
                 </HStack>
               </Tab>
             </TabList>
+
             <TabPanels>
               <TabPanel>
                 {userProfile &&
@@ -361,9 +358,12 @@ export const ProfilePage = () => {
                       spacing="30px"
                     >
                       {userProfile &&
-                        userProfile.ownerOf.map((owned) => {
-                          if (owned?.project) {
-                            const { project } = owned;
+                        userProfile.ownerOf.map((projectOwnershipData) => {
+                          if (projectOwnershipData?.project) {
+                            // const { project }: { project: Project } =
+                            //   projectOwnershipData;
+
+                            const project = projectOwnershipData?.project;
 
                             return (
                               <WrapItem key={project.id}>
@@ -387,6 +387,7 @@ export const ProfilePage = () => {
                   </Box>
                 )}
               </TabPanel>
+
               <TabPanel>
                 {userProfile &&
                 userProfile.contributions &&
@@ -424,11 +425,11 @@ export const ProfilePage = () => {
                 )}
               </TabPanel>
             </TabPanels>
-          </Tabs>
+          </Tabs> */}
         </Box>
       </VStack>
 
-      <AppFooter />
+      {/* <AppFooter /> */}
     </Box>
     // <VStack
     //   background={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}

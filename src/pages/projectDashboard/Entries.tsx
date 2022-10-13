@@ -157,12 +157,12 @@ export const Entries = ({ project }: { project: IProject }) => {
               />
               <VStack w="100%">
                 {liveEntries?.map((entry) => {
-                  // TODO: getting the entries should be refactored. We should move the data fetching closer to the componenet itself
                   const entryWithProject = { ...entry, project };
+
                   return (
                     <ProjectEntryCard
                       key={entry.id}
-                      entry={entryWithProject}
+                      entryID={entryWithProject.id}
                       onEdit={() =>
                         history.push(
                           `/projects/${project.name}/entry/${entry.id}`,
@@ -186,10 +186,11 @@ export const Entries = ({ project }: { project: IProject }) => {
               <VStack>
                 {draftEntries?.map((entry) => {
                   const entryWithProject = { ...entry, project };
+
                   return (
                     <ProjectEntryCard
                       key={entry.id}
-                      entry={entryWithProject}
+                      entryID={entryWithProject.id}
                       onEdit={() =>
                         history.push(
                           `/projects/${project.name}/entry/${entry.id}`,

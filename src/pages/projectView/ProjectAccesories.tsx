@@ -64,7 +64,9 @@ export const ProjectAccesories = ({
     if (project.entries && project.entries.length > 0) {
       return project.entries.map((entry) => {
         const entryWithProject = { ...entry, project };
-        return <ProjectEntryCard entry={entryWithProject} key={entry.id} />;
+        return (
+          <ProjectEntryCard entryID={entryWithProject.id} key={entry.id} />
+        );
       });
     }
 

@@ -79,6 +79,9 @@ export const USER_PROFILE_QUERY = gql`
           }
         }
       }
+      entries {
+        id
+      }
     }
   }
 `;
