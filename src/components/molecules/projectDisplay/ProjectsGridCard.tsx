@@ -36,7 +36,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
   return (
     <Box
       width={'full'}
-      minWidth="284px"
+      maxWidth={'284px'}
       bg={useColorModeValue('white', 'gray.900')}
       borderWidth="3px"
       borderColor={'brand.neutral300'}

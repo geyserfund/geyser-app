@@ -106,6 +106,10 @@ With Docker running, navigate to the URL that's appropriate for the development-
 
 <https://dev.geyser.fund/>
 
+> Make sure to also browse to <https://api.dev.geyser.fund/> and accept the certificate there.
+>
+> This will allow you to get around any `ERR_CERT_AUTHORITY_INVALID` errors that may be thrown in your browser.
+
 ### Running with GraphQL Faker
 
 After starting up Docker with a GraphQL Faker configuration, a number of URLs will be

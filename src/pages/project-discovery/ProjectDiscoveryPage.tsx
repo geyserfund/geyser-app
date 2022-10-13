@@ -36,7 +36,10 @@ type Props = {
 
 const { topNavBar: topNavBarDimensions } = dimensions;
 
-export const ProjectDiscoveryPage = ({ match, history }: Props) => {
+export const ProjectDiscoveryPage = ({
+  match: _match,
+  history: _history,
+}: Props) => {
   const pagingItemLimit = 12;
   const [orderByOption, setOrderByOption] =
     React.useState<OrderByOption>('Newest Projects');
@@ -76,7 +79,7 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
           pagination: paginationInput,
         },
       },
-      updateQuery: (previousResult, { fetchMoreResult }) => {
+      updateQuery: (_previousResult, { fetchMoreResult }) => {
         if (fetchMoreResult.projects.projects.length < pagingItemLimit) {
           setIsShowingAllProjects(true);
         }
@@ -171,7 +174,14 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
         flexDirection="row"
         paddingY={20}
       >
-        <Center>
+        <Center
+          width={'full'}
+          paddingX={{
+            base: 0,
+            sm: 4,
+            md: 10,
+          }}
+        >
           <Grid
             templateAreas={`
             "header"
@@ -179,8 +189,8 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
           `}
             gridTemplateRows={'50px 1fr'}
             gridTemplateColumns={'1fr'}
+            width="full"
             maxWidth="927px"
-            minWidth={['full', '927px']}
             minHeight="100%"
             height="auto"
             gap="1"
@@ -189,7 +199,7 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
             <GridItem area={'header'}>
               <HStack
                 justifyContent={'space-between'}
-                alignItems="baseline"
+                alignItems={['center', 'baseline']}
                 spacing={0}
               >
                 <Heading as={'h3'} size="md">
@@ -251,7 +261,10 @@ export const ProjectDiscoveryPage = ({ match, history }: Props) => {
 
                 <SimpleGrid columns={3} spacingX={7} spacingY={8}>
                   {projects.map((project: Project) => (
-                    <GridItem key={project.id} colSpan={[3, 1]}>
+                    <GridItem
+                      key={project.id}
+                      colSpan={{ base: 3, sm: 3, md: 3, lg: 1 }}
+                    >
                       <ProjectsGridCard project={project} height="100%" />
                     </GridItem>
                   ))}
