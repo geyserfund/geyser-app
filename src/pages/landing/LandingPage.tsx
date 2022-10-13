@@ -15,7 +15,7 @@ import { AppFooter } from '../../components/molecules';
 
 import { ActivityView, LandingPageProjectsList, TopBanner } from './components';
 import { BsArrowRight } from 'react-icons/bs';
-import { dimensions } from '../../constants';
+import { dimensions, getPath } from '../../constants';
 
 const { topNavBar: topNavBarDimensions } = dimensions;
 
@@ -65,7 +65,7 @@ export const LandingPage = () => {
 
               <Link
                 as={ReactRouterLink}
-                to={'/project-discovery'}
+                to={getPath('projectDiscovery')}
                 display="flex"
                 flexDirection={'row'}
                 alignItems="center"
