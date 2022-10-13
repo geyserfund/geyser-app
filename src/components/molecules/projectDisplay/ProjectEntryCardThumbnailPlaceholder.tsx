@@ -1,4 +1,4 @@
-import { HTMLChakraProps, theme } from '@chakra-ui/react';
+import { HTMLChakraProps } from '@chakra-ui/react';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
@@ -6,14 +6,14 @@ import { colors } from '../../../constants';
 const useStyles = createUseStyles({
   thumbnailImagePlaceholder: {
     height: '142px',
-    width: '196px',
+    width: '100%',
     borderRadius: '0.5em',
     backgroundColor: colors.neutral100,
     padding: '2rem',
   },
 });
 
-type Props = HTMLChakraProps<'div'> & {};
+type Props = HTMLChakraProps<'svg'> & {};
 
 export const ProjectEntryCardThumbnailPlaceholder = ({ ...rest }: Props) => {
   const styles = useStyles();
@@ -24,6 +24,7 @@ export const ProjectEntryCardThumbnailPlaceholder = ({ ...rest }: Props) => {
       viewBox="0 0 91 83"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...rest}
     >
       <g filter="url(#filter0_d_2775_127526)">
         <path

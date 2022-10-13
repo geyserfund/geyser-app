@@ -30,7 +30,10 @@ export const LandingPage = () => {
       <TopBanner />
 
       <Stack
-        direction="row"
+        direction={{
+          base: 'column',
+          md: 'row',
+        }}
         paddingY="30px"
         paddingX="60px"
         width="full"
@@ -39,11 +42,21 @@ export const LandingPage = () => {
         overflow="hidden"
         spacing={'64px'}
       >
-        <ActivityView overflow={'hidden'} flexGrow={1} />
+        <ActivityView flexGrow={1} />
 
         <Divider orientation="vertical" borderWidth={'1px'} height="auto" />
 
-        <Box width="400px" minWidth="400px" flexBasis={1} height="full">
+        <Box
+          width={{
+            base: 'full',
+            xl: '400px',
+          }}
+          minWidth={{
+            xl: '400px',
+          }}
+          flexBasis={1}
+          height="full"
+        >
           <VStack alignItems="left" paddingRight={30} spacing={4}>
             <HStack justify="space-between" align="center">
               <Heading as="h5" size="sm">
