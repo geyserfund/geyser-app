@@ -177,8 +177,7 @@ export const ProjectDiscoveryPage = ({
         <Center
           width={'full'}
           paddingX={{
-            base: 0,
-            sm: 4,
+            base: 4,
             md: 10,
           }}
         >
