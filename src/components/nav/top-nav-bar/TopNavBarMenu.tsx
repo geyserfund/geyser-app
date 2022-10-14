@@ -15,11 +15,8 @@ import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem';
 import { AuthContext } from '../../../context';
 import { getPath } from '../../../constants/router-paths';
 import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem';
-import { IUserProfile } from '../../../interfaces';
 
 type Props = {
-  userProfile: IUserProfile;
-  isUserAProjectCreator: boolean;
   shouldShowDashboardMenuItem: boolean;
   shouldShowSignInMenuItem: boolean;
   onDashboardSelected: () => void;
@@ -28,17 +25,15 @@ type Props = {
 };
 
 export const TopNavBarMenu = ({
-  userProfile,
   shouldShowSignInMenuItem,
   shouldShowDashboardMenuItem,
   onSignInSelected,
   onDashboardSelected,
   onSignOutSelected,
-  isUserAProjectCreator,
 }: Props) => {
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
 
-  const { user, isLoggedIn } = useContext(AuthContext);
+  const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext);
 
   return (
     <Menu placement="bottom-end">
@@ -63,7 +58,7 @@ export const TopNavBarMenu = ({
           <HamburgerIcon />
 
           {isLoggedIn ? (
-            <Avatar height="22px" width="22px" src={user.imageUrl} />
+            <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
           ) : null}
         </HStack>
       </MenuButton>
@@ -101,12 +96,24 @@ export const TopNavBarMenu = ({
 
         {isLoggedIn ? (
           <>
-            <NavBarUserProfileMenuItem />
+            <MenuItemLink
+              destinationPath={getPath('userProfile', user.id)}
+              px={0}
+              py={0}
+              _focus={{ boxShadow: 'none' }}
+            >
+              <NavBarUserProfileMenuItem />
+            </MenuItemLink>
 
-            {isUserAProjectCreator ? (
-              <NavBarUserProjectMenuItem
-                project={userProfile.ownerOf[0].project}
-              />
+            {isUserAProjectCreator && user.ownerOf[0]?.project ? (
+              <MenuItemLink
+                destinationPath={getPath('project', user.ownerOf[0].project.id)}
+                px={0}
+                py={0}
+                _focus={{ boxShadow: 'none' }}
+              >
+                <NavBarUserProjectMenuItem project={user.ownerOf[0].project} />
+              </MenuItemLink>
             ) : null}
 
             <MenuDivider />
@@ -155,7 +162,12 @@ export const TopNavBarMenu = ({
           <>
             <MenuDivider />
 
-            <MenuItem onClick={onSignOutSelected} color={'brand.gray500'}>
+            <MenuItem
+              onClick={onSignOutSelected}
+              color={'brand.gray500'}
+              px={4}
+              py={2}
+            >
               Sign Out
             </MenuItem>
           </>

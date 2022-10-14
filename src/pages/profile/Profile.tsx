@@ -33,13 +33,13 @@ import {
   AppFooter,
   ProfileProjectCard,
 } from '../../components/molecules';
-import { USER_PROFILE_QUERY } from '../../graphql';
-import { IUserProfile, IUserExternalAccount } from '../../interfaces';
 import { isDarkMode, isMobileMode, getRandomOrb } from '../../utils';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { useAuthContext } from '../../context';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { defaultUser } from '../../defaults';
+import { ExternalAccount, User } from '../../types/generated/graphql';
+import { USER_PROFILE_QUERY } from '../../graphql';
 
 const useStyles = createUseStyles({
   container: {
@@ -55,11 +55,7 @@ const useStyles = createUseStyles({
   },
 });
 
-const ProfileExternalAccount = ({
-  account,
-}: {
-  account: IUserExternalAccount;
-}) => {
+const ProfileExternalAccount = ({ account }: { account: ExternalAccount }) => {
   const { type, externalUsername } = account;
 
   switch (type) {
@@ -129,12 +125,12 @@ export const Profile = () => {
 
   const params = useParams<{ userId: string }>();
 
-  const [getUserData, { loading: profileLoading, error, data }] =
+  const [queryCurrentUser, { loading: profileLoading, error, data }] =
     useLazyQuery(USER_PROFILE_QUERY);
 
   const isMe = () => history.location.pathname === `/profile/${user.id}`;
 
-  const [userProfile, setUserProfile] = useState<IUserProfile>({
+  const [userProfile, setUserProfile] = useState<User>({
     ...defaultUser,
     contributions: [],
     ownerOf: [],
@@ -150,13 +146,13 @@ export const Profile = () => {
           id: params.userId,
         },
       };
-      getUserData({ variables });
+      queryCurrentUser({ variables });
     }
   }, [params]);
 
   useEffect(() => {
     if (data && data.user) {
-      const user = data.user as IUserProfile;
+      const user = data.user as User;
       setUserProfile(user);
     }
   }, [data]);
@@ -243,15 +239,17 @@ export const Profile = () => {
             )}
           </HStack>
           <Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
-            {userProfile &&
+            {userProfile?.externalAccounts &&
               userProfile.externalAccounts.map((account) => {
-                if (myProfile || account.public) {
-                  return (
-                    <ProfileExternalAccount
-                      key={account.id}
-                      account={account}
-                    />
-                  );
+                if (account) {
+                  if (myProfile || account.public) {
+                    return (
+                      <ProfileExternalAccount
+                        key={account.id}
+                        account={account}
+                      />
+                    );
+                  }
                 }
               })}
             {user.id && user.id === userProfile.id ? (
@@ -324,19 +322,22 @@ export const Profile = () => {
                     >
                       {userProfile &&
                         userProfile.ownerOf.map((owned) => {
-                          const { project } = owned;
-                          return (
-                            <WrapItem key={project.id}>
-                              <ProfileProjectCard
-                                title={project.title}
-                                name={project.name}
-                                project={project}
-                                imgSrc={project.media[0]}
-                                marginLeft="0px !important"
-                                privateUser={myProfile}
-                              />
-                            </WrapItem>
-                          );
+                          if (owned?.project) {
+                            const { project } = owned;
+
+                            return (
+                              <WrapItem key={project.id}>
+                                <ProfileProjectCard
+                                  title={project.title}
+                                  name={project.name}
+                                  project={project}
+                                  imgSrc={project.media[0] || ''}
+                                  marginLeft="0px !important"
+                                  privateUser={myProfile}
+                                />
+                              </WrapItem>
+                            );
+                          }
                         })}
                     </Wrap>
                   </Box>
@@ -362,14 +363,18 @@ export const Profile = () => {
                       spacing="30px"
                     >
                       {userProfile &&
-                        userProfile.contributions.map((contribute) => (
-                          <WrapItem key={contribute.project.id}>
-                            <ProjectContributionCard
-                              marginLeft="0px !important"
-                              contribution={contribute}
-                            />
-                          </WrapItem>
-                        ))}
+                        userProfile.contributions.map((contribution) => {
+                          if (contribution) {
+                            return (
+                              <WrapItem key={contribution?.project.id}>
+                                <ProjectContributionCard
+                                  marginLeft="0px !important"
+                                  contribution={contribution}
+                                />
+                              </WrapItem>
+                            );
+                          }
+                        })}
                     </Wrap>
                   </Box>
                 ) : (

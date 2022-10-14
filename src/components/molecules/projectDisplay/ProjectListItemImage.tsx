@@ -18,7 +18,7 @@ export const ProjectListItemImage = ({
   borderRadius = 'md',
   ...rest
 }: Props) => {
-  const imageSource = imageSrc ?? project.image;
+  const imageSource = imageSrc ?? (project.image || '');
 
   return (
     <Box boxSize={boxSize} {...rest}>

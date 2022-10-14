@@ -6,9 +6,8 @@ export const NavBarUserProfileMenuItem = () => {
   const { user } = useContext(AuthContext);
 
   return (
-    <VStack spacing={1} padding={4} alignItems="flex-start">
+    <VStack spacing={2} padding={4} alignItems="flex-start">
       <Text
-        as="caption"
         textTransform={'uppercase'}
         fontSize="xs"
         fontWeight={'bold'}
@@ -17,10 +16,10 @@ export const NavBarUserProfileMenuItem = () => {
         Profile
       </Text>
 
-      <HStack spacing={1}>
-        <Avatar height="22px" width="22px" src={user.imageUrl} />
+      <HStack spacing={1} overflow={'hidden'} width={'full'}>
+        <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
 
-        <Heading fontWeight={600} fontSize="16px" as={'h6'}>
+        <Heading fontWeight={600} fontSize="16px" as={'h6'} isTruncated>
           {user.username}
         </Heading>
       </HStack>

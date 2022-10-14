@@ -8,10 +8,10 @@ import React, {
   SetStateAction,
 } from 'react';
 import { ME } from '../graphql';
-import { IUser } from '../interfaces';
 import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
+import { User } from '../types/generated/graphql';
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
@@ -20,11 +20,12 @@ const defaultContext: AuthContextProps = {
   error: undefined,
   logout: () => {},
   isAuthModalOpen: false,
+  isUserAProjectCreator: false,
   loginOnOpen: () => {},
   loginOnClose: () => {},
   setIsLoggedIn: () => {},
-  getUser: () => {},
-  setUser: () => {},
+  queryCurrentUser: () => {},
+  setUser: (user: User) => {},
   navigationContext: { title: '', path: '' },
   setNav: () => {},
 };
@@ -37,16 +38,17 @@ export type NavigationContextProps = {
 
 type AuthContextProps = {
   isLoggedIn: boolean;
-  user: IUser;
+  user: User;
   loading: boolean;
   error?: ApolloError;
-  logout: any;
+  logout: () => void;
   isAuthModalOpen: boolean;
   loginOnOpen: () => void;
   loginOnClose: () => void;
+  isUserAProjectCreator: boolean;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
-  getUser: any;
-  setUser: any;
+  queryCurrentUser: () => void;
+  setUser: (user: User) => void;
   navigationContext: NavigationContextProps;
   setNav: React.Dispatch<React.SetStateAction<NavigationContextProps>>;
 };
@@ -54,27 +56,24 @@ type AuthContextProps = {
 export const AuthContext = createContext<AuthContextProps>(defaultContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const logout = () => {
-    setUser(defaultUser);
-    fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, { credentials: 'include' }).catch(
-      (error) => console.error(error),
-    );
-  };
-
   const [loading, setLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(false);
+
   const [nav, setNav] = useState<NavigationContextProps>({
     title: '',
     path: '',
   });
 
-  const [user, setUser] = useState<IUser>(defaultUser);
+  const [user, setUser] = useState<User>(defaultUser);
+  const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
-    onCompleted: (data: any) => {
+
+  const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
+    onCompleted: (data: { me: User }) => {
       if (data && data.me) {
-        setUser(data.me);
+        setUser({ ...defaultUser, ...data.me });
         setIsLoggedIn(true);
+        setIsUserAProjectCreator(data.me.ownerOf?.length > 0);
       }
     },
   });
@@ -85,9 +84,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     onClose: loginOnClose,
   } = useDisclosure();
 
+  const logout = () => {
+    setUser(defaultUser);
+
+    fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
+      credentials: 'include',
+    }).catch((error) => console.error(error));
+  };
+
   useEffect(() => {
     try {
-      getUser();
+      queryCurrentUser();
     } catch (_) {
       setIsLoggedIn(false);
     }
@@ -113,12 +120,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
-        getUser,
+        queryCurrentUser,
         setUser,
         loading,
         error,
         isLoggedIn,
         setIsLoggedIn,
+        isUserAProjectCreator,
         logout,
         isAuthModalOpen: loginIsOpen,
         loginOnOpen,
