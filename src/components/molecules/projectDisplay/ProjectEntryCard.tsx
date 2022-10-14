@@ -15,7 +15,6 @@ import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router';
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
 import { BsHeartFill } from 'react-icons/bs';
-import { createUseStyles } from 'react-jss';
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
 import { colors, getPath } from '../../../constants';
 import { ProjectListItemImage } from './ProjectListItemImage';
@@ -23,6 +22,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { BiPencil } from 'react-icons/bi';
 import { Entry } from '../../../types/generated/graphql';
 import { gql } from '@apollo/client';
+import { createUseStyles } from 'react-jss';
 
 type Props = ICard & {
   entryID: number;
@@ -122,7 +122,11 @@ export const ProjectEntryCard = ({
     return (
       <Stack
         borderRadius="lg"
-        width={{ sm: '100%', md: '798px' }}
+        width={{
+          base: '100%',
+          xl: '798px',
+        }}
+        maxWidth={'798px'}
         direction={{ base: 'column', md: 'row' }}
         backgroundColor={colorMode === 'light' ? 'white' : 'gray.900'}
         _hover={hoverEffect}
@@ -135,10 +139,11 @@ export const ProjectEntryCard = ({
       >
         <Flex>
           <Image
-            className={styles.thumbnailImage}
+            width={'full'}
+            height="142px"
             src={entry.image || ''}
             fallback={<ProjectEntryCardThumbnailPlaceholder />}
-            fit="cover"
+            objectFit="cover"
             alt={entry.title}
           />
         </Flex>
@@ -155,6 +160,7 @@ export const ProjectEntryCard = ({
             <Heading fontSize={'2xl'} fontFamily={'body'} noOfLines={[0, 1]}>
               {entry.title}
             </Heading>
+
             <HStack>
               {onEdit && (
                 <IconButtonComponent
@@ -196,6 +202,10 @@ export const ProjectEntryCard = ({
             justify={'start'}
             direction={'row'}
             spacing={'22px'}
+            wrap={{
+              base: 'wrap',
+              sm: 'nowrap',
+            }}
           >
             <HStack spacing={'12px'} align={'center'} flex={0}>
               <HStack spacing={1}>
@@ -229,7 +239,7 @@ export const ProjectEntryCard = ({
                   textTransform={'uppercase'}
                   noOfLines={1}
                 >
-                  {entry.project.title}
+                  {entry.project?.title}
                 </Text>
               </HStack>
             ) : null}

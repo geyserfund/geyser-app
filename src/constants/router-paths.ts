@@ -1,5 +1,5 @@
 export const routerPathNames = {
-  projectDiscovery: 'project-discovery',
+  projectDiscovery: 'discover',
   grants: 'grants',
   entry: 'entry',
   notFound: 'not-found',
