@@ -9,6 +9,7 @@ import MagnifyPng from '../../assets/magnify.png';
 import MedalPng from '../../assets/medal.png';
 import TrophyPng from '../../assets/trophy.png';
 import HourglassPng from '../../assets/hourglass.png';
+import FountainPNG from '../../assets/fountain-logo-black-small.png';
 import GiftPng from '../../assets/gift.png';
 import GifSvg from '../../assets/gif.svg';
 import EnvelopePng from '../../assets/envelope.png';
@@ -213,5 +214,17 @@ export const BoltIcon = (props: ImageProps) => {
 export const ShareIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
     <Image src={ShareSvg} alt="share" {...props} />
+  </Box>
+);
+
+export const FountainIcon = (props: ImageProps) => (
+  <Box padding="3px 0px">
+    <Image
+      height="20px"
+      width="20px"
+      src={FountainPNG}
+      alt="Fountain Podcasts"
+      {...props}
+    />
   </Box>
 );
