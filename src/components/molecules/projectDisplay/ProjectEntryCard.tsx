@@ -22,7 +22,6 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { BiPencil } from 'react-icons/bi';
 import { Entry } from '../../../types/generated/graphql';
 import { gql } from '@apollo/client';
-import { createUseStyles } from 'react-jss';
 
 type Props = ICard & {
   entryID: number;
@@ -31,14 +30,6 @@ type Props = ICard & {
   onDelete?: () => void;
 };
 
-const useStyles = createUseStyles({
-  thumbnailImage: {
-    height: '142px',
-    width: '196px',
-    borderRadius: '0.5em',
-  },
-});
-
 export const GET_ENTRY = gql`
   query GetEntry($entryID: BigInt!) {
     entry(id: $entryID) {
@@ -46,23 +37,12 @@ export const GET_ENTRY = gql`
       title
       description
       image
-      content
-      published
-      createdAt
-      updatedAt
-      publishedAt
       fundersCount
       amountFunded
       type
-      creator {
-        id
-        username
-        imageUrl
-      }
       project {
         id
         title
-        name
       }
     }
   }
@@ -84,7 +64,6 @@ export const ProjectEntryCard = ({
   ...rest
 }: Props) => {
   const history = useHistory();
-  const styles = useStyles();
   const { colorMode } = useColorMode();
 
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(

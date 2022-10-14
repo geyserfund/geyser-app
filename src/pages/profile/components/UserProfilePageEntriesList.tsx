@@ -9,7 +9,9 @@ type Props = {
 };
 
 export const UserProfilePageEntriesList = ({ profileUser }: Props) => {
-  const entryIDs = profileUser.entries.map((entry) => entry?.id);
+  const entryIDs = profileUser.entries
+    .map((entry) => entry?.id)
+    .filter(Boolean);
 
   if (entryIDs?.length === 0) {
     return (
@@ -18,15 +20,12 @@ export const UserProfilePageEntriesList = ({ profileUser }: Props) => {
         status="info"
         colorScheme={'gray'}
         title="There are currently no project entries."
-        message="Please try refreshing the page. You may also want to contact support if the problem persists."
       />
     );
   }
 
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
-      <Text>UserProfilePageEntriesList</Text>
-
       <VStack alignItems={'flex-start'} width="full">
         {entryIDs.map((entryID: number) => (
           <ProjectEntryCard entryID={entryID} key={entryID} />
