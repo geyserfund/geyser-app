@@ -15,6 +15,8 @@ import {
   VStack,
   ThemeComponentProps,
   ThemeTypings,
+  WrapItem,
+  Wrap,
 } from '@chakra-ui/react';
 import { ExternalAccount, User } from '../../../types/generated/graphql';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
@@ -103,13 +105,17 @@ Props) => {
         ) : null}
       </HStack>
 
-      <Box display="flex" alignItems="center" flexWrap="wrap" width="100%">
+      <Wrap width="100%">
         {profileUser.externalAccounts.map((account) => {
           if (account) {
-            return <ExternalAccountItem key={account.id} account={account} />;
+            return (
+              <WrapItem>
+                <ExternalAccountItem key={account.id} account={account} />
+              </WrapItem>
+            );
           }
         })}
-      </Box>
+      </Wrap>
     </VStack>
   );
 };
