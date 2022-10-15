@@ -1,35 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import {
-  ListItem,
-  List,
-  Container,
-  Button,
-  Divider,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, Divider, VStack } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
 import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingTransactions';
-
-const ContributionItem = ({
-  transactionResponsePayload,
-}: {
-  transactionResponsePayload: any;
-}) => {
-  const { sourceResource: project, ...fundingTx } = transactionResponsePayload;
-
-  return (
-    <Container justifyContent={'center'} width={['308px', '536px']}>
-      <ProjectFundingContributionsFeedItem
-        fundingTx={fundingTx}
-        project={project}
-        width="full"
-      />
-    </Container>
-  );
-};
+import { FundingTx } from '../../../types/generated/graphql';
+import { PaginationInput } from '../../../types/generated/graphql';
 
 type Props = {
   itemLimit?: number;
@@ -47,10 +24,45 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const isShowingAllContributions: boolean = useMemo(() => {
-    // return contributions.length <= itemLimit;
-    return false;
-  }, [contributions, itemLimit]);
+  const [isShowingAllContributions, setIsShowingAllContributions] =
+    useState(false);
+
+  const paginationInput: PaginationInput = useMemo(() => {
+    const options: PaginationInput = {};
+
+    if (contributions.length > 0) {
+      options.cursor = {
+        id: Number(contributions[contributions.length - 1].id),
+      };
+    }
+
+    return options;
+  }, [contributions]);
+
+  const handleLoadMoreButtonTapped = async () => {
+    setIsLoadingMore(true);
+
+    await fetchMore({
+      variables: {
+        input: {
+          pagination: paginationInput,
+        },
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (fetchMoreResult.getFundingTxs.length < itemLimit) {
+          setIsShowingAllContributions(true);
+        }
+
+        // return the result and let our `InMemoryCache` type policies handle
+        // the merging logic.
+        return {
+          getFundingTxs: fetchMoreResult.getFundingTxs,
+        };
+      },
+    });
+
+    setIsLoadingMore(false);
+  };
 
   if (error) {
     return (
@@ -80,37 +92,31 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   }
 
   return (
-    <VStack flexDirection={'column'} spacing={6}>
+    <VStack flexDirection={'column'} spacing={6} width="full">
       {isLoading && <Loader />}
 
-      <List spacing={3}>
-        {contributions.map((contribution: any) => (
-          <ListItem key={contribution.id} justifyContent="center">
-            <ContributionItem transactionResponsePayload={contribution} />
-          </ListItem>
-        ))}
-      </List>
+      <VStack alignItems={'center'} width="full" spacing={'24px'}>
+        {contributions.map((contribution: FundingTx) => {
+          if (contribution.sourceResource?.__typename === 'Project') {
+            return (
+              <ProjectFundingContributionsFeedItem
+                key={contribution.id}
+                fundingTx={contribution}
+                project={contribution.sourceResource}
+              />
+            );
+          }
+
+          return null;
+        })}
+      </VStack>
 
       {isShowingAllContributions === false ? (
         <>
           <Divider />
 
           {isLoadingMore === false ? (
-            <Button
-              onClick={async () => {
-                setIsLoadingMore(true);
-
-                await fetchMore({
-                  variables: {
-                    input: { pagination: { take: itemLimit } },
-                  },
-                });
-
-                setIsLoadingMore(false);
-              }}
-            >
-              View More
-            </Button>
+            <Button onClick={handleLoadMoreButtonTapped}>View More</Button>
           ) : (
             <Loader />
           )}

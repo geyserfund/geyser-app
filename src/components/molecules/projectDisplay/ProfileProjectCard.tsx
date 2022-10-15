@@ -11,7 +11,8 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
 
-import { IProfileProject } from '../../../interfaces';
+import { IProject } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
 import {
   checkExpired,
   getFormattedDate,
@@ -29,7 +30,7 @@ interface IProjectCardProp extends ICard {
   name: string;
   className?: string;
   imgSrc?: string;
-  project: IProfileProject;
+  project: Project | IProject;
   privateUser?: boolean;
 }
 
@@ -96,15 +97,7 @@ export const ProfileProjectCard = ({
     project && project.funders ? project.funders.length : '';
 
   const getProjectStatus = () => {
-    // TODO after project creation flow
-    // if (!project.creationConfirmed) {
-    // 	return (
-    // 		<Badge variant="solid" colorScheme="gray">
-    // 			Draft Project
-    // 		</Badge>
-    // 	);
-    // }
-    if (checkExpired(project.expiresAt)) {
+    if (project.expiresAt && checkExpired(project.expiresAt)) {
       return (
         <Box
           background="brand.bgGrey3"
@@ -119,68 +112,15 @@ export const ProfileProjectCard = ({
         </Box>
       );
     }
-
-    if (
-      project.fundingGoal > 0 &&
-      project.balance * btcRate >= project.fundingGoal
-    ) {
-      return (
-        <Box
-          background="brand.primary"
-          padding="2px 8px"
-          borderRadius="4px"
-          width="100%"
-          textAlign="center"
-        >
-          <Text width="100%" variant="subtle" color="black" fontSize="12px">
-            GOAL REACHED
-          </Text>
-        </Box>
-      );
-    }
-
-    if (project.active) {
-      return (
-        <Box
-          background="brand.white"
-          borderWidth="2px"
-          borderColor="brand.primary"
-          padding="2px 8px"
-          borderRadius="4px"
-          width="100%"
-          textAlign="center"
-        >
-          <Text width="100%" variant="subtle" color="black" fontSize="12px">
-            LIVE
-          </Text>
-        </Box>
-      );
-    }
   };
 
   const getProjectUpdate = () => {
-    // TODO after project creation flow
-    // if (!project.creationConfirmed) {
-    // 	return (
-    // 		<Text>{`Last edited on: ${project.updatedAt}`}</Text>
-    // 	);
-    // }
-
-    if (checkExpired(project.expiresAt)) {
+    if (project.expiresAt && checkExpired(project.expiresAt)) {
       return (
         <Text
           fontSize="12px"
           color="brand.textGrey"
         >{`Closed on: ${getFormattedDate(project.expiresAt)}`}</Text>
-      );
-    }
-
-    if (project.active) {
-      return (
-        <Text
-          fontSize="12px"
-          color="brand.textGrey"
-        >{`Went live on ${getFormattedDate(project.createdAt)}`}</Text>
       );
     }
   };
@@ -245,7 +185,7 @@ export const ProfileProjectCard = ({
               </HStack>
               <Text fontSize="12px">RECEIVED</Text>
             </VStack>
-            {project.active && (
+            {project.active && project.expiresAt && (
               <ProjectCardTime
                 expiresAt={project.expiresAt}
                 active={project.active}

@@ -26,6 +26,8 @@ import { HStack, Link, VStack } from '@chakra-ui/react';
 import { TwitterConnect } from '.';
 import Loader from '../ui/Loader';
 import { DisconnectAccounts } from '.';
+import { User } from '../../types/generated/graphql';
+import { defaultUser } from '../../defaults';
 
 interface IAuthModal {
   isOpen: boolean;
@@ -36,15 +38,6 @@ interface IAuthModal {
   showLightning?: boolean;
   privateRoute?: boolean;
 }
-
-// const useStyles = createUseStyles({
-// 	container: {
-// 		marginTop: '20px',
-// 		display: 'flex',
-// 		flexDirection: 'column',
-// 		justifyContent: 'center',
-// 	},
-// });
 
 const LnurlConnect = ({
   setQrContent,
@@ -126,7 +119,12 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     privateRoute = false,
   } = authModalProps;
 
-  const { user, setUser, isLoggedIn, loginIsOpen } = useAuthContext();
+  const {
+    user,
+    setUser,
+    isLoggedIn,
+    isAuthModalOpen: loginIsOpen,
+  } = useAuthContext();
   const { toast } = useNotification();
   const isMobile = isMobileMode();
   const history = useHistory();
@@ -199,6 +197,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
   useEffect(() => {
     if (modalState === 'lnurl') {
       setModalTitle('Connect with Lightning');
+
       const id = setInterval(() => {
         let hasError = false;
 
@@ -219,10 +218,10 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               throw new Error(response.reason);
             }
 
-            const { user: newUser } = response;
+            const { user: userData }: { user: User } = response;
 
-            if (newUser) {
-              setUser({ ...newUser });
+            if (userData) {
+              setUser({ ...defaultUser, ...userData });
               onClose();
             }
           })

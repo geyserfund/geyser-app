@@ -8,70 +8,72 @@ import React, {
   SetStateAction,
 } from 'react';
 import { ME } from '../graphql';
-import { IUser } from '../interfaces';
 import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
 import { useDisclosure } from '@chakra-ui/react';
+import { User } from '../types/generated/graphql';
 
-const defaultContext = {
+const defaultContext: AuthContextProps = {
   isLoggedIn: false,
   user: defaultUser,
   loading: false,
   error: undefined,
   logout: () => {},
-  loginIsOpen: false,
+  isAuthModalOpen: false,
+  isUserAProjectCreator: false,
   loginOnOpen: () => {},
   loginOnClose: () => {},
   setIsLoggedIn: () => {},
-  getUser: () => {},
-  setUser: () => {},
-  nav: { title: '', path: '' },
+  queryCurrentUser: () => {},
+  setUser: (user: User) => {},
+  navigationContext: { title: '', path: '' },
   setNav: () => {},
 };
 
-export type Tnav = {
+export type NavigationContextProps = {
   title: string;
   path: string;
   projectOwnerId?: number;
 };
 
-interface IAuthContext {
+type AuthContextProps = {
   isLoggedIn: boolean;
-  user: IUser;
+  user: User;
   loading: boolean;
   error?: ApolloError;
-  logout: any;
-  loginIsOpen: boolean;
+  logout: () => void;
+  isAuthModalOpen: boolean;
   loginOnOpen: () => void;
   loginOnClose: () => void;
+  isUserAProjectCreator: boolean;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
-  getUser: any;
-  setUser: any;
-  nav: Tnav;
-  setNav: React.Dispatch<React.SetStateAction<Tnav>>;
-}
+  queryCurrentUser: () => void;
+  setUser: (user: User) => void;
+  navigationContext: NavigationContextProps;
+  setNav: React.Dispatch<React.SetStateAction<NavigationContextProps>>;
+};
 
-export const AuthContext = createContext<IAuthContext>(defaultContext);
+export const AuthContext = createContext<AuthContextProps>(defaultContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const logout = () => {
-    setUser(defaultUser);
-    fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, { credentials: 'include' }).catch(
-      (error) => console.error(error),
-    );
-  };
-
   const [loading, setLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(false);
-  const [nav, setNav] = useState<Tnav>({ title: '', path: '' });
 
-  const [user, setUser] = useState<IUser>(defaultUser);
+  const [nav, setNav] = useState<NavigationContextProps>({
+    title: '',
+    path: '',
+  });
+
+  const [user, setUser] = useState<User>(defaultUser);
+  const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [getUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
-    onCompleted: (data: any) => {
+
+  const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
+    onCompleted: (data: { me: User }) => {
       if (data && data.me) {
-        setUser(data.me);
+        setUser({ ...defaultUser, ...data.me });
         setIsLoggedIn(true);
+        setIsUserAProjectCreator(data.me.ownerOf?.length > 0);
       }
     },
   });
@@ -82,9 +84,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     onClose: loginOnClose,
   } = useDisclosure();
 
+  const logout = () => {
+    setUser(defaultUser);
+
+    fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
+      credentials: 'include',
+    }).catch((error) => console.error(error));
+  };
+
   useEffect(() => {
     try {
-      getUser();
+      queryCurrentUser();
     } catch (_) {
       setIsLoggedIn(false);
     }
@@ -110,17 +120,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
-        getUser,
+        queryCurrentUser,
         setUser,
         loading,
         error,
         isLoggedIn,
         setIsLoggedIn,
+        isUserAProjectCreator,
         logout,
-        loginIsOpen,
+        isAuthModalOpen: loginIsOpen,
         loginOnOpen,
         loginOnClose,
-        nav,
+        navigationContext: nav,
         setNav,
       }}
     >

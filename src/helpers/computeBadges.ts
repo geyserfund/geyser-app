@@ -1,5 +1,6 @@
 import { DateTime, Interval } from 'luxon';
-import { IBadge } from '../interfaces';
+import { IBadge, IFunder, IProject } from '../interfaces';
+import { Funder, Project } from '../types/generated/graphql';
 
 interface IBadges {
   [threshold: string]: IBadge;
@@ -36,71 +37,70 @@ const roleBadges: IBadges = {
   },
 };
 
-interface IcomputeFunderBadgesProps {
-  project: {
-    createdAt: string;
-  };
-  funder: {
-    amountFunded: number;
-    timesFunded: number;
-    confirmedAt: string;
-  };
-  shortForm?: Boolean;
+interface Props {
+  project: Project | IProject;
+  funder: Funder | IFunder;
+  useShortForm?: Boolean;
 }
 
-export const computeFunderBadges = (
-  props: IcomputeFunderBadgesProps,
-): IBadge[] => {
-  const funderBadges: IBadge[] = [];
-  const { project, funder, shortForm = true } = props;
-  const { amountFunded: amount, timesFunded: times } = funder;
+export const computeFunderBadges = ({
+  project,
+  funder,
+  useShortForm = true,
+}: Props): IBadge[] => {
+  const { amountFunded, timesFunded } = funder;
 
-  if (amount === 0) {
-    return funderBadges;
+  if (!amountFunded || amountFunded === 0) {
+    return [];
   }
+
+  const funderBadges: IBadge[] = [];
 
   // Check if earned amount badge
   const amountBadgeIndex: string | undefined = Object.keys(amountBadges)
     .reverse()
-    .find((threshold) => amount > Number(threshold));
+    .find((threshold) => amountFunded > Number(threshold));
 
   if (amountBadgeIndex) {
     funderBadges.push(amountBadges[amountBadgeIndex]);
   }
 
   // Check if early funder
-  const funderConfirmedAt = DateTime.fromMillis(
-    parseInt(funder.confirmedAt, 10),
-  );
-  const projectCreatedAt = DateTime.fromMillis(parseInt(project.createdAt, 10));
-  const interval = Interval.fromDateTimes(projectCreatedAt, funderConfirmedAt);
+  if (funder.confirmedAt) {
+    const funderConfirmedAt = DateTime.fromMillis(
+      parseInt(funder.confirmedAt, 10),
+    );
+    const projectCreatedAt = DateTime.fromMillis(
+      parseInt(project.createdAt, 10),
+    );
+    const interval = Interval.fromDateTimes(
+      projectCreatedAt,
+      funderConfirmedAt,
+    );
 
-  if (interval.length('hours') < 24) {
-    funderBadges.push(roleBadges.earlyFunder);
+    if (interval.length('hours') < 24) {
+      funderBadges.push(roleBadges.earlyFunder);
+    }
   }
 
   // Badge for funding more than once
-  if (times > 1) {
+  if (timesFunded && timesFunded > 1) {
     funderBadges.push({
-      badge: `${times}x`,
-      description: `This user funded this project ${times} times!`,
+      badge: `${timesFunded}x`,
+      description: `This user funded this project ${timesFunded} times!`,
     });
   }
 
-  if (funderBadges.length === 0) {
-    return [];
+  if (funderBadges.length === 0 || useShortForm) {
+    return funderBadges;
   }
 
-  if (!shortForm) {
-    const longFormBadges = funderBadges.map((funderBadge) => ({
-      ...funderBadge,
-      badge: funderBadge.badge.includes('Funder')
-        ? funderBadge.badge
-        : funderBadge.badge + ' Funder',
-    }));
+  const longFormBadges = funderBadges.map((funderBadge) => ({
+    ...funderBadge,
+    badge: funderBadge.badge.includes('Funder')
+      ? funderBadge.badge
+      : funderBadge.badge + ' Funder',
+  }));
 
-    return longFormBadges;
-  }
-
-  return funderBadges;
+  return longFormBadges;
 };

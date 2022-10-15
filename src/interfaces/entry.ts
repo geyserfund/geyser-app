@@ -1,4 +1,4 @@
-import { IUser } from './user';
+import { User } from '../types/generated/graphql';
 
 export interface IEntryCreateInput {
   projectId?: number;
@@ -17,11 +17,14 @@ export interface IEntryUpdateInput {
   content?: string;
 }
 
+/**
+ * Corresponds to https://github.com/geyserfund/geyser-server/blob/development/src/typeDefs/entry.ts
+ */
 export type TEntryData = {
   id: number;
   title: string;
   description: string;
-  image: string;
+  image?: string;
   published: string;
   content: string;
   fundersCount: number;
@@ -30,7 +33,7 @@ export type TEntryData = {
   updatedAt: string;
   publishedAt: string;
   type: string;
-  creator: IUser;
+  creator: User;
   project: {
     id: number;
     title: string;

@@ -2,6 +2,7 @@ import { useLazyQuery, useQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router';
+import { Head } from '../../utils/Head';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
@@ -109,6 +110,11 @@ const EntryViewWrapper = ({
   const { setFundState } = fundingFlow;
   return (
     <>
+      <Head
+        title={`${entry.title} - ${project.title}`}
+        description={entry.description}
+        image={entry.image}
+      />
       <EntryContainer
         entry={entry}
         {...{ detailOpen, setDetailOpen, setFundState }}

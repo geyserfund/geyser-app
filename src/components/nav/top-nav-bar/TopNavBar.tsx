@@ -1,0 +1,362 @@
+import React, { useContext, useEffect, useMemo } from 'react';
+import {
+  Heading,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import { NavBarLogo } from '../NavBarLogo';
+import { Box } from '@chakra-ui/layout';
+import { TopNavBarMenu } from './TopNavBarMenu';
+import { isMobileMode } from '../../../utils';
+import { useDisclosure } from '@chakra-ui/hooks';
+import { AuthContext } from '../../../context';
+import { useLocation, useHistory, useRouteMatch, match } from 'react-router';
+import { customHistory } from '../../../config';
+import { AuthModal } from '../../molecules';
+import { ButtonComponent } from '../../ui';
+import { getPath, routerPathNames } from '../../../constants';
+
+const customTitleRoutes = [
+  `/${routerPathNames.projects}/:projectId/`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.entry}/:entryId`,
+];
+
+const routesForHidingDropdownMenu = [
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+];
+
+const routesForHidingDashboardButton = [
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`,
+];
+
+const routesForEnablingSignInButton = [
+  getPath('index'),
+  getPath('landingPage'),
+  routerPathNames.projectDiscovery,
+  routerPathNames.grants,
+  routerPathNames.notFound,
+  routerPathNames.notAuthorized,
+  routerPathNames.userProfile,
+  `/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+];
+
+const routesForEnablingProjectLaunchButton = [
+  getPath('index'),
+  `/${routerPathNames.projectDiscovery}`,
+  `/${routerPathNames.grants}`,
+];
+
+/**
+ * "Container" component for elements and appearance of
+ * the top navigation bar.
+ */
+export const TopNavBar = () => {
+  const isMobile = isMobileMode();
+  const history = useHistory();
+
+  const {
+    isOpen: isLoginAlertModalOpen,
+    onOpen: onLoginAlertModalOpen,
+    onClose: onLoginAlertModalClose,
+  } = useDisclosure();
+
+  const {
+    user,
+    isLoggedIn,
+    queryCurrentUser,
+    logout,
+    isUserAProjectCreator,
+    isAuthModalOpen,
+    loginOnOpen,
+    loginOnClose,
+    navigationContext,
+  } = useContext(AuthContext);
+
+  const { state } = useLocation<{
+    loggedOut?: boolean;
+    refresh?: boolean;
+  }>();
+
+  const routeMatchesForEnablingSignInButton =
+    routesForEnablingSignInButton.map(useRouteMatch);
+
+  const routeMatchesForHidingDropdownMenu =
+    routesForHidingDropdownMenu.map(useRouteMatch);
+
+  const routeMatchesForHidingDashboardButton =
+    routesForHidingDashboardButton.map(useRouteMatch);
+
+  const routesMatchesForEnablingProjectLaunchButton =
+    routesForEnablingProjectLaunchButton.map(useRouteMatch);
+
+  const routesMatchesForShowingCustomTitle =
+    customTitleRoutes.map(useRouteMatch);
+
+  useEffect(() => {
+    if (state && state.loggedOut) {
+      logout();
+      onLoginAlertModalOpen();
+
+      customHistory.replace(customHistory.location.pathname, {});
+    }
+
+    if (state && state.refresh) {
+      queryCurrentUser();
+      customHistory.replace(customHistory.location.pathname, {});
+    }
+  }, [state]);
+
+  const handleProjectLaunchButtonPress = () => {
+    history.push('/launch');
+  };
+
+  const handleDashboardButtonPress = () => {
+    history.push(`${customHistory.location.pathname}/dashboard`);
+  };
+
+  /**
+   * Logic:
+   *  - Available to all not logged-in users.
+   *  - Viewable in:
+   *    - Landing + Discovery Grant Pages
+   *    - Other's Project + Entry page
+   *  - Hidden on Mobile -- it will be in the menu dropdown instead.
+   */
+  const shouldShowSignInButton: boolean = useMemo(() => {
+    return (
+      isLoggedIn === false &&
+      isMobile === false &&
+      routeMatchesForEnablingSignInButton.some((routeMatch) => {
+        return (routeMatch as match)?.isExact;
+      })
+    );
+  }, [routeMatchesForEnablingSignInButton, isLoggedIn, isMobile]);
+
+  const shouldShowSignInButtonInsideDropdownMenu: boolean = useMemo(() => {
+    return (
+      isLoggedIn === false &&
+      isMobile === true &&
+      routeMatchesForEnablingSignInButton.some((routeMatch) => {
+        return (routeMatch as match)?.isExact;
+      })
+    );
+  }, [routeMatchesForEnablingSignInButton, isLoggedIn, isMobile]);
+
+  /**
+   * Logic:
+   *  - Available to all not logged-in users without a profile inside
+   *  - Available to all logged-in users with profile inside
+   *  - Viewable to all users at all times except when: Creating a Project + Entry
+   */
+  const shouldShowDropdownMenuButton: boolean = useMemo(() => {
+    return routeMatchesForHidingDropdownMenu.every((routeMatch) => {
+      return Boolean(routeMatch) === false;
+    });
+  }, [routeMatchesForHidingDropdownMenu]);
+
+  /**
+   * Logic:
+   *  - Available to a logged-in creator of a live or draft project.
+   *  - Viewable almost everywhere. It does not appear when a
+   *    creator is looking at another user's Project Page or Entry Page.
+   *  - Hidden on Mobile -- it will be in the menu dropdown instead.
+   */
+  const shouldShowDashboardButton: boolean = useMemo(() => {
+    return (
+      isMobile === false &&
+      isLoggedIn &&
+      isUserAProjectCreator &&
+      routeMatchesForHidingDashboardButton.every((routeMatch) => {
+        return Boolean(routeMatch) === false;
+      }) &&
+      navigationContext.projectOwnerId !== user.id
+    );
+  }, [
+    routeMatchesForHidingDashboardButton,
+    isMobile,
+    isLoggedIn,
+    navigationContext,
+    isUserAProjectCreator,
+  ]);
+
+  const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
+    return (
+      isMobile === true &&
+      isLoggedIn &&
+      isUserAProjectCreator &&
+      routeMatchesForHidingDashboardButton.every((routeMatch) => {
+        return Boolean(routeMatch) === false;
+      }) &&
+      navigationContext.projectOwnerId !== user.id
+    );
+  }, [
+    routeMatchesForHidingDashboardButton,
+    isMobile,
+    isLoggedIn,
+    navigationContext,
+    isUserAProjectCreator,
+  ]);
+
+  /**
+   * Logic:
+   *  - Available to all logged-in users
+   *  - Viewable in the profile page and in the menu.
+   */
+  const shouldShowProjectLaunchButton: boolean = useMemo(() => {
+    return (
+      isLoggedIn &&
+      routesMatchesForEnablingProjectLaunchButton.some((routeMatch) => {
+        return (routeMatch as match)?.isExact;
+      })
+    );
+  }, [routesMatchesForEnablingProjectLaunchButton, isLoggedIn]);
+
+  /**
+   * Logic:
+   *  - Shown for creators on the project creation flow pages.
+   */
+  const shouldShowCustomTitle: boolean = useMemo(() => {
+    return routesMatchesForShowingCustomTitle.some((routeMatch) => {
+      return (routeMatch as match)?.isExact;
+    });
+  }, [routesMatchesForShowingCustomTitle]);
+
+  return (
+    <>
+      <Box
+        bg={useColorModeValue('brand.bgWhite', 'brand.bgDark')}
+        px={4}
+        borderBottom={'1px solid'}
+        borderBottomColor={'brand.bgGrey3'}
+        backdropFilter="blur(2px)"
+        position="fixed"
+        top={0}
+        left={0}
+        width="full"
+        zIndex={1000}
+      >
+        <HStack
+          h={16}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          overflow="hidden"
+        >
+          <NavBarLogo marginRight={isMobile ? 0 : 5} />
+
+          {shouldShowCustomTitle ? (
+            <Heading as={'h3'} noOfLines={1} size="sm">
+              {navigationContext.title}
+            </Heading>
+          ) : null}
+
+          <HStack alignItems={'center'} spacing={2}>
+            {shouldShowDashboardButton ? (
+              <ButtonComponent
+                variant={'solid'}
+                fontSize="md"
+                backgroundColor="brand.primary400"
+                onClick={handleDashboardButtonPress}
+              >
+                Dashboard
+              </ButtonComponent>
+            ) : null}
+
+            {shouldShowProjectLaunchButton ? (
+              <ButtonComponent
+                variant={'solid'}
+                fontSize="md"
+                backgroundColor="brand.primary400"
+                onClick={handleProjectLaunchButtonPress}
+              >
+                Launch Your Project
+              </ButtonComponent>
+            ) : null}
+
+            {shouldShowSignInButton ? (
+              <ButtonComponent
+                variant={'solid'}
+                fontSize="md"
+                backgroundColor="white"
+                borderWidth={1}
+                borderColor={'brand.neutral200'}
+                onClick={loginOnOpen}
+              >
+                Connect
+              </ButtonComponent>
+            ) : null}
+
+            {shouldShowDropdownMenuButton ? (
+              <TopNavBarMenu
+                shouldShowDashboardMenuItem={
+                  shouldShowDashboardButtonInsideDropdownMenu
+                }
+                shouldShowSignInMenuItem={
+                  shouldShowSignInButtonInsideDropdownMenu
+                }
+                onDashboardSelected={handleDashboardButtonPress}
+                onSignInSelected={loginOnOpen}
+                onSignOutSelected={logout}
+              />
+            ) : null}
+          </HStack>
+        </HStack>
+      </Box>
+
+      <Modal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose}>
+        <ModalOverlay />
+        <ModalContent display="flex" alignItems="center" padding="20px 15px">
+          <ModalHeader>
+            <Text fontSize="16px" fontWeight="normal">
+              You have been logged out
+            </Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Please log back in with your profile, or press continue if you
+              want to stay anonymous.
+            </Text>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              paddingTop="20px"
+            >
+              <ButtonComponent width="50%" mx={1} primary onClick={loginOnOpen}>
+                Log In
+              </ButtonComponent>
+              <ButtonComponent
+                width="50%"
+                mx={1}
+                onClick={onLoginAlertModalClose}
+              >
+                Continue
+              </ButtonComponent>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => {
+          loginOnClose();
+          onLoginAlertModalClose();
+        }}
+      />
+    </>
+  );
+};

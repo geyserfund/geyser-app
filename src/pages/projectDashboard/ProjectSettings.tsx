@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import {
   HStack,
   Text,
@@ -8,11 +8,12 @@ import {
   Input,
   InputRightAddon,
   Image,
+  Checkbox,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
-import { useHistory, useParams } from 'react-router';
-import { FileUpload } from '../../components/molecules';
+import { useParams } from 'react-router';
+import { CalendarButton, FileUpload } from '../../components/molecules';
 import {
   ButtonComponent,
   Card,
@@ -20,33 +21,23 @@ import {
   TextArea,
   TextBox,
 } from '../../components/ui';
-import {
-  colors,
-  GeyserAssetDomainUrl,
-  GeyserSkeletonUrl,
-} from '../../constants';
+import { colors, GeyserAssetDomainUrl } from '../../constants';
+import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useAuthContext } from '../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../graphql';
-import {
-  MUTATION_CREATE_PROJECT,
-  MUTATION_UPDATE_PROJECT,
-} from '../../graphql/mutations';
+import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
 import { IProject } from '../../interfaces';
 import {
-  isMobileMode,
   useNotification,
   validateEmail,
   validLighteningAddress,
 } from '../../utils';
 import { TProjectDetails } from '../creation/projectCreate/types';
+import { DateTime } from 'luxon';
 
 export const ProjectSettings = ({ project }: { project: IProject }) => {
-  const isMobile = isMobileMode();
-
   const params = useParams<{ projectId: string }>();
   const isEdit = Boolean(params.projectId);
 
-  const history = useHistory();
   const { toast } = useNotification();
 
   const { user } = useAuthContext();
@@ -59,6 +50,16 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
     name: '',
   });
   const [formError, setFormError] = useState<{ [key: string]: string }>({});
+  const [selectedButton, setSelectedButton] = useState(
+    project.expiresAt ? 'custom' : 'ongoing',
+  );
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    project.expiresAt
+      ? DateTime.fromMillis(parseInt(project.expiresAt, 10)).toJSDate()
+      : undefined,
+  );
+  const [finalDate, setFinalDate] = useState<string>();
+  const [deactivate, setDeactivate] = useState(!project.active);
 
   const [updateProject, { loading: updateLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,
@@ -96,7 +97,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       const { name, value } = event.target;
 
       const newForm = { ...form, [name]: value || '' };
-      console.log('checkign is edit', isEdit);
+
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase();
         const sanitizedName = projectName.replaceAll(
@@ -120,8 +121,33 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
     }
   };
 
+  const handleDateChange = (value: Date) => {
+    setSelectedButton('custom');
+    setSelectedDate(value);
+    setFinalDate(`${value.getTime()}`);
+  };
+
+  const handleMonthSelect = () => {
+    setSelectedButton('month');
+    const dateMonth = DateTime.now().plus({ months: 1 });
+    setSelectedDate(undefined);
+    setFinalDate(`${dateMonth.toJSDate().getTime()}`);
+  };
+
+  const handleOngoingSelect = () => {
+    setSelectedButton('ongoing');
+    setSelectedDate(undefined);
+    setFinalDate('');
+  };
+
   const handleUpload = (url: string) => {
     setForm({ ...form, image: `${GeyserAssetDomainUrl}${url}` });
+  };
+
+  const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event) {
+      setDeactivate(event.target.checked);
+    }
   };
 
   const handleNext = () => {
@@ -137,6 +163,8 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
             title: form.title,
             image: form.image,
             description: form.description,
+            expiresAt: finalDate || null,
+            active: !deactivate,
           },
         },
       });
@@ -156,14 +184,6 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
 
     if (!form.description) {
       errors.description = 'Project objective is a required field';
-      isValid = false;
-    }
-
-    if (!form.email && !user.email) {
-      errors.email = 'Email address is a required field.';
-      isValid = false;
-    } else if (!user.email && !validateEmail(form.email)) {
-      errors.email = 'Please enter a valid email address.';
       isValid = false;
     }
 
@@ -253,6 +273,50 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
                 isDisabled={Boolean(user.email)}
               />
             </VStack>
+            <VStack width="100%" alignItems="flex-start">
+              <Text>Fundraising deadline</Text>
+              <HStack width="100%" justifyContent="space-around">
+                <ButtonComponent
+                  primary={selectedButton === 'ongoing'}
+                  onClick={handleOngoingSelect}
+                >
+                  Ongoing
+                </ButtonComponent>
+                <ButtonComponent
+                  primary={selectedButton === 'month'}
+                  onClick={handleMonthSelect}
+                >
+                  1 Month
+                </ButtonComponent>
+                <CalendarButton
+                  primary={selectedButton === 'custom'}
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                >
+                  Custom
+                </CalendarButton>
+              </HStack>
+              <Text fontSize="12px">
+                Add a deadline for your project if you have one, or just keep it
+                as ongoing.
+              </Text>
+            </VStack>
+            <VStack width="100%" alignItems="flex-start">
+              <Text>Deactivate</Text>
+              <Checkbox
+                defaultChecked={deactivate}
+                onChange={handleDeactivate}
+                colorScheme="red"
+              >
+                {' '}
+                Deactivate Project
+              </Checkbox>
+              <Text fontSize="12px">
+                Deactivating your project would not allow others to fund your
+                project, but your project will still be visible to everyone
+                else. You will be able to re-activate your project at any time.
+              </Text>
+            </VStack>
             <ButtonComponent
               isLoading={updateLoading}
               primary
@@ -277,7 +341,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
               <ImageWithReload src={form.image} height="222px" width="350px" />
             ) : (
               <Image
-                src={GeyserSkeletonUrl}
+                src={GeyserTempImage}
                 maxHeight="500px"
                 height="222px"
                 width="350px"

@@ -2,9 +2,9 @@ import React from 'react';
 import { List, ListItem } from '@chakra-ui/react';
 import { AlertBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
-import { IProject } from '../../../interfaces';
 import { LandingPageProjectsListItem } from './LandingPageProjectsListItem';
 import { useProjects } from '../../../hooks';
+import { Project } from '../../../types/generated/graphql';
 
 type Props = {
   itemLimit?: number;
@@ -51,7 +51,7 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
       {isLoading && <Loader />}
 
       <List spacing={3}>
-        {projects.map((project: IProject) => (
+        {projects.map((project: Project) => (
           <ListItem key={project.id} justifyContent="center" cursor="pointer">
             <LandingPageProjectsListItem project={project} />
           </ListItem>

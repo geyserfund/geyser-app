@@ -1,74 +1,41 @@
 import {
   Badge,
-  Box,
+  Flex,
   Heading,
   HStack,
-  HTMLChakraProps,
   Image,
-  SkeletonCircle,
   Spacer,
   Stack,
   Text,
-  VStack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useHistory } from 'react-router';
-import {
-  ProjectFundersCountIndicator,
-  ProjectImageListItemPlaceholder,
-} from '..';
-import { ICard, SatoshiAmount } from '../../ui';
+import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
 import { IProjectListEntryItem } from '../../../interfaces';
-import { isMobileMode } from '../../../utils';
-import { BsPencil } from 'react-icons/bs';
-import { createUseStyles } from 'react-jss';
+import { BsHeartFill } from 'react-icons/bs';
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
+import { colors } from '../../../constants';
+import { ProjectListItemImage } from './ProjectListItemImage';
+import { CloseIcon } from '@chakra-ui/icons';
+import { BiPencil } from 'react-icons/bi';
+import { Entry } from '../../../types/generated/graphql';
 
 type Props = ICard & {
-  entry: IProjectListEntryItem;
+  entry: Entry | IProjectListEntryItem;
   onClick?: () => void;
   onEdit?: () => void;
+  onDelete?: () => void;
 };
 
-const useStyles = createUseStyles({
-  thumbnailImage: {
-    height: '142px',
-    width: '196px',
-    borderRadius: '0.5em',
-  },
-});
-
-type ProjectImageProps = HTMLChakraProps<'div'> & {
-  entry: IProjectListEntryItem;
-};
-
-const ProjectImage = ({ entry, ...rest }: ProjectImageProps) => {
-  const imageSrc = entry.project.image;
-
-  return (
-    <Box {...rest}>
-      {imageSrc && imageSrc.length > 0 ? (
-        <Image
-          flexShrink={0}
-          src={imageSrc}
-          boxSize="42px"
-          borderRadius="md"
-          objectFit="cover"
-          fallback={<ProjectImageListItemPlaceholder />}
-          fit="cover"
-          alt={`Main image for ${entry.project.name}`}
-        />
-      ) : (
-        <SkeletonCircle size="full" speed={0} borderRadius={'4px'} />
-      )}
-    </Box>
-  );
-};
-
-export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
-  const isMobile = isMobileMode();
+export const ProjectEntryCard = ({
+  entry,
+  onClick,
+  onEdit,
+  onDelete,
+  ...rest
+}: Props) => {
   const history = useHistory();
-  const styles = useStyles();
 
   const handleClick =
     onClick ||
@@ -76,102 +43,158 @@ export const ProjectEntryCard = ({ entry, onClick, onEdit }: Props) => {
       history.push(`/entry/${entry.id}`);
     });
 
-  const handleEdit = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     if (onEdit) {
       onEdit();
     }
   };
 
+  const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (onDelete) {
+      onDelete();
+    }
+  };
+
   return (
     <Stack
-      height={'166px'}
-      direction={isMobile ? 'column' : 'row'}
-      spacing={isMobile ? '0px' : '20px'}
-      align="center"
-      justify="start"
-      maxWidth={'100%'}
-      p={2}
+      borderRadius="lg"
+      width={{
+        base: '100%',
+        xl: '798px',
+      }}
+      maxWidth={'798px'}
+      direction={{ base: 'column', md: 'row' }}
+      backgroundColor={useColorModeValue('white', 'gray.900')}
+      _hover={{
+        backgroundColor: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
+      }}
+      transition={'background-color 0.3s ease-in-out'}
+      padding={4}
+      cursor={'pointer'}
+      overflow="hidden"
       onClick={handleClick}
-      cursor="pointer"
+      {...rest}
     >
-      <Box flexShrink={0}>
+      <Flex>
         <Image
-          className={styles.thumbnailImage}
-          src={entry.image}
+          width={'full'}
+          height="142px"
+          src={entry.image || ''}
           fallback={<ProjectEntryCardThumbnailPlaceholder />}
-          fit="cover"
+          objectFit="cover"
           alt={entry.title}
         />
-      </Box>
+      </Flex>
 
-      <Box flex={1} display="flex">
-        <HStack flex={1}>
-          <VStack
-            justify={'space-between'}
-            align="start"
-            height="full"
-            flex={1}
-            overflow="hidden"
-          >
-            <Heading
-              as={'h2'}
-              isTruncated={isMobile === false}
-              noOfLines={[0, 1]}
-            >
-              {entry.title}
-            </Heading>
+      <Stack
+        flex={1}
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="flex-start"
+        p={1}
+        pt={2}
+      >
+        <HStack w="100%" justifyContent="space-between">
+          <Heading fontSize={'2xl'} fontFamily={'body'} noOfLines={[0, 1]}>
+            {entry.title}
+          </Heading>
 
-            <Text color="brand.neutral600" as={'p'} noOfLines={[0, 2]}>
-              {entry.description}
-            </Text>
-
-            <Spacer />
-
-            <HStack flex={0}>
-              <HStack spacing={2}>
-                <ProjectImage entry={entry} flexShrink={0} />
-
-                <Text
-                  color="brand.neutral600"
-                  textTransform={'uppercase'}
-                  noOfLines={1}
-                  isTruncated
-                >
-                  {entry.project.title}
-                </Text>
-              </HStack>
-
-              <SatoshiAmount color="brand.primary" fontWeight="bold">
-                {entry.amountFunded}
-              </SatoshiAmount>
-
-              <Badge textTransform="uppercase" padding={1} borderRadius={0.5}>
-                {entry.type}
-              </Badge>
-            </HStack>
-          </VStack>
-
-          <VStack justifyContent="center" height="100%" paddingRight="10px">
-            {onEdit ? (
-              <Box
-                _hover={{
-                  cursor: 'pointer',
-                  backgroundColor: 'brand.neutral200',
-                }}
-                as="span"
-                borderRadius="50%"
-                padding="8px"
+          <HStack>
+            {onEdit && (
+              <IconButtonComponent
+                aria-label="edit-entry"
+                size="sm"
+                icon={<BiPencil />}
                 onClick={handleEdit}
-              >
-                <BsPencil />
-              </Box>
-            ) : (
-              <ProjectFundersCountIndicator count={entry.fundersCount} />
+              />
             )}
-          </VStack>
+            {onDelete && (
+              <IconButtonComponent
+                aria-label="remove-entry"
+                size="sm"
+                icon={<CloseIcon />}
+                backgroundColor="red.100"
+                _hover={{ backgroundColor: 'red.300' }}
+                onClick={handleDelete}
+              />
+            )}
+          </HStack>
         </HStack>
-      </Box>
+
+        <Text
+          marginTop="2"
+          color={useColorModeValue('brand.neutral600', 'brand.neutral200')}
+          fontSize="lg"
+          as={'p'}
+          noOfLines={[0, 2]}
+        >
+          {entry.description}
+        </Text>
+
+        <Spacer />
+
+        <Stack
+          align={'center'}
+          justify={'start'}
+          direction={'row'}
+          spacing={'22px'}
+          wrap={{
+            base: 'wrap',
+            sm: 'nowrap',
+          }}
+        >
+          <HStack spacing={'12px'} align={'center'} flex={0}>
+            <HStack spacing={1}>
+              <Text color="brand.primary500" fontWeight={'bold'}>
+                {entry.fundersCount}
+              </Text>
+              <BsHeartFill color={colors.primary500} />
+            </HStack>
+
+            <SatoshiAmount color="brand.primary500" fontWeight="bold">
+              {entry.amountFunded}
+            </SatoshiAmount>
+          </HStack>
+
+          {entry.project ? (
+            <HStack
+              spacing={1}
+              alignItems="center"
+              justifyContent="flex-start"
+              flex={0}
+            >
+              <ProjectListItemImage
+                imageSrc={entry.image || ''}
+                project={entry.project}
+                flexShrink={0}
+              />
+
+              <Text
+                as={'p'}
+                color="brand.neutral600"
+                textTransform={'uppercase'}
+                noOfLines={1}
+              >
+                {entry.project?.title}
+              </Text>
+            </HStack>
+          ) : null}
+
+          <Badge
+            flex={0}
+            textTransform="uppercase"
+            fontSize={'10px'}
+            fontWeight="regular"
+            padding={1}
+            borderRadius={0.5}
+            display="flex"
+          >
+            {entry.type}
+          </Badge>
+        </Stack>
+      </Stack>
     </Stack>
   );
 };

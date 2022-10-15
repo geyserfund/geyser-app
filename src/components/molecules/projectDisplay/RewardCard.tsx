@@ -2,6 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { BiPencil } from 'react-icons/bi';
+import { colors } from '../../../constants';
 import { IProjectReward } from '../../../interfaces';
 import { TRewards } from '../../../pages/creation/projectCreate/types';
 import {
@@ -27,19 +28,15 @@ export const RewardCard = ({
   ...rest
 }: IRewardCard) => {
   console.log('something');
+
   return (
-    <Card
-      borderRadius="4px"
+    <Box
+      border="2px solid"
+      borderColor={colors.bgLightGrey}
+      borderRadius="12px"
       alignItems="flex-start"
       padding="10px"
-      _hover={{
-        cursor: 'pointer',
-        boxShadow:
-          'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
-        '.rocketicon': {
-          color: 'brand.primary',
-        },
-      }}
+      _hover={{ borderColor: colors.gray300 }}
       {...rest}
     >
       <VStack width="100%">
@@ -109,6 +106,6 @@ export const RewardCard = ({
           {reward.description}
         </Text>
       </VStack>
-    </Card>
+    </Box>
   );
 };

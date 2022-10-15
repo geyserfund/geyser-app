@@ -1,30 +1,75 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECTS } from '../graphql';
-import { IProject } from '../interfaces';
+import {
+  OrderByOptions,
+  PaginationInput,
+  Project,
+  ProjectsGetQueryInput,
+} from '../types/generated/graphql';
+
+type ResponseData = {
+  projects: {
+    projects: Project[];
+  };
+};
+
+type QueryVariables = {
+  input: ProjectsGetQueryInput;
+};
 
 type OptionsProps = {
   itemLimit?: number;
+  cursorID?: number;
+  orderBy?: OrderByOption;
 };
 
-type ResponseData = IProject[];
+export type OrderByOption =
+  | 'Newest Projects'
+  | 'Oldest Projects'
+  | 'Amount Funded';
 
-export const useProjects = (options?: OptionsProps) => {
-  const { itemLimit = 14 } = options || {};
+export const useProjects = ({
+  itemLimit = 14,
+  orderBy = 'Newest Projects',
+  cursorID,
+}: OptionsProps) => {
+  const paginationOptions: PaginationInput = {
+    take: itemLimit,
+  };
+
+  if (cursorID !== undefined) {
+    paginationOptions.cursor = { id: cursorID };
+  }
+
+  function orderByParams(orderByOption: OrderByOption) {
+    switch (orderByOption) {
+      case 'Newest Projects':
+        return {
+          createdAt: OrderByOptions.Desc,
+        };
+      case 'Oldest Projects':
+        return {
+          createdAt: OrderByOptions.Asc,
+        };
+      case 'Amount Funded':
+        return {
+          balance: OrderByOptions.Desc,
+        };
+      default:
+        break;
+    }
+  }
 
   const {
     loading: isLoading,
     error,
     data: responseData,
     fetchMore,
-  } = useQuery(QUERY_PROJECTS, {
+  } = useQuery<ResponseData, QueryVariables>(QUERY_PROJECTS, {
     variables: {
       input: {
-        pagination: { take: itemLimit },
-
-        // TODO: In the future, tt will probably be helpful to make these options more configurable to callers.
-        orderBy: {
-          createdAt: null,
-        },
+        pagination: paginationOptions,
+        orderBy: orderByParams(orderBy),
       },
     },
   });
@@ -32,7 +77,7 @@ export const useProjects = (options?: OptionsProps) => {
   return {
     isLoading,
     error,
-    data: (responseData?.projects.projects || []) as ResponseData,
+    data: responseData?.projects.projects || [],
     fetchMore,
   };
 };

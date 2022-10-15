@@ -1,19 +1,20 @@
-import { useLazyQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
-import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFound } from '../notFound';
 import Activity from '../project/Activity/Activity';
 import { DetailsContainer } from './DetailsContainer';
 import { useFundingFlow, useFundState } from '../../hooks';
+import { Head } from '../../utils/Head';
 import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
+import { Project } from '../../types/generated/graphql';
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const { state } = useLocation<{ loggedOut?: boolean }>();
   const history = useHistory();
 
   const { setNav } = useAuthContext();
@@ -21,27 +22,28 @@ export const ProjectView = () => {
   const [detailOpen, setDetailOpen] = useState(true);
   const fundingFlow = useFundingFlow();
 
-  useEffect(() => {
-    try {
-      getProject();
-    } catch (_) {
+  const { loading, error, data } = useQuery(QUERY_PROJECT_BY_NAME, {
+    variables: { where: { name: projectId }, input: {} },
+    fetchPolicy: 'network-only',
+    onError() {
       history.push('/not-found');
-    }
-  }, [state]);
-
-  const [getProject, { loading, error, data }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME,
-    {
-      variables: { where: { name: projectId } },
-      onCompleted(data) {
-        setNav({
-          title: data.project.title,
-          path: `/projects/${data.project.name}`,
-          projectOwnerId: data.project.owners[0].user.id,
-        });
-      },
     },
-  );
+    onCompleted(data) {
+      if (data.project && data.project.__typename === 'Project') {
+        const { project }: { project: Project } = data;
+        const projectOwnerID =
+          project.owners && project.owners.length > 0
+            ? project.owners[0]?.user.id
+            : '';
+
+        setNav({
+          title: project.title,
+          path: `/projects/${project.name}`,
+          projectOwnerId: projectOwnerID,
+        });
+      }
+    },
+  });
 
   if (loading) {
     return <Loader />;
@@ -95,6 +97,12 @@ const ProjectViewContainer = ({
   const { setFundState, fundState } = fundingFlow;
   return (
     <>
+      <Head
+        title={project.title}
+        description={project.description}
+        image={project.image}
+        type="article"
+      />
       <DetailsContainer
         {...{
           project,

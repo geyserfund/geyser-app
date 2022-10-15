@@ -1,6 +1,6 @@
 import { IParticipant, IFunder, ISponsor, IGrantee } from './participant';
 import { IFundingTx } from './funding';
-import { IUser } from './user';
+import { User } from '../types/generated/graphql';
 
 export type IProjectType = 'reward' | 'grant' | 'donation';
 
@@ -19,7 +19,6 @@ export interface IProject {
   active: boolean;
   ownerConfirmed: string;
   fundsClaimed: string;
-  creationConfirmed: string;
   media: string[];
   owners: IParticipant[];
   ambassadors: IParticipant[];
@@ -95,6 +94,9 @@ export interface IProjectMilestone {
   amount: number;
 }
 
+/**
+ * Corresponds to https://github.com/geyserfund/geyser-server/blob/development/src/typeDefs/entry.ts
+ */
 export interface IProjectListEntryItem {
   id: number;
   title: string;
@@ -103,7 +105,7 @@ export interface IProjectListEntryItem {
   /**
    * A URL path for the image source.
    */
-  image: string;
+  image?: string;
 
   /**
    * The type of the entry.
@@ -113,7 +115,7 @@ export interface IProjectListEntryItem {
    */
   type: string;
 
-  creator: IUser;
+  creator: User;
   fundersCount: number;
   amountFunded: number;
   published: boolean;

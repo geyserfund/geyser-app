@@ -14,13 +14,14 @@ import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
 import { computeFunderBadges } from '../../../helpers';
 import { IProjectContribution } from '../../../interfaces';
+import { UserProjectContribution } from '../../../types/generated/graphql';
 
 import { isDarkMode } from '../../../utils';
 import { Card, ICard } from '../../ui';
 
 type Props = ICard & {
   className?: string;
-  contribution: IProjectContribution;
+  contribution: UserProjectContribution | IProjectContribution;
 };
 
 const useStyles = createUseStyles({
@@ -97,20 +98,15 @@ export const ProjectContributionCard = ({
   );
 };
 
-// interface IRenderBadges {
-// 	funder: IProjectContribution['funder']
-// 	project: IProjectContribution['project']
-// }
-
 const RenderBadges = ({
   contribution,
 }: {
-  contribution: IProjectContribution;
+  contribution: UserProjectContribution | IProjectContribution;
 }) => {
   const { project, funder, isSponsor, isFunder } = contribution;
   const badges =
     isFunder && funder
-      ? computeFunderBadges({ project, funder, shortForm: false })
+      ? computeFunderBadges({ project, funder, useShortForm: false })
       : [];
 
   if (badges.length === 0) {
