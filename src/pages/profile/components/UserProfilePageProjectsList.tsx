@@ -1,14 +1,35 @@
-import React, { useMemo, useState } from 'react';
-import { Button, Divider, Text, VStack } from '@chakra-ui/react';
-import { PaginationInput, User } from '../../../types/generated/graphql';
+import React from 'react';
+import { Text, VStack } from '@chakra-ui/react';
+import { User } from '../../../types/generated/graphql';
 import { AlertBox } from '../../../components/ui';
-import Loader from '../../../components/ui/Loader';
-import { useProjectEntries } from '../../../hooks';
 
 type Props = {
   profileUser: User;
 };
 
 export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
-  return <Text>UserProfilePageProjectsList</Text>;
+  const projectIDs = profileUser.ownerOf
+    .map((ownedProjectInfo) => ownedProjectInfo?.project?.id)
+    .filter(Boolean);
+
+  if (projectIDs.length === 0) {
+    return (
+      <AlertBox
+        height="200px"
+        status="info"
+        colorScheme={'gray'}
+        title="There are currently no projects."
+      />
+    );
+  }
+
+  return (
+    <VStack flexDirection={'column'} spacing={6} width="full">
+      <VStack alignItems={'flex-start'} width="full">
+        {projectIDs.map((projectID: number) => (
+          <Text key={projectID}>{projectID}</Text>
+        ))}
+      </VStack>
+    </VStack>
+  );
 };

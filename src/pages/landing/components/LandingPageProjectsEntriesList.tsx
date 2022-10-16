@@ -95,7 +95,7 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
 
       <VStack alignItems={'flex-start'} width="full">
         {entries.map((entry: Entry) => (
-          <ProjectEntryCard entryID={entry.id} key={entry.id} />
+          <ProjectEntryCard entry={entry} key={entry.id} />
         ))}
       </VStack>
 

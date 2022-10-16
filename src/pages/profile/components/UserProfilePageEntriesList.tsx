@@ -2,7 +2,7 @@ import React from 'react';
 import { VStack } from '@chakra-ui/react';
 import { User } from '../../../types/generated/graphql';
 import { AlertBox } from '../../../components/ui';
-import { ProjectEntryCard } from '../../../components/molecules';
+import { UserProfilePageEntriesListItem } from '../containers';
 
 type Props = {
   profileUser: User;
@@ -27,9 +27,7 @@ export const UserProfilePageEntriesList = ({ profileUser }: Props) => {
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
       {entryIDs.map((entryID: number) => (
-        // <ProjectEntryCardContainer entryID={entryID} key={entryID}>
-        <ProjectEntryCard entryID={entryID} key={entryID} />
-        // </ProjectEntryCardContainer>
+        <UserProfilePageEntriesListItem key={entryID} entryID={entryID} />
       ))}
     </VStack>
   );

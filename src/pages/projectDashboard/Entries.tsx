@@ -162,7 +162,7 @@ export const Entries = ({ project }: { project: IProject }) => {
                   return (
                     <ProjectEntryCard
                       key={entry.id}
-                      entryID={entryWithProject.id}
+                      entry={entryWithProject}
                       onEdit={() =>
                         history.push(
                           `/projects/${project.name}/entry/${entry.id}`,
@@ -190,7 +190,7 @@ export const Entries = ({ project }: { project: IProject }) => {
                   return (
                     <ProjectEntryCard
                       key={entry.id}
-                      entryID={entryWithProject.id}
+                      entry={entryWithProject}
                       onEdit={() =>
                         history.push(
                           `/projects/${project.name}/entry/${entry.id}`,
