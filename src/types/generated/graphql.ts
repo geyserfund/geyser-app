@@ -3,7 +3,6 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from 'graphql';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -26,7 +25,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Add BigInt functionality */
   BigInt: any;
+  /** Date custom scalar type */
   Date: any;
   amount_Float_NotNull_min_1: any;
   amount_Float_min_1: any;
@@ -595,7 +596,7 @@ export type Project = {
   media: Array<Maybe<Scalars['String']>>;
   milestones?: Maybe<Array<Maybe<ProjectMilestone>>>;
   name: Scalars['String'];
-  owners: Array<Maybe<Owner>>;
+  owners: Array<Owner>;
   rewards?: Maybe<Array<Maybe<ProjectReward>>>;
   sponsors: Array<Maybe<Sponsor>>;
   statistics?: Maybe<ProjectStatistics>;
@@ -692,6 +693,7 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']>;
   entry: Entry;
   fundingTx: FundingTx;
+  /** Returns all published entries */
   getEntries: Array<Maybe<Entry>>;
   getFunders: Array<Maybe<Funder>>;
   getFundingTxs: Array<Maybe<FundingTx>>;
@@ -1858,11 +1860,7 @@ export type ProjectResolvers<
     ContextType
   >;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owners?: Resolver<
-    Array<Maybe<ResolversTypes['Owner']>>,
-    ParentType,
-    ContextType
-  >;
+  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
   rewards?: Resolver<
     Maybe<Array<Maybe<ResolversTypes['ProjectReward']>>>,
     ParentType,

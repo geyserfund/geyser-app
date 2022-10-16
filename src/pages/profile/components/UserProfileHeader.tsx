@@ -2,7 +2,6 @@ import React, { useMemo, ReactElement } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Avatar,
-  Box,
   Button,
   HStack,
   Link,
@@ -96,9 +95,11 @@ Props) => {
               Create
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={onProjectCreateSelected}>Launch idea</MenuItem>
+              <MenuItem onClick={onProjectCreateSelected}>
+                Create A Project
+              </MenuItem>
               <MenuItem color="brand.gray300" pointerEvents="none">
-                Write post
+                Create a Project Entry
               </MenuItem>
             </MenuList>
           </Menu>

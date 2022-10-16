@@ -1,7 +1,6 @@
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React, { ReactElement } from 'react';
 import {
-  Center,
   Image,
   Stack,
   Box,
@@ -16,12 +15,13 @@ import { SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
-import { FundingTx, Project } from '../../../types/generated/graphql';
-import { IBadge, IFundingTx, IProject } from '../../../interfaces';
+import { Funder, FundingTx, Project } from '../../../types/generated/graphql';
+import { IBadge } from '../../../interfaces';
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTx | IFundingTx;
-  project: Project | IProject;
+  funder: Funder;
+  project: Project;
+  transactionInfo: FundingTx;
   showsProjectLink?: boolean;
 };
 
@@ -30,17 +30,25 @@ const renderFunderBadges = (badges: IBadge[]): ReactElement[] => {
 };
 
 export const ProjectFundingContributionsFeedItem = ({
-  fundingTx,
+  funder,
   project,
+  transactionInfo,
   showsProjectLink = false,
   ...rest
 }: Props) => {
-  const { funder, onChain, paidAt, source } = fundingTx;
+  const isFunderAnonymous = Boolean(funder?.user) === false;
+  const timeAgo = getDaysAgo(funder?.confirmedAt || '');
+  const wasMadeOnChain = transactionInfo.onChain;
 
-  const isFunderAnonymous = !funder.user;
-  const timeAgo = getDaysAgo(paidAt) || '';
-  const avatarMetadata = getAvatarMetadata({ funder, source });
-  const funderBadges = computeFunderBadges({ project, funder });
+  const avatarMetadata = getAvatarMetadata({
+    funder,
+    source: transactionInfo.source,
+  });
+
+  const funderBadges = computeFunderBadges({
+    project,
+    funder,
+  });
 
   return (
     <VStack
@@ -54,18 +62,23 @@ export const ProjectFundingContributionsFeedItem = ({
       px={'26px'}
       py={'10px'}
       overflow={'hidden'}
-      width={['375px']}
+      width={{
+        base: '100%',
+        md: '375px',
+      }}
       {...rest}
     >
       {/* Funding Stats Header */}
 
       <Box display="flex" justifyContent="space-between" width={'full'}>
+        {/* Funder Avatar */}
         {isFunderAnonymous ? (
           <HStack spacing={2}>
             <AnonymousAvatar
-              seed={fundingTx.funder.id}
+              seed={funder.id}
               image={avatarMetadata.image}
               imageSize={'20px'}
+              textColor="brand.neutral900"
             />
             <Text>Anonymous Funder</Text>
           </HStack>
@@ -74,24 +87,28 @@ export const ProjectFundingContributionsFeedItem = ({
             avatarMetadata={avatarMetadata}
             fontSize={'14px'}
             imageSize={'20px'}
+            textColor="brand.neutral900"
             badges={renderFunderBadges(funderBadges)}
           />
         )}
 
+        {/* Funding Amount */}
         <Box display="flex" alignItems="center">
           <SatoshiIconTilted scale={0.7} />
-          <Text>{`${commaFormatted(fundingTx.amount)}`} </Text>
+          <Text>{`${commaFormatted(transactionInfo.amount)}`} </Text>
         </Box>
       </Box>
 
       <Stack marginTop="6px" width="100%" spacing={'6px'}>
         {/* Funding Comment */}
 
-        {fundingTx.comment && <Text>{fundingTx.comment}</Text>}
+        {transactionInfo.comment ? (
+          <Text>{transactionInfo.comment}</Text>
+        ) : null}
 
         {/* Funding Media Attachment */}
 
-        {fundingTx.media && (
+        {transactionInfo.media ? (
           <Box
             h={'178px'}
             bg={'gray.100'}
@@ -101,7 +118,7 @@ export const ProjectFundingContributionsFeedItem = ({
             pos={'relative'}
           >
             <Image
-              src={fundingTx.media}
+              src={transactionInfo.media}
               alt="Contribution media attachment"
               objectFit={'cover'}
               width="full"
@@ -109,14 +126,14 @@ export const ProjectFundingContributionsFeedItem = ({
               borderRadius="4px"
             />
           </Box>
-        )}
+        ) : null}
 
         {/* Timestamp and Funded-Project Info */}
 
         <HStack color="brand.neutral700" spacing={2}>
           <Text fontSize={'xs'}>
             {timeAgo
-              ? `${onChain ? '⛓' : '⚡️'} ${timeAgo} ago`
+              ? `${wasMadeOnChain ? '⛓' : '⚡️'} ${timeAgo} ago`
               : 'Some time ago'}
           </Text>
 

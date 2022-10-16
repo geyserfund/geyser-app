@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 import { User } from '../../../types/generated/graphql';
 import { AlertBox } from '../../../components/ui';
 import { ProjectEntryCard } from '../../../components/molecules';
@@ -26,11 +26,11 @@ export const UserProfilePageEntriesList = ({ profileUser }: Props) => {
 
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
-      <VStack alignItems={'flex-start'} width="full">
-        {entryIDs.map((entryID: number) => (
-          <ProjectEntryCard entryID={entryID} key={entryID} />
-        ))}
-      </VStack>
+      {entryIDs.map((entryID: number) => (
+        // <ProjectEntryCardContainer entryID={entryID} key={entryID}>
+        <ProjectEntryCard entryID={entryID} key={entryID} />
+        // </ProjectEntryCardContainer>
+      ))}
     </VStack>
   );
 };

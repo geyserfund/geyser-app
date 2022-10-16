@@ -101,7 +101,8 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
             return (
               <ProjectFundingContributionsFeedItem
                 key={contribution.id}
-                fundingTx={contribution}
+                funder={contribution.funder}
+                transactionInfo={contribution}
                 project={contribution.sourceResource}
               />
             );

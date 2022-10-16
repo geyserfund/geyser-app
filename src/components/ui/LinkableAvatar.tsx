@@ -1,13 +1,15 @@
 import React, { ReactElement } from 'react';
-import { Text, HStack, Box, Link } from '@chakra-ui/layout';
+import { Text, HStack, Link } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/react';
 import { IAvatarMetadata } from '../../interfaces';
 import { isMediumScreen, isMobileMode } from '../../utils';
 import { useHistory } from 'react-router';
+import { FaUser } from 'react-icons/fa';
 
 type Props = {
   avatarMetadata: IAvatarMetadata;
   badges?: ReactElement[];
+  textColor?: string;
   fontSize?: number | string;
   imageSize?: number | string;
 };
@@ -15,6 +17,7 @@ type Props = {
 export const LinkableAvatar = ({
   avatarMetadata,
   badges,
+  textColor,
   fontSize = '16px',
   imageSize = '30px',
 }: Props) => {
@@ -65,6 +68,7 @@ export const LinkableAvatar = ({
 
   return (
     <Link
+      color={textColor}
       isExternal={Boolean(
         avatarMetadata.link && avatarMetadata.link.includes('https'),
       )}
@@ -93,6 +97,7 @@ export const LinkableAvatar = ({
               lineHeight: `${imageSize}`,
             },
           }}
+          icon={<FaUser fontSize="2rem" />}
         />
         <Text
           fontSize={fontSize}
