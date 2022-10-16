@@ -1,10 +1,8 @@
-import React, { useMemo, ReactElement } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import React from 'react';
 import {
   Avatar,
   Button,
   HStack,
-  Link,
   IconButton,
   Menu,
   MenuButton,
@@ -12,35 +10,28 @@ import {
   MenuList,
   Text,
   VStack,
-  ThemeComponentProps,
-  ThemeTypings,
   WrapItem,
   Wrap,
 } from '@chakra-ui/react';
-import { ExternalAccount, User } from '../../../types/generated/graphql';
+import { User } from '../../../types/generated/graphql';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { getRandomOrb } from '../../../utils';
 import { useAuthContext } from '../../../context';
-import { colors, GeyserHomepageUrl } from '../../../constants';
-import { BsTwitter, BsLightningChargeFill } from 'react-icons/bs';
-import { FountainIcon } from '../../../components/icons';
-import { createUseStyles } from 'react-jss';
+import { ExternalAccountLinkItem } from '.';
 
 type Props = {
   profileUser: User;
-  // shouldShowCreateProjectButton: boolean;
   onProjectCreateSelected?: () => void;
 };
 
 export const UserProfilePageHeader = ({
   profileUser,
   onProjectCreateSelected,
-}: // shouldShowCreateProjectButton,
-Props) => {
+}: Props) => {
   const { user: currentAppUser, loginOnOpen } = useAuthContext();
 
   const isUserViewingOwnProfile = currentAppUser.id === profileUser.id;
-  const shouldShowCreateProjectButton = isUserViewingOwnProfile;
+  const shouldShowCreationButton = isUserViewingOwnProfile;
   const shouldShowSettingsButton = isUserViewingOwnProfile;
 
   return (
@@ -68,24 +59,13 @@ Props) => {
               {profileUser.username}
             </Text>
           </HStack>
-
-          {shouldShowSettingsButton ? (
-            <IconButton
-              size="sm"
-              background={'none'}
-              aria-label="connect"
-              icon={<SettingsIcon fontSize="20px" />}
-              border="1px solid lightgrey"
-              onClick={loginOnOpen}
-            />
-          ) : null}
         </HStack>
 
-        {shouldShowCreateProjectButton ? (
+        {shouldShowCreationButton ? (
           <Menu>
             <MenuButton
               as={Button}
-              rightIcon={<ChevronDownIcon />}
+              rightIcon={<ChevronDownIcon fontSize={'1.5em'} />}
               borderRadius="4px"
               bgColor="brand.primary"
               _hover={{ bgColor: 'brand.normalLightGreen' }}
@@ -106,124 +86,29 @@ Props) => {
         ) : null}
       </HStack>
 
-      <Wrap width="100%">
+      <Wrap width="100%" alignItems={'center'} spacing={1.5}>
         {profileUser.externalAccounts.map((account) => {
           if (account) {
             return (
-              <WrapItem>
-                <ExternalAccountItem key={account.id} account={account} />
+              <WrapItem alignSelf={'center'}>
+                <ExternalAccountLinkItem key={account.id} account={account} />
               </WrapItem>
             );
           }
         })}
+
+        {shouldShowSettingsButton ? (
+          <IconButton
+            size="sm"
+            background={'none'}
+            aria-label="connect"
+            icon={<SettingsIcon fontSize="20px" />}
+            border="1px solid lightgrey"
+            onClick={loginOnOpen}
+            alignSelf={'center'}
+          />
+        ) : null}
       </Wrap>
     </VStack>
-  );
-};
-
-const useStyles = createUseStyles({
-  linkContainer: {
-    color: colors.textBlack,
-  },
-  linkButton: {
-    textDecoration: 'none',
-  },
-});
-
-const ExternalAccountItem = ({ account }: { account: ExternalAccount }) => {
-  const { type, externalUsername } = account;
-  const styles = useStyles();
-
-  const linkDestination: string = useMemo(() => {
-    switch (type) {
-      case 'twitter':
-        return `https://twitter.com/${externalUsername}`;
-      case 'Fountain':
-        return `https://www.fountain.fm/${account.externalUsername}`;
-      case 'lnurl':
-        return '';
-      default:
-        return `${GeyserHomepageUrl}`;
-    }
-  }, [type, externalUsername]);
-
-  const isLinkExternal: boolean = useMemo(() => {
-    switch (type) {
-      case 'twitter':
-        return true;
-      case 'Fountain':
-        return true;
-      case 'lnurl':
-        return false;
-      default:
-        return false;
-    }
-  }, [type]);
-
-  const buttonIcon: ReactElement = useMemo(() => {
-    switch (type) {
-      case 'twitter':
-        return <BsTwitter />;
-      case 'Fountain':
-        return <FountainIcon />;
-      case 'lnurl':
-        return <BsLightningChargeFill />;
-      default:
-        return <></>;
-    }
-  }, [type]);
-
-  const buttonVariant: ThemeComponentProps['variant'] = useMemo(() => {
-    switch (type) {
-      case 'twitter':
-        return 'solid';
-      case 'Fountain':
-        return 'ghost';
-      case 'lnurl':
-        return 'ghost';
-      default:
-        return 'ghost';
-    }
-  }, [type]);
-
-  const buttonColorScheme: ThemeTypings['colorSchemes'] | '' = useMemo(() => {
-    switch (type) {
-      case 'twitter':
-        return 'twitter';
-      case 'Fountain':
-        return '';
-      case 'lnurl':
-        return '';
-      default:
-        return '';
-    }
-  }, [type]);
-
-  return isLinkExternal ? (
-    <Link href={linkDestination} isExternal className={styles.linkContainer}>
-      <Button
-        leftIcon={buttonIcon}
-        colorScheme={buttonColorScheme}
-        variant={buttonVariant}
-        className={styles.linkButton}
-      >
-        {account.externalUsername}
-      </Button>
-    </Link>
-  ) : (
-    <Link
-      as={ReactRouterLink}
-      to={linkDestination}
-      className={styles.linkContainer}
-    >
-      <Button
-        leftIcon={buttonIcon}
-        colorScheme={buttonColorScheme}
-        variant={buttonVariant}
-        className={styles.linkButton}
-      >
-        {account.externalUsername}
-      </Button>
-    </Link>
   );
 };

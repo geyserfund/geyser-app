@@ -3,7 +3,6 @@ import {
   Box,
   HStack,
   Skeleton,
-  useMediaQuery,
   VStack,
   Center,
   Container,
@@ -12,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory, useParams } from 'react-router';
 import { AppFooter } from '../../components/molecules';
-import { isDarkMode, isMobileMode } from '../../utils';
+import { isDarkMode } from '../../utils';
 import { useAuthContext } from '../../context';
 import { defaultUser } from '../../defaults';
 import { AlertBox } from '../../components/ui';
@@ -47,13 +46,9 @@ type QueryVariables = {
 
 export const ProfilePage = () => {
   const isInDarkMode = isDarkMode();
-  const isMobile = isMobileMode();
   const history = useHistory();
-  const classes = useStyles();
 
-  const { user: currentAppUser, loginOnOpen } = useAuthContext();
-  const [isLargerThan1080] = useMediaQuery('(min-width: 1080px)');
-
+  const { user: currentAppUser } = useAuthContext();
   const params = useParams<{ userId: string }>();
 
   const [
@@ -86,8 +81,6 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     if (userProfileData && userProfileData.user) {
-      // eslint-disable-next-line no-debugger
-      debugger;
       const user = userProfileData.user as User;
       setUserProfile(user);
     }
@@ -95,8 +88,6 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     if (isViewingOwnProfile()) {
-      // eslint-disable-next-line no-debugger
-      debugger;
       setUserProfile({
         ...userProfile,
         ...currentAppUser,
@@ -105,7 +96,6 @@ export const ProfilePage = () => {
   }, [currentAppUser]);
 
   if (error) {
-    // return <Text> Error loading page, Please refresh</Text>;
     return (
       <Container
         position="relative"
@@ -180,7 +170,6 @@ const ProjectSkeleton = () => {
             <Skeleton height="50px" width="50px" borderRadius="50%" />
             <Skeleton height="30px" width="200px" />
           </HStack>
-          {/* <Button>Create</Button> */}
         </HStack>
 
         <HStack width="100%">

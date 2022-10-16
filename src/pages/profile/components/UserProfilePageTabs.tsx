@@ -57,7 +57,12 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
   return (
     <Tabs variant={'line'} height="full" width="full" isLazy>
       <Stack spacing={'-0.125em'} zIndex={1}>
-        <TabList borderBottomWidth={0} borderRadius="sm" zIndex={1}>
+        <TabList
+          borderBottomWidth={0}
+          borderRadius="sm"
+          zIndex={1}
+          paddingX="22px"
+        >
           {tabData.map((tabItem: TabData, index: number) => (
             <Tab
               key={index}
@@ -69,13 +74,16 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
                 justifyContent={'center'}
                 alignItems={'center'}
                 spacing={'6px'}
+                fontSize="18px"
               >
-                <Text>{tabItem.title}</Text>
+                <Text fontSize={'inherit'}>{tabItem.title}</Text>
 
                 <Text
+                  fontSize={'inherit'}
                   backgroundColor="brand.neutral200"
-                  padding="4px 6px"
-                  borderRadius="4px"
+                  padding="0.33em"
+                  lineHeight={1}
+                  borderRadius="0.25em"
                 >
                   {tabItem.itemCount}
                 </Text>
@@ -97,114 +105,3 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
     </Tabs>
   );
 };
-
-/* <Tabs
-  variant="line"
-  colorScheme="brand.textGrey"
-  defaultIndex={userProfile && userProfile.ownerOf.length === 0 ? 1 : 0}
->
-  <TabList>
-    <Tab>
-      <HStack minWidth={'40px'}>
-        <Text fontWeight={500}>EntryCreateEdits</Text>
-
-        <Text
-          fontSize="12px"
-          backgroundColor="brand.bgGrey3"
-          padding="4px 8px"
-          borderRadius="4px"
-        >
-          {userProfile && userProfile.ownerOf.length}
-        </Text>
-      </HStack>
-    </Tab>
-    <Tab>
-      <HStack minWidth={'40px'}>
-        <Text fontWeight={500}>Contributions</Text>
-        <Text
-          fontSize="12px"
-          backgroundColor="brand.bgGrey3"
-          padding="4px 8px"
-          borderRadius="4px"
-        >
-          {userProfile && userProfile.contributions.length}
-        </Text>
-      </HStack>
-    </Tab>
-  </TabList>
-
-  <TabPanels>
-    <TabPanel>
-      {userProfile && userProfile.ownerOf && userProfile.ownerOf.length > 0 ? (
-        <Box className={isMobile ? classes.containerMobile : classes.container}>
-          <Wrap
-            paddingY="0px"
-            width="100%"
-            justify={!isLargerThan1080 ? 'center' : 'flex-start'}
-            spacing="30px"
-          >
-            {userProfile &&
-              userProfile.ownerOf.map((projectOwnershipData) => {
-                if (projectOwnershipData?.project) {
-                  // const { project }: { project: Project } =
-                  //   projectOwnershipData;
-
-                  const project = projectOwnershipData?.project;
-
-                  return (
-                    <WrapItem key={project.id}>
-                      <ProfileProjectCard
-                        title={project.title}
-                        name={project.name}
-                        project={project}
-                        imgSrc={project.media[0] || ''}
-                        marginLeft="0px !important"
-                        privateUser={myProfile}
-                      />
-                    </WrapItem>
-                  );
-                }
-              })}
-          </Wrap>
-        </Box>
-      ) : (
-        <Box width="100%" display="flex" justifyContent="center">
-          <Text>There are no items here.</Text>
-        </Box>
-      )}
-    </TabPanel>
-
-    <TabPanel>
-      {userProfile &&
-      userProfile.contributions &&
-      userProfile.contributions.length > 0 ? (
-        <Box className={isMobile ? classes.containerMobile : classes.container}>
-          <Wrap
-            paddingY="0px"
-            width="100%"
-            justify={!isLargerThan1080 ? 'center' : 'flex-start'}
-            spacing="30px"
-          >
-            {userProfile &&
-              userProfile.contributions.map((contribution) => {
-                if (contribution) {
-                  return (
-                    <WrapItem key={contribution?.project.id}>
-                      <ProjectContributionCard
-                        marginLeft="0px !important"
-                        contribution={contribution}
-                      />
-                    </WrapItem>
-                  );
-                }
-              })}
-          </Wrap>
-        </Box>
-      ) : (
-        <Box width="100%" display="flex" justifyContent="center">
-          <Text>There are no items here.</Text>
-        </Box>
-      )}
-    </TabPanel>
-  </TabPanels>
-</Tabs>; */

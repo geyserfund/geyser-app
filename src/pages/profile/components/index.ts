@@ -1,3 +1,4 @@
+export * from './ExternalAccountLinkItem';
 export * from './UserProfileHeader';
 export * from './UserProfilePageTabs';
 export * from './UserProfilePageProjectsList';

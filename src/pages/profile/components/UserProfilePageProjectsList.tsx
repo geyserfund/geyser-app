@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, VStack } from '@chakra-ui/react';
+import { Box, GridItem, SimpleGrid } from '@chakra-ui/react';
 import { User } from '../../../types/generated/graphql';
 import { AlertBox } from '../../../components/ui';
+import { UserProfilePageProjectsListItem } from '../containers';
 
 type Props = {
   profileUser: User;
@@ -24,12 +25,14 @@ export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
   }
 
   return (
-    <VStack flexDirection={'column'} spacing={6} width="full">
-      <VStack alignItems={'flex-start'} width="full">
+    <Box display={'flex'} justifyContent="center" alignItems={'center'}>
+      <SimpleGrid columns={3} spacingX={7} spacingY={8}>
         {projectIDs.map((projectID: number) => (
-          <Text key={projectID}>{projectID}</Text>
+          <GridItem key={projectID} colSpan={{ base: 3, sm: 3, md: 3, lg: 1 }}>
+            <UserProfilePageProjectsListItem projectID={projectID} />
+          </GridItem>
         ))}
-      </VStack>
-    </VStack>
+      </SimpleGrid>
+    </Box>
   );
 };
