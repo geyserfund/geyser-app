@@ -32,7 +32,7 @@ const renderFunderBadges = (badges: IBadge[]): ReactElement[] => {
 export const ProjectFundingContributionsFeedItem = ({
   fundingTx,
   project,
-  showsProjectLink = false,
+  showsProjectLink = true,
   ...rest
 }: Props) => {
   const { funder, onChain, paidAt, source } = fundingTx;
