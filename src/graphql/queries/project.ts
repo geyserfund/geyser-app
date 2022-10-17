@@ -20,6 +20,7 @@ export const QUERY_PROJECT_BY_NAME = gql`
       image
       active
       draft
+      rewardCurrency
       owners {
         id
         user {

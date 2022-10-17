@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ButtonComponent,
   IconButtonComponent,
@@ -16,7 +16,7 @@ import {
   SatoshiAmount,
 } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
-import { TMilestone, TRewards } from './types';
+import { TMilestone } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
@@ -31,13 +31,16 @@ import {
   RewardCard,
 } from '../../../components/molecules';
 import { DateTime } from 'luxon';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   MUTATION_UPDATE_PROJECT,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../graphql/mutations';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
+
+import type { Project, ProjectReward } from '../../../types/generated/graphql';
+import { RewardCurrency } from '../../../types/generated/graphql';
 
 const useStyles = createUseStyles({
   backIcon: {
@@ -59,8 +62,8 @@ export const MilestoneAndRewards = () => {
   const [finalDate, setFinalDate] = useState<string>('');
 
   const [milestones, setMilestones] = useState<TMilestone[]>([]);
-  const [rewards, setRewards] = useState<TRewards[]>([]);
-  const [selectedReward, setSelectedReward] = useState<TRewards>();
+  const [rewards, setRewards] = useState<ProjectReward[]>([]);
+  const [selectedReward, setSelectedReward] = useState<ProjectReward>();
 
   const {
     isOpen: isMilestoneOpen,
@@ -78,6 +81,7 @@ export const MilestoneAndRewards = () => {
     onOpen: openRewardDelete,
   } = useDisclosure();
   const [isSatoshi, setIsSatoshi] = useState(true);
+  const [isSatoshiRewards, setIsSatoshiRewards] = useState(false);
 
   const [updateProject, { loading: updateProjectLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,
@@ -110,19 +114,16 @@ export const MilestoneAndRewards = () => {
     },
     onCompleted(data) {
       console.log('checking data', data);
-      if (
-        data.project &&
-        data.project.milestones &&
-        data.project.milestones.length > 0
-      ) {
+      const { project }: { project: Project } = data;
+      if (project?.rewardCurrency) {
+        setIsSatoshiRewards(project.rewardCurrency !== RewardCurrency.Usd);
+      }
+
+      if (Number(project?.milestones?.length) > 0) {
         setMilestones(data.project.milestones);
       }
 
-      if (
-        data.project &&
-        data.project.rewards &&
-        data.project.rewards.length > 0
-      ) {
+      if (Number(project?.rewards?.length) > 0) {
         setRewards(data.project.rewards);
       }
     },
@@ -132,7 +133,7 @@ export const MilestoneAndRewards = () => {
     setMilestones(milestones);
   };
 
-  const handleRewardUpdate = (addReward: TRewards) => {
+  const handleRewardUpdate = (addReward: ProjectReward) => {
     const findReward = rewards.find((reward) => reward.id === addReward.id);
     if (findReward) {
       const newRewards = rewards.map((reward) => {
@@ -151,7 +152,7 @@ export const MilestoneAndRewards = () => {
   const handleNext = () => {
     const updateProjectInput: any = {
       projectId: data?.project?.id,
-      rewardCurrency: isSatoshi ? 'btc' : 'usd',
+      rewardCurrency: isSatoshiRewards ? 'btc' : 'usd',
       expiresAt: finalDate || null,
     };
     if (rewards.length > 0) {
@@ -418,7 +419,7 @@ export const MilestoneAndRewards = () => {
                       key="index"
                       width="100%"
                       reward={reward}
-                      isSatoshi={isSatoshi}
+                      isSatoshi={isSatoshiRewards}
                       handleEdit={() => {
                         setSelectedReward(reward);
                         openReward();
@@ -450,8 +451,8 @@ export const MilestoneAndRewards = () => {
           onClose={onRewardClose}
           rewards={selectedReward}
           onSubmit={handleRewardUpdate}
-          isSatoshi={isSatoshi}
-          setIsSatoshi={setIsSatoshi}
+          isSatoshi={isSatoshiRewards}
+          setIsSatoshi={setIsSatoshiRewards}
           projectId={data?.project?.id}
         />
       )}
