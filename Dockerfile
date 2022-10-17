@@ -51,4 +51,4 @@ COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/build ./build
 
 # RUN yarn global add serve
-CMD yarn serve -s build
+CMD node server.ts
