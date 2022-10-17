@@ -5,7 +5,7 @@ import { LandingPage } from '../pages/landing';
 import { TopNavBar } from '../components/nav';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
-import { NotFound } from '../pages/notFound';
+import { NotFoundPage } from '../pages/notFound';
 import { GrantsLanding } from '../pages/grants/GrantsLanding';
 import { Profile } from '../pages/profile';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
@@ -24,7 +24,7 @@ import { ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
-import { ProjectDiscoveryPage } from '../pages/project-discovery';
+import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
 import { getPath } from '../constants';
 
 export const customHistory = createBrowserHistory();
@@ -105,7 +105,7 @@ export const Router = () => {
               <EntryPage />
             </Route>
             <Route path="/not-found">
-              <NotFound />
+              <NotFoundPage />
             </Route>
             <Route path="/not-authorized">
               <NotAuthorized />

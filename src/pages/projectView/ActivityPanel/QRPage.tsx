@@ -12,28 +12,19 @@ import {
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import QRCode from 'react-qr-code';
-import {
-  ButtonComponent,
-  Card,
-  SatoshiAmount,
-  SectionTitle,
-} from '../../../components/ui';
+import { ButtonComponent, Card, SectionTitle } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import {
-  IFundingTx,
-  IFundingAmounts,
-  IProject,
-  IProjectReward,
-} from '../../../interfaces';
+import { IFundingTx, IFundingAmounts, IProject } from '../../../interfaces';
 import { IFundForm } from '../../../hooks';
-import { GiftIcon } from '../../../components/icons';
 import { BsLightning } from 'react-icons/bs';
 import { GiCrossedChains } from 'react-icons/gi';
 import { FaTelegramPlane } from 'react-icons/fa';
 import { colors, GeyserTelegramUrl } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
-import { hasShipping, hasOnChain } from '../../../utils';
+import { hasOnChain } from '../../../utils';
+import { FundingTx, Project } from '../../../types/generated/graphql';
+import { ContributionInfoBox } from '../components/ContributionInfoBox';
 
 const useStyles = createUseStyles({
   blockText: {
@@ -61,43 +52,42 @@ const useStyles = createUseStyles({
 
 interface IQrPage {
   handleCloseButton: () => void;
-  fundingTx: IFundingTx;
+  fundingTx: FundingTx | IFundingTx;
   amounts: IFundingAmounts;
   state: IFundForm;
-  project: IProject;
+  project: Project | IProject;
 }
 
-export const QrPage = ({
+export const QRPage = ({
   fundingTx,
-  amounts,
   state,
   project,
   handleCloseButton,
 }: IQrPage) => {
   const { paymentRequest, address, amount } = fundingTx;
-  const { title, name } = project;
+  const { name } = project;
 
-  const { getTotalAmount, getRewardsQuantity } = useFundCalc(state);
+  const { getRewardsQuantity } = useFundCalc(state);
 
   const isMobile = isMobileMode();
   const classes = useStyles();
 
-  const [copy, setcopy] = useState(false);
+  const [copy, setCopy] = useState(false);
   const [platform, setPlatform] = useState(0);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(paymentRequest);
-    setcopy(true);
+    navigator.clipboard.writeText(paymentRequest || '');
+    setCopy(true);
     setTimeout(() => {
-      setcopy(false);
+      setCopy(false);
     }, 2000);
   };
 
   const handleCopyOnchain = () => {
     navigator.clipboard.writeText(getOnchainAddress());
-    setcopy(true);
+    setCopy(true);
     setTimeout(() => {
-      setcopy(false);
+      setCopy(false);
     }, 2000);
   };
 
@@ -109,34 +99,6 @@ export const QrPage = ({
   const getOnchainAddress = () => {
     const bitcoins = amount / 100000000;
     return `bitcoin:${address}?amount=${bitcoins}`;
-  };
-
-  const getRewardNames = () => {
-    let rewardNames = '';
-    project.rewards?.map((reward: IProjectReward) => {
-      const rewardCount = state.rewards[reward.id];
-      if (rewardCount) {
-        if (rewardNames.length === 0) {
-          rewardNames = `${reward.name}(x${rewardCount})`;
-        } else {
-          rewardNames = `${rewardNames}, ${reward.name}(x${rewardCount})`;
-        }
-      }
-    });
-    return rewardNames;
-  };
-
-  const rewardCountString = () => {
-    const count = getRewardsQuantity();
-    if (count === 0) {
-      return '';
-    }
-
-    if (count === 1) {
-      return '1 reward';
-    }
-
-    return `${count} rewards`;
   };
 
   const qrBackgroundColor = copy ? colors.primary : colors.bgWhite;
@@ -161,63 +123,18 @@ export const QrPage = ({
         onClick={handleCloseButton}
       />
       <SectionTitle> Confirm & fund</SectionTitle>
-      <Card width="100%" borderRadius="5px">
-        <VStack width="100%" padding="15px" alignItems="flex-start">
-          {state.rewardsCost > 0 && (
-            <VStack
-              width="100%"
-              alignItems="flex-start"
-              paddingBottom="5px"
-              borderBottom={`1px solid ${colors.gray200}`}
-            >
-              <HStack>
-                <GiftIcon />
-                <Text>{`Reward: ${getRewardNames()}`}</Text>
-              </HStack>
-            </VStack>
-          )}
-          <HStack
-            width="100%"
-            justifyContent="space-between"
-            alignItems="flex-start"
-          >
-            <VStack alignItems="flex-start" spacing="0px">
-              <SectionTitle>Total</SectionTitle>
-              <SatoshiAmount label="Donation">
-                {amounts.donationAmount}
-              </SatoshiAmount>
-              {amounts.rewardsCost && (
-                <Text>{`Rewards: ${rewardCountString()}`}</Text>
-              )}
-              {amounts.rewardsCost && hasShipping(name) && (
-                <SatoshiAmount label="Shipping">
-                  {amounts.shippingCost}
-                </SatoshiAmount>
-              )}
-              <Text className={classes.blockText}> {`Project: ${title}`}</Text>
-              {state.email && (
-                <Text className={classes.blockText}>
-                  {' '}
-                  {`Email: ${state.email}`}
-                </Text>
-              )}
-              {state.comment && (
-                <Text className={classes.blockText}>
-                  {' '}
-                  {`Comment: ${state.comment}`}
-                </Text>
-              )}
-              {/* { state.media && <Image src={`${fundingTx.media}`} alt="gif" width="100%" borderRadius="4px" /> } */}
-            </VStack>
-            <VStack alignItems="flex-end" spacing="0px">
-              <SatoshiAmount color="brand.primary" fontSize="24px">
-                {getTotalAmount('sats', project.name)}
-              </SatoshiAmount>
-              <Text> {`$${getTotalAmount('dollar', project.name)}`}</Text>
-            </VStack>
-          </HStack>
-        </VStack>
-      </Card>
+
+      <ContributionInfoBox
+        project={project as Project}
+        contributionAmount={state.donationAmount}
+        rewardsEarned={state.rewards}
+        isFunderAnonymous={state.anonymous}
+        funderUsername={state.funderUsername}
+        funderEmail={state.email}
+        funderAvatarURL={state.funderAvatarURL}
+        referenceCode={fundingTx.uuid}
+      />
+
       <Card width="100%" borderRadius="5px" overflow="auto">
         <Tabs variant="enclosed" isFitted onChange={setPlatform}>
           <TabList>

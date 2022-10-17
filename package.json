@@ -62,8 +62,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
-    "format:generated-types": "prettier --write \"src/types/generated/graphql.ts\"",
-    "codegen": "rover graph fetch geyser-graph@staging > ./schema.graphql && graphql-codegen --config codegen.yaml && rm schema.graphql && format:generated-types"
+    "graph:format": "prettier --write \"src/types/generated/graphql.ts\"",
+    "graph:fetch": "rover graph fetch geyser-graph@staging > ./schema.graphql",
+    "graph:generate": "yarn graph:fetch && graphql-codegen --config codegen.yaml && rm schema.graphql && yarn graph:format"
   },
   "eslintConfig": {
     "extends": "react-app"

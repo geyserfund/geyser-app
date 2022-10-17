@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss';
 import { colors, projectTypes } from '../../../constants';
 import { fonts } from '../../../constants/fonts';
 import { IProject, IProjectMilestone } from '../../../interfaces';
-import { Countdown } from '../../../pages/project/Activity/Countdown';
+import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
 import { isDarkMode, useBitcoinRates } from '../../../utils';
 import { SatoshiAmount } from '../../ui';
 import { ProjectSectionBar } from '../ProjectSectionBar';

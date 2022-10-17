@@ -140,6 +140,7 @@ export const DetailsContainer = ({
             padding={isMobile ? '20px 10px 50px 10px' : '0px 40px 70px 40px'}
           >
             <DetailsCard project={project} setFundState={setFundState} />
+
             <ProjectAccesories
               project={project}
               fundState={fundState}

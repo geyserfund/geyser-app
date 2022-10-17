@@ -2,7 +2,7 @@ export * from './IdComponent';
 export * from './AuthModal';
 export * from './AppFooter';
 export * from './DonationInput';
-export * from './RewardItem';
+export * from '../../pages/projectView/components/FundingFormRewardItem';
 export * from './AddAmbassador';
 export * from './AddSponsor';
 export * from './SwipeLiveProject';
