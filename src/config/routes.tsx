@@ -53,9 +53,10 @@ export const Router = () => {
             <Route path="/grants">
               <GrantsLanding />
             </Route>
-            <Route path="/launch/start">
-              <Launch />
-            </Route>
+            <Route
+              path={getPath('launchProjectStart')}
+              component={Launch}
+            ></Route>
             <Route path="/launch/:projectId/node">
               <PrivateRoute>
                 <Wallet />
