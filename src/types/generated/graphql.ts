@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-
 import {
   GraphQLResolveInfo,
   GraphQLScalarType,
@@ -34,16 +32,28 @@ export type Scalars = {
   amount_Float_NotNull_min_1: any;
   amount_Float_min_1: any;
   comment_String_maxLength_280: any;
-  cost_Float_NotNull_min_1_max_50000000: any;
-  cost_Int_NotNull_min_0_max_1500000: any;
-  donationAmount_Int_NotNull_min_1_max_15000000: any;
+  cost_Float_NotNull_min_1_max_1000000: any;
+  cost_Int_NotNull_min_0: any;
+  description_String_NotNull_maxLength_2200: any;
+  description_String_maxLength_280: any;
+  description_String_maxLength_2200: any;
+  donationAmount_Int_NotNull_min_1: any;
+  email_String_NotNull_format_email: any;
   email_String_format_email: any;
   fundingGoal_Int_min_1: any;
+  name_String_NotNull_minLength_5_maxLength_50: any;
   name_String_NotNull_minLength_5_maxLength_280: any;
+  name_String_minLength_5_maxLength_50: any;
+  name_String_minLength_5_maxLength_280: any;
+  pubkey_String_NotNull_minLength_66_maxLength_66: any;
+  pubkey_String_minLength_66_maxLength_66: any;
   quantity_Int_NotNull_min_1: any;
-  rewardsCost_Int_NotNull_min_0_max_15000000: any;
+  rewardsCost_Int_NotNull_min_0: any;
   stock_Int_min_0: any;
   title_String_NotNull_maxLength_50: any;
+  title_String_NotNull_maxLength_150: any;
+  title_String_maxLength_50: any;
+  title_String_maxLength_150: any;
 };
 
 export type Ambassador = {
@@ -67,10 +77,13 @@ export type ConnectionDetails =
 
 export type CreateEntryInput = {
   content?: InputMaybe<Scalars['String']>;
-  description: Scalars['String'];
+  /** Short description of the Entry. */
+  description: Scalars['description_String_NotNull_maxLength_2200'];
+  /** Header image of the Entry. */
   image?: InputMaybe<Scalars['String']>;
   projectId: Scalars['BigInt'];
-  title: Scalars['String'];
+  /** Title of the Entry. */
+  title: Scalars['title_String_NotNull_maxLength_150'];
   type: EntryType;
 };
 
@@ -81,18 +94,23 @@ export type CreateGranteeInput = {
 };
 
 export type CreateProjectInput = {
-  description: Scalars['String'];
-  email: Scalars['String'];
+  /** A short description of the project. */
+  description: Scalars['description_String_NotNull_maxLength_2200'];
+  email: Scalars['email_String_NotNull_format_email'];
   expiresAt?: InputMaybe<Scalars['String']>;
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>;
+  /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
   name: Scalars['name_String_NotNull_minLength_5_maxLength_280'];
-  rewardCurrency?: InputMaybe<Scalars['String']>;
+  /** The currency used to price rewards for the project. Currently only USD supported. Should become an Enum. */
+  rewardCurrency?: InputMaybe<RewardCurrency>;
+  /** Public title of the project. */
   title: Scalars['title_String_NotNull_maxLength_50'];
   type?: InputMaybe<ProjectType>;
 };
 
 export type CreateProjectMilestoneInput = {
+  /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
   amount: Scalars['amount_Float_NotNull_min_1'];
   description: Scalars['String'];
   name: Scalars['String'];
@@ -100,7 +118,8 @@ export type CreateProjectMilestoneInput = {
 };
 
 export type CreateProjectRewardInput = {
-  cost: Scalars['cost_Float_NotNull_min_1_max_50000000'];
+  /** Cost of the reward, priced in USD cents */
+  cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
   description: Scalars['String'];
   image?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
@@ -110,7 +129,7 @@ export type CreateProjectRewardInput = {
 
 export type CreateWalletInput = {
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsCreateInput>;
-  name?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_50']>;
   resourceInput: ResourceInput;
 };
 
@@ -123,27 +142,44 @@ export type CursorInput = {
 };
 
 export type DonationFundingInput = {
-  donationAmount: Scalars['donationAmount_Int_NotNull_min_1_max_15000000'];
+  /** The donation amount, in satoshis. */
+  donationAmount: Scalars['donationAmount_Int_NotNull_min_1'];
 };
 
 export type Entry = {
   __typename?: 'Entry';
+  /** Total amount of satoshis funded from the Entry page. */
   amountFunded: Scalars['Int'];
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
+  /** User that created the Entry. */
   creator: User;
-  description: Scalars['String'];
+  /** Short description of the Entry. */
+  description: Scalars['description_String_NotNull_maxLength_2200'];
+  /** Number of funders that were created from the Entry's page. */
   fundersCount: Scalars['Int'];
+  /** Funding transactions that were created from the Entry's page. */
   fundingTxs: Array<Maybe<FundingTx>>;
   id: Scalars['BigInt'];
+  /** Header image of the Entry. */
   image?: Maybe<Scalars['String']>;
+  /** Project within which the Entry was created. */
   project?: Maybe<Project>;
+  /** @deprecated This field was replaced by the status field and will eventually be removed. */
   published: Scalars['Boolean'];
   publishedAt?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
+  status: EntryStatus;
+  /** Title of the Entry. */
+  title: Scalars['title_String_NotNull_maxLength_150'];
   type: EntryType;
   updatedAt: Scalars['String'];
 };
+
+export enum EntryStatus {
+  Deleted = 'deleted',
+  Published = 'published',
+  Unpublished = 'unpublished',
+}
 
 export enum EntryType {
   Article = 'article',
@@ -162,16 +198,22 @@ export type ExternalAccount = {
 
 export type FileUploadInput = {
   name?: InputMaybe<Scalars['String']>;
+  /** MIME type of the file. Currently only supports image types. */
   type?: InputMaybe<Scalars['String']>;
 };
 
+/** The Funder type contains a User's funding details over a particular project. */
 export type Funder = {
   __typename?: 'Funder';
+  /** Aggregate amount funded by a Funder over all his (confirmed) funding transactions for a particular project, in satoshis. */
   amountFunded?: Maybe<Scalars['Int']>;
+  /** Boolean value indicating whether at least one of the funding transactions of the Funder were confirmed. */
   confirmed: Scalars['Boolean'];
+  /** Time at which the first confirmed funding transactions of the Funder was confirmed. */
   confirmedAt?: Maybe<Scalars['String']>;
   id: Scalars['BigInt'];
   rewards: Array<Maybe<FunderReward>>;
+  /** Number of (confirmed) times a Funder funded a particular project. */
   timesFunded?: Maybe<Scalars['Int']>;
   user?: Maybe<User>;
 };
@@ -231,6 +273,7 @@ export type FundingInput = {
   metadataInput?: InputMaybe<FundingMetadataInput>;
   projectId: Scalars['BigInt'];
   rewardInput?: InputMaybe<RewardFundingInput>;
+  /** The resource from which the funding transaction is being created. */
   sourceResourceInput: ResourceInput;
 };
 
@@ -364,48 +407,65 @@ export type GranteeSubmissionResponse = {
   success: Scalars['Boolean'];
 };
 
-export type Like = {
-  __typename?: 'Like';
-  user: User;
-};
-
 export type LndConnectionDetails = {
+  /** Port where the gRPC calls should be made. */
   grpcPort: Scalars['Int'];
+  /** Hostname where the gRPC calls should be made. */
   hostname: Scalars['String'];
   lndNodeType: LndNodeType;
+  /** Invoice macaroon for authenticating gRPC calls to the LND node. */
   macaroon: Scalars['String'];
+  /** TLS certificate for the LND node (optional for Voltage nodes). */
   tlsCertificate?: Maybe<Scalars['String']>;
 };
 
 export type LndConnectionDetailsCreateInput = {
+  /** Port where the gRPC calls should be made. */
   grpcPort: Scalars['Int'];
+  /** Hostname where the gRPC calls should be made. */
   hostname: Scalars['String'];
   lndNodeType: LndNodeType;
+  /** Invoice macaroon for authenticating gRPC calls to the LND node. */
   macaroon: Scalars['String'];
-  pubkey: Scalars['String'];
+  /** Public key of the LND node. */
+  pubkey: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
+  /** TLS certificate for the LND node (optional for Voltage nodes). */
   tlsCertificate?: InputMaybe<Scalars['String']>;
 };
 
+/** Private node details that can only be queried by the wallet owner. */
 export type LndConnectionDetailsPrivate = {
   __typename?: 'LndConnectionDetailsPrivate';
+  /** Port where the gRPC calls should be made. */
   grpcPort: Scalars['Int'];
+  /** Hostname where the gRPC calls should be made. */
   hostname: Scalars['String'];
+  /** Type of the LND node used. */
   lndNodeType: LndNodeType;
+  /** Invoice macaroon for authenticating gRPC calls to the LND node. */
   macaroon: Scalars['String'];
-  pubkey: Scalars['String'];
+  /** Public key of the LND node. */
+  pubkey: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
+  /** TLS certificate for the LND node (optional for Voltage nodes). */
   tlsCertificate?: Maybe<Scalars['String']>;
 };
 
+/** Public node details visible by anyone. */
 export type LndConnectionDetailsPublic = {
   __typename?: 'LndConnectionDetailsPublic';
-  pubkey: Scalars['String'];
+  pubkey: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
 };
 
 export type LndConnectionDetailsUpdateInput = {
+  /** Port where the gRPC calls should be made. */
   grpcPort?: InputMaybe<Scalars['Int']>;
+  /** Hostname where the gRPC calls should be made. */
   hostname?: InputMaybe<Scalars['String']>;
+  /** Invoice macaroon for authenticating gRPC calls to the LND node. */
   macaroon?: InputMaybe<Scalars['String']>;
-  pubkey?: InputMaybe<Scalars['String']>;
+  /** Public key of the LND node. */
+  pubkey?: InputMaybe<Scalars['pubkey_String_minLength_66_maxLength_66']>;
+  /** TLS certificate for the LND node (optional for Voltage nodes). */
   tlsCertificate?: InputMaybe<Scalars['String']>;
 };
 
@@ -427,6 +487,7 @@ export type Mutation = {
   createProjectReward: ProjectReward;
   createSponsor: Sponsor;
   createWallet: Wallet;
+  deleteEntry: Entry;
   deleteProjectMilestone: Scalars['Boolean'];
   fund: FundingMutationResponse;
   fundingCancel: FundingCancelResponse;
@@ -434,6 +495,7 @@ export type Mutation = {
   fundingConfirm: FundingConfirmResponse;
   fundingCreateFromPodcastKeysend: FundingTx;
   fundingPend: FundingPendingResponse;
+  /** Makes the Entry public. */
   publishEntry: Entry;
   unlinkExternalAccount: User;
   updateEntry: Entry;
@@ -441,6 +503,7 @@ export type Mutation = {
   updateProjectMilestone: ProjectMilestone;
   updateProjectReward: ProjectReward;
   updateUser: User;
+  /** This operation is currently not supported. */
   updateWallet: Wallet;
 };
 
@@ -478,6 +541,10 @@ export type MutationCreateSponsorArgs = {
 
 export type MutationCreateWalletArgs = {
   input?: InputMaybe<CreateWalletInput>;
+};
+
+export type MutationDeleteEntryArgs = {
+  id: Scalars['BigInt'];
 };
 
 export type MutationDeleteProjectMilestoneArgs = {
@@ -540,6 +607,11 @@ export type MutationUpdateWalletArgs = {
   input?: InputMaybe<UpdateWalletInput>;
 };
 
+export type OffsetBasedPaginationInput = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
 export enum OrderByOptions {
   Asc = 'asc',
   Desc = 'desc',
@@ -557,6 +629,7 @@ export type OwnerOf = {
   project?: Maybe<Project>;
 };
 
+/** Cursor pagination input. */
 export type PaginationInput = {
   cursor?: InputMaybe<CursorInput>;
   take?: InputMaybe<Scalars['Int']>;
@@ -564,55 +637,90 @@ export type PaginationInput = {
 
 export type Project = {
   __typename?: 'Project';
+  /** @deprecated this field will soon be replaced by the status field */
   active: Scalars['Boolean'];
+  /** @deprecated Field no longer supported */
   ambassadors: Array<Maybe<Ambassador>>;
+  /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int'];
   createdAt: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
+  /** A short description of the project. */
+  description?: Maybe<Scalars['description_String_maxLength_2200']>;
+  /** @deprecated this field will soon be replaced by the status field */
   draft: Scalars['Boolean'];
-  entries: Array<Entry>;
+  /**
+   * By default, returns all the entries of a project, both published and unpublished but not deleted.
+   * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
+   * An unpublished entry is only returned if the requesting user is the creator of the entry.
+   */
+  entries: Array<Maybe<Entry>>;
   expiresAt?: Maybe<Scalars['String']>;
   funders: Array<Maybe<Funder>>;
   fundingGoal?: Maybe<Scalars['fundingGoal_Int_min_1']>;
   fundingTxs?: Maybe<Array<Maybe<FundingTx>>>;
+  /** @deprecated Field no longer supported */
   grantees: Array<Maybe<Grantee>>;
   id: Scalars['BigInt'];
+  /** Main project image. */
   image?: Maybe<Scalars['String']>;
-  likes: Array<Maybe<Like>>;
+  /** @deprecated Field no longer supported */
   media: Array<Maybe<Scalars['String']>>;
   milestones?: Maybe<Array<Maybe<ProjectMilestone>>>;
-  name: Scalars['String'];
-  owners: Array<Maybe<Owner>>;
+  /** Unique name for the project. Used for the project URL and lightning address. */
+  name: Scalars['name_String_NotNull_minLength_5_maxLength_280'];
+  owners: Array<Owner>;
+  rewardCurrency?: Maybe<RewardCurrency>;
   rewards?: Maybe<Array<Maybe<ProjectReward>>>;
+  /** @deprecated Field no longer supported */
   sponsors: Array<Maybe<Sponsor>>;
+  /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
-  title: Scalars['String'];
+  /** Public title of the project. */
+  title: Scalars['title_String_NotNull_maxLength_50'];
   type: ProjectType;
   updatedAt: Scalars['String'];
+  /** Wallets linked to a Project. */
   wallets: Array<Wallet>;
+};
+
+export type ProjectEntriesArgs = {
+  input?: InputMaybe<ProjectEntriesGetInput>;
+};
+
+export type ProjectEntriesGetInput = {
+  where?: InputMaybe<ProjectEntriesGetWhereInput>;
+};
+
+export type ProjectEntriesGetWhereInput = {
+  published?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type ProjectMilestone = {
   __typename?: 'ProjectMilestone';
+  /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
   amount: Scalars['Float'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['BigInt'];
   name: Scalars['String'];
 };
 
-export type ProjectOrderByInput = {
-  createdAt?: InputMaybe<Scalars['Date']>;
-};
-
 export type ProjectReward = {
   __typename?: 'ProjectReward';
   /** @deprecated Deprecated field please use 'sold' instead */
   backers: Scalars['Int'];
-  cost: Scalars['Float'];
+  /** Cost of the reward, priced in USD cents. */
+  cost: Scalars['Int'];
+  /**
+   * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
+   * rewards should only be visible by the project owner and the users that purchased it.
+   */
   deleted: Scalars['Boolean'];
-  description?: Maybe<Scalars['String']>;
+  /** Short description of the reward. */
+  description?: Maybe<Scalars['description_String_maxLength_280']>;
   id: Scalars['BigInt'];
+  /** Image of the reward. */
   image?: Maybe<Scalars['String']>;
+  /** Name of the reward. */
   name: Scalars['String'];
   sold: Scalars['Int'];
   stock: Scalars['Int'];
@@ -624,6 +732,12 @@ export type ProjectStatistics = {
   totalVisitors: Scalars['Int'];
 };
 
+export enum ProjectStatus {
+  Active = 'active',
+  Deleted = 'deleted',
+  Draft = 'draft',
+}
+
 export enum ProjectType {
   Donation = 'donation',
   Grant = 'grant',
@@ -633,14 +747,25 @@ export enum ProjectType {
 export type ProjectWhereInput = {
   active?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['BigInt']>;
-  name?: InputMaybe<Scalars['String']>;
+  /** Unique name for the project. Used for the project URL and lightning address. */
+  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_280']>;
   type?: InputMaybe<Scalars['String']>;
 };
 
 export type ProjectsGetQueryInput = {
-  orderBy?: InputMaybe<ProjectOrderByInput>;
+  /**
+   * Takes an array of Project OrderBy options. When passing multiple ordering options, each option must
+   * be passed in a separate object in the array. This ensures consistent ordering of the orderBy options in the
+   * result set.
+   */
+  orderBy?: InputMaybe<Array<InputMaybe<ProjectsOrderByInput>>>;
   pagination?: InputMaybe<PaginationInput>;
   where?: InputMaybe<ProjectWhereInput>;
+};
+
+export type ProjectsOrderByInput = {
+  balance?: InputMaybe<OrderByOptions>;
+  createdAt?: InputMaybe<OrderByOptions>;
 };
 
 export type ProjectsResponse = {
@@ -651,8 +776,11 @@ export type ProjectsResponse = {
 
 export type ProjectsSummary = {
   __typename?: 'ProjectsSummary';
+  /** Total of satoshis raised by projects on the platform. */
   fundedTotal?: Maybe<Scalars['Int']>;
+  /** Total number of funders on the platform. */
   fundersCount?: Maybe<Scalars['Int']>;
+  /** Total number of projects ever created on the platform. */
   projectsCount?: Maybe<Scalars['Int']>;
 };
 
@@ -661,9 +789,11 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']>;
   entry: Entry;
   fundingTx: FundingTx;
+  /** Returns all published entries. */
   getEntries: Array<Maybe<Entry>>;
   getFunders: Array<Maybe<Funder>>;
   getFundingTxs: Array<Maybe<FundingTx>>;
+  /** Returns the public key of the Lightning node linked to a project, if there is one. */
   getProjectPubkey?: Maybe<Scalars['String']>;
   getProjectReward: ProjectReward;
   getProjectRewards: Array<Maybe<ProjectReward>>;
@@ -671,7 +801,9 @@ export type Query = {
   getWallet: Wallet;
   me?: Maybe<User>;
   project?: Maybe<Project>;
+  /** By default, returns a list of all active projects. */
   projects: ProjectsResponse;
+  /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary;
   statusCheck: Scalars['Boolean'];
   user: User;
@@ -726,7 +858,7 @@ export type QueryProjectsArgs = {
 };
 
 export type QueryUserArgs = {
-  where?: InputMaybe<UserQueryInput>;
+  where: UserGetInput;
 };
 
 export type ResourceInput = {
@@ -734,14 +866,23 @@ export type ResourceInput = {
   resourceType: FundingResourceType;
 };
 
+export enum RewardCurrency {
+  Usd = 'usd',
+}
+
 export type RewardFundingInput = {
   rewards: Array<RewardInput>;
-  rewardsCost: Scalars['rewardsCost_Int_NotNull_min_0_max_15000000'];
+  /**
+   * Total cost of rewards, in satoshis. This amount will be used for the invoice  unless there is more than 1%
+   * slippage with the reward cost calculated in the backend.
+   */
+  rewardsCost: Scalars['rewardsCost_Int_NotNull_min_0'];
   shipping?: InputMaybe<ShippingInput>;
 };
 
 export type RewardInput = {
   id: Scalars['BigInt'];
+  /** Number of times a reward was selected. */
   quantity: Scalars['quantity_Int_NotNull_min_1'];
 };
 
@@ -751,13 +892,16 @@ export enum ShippingDestination {
 }
 
 export type ShippingInput = {
-  cost: Scalars['cost_Int_NotNull_min_0_max_1500000'];
+  /** The shipping cost, in satoshis. */
+  cost: Scalars['cost_Int_NotNull_min_0'];
   destination: ShippingDestination;
 };
 
 export type SignedUploadUrl = {
   __typename?: 'SignedUploadUrl';
+  /** Distribution URL from which the image will be served */
   distributionUrl: Scalars['String'];
+  /** Signed URL used by the client to upload an image */
   uploadUrl: Scalars['String'];
 };
 
@@ -779,31 +923,42 @@ export type Subscription = {
 
 export type UniqueProjectQueryInput = {
   id?: InputMaybe<Scalars['BigInt']>;
-  name?: InputMaybe<Scalars['String']>;
+  /** Unique name for the project. Used for the project URL and lightning address. */
+  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_280']>;
 };
 
 export type UpdateEntryInput = {
   content?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['description_String_maxLength_2200']>;
   entryId: Scalars['BigInt'];
+  /** Header image of the Entry. */
   image?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['title_String_maxLength_150']>;
 };
 
 export type UpdateProjectInput = {
+  /** @deprecated this field will soon be replaced by the status field */
   active?: InputMaybe<Scalars['Boolean']>;
-  description?: InputMaybe<Scalars['String']>;
+  /** A short description of the project. */
+  description?: InputMaybe<Scalars['description_String_maxLength_2200']>;
+  /** @deprecated this field will soon be replaced by the status field */
   draft?: InputMaybe<Scalars['Boolean']>;
   expiresAt?: InputMaybe<Scalars['String']>;
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>;
+  /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
   projectId: Scalars['BigInt'];
+  /** The currency used to price rewards for the project. Currently only USD supported. Should become an Enum. */
   rewardCurrency?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
+  /** Current status of the project, either active, draft or deleted. */
+  status?: InputMaybe<ProjectStatus>;
+  /** Public title of the project. */
+  title?: InputMaybe<Scalars['title_String_maxLength_50']>;
   type?: InputMaybe<ProjectType>;
 };
 
 export type UpdateProjectMilestoneInput = {
+  /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
   amount?: InputMaybe<Scalars['amount_Float_min_1']>;
   description?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -811,7 +966,9 @@ export type UpdateProjectMilestoneInput = {
 };
 
 export type UpdateProjectRewardInput = {
-  cost: Scalars['cost_Float_NotNull_min_1_max_50000000'];
+  /** Cost of the reward, priced in USD cents */
+  cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
+  /** Soft deletes the reward. */
   deleted?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
   image?: InputMaybe<Scalars['String']>;
@@ -830,38 +987,93 @@ export type UpdateUserInput = {
 export type UpdateWalletInput = {
   id: Scalars['BigInt'];
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsUpdateInput>;
-  name?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_50']>;
 };
 
 export type User = {
   __typename?: 'User';
+  /** Details on the participation of a User in a project. */
   contributions: Array<Maybe<UserProjectContribution>>;
   email?: Maybe<Scalars['String']>;
+  /**
+   * By default, returns all the entries of a user, both published and unpublished but not deleted.
+   * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
+   * An unpublished entry is only returned if the requesting user is the creator of the entry.
+   */
+  entries: Array<Maybe<Entry>>;
+  /**
+   * External accounts linked to the User. It can be a twitter account if the User linked their account. For anonymous
+   * users, this field can contain the wallet or app from which they funded, eg: Fountain, Breeze, etc.
+   */
   externalAccounts: Array<Maybe<ExternalAccount>>;
+  /** Returns a user's funding transactions accross all projects. */
+  fundingTxs: Array<Maybe<FundingTx>>;
   id: Scalars['BigInt'];
   imageUrl?: Maybe<Scalars['String']>;
   ownerOf: Array<Maybe<OwnerOf>>;
+  /**
+   * Returns the projects of a user. By default, this field returns all the projects for that user, both draft and non-draft.
+   * To filter the result set, an explicit input can be passed that specifies a value of true or false for the draft field.
+   * An unpublished project is only returned if the requesting user is the owner of the project.
+   */
+  projects: Array<Maybe<Project>>;
   username: Scalars['String'];
+};
+
+export type UserEntriesArgs = {
+  input?: InputMaybe<UserEntriesGetInput>;
+};
+
+export type UserProjectsArgs = {
+  input?: InputMaybe<UserProjectsGetInput>;
+};
+
+export type UserEntriesGetInput = {
+  where?: InputMaybe<UserEntriesGetWhereInput>;
+};
+
+export type UserEntriesGetWhereInput = {
+  published?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type UserGetInput = {
+  id: Scalars['BigInt'];
 };
 
 export type UserProjectContribution = {
   __typename?: 'UserProjectContribution';
+  /** Funder linked to the funding contribution. Only present if the contribution was a funding contribution. */
   funder?: Maybe<Funder>;
+  /**
+   * Boolean value indicating if the User was an ambassador of the project.
+   * @deprecated Field no longer supported
+   */
   isAmbassador: Scalars['Boolean'];
+  /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean'];
+  /**
+   * Boolean value indicating if the User was a sponsor for the project.
+   * @deprecated Field no longer supported
+   */
   isSponsor: Scalars['Boolean'];
+  /** Project linked to the contributions. */
   project: Project;
 };
 
-export type UserQueryInput = {
-  id?: InputMaybe<Scalars['BigInt']>;
+export type UserProjectsGetInput = {
+  where?: InputMaybe<UserProjectsGetWhereInput>;
+};
+
+export type UserProjectsGetWhereInput = {
+  draft?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type Wallet = {
   __typename?: 'Wallet';
   connectionDetails: ConnectionDetails;
   id: Scalars['BigInt'];
-  name: Scalars['String'];
+  /** Wallet name */
+  name: Scalars['name_String_NotNull_minLength_5_maxLength_50'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -989,6 +1201,7 @@ export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>;
   DonationFundingInput: DonationFundingInput;
   Entry: ResolverTypeWrapper<Entry>;
+  EntryStatus: EntryStatus;
   EntryType: EntryType;
   ExternalAccount: ResolverTypeWrapper<ExternalAccount>;
   FileUploadInput: FileUploadInput;
@@ -1030,7 +1243,6 @@ export type ResolversTypes = {
   Grantee: ResolverTypeWrapper<Grantee>;
   GranteeSubmissionResponse: ResolverTypeWrapper<GranteeSubmissionResponse>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Like: ResolverTypeWrapper<Like>;
   LndConnectionDetails: never;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
@@ -1038,22 +1250,27 @@ export type ResolversTypes = {
   LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
   LndNodeType: LndNodeType;
   Mutation: ResolverTypeWrapper<{}>;
+  OffsetBasedPaginationInput: OffsetBasedPaginationInput;
   OrderByOptions: OrderByOptions;
   Owner: ResolverTypeWrapper<Owner>;
   OwnerOf: ResolverTypeWrapper<OwnerOf>;
   PaginationInput: PaginationInput;
   Project: ResolverTypeWrapper<Project>;
+  ProjectEntriesGetInput: ProjectEntriesGetInput;
+  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>;
-  ProjectOrderByInput: ProjectOrderByInput;
   ProjectReward: ResolverTypeWrapper<ProjectReward>;
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>;
+  ProjectStatus: ProjectStatus;
   ProjectType: ProjectType;
   ProjectWhereInput: ProjectWhereInput;
   ProjectsGetQueryInput: ProjectsGetQueryInput;
+  ProjectsOrderByInput: ProjectsOrderByInput;
   ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>;
   ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>;
   Query: ResolverTypeWrapper<{}>;
   ResourceInput: ResourceInput;
+  RewardCurrency: RewardCurrency;
   RewardFundingInput: RewardFundingInput;
   RewardInput: RewardInput;
   ShippingDestination: ShippingDestination;
@@ -1071,8 +1288,12 @@ export type ResolversTypes = {
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
   User: ResolverTypeWrapper<User>;
+  UserEntriesGetInput: UserEntriesGetInput;
+  UserEntriesGetWhereInput: UserEntriesGetWhereInput;
+  UserGetInput: UserGetInput;
   UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>;
-  UserQueryInput: UserQueryInput;
+  UserProjectsGetInput: UserProjectsGetInput;
+  UserProjectsGetWhereInput: UserProjectsGetWhereInput;
   Wallet: ResolverTypeWrapper<
     Omit<Wallet, 'connectionDetails'> & {
       connectionDetails: ResolversTypes['ConnectionDetails'];
@@ -1085,31 +1306,67 @@ export type ResolversTypes = {
   comment_String_maxLength_280: ResolverTypeWrapper<
     Scalars['comment_String_maxLength_280']
   >;
-  cost_Float_NotNull_min_1_max_50000000: ResolverTypeWrapper<
-    Scalars['cost_Float_NotNull_min_1_max_50000000']
+  cost_Float_NotNull_min_1_max_1000000: ResolverTypeWrapper<
+    Scalars['cost_Float_NotNull_min_1_max_1000000']
   >;
-  cost_Int_NotNull_min_0_max_1500000: ResolverTypeWrapper<
-    Scalars['cost_Int_NotNull_min_0_max_1500000']
+  cost_Int_NotNull_min_0: ResolverTypeWrapper<
+    Scalars['cost_Int_NotNull_min_0']
   >;
-  donationAmount_Int_NotNull_min_1_max_15000000: ResolverTypeWrapper<
-    Scalars['donationAmount_Int_NotNull_min_1_max_15000000']
+  description_String_NotNull_maxLength_2200: ResolverTypeWrapper<
+    Scalars['description_String_NotNull_maxLength_2200']
+  >;
+  description_String_maxLength_280: ResolverTypeWrapper<
+    Scalars['description_String_maxLength_280']
+  >;
+  description_String_maxLength_2200: ResolverTypeWrapper<
+    Scalars['description_String_maxLength_2200']
+  >;
+  donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<
+    Scalars['donationAmount_Int_NotNull_min_1']
+  >;
+  email_String_NotNull_format_email: ResolverTypeWrapper<
+    Scalars['email_String_NotNull_format_email']
   >;
   email_String_format_email: ResolverTypeWrapper<
     Scalars['email_String_format_email']
   >;
   fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>;
+  name_String_NotNull_minLength_5_maxLength_50: ResolverTypeWrapper<
+    Scalars['name_String_NotNull_minLength_5_maxLength_50']
+  >;
   name_String_NotNull_minLength_5_maxLength_280: ResolverTypeWrapper<
     Scalars['name_String_NotNull_minLength_5_maxLength_280']
+  >;
+  name_String_minLength_5_maxLength_50: ResolverTypeWrapper<
+    Scalars['name_String_minLength_5_maxLength_50']
+  >;
+  name_String_minLength_5_maxLength_280: ResolverTypeWrapper<
+    Scalars['name_String_minLength_5_maxLength_280']
+  >;
+  pubkey_String_NotNull_minLength_66_maxLength_66: ResolverTypeWrapper<
+    Scalars['pubkey_String_NotNull_minLength_66_maxLength_66']
+  >;
+  pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<
+    Scalars['pubkey_String_minLength_66_maxLength_66']
   >;
   quantity_Int_NotNull_min_1: ResolverTypeWrapper<
     Scalars['quantity_Int_NotNull_min_1']
   >;
-  rewardsCost_Int_NotNull_min_0_max_15000000: ResolverTypeWrapper<
-    Scalars['rewardsCost_Int_NotNull_min_0_max_15000000']
+  rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<
+    Scalars['rewardsCost_Int_NotNull_min_0']
   >;
   stock_Int_min_0: ResolverTypeWrapper<Scalars['stock_Int_min_0']>;
   title_String_NotNull_maxLength_50: ResolverTypeWrapper<
     Scalars['title_String_NotNull_maxLength_50']
+  >;
+  title_String_NotNull_maxLength_150: ResolverTypeWrapper<
+    Scalars['title_String_NotNull_maxLength_150']
+  >;
+  title_String_maxLength_50: ResolverTypeWrapper<
+    Scalars['title_String_maxLength_50']
+  >;
+  title_String_maxLength_150: ResolverTypeWrapper<
+    Scalars['title_String_maxLength_150']
   >;
 };
 
@@ -1168,23 +1425,25 @@ export type ResolversParentTypes = {
   Grantee: Grantee;
   GranteeSubmissionResponse: GranteeSubmissionResponse;
   Int: Scalars['Int'];
-  Like: Like;
   LndConnectionDetails: never;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
   LndConnectionDetailsPublic: LndConnectionDetailsPublic;
   LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
   Mutation: {};
+  OffsetBasedPaginationInput: OffsetBasedPaginationInput;
   Owner: Owner;
   OwnerOf: OwnerOf;
   PaginationInput: PaginationInput;
   Project: Project;
+  ProjectEntriesGetInput: ProjectEntriesGetInput;
+  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
   ProjectMilestone: ProjectMilestone;
-  ProjectOrderByInput: ProjectOrderByInput;
   ProjectReward: ProjectReward;
   ProjectStatistics: ProjectStatistics;
   ProjectWhereInput: ProjectWhereInput;
   ProjectsGetQueryInput: ProjectsGetQueryInput;
+  ProjectsOrderByInput: ProjectsOrderByInput;
   ProjectsResponse: ProjectsResponse;
   ProjectsSummary: ProjectsSummary;
   Query: {};
@@ -1207,24 +1466,40 @@ export type ResolversParentTypes = {
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
   User: User;
+  UserEntriesGetInput: UserEntriesGetInput;
+  UserEntriesGetWhereInput: UserEntriesGetWhereInput;
+  UserGetInput: UserGetInput;
   UserProjectContribution: UserProjectContribution;
-  UserQueryInput: UserQueryInput;
+  UserProjectsGetInput: UserProjectsGetInput;
+  UserProjectsGetWhereInput: UserProjectsGetWhereInput;
   Wallet: Omit<Wallet, 'connectionDetails'> & {
     connectionDetails: ResolversParentTypes['ConnectionDetails'];
   };
   amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1'];
   amount_Float_min_1: Scalars['amount_Float_min_1'];
   comment_String_maxLength_280: Scalars['comment_String_maxLength_280'];
-  cost_Float_NotNull_min_1_max_50000000: Scalars['cost_Float_NotNull_min_1_max_50000000'];
-  cost_Int_NotNull_min_0_max_1500000: Scalars['cost_Int_NotNull_min_0_max_1500000'];
-  donationAmount_Int_NotNull_min_1_max_15000000: Scalars['donationAmount_Int_NotNull_min_1_max_15000000'];
+  cost_Float_NotNull_min_1_max_1000000: Scalars['cost_Float_NotNull_min_1_max_1000000'];
+  cost_Int_NotNull_min_0: Scalars['cost_Int_NotNull_min_0'];
+  description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200'];
+  description_String_maxLength_280: Scalars['description_String_maxLength_280'];
+  description_String_maxLength_2200: Scalars['description_String_maxLength_2200'];
+  donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1'];
+  email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email'];
   email_String_format_email: Scalars['email_String_format_email'];
   fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1'];
+  name_String_NotNull_minLength_5_maxLength_50: Scalars['name_String_NotNull_minLength_5_maxLength_50'];
   name_String_NotNull_minLength_5_maxLength_280: Scalars['name_String_NotNull_minLength_5_maxLength_280'];
+  name_String_minLength_5_maxLength_50: Scalars['name_String_minLength_5_maxLength_50'];
+  name_String_minLength_5_maxLength_280: Scalars['name_String_minLength_5_maxLength_280'];
+  pubkey_String_NotNull_minLength_66_maxLength_66: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
+  pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66'];
   quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1'];
-  rewardsCost_Int_NotNull_min_0_max_15000000: Scalars['rewardsCost_Int_NotNull_min_0_max_15000000'];
+  rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0'];
   stock_Int_min_0: Scalars['stock_Int_min_0'];
   title_String_NotNull_maxLength_50: Scalars['title_String_NotNull_maxLength_50'];
+  title_String_NotNull_maxLength_150: Scalars['title_String_NotNull_maxLength_150'];
+  title_String_maxLength_50: Scalars['title_String_maxLength_50'];
+  title_String_maxLength_150: Scalars['title_String_maxLength_150'];
 };
 
 export type ConstraintDirectiveArgs = {
@@ -1301,7 +1576,11 @@ export type EntryResolvers<
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   creator?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<
+    ResolversTypes['description_String_NotNull_maxLength_2200'],
+    ParentType,
+    ContextType
+  >;
   fundersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fundingTxs?: Resolver<
     Array<Maybe<ResolversTypes['FundingTx']>>,
@@ -1317,7 +1596,12 @@ export type EntryResolvers<
     ParentType,
     ContextType
   >;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['EntryStatus'], ParentType, ContextType>;
+  title?: Resolver<
+    ResolversTypes['title_String_NotNull_maxLength_150'],
+    ParentType,
+    ContextType
+  >;
   type?: Resolver<ResolversTypes['EntryType'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1490,14 +1774,6 @@ export type GranteeSubmissionResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LikeResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Like'] = ResolversParentTypes['Like'],
-> = {
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type LndConnectionDetailsResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['LndConnectionDetails'] = ResolversParentTypes['LndConnectionDetails'],
@@ -1530,7 +1806,11 @@ export type LndConnectionDetailsPrivateResolvers<
     ContextType
   >;
   macaroon?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  pubkey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pubkey?: Resolver<
+    ResolversTypes['pubkey_String_NotNull_minLength_66_maxLength_66'],
+    ParentType,
+    ContextType
+  >;
   tlsCertificate?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -1543,7 +1823,11 @@ export type LndConnectionDetailsPublicResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['LndConnectionDetailsPublic'] = ResolversParentTypes['LndConnectionDetailsPublic'],
 > = {
-  pubkey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pubkey?: Resolver<
+    ResolversTypes['pubkey_String_NotNull_minLength_66_maxLength_66'],
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1605,6 +1889,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     Partial<MutationCreateWalletArgs>
+  >;
+  deleteEntry?: Resolver<
+    ResolversTypes['Entry'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteEntryArgs, 'id'>
   >;
   deleteProjectMilestone?: Resolver<
     ResolversTypes['Boolean'],
@@ -1729,12 +2019,17 @@ export type ProjectResolvers<
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<
-    Maybe<ResolversTypes['String']>,
+    Maybe<ResolversTypes['description_String_maxLength_2200']>,
     ParentType,
     ContextType
   >;
   draft?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType>;
+  entries?: Resolver<
+    Array<Maybe<ResolversTypes['Entry']>>,
+    ParentType,
+    ContextType,
+    Partial<ProjectEntriesArgs>
+  >;
   expiresAt?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -1762,11 +2057,6 @@ export type ProjectResolvers<
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  likes?: Resolver<
-    Array<Maybe<ResolversTypes['Like']>>,
-    ParentType,
-    ContextType
-  >;
   media?: Resolver<
     Array<Maybe<ResolversTypes['String']>>,
     ParentType,
@@ -1777,9 +2067,14 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owners?: Resolver<
-    Array<Maybe<ResolversTypes['Owner']>>,
+  name?: Resolver<
+    ResolversTypes['name_String_NotNull_minLength_5_maxLength_280'],
+    ParentType,
+    ContextType
+  >;
+  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
+  rewardCurrency?: Resolver<
+    Maybe<ResolversTypes['RewardCurrency']>,
     ParentType,
     ContextType
   >;
@@ -1798,7 +2093,11 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<
+    ResolversTypes['title_String_NotNull_maxLength_50'],
+    ParentType,
+    ContextType
+  >;
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>;
@@ -1825,10 +2124,10 @@ export type ProjectRewardResolvers<
   ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
 > = {
   backers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  cost?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   description?: Resolver<
-    Maybe<ResolversTypes['String']>,
+    Maybe<ResolversTypes['description_String_maxLength_280']>,
     ParentType,
     ContextType
   >;
@@ -1972,7 +2271,7 @@ export type QueryResolvers<
     ResolversTypes['User'],
     ParentType,
     ContextType,
-    Partial<QueryUserArgs>
+    RequireFields<QueryUserArgs, 'where'>
   >;
 };
 
@@ -2026,8 +2325,19 @@ export type UserResolvers<
     ContextType
   >;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  entries?: Resolver<
+    Array<Maybe<ResolversTypes['Entry']>>,
+    ParentType,
+    ContextType,
+    Partial<UserEntriesArgs>
+  >;
   externalAccounts?: Resolver<
     Array<Maybe<ResolversTypes['ExternalAccount']>>,
+    ParentType,
+    ContextType
+  >;
+  fundingTxs?: Resolver<
+    Array<Maybe<ResolversTypes['FundingTx']>>,
     ParentType,
     ContextType
   >;
@@ -2037,6 +2347,12 @@ export type UserResolvers<
     Array<Maybe<ResolversTypes['OwnerOf']>>,
     ParentType,
     ContextType
+  >;
+  projects?: Resolver<
+    Array<Maybe<ResolversTypes['Project']>>,
+    ParentType,
+    ContextType,
+    Partial<UserProjectsArgs>
   >;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2064,7 +2380,11 @@ export type WalletResolvers<
     ContextType
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<
+    ResolversTypes['name_String_NotNull_minLength_5_maxLength_50'],
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2089,28 +2409,60 @@ export interface Comment_String_MaxLength_280ScalarConfig
   name: 'comment_String_maxLength_280';
 }
 
-export interface Cost_Float_NotNull_Min_1_Max_50000000ScalarConfig
+export interface Cost_Float_NotNull_Min_1_Max_1000000ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['cost_Float_NotNull_min_1_max_50000000'],
+    ResolversTypes['cost_Float_NotNull_min_1_max_1000000'],
     any
   > {
-  name: 'cost_Float_NotNull_min_1_max_50000000';
+  name: 'cost_Float_NotNull_min_1_max_1000000';
 }
 
-export interface Cost_Int_NotNull_Min_0_Max_1500000ScalarConfig
+export interface Cost_Int_NotNull_Min_0ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['cost_Int_NotNull_min_0_max_1500000'],
+    ResolversTypes['cost_Int_NotNull_min_0'],
     any
   > {
-  name: 'cost_Int_NotNull_min_0_max_1500000';
+  name: 'cost_Int_NotNull_min_0';
 }
 
-export interface DonationAmount_Int_NotNull_Min_1_Max_15000000ScalarConfig
+export interface Description_String_NotNull_MaxLength_2200ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['donationAmount_Int_NotNull_min_1_max_15000000'],
+    ResolversTypes['description_String_NotNull_maxLength_2200'],
     any
   > {
-  name: 'donationAmount_Int_NotNull_min_1_max_15000000';
+  name: 'description_String_NotNull_maxLength_2200';
+}
+
+export interface Description_String_MaxLength_280ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['description_String_maxLength_280'],
+    any
+  > {
+  name: 'description_String_maxLength_280';
+}
+
+export interface Description_String_MaxLength_2200ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['description_String_maxLength_2200'],
+    any
+  > {
+  name: 'description_String_maxLength_2200';
+}
+
+export interface DonationAmount_Int_NotNull_Min_1ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['donationAmount_Int_NotNull_min_1'],
+    any
+  > {
+  name: 'donationAmount_Int_NotNull_min_1';
+}
+
+export interface Email_String_NotNull_Format_EmailScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['email_String_NotNull_format_email'],
+    any
+  > {
+  name: 'email_String_NotNull_format_email';
 }
 
 export interface Email_String_Format_EmailScalarConfig
@@ -2129,12 +2481,52 @@ export interface FundingGoal_Int_Min_1ScalarConfig
   name: 'fundingGoal_Int_min_1';
 }
 
+export interface Name_String_NotNull_MinLength_5_MaxLength_50ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['name_String_NotNull_minLength_5_maxLength_50'],
+    any
+  > {
+  name: 'name_String_NotNull_minLength_5_maxLength_50';
+}
+
 export interface Name_String_NotNull_MinLength_5_MaxLength_280ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['name_String_NotNull_minLength_5_maxLength_280'],
     any
   > {
   name: 'name_String_NotNull_minLength_5_maxLength_280';
+}
+
+export interface Name_String_MinLength_5_MaxLength_50ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['name_String_minLength_5_maxLength_50'],
+    any
+  > {
+  name: 'name_String_minLength_5_maxLength_50';
+}
+
+export interface Name_String_MinLength_5_MaxLength_280ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['name_String_minLength_5_maxLength_280'],
+    any
+  > {
+  name: 'name_String_minLength_5_maxLength_280';
+}
+
+export interface Pubkey_String_NotNull_MinLength_66_MaxLength_66ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['pubkey_String_NotNull_minLength_66_maxLength_66'],
+    any
+  > {
+  name: 'pubkey_String_NotNull_minLength_66_maxLength_66';
+}
+
+export interface Pubkey_String_MinLength_66_MaxLength_66ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['pubkey_String_minLength_66_maxLength_66'],
+    any
+  > {
+  name: 'pubkey_String_minLength_66_maxLength_66';
 }
 
 export interface Quantity_Int_NotNull_Min_1ScalarConfig
@@ -2145,12 +2537,12 @@ export interface Quantity_Int_NotNull_Min_1ScalarConfig
   name: 'quantity_Int_NotNull_min_1';
 }
 
-export interface RewardsCost_Int_NotNull_Min_0_Max_15000000ScalarConfig
+export interface RewardsCost_Int_NotNull_Min_0ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['rewardsCost_Int_NotNull_min_0_max_15000000'],
+    ResolversTypes['rewardsCost_Int_NotNull_min_0'],
     any
   > {
-  name: 'rewardsCost_Int_NotNull_min_0_max_15000000';
+  name: 'rewardsCost_Int_NotNull_min_0';
 }
 
 export interface Stock_Int_Min_0ScalarConfig
@@ -2164,6 +2556,30 @@ export interface Title_String_NotNull_MaxLength_50ScalarConfig
     any
   > {
   name: 'title_String_NotNull_maxLength_50';
+}
+
+export interface Title_String_NotNull_MaxLength_150ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['title_String_NotNull_maxLength_150'],
+    any
+  > {
+  name: 'title_String_NotNull_maxLength_150';
+}
+
+export interface Title_String_MaxLength_50ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['title_String_maxLength_50'],
+    any
+  > {
+  name: 'title_String_maxLength_50';
+}
+
+export interface Title_String_MaxLength_150ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['title_String_maxLength_150'],
+    any
+  > {
+  name: 'title_String_maxLength_150';
 }
 
 export type Resolvers<ContextType = any> = {
@@ -2184,7 +2600,6 @@ export type Resolvers<ContextType = any> = {
   FundingTx?: FundingTxResolvers<ContextType>;
   Grantee?: GranteeResolvers<ContextType>;
   GranteeSubmissionResponse?: GranteeSubmissionResponseResolvers<ContextType>;
-  Like?: LikeResolvers<ContextType>;
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
   LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
   LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;
@@ -2208,16 +2623,28 @@ export type Resolvers<ContextType = any> = {
   amount_Float_NotNull_min_1?: GraphQLScalarType;
   amount_Float_min_1?: GraphQLScalarType;
   comment_String_maxLength_280?: GraphQLScalarType;
-  cost_Float_NotNull_min_1_max_50000000?: GraphQLScalarType;
-  cost_Int_NotNull_min_0_max_1500000?: GraphQLScalarType;
-  donationAmount_Int_NotNull_min_1_max_15000000?: GraphQLScalarType;
+  cost_Float_NotNull_min_1_max_1000000?: GraphQLScalarType;
+  cost_Int_NotNull_min_0?: GraphQLScalarType;
+  description_String_NotNull_maxLength_2200?: GraphQLScalarType;
+  description_String_maxLength_280?: GraphQLScalarType;
+  description_String_maxLength_2200?: GraphQLScalarType;
+  donationAmount_Int_NotNull_min_1?: GraphQLScalarType;
+  email_String_NotNull_format_email?: GraphQLScalarType;
   email_String_format_email?: GraphQLScalarType;
   fundingGoal_Int_min_1?: GraphQLScalarType;
+  name_String_NotNull_minLength_5_maxLength_50?: GraphQLScalarType;
   name_String_NotNull_minLength_5_maxLength_280?: GraphQLScalarType;
+  name_String_minLength_5_maxLength_50?: GraphQLScalarType;
+  name_String_minLength_5_maxLength_280?: GraphQLScalarType;
+  pubkey_String_NotNull_minLength_66_maxLength_66?: GraphQLScalarType;
+  pubkey_String_minLength_66_maxLength_66?: GraphQLScalarType;
   quantity_Int_NotNull_min_1?: GraphQLScalarType;
-  rewardsCost_Int_NotNull_min_0_max_15000000?: GraphQLScalarType;
+  rewardsCost_Int_NotNull_min_0?: GraphQLScalarType;
   stock_Int_min_0?: GraphQLScalarType;
   title_String_NotNull_maxLength_50?: GraphQLScalarType;
+  title_String_NotNull_maxLength_150?: GraphQLScalarType;
+  title_String_maxLength_50?: GraphQLScalarType;
+  title_String_maxLength_150?: GraphQLScalarType;
 };
 
 export type DirectiveResolvers<ContextType = any> = {
