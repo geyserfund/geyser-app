@@ -162,7 +162,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
             image: form.image,
             description: form.description,
             expiresAt: finalDate || null,
-            active: !deactivate,
+            ...(deactivate && { active: !deactivate }),
           },
         },
       });
@@ -299,22 +299,25 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
                 as ongoing.
               </Text>
             </VStack>
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Deactivate</Text>
-              <Checkbox
-                defaultChecked={deactivate}
-                onChange={handleDeactivate}
-                colorScheme="red"
-              >
-                {' '}
-                Deactivate Project
-              </Checkbox>
-              <Text fontSize="12px">
-                Deactivating your project would not allow others to fund your
-                project, but your project will still be visible to everyone
-                else. You will be able to re-activate your project at any time.
-              </Text>
-            </VStack>
+            {project.active && (
+              <VStack width="100%" alignItems="flex-start">
+                <Text>Deactivate</Text>
+                <Checkbox
+                  defaultChecked={deactivate}
+                  onChange={handleDeactivate}
+                  colorScheme="red"
+                >
+                  {' '}
+                  Deactivate Project
+                </Checkbox>
+                <Text fontSize="12px">
+                  Deactivating your project would not allow others to fund your
+                  project, but your project will still be visible to everyone
+                  else. You will be able to re-activate your project at any
+                  time.
+                </Text>
+              </VStack>
+            )}
             <ButtonComponent
               isLoading={updateLoading}
               primary
