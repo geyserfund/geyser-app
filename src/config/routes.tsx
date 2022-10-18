@@ -25,8 +25,8 @@ import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
 import { ProjectDiscoveryPage } from '../pages/project-discovery';
-import { getPath } from '../constants';
-import { Launch } from '../pages/launch';
+import { getPath, routerPathNames } from '../constants';
+import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
 
 export const customHistory = createBrowserHistory();
 
@@ -54,20 +54,24 @@ export const Router = () => {
               <GrantsLanding />
             </Route>
             <Route
-              path={getPath('launchProjectStart')}
-              component={Launch}
-            ></Route>
-            <Route path="/launch/:projectId/node">
+              path={getPath('publicProjectLaunch')}
+              component={PublicProjectLaunchPage}
+            />
+            <Route
+              path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`}
+            >
               <PrivateRoute>
                 <Wallet />
               </PrivateRoute>
             </Route>
-            <Route path="/launch/:projectId/milestones">
+            <Route
+              path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.milestonesAndRewards}`}
+            >
               <PrivateRoute>
                 <MilestoneAndRewards />
               </PrivateRoute>
             </Route>
-            <Route path="/launch">
+            <Route path={getPath('privateProjectLaunch')}>
               <PrivateRoute>
                 <ProjectCreate />
               </PrivateRoute>
