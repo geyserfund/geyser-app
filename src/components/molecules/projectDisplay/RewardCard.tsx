@@ -27,8 +27,6 @@ export const RewardCard = ({
   handleRemove,
   ...rest
 }: IRewardCard) => {
-  console.log('something');
-
   return (
     <Box
       border="2px solid"
@@ -95,17 +93,15 @@ export const RewardCard = ({
             )}
           </HStack>
         </HStack>
-        {reward.image && (
-          <Box>
-            <ImageWithReload
-              borderRadius="4px"
-              src={reward.image}
-              width="335px"
-              height="192px"
-              objectFit="cover"
-            />
-          </Box>
-        )}
+        <Box>
+          <ImageWithReload
+            borderRadius="4px"
+            src={reward.image}
+            width="335px"
+            height="192px"
+            objectFit="cover"
+          />
+        </Box>
 
         <Text width="100%" paddingX="5px">
           {reward.description}
