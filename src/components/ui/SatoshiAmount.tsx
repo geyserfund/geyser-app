@@ -63,7 +63,7 @@ export const SatoshiAmount = ({
           fontSize={fontSize}
           {...rest}
         >
-          (${btcConverter.getUSDAmount(Number(children))})
+          (${btcConverter.getUSDAmount(Number(children)).toFixed(2)})
         </Text>
       ) : null}
     </HStack>
