@@ -30,7 +30,7 @@ import { AiOutlineUpload } from 'react-icons/ai';
 import { TProjectDetails } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors, GeyserAssetDomainUrl } from '../../../constants';
+import { colors } from '../../../constants';
 import GeyserTempImage from '../../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
@@ -167,9 +167,7 @@ export const ProjectCreate = () => {
 
   // const projectName = form.title.split(' ').join('').toLowerCase();
 
-  const handleUpload = (url: string) => {
-    setForm({ ...form, image: `${GeyserAssetDomainUrl}${url}` });
-  };
+  const handleUpload = (url: string) => setForm({ ...form, image: url });
 
   const handleNext = () => {
     const isValid = validateForm();
@@ -374,20 +372,7 @@ export const ProjectCreate = () => {
           >
             <Text>Preview</Text>
             <Card padding="16px 10px" overflow="hidden" width="100%">
-              {form.image ? (
-                <ImageWithReload
-                  src={form.image}
-                  height="222px"
-                  width="350px"
-                />
-              ) : (
-                <Image
-                  src={GeyserTempImage}
-                  maxHeight="500px"
-                  height="222px"
-                  width="350px"
-                />
-              )}
+              <ImageWithReload src={form.image} height="222px" width="350px" />
               <Text>geyser.fund/project</Text>
               <Text fontSize="28px" fontWeight={700}>
                 {form.title || 'Project Title'}

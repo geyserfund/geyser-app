@@ -26,7 +26,7 @@ const useStyles = createUseStyles({
   },
 });
 
-export const Launch = () => {
+export const PublicProjectLaunchPage = () => {
   const isMobile = isMobileMode();
   const { loading, user } = useAuthContext();
   const history = useHistory();

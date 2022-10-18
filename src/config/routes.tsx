@@ -25,8 +25,8 @@ import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
 import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
-import { getPath } from '../constants';
-import { Launch } from '../pages/launch';
+import { getPath, routerPathNames } from '../constants';
+import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
 
 export const customHistory = createBrowserHistory();
 
@@ -54,20 +54,24 @@ export const Router = () => {
               <GrantsLanding />
             </Route>
             <Route
-              path={getPath('launchProjectStart')}
-              component={Launch}
-            ></Route>
-            <Route path="/launch/:projectId/node">
+              path={getPath('publicProjectLaunch')}
+              component={PublicProjectLaunchPage}
+            />
+            <Route
+              path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`}
+            >
               <PrivateRoute>
                 <Wallet />
               </PrivateRoute>
             </Route>
-            <Route path="/launch/:projectId/milestones">
+            <Route
+              path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.milestonesAndRewards}`}
+            >
               <PrivateRoute>
                 <MilestoneAndRewards />
               </PrivateRoute>
             </Route>
-            <Route path="/launch">
+            <Route path={getPath('privateProjectLaunch')}>
               <PrivateRoute>
                 <ProjectCreate />
               </PrivateRoute>
@@ -75,6 +79,7 @@ export const Router = () => {
             <Route path="/profile/:userId">
               <Profile />
             </Route>
+            {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
             <Route path="/project/:projectId">
               <Project />
             </Route>
@@ -98,7 +103,7 @@ export const Router = () => {
                 <ProjectDashboard />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId">
+            <Route path={`/${routerPathNames.projects}/:projectId`}>
               <ProjectView />
             </Route>
             <Route path="/entry/:entryId">

@@ -161,17 +161,15 @@ export const FundingFormRewardItem = ({
           </HStack>
         )}
       </HStack>
-      {item.image && (
-        <Box>
-          <ImageWithReload
-            borderRadius="4px"
-            src={item.image}
-            width="100%"
-            height="192px"
-            objectFit="cover"
-          />
-        </Box>
-      )}
+      <Box>
+        <ImageWithReload
+          borderRadius="4px"
+          src={item.image}
+          width="100%"
+          height="192px"
+          objectFit="cover"
+        />
+      </Box>
       <Text marginTop="5px">{description}</Text>
     </Box>
   );

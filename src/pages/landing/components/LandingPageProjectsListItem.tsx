@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { ProjectImageListItemPlaceholder } from '../../../components/molecules';
+import { getPath } from '../../../constants';
 import { Project } from '../../../types/generated/graphql';
 
 type Props = HTMLChakraProps<'div'> & {
@@ -21,7 +22,7 @@ export const LandingPageProjectsListItem = ({ project, ...rest }: Props) => {
   return (
     <Link
       as={ReactRouterLink}
-      to={`/projects/${project.name}`}
+      to={getPath('project', project.name)}
       _hover={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
     >
