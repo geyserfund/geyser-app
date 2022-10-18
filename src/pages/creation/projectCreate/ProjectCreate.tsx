@@ -373,20 +373,7 @@ export const ProjectCreate = () => {
           >
             <Text>Preview</Text>
             <Card padding="16px 10px" overflow="hidden" width="100%">
-              {form.image ? (
-                <ImageWithReload
-                  src={form.image}
-                  height="222px"
-                  width="350px"
-                />
-              ) : (
-                <Image
-                  src={GeyserTempImage}
-                  maxHeight="500px"
-                  height="222px"
-                  width="350px"
-                />
-              )}
+              <ImageWithReload src={form.image} height="222px" width="350px" />
               <Text>geyser.fund/project</Text>
               <Text fontSize="28px" fontWeight={700}>
                 {form.title || 'Project Title'}
