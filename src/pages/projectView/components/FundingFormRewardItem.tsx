@@ -8,7 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
 import { fonts } from '../../../constants/fonts';
@@ -91,10 +91,6 @@ export const FundingFormRewardItem = ({
       }
     }
   };
-
-  // useEffect(() => {
-  // 	updateCount({id: item.id, count});
-  // }, [count]);
 
   const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
 

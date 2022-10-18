@@ -14,7 +14,6 @@ import { useHistory } from 'react-router';
 import {
   ProjectEntryCard,
   ProjectSectionBar,
-  FundingFormRewardItem,
 } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages, IFundingStages, projectTypes } from '../../constants';
