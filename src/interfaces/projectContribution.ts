@@ -15,5 +15,6 @@ export interface IProjectContribution {
     description: string;
     media: string[];
     createdAt: string;
+    image?: string;
   };
 }

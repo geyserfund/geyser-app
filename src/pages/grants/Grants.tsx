@@ -88,7 +88,7 @@ export const Grants = ({ project }: { project: IProject }) => {
             <Image
               w={isMobile ? '300px' : '375px'}
               rounded="md"
-              src={project.media[0] && project.media[0]}
+              src={project.image && project.image}
               alt="grant"
               margin={isMedium ? '0 auto' : ''}
             />
@@ -189,7 +189,7 @@ export const Grants = ({ project }: { project: IProject }) => {
                   active={false}
                   title="Apply"
                   grant={project.title}
-                  image={project.media[0]}
+                  image={project.image}
                 />
               </Box>
             </Box>

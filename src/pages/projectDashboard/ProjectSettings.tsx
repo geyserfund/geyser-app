@@ -29,7 +29,7 @@ import { IProject } from '../../interfaces';
 import {
   useNotification,
   validateEmail,
-  validLighteningAddress,
+  validLightningAddress,
 } from '../../utils';
 import { TProjectDetails } from '../creation/projectCreate/types';
 import { DateTime } from 'luxon';
@@ -85,7 +85,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       setForm({
         title: project.title,
         name: project.name,
-        image: project.media[0],
+        image: project.image,
         description: project.description,
         email: user.email || '',
       });
@@ -100,10 +100,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
 
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase();
-        const sanitizedName = projectName.replaceAll(
-          validLighteningAddress,
-          '',
-        );
+        const sanitizedName = projectName.replaceAll(validLightningAddress, '');
 
         newForm.name = sanitizedName;
       }
@@ -218,7 +215,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
               />
             </VStack>
             <VStack width="100%" alignItems="flex-start">
-              <Text>Lightening Address Preview</Text>
+              <Text>Lightning Address Preview</Text>
               <InputGroup size="md" borderRadius="4px">
                 <Input
                   name="name"

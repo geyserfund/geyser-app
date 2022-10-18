@@ -26,6 +26,7 @@ import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
 import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
 import { getPath } from '../constants';
+import { Launch } from '../pages/launch';
 
 export const customHistory = createBrowserHistory();
 
@@ -52,6 +53,10 @@ export const Router = () => {
             <Route path="/grants">
               <GrantsLanding />
             </Route>
+            <Route
+              path={getPath('launchProjectStart')}
+              component={Launch}
+            ></Route>
             <Route path="/launch/:projectId/node">
               <PrivateRoute>
                 <Wallet />
@@ -60,11 +65,6 @@ export const Router = () => {
             <Route path="/launch/:projectId/milestones">
               <PrivateRoute>
                 <MilestoneAndRewards />
-              </PrivateRoute>
-            </Route>
-            <Route path="/launch/:projectId">
-              <PrivateRoute>
-                <ProjectCreate />
               </PrivateRoute>
             </Route>
             <Route path="/launch">

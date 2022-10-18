@@ -331,7 +331,7 @@ export const Profile = () => {
                                   title={project.title}
                                   name={project.name}
                                   project={project}
-                                  imgSrc={project.media[0] || ''}
+                                  imgSrc={project.image || ''}
                                   marginLeft="0px !important"
                                   privateUser={myProfile}
                                 />

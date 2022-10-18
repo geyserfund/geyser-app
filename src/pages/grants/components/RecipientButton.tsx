@@ -32,7 +32,7 @@ interface RecipientButtonProps {
   active: boolean;
   title: string;
   grant: string;
-  image: string;
+  image?: string;
 }
 
 export const RecipientButton = ({
