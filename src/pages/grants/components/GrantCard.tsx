@@ -62,7 +62,7 @@ export const GrantCard = ({
               h={isMobile ? '325px' : '350px'}
               objectFit="cover"
               borderRadius="4px"
-              src={project.media && project.media[0]}
+              src={project.image}
               alt="grant"
             />
 

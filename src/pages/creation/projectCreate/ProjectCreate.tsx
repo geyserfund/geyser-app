@@ -125,7 +125,7 @@ export const ProjectCreate = () => {
         setForm({
           title: data.project.title,
           name: data.project.name,
-          image: data.project.media[0],
+          image: data.project.image,
           description: data.project.description,
           email: user.email || '',
         });

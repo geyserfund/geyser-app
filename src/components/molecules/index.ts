@@ -5,7 +5,6 @@ export * from './DonationInput';
 export * from './RewardItem';
 export * from './AddAmbassador';
 export * from './AddSponsor';
-export * from './SwipeLiveProject';
 export * from './ProjectDetailsMobileMenu';
 export * from './DisconnectAccounts';
 export * from './FileUpload';

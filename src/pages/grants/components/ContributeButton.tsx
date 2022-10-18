@@ -175,7 +175,7 @@ export const ContributeButton = ({
         <ModalContent>
           <HStack p={6}>
             <Image
-              src={project.media[0]}
+              src={project.image}
               alt="icon"
               rounded="lg"
               w="100px"
@@ -322,7 +322,7 @@ export const ContributeButton = ({
         <ModalContent>
           <HStack p={6}>
             <Image
-              src={project.media[0]}
+              src={project.image}
               alt="icon"
               rounded="lg"
               w="100px"

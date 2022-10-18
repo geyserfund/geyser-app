@@ -85,7 +85,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       setForm({
         title: project.title,
         name: project.name,
-        image: project.media[0],
+        image: project.image,
         description: project.description,
         email: user.email || '',
       });
