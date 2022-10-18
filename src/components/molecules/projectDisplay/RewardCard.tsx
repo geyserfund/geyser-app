@@ -27,8 +27,6 @@ export const RewardCard = ({
   handleRemove,
   ...rest
 }: IRewardCard) => {
-  console.log('something');
-
   return (
     <Box
       border="2px solid"

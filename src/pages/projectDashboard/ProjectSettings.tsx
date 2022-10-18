@@ -33,6 +33,7 @@ import {
 } from '../../utils';
 import { TProjectDetails } from '../creation/projectCreate/types';
 import { DateTime } from 'luxon';
+import { randomInt } from 'crypto';
 
 export const ProjectSettings = ({ project }: { project: IProject }) => {
   const params = useParams<{ projectId: string }>();
@@ -335,7 +336,12 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
           <Text>Preview</Text>
           <Card padding="16px 10px" overflow="hidden" width="100%">
             {form.image ? (
-              <ImageWithReload src={form.image} height="222px" width="350px" />
+              <ImageWithReload
+                src={form.image}
+                noCacheId={(Math.random() + 1).toString(36).substring(7)}
+                height="222px"
+                width="350px"
+              />
             ) : (
               <Image
                 src={GeyserTempImage}

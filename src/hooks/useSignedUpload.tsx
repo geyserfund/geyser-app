@@ -25,8 +25,6 @@ export const useSignedUpload = ({
 
   const handleFileUpload = async () => {
     if (urlData && urlData.getSignedUploadUrl && currentFile) {
-      console.log('URL Dta', urlData);
-
       try {
         await fetch(urlData.getSignedUploadUrl.uploadUrl, {
           method: 'PUT',
