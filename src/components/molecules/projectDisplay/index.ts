@@ -3,8 +3,6 @@ export * from './ProfileProjectCard';
 export * from './ProjectCard';
 export * from './ProjectEntryCard';
 export * from './ProjectBalanceCircularProgress';
-export * from './ProjectBars';
-export * from './LiveProject';
 export * from './ProjectContributionCard';
 export * from './RewardCard';
 export * from './ActivityBrief';
