@@ -24,13 +24,13 @@ import {
   isMobileMode,
   useNotification,
   validateEmail,
-  validLighteningAddress,
+  validLightningAddress,
 } from '../../../utils';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { TProjectDetails } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors, GeyserAssetDomainUrl } from '../../../constants';
+import { colors } from '../../../constants';
 import GeyserTempImage from '../../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
@@ -110,7 +110,7 @@ export const ProjectCreate = () => {
         if (data && data.project && data.project.id) {
           setFormError({
             ...formError,
-            name: 'This lightening address is already taken.',
+            name: 'This lightning address is already taken.',
           });
         }
       },
@@ -122,13 +122,15 @@ export const ProjectCreate = () => {
     {
       variables: { where: { name: params.projectId } },
       onCompleted(data) {
-        setForm({
-          title: data.project.title,
-          name: data.project.name,
-          image: data.project.media[0],
-          description: data.project.description,
-          email: user.email || '',
-        });
+        if (data && data.project) {
+          setForm({
+            title: data.project.title,
+            name: data.project.name,
+            image: data.project.image,
+            description: data.project.description,
+            email: user.email || '',
+          });
+        }
       },
     },
   );
@@ -145,10 +147,7 @@ export const ProjectCreate = () => {
       console.log('checkign is edit', isEdit);
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase();
-        const sanitizedName = projectName.replaceAll(
-          validLighteningAddress,
-          '',
-        );
+        const sanitizedName = projectName.replaceAll(validLightningAddress, '');
 
         newForm.name = sanitizedName;
       }
@@ -168,9 +167,7 @@ export const ProjectCreate = () => {
 
   // const projectName = form.title.split(' ').join('').toLowerCase();
 
-  const handleUpload = (url: string) => {
-    setForm({ ...form, image: `${GeyserAssetDomainUrl}${url}` });
-  };
+  const handleUpload = (url: string) => setForm({ ...form, image: url });
 
   const handleNext = () => {
     const isValid = validateForm();
@@ -227,7 +224,7 @@ export const ProjectCreate = () => {
   };
 
   const handleBack = () => {
-    history.push('/launch');
+    history.push('/launch/start');
   };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
@@ -299,7 +296,7 @@ export const ProjectCreate = () => {
                 />
               </VStack>
               <VStack width="100%" alignItems="flex-start">
-                <Text>Lightening Address Preview</Text>
+                <Text>Lightning Address Preview</Text>
                 <InputGroup size="md" borderRadius="4px">
                   <Input
                     name="name"
@@ -375,20 +372,7 @@ export const ProjectCreate = () => {
           >
             <Text>Preview</Text>
             <Card padding="16px 10px" overflow="hidden" width="100%">
-              {form.image ? (
-                <ImageWithReload
-                  src={form.image}
-                  height="222px"
-                  width="350px"
-                />
-              ) : (
-                <Image
-                  src={GeyserTempImage}
-                  maxHeight="500px"
-                  height="222px"
-                  width="350px"
-                />
-              )}
+              <ImageWithReload src={form.image} height="222px" width="350px" />
               <Text>geyser.fund/project</Text>
               <Text fontSize="28px" fontWeight={700}>
                 {form.title || 'Project Title'}

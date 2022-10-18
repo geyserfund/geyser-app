@@ -3,10 +3,10 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { BiPencil } from 'react-icons/bi';
 import { colors } from '../../../constants';
-import { IProjectReward } from '../../../interfaces';
+
+import { ProjectReward } from '../../../types/generated/graphql';
 import { TRewards } from '../../../pages/creation/projectCreate/types';
 import {
-  Card,
   ICard,
   IconButtonComponent,
   ImageWithReload,
@@ -14,7 +14,7 @@ import {
 } from '../../ui';
 
 interface IRewardCard extends ICard {
-  reward: TRewards | IProjectReward;
+  reward: TRewards | ProjectReward;
   isSatoshi: boolean;
   handleEdit?: any;
   handleRemove?: any;
@@ -27,8 +27,6 @@ export const RewardCard = ({
   handleRemove,
   ...rest
 }: IRewardCard) => {
-  console.log('something');
-
   return (
     <Box
       border="2px solid"
@@ -48,7 +46,12 @@ export const RewardCard = ({
                   {reward.cost}
                 </SatoshiAmount>
               ) : (
-                <Text color="brand.primary">{`$ ${reward.cost}`}</Text>
+                <Text color="brand.primary">
+                  {/* 
+                    Divided by 100 as cost is in cents 
+                  */}
+                  {`$ ${reward.cost / 100}`}
+                </Text>
               )}
               <Text fontSize="12px" color="brand.primary">
                 per item
@@ -90,17 +93,15 @@ export const RewardCard = ({
             )}
           </HStack>
         </HStack>
-        {reward.image && (
-          <Box>
-            <ImageWithReload
-              borderRadius="4px"
-              src={reward.image}
-              width="335px"
-              height="192px"
-              objectFit="cover"
-            />
-          </Box>
-        )}
+        <Box>
+          <ImageWithReload
+            borderRadius="4px"
+            src={reward.image}
+            width="335px"
+            height="192px"
+            objectFit="cover"
+          />
+        </Box>
 
         <Text width="100%" paddingX="5px">
           {reward.description}

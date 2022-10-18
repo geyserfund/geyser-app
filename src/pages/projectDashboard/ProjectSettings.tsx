@@ -21,7 +21,7 @@ import {
   TextArea,
   TextBox,
 } from '../../components/ui';
-import { colors, GeyserAssetDomainUrl } from '../../constants';
+import { colors } from '../../constants';
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
@@ -29,10 +29,11 @@ import { IProject } from '../../interfaces';
 import {
   useNotification,
   validateEmail,
-  validLighteningAddress,
+  validLightningAddress,
 } from '../../utils';
 import { TProjectDetails } from '../creation/projectCreate/types';
 import { DateTime } from 'luxon';
+import { randomInt } from 'crypto';
 
 export const ProjectSettings = ({ project }: { project: IProject }) => {
   const params = useParams<{ projectId: string }>();
@@ -85,7 +86,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       setForm({
         title: project.title,
         name: project.name,
-        image: project.media[0],
+        image: project.image,
         description: project.description,
         email: user.email || '',
       });
@@ -100,10 +101,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
 
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase();
-        const sanitizedName = projectName.replaceAll(
-          validLighteningAddress,
-          '',
-        );
+        const sanitizedName = projectName.replaceAll(validLightningAddress, '');
 
         newForm.name = sanitizedName;
       }
@@ -140,10 +138,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
     setFinalDate('');
   };
 
-  const handleUpload = (url: string) => {
-    setForm({ ...form, image: `${GeyserAssetDomainUrl}${url}` });
-  };
-
+  const handleUpload = (url: string) => setForm({ ...form, image: url });
   const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event) {
       setDeactivate(event.target.checked);
@@ -164,7 +159,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
             image: form.image,
             description: form.description,
             expiresAt: finalDate || null,
-            active: !deactivate,
+            ...(deactivate && { active: !deactivate }),
           },
         },
       });
@@ -218,7 +213,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
               />
             </VStack>
             <VStack width="100%" alignItems="flex-start">
-              <Text>Lightening Address Preview</Text>
+              <Text>Lightning Address Preview</Text>
               <InputGroup size="md" borderRadius="4px">
                 <Input
                   name="name"
@@ -301,22 +296,25 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
                 as ongoing.
               </Text>
             </VStack>
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Deactivate</Text>
-              <Checkbox
-                defaultChecked={deactivate}
-                onChange={handleDeactivate}
-                colorScheme="red"
-              >
-                {' '}
-                Deactivate Project
-              </Checkbox>
-              <Text fontSize="12px">
-                Deactivating your project would not allow others to fund your
-                project, but your project will still be visible to everyone
-                else. You will be able to re-activate your project at any time.
-              </Text>
-            </VStack>
+            {project.active && (
+              <VStack width="100%" alignItems="flex-start">
+                <Text>Deactivate</Text>
+                <Checkbox
+                  defaultChecked={deactivate}
+                  onChange={handleDeactivate}
+                  colorScheme="red"
+                >
+                  {' '}
+                  Deactivate Project
+                </Checkbox>
+                <Text fontSize="12px">
+                  Deactivating your project would not allow others to fund your
+                  project, but your project will still be visible to everyone
+                  else. You will be able to re-activate your project at any
+                  time.
+                </Text>
+              </VStack>
+            )}
             <ButtonComponent
               isLoading={updateLoading}
               primary
@@ -337,16 +335,12 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
         >
           <Text>Preview</Text>
           <Card padding="16px 10px" overflow="hidden" width="100%">
-            {form.image ? (
-              <ImageWithReload src={form.image} height="222px" width="350px" />
-            ) : (
-              <Image
-                src={GeyserTempImage}
-                maxHeight="500px"
-                height="222px"
-                width="350px"
-              />
-            )}
+            <ImageWithReload
+              src={form.image}
+              noCacheId={(Math.random() + 1).toString(36).substring(7)}
+              height="222px"
+              width="350px"
+            />
             <Text>geyser.fund/project</Text>
             <Text fontSize="28px" fontWeight={700}>
               {form.title || 'Project Title'}

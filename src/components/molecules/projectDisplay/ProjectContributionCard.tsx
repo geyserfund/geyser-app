@@ -13,7 +13,6 @@ import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
 import { computeFunderBadges } from '../../../helpers';
-import { IProjectContribution } from '../../../interfaces';
 import { UserProjectContribution } from '../../../types/generated/graphql';
 
 import { isDarkMode } from '../../../utils';
@@ -21,7 +20,7 @@ import { Card, ICard } from '../../ui';
 
 type Props = ICard & {
   className?: string;
-  contribution: UserProjectContribution | IProjectContribution;
+  contribution: UserProjectContribution;
 };
 
 const useStyles = createUseStyles({
@@ -67,7 +66,7 @@ export const ProjectContributionCard = ({
 
   const { project } = contribution;
 
-  const imgSrc = project.media[0];
+  const imgSrc = project.image;
 
   return (
     <Link to={`/project/${project.name}`}>
@@ -77,7 +76,12 @@ export const ProjectContributionCard = ({
         {...rest}
       >
         <Box height="160px" width="100%" position="relative">
-          <Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
+          <Image
+            src={imgSrc || ''}
+            height="100%"
+            width="100%"
+            objectFit="cover"
+          />
         </Box>
         <VStack spacing="5px" width="100%" padding="10px">
           <HStack spacing="10px" justifyContent="flex-start" width="100%">
@@ -101,7 +105,8 @@ export const ProjectContributionCard = ({
 const RenderBadges = ({
   contribution,
 }: {
-  contribution: UserProjectContribution | IProjectContribution;
+  // contribution: UserProjectContribution | IProjectContribution;
+  contribution: UserProjectContribution;
 }) => {
   const { project, funder, isSponsor, isFunder } = contribution;
   const badges =
