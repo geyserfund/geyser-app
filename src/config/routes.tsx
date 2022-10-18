@@ -79,6 +79,7 @@ export const Router = () => {
             <Route path="/profile/:userId">
               <Profile />
             </Route>
+            {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
             <Route path="/project/:projectId">
               <Project />
             </Route>
@@ -102,7 +103,7 @@ export const Router = () => {
                 <ProjectDashboard />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId">
+            <Route path={`/${routerPathNames.projects}/:projectId`}>
               <ProjectView />
             </Route>
             <Route path="/entry/:entryId">
