@@ -24,7 +24,6 @@ import {
   TextArea,
   TextBox,
 } from '../../../../components/ui';
-import { GeyserAssetDomainUrl } from '../../../../constants';
 import {
   MUTATION_CREATE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,
@@ -155,9 +154,8 @@ export const AddRewards = ({
     }
   };
 
-  const handleUpload = (url: string) => {
-    setRewards({ ...rewards.current, image: `${GeyserAssetDomainUrl}${url}` });
-  };
+  const handleUpload = (url: string) =>
+    setRewards({ ...rewards.current, image: url });
 
   const validateReward = () => {
     const errors: any = {};

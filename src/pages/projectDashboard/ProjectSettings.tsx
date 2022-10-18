@@ -21,7 +21,7 @@ import {
   TextArea,
   TextBox,
 } from '../../components/ui';
-import { colors, GeyserAssetDomainUrl } from '../../constants';
+import { colors } from '../../constants';
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
@@ -140,10 +140,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
     setFinalDate('');
   };
 
-  const handleUpload = (url: string) => {
-    setForm({ ...form, image: `${GeyserAssetDomainUrl}${url}` });
-  };
-
+  const handleUpload = (url: string) => setForm({ ...form, image: url });
   const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event) {
       setDeactivate(event.target.checked);

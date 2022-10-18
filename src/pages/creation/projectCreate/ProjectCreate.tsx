@@ -30,7 +30,7 @@ import { AiOutlineUpload } from 'react-icons/ai';
 import { TProjectDetails } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors, GeyserAssetDomainUrl } from '../../../constants';
+import { colors } from '../../../constants';
 import GeyserTempImage from '../../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
@@ -168,9 +168,7 @@ export const ProjectCreate = () => {
 
   // const projectName = form.title.split(' ').join('').toLowerCase();
 
-  const handleUpload = (url: string) => {
-    setForm({ ...form, image: `${GeyserAssetDomainUrl}${url}` });
-  };
+  const handleUpload = (url: string) => setForm({ ...form, image: url });
 
   const handleNext = () => {
     const isValid = validateForm();

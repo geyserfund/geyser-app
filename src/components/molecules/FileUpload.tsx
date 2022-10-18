@@ -1,4 +1,4 @@
-import { Box, ChakraComponent } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useSignedUpload } from '../../hooks';
