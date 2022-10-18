@@ -50,9 +50,7 @@ export const Router = () => {
             <Route path="/failed-authentication">
               <FailedAuth />
             </Route>
-            <Route path="/grants">
-              <GrantsLanding />
-            </Route>
+            <Route path={getPath('grants')} component={GrantsLanding} />
             <Route
               path={getPath('publicProjectLaunch')}
               component={PublicProjectLaunchPage}

@@ -9,4 +9,7 @@ export const defaultUser: User = {
   externalAccounts: [],
   contributions: [],
   ownerOf: [],
+  entries: [],
+  fundingTxs: [],
+  projects: [],
 };

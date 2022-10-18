@@ -56,8 +56,9 @@ const routesForEnablingSignInButton = [
 
 const routesForEnablingProjectLaunchButton = [
   getPath('index'),
-  `/${routerPathNames.projectDiscovery}`,
-  `/${routerPathNames.grants}`,
+  getPath('landingPage'),
+  getPath('grants'),
+  getPath('projectDiscovery'),
 ];
 
 /**
@@ -121,7 +122,11 @@ export const TopNavBar = () => {
   }, [state]);
 
   const handleProjectLaunchButtonPress = () => {
-    history.push('/launch');
+    const routePath = getPath(
+      isLoggedIn ? 'privateProjectLaunch' : 'publicProjectLaunch',
+    );
+
+    history.push(routePath);
   };
 
   const handleDashboardButtonPress = () => {
@@ -213,17 +218,25 @@ export const TopNavBar = () => {
 
   /**
    * Logic:
-   *  - Available to all logged-in users
-   *  - Viewable in the profile page and in the menu.
+   *  - Available to:
+   *    - All non-logged-in users.
+   *    - All logged-in users who aren't yet project creators.
+   *  - Viewable on:
+   *    - The Landing, Discovery, and Grant Pages.
    */
   const shouldShowProjectLaunchButton: boolean = useMemo(() => {
     return (
-      isLoggedIn &&
+      (isLoggedIn === false ||
+        (isLoggedIn && isUserAProjectCreator === false)) &&
       routesMatchesForEnablingProjectLaunchButton.some((routeMatch) => {
         return (routeMatch as match)?.isExact;
       })
     );
-  }, [routesMatchesForEnablingProjectLaunchButton, isLoggedIn]);
+  }, [
+    routesMatchesForEnablingProjectLaunchButton,
+    isLoggedIn,
+    isUserAProjectCreator,
+  ]);
 
   /**
    * Logic:
