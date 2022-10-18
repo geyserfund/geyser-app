@@ -1,7 +1,6 @@
 import { HTMLChakraProps } from '@chakra-ui/system';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import {
-  Center,
   Image,
   Stack,
   Box,
@@ -9,7 +8,6 @@ import {
   useColorModeValue,
   HStack,
   VStack,
-  Badge,
 } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
 import { SatoshiIconTilted } from '../../icons';
@@ -17,16 +15,13 @@ import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
-import { IBadge, IFundingTx, IProject } from '../../../interfaces';
+import { IFundingTx, IProject } from '../../../interfaces';
+import { renderFunderBadges } from './renderFunderBadges';
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx | IFundingTx;
   project: Project | IProject;
   showsProjectLink?: boolean;
-};
-
-const renderFunderBadges = (badges: IBadge[]): ReactElement[] => {
-  return badges.map((badge, index) => <Badge key={index}>{badge.badge}</Badge>);
 };
 
 export const ProjectFundingContributionsFeedItem = ({
@@ -74,7 +69,8 @@ export const ProjectFundingContributionsFeedItem = ({
             avatarMetadata={avatarMetadata}
             fontSize={'14px'}
             imageSize={'20px'}
-            badges={renderFunderBadges(funderBadges)}
+            badgeNames={funderBadges.map((badge) => badge.badge)}
+            badgeElements={renderFunderBadges(funderBadges)}
           />
         )}
 

@@ -24,7 +24,7 @@ const pathsMap = {
   notFound: () => `/${routerPathNames.notFound}`,
   notAuthorized: () => `/${routerPathNames.notAuthorized}`,
   project: (projectName: string) =>
-    `/${routerPathNames.project}/${projectName}`,
+    `/${routerPathNames.projects}/${projectName}`,
   projectEntry: (projectName: string) =>
     `/${routerPathNames.projects}/${projectName}/entry`,
   launchProjectStart: () => `/${routerPathNames.launchProject}/start`,

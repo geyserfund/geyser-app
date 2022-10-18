@@ -25,7 +25,7 @@ import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
 import { ProjectDiscoveryPage } from '../pages/project-discovery';
-import { getPath } from '../constants';
+import { getPath, routerPathNames } from '../constants';
 import { Launch } from '../pages/launch';
 
 export const customHistory = createBrowserHistory();
@@ -75,6 +75,7 @@ export const Router = () => {
             <Route path="/profile/:userId">
               <Profile />
             </Route>
+            {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
             <Route path="/project/:projectId">
               <Project />
             </Route>
@@ -98,7 +99,7 @@ export const Router = () => {
                 <ProjectDashboard />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId">
+            <Route path={`/${routerPathNames.projects}/:projectId`}>
               <ProjectView />
             </Route>
             <Route path="/entry/:entryId">
