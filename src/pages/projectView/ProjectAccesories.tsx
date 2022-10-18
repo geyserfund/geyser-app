@@ -23,6 +23,7 @@ import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
+import { FundingFormRewardItem } from './components/FundingFormRewardItem';
 
 const useStyles = createUseStyles({
   navButton: {
