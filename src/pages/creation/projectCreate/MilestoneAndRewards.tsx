@@ -150,6 +150,8 @@ export const MilestoneAndRewards = () => {
   };
 
   const handleNext = () => {
+    // eslint-disable-next-line no-debugger
+    debugger;
     const updateProjectInput: any = {
       projectId: data?.project?.id,
       rewardCurrency: isSatoshiRewards ? 'btc' : 'usd',

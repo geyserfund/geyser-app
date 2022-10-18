@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react';
 import { DeleteConfirmModal, RewardCard } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../graphql/mutations';
-// import { IProject } from '../../interfaces';
 import {
   Project,
   ProjectReward,
