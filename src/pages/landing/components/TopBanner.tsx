@@ -43,7 +43,7 @@ export const TopBanner = () => {
   }, [summaryError]);
 
   const handleLaunch = () => {
-    history.push('/launch');
+    history.push('/launch/start');
   };
 
   return (
