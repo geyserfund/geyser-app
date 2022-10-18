@@ -1,9 +1,9 @@
 export const validEmail = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/);
 
-export const validLighteningAddress = new RegExp(/[^a-z0-9-_]+/g);
+export const validLightningAddress = new RegExp(/[^a-z0-9-_]+/g);
 
-export const isValidLighteningAddress = (address: string) => {
-  const match = validLighteningAddress.test(address);
+export const isValidLightningAddress = (address: string) => {
+  const match = validLightningAddress.test(address);
 
   return match;
 };

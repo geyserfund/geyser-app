@@ -27,6 +27,7 @@ const pathsMap = {
     `/${routerPathNames.project}/${projectName}`,
   projectEntry: (projectName: string) =>
     `/${routerPathNames.projects}/${projectName}/entry`,
+  launchProjectStart: () => `/${routerPathNames.launchProject}/start`,
   launchProject: (projectName: string) =>
     `/${routerPathNames.launchProject}/${projectName}`,
   userProfile: (userID: string) => `/${routerPathNames.userProfile}/${userID}`,

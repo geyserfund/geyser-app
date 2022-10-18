@@ -24,7 +24,7 @@ import {
   isMobileMode,
   useNotification,
   validateEmail,
-  validLighteningAddress,
+  validLightningAddress,
 } from '../../../utils';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { TProjectDetails } from './types';
@@ -110,7 +110,7 @@ export const ProjectCreate = () => {
         if (data && data.project && data.project.id) {
           setFormError({
             ...formError,
-            name: 'This lightening address is already taken.',
+            name: 'This lightning address is already taken.',
           });
         }
       },
@@ -122,13 +122,15 @@ export const ProjectCreate = () => {
     {
       variables: { where: { name: params.projectId } },
       onCompleted(data) {
-        setForm({
-          title: data.project.title,
-          name: data.project.name,
-          image: data.project.image,
-          description: data.project.description,
-          email: user.email || '',
-        });
+        if (data && data.project) {
+          setForm({
+            title: data.project.title,
+            name: data.project.name,
+            image: data.project.image,
+            description: data.project.description,
+            email: user.email || '',
+          });
+        }
       },
     },
   );
@@ -145,10 +147,7 @@ export const ProjectCreate = () => {
       console.log('checkign is edit', isEdit);
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase();
-        const sanitizedName = projectName.replaceAll(
-          validLighteningAddress,
-          '',
-        );
+        const sanitizedName = projectName.replaceAll(validLightningAddress, '');
 
         newForm.name = sanitizedName;
       }
@@ -227,7 +226,7 @@ export const ProjectCreate = () => {
   };
 
   const handleBack = () => {
-    history.push('/launch');
+    history.push('/launch/start');
   };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
@@ -299,7 +298,7 @@ export const ProjectCreate = () => {
                 />
               </VStack>
               <VStack width="100%" alignItems="flex-start">
-                <Text>Lightening Address Preview</Text>
+                <Text>Lightning Address Preview</Text>
                 <InputGroup size="md" borderRadius="4px">
                   <Input
                     name="name"
