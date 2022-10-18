@@ -10,16 +10,20 @@ import React, { useEffect, useState } from 'react';
 import { DeleteConfirmModal, RewardCard } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../graphql/mutations';
-import { IProject } from '../../interfaces';
+// import { IProject } from '../../interfaces';
+import {
+  Project,
+  ProjectReward,
+  RewardCurrency,
+} from '../../types/generated/graphql';
 import { useNotification } from '../../utils';
 import { AddRewards } from '../creation/projectCreate/components/AddRewards';
-import { TRewards } from '../creation/projectCreate/types';
 
-export const RewardSettings = ({ project }: { project: IProject }) => {
+export const RewardSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
 
-  const [rewards, setRewards] = useState<TRewards[]>([]);
-  const [selectedReward, setSelectedReward] = useState<TRewards>();
+  const [rewards, setRewards] = useState<ProjectReward[]>([]);
+  const [selectedReward, setSelectedReward] = useState<ProjectReward>();
 
   const {
     isOpen: isRewardOpen,
@@ -31,17 +35,19 @@ export const RewardSettings = ({ project }: { project: IProject }) => {
     onClose: onRewardDeleteClose,
     onOpen: openRewardDelete,
   } = useDisclosure();
-  const [isSatoshi, setIsSatoshi] = useState(true);
+  const [isSatoshi, setIsSatoshi] = useState(
+    project.rewardCurrency !== RewardCurrency.Usd,
+  );
 
   const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
 
   useEffect(() => {
     if (project.rewards && project.rewards.length > 0) {
-      setRewards(project.rewards);
+      setRewards(project.rewards.map((reward) => reward!));
     }
   }, [project]);
 
-  const handleRewardUpdate = (addReward: TRewards) => {
+  const handleRewardUpdate = (addReward: ProjectReward) => {
     const findReward = rewards.find((reward) => reward.id === addReward.id);
     if (findReward) {
       const newRewards = rewards.map((reward) => {

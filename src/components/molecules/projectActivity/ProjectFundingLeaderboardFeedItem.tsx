@@ -7,6 +7,7 @@ import { IProject, IFunder } from '../../../interfaces';
 import { commaFormatted } from '../../../utils';
 import { SatoshiIconTilted } from '../../icons';
 import { AnonymousAvatar, LinkableAvatar } from '../../ui';
+import { renderFunderBadges } from './renderFunderBadges';
 
 type Props = HTMLChakraProps<'div'> & {
   project: IProject;
@@ -22,12 +23,7 @@ export const ProjectFundingLeaderboardFeedItem = ({
 }: Props) => {
   const anonymous = !funder.user;
   const avatarMetadata = getAvatarMetadata({ funder });
-
-  // TODO: The `Badge` component should take the `badge.badge` string
-  // as inner child content: https://v1.chakra-ui.com/docs/components/data-display/badge
-  const badges = computeFunderBadges({ project, funder }).map((badge) => (
-    <Badge key={`${badge.badge}`} badge={`${badge.badge}`} />
-  ));
+  const funderBadges = computeFunderBadges({ project, funder });
 
   return (
     <Box
@@ -48,7 +44,11 @@ export const ProjectFundingLeaderboardFeedItem = ({
           {anonymous ? (
             <AnonymousAvatar seed={funder.id} />
           ) : (
-            <LinkableAvatar avatarMetadata={avatarMetadata} badges={badges} />
+            <LinkableAvatar
+              avatarMetadata={avatarMetadata}
+              badgeNames={funderBadges.map((badge) => badge.badge)}
+              badgeElements={renderFunderBadges(funderBadges)}
+            />
           )}
         </HStack>
 

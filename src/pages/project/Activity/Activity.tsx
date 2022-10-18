@@ -47,7 +47,7 @@ const Activity = ({
   const { toast } = useNotification();
   const isMobile = isMobileMode();
 
-  // REquired for activity (recent and leaderboard) visibility
+  // Required for activity (recent and leaderboard) visibility
   const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);
   const [funders, setFunders] = useState<IFunder[]>([]);
 

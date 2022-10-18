@@ -10,6 +10,8 @@ export const routerPathNames = {
   userProfile: 'profile',
   dashboard: 'dashboard',
   preview: 'preview',
+  milestonesAndRewards: 'milestones',
+  node: 'node',
 };
 
 // TODO: These definitions are currently a WIP.
@@ -24,11 +26,15 @@ const pathsMap = {
   notFound: () => `/${routerPathNames.notFound}`,
   notAuthorized: () => `/${routerPathNames.notAuthorized}`,
   project: (projectName: string) =>
-    `/${routerPathNames.project}/${projectName}`,
+    `/${routerPathNames.projects}/${projectName}`,
   projectEntry: (projectName: string) =>
     `/${routerPathNames.projects}/${projectName}/entry`,
-  launchProject: (projectName: string) =>
-    `/${routerPathNames.launchProject}/${projectName}`,
+  publicProjectLaunch: () => `/${routerPathNames.launchProject}/start`,
+  privateProjectLaunch: () => `/${routerPathNames.launchProject}`,
+  launchProjectWithNode: (projectID: string) =>
+    `/${routerPathNames.launchProject}/${projectID}/${routerPathNames.node}`,
+  launchProjectWithMilestonesAndRewards: (projectID: string) =>
+    `/${routerPathNames.launchProject}/${projectID}/${routerPathNames.milestonesAndRewards}`,
   userProfile: (userID: string) => `/${routerPathNames.userProfile}/${userID}`,
 };
 

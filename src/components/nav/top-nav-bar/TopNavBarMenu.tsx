@@ -107,7 +107,10 @@ export const TopNavBarMenu = ({
 
             {isUserAProjectCreator && user.ownerOf[0]?.project ? (
               <MenuItemLink
-                destinationPath={getPath('project', user.ownerOf[0].project.id)}
+                destinationPath={getPath(
+                  'project',
+                  user.ownerOf[0].project.name,
+                )}
                 px={0}
                 py={0}
                 _focus={{ boxShadow: 'none' }}

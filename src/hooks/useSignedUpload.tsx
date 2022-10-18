@@ -4,10 +4,13 @@ import { API_SERVICE_ENDPOINT, GeyserAssetDomainUrl } from '../constants';
 import { QUERY_GET_SIGNED_URL } from '../graphql/queries/entries';
 import { testImage, useNotification } from '../utils';
 
+type FileUploadURL = string;
+type FileUploadFile = any;
+
 export const useSignedUpload = ({
   onUpload,
 }: {
-  onUpload: (url: string, file?: any) => void;
+  onUpload: (_: FileUploadURL, __?: FileUploadFile) => void;
 }) => {
   const { toast } = useNotification();
 
@@ -20,18 +23,20 @@ export const useSignedUpload = ({
     }
   }, [urlData, currentFile]);
 
-  const handleFileUpload = () => {
+  const handleFileUpload = async () => {
     if (urlData && urlData.getSignedUploadUrl && currentFile) {
       try {
-        fetch(urlData.getSignedUploadUrl.uploadUrl, {
+        await fetch(urlData.getSignedUploadUrl.uploadUrl, {
           method: 'PUT',
           body: currentFile,
           headers: {
             'Content-Type': currentFile.type,
           },
-        }).then(() => {
-          onUpload(urlData.getSignedUploadUrl.distributionUrl, currentFile);
         });
+
+        const imageUrl = `${GeyserAssetDomainUrl}${urlData.getSignedUploadUrl.distributionUrl}`;
+        // await testImage(imageUrl);
+        onUpload(imageUrl, currentFile);
         // console.log('checking urlData', urlData);
         // onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
       } catch (error) {

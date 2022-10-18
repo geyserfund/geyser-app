@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { IProject } from '../../interfaces';
 import { Card, SatoshiAmount } from '../../components/ui';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
-import { LighteningQR } from './components/LighteningQR';
+import { LightningQR } from './components/LightningQR';
 import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
 import { colors, fundingStages, IFundingStages } from '../../constants';
@@ -118,7 +118,7 @@ export const DetailsCard = ({
               <BsFillCheckCircleFill color={colors.primary800} />
             </HStack>
           </HStack>
-          <LighteningQR project={project} />
+          <LightningQR project={project} />
         </VStack>
         <HStack>
           <Text color="brand.neutral600">Creator</Text>

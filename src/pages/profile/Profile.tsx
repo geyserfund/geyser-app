@@ -40,6 +40,7 @@ import { BsLightningChargeFill } from 'react-icons/bs';
 import { defaultUser } from '../../defaults';
 import { ExternalAccount, User } from '../../types/generated/graphql';
 import { USER_PROFILE_QUERY } from '../../graphql';
+import { getPath } from '../../constants';
 
 const useStyles = createUseStyles({
   container: {
@@ -177,7 +178,7 @@ export const Profile = () => {
   }
 
   const handleLaunchIdea = () => {
-    history.push('/launch');
+    history.push(getPath('privateProjectLaunch'));
   };
 
   return (
@@ -331,7 +332,7 @@ export const Profile = () => {
                                   title={project.title}
                                   name={project.name}
                                   project={project}
-                                  imgSrc={project.media[0] || ''}
+                                  imgSrc={project.image || ''}
                                   marginLeft="0px !important"
                                   privateUser={myProfile}
                                 />

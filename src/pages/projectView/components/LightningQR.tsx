@@ -11,11 +11,11 @@ import { BoltIcon, QrIcon, ShareIcon } from '../../../components/icons';
 import { QRModal } from './QRModal';
 import { IProject } from '../../../interfaces';
 
-interface ILighteningQR {
+interface ILightningQR {
   project: IProject;
 }
 
-export const LighteningQR = ({ project }: ILighteningQR) => {
+export const LightningQR = ({ project }: ILightningQR) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name } = project;
 
