@@ -96,7 +96,6 @@ export const ProjectCreate = () => {
   const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
     variables: { where: { name: form.name } },
     onCompleted(data) {
-      console.log('chekcing data', data);
       if (data && data.project && data.project.id) {
         setFormError({
           ...formError,
