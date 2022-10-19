@@ -105,13 +105,16 @@ export const ProjectContributionCard = ({
 const RenderBadges = ({
   contribution,
 }: {
-  // contribution: UserProjectContribution | IProjectContribution;
   contribution: UserProjectContribution;
 }) => {
   const { project, funder, isSponsor, isFunder } = contribution;
   const badges =
     isFunder && funder
-      ? computeFunderBadges({ project, funder, useShortForm: false })
+      ? computeFunderBadges({
+          creationDateStringOfFundedContent: project.createdAt,
+          funder,
+          useShortForm: false,
+        })
       : [];
 
   if (badges.length === 0) {

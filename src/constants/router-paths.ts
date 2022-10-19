@@ -8,7 +8,7 @@ export const routerPathNames = {
   projects: 'projects',
   launchProject: 'launch',
   userProfile: 'profile',
-  dashboard: 'dashboard',
+  projectDashboard: 'dashboard',
   preview: 'preview',
   milestonesAndRewards: 'milestones',
   node: 'node',
@@ -36,6 +36,9 @@ const pathsMap = {
   launchProjectWithMilestonesAndRewards: (projectID: string) =>
     `/${routerPathNames.launchProject}/${projectID}/${routerPathNames.milestonesAndRewards}`,
   userProfile: (userID: string) => `/${routerPathNames.userProfile}/${userID}`,
+  projectDashboard: (projectID: string) =>
+    `/${routerPathNames.projects}/${projectID}/${routerPathNames.projectDashboard}`,
+  entry: (entryID: string) => `/${routerPathNames.entry}/${entryID}`,
 };
 
 type PathsMap = typeof pathsMap;

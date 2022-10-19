@@ -1,5 +1,4 @@
 /* eslint-disable complexity */
-
 import React, { useEffect } from 'react';
 import { Box, Text, Skeleton, Link, Image, VStack } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
@@ -9,23 +8,37 @@ import { Board } from './components/Board';
 import { QUERY_GRANTS } from '../../graphql';
 import GrantsHeader from '../../assets/grants-header.webp';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
-import { IProject } from '../../interfaces';
 import { Subscribe } from '../../components/nav/Subscribe';
 import { fonts } from '../../constants/fonts';
-import { ButtonComponent, TwitterComponent } from '../../components/ui';
+import { ButtonComponent } from '../../components/ui';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { ContributeButton } from './components/ContributeButton';
+import { projectTypes } from '../../constants';
+import { Project, ProjectsGetQueryInput } from '../../types/generated/graphql';
 
-export const GrantsLanding = () => {
+type ResponseData = {
+  projects: {
+    projects: Project[];
+  };
+};
+
+type QueryVariables = {
+  input: ProjectsGetQueryInput;
+};
+
+export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
   const isMedium = isMediumScreen();
   const { toast } = useNotification();
 
-  const { loading, error, data } = useQuery(QUERY_GRANTS, {
-    variables: { where: { type: 'grant' } },
-  });
+  const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
+    QUERY_GRANTS,
+    {
+      variables: { input: { where: { type: projectTypes.grant } } },
+    },
+  );
 
-  const grants = (data && data.projects.projects) || [];
+  // const grants = (data && data.projects.projects) || [];
+  const grants = data?.projects.projects || [];
 
   useEffect(() => {
     if (error) {
@@ -37,7 +50,7 @@ export const GrantsLanding = () => {
     }
   }, [error]);
 
-  const grantsSort = (grantA: IProject) => {
+  const grantsSort = (grantA: Project) => {
     if (grantA.name === 'bitcoineducation') {
       return -1;
     }
@@ -126,7 +139,7 @@ export const GrantsLanding = () => {
           >
             {!loading &&
               grants.length > 0 &&
-              grantsSorted.map((grant: IProject) => {
+              grantsSorted.map((grant: Project) => {
                 if (!grant.active) {
                   return;
                 }

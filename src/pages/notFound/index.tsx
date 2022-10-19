@@ -3,7 +3,7 @@ import React from 'react';
 import { Head } from '../../utils/Head';
 import { BiErrorAlt } from 'react-icons/bi';
 
-export const NotFound = () => (
+export const NotFoundPage = () => (
   <>
     <Head title="Not Found" />
     <VStack

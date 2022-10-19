@@ -14,6 +14,8 @@ export interface IFundForm {
   shippingCost: number;
   email: string;
   media: string;
+  funderUsername: string;
+  funderAvatarURL: string;
   rewards: { [key: string]: number };
 }
 
@@ -34,7 +36,7 @@ export interface IFundFormState {
 export const useFundState = ({ rewards }: IuseFundStateProps) => {
   const { user } = useContext(AuthContext);
 
-  const intialState = {
+  const initialState = {
     donationAmount: 0,
     rewardsCost: 0,
     totalAmount: 0,
@@ -42,12 +44,14 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
     shippingDestination: shippingTypes.national,
     shippingCost: 0,
     anonymous: !(user && user.id), // The default user has id 0
+    funderAvatarURL: user.imageUrl || '',
+    funderUsername: user.username,
     email: '',
     media: '',
     rewards: {},
   };
 
-  const [state, _setState] = useState<IFundForm>(intialState);
+  const [state, _setState] = useState<IFundForm>(initialState);
   const setTarget = (event: any) => {
     const { name, value } = event.target;
     const newState = { ...state, [name]: value };
@@ -98,7 +102,7 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
   };
 
   const resetForm = () => {
-    _setState(intialState);
+    _setState(initialState);
   };
 
   return { state, setTarget, setState, updateReward, resetForm };

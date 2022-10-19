@@ -5,8 +5,8 @@ import { useHistory, useLocation, useParams } from 'react-router';
 import { Head } from '../../utils/Head';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
-import { NotFound } from '../notFound';
-import Activity from '../project/Activity/Activity';
+import { NotFoundPage } from '../notFound';
+import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
 import { useFundingFlow, useFundState } from '../../hooks';
 import { useAuthContext } from '../../context';
 import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
@@ -58,7 +58,7 @@ export const EntryPage = () => {
   }
 
   if (error || !entryData || !entryData.entry || projectError) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   const project = projectData && projectData.project;
@@ -119,7 +119,7 @@ const EntryViewWrapper = ({
         entry={entry}
         {...{ detailOpen, setDetailOpen, setFundState }}
       />
-      <Activity
+      <ProjectActivityPanel
         {...{ detailOpen, setDetailOpen, project, fundingFlow, fundForm }}
         resourceType="entry"
         resourceId={entry.id}

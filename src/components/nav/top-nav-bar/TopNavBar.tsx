@@ -36,17 +36,22 @@ const routesForHidingDropdownMenu = [
 ];
 
 const routesForHidingDashboardButton = [
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`,
+  `/${routerPathNames.project}/:projectId`,
+  `/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`,
 ];
 
 const routesForEnablingSignInButton = [
   getPath('index'),
   getPath('landingPage'),
-  routerPathNames.projectDiscovery,
-  routerPathNames.grants,
-  routerPathNames.notFound,
-  routerPathNames.notAuthorized,
-  routerPathNames.userProfile,
+  getPath('projectDiscovery'),
+  getPath('grants'),
+  getPath('notFound'),
+  getPath('notAuthorized'),
+  `/${routerPathNames.userProfile}/:userId`,
   `/${routerPathNames.entry}/:entryId`,
   `/${routerPathNames.projects}/:projectId/`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
@@ -56,8 +61,9 @@ const routesForEnablingSignInButton = [
 
 const routesForEnablingProjectLaunchButton = [
   getPath('index'),
-  `/${routerPathNames.projectDiscovery}`,
-  `/${routerPathNames.grants}`,
+  getPath('landingPage'),
+  getPath('grants'),
+  getPath('projectDiscovery'),
 ];
 
 /**
@@ -121,19 +127,31 @@ export const TopNavBar = () => {
   }, [state]);
 
   const handleProjectLaunchButtonPress = () => {
-    history.push('/launch');
+    history.push(getPath('publicProjectLaunch'));
   };
 
   const handleDashboardButtonPress = () => {
-    history.push(`${customHistory.location.pathname}/dashboard`);
+    const latestProject = user.ownerOf[0]?.project?.name;
+
+    // QUESTION: Should this ever happen? And if so, do we want a better
+    // fallback?
+    if (Boolean(latestProject) === false) {
+      console.error('no project found during dashboard button press.');
+
+      history.push(getPath('landingPage'));
+    }
+
+    history.push(getPath('projectDashboard', latestProject.id));
   };
 
   /**
    * Logic:
    *  - Available to all not logged-in users.
-   *  - Viewable in:
-   *    - Landing + Discovery Grant Pages
-   *    - Other's Project + Entry page
+   *  - Viewable on:
+   *    - Landing Page
+   *    - Discovery Page
+   *    - Grant Pages
+   *    - Other Users's Project and Entry pages
    *  - Hidden on Mobile -- it will be in the menu dropdown instead.
    */
   const shouldShowSignInButton: boolean = useMemo(() => {
@@ -170,27 +188,31 @@ export const TopNavBar = () => {
 
   /**
    * Logic:
-   *  - Available to a logged-in creator of a live or draft project.
-   *  - Viewable almost everywhere. It does not appear when a
-   *    creator is looking at another user's Project Page or Entry Page.
-   *  - Hidden on Mobile -- it will be in the menu dropdown instead.
+   *  - Available to:
+   *    - a logged-in creator of a live or draft project.
+   *  - Viewable:
+   *    - Almost everywhere.
+   *    - It does not appear when a
+   *      creator is looking at another user's Project Page or Entry Page.
+   *    - Hidden on Mobile -- it will be in the menu dropdown instead.
    */
   const shouldShowDashboardButton: boolean = useMemo(() => {
     return (
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      routeMatchesForHidingDashboardButton.every((routeMatch) => {
+      (routeMatchesForHidingDashboardButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      }) &&
-      navigationContext.projectOwnerId !== user.id
+      }) ||
+        navigationContext.projectOwnerId === user.id)
     );
   }, [
+    user.id,
     routeMatchesForHidingDashboardButton,
     isMobile,
     isLoggedIn,
-    navigationContext,
     isUserAProjectCreator,
+    navigationContext.projectOwnerId,
   ]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -198,32 +220,41 @@ export const TopNavBar = () => {
       isMobile === true &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      routeMatchesForHidingDashboardButton.every((routeMatch) => {
+      (routeMatchesForHidingDashboardButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      }) &&
-      navigationContext.projectOwnerId !== user.id
+      }) ||
+        navigationContext.projectOwnerId === user.id)
     );
   }, [
+    user.id,
     routeMatchesForHidingDashboardButton,
     isMobile,
     isLoggedIn,
-    navigationContext,
     isUserAProjectCreator,
+    navigationContext.projectOwnerId,
   ]);
 
   /**
    * Logic:
-   *  - Available to all logged-in users
-   *  - Viewable in the profile page and in the menu.
+   *  - Available to:
+   *    - All non-logged-in users.
+   *    - All logged-in users who aren't yet project creators.
+   *  - Viewable on:
+   *    - The Landing, Discovery, and Grant Pages.
    */
   const shouldShowProjectLaunchButton: boolean = useMemo(() => {
     return (
-      isLoggedIn &&
+      (isLoggedIn === false ||
+        (isLoggedIn && isUserAProjectCreator === false)) &&
       routesMatchesForEnablingProjectLaunchButton.some((routeMatch) => {
         return (routeMatch as match)?.isExact;
       })
     );
-  }, [routesMatchesForEnablingProjectLaunchButton, isLoggedIn]);
+  }, [
+    routesMatchesForEnablingProjectLaunchButton,
+    isLoggedIn,
+    isUserAProjectCreator,
+  ]);
 
   /**
    * Logic:

@@ -5,9 +5,8 @@ import { LandingPage } from '../pages/landing';
 import { TopNavBar } from '../components/nav';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
-import { NotFound } from '../pages/notFound';
-import { GrantsLanding } from '../pages/grants/GrantsLanding';
-import { Profile } from '../pages/profile';
+import { NotFoundPage } from '../pages/notFound';
+import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
@@ -24,9 +23,10 @@ import { ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
-import { ProjectDiscoveryPage } from '../pages/project-discovery';
+import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
 import { getPath, routerPathNames } from '../constants';
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
+import { ProfilePage } from '../pages/profile/ProfilePage';
 
 export const customHistory = createBrowserHistory();
 
@@ -50,9 +50,7 @@ export const Router = () => {
             <Route path="/failed-authentication">
               <FailedAuth />
             </Route>
-            <Route path="/grants">
-              <GrantsLanding />
-            </Route>
+            <Route path={getPath('grants')} component={GrantsLandingPage} />
             <Route
               path={getPath('publicProjectLaunch')}
               component={PublicProjectLaunchPage}
@@ -76,52 +74,58 @@ export const Router = () => {
                 <ProjectCreate />
               </PrivateRoute>
             </Route>
-            <Route path="/profile/:userId">
-              <Profile />
-            </Route>
+            <Route
+              path={`/${routerPathNames.userProfile}/:userId`}
+              component={ProfilePage}
+            />
             {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
             <Route path="/project/:projectId">
               <Project />
             </Route>
-            <Route path="/projects/:projectId/entry/:entryId/preview">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`}
+            >
               <PrivateRoute>
                 <EntryPreview />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId/entry/:entryId">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`}
+            >
               <PrivateRoute>
                 <EntryCreateEdit />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId/entry">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`}
+            >
               <PrivateRoute>
                 <EntryCreateEdit />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId/dashboard">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`}
+            >
               <PrivateRoute>
                 <ProjectDashboard />
               </PrivateRoute>
             </Route>
-            <Route path={`/${routerPathNames.projects}/:projectId`}>
-              <ProjectView />
-            </Route>
-            <Route path="/entry/:entryId">
-              <EntryPage />
-            </Route>
-            <Route path="/not-found">
-              <NotFound />
-            </Route>
-            <Route path="/not-authorized">
-              <NotAuthorized />
-            </Route>
+            <Route
+              path={`/${routerPathNames.projects}/:projectId`}
+              component={ProjectView}
+            />
+            <Route
+              path={`/${routerPathNames.entry}/:entryId`}
+              component={EntryPage}
+            />
+            <Route path={getPath('notFound')} component={NotFoundPage} />
+            <Route path={getPath('notAuthorized')} component={NotAuthorized} />
             <Route
               path={getPath('projectDiscovery')}
               component={ProjectDiscoveryPage}
             />
-            <Route path="/">
-              <LandingPage />
-            </Route>
+            <Route path={getPath('index')} component={LandingPage} />
+            <Route path={getPath('landingPage')} component={LandingPage} />
           </Switch>
         </Box>
       </Box>

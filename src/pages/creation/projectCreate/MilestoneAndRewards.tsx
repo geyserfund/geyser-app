@@ -152,7 +152,9 @@ export const MilestoneAndRewards = () => {
   const handleNext = () => {
     const updateProjectInput: any = {
       projectId: data?.project?.id,
-      rewardCurrency: isSatoshiRewards ? 'btc' : 'usd',
+      // TODO: Use enums from back-end after they're implemented (https://discord.com/channels/940363862723690546/960539150602342400/1032372207264997386)
+      // rewardCurrency: isSatoshiRewards ? RewardCurrency.BTC : RewardCurrency.Usd,
+      rewardCurrency: RewardCurrency.Usd,
       expiresAt: finalDate || null,
     };
     if (rewards.length > 0) {

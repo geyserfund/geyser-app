@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/modal';
 import { QRCode } from 'react-qrcode-logo';
 import React, { useEffect, useState } from 'react';
-// import { createUseStyles } from 'react-jss';
 import { ButtonComponent } from '../ui';
 import Icon from '@chakra-ui/icon';
 import {

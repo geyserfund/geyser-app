@@ -164,7 +164,7 @@ export const InfoPage = ({
                 <ProjectFundingContributionsFeedItem
                   key={index}
                   fundingTx={fundingTx}
-                  project={project}
+                  linkedProject={project}
                 />
               ))
             : sortedFunders.map((funder, index) => (

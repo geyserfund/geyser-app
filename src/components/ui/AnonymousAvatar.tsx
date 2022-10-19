@@ -1,14 +1,21 @@
 import React from 'react';
 import { Avatar, Stack } from '@chakra-ui/react';
 import { getRandomOrb } from '../../utils';
+import { FaUser } from 'react-icons/fa';
 
 type Props = {
   seed: number;
   image?: string;
   imageSize?: number | string;
+  textColor?: string;
 };
 
-export const AnonymousAvatar = ({ seed, image, imageSize = '30px' }: Props) => (
+export const AnonymousAvatar = ({
+  seed,
+  image,
+  textColor,
+  imageSize = '30px',
+}: Props) => (
   <Stack
     width={imageSize}
     height={imageSize}
@@ -30,6 +37,8 @@ export const AnonymousAvatar = ({ seed, image, imageSize = '30px' }: Props) => (
           lineHeight: `${imageSize}`,
         },
       }}
+      color={textColor}
+      icon={<FaUser fontSize="2rem" />}
     />
   </Stack>
 );

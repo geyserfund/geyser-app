@@ -38,7 +38,7 @@ export const LandingPage = () => {
         paddingX="60px"
         width="full"
         height="auto"
-        minH={'full'}
+        minHeight={'full'}
         overflow="hidden"
         spacing={'64px'}
       >
