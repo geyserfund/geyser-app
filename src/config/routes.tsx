@@ -82,45 +82,50 @@ export const Router = () => {
             <Route path="/project/:projectId">
               <Project />
             </Route>
-            <Route path="/projects/:projectId/entry/:entryId/preview">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`}
+            >
               <PrivateRoute>
                 <EntryPreview />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId/entry/:entryId">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`}
+            >
               <PrivateRoute>
                 <EntryCreateEdit />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId/entry">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`}
+            >
               <PrivateRoute>
                 <EntryCreateEdit />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId/dashboard">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`}
+            >
               <PrivateRoute>
                 <ProjectDashboard />
               </PrivateRoute>
             </Route>
-            <Route path={`/${routerPathNames.projects}/:projectId`}>
-              <ProjectView />
-            </Route>
-            <Route path="/entry/:entryId">
-              <EntryPage />
-            </Route>
-            <Route path="/not-found">
-              <NotFoundPage />
-            </Route>
-            <Route path="/not-authorized">
-              <NotAuthorized />
-            </Route>
+            <Route
+              path={`/${routerPathNames.projects}/:projectId`}
+              component={ProjectView}
+            />
+            <Route
+              path={`/${routerPathNames.entry}/:entryId`}
+              component={EntryPage}
+            />
+            <Route path={getPath('notFound')} component={NotFoundPage} />
+            <Route path={getPath('notAuthorized')} component={NotAuthorized} />
             <Route
               path={getPath('projectDiscovery')}
               component={ProjectDiscoveryPage}
             />
-            <Route path="/">
-              <LandingPage />
-            </Route>
+            <Route path={getPath('index')} component={LandingPage} />
+            <Route path={getPath('landingPage')} component={LandingPage} />
           </Switch>
         </Box>
       </Box>

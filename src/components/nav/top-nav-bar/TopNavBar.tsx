@@ -36,7 +36,13 @@ const routesForHidingDropdownMenu = [
 ];
 
 const routesForHidingDashboardButton = [
+  `/${routerPathNames.project}/:projectId`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`,
+  `/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
 const routesForEnablingSignInButton = [
