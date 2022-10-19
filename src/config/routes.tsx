@@ -74,9 +74,10 @@ export const Router = () => {
                 <ProjectCreate />
               </PrivateRoute>
             </Route>
-            <Route path="/profile/:userId">
-              <Profile />
-            </Route>
+            <Route
+              path={`/${routerPathNames.userProfile}/:userId`}
+              component={Profile}
+            />
             {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
             <Route path="/project/:projectId">
               <Project />
