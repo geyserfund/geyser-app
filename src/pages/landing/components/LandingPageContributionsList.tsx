@@ -5,7 +5,7 @@ import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
 import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingTransactions';
-import { FundingTx } from '../../../types/generated/graphql';
+import { FundingTx, Project } from '../../../types/generated/graphql';
 import { PaginationInput } from '../../../types/generated/graphql';
 
 type Props = {
@@ -101,9 +101,8 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
             return (
               <ProjectFundingContributionsFeedItem
                 key={contribution.id}
-                funder={contribution.funder}
-                transactionInfo={contribution}
-                project={contribution.sourceResource}
+                linkedProject={contribution.sourceResource as Project}
+                fundingTx={contribution}
               />
             );
           }

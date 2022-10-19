@@ -9,9 +9,11 @@ type Props = {
 };
 
 export const UserProfilePageContributionsList = ({ profileUser }: Props) => {
-  const { contributions } = profileUser;
+  const contributionIDs: number[] = profileUser.fundingTxs
+    .map((contribution) => contribution?.id)
+    .filter(Boolean);
 
-  if (contributions.length === 0) {
+  if (contributionIDs.length === 0) {
     return (
       <AlertBox
         height="200px"
@@ -24,22 +26,12 @@ export const UserProfilePageContributionsList = ({ profileUser }: Props) => {
 
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
-      {contributions
-        // TODO: Contributions will need to be sorted in order of most-recent.
-        // .sort((contributionA, contributionB) => {
-        //   return Date(contributionA.paidAt) - Date(contributionB.paidAt);
-        // })
-        .map((contribution) => {
-          // TODO: We need a way to get actual unique IDs here (see: https://discord.com/channels/940363862723690546/1030971121660612648/1030976635442311188)
-          const contributionID = Math.random();
-
-          return contribution ? (
-            <UserProfilePageContributionsListItem
-              key={contributionID}
-              contribution={contribution}
-            />
-          ) : null;
-        })}
+      {contributionIDs.map((contributionID: number) => (
+        <UserProfilePageContributionsListItem
+          key={contributionID}
+          fundingTxID={contributionID}
+        />
+      ))}
     </VStack>
   );
 };

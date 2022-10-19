@@ -120,6 +120,7 @@ export interface IProjectListEntryItem {
   amountFunded: number;
   published: boolean;
   project: IProject;
+  createdAt: string;
 }
 
 export interface IRewardCount {

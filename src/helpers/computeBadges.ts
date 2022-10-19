@@ -38,17 +38,18 @@ const roleBadges: IBadges = {
 };
 
 interface Props {
-  project: Project | IProject;
+  creationDateStringOfFundedContent: string;
   funder: Funder | IFunder;
   useShortForm?: Boolean;
 }
 
 /**
  * Computes the badges that a funder has earned with
- * respect to their funding history for a specific project.
+ * respect to their funding history for a specific project
+ * or entry.
  */
 export const computeFunderBadges = ({
-  project,
+  creationDateStringOfFundedContent,
   funder,
   useShortForm = true,
 }: Props): IBadge[] => {
@@ -75,7 +76,7 @@ export const computeFunderBadges = ({
       parseInt(funder.confirmedAt, 10),
     );
     const projectCreatedAt = DateTime.fromMillis(
-      parseInt(project.createdAt, 10),
+      parseInt(creationDateStringOfFundedContent, 10),
     );
     const interval = Interval.fromDateTimes(
       projectCreatedAt,

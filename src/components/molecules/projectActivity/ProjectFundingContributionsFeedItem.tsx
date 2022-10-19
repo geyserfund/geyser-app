@@ -14,34 +14,34 @@ import { SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
-import { Funder, FundingTx, Project } from '../../../types/generated/graphql';
+import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';
+import { IFundingTx, IProject } from '../../../interfaces';
 
 type Props = HTMLChakraProps<'div'> & {
-  funder: Funder;
-  project: Project;
-  transactionInfo: FundingTx;
+  fundingTx: FundingTx | IFundingTx;
   showsProjectLink?: boolean;
+  linkedProject?: Project | IProject;
 };
 
 export const ProjectFundingContributionsFeedItem = ({
-  funder,
-  project,
-  transactionInfo,
-  showsProjectLink = false,
+  fundingTx,
+  linkedProject,
   ...rest
 }: Props) => {
+  const { funder } = fundingTx;
   const isFunderAnonymous = Boolean(funder?.user) === false;
   const timeAgo = getDaysAgo(funder?.confirmedAt || '');
-  const wasMadeOnChain = transactionInfo.onChain;
+  const wasMadeOnChain = fundingTx.onChain;
 
   const avatarMetadata = getAvatarMetadata({
     funder,
-    source: transactionInfo.source,
+    source: fundingTx.source,
   });
 
   const funderBadges = computeFunderBadges({
-    project,
+    creationDateStringOfFundedContent:
+      fundingTx.sourceResource?.createdAt || '',
     funder,
   });
 
@@ -91,20 +91,18 @@ export const ProjectFundingContributionsFeedItem = ({
         {/* Funding Amount */}
         <Box display="flex" alignItems="center">
           <SatoshiIconTilted scale={0.7} />
-          <Text>{`${commaFormatted(transactionInfo.amount)}`} </Text>
+          <Text>{`${commaFormatted(fundingTx.amount)}`} </Text>
         </Box>
       </Box>
 
       <Stack marginTop="6px" width="100%" spacing={'6px'}>
         {/* Funding Comment */}
 
-        {transactionInfo.comment ? (
-          <Text>{transactionInfo.comment}</Text>
-        ) : null}
+        {fundingTx.comment ? <Text>{fundingTx.comment}</Text> : null}
 
         {/* Funding Media Attachment */}
 
-        {transactionInfo.media ? (
+        {fundingTx.media ? (
           <Box
             h={'178px'}
             bg={'gray.100'}
@@ -114,7 +112,7 @@ export const ProjectFundingContributionsFeedItem = ({
             pos={'relative'}
           >
             <Image
-              src={transactionInfo.media}
+              src={fundingTx.media}
               alt="Contribution media attachment"
               objectFit={'cover'}
               width="full"
@@ -133,10 +131,10 @@ export const ProjectFundingContributionsFeedItem = ({
               : 'Some time ago'}
           </Text>
 
-          {showsProjectLink ? (
+          {linkedProject ? (
             <>
               <Text>▶</Text>
-              <ProjectAvatarLink project={project} />
+              <ProjectAvatarLink project={linkedProject} />
             </>
           ) : null}
         </HStack>

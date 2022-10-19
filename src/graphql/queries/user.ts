@@ -24,7 +24,7 @@ export const ME = gql`
 `;
 
 export const USER_PROFILE_QUERY = gql`
-  query User($where: UserGetInput) {
+  query User($where: UserGetInput!) {
     user(where: $where) {
       id
       username
@@ -80,6 +80,9 @@ export const USER_PROFILE_QUERY = gql`
         }
       }
       entries {
+        id
+      }
+      fundingTxs {
         id
       }
     }

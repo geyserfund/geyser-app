@@ -8,7 +8,6 @@ import {
   Container,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { createUseStyles } from 'react-jss';
 import { useHistory, useParams } from 'react-router';
 import { AppFooter } from '../../components/molecules';
 import { isDarkMode } from '../../utils';
@@ -21,20 +20,6 @@ import { USER_PROFILE_QUERY } from '../../graphql';
 import { UserProfilePageHeader, UserProfilePageTabs } from './components';
 
 const { topNavBar: topNavBarDimensions } = dimensions;
-
-const useStyles = createUseStyles({
-  container: {
-    width: '100%',
-    position: 'relative',
-  },
-  containerMobile: {
-    width: '100%',
-    position: 'relative',
-    '& .chakra-wrap__list': {
-      margin: '0px',
-    },
-  },
-});
 
 type ResponseData = {
   user: User;

@@ -1,43 +1,59 @@
 import React from 'react';
-import {
-  FundingStatus,
-  FundingTx,
-  UserProjectContribution,
-} from '../../../types/generated/graphql';
+import { FundingTx } from '../../../types/generated/graphql';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules/projectActivity/ProjectFundingContributionsFeedItem';
+import { gql, useQuery } from '@apollo/client';
 
 type Props = {
-  contribution: UserProjectContribution;
+  fundingTxID: number;
+};
+
+const GET_FUNDING_TX_FOR_USER_CONTRIBUTION = gql`
+  query GetFundingTxForUserContribution($fundingTxId: BigInt!) {
+    fundingTx(id: $fundingTxId) {
+      id
+      uuid
+      invoiceId
+      address
+      paymentRequest
+      amount
+      status
+      comment
+      media
+      paidAt
+      onChain
+      source
+      funder {
+        id
+      }
+      sourceResource {
+        ... on Project {
+          id
+        }
+        ... on Entry {
+          id
+        }
+      }
+    }
+  }
+`;
+
+type ResponseData = {
+  fundingTx: FundingTx;
+};
+
+type QueryVariables = {
+  id: BigInt;
 };
 
 export const UserProfilePageContributionsListItem = ({
-  contribution,
+  fundingTxID,
 }: Props) => {
-  const { funder, project } = contribution;
+  const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
+    GET_FUNDING_TX_FOR_USER_CONTRIBUTION,
+    { variables: { id: BigInt(fundingTxID) } },
+  );
 
-  if (funder && project) {
-    // TODO: We need a way to get the actual transaction info from the
-    // database, given a `UserProjectContribution` instance.
-    // (See: https://discord.com/channels/940363862723690546/940371255658418226/1030922471735574588)
-    const transactionInfo: FundingTx = {
-      amount: 21000,
-      funder,
-      onChain: Math.random() > 0.5,
-      source: '',
-      status: FundingStatus.Paid,
-      uuid: '',
-      id: undefined,
-      invoiceId: '',
-    };
-
-    return (
-      <ProjectFundingContributionsFeedItem
-        funder={funder}
-        project={project}
-        transactionInfo={transactionInfo}
-      />
-    );
-  }
-
-  return null;
+  return data ? (
+    <ProjectFundingContributionsFeedItem fundingTx={data.fundingTx} />
+  ) : null;
 };
