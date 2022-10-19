@@ -152,8 +152,8 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
 `;
 
 export const QUERY_GRANTS = gql`
-  query projects($where: ProjectQueryInput) {
-    projects(where: $where) {
+  query projects($input: ProjectsGetQueryInput) {
+    projects(input: $input) {
       projects {
         id
         title
@@ -165,6 +165,7 @@ export const QUERY_GRANTS = gql`
         expiresAt
         active
         media
+        image
       }
     }
   }
