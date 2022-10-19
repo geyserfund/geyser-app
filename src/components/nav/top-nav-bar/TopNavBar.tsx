@@ -36,7 +36,7 @@ const routesForHidingDropdownMenu = [
 ];
 
 const routesForHidingDashboardButton = [
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`,
 ];
 
 const routesForEnablingSignInButton = [
@@ -126,7 +126,17 @@ export const TopNavBar = () => {
   };
 
   const handleDashboardButtonPress = () => {
-    history.push(`${customHistory.location.pathname}/dashboard`);
+    const latestProject = user.ownerOf[0]?.project?.name;
+
+    // QUESTION: Should this ever happen? And if so, do we want a better
+    // fallback?
+    if (Boolean(latestProject) === false) {
+      console.error('no project found during dashboard button press.');
+
+      history.push(getPath('landingPage'));
+    }
+
+    history.push(getPath('projectDashboard', latestProject.id));
   };
 
   /**
@@ -174,8 +184,9 @@ export const TopNavBar = () => {
   /**
    * Logic:
    *  - Available to a logged-in creator of a live or draft project.
-   *  - Viewable almost everywhere. It does not appear when a
-   *    creator is looking at another user's Project Page or Entry Page.
+   *  - Viewable:
+   *    - Almost everywhere -- it does not appear when a
+   *      creator is looking at another user's Project or Entry Page.
    *  - Hidden on Mobile -- it will be in the menu dropdown instead.
    */
   const shouldShowDashboardButton: boolean = useMemo(() => {
@@ -189,11 +200,12 @@ export const TopNavBar = () => {
       navigationContext.projectOwnerId !== user.id
     );
   }, [
+    user.id,
     routeMatchesForHidingDashboardButton,
     isMobile,
     isLoggedIn,
-    navigationContext,
     isUserAProjectCreator,
+    navigationContext.projectOwnerId,
   ]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -207,11 +219,12 @@ export const TopNavBar = () => {
       navigationContext.projectOwnerId !== user.id
     );
   }, [
+    user.id,
     routeMatchesForHidingDashboardButton,
     isMobile,
     isLoggedIn,
-    navigationContext,
     isUserAProjectCreator,
+    navigationContext.projectOwnerId,
   ]);
 
   /**

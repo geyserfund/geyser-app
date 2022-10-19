@@ -97,7 +97,9 @@ export const Router = () => {
                 <EntryCreateEdit />
               </PrivateRoute>
             </Route>
-            <Route path="/projects/:projectId/dashboard">
+            <Route
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`}
+            >
               <PrivateRoute>
                 <ProjectDashboard />
               </PrivateRoute>
