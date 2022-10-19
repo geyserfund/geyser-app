@@ -1,24 +1,29 @@
 import { HStack, Text, TextProps } from '@chakra-ui/react';
 import React from 'react';
+import { useBTCConverter } from '../../helpers';
 import { numberWithCommas } from '../../utils';
 import { SatoshiIconTilted } from '../icons';
 
-interface ISatoshiAmountProps extends TextProps {
+type Props = TextProps & {
   label?: string;
   extra?: string;
-  loading?: boolean;
+  isLoading?: boolean;
+  shouldShowDollarConversion?: boolean;
   wrapperClassName?: string;
-}
+};
 
 export const SatoshiAmount = ({
   label,
   extra,
   fontSize,
-  loading,
+  isLoading = false,
+  shouldShowDollarConversion,
   wrapperClassName,
   children,
   ...rest
-}: ISatoshiAmountProps) => {
+}: Props) => {
+  const btcConverter = useBTCConverter();
+
   const getScale = () => {
     if (fontSize) {
       let size = 0;
@@ -34,12 +39,33 @@ export const SatoshiAmount = ({
   };
 
   return (
-    <HStack spacing="2px" alignItems="center" className={wrapperClassName}>
-      {label && <Text fontSize={fontSize} {...rest}>{`${label}: `}</Text>}
-      {!loading && <SatoshiIconTilted color={rest.color} scale={getScale()} />}
-      <Text fontSize={fontSize} {...rest}>{`${numberWithCommas(
-        `${children}`,
-      )} ${extra ? '( ' + extra + ' )' : ''}`}</Text>
+    <HStack alignItems="center" className={wrapperClassName}>
+      {label ? (
+        <Text fontSize={fontSize} {...rest}>
+          {`${label}: `}
+        </Text>
+      ) : null}
+
+      {isLoading === false ? (
+        <SatoshiIconTilted color={rest.color} scale={getScale()} />
+      ) : null}
+
+      <Text fontSize={fontSize} {...rest}>
+        {`${numberWithCommas(`${children}`)} ${
+          extra ? '( ' + extra + ' )' : ''
+        }`}
+      </Text>
+
+      {shouldShowDollarConversion ? (
+        <Text
+          marginLeft={4}
+          marginInlineStart={4}
+          fontSize={fontSize}
+          {...rest}
+        >
+          (${btcConverter.getUSDAmount(Number(children)).toFixed(2)})
+        </Text>
+      ) : null}
     </HStack>
   );
 };

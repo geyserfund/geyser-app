@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, VStack } from '@chakra-ui/react';
-import { DonationInput, RewardItem } from '../../../components/molecules';
+import { DonationInput } from '../../../components/molecules';
 import { SectionTitle } from '../../../components/ui';
 import { IProjectReward, IRewardCount } from '../../../interfaces';
 import { IFundForm } from '../../../hooks';
+import { FundingFormRewardItem } from '../../projectView/components/FundingFormRewardItem';
 
 interface IRewardBasedProps {
   setState: any;
@@ -55,7 +56,7 @@ export const RewardBased = ({
           <SectionTitle>Donate to receive a reward</SectionTitle>
           <VStack padding="2px">
             {rewards.map((reward: IProjectReward) => (
-              <RewardItem
+              <FundingFormRewardItem
                 key={reward.id}
                 item={reward}
                 count={getRewardCount(reward.id)}

@@ -8,12 +8,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
-import { fonts } from '../../constants/fonts';
-import { IRewardCount, IProjectReward } from '../../interfaces';
-import { ImageWithReload, SatoshiAmount } from '../ui';
+import { colors } from '../../../constants';
+import { fonts } from '../../../constants/fonts';
+import { IRewardCount, IProjectReward } from '../../../interfaces';
+import { ImageWithReload, SatoshiAmount } from '../../../components/ui';
 
 const useStyles = createUseStyles({
   container: {
@@ -60,7 +60,7 @@ interface IRewardItemProps {
   onClick?: any;
 }
 
-export const RewardItem = ({
+export const FundingFormRewardItem = ({
   item,
   updateCount,
   count: initialCount,
@@ -91,10 +91,6 @@ export const RewardItem = ({
       }
     }
   };
-
-  // useEffect(() => {
-  // 	updateCount({id: item.id, count});
-  // }, [count]);
 
   const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
 

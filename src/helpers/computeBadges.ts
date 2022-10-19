@@ -43,6 +43,10 @@ interface Props {
   useShortForm?: Boolean;
 }
 
+/**
+ * Computes the badges that a funder has earned with
+ * respect to their funding history for a specific project.
+ */
 export const computeFunderBadges = ({
   project,
   funder,

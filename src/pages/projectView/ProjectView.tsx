@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
-import { NotFound } from '../notFound';
-import Activity from '../project/Activity/Activity';
+import { NotFoundPage } from '../notFound';
+import { ProjectActivityPanel } from './ActivityPanel/ProjectActivityPanel';
 import { DetailsContainer } from './DetailsContainer';
 import { useFundingFlow, useFundState } from '../../hooks';
 import { Head } from '../../utils/Head';
@@ -51,7 +51,7 @@ export const ProjectView = () => {
   }
 
   if (error || !data || !data.project) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   const { project } = data;
@@ -114,7 +114,8 @@ const ProjectViewContainer = ({
           updateReward: fundForm.updateReward,
         }}
       />
-      <Activity
+
+      <ProjectActivityPanel
         project={project}
         {...{ detailOpen, setDetailOpen, fundingFlow, fundForm }}
       />
