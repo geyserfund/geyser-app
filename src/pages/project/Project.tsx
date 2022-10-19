@@ -5,9 +5,9 @@ import { useLocation, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
-import { NotFound } from '../notFound';
+import { NotFoundPage } from '../notFound';
 import { Head } from '../../utils/Head';
-import Activity from './Activity/Activity';
+import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
 import Details from './Details';
 import { useFundingFlow } from '../../hooks';
 import { Grants } from '../grants/Grants';
@@ -40,7 +40,7 @@ export const Project = () => {
   }
 
   if (error || !data || !data.project) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   const { project } = data;
@@ -72,7 +72,7 @@ export const Project = () => {
               project={project}
               {...{ detailOpen, setDetailOpen, setFundState }}
             />
-            <Activity
+            <ProjectActivityPanel
               project={project}
               {...{ detailOpen, setDetailOpen, fundingFlow }}
             />

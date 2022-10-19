@@ -16,7 +16,7 @@ import { useAuthContext } from '../../context';
 import { defaultUser } from '../../defaults';
 import { AlertBox } from '../../components/ui';
 import { dimensions } from '../../constants';
-import { User, UserQueryInput } from '../../types/generated/graphql';
+import { User, UserGetInput } from '../../types/generated/graphql';
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { UserProfilePageHeader, UserProfilePageTabs } from './components';
 
@@ -41,7 +41,7 @@ type ResponseData = {
 };
 
 type QueryVariables = {
-  where: UserQueryInput;
+  where: UserGetInput;
 };
 
 export const ProfilePage = () => {

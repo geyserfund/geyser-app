@@ -42,11 +42,11 @@ const routesForHidingDashboardButton = [
 const routesForEnablingSignInButton = [
   getPath('index'),
   getPath('landingPage'),
-  routerPathNames.projectDiscovery,
-  routerPathNames.grants,
-  routerPathNames.notFound,
-  routerPathNames.notAuthorized,
-  routerPathNames.userProfile,
+  getPath('projectDiscovery'),
+  getPath('grants'),
+  getPath('notFound'),
+  getPath('notAuthorized'),
+  `/${routerPathNames.userProfile}/:userId`,
   `/${routerPathNames.entry}/:entryId`,
   `/${routerPathNames.projects}/:projectId/`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
@@ -131,9 +131,11 @@ export const TopNavBar = () => {
   /**
    * Logic:
    *  - Available to all not logged-in users.
-   *  - Viewable in:
-   *    - Landing + Discovery Grant Pages
-   *    - Other's Project + Entry page
+   *  - Viewable on:
+   *    - Landing Page
+   *    - Discovery Page
+   *    - Grant Pages
+   *    - Other Users's Project and Entry pages
    *  - Hidden on Mobile -- it will be in the menu dropdown instead.
    */
   const shouldShowSignInButton: boolean = useMemo(() => {

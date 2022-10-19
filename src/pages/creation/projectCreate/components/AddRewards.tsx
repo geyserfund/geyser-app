@@ -30,25 +30,39 @@ import {
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations';
 import { useNotification } from '../../../../utils';
-import { TRewards } from '../types';
+import { ProjectReward } from '../../../../types/generated/graphql';
 
 interface IAddRewards {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (rewards: TRewards) => void;
-  rewards?: TRewards;
+  onSubmit: (_: ProjectReward) => void;
+  rewards?: ProjectReward;
   isSatoshi: boolean;
   setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
   projectId?: number;
 }
 
-export const defaultReward = {
+export const defaultReward: ProjectReward = {
+  // projectId: 0,
+  // projectRewardId: 0,
+  id: 0,
   name: '',
-  projectId: 0,
   description: '',
   cost: 0,
   image: '',
+  deleted: false,
+  stock: 0,
+  backers: 0,
+  sold: 0,
 };
+
+// export const defaultCreateReward: CreateProjectRewardInput = {
+//   name: '',
+//   projectId: 0,
+//   description: '',
+//   cost: 0,
+//   image: '',
+// };
 
 export const AddRewards = ({
   isOpen,
@@ -60,11 +74,12 @@ export const AddRewards = ({
 }: IAddRewards) => {
   const { toast } = useNotification();
 
-  const [_rewards, _setRewards] = useState<TRewards>(
+  // UpdateProjectRewardInput | CreateProjectRewardInput
+  const [_rewards, _setRewards] = useState<ProjectReward>(
     availableReward || defaultReward,
   );
   const rewards = useRef(_rewards);
-  const setRewards = (value: TRewards) => {
+  const setRewards = (value: ProjectReward) => {
     rewards.current = value;
     _setRewards(value);
   };
@@ -117,6 +132,8 @@ export const AddRewards = ({
 
   useEffect(() => {
     if (availableReward && availableReward !== rewards.current) {
+      console.log(availableReward);
+
       setRewards(availableReward);
     }
   }, [availableReward]);
@@ -137,18 +154,22 @@ export const AddRewards = ({
       return;
     }
 
-    if (rewards.current.id) {
+    if ((rewards.current as ProjectReward).id) {
       const updateRewardsInput = {
-        projectRewardId: rewards.current.id,
+        projectRewardId: (rewards.current as ProjectReward).id,
         name: rewards.current.name,
         description: rewards.current.description,
-        cost: rewards.current.cost,
+        cost: rewards.current.cost * 100, // multiplied by 100 to express the cost in cents
         image: rewards.current.image,
       };
       updateReward({ variables: { input: updateRewardsInput } });
     } else {
       const createRewardsInput = {
-        ...rewards.current,
+        cost: rewards.current.cost * 100, // multiplied by 100 to express the cost in cents
+        description: rewards.current.description,
+        image: rewards.current.image,
+        name: rewards.current.name,
+        stock: rewards.current.stock,
         projectId,
       };
       createReward({ variables: { input: createRewardsInput } });
@@ -223,7 +244,7 @@ export const AddRewards = ({
               <Text>Description</Text>
               <TextArea
                 placeholder={' ...'}
-                value={rewards.current.description}
+                value={rewards.current.description!}
                 name="description"
                 onChange={handleTextChange}
               />

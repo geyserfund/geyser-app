@@ -96,24 +96,33 @@ export const TopNavBarMenu = ({
 
         {isLoggedIn ? (
           <>
-            <MenuItemLink
-              destinationPath={getPath('userProfile', user.id)}
-              px={0}
-              py={0}
-              _focus={{ boxShadow: 'none' }}
-            >
-              <NavBarUserProfileMenuItem />
-            </MenuItemLink>
-
-            {isUserAProjectCreator && user.ownerOf[0]?.project ? (
+            <MenuItem padding={0}>
               <MenuItemLink
-                destinationPath={getPath('project', user.ownerOf[0].project.id)}
+                destinationPath={getPath('userProfile', user.id)}
                 px={0}
                 py={0}
                 _focus={{ boxShadow: 'none' }}
               >
-                <NavBarUserProjectMenuItem project={user.ownerOf[0].project} />
+                <NavBarUserProfileMenuItem />
               </MenuItemLink>
+            </MenuItem>
+
+            {isUserAProjectCreator && user.ownerOf[0]?.project ? (
+              <MenuItem padding={0}>
+                <MenuItemLink
+                  destinationPath={getPath(
+                    'project',
+                    user.ownerOf[0].project.name,
+                  )}
+                  px={0}
+                  py={0}
+                  _focus={{ boxShadow: 'none' }}
+                >
+                  <NavBarUserProjectMenuItem
+                    project={user.ownerOf[0].project}
+                  />
+                </MenuItemLink>
+              </MenuItem>
             ) : null}
 
             <MenuDivider />

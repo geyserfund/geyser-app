@@ -4,7 +4,7 @@ import React from 'react';
 import { ImageProps } from '@chakra-ui/react';
 import StarPng from '../../assets/star.png';
 import CrownPng from '../../assets/crown.png';
-import LighteningPng from '../../assets/lightening.png';
+import LightningPng from '../../assets/lightning.png';
 import MagnifyPng from '../../assets/magnify.png';
 import MedalPng from '../../assets/medal.png';
 import TrophyPng from '../../assets/trophy.png';
@@ -122,8 +122,8 @@ export const LightningIcon = (props: ImageProps) => (
     <Image
       height="20px"
       width="20px"
-      src={LighteningPng}
-      alt="lightening"
+      src={LightningPng}
+      alt="lightning"
       {...props}
     />
   </Box>

@@ -16,7 +16,7 @@ import { useAuthContext } from '../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { isMobileMode } from '../../utils';
 import { NotAuthorized } from '../notAuthorized';
-import { NotFound } from '../notFound';
+import { NotFoundPage } from '../notFound';
 import { Entries } from './Entries';
 import { MilestoneSettings } from './MilestoneSettings';
 import { NodeSettings } from './NodeSettings';
@@ -73,7 +73,7 @@ export const ProjectDashboard = () => {
   }
 
   if (error || !data || !data.project) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   if (data.project.owners[0].user.id !== user.id) {

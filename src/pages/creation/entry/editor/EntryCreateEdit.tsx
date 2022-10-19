@@ -20,13 +20,12 @@ import { useHistory, useParams } from 'react-router';
 import { QUERY_GET_ENTRY } from '../../../../graphql/queries/entries';
 import { FileUpload } from '../../../../components/molecules';
 import { createUseStyles } from 'react-jss';
-import { colors, GeyserAssetDomainUrl } from '../../../../constants';
+import { colors } from '../../../../constants';
 import { ImageWithReload } from '../../../../components/ui';
 import { Editor } from './Editor';
 import Loader from '../../../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../../../graphql';
 import { useAuthContext } from '../../../../context';
-import { ENETDOWN } from 'constants';
 
 const useStyles = createUseStyles({
   uploadContainer: {
@@ -212,9 +211,8 @@ export const EntryCreateEdit = () => {
     }
   };
 
-  const onImageUpload = (url: string) => {
-    setForm({ ...form.current, image: `${GeyserAssetDomainUrl}${url}` });
-  };
+  const onImageUpload = (url: string) =>
+    setForm({ ...form.current, image: url });
 
   const isEdit =
     Boolean(createData?.createEntry?.id) || Boolean(params.entryId);

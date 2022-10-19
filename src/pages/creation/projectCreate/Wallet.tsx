@@ -230,7 +230,7 @@ export const Wallet = () => {
                 </HStack>
               </VStack>
               <VStack width="100%" alignItems="flex-start">
-                <Text>Lightening Wallet</Text>
+                <Text>Lightning Wallet</Text>
                 <ButtonComponent isFullWidth disabled>
                   Coming Soon
                 </ButtonComponent>

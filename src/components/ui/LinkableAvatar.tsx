@@ -8,16 +8,18 @@ import { FaUser } from 'react-icons/fa';
 
 type Props = {
   avatarMetadata: IAvatarMetadata;
-  badges?: ReactElement[];
   textColor?: string;
+  badgeElements?: ReactElement[];
+  badgeNames?: string[];
   fontSize?: number | string;
   imageSize?: number | string;
 };
 
 export const LinkableAvatar = ({
   avatarMetadata,
-  badges,
   textColor,
+  badgeNames,
+  badgeElements,
   fontSize = '16px',
   imageSize = '30px',
 }: Props) => {
@@ -26,14 +28,13 @@ export const LinkableAvatar = ({
   const history = useHistory();
 
   const calculateBadgesLength = () => {
-    if (!badges) {
+    if (!badgeNames) {
       return 0;
     }
 
-    return badges.reduce(
-      (length, element) => length + element.props.badge.length,
-      0,
-    );
+    return badgeNames.reduce((accumulatedLength, badgeName) => {
+      return accumulatedLength + badgeName.length;
+    }, 0);
   };
 
   const getFormattedUsername = () => {
@@ -42,21 +43,24 @@ export const LinkableAvatar = ({
     }
 
     if (
-      (badges &&
-        badges.length === 0 &&
+      (badgeElements &&
+        badgeElements.length === 0 &&
         avatarMetadata.username.length > (isMedium ? 12 : 21)) ||
-      (!badges && avatarMetadata.username.length > (isMedium ? 12 : 21))
+      (!badgeElements && avatarMetadata.username.length > (isMedium ? 12 : 21))
     ) {
       return `${avatarMetadata.username.slice(0, isMedium ? 10 : 19)}...`;
     }
 
-    if (badges && badges.length >= (isMobile ? 2 : isMedium ? 1 : 3)) {
+    if (
+      badgeElements &&
+      badgeElements.length >= (isMobile ? 2 : isMedium ? 1 : 3)
+    ) {
       return;
     }
 
     if (
-      badges &&
-      badges.length &&
+      badgeElements &&
+      badgeElements.length &&
       avatarMetadata.username.length + calculateBadgesLength() >
         (isMedium ? 13 : 21)
     ) {
@@ -106,7 +110,7 @@ export const LinkableAvatar = ({
           {' '}
           {getFormattedUsername()}
         </Text>
-        {badges}
+        {badgeElements}
       </HStack>
     </Link>
   );

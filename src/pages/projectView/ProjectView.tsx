@@ -4,14 +4,15 @@ import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
-import { NotFound } from '../notFound';
-import Activity from '../project/Activity/Activity';
+import { NotFoundPage } from '../notFound';
+import { ProjectActivityPanel } from './ActivityPanel/ProjectActivityPanel';
 import { DetailsContainer } from './DetailsContainer';
 import { useFundingFlow, useFundState } from '../../hooks';
 import { Head } from '../../utils/Head';
 import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
 import { Project } from '../../types/generated/graphql';
+import { getPath } from '../../constants';
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -38,7 +39,7 @@ export const ProjectView = () => {
 
         setNav({
           title: project.title,
-          path: `/projects/${project.name}`,
+          path: getPath('project', project.name),
           projectOwnerId: projectOwnerID,
         });
       }
@@ -50,7 +51,7 @@ export const ProjectView = () => {
   }
 
   if (error || !data || !data.project) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   const { project } = data;
@@ -113,7 +114,8 @@ const ProjectViewContainer = ({
           updateReward: fundForm.updateReward,
         }}
       />
-      <Activity
+
+      <ProjectActivityPanel
         project={project}
         {...{ detailOpen, setDetailOpen, fundingFlow, fundForm }}
       />
