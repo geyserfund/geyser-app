@@ -1,2 +1,2 @@
 export * from './Grants';
-export * from './GrantsLanding';
+export * from './GrantsLandingPage';

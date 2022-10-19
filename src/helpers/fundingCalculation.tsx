@@ -47,5 +47,10 @@ export const useFundCalc = (state: IFundForm) => {
     return totalRewards;
   };
 
-  return { getTotalAmount, getShippingCost, getRewardsQuantity, btcRate };
+  return {
+    getTotalAmount,
+    getShippingCost,
+    getRewardsQuantity,
+    btcRate,
+  };
 };

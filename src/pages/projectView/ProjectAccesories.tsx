@@ -14,7 +14,6 @@ import { useHistory } from 'react-router';
 import {
   ProjectEntryCard,
   ProjectSectionBar,
-  RewardItem,
 } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages, IFundingStages, projectTypes } from '../../constants';
@@ -24,6 +23,7 @@ import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
+import { FundingFormRewardItem } from './components/FundingFormRewardItem';
 
 const useStyles = createUseStyles({
   navButton: {
@@ -75,7 +75,7 @@ export const ProjectAccesories = ({
     if (project.rewards && project.rewards.length > 0) {
       return project.rewards.map((reward) => (
         <GridItem key={reward.id} colSpan={isSmallerThan1265 ? 1 : 2}>
-          <RewardItem
+          <FundingFormRewardItem
             onClick={() => {
               if (fundState === fundingStages.initial) {
                 updateReward({ id: reward.id, count: 1 });
