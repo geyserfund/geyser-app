@@ -32,7 +32,6 @@ export const ImageWithReload = ({
 
   const handleError = ({ currentTarget }: any) => {
     setLoading(true);
-    console.log('CURRENT REF', componentRef.current);
 
     if (
       componentRef.current !== null &&
