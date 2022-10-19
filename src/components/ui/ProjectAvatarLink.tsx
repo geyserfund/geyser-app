@@ -1,6 +1,7 @@
 import { Avatar, HStack, Text, Link } from '@chakra-ui/react';
 import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
+import { getPath } from '../../constants';
 
 import { IProject } from '../../interfaces';
 import { Project } from '../../types/generated/graphql';
@@ -19,7 +20,7 @@ export const ProjectAvatarLink = ({
   return (
     <Link
       as={ReactRouterLink}
-      to={`/project/${project.name}`}
+      to={getPath('project', project.name)}
       color={textColor}
     >
       <HStack spacing={1}>

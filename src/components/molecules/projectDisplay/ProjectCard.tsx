@@ -26,7 +26,7 @@ import { formatDaysLeft, isDarkMode, useBitcoinRates } from '../../../utils';
 import { getShortAmountLabel } from '../../../utils/helperFunctions';
 import { SatoshiIconTilted } from '../../icons';
 import { ButtonComponent, Card, ICard, Linkin } from '../../ui';
-import { StartCrowdFundUrl, SubscribeUrl } from '../../../constants';
+import { getPath, StartCrowdFundUrl, SubscribeUrl } from '../../../constants';
 import { Link } from 'react-router-dom';
 
 interface IProjectCardProp extends ICard {
@@ -135,7 +135,7 @@ export const ProjectCard = ({
     project && project.funders ? project.funders.length : '';
 
   return (
-    <Link to={`/project/${project.name}`}>
+    <Link to={getPath('project', project.name)}>
       <Card
         className={classNames(classes.container, className)}
         backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}

@@ -6,7 +6,7 @@ import { TopNavBar } from '../components/nav';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFoundPage } from '../pages/notFound';
-import { GrantsLanding } from '../pages/grants/GrantsLanding';
+import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage';
 import { Profile } from '../pages/profile';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
@@ -50,9 +50,7 @@ export const Router = () => {
             <Route path="/failed-authentication">
               <FailedAuth />
             </Route>
-            <Route path="/grants">
-              <GrantsLanding />
-            </Route>
+            <Route path={getPath('grants')} component={GrantsLandingPage} />
             <Route
               path={getPath('publicProjectLaunch')}
               component={PublicProjectLaunchPage}
