@@ -12,6 +12,7 @@ import { Head } from '../../utils/Head';
 import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
 import { Project } from '../../types/generated/graphql';
+import { getPath } from '../../constants';
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -38,7 +39,7 @@ export const ProjectView = () => {
 
         setNav({
           title: project.title,
-          path: `/projects/${project.name}`,
+          path: getPath('project', project.name),
           projectOwnerId: projectOwnerID,
         });
       }
