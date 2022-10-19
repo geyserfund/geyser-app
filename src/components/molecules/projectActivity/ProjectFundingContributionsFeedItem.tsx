@@ -15,27 +15,35 @@ import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
-import { IFundingTx, IProject } from '../../../interfaces';
 import { renderFunderBadges } from './renderFunderBadges';
+import { IFundingTx, IProject } from '../../../interfaces';
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx | IFundingTx;
-  project: Project | IProject;
   showsProjectLink?: boolean;
+  linkedProject?: Project | IProject;
 };
 
 export const ProjectFundingContributionsFeedItem = ({
   fundingTx,
-  project,
-  showsProjectLink = true,
+  linkedProject,
   ...rest
 }: Props) => {
-  const { funder, onChain, paidAt, source } = fundingTx;
+  const { funder } = fundingTx;
+  const isFunderAnonymous = Boolean(funder?.user) === false;
+  const timeAgo = getDaysAgo(funder?.confirmedAt || '');
+  const wasMadeOnChain = fundingTx.onChain;
 
-  const isFunderAnonymous = !funder.user;
-  const timeAgo = getDaysAgo(paidAt) || '';
-  const avatarMetadata = getAvatarMetadata({ funder, source });
-  const funderBadges = computeFunderBadges({ project, funder });
+  const avatarMetadata = getAvatarMetadata({
+    funder,
+    source: fundingTx.source,
+  });
+
+  const funderBadges = computeFunderBadges({
+    creationDateStringOfFundedContent:
+      fundingTx.sourceResource?.createdAt || '',
+    funder,
+  });
 
   return (
     <VStack
@@ -49,18 +57,23 @@ export const ProjectFundingContributionsFeedItem = ({
       px={'26px'}
       py={'10px'}
       overflow={'hidden'}
-      width={['375px']}
+      width={{
+        base: '100%',
+        md: '375px',
+      }}
       {...rest}
     >
       {/* Funding Stats Header */}
 
       <Box display="flex" justifyContent="space-between" width={'full'}>
+        {/* Funder Avatar */}
         {isFunderAnonymous ? (
           <HStack spacing={2}>
             <AnonymousAvatar
-              seed={fundingTx.funder.id}
+              seed={funder.id}
               image={avatarMetadata.image}
               imageSize={'20px'}
+              textColor="brand.neutral900"
             />
             <Text>Anonymous Funder</Text>
           </HStack>
@@ -69,11 +82,13 @@ export const ProjectFundingContributionsFeedItem = ({
             avatarMetadata={avatarMetadata}
             fontSize={'14px'}
             imageSize={'20px'}
+            textColor="brand.neutral900"
             badgeNames={funderBadges.map((badge) => badge.badge)}
             badgeElements={renderFunderBadges(funderBadges)}
           />
         )}
 
+        {/* Funding Amount */}
         <Box display="flex" alignItems="center">
           <SatoshiIconTilted scale={0.7} />
           <Text>{`${commaFormatted(fundingTx.amount)}`} </Text>
@@ -83,11 +98,11 @@ export const ProjectFundingContributionsFeedItem = ({
       <Stack marginTop="6px" width="100%" spacing={'6px'}>
         {/* Funding Comment */}
 
-        {fundingTx.comment && <Text>{fundingTx.comment}</Text>}
+        {fundingTx.comment ? <Text>{fundingTx.comment}</Text> : null}
 
         {/* Funding Media Attachment */}
 
-        {fundingTx.media && (
+        {fundingTx.media ? (
           <Box
             h={'178px'}
             bg={'gray.100'}
@@ -105,21 +120,21 @@ export const ProjectFundingContributionsFeedItem = ({
               borderRadius="4px"
             />
           </Box>
-        )}
+        ) : null}
 
         {/* Timestamp and Funded-Project Info */}
 
         <HStack color="brand.neutral700" spacing={2}>
           <Text fontSize={'xs'}>
             {timeAgo
-              ? `${onChain ? '⛓' : '⚡️'} ${timeAgo} ago`
+              ? `${wasMadeOnChain ? '⛓' : '⚡️'} ${timeAgo} ago`
               : 'Some time ago'}
           </Text>
 
-          {showsProjectLink ? (
+          {linkedProject ? (
             <>
               <Text>▶</Text>
-              <ProjectAvatarLink project={project} />
+              <ProjectAvatarLink project={linkedProject} />
             </>
           ) : null}
         </HStack>

@@ -36,6 +36,7 @@ const pathsMap = {
   launchProjectWithMilestonesAndRewards: (projectID: string) =>
     `/${routerPathNames.launchProject}/${projectID}/${routerPathNames.milestonesAndRewards}`,
   userProfile: (userID: string) => `/${routerPathNames.userProfile}/${userID}`,
+  entry: (entryID: string) => `/${routerPathNames.entry}/${entryID}`,
 };
 
 type PathsMap = typeof pathsMap;

@@ -23,7 +23,10 @@ export const ProjectFundingLeaderboardFeedItem = ({
 }: Props) => {
   const anonymous = !funder.user;
   const avatarMetadata = getAvatarMetadata({ funder });
-  const funderBadges = computeFunderBadges({ project, funder });
+  const funderBadges = computeFunderBadges({
+    creationDateStringOfFundedContent: project.createdAt,
+    funder,
+  });
 
   return (
     <Box

@@ -97,7 +97,6 @@ export const ProjectAccesories = ({
   };
 
   const renderMilestones = () => {
-    console.log('project mielstones', project.milestones);
     if (project.milestones && project.milestones.length > 0) {
       return project.milestones.map((milestone) => (
         <MilestoneComponent
