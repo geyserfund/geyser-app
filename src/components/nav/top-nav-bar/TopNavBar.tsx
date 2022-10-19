@@ -36,6 +36,11 @@ const routesForHidingDropdownMenu = [
 ];
 
 const routesForHidingDashboardButton = [
+  `/${routerPathNames.project}/:projectId`,
+  `/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`,
 ];
 
@@ -183,21 +188,23 @@ export const TopNavBar = () => {
 
   /**
    * Logic:
-   *  - Available to a logged-in creator of a live or draft project.
+   *  - Available to:
+   *    - a logged-in creator of a live or draft project.
    *  - Viewable:
-   *    - Almost everywhere -- it does not appear when a
-   *      creator is looking at another user's Project or Entry Page.
-   *  - Hidden on Mobile -- it will be in the menu dropdown instead.
+   *    - Almost everywhere.
+   *    - It does not appear when a
+   *      creator is looking at another user's Project Page or Entry Page.
+   *    - Hidden on Mobile -- it will be in the menu dropdown instead.
    */
   const shouldShowDashboardButton: boolean = useMemo(() => {
     return (
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      routeMatchesForHidingDashboardButton.every((routeMatch) => {
+      (routeMatchesForHidingDashboardButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      }) &&
-      navigationContext.projectOwnerId !== user.id
+      }) ||
+        navigationContext.projectOwnerId === user.id)
     );
   }, [
     user.id,
@@ -213,10 +220,10 @@ export const TopNavBar = () => {
       isMobile === true &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      routeMatchesForHidingDashboardButton.every((routeMatch) => {
+      (routeMatchesForHidingDashboardButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      }) &&
-      navigationContext.projectOwnerId !== user.id
+      }) ||
+        navigationContext.projectOwnerId === user.id)
     );
   }, [
     user.id,
