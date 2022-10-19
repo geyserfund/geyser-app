@@ -3,7 +3,6 @@ import {
   Grid,
   GridItem,
   HStack,
-  Image,
   Input,
   InputGroup,
   InputRightAddon,
@@ -31,7 +30,6 @@ import { TProjectDetails } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
-import GeyserTempImage from '../../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { useLazyQuery, useMutation } from '@apollo/client';
@@ -63,59 +61,49 @@ export const ProjectCreate = () => {
   const [form, setForm] = useState<TProjectDetails>({
     title: '',
     description: '',
-    image: '',
+    image: undefined,
     email: '',
     name: '',
   });
   const [formError, setFormError] = useState<{ [key: string]: string }>({});
 
-  const [createProject, { loading: createLoading }] = useMutation(
-    MUTATION_CREATE_PROJECT,
-    {
-      onCompleted(data) {
-        history.push(`/launch/${data.createProject.name}/milestones`);
-      },
-      onError(error) {
-        toast({
-          title: 'project creation failed!',
-          description: `${error}`,
-          status: 'error',
-        });
-      },
+  const [createProject] = useMutation(MUTATION_CREATE_PROJECT, {
+    onCompleted(data) {
+      history.push(`/launch/${data.createProject.name}/milestones`);
     },
-  );
+    onError(error) {
+      toast({
+        title: 'project creation failed!',
+        description: `${error}`,
+        status: 'error',
+      });
+    },
+  });
 
-  const [updateProject, { loading: updateLoading }] = useMutation(
-    MUTATION_UPDATE_PROJECT,
-    {
-      onCompleted() {
-        history.push(`/launch/${params.projectId}/milestones`);
-      },
-      onError(error) {
-        toast({
-          title: 'project update failed!',
-          description: `${error}`,
-          status: 'error',
-        });
-      },
+  const [updateProject] = useMutation(MUTATION_UPDATE_PROJECT, {
+    onCompleted() {
+      history.push(`/launch/${params.projectId}/milestones`);
     },
-  );
+    onError(error) {
+      toast({
+        title: 'project update failed!',
+        description: `${error}`,
+        status: 'error',
+      });
+    },
+  });
 
-  const [getProject, { loading: getProjectLoading }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME,
-    {
-      variables: { where: { name: form.name } },
-      onCompleted(data) {
-        console.log('chekcing data', data);
-        if (data && data.project && data.project.id) {
-          setFormError({
-            ...formError,
-            name: 'This lightning address is already taken.',
-          });
-        }
-      },
+  const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
+    variables: { where: { name: form.name } },
+    onCompleted(data) {
+      if (data && data.project && data.project.id) {
+        setFormError({
+          ...formError,
+          name: 'This lightning address is already taken.',
+        });
+      }
     },
-  );
+  });
 
   const [getProjectById, { loading, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME,
