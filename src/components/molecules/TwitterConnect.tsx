@@ -25,8 +25,6 @@ export const TwitterConnect = ({ onClose }: { onClose?: () => {} }) => {
           }
 
           stopPolling();
-          // eslint-disable-next-line no-debugger
-          debugger;
           setUser({ ...defaultUser, ...data.me });
           setIsLoggedIn(true);
         }

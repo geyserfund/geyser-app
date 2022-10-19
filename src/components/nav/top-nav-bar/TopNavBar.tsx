@@ -122,11 +122,7 @@ export const TopNavBar = () => {
   }, [state]);
 
   const handleProjectLaunchButtonPress = () => {
-    const routePath = getPath(
-      isLoggedIn ? 'privateProjectLaunch' : 'publicProjectLaunch',
-    );
-
-    history.push(routePath);
+    history.push(getPath('publicProjectLaunch'));
   };
 
   const handleDashboardButtonPress = () => {
