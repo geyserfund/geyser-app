@@ -46,7 +46,9 @@ export const SatoshiIcon = ({
       <Image
         filter={getFilter()}
         height={`${26 * scale}px`}
+        minHeight={`${26 * scale}px`}
         width={`${14 * scale}px`}
+        minWidth={`${14 * scale}px`}
         src={SatoshiPng}
         alt="satoshi"
         {...rest}
@@ -84,7 +86,9 @@ export const SatoshiIconTilted = ({
       <Image
         filter={getFilter()}
         height={`${26 * scale}px`}
+        minHeight={`${26 * scale}px`}
         width={`${26 * scale}px`}
+        minWidth={`${26 * scale}px`}
         src={dash ? SatoshiTiltedDash : SatoshiTilted}
         alt="satoshi"
         {...rest}
