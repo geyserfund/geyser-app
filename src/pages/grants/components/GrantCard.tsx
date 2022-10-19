@@ -10,7 +10,8 @@ import {
 import { useHistory } from 'react-router';
 import { SatoshiIconTilted } from '../../../components/icons';
 import { isMobileMode } from '../../../utils';
-import { IProject } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
+import { getPath } from '../../../constants';
 
 export const GrantCard = ({
   project,
@@ -20,7 +21,7 @@ export const GrantCard = ({
   status,
   marginRight,
 }: {
-  project: IProject;
+  project: Project;
   number: string;
   distributed: string;
   date: string;
@@ -31,7 +32,7 @@ export const GrantCard = ({
   const isMobile = isMobileMode();
 
   const gotoGrant = () => {
-    history.push(`/project/${project.name}`);
+    history.push(getPath('project', project.name));
   };
 
   return (
@@ -62,7 +63,7 @@ export const GrantCard = ({
               h={isMobile ? '325px' : '350px'}
               objectFit="cover"
               borderRadius="4px"
-              src={project.media && project.media[0]}
+              src={project.image}
               alt="grant"
             />
 

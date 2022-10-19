@@ -13,20 +13,6 @@ export const MUTATION_CREATE_PROJECT = gql`
     }
   }
 `;
-/*
-{
-  "input": {
-    "title": null,
-    "image": null,
-    "name": null,
-    "description": null,
-    "type": null,
-    "expiresAt": null,
-    "fundingGoal": null,
-    "rewardCurrency": null
-  }
-}
-*/
 
 export const MUTATION_UPDATE_PROJECT = gql`
   mutation UpdateProject($input: UpdateProjectInput!) {
@@ -41,20 +27,6 @@ export const MUTATION_UPDATE_PROJECT = gql`
     }
   }
 `;
-/*
-{
-  "input": {
-    "projectId": null,
-    "title": null,
-    "image": null,
-    "description": null,
-    "active": null,
-    "draft": null,
-    "expiresAt": null,
-    "fundingGoal": null
-  }
-}
-*/
 
 export const MUTATION_CREATE_PROJECT_REWARD = gql`
   mutation CreateProjectReward($input: CreateProjectRewardInput) {
@@ -68,18 +40,6 @@ export const MUTATION_CREATE_PROJECT_REWARD = gql`
     }
   }
 `;
-/*
-{
-  "input": {
-    "projectId": null,
-    "name": null,
-    "description": null,
-    "cost": null,
-    "image": null,
-    "stock": null
-  }
-}
-*/
 
 export const MUTATION_UPDATE_PROJECT_REWARD = gql`
   mutation CreateProjectReward($input: UpdateProjectRewardInput) {
@@ -94,20 +54,6 @@ export const MUTATION_UPDATE_PROJECT_REWARD = gql`
   }
 `;
 
-/*
-{
-  "input": {
-    "projectRewardId": null,
-    "name": null,
-    "description": null,
-    "cost": null,
-    "image": null,
-    "deleted": null,
-    "stock": null
-  }
-}
-*/
-
 export const MUTATION_CREATE_PROJECT_MILESTONE = gql`
   mutation CreateProjectMilestone($input: CreateProjectMilestoneInput) {
     createProjectMilestone(input: $input) {
@@ -118,16 +64,6 @@ export const MUTATION_CREATE_PROJECT_MILESTONE = gql`
     }
   }
 `;
-/*
-{
-  "input": {
-    "name": null,
-    "description": null,
-    "amount": null,
-    "projectId": null
-  }
-}
-*/
 
 export const MUTATION_UPDATE_PROJECT_MILESTONE = gql`
   mutation UpdateProjectMilestone($input: UpdateProjectMilestoneInput) {
@@ -139,16 +75,6 @@ export const MUTATION_UPDATE_PROJECT_MILESTONE = gql`
     }
   }
 `;
-/*
-{
-  "input": {
-    "projectMilestoneId": null,
-    "name": null,
-    "description": null,
-    "amount": null
-  }
-}
-*/
 
 export const MUTATION_DELETE_PROJECT_MILESTONE = gql`
   mutation DeleteProjectMilestone($projectMilestoneId: BigInt!) {

@@ -26,7 +26,7 @@ const useStyles = createUseStyles({
   },
 });
 
-export const Launch = () => {
+export const PublicProjectLaunchPage = () => {
   const isMobile = isMobileMode();
   const { loading, user } = useAuthContext();
   const history = useHistory();
@@ -37,7 +37,7 @@ export const Launch = () => {
   };
 
   const handleNext = () => {
-    history.push('/launch/start');
+    history.push('/launch');
   };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');

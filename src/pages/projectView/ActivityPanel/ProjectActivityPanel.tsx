@@ -9,8 +9,8 @@ import {
 } from '../../../interfaces';
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
-import { SuccessPage } from './SuccessPage';
-import { QrPage } from './QrPage';
+import { SuccessScreen } from './SuccessScreen';
+import { QRPage } from './QRPage';
 import { isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
@@ -32,7 +32,7 @@ interface IActivityProps {
   fundForm: IFundFormState;
 }
 
-const Activity = ({
+export const ProjectActivityPanel = ({
   project,
   detailOpen,
   setDetailOpen,
@@ -47,7 +47,7 @@ const Activity = ({
   const { toast } = useNotification();
   const isMobile = isMobileMode();
 
-  // REquired for activity (recent and leaderboard) visibility
+  // Required for activity (recent and leaderboard) visibility
   const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);
   const [funders, setFunders] = useState<IFunder[]>([]);
 
@@ -186,7 +186,7 @@ const Activity = ({
     }, 500);
   };
 
-  const renderActivity = () => {
+  const renderPanelContent = () => {
     if (loading) {
       return <InfoPageSkeleton />;
     }
@@ -228,7 +228,7 @@ const Activity = ({
         );
       case fundingStages.started:
         return (
-          <QrPage
+          <QRPage
             state={state}
             project={project}
             fundingTx={fundingTx}
@@ -238,8 +238,8 @@ const Activity = ({
         );
       case fundingStages.completed:
         return (
-          <SuccessPage
-            state={state}
+          <SuccessScreen
+            fundingState={state}
             project={project}
             fundingTx={fundingTx}
             handleCloseButton={handleCloseButton}
@@ -271,11 +271,9 @@ const Activity = ({
         borderTopLeftRadius={isMobile ? '' : '22px'}
         boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
       >
-        {renderActivity()}
+        {renderPanelContent()}
       </Box>
       <AuthModal isOpen={loginIsOpen} onClose={loginOnClose} />
     </>
   );
 };
-
-export default Activity;

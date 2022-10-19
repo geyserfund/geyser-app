@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
+import { getPath } from '../../../constants';
 
 import { IProject } from '../../../interfaces';
 import { Project } from '../../../types/generated/graphql';
@@ -126,7 +127,7 @@ export const ProfileProjectCard = ({
   };
 
   return (
-    <Link to={`/project/${project.name}`}>
+    <Link to={getPath('project', project.name)}>
       <Card
         className={classNames(classes.container, className)}
         backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}

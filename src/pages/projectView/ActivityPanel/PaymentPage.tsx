@@ -31,7 +31,7 @@ import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 import { IProjectReward, IProjectType } from '../../../interfaces';
-import { DonationBased, RewardBased } from '../FundForm';
+import { DonationBased, RewardBased } from '../../project/FundForm';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';

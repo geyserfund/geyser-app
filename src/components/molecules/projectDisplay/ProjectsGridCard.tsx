@@ -11,6 +11,7 @@ import {
 import React from 'react';
 import { BsFillCheckCircleFill, BsXCircleFill } from 'react-icons/bs';
 import { useHistory } from 'react-router';
+import { getPath } from '../../../constants';
 
 import { Project } from '../../../types/generated/graphql';
 import { ICard, SatoshiAmount } from '../../ui';
@@ -30,7 +31,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
   const handleClick =
     onClick ||
     (() => {
-      history.push(`/project/${project.name}`);
+      history.push(getPath('project', project.name));
     });
 
   return (

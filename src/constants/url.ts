@@ -6,7 +6,7 @@ export const geyserHomeCoin2 =
   'https://storage.googleapis.com/geyser-projects-media/app/coins2.png';
 
 export const HomeUrl = 'https://geyser.fund';
-export const LaunchUrl = 'https://geyser.fund/launch';
+export const LaunchUrl = 'https://geyser.fund/launch/start';
 export const GrantsUrl = 'https://geyser.fund/grants';
 export const AboutUsUrl =
   'https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09';
