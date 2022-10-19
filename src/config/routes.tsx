@@ -5,9 +5,8 @@ import { LandingPage } from '../pages/landing';
 import { TopNavBar } from '../components/nav';
 import { Project } from '../pages/project';
 import { createBrowserHistory } from 'history';
-import { NotFound } from '../pages/notFound';
-import { GrantsLanding } from '../pages/grants/GrantsLanding';
-import { Profile } from '../pages/profile';
+import { NotFoundPage } from '../pages/notFound';
+import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage';
 import { TwitterSuccess, FailedAuth } from '../pages/auth';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
@@ -24,9 +23,10 @@ import { ProjectView } from '../pages/projectView';
 import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
-import { ProjectDiscoveryPage } from '../pages/project-discovery';
+import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
 import { getPath, routerPathNames } from '../constants';
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
+import { ProfilePage } from '../pages/profile/ProfilePage';
 
 export const customHistory = createBrowserHistory();
 
@@ -50,9 +50,7 @@ export const Router = () => {
             <Route path="/failed-authentication">
               <FailedAuth />
             </Route>
-            <Route path="/grants">
-              <GrantsLanding />
-            </Route>
+            <Route path={getPath('grants')} component={GrantsLandingPage} />
             <Route
               path={getPath('publicProjectLaunch')}
               component={PublicProjectLaunchPage}
@@ -76,9 +74,10 @@ export const Router = () => {
                 <ProjectCreate />
               </PrivateRoute>
             </Route>
-            <Route path="/profile/:userId">
-              <Profile />
-            </Route>
+            <Route
+              path={`/${routerPathNames.userProfile}/:userId`}
+              component={ProfilePage}
+            />
             {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
             <Route path="/project/:projectId">
               <Project />
@@ -112,7 +111,7 @@ export const Router = () => {
               <EntryPage />
             </Route>
             <Route path="/not-found">
-              <NotFound />
+              <NotFoundPage />
             </Route>
             <Route path="/not-authorized">
               <NotAuthorized />

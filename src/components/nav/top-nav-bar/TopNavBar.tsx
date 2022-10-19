@@ -42,11 +42,11 @@ const routesForHidingDashboardButton = [
 const routesForEnablingSignInButton = [
   getPath('index'),
   getPath('landingPage'),
-  routerPathNames.projectDiscovery,
-  routerPathNames.grants,
-  routerPathNames.notFound,
-  routerPathNames.notAuthorized,
-  routerPathNames.userProfile,
+  getPath('projectDiscovery'),
+  getPath('grants'),
+  getPath('notFound'),
+  getPath('notAuthorized'),
+  `/${routerPathNames.userProfile}/:userId`,
   `/${routerPathNames.entry}/:entryId`,
   `/${routerPathNames.projects}/:projectId/`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
@@ -56,8 +56,9 @@ const routesForEnablingSignInButton = [
 
 const routesForEnablingProjectLaunchButton = [
   getPath('index'),
-  `/${routerPathNames.projectDiscovery}`,
-  `/${routerPathNames.grants}`,
+  getPath('landingPage'),
+  getPath('grants'),
+  getPath('projectDiscovery'),
 ];
 
 /**
@@ -121,7 +122,7 @@ export const TopNavBar = () => {
   }, [state]);
 
   const handleProjectLaunchButtonPress = () => {
-    history.push('/launch');
+    history.push(getPath('publicProjectLaunch'));
   };
 
   const handleDashboardButtonPress = () => {
@@ -140,9 +141,11 @@ export const TopNavBar = () => {
   /**
    * Logic:
    *  - Available to all not logged-in users.
-   *  - Viewable in:
-   *    - Landing + Discovery Grant Pages
-   *    - Other's Project + Entry page
+   *  - Viewable on:
+   *    - Landing Page
+   *    - Discovery Page
+   *    - Grant Pages
+   *    - Other Users's Project and Entry pages
    *  - Hidden on Mobile -- it will be in the menu dropdown instead.
    */
   const shouldShowSignInButton: boolean = useMemo(() => {
@@ -225,17 +228,25 @@ export const TopNavBar = () => {
 
   /**
    * Logic:
-   *  - Available to all logged-in users
-   *  - Viewable in the profile page and in the menu.
+   *  - Available to:
+   *    - All non-logged-in users.
+   *    - All logged-in users who aren't yet project creators.
+   *  - Viewable on:
+   *    - The Landing, Discovery, and Grant Pages.
    */
   const shouldShowProjectLaunchButton: boolean = useMemo(() => {
     return (
-      isLoggedIn &&
+      (isLoggedIn === false ||
+        (isLoggedIn && isUserAProjectCreator === false)) &&
       routesMatchesForEnablingProjectLaunchButton.some((routeMatch) => {
         return (routeMatch as match)?.isExact;
       })
     );
-  }, [routesMatchesForEnablingProjectLaunchButton, isLoggedIn]);
+  }, [
+    routesMatchesForEnablingProjectLaunchButton,
+    isLoggedIn,
+    isUserAProjectCreator,
+  ]);
 
   /**
    * Logic:

@@ -7,19 +7,20 @@ import {
   Spacer,
   Stack,
   Text,
+  useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
-import { IProjectListEntryItem } from '../../../interfaces';
 import { BsHeartFill } from 'react-icons/bs';
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
-import { colors } from '../../../constants';
+import { colors, getPath } from '../../../constants';
 import { ProjectListItemImage } from './ProjectListItemImage';
 import { CloseIcon } from '@chakra-ui/icons';
 import { BiPencil } from 'react-icons/bi';
 import { Entry } from '../../../types/generated/graphql';
+import { IProjectListEntryItem } from '../../../interfaces';
 
 type Props = ICard & {
   entry: Entry | IProjectListEntryItem;
@@ -36,11 +37,12 @@ export const ProjectEntryCard = ({
   ...rest
 }: Props) => {
   const history = useHistory();
+  const { colorMode } = useColorMode();
 
   const handleClick =
     onClick ||
     (() => {
-      history.push(`/entry/${entry.id}`);
+      history.push(getPath('entry', `${entry.id}`));
     });
 
   const handleEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -57,6 +59,10 @@ export const ProjectEntryCard = ({
     }
   };
 
+  const hoverEffect = {
+    backgroundColor: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
+  };
+
   return (
     <Stack
       borderRadius="lg"
@@ -66,10 +72,8 @@ export const ProjectEntryCard = ({
       }}
       maxWidth={'798px'}
       direction={{ base: 'column', md: 'row' }}
-      backgroundColor={useColorModeValue('white', 'gray.900')}
-      _hover={{
-        backgroundColor: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
-      }}
+      backgroundColor={colorMode === 'light' ? 'white' : 'gray.900'}
+      _hover={hoverEffect}
       transition={'background-color 0.3s ease-in-out'}
       padding={4}
       cursor={'pointer'}
@@ -125,7 +129,9 @@ export const ProjectEntryCard = ({
 
         <Text
           marginTop="2"
-          color={useColorModeValue('brand.neutral600', 'brand.neutral200')}
+          color={
+            colorMode === 'light' ? 'brand.neutral600' : 'brand.neutral200'
+          }
           fontSize="lg"
           as={'p'}
           noOfLines={[0, 2]}
