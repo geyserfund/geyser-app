@@ -34,25 +34,28 @@ export type Scalars = {
   comment_String_maxLength_280: any;
   cost_Float_NotNull_min_1_max_1000000: any;
   cost_Int_NotNull_min_0: any;
+  description_String_NotNull_maxLength_250: any;
   description_String_NotNull_maxLength_2200: any;
-  description_String_maxLength_280: any;
+  description_String_maxLength_250: any;
   description_String_maxLength_2200: any;
   donationAmount_Int_NotNull_min_1: any;
   email_String_NotNull_format_email: any;
   email_String_format_email: any;
   fundingGoal_Int_min_1: any;
-  name_String_NotNull_minLength_5_maxLength_50: any;
+  name_String_NotNull_maxLength_100: any;
+  name_String_NotNull_minLength_5_maxLength_60: any;
   name_String_NotNull_minLength_5_maxLength_280: any;
-  name_String_minLength_5_maxLength_50: any;
+  name_String_maxLength_100: any;
+  name_String_minLength_5_maxLength_60: any;
   name_String_minLength_5_maxLength_280: any;
   pubkey_String_NotNull_minLength_66_maxLength_66: any;
   pubkey_String_minLength_66_maxLength_66: any;
   quantity_Int_NotNull_min_1: any;
   rewardsCost_Int_NotNull_min_0: any;
   stock_Int_min_0: any;
-  title_String_NotNull_maxLength_50: any;
+  title_String_NotNull_maxLength_60: any;
   title_String_NotNull_maxLength_150: any;
-  title_String_maxLength_50: any;
+  title_String_maxLength_60: any;
   title_String_maxLength_150: any;
 };
 
@@ -101,35 +104,35 @@ export type CreateProjectInput = {
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>;
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
-  name: Scalars['name_String_NotNull_minLength_5_maxLength_280'];
+  name: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
   /** The currency used to price rewards for the project. Currently only USD supported. Should become an Enum. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
   /** Public title of the project. */
-  title: Scalars['title_String_NotNull_maxLength_50'];
+  title: Scalars['title_String_NotNull_maxLength_60'];
   type?: InputMaybe<ProjectType>;
 };
 
 export type CreateProjectMilestoneInput = {
   /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
   amount: Scalars['amount_Float_NotNull_min_1'];
-  description: Scalars['String'];
-  name: Scalars['String'];
+  description: Scalars['description_String_NotNull_maxLength_250'];
+  name: Scalars['name_String_NotNull_maxLength_100'];
   projectId: Scalars['BigInt'];
 };
 
 export type CreateProjectRewardInput = {
   /** Cost of the reward, priced in USD cents */
   cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
-  description: Scalars['String'];
+  description: Scalars['description_String_NotNull_maxLength_250'];
   image?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
+  name: Scalars['name_String_NotNull_maxLength_100'];
   projectId: Scalars['BigInt'];
   stock?: InputMaybe<Scalars['stock_Int_min_0']>;
 };
 
 export type CreateWalletInput = {
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsCreateInput>;
-  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_50']>;
+  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>;
   resourceInput: ResourceInput;
 };
 
@@ -170,7 +173,7 @@ export type Entry = {
   publishedAt?: Maybe<Scalars['String']>;
   status: EntryStatus;
   /** Title of the Entry. */
-  title: Scalars['title_String_NotNull_maxLength_150'];
+  title: Scalars['title_String_NotNull_maxLength_60'];
   type: EntryType;
   updatedAt: Scalars['String'];
 };
@@ -676,7 +679,7 @@ export type Project = {
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
   /** Public title of the project. */
-  title: Scalars['title_String_NotNull_maxLength_50'];
+  title: Scalars['title_String_NotNull_maxLength_60'];
   type: ProjectType;
   updatedAt: Scalars['String'];
   /** Wallets linked to a Project. */
@@ -699,9 +702,9 @@ export type ProjectMilestone = {
   __typename?: 'ProjectMilestone';
   /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
   amount: Scalars['Float'];
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['description_String_maxLength_250']>;
   id: Scalars['BigInt'];
-  name: Scalars['String'];
+  name: Scalars['name_String_NotNull_maxLength_100'];
 };
 
 export type ProjectReward = {
@@ -716,12 +719,12 @@ export type ProjectReward = {
    */
   deleted: Scalars['Boolean'];
   /** Short description of the reward. */
-  description?: Maybe<Scalars['description_String_maxLength_280']>;
+  description?: Maybe<Scalars['description_String_maxLength_250']>;
   id: Scalars['BigInt'];
   /** Image of the reward. */
   image?: Maybe<Scalars['String']>;
   /** Name of the reward. */
-  name: Scalars['String'];
+  name: Scalars['name_String_NotNull_maxLength_100'];
   sold: Scalars['Int'];
   stock: Scalars['Int'];
 };
@@ -953,15 +956,15 @@ export type UpdateProjectInput = {
   /** Current status of the project, either active, draft or deleted. */
   status?: InputMaybe<ProjectStatus>;
   /** Public title of the project. */
-  title?: InputMaybe<Scalars['title_String_maxLength_50']>;
+  title?: InputMaybe<Scalars['title_String_maxLength_60']>;
   type?: InputMaybe<ProjectType>;
 };
 
 export type UpdateProjectMilestoneInput = {
   /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
   amount?: InputMaybe<Scalars['amount_Float_min_1']>;
-  description?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['description_String_maxLength_250']>;
+  name?: InputMaybe<Scalars['name_String_maxLength_100']>;
   projectMilestoneId: Scalars['BigInt'];
 };
 
@@ -970,9 +973,9 @@ export type UpdateProjectRewardInput = {
   cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
   /** Soft deletes the reward. */
   deleted?: InputMaybe<Scalars['Boolean']>;
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['description_String_maxLength_250']>;
   image?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
+  name: Scalars['name_String_NotNull_maxLength_100'];
   projectRewardId: Scalars['BigInt'];
   stock?: InputMaybe<Scalars['stock_Int_min_0']>;
 };
@@ -987,7 +990,7 @@ export type UpdateUserInput = {
 export type UpdateWalletInput = {
   id: Scalars['BigInt'];
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsUpdateInput>;
-  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_50']>;
+  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>;
 };
 
 export type User = {
@@ -1073,7 +1076,7 @@ export type Wallet = {
   connectionDetails: ConnectionDetails;
   id: Scalars['BigInt'];
   /** Wallet name */
-  name: Scalars['name_String_NotNull_minLength_5_maxLength_50'];
+  name: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1312,11 +1315,14 @@ export type ResolversTypes = {
   cost_Int_NotNull_min_0: ResolverTypeWrapper<
     Scalars['cost_Int_NotNull_min_0']
   >;
+  description_String_NotNull_maxLength_250: ResolverTypeWrapper<
+    Scalars['description_String_NotNull_maxLength_250']
+  >;
   description_String_NotNull_maxLength_2200: ResolverTypeWrapper<
     Scalars['description_String_NotNull_maxLength_2200']
   >;
-  description_String_maxLength_280: ResolverTypeWrapper<
-    Scalars['description_String_maxLength_280']
+  description_String_maxLength_250: ResolverTypeWrapper<
+    Scalars['description_String_maxLength_250']
   >;
   description_String_maxLength_2200: ResolverTypeWrapper<
     Scalars['description_String_maxLength_2200']
@@ -1331,14 +1337,20 @@ export type ResolversTypes = {
     Scalars['email_String_format_email']
   >;
   fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>;
-  name_String_NotNull_minLength_5_maxLength_50: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_5_maxLength_50']
+  name_String_NotNull_maxLength_100: ResolverTypeWrapper<
+    Scalars['name_String_NotNull_maxLength_100']
+  >;
+  name_String_NotNull_minLength_5_maxLength_60: ResolverTypeWrapper<
+    Scalars['name_String_NotNull_minLength_5_maxLength_60']
   >;
   name_String_NotNull_minLength_5_maxLength_280: ResolverTypeWrapper<
     Scalars['name_String_NotNull_minLength_5_maxLength_280']
   >;
-  name_String_minLength_5_maxLength_50: ResolverTypeWrapper<
-    Scalars['name_String_minLength_5_maxLength_50']
+  name_String_maxLength_100: ResolverTypeWrapper<
+    Scalars['name_String_maxLength_100']
+  >;
+  name_String_minLength_5_maxLength_60: ResolverTypeWrapper<
+    Scalars['name_String_minLength_5_maxLength_60']
   >;
   name_String_minLength_5_maxLength_280: ResolverTypeWrapper<
     Scalars['name_String_minLength_5_maxLength_280']
@@ -1356,14 +1368,14 @@ export type ResolversTypes = {
     Scalars['rewardsCost_Int_NotNull_min_0']
   >;
   stock_Int_min_0: ResolverTypeWrapper<Scalars['stock_Int_min_0']>;
-  title_String_NotNull_maxLength_50: ResolverTypeWrapper<
-    Scalars['title_String_NotNull_maxLength_50']
+  title_String_NotNull_maxLength_60: ResolverTypeWrapper<
+    Scalars['title_String_NotNull_maxLength_60']
   >;
   title_String_NotNull_maxLength_150: ResolverTypeWrapper<
     Scalars['title_String_NotNull_maxLength_150']
   >;
-  title_String_maxLength_50: ResolverTypeWrapper<
-    Scalars['title_String_maxLength_50']
+  title_String_maxLength_60: ResolverTypeWrapper<
+    Scalars['title_String_maxLength_60']
   >;
   title_String_maxLength_150: ResolverTypeWrapper<
     Scalars['title_String_maxLength_150']
@@ -1480,25 +1492,28 @@ export type ResolversParentTypes = {
   comment_String_maxLength_280: Scalars['comment_String_maxLength_280'];
   cost_Float_NotNull_min_1_max_1000000: Scalars['cost_Float_NotNull_min_1_max_1000000'];
   cost_Int_NotNull_min_0: Scalars['cost_Int_NotNull_min_0'];
+  description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250'];
   description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200'];
-  description_String_maxLength_280: Scalars['description_String_maxLength_280'];
+  description_String_maxLength_250: Scalars['description_String_maxLength_250'];
   description_String_maxLength_2200: Scalars['description_String_maxLength_2200'];
   donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1'];
   email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email'];
   email_String_format_email: Scalars['email_String_format_email'];
   fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1'];
-  name_String_NotNull_minLength_5_maxLength_50: Scalars['name_String_NotNull_minLength_5_maxLength_50'];
+  name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
+  name_String_NotNull_minLength_5_maxLength_60: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
   name_String_NotNull_minLength_5_maxLength_280: Scalars['name_String_NotNull_minLength_5_maxLength_280'];
-  name_String_minLength_5_maxLength_50: Scalars['name_String_minLength_5_maxLength_50'];
+  name_String_maxLength_100: Scalars['name_String_maxLength_100'];
+  name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60'];
   name_String_minLength_5_maxLength_280: Scalars['name_String_minLength_5_maxLength_280'];
   pubkey_String_NotNull_minLength_66_maxLength_66: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
   pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66'];
   quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1'];
   rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0'];
   stock_Int_min_0: Scalars['stock_Int_min_0'];
-  title_String_NotNull_maxLength_50: Scalars['title_String_NotNull_maxLength_50'];
+  title_String_NotNull_maxLength_60: Scalars['title_String_NotNull_maxLength_60'];
   title_String_NotNull_maxLength_150: Scalars['title_String_NotNull_maxLength_150'];
-  title_String_maxLength_50: Scalars['title_String_maxLength_50'];
+  title_String_maxLength_60: Scalars['title_String_maxLength_60'];
   title_String_maxLength_150: Scalars['title_String_maxLength_150'];
 };
 
@@ -1598,7 +1613,7 @@ export type EntryResolvers<
   >;
   status?: Resolver<ResolversTypes['EntryStatus'], ParentType, ContextType>;
   title?: Resolver<
-    ResolversTypes['title_String_NotNull_maxLength_150'],
+    ResolversTypes['title_String_NotNull_maxLength_60'],
     ParentType,
     ContextType
   >;
@@ -2094,7 +2109,7 @@ export type ProjectResolvers<
     ContextType
   >;
   title?: Resolver<
-    ResolversTypes['title_String_NotNull_maxLength_50'],
+    ResolversTypes['title_String_NotNull_maxLength_60'],
     ParentType,
     ContextType
   >;
@@ -2110,12 +2125,16 @@ export type ProjectMilestoneResolvers<
 > = {
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   description?: Resolver<
-    Maybe<ResolversTypes['String']>,
+    Maybe<ResolversTypes['description_String_maxLength_250']>,
     ParentType,
     ContextType
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<
+    ResolversTypes['name_String_NotNull_maxLength_100'],
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2127,13 +2146,17 @@ export type ProjectRewardResolvers<
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   description?: Resolver<
-    Maybe<ResolversTypes['description_String_maxLength_280']>,
+    Maybe<ResolversTypes['description_String_maxLength_250']>,
     ParentType,
     ContextType
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<
+    ResolversTypes['name_String_NotNull_maxLength_100'],
+    ParentType,
+    ContextType
+  >;
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   stock?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2381,7 +2404,7 @@ export type WalletResolvers<
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_50'],
+    ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
     ParentType,
     ContextType
   >;
@@ -2425,6 +2448,14 @@ export interface Cost_Int_NotNull_Min_0ScalarConfig
   name: 'cost_Int_NotNull_min_0';
 }
 
+export interface Description_String_NotNull_MaxLength_250ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['description_String_NotNull_maxLength_250'],
+    any
+  > {
+  name: 'description_String_NotNull_maxLength_250';
+}
+
 export interface Description_String_NotNull_MaxLength_2200ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['description_String_NotNull_maxLength_2200'],
@@ -2433,12 +2464,12 @@ export interface Description_String_NotNull_MaxLength_2200ScalarConfig
   name: 'description_String_NotNull_maxLength_2200';
 }
 
-export interface Description_String_MaxLength_280ScalarConfig
+export interface Description_String_MaxLength_250ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['description_String_maxLength_280'],
+    ResolversTypes['description_String_maxLength_250'],
     any
   > {
-  name: 'description_String_maxLength_280';
+  name: 'description_String_maxLength_250';
 }
 
 export interface Description_String_MaxLength_2200ScalarConfig
@@ -2481,12 +2512,20 @@ export interface FundingGoal_Int_Min_1ScalarConfig
   name: 'fundingGoal_Int_min_1';
 }
 
-export interface Name_String_NotNull_MinLength_5_MaxLength_50ScalarConfig
+export interface Name_String_NotNull_MaxLength_100ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_50'],
+    ResolversTypes['name_String_NotNull_maxLength_100'],
     any
   > {
-  name: 'name_String_NotNull_minLength_5_maxLength_50';
+  name: 'name_String_NotNull_maxLength_100';
+}
+
+export interface Name_String_NotNull_MinLength_5_MaxLength_60ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
+    any
+  > {
+  name: 'name_String_NotNull_minLength_5_maxLength_60';
 }
 
 export interface Name_String_NotNull_MinLength_5_MaxLength_280ScalarConfig
@@ -2497,12 +2536,20 @@ export interface Name_String_NotNull_MinLength_5_MaxLength_280ScalarConfig
   name: 'name_String_NotNull_minLength_5_maxLength_280';
 }
 
-export interface Name_String_MinLength_5_MaxLength_50ScalarConfig
+export interface Name_String_MaxLength_100ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_minLength_5_maxLength_50'],
+    ResolversTypes['name_String_maxLength_100'],
     any
   > {
-  name: 'name_String_minLength_5_maxLength_50';
+  name: 'name_String_maxLength_100';
+}
+
+export interface Name_String_MinLength_5_MaxLength_60ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['name_String_minLength_5_maxLength_60'],
+    any
+  > {
+  name: 'name_String_minLength_5_maxLength_60';
 }
 
 export interface Name_String_MinLength_5_MaxLength_280ScalarConfig
@@ -2550,12 +2597,12 @@ export interface Stock_Int_Min_0ScalarConfig
   name: 'stock_Int_min_0';
 }
 
-export interface Title_String_NotNull_MaxLength_50ScalarConfig
+export interface Title_String_NotNull_MaxLength_60ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['title_String_NotNull_maxLength_50'],
+    ResolversTypes['title_String_NotNull_maxLength_60'],
     any
   > {
-  name: 'title_String_NotNull_maxLength_50';
+  name: 'title_String_NotNull_maxLength_60';
 }
 
 export interface Title_String_NotNull_MaxLength_150ScalarConfig
@@ -2566,12 +2613,12 @@ export interface Title_String_NotNull_MaxLength_150ScalarConfig
   name: 'title_String_NotNull_maxLength_150';
 }
 
-export interface Title_String_MaxLength_50ScalarConfig
+export interface Title_String_MaxLength_60ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['title_String_maxLength_50'],
+    ResolversTypes['title_String_maxLength_60'],
     any
   > {
-  name: 'title_String_maxLength_50';
+  name: 'title_String_maxLength_60';
 }
 
 export interface Title_String_MaxLength_150ScalarConfig
@@ -2625,25 +2672,28 @@ export type Resolvers<ContextType = any> = {
   comment_String_maxLength_280?: GraphQLScalarType;
   cost_Float_NotNull_min_1_max_1000000?: GraphQLScalarType;
   cost_Int_NotNull_min_0?: GraphQLScalarType;
+  description_String_NotNull_maxLength_250?: GraphQLScalarType;
   description_String_NotNull_maxLength_2200?: GraphQLScalarType;
-  description_String_maxLength_280?: GraphQLScalarType;
+  description_String_maxLength_250?: GraphQLScalarType;
   description_String_maxLength_2200?: GraphQLScalarType;
   donationAmount_Int_NotNull_min_1?: GraphQLScalarType;
   email_String_NotNull_format_email?: GraphQLScalarType;
   email_String_format_email?: GraphQLScalarType;
   fundingGoal_Int_min_1?: GraphQLScalarType;
-  name_String_NotNull_minLength_5_maxLength_50?: GraphQLScalarType;
+  name_String_NotNull_maxLength_100?: GraphQLScalarType;
+  name_String_NotNull_minLength_5_maxLength_60?: GraphQLScalarType;
   name_String_NotNull_minLength_5_maxLength_280?: GraphQLScalarType;
-  name_String_minLength_5_maxLength_50?: GraphQLScalarType;
+  name_String_maxLength_100?: GraphQLScalarType;
+  name_String_minLength_5_maxLength_60?: GraphQLScalarType;
   name_String_minLength_5_maxLength_280?: GraphQLScalarType;
   pubkey_String_NotNull_minLength_66_maxLength_66?: GraphQLScalarType;
   pubkey_String_minLength_66_maxLength_66?: GraphQLScalarType;
   quantity_Int_NotNull_min_1?: GraphQLScalarType;
   rewardsCost_Int_NotNull_min_0?: GraphQLScalarType;
   stock_Int_min_0?: GraphQLScalarType;
-  title_String_NotNull_maxLength_50?: GraphQLScalarType;
+  title_String_NotNull_maxLength_60?: GraphQLScalarType;
   title_String_NotNull_maxLength_150?: GraphQLScalarType;
-  title_String_maxLength_50?: GraphQLScalarType;
+  title_String_maxLength_60?: GraphQLScalarType;
   title_String_maxLength_150?: GraphQLScalarType;
 };
 

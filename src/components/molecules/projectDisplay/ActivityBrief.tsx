@@ -1,13 +1,11 @@
-import { Box, CircularProgress, HStack, Text, VStack } from '@chakra-ui/react';
+import { CircularProgress, HStack, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors, projectTypes } from '../../../constants';
+import { colors } from '../../../constants';
 import { fonts } from '../../../constants/fonts';
 import { IProject, IProjectMilestone } from '../../../interfaces';
 import { Countdown } from '../../../pages/project/Activity/Countdown';
-import { isDarkMode, useBitcoinRates } from '../../../utils';
 import { SatoshiAmount } from '../../ui';
-import { ProjectSectionBar } from '../ProjectSectionBar';
 
 interface IActivityBrief {
   loading: boolean;
@@ -16,7 +14,6 @@ interface IActivityBrief {
 
 const useStyles = createUseStyles({
   circularProgress: {
-    // borderRadius: '50%',
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
@@ -30,9 +27,6 @@ const useStyles = createUseStyles({
 
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const classes = useStyles();
-  const isDark = isDarkMode();
-
-  const { btcRate } = useBitcoinRates();
 
   const [currentMilestone, setCurrentMilestone] = useState<IProjectMilestone>();
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0);
@@ -50,31 +44,6 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
       });
     }
   }, [project]);
-  // const percentage = (balance / goal) * 100;
-
-  const [display, setDisplay] = useState(false);
-
-  const getDisplayPercent = (percent: number) => {
-    if (percent < 1) {
-      return percent.toFixed(2);
-    }
-
-    return percent.toFixed();
-  };
-
-  const handleClick = () => {
-    setDisplay(!display);
-  };
-
-  const handleMouseOver = () => {
-    setDisplay(true);
-    setTimeout(() => {
-      setDisplay(false);
-    }, 5000);
-  };
-
-  // {showCountdown() && <Countdown endDate={project.expiresAt}/>;}
-  // <ProjectBalance balance={project.balance} rate={btcRate}/> */}
 
   const getTrackColor = () => {
     switch (milestoneIndex) {
