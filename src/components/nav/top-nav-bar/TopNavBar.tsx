@@ -37,12 +37,11 @@ const routesForHidingDropdownMenu = [
 
 const routesForHidingDashboardButton = [
   `/${routerPathNames.project}/:projectId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`,
   `/${routerPathNames.entry}/:entryId`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`,
 ];
 
 const routesForEnablingSignInButton = [
@@ -132,7 +131,17 @@ export const TopNavBar = () => {
   };
 
   const handleDashboardButtonPress = () => {
-    history.push(`${customHistory.location.pathname}/dashboard`);
+    const latestProject = user.ownerOf[0]?.project?.name;
+
+    // QUESTION: Should this ever happen? And if so, do we want a better
+    // fallback?
+    if (Boolean(latestProject) === false) {
+      console.error('no project found during dashboard button press.');
+
+      history.push(getPath('landingPage'));
+    }
+
+    history.push(getPath('projectDashboard', latestProject.id));
   };
 
   /**
@@ -202,8 +211,8 @@ export const TopNavBar = () => {
     routeMatchesForHidingDashboardButton,
     isMobile,
     isLoggedIn,
-    navigationContext.projectOwnerId,
     isUserAProjectCreator,
+    navigationContext.projectOwnerId,
   ]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -221,8 +230,8 @@ export const TopNavBar = () => {
     routeMatchesForHidingDashboardButton,
     isMobile,
     isLoggedIn,
-    navigationContext.projectOwnerId,
     isUserAProjectCreator,
+    navigationContext.projectOwnerId,
   ]);
 
   /**

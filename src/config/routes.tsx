@@ -104,7 +104,7 @@ export const Router = () => {
               </PrivateRoute>
             </Route>
             <Route
-              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.dashboard}`}
+              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`}
             >
               <PrivateRoute>
                 <ProjectDashboard />
