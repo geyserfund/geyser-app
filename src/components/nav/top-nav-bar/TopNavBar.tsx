@@ -131,17 +131,21 @@ export const TopNavBar = () => {
   };
 
   const handleDashboardButtonPress = () => {
-    const latestProject = user.ownerOf[0]?.project?.name;
+    const ownedProjects = user.ownerOf;
 
-    // QUESTION: Should this ever happen? And if so, do we want a better
-    // fallback?
-    if (Boolean(latestProject) === false) {
-      console.error('no project found during dashboard button press.');
+    if (ownedProjects.length > 1) {
+      history.push(getPath('userProfile', user.id));
+    } else {
+      const latestProject = user.ownerOf[0]?.project?.name;
 
-      history.push(getPath('landingPage'));
+      // QUESTION: Should this ever be a concern? And if so, do we want a better
+      // fallback than the landing page?
+      const path = latestProject
+        ? getPath('projectDashboard', latestProject.id)
+        : getPath('landingPage');
+
+      history.push(path);
     }
-
-    history.push(getPath('projectDashboard', latestProject.id));
   };
 
   /**
