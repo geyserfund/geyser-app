@@ -126,13 +126,14 @@ export const TopNavBar = () => {
   };
 
   const handleDashboardButtonPress = () => {
-    // history.push(`${customHistory.location.pathname}/dashboard`);
-    // eslint-disable-next-line no-debugger
-    debugger;
     const latestProject = user.ownerOf[0]?.project?.name;
 
+    // QUESTION: Should this ever happen? And if so, do we want a better
+    // fallback?
     if (Boolean(latestProject) === false) {
       console.error('no project found during dashboard button press.');
+
+      history.push(getPath('landingPage'));
     }
 
     history.push(getPath('projectDashboard', latestProject.id));
