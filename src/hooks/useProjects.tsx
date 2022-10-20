@@ -5,6 +5,7 @@ import {
   PaginationInput,
   Project,
   ProjectsGetQueryInput,
+  ProjectsOrderByInput,
 } from '../types/generated/graphql';
 
 type ResponseData = {
@@ -20,17 +21,12 @@ type QueryVariables = {
 type OptionsProps = {
   itemLimit?: number;
   cursorID?: number;
-  orderBy?: OrderByOption;
+  orderBy?: [ProjectsOrderByInput];
 };
-
-export type OrderByOption =
-  | 'Newest Projects'
-  | 'Oldest Projects'
-  | 'Amount Funded';
 
 export const useProjects = ({
   itemLimit = 14,
-  orderBy = 'Newest Projects',
+  orderBy = [{ balance: OrderByOptions.Desc }],
   cursorID,
 }: OptionsProps) => {
   const paginationOptions: PaginationInput = {
@@ -39,25 +35,6 @@ export const useProjects = ({
 
   if (cursorID !== undefined) {
     paginationOptions.cursor = { id: cursorID };
-  }
-
-  function orderByParams(orderByOption: OrderByOption) {
-    switch (orderByOption) {
-      case 'Newest Projects':
-        return {
-          createdAt: OrderByOptions.Desc,
-        };
-      case 'Oldest Projects':
-        return {
-          createdAt: OrderByOptions.Asc,
-        };
-      case 'Amount Funded':
-        return {
-          balance: OrderByOptions.Desc,
-        };
-      default:
-        break;
-    }
   }
 
   const {
@@ -69,7 +46,7 @@ export const useProjects = ({
     variables: {
       input: {
         pagination: paginationOptions,
-        orderBy: orderByParams(orderBy),
+        orderBy,
       },
     },
   });
