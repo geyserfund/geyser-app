@@ -19,11 +19,11 @@ import { ButtonComponent } from '../../components/ui';
 import { fundingStages, IFundingStages, projectTypes } from '../../constants';
 import { useAuthContext } from '../../context';
 import { TupdateReward } from '../../hooks';
-import { IProject } from '../../interfaces';
 import { isMobileMode } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
 import { FundingFormRewardItem } from './components/FundingFormRewardItem';
+import { Project } from '../../types/generated/graphql';
 
 const useStyles = createUseStyles({
   navButton: {
@@ -32,7 +32,7 @@ const useStyles = createUseStyles({
 });
 
 interface IProjectAccesories {
-  project: IProject;
+  project: Project;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
   updateReward: TupdateReward;
   fundState: IFundingStages;
@@ -54,17 +54,19 @@ export const ProjectAccesories = ({
   const rewardsRef = useRef<any>(null);
   const milestonesRef = useRef<any>(null);
 
-  const entriesLength = project.entries && project.entries.length;
-  const rewardsLength = project.rewards && project.rewards.length;
-  const milestoneLength = project.milestones && project.milestones.length;
+  const entriesLength = project.entries ? project.entries.length : 0;
+  const rewardsLength = project.rewards ? project.rewards.length : 0;
+  const milestoneLength = project.milestones ? project.milestones.length : 0;
 
   const [isSmallerThan1265] = useMediaQuery('(min-width: 1265px)');
 
   const renderEntries = () => {
     if (project.entries && project.entries.length > 0) {
       return project.entries.map((entry) => {
-        const entryWithProject = { ...entry, project };
-        return <ProjectEntryCard entry={entryWithProject} key={entry.id} />;
+        if (entry) {
+          const entryWithProject = { ...entry, project };
+          return <ProjectEntryCard entry={entryWithProject} key={entry.id} />;
+        }
       });
     }
 
@@ -73,20 +75,24 @@ export const ProjectAccesories = ({
 
   const renderRewards = () => {
     if (project.rewards && project.rewards.length > 0) {
-      return project.rewards.map((reward) => (
-        <GridItem key={reward.id} colSpan={isSmallerThan1265 ? 1 : 2}>
-          <FundingFormRewardItem
-            onClick={() => {
-              if (fundState === fundingStages.initial) {
-                updateReward({ id: reward.id, count: 1 });
-                setFundState(fundingStages.form);
-              }
-            }}
-            item={reward}
-            readOnly
-          />
-        </GridItem>
-      ));
+      return project.rewards.map((reward) => {
+        if (reward) {
+          return (
+            <GridItem key={reward.id} colSpan={isSmallerThan1265 ? 1 : 2}>
+              <FundingFormRewardItem
+                onClick={() => {
+                  if (fundState === fundingStages.initial) {
+                    updateReward({ id: reward.id, count: 1 });
+                    setFundState(fundingStages.form);
+                  }
+                }}
+                item={{ ...reward, currency: project.rewardCurrency }}
+                readOnly
+              />
+            </GridItem>
+          );
+        }
+      });
     }
 
     return (
@@ -98,15 +104,19 @@ export const ProjectAccesories = ({
 
   const renderMilestones = () => {
     if (project.milestones && project.milestones.length > 0) {
-      return project.milestones.map((milestone) => (
-        <MilestoneComponent
-          key={milestone.id}
-          name={milestone.name}
-          description={milestone.description}
-          checked={milestone.amount <= project.balance}
-          amount={milestone.amount - project.balance}
-        />
-      ));
+      return project.milestones.map((milestone) => {
+        if (milestone) {
+          return (
+            <MilestoneComponent
+              key={milestone.id}
+              name={milestone.name}
+              description={milestone.description}
+              checked={milestone.amount <= project.balance}
+              amount={milestone.amount - project.balance}
+            />
+          );
+        }
+      });
     }
 
     return <Text>There are no any milestones available </Text>;
