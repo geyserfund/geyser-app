@@ -103,6 +103,10 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
                 key={contribution.id}
                 linkedProject={contribution.sourceResource as Project}
                 fundingTx={contribution}
+                width={{
+                  base: '100%',
+                  md: '375px',
+                }}
               />
             );
           }
