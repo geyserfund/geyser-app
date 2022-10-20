@@ -1,5 +1,5 @@
 import { Image, ImageProps, Skeleton } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNotification } from '../../utils';
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 
@@ -7,7 +7,7 @@ interface IImageWithReload extends ImageProps {
   noCacheId?: string;
 }
 
-const MAX_RETRIES = 5;
+const MAX_RETRIES = 10;
 const BACKOFF = 1.2;
 const MILLISECONDS = 1_000;
 
