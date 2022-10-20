@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Avatar, HStack, MenuDivider } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
@@ -15,6 +15,7 @@ import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem';
 import { AuthContext } from '../../../context';
 import { getPath } from '../../../constants/router-paths';
 import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem';
+import { Project } from '../../../types/generated/graphql';
 
 type Props = {
   shouldShowDashboardMenuItem: boolean;
@@ -34,6 +35,43 @@ export const TopNavBarMenu = ({
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
 
   const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext);
+
+  const projectToLink: Project | null = useMemo(() => {
+    if (
+      isUserAProjectCreator === false ||
+      !user.ownerOf[0] ||
+      !user.ownerOf[0].project
+    ) {
+      return null;
+    }
+
+    if (user.ownerOf.length === 0) {
+      return null;
+    }
+
+    // If the user has multiple projects, show the LAST project created
+    if (user.ownerOf.length > 1) {
+      const ownershipInfoByMostRecent = user.ownerOf.sort(
+        (ownershipInfoA, ownershipInfoB) => {
+          if (
+            ownershipInfoA?.project?.createdAt &&
+            ownershipInfoB?.project?.createdAt
+          ) {
+            return (
+              new Date(ownershipInfoB.project.createdAt).valueOf() -
+              new Date(ownershipInfoA.project.createdAt).valueOf()
+            );
+          }
+
+          return 1;
+        },
+      );
+
+      return ownershipInfoByMostRecent[0]?.project || null;
+    }
+
+    return user.ownerOf[0].project;
+  }, [isUserAProjectCreator, user.projects]);
 
   return (
     <Menu placement="bottom-end">
@@ -107,20 +145,15 @@ export const TopNavBarMenu = ({
               </MenuItemLink>
             </MenuItem>
 
-            {isUserAProjectCreator && user.ownerOf[0]?.project ? (
+            {projectToLink ? (
               <MenuItem padding={0}>
                 <MenuItemLink
-                  destinationPath={getPath(
-                    'project',
-                    user.ownerOf[0].project.name,
-                  )}
+                  destinationPath={getPath('project', projectToLink.name)}
                   px={0}
                   py={0}
                   _focus={{ boxShadow: 'none' }}
                 >
-                  <NavBarUserProjectMenuItem
-                    project={user.ownerOf[0].project}
-                  />
+                  <NavBarUserProjectMenuItem project={projectToLink} />
                 </MenuItemLink>
               </MenuItem>
             ) : null}
