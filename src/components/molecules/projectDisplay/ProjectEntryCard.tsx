@@ -78,17 +78,31 @@ export const ProjectEntryCard = ({
       padding={4}
       cursor={'pointer'}
       overflow="hidden"
+      alignItems={{ base: 'flex-start', md: 'center' }}
       onClick={handleClick}
       {...rest}
     >
-      <Flex>
+      <Flex
+        flex={1}
+        width={{
+          base: 'full',
+          md: '142px',
+        }}
+        maxWidth={{
+          base: 'full',
+          md: '142px',
+        }}
+        height="142px"
+        maxHeight="142px"
+      >
         <Image
-          width={'full'}
-          height="142px"
-          src={entry.image || ''}
-          fallback={<ProjectEntryCardThumbnailPlaceholder />}
+          maxHeight="142px"
           objectFit="cover"
+          boxSize="100%"
+          borderRadius={'md'}
+          src={entry.image || ''}
           alt={entry.title}
+          fallback={<ProjectEntryCardThumbnailPlaceholder />}
         />
       </Flex>
 
@@ -153,23 +167,22 @@ export const ProjectEntryCard = ({
         >
           <HStack spacing={'12px'} align={'center'} flex={0}>
             <HStack spacing={1}>
-              <Text color="brand.primary500" fontWeight={'bold'}>
+              <Text color="brand.primary" fontWeight={'bold'}>
                 {entry.fundersCount}
               </Text>
-              <BsHeartFill color={colors.primary500} />
+              <BsHeartFill color={colors.primary} />
             </HStack>
 
-            <SatoshiAmount color="brand.primary500" fontWeight="bold">
+            <SatoshiAmount color="brand.primary" fontWeight="bold">
               {entry.amountFunded}
             </SatoshiAmount>
           </HStack>
 
           {entry.project ? (
             <HStack
-              spacing={1}
+              spacing={1.5}
               alignItems="center"
               justifyContent="flex-start"
-              flex={0}
             >
               <ProjectListItemImage
                 imageSrc={entry.image || ''}
@@ -177,12 +190,7 @@ export const ProjectEntryCard = ({
                 flexShrink={0}
               />
 
-              <Text
-                as={'p'}
-                color="brand.neutral600"
-                textTransform={'uppercase'}
-                noOfLines={1}
-              >
+              <Text color="brand.neutral600" textTransform={'uppercase'}>
                 {entry.project?.title}
               </Text>
             </HStack>

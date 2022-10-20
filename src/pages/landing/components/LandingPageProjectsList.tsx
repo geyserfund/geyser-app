@@ -4,7 +4,7 @@ import { AlertBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { LandingPageProjectsListItem } from './LandingPageProjectsListItem';
 import { useProjects } from '../../../hooks';
-import { Project } from '../../../types/generated/graphql';
+import { OrderByOptions, Project } from '../../../types/generated/graphql';
 
 type Props = {
   itemLimit?: number;
@@ -17,6 +17,7 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
     data: projects,
   } = useProjects({
     itemLimit,
+    orderBy: [{ balance: OrderByOptions.Desc }],
   });
 
   if (error) {
