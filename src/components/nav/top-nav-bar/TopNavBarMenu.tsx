@@ -71,7 +71,7 @@ export const TopNavBarMenu = ({
     }
 
     return user.ownerOf[0].project;
-  }, [isUserAProjectCreator, user.projects]);
+  }, [isUserAProjectCreator, user.ownerOf]);
 
   return (
     <Menu placement="bottom-end">
@@ -145,7 +145,7 @@ export const TopNavBarMenu = ({
               </MenuItemLink>
             </MenuItem>
 
-            {projectToLink ? (
+            {isLoggedIn && projectToLink ? (
               <MenuItem padding={0}>
                 <MenuItemLink
                   destinationPath={getPath('project', projectToLink.name)}
