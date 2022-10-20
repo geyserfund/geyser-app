@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { ExternalAccount } from '../../../types/generated/graphql';
 import { colors, GeyserHomepageUrl } from '../../../constants';
-import { BsTwitter, BsLightningChargeFill } from 'react-icons/bs';
+import { BsTwitter } from 'react-icons/bs';
 import { FountainIcon } from '../../../components/icons';
 import { createUseStyles } from 'react-jss';
 
@@ -37,8 +37,6 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
         return `https://twitter.com/${externalUsername}`;
       case 'Fountain':
         return `https://www.fountain.fm/${account.externalUsername}`;
-      case 'lnurl':
-        return '';
       default:
         return `${GeyserHomepageUrl}`;
     }
@@ -50,8 +48,6 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
         return true;
       case 'Fountain':
         return true;
-      case 'lnurl':
-        return false;
       default:
         return false;
     }
@@ -63,8 +59,6 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
         return <BsTwitter />;
       case 'Fountain':
         return <FountainIcon />;
-      case 'lnurl':
-        return <BsLightningChargeFill />;
       default:
         return <></>;
     }
@@ -76,8 +70,6 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
         return 'solid';
       case 'Fountain':
         return 'ghost';
-      case 'lnurl':
-        return 'ghost';
       default:
         return 'ghost';
     }
@@ -88,8 +80,6 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
       case 'twitter':
         return 'twitter';
       case 'Fountain':
-        return '';
-      case 'lnurl':
         return '';
       default:
         return '';
