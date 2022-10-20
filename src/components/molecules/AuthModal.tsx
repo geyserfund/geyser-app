@@ -257,24 +257,26 @@ export const AuthModal = (authModalProps: IAuthModal) => {
             </Link>
             <VStack marginTop={3} marginBottom={3}>
               <Box border="4px solid #20ECC7" borderRadius={4}>
-                <QRCode
-                  qrStyle="dots"
-                  logoImage={LogoDarkGreen}
-                  logoHeight={30}
-                  logoWidth={30}
-                  eyeRadius={2}
-                  removeQrCodeBehindLogo={true}
-                  bgColor="#fff"
-                  fgColor="#004236"
-                  size={186}
-                  value={qrContent}
-                  id="lnurl-auth-qr-code"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                />
+                <Link href={`lightning://${qrContent}`}>
+                  <QRCode
+                    qrStyle="dots"
+                    logoImage={LogoDarkGreen}
+                    logoHeight={30}
+                    logoWidth={30}
+                    eyeRadius={2}
+                    removeQrCodeBehindLogo={true}
+                    bgColor="#fff"
+                    fgColor="#004236"
+                    size={186}
+                    value={qrContent}
+                    id="lnurl-auth-qr-code"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  />
+                </Link>
               </Box>
               <HStack justifyContent="center" alignItems="center" marginTop={3}>
                 <Loader size="lg" />
