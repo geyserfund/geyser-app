@@ -133,7 +133,8 @@ export const RewardSettings = ({ project }: { project: Project }) => {
               </ButtonComponent>
               <Text fontSize="12px">
                 Rewards are a powerful way of exchanging value with your
-                community
+                community. Check here our list of prohibited items. You can edit
+                or add Rewards later.
               </Text>
             </VStack>
             <VStack
