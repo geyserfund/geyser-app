@@ -23,6 +23,12 @@ import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
 import { getPath, routerPathNames } from '../../../constants';
 
+const routesForHidingTopNav = [
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+];
+
 const customTitleRoutes = [
   `/${routerPathNames.projects}/:projectId/`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
@@ -97,6 +103,8 @@ export const TopNavBar = () => {
     refresh?: boolean;
   }>();
 
+  const routeMatchesForHidingTopNav = routesForHidingTopNav.map(useRouteMatch);
+
   const routeMatchesForEnablingSignInButton =
     routesForEnablingSignInButton.map(useRouteMatch);
 
@@ -143,6 +151,12 @@ export const TopNavBar = () => {
 
     history.push(getPath('projectDashboard', latestProject.id));
   };
+
+  const shouldTopNavBeHidden: boolean = useMemo(() => {
+    return routeMatchesForHidingTopNav.some((routeMatch) => {
+      return (routeMatch as match)?.isExact;
+    });
+  }, [routeMatchesForHidingTopNav]);
 
   /**
    * Logic:
@@ -265,6 +279,10 @@ export const TopNavBar = () => {
       return (routeMatch as match)?.isExact;
     });
   }, [routesMatchesForShowingCustomTitle]);
+
+  if (shouldTopNavBeHidden) {
+    return null;
+  }
 
   return (
     <>
