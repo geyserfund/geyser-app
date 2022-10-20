@@ -47,8 +47,8 @@ export interface IProjectWallet {
 
 export interface IProjectReward {
   id: number;
-  cost: number;
   currency: string;
+  cost: number;
   name: string;
   description: string;
   backers: number;

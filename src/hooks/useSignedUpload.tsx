@@ -35,10 +35,7 @@ export const useSignedUpload = ({
         });
 
         const imageUrl = `${GeyserAssetDomainUrl}${urlData.getSignedUploadUrl.distributionUrl}`;
-        // await testImage(imageUrl);
         onUpload(imageUrl, currentFile);
-        // console.log('checking urlData', urlData);
-        // onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
       } catch (error) {
         console.log('checking error', error);
         toast({
@@ -61,13 +58,11 @@ export const useSignedUpload = ({
 };
 
 export const useSignedUploadAPI = async (file: any): Promise<string> => {
-  // const data:any = {name: file.name, type: file.type};
-
   const response = await fetch(
     `${API_SERVICE_ENDPOINT}/upload_url?name=${file.name}&type=${file.type}`,
   ).then((response) => response.json());
 
-  const uploadRes = await fetch(response.uploadUrl, {
+  await fetch(response.uploadUrl, {
     method: 'PUT',
     body: file,
     headers: {
@@ -76,11 +71,6 @@ export const useSignedUploadAPI = async (file: any): Promise<string> => {
   });
 
   const newValue = `${GeyserAssetDomainUrl}${response.distributionUrl}`;
-
-  const test = await testImage(newValue);
-  console.log('checking urlData', test, uploadRes);
-  // onUploadComplete(urlData.getSignedUploadUrl.distributionUrl);
-
-  console.log('checking resopnse', response);
+  await testImage(newValue);
   return newValue;
 };

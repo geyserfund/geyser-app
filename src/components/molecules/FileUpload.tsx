@@ -2,9 +2,12 @@ import { Box } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useSignedUpload } from '../../hooks';
+
+type URL = string;
+
 interface IFileUpload {
   children: React.ReactNode;
-  onUploadComplete: (url: string) => void;
+  onUploadComplete: (_: URL) => void;
 }
 
 export const FileUpload = ({ children, onUploadComplete }: IFileUpload) => {
@@ -14,7 +17,7 @@ export const FileUpload = ({ children, onUploadComplete }: IFileUpload) => {
     const file = acceptedFiles[0];
     upload(file);
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
     accept: { 'image/*': [] },

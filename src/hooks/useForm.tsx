@@ -90,7 +90,15 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
         );
         console.log('checking this', reward, rewards, key);
         if (reward && reward.id) {
-          rewardsCost += reward.cost * newRewards[key];
+          /*
+           * IMPORTANT: the reward.currency is undefined at the moment of writing this. This means the cost defaults to
+           * being divided by 100, which assumes the cost is expressed in fiat (specifically USD). This was done as a quick fix
+           * and must be refactored.
+           */
+          const cost =
+            reward.currency === 'btc' ? reward.cost : reward.cost / 100;
+
+          rewardsCost += cost * newRewards[key];
         }
       });
     }
