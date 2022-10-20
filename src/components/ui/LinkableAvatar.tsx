@@ -1,13 +1,15 @@
 import React, { ReactElement } from 'react';
 import { Text, HStack, Link } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/react';
-import { IAvatarMetadata } from '../../interfaces';
 import { isMediumScreen, isMobileMode } from '../../utils';
-import { useHistory } from 'react-router';
 import { FaUser } from 'react-icons/fa';
+import { Link as ReactRouterLink } from 'react-router-dom';
+import { getPath } from '../../constants';
 
 type Props = {
-  avatarMetadata: IAvatarMetadata;
+  avatarUsername: string;
+  userProfileID: string;
+  imageSrc: string;
   textColor?: string;
   badgeElements?: ReactElement[];
   badgeNames?: string[];
@@ -16,7 +18,9 @@ type Props = {
 };
 
 export const LinkableAvatar = ({
-  avatarMetadata,
+  avatarUsername,
+  userProfileID,
+  imageSrc,
   textColor,
   badgeNames,
   badgeElements,
@@ -25,7 +29,6 @@ export const LinkableAvatar = ({
 }: Props) => {
   const isMedium = isMediumScreen();
   const isMobile = isMobileMode();
-  const history = useHistory();
 
   const calculateBadgesLength = () => {
     if (!badgeNames) {
@@ -38,17 +41,17 @@ export const LinkableAvatar = ({
   };
 
   const getFormattedUsername = () => {
-    if (!avatarMetadata.username) {
+    if (!avatarUsername) {
       return;
     }
 
     if (
       (badgeElements &&
         badgeElements.length === 0 &&
-        avatarMetadata.username.length > (isMedium ? 12 : 21)) ||
-      (!badgeElements && avatarMetadata.username.length > (isMedium ? 12 : 21))
+        avatarUsername.length > (isMedium ? 12 : 21)) ||
+      (!badgeElements && avatarUsername.length > (isMedium ? 12 : 21))
     ) {
-      return `${avatarMetadata.username.slice(0, isMedium ? 10 : 19)}...`;
+      return `${avatarUsername.slice(0, isMedium ? 10 : 19)}...`;
     }
 
     if (
@@ -61,48 +64,39 @@ export const LinkableAvatar = ({
     if (
       badgeElements &&
       badgeElements.length &&
-      avatarMetadata.username.length + calculateBadgesLength() >
-        (isMedium ? 13 : 21)
+      avatarUsername.length + calculateBadgesLength() > (isMedium ? 13 : 21)
     ) {
-      return `${avatarMetadata.username.slice(0, isMedium ? 3 : 6)}...`;
+      return `${avatarUsername.slice(0, isMedium ? 3 : 6)}...`;
     }
 
-    return avatarMetadata.username;
+    return avatarUsername;
   };
 
   return (
     <Link
+      as={ReactRouterLink}
+      pointerEvents={userProfileID ? 'all' : 'none'}
+      to={userProfileID ? getPath('userProfile', userProfileID) : '/'}
       color={textColor}
-      isExternal={Boolean(
-        avatarMetadata.link && avatarMetadata.link.includes('https'),
-      )}
-      href={avatarMetadata.link || ''}
-      onClick={(e) => {
-        if (avatarMetadata.link && !avatarMetadata.link.includes('https')) {
-          e.preventDefault();
-          history.push(avatarMetadata.link);
-        }
-      }}
+      _hover={{ textDecoration: 'none' }}
+      _active={{ textDecoration: 'none' }}
+      _focus={{ textDecoration: 'none' }}
     >
-      <HStack
-        spacing="5px"
-        display="flex"
-        cursor={avatarMetadata.link ? 'pointer' : 'normal'}
-      >
+      <HStack spacing="5px" display="flex">
         <Avatar
           width={imageSize}
           height={imageSize}
           scale={0.8}
           backgroundColor="transparent"
-          name={'Anonymous'}
-          src={avatarMetadata.image}
+          src={imageSrc}
           sx={{
             '& .chakra-avatar__initials': {
               lineHeight: `${imageSize}`,
             },
           }}
-          icon={<FaUser fontSize="2rem" />}
+          icon={<FaUser size={'1em'} />}
         />
+
         <Text
           fontSize={fontSize}
           _hover={{ fontWeight: 500, textDecoration: 'underline' }}
@@ -110,6 +104,7 @@ export const LinkableAvatar = ({
           {' '}
           {getFormattedUsername()}
         </Text>
+
         {badgeElements}
       </HStack>
     </Link>

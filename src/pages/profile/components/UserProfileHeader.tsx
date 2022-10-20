@@ -18,6 +18,7 @@ import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import { getRandomOrb } from '../../../utils';
 import { useAuthContext } from '../../../context';
 import { ExternalAccountLinkItem } from '.';
+import { BsLightningChargeFill } from 'react-icons/bs';
 
 type Props = {
   profileUser: User;
@@ -91,7 +92,14 @@ export const UserProfilePageHeader = ({
           if (account) {
             return (
               <WrapItem alignSelf={'center'}>
-                <ExternalAccountLinkItem key={account.id} account={account} />
+                {account.type === 'lnurl' ? (
+                  <HStack spacing={1.5}>
+                    <BsLightningChargeFill />
+                    <Text>{account.externalUsername}</Text>
+                  </HStack>
+                ) : (
+                  <ExternalAccountLinkItem key={account.id} account={account} />
+                )}
               </WrapItem>
             );
           }
