@@ -128,9 +128,6 @@ export const ProjectCreate = () => {
   );
 
   useEffect(() => {
-    console.log('CALLING GET PROJECT BY ID:', params.projectId);
-    console.log(params);
-
     getProjectById();
   }, [params.projectId]);
 
@@ -139,7 +136,6 @@ export const ProjectCreate = () => {
       const { name, value } = event.target;
 
       const newForm = { ...form, [name]: value || '' };
-      console.log('checkign is edit', isEdit);
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase();
         const sanitizedName = projectName.replaceAll(validLightningAddress, '');

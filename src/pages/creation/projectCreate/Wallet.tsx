@@ -77,9 +77,6 @@ export const Wallet = () => {
         status: 'error',
       });
     },
-    onCompleted(data) {
-      console.log('checking data', data);
-    },
   });
 
   const handleBack = () => {
@@ -87,8 +84,6 @@ export const Wallet = () => {
   };
 
   const handleNext = async () => {
-    console.log('PROJECT DATA', projectData);
-
     if (node?.name) {
       try {
         const createWalletInput = {
@@ -147,8 +142,6 @@ export const Wallet = () => {
       setTc(event.target.checked);
     }
   };
-
-  console.log('checking tc', tc);
 
   return (
     <Box

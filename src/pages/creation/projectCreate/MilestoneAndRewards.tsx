@@ -113,7 +113,6 @@ export const MilestoneAndRewards = () => {
       });
     },
     onCompleted(data) {
-      console.log('checking data', data);
       const { project }: { project: Project } = data;
       if (project?.rewardCurrency) {
         setIsSatoshiRewards(project.rewardCurrency !== RewardCurrency.Usd);
