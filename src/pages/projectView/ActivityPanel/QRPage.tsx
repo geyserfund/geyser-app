@@ -67,7 +67,7 @@ export const QRPage = ({
   const { paymentRequest, address, amount } = fundingTx;
   const { name } = project;
 
-  const { getRewardsQuantity } = useFundCalc(state);
+  const { getTotalAmount } = useFundCalc(state);
 
   const isMobile = isMobileMode();
   const classes = useStyles();
@@ -126,7 +126,7 @@ export const QRPage = ({
 
       <ContributionInfoBox
         project={project as Project}
-        contributionAmount={state.donationAmount}
+        contributionAmount={getTotalAmount('sats', project.name)}
         rewardsEarned={state.rewards}
         isFunderAnonymous={state.anonymous}
         funderUsername={state.funderUsername}

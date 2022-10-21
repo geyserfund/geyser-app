@@ -11,9 +11,9 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
-import { fonts } from '../../../constants/fonts';
-import { IRewardCount, IProjectReward } from '../../../interfaces';
-import { ImageWithReload, SatoshiAmount } from '../../../components/ui';
+import { IRewardCount } from '../../../interfaces';
+import { ImageWithReload } from '../../../components/ui';
+import { ProjectReward } from '../../../types/generated/graphql';
 
 const useStyles = createUseStyles({
   container: {
@@ -53,7 +53,7 @@ const useStyles = createUseStyles({
 });
 
 interface IRewardItemProps {
-  item: IProjectReward;
+  item: ProjectReward;
   updateCount?: (_: IRewardCount) => void;
   count?: number;
   readOnly?: boolean;
