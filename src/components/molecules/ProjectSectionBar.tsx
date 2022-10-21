@@ -11,24 +11,21 @@ export const ProjectSectionBar = ({
   name,
   number,
   rightSection,
-}: IProjectSectionBar) => {
-  console.log('sd');
-  return (
-    <VStack
-      width="100%"
-      alignItems="flex-start"
-      borderBottom="2px solid"
-      borderColor="brand.neutral300"
-    >
-      <HStack width="100%" marginBottom="10px" justifyContent="space-between">
-        <HStack>
-          <Text fontSize="18px" color="brand.neutral900">
-            {name}
-          </Text>
-          {number && <Badge>{number}</Badge>}
-        </HStack>
-        {rightSection}
+}: IProjectSectionBar) => (
+  <VStack
+    width="100%"
+    alignItems="flex-start"
+    borderBottom="2px solid"
+    borderColor="brand.neutral300"
+  >
+    <HStack width="100%" marginBottom="10px" justifyContent="space-between">
+      <HStack>
+        <Text fontSize="18px" color="brand.neutral900">
+          {name}
+        </Text>
+        {number && <Badge>{number}</Badge>}
       </HStack>
-    </VStack>
-  );
-};
+      {rightSection}
+    </HStack>
+  </VStack>
+);

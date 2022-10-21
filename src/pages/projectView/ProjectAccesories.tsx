@@ -86,7 +86,7 @@ export const ProjectAccesories = ({
                     setFundState(fundingStages.form);
                   }
                 }}
-                item={{ ...reward, currency: project.rewardCurrency }}
+                item={{ ...reward }}
                 readOnly
               />
             </GridItem>

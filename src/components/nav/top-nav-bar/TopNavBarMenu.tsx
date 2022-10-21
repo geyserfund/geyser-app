@@ -19,7 +19,9 @@ import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem';
 type Props = {
   shouldShowDashboardMenuItem: boolean;
   shouldShowSignInMenuItem: boolean;
+  shouldShowMyProjectsMenuItem: boolean;
   onDashboardSelected: () => void;
+  onMyProjectsSelected: () => void;
   onSignInSelected: () => void;
   onSignOutSelected: () => void;
 };
@@ -27,8 +29,10 @@ type Props = {
 export const TopNavBarMenu = ({
   shouldShowSignInMenuItem,
   shouldShowDashboardMenuItem,
+  shouldShowMyProjectsMenuItem,
   onSignInSelected,
   onDashboardSelected,
+  onMyProjectsSelected,
   onSignOutSelected,
 }: Props) => {
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
@@ -88,6 +92,21 @@ export const TopNavBarMenu = ({
               py={2}
             >
               Dashboard
+            </MenuItem>
+
+            <MenuDivider />
+          </>
+        ) : null}
+
+        {shouldShowMyProjectsMenuItem ? (
+          <>
+            <MenuItem
+              onClick={onMyProjectsSelected}
+              color="brand.primary700"
+              px={4}
+              py={2}
+            >
+              My Projects
             </MenuItem>
 
             <MenuDivider />

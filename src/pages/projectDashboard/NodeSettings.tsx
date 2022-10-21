@@ -18,7 +18,7 @@ import { MUTATION_CREATE_WALLET } from '../../graphql/mutations';
 import { IProject } from '../../interfaces';
 import { useNotification } from '../../utils';
 import { TNodeInput } from '../creation/projectCreate/types';
-import { AddNode } from '../creation/projectCreate/components/AddNode';
+import { NodeAdditionModal } from '../creation/projectCreate/components/NodeAdditionModal';
 
 export const NodeSettings = ({ project }: { project: IProject }) => {
   const { toast } = useNotification();
@@ -226,7 +226,8 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
           </VStack>
         </VStack>
       </GridItem>
-      <AddNode
+
+      <NodeAdditionModal
         isOpen={isWalletOpen}
         onClose={onWalletClose}
         node={nodeData}

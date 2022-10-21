@@ -2,13 +2,15 @@ import { useContext, useEffect, useState } from 'react';
 import { fundingStages, stageList } from '../constants';
 import { AuthContext } from '../context';
 
-import { IFundingTx, IFundingAmounts } from '../interfaces';
+import { IFundingAmounts } from '../interfaces';
 
 import { IFundingStages } from '../constants';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND, QUERY_GET_FUNDING_STATUS } from '../graphql';
 import { sha256, useNotification } from '../utils';
 import { RejectionError, WebLNProvider } from 'webln';
+
+import { FundingTx, FundingStatus } from '../types/generated/graphql';
 
 const initialAmounts = {
   total: 0,
@@ -21,7 +23,7 @@ const initialFunding = {
   id: 0,
   uuid: '',
   invoiceId: '',
-  status: 'unpaid',
+  status: FundingStatus.Unpaid,
   amount: 0,
   paymentRequest: '',
   address: '',
@@ -38,6 +40,7 @@ const initialFunding = {
     confirmed: false,
     confirmedAt: '',
     badges: [],
+    rewards: [],
   },
 };
 
@@ -61,7 +64,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundState, setFundState] = useState<IFundingStages>(
     fundingStages.initial,
   );
-  const [fundingTx, setFundingTx] = useState<IFundingTx>({
+  const [fundingTx, setFundingTx] = useState<FundingTx>({
     ...initialFunding,
     funder: { ...initialFunding.funder, user },
   });
@@ -85,6 +88,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       }
 
       await webln.enable();
+
+      if (!fundingTx.paymentRequest) {
+        throw new Error('payment request not found');
+      }
 
       const { preimage } = await webln.sendPayment(fundingTx.paymentRequest);
       const paymentHash = await sha256(preimage);

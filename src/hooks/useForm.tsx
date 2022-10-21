@@ -8,7 +8,6 @@ import { ProjectReward, RewardCurrency } from '../types/generated/graphql';
 export interface IFundForm {
   donationAmount: number;
   rewardsCost: number;
-  totalAmount: number;
   comment: string;
   anonymous: boolean;
   shippingDestination: ShippingDestination;
@@ -26,11 +25,13 @@ export interface IuseFundStateProps {
   rewardCurrency: RewardCurrency;
 }
 
-export type TupdateReward = ({ id, count }: IRewardCount) => void;
+export type TupdateReward = (_: IRewardCount) => void;
 
 export interface IFundFormState {
   state: IFundForm;
+  // eslint-disable-next-line no-unused-vars
   setTarget: (event: any) => void;
+  // eslint-disable-next-line no-unused-vars
   setState: (name: string, value: any) => void;
   updateReward: TupdateReward;
   resetForm: () => void;
@@ -42,7 +43,6 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
   const initialState = {
     donationAmount: 0,
     rewardsCost: 0,
-    totalAmount: 0,
     comment: '',
     shippingDestination: shippingTypes.national,
     shippingCost: 0,
@@ -91,7 +91,7 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
         const reward = rewards.find(
           (reward: ProjectReward) => reward.id === id || `${reward.id}` === key,
         );
-        console.log('checking this', reward, rewards, key);
+
         if (reward && reward.id) {
           /*
            * IMPORTANT: the reward.currency is undefined at the moment of writing this. This means the cost defaults to
@@ -108,10 +108,14 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
       });
     }
 
-    console.log('chekcing update reward', rewardsCost);
+    const newState = {
+      ...state,
+      rewards: newRewards,
+      rewardsCost,
+      totalAmount: rewardsCost + state.donationAmount,
+    };
+    _setState(newState);
 
-    const newState = { ...state, rewards: newRewards, rewardsCost };
-    _setState(newState as IFundForm);
   };
 
   const resetForm = () => {
