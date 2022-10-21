@@ -70,15 +70,12 @@ export const Wallet = () => {
   );
 
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { name: params.projectId } },
+    variables: { where: { id: params.projectId } },
     onError() {
       toast({
         title: 'Error fetching project',
         status: 'error',
       });
-    },
-    onCompleted(data) {
-      console.log('checking data', data);
     },
   });
 
@@ -109,7 +106,7 @@ export const Wallet = () => {
         };
 
         await createWallet({ variables: { input: createWalletInput } });
-        history.push(`/projects/${params.projectId}`);
+        history.push(`/projects/${projectData.project.name}`);
       } catch (error) {
         toast({
           title: 'Something went wrong',
@@ -127,7 +124,7 @@ export const Wallet = () => {
             },
           },
         });
-        history.push(`/projects/${params.projectId}`);
+        history.push(`/projects/${projectData.project.name}`);
       } catch (error) {
         toast({
           title: 'Something went wrong',
@@ -145,8 +142,6 @@ export const Wallet = () => {
       setTc(event.target.checked);
     }
   };
-
-  console.log('checking tc', tc);
 
   return (
     <Box

@@ -69,7 +69,7 @@ export const ProjectCreate = () => {
 
   const [createProject] = useMutation(MUTATION_CREATE_PROJECT, {
     onCompleted(data) {
-      history.push(`/launch/${data.createProject.name}/milestones`);
+      history.push(`/launch/${data.createProject.id}/milestones`);
     },
     onError(error) {
       toast({
@@ -94,7 +94,11 @@ export const ProjectCreate = () => {
   });
 
   const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { name: form.name } },
+    variables: {
+      where: {
+        name: form.name,
+      },
+    },
     onCompleted(data) {
       if (data && data.project && data.project.id) {
         setFormError({
@@ -108,7 +112,7 @@ export const ProjectCreate = () => {
   const [getProjectById, { loading, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME,
     {
-      variables: { where: { name: params.projectId } },
+      variables: { where: { id: params.projectId } },
       onCompleted(data) {
         if (data && data.project) {
           setForm({
@@ -132,7 +136,6 @@ export const ProjectCreate = () => {
       const { name, value } = event.target;
 
       const newForm = { ...form, [name]: value || '' };
-      console.log('checkign is edit', isEdit);
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase();
         const sanitizedName = projectName.replaceAll(validLightningAddress, '');
