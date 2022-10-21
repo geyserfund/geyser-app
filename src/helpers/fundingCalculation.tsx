@@ -12,6 +12,10 @@ export const useFundCalc = (state: IFundForm) => {
   const getTotalAmount = (type: 'sats' | 'dollar', name: string) => {
     const shippingAmount = hasShipping(name) ? getShippingCost() : 0;
 
+    /*
+     * This code also assumes rewards are only priced in USD. It will need refactoring if we want support for multiple
+     * currencies
+     */
     if (type === 'sats') {
       return (
         Math.round(state.rewardsCost / btcRate) +
