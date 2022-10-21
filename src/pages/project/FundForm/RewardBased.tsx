@@ -63,7 +63,7 @@ export const RewardBased = ({
                 /* Hard-coding USD as reward currency as a quick fix. Seeing as it is used accross several places, a
                  * sensible refactor would be to set the ProjectCurrency as a a shared context variable.
                  */
-                item={{ ...reward, currency: 'usd' }}
+                item={reward}
                 count={getRewardCount(reward.id)}
                 updateCount={updateReward}
               />
