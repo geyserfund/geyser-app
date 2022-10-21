@@ -44,10 +44,8 @@ export const TopBanner = () => {
     }
   }, [summaryError]);
 
-  const handleLaunch = () => {
-    const routePath = getPath('publicProjectLaunch');
-
-    history.push(routePath);
+  const handleProjectLaunchButtonPress = () => {
+    history.push(getPath('publicProjectLaunch'));
   };
 
   return (
@@ -104,7 +102,7 @@ export const TopBanner = () => {
           <ButtonComponent
             primary
             width={300}
-            onClick={handleLaunch}
+            onClick={handleProjectLaunchButtonPress}
             fontSize="16px"
             bg={'primary400'}
             boxShadow={
