@@ -7,7 +7,7 @@ import { IProjectReward, IRewardCount } from '../interfaces';
 export interface IFundForm {
   donationAmount: number;
   rewardsCost: number;
-  totalAmount: number;
+  // totalAmount: number;
   comment: string;
   anonymous: boolean;
   shippingDestination: ShippingDestination;
@@ -23,11 +23,13 @@ export interface IuseFundStateProps {
   rewards?: IProjectReward[];
 }
 
-export type TupdateReward = ({ id, count }: IRewardCount) => void;
+export type TupdateReward = (_: IRewardCount) => void;
 
 export interface IFundFormState {
   state: IFundForm;
+  // eslint-disable-next-line no-unused-vars
   setTarget: (event: any) => void;
+  // eslint-disable-next-line no-unused-vars
   setState: (name: string, value: any) => void;
   updateReward: TupdateReward;
   resetForm: () => void;
@@ -39,7 +41,7 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
   const initialState = {
     donationAmount: 0,
     rewardsCost: 0,
-    totalAmount: 0,
+    // totalAmount: 0,
     comment: '',
     shippingDestination: shippingTypes.national,
     shippingCost: 0,
@@ -58,6 +60,8 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
     _setState(newState);
   };
 
+  console.log('FUNDING STATE', state);
+
   useEffect(() => {
     if (!user || !user.id) {
       setState('anonymous', true);
@@ -72,7 +76,10 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
   };
 
   const updateReward = ({ id, count }: IRewardCount) => {
+    console.log('STATE REWARDS', state.rewards);
+
     const newRewards = { ...state.rewards };
+    console.log('NEW REWARDS', newRewards);
 
     if (count !== 0) {
       newRewards[id] = count;
@@ -105,7 +112,12 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
 
     console.log('chekcing update reward', rewardsCost);
 
-    const newState = { ...state, rewards: newRewards, rewardsCost };
+    const newState = {
+      ...state,
+      rewards: newRewards,
+      rewardsCost,
+      totalAmount: rewardsCost + state.donationAmount,
+    };
     _setState(newState);
   };
 

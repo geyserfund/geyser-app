@@ -9,6 +9,7 @@ import { IFundingTx, IProject } from '../../../interfaces';
 import { BotTwitterUrl } from '../../../constants';
 import { Project, FundingTx } from '../../../types/generated/graphql';
 import { ContributionInfoBox } from '../components/ContributionInfoBox';
+import { useFundCalc } from '../../../helpers';
 
 type Props = {
   fundingState: IFundForm;
@@ -25,6 +26,7 @@ export const SuccessScreen = ({
 }: Props) => {
   const [hasCopiedProjectLink, setCopy] = useState(false);
 
+  const { getTotalAmount } = useFundCalc(fundingState);
   const shareProjectWithFriends = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopy(true);
@@ -89,7 +91,7 @@ export const SuccessScreen = ({
 
         <ContributionInfoBox
           project={project as Project}
-          contributionAmount={fundingState.donationAmount}
+          contributionAmount={getTotalAmount('sats', project.name)}
           rewardsEarned={fundingState.rewards}
           isFunderAnonymous={fundingState.anonymous}
           funderUsername={fundingState.funderUsername}
