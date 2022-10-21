@@ -9,10 +9,10 @@ import html2canvas from 'html2canvas';
 import React, { useState } from 'react';
 import { BoltIcon, QrIcon, ShareIcon } from '../../../components/icons';
 import { QRModal } from './QRModal';
-import { IProject } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
 
 interface ILightningQR {
-  project: IProject;
+  project: Project;
 }
 
 export const LightningQR = ({ project }: ILightningQR) => {
@@ -110,7 +110,7 @@ export const LightningQR = ({ project }: ILightningQR) => {
         onClose={onClose}
         setCopy={setCopy}
         name={project.name}
-        image={project.image}
+        image={project.image || ''}
         projectId={project.id}
         title={project.title}
         imageDownload={imageDownload}

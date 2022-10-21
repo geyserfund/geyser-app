@@ -10,8 +10,12 @@ import { DetailsContainer } from './DetailsContainer';
 import { useFundingFlow, useFundState } from '../../hooks';
 import { Head } from '../../utils/Head';
 import { useAuthContext } from '../../context';
-import { IProject } from '../../interfaces';
-import { Project } from '../../types/generated/graphql';
+
+import {
+  Project,
+  ProjectReward,
+  RewardCurrency,
+} from '../../types/generated/graphql';
 import { getPath } from '../../constants';
 
 export const ProjectView = () => {
@@ -19,7 +23,6 @@ export const ProjectView = () => {
   const history = useHistory();
 
   const { setNav } = useAuthContext();
-
   const [detailOpen, setDetailOpen] = useState(true);
   const fundingFlow = useFundingFlow();
 
@@ -80,7 +83,7 @@ export const ProjectView = () => {
 };
 
 interface IProjectViewContainer {
-  project: IProject;
+  project: Project;
   detailOpen: boolean;
   fundingFlow: any;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -94,14 +97,21 @@ const ProjectViewContainer = ({
   setDetailOpen,
   fundingFlow,
 }: IProjectViewContainer) => {
-  const fundForm = useFundState({ rewards: project.rewards });
+  const fundForm = useFundState({
+    /*
+     * Passing an empty array as fallback would probalby make more sense but I think at the moment most checks look
+     * for an undefined value
+     */
+    rewards: (project.rewards as ProjectReward[]) || undefined,
+    rewardCurrency: RewardCurrency.Usd,
+  });
   const { setFundState, fundState } = fundingFlow;
   return (
     <>
       <Head
         title={project.title}
         description={project.description}
-        image={project.image}
+        image={project.image || ''}
         type="article"
       />
       <DetailsContainer
