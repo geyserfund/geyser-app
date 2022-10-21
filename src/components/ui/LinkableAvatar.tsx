@@ -72,6 +72,8 @@ export const LinkableAvatar = ({
     return avatarUsername;
   };
 
+  console.log('userProfileID', userProfileID);
+
   return (
     <Link
       as={ReactRouterLink}
