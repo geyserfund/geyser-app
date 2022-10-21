@@ -102,7 +102,6 @@ export const DonationInputWithSatoshi = ({
   }, [satoshi, dollar, amountSatoshi]);
 
   useEffect(() => {
-    console.log('checking value', value);
     if (amountSatoshi) {
       const newValue = parseInt(`${value}`, 10);
       if (satoshi !== newValue) {
@@ -139,10 +138,7 @@ export const DonationInputWithSatoshi = ({
         <InputRightElement width="50px">
           <Button
             className={classes.switchButtton}
-            onClick={() => {
-              console.log('checking onclick event');
-              onChangeSatoshi(!amountSatoshi);
-            }}
+            onClick={() => onChangeSatoshi(!amountSatoshi)}
             variant="ghost"
           >
             <BsArrowRepeat className={classes.switchIcon} />

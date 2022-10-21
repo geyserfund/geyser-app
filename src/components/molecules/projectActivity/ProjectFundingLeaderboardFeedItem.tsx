@@ -1,16 +1,16 @@
 import { Box, Text, HStack } from '@chakra-ui/layout';
-import { Badge } from '@chakra-ui/react';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { getAvatarMetadata, computeFunderBadges } from '../../../helpers';
-import { IProject, IFunder } from '../../../interfaces';
+import { IFunder } from '../../../interfaces';
 import { commaFormatted } from '../../../utils';
 import { SatoshiIconTilted } from '../../icons';
 import { AnonymousAvatar, LinkableAvatar } from '../../ui';
 import { renderFunderBadges } from './renderFunderBadges';
+import { Project } from '../../../types/generated/graphql';
 
 type Props = HTMLChakraProps<'div'> & {
-  project: IProject;
+  project: Project;
   funder: IFunder;
   leaderboardPosition: number;
 };
@@ -48,7 +48,9 @@ export const ProjectFundingLeaderboardFeedItem = ({
             <AnonymousAvatar seed={funder.id} />
           ) : (
             <LinkableAvatar
-              avatarMetadata={avatarMetadata}
+              avatarUsername={avatarMetadata.username || ''}
+              userProfileID={funder.user!.id}
+              imageSrc={avatarMetadata.image}
               badgeNames={funderBadges.map((badge) => badge.badge)}
               badgeElements={renderFunderBadges(funderBadges)}
             />

@@ -107,14 +107,12 @@ export const EntryCreateEdit = () => {
 
   useEffect(() => {
     if (entryData && entryData.entry) {
-      console.log('checking entry Data', entryData);
       setForm(entryData.entry);
     }
   }, [entryData]);
 
   useEffect(() => {
     if (createData && createData.createEntry) {
-      console.log('checking createdata Data', createData.createEntry);
       setForm(createData.createEntry);
     }
   }, [createData]);

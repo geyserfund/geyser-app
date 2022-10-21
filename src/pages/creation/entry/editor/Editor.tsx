@@ -192,7 +192,6 @@ export const Editor = ({
         key: 'up',
       },
       function (range) {
-        console.log('checking range', range);
         if (range.index === 0 && range.length === 0) {
           document.getElementById('entry-description-input')?.focus();
           return false;

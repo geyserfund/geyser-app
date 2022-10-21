@@ -50,7 +50,7 @@ export interface IProjectReward {
   currency: string;
   cost: number;
   name: string;
-  description: string;
+  description?: string;
   backers: number;
   image?: string;
 }
