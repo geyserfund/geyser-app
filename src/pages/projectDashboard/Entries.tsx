@@ -64,6 +64,18 @@ export const Entries = ({ project }: { project: Project }) => {
     QUERY_PROJECT_TOTAL_VISITORS,
     {
       variables: { where: { id: project.id } },
+      onCompleted: () => {
+        if (project && project.entries) {
+          const live = project?.entries?.filter(
+            (entry) => (entry as Entry).published,
+          );
+          const draft = project?.entries?.filter(
+            (entry) => !(entry as Entry).published,
+          );
+          setLiveEntries(live as Entry[]);
+          setDraftEntries(draft as Entry[]);
+        }
+      },
     },
   );
 
@@ -72,19 +84,6 @@ export const Entries = ({ project }: { project: Project }) => {
   const fundersToVisitorsRatio =
     visitorsCount > 0 ? fundersCount / visitorsCount : 1;
   const fundersToVisitorsPerc = `${fundersToVisitorsRatio / 100} %`;
-
-  useEffect(() => {
-    if (project && project.entries) {
-      const live = project?.entries?.filter(
-        (entry) => (entry as Entry).published,
-      );
-      const draft = project?.entries?.filter(
-        (entry) => !(entry as Entry).published,
-      );
-      setLiveEntries(live as Entry[]);
-      setDraftEntries(draft as Entry[]);
-    }
-  }, [project?.entries]);
 
   const {
     isOpen: isDeleteEntryOpen,
