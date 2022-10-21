@@ -164,7 +164,7 @@ export const QRPage = ({
                   size={186}
                   bgColor={qrBackgroundColor}
                   className={classes.qr}
-                  value={paymentRequest}
+                  value={paymentRequest!}
                   onClick={handleCopy}
                 />
               </Box>

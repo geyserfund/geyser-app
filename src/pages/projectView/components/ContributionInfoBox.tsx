@@ -102,12 +102,12 @@ export const ContributionInfoBox = ({
           <>
             <Divider className={styles.divider} orientation="horizontal" />
 
-            {rewardNameString.length > 0 ? (
+            {rewardNameString.length > 0 && (
               <HStack>
                 <GiftIcon />
                 <Text>{`Reward: ${rewardNameString}`}</Text>
               </HStack>
-            ) : null}
+            )}
 
             {badgesEarned.map((badge, index) => {
               return (
