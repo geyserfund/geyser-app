@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   GridItem,
   HStack,
@@ -19,8 +19,13 @@ import { ButtonComponent, SatoshiAmount } from '../../components/ui';
 import { colors } from '../../constants';
 import { fonts } from '../../constants/fonts';
 import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations';
-import { IProject, IProjectListEntryItem } from '../../interfaces';
 import { numberWithCommas, useNotification } from '../../utils';
+import {
+  Entry,
+  Project,
+  UniqueProjectQueryInput,
+} from '../../types/generated/graphql';
+import { QUERY_PROJECT_TOTAL_VISITORS } from '../../graphql';
 
 const useStyles = createUseStyles({
   statBox: {
@@ -39,20 +44,45 @@ const useStyles = createUseStyles({
   },
 });
 
-export const Entries = ({ project }: { project: IProject }) => {
+type ResponseData = {
+  project: Project;
+};
+
+type QueryVariables = {
+  where: UniqueProjectQueryInput;
+};
+
+export const Entries = ({ project }: { project: Project }) => {
   const classes = useStyles();
   const history = useHistory();
   const { toast } = useNotification();
 
-  const [liveEntries, setLiveEntries] = useState<IProjectListEntryItem[]>([]);
-  const [draftEntries, setDraftEntries] = useState<IProjectListEntryItem[]>([]);
+  const [liveEntries, setLiveEntries] = useState<Entry[]>([]);
+  const [draftEntries, setDraftEntries] = useState<Entry[]>([]);
+
+  const { loading, data } = useQuery<ResponseData, QueryVariables>(
+    QUERY_PROJECT_TOTAL_VISITORS,
+    {
+      variables: { where: { id: project.id } },
+    },
+  );
+
+  const fundersCount = project.funders?.length || 0;
+  const visitorsCount = data?.project?.statistics?.totalVisitors || 0;
+  const fundersToVisitorsRatio =
+    visitorsCount > 0 ? fundersCount / visitorsCount : 1;
+  const fundersToVisitorsPerc = `${fundersToVisitorsRatio / 100} %`;
 
   useEffect(() => {
     if (project && project.entries) {
-      const live = project?.entries?.filter((entry) => entry.published);
-      const draft = project?.entries?.filter((entry) => !entry.published);
-      setLiveEntries(live);
-      setDraftEntries(draft);
+      const live = project?.entries?.filter(
+        (entry) => (entry as Entry).published,
+      );
+      const draft = project?.entries?.filter(
+        (entry) => !(entry as Entry).published,
+      );
+      setLiveEntries(live as Entry[]);
+      setDraftEntries(draft as Entry[]);
     }
   }, [project?.entries]);
 
@@ -64,13 +94,13 @@ export const Entries = ({ project }: { project: IProject }) => {
 
   const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY);
 
-  const [selectedEntry, setSelectedEntry] = useState<IProjectListEntryItem>();
+  const [selectedEntry, setSelectedEntry] = useState<Entry>();
 
   const handleCreateEntry = () => {
     history.push(`/projects/${project.name}/entry`);
   };
 
-  const triggerDeleteEntry = (entry: IProjectListEntryItem) => {
+  const triggerDeleteEntry = (entry: Entry) => {
     setSelectedEntry(entry);
     openDeleteEntry();
   };
@@ -125,12 +155,12 @@ export const Entries = ({ project }: { project: IProject }) => {
           <VStack w="100%" spacing="40px">
             <VStack alignItems="flex-start">
               <Text fontSize="18px" fontWeight={600} color="brand.neutral600">
-                Past 7 days
+                All Time Statistics
               </Text>
               <HStack spacing="22px">
                 <VStack className={classes.statBox}>
                   <Text className={classes.numberText}>
-                    {numberWithCommas(5213)}
+                    {loading ? 0 : numberWithCommas(visitorsCount)}
                   </Text>
                   <Text className={classes.labelText}>VISITS</Text>
                 </VStack>
@@ -140,13 +170,15 @@ export const Entries = ({ project }: { project: IProject }) => {
                     color="brand.neutral900"
                     fontFamily={fonts.mono}
                   >
-                    1120000
+                    {loading ? 0 : project.balance}
                   </SatoshiAmount>
                   <Text className={classes.labelText}>FUNDED</Text>
                 </VStack>
                 <VStack className={classes.statBox}>
-                  <Text className={classes.numberText}>2%</Text>
-                  <Text className={classes.labelText}>FUNDERS/VISITS</Text>
+                  <Text className={classes.numberText}>
+                    {loading ? '0 %' : fundersToVisitorsPerc}
+                  </Text>
+                  <Text className={classes.labelText}>FUNDERS/VISITORS</Text>
                 </VStack>
               </HStack>
             </VStack>
