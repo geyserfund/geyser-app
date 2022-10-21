@@ -12,8 +12,9 @@ import {
 } from '../../components/molecules';
 import { fundingStages } from '../../constants';
 import { DetailsCard } from './DetailsCard';
-import { ProjectAccesories } from './ProjectAccesories';
+import { ProjectAccessories } from './ProjectAccessories';
 import { TupdateReward } from '../../hooks';
+import { Project } from '../../types/generated/graphql';
 
 type Rules = string;
 
@@ -53,7 +54,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
 });
 
 interface IActivityProps {
-  project: IProject;
+  project: Project;
   detailOpen: boolean;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   fundState: IFundingStages;
@@ -141,7 +142,7 @@ export const DetailsContainer = ({
           >
             <DetailsCard project={project} setFundState={setFundState} />
 
-            <ProjectAccesories
+            <ProjectAccessories
               project={project}
               fundState={fundState}
               setFundState={setFundState}

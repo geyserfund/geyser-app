@@ -31,19 +31,19 @@ const useStyles = createUseStyles({
   },
 });
 
-interface IProjectAccesories {
+type Props = {
   project: Project;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
   updateReward: TupdateReward;
   fundState: IFundingStages;
-}
+};
 
-export const ProjectAccesories = ({
+export const ProjectAccessories = ({
   project,
   setFundState,
   updateReward,
   fundState,
-}: IProjectAccesories) => {
+}: Props) => {
   const classes = useStyles();
   const isMobile = isMobileMode();
   const history = useHistory();
@@ -57,6 +57,13 @@ export const ProjectAccesories = ({
   const entriesLength = project.entries ? project.entries.length : 0;
   const rewardsLength = project.rewards ? project.rewards.length : 0;
   const milestoneLength = project.milestones ? project.milestones.length : 0;
+
+  const isRewardBased = project.type === projectTypes.reward;
+  const hasMilestones = project.milestones && project.milestones.length > 0;
+  const hasEntries = project.entries && project.entries.length > 0;
+  const isOwner = user?.id && user.id === project.owners[0].user.id;
+
+  const canPublishEntries = isOwner && (project.active || project.draft);
 
   const [isSmallerThan1265] = useMediaQuery('(min-width: 1265px)');
 
@@ -134,7 +141,7 @@ export const ProjectAccesories = ({
     }
   };
 
-  const handleMielstonesClick = () => {
+  const handleMilestonesClick = () => {
     if (milestonesRef) {
       milestonesRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -143,11 +150,6 @@ export const ProjectAccesories = ({
   const handleCreateNewEntry = () => [
     history.push(`/projects/${project.name}/entry`),
   ];
-
-  const isRewardBased = project.type === projectTypes.reward;
-  const hasMilestones = project.milestones && project.milestones.length > 0;
-  const hasEntries = project.entries && project.entries.length > 0;
-  const isOwner = user?.id && user.id === project.owners[0].user.id;
 
   return (
     <VStack w="100%" spacing="40px">
@@ -180,12 +182,13 @@ export const ProjectAccesories = ({
             rightIcon={
               milestoneLength ? <Badge>{milestoneLength}</Badge> : undefined
             }
-            onClick={handleMielstonesClick}
+            onClick={handleMilestonesClick}
           >
             Milestones
           </Button>
         )}
       </HStack>
+
       {(hasEntries || isOwner) && (
         <VStack
           ref={entriesRef}
@@ -194,13 +197,15 @@ export const ProjectAccesories = ({
           spacing="20px"
         >
           <ProjectSectionBar name={'Entries'} number={entriesLength} />
+
           {renderEntries()}
-          {isOwner && (
+
+          {canPublishEntries ? (
             <ButtonComponent onClick={handleCreateNewEntry} isFullWidth>
               <BiPlus style={{ marginRight: '10px' }} />
-              Create new entry
+              Create A New Entry
             </ButtonComponent>
-          )}
+          ) : null}
         </VStack>
       )}
       {isRewardBased && (

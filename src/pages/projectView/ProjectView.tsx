@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import { useQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
 import React, { useState } from 'react';
@@ -11,8 +12,19 @@ import { useFundingFlow, useFundState } from '../../hooks';
 import { Head } from '../../utils/Head';
 import { useAuthContext } from '../../context';
 import { IProject } from '../../interfaces';
-import { Project } from '../../types/generated/graphql';
+import {
+  Project,
+  UniqueProjectQueryInput,
+} from '../../types/generated/graphql';
 import { getPath } from '../../constants';
+
+type ResponseData = {
+  project: Project;
+};
+
+type QueryVariables = {
+  where: UniqueProjectQueryInput;
+};
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -23,38 +35,66 @@ export const ProjectView = () => {
   const [detailOpen, setDetailOpen] = useState(true);
   const fundingFlow = useFundingFlow();
 
-  const { loading, error, data } = useQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { name: projectId }, input: {} },
-    fetchPolicy: 'network-only',
-    onError() {
-      history.push('/not-found');
-    },
-    onCompleted(data) {
-      if (data.project && data.project.__typename === 'Project') {
-        const { project }: { project: Project } = data;
-        const projectOwnerID =
-          project.owners && project.owners.length > 0
-            ? project.owners[0]?.user.id
-            : '';
+  const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
+    QUERY_PROJECT_BY_NAME,
+    {
+      variables: { where: { name: projectId } },
+      fetchPolicy: 'network-only',
 
-        setNav({
-          title: project.title,
-          path: getPath('project', project.name),
-          projectOwnerId: projectOwnerID,
-        });
-      }
+      onError() {
+        history.push(getPath('notFound'));
+      },
+
+      onCompleted(data) {
+        if (data.project) {
+          const { project }: { project: Project } = data;
+
+          const projectOwnerID =
+            project.owners && project.owners.length > 0
+              ? project.owners[0]?.user.id
+              : '';
+
+          setNav({
+            title: project.title,
+            path: getPath('project', project.name),
+            projectOwnerId: projectOwnerID,
+          });
+        }
+      },
     },
-  });
+  );
+  // const { loading, error, data } = useQuery(QUERY_PROJECT_BY_NAME, {
+  //   variables: { where: { name: projectId }, input: {} },
+  //   fetchPolicy: 'network-only',
+
+  //   onError() {
+  //     history.push('/not-found');
+  //   },
+
+  //   onCompleted(data) {
+  //     if (data.project && data.project.__typename === 'Project') {
+  //       const { project }: { project: Project } = data;
+  //       const projectOwnerID =
+  //         project.owners && project.owners.length > 0
+  //           ? project.owners[0]?.user.id
+  //           : '';
+
+  //       setNav({
+  //         title: project.title,
+  //         path: getPath('project', project.name),
+  //         projectOwnerId: projectOwnerID,
+  //       });
+  //     }
+  //   },
+  // });
 
   if (loading) {
     return <Loader />;
   }
 
   if (error || !data || !data.project) {
-    return <NotFoundPage />;
+    return history.replace(getPath('notFound'));
   }
-
-  const { project } = data;
 
   return (
     <Box
@@ -72,7 +112,7 @@ export const ProjectView = () => {
         bg="brand.bgGrey4"
       >
         <ProjectViewContainer
-          {...{ project, detailOpen, setDetailOpen, fundingFlow }}
+          {...{ project: data.project, detailOpen, setDetailOpen, fundingFlow }}
         />
       </Box>
     </Box>
@@ -80,7 +120,7 @@ export const ProjectView = () => {
 };
 
 interface IProjectViewContainer {
-  project: IProject;
+  project: Project | IProject;
   detailOpen: boolean;
   fundingFlow: any;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -95,6 +135,7 @@ const ProjectViewContainer = ({
   fundingFlow,
 }: IProjectViewContainer) => {
   const fundForm = useFundState({ rewards: project.rewards });
+
   const { setFundState, fundState } = fundingFlow;
   return (
     <>
