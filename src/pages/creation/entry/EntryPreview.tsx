@@ -100,7 +100,6 @@ export const EntryPreview = () => {
     const { name, value } = event.target;
     if (name) {
       const newForm = { ...entry, [name]: value };
-      console.log('checking handleContent handleInput Data', newForm);
       setEntry(newForm);
       isEdited = true;
     }

@@ -137,14 +137,16 @@ export const DetailsCard = ({
             {renderYourFunding()}
           </HStack>
         )}
-        <Button
-          isFullWidth
-          backgroundColor="brand.primary"
-          leftIcon={<BoltIcon />}
-          onClick={handleFundProject}
-        >
-          Fund this project
-        </Button>
+        {project.active && (
+          <Button
+            isFullWidth
+            backgroundColor="brand.primary"
+            leftIcon={<BoltIcon />}
+            onClick={handleFundProject}
+          >
+            Fund this project
+          </Button>
+        )}
       </VStack>
     </Card>
   );
