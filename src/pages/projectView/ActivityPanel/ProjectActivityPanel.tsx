@@ -14,7 +14,7 @@ import { QRPage } from './QRPage';
 import { isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
-import { Box, useDisclosure } from '@chakra-ui/react';
+import { Box, Text, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage, InfoPageSkeleton } from './InfoPage';
@@ -253,6 +253,8 @@ export const ProjectActivityPanel = ({
 
   return (
     <>
+      <Text>Panel Content</Text>
+
       <Box
         overflow="auto"
         className={classNames(classes.container, {
@@ -273,6 +275,7 @@ export const ProjectActivityPanel = ({
       >
         {renderPanelContent()}
       </Box>
+
       <AuthModal isOpen={loginIsOpen} onClose={loginOnClose} />
     </>
   );
