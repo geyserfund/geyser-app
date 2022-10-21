@@ -1,34 +1,15 @@
 import React from 'react';
 import { Box, GridItem, SimpleGrid } from '@chakra-ui/react';
-import { User } from '../../../types/generated/graphql';
+import { OwnerOf, User, Maybe } from '../../../types/generated/graphql';
 import { AlertBox } from '../../../components/ui';
 import { UserProfilePageProjectsListItem } from '../containers';
-import { useAuthContext } from '../../../context';
 
 type Props = {
   profileUser: User;
 };
 
 export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
-  const { user: currentAppUser } = useAuthContext();
-  const isUserViewingOwnProfile = currentAppUser.id === profileUser.id;
-
-  const projectIDs = profileUser.ownerOf
-    // Don't show drafts if the user is viewing someone else's profile
-    .filter((ownedProjectInfo) => {
-      if (isUserViewingOwnProfile) {
-        return true;
-      }
-
-      return (
-        Boolean(ownedProjectInfo?.project) &&
-        ownedProjectInfo?.project?.draft === false
-      );
-    })
-    .map((ownedProjectInfo) => ownedProjectInfo?.project?.id)
-    .filter(Boolean);
-
-  if (projectIDs.length === 0) {
+  if (profileUser.ownerOf.length === 0) {
     return (
       <AlertBox
         height="200px"
@@ -42,11 +23,20 @@ export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
   return (
     <Box display={'flex'} justifyContent="center" alignItems={'center'}>
       <SimpleGrid columns={3} spacingX={7} spacingY={8}>
-        {projectIDs.map((projectID: number) => (
-          <GridItem key={projectID} colSpan={{ base: 3, sm: 3, md: 3, lg: 1 }}>
-            <UserProfilePageProjectsListItem projectID={projectID} />
-          </GridItem>
-        ))}
+        {profileUser.ownerOf.map((ownerOf: Maybe<OwnerOf>) => {
+          if (ownerOf && ownerOf.project) {
+            return (
+              <GridItem
+                key={ownerOf.project.id}
+                colSpan={{ base: 3, sm: 3, md: 3, lg: 1 }}
+              >
+                <UserProfilePageProjectsListItem
+                  projectID={ownerOf.project.id}
+                />
+              </GridItem>
+            );
+          }
+        })}
       </SimpleGrid>
     </Box>
   );

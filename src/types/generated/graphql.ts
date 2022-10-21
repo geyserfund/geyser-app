@@ -752,7 +752,7 @@ export type ProjectWhereInput = {
   id?: InputMaybe<Scalars['BigInt']>;
   /** Unique name for the project. Used for the project URL and lightning address. */
   name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_280']>;
-  type?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<ProjectType>;
 };
 
 export type ProjectsGetQueryInput = {

@@ -27,7 +27,12 @@ import {
   TextArea,
   TextBox,
 } from '../../../components/ui';
-import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
+import {
+  colors,
+  MAX_FUNDING_AMOUNT_USD,
+  projectTypes,
+  SelectCountryOptions,
+} from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 import { IProjectReward, IProjectType } from '../../../interfaces';
@@ -84,14 +89,15 @@ export const PaymentPage = ({
     }
   };
 
+  // TODO: remove hardcoded API key
   const gf = new GiphyFetch('AqeIUD33qyHnMwLDSDWP0da9lCSu0LXx');
   const fetchGifs = (offset: number) =>
     gf.search(gifSearch, { offset, sort: 'relevant', limit: 9 });
 
   const validateFundingAmount = () => {
-    if (getTotalAmount('dollar', name) >= 5000) {
+    if (getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD) {
       toast({
-        title: 'Payment above $5000 is not allowed at the moment.',
+        title: `Payment above ${MAX_FUNDING_AMOUNT_USD} is not allowed at the moment.`,
         description:
           'Please update the amount, or contact us for donating a higher amount.',
         status: 'error',
@@ -101,7 +107,7 @@ export const PaymentPage = ({
 
     if (getTotalAmount('sats', name) < 1) {
       toast({
-        title: 'Payment below 1 sats is not allowed at the moment.',
+        title: 'The payment minimum is 1 satoshi.',
         description: 'Please update the amount.',
         status: 'error',
       });
