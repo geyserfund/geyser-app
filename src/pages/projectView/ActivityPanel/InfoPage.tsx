@@ -18,9 +18,10 @@ import {
 
 import { useStyles } from './styles';
 import { IProject, IFundingTx, IFunder } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
 
 interface IInfoPage {
-  project: IProject;
+  project: Project;
   handleViewClick: () => void;
   handleFundProject: () => void;
   loading: boolean;

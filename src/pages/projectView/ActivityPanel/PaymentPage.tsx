@@ -35,13 +35,14 @@ import {
 } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
-import { IProjectReward, IProjectType } from '../../../interfaces';
+import { IProjectType } from '../../../interfaces';
 import { DonationBased, RewardBased } from '../../project/FundForm';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { IGif } from '@giphy/js-types';
 import { hasShipping, useNotification } from '../../../utils';
+import { ProjectReward } from '../../../types/generated/graphql';
 
 interface IPaymentPageProps {
   isMobile: boolean;
@@ -54,7 +55,7 @@ interface IPaymentPageProps {
   setState: any;
   handleFund: () => void;
   type: IProjectType;
-  rewards?: IProjectReward[];
+  rewards?: ProjectReward[];
   name: string;
 }
 

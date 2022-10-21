@@ -21,9 +21,10 @@ import { InfoPage, InfoPageSkeleton } from './InfoPage';
 import { fundingStages } from '../../../constants';
 import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
+import { Project, ProjectReward } from '../../../types/generated/graphql';
 
 interface IActivityProps {
-  project: IProject;
+  project: Project;
   detailOpen: boolean;
   fundingFlow: any;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -220,7 +221,9 @@ export const ProjectActivityPanel = ({
               setTarget,
               updateReward,
               handleFund,
-              rewards: project.rewards,
+              rewards: project.rewards?.filter(
+                (reward) => reward !== null,
+              ) as ProjectReward[],
               type: project.type,
               name: project.name,
             }}
