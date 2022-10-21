@@ -156,8 +156,13 @@ export const TopNavBar = () => {
   };
 
   const isViewingOwnProject: boolean = useMemo(() => {
-    return navigationContext.projectOwnerId === user.id;
-  }, [user.id, navigationContext.projectOwnerId]);
+    return (
+      (history.location.pathname.startsWith(`/${routerPathNames.entry}`) ||
+        history.location.pathname.startsWith(`/${routerPathNames.project}`) ||
+        history.location.pathname.startsWith(`/${routerPathNames.projects}`)) &&
+      navigationContext.projectOwnerId === user.id
+    );
+  }, [user.id, navigationContext.projectOwnerId, history.location.pathname]);
 
   const shouldTopNavBeHidden: boolean = useMemo(() => {
     return routeMatchesForHidingTopNav.some((routeMatch) => {
