@@ -1,27 +1,21 @@
 import { Box, Button, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { IProject } from '../../interfaces';
-import { Card, SatoshiAmount } from '../../components/ui';
-import { BsFillCheckCircleFill } from 'react-icons/bs';
+import { Card, SatoshiAmount, ProjectStatusLabel } from '../../components/ui';
 import { LightningQR } from './components/LightningQR';
 import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
-import { colors, fundingStages, IFundingStages } from '../../constants';
+import { fundingStages, IFundingStages } from '../../constants';
 import { useAuthContext } from '../../context';
-
+import { Project } from '../../types/generated/graphql';
 export const DetailsCard = ({
   project,
   setFundState,
 }: {
-  project: IProject;
+  project: Project;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
 }) => {
   const { user } = useAuthContext();
   const owner = project.owners[0];
-
-  // const { projectDetails, projectUpdates } = projectData;
-  console.log(project);
 
   const renderMilestone = () => {
     if (!project.milestones) {
@@ -29,7 +23,7 @@ export const DetailsCard = ({
     }
 
     const currentMilestone = project.milestones.find(
-      (milestone) => milestone.amount > project.balance,
+      (milestone) => Number(milestone?.amount) > project.balance,
     );
 
     if (!currentMilestone) {
@@ -53,7 +47,7 @@ export const DetailsCard = ({
   const renderYourFunding = () => {
     if (project.funders.length > 0) {
       const currentFund = project.funders.find(
-        (funder) => funder.user?.id === user.id,
+        (funder) => funder?.user?.id === user.id,
       );
       console.log(currentFund);
 
@@ -101,7 +95,7 @@ export const DetailsCard = ({
             borderRadius="4px"
             width="100%"
             height="100%"
-            src={project.image}
+            src={project.image || ''}
             maxH="210px"
             objectFit="cover"
           />
@@ -111,12 +105,7 @@ export const DetailsCard = ({
             <Text fontSize="30px" fontWeight={700}>
               {project.title}
             </Text>
-            <HStack>
-              <Text fontSize="12px" color="brand.primary800">
-                RUNNING
-              </Text>
-              <BsFillCheckCircleFill color={colors.primary800} />
-            </HStack>
+            <ProjectStatusLabel project={project} />
           </HStack>
           <LightningQR project={project} />
         </VStack>
@@ -137,14 +126,16 @@ export const DetailsCard = ({
             {renderYourFunding()}
           </HStack>
         )}
-        <Button
-          isFullWidth
-          backgroundColor="brand.primary"
-          leftIcon={<BoltIcon />}
-          onClick={handleFundProject}
-        >
-          Fund this project
-        </Button>
+        {project.active && (
+          <Button
+            isFullWidth
+            backgroundColor="brand.primary"
+            leftIcon={<BoltIcon />}
+            onClick={handleFundProject}
+          >
+            Fund this project
+          </Button>
+        )}
       </VStack>
     </Card>
   );

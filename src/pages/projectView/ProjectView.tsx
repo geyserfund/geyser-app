@@ -7,6 +7,7 @@ import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFoundPage } from '../notFound';
 import { useFundingFlow } from '../../hooks';
 import { useAuthContext } from '../../context';
+
 import { Project } from '../../types/generated/graphql';
 import { getPath } from '../../constants';
 import { ProjectDetailsViewContainer } from './containers';
@@ -16,7 +17,6 @@ export const ProjectView = () => {
   const history = useHistory();
 
   const { setNav } = useAuthContext();
-
   const [detailOpen, setDetailOpen] = useState(true);
   const fundingFlow = useFundingFlow();
 

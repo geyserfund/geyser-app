@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
 import { fonts } from '../../../constants/fonts';
-import { IProject, IProjectMilestone } from '../../../interfaces';
+import { IProjectMilestone } from '../../../interfaces';
 import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
 import { SatoshiAmount } from '../../ui';
+import { Project } from '../../../types/generated/graphql';
 
 interface IActivityBrief {
   loading: boolean;
-  project: IProject;
+  project: Project;
 }
 
 const useStyles = createUseStyles({
@@ -36,9 +37,13 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
       let selectedMilestone: IProjectMilestone | undefined;
 
       project.milestones.map((milestone, index) => {
-        if (milestone.amount >= project.balance && !selectedMilestone) {
-          selectedMilestone = milestone;
-          setCurrentMilestone(milestone);
+        if (
+          milestone &&
+          milestone.amount >= project.balance &&
+          !selectedMilestone
+        ) {
+          selectedMilestone = milestone as IProjectMilestone;
+          setCurrentMilestone(milestone as IProjectMilestone);
           setMilestoneIndex(index + 1);
         }
       });
@@ -122,7 +127,8 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           {project.balance}
         </SatoshiAmount>
         {getMilestoneValue()}
-        {showCountdown && <Countdown endDate={project.expiresAt} />}
+        {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
+        {showCountdown && <Countdown endDate={project.expiresAt!} />}
       </VStack>
     </HStack>
   );

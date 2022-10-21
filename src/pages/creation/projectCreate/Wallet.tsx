@@ -21,7 +21,7 @@ import { createUseStyles } from 'react-jss';
 import { colors, GeyserTermsAndConditionsURL } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
-import { AddNode } from './components/AddNode';
+import { NodeAdditionModal } from './components/NodeAdditionModal';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   MUTATION_CREATE_WALLET,
@@ -197,6 +197,7 @@ export const Wallet = () => {
                 percentage={100}
               />
             </VStack>
+
             <VStack width="100%" alignItems="flex-start" spacing="40px">
               <VStack width="100%" alignItems="flex-start">
                 <Text>Connect your node</Text>
@@ -213,6 +214,7 @@ export const Wallet = () => {
                     "Connect your Lightning node if you have one, and the funds will be sent directly to your account at no charge. If you don't have one yet, don't worry, you can add this later in the Admin Dashboard."
                   }
                 </Text>
+
                 <HStack padding="10px" spacing="20px">
                   <Image src={VoltageLogoSmall} />
                   <Link
@@ -224,6 +226,7 @@ export const Wallet = () => {
                   </Link>
                 </HStack>
               </VStack>
+
               <VStack width="100%" alignItems="flex-start">
                 <Text>Lightning Wallet</Text>
                 <ButtonComponent isFullWidth disabled>
@@ -300,7 +303,8 @@ export const Wallet = () => {
           </VStack>
         </GridItem>
       </Grid>
-      <AddNode
+
+      <NodeAdditionModal
         isOpen={isWalletOpen}
         onClose={onWalletClose}
         node={node}

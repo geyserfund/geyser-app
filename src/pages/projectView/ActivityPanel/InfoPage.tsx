@@ -16,10 +16,11 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 
-import { IProject, IFundingTx, IFunder } from '../../../interfaces';
+import { IFundingTx, IFunder } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
 
 interface IInfoPage {
-  project: IProject;
+  project: Project;
   handleViewClick: () => void;
   handleFundProject: () => void;
   loading: boolean;

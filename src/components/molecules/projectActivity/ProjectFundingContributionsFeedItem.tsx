@@ -30,6 +30,7 @@ export const ProjectFundingContributionsFeedItem = ({
   ...rest
 }: Props) => {
   const { funder } = fundingTx;
+
   const isFunderAnonymous = Boolean(funder?.user) === false;
   const timeAgo = getDaysAgo(funder?.confirmedAt || '');
   const wasMadeOnChain = fundingTx.onChain;
