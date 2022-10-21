@@ -1,14 +1,12 @@
 import { Box, Button, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { Card, SatoshiAmount } from '../../components/ui';
-import { BsFillCheckCircleFill } from 'react-icons/bs';
+import { Card, SatoshiAmount, ProjectStatusLabel } from '../../components/ui';
 import { LightningQR } from './components/LightningQR';
 import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
-import { colors, fundingStages, IFundingStages } from '../../constants';
+import { fundingStages, IFundingStages } from '../../constants';
 import { useAuthContext } from '../../context';
 import { Project } from '../../types/generated/graphql';
-
 export const DetailsCard = ({
   project,
   setFundState,
@@ -18,9 +16,6 @@ export const DetailsCard = ({
 }) => {
   const { user } = useAuthContext();
   const owner = project.owners[0];
-
-  // const { projectDetails, projectUpdates } = projectData;
-  console.log(project);
 
   const renderMilestone = () => {
     if (!project.milestones) {
@@ -92,19 +87,6 @@ export const DetailsCard = ({
     setFundState(fundingStages.form);
   };
 
-  // This function will need to be refactored to use project.status
-  const getStatusText = () => {
-    if (project.active) {
-      return 'RUNNING';
-    }
-
-    if (project.draft) {
-      return 'DRAFT';
-    }
-
-    return 'INACTIVE';
-  };
-
   return (
     <Card padding="24px">
       <VStack alignItems="flex-start" width="100%" spacing="18px">
@@ -123,12 +105,7 @@ export const DetailsCard = ({
             <Text fontSize="30px" fontWeight={700}>
               {project.title}
             </Text>
-            <HStack>
-              <Text fontSize="12px" color="brand.primary800">
-                {getStatusText()}
-              </Text>
-              <BsFillCheckCircleFill color={colors.primary800} />
-            </HStack>
+            <ProjectStatusLabel project={project} />
           </HStack>
           <LightningQR project={project} />
         </VStack>

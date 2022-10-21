@@ -2,21 +2,18 @@ import {
   Box,
   Heading,
   HStack,
-  Icon,
   Image,
   Text,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import { BsFillCheckCircleFill, BsXCircleFill } from 'react-icons/bs';
 import { useHistory } from 'react-router';
 import { getPath } from '../../../constants';
 
 import { Project } from '../../../types/generated/graphql';
-import { ICard, SatoshiAmount } from '../../ui';
+import { ICard, ProjectStatusLabel, SatoshiAmount } from '../../ui';
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
-
 type Props = ICard & {
   project: Project;
   onClick?: () => void;
@@ -109,33 +106,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               </Text>
             </VStack>
 
-            {project.active ? (
-              // TODO: Make a "badge" component out of this
-              // instead of duplicating the logic
-              <HStack paddingX={2}>
-                <Icon color="brand.primary500" as={BsFillCheckCircleFill} />
-
-                <Text
-                  fontSize="12px"
-                  color="brand.primary800"
-                  textTransform="uppercase"
-                >
-                  Running
-                </Text>
-              </HStack>
-            ) : (
-              <HStack paddingX={2}>
-                <Icon color="brand.neutral500" as={BsXCircleFill} />
-
-                <Text
-                  fontSize="12px"
-                  color="brand.neutral500"
-                  textTransform="uppercase"
-                >
-                  Inactive
-                </Text>
-              </HStack>
-            )}
+            <ProjectStatusLabel project={project} paddingX={2} />
           </HStack>
 
           <Text noOfLines={5} textAlign="left" size="sm">
