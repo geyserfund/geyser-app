@@ -69,7 +69,12 @@ export const Router = () => {
                 <MilestoneAndRewards />
               </PrivateRoute>
             </Route>
-            <Route path={getPath('privateProjectLaunch')}>
+            <Route path={`${getPath('privateProjectLaunch')}/:projectId`}>
+              <PrivateRoute>
+                <ProjectCreate />
+              </PrivateRoute>
+            </Route>
+            <Route path={`${getPath('privateProjectLaunch')}`}>
               <PrivateRoute>
                 <ProjectCreate />
               </PrivateRoute>

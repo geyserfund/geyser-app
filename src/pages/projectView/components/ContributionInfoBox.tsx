@@ -20,7 +20,7 @@ import { Satoshi } from '../../../types/types';
 type Props = HTMLChakraProps<'div'> & {
   project: Project;
   contributionAmount: Satoshi;
-  referenceCode: string;
+  referenceCode?: string;
   isFunderAnonymous?: boolean;
   funderEmail?: string;
   funderUsername?: string;
@@ -102,12 +102,12 @@ export const ContributionInfoBox = ({
           <>
             <Divider className={styles.divider} orientation="horizontal" />
 
-            {rewardNameString.length > 0 ? (
+            {rewardNameString.length > 0 && (
               <HStack>
                 <GiftIcon />
                 <Text>{`Reward: ${rewardNameString}`}</Text>
               </HStack>
-            ) : null}
+            )}
 
             {badgesEarned.map((badge, index) => {
               return (
@@ -153,15 +153,19 @@ export const ContributionInfoBox = ({
           </HStack>
         </VStack>
 
-        <Divider className={styles.divider} orientation="horizontal" />
+        {referenceCode ? (
+          <>
+            <Divider className={styles.divider} orientation="horizontal" />
 
-        <Stack direction="column" spacing="2">
-          <Text textTransform={'uppercase'} color="brand.neutral600">
-            Reference Code
-          </Text>
+            <Stack direction="column" spacing="2">
+              <Text textTransform={'uppercase'} color="brand.neutral600">
+                Reference Code
+              </Text>
 
-          <Text>{referenceCode}</Text>
-        </Stack>
+              <Text>{referenceCode}</Text>
+            </Stack>
+          </>
+        ) : null}
       </VStack>
     </Box>
   );

@@ -67,7 +67,11 @@ export const ProfilePage = () => {
   useEffect(() => {
     if (userProfileData && userProfileData.user) {
       const user = userProfileData.user as User;
-      setUserProfile(user);
+
+      setUserProfile({
+        ...userProfile,
+        ...user,
+      });
     }
   }, [userProfileData]);
 
