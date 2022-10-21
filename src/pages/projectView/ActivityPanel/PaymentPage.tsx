@@ -37,6 +37,7 @@ import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { IGif } from '@giphy/js-types';
 import { hasShipping, useNotification } from '../../../utils';
+import { ProjectReward } from '../../../types/generated/graphql';
 
 interface IPaymentPageProps {
   isMobile: boolean;
@@ -49,7 +50,7 @@ interface IPaymentPageProps {
   setState: any;
   handleFund: () => void;
   type: IProjectType;
-  rewards?: IProjectReward[];
+  rewards?: ProjectReward[];
   name: string;
 }
 

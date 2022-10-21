@@ -1,7 +1,5 @@
 import { Box, Button, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { IProject } from '../../interfaces';
 import { Card, SatoshiAmount } from '../../components/ui';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { LightningQR } from './components/LightningQR';
@@ -9,12 +7,13 @@ import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
 import { colors, fundingStages, IFundingStages } from '../../constants';
 import { useAuthContext } from '../../context';
+import { Project } from '../../types/generated/graphql';
 
 export const DetailsCard = ({
   project,
   setFundState,
 }: {
-  project: IProject;
+  project: Project;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
 }) => {
   const { user } = useAuthContext();
@@ -29,7 +28,7 @@ export const DetailsCard = ({
     }
 
     const currentMilestone = project.milestones.find(
-      (milestone) => milestone.amount > project.balance,
+      (milestone) => Number(milestone?.amount) > project.balance,
     );
 
     if (!currentMilestone) {
@@ -53,7 +52,7 @@ export const DetailsCard = ({
   const renderYourFunding = () => {
     if (project.funders.length > 0) {
       const currentFund = project.funders.find(
-        (funder) => funder.user?.id === user.id,
+        (funder) => funder?.user?.id === user.id,
       );
       console.log(currentFund);
 
@@ -93,6 +92,19 @@ export const DetailsCard = ({
     setFundState(fundingStages.form);
   };
 
+  // This function will need to be refactored to use project.status
+  const getStatusText = () => {
+    if (project.active) {
+      return 'RUNNING';
+    }
+
+    if (project.draft) {
+      return 'DRAFT';
+    }
+
+    return 'INACTIVE';
+  };
+
   return (
     <Card padding="24px">
       <VStack alignItems="flex-start" width="100%" spacing="18px">
@@ -101,7 +113,7 @@ export const DetailsCard = ({
             borderRadius="4px"
             width="100%"
             height="100%"
-            src={project.image}
+            src={project.image || ''}
             maxH="210px"
             objectFit="cover"
           />
@@ -113,7 +125,7 @@ export const DetailsCard = ({
             </Text>
             <HStack>
               <Text fontSize="12px" color="brand.primary800">
-                RUNNING
+                {getStatusText()}
               </Text>
               <BsFillCheckCircleFill color={colors.primary800} />
             </HStack>
