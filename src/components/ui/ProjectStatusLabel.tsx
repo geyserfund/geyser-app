@@ -21,7 +21,7 @@ export const ProjectStatusLabel = ({
 }: IProjectStatusLabel) => {
   // This function will need to be refactored to use project.status
 
-  const renderLable = () => {
+  const renderLabel = () => {
     if (project.active) {
       return (
         <HStack {...rest}>
@@ -69,5 +69,5 @@ export const ProjectStatusLabel = ({
     );
   };
 
-  return renderLable();
+  return renderLabel();
 };
