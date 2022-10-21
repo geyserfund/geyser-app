@@ -18,8 +18,8 @@ export const ME = gql`
         project {
           id
           name
-          title
           image
+          title
         }
       }
     }
