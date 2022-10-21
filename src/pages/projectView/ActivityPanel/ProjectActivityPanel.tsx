@@ -253,8 +253,6 @@ export const ProjectActivityPanel = ({
 
   return (
     <>
-      <Text>Panel Content</Text>
-
       <Box
         overflow="auto"
         className={classNames(classes.container, {

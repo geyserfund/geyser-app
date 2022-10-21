@@ -5,14 +5,11 @@ import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFoundPage } from '../notFound';
-import { ProjectActivityPanel } from './ActivityPanel/ProjectActivityPanel';
-import { DetailsContainer } from './DetailsContainer';
-import { useFundingFlow, useFundState } from '../../hooks';
-import { Head } from '../../utils/Head';
+import { useFundingFlow } from '../../hooks';
 import { useAuthContext } from '../../context';
-import { IProject } from '../../interfaces';
 import { Project } from '../../types/generated/graphql';
 import { getPath } from '../../constants';
+import { ProjectDetailsViewContainer } from './containers';
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -71,54 +68,10 @@ export const ProjectView = () => {
         position="relative"
         bg="brand.bgGrey4"
       >
-        <ProjectViewContainer
+        <ProjectDetailsViewContainer
           {...{ project, detailOpen, setDetailOpen, fundingFlow }}
         />
       </Box>
     </Box>
-  );
-};
-
-interface IProjectViewContainer {
-  project: IProject;
-  detailOpen: boolean;
-  fundingFlow: any;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  resourceType?: string;
-  resourceId?: number;
-}
-
-const ProjectViewContainer = ({
-  project,
-  detailOpen,
-  setDetailOpen,
-  fundingFlow,
-}: IProjectViewContainer) => {
-  const fundForm = useFundState({ rewards: project.rewards });
-  const { setFundState, fundState } = fundingFlow;
-  return (
-    <>
-      <Head
-        title={project.title}
-        description={project.description}
-        image={project.image}
-        type="article"
-      />
-      <DetailsContainer
-        {...{
-          project,
-          detailOpen,
-          setDetailOpen,
-          fundState,
-          setFundState,
-          updateReward: fundForm.updateReward,
-        }}
-      />
-
-      <ProjectActivityPanel
-        project={project}
-        {...{ detailOpen, setDetailOpen, fundingFlow, fundForm }}
-      />
-    </>
   );
 };
