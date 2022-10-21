@@ -7,4 +7,4 @@ export * from './url';
 export * from './cookie';
 export * from './events';
 export * from './router-paths';
-export * from './miscalleneous';
+export * from './projectFunding';
