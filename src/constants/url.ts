@@ -53,3 +53,6 @@ export const GeyserFAQUrl =
 export const GeyserAssetDomainUrl = 'https://storage.googleapis.com/';
 export const GeyserSkeletonUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/imageskelton.gif';
+
+export const VoltageNodeConnectionDemoURL =
+  'https://geyser.notion.site/Connecting-your-Geyser-campaign-to-a-Voltage-node-10e786db5a5a46af9456f00abfa0dc43';

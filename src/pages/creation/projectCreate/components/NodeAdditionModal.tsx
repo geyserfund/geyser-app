@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,20 +11,20 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
 import { ButtonComponent, TextArea, TextBox } from '../../../../components/ui';
+import { VoltageNodeConnectionDemoURL } from '../../../../constants';
 import { isMobileMode } from '../../../../utils';
 import { checkMacaroonPermissions } from '../../../../utils/checkMacaroonPermissions';
 import { isSecp256k1Compressed } from '../../../../utils/isSecp256k1Compressed';
 import { isTorV3Address } from '../../../../utils/isTorV3Address';
 import { TNodeInput } from '../types';
 
-interface IAddNode {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (_: TNodeInput) => void;
   node?: TNodeInput;
-}
+};
 
 export const defaultNode = {
   name: '',
@@ -35,28 +36,44 @@ export const defaultNode = {
   grpc: '',
 };
 
-export const AddNode = ({ isOpen, onClose, node, onSubmit }: IAddNode) => {
+export const NodeAdditionModal = ({
+  isOpen,
+  onClose,
+  node,
+  onSubmit,
+}: Props) => {
   const isMobile = isMobileMode();
 
   const [isVoltage, setIsVoltage] = useState(false);
   const [form, setForm] = useState<TNodeInput>(node || defaultNode);
   const [formError, setFormError] = useState<any>({});
 
-  const handleTextChange = (event: any) => {
+  const handleTextChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormError({});
+
     if (event) {
       const { name, value } = event.target;
+
       if (name) {
         setForm({ ...form, [name]: value });
       }
     }
   };
 
-  const handleIsVoltage = (event: any) => {
+  const handleVoltageNodeToggled = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setFormError({});
-    if (event) {
-      setIsVoltage(event.target.checked);
+
+    const isVoltageNode = event.target.checked;
+
+    if (isVoltageNode && Boolean(form.hostname) === false) {
+      // setForm({ ...form, hostname: 'nodename.m.voltageapp.io' });
     }
+
+    setIsVoltage(isVoltageNode);
   };
 
   const handleSubmit = () => {
@@ -136,14 +153,29 @@ export const AddNode = ({ isOpen, onClose, node, onSubmit }: IAddNode) => {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
+
+      <ModalContent
+        display="flex"
+        alignItems="flex-start"
+        paddingY="20px"
+        paddingX="0px"
+      >
         <ModalHeader paddingX="20px">
-          <Text fontSize="18px" fontWeight={600}>
-            Add a Node
-          </Text>
+          <VStack spacing={2} alignItems="flex-start">
+            <Text fontSize="18px" fontWeight={600}>
+              Add a Node
+            </Text>
+
+            <Text fontSize={'14px'} fontWeight="medium">
+              We currently support non-Tor nodes. So Tor nodes (including
+              Umbrel) will not work at this time.
+            </Text>
+          </VStack>
         </ModalHeader>
+
         <ModalCloseButton />
-        <ModalBody width="100%">
+
+        <ModalBody width="100%" paddingX="0px">
           <VStack
             width="100%"
             paddingBottom="20px"
@@ -151,7 +183,7 @@ export const AddNode = ({ isOpen, onClose, node, onSubmit }: IAddNode) => {
             maxHeight="600px"
             overflowY="auto"
             spacing="15px"
-            paddingX="2px"
+            paddingX="20px"
           >
             <VStack width="100%" alignItems="flex-start">
               <Text>Node Name</Text>
@@ -162,49 +194,68 @@ export const AddNode = ({ isOpen, onClose, node, onSubmit }: IAddNode) => {
                 error={formError.name}
               />
             </VStack>
+
             <VStack width="100%" alignItems="flex-start">
               <Checkbox
                 size="lg"
                 colorScheme="green"
                 isChecked={isVoltage}
-                onChange={handleIsVoltage}
+                onChange={handleVoltageNodeToggled}
               >
-                <Text>This is a voltage Node</Text>
+                <Text>This is a Voltage Node</Text>
               </Checkbox>
+
+              {isVoltage ? (
+                <Link isExternal href={VoltageNodeConnectionDemoURL}>
+                  Find our demo here on how to load a Voltage node.
+                </Link>
+              ) : null}
             </VStack>
+
             <VStack width="100%" alignItems="flex-start">
-              <Text>Hostname or IP address</Text>
+              <Text>Hostname or IP Address (API endpoint)</Text>
+
               <TextBox
                 name="hostname"
                 onChange={handleTextChange}
+                placeholder={isVoltage ? 'nodename.m.voltageapp.io' : ''}
                 value={form.hostname}
                 error={formError.hostname}
               />
             </VStack>
+
             <VStack width="100%" alignItems="flex-start">
-              <Text>Public key</Text>
-              <TextBox
+              <Text>Public Key (Identity Pubkey)</Text>
+              <TextArea
+                minHeight={'10em'}
                 name="publicKey"
+                placeholder="0330ba2ac70aa1566d3d07524248ee8a7861aaebdc6d46c8ccd016bfe20b76c995"
                 onChange={handleTextChange}
                 value={form.publicKey}
                 error={formError.publicKey}
               />
             </VStack>
+
             <VStack width="100%" alignItems="flex-start">
-              <Text>Invoice Macaroon</Text>
+              <Text>Invoice Macaroon (base64)</Text>
               <TextArea
+                minHeight={'10em'}
                 name="invoiceMacaroon"
+                placeholder="AgEDbG5kAlgRChAGp+sQl/hVmpZQVWvphmk/EgEwGhYKB2FkZHJlc3MSBHJlYWWSBXdyaXRlGhcKCGrudm9pY2VzEgRyZZFkEgV3cml0ZRoPCgdvbmNoYWluEgRyZWFkAAAGIK8pI70yQT8GuVhykez0PMpNt5kEeYsmuvwdnLe4JfFM"
                 onChange={handleTextChange}
                 value={form.invoiceMacaroon}
                 error={formError.invoiceMacaroon}
               />
             </VStack>
-            {!isVoltage && (
+
+            {isVoltage === false ? (
               <>
                 <VStack width="100%" alignItems="flex-start">
-                  <Text>TLS certificate</Text>
-                  <TextBox
+                  <Text>TLS Certificate (base64)</Text>
+                  <TextArea
+                    minHeight={'10em'}
                     name="tlsCert"
+                    placeholder="LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNYakNDQWdPZ0FSQU52Tyt1UUtDMjlrWnlDNnNjR05QOXd3Q2dZSUt...VzQ2NUR2OTdiVC84NWYzeUZrYWFNTzdCWU51SVRxSDlLZmc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
                     onChange={handleTextChange}
                     value={form.tlsCert}
                     error={formError.tlsCert}
@@ -215,15 +266,17 @@ export const AddNode = ({ isOpen, onClose, node, onSubmit }: IAddNode) => {
                   <TextBox
                     name="grpc"
                     type="number"
+                    placeholder="10009"
                     onChange={handleTextChange}
                     value={form.grpc}
                     error={formError.grpc}
                   />
                 </VStack>
               </>
-            )}
+            ) : null}
           </VStack>
-          <VStack spacing="10px">
+
+          <VStack spacing="10px" paddingX="20px">
             <ButtonComponent isFullWidth primary onClick={handleSubmit}>
               Confirm
             </ButtonComponent>
