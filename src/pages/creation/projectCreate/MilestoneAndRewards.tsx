@@ -337,7 +337,8 @@ export const MilestoneAndRewards = () => {
                 </ButtonComponent>
                 <Text fontSize="12px">
                   Milestones help you and your community keep track of your
-                  progress and set your expectations.
+                  progress and set your expectations. You can edit Milestones
+                  later.
                 </Text>
               </VStack>
               <VStack width="100%" alignItems="flex-start">
@@ -353,7 +354,8 @@ export const MilestoneAndRewards = () => {
                 </ButtonComponent>
                 <Text fontSize="12px">
                   Rewards are a powerful way of exchanging value with your
-                  community
+                  community. Check here our list of prohibited items. You can
+                  edit or add Rewards later.
                 </Text>
               </VStack>
               <ButtonComponent

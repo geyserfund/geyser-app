@@ -62,7 +62,8 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
               </ButtonComponent>
               <Text fontSize="12px">
                 Milestones help you and your community keep track of your
-                progress and set your expectations.
+                progress and set your expectations. You can edit Milestones
+                later.
               </Text>
             </VStack>
             <VStack alignItems="flex-start" width="100%" spacing="10px">

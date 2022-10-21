@@ -42,7 +42,7 @@ type ResponseData = {
 };
 
 type QueryVariables = {
-  id: BigInt;
+  id: number;
 };
 
 export const UserProfilePageContributionsListItem = ({
@@ -50,7 +50,7 @@ export const UserProfilePageContributionsListItem = ({
 }: Props) => {
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_FUNDING_TX_FOR_USER_CONTRIBUTION,
-    { variables: { id: BigInt(fundingTxID) } },
+    { variables: { id: fundingTxID } },
   );
 
   return data ? (

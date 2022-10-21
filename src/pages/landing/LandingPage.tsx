@@ -42,17 +42,26 @@ export const LandingPage = () => {
         overflow="hidden"
         spacing={'64px'}
       >
-        <ActivityView flexGrow={1} />
+        <ActivityView
+          flexGrow={1}
+          minWidth={{
+            base: 'full',
+            sm: '400px',
+          }}
+        />
 
         <Divider orientation="vertical" borderWidth={'1px'} height="auto" />
 
         <Box
           width={{
             base: 'full',
-            xl: '400px',
+            md: '300px',
+            lg: '400px',
           }}
-          minWidth={{
-            xl: '400px',
+          maxWidth={{
+            base: 'full',
+            md: '300px',
+            lg: '400px',
           }}
           flexBasis={1}
           height="full"

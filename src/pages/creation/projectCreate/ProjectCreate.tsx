@@ -153,8 +153,6 @@ export const ProjectCreate = () => {
     }
   };
 
-  // const projectName = form.title.split(' ').join('').toLowerCase();
-
   const handleUpload = (url: string) => setForm({ ...form, image: url });
 
   const handleNext = () => {
@@ -360,7 +358,12 @@ export const ProjectCreate = () => {
           >
             <Text>Preview</Text>
             <Card padding="16px 10px" overflow="hidden" width="100%">
-              <ImageWithReload src={form.image} height="222px" width="350px" />
+              <ImageWithReload
+                src={form.image}
+                height="222px"
+                width="350px"
+                noCacheId={(Math.random() + 1).toString(36).substring(7)}
+              />
               <Text>geyser.fund/project</Text>
               <Text fontSize="28px" fontWeight={700}>
                 {form.title || 'Project Title'}

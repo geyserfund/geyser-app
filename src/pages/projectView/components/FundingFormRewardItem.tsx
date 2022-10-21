@@ -69,7 +69,7 @@ export const FundingFormRewardItem = ({
 }: IRewardItemProps) => {
   const classes = useStyles();
 
-  const { cost, name, backers, description, currency } = item;
+  const { cost, name, backers, description } = item;
 
   const [count, setCount] = useState(initialCount || 0);
   const { isOpen: focus, onOpen: setFocus, onClose: setBlur } = useDisclosure();
@@ -104,7 +104,11 @@ export const FundingFormRewardItem = ({
     >
       <HStack className={classes.upperContainer}>
         <VStack spacing={0}>
-          {currency === 'usd' ? (
+          <Text fontSize="14px" color="#1A1A1A" fontWeight="bold">{`$${
+            cost / 100
+          }`}</Text>
+          {/* Add Support for multiple currencies */}
+          {/* {currency === 'usd' ? (
             <Text
               fontSize="14px"
               color="#1A1A1A"
@@ -115,7 +119,7 @@ export const FundingFormRewardItem = ({
               fontFamily={fonts.mono}
               fontWeight={600}
             >{`${cost}`}</SatoshiAmount>
-          )}
+          )} */}
           <Text fontSize="10px" color="#1A1A1A" fontWeight="bold">
             per item
           </Text>

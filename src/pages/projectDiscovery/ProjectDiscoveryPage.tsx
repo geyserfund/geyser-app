@@ -22,12 +22,17 @@ import { History } from 'history';
 import { dimensions } from '../../constants';
 import { AlertBox } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
-import { OrderByOption, useProjects } from '../../hooks';
+import { useProjects } from '../../hooks';
 import { ProjectsGridCard } from '../../components/molecules/projectDisplay/ProjectsGridCard';
 import { RiSortDesc } from 'react-icons/ri';
 import { TopBanner } from '../landing/components';
 import { AppFooter } from '../../components/molecules';
-import { PaginationInput, Project } from '../../types/generated/graphql';
+import {
+  OrderByOptions,
+  PaginationInput,
+  Project,
+  ProjectsOrderByInput,
+} from '../../types/generated/graphql';
 
 type Props = {
   match: any;
@@ -42,7 +47,7 @@ export const ProjectDiscoveryPage = ({
 }: Props) => {
   const pagingItemLimit = 12;
   const [orderByOption, setOrderByOption] =
-    React.useState<OrderByOption>('Newest Projects');
+    React.useState<ProjectsOrderByInput>({ createdAt: OrderByOptions.Desc });
 
   const {
     isLoading,
@@ -50,7 +55,7 @@ export const ProjectDiscoveryPage = ({
     data: projects,
     fetchMore,
   } = useProjects({
-    orderBy: orderByOption,
+    orderBy: [orderByOption],
     itemLimit: pagingItemLimit,
   });
 
@@ -226,7 +231,7 @@ export const ProjectDiscoveryPage = ({
                     <MenuItem
                       fontWeight={'semibold'}
                       onClick={() => {
-                        setOrderByOption('Newest Projects');
+                        setOrderByOption({ createdAt: OrderByOptions.Desc });
                       }}
                     >
                       Newest Projects
@@ -235,7 +240,7 @@ export const ProjectDiscoveryPage = ({
                     <MenuItem
                       fontWeight={'semibold'}
                       onClick={() => {
-                        setOrderByOption('Oldest Projects');
+                        setOrderByOption({ createdAt: OrderByOptions.Asc });
                       }}
                     >
                       Oldest Projects
@@ -244,7 +249,7 @@ export const ProjectDiscoveryPage = ({
                     <MenuItem
                       fontWeight={'semibold'}
                       onClick={() => {
-                        setOrderByOption('Amount Funded');
+                        setOrderByOption({ balance: OrderByOptions.Desc });
                       }}
                     >
                       Amount Funded
