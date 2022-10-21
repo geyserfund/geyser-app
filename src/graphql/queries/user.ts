@@ -17,6 +17,9 @@ export const ME = gql`
       ownerOf {
         project {
           id
+          name
+          title
+          image
         }
       }
     }

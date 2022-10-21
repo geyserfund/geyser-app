@@ -41,7 +41,7 @@ const routesForHidingDropdownMenu = [
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
-const routesForHidingDashboardButton = [
+const routesForHidingMyProjectsButton = [
   `/${routerPathNames.project}/:projectId`,
   `/${routerPathNames.entry}/:entryId`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
@@ -80,6 +80,9 @@ export const TopNavBar = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
 
+  const currentProjectRouteMatch: match<Record<string, any>> | null =
+    useRouteMatch(`/${routerPathNames.projects}/:projectId/`);
+
   const {
     isOpen: isLoginAlertModalOpen,
     onOpen: onLoginAlertModalOpen,
@@ -111,8 +114,8 @@ export const TopNavBar = () => {
   const routeMatchesForHidingDropdownMenu =
     routesForHidingDropdownMenu.map(useRouteMatch);
 
-  const routeMatchesForHidingDashboardButton =
-    routesForHidingDashboardButton.map(useRouteMatch);
+  const routeMatchesForHidingMyProjectsButton =
+    routesForHidingMyProjectsButton.map(useRouteMatch);
 
   const routesMatchesForEnablingProjectLaunchButton =
     routesForEnablingProjectLaunchButton.map(useRouteMatch);
@@ -138,23 +141,23 @@ export const TopNavBar = () => {
     history.push(getPath('publicProjectLaunch'));
   };
 
-  const handleDashboardButtonPress = () => {
-    const ownedProjects = user.ownerOf;
+  const handleMyProjectsButtonPress = () => {
+    history.push(getPath('userProfile', user.id));
+  };
 
-    if (ownedProjects.length > 1) {
-      history.push(getPath('userProfile', user.id));
+  const handleProjectDashboardButtonPress = () => {
+    const projectName = currentProjectRouteMatch?.params?.projectId;
+
+    if (projectName) {
+      history.push(getPath('projectDashboard', projectName));
     } else {
-      const latestProject = user.ownerOf[0]?.project?.name;
-
-      // QUESTION: Should this ever be a concern? And if so, do we want a better
-      // fallback than the landing page?
-      const path = latestProject
-        ? getPath('projectDashboard', latestProject.id)
-        : getPath('landingPage');
-
-      history.push(path);
+      history.push(getPath('landingPage'));
     }
   };
+
+  const isViewingOwnProject: boolean = useMemo(() => {
+    return navigationContext.projectOwnerId === user.id;
+  }, [user.id, navigationContext.projectOwnerId]);
 
   const shouldTopNavBeHidden: boolean = useMemo(() => {
     return routeMatchesForHidingTopNav.some((routeMatch) => {
@@ -210,8 +213,8 @@ export const TopNavBar = () => {
    *    - a logged-in creator of a live or draft project.
    *  - Viewable:
    *    - Almost everywhere.
-   *    - It does not appear when a
-   *      creator is looking at another user's Project Page or Entry Page.
+   *    - It does not appear when:
+   *      - A creator is looking at another user's Project Page or Entry Page.
    *    - Hidden on Mobile -- it will be in the menu dropdown instead.
    */
   const shouldShowDashboardButton: boolean = useMemo(() => {
@@ -219,37 +222,65 @@ export const TopNavBar = () => {
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      (routeMatchesForHidingDashboardButton.every((routeMatch) => {
-        return Boolean(routeMatch) === false;
-      }) ||
-        navigationContext.projectOwnerId === user.id)
+      isViewingOwnProject
     );
-  }, [
-    user.id,
-    routeMatchesForHidingDashboardButton,
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    navigationContext.projectOwnerId,
-  ]);
+  }, [isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
     return (
       isMobile === true &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      (routeMatchesForHidingDashboardButton.every((routeMatch) => {
+      isViewingOwnProject
+    );
+  }, [isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject]);
+
+  /**
+   * Logic:
+   *  - Available to:
+   *    - a logged-in creator of a live or draft project.
+   *  - Viewable:
+   *    - Almost everywhere.
+   *    - It does not appear when:
+   *      - a creator is looking at another user's Project Page or Entry Page.
+   *      - a creator is looking their own Project Page or Entry Page.
+   *        - The "Dashboard" button will show for them instead.
+   *    - Hidden on Mobile -- it will be in the menu dropdown instead.
+   */
+  const shouldShowMyProjectsButton: boolean = useMemo(() => {
+    return (
+      isMobile === false &&
+      isLoggedIn &&
+      isUserAProjectCreator &&
+      isViewingOwnProject === false &&
+      routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      }) ||
-        navigationContext.projectOwnerId === user.id)
+      })
     );
   }, [
-    user.id,
-    routeMatchesForHidingDashboardButton,
+    routeMatchesForHidingMyProjectsButton,
     isMobile,
     isLoggedIn,
     isUserAProjectCreator,
-    navigationContext.projectOwnerId,
+    isViewingOwnProject,
+  ]);
+
+  const shouldShowMyProjectsButtonInsideDropdownMenu: boolean = useMemo(() => {
+    return (
+      isMobile === true &&
+      isLoggedIn &&
+      isUserAProjectCreator &&
+      isViewingOwnProject === false &&
+      routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
+        return Boolean(routeMatch) === false;
+      })
+    );
+  }, [
+    routeMatchesForHidingMyProjectsButton,
+    isMobile,
+    isLoggedIn,
+    isUserAProjectCreator,
+    isViewingOwnProject,
   ]);
 
   /**
@@ -322,9 +353,20 @@ export const TopNavBar = () => {
                 variant={'solid'}
                 fontSize="md"
                 backgroundColor="brand.primary400"
-                onClick={handleDashboardButtonPress}
+                onClick={handleProjectDashboardButtonPress}
               >
                 Dashboard
+              </ButtonComponent>
+            ) : null}
+
+            {shouldShowMyProjectsButton ? (
+              <ButtonComponent
+                variant={'solid'}
+                fontSize="md"
+                backgroundColor="brand.primary400"
+                onClick={handleMyProjectsButtonPress}
+              >
+                My Projects
               </ButtonComponent>
             ) : null}
 
@@ -357,10 +399,14 @@ export const TopNavBar = () => {
                 shouldShowDashboardMenuItem={
                   shouldShowDashboardButtonInsideDropdownMenu
                 }
+                shouldShowMyProjectsMenuItem={
+                  shouldShowMyProjectsButtonInsideDropdownMenu
+                }
                 shouldShowSignInMenuItem={
                   shouldShowSignInButtonInsideDropdownMenu
                 }
-                onDashboardSelected={handleDashboardButtonPress}
+                onDashboardSelected={handleProjectDashboardButtonPress}
+                onMyProjectsSelected={handleMyProjectsButtonPress}
                 onSignInSelected={loginOnOpen}
                 onSignOutSelected={logout}
               />
