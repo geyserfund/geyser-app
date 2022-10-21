@@ -1,8 +1,12 @@
+import { Modal } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { AuthModal } from '../components/molecules';
+import { getPath } from '../constants';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
+import { ProjectType, OwnerOf, Project } from '../types/generated/graphql';
+
 import { hasTwitterAccount } from '../utils';
 
 interface IPrivateRoute {
@@ -27,6 +31,10 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     history.location.pathname,
   );
   const isProjectCreationPath = /\/launch/.test(history.location.pathname);
+  const params = useParams<{ projectId: string }>();
+  const isViewerProjectOwner = user.ownerOf?.find(
+    ({ project }: any) => project.id === params.projectId,
+  );
 
   useEffect(() => {
     if (!loading) {
@@ -60,17 +68,31 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     return 'Login to continue';
   };
 
+  const renderUnauthorised = () => (
+    <AuthModal
+      title={modalTitle()}
+      description={modalDescription()}
+      showLightning={!isProjectCreationPath}
+      isOpen={loginIsOpen}
+      privateRoute={true}
+      onClose={loginOnClose}
+    />
+  );
+
+  const isForbidden = () => {
+    // 1. User trying to access the project creation flow of a project he doesn't own
+    if (user && isProjectCreationPath && !isViewerProjectOwner) return true;
+
+    // TODO: 2. User trying to access the entry creation flow of an entry he is not the author of
+    return false;
+  };
+
+  const renderForbidden = () => history.push(getPath('index'));
+
   return (
     <>
       {children}
-      <AuthModal
-        title={modalTitle()}
-        description={modalDescription()}
-        showLightning={!isProjectCreationPath}
-        isOpen={loginIsOpen}
-        privateRoute={true}
-        onClose={loginOnClose}
-      />
+      {isForbidden() ? renderForbidden() : renderUnauthorised()}
     </>
   );
 };
