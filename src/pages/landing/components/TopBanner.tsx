@@ -45,9 +45,7 @@ export const TopBanner = () => {
   }, [summaryError]);
 
   const handleLaunch = () => {
-    const routePath = getPath(
-      isLoggedIn ? 'privateProjectLaunch' : 'publicProjectLaunch',
-    );
+    const routePath = getPath('publicProjectLaunch');
 
     history.push(routePath);
   };

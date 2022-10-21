@@ -70,7 +70,7 @@ export const Wallet = () => {
   );
 
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { name: params.projectId } },
+    variables: { where: { id: params.projectId } },
     onError() {
       toast({
         title: 'Error fetching project',
@@ -87,6 +87,8 @@ export const Wallet = () => {
   };
 
   const handleNext = async () => {
+    console.log('PROJECT DATA', projectData);
+
     if (node?.name) {
       try {
         const createWalletInput = {
@@ -109,7 +111,7 @@ export const Wallet = () => {
         };
 
         await createWallet({ variables: { input: createWalletInput } });
-        history.push(`/projects/${params.projectId}`);
+        history.push(`/projects/${projectData.project.name}`);
       } catch (error) {
         toast({
           title: 'Something went wrong',
@@ -127,7 +129,7 @@ export const Wallet = () => {
             },
           },
         });
-        history.push(`/projects/${params.projectId}`);
+        history.push(`/projects/${projectData.project.name}`);
       } catch (error) {
         toast({
           title: 'Something went wrong',

@@ -104,7 +104,7 @@ export const MilestoneAndRewards = () => {
   );
 
   const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { name: params.projectId } },
+    variables: { where: { id: params.projectId } },
     fetchPolicy: 'network-only',
     onError() {
       toast({
