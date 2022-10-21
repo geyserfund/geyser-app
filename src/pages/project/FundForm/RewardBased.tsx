@@ -30,7 +30,8 @@ export const RewardBased = ({
     );
   }
 
-  const getRewardCount = (rewardId: number) => state?.rewards[`${rewardId}`];
+  const getRewardCount = (rewardId: number) =>
+    state?.rewards ? state?.rewards[`${rewardId}` as keyof ProjectReward] : 0;
 
   return (
     <VStack
@@ -59,7 +60,10 @@ export const RewardBased = ({
             {rewards.map((reward: ProjectReward) => (
               <FundingFormRewardItem
                 key={reward.id}
-                item={reward}
+                /* Hard-coding USD as reward currency as a quick fix. Seeing as it is used accross several places, a
+                 * sensible refactor would be to set the ProjectCurrency as a a shared context variable.
+                 */
+                item={{ ...reward, currency: 'usd' }}
                 count={getRewardCount(reward.id)}
                 updateCount={updateReward}
               />

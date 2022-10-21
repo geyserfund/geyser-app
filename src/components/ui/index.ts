@@ -24,3 +24,4 @@ export * from './ExternalAccountComponent';
 export * from './ImageWithReload';
 export * from './ProgressBar';
 export * from './ProjectAvatarLink';
+export * from './ProjectStatusLabel';

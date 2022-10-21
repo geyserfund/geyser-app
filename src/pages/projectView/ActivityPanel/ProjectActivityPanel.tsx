@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthModal } from '../../../components/molecules';
 import {
   IFundingTx,
-  IProject,
   IFundingInput,
   IRewardFundingInput,
   IFunder,
@@ -155,10 +154,10 @@ export const ProjectActivityPanel = ({
       },
     };
 
-    if (Object.entries(state.rewards).length > 0) {
+    if (state.rewards && Object.entries(state.rewards).length > 0 && rewards) {
       const rewardsArray = Object.keys(rewards).map((key) => ({
         id: parseInt(key, 10),
-        quantity: rewards[key],
+        quantity: rewards[key as keyof ProjectReward],
       }));
       const filteredRewards = rewardsArray.filter(
         (reward) => reward.quantity !== 0,

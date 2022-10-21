@@ -1,5 +1,4 @@
 import { Box, Text, HStack } from '@chakra-ui/layout';
-import { Badge } from '@chakra-ui/react';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { getAvatarMetadata, computeFunderBadges } from '../../../helpers';
@@ -49,12 +48,9 @@ export const ProjectFundingLeaderboardFeedItem = ({
             <AnonymousAvatar seed={funder.id} />
           ) : (
             <LinkableAvatar
-              imageSrc={funder.user?.imageUrl || ''}
-              avatarUsername={funder.user?.username || ''}
+              imageSrc={avatarMetadata.image}
+              avatarUsername={avatarMetadata.username || ''}
               userProfileID={funder.user?.id}
-              // fontSize={'14px'}
-              // imageSize={'20px'}
-              // textColor="brand.neutral900"
               badgeNames={funderBadges.map((badge) => badge.badge)}
               badgeElements={renderFunderBadges(funderBadges)}
             />
