@@ -115,7 +115,6 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
       totalAmount: rewardsCost + state.donationAmount,
     };
     _setState(newState);
-
   };
 
   const resetForm = () => {
