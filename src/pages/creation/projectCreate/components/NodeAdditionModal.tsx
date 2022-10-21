@@ -53,13 +53,9 @@ export const NodeAdditionModal = ({
   ) => {
     setFormError({});
 
-    if (event) {
-      const { name, value } = event.target;
+    const { name, value } = event.target;
 
-      if (name) {
-        setForm({ ...form, [name]: value });
-      }
-    }
+    setForm({ ...form, [name]: value });
   };
 
   const handleVoltageNodeToggled = (
@@ -68,10 +64,6 @@ export const NodeAdditionModal = ({
     setFormError({});
 
     const isVoltageNode = event.target.checked;
-
-    if (isVoltageNode && Boolean(form.hostname) === false) {
-      // setForm({ ...form, hostname: 'nodename.m.voltageapp.io' });
-    }
 
     setIsVoltage(isVoltageNode);
   };
@@ -227,7 +219,7 @@ export const NodeAdditionModal = ({
             <VStack width="100%" alignItems="flex-start">
               <Text>Public Key (Identity Pubkey)</Text>
               <TextArea
-                minHeight={'10em'}
+                minHeight={'6em'}
                 name="publicKey"
                 placeholder="0330ba2ac70aa1566d3d07524248ee8a7861aaebdc6d46c8ccd016bfe20b76c995"
                 onChange={handleTextChange}
@@ -241,7 +233,7 @@ export const NodeAdditionModal = ({
               <TextArea
                 minHeight={'10em'}
                 name="invoiceMacaroon"
-                placeholder="AgEDbG5kAlgRChAGp+sQl/hVmpZQVWvphmk/EgEwGhYKB2FkZHJlc3MSBHJlYWWSBXdyaXRlGhcKCGrudm9pY2VzEgRyZZFkEgV3cml0ZRoPCgdvbmNoYWluEgRyZWFkAAAGIK8pI70yQT8GuVhykez0PMpNt5kEeYsmuvwdnLe4JfFM"
+                placeholder="cml0ZRoKCGbG5kAlgRChAGp+sQl/hVmpZQVWvphmk/EgEwGhYKB2FkZHJlc3MSBHJlYWWSBXdyaXRlGhcrudm9pY2VzEgRyZZFkEgV3PCgdvbmNoYWluEgRyZWFkAAAGIK8pI70yQT8GuVhykez0PMpNt5kEeYsmuvwdnLe4JfFMAgEE"
                 onChange={handleTextChange}
                 value={form.invoiceMacaroon}
                 error={formError.invoiceMacaroon}
@@ -253,9 +245,9 @@ export const NodeAdditionModal = ({
                 <VStack width="100%" alignItems="flex-start">
                   <Text>TLS Certificate (base64)</Text>
                   <TextArea
-                    minHeight={'10em'}
+                    minHeight={'6em'}
                     name="tlsCert"
-                    placeholder="LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNYakNDQWdPZ0FSQU52Tyt1UUtDMjlrWnlDNnNjR05QOXd3Q2dZSUt...VzQ2NUR2OTdiVC84NWYzeUZrYWFNTzdCWU51SVRxSDlLZmc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
+                    placeholder="LS0tLS1CRUdJTiBDRVJU.....zeUZrYWFNTzdCWU51SVRxSRVJUSUZJQ0FURS0tLS0tCg=="
                     onChange={handleTextChange}
                     value={form.tlsCert}
                     error={formError.tlsCert}
