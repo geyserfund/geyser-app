@@ -43,8 +43,6 @@ interface IAddRewards {
 }
 
 export const defaultReward: ProjectReward = {
-  // projectId: 0,
-  // projectRewardId: 0,
   id: 0,
   name: '',
   description: '',
@@ -56,14 +54,6 @@ export const defaultReward: ProjectReward = {
   sold: 0,
 };
 
-// export const defaultCreateReward: CreateProjectRewardInput = {
-//   name: '',
-//   projectId: 0,
-//   description: '',
-//   cost: 0,
-//   image: '',
-// };
-
 export const AddRewards = ({
   isOpen,
   onClose,
@@ -73,8 +63,6 @@ export const AddRewards = ({
   isSatoshi,
 }: IAddRewards) => {
   const { toast } = useNotification();
-
-  // UpdateProjectRewardInput | CreateProjectRewardInput
   const [_rewards, _setRewards] = useState<ProjectReward>(
     availableReward || defaultReward,
   );
@@ -132,8 +120,6 @@ export const AddRewards = ({
 
   useEffect(() => {
     if (availableReward && availableReward !== rewards.current) {
-      console.log(availableReward);
-
       setRewards(availableReward);
     }
   }, [availableReward]);
@@ -287,18 +273,13 @@ export const AddRewards = ({
                   name="cost"
                   type="number"
                   onChange={handleTextChange}
-                  value={rewards.current.cost}
+                  value={rewards.current.cost / 100} // convert from cents to dollars
                   isInvalid={formError.cost}
                 />
               </InputGroup>
               {formError.cost && (
                 <Text fontSize="12px" color="red.500">
                   {formError.cost}
-                </Text>
-              )}
-              {!formError.cost && (
-                <Text fontSize="12px">
-                  Reward currency is the same as milestone
                 </Text>
               )}
             </VStack>
