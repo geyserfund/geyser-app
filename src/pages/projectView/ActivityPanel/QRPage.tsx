@@ -122,7 +122,7 @@ export const QRPage = ({
         top="0px"
         onClick={handleCloseButton}
       />
-      <SectionTitle> Confirm & fund</SectionTitle>
+      <SectionTitle> Confirm & Contribute</SectionTitle>
 
       <ContributionInfoBox
         project={project as Project}
@@ -132,7 +132,6 @@ export const QRPage = ({
         funderUsername={state.funderUsername}
         funderEmail={state.email}
         funderAvatarURL={state.funderAvatarURL}
-        referenceCode={fundingTx.uuid}
       />
 
       <Card width="100%" borderRadius="5px" overflow="auto">
