@@ -4,15 +4,15 @@ import { Card, SatoshiAmount, ProjectStatusLabel } from '../../components/ui';
 import { LightningQR } from './components/LightningQR';
 import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
-import { fundingStages, IFundingStages } from '../../constants';
 import { useAuthContext } from '../../context';
 import { Project } from '../../types/generated/graphql';
+
 export const DetailsCard = ({
   project,
-  setFundState,
+  fundButtonFunction,
 }: {
   project: Project;
-  setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
+  fundButtonFunction: any;
 }) => {
   const { user } = useAuthContext();
   const owner = project.owners[0];
@@ -49,7 +49,6 @@ export const DetailsCard = ({
       const currentFund = project.funders.find(
         (funder) => funder?.user?.id === user.id,
       );
-      console.log(currentFund);
 
       if (!currentFund) {
         return null;
@@ -81,12 +80,6 @@ export const DetailsCard = ({
         {contributorsCount === 1 ? 'contributor' : 'contributors'} |
       </Text>
     );
-  };
-
-  const handleFundProject = () => {
-    // eslint-disable-next-line no-debugger
-    debugger;
-    setFundState(fundingStages.form);
   };
 
   return (
@@ -133,7 +126,7 @@ export const DetailsCard = ({
             isFullWidth
             backgroundColor="brand.primary"
             leftIcon={<BoltIcon />}
-            onClick={handleFundProject}
+            onClick={fundButtonFunction}
           >
             Fund this project
           </Button>

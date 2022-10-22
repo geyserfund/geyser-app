@@ -27,22 +27,16 @@ import {
   TextArea,
   TextBox,
 } from '../../../components/ui';
-import {
-  colors,
-  MAX_FUNDING_AMOUNT_USD,
-  projectTypes,
-  SelectCountryOptions,
-} from '../../../constants';
+import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
-import { IProjectType } from '../../../interfaces';
-import { DonationBased, RewardBased } from '../../project/FundForm';
+import { IProjectReward, IProjectType } from '../../../interfaces';
+import { DonationBased, RewardBased } from '../FundForm';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { IGif } from '@giphy/js-types';
 import { hasShipping, useNotification } from '../../../utils';
-import { ProjectReward } from '../../../types/generated/graphql';
 
 interface IPaymentPageProps {
   isMobile: boolean;
@@ -55,7 +49,7 @@ interface IPaymentPageProps {
   setState: any;
   handleFund: () => void;
   type: IProjectType;
-  rewards?: ProjectReward[];
+  rewards?: IProjectReward[];
   name: string;
 }
 
@@ -89,15 +83,14 @@ export const PaymentPage = ({
     }
   };
 
-  // TODO: remove hardcoded API key
   const gf = new GiphyFetch('AqeIUD33qyHnMwLDSDWP0da9lCSu0LXx');
   const fetchGifs = (offset: number) =>
     gf.search(gifSearch, { offset, sort: 'relevant', limit: 9 });
 
   const validateFundingAmount = () => {
-    if (getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD) {
+    if (getTotalAmount('dollar', name) > 10000) {
       toast({
-        title: `Payment above ${MAX_FUNDING_AMOUNT_USD} is not allowed at the moment.`,
+        title: 'Payment above $10000 is not allowed at the moment.',
         description:
           'Please update the amount, or contact us for donating a higher amount.',
         status: 'error',
@@ -107,7 +100,7 @@ export const PaymentPage = ({
 
     if (getTotalAmount('sats', name) < 1) {
       toast({
-        title: 'The payment minimum is 1 satoshi.',
+        title: 'Payment below 1 sats is not allowed at the moment.',
         description: 'Please update the amount.',
         status: 'error',
       });
@@ -134,7 +127,7 @@ export const PaymentPage = ({
       case projectTypes.reward:
         return (
           <Box width="100%" overflowY="auto">
-            <RewardBased {...{ rewards, setState, updateReward, state }} />
+            <RewardBased {...{ rewards, setState, updateReward }} />
             <Divider
               borderTopWidth="3px"
               borderBottomWidth="0px"

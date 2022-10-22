@@ -1,7 +1,7 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { Head } from '../../utils/Head';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
@@ -11,19 +11,18 @@ import { useFundingFlow, useFundState } from '../../hooks';
 import { useAuthContext } from '../../context';
 import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
 import { EntryContainer } from './EntryContainer';
-import { IProject } from '../../interfaces';
-import { TEntryData } from '../../interfaces/entry';
+import { Entry, Project, ProjectReward } from '../../types/generated/graphql';
+import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
+import { compactMap } from '../../utils/compactMap';
 
 export const EntryPage = () => {
   const { entryId } = useParams<{ entryId: string }>();
-  const { state } = useLocation<{ loggedOut?: boolean }>();
   const history = useHistory();
 
   const { setNav } = useAuthContext();
 
   const [detailOpen, setDetailOpen] = useState(true);
   const fundingFlow = useFundingFlow();
-  const { setFundState } = fundingFlow;
 
   useEffect(() => {
     if (entryId) {
@@ -89,8 +88,8 @@ export const EntryPage = () => {
 };
 
 interface IEntryViewWrapper {
-  project: IProject;
-  entry: TEntryData;
+  project: Project;
+  entry: Entry;
   detailOpen: boolean;
   fundingFlow: any;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -105,14 +104,16 @@ const EntryViewWrapper = ({
   setDetailOpen,
   fundingFlow,
 }: IEntryViewWrapper) => {
-  const fundForm = useFundState({ rewards: project.rewards });
+  const rewards =
+    (project.rewards && compactMap<ProjectReward>(project.rewards)) || [];
+  const fundForm = useFundState({ rewards });
   const { setFundState } = fundingFlow;
   return (
     <>
       <Head
         title={`${entry.title} - ${project.title}`}
         description={entry.description}
-        image={entry.image}
+        image={entry.image || entry.project?.image || GeyserTempImage}
       />
       <EntryContainer
         entry={entry}

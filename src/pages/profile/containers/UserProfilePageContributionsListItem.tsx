@@ -1,5 +1,5 @@
 import React from 'react';
-import { FundingTx } from '../../../types/generated/graphql';
+import { FundingTx, Project } from '../../../types/generated/graphql';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules/projectActivity/ProjectFundingContributionsFeedItem';
 import { gql, useQuery } from '@apollo/client';
 
@@ -24,10 +24,17 @@ const GET_FUNDING_TX_FOR_USER_CONTRIBUTION = gql`
       source
       funder {
         id
+        user {
+          id
+          username
+          imageUrl
+        }
       }
       sourceResource {
         ... on Project {
           id
+          name
+          title
         }
         ... on Entry {
           id
@@ -42,7 +49,7 @@ type ResponseData = {
 };
 
 type QueryVariables = {
-  id: number;
+  fundingTxId: number;
 };
 
 export const UserProfilePageContributionsListItem = ({
@@ -50,10 +57,18 @@ export const UserProfilePageContributionsListItem = ({
 }: Props) => {
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_FUNDING_TX_FOR_USER_CONTRIBUTION,
-    { variables: { id: fundingTxID } },
+    { variables: { fundingTxId: fundingTxID } },
   );
 
+  const project =
+    data?.fundingTx.sourceResource?.__typename === 'Project'
+      ? (data.fundingTx.sourceResource! as Project)
+      : undefined;
+
   return data ? (
-    <ProjectFundingContributionsFeedItem fundingTx={data.fundingTx} />
+    <ProjectFundingContributionsFeedItem
+      fundingTx={data.fundingTx}
+      linkedProject={project}
+    />
   ) : null;
 };

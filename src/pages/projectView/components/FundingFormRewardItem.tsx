@@ -104,7 +104,7 @@ export const FundingFormRewardItem = ({
     >
       <HStack className={classes.upperContainer}>
         <VStack spacing={0}>
-          <Text fontSize="14px" color="#1A1A1A" fontWeight="bold">{`$${
+          <Text fontSize="14px" color={colors.textBlack} fontWeight="bold">{`$${
             cost / 100
           }`}</Text>
           {/* Add Support for multiple currencies */}
@@ -120,7 +120,7 @@ export const FundingFormRewardItem = ({
               fontWeight={600}
             >{`${cost}`}</SatoshiAmount>
           )} */}
-          <Text fontSize="10px" color="#1A1A1A" fontWeight="bold">
+          <Text fontSize="10px" color={colors.textBlack} fontWeight="bold">
             per item
           </Text>
         </VStack>

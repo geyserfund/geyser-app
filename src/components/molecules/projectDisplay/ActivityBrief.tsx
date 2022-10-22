@@ -3,10 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
 import { fonts } from '../../../constants/fonts';
-import { IProjectMilestone } from '../../../interfaces';
 import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
 import { SatoshiAmount } from '../../ui';
-import { Project } from '../../../types/generated/graphql';
+import { Project, ProjectMilestone } from '../../../types/generated/graphql';
 
 interface IActivityBrief {
   loading: boolean;
@@ -29,12 +28,12 @@ const useStyles = createUseStyles({
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const classes = useStyles();
 
-  const [currentMilestone, setCurrentMilestone] = useState<IProjectMilestone>();
+  const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>();
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0);
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
-      let selectedMilestone: IProjectMilestone | undefined;
+      let selectedMilestone: ProjectMilestone | undefined;
 
       project.milestones.map((milestone, index) => {
         if (
@@ -42,8 +41,8 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           milestone.amount >= project.balance &&
           !selectedMilestone
         ) {
-          selectedMilestone = milestone as IProjectMilestone;
-          setCurrentMilestone(milestone as IProjectMilestone);
+          selectedMilestone = milestone;
+          setCurrentMilestone(milestone);
           setMilestoneIndex(index + 1);
         }
       });

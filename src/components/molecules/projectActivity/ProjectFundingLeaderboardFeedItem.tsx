@@ -48,9 +48,9 @@ export const ProjectFundingLeaderboardFeedItem = ({
             <AnonymousAvatar seed={funder.id} />
           ) : (
             <LinkableAvatar
-              avatarUsername={avatarMetadata.username || ''}
-              userProfileID={funder.user!.id}
               imageSrc={avatarMetadata.image}
+              avatarUsername={avatarMetadata.username || ''}
+              userProfileID={funder.user?.id}
               badgeNames={funderBadges.map((badge) => badge.badge)}
               badgeElements={renderFunderBadges(funderBadges)}
             />

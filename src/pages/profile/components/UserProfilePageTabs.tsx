@@ -49,7 +49,7 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
     },
     {
       title: 'Contributions',
-      itemCount: profileUser.contributions.length,
+      itemCount: profileUser.fundingTxs.length,
       component: UserProfilePageContributionsList,
     },
   ];

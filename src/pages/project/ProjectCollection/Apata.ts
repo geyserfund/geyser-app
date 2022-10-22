@@ -6,7 +6,7 @@ const projectBlocks: IProjectBlock[] = [
     title: '',
     body: [],
     podcast:
-      'https://soundcloud.com/user-44010708/bitcoin-education-in-nigeria-004?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
+      'https://anchor.fm/geyser-fund/embed/episodes/Bitcoin-Education-in-Nigeria-004-e1iqr8g',
     blockType: 'PL',
   },
   {

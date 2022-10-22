@@ -75,10 +75,12 @@ export const UserProfilePageHeader = ({
             >
               Create
             </MenuButton>
+
             <MenuList>
               <MenuItem onClick={onProjectCreateSelected}>
                 Create A Project
               </MenuItem>
+
               <MenuItem color="brand.gray300" pointerEvents="none">
                 Create a Project Entry
               </MenuItem>

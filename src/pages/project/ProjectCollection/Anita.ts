@@ -4,7 +4,8 @@ const projectBlocks: IProjectBlock[] = [
     key: 'podcast',
     title: '',
     body: [],
-    podcast: 'https://soundcloud.com/user-44010708/bitcoin-for-freedom-003',
+    podcast:
+      'https://anchor.fm/geyser-fund/embed/episodes/Bitcoin-for-Fairness-003-e1ipana',
     blockType: 'PL',
   },
   {
