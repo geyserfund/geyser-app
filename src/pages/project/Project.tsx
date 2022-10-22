@@ -72,10 +72,10 @@ export const Project = () => {
               project={project}
               {...{ detailOpen, setDetailOpen, setFundState }}
             />
-            <ProjectActivityPanel
+            {/* <ProjectActivityPanel
               project={project}
               {...{ detailOpen, setDetailOpen, fundingFlow }}
-            />
+            /> */}
           </Box>
         </Box>
       ) : (

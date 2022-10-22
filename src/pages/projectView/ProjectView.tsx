@@ -116,7 +116,6 @@ const ProjectViewContainer = ({
      * for an undefined value.
      */
     rewards: (project.rewards as ProjectReward[]) || undefined,
-    rewardCurrency: RewardCurrency.Usd,
   });
 
   const { setFundState, fundState } = fundingFlow;
