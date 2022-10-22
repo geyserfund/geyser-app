@@ -4,15 +4,14 @@ import { Card, SatoshiAmount, ProjectStatusLabel } from '../../components/ui';
 import { LightningQR } from './components/LightningQR';
 import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
-import { fundingStages, IFundingStages } from '../../constants';
 import { useAuthContext } from '../../context';
 import { Project } from '../../types/generated/graphql';
 export const DetailsCard = ({
   project,
-  setFundState,
+  fundButtonFunction,
 }: {
   project: Project;
-  setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
+  fundButtonFunction: any;
 }) => {
   const { user } = useAuthContext();
   const owner = project.owners[0];
@@ -82,10 +81,6 @@ export const DetailsCard = ({
     );
   };
 
-  const handleFundProject = () => {
-    setFundState(fundingStages.form);
-  };
-
   return (
     <Card padding="24px">
       <VStack alignItems="flex-start" width="100%" spacing="18px">
@@ -130,7 +125,7 @@ export const DetailsCard = ({
             isFullWidth
             backgroundColor="brand.primary"
             leftIcon={<BoltIcon />}
-            onClick={handleFundProject}
+            onClick={fundButtonFunction}
           >
             Fund this project
           </Button>

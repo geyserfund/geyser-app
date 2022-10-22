@@ -151,7 +151,10 @@ export const DetailsContainer = ({
             w="100%"
             padding={isMobile ? '20px 10px 50px 10px' : '0px 40px 70px 40px'}
           >
-            <DetailsCard project={project} setFundState={setFundState} />
+            <DetailsCard
+              project={project}
+              fundButtonFunction={handleFundClick}
+            />
 
             {isViewerProjectOwner && project.wallets.length === 0 && (
               <VStack
