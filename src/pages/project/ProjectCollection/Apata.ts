@@ -1,43 +1,42 @@
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
 
 const projectBlocks: IProjectBlock[] = [
-  {
-    key: 'podcast',
-    title: '',
-    body: [],
-    podcast:
-      'https://soundcloud.com/user-44010708/bitcoin-education-in-nigeria-004?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
-    blockType: 'PL',
-  },
-  {
-    key: 'title1',
-    title: '',
-    body: [
-      'I plan on going street to street enlightening youths about bitcoin and lightning.',
-      ' I noticed that the key to massive adoption of bitcoin and lightning in Nigeria is by talking to youths in the street who are ready to listen and sharing Satoshis with them if they are new to Bitcoin. I will also share satoshis to bitcoiners who answer some certain questions. I also plan on teaching them easy ways to stack satoshis like thundr games e.t.c.. i believe Nigeria can transform from an underdeveloped country to a super developed country with the help of bitcoin and lightning. I would love all bitcoiners around the world who buy this idea and vision to help support massively and make it a reality. I plan on sharing 80% of the SATs donated to the street and the remaining 20% for transportation and feeding. ',
-      ' Thanks.',
-    ],
-    images: [0, 5],
-    blockType: 'PL',
-  },
-  {
-    key: 'title1',
-    title: '',
-    body: [
-      'I also plan on hosting another Bitcoin Conference as we hosted the 1st Lagos Bitcoin Conference, but this time we are hosting it at Kwara state around the University of Ilorin. I would love to host it in the next two months.',
-    ],
-    images: [3, 4],
-    blockType: 'PL',
-  },
-  {
-    key: 'aboutMe',
-    title: 'About me',
-    body: [
-      "A visionary, game changer, speaker, author, mentor, bitcoin investor, and dedicated entrepreneur. Apata Johnson is on a mission to shift our culture, and won't stop until his vision becomes a reality. Johnson can't stand traditional education, and feels our society isn't doing enough to educate, teach, and train our youth on how to REALLY thrive in this tough new age economy. He's taken it upon himself to guide and educate our millennials on what it takes to not only succeed, but thrive. Johnson's aim is to make Nigeria, Africa and the World a cryptocurrency world [ Bitcoin and lightning world]. Johnson has seen a lot of success over the years, but even more failure. He's used his past to design his ideal future, and has dedicated the last 4 years to helping people maximize their potentials, and also create bitcoin awareness across all social media.  Johnson is the C.E.O of LUMINOUS EXCHANGE",
-    ],
-    images: [2],
-    blockType: 'PL',
-  },
+	{
+		key: 'podcast',
+		title: '',
+		body: [],
+		podcast: 'https://anchor.fm/geyser-fund/embed/episodes/Bitcoin-Education-in-Nigeria-004-e1iqr8g',
+		blockType: 'PL',
+	},
+	{
+		key: 'title1',
+		title: '',
+		body: [
+			'I plan on going street to street enlightening youths about bitcoin and lightning.',
+			' I noticed that the key to massive adoption of bitcoin and lightning in Nigeria is by talking to youths in the street who are ready to listen and sharing Satoshis with them if they are new to Bitcoin. I will also share satoshis to bitcoiners who answer some certain questions. I also plan on teaching them easy ways to stack satoshis like thundr games e.t.c.. i believe Nigeria can transform from an underdeveloped country to a super developed country with the help of bitcoin and lightning. I would love all bitcoiners around the world who buy this idea and vision to help support massively and make it a reality. I plan on sharing 80% of the SATs donated to the street and the remaining 20% for transportation and feeding. ',
+			' Thanks.',
+		],
+		images: [0, 5],
+		blockType: 'PL',
+	},
+	{
+		key: 'title1',
+		title: '',
+		body: [
+			'I also plan on hosting another Bitcoin Conference as we hosted the 1st Lagos Bitcoin Conference, but this time we are hosting it at Kwara state around the University of Ilorin. I would love to host it in the next two months.',
+		],
+		images: [3, 4],
+		blockType: 'PL',
+	},
+	{
+		key: 'aboutMe',
+		title: 'About me',
+		body: [
+			'A visionary, game changer, speaker, author, mentor, bitcoin investor, and dedicated entrepreneur. Apata Johnson is on a mission to shift our culture, and won\'t stop until his vision becomes a reality. Johnson can\'t stand traditional education, and feels our society isn\'t doing enough to educate, teach, and train our youth on how to REALLY thrive in this tough new age economy. He\'s taken it upon himself to guide and educate our millennials on what it takes to not only succeed, but thrive. Johnson\'s aim is to make Nigeria, Africa and the World a cryptocurrency world [ Bitcoin and lightning world]. Johnson has seen a lot of success over the years, but even more failure. He\'s used his past to design his ideal future, and has dedicated the last 4 years to helping people maximize their potentials, and also create bitcoin awareness across all social media.  Johnson is the C.E.O of LUMINOUS EXCHANGE',
+		],
+		images: [2],
+		blockType: 'PL',
+	},
 ];
 
 const projectDetails: IProjectDetail = {
