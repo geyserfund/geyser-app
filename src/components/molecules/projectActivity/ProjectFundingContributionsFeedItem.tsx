@@ -32,7 +32,7 @@ export const ProjectFundingContributionsFeedItem = ({
   const { funder } = fundingTx;
 
   const isFunderAnonymous = Boolean(funder?.user) === false;
-  const timeAgo = getDaysAgo(funder?.confirmedAt || '');
+  const timeAgo = getDaysAgo(fundingTx?.paidAt || '');
   const wasMadeOnChain = fundingTx.onChain;
 
   const avatarMetadata = getAvatarMetadata({
@@ -123,9 +123,8 @@ export const ProjectFundingContributionsFeedItem = ({
 
           <HStack color="brand.neutral700" spacing={2}>
             <Text fontSize={'xs'}>
-              {timeAgo
-                ? `${wasMadeOnChain ? '⛓' : '⚡️'} ${timeAgo} ago`
-                : 'Some time ago'}
+              {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
+              {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
             </Text>
 
             {linkedProject ? (
