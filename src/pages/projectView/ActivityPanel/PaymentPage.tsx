@@ -35,7 +35,7 @@ import {
 } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
-import { IProjectReward, IProjectType } from '../../../interfaces';
+import { IProjectType } from '../../../interfaces';
 import { DonationBased, RewardBased } from '../../project/FundForm';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';

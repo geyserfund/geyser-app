@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, VStack } from '@chakra-ui/react';
 import { DonationInput } from '../../../components/molecules';
 import { SectionTitle } from '../../../components/ui';
-import { IProjectReward, IRewardCount } from '../../../interfaces';
+import { IRewardCount } from '../../../interfaces';
 import { IFundForm } from '../../../hooks';
 import { FundingFormRewardItem } from '../../projectView/components/FundingFormRewardItem';
 import { ProjectReward } from '../../../types/generated/graphql';
@@ -63,7 +63,7 @@ export const RewardBased = ({
                 /* Hard-coding USD as reward currency as a quick fix. Seeing as it is used accross several places, a
                  * sensible refactor would be to set the ProjectCurrency as a a shared context variable.
                  */
-                item={{ ...reward, currency: 'usd' }}
+                item={reward}
                 count={getRewardCount(reward.id)}
                 updateCount={updateReward}
               />

@@ -220,7 +220,9 @@ export const ProjectActivityPanel = ({
               setTarget,
               updateReward,
               handleFund,
-              rewards: project.rewards as ProjectReward[],
+              rewards: project.rewards?.filter(
+                (reward) => reward !== null,
+              ) as ProjectReward[],
               type: project.type,
               name: project.name,
             }}
