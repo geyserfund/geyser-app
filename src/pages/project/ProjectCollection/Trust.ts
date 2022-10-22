@@ -109,27 +109,28 @@ const projectBlocks: IProjectBlock[] = [
 		body: [
 			'Special thanks to Swan Bitcoin for sponsoring this project.',
 
-			'Twitter: [https://twitter.com/SwanBitcoin](https://twitter.com/SwanBitcoin)',
-			'Website: [https://www.swanbitcoin.com/](https://www.swanbitcoin.com/)',
-		],
-		images: [2],
-		blockType: 'PL',
-	},
-	{
-		key: 'aboutMe',
-		title: 'About me',
-		body: [
-			'Jamie King is an award-winning documentary filmmaker, whose previous films have reached millions of viewers online, been screened at film festivals world wide and sold to major television networks. He is also an advocate for decentralization – his first film series STEAL THIS FILM focused on the benefits of peer-to-peer sharing for creators, and as early as 2011 his film distribution platform VODO trialled p2p distribution for filmmakers alongside Bitcoin-based donations. Now Jamie is focused on creating a mainstream series that can bring the story of Bitcoin to a multi-million audience via a major streaming service.',
-		],
-		blockType: 'PL',
-	},
+      'Twitter: [https://twitter.com/SwanBitcoin](https://twitter.com/SwanBitcoin)',
+      'Website: [https://www.swanbitcoin.com/](https://www.swanbitcoin.com/)',
+    ],
+    images: [2],
+    blockType: 'PL',
+  },
+  {
+    key: 'aboutMe',
+    title: 'About me',
+    body: [
+      'Jamie King is an award-winning documentary filmmaker, whose previous films have reached millions of viewers online, been screened at film festivals world wide and sold to major television networks. He is also an advocate for decentralization – his first film series STEAL THIS FILM focused on the benefits of peer-to-peer sharing for creators, and as early as 2011 his film distribution platform VODO trialled p2p distribution for filmmakers alongside Bitcoin-based donations. Now Jamie is focused on creating a mainstream series that can bring the story of Bitcoin to a multi-million audience via a major streaming service.',
+    ],
+    blockType: 'PL',
+  },
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: '',
-	idea: 'How will we survive in a world after trust? Could Bitcoin be the answer? From the director of This Machine Greens and co-producer Swan Bitcoin, this three part documentary series places Bitcoin at the heart of one of the key social and political crises of our era.',
-	ownerIntro: 'Jamie King is an award-winning documentary filmmaker, whose previous films have reached millions of viewers online, been screened at film festivals world wide and sold to major television networks. He is also an advocate for decentralization – his first film series STEAL THIS FILM focused on the benefits of peer-to-peer sharing for creators, and as early as 2011 his film distribution platform VODO trialled p2p distribution for filmmakers alongside Bitcoin-based donations. Now Jamie is focused on creating a mainstream series that can bring the story of Bitcoin to a multi-million audience via a major streaming service.',
-	blocks: projectBlocks,
+  problem: '',
+  idea: 'How will we survive in a world after trust? Could Bitcoin be the answer? From the director of This Machine Greens and co-producer Swan Bitcoin, this three part documentary series places Bitcoin at the heart of one of the key social and political crises of our era.',
+  ownerIntro:
+    'Jamie King is an award-winning documentary filmmaker, whose previous films have reached millions of viewers online, been screened at film festivals world wide and sold to major television networks. He is also an advocate for decentralization – his first film series STEAL THIS FILM focused on the benefits of peer-to-peer sharing for creators, and as early as 2011 his film distribution platform VODO trialled p2p distribution for filmmakers alongside Bitcoin-based donations. Now Jamie is focused on creating a mainstream series that can bring the story of Bitcoin to a multi-million audience via a major streaming service.',
+  blocks: projectBlocks,
 };
 
 const projectName: string = 'trustdocumentary';

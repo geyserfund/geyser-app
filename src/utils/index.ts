@@ -15,3 +15,5 @@ export * from './hasOnChain';
 export * from './lnurlEncode';
 export * from './hasLnurlAccount';
 export * from './hasTwitterAccount';
+export * from './testImage';
+export * from './regex';

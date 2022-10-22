@@ -5,72 +5,84 @@ import { useLocation, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
-import { NotFound } from '../notFound';
-import Activity from './Activity/Activity';
+import { NotFoundPage } from '../notFound';
+import { Head } from '../../utils/Head';
+import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
 import Details from './Details';
 import { useFundingFlow } from '../../hooks';
 import { Grants } from '../grants/Grants';
 
 export const Project = () => {
-	const { projectId } = useParams<{ projectId: string }>();
-	const { state } = useLocation<{ loggedOut?: boolean }>();
+  const { projectId } = useParams<{ projectId: string }>();
+  const { state } = useLocation<{ loggedOut?: boolean }>();
 
-	const [detailOpen, setDetailOpen] = useState(true);
-	const fundingFlow = useFundingFlow();
-	const { setFundState } = fundingFlow;
+  const [detailOpen, setDetailOpen] = useState(true);
+  const fundingFlow = useFundingFlow();
+  const { setFundState } = fundingFlow;
 
-	useEffect(() => {
-		try {
-			getProject();
-		} catch (_) {
-			customHistory.push('/not-found');
-		}
-	}, [state]);
+  useEffect(() => {
+    try {
+      getProject();
+    } catch (_) {
+      customHistory.push('/not-found');
+    }
+  }, [state]);
 
-	const [getProject, { loading, error, data }] = useLazyQuery(QUERY_PROJECT_BY_NAME,
-		{
-			variables: { where: { name: projectId } },
-		},
-	);
+  const [getProject, { loading, error, data }] = useLazyQuery(
+    QUERY_PROJECT_BY_NAME,
+    {
+      variables: { where: { name: projectId } },
+    },
+  );
 
-	if (loading) {
-		return (
-			<Loader />
-		);
-	}
+  if (loading) {
+    return <Loader />;
+  }
 
-	if (error || !data || !data.project) {
-		return <NotFound />;
-	}
+  if (error || !data || !data.project) {
+    return <NotFoundPage />;
+  }
 
-	const { project } = data;
+  const { project } = data;
 
-	return (
-		<>
-			{project.type !== 'grant'
-				? <Box
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-					height="100%"
-				>
-					<Box
-						width="100%"
-						height="100%"
-						display="flex"
-						overflow="hidden"
-						position="relative"
-						bg="brand.bgGrey4"
-
-					>
-						<Details project={project} {...{detailOpen, setDetailOpen, setFundState }}/>
-						<Activity project={project} {...{detailOpen, setDetailOpen, fundingFlow }}/>
-					</Box>
-				</Box>
-				: <>
-					<Grants project={project}/>
-				</>
-			}
-		</>
-	);
+  return (
+    <>
+      <Head
+        title={project.title}
+        description={project.description}
+        image={project.image}
+        type="article"
+      />
+      {project.type !== 'grant' ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+        >
+          <Box
+            width="100%"
+            height="100%"
+            display="flex"
+            overflow="hidden"
+            position="relative"
+            bg="brand.bgGrey4"
+          >
+            <Details
+              project={project}
+              {...{ detailOpen, setDetailOpen, setFundState }}
+            />
+            <ProjectActivityPanel
+              project={project}
+              {...{ detailOpen, setDetailOpen, fundingFlow }}
+            />
+          </Box>
+        </Box>
+      ) : (
+        <>
+          <Grants project={project} />
+        </>
+      )}
+    </>
+  );
 };

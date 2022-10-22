@@ -136,10 +136,11 @@ const projectBlocks: IProjectBlock[] = [
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: '',
-	idea: 'We need your help to be  cinematic chroniclers and to create extraordinary interviews and images of  this unique moment in history: a possible socio- economic revolution.',
-	ownerIntro: 'I recently gave up a secure job in a large cultural institution to focus on implementing my own ideas.',
-	blocks: projectBlocks,
+  problem: '',
+  idea: 'We need your help to be  cinematic chroniclers and to create extraordinary interviews and images of  this unique moment in history: a possible socio- economic revolution.',
+  ownerIntro:
+    'I recently gave up a secure job in a large cultural institution to focus on implementing my own ideas.',
+  blocks: projectBlocks,
 };
 
 const projectName: string = 'thelastrevolution';

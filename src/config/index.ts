@@ -1,4 +1,5 @@
 export * from './routes';
 export * from './theme';
-export * from './apolloClient';
+export * from './apollo-client/apolloClient';
 export * from './GlobalStyles';
+export * from './PrivateRoute';

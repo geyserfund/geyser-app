@@ -1,73 +1,116 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_PROJECT_BY_NAME = gql`
-query GetProject($where: UniqueProjectQueryInput!) {
-  project(where: $where) {
-    id
-    title
-    name
-    type
-    description
-    balance
-    fundingGoal
-    createdAt
-    updatedAt
-    expiresAt
-    media
-    active
-    ownerConfirmed
-    fundsClaimed
-    creationConfirmed
-    owners {
+  query GetProject(
+    $where: UniqueProjectQueryInput!
+    $input: ProjectEntriesGetInput
+  ) {
+    project(where: $where) {
       id
-      user {
-        id
-        username
-        imageUrl
-      }
-    }
-    rewards {
-      id
-      cost
-      description
-      currency
+      title
       name
-      backers
-    }
-    ambassadors {
-      id
-      confirmed
-      user {
-        id
-        username
-        imageUrl
-      }
-    }
-    sponsors {
-      id
-      confirmed
-      url
+      type
+      description
+      balance
+      fundingGoal
+      createdAt
+      updatedAt
+      expiresAt
+      media
       image
-      user {
+      active
+      draft
+      rewardCurrency
+      owners {
         id
-        username
-        imageUrl
+        user {
+          id
+          username
+          imageUrl
+        }
       }
-    }
-    funders {
-      id
-      user {
+      rewards {
         id
-        username
-        imageUrl
+        cost
+        description
+        name
+        backers
+        image
       }
-      confirmed
-    }
-    grantees {
-      id
+      ambassadors {
+        id
+        confirmed
+        user {
+          id
+          username
+          imageUrl
+        }
+      }
+      sponsors {
+        id
+        confirmed
+        url
+        image
+        user {
+          id
+          username
+          imageUrl
+        }
+      }
+      funders {
+        id
+        user {
+          id
+          username
+          imageUrl
+        }
+        amountFunded
+        confirmed
+      }
+      grantees {
+        id
+      }
+      milestones {
+        id
+        name
+        description
+        amount
+      }
+      entries(input: $input) {
+        id
+        title
+        description
+        image
+        type
+        fundersCount
+        amountFunded
+        published
+
+        creator {
+          id
+          username
+          imageUrl
+        }
+      }
+      wallets {
+        id
+        name
+        connectionDetails {
+          ... on LndConnectionDetailsPrivate {
+            macaroon
+            tlsCertificate
+            hostname
+            grpcPort
+            lndNodeType
+            pubkey
+          }
+          ... on LndConnectionDetailsPublic {
+            pubkey
+          }
+        }
+      }
     }
   }
-}
 `;
 
 export const QUERY_PROJECT_FUNDING_DATA = gql`
@@ -109,71 +152,81 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
 `;
 
 export const QUERY_GRANTS = gql`
-query projects($where: ProjectQueryInput) {
-  projects(where: $where) {
-    projects {
-      id
-      title
-      name
-      description
-      balance
-      fundingGoal
-      createdAt
-      expiresAt
-      active
-      media
+  query projects($input: ProjectsGetQueryInput) {
+    projects(input: $input) {
+      projects {
+        id
+        title
+        name
+        description
+        balance
+        fundingGoal
+        createdAt
+        expiresAt
+        active
+        media
+        image
+      }
     }
   }
-}
 `;
 
 export const QUERY_PROJECTS = gql`
-query projects($where: ProjectQueryInput) {
-  projects(where: $where) {
-    projects {
-      id
-      title
-      name
-      type
-      description
-      balance
-      fundingGoal
-      createdAt
-      updatedAt
-      expiresAt
-      active
-      ownerConfirmed
-      fundsClaimed
-      creationConfirmed
-      media
-      owners {
+  query projects($input: ProjectsGetQueryInput) {
+    projects(input: $input) {
+      projects {
         id
-        user {
+        title
+        name
+        type
+        description
+        balance
+        fundingGoal
+        createdAt
+        updatedAt
+        expiresAt
+        image
+        active
+        draft
+        media
+        owners {
           id
-          username
-          imageUrl
+          user {
+            id
+            username
+            imageUrl
+          }
         }
-      }
-      funders {
-        id
-        user {
+        funders {
           id
-          username
-          imageUrl
+          user {
+            id
+            username
+            imageUrl
+          }
+          confirmed
         }
-        confirmed
       }
     }
   }
-}
 `;
 
 export const ALL_PROJECTS_SUMMARY = gql`
-query ProjectsSummary {
-  projectsSummary {
-    fundedTotal
-    fundersCount
-    projectsCount
+  query ProjectsSummary {
+    projectsSummary {
+      fundedTotal
+      fundersCount
+      projectsCount
+    }
   }
-}
+`;
+
+export const QUERY_PROJECT_TOTAL_VISITORS = gql`
+  query ProjectTotalVisitors($where: UniqueProjectQueryInput!) {
+    project(where: $where) {
+      statistics {
+        totalVisitors
+      }
+    }
+  }
 `;

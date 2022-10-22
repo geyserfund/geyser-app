@@ -40,10 +40,11 @@ const projectBlocks: IProjectBlock[] = [
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: 'Financial illiteracy among youths in Nigeria',
-	idea: 'Teaching youths financial literacy with Bitcoin and lightning',
-	ownerIntro: 'I’m Apata Johnson. I’m a visionary, a dedicated entrepreneur, who loves technology. As a thinker, and someone who cherish technology I can say that Bitcoin is the next big thing, I have hope that with Bitcoin we change the way we view money in Nigeria and the world as a whole. And how, with Bitcoin, Nigeria will transform from an underdeveloped nation to a super developed nation. I’m just a freedom lover and I feel Nigeria needs bitcoin.',
-	blocks: projectBlocks,
+  problem: 'Financial illiteracy among youths in Nigeria',
+  idea: 'Teaching youths financial literacy with Bitcoin and lightning',
+  ownerIntro:
+    'I’m Apata Johnson. I’m a visionary, a dedicated entrepreneur, who loves technology. As a thinker, and someone who cherish technology I can say that Bitcoin is the next big thing, I have hope that with Bitcoin we change the way we view money in Nigeria and the world as a whole. And how, with Bitcoin, Nigeria will transform from an underdeveloped nation to a super developed nation. I’m just a freedom lover and I feel Nigeria needs bitcoin.',
+  blocks: projectBlocks,
 };
 
 const projectName: string = 'bitcoineducationinnigeria';

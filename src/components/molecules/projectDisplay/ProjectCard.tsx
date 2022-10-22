@@ -1,186 +1,258 @@
-import { Avatar, Box, CircularProgress, HStack, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  HStack,
+  Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
-import {RiRocketLine} from 'react-icons/ri';
+import { RiRocketLine } from 'react-icons/ri';
 
 import { IProject } from '../../../interfaces';
 import { formatDaysLeft, isDarkMode, useBitcoinRates } from '../../../utils';
 import { getShortAmountLabel } from '../../../utils/helperFunctions';
 import { SatoshiIconTilted } from '../../icons';
 import { ButtonComponent, Card, ICard, Linkin } from '../../ui';
-import { StartCrowdFundUrl, SubscribeUrl } from '../../../constants';
+import { getPath, StartCrowdFundUrl, SubscribeUrl } from '../../../constants';
 import { Link } from 'react-router-dom';
 
 interface IProjectCardProp extends ICard {
-	title: string
-	open?: boolean
-	name: string
-	className?: string
-	imgSrc?: string
-	project: IProject
+  title: string;
+  open?: boolean;
+  name: string;
+  className?: string;
+  imgSrc?: string;
+  project: IProject;
 }
 
 const useStyles = createUseStyles({
-	container: {
-		borderRadius: '4px',
-		height: '260px',
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		width: '300px',
-		minWidth: '300px',
-		marginLeft: '15px',
-		boxShadow: 'rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px',
-		'&:hover': {
-			cursor: 'pointer',
-			boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
-			'.rocketicon': {
-				color: 'brand.primary',
-			},
-		},
+  container: {
+    borderRadius: '4px',
+    height: '260px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '300px',
+    minWidth: '300px',
+    marginLeft: '15px',
+    boxShadow:
+      'rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px',
+    '&:hover': {
+      cursor: 'pointer',
+      boxShadow:
+        'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
+      '.rocketicon': {
+        color: 'brand.primary',
+      },
+    },
 
-		transition: 'box-shadow 0.3s ease-in-out',
-	},
+    transition: 'box-shadow 0.3s ease-in-out',
+  },
 
-	circularProgress: {
-		position: 'relative',
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))',
-	},
+  circularProgress: {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))',
+  },
 });
 
-export const ProjectCardTime = ({ active, expiresAt }: { active: boolean, expiresAt: string}) => {
-	const {amount, label} = formatDaysLeft(expiresAt);
+export const ProjectCardTime = ({
+  active,
+  expiresAt,
+}: {
+  active: boolean;
+  expiresAt: string;
+}) => {
+  const { amount, label } = formatDaysLeft(expiresAt);
 
-	if (!active) {
-		return <Text fontSize="12px" fontWeight={600}>{'Completed'}</Text>;
-	}
+  if (!active) {
+    return (
+      <Text fontSize="12px" fontWeight={600}>
+        {'Completed'}
+      </Text>
+    );
+  }
 
-	if (!expiresAt) {
-		return <Text fontSize="12px" fontWeight={600}>{'Open'}</Text>;
-	}
+  if (!expiresAt) {
+    return (
+      <Text fontSize="12px" fontWeight={600}>
+        {'Open'}
+      </Text>
+    );
+  }
 
-	return (
-		<VStack alignItems="center" justifyContent="center" spacing="0">
-			<Text fontSize="14px" fontWeight={600}>{`${amount}`}</Text>
-			<Text fontSize="12px" textTransform="uppercase">{`${label} left`}</Text>
-		</VStack>
-	);
+  return (
+    <VStack alignItems="center" justifyContent="center" spacing="0">
+      <Text fontSize="14px" fontWeight={600}>{`${amount}`}</Text>
+      <Text fontSize="12px" textTransform="uppercase">{`${label} left`}</Text>
+    </VStack>
+  );
 };
 
-export const ProjectCard = ({ title, imgSrc, open, name, className, project, ...rest }: IProjectCardProp) => {
-	const classes = useStyles();
-	const history = useHistory();
-	const isDark = isDarkMode();
+export const ProjectCard = ({
+  title,
+  imgSrc,
+  open,
+  name,
+  className,
+  project,
+  ...rest
+}: IProjectCardProp) => {
+  const classes = useStyles();
+  const history = useHistory();
+  const isDark = isDarkMode();
 
-	const { btcRate} = useBitcoinRates();
-	const [percentage, setPercentage] = useState(0);
+  const { btcRate } = useBitcoinRates();
+  const [percentage, setPercentage] = useState(0);
 
-	const handleCardClick = () => {
-		history.push(`/project/${name}`);
-	};
+  const handleCardClick = () => {
+    history.push(`/project/${name}`);
+  };
 
-	useEffect(() => {
-		if (btcRate && project.balance) {
-			const percent = Math.ceil((project.balance / project.fundingGoal) * 100);
-			setPercentage(percent);
-		}
-	}, [btcRate, project]);
+  useEffect(() => {
+    if (btcRate && project.balance) {
+      const percent = Math.ceil((project.balance / project.fundingGoal) * 100);
+      setPercentage(percent);
+    }
+  }, [btcRate, project]);
 
-	const getProjectBackers = () => (project && project.funders) ? project.funders.length : '';
+  const getProjectBackers = () =>
+    project && project.funders ? project.funders.length : '';
 
-	return (
-		<Link to={`/project/${project.name}`}>
-			<Card
-				className={classNames(classes.container, className)}
-				backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
-				{...rest}
-			>
-				<Box height="160px" width="100%" position="relative">
-					<Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
-				</Box>
-				<VStack spacing="5px" width="100%" padding="10px">
-					<HStack spacing="10px" justifyContent="flex-start" width="100%">
-						<Avatar src={project.owners && project.owners[0].user.imageUrl} height="22px" width="22px" />
-						<Text fontSize="16px" fontWeight={600} isTruncated>{title}</Text>
-					</HStack>
-					<HStack alignItems="center" justifyContent={project.fundingGoal ? 'space-between' : 'space-around'} width="100%">
-						{project.fundingGoal
-								&& <CircularProgress
-									className={classes.circularProgress}
-									value={percentage}
-									size="55px"
-									thickness="10px"
-									color="brand.primary"
-								>
-									<Box position="absolute" fontSize="12px" top="19px">
-										<Text fontSize="12px">{`${percentage}%`}</Text>
-									</Box>
-								</CircularProgress>
-						}
-						<VStack alignItems="center" justifyContent="center" spacing="0">
-							<Text fontSize="14px" fontWeight={600}>{getProjectBackers()}</Text>
-							<Text fontSize="12px">BACKERS</Text>
-						</VStack>
-						<VStack alignItems="center" justifyContent={'center'} spacing="0">
-							<HStack spacing="2px">
-								<SatoshiIconTilted scale={0.6}/>
-								<Text fontSize="14px" fontWeight={600}>{getShortAmountLabel(project.balance)}</Text>
-							</HStack>
-							<Text fontSize="12px">RECEIVED</Text>
-						</VStack>
-						<ProjectCardTime expiresAt={project.expiresAt} active={project.active}/>
-					</HStack>
-				</VStack>
-			</Card>
-		</Link>
-	);
+  return (
+    <Link to={getPath('project', project.name)}>
+      <Card
+        className={classNames(classes.container, className)}
+        backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
+        {...rest}
+      >
+        <Box height="160px" width="100%" position="relative">
+          <Image src={imgSrc} height="100%" width="100%" objectFit="cover" />
+        </Box>
+        <VStack spacing="5px" width="100%" padding="10px">
+          <HStack spacing="10px" justifyContent="flex-start" width="100%">
+            <Avatar
+              src={project.owners && project.owners[0].user.imageUrl}
+              height="22px"
+              width="22px"
+            />
+            <Text fontSize="16px" fontWeight={600} isTruncated>
+              {title}
+            </Text>
+          </HStack>
+          <HStack
+            alignItems="center"
+            justifyContent={
+              project.fundingGoal ? 'space-between' : 'space-around'
+            }
+            width="100%"
+          >
+            {project.fundingGoal && (
+              <CircularProgress
+                className={classes.circularProgress}
+                value={percentage}
+                size="55px"
+                thickness="10px"
+                color="brand.primary"
+              >
+                <Box position="absolute" fontSize="12px" top="19px">
+                  <Text fontSize="12px">{`${percentage}%`}</Text>
+                </Box>
+              </CircularProgress>
+            )}
+            <VStack alignItems="center" justifyContent="center" spacing="0">
+              <Text fontSize="14px" fontWeight={600}>
+                {getProjectBackers()}
+              </Text>
+              <Text fontSize="12px">BACKERS</Text>
+            </VStack>
+            <VStack alignItems="center" justifyContent={'center'} spacing="0">
+              <HStack spacing="2px">
+                <SatoshiIconTilted scale={0.6} />
+                <Text fontSize="14px" fontWeight={600}>
+                  {getShortAmountLabel(project.balance)}
+                </Text>
+              </HStack>
+              <Text fontSize="12px">RECEIVED</Text>
+            </VStack>
+            <ProjectCardTime
+              expiresAt={project.expiresAt}
+              active={project.active}
+            />
+          </HStack>
+        </VStack>
+      </Card>
+    </Link>
+  );
 };
 
-export const ProjectComingSoon = ({...rest}: ICard) => {
-	const isDark = isDarkMode();
-	const classes = useStyles();
+export const ProjectComingSoon = ({ ...rest }: ICard) => {
+  const isDark = isDarkMode();
+  const classes = useStyles();
 
-	const {isOpen, onOpen, onClose} = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-	return (
-		<>
-			<Card
-				className={classes.container}
-				backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
-				{...rest}
-				onClick={onOpen}
-			>
-				<VStack height="100%" width="100%" alignItems="center" justifyContent="center">
-					<RiRocketLine className="rocketicon" fontSize="30px"/>
-					<Text fontSize="14px">More projects coming soon!</Text>
-				</VStack>
-			</Card>
-			<Modal isOpen={isOpen} onClose={onClose} isCentered>
-				<ModalOverlay />
-				<ModalContent paddingX="10px" marginX="10px">
-					<ModalHeader textAlign="center" fontSize="16px" >More projects coming soon</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody fontSize="12px" textAlign="justify">
-					We are releasing projects slowly which will allow us to keep building the best possible crowdfunding experience.  Signup to our mailing list to hear when a new crowdfund project is live on Geyser, and if you have a crowdfund idea drop it in the form.
-					</ModalBody>
+  return (
+    <>
+      <Card
+        className={classes.container}
+        backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
+        {...rest}
+        onClick={onOpen}
+      >
+        <VStack
+          height="100%"
+          width="100%"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <RiRocketLine className="rocketicon" fontSize="30px" />
+          <Text fontSize="14px">More projects coming soon!</Text>
+        </VStack>
+      </Card>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent paddingX="10px" marginX="10px">
+          <ModalHeader textAlign="center" fontSize="16px">
+            More projects coming soon
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody fontSize="12px" textAlign="justify">
+            We are releasing projects slowly which will allow us to keep
+            building the best possible crowdfunding experience. Signup to our
+            mailing list to hear when a new crowdfund project is live on Geyser,
+            and if you have a crowdfund idea drop it in the form.
+          </ModalBody>
 
-					<ModalFooter width="100%">
-						<VStack width="100%">
-							<Linkin href={SubscribeUrl} isExternal width="100%" >
-								<ButtonComponent isFullWidth>Subscribe</ButtonComponent>
-							</Linkin>
-							<Linkin href={StartCrowdFundUrl} isExternal width="100%" >
-								<ButtonComponent primary isFullWidth>Start a crowd fund</ButtonComponent>
-							</Linkin>
-						</VStack>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</>
-	);
+          <ModalFooter width="100%">
+            <VStack width="100%">
+              <Linkin href={SubscribeUrl} isExternal width="100%">
+                <ButtonComponent isFullWidth>Subscribe</ButtonComponent>
+              </Linkin>
+              <Linkin href={StartCrowdFundUrl} isExternal width="100%">
+                <ButtonComponent primary isFullWidth>
+                  Start a crowd fund
+                </ButtonComponent>
+              </Linkin>
+            </VStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
 };

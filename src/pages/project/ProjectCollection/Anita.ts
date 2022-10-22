@@ -76,12 +76,14 @@ const projectBlocks: IProjectBlock[] = [
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: 'Lack of education and extreme mistrust of Bitcoin with people in emerging countries.',
-	idea: 'Creating connections, supporting the growth of Bitcoin communities on the ground and creating content that closes important knowledge gaps about bitcoin for people in emerging countries.',
-	ownerIntro: 'Anita Posch is a Bitcoin advocate, author of (L)earn Bitcoin, host of the Anita Posch show and Founder of Bitcoin For Fairness.',
-	blocks: projectBlocks,
+  problem:
+    'Lack of education and extreme mistrust of Bitcoin with people in emerging countries.',
+  idea: 'Creating connections, supporting the growth of Bitcoin communities on the ground and creating content that closes important knowledge gaps about bitcoin for people in emerging countries.',
+  ownerIntro:
+    'Anita Posch is a Bitcoin advocate, author of (L)earn Bitcoin, host of the Anita Posch show and Founder of Bitcoin For Fairness.',
+  blocks: projectBlocks,
 };
 
 const projectName: string = 'bff';
 
-export const Anita = {projectBlocks, projectDetails, projectName};
+export const Anita = { projectBlocks, projectDetails, projectName };

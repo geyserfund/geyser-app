@@ -1,9 +1,11 @@
-import { IUserExternalAccount, IUser } from '../interfaces';
+import { User } from '../types/generated/graphql';
 
-export const hasLnurlAccount = (user: IUser) => {
-	if (!user) {
-		return false;
-	}
+export const hasLnurlAccount = (user: User) => {
+  if (!user) {
+    return false;
+  }
 
-	return user.externalAccounts.some((account: IUserExternalAccount) => account.type === 'lnurl');
+  return (user.externalAccounts || []).some((account) => {
+    return account?.type === 'lnurl';
+  });
 };

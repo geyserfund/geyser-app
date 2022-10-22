@@ -67,12 +67,14 @@ const projectBlocks: IProjectBlock[] = [
 ];
 
 const projectDetails: IProjectDetail = {
-	problem: 'Non technical users and pre-coiners have no entertaining way to learn the technical side of bitcoin and are hesitant to dig deeper.',
-	idea: 'Establish a compelling narrative in long form film to educate and connect the viewer to the rules of the bitcoin protocol using real data and stunning visuals.',
-	ownerIntro: 'I’m a bitcoiner trying to emulate Satoshi’s practices and methods applied in the deployment and development of bitcoin.',
-	blocks: projectBlocks,
+  problem:
+    'Non technical users and pre-coiners have no entertaining way to learn the technical side of bitcoin and are hesitant to dig deeper.',
+  idea: 'Establish a compelling narrative in long form film to educate and connect the viewer to the rules of the bitcoin protocol using real data and stunning visuals.',
+  ownerIntro:
+    'I’m a bitcoiner trying to emulate Satoshi’s practices and methods applied in the deployment and development of bitcoin.',
+  blocks: projectBlocks,
 };
 
 const projectName: string = 'anatomyofbitcoin';
 
-export const Pedro = {projectBlocks, projectDetails, projectName};
+export const Pedro = { projectBlocks, projectDetails, projectName };
