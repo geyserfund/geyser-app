@@ -16,11 +16,11 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 
-import { useStyles } from './styles';
-import { IProject, IFundingTx, IFunder } from '../../../interfaces';
+import { IFundingTx, IFunder } from '../../../interfaces';
+import { Project } from '../../../types/generated/graphql';
 
 interface IInfoPage {
-  project: IProject;
+  project: Project;
   handleViewClick: () => void;
   handleFundProject: () => void;
   loading: boolean;
@@ -35,13 +35,11 @@ export const InfoPage = ({
   handleFundProject,
   loading,
   project,
-  btcRate,
   fundingTxs,
   funders,
   test,
 }: IInfoPage) => {
   const isMobile = isMobileMode();
-  const classes = useStyles({ isMobile });
   const [view, setView] = useState('activity');
 
   const leaderboardSort = (funderA: IFunder, funderB: IFunder) => {
@@ -73,10 +71,6 @@ export const InfoPage = ({
       overflowY="hidden"
       position="relative"
     >
-      {/* <FundingStatus open={project.active} /> */}
-
-      {/* {project.fundingGoal
-				?  */}
       <ActivityBrief loading={loading} project={project} />
 
       {project.active && !isMobile && (

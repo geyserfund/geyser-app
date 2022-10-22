@@ -1,19 +1,22 @@
-import { Box, VStack } from '@chakra-ui/react';
+import { Box, VStack, Text } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, { useState, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { fadeOut, slideInLeft } from '../../css';
-import { IProject } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
-import { IFundingStages } from '../../constants';
+import { colors, IFundingStages, getPath } from '../../constants';
 import {
   AppFooter,
   ProjectDetailsMobileMenu,
 } from '../../components/molecules';
+import { ButtonComponent } from '../../components/ui';
 import { fundingStages } from '../../constants';
 import { DetailsCard } from './DetailsCard';
-import { ProjectAccesories } from './ProjectAccesories';
+import { ProjectAccessories } from './ProjectAccessories';
 import { TupdateReward } from '../../hooks';
+import { Project } from '../../types/generated/graphql';
+import { useHistory } from 'react-router-dom';
+import { useAuthContext } from '../../context';
 
 type Rules = string;
 
@@ -53,7 +56,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
 });
 
 interface IActivityProps {
-  project: IProject;
+  project: Project;
   detailOpen: boolean;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   fundState: IFundingStages;
@@ -78,6 +81,10 @@ export const DetailsContainer = ({
   const scrollDiv = useRef(document.createElement('div'));
 
   const classes = useStyles({ isMobile, detailOpen, fadeStarted });
+  const history = useHistory();
+
+  const { user, navigationContext } = useAuthContext();
+  const isViewerProjectOwner = navigationContext.projectOwnerId === user.id;
 
   const handleViewClick = () => {
     setDetailOpen(false);
@@ -94,6 +101,11 @@ export const DetailsContainer = ({
     setTimeout(() => {
       setFadeStarted(false);
     }, 500);
+  };
+
+  const handleConnectNodeClick = () => {
+    const nodeConfigurationPath = getPath('launchProjectWithNode', project.id);
+    history.push(nodeConfigurationPath);
   };
 
   return (
@@ -141,7 +153,31 @@ export const DetailsContainer = ({
           >
             <DetailsCard project={project} setFundState={setFundState} />
 
-            <ProjectAccesories
+            {isViewerProjectOwner && project.wallets.length === 0 && (
+              <VStack
+                paddingLeft="25%"
+                paddingRight="25%"
+                paddingBottom="5%"
+                paddingTop="5%"
+                backgroundColor={colors.primary50}
+              >
+                <Text color={colors.gray500} paddingBottom="5%">
+                  Your project is not live yet as you have not finalized the
+                  project creation flow. Head back to the project creation flow
+                  to add your Lightning node and launch your project.
+                </Text>
+
+                <ButtonComponent
+                  primary={true}
+                  isFullWidth={true}
+                  onClick={handleConnectNodeClick}
+                >
+                  Connect Node
+                </ButtonComponent>
+              </VStack>
+            )}
+
+            <ProjectAccessories
               project={project}
               fundState={fundState}
               setFundState={setFundState}

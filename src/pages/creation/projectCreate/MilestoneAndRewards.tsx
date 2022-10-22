@@ -104,7 +104,7 @@ export const MilestoneAndRewards = () => {
   );
 
   const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
-    variables: { where: { name: params.projectId } },
+    variables: { where: { id: params.projectId } },
     fetchPolicy: 'network-only',
     onError() {
       toast({
@@ -113,7 +113,6 @@ export const MilestoneAndRewards = () => {
       });
     },
     onCompleted(data) {
-      console.log('checking data', data);
       const { project }: { project: Project } = data;
       if (project?.rewardCurrency) {
         setIsSatoshiRewards(project.rewardCurrency !== RewardCurrency.Usd);

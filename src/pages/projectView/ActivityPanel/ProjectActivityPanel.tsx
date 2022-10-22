@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthModal } from '../../../components/molecules';
 import {
   IFundingTx,
-  IProject,
   IFundingInput,
   IRewardFundingInput,
   IFunder,
@@ -21,9 +20,10 @@ import { InfoPage, InfoPageSkeleton } from './InfoPage';
 import { fundingStages } from '../../../constants';
 import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
+import { Project, ProjectReward } from '../../../types/generated/graphql';
 
 interface IActivityProps {
-  project: IProject;
+  project: Project;
   detailOpen: boolean;
   fundingFlow: any;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -154,10 +154,10 @@ export const ProjectActivityPanel = ({
       },
     };
 
-    if (Object.entries(state.rewards).length > 0) {
+    if (state.rewards && Object.entries(state.rewards).length > 0 && rewards) {
       const rewardsArray = Object.keys(rewards).map((key) => ({
         id: parseInt(key, 10),
-        quantity: rewards[key],
+        quantity: rewards[key as keyof ProjectReward],
       }));
       const filteredRewards = rewardsArray.filter(
         (reward) => reward.quantity !== 0,
@@ -220,7 +220,9 @@ export const ProjectActivityPanel = ({
               setTarget,
               updateReward,
               handleFund,
-              rewards: project.rewards,
+              rewards: project.rewards?.filter(
+                (reward) => reward !== null,
+              ) as ProjectReward[],
               type: project.type,
               name: project.name,
             }}

@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
 import { fonts } from '../../../constants/fonts';
-import { IProject, IProjectMilestone } from '../../../interfaces';
 import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
 import { SatoshiAmount } from '../../ui';
+import { Project, ProjectMilestone } from '../../../types/generated/graphql';
 
 interface IActivityBrief {
   loading: boolean;
-  project: IProject;
+  project: Project;
 }
 
 const useStyles = createUseStyles({
@@ -28,15 +28,19 @@ const useStyles = createUseStyles({
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const classes = useStyles();
 
-  const [currentMilestone, setCurrentMilestone] = useState<IProjectMilestone>();
+  const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>();
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0);
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
-      let selectedMilestone: IProjectMilestone | undefined;
+      let selectedMilestone: ProjectMilestone | undefined;
 
       project.milestones.map((milestone, index) => {
-        if (milestone.amount >= project.balance && !selectedMilestone) {
+        if (
+          milestone &&
+          milestone.amount >= project.balance &&
+          !selectedMilestone
+        ) {
           selectedMilestone = milestone;
           setCurrentMilestone(milestone);
           setMilestoneIndex(index + 1);
@@ -122,7 +126,8 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           {project.balance}
         </SatoshiAmount>
         {getMilestoneValue()}
-        {showCountdown && <Countdown endDate={project.expiresAt} />}
+        {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
+        {showCountdown && <Countdown endDate={project.expiresAt!} />}
       </VStack>
     </HStack>
   );

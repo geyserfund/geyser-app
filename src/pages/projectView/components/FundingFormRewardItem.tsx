@@ -11,9 +11,9 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
-import { fonts } from '../../../constants/fonts';
-import { IRewardCount, IProjectReward } from '../../../interfaces';
-import { ImageWithReload, SatoshiAmount } from '../../../components/ui';
+import { IRewardCount } from '../../../interfaces';
+import { ImageWithReload } from '../../../components/ui';
+import { ProjectReward } from '../../../types/generated/graphql';
 
 const useStyles = createUseStyles({
   container: {
@@ -53,7 +53,7 @@ const useStyles = createUseStyles({
 });
 
 interface IRewardItemProps {
-  item: IProjectReward;
+  item: ProjectReward;
   updateCount?: (_: IRewardCount) => void;
   count?: number;
   readOnly?: boolean;
@@ -104,7 +104,7 @@ export const FundingFormRewardItem = ({
     >
       <HStack className={classes.upperContainer}>
         <VStack spacing={0}>
-          <Text fontSize="14px" color="#1A1A1A" fontWeight="bold">{`$${
+          <Text fontSize="14px" color={colors.textBlack} fontWeight="bold">{`$${
             cost / 100
           }`}</Text>
           {/* Add Support for multiple currencies */}
@@ -120,7 +120,7 @@ export const FundingFormRewardItem = ({
               fontWeight={600}
             >{`${cost}`}</SatoshiAmount>
           )} */}
-          <Text fontSize="10px" color="#1A1A1A" fontWeight="bold">
+          <Text fontSize="10px" color={colors.textBlack} fontWeight="bold">
             per item
           </Text>
         </VStack>

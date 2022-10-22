@@ -5,6 +5,7 @@ import { BsCheckLg } from 'react-icons/bs';
 import { useHistory, useParams } from 'react-router';
 import { ButtonComponent, TextBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
+import { getPath } from '../../../constants';
 import { useAuthContext } from '../../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import {
@@ -100,7 +101,6 @@ export const EntryPreview = () => {
     const { name, value } = event.target;
     if (name) {
       const newForm = { ...entry, [name]: value };
-      console.log('checking handleContent handleInput Data', newForm);
       setEntry(newForm);
       isEdited = true;
     }
@@ -249,6 +249,25 @@ export const EntryPreview = () => {
                 Go to Entry
               </ButtonComponent>
             </VStack>
+          ) : projectData.project.draft ? (
+            <>
+              <Text>
+                You cannot publish an entry in an inactive project. Finish the
+                project configuration or re-activate the project to publish this
+                entry
+              </Text>
+              <ButtonComponent
+                primary
+                isFullWidth
+                onClick={() =>
+                  history.push(
+                    getPath('projectDashboard', projectData.project.name),
+                  )
+                }
+              >
+                Go to Project Dashboard
+              </ButtonComponent>
+            </>
           ) : (
             <ButtonComponent primary isFullWidth onClick={handlePublish}>
               Publish

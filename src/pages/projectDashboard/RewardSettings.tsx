@@ -35,7 +35,10 @@ export const RewardSettings = ({ project }: { project: Project }) => {
     onOpen: openRewardDelete,
   } = useDisclosure();
   const [isSatoshi, setIsSatoshi] = useState(
-    project.rewardCurrency !== RewardCurrency.Usd,
+    /* to be replaced with an actual check on RewardCurrency.Sats when we add it to the enum */
+    project.rewardCurrency !== null &&
+      project.rewardCurrency !== undefined &&
+      project.rewardCurrency !== RewardCurrency.Usd,
   );
 
   const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);

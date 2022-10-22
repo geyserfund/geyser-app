@@ -46,14 +46,14 @@ export const RewardCard = ({
                   {reward.cost}
                 </SatoshiAmount>
               ) : (
-                <Text color="brand.primary">
+                <Text color={colors.textBlack} fontWeight="bold">
                   {/* 
                     Divided by 100 as cost is in cents 
                   */}
                   {`$ ${reward.cost / 100}`}
                 </Text>
               )}
-              <Text fontSize="12px" color="brand.primary">
+              <Text fontSize="12px" color={colors.textBlack} fontWeight="bold">
                 per item
               </Text>
             </VStack>
@@ -96,7 +96,7 @@ export const RewardCard = ({
         <Box>
           <ImageWithReload
             borderRadius="4px"
-            src={reward.image}
+            src={reward.image || ''}
             width="335px"
             height="192px"
             objectFit="cover"

@@ -49,6 +49,7 @@ export const EntryPage = () => {
         getProject({ variables: { where: { id: entry.project.id } } });
       },
       onError(error) {
+        console.error(error);
         history.push('/404');
       },
     });
@@ -63,8 +64,6 @@ export const EntryPage = () => {
 
   const project = projectData && projectData.project;
   const entry = entryData && entryData.entry;
-
-  console.log('checking project data', project);
 
   return (
     <Box

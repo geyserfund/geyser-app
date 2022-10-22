@@ -220,3 +220,13 @@ export const ALL_PROJECTS_SUMMARY = gql`
     }
   }
 `;
+
+export const QUERY_PROJECT_TOTAL_VISITORS = gql`
+  query ProjectTotalVisitors($where: UniqueProjectQueryInput!) {
+    project(where: $where) {
+      statistics {
+        totalVisitors
+      }
+    }
+  }
+`;

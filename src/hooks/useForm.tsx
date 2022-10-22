@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from 'react';
 import { ShippingDestination, shippingTypes } from '../constants';
 import { AuthContext } from '../context';
 
-import { IProjectReward, IRewardCount } from '../interfaces';
+import { IRewardCount } from '../interfaces';
+import { ProjectReward, RewardCurrency } from '../types/generated/graphql';
 
 export interface IFundForm {
   donationAmount: number;
   rewardsCost: number;
-  totalAmount: number;
   comment: string;
   anonymous: boolean;
   shippingDestination: ShippingDestination;
@@ -16,18 +16,22 @@ export interface IFundForm {
   media: string;
   funderUsername: string;
   funderAvatarURL: string;
-  rewards: { [key: string]: number };
+  rewards?: ProjectReward; // { [key: string]: number } | undefined;
+  rewardCurrency: RewardCurrency;
 }
 
 export interface IuseFundStateProps {
-  rewards?: IProjectReward[];
+  rewards?: ProjectReward[];
+  rewardCurrency: RewardCurrency;
 }
 
-export type TupdateReward = ({ id, count }: IRewardCount) => void;
+export type TupdateReward = (_: IRewardCount) => void;
 
 export interface IFundFormState {
   state: IFundForm;
+  // eslint-disable-next-line no-unused-vars
   setTarget: (event: any) => void;
+  // eslint-disable-next-line no-unused-vars
   setState: (name: string, value: any) => void;
   updateReward: TupdateReward;
   resetForm: () => void;
@@ -39,7 +43,6 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
   const initialState = {
     donationAmount: 0,
     rewardsCost: 0,
-    totalAmount: 0,
     comment: '',
     shippingDestination: shippingTypes.national,
     shippingCost: 0,
@@ -48,7 +51,8 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
     funderUsername: user.username,
     email: '',
     media: '',
-    rewards: {},
+    rewards: undefined,
+    rewardCurrency: RewardCurrency.Usd,
   };
 
   const [state, _setState] = useState<IFundForm>(initialState);
@@ -75,9 +79,9 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
     const newRewards = { ...state.rewards };
 
     if (count !== 0) {
-      newRewards[id] = count;
+      newRewards[id as unknown as keyof ProjectReward] = count;
     } else if (count === 0) {
-      delete newRewards[id];
+      delete newRewards[id as unknown as keyof ProjectReward];
     }
 
     let rewardsCost = 0;
@@ -85,10 +89,9 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
       Object.keys(newRewards).map((key: string) => {
         const id = parseInt(key, 10);
         const reward = rewards.find(
-          (reward: IProjectReward) =>
-            reward.id === id || `${reward.id}` === key,
+          (reward: ProjectReward) => reward.id === id || `${reward.id}` === key,
         );
-        console.log('checking this', reward, rewards, key);
+
         if (reward && reward.id) {
           /*
            * IMPORTANT: the reward.currency is undefined at the moment of writing this. This means the cost defaults to
@@ -96,16 +99,21 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
            * and must be refactored.
            */
           const cost =
-            reward.currency === 'btc' ? reward.cost : reward.cost / 100;
+            state.rewardCurrency === RewardCurrency.Usd
+              ? reward.cost
+              : reward.cost / 100;
 
-          rewardsCost += cost * newRewards[key];
+          rewardsCost += cost * newRewards[key as keyof ProjectReward];
         }
       });
     }
 
-    console.log('chekcing update reward', rewardsCost);
-
-    const newState = { ...state, rewards: newRewards, rewardsCost };
+    const newState = {
+      ...state,
+      rewards: newRewards,
+      rewardsCost,
+      totalAmount: rewardsCost + state.donationAmount,
+    };
     _setState(newState);
   };
 
