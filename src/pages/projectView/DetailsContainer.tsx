@@ -12,10 +12,10 @@ import {
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages } from '../../constants';
 import { DetailsCard } from './DetailsCard';
-import { ProjectAccesories } from './ProjectAccesories';
+import { ProjectAccessories } from './ProjectAccessories';
 import { TupdateReward } from '../../hooks';
 import { Project } from '../../types/generated/graphql';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../context';
 
 type Rules = string;
@@ -152,6 +152,7 @@ export const DetailsContainer = ({
             padding={isMobile ? '20px 10px 50px 10px' : '0px 40px 70px 40px'}
           >
             <DetailsCard project={project} setFundState={setFundState} />
+
             {isViewerProjectOwner && project.wallets.length === 0 && (
               <VStack
                 paddingLeft="25%"
@@ -161,10 +162,11 @@ export const DetailsContainer = ({
                 backgroundColor={colors.primary50}
               >
                 <Text color={colors.gray500} paddingBottom="5%">
-                  Your project is not live yet as you have not finalised the
+                  Your project is not live yet as you have not finalized the
                   project creation flow. Head back to the project creation flow
                   to add your Lightning node and launch your project.
                 </Text>
+
                 <ButtonComponent
                   primary={true}
                   isFullWidth={true}
@@ -174,7 +176,8 @@ export const DetailsContainer = ({
                 </ButtonComponent>
               </VStack>
             )}
-            <ProjectAccesories
+
+            <ProjectAccessories
               project={project}
               fundState={fundState}
               setFundState={setFundState}
