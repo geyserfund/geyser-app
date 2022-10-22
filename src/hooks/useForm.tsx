@@ -16,13 +16,12 @@ export interface IFundForm {
   media: string;
   funderUsername: string;
   funderAvatarURL: string;
-  rewards?: ProjectReward; // { [key: string]: number } | undefined;
+  rewards?: { [key: string]: number } | undefined;
   rewardCurrency: RewardCurrency;
 }
 
 export interface IuseFundStateProps {
   rewards?: ProjectReward[];
-  rewardCurrency: RewardCurrency;
 }
 
 export type TupdateReward = (_: IRewardCount) => void;

@@ -49,7 +49,6 @@ export const DetailsCard = ({
       const currentFund = project.funders.find(
         (funder) => funder?.user?.id === user.id,
       );
-      console.log(currentFund);
 
       if (!currentFund) {
         return null;
