@@ -10,8 +10,8 @@ import {
   ProjectDetailsMobileMenu,
 } from '../../components/molecules';
 import { fundingStages } from '../../constants';
-import { TEntryData } from '../../interfaces/entry';
 import { EntryDetails } from './EntryDetails';
+import { Entry } from '../../types/generated/graphql';
 
 type Rules = string;
 
@@ -51,7 +51,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
 });
 
 interface IActivityProps {
-  entry: TEntryData;
+  entry: Entry;
   detailOpen: boolean;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;

@@ -99,9 +99,7 @@ export const MilestoneAndRewards = () => {
     },
   );
 
-  const [updateReward, { loading: updateRewardLoading }] = useMutation(
-    MUTATION_UPDATE_PROJECT_REWARD,
-  );
+  const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
 
   const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
     variables: { where: { id: params.projectId } },
