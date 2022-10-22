@@ -26,12 +26,13 @@ export const ProjectDetailsViewContainer = ({
 }: Props) => {
   const fundForm = useFundState({
     /*
-     * Passing an empty array as fallback would probalby make more sense but I think at the moment most checks look
-     * for an undefined value
+     * Passing an empty array as fallback would probably make
+     * more sense but I think at the moment most checks look
+     * for an undefined value.
      */
     rewards: (project.rewards as ProjectReward[]) || undefined,
-    rewardCurrency: RewardCurrency.Usd,
   });
+
   const { setFundState, fundState } = fundingFlow;
 
   return (
