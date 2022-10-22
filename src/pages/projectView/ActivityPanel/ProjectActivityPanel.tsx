@@ -13,7 +13,7 @@ import { QRPage } from './QRPage';
 import { isMobileMode, useNotification } from '../../../utils';
 import { PaymentPage } from './PaymentPage';
 import { AuthContext } from '../../../context';
-import { Box, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
 import { useStyles } from './styles';
 import { InfoPage, InfoPageSkeleton } from './InfoPage';

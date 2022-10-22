@@ -84,6 +84,8 @@ export const DetailsCard = ({
   };
 
   const handleFundProject = () => {
+    // eslint-disable-next-line no-debugger
+    debugger;
     setFundState(fundingStages.form);
   };
 
