@@ -1,6 +1,6 @@
 export * from './useProjects';
-export * from './useProjectEntries';
 export * from './useForm';
+export * from './useAllGeyserProjectEntries';
 export * from './useFundingFlow';
 export * from './useDebounce';
 export * from './useSignedUpload';

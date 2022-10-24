@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Button, VStack, Divider } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
-import { useProjectEntries } from '../../../hooks';
+import { useAllGeyserProjectEntries } from '../../../hooks';
 import { AlertBox } from '../../../components/ui';
 import { ProjectEntryCard } from '../../../components/molecules';
 import { Entry, PaginationInput } from '../../../types/generated/graphql';
@@ -17,7 +17,7 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
     error,
     data: entries,
     fetchMore,
-  } = useProjectEntries({
+  } = useAllGeyserProjectEntries({
     itemLimit,
   });
 
