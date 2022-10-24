@@ -7,7 +7,6 @@ import {
   InputGroup,
   Input,
   InputRightAddon,
-  Image,
   Checkbox,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
@@ -22,18 +21,12 @@ import {
   TextBox,
 } from '../../components/ui';
 import { colors } from '../../constants';
-import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
 import { IProject } from '../../interfaces';
-import {
-  useNotification,
-  validateEmail,
-  validLightningAddress,
-} from '../../utils';
-import { TProjectDetails } from '../creation/projectCreate/types';
+import { useNotification, validLightningAddress } from '../../utils';
+import { ProjectCreationVariables } from '../creation/projectCreate/types';
 import { DateTime } from 'luxon';
-import { randomInt } from 'crypto';
 
 export const ProjectSettings = ({ project }: { project: IProject }) => {
   const params = useParams<{ projectId: string }>();
@@ -43,13 +36,14 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
 
   const { user } = useAuthContext();
 
-  const [form, setForm] = useState<TProjectDetails>({
+  const [form, setForm] = useState<ProjectCreationVariables>({
     title: '',
     description: '',
     image: '',
     email: '',
     name: '',
   });
+
   const [formError, setFormError] = useState<{ [key: string]: string }>({});
   const [selectedButton, setSelectedButton] = useState(
     project.expiresAt ? 'custom' : 'ongoing',

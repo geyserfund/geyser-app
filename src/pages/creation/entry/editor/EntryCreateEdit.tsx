@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
 
-// import { Editor } from './Editor';
 import { isMobileMode, useNotification } from '../../../../utils';
 import { CreateNav } from './CreateNav';
 import { BsImage } from 'react-icons/bs';

@@ -1,9 +1,15 @@
-export type TProjectDetails = {
+import { ProjectType, RewardCurrency } from '../../../types/generated/graphql';
+
+export type ProjectCreationVariables = {
   title: string;
   name: string;
   image?: string;
   description: string;
   email: string;
+  expiresAt?: string;
+  fundingGoal?: number;
+  rewardCurrency?: RewardCurrency;
+  type?: ProjectType;
 };
 
 export type TMilestone = {

@@ -26,10 +26,10 @@ import {
   validLightningAddress,
 } from '../../../utils';
 import { AiOutlineUpload } from 'react-icons/ai';
-import { TProjectDetails } from './types';
+import { ProjectCreationVariables } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
+import { colors, getPath } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { useLazyQuery, useMutation } from '@apollo/client';
@@ -39,6 +39,11 @@ import {
 } from '../../../graphql/mutations';
 import { useAuthContext } from '../../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import { Project } from '../../../types/generated/graphql';
+
+type CreateProjectMutationResponseData = {
+  createProject: Project | null;
+};
 
 const useStyles = createUseStyles({
   backIcon: {
@@ -49,6 +54,7 @@ const useStyles = createUseStyles({
 export const ProjectCreate = () => {
   const isMobile = isMobileMode();
   const classes = useStyles();
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   const params = useParams<{ projectId: string }>();
   const isEdit = Boolean(params.projectId);
@@ -56,20 +62,40 @@ export const ProjectCreate = () => {
   const history = useHistory();
   const { toast } = useNotification();
 
-  const { user } = useAuthContext();
+  const { user, setUser } = useAuthContext();
 
-  const [form, setForm] = useState<TProjectDetails>({
+  const [form, setForm] = useState<ProjectCreationVariables>({
     title: '',
     description: '',
     image: undefined,
     email: '',
     name: '',
   });
+
   const [formError, setFormError] = useState<{ [key: string]: string }>({});
 
-  const [createProject] = useMutation(MUTATION_CREATE_PROJECT, {
-    onCompleted(data) {
-      history.push(`/launch/${data.createProject.id}/milestones`);
+  const [createProject] = useMutation<
+    CreateProjectMutationResponseData,
+    { input: ProjectCreationVariables }
+  >(MUTATION_CREATE_PROJECT, {
+    onCompleted({ createProject: createdProject }) {
+      if (createdProject && createdProject.owners[0]) {
+        const newOwnershipInfo = user.ownerOf.concat([
+          {
+            project: createdProject,
+            owner: createdProject.owners[0],
+          },
+        ]);
+
+        setUser({
+          ...user,
+          ...{
+            ownerOf: newOwnershipInfo,
+          },
+        });
+
+        history.push(`/launch/${createdProject.id}/milestones`);
+      }
     },
     onError(error) {
       toast({
@@ -113,6 +139,7 @@ export const ProjectCreate = () => {
     QUERY_PROJECT_BY_NAME,
     {
       variables: { where: { id: params.projectId } },
+
       onCompleted(data) {
         if (data && data.project) {
           setForm({
@@ -127,10 +154,6 @@ export const ProjectCreate = () => {
     },
   );
 
-  useEffect(() => {
-    getProjectById();
-  }, [params.projectId]);
-
   const handleChange = (event: any) => {
     if (event) {
       const { name, value } = event.target;
@@ -144,6 +167,7 @@ export const ProjectCreate = () => {
       }
 
       setForm(newForm);
+
       if (name === 'title' && value.length > 50) {
         setFormError({ title: `max character allowed is 50/${value.length}` });
       } else if (name === 'description' && value.length > 280) {
@@ -158,11 +182,9 @@ export const ProjectCreate = () => {
 
   const handleUpload = (url: string) => setForm({ ...form, image: url });
 
-  const handleNext = () => {
+  const handleNextButtonTapped = () => {
     const isValid = validateForm();
 
-    const newForm = form;
-    newForm.email = user.email || form.email;
     if (isValid) {
       if (isEdit) {
         updateProject({
@@ -183,7 +205,9 @@ export const ProjectCreate = () => {
 
   const validateForm = () => {
     const errors: any = {};
+
     let isValid = true;
+
     if (!form.title) {
       errors.title = 'title is a required field';
       isValid = false;
@@ -213,10 +237,12 @@ export const ProjectCreate = () => {
   };
 
   const handleBack = () => {
-    history.push('/launch/start');
+    history.push(getPath('publicProjectLaunch'));
   };
 
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+  useEffect(() => {
+    getProjectById();
+  }, [params.projectId]);
 
   return (
     <Box
@@ -345,7 +371,7 @@ export const ProjectCreate = () => {
                 isLoading={loading}
                 primary
                 isFullWidth
-                onClick={handleNext}
+                onClick={handleNextButtonTapped}
               >
                 Next
               </ButtonComponent>

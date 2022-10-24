@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const MUTATION_CREATE_PROJECT = gql`
-  mutation Mutation($input: CreateProjectInput!) {
+  mutation CreateProject($input: CreateProjectInput!) {
     createProject(input: $input) {
       id
       title
@@ -10,6 +10,17 @@ export const MUTATION_CREATE_PROJECT = gql`
       active
       draft
       type
+      owners {
+        id
+        user {
+          id
+          ownerOf {
+            project {
+              id
+            }
+          }
+        }
+      }
     }
   }
 `;
