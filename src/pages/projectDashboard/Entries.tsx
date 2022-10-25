@@ -25,7 +25,7 @@ import {
   Project,
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql';
-import { QUERY_PROJECT_TOTAL_VISITORS } from '../../graphql';
+import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql';
 
 const useStyles = createUseStyles({
   statBox: {
@@ -45,7 +45,10 @@ const useStyles = createUseStyles({
 });
 
 type ResponseData = {
-  project: Project;
+  project: Project & {
+    publishedEntries: Entry[];
+    unpublishedEntries: Entry[];
+  };
 };
 
 type QueryVariables = {
@@ -61,17 +64,15 @@ export const Entries = ({ project }: { project: Project }) => {
   const [draftEntries, setDraftEntries] = useState<Entry[]>([]);
 
   const { loading, data } = useQuery<ResponseData, QueryVariables>(
-    QUERY_PROJECT_TOTAL_VISITORS,
+    QUERY_PROJECT_DASHBOARD_DATA,
     {
       variables: { where: { id: project.id } },
       onCompleted: () => {
-        if (project && project.entries) {
-          const live = project?.entries?.filter(
-            (entry) => (entry as Entry).published,
-          );
-          const draft = project?.entries?.filter(
-            (entry) => !(entry as Entry).published,
-          );
+        if (data?.project) {
+          console.log(data.project);
+
+          const live = data.project.publishedEntries;
+          const draft = data.project.unpublishedEntries;
           setLiveEntries(live as Entry[]);
           setDraftEntries(draft as Entry[]);
         }
