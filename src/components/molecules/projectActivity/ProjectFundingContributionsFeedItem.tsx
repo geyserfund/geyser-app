@@ -16,12 +16,12 @@ import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';
-import { IFundingTx, IProject } from '../../../interfaces';
+import { IFundingTx } from '../../../interfaces';
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx | IFundingTx;
   showsProjectLink?: boolean;
-  linkedProject?: Project | IProject;
+  linkedProject?: Project;
 };
 
 export const ProjectFundingContributionsFeedItem = ({
