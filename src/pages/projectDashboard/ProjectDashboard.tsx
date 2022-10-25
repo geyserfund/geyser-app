@@ -53,7 +53,6 @@ export const ProjectDashboard = () => {
     {
       variables: {
         where: { name: projectId },
-        input: { where: { published: false } },
       },
       onCompleted(data) {
         setNav({
