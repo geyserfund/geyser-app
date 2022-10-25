@@ -96,6 +96,10 @@ export const DetailsContainer = ({
 
   const handleFundClick = () => {
     setFundState(fundingStages.form);
+  };
+
+  const handleFundClickMobile = () => {
+    setFundState(fundingStages.form);
     setDetailOpen(false);
     setFadeStarted(true);
     setTimeout(() => {
@@ -153,7 +157,9 @@ export const DetailsContainer = ({
           >
             <DetailsCard
               project={project}
-              fundButtonFunction={handleFundClick}
+              fundButtonFunction={
+                isMobile ? handleFundClickMobile : handleFundClick
+              }
             />
 
             {isViewerProjectOwner && project.wallets.length === 0 && (

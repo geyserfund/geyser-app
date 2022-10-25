@@ -1,17 +1,23 @@
-import { Modal } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useHistory, useParams } from 'react-router';
+import React, { useEffect, useMemo } from 'react';
+import { match, useHistory, useParams, useRouteMatch } from 'react-router';
 import { AuthModal } from '../components/molecules';
-import { getPath } from '../constants';
+import { getPath, routerPathNames } from '../constants';
 import { useAuthContext } from '../context';
 import { LoadingPage } from '../pages/loading';
-import { ProjectType, OwnerOf, Project } from '../types/generated/graphql';
 
 import { hasTwitterAccount } from '../utils';
 
 interface IPrivateRoute {
   children: React.ReactNode;
 }
+
+const privateProjectLaunchRoutes = [getPath('privateProjectLaunch')];
+
+const projectEntryCreationRoutes = [
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+];
 
 export const PrivateRoute = ({ children }: IPrivateRoute) => {
   const {
@@ -21,27 +27,48 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     isAuthModalOpen: loginIsOpen,
     loginOnOpen,
   } = useAuthContext();
+
   const history = useHistory();
-
-  if (loading) {
-    return <LoadingPage />;
-  }
-
-  const isEntryCreationPath = /\/projects\/([a-z-_0-9])*\/entry/.test(
-    history.location.pathname,
-  );
-  const isProjectCreationPath = /\/launch/.test(history.location.pathname);
   const params = useParams<{ projectId: string }>();
-  const isViewerProjectOwner = user.ownerOf?.find(
-    ({ project }: any) => project.id === params.projectId,
+
+  const routeMatchesForPrivateProjectLaunch =
+    privateProjectLaunchRoutes.map(useRouteMatch);
+
+  const routeMatchesForEntryProjectCreation =
+    projectEntryCreationRoutes.map(useRouteMatch);
+
+  const routeMatchForTopLevelProjectCreation = useRouteMatch(
+    getPath('privateProjectLaunch'),
   );
+
+  const isPrivateProjectCreationPath: boolean = useMemo(() => {
+    return routeMatchesForPrivateProjectLaunch.some((routeMatch) => {
+      return Boolean(routeMatch as match);
+    });
+  }, [routeMatchesForPrivateProjectLaunch]);
+
+  const isProjectEntryCreationPath: boolean = useMemo(() => {
+    return routeMatchesForEntryProjectCreation.some((routeMatch) => {
+      return Boolean(routeMatch as match);
+    });
+  }, [routeMatchesForEntryProjectCreation]);
+
+  const isTopLevelProjectCreationRoute: boolean = useMemo(() => {
+    return Boolean(routeMatchForTopLevelProjectCreation?.isExact);
+  }, [routeMatchForTopLevelProjectCreation]);
+
+  const isUserViewingTheirOwnProject: boolean = useMemo(() => {
+    return user.ownerOf.some(
+      ({ project }: any) => project.id === params.projectId,
+    );
+  }, [params.projectId, user.ownerOf]);
 
   useEffect(() => {
     if (!loading) {
       if (
         !user ||
         (user && !user.id) ||
-        (isProjectCreationPath && user && !hasTwitterAccount(user))
+        (isPrivateProjectCreationPath && user && !hasTwitterAccount(user))
       ) {
         loginOnOpen();
       }
@@ -49,7 +76,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   }, [user, loading]);
 
   const modalTitle = () => {
-    if (isProjectCreationPath && user && !hasTwitterAccount(user)) {
+    if (isPrivateProjectCreationPath && user && !hasTwitterAccount(user)) {
       return 'Connect Twitter';
     }
 
@@ -57,22 +84,22 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   };
 
   const modalDescription = () => {
-    if (isProjectCreationPath && user && !hasTwitterAccount(user)) {
+    if (isPrivateProjectCreationPath && user && !hasTwitterAccount(user)) {
       return 'Connect your Twitter social profile to create a project. We require creators to login with twitter to start their Geyser projects.';
     }
 
-    if (isEntryCreationPath) {
+    if (isProjectEntryCreationPath) {
       return 'You must be logged in to create an entry.';
     }
 
     return 'Login to continue';
   };
 
-  const renderUnauthorised = () => (
+  const renderUnauthorized = () => (
     <AuthModal
       title={modalTitle()}
       description={modalDescription()}
-      showLightning={!isProjectCreationPath}
+      showLightning={!isPrivateProjectCreationPath}
       isOpen={loginIsOpen}
       privateRoute={true}
       onClose={loginOnClose}
@@ -80,19 +107,32 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   );
 
   const isForbidden = () => {
-    // 1. User trying to access the project creation flow of a project he doesn't own
-    if (user && isProjectCreationPath && !isViewerProjectOwner) return true;
+    // 1. Check if a user is trying to access the project creation flow
+    // of a project they doesn't own.
+    if (user && isTopLevelProjectCreationRoute) {
+      return false;
+    }
 
-    // TODO: 2. User trying to access the entry creation flow of an entry he is not the author of
-    return false;
+    return (
+      user &&
+      isPrivateProjectCreationPath &&
+      Boolean(isUserViewingTheirOwnProject) === false
+    );
+
+    // TODO: 2. Check if a user is trying to access the entry creation flow of an
+    // that entry they are not the author of.
   };
 
-  const renderForbidden = () => history.push(getPath('index'));
+  const renderForbidden = () => history.push(getPath('notAuthorized'));
+
+  if (loading) {
+    return <LoadingPage />;
+  }
 
   return (
     <>
       {children}
-      {isForbidden() ? renderForbidden() : renderUnauthorised()}
+      {isForbidden() ? renderForbidden() : renderUnauthorized()}
     </>
   );
 };

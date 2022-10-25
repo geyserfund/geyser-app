@@ -7,7 +7,6 @@ import {
   LinkBox,
   LinkOverlay,
 } from '@chakra-ui/react';
-import { useHistory } from 'react-router';
 import { SatoshiIconTilted } from '../../../components/icons';
 import { isMobileMode } from '../../../utils';
 import { Project } from '../../../types/generated/graphql';
@@ -28,12 +27,7 @@ export const GrantCard = ({
   status: string;
   marginRight?: boolean;
 }) => {
-  const history = useHistory();
   const isMobile = isMobileMode();
-
-  const gotoGrant = () => {
-    history.push(getPath('project', project.name));
-  };
 
   return (
     <Box
@@ -52,11 +46,7 @@ export const GrantCard = ({
       <Box w={isMobile ? '325px' : '350px'}>
         <LinkBox>
           <LinkOverlay
-            href={`https://geyser.fund/project/${project.name}`}
-            onClick={(e) => {
-              e.preventDefault();
-              gotoGrant();
-            }}
+            href={getPath('_deprecatedPathForProject', project.name)}
           >
             <Image
               w={isMobile ? '325px' : '350px'}

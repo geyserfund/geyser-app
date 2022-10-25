@@ -31,7 +31,7 @@ export const QUERY_GET_ENTRY = gql`
 /**
  * @returns `Entry`
  */
-export const QUERY_ENTRIES_LANDING_PAGE = gql`
+export const QUERY_ALL_GEYSER_PROJECT_ENTRIES = gql`
   query GetEntries($input: GetEntriesInput!) {
     getEntries(input: $input) {
       id
