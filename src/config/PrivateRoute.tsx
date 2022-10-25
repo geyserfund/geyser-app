@@ -11,10 +11,7 @@ interface IPrivateRoute {
   children: React.ReactNode;
 }
 
-const privateProjectLaunchRoutes = [
-  // getPath('privateProjectLaunch'),
-  getPath('privateProjectLaunch'),
-];
+const privateProjectLaunchRoutes = [getPath('privateProjectLaunch')];
 
 const projectEntryCreationRoutes = [
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
