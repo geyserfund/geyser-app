@@ -1,6 +1,8 @@
+/* eslint-disable complexity */
 import {
   Badge,
   Button,
+  Center,
   Grid,
   GridItem,
   HStack,
@@ -16,7 +18,12 @@ import {
   ProjectSectionBar,
 } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
-import { fundingStages, IFundingStages, projectTypes } from '../../constants';
+import {
+  fundingStages,
+  getPath,
+  IFundingStages,
+  projectTypes,
+} from '../../constants';
 import { useAuthContext } from '../../context';
 import { TupdateReward } from '../../hooks';
 import { isMobileMode } from '../../utils';
@@ -61,9 +68,12 @@ export const ProjectAccessories = ({
   const isRewardBased = project.type === projectTypes.reward;
   const hasMilestones = project.milestones && project.milestones.length > 0;
   const hasEntries = project.entries && project.entries.length > 0;
-  const isOwner = user?.id && user.id === project.owners[0].user.id;
 
-  const canPublishEntries = isOwner && (project.active || project.draft);
+  const isUserOwnerOfCurrentProject: boolean =
+    user?.id && user.id === project.owners[0].user.id;
+
+  const canCreateEntries: boolean =
+    isUserOwnerOfCurrentProject && (project.active || project.draft);
 
   const [isSmallerThan1265] = useMediaQuery('(min-width: 1265px)');
 
@@ -148,7 +158,7 @@ export const ProjectAccessories = ({
   };
 
   const handleCreateNewEntry = () => [
-    history.push(`/projects/${project.name}/entry`),
+    history.push(getPath('projectEntry', project.name)),
   ];
 
   return (
@@ -189,7 +199,7 @@ export const ProjectAccessories = ({
         )}
       </HStack>
 
-      {(hasEntries || isOwner) && (
+      {hasEntries || isUserOwnerOfCurrentProject ? (
         <VStack
           ref={entriesRef}
           width="100%"
@@ -200,14 +210,35 @@ export const ProjectAccessories = ({
 
           {renderEntries()}
 
-          {canPublishEntries ? (
-            <ButtonComponent onClick={handleCreateNewEntry} isFullWidth>
-              <BiPlus style={{ marginRight: '10px' }} />
-              Create A New Entry
-            </ButtonComponent>
+          {isUserOwnerOfCurrentProject ? (
+            <>
+              <ButtonComponent
+                onClick={handleCreateNewEntry}
+                isFullWidth
+                disabled={Boolean(canCreateEntries) === false}
+              >
+                <BiPlus style={{ marginRight: '10px' }} />
+                Create A New Entry
+              </ButtonComponent>
+
+              {Boolean(canCreateEntries) === false ? (
+                <Center>
+                  <Text
+                    textColor={'brand.neutral600'}
+                    textAlign="center"
+                    paddingX={2}
+                  >
+                    You cannot publish an entry in an inactive project. Finish
+                    the project configuration or re-activate the project to
+                    publish this entry.
+                  </Text>
+                </Center>
+              ) : null}
+            </>
           ) : null}
         </VStack>
-      )}
+      ) : null}
+
       {isRewardBased && (
         <VStack
           ref={rewardsRef}

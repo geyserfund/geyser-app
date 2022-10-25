@@ -6,6 +6,7 @@ import { BoltIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
 import { useAuthContext } from '../../context';
 import { Project } from '../../types/generated/graphql';
+
 export const DetailsCard = ({
   project,
   fundButtonFunction,
