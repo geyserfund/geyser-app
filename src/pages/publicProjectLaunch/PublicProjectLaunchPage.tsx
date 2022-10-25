@@ -18,7 +18,7 @@ import { TwitterConnect } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { useAuthContext } from '../../context';
 import { hasTwitterAccount, isMobileMode } from '../../utils';
-import { LaunchProjectRocketUrl, colors } from '../../constants';
+import { LaunchProjectRocketUrl, colors, getPath } from '../../constants';
 
 const useStyles = createUseStyles({
   backIcon: {
@@ -37,7 +37,7 @@ export const PublicProjectLaunchPage = () => {
   };
 
   const handleNext = () => {
-    history.push('/launch');
+    history.push(getPath('privateProjectLaunch'));
   };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
