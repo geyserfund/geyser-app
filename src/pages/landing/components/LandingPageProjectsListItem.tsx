@@ -37,7 +37,9 @@ export const LandingPageProjectsListItem = ({ project, ...rest }: Props) => {
           <Image
             src={projectImageSrc}
             borderRadius="md"
-            objectFit="cover"
+            fit="cover"
+            width="100%"
+            height="100%"
             fallback={<ProjectImageListItemPlaceholder />}
             alt={`Main image for ${project.name}`}
           />

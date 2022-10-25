@@ -1,9 +1,11 @@
 import { useQuery } from '@apollo/client';
-import { QUERY_ENTRIES_LANDING_PAGE } from '../graphql';
+import { QUERY_ALL_GEYSER_PROJECT_ENTRIES } from '../graphql';
 import {
   GetEntriesInput,
   Entry,
   PaginationInput,
+  GetEntriesOrderByInput,
+  OrderByOptions,
 } from '../types/generated/graphql';
 
 type ResponseData = {
@@ -17,14 +19,17 @@ type QueryVariables = {
 type OptionsProps = {
   itemLimit?: number;
   cursorID?: number;
+  orderBy?: GetEntriesOrderByInput;
 };
 
 /**
  * Hook for fetching project entries across the entire Geyser platform.
  */
-export const useProjectEntries = (options?: OptionsProps) => {
-  const { itemLimit = 10, cursorID } = options || {};
-
+export const useAllGeyserProjectEntries = ({
+  itemLimit = 14,
+  orderBy = { publishedAt: OrderByOptions.Desc },
+  cursorID,
+}: OptionsProps) => {
   const paginationOptions: PaginationInput = {
     take: itemLimit,
   };
@@ -38,10 +43,11 @@ export const useProjectEntries = (options?: OptionsProps) => {
     error,
     data: responseData,
     fetchMore,
-  } = useQuery<ResponseData, QueryVariables>(QUERY_ENTRIES_LANDING_PAGE, {
+  } = useQuery<ResponseData, QueryVariables>(QUERY_ALL_GEYSER_PROJECT_ENTRIES, {
     variables: {
       input: {
         pagination: paginationOptions,
+        orderBy,
       },
     },
   });

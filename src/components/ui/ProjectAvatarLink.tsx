@@ -3,11 +3,10 @@ import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { getPath } from '../../constants';
 
-import { IProject } from '../../interfaces';
 import { Project } from '../../types/generated/graphql';
 
 type Props = {
-  project: IProject | Project;
+  project: Project;
   textColor?: string;
 };
 
@@ -24,7 +23,7 @@ export const ProjectAvatarLink = ({
       color={textColor}
     >
       <HStack spacing={1}>
-        <Avatar borderRadius="4px" src={avatarSrc} boxSize={'1em'} />
+        <Avatar borderRadius="4px" src={avatarSrc || ''} boxSize={'1em'} />
         <Text fontWeight={'bold'}>{project.title}</Text>
       </HStack>
     </Link>

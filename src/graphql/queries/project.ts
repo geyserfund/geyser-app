@@ -221,9 +221,21 @@ export const ALL_PROJECTS_SUMMARY = gql`
   }
 `;
 
-export const QUERY_PROJECT_TOTAL_VISITORS = gql`
+export const QUERY_PROJECT_DASHBOARD_DATA = gql`
   query ProjectTotalVisitors($where: UniqueProjectQueryInput!) {
     project(where: $where) {
+      unpublishedEntries: entries(input: { where: { published: false } }) {
+        id
+        title
+        published
+        publishedAt
+      }
+      publishedEntries: entries(input: { where: { published: true } }) {
+        id
+        title
+        published
+        publishedAt
+      }
       statistics {
         totalVisitors
       }
