@@ -26,7 +26,7 @@ import {
   validLightningAddress,
 } from '../../../utils';
 import { AiOutlineUpload } from 'react-icons/ai';
-import { ProjectCreationVariables } from './types';
+import { ProjectCreationVariables, ProjectUpdateVariables } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { colors, getPath } from '../../../constants';
@@ -45,6 +45,10 @@ type CreateProjectMutationResponseData = {
   createProject: Project | null;
 };
 
+type UpdateProjectMutationResponseData = {
+  updateProject: Project | null;
+};
+
 const useStyles = createUseStyles({
   backIcon: {
     fontSize: '25px',
@@ -57,7 +61,7 @@ export const ProjectCreate = () => {
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   const params = useParams<{ projectId: string }>();
-  const isEdit = Boolean(params.projectId);
+  const isEditingExistingProject = Boolean(params.projectId);
 
   const history = useHistory();
   const { toast } = useNotification();
@@ -106,9 +110,14 @@ export const ProjectCreate = () => {
     },
   });
 
-  const [updateProject] = useMutation(MUTATION_UPDATE_PROJECT, {
+  const [updateProject] = useMutation<
+    UpdateProjectMutationResponseData,
+    { input: ProjectUpdateVariables }
+  >(MUTATION_UPDATE_PROJECT, {
     onCompleted() {
-      history.push(`/launch/${params.projectId}/milestones`);
+      history.push(
+        getPath('launchProjectWithMilestonesAndRewards', params.projectId),
+      );
     },
     onError(error) {
       toast({
@@ -159,7 +168,8 @@ export const ProjectCreate = () => {
       const { name, value } = event.target;
 
       const newForm = { ...form, [name]: value || '' };
-      if (name === 'title' && !isEdit) {
+
+      if (name === 'title' && !isEditingExistingProject) {
         const projectName: string = value.split(' ').join('').toLowerCase();
         const sanitizedName = projectName.replaceAll(validLightningAddress, '');
 
@@ -186,7 +196,7 @@ export const ProjectCreate = () => {
     const isValid = validateForm();
 
     if (isValid) {
-      if (isEdit) {
+      if (isEditingExistingProject) {
         updateProject({
           variables: {
             input: {
@@ -198,7 +208,14 @@ export const ProjectCreate = () => {
           },
         });
       } else {
-        createProject({ variables: { input: form } });
+        createProject({
+          variables: {
+            input: {
+              ...form,
+              email: user.email || form.email,
+            },
+          },
+        });
       }
     }
   };
@@ -307,7 +324,7 @@ export const ProjectCreate = () => {
                   onChange={handleChange}
                   value={form.title}
                   error={formError.title}
-                  onBlur={() => !isEdit && getProject()}
+                  onBlur={() => !isEditingExistingProject && getProject()}
                 />
               </VStack>
               <VStack width="100%" alignItems="flex-start">
@@ -319,8 +336,8 @@ export const ProjectCreate = () => {
                     value={form.name}
                     isInvalid={Boolean(formError.name)}
                     focusBorderColor={colors.primary}
-                    disabled={isEdit}
-                    onBlur={() => !isEdit && getProject()}
+                    disabled={isEditingExistingProject}
+                    onBlur={() => !isEditingExistingProject && getProject()}
                   />
                   <InputRightAddon>@geyser.fund</InputRightAddon>
                 </InputGroup>

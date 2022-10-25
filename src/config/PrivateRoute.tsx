@@ -40,7 +40,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   const routeMatchesForEntryProjectCreation =
     projectEntryCreationRoutes.map(useRouteMatch);
 
-  const routeMatchForTopLevelProjectCreationRoute = useRouteMatch(
+  const routeMatchForTopLevelProjectCreation = useRouteMatch(
     getPath('privateProjectLaunch'),
   );
 
@@ -57,14 +57,14 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   }, [routeMatchesForEntryProjectCreation]);
 
   const isTopLevelProjectCreationRoute: boolean = useMemo(() => {
-    return Boolean(useRouteMatch(getPath('privateProjectLaunch'))?.isExact);
-  }, [routeMatchForTopLevelProjectCreationRoute]);
+    return Boolean(routeMatchForTopLevelProjectCreation?.isExact);
+  }, [routeMatchForTopLevelProjectCreation]);
 
   const isUserViewingTheirOwnProject: boolean = useMemo(() => {
     return user.ownerOf.some(
       ({ project }: any) => project.id === params.projectId,
     );
-  }, [user.ownerOf]);
+  }, [params.projectId, user.ownerOf]);
 
   useEffect(() => {
     if (!loading) {

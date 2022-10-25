@@ -1,4 +1,8 @@
-import { ProjectType, RewardCurrency } from '../../../types/generated/graphql';
+import {
+  ProjectStatus,
+  ProjectType,
+  RewardCurrency,
+} from '../../../types/generated/graphql';
 
 export type ProjectCreationVariables = {
   title: string;
@@ -10,6 +14,21 @@ export type ProjectCreationVariables = {
   fundingGoal?: number;
   rewardCurrency?: RewardCurrency;
   type?: ProjectType;
+};
+
+export type ProjectUpdateVariables = {
+  projectId: number;
+  title?: string;
+  name?: string;
+  image?: string;
+  description?: string;
+  active?: boolean;
+  draft?: boolean;
+  expiresAt?: string;
+  type?: ProjectType;
+  rewardCurrency?: RewardCurrency;
+  fundingGoal?: number;
+  status?: ProjectStatus;
 };
 
 export type TMilestone = {
