@@ -25,6 +25,8 @@ const pathsMap = {
   grants: () => `/${routerPathNames.grants}`,
   notFound: () => `/${routerPathNames.notFound}`,
   notAuthorized: () => `/${routerPathNames.notAuthorized}`,
+  _deprecatedPathForProject: (projectName: string) =>
+    `/${routerPathNames.project}/${projectName}`,
   project: (projectName: string) =>
     `/${routerPathNames.projects}/${projectName}`,
   projectEntry: (projectName: string) =>
