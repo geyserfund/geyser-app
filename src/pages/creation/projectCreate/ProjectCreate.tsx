@@ -148,7 +148,6 @@ export const ProjectCreate = () => {
     QUERY_PROJECT_BY_NAME,
     {
       variables: { where: { id: params.projectId } },
-
       onCompleted(data) {
         if (data && data.project) {
           setForm({
