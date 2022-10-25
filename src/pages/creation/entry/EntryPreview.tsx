@@ -162,6 +162,7 @@ export const EntryPreview = () => {
           <Text fontSize="33px" fontWeight={600} color="brand.gray500">
             {isPublished ? 'Share entry' : 'Publish entry'}
           </Text>
+
           {isPublished && (
             <VStack width="100%" alignItems="center">
               <Box
@@ -254,7 +255,7 @@ export const EntryPreview = () => {
               <Text>
                 You cannot publish an entry in an inactive project. Finish the
                 project configuration or re-activate the project to publish this
-                entry
+                entry.
               </Text>
               <ButtonComponent
                 primary

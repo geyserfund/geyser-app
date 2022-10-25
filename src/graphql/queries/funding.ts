@@ -52,7 +52,7 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
           id
           name
           title
-          media
+          image
         }
         ... on Entry {
           id

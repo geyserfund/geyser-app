@@ -275,6 +275,7 @@ export const ProjectActivityPanel = ({
       >
         {renderPanelContent()}
       </Box>
+
       <AuthModal isOpen={loginIsOpen} onClose={loginOnClose} />
     </>
   );

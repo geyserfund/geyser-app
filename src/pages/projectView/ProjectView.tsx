@@ -5,18 +5,14 @@ import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
-import { ProjectActivityPanel } from './ActivityPanel/ProjectActivityPanel';
-import { DetailsContainer } from './DetailsContainer';
-import { useFundingFlow, useFundState } from '../../hooks';
-import { Head } from '../../utils/Head';
+import { useFundingFlow } from '../../hooks';
 import { useAuthContext } from '../../context';
 import {
   Project,
-  ProjectReward,
-  RewardCurrency,
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql';
 import { getPath } from '../../constants';
+import { ProjectDetailsViewContainer } from './containers';
 
 type ResponseData = {
   project: Project;
@@ -86,63 +82,11 @@ export const ProjectView = () => {
         position="relative"
         bg="brand.bgGrey4"
       >
-        <ProjectViewContainer
+        <ProjectDetailsViewContainer
+          {...{ project: data.project, detailOpen, setDetailOpen, fundingFlow }}
           {...{ project: data.project, detailOpen, setDetailOpen, fundingFlow }}
         />
       </Box>
     </Box>
-  );
-};
-
-interface IProjectViewContainer {
-  project: Project;
-  detailOpen: boolean;
-  fundingFlow: any;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  resourceType?: string;
-  resourceId?: number;
-}
-
-const ProjectViewContainer = ({
-  project,
-  detailOpen,
-  setDetailOpen,
-  fundingFlow,
-}: IProjectViewContainer) => {
-  const fundForm = useFundState({
-    /*
-     * Passing an empty array as fallback would probably make
-     * more sense but I think at the moment most checks look
-     * for an undefined value.
-     */
-    rewards: (project.rewards as ProjectReward[]) || undefined,
-  });
-
-  const { setFundState, fundState } = fundingFlow;
-
-  return (
-    <>
-      <Head
-        title={project.title}
-        description={project.description}
-        image={project.image || ''}
-        type="article"
-      />
-      <DetailsContainer
-        {...{
-          project,
-          detailOpen,
-          setDetailOpen,
-          fundState,
-          setFundState,
-          updateReward: fundForm.updateReward,
-        }}
-      />
-
-      <ProjectActivityPanel
-        project={project}
-        {...{ detailOpen, setDetailOpen, fundingFlow, fundForm }}
-      />
-    </>
   );
 };
