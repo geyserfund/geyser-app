@@ -69,8 +69,6 @@ export const Entries = ({ project }: { project: Project }) => {
       variables: { where: { id: project.id } },
       onCompleted: () => {
         if (data?.project) {
-          console.log(data.project);
-
           const live = data.project.publishedEntries;
           const draft = data.project.unpublishedEntries;
           setLiveEntries(live as Entry[]);
