@@ -28,7 +28,6 @@ const useStyles = createUseStyles({
     '&:hover': {
       cursor: 'pointer',
       borderColor: colors.gray300,
-      // BoxShadow: `0 0 0 1px ${colors.gray300}`,
     },
   },
   focused: {
@@ -107,19 +106,6 @@ export const FundingFormRewardItem = ({
           <Text fontSize="14px" color={colors.textBlack} fontWeight="bold">{`$${
             cost / 100
           }`}</Text>
-          {/* Add Support for multiple currencies */}
-          {/* {currency === 'usd' ? (
-            <Text
-              fontSize="14px"
-              color="#1A1A1A"
-              fontWeight="bold"
-            >{`$${cost}`}</Text>
-          ) : (
-            <SatoshiAmount
-              fontFamily={fonts.mono}
-              fontWeight={600}
-            >{`${cost}`}</SatoshiAmount>
-          )} */}
           <Text fontSize="10px" color={colors.textBlack} fontWeight="bold">
             per item
           </Text>

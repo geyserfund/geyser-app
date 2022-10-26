@@ -47,8 +47,8 @@ export const RewardCard = ({
                 </SatoshiAmount>
               ) : (
                 <Text color={colors.textBlack} fontWeight="bold">
-                  {/* 
-                    Divided by 100 as cost is in cents 
+                  {/*
+                    Divided by 100 as cost is in cents
                   */}
                   {`$ ${reward.cost / 100}`}
                 </Text>
