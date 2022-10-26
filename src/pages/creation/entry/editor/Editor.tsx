@@ -1,4 +1,4 @@
-import ReactQuill, { Quill } from 'react-quill';
+import { Quill } from 'react-quill';
 import React, { useEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import 'react-quill/dist/quill.snow.css';
@@ -9,7 +9,6 @@ import { useNotification } from '../../../../utils';
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader';
 import ImageEdit from 'quill-image-edit-module';
-import EventEmitter from 'events';
 
 type Rules = string;
 
@@ -49,13 +48,15 @@ const useStyles = createUseStyles<Rules, StyleProps>({
     },
 
     '& .ql-editor li': {
-      color: 'red !important',
+      fontSize: '18px',
     },
 
     '& p': {
       fontFamily: fonts.inter,
       fontSize: '18px',
+      lineHeight: 1.5,
     },
+
     '& h1': {
       fontFamily: fonts.inter,
       fontSize: '22px',
@@ -167,24 +168,6 @@ export const Editor = ({
     },
   };
 
-  const onTextChange = (delta) => {
-    const contents = quillObj.current?.getContents();
-
-    if (
-      delta &&
-      delta.ops &&
-      delta.ops[2] &&
-      delta.ops[2].attributes &&
-      delta.ops[2].attributes.imageBlot
-    ) {
-      return;
-    }
-
-    if (handleChange) {
-      handleChange(name, JSON.stringify(contents));
-    }
-  };
-
   useEffect(() => {
     Quill.register('modules/imageUploader', ImageUploader);
     Quill.register('modules/imageEdit', ImageEdit);
@@ -247,12 +230,6 @@ export const Editor = ({
       <div id={editorDOMID}>
         <div id="drag-and-drop-container"></div>
       </div>
-      {/* <ReactQuill
-        modules={editorModules}
-        readOnly={isReadOnly}
-        theme={'snow'}
-      /> */}
-      ;
     </div>
   );
 };
