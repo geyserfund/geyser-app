@@ -1,5 +1,13 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Box, Image, Input, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Image,
+  Input,
+  Text,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BsCheckLg } from 'react-icons/bs';
 import { useHistory, useParams } from 'react-router';
@@ -29,11 +37,13 @@ export const EntryPreview = () => {
   const history = useHistory();
   const { setNav } = useAuthContext();
 
-  const [isPublished, setIsPublished] = useState(false);
+  const [isEntryPublished, setIsEntryPublished] = useState(false);
 
   const [entry, setEntry] = useState<TEntry>(defaultEntry);
+
   const [getPost, { loading: loadingPosts, error, data: entryData }] =
     useLazyQuery(QUERY_GET_ENTRY);
+
   const [updatePost, { data: updateData, loading: updatePostLoading }] =
     useMutation(MUTATION_UPDATE_ENTRY);
 
@@ -121,7 +131,7 @@ export const EntryPreview = () => {
       });
     }
 
-    setIsPublished(true);
+    setIsEntryPublished(true);
   };
 
   const handleGotoPost = () => {
@@ -160,10 +170,10 @@ export const EntryPreview = () => {
           paddingBottom="80px"
         >
           <Text fontSize="33px" fontWeight={600} color="brand.gray500">
-            {isPublished ? 'Share entry' : 'Publish entry'}
+            {isEntryPublished ? 'Share entry' : 'Publish entry'}
           </Text>
 
-          {isPublished && (
+          {isEntryPublished && (
             <VStack width="100%" alignItems="center">
               <Box
                 borderRadius="50%"
@@ -176,7 +186,7 @@ export const EntryPreview = () => {
             </VStack>
           )}
           <Text fontSize="14px" color="brand.neutral800">
-            {!isPublished ? 'Edit Social Preview' : 'Preview'}{' '}
+            {!isEntryPublished ? 'Edit Social Preview' : 'Preview'}{' '}
           </Text>
           <VStack
             alignItems="flex-start"
@@ -212,7 +222,7 @@ export const EntryPreview = () => {
               name="title"
               value={entry.title}
               onChange={handleInput}
-              disabled={isPublished}
+              disabled={isEntryPublished}
             />
             <Input
               border="none"
@@ -226,10 +236,10 @@ export const EntryPreview = () => {
               name="description"
               value={entry.description}
               onChange={handleInput}
-              disabled={isPublished}
+              disabled={isEntryPublished}
             />
           </VStack>
-          {!isPublished && (
+          {!isEntryPublished && (
             <VStack alignItems="flex-start" width="100%">
               <Text fontSize="14px" color="brand.neutral800">
                 Linked project
@@ -241,39 +251,51 @@ export const EntryPreview = () => {
               />
             </VStack>
           )}
-          {isPublished ? (
-            <VStack width="100%">
-              <ButtonComponent isFullWidth onClick={handlePublish}>
-                Share on Twitter
-              </ButtonComponent>
-              <ButtonComponent primary isFullWidth onClick={handleGotoPost}>
-                Go to Entry
-              </ButtonComponent>
-            </VStack>
-          ) : projectData.project.draft ? (
-            <>
-              <Text>
-                You cannot publish an entry in an inactive project. Finish the
-                project configuration or re-activate the project to publish this
-                entry.
-              </Text>
-              <ButtonComponent
-                primary
-                isFullWidth
-                onClick={() =>
-                  history.push(
-                    getPath('projectDashboard', projectData.project.name),
-                  )
-                }
-              >
-                Go to Project Dashboard
-              </ButtonComponent>
-            </>
-          ) : (
-            <ButtonComponent primary isFullWidth onClick={handlePublish}>
-              Publish
-            </ButtonComponent>
-          )}
+
+          <VStack width="100%">
+            {isEntryPublished ? (
+              <>
+                <ButtonComponent isFullWidth onClick={handlePublish}>
+                  Share on Twitter
+                </ButtonComponent>
+                <ButtonComponent primary isFullWidth onClick={handleGotoPost}>
+                  Go to Entry
+                </ButtonComponent>
+              </>
+            ) : (
+              <>
+                <Box width={'full'}>
+                  <Tooltip
+                    label="Your project is not active yet so you cannot publish this Entry. But don’t worry your Entry will automatically be saved as a draft."
+                    shouldWrapChildren
+                    width={'full'}
+                  >
+                    <Button
+                      isFullWidth
+                      backgroundColor={'brand.primary'}
+                      onClick={handlePublish}
+                      isDisabled={Boolean(projectData.project.draft) || true}
+                      width={'full'}
+                    >
+                      Publish
+                    </Button>
+                  </Tooltip>
+                </Box>
+
+                <Button
+                  isFullWidth
+                  backgroundColor={'brand.primary'}
+                  onClick={() =>
+                    history.push(
+                      getPath('projectDashboard', projectData.project.name),
+                    )
+                  }
+                >
+                  Go to Project
+                </Button>
+              </>
+            )}
+          </VStack>
         </VStack>
       </VStack>
     </>
