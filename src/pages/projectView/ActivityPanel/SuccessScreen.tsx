@@ -27,6 +27,7 @@ export const SuccessScreen = ({
   const [hasCopiedProjectLink, setCopy] = useState(false);
 
   const { getTotalAmount } = useFundCalc(fundingState);
+
   const shareProjectWithFriends = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopy(true);
