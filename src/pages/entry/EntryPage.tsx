@@ -14,6 +14,7 @@ import { EntryContainer } from './EntryContainer';
 import { Entry, Project, ProjectReward } from '../../types/generated/graphql';
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { compactMap } from '../../utils/compactMap';
+import { getPath } from '../../constants';
 
 export const EntryPage = () => {
   const { entryId } = useParams<{ entryId: string }>();
@@ -35,7 +36,7 @@ export const EntryPage = () => {
       onCompleted(data) {
         setNav({
           title: data.project.title,
-          path: `/projects/${data.project.name}`,
+          path: getPath('project', data.project.name),
         });
       },
     });
@@ -49,7 +50,7 @@ export const EntryPage = () => {
       },
       onError(error) {
         console.error(error);
-        history.push('/404');
+        history.push(getPath('notFound'));
       },
     });
 

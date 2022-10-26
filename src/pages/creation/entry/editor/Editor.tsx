@@ -1,4 +1,4 @@
-import Quill from 'quill';
+import { Quill } from 'react-quill';
 import React, { useEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import 'react-quill/dist/quill.snow.css';
@@ -12,21 +12,22 @@ import ImageEdit from 'quill-image-edit-module';
 
 type Rules = string;
 
-interface IStyles {
-  readOnly?: boolean;
-}
+type StyleProps = {
+  isReadOnly?: boolean;
+};
 
-const useStyles = createUseStyles<Rules, IStyles>({
-  container: ({ readOnly }: IStyles) => ({
+const useStyles = createUseStyles<Rules, StyleProps>({
+  container: ({ isReadOnly }: StyleProps) => ({
     width: '100%',
     height: '100%',
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
     minHeight: '350px',
+
     '& .ql-toolbar': {
       position: 'fixed',
-      display: readOnly ? 'none' : 'block',
+      display: isReadOnly ? 'none' : 'block',
       bottom: '20px',
       float: 'center',
       zIndex: 99,
@@ -35,19 +36,27 @@ const useStyles = createUseStyles<Rules, IStyles>({
       borderWidth: '0px',
       boxShadow: '0px 3px 12px rgba(0, 0, 0, 0.1)',
     },
+
     '& .ql-container': {
       width: '100%',
       border: 'none',
     },
+
     '& .ql-editor': {
       paddingBottom: '70px !important',
       overflow: 'hidden',
     },
 
+    '& .ql-editor li': {
+      fontSize: '18px',
+    },
+
     '& p': {
       fontFamily: fonts.inter,
       fontSize: '18px',
+      lineHeight: 1.5,
     },
+
     '& h1': {
       fontFamily: fonts.inter,
       fontSize: '22px',
@@ -87,85 +96,91 @@ const useStyles = createUseStyles<Rules, IStyles>({
   }),
 });
 
-interface IEditor {
+type Props = {
   name: string;
   value: string;
   handleChange?: (name: string, content: string) => void;
-  readOnly?: boolean;
+  isReadOnly?: boolean;
   focusFlag?: string;
-}
+};
+
+const editorDOMID = 'editor';
 
 export const Editor = ({
   name,
   value,
   handleChange,
-  readOnly,
+  isReadOnly,
   focusFlag,
-}: IEditor) => {
+}: Props) => {
   const [_quillObj, _setQuillObj] = useState<Quill>();
   const quillObj = useRef(_quillObj);
+
   const setQuillObj = (value: Quill) => {
     quillObj.current = value;
     _setQuillObj(value);
   };
 
   const { toast } = useNotification();
+  const classes = useStyles({ isReadOnly });
 
-  const classes = useStyles({ readOnly });
+  const editorModules = {
+    toolbar: {
+      container: [
+        ['bold', 'italic', 'blockquote', 'code-block'],
+        [{ header: 1 }, { header: 2 }],
+        [
+          { list: 'ordered' },
+          { list: 'bullet' },
+          { indent: '-1' },
+          { indent: '+1' },
+        ],
+        ['link', 'image', 'video'],
+      ],
+    },
+    imageUploader: {
+      upload: async (file: any) => {
+        try {
+          const response = await useSignedUploadAPI(file);
+          return response;
+        } catch {
+          toast({
+            title: 'Something went wrong',
+            description: 'Image upload failed, please try again.',
+            status: 'error',
+          });
+          return false;
+        }
+      },
+    },
+    imageEdit: {
+      modules: ['Resize', 'DisplaySize'],
+      overlayStyles: {
+        border: '2px solid',
+        borderColor: colors.primary400,
+        boxShadow: `0px 0px 0px 2px ${colors.primary400}`,
+        borderRadius: '4px',
+      },
+      handleStyles: {
+        backgroundColor: 'transparent',
+        border: 'none',
+      },
+    },
+  };
 
   useEffect(() => {
     Quill.register('modules/imageUploader', ImageUploader);
     Quill.register('modules/imageEdit', ImageEdit);
-    const editor = new Quill('#editor', {
-      modules: {
-        toolbar: {
-          container: [
-            ['bold', 'italic', 'blockquote', 'code-block'],
-            [{ header: 1 }, { header: 2 }],
-            [
-              { list: 'ordered' },
-              { list: 'bullet' },
-              { indent: '-1' },
-              { indent: '+1' },
-            ],
-            ['link', 'image', 'video'],
-          ],
-        },
-        imageUploader: {
-          upload: async (file: any) => {
-            try {
-              const response = await useSignedUploadAPI(file);
-              return response;
-            } catch (error) {
-              toast({
-                title: 'Something went wrong',
-                description: 'Image upload failed, please try again.',
-                status: 'error',
-              });
-              return false;
-            }
-          },
-        },
-        imageEdit: {
-          modules: ['Resize', 'DisplaySize'],
-          overlayStyles: {
-            border: '2px solid',
-            borderColor: colors.primary400,
-            boxShadow: `0px 0px 0px 2px ${colors.primary400}`,
-            borderRadius: '4px',
-          },
-          handleStyles: {
-            backgroundColor: 'transparent',
-            border: 'none',
-          },
-        },
-      },
-      readOnly,
+
+    const editor = new Quill(`#${editorDOMID}`, {
+      modules: editorModules,
+      readOnly: isReadOnly,
       theme: 'snow',
     });
 
     if (value) {
       const textValue = JSON.parse(value);
+
       editor.updateContents(textValue, 'api');
     }
 
@@ -212,7 +227,7 @@ export const Editor = ({
 
   return (
     <div className={classes.container}>
-      <div id="editor">
+      <div id={editorDOMID}>
         <div id="drag-and-drop-container"></div>
       </div>
     </div>
