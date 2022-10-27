@@ -55,7 +55,7 @@ type QueryVariables = {
   where: UniqueProjectQueryInput;
 };
 
-export const Entries = ({ project }: { project: Project }) => {
+export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
   const classes = useStyles();
   const history = useHistory();
   const { toast } = useNotification();
@@ -67,13 +67,12 @@ export const Entries = ({ project }: { project: Project }) => {
     QUERY_PROJECT_DASHBOARD_DATA,
     {
       variables: { where: { id: project.id } },
-      onCompleted: () => {
-        if (data?.project) {
-          const live = data.project.publishedEntries;
-          const draft = data.project.unpublishedEntries;
-          setLiveEntries(live as Entry[]);
-          setDraftEntries(draft as Entry[]);
-        }
+      onCompleted: (data) => {
+        const live = data.project.publishedEntries;
+        const draft = data.project.unpublishedEntries;
+
+        setLiveEntries(live as Entry[]);
+        setDraftEntries(draft as Entry[]);
       },
     },
   );

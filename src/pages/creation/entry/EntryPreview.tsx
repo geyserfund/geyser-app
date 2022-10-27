@@ -274,7 +274,7 @@ export const EntryPreview = () => {
                       isFullWidth
                       backgroundColor={'brand.primary'}
                       onClick={handlePublish}
-                      isDisabled={Boolean(projectData.project.draft) || true}
+                      isDisabled={Boolean(projectData.project.active) === false}
                       width={'full'}
                     >
                       Publish
