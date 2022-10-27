@@ -11,7 +11,7 @@ import {
 import ProjectColl, { IProjectData } from '../ProjectCollection';
 import { AppFooter } from '../../../components/molecules';
 
-export const RewardBased = ({ project }: { project: IProject }) => {
+export const Old_RewardBased = ({ project }: { project: IProject }) => {
   const [projectData, setProjectData] = useState<IProjectData>();
 
   useEffect(() => {

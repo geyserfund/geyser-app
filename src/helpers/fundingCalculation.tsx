@@ -44,11 +44,10 @@ export const useFundCalc = (state: IFundForm) => {
   };
 
   const getRewardsQuantity = () => {
-    let totalRewards = 0;
-    Object.keys(state.rewards).map((key) => {
-      totalRewards += state.rewards[key];
-    });
-    return totalRewards;
+    return Object.values(state.rewardsByIDAndCount || {}).reduce(
+      (totalCount, current) => totalCount + current,
+      0,
+    );
   };
 
   return {

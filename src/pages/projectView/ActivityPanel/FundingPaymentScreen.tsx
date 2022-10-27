@@ -29,52 +29,55 @@ import {
 } from '../../../components/ui';
 import {
   colors,
-  MAX_FUNDING_AMOUNT_USD,
   projectTypes,
   SelectCountryOptions,
+  MAX_FUNDING_AMOUNT_USD,
 } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 import { IProjectType } from '../../../interfaces';
-import { DonationBased, RewardBased } from '../../project/FundForm';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { IGif } from '@giphy/js-types';
 import { hasShipping, useNotification } from '../../../utils';
 import { ProjectReward } from '../../../types/generated/graphql';
+import {
+  DonationBasedFundingFormSection,
+  RewardBasedFundingFormSection,
+} from '../FundingForm';
 
-interface IPaymentPageProps {
+type Props = {
   isMobile: boolean;
   fundLoading: boolean;
   handleCloseButton: () => void;
   btcRate: number;
-  state: IFundForm;
+  formState: IFundForm;
   setTarget: (_: any) => void;
   updateReward: any;
-  setState: any;
+  setFormState: any;
   handleFund: () => void;
   type: IProjectType;
   rewards?: ProjectReward[];
   name: string;
-}
+};
 
-export const PaymentPage = ({
+export const FundingPaymentScreen = ({
   isMobile,
   fundLoading,
   handleCloseButton,
   btcRate,
   handleFund,
-  state,
+  formState,
   setTarget,
-  setState,
+  setFormState,
   updateReward,
   type,
   rewards,
   name,
-}: IPaymentPageProps) => {
+}: Props) => {
   const { getShippingCost, getTotalAmount, getRewardsQuantity } =
-    useFundCalc(state);
+    useFundCalc(formState);
   const [gifSearch, setGifSearch] = useState('bitcoin');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedGif, setSelectedGif] = useState<IGif | null>(null);
@@ -114,7 +117,7 @@ export const PaymentPage = ({
       return false;
     }
 
-    if (state.rewardsCost && !state.email) {
+    if (formState.rewardsCost && !formState.email) {
       toast({
         title: 'Email is a required field when donating for a reward.',
         description: 'Please enter an email.',
@@ -129,12 +132,19 @@ export const PaymentPage = ({
   const renderFundForm = () => {
     switch (type) {
       case projectTypes.donation:
-        return <DonationBased setState={setState} />;
+        return <DonationBasedFundingFormSection setState={setFormState} />;
 
       case projectTypes.reward:
         return (
           <Box width="100%" overflowY="auto">
-            <RewardBased {...{ rewards, setState, updateReward, state }} />
+            <RewardBasedFundingFormSection
+              {...{
+                rewards,
+                setFormState,
+                updateReward,
+                formState,
+              }}
+            />
             <Divider
               borderTopWidth="3px"
               borderBottomWidth="0px"
@@ -180,16 +190,19 @@ export const PaymentPage = ({
         _active={{ bg: 'none' }}
         onClick={handleCloseButton}
       />
+
       {renderFundForm()}
+
       <VStack spacing="5px" width="100%" alignItems="flex-start">
         <SectionTitle>Comment</SectionTitle>
+
         <Box width="100%" position="relative">
           <TextArea
             pr={16}
             placeholder="Leave a comment and drop a GIF."
             fontSize="14px"
             resize="none"
-            value={state.comment}
+            value={formState.comment}
             maxLength={280}
             name="comment"
             onChange={setTarget}
@@ -276,7 +289,7 @@ export const PaymentPage = ({
                     key={gifSearch}
                     onGifClick={(gif) => {
                       setSelectedGif(gif);
-                      setState('media', gif.images.original.webp);
+                      setFormState('media', gif.images.original.webp);
                       onClose();
                     }}
                   />
@@ -285,7 +298,7 @@ export const PaymentPage = ({
             </ModalBody>
           </ModalContent>
         </Modal>
-        {state.rewardsCost && hasShipping(name) && (
+        {formState.rewardsCost && hasShipping(name) && (
           <Box width="100%">
             <SelectComponent
               name="shippingDestination"
@@ -294,21 +307,21 @@ export const PaymentPage = ({
                 <Text color={colors.grayPlaceholder}>Delivery Rewards...</Text>
               }
               options={SelectCountryOptions}
-              onChange={setState}
+              onChange={setFormState}
               value={SelectCountryOptions.find(
-                (val) => val.value === state.shippingDestination,
+                (val) => val.value === formState.shippingDestination,
               )}
             />
           </Box>
         )}
-        {state.rewardsCost && (
+        {formState.rewardsCost && (
           <Box width="100%">
             <TextBox
               type="email"
               name="email"
               fontSize="14px"
               placeholder="Contact Email"
-              value={state.email}
+              value={formState.email}
               onChange={setTarget}
             />
           </Box>
@@ -323,12 +336,13 @@ export const PaymentPage = ({
           <VStack alignItems="flex-start" spacing="0px">
             <SectionTitle>Total</SectionTitle>
             <SatoshiAmount label="Donation">
-              {state.donationAmount + Math.round(state.rewardsCost / btcRate)}
+              {formState.donationAmount +
+                Math.round(formState.rewardsCost / btcRate)}
             </SatoshiAmount>
-            {state.rewardsCost && (
+            {formState.rewardsCost && (
               <Text>{`Rewards: ${rewardCountString()}`}</Text>
             )}
-            {state.rewardsCost && hasShipping(name) && (
+            {formState.rewardsCost && hasShipping(name) && (
               <SatoshiAmount label="Shipping">
                 {getShippingCost()}
               </SatoshiAmount>

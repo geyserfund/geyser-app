@@ -4,22 +4,22 @@ import { DonationInput } from '../../../components/molecules';
 import { SectionTitle } from '../../../components/ui';
 import { IRewardCount } from '../../../interfaces';
 import { IFundForm } from '../../../hooks';
-import { FundingFormRewardItem } from '../../projectView/components/FundingFormRewardItem';
+import { FundingFormRewardItem } from '../components/FundingFormRewardItem';
 import { ProjectReward } from '../../../types/generated/graphql';
 
-interface IRewardBasedProps {
-  setState: any;
+type Props = {
+  setFormState: any;
   updateReward: (_: IRewardCount) => void;
   rewards?: ProjectReward[];
-  state?: IFundForm;
-}
+  formState?: IFundForm;
+};
 
-export const RewardBased = ({
-  setState,
+export const RewardBasedFundingFormSection = ({
+  setFormState,
   updateReward,
   rewards,
-  state,
-}: IRewardBasedProps) => {
+  formState,
+}: Props) => {
   if (!rewards || !(rewards.length > 0)) {
     return (
       <VStack width="100%" spacing="12px" flex="1" overflowX="visible">
@@ -31,7 +31,9 @@ export const RewardBased = ({
   }
 
   const getRewardCount = (rewardId: number) =>
-    state?.rewards ? state?.rewards[`${rewardId}` as keyof ProjectReward] : 0;
+    formState?.rewardsByIDAndCount
+      ? formState?.rewardsByIDAndCount[`${rewardId}` as keyof ProjectReward]
+      : 0;
 
   return (
     <VStack
@@ -43,12 +45,14 @@ export const RewardBased = ({
     >
       <Box width="100%">
         <SectionTitle>Donate to this idea</SectionTitle>
+
         <DonationInput
           inputGroup={{ padding: '2px' }}
           name="donationAmount"
-          onChange={setState}
+          onChange={setFormState}
         />
       </Box>
+
       {!rewards || !(rewards.length > 0) ? (
         <Box width="100%">
           <SectionTitle>Not any rewards</SectionTitle>
@@ -56,6 +60,7 @@ export const RewardBased = ({
       ) : (
         <Box width="100%">
           <SectionTitle>Donate to receive a reward</SectionTitle>
+
           <VStack padding="2px">
             {rewards.map((reward: ProjectReward) => (
               <FundingFormRewardItem

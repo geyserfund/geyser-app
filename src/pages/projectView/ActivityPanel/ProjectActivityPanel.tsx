@@ -11,7 +11,7 @@ import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
 import { SuccessScreen } from './SuccessScreen';
 import { QRPage } from './QRPage';
 import { isMobileMode, useNotification } from '../../../utils';
-import { PaymentPage } from './PaymentPage';
+import { FundingPaymentScreen } from './FundingPaymentScreen';
 import { AuthContext } from '../../../context';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
@@ -22,7 +22,7 @@ import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
 import { Project, ProjectReward } from '../../../types/generated/graphql';
 
-interface IActivityProps {
+type Props = {
   project: Project;
   detailOpen: boolean;
   fundingFlow: any;
@@ -30,7 +30,7 @@ interface IActivityProps {
   resourceType?: string;
   resourceId?: number;
   fundForm: IFundFormState;
-}
+};
 
 export const ProjectActivityPanel = ({
   project,
@@ -40,7 +40,7 @@ export const ProjectActivityPanel = ({
   fundForm,
   resourceType,
   resourceId,
-}: IActivityProps) => {
+}: Props) => {
   const { user } = useContext(AuthContext);
 
   const { btcRate } = useBtcContext();
@@ -52,7 +52,13 @@ export const ProjectActivityPanel = ({
   const [funders, setFunders] = useState<IFunder[]>([]);
 
   // required for knowing the rewards and the funds
-  const { state, setTarget, setState, updateReward, resetForm } = fundForm;
+  const {
+    state: formState,
+    setTarget,
+    setState: setFormState,
+    updateReward,
+    resetForm,
+  } = fundForm;
 
   const {
     fundState,
@@ -106,16 +112,16 @@ export const ProjectActivityPanel = ({
 
   useEffect(() => {
     if (user && user.id) {
-      setState('anonymous', false);
+      setFormState('anonymous', false);
     }
   }, [user]);
 
   useEffect(() => {
-    if (!state.anonymous && (!user || !user.id)) {
+    if (!formState.anonymous && (!user || !user.id)) {
       loginOnOpen();
-      setState('anonymous', true);
+      setFormState('anonymous', true);
     }
-  }, [state.anonymous]);
+  }, [formState.anonymous]);
 
   const handleFundProject = () => {
     gotoNextStage();
@@ -132,7 +138,7 @@ export const ProjectActivityPanel = ({
       rewardsCost,
       shippingCost: cost,
       shippingDestination: destination,
-      rewards,
+      rewardsByIDAndCount,
       email,
       anonymous,
       comment,
@@ -154,10 +160,14 @@ export const ProjectActivityPanel = ({
       },
     };
 
-    if (state.rewards && Object.entries(state.rewards).length > 0 && rewards) {
-      const rewardsArray = Object.keys(rewards).map((key) => ({
+    if (
+      state.rewardsByIDAndCount &&
+      Object.entries(state.rewardsByIDAndCount).length > 0 &&
+      rewardsByIDAndCount
+    ) {
+      const rewardsArray = Object.keys(rewardsByIDAndCount).map((key) => ({
         id: parseInt(key, 10),
-        quantity: rewards[key as keyof ProjectReward],
+        quantity: rewardsByIDAndCount[key as keyof ProjectReward],
       }));
       const filteredRewards = rewardsArray.filter(
         (reward) => reward.quantity !== 0,
@@ -174,7 +184,7 @@ export const ProjectActivityPanel = ({
   };
 
   const handleFund = async () => {
-    const input = formatFundingInput(state);
+    const input = formatFundingInput(formState);
     requestFunding(input);
   };
 
@@ -209,14 +219,14 @@ export const ProjectActivityPanel = ({
         );
       case fundingStages.form:
         return (
-          <PaymentPage
+          <FundingPaymentScreen
             {...{
               fundLoading,
               isMobile,
               handleCloseButton,
               btcRate,
-              state,
-              setState,
+              formState,
+              setFormState,
               setTarget,
               updateReward,
               handleFund,
@@ -231,7 +241,7 @@ export const ProjectActivityPanel = ({
       case fundingStages.started:
         return (
           <QRPage
-            state={state}
+            state={formState}
             project={project}
             fundingTx={fundingTx}
             amounts={amounts}
@@ -241,7 +251,7 @@ export const ProjectActivityPanel = ({
       case fundingStages.completed:
         return (
           <SuccessScreen
-            fundingState={state}
+            fundingState={formState}
             project={project}
             fundingTx={fundingTx}
             handleCloseButton={handleCloseButton}
