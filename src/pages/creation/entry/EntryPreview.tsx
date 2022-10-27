@@ -58,7 +58,7 @@ export const EntryPreview = () => {
       });
     },
     onError() {
-      history.push('/404');
+      history.push(getPath('notFound'));
     },
   });
 

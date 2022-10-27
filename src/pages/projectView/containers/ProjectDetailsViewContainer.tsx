@@ -1,13 +1,9 @@
 import React from 'react';
 import { useFundState } from '../../../hooks';
-import {
-  Project,
-  ProjectReward,
-  RewardCurrency,
-} from '../../../types/generated/graphql';
+import { Project, ProjectReward } from '../../../types/generated/graphql';
 import { Head } from '../../../utils/Head';
 import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel';
-import { DetailsContainer } from '../DetailsContainer';
+import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer';
 
 type Props = {
   project: Project;
@@ -43,7 +39,8 @@ export const ProjectDetailsViewContainer = ({
         image={project.image || ''}
         type="article"
       />
-      <DetailsContainer
+
+      <ProjectDetailsMainBodyContainer
         {...{
           project,
           detailOpen,

@@ -20,14 +20,14 @@ import { useAuthContext } from '../../context';
 
 type Rules = string;
 
-interface IStyles {
+type Styles = {
   isMobile: boolean;
   detailOpen: boolean;
   fadeStarted: boolean;
-}
+};
 
-const useStyles = createUseStyles<Rules, IStyles>({
-  container: ({ isMobile, detailOpen, fadeStarted }: IStyles) => ({
+const useStyles = createUseStyles<Rules, Styles>({
+  container: ({ isMobile, detailOpen, fadeStarted }: Styles) => ({
     display: !isMobile || detailOpen || fadeStarted ? 'flex' : 'none',
     position: fadeStarted ? 'absolute' : 'relative',
     top: fadeStarted ? 0 : undefined,
@@ -43,7 +43,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
     width: '100%',
     fontSize: '14px',
   },
-  detailsContainer: ({ isMobile }: IStyles) => ({
+  detailsContainer: ({ isMobile }: Styles) => ({
     height: '100%',
     paddingTop: isMobile ? '61px' : '71px',
     overflowY: 'scroll',
@@ -55,23 +55,23 @@ const useStyles = createUseStyles<Rules, IStyles>({
   ...fadeOut,
 });
 
-interface IActivityProps {
+type Props = {
   project: Project;
   detailOpen: boolean;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   fundState: IFundingStages;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
   updateReward: TupdateReward;
-}
+};
 
-export const DetailsContainer = ({
+export const ProjectDetailsMainBodyContainer = ({
   project,
   detailOpen,
   setDetailOpen,
   fundState,
   setFundState,
   updateReward,
-}: IActivityProps) => {
+}: Props) => {
   const isMobile = isMobileMode();
   const isDark = isDarkMode();
 
@@ -84,7 +84,7 @@ export const DetailsContainer = ({
   const history = useHistory();
 
   const { user, navigationContext } = useAuthContext();
-  const isViewerProjectOwner = navigationContext.projectOwnerId === user.id;
+  const isViewerTheProjectOwner = navigationContext.projectOwnerId === user.id;
 
   const handleViewClick = () => {
     setDetailOpen(false);
@@ -146,6 +146,7 @@ export const DetailsContainer = ({
           fundButtonFunction={handleFundClick}
           transitionButtonFunction={handleViewClick}
         />
+
         <VStack alignItems="center" width="100%" flex="1">
           <VStack
             spacing="20px"
@@ -162,7 +163,7 @@ export const DetailsContainer = ({
               }
             />
 
-            {isViewerProjectOwner && project.wallets.length === 0 && (
+            {isViewerTheProjectOwner && project.wallets.length === 0 && (
               <VStack
                 paddingLeft="25%"
                 paddingRight="25%"

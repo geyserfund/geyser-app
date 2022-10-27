@@ -19,7 +19,7 @@ import { useHistory, useParams } from 'react-router';
 import { QUERY_GET_ENTRY } from '../../../../graphql/queries/entries';
 import { FileUpload } from '../../../../components/molecules';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../../constants';
+import { colors, getPath } from '../../../../constants';
 import { ImageWithReload } from '../../../../components/ui';
 import { Editor } from './Editor';
 import Loader from '../../../../components/ui/Loader';
@@ -90,7 +90,7 @@ export const EntryCreateEdit = () => {
       });
     },
     onError() {
-      history.push('/404');
+      history.push(getPath('notFound'));
     },
   });
 
@@ -98,8 +98,8 @@ export const EntryCreateEdit = () => {
     if (params && params.entryId) {
       try {
         getPost({ variables: { id: parseInt(params.entryId, 10) } });
-      } catch (error) {
-        history.push('/404');
+      } catch {
+        history.push(getPath('notFound'));
       }
     }
   }, [params]);
@@ -313,6 +313,7 @@ export const EntryCreateEdit = () => {
                 </>
               </FileUpload>
             </Box>
+
             <VStack width="100%">
               <Input
                 id={'entry-title-input'}
@@ -329,6 +330,7 @@ export const EntryCreateEdit = () => {
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
               />
+
               <Input
                 id={'entry-description-input'}
                 border="none"

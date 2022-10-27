@@ -110,18 +110,4 @@ With Docker running, navigate to the URL that's appropriate for the development-
 >
 > This will allow you to get around any `ERR_CERT_AUTHORITY_INVALID` errors that may be thrown in your browser.
 
-### Running with GraphQL Faker
-
-After starting up Docker with a GraphQL Faker configuration, a number of URLs will be
-useful for debugging and making customizations to the GraphQL schema:
-
-- Interactive Editor: <http://localhost:9002/editor>
-- GraphQL API: <http://localhost:9002/graphql>
-- GraphQL Voyager: <http://localhost:9002/voyager>
-
-When the schema is updated, you must manually refresh the schema used by `GraphQL-Faker`. You can do so by running:
-
-`make faker-schema-refresh`
-
-This is required because, at the moment, the schame is resolved at build time (ie: in the Dockerfile). At a later date,
-this can be improved by resolving the schema at runtime and auto-restarting the GraphQL-Faker server on every schema change.
+> See [the docs on `GraphQL Faker Tips & Tricks`](./faker/docs/TipsAndTricks.md) for more useful tidbits of information on running/developing the app against Faker.
