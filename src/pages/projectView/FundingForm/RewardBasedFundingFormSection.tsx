@@ -17,17 +17,11 @@ type Props = {
 export const RewardBasedFundingFormSection = ({
   setFormState,
   updateReward,
-  rewards,
+  rewards = [],
   formState,
 }: Props) => {
-  if (!rewards || !(rewards.length > 0)) {
-    return (
-      <VStack width="100%" spacing="12px" flex="1" overflowX="visible">
-        <Box width="100%">
-          <SectionTitle>Not any rewards</SectionTitle>
-        </Box>
-      </VStack>
-    );
+  if (rewards.length === 0) {
+    return null;
   }
 
   const getRewardCount = (rewardId: number) =>
@@ -53,29 +47,20 @@ export const RewardBasedFundingFormSection = ({
         />
       </Box>
 
-      {!rewards || !(rewards.length > 0) ? (
-        <Box width="100%">
-          <SectionTitle>Not any rewards</SectionTitle>
-        </Box>
-      ) : (
-        <Box width="100%">
-          <SectionTitle>Donate to receive a reward</SectionTitle>
+      <Box width="100%">
+        <SectionTitle>Donate to receive a reward</SectionTitle>
 
-          <VStack padding="2px">
-            {rewards.map((reward: ProjectReward) => (
-              <FundingFormRewardItem
-                key={reward.id}
-                /* Hard-coding USD as reward currency as a quick fix. Seeing as it is used accross several places, a
-                 * sensible refactor would be to set the ProjectCurrency as a a shared context variable.
-                 */
-                item={reward}
-                count={getRewardCount(reward.id)}
-                updateCount={updateReward}
-              />
-            ))}
-          </VStack>
-        </Box>
-      )}
+        <VStack padding="2px">
+          {rewards.map((reward: ProjectReward) => (
+            <FundingFormRewardItem
+              key={reward.id}
+              item={reward}
+              count={getRewardCount(reward.id)}
+              updateCount={updateReward}
+            />
+          ))}
+        </VStack>
+      </Box>
     </VStack>
   );
 };
