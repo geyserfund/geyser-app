@@ -63,10 +63,12 @@ export const AddRewards = ({
   isSatoshi,
 }: IAddRewards) => {
   const { toast } = useNotification();
+
   const [_rewards, _setRewards] = useState<ProjectReward>(
     availableReward || defaultReward,
   );
   const rewards = useRef(_rewards);
+
   const setRewards = (value: ProjectReward) => {
     rewards.current = value;
     _setRewards(value);
@@ -198,7 +200,7 @@ export const AddRewards = ({
     <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
       <ModalOverlay />
       <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
-        <ModalHeader paddinX="20px">
+        <ModalHeader paddingX="20px">
           <Text fontSize="18px" fontWeight={600}>
             Add a Reward
           </Text>
@@ -262,18 +264,21 @@ export const AddRewards = ({
                 )}
               </FileUpload>
             </VStack>
+
             <VStack width="100%" alignItems="flex-start">
-              <Text>Cost of reward</Text>
+              <Text textTransform={'capitalize'}>Cost of Reward</Text>
+
               <InputGroup>
                 <InputLeftAddon>
                   {isSatoshi ? <SatoshiIconTilted /> : <BiDollar />}
                 </InputLeftAddon>
+
                 <Input
                   focusBorderColor="brand.primary"
                   name="cost"
                   type="number"
                   onChange={handleTextChange}
-                  value={rewards.current.cost / 100} // convert from cents to dollars
+                  value={rewards.current.cost}
                   isInvalid={formError.cost}
                 />
               </InputGroup>
