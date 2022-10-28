@@ -14,17 +14,17 @@ services:
     volumes:
       - .:/usr/app:cached
 
-  graphql-faker:
-    container_name: graphql-faker
-    working_dir: /workdir
-    build:
-      context: ./faker
-      args:
-        - APOLLO_KEY=$APOLLO_KEY
-    image: graphql-faker
-    env_file: .env
-    ports:
-      - '9002:9002'
+  # graphql-faker:
+  #   container_name: graphql-faker
+  #   working_dir: /workdir
+  #   build:
+  #     context: ./faker
+  #     args:
+  #       - APOLLO_KEY=$APOLLO_KEY
+  #   image: graphql-faker
+  #   env_file: .env
+  #   ports:
+  #     - '9002:9002'
 
   caddy:
     container_name: geyser-caddy-standalone
