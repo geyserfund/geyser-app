@@ -30,7 +30,10 @@ import {
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations';
 import { useNotification } from '../../../../utils';
-import { ProjectReward } from '../../../../types/generated/graphql';
+import {
+  ProjectReward,
+  RewardCurrency,
+} from '../../../../types/generated/graphql';
 import { defaultProjectReward } from '../../../../defaults';
 
 interface IAddRewards {
@@ -137,12 +140,14 @@ export const AddRewards = ({
         name: rewards.current.name,
         description: rewards.current.description,
         cost: rewards.current.cost * 100, // multiplied by 100 to express the cost in cents
+        costCurrency: RewardCurrency.Usdcent,
         image: rewards.current.image,
       };
       updateReward({ variables: { input: updateRewardsInput } });
     } else {
       const createRewardsInput = {
         cost: rewards.current.cost * 100, // multiplied by 100 to express the cost in cents
+        costCurrency: RewardCurrency.Usdcent,
         description: rewards.current.description,
         image: rewards.current.image,
         name: rewards.current.name,
