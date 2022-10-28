@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { fetchBitcoinRates } from '../api';
+import { BTC_IN_SATOSHI } from '../constants';
 
 const defaultContext = {
   btcRate: 0,
@@ -8,7 +9,8 @@ const defaultContext = {
 interface IBtcContext {
   /**
    * TODO: We should be more clear about how this "rate" is denominated.
-   * And it should be the invserse of a "satoshi rate".
+   * And it should be the inverse of a "satoshi rate". (Currently, it's being
+   * set to match the "satoshi rate")
    *
    * (See: https://github.com/geyserfund/geyser-app/pull/361#discussion_r999694992)
    */
@@ -23,7 +25,7 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const getBitcoinRates = async () => {
       const usdRate = await fetchBitcoinRates();
-      const satoshirate = usdRate * 0.00000001;
+      const satoshirate = usdRate * BTC_IN_SATOSHI;
 
       setBtcRate(satoshirate);
     };

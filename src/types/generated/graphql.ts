@@ -105,7 +105,7 @@ export type CreateProjectInput = {
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
   name: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
-  /** The currency used to price rewards for the project. Currently only USD supported. Should become an Enum. */
+  /** The currency used to price rewards for the project. Currently only USDCENT supported. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
   /** Public title of the project. */
   title: Scalars['title_String_NotNull_maxLength_60'];
@@ -121,8 +121,10 @@ export type CreateProjectMilestoneInput = {
 };
 
 export type CreateProjectRewardInput = {
-  /** Cost of the reward, priced in USD cents */
+  /** Cost of the reward, currently only in USD cents */
   cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
+  /** Currency used for the cost */
+  costCurrency: RewardCurrency;
   description: Scalars['description_String_NotNull_maxLength_250'];
   image?: InputMaybe<Scalars['String']>;
   name: Scalars['name_String_NotNull_maxLength_100'];
@@ -137,7 +139,7 @@ export type CreateWalletInput = {
 };
 
 export enum Currency {
-  Usd = 'usd',
+  Usdcent = 'USDCENT',
 }
 
 export type CursorInput = {
@@ -713,6 +715,8 @@ export type ProjectReward = {
   backers: Scalars['Int'];
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int'];
+  /** Currency used for the cost */
+  costCurrency: RewardCurrency;
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
    * rewards should only be visible by the project owner and the users that purchased it.
@@ -870,7 +874,7 @@ export type ResourceInput = {
 };
 
 export enum RewardCurrency {
-  Usd = 'usd',
+  Usdcent = 'USDCENT',
 }
 
 export type RewardFundingInput = {
@@ -949,8 +953,8 @@ export type UpdateProjectInput = {
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
   projectId: Scalars['BigInt'];
-  /** The currency used to price rewards for the project. Currently only USD supported. Should become an Enum. */
-  rewardCurrency?: InputMaybe<Scalars['String']>;
+  /** The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum. */
+  rewardCurrency?: InputMaybe<RewardCurrency>;
   /** Current status of the project, either active, draft or deleted. */
   status?: InputMaybe<ProjectStatus>;
   /** Public title of the project. */
@@ -969,6 +973,8 @@ export type UpdateProjectMilestoneInput = {
 export type UpdateProjectRewardInput = {
   /** Cost of the reward, priced in USD cents */
   cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
+  /** Currency used for the cost */
+  costCurrency: RewardCurrency;
   /** Soft deletes the reward. */
   deleted?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['description_String_maxLength_250']>;
@@ -2142,6 +2148,11 @@ export type ProjectRewardResolvers<
 > = {
   backers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  costCurrency?: Resolver<
+    ResolversTypes['RewardCurrency'],
+    ParentType,
+    ContextType
+  >;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   description?: Resolver<
     Maybe<ResolversTypes['description_String_maxLength_250']>,

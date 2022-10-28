@@ -31,6 +31,7 @@ import {
 } from '../../../../graphql/mutations';
 import { useNotification } from '../../../../utils';
 import { ProjectReward } from '../../../../types/generated/graphql';
+import { defaultProjectReward } from '../../../../defaults';
 
 interface IAddRewards {
   isOpen: boolean;
@@ -41,18 +42,6 @@ interface IAddRewards {
   setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
   projectId?: number;
 }
-
-export const defaultReward: ProjectReward = {
-  id: 0,
-  name: '',
-  description: '',
-  cost: 0,
-  image: '',
-  deleted: false,
-  stock: 0,
-  backers: 0,
-  sold: 0,
-};
 
 export const AddRewards = ({
   isOpen,
@@ -65,7 +54,7 @@ export const AddRewards = ({
   const { toast } = useNotification();
 
   const [_rewards, _setRewards] = useState<ProjectReward>(
-    availableReward || defaultReward,
+    availableReward || defaultProjectReward,
   );
   const rewards = useRef(_rewards);
 
