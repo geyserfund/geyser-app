@@ -3,9 +3,9 @@ import {
   Badge,
   Button,
   Center,
-  Grid,
   GridItem,
   HStack,
+  SimpleGrid,
   Text,
   useMediaQuery,
   VStack,
@@ -25,7 +25,7 @@ import {
   projectTypes,
 } from '../../constants';
 import { useAuthContext } from '../../context';
-import { TupdateReward } from '../../hooks';
+import { UpdateReward } from '../../hooks';
 import { isMobileMode } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
@@ -41,7 +41,7 @@ const useStyles = createUseStyles({
 type Props = {
   project: Project;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
-  updateReward: TupdateReward;
+  updateReward: UpdateReward;
   fundState: IFundingStages;
 };
 
@@ -75,7 +75,7 @@ export const ProjectAccessories = ({
   const canCreateEntries: boolean =
     isUserOwnerOfCurrentProject && (project.active || project.draft);
 
-  const [isSmallerThan1265] = useMediaQuery('(min-width: 1265px)');
+  const [isSmallerThan1265] = useMediaQuery('(max-width: 1265px)');
 
   const renderEntries = () => {
     if (project.entries && project.entries.length > 0) {
@@ -95,7 +95,7 @@ export const ProjectAccessories = ({
       return project.rewards.map((reward) => {
         if (reward) {
           return (
-            <GridItem key={reward.id} colSpan={isSmallerThan1265 ? 1 : 2}>
+            <GridItem key={reward.id} colSpan={isSmallerThan1265 ? 2 : 1}>
               <FundingFormRewardItem
                 onClick={() => {
                   if (fundState === fundingStages.initial) {
@@ -114,7 +114,7 @@ export const ProjectAccessories = ({
 
     return (
       <GridItem colSpan={isMobile ? 2 : 1}>
-        <Text>There are no any rewards available </Text>
+        <Text>There are no rewards available.</Text>
       </GridItem>
     );
   };
@@ -136,7 +136,7 @@ export const ProjectAccessories = ({
       });
     }
 
-    return <Text>There are no any milestones available </Text>;
+    return <Text>There are no milestones available.</Text>;
   };
 
   const handleEntriesClick = () => {
@@ -162,7 +162,7 @@ export const ProjectAccessories = ({
   ];
 
   return (
-    <VStack w="100%" spacing="40px">
+    <VStack width="100%" spacing="40px">
       <HStack justifyContent="center" spacing="13px">
         {hasEntries && (
           <Button
@@ -239,7 +239,7 @@ export const ProjectAccessories = ({
         </VStack>
       ) : null}
 
-      {isRewardBased && (
+      {isRewardBased ? (
         <VStack
           ref={rewardsRef}
           width="100%"
@@ -247,13 +247,18 @@ export const ProjectAccessories = ({
           spacing="20px"
         >
           <ProjectSectionBar name={'Rewards'} number={rewardsLength} />
-          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-            {renderRewards()}
-          </Grid>
-        </VStack>
-      )}
 
-      {hasMilestones && (
+          <SimpleGrid
+            columns={isSmallerThan1265 ? 1 : 2}
+            spacingX={7}
+            spacingY={8}
+          >
+            {renderRewards()}
+          </SimpleGrid>
+        </VStack>
+      ) : null}
+
+      {hasMilestones ? (
         <VStack
           ref={milestonesRef}
           width="100%"
@@ -263,7 +268,7 @@ export const ProjectAccessories = ({
           <ProjectSectionBar name={'Milestones'} number={milestoneLength} />
           <VStack alignItems="flex-start">{renderMilestones()}</VStack>
         </VStack>
-      )}
+      ) : null}
     </VStack>
   );
 };

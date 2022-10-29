@@ -27,6 +27,7 @@ export const SuccessScreen = ({
   const [hasCopiedProjectLink, setCopy] = useState(false);
 
   const { getTotalAmount } = useFundCalc(fundingState);
+
   const shareProjectWithFriends = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopy(true);
@@ -92,7 +93,7 @@ export const SuccessScreen = ({
         <ContributionInfoBox
           project={project as Project}
           contributionAmount={getTotalAmount('sats', project.name)}
-          rewardsEarned={fundingState.rewards}
+          rewardsEarned={fundingState.rewardsByIDAndCount}
           isFunderAnonymous={fundingState.anonymous}
           funderUsername={fundingState.funderUsername}
           funderEmail={fundingState.email}

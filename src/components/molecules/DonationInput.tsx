@@ -7,6 +7,8 @@ import {
   Button,
   useDisclosure,
   InputGroupProps,
+  VStack,
+  HStack,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
@@ -15,7 +17,14 @@ import { BsArrowRepeat } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { useBtcContext } from '../../context/btc';
-import { SatoshiIconTilted } from '../icons';
+import {
+  CrownIcon,
+  MedalIcon,
+  SatoshiIconTilted,
+  StarIcon,
+  TrophyIcon,
+} from '../icons';
+import { ButtonComponent } from '../ui';
 
 const useStyles = createUseStyles({
   inputElement: {
@@ -43,6 +52,13 @@ const useStyles = createUseStyles({
   },
   switchIcon: {
     fontSize: '35px',
+  },
+  defaultAmountButtons: {
+    borderWidth: '2px',
+    boxShadow: 'none',
+    '&:focus': {
+      borderColor: colors.normalLightGreen,
+    },
   },
 });
 
@@ -88,33 +104,74 @@ export const DonationInput = ({
     }
   }, [satoshi]);
 
+  const handleDefaultAmountButtonClick = (val: number) => {
+    setDollar(val);
+    setSatoshi(Math.round(val / btcRate));
+  };
+
   return (
-    <InputGroup {...inputGroup}>
-      <InputLeftElement>
-        {isSatoshi ? <SatoshiIconTilted /> : <BiDollar fontSize="25px" />}
-      </InputLeftElement>
-      <Input
-        value={satoshi > 0 ? (isSatoshi ? satoshi : dollar) : undefined}
-        type="number"
-        className={classNames(classes.inputElement, className)}
-        onChange={handleInput}
-        {...rest}
-        placeholder="0"
-      />
-      <InputRightElement width="50px">
-        <Button
-          className={classes.switchButtton}
-          onClick={onToggle}
-          variant="ghost"
+    <VStack>
+      <HStack width="100%" justifyContent="space-around" mt="5px">
+        <ButtonComponent
+          className={classes.defaultAmountButtons}
+          onClick={() => handleDefaultAmountButtonClick(10)}
+          leftIcon={<MedalIcon />}
         >
-          <BsArrowRepeat className={classes.switchIcon} />
-          {isSatoshi ? (
-            <BiDollar className={classes.insideIcon} />
-          ) : (
-            <SatoshiIconTilted wrapperClass={classes.insideIcon} scale={0.7} />
-          )}
-        </Button>
-      </InputRightElement>
-    </InputGroup>
+          $ 10
+        </ButtonComponent>
+        <ButtonComponent
+          className={classes.defaultAmountButtons}
+          onClick={() => handleDefaultAmountButtonClick(50)}
+          leftIcon={<TrophyIcon />}
+        >
+          $ 50
+        </ButtonComponent>
+        <ButtonComponent
+          className={classes.defaultAmountButtons}
+          onClick={() => handleDefaultAmountButtonClick(100)}
+          leftIcon={<CrownIcon />}
+        >
+          $ 100
+        </ButtonComponent>
+        <ButtonComponent
+          className={classes.defaultAmountButtons}
+          onClick={() => handleDefaultAmountButtonClick(1000)}
+          leftIcon={<StarIcon />}
+        >
+          $ 1000
+        </ButtonComponent>
+      </HStack>
+
+      <InputGroup {...inputGroup}>
+        <InputLeftElement>
+          {isSatoshi ? <SatoshiIconTilted /> : <BiDollar fontSize="25px" />}
+        </InputLeftElement>
+        <Input
+          value={satoshi > 0 ? (isSatoshi ? satoshi : dollar) : undefined}
+          type="number"
+          className={classNames(classes.inputElement, className)}
+          onChange={handleInput}
+          {...rest}
+          placeholder="0"
+        />
+        <InputRightElement width="50px">
+          <Button
+            className={classes.switchButtton}
+            onClick={onToggle}
+            variant="ghost"
+          >
+            <BsArrowRepeat className={classes.switchIcon} />
+            {isSatoshi ? (
+              <BiDollar className={classes.insideIcon} />
+            ) : (
+              <SatoshiIconTilted
+                wrapperClass={classes.insideIcon}
+                scale={0.7}
+              />
+            )}
+          </Button>
+        </InputRightElement>
+      </InputGroup>
+    </VStack>
   );
 };

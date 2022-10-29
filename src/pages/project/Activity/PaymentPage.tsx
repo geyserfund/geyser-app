@@ -30,13 +30,15 @@ import {
 import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
-import { IProjectReward, IProjectType } from '../../../interfaces';
-import { DonationBased, RewardBased } from '../FundForm';
+import { IProjectType } from '../../../interfaces';
+import { FundingFormSection } from '../../projectView/FundingFormSection';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { IGif } from '@giphy/js-types';
 import { hasShipping, useNotification } from '../../../utils';
+
+import { ProjectReward } from '../../../types/generated/graphql';
 
 interface IPaymentPageProps {
   isMobile: boolean;
@@ -49,7 +51,7 @@ interface IPaymentPageProps {
   setState: any;
   handleFund: () => void;
   type: IProjectType;
-  rewards?: IProjectReward[];
+  rewards?: ProjectReward[];
   name: string;
 }
 
@@ -75,6 +77,8 @@ export const PaymentPage = ({
   const [gifHover, setGifHover] = useState(false);
   const [focus, setFocus] = useState(true);
   const { toast } = useNotification();
+
+  const hasRewards = rewards && rewards.length > 0;
 
   const submit = () => {
     const valid = validateFundingAmount();
@@ -119,28 +123,6 @@ export const PaymentPage = ({
     return true;
   };
 
-  const renderFundForm = () => {
-    switch (type) {
-      case projectTypes.donation:
-        return <DonationBased setState={setState} />;
-
-      case projectTypes.reward:
-        return (
-          <Box width="100%" overflowY="auto">
-            <RewardBased {...{ rewards, setState, updateReward }} />
-            <Divider
-              borderTopWidth="3px"
-              borderBottomWidth="0px"
-              orientation="horizontal"
-              marginTop="0px !important"
-            />
-          </Box>
-        );
-      default:
-        return null;
-    }
-  };
-
   const rewardCountString = () => {
     const count = getRewardsQuantity();
     if (count === 0) {
@@ -173,7 +155,19 @@ export const PaymentPage = ({
         _active={{ bg: 'none' }}
         onClick={handleCloseButton}
       />
-      {renderFundForm()}
+      <Box width="100%" overflowY="auto">
+        <FundingFormSection
+          {...{ rewards, setFormState: setState, updateReward }}
+        />
+        {hasRewards && (
+          <Divider
+            borderTopWidth="3px"
+            borderBottomWidth="0px"
+            orientation="horizontal"
+            marginTop="0px !important"
+          />
+        )}
+      </Box>
       <VStack spacing="5px" width="100%" alignItems="flex-start">
         <SectionTitle>Comment</SectionTitle>
         <Box width="100%" position="relative">

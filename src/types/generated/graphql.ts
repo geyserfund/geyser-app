@@ -43,12 +43,12 @@ export type Scalars = {
   email_String_format_email: any;
   fundingGoal_Int_min_1: any;
   name_String_NotNull_maxLength_100: any;
+  name_String_NotNull_minLength_3_maxLength_60: any;
+  name_String_NotNull_minLength_3_maxLength_280: any;
   name_String_NotNull_minLength_5_maxLength_60: any;
-  name_String_NotNull_minLength_5_maxLength_280: any;
   name_String_maxLength_100: any;
+  name_String_minLength_3_maxLength_280: any;
   name_String_minLength_5_maxLength_60: any;
-  name_String_minLength_5_maxLength_280: any;
-  pubkey_String_NotNull_minLength_66_maxLength_66: any;
   pubkey_String_minLength_66_maxLength_66: any;
   quantity_Int_NotNull_min_1: any;
   rewardsCost_Int_NotNull_min_0: any;
@@ -104,8 +104,8 @@ export type CreateProjectInput = {
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>;
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
-  name: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
-  /** The currency used to price rewards for the project. Currently only USD supported. Should become an Enum. */
+  name: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
+  /** The currency used to price rewards for the project. Currently only USDCENT supported. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
   /** Public title of the project. */
   title: Scalars['title_String_NotNull_maxLength_60'];
@@ -121,8 +121,10 @@ export type CreateProjectMilestoneInput = {
 };
 
 export type CreateProjectRewardInput = {
-  /** Cost of the reward, priced in USD cents */
+  /** Cost of the reward, currently only in USD cents */
   cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
+  /** Currency used for the cost */
+  costCurrency: RewardCurrency;
   description: Scalars['description_String_NotNull_maxLength_250'];
   image?: InputMaybe<Scalars['String']>;
   name: Scalars['name_String_NotNull_maxLength_100'];
@@ -137,7 +139,7 @@ export type CreateWalletInput = {
 };
 
 export enum Currency {
-  Usd = 'usd',
+  Usdcent = 'USDCENT',
 }
 
 export type CursorInput = {
@@ -431,7 +433,7 @@ export type LndConnectionDetailsCreateInput = {
   /** Invoice macaroon for authenticating gRPC calls to the LND node. */
   macaroon: Scalars['String'];
   /** Public key of the LND node. */
-  pubkey: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
+  pubkey?: InputMaybe<Scalars['pubkey_String_minLength_66_maxLength_66']>;
   /** TLS certificate for the LND node (optional for Voltage nodes). */
   tlsCertificate?: InputMaybe<Scalars['String']>;
 };
@@ -448,7 +450,7 @@ export type LndConnectionDetailsPrivate = {
   /** Invoice macaroon for authenticating gRPC calls to the LND node. */
   macaroon: Scalars['String'];
   /** Public key of the LND node. */
-  pubkey: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
+  pubkey?: Maybe<Scalars['pubkey_String_minLength_66_maxLength_66']>;
   /** TLS certificate for the LND node (optional for Voltage nodes). */
   tlsCertificate?: Maybe<Scalars['String']>;
 };
@@ -456,7 +458,7 @@ export type LndConnectionDetailsPrivate = {
 /** Public node details visible by anyone. */
 export type LndConnectionDetailsPublic = {
   __typename?: 'LndConnectionDetailsPublic';
-  pubkey: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
+  pubkey?: Maybe<Scalars['pubkey_String_minLength_66_maxLength_66']>;
 };
 
 export type LndConnectionDetailsUpdateInput = {
@@ -670,7 +672,7 @@ export type Project = {
   media: Array<Maybe<Scalars['String']>>;
   milestones?: Maybe<Array<Maybe<ProjectMilestone>>>;
   /** Unique name for the project. Used for the project URL and lightning address. */
-  name: Scalars['name_String_NotNull_minLength_5_maxLength_280'];
+  name: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
   owners: Array<Owner>;
   rewardCurrency?: Maybe<RewardCurrency>;
   rewards?: Maybe<Array<Maybe<ProjectReward>>>;
@@ -713,6 +715,8 @@ export type ProjectReward = {
   backers: Scalars['Int'];
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int'];
+  /** Currency used for the cost */
+  costCurrency: RewardCurrency;
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
    * rewards should only be visible by the project owner and the users that purchased it.
@@ -751,7 +755,7 @@ export type ProjectWhereInput = {
   active?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['BigInt']>;
   /** Unique name for the project. Used for the project URL and lightning address. */
-  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_280']>;
+  name?: InputMaybe<Scalars['name_String_minLength_3_maxLength_280']>;
   type?: InputMaybe<ProjectType>;
 };
 
@@ -870,7 +874,7 @@ export type ResourceInput = {
 };
 
 export enum RewardCurrency {
-  Usd = 'usd',
+  Usdcent = 'USDCENT',
 }
 
 export type RewardFundingInput = {
@@ -927,7 +931,7 @@ export type Subscription = {
 export type UniqueProjectQueryInput = {
   id?: InputMaybe<Scalars['BigInt']>;
   /** Unique name for the project. Used for the project URL and lightning address. */
-  name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_280']>;
+  name?: InputMaybe<Scalars['name_String_minLength_3_maxLength_280']>;
 };
 
 export type UpdateEntryInput = {
@@ -940,19 +944,17 @@ export type UpdateEntryInput = {
 };
 
 export type UpdateProjectInput = {
-  /** @deprecated this field will soon be replaced by the status field */
   active?: InputMaybe<Scalars['Boolean']>;
   /** A short description of the project. */
   description?: InputMaybe<Scalars['description_String_maxLength_2200']>;
-  /** @deprecated this field will soon be replaced by the status field */
   draft?: InputMaybe<Scalars['Boolean']>;
   expiresAt?: InputMaybe<Scalars['String']>;
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>;
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
   projectId: Scalars['BigInt'];
-  /** The currency used to price rewards for the project. Currently only USD supported. Should become an Enum. */
-  rewardCurrency?: InputMaybe<Scalars['String']>;
+  /** The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum. */
+  rewardCurrency?: InputMaybe<RewardCurrency>;
   /** Current status of the project, either active, draft or deleted. */
   status?: InputMaybe<ProjectStatus>;
   /** Public title of the project. */
@@ -971,6 +973,8 @@ export type UpdateProjectMilestoneInput = {
 export type UpdateProjectRewardInput = {
   /** Cost of the reward, priced in USD cents */
   cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
+  /** Currency used for the cost */
+  costCurrency: RewardCurrency;
   /** Soft deletes the reward. */
   deleted?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['description_String_maxLength_250']>;
@@ -1340,23 +1344,23 @@ export type ResolversTypes = {
   name_String_NotNull_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_NotNull_maxLength_100']
   >;
+  name_String_NotNull_minLength_3_maxLength_60: ResolverTypeWrapper<
+    Scalars['name_String_NotNull_minLength_3_maxLength_60']
+  >;
+  name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<
+    Scalars['name_String_NotNull_minLength_3_maxLength_280']
+  >;
   name_String_NotNull_minLength_5_maxLength_60: ResolverTypeWrapper<
     Scalars['name_String_NotNull_minLength_5_maxLength_60']
-  >;
-  name_String_NotNull_minLength_5_maxLength_280: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_5_maxLength_280']
   >;
   name_String_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_maxLength_100']
   >;
+  name_String_minLength_3_maxLength_280: ResolverTypeWrapper<
+    Scalars['name_String_minLength_3_maxLength_280']
+  >;
   name_String_minLength_5_maxLength_60: ResolverTypeWrapper<
     Scalars['name_String_minLength_5_maxLength_60']
-  >;
-  name_String_minLength_5_maxLength_280: ResolverTypeWrapper<
-    Scalars['name_String_minLength_5_maxLength_280']
-  >;
-  pubkey_String_NotNull_minLength_66_maxLength_66: ResolverTypeWrapper<
-    Scalars['pubkey_String_NotNull_minLength_66_maxLength_66']
   >;
   pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<
     Scalars['pubkey_String_minLength_66_maxLength_66']
@@ -1501,12 +1505,12 @@ export type ResolversParentTypes = {
   email_String_format_email: Scalars['email_String_format_email'];
   fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1'];
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
+  name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
+  name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
   name_String_NotNull_minLength_5_maxLength_60: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
-  name_String_NotNull_minLength_5_maxLength_280: Scalars['name_String_NotNull_minLength_5_maxLength_280'];
   name_String_maxLength_100: Scalars['name_String_maxLength_100'];
+  name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280'];
   name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60'];
-  name_String_minLength_5_maxLength_280: Scalars['name_String_minLength_5_maxLength_280'];
-  pubkey_String_NotNull_minLength_66_maxLength_66: Scalars['pubkey_String_NotNull_minLength_66_maxLength_66'];
   pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66'];
   quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1'];
   rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0'];
@@ -1822,7 +1826,7 @@ export type LndConnectionDetailsPrivateResolvers<
   >;
   macaroon?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pubkey?: Resolver<
-    ResolversTypes['pubkey_String_NotNull_minLength_66_maxLength_66'],
+    Maybe<ResolversTypes['pubkey_String_minLength_66_maxLength_66']>,
     ParentType,
     ContextType
   >;
@@ -1839,7 +1843,7 @@ export type LndConnectionDetailsPublicResolvers<
   ParentType extends ResolversParentTypes['LndConnectionDetailsPublic'] = ResolversParentTypes['LndConnectionDetailsPublic'],
 > = {
   pubkey?: Resolver<
-    ResolversTypes['pubkey_String_NotNull_minLength_66_maxLength_66'],
+    Maybe<ResolversTypes['pubkey_String_minLength_66_maxLength_66']>,
     ParentType,
     ContextType
   >;
@@ -2083,7 +2087,7 @@ export type ProjectResolvers<
     ContextType
   >;
   name?: Resolver<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_280'],
+    ResolversTypes['name_String_NotNull_minLength_3_maxLength_280'],
     ParentType,
     ContextType
   >;
@@ -2144,6 +2148,11 @@ export type ProjectRewardResolvers<
 > = {
   backers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  costCurrency?: Resolver<
+    ResolversTypes['RewardCurrency'],
+    ParentType,
+    ContextType
+  >;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   description?: Resolver<
     Maybe<ResolversTypes['description_String_maxLength_250']>,
@@ -2520,20 +2529,28 @@ export interface Name_String_NotNull_MaxLength_100ScalarConfig
   name: 'name_String_NotNull_maxLength_100';
 }
 
+export interface Name_String_NotNull_MinLength_3_MaxLength_60ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['name_String_NotNull_minLength_3_maxLength_60'],
+    any
+  > {
+  name: 'name_String_NotNull_minLength_3_maxLength_60';
+}
+
+export interface Name_String_NotNull_MinLength_3_MaxLength_280ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['name_String_NotNull_minLength_3_maxLength_280'],
+    any
+  > {
+  name: 'name_String_NotNull_minLength_3_maxLength_280';
+}
+
 export interface Name_String_NotNull_MinLength_5_MaxLength_60ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
     any
   > {
   name: 'name_String_NotNull_minLength_5_maxLength_60';
-}
-
-export interface Name_String_NotNull_MinLength_5_MaxLength_280ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_280'],
-    any
-  > {
-  name: 'name_String_NotNull_minLength_5_maxLength_280';
 }
 
 export interface Name_String_MaxLength_100ScalarConfig
@@ -2544,28 +2561,20 @@ export interface Name_String_MaxLength_100ScalarConfig
   name: 'name_String_maxLength_100';
 }
 
+export interface Name_String_MinLength_3_MaxLength_280ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['name_String_minLength_3_maxLength_280'],
+    any
+  > {
+  name: 'name_String_minLength_3_maxLength_280';
+}
+
 export interface Name_String_MinLength_5_MaxLength_60ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['name_String_minLength_5_maxLength_60'],
     any
   > {
   name: 'name_String_minLength_5_maxLength_60';
-}
-
-export interface Name_String_MinLength_5_MaxLength_280ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_minLength_5_maxLength_280'],
-    any
-  > {
-  name: 'name_String_minLength_5_maxLength_280';
-}
-
-export interface Pubkey_String_NotNull_MinLength_66_MaxLength_66ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['pubkey_String_NotNull_minLength_66_maxLength_66'],
-    any
-  > {
-  name: 'pubkey_String_NotNull_minLength_66_maxLength_66';
 }
 
 export interface Pubkey_String_MinLength_66_MaxLength_66ScalarConfig
@@ -2681,12 +2690,12 @@ export type Resolvers<ContextType = any> = {
   email_String_format_email?: GraphQLScalarType;
   fundingGoal_Int_min_1?: GraphQLScalarType;
   name_String_NotNull_maxLength_100?: GraphQLScalarType;
+  name_String_NotNull_minLength_3_maxLength_60?: GraphQLScalarType;
+  name_String_NotNull_minLength_3_maxLength_280?: GraphQLScalarType;
   name_String_NotNull_minLength_5_maxLength_60?: GraphQLScalarType;
-  name_String_NotNull_minLength_5_maxLength_280?: GraphQLScalarType;
   name_String_maxLength_100?: GraphQLScalarType;
+  name_String_minLength_3_maxLength_280?: GraphQLScalarType;
   name_String_minLength_5_maxLength_60?: GraphQLScalarType;
-  name_String_minLength_5_maxLength_280?: GraphQLScalarType;
-  pubkey_String_NotNull_minLength_66_maxLength_66?: GraphQLScalarType;
   pubkey_String_minLength_66_maxLength_66?: GraphQLScalarType;
   quantity_Int_NotNull_min_1?: GraphQLScalarType;
   rewardsCost_Int_NotNull_min_0?: GraphQLScalarType;

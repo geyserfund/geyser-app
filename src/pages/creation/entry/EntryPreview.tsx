@@ -30,10 +30,13 @@ export const EntryPreview = () => {
   const { setNav } = useAuthContext();
 
   const [isPublished, setIsPublished] = useState(false);
+  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false);
 
   const [entry, setEntry] = useState<TEntry>(defaultEntry);
+
   const [getPost, { loading: loadingPosts, error, data: entryData }] =
     useLazyQuery(QUERY_GET_ENTRY);
+
   const [updatePost, { data: updateData, loading: updatePostLoading }] =
     useMutation(MUTATION_UPDATE_ENTRY);
 
@@ -48,7 +51,7 @@ export const EntryPreview = () => {
       });
     },
     onError() {
-      history.push('/404');
+      history.push(getPath('notFound'));
     },
   });
 
@@ -94,7 +97,9 @@ export const EntryPreview = () => {
   };
 
   const onBack = () => {
-    history.push(`/projects/${params.projectId}/entry/${params.entryId}`);
+    history.push(
+      getPath('projectEntryDetails', params.projectId, params.entryId),
+    );
   };
 
   const handleInput = (event: any) => {
@@ -124,8 +129,14 @@ export const EntryPreview = () => {
     setIsPublished(true);
   };
 
-  const handleGotoPost = () => {
-    history.push(`/entry/${params.entryId}`);
+  const handleGoToPost = () => {
+    history.push(getPath('entry', params.entryId));
+  };
+
+  const handleTwitterShareButtonTapped = () => {
+    navigator.clipboard.writeText(window.location.href);
+
+    setHasCopiedSharingLink(true);
   };
 
   if (loadingPosts || loading) {
@@ -151,7 +162,6 @@ export const EntryPreview = () => {
         <VStack
           spacing="20px"
           width="100%"
-          // height="100%"
           maxWidth="380px"
           padding={'0px 10px'}
           display="flex"
@@ -163,7 +173,7 @@ export const EntryPreview = () => {
             {isPublished ? 'Share entry' : 'Publish entry'}
           </Text>
 
-          {isPublished && (
+          {isPublished ? (
             <VStack width="100%" alignItems="center">
               <Box
                 borderRadius="50%"
@@ -172,12 +182,15 @@ export const EntryPreview = () => {
               >
                 <BsCheckLg />
               </Box>
+
               <Text>Your entry is live!</Text>
             </VStack>
-          )}
+          ) : null}
+
           <Text fontSize="14px" color="brand.neutral800">
             {!isPublished ? 'Edit Social Preview' : 'Preview'}{' '}
           </Text>
+
           <VStack
             alignItems="flex-start"
             backgroundColor="white"
@@ -196,10 +209,11 @@ export const EntryPreview = () => {
                 />
               </Box>
             )}
-            <Text
-              fontSize="11px"
-              color="brand.gray500"
-            >{`geyser.fund/${projectData?.project?.name}`}</Text>
+
+            <Text fontSize="11px" color="brand.gray500">
+              {`geyser.fund/${projectData?.project?.name}`}
+            </Text>
+
             <Input
               border="none"
               _focus={{ border: 'none' }}
@@ -243,10 +257,15 @@ export const EntryPreview = () => {
           )}
           {isPublished ? (
             <VStack width="100%">
-              <ButtonComponent isFullWidth onClick={handlePublish}>
-                Share on Twitter
+              <ButtonComponent
+                isFullWidth
+                onClick={handleTwitterShareButtonTapped}
+                primary={hasCopiedSharingLink}
+              >
+                {hasCopiedSharingLink ? 'Copied Link!' : 'Share on Twitter'}
               </ButtonComponent>
-              <ButtonComponent primary isFullWidth onClick={handleGotoPost}>
+
+              <ButtonComponent primary isFullWidth onClick={handleGoToPost}>
                 Go to Entry
               </ButtonComponent>
             </VStack>
