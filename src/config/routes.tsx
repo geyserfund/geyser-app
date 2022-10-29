@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/layout';
 import { Switch, Route } from 'react-router-dom';
 import { LandingPage } from '../pages/landing';
 import { TopNavBar } from '../components/nav';
-import { Project } from '../pages/project';
+import { Project as OldProjectView } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFoundPage } from '../pages/notFound';
 import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage';
@@ -85,7 +85,7 @@ export const Router = () => {
             />
             {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
             <Route path="/project/:projectId">
-              <Project />
+              <OldProjectView />
             </Route>
             <Route
               path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`}

@@ -1,13 +1,5 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import {
-  Box,
-  Button,
-  Image,
-  Input,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Image, Input, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BsCheckLg } from 'react-icons/bs';
 import { useHistory, useParams } from 'react-router';
@@ -38,6 +30,7 @@ export const EntryPreview = () => {
   const { setNav } = useAuthContext();
 
   const [isEntryPublished, setIsEntryPublished] = useState(false);
+  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false);
 
   const [entry, setEntry] = useState<TEntry>(defaultEntry);
 
@@ -104,7 +97,9 @@ export const EntryPreview = () => {
   };
 
   const onBack = () => {
-    history.push(`/projects/${params.projectId}/entry/${params.entryId}`);
+    history.push(
+      getPath('projectEntryDetails', params.projectId, params.entryId),
+    );
   };
 
   const handleInput = (event: any) => {
@@ -134,8 +129,14 @@ export const EntryPreview = () => {
     setIsEntryPublished(true);
   };
 
-  const handleGotoPost = () => {
-    history.push(`/entry/${params.entryId}`);
+  const handleGoToPost = () => {
+    history.push(getPath('entry', params.entryId));
+  };
+
+  const handleTwitterShareButtonTapped = () => {
+    navigator.clipboard.writeText(window.location.href);
+
+    setHasCopiedSharingLink(true);
   };
 
   if (loadingPosts || loading) {
@@ -161,7 +162,6 @@ export const EntryPreview = () => {
         <VStack
           spacing="20px"
           width="100%"
-          // height="100%"
           maxWidth="380px"
           padding={'0px 10px'}
           display="flex"
@@ -173,7 +173,7 @@ export const EntryPreview = () => {
             {isEntryPublished ? 'Share entry' : 'Publish entry'}
           </Text>
 
-          {isEntryPublished && (
+          {isEntryPublished ? (
             <VStack width="100%" alignItems="center">
               <Box
                 borderRadius="50%"
@@ -182,12 +182,15 @@ export const EntryPreview = () => {
               >
                 <BsCheckLg />
               </Box>
+
               <Text>Your entry is live!</Text>
             </VStack>
-          )}
+          ) : null}
+
           <Text fontSize="14px" color="brand.neutral800">
             {!isEntryPublished ? 'Edit Social Preview' : 'Preview'}{' '}
           </Text>
+
           <VStack
             alignItems="flex-start"
             backgroundColor="white"
@@ -206,10 +209,11 @@ export const EntryPreview = () => {
                 />
               </Box>
             )}
-            <Text
-              fontSize="11px"
-              color="brand.gray500"
-            >{`geyser.fund/${projectData?.project?.name}`}</Text>
+
+            <Text fontSize="11px" color="brand.gray500">
+              {`geyser.fund/${projectData?.project?.name}`}
+            </Text>
+
             <Input
               border="none"
               _focus={{ border: 'none' }}
@@ -251,52 +255,44 @@ export const EntryPreview = () => {
               />
             </VStack>
           )}
+          {isEntryPublished ? (
+            <VStack width="100%">
+              <ButtonComponent
+                isFullWidth
+                onClick={handleTwitterShareButtonTapped}
+                primary={hasCopiedSharingLink}
+              >
+                {hasCopiedSharingLink ? 'Copied Link!' : 'Share on Twitter'}
+              </ButtonComponent>
 
-          <VStack width="100%">
-            {isEntryPublished ? (
-              <>
-                <ButtonComponent isFullWidth onClick={handlePublish}>
-                  Share on Twitter
-                </ButtonComponent>
-                <ButtonComponent primary isFullWidth onClick={handleGotoPost}>
-                  Go to Entry
-                </ButtonComponent>
-              </>
-            ) : (
-              <>
-                <Box width={'full'}>
-                  <Tooltip
-                    isDisabled={projectData.project.active}
-                    label="Your project is not active yet so you cannot publish this Entry. But don’t worry your Entry will automatically be saved as a draft."
-                    shouldWrapChildren
-                    width={'full'}
-                  >
-                    <Button
-                      isFullWidth
-                      backgroundColor={'brand.primary'}
-                      onClick={handlePublish}
-                      isDisabled={Boolean(projectData.project.active) === false}
-                      width={'full'}
-                    >
-                      Publish
-                    </Button>
-                  </Tooltip>
-                </Box>
-
-                <Button
-                  isFullWidth
-                  backgroundColor={'brand.primary'}
-                  onClick={() =>
-                    history.push(
-                      getPath('projectDashboard', projectData.project.name),
-                    )
-                  }
-                >
-                  Go to Project
-                </Button>
-              </>
-            )}
-          </VStack>
+              <ButtonComponent primary isFullWidth onClick={handleGoToPost}>
+                Go to Entry
+              </ButtonComponent>
+            </VStack>
+          ) : projectData.project.draft ? (
+            <>
+              <Text>
+                You cannot publish an entry in an inactive project. Finish the
+                project configuration or re-activate the project to publish this
+                entry.
+              </Text>
+              <ButtonComponent
+                primary
+                isFullWidth
+                onClick={() =>
+                  history.push(
+                    getPath('projectDashboard', projectData.project.name),
+                  )
+                }
+              >
+                Go to Project Dashboard
+              </ButtonComponent>
+            </>
+          ) : (
+            <ButtonComponent primary isFullWidth onClick={handlePublish}>
+              Publish
+            </ButtonComponent>
+          )}
         </VStack>
       </VStack>
     </>

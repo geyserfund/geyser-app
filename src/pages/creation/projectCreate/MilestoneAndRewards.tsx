@@ -24,7 +24,7 @@ import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddMilestones, defaultMilestone } from './components';
 import { EditIcon } from '@chakra-ui/icons';
-import { AddRewards } from './components/AddRewards';
+import { RewardAdditionModal } from './components/RewardAdditionModal';
 import {
   CalendarButton,
   DeleteConfirmModal,
@@ -113,7 +113,7 @@ export const MilestoneAndRewards = () => {
     onCompleted(data) {
       const { project }: { project: Project } = data;
       if (project?.rewardCurrency) {
-        setIsSatoshiRewards(project.rewardCurrency !== RewardCurrency.Usd);
+        setIsSatoshiRewards(project.rewardCurrency !== RewardCurrency.Usdcent);
       }
 
       if (Number(project?.milestones?.length) > 0) {
@@ -132,6 +132,7 @@ export const MilestoneAndRewards = () => {
 
   const handleRewardUpdate = (addReward: ProjectReward) => {
     const findReward = rewards.find((reward) => reward.id === addReward.id);
+
     if (findReward) {
       const newRewards = rewards.map((reward) => {
         if (reward.id === addReward.id) {
@@ -150,8 +151,8 @@ export const MilestoneAndRewards = () => {
     const updateProjectInput: any = {
       projectId: data?.project?.id,
       // TODO: Use enums from back-end after they're implemented (https://discord.com/channels/940363862723690546/960539150602342400/1032372207264997386)
-      // rewardCurrency: isSatoshiRewards ? RewardCurrency.BTC : RewardCurrency.Usd,
-      rewardCurrency: RewardCurrency.Usd,
+      // rewardCurrency: isSatoshiRewards ? RewardCurrency.BTC : RewardCurrency.Usdcent,
+      rewardCurrency: RewardCurrency.Usdcent,
       expiresAt: finalDate || null,
     };
     if (rewards.length > 0) {
@@ -179,6 +180,7 @@ export const MilestoneAndRewards = () => {
             deleted: true,
             name: currentReward?.name,
             cost: currentReward?.cost,
+            costCurrency: RewardCurrency.Usdcent,
           },
         },
       });
@@ -366,6 +368,7 @@ export const MilestoneAndRewards = () => {
             </VStack>
           </VStack>
         </GridItem>
+
         <GridItem colSpan={2} display="flex" justifyContent="center">
           <VStack
             alignItems="flex-start"
@@ -407,13 +410,15 @@ export const MilestoneAndRewards = () => {
                 ))}
               </>
             )}
-            {rewards.length > 0 && (
+
+            {rewards.length > 0 ? (
               <>
                 <HStack justifyContent="space-between" width="100%">
                   <Text fontSize="18px" fontWeight={500}>
                     Rewards
                   </Text>
                 </HStack>
+
                 <VStack width="100%">
                   {rewards.map((reward, index) => (
                     <RewardCard
@@ -430,10 +435,11 @@ export const MilestoneAndRewards = () => {
                   ))}
                 </VStack>
               </>
-            )}
+            ) : null}
           </VStack>
         </GridItem>
       </Grid>
+
       {isMilestoneOpen && (
         <AddMilestones
           isOpen={isMilestoneOpen}
@@ -447,13 +453,12 @@ export const MilestoneAndRewards = () => {
       )}
 
       {isRewardOpen && (
-        <AddRewards
+        <RewardAdditionModal
           isOpen={isRewardOpen}
           onClose={onRewardClose}
-          rewards={selectedReward}
+          reward={selectedReward}
           onSubmit={handleRewardUpdate}
           isSatoshi={isSatoshiRewards}
-          setIsSatoshi={setIsSatoshiRewards}
           projectId={data?.project?.id}
         />
       )}

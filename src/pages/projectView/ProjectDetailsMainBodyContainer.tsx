@@ -13,7 +13,7 @@ import { ButtonComponent } from '../../components/ui';
 import { fundingStages } from '../../constants';
 import { DetailsCard } from './DetailsCard';
 import { ProjectAccessories } from './ProjectAccessories';
-import { TupdateReward } from '../../hooks';
+import { UpdateReward } from '../../hooks';
 import { Project } from '../../types/generated/graphql';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../context';
@@ -61,7 +61,7 @@ type Props = {
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   fundState: IFundingStages;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
-  updateReward: TupdateReward;
+  updateReward: UpdateReward;
 };
 
 export const ProjectDetailsMainBodyContainer = ({

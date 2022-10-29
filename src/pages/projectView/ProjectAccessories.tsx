@@ -25,7 +25,7 @@ import {
   projectTypes,
 } from '../../constants';
 import { useAuthContext } from '../../context';
-import { TupdateReward } from '../../hooks';
+import { UpdateReward } from '../../hooks';
 import { isMobileMode } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
@@ -41,7 +41,7 @@ const useStyles = createUseStyles({
 type Props = {
   project: Project;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
-  updateReward: TupdateReward;
+  updateReward: UpdateReward;
   fundState: IFundingStages;
 };
 
@@ -158,7 +158,7 @@ export const ProjectAccessories = ({
   };
 
   const handleCreateNewEntry = () => [
-    history.push(getPath('projectEntry', project.name)),
+    history.push(getPath('projectEntryCreation', project.name)),
   ];
 
   return (
