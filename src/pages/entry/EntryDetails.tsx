@@ -62,7 +62,7 @@ export const EntryDetails = ({ entry }: { entry: Entry }) => (
     </Text>
     <Box flex={1} width="100%">
       {entry.content && (
-        <Editor name="content" value={entry.content} readOnly />
+        <Editor name="content" value={entry.content} isReadOnly />
       )}
     </Box>
   </VStack>

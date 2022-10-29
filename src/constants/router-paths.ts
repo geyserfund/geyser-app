@@ -29,8 +29,10 @@ const pathsMap = {
     `/${routerPathNames.project}/${projectName}`,
   project: (projectName: string) =>
     `/${routerPathNames.projects}/${projectName}`,
-  projectEntry: (projectName: string) =>
-    `/${routerPathNames.projects}/${projectName}/entry`,
+  projectEntryCreation: (projectName: string) =>
+    `/${routerPathNames.projects}/${projectName}/${routerPathNames.entry}`,
+  projectEntryDetails: (projectName: string, entryID: string) =>
+    `/${routerPathNames.projects}/${projectName}/${routerPathNames.entry}/${entryID}`,
   publicProjectLaunch: () => `/${routerPathNames.launchProject}/start`,
   privateProjectLaunch: () => `/${routerPathNames.launchProject}`,
   launchProjectWithNode: (projectID: string) =>

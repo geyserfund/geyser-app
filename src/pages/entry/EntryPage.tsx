@@ -7,13 +7,14 @@ import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFoundPage } from '../notFound';
 import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
-import { useFundingFlow, useFundState } from '../../hooks';
+import { useFundingFlow, useFundingFormState } from '../../hooks';
 import { useAuthContext } from '../../context';
 import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
 import { EntryContainer } from './EntryContainer';
 import { Entry, Project, ProjectReward } from '../../types/generated/graphql';
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { compactMap } from '../../utils/compactMap';
+import { getPath } from '../../constants';
 
 export const EntryPage = () => {
   const { entryId } = useParams<{ entryId: string }>();
@@ -35,7 +36,7 @@ export const EntryPage = () => {
       onCompleted(data) {
         setNav({
           title: data.project.title,
-          path: `/projects/${data.project.name}`,
+          path: getPath('project', data.project.name),
         });
       },
     });
@@ -49,7 +50,7 @@ export const EntryPage = () => {
       },
       onError(error) {
         console.error(error);
-        history.push('/404');
+        history.push(getPath('notFound'));
       },
     });
 
@@ -106,7 +107,7 @@ const EntryViewWrapper = ({
 }: IEntryViewWrapper) => {
   const rewards =
     (project.rewards && compactMap<ProjectReward>(project.rewards)) || [];
-  const fundForm = useFundState({ rewards });
+  const fundForm = useFundingFormState({ rewards });
   const { setFundState } = fundingFlow;
   return (
     <>

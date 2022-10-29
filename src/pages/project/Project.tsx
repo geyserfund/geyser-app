@@ -7,7 +7,6 @@ import { customHistory } from '../../config';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFoundPage } from '../notFound';
 import { Head } from '../../utils/Head';
-import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
 import Details from './Details';
 import { useFundingFlow } from '../../hooks';
 import { Grants } from '../grants/Grants';
@@ -72,10 +71,6 @@ export const Project = () => {
               project={project}
               {...{ detailOpen, setDetailOpen, setFundState }}
             />
-            {/* <ProjectActivityPanel
-              project={project}
-              {...{ detailOpen, setDetailOpen, fundingFlow }}
-            /> */}
           </Box>
         </Box>
       ) : (

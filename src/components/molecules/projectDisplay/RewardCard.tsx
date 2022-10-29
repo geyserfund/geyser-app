@@ -13,12 +13,12 @@ import {
   SatoshiAmount,
 } from '../../ui';
 
-interface IRewardCard extends ICard {
+type Props = ICard & {
   reward: TRewards | ProjectReward;
   isSatoshi: boolean;
   handleEdit?: any;
   handleRemove?: any;
-}
+};
 
 export const RewardCard = ({
   reward,
@@ -26,7 +26,7 @@ export const RewardCard = ({
   handleEdit,
   handleRemove,
   ...rest
-}: IRewardCard) => {
+}: Props) => {
   return (
     <Box
       border="2px solid"
@@ -47,8 +47,8 @@ export const RewardCard = ({
                 </SatoshiAmount>
               ) : (
                 <Text color={colors.textBlack} fontWeight="bold">
-                  {/* 
-                    Divided by 100 as cost is in cents 
+                  {/*
+                    Divided by 100 as cost is in cents
                   */}
                   {`$ ${reward.cost / 100}`}
                 </Text>

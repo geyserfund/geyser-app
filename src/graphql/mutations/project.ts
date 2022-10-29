@@ -46,21 +46,27 @@ export const MUTATION_CREATE_PROJECT_REWARD = gql`
       name
       description
       cost
+      costCurrency
       image
       deleted
+      stock
+      sold
     }
   }
 `;
 
 export const MUTATION_UPDATE_PROJECT_REWARD = gql`
-  mutation CreateProjectReward($input: UpdateProjectRewardInput) {
+  mutation UpdateProjectReward($input: UpdateProjectRewardInput) {
     updateProjectReward(input: $input) {
       id
       name
       description
       cost
+      costCurrency
       image
       deleted
+      stock
+      sold
     }
   }
 `;
