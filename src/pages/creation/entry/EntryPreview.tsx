@@ -266,6 +266,7 @@ export const EntryPreview = () => {
               <>
                 <Box width={'full'}>
                   <Tooltip
+                    isDisabled={projectData.project.active}
                     label="Your project is not active yet so you cannot publish this Entry. But don’t worry your Entry will automatically be saved as a draft."
                     shouldWrapChildren
                     width={'full'}
