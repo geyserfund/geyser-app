@@ -84,6 +84,7 @@ export const RewardSettings = ({ project }: { project: Project }) => {
             deleted: true,
             name: currentReward?.name,
             cost: currentReward?.cost,
+            costCurrency: RewardCurrency.Usdcent,
           },
         },
       });

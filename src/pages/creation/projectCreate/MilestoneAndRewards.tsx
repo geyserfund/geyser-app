@@ -180,6 +180,7 @@ export const MilestoneAndRewards = () => {
             deleted: true,
             name: currentReward?.name,
             cost: currentReward?.cost,
+            costCurrency: RewardCurrency.Usdcent,
           },
         },
       });
