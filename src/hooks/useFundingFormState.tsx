@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { ShippingDestination, shippingTypes } from '../constants';
 import { AuthContext } from '../context';
+import { useBTCConverter } from '../helpers';
 
 import { IRewardCount } from '../interfaces';
 import { ProjectReward, RewardCurrency } from '../types/generated/graphql';
@@ -16,15 +17,15 @@ export interface IFundForm {
   media: string;
   funderUsername: string;
   funderAvatarURL: string;
-  rewards?: { [key: string]: number } | undefined;
+  rewardsByIDAndCount?: { [key: string]: number } | undefined;
   rewardCurrency: RewardCurrency;
 }
 
-export interface IuseFundStateProps {
+type UseFundStateProps = {
   rewards?: ProjectReward[];
-}
+};
 
-export type TupdateReward = (_: IRewardCount) => void;
+export type UpdateReward = (_: IRewardCount) => void;
 
 export interface IFundFormState {
   state: IFundForm;
@@ -32,14 +33,15 @@ export interface IFundFormState {
   setTarget: (event: any) => void;
   // eslint-disable-next-line no-unused-vars
   setState: (name: string, value: any) => void;
-  updateReward: TupdateReward;
+  updateReward: UpdateReward;
   resetForm: () => void;
 }
 
-export const useFundState = ({ rewards }: IuseFundStateProps) => {
+export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
   const { user } = useContext(AuthContext);
+  const { getUSDCentsAmount } = useBTCConverter();
 
-  const initialState = {
+  const initialState: IFundForm = {
     donationAmount: 0,
     rewardsCost: 0,
     comment: '',
@@ -50,11 +52,12 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
     funderUsername: user.username,
     email: '',
     media: '',
-    rewards: undefined,
-    rewardCurrency: RewardCurrency.Usd,
+    rewardsByIDAndCount: undefined,
+    rewardCurrency: RewardCurrency.Usdcent,
   };
 
   const [state, _setState] = useState<IFundForm>(initialState);
+
   const setTarget = (event: any) => {
     const { name, value } = event.target;
     const newState = { ...state, [name]: value };
@@ -75,44 +78,45 @@ export const useFundState = ({ rewards }: IuseFundStateProps) => {
   };
 
   const updateReward = ({ id, count }: IRewardCount) => {
-    const newRewards = { ...state.rewards };
+    const newRewardsCountInfo = { ...state.rewardsByIDAndCount };
 
     if (count !== 0) {
-      newRewards[id as unknown as keyof ProjectReward] = count;
+      newRewardsCountInfo[id as unknown as keyof ProjectReward] = count;
     } else if (count === 0) {
-      delete newRewards[id as unknown as keyof ProjectReward];
+      delete newRewardsCountInfo[id as unknown as keyof ProjectReward];
     }
 
     let rewardsCost = 0;
+
     if (rewards) {
-      Object.keys(newRewards).map((key: string) => {
-        const id = parseInt(key, 10);
+      Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
+        const id = parseInt(rewardID, 10);
+
         const reward = rewards.find(
-          (reward: ProjectReward) => reward.id === id || `${reward.id}` === key,
+          (reward: ProjectReward) =>
+            reward.id === id || `${reward.id}` === rewardID,
         );
 
         if (reward && reward.id) {
-          /*
-           * IMPORTANT: the reward.currency is undefined at the moment of writing this. This means the cost defaults to
-           * being divided by 100, which assumes the cost is expressed in fiat (specifically USD). This was done as a quick fix
-           * and must be refactored.
-           */
           const cost =
-            state.rewardCurrency === RewardCurrency.Usd
+            state.rewardCurrency === RewardCurrency.Usdcent
               ? reward.cost
-              : reward.cost / 100;
+              : // Assume sats if not USD cents
+                getUSDCentsAmount(reward.cost);
 
-          rewardsCost += cost * newRewards[key as keyof ProjectReward];
+          rewardsCost +=
+            cost * newRewardsCountInfo[rewardID as keyof ProjectReward];
         }
       });
     }
 
     const newState = {
       ...state,
-      rewards: newRewards,
+      rewardsByIDAndCount: newRewardsCountInfo,
       rewardsCost,
       totalAmount: rewardsCost + state.donationAmount,
     };
+
     _setState(newState);
   };
 

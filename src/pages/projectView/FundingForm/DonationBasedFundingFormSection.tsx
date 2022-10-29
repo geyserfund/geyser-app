@@ -8,7 +8,9 @@ interface IDonationBasedProps {
   setState: AnyAaaaRecord;
 }
 
-export const DonationBased = ({ setState }: IDonationBasedProps) => (
+export const DonationBasedFundingFormSection = ({
+  setState,
+}: IDonationBasedProps) => (
   <VStack width="100%">
     <Box width="100%">
       <SectionTitle> Send amount</SectionTitle>

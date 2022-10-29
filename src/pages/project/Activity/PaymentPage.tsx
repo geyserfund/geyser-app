@@ -31,7 +31,10 @@ import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 import { IProjectReward, IProjectType } from '../../../interfaces';
-import { DonationBased, RewardBased } from '../FundForm';
+import {
+  DonationBasedFundingFormSection,
+  RewardBasedFundingFormSection,
+} from '../../projectView/FundingForm';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
@@ -122,12 +125,14 @@ export const PaymentPage = ({
   const renderFundForm = () => {
     switch (type) {
       case projectTypes.donation:
-        return <DonationBased setState={setState} />;
+        return <DonationBasedFundingFormSection setState={setState} />;
 
       case projectTypes.reward:
         return (
           <Box width="100%" overflowY="auto">
-            <RewardBased {...{ rewards, setState, updateReward }} />
+            <RewardBasedFundingFormSection
+              {...{ rewards, setFormState: setState, updateReward }}
+            />
             <Divider
               borderTopWidth="3px"
               borderBottomWidth="0px"
