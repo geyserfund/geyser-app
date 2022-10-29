@@ -43,6 +43,7 @@ import { IGif } from '@giphy/js-types';
 import { hasShipping, useNotification } from '../../../utils';
 import { ProjectReward } from '../../../types/generated/graphql';
 import { FundingFormSection } from '../FundingFormSection';
+import { useBtcContext } from '../../../context/btc';
 
 type Props = {
   isMobile: boolean;
