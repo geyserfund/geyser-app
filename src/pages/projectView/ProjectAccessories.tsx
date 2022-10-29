@@ -158,7 +158,7 @@ export const ProjectAccessories = ({
   };
 
   const handleCreateNewEntry = () => [
-    history.push(getPath('projectEntry', project.name)),
+    history.push(getPath('projectEntryCreation', project.name)),
   ];
 
   return (

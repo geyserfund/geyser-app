@@ -29,7 +29,7 @@ export const EntryPreview = () => {
   const history = useHistory();
   const { setNav } = useAuthContext();
 
-  const [isPublished, setIsPublished] = useState(false);
+  const [isEntryPublished, setIsEntryPublished] = useState(false);
   const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false);
 
   const [entry, setEntry] = useState<TEntry>(defaultEntry);
@@ -126,7 +126,7 @@ export const EntryPreview = () => {
       });
     }
 
-    setIsPublished(true);
+    setIsEntryPublished(true);
   };
 
   const handleGoToPost = () => {
@@ -170,10 +170,10 @@ export const EntryPreview = () => {
           paddingBottom="80px"
         >
           <Text fontSize="33px" fontWeight={600} color="brand.gray500">
-            {isPublished ? 'Share entry' : 'Publish entry'}
+            {isEntryPublished ? 'Share entry' : 'Publish entry'}
           </Text>
 
-          {isPublished ? (
+          {isEntryPublished ? (
             <VStack width="100%" alignItems="center">
               <Box
                 borderRadius="50%"
@@ -188,7 +188,7 @@ export const EntryPreview = () => {
           ) : null}
 
           <Text fontSize="14px" color="brand.neutral800">
-            {!isPublished ? 'Edit Social Preview' : 'Preview'}{' '}
+            {!isEntryPublished ? 'Edit Social Preview' : 'Preview'}{' '}
           </Text>
 
           <VStack
@@ -226,7 +226,7 @@ export const EntryPreview = () => {
               name="title"
               value={entry.title}
               onChange={handleInput}
-              disabled={isPublished}
+              disabled={isEntryPublished}
             />
             <Input
               border="none"
@@ -240,10 +240,10 @@ export const EntryPreview = () => {
               name="description"
               value={entry.description}
               onChange={handleInput}
-              disabled={isPublished}
+              disabled={isEntryPublished}
             />
           </VStack>
-          {!isPublished && (
+          {!isEntryPublished && (
             <VStack alignItems="flex-start" width="100%">
               <Text fontSize="14px" color="brand.neutral800">
                 Linked project
@@ -255,7 +255,7 @@ export const EntryPreview = () => {
               />
             </VStack>
           )}
-          {isPublished ? (
+          {isEntryPublished ? (
             <VStack width="100%">
               <ButtonComponent
                 isFullWidth

@@ -17,7 +17,7 @@ import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { isMobileMode } from '../../utils';
 import { NotAuthorized } from '../notAuthorized';
 import { NotFoundPage } from '../notFound';
-import { Entries } from './Entries';
+import { ProjectDashboardEntries } from './ProjectDashboardEntries';
 import { MilestoneSettings } from './MilestoneSettings';
 import { NodeSettings } from './NodeSettings';
 import { ProjectSettings } from './ProjectSettings';
@@ -87,7 +87,7 @@ export const ProjectDashboard = () => {
   const renderTabs = () => {
     switch (view) {
       case 'entries':
-        return <Entries project={project} />;
+        return <ProjectDashboardEntries project={project} />;
       case 'milestones':
         return <MilestoneSettings project={project} />;
       case 'rewards':
@@ -97,7 +97,7 @@ export const ProjectDashboard = () => {
       case 'project':
         return <ProjectSettings project={project} />;
       default:
-        return <Entries project={project} />;
+        return <ProjectDashboardEntries project={project} />;
     }
   };
 
