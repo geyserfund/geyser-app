@@ -7,7 +7,7 @@ import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { NotFoundPage } from '../notFound';
 import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
-import { useFundingFlow, useFundState } from '../../hooks';
+import { useFundingFlow, useFundingFormState } from '../../hooks';
 import { useAuthContext } from '../../context';
 import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
 import { EntryContainer } from './EntryContainer';
@@ -107,7 +107,7 @@ const EntryViewWrapper = ({
 }: IEntryViewWrapper) => {
   const rewards =
     (project.rewards && compactMap<ProjectReward>(project.rewards)) || [];
-  const fundForm = useFundState({ rewards });
+  const fundForm = useFundingFormState({ rewards });
   const { setFundState } = fundingFlow;
   return (
     <>

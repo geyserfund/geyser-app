@@ -24,7 +24,7 @@ import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { AddMilestones, defaultMilestone } from './components';
 import { EditIcon } from '@chakra-ui/icons';
-import { AddRewards } from './components/AddRewards';
+import { RewardAdditionModal } from './components/RewardAdditionModal';
 import {
   CalendarButton,
   DeleteConfirmModal,
@@ -132,6 +132,7 @@ export const MilestoneAndRewards = () => {
 
   const handleRewardUpdate = (addReward: ProjectReward) => {
     const findReward = rewards.find((reward) => reward.id === addReward.id);
+
     if (findReward) {
       const newRewards = rewards.map((reward) => {
         if (reward.id === addReward.id) {
@@ -366,6 +367,7 @@ export const MilestoneAndRewards = () => {
             </VStack>
           </VStack>
         </GridItem>
+
         <GridItem colSpan={2} display="flex" justifyContent="center">
           <VStack
             alignItems="flex-start"
@@ -407,13 +409,15 @@ export const MilestoneAndRewards = () => {
                 ))}
               </>
             )}
-            {rewards.length > 0 && (
+
+            {rewards.length > 0 ? (
               <>
                 <HStack justifyContent="space-between" width="100%">
                   <Text fontSize="18px" fontWeight={500}>
                     Rewards
                   </Text>
                 </HStack>
+
                 <VStack width="100%">
                   {rewards.map((reward, index) => (
                     <RewardCard
@@ -430,10 +434,11 @@ export const MilestoneAndRewards = () => {
                   ))}
                 </VStack>
               </>
-            )}
+            ) : null}
           </VStack>
         </GridItem>
       </Grid>
+
       {isMilestoneOpen && (
         <AddMilestones
           isOpen={isMilestoneOpen}
@@ -447,13 +452,12 @@ export const MilestoneAndRewards = () => {
       )}
 
       {isRewardOpen && (
-        <AddRewards
+        <RewardAdditionModal
           isOpen={isRewardOpen}
           onClose={onRewardClose}
-          rewards={selectedReward}
+          reward={selectedReward}
           onSubmit={handleRewardUpdate}
           isSatoshi={isSatoshiRewards}
-          setIsSatoshi={setIsSatoshiRewards}
           projectId={data?.project?.id}
         />
       )}

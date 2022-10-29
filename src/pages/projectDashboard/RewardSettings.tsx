@@ -16,7 +16,7 @@ import {
   RewardCurrency,
 } from '../../types/generated/graphql';
 import { useNotification } from '../../utils';
-import { AddRewards } from '../creation/projectCreate/components/AddRewards';
+import { RewardAdditionModal } from '../creation/projectCreate/components/RewardAdditionModal';
 
 export const RewardSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
@@ -29,11 +29,13 @@ export const RewardSettings = ({ project }: { project: Project }) => {
     onClose: onRewardClose,
     onOpen: openReward,
   } = useDisclosure();
+
   const {
     isOpen: isRewardDeleteOpen,
     onClose: onRewardDeleteClose,
     onOpen: openRewardDelete,
   } = useDisclosure();
+
   const [isSatoshi, setIsSatoshi] = useState(
     /* to be replaced with an actual check on RewardCurrency.Sats when we add it to the enum */
     project.rewardCurrency !== null &&
@@ -51,6 +53,7 @@ export const RewardSettings = ({ project }: { project: Project }) => {
 
   const handleRewardUpdate = (addReward: ProjectReward) => {
     const findReward = rewards.find((reward) => reward.id === addReward.id);
+
     if (findReward) {
       const newRewards = rewards.map((reward) => {
         if (reward.id === addReward.id) {
@@ -59,6 +62,7 @@ export const RewardSettings = ({ project }: { project: Project }) => {
 
         return reward;
       });
+
       setRewards(newRewards);
     } else {
       setRewards([...rewards, addReward]);
@@ -72,6 +76,7 @@ export const RewardSettings = ({ project }: { project: Project }) => {
 
     try {
       const currentReward = rewards.find((reward) => reward.id === id);
+
       await updateReward({
         variables: {
           input: {
@@ -84,7 +89,9 @@ export const RewardSettings = ({ project }: { project: Project }) => {
       });
       const newRewards = rewards.filter((reward) => reward.id !== id);
       setRewards(newRewards);
+
       onRewardDeleteClose();
+
       toast({
         title: 'Successfully removed!',
         description: `Reward ${currentReward?.name} was successfully removed`,
@@ -146,13 +153,14 @@ export const RewardSettings = ({ project }: { project: Project }) => {
               spacing="10px"
               width="100%"
             >
-              {rewards.length > 0 && (
+              {rewards.length > 0 ? (
                 <>
                   <HStack justifyContent="space-between" width="100%">
                     <Text fontSize="18px" fontWeight={500}>
                       Rewards
                     </Text>
                   </HStack>
+
                   <VStack width="100%">
                     {rewards.map((reward, index) => (
                       <RewardCard
@@ -169,20 +177,19 @@ export const RewardSettings = ({ project }: { project: Project }) => {
                     ))}
                   </VStack>
                 </>
-              )}
+              ) : null}
             </VStack>
           </VStack>
         </VStack>
       </GridItem>
 
       {isRewardOpen && (
-        <AddRewards
+        <RewardAdditionModal
           isOpen={isRewardOpen}
           onClose={onRewardClose}
-          rewards={selectedReward}
+          reward={selectedReward}
           onSubmit={handleRewardUpdate}
           isSatoshi={isSatoshi}
-          setIsSatoshi={setIsSatoshi}
           projectId={parseInt(`${project.id}`, 10)}
         />
       )}
