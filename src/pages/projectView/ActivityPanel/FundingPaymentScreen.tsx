@@ -42,10 +42,7 @@ import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import { IGif } from '@giphy/js-types';
 import { hasShipping, useNotification } from '../../../utils';
 import { ProjectReward } from '../../../types/generated/graphql';
-import {
-  DonationBasedFundingFormSection,
-  RewardBasedFundingFormSection,
-} from '../FundingForm';
+import { FundingFormSection } from '../FundingFormSection';
 import { useBtcContext } from '../../../context/btc';
 
 type Props = {
@@ -83,6 +80,7 @@ export const FundingPaymentScreen = ({
   const [gifHover, setGifHover] = useState(false);
   const [focus, setFocus] = useState(true);
   const { toast } = useNotification();
+  const hasRewards = rewards && rewards.length > 0;
   const { btcRate } = useBtcContext();
 
   const submit = () => {
@@ -129,35 +127,6 @@ export const FundingPaymentScreen = ({
     return true;
   };
 
-  const renderFundForm = () => {
-    switch (type) {
-      case projectTypes.donation:
-        return <DonationBasedFundingFormSection setState={setFormState} />;
-
-      case projectTypes.reward:
-        return (
-          <Box width="100%" overflowY="auto">
-            <RewardBasedFundingFormSection
-              {...{
-                rewards,
-                setFormState,
-                updateReward,
-                formState,
-              }}
-            />
-            <Divider
-              borderTopWidth="3px"
-              borderBottomWidth="0px"
-              orientation="horizontal"
-              marginTop="0px !important"
-            />
-          </Box>
-        );
-      default:
-        return null;
-    }
-  };
-
   const rewardCountString = () => {
     const count = getRewardsQuantity();
     if (count === 0) {
@@ -191,7 +160,24 @@ export const FundingPaymentScreen = ({
         onClick={handleCloseButton}
       />
 
-      {renderFundForm()}
+      <Box width="100%" overflowY="auto">
+        <FundingFormSection
+          {...{
+            rewards,
+            setFormState,
+            updateReward,
+            formState,
+          }}
+        />
+        {hasRewards && (
+          <Divider
+            borderTopWidth="3px"
+            borderBottomWidth="0px"
+            orientation="horizontal"
+            marginTop="0px !important"
+          />
+        )}
+      </Box>
 
       <VStack spacing="5px" width="100%" alignItems="flex-start">
         <SectionTitle>Comment</SectionTitle>
