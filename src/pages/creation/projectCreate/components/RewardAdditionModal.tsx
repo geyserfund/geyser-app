@@ -30,43 +30,51 @@ import {
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations';
 import { useNotification } from '../../../../utils';
-import { ProjectReward } from '../../../../types/generated/graphql';
+import {
+  ProjectReward,
+  RewardCurrency,
+} from '../../../../types/generated/graphql';
+import { defaultProjectReward } from '../../../../defaults';
+import {
+  ProjectRewardCreationVariables,
+  ProjectRewardUpdateVariables,
+} from '../types';
 
-interface IAddRewards {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (_: ProjectReward) => void;
-  rewards?: ProjectReward;
+  reward?: ProjectReward;
   isSatoshi: boolean;
-  setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
-  projectId?: number;
-}
-
-export const defaultReward: ProjectReward = {
-  id: 0,
-  name: '',
-  description: '',
-  cost: 0,
-  image: '',
-  deleted: false,
-  stock: 0,
-  backers: 0,
-  sold: 0,
+  projectId: number;
 };
 
-export const AddRewards = ({
+type CreateRewardMutationResponseData = {
+  createProjectReward: ProjectReward;
+};
+
+type UpdateRewardMutationResponseData = {
+  updateProjectReward: ProjectReward;
+};
+
+export const RewardAdditionModal = ({
   isOpen,
   onClose,
-  rewards: availableReward,
+  reward: availableReward,
   onSubmit,
   projectId,
   isSatoshi,
-}: IAddRewards) => {
+}: Props) => {
   const { toast } = useNotification();
 
-  const [_rewards, _setRewards] = useState<ProjectReward>(
-    availableReward || defaultReward,
+  const [formCostDollarValue, setFormCostDollarValue] = useState(
+    (availableReward || defaultProjectReward).cost / 100,
   );
+
+  const [_rewards, _setRewards] = useState<ProjectReward>(
+    availableReward || defaultProjectReward,
+  );
+
   const rewards = useRef(_rewards);
 
   const setRewards = (value: ProjectReward) => {
@@ -76,49 +84,74 @@ export const AddRewards = ({
 
   const [formError, setFormError] = useState<any>({});
 
-  const [createReward, { loading: createRewardLoading }] = useMutation(
-    MUTATION_CREATE_PROJECT_REWARD,
-    {
-      onCompleted(data) {
-        toast({
-          title: 'Successfully created!',
-          description: `Reward ${data.createProjectReward.name} was successfully created`,
-          status: 'success',
-        });
-        onSubmit(data.createProjectReward);
-        onClose();
-      },
-      onError(error) {
-        toast({
-          title: 'Failed to create reward',
-          description: `${error}`,
-          status: 'error',
-        });
-      },
+  const [createReward, { loading: createRewardLoading }] = useMutation<
+    CreateRewardMutationResponseData,
+    { input: ProjectRewardCreationVariables }
+  >(MUTATION_CREATE_PROJECT_REWARD, {
+    onCompleted({ createProjectReward: createdReward }) {
+      toast({
+        title: 'Successfully created!',
+        description: `Reward ${createdReward.name} was successfully created`,
+        status: 'success',
+      });
+      onSubmit(createdReward);
+      onClose();
     },
-  );
+    onError(error) {
+      toast({
+        title: 'Failed to create reward',
+        description: `${error}`,
+        status: 'error',
+      });
+    },
+  });
 
-  const [updateReward, { loading: updateRewardLoading }] = useMutation(
-    MUTATION_UPDATE_PROJECT_REWARD,
-    {
-      onCompleted(data) {
-        toast({
-          title: 'Successfully updated!',
-          description: `Reward ${data.updateProjectReward.name} was successfully updated`,
-          status: 'success',
-        });
-        onSubmit(data.updateProjectReward);
-        onClose();
-      },
-      onError(error) {
-        toast({
-          title: 'Failed to update reward',
-          description: `${error}`,
-          status: 'error',
-        });
-      },
+  const [updateReward, { loading: updateRewardLoading }] = useMutation<
+    UpdateRewardMutationResponseData,
+    { input: ProjectRewardUpdateVariables }
+  >(MUTATION_UPDATE_PROJECT_REWARD, {
+    onCompleted({ updateProjectReward: updatedProjectReward }) {
+      toast({
+        title: 'Successfully updated!',
+        description: `Reward ${updatedProjectReward.name} was successfully updated`,
+        status: 'success',
+      });
+      onSubmit(updatedProjectReward);
+      onClose();
     },
-  );
+    onError(error) {
+      toast({
+        title: 'Failed to update reward',
+        description: `${error}`,
+        status: 'error',
+      });
+    },
+  });
+
+  const getRewardCreationInputVariables =
+    (): ProjectRewardCreationVariables => {
+      return {
+        projectId,
+        cost: rewards.current.cost,
+        costCurrency: rewards.current.costCurrency,
+        description: rewards.current.description,
+        image: rewards.current.image || undefined,
+        name: rewards.current.name,
+        stock: rewards.current.stock,
+      };
+    };
+
+  const getRewardUpdateInputVariables = (): ProjectRewardUpdateVariables => {
+    return {
+      projectRewardId: (rewards.current as ProjectReward).id,
+      cost: rewards.current.cost,
+      costCurrency: RewardCurrency.Usdcent,
+      description: rewards.current.description,
+      image: rewards.current.image || undefined,
+      name: rewards.current.name,
+      stock: rewards.current.stock,
+    };
+  };
 
   useEffect(() => {
     if (availableReward && availableReward !== rewards.current) {
@@ -126,41 +159,47 @@ export const AddRewards = ({
     }
   }, [availableReward]);
 
-  const handleTextChange = (event: any) => {
+  const handleTextChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormError({});
-    if (event) {
-      const { name, value } = event.target;
-      if (name) {
-        setRewards({ ...rewards.current, [name]: value });
-      }
+    const { name, value } = event.target;
+    if (name) {
+      setRewards({ ...rewards.current, [name]: value });
     }
+  };
+
+  const handleCostAmountChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setFormError({});
+
+    // Dollar value rounded to two decimal places
+    const dollarValue = Math.round(parseFloat(event.target.value) * 100) / 100;
+
+    setFormCostDollarValue(dollarValue);
+
+    // set cost with the dollar value converted to cents
+    setRewards({ ...rewards.current, ...{ cost: dollarValue * 100 } });
   };
 
   const handleConfirmReward = () => {
     const isValid = validateReward();
+
     if (!isValid) {
       return;
     }
 
     if ((rewards.current as ProjectReward).id) {
-      const updateRewardsInput = {
-        projectRewardId: (rewards.current as ProjectReward).id,
-        name: rewards.current.name,
-        description: rewards.current.description,
-        cost: rewards.current.cost * 100, // multiplied by 100 to express the cost in cents
-        image: rewards.current.image,
-      };
-      updateReward({ variables: { input: updateRewardsInput } });
+      updateReward({
+        variables: { input: getRewardUpdateInputVariables() },
+      });
     } else {
-      const createRewardsInput = {
-        cost: rewards.current.cost * 100, // multiplied by 100 to express the cost in cents
-        description: rewards.current.description,
-        image: rewards.current.image,
-        name: rewards.current.name,
-        stock: rewards.current.stock,
-        projectId,
-      };
-      createReward({ variables: { input: createRewardsInput } });
+      createReward({
+        variables: {
+          input: getRewardCreationInputVariables(),
+        },
+      });
     }
   };
 
@@ -273,15 +312,20 @@ export const AddRewards = ({
                   {isSatoshi ? <SatoshiIconTilted /> : <BiDollar />}
                 </InputLeftAddon>
 
+                {/*
+                   TODO: Use a different `value` here if when we support currency
+                   types beyond USD cents (e.g: satoshis)
+                 */}
                 <Input
                   focusBorderColor="brand.primary"
-                  name="cost"
+                  name="Dollar Amount Cost"
                   type="number"
-                  onChange={handleTextChange}
-                  value={rewards.current.cost}
+                  onChange={handleCostAmountChange}
+                  value={formCostDollarValue}
                   isInvalid={formError.cost}
                 />
               </InputGroup>
+
               {formError.cost && (
                 <Text fontSize="12px" color="red.500">
                   {formError.cost}

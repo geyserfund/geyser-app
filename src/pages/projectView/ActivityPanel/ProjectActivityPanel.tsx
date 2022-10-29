@@ -224,7 +224,6 @@ export const ProjectActivityPanel = ({
               fundLoading,
               isMobile,
               handleCloseButton,
-              btcRate,
               formState,
               setFormState,
               setTarget,

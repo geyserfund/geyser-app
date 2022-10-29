@@ -2,15 +2,14 @@ import React from 'react';
 import { Box, VStack } from '@chakra-ui/react';
 import { DonationInput } from '../../../components/molecules';
 import { SectionTitle } from '../../../components/ui';
-import { IRewardCount } from '../../../interfaces';
+import { IProjectReward, IRewardCount } from '../../../interfaces';
 import { IFundForm } from '../../../hooks';
 import { FundingFormRewardItem } from '../components/FundingFormRewardItem';
-import { ProjectReward } from '../../../types/generated/graphql';
 
 type Props = {
   setFormState: any;
   updateReward: (_: IRewardCount) => void;
-  rewards?: ProjectReward[];
+  rewards?: IProjectReward[];
   formState?: IFundForm;
 };
 
@@ -26,7 +25,7 @@ export const RewardBasedFundingFormSection = ({
 
   const getRewardCount = (rewardId: number) =>
     formState?.rewardsByIDAndCount
-      ? formState?.rewardsByIDAndCount[`${rewardId}` as keyof ProjectReward]
+      ? formState?.rewardsByIDAndCount[`${rewardId}` as keyof IProjectReward]
       : 0;
 
   return (
@@ -49,18 +48,21 @@ export const RewardBasedFundingFormSection = ({
 
       <Box width="100%">
         <SectionTitle>Donate to receive a reward</SectionTitle>
-
-        <VStack padding="2px">
-          {rewards.map((reward: ProjectReward) => (
-            <FundingFormRewardItem
-              key={reward.id}
-              item={reward}
-              count={getRewardCount(reward.id)}
-              updateCount={updateReward}
-            />
-          ))}
-        </VStack>
-      </Box>
+          <VStack padding="2px">
+            {rewards.map((reward: IProjectReward) => (
+              <FundingFormRewardItem
+                key={reward.id}
+                /* Hard-coding USD as reward currency as a quick fix. Seeing as it is used accross several places, a
+                 * sensible refactor would be to set the ProjectCurrency as a a shared context variable.
+                 */
+                item={reward}
+                count={getRewardCount(reward.id)}
+                updateCount={updateReward}
+              />
+            ))}
+          </VStack>
+        </Box>
+      )}
     </VStack>
   );
 };

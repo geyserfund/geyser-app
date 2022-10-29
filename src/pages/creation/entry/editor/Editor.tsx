@@ -40,6 +40,7 @@ const useStyles = createUseStyles<Rules, StyleProps>({
     '& .ql-container': {
       width: '100%',
       border: 'none',
+      fontFamily: fonts.inter,
     },
 
     '& .ql-editor': {

@@ -46,12 +46,12 @@ import {
   DonationBasedFundingFormSection,
   RewardBasedFundingFormSection,
 } from '../FundingForm';
+import { useBtcContext } from '../../../context/btc';
 
 type Props = {
   isMobile: boolean;
   fundLoading: boolean;
   handleCloseButton: () => void;
-  btcRate: number;
   formState: IFundForm;
   setTarget: (_: any) => void;
   updateReward: any;
@@ -66,7 +66,6 @@ export const FundingPaymentScreen = ({
   isMobile,
   fundLoading,
   handleCloseButton,
-  btcRate,
   handleFund,
   formState,
   setTarget,
@@ -84,6 +83,7 @@ export const FundingPaymentScreen = ({
   const [gifHover, setGifHover] = useState(false);
   const [focus, setFocus] = useState(true);
   const { toast } = useNotification();
+  const { btcRate } = useBtcContext();
 
   const submit = () => {
     const valid = validateFundingAmount();
@@ -335,23 +335,28 @@ export const FundingPaymentScreen = ({
         >
           <VStack alignItems="flex-start" spacing="0px">
             <SectionTitle>Total</SectionTitle>
+
             <SatoshiAmount label="Donation">
               {formState.donationAmount +
-                Math.round(formState.rewardsCost / btcRate)}
+                Math.round(formState.rewardsCost * btcRate)}
             </SatoshiAmount>
+
             {formState.rewardsCost && (
               <Text>{`Rewards: ${rewardCountString()}`}</Text>
             )}
+
             {formState.rewardsCost && hasShipping(name) && (
               <SatoshiAmount label="Shipping">
                 {getShippingCost()}
               </SatoshiAmount>
             )}
           </VStack>
+
           <VStack alignItems="flex-end" spacing="0px">
             <SatoshiAmount color="#1A1A1A" fontWeight="bold" fontSize="24px">
               {getTotalAmount('sats', name)}
             </SatoshiAmount>
+
             <Text> {`$${getTotalAmount('dollar', name)}`}</Text>
           </VStack>
         </HStack>

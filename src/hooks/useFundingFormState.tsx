@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { ShippingDestination, shippingTypes } from '../constants';
 import { AuthContext } from '../context';
+import { useBTCConverter } from '../helpers';
 
 import { IRewardCount } from '../interfaces';
 import { ProjectReward, RewardCurrency } from '../types/generated/graphql';
@@ -36,8 +37,9 @@ export interface IFundFormState {
   resetForm: () => void;
 }
 
-export const useFundState = ({ rewards }: UseFundStateProps) => {
+export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
   const { user } = useContext(AuthContext);
+  const { getUSDCentsAmount } = useBTCConverter();
 
   const initialState: IFundForm = {
     donationAmount: 0,
@@ -51,7 +53,7 @@ export const useFundState = ({ rewards }: UseFundStateProps) => {
     email: '',
     media: '',
     rewardsByIDAndCount: undefined,
-    rewardCurrency: RewardCurrency.Usd,
+    rewardCurrency: RewardCurrency.Usdcent,
   };
 
   const [state, _setState] = useState<IFundForm>(initialState);
@@ -78,10 +80,10 @@ export const useFundState = ({ rewards }: UseFundStateProps) => {
   const updateReward = ({ id, count }: IRewardCount) => {
     const newRewardsCountInfo = { ...state.rewardsByIDAndCount };
 
-    if (count === 0) {
-      delete newRewardsCountInfo[id as unknown as keyof ProjectReward];
-    } else {
+    if (count !== 0) {
       newRewardsCountInfo[id as unknown as keyof ProjectReward] = count;
+    } else if (count === 0) {
+      delete newRewardsCountInfo[id as unknown as keyof ProjectReward];
     }
 
     let rewardsCost = 0;
@@ -96,13 +98,11 @@ export const useFundState = ({ rewards }: UseFundStateProps) => {
         );
 
         if (reward && reward.id) {
-          /*
-           * IMPORTANT: the reward.currency is undefined at the moment of writing this. This means the cost defaults to
-           * being divided by 100, which assumes the cost is expressed in fiat (specifically USD).
-           * This was done as a quick fix
-           * and must be refactored.
-           */
-          const cost = reward.cost / 100;
+          const cost =
+            state.rewardCurrency === RewardCurrency.Usdcent
+              ? reward.cost
+              : // Assume sats if not USD cents
+                getUSDCentsAmount(reward.cost);
 
           rewardsCost +=
             cost * newRewardsCountInfo[rewardID as keyof ProjectReward];
