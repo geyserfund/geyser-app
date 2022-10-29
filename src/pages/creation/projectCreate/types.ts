@@ -31,6 +31,27 @@ export type ProjectUpdateVariables = {
   status?: ProjectStatus;
 };
 
+export type ProjectRewardCreationVariables = {
+  projectId: number;
+  name: string;
+  description: string;
+  cost: number;
+  costCurrency: RewardCurrency;
+  image?: string;
+  stock?: number;
+};
+
+export type ProjectRewardUpdateVariables = {
+  projectRewardId: number;
+  name: string;
+  description?: string;
+  cost: number;
+  costCurrency: RewardCurrency;
+  image?: string;
+  deleted?: boolean;
+  stock?: number;
+};
+
 export type TMilestone = {
   id?: number;
   name: string;
