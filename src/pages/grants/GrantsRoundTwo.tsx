@@ -14,19 +14,6 @@ import { AppFooter } from '../../components/molecules';
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
-
-  React.useEffect(() => {
-    fetch('https://airtable.com/shrBLwOQcQZpwoNQM/embed')
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log('ss', data);
-      })
-      .catch((err) => {
-        console.log('sss', err);
-        // Error
-      });
-  }, []);
-
   return (
     <>
       <Box
@@ -53,7 +40,7 @@ export const GrantsRoundTwo = () => {
             <FaArrowLeft /> See all Grants
           </Button>
           <Text
-            fontSize={isMobile ? '4xl' : '48px'}
+            fontSize={isMobile ? '4xl' : '47px'}
             fontWeight="medium"
             textAlign="center"
           >
