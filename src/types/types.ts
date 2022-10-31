@@ -1,6 +1,6 @@
 export type Satoshi = number;
 
-export type GrantTextProps = {
+export type GrantTextType = {
   title: string;
   subtitle: string;
   isSatLogo: boolean;

@@ -16,7 +16,11 @@ export const ListText = ({ title, subtitle, isSatLogo }: GrantTextType) => {
             <img src={satsymbol} width="8px" alt="satsymbol" />
           </Box>
         ) : null}
-        <Text fontWeight={'800'} fontSize={'18px'}>
+        <Text
+          fontWeight={'800'}
+          fontSize={'18px'}
+          fontFamily={fonts.interBlack}
+        >
           {title}
         </Text>
       </Box>

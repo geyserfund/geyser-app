@@ -2,6 +2,9 @@ import { Box, Text } from '@chakra-ui/react';
 import React from 'react';
 import { ListText } from './ListText';
 import { GrantTextType } from '../../../types/types';
+import { isMobileMode } from '../../../utils';
+import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 interface GrantProps {
   title: string;
@@ -9,8 +12,11 @@ interface GrantProps {
   status: boolean;
   to: string;
   showBanner: boolean;
-
-  sponsors: Array<string>;
+  applicants?: string;
+  grant?: string;
+  grantees?: string;
+  distributed?: string;
+  sponsors?: Array<string>;
 }
 export const CustomGrantCard = ({
   title,
@@ -19,66 +25,99 @@ export const CustomGrantCard = ({
   status,
   sponsors,
   to,
+  applicants,
+  grant,
+  grantees,
+  distributed,
 }: GrantProps) => {
-  return (
-    <Box
-      minWidth={'100%'}
-      cursor="pointer"
-      border={'2px solid #E9ECEF'}
-      borderRadius="12px"
-    >
-      {showBanner ? (
-        <Box bg="brand.primary50" height={'200px'} borderRadius="12px"></Box>
-      ) : null}
-      <Box display="flex" flexDirection={'column'} p="4">
-        <Box
-          display="flex"
-          justifyContent={'space-between'}
-          alignItems="center"
-        >
-          <Box>
-            <Box display="flex" alignItems="start">
-              <Text mr={4} fontWeight="bold" fontSize={'16px'}>
-                {title}
-              </Text>
+  const isMobile = isMobileMode();
+  const history = useHistory();
 
-              {status ? (
-                <Text
-                  bg="brand.primary100"
-                  fontSize={'10px'}
-                  px="14px"
-                  py={'5px'}
-                  fontWeight="500"
-                >
-                  ACTIVE
-                </Text>
-              ) : null}
-            </Box>
-            <Text color={'brand.neutral600'}>{date}</Text>
-          </Box>
-          <Box display="flex" alignItems={'center'}>
-            <Box mr={4}>
-              <ListText title="-" subtitle="APPLICANTS" isSatLogo={false} />
-            </Box>
-            <ListText title="100 M" subtitle="GRANT" isSatLogo={true} />
-          </Box>
-        </Box>
-        <Box display={'flex'} alignItems="center" mt={6}>
-          <Text
-            color={'brand.neutral600'}
-            fontSize="11px"
-            mr={2}
-            fontWeight="700"
+  return (
+    <Link to={to}>
+      <Box
+        minWidth={'100%'}
+        cursor="pointer"
+        border={'2px solid #E9ECEF'}
+        borderRadius="12px"
+      >
+        {showBanner ? (
+          <Box bg="brand.primary50" height={'200px'} borderRadius="12px"></Box>
+        ) : null}
+        <Box display="flex" flexDirection={'column'} p="4">
+          <Box
+            display="flex"
+            justifyContent={'space-between'}
+            alignItems={isMobile ? 'center' : 'center'}
+            flexDirection={isMobile ? 'column' : 'row'}
           >
-            SPONSORS
-          </Text>
-          {sponsors.map((item, idx) => (
-            <Box key={idx * 2} mr={3}>
-              <img src={item} alt="logo" />
+            <Box>
+              <Box display="flex" alignItems="start">
+                <Text mr={4} fontWeight="bold" fontSize={'16px'}>
+                  {title}
+                </Text>
+
+                {status ? (
+                  <Text
+                    bg="brand.primary100"
+                    fontSize={'10px'}
+                    px="14px"
+                    py={'5px'}
+                    fontWeight="500"
+                  >
+                    ACTIVE
+                  </Text>
+                ) : null}
+              </Box>
+              <Text color={'brand.neutral600'}>{date}</Text>
             </Box>
-          ))}
+            {showBanner ? (
+              <Box display="flex" alignItems={'center'}>
+                <Box mr={4}>
+                  <ListText
+                    title={applicants}
+                    subtitle="APPLICANTS"
+                    isSatLogo={false}
+                  />
+                </Box>
+                <ListText title={grant} subtitle="GRANT" isSatLogo={true} />
+              </Box>
+            ) : (
+              <Box display="flex" alignItems={'center'}>
+                <Box mr={4}>
+                  <ListText
+                    title={grantees}
+                    subtitle="APPLICANTS"
+                    isSatLogo={false}
+                  />
+                </Box>
+                <ListText
+                  title={distributed}
+                  subtitle="GRANT"
+                  isSatLogo={true}
+                />
+              </Box>
+            )}
+          </Box>
+          {isMobile !== true && (
+            <Box display={'flex'} alignItems="center" mt={6}>
+              <Text
+                color={'brand.neutral600'}
+                fontSize="11px"
+                mr={2}
+                fontWeight="700"
+              >
+                SPONSORS
+              </Text>
+              {sponsors.map((item, idx) => (
+                <Box key={idx * 2} mr={3}>
+                  <img src={item} alt="logo" />
+                </Box>
+              ))}
+            </Box>
+          )}
         </Box>
       </Box>
-    </Box>
+    </Link>
   );
 };
