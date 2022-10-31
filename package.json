@@ -101,14 +101,14 @@
     "@types/react-show-more-text": "^1.4.1",
     "@types/react-slick": "^0.23.8",
     "@types/react-twitter-auth": "^0.0.4",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-xo": "^0.38.0",
     "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-react": "^7.31.10",
     "prettier": "^2.7.1"
   },
   "resolutions": {

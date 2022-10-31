@@ -10,6 +10,7 @@ import { BoardMembers } from './components/BoardMembers';
 import satwalletimg from '../../assets/walletsats.svg';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
+import { ContributeModal } from './components/ContributeModal';
 
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
@@ -208,15 +209,7 @@ export const GrantsRoundTwo = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <Button
-                  variant={'solid'}
-                  fontSize="sm"
-                  px={10}
-                  mr="2"
-                  backgroundColor="brand.primary400"
-                >
-                  Contribute
-                </Button>
+                <ContributeModal />
 
                 <Box display="flex" alignItems={'center'}>
                   <Text
@@ -236,6 +229,22 @@ export const GrantsRoundTwo = () => {
             </Box>
           </Box>
           <MoreInfo />
+          <Box
+            border={'2px solid #E9ECEF'}
+            minWidth="100%"
+            p="2"
+            rounded={'md'}
+            height={'300px'}
+          >
+            <Text
+              fontWeight={'bold'}
+              fontSize="large"
+              mt={'2'}
+              fontFamily={fonts.interBlack}
+            >
+              Applications
+            </Text>
+          </Box>
         </Box>
         <AppFooter />
       </Box>
