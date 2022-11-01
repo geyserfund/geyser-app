@@ -42,7 +42,7 @@ const routesForHidingDropdownMenu = [
 ];
 
 const routesForHidingMyProjectsButton = [
-  `/${routerPathNames.project}/:projectId`,
+  `/${routerPathNames._deprecatedPathNameForProject}/:projectId`,
   `/${routerPathNames.entry}/:entryId`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
   `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
@@ -158,7 +158,9 @@ export const TopNavBar = () => {
   const isViewingOwnProject: boolean = useMemo(() => {
     return (
       (history.location.pathname.startsWith(`/${routerPathNames.entry}`) ||
-        history.location.pathname.startsWith(`/${routerPathNames.project}`) ||
+        history.location.pathname.startsWith(
+          `/${routerPathNames._deprecatedPathNameForProject}`,
+        ) ||
         history.location.pathname.startsWith(`/${routerPathNames.projects}`)) &&
       navigationContext.projectOwnerId === user.id
     );
