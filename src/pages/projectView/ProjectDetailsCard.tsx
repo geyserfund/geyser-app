@@ -1,13 +1,23 @@
-import { Box, Button, HStack, Image, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
+import {
+  Box,
+  Button,
+  HStack,
+  IconButton,
+  Image,
+  Text,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { Card, SatoshiAmount, ProjectStatusLabel } from '../../components/ui';
 import { LightningQR } from './components/LightningQR';
-import { BoltIcon } from '../../components/icons';
+import { BoltIcon, ShareIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
 import { useAuthContext } from '../../context';
 import { Project } from '../../types/generated/graphql';
+import { getPath, HomeUrl } from '../../constants';
 
-export const DetailsCard = ({
+export const ProjectDetailsCard = ({
   project,
   fundButtonFunction,
 }: {
@@ -15,7 +25,15 @@ export const DetailsCard = ({
   fundButtonFunction: any;
 }) => {
   const { user } = useAuthContext();
+  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false);
   const owner = project.owners[0];
+
+  const handleShareButtonTapped = () => {
+    const relativePath = getPath('project', project.name);
+
+    navigator.clipboard.writeText(`${HomeUrl}${relativePath}`);
+    setHasCopiedSharingLink(true);
+  };
 
   const renderMilestone = () => {
     if (!project.milestones) {
@@ -95,6 +113,7 @@ export const DetailsCard = ({
             objectFit="cover"
           />
         </Box>
+
         <VStack width="100%" spacing={0} alignItems="flex-start">
           <HStack justifyContent="space-between" width="100%">
             <Text fontSize="30px" fontWeight={700}>
@@ -102,8 +121,36 @@ export const DetailsCard = ({
             </Text>
             <ProjectStatusLabel project={project} />
           </HStack>
-          <LightningQR project={project} />
+
+          <HStack
+            flexWrap="wrap"
+            justifyContent="start"
+            alignItems="center"
+            spacing={1}
+          >
+            <LightningQR project={project} />
+
+            <Tooltip
+              label={hasCopiedSharingLink ? 'Copied!' : 'Share Project'}
+              placement="top"
+              closeOnClick={false}
+            >
+              <IconButton
+                size="sm"
+                _hover={{
+                  backgroundColor: 'none',
+                  border: '1px solid #20ECC7',
+                }}
+                _active={{ backgroundColor: 'brand.primary' }}
+                bg="none"
+                icon={<ShareIcon />}
+                aria-label="share"
+                onClick={handleShareButtonTapped}
+              />
+            </Tooltip>
+          </HStack>
         </VStack>
+
         <HStack>
           <Text color="brand.neutral600">Creator</Text>
           <AvatarElement user={owner.user} />

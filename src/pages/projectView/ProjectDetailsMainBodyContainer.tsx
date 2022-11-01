@@ -11,7 +11,7 @@ import {
 } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages } from '../../constants';
-import { DetailsCard } from './DetailsCard';
+import { ProjectDetailsCard } from './ProjectDetailsCard';
 import { ProjectAccessories } from './ProjectAccessories';
 import { UpdateReward } from '../../hooks';
 import { Project } from '../../types/generated/graphql';
@@ -156,7 +156,7 @@ export const ProjectDetailsMainBodyContainer = ({
             w="100%"
             padding={isMobile ? '20px 10px 50px 10px' : '0px 40px 70px 40px'}
           >
-            <DetailsCard
+            <ProjectDetailsCard
               project={project}
               fundButtonFunction={
                 isMobile ? handleFundClickMobile : handleFundClick

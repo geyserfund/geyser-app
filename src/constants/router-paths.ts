@@ -4,7 +4,7 @@ export const routerPathNames = {
   entry: 'entry',
   notFound: 'not-found',
   notAuthorized: 'not-authorized',
-  project: 'project',
+  _deprecatedPathNameForProject: 'project',
   projects: 'projects',
   launchProject: 'launch',
   userProfile: 'profile',
@@ -26,7 +26,7 @@ const pathsMap = {
   notFound: () => `/${routerPathNames.notFound}`,
   notAuthorized: () => `/${routerPathNames.notAuthorized}`,
   _deprecatedPathForProject: (projectName: string) =>
-    `/${routerPathNames.project}/${projectName}`,
+    `/${routerPathNames._deprecatedPathNameForProject}/${projectName}`,
   project: (projectName: string) =>
     `/${routerPathNames.projects}/${projectName}`,
   projectEntryCreation: (projectName: string) =>
