@@ -12,6 +12,24 @@ import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { ContributeModal } from './components/ContributeModal';
 
+const grants = [
+  {
+    name: 'Bitcoin for Free Speech',
+    applicants: 0,
+    about: '',
+  },
+  {
+    name: 'Visual Artists for Bitcoin',
+    applicants: 0,
+    about: '',
+  },
+  {
+    name: 'Bitcoin Open Source',
+    applicants: 0,
+    about: '',
+  },
+];
+
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
@@ -136,15 +154,14 @@ export const GrantsRoundTwo = () => {
               minWidth="100%"
               mt={8}
             >
-              <GridItem w={'100%'}>
-                <ApplyGrantCard />
-              </GridItem>
-              <GridItem w={'100%'}>
-                <ApplyGrantCard />
-              </GridItem>
-              <GridItem w={'100%'}>
-                <ApplyGrantCard />
-              </GridItem>
+              {grants.map((item) => (
+                <GridItem w={'100%'} key={item.name}>
+                  <ApplyGrantCard
+                    name={item.name}
+                    applicant={item.applicants}
+                  />
+                </GridItem>
+              ))}
             </Grid>
           </Box>
           <Box my={8}>
@@ -234,7 +251,7 @@ export const GrantsRoundTwo = () => {
             minWidth="100%"
             p="2"
             rounded={'md'}
-            height={'300px'}
+            minHeight={'300px'}
           >
             <Text
               fontWeight={'bold'}
@@ -244,6 +261,15 @@ export const GrantsRoundTwo = () => {
             >
               Applications
             </Text>
+            <Box>
+              <iframe
+                className="airtable-embed"
+                src="https://airtable.com/embed/shrfeI21FWzyCqHZy?backgroundColor=teal"
+                frameBorder="0"
+                width="100%"
+                height="533"
+              ></iframe>
+            </Box>
           </Box>
         </Box>
         <AppFooter />
