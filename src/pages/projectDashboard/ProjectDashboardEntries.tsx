@@ -6,7 +6,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
@@ -77,11 +77,17 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
     },
   );
 
-  const fundersCount = project.funders?.length || 0;
   const visitorsCount = data?.project?.statistics?.totalVisitors || 0;
-  const fundersToVisitorsRatio =
-    visitorsCount > 0 ? fundersCount / visitorsCount : 1;
-  const fundersToVisitorsPerc = `${fundersToVisitorsRatio / 100} %`;
+
+  const getFundersToVisitorsPercentage = (): number => {
+    if (visitorsCount === 0) {
+      return 100;
+    }
+
+    const fundersCount = project.funders?.length || 0;
+
+    return (fundersCount / visitorsCount) * 100;
+  };
 
   const {
     isOpen: isDeleteEntryOpen,
@@ -173,7 +179,9 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                 </VStack>
                 <VStack className={classes.statBox}>
                   <Text className={classes.numberText}>
-                    {loading ? '0 %' : fundersToVisitorsPerc}
+                    {`${
+                      loading ? 0 : getFundersToVisitorsPercentage().toFixed(0)
+                    } %`}
                   </Text>
                   <Text className={classes.labelText}>FUNDERS/VISITORS</Text>
                 </VStack>
