@@ -15,8 +15,8 @@ import {
 import { colors } from '../../constants';
 import { IProject } from '../../interfaces';
 import {
-  AddMilestones,
   defaultMilestone,
+  MilestoneAdditionModal,
 } from '../creation/projectCreate/components';
 import { TMilestone } from '../creation/projectCreate/types';
 
@@ -38,6 +38,9 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
   }, [project]);
 
   const handleMilestoneSubmit = (milestones: TMilestone[]) => {
+    // eslint-disable-next-line no-debugger
+    debugger;
+
     setMilestones(milestones);
   };
 
@@ -107,7 +110,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
       </GridItem>
 
       {isMilestoneOpen && (
-        <AddMilestones
+        <MilestoneAdditionModal
           isOpen={isMilestoneOpen}
           onClose={onMilestoneClose}
           milestones={milestones.length > 0 ? milestones : [defaultMilestone]}

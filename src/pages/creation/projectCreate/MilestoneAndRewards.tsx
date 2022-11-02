@@ -22,7 +22,7 @@ import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
-import { AddMilestones, defaultMilestone } from './components';
+import { MilestoneAdditionModal, defaultMilestone } from './components';
 import { EditIcon } from '@chakra-ui/icons';
 import { RewardAdditionModal } from './components/RewardAdditionModal';
 import {
@@ -70,16 +70,19 @@ export const MilestoneAndRewards = () => {
     onClose: onMilestoneClose,
     onOpen: openMilestone,
   } = useDisclosure();
+
   const {
     isOpen: isRewardOpen,
     onClose: onRewardClose,
     onOpen: openReward,
   } = useDisclosure();
+
   const {
     isOpen: isRewardDeleteOpen,
     onClose: onRewardDeleteClose,
     onOpen: openRewardDelete,
   } = useDisclosure();
+
   const [isSatoshi, setIsSatoshi] = useState(true);
   const [isSatoshiRewards, setIsSatoshiRewards] = useState(false);
 
@@ -127,6 +130,8 @@ export const MilestoneAndRewards = () => {
   });
 
   const handleMilestoneSubmit = (milestones: TMilestone[]) => {
+    // eslint-disable-next-line no-debugger
+    debugger;
     setMilestones(milestones);
   };
 
@@ -441,7 +446,7 @@ export const MilestoneAndRewards = () => {
       </Grid>
 
       {isMilestoneOpen && (
-        <AddMilestones
+        <MilestoneAdditionModal
           isOpen={isMilestoneOpen}
           onClose={onMilestoneClose}
           milestones={milestones.length > 0 ? milestones : [defaultMilestone]}

@@ -23,7 +23,7 @@ import {
 import { useNotification } from '../../../../utils';
 import { TMilestone } from '../types';
 
-interface IAddMilestones {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (milestones: TMilestone[]) => void;
@@ -31,7 +31,7 @@ interface IAddMilestones {
   isSatoshi: boolean;
   setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
   projectId?: number;
-}
+};
 
 export const defaultMilestone = {
   name: '',
@@ -40,7 +40,7 @@ export const defaultMilestone = {
   amount: 0,
 };
 
-export const AddMilestones = ({
+export const MilestoneAdditionModal = ({
   isOpen,
   projectId,
   onClose,
@@ -48,7 +48,7 @@ export const AddMilestones = ({
   onSubmit,
   isSatoshi,
   setIsSatoshi,
-}: IAddMilestones) => {
+}: Props) => {
   const { toast } = useNotification();
 
   const [_milestones, _setMilestones] =
@@ -93,7 +93,11 @@ export const AddMilestones = ({
   };
 
   const handleConfirmMilestone = () => {
+    // eslint-disable-next-line no-debugger
+    debugger;
+
     const isValid = validateMilestones();
+
     if (!isValid) {
       return;
     }
@@ -175,6 +179,9 @@ export const AddMilestones = ({
   );
 
   const validateMilestones = () => {
+    // eslint-disable-next-line no-debugger
+    debugger;
+
     let isValid = true;
     const totalErrors: any = [];
 
@@ -229,9 +236,9 @@ export const AddMilestones = ({
                 paddingX="2px"
               >
                 <HStack justifyContent="space-between" width="100%">
-                  <Text marginTop="10px" marginBottoim="5px">{`Milestone ${
-                    index + 1
-                  }`}</Text>
+                  <Text marginTop="10px" marginBottom="5px">
+                    {`Milestone ${index + 1}`}
+                  </Text>
                   <ButtonComponent
                     size="xs"
                     padding="7px"
