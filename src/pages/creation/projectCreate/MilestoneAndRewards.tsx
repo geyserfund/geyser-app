@@ -449,7 +449,9 @@ export const MilestoneAndRewards = () => {
         <MilestoneAdditionModal
           isOpen={isMilestoneOpen}
           onClose={onMilestoneClose}
-          milestones={milestones.length > 0 ? milestones : [defaultMilestone]}
+          availableMilestones={
+            milestones.length > 0 ? milestones : [defaultMilestone]
+          }
           onSubmit={handleMilestoneSubmit}
           isSatoshi={isSatoshi}
           setIsSatoshi={setIsSatoshi}

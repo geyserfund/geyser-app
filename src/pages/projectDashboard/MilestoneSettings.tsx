@@ -24,9 +24,9 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
   const [milestones, setMilestones] = useState<TMilestone[]>([]);
 
   const {
-    isOpen: isMilestoneOpen,
-    onClose: onMilestoneClose,
-    onOpen: openMilestone,
+    isOpen: isMilestoneModalOpen,
+    onClose: onMilestoneModalClose,
+    onOpen: openMilestoneModal,
   } = useDisclosure();
 
   const [isSatoshi, setIsSatoshi] = useState(true);
@@ -37,11 +37,20 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
     }
   }, [project]);
 
-  const handleMilestoneSubmit = (milestones: TMilestone[]) => {
+  const handleMilestoneSubmit = (newMilestones: TMilestone[]) => {
     // eslint-disable-next-line no-debugger
     debugger;
 
-    setMilestones(milestones);
+    setMilestones(newMilestones);
+    onMilestoneModalClose();
+  };
+
+  const handleMilestoneModalClose = (newMilestones: TMilestone[]) => {
+    // eslint-disable-next-line no-debugger
+    debugger;
+
+    setMilestones(newMilestones);
+    onMilestoneModalClose();
   };
 
   return (
@@ -60,7 +69,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
           <VStack w="100%" spacing="40px">
             <VStack width="100%" alignItems="flex-start">
               <Text name="title">Project Milestones </Text>
-              <ButtonComponent isFullWidth onClick={openMilestone}>
+              <ButtonComponent isFullWidth onClick={openMilestoneModal}>
                 Add a milestone
               </ButtonComponent>
               <Text fontSize="12px">
@@ -78,7 +87,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
                     </Text>
                     <IconButtonComponent
                       aria-label="edit"
-                      onClick={openMilestone}
+                      onClick={openMilestoneModal}
                     >
                       <EditIcon />
                     </IconButtonComponent>
@@ -109,17 +118,19 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
         </VStack>
       </GridItem>
 
-      {isMilestoneOpen && (
+      {isMilestoneModalOpen ? (
         <MilestoneAdditionModal
-          isOpen={isMilestoneOpen}
-          onClose={onMilestoneClose}
-          milestones={milestones.length > 0 ? milestones : [defaultMilestone]}
+          isOpen={isMilestoneModalOpen}
+          onClose={handleMilestoneModalClose}
+          availableMilestones={
+            milestones.length > 0 ? milestones : [defaultMilestone]
+          }
           onSubmit={handleMilestoneSubmit}
           isSatoshi={isSatoshi}
           setIsSatoshi={setIsSatoshi}
           projectId={parseInt(`${project.id}`, 10)}
         />
-      )}
+      ) : null}
     </>
   );
 };

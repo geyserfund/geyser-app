@@ -25,9 +25,9 @@ import { TMilestone } from '../types';
 
 type Props = {
   isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (milestones: TMilestone[]) => void;
-  milestones: TMilestone[];
+  onClose: (newMilestones: TMilestone[]) => void;
+  onSubmit: (newMilestones: TMilestone[]) => void;
+  availableMilestones: TMilestone[];
   isSatoshi: boolean;
   setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
   projectId?: number;
@@ -44,7 +44,7 @@ export const MilestoneAdditionModal = ({
   isOpen,
   projectId,
   onClose,
-  milestones: availableMilestones,
+  availableMilestones,
   onSubmit,
   isSatoshi,
   setIsSatoshi,
@@ -53,7 +53,9 @@ export const MilestoneAdditionModal = ({
 
   const [_milestones, _setMilestones] =
     useState<TMilestone[]>(availableMilestones);
+
   const milestones = useRef(_milestones);
+
   const setMilestones = (value: TMilestone[]) => {
     milestones.current = value;
     _setMilestones(value);
@@ -64,6 +66,12 @@ export const MilestoneAdditionModal = ({
 
   const handleAddMilestone = () => {
     setMilestones([...milestones.current, defaultMilestone]);
+  };
+
+  const getFilteredMilestones = (): TMilestone[] => {
+    return milestones.current.filter(
+      (milestone: TMilestone) => milestone.amount > 0 && milestone.name,
+    );
   };
 
   const handleAmountChange = (value: any, itemIndex: number) => {
@@ -92,6 +100,19 @@ export const MilestoneAdditionModal = ({
     }
   };
 
+  const handleModalClose = () => {
+    // eslint-disable-next-line no-debugger
+    debugger;
+
+    const isValid = validateMilestones();
+
+    if (!isValid) {
+      onClose(milestones.current);
+    }
+
+    onClose(getFilteredMilestones());
+  };
+
   const handleConfirmMilestone = () => {
     // eslint-disable-next-line no-debugger
     debugger;
@@ -102,13 +123,12 @@ export const MilestoneAdditionModal = ({
       return;
     }
 
-    const filetMilestones = milestones.current.filter(
-      (milestone) => milestone.amount > 0 && milestone.name,
-    );
     setIsSatoshi(amountSatoshi);
 
+    const filteredMilestones = getFilteredMilestones();
+
     try {
-      filetMilestones.map(async (milestone) => {
+      filteredMilestones.map(async (milestone) => {
         const createMilestoneInput = {
           ...milestone,
           projectId,
@@ -136,8 +156,7 @@ export const MilestoneAdditionModal = ({
       });
     }
 
-    onSubmit(filetMilestones);
-    onClose();
+    onSubmit(filteredMilestones);
   };
 
   const handleRemoveMilestone = async (itemIndex: number) => {
@@ -208,7 +227,13 @@ export const MilestoneAdditionModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
+    <Modal
+      isOpen={isOpen}
+      // onClose={() => onClose(milestones.current)}
+      onClose={handleModalClose}
+      size="sm"
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
         <ModalHeader paddingX="20px">
