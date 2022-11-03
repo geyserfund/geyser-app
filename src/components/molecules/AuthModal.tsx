@@ -257,7 +257,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
             </Link>
             <VStack marginTop={3} marginBottom={3}>
               <Box border="4px solid #20ECC7" borderRadius={4}>
-                <Link href={`lightning://${qrContent}`}>
+                <Link href={`lightning:${qrContent}`}>
                   <QRCode
                     qrStyle="dots"
                     logoImage={LogoDarkGreen}
