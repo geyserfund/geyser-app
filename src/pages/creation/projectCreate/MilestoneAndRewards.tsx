@@ -22,9 +22,12 @@ import { createUseStyles } from 'react-jss';
 import { colors } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
-import { MilestoneAdditionModal, defaultMilestone } from './components';
+import {
+  MilestoneAdditionModal,
+  defaultMilestone,
+  RewardAdditionModal,
+} from './components';
 import { EditIcon } from '@chakra-ui/icons';
-import { RewardAdditionModal } from './components/RewardAdditionModal';
 import {
   CalendarButton,
   DeleteConfirmModal,
@@ -83,7 +86,6 @@ export const MilestoneAndRewards = () => {
     onOpen: openRewardDelete,
   } = useDisclosure();
 
-  const [isSatoshi, setIsSatoshi] = useState(true);
   const [isSatoshiRewards, setIsSatoshiRewards] = useState(false);
 
   const [updateProject, { loading: updateProjectLoading }] = useMutation(
@@ -130,8 +132,6 @@ export const MilestoneAndRewards = () => {
   });
 
   const handleMilestoneSubmit = (milestones: TMilestone[]) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
     setMilestones(milestones);
   };
 
@@ -337,7 +337,7 @@ export const MilestoneAndRewards = () => {
               <VStack width="100%" alignItems="flex-start">
                 <Text name="title">Project Milestones (optional)</Text>
                 <ButtonComponent isFullWidth onClick={openMilestone}>
-                  Add a milestone
+                  Add a Milestone
                 </ButtonComponent>
                 <Text fontSize="12px">
                   Milestones help you and your community keep track of your
@@ -354,7 +354,7 @@ export const MilestoneAndRewards = () => {
                     openReward();
                   }}
                 >
-                  Add a reward
+                  Add a Reward
                 </ButtonComponent>
                 <Text fontSize="12px">
                   Rewards are a powerful way of exchanging value with your
@@ -406,11 +406,7 @@ export const MilestoneAndRewards = () => {
                     padding="10px"
                   >
                     <Text>{milestone.name}</Text>
-                    {isSatoshi ? (
-                      <SatoshiAmount>{milestone.amount}</SatoshiAmount>
-                    ) : (
-                      <Text>{`$ ${milestone.amount}`}</Text>
-                    )}
+                    <SatoshiAmount>{milestone.amount}</SatoshiAmount>
                   </VStack>
                 ))}
               </>
@@ -453,8 +449,6 @@ export const MilestoneAndRewards = () => {
             milestones.length > 0 ? milestones : [defaultMilestone]
           }
           onSubmit={handleMilestoneSubmit}
-          isSatoshi={isSatoshi}
-          setIsSatoshi={setIsSatoshi}
           projectId={data?.project?.id}
         />
       )}

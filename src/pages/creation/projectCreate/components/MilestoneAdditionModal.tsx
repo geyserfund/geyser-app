@@ -48,8 +48,7 @@ export const MilestoneAdditionModal = ({
   onSubmit,
 }: Props) => {
   const { toast } = useNotification();
-  const { getUSDCentsAmount, getSatoshisAmount, getUSDAmount } =
-    useBTCConverter();
+  const { getUSDCentsAmount, getSatoshisAmount } = useBTCConverter();
 
   const [_milestones, _setMilestones] =
     useState<TMilestone[]>(availableMilestones);
