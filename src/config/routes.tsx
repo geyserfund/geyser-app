@@ -1,9 +1,8 @@
 import React from 'react';
 import { Box } from '@chakra-ui/layout';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { LandingPage } from '../pages/landing';
 import { TopNavBar } from '../components/nav';
-import { Project as OldProjectView } from '../pages/project';
 import { createBrowserHistory } from 'history';
 import { NotFoundPage } from '../pages/notFound';
 import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage';
@@ -84,39 +83,40 @@ export const Router = () => {
               component={ProfilePage}
             />
             {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
-            <Route path="/project/:projectId">
-              <OldProjectView />
+            <Redirect from="/projects/:projectId" to="/project/:projectId" />
+            <Route path="/project/grants">
+              <Redirect to="/grants" />
             </Route>
             <Route
-              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`}
+              path={`/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`}
             >
               <PrivateRoute>
                 <EntryPreview />
               </PrivateRoute>
             </Route>
             <Route
-              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`}
+              path={`/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`}
             >
               <PrivateRoute>
                 <EntryCreateEdit />
               </PrivateRoute>
             </Route>
             <Route
-              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`}
+              path={`/${routerPathNames.project}/:projectId/${routerPathNames.entry}`}
             >
               <PrivateRoute>
                 <EntryCreateEdit />
               </PrivateRoute>
             </Route>
             <Route
-              path={`/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`}
+              path={`/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`}
             >
               <PrivateRoute>
                 <ProjectDashboard />
               </PrivateRoute>
             </Route>
             <Route
-              path={`/${routerPathNames.projects}/:projectId`}
+              path={`/${routerPathNames.project}/:projectId`}
               component={ProjectView}
             />
             <Route

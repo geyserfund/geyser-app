@@ -11,7 +11,7 @@ import { Entry } from '../../types/generated/graphql';
 export const EntryDetails = ({ entry }: { entry: Entry }) => (
   <VStack width="100%" alignItems="flex-start">
     {/* At the moment entries are always tied to a project so we can force unwrap this term */}
-    <Link to={`/projects/${entry.project!.name}`}>
+    <Link to={`/project/${entry.project!.name}`}>
       <Box
         display="flex"
         size="xs"
