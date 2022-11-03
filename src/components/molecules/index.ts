@@ -8,7 +8,7 @@ export * from './ProjectDetailsMobileMenu';
 export * from './DisconnectAccounts';
 export * from './FileUpload';
 export * from './TitleWithProgressBar';
-export * from './DonationInputWithSatoshi';
+export * from './AmountInputWithSatoshiToggle';
 export * from './CalendarButton';
 export * from './ProjectSectionBar';
 export * from './DeleteConfirmModal';

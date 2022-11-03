@@ -29,8 +29,6 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
     onOpen: openMilestoneModal,
   } = useDisclosure();
 
-  const [isSatoshi, setIsSatoshi] = useState(true);
-
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
       setMilestones(project.milestones);
@@ -38,17 +36,11 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
   }, [project]);
 
   const handleMilestoneSubmit = (newMilestones: TMilestone[]) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
-
     setMilestones(newMilestones);
     onMilestoneModalClose();
   };
 
   const handleMilestoneModalClose = (newMilestones: TMilestone[]) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
-
     setMilestones(newMilestones);
     onMilestoneModalClose();
   };
@@ -104,11 +96,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
                       padding="10px"
                     >
                       <Text>{milestone.name}</Text>
-                      {isSatoshi ? (
-                        <SatoshiAmount>{milestone.amount}</SatoshiAmount>
-                      ) : (
-                        <Text>{`$ ${milestone.amount}`}</Text>
-                      )}
+                      <SatoshiAmount>{milestone.amount}</SatoshiAmount>
                     </VStack>
                   ))}
                 </>
@@ -126,8 +114,6 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
             milestones.length > 0 ? milestones : [defaultMilestone]
           }
           onSubmit={handleMilestoneSubmit}
-          isSatoshi={isSatoshi}
-          setIsSatoshi={setIsSatoshi}
           projectId={parseInt(`${project.id}`, 10)}
         />
       ) : null}

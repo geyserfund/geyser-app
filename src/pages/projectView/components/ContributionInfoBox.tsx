@@ -15,11 +15,11 @@ import { AnonymousAvatar, SatoshiAmount } from '../../../components/ui';
 import { fonts } from '../../../constants/fonts';
 import { IBadge } from '../../../interfaces';
 import { Project } from '../../../types/generated/graphql';
-import { Satoshi } from '../../../types/types';
+import { Satoshis } from '../../../types/types';
 
 type Props = HTMLChakraProps<'div'> & {
   project: Project;
-  contributionAmount: Satoshi;
+  contributionAmount: Satoshis;
   referenceCode?: string;
   isFunderAnonymous?: boolean;
   funderEmail?: string;
