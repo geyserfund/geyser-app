@@ -26,6 +26,7 @@ import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
 import { getPath, routerPathNames } from '../constants';
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
 import { ProfilePage } from '../pages/profile/ProfilePage';
+import { Project as OldProjectView } from '../pages/project';
 
 export const customHistory = createBrowserHistory();
 
@@ -54,6 +55,17 @@ export const Router = () => {
               path={getPath('publicProjectLaunch')}
               component={PublicProjectLaunchPage}
             />
+            {/* Begin: Old Grants Routes to be retired soon */}
+            <Route path="/project/bitcoineducation">
+              <OldProjectView projectId="bitcoineducation" />
+            </Route>
+            <Route path="/project/bitcoinculture">
+              <OldProjectView projectId="bitcoinculture" />
+            </Route>
+            <Route path="/project/bitcoinbuilders">
+              <OldProjectView projectId="bitcoinbuilders" />
+            </Route>
+            {/* End: Old Grants Routes to be retired soon */}
             <Route
               path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`}
             >
