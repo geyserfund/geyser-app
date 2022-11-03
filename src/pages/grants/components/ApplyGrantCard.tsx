@@ -1,5 +1,6 @@
 import { Box, Button, Text } from '@chakra-ui/react';
 import React from 'react';
+import { ApplyGrantModal } from './ApplyGrantModal';
 
 interface GrantsProp {
   name: string;
@@ -34,15 +35,8 @@ export const ApplyGrantCard = ({ name, applicant }: GrantsProp) => {
           >
             APPLICANTS
           </Text>
-          <Button
-            bg="brand.primary400"
-            mt={3}
-            size="sm"
-            minWidth={'100%'}
-            fontSize="14px"
-          >
-            APPLY
-          </Button>
+
+          <ApplyGrantModal />
         </Box>
       </Box>
     </Box>

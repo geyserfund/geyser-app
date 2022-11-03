@@ -29,3 +29,24 @@ export const createApplicantRecord = async (data: any) => {
     body: JSON.stringify(data),
   }).then((response) => response.json());
 };
+
+export const createApplicantRecordRound2 = async (data: any) => {
+  return fetch(
+    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Applicants',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer keyTOBktQBmVVb09n',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    },
+  )
+    .then((response) => response.json())
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
