@@ -5,7 +5,7 @@ export const routerPathNames = {
   notFound: 'not-found',
   notAuthorized: 'not-authorized',
   _deprecatedPathNameForProject: 'project',
-  projects: 'projects',
+  project: 'project',
   launchProject: 'launch',
   userProfile: 'profile',
   projectDashboard: 'dashboard',
@@ -28,11 +28,11 @@ const pathsMap = {
   _deprecatedPathForProject: (projectName: string) =>
     `/${routerPathNames._deprecatedPathNameForProject}/${projectName}`,
   project: (projectName: string) =>
-    `/${routerPathNames.projects}/${projectName}`,
+    `/${routerPathNames.project}/${projectName}`,
   projectEntryCreation: (projectName: string) =>
-    `/${routerPathNames.projects}/${projectName}/${routerPathNames.entry}`,
+    `/${routerPathNames.project}/${projectName}/${routerPathNames.entry}`,
   projectEntryDetails: (projectName: string, entryID: string) =>
-    `/${routerPathNames.projects}/${projectName}/${routerPathNames.entry}/${entryID}`,
+    `/${routerPathNames.project}/${projectName}/${routerPathNames.entry}/${entryID}`,
   publicProjectLaunch: () => `/${routerPathNames.launchProject}/start`,
   privateProjectLaunch: () => `/${routerPathNames.launchProject}`,
   launchProjectWithNode: (projectID: string) =>
@@ -41,7 +41,7 @@ const pathsMap = {
     `/${routerPathNames.launchProject}/${projectID}/${routerPathNames.milestonesAndRewards}`,
   userProfile: (userID: string) => `/${routerPathNames.userProfile}/${userID}`,
   projectDashboard: (projectID: string) =>
-    `/${routerPathNames.projects}/${projectID}/${routerPathNames.projectDashboard}`,
+    `/${routerPathNames.project}/${projectID}/${routerPathNames.projectDashboard}`,
   entry: (entryID: string) => `/${routerPathNames.entry}/${entryID}`,
 };
 

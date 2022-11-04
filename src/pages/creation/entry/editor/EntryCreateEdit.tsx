@@ -86,7 +86,7 @@ export const EntryCreateEdit = () => {
     onCompleted(data) {
       setNav({
         title: data.project.title,
-        path: `/projects/${data.project.name}`,
+        path: `/project/${data.project.name}`,
       });
     },
     onError() {
@@ -197,7 +197,7 @@ export const EntryCreateEdit = () => {
   const onPreview = () => {
     if (form.current && form.current.id) {
       history.push(
-        `/projects/${params.projectId}/entry/${form.current.id}/preview`,
+        `/project/${params.projectId}/entry/${form.current.id}/preview`,
       );
     } else {
       toast({

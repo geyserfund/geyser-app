@@ -47,7 +47,7 @@ export const EntryPreview = () => {
     onCompleted(data) {
       setNav({
         title: data.project.title,
-        path: `/projects/${data.project.name}`,
+        path: `/project/${data.project.name}`,
       });
     },
     onError() {
