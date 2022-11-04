@@ -1,7 +1,15 @@
 import { useMediaQuery } from '@chakra-ui/media-query';
 
-export const isMobileMode = () => {
-  const [isLargerThan900] = useMediaQuery('(min-width: 900px)');
+type Props = {
+  /**
+   * The breakpoint at which smaller widths should be
+   * considered "mobile".
+   */
+  mobileBreakpoint: number;
+};
 
-  return isLargerThan900 === false;
+export const isMobileMode = (props: Props = { mobileBreakpoint: 900 }) => {
+  const [isMobile] = useMediaQuery(`(max-width: ${props.mobileBreakpoint}px)`);
+
+  return isMobile;
 };

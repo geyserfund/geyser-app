@@ -45,7 +45,7 @@ type Props = {
   fundState: IFundingStages;
 };
 
-export const ProjectAccessories = ({
+export const ProjectDetailsAccessoriesSections = ({
   project,
   setFundState,
   updateReward,
@@ -128,8 +128,8 @@ export const ProjectAccessories = ({
               key={milestone.id}
               name={milestone.name}
               description={milestone.description}
-              checked={milestone.amount <= project.balance}
-              amount={milestone.amount - project.balance}
+              isReached={milestone.amount <= project.balance}
+              amountRemaining={milestone.amount - project.balance}
             />
           );
         }
@@ -158,7 +158,7 @@ export const ProjectAccessories = ({
   };
 
   const handleCreateNewEntry = () => [
-    history.push(getPath('projectEntry', project.name)),
+    history.push(getPath('projectEntryCreation', project.name)),
   ];
 
   return (

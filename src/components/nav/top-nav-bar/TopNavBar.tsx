@@ -24,30 +24,30 @@ import { ButtonComponent } from '../../ui';
 import { getPath, routerPathNames } from '../../../constants';
 
 const routesForHidingTopNav = [
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
 const customTitleRoutes = [
-  `/${routerPathNames.projects}/:projectId/`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
   `/${routerPathNames.entry}/:entryId`,
 ];
 
 const routesForHidingDropdownMenu = [
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
 const routesForHidingMyProjectsButton = [
-  `/${routerPathNames.project}/:projectId`,
+  `/${routerPathNames._deprecatedPathNameForProject}/:projectId`,
   `/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
 ];
 
 const routesForEnablingSignInButton = [
@@ -59,10 +59,10 @@ const routesForEnablingSignInButton = [
   getPath('notAuthorized'),
   `/${routerPathNames.userProfile}/:userId`,
   `/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.project}/:projectId/`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
 const routesForEnablingProjectLaunchButton = [
@@ -81,7 +81,7 @@ export const TopNavBar = () => {
   const history = useHistory();
 
   const currentProjectRouteMatch: match<Record<string, any>> | null =
-    useRouteMatch(`/${routerPathNames.projects}/:projectId/`);
+    useRouteMatch(`/${routerPathNames.project}/:projectId/`);
 
   const {
     isOpen: isLoginAlertModalOpen,
@@ -158,8 +158,10 @@ export const TopNavBar = () => {
   const isViewingOwnProject: boolean = useMemo(() => {
     return (
       (history.location.pathname.startsWith(`/${routerPathNames.entry}`) ||
-        history.location.pathname.startsWith(`/${routerPathNames.project}`) ||
-        history.location.pathname.startsWith(`/${routerPathNames.projects}`)) &&
+        history.location.pathname.startsWith(
+          `/${routerPathNames._deprecatedPathNameForProject}`,
+        ) ||
+        history.location.pathname.startsWith(`/${routerPathNames.project}`)) &&
       navigationContext.projectOwnerId === user.id
     );
   }, [user.id, navigationContext.projectOwnerId, history.location.pathname]);

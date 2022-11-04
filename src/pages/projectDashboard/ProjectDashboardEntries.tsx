@@ -6,7 +6,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router';
@@ -55,7 +55,7 @@ type QueryVariables = {
   where: UniqueProjectQueryInput;
 };
 
-export const Entries = ({ project }: { project: Project }) => {
+export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
   const classes = useStyles();
   const history = useHistory();
   const { toast } = useNotification();
@@ -67,22 +67,27 @@ export const Entries = ({ project }: { project: Project }) => {
     QUERY_PROJECT_DASHBOARD_DATA,
     {
       variables: { where: { id: project.id } },
-      onCompleted: () => {
-        if (data?.project) {
-          const live = data.project.publishedEntries;
-          const draft = data.project.unpublishedEntries;
-          setLiveEntries(live as Entry[]);
-          setDraftEntries(draft as Entry[]);
-        }
+      onCompleted: (data) => {
+        const live = data.project.publishedEntries;
+        const draft = data.project.unpublishedEntries;
+
+        setLiveEntries(live as Entry[]);
+        setDraftEntries(draft as Entry[]);
       },
     },
   );
 
-  const fundersCount = project.funders?.length || 0;
   const visitorsCount = data?.project?.statistics?.totalVisitors || 0;
-  const fundersToVisitorsRatio =
-    visitorsCount > 0 ? fundersCount / visitorsCount : 1;
-  const fundersToVisitorsPerc = `${fundersToVisitorsRatio / 100} %`;
+
+  const getFundersToVisitorsPercentage = (): number => {
+    if (visitorsCount === 0) {
+      return 100;
+    }
+
+    const fundersCount = project.funders?.length || 0;
+
+    return (fundersCount / visitorsCount) * 100;
+  };
 
   const {
     isOpen: isDeleteEntryOpen,
@@ -95,7 +100,7 @@ export const Entries = ({ project }: { project: Project }) => {
   const [selectedEntry, setSelectedEntry] = useState<Entry>();
 
   const handleCreateEntry = () => {
-    history.push(`/projects/${project.name}/entry`);
+    history.push(`/project/${project.name}/entry`);
   };
 
   const triggerDeleteEntry = (entry: Entry) => {
@@ -174,7 +179,9 @@ export const Entries = ({ project }: { project: Project }) => {
                 </VStack>
                 <VStack className={classes.statBox}>
                   <Text className={classes.numberText}>
-                    {loading ? '0 %' : fundersToVisitorsPerc}
+                    {`${
+                      loading ? 0 : getFundersToVisitorsPercentage().toFixed(0)
+                    } %`}
                   </Text>
                   <Text className={classes.labelText}>FUNDERS/VISITORS</Text>
                 </VStack>
@@ -195,7 +202,7 @@ export const Entries = ({ project }: { project: Project }) => {
                       entry={entryWithProject}
                       onEdit={() =>
                         history.push(
-                          `/projects/${project.name}/entry/${entry.id}`,
+                          `/project/${project.name}/entry/${entry.id}`,
                         )
                       }
                       onDelete={() => triggerDeleteEntry(entry)}
@@ -223,7 +230,7 @@ export const Entries = ({ project }: { project: Project }) => {
                       entry={entryWithProject}
                       onEdit={() =>
                         history.push(
-                          `/projects/${project.name}/entry/${entry.id}`,
+                          `/project/${project.name}/entry/${entry.id}`,
                         )
                       }
                       onDelete={() => triggerDeleteEntry(entry)}

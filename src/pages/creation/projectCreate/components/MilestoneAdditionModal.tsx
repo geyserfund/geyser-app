@@ -12,7 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
-import { DonationInputWithSatoshi } from '../../../../components/molecules';
+import { AmountInputWithSatoshiToggle } from '../../../../components/molecules';
 import { ButtonComponent, TextBox } from '../../../../components/ui';
 import { colors } from '../../../../constants';
 import {
@@ -20,18 +20,18 @@ import {
   MUTATION_DELETE_PROJECT_MILESTONE,
   MUTATION_UPDATE_PROJECT_MILESTONE,
 } from '../../../../graphql/mutations';
+import { useBTCConverter } from '../../../../helpers';
+import { Satoshis, USDollars } from '../../../../types/types';
 import { useNotification } from '../../../../utils';
 import { TMilestone } from '../types';
 
-interface IAddMilestones {
+type Props = {
   isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (milestones: TMilestone[]) => void;
-  milestones: TMilestone[];
-  isSatoshi: boolean;
-  setIsSatoshi: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: (newMilestones: TMilestone[]) => void;
+  onSubmit: (newMilestones: TMilestone[]) => void;
+  availableMilestones: TMilestone[];
   projectId?: number;
-}
+};
 
 export const defaultMilestone = {
   name: '',
@@ -40,42 +40,71 @@ export const defaultMilestone = {
   amount: 0,
 };
 
-export const AddMilestones = ({
+export const MilestoneAdditionModal = ({
   isOpen,
   projectId,
   onClose,
-  milestones: availableMilestones,
+  availableMilestones,
   onSubmit,
-  isSatoshi,
-  setIsSatoshi,
-}: IAddMilestones) => {
+}: Props) => {
   const { toast } = useNotification();
+  const { getUSDCentsAmount, getSatoshisAmount } = useBTCConverter();
 
   const [_milestones, _setMilestones] =
     useState<TMilestone[]>(availableMilestones);
+
   const milestones = useRef(_milestones);
+
   const setMilestones = (value: TMilestone[]) => {
     milestones.current = value;
     _setMilestones(value);
   };
 
-  const [amountSatoshi, setAmountSatoshi] = useState(isSatoshi);
+  const [isFormInputUsingSatoshis, setIsFormInputUsingSatoshis] =
+    useState(true);
+
   const [formError, setFormError] = useState<any>([]);
 
   const handleAddMilestone = () => {
     setMilestones([...milestones.current, defaultMilestone]);
   };
 
-  const handleAmountChange = (value: any, itemIndex: number) => {
-    const newMilestones = milestones.current.map((milestone, index) => {
-      if (index === itemIndex) {
-        return { ...milestone, amount: value };
-      }
+  const getFilteredMilestones = (): TMilestone[] => {
+    return milestones.current.filter(
+      (milestone: TMilestone) => milestone.amount > 0 && milestone.name,
+    );
+  };
 
-      return milestone;
-    });
+  const getMutationConvertedMilestoneAmount = (
+    amount: Satoshis | USDollars,
+  ): Satoshis => {
+    return isFormInputUsingSatoshis ? amount : getSatoshisAmount(amount * 100);
+  };
+
+  const getFormConvertedMilestoneAmount = (
+    satoshiAmount: Satoshis,
+  ): Satoshis | USDollars => {
+    if (isFormInputUsingSatoshis) {
+      return satoshiAmount;
+    }
+
+    const usdCentsAmount = getUSDCentsAmount(satoshiAmount);
+
+    // Dollar value rounded to two decimal places
+    return Math.round(usdCentsAmount) / 100;
+  };
+
+  const handleAmountChange = (newAmount: number, itemIndex: number) => {
+    const newMilestone = { ...milestones.current[itemIndex] };
+
+    if (newMilestone) {
+      newMilestone.amount = newAmount;
+
+      milestones.current[itemIndex] = newMilestone;
+    }
+
     setFormError([]);
-    setMilestones(newMilestones);
+    setMilestones(milestones.current);
   };
 
   const handleTextChange = (event: any, itemIndex: number) => {
@@ -92,38 +121,65 @@ export const AddMilestones = ({
     }
   };
 
-  const handleConfirmMilestone = () => {
+  const handleModalClose = () => {
     const isValid = validateMilestones();
+
+    if (!isValid) {
+      onClose(milestones.current);
+    }
+
+    onClose(getFilteredMilestones());
+  };
+
+  /* TODO: REFACTOR -- This updates all milestones, even unchanged ones. We should refactor it to only update the relevant 
+  milestones
+  */
+  const handleConfirmMilestone = async () => {
+    const isValid = validateMilestones();
+
     if (!isValid) {
       return;
     }
 
-    const filetMilestones = milestones.current.filter(
-      (milestone) => milestone.amount > 0 && milestone.name,
-    );
-    setIsSatoshi(amountSatoshi);
+    const filteredMilestones = getFilteredMilestones();
 
     try {
-      filetMilestones.map(async (milestone) => {
-        const createMilestoneInput = {
-          ...milestone,
-          projectId,
-        };
-        if (milestone.id) {
-          await updateMilestone({
-            variables: {
-              input: {
-                projectMilestoneId: milestone.id,
-                name: milestone.name,
-                description: milestone.description,
-                amount: milestone.amount,
+      const newMilestones = await Promise.all(
+        filteredMilestones.map(async (milestone) => {
+          const createMilestoneInput = {
+            ...milestone,
+            projectId,
+          };
+
+          if (milestone.id) {
+            await updateMilestone({
+              variables: {
+                input: {
+                  projectMilestoneId: milestone.id,
+                  name: milestone.name,
+                  description: milestone.description,
+                  amount: milestone.amount,
+                },
               },
-            },
+            });
+
+            return milestone;
+          }
+
+          const { data } = await createMilestone({
+            variables: { input: createMilestoneInput },
           });
-        } else {
-          await createMilestone({ variables: { input: createMilestoneInput } });
-        }
-      });
+          if (data?.createProjectMilestone?.id) {
+            return {
+              id: data.createProjectMilestone.id,
+              ...milestone,
+            };
+          }
+
+          throw Error('missing id for created project milestone');
+        }),
+      );
+      onSubmit(newMilestones);
     } catch (error) {
       toast({
         title: 'Something went wrong',
@@ -131,9 +187,6 @@ export const AddMilestones = ({
         status: 'error',
       });
     }
-
-    onSubmit(filetMilestones);
-    onClose();
   };
 
   const handleRemoveMilestone = async (itemIndex: number) => {
@@ -201,7 +254,7 @@ export const AddMilestones = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
+    <Modal isOpen={isOpen} onClose={handleModalClose} size="sm" isCentered>
       <ModalOverlay />
       <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
         <ModalHeader paddingX="20px">
@@ -229,9 +282,9 @@ export const AddMilestones = ({
                 paddingX="2px"
               >
                 <HStack justifyContent="space-between" width="100%">
-                  <Text marginTop="10px" marginBottoim="5px">{`Milestone ${
-                    index + 1
-                  }`}</Text>
+                  <Text marginTop="10px" marginBottom="5px">
+                    {`Milestone ${index + 1}`}
+                  </Text>
                   <ButtonComponent
                     size="xs"
                     padding="7px"
@@ -242,17 +295,21 @@ export const AddMilestones = ({
                   </ButtonComponent>
                 </HStack>
                 <TextBox
-                  placeholder={'title ...'}
+                  placeholder={'Enter a Milestone Title'}
                   value={milestone.name}
                   onChange={(event: any) => handleTextChange(event, index)}
                   error={formError[index] && formError[index].name}
                 />
-                <DonationInputWithSatoshi
-                  amountSatoshi={amountSatoshi}
-                  onChangeSatoshi={setAmountSatoshi}
-                  value={milestone.amount || undefined}
-                  onChange={(_: any, value: number) =>
-                    handleAmountChange(value, index)
+
+                <AmountInputWithSatoshiToggle
+                  isUsingSatoshis={isFormInputUsingSatoshis}
+                  onUnitTypeChanged={setIsFormInputUsingSatoshis}
+                  value={getFormConvertedMilestoneAmount(milestone.amount)}
+                  onValueChanged={(newAmount: Satoshis | USDollars) =>
+                    handleAmountChange(
+                      getMutationConvertedMilestoneAmount(newAmount),
+                      index,
+                    )
                   }
                   error={formError[index] && formError[index].amount}
                 />
@@ -261,7 +318,7 @@ export const AddMilestones = ({
           </VStack>
           <VStack spacing="10px">
             <ButtonComponent isFullWidth onClick={handleAddMilestone}>
-              Add a milestone
+              Add a Milestone
             </ButtonComponent>
             <ButtonComponent
               isFullWidth

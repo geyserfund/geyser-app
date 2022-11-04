@@ -116,24 +116,39 @@ export const PublicProjectLaunchPage = () => {
                   Gain subscribers (soon)
                 </ListItem>
               </UnorderedList>
-              {!loading &&
-              (!user ||
+
+              {!loading ? (
+                !user ||
                 (user && !user.id) ||
-                (user && !hasTwitterAccount(user))) ? (
-                <VStack>
-                  <Text color={colors.neutral700} paddingBottom={3}>
-                    We require creators to login with Twitter to create a
-                    project.
-                  </Text>
-                  <TwitterConnect />
-                </VStack>
-              ) : (
-                <Box width="100%" paddingTop={5}>
-                  <ButtonComponent primary isFullWidth onClick={handleNext}>
-                    Continue
-                  </ButtonComponent>
-                </Box>
-              )}
+                (user && !hasTwitterAccount(user)) ? (
+                  <VStack>
+                    <Text color={colors.neutral700} paddingBottom={3}>
+                      We require creators to login with Twitter to create a
+                      project.
+                    </Text>
+
+                    <TwitterConnect />
+
+                    {isMobile ? (
+                      <Text
+                        fontSize={'11px'}
+                        fontWeight={400}
+                        color={'brand.gray500'}
+                      >
+                        {`If this button isn't opening a Twitter authentication
+                        page, make sure pop-ups are enabled in your browser's
+                        preferences.`}
+                      </Text>
+                    ) : null}
+                  </VStack>
+                ) : (
+                  <Box width="100%" paddingTop={5}>
+                    <ButtonComponent primary isFullWidth onClick={handleNext}>
+                      Continue
+                    </ButtonComponent>
+                  </Box>
+                )
+              ) : null}
             </VStack>
           </VStack>
         </GridItem>

@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import React, { useState } from 'react';
-import { BoltIcon, QrIcon, ShareIcon } from '../../../components/icons';
+import { BoltIcon, QrIcon } from '../../../components/icons';
 import { QRModal } from './QRModal';
 import { Project } from '../../../types/generated/graphql';
 
@@ -35,11 +35,6 @@ export const LightningQR = ({ project }: ILightningQR) => {
         setImageDownload(canvas.toDataURL('image/png', 1.0));
       });
     }
-  };
-
-  const handleShare = () => {
-    navigator.clipboard.writeText(`https://geyser.fund/project/${name}`);
-    setCopy(true);
   };
 
   return (
@@ -88,23 +83,8 @@ export const LightningQR = ({ project }: ILightningQR) => {
             }}
           />
         </Tooltip>
-
-        <Tooltip
-          label={copy ? 'Copied!' : 'Share Project'}
-          placement="top"
-          closeOnClick={false}
-        >
-          <IconButton
-            size="sm"
-            _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
-            _active={{ backgroundColor: 'brand.primary' }}
-            bg="none"
-            icon={<ShareIcon />}
-            aria-label="share"
-            onClick={handleShare}
-          />
-        </Tooltip>
       </HStack>
+
       <QRModal
         isOpen={isOpen}
         onClose={onClose}
