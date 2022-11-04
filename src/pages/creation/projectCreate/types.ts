@@ -3,6 +3,7 @@ import {
   ProjectType,
   RewardCurrency,
 } from '../../../types/generated/graphql';
+import { Satoshis } from '../../../types/types';
 
 export type ProjectCreationVariables = {
   title: string;
@@ -57,7 +58,7 @@ export type TMilestone = {
   name: string;
   projectId?: number;
   description: string;
-  amount: number;
+  amount: Satoshis;
 };
 
 export type TRewards = {

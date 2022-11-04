@@ -46,11 +46,12 @@ export const Grants = ({ project }: { project: IProject }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        setApplicants(
-          data.records.filter(
-            (applicant: any) => applicant.fields.Grant === project.title,
-          ),
-        );
+        const applications = data.records
+          ? data.records?.filter(
+              (applicant: any) => applicant.fields.Grant === project.title,
+            )
+          : [];
+        setApplicants(applications);
       });
   };
 

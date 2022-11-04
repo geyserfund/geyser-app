@@ -9,12 +9,12 @@ import {
   Text,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BiDollar } from 'react-icons/bi';
 import { BsArrowRepeat } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
-import { useBtcContext } from '../../context/btc';
+import { Satoshis, USDollars } from '../../types/types';
 import { SatoshiIconTilted } from '../icons';
 
 const useStyles = createUseStyles({
@@ -50,79 +50,47 @@ const useStyles = createUseStyles({
   },
 });
 
-interface IDonationInputWithSatoshiProps extends InputProps {
+type Props = InputProps & {
   name?: string;
-  onChange: any;
-  onChangeSatoshi: (_: boolean) => void;
-  amountSatoshi: boolean;
+  onValueChanged: (newAmount: Satoshis | USDollars) => any;
+  onUnitTypeChanged: (_: boolean) => void;
+  isUsingSatoshis: boolean;
   inputGroup?: InputGroupProps;
   error?: string;
-}
+};
 
-export const DonationInputWithSatoshi = ({
+export const AmountInputWithSatoshiToggle = ({
   className,
-  onChange,
+  onValueChanged,
   name,
   inputGroup,
-  amountSatoshi,
-  onChangeSatoshi,
+  isUsingSatoshis,
+  onUnitTypeChanged,
   value,
   error,
   ...rest
-}: IDonationInputWithSatoshiProps) => {
-  const { btcRate } = useBtcContext();
-
+}: Props) => {
   const classes = useStyles();
 
-  const isDollar = !amountSatoshi;
-
-  const [satoshi, setSatoshi] = useState(0);
-  const [dollar, setDollar] = useState(0.0);
-
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseInt(event.target.value, 10);
-    onChange(name, val);
-    if (isDollar) {
-      setDollar(val);
-      setSatoshi(Math.round(val / btcRate));
-    } else {
-      setSatoshi(val);
-      setDollar(Math.round(val * btcRate));
-    }
+    const value = isUsingSatoshis
+      ? parseInt(event.target.value, 10)
+      : parseFloat(event.target.value);
+
+    onValueChanged(value);
   };
-
-  useEffect(() => {
-    if (amountSatoshi) {
-      if (value && satoshi) {
-        onChange(name, satoshi);
-      }
-    } else if (value && dollar) {
-      onChange(name, dollar);
-    }
-  }, [satoshi, dollar, amountSatoshi]);
-
-  useEffect(() => {
-    if (amountSatoshi) {
-      const newValue = parseInt(`${value}`, 10);
-      if (satoshi !== newValue) {
-        setSatoshi(newValue);
-        setDollar(Math.round(newValue * btcRate));
-      }
-    } else {
-      const newValue = parseInt(`${value}`, 10);
-      if (dollar !== newValue) {
-        setDollar(newValue);
-        setSatoshi(Math.round(newValue / btcRate));
-      }
-    }
-  }, [value]);
 
   return (
     <>
       <InputGroup {...inputGroup}>
         <InputLeftElement>
-          {amountSatoshi ? <SatoshiIconTilted /> : <BiDollar fontSize="25px" />}
+          {isUsingSatoshis ? (
+            <SatoshiIconTilted />
+          ) : (
+            <BiDollar fontSize="25px" />
+          )}
         </InputLeftElement>
+
         <Input
           value={value}
           type="number"
@@ -131,18 +99,20 @@ export const DonationInputWithSatoshi = ({
             { [classes.inputError]: Boolean(error) },
             className,
           )}
-          onChange={handleInput}
+          onInput={handleInput}
           {...rest}
           placeholder="0"
         />
+
         <InputRightElement width="50px">
           <Button
             className={classes.switchButtton}
-            onClick={() => onChangeSatoshi(!amountSatoshi)}
+            onClick={() => onUnitTypeChanged(!isUsingSatoshis)}
             variant="ghost"
           >
             <BsArrowRepeat className={classes.switchIcon} />
-            {amountSatoshi ? (
+
+            {isUsingSatoshis ? (
               <BiDollar className={classes.insideIcon} />
             ) : (
               <SatoshiIconTilted
@@ -153,6 +123,7 @@ export const DonationInputWithSatoshi = ({
           </Button>
         </InputRightElement>
       </InputGroup>
+
       {error && (
         <Text color="brand.error" fontSize="12px">
           {error}

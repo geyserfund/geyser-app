@@ -1,19 +1,19 @@
 import { useBtcContext } from '../context/btc';
-import { Satoshi } from '../types/types';
+import { Satoshis, USDCents, USDollars } from '../types/types';
 
 export const useBTCConverter = () => {
   const { btcRate } = useBtcContext();
 
-  const getUSDAmount = (satoshis: Satoshi) => {
+  const getUSDAmount = (satoshis: Satoshis): USDollars => {
     return satoshis * btcRate;
   };
 
-  const getUSDCentsAmount = (satoshis: Satoshi) => {
+  const getUSDCentsAmount = (satoshis: Satoshis): USDCents => {
     return satoshis * btcRate * 100;
   };
 
-  const getSatoshisAmount = (usdCents: number) => {
-    return usdCents / 100 / btcRate;
+  const getSatoshisAmount = (usdCents: USDCents): Satoshis => {
+    return Math.round(usdCents / 100 / btcRate);
   };
 
   return {

@@ -22,6 +22,7 @@ import { MilestoneSettings } from './MilestoneSettings';
 import { NodeSettings } from './NodeSettings';
 import { ProjectSettings } from './ProjectSettings';
 import { RewardSettings } from './RewardSettings';
+import { getPath } from '../../constants';
 
 export type TDashboardTabs =
   | 'entries'
@@ -33,20 +34,28 @@ export type TDashboardTabs =
 export const ProjectDashboard = () => {
   const isMobile = isMobileMode();
   const { projectId } = useParams<{ projectId: string }>();
-  const { state } = useLocation<{ loggedOut?: boolean }>();
+  const { state: locationState } = useLocation<{ loggedOut?: boolean }>();
   const history = useHistory();
 
   const { user, setNav } = useAuthContext();
 
-  const [view, setView] = useState<TDashboardTabs>('entries');
+  const [activeTab, setActiveTab] = useState<TDashboardTabs>('entries');
 
   useEffect(() => {
     try {
       getProject();
     } catch (_) {
-      history.push('/not-found');
+      history.push(getPath('notFound'));
     }
-  }, [state]);
+  }, [locationState]);
+
+  const handleTabSelection = async (selectedTab: TDashboardTabs) => {
+    if (selectedTab !== activeTab) {
+      await getProject({ fetchPolicy: 'no-cache' });
+    }
+
+    setActiveTab(selectedTab);
+  };
 
   const [getProject, { loading, error, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME,
@@ -57,7 +66,7 @@ export const ProjectDashboard = () => {
       onCompleted(data) {
         setNav({
           title: data.project.title,
-          path: `/projects/${data.project.name}`,
+          path: `${getPath('project', data.project.name)}`,
           projectOwnerId: data.project.owners[0].user.id,
         });
       },
@@ -65,7 +74,7 @@ export const ProjectDashboard = () => {
   );
 
   const handleBack = () => {
-    history.push(`/projects/${projectId}`);
+    history.push(getPath('project', projectId));
   };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
@@ -85,7 +94,7 @@ export const ProjectDashboard = () => {
   const { project } = data;
 
   const renderTabs = () => {
-    switch (view) {
+    switch (activeTab) {
       case 'entries':
         return <ProjectDashboardEntries project={project} />;
       case 'milestones':
@@ -105,7 +114,7 @@ export const ProjectDashboard = () => {
     return (
       <Box
         borderBottom="3px solid"
-        borderColor={view === nav ? 'brand.primary' : 'brand.neutral500'}
+        borderColor={activeTab === nav ? 'brand.primary' : 'brand.neutral500'}
       >
         <Button
           borderRadius="4px"
@@ -113,10 +122,10 @@ export const ProjectDashboard = () => {
           w="100%"
           rounded="none"
           bg="none"
-          fontWeight={view === nav ? 'bold' : 'normal'}
+          fontWeight={activeTab === nav ? 'bold' : 'normal'}
           fontSize="16px"
           marginTop="10px"
-          onClick={() => setView(nav)}
+          onClick={() => handleTabSelection(nav)}
           textTransform="capitalize"
         >
           {nav}
@@ -202,6 +211,7 @@ export const ProjectDashboard = () => {
           display="flex"
           justifyContent="flex-start"
         ></GridItem>
+
         {renderTabs()}
       </Grid>
     </Box>

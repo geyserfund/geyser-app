@@ -15,8 +15,8 @@ import {
 import { colors } from '../../constants';
 import { IProject } from '../../interfaces';
 import {
-  AddMilestones,
   defaultMilestone,
+  MilestoneAdditionModal,
 } from '../creation/projectCreate/components';
 import { TMilestone } from '../creation/projectCreate/types';
 
@@ -24,12 +24,10 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
   const [milestones, setMilestones] = useState<TMilestone[]>([]);
 
   const {
-    isOpen: isMilestoneOpen,
-    onClose: onMilestoneClose,
-    onOpen: openMilestone,
+    isOpen: isMilestoneModalOpen,
+    onClose: onMilestoneModalClose,
+    onOpen: openMilestoneModal,
   } = useDisclosure();
-
-  const [isSatoshi, setIsSatoshi] = useState(true);
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
@@ -37,8 +35,14 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
     }
   }, [project]);
 
-  const handleMilestoneSubmit = (milestones: TMilestone[]) => {
-    setMilestones(milestones);
+  const handleMilestoneSubmit = (newMilestones: TMilestone[]) => {
+    setMilestones(newMilestones);
+    onMilestoneModalClose();
+  };
+
+  const handleMilestoneModalClose = (newMilestones: TMilestone[]) => {
+    setMilestones(newMilestones);
+    onMilestoneModalClose();
   };
 
   return (
@@ -57,7 +61,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
           <VStack w="100%" spacing="40px">
             <VStack width="100%" alignItems="flex-start">
               <Text name="title">Project Milestones </Text>
-              <ButtonComponent isFullWidth onClick={openMilestone}>
+              <ButtonComponent isFullWidth onClick={openMilestoneModal}>
                 Add a milestone
               </ButtonComponent>
               <Text fontSize="12px">
@@ -75,7 +79,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
                     </Text>
                     <IconButtonComponent
                       aria-label="edit"
-                      onClick={openMilestone}
+                      onClick={openMilestoneModal}
                     >
                       <EditIcon />
                     </IconButtonComponent>
@@ -92,11 +96,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
                       padding="10px"
                     >
                       <Text>{milestone.name}</Text>
-                      {isSatoshi ? (
-                        <SatoshiAmount>{milestone.amount}</SatoshiAmount>
-                      ) : (
-                        <Text>{`$ ${milestone.amount}`}</Text>
-                      )}
+                      <SatoshiAmount>{milestone.amount}</SatoshiAmount>
                     </VStack>
                   ))}
                 </>
@@ -106,17 +106,17 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
         </VStack>
       </GridItem>
 
-      {isMilestoneOpen && (
-        <AddMilestones
-          isOpen={isMilestoneOpen}
-          onClose={onMilestoneClose}
-          milestones={milestones.length > 0 ? milestones : [defaultMilestone]}
+      {isMilestoneModalOpen ? (
+        <MilestoneAdditionModal
+          isOpen={isMilestoneModalOpen}
+          onClose={handleMilestoneModalClose}
+          availableMilestones={
+            milestones.length > 0 ? milestones : [defaultMilestone]
+          }
           onSubmit={handleMilestoneSubmit}
-          isSatoshi={isSatoshi}
-          setIsSatoshi={setIsSatoshi}
           projectId={parseInt(`${project.id}`, 10)}
         />
-      )}
+      ) : null}
     </>
   );
 };
