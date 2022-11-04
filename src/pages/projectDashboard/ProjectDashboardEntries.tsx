@@ -100,7 +100,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
   const [selectedEntry, setSelectedEntry] = useState<Entry>();
 
   const handleCreateEntry = () => {
-    history.push(`/projects/${project.name}/entry`);
+    history.push(`/project/${project.name}/entry`);
   };
 
   const triggerDeleteEntry = (entry: Entry) => {
@@ -202,7 +202,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                       entry={entryWithProject}
                       onEdit={() =>
                         history.push(
-                          `/projects/${project.name}/entry/${entry.id}`,
+                          `/project/${project.name}/entry/${entry.id}`,
                         )
                       }
                       onDelete={() => triggerDeleteEntry(entry)}
@@ -230,7 +230,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                       entry={entryWithProject}
                       onEdit={() =>
                         history.push(
-                          `/projects/${project.name}/entry/${entry.id}`,
+                          `/project/${project.name}/entry/${entry.id}`,
                         )
                       }
                       onDelete={() => triggerDeleteEntry(entry)}

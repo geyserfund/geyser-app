@@ -57,7 +57,7 @@ export const ProjectDashboard = () => {
       onCompleted(data) {
         setNav({
           title: data.project.title,
-          path: `/projects/${data.project.name}`,
+          path: `/project/${data.project.name}`,
           projectOwnerId: data.project.owners[0].user.id,
         });
       },
@@ -65,7 +65,7 @@ export const ProjectDashboard = () => {
   );
 
   const handleBack = () => {
-    history.push(`/projects/${projectId}`);
+    history.push(`/project/${projectId}`);
   };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
