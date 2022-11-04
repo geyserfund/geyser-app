@@ -11,12 +11,12 @@ import {
 } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages } from '../../constants';
-import { ProjectDetailsCard } from './ProjectDetailsCard';
-import { ProjectAccessories } from './ProjectAccessories';
+import { ProjectDetailsAccessoriesSections } from './ProjectDetailsAccessoriesSections';
 import { UpdateReward } from '../../hooks';
 import { Project } from '../../types/generated/graphql';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../context';
+import { ProjectDetailsCard } from './ProjectDetailsCard';
 
 type Rules = string;
 
@@ -187,7 +187,7 @@ export const ProjectDetailsMainBodyContainer = ({
               </VStack>
             )}
 
-            <ProjectAccessories
+            <ProjectDetailsAccessoriesSections
               project={project}
               fundState={fundState}
               setFundState={setFundState}
