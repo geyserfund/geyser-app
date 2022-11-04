@@ -131,7 +131,10 @@ export const MilestoneAdditionModal = ({
     onClose(getFilteredMilestones());
   };
 
-  const handleConfirmMilestone = () => {
+  /* TODO: REFACTOR -- This updates all milestones, even unchanged ones. We should refactor it to only update the relevant 
+  milestones
+  */
+  const handleConfirmMilestone = async () => {
     const isValid = validateMilestones();
 
     if (!isValid) {
@@ -141,26 +144,42 @@ export const MilestoneAdditionModal = ({
     const filteredMilestones = getFilteredMilestones();
 
     try {
-      filteredMilestones.map(async (milestone) => {
-        const createMilestoneInput = {
-          ...milestone,
-          projectId,
-        };
-        if (milestone.id) {
-          await updateMilestone({
-            variables: {
-              input: {
-                projectMilestoneId: milestone.id,
-                name: milestone.name,
-                description: milestone.description,
-                amount: milestone.amount,
+      const newMilestones = await Promise.all(
+        filteredMilestones.map(async (milestone) => {
+          const createMilestoneInput = {
+            ...milestone,
+            projectId,
+          };
+
+          if (milestone.id) {
+            await updateMilestone({
+              variables: {
+                input: {
+                  projectMilestoneId: milestone.id,
+                  name: milestone.name,
+                  description: milestone.description,
+                  amount: milestone.amount,
+                },
               },
-            },
+            });
+
+            return milestone;
+          }
+
+          const { data } = await createMilestone({
+            variables: { input: createMilestoneInput },
           });
-        } else {
-          await createMilestone({ variables: { input: createMilestoneInput } });
-        }
-      });
+          if (data?.createProjectMilestone?.id) {
+            return {
+              id: data.createProjectMilestone.id,
+              ...milestone,
+            };
+          }
+
+          throw Error('missing id for created project milestone');
+        }),
+      );
+      onSubmit(newMilestones);
     } catch (error) {
       toast({
         title: 'Something went wrong',
@@ -168,8 +187,6 @@ export const MilestoneAdditionModal = ({
         status: 'error',
       });
     }
-
-    onSubmit(filteredMilestones);
   };
 
   const handleRemoveMilestone = async (itemIndex: number) => {
