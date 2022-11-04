@@ -20,5 +20,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
-  "cSpell.words": ["chakra", "funder", "Leaderboard", "Satoshi"]
+  "cSpell.words": ["chakra", "funder", "Funders", "Leaderboard", "Satoshi"]
 }

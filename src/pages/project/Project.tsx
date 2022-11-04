@@ -11,8 +11,8 @@ import Details from './Details';
 import { useFundingFlow } from '../../hooks';
 import { Grants } from '../grants/Grants';
 
-export const Project = () => {
-  const { projectId } = useParams<{ projectId: string }>();
+export const Project = ({ projectId }: { projectId: string }) => {
+  // const { projectId } = useParams<{ projectId: string }>();
   const { state } = useLocation<{ loggedOut?: boolean }>();
 
   const [detailOpen, setDetailOpen] = useState(true);

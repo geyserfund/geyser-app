@@ -106,7 +106,7 @@ export const Wallet = () => {
         };
 
         await createWallet({ variables: { input: createWalletInput } });
-        history.push(`/projects/${projectData.project.name}`);
+        history.push(`/project/${projectData.project.name}`);
       } catch (error) {
         toast({
           title: 'Something went wrong',
@@ -124,7 +124,7 @@ export const Wallet = () => {
             },
           },
         });
-        history.push(`/projects/${projectData.project.name}`);
+        history.push(`/project/${projectData.project.name}`);
       } catch (error) {
         toast({
           title: 'Something went wrong',

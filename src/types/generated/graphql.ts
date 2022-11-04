@@ -730,7 +730,7 @@ export type ProjectReward = {
   /** Name of the reward. */
   name: Scalars['name_String_NotNull_maxLength_100'];
   sold: Scalars['Int'];
-  stock: Scalars['Int'];
+  stock?: Maybe<Scalars['Int']>;
 };
 
 export type ProjectStatistics = {
@@ -2167,7 +2167,7 @@ export type ProjectRewardResolvers<
     ContextType
   >;
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  stock?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
