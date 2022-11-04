@@ -33,6 +33,12 @@ const grants = [
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
+  const [link, setLink] = React.useState('');
+
+  const linkHandler = (link) => {
+    setLink(link);
+  };
+
   return (
     <>
       <Box
@@ -67,8 +73,9 @@ export const GrantsRoundTwo = () => {
           </Text>
           <Text
             fontSize={'27px'}
-            fontWeight="bold"
+            fontWeight="900"
             textAlign="center"
+            fontFamily={fonts.livvic}
             textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
             color={'brand.primary500'}
           >
@@ -111,7 +118,7 @@ export const GrantsRoundTwo = () => {
             sponsors who want to change the world for the better.
           </Text>
           <Box display="flex" flexDirection={'column'} alignItems="center">
-            <Box color={'brand.primary500'}>
+            <Box color={'brand.primary500'} my={8}>
               <Box
                 display={'flex'}
                 alignItems="center"
@@ -122,10 +129,10 @@ export const GrantsRoundTwo = () => {
                 </Box>
 
                 <Text
-                  fontWeight={'900'}
-                  fontSize={'18px'}
+                  fontWeight={'700'}
+                  fontSize={'36px'}
+                  fontFamily={fonts.livvic}
                   textAlign="center"
-                  fontFamily={fonts.interBlack}
                 >
                   100 M
                 </Text>
@@ -138,7 +145,9 @@ export const GrantsRoundTwo = () => {
                   <small>($20K)</small>
                 </Text>
               </Box>
-              <Text fontWeight={'400'}>GRANT TO DISTRIBUTE</Text>
+              <Text fontWeight={'400'} fontFamily={fonts.inter} fontSize="17px">
+                GRANT TO DISTRIBUTE
+              </Text>
             </Box>
 
             <Box
@@ -208,15 +217,24 @@ export const GrantsRoundTwo = () => {
           >
             <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
               <img src={satwalletimg} width="195px" />
-              {[1, 2].map((item) => (
-                <Box
-                  height={'34px'}
-                  rounded="full"
-                  bg="brand.neutral200"
-                  width={'138px'}
-                  key={item}
-                ></Box>
-              ))}
+
+              <>
+                {typeof link === 'string' && link.trim().length === 0 ? (
+                  <Box display="flex" alignItems={'center'} gap={4}>
+                    {[1, 2].map((item) => (
+                      <Box
+                        height={'34px'}
+                        rounded="full"
+                        bg="brand.neutral200"
+                        width={'138px'}
+                        key={item}
+                      ></Box>
+                    ))}
+                  </Box>
+                ) : (
+                  <img src={link} width="100px" />
+                )}
+              </>
             </Box>
 
             <Box display="flex" alignItems={'center'} mt={2}>
@@ -226,7 +244,7 @@ export const GrantsRoundTwo = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <ContributeModal />
+                <ContributeModal onLink={linkHandler} />
 
                 <Box display="flex" alignItems={'center'}>
                   <Text

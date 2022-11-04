@@ -14,7 +14,7 @@ export const ApplyGrantCard = ({ name, applicant }: GrantsProp) => {
         <Text fontWeight={'600'} fontSize="14px">
           {name}
         </Text>
-        <Text fontWeight={'500'} fontSize="13px">
+        <Text fontWeight={'300'} fontSize="13px">
           ROUND 2: DECEMBER
         </Text>
         <Box

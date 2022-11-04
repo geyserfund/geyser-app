@@ -21,7 +21,7 @@ import { MdClose } from 'react-icons/md';
 import QRCode from 'react-qr-code';
 import bitcircle from '../../../assets/bitcircle.svg';
 
-export const ContributeModal = () => {
+export const ContributeModal = ({ onLink }) => {
   const OverlayOne = () => (
     <ModalOverlay
       bg="blackAlpha.300"
@@ -41,6 +41,11 @@ export const ContributeModal = () => {
   const [overlay, setOverlay] = React.useState(<OverlayOne />);
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
+
+  const linkChangeHandler = (e) => {
+    setLink(e.target.value);
+    onLink(e.target.value);
+  };
 
   return (
     <>
@@ -196,7 +201,7 @@ export const ContributeModal = () => {
                   </Text>
                   <Textarea
                     mt={3}
-                    onChange={(e) => setLink(e.target.value)}
+                    onChange={linkChangeHandler}
                     size={'lg'}
                     _placeholder={{ fontSize: '12px' }}
                     _focus={{ borderColor: 'brand.primary' }}

@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
+  Divider,
 } from '@chakra-ui/react';
 import React, { useState, useContext } from 'react';
 import { FaCheck, FaClosedCaptioning } from 'react-icons/fa';
@@ -118,155 +119,174 @@ export const ApplyGrantModal = () => {
             {grant && (
               <>
                 <Box width={'100%'} height="273px" bg="brand.primary50"></Box>
-                {hasTwitterAccount(user) ? (
-                  <ModalBody>
-                    <Text fontWeight={'600'} mb={2} fontSize="18px">
-                      Bitcoin for Free Speech
-                    </Text>
-                    <Text fontWeight={'500'} mb={2} fontSize="13px">
-                      ROUND 2: DECEMBER
-                    </Text>
-                    <Box height={'100px'} my={4}>
-                      <Box
-                        display="flex"
-                        justifyContent={'center'}
-                        alignContent="center"
-                        flexDirection={'column'}
-                      >
-                        <Text>This grant is about...</Text>
-                      </Box>
-                    </Box>
 
-                    <Box mt={4}>
-                      <Button
-                        bg="brand.primary"
-                        onClick={() => {
-                          setGrant(false);
-                          setFormC(true);
-                        }}
-                        isFullWidth
-                      >
-                        Confirm
-                      </Button>
+                <ModalBody>
+                  <Text fontWeight={'600'} mb={2} fontSize="18px">
+                    Bitcoin for Free Speech
+                  </Text>
+                  <Text fontWeight={'500'} mb={2} fontSize="13px">
+                    ROUND 2: DECEMBER
+                  </Text>
+                  <Box height={'100px'} my={4}>
+                    <Box
+                      display="flex"
+                      justifyContent={'center'}
+                      alignContent="center"
+                      flexDirection={'column'}
+                    >
+                      <Text>This grant is about...</Text>
                     </Box>
-                  </ModalBody>
-                ) : (
-                  <ModalBody>
-                    <Text fontWeight={'700'} mb={3} fontSize="22px">
-                      Apply
-                    </Text>
-                    <Text fontWeight={'400'} mb={2} fontSize="15px">
-                      You need to link your Twitter account to apply to a Grant.
-                      This is to verify your identity and
-                    </Text>
+                  </Box>
 
-                    <Box mt={6}>
-                      <TwitterConnect
-                        onClose={() => {
-                          loginOnClose();
-                          onLoginAlertModalClose();
-                        }}
-                      />
-                    </Box>
-                  </ModalBody>
-                )}
+                  <Box mt={4}>
+                    <Button
+                      bg="brand.primary"
+                      onClick={() => {
+                        setGrant(false);
+                        setFormC(true);
+                      }}
+                      isFullWidth
+                    >
+                      Confirm
+                    </Button>
+                  </Box>
+                </ModalBody>
               </>
             )}
             {formC && (
-              <ModalBody>
-                <Text fontWeight={'700'} mb={2} mt={4} fontSize="22px">
-                  Apply
-                </Text>
+              <>
+                {hasTwitterAccount(user) ? (
+                  <ModalBody>
+                    <Text fontWeight={'700'} mb={2} mt={4} fontSize="22px">
+                      Apply
+                    </Text>
 
-                <FormControl mb={3}>
-                  <FormLabel fontWeight={'500'} fontSize="12px">
-                    Which Grant are you applying to?
-                  </FormLabel>
-                  <Select
-                    ref={initialRef}
-                    _placeholder={{ fontSize: '12px' }}
-                    _focus={{ borderColor: 'brand.primary' }}
-                    onChange={(e) => setGrantType(e.target.value)}
-                  >
-                    {' '}
-                    <option value="Bitcoin Education">Bitcoin Education</option>
-                    <option value="Bitcoin Culture">Bitcoin Culture</option>
-                    <option value="Bitcoin Builders">Bitcoin Builders</option>
-                  </Select>
-                </FormControl>
-                <FormControl mb={3}>
-                  <FormLabel fontWeight={'500'} fontSize="12px">
-                    What’s your project name?
-                  </FormLabel>
-                  <Input
-                    ref={initialRef}
-                    placeholder="Bitcoin for Fairness"
-                    _placeholder={{ fontSize: '12px' }}
-                    _focus={{ borderColor: 'brand.primary' }}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </FormControl>
-                <Box>
-                  <Text fontWeight={'500'} fontSize="12px">
-                    Drop your Geyser Project or Entry link with an explainer of
-                    your project idea and intent
-                  </Text>
+                    <FormControl mb={3}>
+                      <FormLabel fontWeight={'500'} fontSize="12px">
+                        Which Grant are you applying to?
+                      </FormLabel>
+                      <Select
+                        ref={initialRef}
+                        _placeholder={{ fontSize: '12px' }}
+                        _focus={{ borderColor: 'brand.primary' }}
+                        onChange={(e) => setGrantType(e.target.value)}
+                      >
+                        {' '}
+                        <option value="Bitcoin Education">
+                          Bitcoin Education
+                        </option>
+                        <option value="Bitcoin Culture">Bitcoin Culture</option>
+                        <option value="Bitcoin Builders">
+                          Bitcoin Builders
+                        </option>
+                      </Select>
+                    </FormControl>
+                    <FormControl mb={3}>
+                      <FormLabel fontWeight={'500'} fontSize="12px">
+                        What’s your project name?
+                      </FormLabel>
+                      <Input
+                        ref={initialRef}
+                        placeholder="Bitcoin for Fairness"
+                        _placeholder={{ fontSize: '12px' }}
+                        _focus={{ borderColor: 'brand.primary' }}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </FormControl>
+                    <Box>
+                      <Text fontWeight={'500'} fontSize="12px">
+                        Drop your Geyser Project or Entry link with an explainer
+                        of your project idea and intent
+                      </Text>
 
-                  <Textarea
-                    mt={3}
-                    onChange={(e) => setLink(e.target.value)}
-                    size={'md'}
-                    _placeholder={{ fontSize: '12px' }}
-                    _focus={{ borderColor: 'brand.primary' }}
-                    placeholder="https://geyser.fund/project/bitcoin-for-fairness"
-                  />
-                </Box>
-                <FormControl mb={3} mt={3}>
-                  <FormLabel fontWeight={'500'} fontSize="12px">
-                    Which area of th world will you be focusing your efforts on?
-                  </FormLabel>
-                  <Select
-                    ref={initialRef}
-                    _placeholder={{ fontSize: '12px' }}
-                    _focus={{ borderColor: 'brand.primary' }}
-                    onChange={(e) => setArea(e.target.value)}
-                  >
-                    {' '}
-                    <option value="option1">Online</option>
-                  </Select>
-                </FormControl>
-                <FormControl mb={3}>
-                  <FormLabel fontWeight={'700'} fontSize="12px">
-                    Email
-                  </FormLabel>
-                  <Input
-                    ref={initialRef}
-                    _placeholder={{ fontSize: '12px' }}
-                    placeholder="Yolo@protonmail.com"
-                    _focus={{ borderColor: 'brand.primary' }}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </FormControl>
+                      <Textarea
+                        mt={3}
+                        onChange={(e) => setLink(e.target.value)}
+                        size={'md'}
+                        _placeholder={{ fontSize: '12px' }}
+                        _focus={{ borderColor: 'brand.primary' }}
+                        placeholder="https://geyser.fund/project/bitcoin-for-fairness"
+                      />
+                    </Box>
+                    <FormControl mb={3} mt={3}>
+                      <FormLabel fontWeight={'500'} fontSize="12px">
+                        Which area of th world will you be focusing your efforts
+                        on?
+                      </FormLabel>
+                      <Select
+                        ref={initialRef}
+                        _placeholder={{ fontSize: '12px' }}
+                        _focus={{ borderColor: 'brand.primary' }}
+                        onChange={(e) => setArea(e.target.value)}
+                      >
+                        {' '}
+                        <option value="option1">Online</option>
+                      </Select>
+                    </FormControl>
+                    <FormControl mb={3}>
+                      <FormLabel fontWeight={'700'} fontSize="12px">
+                        Email
+                      </FormLabel>
+                      <Input
+                        ref={initialRef}
+                        _placeholder={{ fontSize: '12px' }}
+                        placeholder="Yolo@protonmail.com"
+                        _focus={{ borderColor: 'brand.primary' }}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </FormControl>
 
-                <Box mt={4}>
-                  {loading ? (
-                    <Button
-                      isLoading
-                      loadingText="Loading"
-                      bg="brand.primary"
-                      isFullWidth
-                      isDisabled
-                      spinnerPlacement="start"
-                    >
-                      Submit
-                    </Button>
-                  ) : (
-                    <Button bg="brand.primary" onClick={submitForm} isFullWidth>
-                      Submit
-                    </Button>
-                  )}
-                </Box>
-              </ModalBody>
+                    <Box mt={4}>
+                      {loading ? (
+                        <Button
+                          isLoading
+                          loadingText="Loading"
+                          bg="brand.primary"
+                          isFullWidth
+                          isDisabled
+                          spinnerPlacement="start"
+                        >
+                          Submit
+                        </Button>
+                      ) : (
+                        <Button
+                          bg="brand.primary"
+                          onClick={submitForm}
+                          isFullWidth
+                        >
+                          Submit
+                        </Button>
+                      )}
+                    </Box>
+                  </ModalBody>
+                ) : (
+                  <>
+                    <Box
+                      width={'100%'}
+                      height="273px"
+                      bg="brand.primary50"
+                    ></Box>
+                    <ModalBody>
+                      <Text fontWeight={'700'} mb={3} fontSize="22px">
+                        Apply
+                      </Text>
+                      <Text fontWeight={'400'} mb={2} fontSize="15px">
+                        You need to link your Twitter account to apply to a
+                        Grant. This is to verify your identity and
+                      </Text>
+
+                      <Box mt={6}>
+                        <TwitterConnect
+                          onClose={() => {
+                            loginOnClose();
+                            onLoginAlertModalClose();
+                          }}
+                        />
+                      </Box>
+                    </ModalBody>
+                  </>
+                )}
+              </>
             )}
             {sentC && (
               <ModalBody>

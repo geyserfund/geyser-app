@@ -33,8 +33,9 @@ export const GrantsLandingPage = () => {
           </Text>
           <Text
             fontSize={'27px'}
-            fontWeight="bold"
+            fontWeight="900"
             textAlign="center"
+            fontFamily={fonts.livvic}
             textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
             color={'brand.primary500'}
           >
