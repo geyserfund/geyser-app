@@ -1,5 +1,5 @@
 import { FieldFunctionOptions, InMemoryCache } from '@apollo/client';
-import { Project, ProjectsResponse } from '../../types/generated/graphql';
+import { PaginationInput } from '../../types/generated/graphql';
 
 type IdentifiableCollection = {
   id: number;
@@ -12,7 +12,13 @@ const mergeIdentifiableCollectionUsingCursorIDs = (
   incoming: IdentifiableCollection = [],
   args: FieldFunctionOptions,
 ) => {
-  const cursorID = Number(args.variables?.input?.cursor?.id || -1);
+  const paginationInput: PaginationInput = args?.variables?.input?.pagination;
+
+  if (!paginationInput) {
+    return [...existing, ...incoming];
+  }
+
+  const cursorID = paginationInput.cursor?.id || -1;
 
   if (cursorID === -1) {
     return [...existing, ...incoming];
@@ -57,20 +63,7 @@ export const cache: InMemoryCache = new InMemoryCache({
           // any of this field's arguments.
           // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
           keyArgs: false,
-
-          merge: (
-            // eslint-disable-next-line default-param-last
-            existing: ProjectsResponse,
-            // eslint-disable-next-line default-param-last
-            incoming: ProjectsResponse,
-            args: FieldFunctionOptions,
-          ) => {
-            return mergeIdentifiableCollectionUsingCursorIDs(
-              (existing?.projects || []) as Project[],
-              (incoming?.projects || []) as Project[],
-              args,
-            );
-          },
+          merge: false,
         },
       },
     },
