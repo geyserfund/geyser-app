@@ -8,6 +8,7 @@ import { QUERY_PROJECT_BY_NAME } from '../../graphql';
 import { useFundingFlow } from '../../hooks';
 import { useAuthContext } from '../../context';
 import {
+  Owner,
   Project,
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql';
@@ -44,15 +45,13 @@ export const ProjectView = () => {
         if (data.project) {
           const { project }: { project: Project } = data;
 
-          const projectOwnerID =
-            project.owners && project.owners.length > 0
-              ? project.owners[0]?.user.id
-              : '';
-
           setNav({
             title: project.title,
             path: getPath('project', project.name),
-            projectOwnerId: projectOwnerID,
+            projectOwnerIDs:
+              project.owners.map((ownerInfo: Owner) => {
+                return Number(ownerInfo.user.id || -1);
+              }) || [],
           });
         }
       },

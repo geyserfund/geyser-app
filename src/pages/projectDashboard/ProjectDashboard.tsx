@@ -23,6 +23,7 @@ import { NodeSettings } from './NodeSettings';
 import { ProjectSettings } from './ProjectSettings';
 import { RewardSettings } from './RewardSettings';
 import { getPath } from '../../constants';
+import { Owner } from '../../types/generated/graphql';
 
 export type TDashboardTabs =
   | 'entries'
@@ -67,7 +68,10 @@ export const ProjectDashboard = () => {
         setNav({
           title: data.project.title,
           path: `${getPath('project', data.project.name)}`,
-          projectOwnerId: data.project.owners[0].user.id,
+          projectOwnerIDs:
+            data.project.owners.map((ownerInfo: Owner) => {
+              return Number(ownerInfo.user.id || -1);
+            }) || [],
         });
       },
     },

@@ -84,7 +84,10 @@ export const ProjectDetailsMainBodyContainer = ({
   const history = useHistory();
 
   const { user, navigationContext } = useAuthContext();
-  const isViewerTheProjectOwner = navigationContext.projectOwnerId === user.id;
+
+  const isViewerTheProjectOwner = navigationContext.projectOwnerIDs.includes(
+    Number(user.id),
+  );
 
   const handleViewClick = () => {
     setDetailOpen(false);

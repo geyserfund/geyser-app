@@ -80,6 +80,8 @@ export const TopNavBar = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
 
+  const currentPathName = history.location.pathname;
+
   const currentProjectRouteMatch: match<Record<string, any>> | null =
     useRouteMatch(`/${routerPathNames.project}/:projectId/`);
 
@@ -157,14 +159,19 @@ export const TopNavBar = () => {
 
   const isViewingOwnProject: boolean = useMemo(() => {
     return (
-      (history.location.pathname.startsWith(`/${routerPathNames.entry}`) ||
-        history.location.pathname.startsWith(
+      (currentPathName.startsWith(`/${routerPathNames.entry}`) ||
+        currentPathName.startsWith(
           `/${routerPathNames._deprecatedPathNameForProject}`,
         ) ||
-        history.location.pathname.startsWith(`/${routerPathNames.project}`)) &&
-      navigationContext.projectOwnerId === user.id
+        currentPathName.startsWith(`/${routerPathNames.project}`)) &&
+      navigationContext.projectOwnerIDs.includes(Number(user.id))
     );
-  }, [user.id, navigationContext.projectOwnerId, history.location.pathname]);
+  }, [
+    user.id,
+    navigationContext.projectOwnerIDs,
+    currentPathName,
+    routerPathNames,
+  ]);
 
   const shouldTopNavBeHidden: boolean = useMemo(() => {
     return routeMatchesForHidingTopNav.some((routeMatch) => {
