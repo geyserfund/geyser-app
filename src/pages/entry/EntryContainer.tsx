@@ -137,6 +137,7 @@ export const EntryContainer = ({
             <EntryDetails entry={entry} />
           </VStack>
         </VStack>
+
         <AppFooter />
       </Box>
     </Box>
