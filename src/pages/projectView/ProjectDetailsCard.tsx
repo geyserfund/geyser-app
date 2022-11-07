@@ -168,16 +168,18 @@ export const ProjectDetailsCard = ({
             {renderYourFunding()}
           </HStack>
         )}
-        {project.active && (
-          <Button
-            isFullWidth
-            backgroundColor="brand.primary"
-            leftIcon={<BoltIcon />}
-            onClick={fundButtonFunction}
-          >
-            Fund this project
-          </Button>
-        )}
+
+        <Button
+          isFullWidth
+          backgroundColor={
+            project.active ? 'brand.primary' : 'brand.grayPlaceholder'
+          }
+          leftIcon={<BoltIcon />}
+          onClick={fundButtonFunction}
+          isDisabled={project.active === false}
+        >
+          Contribute
+        </Button>
       </VStack>
     </Card>
   );

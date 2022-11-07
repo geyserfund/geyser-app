@@ -73,17 +73,20 @@ export const InfoPage = ({
     >
       <ActivityBrief loading={loading} project={project} />
 
-      {project.active && !isMobile && (
+      {!isMobile ? (
         <ButtonComponent
-          primary
           standard
           leftIcon={<SatoshiIconTilted />}
           width="100%"
+          backgroundColor={
+            project.active ? 'brand.primary' : 'brand.grayPlaceholder'
+          }
           onClick={handleFundProject}
+          isDisabled={project.active === false}
         >
-          Fund this project
+          Contribute
         </ButtonComponent>
-      )}
+      ) : null}
 
       <ProjectActivityActionsToolbar
         fundButtonFunction={handleFundProject}
