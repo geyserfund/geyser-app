@@ -21,7 +21,7 @@ import { FileUpload } from '../../../../components/molecules';
 import { createUseStyles } from 'react-jss';
 import { colors, getPath } from '../../../../constants';
 import { ImageWithReload } from '../../../../components/ui';
-import { Editor } from './Editor';
+import { ProjectEntryEditor } from './ProjectEntryEditor';
 import Loader from '../../../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../../../graphql';
 import { useAuthContext } from '../../../../context';
@@ -347,7 +347,7 @@ export const EntryCreateEdit = () => {
             </VStack>
 
             <Box flex={1} width="100%">
-              <Editor
+              <ProjectEntryEditor
                 name="content"
                 handleChange={handleContentUpdate}
                 value={form.current.content}

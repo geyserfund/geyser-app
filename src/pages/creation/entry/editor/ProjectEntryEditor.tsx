@@ -107,7 +107,7 @@ type Props = {
 
 const editorDOMID = 'editor';
 
-export const Editor = ({
+export const ProjectEntryEditor = ({
   name,
   value,
   handleChange,
