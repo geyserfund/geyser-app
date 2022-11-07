@@ -19,9 +19,6 @@ type Props = ICard & {
   onClick?: () => void;
 };
 
-// TODO: Figure out how this is supposed to differ from `ProjectCard`.
-// (It's possible this could replace `ProjectCard`)
-
 export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
   const history = useHistory();
 

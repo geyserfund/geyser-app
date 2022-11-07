@@ -10,6 +10,7 @@ export const MUTATION_CREATE_PROJECT = gql`
       active
       draft
       type
+      image
       owners {
         id
         user {
@@ -32,6 +33,7 @@ export const MUTATION_UPDATE_PROJECT = gql`
       title
       name
       description
+      image
       active
       draft
       type
