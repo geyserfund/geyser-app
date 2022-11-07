@@ -36,6 +36,19 @@ export const EntryDetails = ({ entry }: Props) => {
           {entry.title}
         </Text>
       </Box>
+
+      {headerImageSrc ? (
+        <HStack
+          width={'100%'}
+          justifyContent="center"
+          maxHeight="400px"
+          borderRadius="4px"
+          overflow="hidden"
+        >
+          <Image width="100%" src={headerImageSrc} />
+        </HStack>
+      ) : null}
+
       <HStack width="100%" justifyContent="space-between">
         <Link to={getPath('userProfile', entry.creator.id)}>
           <HStack>
@@ -52,18 +65,6 @@ export const EntryDetails = ({ entry }: Props) => {
         </Link>
         <ProjectFundersCountIndicator count={entry.fundersCount} />
       </HStack>
-
-      {headerImageSrc ? (
-        <HStack
-          width={'100%'}
-          justifyContent="center"
-          maxHeight="400px"
-          borderRadius="4px"
-          overflow="hidden"
-        >
-          <Image width="100%" src={headerImageSrc} />
-        </HStack>
-      ) : null}
 
       <Text fontSize="18px" fontWeight={600}>
         {entry.description}
