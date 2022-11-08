@@ -148,7 +148,9 @@ export const TopNavBar = () => {
   };
 
   const handleProjectDashboardButtonPress = () => {
-    const projectName = currentProjectRouteMatch?.params?.projectId;
+    const projectName =
+      currentProjectRouteMatch?.params?.projectId ||
+      navigationContext.projectName;
 
     if (projectName) {
       history.push(getPath('projectDashboard', projectName));
@@ -357,7 +359,7 @@ export const TopNavBar = () => {
 
           {shouldShowCustomTitle ? (
             <Heading as={'h3'} noOfLines={1} size="sm">
-              {navigationContext.title}
+              {navigationContext.projectTitle}
             </Heading>
           ) : null}
 

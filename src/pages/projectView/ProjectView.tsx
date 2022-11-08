@@ -46,8 +46,9 @@ export const ProjectView = () => {
           const { project }: { project: Project } = data;
 
           setNav({
-            title: project.title,
-            path: getPath('project', project.name),
+            projectName: project.name,
+            projectTitle: project.title,
+            projectPath: getPath('project', project.name),
             projectOwnerIDs:
               project.owners.map((ownerInfo: Owner) => {
                 return Number(ownerInfo.user.id || -1);

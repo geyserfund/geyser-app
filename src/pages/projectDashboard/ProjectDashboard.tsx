@@ -66,8 +66,9 @@ export const ProjectDashboard = () => {
       },
       onCompleted(data) {
         setNav({
-          title: data.project.title,
-          path: `${getPath('project', data.project.name)}`,
+          projectName: data.project.name,
+          projectTitle: data.project.title,
+          projectPath: `${getPath('project', data.project.name)}`,
           projectOwnerIDs:
             data.project.owners.map((ownerInfo: Owner) => {
               return Number(ownerInfo.user.id || -1);
