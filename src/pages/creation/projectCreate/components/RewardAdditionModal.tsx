@@ -227,7 +227,7 @@ export const RewardAdditionModal = ({
       rewards.current.description &&
       rewards.current.description.length > 280
     ) {
-      errors.cost = 'description must be less than 280 characters';
+      errors.cost = 'Description must be less than 280 characters';
       isValid = false;
     }
 

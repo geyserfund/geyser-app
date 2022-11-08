@@ -237,12 +237,12 @@ export const MilestoneAdditionModal = ({
         errors.name = 'Name is a required field';
         isValid = false;
       } else if (milestone.name.length > 50) {
-        errors.name = 'milestone name cannot be longer than 50 characters';
+        errors.name = 'Name cannot be longer than 50 characters';
         isValid = false;
       }
 
       if (!milestone.amount || !(milestone.amount > 0)) {
-        errors.amount = 'amount needs to be greater than 1';
+        errors.amount = 'Amount needs to be greater than 1';
         isValid = false;
       }
 

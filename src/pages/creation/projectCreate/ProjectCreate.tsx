@@ -225,18 +225,18 @@ export const ProjectCreate = () => {
     let isValid = true;
 
     if (!form.title) {
-      errors.title = 'title is a required field';
+      errors.title = 'Title is a required field';
       isValid = false;
     } else if (form.title.length < 5 || form.title.length > 50) {
-      errors.title = 'title should be between 5 and 50 characters';
+      errors.title = 'Title should be between 5 and 50 characters';
       isValid = false;
     }
 
     if (!form.name) {
-      errors.name = 'Lightening address is a required field';
+      errors.name = 'Lightning address is a required field';
       isValid = false;
     } else if (form.name.length > 50) {
-      errors.name = 'Lightening address should be less than 50 characters';
+      errors.name = 'Lightning address should be less than 50 characters';
       isValid = false;
     }
 
@@ -244,7 +244,7 @@ export const ProjectCreate = () => {
       errors.description = 'Project objective is a required field';
       isValid = false;
     } else if (form.title.length > 280) {
-      errors.title = 'title should be less than 280 characters';
+      errors.title = 'Title should be less than 280 characters';
       isValid = false;
     }
 
