@@ -65,7 +65,9 @@ export const ProjectDiscoveryPage = ({
   const [isShowingAllProjects, setIsShowingAllProjects] = useState(false);
 
   const paginationInput: PaginationInput = useMemo(() => {
-    const options: PaginationInput = {};
+    const options: PaginationInput = {
+      take: pagingItemLimit,
+    };
 
     if (projects.length > 0) {
       options.cursor = {
