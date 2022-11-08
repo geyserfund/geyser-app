@@ -52,7 +52,6 @@ export const TopNavBarMenu = ({
         color={textColor}
         border={'1px'}
         borderColor="brand.bgGrey3"
-        sx={styles.buttonCommon}
       >
         <HStack color={useColorModeValue('brand.gray500', 'brand.gray200')}>
           <HamburgerIcon color={'#ADB5BD'} />
