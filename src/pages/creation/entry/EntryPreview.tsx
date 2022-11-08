@@ -142,7 +142,7 @@ export const EntryPreview = () => {
   };
 
   const handleTwitterShareButtonTapped = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(`${window.origin}/entry/${params.entryId}`);
 
     setHasCopiedSharingLink(true);
   };
