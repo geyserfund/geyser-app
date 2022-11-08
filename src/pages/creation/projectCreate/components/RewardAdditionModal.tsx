@@ -213,6 +213,9 @@ export const RewardAdditionModal = ({
     if (!rewards.current.name) {
       errors.name = 'Name is a required field';
       isValid = false;
+    } else if (rewards.current.name.length > 50) {
+      errors.name = 'Name should be less than 50 characters';
+      isValid = false;
     }
 
     if (!rewards.current.cost || !(rewards.current.cost > 0)) {

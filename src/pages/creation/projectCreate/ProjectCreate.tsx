@@ -232,8 +232,19 @@ export const ProjectCreate = () => {
       isValid = false;
     }
 
+    if (!form.name) {
+      errors.name = 'Lightening address is a required field';
+      isValid = false;
+    } else if (form.name.length > 50) {
+      errors.name = 'Lightening address should be less than 50 characters';
+      isValid = false;
+    }
+
     if (!form.description) {
       errors.description = 'Project objective is a required field';
+      isValid = false;
+    } else if (form.title.length > 280) {
+      errors.title = 'title should be less than 280 characters';
       isValid = false;
     }
 
@@ -242,6 +253,9 @@ export const ProjectCreate = () => {
       isValid = false;
     } else if (!user.email && !validateEmail(form.email)) {
       errors.email = 'Please enter a valid email address.';
+      isValid = false;
+    } else if (form.email.length > 50) {
+      errors.email = 'Email cannot be longer than 50 characters';
       isValid = false;
     }
 

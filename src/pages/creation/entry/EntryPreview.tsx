@@ -104,6 +104,14 @@ export const EntryPreview = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
+    if (name === 'title' && value.length > 50) {
+      return;
+    }
+
+    if (name === 'description' && value.length > 280) {
+      return;
+    }
+
     if (name) {
       const newForm = { ...entry, [name]: value };
       setEntry(newForm);
