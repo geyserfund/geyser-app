@@ -179,9 +179,9 @@ export const ProjectCreate = () => {
 
       if (name === 'title' && value.length > 50) {
         setFormError({ title: `max character allowed is 50/${value.length}` });
-      } else if (name === 'description' && value.length > 280) {
+      } else if (name === 'description' && value.length > 2200) {
         setFormError({
-          description: `max character allowed is 280/${value.length}`,
+          description: `max character allowed is 2200/${value.length}`,
         });
       } else {
         setFormError({});
