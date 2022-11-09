@@ -79,7 +79,13 @@ export const ProjectDetailsAccessoriesSections = ({
 
   const renderEntries = () => {
     if (project.entries && project.entries.length > 0) {
-      return project.entries.map((entry) => {
+      const sortedEntries =
+        project.entries &&
+        project.entries.sort(
+          (a, b) =>
+            parseInt(a?.createdAt || '', 10) - parseInt(b.createdAt || '', 10),
+        );
+      return sortedEntries.map((entry) => {
         if (entry) {
           const entryWithProject = { ...entry, project };
           return <ProjectEntryCard entry={entryWithProject} key={entry.id} />;

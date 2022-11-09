@@ -110,6 +110,14 @@ export const EntryPreview = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
+    if (name === 'title' && value.length > 60) {
+      return;
+    }
+
+    if (name === 'description' && value.length > 2200) {
+      return;
+    }
+
     if (name) {
       const newForm = { ...entry, [name]: value };
       setEntry(newForm);
@@ -140,7 +148,7 @@ export const EntryPreview = () => {
   };
 
   const handleTwitterShareButtonTapped = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(getPath('entry', params.entryId));
 
     setHasCopiedSharingLink(true);
   };

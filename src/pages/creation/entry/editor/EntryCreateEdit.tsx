@@ -189,6 +189,14 @@ export const EntryCreateEdit = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
+    if (name === 'title' && value.length > 60) {
+      return;
+    }
+
+    if (name === 'description' && value.length > 2200) {
+      return;
+    }
+
     if (name) {
       const newForm = { ...form.current, [name]: value };
       setForm(newForm);

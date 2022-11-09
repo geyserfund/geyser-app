@@ -85,6 +85,7 @@ export const ProjectActivityPanel = ({
     data: fundingData,
   } = useQuery(QUERY_PROJECT_FUNDING_DATA, {
     variables: { where: { id: project.id } },
+    fetchPolicy: 'network-only',
   });
 
   useEffect(() => {
