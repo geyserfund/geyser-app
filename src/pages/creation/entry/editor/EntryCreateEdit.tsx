@@ -26,6 +26,7 @@ import Loader from '../../../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../../../graphql';
 import { useAuthContext } from '../../../../context';
 import { Owner } from '../../../../types/generated/graphql';
+import { ProjectEntryValidations } from '../../../../constants/validations';
 
 const useStyles = createUseStyles({
   uploadContainer: {
@@ -189,11 +190,18 @@ export const EntryCreateEdit = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
-    if (name === 'title' && value.length > 60) {
+
+    if (
+      name === 'title' &&
+      value.length > ProjectEntryValidations.title.maxLength
+    ) {
       return;
     }
 
-    if (name === 'description' && value.length > 2200) {
+    if (
+      name === 'description' &&
+      value.length > ProjectEntryValidations.description.maxLength
+    ) {
       return;
     }
 

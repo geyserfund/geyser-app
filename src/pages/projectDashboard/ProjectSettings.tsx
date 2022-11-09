@@ -24,9 +24,17 @@ import { colors } from '../../constants';
 import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
 import { IProject } from '../../interfaces';
-import { useNotification, validLightningAddress } from '../../utils';
+import {
+  useNotification,
+  validateEmail,
+  validLightningAddress,
+} from '../../utils';
 import { ProjectCreationVariables } from '../creation/projectCreate/types';
 import { DateTime } from 'luxon';
+import {
+  ProjectValidations,
+  UserValidations,
+} from '../../constants/validations';
 
 export const ProjectSettings = ({ project }: { project: IProject }) => {
   const params = useParams<{ projectId: string }>();
@@ -101,11 +109,19 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       }
 
       setForm(newForm);
-      if (name === 'title' && value.length > 50) {
-        setFormError({ title: `max character allowed is 50/${value.length}` });
-      } else if (name === 'description' && value.length > 280) {
+      if (
+        name === 'title' &&
+        value.length > ProjectValidations.title.maxLength
+      ) {
         setFormError({
-          description: `max character allowed is 280/${value.length}`,
+          title: `Character Limit: ${ProjectValidations.title.maxLength}/${value.length}`,
+        });
+      } else if (
+        name === 'description' &&
+        value.length > ProjectValidations.description.maxLength
+      ) {
+        setFormError({
+          description: `Character Limit: ${ProjectValidations.description.maxLength}/${value.length}`,
         });
       } else {
         setFormError({});
@@ -163,16 +179,44 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
   const validateForm = () => {
     const errors: any = {};
     let isValid = true;
-    if (!form.title) {
-      errors.title = 'title is a required field';
+
+    if (!form.name) {
+      errors.name = 'Project name is a required field.';
       isValid = false;
-    } else if (form.title.length < 5 || form.title.length > 50) {
-      errors.title = 'title should be between 5 and 50 characters';
+    } else if (
+      form.name.length < ProjectValidations.name.minLength ||
+      form.name.length > ProjectValidations.name.maxLength
+    ) {
+      errors.name = `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`;
+      isValid = false;
+    }
+
+    if (!form.title) {
+      errors.title = 'Title is a required field.';
+      isValid = false;
+    } else if (form.title.length > ProjectValidations.title.maxLength) {
+      errors.title = `Title should shorter than ${ProjectValidations.title.maxLength} characters.`;
       isValid = false;
     }
 
     if (!form.description) {
-      errors.description = 'Project objective is a required field';
+      errors.description = 'Project objective is a required field.';
+      isValid = false;
+    } else if (
+      form.description.length > ProjectValidations.description.maxLength
+    ) {
+      errors.description = `Project objective should shorter than ${ProjectValidations.description.maxLength} characters.`;
+      isValid = false;
+    }
+
+    if (!form.email && !user.email) {
+      errors.email = 'Email address is a required field.';
+      isValid = false;
+    } else if (!user.email && !validateEmail(form.email)) {
+      errors.email = 'Please enter a valid email address.';
+      isValid = false;
+    } else if (form.email.length > UserValidations.email.maxLength) {
+      errors.email = `Email address should shorter than ${UserValidations.email.maxLength} characters.`;
       isValid = false;
     }
 

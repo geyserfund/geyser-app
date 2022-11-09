@@ -13,6 +13,7 @@ import {
 import React, { useState } from 'react';
 import { ButtonComponent, TextArea, TextBox } from '../../../../components/ui';
 import { VoltageNodeConnectionDemoURL } from '../../../../constants';
+import { ProjectNodeValidations } from '../../../../constants/validations';
 import { isMobileMode } from '../../../../utils';
 import { checkMacaroonPermissions } from '../../../../utils/checkMacaroonPermissions';
 import { isSecp256k1Compressed } from '../../../../utils/isSecp256k1Compressed';
@@ -85,16 +86,18 @@ export const NodeAdditionModal = ({
     if (!form.name) {
       errors.name = 'Node name' + additionalText;
       isValid = false;
-    } else if (form.name.length > 60) {
-      errors.name = 'Node name cannot be longer than 60 characters';
+    } else if (form.name.length > ProjectNodeValidations.nodeName.maxLength) {
+      errors.name = `Node name cannot be longer than ${ProjectNodeValidations.nodeName.maxLength} characters.`;
       isValid = false;
     }
 
     if (!form.hostname) {
       errors.hostname = 'Host name' + additionalText;
       isValid = false;
-    } else if (form.hostname.length > 80) {
-      errors.hostname = 'Host name cannot be longer than 80 characters';
+    } else if (
+      form.hostname.length > ProjectNodeValidations.hostname.maxLength
+    ) {
+      errors.hostname = `Host name cannot be longer than ${ProjectNodeValidations.hostname.maxLength} characters.`;
       isValid = false;
     } else {
       const val = isTorV3Address(form.hostname);
@@ -107,8 +110,10 @@ export const NodeAdditionModal = ({
     if (!form.publicKey) {
       errors.publicKey = 'Public Key' + additionalText;
       isValid = false;
-    } else if (form.publicKey.length > 66) {
-      errors.publicKey = 'Host name cannot be longer than 66 characters';
+    } else if (
+      form.publicKey.length > ProjectNodeValidations.hostname.maxLength
+    ) {
+      errors.publicKey = `Host name cannot be longer than ${ProjectNodeValidations.hostname.maxLength} characters.`;
       isValid = false;
     } else {
       const val = isSecp256k1Compressed(form.publicKey);
@@ -121,8 +126,11 @@ export const NodeAdditionModal = ({
     if (!form.invoiceMacaroon) {
       errors.invoiceMacaroon = 'Invoice Macaroon' + additionalText;
       isValid = false;
-    } else if (form.invoiceMacaroon.length > 280) {
-      errors.invoiceMacaroon = 'Host name cannot be longer than 280 characters';
+    } else if (
+      form.invoiceMacaroon.length >
+      ProjectNodeValidations.invoiceMacaroon.maxLength
+    ) {
+      errors.invoiceMacaroon = `Invoice Macaroon cannot be longer than ${ProjectNodeValidations.invoiceMacaroon.maxLength} characters.`;
       isValid = false;
     } else {
       const val = checkMacaroonPermissions(form.invoiceMacaroon);
@@ -136,9 +144,10 @@ export const NodeAdditionModal = ({
       if (!form.tlsCert) {
         errors.tlsCert = 'TLS certificate' + additionalText;
         isValid = false;
-      } else if (form.invoiceMacaroon.length > 280) {
-        errors.hostname =
-          'TLS certificate cannot be longer than 280 characters';
+      } else if (
+        form.tlsCert.length > ProjectNodeValidations.tlsCertificate.maxLength
+      ) {
+        errors.hostname = `TLS Certificate cannot be longer than ${ProjectNodeValidations.tlsCertificate.maxLength} characters.`;
         isValid = false;
       }
     }

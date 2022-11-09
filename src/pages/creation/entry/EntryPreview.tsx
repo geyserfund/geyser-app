@@ -6,6 +6,7 @@ import { useHistory, useParams } from 'react-router';
 import { ButtonComponent, TextBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { getPath } from '../../../constants';
+import { ProjectEntryValidations } from '../../../constants/validations';
 import { useAuthContext } from '../../../context';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import {
@@ -110,11 +111,17 @@ export const EntryPreview = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
-    if (name === 'title' && value.length > 60) {
+    if (
+      name === 'title' &&
+      value.length > ProjectEntryValidations.title.maxLength
+    ) {
       return;
     }
 
-    if (name === 'description' && value.length > 2200) {
+    if (
+      name === 'description' &&
+      value.length > ProjectEntryValidations.description.maxLength
+    ) {
       return;
     }
 
