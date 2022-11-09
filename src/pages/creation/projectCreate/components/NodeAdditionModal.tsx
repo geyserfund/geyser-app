@@ -85,8 +85,8 @@ export const NodeAdditionModal = ({
     if (!form.name) {
       errors.name = 'Node name' + additionalText;
       isValid = false;
-    } else if (form.name.length > 50) {
-      errors.name = 'Node name cannot be longer than 50 characters';
+    } else if (form.name.length > 60) {
+      errors.name = 'Node name cannot be longer than 60 characters';
       isValid = false;
     }
 
@@ -94,7 +94,7 @@ export const NodeAdditionModal = ({
       errors.hostname = 'Host name' + additionalText;
       isValid = false;
     } else if (form.hostname.length > 80) {
-      errors.hostname = 'Host name cannot be longer than 50 characters';
+      errors.hostname = 'Host name cannot be longer than 80 characters';
       isValid = false;
     } else {
       const val = isTorV3Address(form.hostname);
@@ -106,6 +106,9 @@ export const NodeAdditionModal = ({
 
     if (!form.publicKey) {
       errors.publicKey = 'Public Key' + additionalText;
+      isValid = false;
+    } else if (form.publicKey.length > 66) {
+      errors.publicKey = 'Host name cannot be longer than 66 characters';
       isValid = false;
     } else {
       const val = isSecp256k1Compressed(form.publicKey);
@@ -119,7 +122,7 @@ export const NodeAdditionModal = ({
       errors.invoiceMacaroon = 'Invoice Macaroon' + additionalText;
       isValid = false;
     } else if (form.invoiceMacaroon.length > 280) {
-      errors.hostname = 'Host name cannot be longer than 280 characters';
+      errors.invoiceMacaroon = 'Host name cannot be longer than 280 characters';
       isValid = false;
     } else {
       const val = checkMacaroonPermissions(form.invoiceMacaroon);
