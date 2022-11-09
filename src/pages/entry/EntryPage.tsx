@@ -11,7 +11,12 @@ import { useFundingFlow, useFundingFormState } from '../../hooks';
 import { useAuthContext } from '../../context';
 import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
 import { EntryContainer } from './EntryContainer';
-import { Entry, Project, ProjectReward } from '../../types/generated/graphql';
+import {
+  Entry,
+  Owner,
+  Project,
+  ProjectReward,
+} from '../../types/generated/graphql';
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { compactMap } from '../../utils/compactMap';
 import { getPath } from '../../constants';
@@ -35,8 +40,13 @@ export const EntryPage = () => {
     useLazyQuery(QUERY_PROJECT_BY_NAME, {
       onCompleted(data) {
         setNav({
-          title: data.project.title,
-          path: getPath('project', data.project.name),
+          projectName: data.project.name,
+          projectTitle: data.project.title,
+          projectPath: getPath('project', data.project.name),
+          projectOwnerIDs:
+            data.project.owners.map((ownerInfo: Owner) => {
+              return Number(ownerInfo.user.id || -1);
+            }) || [],
         });
       },
     });

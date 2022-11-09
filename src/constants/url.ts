@@ -56,3 +56,5 @@ export const GeyserSkeletonUrl =
 
 export const VoltageNodeConnectionDemoURL =
   'https://geyser.notion.site/Connecting-your-Geyser-campaign-to-a-Voltage-node-10e786db5a5a46af9456f00abfa0dc43';
+
+export const AmbossUrl = 'https://amboss.space/node/';

@@ -26,14 +26,20 @@ const defaultContext: AuthContextProps = {
   setIsLoggedIn: () => {},
   queryCurrentUser: () => {},
   setUser: (user: User) => {},
-  navigationContext: { title: '', path: '' },
+  navigationContext: {
+    projectName: '',
+    projectTitle: '',
+    projectPath: '',
+    projectOwnerIDs: [],
+  },
   setNav: () => {},
 };
 
 export type NavigationContextProps = {
-  title: string;
-  path: string;
-  projectOwnerId?: number;
+  projectName: string;
+  projectTitle: string;
+  projectPath: string;
+  projectOwnerIDs: number[];
 };
 
 type AuthContextProps = {
@@ -60,8 +66,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialLoad, setInitialLoad] = useState(false);
 
   const [nav, setNav] = useState<NavigationContextProps>({
-    title: '',
-    path: '',
+    projectName: '',
+    projectTitle: '',
+    projectPath: '',
+    projectOwnerIDs: [],
   });
 
   const [user, setUser] = useState<User>(defaultUser);

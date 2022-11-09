@@ -11,11 +11,11 @@ import {
 import React, { useState } from 'react';
 import { Card, SatoshiAmount, ProjectStatusLabel } from '../../components/ui';
 import { LightningQR } from './components/LightningQR';
-import { BoltIcon, ShareIcon } from '../../components/icons';
+import { BoltIcon, ShareIcon, AmbossIcon } from '../../components/icons';
 import { AvatarElement } from './components/AvatarElement';
 import { useAuthContext } from '../../context';
 import { Project } from '../../types/generated/graphql';
-import { getPath, HomeUrl } from '../../constants';
+import { getPath, HomeUrl, AmbossUrl } from '../../constants';
 
 export const ProjectDetailsCard = ({
   project,
@@ -148,6 +148,27 @@ export const ProjectDetailsCard = ({
                 onClick={handleShareButtonTapped}
               />
             </Tooltip>
+            {project.wallets && project.wallets[0]?.connectionDetails?.pubkey && (
+              <IconButton
+                size="sm"
+                _hover={{
+                  backgroundColor: 'none',
+                  border: '1px solid #20ECC7',
+                }}
+                _active={{ backgroundColor: 'brand.primary' }}
+                bg="none"
+                icon={<AmbossIcon />}
+                aria-label="share"
+                onClick={() =>
+                  window
+                    .open(
+                      `${AmbossUrl}${project.wallets[0].connectionDetails.pubkey}`,
+                      '_blank',
+                    )
+                    ?.focus()
+                }
+              />
+            )}
           </HStack>
         </VStack>
 
