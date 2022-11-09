@@ -183,11 +183,11 @@ export const EntryCreateEdit = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
-    if (name === 'title' && value.length > 50) {
+    if (name === 'title' && value.length > 60) {
       return;
     }
 
-    if (name === 'description' && value.length > 280) {
+    if (name === 'description' && value.length > 2200) {
       return;
     }
 
