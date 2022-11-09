@@ -122,7 +122,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
         );
         setLiveEntries(newLive);
       } else {
-        const newDraft = liveEntries.filter(
+        const newDraft = draftEntries.filter(
           (entry) => entry.id !== selectedEntry.id,
         );
         setDraftEntries(newDraft);
