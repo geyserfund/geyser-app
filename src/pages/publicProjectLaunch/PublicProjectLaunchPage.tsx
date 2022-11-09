@@ -95,7 +95,7 @@ export const PublicProjectLaunchPage = () => {
               paddingBottom="20%"
             >
               {' '}
-              Create a new Project
+              Create A New Project
             </Text>
             <VStack width="100%" justifyContent="center">
               <Image src={LaunchProjectRocketUrl} />

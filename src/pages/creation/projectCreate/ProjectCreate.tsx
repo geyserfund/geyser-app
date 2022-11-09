@@ -98,7 +98,9 @@ export const ProjectCreate = () => {
           },
         });
 
-        history.push(`/launch/${createdProject.id}/milestones`);
+        history.push(
+          getPath('launchProjectWithMilestonesAndRewards', createdProject.id),
+        );
       }
     },
     onError(error) {
@@ -306,7 +308,7 @@ export const ProjectCreate = () => {
             <VStack width="100%" spacing="40px" alignItems="flex-start">
               <Text color="brand.gray500" fontSize="30px" fontWeight={700}>
                 {' '}
-                Create a new Project
+                Create A New Project
               </Text>
               <TitleWithProgressBar
                 paddingBottom="20px"

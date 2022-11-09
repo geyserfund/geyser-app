@@ -6,19 +6,35 @@ import {
   HStack,
   Image,
   Link,
+  Radio,
+  RadioGroup,
+  Stack,
   Text,
+  useBoolean,
   useDisclosure,
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { ButtonComponent, IconButtonComponent } from '../../../components/ui';
+import {
+  ButtonComponent,
+  IconButtonComponent,
+  TextBox,
+} from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { TNodeInput } from './types';
 import { BiLeftArrowAlt, BiPencil, BiRocket } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors, GeyserTermsAndConditionsURL } from '../../../constants';
+import {
+  AlbyLightningAddressURL,
+  BitNobLightningAddressURL,
+  colors,
+  getPath,
+  GeyserTermsAndConditionsURL,
+  VoltageExplainerPageForGeyserURL,
+  WalletOfSatoshiLightningAddressURL,
+} from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { NodeAdditionModal } from './components/NodeAdditionModal';
@@ -29,13 +45,20 @@ import {
 } from '../../../graphql/mutations';
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
+import { WalletConnectionOptionInfoBox } from './components';
+
 const useStyles = createUseStyles({
   backIcon: {
     fontSize: '25px',
   },
 });
 
-export const Wallet = () => {
+enum ConnectionOption {
+  LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
+  PERSONAL_NODE = 'PERSONAL_NODE',
+}
+
+export const ProjectCreationWalletConnectionPage = () => {
   const isMobile = isMobileMode();
   const classes = useStyles();
   const history = useHistory();
@@ -44,7 +67,16 @@ export const Wallet = () => {
   const { toast } = useNotification();
 
   const [node, setNode] = useState<TNodeInput>();
-  const [tc, setTc] = useState(false);
+
+  const [hasAcceptedTermsAndConditions, setHasAcceptedTermsAndConditions] =
+    useBoolean(false);
+
+  const [isUsingLightningAddress, setIsUsingLightningAddress] =
+    useBoolean(false);
+
+  const [isUsingPersonalNode, setIsUsingPersonalNode] = useBoolean(false);
+
+  const [connectionOption, setConnectionOption] = useState<string>('');
 
   const {
     isOpen: isWalletOpen,
@@ -79,11 +111,13 @@ export const Wallet = () => {
     },
   });
 
-  const handleBack = () => {
-    history.push(`/launch/${params.projectId}/milestones`);
+  const handleBackButtonTapped = () => {
+    history.push(
+      getPath('launchProjectWithMilestonesAndRewards', params.projectId),
+    );
   };
 
-  const handleNext = async () => {
+  const handleNextButtonTapped = async () => {
     if (node?.name) {
       try {
         const createWalletInput = {
@@ -106,6 +140,7 @@ export const Wallet = () => {
         };
 
         await createWallet({ variables: { input: createWalletInput } });
+
         history.push(`/project/${projectData.project.name}`);
       } catch (error) {
         toast({
@@ -137,12 +172,6 @@ export const Wallet = () => {
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
-  const handleTC = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event) {
-      setTc(event.target.checked);
-    }
-  };
-
   return (
     <Box
       background={'brand.bgGrey4'}
@@ -168,12 +197,13 @@ export const Wallet = () => {
           justifyContent="flex-start"
         >
           <ButtonComponent
-            onClick={handleBack}
+            onClick={handleBackButtonTapped}
             leftIcon={<BiLeftArrowAlt className={classes.backIcon} />}
           >
             Back
           </ButtonComponent>
         </GridItem>
+
         <GridItem colSpan={2} display="flex" justifyContent="center">
           <VStack
             spacing="30px"
@@ -188,7 +218,7 @@ export const Wallet = () => {
             <VStack width="100%" spacing="40px" alignItems="flex-start">
               <Text color="brand.gray500" fontSize="30px" fontWeight={700}>
                 {' '}
-                Create a new Project
+                Create A New Project
               </Text>
               <TitleWithProgressBar
                 paddingBottom="20px"
@@ -199,16 +229,141 @@ export const Wallet = () => {
             </VStack>
 
             <VStack width="100%" alignItems="flex-start" spacing="40px">
+              <RadioGroup
+                onChange={setConnectionOption}
+                value={connectionOption}
+              >
+                <VStack spacing={10}>
+                  <VStack width="100%" alignItems="flex-start" spacing={3}>
+                    <Radio
+                      size="lg"
+                      colorScheme="green"
+                      value={ConnectionOption.LIGHTNING_ADDRESS}
+                    >
+                      <Text>Lightning Address</Text>
+                    </Radio>
+
+                    {connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? (
+                      <TextBox name="lightning-address" type={'email'} />
+                    ) : null}
+
+                    <WalletConnectionOptionInfoBox
+                      primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
+                      secondaryText="Lightning Addresses look like email addresses (mick@alby.com) but are for sending bitcoin. Most Lightning wallets provide lightning addresses. We recommend:"
+                    >
+                      <HStack width={'full'} justifyContent={'flex-start'}>
+                        <Link isExternal href={AlbyLightningAddressURL}>
+                          <HStack>
+                            <Image
+                              src={
+                                '../../../assets/images/third-party-icons/alby.png'
+                              }
+                            />
+                            <Text>Alby</Text>
+                          </HStack>
+                        </Link>
+
+                        <Link
+                          isExternal
+                          href={WalletOfSatoshiLightningAddressURL}
+                        >
+                          <Image
+                            src={
+                              '../../../assets/images/third-party-icons/wallet-of-satoshi.png'
+                            }
+                          />
+                        </Link>
+
+                        <Link isExternal href={BitNobLightningAddressURL}>
+                          <Image
+                            src={
+                              '../../../assets/images/third-party-icons/bitnob.png'
+                            }
+                          />
+                        </Link>
+                      </HStack>
+                    </WalletConnectionOptionInfoBox>
+                  </VStack>
+
+                  <VStack width="100%" alignItems="flex-start" spacing={3}>
+                    <Radio
+                      size="lg"
+                      colorScheme="green"
+                      value={ConnectionOption.PERSONAL_NODE}
+                    >
+                      <Text>Connect Your Node</Text>
+                    </Radio>
+
+                    {connectionOption === ConnectionOption.PERSONAL_NODE ? (
+                      <ButtonComponent isFullWidth onClick={openWallet}>
+                        {' '}
+                        <AiOutlineSetting
+                          style={{ marginRight: '5px' }}
+                          fontSize="20px"
+                        />{' '}
+                        Connect Your Node
+                      </ButtonComponent>
+                    ) : null}
+
+                    <WalletConnectionOptionInfoBox
+                      primaryText="More challenging to setup, but you own your funds."
+                      secondaryText="Connect your Lightning node to receive incoming transactions directly. Don't have a node? You can create a node on the cloud using:"
+                    >
+                      <HStack width={'full'} justifyContent={'flex-start'}>
+                        <Link
+                          isExternal
+                          href={VoltageExplainerPageForGeyserURL}
+                        >
+                          <Image src={VoltageLogoSmall} />
+                        </Link>
+                      </HStack>
+                    </WalletConnectionOptionInfoBox>
+                  </VStack>
+                </VStack>
+              </RadioGroup>
+
+              {/* <VStack width="100%" alignItems="flex-start">
+                <Checkbox
+                  size="lg"
+                  colorScheme="green"
+                  isChecked={isUsingLightningAddress}
+                  onChange={setIsUsingLightningAddress.toggle}
+                >
+                  <Text>Lightning Address</Text>
+                </Checkbox>
+
+                {isUsingLightningAddress ? (
+                  <TextBox
+                    name="lightning-address"
+                    type={'email'}
+                    // onChange={handleTextChange}
+                    // value={form.name}
+                    // error={formError.name}
+                  />
+                ) : null}
+
+                <WalletConnectionOptionInfoBox
+                  primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
+                  secondaryText="Lightning Addresses look like email addresses (mick@alby.com) but are for sending bitcoin. Most Lightning wallets provide lightning addresses. We recommend:"
+                >
+                  <Text>Link 1</Text>
+                  <Text>Link 2</Text>
+                  <Text>Link 3</Text>
+                </WalletConnectionOptionInfoBox>
+              </VStack>
+
               <VStack width="100%" alignItems="flex-start">
-                <Text>Connect your node</Text>
+                <Text>Connect Your Node</Text>
+
                 <ButtonComponent isFullWidth onClick={openWallet}>
                   {' '}
                   <AiOutlineSetting
                     style={{ marginRight: '5px' }}
                     fontSize="20px"
                   />{' '}
-                  Connect your Node
+                  Connect Your Node
                 </ButtonComponent>
+
                 <Text fontSize="14px">
                   {
                     "Connect your Lightning node if you have one, and the funds will be sent directly to your account at no charge. If you don't have one yet, don't worry, you can add this later in the Admin Dashboard."
@@ -225,18 +380,14 @@ export const Wallet = () => {
                     Create a node quick and easy with Voltage.
                   </Link>
                 </HStack>
-              </VStack>
-
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Lightning Wallet</Text>
-                <ButtonComponent isFullWidth disabled>
-                  Coming Soon
-                </ButtonComponent>
-              </VStack>
+              </VStack> */}
 
               <VStack width="100%" alignItems="flex-start">
                 {node?.name && (
-                  <Checkbox checked={tc} onChange={handleTC}>
+                  <Checkbox
+                    checked={hasAcceptedTermsAndConditions}
+                    onChange={setHasAcceptedTermsAndConditions.toggle}
+                  >
                     I agree with geysers&apos;s{' '}
                     <Link
                       href={GeyserTermsAndConditionsURL}
@@ -247,12 +398,15 @@ export const Wallet = () => {
                     </Link>
                   </Checkbox>
                 )}
+
                 <ButtonComponent
                   primary
                   isFullWidth
-                  onClick={handleNext}
+                  onClick={handleNextButtonTapped}
                   isLoading={createWalletLoading || updateProjectLoading}
-                  disabled={Boolean(node?.name) && !tc}
+                  disabled={
+                    Boolean(node?.name) && !hasAcceptedTermsAndConditions
+                  }
                 >
                   {node?.name ? (
                     <>

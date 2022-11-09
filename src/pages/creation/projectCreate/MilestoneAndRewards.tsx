@@ -19,7 +19,7 @@ import { isMobileMode, useNotification } from '../../../utils';
 import { TMilestone } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
+import { colors, getPath } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import {
@@ -92,7 +92,7 @@ export const MilestoneAndRewards = () => {
     MUTATION_UPDATE_PROJECT,
     {
       onCompleted() {
-        history.push(`/launch/${params.projectId}/node`);
+        history.push(getPath('launchProjectWithNode', params.projectId));
       },
       onError(error) {
         toast({
@@ -160,6 +160,7 @@ export const MilestoneAndRewards = () => {
       rewardCurrency: RewardCurrency.Usdcent,
       expiresAt: finalDate || null,
     };
+
     if (rewards.length > 0) {
       updateProjectInput.type = 'reward';
     }
