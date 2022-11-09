@@ -133,6 +133,7 @@ export const MilestoneAndRewards = () => {
 
   const handleMilestoneSubmit = (milestones: TMilestone[]) => {
     setMilestones(milestones);
+    onMilestoneClose();
   };
 
   const handleRewardUpdate = (addReward: ProjectReward) => {

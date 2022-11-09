@@ -1,2 +1,2 @@
-export * from './Editor';
+export * from './ProjectEntryEditor';
 export * from './EntryCreateEdit';

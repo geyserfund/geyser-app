@@ -16,7 +16,6 @@ export const QUERY_PROJECT_BY_NAME = gql`
       createdAt
       updatedAt
       expiresAt
-      media
       image
       active
       draft
@@ -222,7 +221,7 @@ export const ALL_PROJECTS_SUMMARY = gql`
 `;
 
 export const QUERY_PROJECT_DASHBOARD_DATA = gql`
-  query ProjectTotalVisitors($where: UniqueProjectQueryInput!) {
+  query ProjectDashboardData($where: UniqueProjectQueryInput!) {
     project(where: $where) {
       unpublishedEntries: entries(input: { where: { published: false } }) {
         id
