@@ -25,6 +25,7 @@ import { ProjectEntryEditor } from './ProjectEntryEditor';
 import Loader from '../../../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../../../graphql';
 import { useAuthContext } from '../../../../context';
+import { Owner } from '../../../../types/generated/graphql';
 
 const useStyles = createUseStyles({
   uploadContainer: {
@@ -85,8 +86,13 @@ export const EntryCreateEdit = () => {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
       setNav({
-        title: data.project.title,
-        path: `/project/${data.project.name}`,
+        projectName: data.project.name,
+        projectTitle: data.project.title,
+        projectPath: getPath('project', data.project.name),
+        projectOwnerIDs:
+          data.project.owners.map((ownerInfo: Owner) => {
+            return Number(ownerInfo.user.id || -1);
+          }) || [],
       });
     },
     onError() {
