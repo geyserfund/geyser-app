@@ -195,7 +195,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       errors.title = 'Title is a required field.';
       isValid = false;
     } else if (form.title.length > ProjectValidations.title.maxLength) {
-      errors.title = `Title should shorter than ${ProjectValidations.title.maxLength} characters.`;
+      errors.title = `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`;
       isValid = false;
     }
 
@@ -205,7 +205,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
     } else if (
       form.description.length > ProjectValidations.description.maxLength
     ) {
-      errors.description = `Project objective should shorter than ${ProjectValidations.description.maxLength} characters.`;
+      errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`;
       isValid = false;
     }
 
@@ -216,7 +216,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       errors.email = 'Please enter a valid email address.';
       isValid = false;
     } else if (form.email.length > UserValidations.email.maxLength) {
-      errors.email = `Email address should shorter than ${UserValidations.email.maxLength} characters.`;
+      errors.email = `Email address should be shorter than ${UserValidations.email.maxLength} characters.`;
       isValid = false;
     }
 
