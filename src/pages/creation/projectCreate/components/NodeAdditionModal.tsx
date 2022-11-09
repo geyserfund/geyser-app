@@ -107,6 +107,9 @@ export const NodeAdditionModal = ({
     if (!form.publicKey) {
       errors.publicKey = 'Public Key' + additionalText;
       isValid = false;
+    } else if (form.publicKey.length > 66) {
+      errors.publicKey = 'Host name cannot be longer than 66 characters';
+      isValid = false;
     } else {
       const val = isSecp256k1Compressed(form.publicKey);
       if (!val) {
