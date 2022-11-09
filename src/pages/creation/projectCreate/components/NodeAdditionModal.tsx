@@ -85,10 +85,16 @@ export const NodeAdditionModal = ({
     if (!form.name) {
       errors.name = 'Node name' + additionalText;
       isValid = false;
+    } else if (form.name.length > 60) {
+      errors.name = 'Node name cannot be longer than 60 characters';
+      isValid = false;
     }
 
     if (!form.hostname) {
       errors.hostname = 'Host name' + additionalText;
+      isValid = false;
+    } else if (form.hostname.length > 80) {
+      errors.hostname = 'Host name cannot be longer than 80 characters';
       isValid = false;
     } else {
       const val = isTorV3Address(form.hostname);
@@ -101,6 +107,9 @@ export const NodeAdditionModal = ({
     if (!form.publicKey) {
       errors.publicKey = 'Public Key' + additionalText;
       isValid = false;
+    } else if (form.publicKey.length > 66) {
+      errors.publicKey = 'Host name cannot be longer than 66 characters';
+      isValid = false;
     } else {
       const val = isSecp256k1Compressed(form.publicKey);
       if (!val) {
@@ -112,6 +121,9 @@ export const NodeAdditionModal = ({
     if (!form.invoiceMacaroon) {
       errors.invoiceMacaroon = 'Invoice Macaroon' + additionalText;
       isValid = false;
+    } else if (form.invoiceMacaroon.length > 280) {
+      errors.invoiceMacaroon = 'Host name cannot be longer than 280 characters';
+      isValid = false;
     } else {
       const val = checkMacaroonPermissions(form.invoiceMacaroon);
       if (val) {
@@ -120,9 +132,15 @@ export const NodeAdditionModal = ({
       }
     }
 
-    if (!isVoltage && !form.tlsCert) {
-      errors.tlsCert = 'TLS certificate' + additionalText;
-      isValid = false;
+    if (!isVoltage) {
+      if (!form.tlsCert) {
+        errors.tlsCert = 'TLS certificate' + additionalText;
+        isValid = false;
+      } else if (form.invoiceMacaroon.length > 280) {
+        errors.hostname =
+          'TLS certificate cannot be longer than 280 characters';
+        isValid = false;
+      }
     }
 
     if (!isVoltage && !form.grpc) {

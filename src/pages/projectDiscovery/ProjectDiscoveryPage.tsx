@@ -46,11 +46,12 @@ export const ProjectDiscoveryPage = ({
   history: _history,
 }: Props) => {
   const pagingItemLimit = 12;
-  const [orderByOption, setOrderByOption] =
-    React.useState<ProjectsOrderByInput>({ createdAt: OrderByOptions.Desc });
+  const [orderByOption, setOrderByOption] = useState<ProjectsOrderByInput>({
+    createdAt: OrderByOptions.Desc,
+  });
 
   const {
-    isLoading,
+    isLoading: isPageLoading,
     error,
     data: projects,
     fetchMore,
@@ -64,7 +65,9 @@ export const ProjectDiscoveryPage = ({
   const [isShowingAllProjects, setIsShowingAllProjects] = useState(false);
 
   const paginationInput: PaginationInput = useMemo(() => {
-    const options: PaginationInput = {};
+    const options: PaginationInput = {
+      take: pagingItemLimit,
+    };
 
     if (projects.length > 0) {
       options.cursor = {
@@ -82,6 +85,7 @@ export const ProjectDiscoveryPage = ({
       variables: {
         input: {
           pagination: paginationInput,
+          orderBy: [orderByOption],
         },
       },
       updateQuery: (_previousResult, { fetchMoreResult }) => {
@@ -89,11 +93,11 @@ export const ProjectDiscoveryPage = ({
           setIsShowingAllProjects(true);
         }
 
-        // return the result and let our `InMemoryCache` type policies handle
+        // return all data and let our `InMemoryCache` type policies handle
         // the merging logic.
         return {
           projects: {
-            projects: fetchMoreResult.projects.projects,
+            projects: [...projects, ...fetchMoreResult.projects.projects],
           },
         };
       },
@@ -124,7 +128,7 @@ export const ProjectDiscoveryPage = ({
     );
   }
 
-  if (isLoading) {
+  if (isPageLoading) {
     return (
       <Container
         position="relative"

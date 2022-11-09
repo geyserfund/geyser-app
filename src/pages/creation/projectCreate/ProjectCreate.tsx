@@ -181,9 +181,9 @@ export const ProjectCreate = () => {
 
       if (name === 'title' && value.length > 50) {
         setFormError({ title: `max character allowed is 50/${value.length}` });
-      } else if (name === 'description' && value.length > 280) {
+      } else if (name === 'description' && value.length > 2200) {
         setFormError({
-          description: `max character allowed is 280/${value.length}`,
+          description: `max character allowed is 2200/${value.length}`,
         });
       } else {
         setFormError({});
@@ -227,15 +227,26 @@ export const ProjectCreate = () => {
     let isValid = true;
 
     if (!form.title) {
-      errors.title = 'title is a required field';
+      errors.title = 'Title is a required field';
       isValid = false;
     } else if (form.title.length < 5 || form.title.length > 50) {
-      errors.title = 'title should be between 5 and 50 characters';
+      errors.title = 'Title should be between 5 and 50 characters';
+      isValid = false;
+    }
+
+    if (!form.name) {
+      errors.name = 'Lightning address is a required field';
+      isValid = false;
+    } else if (form.name.length > 50) {
+      errors.name = 'Lightning address should be less than 50 characters';
       isValid = false;
     }
 
     if (!form.description) {
       errors.description = 'Project objective is a required field';
+      isValid = false;
+    } else if (form.title.length > 280) {
+      errors.title = 'Title should be less than 280 characters';
       isValid = false;
     }
 
@@ -244,6 +255,9 @@ export const ProjectCreate = () => {
       isValid = false;
     } else if (!user.email && !validateEmail(form.email)) {
       errors.email = 'Please enter a valid email address.';
+      isValid = false;
+    } else if (form.email.length > 50) {
+      errors.email = 'Email cannot be longer than 50 characters';
       isValid = false;
     }
 

@@ -63,3 +63,4 @@ export const AlbyLightningAddressURL = 'https://getalby.com/lightning-address';
 export const WalletOfSatoshiLightningAddressURL =
   'https://www.walletofsatoshi.com/';
 export const BitNobLightningAddressURL = 'https://bitnob.com/';
+export const AmbossUrl = 'https://amboss.space/node/';

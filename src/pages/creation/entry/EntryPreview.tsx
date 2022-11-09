@@ -14,6 +14,7 @@ import {
 } from '../../../graphql/mutations/entries';
 import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
 import { IEntryUpdateInput } from '../../../interfaces/entry';
+import { Owner } from '../../../types/generated/graphql';
 import { isMobileMode, useNotification } from '../../../utils';
 import { defaultEntry } from './editor';
 import { CreateNav } from './editor/CreateNav';
@@ -46,8 +47,13 @@ export const EntryPreview = () => {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
       setNav({
-        title: data.project.title,
-        path: `/project/${data.project.name}`,
+        projectName: data.project.name,
+        projectTitle: data.project.title,
+        projectPath: getPath('project', data.project.name),
+        projectOwnerIDs:
+          data.project.owners.map((ownerInfo: Owner) => {
+            return Number(ownerInfo.user.id || -1);
+          }) || [],
       });
     },
     onError() {
@@ -104,6 +110,14 @@ export const EntryPreview = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
+    if (name === 'title' && value.length > 60) {
+      return;
+    }
+
+    if (name === 'description' && value.length > 2200) {
+      return;
+    }
+
     if (name) {
       const newForm = { ...entry, [name]: value };
       setEntry(newForm);
@@ -134,7 +148,7 @@ export const EntryPreview = () => {
   };
 
   const handleTwitterShareButtonTapped = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(getPath('entry', params.entryId));
 
     setHasCopiedSharingLink(true);
   };
