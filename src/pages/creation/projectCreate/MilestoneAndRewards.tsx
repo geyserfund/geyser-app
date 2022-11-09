@@ -14,6 +14,7 @@ import {
   IconButtonComponent,
   Linkin,
   SatoshiAmount,
+  UndecoratedLink,
 } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import { TMilestone } from './types';
@@ -267,7 +268,7 @@ export const MilestoneAndRewards = () => {
           display="flex"
           justifyContent="flex-start"
         >
-          <Linkin href={`/launch/${params.projectId}`}>
+          <UndecoratedLink href={`/launch/${params.projectId}`}>
             <ButtonComponent
               leftIcon={
                 <BiLeftArrowAlt
@@ -278,7 +279,7 @@ export const MilestoneAndRewards = () => {
             >
               Back
             </ButtonComponent>
-          </Linkin>
+          </UndecoratedLink>
         </GridItem>
         <GridItem
           colSpan={2}

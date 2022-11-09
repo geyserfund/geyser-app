@@ -20,6 +20,7 @@ import {
   ButtonComponent,
   IconButtonComponent,
   TextBox,
+  UndecoratedLink,
 } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import { AiOutlineSetting } from 'react-icons/ai';
@@ -46,6 +47,9 @@ import {
 import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
 import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
 import { WalletConnectionOptionInfoBox } from './components';
+import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png';
+import WalletOfSatoshiPNG from '../../../assets/images/third-party-icons/wallet-of-satoshi@3x.png';
+import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png';
 
 const useStyles = createUseStyles({
   backIcon: {
@@ -222,7 +226,7 @@ export const ProjectCreationWalletConnectionPage = () => {
               </Text>
               <TitleWithProgressBar
                 paddingBottom="20px"
-                title="Connect wallet"
+                title="Connect Wallet"
                 subTitle="Step 3 of 3"
                 percentage={100}
               />
@@ -235,12 +239,8 @@ export const ProjectCreationWalletConnectionPage = () => {
               >
                 <VStack spacing={10}>
                   <VStack width="100%" alignItems="flex-start" spacing={3}>
-                    <Radio
-                      size="lg"
-                      colorScheme="green"
-                      value={ConnectionOption.LIGHTNING_ADDRESS}
-                    >
-                      <Text>Lightning Address</Text>
+                    <Radio size="lg" value={ConnectionOption.LIGHTNING_ADDRESS}>
+                      Lightning Address
                     </Radio>
 
                     {connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? (
@@ -251,47 +251,40 @@ export const ProjectCreationWalletConnectionPage = () => {
                       primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
                       secondaryText="Lightning Addresses look like email addresses (mick@alby.com) but are for sending bitcoin. Most Lightning wallets provide lightning addresses. We recommend:"
                     >
-                      <HStack width={'full'} justifyContent={'flex-start'}>
-                        <Link isExternal href={AlbyLightningAddressURL}>
+                      <HStack
+                        width={'full'}
+                        justifyContent={'flex-start'}
+                        spacing={4}
+                      >
+                        <UndecoratedLink
+                          isExternal
+                          href={AlbyLightningAddressURL}
+                        >
                           <HStack>
-                            <Image
-                              src={
-                                '../../../assets/images/third-party-icons/alby.png'
-                              }
-                            />
-                            <Text>Alby</Text>
+                            <Image src={AlbyPNG} height="24px" />
+                            <Text fontSize={'12px'} fontWeight={'bold'}>
+                              Alby
+                            </Text>
                           </HStack>
-                        </Link>
+                        </UndecoratedLink>
 
                         <Link
                           isExternal
                           href={WalletOfSatoshiLightningAddressURL}
                         >
-                          <Image
-                            src={
-                              '../../../assets/images/third-party-icons/wallet-of-satoshi.png'
-                            }
-                          />
+                          <Image src={WalletOfSatoshiPNG} height="24px" />
                         </Link>
 
                         <Link isExternal href={BitNobLightningAddressURL}>
-                          <Image
-                            src={
-                              '../../../assets/images/third-party-icons/bitnob.png'
-                            }
-                          />
+                          <Image src={BitNobPNG} height="24px" />
                         </Link>
                       </HStack>
                     </WalletConnectionOptionInfoBox>
                   </VStack>
 
                   <VStack width="100%" alignItems="flex-start" spacing={3}>
-                    <Radio
-                      size="lg"
-                      colorScheme="green"
-                      value={ConnectionOption.PERSONAL_NODE}
-                    >
-                      <Text>Connect Your Node</Text>
+                    <Radio size="lg" value={ConnectionOption.PERSONAL_NODE}>
+                      Connect Your Node
                     </Radio>
 
                     {connectionOption === ConnectionOption.PERSONAL_NODE ? (
@@ -321,66 +314,6 @@ export const ProjectCreationWalletConnectionPage = () => {
                   </VStack>
                 </VStack>
               </RadioGroup>
-
-              {/* <VStack width="100%" alignItems="flex-start">
-                <Checkbox
-                  size="lg"
-                  colorScheme="green"
-                  isChecked={isUsingLightningAddress}
-                  onChange={setIsUsingLightningAddress.toggle}
-                >
-                  <Text>Lightning Address</Text>
-                </Checkbox>
-
-                {isUsingLightningAddress ? (
-                  <TextBox
-                    name="lightning-address"
-                    type={'email'}
-                    // onChange={handleTextChange}
-                    // value={form.name}
-                    // error={formError.name}
-                  />
-                ) : null}
-
-                <WalletConnectionOptionInfoBox
-                  primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
-                  secondaryText="Lightning Addresses look like email addresses (mick@alby.com) but are for sending bitcoin. Most Lightning wallets provide lightning addresses. We recommend:"
-                >
-                  <Text>Link 1</Text>
-                  <Text>Link 2</Text>
-                  <Text>Link 3</Text>
-                </WalletConnectionOptionInfoBox>
-              </VStack>
-
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Connect Your Node</Text>
-
-                <ButtonComponent isFullWidth onClick={openWallet}>
-                  {' '}
-                  <AiOutlineSetting
-                    style={{ marginRight: '5px' }}
-                    fontSize="20px"
-                  />{' '}
-                  Connect Your Node
-                </ButtonComponent>
-
-                <Text fontSize="14px">
-                  {
-                    "Connect your Lightning node if you have one, and the funds will be sent directly to your account at no charge. If you don't have one yet, don't worry, you can add this later in the Admin Dashboard."
-                  }
-                </Text>
-
-                <HStack padding="10px" spacing="20px">
-                  <Image src={VoltageLogoSmall} />
-                  <Link
-                    isExternal
-                    href="https://voltage.cloud/geyser"
-                    fontSize="12px"
-                  >
-                    Create a node quick and easy with Voltage.
-                  </Link>
-                </HStack>
-              </VStack> */}
 
               <VStack width="100%" alignItems="flex-start">
                 {node?.name && (

@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/modal';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import { ButtonComponent, Linkin } from '../ui';
+import { ButtonComponent, UndecoratedLink } from '../ui';
 import { AmbassadorUrl } from '../../constants';
 
 interface IConnectTwitter {
@@ -46,7 +46,7 @@ export const AddAmbassador = ({ isOpen, onClose }: IConnectTwitter) => {
         <ModalBody>
           <Box className={classes.twitterContainer}>
             <Text>{useDescription}</Text>
-            <Linkin href={AmbassadorUrl} isExternal>
+            <UndecoratedLink href={AmbassadorUrl} isExternal>
               <ButtonComponent
                 margin="10px"
                 isFullWidth
@@ -56,7 +56,7 @@ export const AddAmbassador = ({ isOpen, onClose }: IConnectTwitter) => {
               >
                 Continue
               </ButtonComponent>
-            </Linkin>
+            </UndecoratedLink>
           </Box>
         </ModalBody>
       </ModalContent>

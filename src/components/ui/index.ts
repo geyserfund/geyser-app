@@ -10,7 +10,7 @@ export * from './CustomToggle';
 export * from './FundingStatus';
 export * from './AlertBox';
 export * from './StatusBar';
-export * from './Linkin';
+export * from './UndecoratedLink';
 export * from './TwitterComponent';
 export * from './SectionTitle';
 export * from './TextArea';
