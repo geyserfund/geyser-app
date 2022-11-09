@@ -21,10 +21,12 @@ import { FileUpload } from '../../../../components/molecules';
 import { createUseStyles } from 'react-jss';
 import { colors, getPath } from '../../../../constants';
 import { ImageWithReload } from '../../../../components/ui';
-import { Editor } from './Editor';
+import { ProjectEntryEditor } from './ProjectEntryEditor';
 import Loader from '../../../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME } from '../../../../graphql';
 import { useAuthContext } from '../../../../context';
+import { Owner } from '../../../../types/generated/graphql';
+import { ProjectEntryValidations } from '../../../../constants/validations';
 
 const useStyles = createUseStyles({
   uploadContainer: {
@@ -85,8 +87,13 @@ export const EntryCreateEdit = () => {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
       setNav({
-        title: data.project.title,
-        path: `/project/${data.project.name}`,
+        projectName: data.project.name,
+        projectTitle: data.project.title,
+        projectPath: getPath('project', data.project.name),
+        projectOwnerIDs:
+          data.project.owners.map((ownerInfo: Owner) => {
+            return Number(ownerInfo.user.id || -1);
+          }) || [],
       });
     },
     onError() {
@@ -183,6 +190,21 @@ export const EntryCreateEdit = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
+
+    if (
+      name === 'title' &&
+      value.length > ProjectEntryValidations.title.maxLength
+    ) {
+      return;
+    }
+
+    if (
+      name === 'description' &&
+      value.length > ProjectEntryValidations.description.maxLength
+    ) {
+      return;
+    }
+
     if (name) {
       const newForm = { ...form.current, [name]: value };
       setForm(newForm);
@@ -347,7 +369,7 @@ export const EntryCreateEdit = () => {
             </VStack>
 
             <Box flex={1} width="100%">
-              <Editor
+              <ProjectEntryEditor
                 name="content"
                 handleChange={handleContentUpdate}
                 value={form.current.content}

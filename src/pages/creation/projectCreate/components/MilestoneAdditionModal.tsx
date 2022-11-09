@@ -15,6 +15,7 @@ import React, { useRef, useState } from 'react';
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules';
 import { ButtonComponent, TextBox } from '../../../../components/ui';
 import { colors } from '../../../../constants';
+import { MilestoneValidations } from '../../../../constants/validations';
 import {
   MUTATION_CREATE_PROJECT_MILESTONE,
   MUTATION_DELETE_PROJECT_MILESTONE,
@@ -131,9 +132,10 @@ export const MilestoneAdditionModal = ({
     onClose(getFilteredMilestones());
   };
 
-  /* TODO: REFACTOR -- This updates all milestones, even unchanged ones. We should refactor it to only update the relevant 
-  milestones
-  */
+  /**
+   * TODO: REFACTOR -- This updates all milestones, even unchanged ones.
+   * We should refactor it to only update the relevant milestones.
+   */
   const handleConfirmMilestone = async () => {
     const isValid = validateMilestones();
 
@@ -234,12 +236,24 @@ export const MilestoneAdditionModal = ({
     milestones.current.map((milestone) => {
       const errors: any = {};
       if (!milestone.name) {
-        errors.name = 'Name is a required field';
+        errors.name = 'Name is a required field.';
+        isValid = false;
+      } else if (milestone.name.length > MilestoneValidations.name.maxLength) {
+        errors.name = `Name cannot be longer than ${MilestoneValidations.name.maxLength} characters.`;
         isValid = false;
       }
 
-      if (!milestone.amount || !(milestone.amount > 0)) {
-        errors.amount = 'amount needs to be greater than 1';
+      if (!milestone.amount || !(milestone.amount < 1)) {
+        errors.amount = 'Amount needs to be at least 1 satoshi';
+        isValid = false;
+      }
+
+      if (
+        milestone.description &&
+        milestone.description.length >
+          MilestoneValidations.description.maxLength
+      ) {
+        errors.description = `Description cannot be longer than ${MilestoneValidations.description.maxLength} characters.`;
         isValid = false;
       }
 

@@ -21,6 +21,7 @@ import SatoshiTiltedDash from '../../assets/satoshi-tilted-dash.svg';
 import QrSvg from '../../assets/qr.svg';
 import BoltSvg from '../../assets/bolt.svg';
 import ShareSvg from '../../assets/share.svg';
+import AmbossSVG from '../../assets/amboss-short.svg';
 
 export const SatoshiIcon = ({
   scale = 1,
@@ -230,5 +231,11 @@ export const FountainIcon = (props: ImageProps) => (
       alt="Fountain Podcasts"
       {...props}
     />
+  </Box>
+);
+
+export const AmbossIcon = (props: ImageProps) => (
+  <Box padding="3px 0px">
+    <Image height="20px" width="20px" src={AmbossSVG} alt="Amboss" {...props} />
   </Box>
 );
