@@ -20,7 +20,7 @@ export const WalletConnectionOptionInfoBox = ({
       alignItems="flex-start"
       textColor={'brand.gray500'}
       fontSize={'10px'}
-      borderRadius={'sm'}
+      borderRadius={'md'}
     >
       <VStack spacing={4} alignItems="flex-start">
         <Text fontWeight={'bold'}>{primaryText}</Text>

@@ -230,7 +230,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
       <NodeAdditionModal
         isOpen={isWalletOpen}
         onClose={onWalletClose}
-        node={nodeData}
+        nodeInput={nodeData}
         onSubmit={setNodeData}
       />
     </>

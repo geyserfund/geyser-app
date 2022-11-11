@@ -23,7 +23,7 @@ import { colors, getPath } from '../../../../constants';
 import { ImageWithReload } from '../../../../components/ui';
 import { ProjectEntryEditor } from './ProjectEntryEditor';
 import Loader from '../../../../components/ui/Loader';
-import { QUERY_PROJECT_BY_NAME } from '../../../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql';
 import { useAuthContext } from '../../../../context';
 import { Owner } from '../../../../types/generated/graphql';
 
@@ -82,7 +82,7 @@ export const EntryCreateEdit = () => {
   const [getPost, { loading: loadingPosts, error, data: entryData }] =
     useLazyQuery(QUERY_GET_ENTRY);
 
-  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
+  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
       setNav({

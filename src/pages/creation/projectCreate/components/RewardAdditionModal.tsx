@@ -22,7 +22,7 @@ import {
   ButtonComponent,
   ImageWithReload,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../../../components/ui';
 
 import {
@@ -261,7 +261,7 @@ export const RewardAdditionModal = ({
           >
             <VStack width="100%" alignItems="flex-start">
               <Text>Name</Text>
-              <TextBox
+              <TextInputBox
                 placeholder={'T - Shirt ...'}
                 value={rewards.current.name}
                 name="name"

@@ -25,7 +25,7 @@ import {
   SectionTitle,
   SelectComponent,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../../components/ui';
 import {
   colors,
@@ -302,7 +302,7 @@ export const FundingPaymentScreen = ({
         )}
         {formState.rewardsCost && (
           <Box width="100%">
-            <TextBox
+            <TextInputBox
               type="email"
               name="email"
               fontSize="14px"

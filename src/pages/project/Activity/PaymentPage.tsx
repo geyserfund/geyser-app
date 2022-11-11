@@ -25,7 +25,7 @@ import {
   SectionTitle,
   SelectComponent,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../../components/ui';
 import { colors, projectTypes, SelectCountryOptions } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
@@ -290,7 +290,7 @@ export const PaymentPage = ({
         )}
         {state.rewardsCost && (
           <Box width="100%">
-            <TextBox
+            <TextInputBox
               type="email"
               name="email"
               fontSize="14px"

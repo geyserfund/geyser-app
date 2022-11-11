@@ -11,12 +11,11 @@ import {
   Text,
   Link,
 } from '@chakra-ui/react';
-import html2canvas from 'html2canvas';
-import React, { useState } from 'react';
+import React from 'react';
 import { QRCode } from 'react-qrcode-logo';
 import { ButtonComponent } from '../../../components/ui';
 import { API_SERVICE_ENDPOINT } from '../../../constants';
-import { encode, isMobileMode } from '../../../utils';
+import { encodeLNURL, isMobileMode } from '../../../utils';
 import LogoLight from '../../../assets/logo-dark-green.svg';
 
 function ModalProjectImage({ image }: { image: string }) {
@@ -57,7 +56,7 @@ export const QRModal = ({
 }: IQRModal) => {
   const isMobile = isMobileMode();
 
-  const lnurlPayUrl = encode(
+  const lnurlPayUrl = encodeLNURL(
     `${API_SERVICE_ENDPOINT}/lnurl/pay?projectId=${projectId}`,
   );
 

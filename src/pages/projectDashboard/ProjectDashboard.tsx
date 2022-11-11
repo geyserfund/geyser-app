@@ -13,7 +13,7 @@ import { useHistory, useLocation, useParams } from 'react-router';
 import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { useAuthContext } from '../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { isMobileMode } from '../../utils';
 import { NotAuthorized } from '../notAuthorized';
 import { NotFoundPage } from '../notFound';
@@ -59,7 +59,7 @@ export const ProjectDashboard = () => {
   };
 
   const [getProject, { loading, error, data }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME,
+    QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: {
         where: { name: projectId },

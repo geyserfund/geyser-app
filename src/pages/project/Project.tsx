@@ -1,10 +1,10 @@
 import { useLazyQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
-import { QUERY_PROJECT_BY_NAME } from '../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { NotFoundPage } from '../notFound';
 import { Head } from '../../utils/Head';
 import Details from './Details';
@@ -28,7 +28,7 @@ export const Project = ({ projectId }: { projectId: string }) => {
   }, [state]);
 
   const [getProject, { loading, error, data }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME,
+    QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: { where: { name: projectId } },
     },

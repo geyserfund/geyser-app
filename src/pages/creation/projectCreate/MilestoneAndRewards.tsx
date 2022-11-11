@@ -40,7 +40,7 @@ import {
   MUTATION_UPDATE_PROJECT,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../graphql/mutations';
-import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
 
 import type { Project, ProjectReward } from '../../../types/generated/graphql';
@@ -107,7 +107,7 @@ export const MilestoneAndRewards = () => {
 
   const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
 
-  const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
+  const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { id: params.projectId } },
     fetchPolicy: 'network-only',
     onError() {

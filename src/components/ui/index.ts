@@ -15,7 +15,7 @@ export * from './TwitterComponent';
 export * from './SectionTitle';
 export * from './TextArea';
 export * from './SelectComponent';
-export * from './TextBox';
+export * from './TextInputBox';
 export * from './SatoshiAmount';
 export * from './InfoTooltip';
 export * from './LinkableAvatar';
