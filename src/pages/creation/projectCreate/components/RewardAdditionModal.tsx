@@ -39,6 +39,7 @@ import {
   ProjectRewardCreationVariables,
   ProjectRewardUpdateVariables,
 } from '../types';
+import { ProjectRewardValidations } from '../../../../constants/validations';
 
 type Props = {
   isOpen: boolean;
@@ -213,21 +214,24 @@ export const RewardAdditionModal = ({
     if (!rewards.current.name) {
       errors.name = 'Name is a required field';
       isValid = false;
-    } else if (rewards.current.name.length > 100) {
-      errors.name = 'Name should be less than 100 characters';
+    } else if (
+      rewards.current.name.length > ProjectRewardValidations.name.maxLength
+    ) {
+      errors.name = `Name should be less than ${ProjectRewardValidations.name.maxLength} characters`;
       isValid = false;
     }
 
-    if (!rewards.current.cost || !(rewards.current.cost > 0)) {
-      errors.cost = 'Cost needs to be greater than 1';
+    if (!rewards.current.cost || !(rewards.current.cost < 1)) {
+      errors.cost = `Cost must be at least one Satoshi.`;
       isValid = false;
     }
 
     if (
       rewards.current.description &&
-      rewards.current.description.length > 250
+      rewards.current.description.length >
+        ProjectRewardValidations.description.maxLength
     ) {
-      errors.cost = 'Description must be less than 250 characters';
+      errors.description = `Description should be less than ${ProjectRewardValidations.description.maxLength} characters`;
       isValid = false;
     }
 
@@ -277,6 +281,7 @@ export const RewardAdditionModal = ({
                 value={rewards.current.description!}
                 name="description"
                 onChange={handleTextChange}
+                error={formError.description}
               />
             </VStack>
 
