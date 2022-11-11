@@ -1,5 +1,11 @@
-import { ApolloClient, createHttpLink, from } from '@apollo/client';
-import { API_SERVICE_ENDPOINT } from '../../constants';
+import {
+  ApolloClient,
+  ApolloClientOptions,
+  createHttpLink,
+  from,
+  NormalizedCacheObject,
+} from '@apollo/client';
+import { API_SERVICE_ENDPOINT, __development__ } from '../../constants';
 import { onError } from '@apollo/client/link/error';
 import { customHistory } from '..';
 import { cache } from './apollo-client-cache';
@@ -24,8 +30,13 @@ const errorLink = onError(({ graphQLErrors }) => {
   }
 });
 
-export const client = new ApolloClient({
+const clientConfig: ApolloClientOptions<NormalizedCacheObject> = {
   link: from([errorLink, httpLink]),
   cache,
-  typeDefs: customClientTypeDefs,
-});
+};
+
+if (__development__) {
+  clientConfig.typeDefs = customClientTypeDefs;
+}
+
+export const client = new ApolloClient(clientConfig);
