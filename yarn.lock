@@ -13198,6 +13198,11 @@ prepend-http@^1.0.0:
   resolved "https://registry.npmjs.org/prepend-http/-/prepend-http-1.0.4.tgz"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
+prerender-node@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/prerender-node/-/prerender-node-3.5.0.tgz#2d2f6bb24977a48f16c10235cd444caaaea7f247"
+  integrity sha512-sx+ONyy3meEPmlixmeezcOSNg45Z9hzlUN5R6STPHzllWtf5EUBWh6lRV8/29IzPI+VWqIJ32EeV/5JbjvbSKg==
+
 prettier-linter-helpers@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/prettier-linter-helpers/-/prettier-linter-helpers-1.0.0.tgz#d23d41fe1375646de2d0104d3454a3008802cf7b"
