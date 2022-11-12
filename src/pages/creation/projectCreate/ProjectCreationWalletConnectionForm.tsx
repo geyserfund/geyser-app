@@ -153,7 +153,7 @@ export const ProjectCreationWalletConnectionForm = ({
     }
 
     return null;
-  }, [project, nodeInput, connectionOption]);
+  }, [project, nodeInput, connectionOption, lightningAddressFormValue]);
 
   const isSubmitEnabled = useMemo(() => {
     if (createWalletInput === null) {
@@ -172,49 +172,49 @@ export const ProjectCreationWalletConnectionForm = ({
   };
 
   const validateLightningAddress = async () => {
-    await validateLightningAddressFormat();
+    await validateLightningAddressFormat(lightningAddressFormValue);
 
     if (lightningAddressFormError === null) {
-      await evaluateLightningAddress();
+      await evaluateLightningAddress(lightningAddressFormValue);
     }
   };
 
   const handleProjectLaunchSelected = async () => {
     await validateLightningAddress();
 
-    // if (lightningAddressFormError === null) {
     onProjectLaunchSelected(createWalletInput!);
-    // }
   };
 
-  const evaluateLightningAddress = async () => {
-    const evaluationURL = lightningAddressToEvaluationURL(
-      lightningAddressFormValue,
-    );
+  const evaluateLightningAddress = async (lightningAddress: string) => {
+    const evaluationURL = lightningAddressToEvaluationURL(lightningAddress);
 
     try {
       setLnAddressEvaluationState(LNAddressEvaluationState.LOADING);
 
       const response = await fetch(evaluationURL);
-      const responseJSON = await response.json();
 
-      console.log(responseJSON);
-      setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED);
+      if (response.ok) {
+        setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED);
+      } else {
+        setLightningAddressFormError(
+          'We could not validate this as a working Lightning Address.',
+        );
+        setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
+      }
     } catch (_) {
-      // setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
-      setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED);
+      setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
       setLightningAddressFormError(
         'We could not validate this as a working Lightning Address.',
       );
     }
   };
 
-  const validateLightningAddressFormat = async () => {
-    if (lightningAddressFormValue.endsWith('@geyser.fund')) {
+  const validateLightningAddressFormat = async (lightningAddress: string) => {
+    if (lightningAddress.endsWith('@geyser.fund')) {
       setLightningAddressFormError(
         `Custom Lightning Addresses can't end with "@geyser.fund".`,
       );
-    } else if (validateEmail(lightningAddressFormValue) === false) {
+    } else if (validateEmail(lightningAddress) === false) {
       setLightningAddressFormError(
         `Please use a valid email-formatted address for your Lightning Address.`,
       );
@@ -308,7 +308,7 @@ export const ProjectCreationWalletConnectionForm = ({
                           value={lightningAddressFormValue}
                           onChange={(event) => {
                             setLightningAddressFormValue(event.target.value);
-                            validateLightningAddressFormat();
+                            validateLightningAddressFormat(event.target.value);
                           }}
                           onBlur={validateLightningAddress}
                           isInvalid={Boolean(lightningAddressFormError)}
