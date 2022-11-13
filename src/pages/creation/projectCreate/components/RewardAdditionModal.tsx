@@ -221,7 +221,7 @@ export const RewardAdditionModal = ({
       isValid = false;
     }
 
-    if (!rewards.current.cost || !(rewards.current.cost < 1)) {
+    if (!rewards.current.cost || rewards.current.cost < 1) {
       errors.cost = `Cost must be at least one Satoshi.`;
       isValid = false;
     }
