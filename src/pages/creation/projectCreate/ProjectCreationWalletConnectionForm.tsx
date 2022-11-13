@@ -31,7 +31,7 @@ import { BiLeftArrowAlt, BiPencil, BiRocket } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import {
   AlbyLightningAddressURL,
-  BitNobLightningAddressURL,
+  BitNobURL,
   colors,
   GeyserTermsAndConditionsURL,
   VoltageExplainerPageForGeyserURL,
@@ -352,7 +352,7 @@ export const ProjectCreationWalletConnectionForm = ({
                           <Image src={WalletOfSatoshiPNG} height="24px" />
                         </Link>
 
-                        <Link isExternal href={BitNobLightningAddressURL}>
+                        <Link isExternal href={BitNobURL}>
                           <Image src={BitNobPNG} height="24px" />
                         </Link>
                       </HStack>
