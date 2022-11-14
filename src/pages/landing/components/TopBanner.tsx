@@ -97,26 +97,6 @@ export const TopBanner = () => {
               );
             })}
           </HStack>
-
-          {/* TODO: Make this the basis for a re-useable "Primary"/CTA button component */}
-          <ButtonComponent
-            primary
-            width={300}
-            onClick={handleProjectLaunchButtonPress}
-            fontSize="16px"
-            bg={'primary400'}
-            boxShadow={
-              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-            }
-            _hover={{
-              bg: 'brand.primaryTint',
-            }}
-            _focus={{
-              bg: 'brand.primaryTint',
-            }}
-          >
-            Launch Your Project
-          </ButtonComponent>
         </Stack>
       </Container>
     </VStack>
