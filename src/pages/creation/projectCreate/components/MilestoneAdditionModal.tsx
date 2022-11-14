@@ -243,7 +243,7 @@ export const MilestoneAdditionModal = ({
         isValid = false;
       }
 
-      if (!milestone.amount || !(milestone.amount < 1)) {
+      if (!milestone.amount || milestone.amount < 1) {
         errors.amount = 'Amount needs to be at least 1 satoshi';
         isValid = false;
       }
