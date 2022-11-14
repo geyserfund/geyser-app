@@ -6,7 +6,7 @@ export const ProjectNodeValidations = {
     maxLength: 60,
   },
   publicKey: {
-    maxLength: 66,
+    length: 66,
   },
   invoiceMacaroon: {
     maxLength: 280,
