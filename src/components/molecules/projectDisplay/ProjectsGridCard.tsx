@@ -62,25 +62,26 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
         />
       </Box>
 
-      <Box paddingX={6} paddingY={4}>
-        <VStack spacing={4} alignItems="flex-start">
+      <Box paddingX={'12px'} paddingY={4}>
+        <Box>
           <Heading
             color={useColorModeValue('gray.700', 'white')}
-            fontSize={'2xl'}
+            fontSize={'18px'}
             fontFamily={'body'}
+            fontWeight={600}
             noOfLines={1}
           >
             {project.title}
           </Heading>
 
-          <HStack
+          <Box
             mt={6}
-            direction={'row'}
-            spacing={0}
-            align={'center'}
-            alignSelf="center"
+            display="flex"
+            space="x-6"
+            alignItems={'center'}
+            justifyContent={'space-between'}
           >
-            <VStack spacing={0.25} align={'center'} paddingX={2}>
+            <Box display="flex" flexDirection={'column'} alignItems={'center'}>
               <Text fontWeight={600}>{project.funders.length}</Text>
 
               <Text
@@ -91,9 +92,14 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               >
                 Contributors
               </Text>
-            </VStack>
+            </Box>
 
-            <VStack spacing={0.25} align={'center'} paddingX={2}>
+            <Box
+              display="flex"
+              flexDirection={'column'}
+              alignItems={'center'}
+              marginTop="-6px"
+            >
               <SatoshiAmount fontWeight={600}>{project.balance}</SatoshiAmount>
 
               <Text
@@ -104,15 +110,15 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               >
                 Funded
               </Text>
-            </VStack>
+            </Box>
 
-            <ProjectStatusLabel project={project} paddingX={2} />
-          </HStack>
+            <ProjectStatusLabel project={project} marginTop="18px" />
+          </Box>
 
-          <Text noOfLines={5} textAlign="left" size="sm">
+          <Text noOfLines={5} mt={2} textAlign="justify" size="sm">
             {project.description}
           </Text>
-        </VStack>
+        </Box>
       </Box>
     </Box>
   );
