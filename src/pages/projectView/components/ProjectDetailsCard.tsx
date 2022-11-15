@@ -9,13 +9,17 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { Card, SatoshiAmount, ProjectStatusLabel } from '../../components/ui';
-import { LightningQR } from './components/LightningQR';
-import { BoltIcon, ShareIcon, AmbossIcon } from '../../components/icons';
-import { AvatarElement } from './components/AvatarElement';
-import { useAuthContext } from '../../context';
-import { Project } from '../../types/generated/graphql';
-import { getPath, HomeUrl, AmbossUrl } from '../../constants';
+import {
+  Card,
+  SatoshiAmount,
+  ProjectStatusLabel,
+} from '../../../components/ui';
+import { ProjectLightningQR } from './ProjectLightningQR';
+import { BoltIcon, ShareIcon, AmbossIcon } from '../../../components/icons';
+import { AvatarElement } from './AvatarElement';
+import { useAuthContext } from '../../../context';
+import { Project } from '../../../types/generated/graphql';
+import { getPath, HomeUrl, AmbossUrl } from '../../../constants';
 
 export const ProjectDetailsCard = ({
   project,
@@ -128,7 +132,7 @@ export const ProjectDetailsCard = ({
             alignItems="center"
             spacing={1}
           >
-            <LightningQR project={project} />
+            <ProjectLightningQR project={project} />
 
             <Tooltip
               label={hasCopiedSharingLink ? 'Copied!' : 'Share Project'}

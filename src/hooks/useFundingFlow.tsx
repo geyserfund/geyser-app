@@ -10,7 +10,11 @@ import { MUTATION_FUND, QUERY_GET_FUNDING_STATUS } from '../graphql';
 import { sha256, useNotification } from '../utils';
 import { RejectionError, WebLNProvider } from 'webln';
 
-import { FundingTx, FundingStatus } from '../types/generated/graphql';
+import {
+  FundingTx,
+  FundingStatus,
+  FundingInput,
+} from '../types/generated/graphql';
 
 const initialAmounts = {
   total: 0,
@@ -49,15 +53,14 @@ let fundInterval: any;
 interface IFundingFlowOptions {
   hasBolt11?: boolean;
   hasWebLN?: boolean;
-  hasOnChain?: boolean;
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const { hasBolt11 = true, hasWebLN = true } = options || {
     hasBolt11: true,
     hasWebLN: true,
-    hasOnChain: true,
   };
+
   const { user } = useContext(AuthContext);
   const { toast } = useNotification();
 
@@ -196,7 +199,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     setFundState(nextState);
   };
 
-  const requestFunding = async (input: any) => {
+  const requestFunding = async (input: FundingInput) => {
     try {
       await fundProject({ variables: { input } });
       gotoNextStage();

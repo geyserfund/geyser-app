@@ -51,11 +51,11 @@ type Props = {
 };
 
 type CreateRewardMutationResponseData = {
-  createProjectReward: ProjectReward;
+  createdReward: ProjectReward;
 };
 
 type UpdateRewardMutationResponseData = {
-  updateProjectReward: ProjectReward;
+  updatedReward: ProjectReward;
 };
 
 export const RewardAdditionModal = ({
@@ -89,7 +89,7 @@ export const RewardAdditionModal = ({
     CreateRewardMutationResponseData,
     { input: ProjectRewardCreationVariables }
   >(MUTATION_CREATE_PROJECT_REWARD, {
-    onCompleted({ createProjectReward: createdReward }) {
+    onCompleted({ createdReward }) {
       toast({
         title: 'Successfully created!',
         description: `Reward ${createdReward.name} was successfully created`,
@@ -111,13 +111,13 @@ export const RewardAdditionModal = ({
     UpdateRewardMutationResponseData,
     { input: ProjectRewardUpdateVariables }
   >(MUTATION_UPDATE_PROJECT_REWARD, {
-    onCompleted({ updateProjectReward: updatedProjectReward }) {
+    onCompleted({ updatedReward }) {
       toast({
         title: 'Successfully updated!',
-        description: `Reward ${updatedProjectReward.name} was successfully updated`,
+        description: `Reward ${updatedReward.name} was successfully updated`,
         status: 'success',
       });
-      onSubmit(updatedProjectReward);
+      onSubmit(updatedReward);
       onClose();
     },
     onError(error) {
