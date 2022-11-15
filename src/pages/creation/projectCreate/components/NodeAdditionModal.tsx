@@ -111,14 +111,14 @@ export const NodeAdditionModal = ({
       errors.publicKey = 'Public Key' + additionalText;
       isValid = false;
     } else if (
-      form.publicKey.length > ProjectNodeValidations.hostname.maxLength
+      form.publicKey.length !== ProjectNodeValidations.publicKey.length
     ) {
-      errors.publicKey = `Host name cannot be longer than ${ProjectNodeValidations.hostname.maxLength} characters.`;
+      errors.publicKey = `Public Key must be ${ProjectNodeValidations.publicKey.length} characters long.`;
       isValid = false;
     } else {
       const val = isSecp256k1Compressed(form.publicKey);
       if (!val) {
-        errors.publicKey = 'The pubkey is wrongly formatted';
+        errors.publicKey = 'The Public Key is wrongly formatted.';
         isValid = false;
       }
     }

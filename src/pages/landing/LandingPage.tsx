@@ -81,7 +81,7 @@ export const LandingPage = () => {
                 color={'brand.neutral600'}
                 fontSize="12px"
               >
-                <Text size="sm" marginRight={3}>
+                <Text size="sm" marginRight={3} color="brand.primary700">
                   All Projects
                 </Text>
 
