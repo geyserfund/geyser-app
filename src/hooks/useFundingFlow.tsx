@@ -172,7 +172,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       fundingStatus &&
       fundingStatus.fundingTx &&
       (fundingStatus.fundingTx.status === FundingStatus.Paid ||
-        fundingStatus.fundingTx.status === FundingStatus.Pending)
+        (fundingStatus.fundingTx.status === FundingStatus.Pending &&
+          fundingTx.onChain))
     ) {
       const newTx = { ...fundingTx, status: fundingStatus.fundingTx.status };
 
