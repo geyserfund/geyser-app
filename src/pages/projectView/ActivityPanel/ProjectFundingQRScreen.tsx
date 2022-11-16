@@ -11,6 +11,7 @@ import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { Project } from '../../../types/generated/graphql';
 import { ContributionInfoBox } from '../components/ContributionInfoBox';
 import { ProjectFundingQRScreenQRCodeSection } from './ProjectFundingQRScreenQRCodeSection';
+import { fonts } from '../../../constants/fonts';
 
 type Props = {
   handleCloseButton: () => void;
@@ -93,7 +94,7 @@ export const ProjectFundingQRScreen = ({
         <Text
           fontSize="8px"
           fontWeight={400}
-          fontFamily={'Myanmar Khyay'}
+          fontFamily={fonts.myanmar}
           color={'brand.gray500'}
         >
           Geyser is not a store. It’s a way to bring creative projects to life

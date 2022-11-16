@@ -101,6 +101,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({
 }: Props) => {
   const [isRefreshingInvoice, setIsRefreshingInvoice] = useState(true);
   const [hasCopiedQRCode, setHasCopiedQRCode] = useState(false);
+  const [errorFromRefresh, setErrorFromRefresh] = useState<string | null>(null);
 
   const [refreshInvoice] = useMutation<
     InvoiceRefreshMutationResponseData,
@@ -109,17 +110,16 @@ export const ProjectFundingQRScreenQRCodeSection = ({
     variables: {
       fundingTxID: currentFundingTX.id,
     },
-    onCompleted({ fundingTx }) {
-      // setCurrentFundingTX(fundingTx);
-      // setQRDisplayState(QRDisplayState.AWAITING_PAYMENT);
-      // setQRDisplayState(QRDisplayState.INVOICE_FAILED);
-    },
     onError(error) {
-      // setQRDisplayState(QRDisplayState.INVOICE_FAILED);
+      setErrorFromRefresh(error.message);
     },
   });
 
   const qrDisplayState = useMemo(() => {
+    if (errorFromRefresh !== null) {
+      return QRDisplayState.INVOICE_FAILED;
+    }
+
     switch (currentFundingTXInvoiceStatus) {
       case InvoiceStatus.Unpaid:
         return isRefreshingInvoice
@@ -127,10 +127,17 @@ export const ProjectFundingQRScreenQRCodeSection = ({
           : hasCopiedQRCode
           ? QRDisplayState.COPIED
           : QRDisplayState.AWAITING_PAYMENT;
+      case InvoiceStatus.Canceled:
+        return QRDisplayState.INVOICE_CANCELLED;
       default:
         return QRDisplayState.AWAITING_PAYMENT;
     }
-  }, [isRefreshingInvoice, hasCopiedQRCode, currentFundingTXInvoiceStatus]);
+  }, [
+    isRefreshingInvoice,
+    hasCopiedQRCode,
+    currentFundingTXInvoiceStatus,
+    errorFromRefresh,
+  ]);
 
   const paymentRequest = useMemo(() => {
     // QUESTION: What should we do if the `paymentRequest` property returned
