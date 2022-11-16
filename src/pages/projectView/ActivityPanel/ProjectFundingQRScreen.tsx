@@ -3,25 +3,25 @@ import { CloseButton, IconButton, Link } from '@chakra-ui/react';
 import React from 'react';
 import { SectionTitle } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
-import { IFundingTx, IFundingAmounts, IProject } from '../../../interfaces';
+import { IFundingAmounts, IProject } from '../../../interfaces';
 import { IFundForm } from '../../../hooks';
 import { FaTelegramPlane } from 'react-icons/fa';
 import { GeyserTelegramUrl } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
-import { FundingTx, Project } from '../../../types/generated/graphql';
+import { Project } from '../../../types/generated/graphql';
 import { ContributionInfoBox } from '../components/ContributionInfoBox';
-import ProjectFundingQRScreenQRCodeSection from './ProjectFundingQRScreenQRCodeSection';
+import { ProjectFundingQRScreenQRCodeSection } from './ProjectFundingQRScreenQRCodeSection';
 
 type Props = {
   handleCloseButton: () => void;
-  fundingTx: FundingTx | IFundingTx;
+  fundingFlow: any;
   amounts: IFundingAmounts;
   state: IFundForm;
   project: Project | IProject;
 };
 
 export const ProjectFundingQRScreen = ({
-  fundingTx,
+  fundingFlow,
   state,
   project,
   handleCloseButton,
@@ -48,7 +48,7 @@ export const ProjectFundingQRScreen = ({
         onClick={handleCloseButton}
       />
 
-      <SectionTitle>Confirm & Contributes</SectionTitle>
+      <SectionTitle>Confirm & Contribute</SectionTitle>
 
       <VStack
         width={'full'}
@@ -56,8 +56,12 @@ export const ProjectFundingQRScreen = ({
         alignItems="center"
         paddingX={2}
         marginTop={2}
+        spacing={4}
       >
-        <ProjectFundingQRScreenQRCodeSection fundingTxID={fundingTx.id} />
+        <ProjectFundingQRScreenQRCodeSection
+          currentFundingTX={fundingFlow.fundingTx}
+          currentFundingTXInvoiceStatus={fundingFlow.fundingTx.invoiceStatus}
+        />
 
         <ContributionInfoBox
           project={project as Project}
@@ -67,6 +71,7 @@ export const ProjectFundingQRScreen = ({
           funderUsername={state.funderUsername}
           funderEmail={state.email}
           funderAvatarURL={state.funderAvatarURL}
+          backgroundColor={'brand.neutral100'}
         />
 
         <HStack>

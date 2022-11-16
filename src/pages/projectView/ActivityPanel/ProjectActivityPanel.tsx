@@ -247,7 +247,7 @@ export const ProjectActivityPanel = ({
           <ProjectFundingQRScreen
             state={formState}
             project={project}
-            fundingTx={fundingTx}
+            fundingFlow={fundingFlow}
             amounts={amounts}
             handleCloseButton={handleCloseButton}
           />

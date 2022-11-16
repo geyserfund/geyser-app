@@ -1,8 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react';
+import React, { useMemo, useState } from 'react';
+import {
+  Box,
+  Button,
+  HStack,
+  HTMLChakraProps,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { gql, useMutation } from '@apollo/client';
 import Loader from '../../../components/ui/Loader';
-import { FundingTx } from '../../../types/generated/graphql';
+import { FundingTx, InvoiceStatus } from '../../../types/generated/graphql';
 import { QRCode } from 'react-qrcode-logo';
 import { RiLinkUnlink } from 'react-icons/ri';
 import { colors } from '../../../constants';
@@ -12,9 +19,11 @@ import LogoDark from '../../../assets/logo-dark.svg';
 import LogoPrimary from '../../../assets/logo-brand.svg';
 import { BiRefresh } from 'react-icons/bi';
 import { BsExclamationCircle } from 'react-icons/bs';
+// import { useFundingFlow } from '../../../hooks';
 
 type Props = {
-  fundingTxID: number;
+  currentFundingTX: FundingTx;
+  currentFundingTXInvoiceStatus: InvoiceStatus;
 };
 
 type InvoiceRefreshMutationResponseData = {
@@ -22,12 +31,12 @@ type InvoiceRefreshMutationResponseData = {
 };
 
 type InvoiceRefreshMutationInput = {
-  fundingTxId: number;
+  fundingTxID: number;
 };
 
 const REFRESH_FUNDING_INVOICE = gql`
-  mutation RefreshFundingInvoice($fundingTxId: BigInt!) {
-    fundingInvoiceRefresh(fundingTxId: $fundingTxId) {
+  mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
+    fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
       id
       paymentRequest
     }
@@ -48,70 +57,124 @@ enum QRDisplayState {
   INVOICE_CANCELLED = 'INVOICE_CANCELLED',
 }
 
-const ProjectFundingQRScreenQRCodeSection = ({ fundingTxID }: Props) => {
-  const [qrDisplayState, setQRDisplayState] = useState<QRDisplayState>(
-    QRDisplayState.REFRESHING,
-  );
+const InvoiceErrorView = ({
+  onRefreshSelected,
+}: {
+  onRefreshSelected: () => void;
+}) => {
+  return (
+    <VStack
+      height={248}
+      width={252}
+      spacing={4}
+      backgroundColor={'brand.primary100'}
+      justifyContent="center"
+      borderRadius={'md'}
+    >
+      <BsExclamationCircle fontSize={'2em'} />
 
+      <VStack spacing={1}>
+        <Text fontWeight={700} fontSize="14px">
+          Invoice failed or was cancelled
+        </Text>
+        <Text>Click refresh to try again</Text>
+      </VStack>
+
+      <Button
+        leftIcon={<BiRefresh fontSize={'2em'} />}
+        iconSpacing={2}
+        backgroundColor={'brand.bgWhite'}
+        textTransform={'uppercase'}
+        onClick={onRefreshSelected}
+        borderRadius={'full'}
+        fontSize={'10px'}
+      >
+        Refresh
+      </Button>
+    </VStack>
+  );
+};
+
+export const ProjectFundingQRScreenQRCodeSection = ({
+  currentFundingTX,
+  currentFundingTXInvoiceStatus,
+}: Props) => {
+  const [isRefreshingInvoice, setIsRefreshingInvoice] = useState(true);
   const [hasCopiedQRCode, setHasCopiedQRCode] = useState(false);
-
-  const [currentFundingTX, setCurrentFundingTX] = useState<FundingTx | null>(
-    null,
-  );
 
   const [refreshInvoice] = useMutation<
     InvoiceRefreshMutationResponseData,
     InvoiceRefreshMutationInput
   >(REFRESH_FUNDING_INVOICE, {
     variables: {
-      fundingTxId: fundingTxID,
+      fundingTxID: currentFundingTX.id,
     },
     onCompleted({ fundingTx }) {
-      setCurrentFundingTX(fundingTx);
-      setQRDisplayState(QRDisplayState.AWAITING_PAYMENT);
+      // setCurrentFundingTX(fundingTx);
+      // setQRDisplayState(QRDisplayState.AWAITING_PAYMENT);
+      // setQRDisplayState(QRDisplayState.INVOICE_FAILED);
     },
     onError(error) {
-      setQRDisplayState(QRDisplayState.INVOICE_FAILED);
+      // setQRDisplayState(QRDisplayState.INVOICE_FAILED);
     },
   });
+
+  const qrDisplayState = useMemo(() => {
+    switch (currentFundingTXInvoiceStatus) {
+      case InvoiceStatus.Unpaid:
+        return isRefreshingInvoice
+          ? QRDisplayState.REFRESHING
+          : hasCopiedQRCode
+          ? QRDisplayState.COPIED
+          : QRDisplayState.AWAITING_PAYMENT;
+      default:
+        return QRDisplayState.AWAITING_PAYMENT;
+    }
+  }, [isRefreshingInvoice, hasCopiedQRCode, currentFundingTXInvoiceStatus]);
 
   const paymentRequest = useMemo(() => {
     // QUESTION: What should we do if the `paymentRequest` property returned
     // from the `fundingInvoiceRefresh` mutation is null?
     return currentFundingTX?.paymentRequest || '';
-  }, [currentFundingTX]);
+  }, [currentFundingTX, currentFundingTX.paymentRequest]);
 
   const qrForegroundColor = useMemo(() => {
     return hasCopiedQRCode ? colors.primary : colors.textBlack;
   }, [hasCopiedQRCode, colors]);
 
+  const isShowingInvoiceErrorView = useMemo(() => {
+    return [
+      QRDisplayState.INVOICE_FAILED,
+      QRDisplayState.INVOICE_CANCELLED,
+    ].includes(qrDisplayState);
+  }, [qrDisplayState]);
+
   const handleCopyButtonTapped = () => {
     setHasCopiedQRCode(true);
-    setQRDisplayState(QRDisplayState.COPIED);
 
     navigator.clipboard.writeText(paymentRequest);
   };
 
   const handleRefreshButtonTapped = () => {
     setHasCopiedQRCode(false);
-    setQRDisplayState(QRDisplayState.REFRESHING);
+    setIsRefreshingInvoice(true);
 
     refreshInvoice();
   };
 
-  const PaymentRequestCopyButton = () => {
+  const PaymentRequestCopyButton = ({ ...rest }: HTMLChakraProps<'button'>) => {
     return (
       <ButtonComponent
         isFullWidth
         onClick={handleCopyButtonTapped}
-        disabled={hasCopiedQRCode}
         _disabled={{
-          opacity: 1,
+          opacity: hasCopiedQRCode ? '1' : '0.4',
           pointerEvents: 'none',
         }}
         backgroundColor={hasCopiedQRCode ? 'brand.bgWhite' : 'brand.primary400'}
         borderColor={hasCopiedQRCode ? 'brand.neutral200' : 'none'}
         borderWidth={hasCopiedQRCode ? '1px' : '0'}
+        {...rest}
       >
         <HStack spacing={4}>
           {hasCopiedQRCode ? (
@@ -125,98 +188,76 @@ const ProjectFundingQRScreenQRCodeSection = ({ fundingTxID }: Props) => {
     );
   };
 
-  useEffect(() => {
-    refreshInvoice();
-  }, [refreshInvoice]);
-
   if (qrDisplayState === QRDisplayState.REFRESHING) {
     return (
-      <VStack>
-        <Loader />
-        <Text>Generating Invoice</Text>
-      </VStack>
-    );
-  }
-
-  if (
-    [QRDisplayState.INVOICE_FAILED, QRDisplayState.INVOICE_CANCELLED].includes(
-      qrDisplayState,
-    )
-  ) {
-    return (
-      <VStack spacing={4}>
-        <BsExclamationCircle fontSize={'3rem'} />
-
-        <VStack spacing={1}>
-          <Text>Invoice failed or was cancelled</Text>
-          <Text>Click refresh to try again</Text>
+      <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
+        <VStack>
+          <Loader />
+          <Text>Generating Invoice</Text>
         </VStack>
-
-        <Button
-          leftIcon={<BiRefresh />}
-          backgroundColor={'brand.bgWhite'}
-          textTransform={'uppercase'}
-          onClick={handleRefreshButtonTapped}
-          borderRadius={'full'}
-        >
-          Refresh
-        </Button>
       </VStack>
     );
   }
 
   return (
     <VStack spacing={4}>
-      <HStack spacing={4}>
-        <FaBitcoin fontSize={'2rem'} />
-        <Text fontSize={'10px'} fontWeight={400}>
-          Scan this QR code to fund with Bitcoin on any wallet (on-chain or
-          lightning).
-        </Text>
-      </HStack>
+      <VStack spacing={4}>
+        <HStack
+          spacing={4}
+          visibility={isShowingInvoiceErrorView ? 'hidden' : 'visible'}
+        >
+          <FaBitcoin fontSize={'2.5em'} />
 
-      <Box
-        borderRadius={'4px'}
-        borderColor={qrForegroundColor}
-        borderWidth={'2px'}
-        padding={'2px'}
-      >
-        <QRCode
-          value={paymentRequest!}
-          size={208}
-          bgColor={colors.bgWhite}
-          fgColor={qrForegroundColor}
-          qrStyle="dots"
-          logoImage={hasCopiedQRCode ? LogoPrimary : LogoDark}
-          logoHeight={60}
-          logoWidth={60}
-          eyeRadius={4}
-          removeQrCodeBehindLogo={true}
-        />
-      </Box>
-
-      <Box marginBottom={4} fontSize={'10px'}>
-        {qrDisplayState === QRDisplayState.AWAITING_PAYMENT ? (
-          <HStack spacing={5}>
-            <Loader size="md" />
-            <Text color={'brand.neutral900'} fontWeight={400}>
-              Waiting for payment...
-            </Text>
-          </HStack>
-        ) : qrDisplayState === QRDisplayState.COPIED ? (
-          <Text color={'brand.primary'} fontWeight={700}>
-            Copied!
+          <Text fontSize={'10px'} fontWeight={400}>
+            Scan this QR code to fund with Bitcoin on any wallet (on-chain or
+            lightning). If you are paying onchain the transaction will confirm
+            after 1 confirmation.
           </Text>
-        ) : null}
-      </Box>
+        </HStack>
 
-      {[QRDisplayState.AWAITING_PAYMENT, QRDisplayState.COPIED].includes(
-        qrDisplayState,
-      ) ? (
-        <PaymentRequestCopyButton />
-      ) : null}
+        {isShowingInvoiceErrorView ? (
+          <InvoiceErrorView onRefreshSelected={handleRefreshButtonTapped} />
+        ) : (
+          <Box
+            borderRadius={'4px'}
+            borderColor={qrForegroundColor}
+            borderWidth={'2px'}
+            padding={'2px'}
+          >
+            <QRCode
+              value={paymentRequest!}
+              size={208}
+              bgColor={colors.bgWhite}
+              fgColor={qrForegroundColor}
+              qrStyle="dots"
+              logoImage={hasCopiedQRCode ? LogoPrimary : LogoDark}
+              logoHeight={60}
+              logoWidth={60}
+              eyeRadius={4}
+              removeQrCodeBehindLogo={true}
+            />
+          </Box>
+        )}
+
+        <Box marginBottom={4} fontSize={'10px'}>
+          {qrDisplayState === QRDisplayState.AWAITING_PAYMENT ? (
+            <HStack spacing={5}>
+              <Loader size="md" />
+              <Text color={'brand.neutral900'} fontWeight={400}>
+                Waiting for payment...
+              </Text>
+            </HStack>
+          ) : qrDisplayState === QRDisplayState.COPIED ? (
+            <Text color={'brand.primary'} fontWeight={700}>
+              Copied!
+            </Text>
+          ) : null}
+        </Box>
+      </VStack>
+
+      <PaymentRequestCopyButton
+        disabled={hasCopiedQRCode || isShowingInvoiceErrorView}
+      />
     </VStack>
   );
 };
-
-export default ProjectFundingQRScreenQRCodeSection;

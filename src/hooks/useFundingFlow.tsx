@@ -5,8 +5,8 @@ import { AuthContext } from '../context';
 import { IFundingAmounts } from '../interfaces';
 
 import { IFundingStages } from '../constants';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import { MUTATION_FUND, QUERY_GET_FUNDING_STATUS } from '../graphql';
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { MUTATION_FUND } from '../graphql';
 import { sha256, useNotification } from '../utils';
 import { RejectionError, WebLNProvider } from 'webln';
 
@@ -15,6 +15,23 @@ import {
   FundingStatus,
   FundingInput,
 } from '../types/generated/graphql';
+
+type FundingTXQueryResponseData = {
+  fundingTx: FundingTx;
+};
+
+type FundingTXQueryInput = {
+  fundingTxID: number;
+};
+
+const QUERY_GET_FUNDING_TX_STATUS_AND_INVOICE_STATUS = gql`
+  query GetFundingTxStatusAndInvoiceStatus($fundingTxID: BigInt!) {
+    fundingTx(id: $fundingTxID) {
+      status
+      invoiceStatus
+    }
+  }
+`;
 
 const initialAmounts = {
   total: 0,
@@ -67,19 +84,23 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundState, setFundState] = useState<IFundingStages>(
     fundingStages.initial,
   );
+
   const [fundingTx, setFundingTx] = useState<FundingTx>({
     ...initialFunding,
     funder: { ...initialFunding.funder, user },
   });
+
   const [amounts, setAmounts] = useState<IFundingAmounts>(initialAmounts);
 
-  const [getFundingStatus, { data: fundingStatus }] = useLazyQuery(
-    QUERY_GET_FUNDING_STATUS,
-    {
-      variables: { id: fundingTx.id },
-      fetchPolicy: 'network-only',
+  const [getFundingStatus, { data: fundingStatus }] = useLazyQuery<
+    FundingTXQueryResponseData,
+    FundingTXQueryInput
+  >(QUERY_GET_FUNDING_TX_STATUS_AND_INVOICE_STATUS, {
+    variables: {
+      fundingTxID: fundingTx.id,
     },
-  );
+    fetchPolicy: 'network-only',
+  });
 
   const startWebLNFlow = async () => {
     let succeeded = false;
@@ -150,8 +171,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     if (
       fundingStatus &&
       fundingStatus.fundingTx &&
-      (fundingStatus.fundingTx.status === 'paid' ||
-        fundingStatus.fundingTx.status === 'pending')
+      (fundingStatus.fundingTx.status === FundingStatus.Paid ||
+        fundingStatus.fundingTx.status === FundingStatus.Pending)
     ) {
       const newTx = { ...fundingTx, status: fundingStatus.fundingTx.status };
 
