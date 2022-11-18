@@ -17,6 +17,7 @@ import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';
 import { IFundingTx } from '../../../interfaces';
+import { isMobileMode, isMediumScreen, useNotification } from '../../../utils';
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx | IFundingTx;
@@ -34,6 +35,7 @@ export const ProjectFundingContributionsFeedItem = ({
   const isFunderAnonymous = Boolean(funder?.user) === false;
   const timeAgo = getDaysAgo(fundingTx?.paidAt || '');
   const wasMadeOnChain = fundingTx.onChain;
+  const isMobile = isMobileMode();
 
   const avatarMetadata = getAvatarMetadata({
     funder,
@@ -54,6 +56,8 @@ export const ProjectFundingContributionsFeedItem = ({
       _hover={{ boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)' }}
       rounded={'md'}
       px={'26px'}
+      minW={isMobile ? 'full' : 'xl'}
+      maxW={'xl'}
       py={'10px'}
       {...rest}
     >
