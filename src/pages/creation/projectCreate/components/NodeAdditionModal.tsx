@@ -94,11 +94,6 @@ export const NodeAdditionModal = ({
     if (!form.hostname) {
       errors.hostname = 'Host name' + additionalText;
       isValid = false;
-    } else if (
-      form.hostname.length > ProjectNodeValidations.hostname.maxLength
-    ) {
-      errors.hostname = `Host name cannot be longer than ${ProjectNodeValidations.hostname.maxLength} characters.`;
-      isValid = false;
     } else {
       const val = isTorV3Address(form.hostname);
       if (val) {
@@ -143,11 +138,6 @@ export const NodeAdditionModal = ({
     if (!isVoltage) {
       if (!form.tlsCert) {
         errors.tlsCert = 'TLS certificate' + additionalText;
-        isValid = false;
-      } else if (
-        form.tlsCert.length > ProjectNodeValidations.tlsCertificate.maxLength
-      ) {
-        errors.hostname = `TLS Certificate cannot be longer than ${ProjectNodeValidations.tlsCertificate.maxLength} characters.`;
         isValid = false;
       }
     }
