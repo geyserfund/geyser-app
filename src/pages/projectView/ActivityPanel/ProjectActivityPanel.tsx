@@ -11,7 +11,8 @@ import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
 import { SuccessScreen } from './SuccessScreen';
 import { QRPage } from './QRPage';
 import { isMobileMode, useNotification } from '../../../utils';
-import { FundingPaymentScreen } from './FundingPaymentScreen';
+import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
+
 import { AuthContext } from '../../../context';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
@@ -220,7 +221,7 @@ export const ProjectActivityPanel = ({
         );
       case fundingStages.form:
         return (
-          <FundingPaymentScreen
+          <ProjectFundingSelectionFormScreen
             {...{
               fundLoading,
               isMobile,
