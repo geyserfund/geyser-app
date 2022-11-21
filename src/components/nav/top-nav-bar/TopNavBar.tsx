@@ -148,6 +148,12 @@ export const TopNavBar = () => {
   };
 
   const handleProjectDashboardButtonPress = () => {
+    if (userHasOnlyOneProject) {
+      console.log('checking this', user);
+      history.push(getPath('projectDashboard', user.ownerOf[0]?.project?.name));
+      return;
+    }
+
     const projectName =
       currentProjectRouteMatch?.params?.projectId ||
       navigationContext.projectName;
@@ -174,6 +180,11 @@ export const TopNavBar = () => {
     currentPathName,
     routerPathNames,
   ]);
+
+  const userHasOnlyOneProject: boolean = useMemo(
+    () => user && user.ownerOf && user.ownerOf.length === 1,
+    [user],
+  );
 
   const shouldTopNavBeHidden: boolean = useMemo(() => {
     return routeMatchesForHidingTopNav.some((routeMatch) => {
@@ -238,18 +249,30 @@ export const TopNavBar = () => {
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      isViewingOwnProject
+      (isViewingOwnProject || userHasOnlyOneProject)
     );
-  }, [isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject]);
+  }, [
+    isMobile,
+    isLoggedIn,
+    isUserAProjectCreator,
+    isViewingOwnProject,
+    userHasOnlyOneProject,
+  ]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
     return (
       isMobile === true &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      isViewingOwnProject
+      (isViewingOwnProject || userHasOnlyOneProject)
     );
-  }, [isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject]);
+  }, [
+    isMobile,
+    isLoggedIn,
+    isUserAProjectCreator,
+    isViewingOwnProject,
+    userHasOnlyOneProject,
+  ]);
 
   /**
    * Logic:
@@ -271,7 +294,8 @@ export const TopNavBar = () => {
       isViewingOwnProject === false &&
       routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      })
+      }) &&
+      !userHasOnlyOneProject
     );
   }, [
     routeMatchesForHidingMyProjectsButton,
@@ -279,6 +303,7 @@ export const TopNavBar = () => {
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
+    userHasOnlyOneProject,
   ]);
 
   const shouldShowMyProjectsButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -289,7 +314,8 @@ export const TopNavBar = () => {
       isViewingOwnProject === false &&
       routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      })
+      }) &&
+      !userHasOnlyOneProject
     );
   }, [
     routeMatchesForHidingMyProjectsButton,
@@ -297,6 +323,7 @@ export const TopNavBar = () => {
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
+    userHasOnlyOneProject,
   ]);
 
   /**
@@ -371,7 +398,7 @@ export const TopNavBar = () => {
                 backgroundColor="brand.primary400"
                 onClick={handleProjectDashboardButtonPress}
               >
-                Dashboard
+                Project Dashboard
               </ButtonComponent>
             ) : null}
 
