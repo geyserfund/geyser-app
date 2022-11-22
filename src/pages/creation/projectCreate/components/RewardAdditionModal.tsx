@@ -211,6 +211,7 @@ export const RewardAdditionModal = ({
   const validateReward = () => {
     const errors: any = {};
     let isValid = true;
+
     if (!rewards.current.name) {
       errors.name = 'Name is a required field';
       isValid = false;
@@ -221,8 +222,16 @@ export const RewardAdditionModal = ({
       isValid = false;
     }
 
-    if (!rewards.current.cost || rewards.current.cost < 1) {
-      errors.cost = `Cost must be at least one Satoshi.`;
+    if (!rewards.current.cost || rewards.current.cost <= 0) {
+      errors.cost = `Cost must be greater than 0 USD Cents.`;
+      isValid = false;
+    }
+
+    if (
+      formCostDollarValue * 100 >
+      ProjectRewardValidations.cost.maxUSDCentsAmount
+    ) {
+      errors.cost = `Cost must be less than ${ProjectRewardValidations.cost.maxUSDCentsAmount} USD Cents.`;
       isValid = false;
     }
 
@@ -334,13 +343,14 @@ export const RewardAdditionModal = ({
                 />
               </InputGroup>
 
-              {formError.cost && (
+              {formError.cost ? (
                 <Text fontSize="12px" color="red.500">
                   {formError.cost}
                 </Text>
-              )}
+              ) : null}
             </VStack>
           </VStack>
+
           <VStack spacing="10px">
             <ButtonComponent
               isLoading={createRewardLoading || updateRewardLoading}
