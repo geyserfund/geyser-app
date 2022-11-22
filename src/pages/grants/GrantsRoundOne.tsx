@@ -1,20 +1,42 @@
-/* eslint-disable complexity */
 import React, { useEffect } from 'react';
-import { Box, Text, Skeleton, Link, Image, VStack } from '@chakra-ui/react';
-import { useQuery } from '@apollo/client';
-import { AppFooter } from '../../components/molecules';
-import { GrantCard } from './components/GrantCard';
-import { Board } from './components/Board';
-import { QUERY_GRANTS } from '../../graphql';
-import GrantsHeader from '../../assets/grants-header.webp';
-import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
-import { Subscribe } from '../../components/nav/Subscribe';
+import { Box, Button, Grid, GridItem, Text } from '@chakra-ui/react';
+import { isMobileMode } from '../../utils';
+import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
-import { ButtonComponent } from '../../components/ui';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { FaArrowLeft } from 'react-icons/fa';
+import { useHistory } from 'react-router';
+import { useNotification } from '../../utils';
+
+import { ApplyGrantCard } from './components/ApplyGrantCard';
+import { BoardMembers } from './components/BoardMembers';
+import satwalletimg from '../../assets/walletsats.svg';
+import { MoreInfo } from './components/MoreInfo';
+import { AppFooter } from '../../components/molecules';
+import { ContributeModal } from './components/ContributeModal';
+import granthero from '../../assets/granthero.svg';
 import { projectTypes } from '../../constants';
+import { useQuery } from '@apollo/client';
+import { QUERY_GRANTS } from '../../graphql';
+import { GrantCard } from './components/GrantCard';
 import { Project, ProjectsGetQueryInput } from '../../types/generated/graphql';
 
+const grantx = [
+  {
+    name: 'Bitcoin for Free Speech',
+    applicants: 0,
+    about: '',
+  },
+  {
+    name: 'Visual Artists for Bitcoin',
+    applicants: 0,
+    about: '',
+  },
+  {
+    name: 'Bitcoin Open Source',
+    applicants: 0,
+    about: '',
+  },
+];
 type ResponseData = {
   projects: {
     projects: Project[];
@@ -27,8 +49,13 @@ type QueryVariables = {
 
 export const GrantsRoundOne = () => {
   const isMobile = isMobileMode();
-  const isMedium = isMediumScreen();
+  const history = useHistory();
   const { toast } = useNotification();
+  const [link, setLink] = React.useState('');
+
+  const linkHandler = (link) => {
+    setLink(link);
+  };
 
   const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
     QUERY_GRANTS,
@@ -63,229 +90,225 @@ export const GrantsRoundOne = () => {
   return (
     <>
       <Box
-        pb={20}
         paddingTop={isMobile ? '81px' : '91px'}
-        backgroundImage={GrantsHeader}
-        backgroundSize="contain"
-        backgroundRepeat="no-repeat"
+        bg={'brand.bgGrey4'}
+        minHeight="100vh"
+        display="flex"
+        alignItems={'center'}
+        flexDirection="column"
       >
         <Box
-          width={isMobile ? '90%' : isMedium ? '75%' : '35%'}
-          margin="0 auto"
           my={5}
+          width={isMobile ? '100%' : '909px'}
+          px={isMobile ? '1rem' : ''}
         >
+          <Button
+            size={'sm'}
+            bg="brand.bgWhite"
+            variant={'outline'}
+            gap={2}
+            onClick={() => history.goBack()}
+            fontSize="sm"
+          >
+            <FaArrowLeft /> See all Grants
+          </Button>
           <Text
-            fontSize={isMobile ? '4xl' : '55px'}
+            fontSize={isMobile ? '4xl' : '47px'}
             fontWeight="medium"
             textAlign="center"
           >
-            Geyser Grants
+            🧊
           </Text>
           <Text
-            fontFamily={fonts.interBlack}
-            fontSize={isMobile ? '3xl' : '5xl'}
+            fontSize={'27px'}
             fontWeight="900"
             textAlign="center"
+            fontFamily={fonts.livvic}
+            textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
+            color={'brand.primary500'}
           >
-            ROUND 1
+            Geyser Grants
           </Text>
-          <Text
-            fontSize={isMobile ? '3xl' : '5xl'}
-            fontWeight="light"
-            textAlign="center"
-          >
-            JULY 1-31
-          </Text>
-          <Text fontSize="4xl" fontWeight="bold" textAlign="center" mt={8}>
-            A new era for Bitcoin grants
-          </Text>
-          <Text textAlign="justify" fontSize="lg">
-            Bitcoin is signal, everything else is noise. We created Geyser
-            Grants to help broadcast loud and clear Bitcoin signal to the world.
-            That is, to accelerate the growth of the Bitcoin ecosystem by
-            increasing Bitcoin awareness, enabling Bitcoin culture, and
-            supporting needed development in this space. Through these grants,
-            we will be supporting Bitcoin educators, developers, entrepreneurs,
-            and creatives with the resources they need to bootstrap their
-            initiatives worldwide.
-            <br />
-            <br />
-            To bring this vision to life, we accept Bitcoin contributions for
-            each individual grant and take no fees at this stage. When the Round
-            goes live, applications will be opened and they will be evaluated
-            once the Rounds close. Geyser will not charge any fees in the first
-            Rounds but may in the future start charging admin fees to cover
-            expenses. For more information, see{' '}
-            <Link
-              textDecoration="underline"
-              href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f"
-            >
-              here
-            </Link>
-            .
-          </Text>
-        </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          px={isMobile ? 0 : 20}
-        >
           <Box
-            overflow="auto"
-            w={isMobile ? '95%' : '1226px'}
             display="flex"
-            px={2}
+            alignItems={'center'}
+            justifyContent="center"
+            gap={4}
           >
-            {!loading &&
-              grants.length > 0 &&
-              grantsSorted.map((grant: Project) => {
-                if (!grant.active) {
-                  return;
-                }
+            <Text
+              fontFamily={fonts.interBlack}
+              fontSize={isMobile ? '30' : '35px'}
+              fontWeight="700"
+              textAlign="center"
+              justify="center"
+            >
+              Round 1
+            </Text>
+          </Box>
+          <Box display="flex" justifyContent={'center'} my="2" rounded={'sm'}>
+            <Text
+              bg="brand.neutral200"
+              px={'3'}
+              py="2"
+              fontWeight={'500'}
+              fontSize="14px"
+            >
+              CLOSED
+            </Text>
+          </Box>
+          <Text
+            fontSize={isMobile ? '15px' : '16px'}
+            fontWeight="500"
+            color={'brand.neutral600'}
+            textAlign="center"
+            justify="center"
+          >
+            Funding educators, creatives and builders doing Bitcoin-only
+            projects on Geyser.{isMobile ? '' : <br />} Funded by bitcoin
+            sponsors who want to change the world for the better.
+          </Text>
+          <Box display="flex" flexDirection={'column'} alignItems="center">
+            <Box color={'brand.primary500'} my={8}>
+              <Box>
+                <img src={granthero} />
+              </Box>
+            </Box>
 
-                return (
-                  <GrantCard
-                    key={grant.id}
-                    project={grant}
-                    number="1"
-                    date="JULY 1 - 31"
-                    distributed={
-                      grant.name === 'bitcoineducation'
-                        ? (0 / 1000000).toFixed(0)
-                        : grant.name === 'bitcoinculture'
-                        ? (0 / 1000000).toFixed(0)
-                        : grant.name === 'bitcoinbuilders'
-                        ? (0 / 1000000).toFixed(0)
-                        : ''
-                    }
-                    status={'complete'}
-                    marginRight={grant.name !== 'bitcoinculture' && true}
+            <Grid
+              templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+              gap={6}
+              minWidth="100%"
+              mt={8}
+            >
+              {grants.map((item) => (
+                <GridItem w={'100%'} key={item.name}>
+                  <ApplyGrantCard
+                    name={item.name}
+                    applicant={item.applicants}
                   />
-                );
-              })}
-            {loading && (
+                </GridItem>
+              ))}
+            </Grid>
+          </Box>
+          <Box my={8}>
+            <Text
+              fontFamily={fonts.interBlack}
+              fontSize="24px"
+              fontWeight={'bold'}
+            >
+              Principled Bitcoiners Board
+            </Text>
+            <Text color={'brand.neutral600'} fontWeight="600">
+              The baord will be responsible for reviewing and evaluating the
+              applications.
+            </Text>
+          </Box>
+          <BoardMembers />
+          <Box my={8}>
+            <Text
+              fontFamily={fonts.interBlack}
+              fontSize="24px"
+              fontWeight={'bold'}
+            >
+              Made possible by sponsors
+            </Text>
+            <Text color={'brand.neutral600'} fontWeight="600">
+              Bitcoin companies and anon individuals that want to bring hope to
+              the world.
+            </Text>
+          </Box>
+          <Box
+            border={'2px solid #E9ECEF'}
+            borderRadius="12px"
+            pb={4}
+            pt={6}
+            bg="brand.bgWhite"
+            mt={8}
+            mb={3}
+            px={4}
+            width={isMobile ? '100%' : '909px'}
+            display="flex"
+            flexDirection={'column'}
+            justifyContent="center"
+            alignItems={'center'}
+          >
+            <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
+              <img src={satwalletimg} width="195px" />
+
               <>
-                <Box>
-                  <Skeleton
-                    w={isMobile ? '325px' : '350px'}
-                    h={isMobile ? '527px' : '552px'}
-                    my={10}
-                    mr={isMobile ? 10 : 20}
-                  />
-                </Box>
-                <Box>
-                  <Skeleton
-                    w={isMobile ? '325px' : '350px'}
-                    h={isMobile ? '527px' : '552px'}
-                    my={10}
-                    mr={isMobile ? 10 : 20}
-                  />
-                </Box>
-                <Box>
-                  <Skeleton
-                    w={isMobile ? '325px' : '350px'}
-                    h={isMobile ? '527px' : '552px'}
-                    my={10}
-                  />
-                </Box>
+                {typeof link === 'string' && link.trim().length === 0 ? (
+                  <Box display="flex" alignItems={'center'} gap={4}>
+                    {[1, 2].map((item) => (
+                      <Box
+                        height={'34px'}
+                        rounded="full"
+                        bg="brand.neutral200"
+                        width={'138px'}
+                        key={item}
+                      ></Box>
+                    ))}
+                  </Box>
+                ) : (
+                  <img src={link} width="100px" />
+                )}
               </>
-            )}
-            {/* <ContributeButton active={grants[0].active} title="Contribute" project={grants[0]}/> */}
+            </Box>
+
+            <Box display="flex" alignItems={'center'} mt={2}>
+              <Box
+                display="flex"
+                alignItems={'center'}
+                mt="3"
+                flexDirection={isMobile ? 'column' : 'row'}
+              >
+                <ContributeModal onLink={linkHandler} />
+
+                <Box display="flex" alignItems={'center'}>
+                  <Text
+                    fontSize={'13px'}
+                    fontWeight="500"
+                    mr={1}
+                    color="brand.neutral600"
+                  >
+                    Or sending SATs to our lightning address:{' '}
+                  </Text>
+                  <Text decoration={'underline'} color="brand.primary">
+                    {' '}
+                    <a href="">grants@geyser.fund.</a>
+                  </Text>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          <MoreInfo />
+          <Box
+            border={'2px solid #E9ECEF'}
+            minWidth="100%"
+            p="2"
+            rounded={'md'}
+            minHeight={'300px'}
+          >
+            <Text
+              fontWeight={'bold'}
+              fontSize="large"
+              mt={'2'}
+              fontFamily={fonts.interBlack}
+            >
+              Applications
+            </Text>
+            <Box>
+              <iframe
+                className="airtable-embed"
+                src="https://airtable.com/embed/shrfeI21FWzyCqHZy?backgroundColor=teal"
+                frameBorder="0"
+                width="100%"
+                height="533"
+              ></iframe>
+            </Box>
           </Box>
         </Box>
-        <Box
-          width={isMobile ? '90%' : isMedium ? '75%' : '35%'}
-          display="flex"
-          justifyContent="center"
-          justifyItems="center"
-          margin="0 auto"
-        >
-          <VStack>
-            <Text fontSize="4xl" fontWeight="bold" textAlign="center" mt={8}>
-              Round 1 Announcement
-            </Text>
-            <Text textAlign="justify" fontSize="lg">
-              The Geyser Grant Round 1 winners have been released.{' '}
-              <Link
-                _hover={{ textDecoration: 'none' }}
-                isExternal
-                href="https://twitter.com/geyserfund/status/1567537222005530625?s=20&t=ubMlkMfNudkbogo-IKhkHw"
-              >
-                Check out our Twitter announcement.
-              </Link>
-            </Text>
-            <Image
-              htmlHeight={450}
-              htmlWidth={800}
-              src="https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-1-results.jpeg"
-            ></Image>
-            <Link
-              margin="0 auto"
-              w="87px"
-              _hover={{ textDecoration: 'none' }}
-              isExternal
-              href="https://twitter.com/geyserfund/status/1567537222005530625"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <ButtonComponent fontSize="lg">
-                Announcement
-                <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
-              </ButtonComponent>
-            </Link>
-          </VStack>
-        </Box>
-        <Box
-          width={isMobile ? '90%' : isMedium ? '75%' : '50%'}
-          margin="0 auto"
-          mt={10}
-          mb={20}
-        >
-          <Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">
-            A board of principled Bitcoiners
-          </Text>
-          <Text fontSize="lg" textAlign="justify" mb={2}>
-            We are bringing together a board of Bitcoiners that have a history
-            of supporting the Bitcoin ecosystem. At the end of the Round, they
-            will review the applications through a set of criteria, which will
-            be revealed at a later date, and establish how the funds should be
-            distributed.
-          </Text>
-          <Board />
-        </Box>
-        <Box
-          width={isMobile ? '90%' : isMedium ? '75%' : '50%'}
-          margin="0 auto"
-          mt={10}
-          mb={20}
-        >
-          <Text fontSize="3xl" fontWeight="bold" mb={2} textAlign="center">
-            Have questions?
-          </Text>
-          <Link
-            margin="0 auto"
-            w="87px"
-            _hover={{ textDecoration: 'none' }}
-            isExternal
-            href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <ButtonComponent fontSize="lg">
-              FAQ <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
-            </ButtonComponent>
-          </Link>
-        </Box>
-
-        <Box display="flex" justifyContent="center" mt={10} px={4}>
-          <Subscribe style="inline" interest="grants" titleSize="3xl" />
-        </Box>
+        <AppFooter />
       </Box>
-
-      <AppFooter />
     </>
   );
 };
