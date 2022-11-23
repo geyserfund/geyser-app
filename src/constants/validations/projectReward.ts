@@ -6,6 +6,6 @@ export const ProjectRewardValidations = {
     maxLength: 250,
   },
   cost: {
-    maxUSDCentsAmount: 10_000,
+    maxUSDCentsAmount: 1_000_000,
   },
 };

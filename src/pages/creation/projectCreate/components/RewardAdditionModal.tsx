@@ -29,7 +29,7 @@ import {
   MUTATION_CREATE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations';
-import { useNotification } from '../../../../utils';
+import { commaFormatted, useNotification } from '../../../../utils';
 import {
   ProjectReward,
   RewardCurrency,
@@ -223,7 +223,7 @@ export const RewardAdditionModal = ({
     }
 
     if (!rewards.current.cost || rewards.current.cost <= 0) {
-      errors.cost = `Cost must be greater than 0 USD Cents.`;
+      errors.cost = `Cost must be greater than 0.`;
       isValid = false;
     }
 
@@ -231,7 +231,9 @@ export const RewardAdditionModal = ({
       formCostDollarValue * 100 >
       ProjectRewardValidations.cost.maxUSDCentsAmount
     ) {
-      errors.cost = `Cost must be less than ${ProjectRewardValidations.cost.maxUSDCentsAmount} USD Cents.`;
+      errors.cost = `Cost must be less than $${commaFormatted(
+        ProjectRewardValidations.cost.maxUSDCentsAmount / 100,
+      )}.`;
       isValid = false;
     }
 
