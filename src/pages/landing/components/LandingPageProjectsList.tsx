@@ -3,21 +3,43 @@ import { List, ListItem } from '@chakra-ui/react';
 import { AlertBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { LandingPageProjectsListItem } from './LandingPageProjectsListItem';
-import { useProjects } from '../../../hooks';
-import { OrderByOptions, Project } from '../../../types/generated/graphql';
+import {
+  OrderByOptions,
+  Project,
+  ProjectsGetQueryInput,
+} from '../../../types/generated/graphql';
+import { useQuery } from '@apollo/client';
+import { QUERY_PROJECTS } from '../../../graphql';
 
 type Props = {
   itemLimit?: number;
 };
 
+type ResponseData = {
+  projects: {
+    projects: Project[];
+  };
+};
+
+type QueryVariables = {
+  input: ProjectsGetQueryInput;
+};
+
 export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
   const {
-    isLoading,
+    data: projectsResponseData,
     error,
-    data: projects,
-  } = useProjects({
-    itemLimit,
-    orderBy: [{ balance: OrderByOptions.Desc }],
+    loading: isLoading,
+  } = useQuery<ResponseData, QueryVariables>(QUERY_PROJECTS, {
+    variables: {
+      input: {
+        pagination: {
+          take: itemLimit,
+        },
+        orderBy: [{ balance: OrderByOptions.Desc }],
+      },
+    },
+    fetchPolicy: 'no-cache',
   });
 
   if (error) {
@@ -34,6 +56,8 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
   if (isLoading) {
     return <Loader />;
   }
+
+  const projects = projectsResponseData?.projects.projects || [];
 
   if (projects.length === 0) {
     return (
@@ -52,7 +76,7 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
       {isLoading && <Loader />}
 
       <List spacing={3}>
-        {projects.map((project: Project) => (
+        {projects.slice(0, itemLimit - 1).map((project: Project) => (
           <ListItem key={project.id} justifyContent="center" cursor="pointer">
             <LandingPageProjectsListItem project={project} />
           </ListItem>
