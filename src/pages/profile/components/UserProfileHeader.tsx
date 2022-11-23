@@ -89,7 +89,7 @@ export const UserProfilePageHeader = ({
         {profileUser.externalAccounts.map((account) => {
           if (account) {
             return (
-              <WrapItem alignSelf={'center'}>
+              <WrapItem alignSelf={'center'} key={account.id}>
                 {account.type === 'lnurl' ? (
                   <HStack spacing={1.5}>
                     <BsLightningChargeFill />
