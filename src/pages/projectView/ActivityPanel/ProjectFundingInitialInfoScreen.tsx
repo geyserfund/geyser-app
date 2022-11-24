@@ -19,26 +19,26 @@ import {
 import { IFundingTx, IFunder } from '../../../interfaces';
 import { Project } from '../../../types/generated/graphql';
 
-interface IInfoPage {
+type Props = {
   project: Project;
   handleViewClick: () => void;
-  handleFundProject: () => void;
+  onFundProjectTapped: () => void;
   loading: boolean;
   btcRate: number;
   fundingTxs: IFundingTx[];
   funders: IFunder[];
   test?: boolean;
-}
+};
 
-export const InfoPage = ({
+export const ProjectFundingInitialInfoScreen = ({
   handleViewClick,
-  handleFundProject,
+  onFundProjectTapped,
   loading,
   project,
   fundingTxs,
   funders,
   test,
-}: IInfoPage) => {
+}: Props) => {
   const isMobile = isMobileMode();
   const [view, setView] = useState('activity');
 
@@ -81,7 +81,7 @@ export const InfoPage = ({
           backgroundColor={
             project.active ? 'brand.primary' : 'brand.grayPlaceholder'
           }
-          onClick={handleFundProject}
+          onClick={onFundProjectTapped}
           isDisabled={project.active === false}
         >
           Contribute
@@ -89,7 +89,7 @@ export const InfoPage = ({
       ) : null}
 
       <ProjectActivityActionsToolbar
-        fundButtonFunction={handleFundProject}
+        fundButtonFunction={onFundProjectTapped}
         transitionButtonFunction={handleViewClick}
       />
 
