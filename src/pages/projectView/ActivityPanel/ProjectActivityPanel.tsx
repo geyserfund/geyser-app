@@ -9,14 +9,18 @@ import {
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
 import { SuccessScreen } from './SuccessScreen';
-import { QRPage } from './QRPage';
+import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
 import { isMobileMode, useNotification } from '../../../utils';
-import { FundingPaymentScreen } from './FundingPaymentScreen';
+import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
+
 import { AuthContext } from '../../../context';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
 import { useStyles } from './styles';
-import { InfoPage, InfoPageSkeleton } from './InfoPage';
+import {
+  ProjectFundingInitialInfoScreen,
+  InfoPageSkeleton,
+} from './ProjectFundingInitialInfoScreen';
 import { fundingStages } from '../../../constants';
 import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
@@ -69,6 +73,7 @@ export const ProjectActivityPanel = ({
     resetFundingFlow,
     requestFunding,
   } = fundingFlow;
+
   const {
     isOpen: loginIsOpen,
     onOpen: loginOnOpen,
@@ -124,7 +129,7 @@ export const ProjectActivityPanel = ({
     }
   }, [formState.anonymous]);
 
-  const handleFundProject = () => {
+  const handleFundProjectButtonTapped = () => {
     gotoNextStage();
   };
 
@@ -205,11 +210,11 @@ export const ProjectActivityPanel = ({
     switch (fundState) {
       case fundingStages.initial:
         return (
-          <InfoPage
+          <ProjectFundingInitialInfoScreen
             {...{
               project,
               handleViewClick,
-              handleFundProject,
+              onFundProjectTapped: handleFundProjectButtonTapped,
               loading,
               btcRate,
               fundingTxs,
@@ -220,7 +225,7 @@ export const ProjectActivityPanel = ({
         );
       case fundingStages.form:
         return (
-          <FundingPaymentScreen
+          <ProjectFundingSelectionFormScreen
             {...{
               fundLoading,
               isMobile,
@@ -240,10 +245,10 @@ export const ProjectActivityPanel = ({
         );
       case fundingStages.started:
         return (
-          <QRPage
+          <ProjectFundingQRScreen
             state={formState}
             project={project}
-            fundingTx={fundingTx}
+            fundingFlow={fundingFlow}
             amounts={amounts}
             handleCloseButton={handleCloseButton}
           />

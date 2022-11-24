@@ -9,13 +9,17 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { Card, SatoshiAmount, ProjectStatusLabel } from '../../components/ui';
-import { LightningQR } from './components/LightningQR';
-import { BoltIcon, ShareIcon, AmbossIcon } from '../../components/icons';
-import { AvatarElement } from './components/AvatarElement';
-import { useAuthContext } from '../../context';
-import { Project } from '../../types/generated/graphql';
-import { getPath, HomeUrl, AmbossUrl } from '../../constants';
+import {
+  Card,
+  SatoshiAmount,
+  ProjectStatusLabel,
+} from '../../../components/ui';
+import { ProjectLightningQR } from './ProjectLightningQR';
+import { BoltIcon, ShareIcon, AmbossIcon } from '../../../components/icons';
+import { AvatarElement } from './AvatarElement';
+import { useAuthContext } from '../../../context';
+import { Project } from '../../../types/generated/graphql';
+import { getPath, HomeUrl, AmbossUrl } from '../../../constants';
 
 export const ProjectDetailsCard = ({
   project,
@@ -103,16 +107,18 @@ export const ProjectDetailsCard = ({
   return (
     <Card padding="24px">
       <VStack alignItems="flex-start" width="100%" spacing="18px">
-        <Box width="100%" overflow="hidden">
-          <Image
-            borderRadius="4px"
-            width="100%"
-            height="100%"
-            src={project.image || ''}
-            maxH="210px"
-            objectFit="cover"
-          />
-        </Box>
+        {project.image ? (
+          <Box width="100%" overflow="hidden">
+            <Image
+              borderRadius="4px"
+              width="100%"
+              height="100%"
+              src={project.image || ''}
+              maxH="210px"
+              objectFit="cover"
+            />
+          </Box>
+        ) : null}
 
         <VStack width="100%" spacing={0} alignItems="flex-start">
           <HStack justifyContent="space-between" width="100%">
@@ -128,7 +134,7 @@ export const ProjectDetailsCard = ({
             alignItems="center"
             spacing={1}
           >
-            <LightningQR project={project} />
+            <ProjectLightningQR project={project} />
 
             <Tooltip
               label={hasCopiedSharingLink ? 'Copied!' : 'Share Project'}
@@ -171,7 +177,6 @@ export const ProjectDetailsCard = ({
             )}
           </HStack>
         </VStack>
-
         <HStack>
           <Text color="brand.neutral600">Creator</Text>
           <AvatarElement user={owner.user} />
@@ -189,7 +194,6 @@ export const ProjectDetailsCard = ({
             {renderYourFunding()}
           </HStack>
         )}
-
         <Button
           isFullWidth
           backgroundColor={

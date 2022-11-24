@@ -122,7 +122,7 @@ export const ProjectFundingContributionsFeedItem = ({
           {/* Timestamp and Funded-Project Info */}
 
           <HStack color="brand.neutral700" spacing={2}>
-            <Text fontSize={'xs'}>
+            <Text fontSize={'xs'} noOfLines={1}>
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
             </Text>
