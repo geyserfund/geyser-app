@@ -8,14 +8,14 @@ import {
 import html2canvas from 'html2canvas';
 import React, { useState } from 'react';
 import { BoltIcon, QrIcon } from '../../../components/icons';
-import { QRModal } from './QRModal';
+import { ProjectFundingQRModal } from './ProjectFundingQRModal';
 import { Project } from '../../../types/generated/graphql';
 
 interface ILightningQR {
   project: Project;
 }
 
-export const LightningQR = ({ project }: ILightningQR) => {
+export const ProjectLightningQR = ({ project }: ILightningQR) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name } = project;
 
@@ -85,7 +85,7 @@ export const LightningQR = ({ project }: ILightningQR) => {
         </Tooltip>
       </HStack>
 
-      <QRModal
+      <ProjectFundingQRModal
         isOpen={isOpen}
         onClose={onClose}
         setCopy={setCopy}

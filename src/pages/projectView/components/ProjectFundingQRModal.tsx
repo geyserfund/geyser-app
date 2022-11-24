@@ -44,7 +44,7 @@ interface IQRModal {
   imageDownload: string;
 }
 
-export const QRModal = ({
+export const ProjectFundingQRModal = ({
   isOpen,
   onClose,
   name,

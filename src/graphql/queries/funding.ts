@@ -62,11 +62,3 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
     }
   }
 `;
-
-export const QUERY_GET_FUNDING_STATUS = gql`
-  query GetFundingTxStatus($id: BigInt!) {
-    fundingTx(id: $id) {
-      status
-    }
-  }
-`;

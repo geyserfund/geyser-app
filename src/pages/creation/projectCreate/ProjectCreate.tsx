@@ -44,11 +44,11 @@ import { ProjectValidations } from '../../../constants/validations/project';
 import { UserValidations } from '../../../constants/validations';
 
 type CreateProjectMutationResponseData = {
-  createProject: Project | null;
+  createdProject: Project | null;
 };
 
 type UpdateProjectMutationResponseData = {
-  updateProject: Project | null;
+  updatedProject: Project | null;
 };
 
 const useStyles = createUseStyles({
@@ -84,7 +84,7 @@ export const ProjectCreate = () => {
     CreateProjectMutationResponseData,
     { input: ProjectCreationVariables }
   >(MUTATION_CREATE_PROJECT, {
-    onCompleted({ createProject: createdProject }) {
+    onCompleted({ createdProject }) {
       if (createdProject && createdProject.owners[0]) {
         const newOwnershipInfo = user.ownerOf.concat([
           {
