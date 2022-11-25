@@ -44,11 +44,11 @@ import { ProjectValidations } from '../../../constants/validations/project';
 import { UserValidations } from '../../../constants/validations';
 
 type CreateProjectMutationResponseData = {
-  createdProject: Project | null;
+  createProject: Project | null;
 };
 
 type UpdateProjectMutationResponseData = {
-  updatedProject: Project | null;
+  updateProject: Project | null;
 };
 
 const useStyles = createUseStyles({
@@ -84,7 +84,7 @@ export const ProjectCreate = () => {
     CreateProjectMutationResponseData,
     { input: ProjectCreationVariables }
   >(MUTATION_CREATE_PROJECT, {
-    onCompleted({ createdProject }) {
+    onCompleted({ createProject: createdProject }) {
       if (createdProject && createdProject.owners[0]) {
         const newOwnershipInfo = user.ownerOf.concat([
           {
@@ -100,7 +100,9 @@ export const ProjectCreate = () => {
           },
         });
 
-        history.push(`/launch/${createdProject.id}/milestones`);
+        history.push(
+          getPath('launchProjectWithMilestonesAndRewards', createdProject.id),
+        );
       }
     },
     onError(error) {
