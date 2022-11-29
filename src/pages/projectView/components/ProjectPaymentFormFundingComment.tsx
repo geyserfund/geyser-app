@@ -71,6 +71,7 @@ export const ProjectPaymentFormFundingComment = ({
           name="comment"
           borderWidth={'2px'}
           borderColor={'brand.primary500'}
+          backgroundColor={'brand.bgWhite'}
           onChange={setTarget}
         />
 
