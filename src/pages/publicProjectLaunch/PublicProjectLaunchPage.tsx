@@ -111,10 +111,7 @@ export const PublicProjectLaunchPage = () => {
                 <ListItem>Reward your contributors with perks</ListItem>
                 <ListItem>Keep community up to date with entries</ListItem>
                 <ListItem>Keep ownership of your funds</ListItem>
-                <ListItem>No creator fees (alpha)</ListItem>
-                <ListItem color={colors.neutral500}>
-                  Gain subscribers (soon)
-                </ListItem>
+                <ListItem>Geyser tip of 2% paid by contributors</ListItem>
               </UnorderedList>
 
               {!loading ? (
