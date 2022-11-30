@@ -22,6 +22,7 @@ import {
 } from '../../../components/ui';
 import {
   isMobileMode,
+  knownLNURLDomains,
   lightningAddressToEvaluationURL,
   validateEmail,
 } from '../../../utils';
@@ -186,11 +187,15 @@ export const ProjectCreationWalletConnectionForm = ({
   };
 
   const evaluateLightningAddress = async (lightningAddress: string) => {
+    if (lightningAddress.length === 0) {
+      return;
+    }
+
+    setLnAddressEvaluationState(LNAddressEvaluationState.LOADING);
+
     const evaluationURL = lightningAddressToEvaluationURL(lightningAddress);
 
     try {
-      setLnAddressEvaluationState(LNAddressEvaluationState.LOADING);
-
       const response = await fetch(evaluationURL);
 
       if (response.ok) {
@@ -202,14 +207,26 @@ export const ProjectCreationWalletConnectionForm = ({
         setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
       }
     } catch (_) {
-      setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
-      setLightningAddressFormError(
-        'We could not validate this as a working Lightning Address.',
-      );
+      if (
+        knownLNURLDomains.some((hostname) => {
+          return lightningAddress.endsWith(hostname);
+        })
+      ) {
+        setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED);
+      } else {
+        setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
+        setLightningAddressFormError(
+          'We could not validate this as a working Lightning Address.',
+        );
+      }
     }
   };
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
+    if (lightningAddress.length === 0) {
+      setLightningAddressFormError(`Lightning Address can't be empty.`);
+    }
+
     if (lightningAddress.endsWith('@geyser.fund')) {
       setLightningAddressFormError(
         `Custom Lightning Addresses can't end with "@geyser.fund".`,
@@ -218,7 +235,6 @@ export const ProjectCreationWalletConnectionForm = ({
       setLightningAddressFormError(
         `Please use a valid email-formatted address for your Lightning Address.`,
       );
-    } else {
       setLightningAddressFormError(null);
     }
   };
