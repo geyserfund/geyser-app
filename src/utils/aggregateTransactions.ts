@@ -24,7 +24,7 @@ export const aggregateTransactions = (
         f1.amount === f2.amount &&
         f1.address === f2.address
       ) {
-        if (matches.some((match) => match.paidAt - f2.paidAt <= 60000)) {
+        if (matches.some((match) => match.paidAt - f2.paidAt <= 75000)) {
           matches.push(f2);
         }
       }
