@@ -2,11 +2,16 @@ const express = require('express');
 const handler = require('serve-handler');
 const prerender = require('prerender-node');
 
-console.log(`ENV VAR CHECK:\n\tPORT: ${process.env.PORT}\n\PRERENDER_TOKEN: not null -> ${Boolean(process.env.PRERENDER_TOKEN)}`);
+console.log(
+  `ENV VAR CHECK:\n\tPORT: ${
+    process.env.PORT
+  }\n\PRERENDER_TOKEN: not null -> ${Boolean(process.env.PRERENDER_TOKEN)}`,
+);
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+app.use(
   prerender
     .set('prerenderToken', process.env.PRERENDER_TOKEN)
     .set('afterRender', (err) => {
