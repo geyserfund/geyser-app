@@ -16,3 +16,4 @@ export * from './ln-url';
 export * from './hasTwitterAccount';
 export * from './testImage';
 export * from './regex';
+export * from './aggregateTransactions';

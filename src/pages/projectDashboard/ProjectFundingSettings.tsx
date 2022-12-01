@@ -8,7 +8,7 @@ import {
   Image,
   Link,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { AiOutlineSetting } from 'react-icons/ai';
 import VoltageLogoSmall from '../../assets/voltage-logo-small.svg';
 import { BiPencil } from 'react-icons/bi';
@@ -19,8 +19,13 @@ import { IProject } from '../../interfaces';
 import { useNotification } from '../../utils';
 import { TNodeInput } from '../creation/projectCreate/types';
 import { NodeAdditionModal } from '../creation/projectCreate/components/NodeAdditionModal';
+import {
+  LightningAddressConnectionDetails,
+  Wallet,
+} from '../../types/generated/graphql';
+import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView';
 
-export const NodeSettings = ({ project }: { project: IProject }) => {
+export const ProjectFundingSettings = ({ project }: { project: IProject }) => {
   const { toast } = useNotification();
   const [nodeData, setNodeData] = useState<TNodeInput>();
 
@@ -69,7 +74,32 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
     }
   };
 
-  const node = project.wallets && project.wallets[0];
+  // const node = project.wallets && project.wallets[0];
+
+  const projectWallet: Wallet | undefined = useMemo(() => {
+    return project.wallets && project.wallets[0];
+  }, [project.wallets]);
+
+  const projectLightningAddress: string | undefined = useMemo(() => {
+    project.wallets?.forEach((wallet: Wallet) => {
+      if (wallet.connectionDetails as LightningAddressConnectionDetails) {
+        return (wallet.connectionDetails as LightningAddressConnectionDetails)
+          .lightningAddress;
+      }
+    });
+
+    return undefined;
+  }, [project.wallets]);
+
+  if (projectLightningAddress) {
+    return (
+      <GridItem colSpan={8} display="flex" justifyContent="center">
+        <ProjectFundingSettingsLightningAddressView
+          lightningAddress={projectLightningAddress}
+        />
+      </GridItem>
+    );
+  }
 
   return (
     <>
@@ -85,7 +115,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
           alignItems="center"
         >
           <VStack w="100%" spacing="40px">
-            {!node && (
+            {!projectWallet && (
               <VStack width="100%" alignItems="flex-start">
                 <Text>Connect your node</Text>
                 <ButtonComponent isFullWidth onClick={openWallet}>
@@ -130,7 +160,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
                 spacing="10px"
                 paddingY="80px"
               >
-                {node && node.name && (
+                {projectWallet && projectWallet.name && (
                   <VStack
                     width="100%"
                     border="1px solid"
@@ -140,7 +170,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
                     padding="10px"
                   >
                     <HStack width="100%" justifyContent="space-between">
-                      <Text fontWeight={500}>{node?.name}</Text>
+                      <Text fontWeight={500}>{projectWallet?.name}</Text>
                       <IconButtonComponent
                         aria-label="edit-node"
                         icon={<BiPencil />}
@@ -156,7 +186,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
                 )}
               </VStack>
             )}
-            {node && node.name && (
+            {projectWallet && projectWallet.name && (
               <>
                 <VStack
                   width="100%"
@@ -167,7 +197,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
                   padding="10px"
                 >
                   <HStack width="100%" justifyContent="space-between">
-                    <Text fontWeight={500}>{node?.name}</Text>
+                    <Text fontWeight={500}>{projectWallet?.name}</Text>
                   </HStack>
 
                   <VStack width="100%" alignItems="flex-start">
@@ -177,7 +207,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
                       color="brand.neutral700"
                       fontSize="12px"
                     >
-                      {node?.connectionDetails.hostname}
+                      {projectWallet?.connectionDetails.hostname}
                     </Text>
                   </VStack>
 
@@ -188,13 +218,13 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
                       color="brand.neutral700"
                       fontSize="12px"
                     >
-                      {node?.connectionDetails.pubkey}
+                      {projectWallet?.connectionDetails.pubkey}
                     </Text>
                   </VStack>
                   <VStack width="100%" alignItems="flex-start" flexWrap="wrap">
                     <Text color="brand.neutral700">Invoice Macaroon</Text>
                     <Text wordBreak="break-all">
-                      {node?.connectionDetails.macaroon}
+                      {projectWallet?.connectionDetails.macaroon}
                     </Text>
                   </VStack>
                   <VStack width="100%" alignItems="flex-start">
@@ -204,7 +234,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
                       color="brand.neutral700"
                       fontSize="12px"
                     >
-                      {node?.connectionDetails.tlsCertificate}
+                      {projectWallet?.connectionDetails.tlsCertificate}
                     </Text>
                   </VStack>
                   <VStack width="100%" alignItems="flex-start">
@@ -214,7 +244,7 @@ export const NodeSettings = ({ project }: { project: IProject }) => {
                       color="brand.neutral700"
                       fontSize="12px"
                     >
-                      {node?.connectionDetails.grpcPort}
+                      {projectWallet?.connectionDetails.grpcPort}
                     </Text>
                   </VStack>
                 </VStack>

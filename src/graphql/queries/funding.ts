@@ -39,6 +39,7 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
       comment
       amount
       funder {
+        id
         user {
           id
           username
