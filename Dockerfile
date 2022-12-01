@@ -29,7 +29,7 @@ FROM dependencies AS build
 WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
-COPY server.ts tsconfig.json .eslintrc.js .prettierrc ./
+COPY tsconfig.json .eslintrc.js .prettierrc ./
 
 ARG REACT_APP_API_ENDPOINT
 ARG REACT_APP_AIR_TABLE_KEY
@@ -44,7 +44,7 @@ RUN rm -rf ./src
 FROM base AS production
 
 WORKDIR /usr/app
-COPY package.json yarn.lock ./
+COPY server.ts package.json yarn.lock ./
 
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
