@@ -228,12 +228,14 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
         title
         published
         publishedAt
+        status
       }
       publishedEntries: entries(input: { where: { published: true } }) {
         id
         title
         published
         publishedAt
+        status
       }
       statistics {
         totalVisitors
