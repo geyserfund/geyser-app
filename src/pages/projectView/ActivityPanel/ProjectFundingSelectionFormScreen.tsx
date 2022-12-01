@@ -21,7 +21,6 @@ import { IProjectType } from '../../../interfaces';
 import { useNotification } from '../../../utils';
 import { ProjectReward } from '../../../types/generated/graphql';
 import { FundingFormSection } from '../FundingFormSection';
-import { useBtcContext } from '../../../context/btc';
 import { ProjectPaymentFormFundingComment } from '../components/ProjectPaymentFormFundingComment';
 
 type Props = {
@@ -50,7 +49,7 @@ export const ProjectFundingSelectionFormScreen = ({
   rewards,
   name,
 }: Props) => {
-  const { getTotalAmount, getRewardsQuantity } = useFundCalc(formState);
+  const { getTotalAmount } = useFundCalc(formState);
 
   const { toast } = useNotification();
   const hasRewards = rewards && rewards.length > 0;
@@ -169,16 +168,21 @@ export const ProjectFundingSelectionFormScreen = ({
           spacing={2}
         >
           {hasRewards ? (
-            <HStack justifyContent={'space-between'} width={'full'}>
+            <HStack
+              justifyContent={'space-between'}
+              width={'full'}
+              alignItems="flex-start"
+              fontWeight={300}
+              color="brand.neutral700"
+            >
               <Text flex={0}>Rewards</Text>
 
-              <VStack flex={1} flexWrap={'wrap'}>
+              <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
                 {rewards.map((reward: ProjectReward) => {
                   return (
-                    <>
-                      <Text>{reward.name}</Text>
-                      <Text>{', '}</Text>
-                    </>
+                    <Text key={reward.id}>
+                      {reward.stock ?? 0}x {reward.name}
+                    </Text>
                   );
                 })}
               </VStack>
@@ -188,17 +192,10 @@ export const ProjectFundingSelectionFormScreen = ({
           <HStack
             justifyContent={'space-between'}
             width={'full'}
-            fontSize={'10px'}
+            fontSize={'14px'}
           >
-            <Text>{'Includes a 2% Geyser tip'}</Text>
-
-            <SatoshiAmount
-              color="#1A1A1A"
-              fontWeight="bold"
-              marginLeft={'auto'}
-            >
-              {(getTotalAmount('sats', name) * 0.02).toFixed(0)}
-            </SatoshiAmount>
+            <Text>{'Geyser tip'}</Text>
+            <Text>{'2%'}</Text>
           </HStack>
 
           <HStack

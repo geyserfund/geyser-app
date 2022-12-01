@@ -49,6 +49,7 @@ export const ContributionInfoBox = ({
   ...rest
 }: Props) => {
   const styles = useStyles();
+
   const rewardNameString: string = useMemo(() => {
     let nameString = '';
 
@@ -95,6 +96,20 @@ export const ContributionInfoBox = ({
         >
           {contributionAmount}
         </SatoshiAmount>
+
+        <HStack>
+          <Text fontSize="10px" textColor={'brand.neutral700'} fontWeight={300}>
+            Geyser Tip
+          </Text>
+
+          <SatoshiAmount
+            fontSize="10px"
+            textColor={'brand.neutral700'}
+            fontWeight={300}
+          >
+            {Math.round(contributionAmount * 0.02)}
+          </SatoshiAmount>
+        </HStack>
 
         <Divider className={styles.divider} orientation="horizontal" />
 

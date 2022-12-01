@@ -157,9 +157,13 @@ export const ProjectFundingQRScreenQRCodeSection = ({
   }, [qrDisplayState]);
 
   const handleCopyButtonTapped = () => {
+    navigator.clipboard.writeText(paymentRequest);
+
     setHasCopiedQRCode(true);
 
-    navigator.clipboard.writeText(paymentRequest);
+    setTimeout(() => {
+      setHasCopiedQRCode(false);
+    }, 2000);
   };
 
   const handleRefreshButtonTapped = () => {
@@ -238,9 +242,9 @@ export const ProjectFundingQRScreenQRCodeSection = ({
               fgColor={qrForegroundColor}
               qrStyle="dots"
               logoImage={hasCopiedQRCode ? LogoPrimary : LogoDark}
-              logoHeight={60}
-              logoWidth={60}
-              eyeRadius={4}
+              logoHeight={40}
+              logoWidth={40}
+              eyeRadius={2}
               removeQrCodeBehindLogo={true}
             />
           </Box>

@@ -223,8 +223,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const requestFunding = async (input: FundingInput) => {
     try {
-      await fundProject({ variables: { input } });
       gotoNextStage();
+      await fundProject({ variables: { input } });
     } catch (_) {
       toast({
         title: 'Something went wrong',
