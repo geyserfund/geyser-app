@@ -110,7 +110,7 @@ With Docker running, navigate to the URL that's appropriate for the development-
 >
 > This will allow you to get around any `ERR_CERT_AUTHORITY_INVALID` errors that may be thrown in your browser.
 
-> See [the docs on `GraphQL Faker Tips & Tricks`](./faker/docs/TipsAndTricks.md) for more useful tidbits of information on running/developing the app against Faker.
+> See [the docs on `GraphQL Faker Tips & Tricks`](./docs/faker/TipsAndTricks.md) for more useful tidbits of information on running/developing the app against Faker.
 
 ### Debugging on a Mobile Device
 

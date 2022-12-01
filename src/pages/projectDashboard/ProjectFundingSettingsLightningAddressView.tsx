@@ -1,6 +1,6 @@
 import { Container, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { TextBox } from '../../components/ui';
+import { TextInputBox } from '../../components/ui/TextInputBox';
 
 type Props = {
   lightningAddress: string;
@@ -21,7 +21,7 @@ export const ProjectFundingSettingsLightningAddressView = ({
             Lightning Address
           </Text>
 
-          <TextBox
+          <TextInputBox
             name="lightning-address"
             type={'email'}
             placeholder={'Lightning Address'}

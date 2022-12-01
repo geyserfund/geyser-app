@@ -1,3 +1,4 @@
 export * from './ProjectCreate';
 export * from './MilestoneAndRewards';
-export * from './Wallet';
+export * from './ProjectCreationWalletConnectionForm';
+export * from './ProjectCreationWalletConnectionPage';

@@ -1,11 +1,11 @@
 import { Link, LinkProps } from '@chakra-ui/react';
 import React from 'react';
 
-interface ILinkin extends LinkProps {
+type Props = LinkProps & {
   children: any;
-}
+};
 
-export const Linkin = ({ children, ...rest }: ILinkin) => (
+export const UndecoratedLink = ({ children, ...rest }: Props) => (
   <Link {...rest} _hover={{ textDecoration: 'none' }}>
     {children}
   </Link>

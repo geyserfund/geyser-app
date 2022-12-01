@@ -34,5 +34,33 @@ export const theme = extendTheme({
         },
       },
     },
+    Radio: {
+      variants: {
+        primary: ({ colorScheme = 'primary' }) => ({
+          color: `brand.${colorScheme}400`,
+          control: {
+            _checked: {
+              color: `brand.${colorScheme}400`,
+              _before: {
+                width: '90%',
+                height: '90%',
+              },
+            },
+            _before: {
+              width: '90%',
+              height: '90%',
+            },
+            _focus: {
+              ring: 2,
+              ringColor: `brand.${colorScheme}500`,
+            },
+          },
+        }),
+      },
+      defaultProps: {
+        variant: 'primary',
+        colorScheme: 'primary',
+      },
+    },
   },
 });

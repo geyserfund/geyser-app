@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules';
-import { ButtonComponent, TextBox } from '../../../../components/ui';
+import { ButtonComponent, TextInputBox } from '../../../../components/ui';
 import { colors } from '../../../../constants';
 import { MilestoneValidations } from '../../../../constants/validations';
 import {
@@ -308,7 +308,7 @@ export const MilestoneAdditionModal = ({
                     <CloseIcon fontSize="10px" />
                   </ButtonComponent>
                 </HStack>
-                <TextBox
+                <TextInputBox
                   placeholder={'Enter a Milestone Title'}
                   value={milestone.name}
                   onChange={(event: any) => handleTextChange(event, index)}
