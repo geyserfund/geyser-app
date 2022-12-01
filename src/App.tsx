@@ -8,18 +8,16 @@ import { Head } from './utils/Head';
 import { Router as BrowserRouter } from 'react-router-dom';
 
 export const App = () => (
-  <>
-    <Head />
-    <ChakraProvider theme={theme}>
-      <BrowserRouter history={customHistory}>
-        <ApolloProvider client={client}>
-          <AuthProvider>
-            <BtcProvider>
-              <Router />
-            </BtcProvider>
-          </AuthProvider>
-        </ApolloProvider>
-      </BrowserRouter>
-    </ChakraProvider>
-  </>
+  <ChakraProvider theme={theme}>
+    <BrowserRouter history={customHistory}>
+      <ApolloProvider client={client}>
+        <AuthProvider>
+          <BtcProvider>
+            <Head />
+            <Router />
+          </BtcProvider>
+        </AuthProvider>
+      </ApolloProvider>
+    </BrowserRouter>
+  </ChakraProvider>
 );
