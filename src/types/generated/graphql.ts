@@ -45,7 +45,6 @@ export type Scalars = {
   name_String_NotNull_maxLength_100: any;
   name_String_NotNull_minLength_3_maxLength_60: any;
   name_String_NotNull_minLength_3_maxLength_280: any;
-  name_String_NotNull_minLength_5_maxLength_60: any;
   name_String_maxLength_100: any;
   name_String_minLength_3_maxLength_280: any;
   name_String_minLength_5_maxLength_60: any;
@@ -1137,7 +1136,7 @@ export type Wallet = {
   connectionDetails: ConnectionDetails;
   id: Scalars['BigInt'];
   /** Wallet name */
-  name: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
+  name?: Maybe<Scalars['name_String_minLength_5_maxLength_60']>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1416,9 +1415,6 @@ export type ResolversTypes = {
   name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<
     Scalars['name_String_NotNull_minLength_3_maxLength_280']
   >;
-  name_String_NotNull_minLength_5_maxLength_60: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_5_maxLength_60']
-  >;
   name_String_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_maxLength_100']
   >;
@@ -1581,7 +1577,6 @@ export type ResolversParentTypes = {
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
-  name_String_NotNull_minLength_5_maxLength_60: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
   name_String_maxLength_100: Scalars['name_String_maxLength_100'];
   name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280'];
   name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60'];
@@ -2531,7 +2526,7 @@ export type WalletResolvers<
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
+    Maybe<ResolversTypes['name_String_minLength_5_maxLength_60']>,
     ParentType,
     ContextType
   >;
@@ -2661,14 +2656,6 @@ export interface Name_String_NotNull_MinLength_3_MaxLength_280ScalarConfig
     any
   > {
   name: 'name_String_NotNull_minLength_3_maxLength_280';
-}
-
-export interface Name_String_NotNull_MinLength_5_MaxLength_60ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
-    any
-  > {
-  name: 'name_String_NotNull_minLength_5_maxLength_60';
 }
 
 export interface Name_String_MaxLength_100ScalarConfig
@@ -2812,7 +2799,6 @@ export type Resolvers<ContextType = any> = {
   name_String_NotNull_maxLength_100?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_60?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_280?: GraphQLScalarType;
-  name_String_NotNull_minLength_5_maxLength_60?: GraphQLScalarType;
   name_String_maxLength_100?: GraphQLScalarType;
   name_String_minLength_3_maxLength_280?: GraphQLScalarType;
   name_String_minLength_5_maxLength_60?: GraphQLScalarType;

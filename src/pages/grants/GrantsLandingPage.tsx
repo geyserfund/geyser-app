@@ -13,7 +13,11 @@ import { fonts } from '../../constants/fonts';
 import { ButtonComponent } from '../../components/ui';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { projectTypes } from '../../constants';
-import { Project, ProjectsGetQueryInput } from '../../types/generated/graphql';
+import {
+  Project,
+  ProjectsGetQueryInput,
+  ProjectType,
+} from '../../types/generated/graphql';
 
 type ResponseData = {
   projects: {
@@ -33,7 +37,7 @@ export const GrantsLandingPage = () => {
   const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
     QUERY_GRANTS,
     {
-      variables: { input: { where: { type: projectTypes.grant } } },
+      variables: { input: { where: { type: ProjectType.Grant } } },
     },
   );
 
