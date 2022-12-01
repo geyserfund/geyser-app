@@ -29,7 +29,7 @@ FROM dependencies AS build
 WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
-COPY tsconfig.json .eslintrc.js .prettierrc ./
+COPY server.ts tsconfig.json .eslintrc.js .prettierrc ./
 
 ARG REACT_APP_API_ENDPOINT
 ARG REACT_APP_AIR_TABLE_KEY
