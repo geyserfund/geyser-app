@@ -456,6 +456,12 @@ export type LightningAddressConnectionDetailsUpdateInput = {
   walletId: Scalars['BigInt'];
 };
 
+export type LightningAddressVerifyResponse = {
+  __typename?: 'LightningAddressVerifyResponse';
+  reason?: Maybe<Scalars['String']>;
+  valid: Scalars['Boolean'];
+};
+
 export type LndConnectionDetails = {
   /** Port where the gRPC calls should be made. */
   grpcPort: Scalars['Int'];
@@ -849,7 +855,7 @@ export type ProjectsSummary = {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
-  entry: Entry;
+  entry?: Maybe<Entry>;
   fundingTx: FundingTx;
   /** Returns all published entries. */
   getEntries: Array<Maybe<Entry>>;
@@ -861,6 +867,7 @@ export type Query = {
   getProjectRewards: Array<Maybe<ProjectReward>>;
   getSignedUploadUrl: SignedUploadUrl;
   getWallet: Wallet;
+  lightningAddressVerify: LightningAddressVerifyResponse;
   me?: Maybe<User>;
   project?: Maybe<Project>;
   /** By default, returns a list of all active projects. */
@@ -909,6 +916,10 @@ export type QueryGetSignedUploadUrlArgs = {
 
 export type QueryGetWalletArgs = {
   id: Scalars['BigInt'];
+};
+
+export type QueryLightningAddressVerifyArgs = {
+  lightningAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryProjectArgs = {
@@ -1315,6 +1326,7 @@ export type ResolversTypes = {
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
+  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>;
   LndConnectionDetails: never;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
@@ -1511,6 +1523,7 @@ export type ResolversParentTypes = {
   LightningAddressConnectionDetails: LightningAddressConnectionDetails;
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
+  LightningAddressVerifyResponse: LightningAddressVerifyResponse;
   LndConnectionDetails: never;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
@@ -1891,6 +1904,15 @@ export type LightningAddressConnectionDetailsResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LightningAddressVerifyResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LightningAddressVerifyResponse'] = ResolversParentTypes['LightningAddressVerifyResponse'],
+> = {
+  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2334,7 +2356,7 @@ export type QueryResolvers<
 > = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   entry?: Resolver<
-    ResolversTypes['Entry'],
+    Maybe<ResolversTypes['Entry']>,
     ParentType,
     ContextType,
     RequireFields<QueryEntryArgs, 'id'>
@@ -2392,6 +2414,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryGetWalletArgs, 'id'>
+  >;
+  lightningAddressVerify?: Resolver<
+    ResolversTypes['LightningAddressVerifyResponse'],
+    ParentType,
+    ContextType,
+    Partial<QueryLightningAddressVerifyArgs>
   >;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   project?: Resolver<
@@ -2763,6 +2791,7 @@ export type Resolvers<ContextType = any> = {
   Grantee?: GranteeResolvers<ContextType>;
   GranteeSubmissionResponse?: GranteeSubmissionResponseResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
+  LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>;
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
   LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
   LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;

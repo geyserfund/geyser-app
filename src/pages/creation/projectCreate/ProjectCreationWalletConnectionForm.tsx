@@ -20,12 +20,7 @@ import {
   TextInputBox,
   UndecoratedLink,
 } from '../../../components/ui';
-import {
-  isMobileMode,
-  knownLNURLDomains,
-  lightningAddressToEvaluationURL,
-  validateEmail,
-} from '../../../utils';
+import { isMobileMode, validateEmail } from '../../../utils';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { TNodeInput } from './types';
 import { BiLeftArrowAlt, BiPencil, BiRocket } from 'react-icons/bi';
@@ -47,6 +42,7 @@ import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png';
 import {
   CreateWalletInput,
   FundingResourceType,
+  LightningAddressVerifyResponse,
   LndNodeType,
   Project,
   ResourceInput,
@@ -54,6 +50,7 @@ import {
 import Loader from '../../../components/ui/Loader';
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
 import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox';
+import { gql, useLazyQuery } from '@apollo/client';
 
 type Props = {
   project: Project;
@@ -80,6 +77,23 @@ enum LNAddressEvaluationState {
   FAILED = 'FAILED',
   SUCCEEDED = 'SUCCEEDED',
 }
+
+type LightningAddressVerificationQueryVariables = {
+  lightningAddress: string;
+};
+
+type LightningAddressVerificationResponseData = {
+  lightningAddressVerify: LightningAddressVerifyResponse;
+};
+
+export const QUERY_LIGHTNING_ADDRESS_EVALUATION = gql`
+  query LightningAddressVerify($lightningAddress: String) {
+    lightningAddressVerify(lightningAddress: $lightningAddress) {
+      reason
+      valid
+    }
+  }
+`;
 
 export const ProjectCreationWalletConnectionForm = ({
   project,
@@ -112,6 +126,26 @@ export const ProjectCreationWalletConnectionForm = ({
     onClose: onWalletClose,
     onOpen: openWallet,
   } = useDisclosure();
+
+  const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
+    useLazyQuery<
+      LightningAddressVerificationResponseData,
+      LightningAddressVerificationQueryVariables
+    >(QUERY_LIGHTNING_ADDRESS_EVALUATION, {
+      variables: {
+        lightningAddress: lightningAddressFormValue,
+      },
+      onCompleted({ lightningAddressVerify: { valid } }) {
+        if (Boolean(valid) === false) {
+          setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
+          setLightningAddressFormError(
+            'We could not validate this as a working Lightning Address.',
+          );
+        } else {
+          setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED);
+        }
+      },
+    });
 
   const createWalletInput: CreateWalletInput | null = useMemo(() => {
     const resourceInput: ResourceInput = {
@@ -173,10 +207,8 @@ export const ProjectCreationWalletConnectionForm = ({
   };
 
   const validateLightningAddress = async () => {
-    await validateLightningAddressFormat(lightningAddressFormValue);
-
     if (lightningAddressFormError === null) {
-      await evaluateLightningAddress(lightningAddressFormValue);
+      await evaluateLightningAddress();
     }
   };
 
@@ -186,48 +218,10 @@ export const ProjectCreationWalletConnectionForm = ({
     onProjectLaunchSelected(createWalletInput!);
   };
 
-  const evaluateLightningAddress = async (lightningAddress: string) => {
-    if (lightningAddress.length === 0) {
-      return;
-    }
-
-    setLnAddressEvaluationState(LNAddressEvaluationState.LOADING);
-
-    const evaluationURL = lightningAddressToEvaluationURL(lightningAddress);
-
-    try {
-      const response = await fetch(evaluationURL);
-
-      if (response.ok) {
-        setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED);
-      } else {
-        setLightningAddressFormError(
-          'We could not validate this as a working Lightning Address.',
-        );
-        setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
-      }
-    } catch (_) {
-      if (
-        knownLNURLDomains.some((hostname) => {
-          return lightningAddress.endsWith(hostname);
-        })
-      ) {
-        setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED);
-      } else {
-        setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
-        setLightningAddressFormError(
-          'We could not validate this as a working Lightning Address.',
-        );
-      }
-    }
-  };
-
   const validateLightningAddressFormat = async (lightningAddress: string) => {
     if (lightningAddress.length === 0) {
       setLightningAddressFormError(`Lightning Address can't be empty.`);
-    }
-
-    if (lightningAddress.endsWith('@geyser.fund')) {
+    } else if (lightningAddress.endsWith('@geyser.fund')) {
       setLightningAddressFormError(
         `Custom Lightning Addresses can't end with "@geyser.fund".`,
       );
@@ -235,11 +229,16 @@ export const ProjectCreationWalletConnectionForm = ({
       setLightningAddressFormError(
         `Please use a valid email-formatted address for your Lightning Address.`,
       );
+    } else {
       setLightningAddressFormError(null);
     }
   };
 
   const renderRightElementContent = () => {
+    if (isEvaluatingLightningAddress) {
+      return <Loader size="md"></Loader>;
+    }
+
     switch (lnAddressEvaluationState) {
       case LNAddressEvaluationState.IDLE:
         return null;
@@ -414,9 +413,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   isFullWidth
                   onClick={handleProjectLaunchSelected}
                   isLoading={
-                    isProcessingSubmission ||
-                    lnAddressEvaluationState ===
-                      LNAddressEvaluationState.LOADING
+                    isProcessingSubmission || isEvaluatingLightningAddress
                   }
                   disabled={isSubmitEnabled === false}
                 >
@@ -430,9 +427,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   isFullWidth
                   onClick={() => onSaveAsDraftSelected(createWalletInput!)}
                   isLoading={
-                    isProcessingSubmission ||
-                    lnAddressEvaluationState ===
-                      LNAddressEvaluationState.LOADING
+                    isProcessingSubmission || isEvaluatingLightningAddress
                   }
                   disabled={isSubmitEnabled === false}
                 >
