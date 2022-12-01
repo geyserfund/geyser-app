@@ -2,7 +2,7 @@ const express = require('express');
 const handler = require('serve-handler');
 const prerender = require('prerender-node');
 
-const PORT = process.env.port || 3001;
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(
