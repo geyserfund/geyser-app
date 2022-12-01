@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthModal } from '../../../components/molecules';
 import {
-  IFundingTx,
   IFundingInput,
   IRewardFundingInput,
   IFunder,
@@ -24,7 +23,11 @@ import {
 import { fundingStages } from '../../../constants';
 import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
-import { Project, ProjectReward } from '../../../types/generated/graphql';
+import {
+  FundingTx,
+  Project,
+  ProjectReward,
+} from '../../../types/generated/graphql';
 
 type Props = {
   project: Project;
@@ -52,7 +55,7 @@ export const ProjectActivityPanel = ({
   const isMobile = isMobileMode();
 
   // Required for activity (recent and leaderboard) visibility
-  const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);
+  const [fundingTxs, setFundingTxs] = useState<FundingTx[]>([]);
   const [funders, setFunders] = useState<IFunder[]>([]);
 
   // required for knowing the rewards and the funds
