@@ -3,19 +3,30 @@ import React from 'react';
 import { ApplyGrantModal } from './ApplyGrantModal';
 
 interface GrantsProp {
-  name: string;
   applicant: number;
+  title: string;
+  subtitle: string;
+  about: string;
+  image: string;
 }
-export const ApplyGrantCard = ({ name, applicant }: GrantsProp) => {
+export const ApplyGrantCard = ({
+  title,
+  subtitle,
+  about,
+  applicant,
+  image,
+}: GrantsProp) => {
   return (
     <Box rounded="md" borderWidth="1px" minWidth={'100%'}>
-      <Box bg="brand.primary50" height={'273px'}></Box>
+      <Box width={'100%'}>
+        <img src={image} width={'100%'} />
+      </Box>
       <Box px={4} py={2}>
         <Text fontWeight={'600'} fontSize="14px">
-          {name}
+          {title}
         </Text>
         <Text fontWeight={'300'} fontSize="13px">
-          ROUND 2: DECEMBER
+          {subtitle}
         </Text>
         <Box
           display="flex"
@@ -36,7 +47,13 @@ export const ApplyGrantCard = ({ name, applicant }: GrantsProp) => {
             APPLICANTS
           </Text>
 
-          <ApplyGrantModal />
+          <ApplyGrantModal
+            title={title}
+            subtitle={subtitle}
+            about={about}
+            applicant={applicant}
+            image={image}
+          />
         </Box>
       </Box>
     </Box>
