@@ -12,7 +12,7 @@ import {
   ButtonComponent,
   SatoshiAmount,
   SectionTitle,
-  TextBox,
+  TextInputBox,
 } from '../../../components/ui';
 import { MAX_FUNDING_AMOUNT_USD } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
@@ -149,7 +149,7 @@ export const ProjectFundingSelectionFormScreen = ({
 
           {formState.rewardsCost && (
             <Box width="100%">
-              <TextBox
+              <TextInputBox
                 type="email"
                 name="email"
                 fontSize="14px"

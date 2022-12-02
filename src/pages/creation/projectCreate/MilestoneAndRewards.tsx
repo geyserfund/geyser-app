@@ -14,12 +14,13 @@ import {
   IconButtonComponent,
   Linkin,
   SatoshiAmount,
+  UndecoratedLink,
 } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import { TMilestone } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
+import { colors, getPath } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import {
@@ -39,7 +40,7 @@ import {
   MUTATION_UPDATE_PROJECT,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../graphql/mutations';
-import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
 
 import type { Project, ProjectReward } from '../../../types/generated/graphql';
@@ -92,7 +93,7 @@ export const MilestoneAndRewards = () => {
     MUTATION_UPDATE_PROJECT,
     {
       onCompleted() {
-        history.push(`/launch/${params.projectId}/node`);
+        history.push(getPath('launchProjectWithNode', params.projectId));
       },
       onError(error) {
         toast({
@@ -106,7 +107,7 @@ export const MilestoneAndRewards = () => {
 
   const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
 
-  const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
+  const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { id: params.projectId } },
     fetchPolicy: 'network-only',
     onError() {
@@ -161,6 +162,7 @@ export const MilestoneAndRewards = () => {
       rewardCurrency: RewardCurrency.Usdcent,
       expiresAt: finalDate || null,
     };
+
     if (rewards.length > 0) {
       updateProjectInput.type = 'reward';
     }
@@ -266,7 +268,7 @@ export const MilestoneAndRewards = () => {
           display="flex"
           justifyContent="flex-start"
         >
-          <Linkin href={`/launch/${params.projectId}`}>
+          <UndecoratedLink href={`/launch/${params.projectId}`}>
             <ButtonComponent
               leftIcon={
                 <BiLeftArrowAlt
@@ -277,7 +279,7 @@ export const MilestoneAndRewards = () => {
             >
               Back
             </ButtonComponent>
-          </Linkin>
+          </UndecoratedLink>
         </GridItem>
         <GridItem
           colSpan={2}

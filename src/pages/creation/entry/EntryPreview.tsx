@@ -3,12 +3,12 @@ import { Box, Image, Input, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BsCheckLg } from 'react-icons/bs';
 import { useHistory, useParams } from 'react-router';
-import { ButtonComponent, TextBox } from '../../../components/ui';
+import { ButtonComponent, TextInputBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { getPath } from '../../../constants';
 import { ProjectEntryValidations } from '../../../constants/validations';
 import { useAuthContext } from '../../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import {
   MUTATION_PUBLISH_ENTRY,
   MUTATION_UPDATE_ENTRY,
@@ -44,7 +44,7 @@ export const EntryPreview = () => {
 
   const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_ENTRY);
 
-  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
+  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
       setNav({
@@ -270,7 +270,7 @@ export const EntryPreview = () => {
                 Linked project
               </Text>
               <Text>Where should Satoshi donations go to?</Text>
-              <TextBox
+              <TextInputBox
                 isDisabled
                 value={`${projectData.project.name}@geyser.fund`}
               />

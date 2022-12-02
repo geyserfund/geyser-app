@@ -19,7 +19,7 @@ import {
   InputGroup,
   InputRightElement,
 } from '@chakra-ui/react';
-import { ButtonComponent, TextBox } from '../ui';
+import { ButtonComponent, TextInputBox } from '../ui';
 import { createCreatorRecord } from '../../api';
 import { useNotification, validateEmail, isMobileMode } from '../../utils';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
@@ -139,7 +139,7 @@ export const Subscribe = ({
                     : 'To get information on the latest Geyser projects and product, subscribe by dropping your email below.'}
                 </Text>
                 {!success && (
-                  <TextBox
+                  <TextInputBox
                     value={email}
                     placeholder="Contact Email"
                     onChange={handleEmail}

@@ -8,7 +8,7 @@ import {
 } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
-import { isMobileMode } from '../../../utils';
+import { aggregateTransactions, isMobileMode } from '../../../utils';
 import {
   Button,
   Skeleton,
@@ -16,8 +16,8 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 
-import { IFundingTx, IFunder } from '../../../interfaces';
-import { Project } from '../../../types/generated/graphql';
+import { IFunder } from '../../../interfaces';
+import { FundingTx, Project } from '../../../types/generated/graphql';
 
 type Props = {
   project: Project;
@@ -25,7 +25,7 @@ type Props = {
   onFundProjectTapped: () => void;
   loading: boolean;
   btcRate: number;
-  fundingTxs: IFundingTx[];
+  fundingTxs: FundingTx[];
   funders: IFunder[];
   test?: boolean;
 };
@@ -57,6 +57,7 @@ export const ProjectFundingInitialInfoScreen = ({
   const fundersCopy = [...funders];
 
   const sortedFunders: IFunder[] = fundersCopy.sort(leaderboardSort);
+  const aggregatedContributions = aggregateTransactions(fundingTxs);
 
   if (test) {
     return <InfoPageSkeleton />;
@@ -157,10 +158,11 @@ export const ProjectFundingInitialInfoScreen = ({
           paddingBottom="10px"
         >
           {view === 'activity'
-            ? fundingTxs.map((fundingTx, index) => (
+            ? aggregatedContributions.map((fundingTx, index) => (
                 <ProjectFundingContributionsFeedItem
                   key={index}
                   fundingTx={fundingTx}
+                  count={fundingTx.count}
                   width={'95%'}
                 />
               ))

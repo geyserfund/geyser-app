@@ -45,7 +45,6 @@ export type Scalars = {
   name_String_NotNull_maxLength_100: any;
   name_String_NotNull_minLength_3_maxLength_60: any;
   name_String_NotNull_minLength_3_maxLength_280: any;
-  name_String_NotNull_minLength_5_maxLength_60: any;
   name_String_maxLength_100: any;
   name_String_minLength_3_maxLength_280: any;
   name_String_minLength_5_maxLength_60: any;
@@ -457,6 +456,12 @@ export type LightningAddressConnectionDetailsUpdateInput = {
   walletId: Scalars['BigInt'];
 };
 
+export type LightningAddressVerifyResponse = {
+  __typename?: 'LightningAddressVerifyResponse';
+  reason?: Maybe<Scalars['String']>;
+  valid: Scalars['Boolean'];
+};
+
 export type LndConnectionDetails = {
   /** Port where the gRPC calls should be made. */
   grpcPort: Scalars['Int'];
@@ -850,7 +855,7 @@ export type ProjectsSummary = {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
-  entry: Entry;
+  entry?: Maybe<Entry>;
   fundingTx: FundingTx;
   /** Returns all published entries. */
   getEntries: Array<Maybe<Entry>>;
@@ -862,6 +867,7 @@ export type Query = {
   getProjectRewards: Array<Maybe<ProjectReward>>;
   getSignedUploadUrl: SignedUploadUrl;
   getWallet: Wallet;
+  lightningAddressVerify: LightningAddressVerifyResponse;
   me?: Maybe<User>;
   project?: Maybe<Project>;
   /** By default, returns a list of all active projects. */
@@ -910,6 +916,10 @@ export type QueryGetSignedUploadUrlArgs = {
 
 export type QueryGetWalletArgs = {
   id: Scalars['BigInt'];
+};
+
+export type QueryLightningAddressVerifyArgs = {
+  lightningAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryProjectArgs = {
@@ -1137,7 +1147,7 @@ export type Wallet = {
   connectionDetails: ConnectionDetails;
   id: Scalars['BigInt'];
   /** Wallet name */
-  name: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
+  name?: Maybe<Scalars['name_String_minLength_5_maxLength_60']>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1316,6 +1326,7 @@ export type ResolversTypes = {
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
+  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>;
   LndConnectionDetails: never;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
@@ -1416,9 +1427,6 @@ export type ResolversTypes = {
   name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<
     Scalars['name_String_NotNull_minLength_3_maxLength_280']
   >;
-  name_String_NotNull_minLength_5_maxLength_60: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_5_maxLength_60']
-  >;
   name_String_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_maxLength_100']
   >;
@@ -1515,6 +1523,7 @@ export type ResolversParentTypes = {
   LightningAddressConnectionDetails: LightningAddressConnectionDetails;
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
+  LightningAddressVerifyResponse: LightningAddressVerifyResponse;
   LndConnectionDetails: never;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
@@ -1581,7 +1590,6 @@ export type ResolversParentTypes = {
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
-  name_String_NotNull_minLength_5_maxLength_60: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
   name_String_maxLength_100: Scalars['name_String_maxLength_100'];
   name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280'];
   name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60'];
@@ -1896,6 +1904,15 @@ export type LightningAddressConnectionDetailsResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LightningAddressVerifyResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LightningAddressVerifyResponse'] = ResolversParentTypes['LightningAddressVerifyResponse'],
+> = {
+  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2339,7 +2356,7 @@ export type QueryResolvers<
 > = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   entry?: Resolver<
-    ResolversTypes['Entry'],
+    Maybe<ResolversTypes['Entry']>,
     ParentType,
     ContextType,
     RequireFields<QueryEntryArgs, 'id'>
@@ -2397,6 +2414,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryGetWalletArgs, 'id'>
+  >;
+  lightningAddressVerify?: Resolver<
+    ResolversTypes['LightningAddressVerifyResponse'],
+    ParentType,
+    ContextType,
+    Partial<QueryLightningAddressVerifyArgs>
   >;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   project?: Resolver<
@@ -2531,7 +2554,7 @@ export type WalletResolvers<
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
+    Maybe<ResolversTypes['name_String_minLength_5_maxLength_60']>,
     ParentType,
     ContextType
   >;
@@ -2663,14 +2686,6 @@ export interface Name_String_NotNull_MinLength_3_MaxLength_280ScalarConfig
   name: 'name_String_NotNull_minLength_3_maxLength_280';
 }
 
-export interface Name_String_NotNull_MinLength_5_MaxLength_60ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
-    any
-  > {
-  name: 'name_String_NotNull_minLength_5_maxLength_60';
-}
-
 export interface Name_String_MaxLength_100ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['name_String_maxLength_100'],
@@ -2776,6 +2791,7 @@ export type Resolvers<ContextType = any> = {
   Grantee?: GranteeResolvers<ContextType>;
   GranteeSubmissionResponse?: GranteeSubmissionResponseResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
+  LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>;
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
   LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
   LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;
@@ -2812,7 +2828,6 @@ export type Resolvers<ContextType = any> = {
   name_String_NotNull_maxLength_100?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_60?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_280?: GraphQLScalarType;
-  name_String_NotNull_minLength_5_maxLength_60?: GraphQLScalarType;
   name_String_maxLength_100?: GraphQLScalarType;
   name_String_minLength_3_maxLength_280?: GraphQLScalarType;
   name_String_minLength_5_maxLength_60?: GraphQLScalarType;

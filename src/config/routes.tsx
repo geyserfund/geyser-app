@@ -15,7 +15,7 @@ import { EntryPreview } from '../pages/creation/entry/EntryPreview';
 import {
   MilestoneAndRewards,
   ProjectCreate,
-  Wallet,
+  ProjectCreationWalletConnectionPage,
 } from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
 import { ProjectView } from '../pages/projectView';
@@ -70,7 +70,7 @@ export const Router = () => {
               path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`}
             >
               <PrivateRoute>
-                <Wallet />
+                <ProjectCreationWalletConnectionPage />
               </PrivateRoute>
             </Route>
             <Route

@@ -13,13 +13,13 @@ import { useHistory, useLocation, useParams } from 'react-router';
 import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { useAuthContext } from '../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { isMobileMode } from '../../utils';
 import { NotAuthorized } from '../notAuthorized';
 import { NotFoundPage } from '../notFound';
 import { ProjectDashboardEntries } from './ProjectDashboardEntries';
 import { MilestoneSettings } from './MilestoneSettings';
-import { NodeSettings } from './NodeSettings';
+import { ProjectFundingSettings } from './ProjectFundingSettings';
 import { ProjectSettings } from './ProjectSettings';
 import { RewardSettings } from './RewardSettings';
 import { getPath } from '../../constants';
@@ -27,10 +27,10 @@ import { Owner } from '../../types/generated/graphql';
 
 export type TDashboardTabs =
   | 'entries'
+  | 'funds'
   | 'milestones'
   | 'rewards'
-  | 'node'
-  | 'project';
+  | 'project settings';
 
 export const ProjectDashboard = () => {
   const isMobile = isMobileMode();
@@ -59,7 +59,7 @@ export const ProjectDashboard = () => {
   };
 
   const [getProject, { loading, error, data }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME,
+    QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: {
         where: { name: projectId },
@@ -106,9 +106,9 @@ export const ProjectDashboard = () => {
         return <MilestoneSettings project={project} />;
       case 'rewards':
         return <RewardSettings project={project} />;
-      case 'node':
-        return <NodeSettings project={project} />;
-      case 'project':
+      case 'funds':
+        return <ProjectFundingSettings project={project} />;
+      case 'project settings':
         return <ProjectSettings project={project} />;
       default:
         return <ProjectDashboardEntries project={project} />;
@@ -141,10 +141,10 @@ export const ProjectDashboard = () => {
 
   const navList: TDashboardTabs[] = [
     'entries',
+    'funds',
     'milestones',
     'rewards',
-    'node',
-    'project',
+    'project settings',
   ];
 
   return (
