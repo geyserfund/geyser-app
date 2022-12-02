@@ -11,22 +11,40 @@ import satwalletimg from '../../assets/walletsats.svg';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { ContributeModal } from './components/ContributeModal';
+import logo from '../../assets/round2.svg';
+import banner from '../../assets/roundtwobanner.svg';
+import bitcoinCommunity from '../../assets/bitcoincommunity.svg';
+import bitcoinTransition from '../../assets/bitcointransition.svg';
+import bitcoinArt from '../../assets/bitcoinart.svg';
+import { GrantDevelopers } from './components/GrantDevs';
 
 const grants = [
   {
+    title: 'Communities & Meetups',
+    subtitle: 'ROUND 2: DECEMBER',
+    image: bitcoinCommunity,
     name: 'Bitcoin for Free Speech',
     applicants: 0,
-    about: '',
+    about:
+      'This grant is for all projects creating bitcoin communities irl (in real life). In-person bitcoin spaces and meetups  allow for quality information to spread and enable the forging of deeper social networks. This in term, results in a more resilient bitcoin network. We want to enable these creators to continue building grassroots bitcoin communities globally.',
   },
   {
+    title: 'Bitcoin Translations',
+    subtitle: 'ROUND 2: DECEMBER',
+    image: bitcoinTransition,
     name: 'Visual Artists for Bitcoin',
     applicants: 0,
-    about: '',
+    about:
+      'Bitcoin content is spreading like wildfire. But language represent the biggest blocker to learning more about it, as most content remains written in English. By supporting translators in this space we want to keep supporting those that make Bitcoin content available to everyone around the world.',
   },
   {
+    title: 'Bitcoin Visual Art',
+    subtitle: 'ROUND 2: DECEMBER',
+    image: bitcoinArt,
     name: 'Bitcoin Open Source',
     applicants: 0,
-    about: '',
+    about:
+      'This grant is for all creative projects that focus on explaining and showcasing bitcoin through visual mediums. Creating culture and art around bitcoin is a key way of educating the world about bitcoin history, mythology, technology and ideological significance. Let support Bitcoin artists!',
   },
 ];
 
@@ -64,38 +82,16 @@ export const GrantsRoundTwo = () => {
           >
             <FaArrowLeft /> See all Grants
           </Button>
-          <Text
-            fontSize={isMobile ? '4xl' : '47px'}
-            fontWeight="medium"
-            textAlign="center"
-          >
-            🥳
-          </Text>
-          <Text
-            fontSize={'27px'}
-            fontWeight="900"
-            textAlign="center"
-            fontFamily={fonts.livvic}
-            textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
-            color={'brand.primary500'}
-          >
-            Geyser Grants
-          </Text>
+          <Box display="flex" justifyContent={'center'}>
+            <img src={logo} />
+          </Box>
           <Box
             display="flex"
             alignItems={'center'}
             justifyContent="center"
+            my={2}
             gap={4}
           >
-            <Text
-              fontFamily={fonts.interBlack}
-              fontSize={isMobile ? '35' : '44px'}
-              fontWeight="700"
-              textAlign="center"
-              justify="center"
-            >
-              Geyser Grants Round Two
-            </Text>
             <Text
               bg="brand.primary100"
               fontSize={'10px'}
@@ -150,12 +146,9 @@ export const GrantsRoundTwo = () => {
               </Text>
             </Box>
 
-            <Box
-              minWidth={'100%'}
-              bg="brand.primary50"
-              height={'273px'}
-              borderRadius="12px"
-            ></Box>
+            <Box minWidth={'100%'} borderRadius="12px">
+              <img src={banner} />
+            </Box>
 
             <Grid
               templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
@@ -166,7 +159,10 @@ export const GrantsRoundTwo = () => {
               {grants.map((item) => (
                 <GridItem w={'100%'} key={item.name}>
                   <ApplyGrantCard
-                    name={item.name}
+                    title={item.title}
+                    subtitle={item.subtitle}
+                    about={item.about}
+                    image={item.image}
                     applicant={item.applicants}
                   />
                 </GridItem>
@@ -187,6 +183,8 @@ export const GrantsRoundTwo = () => {
             </Text>
           </Box>
           <BoardMembers />
+
+          <MoreInfo />
           <Box my={8}>
             <Text
               fontFamily={fonts.interBlack}
@@ -263,7 +261,13 @@ export const GrantsRoundTwo = () => {
               </Box>
             </Box>
           </Box>
-          <MoreInfo />
+          <Box my={6}>
+            <Text color={'brand.neutral600'} fontWeight="600" mb={4}>
+              Thanks to the developers and designers that built and designed
+              Geyser Grants.
+            </Text>
+            <GrantDevelopers />
+          </Box>
           <Box
             border={'2px solid #E9ECEF'}
             minWidth="100%"

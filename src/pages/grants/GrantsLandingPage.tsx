@@ -10,6 +10,7 @@ import { ListText } from './components/ListText';
 import { CustomGrantCard } from './components/CustomGrantCard';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
+import banner from '../../assets/roundtwobanner.svg';
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
@@ -202,6 +203,7 @@ export const GrantsLandingPage = () => {
                 <CustomGrantCard
                   showBanner={true}
                   status={true}
+                  banner={banner}
                   applicants="-"
                   grant="100 M"
                   title="Geyser Grants Round 2"

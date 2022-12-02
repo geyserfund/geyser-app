@@ -14,6 +14,7 @@ interface GrantProps {
   showBanner: boolean;
   applicants?: string;
   grant?: string;
+  banner?: string;
   grantees?: string;
   distributed?: string;
   sponsors?: Array<string>;
@@ -28,6 +29,7 @@ export const CustomGrantCard = ({
   applicants,
   grant,
   grantees,
+  banner,
   distributed,
 }: GrantProps) => {
   const isMobile = isMobileMode();
@@ -42,7 +44,9 @@ export const CustomGrantCard = ({
         borderRadius="12px"
       >
         {showBanner ? (
-          <Box bg="brand.primary50" height={'200px'} borderRadius="12px"></Box>
+          <Box borderRadius="12px">
+            <img src={banner} width="100%" />
+          </Box>
         ) : null}
         <Box display="flex" flexDirection={'column'} p="4">
           <Box

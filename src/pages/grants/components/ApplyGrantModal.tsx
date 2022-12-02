@@ -29,11 +29,20 @@ import { TwitterConnect } from '../../../components/molecules';
 import { AuthContext } from '../../../context';
 
 interface Grant {
-  name: string;
+  applicant: number;
+  title: string;
+  subtitle: string;
   about: string;
+  image: string;
 }
 
-export const ApplyGrantModal = () => {
+export const ApplyGrantModal = ({
+  applicant,
+  image,
+  title,
+  subtitle,
+  about,
+}: Grant) => {
   const {
     user,
     setUser,
@@ -97,7 +106,7 @@ export const ApplyGrantModal = () => {
         }}
         backgroundColor="brand.primary400"
       >
-        Apply
+        view
       </Button>
 
       <Modal isCentered isOpen={isOpen} size="sm">
@@ -118,26 +127,27 @@ export const ApplyGrantModal = () => {
           <Box bg="brand.bgWhite" pb={3}>
             {grant && (
               <>
-                <Box width={'100%'} height="273px" bg="brand.primary50"></Box>
+                <Box width={'100%'}>
+                  <img src={image} width={'100%'} />
+                </Box>
 
                 <ModalBody>
                   <Text fontWeight={'600'} mb={2} fontSize="18px">
-                    Bitcoin for Free Speech
+                    {title}
                   </Text>
                   <Text fontWeight={'500'} mb={2} fontSize="13px">
-                    ROUND 2: DECEMBER
+                    {subtitle}
                   </Text>
-                  <Box height={'100px'} my={4}>
+                  <Box my={4}>
                     <Box
                       display="flex"
                       justifyContent={'center'}
                       alignContent="center"
                       flexDirection={'column'}
                     >
-                      <Text>This grant is about...</Text>
+                      <Text>{about}</Text>
                     </Box>
                   </Box>
-
                   <Box mt={4}>
                     <Button
                       bg="brand.primary"
@@ -261,11 +271,9 @@ export const ApplyGrantModal = () => {
                   </ModalBody>
                 ) : (
                   <>
-                    <Box
-                      width={'100%'}
-                      height="273px"
-                      bg="brand.primary50"
-                    ></Box>
+                    <Box width={'100%'}>
+                      <img src={image} width={'100%'} />
+                    </Box>
                     <ModalBody>
                       <Text fontWeight={'700'} mb={3} fontSize="22px">
                         Apply
