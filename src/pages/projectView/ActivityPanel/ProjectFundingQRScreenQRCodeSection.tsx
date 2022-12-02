@@ -19,11 +19,9 @@ import LogoDark from '../../../assets/logo-dark.svg';
 import LogoPrimary from '../../../assets/logo-brand.svg';
 import { BiRefresh } from 'react-icons/bi';
 import { BsExclamationCircle } from 'react-icons/bs';
-// import { useFundingFlow } from '../../../hooks';
 
 type Props = {
   currentFundingTX: FundingTx;
-  currentFundingTXInvoiceStatus: InvoiceStatus;
 };
 
 type InvoiceRefreshMutationResponseData = {
@@ -97,7 +95,6 @@ const InvoiceErrorView = ({
 
 export const ProjectFundingQRScreenQRCodeSection = ({
   currentFundingTX,
-  currentFundingTXInvoiceStatus,
 }: Props) => {
   const [isRefreshingInvoice, setIsRefreshingInvoice] = useState(true);
   const [hasCopiedQRCode, setHasCopiedQRCode] = useState(false);
@@ -120,11 +117,13 @@ export const ProjectFundingQRScreenQRCodeSection = ({
       return QRDisplayState.INVOICE_FAILED;
     }
 
-    switch (currentFundingTXInvoiceStatus) {
+    if (isRefreshingInvoice) {
+      return QRDisplayState.REFRESHING;
+    }
+
+    switch (currentFundingTX.invoiceStatus) {
       case InvoiceStatus.Unpaid:
-        return isRefreshingInvoice
-          ? QRDisplayState.REFRESHING
-          : hasCopiedQRCode
+        return hasCopiedQRCode
           ? QRDisplayState.COPIED
           : QRDisplayState.AWAITING_PAYMENT;
       case InvoiceStatus.Canceled:
@@ -135,7 +134,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({
   }, [
     isRefreshingInvoice,
     hasCopiedQRCode,
-    currentFundingTXInvoiceStatus,
+    currentFundingTX.invoiceStatus,
     errorFromRefresh,
   ]);
 
@@ -168,6 +167,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({
 
   const handleRefreshButtonTapped = () => {
     setHasCopiedQRCode(false);
+
     setIsRefreshingInvoice(true);
 
     refreshInvoice();

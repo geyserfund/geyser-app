@@ -61,7 +61,6 @@ export const ProjectFundingQRScreen = ({
       >
         <ProjectFundingQRScreenQRCodeSection
           currentFundingTX={fundingFlow.fundingTx}
-          currentFundingTXInvoiceStatus={fundingFlow.fundingTx.invoiceStatus}
         />
 
         <ContributionInfoBox
