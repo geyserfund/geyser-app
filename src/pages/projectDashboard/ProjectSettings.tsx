@@ -18,7 +18,7 @@ import {
   Card,
   ImageWithReload,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../components/ui';
 import { colors } from '../../constants';
 import { useAuthContext } from '../../context';
@@ -243,7 +243,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
           <VStack width="100%" alignItems="flex-start">
             <VStack width="100%" alignItems="flex-start">
               <Text>Project Title</Text>
-              <TextBox
+              <TextInputBox
                 name="title"
                 onChange={handleChange}
                 value={form.title}
@@ -298,7 +298,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
 
             <VStack width="100%" alignItems="flex-start">
               <Text>Project E-mail</Text>
-              <TextBox
+              <TextInputBox
                 name="email"
                 value={user.email || form.email}
                 onChange={handleChange}

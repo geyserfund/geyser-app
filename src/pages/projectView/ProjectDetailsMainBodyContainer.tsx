@@ -16,7 +16,7 @@ import { UpdateReward } from '../../hooks';
 import { Project } from '../../types/generated/graphql';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../context';
-import { ProjectDetailsCard } from './ProjectDetailsCard';
+import { ProjectDetailsCard } from './components/ProjectDetailsCard';
 
 type Rules = string;
 

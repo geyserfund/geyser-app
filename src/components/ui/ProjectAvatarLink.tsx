@@ -24,7 +24,9 @@ export const ProjectAvatarLink = ({
     >
       <HStack spacing={1}>
         <Avatar borderRadius="4px" src={avatarSrc || ''} boxSize={'1em'} />
-        <Text fontWeight={'bold'}>{project.title}</Text>
+        <Text fontWeight={'bold'} noOfLines={1}>
+          {project.title}
+        </Text>
       </HStack>
     </Link>
   );

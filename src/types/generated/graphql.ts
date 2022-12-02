@@ -45,7 +45,6 @@ export type Scalars = {
   name_String_NotNull_maxLength_100: any;
   name_String_NotNull_minLength_3_maxLength_60: any;
   name_String_NotNull_minLength_3_maxLength_280: any;
-  name_String_NotNull_minLength_5_maxLength_60: any;
   name_String_maxLength_100: any;
   name_String_minLength_3_maxLength_280: any;
   name_String_minLength_5_maxLength_60: any;
@@ -75,6 +74,7 @@ export type AmountSummary = {
 };
 
 export type ConnectionDetails =
+  | LightningAddressConnectionDetails
   | LndConnectionDetailsPrivate
   | LndConnectionDetailsPublic;
 
@@ -133,6 +133,7 @@ export type CreateProjectRewardInput = {
 };
 
 export type CreateWalletInput = {
+  lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsCreateInput>;
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsCreateInput>;
   name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>;
   resourceInput: ResourceInput;
@@ -229,6 +230,12 @@ export type FunderReward = {
   quantity: Scalars['Int'];
 };
 
+export type FundingCancelInput = {
+  address?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['BigInt']>;
+  invoiceId?: InputMaybe<Scalars['String']>;
+};
+
 export type FundingCancelResponse = {
   __typename?: 'FundingCancelResponse';
   id: Scalars['BigInt'];
@@ -244,7 +251,7 @@ export type FundingConfirmInput = {
 
 export type FundingConfirmOffChainBolt11Input = {
   invoiceId: Scalars['String'];
-  settleIndex: Scalars['Int'];
+  settleIndex?: InputMaybe<Scalars['Int']>;
 };
 
 export type FundingConfirmOffChainInput = {
@@ -252,13 +259,13 @@ export type FundingConfirmOffChainInput = {
 };
 
 export type FundingConfirmOnChainInput = {
-  address: Scalars['String'];
+  address?: InputMaybe<Scalars['String']>;
 };
 
 export type FundingConfirmResponse = {
   __typename?: 'FundingConfirmResponse';
   id: Scalars['BigInt'];
-  missedSettleEvents: Scalars['Int'];
+  missedSettleEvents?: Maybe<Scalars['Int']>;
   success: Scalars['Boolean'];
 };
 
@@ -295,11 +302,21 @@ export type FundingMutationResponse = {
 };
 
 export type FundingPendingInput = {
-  onChain: FundingPendingOnChainInput;
+  amount: Scalars['Int'];
+  offChain?: InputMaybe<FundingPendingOffChainInput>;
+  onChain?: InputMaybe<FundingPendingOnChainInput>;
+};
+
+export type FundingPendingOffChainBolt11Input = {
+  invoiceId: Scalars['String'];
+};
+
+export type FundingPendingOffChainInput = {
+  bolt11: FundingPendingOffChainBolt11Input;
 };
 
 export type FundingPendingOnChainInput = {
-  address: Scalars['String'];
+  address?: InputMaybe<Scalars['String']>;
 };
 
 export type FundingPendingResponse = {
@@ -336,6 +353,7 @@ export type FundingTx = {
   funder: Funder;
   id: Scalars['BigInt'];
   invoiceId: Scalars['String'];
+  invoiceStatus: InvoiceStatus;
   media?: Maybe<Scalars['String']>;
   onChain: Scalars['Boolean'];
   paidAt?: Maybe<Scalars['Date']>;
@@ -344,6 +362,12 @@ export type FundingTx = {
   sourceResource?: Maybe<SourceResource>;
   status: FundingStatus;
   uuid: Scalars['String'];
+};
+
+export type FundinginvoiceCancel = {
+  __typename?: 'FundinginvoiceCancel';
+  id: Scalars['BigInt'];
+  success: Scalars['Boolean'];
 };
 
 export type GetEntriesInput = {
@@ -412,6 +436,32 @@ export type GranteeSubmissionResponse = {
   success: Scalars['Boolean'];
 };
 
+export enum InvoiceStatus {
+  Canceled = 'canceled',
+  Paid = 'paid',
+  Unpaid = 'unpaid',
+}
+
+export type LightningAddressConnectionDetails = {
+  __typename?: 'LightningAddressConnectionDetails';
+  lightningAddress: Scalars['String'];
+};
+
+export type LightningAddressConnectionDetailsCreateInput = {
+  lightningAddress: Scalars['String'];
+};
+
+export type LightningAddressConnectionDetailsUpdateInput = {
+  lightningAddress: Scalars['String'];
+  walletId: Scalars['BigInt'];
+};
+
+export type LightningAddressVerifyResponse = {
+  __typename?: 'LightningAddressVerifyResponse';
+  reason?: Maybe<Scalars['String']>;
+  valid: Scalars['Boolean'];
+};
+
 export type LndConnectionDetails = {
   /** Port where the gRPC calls should be made. */
   grpcPort: Scalars['Int'];
@@ -472,6 +522,7 @@ export type LndConnectionDetailsUpdateInput = {
   pubkey?: InputMaybe<Scalars['pubkey_String_minLength_66_maxLength_66']>;
   /** TLS certificate for the LND node (optional for Voltage nodes). */
   tlsCertificate?: InputMaybe<Scalars['String']>;
+  walletId: Scalars['BigInt'];
 };
 
 export enum LndNodeType {
@@ -499,6 +550,8 @@ export type Mutation = {
   fundingClaimAnonymous: FundingMutationResponse;
   fundingConfirm: FundingConfirmResponse;
   fundingCreateFromPodcastKeysend: FundingTx;
+  fundingInvoiceCancel: FundinginvoiceCancel;
+  fundingInvoiceRefresh: FundingTx;
   fundingPend: FundingPendingResponse;
   /** Makes the Entry public. */
   publishEntry: Entry;
@@ -545,7 +598,7 @@ export type MutationCreateSponsorArgs = {
 };
 
 export type MutationCreateWalletArgs = {
-  input?: InputMaybe<CreateWalletInput>;
+  input: CreateWalletInput;
 };
 
 export type MutationDeleteEntryArgs = {
@@ -561,7 +614,7 @@ export type MutationFundArgs = {
 };
 
 export type MutationFundingCancelArgs = {
-  id: Scalars['BigInt'];
+  input: FundingCancelInput;
 };
 
 export type MutationFundingClaimAnonymousArgs = {
@@ -574,6 +627,14 @@ export type MutationFundingConfirmArgs = {
 
 export type MutationFundingCreateFromPodcastKeysendArgs = {
   input?: InputMaybe<FundingCreateFromPodcastKeysendInput>;
+};
+
+export type MutationFundingInvoiceCancelArgs = {
+  invoiceId: Scalars['String'];
+};
+
+export type MutationFundingInvoiceRefreshArgs = {
+  fundingTxId: Scalars['BigInt'];
 };
 
 export type MutationFundingPendArgs = {
@@ -609,7 +670,7 @@ export type MutationUpdateUserArgs = {
 };
 
 export type MutationUpdateWalletArgs = {
-  input?: InputMaybe<UpdateWalletInput>;
+  input: UpdateWalletInput;
 };
 
 export type OffsetBasedPaginationInput = {
@@ -794,7 +855,7 @@ export type ProjectsSummary = {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
-  entry: Entry;
+  entry?: Maybe<Entry>;
   fundingTx: FundingTx;
   /** Returns all published entries. */
   getEntries: Array<Maybe<Entry>>;
@@ -806,6 +867,7 @@ export type Query = {
   getProjectRewards: Array<Maybe<ProjectReward>>;
   getSignedUploadUrl: SignedUploadUrl;
   getWallet: Wallet;
+  lightningAddressVerify: LightningAddressVerifyResponse;
   me?: Maybe<User>;
   project?: Maybe<Project>;
   /** By default, returns a list of all active projects. */
@@ -854,6 +916,10 @@ export type QueryGetSignedUploadUrlArgs = {
 
 export type QueryGetWalletArgs = {
   id: Scalars['BigInt'];
+};
+
+export type QueryLightningAddressVerifyArgs = {
+  lightningAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryProjectArgs = {
@@ -993,6 +1059,7 @@ export type UpdateUserInput = {
 
 export type UpdateWalletInput = {
   id: Scalars['BigInt'];
+  lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsUpdateInput>;
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsUpdateInput>;
   name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>;
 };
@@ -1080,7 +1147,7 @@ export type Wallet = {
   connectionDetails: ConnectionDetails;
   id: Scalars['BigInt'];
   /** Wallet name */
-  name: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
+  name?: Maybe<Scalars['name_String_minLength_5_maxLength_60']>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1195,6 +1262,7 @@ export type ResolversTypes = {
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ConnectionDetails:
+    | ResolversTypes['LightningAddressConnectionDetails']
     | ResolversTypes['LndConnectionDetailsPrivate']
     | ResolversTypes['LndConnectionDetailsPublic'];
   CreateEntryInput: CreateEntryInput;
@@ -1215,6 +1283,7 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Funder: ResolverTypeWrapper<Funder>;
   FunderReward: ResolverTypeWrapper<FunderReward>;
+  FundingCancelInput: FundingCancelInput;
   FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>;
   FundingConfirmInput: FundingConfirmInput;
   FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input;
@@ -1226,6 +1295,8 @@ export type ResolversTypes = {
   FundingMetadataInput: FundingMetadataInput;
   FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>;
   FundingPendingInput: FundingPendingInput;
+  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
+  FundingPendingOffChainInput: FundingPendingOffChainInput;
   FundingPendingOnChainInput: FundingPendingOnChainInput;
   FundingPendingResponse: ResolverTypeWrapper<FundingPendingResponse>;
   FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>;
@@ -1236,6 +1307,7 @@ export type ResolversTypes = {
       sourceResource?: Maybe<ResolversTypes['SourceResource']>;
     }
   >;
+  FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
   GetEntriesWhereInput: GetEntriesWhereInput;
@@ -1250,6 +1322,11 @@ export type ResolversTypes = {
   Grantee: ResolverTypeWrapper<Grantee>;
   GranteeSubmissionResponse: ResolverTypeWrapper<GranteeSubmissionResponse>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  InvoiceStatus: InvoiceStatus;
+  LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
+  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
+  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
+  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>;
   LndConnectionDetails: never;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
@@ -1350,9 +1427,6 @@ export type ResolversTypes = {
   name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<
     Scalars['name_String_NotNull_minLength_3_maxLength_280']
   >;
-  name_String_NotNull_minLength_5_maxLength_60: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_5_maxLength_60']
-  >;
   name_String_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_maxLength_100']
   >;
@@ -1393,6 +1467,7 @@ export type ResolversParentTypes = {
   BigInt: Scalars['BigInt'];
   Boolean: Scalars['Boolean'];
   ConnectionDetails:
+    | ResolversParentTypes['LightningAddressConnectionDetails']
     | ResolversParentTypes['LndConnectionDetailsPrivate']
     | ResolversParentTypes['LndConnectionDetailsPublic'];
   CreateEntryInput: CreateEntryInput;
@@ -1410,6 +1485,7 @@ export type ResolversParentTypes = {
   Float: Scalars['Float'];
   Funder: Funder;
   FunderReward: FunderReward;
+  FundingCancelInput: FundingCancelInput;
   FundingCancelResponse: FundingCancelResponse;
   FundingConfirmInput: FundingConfirmInput;
   FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input;
@@ -1421,12 +1497,15 @@ export type ResolversParentTypes = {
   FundingMetadataInput: FundingMetadataInput;
   FundingMutationResponse: FundingMutationResponse;
   FundingPendingInput: FundingPendingInput;
+  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
+  FundingPendingOffChainInput: FundingPendingOffChainInput;
   FundingPendingOnChainInput: FundingPendingOnChainInput;
   FundingPendingResponse: FundingPendingResponse;
   FundingQueryResponse: FundingQueryResponse;
   FundingTx: Omit<FundingTx, 'sourceResource'> & {
     sourceResource?: Maybe<ResolversParentTypes['SourceResource']>;
   };
+  FundinginvoiceCancel: FundinginvoiceCancel;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
   GetEntriesWhereInput: GetEntriesWhereInput;
@@ -1441,6 +1520,10 @@ export type ResolversParentTypes = {
   Grantee: Grantee;
   GranteeSubmissionResponse: GranteeSubmissionResponse;
   Int: Scalars['Int'];
+  LightningAddressConnectionDetails: LightningAddressConnectionDetails;
+  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
+  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
+  LightningAddressVerifyResponse: LightningAddressVerifyResponse;
   LndConnectionDetails: never;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
@@ -1507,7 +1590,6 @@ export type ResolversParentTypes = {
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
-  name_String_NotNull_minLength_5_maxLength_60: Scalars['name_String_NotNull_minLength_5_maxLength_60'];
   name_String_maxLength_100: Scalars['name_String_maxLength_100'];
   name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280'];
   name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60'];
@@ -1576,7 +1658,9 @@ export type ConnectionDetailsResolvers<
   ParentType extends ResolversParentTypes['ConnectionDetails'] = ResolversParentTypes['ConnectionDetails'],
 > = {
   __resolveType: TypeResolveFn<
-    'LndConnectionDetailsPrivate' | 'LndConnectionDetailsPublic',
+    | 'LightningAddressConnectionDetails'
+    | 'LndConnectionDetailsPrivate'
+    | 'LndConnectionDetailsPublic',
     ParentType,
     ContextType
   >;
@@ -1695,7 +1779,11 @@ export type FundingConfirmResponseResolvers<
   ParentType extends ResolversParentTypes['FundingConfirmResponse'] = ResolversParentTypes['FundingConfirmResponse'],
 > = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  missedSettleEvents?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  missedSettleEvents?: Resolver<
+    Maybe<ResolversTypes['Int']>,
+    ParentType,
+    ContextType
+  >;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1750,6 +1838,11 @@ export type FundingTxResolvers<
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   invoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  invoiceStatus?: Resolver<
+    ResolversTypes['InvoiceStatus'],
+    ParentType,
+    ContextType
+  >;
   media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -1766,6 +1859,15 @@ export type FundingTxResolvers<
   >;
   status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>;
   uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FundinginvoiceCancelResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FundinginvoiceCancel'] = ResolversParentTypes['FundinginvoiceCancel'],
+> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1790,6 +1892,27 @@ export type GranteeSubmissionResponseResolvers<
   >;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LightningAddressConnectionDetailsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LightningAddressConnectionDetails'] = ResolversParentTypes['LightningAddressConnectionDetails'],
+> = {
+  lightningAddress?: Resolver<
+    ResolversTypes['String'],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LightningAddressVerifyResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LightningAddressVerifyResponse'] = ResolversParentTypes['LightningAddressVerifyResponse'],
+> = {
+  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1907,7 +2030,7 @@ export type MutationResolvers<
     ResolversTypes['Wallet'],
     ParentType,
     ContextType,
-    Partial<MutationCreateWalletArgs>
+    RequireFields<MutationCreateWalletArgs, 'input'>
   >;
   deleteEntry?: Resolver<
     ResolversTypes['Entry'],
@@ -1931,7 +2054,7 @@ export type MutationResolvers<
     ResolversTypes['FundingCancelResponse'],
     ParentType,
     ContextType,
-    RequireFields<MutationFundingCancelArgs, 'id'>
+    RequireFields<MutationFundingCancelArgs, 'input'>
   >;
   fundingClaimAnonymous?: Resolver<
     ResolversTypes['FundingMutationResponse'],
@@ -1950,6 +2073,18 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     Partial<MutationFundingCreateFromPodcastKeysendArgs>
+  >;
+  fundingInvoiceCancel?: Resolver<
+    ResolversTypes['FundinginvoiceCancel'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationFundingInvoiceCancelArgs, 'invoiceId'>
+  >;
+  fundingInvoiceRefresh?: Resolver<
+    ResolversTypes['FundingTx'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationFundingInvoiceRefreshArgs, 'fundingTxId'>
   >;
   fundingPend?: Resolver<
     ResolversTypes['FundingPendingResponse'],
@@ -2003,7 +2138,7 @@ export type MutationResolvers<
     ResolversTypes['Wallet'],
     ParentType,
     ContextType,
-    Partial<MutationUpdateWalletArgs>
+    RequireFields<MutationUpdateWalletArgs, 'input'>
   >;
 };
 
@@ -2221,7 +2356,7 @@ export type QueryResolvers<
 > = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   entry?: Resolver<
-    ResolversTypes['Entry'],
+    Maybe<ResolversTypes['Entry']>,
     ParentType,
     ContextType,
     RequireFields<QueryEntryArgs, 'id'>
@@ -2279,6 +2414,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryGetWalletArgs, 'id'>
+  >;
+  lightningAddressVerify?: Resolver<
+    ResolversTypes['LightningAddressVerifyResponse'],
+    ParentType,
+    ContextType,
+    Partial<QueryLightningAddressVerifyArgs>
   >;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   project?: Resolver<
@@ -2413,7 +2554,7 @@ export type WalletResolvers<
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
+    Maybe<ResolversTypes['name_String_minLength_5_maxLength_60']>,
     ParentType,
     ContextType
   >;
@@ -2545,14 +2686,6 @@ export interface Name_String_NotNull_MinLength_3_MaxLength_280ScalarConfig
   name: 'name_String_NotNull_minLength_3_maxLength_280';
 }
 
-export interface Name_String_NotNull_MinLength_5_MaxLength_60ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_NotNull_minLength_5_maxLength_60'],
-    any
-  > {
-  name: 'name_String_NotNull_minLength_5_maxLength_60';
-}
-
 export interface Name_String_MaxLength_100ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['name_String_maxLength_100'],
@@ -2654,8 +2787,11 @@ export type Resolvers<ContextType = any> = {
   FundingPendingResponse?: FundingPendingResponseResolvers<ContextType>;
   FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>;
   FundingTx?: FundingTxResolvers<ContextType>;
+  FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>;
   Grantee?: GranteeResolvers<ContextType>;
   GranteeSubmissionResponse?: GranteeSubmissionResponseResolvers<ContextType>;
+  LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
+  LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>;
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
   LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
   LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;
@@ -2692,7 +2828,6 @@ export type Resolvers<ContextType = any> = {
   name_String_NotNull_maxLength_100?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_60?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_280?: GraphQLScalarType;
-  name_String_NotNull_minLength_5_maxLength_60?: GraphQLScalarType;
   name_String_maxLength_100?: GraphQLScalarType;
   name_String_minLength_3_maxLength_280?: GraphQLScalarType;
   name_String_minLength_5_maxLength_60?: GraphQLScalarType;

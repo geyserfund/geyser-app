@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
-import { ButtonComponent, Linkin } from '../../../components/ui';
+import { ButtonComponent, UndecoratedLink } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createApplicantRecord } from '../../../api';
@@ -235,7 +235,7 @@ export const RecipientButton = ({
                 <Text textAlign="center" mb={4}>
                   You need to link your Twitter account to apply for a Grant.
                 </Text>
-                <Linkin href={`${AUTH_SERVICE_ENDPOINT}/twitter`}>
+                <UndecoratedLink href={`${AUTH_SERVICE_ENDPOINT}/twitter`}>
                   <ButtonComponent
                     isFullWidth
                     primary
@@ -244,7 +244,7 @@ export const RecipientButton = ({
                   >
                     Login with Twitter
                   </ButtonComponent>
-                </Linkin>
+                </UndecoratedLink>
               </Box>
             )}
           </ModalBody>

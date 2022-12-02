@@ -22,14 +22,14 @@ import {
   ButtonComponent,
   ImageWithReload,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../../../components/ui';
 
 import {
   MUTATION_CREATE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations';
-import { useNotification } from '../../../../utils';
+import { commaFormatted, useNotification } from '../../../../utils';
 import {
   ProjectReward,
   RewardCurrency,
@@ -51,11 +51,11 @@ type Props = {
 };
 
 type CreateRewardMutationResponseData = {
-  createProjectReward: ProjectReward;
+  createdReward: ProjectReward;
 };
 
 type UpdateRewardMutationResponseData = {
-  updateProjectReward: ProjectReward;
+  updatedReward: ProjectReward;
 };
 
 export const RewardAdditionModal = ({
@@ -89,7 +89,7 @@ export const RewardAdditionModal = ({
     CreateRewardMutationResponseData,
     { input: ProjectRewardCreationVariables }
   >(MUTATION_CREATE_PROJECT_REWARD, {
-    onCompleted({ createProjectReward: createdReward }) {
+    onCompleted({ createdReward }) {
       toast({
         title: 'Successfully created!',
         description: `Reward ${createdReward.name} was successfully created`,
@@ -111,13 +111,13 @@ export const RewardAdditionModal = ({
     UpdateRewardMutationResponseData,
     { input: ProjectRewardUpdateVariables }
   >(MUTATION_UPDATE_PROJECT_REWARD, {
-    onCompleted({ updateProjectReward: updatedProjectReward }) {
+    onCompleted({ updatedReward }) {
       toast({
         title: 'Successfully updated!',
-        description: `Reward ${updatedProjectReward.name} was successfully updated`,
+        description: `Reward ${updatedReward.name} was successfully updated`,
         status: 'success',
       });
-      onSubmit(updatedProjectReward);
+      onSubmit(updatedReward);
       onClose();
     },
     onError(error) {
@@ -211,6 +211,7 @@ export const RewardAdditionModal = ({
   const validateReward = () => {
     const errors: any = {};
     let isValid = true;
+
     if (!rewards.current.name) {
       errors.name = 'Name is a required field';
       isValid = false;
@@ -221,8 +222,18 @@ export const RewardAdditionModal = ({
       isValid = false;
     }
 
-    if (!rewards.current.cost || rewards.current.cost < 1) {
-      errors.cost = `Cost must be at least one Satoshi.`;
+    if (!rewards.current.cost || rewards.current.cost <= 0) {
+      errors.cost = `Cost must be greater than 0.`;
+      isValid = false;
+    }
+
+    if (
+      formCostDollarValue * 100 >
+      ProjectRewardValidations.cost.maxUSDCentsAmount
+    ) {
+      errors.cost = `Cost must be less than $${commaFormatted(
+        ProjectRewardValidations.cost.maxUSDCentsAmount / 100,
+      )}.`;
       isValid = false;
     }
 
@@ -265,7 +276,7 @@ export const RewardAdditionModal = ({
           >
             <VStack width="100%" alignItems="flex-start">
               <Text>Name</Text>
-              <TextBox
+              <TextInputBox
                 placeholder={'T - Shirt ...'}
                 value={rewards.current.name}
                 name="name"
@@ -334,13 +345,14 @@ export const RewardAdditionModal = ({
                 />
               </InputGroup>
 
-              {formError.cost && (
+              {formError.cost ? (
                 <Text fontSize="12px" color="red.500">
                   {formError.cost}
                 </Text>
-              )}
+              ) : null}
             </VStack>
           </VStack>
+
           <VStack spacing="10px">
             <ButtonComponent
               isLoading={createRewardLoading || updateRewardLoading}

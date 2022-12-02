@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const QUERY_PROJECT_BY_NAME = gql`
+export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
   query GetProject(
     $where: UniqueProjectQueryInput!
     $input: ProjectEntriesGetInput
@@ -228,12 +228,14 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
         title
         published
         publishedAt
+        status
       }
       publishedEntries: entries(input: { where: { published: true } }) {
         id
         title
         published
         publishedAt
+        status
       }
       statistics {
         totalVisitors

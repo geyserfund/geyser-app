@@ -10,7 +10,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
-import { SatoshiIconTilted } from '../../icons';
+import { LightningIcon, SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
@@ -22,11 +22,13 @@ type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx | IFundingTx;
   showsProjectLink?: boolean;
   linkedProject?: Project;
+  count?: number;
 };
 
 export const ProjectFundingContributionsFeedItem = ({
   fundingTx,
   linkedProject,
+  count,
   ...rest
 }: Props) => {
   const { funder } = fundingTx;
@@ -62,28 +64,44 @@ export const ProjectFundingContributionsFeedItem = ({
 
         <Box display="flex" justifyContent="space-between" width={'full'}>
           {/* Funder Avatar */}
-          {isFunderAnonymous ? (
-            <HStack spacing={2}>
-              <AnonymousAvatar
-                seed={funder.id}
-                image={avatarMetadata.image}
+          <HStack>
+            {isFunderAnonymous ? (
+              <HStack spacing={2}>
+                <AnonymousAvatar
+                  seed={funder.id}
+                  image={avatarMetadata.image}
+                  imageSize={'20px'}
+                  textColor="brand.neutral900"
+                />
+                <Text>Anonymous Funder</Text>
+              </HStack>
+            ) : (
+              <LinkableAvatar
+                imageSrc={funder.user?.imageUrl || ''}
+                avatarUsername={funder.user?.username || ''}
+                userProfileID={funder.user?.id}
+                fontSize={'14px'}
                 imageSize={'20px'}
                 textColor="brand.neutral900"
+                badgeNames={funderBadges.map((badge) => badge.badge)}
+                badgeElements={renderFunderBadges(funderBadges)}
               />
-              <Text>Anonymous Funder</Text>
-            </HStack>
-          ) : (
-            <LinkableAvatar
-              imageSrc={funder.user?.imageUrl || ''}
-              avatarUsername={funder.user?.username || ''}
-              userProfileID={funder.user?.id}
-              fontSize={'14px'}
-              imageSize={'20px'}
-              textColor="brand.neutral900"
-              badgeNames={funderBadges.map((badge) => badge.badge)}
-              badgeElements={renderFunderBadges(funderBadges)}
-            />
-          )}
+            )}
+            {count && count > 1 && (
+              <HStack
+                backgroundColor="brand.neutral300"
+                px="5px"
+                borderRadius="4px"
+                spacing="2px"
+              >
+                <Text fontSize="12px" fontWeight={500}>{`${count}x`}</Text>
+                <LightningIcon height="18px" width="12px" />
+                <Text fontSize="12px" fontWeight={500}>
+                  STREAMS
+                </Text>
+              </HStack>
+            )}
+          </HStack>
 
           {/* Funding Amount */}
           <Box display="flex" alignItems="center">
@@ -122,7 +140,7 @@ export const ProjectFundingContributionsFeedItem = ({
           {/* Timestamp and Funded-Project Info */}
 
           <HStack color="brand.neutral700" spacing={2}>
-            <Text fontSize={'xs'}>
+            <Text fontSize={'xs'} noOfLines={1}>
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
             </Text>

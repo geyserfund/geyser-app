@@ -39,6 +39,7 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
       comment
       amount
       funder {
+        id
         user {
           id
           username
@@ -59,14 +60,6 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
           image
         }
       }
-    }
-  }
-`;
-
-export const QUERY_GET_FUNDING_STATUS = gql`
-  query GetFundingTxStatus($id: BigInt!) {
-    fundingTx(id: $id) {
-      status
     }
   }
 `;

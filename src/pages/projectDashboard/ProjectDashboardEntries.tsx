@@ -16,7 +16,7 @@ import {
   ProjectSectionBar,
 } from '../../components/molecules';
 import { ButtonComponent, SatoshiAmount } from '../../components/ui';
-import { colors } from '../../constants';
+import { colors, getPath } from '../../constants';
 import { fonts } from '../../constants/fonts';
 import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations';
 import { numberWithCommas, useNotification } from '../../utils';
@@ -100,7 +100,11 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
   const [selectedEntry, setSelectedEntry] = useState<Entry>();
 
   const handleCreateEntry = () => {
-    history.push(`/project/${project.name}/entry`);
+    history.push(getPath('projectEntryCreation', project.name));
+  };
+
+  const handleEntryEditButtonTapped = (entry: Entry) => {
+    history.push(getPath('projectEntryDetails', project.name, entry.id));
   };
 
   const triggerDeleteEntry = (entry: Entry) => {
@@ -200,11 +204,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                     <ProjectEntryCard
                       key={entry.id}
                       entry={entryWithProject}
-                      onEdit={() =>
-                        history.push(
-                          `/project/${project.name}/entry/${entry.id}`,
-                        )
-                      }
+                      onEdit={() => handleEntryEditButtonTapped(entry)}
                       onDelete={() => triggerDeleteEntry(entry)}
                     />
                   );
@@ -220,6 +220,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                 name="Drafts"
                 number={draftEntries && draftEntries.length}
               />
+
               <VStack>
                 {draftEntries?.map((entry) => {
                   const entryWithProject = { ...entry, project };
@@ -228,11 +229,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                     <ProjectEntryCard
                       key={entry.id}
                       entry={entryWithProject}
-                      onEdit={() =>
-                        history.push(
-                          `/project/${project.name}/entry/${entry.id}`,
-                        )
-                      }
+                      onEdit={() => handleEntryEditButtonTapped(entry)}
                       onDelete={() => triggerDeleteEntry(entry)}
                     />
                   );

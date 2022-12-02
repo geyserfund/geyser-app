@@ -17,7 +17,7 @@ import {
   Card,
   ImageWithReload,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../../components/ui';
 import {
   isMobileMode,
@@ -38,7 +38,7 @@ import {
   MUTATION_UPDATE_PROJECT,
 } from '../../../graphql/mutations';
 import { useAuthContext } from '../../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import { Project } from '../../../types/generated/graphql';
 import { ProjectValidations } from '../../../constants/validations/project';
 import { UserValidations } from '../../../constants/validations';
@@ -100,7 +100,9 @@ export const ProjectCreate = () => {
           },
         });
 
-        history.push(`/launch/${createdProject.id}/milestones`);
+        history.push(
+          getPath('launchProjectWithMilestonesAndRewards', createdProject.id),
+        );
       }
     },
     onError(error) {
@@ -130,7 +132,7 @@ export const ProjectCreate = () => {
     },
   });
 
-  const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
+  const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: {
       where: {
         name: form.name,
@@ -147,7 +149,7 @@ export const ProjectCreate = () => {
   });
 
   const [getProjectById, { loading, data }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME,
+    QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: { where: { id: params.projectId } },
       onCompleted(data) {
@@ -335,7 +337,7 @@ export const ProjectCreate = () => {
             <VStack width="100%" spacing="40px" alignItems="flex-start">
               <Text color="brand.gray500" fontSize="30px" fontWeight={700}>
                 {' '}
-                Create a new Project
+                Create A New Project
               </Text>
               <TitleWithProgressBar
                 paddingBottom="20px"
@@ -347,7 +349,7 @@ export const ProjectCreate = () => {
             <VStack width="100%" alignItems="flex-start">
               <VStack width="100%" alignItems="flex-start">
                 <Text>Project Title</Text>
-                <TextBox
+                <TextInputBox
                   name="title"
                   onChange={handleChange}
                   value={form.title}
@@ -404,7 +406,7 @@ export const ProjectCreate = () => {
 
               <VStack width="100%" alignItems="flex-start">
                 <Text>Project E-mail</Text>
-                <TextBox
+                <TextInputBox
                   name="email"
                   value={user.email || form.email}
                   onChange={handleChange}
