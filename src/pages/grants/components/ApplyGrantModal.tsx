@@ -74,6 +74,8 @@ export const ApplyGrantModal = ({
   const [loading, setLoading] = useState(false);
   const finalRef = React.useRef(null);
 
+  const { externalAccounts } = user;
+
   const submitForm = async () => {
     setLoading(true);
     const data = {
@@ -83,8 +85,8 @@ export const ApplyGrantModal = ({
         'Project Link': link,
         Contact: email,
         Region: area,
-        'Twitter ID': '',
-        Links: 'ssaaa',
+        'Twitter ID': externalAccounts[0]?.externalUsername,
+        Links: '',
       },
     };
 

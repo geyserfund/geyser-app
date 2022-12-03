@@ -1,5 +1,5 @@
 import { Box, Button, Grid, GridItem, Text } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { isMobileMode } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
@@ -17,6 +17,7 @@ import bitcoinCommunity from '../../assets/bitcoincommunity.svg';
 import bitcoinTransition from '../../assets/bitcointransition.svg';
 import bitcoinArt from '../../assets/bitcoinart.svg';
 import { GrantDevelopers } from './components/GrantDevs';
+import { AuthContext } from '../../context';
 
 const grants = [
   {
@@ -52,6 +53,9 @@ export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
   const [link, setLink] = React.useState('');
+
+  const { user } = useContext(AuthContext);
+  const { externalAccounts } = user;
 
   const linkHandler = (link) => {
     setLink(link);
