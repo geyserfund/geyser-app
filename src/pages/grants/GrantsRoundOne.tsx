@@ -1,6 +1,15 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Grid, GridItem, Text } from '@chakra-ui/react';
-import { isMobileMode } from '../../utils';
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Link,
+  Text,
+  VStack,
+  Image,
+} from '@chakra-ui/react';
+import { isMobileMode, isMediumScreen } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -19,22 +28,42 @@ import { useQuery } from '@apollo/client';
 import { QUERY_GRANTS } from '../../graphql';
 import { GrantCard } from './components/GrantCard';
 import { Project, ProjectsGetQueryInput } from '../../types/generated/graphql';
-
-const grantx = [
+import bitedu from '../../assets/bitcoineducation.svg';
+import bitcul from '../../assets/bitcoinculture.svg';
+import bitdev from '../../assets/bitcoindevelopment.svg';
+import { ButtonComponent } from '../../components/ui';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { Board } from './components/Board';
+const grants = [
   {
-    name: 'Bitcoin for Free Speech',
+    title: 'Bitcoin Education',
+    subtitle: 'ROUND 1: JULY 1-31',
     applicants: 0,
-    about: '',
+    about:
+      'The aim of this grant is to support not-for-profit efforts and initiatives going towards Bitcoin education. Bitcoin is a tool for individual freedom and self-sovereignty. It is enabling a revolution that will take humanity to the next level by providing financial freedom and accessibility to the world, and a return to a sound financial system. And yet, most people still see it as a tool for gambling, money for criminals, a ponzi scheme, or an ecological nightmare. This is why the work of Bitcoin educators is so important. Much work is still needed to empower people around the world to use Bitcoin as a tool for escaping rampant inflation, financial censorship and banklessness. For more information, see here.',
+    contributed: '1.1M',
+    distributed: '0',
+    image: bitedu,
   },
   {
-    name: 'Visual Artists for Bitcoin',
+    title: 'Bitcoin Development',
+    subtitle: 'ROUND 1: JULY 1-31',
     applicants: 0,
-    about: '',
+    about:
+      'The aim of this grant is to support not-for-profit efforts and initiatives going towards Bitcoin education. Bitcoin is a tool for individual freedom and self-sovereignty. It is enabling a revolution that will take humanity to the next level by providing financial freedom and accessibility to the world, and a return to a sound financial system. And yet, most people still see it as a tool for gambling, money for criminals, a ponzi scheme, or an ecological nightmare. This is why the work of Bitcoin educators is so important. Much work is still needed to empower people around the world to use Bitcoin as a tool for escaping rampant inflation, financial censorship and banklessness. For more information, see here.',
+    contributed: '12,231,955',
+    distributed: '231,955',
+    image: bitdev,
   },
   {
-    name: 'Bitcoin Open Source',
+    title: 'Bitcoin Culture',
+    subtitle: 'ROUND 1: JULY 1-31',
     applicants: 0,
-    about: '',
+    about:
+      'The aim of this grant is to support not-for-profit efforts and initiatives going towards Bitcoin education. Bitcoin is a tool for individual freedom and self-sovereignty. It is enabling a revolution that will take humanity to the next level by providing financial freedom and accessibility to the world, and a return to a sound financial system. And yet, most people still see it as a tool for gambling, money for criminals, a ponzi scheme, or an ecological nightmare. This is why the work of Bitcoin educators is so important. Much work is still needed to empower people around the world to use Bitcoin as a tool for escaping rampant inflation, financial censorship and banklessness. For more information, see here.',
+    contributed: '12,231,955',
+    distributed: '231,955',
+    image: bitcul,
   },
 ];
 type ResponseData = {
@@ -50,42 +79,13 @@ type QueryVariables = {
 export const GrantsRoundOne = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
+  const isMedium = isMediumScreen();
   const { toast } = useNotification();
   const [link, setLink] = React.useState('');
 
   const linkHandler = (link) => {
     setLink(link);
   };
-
-  const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
-    QUERY_GRANTS,
-    {
-      variables: { input: { where: { type: projectTypes.grant } } },
-    },
-  );
-
-  // const grants = (data && data.projects.projects) || [];
-  const grants = data?.projects.projects || [];
-
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: 'Could not load projects',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    }
-  }, [error]);
-
-  const grantsSort = (grantA: Project) => {
-    if (grantA.name === 'bitcoineducation') {
-      return -1;
-    }
-
-    return 0;
-  };
-
-  const grantsSorted = [...grants].sort(grantsSort);
 
   return (
     <>
@@ -180,11 +180,17 @@ export const GrantsRoundOne = () => {
               minWidth="100%"
               mt={8}
             >
-              {grants.map((item) => (
-                <GridItem w={'100%'} key={item.name}>
+              {grants.map((item, idx) => (
+                <GridItem w={'100%'} key={idx}>
                   <ApplyGrantCard
-                    name={item.name}
+                    title={item.title}
+                    contributed={item.contributed}
+                    distributed={item.distributed}
+                    subtitle={item.subtitle}
+                    about={item.about}
+                    image={item.image}
                     applicant={item.applicants}
+                    isClose={false}
                   />
                 </GridItem>
               ))}
@@ -203,7 +209,9 @@ export const GrantsRoundOne = () => {
               applications.
             </Text>
           </Box>
-          <BoardMembers />
+          <Box minWidth={'100%'} p="2" bg="white">
+            <Board />
+          </Box>
           <Box my={8}>
             <Text
               fontFamily={fonts.interBlack}
@@ -261,7 +269,15 @@ export const GrantsRoundOne = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <ContributeModal onLink={linkHandler} />
+                <Button
+                  variant={'solid'}
+                  fontSize="sm"
+                  px={10}
+                  mr="2"
+                  backgroundColor="brand.primary400"
+                >
+                  Contribute
+                </Button>
 
                 <Box display="flex" alignItems={'center'}>
                   <Text
@@ -280,31 +296,54 @@ export const GrantsRoundOne = () => {
               </Box>
             </Box>
           </Box>
-          <MoreInfo />
           <Box
-            border={'2px solid #E9ECEF'}
-            minWidth="100%"
-            p="2"
-            rounded={'md'}
-            minHeight={'300px'}
+            width={isMobile ? '90%' : isMedium ? '75%' : '60%'}
+            display="flex"
+            justifyContent="center"
+            justifyItems="center"
+            margin="0 auto"
           >
-            <Text
-              fontWeight={'bold'}
-              fontSize="large"
-              mt={'2'}
-              fontFamily={fonts.interBlack}
-            >
-              Applications
-            </Text>
-            <Box>
-              <iframe
-                className="airtable-embed"
-                src="https://airtable.com/embed/shrfeI21FWzyCqHZy?backgroundColor=teal"
-                frameBorder="0"
-                width="100%"
-                height="533"
-              ></iframe>
-            </Box>
+            <VStack>
+              <Text
+                fontFamily={fonts.interBlack}
+                fontSize="24px"
+                fontWeight={'bold'}
+                textAlign="center"
+                mt={8}
+              >
+                Round 1 Announcement
+              </Text>
+              <Text textAlign="justify" fontSize="sm">
+                The Geyser Grant Round 1 winners have been released.{' '}
+                <Link
+                  _hover={{ textDecoration: 'none' }}
+                  isExternal
+                  href="https://twitter.com/geyserfund/status/1567537222005530625?s=20&t=ubMlkMfNudkbogo-IKhkHw"
+                >
+                  Check out our Twitter announcement.
+                </Link>
+              </Text>
+              <Image
+                htmlHeight={450}
+                htmlWidth={800}
+                src="https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-1-results.jpeg"
+              ></Image>
+              <Link
+                margin="0 auto"
+                w="87px"
+                _hover={{ textDecoration: 'none' }}
+                isExternal
+                href="https://twitter.com/geyserfund/status/1567537222005530625"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <ButtonComponent fontSize="lg">
+                  Announcement
+                  <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
+                </ButtonComponent>
+              </Link>
+            </VStack>
           </Box>
         </Box>
         <AppFooter />

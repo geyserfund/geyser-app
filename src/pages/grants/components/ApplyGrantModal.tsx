@@ -34,6 +34,7 @@ interface Grant {
   subtitle: string;
   about: string;
   image: string;
+  isClose: Boolean;
 }
 
 export const ApplyGrantModal = ({
@@ -41,6 +42,7 @@ export const ApplyGrantModal = ({
   image,
   title,
   subtitle,
+  isClose,
   about,
 }: Grant) => {
   const {
@@ -94,20 +96,35 @@ export const ApplyGrantModal = ({
 
   return (
     <>
-      <Button
-        bg="brand.primary400"
-        mt={3}
-        size="sm"
-        minWidth={'100%'}
-        fontSize="14px"
-        onClick={() => {
-          setOverlay(<OverlayOne />);
-          onOpen();
-        }}
-        backgroundColor="brand.primary400"
-      >
-        view
-      </Button>
+      {isClose ? (
+        <Button
+          bg="brand.primary400"
+          mt={3}
+          size="sm"
+          minWidth={'100%'}
+          fontSize="14px"
+          onClick={() => {
+            setOverlay(<OverlayOne />);
+            onOpen();
+          }}
+          backgroundColor="brand.primary400"
+        >
+          view
+        </Button>
+      ) : (
+        <Button
+          variant={'outline'}
+          size="sm"
+          isFullWidth
+          onClick={() => {
+            setOverlay(<OverlayOne />);
+            onOpen();
+          }}
+          style={{ border: 'solid 2px #20ECC7' }}
+        >
+          Closed
+        </Button>
+      )}
 
       <Modal isCentered isOpen={isOpen} size="sm">
         {overlay}
@@ -127,8 +144,12 @@ export const ApplyGrantModal = ({
           <Box bg="brand.bgWhite" pb={3}>
             {grant && (
               <>
-                <Box width={'100%'}>
-                  <img src={image} width={'100%'} />
+                <Box
+                  width={'100%'}
+                  display={isClose ? 'block' : 'flex'}
+                  justifyContent={'center'}
+                >
+                  <img src={image} width={isClose ? '100%' : '60%'} />
                 </Box>
 
                 <ModalBody>
@@ -145,20 +166,26 @@ export const ApplyGrantModal = ({
                       alignContent="center"
                       flexDirection={'column'}
                     >
-                      <Text>{about}</Text>
+                      <Text justify="center">{about}</Text>
                     </Box>
                   </Box>
                   <Box mt={4}>
-                    <Button
-                      bg="brand.primary"
-                      onClick={() => {
-                        setGrant(false);
-                        setFormC(true);
-                      }}
-                      isFullWidth
-                    >
-                      Confirm
-                    </Button>
+                    {isClose ? (
+                      <Button
+                        bg="brand.primary"
+                        onClick={() => {
+                          setGrant(false);
+                          setFormC(true);
+                        }}
+                        isFullWidth
+                      >
+                        Confirm
+                      </Button>
+                    ) : (
+                      <Button isFullWidth disabled>
+                        Apply
+                      </Button>
+                    )}
                   </Box>
                 </ModalBody>
               </>
