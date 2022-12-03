@@ -1,6 +1,6 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
 import { CloseButton, IconButton, Link } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SectionTitle } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { IFundingAmounts, IProject } from '../../../interfaces';

@@ -212,6 +212,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         setAmounts(data.fund.amountSummary);
         gotoNextStage();
       }
+    } else if (data && fundState === fundingStages.started) {
+      setFundingTx(data.fund.fundingTx);
     }
   }, [data]);
 

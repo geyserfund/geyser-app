@@ -138,11 +138,44 @@ export const ProjectFundingQRScreenQRCodeSection = ({
     errorFromRefresh,
   ]);
 
-  const paymentRequest = useMemo(() => {
+  const value = useMemo(() => {
     // QUESTION: What should we do if the `paymentRequest` property returned
     // from the `fundingInvoiceRefresh` mutation is null?
-    return currentFundingTX?.paymentRequest || '';
-  }, [currentFundingTX, currentFundingTX.paymentRequest]);
+
+    const { id, paymentRequest, address, amount } = currentFundingTX;
+
+    if (id === 0) {
+      return '';
+    }
+
+    let value;
+    if ((!address && !paymentRequest) || !amount) {
+      // TODO: replace with toast
+      console.log('Could not fetch funding data');
+    }
+
+    const btcAmount = amount / 10 ** 8;
+    console.log('btcAmount', btcAmount);
+    // If no on-chain address could be generated, only show the payment request
+    if (!address) {
+      value = paymentRequest;
+    }
+
+    // If no payment request could be generated, only show the on-chain option
+    if (!paymentRequest) {
+      value = `bitcoin:${address}?amount=${btcAmount}`;
+    }
+
+    value = `bitcoin:${address}?amount=${btcAmount}&lightning=${paymentRequest}`;
+    console.log('value', value);
+
+    setIsRefreshingInvoice(false);
+    return value;
+  }, [
+    currentFundingTX,
+    currentFundingTX.paymentRequest,
+    currentFundingTX.address,
+  ]);
 
   const qrForegroundColor = useMemo(() => {
     return hasCopiedQRCode ? colors.primary : colors.textBlack;
@@ -156,7 +189,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({
   }, [qrDisplayState]);
 
   const handleCopyButtonTapped = () => {
-    navigator.clipboard.writeText(paymentRequest);
+    navigator.clipboard.writeText(value!);
 
     setHasCopiedQRCode(true);
 
@@ -236,7 +269,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({
             padding={'2px'}
           >
             <QRCode
-              value={paymentRequest!}
+              value={value!}
               size={208}
               bgColor={colors.bgWhite}
               fgColor={qrForegroundColor}
