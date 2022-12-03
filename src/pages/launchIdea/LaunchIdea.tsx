@@ -8,7 +8,7 @@ import {
   Card,
   SectionTitle,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { GeyserFAQUrl } from '../../constants';
@@ -187,7 +187,7 @@ export const LaunchIdea = () => {
               </Text>
               <VStack width="100%" alignItems="flex-start">
                 <SectionTitle>Your email/contact</SectionTitle>
-                <TextBox
+                <TextInputBox
                   type="email"
                   name="email"
                   fontSize="14px"

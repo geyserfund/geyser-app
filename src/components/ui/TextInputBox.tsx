@@ -13,11 +13,11 @@ const useStyles = createUseStyles({
   },
 });
 
-interface ITextBoxProps extends InputProps {
-  error?: string;
-}
+type Props = InputProps & {
+  error?: string | null;
+};
 
-export const TextBox = ({ children, error, ...rest }: ITextBoxProps) => {
+export const TextInputBox = ({ children, error, ...rest }: Props) => {
   const classes = useStyles();
   return (
     <Box width="100%">
@@ -28,11 +28,12 @@ export const TextBox = ({ children, error, ...rest }: ITextBoxProps) => {
       >
         {children}
       </Input>
-      {error && (
+
+      {error ? (
         <Text color="brand.error" fontSize="12px">
           {error}
         </Text>
-      )}
+      ) : null}
     </Box>
   );
 };

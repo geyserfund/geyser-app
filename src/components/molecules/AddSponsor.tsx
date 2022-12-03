@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/modal';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import { ButtonComponent, Linkin } from '../ui';
+import { ButtonComponent, UndecoratedLink } from '../ui';
 import { AddSponsorUrl } from '../../constants';
 
 interface IConnectTwitter {
@@ -46,11 +46,11 @@ export const AddSponsor = ({ isOpen, onClose }: IConnectTwitter) => {
         <ModalBody>
           <Text>{useDescription}</Text>
           <Box className={classes.twitterContainer}>
-            <Linkin href={AddSponsorUrl} isExternal>
+            <UndecoratedLink href={AddSponsorUrl} isExternal>
               <ButtonComponent margin="10px" isFullWidth primary standard>
                 Continue
               </ButtonComponent>
-            </Linkin>
+            </UndecoratedLink>
           </Box>
         </ModalBody>
       </ModalContent>
