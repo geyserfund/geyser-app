@@ -107,18 +107,18 @@ export const ProjectDetailsCard = ({
   return (
     <Card padding="24px">
       <VStack alignItems="flex-start" width="100%" spacing="18px">
-        {project.image ? (
+        {project.image && (
           <Box width="100%" overflow="hidden">
             <Image
               borderRadius="4px"
               width="100%"
               height="100%"
-              src={project.image || ''}
+              src={project.image}
               maxH="210px"
               objectFit="cover"
             />
           </Box>
-        ) : null}
+        )}
 
         <VStack width="100%" spacing={0} alignItems="flex-start">
           <HStack justifyContent="space-between" width="100%">
