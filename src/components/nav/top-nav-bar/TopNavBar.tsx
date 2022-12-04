@@ -149,7 +149,6 @@ export const TopNavBar = () => {
 
   const handleProjectDashboardButtonPress = () => {
     if (userHasOnlyOneProject) {
-      console.log('checking this', user);
       history.push(getPath('projectDashboard', user.ownerOf[0]?.project?.name));
       return;
     }
