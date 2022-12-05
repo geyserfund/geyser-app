@@ -124,14 +124,7 @@ export const ProjectFundingContributionsFeedItem = ({
           {/* Funding Media Attachment */}
 
           {fundingTx.media ? (
-            <Box
-              h={'178px'}
-              bg={'gray.100'}
-              mt={-6}
-              mx={-6}
-              mb={6}
-              pos={'relative'}
-            >
+            <Box h={'178px'} bg={'gray.100'} pos={'relative'}>
               <Image
                 src={fundingTx.media}
                 alt="Contribution media attachment"
