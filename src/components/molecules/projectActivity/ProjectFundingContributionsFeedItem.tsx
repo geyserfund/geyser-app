@@ -79,7 +79,6 @@ export const ProjectFundingContributionsFeedItem = ({
                   imageSize={'20px'}
                   textColor="brand.neutral900"
                 />
-                <Text>Anonymous Funder</Text>
               </HStack>
             ) : (
               <LinkableAvatar

@@ -25,3 +25,4 @@ export * from './ImageWithReload';
 export * from './ProgressBar';
 export * from './ProjectAvatarLink';
 export * from './ProjectStatusLabel';
+export * from './UserSkeleton';
