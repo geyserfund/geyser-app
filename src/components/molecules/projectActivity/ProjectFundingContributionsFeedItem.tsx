@@ -8,9 +8,10 @@ import {
   useColorModeValue,
   HStack,
   VStack,
+  Link,
 } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
-import { LightningIcon, SatoshiIconTilted } from '../../icons';
+import { FountainIcon, LightningIcon, SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
@@ -47,6 +48,11 @@ export const ProjectFundingContributionsFeedItem = ({
       fundingTx.sourceResource?.createdAt || '',
     funder,
   });
+
+  const isFromFountain = fundingTx.source === 'Fountain';
+  const funderFountainUserName = fundingTx.funder?.user?.externalAccounts?.find(
+    (account) => account?.type === 'Fountain',
+  )?.externalUsername;
 
   return (
     <Box
@@ -144,6 +150,18 @@ export const ProjectFundingContributionsFeedItem = ({
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
             </Text>
+
+            {isFromFountain && funderFountainUserName && (
+              <>
+                <Text fontSize="xs">from</Text>
+                <Link
+                  href={`https://fountain.fm/${funderFountainUserName}`}
+                  isExternal
+                >
+                  <FountainIcon rounded="full" />
+                </Link>
+              </>
+            )}
 
             {linkedProject ? (
               <>
