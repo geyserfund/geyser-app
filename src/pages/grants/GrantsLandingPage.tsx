@@ -10,12 +10,16 @@ import { ListText } from './components/ListText';
 import { CustomGrantCard } from './components/CustomGrantCard';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
-import banner from '../../assets/roundtwobanner.svg';
+import { ContributeModal } from './components/ContributeModal';
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
+  const [link, setLink] = React.useState('');
 
   const theme = useTheme();
+  const linkHandler = (link: React.SetStateAction<string>) => {
+    setLink(link);
+  };
 
   return (
     <>
@@ -143,15 +147,7 @@ export const GrantsLandingPage = () => {
                 mt="6"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <Button
-                  variant={'solid'}
-                  fontSize="sm"
-                  px={10}
-                  mr="2"
-                  backgroundColor="brand.primary400"
-                >
-                  Contribute
-                </Button>
+                <ContributeModal onLink={linkHandler} />
                 {isMobile ? (
                   <Text
                     fontSize={'13px'}
@@ -203,7 +199,9 @@ export const GrantsLandingPage = () => {
                 <CustomGrantCard
                   showBanner={true}
                   status={true}
-                  banner={banner}
+                  banner={
+                    'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'
+                  }
                   applicants="-"
                   grant="100 M"
                   title="Geyser Grants Round 2"

@@ -45,7 +45,7 @@ export const CustomGrantCard = ({
       >
         {showBanner ? (
           <Box borderRadius="12px">
-            <img src={banner} width="100%" />
+            <img src={banner} width="100%" style={{ borderRadius: '11px' }} />
           </Box>
         ) : null}
         <Box display="flex" flexDirection={'column'} p="4">

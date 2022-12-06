@@ -11,11 +11,6 @@ import satwalletimg from '../../assets/walletsats.svg';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { ContributeModal } from './components/ContributeModal';
-import logo from '../../assets/round2.svg';
-import banner from '../../assets/roundtwobanner.svg';
-import bitcoinCommunity from '../../assets/bitcoincommunity.svg';
-import bitcoinTransition from '../../assets/bitcointransition.svg';
-import bitcoinArt from '../../assets/bitcoinart.svg';
 import { GrantDevelopers } from './components/GrantDevs';
 import { AuthContext } from '../../context';
 
@@ -23,7 +18,8 @@ const grants = [
   {
     title: 'Communities & Meetups',
     subtitle: 'ROUND 2: DECEMBER',
-    image: bitcoinCommunity,
+    image:
+      'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-2%20copy.jpg',
     name: 'Bitcoin for Free Speech',
     applicants: 0,
     about:
@@ -32,7 +28,8 @@ const grants = [
   {
     title: 'Bitcoin Translations',
     subtitle: 'ROUND 2: DECEMBER',
-    image: bitcoinTransition,
+    image:
+      'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-1%20copy.jpg',
     name: 'Visual Artists for Bitcoin',
     applicants: 0,
     about:
@@ -41,7 +38,8 @@ const grants = [
   {
     title: 'Bitcoin Visual Art',
     subtitle: 'ROUND 2: DECEMBER',
-    image: bitcoinArt,
+    image:
+      'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-3%20copy.jpg',
     name: 'Bitcoin Open Source',
     applicants: 0,
     about:
@@ -54,10 +52,7 @@ export const GrantsRoundTwo = () => {
   const history = useHistory();
   const [link, setLink] = React.useState('');
 
-  const { user } = useContext(AuthContext);
-  const { externalAccounts } = user;
-
-  const linkHandler = (link) => {
+  const linkHandler = (link: React.SetStateAction<string>) => {
     setLink(link);
   };
 
@@ -72,7 +67,7 @@ export const GrantsRoundTwo = () => {
         flexDirection="column"
       >
         <Box
-          my={5}
+          my={4}
           width={isMobile ? '100%' : '909px'}
           px={isMobile ? '1rem' : ''}
         >
@@ -87,13 +82,19 @@ export const GrantsRoundTwo = () => {
             <FaArrowLeft /> See all Grants
           </Button>
           <Box display="flex" justifyContent={'center'}>
-            <img src={logo} />
+            <img
+              width={'217px'}
+              height={'180px'}
+              src={
+                'https://storage.googleapis.com/geyser-images-distribution-prod-us/snap2022-11-25-19-45-27.png'
+              }
+            />
           </Box>
           <Box
             display="flex"
             alignItems={'center'}
             justifyContent="center"
-            my={2}
+            my={1}
             gap={4}
           >
             <Text
@@ -151,7 +152,11 @@ export const GrantsRoundTwo = () => {
             </Box>
 
             <Box minWidth={'100%'} borderRadius="12px">
-              <img src={banner} />
+              <img
+                src={
+                  'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'
+                }
+              />
             </Box>
 
             <Grid
