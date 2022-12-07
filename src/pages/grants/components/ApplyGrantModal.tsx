@@ -234,8 +234,8 @@ export const ApplyGrantModal = ({
                     </FormControl>
                     <Box>
                       <Text fontWeight={'500'} fontSize="12px">
-                        Drop your Geyser Project or Entry link with an explainer
-                        of your project idea and intent
+                        Drop your Geyser or Bolt.fun project or entry link with
+                        an explainer of your project idea and intent
                       </Text>
 
                       <Textarea
