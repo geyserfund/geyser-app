@@ -1,4 +1,4 @@
-import { Box, Button, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, Link, Text } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { isMobileMode } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
@@ -177,6 +177,18 @@ export const GrantsRoundTwo = () => {
                 </GridItem>
               ))}
             </Grid>
+          </Box>
+
+          <Box display={'flex'} justifyContent="center" my={6}>
+            <Text fontWeight={'400'} fontSize="14px" color={'brand.neutral600'}>
+              Designs by
+              <Link
+                href="https://twitter.com/tachirahomestd"
+                color={'brand.primary500'}
+              >
+                @tachirahomestd
+              </Link>
+            </Text>
           </Box>
           <Box my={8}>
             <Text
