@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Divider,
@@ -17,11 +17,32 @@ import { ActivityView, LandingPageProjectsList, TopBanner } from './components';
 import { BsArrowRight } from 'react-icons/bs';
 import { dimensions, getPath } from '../../constants';
 import { isMobileMode } from '../../utils';
+import { gql, useSubscription } from '@apollo/client';
 
 const { topNavBar: topNavBarDimensions } = dimensions;
 
+const HELLO_SUBSCRIPTION = gql`
+  subscription Subscription {
+    projectCreated {
+      subscribe {
+        hello
+      }
+    }
+  }
+`;
+
 export const LandingPage = () => {
   const isMobile = isMobileMode();
+
+  const { data, loading } = useSubscription(HELLO_SUBSCRIPTION, {
+    // variables: { },
+  });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  console.log(data);
 
   return (
     <Box
@@ -30,6 +51,7 @@ export const LandingPage = () => {
       width="full"
       height="full"
     >
+      <h4>New comment: {!loading && data?.projectCreated?.subscribe.hello}</h4>
       <TopBanner />
 
       <Stack
