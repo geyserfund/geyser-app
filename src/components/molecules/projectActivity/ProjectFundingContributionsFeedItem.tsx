@@ -17,10 +17,10 @@ import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';
-import { IFundingTx } from '../../../interfaces';
+import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon';
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTx | IFundingTx;
+  fundingTx: FundingTx;
   showsProjectLink?: boolean;
   linkedProject?: Project;
   count?: number;
@@ -143,17 +143,7 @@ export const ProjectFundingContributionsFeedItem = ({
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
             </Text>
 
-            {isFromFountain && funderFountainUserName && (
-              <>
-                <Text fontSize="xs">from</Text>
-                <Link
-                  href={`https://fountain.fm/${funderFountainUserName}`}
-                  isExternal
-                >
-                  <FountainIcon rounded="full" />
-                </Link>
-              </>
-            )}
+            <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
             {linkedProject ? (
               <>
