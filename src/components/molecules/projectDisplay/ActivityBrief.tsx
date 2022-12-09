@@ -6,6 +6,7 @@ import { fonts } from '../../../constants/fonts';
 import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
 import { SatoshiAmount } from '../../ui';
 import { Project, ProjectMilestone } from '../../../types/generated/graphql';
+import { noFeeProjects, GEYSER_FEE } from '../../../constants';
 
 interface IActivityBrief {
   loading: boolean;
@@ -27,20 +28,19 @@ const useStyles = createUseStyles({
 
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const classes = useStyles();
-
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>();
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0);
+
+  const balance = noFeeProjects.includes(project.name)
+    ? project.balance
+    : project.balance * (1 - GEYSER_FEE);
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
       let selectedMilestone: ProjectMilestone | undefined;
 
       project.milestones.map((milestone, index) => {
-        if (
-          milestone &&
-          milestone.amount >= project.balance &&
-          !selectedMilestone
-        ) {
+        if (milestone && milestone.amount >= balance && !selectedMilestone) {
           selectedMilestone = milestone;
           setCurrentMilestone(milestone);
           setMilestoneIndex(index + 1);
@@ -77,7 +77,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
 
   const renderCircularProgress = () => {
     if (currentMilestone) {
-      const percentage = (project.balance / currentMilestone.amount) * 100;
+      const percentage = (balance / currentMilestone.amount) * 100;
       return (
         <CircularProgress
           capIsRound
@@ -97,9 +97,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
 
   const getMilestoneValue = () => {
     if (currentMilestone) {
-      const percentage = Math.ceil(
-        (project.balance / currentMilestone.amount) * 100,
-      );
+      const percentage = Math.ceil((balance / currentMilestone.amount) * 100);
       return (
         <Text
           fontSize="14px"
@@ -123,7 +121,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           {project.title}
         </Text>
         <SatoshiAmount fontSize="20px" fontFamily={fonts.mono}>
-          {project.balance}
+          {balance}
         </SatoshiAmount>
         {getMilestoneValue()}
         {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}

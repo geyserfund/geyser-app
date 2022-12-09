@@ -8,7 +8,10 @@ import { IFundForm } from '../../../hooks';
 import { IFundingTx, IProject } from '../../../interfaces';
 import { BotTwitterUrl } from '../../../constants';
 import { Project, FundingTx } from '../../../types/generated/graphql';
-import { ContributionInfoBox } from '../components/ContributionInfoBox';
+import {
+  ContributionInfoBox,
+  ContributionInfoBoxVersion,
+} from '../components/ContributionInfoBox';
 import { useFundCalc } from '../../../helpers';
 
 type Props = {
@@ -89,37 +92,24 @@ export const SuccessScreen = ({
           The contribution went through! You can now share this campaign with
           friends.
         </Text>
-
-        <ContributionInfoBox
-          project={project as Project}
-          contributionAmount={getTotalAmount('sats', project.name)}
-          rewardsEarned={fundingState.rewardsByIDAndCount}
-          isFunderAnonymous={fundingState.anonymous}
-          funderUsername={fundingState.funderUsername}
-          funderEmail={fundingState.email}
-          funderAvatarURL={fundingState.funderAvatarURL}
-          // TODO: Determine the correct logic for computing and rendering badges
-          // earned by this contribution (see: https://geyserteam.atlassian.net/browse/GT-617?focusedCommentId=10127)
-          // badgesEarned={[
-          //   {
-          //     badge: '🥇',
-          //     description: 'With this donation, you’ll earn a medal!',
-          //   },
-          //   {
-          //     badge: '🏆',
-          //     description: 'With this donation, you’ll earn a trophy!',
-          //   },
-          // ]}
-          referenceCode={fundingTx.uuid}
-        />
-
         {!fundingState.anonymous && (
           <Text textAlign="left" paddingBlockEnd="30px">
             🤖 Check your Twitter! Our bot{' '}
             <a href={BotTwitterUrl}>@geyserfunders</a> just sent out a tweet.
           </Text>
         )}
-
+        <ContributionInfoBox
+          project={project as Project}
+          formState={fundingState}
+          contributionAmount={getTotalAmount('sats', project.name)}
+          rewardsEarned={fundingState.rewardsByIDAndCount}
+          isFunderAnonymous={fundingState.anonymous}
+          funderUsername={fundingState.funderUsername}
+          funderEmail={fundingState.email}
+          funderAvatarURL={fundingState.funderAvatarURL}
+          version={ContributionInfoBoxVersion.PRIMARY}
+          referenceCode={fundingTx.uuid}
+        />
         <ButtonComponent
           standard
           primary={hasCopiedProjectLink}

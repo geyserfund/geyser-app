@@ -9,7 +9,10 @@ import { FaTelegramPlane } from 'react-icons/fa';
 import { GeyserTelegramUrl } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { Project } from '../../../types/generated/graphql';
-import { ContributionInfoBox } from '../components/ContributionInfoBox';
+import {
+  ContributionInfoBox,
+  ContributionInfoBoxVersion,
+} from '../components/ContributionInfoBox';
 import { ProjectFundingQRScreenQRCodeSection } from './ProjectFundingQRScreenQRCodeSection';
 import { fonts } from '../../../constants/fonts';
 
@@ -55,6 +58,8 @@ export const ProjectFundingQRScreen = ({
       >
         <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
         <ContributionInfoBox
+          formState={state}
+          version={ContributionInfoBoxVersion.NEUTRAL}
           project={project as Project}
           contributionAmount={getTotalAmount('sats', project.name)}
           rewardsEarned={state.rewardsByIDAndCount}
