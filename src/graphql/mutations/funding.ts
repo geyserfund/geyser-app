@@ -10,6 +10,7 @@ export const MUTATION_FUND = gql`
         paymentRequest
         amount
         status
+        invoiceStatus
         comment
         media
         paidAt

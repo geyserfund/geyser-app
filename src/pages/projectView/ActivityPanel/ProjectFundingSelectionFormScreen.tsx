@@ -25,7 +25,7 @@ import { ProjectPaymentFormFundingComment } from '../components/ProjectPaymentFo
 
 type Props = {
   isMobile: boolean;
-  fundLoading: boolean;
+  fundingRequestLoading: boolean;
   handleCloseButton: () => void;
   formState: IFundForm;
   setTarget: (_: any) => void;
@@ -39,7 +39,7 @@ type Props = {
 
 export const ProjectFundingSelectionFormScreen = ({
   isMobile,
-  fundLoading,
+  fundingRequestLoading,
   handleCloseButton,
   handleFund,
   formState,
@@ -221,7 +221,7 @@ export const ProjectFundingSelectionFormScreen = ({
 
         <Box width="100%" marginTop={2}>
           <ButtonComponent
-            isLoading={fundLoading}
+            isLoading={fundingRequestLoading}
             primary
             standard
             leftIcon={<BoltIcon />}
