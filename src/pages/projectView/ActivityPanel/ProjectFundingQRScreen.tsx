@@ -36,23 +36,21 @@ export const ProjectFundingQRScreen = ({
       spacing="12px"
       width="100%"
       height="100%"
-      overflowY="hidden"
+      overflowY="auto"
       margin="10px 15px"
       display="flex"
       flexDirection={'column'}
     >
-      <CloseButton
-        borderRadius="50%"
-        position="absolute"
-        right="10px"
-        top="0px"
-        onClick={handleCloseButton}
-      />
-
-      <SectionTitle justifyContent={'flex-start'}>
-        Confirm & Contribute
-      </SectionTitle>
-
+      <HStack paddingX={2} justifyContent="space-between">
+        <SectionTitle>Confirm & Contribute</SectionTitle>
+        <CloseButton
+          // borderRadius="50%"
+          // position="absolute"
+          // right="10px"
+          // top="0px"
+          onClick={handleCloseButton}
+        />
+      </HStack>
       <VStack
         width={'full'}
         alignItems="center"
@@ -60,6 +58,7 @@ export const ProjectFundingQRScreen = ({
         marginTop={2}
         spacing={4}
         justifyContent={'flex-end'}
+        // overflowY="scroll"
       >
         <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
         <ContributionInfoBox
