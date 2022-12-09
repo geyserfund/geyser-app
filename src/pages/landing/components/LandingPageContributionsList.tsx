@@ -46,6 +46,7 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
       };
     }
 
+    options.take = itemLimit;
     return options;
   }, [data]);
 
