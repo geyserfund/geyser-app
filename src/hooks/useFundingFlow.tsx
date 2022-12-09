@@ -234,11 +234,11 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       if (hasBolt11 && hasWebLN) {
         startWebLNFlow().then((success) => {
           if (!success) {
-            fundInterval = setInterval(getFundingStatus, 1500);
+            // fundInterval = setInterval(getFundingStatus, 1500);
           }
         });
       } else {
-        fundInterval = setInterval(getFundingStatus, 1500);
+        // fundInterval = setInterval(getFundingStatus, 1500);
       }
     }
   }, [fundState]);

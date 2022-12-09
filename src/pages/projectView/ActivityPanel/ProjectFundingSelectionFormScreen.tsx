@@ -14,7 +14,7 @@ import {
   SectionTitle,
   TextInputBox,
 } from '../../../components/ui';
-import { MAX_FUNDING_AMOUNT_USD } from '../../../constants';
+import { MAX_FUNDING_AMOUNT_USD, noFeeProjects } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 import { IProjectType } from '../../../interfaces';
@@ -53,7 +53,9 @@ export const ProjectFundingSelectionFormScreen = ({
 
   const { toast } = useNotification();
   const hasRewards = rewards && rewards.length > 0;
-
+  const hasSelectedRewards =
+    formState.rewardsByIDAndCount &&
+    Object.entries(formState.rewardsByIDAndCount).length > 0;
   const submit = () => {
     const valid = validateFundingAmount();
     if (valid) {
@@ -131,7 +133,7 @@ export const ProjectFundingSelectionFormScreen = ({
       </Box>
 
       <VStack
-        padding={4}
+        padding={2}
         width={'full'}
         borderRadius={'md'}
         backgroundColor={'brand.neutral100'}
@@ -153,6 +155,7 @@ export const ProjectFundingSelectionFormScreen = ({
                 type="email"
                 name="email"
                 fontSize="14px"
+                backgroundColor={'brand.bgWhite'}
                 placeholder="Contact Email"
                 value={formState.email}
                 onChange={setTarget}
@@ -162,41 +165,48 @@ export const ProjectFundingSelectionFormScreen = ({
         </VStack>
 
         <VStack
+          padding={2}
           color={'brand.neutral700'}
+          fontWeight={'medium'}
           width={'full'}
           alignItems="flex-start"
           spacing={2}
         >
-          {hasRewards ? (
+          {hasRewards && hasSelectedRewards ? (
             <HStack
               justifyContent={'space-between'}
               width={'full'}
               alignItems="flex-start"
-              fontWeight={300}
               color="brand.neutral700"
             >
               <Text flex={0}>Rewards</Text>
-
               <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
-                {rewards.map((reward: ProjectReward) => {
-                  return (
-                    <Text key={reward.id}>
-                      {reward.stock ?? 0}x {reward.name}
-                    </Text>
-                  );
-                })}
+                {Object.entries(formState.rewardsByIDAndCount!).map(
+                  ([key, value]) => {
+                    const reward = rewards.find(({ id }) => id === key);
+                    if (reward) {
+                      return (
+                        <Text key={key}>
+                          {value}x {reward.name}
+                        </Text>
+                      );
+                    }
+                  },
+                )}
               </VStack>
             </HStack>
           ) : null}
 
-          <HStack
-            justifyContent={'space-between'}
-            width={'full'}
-            fontSize={'14px'}
-          >
-            <Text>{'Geyser tip'}</Text>
-            <Text>{'2%'}</Text>
-          </HStack>
+          {!noFeeProjects.includes(name) && (
+            <HStack
+              justifyContent={'space-between'}
+              width={'full'}
+              fontSize={'14px'}
+            >
+              <Text>{'Geyser fee'}</Text>
+              <Text>{'2%'}</Text>
+            </HStack>
+          )}
 
           <HStack
             justifyContent={'space-between'}
@@ -210,11 +220,14 @@ export const ProjectFundingSelectionFormScreen = ({
                 color="#1A1A1A"
                 fontWeight="bold"
                 marginLeft={'auto'}
+                fontSize={'21px'}
               >
                 {getTotalAmount('sats', name)}
               </SatoshiAmount>
 
-              <Text> {`($${getTotalAmount('dollar', name)})`}</Text>
+              <Text color="#1A1A1A" fontWeight="bold" fontSize={'21px'}>
+                {`($${getTotalAmount('dollar', name)})`}
+              </Text>
             </HStack>
           </HStack>
         </VStack>
