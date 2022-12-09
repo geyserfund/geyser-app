@@ -126,6 +126,11 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
             id
             username
             imageUrl
+            externalAccounts {
+              externalUsername
+              public
+              type
+            }
           }
         }
         amount

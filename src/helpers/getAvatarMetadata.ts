@@ -1,9 +1,7 @@
 import { IFunder } from '../interfaces';
 import { getRandomOrb } from '../utils';
-
-import FountainLogo from '../assets/fountain-logo-black-small.png';
-import BreezLogo from '../assets/breez-logo.png';
 import { Funder } from '../types/generated/graphql';
+import { BreezLogoUrl, FountainLogoUrl } from '../constants';
 
 export const getAvatarMetadata = ({
   funder,
@@ -16,7 +14,7 @@ export const getAvatarMetadata = ({
     if (source === 'Breez') {
       return {
         appName: source,
-        image: BreezLogo,
+        image: BreezLogoUrl,
         link: 'https://breez.technology/',
       };
     }
@@ -32,7 +30,7 @@ export const getAvatarMetadata = ({
       return {
         username,
         appName: 'Fountain.fm',
-        image: FountainLogo,
+        image: FountainLogoUrl,
         link: `https://fountain.fm/${username}`,
       };
     }

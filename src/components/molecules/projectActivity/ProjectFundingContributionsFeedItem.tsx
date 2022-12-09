@@ -8,18 +8,19 @@ import {
   useColorModeValue,
   HStack,
   VStack,
+  Link,
 } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
-import { LightningIcon, SatoshiIconTilted } from '../../icons';
+import { FountainIcon, LightningIcon, SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';
-import { IFundingTx } from '../../../interfaces';
+import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon';
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTx | IFundingTx;
+  fundingTx: FundingTx;
   showsProjectLink?: boolean;
   linkedProject?: Project;
   count?: number;
@@ -48,6 +49,11 @@ export const ProjectFundingContributionsFeedItem = ({
     funder,
   });
 
+  const isFromFountain = fundingTx.source === 'Fountain';
+  const funderFountainUserName = fundingTx.funder?.user?.externalAccounts?.find(
+    (account) => account?.type === 'Fountain',
+  )?.externalUsername;
+
   return (
     <Box
       bg={useColorModeValue('white', 'gray.900')}
@@ -73,7 +79,6 @@ export const ProjectFundingContributionsFeedItem = ({
                   imageSize={'20px'}
                   textColor="brand.neutral900"
                 />
-                <Text>Anonymous Funder</Text>
               </HStack>
             ) : (
               <LinkableAvatar
@@ -118,14 +123,7 @@ export const ProjectFundingContributionsFeedItem = ({
           {/* Funding Media Attachment */}
 
           {fundingTx.media ? (
-            <Box
-              h={'178px'}
-              bg={'gray.100'}
-              mt={-6}
-              mx={-6}
-              mb={6}
-              pos={'relative'}
-            >
+            <Box h={'178px'} bg={'gray.100'} pos={'relative'}>
               <Image
                 src={fundingTx.media}
                 alt="Contribution media attachment"
@@ -144,6 +142,8 @@ export const ProjectFundingContributionsFeedItem = ({
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
             </Text>
+
+            <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
             {linkedProject ? (
               <>
