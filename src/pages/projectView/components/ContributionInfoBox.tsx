@@ -180,32 +180,34 @@ export const ContributionInfoBox = ({
         </HStack>
       </VStack>
 
-      <ContributionInfoBoxDivider version={version} />
-      {hasRewards && hasSelectedRewards ? (
-        <HStack
-          justifyContent={'space-between'}
-          width={'full'}
-          alignItems="flex-start"
-          color="brand.neutral700"
-          fontWeight={'medium'}
-        >
-          <Text flex={0}>Rewards</Text>
-          <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
-            {Object.entries(formState.rewardsByIDAndCount!).map(
-              ([key, value]) => {
-                const reward = rewards!.find(({ id }) => id === key);
-                if (reward) {
-                  return (
-                    <Text key={key} fontSize={'14px'} fontWeight={'normal'}>
-                      {value}x {reward.name}
-                    </Text>
-                  );
-                }
-              },
-            )}
-          </VStack>
-        </HStack>
-      ) : null}
+      {hasRewards && hasSelectedRewards && (
+        <>
+          <ContributionInfoBoxDivider version={version} />
+          <HStack
+            justifyContent={'space-between'}
+            width={'full'}
+            alignItems="flex-start"
+            color="brand.neutral700"
+            fontWeight={'medium'}
+          >
+            <Text flex={0}>Rewards</Text>
+            <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
+              {Object.entries(formState.rewardsByIDAndCount!).map(
+                ([key, value]) => {
+                  const reward = rewards!.find(({ id }) => id === key);
+                  if (reward) {
+                    return (
+                      <Text key={key} fontSize={'14px'} fontWeight={'normal'}>
+                        {value}x {reward.name}
+                      </Text>
+                    );
+                  }
+                },
+              )}
+            </VStack>
+          </HStack>
+        </>
+      )}
 
       {showGeyserFee && !noFeeProjects.includes(project.name) && (
         <>

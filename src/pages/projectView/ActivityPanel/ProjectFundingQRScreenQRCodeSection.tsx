@@ -173,7 +173,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
 
     setTimeout(() => {
       setHasCopiedQRCode(false);
-    }, 2000);
+    }, 500);
   };
 
   const PaymentRequestCopyButton = ({ ...rest }: HTMLChakraProps<'button'>) => {
