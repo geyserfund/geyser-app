@@ -36,34 +36,24 @@ export const ProjectFundingQRScreen = ({
       spacing="12px"
       width="100%"
       height="100%"
-      overflowY="hidden"
+      overflowY="auto"
       margin="10px 15px"
       display="flex"
       flexDirection={'column'}
     >
-      <CloseButton
-        borderRadius="50%"
-        position="absolute"
-        right="10px"
-        top="0px"
-        onClick={handleCloseButton}
-      />
-
-      <SectionTitle>Confirm & Contribute</SectionTitle>
-
+      <HStack paddingX={2} justifyContent="space-between">
+        <SectionTitle>Confirm & Contribute</SectionTitle>
+        <CloseButton onClick={handleCloseButton} />
+      </HStack>
       <VStack
         width={'full'}
-        justifyContent={'flex-start'}
         alignItems="center"
         paddingX={2}
         marginTop={2}
         spacing={4}
+        justifyContent={'flex-end'}
       >
-        <ProjectFundingQRScreenQRCodeSection
-          currentFundingTX={fundingFlow.fundingTx}
-          currentFundingTXInvoiceStatus={fundingFlow.fundingTx.invoiceStatus}
-        />
-
+        <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
         <ContributionInfoBox
           project={project as Project}
           contributionAmount={getTotalAmount('sats', project.name)}
@@ -74,7 +64,6 @@ export const ProjectFundingQRScreen = ({
           funderAvatarURL={state.funderAvatarURL}
           backgroundColor={'brand.neutral100'}
         />
-
         <HStack>
           <Text>
             If you’re experiencing any issues with this payment, please reach

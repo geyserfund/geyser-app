@@ -14,6 +14,7 @@ import {
   FundingTx,
   FundingStatus,
   FundingInput,
+  InvoiceStatus,
 } from '../types/generated/graphql';
 
 type FundingTXQueryResponseData = {
@@ -24,11 +25,31 @@ type FundingTXQueryInput = {
   fundingTxID: number;
 };
 
+type InvoiceRefreshMutationResponseData = {
+  fundingInvoiceRefresh: FundingTx;
+};
+
+type InvoiceRefreshMutationInput = {
+  fundingTxID: number;
+};
+
 const QUERY_GET_FUNDING_TX_STATUS_AND_INVOICE_STATUS = gql`
   query GetFundingTxStatusAndInvoiceStatus($fundingTxID: BigInt!) {
     fundingTx(id: $fundingTxID) {
+      invoiceId
       status
       invoiceStatus
+    }
+  }
+`;
+
+const REFRESH_FUNDING_INVOICE = gql`
+  mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
+    fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
+      id
+      invoiceId
+      invoiceStatus
+      paymentRequest
     }
   }
 `;
@@ -45,6 +66,7 @@ const initialFunding = {
   uuid: '',
   invoiceId: '',
   status: FundingStatus.Unpaid,
+  invoiceStatus: InvoiceStatus.Unpaid,
   amount: 0,
   paymentRequest: '',
   address: '',
@@ -84,6 +106,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundState, setFundState] = useState<IFundingStages>(
     fundingStages.initial,
   );
+
+  const [fundingRequestErrored, setFundingRequestErrored] = useState(false);
+  const [invoiceRefreshErrored, setInvoiceRefreshErrored] = useState(false);
+  const [invoiceRefreshLoading, setRefreshingInvoice] = useState(false);
 
   const [fundingTx, setFundingTx] = useState<FundingTx>({
     ...initialFunding,
@@ -164,22 +190,34 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       });
   };
 
-  const [fundProject, { data, loading: fundLoading }] =
+  const [fundProject, { loading: fundingRequestLoading }] =
     useMutation(MUTATION_FUND);
 
   useEffect(() => {
-    if (
-      fundingStatus &&
-      fundingStatus.fundingTx &&
-      (fundingStatus.fundingTx.status === FundingStatus.Paid ||
-        (fundingStatus.fundingTx.status === FundingStatus.Pending &&
-          fundingTx.onChain))
-    ) {
-      const newTx = { ...fundingTx, status: fundingStatus.fundingTx.status };
+    if (fundingStatus && fundingStatus.fundingTx) {
+      /*
+        We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
+        older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
+      */
+      if (
+        (fundingStatus.fundingTx.invoiceStatus !== fundingTx.invoiceStatus ||
+          fundingStatus.fundingTx.status !== fundingTx.status) &&
+        fundingStatus.fundingTx.invoiceId === fundingTx.invoiceId
+      ) {
+        setFundingTx({
+          ...fundingTx,
+          ...fundingStatus.fundingTx,
+        });
+      }
 
-      setFundingTx(newTx);
-      clearInterval(fundInterval);
-      gotoNextStage();
+      if (
+        fundingStatus.fundingTx.status === FundingStatus.Paid ||
+        (fundingStatus.fundingTx.status === FundingStatus.Pending &&
+          fundingTx.onChain)
+      ) {
+        clearInterval(fundInterval);
+        gotoNextStage();
+      }
     }
   }, [fundingStatus]);
 
@@ -205,15 +243,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     }
   }, [fundState]);
 
-  useEffect(() => {
-    if (data && fundState === fundingStages.form) {
-      if (data.fund && data.fund.fundingTx && data.fund.amountSummary) {
-        setFundingTx(data.fund.fundingTx);
-        setAmounts(data.fund.amountSummary);
-        gotoNextStage();
-      }
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && fundState === fundingStages.form) {
+  //     if (data.fund && data.fund.fundingTx && data.fund.amountSummary) {
+  //       setFundingTx(data.fund.fundingTx);
+  //       setAmounts(data.fund.amountSummary);
+  //       gotoNextStage();
+  //     }
+  //   } else if (data && fundState === fundingStages.started) {
+  //     setFundingTx(data.fund.fundingTx);
+  //   }
+  // }, [data]);
 
   const gotoNextStage = () => {
     const currentIndex = stageList.indexOf(fundState);
@@ -223,9 +263,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const requestFunding = async (input: FundingInput) => {
     try {
-      await fundProject({ variables: { input } });
       gotoNextStage();
+      const { data } = await fundProject({ variables: { input } });
+
+      if (data) {
+        setFundingTx(data.fund.fundingTx);
+        setAmounts(data.fund.amountSummary);
+        gotoNextStage();
+      }
     } catch (_) {
+      setFundingRequestErrored(true);
+      clearInterval(fundInterval);
       toast({
         title: 'Something went wrong',
         description: 'Please refresh the page and try again',
@@ -234,8 +282,47 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     }
   };
 
+  const [refreshInvoice] = useMutation<
+    InvoiceRefreshMutationResponseData,
+    InvoiceRefreshMutationInput
+  >(REFRESH_FUNDING_INVOICE, {
+    variables: {
+      fundingTxID: fundingTx.id,
+    },
+    onError(_) {
+      setInvoiceRefreshErrored(true);
+      clearInterval(fundInterval);
+    },
+  });
+
+  const refreshFundingInvoice = async () => {
+    try {
+      setFundingTx({
+        ...fundingTx,
+        invoiceStatus: InvoiceStatus.Unpaid,
+      });
+      /*
+       We set this manually instead of using loading so that we ensure the funding tx values are updated before the 
+       loading variable is changed 
+      */
+      setRefreshingInvoice(true);
+      const { data } = await refreshInvoice();
+
+      if (data) {
+        setFundingTx({
+          ...fundingTx,
+          ...data.fundingInvoiceRefresh,
+        });
+        setRefreshingInvoice(false);
+      }
+    } catch (_) {
+      //
+    }
+  };
+
   const resetFundingFlow = () => {
     setFundState(fundingStages.initial);
+    setFundingRequestErrored(false);
     setFundingTx({
       ...initialFunding,
       funder: { ...initialFunding.funder, user },
@@ -244,13 +331,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   };
 
   return {
+    fundingRequestErrored,
+    fundingRequestLoading,
+    invoiceRefreshErrored,
+    invoiceRefreshLoading,
     fundState,
     amounts,
-    fundLoading,
     fundingTx,
     gotoNextStage,
     resetFundingFlow,
     requestFunding,
+    refreshFundingInvoice,
     setFundState,
   };
 };

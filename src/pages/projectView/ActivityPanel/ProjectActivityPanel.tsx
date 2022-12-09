@@ -70,7 +70,7 @@ export const ProjectActivityPanel = ({
   const {
     fundState,
     amounts,
-    fundLoading,
+    fundingRequestLoading,
     fundingTx,
     gotoNextStage,
     resetFundingFlow,
@@ -230,7 +230,7 @@ export const ProjectActivityPanel = ({
         return (
           <ProjectFundingSelectionFormScreen
             {...{
-              fundLoading,
+              fundingRequestLoading,
               isMobile,
               handleCloseButton,
               formState,
