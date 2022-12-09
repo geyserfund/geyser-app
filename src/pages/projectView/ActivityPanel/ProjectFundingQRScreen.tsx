@@ -1,6 +1,6 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
 import { CloseButton, IconButton, Link } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SectionTitle } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
 import { IFundingAmounts, IProject } from '../../../interfaces';
@@ -43,13 +43,7 @@ export const ProjectFundingQRScreen = ({
     >
       <HStack paddingX={2} justifyContent="space-between">
         <SectionTitle>Confirm & Contribute</SectionTitle>
-        <CloseButton
-          // borderRadius="50%"
-          // position="absolute"
-          // right="10px"
-          // top="0px"
-          onClick={handleCloseButton}
-        />
+        <CloseButton onClick={handleCloseButton} />
       </HStack>
       <VStack
         width={'full'}
@@ -58,7 +52,6 @@ export const ProjectFundingQRScreen = ({
         marginTop={2}
         spacing={4}
         justifyContent={'flex-end'}
-        // overflowY="scroll"
       >
         <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
         <ContributionInfoBox

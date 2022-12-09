@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -7,13 +7,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { gql, useMutation } from '@apollo/client';
 import Loader from '../../../components/ui/Loader';
-import {
-  FundingStatus,
-  FundingTx,
-  InvoiceStatus,
-} from '../../../types/generated/graphql';
+import { FundingStatus, InvoiceStatus } from '../../../types/generated/graphql';
 import { QRCode } from 'react-qrcode-logo';
 import { RiLinkUnlink } from 'react-icons/ri';
 import { colors } from '../../../constants';
