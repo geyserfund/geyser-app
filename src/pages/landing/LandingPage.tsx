@@ -16,10 +16,13 @@ import { AppFooter } from '../../components/molecules';
 import { ActivityView, LandingPageProjectsList, TopBanner } from './components';
 import { BsArrowRight } from 'react-icons/bs';
 import { dimensions, getPath } from '../../constants';
+import { isMobileMode } from '../../utils';
 
 const { topNavBar: topNavBarDimensions } = dimensions;
 
 export const LandingPage = () => {
+  const isMobile = isMobileMode();
+
   return (
     <Box
       position="relative"
@@ -35,7 +38,7 @@ export const LandingPage = () => {
           md: 'row',
         }}
         paddingY="30px"
-        paddingX="60px"
+        paddingX={isMobile ? '10px' : '60px'}
         width="full"
         height="auto"
         minHeight={'full'}
@@ -66,30 +69,40 @@ export const LandingPage = () => {
           flexBasis={1}
           height="full"
         >
-          <VStack alignItems="left" paddingRight={30} spacing={4}>
-            <HStack justify="space-between" align="center">
-              <Heading as="h5" size="sm">
-                Top Projects
-              </Heading>
+          <VStack
+            alignItems="left"
+            paddingRight={isMobile ? '0px' : '30px'}
+            spacing={4}
+          >
+            <VStack alignItems="left">
+              <HStack justify="space-between" align="center" my="5px">
+                <Heading as="h5" size="sm">
+                  Top Projects
+                </Heading>
 
-              <Link
-                as={ReactRouterLink}
-                to={getPath('projectDiscovery')}
-                display="flex"
-                flexDirection={'row'}
-                alignItems="center"
-                color={'brand.neutral600'}
-                fontSize="12px"
-              >
-                <Text size="sm" marginRight={3} color="brand.primary700">
-                  All Projects
-                </Text>
+                <Link
+                  as={ReactRouterLink}
+                  to={getPath('projectDiscovery')}
+                  display="flex"
+                  flexDirection={'row'}
+                  alignItems="center"
+                  color={'brand.neutral600'}
+                  fontSize="12px"
+                >
+                  <Text size="sm" marginRight={3} color="brand.primary700">
+                    All Projects
+                  </Text>
 
-                <Icon as={BsArrowRight} strokeWidth={'1px'} fontSize="1.5em" />
-              </Link>
-            </HStack>
+                  <Icon
+                    as={BsArrowRight}
+                    strokeWidth={'1px'}
+                    fontSize="1.5em"
+                  />
+                </Link>
+              </HStack>
 
-            <Divider borderWidth="2px" borderRadius="full" />
+              <Divider borderWidth="2px" borderRadius="full" />
+            </VStack>
 
             <LandingPageProjectsList />
           </VStack>

@@ -1,10 +1,4 @@
-import {
-  Button,
-  HStack,
-  IconButton,
-  Tooltip,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Button, IconButton, Tooltip, useDisclosure } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import React, { useState } from 'react';
 import { BoltIcon, QrIcon } from '../../../components/icons';
@@ -39,51 +33,44 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
 
   return (
     <>
-      <HStack
-        flexWrap="wrap"
-        justifyContent="start"
-        alignItems="center"
-        spacing="4px"
+      <Tooltip
+        label={copy ? 'Copied!' : 'Copy Lightning Address'}
+        placement="top"
+        closeOnClick={false}
       >
-        <Tooltip
-          label={copy ? 'Copied!' : 'Copy Lightning Address'}
-          placement="top"
-          closeOnClick={false}
+        <Button
+          size="sm"
+          leftIcon={<BoltIcon scale={0.8} />}
+          _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
+          _active={{ backgroundColor: 'brand.primary' }}
+          bg="none"
+          fontWeight="medium"
+          onClick={handleAddressCopy}
+          color="#2F423E"
+          id="lightning-address"
         >
-          <Button
-            size="sm"
-            leftIcon={<BoltIcon scale={0.8} />}
-            _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
-            _active={{ backgroundColor: 'brand.primary' }}
-            bg="none"
-            fontWeight="medium"
-            onClick={handleAddressCopy}
-            color="#2F423E"
-            id="lightning-address"
-          >
-            {name}@geyser.fund
-          </Button>
-        </Tooltip>
+          {name}@geyser.fund
+        </Button>
+      </Tooltip>
 
-        <Tooltip label="View Project QR Code" placement="top">
-          <IconButton
-            _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
-            _active={{ backgroundColor: 'brand.primary' }}
-            bg="none"
-            icon={<QrIcon />}
-            aria-label="qr"
-            onClick={() => {
-              setCopy(false);
-              onOpen();
-              if (imageDownload.length === 0) {
-                setTimeout(() => {
-                  capture();
-                }, 2100);
-              }
-            }}
-          />
-        </Tooltip>
-      </HStack>
+      <Tooltip label="View Project QR Code" placement="top">
+        <IconButton
+          _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
+          _active={{ backgroundColor: 'brand.primary' }}
+          bg="none"
+          icon={<QrIcon />}
+          aria-label="qr"
+          onClick={() => {
+            setCopy(false);
+            onOpen();
+            if (imageDownload.length === 0) {
+              setTimeout(() => {
+                capture();
+              }, 2100);
+            }
+          }}
+        />
+      </Tooltip>
 
       <ProjectFundingQRModal
         isOpen={isOpen}

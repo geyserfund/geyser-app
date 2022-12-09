@@ -285,6 +285,10 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
                   <Text>Select a header image</Text>
                 </HStack>
               </FileUpload>
+              <Text fontSize="10px" color="brand.neutral700">
+                For best fit, pick an image around 800px x 200px. Image size
+                limit: 10MB.
+              </Text>
             </VStack>
             <VStack width="100%" alignItems="flex-start">
               <Text>Main Objective</Text>
