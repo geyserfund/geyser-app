@@ -217,10 +217,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       ) {
         clearInterval(fundInterval);
         gotoNextStage();
-        // setFundingTx({
-        //   ...fundingTx,
-        //   ...fundingStatus.fundingTx,
-        // });
       }
     }
   }, [fundingStatus]);
@@ -301,7 +297,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const refreshFundingInvoice = async () => {
     try {
-      console.log('CALLING REFRESH INVOICE');
       setFundingTx({
         ...fundingTx,
         invoiceStatus: InvoiceStatus.Unpaid,

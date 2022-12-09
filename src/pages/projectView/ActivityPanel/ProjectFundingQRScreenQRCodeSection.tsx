@@ -114,18 +114,6 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   } = fundingFlow;
 
   const qrDisplayState = useMemo(() => {
-    console.log(
-      invoiceRefreshLoading,
-      fundingRequestLoading,
-      fundingTx.invoiceStatus,
-      fundingTx.status,
-      errorFromRefresh,
-      invoiceRefreshErrored,
-      fundingRequestErrored,
-    );
-
-    console.log('fundingTx', fundingTx);
-
     if (invoiceRefreshLoading || fundingRequestLoading) {
       return QRDisplayState.REFRESHING;
     }
