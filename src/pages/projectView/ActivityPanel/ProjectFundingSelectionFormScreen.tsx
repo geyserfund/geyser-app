@@ -197,16 +197,14 @@ export const ProjectFundingSelectionFormScreen = ({
             </HStack>
           ) : null}
 
-          {!noFeeProjects.includes(name) && (
-            <HStack
-              justifyContent={'space-between'}
-              width={'full'}
-              fontSize={'14px'}
-            >
-              <Text>{'Geyser fee'}</Text>
-              <Text>{'2%'}</Text>
-            </HStack>
-          )}
+          <HStack
+            justifyContent={'space-between'}
+            width={'full'}
+            fontSize={'14px'}
+          >
+            <Text>{'Geyser fee'}</Text>
+            <Text>{!noFeeProjects.includes(name) ? '2%' : '0%'}</Text>
+          </HStack>
 
           <HStack
             justifyContent={'space-between'}
