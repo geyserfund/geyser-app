@@ -30,6 +30,8 @@ enum QRDisplayState {
   // eslint-disable-next-line no-unused-vars
   AWAITING_PAYMENT = 'AWAITING_PAYMENT',
   // eslint-disable-next-line no-unused-vars
+  AWAITING_PAYMENT_WEB_LN = 'AWAITING_PAYMENT_WEB_LN',
+  // eslint-disable-next-line no-unused-vars
   INVOICE_CANCELLED = 'INVOICE_CANCELLED',
   // eslint-disable-next-line no-unused-vars
   FUNDING_CANCELED = 'FUNDING_CANCELED',
@@ -106,6 +108,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     invoiceRefreshErrored,
     invoiceRefreshLoading,
     fundingRequestLoading,
+    hasWebLN,
+    weblnErrored,
   } = fundingFlow;
 
   const qrDisplayState = useMemo(() => {
@@ -124,12 +128,17 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
       return QRDisplayState.INVOICE_CANCELLED;
     }
 
+    if (hasWebLN && !weblnErrored) {
+      return QRDisplayState.AWAITING_PAYMENT_WEB_LN;
+    }
+
     return QRDisplayState.AWAITING_PAYMENT;
   }, [
     invoiceRefreshLoading,
     fundingRequestLoading,
     fundingTx.invoiceStatus,
     fundingTx.status,
+    weblnErrored,
     errorFromRefresh,
     invoiceRefreshErrored,
     fundingRequestErrored,
@@ -211,44 +220,63 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             render both elements in a Grid, make them overlap and hide one of the two based on the value of "hasCopiedQrCode".
             This way the component is already rendered, and the visual effect is smoother.
           */
-          <Box borderRadius={'4px'} borderWidth={'2px'} padding={'2px'}>
-            {hasCopiedQRCode ? (
-              <Box borderColor={colors.primary}>
-                <QRCode
-                  value={value!}
-                  size={208}
-                  bgColor={colors.bgWhite}
-                  fgColor={colors.primary}
-                  qrStyle="dots"
-                  logoImage={LogoPrimary}
-                  logoHeight={40}
-                  logoWidth={40}
-                  eyeRadius={2}
-                  removeQrCodeBehindLogo={true}
-                />
-              </Box>
-            ) : (
-              <Box
-                visibility={!hasCopiedQRCode ? 'visible' : 'hidden'}
-                borderColor={colors.textBlack}
-              >
-                <QRCode
-                  value={value!}
-                  size={208}
-                  bgColor={colors.bgWhite}
-                  fgColor={colors.textBlack}
-                  qrStyle="dots"
-                  logoImage={LogoDark}
-                  logoHeight={40}
-                  logoWidth={40}
-                  eyeRadius={2}
-                  removeQrCodeBehindLogo={true}
-                />
-              </Box>
-            )}
-          </Box>
+          <VStack>
+            <Box borderRadius={'4px'} borderWidth={'2px'} padding={'2px'}>
+              {hasCopiedQRCode ? (
+                <Box borderColor={colors.primary}>
+                  <QRCode
+                    value={value!}
+                    size={208}
+                    bgColor={colors.bgWhite}
+                    fgColor={colors.primary}
+                    qrStyle="dots"
+                    logoImage={LogoPrimary}
+                    logoHeight={40}
+                    logoWidth={40}
+                    eyeRadius={2}
+                    removeQrCodeBehindLogo={true}
+                  />
+                </Box>
+              ) : (
+                <Box
+                  visibility={!hasCopiedQRCode ? 'visible' : 'hidden'}
+                  borderColor={colors.textBlack}
+                >
+                  <QRCode
+                    value={value!}
+                    size={208}
+                    bgColor={colors.bgWhite}
+                    fgColor={colors.textBlack}
+                    qrStyle="dots"
+                    logoImage={LogoDark}
+                    logoHeight={40}
+                    logoWidth={40}
+                    eyeRadius={2}
+                    removeQrCodeBehindLogo={true}
+                  />
+                </Box>
+              )}
+            </Box>
+            <Box marginBottom={4} fontSize={'10px'}>
+              <HStack spacing={5}>
+                <Loader size="md" />
+                <Text color={'brand.neutral900'} fontWeight={400}>
+                  Waiting for payment...
+                </Text>
+              </HStack>
+            </Box>
+          </VStack>
         );
 
+      case QRDisplayState.AWAITING_PAYMENT_WEB_LN:
+        return (
+          <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
+            <VStack>
+              <Loader />
+              <Text>Awaiting Payment</Text>
+            </VStack>
+          </VStack>
+        );
       case QRDisplayState.INVOICE_CANCELLED:
         return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />;
 
@@ -286,21 +314,6 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           </Text>
         </HStack>
         {renderQrBox()}
-        <Box marginBottom={4} fontSize={'10px'}>
-          <HStack
-            spacing={5}
-            visibility={
-              qrDisplayState === QRDisplayState.AWAITING_PAYMENT
-                ? 'visible'
-                : 'hidden'
-            }
-          >
-            <Loader size="md" />
-            <Text color={'brand.neutral900'} fontWeight={400}>
-              Waiting for payment...
-            </Text>
-          </HStack>
-        </Box>
       </VStack>
 
       <PaymentRequestCopyButton

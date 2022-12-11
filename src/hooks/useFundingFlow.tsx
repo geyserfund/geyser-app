@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import { fundingStages, stageList } from '../constants';
 import { AuthContext } from '../context';
 
@@ -100,6 +100,15 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     hasWebLN: true,
   };
 
+  const webln = useMemo(() => {
+    const { webln }: { webln: WebLNProvider } = window as any;
+    if (!webln) {
+      return;
+    }
+
+    return webln;
+  }, []);
+
   const { user } = useContext(AuthContext);
   const { toast } = useNotification();
 
@@ -109,6 +118,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const [fundingRequestErrored, setFundingRequestErrored] = useState(false);
   const [invoiceRefreshErrored, setInvoiceRefreshErrored] = useState(false);
+  const [weblnErrored, setWebLNErrored] = useState(false);
+
   const [invoiceRefreshLoading, setRefreshingInvoice] = useState(false);
 
   const [fundingTx, setFundingTx] = useState<FundingTx>({
@@ -128,11 +139,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     fetchPolicy: 'network-only',
   });
 
-  const startWebLNFlow = async () => {
+  const startWebLNFlow = async (fundingTx: FundingTx) => {
     let succeeded = false;
 
     const requestWebLNPayment = async () => {
-      const { webln }: { webln: WebLNProvider } = window as any;
       if (!webln) {
         throw new Error('no provider');
       }
@@ -161,7 +171,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       })
       .catch((error) => {
         if (error.message === 'no provider') {
-          //
+          throw error;
         } else if (error.message === 'wrong preimage') {
           toast({
             title: 'Wrong payment preimage',
@@ -190,8 +200,44 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       });
   };
 
-  const [fundProject, { loading: fundingRequestLoading }] =
-    useMutation(MUTATION_FUND);
+  const [fundProject, { loading: fundingRequestLoading }] = useMutation(
+    MUTATION_FUND,
+    {
+      onCompleted: (data) => {
+        try {
+          setFundingTx(data.fund.fundingTx);
+          setAmounts(data.fund.amountSummary);
+
+          if (hasBolt11 && hasWebLN && webln) {
+            startWebLNFlow(data.fund.fundingTx).then((success) => {
+              if (!success) {
+                fundInterval = setInterval(getFundingStatus, 1500);
+                setWebLNErrored(true);
+              }
+            });
+          } else {
+            fundInterval = setInterval(getFundingStatus, 1500);
+          }
+        } catch (_) {
+          setFundingRequestErrored(true);
+          toast({
+            title: 'Something went wrong',
+            description: 'Please refresh the page and try again',
+            status: 'error',
+          });
+        }
+      },
+      onError: (_) => {
+        setFundingRequestErrored(true);
+        clearInterval(fundInterval);
+        toast({
+          title: 'Something went wrong',
+          description: 'Please refresh the page and try again',
+          status: 'error',
+        });
+      },
+    },
+  );
 
   useEffect(() => {
     if (fundingStatus && fundingStatus.fundingTx) {
@@ -229,31 +275,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     ) {
       clearInterval(fundInterval);
     }
-
-    if (fundState === fundingStages.started) {
-      if (hasBolt11 && hasWebLN) {
-        startWebLNFlow().then((success) => {
-          if (!success) {
-            // fundInterval = setInterval(getFundingStatus, 1500);
-          }
-        });
-      } else {
-        // fundInterval = setInterval(getFundingStatus, 1500);
-      }
-    }
   }, [fundState]);
-
-  // useEffect(() => {
-  //   if (data && fundState === fundingStages.form) {
-  //     if (data.fund && data.fund.fundingTx && data.fund.amountSummary) {
-  //       setFundingTx(data.fund.fundingTx);
-  //       setAmounts(data.fund.amountSummary);
-  //       gotoNextStage();
-  //     }
-  //   } else if (data && fundState === fundingStages.started) {
-  //     setFundingTx(data.fund.fundingTx);
-  //   }
-  // }, [data]);
 
   const gotoNextStage = () => {
     const currentIndex = stageList.indexOf(fundState);
@@ -262,24 +284,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   };
 
   const requestFunding = async (input: FundingInput) => {
-    try {
-      gotoNextStage();
-      const { data } = await fundProject({ variables: { input } });
-
-      if (data) {
-        setFundingTx(data.fund.fundingTx);
-        setAmounts(data.fund.amountSummary);
-        gotoNextStage();
-      }
-    } catch (_) {
-      setFundingRequestErrored(true);
-      clearInterval(fundInterval);
-      toast({
-        title: 'Something went wrong',
-        description: 'Please refresh the page and try again',
-        status: 'error',
-      });
-    }
+    gotoNextStage();
+    await fundProject({ variables: { input } });
   };
 
   const [refreshInvoice] = useMutation<
@@ -323,6 +329,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const resetFundingFlow = () => {
     setFundState(fundingStages.initial);
     setFundingRequestErrored(false);
+    setInvoiceRefreshErrored(false);
+    setWebLNErrored(false);
     setFundingTx({
       ...initialFunding,
       funder: { ...initialFunding.funder, user },
@@ -335,6 +343,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     fundingRequestLoading,
     invoiceRefreshErrored,
     invoiceRefreshLoading,
+    weblnErrored,
     fundState,
     amounts,
     fundingTx,
@@ -343,5 +352,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     requestFunding,
     refreshFundingInvoice,
     setFundState,
+    hasWebLN: hasWebLN && Boolean(webln),
   };
 };

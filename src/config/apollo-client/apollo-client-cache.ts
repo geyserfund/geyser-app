@@ -10,31 +10,40 @@ const mergeIdentifiableCollectionUsingCursorIDs = (
   existing: IdentifiableCollection = [],
   // eslint-disable-next-line default-param-last
   incoming: IdentifiableCollection = [],
-  args: FieldFunctionOptions,
+  // { args }: FieldFunctionOptions,
 ) => {
-  const paginationInput: PaginationInput = args?.variables?.input?.pagination;
+  return [...existing, ...incoming];
 
-  if (!paginationInput) {
-    return [...existing, ...incoming];
-  }
+  // const paginationInput: PaginationInput = args?.input?.pagination;
+  // console.log('PAGINATION INPUT', paginationInput);
 
-  const cursorID = paginationInput.cursor?.id || -1;
+  // if (!paginationInput) {
+  //   return [...existing, ...incoming];
+  // }
 
-  if (cursorID === -1) {
-    return [...existing, ...incoming];
-  }
+  // const cursorID = paginationInput.cursor?.id || -1;
 
-  // Slicing is necessary because the existing data is
-  // immutable, and frozen in development.
-  const merged = existing ? existing.slice(0) : [];
+  // if (cursorID === -1) {
+  //   return [...existing, ...incoming];
+  // }
 
-  incoming.forEach((item) => {
-    if (item.id > cursorID) {
-      merged.push(item);
-    }
-  });
+  // console.log('merged', [...existing, ...incoming]);
 
-  return merged;
+  // // Slicing is necessary because the existing data is
+  // // immutable, and frozen in development.
+  // const merged = existing ? existing.slice(0) : [];
+  // console.log('MERGED BEFORE', merged);
+  // console.log('INCOMING', incoming);
+
+  // incoming.forEach((item) => {
+  //   console.log('item id', item.id);
+
+  //   if (item.id > cursorID) {
+  //     merged.push(item);
+  //   }
+  // });
+  // console.log('MERGED AFTER', merged);
+  // return merged;
 };
 
 export const cache: InMemoryCache = new InMemoryCache({
