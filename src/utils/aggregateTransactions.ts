@@ -42,8 +42,6 @@ export const aggregateTransactions = (
 
     newContributions.push(newContribution);
   });
-  const sortedCOntributions = newContributions.sort(
-    (a, b) => a.paidAt - b.paidAt,
-  );
-  return sortedCOntributions;
+
+  return newContributions;
 };
