@@ -70,7 +70,7 @@ export const ContributionInfoBox = ({
   contributionAmount,
   referenceCode,
   isFunderAnonymous,
-  showGeyserFee,
+  showGeyserFee = true,
   funderEmail,
   funderUsername,
   funderAvatarURL,
@@ -150,18 +150,24 @@ export const ContributionInfoBox = ({
           <HStack justify={'space-between'} width={'full'}>
             <Text
               fontSize={'14px'}
-              fontWeight={'medium'}
+              fontWeight={'normal'}
               textColor={'brand.neutral700'}
             >
               Email
             </Text>
-            <Text fontSize={'14px'}>{funderEmail}</Text>
+            <Text
+              fontSize={'14px'}
+              fontWeight={'medium'}
+              color="brand.neutral700"
+            >
+              {funderEmail}
+            </Text>
           </HStack>
         )}
         <HStack spacing={2} width={'full'} justify={'space-between'}>
           <Text
             fontSize={'14px'}
-            fontWeight={'medium'}
+            fontWeight={'normal'}
             textColor={'brand.neutral700'}
           >
             Funding as
@@ -169,12 +175,24 @@ export const ContributionInfoBox = ({
           {isFunderAnonymous ? (
             <HStack>
               <AnonymousAvatar seed={0} imageSize={'20px'} />
-              <Text>anonymous</Text>
+              <Text
+                fontSize={'14px'}
+                fontWeight={'medium'}
+                color="brand.neutral700"
+              >
+                anonymous
+              </Text>
             </HStack>
           ) : (
             <HStack>
               <Avatar width={'20px'} height={'20px'} src={funderAvatarURL} />
-              <Text>{funderUsername}</Text>
+              <Text
+                fontSize={'14px'}
+                fontWeight={'medium'}
+                color="brand.neutral700"
+              >
+                {funderUsername}
+              </Text>
             </HStack>
           )}
         </HStack>
@@ -188,7 +206,7 @@ export const ContributionInfoBox = ({
             width={'full'}
             alignItems="flex-start"
             color="brand.neutral700"
-            fontWeight={'medium'}
+            fontWeight={'normal'}
           >
             <Text flex={0}>Rewards</Text>
             <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
@@ -197,8 +215,13 @@ export const ContributionInfoBox = ({
                   const reward = rewards!.find(({ id }) => id === key);
                   if (reward) {
                     return (
-                      <Text key={key} fontSize={'14px'} fontWeight={'normal'}>
-                        {value}x {reward.name}
+                      <Text
+                        key={key}
+                        fontSize={'14px'}
+                        fontWeight={'medium'}
+                        color="brand.neutral700"
+                      >
+                        {value} x {reward.name}
                       </Text>
                     );
                   }
@@ -209,14 +232,14 @@ export const ContributionInfoBox = ({
         </>
       )}
 
-      {showGeyserFee && !noFeeProjects.includes(project.name) && (
+      {showGeyserFee && (
         <>
           <ContributionInfoBoxDivider version={version} />
           <HStack justifyContent={'space-between'} width={'full'}>
             <Text
               fontSize="14px"
               textColor={'brand.neutral700'}
-              fontWeight={'medium'}
+              fontWeight={'normal'}
             >
               Geyser fee
             </Text>
@@ -224,9 +247,11 @@ export const ContributionInfoBox = ({
             <SatoshiAmount
               fontSize="14px"
               textColor={'brand.neutral700'}
-              fontWeight={'normal'}
+              fontWeight={'medium'}
             >
-              {Math.round(contributionAmount * 0.02)}
+              {!noFeeProjects.includes(project.name)
+                ? Math.round(contributionAmount * 0.02)
+                : 0}
             </SatoshiAmount>
           </HStack>
         </>
