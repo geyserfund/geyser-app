@@ -12,6 +12,7 @@ export const routerPathNames = {
   preview: 'preview',
   milestonesAndRewards: 'milestones',
   node: 'node',
+  discover: 'discover',
 };
 
 // TODO: These definitions are currently a WIP.
