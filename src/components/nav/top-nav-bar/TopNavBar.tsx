@@ -48,6 +48,7 @@ const routesForHidingTopNav = [
 const customTitleRoutes = [
   `/${routerPathNames.project}/:projectId/`,
   `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.entry}/:entryId`,
 ];
 const navItemsRoutes = [
   `/`,
