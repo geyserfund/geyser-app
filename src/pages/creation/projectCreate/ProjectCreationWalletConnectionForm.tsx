@@ -1,6 +1,4 @@
 import {
-  Grid,
-  GridItem,
   HStack,
   Image,
   InputGroup,
@@ -10,21 +8,18 @@ import {
   RadioGroup,
   Text,
   useDisclosure,
-  useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ButtonComponent,
-  IconButtonComponent,
   TextInputBox,
   UndecoratedLink,
 } from '../../../components/ui';
-import { isMobileMode, validateEmail } from '../../../utils';
+import { useNotification, validateEmail } from '../../../utils';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { TNodeInput } from './types';
-import { BiLeftArrowAlt, BiPencil, BiRocket } from 'react-icons/bi';
-import { createUseStyles } from 'react-jss';
+import { BiRocket } from 'react-icons/bi';
 import {
   AlbyLightningAddressURL,
   BitNobURL,
@@ -33,7 +28,6 @@ import {
   VoltageExplainerPageForGeyserURL,
   WalletOfSatoshiLightningAddressURL,
 } from '../../../constants';
-import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { NodeAdditionModal } from './components/NodeAdditionModal';
 import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
 import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png';
@@ -50,28 +44,23 @@ import {
 import Loader from '../../../components/ui/Loader';
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
 import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox';
-import { gql, useLazyQuery } from '@apollo/client';
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
 
 type Props = {
   project: Project;
   onProjectLaunchSelected: (input: CreateWalletInput) => void;
-  onSaveAsDraftSelected: (input: CreateWalletInput) => void;
-  onBackButtonTapped: () => void;
-  isProcessingSubmission: boolean;
+  onSaveAsDraftSelected?: (input: CreateWalletInput) => void;
+  triggerWallet?: boolean;
+  setNodeInput?: React.Dispatch<React.SetStateAction<TNodeInput | undefined>>;
 };
 
-const useStyles = createUseStyles({
-  backIcon: {
-    fontSize: '25px',
-  },
-});
-
-enum ConnectionOption {
+export enum ConnectionOption {
   LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
   PERSONAL_NODE = 'PERSONAL_NODE',
 }
 
-enum LNAddressEvaluationState {
+export enum LNAddressEvaluationState {
   IDLE = 'IDLE',
   LOADING = 'LOADING',
   FAILED = 'FAILED',
@@ -99,11 +88,10 @@ export const ProjectCreationWalletConnectionForm = ({
   project,
   onProjectLaunchSelected,
   onSaveAsDraftSelected,
-  onBackButtonTapped,
-  isProcessingSubmission,
+  triggerWallet,
+  setNodeInput: setNode,
 }: Props) => {
-  const isMobile = isMobileMode();
-  const classes = useStyles();
+  const { toast } = useNotification();
 
   const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined);
 
@@ -119,13 +107,30 @@ export const ProjectCreationWalletConnectionForm = ({
 
   const [connectionOption, setConnectionOption] = useState<string>('');
 
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
-
   const {
     isOpen: isWalletOpen,
     onClose: onWalletClose,
     onOpen: openWallet,
   } = useDisclosure();
+
+  useEffect(() => {
+    if (triggerWallet) {
+      openWallet();
+    }
+  }, [triggerWallet]);
+
+  useEffect(() => {
+    if (setNode) {
+      setNode(nodeInput);
+    }
+  }, [nodeInput]);
+
+  const onSubmit = (value: TNodeInput) => {
+    setNodeInput(value);
+    if (setNode) {
+      setNode(value);
+    }
+  };
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
     useLazyQuery<
@@ -146,6 +151,10 @@ export const ProjectCreationWalletConnectionForm = ({
         }
       },
     });
+
+  const [createWallet, { loading: isCreateWalletLoading }] = useMutation(
+    MUTATION_CREATE_WALLET,
+  );
 
   const createWalletInput: CreateWalletInput | null = useMemo(() => {
     const resourceInput: ResourceInput = {
@@ -202,10 +211,6 @@ export const ProjectCreationWalletConnectionForm = ({
     );
   }, [connectionOption, lightningAddressFormValue, createWalletInput]);
 
-  const handleBackButtonTapped = () => {
-    onBackButtonTapped();
-  };
-
   const validateLightningAddress = async () => {
     if (lightningAddressFormError === null) {
       await evaluateLightningAddress();
@@ -215,7 +220,16 @@ export const ProjectCreationWalletConnectionForm = ({
   const handleProjectLaunchSelected = async () => {
     await validateLightningAddress();
 
-    onProjectLaunchSelected(createWalletInput!);
+    try {
+      await createWallet({ variables: { input: createWalletInput } });
+      onProjectLaunchSelected(createWalletInput!);
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `${error}`,
+        status: 'error',
+      });
+    }
   };
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
@@ -255,242 +269,140 @@ export const ProjectCreationWalletConnectionForm = ({
 
   return (
     <>
-      <Grid
-        width="100%"
-        templateColumns={
-          isLargerThan1280
-            ? 'repeat(6, 1fr)'
-            : isMobile
-            ? 'repeat(2, 1fr)'
-            : 'repeat(5, 1fr)'
-        }
-        padding={isMobile ? '10px' : '40px 40px 20px 40px'}
-      >
-        <GridItem
-          colSpan={isLargerThan1280 ? 2 : 1}
-          display="flex"
-          justifyContent="flex-start"
-        >
-          <ButtonComponent
-            onClick={handleBackButtonTapped}
-            leftIcon={<BiLeftArrowAlt className={classes.backIcon} />}
-          >
-            Back
-          </ButtonComponent>
-        </GridItem>
+      <VStack width="100%" alignItems="flex-start" spacing="40px">
+        <RadioGroup onChange={setConnectionOption} value={connectionOption}>
+          <VStack spacing={10}>
+            <VStack width="100%" alignItems="flex-start" spacing={3}>
+              <Radio size="lg" value={ConnectionOption.LIGHTNING_ADDRESS}>
+                Lightning Address
+              </Radio>
 
-        <GridItem colSpan={2} display="flex" justifyContent="center">
-          <VStack
-            spacing="30px"
-            width="100%"
-            maxWidth="400px"
-            minWidth="350px"
-            marginBottom="40px"
-            display="flex"
-            flexDirection="column"
-            alignItems="flex-start"
-          >
-            <VStack width="100%" spacing="40px" alignItems="flex-start">
-              <Text color="brand.gray500" fontSize="30px" fontWeight={700}>
-                {' '}
-                Create A New Project
-              </Text>
-              <TitleWithProgressBar
-                paddingBottom="20px"
-                title="Connect Wallet"
-                subTitle="Step 3 of 3"
-                percentage={100}
-              />
-            </VStack>
+              {connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? (
+                <InputGroup size={'md'}>
+                  <TextInputBox
+                    name="lightning-address"
+                    type={'email'}
+                    placeholder={'Enter your Lightning Address'}
+                    value={lightningAddressFormValue}
+                    onChange={(event) => {
+                      setLightningAddressFormValue(event.target.value);
+                      validateLightningAddressFormat(event.target.value);
+                    }}
+                    onBlur={validateLightningAddress}
+                    isInvalid={Boolean(lightningAddressFormError)}
+                    focusBorderColor={colors.neutral200}
+                    _valid={{
+                      focusBorderColor: colors.primary500,
+                    }}
+                    error={lightningAddressFormError}
+                  />
+                  <InputRightElement>
+                    {renderRightElementContent()}
+                  </InputRightElement>
+                </InputGroup>
+              ) : null}
 
-            <VStack width="100%" alignItems="flex-start" spacing="40px">
-              <RadioGroup
-                onChange={setConnectionOption}
-                value={connectionOption}
+              <WalletConnectionOptionInfoBox
+                primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
+                secondaryText="Lightning Addresses look like email addresses (mick@alby.com) but are for sending bitcoin. Most Lightning wallets provide lightning addresses. We recommend:"
               >
-                <VStack spacing={10}>
-                  <VStack width="100%" alignItems="flex-start" spacing={3}>
-                    <Radio size="lg" value={ConnectionOption.LIGHTNING_ADDRESS}>
-                      Lightning Address
-                    </Radio>
-
-                    {connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? (
-                      <InputGroup size={'md'}>
-                        <TextInputBox
-                          name="lightning-address"
-                          type={'email'}
-                          placeholder={'Enter your Lightning Address'}
-                          value={lightningAddressFormValue}
-                          onChange={(event) => {
-                            setLightningAddressFormValue(event.target.value);
-                            validateLightningAddressFormat(event.target.value);
-                          }}
-                          onBlur={validateLightningAddress}
-                          isInvalid={Boolean(lightningAddressFormError)}
-                          focusBorderColor={colors.neutral200}
-                          _valid={{
-                            focusBorderColor: colors.primary500,
-                          }}
-                          error={lightningAddressFormError}
-                        />
-                        <InputRightElement>
-                          {renderRightElementContent()}
-                        </InputRightElement>
-                      </InputGroup>
-                    ) : null}
-
-                    <WalletConnectionOptionInfoBox
-                      primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
-                      secondaryText="Lightning Addresses look like email addresses (mick@alby.com) but are for sending bitcoin. Most Lightning wallets provide lightning addresses. We recommend:"
-                    >
-                      <HStack
-                        width={'full'}
-                        justifyContent={'flex-start'}
-                        spacing={4}
-                      >
-                        <UndecoratedLink
-                          isExternal
-                          href={AlbyLightningAddressURL}
-                        >
-                          <HStack>
-                            <Image src={AlbyPNG} height="24px" />
-                            <Text fontSize={'12px'} fontWeight={'bold'}>
-                              Alby
-                            </Text>
-                          </HStack>
-                        </UndecoratedLink>
-
-                        <Link
-                          isExternal
-                          href={WalletOfSatoshiLightningAddressURL}
-                        >
-                          <Image src={WalletOfSatoshiPNG} height="24px" />
-                        </Link>
-
-                        <Link isExternal href={BitNobURL}>
-                          <Image src={BitNobPNG} height="24px" />
-                        </Link>
-                      </HStack>
-                    </WalletConnectionOptionInfoBox>
-                  </VStack>
-
-                  <VStack width="100%" alignItems="flex-start" spacing={3}>
-                    <Radio size="lg" value={ConnectionOption.PERSONAL_NODE}>
-                      Connect Your Node
-                    </Radio>
-
-                    {connectionOption === ConnectionOption.PERSONAL_NODE ? (
-                      <ButtonComponent isFullWidth onClick={openWallet}>
-                        {' '}
-                        <AiOutlineSetting
-                          style={{ marginRight: '5px' }}
-                          fontSize="20px"
-                        />{' '}
-                        Connect Your Node
-                      </ButtonComponent>
-                    ) : null}
-
-                    <WalletConnectionOptionInfoBox
-                      primaryText="More challenging to setup, but you own your funds."
-                      secondaryText="Connect your Lightning node to receive incoming transactions directly. Don't have a node? You can create a node on the cloud using:"
-                    >
-                      <HStack width={'full'} justifyContent={'flex-start'}>
-                        <Link
-                          isExternal
-                          href={VoltageExplainerPageForGeyserURL}
-                        >
-                          <Image src={VoltageLogoSmall} />
-                        </Link>
-                      </HStack>
-                    </WalletConnectionOptionInfoBox>
-                  </VStack>
-                </VStack>
-              </RadioGroup>
-
-              <VStack width="100%" alignItems="flex-start">
-                <ButtonComponent
-                  primary
-                  isFullWidth
-                  onClick={handleProjectLaunchSelected}
-                  isLoading={
-                    isProcessingSubmission || isEvaluatingLightningAddress
-                  }
-                  disabled={isSubmitEnabled === false}
+                <HStack
+                  width={'full'}
+                  justifyContent={'flex-start'}
+                  spacing={4}
                 >
-                  <>
-                    <BiRocket style={{ marginRight: '10px' }} />
-                    Launch Project
-                  </>
-                </ButtonComponent>
+                  <UndecoratedLink isExternal href={AlbyLightningAddressURL}>
+                    <HStack>
+                      <Image src={AlbyPNG} height="24px" />
+                      <Text fontSize={'12px'} fontWeight={'bold'}>
+                        Alby
+                      </Text>
+                    </HStack>
+                  </UndecoratedLink>
 
-                <ButtonComponent
-                  isFullWidth
-                  onClick={() => onSaveAsDraftSelected(createWalletInput!)}
-                  isLoading={
-                    isProcessingSubmission || isEvaluatingLightningAddress
-                  }
-                  disabled={isSubmitEnabled === false}
-                >
-                  Save As Draft
-                </ButtonComponent>
+                  <Link isExternal href={WalletOfSatoshiLightningAddressURL}>
+                    <Image src={WalletOfSatoshiPNG} height="24px" />
+                  </Link>
 
-                <HStack color={'brand.neutral600'} spacing={2} mt={2}>
-                  <Text>By continuing, I agree with Geysers&apos;s</Text>
-                  <Link
-                    href={GeyserTermsAndConditionsURL}
-                    isExternal
-                    textDecoration="underline"
-                  >
-                    Terms & Conditions
+                  <Link isExternal href={BitNobURL}>
+                    <Image src={BitNobPNG} height="24px" />
                   </Link>
                 </HStack>
-              </VStack>
+              </WalletConnectionOptionInfoBox>
+            </VStack>
+
+            <VStack width="100%" alignItems="flex-start" spacing={3}>
+              <Radio size="lg" value={ConnectionOption.PERSONAL_NODE}>
+                Connect Your Node
+              </Radio>
+
+              {connectionOption === ConnectionOption.PERSONAL_NODE ? (
+                <ButtonComponent isFullWidth onClick={openWallet}>
+                  {' '}
+                  <AiOutlineSetting
+                    style={{ marginRight: '5px' }}
+                    fontSize="20px"
+                  />{' '}
+                  Connect Your Node
+                </ButtonComponent>
+              ) : null}
+
+              <WalletConnectionOptionInfoBox
+                primaryText="More challenging to setup, but you own your funds."
+                secondaryText="Connect your Lightning node to receive incoming transactions directly. Don't have a node? You can create a node on the cloud using:"
+              >
+                <HStack width={'full'} justifyContent={'flex-start'}>
+                  <Link isExternal href={VoltageExplainerPageForGeyserURL}>
+                    <Image src={VoltageLogoSmall} />
+                  </Link>
+                </HStack>
+              </WalletConnectionOptionInfoBox>
             </VStack>
           </VStack>
-        </GridItem>
+        </RadioGroup>
 
-        <GridItem colSpan={2} display="flex" justifyContent="center">
-          <VStack
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            maxWidth="370px"
-            width="100%"
-            spacing="10px"
-            paddingY="80px"
+        <VStack width="100%" alignItems="flex-start">
+          <ButtonComponent
+            primary
+            isFullWidth
+            onClick={handleProjectLaunchSelected}
+            isLoading={isCreateWalletLoading || isEvaluatingLightningAddress}
+            disabled={isSubmitEnabled === false}
           >
-            {nodeInput && nodeInput.name && (
-              <VStack
-                width="100%"
-                border="1px solid"
-                borderColor={colors.gray300}
-                borderRadius="4px"
-                alignItems="flex-start"
-                padding="10px"
-              >
-                <HStack width="100%" justifyContent="space-between">
-                  <Text fontWeight={500}>{nodeInput?.name}</Text>
-                  <IconButtonComponent
-                    aria-label="edit-node"
-                    icon={<BiPencil />}
-                    onClick={openWallet}
-                  />
-                </HStack>
+            <>
+              <BiRocket style={{ marginRight: '10px' }} />
+              Launch Project
+            </>
+          </ButtonComponent>
 
-                <VStack width="100%" alignItems="flex-start">
-                  <Text color="brand.textGray">Hostname or IP address</Text>
-                  <Text>{nodeInput?.hostname}</Text>
-                </VStack>
-              </VStack>
-            )}
-          </VStack>
-        </GridItem>
-      </Grid>
+          {onSaveAsDraftSelected && (
+            <ButtonComponent
+              isFullWidth
+              onClick={() => onSaveAsDraftSelected(createWalletInput!)}
+              isLoading={isCreateWalletLoading || isEvaluatingLightningAddress}
+            >
+              Save As Draft
+            </ButtonComponent>
+          )}
+
+          <HStack color={'brand.neutral600'} spacing={2} mt={2}>
+            <Text>By continuing, I agree with Geysers&apos;s</Text>
+            <Link
+              href={GeyserTermsAndConditionsURL}
+              isExternal
+              textDecoration="underline"
+            >
+              Terms & Conditions
+            </Link>
+          </HStack>
+        </VStack>
+      </VStack>
 
       <NodeAdditionModal
         isOpen={isWalletOpen}
         onClose={onWalletClose}
         nodeInput={nodeInput}
-        onSubmit={setNodeInput}
+        onSubmit={onSubmit}
       />
     </>
   );

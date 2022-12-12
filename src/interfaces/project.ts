@@ -17,6 +17,7 @@ export interface IProject {
   expiresAt: string;
   image?: string;
   active: boolean;
+  draft?: boolean;
   ownerConfirmed: string;
   fundsClaimed: string;
   media: string[];
