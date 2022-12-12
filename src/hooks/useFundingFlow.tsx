@@ -119,6 +119,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundingRequestErrored, setFundingRequestErrored] = useState(false);
   const [invoiceRefreshErrored, setInvoiceRefreshErrored] = useState(false);
   const [weblnErrored, setWebLNErrored] = useState(false);
+  const [weblnClosed, setWeblnClosed] = useState(false);
 
   const [invoiceRefreshLoading, setRefreshingInvoice] = useState(false);
 
@@ -352,6 +353,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     requestFunding,
     refreshFundingInvoice,
     setFundState,
-    hasWebLN: hasWebLN && Boolean(webln),
+    setWeblnClosed,
+    hasWebLN: hasWebLN && Boolean(webln) && !weblnClosed,
   };
 };

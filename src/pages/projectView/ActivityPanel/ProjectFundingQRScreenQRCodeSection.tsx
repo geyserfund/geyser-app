@@ -6,11 +6,12 @@ import {
   HTMLChakraProps,
   Text,
   VStack,
+  Link,
 } from '@chakra-ui/react';
 import Loader from '../../../components/ui/Loader';
 import { FundingStatus, InvoiceStatus } from '../../../types/generated/graphql';
 import { QRCode } from 'react-qrcode-logo';
-import { RiLinkUnlink } from 'react-icons/ri';
+import { RiLinkUnlink, RiQrCodeLine } from 'react-icons/ri';
 import { colors } from '../../../constants';
 import { ButtonComponent } from '../../../components/ui';
 import { FaBitcoin, FaCopy } from 'react-icons/fa';
@@ -110,6 +111,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     fundingRequestLoading,
     hasWebLN,
     weblnErrored,
+    setWeblnClosed,
   } = fundingFlow;
 
   const qrDisplayState = useMemo(() => {
@@ -138,6 +140,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     fundingRequestLoading,
     fundingTx.invoiceStatus,
     fundingTx.status,
+    hasWebLN,
     weblnErrored,
     errorFromRefresh,
     invoiceRefreshErrored,
@@ -261,7 +264,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               <HStack spacing={5}>
                 <Loader size="md" />
                 <Text color={'brand.neutral900'} fontWeight={400}>
-                  Waiting for payment...
+                  Waiting for payment
                 </Text>
               </HStack>
             </Box>
@@ -270,12 +273,24 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
 
       case QRDisplayState.AWAITING_PAYMENT_WEB_LN:
         return (
-          <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
-            <VStack>
-              <Loader />
-              <Text>Awaiting Payment</Text>
+          <>
+            <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
+              <VStack position={'relative'} justifyContent={'space-between'}>
+                <Loader />
+                <Text>Waiting for payment</Text>
+              </VStack>
+              <Link onClick={() => setWeblnClosed(true)}>
+                <HStack
+                  justifyContent={'flex-end'}
+                  position={'relative'}
+                  top={100}
+                >
+                  <RiQrCodeLine color={'10CAA8'} />
+                  <Text>Fund with QR code</Text>
+                </HStack>
+              </Link>
             </VStack>
-          </VStack>
+          </>
         );
       case QRDisplayState.INVOICE_CANCELLED:
         return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />;
