@@ -49,21 +49,27 @@ import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
 
 type Props = {
   project: Project;
-  onProjectLaunchSelected: (input: CreateWalletInput) => void;
-  onSaveAsDraftSelected?: (input: CreateWalletInput) => void;
+  onProjectLaunchSelected: (_: CreateWalletInput) => void;
+  onSaveAsDraftSelected?: (_: CreateWalletInput) => void;
   triggerWallet?: boolean;
   setNodeInput?: React.Dispatch<React.SetStateAction<TNodeInput | undefined>>;
 };
 
 export enum ConnectionOption {
+  // eslint-disable-next-line no-unused-vars
   LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
+  // eslint-disable-next-line no-unused-vars
   PERSONAL_NODE = 'PERSONAL_NODE',
 }
 
 export enum LNAddressEvaluationState {
+  // eslint-disable-next-line no-unused-vars
   IDLE = 'IDLE',
+  // eslint-disable-next-line no-unused-vars
   LOADING = 'LOADING',
+  // eslint-disable-next-line no-unused-vars
   FAILED = 'FAILED',
+  // eslint-disable-next-line no-unused-vars
   SUCCEEDED = 'SUCCEEDED',
 }
 
