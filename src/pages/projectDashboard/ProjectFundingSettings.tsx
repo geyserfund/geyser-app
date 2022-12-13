@@ -2,8 +2,8 @@ import { HStack, Text, VStack, GridItem } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react';
 import { useHistory } from 'react-router';
 
-// import { BiPencil } from 'react-icons/bi';
-// import { IconButtonComponent } from '../../components/ui';
+import { BiPencil } from 'react-icons/bi';
+import { IconButtonComponent } from '../../components/ui';
 import { TNodeInput } from '../creation/projectCreate/types';
 import { colors, getPath } from '../../constants';
 import { useNotification } from '../../utils';
@@ -15,6 +15,7 @@ import {
 } from '../../types/generated/graphql';
 import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView';
 import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 
 export const ProjectFundingSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
@@ -78,6 +79,12 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
               <HStack width="100%" justifyContent="space-between">
                 <Text fontWeight={500}>{projectWallet?.name}</Text>
               </HStack>
+              <HStack width="100%">
+                <CheckCircleIcon color={colors.primary800} fontSize="12px" />
+                <Text color={colors.primary800} fontSize="12px">
+                  RUNNING
+                </Text>
+              </HStack>
 
               <VStack width="100%" alignItems="flex-start">
                 <Text color="brand.neutral700">Hostname or IP address</Text>
@@ -128,7 +135,9 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
               </VStack>
             </VStack>
             <Text color="brand.neutral700" fontSize="10px">
-              If you want to change your node reach out to hello@geyser.fund
+              If you want to change how you receive your funds reach out to
+              hello@geyser.fund. We are not currently enabling editing of this
+              information for security reasons.
             </Text>
           </>
         );
@@ -159,8 +168,8 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
           {projectWallet && renderWalletConnectionDetails()}
         </VStack>
       </GridItem>
-      {/* <GridItem colSpan={5} display="flex" justifyContent="center">
-        {nodeData && (
+      {nodeData && (
+        <GridItem colSpan={5} display="flex" justifyContent="center">
           <VStack
             justifyContent="flex-start"
             alignItems="flex-start"
@@ -194,8 +203,8 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
               </VStack>
             )}
           </VStack>
-        )}
-      </GridItem> */}
+        </GridItem>
+      )}
     </>
   );
 };
