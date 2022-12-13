@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 
 // import { BiPencil } from 'react-icons/bi';
 // import { IconButtonComponent } from '../../components/ui';
-// import { TNodeInput } from '../creation/projectCreate/types';
+import { TNodeInput } from '../creation/projectCreate/types';
 import { colors, getPath } from '../../constants';
 import { useNotification } from '../../utils';
 import {
@@ -19,7 +19,7 @@ import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate';
 export const ProjectFundingSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
   const history = useHistory();
-  // const [nodeData, setNodeData] = useState<TNodeInput>();
+  const [nodeData, setNodeData] = useState<TNodeInput>();
   const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false);
 
   const projectWallet: Wallet | undefined = useMemo(() => {
