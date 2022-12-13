@@ -75,6 +75,7 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
               borderRadius="4px"
               alignItems="flex-start"
               padding="10px"
+              spacing="10px"
             >
               <HStack width="100%" justifyContent="space-between">
                 <Text fontWeight={500}>{projectWallet?.name}</Text>
@@ -86,49 +87,70 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
                 </Text>
               </HStack>
 
-              <VStack width="100%" alignItems="flex-start">
-                <Text color="brand.neutral700">Hostname or IP address</Text>
+              <VStack width="100%" spacing="4px" alignItems="flex-start">
+                <Text color="brand.neutral700" fontSize="10px">
+                  Hostname or IP address
+                </Text>
                 <Text
                   wordBreak="break-all"
-                  color="brand.neutral700"
-                  fontSize="12px"
+                  color="brand.neutral900"
+                  fontSize="14px"
                 >
                   {castedConnectionDetails.hostname}
                 </Text>
               </VStack>
 
-              <VStack width="100%" alignItems="flex-start">
-                <Text color="brand.neutral700">Public key</Text>
+              <VStack width="100%" spacing="4px" alignItems="flex-start">
+                <Text color="brand.neutral700" fontSize="10px">
+                  Public key
+                </Text>
                 <Text
                   wordBreak="break-all"
-                  color="brand.neutral700"
-                  fontSize="12px"
+                  color="brand.neutral900"
+                  fontSize="14px"
                 >
                   {castedConnectionDetails.pubkey}
                 </Text>
               </VStack>
-              <VStack width="100%" alignItems="flex-start" flexWrap="wrap">
-                <Text color="brand.neutral700">Invoice Macaroon</Text>
-                <Text wordBreak="break-all">
+              <VStack
+                width="100%"
+                spacing="4px"
+                alignItems="flex-start"
+                flexWrap="wrap"
+              >
+                <Text color="brand.neutral700" fontSize="10px">
+                  Invoice Macaroon
+                </Text>
+                <Text
+                  wordBreak="break-all"
+                  color="brand.neutral900"
+                  fontSize="14px"
+                >
                   {castedConnectionDetails.macaroon}
                 </Text>
               </VStack>
-              <VStack width="100%" alignItems="flex-start">
-                <Text color="brand.neutral700">TLS certificate</Text>
-                <Text
-                  wordBreak="break-all"
-                  color="brand.neutral700"
-                  fontSize="12px"
-                >
-                  {castedConnectionDetails.tlsCertificate}
+              {castedConnectionDetails.tlsCertificate && (
+                <VStack width="100%" spacing="4px" alignItems="flex-start">
+                  <Text color="brand.neutral700" fontSize="10px">
+                    TLS certificate
+                  </Text>
+                  <Text
+                    wordBreak="break-all"
+                    color="brand.neutral900"
+                    fontSize="14px"
+                  >
+                    {castedConnectionDetails.tlsCertificate}
+                  </Text>
+                </VStack>
+              )}
+              <VStack width="100%" spacing="4px" alignItems="flex-start">
+                <Text color="brand.neutral700" fontSize="10px">
+                  gRPC port
                 </Text>
-              </VStack>
-              <VStack width="100%" alignItems="flex-start">
-                <Text color="brand.neutral700">gRPC port</Text>
                 <Text
                   wordBreak="break-all"
-                  color="brand.neutral700"
-                  fontSize="12px"
+                  color="brand.neutral900"
+                  fontSize="14px"
                 >
                   {castedConnectionDetails.grpcPort}
                 </Text>
