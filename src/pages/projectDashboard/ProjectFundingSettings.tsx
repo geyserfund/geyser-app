@@ -27,17 +27,6 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
     return project.wallets && project.wallets[0];
   }, [project.wallets]);
 
-  // const projectLightningAddress: string | undefined = useMemo(() => {
-  //   project.wallets?.forEach((wallet: Wallet) => {
-  //     if (wallet.connectionDetails as LightningAddressConnectionDetails) {
-  //       return (wallet.connectionDetails as LightningAddressConnectionDetails)
-  //         .lightningAddress;
-  //     }
-  //   });
-
-  //   return undefined;
-  // }, [project.wallets]);
-
   const handleProjectLaunch = async () => {
     history.push(getPath('project', project.name));
     toast({
