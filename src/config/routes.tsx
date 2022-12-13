@@ -27,6 +27,8 @@ import { getPath, routerPathNames } from '../constants';
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
 import { ProfilePage } from '../pages/profile/ProfilePage';
 import { Project as OldProjectView } from '../pages/project';
+import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne';
+import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo';
 
 export const customHistory = createBrowserHistory();
 
@@ -50,7 +52,14 @@ export const Router = () => {
             <Route path="/failed-authentication">
               <FailedAuth />
             </Route>
-            <Route path={getPath('grants')} component={GrantsLandingPage} />
+            <Route path={'/grants/roundone'}>
+              <GrantsRoundOne />
+            </Route>
+            <Route path={'/grants/roundtwo'}>
+              <GrantsRoundTwo />
+            </Route>
+            <Route path={'/grants'} component={GrantsLandingPage} />
+
             <Route
               path={getPath('publicProjectLaunch')}
               component={PublicProjectLaunchPage}
