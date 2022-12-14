@@ -130,13 +130,15 @@ export const EntryContainer = ({
             spacing="20px"
             alignItems="left"
             marginTop={isMobile ? '0px' : '20px'}
+            width={'full'}
             maxWidth="1000px"
-            w="100%"
+            height={'full'}
             padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
           >
             <EntryDetails entry={entry} />
           </VStack>
         </VStack>
+
         <AppFooter />
       </Box>
     </Box>

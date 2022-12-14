@@ -17,7 +17,7 @@ import {
   Card,
   ImageWithReload,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../../components/ui';
 import {
   isMobileMode,
@@ -38,8 +38,10 @@ import {
   MUTATION_UPDATE_PROJECT,
 } from '../../../graphql/mutations';
 import { useAuthContext } from '../../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import { Project } from '../../../types/generated/graphql';
+import { ProjectValidations } from '../../../constants/validations/project';
+import { UserValidations } from '../../../constants/validations';
 
 type CreateProjectMutationResponseData = {
   createProject: Project | null;
@@ -98,7 +100,9 @@ export const ProjectCreate = () => {
           },
         });
 
-        history.push(`/launch/${createdProject.id}/milestones`);
+        history.push(
+          getPath('launchProjectWithMilestonesAndRewards', createdProject.id),
+        );
       }
     },
     onError(error) {
@@ -128,7 +132,7 @@ export const ProjectCreate = () => {
     },
   });
 
-  const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME, {
+  const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: {
       where: {
         name: form.name,
@@ -145,7 +149,7 @@ export const ProjectCreate = () => {
   });
 
   const [getProjectById, { loading, data }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME,
+    QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: { where: { id: params.projectId } },
       onCompleted(data) {
@@ -177,11 +181,19 @@ export const ProjectCreate = () => {
 
       setForm(newForm);
 
-      if (name === 'title' && value.length > 50) {
-        setFormError({ title: `max character allowed is 50/${value.length}` });
-      } else if (name === 'description' && value.length > 280) {
+      if (
+        name === 'title' &&
+        value.length > ProjectValidations.title.maxLength
+      ) {
         setFormError({
-          description: `max character allowed is 280/${value.length}`,
+          title: `Character limit: ${ProjectValidations.title.maxLength}/${value.length}`,
+        });
+      } else if (
+        name === 'description' &&
+        value.length > ProjectValidations.description.maxLength
+      ) {
+        setFormError({
+          description: `Character limit: ${ProjectValidations.description.maxLength}/${value.length}`,
         });
       } else {
         setFormError({});
@@ -225,15 +237,31 @@ export const ProjectCreate = () => {
     let isValid = true;
 
     if (!form.title) {
-      errors.title = 'title is a required field';
+      errors.title = 'Title is a required field.';
       isValid = false;
-    } else if (form.title.length < 5 || form.title.length > 50) {
-      errors.title = 'title should be between 5 and 50 characters';
+    } else if (form.title.length > ProjectValidations.title.maxLength) {
+      errors.title = `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`;
+      isValid = false;
+    }
+
+    if (!form.name) {
+      errors.name = 'Project name is a required field.';
+      isValid = false;
+    } else if (
+      form.name.length < ProjectValidations.name.minLength ||
+      form.name.length > ProjectValidations.name.maxLength
+    ) {
+      errors.name = `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`;
       isValid = false;
     }
 
     if (!form.description) {
-      errors.description = 'Project objective is a required field';
+      errors.description = 'Project objective is a required field.';
+      isValid = false;
+    } else if (
+      form.description.length > ProjectValidations.description.maxLength
+    ) {
+      errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`;
       isValid = false;
     }
 
@@ -242,6 +270,9 @@ export const ProjectCreate = () => {
       isValid = false;
     } else if (!user.email && !validateEmail(form.email)) {
       errors.email = 'Please enter a valid email address.';
+      isValid = false;
+    } else if (form.email.length > UserValidations.email.maxLength) {
+      errors.email = `Email address should be shorter than ${UserValidations.email.maxLength} characters.`;
       isValid = false;
     }
 
@@ -306,7 +337,7 @@ export const ProjectCreate = () => {
             <VStack width="100%" spacing="40px" alignItems="flex-start">
               <Text color="brand.gray500" fontSize="30px" fontWeight={700}>
                 {' '}
-                Create a new Project
+                Create A New Project
               </Text>
               <TitleWithProgressBar
                 paddingBottom="20px"
@@ -318,7 +349,7 @@ export const ProjectCreate = () => {
             <VStack width="100%" alignItems="flex-start">
               <VStack width="100%" alignItems="flex-start">
                 <Text>Project Title</Text>
-                <TextBox
+                <TextInputBox
                   name="title"
                   onChange={handleChange}
                   value={form.title}
@@ -375,7 +406,7 @@ export const ProjectCreate = () => {
 
               <VStack width="100%" alignItems="flex-start">
                 <Text>Project E-mail</Text>
-                <TextBox
+                <TextInputBox
                   name="email"
                   value={user.email || form.email}
                   onChange={handleChange}

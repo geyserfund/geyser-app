@@ -2,24 +2,31 @@ import { Checkbox, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { SatoshiAmount } from '../../../components/ui';
 
-interface IMilestoneComponent {
+type Props = {
   name: string;
   description: string;
-  amount: number;
-  checked?: boolean;
-}
+  amountRemaining: number;
+  isReached?: boolean;
+};
 
 export const MilestoneComponent = ({
   name,
   description,
-  amount,
-  checked,
-}: IMilestoneComponent) => (
+  amountRemaining,
+  isReached,
+}: Props) => (
   <HStack>
-    <Checkbox isChecked={checked} colorScheme="gray">
+    <Checkbox isChecked={isReached} colorScheme="gray">
       <Text color="brand.neutral800">{`${name}: ${description} - `}</Text>
     </Checkbox>
-    <SatoshiAmount>{amount}</SatoshiAmount>
-    <Text color="brand.neutral800"> to go.</Text>
+
+    {isReached ? (
+      <Text>Reached!</Text>
+    ) : (
+      <>
+        <SatoshiAmount>{amountRemaining}</SatoshiAmount>
+        <Text color="brand.neutral800"> to go.</Text>
+      </>
+    )}
   </HStack>
 );

@@ -95,7 +95,7 @@ export const PublicProjectLaunchPage = () => {
               paddingBottom="20%"
             >
               {' '}
-              Create a new Project
+              Create A New Project
             </Text>
             <VStack width="100%" justifyContent="center">
               <Image src={LaunchProjectRocketUrl} />
@@ -111,29 +111,41 @@ export const PublicProjectLaunchPage = () => {
                 <ListItem>Reward your contributors with perks</ListItem>
                 <ListItem>Keep community up to date with entries</ListItem>
                 <ListItem>Keep ownership of your funds</ListItem>
-                <ListItem>No creator fees (alpha)</ListItem>
-                <ListItem color={colors.neutral500}>
-                  Gain subscribers (soon)
-                </ListItem>
+                <ListItem>Geyser tip of 2% paid by contributors</ListItem>
               </UnorderedList>
-              {!loading &&
-              (!user ||
+
+              {!loading ? (
+                !user ||
                 (user && !user.id) ||
-                (user && !hasTwitterAccount(user))) ? (
-                <VStack>
-                  <Text color={colors.neutral700} paddingBottom={3}>
-                    We require creators to login with Twitter to create a
-                    project.
-                  </Text>
-                  <TwitterConnect />
-                </VStack>
-              ) : (
-                <Box width="100%" paddingTop={5}>
-                  <ButtonComponent primary isFullWidth onClick={handleNext}>
-                    Continue
-                  </ButtonComponent>
-                </Box>
-              )}
+                (user && !hasTwitterAccount(user)) ? (
+                  <VStack>
+                    <Text color={colors.neutral700} paddingBottom={3}>
+                      We require creators to login with Twitter to create a
+                      project.
+                    </Text>
+
+                    <TwitterConnect />
+
+                    {isMobile ? (
+                      <Text
+                        fontSize={'11px'}
+                        fontWeight={400}
+                        color={'brand.gray500'}
+                      >
+                        {`If this button isn't opening a Twitter authentication
+                        page, make sure pop-ups are enabled in your browser's
+                        preferences.`}
+                      </Text>
+                    ) : null}
+                  </VStack>
+                ) : (
+                  <Box width="100%" paddingTop={5}>
+                    <ButtonComponent primary isFullWidth onClick={handleNext}>
+                      Continue
+                    </ButtonComponent>
+                  </Box>
+                )
+              ) : null}
             </VStack>
           </VStack>
         </GridItem>

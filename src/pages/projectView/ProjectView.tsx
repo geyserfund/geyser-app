@@ -4,10 +4,11 @@ import { Box } from '@chakra-ui/layout';
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
-import { QUERY_PROJECT_BY_NAME } from '../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { useFundingFlow } from '../../hooks';
 import { useAuthContext } from '../../context';
 import {
+  Owner,
   Project,
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql';
@@ -31,7 +32,7 @@ export const ProjectView = () => {
   const fundingFlow = useFundingFlow();
 
   const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
-    QUERY_PROJECT_BY_NAME,
+    QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: { where: { name: projectId } },
       fetchPolicy: 'network-only',
@@ -41,20 +42,17 @@ export const ProjectView = () => {
       },
 
       onCompleted(data) {
-        if (data.project) {
-          const { project }: { project: Project } = data;
+        const { project } = data;
 
-          const projectOwnerID =
-            project.owners && project.owners.length > 0
-              ? project.owners[0]?.user.id
-              : '';
-
-          setNav({
-            title: project.title,
-            path: getPath('project', project.name),
-            projectOwnerId: projectOwnerID,
-          });
-        }
+        setNav({
+          projectName: project.name,
+          projectTitle: project.title,
+          projectPath: getPath('project', project.name),
+          projectOwnerIDs:
+            project.owners.map((ownerInfo: Owner) => {
+              return Number(ownerInfo.user.id || -1);
+            }) || [],
+        });
       },
     },
   );

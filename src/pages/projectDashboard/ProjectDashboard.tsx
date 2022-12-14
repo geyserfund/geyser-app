@@ -13,59 +13,73 @@ import { useHistory, useLocation, useParams } from 'react-router';
 import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { useAuthContext } from '../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { isMobileMode } from '../../utils';
 import { NotAuthorized } from '../notAuthorized';
 import { NotFoundPage } from '../notFound';
 import { ProjectDashboardEntries } from './ProjectDashboardEntries';
 import { MilestoneSettings } from './MilestoneSettings';
-import { NodeSettings } from './NodeSettings';
+import { ProjectFundingSettings } from './ProjectFundingSettings';
 import { ProjectSettings } from './ProjectSettings';
 import { RewardSettings } from './RewardSettings';
+import { getPath } from '../../constants';
+import { Owner } from '../../types/generated/graphql';
 
 export type TDashboardTabs =
   | 'entries'
+  | 'funds'
   | 'milestones'
   | 'rewards'
-  | 'node'
-  | 'project';
+  | 'project settings';
 
 export const ProjectDashboard = () => {
   const isMobile = isMobileMode();
   const { projectId } = useParams<{ projectId: string }>();
-  const { state } = useLocation<{ loggedOut?: boolean }>();
+  const { state: locationState } = useLocation<{ loggedOut?: boolean }>();
   const history = useHistory();
 
   const { user, setNav } = useAuthContext();
 
-  const [view, setView] = useState<TDashboardTabs>('entries');
+  const [activeTab, setActiveTab] = useState<TDashboardTabs>('entries');
 
   useEffect(() => {
     try {
       getProject();
     } catch (_) {
-      history.push('/not-found');
+      history.push(getPath('notFound'));
     }
-  }, [state]);
+  }, [locationState]);
+
+  const handleTabSelection = async (selectedTab: TDashboardTabs) => {
+    if (selectedTab !== activeTab) {
+      await getProject({ fetchPolicy: 'no-cache' });
+    }
+
+    setActiveTab(selectedTab);
+  };
 
   const [getProject, { loading, error, data }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME,
+    QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: {
         where: { name: projectId },
       },
       onCompleted(data) {
         setNav({
-          title: data.project.title,
-          path: `/projects/${data.project.name}`,
-          projectOwnerId: data.project.owners[0].user.id,
+          projectName: data.project.name,
+          projectTitle: data.project.title,
+          projectPath: `${getPath('project', data.project.name)}`,
+          projectOwnerIDs:
+            data.project.owners.map((ownerInfo: Owner) => {
+              return Number(ownerInfo.user.id || -1);
+            }) || [],
         });
       },
     },
   );
 
   const handleBack = () => {
-    history.push(`/projects/${projectId}`);
+    history.push(getPath('project', projectId));
   };
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
@@ -85,16 +99,16 @@ export const ProjectDashboard = () => {
   const { project } = data;
 
   const renderTabs = () => {
-    switch (view) {
+    switch (activeTab) {
       case 'entries':
         return <ProjectDashboardEntries project={project} />;
       case 'milestones':
         return <MilestoneSettings project={project} />;
       case 'rewards':
         return <RewardSettings project={project} />;
-      case 'node':
-        return <NodeSettings project={project} />;
-      case 'project':
+      case 'funds':
+        return <ProjectFundingSettings project={project} />;
+      case 'project settings':
         return <ProjectSettings project={project} />;
       default:
         return <ProjectDashboardEntries project={project} />;
@@ -105,7 +119,7 @@ export const ProjectDashboard = () => {
     return (
       <Box
         borderBottom="3px solid"
-        borderColor={view === nav ? 'brand.primary' : 'brand.neutral500'}
+        borderColor={activeTab === nav ? 'brand.primary' : 'brand.neutral500'}
       >
         <Button
           borderRadius="4px"
@@ -113,10 +127,10 @@ export const ProjectDashboard = () => {
           w="100%"
           rounded="none"
           bg="none"
-          fontWeight={view === nav ? 'bold' : 'normal'}
+          fontWeight={activeTab === nav ? 'bold' : 'normal'}
           fontSize="16px"
           marginTop="10px"
-          onClick={() => setView(nav)}
+          onClick={() => handleTabSelection(nav)}
           textTransform="capitalize"
         >
           {nav}
@@ -127,10 +141,10 @@ export const ProjectDashboard = () => {
 
   const navList: TDashboardTabs[] = [
     'entries',
+    'funds',
     'milestones',
     'rewards',
-    'node',
-    'project',
+    'project settings',
   ];
 
   return (
@@ -202,6 +216,7 @@ export const ProjectDashboard = () => {
           display="flex"
           justifyContent="flex-start"
         ></GridItem>
+
         {renderTabs()}
       </Grid>
     </Box>

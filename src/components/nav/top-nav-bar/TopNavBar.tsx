@@ -22,32 +22,34 @@ import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
 import { getPath, routerPathNames } from '../../../constants';
+import satlogo from '../../../assets/satgrey.svg';
+import { fonts } from '../../../constants/fonts';
 
 const routesForHidingTopNav = [
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
 const customTitleRoutes = [
-  `/${routerPathNames.projects}/:projectId/`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
   `/${routerPathNames.entry}/:entryId`,
 ];
 
 const routesForHidingDropdownMenu = [
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
 const routesForHidingMyProjectsButton = [
-  `/${routerPathNames.project}/:projectId`,
+  `/${routerPathNames._deprecatedPathNameForProject}/:projectId`,
   `/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.projectDashboard}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
 ];
 
 const routesForEnablingSignInButton = [
@@ -59,10 +61,10 @@ const routesForEnablingSignInButton = [
   getPath('notAuthorized'),
   `/${routerPathNames.userProfile}/:userId`,
   `/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.projects}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${routerPathNames.project}/:projectId/`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
 const routesForEnablingProjectLaunchButton = [
@@ -80,8 +82,10 @@ export const TopNavBar = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
 
+  const currentPathName = history.location.pathname;
+
   const currentProjectRouteMatch: match<Record<string, any>> | null =
-    useRouteMatch(`/${routerPathNames.projects}/:projectId/`);
+    useRouteMatch(`/${routerPathNames.project}/:projectId/`);
 
   const {
     isOpen: isLoginAlertModalOpen,
@@ -146,7 +150,14 @@ export const TopNavBar = () => {
   };
 
   const handleProjectDashboardButtonPress = () => {
-    const projectName = currentProjectRouteMatch?.params?.projectId;
+    if (userHasOnlyOneProject) {
+      history.push(getPath('projectDashboard', user.ownerOf[0]?.project?.name));
+      return;
+    }
+
+    const projectName =
+      currentProjectRouteMatch?.params?.projectId ||
+      navigationContext.projectName;
 
     if (projectName) {
       history.push(getPath('projectDashboard', projectName));
@@ -157,12 +168,24 @@ export const TopNavBar = () => {
 
   const isViewingOwnProject: boolean = useMemo(() => {
     return (
-      (history.location.pathname.startsWith(`/${routerPathNames.entry}`) ||
-        history.location.pathname.startsWith(`/${routerPathNames.project}`) ||
-        history.location.pathname.startsWith(`/${routerPathNames.projects}`)) &&
-      navigationContext.projectOwnerId === user.id
+      (currentPathName.startsWith(`/${routerPathNames.entry}`) ||
+        currentPathName.startsWith(
+          `/${routerPathNames._deprecatedPathNameForProject}`,
+        ) ||
+        currentPathName.startsWith(`/${routerPathNames.project}`)) &&
+      navigationContext.projectOwnerIDs.includes(Number(user.id))
     );
-  }, [user.id, navigationContext.projectOwnerId, history.location.pathname]);
+  }, [
+    user.id,
+    navigationContext.projectOwnerIDs,
+    currentPathName,
+    routerPathNames,
+  ]);
+
+  const userHasOnlyOneProject: boolean = useMemo(
+    () => user && user.ownerOf && user.ownerOf.length === 1,
+    [user],
+  );
 
   const shouldTopNavBeHidden: boolean = useMemo(() => {
     return routeMatchesForHidingTopNav.some((routeMatch) => {
@@ -227,18 +250,30 @@ export const TopNavBar = () => {
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      isViewingOwnProject
+      (isViewingOwnProject || userHasOnlyOneProject)
     );
-  }, [isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject]);
+  }, [
+    isMobile,
+    isLoggedIn,
+    isUserAProjectCreator,
+    isViewingOwnProject,
+    userHasOnlyOneProject,
+  ]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
     return (
       isMobile === true &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      isViewingOwnProject
+      (isViewingOwnProject || userHasOnlyOneProject)
     );
-  }, [isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject]);
+  }, [
+    isMobile,
+    isLoggedIn,
+    isUserAProjectCreator,
+    isViewingOwnProject,
+    userHasOnlyOneProject,
+  ]);
 
   /**
    * Logic:
@@ -260,7 +295,8 @@ export const TopNavBar = () => {
       isViewingOwnProject === false &&
       routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      })
+      }) &&
+      !userHasOnlyOneProject
     );
   }, [
     routeMatchesForHidingMyProjectsButton,
@@ -268,6 +304,7 @@ export const TopNavBar = () => {
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
+    userHasOnlyOneProject,
   ]);
 
   const shouldShowMyProjectsButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -278,7 +315,8 @@ export const TopNavBar = () => {
       isViewingOwnProject === false &&
       routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      })
+      }) &&
+      !userHasOnlyOneProject
     );
   }, [
     routeMatchesForHidingMyProjectsButton,
@@ -286,6 +324,7 @@ export const TopNavBar = () => {
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
+    userHasOnlyOneProject,
   ]);
 
   /**
@@ -327,10 +366,8 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={useColorModeValue('brand.bgWhite', 'brand.bgDark')}
+        bg={useColorModeValue('brand.bgGrey4', 'brand.bgDark')}
         px={4}
-        borderBottom={'1px solid'}
-        borderBottomColor={'brand.bgGrey3'}
         backdropFilter="blur(2px)"
         position="fixed"
         top={0}
@@ -348,7 +385,7 @@ export const TopNavBar = () => {
 
           {shouldShowCustomTitle ? (
             <Heading as={'h3'} noOfLines={1} size="sm">
-              {navigationContext.title}
+              {navigationContext.projectTitle}
             </Heading>
           ) : null}
 
@@ -360,7 +397,7 @@ export const TopNavBar = () => {
                 backgroundColor="brand.primary400"
                 onClick={handleProjectDashboardButtonPress}
               >
-                Dashboard
+                Project Dashboard
               </ButtonComponent>
             ) : null}
 
@@ -399,6 +436,37 @@ export const TopNavBar = () => {
               </ButtonComponent>
             ) : null}
 
+            {!isMobile && isLoggedIn && (
+              <Box
+                display={'flex'}
+                alignItems="center"
+                fontFamily={fonts.inter}
+                fontWeight={'500'}
+                cursor="pointer"
+                fontSize="17px"
+                gap={4}
+              >
+                <Text onClick={() => history.push('/discover')}>Projects</Text>
+                <Text onClick={() => history.push('/grants')}>Grants</Text>
+              </Box>
+            )}
+
+            <Box
+              rounded={'md'}
+              border={'1px'}
+              borderColor="brand.bgGrey3"
+              px={2.5}
+              py={2.5}
+              maxHeight="40px"
+            >
+              <Box
+                display="flex"
+                justifyContent={'center'}
+                alignContent="center"
+              >
+                <img src={satlogo} alt="sat logo" width={'18px'} />
+              </Box>
+            </Box>
             {shouldShowDropdownMenuButton ? (
               <TopNavBarMenu
                 shouldShowDashboardMenuItem={

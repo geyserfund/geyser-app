@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthModal } from '../../../components/molecules';
 import {
-  IFundingTx,
   IFundingInput,
   IRewardFundingInput,
   IFunder,
@@ -9,18 +8,26 @@ import {
 import { useQuery } from '@apollo/client';
 import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
 import { SuccessScreen } from './SuccessScreen';
-import { QRPage } from './QRPage';
+import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
 import { isMobileMode, useNotification } from '../../../utils';
-import { FundingPaymentScreen } from './FundingPaymentScreen';
+import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
+
 import { AuthContext } from '../../../context';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
 import { useStyles } from './styles';
-import { InfoPage, InfoPageSkeleton } from './InfoPage';
+import {
+  ProjectFundingInitialInfoScreen,
+  InfoPageSkeleton,
+} from './ProjectFundingInitialInfoScreen';
 import { fundingStages } from '../../../constants';
 import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
-import { Project, ProjectReward } from '../../../types/generated/graphql';
+import {
+  FundingTx,
+  Project,
+  ProjectReward,
+} from '../../../types/generated/graphql';
 
 type Props = {
   project: Project;
@@ -48,7 +55,7 @@ export const ProjectActivityPanel = ({
   const isMobile = isMobileMode();
 
   // Required for activity (recent and leaderboard) visibility
-  const [fundingTxs, setFundingTxs] = useState<IFundingTx[]>([]);
+  const [fundingTxs, setFundingTxs] = useState<FundingTx[]>([]);
   const [funders, setFunders] = useState<IFunder[]>([]);
 
   // required for knowing the rewards and the funds
@@ -69,6 +76,7 @@ export const ProjectActivityPanel = ({
     resetFundingFlow,
     requestFunding,
   } = fundingFlow;
+
   const {
     isOpen: loginIsOpen,
     onOpen: loginOnOpen,
@@ -85,6 +93,7 @@ export const ProjectActivityPanel = ({
     data: fundingData,
   } = useQuery(QUERY_PROJECT_FUNDING_DATA, {
     variables: { where: { id: project.id } },
+    fetchPolicy: 'network-only',
   });
 
   useEffect(() => {
@@ -123,7 +132,7 @@ export const ProjectActivityPanel = ({
     }
   }, [formState.anonymous]);
 
-  const handleFundProject = () => {
+  const handleFundProjectButtonTapped = () => {
     gotoNextStage();
   };
 
@@ -204,11 +213,11 @@ export const ProjectActivityPanel = ({
     switch (fundState) {
       case fundingStages.initial:
         return (
-          <InfoPage
+          <ProjectFundingInitialInfoScreen
             {...{
               project,
               handleViewClick,
-              handleFundProject,
+              onFundProjectTapped: handleFundProjectButtonTapped,
               loading,
               btcRate,
               fundingTxs,
@@ -219,7 +228,7 @@ export const ProjectActivityPanel = ({
         );
       case fundingStages.form:
         return (
-          <FundingPaymentScreen
+          <ProjectFundingSelectionFormScreen
             {...{
               fundLoading,
               isMobile,
@@ -239,10 +248,10 @@ export const ProjectActivityPanel = ({
         );
       case fundingStages.started:
         return (
-          <QRPage
+          <ProjectFundingQRScreen
             state={formState}
             project={project}
-            fundingTx={fundingTx}
+            fundingFlow={fundingFlow}
             amounts={amounts}
             handleCloseButton={handleCloseButton}
           />

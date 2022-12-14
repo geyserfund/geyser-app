@@ -3,17 +3,19 @@ import { Box, Image, Input, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BsCheckLg } from 'react-icons/bs';
 import { useHistory, useParams } from 'react-router';
-import { ButtonComponent, TextBox } from '../../../components/ui';
+import { ButtonComponent, TextInputBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { getPath } from '../../../constants';
+import { ProjectEntryValidations } from '../../../constants/validations';
 import { useAuthContext } from '../../../context';
-import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import {
   MUTATION_PUBLISH_ENTRY,
   MUTATION_UPDATE_ENTRY,
 } from '../../../graphql/mutations/entries';
 import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
 import { IEntryUpdateInput } from '../../../interfaces/entry';
+import { Owner } from '../../../types/generated/graphql';
 import { isMobileMode, useNotification } from '../../../utils';
 import { defaultEntry } from './editor';
 import { CreateNav } from './editor/CreateNav';
@@ -42,12 +44,17 @@ export const EntryPreview = () => {
 
   const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_ENTRY);
 
-  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME, {
+  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
       setNav({
-        title: data.project.title,
-        path: `/projects/${data.project.name}`,
+        projectName: data.project.name,
+        projectTitle: data.project.title,
+        projectPath: getPath('project', data.project.name),
+        projectOwnerIDs:
+          data.project.owners.map((ownerInfo: Owner) => {
+            return Number(ownerInfo.user.id || -1);
+          }) || [],
       });
     },
     onError() {
@@ -104,6 +111,20 @@ export const EntryPreview = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target;
+    if (
+      name === 'title' &&
+      value.length > ProjectEntryValidations.title.maxLength
+    ) {
+      return;
+    }
+
+    if (
+      name === 'description' &&
+      value.length > ProjectEntryValidations.description.maxLength
+    ) {
+      return;
+    }
+
     if (name) {
       const newForm = { ...entry, [name]: value };
       setEntry(newForm);
@@ -134,7 +155,7 @@ export const EntryPreview = () => {
   };
 
   const handleTwitterShareButtonTapped = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(getPath('entry', params.entryId));
 
     setHasCopiedSharingLink(true);
   };
@@ -249,7 +270,7 @@ export const EntryPreview = () => {
                 Linked project
               </Text>
               <Text>Where should Satoshi donations go to?</Text>
-              <TextBox
+              <TextInputBox
                 isDisabled
                 value={`${projectData.project.name}@geyser.fund`}
               />

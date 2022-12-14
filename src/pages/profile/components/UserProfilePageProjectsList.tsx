@@ -21,23 +21,19 @@ export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
   }
 
   return (
-    <Box display={'flex'} justifyContent="center" alignItems={'center'}>
-      <SimpleGrid columns={3} spacingX={7} spacingY={8}>
-        {profileUser.ownerOf.map((ownerOf: Maybe<OwnerOf>) => {
-          if (ownerOf && ownerOf.project) {
-            return (
-              <GridItem
-                key={ownerOf.project.id}
-                colSpan={{ base: 3, sm: 3, md: 3, lg: 1 }}
-              >
-                <UserProfilePageProjectsListItem
-                  projectID={ownerOf.project.id}
-                />
-              </GridItem>
-            );
-          }
-        })}
-      </SimpleGrid>
-    </Box>
+    <SimpleGrid columns={4} spacingX={4} spacingY={8}>
+      {profileUser.ownerOf.map((ownerOf: Maybe<OwnerOf>) => {
+        if (ownerOf && ownerOf.project) {
+          return (
+            <GridItem
+              key={ownerOf.project.id}
+              colSpan={{ base: 3, sm: 3, md: 3, lg: 1 }}
+            >
+              <UserProfilePageProjectsListItem projectID={ownerOf.project.id} />
+            </GridItem>
+          );
+        }
+      })}
+    </SimpleGrid>
   );
 };

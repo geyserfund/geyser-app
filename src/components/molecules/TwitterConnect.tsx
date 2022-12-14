@@ -10,7 +10,11 @@ import { ME } from '../../graphql';
 import { User } from '../../types/generated/graphql';
 import { defaultUser } from '../../defaults';
 
-export const TwitterConnect = ({ onClose }: { onClose?: () => {} }) => {
+type Props = {
+  onClose?: () => void;
+};
+
+export const TwitterConnect = ({ onClose }: Props) => {
   const { setUser, setIsLoggedIn } = useAuthContext();
   const { toast } = useNotification();
 

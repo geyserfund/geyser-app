@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const QUERY_PROJECT_BY_NAME = gql`
+export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
   query GetProject(
     $where: UniqueProjectQueryInput!
     $input: ProjectEntriesGetInput
@@ -16,7 +16,6 @@ export const QUERY_PROJECT_BY_NAME = gql`
       createdAt
       updatedAt
       expiresAt
-      media
       image
       active
       draft
@@ -222,19 +221,21 @@ export const ALL_PROJECTS_SUMMARY = gql`
 `;
 
 export const QUERY_PROJECT_DASHBOARD_DATA = gql`
-  query ProjectTotalVisitors($where: UniqueProjectQueryInput!) {
+  query ProjectDashboardData($where: UniqueProjectQueryInput!) {
     project(where: $where) {
       unpublishedEntries: entries(input: { where: { published: false } }) {
         id
         title
         published
         publishedAt
+        status
       }
       publishedEntries: entries(input: { where: { published: true } }) {
         id
         title
         published
         publishedAt
+        status
       }
       statistics {
         totalVisitors

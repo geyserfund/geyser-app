@@ -102,10 +102,10 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
       );
       return (
         <Text
-          isTruncated
           fontSize="14px"
           fontFamily={fonts.mono}
           color={colors.neutral600}
+          maxW="100%"
         >{`${percentage}% of ${currentMilestone.name}`}</Text>
       );
     }
@@ -118,7 +118,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   return (
     <HStack width="100%" padding="20px" justifyContent="space-between">
       {renderCircularProgress()}
-      <VStack flex="1" spacing="5px">
+      <VStack flex="1" spacing="5px" width="100%" overflow="hidden">
         <Text fontSize="18px" fontWeight={600} color="brand.neutral900">
           {project.title}
         </Text>

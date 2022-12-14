@@ -21,9 +21,6 @@ type Props = ICard & {
   onClick?: () => void;
 };
 
-// TODO: Figure out how this is supposed to differ from `ProjectCard`.
-// (It's possible this could replace `ProjectCard`)
-
 export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
   const history = useHistory();
 
@@ -67,7 +64,6 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
             />
           </LinkOverlay>
         </Box>
-
         <Box paddingX={6} paddingY={4}>
           <VStack spacing={4} alignItems="flex-start">
             <Heading

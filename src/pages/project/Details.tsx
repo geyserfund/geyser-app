@@ -5,7 +5,6 @@ import { createUseStyles } from 'react-jss';
 import { fadeOut, slideInLeft } from '../../css';
 import { IProject } from '../../interfaces';
 import { isDarkMode, isMobileMode } from '../../utils';
-import { Old_RewardBased } from './ProjectLayout';
 import { IFundingStages } from '../../constants';
 import { ProjectDetailsMobileMenu } from '../../components/molecules';
 import { fundingStages } from '../../constants';
@@ -115,7 +114,7 @@ export const Details = ({
             }
           }}
         >
-          <Old_RewardBased project={project} />
+          {/* <Old_RewardBased project={project} /> */}
         </Box>
       </Box>
 

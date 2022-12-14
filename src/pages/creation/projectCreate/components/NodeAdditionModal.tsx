@@ -11,8 +11,13 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { ButtonComponent, TextArea, TextBox } from '../../../../components/ui';
+import {
+  ButtonComponent,
+  TextArea,
+  TextInputBox,
+} from '../../../../components/ui';
 import { VoltageNodeConnectionDemoURL } from '../../../../constants';
+import { ProjectNodeValidations } from '../../../../constants/validations';
 import { isMobileMode } from '../../../../utils';
 import { checkMacaroonPermissions } from '../../../../utils/checkMacaroonPermissions';
 import { isSecp256k1Compressed } from '../../../../utils/isSecp256k1Compressed';
@@ -23,7 +28,7 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (_: TNodeInput) => void;
-  node?: TNodeInput;
+  nodeInput?: TNodeInput;
 };
 
 export const defaultNode = {
@@ -39,13 +44,13 @@ export const defaultNode = {
 export const NodeAdditionModal = ({
   isOpen,
   onClose,
-  node,
+  nodeInput,
   onSubmit,
 }: Props) => {
   const isMobile = isMobileMode();
 
   const [isVoltage, setIsVoltage] = useState(false);
-  const [form, setForm] = useState<TNodeInput>(node || defaultNode);
+  const [form, setForm] = useState<TNodeInput>(nodeInput || defaultNode);
   const [formError, setFormError] = useState<any>({});
 
   const handleTextChange = (
@@ -85,6 +90,9 @@ export const NodeAdditionModal = ({
     if (!form.name) {
       errors.name = 'Node name' + additionalText;
       isValid = false;
+    } else if (form.name.length > ProjectNodeValidations.nodeName.maxLength) {
+      errors.name = `Node name cannot be longer than ${ProjectNodeValidations.nodeName.maxLength} characters.`;
+      isValid = false;
     }
 
     if (!form.hostname) {
@@ -101,16 +109,27 @@ export const NodeAdditionModal = ({
     if (!form.publicKey) {
       errors.publicKey = 'Public Key' + additionalText;
       isValid = false;
+    } else if (
+      form.publicKey.length !== ProjectNodeValidations.publicKey.length
+    ) {
+      errors.publicKey = `Public Key must be ${ProjectNodeValidations.publicKey.length} characters long.`;
+      isValid = false;
     } else {
       const val = isSecp256k1Compressed(form.publicKey);
       if (!val) {
-        errors.publicKey = 'The pubkey is wrongly formatted';
+        errors.publicKey = 'The Public Key is wrongly formatted.';
         isValid = false;
       }
     }
 
     if (!form.invoiceMacaroon) {
       errors.invoiceMacaroon = 'Invoice Macaroon' + additionalText;
+      isValid = false;
+    } else if (
+      form.invoiceMacaroon.length >
+      ProjectNodeValidations.invoiceMacaroon.maxLength
+    ) {
+      errors.invoiceMacaroon = `Invoice Macaroon cannot be longer than ${ProjectNodeValidations.invoiceMacaroon.maxLength} characters.`;
       isValid = false;
     } else {
       const val = checkMacaroonPermissions(form.invoiceMacaroon);
@@ -120,9 +139,11 @@ export const NodeAdditionModal = ({
       }
     }
 
-    if (!isVoltage && !form.tlsCert) {
-      errors.tlsCert = 'TLS certificate' + additionalText;
-      isValid = false;
+    if (!isVoltage) {
+      if (!form.tlsCert) {
+        errors.tlsCert = 'TLS certificate' + additionalText;
+        isValid = false;
+      }
     }
 
     if (!isVoltage && !form.grpc) {
@@ -179,7 +200,7 @@ export const NodeAdditionModal = ({
           >
             <VStack width="100%" alignItems="flex-start">
               <Text>Node Name</Text>
-              <TextBox
+              <TextInputBox
                 name="name"
                 onChange={handleTextChange}
                 value={form.name}
@@ -207,7 +228,7 @@ export const NodeAdditionModal = ({
             <VStack width="100%" alignItems="flex-start">
               <Text>Hostname or IP Address (API endpoint)</Text>
 
-              <TextBox
+              <TextInputBox
                 name="hostname"
                 onChange={handleTextChange}
                 placeholder={isVoltage ? 'nodename.m.voltageapp.io' : ''}
@@ -255,7 +276,7 @@ export const NodeAdditionModal = ({
                 </VStack>
                 <VStack width="100%" alignItems="flex-start">
                   <Text>gRPC port</Text>
-                  <TextBox
+                  <TextInputBox
                     name="grpc"
                     type="number"
                     placeholder="10009"

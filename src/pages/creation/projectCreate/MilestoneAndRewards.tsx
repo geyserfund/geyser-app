@@ -14,17 +14,21 @@ import {
   IconButtonComponent,
   Linkin,
   SatoshiAmount,
+  UndecoratedLink,
 } from '../../../components/ui';
 import { isMobileMode, useNotification } from '../../../utils';
 import { TMilestone } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
+import { colors, getPath } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
-import { AddMilestones, defaultMilestone } from './components';
+import {
+  MilestoneAdditionModal,
+  defaultMilestone,
+  RewardAdditionModal,
+} from './components';
 import { EditIcon } from '@chakra-ui/icons';
-import { RewardAdditionModal } from './components/RewardAdditionModal';
 import {
   CalendarButton,
   DeleteConfirmModal,
@@ -36,7 +40,7 @@ import {
   MUTATION_UPDATE_PROJECT,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../graphql/mutations';
-import { QUERY_PROJECT_BY_NAME } from '../../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
 
 import type { Project, ProjectReward } from '../../../types/generated/graphql';
@@ -70,24 +74,26 @@ export const MilestoneAndRewards = () => {
     onClose: onMilestoneClose,
     onOpen: openMilestone,
   } = useDisclosure();
+
   const {
     isOpen: isRewardOpen,
     onClose: onRewardClose,
     onOpen: openReward,
   } = useDisclosure();
+
   const {
     isOpen: isRewardDeleteOpen,
     onClose: onRewardDeleteClose,
     onOpen: openRewardDelete,
   } = useDisclosure();
-  const [isSatoshi, setIsSatoshi] = useState(true);
+
   const [isSatoshiRewards, setIsSatoshiRewards] = useState(false);
 
   const [updateProject, { loading: updateProjectLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,
     {
       onCompleted() {
-        history.push(`/launch/${params.projectId}/node`);
+        history.push(getPath('launchProjectWithNode', params.projectId));
       },
       onError(error) {
         toast({
@@ -101,7 +107,7 @@ export const MilestoneAndRewards = () => {
 
   const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
 
-  const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME, {
+  const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { id: params.projectId } },
     fetchPolicy: 'network-only',
     onError() {
@@ -128,6 +134,7 @@ export const MilestoneAndRewards = () => {
 
   const handleMilestoneSubmit = (milestones: TMilestone[]) => {
     setMilestones(milestones);
+    onMilestoneClose();
   };
 
   const handleRewardUpdate = (addReward: ProjectReward) => {
@@ -155,6 +162,7 @@ export const MilestoneAndRewards = () => {
       rewardCurrency: RewardCurrency.Usdcent,
       expiresAt: finalDate || null,
     };
+
     if (rewards.length > 0) {
       updateProjectInput.type = 'reward';
     }
@@ -260,7 +268,7 @@ export const MilestoneAndRewards = () => {
           display="flex"
           justifyContent="flex-start"
         >
-          <Linkin href={`/launch/${params.projectId}`}>
+          <UndecoratedLink href={`/launch/${params.projectId}`}>
             <ButtonComponent
               leftIcon={
                 <BiLeftArrowAlt
@@ -271,7 +279,7 @@ export const MilestoneAndRewards = () => {
             >
               Back
             </ButtonComponent>
-          </Linkin>
+          </UndecoratedLink>
         </GridItem>
         <GridItem
           colSpan={2}
@@ -332,7 +340,7 @@ export const MilestoneAndRewards = () => {
               <VStack width="100%" alignItems="flex-start">
                 <Text name="title">Project Milestones (optional)</Text>
                 <ButtonComponent isFullWidth onClick={openMilestone}>
-                  Add a milestone
+                  Add a Milestone
                 </ButtonComponent>
                 <Text fontSize="12px">
                   Milestones help you and your community keep track of your
@@ -349,7 +357,7 @@ export const MilestoneAndRewards = () => {
                     openReward();
                   }}
                 >
-                  Add a reward
+                  Add a Reward
                 </ButtonComponent>
                 <Text fontSize="12px">
                   Rewards are a powerful way of exchanging value with your
@@ -401,11 +409,7 @@ export const MilestoneAndRewards = () => {
                     padding="10px"
                   >
                     <Text>{milestone.name}</Text>
-                    {isSatoshi ? (
-                      <SatoshiAmount>{milestone.amount}</SatoshiAmount>
-                    ) : (
-                      <Text>{`$ ${milestone.amount}`}</Text>
-                    )}
+                    <SatoshiAmount>{milestone.amount}</SatoshiAmount>
                   </VStack>
                 ))}
               </>
@@ -441,13 +445,13 @@ export const MilestoneAndRewards = () => {
       </Grid>
 
       {isMilestoneOpen && (
-        <AddMilestones
+        <MilestoneAdditionModal
           isOpen={isMilestoneOpen}
           onClose={onMilestoneClose}
-          milestones={milestones.length > 0 ? milestones : [defaultMilestone]}
+          availableMilestones={
+            milestones.length > 0 ? milestones : [defaultMilestone]
+          }
           onSubmit={handleMilestoneSubmit}
-          isSatoshi={isSatoshi}
-          setIsSatoshi={setIsSatoshi}
           projectId={data?.project?.id}
         />
       )}

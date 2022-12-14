@@ -1,5 +1,4 @@
 export * from './ProjectBalance';
-export * from './ProjectCard';
 export * from './ProjectEntryCard';
 export * from './ProjectBalanceCircularProgress';
 export * from './ProjectContributionCard';

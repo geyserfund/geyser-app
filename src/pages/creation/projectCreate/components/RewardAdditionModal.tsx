@@ -22,14 +22,14 @@ import {
   ButtonComponent,
   ImageWithReload,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../../../components/ui';
 
 import {
   MUTATION_CREATE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations';
-import { useNotification } from '../../../../utils';
+import { commaFormatted, useNotification } from '../../../../utils';
 import {
   ProjectReward,
   RewardCurrency,
@@ -39,6 +39,7 @@ import {
   ProjectRewardCreationVariables,
   ProjectRewardUpdateVariables,
 } from '../types';
+import { ProjectRewardValidations } from '../../../../constants/validations';
 
 type Props = {
   isOpen: boolean;
@@ -50,11 +51,11 @@ type Props = {
 };
 
 type CreateRewardMutationResponseData = {
-  createProjectReward: ProjectReward;
+  createdReward: ProjectReward;
 };
 
 type UpdateRewardMutationResponseData = {
-  updateProjectReward: ProjectReward;
+  updatedReward: ProjectReward;
 };
 
 export const RewardAdditionModal = ({
@@ -88,7 +89,7 @@ export const RewardAdditionModal = ({
     CreateRewardMutationResponseData,
     { input: ProjectRewardCreationVariables }
   >(MUTATION_CREATE_PROJECT_REWARD, {
-    onCompleted({ createProjectReward: createdReward }) {
+    onCompleted({ createdReward }) {
       toast({
         title: 'Successfully created!',
         description: `Reward ${createdReward.name} was successfully created`,
@@ -110,13 +111,13 @@ export const RewardAdditionModal = ({
     UpdateRewardMutationResponseData,
     { input: ProjectRewardUpdateVariables }
   >(MUTATION_UPDATE_PROJECT_REWARD, {
-    onCompleted({ updateProjectReward: updatedProjectReward }) {
+    onCompleted({ updatedReward }) {
       toast({
         title: 'Successfully updated!',
-        description: `Reward ${updatedProjectReward.name} was successfully updated`,
+        description: `Reward ${updatedReward.name} was successfully updated`,
         status: 'success',
       });
-      onSubmit(updatedProjectReward);
+      onSubmit(updatedReward);
       onClose();
     },
     onError(error) {
@@ -210,21 +211,38 @@ export const RewardAdditionModal = ({
   const validateReward = () => {
     const errors: any = {};
     let isValid = true;
+
     if (!rewards.current.name) {
       errors.name = 'Name is a required field';
       isValid = false;
+    } else if (
+      rewards.current.name.length > ProjectRewardValidations.name.maxLength
+    ) {
+      errors.name = `Name should be less than ${ProjectRewardValidations.name.maxLength} characters`;
+      isValid = false;
     }
 
-    if (!rewards.current.cost || !(rewards.current.cost > 0)) {
-      errors.cost = 'Cost needs to be greater than 1';
+    if (!rewards.current.cost || rewards.current.cost <= 0) {
+      errors.cost = `Cost must be greater than 0.`;
+      isValid = false;
+    }
+
+    if (
+      formCostDollarValue * 100 >
+      ProjectRewardValidations.cost.maxUSDCentsAmount
+    ) {
+      errors.cost = `Cost must be less than $${commaFormatted(
+        ProjectRewardValidations.cost.maxUSDCentsAmount / 100,
+      )}.`;
       isValid = false;
     }
 
     if (
       rewards.current.description &&
-      rewards.current.description.length > 280
+      rewards.current.description.length >
+        ProjectRewardValidations.description.maxLength
     ) {
-      errors.cost = 'description must be less than 280 characters';
+      errors.description = `Description should be less than ${ProjectRewardValidations.description.maxLength} characters`;
       isValid = false;
     }
 
@@ -258,7 +276,7 @@ export const RewardAdditionModal = ({
           >
             <VStack width="100%" alignItems="flex-start">
               <Text>Name</Text>
-              <TextBox
+              <TextInputBox
                 placeholder={'T - Shirt ...'}
                 value={rewards.current.name}
                 name="name"
@@ -274,6 +292,7 @@ export const RewardAdditionModal = ({
                 value={rewards.current.description!}
                 name="description"
                 onChange={handleTextChange}
+                error={formError.description}
               />
             </VStack>
 
@@ -326,13 +345,14 @@ export const RewardAdditionModal = ({
                 />
               </InputGroup>
 
-              {formError.cost && (
+              {formError.cost ? (
                 <Text fontSize="12px" color="red.500">
                   {formError.cost}
                 </Text>
-              )}
+              ) : null}
             </VStack>
           </VStack>
+
           <VStack spacing="10px">
             <ButtonComponent
               isLoading={createRewardLoading || updateRewardLoading}
