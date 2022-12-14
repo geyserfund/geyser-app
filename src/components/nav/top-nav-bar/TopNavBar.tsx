@@ -381,10 +381,14 @@ export const TopNavBar = () => {
   }, [routesMatchesForShowingCustomTitle]);
 
   const shouldShowNavItems: boolean = useMemo(() => {
+    if (isMobile) {
+      return false;
+    }
+
     return routesMatchesForShowingNavItems.some((routeMatch) => {
       return (routeMatch as match)?.isExact;
     });
-  }, [routesMatchesForShowingNavItems]);
+  }, [routesMatchesForShowingNavItems, isMobile]);
 
   if (shouldTopNavBeHidden) {
     return null;

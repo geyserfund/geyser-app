@@ -1,111 +1,165 @@
-import { useMutation } from '@apollo/client';
-import {
-  HStack,
-  Text,
-  useDisclosure,
-  VStack,
-  GridItem,
-  Image,
-  Link,
-} from '@chakra-ui/react';
+import { HStack, Text, VStack, GridItem } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react';
-import { AiOutlineSetting } from 'react-icons/ai';
-import VoltageLogoSmall from '../../assets/voltage-logo-small.svg';
+import { useHistory } from 'react-router';
+
 import { BiPencil } from 'react-icons/bi';
-import { ButtonComponent, IconButtonComponent } from '../../components/ui';
-import { colors } from '../../constants';
-import { MUTATION_CREATE_WALLET } from '../../graphql/mutations';
-import { IProject } from '../../interfaces';
-import { useNotification } from '../../utils';
+import { IconButtonComponent } from '../../components/ui';
 import { TNodeInput } from '../creation/projectCreate/types';
-import { NodeAdditionModal } from '../creation/projectCreate/components/NodeAdditionModal';
+import { colors, getPath } from '../../constants';
+import { useNotification } from '../../utils';
 import {
   LightningAddressConnectionDetails,
+  LndConnectionDetailsPrivate,
+  Project,
   Wallet,
 } from '../../types/generated/graphql';
 import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView';
+import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 
-export const ProjectFundingSettings = ({ project }: { project: IProject }) => {
+export const ProjectFundingSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
+  const history = useHistory();
   const [nodeData, setNodeData] = useState<TNodeInput>();
-
-  const {
-    isOpen: isWalletOpen,
-    onClose: onWalletClose,
-    onOpen: openWallet,
-  } = useDisclosure();
-
-  const [createWallet, { loading: createWalletLoading }] = useMutation(
-    MUTATION_CREATE_WALLET,
-  );
-
-  const handleNext = async () => {
-    try {
-      const createWalletInput = {
-        resourceInput: {
-          resourceId: project.id,
-          resourceType: 'project',
-        },
-        lndConnectionDetailsInput: {
-          macaroon: nodeData?.invoiceMacaroon,
-          tlsCertificate: nodeData?.tlsCert,
-          hostname: nodeData?.hostname,
-          grpcPort: nodeData?.isVoltage
-            ? 10009
-            : nodeData?.grpc
-            ? parseInt(nodeData.grpc, 10)
-            : '',
-          lndNodeType: nodeData?.isVoltage ? 'voltage' : 'custom',
-          pubkey: nodeData?.publicKey,
-        },
-      };
-
-      await createWallet({ variables: { input: createWalletInput } });
-      toast({
-        title: 'Successfully update node information.',
-        status: 'success',
-      });
-    } catch (error) {
-      toast({
-        title: 'Something went wrong',
-        description: `${error}`,
-        status: 'error',
-      });
-    }
-  };
-
-  // const node = project.wallets && project.wallets[0];
+  const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false);
 
   const projectWallet: Wallet | undefined = useMemo(() => {
     return project.wallets && project.wallets[0];
   }, [project.wallets]);
 
-  const projectLightningAddress: string | undefined = useMemo(() => {
-    project.wallets?.forEach((wallet: Wallet) => {
-      if (wallet.connectionDetails as LightningAddressConnectionDetails) {
-        return (wallet.connectionDetails as LightningAddressConnectionDetails)
-          .lightningAddress;
-      }
+  const handleProjectLaunch = async () => {
+    history.push(getPath('project', project.name));
+    toast({
+      status: 'success',
+      title: 'Wallet updated!',
+      description: 'Project is now active',
     });
+  };
 
-    return undefined;
-  }, [project.wallets]);
+  const renderWalletConnectionDetails = () => {
+    const { connectionDetails } = projectWallet;
+    let castedConnectionDetails;
+    switch (connectionDetails.__typename) {
+      case 'LightningAddressConnectionDetails':
+        castedConnectionDetails =
+          connectionDetails as LightningAddressConnectionDetails;
 
-  if (projectLightningAddress) {
-    return (
-      <GridItem colSpan={8} display="flex" justifyContent="center">
-        <ProjectFundingSettingsLightningAddressView
-          lightningAddress={projectLightningAddress}
-        />
-      </GridItem>
-    );
-  }
+        return (
+          <GridItem colSpan={8} display="flex" justifyContent="center">
+            <ProjectFundingSettingsLightningAddressView
+              lightningAddress={castedConnectionDetails.lightningAddress}
+            />
+          </GridItem>
+        );
+
+      default:
+        castedConnectionDetails =
+          connectionDetails as LndConnectionDetailsPrivate;
+        return (
+          <>
+            <VStack
+              width="100%"
+              border="1px solid"
+              borderColor={colors.gray300}
+              borderRadius="4px"
+              alignItems="flex-start"
+              padding="10px"
+              spacing="10px"
+            >
+              <HStack width="100%" justifyContent="space-between">
+                <Text fontWeight={500}>{projectWallet?.name}</Text>
+              </HStack>
+              <HStack width="100%">
+                <CheckCircleIcon color={colors.primary800} fontSize="12px" />
+                <Text color={colors.primary800} fontSize="12px">
+                  RUNNING
+                </Text>
+              </HStack>
+
+              <VStack width="100%" spacing="4px" alignItems="flex-start">
+                <Text color="brand.neutral700" fontSize="10px">
+                  Hostname or IP address
+                </Text>
+                <Text
+                  wordBreak="break-all"
+                  color="brand.neutral900"
+                  fontSize="14px"
+                >
+                  {castedConnectionDetails.hostname}
+                </Text>
+              </VStack>
+
+              <VStack width="100%" spacing="4px" alignItems="flex-start">
+                <Text color="brand.neutral700" fontSize="10px">
+                  Public key
+                </Text>
+                <Text
+                  wordBreak="break-all"
+                  color="brand.neutral900"
+                  fontSize="14px"
+                >
+                  {castedConnectionDetails.pubkey}
+                </Text>
+              </VStack>
+              <VStack
+                width="100%"
+                spacing="4px"
+                alignItems="flex-start"
+                flexWrap="wrap"
+              >
+                <Text color="brand.neutral700" fontSize="10px">
+                  Invoice Macaroon
+                </Text>
+                <Text
+                  wordBreak="break-all"
+                  color="brand.neutral900"
+                  fontSize="14px"
+                >
+                  {castedConnectionDetails.macaroon}
+                </Text>
+              </VStack>
+              {castedConnectionDetails.tlsCertificate && (
+                <VStack width="100%" spacing="4px" alignItems="flex-start">
+                  <Text color="brand.neutral700" fontSize="10px">
+                    TLS certificate
+                  </Text>
+                  <Text
+                    wordBreak="break-all"
+                    color="brand.neutral900"
+                    fontSize="14px"
+                  >
+                    {castedConnectionDetails.tlsCertificate}
+                  </Text>
+                </VStack>
+              )}
+              <VStack width="100%" spacing="4px" alignItems="flex-start">
+                <Text color="brand.neutral700" fontSize="10px">
+                  gRPC port
+                </Text>
+                <Text
+                  wordBreak="break-all"
+                  color="brand.neutral900"
+                  fontSize="14px"
+                >
+                  {castedConnectionDetails.grpcPort}
+                </Text>
+              </VStack>
+            </VStack>
+            <Text color="brand.neutral700" fontSize="10px">
+              If you want to change how you receive your funds reach out to
+              hello@geyser.fund. We are not currently enabling editing of this
+              information for security reasons.
+            </Text>
+          </>
+        );
+    }
+  };
 
   return (
     <>
       <GridItem colSpan={8} display="flex" justifyContent="center">
         <VStack
-          spacing="30px"
+          spacing="40px"
           width="100%"
           minWidth="350px"
           maxWidth="400px"
@@ -114,155 +168,54 @@ export const ProjectFundingSettings = ({ project }: { project: IProject }) => {
           flexDirection="column"
           alignItems="center"
         >
-          <VStack w="100%" spacing="40px">
-            {!projectWallet && (
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Connect your node</Text>
-                <ButtonComponent isFullWidth onClick={openWallet}>
-                  {' '}
-                  <AiOutlineSetting
-                    style={{ marginRight: '5px' }}
-                    fontSize="20px"
-                  />{' '}
-                  Connect your Node
-                </ButtonComponent>
-                <Text fontSize="14px">
-                  {
-                    "Connect your Lightning node if you have one, and the funds will be sent directly to your account at no charge. Don't have one? No problem, you can create one in 2 minutes using Voltage.cloud."
-                  }
-                </Text>
-                <HStack padding="10px" spacing="20px">
-                  <Image src={VoltageLogoSmall} />
-                  <Link
-                    isExternal
-                    href="https://voltage.cloud/geyser"
-                    fontSize="12px"
-                  >
-                    Create a node quick and easy with Voltage.
-                  </Link>
-                </HStack>
-                <ButtonComponent
-                  primary
-                  isFullWidth
-                  onClick={handleNext}
-                  isLoading={createWalletLoading}
-                >
-                  Save
-                </ButtonComponent>
-              </VStack>
-            )}
-            {nodeData && (
-              <VStack
-                justifyContent="flex-start"
-                alignItems="flex-start"
-                maxWidth="370px"
-                width="100%"
-                spacing="10px"
-                paddingY="80px"
-              >
-                {projectWallet && projectWallet.name && (
-                  <VStack
-                    width="100%"
-                    border="1px solid"
-                    borderColor={colors.gray300}
-                    borderRadius="4px"
-                    alignItems="flex-start"
-                    padding="10px"
-                  >
-                    <HStack width="100%" justifyContent="space-between">
-                      <Text fontWeight={500}>{projectWallet?.name}</Text>
-                      <IconButtonComponent
-                        aria-label="edit-node"
-                        icon={<BiPencil />}
-                        onClick={openWallet}
-                      />
-                    </HStack>
-
-                    <VStack width="100%" alignItems="flex-start">
-                      <Text color="brand.textGray">Hostname or IP address</Text>
-                      <Text>{nodeData?.hostname}</Text>
-                    </VStack>
-                  </VStack>
-                )}
-              </VStack>
-            )}
-            {projectWallet && projectWallet.name && (
-              <>
-                <VStack
-                  width="100%"
-                  border="1px solid"
-                  borderColor={colors.gray300}
-                  borderRadius="4px"
-                  alignItems="flex-start"
-                  padding="10px"
-                >
-                  <HStack width="100%" justifyContent="space-between">
-                    <Text fontWeight={500}>{projectWallet?.name}</Text>
-                  </HStack>
-
-                  <VStack width="100%" alignItems="flex-start">
-                    <Text color="brand.neutral700">Hostname or IP address</Text>
-                    <Text
-                      wordBreak="break-all"
-                      color="brand.neutral700"
-                      fontSize="12px"
-                    >
-                      {projectWallet?.connectionDetails.hostname}
-                    </Text>
-                  </VStack>
-
-                  <VStack width="100%" alignItems="flex-start">
-                    <Text color="brand.neutral700">Public key</Text>
-                    <Text
-                      wordBreak="break-all"
-                      color="brand.neutral700"
-                      fontSize="12px"
-                    >
-                      {projectWallet?.connectionDetails.pubkey}
-                    </Text>
-                  </VStack>
-                  <VStack width="100%" alignItems="flex-start" flexWrap="wrap">
-                    <Text color="brand.neutral700">Invoice Macaroon</Text>
-                    <Text wordBreak="break-all">
-                      {projectWallet?.connectionDetails.macaroon}
-                    </Text>
-                  </VStack>
-                  <VStack width="100%" alignItems="flex-start">
-                    <Text color="brand.neutral700">TLS certificate</Text>
-                    <Text
-                      wordBreak="break-all"
-                      color="brand.neutral700"
-                      fontSize="12px"
-                    >
-                      {projectWallet?.connectionDetails.tlsCertificate}
-                    </Text>
-                  </VStack>
-                  <VStack width="100%" alignItems="flex-start">
-                    <Text color="brand.neutral700">gRPC port</Text>
-                    <Text
-                      wordBreak="break-all"
-                      color="brand.neutral700"
-                      fontSize="12px"
-                    >
-                      {projectWallet?.connectionDetails.grpcPort}
-                    </Text>
-                  </VStack>
-                </VStack>
-                <Text color="brand.neutral700" fontSize="10px">
-                  If you want to change your node reach out to hello@geyser.fund
-                </Text>
-              </>
-            )}
-          </VStack>
+          {!projectWallet && (
+            <ProjectCreationWalletConnectionForm
+              project={project}
+              onProjectLaunchSelected={handleProjectLaunch}
+              setNodeInput={setNodeData}
+              triggerWallet={tiggerWalletOpen}
+            />
+          )}
+          {projectWallet && renderWalletConnectionDetails()}
         </VStack>
       </GridItem>
+      {nodeData && (
+        <GridItem colSpan={5} display="flex" justifyContent="center">
+          <VStack
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            maxWidth="370px"
+            width="100%"
+            spacing="10px"
+            paddingY="20px"
+          >
+            {nodeData.name && (
+              <VStack
+                width="100%"
+                border="1px solid"
+                borderColor={colors.gray300}
+                borderRadius="4px"
+                alignItems="flex-start"
+                padding="10px"
+              >
+                <HStack width="100%" justifyContent="space-between">
+                  <Text fontWeight={500}>{nodeData.name}</Text>
+                  <IconButtonComponent
+                    aria-label="edit-node"
+                    icon={<BiPencil />}
+                    onClick={() => setTriggerWalletOpen(true)}
+                  />
+                </HStack>
 
-      <NodeAdditionModal
-        isOpen={isWalletOpen}
-        onClose={onWalletClose}
-        nodeInput={nodeData}
-        onSubmit={setNodeData}
-      />
+                <VStack width="100%" alignItems="flex-start">
+                  <Text color="brand.textGray">Hostname or IP address</Text>
+                  <Text>{nodeData?.hostname}</Text>
+                </VStack>
+              </VStack>
+            )}
+          </VStack>
+        </GridItem>
+      )}
     </>
   );
 };
