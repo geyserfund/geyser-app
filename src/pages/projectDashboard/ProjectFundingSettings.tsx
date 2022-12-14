@@ -31,7 +31,7 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
     history.push(getPath('project', project.name));
     toast({
       status: 'success',
-      title: 'Node updated!',
+      title: 'Wallet updated!',
       description: 'Project is now active',
     });
   };
