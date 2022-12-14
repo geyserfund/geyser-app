@@ -4,26 +4,6 @@ import { Box, Text, Button } from '@chakra-ui/react';
 import { useTheme } from '@chakra-ui/react';
 import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
 import { fonts } from '../../constants/fonts';
-<<<<<<< HEAD
-import { ButtonComponent } from '../../components/ui';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { projectTypes } from '../../constants';
-import {
-  Project,
-  ProjectsGetQueryInput,
-  ProjectType,
-} from '../../types/generated/graphql';
-
-type ResponseData = {
-  projects: {
-    projects: Project[];
-  };
-};
-
-type QueryVariables = {
-  input: ProjectsGetQueryInput;
-};
-=======
 import borderimg from '../../assets/border.svg';
 import satwalletimg from '../../assets/walletsats.svg';
 import { ListText } from './components/ListText';
@@ -31,44 +11,14 @@ import { CustomGrantCard } from './components/CustomGrantCard';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { ContributeModal } from './components/ContributeModal';
->>>>>>> GT-792-grants-round-2-frontend
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
   const [link, setLink] = React.useState('');
 
-<<<<<<< HEAD
-  const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
-    QUERY_GRANTS,
-    {
-      variables: { input: { where: { type: ProjectType.Grant } } },
-    },
-  );
-
-  // const grants = (data && data.projects.projects) || [];
-  const grants = data?.projects.projects || [];
-
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: 'Could not load projects',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    }
-  }, [error]);
-
-  const grantsSort = (grantA: Project) => {
-    if (grantA.name === 'bitcoineducation') {
-      return -1;
-    }
-
-    return 0;
-=======
   const theme = useTheme();
   const linkHandler = (link: React.SetStateAction<string>) => {
     setLink(link);
->>>>>>> GT-792-grants-round-2-frontend
   };
 
   return (
