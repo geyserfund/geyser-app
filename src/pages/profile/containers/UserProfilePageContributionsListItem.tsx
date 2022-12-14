@@ -68,6 +68,10 @@ export const UserProfilePageContributionsListItem = ({
   return data ? (
     <ProjectFundingContributionsFeedItem
       fundingTx={data.fundingTx}
+      width={{
+        base: '100%',
+        md: '375px',
+      }}
       linkedProject={project}
     />
   ) : null;
