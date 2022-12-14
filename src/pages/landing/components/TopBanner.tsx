@@ -68,9 +68,12 @@ export const TopBanner = () => {
 
           <HStack fontSize={'sm'} spacing={4} textColor={'brand.neutral700'}>
             {[
-              [projectsSummaryData.projectsCount, 'Projects'],
-              [projectsSummaryData.fundedTotal, 'Sats Raised'],
-              [projectsSummaryData.fundersCount, 'Pleb Contributors'],
+              [projectsSummaryData.projectsCount.toLocaleString(), 'Projects'],
+              [projectsSummaryData.fundedTotal.toLocaleString(), 'Sats Raised'],
+              [
+                projectsSummaryData.fundersCount.toLocaleString(),
+                'Pleb Contributors',
+              ],
             ].map((statsData, index) => {
               return (
                 <HStack
