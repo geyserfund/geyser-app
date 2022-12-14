@@ -24,9 +24,7 @@ const { topNavBar: topNavBarDimensions } = dimensions;
 const HELLO_SUBSCRIPTION = gql`
   subscription Subscription {
     projectCreated {
-      subscribe {
-        hello
-      }
+      hello
     }
   }
 `;
@@ -39,7 +37,7 @@ export const LandingPage = () => {
   });
 
   useEffect(() => {
-    console.log(data);
+    console.log('DATA', data);
   }, [data]);
 
   console.log(data);

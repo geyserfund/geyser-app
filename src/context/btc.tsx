@@ -24,10 +24,13 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const getBitcoinRates = async () => {
-      const usdRate = await fetchBitcoinRates();
-      const satoshirate = usdRate * BTC_IN_SATOSHI;
-
-      setBtcRate(satoshirate);
+      try {
+        const usdRate = await fetchBitcoinRates();
+        const satoshirate = usdRate * BTC_IN_SATOSHI;
+        setBtcRate(satoshirate);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     getBitcoinRates();
