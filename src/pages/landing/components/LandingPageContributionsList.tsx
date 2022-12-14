@@ -116,7 +116,7 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
                 count={contribution.count}
                 width={{
                   base: '100%',
-                  md: '375px',
+                  md: '382px',
                 }}
               />
             );
