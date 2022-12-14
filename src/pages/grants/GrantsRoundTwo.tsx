@@ -43,7 +43,7 @@ const grants = [
     name: 'Bitcoin Open Source',
     applicants: 0,
     about:
-      'This grant is for all creative projects that focus on explaining and showcasing bitcoin through visual mediums. Creating culture and art around bitcoin is a key way of educating the world about bitcoin history, mythology, technology and ideological significance. Let support Bitcoin artists!',
+      "This grant is for all creative projects that focus on explaining and showcasing bitcoin through visual mediums. Creating culture and art around bitcoin is a key way of educating the world about bitcoin's history, mythology, technology and ideological significance. Let's support Bitcoin artists!",
   },
 ];
 

@@ -26,7 +26,6 @@ import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
 import { getPath, routerPathNames } from '../constants';
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
 import { ProfilePage } from '../pages/profile/ProfilePage';
-import { Project as OldProjectView } from '../pages/project';
 import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne';
 import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo';
 
