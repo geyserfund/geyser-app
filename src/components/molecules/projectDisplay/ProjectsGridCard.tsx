@@ -3,6 +3,8 @@ import {
   Heading,
   HStack,
   Image,
+  LinkBox,
+  LinkOverlay,
   Text,
   useColorModeValue,
   VStack,
@@ -32,10 +34,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
     });
 
   return (
-    <a
-      href={getPath('project', project.name)}
-      style={{ textDecoration: 'none' }}
-    >
+    <LinkBox style={{ textDecoration: 'none' }}>
       <Box
         width={'full'}
         maxWidth={'284px'}
@@ -58,13 +57,15 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
           justifyContent={'center'}
           alignItems="center"
         >
-          <Image
-            src={project.image || ''}
-            width="full"
-            height="full"
-            fallback={<ProjectImageListItemPlaceholder padding="3em" />}
-            objectFit="cover"
-          />
+          <LinkOverlay href={getPath('project', project.name)}>
+            <Image
+              src={project.image || ''}
+              width="full"
+              height="full"
+              fallback={<ProjectImageListItemPlaceholder padding="3em" />}
+              objectFit="cover"
+            />
+          </LinkOverlay>
         </Box>
 
         <Box paddingX={6} paddingY={4}>
@@ -122,6 +123,6 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
           </VStack>
         </Box>
       </Box>
-    </a>
+    </LinkBox>
   );
 };
