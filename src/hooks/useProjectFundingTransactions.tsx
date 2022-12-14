@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import { useState } from 'react';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../graphql';
 import {
   FundingTx,
@@ -26,13 +27,10 @@ type OptionsProps = {
 export const useProjectFundingTransactions = (options?: OptionsProps) => {
   const { itemLimit = 10, cursorID } = options || {};
 
-  const paginationOptions: PaginationInput = {
+  const [paginationOptions, setPaginationOptions] = useState<PaginationInput>({
     take: itemLimit,
-  };
-
-  if (cursorID !== undefined) {
-    paginationOptions.cursor = { id: cursorID };
-  }
+    ...(cursorID !== undefined && { id: cursorID }),
+  });
 
   const {
     loading: isLoading,
@@ -52,5 +50,7 @@ export const useProjectFundingTransactions = (options?: OptionsProps) => {
     error,
     data: responseData?.getFundingTxs || [],
     fetchMore,
+    paginationOptions,
+    setPaginationOptions,
   };
 };

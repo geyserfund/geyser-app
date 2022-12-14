@@ -95,6 +95,9 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
         id
         name
         connectionDetails {
+          ... on LightningAddressConnectionDetails {
+            lightningAddress
+          }
           ... on LndConnectionDetailsPrivate {
             macaroon
             tlsCertificate
@@ -126,6 +129,11 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
             id
             username
             imageUrl
+            externalAccounts {
+              externalUsername
+              public
+              type
+            }
           }
         }
         amount

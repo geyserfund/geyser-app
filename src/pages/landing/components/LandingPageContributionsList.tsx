@@ -14,7 +14,14 @@ type Props = {
 };
 
 export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
-  const { isLoading, error, data, fetchMore } = useProjectFundingTransactions({
+  const {
+    isLoading,
+    error,
+    data,
+    fetchMore,
+    setPaginationOptions,
+    paginationOptions,
+  } = useProjectFundingTransactions({
     itemLimit,
   });
 
@@ -24,6 +31,8 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     useState(false);
 
   useEffect(() => {
+    const options: PaginationInput = {};
+
     if (data && data.length > 0) {
       const newContributions = aggregateTransactions(data);
       setContributions(newContributions);
@@ -34,31 +43,27 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
       ) {
         handleLoadMoreButtonTapped();
       }
-    }
-  }, [data]);
 
-  const paginationInput: PaginationInput = useMemo(() => {
-    const options: PaginationInput = {};
-
-    if (data.length > 0) {
       options.cursor = {
         id: Number(data[data.length - 1].id),
       };
     }
 
-    return options;
+    options.take = itemLimit;
+    setPaginationOptions(options);
   }, [data]);
 
   const handleLoadMoreButtonTapped = async () => {
     setIsLoadingMore(true);
+    console.log('paginationInput before fetchMore', paginationOptions);
 
     await fetchMore({
       variables: {
         input: {
-          pagination: paginationInput,
+          pagination: paginationOptions,
         },
       },
-      updateQuery: (previousResult, { fetchMoreResult }) => {
+      updateQuery: (_, { fetchMoreResult }) => {
         if (fetchMoreResult.getFundingTxs.length < itemLimit) {
           setIsShowingAllContributions(true);
         }

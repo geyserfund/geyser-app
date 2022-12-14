@@ -14,19 +14,18 @@ import {
   SectionTitle,
   TextInputBox,
 } from '../../../components/ui';
-import { MAX_FUNDING_AMOUNT_USD } from '../../../constants';
+import { MAX_FUNDING_AMOUNT_USD, noFeeProjects } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 import { IProjectType } from '../../../interfaces';
 import { useNotification } from '../../../utils';
 import { ProjectReward } from '../../../types/generated/graphql';
 import { FundingFormSection } from '../FundingFormSection';
-import { useBtcContext } from '../../../context/btc';
 import { ProjectPaymentFormFundingComment } from '../components/ProjectPaymentFormFundingComment';
 
 type Props = {
   isMobile: boolean;
-  fundLoading: boolean;
+  fundingRequestLoading: boolean;
   handleCloseButton: () => void;
   formState: IFundForm;
   setTarget: (_: any) => void;
@@ -40,7 +39,7 @@ type Props = {
 
 export const ProjectFundingSelectionFormScreen = ({
   isMobile,
-  fundLoading,
+  fundingRequestLoading,
   handleCloseButton,
   handleFund,
   formState,
@@ -50,11 +49,13 @@ export const ProjectFundingSelectionFormScreen = ({
   rewards,
   name,
 }: Props) => {
-  const { getTotalAmount, getRewardsQuantity } = useFundCalc(formState);
+  const { getTotalAmount } = useFundCalc(formState);
 
   const { toast } = useNotification();
   const hasRewards = rewards && rewards.length > 0;
-
+  const hasSelectedRewards =
+    formState.rewardsByIDAndCount &&
+    Object.entries(formState.rewardsByIDAndCount).length > 0;
   const submit = () => {
     const valid = validateFundingAmount();
     if (valid) {
@@ -132,7 +133,7 @@ export const ProjectFundingSelectionFormScreen = ({
       </Box>
 
       <VStack
-        padding={4}
+        padding={2}
         width={'full'}
         borderRadius={'md'}
         backgroundColor={'brand.neutral100'}
@@ -154,6 +155,7 @@ export const ProjectFundingSelectionFormScreen = ({
                 type="email"
                 name="email"
                 fontSize="14px"
+                backgroundColor={'brand.bgWhite'}
                 placeholder="Contact Email"
                 value={formState.email}
                 onChange={setTarget}
@@ -163,24 +165,34 @@ export const ProjectFundingSelectionFormScreen = ({
         </VStack>
 
         <VStack
+          padding={2}
           color={'brand.neutral700'}
+          fontWeight={'medium'}
           width={'full'}
           alignItems="flex-start"
           spacing={2}
         >
-          {hasRewards ? (
-            <HStack justifyContent={'space-between'} width={'full'}>
+          {hasRewards && hasSelectedRewards ? (
+            <HStack
+              justifyContent={'space-between'}
+              width={'full'}
+              alignItems="flex-start"
+              color="brand.neutral700"
+            >
               <Text flex={0}>Rewards</Text>
-
-              <VStack flex={1} flexWrap={'wrap'}>
-                {rewards.map((reward: ProjectReward) => {
-                  return (
-                    <>
-                      <Text>{reward.name}</Text>
-                      <Text>{', '}</Text>
-                    </>
-                  );
-                })}
+              <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
+                {Object.entries(formState.rewardsByIDAndCount!).map(
+                  ([key, value]) => {
+                    const reward = rewards.find(({ id }) => id === key);
+                    if (reward) {
+                      return (
+                        <Text key={key}>
+                          {value}x {reward.name}
+                        </Text>
+                      );
+                    }
+                  },
+                )}
               </VStack>
             </HStack>
           ) : null}
@@ -188,17 +200,10 @@ export const ProjectFundingSelectionFormScreen = ({
           <HStack
             justifyContent={'space-between'}
             width={'full'}
-            fontSize={'10px'}
+            fontSize={'14px'}
           >
-            <Text>{'Includes a 2% Geyser tip'}</Text>
-
-            <SatoshiAmount
-              color="#1A1A1A"
-              fontWeight="bold"
-              marginLeft={'auto'}
-            >
-              {(getTotalAmount('sats', name) * 0.02).toFixed(0)}
-            </SatoshiAmount>
+            <Text>{'Geyser fee'}</Text>
+            <Text>{!noFeeProjects.includes(name) ? '2%' : '0%'}</Text>
           </HStack>
 
           <HStack
@@ -213,18 +218,21 @@ export const ProjectFundingSelectionFormScreen = ({
                 color="#1A1A1A"
                 fontWeight="bold"
                 marginLeft={'auto'}
+                fontSize={'21px'}
               >
                 {getTotalAmount('sats', name)}
               </SatoshiAmount>
 
-              <Text> {`($${getTotalAmount('dollar', name)})`}</Text>
+              <Text color="#1A1A1A" fontWeight="bold" fontSize={'21px'}>
+                {`($${getTotalAmount('dollar', name)})`}
+              </Text>
             </HStack>
           </HStack>
         </VStack>
 
         <Box width="100%" marginTop={2}>
           <ButtonComponent
-            isLoading={fundLoading}
+            isLoading={fundingRequestLoading}
             primary
             standard
             leftIcon={<BoltIcon />}

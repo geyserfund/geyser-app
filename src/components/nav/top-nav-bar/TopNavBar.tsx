@@ -22,6 +22,22 @@ import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
 import { getPath, routerPathNames } from '../../../constants';
+import { Link } from 'react-router-dom';
+
+const navItems = [
+  {
+    name: 'Projects',
+    to: '/discover',
+  },
+  {
+    name: 'Grants',
+    to: '/grants',
+  },
+  {
+    name: 'About',
+    to: 'https://geyser.notion.site/Geyser-2dd9468a27e84531bcbcbe89c24d7f09',
+  },
+];
 
 const routesForHidingTopNav = [
   `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
@@ -33,6 +49,12 @@ const customTitleRoutes = [
   `/${routerPathNames.project}/:projectId/`,
   `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
   `/${routerPathNames.entry}/:entryId`,
+];
+const navItemsRoutes = [
+  `/`,
+  `/${routerPathNames.discover}`,
+  `/${routerPathNames.grants}`,
+  `/${routerPathNames.project}/:projectId/`,
 ];
 
 const routesForHidingDropdownMenu = [
@@ -124,6 +146,7 @@ export const TopNavBar = () => {
 
   const routesMatchesForShowingCustomTitle =
     customTitleRoutes.map(useRouteMatch);
+  const routesMatchesForShowingNavItems = navItemsRoutes.map(useRouteMatch);
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -357,6 +380,16 @@ export const TopNavBar = () => {
     });
   }, [routesMatchesForShowingCustomTitle]);
 
+  const shouldShowNavItems: boolean = useMemo(() => {
+    if (isMobile) {
+      return false;
+    }
+
+    return routesMatchesForShowingNavItems.some((routeMatch) => {
+      return (routeMatch as match)?.isExact;
+    });
+  }, [routesMatchesForShowingNavItems, isMobile]);
+
   if (shouldTopNavBeHidden) {
     return null;
   }
@@ -390,6 +423,37 @@ export const TopNavBar = () => {
           ) : null}
 
           <HStack alignItems={'center'} spacing={2}>
+            {shouldShowNavItems ? (
+              <Box display={'flex'} alignItems="center" gap={4} mr={4}>
+                {navItems.map((item, idx) => (
+                  <>
+                    {item.name === 'About' ? (
+                      <a key={idx} href={item.to}>
+                        <Text
+                          fontWeight={'500'}
+                          textDecoration="none"
+                          fontSize="16px"
+                          color={'brand.neutral700'}
+                        >
+                          {item.name}
+                        </Text>
+                      </a>
+                    ) : (
+                      <Link key={idx} to={item.to}>
+                        <Text
+                          fontWeight={'500'}
+                          textDecoration="none"
+                          fontSize="16px"
+                          color={'brand.neutral700'}
+                        >
+                          {item.name}
+                        </Text>
+                      </Link>
+                    )}
+                  </>
+                ))}
+              </Box>
+            ) : null}
             {shouldShowDashboardButton ? (
               <ButtonComponent
                 variant={'solid'}

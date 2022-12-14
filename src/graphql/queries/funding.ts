@@ -43,11 +43,18 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
         user {
           id
           username
+          imageUrl
+          externalAccounts {
+            externalUsername
+            public
+            type
+          }
         }
       }
       paidAt
       onChain
       media
+      source
       sourceResource {
         ... on Project {
           id

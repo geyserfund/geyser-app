@@ -9,7 +9,10 @@ import { FaTelegramPlane } from 'react-icons/fa';
 import { GeyserTelegramUrl } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { Project } from '../../../types/generated/graphql';
-import { ContributionInfoBox } from '../components/ContributionInfoBox';
+import {
+  ContributionInfoBox,
+  ContributionInfoBoxVersion,
+} from '../components/ContributionInfoBox';
 import { ProjectFundingQRScreenQRCodeSection } from './ProjectFundingQRScreenQRCodeSection';
 import { fonts } from '../../../constants/fonts';
 
@@ -31,80 +34,66 @@ export const ProjectFundingQRScreen = ({
   const isMobile = isMobileMode();
 
   return (
-    <Box
+    <VStack
       padding={isMobile ? '10px 0px' : '10px 20px'}
       spacing="12px"
       width="100%"
       height="100%"
-      overflowY="hidden"
+      overflowY="auto"
       margin="10px 15px"
       display="flex"
       flexDirection={'column'}
+      justifyContent={'space-between'}
+      alignItems={'center'}
+      paddingX={5}
+      marginTop={2}
     >
-      <CloseButton
-        borderRadius="50%"
-        position="absolute"
-        right="10px"
-        top="0px"
-        onClick={handleCloseButton}
+      <HStack justifyContent="space-between" width={'full'}>
+        <SectionTitle>Confirm & Contribute</SectionTitle>
+        <CloseButton onClick={handleCloseButton} />
+      </HStack>
+      <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
+      <ContributionInfoBox
+        formState={state}
+        version={ContributionInfoBoxVersion.NEUTRAL}
+        project={project as Project}
+        contributionAmount={getTotalAmount('sats', project.name)}
+        rewardsEarned={state.rewardsByIDAndCount}
+        isFunderAnonymous={state.anonymous}
+        funderUsername={state.funderUsername}
+        funderEmail={state.email}
+        funderAvatarURL={state.funderAvatarURL}
+        backgroundColor={'brand.neutral100'}
       />
-
-      <SectionTitle>Confirm & Contribute</SectionTitle>
-
-      <VStack
-        width={'full'}
-        justifyContent={'flex-start'}
-        alignItems="center"
-        paddingX={2}
-        marginTop={2}
-        spacing={4}
-      >
-        <ProjectFundingQRScreenQRCodeSection
-          currentFundingTX={fundingFlow.fundingTx}
-          currentFundingTXInvoiceStatus={fundingFlow.fundingTx.invoiceStatus}
-        />
-
-        <ContributionInfoBox
-          project={project as Project}
-          contributionAmount={getTotalAmount('sats', project.name)}
-          rewardsEarned={state.rewardsByIDAndCount}
-          isFunderAnonymous={state.anonymous}
-          funderUsername={state.funderUsername}
-          funderEmail={state.email}
-          funderAvatarURL={state.funderAvatarURL}
-          backgroundColor={'brand.neutral100'}
-        />
-
-        <HStack>
-          <Text>
-            If you’re experiencing any issues with this payment, please reach
-            out to us on Telegram.
-          </Text>
-
-          <Link href={GeyserTelegramUrl} isExternal>
-            <IconButton
-              background={'none'}
-              aria-label="telegram"
-              icon={<FaTelegramPlane fontSize="20px" />}
-              color={'#6C757D'}
-            />
-          </Link>
-        </HStack>
-
-        <Text
-          fontSize="8px"
-          fontWeight={400}
-          fontFamily={fonts.myanmar}
-          color={'brand.gray500'}
-        >
-          Geyser is not a store. It’s a way to bring creative projects to life
-          using Bitcoin. Your donation will support a creative project that has
-          yet to be developed. There’s a risk that, despite a creator’s best
-          efforts, your reward will not be fulfilled, and we urge you to
-          consider this risk prior to backing it. Geyser is not responsible for
-          project claims or reward fulfillment.
+      <HStack>
+        <Text>
+          If you’re experiencing any issues with this payment, please reach out
+          to us on Telegram.
         </Text>
-      </VStack>
-    </Box>
+
+        <Link href={GeyserTelegramUrl} isExternal>
+          <IconButton
+            background={'none'}
+            aria-label="telegram"
+            icon={<FaTelegramPlane fontSize="20px" />}
+            color={'#6C757D'}
+          />
+        </Link>
+      </HStack>
+
+      <Text
+        fontSize="8px"
+        fontWeight={400}
+        fontFamily={fonts.myanmar}
+        color={'brand.gray500'}
+      >
+        Geyser is not a store. It’s a way to bring creative projects to life
+        using Bitcoin. Your donation will support a creative project that has
+        yet to be developed. There’s a risk that, despite a creator’s best
+        efforts, your reward will not be fulfilled, and we urge you to consider
+        this risk prior to backing it. Geyser is not responsible for project
+        claims or reward fulfillment.
+      </Text>
+    </VStack>
   );
 };

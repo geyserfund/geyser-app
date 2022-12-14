@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, Stack } from '@chakra-ui/react';
 import { getRandomOrb } from '../../utils';
-import { FaUser } from 'react-icons/fa';
+import { UserSkeleton } from './UserSkeleton';
 
 type Props = {
   seed: number;
@@ -38,7 +38,7 @@ export const AnonymousAvatar = ({
         },
       }}
       color={textColor}
-      icon={<FaUser fontSize="2rem" />}
+      icon={<UserSkeleton />}
     />
   </Stack>
 );
