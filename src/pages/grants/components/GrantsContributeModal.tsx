@@ -37,6 +37,7 @@ import {
 } from '../../../types/generated/graphql';
 import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/ActivityPanel/ProjectFundingQRScreenQRCodeSection';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
+import { createCreatorRecord } from '../../../api';
 
 const GRANTS_PROJECT_NAME = 'grants';
 
@@ -81,9 +82,21 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
   };
 
   useEffect(() => {
-    console.log('FUND STATE', fundState);
     if (fundState === fundingStages.completed) {
       setModalHeader('Contribution Successful');
+      const records = [
+        {
+          fields: {
+            Title: name,
+            fldGla9o00ogzrquw: email,
+            Type: ['Grants Contributor'],
+            fldOWbMeUVrRjXrYu: ['Geyser Grants'],
+            Grant: grantsData.project.title,
+            fldNsoC4hNwXXYBUZ: amount,
+          },
+        },
+      ];
+      createCreatorRecord({ records });
     }
   }, [fundState]);
 
@@ -101,9 +114,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
         donationInput: { donationAmount: getSatoshisAmount(amount * 100) },
       }),
       metadataInput: {
-        ...(email && { email }),
-        ...(imageUrl && { media: imageUrl }),
-        ...(comment && { comment: `${name}: ${comment}` }),
+        ...(comment && { comment }),
       },
       sourceResourceInput: {
         resourceId: Number(grantsData?.project.id),
