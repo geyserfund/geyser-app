@@ -38,6 +38,7 @@ const QUERY_GET_FUNDING_TX_STATUS_AND_INVOICE_STATUS = gql`
     fundingTx(id: $fundingTxID) {
       invoiceId
       status
+      onChain
       invoiceStatus
     }
   }
