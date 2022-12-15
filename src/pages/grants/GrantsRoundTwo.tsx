@@ -1,5 +1,5 @@
-import { Box, Button, Grid, GridItem, Text } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Button, Grid, GridItem, Link, Text } from '@chakra-ui/react';
+import React, { useContext, useState } from 'react';
 import { isMobileMode } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
@@ -11,6 +11,11 @@ import satwalletimg from '../../assets/walletsats.svg';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
+import {
+  ContributeModal,
+  defaultGrantContribution,
+  GrantContributeInput,
+} from './components/ContributeModal';
 import { GrantDevelopers } from './components/GrantDevs';
 
 const grants = [
@@ -49,11 +54,9 @@ const grants = [
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
-  const [link, setLink] = React.useState('');
-
-  const linkHandler = (link: React.SetStateAction<string>) => {
-    setLink(link);
-  };
+  const [{ link }, setGrantInput] = useState<GrantContributeInput>(
+    defaultGrantContribution,
+  );
 
   return (
     <>
@@ -177,6 +180,18 @@ export const GrantsRoundTwo = () => {
               ))}
             </Grid>
           </Box>
+
+          <Box display={'flex'} justifyContent="center" my={6}>
+            <Text fontWeight={'400'} fontSize="14px" color={'brand.neutral600'}>
+              Designs by
+              <Link
+                href="https://twitter.com/tachirahomestd"
+                color={'brand.primary500'}
+              >
+                @tachirahomestd
+              </Link>
+            </Text>
+          </Box>
           <Box my={8}>
             <Text
               fontFamily={fonts.interBlack}
@@ -250,6 +265,7 @@ export const GrantsRoundTwo = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
+                <ContributeModal onComplete={setGrantInput} />
                 <GrantsContributeModal onLink={linkHandler} />
 
                 <Box display="flex" alignItems={'center'}>

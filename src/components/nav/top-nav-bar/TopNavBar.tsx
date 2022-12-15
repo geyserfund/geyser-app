@@ -22,6 +22,8 @@ import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
 import { getPath, routerPathNames } from '../../../constants';
+import satlogo from '../../../assets/satgrey.svg';
+import { fonts } from '../../../constants/fonts';
 import { Link } from 'react-router-dom';
 
 const navItems = [
@@ -397,10 +399,8 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={useColorModeValue('brand.bgWhite', 'brand.bgDark')}
+        bg={useColorModeValue('brand.bgGrey4', 'brand.bgDark')}
         px={4}
-        borderBottom={'1px solid'}
-        borderBottomColor={'brand.bgGrey3'}
         backdropFilter="blur(2px)"
         position="fixed"
         top={0}
@@ -500,6 +500,37 @@ export const TopNavBar = () => {
               </ButtonComponent>
             ) : null}
 
+            {!isMobile && isLoggedIn && (
+              <Box
+                display={'flex'}
+                alignItems="center"
+                fontFamily={fonts.inter}
+                fontWeight={'500'}
+                cursor="pointer"
+                fontSize="17px"
+                gap={4}
+              >
+                <Text onClick={() => history.push('/discover')}>Projects</Text>
+                <Text onClick={() => history.push('/grants')}>Grants</Text>
+              </Box>
+            )}
+
+            <Box
+              rounded={'md'}
+              border={'1px'}
+              borderColor="brand.bgGrey3"
+              px={2.5}
+              py={2.5}
+              maxHeight="40px"
+            >
+              <Box
+                display="flex"
+                justifyContent={'center'}
+                alignContent="center"
+              >
+                <img src={satlogo} alt="sat logo" width={'18px'} />
+              </Box>
+            </Box>
             {shouldShowDropdownMenuButton ? (
               <TopNavBarMenu
                 shouldShowDashboardMenuItem={

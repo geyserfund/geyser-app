@@ -78,15 +78,19 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
               >
                 <Text fontSize={'inherit'}>{tabItem.title}</Text>
 
-                <Text
-                  fontSize={'inherit'}
-                  backgroundColor="brand.neutral200"
-                  padding="0.33em"
-                  lineHeight={1}
-                  borderRadius="0.25em"
-                >
-                  {tabItem.itemCount}
-                </Text>
+                {tabItem.itemCount === 0 ? (
+                  ''
+                ) : (
+                  <Text
+                    fontSize={'inherit'}
+                    backgroundColor="brand.neutral200"
+                    padding="0.33em"
+                    lineHeight={1}
+                    borderRadius="0.25em"
+                  >
+                    {tabItem.itemCount}
+                  </Text>
+                )}
               </HStack>
             </Tab>
           ))}

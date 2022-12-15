@@ -64,8 +64,8 @@ export const Router = () => {
               component={PublicProjectLaunchPage}
             />
             {/* Begin: Old Grants Routes to be retired soon */}
-            {/* <Route path="/project/bitcoineducation"> */}
-            {/* <OldProjectView projectId="bitcoineducation" />
+            {/* <Route path="/project/bitcoineducation">
+              <OldProjectView projectId="bitcoineducation" />
             </Route>
             <Route path="/project/bitcoinculture">
               <OldProjectView projectId="bitcoinculture" />

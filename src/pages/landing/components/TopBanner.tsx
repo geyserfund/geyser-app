@@ -48,6 +48,24 @@ export const TopBanner = () => {
     history.push(getPath('publicProjectLaunch'));
   };
 
+  const satsDataArray = [
+    [
+      projectsSummaryData.projectsCount &&
+        projectsSummaryData.projectsCount.toLocaleString(),
+      'Projects',
+    ],
+    [
+      projectsSummaryData.fundedTotal &&
+        projectsSummaryData.fundedTotal.toLocaleString(),
+      'Sats Raised',
+    ],
+    [
+      projectsSummaryData.fundersCount &&
+        projectsSummaryData.fundersCount.toLocaleString(),
+      'Pleb Contributors',
+    ],
+  ];
+
   return (
     <VStack width="full" align="center" backgroundImage={BannerPattern}>
       <Container maxW={'5xl'}>
@@ -67,56 +85,42 @@ export const TopBanner = () => {
           </VStack>
 
           <HStack fontSize={'sm'} spacing={4} textColor={'brand.neutral700'}>
-            {[
-              [projectsSummaryData.projectsCount, 'Projects'],
-              [projectsSummaryData.fundedTotal, 'Sats Raised'],
-              [projectsSummaryData.fundersCount, 'Pleb Contributors'],
-            ].map((statsData, index) => {
-              return (
-                <HStack
-                  spacing={1.5}
-                  key={index}
-                  justifyContent="flex-start"
-                  alignItems={'center'}
-                >
-                  {isSummaryLoading ? (
-                    <Skeleton w="25px" h="25px" />
-                  ) : (
-                    <Text fontWeight={'bold'} textColor={colors.neutral900}>
-                      {statsData[0]}
-                    </Text>
-                  )}
-
-                  <Text
-                    textColor={colors.neutral700}
-                    textTransform={'uppercase'}
+            {isSummaryLoading ? (
+              <HStack
+                spacing={1.5}
+                justifyContent="flex-start"
+                alignItems={'center'}
+              >
+                <Skeleton w="25px" h="25px" />
+              </HStack>
+            ) : (
+              satsDataArray.map((statsData, index) => {
+                return (
+                  <HStack
+                    spacing={1.5}
+                    key={index}
+                    justifyContent="flex-start"
+                    alignItems={'center'}
                   >
-                    {statsData[1]}
-                  </Text>
-                </HStack>
-              );
-            })}
-          </HStack>
+                    {isSummaryLoading ? (
+                      <Skeleton w="25px" h="25px" />
+                    ) : (
+                      <Text fontWeight={'bold'} textColor={colors.neutral900}>
+                        {statsData[0]}
+                      </Text>
+                    )}
 
-          {/* TODO: Make this the basis for a re-useable "Primary"/CTA button component */}
-          <ButtonComponent
-            primary
-            width={300}
-            onClick={handleProjectLaunchButtonPress}
-            fontSize="16px"
-            bg={'primary400'}
-            boxShadow={
-              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-            }
-            _hover={{
-              bg: 'brand.primaryTint',
-            }}
-            _focus={{
-              bg: 'brand.primaryTint',
-            }}
-          >
-            Launch Your Project
-          </ButtonComponent>
+                    <Text
+                      textColor={colors.neutral700}
+                      textTransform={'uppercase'}
+                    >
+                      {statsData[1]}
+                    </Text>
+                  </HStack>
+                );
+              })
+            )}
+          </HStack>
         </Stack>
       </Container>
     </VStack>
