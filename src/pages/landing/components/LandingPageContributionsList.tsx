@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Divider, VStack } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
@@ -8,6 +8,8 @@ import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingT
 import { Project } from '../../../types/generated/graphql';
 import { PaginationInput } from '../../../types/generated/graphql';
 import { aggregateTransactions, FundingTxWithCount } from '../../../utils';
+import { ScrollInvoke } from '../../../helpers';
+import { useListenerState } from '../../../hooks';
 
 type Props = {
   itemLimit?: number;
@@ -25,10 +27,17 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     itemLimit,
   });
 
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [contributions, setContributions] = useState<FundingTxWithCount[]>([]);
   const [isShowingAllContributions, setIsShowingAllContributions] =
     useState(false);
+
+  const [isLoadingMore, setIsLoadingMore] = useListenerState(false);
+
+  const pagination = useRef(paginationOptions);
+  const setPagination = (value: PaginationInput) => {
+    pagination.current = value;
+    setPaginationOptions(value);
+  };
 
   useEffect(() => {
     const options: PaginationInput = {};
@@ -50,17 +59,16 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     }
 
     options.take = itemLimit;
-    setPaginationOptions(options);
+    setPagination(options);
   }, [data]);
 
   const handleLoadMoreButtonTapped = async () => {
     setIsLoadingMore(true);
-    console.log('paginationInput before fetchMore', paginationOptions);
 
     await fetchMore({
       variables: {
         input: {
-          pagination: paginationOptions,
+          pagination: pagination.current,
         },
       },
       updateQuery: (_, { fetchMoreResult }) => {
@@ -108,8 +116,6 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
 
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
-      {isLoading && <Loader />}
-
       <VStack alignItems={'center'} width="full" spacing={'24px'}>
         {contributions.map((contribution: FundingTxWithCount) => {
           if (contribution.sourceResource?.__typename === 'Project') {
@@ -134,12 +140,11 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
       {isShowingAllContributions === false ? (
         <>
           <Divider />
-
-          {isLoadingMore === false ? (
-            <Button onClick={handleLoadMoreButtonTapped}>View More</Button>
-          ) : (
-            <Loader />
-          )}
+          {isLoadingMore.current && <Loader />}
+          <ScrollInvoke
+            onScrollEnd={handleLoadMoreButtonTapped}
+            isLoading={isLoadingMore.current}
+          />
         </>
       ) : null}
     </VStack>
