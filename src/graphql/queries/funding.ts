@@ -17,6 +17,8 @@ export const QUERY_GET_FUNDING = gql`
       paidAt
       onChain
       source
+      method
+      projectId
       funder {
         user {
           id
@@ -55,6 +57,8 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
       onChain
       media
       source
+      method
+      projectId
       sourceResource {
         ... on Project {
           id
