@@ -1,5 +1,5 @@
 import { Box, Button, Grid, GridItem, Text } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React from 'react';
 import { isMobileMode } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
@@ -10,9 +10,8 @@ import { BoardMembers } from './components/BoardMembers';
 import satwalletimg from '../../assets/walletsats.svg';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
-import { ContributeModal } from './components/ContributeModal';
+import { GrantsContributeModal } from './components/GrantsContributeModal';
 import { GrantDevelopers } from './components/GrantDevs';
-import { AuthContext } from '../../context';
 
 const grants = [
   {
@@ -251,7 +250,7 @@ export const GrantsRoundTwo = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <ContributeModal onLink={linkHandler} />
+                <GrantsContributeModal onLink={linkHandler} />
 
                 <Box display="flex" alignItems={'center'}>
                   <Text

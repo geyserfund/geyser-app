@@ -10,7 +10,7 @@ import { ListText } from './components/ListText';
 import { CustomGrantCard } from './components/CustomGrantCard';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
-import { ContributeModal } from './components/ContributeModal';
+import { GrantsContributeModal } from './components/GrantsContributeModal';
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
@@ -147,7 +147,7 @@ export const GrantsLandingPage = () => {
                 mt="6"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <ContributeModal onLink={linkHandler} />
+                <GrantsContributeModal onLink={linkHandler} />
                 {isMobile ? (
                   <Text
                     fontSize={'13px'}

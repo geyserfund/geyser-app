@@ -10,30 +10,23 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { isMobileMode, isMediumScreen } from '../../utils';
-import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useHistory } from 'react-router';
 import { useNotification } from '../../utils';
 
 import { ApplyGrantCard } from './components/ApplyGrantCard';
-import { BoardMembers } from './components/BoardMembers';
 import satwalletimg from '../../assets/walletsats.svg';
-import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
-import { ContributeModal } from './components/ContributeModal';
 import granthero from '../../assets/granthero.svg';
-import { projectTypes } from '../../constants';
-import { useQuery } from '@apollo/client';
-import { QUERY_GRANTS } from '../../graphql';
-import { GrantCard } from './components/GrantCard';
-import { Project, ProjectsGetQueryInput } from '../../types/generated/graphql';
 import bitedu from '../../assets/bitcoineducation.svg';
 import bitcul from '../../assets/bitcoinculture.svg';
 import bitdev from '../../assets/bitcoindevelopment.svg';
 import { ButtonComponent } from '../../components/ui';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Board } from './components/Board';
+import { GrantsContributeModal } from './components/GrantsContributeModal';
+
 const grants = [
   {
     title: 'Bitcoin Education',
@@ -66,24 +59,13 @@ const grants = [
     image: bitcul,
   },
 ];
-type ResponseData = {
-  projects: {
-    projects: Project[];
-  };
-};
-
-type QueryVariables = {
-  input: ProjectsGetQueryInput;
-};
 
 export const GrantsRoundOne = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
   const isMedium = isMediumScreen();
-  const { toast } = useNotification();
   const [link, setLink] = React.useState('');
-
-  const linkHandler = (link) => {
+  const linkHandler = (link: React.SetStateAction<string>) => {
     setLink(link);
   };
 
@@ -269,15 +251,7 @@ export const GrantsRoundOne = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <Button
-                  variant={'solid'}
-                  fontSize="sm"
-                  px={10}
-                  mr="2"
-                  backgroundColor="brand.primary400"
-                >
-                  Contribute
-                </Button>
+                <GrantsContributeModal onLink={linkHandler} />
 
                 <Box display="flex" alignItems={'center'}>
                   <Text
