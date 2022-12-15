@@ -32,10 +32,11 @@ export const useProjectFundingTransactions = (options?: OptionsProps) => {
     ...(cursorID !== undefined && { id: cursorID }),
   });
 
+  const [responseData, setResponseData] = useState<FundingTx[]>([]);
+
   const {
     loading: isLoading,
     error,
-    data: responseData,
     fetchMore,
   } = useQuery<ResponseData, QueryVariables>(QUERY_GET_FUNDING_TXS_LANDING, {
     variables: {
@@ -43,12 +44,15 @@ export const useProjectFundingTransactions = (options?: OptionsProps) => {
         pagination: paginationOptions,
       },
     },
+    onCompleted(data: ResponseData) {
+      setResponseData(data?.getFundingTxs || []);
+    },
   });
 
   return {
     isLoading,
     error,
-    data: responseData?.getFundingTxs || [],
+    data: responseData,
     fetchMore,
     paginationOptions,
     setPaginationOptions,
