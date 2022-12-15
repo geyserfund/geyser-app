@@ -25,6 +25,7 @@ export const aggregateTransactions = (
         f1.id !== f2.id &&
         (f1.funder.id === f2.funder.id || (isAnon(f1) && isAnon(f2))) &&
         f1.amount === f2.amount &&
+        f1.projectId === f2.projectId &&
         f2.method === FundingMethod.PodcastKeysend
       ) {
         if (

@@ -366,6 +366,7 @@ export type FundingTx = {
   onChain: Scalars['Boolean'];
   paidAt?: Maybe<Scalars['Date']>;
   paymentRequest?: Maybe<Scalars['String']>;
+  projectId: Scalars['BigInt'];
   source: Scalars['String'];
   sourceResource?: Maybe<SourceResource>;
   status: FundingStatus;
@@ -1865,6 +1866,7 @@ export type FundingTxResolvers<
     ParentType,
     ContextType
   >;
+  projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sourceResource?: Resolver<
     Maybe<ResolversTypes['SourceResource']>,
