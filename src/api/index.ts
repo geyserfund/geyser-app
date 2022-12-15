@@ -36,7 +36,28 @@ export const createApplicantRecordRound2 = async (data: any) => {
     {
       method: 'POST',
       headers: {
-        Authorization: 'Bearer keyTOBktQBmVVb09n',
+        Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    },
+  )
+    .then((response) => response.json())
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const createGrantContributionRecord = async (data: any) => {
+  return fetch(
+    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Contributors',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),

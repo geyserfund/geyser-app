@@ -64,7 +64,7 @@ export const Router = () => {
               component={PublicProjectLaunchPage}
             />
             {/* Begin: Old Grants Routes to be retired soon */}
-            <Route path="/project/bitcoineducation">
+            {/* <Route path="/project/bitcoineducation">
               <OldProjectView projectId="bitcoineducation" />
             </Route>
             <Route path="/project/bitcoinculture">
@@ -72,7 +72,7 @@ export const Router = () => {
             </Route>
             <Route path="/project/bitcoinbuilders">
               <OldProjectView projectId="bitcoinbuilders" />
-            </Route>
+            </Route> */}
             {/* End: Old Grants Routes to be retired soon */}
             <Route
               path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`}
