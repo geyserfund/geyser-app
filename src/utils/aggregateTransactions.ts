@@ -1,4 +1,4 @@
-import { FundingTx } from '../types/generated/graphql';
+import { FundingMethod, FundingTx } from '../types/generated/graphql';
 
 export interface FundingTxWithCount extends FundingTx {
   count?: number;
@@ -18,11 +18,14 @@ export const aggregateTransactions = (
 
     const matches = [f1];
     data.map((f2) => {
+      const isAnon = (f: FundingTx) =>
+        f.funder.user === null || f.funder.user === undefined;
+
       if (
         f1.id !== f2.id &&
-        f1.funder.id === f2.funder.id &&
+        (f1.funder.id === f2.funder.id || (isAnon(f1) && isAnon(f2))) &&
         f1.amount === f2.amount &&
-        f1.address === f2.address
+        f2.method === FundingMethod.PodcastKeysend
       ) {
         if (
           matches.some(

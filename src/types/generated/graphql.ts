@@ -295,6 +295,13 @@ export type FundingMetadataInput = {
   media?: InputMaybe<Scalars['String']>;
 };
 
+export enum FundingMethod {
+  GeyserQr = 'geyser_qr',
+  LnAddress = 'ln_address',
+  LnurlPay = 'lnurl_pay',
+  PodcastKeysend = 'podcast_keysend',
+}
+
 export type FundingMutationResponse = {
   __typename?: 'FundingMutationResponse';
   amountSummary?: Maybe<AmountSummary>;
@@ -355,6 +362,7 @@ export type FundingTx = {
   invoiceId: Scalars['String'];
   invoiceStatus: InvoiceStatus;
   media?: Maybe<Scalars['String']>;
+  method?: Maybe<FundingMethod>;
   onChain: Scalars['Boolean'];
   paidAt?: Maybe<Scalars['Date']>;
   paymentRequest?: Maybe<Scalars['String']>;
@@ -1293,6 +1301,7 @@ export type ResolversTypes = {
   FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput;
   FundingInput: FundingInput;
   FundingMetadataInput: FundingMetadataInput;
+  FundingMethod: FundingMethod;
   FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>;
   FundingPendingInput: FundingPendingInput;
   FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
@@ -1844,6 +1853,11 @@ export type FundingTxResolvers<
     ContextType
   >;
   media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  method?: Resolver<
+    Maybe<ResolversTypes['FundingMethod']>,
+    ParentType,
+    ContextType
+  >;
   onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   paymentRequest?: Resolver<
