@@ -22,6 +22,22 @@ import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
 import { getPath, routerPathNames } from '../../../constants';
+import { Link } from 'react-router-dom';
+
+const navItems = [
+  {
+    name: 'Projects',
+    to: '/discover',
+  },
+  {
+    name: 'Grants',
+    to: '/grants',
+  },
+  {
+    name: 'About',
+    to: 'https://geyser.notion.site/Geyser-2dd9468a27e84531bcbcbe89c24d7f09',
+  },
+];
 
 const routesForHidingTopNav = [
   `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
@@ -33,6 +49,12 @@ const customTitleRoutes = [
   `/${routerPathNames.project}/:projectId/`,
   `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
   `/${routerPathNames.entry}/:entryId`,
+];
+const navItemsRoutes = [
+  `/`,
+  `/${routerPathNames.discover}`,
+  `/${routerPathNames.grants}`,
+  `/${routerPathNames.project}/:projectId/`,
 ];
 
 const routesForHidingDropdownMenu = [
@@ -124,6 +146,7 @@ export const TopNavBar = () => {
 
   const routesMatchesForShowingCustomTitle =
     customTitleRoutes.map(useRouteMatch);
+  const routesMatchesForShowingNavItems = navItemsRoutes.map(useRouteMatch);
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -148,6 +171,11 @@ export const TopNavBar = () => {
   };
 
   const handleProjectDashboardButtonPress = () => {
+    if (userHasOnlyOneProject) {
+      history.push(getPath('projectDashboard', user.ownerOf[0]?.project?.name));
+      return;
+    }
+
     const projectName =
       currentProjectRouteMatch?.params?.projectId ||
       navigationContext.projectName;
@@ -174,6 +202,11 @@ export const TopNavBar = () => {
     currentPathName,
     routerPathNames,
   ]);
+
+  const userHasOnlyOneProject: boolean = useMemo(
+    () => user && user.ownerOf && user.ownerOf.length === 1,
+    [user],
+  );
 
   const shouldTopNavBeHidden: boolean = useMemo(() => {
     return routeMatchesForHidingTopNav.some((routeMatch) => {
@@ -238,18 +271,30 @@ export const TopNavBar = () => {
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      isViewingOwnProject
+      (isViewingOwnProject || userHasOnlyOneProject)
     );
-  }, [isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject]);
+  }, [
+    isMobile,
+    isLoggedIn,
+    isUserAProjectCreator,
+    isViewingOwnProject,
+    userHasOnlyOneProject,
+  ]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
     return (
       isMobile === true &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      isViewingOwnProject
+      (isViewingOwnProject || userHasOnlyOneProject)
     );
-  }, [isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject]);
+  }, [
+    isMobile,
+    isLoggedIn,
+    isUserAProjectCreator,
+    isViewingOwnProject,
+    userHasOnlyOneProject,
+  ]);
 
   /**
    * Logic:
@@ -271,7 +316,8 @@ export const TopNavBar = () => {
       isViewingOwnProject === false &&
       routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      })
+      }) &&
+      !userHasOnlyOneProject
     );
   }, [
     routeMatchesForHidingMyProjectsButton,
@@ -279,6 +325,7 @@ export const TopNavBar = () => {
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
+    userHasOnlyOneProject,
   ]);
 
   const shouldShowMyProjectsButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -289,7 +336,8 @@ export const TopNavBar = () => {
       isViewingOwnProject === false &&
       routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
         return Boolean(routeMatch) === false;
-      })
+      }) &&
+      !userHasOnlyOneProject
     );
   }, [
     routeMatchesForHidingMyProjectsButton,
@@ -297,6 +345,7 @@ export const TopNavBar = () => {
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
+    userHasOnlyOneProject,
   ]);
 
   /**
@@ -331,6 +380,16 @@ export const TopNavBar = () => {
     });
   }, [routesMatchesForShowingCustomTitle]);
 
+  const shouldShowNavItems: boolean = useMemo(() => {
+    if (isMobile) {
+      return false;
+    }
+
+    return routesMatchesForShowingNavItems.some((routeMatch) => {
+      return (routeMatch as match)?.isExact;
+    });
+  }, [routesMatchesForShowingNavItems, isMobile]);
+
   if (shouldTopNavBeHidden) {
     return null;
   }
@@ -364,6 +423,37 @@ export const TopNavBar = () => {
           ) : null}
 
           <HStack alignItems={'center'} spacing={2}>
+            {shouldShowNavItems ? (
+              <Box display={'flex'} alignItems="center" gap={4} mr={4}>
+                {navItems.map((item, idx) => (
+                  <>
+                    {item.name === 'About' ? (
+                      <a key={idx} href={item.to}>
+                        <Text
+                          fontWeight={'500'}
+                          textDecoration="none"
+                          fontSize="16px"
+                          color={'brand.neutral700'}
+                        >
+                          {item.name}
+                        </Text>
+                      </a>
+                    ) : (
+                      <Link key={idx} to={item.to}>
+                        <Text
+                          fontWeight={'500'}
+                          textDecoration="none"
+                          fontSize="16px"
+                          color={'brand.neutral700'}
+                        >
+                          {item.name}
+                        </Text>
+                      </Link>
+                    )}
+                  </>
+                ))}
+              </Box>
+            ) : null}
             {shouldShowDashboardButton ? (
               <ButtonComponent
                 variant={'solid'}
@@ -371,7 +461,7 @@ export const TopNavBar = () => {
                 backgroundColor="brand.primary400"
                 onClick={handleProjectDashboardButtonPress}
               >
-                Dashboard
+                Project Dashboard
               </ButtonComponent>
             ) : null}
 

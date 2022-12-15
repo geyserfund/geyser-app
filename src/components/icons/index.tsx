@@ -9,7 +9,6 @@ import MagnifyPng from '../../assets/magnify.png';
 import MedalPng from '../../assets/medal.png';
 import TrophyPng from '../../assets/trophy.png';
 import HourglassPng from '../../assets/hourglass.png';
-import FountainPNG from '../../assets/fountain-logo-black-small.png';
 import GiftPng from '../../assets/gift.png';
 import GifSvg from '../../assets/gif.svg';
 import EnvelopePng from '../../assets/envelope.png';
@@ -22,6 +21,7 @@ import QrSvg from '../../assets/qr.svg';
 import BoltSvg from '../../assets/bolt.svg';
 import ShareSvg from '../../assets/share.svg';
 import AmbossSVG from '../../assets/amboss-short.svg';
+import { FountainLogoUrl } from '../../constants';
 
 export const SatoshiIcon = ({
   scale = 1,
@@ -227,7 +227,7 @@ export const FountainIcon = (props: ImageProps) => (
     <Image
       height="20px"
       width="20px"
-      src={FountainPNG}
+      src={FountainLogoUrl}
       alt="Fountain Podcasts"
       {...props}
     />

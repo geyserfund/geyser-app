@@ -1,6 +1,7 @@
 import { Avatar } from '@chakra-ui/avatar';
 import { HStack, Text, Box } from '@chakra-ui/layout';
 import React from 'react';
+import { UserSkeleton } from '../ui';
 
 export interface IIdComponent {
   URL: string;
@@ -12,14 +13,7 @@ export interface IIdComponent {
 export const IdComponent = ({ URL, username, fullName }: IIdComponent) => (
   <HStack spacing="5px" display="flex">
     <Avatar
-      icon={
-        <Box
-          width="30px"
-          height="30px"
-          borderRadius="50%"
-          backgroundColor="brand.gray50"
-        />
-      }
+      icon={<UserSkeleton />}
       width="30px"
       height="30px"
       name={fullName}

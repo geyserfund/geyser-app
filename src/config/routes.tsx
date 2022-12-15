@@ -15,7 +15,7 @@ import { EntryPreview } from '../pages/creation/entry/EntryPreview';
 import {
   MilestoneAndRewards,
   ProjectCreate,
-  Wallet,
+  ProjectCreationWalletConnectionPage,
 } from '../pages/creation/projectCreate';
 import { PrivateRoute } from './PrivateRoute';
 import { ProjectView } from '../pages/projectView';
@@ -27,6 +27,7 @@ import { getPath, routerPathNames } from '../constants';
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
 import { ProfilePage } from '../pages/profile/ProfilePage';
 import { Project as OldProjectView } from '../pages/project';
+import { GrantsMaintenancePage } from '../pages/grants/GrantsMaintenancePage';
 
 export const customHistory = createBrowserHistory();
 
@@ -50,7 +51,8 @@ export const Router = () => {
             <Route path="/failed-authentication">
               <FailedAuth />
             </Route>
-            <Route path={getPath('grants')} component={GrantsLandingPage} />
+            {/* <Route path={getPath('grants')} component={GrantsLandingPage} /> */}
+            <Route path={getPath('grants')} component={GrantsMaintenancePage} />
             <Route
               path={getPath('publicProjectLaunch')}
               component={PublicProjectLaunchPage}
@@ -70,7 +72,7 @@ export const Router = () => {
               path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`}
             >
               <PrivateRoute>
-                <Wallet />
+                <ProjectCreationWalletConnectionPage />
               </PrivateRoute>
             </Route>
             <Route

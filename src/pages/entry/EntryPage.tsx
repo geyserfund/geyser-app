@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { Head } from '../../utils/Head';
 import Loader from '../../components/ui/Loader';
-import { QUERY_PROJECT_BY_NAME } from '../../graphql';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { NotFoundPage } from '../notFound';
 import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
 import { useFundingFlow, useFundingFormState } from '../../hooks';
@@ -37,7 +37,7 @@ export const EntryPage = () => {
   }, [entryId]);
 
   const [getProject, { loading, error: projectError, data: projectData }] =
-    useLazyQuery(QUERY_PROJECT_BY_NAME, {
+    useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
       onCompleted(data) {
         setNav({
           projectName: data.project.name,

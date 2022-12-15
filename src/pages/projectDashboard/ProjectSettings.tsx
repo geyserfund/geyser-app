@@ -18,7 +18,7 @@ import {
   Card,
   ImageWithReload,
   TextArea,
-  TextBox,
+  TextInputBox,
 } from '../../components/ui';
 import { colors } from '../../constants';
 import { useAuthContext } from '../../context';
@@ -243,7 +243,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
           <VStack width="100%" alignItems="flex-start">
             <VStack width="100%" alignItems="flex-start">
               <Text>Project Title</Text>
-              <TextBox
+              <TextInputBox
                 name="title"
                 onChange={handleChange}
                 value={form.title}
@@ -285,6 +285,10 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
                   <Text>Select a header image</Text>
                 </HStack>
               </FileUpload>
+              <Text fontSize="10px" color="brand.neutral700">
+                For best fit, pick an image around 800px x 200px. Image size
+                limit: 10MB.
+              </Text>
             </VStack>
             <VStack width="100%" alignItems="flex-start">
               <Text>Main Objective</Text>
@@ -298,7 +302,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
 
             <VStack width="100%" alignItems="flex-start">
               <Text>Project E-mail</Text>
-              <TextBox
+              <TextInputBox
                 name="email"
                 value={user.email || form.email}
                 onChange={handleChange}

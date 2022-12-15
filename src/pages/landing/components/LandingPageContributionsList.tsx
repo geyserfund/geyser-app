@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Divider, VStack } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
 import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingTransactions';
-import { FundingTx, Project } from '../../../types/generated/graphql';
+import { Project } from '../../../types/generated/graphql';
 import { PaginationInput } from '../../../types/generated/graphql';
+import { aggregateTransactions, FundingTxWithCount } from '../../../utils';
 
 type Props = {
   itemLimit?: number;
@@ -16,39 +17,53 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   const {
     isLoading,
     error,
-    data: contributions,
+    data,
     fetchMore,
+    setPaginationOptions,
+    paginationOptions,
   } = useProjectFundingTransactions({
     itemLimit,
   });
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-
+  const [contributions, setContributions] = useState<FundingTxWithCount[]>([]);
   const [isShowingAllContributions, setIsShowingAllContributions] =
     useState(false);
 
-  const paginationInput: PaginationInput = useMemo(() => {
+  useEffect(() => {
     const options: PaginationInput = {};
 
-    if (contributions.length > 0) {
+    if (data && data.length > 0) {
+      const newContributions = aggregateTransactions(data);
+      setContributions(newContributions);
+      if (
+        data.length === 10 &&
+        newContributions.length < 10 &&
+        !isShowingAllContributions
+      ) {
+        handleLoadMoreButtonTapped();
+      }
+
       options.cursor = {
-        id: Number(contributions[contributions.length - 1].id),
+        id: Number(data[data.length - 1].id),
       };
     }
 
-    return options;
-  }, [contributions]);
+    options.take = itemLimit;
+    setPaginationOptions(options);
+  }, [data]);
 
   const handleLoadMoreButtonTapped = async () => {
     setIsLoadingMore(true);
+    console.log('paginationInput before fetchMore', paginationOptions);
 
     await fetchMore({
       variables: {
         input: {
-          pagination: paginationInput,
+          pagination: paginationOptions,
         },
       },
-      updateQuery: (previousResult, { fetchMoreResult }) => {
+      updateQuery: (_, { fetchMoreResult }) => {
         if (fetchMoreResult.getFundingTxs.length < itemLimit) {
           setIsShowingAllContributions(true);
         }
@@ -75,11 +90,11 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     );
   }
 
-  if (isLoading && !contributions) {
+  if (isLoading && !data) {
     return <Loader />;
   }
 
-  if (contributions?.length === 0) {
+  if (data?.length === 0) {
     return (
       <AlertBox
         height="200px"
@@ -96,13 +111,14 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
       {isLoading && <Loader />}
 
       <VStack alignItems={'center'} width="full" spacing={'24px'}>
-        {contributions.map((contribution: FundingTx) => {
+        {contributions.map((contribution: FundingTxWithCount) => {
           if (contribution.sourceResource?.__typename === 'Project') {
             return (
               <ProjectFundingContributionsFeedItem
                 key={contribution.id}
                 linkedProject={contribution.sourceResource as Project}
                 fundingTx={contribution}
+                count={contribution.count}
                 width={{
                   base: '100%',
                   md: '375px',

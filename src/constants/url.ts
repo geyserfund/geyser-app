@@ -57,4 +57,24 @@ export const GeyserSkeletonUrl =
 export const VoltageNodeConnectionDemoURL =
   'https://geyser.notion.site/Connecting-your-Geyser-campaign-to-a-Voltage-node-10e786db5a5a46af9456f00abfa0dc43';
 
+export const VoltageExplainerPageForGeyserURL = 'https://voltage.cloud/geyser';
+
+export const AlbyLightningAddressURL = 'https://getalby.com/lightning-address';
+export const WalletOfSatoshiLightningAddressURL =
+  'https://www.walletofsatoshi.com/';
+export const BitNobURL = 'https://bitnob.com/';
 export const AmbossUrl = 'https://amboss.space/node/';
+
+// Asset Urls
+export const BoostCLILogoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/boostcli.png';
+export const BreezLogoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/breez.png';
+export const FountainLogoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/fountain.png';
+export const CastamaticLogoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/castamatic.png';
+export const CuriocasterLogoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/curiocaster.png';
+export const PodverseLogoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/podverse.png';

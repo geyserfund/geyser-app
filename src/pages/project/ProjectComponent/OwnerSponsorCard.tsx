@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom';
 import { IProject, IProjectDetail } from '../../../interfaces';
 import { ButtonComponent } from '../../../components/ui';
 import ReactPlayer from 'react-player';
-import { isMobileMode, getFormattedDate, encode } from '../../../utils';
+import { isMobileMode, getFormattedDate, encodeLNURL } from '../../../utils';
 import { useStyles } from './styles';
 import { QrIcon, BoltIcon, ShareIcon } from '../../../components/icons';
 import { DownloadIcon } from '@chakra-ui/icons';
@@ -79,7 +79,7 @@ export const OwnerSponsorCard = ({
     }
   };
 
-  const lnurlPayUrl = encode(
+  const lnurlPayUrl = encodeLNURL(
     `${API_SERVICE_ENDPOINT}/lnurl/pay?projectId=${id}`,
   );
 

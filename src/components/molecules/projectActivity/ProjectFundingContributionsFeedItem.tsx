@@ -8,25 +8,28 @@ import {
   useColorModeValue,
   HStack,
   VStack,
+  Link,
 } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
-import { SatoshiIconTilted } from '../../icons';
+import { FountainIcon, LightningIcon, SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';
-import { IFundingTx } from '../../../interfaces';
+import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon';
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTx | IFundingTx;
+  fundingTx: FundingTx;
   showsProjectLink?: boolean;
   linkedProject?: Project;
+  count?: number;
 };
 
 export const ProjectFundingContributionsFeedItem = ({
   fundingTx,
   linkedProject,
+  count,
   ...rest
 }: Props) => {
   const { funder } = fundingTx;
@@ -46,6 +49,11 @@ export const ProjectFundingContributionsFeedItem = ({
     funder,
   });
 
+  const isFromFountain = fundingTx.source === 'Fountain';
+  const funderFountainUserName = fundingTx.funder?.user?.externalAccounts?.find(
+    (account) => account?.type === 'Fountain',
+  )?.externalUsername;
+
   return (
     <Box
       bg={useColorModeValue('white', 'gray.900')}
@@ -62,28 +70,43 @@ export const ProjectFundingContributionsFeedItem = ({
 
         <Box display="flex" justifyContent="space-between" width={'full'}>
           {/* Funder Avatar */}
-          {isFunderAnonymous ? (
-            <HStack spacing={2}>
-              <AnonymousAvatar
-                seed={funder.id}
-                image={avatarMetadata.image}
+          <HStack>
+            {isFunderAnonymous ? (
+              <HStack spacing={2}>
+                <AnonymousAvatar
+                  seed={funder.id}
+                  image={avatarMetadata.image}
+                  imageSize={'20px'}
+                  textColor="brand.neutral900"
+                />
+              </HStack>
+            ) : (
+              <LinkableAvatar
+                imageSrc={funder.user?.imageUrl || ''}
+                avatarUsername={funder.user?.username || ''}
+                userProfileID={funder.user?.id}
+                fontSize={'14px'}
                 imageSize={'20px'}
                 textColor="brand.neutral900"
+                badgeNames={funderBadges.map((badge) => badge.badge)}
+                badgeElements={renderFunderBadges(funderBadges)}
               />
-              <Text>Anonymous Funder</Text>
-            </HStack>
-          ) : (
-            <LinkableAvatar
-              imageSrc={funder.user?.imageUrl || ''}
-              avatarUsername={funder.user?.username || ''}
-              userProfileID={funder.user?.id}
-              fontSize={'14px'}
-              imageSize={'20px'}
-              textColor="brand.neutral900"
-              badgeNames={funderBadges.map((badge) => badge.badge)}
-              badgeElements={renderFunderBadges(funderBadges)}
-            />
-          )}
+            )}
+            {count && count > 1 && (
+              <HStack
+                backgroundColor="brand.neutral300"
+                px="5px"
+                borderRadius="4px"
+                spacing="2px"
+              >
+                <Text fontSize="12px" fontWeight={500}>{`${count}x`}</Text>
+                <LightningIcon height="18px" width="12px" />
+                <Text fontSize="12px" fontWeight={500}>
+                  STREAMS
+                </Text>
+              </HStack>
+            )}
+          </HStack>
 
           {/* Funding Amount */}
           <Box display="flex" alignItems="center">
@@ -100,14 +123,7 @@ export const ProjectFundingContributionsFeedItem = ({
           {/* Funding Media Attachment */}
 
           {fundingTx.media ? (
-            <Box
-              h={'178px'}
-              bg={'gray.100'}
-              mt={-6}
-              mx={-6}
-              mb={6}
-              pos={'relative'}
-            >
+            <Box h={'178px'} bg={'gray.100'} pos={'relative'}>
               <Image
                 src={fundingTx.media}
                 alt="Contribution media attachment"
@@ -122,10 +138,12 @@ export const ProjectFundingContributionsFeedItem = ({
           {/* Timestamp and Funded-Project Info */}
 
           <HStack color="brand.neutral700" spacing={2}>
-            <Text fontSize={'xs'}>
+            <Text fontSize={'xs'} noOfLines={1}>
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
             </Text>
+
+            <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
             {linkedProject ? (
               <>

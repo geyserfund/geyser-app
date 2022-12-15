@@ -11,7 +11,11 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { ButtonComponent, TextArea, TextBox } from '../../../../components/ui';
+import {
+  ButtonComponent,
+  TextArea,
+  TextInputBox,
+} from '../../../../components/ui';
 import { VoltageNodeConnectionDemoURL } from '../../../../constants';
 import { ProjectNodeValidations } from '../../../../constants/validations';
 import { isMobileMode } from '../../../../utils';
@@ -24,7 +28,7 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (_: TNodeInput) => void;
-  node?: TNodeInput;
+  nodeInput?: TNodeInput;
 };
 
 export const defaultNode = {
@@ -40,13 +44,13 @@ export const defaultNode = {
 export const NodeAdditionModal = ({
   isOpen,
   onClose,
-  node,
+  nodeInput,
   onSubmit,
 }: Props) => {
   const isMobile = isMobileMode();
 
   const [isVoltage, setIsVoltage] = useState(false);
-  const [form, setForm] = useState<TNodeInput>(node || defaultNode);
+  const [form, setForm] = useState<TNodeInput>(nodeInput || defaultNode);
   const [formError, setFormError] = useState<any>({});
 
   const handleTextChange = (
@@ -196,7 +200,7 @@ export const NodeAdditionModal = ({
           >
             <VStack width="100%" alignItems="flex-start">
               <Text>Node Name</Text>
-              <TextBox
+              <TextInputBox
                 name="name"
                 onChange={handleTextChange}
                 value={form.name}
@@ -224,7 +228,7 @@ export const NodeAdditionModal = ({
             <VStack width="100%" alignItems="flex-start">
               <Text>Hostname or IP Address (API endpoint)</Text>
 
-              <TextBox
+              <TextInputBox
                 name="hostname"
                 onChange={handleTextChange}
                 placeholder={isVoltage ? 'nodename.m.voltageapp.io' : ''}
@@ -272,7 +276,7 @@ export const NodeAdditionModal = ({
                 </VStack>
                 <VStack width="100%" alignItems="flex-start">
                   <Text>gRPC port</Text>
-                  <TextBox
+                  <TextInputBox
                     name="grpc"
                     type="number"
                     placeholder="10009"

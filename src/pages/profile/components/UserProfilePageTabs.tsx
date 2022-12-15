@@ -92,7 +92,7 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
           ))}
         </TabList>
 
-        <Divider borderWidth={'2px'} zIndex={-1} borderRadius="full" />
+        <Divider borderWidth={'2px'} />
       </Stack>
 
       <TabPanels width="100%">

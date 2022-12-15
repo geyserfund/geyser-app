@@ -17,6 +17,8 @@ export const QUERY_GET_FUNDING = gql`
       paidAt
       onChain
       source
+      method
+      projectId
       funder {
         user {
           id
@@ -39,14 +41,24 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
       comment
       amount
       funder {
+        id
         user {
           id
           username
+          imageUrl
+          externalAccounts {
+            externalUsername
+            public
+            type
+          }
         }
       }
       paidAt
       onChain
       media
+      source
+      method
+      projectId
       sourceResource {
         ... on Project {
           id
@@ -59,14 +71,6 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
           image
         }
       }
-    }
-  }
-`;
-
-export const QUERY_GET_FUNDING_STATUS = gql`
-  query GetFundingTxStatus($id: BigInt!) {
-    fundingTx(id: $id) {
-      status
     }
   }
 `;

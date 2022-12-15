@@ -16,7 +16,7 @@ import { UpdateReward } from '../../hooks';
 import { Project } from '../../types/generated/graphql';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../context';
-import { ProjectDetailsCard } from './ProjectDetailsCard';
+import { ProjectDetailsCard } from './components/ProjectDetailsCard';
 
 type Rules = string;
 
@@ -175,9 +175,9 @@ export const ProjectDetailsMainBodyContainer = ({
                 backgroundColor={colors.primary50}
               >
                 <Text color={colors.gray500} paddingBottom="5%">
-                  Your project is not live yet as you have not finalized the
-                  project creation flow. Head back to the project creation flow
-                  to add your Lightning node and launch your project.
+                  Your project is not live yet as you have not added a wallet
+                  where you can receive funds. Head back to the project creation
+                  flow to add a wallet.
                 </Text>
 
                 <ButtonComponent
@@ -185,7 +185,7 @@ export const ProjectDetailsMainBodyContainer = ({
                   isFullWidth={true}
                   onClick={handleConnectNodeClick}
                 >
-                  Connect Node
+                  Connect Wallet
                 </ButtonComponent>
               </VStack>
             )}
