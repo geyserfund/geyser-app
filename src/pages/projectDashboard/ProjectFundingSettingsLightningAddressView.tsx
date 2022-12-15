@@ -1,6 +1,6 @@
 import { Container, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { TextInputBox } from '../../components/ui/TextInputBox';
+import { colors } from '../../constants';
 
 type Props = {
   lightningAddress: string;
@@ -16,21 +16,20 @@ export const ProjectFundingSettingsLightningAddressView = ({
       <VStack alignItems={'flex-start'} spacing={2.5}>
         <Text color="brand.neutral700">Where are all your funds going to?</Text>
 
-        <VStack spacing={1} alignItems={'flex-start'} width={'full'}>
+        <VStack
+          spacing="7px"
+          alignItems={'flex-start'}
+          width={'full'}
+          border="1px solid"
+          borderColor={colors.neutral300}
+          borderRadius="4px"
+          padding="16px"
+        >
           <Text fontSize="10px" fontWeight={400}>
             Lightning Address
           </Text>
 
-          <TextInputBox
-            name="lightning-address"
-            type={'email'}
-            placeholder={'Lightning Address'}
-            value={lightningAddress}
-            isDisabled
-            _disabled={{
-              opacity: 1,
-            }}
-          />
+          <Text fontSize="14px">{lightningAddress}</Text>
         </VStack>
 
         <Text fontSize="10px" color="brand.neutral700" fontWeight={400}>
