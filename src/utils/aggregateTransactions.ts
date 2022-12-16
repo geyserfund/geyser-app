@@ -18,6 +18,16 @@ export const aggregateTransactions = (
 
     const matches = [f1];
     data.map((f2) => {
+      if (matches.some((f) => f.id === f2.id)) {
+        return;
+      }
+
+      if (
+        nestedTransactions.some((array) => array.some((f) => f.id === f2.id))
+      ) {
+        return;
+      }
+
       const isAnon = (f: FundingTx) =>
         f.funder.user === null || f.funder.user === undefined;
 
@@ -29,9 +39,7 @@ export const aggregateTransactions = (
         f2.method === FundingMethod.PodcastKeysend
       ) {
         if (
-          matches.some(
-            (match) => match.paidAt - f2.paidAt <= 75000 && match.id !== f1.id,
-          )
+          matches.some((match) => Math.abs(match.paidAt - f2.paidAt) <= 75000)
         ) {
           matches.push(f2);
         }
