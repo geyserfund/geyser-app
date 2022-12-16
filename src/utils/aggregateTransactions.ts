@@ -11,13 +11,20 @@ export const aggregateTransactions = (
 
   const nestedTransactions: FundingTx[][] = [];
 
+  const checkedTransactions: string[] = [];
+
   data.map((f1) => {
-    if (nestedTransactions.some((array) => array.some((f) => f.id === f1.id))) {
+    if (checkedTransactions.includes(f1.id)) {
       return;
     }
 
     const matches = [f1];
+    checkedTransactions.push(f1.id);
     data.map((f2) => {
+      if (checkedTransactions.includes(f2.id)) {
+        return;
+      }
+
       const isAnon = (f: FundingTx) =>
         f.funder.user === null || f.funder.user === undefined;
 
@@ -29,11 +36,10 @@ export const aggregateTransactions = (
         f2.method === FundingMethod.PodcastKeysend
       ) {
         if (
-          matches.some(
-            (match) => match.paidAt - f2.paidAt <= 75000 && match.id !== f1.id,
-          )
+          matches.some((match) => Math.abs(match.paidAt - f2.paidAt) <= 75000)
         ) {
           matches.push(f2);
+          checkedTransactions.push(f2.id);
         }
       }
     });
