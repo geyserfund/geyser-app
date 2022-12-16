@@ -11,20 +11,17 @@ export const aggregateTransactions = (
 
   const nestedTransactions: FundingTx[][] = [];
 
+  const checkedTransactions: string[] = [];
+
   data.map((f1) => {
-    if (nestedTransactions.some((array) => array.some((f) => f.id === f1.id))) {
+    if (checkedTransactions.includes(f1.id)) {
       return;
     }
 
     const matches = [f1];
+    checkedTransactions.push(f1.id);
     data.map((f2) => {
-      if (matches.some((f) => f.id === f2.id)) {
-        return;
-      }
-
-      if (
-        nestedTransactions.some((array) => array.some((f) => f.id === f2.id))
-      ) {
+      if (checkedTransactions.includes(f2.id)) {
         return;
       }
 
@@ -42,6 +39,7 @@ export const aggregateTransactions = (
           matches.some((match) => Math.abs(match.paidAt - f2.paidAt) <= 75000)
         ) {
           matches.push(f2);
+          checkedTransactions.push(f2.id);
         }
       }
     });
