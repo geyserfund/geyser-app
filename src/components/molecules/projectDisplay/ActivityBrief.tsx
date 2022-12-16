@@ -33,7 +33,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
 
   const balance = noFeeProjects.includes(project.name)
     ? project.balance
-    : project.balance * (1 - GEYSER_FEE);
+    : Math.round(project.balance * (1 - GEYSER_FEE));
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
