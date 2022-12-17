@@ -5,6 +5,7 @@ import {
   FundingTx,
   GetFundingTxsInput,
   PaginationInput,
+  GetFundingTxsWhereInput,
 } from '../types/generated/graphql';
 
 type ResponseData = {
@@ -15,16 +16,19 @@ type QueryVariables = {
   input: GetFundingTxsInput;
 };
 
-type OptionsProps = {
+export type useProjectFundingTransactionsProps = {
   itemLimit?: number;
   cursorID?: number;
+  where?: GetFundingTxsWhereInput;
 };
 
 /**
  * Hook for fetching project funding transactions
  * across the entire Geyser platform.
  */
-export const useProjectFundingTransactions = (options?: OptionsProps) => {
+export const useProjectFundingTransactions = (
+  options?: useProjectFundingTransactionsProps,
+) => {
   const { itemLimit = 10, cursorID } = options || {};
 
   const [paginationOptions, setPaginationOptions] = useState<PaginationInput>({
@@ -42,6 +46,7 @@ export const useProjectFundingTransactions = (options?: OptionsProps) => {
     variables: {
       input: {
         pagination: paginationOptions,
+        where: options?.where,
       },
     },
     onCompleted(data: ResponseData) {
