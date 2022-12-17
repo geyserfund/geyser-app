@@ -120,9 +120,11 @@ export const ProjectFundingInitialInfoScreen = ({
               onClick={() => setView('activity')}
             >
               Contributions{' '}
-              <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+              {/*  commented out because currently the transaciton length doesnot determine the total transactions, it need
+              to be fetched from a different query, most likely the project summary */}
+              {/* <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
                 {fundingTxs.length}
-              </Text>
+              </Text> */}
             </Button>
             <Box
               bg={view === 'activity' ? 'darkgrey' : 'lightgrey'}
