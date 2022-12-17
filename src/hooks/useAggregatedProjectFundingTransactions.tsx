@@ -1,5 +1,9 @@
+import { ApolloError } from '@apollo/client';
 import { useEffect, useRef, useState } from 'react';
-import { PaginationInput } from '../types/generated/graphql';
+import {
+  GetFundingTxsWhereInput,
+  PaginationInput,
+} from '../types/generated/graphql';
 import { aggregateTransactions, FundingTxWithCount } from '../utils';
 import { useListenerState } from './useListenerState';
 import {
@@ -7,13 +11,20 @@ import {
   useProjectFundingTransactionsProps,
 } from './useProjectFundingTransactions';
 
+export type useAggregatedProjectFundingTransactionsProps = {
+  itemLimit?: number;
+  cursorID?: number;
+  where?: GetFundingTxsWhereInput;
+  onError?: (error: ApolloError) => void;
+};
+
 export const useAggregatedProjectFundingTransactions = ({
   itemLimit = 10,
+  where,
   ...rest
 }: useProjectFundingTransactionsProps) => {
   const [contributions, setContributions] = useState<FundingTxWithCount[]>([]);
-  const [isShowingAllContributions, setIsShowingAllContributions] =
-    useState(false);
+  const [noMoreitems, setNoMoreitems] = useState(false);
 
   const [isLoadingMore, setIsLoadingMore] = useListenerState(false);
 
@@ -26,6 +37,7 @@ export const useAggregatedProjectFundingTransactions = ({
     paginationOptions,
   } = useProjectFundingTransactions({
     itemLimit,
+    where,
     ...rest,
   });
 
@@ -41,12 +53,9 @@ export const useAggregatedProjectFundingTransactions = ({
     if (data && data.length > 0) {
       const newContributions = aggregateTransactions(data);
       setContributions(newContributions);
-      if (
-        data.length === 10 &&
-        newContributions.length < 10 &&
-        !isShowingAllContributions
-      ) {
-        handleLoadMoreButtonTapped();
+
+      if (data.length === 10 && newContributions.length < 10 && !noMoreitems) {
+        fetchNext();
       }
 
       options.cursor = {
@@ -58,18 +67,19 @@ export const useAggregatedProjectFundingTransactions = ({
     setPagination(options);
   }, [data]);
 
-  const handleLoadMoreButtonTapped = async () => {
+  const fetchNext = async () => {
     setIsLoadingMore(true);
 
     await fetchMore({
       variables: {
         input: {
           pagination: pagination.current,
+          where,
         },
       },
       updateQuery: (_, { fetchMoreResult }) => {
         if (fetchMoreResult.getFundingTxs.length < itemLimit) {
-          setIsShowingAllContributions(true);
+          setNoMoreitems(true);
         }
 
         // return the result and let our `InMemoryCache` type policies handle
@@ -88,7 +98,7 @@ export const useAggregatedProjectFundingTransactions = ({
     isLoadingMore,
     error,
     data: contributions,
-    fetchMore: handleLoadMoreButtonTapped,
-    isShowingAllContributions,
+    fetchNext,
+    noMoreitems,
   };
 };

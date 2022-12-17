@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { ApolloError, useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../graphql';
 import {
@@ -20,6 +20,7 @@ export type useProjectFundingTransactionsProps = {
   itemLimit?: number;
   cursorID?: number;
   where?: GetFundingTxsWhereInput;
+  onError?: (error: ApolloError) => void;
 };
 
 /**
@@ -52,6 +53,7 @@ export const useProjectFundingTransactions = (
     onCompleted(data: ResponseData) {
       setResponseData(data?.getFundingTxs || []);
     },
+    onError: options?.onError,
   });
 
   return {

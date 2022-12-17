@@ -14,16 +14,10 @@ type Props = {
 };
 
 export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
-  const {
-    isLoading,
-    isLoadingMore,
-    error,
-    data,
-    isShowingAllContributions,
-    fetchMore,
-  } = useAggregatedProjectFundingTransactions({
-    itemLimit,
-  });
+  const { isLoading, isLoadingMore, error, data, noMoreitems, fetchNext } =
+    useAggregatedProjectFundingTransactions({
+      itemLimit,
+    });
 
   if (error) {
     return (
@@ -75,13 +69,13 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
         })}
       </VStack>
 
-      {isShowingAllContributions === false ? (
+      {noMoreitems === false ? (
         <>
           <Divider />
           {isLoadingMore.current && <Loader />}
           <ScrollInvoke
             elementId="app-route-content-root"
-            onScrollEnd={fetchMore}
+            onScrollEnd={fetchNext}
             isLoading={isLoadingMore.current}
           />
         </>

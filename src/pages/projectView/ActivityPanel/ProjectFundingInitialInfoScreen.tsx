@@ -1,4 +1,4 @@
-import { Box, Text, VStack, HStack, Divider } from '@chakra-ui/layout';
+import { Box, VStack, HStack, Divider } from '@chakra-ui/layout';
 import React, { useState } from 'react';
 import {
   ProjectActivityActionsToolbar,
@@ -8,7 +8,11 @@ import {
 } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
-import { FundingTxWithCount, isMobileMode } from '../../../utils';
+import {
+  FundingTxWithCount,
+  isMobileMode,
+  useNotification,
+} from '../../../utils';
 import {
   Button,
   Skeleton,
@@ -16,10 +20,10 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 
-import { IFunder } from '../../../interfaces';
-import { Project } from '../../../types/generated/graphql';
+import { Funder, Project } from '../../../types/generated/graphql';
 import Loader from '../../../components/ui/Loader';
 import { ScrollInvoke } from '../../../helpers';
+import { useProjectFunders } from '../../../hooks';
 
 type Props = {
   project: Project;
@@ -28,10 +32,9 @@ type Props = {
   loading: boolean;
   btcRate: number;
   fundingTxs: FundingTxWithCount[];
-  funders: IFunder[];
   test?: boolean;
-  isShowingAllContributions: boolean;
-  fetchMore: () => void;
+  noMoreTransactions: boolean;
+  nextTransactions: () => void;
 };
 
 export const ProjectFundingInitialInfoScreen = ({
@@ -40,20 +43,48 @@ export const ProjectFundingInitialInfoScreen = ({
   loading,
   project,
   fundingTxs,
-  funders,
   test,
-  isShowingAllContributions,
-  fetchMore,
+  noMoreTransactions,
+  nextTransactions,
 }: Props) => {
   const isMobile = isMobileMode();
+  const { toast } = useNotification();
   const [view, setView] = useState('activity');
 
-  const leaderboardSort = (funderA: IFunder, funderB: IFunder) => {
-    if (funderA.amountFunded > funderB.amountFunded) {
+  const {
+    isLoading: loadingFunders,
+    isLoadingMore: loadingNextFunders,
+    noMoreItems: noMoreFunders,
+    fetchNext: nextFunders,
+    data: funders,
+  } = useProjectFunders({
+    where: {
+      projectId: parseInt(project.id, 10),
+      confirmed: true,
+    },
+    onError() {
+      toast({
+        title: 'Something went wrong',
+        description: 'Please refresh the page',
+        status: 'error',
+      });
+    },
+  });
+
+  const leaderboardSort = (funderA: Funder, funderB: Funder) => {
+    if (
+      funderA.amountFunded &&
+      funderB.amountFunded &&
+      funderA.amountFunded > funderB.amountFunded
+    ) {
       return -1;
     }
 
-    if (funderA.amountFunded < funderB.amountFunded) {
+    if (
+      funderA.amountFunded &&
+      funderB.amountFunded &&
+      funderA.amountFunded < funderB.amountFunded
+    ) {
       return 1;
     }
 
@@ -62,9 +93,8 @@ export const ProjectFundingInitialInfoScreen = ({
 
   const fundersCopy = [...funders];
 
-  const sortedFunders: IFunder[] = fundersCopy.sort(leaderboardSort);
-
-  if (test) {
+  const sortedFunders: Funder[] = fundersCopy.sort(leaderboardSort);
+  if (test || loadingFunders) {
     return <InfoPageSkeleton />;
   }
 
@@ -145,9 +175,9 @@ export const ProjectFundingInitialInfoScreen = ({
               onClick={() => setView('leaderboard')}
             >
               Leaderboard{' '}
-              <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+              {/* <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
                 {funders.length}
-              </Text>
+              </Text> */}
             </Button>
             <Box
               bg={view === 'activity' ? 'lightgrey' : 'darkgrey'}
@@ -184,17 +214,29 @@ export const ProjectFundingInitialInfoScreen = ({
                   project={project}
                 />
               ))}
-          {isShowingAllContributions === false ? (
-            <>
-              <Divider />
-              {loading && <Loader />}
-              <ScrollInvoke
-                elementId="project-activity-list-container"
-                onScrollEnd={fetchMore}
-                isLoading={loading}
-              />
-            </>
-          ) : null}
+          {view === 'activity'
+            ? noMoreTransactions === false && (
+                <>
+                  <Divider />
+                  {loading && <Loader />}
+                  <ScrollInvoke
+                    elementId="project-activity-list-container"
+                    onScrollEnd={nextTransactions}
+                    isLoading={loading}
+                  />
+                </>
+              )
+            : noMoreFunders === false && (
+                <>
+                  <Divider />
+                  {loadingNextFunders.current && <Loader />}
+                  <ScrollInvoke
+                    elementId="project-activity-list-container"
+                    onScrollEnd={nextFunders}
+                    isLoading={loadingNextFunders.current}
+                  />
+                </>
+              )}
         </VStack>
       </Box>
     </VStack>

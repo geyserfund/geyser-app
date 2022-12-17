@@ -1,12 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthModal } from '../../../components/molecules';
-import {
-  IFundingInput,
-  IRewardFundingInput,
-  IFunder,
-} from '../../../interfaces';
-import { useQuery } from '@apollo/client';
-import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
+import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
 import { SuccessScreen } from './SuccessScreen';
 import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
 import {
@@ -61,7 +55,6 @@ export const ProjectActivityPanel = ({
 
   // Required for activity (recent and leaderboard) visibility
   const [fundingTxs, setFundingTxs] = useState<FundingTxWithCount[]>([]);
-  const [funders, setFunders] = useState<IFunder[]>([]);
 
   // required for knowing the rewards and the funds
   const {
@@ -92,15 +85,15 @@ export const ProjectActivityPanel = ({
 
   const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
-  const { loading: fundersLoading } = useQuery(QUERY_PROJECT_FUNDING_DATA, {
-    variables: { where: { id: project.id } },
-    fetchPolicy: 'network-only',
-    onCompleted(data) {
-      if (data && data.project && data.project.funders) {
-        setFunders(data.project.funders);
-      }
-    },
-    onError() {
+  const {
+    isLoading: loadingTransactions,
+    isLoadingMore: loadingNextTransactions,
+    noMoreitems: noMoreTransactions,
+    data: transactions,
+    fetchNext: nextTransactions,
+  } = useAggregatedProjectFundingTransactions({
+    where: { projectId: parseInt(project.id, 10) },
+    onError(error) {
       toast({
         title: 'Something went wrong',
         description: 'Please refresh the page',
@@ -109,34 +102,15 @@ export const ProjectActivityPanel = ({
     },
   });
 
-  const {
-    isLoading,
-    isLoadingMore,
-    error,
-    data,
-    isShowingAllContributions,
-    fetchMore,
-  } = useAggregatedProjectFundingTransactions({});
-
   useEffect(() => {
-    setFundingTxs(data);
-  }, [data]);
+    setFundingTxs(transactions);
+  }, [transactions]);
 
   useEffect(() => {
     if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
       setFundingTxs([fundingTx, ...fundingTxs]);
     }
   }, [fundingTx]);
-
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: 'Something went wrong',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    }
-  }, [error]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -225,7 +199,7 @@ export const ProjectActivityPanel = ({
   };
 
   const renderPanelContent = () => {
-    if (isLoading) {
+    if (loadingTransactions) {
       return <InfoPageSkeleton />;
     }
 
@@ -237,12 +211,11 @@ export const ProjectActivityPanel = ({
               project,
               handleViewClick,
               onFundProjectTapped: handleFundProjectButtonTapped,
-              loading: isLoadingMore.current || fundersLoading,
+              loading: loadingNextTransactions.current,
               btcRate,
               fundingTxs,
-              funders,
-              isShowingAllContributions,
-              fetchMore,
+              noMoreTransactions,
+              nextTransactions,
               test: false,
             }}
           />

@@ -226,3 +226,26 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
     }
   }
 `;
+
+export const QUERY_GET_PROJECT_FUNDERS = gql`
+  query Query($input: GetFundersInput!) {
+    getFunders(input: $input) {
+      amountFunded
+      confirmed
+      id
+      confirmedAt
+      timesFunded
+      user {
+        id
+        username
+        externalAccounts {
+          externalId
+          externalUsername
+          id
+          type
+        }
+        imageUrl
+      }
+    }
+  }
+`;
