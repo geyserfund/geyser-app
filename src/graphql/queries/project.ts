@@ -118,31 +118,6 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
 export const QUERY_PROJECT_FUNDING_DATA = gql`
   query GetProjectFundingData($where: UniqueProjectQueryInput!) {
     project(where: $where) {
-      fundingTxs {
-        id
-        funder {
-          id
-          amountFunded
-          timesFunded
-          confirmedAt
-          user {
-            id
-            username
-            imageUrl
-            externalAccounts {
-              externalUsername
-              public
-              type
-            }
-          }
-        }
-        amount
-        paidAt
-        comment
-        media
-        onChain
-        source
-      }
       funders {
         id
         user {

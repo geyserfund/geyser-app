@@ -9,7 +9,11 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
 import { SuccessScreen } from './SuccessScreen';
 import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
-import { isMobileMode, useNotification } from '../../../utils';
+import {
+  FundingTxWithCount,
+  isMobileMode,
+  useNotification,
+} from '../../../utils';
 import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
 
 import { AuthContext } from '../../../context';
@@ -24,18 +28,19 @@ import { fundingStages } from '../../../constants';
 import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
 import {
-  FundingTx,
+  FundingResourceType,
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
+import { useAggregatedProjectFundingTransactions } from '../../../hooks/useAggregatedProjectFundingTransactions';
 
 type Props = {
   project: Project;
   detailOpen: boolean;
   fundingFlow: any;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  resourceType?: string;
-  resourceId?: number;
+  resourceType: FundingResourceType;
+  resourceId: number;
   fundForm: IFundFormState;
 };
 
@@ -55,7 +60,7 @@ export const ProjectActivityPanel = ({
   const isMobile = isMobileMode();
 
   // Required for activity (recent and leaderboard) visibility
-  const [fundingTxs, setFundingTxs] = useState<FundingTx[]>([]);
+  const [fundingTxs, setFundingTxs] = useState<FundingTxWithCount[]>([]);
   const [funders, setFunders] = useState<IFunder[]>([]);
 
   // required for knowing the rewards and the funds
@@ -87,21 +92,35 @@ export const ProjectActivityPanel = ({
 
   const classes = useStyles({ isMobile, detailOpen, fadeStarted });
 
-  const {
-    loading,
-    error,
-    data: fundingData,
-  } = useQuery(QUERY_PROJECT_FUNDING_DATA, {
+  const { loading: fundersLoading } = useQuery(QUERY_PROJECT_FUNDING_DATA, {
     variables: { where: { id: project.id } },
     fetchPolicy: 'network-only',
+    onCompleted(data) {
+      if (data && data.project && data.project.funders) {
+        setFunders(data.project.funders);
+      }
+    },
+    onError() {
+      toast({
+        title: 'Something went wrong',
+        description: 'Please refresh the page',
+        status: 'error',
+      });
+    },
   });
 
+  const {
+    isLoading,
+    isLoadingMore,
+    error,
+    data,
+    isShowingAllContributions,
+    fetchMore,
+  } = useAggregatedProjectFundingTransactions({});
+
   useEffect(() => {
-    if (fundingData && fundingData.project.fundingTxs) {
-      setFundingTxs(fundingData.project.fundingTxs);
-      setFunders(fundingData.project.funders);
-    }
-  }, [fundingData]);
+    setFundingTxs(data);
+  }, [data]);
 
   useEffect(() => {
     if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
@@ -206,7 +225,7 @@ export const ProjectActivityPanel = ({
   };
 
   const renderPanelContent = () => {
-    if (loading) {
+    if (isLoading) {
       return <InfoPageSkeleton />;
     }
 
@@ -218,10 +237,12 @@ export const ProjectActivityPanel = ({
               project,
               handleViewClick,
               onFundProjectTapped: handleFundProjectButtonTapped,
-              loading,
+              loading: isLoadingMore.current || fundersLoading,
               btcRate,
               fundingTxs,
               funders,
+              isShowingAllContributions,
+              fetchMore,
               test: false,
             }}
           />

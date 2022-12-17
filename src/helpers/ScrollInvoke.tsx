@@ -1,29 +1,41 @@
 import React, { useEffect } from 'react';
 
 interface ScrollInvokeProps {
+  elementId: string;
   onScrollEnd: () => void;
   isLoading?: boolean;
 }
 
-export const ScrollInvoke = ({ onScrollEnd, isLoading }: ScrollInvokeProps) => {
+export const ScrollInvoke = ({
+  elementId,
+  onScrollEnd,
+  isLoading,
+}: ScrollInvokeProps) => {
   useEffect(() => {
-    const element = document.getElementById('app-route-content-root');
+    const element = document.getElementById(elementId);
     if (element) {
       element.addEventListener('scroll', () => {
-        const isInView = isInViewport(
-          'landing-page-contributions-list-refetch-dummy',
-        );
-        if (isInView && !isLoading) {
+        if (isLoading) {
+          return;
+        }
+
+        const isInView =
+          element.scrollHeight - element.scrollTop - element.clientHeight <= 40;
+        if (isInView) {
           onScrollEnd();
         }
       });
 
       return () => {
         element.removeEventListener('scroll', () => {
-          const isInView = isInViewport(
-            'landing-page-contributions-list-refetch-dummy',
-          );
-          if (isInView && !isLoading) {
+          if (isLoading) {
+            return;
+          }
+
+          const isInView =
+            element.scrollHeight - element.scrollTop - element.clientHeight <=
+            40;
+          if (isInView) {
             onScrollEnd();
           }
         });
@@ -31,22 +43,5 @@ export const ScrollInvoke = ({ onScrollEnd, isLoading }: ScrollInvokeProps) => {
     }
   }, []);
 
-  const isInViewport = (id: string) => {
-    const el = document.getElementById(id);
-
-    if (!el) {
-      return false;
-    }
-
-    const rect = el.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-  };
-
-  return <div id="landing-page-contributions-list-refetch-dummy" />;
+  return <div id={`landing-page-contributions-list-refetch-${elementId}`} />;
 };

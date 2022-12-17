@@ -1,4 +1,4 @@
-import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
+import { Box, Text, VStack, HStack, Divider } from '@chakra-ui/layout';
 import React, { useState } from 'react';
 import {
   ProjectActivityActionsToolbar,
@@ -8,7 +8,7 @@ import {
 } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
-import { aggregateTransactions, isMobileMode } from '../../../utils';
+import { FundingTxWithCount, isMobileMode } from '../../../utils';
 import {
   Button,
   Skeleton,
@@ -17,7 +17,9 @@ import {
 } from '@chakra-ui/react';
 
 import { IFunder } from '../../../interfaces';
-import { FundingTx, Project } from '../../../types/generated/graphql';
+import { Project } from '../../../types/generated/graphql';
+import Loader from '../../../components/ui/Loader';
+import { ScrollInvoke } from '../../../helpers';
 
 type Props = {
   project: Project;
@@ -25,9 +27,11 @@ type Props = {
   onFundProjectTapped: () => void;
   loading: boolean;
   btcRate: number;
-  fundingTxs: FundingTx[];
+  fundingTxs: FundingTxWithCount[];
   funders: IFunder[];
   test?: boolean;
+  isShowingAllContributions: boolean;
+  fetchMore: () => void;
 };
 
 export const ProjectFundingInitialInfoScreen = ({
@@ -38,6 +42,8 @@ export const ProjectFundingInitialInfoScreen = ({
   fundingTxs,
   funders,
   test,
+  isShowingAllContributions,
+  fetchMore,
 }: Props) => {
   const isMobile = isMobileMode();
   const [view, setView] = useState('activity');
@@ -57,7 +63,6 @@ export const ProjectFundingInitialInfoScreen = ({
   const fundersCopy = [...funders];
 
   const sortedFunders: IFunder[] = fundersCopy.sort(leaderboardSort);
-  const aggregatedContributions = aggregateTransactions(fundingTxs);
 
   if (test) {
     return <InfoPageSkeleton />;
@@ -151,6 +156,7 @@ export const ProjectFundingInitialInfoScreen = ({
           </Box>
         </Box>
         <VStack
+          id="project-activity-list-container"
           spacing={'8px'}
           width="100%"
           overflow="auto"
@@ -158,13 +164,15 @@ export const ProjectFundingInitialInfoScreen = ({
           paddingBottom="10px"
         >
           {view === 'activity'
-            ? aggregatedContributions.map((fundingTx, index) => (
-                <ProjectFundingContributionsFeedItem
-                  key={index}
-                  fundingTx={fundingTx}
-                  count={fundingTx.count}
-                  width={'95%'}
-                />
+            ? fundingTxs.map((fundingTx, index) => (
+                <>
+                  <ProjectFundingContributionsFeedItem
+                    key={index}
+                    fundingTx={fundingTx}
+                    count={fundingTx.count}
+                    width={'95%'}
+                  />
+                </>
               ))
             : sortedFunders.map((funder, index) => (
                 <ProjectFundingLeaderboardFeedItem
@@ -174,6 +182,17 @@ export const ProjectFundingInitialInfoScreen = ({
                   project={project}
                 />
               ))}
+          {isShowingAllContributions === false ? (
+            <>
+              <Divider />
+              {loading && <Loader />}
+              <ScrollInvoke
+                elementId="project-activity-list-container"
+                onScrollEnd={fetchMore}
+                isLoading={loading}
+              />
+            </>
+          ) : null}
         </VStack>
       </Box>
     </VStack>

@@ -1,15 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Divider, VStack } from '@chakra-ui/react';
+import React from 'react';
+import { Divider, VStack } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
-import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingTransactions';
 import { Project } from '../../../types/generated/graphql';
-import { PaginationInput } from '../../../types/generated/graphql';
-import { aggregateTransactions, FundingTxWithCount } from '../../../utils';
+import { FundingTxWithCount } from '../../../utils';
 import { ScrollInvoke } from '../../../helpers';
-import { useListenerState } from '../../../hooks';
+import { useAggregatedProjectFundingTransactions } from '../../../hooks/useAggregatedProjectFundingTransactions';
 
 type Props = {
   itemLimit?: number;
@@ -18,74 +16,14 @@ type Props = {
 export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   const {
     isLoading,
+    isLoadingMore,
     error,
     data,
+    isShowingAllContributions,
     fetchMore,
-    setPaginationOptions,
-    paginationOptions,
-  } = useProjectFundingTransactions({
+  } = useAggregatedProjectFundingTransactions({
     itemLimit,
   });
-
-  const [contributions, setContributions] = useState<FundingTxWithCount[]>([]);
-  const [isShowingAllContributions, setIsShowingAllContributions] =
-    useState(false);
-
-  const [isLoadingMore, setIsLoadingMore] = useListenerState(false);
-
-  const pagination = useRef(paginationOptions);
-  const setPagination = (value: PaginationInput) => {
-    pagination.current = value;
-    setPaginationOptions(value);
-  };
-
-  useEffect(() => {
-    const options: PaginationInput = {};
-
-    if (data && data.length > 0) {
-      const newContributions = aggregateTransactions(data);
-      setContributions(newContributions);
-      if (
-        data.length === 10 &&
-        newContributions.length < 10 &&
-        !isShowingAllContributions
-      ) {
-        handleLoadMoreButtonTapped();
-      }
-
-      options.cursor = {
-        id: Number(data[data.length - 1].id),
-      };
-    }
-
-    options.take = itemLimit;
-    setPagination(options);
-  }, [data]);
-
-  const handleLoadMoreButtonTapped = async () => {
-    setIsLoadingMore(true);
-
-    await fetchMore({
-      variables: {
-        input: {
-          pagination: pagination.current,
-        },
-      },
-      updateQuery: (_, { fetchMoreResult }) => {
-        if (fetchMoreResult.getFundingTxs.length < itemLimit) {
-          setIsShowingAllContributions(true);
-        }
-
-        // return the result and let our `InMemoryCache` type policies handle
-        // the merging logic.
-        return {
-          getFundingTxs: fetchMoreResult.getFundingTxs,
-        };
-      },
-    });
-
-    setIsLoadingMore(false);
-  };
 
   if (error) {
     return (
@@ -117,7 +55,7 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
       <VStack alignItems={'center'} width="full" spacing={'24px'}>
-        {contributions.map((contribution: FundingTxWithCount) => {
+        {data.map((contribution: FundingTxWithCount) => {
           if (contribution.sourceResource?.__typename === 'Project') {
             return (
               <ProjectFundingContributionsFeedItem
@@ -142,7 +80,8 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
           <Divider />
           {isLoadingMore.current && <Loader />}
           <ScrollInvoke
-            onScrollEnd={handleLoadMoreButtonTapped}
+            elementId="app-route-content-root"
+            onScrollEnd={fetchMore}
             isLoading={isLoadingMore.current}
           />
         </>
