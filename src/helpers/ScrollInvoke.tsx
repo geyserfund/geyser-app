@@ -1,10 +1,14 @@
+import { Divider } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
+import Loader from '../components/ui/Loader';
 
 interface ScrollInvokeProps {
   elementId: string;
-  onScrollEnd: () => void;
+  onScrollEnd: () => Promise<void>;
   isLoading?: boolean;
 }
+
+let loading = false;
 
 export const ScrollInvoke = ({
   elementId,
@@ -14,34 +18,47 @@ export const ScrollInvoke = ({
   useEffect(() => {
     const element = document.getElementById(elementId);
     if (element) {
-      element.addEventListener('scroll', () => {
-        if (isLoading) {
+      element.addEventListener('scroll', async () => {
+        if (isLoading || loading) {
           return;
         }
+
+        loading = true;
 
         const isInView =
           element.scrollHeight - element.scrollTop - element.clientHeight <= 40;
         if (isInView) {
-          onScrollEnd();
+          await onScrollEnd();
         }
+
+        loading = false;
       });
 
       return () => {
-        element.removeEventListener('scroll', () => {
-          if (isLoading) {
+        element.removeEventListener('scroll', async () => {
+          if (isLoading || loading) {
             return;
           }
+
+          loading = true;
 
           const isInView =
             element.scrollHeight - element.scrollTop - element.clientHeight <=
             40;
           if (isInView) {
-            onScrollEnd();
+            await onScrollEnd();
           }
+
+          loading = false;
         });
       };
     }
   }, []);
 
-  return <div id={`landing-page-contributions-list-refetch-${elementId}`} />;
+  return (
+    <div id={`landing-page-contributions-list-refetch-${elementId}`}>
+      <Divider />
+      {isLoading && <Loader />}
+    </div>
+  );
 };

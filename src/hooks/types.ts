@@ -8,5 +8,5 @@ export type PaginationHookReturn<T> = {
   data: T[];
   count: number;
   fetchNext: () => Promise<void>;
-  noMoreItems: boolean;
+  noMoreItems: React.MutableRefObject<boolean>;
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
@@ -7,17 +7,21 @@ import { AlertBox } from '../../../components/ui';
 import { Project } from '../../../types/generated/graphql';
 import { FundingTxWithCount } from '../../../utils';
 import { ScrollInvoke } from '../../../helpers';
-import { useAggregatedProjectFundingTransactions } from '../../../hooks/useAggregatedProjectFundingTransactions';
+import useAggregatedContributionsQuery from '../../../hooks/useAggregatedContributionsQuery';
 
 type Props = {
   itemLimit?: number;
 };
 
 export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
-  const { isLoading, isLoadingMore, error, data, noMoreItems, fetchNext } =
-    useAggregatedProjectFundingTransactions({
-      itemLimit,
-    });
+  const {
+    isLoading,
+    isLoadingMore,
+    noMoreItems,
+    data: contributions,
+    error,
+    fetchNext,
+  } = useAggregatedContributionsQuery({ itemLimit: 10 });
 
   if (error) {
     return (
@@ -30,11 +34,11 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     );
   }
 
-  if (isLoading && !data) {
+  if (isLoading) {
     return <Loader />;
   }
 
-  if (data?.length === 0) {
+  if (contributions?.length === 0) {
     return (
       <AlertBox
         height="200px"
@@ -49,7 +53,7 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
       <VStack alignItems={'center'} width="full" spacing={'24px'}>
-        {data.map((contribution: FundingTxWithCount) => {
+        {contributions.map((contribution: FundingTxWithCount) => {
           if (contribution.sourceResource?.__typename === 'Project') {
             return (
               <ProjectFundingContributionsFeedItem
@@ -69,17 +73,13 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
         })}
       </VStack>
 
-      {noMoreItems === false ? (
-        <>
-          <Divider />
-          {isLoadingMore.current && <Loader />}
-          <ScrollInvoke
-            elementId="app-route-content-root"
-            onScrollEnd={fetchNext}
-            isLoading={isLoadingMore.current}
-          />
-        </>
-      ) : null}
+      {!noMoreItems.current && (
+        <ScrollInvoke
+          elementId="app-route-content-root"
+          onScrollEnd={fetchNext}
+          isLoading={isLoadingMore.current}
+        />
+      )}
     </VStack>
   );
 };

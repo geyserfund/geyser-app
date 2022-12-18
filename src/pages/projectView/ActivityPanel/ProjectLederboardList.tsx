@@ -1,7 +1,6 @@
-import { Divider, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 import React from 'react';
 import { ProjectFundingLeaderboardFeedItem } from '../../../components/molecules';
-import Loader from '../../../components/ui/Loader';
 import { ScrollInvoke } from '../../../helpers';
 import { PaginationHookReturn } from '../../../hooks/types';
 import { Funder, Project } from '../../../types/generated/graphql';
@@ -39,16 +38,12 @@ export const ProjectLederboardList = ({
           project={project}
         />
       ))}
-      {funders.noMoreItems === false && (
-        <>
-          <Divider />
-          {funders.isLoadingMore.current && <Loader />}
-          <ScrollInvoke
-            elementId="project-activity-list-container"
-            onScrollEnd={funders.fetchNext}
-            isLoading={funders.isLoadingMore.current}
-          />
-        </>
+      {funders.noMoreItems.current === false && (
+        <ScrollInvoke
+          elementId="project-activity-list-container"
+          onScrollEnd={funders.fetchNext}
+          isLoading={funders.isLoadingMore.current}
+        />
       )}
     </VStack>
   );

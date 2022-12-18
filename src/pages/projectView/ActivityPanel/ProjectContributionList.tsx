@@ -1,7 +1,6 @@
-import { Divider, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 import React from 'react';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
-import Loader from '../../../components/ui/Loader';
 import { ScrollInvoke } from '../../../helpers';
 import { PaginationHookReturn } from '../../../hooks/types';
 import { FundingTxWithCount, isMobileMode } from '../../../utils';
@@ -35,16 +34,12 @@ export const ProjectContributionList = ({
         </>
       ))}
 
-      {transactions.noMoreItems === false && (
-        <>
-          <Divider />
-          {transactions.isLoadingMore.current && <Loader />}
-          <ScrollInvoke
-            elementId="project-activity-list-container"
-            onScrollEnd={transactions.fetchNext}
-            isLoading={transactions.isLoadingMore.current}
-          />
-        </>
+      {transactions.noMoreItems.current === false && (
+        <ScrollInvoke
+          elementId="project-activity-list-container"
+          onScrollEnd={transactions.fetchNext}
+          isLoading={transactions.isLoadingMore.current}
+        />
       )}
     </VStack>
   );

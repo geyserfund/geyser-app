@@ -21,10 +21,8 @@ import {
 import { Project } from '../../../types/generated/graphql';
 import { ProjectContributionList } from './ProjectContributionList';
 import { ProjectLederboardList } from './ProjectLederboardList';
-import {
-  useAggregatedProjectFundingTransactions,
-  useProjectFunders,
-} from '../../../hooks';
+import useAggregatedContributionsQuery from '../../../hooks/useAggregatedContributionsQuery';
+import useFundersQuery from '../../../hooks/useFundersQuery';
 
 type Props = {
   project: Project;
@@ -35,6 +33,7 @@ type Props = {
   fundingTx: any;
 };
 
+const itemLimit = 10;
 export const ProjectFundingInitialInfoScreen = ({
   handleViewClick,
   onFundProjectTapped,
@@ -45,33 +44,16 @@ export const ProjectFundingInitialInfoScreen = ({
   const isMobile = isMobileMode();
   const [view, setView] = useState('activity');
 
-  const { toast } = useNotification();
-
   const [fundingTxs, setFundingTxs] = useState<FundingTxWithCount[]>([]);
 
-  const transactions = useAggregatedProjectFundingTransactions({
+  const transactions = useAggregatedContributionsQuery({
+    itemLimit,
     where: { projectId: parseInt(project.id, 10) },
-    onError(error) {
-      toast({
-        title: 'Something went wrong',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    },
   });
 
-  const funders = useProjectFunders({
-    where: {
-      projectId: parseInt(project.id, 10),
-      confirmed: true,
-    },
-    onError() {
-      toast({
-        title: 'Something went wrong',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    },
+  const funders = useFundersQuery({
+    itemLimit,
+    where: { projectId: parseInt(project.id, 10) },
   });
 
   useEffect(() => {
