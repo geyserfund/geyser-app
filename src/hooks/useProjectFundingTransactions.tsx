@@ -9,7 +9,10 @@ import {
 } from '../types/generated/graphql';
 
 type ResponseData = {
-  getFundingTxs: FundingTx[];
+  getFundingTxs: {
+    count: number;
+    data: FundingTx[];
+  };
 };
 
 type QueryVariables = {
@@ -37,12 +40,11 @@ export const useProjectFundingTransactions = (
     ...(cursorID !== undefined && { id: cursorID }),
   });
 
-  const [responseData, setResponseData] = useState<FundingTx[]>([]);
-
   const {
     loading: isLoading,
     error,
     fetchMore,
+    data,
   } = useQuery<ResponseData, QueryVariables>(QUERY_GET_FUNDING_TXS_LANDING, {
     variables: {
       input: {
@@ -50,16 +52,14 @@ export const useProjectFundingTransactions = (
         where: options?.where,
       },
     },
-    onCompleted(data: ResponseData) {
-      setResponseData(data?.getFundingTxs || []);
-    },
     onError: options?.onError,
   });
 
   return {
     isLoading,
     error,
-    data: responseData,
+    data: data?.getFundingTxs.data || [],
+    count: data?.getFundingTxs.count || 0,
     fetchMore,
     paginationOptions,
     setPaginationOptions,

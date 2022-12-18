@@ -3,11 +3,7 @@ import { AuthModal } from '../../../components/molecules';
 import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
 import { SuccessScreen } from './SuccessScreen';
 import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
-import {
-  FundingTxWithCount,
-  isMobileMode,
-  useNotification,
-} from '../../../utils';
+import { isMobileMode } from '../../../utils';
 import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
 
 import { AuthContext } from '../../../context';
@@ -26,7 +22,6 @@ import {
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
-import { useAggregatedProjectFundingTransactions } from '../../../hooks/useAggregatedProjectFundingTransactions';
 
 type Props = {
   project: Project;
@@ -50,11 +45,7 @@ export const ProjectActivityPanel = ({
   const { user } = useContext(AuthContext);
 
   const { btcRate } = useBtcContext();
-  const { toast } = useNotification();
   const isMobile = isMobileMode();
-
-  // Required for activity (recent and leaderboard) visibility
-  const [fundingTxs, setFundingTxs] = useState<FundingTxWithCount[]>([]);
 
   // required for knowing the rewards and the funds
   const {
@@ -84,33 +75,6 @@ export const ProjectActivityPanel = ({
   const [fadeStarted, setFadeStarted] = useState(false);
 
   const classes = useStyles({ isMobile, detailOpen, fadeStarted });
-
-  const {
-    isLoading: loadingTransactions,
-    isLoadingMore: loadingNextTransactions,
-    noMoreitems: noMoreTransactions,
-    data: transactions,
-    fetchNext: nextTransactions,
-  } = useAggregatedProjectFundingTransactions({
-    where: { projectId: parseInt(project.id, 10) },
-    onError(error) {
-      toast({
-        title: 'Something went wrong',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    },
-  });
-
-  useEffect(() => {
-    setFundingTxs(transactions);
-  }, [transactions]);
-
-  useEffect(() => {
-    if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
-      setFundingTxs([fundingTx, ...fundingTxs]);
-    }
-  }, [fundingTx]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -199,7 +163,7 @@ export const ProjectActivityPanel = ({
   };
 
   const renderPanelContent = () => {
-    if (loadingTransactions) {
+    if (!project || !project.id) {
       return <InfoPageSkeleton />;
     }
 
@@ -211,11 +175,8 @@ export const ProjectActivityPanel = ({
               project,
               handleViewClick,
               onFundProjectTapped: handleFundProjectButtonTapped,
-              loading: loadingNextTransactions.current,
+              fundingTx,
               btcRate,
-              fundingTxs,
-              noMoreTransactions,
-              nextTransactions,
               test: false,
             }}
           />

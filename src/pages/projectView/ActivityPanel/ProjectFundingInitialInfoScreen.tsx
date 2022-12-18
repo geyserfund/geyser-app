@@ -1,10 +1,8 @@
-import { Box, VStack, HStack, Divider } from '@chakra-ui/layout';
-import React, { useState } from 'react';
+import { Box, VStack, HStack, Text } from '@chakra-ui/layout';
+import React, { useEffect, useState } from 'react';
 import {
   ProjectActivityActionsToolbar,
   ActivityBrief,
-  ProjectFundingContributionsFeedItem,
-  ProjectFundingLeaderboardFeedItem,
 } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
@@ -20,44 +18,49 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 
-import { Funder, Project } from '../../../types/generated/graphql';
-import Loader from '../../../components/ui/Loader';
-import { ScrollInvoke } from '../../../helpers';
-import { useProjectFunders } from '../../../hooks';
+import { Project } from '../../../types/generated/graphql';
+import { ProjectContributionList } from './ProjectContributionList';
+import { ProjectLederboardList } from './ProjectLederboardList';
+import {
+  useAggregatedProjectFundingTransactions,
+  useProjectFunders,
+} from '../../../hooks';
 
 type Props = {
   project: Project;
   handleViewClick: () => void;
   onFundProjectTapped: () => void;
-  loading: boolean;
   btcRate: number;
-  fundingTxs: FundingTxWithCount[];
   test?: boolean;
-  noMoreTransactions: boolean;
-  nextTransactions: () => void;
+  fundingTx: any;
 };
 
 export const ProjectFundingInitialInfoScreen = ({
   handleViewClick,
   onFundProjectTapped,
-  loading,
   project,
-  fundingTxs,
   test,
-  noMoreTransactions,
-  nextTransactions,
+  fundingTx,
 }: Props) => {
   const isMobile = isMobileMode();
-  const { toast } = useNotification();
   const [view, setView] = useState('activity');
 
-  const {
-    isLoading: loadingFunders,
-    isLoadingMore: loadingNextFunders,
-    noMoreItems: noMoreFunders,
-    fetchNext: nextFunders,
-    data: funders,
-  } = useProjectFunders({
+  const { toast } = useNotification();
+
+  const [fundingTxs, setFundingTxs] = useState<FundingTxWithCount[]>([]);
+
+  const transactions = useAggregatedProjectFundingTransactions({
+    where: { projectId: parseInt(project.id, 10) },
+    onError(error) {
+      toast({
+        title: 'Something went wrong',
+        description: 'Please refresh the page',
+        status: 'error',
+      });
+    },
+  });
+
+  const funders = useProjectFunders({
     where: {
       projectId: parseInt(project.id, 10),
       confirmed: true,
@@ -71,32 +74,32 @@ export const ProjectFundingInitialInfoScreen = ({
     },
   });
 
-  const leaderboardSort = (funderA: Funder, funderB: Funder) => {
-    if (
-      funderA.amountFunded &&
-      funderB.amountFunded &&
-      funderA.amountFunded > funderB.amountFunded
-    ) {
-      return -1;
+  useEffect(() => {
+    setFundingTxs(transactions.data);
+  }, [transactions.data]);
+
+  useEffect(() => {
+    if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
+      setFundingTxs([fundingTx, ...fundingTxs]);
     }
+  }, [fundingTx]);
 
-    if (
-      funderA.amountFunded &&
-      funderB.amountFunded &&
-      funderA.amountFunded < funderB.amountFunded
-    ) {
-      return 1;
-    }
-
-    return 0;
-  };
-
-  const fundersCopy = [...funders];
-
-  const sortedFunders: Funder[] = fundersCopy.sort(leaderboardSort);
-  if (test || loadingFunders) {
+  if (test) {
     return <InfoPageSkeleton />;
   }
+
+  const renderActivityList = () => {
+    switch (view) {
+      case 'activity':
+        return (
+          <ProjectContributionList
+            transactions={{ ...transactions, data: fundingTxs }}
+          />
+        );
+      default:
+        return <ProjectLederboardList project={project} funders={funders} />;
+    }
+  };
 
   return (
     <VStack
@@ -107,7 +110,7 @@ export const ProjectFundingInitialInfoScreen = ({
       overflowY="hidden"
       position="relative"
     >
-      <ActivityBrief loading={loading} project={project} />
+      <ActivityBrief project={project} />
 
       {!isMobile ? (
         <ButtonComponent
@@ -150,11 +153,9 @@ export const ProjectFundingInitialInfoScreen = ({
               onClick={() => setView('activity')}
             >
               Contributions{' '}
-              {/*  commented out because currently the transaciton length doesnot determine the total transactions, it need
-              to be fetched from a different query, most likely the project summary */}
-              {/* <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {fundingTxs.length}
-              </Text> */}
+              <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+                {transactions.count}
+              </Text>
             </Button>
             <Box
               bg={view === 'activity' ? 'darkgrey' : 'lightgrey'}
@@ -175,9 +176,9 @@ export const ProjectFundingInitialInfoScreen = ({
               onClick={() => setView('leaderboard')}
             >
               Leaderboard{' '}
-              {/* <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {funders.length}
-              </Text> */}
+              <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+                {funders.count}
+              </Text>
             </Button>
             <Box
               bg={view === 'activity' ? 'lightgrey' : 'darkgrey'}
@@ -187,57 +188,7 @@ export const ProjectFundingInitialInfoScreen = ({
             ></Box>
           </Box>
         </Box>
-        <VStack
-          id="project-activity-list-container"
-          spacing={'8px'}
-          width="100%"
-          overflow="auto"
-          height={isMobile ? 'calc(100% - 44px)' : '100%'}
-          paddingBottom="10px"
-        >
-          {view === 'activity'
-            ? fundingTxs.map((fundingTx, index) => (
-                <>
-                  <ProjectFundingContributionsFeedItem
-                    key={index}
-                    fundingTx={fundingTx}
-                    count={fundingTx.count}
-                    width={'95%'}
-                  />
-                </>
-              ))
-            : sortedFunders.map((funder, index) => (
-                <ProjectFundingLeaderboardFeedItem
-                  key={index}
-                  funder={funder}
-                  leaderboardPosition={index + 1}
-                  project={project}
-                />
-              ))}
-          {view === 'activity'
-            ? noMoreTransactions === false && (
-                <>
-                  <Divider />
-                  {loading && <Loader />}
-                  <ScrollInvoke
-                    elementId="project-activity-list-container"
-                    onScrollEnd={nextTransactions}
-                    isLoading={loading}
-                  />
-                </>
-              )
-            : noMoreFunders === false && (
-                <>
-                  <Divider />
-                  {loadingNextFunders.current && <Loader />}
-                  <ScrollInvoke
-                    elementId="project-activity-list-container"
-                    onScrollEnd={nextFunders}
-                    isLoading={loadingNextFunders.current}
-                  />
-                </>
-              )}
-        </VStack>
+        {renderActivityList()}
       </Box>
     </VStack>
   );

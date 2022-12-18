@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
-  const { isLoading, isLoadingMore, error, data, noMoreitems, fetchNext } =
+  const { isLoading, isLoadingMore, error, data, noMoreItems, fetchNext } =
     useAggregatedProjectFundingTransactions({
       itemLimit,
     });
@@ -69,7 +69,7 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
         })}
       </VStack>
 
-      {noMoreitems === false ? (
+      {noMoreItems === false ? (
         <>
           <Divider />
           {isLoadingMore.current && <Loader />}
