@@ -1,15 +1,19 @@
 import { ApolloError, useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QUERY_GET_PROJECT_FUNDERS } from '../graphql';
 import {
   PaginationInput,
   GetFundersInput,
   Funder,
 } from '../types/generated/graphql';
+import { PaginationHookReturn } from './types';
 import { useListenerState } from './useListenerState';
 
 type ResponseData = {
-  getFunders: Funder[];
+  getFunders: {
+    count: number;
+    data: Funder[];
+  };
 };
 
 type QueryVariables = {
@@ -23,16 +27,23 @@ export type useProjectFunderProps = {
   onError?: (error: ApolloError) => void;
 };
 
-export const useProjectFunders = (options?: useProjectFunderProps) => {
+export const useProjectFunders = (
+  options?: useProjectFunderProps,
+): PaginationHookReturn<Funder> => {
   const { itemLimit = 10, cursorID } = options || {};
 
-  const [pagination, setPagination] = useListenerState<PaginationInput>({
+  const [paginationOptions, setPaginationOptions] = useState<PaginationInput>({
     take: itemLimit,
     ...(cursorID !== undefined && { id: cursorID }),
   });
+  const pagination = useRef(paginationOptions);
+  const setPagination = (value: PaginationInput) => {
+    pagination.current = value;
+    setPaginationOptions(value);
+  };
 
-  const [responseData, setResponseData] = useState<Funder[]>([]);
-
+  const [funders, setFunders] = useState<Funder[]>([]);
+  const [count, setCount] = useState(0);
   const [noMoreItems, setNoMoreItems] = useState(false);
 
   const [isLoadingMore, setIsLoadingMore] = useListenerState(false);
@@ -40,6 +51,7 @@ export const useProjectFunders = (options?: useProjectFunderProps) => {
   const {
     loading: isLoading,
     error,
+    data,
     fetchMore,
   } = useQuery<ResponseData, QueryVariables>(QUERY_GET_PROJECT_FUNDERS, {
     variables: {
@@ -50,21 +62,22 @@ export const useProjectFunders = (options?: useProjectFunderProps) => {
     },
     fetchPolicy: 'network-only',
     onError: options?.onError,
-    onCompleted(data: ResponseData) {
-      setResponseData(data?.getFunders || []);
-
-      if (data?.getFunders.length < itemLimit) {
-        setNoMoreItems(true);
-      }
-
-      const options: PaginationInput = {};
-      options.cursor = {
-        id: Number(responseData[responseData.length - 1].id),
-      };
-      options.take = itemLimit;
-      setPagination(options);
-    },
   });
+
+  useEffect(() => {
+    const options: PaginationInput = {};
+
+    if (data && data.getFunders.data.length > 0) {
+      setFunders(data.getFunders.data);
+      setCount(data.getFunders.count);
+      options.cursor = {
+        id: Number(data.getFunders.data[data.getFunders.data.length - 1].id),
+      };
+    }
+
+    options.take = itemLimit;
+    setPagination(options);
+  }, [data]);
 
   const fetchNext = async () => {
     setIsLoadingMore(true);
@@ -77,7 +90,7 @@ export const useProjectFunders = (options?: useProjectFunderProps) => {
         },
       },
       updateQuery: (_, { fetchMoreResult }) => {
-        if (fetchMoreResult.getFunders.length < itemLimit) {
+        if (fetchMoreResult.getFunders.data.length < itemLimit) {
           setNoMoreItems(true);
         }
 
@@ -93,7 +106,8 @@ export const useProjectFunders = (options?: useProjectFunderProps) => {
   return {
     isLoading,
     error,
-    data: responseData,
+    data: funders,
+    count,
     fetchNext,
     noMoreItems,
     isLoadingMore,

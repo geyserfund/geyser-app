@@ -46,6 +46,20 @@ const mergeIdentifiableCollectionUsingCursorIDs = (
   // return merged;
 };
 
+const mergeIdentifiableCollectionUsingCursorIDsWithCount = (
+  existing: any,
+  incoming: any,
+) => {
+  console.log('checking existing and incoming', existing, incoming);
+  return {
+    count: incoming.count,
+    data:
+      existing && existing.data
+        ? [...existing.data, ...incoming.data]
+        : incoming.data,
+  };
+};
+
 export const cache: InMemoryCache = new InMemoryCache({
   // See https://www.apollographql.com/docs/react/pagination/core-api/#defining-a-field-policy for tips on defining custom GraphQL field policies.
   typePolicies: {
@@ -65,7 +79,11 @@ export const cache: InMemoryCache = new InMemoryCache({
           // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
           keyArgs: false,
 
-          merge: mergeIdentifiableCollectionUsingCursorIDs,
+          merge: mergeIdentifiableCollectionUsingCursorIDsWithCount,
+        },
+        getFunders: {
+          keyArgs: false,
+          merge: mergeIdentifiableCollectionUsingCursorIDsWithCount,
         },
         projects: {
           // Don't cache separate results based on

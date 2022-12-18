@@ -230,21 +230,24 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
 export const QUERY_GET_PROJECT_FUNDERS = gql`
   query Query($input: GetFundersInput!) {
     getFunders(input: $input) {
-      amountFunded
-      confirmed
-      id
-      confirmedAt
-      timesFunded
-      user {
+      count
+      data {
+        amountFunded
+        confirmed
         id
-        username
-        externalAccounts {
-          externalId
-          externalUsername
+        confirmedAt
+        timesFunded
+        user {
           id
-          type
+          username
+          externalAccounts {
+            externalId
+            externalUsername
+            id
+            type
+          }
+          imageUrl
         }
-        imageUrl
       }
     }
   }

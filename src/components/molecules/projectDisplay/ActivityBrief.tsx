@@ -9,7 +9,7 @@ import { Project, ProjectMilestone } from '../../../types/generated/graphql';
 import { noFeeProjects, GEYSER_FEE } from '../../../constants';
 
 interface IActivityBrief {
-  loading: boolean;
+  loading?: boolean;
   project: Project;
 }
 
