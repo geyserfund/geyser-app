@@ -120,7 +120,13 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
         <Text fontSize="18px" fontWeight={600} color="brand.neutral900">
           {project.title}
         </Text>
-        <SatoshiAmount fontSize="20px" fontFamily={fonts.mono}>
+        <SatoshiAmount
+          fontSize="32px"
+          fontFamily={fonts.mono}
+          fontWeight={400}
+          fontStyle={'normal'}
+          color={colors.primary600}
+        >
           {balance}
         </SatoshiAmount>
         {getMilestoneValue()}
