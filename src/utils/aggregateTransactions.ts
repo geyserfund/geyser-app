@@ -4,7 +4,7 @@ export interface FundingTxWithCount extends FundingTx {
   count?: number;
 }
 
-export const aggregateFundingTransactions = (
+export const aggregateTransactions = (
   data: FundingTx[],
 ): FundingTxWithCount[] => {
   const aggregatedTxs: FundingTxWithCount[] = [];
