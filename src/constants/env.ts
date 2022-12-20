@@ -25,4 +25,9 @@ export const AUTH_SERVICE_ENDPOINT = __production__
 /*
  Other environment vars
 */
+
+if (!process.env.REACT_APP_GIPHY_API_KEY) {
+  console.warn('Missing GIPHY API key from environment variables');
+}
+
 export const { REACT_APP_AIR_TABLE_KEY, REACT_APP_GIPHY_API_KEY } = process.env;

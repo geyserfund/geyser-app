@@ -23,6 +23,7 @@ import React, { useState } from 'react';
 import { GifIcon } from '../../../components/icons';
 import { TextArea } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
+import { REACT_APP_GIPHY_API_KEY } from '../../../constants';
 
 type Props = HTMLChakraProps<'div'> & {
   comment: string;
@@ -51,8 +52,7 @@ export const ProjectPaymentFormFundingComment = ({
     useBoolean(false);
   const [focus, setFocus] = useState(true);
 
-  // TODO: remove hardcoded API key
-  const giphyFetch = new GiphyFetch('AqeIUD33qyHnMwLDSDWP0da9lCSu0LXx');
+  const giphyFetch = new GiphyFetch(REACT_APP_GIPHY_API_KEY || '');
 
   const fetchGifs = (offset: number) => {
     giphyFetch.search(gifSearch, { offset, sort: 'relevant', limit: 9 });
