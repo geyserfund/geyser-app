@@ -7,6 +7,7 @@ export type usePaginationHookProps = {
   itemLimit?: number;
   cursorID?: number;
   where?: any;
+  orderBy?: any;
 };
 
 export const usePaginationHook = <Type,>({
@@ -15,6 +16,7 @@ export const usePaginationHook = <Type,>({
   itemLimit = 10,
   cursorID,
   where,
+  orderBy,
 }: usePaginationHookProps) => {
   const [noMoreItems, setNoMoreItems] = useListenerState(false);
 
@@ -54,10 +56,11 @@ export const usePaginationHook = <Type,>({
         input: {
           pagination: pagination.current,
           where,
+          orderBy,
         },
       },
       updateQuery: (_: any, { fetchMoreResult }: any) => {
-        if (fetchMoreResult[queryName].data.length < itemLimit) {
+        if (fetchMoreResult[queryName].length < itemLimit) {
           setNoMoreItems(true);
         }
 

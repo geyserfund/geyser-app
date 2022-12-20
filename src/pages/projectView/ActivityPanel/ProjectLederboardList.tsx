@@ -17,10 +17,6 @@ export const ProjectLederboardList = ({
 }: ProjectLederboardListProps) => {
   const isMobile = isMobileMode();
 
-  const fundersCopy = funders && funders.data ? [...funders.data] : [];
-
-  const sortedFunders: Funder[] = fundersCopy.sort(leaderboardSort);
-
   return (
     <VStack
       id="project-activity-list-container"
@@ -30,7 +26,7 @@ export const ProjectLederboardList = ({
       height={isMobile ? 'calc(100% - 44px)' : '100%'}
       paddingBottom="10px"
     >
-      {sortedFunders.map((funder, index) => (
+      {funders.data.map((funder, index) => (
         <ProjectFundingLeaderboardFeedItem
           key={index}
           funder={funder}
@@ -47,24 +43,4 @@ export const ProjectLederboardList = ({
       )}
     </VStack>
   );
-};
-
-const leaderboardSort = (funderA: Funder, funderB: Funder) => {
-  if (
-    funderA.amountFunded &&
-    funderB.amountFunded &&
-    funderA.amountFunded > funderB.amountFunded
-  ) {
-    return -1;
-  }
-
-  if (
-    funderA.amountFunded &&
-    funderB.amountFunded &&
-    funderA.amountFunded < funderB.amountFunded
-  ) {
-    return 1;
-  }
-
-  return 0;
 };

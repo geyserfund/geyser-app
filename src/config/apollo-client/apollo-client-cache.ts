@@ -1,5 +1,4 @@
-import { FieldFunctionOptions, InMemoryCache } from '@apollo/client';
-import { PaginationInput } from '../../types/generated/graphql';
+import { InMemoryCache } from '@apollo/client';
 
 type IdentifiableCollection = {
   id: number;
@@ -13,51 +12,23 @@ const mergeIdentifiableCollectionUsingCursorIDs = (
   // { args }: FieldFunctionOptions,
 ) => {
   return [...existing, ...incoming];
-
-  // const paginationInput: PaginationInput = args?.input?.pagination;
-  // console.log('PAGINATION INPUT', paginationInput);
-
-  // if (!paginationInput) {
-  //   return [...existing, ...incoming];
-  // }
-
-  // const cursorID = paginationInput.cursor?.id || -1;
-
-  // if (cursorID === -1) {
-  //   return [...existing, ...incoming];
-  // }
-
-  // console.log('merged', [...existing, ...incoming]);
-
-  // // Slicing is necessary because the existing data is
-  // // immutable, and frozen in development.
-  // const merged = existing ? existing.slice(0) : [];
-  // console.log('MERGED BEFORE', merged);
-  // console.log('INCOMING', incoming);
-
-  // incoming.forEach((item) => {
-  //   console.log('item id', item.id);
-
-  //   if (item.id > cursorID) {
-  //     merged.push(item);
-  //   }
-  // });
-  // console.log('MERGED AFTER', merged);
-  // return merged;
 };
 
-const mergeIdentifiableCollectionUsingCursorIDsWithCount = (
-  existing: any,
-  incoming: any,
+const merge = (
+  existing: IdentifiableCollection,
+  incoming: IdentifiableCollection,
+  { args, readField }: any,
 ) => {
-  console.log('checking existing and incoming', existing, incoming);
-  return {
-    count: incoming.count,
-    data:
-      existing && existing.data
-        ? [...existing.data, ...incoming.data]
-        : incoming.data,
-  };
+  const merged: IdentifiableCollection = existing ? [...existing] : [];
+  incoming.forEach((item: any, index) => {
+    merged.some(
+      (existingValue) =>
+        readField('id', existingValue) === readField('id', item),
+    );
+
+    merged.push(item);
+  });
+  return merged;
 };
 
 export const cache: InMemoryCache = new InMemoryCache({
@@ -77,13 +48,12 @@ export const cache: InMemoryCache = new InMemoryCache({
           // Don't cache separate results based on
           // any of this field's arguments.
           // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
-          keyArgs: false,
-
-          merge: mergeIdentifiableCollectionUsingCursorIDsWithCount,
+          keyArgs: ['input', ['where']],
+          merge,
         },
         getFunders: {
           keyArgs: false,
-          merge: mergeIdentifiableCollectionUsingCursorIDsWithCount,
+          merge,
         },
         projects: {
           // Don't cache separate results based on

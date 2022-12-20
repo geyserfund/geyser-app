@@ -37,41 +37,38 @@ export const QUERY_GET_FUNDING = gql`
 export const QUERY_GET_FUNDING_TXS_LANDING = gql`
   query GetFundingTxs($input: GetFundingTxsInput) {
     getFundingTxs(input: $input) {
-      count
-      data {
+      id
+      comment
+      amount
+      funder {
         id
-        comment
-        amount
-        funder {
+        user {
           id
-          user {
-            id
-            username
-            imageUrl
-            externalAccounts {
-              externalUsername
-              public
-              type
-            }
+          username
+          imageUrl
+          externalAccounts {
+            externalUsername
+            public
+            type
           }
         }
-        paidAt
-        onChain
-        media
-        source
-        method
-        projectId
-        sourceResource {
-          ... on Project {
-            id
-            name
-            title
-            image
-          }
-          ... on Entry {
-            id
-            image
-          }
+      }
+      paidAt
+      onChain
+      media
+      source
+      method
+      projectId
+      sourceResource {
+        ... on Project {
+          id
+          name
+          title
+          image
+        }
+        ... on Entry {
+          id
+          image
         }
       }
     }

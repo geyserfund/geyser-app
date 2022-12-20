@@ -393,7 +393,7 @@ export type GetEntriesWhereInput = {
 
 export type GetFunderWhereInput = {
   confirmed?: InputMaybe<Scalars['Boolean']>;
-  projectId?: InputMaybe<Scalars['Int']>;
+  projectId?: InputMaybe<Scalars['BigInt']>;
   sourceResourceInput?: InputMaybe<ResourceInput>;
 };
 
@@ -407,12 +407,6 @@ export type GetFundersOrderByInput = {
   amountFunded: OrderByOptions;
 };
 
-export type GetFundersResponse = {
-  __typename?: 'GetFundersResponse';
-  count: Scalars['Int'];
-  data: Array<Maybe<Funder>>;
-};
-
 export type GetFundingTxsInput = {
   orderBy?: InputMaybe<GetFundingTxsOrderByInput>;
   pagination?: InputMaybe<PaginationInput>;
@@ -423,14 +417,8 @@ export type GetFundingTxsOrderByInput = {
   paidAt: OrderByOptions;
 };
 
-export type GetFundingTxsResponse = {
-  __typename?: 'GetFundingTxsResponse';
-  count: Scalars['Int'];
-  data: Array<Maybe<FundingTx>>;
-};
-
 export type GetFundingTxsWhereInput = {
-  projectId?: InputMaybe<Scalars['Int']>;
+  projectId?: InputMaybe<Scalars['BigInt']>;
   sourceResourceInput?: InputMaybe<ResourceInput>;
 };
 
@@ -743,8 +731,10 @@ export type Project = {
   entries: Array<Maybe<Entry>>;
   expiresAt?: Maybe<Scalars['String']>;
   funders: Array<Maybe<Funder>>;
+  fundersCount?: Maybe<Scalars['Int']>;
   fundingGoal?: Maybe<Scalars['fundingGoal_Int_min_1']>;
   fundingTxs?: Maybe<Array<Maybe<FundingTx>>>;
+  fundingTxsCount?: Maybe<Scalars['Int']>;
   /** @deprecated No longer supported */
   grantees: Array<Maybe<Grantee>>;
   id: Scalars['BigInt'];
@@ -880,8 +870,8 @@ export type Query = {
   fundingTx: FundingTx;
   /** Returns all published entries. */
   getEntries: Array<Maybe<Entry>>;
-  getFunders: GetFundersResponse;
-  getFundingTxs: GetFundingTxsResponse;
+  getFunders: Array<Maybe<Funder>>;
+  getFundingTxs: Array<Maybe<FundingTx>>;
   /** Returns the public key of the Lightning node linked to a project, if there is one. */
   getProjectPubkey?: Maybe<Scalars['String']>;
   getProjectReward: ProjectReward;
@@ -1336,10 +1326,8 @@ export type ResolversTypes = {
   GetFunderWhereInput: GetFunderWhereInput;
   GetFundersInput: GetFundersInput;
   GetFundersOrderByInput: GetFundersOrderByInput;
-  GetFundersResponse: ResolverTypeWrapper<GetFundersResponse>;
   GetFundingTxsInput: GetFundingTxsInput;
   GetFundingTxsOrderByInput: GetFundingTxsOrderByInput;
-  GetFundingTxsResponse: ResolverTypeWrapper<GetFundingTxsResponse>;
   GetFundingTxsWhereInput: GetFundingTxsWhereInput;
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
@@ -1536,10 +1524,8 @@ export type ResolversParentTypes = {
   GetFunderWhereInput: GetFunderWhereInput;
   GetFundersInput: GetFundersInput;
   GetFundersOrderByInput: GetFundersOrderByInput;
-  GetFundersResponse: GetFundersResponse;
   GetFundingTxsInput: GetFundingTxsInput;
   GetFundingTxsOrderByInput: GetFundingTxsOrderByInput;
-  GetFundingTxsResponse: GetFundingTxsResponse;
   GetFundingTxsWhereInput: GetFundingTxsWhereInput;
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
@@ -1903,32 +1889,6 @@ export type FundinginvoiceCancelResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GetFundersResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['GetFundersResponse'] = ResolversParentTypes['GetFundersResponse'],
-> = {
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  data?: Resolver<
-    Array<Maybe<ResolversTypes['Funder']>>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GetFundingTxsResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['GetFundingTxsResponse'] = ResolversParentTypes['GetFundingTxsResponse'],
-> = {
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  data?: Resolver<
-    Array<Maybe<ResolversTypes['FundingTx']>>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GranteeResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Grantee'] = ResolversParentTypes['Grantee'],
@@ -2252,6 +2212,11 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >;
+  fundersCount?: Resolver<
+    Maybe<ResolversTypes['Int']>,
+    ParentType,
+    ContextType
+  >;
   fundingGoal?: Resolver<
     Maybe<ResolversTypes['fundingGoal_Int_min_1']>,
     ParentType,
@@ -2259,6 +2224,11 @@ export type ProjectResolvers<
   >;
   fundingTxs?: Resolver<
     Maybe<Array<Maybe<ResolversTypes['FundingTx']>>>,
+    ParentType,
+    ContextType
+  >;
+  fundingTxsCount?: Resolver<
+    Maybe<ResolversTypes['Int']>,
     ParentType,
     ContextType
   >;
@@ -2432,13 +2402,13 @@ export type QueryResolvers<
     Partial<QueryGetEntriesArgs>
   >;
   getFunders?: Resolver<
-    ResolversTypes['GetFundersResponse'],
+    Array<Maybe<ResolversTypes['Funder']>>,
     ParentType,
     ContextType,
     RequireFields<QueryGetFundersArgs, 'input'>
   >;
   getFundingTxs?: Resolver<
-    ResolversTypes['GetFundingTxsResponse'],
+    Array<Maybe<ResolversTypes['FundingTx']>>,
     ParentType,
     ContextType,
     Partial<QueryGetFundingTxsArgs>
@@ -2846,8 +2816,6 @@ export type Resolvers<ContextType = any> = {
   FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>;
   FundingTx?: FundingTxResolvers<ContextType>;
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>;
-  GetFundersResponse?: GetFundersResponseResolvers<ContextType>;
-  GetFundingTxsResponse?: GetFundingTxsResponseResolvers<ContextType>;
   Grantee?: GranteeResolvers<ContextType>;
   GranteeSubmissionResponse?: GranteeSubmissionResponseResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;

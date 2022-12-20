@@ -7,9 +7,9 @@ import {
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
 import {
+  aggregateTransactions,
   FundingTxWithCount,
   isMobileMode,
-  useNotification,
 } from '../../../utils';
 import {
   Button,
@@ -18,11 +18,14 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 
-import { Project } from '../../../types/generated/graphql';
+import { Funder, Project } from '../../../types/generated/graphql';
 import { ProjectContributionList } from './ProjectContributionList';
 import { ProjectLederboardList } from './ProjectLederboardList';
-import useAggregatedContributionsQuery from '../../../hooks/useAggregatedContributionsQuery';
-import useFundersQuery from '../../../hooks/useFundersQuery';
+import {
+  QUERY_GET_FUNDING_TXS_LANDING,
+  QUERY_GET_PROJECT_FUNDERS,
+} from '../../../graphql';
+import { useQueryWithPagination } from '../../../hooks';
 
 type Props = {
   project: Project;
@@ -33,7 +36,8 @@ type Props = {
   fundingTx: any;
 };
 
-const itemLimit = 10;
+const itemLimit = 15;
+
 export const ProjectFundingInitialInfoScreen = ({
   handleViewClick,
   onFundProjectTapped,
@@ -46,14 +50,22 @@ export const ProjectFundingInitialInfoScreen = ({
 
   const [fundingTxs, setFundingTxs] = useState<FundingTxWithCount[]>([]);
 
-  const transactions = useAggregatedContributionsQuery({
+  const transactions = useQueryWithPagination<FundingTxWithCount>({
     itemLimit,
+    queryName: 'getFundingTxs',
+    query: QUERY_GET_FUNDING_TXS_LANDING,
+    resultMap: aggregateTransactions,
     where: { projectId: parseInt(project.id, 10) },
   });
 
-  const funders = useFundersQuery({
+  const funders = useQueryWithPagination<Funder>({
+    queryName: 'getFunders',
     itemLimit,
+    query: QUERY_GET_PROJECT_FUNDERS,
     where: { projectId: parseInt(project.id, 10) },
+    orderBy: {
+      amountFunded: 'desc',
+    },
   });
 
   useEffect(() => {
@@ -136,7 +148,7 @@ export const ProjectFundingInitialInfoScreen = ({
             >
               Contributions{' '}
               <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {transactions.count}
+                {project.fundingTxsCount}
               </Text>
             </Button>
             <Box
@@ -159,7 +171,7 @@ export const ProjectFundingInitialInfoScreen = ({
             >
               Leaderboard{' '}
               <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {funders.count}
+                {project.fundersCount}
               </Text>
             </Button>
             <Box

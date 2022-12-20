@@ -1,6 +1,4 @@
-import { Divider } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
-import Loader from '../components/ui/Loader';
 
 interface ScrollInvokeProps {
   elementId: string;
@@ -9,6 +7,8 @@ interface ScrollInvokeProps {
 }
 
 let loading = false;
+
+const ThresholdHeightBeforeScrollEnd = 80;
 
 export const ScrollInvoke = ({
   elementId,
@@ -26,15 +26,18 @@ export const ScrollInvoke = ({
         loading = true;
 
         const isInView =
-          element.scrollHeight - element.scrollTop - element.clientHeight <= 40;
+          element.scrollHeight - element.scrollTop - element.clientHeight <=
+          ThresholdHeightBeforeScrollEnd;
         if (isInView) {
           await onScrollEnd();
         }
 
         loading = false;
       });
+    }
 
-      return () => {
+    return () => {
+      if (element) {
         element.removeEventListener('scroll', async () => {
           if (isLoading || loading) {
             return;
@@ -44,21 +47,21 @@ export const ScrollInvoke = ({
 
           const isInView =
             element.scrollHeight - element.scrollTop - element.clientHeight <=
-            40;
+            ThresholdHeightBeforeScrollEnd;
           if (isInView) {
             await onScrollEnd();
           }
 
           loading = false;
         });
-      };
-    }
+      }
+    };
   }, []);
 
   return (
     <div id={`landing-page-contributions-list-refetch-${elementId}`}>
-      <Divider />
-      {isLoading && <Loader />}
+      {/* <Divider /> */}
+      {/* {isLoading && <Loader />} */}
     </div>
   );
 };

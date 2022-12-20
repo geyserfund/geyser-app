@@ -5,9 +5,10 @@ import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
 import { Project } from '../../../types/generated/graphql';
-import { FundingTxWithCount } from '../../../utils';
+import { aggregateTransactions, FundingTxWithCount } from '../../../utils';
 import { ScrollInvoke } from '../../../helpers';
-import useAggregatedContributionsQuery from '../../../hooks/useAggregatedContributionsQuery';
+import { useQueryWithPagination } from '../../../hooks';
+import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 
 type Props = {
   itemLimit?: number;
@@ -21,7 +22,12 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     data: contributions,
     error,
     fetchNext,
-  } = useAggregatedContributionsQuery({ itemLimit: 10 });
+  } = useQueryWithPagination<FundingTxWithCount>({
+    itemLimit,
+    queryName: 'getFundingTxs',
+    query: QUERY_GET_FUNDING_TXS_LANDING,
+    resultMap: aggregateTransactions,
+  });
 
   if (error) {
     return (

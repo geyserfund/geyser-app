@@ -20,6 +20,8 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       active
       draft
       rewardCurrency
+      fundersCount
+      fundingTxsCount
       owners {
         id
         user {
@@ -230,24 +232,21 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
 export const QUERY_GET_PROJECT_FUNDERS = gql`
   query Query($input: GetFundersInput!) {
     getFunders(input: $input) {
-      count
-      data {
-        amountFunded
-        confirmed
+      amountFunded
+      confirmed
+      id
+      confirmedAt
+      timesFunded
+      user {
         id
-        confirmedAt
-        timesFunded
-        user {
+        username
+        externalAccounts {
+          externalId
+          externalUsername
           id
-          username
-          externalAccounts {
-            externalId
-            externalUsername
-            id
-            type
-          }
-          imageUrl
+          type
         }
+        imageUrl
       }
     }
   }

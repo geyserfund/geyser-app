@@ -26,7 +26,7 @@ export const ProjectContributionList = ({
       {transactions.data.map((fundingTx, index) => (
         <>
           <ProjectFundingContributionsFeedItem
-            key={index}
+            key={fundingTx.id}
             fundingTx={fundingTx}
             count={fundingTx.count}
             width={'95%'}
