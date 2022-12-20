@@ -6,15 +6,15 @@ import { PaginationHookReturn } from '../../../hooks/types';
 import { Funder, Project } from '../../../types/generated/graphql';
 import { isMobileMode } from '../../../utils';
 
-interface ProjectLederboardListProps {
+interface ProjectLeaderboardListProps {
   project: Project;
   funders: PaginationHookReturn<Funder>;
 }
 
-export const ProjectLederboardList = ({
+export const ProjectLeaderboardList = ({
   project,
   funders,
-}: ProjectLederboardListProps) => {
+}: ProjectLeaderboardListProps) => {
   const isMobile = isMobileMode();
 
   return (

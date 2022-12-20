@@ -6,11 +6,11 @@ import { PaginationHookReturn } from '../../../hooks/types';
 import { FundingTxWithCount, isMobileMode } from '../../../utils';
 
 interface ProjectContributionListProps {
-  transactions: PaginationHookReturn<FundingTxWithCount>;
+  fundingTxs: PaginationHookReturn<FundingTxWithCount>;
 }
 
 export const ProjectContributionList = ({
-  transactions,
+  fundingTxs,
 }: ProjectContributionListProps) => {
   const isMobile = isMobileMode();
 
@@ -23,7 +23,7 @@ export const ProjectContributionList = ({
       height={isMobile ? 'calc(100% - 44px)' : '100%'}
       paddingBottom="10px"
     >
-      {transactions.data.map((fundingTx, index) => (
+      {fundingTxs.data.map((fundingTx, index) => (
         <>
           <ProjectFundingContributionsFeedItem
             key={fundingTx.id}
@@ -34,11 +34,11 @@ export const ProjectContributionList = ({
         </>
       ))}
 
-      {transactions.noMoreItems.current === false && (
+      {fundingTxs.noMoreItems.current === false && (
         <ScrollInvoke
           elementId="project-activity-list-container"
-          onScrollEnd={transactions.fetchNext}
-          isLoading={transactions.isLoadingMore.current}
+          onScrollEnd={fundingTxs.fetchNext}
+          isLoading={fundingTxs.isLoadingMore.current}
         />
       )}
     </VStack>

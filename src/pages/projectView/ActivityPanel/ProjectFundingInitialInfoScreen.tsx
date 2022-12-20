@@ -20,7 +20,7 @@ import {
 
 import { Funder, Project } from '../../../types/generated/graphql';
 import { ProjectContributionList } from './ProjectContributionList';
-import { ProjectLederboardList } from './ProjectLederboardList';
+import { ProjectLeaderboardList } from './ProjectLeaderboardList';
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
   QUERY_GET_PROJECT_FUNDERS,
@@ -48,9 +48,11 @@ export const ProjectFundingInitialInfoScreen = ({
   const isMobile = isMobileMode();
   const [view, setView] = useState('activity');
 
-  const [fundingTxs, setFundingTxs] = useState<FundingTxWithCount[]>([]);
+  const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
+    FundingTxWithCount[]
+  >([]);
 
-  const transactions = useQueryWithPagination<FundingTxWithCount>({
+  const fundingTxs = useQueryWithPagination<FundingTxWithCount>({
     itemLimit,
     queryName: 'getFundingTxs',
     query: QUERY_GET_FUNDING_TXS_LANDING,
@@ -69,12 +71,12 @@ export const ProjectFundingInitialInfoScreen = ({
   });
 
   useEffect(() => {
-    setFundingTxs(transactions.data);
-  }, [transactions.data]);
+    setAggregatedFundingTxs(fundingTxs.data);
+  }, [fundingTxs.data]);
 
   useEffect(() => {
     if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
-      setFundingTxs([fundingTx, ...fundingTxs]);
+      setAggregatedFundingTxs([fundingTx, ...aggregatedFundingTxs]);
     }
   }, [fundingTx]);
 
@@ -87,11 +89,11 @@ export const ProjectFundingInitialInfoScreen = ({
       case 'activity':
         return (
           <ProjectContributionList
-            transactions={{ ...transactions, data: fundingTxs }}
+            fundingTxs={{ ...fundingTxs, data: aggregatedFundingTxs }}
           />
         );
       default:
-        return <ProjectLederboardList project={project} funders={funders} />;
+        return <ProjectLeaderboardList project={project} funders={funders} />;
     }
   };
 
