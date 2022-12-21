@@ -33,13 +33,13 @@ export const ProjectContributionList = ({
           />
         </>
       ))}
-
-      <ScrollInvoke
-        elementId="project-activity-list-container"
-        onScrollEnd={fundingTxs.fetchNext}
-        isLoading={fundingTxs.isLoadingMore}
-        noMoreItems={fundingTxs.noMoreItems}
-      />
+      {fundingTxs.noMoreItems.current === false && (
+        <ScrollInvoke
+          elementId="project-activity-list-container"
+          onScrollEnd={fundingTxs.fetchNext}
+          isLoading={fundingTxs.isLoadingMore}
+        />
+      )}
     </VStack>
   );
 };

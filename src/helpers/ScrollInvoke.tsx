@@ -5,7 +5,6 @@ interface ScrollInvokeProps {
   elementId: string;
   onScrollEnd: () => Promise<void>;
   isLoading?: React.MutableRefObject<boolean>;
-  noMoreItems?: React.MutableRefObject<boolean>;
 }
 
 const ThresholdHeightBeforeScrollEnd = 300;
@@ -14,7 +13,6 @@ export const ScrollInvoke = ({
   elementId,
   onScrollEnd,
   isLoading,
-  noMoreItems,
 }: ScrollInvokeProps) => {
   const [loading, setLoading] = useListenerState(false);
   const [prevValue, setPrevValue] = useListenerState(false);
@@ -33,11 +31,7 @@ export const ScrollInvoke = ({
   }, []);
 
   async function handleScroll(this: HTMLElement) {
-    if (
-      (isLoading && isLoading.current) ||
-      (noMoreItems && noMoreItems.current) ||
-      loading.current
-    ) {
+    if ((isLoading && isLoading.current) || loading.current) {
       return;
     }
 

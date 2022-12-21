@@ -34,12 +34,13 @@ export const ProjectLeaderboardList = ({
           project={project}
         />
       ))}
-      <ScrollInvoke
-        elementId="project-activity-list-container"
-        onScrollEnd={funders.fetchNext}
-        isLoading={funders.isLoadingMore}
-        noMoreItems={funders.noMoreItems}
-      />
+      {funders.noMoreItems.current === false && (
+        <ScrollInvoke
+          elementId="project-leaderboard-list-container"
+          onScrollEnd={funders.fetchNext}
+          isLoading={funders.isLoadingMore}
+        />
+      )}
     </VStack>
   );
 };
