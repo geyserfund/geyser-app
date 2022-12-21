@@ -33,12 +33,20 @@ export const LandingPage = () => {
 
     Used to demonstrate the project and fundingTx subscriptions
   */
-   const { data } = useSubscription(PROJECT_CREATION_SUBSCRIPTION, {
+  const { data } = useSubscription(PROJECT_CREATION_SUBSCRIPTION, {
+    // variables: { },
+  });
+
+  const { data: fundingTxsConfirmedSubData } = useSubscription(
+    FUNDING_TX_CONFIRMED_SUBSCRIPTION,
+    {
       // variables: { },
-   });
+    },
+  );
 
   const [projects, setProjects] = useState([]);
   const [fundingTxs, setFundingTxs] = useState([]);
+  console.log('fundingTxs', fundingTxs);
 
   useEffect(() => {
     if (data?.projectCreated) {
