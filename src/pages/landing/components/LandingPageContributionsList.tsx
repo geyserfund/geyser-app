@@ -1,13 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Divider, VStack } from '@chakra-ui/react';
+import React from 'react';
+import { VStack } from '@chakra-ui/react';
 
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
-import { useProjectFundingTransactions } from '../../../hooks/useProjectFundingTransactions';
 import { Project } from '../../../types/generated/graphql';
-import { PaginationInput } from '../../../types/generated/graphql';
 import { aggregateTransactions, FundingTxWithCount } from '../../../utils';
+import { ScrollInvoke } from '../../../helpers';
+import { useQueryWithPagination } from '../../../hooks';
+import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 
 type Props = {
   itemLimit?: number;
@@ -16,68 +17,17 @@ type Props = {
 export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
   const {
     isLoading,
+    isLoadingMore,
+    noMoreItems,
+    data: contributions,
     error,
-    data,
-    fetchMore,
-    setPaginationOptions,
-    paginationOptions,
-  } = useProjectFundingTransactions({
+    fetchNext,
+  } = useQueryWithPagination<FundingTxWithCount>({
     itemLimit,
+    queryName: 'getFundingTxs',
+    query: QUERY_GET_FUNDING_TXS_LANDING,
+    resultMap: aggregateTransactions,
   });
-
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [contributions, setContributions] = useState<FundingTxWithCount[]>([]);
-  const [isShowingAllContributions, setIsShowingAllContributions] =
-    useState(false);
-
-  useEffect(() => {
-    const options: PaginationInput = {};
-
-    if (data && data.length > 0) {
-      const newContributions = aggregateTransactions(data);
-      setContributions(newContributions);
-      if (
-        data.length === 10 &&
-        newContributions.length < 10 &&
-        !isShowingAllContributions
-      ) {
-        handleLoadMoreButtonTapped();
-      }
-
-      options.cursor = {
-        id: Number(data[data.length - 1].id),
-      };
-    }
-
-    options.take = itemLimit;
-    setPaginationOptions(options);
-  }, [data]);
-
-  const handleLoadMoreButtonTapped = async () => {
-    setIsLoadingMore(true);
-    console.log('paginationInput before fetchMore', paginationOptions);
-
-    await fetchMore({
-      variables: {
-        input: {
-          pagination: paginationOptions,
-        },
-      },
-      updateQuery: (_, { fetchMoreResult }) => {
-        if (fetchMoreResult.getFundingTxs.length < itemLimit) {
-          setIsShowingAllContributions(true);
-        }
-
-        // return the result and let our `InMemoryCache` type policies handle
-        // the merging logic.
-        return {
-          getFundingTxs: fetchMoreResult.getFundingTxs,
-        };
-      },
-    });
-
-    setIsLoadingMore(false);
-  };
 
   if (error) {
     return (
@@ -90,11 +40,11 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
     );
   }
 
-  if (isLoading && !data) {
+  if (isLoading) {
     return <Loader />;
   }
 
-  if (data?.length === 0) {
+  if (contributions?.length === 0) {
     return (
       <AlertBox
         height="200px"
@@ -108,8 +58,6 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
 
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
-      {isLoading && <Loader />}
-
       <VStack alignItems={'center'} width="full" spacing={'24px'}>
         {contributions.map((contribution: FundingTxWithCount) => {
           if (contribution.sourceResource?.__typename === 'Project') {
@@ -131,17 +79,13 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
         })}
       </VStack>
 
-      {isShowingAllContributions === false ? (
-        <>
-          <Divider />
-
-          {isLoadingMore === false ? (
-            <Button onClick={handleLoadMoreButtonTapped}>View More</Button>
-          ) : (
-            <Loader />
-          )}
-        </>
-      ) : null}
+      {!noMoreItems.current && (
+        <ScrollInvoke
+          elementId="app-route-content-root"
+          onScrollEnd={fetchNext}
+          isLoading={isLoadingMore}
+        />
+      )}
     </VStack>
   );
 };

@@ -13,6 +13,7 @@ import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
 import { EntryContainer } from './EntryContainer';
 import {
   Entry,
+  FundingResourceType,
   Owner,
   Project,
   ProjectReward,
@@ -132,7 +133,7 @@ const EntryViewWrapper = ({
       />
       <ProjectActivityPanel
         {...{ detailOpen, setDetailOpen, project, fundingFlow, fundForm }}
-        resourceType="entry"
+        resourceType={FundingResourceType.Entry}
         resourceId={entry.id}
       />
     </>

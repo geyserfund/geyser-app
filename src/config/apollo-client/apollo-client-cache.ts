@@ -1,5 +1,4 @@
-import { FieldFunctionOptions, InMemoryCache } from '@apollo/client';
-import { PaginationInput } from '../../types/generated/graphql';
+import { InMemoryCache } from '@apollo/client';
 
 type IdentifiableCollection = {
   id: number;
@@ -13,37 +12,26 @@ const mergeIdentifiableCollectionUsingCursorIDs = (
   // { args }: FieldFunctionOptions,
 ) => {
   return [...existing, ...incoming];
+};
 
-  // const paginationInput: PaginationInput = args?.input?.pagination;
-  // console.log('PAGINATION INPUT', paginationInput);
+// The fetch policy still had issues when multiple queries were done in the same component,
+// and this caused me to end up store and merge to our own state, instead of apollo
 
-  // if (!paginationInput) {
-  //   return [...existing, ...incoming];
-  // }
+const merge = (
+  existing: IdentifiableCollection,
+  incoming: IdentifiableCollection,
+  { readField }: any,
+) => {
+  const merged: IdentifiableCollection = existing ? existing.slice(0) : [];
+  incoming.forEach((item: any) => {
+    merged.some(
+      (existingValue) =>
+        readField('id', existingValue) === readField('id', item),
+    );
 
-  // const cursorID = paginationInput.cursor?.id || -1;
-
-  // if (cursorID === -1) {
-  //   return [...existing, ...incoming];
-  // }
-
-  // console.log('merged', [...existing, ...incoming]);
-
-  // // Slicing is necessary because the existing data is
-  // // immutable, and frozen in development.
-  // const merged = existing ? existing.slice(0) : [];
-  // console.log('MERGED BEFORE', merged);
-  // console.log('INCOMING', incoming);
-
-  // incoming.forEach((item) => {
-  //   console.log('item id', item.id);
-
-  //   if (item.id > cursorID) {
-  //     merged.push(item);
-  //   }
-  // });
-  // console.log('MERGED AFTER', merged);
-  // return merged;
+    merged.push(item);
+  });
+  return merged;
 };
 
 export const cache: InMemoryCache = new InMemoryCache({
@@ -63,9 +51,12 @@ export const cache: InMemoryCache = new InMemoryCache({
           // Don't cache separate results based on
           // any of this field's arguments.
           // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
-          keyArgs: false,
-
-          merge: mergeIdentifiableCollectionUsingCursorIDs,
+          keyArgs: ['input', ['where']],
+          merge,
+        },
+        getFunders: {
+          keyArgs: ['input', ['where', 'orderby']],
+          merge,
         },
         projects: {
           // Don't cache separate results based on

@@ -20,6 +20,8 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       active
       draft
       rewardCurrency
+      fundersCount
+      fundingTxsCount
       owners {
         id
         user {
@@ -118,31 +120,6 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
 export const QUERY_PROJECT_FUNDING_DATA = gql`
   query GetProjectFundingData($where: UniqueProjectQueryInput!) {
     project(where: $where) {
-      fundingTxs {
-        id
-        funder {
-          id
-          amountFunded
-          timesFunded
-          confirmedAt
-          user {
-            id
-            username
-            imageUrl
-            externalAccounts {
-              externalUsername
-              public
-              type
-            }
-          }
-        }
-        amount
-        paidAt
-        comment
-        media
-        onChain
-        source
-      }
       funders {
         id
         user {
@@ -247,6 +224,29 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
       }
       statistics {
         totalVisitors
+      }
+    }
+  }
+`;
+
+export const QUERY_GET_PROJECT_FUNDERS = gql`
+  query Query($input: GetFundersInput!) {
+    getFunders(input: $input) {
+      amountFunded
+      confirmed
+      id
+      confirmedAt
+      timesFunded
+      user {
+        id
+        username
+        externalAccounts {
+          externalId
+          externalUsername
+          id
+          type
+        }
+        imageUrl
       }
     }
   }
