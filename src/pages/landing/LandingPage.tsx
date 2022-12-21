@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Divider,
@@ -16,31 +16,45 @@ import { AppFooter } from '../../components/molecules';
 import { ActivityView, LandingPageProjectsList, TopBanner } from './components';
 import { BsArrowRight } from 'react-icons/bs';
 import { dimensions, getPath } from '../../constants';
+import { useSubscription } from '@apollo/client';
+import {
+  PROJECT_CREATION_SUBSCRIPTION,
+  FUNDING_TX_CONFIRMED_SUBSCRIPTION,
+} from '../../graphql/subscriptions';
 import { isMobileMode } from '../../utils';
-import { gql, useSubscription } from '@apollo/client';
 
 const { topNavBar: topNavBarDimensions } = dimensions;
-
-const HELLO_SUBSCRIPTION = gql`
-  subscription Subscription {
-    projectCreated {
-      hello
-    }
-  }
-`;
 
 export const LandingPage = () => {
   const isMobile = isMobileMode();
 
-  const { data, loading } = useSubscription(HELLO_SUBSCRIPTION, {
-    // variables: { },
-  });
+  /* 
+    START PLACEHOLDER 
+
+    Used to demonstrate the project and fundingTx subscriptions
+  */
+   const { data } = useSubscription(PROJECT_CREATION_SUBSCRIPTION, {
+      // variables: { },
+   });
+
+  const [projects, setProjects] = useState([]);
+  const [fundingTxs, setFundingTxs] = useState([]);
 
   useEffect(() => {
-    console.log('DATA', data);
+    if (data?.projectCreated) {
+      setProjects([...projects, data.projectCreated.project]);
+    }
   }, [data]);
 
-  console.log(data);
+  useEffect(() => {
+    if (fundingTxsConfirmedSubData?.fundingTxConfirmed) {
+      setFundingTxs([
+        ...fundingTxs,
+        fundingTxsConfirmedSubData.fundingTxConfirmed.fundingTx,
+      ]);
+    }
+  });
+  /* END PLACEHOLDER */
 
   return (
     <Box
@@ -49,7 +63,21 @@ export const LandingPage = () => {
       width="full"
       height="full"
     >
-      <h4>New comment: {!loading && data?.projectCreated?.subscribe.hello}</h4>
+      {/* PLACEHOLDER START */}
+      {projects.map((project) => {
+        console.log('PROJECT', project);
+        return <Text key={project.id}> New project: {project.name} </Text>;
+      })}
+      {fundingTxs.map((fundingTx) => {
+        console.log('FUNDING TX', fundingTx);
+        return (
+          <Text key={fundingTx.id}>
+            {' '}
+            New confirmed funding tx: {fundingTx.id}{' '}
+          </Text>
+        );
+      })}
+      {/* PLACEHOLDER END */}
       <TopBanner />
 
       <Stack
