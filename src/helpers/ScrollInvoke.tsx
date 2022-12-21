@@ -3,12 +3,12 @@ import React, { useEffect } from 'react';
 interface ScrollInvokeProps {
   elementId: string;
   onScrollEnd: () => Promise<void>;
-  isLoading?: boolean;
+  isLoading?: React.MutableRefObject<boolean>;
 }
 
 let loading = false;
 
-const ThresholdHeightBeforeScrollEnd = 80;
+const ThresholdHeightBeforeScrollEnd = 300;
 
 export const ScrollInvoke = ({
   elementId,
@@ -18,50 +18,34 @@ export const ScrollInvoke = ({
   useEffect(() => {
     const element = document.getElementById(elementId);
     if (element) {
-      element.addEventListener('scroll', async () => {
-        if (isLoading || loading) {
-          return;
-        }
-
-        loading = true;
-
-        const isInView =
-          element.scrollHeight - element.scrollTop - element.clientHeight <=
-          ThresholdHeightBeforeScrollEnd;
-        if (isInView) {
-          await onScrollEnd();
-        }
-
-        loading = false;
-      });
+      element.addEventListener('scroll', handleScroll);
     }
 
     return () => {
       if (element) {
-        element.removeEventListener('scroll', async () => {
-          if (isLoading || loading) {
-            return;
-          }
-
-          loading = true;
-
-          const isInView =
-            element.scrollHeight - element.scrollTop - element.clientHeight <=
-            ThresholdHeightBeforeScrollEnd;
-          if (isInView) {
-            await onScrollEnd();
-          }
-
-          loading = false;
-        });
+        element.removeEventListener('scroll', handleScroll);
       }
     };
   }, []);
 
+  async function handleScroll(this: HTMLElement) {
+    if ((isLoading && isLoading.current) || loading) {
+      return;
+    }
+
+    loading = true;
+
+    const isInView =
+      this.scrollHeight - this.scrollTop - this.clientHeight <=
+      ThresholdHeightBeforeScrollEnd;
+    if (isInView) {
+      await onScrollEnd();
+    }
+
+    loading = false;
+  }
+
   return (
-    <div id={`landing-page-contributions-list-refetch-${elementId}`}>
-      {/* <Divider /> */}
-      {/* {isLoading && <Loader />} */}
-    </div>
+    <div id={`landing-page-contributions-list-refetch-${elementId}`}></div>
   );
 };

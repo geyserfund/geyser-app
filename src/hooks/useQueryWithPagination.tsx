@@ -27,7 +27,7 @@ export const useQueryWithPagination = <Type,>({
     throw Error('Invalid query');
   }
 
-  const { error, loading, data, fetchMore } = useQuery<QueryResponseData<Type>>(
+  const { error, loading, fetchMore } = useQuery<QueryResponseData<Type>>(
     query,
     {
       variables: {
@@ -38,11 +38,17 @@ export const useQueryWithPagination = <Type,>({
           where,
           orderBy,
         },
+        fetch,
+      },
+      onCompleted(data) {
+        const resultItems = data[queryName];
+        handleDataUpdate(resultItems);
       },
     },
   );
-  const { isLoadingMore, fetchNext, noMoreItems, handleDataUpdate } =
-    usePaginationHook({
+
+  const { data, isLoadingMore, fetchNext, noMoreItems, handleDataUpdate } =
+    usePaginationHook<Type>({
       fetchMore,
       queryName,
       itemLimit,
@@ -51,22 +57,19 @@ export const useQueryWithPagination = <Type,>({
     });
 
   useEffect(() => {
-    if (data && data[queryName]) {
-      const resultItems = data[queryName];
-      handleDataUpdate(resultItems);
-
+    if (data && data.length > 0) {
       let newItems;
 
       if (resultMap) {
-        newItems = resultMap(resultItems);
+        newItems = resultMap(data);
       } else {
-        newItems = resultItems;
+        newItems = data;
       }
 
       setItems(newItems);
 
       if (
-        resultItems.length === itemLimit &&
+        data.length === itemLimit &&
         newItems.length < itemLimit - 2 &&
         !noMoreItems.current
       ) {
@@ -74,6 +77,7 @@ export const useQueryWithPagination = <Type,>({
       }
     }
   }, [data]);
+
   return {
     isLoading: loading,
     isLoadingMore,

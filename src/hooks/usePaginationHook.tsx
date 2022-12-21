@@ -18,6 +18,8 @@ export const usePaginationHook = <Type,>({
   where,
   orderBy,
 }: usePaginationHookProps) => {
+  const [list, setList] = useListenerState<Type[]>([]);
+
   const [noMoreItems, setNoMoreItems] = useListenerState(false);
 
   const [isLoadingMore, setIsLoadingMore] = useListenerState(false);
@@ -27,10 +29,14 @@ export const usePaginationHook = <Type,>({
     ...(cursorID !== undefined && { id: cursorID }),
   });
 
-  const handleDataUpdate = (data: any[]) => {
+  const handleDataUpdate = (data: Type[]) => {
     if (data && data.length > 0) {
+      setList(data);
+
       if (data.length < itemLimit) {
         setNoMoreItems(true);
+      } else {
+        setNoMoreItems(false);
       }
 
       const options: PaginationInput = {};
@@ -62,11 +68,13 @@ export const usePaginationHook = <Type,>({
       updateQuery: (_: any, { fetchMoreResult }: any) => {
         if (fetchMoreResult[queryName].length < itemLimit) {
           setNoMoreItems(true);
+        } else {
+          setNoMoreItems(false);
         }
 
-        return {
-          [queryName]: fetchMoreResult[queryName],
-        };
+        setList([...list.current, ...fetchMoreResult[queryName]]);
+
+        return null;
       },
     });
 
@@ -78,5 +86,6 @@ export const usePaginationHook = <Type,>({
     isLoadingMore,
     fetchNext,
     noMoreItems,
+    data: list.current,
   };
 };

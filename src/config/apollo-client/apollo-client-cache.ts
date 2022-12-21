@@ -14,13 +14,16 @@ const mergeIdentifiableCollectionUsingCursorIDs = (
   return [...existing, ...incoming];
 };
 
+// The fetch policy still had issues when multiple queries were done in the same component,
+// and this caused me to end up store and merge to our own state, instead of apollo
+
 const merge = (
   existing: IdentifiableCollection,
   incoming: IdentifiableCollection,
-  { args, readField }: any,
+  { readField }: any,
 ) => {
-  const merged: IdentifiableCollection = existing ? [...existing] : [];
-  incoming.forEach((item: any, index) => {
+  const merged: IdentifiableCollection = existing ? existing.slice(0) : [];
+  incoming.forEach((item: any) => {
     merged.some(
       (existingValue) =>
         readField('id', existingValue) === readField('id', item),
@@ -52,7 +55,7 @@ export const cache: InMemoryCache = new InMemoryCache({
           merge,
         },
         getFunders: {
-          keyArgs: false,
+          keyArgs: ['input', ['where', 'orderby']],
           merge,
         },
         projects: {

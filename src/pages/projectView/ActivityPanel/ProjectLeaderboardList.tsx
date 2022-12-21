@@ -38,7 +38,7 @@ export const ProjectLeaderboardList = ({
         <ScrollInvoke
           elementId="project-activity-list-container"
           onScrollEnd={funders.fetchNext}
-          isLoading={funders.isLoadingMore.current}
+          isLoading={funders.isLoadingMore}
         />
       )}
     </VStack>
