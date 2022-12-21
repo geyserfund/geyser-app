@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
+import { useListenerState } from '../hooks';
 
 interface ScrollInvokeProps {
   elementId: string;
   onScrollEnd: () => Promise<void>;
   isLoading?: React.MutableRefObject<boolean>;
+  noMoreItems?: React.MutableRefObject<boolean>;
 }
-
-let loading = false;
 
 const ThresholdHeightBeforeScrollEnd = 300;
 
@@ -14,7 +14,11 @@ export const ScrollInvoke = ({
   elementId,
   onScrollEnd,
   isLoading,
+  noMoreItems,
 }: ScrollInvokeProps) => {
+  const [loading, setLoading] = useListenerState(false);
+  const [prevValue, setPrevValue] = useListenerState(false);
+
   useEffect(() => {
     const element = document.getElementById(elementId);
     if (element) {
@@ -29,20 +33,25 @@ export const ScrollInvoke = ({
   }, []);
 
   async function handleScroll(this: HTMLElement) {
-    if ((isLoading && isLoading.current) || loading) {
+    if (
+      (isLoading && isLoading.current) ||
+      (noMoreItems && noMoreItems.current) ||
+      loading.current
+    ) {
       return;
     }
 
-    loading = true;
+    setLoading(true);
 
     const isInView =
       this.scrollHeight - this.scrollTop - this.clientHeight <=
       ThresholdHeightBeforeScrollEnd;
-    if (isInView) {
+    if (isInView && prevValue.current !== isInView) {
       await onScrollEnd();
     }
 
-    loading = false;
+    setPrevValue(isInView);
+    setLoading(false);
   }
 
   return (

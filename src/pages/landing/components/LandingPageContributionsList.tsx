@@ -79,13 +79,12 @@ export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
         })}
       </VStack>
 
-      {!noMoreItems.current && (
-        <ScrollInvoke
-          elementId="app-route-content-root"
-          onScrollEnd={fetchNext}
-          isLoading={isLoadingMore}
-        />
-      )}
+      <ScrollInvoke
+        elementId="app-route-content-root"
+        onScrollEnd={fetchNext}
+        isLoading={isLoadingMore}
+        noMoreItems={noMoreItems}
+      />
     </VStack>
   );
 };
