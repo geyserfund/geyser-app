@@ -35,8 +35,6 @@ export const usePaginationHook = <Type,>({
 
       if (data.length < itemLimit) {
         setNoMoreItems(true);
-      } else {
-        setNoMoreItems(false);
       }
 
       const options: PaginationInput = {};
@@ -72,7 +70,7 @@ export const usePaginationHook = <Type,>({
           setNoMoreItems(false);
         }
 
-        setList([...list.current, ...fetchMoreResult[queryName]]);
+        handleDataUpdate([...list.current, ...fetchMoreResult[queryName]]);
 
         return null;
       },
