@@ -9,7 +9,7 @@ import { Project, ProjectMilestone } from '../../../types/generated/graphql';
 import { noFeeProjects, GEYSER_FEE } from '../../../constants';
 
 interface IActivityBrief {
-  loading: boolean;
+  loading?: boolean;
   project: Project;
 }
 
@@ -33,7 +33,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
 
   const balance = noFeeProjects.includes(project.name)
     ? project.balance
-    : project.balance * (1 - GEYSER_FEE);
+    : Math.round(project.balance * (1 - GEYSER_FEE));
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
@@ -120,7 +120,13 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
         <Text fontSize="18px" fontWeight={600} color="brand.neutral900">
           {project.title}
         </Text>
-        <SatoshiAmount fontSize="20px" fontFamily={fonts.mono}>
+        <SatoshiAmount
+          fontSize="32px"
+          fontFamily={fonts.courier}
+          fontWeight={400}
+          fontStyle={'normal'}
+          color={colors.primary600}
+        >
           {balance}
         </SatoshiAmount>
         {getMilestoneValue()}

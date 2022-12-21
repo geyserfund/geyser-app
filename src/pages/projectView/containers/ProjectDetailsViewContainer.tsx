@@ -1,6 +1,10 @@
 import React from 'react';
 import { useFundingFormState } from '../../../hooks';
-import { Project, ProjectReward } from '../../../types/generated/graphql';
+import {
+  FundingResourceType,
+  Project,
+  ProjectReward,
+} from '../../../types/generated/graphql';
 import { Head } from '../../../utils/Head';
 import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel';
 import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer';
@@ -54,6 +58,8 @@ export const ProjectDetailsViewContainer = ({
       <ProjectActivityPanel
         project={project}
         {...{ detailOpen, setDetailOpen, fundingFlow, fundForm }}
+        resourceType={FundingResourceType.Project}
+        resourceId={project.id}
       />
     </>
   );

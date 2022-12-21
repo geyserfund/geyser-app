@@ -109,6 +109,7 @@ export const SuccessScreen = ({
           funderAvatarURL={fundingState.funderAvatarURL}
           version={ContributionInfoBoxVersion.PRIMARY}
           referenceCode={fundingTx.uuid}
+          showGeyserFee={false}
         />
         <ButtonComponent
           standard
