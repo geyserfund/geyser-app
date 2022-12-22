@@ -499,21 +499,6 @@ export const TopNavBar = () => {
               </ButtonComponent>
             ) : null}
 
-            {!isMobile && isLoggedIn && (
-              <Box
-                display={'flex'}
-                alignItems="center"
-                fontFamily={fonts.inter}
-                fontWeight={'500'}
-                cursor="pointer"
-                fontSize="17px"
-                gap={4}
-              >
-                <Text onClick={() => history.push('/discover')}>Projects</Text>
-                <Text onClick={() => history.push('/grants')}>Grants</Text>
-              </Box>
-            )}
-
             <Box
               rounded={'md'}
               border={'1px'}
