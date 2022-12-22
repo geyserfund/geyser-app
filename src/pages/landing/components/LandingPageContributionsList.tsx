@@ -10,11 +10,9 @@ import { ScrollInvoke } from '../../../helpers';
 import { useQueryWithPagination } from '../../../hooks';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 
-type Props = {
-  itemLimit?: number;
-};
+const itemLimit = 50;
 
-export const LandingPageContributionsList = ({ itemLimit = 10 }: Props) => {
+export const LandingPageContributionsList = () => {
   const {
     isLoading,
     isLoadingMore,

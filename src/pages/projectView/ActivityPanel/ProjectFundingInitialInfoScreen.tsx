@@ -36,7 +36,7 @@ type Props = {
   fundingTx: any;
 };
 
-const itemLimit = 30;
+const itemLimit = 50;
 
 export const ProjectFundingInitialInfoScreen = ({
   handleViewClick,

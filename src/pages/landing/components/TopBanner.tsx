@@ -9,21 +9,16 @@ import {
   Heading,
   Stack,
 } from '@chakra-ui/react';
-import { useHistory } from 'react-router';
 import { useQuery } from '@apollo/client';
 
 import BannerPattern from '../../../assets/banner-pattern.png';
-import { colors, getPath } from '../../../constants';
+import { colors } from '../../../constants';
 import { useNotification } from '../../../utils';
-import { ButtonComponent } from '../../../components/ui';
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
 import SatsFlowSVG from '../../../assets/images/let-the-sats-flow.svg';
-import { useAuthContext } from '../../../context';
 
 export const TopBanner = () => {
   const { toast } = useNotification();
-  const history = useHistory();
-  const { isLoggedIn } = useAuthContext();
 
   const {
     loading: isSummaryLoading,
@@ -43,10 +38,6 @@ export const TopBanner = () => {
       });
     }
   }, [summaryError]);
-
-  const handleProjectLaunchButtonPress = () => {
-    history.push(getPath('publicProjectLaunch'));
-  };
 
   return (
     <VStack width="full" align="center" backgroundImage={BannerPattern}>
@@ -97,26 +88,6 @@ export const TopBanner = () => {
               );
             })}
           </HStack>
-
-          {/* TODO: Make this the basis for a re-useable "Primary"/CTA button component */}
-          <ButtonComponent
-            primary
-            width={300}
-            onClick={handleProjectLaunchButtonPress}
-            fontSize="16px"
-            bg={'primary400'}
-            boxShadow={
-              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-            }
-            _hover={{
-              bg: 'brand.primaryTint',
-            }}
-            _focus={{
-              bg: 'brand.primaryTint',
-            }}
-          >
-            Launch Your Project
-          </ButtonComponent>
         </Stack>
       </Container>
     </VStack>
