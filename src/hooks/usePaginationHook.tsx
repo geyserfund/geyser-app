@@ -11,6 +11,9 @@ export type usePaginationHookProps = {
   resultMap?: (_: any[]) => any[];
 };
 
+const thresholdNoOfAggregatedResultsToFetchMore = 10;
+const noOfTimesToRefetchMore = 5;
+
 export const usePaginationHook = <Type,>({
   fetchMore,
   queryName,
@@ -43,7 +46,7 @@ export const usePaginationHook = <Type,>({
 
       if (
         data.length === itemLimit &&
-        mappedData.length < itemLimit - 2 &&
+        mappedData.length < thresholdNoOfAggregatedResultsToFetchMore &&
         !noMoreItems.current
       ) {
         fetchNext();
@@ -72,7 +75,7 @@ export const usePaginationHook = <Type,>({
     return data;
   };
 
-  const fetchNext = async () => {
+  const fetchNext = async (count?: number) => {
     if (noMoreItems.current) {
       return;
     }
@@ -97,6 +100,14 @@ export const usePaginationHook = <Type,>({
         const mappedData = handleMapData(fetchMoreResult[queryName]);
 
         setList([...list.current, ...mappedData]);
+
+        if (
+          fetchMoreResult[queryName].length === itemLimit &&
+          mappedData.length <= thresholdNoOfAggregatedResultsToFetchMore &&
+          (count ? count < noOfTimesToRefetchMore : true)
+        ) {
+          fetchNext(count ? count + 1 : 1);
+        }
 
         return null;
       },

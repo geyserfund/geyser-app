@@ -4,7 +4,7 @@ import { VStack } from '@chakra-ui/react';
 import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
-import { Project } from '../../../types/generated/graphql';
+import { FundingMethod, Project } from '../../../types/generated/graphql';
 import { aggregateTransactions, FundingTxWithCount } from '../../../utils';
 import { ScrollInvoke } from '../../../helpers';
 import { useQueryWithPagination } from '../../../hooks';
@@ -25,6 +25,18 @@ export const LandingPageContributionsList = () => {
     queryName: 'getFundingTxs',
     query: QUERY_GET_FUNDING_TXS_LANDING,
     resultMap: aggregateTransactions,
+    where: {
+      OR: [
+        {
+          method: null,
+        },
+        {
+          NOT: {
+            method: FundingMethod.PodcastKeysend,
+          },
+        },
+      ],
+    },
   });
 
   if (error) {
