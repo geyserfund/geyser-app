@@ -33,6 +33,7 @@ export const ProjectContributionList = ({
           />
         </>
       ))}
+
       <ScrollInvoke
         elementId="project-activity-list-container"
         onScrollEnd={fundingTxs.fetchNext}
