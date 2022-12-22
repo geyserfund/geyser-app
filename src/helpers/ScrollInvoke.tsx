@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useListenerState } from '../hooks';
+
 interface ScrollInvokeProps {
   elementId: string;
   onScrollEnd: () => Promise<void>;
@@ -8,6 +9,7 @@ interface ScrollInvokeProps {
 }
 
 const ThresholdHeightBeforeScrollEnd = 300;
+
 export const ScrollInvoke = ({
   elementId,
   onScrollEnd,
@@ -16,6 +18,7 @@ export const ScrollInvoke = ({
 }: ScrollInvokeProps) => {
   const [loading, setLoading] = useListenerState(false);
   const [prevValue, setPrevValue] = useListenerState(false);
+
   useEffect(() => {
     const element = document.getElementById(elementId);
     if (element) {
@@ -39,6 +42,7 @@ export const ScrollInvoke = ({
     }
 
     setLoading(true);
+
     const isInView =
       this.scrollHeight - this.scrollTop - this.clientHeight <=
       ThresholdHeightBeforeScrollEnd;
