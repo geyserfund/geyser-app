@@ -1,7 +1,8 @@
 export const noFeeProjects = [
   'ayudaalosjvenesalfuturo',
-  'anonymal',
-  'chesskingdoms',
+  'bff',
+  // 'anonymal',
+  // 'chesskingdoms',
   'bloggingbitcoingeyser',
   'blip',
   'bwbip47',
