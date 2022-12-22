@@ -18,7 +18,7 @@ import {
   InputLeftElement,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
@@ -186,6 +186,16 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
 
     return true;
   };
+
+  const OverlayOne = useMemo(
+    () => (
+      <ModalOverlay
+        bg="blackAlpha.300"
+        backdropFilter="blur(10px) hue-rotate(90deg)"
+      />
+    ),
+    [],
+  );
 
   const contributionForm = () => (
     <Box>
@@ -409,8 +419,8 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
 
       <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
         {OverlayOne}
-        <ModalContent bg="transparent" boxShadow={0} borderRadius={4}>
-          <Box bg="brand.bgWhite" pb={3}>
+        <ModalContent bg="transparent" boxShadow={0}>
+          <Box borderRadius="4px" bg="brand.bgWhite" pb={3}>
             <ModalHeader pb={2}>{modalHeader}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>{renderModalBody()}</ModalBody>
@@ -420,10 +430,3 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
     </>
   );
 };
-
-const OverlayOne = () => (
-  <ModalOverlay
-    bg="blackAlpha.300"
-    backdropFilter="blur(10px) hue-rotate(90deg)"
-  />
-);
