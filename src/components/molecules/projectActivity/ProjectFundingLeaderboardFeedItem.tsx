@@ -2,16 +2,15 @@ import { Box, Text, HStack } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import React from 'react';
 import { getAvatarMetadata, computeFunderBadges } from '../../../helpers';
-import { IFunder } from '../../../interfaces';
 import { commaFormatted } from '../../../utils';
 import { SatoshiIconTilted } from '../../icons';
 import { AnonymousAvatar, LinkableAvatar } from '../../ui';
 import { renderFunderBadges } from './renderFunderBadges';
-import { Project } from '../../../types/generated/graphql';
+import { Funder, Project } from '../../../types/generated/graphql';
 
 type Props = HTMLChakraProps<'div'> & {
   project: Project;
-  funder: IFunder;
+  funder: Funder;
   leaderboardPosition: number;
 };
 
@@ -59,7 +58,7 @@ export const ProjectFundingLeaderboardFeedItem = ({
 
         <Box display="flex" alignItems="center">
           <SatoshiIconTilted scale={0.7} />
-          <Text>{`${commaFormatted(funder.amountFunded)}`} </Text>
+          <Text>{`${commaFormatted(funder.amountFunded || 0)}`} </Text>
         </Box>
       </Box>
     </Box>

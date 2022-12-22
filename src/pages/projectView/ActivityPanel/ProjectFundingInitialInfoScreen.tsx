@@ -1,14 +1,16 @@
-import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
-import React, { useState } from 'react';
+import { Box, VStack, HStack, Text } from '@chakra-ui/layout';
+import React, { useEffect, useState } from 'react';
 import {
   ProjectActivityActionsToolbar,
   ActivityBrief,
-  ProjectFundingContributionsFeedItem,
-  ProjectFundingLeaderboardFeedItem,
 } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
-import { aggregateTransactions, isMobileMode } from '../../../utils';
+import {
+  aggregateTransactions,
+  FundingTxWithCount,
+  isMobileMode,
+} from '../../../utils';
 import {
   Button,
   Skeleton,
@@ -16,52 +18,84 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 
-import { IFunder } from '../../../interfaces';
-import { FundingTx, Project } from '../../../types/generated/graphql';
+import { Funder, Project } from '../../../types/generated/graphql';
+import { ProjectContributionList } from './ProjectContributionList';
+import { ProjectLeaderboardList } from './ProjectLeaderboardList';
+import {
+  QUERY_GET_FUNDING_TXS_LANDING,
+  QUERY_GET_PROJECT_FUNDERS,
+} from '../../../graphql';
+import { useQueryWithPagination } from '../../../hooks';
 
 type Props = {
   project: Project;
   handleViewClick: () => void;
   onFundProjectTapped: () => void;
-  loading: boolean;
   btcRate: number;
-  fundingTxs: FundingTx[];
-  funders: IFunder[];
   test?: boolean;
+  fundingTx: any;
 };
+
+const itemLimit = 50;
 
 export const ProjectFundingInitialInfoScreen = ({
   handleViewClick,
   onFundProjectTapped,
-  loading,
   project,
-  fundingTxs,
-  funders,
   test,
+  fundingTx,
 }: Props) => {
   const isMobile = isMobileMode();
   const [view, setView] = useState('activity');
 
-  const leaderboardSort = (funderA: IFunder, funderB: IFunder) => {
-    if (funderA.amountFunded > funderB.amountFunded) {
-      return -1;
+  const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
+    FundingTxWithCount[]
+  >([]);
+
+  const fundingTxs = useQueryWithPagination<FundingTxWithCount>({
+    itemLimit,
+    queryName: 'getFundingTxs',
+    query: QUERY_GET_FUNDING_TXS_LANDING,
+    resultMap: aggregateTransactions,
+    where: { projectId: parseInt(project.id, 10) },
+  });
+
+  const funders = useQueryWithPagination<Funder>({
+    queryName: 'getFunders',
+    itemLimit,
+    query: QUERY_GET_PROJECT_FUNDERS,
+    where: { projectId: parseInt(project.id, 10) },
+    orderBy: {
+      amountFunded: 'desc',
+    },
+  });
+
+  useEffect(() => {
+    setAggregatedFundingTxs(fundingTxs.data);
+  }, [fundingTxs.data]);
+
+  useEffect(() => {
+    if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
+      setAggregatedFundingTxs([fundingTx, ...aggregatedFundingTxs]);
     }
-
-    if (funderA.amountFunded < funderB.amountFunded) {
-      return 1;
-    }
-
-    return 0;
-  };
-
-  const fundersCopy = [...funders];
-
-  const sortedFunders: IFunder[] = fundersCopy.sort(leaderboardSort);
-  const aggregatedContributions = aggregateTransactions(fundingTxs);
+  }, [fundingTx]);
 
   if (test) {
     return <InfoPageSkeleton />;
   }
+
+  const renderActivityList = () => {
+    switch (view) {
+      case 'activity':
+        return (
+          <ProjectContributionList
+            fundingTxs={{ ...fundingTxs, data: aggregatedFundingTxs }}
+          />
+        );
+      default:
+        return <ProjectLeaderboardList project={project} funders={funders} />;
+    }
+  };
 
   return (
     <VStack
@@ -72,7 +106,7 @@ export const ProjectFundingInitialInfoScreen = ({
       overflowY="hidden"
       position="relative"
     >
-      <ActivityBrief loading={loading} project={project} />
+      <ActivityBrief project={project} />
 
       {!isMobile ? (
         <ButtonComponent
@@ -116,7 +150,7 @@ export const ProjectFundingInitialInfoScreen = ({
             >
               Contributions{' '}
               <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {fundingTxs.length}
+                {project.fundingTxsCount}
               </Text>
             </Button>
             <Box
@@ -139,7 +173,7 @@ export const ProjectFundingInitialInfoScreen = ({
             >
               Leaderboard{' '}
               <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {funders.length}
+                {project.fundersCount}
               </Text>
             </Button>
             <Box
@@ -150,31 +184,7 @@ export const ProjectFundingInitialInfoScreen = ({
             ></Box>
           </Box>
         </Box>
-        <VStack
-          spacing={'8px'}
-          width="100%"
-          overflow="auto"
-          height={isMobile ? 'calc(100% - 44px)' : '100%'}
-          paddingBottom="10px"
-        >
-          {view === 'activity'
-            ? aggregatedContributions.map((fundingTx, index) => (
-                <ProjectFundingContributionsFeedItem
-                  key={index}
-                  fundingTx={fundingTx}
-                  count={fundingTx.count}
-                  width={'95%'}
-                />
-              ))
-            : sortedFunders.map((funder, index) => (
-                <ProjectFundingLeaderboardFeedItem
-                  key={index}
-                  funder={funder}
-                  leaderboardPosition={index + 1}
-                  project={project}
-                />
-              ))}
-        </VStack>
+        {renderActivityList()}
       </Box>
     </VStack>
   );

@@ -7,23 +7,29 @@ export interface FundingTxWithCount extends FundingTx {
 export const aggregateTransactions = (
   data: FundingTx[],
 ): FundingTxWithCount[] => {
-  const newContributions: FundingTxWithCount[] = [];
+  const aggregatedTxs: FundingTxWithCount[] = [];
 
-  const nestedTransactions: FundingTx[][] = [];
+  // Array of group of alike FundingTx that are grouped together based on defined categories.
+  const groupedTxs: FundingTx[][] = [];
 
-  const checkedTransactions: string[] = [];
+  // List of FundingTx IDs that are already a part of a group, and need to be skipped.
+  const groupedTxIds: string[] = [];
 
   data.map((f1) => {
-    if (checkedTransactions.includes(f1.id)) {
+    if (groupedTxIds.includes(f1.id)) {
       return;
     }
 
+    // If a FundingTx iterating from the first loop has not been grouped, will start a new group,
+
     const matches = [f1];
-    checkedTransactions.push(f1.id);
+    groupedTxIds.push(f1.id);
+
     data.map((f2) => {
-      if (checkedTransactions.includes(f2.id)) {
+      if (groupedTxIds.includes(f2.id)) {
         return;
       }
+      // We start the second loop to match items with this first Item that started a new match group, skipping FundingTx that are already grouped.
 
       const isAnon = (f: FundingTx) =>
         f.funder.user === null || f.funder.user === undefined;
@@ -39,14 +45,15 @@ export const aggregateTransactions = (
           matches.some((match) => Math.abs(match.paidAt - f2.paidAt) <= 75000)
         ) {
           matches.push(f2);
-          checkedTransactions.push(f2.id);
+          groupedTxIds.push(f2.id);
         }
       }
     });
-    nestedTransactions.push(matches);
+    groupedTxs.push(matches);
   });
 
-  nestedTransactions.map((transactions) => {
+  // Each group of matches, is then changed into a single FundingTx with the count of the length of the matches.
+  groupedTxs.map((transactions) => {
     const sortedTransaction = transactions.sort((a, b) => a.paidAt - b.paidAt);
 
     const newContribution = {
@@ -54,8 +61,8 @@ export const aggregateTransactions = (
       count: sortedTransaction.length,
     };
 
-    newContributions.push(newContribution);
+    aggregatedTxs.push(newContribution);
   });
 
-  return newContributions;
+  return aggregatedTxs;
 };
