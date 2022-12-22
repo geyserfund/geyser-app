@@ -56,7 +56,6 @@ const navItemsRoutes = [
   `/`,
   `/${routerPathNames.discover}`,
   `/${routerPathNames.grants}`,
-  `/${routerPathNames.project}/:projectId/`,
 ];
 
 const routesForHidingDropdownMenu = [

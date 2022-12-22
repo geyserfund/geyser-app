@@ -9,21 +9,16 @@ import {
   Heading,
   Stack,
 } from '@chakra-ui/react';
-import { useHistory } from 'react-router';
 import { useQuery } from '@apollo/client';
 
 import BannerPattern from '../../../assets/banner-pattern.png';
-import { colors, getPath } from '../../../constants';
+import { colors } from '../../../constants';
 import { useNotification } from '../../../utils';
-import { ButtonComponent } from '../../../components/ui';
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
 import SatsFlowSVG from '../../../assets/images/let-the-sats-flow.svg';
-import { useAuthContext } from '../../../context';
 
 export const TopBanner = () => {
   const { toast } = useNotification();
-  const history = useHistory();
-  const { isLoggedIn } = useAuthContext();
 
   const {
     loading: isSummaryLoading,
@@ -43,10 +38,6 @@ export const TopBanner = () => {
       });
     }
   }, [summaryError]);
-
-  const handleProjectLaunchButtonPress = () => {
-    history.push(getPath('publicProjectLaunch'));
-  };
 
   const satsDataArray = [
     [

@@ -179,7 +179,14 @@ export const ProjectFundingSelectionFormScreen = ({
               alignItems="flex-start"
               color="brand.neutral700"
             >
-              <Text flex={0}>Rewards</Text>
+              <Text
+                flex={0}
+                fontSize="14px"
+                textColor={'brand.neutral700'}
+                fontWeight={'normal'}
+              >
+                Rewards
+              </Text>
               <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
                 {Object.entries(formState.rewardsByIDAndCount!).map(
                   ([key, value]) => {
@@ -202,7 +209,13 @@ export const ProjectFundingSelectionFormScreen = ({
             width={'full'}
             fontSize={'14px'}
           >
-            <Text>{'Geyser fee'}</Text>
+            <Text
+              fontSize="14px"
+              textColor={'brand.neutral700'}
+              fontWeight={'normal'}
+            >
+              {'Geyser fee'}
+            </Text>
             <Text>{!noFeeProjects.includes(name) ? '2%' : '0%'}</Text>
           </HStack>
 

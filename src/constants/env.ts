@@ -25,4 +25,4 @@ export const AUTH_SERVICE_ENDPOINT = __production__
 /*
  Other environment vars
 */
-export const { REACT_APP_AIR_TABLE_KEY } = process.env;
+export const { REACT_APP_AIR_TABLE_KEY, REACT_APP_GIPHY_API_KEY } = process.env;

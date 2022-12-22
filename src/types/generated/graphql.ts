@@ -25,9 +25,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Add BigInt functionality */
   BigInt: any;
-  /** Date custom scalar type */
   Date: any;
   amount_Float_NotNull_min_1: any;
   amount_Float_min_1: any;
@@ -295,6 +293,13 @@ export type FundingMetadataInput = {
   media?: InputMaybe<Scalars['String']>;
 };
 
+export enum FundingMethod {
+  GeyserQr = 'geyser_qr',
+  LnAddress = 'ln_address',
+  LnurlPay = 'lnurl_pay',
+  PodcastKeysend = 'podcast_keysend',
+}
+
 export type FundingMutationResponse = {
   __typename?: 'FundingMutationResponse';
   amountSummary?: Maybe<AmountSummary>;
@@ -355,9 +360,11 @@ export type FundingTx = {
   invoiceId: Scalars['String'];
   invoiceStatus: InvoiceStatus;
   media?: Maybe<Scalars['String']>;
+  method?: Maybe<FundingMethod>;
   onChain: Scalars['Boolean'];
   paidAt?: Maybe<Scalars['Date']>;
   paymentRequest?: Maybe<Scalars['String']>;
+  projectId: Scalars['BigInt'];
   source: Scalars['String'];
   sourceResource?: Maybe<SourceResource>;
   status: FundingStatus;
@@ -386,6 +393,7 @@ export type GetEntriesWhereInput = {
 
 export type GetFunderWhereInput = {
   confirmed?: InputMaybe<Scalars['Boolean']>;
+  projectId?: InputMaybe<Scalars['BigInt']>;
   sourceResourceInput?: InputMaybe<ResourceInput>;
 };
 
@@ -410,6 +418,10 @@ export type GetFundingTxsOrderByInput = {
 };
 
 export type GetFundingTxsWhereInput = {
+  NOT?: InputMaybe<GetFundingTxsWhereInput>;
+  OR?: InputMaybe<Array<InputMaybe<GetFundingTxsWhereInput>>>;
+  method?: InputMaybe<Scalars['String']>;
+  projectId?: InputMaybe<Scalars['BigInt']>;
   sourceResourceInput?: InputMaybe<ResourceInput>;
 };
 
@@ -705,7 +717,7 @@ export type Project = {
   __typename?: 'Project';
   /** @deprecated this field will soon be replaced by the status field */
   active: Scalars['Boolean'];
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   ambassadors: Array<Maybe<Ambassador>>;
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int'];
@@ -722,14 +734,16 @@ export type Project = {
   entries: Array<Maybe<Entry>>;
   expiresAt?: Maybe<Scalars['String']>;
   funders: Array<Maybe<Funder>>;
+  fundersCount?: Maybe<Scalars['Int']>;
   fundingGoal?: Maybe<Scalars['fundingGoal_Int_min_1']>;
   fundingTxs?: Maybe<Array<Maybe<FundingTx>>>;
-  /** @deprecated Field no longer supported */
+  fundingTxsCount?: Maybe<Scalars['Int']>;
+  /** @deprecated No longer supported */
   grantees: Array<Maybe<Grantee>>;
   id: Scalars['BigInt'];
   /** Main project image. */
   image?: Maybe<Scalars['String']>;
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   media: Array<Maybe<Scalars['String']>>;
   milestones?: Maybe<Array<Maybe<ProjectMilestone>>>;
   /** Unique name for the project. Used for the project URL and lightning address. */
@@ -737,7 +751,7 @@ export type Project = {
   owners: Array<Owner>;
   rewardCurrency?: Maybe<RewardCurrency>;
   rewards?: Maybe<Array<Maybe<ProjectReward>>>;
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Maybe<Sponsor>>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
@@ -1120,14 +1134,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean'];
   /** Project linked to the contributions. */
@@ -1293,6 +1307,7 @@ export type ResolversTypes = {
   FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput;
   FundingInput: FundingInput;
   FundingMetadataInput: FundingMetadataInput;
+  FundingMethod: FundingMethod;
   FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>;
   FundingPendingInput: FundingPendingInput;
   FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
@@ -1844,6 +1859,11 @@ export type FundingTxResolvers<
     ContextType
   >;
   media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  method?: Resolver<
+    Maybe<ResolversTypes['FundingMethod']>,
+    ParentType,
+    ContextType
+  >;
   onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   paymentRequest?: Resolver<
@@ -1851,6 +1871,7 @@ export type FundingTxResolvers<
     ParentType,
     ContextType
   >;
+  projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sourceResource?: Resolver<
     Maybe<ResolversTypes['SourceResource']>,
@@ -2194,6 +2215,11 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >;
+  fundersCount?: Resolver<
+    Maybe<ResolversTypes['Int']>,
+    ParentType,
+    ContextType
+  >;
   fundingGoal?: Resolver<
     Maybe<ResolversTypes['fundingGoal_Int_min_1']>,
     ParentType,
@@ -2201,6 +2227,11 @@ export type ProjectResolvers<
   >;
   fundingTxs?: Resolver<
     Maybe<Array<Maybe<ResolversTypes['FundingTx']>>>,
+    ParentType,
+    ContextType
+  >;
+  fundingTxsCount?: Resolver<
+    Maybe<ResolversTypes['Int']>,
     ParentType,
     ContextType
   >;
