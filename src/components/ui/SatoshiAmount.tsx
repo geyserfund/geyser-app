@@ -32,7 +32,7 @@ export const SatoshiAmount = ({
         size = parseInt(fontSize.split('px')[0], 10);
       }
 
-      return (size / 14) * 0.8;
+      return (size / 14) * 0.4;
     }
 
     return 0.8;

@@ -8,6 +8,7 @@ export type usePaginationHookProps = {
   cursorID?: number;
   where?: any;
   orderBy?: any;
+  resultMap?: (_: any[]) => any[];
 };
 
 export const usePaginationHook = <Type,>({
@@ -17,6 +18,7 @@ export const usePaginationHook = <Type,>({
   cursorID,
   where,
   orderBy,
+  resultMap,
 }: usePaginationHookProps) => {
   const [list, setList] = useListenerState<Type[]>([]);
 
@@ -31,21 +33,43 @@ export const usePaginationHook = <Type,>({
 
   const handleDataUpdate = (data: Type[]) => {
     if (data && data.length > 0) {
-      setList(data);
-
       if (data.length < itemLimit) {
         setNoMoreItems(true);
       }
 
-      const options: PaginationInput = {};
+      handlePaginationChange(data);
 
-      const tempData: any = data;
+      const mappedData = handleMapData(data);
+
+      if (
+        data.length === itemLimit &&
+        mappedData.length < itemLimit - 2 &&
+        !noMoreItems.current
+      ) {
+        fetchNext();
+      }
+
+      setList(mappedData);
+    }
+  };
+
+  const handlePaginationChange = (tempData: any[]) => {
+    if (tempData.length > 0) {
+      const options: PaginationInput = {};
       options.cursor = {
         id: Number(tempData[tempData.length - 1].id),
       };
       options.take = itemLimit;
       setPagination(options);
     }
+  };
+
+  const handleMapData = (data: Type[]) => {
+    if (resultMap) {
+      return resultMap(data);
+    }
+
+    return data;
   };
 
   const fetchNext = async () => {
@@ -66,11 +90,13 @@ export const usePaginationHook = <Type,>({
       updateQuery: (_: any, { fetchMoreResult }: any) => {
         if (fetchMoreResult[queryName].length < itemLimit) {
           setNoMoreItems(true);
-        } else {
-          setNoMoreItems(false);
         }
 
-        handleDataUpdate([...list.current, ...fetchMoreResult[queryName]]);
+        handlePaginationChange(fetchMoreResult[queryName]);
+
+        const mappedData = handleMapData(fetchMoreResult[queryName]);
+
+        setList([...list.current, ...mappedData]);
 
         return null;
       },

@@ -10,7 +10,7 @@ import {
   HTMLChakraProps,
   Box,
 } from '@chakra-ui/react';
-import { LandingPageProjectsEntriesList } from './LandingPageProjectsEntriesList';
+// import { LandingPageProjectsEntriesList } from './LandingPageProjectsEntriesList';
 import { LandingPageContributionsList } from './LandingPageContributionsList';
 
 type ActivityViewTab = {
@@ -34,10 +34,11 @@ export const ActivityView = ({ ...rest }: Props) => {
       title: 'Contributions',
       component: LandingPageContributionsList,
     },
-    {
-      title: 'Entries',
-      component: LandingPageProjectsEntriesList,
-    },
+    // TODO: remove and refactor with the new landing page design
+    // {
+    //   title: 'Entries',
+    //   component: LandingPageProjectsEntriesList,
+    // },
   ];
 
   return (
