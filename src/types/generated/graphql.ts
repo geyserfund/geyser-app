@@ -418,6 +418,9 @@ export type GetFundingTxsOrderByInput = {
 };
 
 export type GetFundingTxsWhereInput = {
+  NOT?: InputMaybe<GetFundingTxsWhereInput>;
+  OR?: InputMaybe<Array<InputMaybe<GetFundingTxsWhereInput>>>;
+  method?: InputMaybe<Scalars['String']>;
   projectId?: InputMaybe<Scalars['BigInt']>;
   sourceResourceInput?: InputMaybe<ResourceInput>;
 };
