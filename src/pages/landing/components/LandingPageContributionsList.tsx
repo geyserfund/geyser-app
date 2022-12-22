@@ -26,9 +26,16 @@ export const LandingPageContributionsList = () => {
     query: QUERY_GET_FUNDING_TXS_LANDING,
     resultMap: aggregateTransactions,
     where: {
-      NOT: {
-        method: FundingMethod.PodcastKeysend,
-      },
+      OR: [
+        {
+          method: null,
+        },
+        {
+          NOT: {
+            method: FundingMethod.PodcastKeysend,
+          },
+        },
+      ],
     },
   });
 
