@@ -1,5 +1,5 @@
 import { Box, Button, Grid, GridItem, Link, Text } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { isMobileMode } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
@@ -11,11 +11,6 @@ import satwalletimg from '../../assets/walletsats.svg';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
-import {
-  ContributeModal,
-  defaultGrantContribution,
-  GrantContributeInput,
-} from './components/ContributeModal';
 import { GrantDevelopers } from './components/GrantDevs';
 
 const grants = [
@@ -54,9 +49,7 @@ const grants = [
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
-  const [{ link }, setGrantInput] = useState<GrantContributeInput>(
-    defaultGrantContribution,
-  );
+  const [link, setLink] = useState<string>('');
 
   return (
     <>
@@ -265,8 +258,7 @@ export const GrantsRoundTwo = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <ContributeModal onComplete={setGrantInput} />
-                <GrantsContributeModal onLink={linkHandler} />
+                <GrantsContributeModal onLink={setLink} />
 
                 <Box display="flex" alignItems={'center'}>
                   <Text
