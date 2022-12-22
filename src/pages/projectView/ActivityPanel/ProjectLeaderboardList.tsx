@@ -19,7 +19,7 @@ export const ProjectLeaderboardList = ({
 
   return (
     <VStack
-      id="project-activity-list-container"
+      id="project-leaderboard-list-container"
       spacing={'8px'}
       width="100%"
       overflow="auto"
