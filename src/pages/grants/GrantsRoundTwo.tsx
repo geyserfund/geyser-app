@@ -1,4 +1,12 @@
-import { Box, Button, Grid, GridItem, Link, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Image,
+  Link,
+  Text,
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { isMobileMode } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
@@ -12,6 +20,7 @@ import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
 import { GrantDevelopers } from './components/GrantDevs';
+import { GrantsChristmasUrl } from '../../constants';
 
 const grants = [
   {
@@ -77,13 +86,7 @@ export const GrantsRoundTwo = () => {
             <FaArrowLeft /> See all Grants
           </Button>
           <Box display="flex" justifyContent={'center'}>
-            <img
-              width={'217px'}
-              height={'180px'}
-              src={
-                'https://storage.googleapis.com/geyser-images-distribution-prod-us/snap2022-11-25-19-45-27.png'
-              }
-            />
+            <Image height={'200px'} src={GrantsChristmasUrl} />
           </Box>
           <Box
             display="flex"

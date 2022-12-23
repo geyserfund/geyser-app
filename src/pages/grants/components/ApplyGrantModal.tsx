@@ -3,30 +3,33 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalHeader,
   ModalOverlay,
   useDisclosure,
   Box,
   Text,
   FormControl,
   FormLabel,
-  Input,
-  Textarea,
-  InputGroup,
-  InputLeftElement,
   Select,
-  Divider,
+  HStack,
 } from '@chakra-ui/react';
-import React, { useState, useContext } from 'react';
-import { FaCheck, FaClosedCaptioning } from 'react-icons/fa';
+import React, { useState, useContext, useMemo, useEffect } from 'react';
+import { FaCheck } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
-import QRCode from 'react-qr-code';
+
 import { useAuthContext } from '../../../context';
 import { createApplicantRecordRound2 } from '../../../api';
-import bitcircle from '../../../assets/bitcircle.svg';
-import { hasTwitterAccount } from '../../../utils';
+import {
+  hasTwitterAccount,
+  useNotification,
+  validEmail,
+  validUrl,
+} from '../../../utils';
 import { TwitterConnect } from '../../../components/molecules';
+import { TextInputBox, TextArea } from '../../../components/ui';
 import { AuthContext } from '../../../context';
+import { useFormState } from '../../../hooks';
+import { FormStateError } from '../../../interfaces';
+import { BiLeftArrowAlt } from 'react-icons/bi';
 
 interface Grant {
   applicant: number;
@@ -37,6 +40,30 @@ interface Grant {
   isClose: Boolean;
 }
 
+export type GrantApplicantInput = {
+  area: string;
+  email: string;
+  grantType: string;
+  link: string;
+  name: string;
+  amount: number;
+};
+
+export const defaultGrantApplicant = {
+  area: 'Online',
+  email: '',
+  grantType: 'Bitcoin Education',
+  link: '',
+  name: '',
+  amount: 0,
+};
+
+enum GrantApplicationStages {
+  info = 'info',
+  form = 'form',
+  complete = 'complete',
+}
+
 export const ApplyGrantModal = ({
   applicant,
   image,
@@ -45,38 +72,36 @@ export const ApplyGrantModal = ({
   isClose,
   about,
 }: Grant) => {
-  const {
-    user,
-    setUser,
-    isLoggedIn,
-    isAuthModalOpen: loginIsOpen,
-  } = useAuthContext();
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
+  const { user } = useAuthContext();
+  const { toast } = useNotification();
+  const { externalAccounts } = user;
+
   const { loginOnClose } = useContext(AuthContext);
   const { onClose: onLoginAlertModalClose } = useDisclosure();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [area, setArea] = React.useState(null);
-  const [email, setEmail] = React.useState();
-  const [grantType, setGrantType] = React.useState();
-  const [link, setLink] = React.useState();
-  const [name, setName] = React.useState();
-  const [formC, setFormC] = React.useState(false);
-  const [grant, setGrant] = React.useState(true);
-  const [sentC, setSentC] = React.useState(false);
-  const [overlay, setOverlay] = React.useState(<OverlayOne />);
-  const initialRef = React.useRef(null);
-  const [loading, setLoading] = useState(false);
-  const finalRef = React.useRef(null);
 
-  const { externalAccounts } = user;
+  const { state, setState, setTarget } = useFormState<GrantApplicantInput>(
+    defaultGrantApplicant,
+  );
+  const { area, amount, email, grantType, link, name } = state;
+
+  const [formError, setFormError] = useState<
+    FormStateError<GrantApplicantInput>
+  >({});
+
+  const [applicationStages, setApplicationStages] =
+    useState<GrantApplicationStages>(GrantApplicationStages.info);
+
+  const [loading, setLoading] = useState(false);
 
   const submitForm = async () => {
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
+
     setLoading(true);
     const data = {
       fields: {
@@ -84,16 +109,316 @@ export const ApplyGrantModal = ({
         Grant: grantType,
         'Project Link': link,
         Contact: email,
+        Amount: `${amount}`,
         Region: area,
         'Twitter ID': externalAccounts[0]?.externalUsername,
         Links: '',
       },
     };
+    try {
+      await createApplicantRecordRound2(data);
+      setApplicationStages(GrantApplicationStages.complete);
+      setState(defaultGrantApplicant);
+    } catch (error) {
+      toast({
+        status: 'error',
+        title: 'Failed to submit application',
+        description: 'Please try again later.',
+      });
+    }
 
-    await createApplicantRecordRound2(data);
     setLoading(false);
-    setFormC(false);
-    setSentC(true);
+  };
+
+  const handleClose = () => {
+    onClose();
+    setApplicationStages(GrantApplicationStages.info);
+    setState(defaultGrantApplicant);
+  };
+
+  const validateForm = () => {
+    const error: FormStateError<GrantApplicantInput> = {};
+    let isValid = true;
+
+    if (!state.name) {
+      error.name = 'Name is a required field';
+      isValid = false;
+    }
+
+    if (!state.amount) {
+      error.amount = 'Amount cannot be zero';
+      isValid = false;
+    }
+
+    if (!state.link) {
+      error.link = 'Link is a required field.';
+      isValid = false;
+    } else if (!validUrl.test(state.link)) {
+      error.link = 'Link needs to be a valid URL';
+      isValid = false;
+    }
+
+    if (!state.email) {
+      error.email = 'Email is a required field';
+      isValid = false;
+    } else if (!validEmail.test(state.email)) {
+      error.email = 'Email needs to be valid';
+      isValid = false;
+    }
+
+    setFormError(error);
+
+    return isValid;
+  };
+
+  useEffect(() => {
+    setFormError({});
+  }, [state]);
+
+  const OverlayOne = useMemo(
+    () => (
+      <ModalOverlay
+        bg="blackAlpha.300"
+        backdropFilter="blur(10px) hue-rotate(90deg)"
+      />
+    ),
+    [],
+  );
+
+  const grantInfo = () => (
+    <>
+      <Box
+        width={'100%'}
+        display={isClose ? 'block' : 'flex'}
+        justifyContent={'center'}
+      >
+        <img src={image} width={isClose ? '100%' : '60%'} />
+      </Box>
+
+      <ModalBody>
+        <Text fontWeight={'600'} mb={2} fontSize="18px">
+          {title}
+        </Text>
+        <Text fontWeight={'500'} mb={2} fontSize="13px">
+          {subtitle}
+        </Text>
+        <Box my={4}>
+          <Box
+            display="flex"
+            justifyContent={'center'}
+            alignContent="center"
+            flexDirection={'column'}
+          >
+            <Text justify="center">{about}</Text>
+          </Box>
+        </Box>
+        <Box mt={4}>
+          {isClose ? (
+            <Button
+              bg="brand.primary"
+              onClick={() => {
+                setApplicationStages(GrantApplicationStages.form);
+              }}
+              isFullWidth
+            >
+              Confirm
+            </Button>
+          ) : (
+            <Button isFullWidth disabled>
+              Apply
+            </Button>
+          )}
+        </Box>
+      </ModalBody>
+    </>
+  );
+
+  const applicationForm = () => (
+    <>
+      {hasTwitterAccount(user) ? (
+        <ModalBody>
+          <Text fontWeight={'700'} mb={2} mt={4} fontSize="22px">
+            Apply
+          </Text>
+
+          <FormControl mb={3}>
+            <FormLabel fontWeight={'500'} fontSize="12px">
+              Which Grant are you applying to?
+            </FormLabel>
+            <Select
+              _placeholder={{ fontSize: '12px' }}
+              _focus={{ borderColor: 'brand.primary' }}
+              name="grantType"
+              value={state.grantType}
+              onChange={setTarget}
+            >
+              {' '}
+              <option value="Bitcoin Education">Bitcoin Education</option>
+              <option value="Bitcoin Culture">Bitcoin Culture</option>
+              <option value="Bitcoin Builders">Bitcoin Builders</option>
+            </Select>
+          </FormControl>
+          <FormControl mb={3}>
+            <FormLabel fontWeight={'500'} fontSize="12px">
+              What’s your project name?
+            </FormLabel>
+            <TextInputBox
+              placeholder="Bitcoin for Fairness"
+              _placeholder={{ fontSize: '12px' }}
+              _focus={{ borderColor: 'brand.primary' }}
+              name="name"
+              value={state.name}
+              onChange={setTarget}
+              error={formError.name}
+            />
+          </FormControl>
+          <Box>
+            <Text fontWeight={'500'} fontSize="12px">
+              Drop your Geyser or Bolt.fun project or entry link with an
+              explainer of your project idea and intent
+            </Text>
+
+            <TextArea
+              mt={3}
+              name="link"
+              value={state.link}
+              onChange={setTarget}
+              error={formError.link}
+              size={'md'}
+              _placeholder={{ fontSize: '12px' }}
+              _focus={{ borderColor: 'brand.primary' }}
+              placeholder="https://geyser.fund/project/bitcoin-for-fairness"
+            />
+          </Box>
+          <FormControl mb={3}>
+            <FormLabel fontWeight={'500'} fontSize="12px">
+              How much money are you looking for to achieve your specific goal
+              ($) ?
+            </FormLabel>
+            <TextInputBox
+              placeholder="10,000"
+              _placeholder={{ fontSize: '12px' }}
+              _focus={{ borderColor: 'brand.primary' }}
+              name="amount"
+              value={state.amount}
+              onChange={setTarget}
+              error={formError.amount}
+            />
+          </FormControl>
+          <FormControl mb={3} mt={3}>
+            <FormLabel fontWeight={'500'} fontSize="12px">
+              Which area of th world will you be focusing your efforts on?
+            </FormLabel>
+            <Select
+              _placeholder={{ fontSize: '12px' }}
+              _focus={{ borderColor: 'brand.primary' }}
+              name="area"
+              value={state.area}
+              onChange={setTarget}
+            >
+              {' '}
+              <option value="option1">Online</option>
+            </Select>
+          </FormControl>
+          <FormControl mb={3}>
+            <FormLabel fontWeight={'700'} fontSize="12px">
+              Email
+            </FormLabel>
+            <TextInputBox
+              _placeholder={{ fontSize: '12px' }}
+              placeholder="Yolo@protonmail.com"
+              _focus={{ borderColor: 'brand.primary' }}
+              name="email"
+              value={state.email}
+              onChange={setTarget}
+              error={formError.email}
+            />
+          </FormControl>
+
+          <Box mt={4}>
+            {loading ? (
+              <Button
+                isLoading
+                loadingText="Loading"
+                bg="brand.primary"
+                isFullWidth
+                isDisabled
+                spinnerPlacement="start"
+              >
+                Submit
+              </Button>
+            ) : (
+              <Button bg="brand.primary" onClick={submitForm} isFullWidth>
+                Submit
+              </Button>
+            )}
+          </Box>
+        </ModalBody>
+      ) : (
+        <>
+          <Box width={'100%'}>
+            <img src={image} width={'100%'} />
+          </Box>
+          <ModalBody>
+            <Text fontWeight={'700'} mb={3} fontSize="22px">
+              Apply
+            </Text>
+            <Text fontWeight={'400'} mb={2} fontSize="15px">
+              You need to link your Twitter account to apply to a Grant. This is
+              to verify your identity and
+            </Text>
+
+            <Box mt={6}>
+              <TwitterConnect
+                onClose={() => {
+                  loginOnClose();
+                  onLoginAlertModalClose();
+                }}
+              />
+            </Box>
+          </ModalBody>
+        </>
+      )}
+    </>
+  );
+
+  const completion = () => (
+    <>
+      <Text fontWeight={'700'} fontSize="22px">
+        Apply
+      </Text>
+
+      <Box display="flex" justifyContent={'center'} my={4}>
+        {' '}
+        <Box
+          height={'55px'}
+          width={'55px'}
+          rounded="full"
+          display="flex"
+          justifyContent={'center'}
+          alignItems="center"
+          bg="brand.primary"
+        >
+          <FaCheck />
+        </Box>
+      </Box>
+      <Text fontSize={'14px'} textAlign="center" fontWeight={'500'}>
+        Application Submitted
+      </Text>
+    </>
+  );
+
+  const renderBody = () => {
+    switch (applicationStages) {
+      case GrantApplicationStages.info:
+        return grantInfo();
+      case GrantApplicationStages.form:
+        return applicationForm();
+      case GrantApplicationStages.complete:
+        return completion();
+      default:
+        return grantInfo();
+    }
   };
 
   return (
@@ -105,10 +430,7 @@ export const ApplyGrantModal = ({
           size="sm"
           minWidth={'100%'}
           fontSize="14px"
-          onClick={() => {
-            setOverlay(<OverlayOne />);
-            onOpen();
-          }}
+          onClick={onOpen}
           backgroundColor="brand.primary400"
         >
           view
@@ -118,252 +440,49 @@ export const ApplyGrantModal = ({
           variant={'outline'}
           size="sm"
           isFullWidth
-          onClick={() => {
-            setOverlay(<OverlayOne />);
-            onOpen();
-          }}
+          onClick={onOpen}
           style={{ border: 'solid 2px #20ECC7' }}
         >
           Closed
         </Button>
       )}
 
-      <Modal isCentered isOpen={isOpen} size="sm">
-        {overlay}
+      <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
+        {OverlayOne}
 
         <ModalContent bg="transparent" boxShadow={0}>
-          <Button
-            fontSize="sm"
-            rounded={0}
-            onClick={onClose}
-            mb={2}
-            gap={2}
-            width="100px"
-            backgroundColor="brand.bgWhite"
-          >
-            <MdClose fontSize={'18px'} /> Close
-          </Button>
-          <Box bg="brand.bgWhite" pb={3}>
-            {grant && (
-              <>
-                <Box
-                  width={'100%'}
-                  display={isClose ? 'block' : 'flex'}
-                  justifyContent={'center'}
+          <HStack width="100%" justifyContent="space-between" mb={2}>
+            <Box>
+              {applicationStages === GrantApplicationStages.form && (
+                <Button
+                  fontSize="sm"
+                  rounded={0}
+                  onClick={() =>
+                    setApplicationStages(GrantApplicationStages.info)
+                  }
+                  gap={2}
+                  width="50px"
+                  backgroundColor="brand.bgWhite"
                 >
-                  <img src={image} width={isClose ? '100%' : '60%'} />
-                </Box>
+                  <BiLeftArrowAlt fontSize={'25px'} />
+                </Button>
+              )}
+            </Box>
 
-                <ModalBody>
-                  <Text fontWeight={'600'} mb={2} fontSize="18px">
-                    {title}
-                  </Text>
-                  <Text fontWeight={'500'} mb={2} fontSize="13px">
-                    {subtitle}
-                  </Text>
-                  <Box my={4}>
-                    <Box
-                      display="flex"
-                      justifyContent={'center'}
-                      alignContent="center"
-                      flexDirection={'column'}
-                    >
-                      <Text justify="center">{about}</Text>
-                    </Box>
-                  </Box>
-                  <Box mt={4}>
-                    {isClose ? (
-                      <Button
-                        bg="brand.primary"
-                        onClick={() => {
-                          setGrant(false);
-                          setFormC(true);
-                        }}
-                        isFullWidth
-                      >
-                        Confirm
-                      </Button>
-                    ) : (
-                      <Button isFullWidth disabled>
-                        Apply
-                      </Button>
-                    )}
-                  </Box>
-                </ModalBody>
-              </>
-            )}
-            {formC && (
-              <>
-                {hasTwitterAccount(user) ? (
-                  <ModalBody>
-                    <Text fontWeight={'700'} mb={2} mt={4} fontSize="22px">
-                      Apply
-                    </Text>
+            <Button
+              fontSize="sm"
+              rounded={0}
+              onClick={handleClose}
+              gap={2}
+              width="100px"
+              backgroundColor="brand.bgWhite"
+            >
+              <MdClose fontSize={'18px'} /> Close
+            </Button>
+          </HStack>
 
-                    <FormControl mb={3}>
-                      <FormLabel fontWeight={'500'} fontSize="12px">
-                        Which Grant are you applying to?
-                      </FormLabel>
-                      <Select
-                        ref={initialRef}
-                        _placeholder={{ fontSize: '12px' }}
-                        _focus={{ borderColor: 'brand.primary' }}
-                        onChange={(e) => setGrantType(e.target.value)}
-                      >
-                        {' '}
-                        <option value="Bitcoin Education">
-                          Bitcoin Education
-                        </option>
-                        <option value="Bitcoin Culture">Bitcoin Culture</option>
-                        <option value="Bitcoin Builders">
-                          Bitcoin Builders
-                        </option>
-                      </Select>
-                    </FormControl>
-                    <FormControl mb={3}>
-                      <FormLabel fontWeight={'500'} fontSize="12px">
-                        What’s your project name?
-                      </FormLabel>
-                      <Input
-                        ref={initialRef}
-                        placeholder="Bitcoin for Fairness"
-                        _placeholder={{ fontSize: '12px' }}
-                        _focus={{ borderColor: 'brand.primary' }}
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </FormControl>
-                    <Box>
-                      <Text fontWeight={'500'} fontSize="12px">
-                        Drop your Geyser or Bolt.fun project or entry link with
-                        an explainer of your project idea and intent
-                      </Text>
-
-                      <Textarea
-                        mt={3}
-                        onChange={(e) => setLink(e.target.value)}
-                        size={'md'}
-                        _placeholder={{ fontSize: '12px' }}
-                        _focus={{ borderColor: 'brand.primary' }}
-                        placeholder="https://geyser.fund/project/bitcoin-for-fairness"
-                      />
-                    </Box>
-                    <FormControl mb={3} mt={3}>
-                      <FormLabel fontWeight={'500'} fontSize="12px">
-                        Which area of th world will you be focusing your efforts
-                        on?
-                      </FormLabel>
-                      <Select
-                        ref={initialRef}
-                        _placeholder={{ fontSize: '12px' }}
-                        _focus={{ borderColor: 'brand.primary' }}
-                        onChange={(e) => setArea(e.target.value)}
-                      >
-                        {' '}
-                        <option value="option1">Online</option>
-                      </Select>
-                    </FormControl>
-                    <FormControl mb={3}>
-                      <FormLabel fontWeight={'700'} fontSize="12px">
-                        Email
-                      </FormLabel>
-                      <Input
-                        ref={initialRef}
-                        _placeholder={{ fontSize: '12px' }}
-                        placeholder="Yolo@protonmail.com"
-                        _focus={{ borderColor: 'brand.primary' }}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </FormControl>
-
-                    <Box mt={4}>
-                      {loading ? (
-                        <Button
-                          isLoading
-                          loadingText="Loading"
-                          bg="brand.primary"
-                          isFullWidth
-                          isDisabled
-                          spinnerPlacement="start"
-                        >
-                          Submit
-                        </Button>
-                      ) : (
-                        <Button
-                          bg="brand.primary"
-                          onClick={submitForm}
-                          isFullWidth
-                        >
-                          Submit
-                        </Button>
-                      )}
-                    </Box>
-                  </ModalBody>
-                ) : (
-                  <>
-                    <Box width={'100%'}>
-                      <img src={image} width={'100%'} />
-                    </Box>
-                    <ModalBody>
-                      <Text fontWeight={'700'} mb={3} fontSize="22px">
-                        Apply
-                      </Text>
-                      <Text fontWeight={'400'} mb={2} fontSize="15px">
-                        You need to link your Twitter account to apply to a
-                        Grant. This is to verify your identity and
-                      </Text>
-
-                      <Box mt={6}>
-                        <TwitterConnect
-                          onClose={() => {
-                            loginOnClose();
-                            onLoginAlertModalClose();
-                          }}
-                        />
-                      </Box>
-                    </ModalBody>
-                  </>
-                )}
-              </>
-            )}
-            {sentC && (
-              <ModalBody>
-                <Text fontWeight={'700'} fontSize="22px">
-                  Apply
-                </Text>
-
-                <Box display="flex" justifyContent={'center'} my={4}>
-                  {' '}
-                  <Box
-                    height={'55px'}
-                    width={'55px'}
-                    rounded="full"
-                    display="flex"
-                    justifyContent={'center'}
-                    alignItems="center"
-                    bg="brand.primary"
-                  >
-                    <FaCheck />
-                  </Box>
-                </Box>
-                <Text fontSize={'14px'} textAlign="center" fontWeight={'500'}>
-                  Application Submitted
-                </Text>
-
-                <Box mt={4}>
-                  <Button
-                    bg="brand.primary"
-                    onClick={() => {
-                      setFormC(false);
-                      setGrant(false);
-                      setSentC(true);
-                    }}
-                    isFullWidth
-                  >
-                    Submit
-                  </Button>
-                </Box>
-              </ModalBody>
-            )}
+          <Box bg="brand.bgWhite" pb={3} borderRadius="4px">
+            <ModalBody>{renderBody()}</ModalBody>
           </Box>
         </ModalContent>
       </Modal>

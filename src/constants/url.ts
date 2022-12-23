@@ -106,3 +106,8 @@ export const tachiraUrl =
 
 export const umarUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/umar.svg';
+
+// Grant Assets
+
+export const GrantsChristmasUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/christmas-grants.png';
