@@ -78,3 +78,31 @@ export const CuriocasterLogoUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/curiocaster.png';
 export const PodverseLogoUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/podverse.png';
+
+// Grant Board Member Images
+export const pacoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/paco.jpg';
+export const lucasUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/lucas.jpg';
+export const desUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/des.jpg';
+export const danialUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/danial.svg';
+export const bradUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/brad.png';
+export const abubakarUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/abubakar.svg';
+export const princeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/prince.jpg';
+export const cryptoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/crypto.jpg';
+export const zuccoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/zucco.jpg';
+export const conorUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/conor.jpg';
+
+export const tachiraUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/tachira.svg';
+
+export const umarUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/umar.svg';

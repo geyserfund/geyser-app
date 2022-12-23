@@ -1,57 +1,49 @@
 import React from 'react';
-import Brad from '../../../assets/brad.png';
-import Zucco from '../../../assets/zucco.jpg';
-import Lucas from '../../../assets/lucas.jpg';
 import { isMobileMode } from '../../../utils';
-import Conor from '../../../assets/conor.jpg';
-import Des from '../../../assets/des.svg';
-import abubakar from '../../../assets/abubakar.svg';
-import danial from '../../../assets/danial.svg';
-import {
-  Grid,
-  GridItem,
-  Box,
-  Text,
-  Avatar,
-  Wrap,
-  WrapItem,
-  Center,
-} from '@chakra-ui/react';
-import { GrantCard } from './GrantCard';
+import { Box, Wrap, WrapItem } from '@chakra-ui/react';
 import { BitcoinerCard } from './BitcoinerCard';
-import { isTemplateMiddle } from 'typescript';
+import {
+  abubakarUrl,
+  bradUrl,
+  danialUrl,
+  desUrl,
+  lucasUrl,
+  pacoUrl,
+} from '../../../constants';
 
 const members = [
   {
     name: 'Brad Mills',
     handle: 'bradmillscan',
     link: 'https://twitter.com/bradmillscan',
-    image: Brad,
+    image: bradUrl,
   },
 
   {
     name: 'Lucas Ferreira',
     handle: 'lucasdcf',
     link: 'https://twitter.com/lucasdcf',
-    image: Lucas,
+    image: lucasUrl,
   },
   {
     name: 'Daniel Prince',
-
     link: 'https://twitter.com/PrinceySOV',
-    image: danial,
+    image: danialUrl,
   },
   {
     name: 'Abubakar',
-
     link: 'https://twitter.com/ihate1999',
-    image: abubakar,
+    image: abubakarUrl,
   },
   {
     name: 'Des',
-
     link: '',
-    image: Des,
+    image: desUrl,
+  },
+  {
+    name: 'Paco de la India',
+    image: pacoUrl,
+    link: 'https://twitter.com/RunwithBitcoin',
   },
 ];
 
@@ -67,7 +59,7 @@ export const BoardMembers = () => {
               <BitcoinerCard
                 name={item.name}
                 image={item.image}
-                link={isTemplateMiddle.link}
+                link={item.link}
               />
             </WrapItem>
           ))}
