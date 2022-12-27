@@ -243,16 +243,24 @@ export const ContributionInfoBox = ({
             >
               Geyser fee
             </Text>
-
-            <SatoshiAmount
-              fontSize="14px"
-              textColor={'brand.neutral700'}
-              fontWeight={'medium'}
-            >
-              {!noFeeProjects.includes(project.name)
-                ? Math.round(contributionAmount * 0.02)
-                : 0}
-            </SatoshiAmount>
+            <HStack>
+              <SatoshiAmount
+                fontSize="14px"
+                textColor={'brand.neutral700'}
+                fontWeight={'medium'}
+              >
+                {!noFeeProjects.includes(project.name)
+                  ? Math.round(contributionAmount * 0.02)
+                  : 0}
+              </SatoshiAmount>
+              <Text
+                fontSize="14px"
+                textColor={'brand.neutral700'}
+                fontWeight={'normal'}
+              >
+                {`( 2 %)`}
+              </Text>
+            </HStack>
           </HStack>
         </>
       )}
