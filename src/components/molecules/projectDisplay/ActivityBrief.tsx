@@ -9,7 +9,7 @@ import { Project, ProjectMilestone } from '../../../types/generated/graphql';
 import { noFeeProjects, GEYSER_FEE } from '../../../constants';
 
 interface IActivityBrief {
-  loading: boolean;
+  loading?: boolean;
   project: Project;
 }
 
@@ -125,7 +125,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           fontFamily={fonts.courier}
           fontWeight={400}
           fontStyle={'normal'}
-          color={colors.primary600}
+          color="brand.primary600"
         >
           {balance}
         </SatoshiAmount>

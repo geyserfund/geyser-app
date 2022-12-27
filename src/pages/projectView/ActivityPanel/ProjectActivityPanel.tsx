@@ -1,15 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthModal } from '../../../components/molecules';
-import {
-  IFundingInput,
-  IRewardFundingInput,
-  IFunder,
-} from '../../../interfaces';
-import { useQuery } from '@apollo/client';
-import { QUERY_PROJECT_FUNDING_DATA } from '../../../graphql';
+import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
 import { SuccessScreen } from './SuccessScreen';
 import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
-import { isMobileMode, useNotification } from '../../../utils';
+import { isMobileMode } from '../../../utils';
 import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
 
 import { AuthContext } from '../../../context';
@@ -24,7 +18,7 @@ import { fundingStages } from '../../../constants';
 import { IFundForm, IFundFormState } from '../../../hooks';
 import { useBtcContext } from '../../../context/btc';
 import {
-  FundingTx,
+  FundingResourceType,
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
@@ -34,8 +28,8 @@ type Props = {
   detailOpen: boolean;
   fundingFlow: any;
   setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  resourceType?: string;
-  resourceId?: number;
+  resourceType: FundingResourceType;
+  resourceId: number;
   fundForm: IFundFormState;
 };
 
@@ -51,12 +45,7 @@ export const ProjectActivityPanel = ({
   const { user } = useContext(AuthContext);
 
   const { btcRate } = useBtcContext();
-  const { toast } = useNotification();
   const isMobile = isMobileMode();
-
-  // Required for activity (recent and leaderboard) visibility
-  const [fundingTxs, setFundingTxs] = useState<FundingTx[]>([]);
-  const [funders, setFunders] = useState<IFunder[]>([]);
 
   // required for knowing the rewards and the funds
   const {
@@ -86,38 +75,6 @@ export const ProjectActivityPanel = ({
   const [fadeStarted, setFadeStarted] = useState(false);
 
   const classes = useStyles({ isMobile, detailOpen, fadeStarted });
-
-  const {
-    loading,
-    error,
-    data: fundingData,
-  } = useQuery(QUERY_PROJECT_FUNDING_DATA, {
-    variables: { where: { id: project.id } },
-    fetchPolicy: 'network-only',
-  });
-
-  useEffect(() => {
-    if (fundingData && fundingData.project.fundingTxs) {
-      setFundingTxs(fundingData.project.fundingTxs);
-      setFunders(fundingData.project.funders);
-    }
-  }, [fundingData]);
-
-  useEffect(() => {
-    if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
-      setFundingTxs([fundingTx, ...fundingTxs]);
-    }
-  }, [fundingTx]);
-
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: 'Something went wrong',
-        description: 'Please refresh the page',
-        status: 'error',
-      });
-    }
-  }, [error]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -206,7 +163,7 @@ export const ProjectActivityPanel = ({
   };
 
   const renderPanelContent = () => {
-    if (loading) {
+    if (!project || !project.id) {
       return <InfoPageSkeleton />;
     }
 
@@ -218,10 +175,8 @@ export const ProjectActivityPanel = ({
               project,
               handleViewClick,
               onFundProjectTapped: handleFundProjectButtonTapped,
-              loading,
+              fundingTx,
               btcRate,
-              fundingTxs,
-              funders,
               test: false,
             }}
           />
