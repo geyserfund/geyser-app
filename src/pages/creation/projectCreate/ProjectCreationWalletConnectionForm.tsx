@@ -372,8 +372,8 @@ export const ProjectCreationWalletConnectionForm = ({
             primary
             isFullWidth
             onClick={handleProjectLaunchSelected}
-            isLoading={isCreateWalletLoading || isEvaluatingLightningAddress}
-            disabled={isSubmitEnabled === false}
+            isLoading={isCreateWalletLoading}
+            disabled={isSubmitEnabled === false || isEvaluatingLightningAddress}
           >
             <>
               <BiRocket style={{ marginRight: '10px' }} />
@@ -385,7 +385,7 @@ export const ProjectCreationWalletConnectionForm = ({
             <ButtonComponent
               isFullWidth
               onClick={() => onSaveAsDraftSelected(createWalletInput!)}
-              isLoading={isCreateWalletLoading || isEvaluatingLightningAddress}
+              disabled={isCreateWalletLoading || isEvaluatingLightningAddress}
             >
               Save As Draft
             </ButtonComponent>
