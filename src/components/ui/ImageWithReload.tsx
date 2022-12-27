@@ -101,7 +101,7 @@ export const ImageWithReload = ({
   return (
     <>
       {!hasValidSource && renderDefaultImage()}
-      {loading && renderSkeletonImage()}
+      {hasValidSource && loading && renderSkeletonImage()}
       {renderSourceImage()}
     </>
   );
