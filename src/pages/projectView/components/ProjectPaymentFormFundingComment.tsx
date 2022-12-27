@@ -19,7 +19,7 @@ import {
   useBoolean,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GifIcon } from '../../../components/icons';
 import { TextArea } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
@@ -45,6 +45,7 @@ export const ProjectPaymentFormFundingComment = ({
     onClose: onGIFModalClosed,
   } = useDisclosure();
 
+  const [giphyFetch, setGiphyFetch] = useState<GiphyFetch | any>();
   const [gifSearch, setGifSearch] = useState('bitcoin');
   const [selectedGIF, setSelectedGIF] = useState<IGif | null>(null);
 
@@ -52,11 +53,15 @@ export const ProjectPaymentFormFundingComment = ({
     useBoolean(false);
   const [focus, setFocus] = useState(true);
 
-  const giphyFetch = new GiphyFetch(REACT_APP_GIPHY_API_KEY || '');
+  useEffect(() => {
+    if (REACT_APP_GIPHY_API_KEY) {
+      const giphy = new GiphyFetch(REACT_APP_GIPHY_API_KEY);
+      setGiphyFetch(giphy);
+    }
+  }, []);
 
-  const fetchGifs = (offset: number) => {
+  const fetchGifs = (offset: number) =>
     giphyFetch.search(gifSearch, { offset, sort: 'relevant', limit: 9 });
-  };
 
   return (
     <Box {...rest}>
