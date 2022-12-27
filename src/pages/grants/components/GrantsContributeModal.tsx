@@ -354,7 +354,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           You contributed{' '}
           <span style={{ fontWeight: 'bold' }}>
             {' '}
-            {getSatoshisAmount(state.amount)} sats{' '}
+            {getSatoshisAmount(state.amount * 100)} sats{' '}
           </span>{' '}
           to the Geyser Grants Pool.
         </Text>
