@@ -20,10 +20,11 @@ steps:
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
         --build-arg REACT_APP_API_ENDPOINT=${_API_ENDPOINT} \
         --build-arg REACT_APP_AIR_TABLE_KEY=$$AIRTABLE_API_KEY \
+        --build-arg REACT_APP_GIPHY_API_KEY=$$GIPHY_API_KEY \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build . \
         && \
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build
-    secretEnv: ['AIRTABLE_API_KEY']
+    secretEnv: ['AIRTABLE_API_KEY', 'GIPHY_API_KEY']
   - id: 'Update Image: latest'
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
