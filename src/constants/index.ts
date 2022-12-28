@@ -10,3 +10,4 @@ export * from './router-paths';
 export * from './projectFunding';
 export * from './geyserFee';
 export * from './noFeeProjects';
+export * from './fonts';

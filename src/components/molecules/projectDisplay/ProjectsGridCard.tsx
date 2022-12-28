@@ -3,17 +3,21 @@ import {
   Heading,
   HStack,
   Image,
+  Link,
   Text,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
+import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { useHistory } from 'react-router';
-import { getPath } from '../../../constants';
 
+import SatoshiPng from '../../../assets/satoshi.png';
+import { getPath, fonts, colors } from '../../../constants';
 import { Project } from '../../../types/generated/graphql';
-import { ICard, ProjectStatusLabel, SatoshiAmount } from '../../ui';
+import { ICard } from '../../ui';
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
+import { getShortAmountLabel } from '../../../utils';
 type Props = ICard & {
   project: Project;
   onClick?: () => void;
@@ -39,6 +43,11 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
       overflow={'hidden'}
       onClick={handleClick}
       spacing={2.5}
+      _hover={{
+        borderColor: 'brand.neutral500',
+        cursor: 'pointer',
+      }}
+      transition="border-color 0.3s ease-in-out"
       {...rest}
     >
       <Box
@@ -56,6 +65,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
           height="full"
           fallback={<ProjectImageListItemPlaceholder padding="3em" />}
           objectFit="cover"
+          onRight
         />
       </Box>
 
@@ -78,38 +88,52 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
             alignItems={'center'}
             justifyContent={'space-between'}
           >
-            <Box display="flex" flexDirection={'column'} alignItems={'center'}>
-              <Text fontWeight={600}>{project.funders.length}</Text>
+            <VStack alignItems={'center'}>
+              <Text fontSize="16px" fontWeight={600} fontFamily={fonts.mono}>
+                {project.funders.length}
+              </Text>
 
               <Text
-                fontSize={'xs'}
+                fontSize="12px"
                 color={'brand.neutral600'}
-                fontFamily={'mono'}
+                fontFamily={fonts.mono}
                 textTransform="uppercase"
               >
-                Contributors
+                funders
               </Text>
-            </Box>
+            </VStack>
 
-            <Box
-              display="flex"
-              flexDirection={'column'}
-              alignItems={'center'}
-              marginTop="-6px"
-            >
-              <SatoshiAmount fontWeight={600}>{project.balance}</SatoshiAmount>
-
+            <VStack alignItems={'center'}>
+              <HStack spacing="3px">
+                <Image src={SatoshiPng} height="20px" />
+                <Text fontSize="16px" fontWeight={600} fontFamily={fonts.mono}>
+                  {getShortAmountLabel(project.balance)}
+                </Text>
+              </HStack>
               <Text
-                fontSize={'xs'}
+                fontSize="12px"
                 color={'brand.neutral600'}
-                fontFamily={'mono'}
+                fontFamily={fonts.mono}
                 textTransform="uppercase"
               >
                 Funded
               </Text>
-            </Box>
+            </VStack>
 
-            <ProjectStatusLabel project={project} marginTop="18px" />
+            <VStack {...rest}>
+              <BsFillCheckCircleFill
+                color={colors.primary500}
+                fontSize="24px"
+              />
+              <Text
+                fontSize="12px"
+                fontFamily={fonts.mono}
+                color="brand.primary500"
+                textTransform="uppercase"
+              >
+                RUNNING
+              </Text>
+            </VStack>
           </Box>
 
           <Text noOfLines={5} mt={2} textAlign="justify" size="sm">
