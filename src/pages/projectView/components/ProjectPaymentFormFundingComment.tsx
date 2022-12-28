@@ -53,9 +53,12 @@ export const ProjectPaymentFormFundingComment = ({
     useBoolean(false);
   const [focus, setFocus] = useState(true);
 
+  // TODO: remove the static value
   useEffect(() => {
     if (REACT_APP_GIPHY_API_KEY) {
-      const giphy = new GiphyFetch(REACT_APP_GIPHY_API_KEY);
+      const giphy = new GiphyFetch(
+        REACT_APP_GIPHY_API_KEY || 'p8H1UK6bKvfSpkvCFOty7a8bfK6stpVf',
+      );
       setGiphyFetch(giphy);
     }
   }, []);
