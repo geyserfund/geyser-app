@@ -11,33 +11,37 @@ const GET_FUNDING_TX_FOR_USER_CONTRIBUTION = gql`
   query GetFundingTxForUserContribution($fundingTxId: BigInt!) {
     fundingTx(id: $fundingTxId) {
       id
-      uuid
-      invoiceId
-      address
-      paymentRequest
-      amount
-      status
       comment
-      media
-      paidAt
-      onChain
-      source
+      amount
       funder {
         id
         user {
           id
           username
           imageUrl
+          externalAccounts {
+            externalUsername
+            public
+            type
+          }
         }
       }
+      paidAt
+      onChain
+      media
+      source
+      method
+      projectId
       sourceResource {
         ... on Project {
           id
           name
           title
+          image
         }
         ... on Entry {
           id
+          image
         }
       }
     }
