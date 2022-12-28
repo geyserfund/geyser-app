@@ -16,3 +16,4 @@ export * from './TwitterConnect';
 
 export * from './projectActivity';
 export * from './projectDisplay';
+export * from './DescriptionLinkWithIconComponent';

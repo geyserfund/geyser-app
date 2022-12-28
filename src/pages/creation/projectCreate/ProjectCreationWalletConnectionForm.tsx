@@ -310,7 +310,20 @@ export const ProjectCreationWalletConnectionForm = ({
 
               <WalletConnectionOptionInfoBox
                 primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
-                secondaryText="Lightning Addresses look like email addresses (mick@alby.com) but are for sending bitcoin. Most Lightning wallets provide lightning addresses. We recommend:"
+                secondaryText={
+                  <>
+                    <Link
+                      textDecoration="underline"
+                      href="https://lightningaddress.com/"
+                      isExternal
+                    >
+                      Lightning Addresses
+                    </Link>{' '}
+                    look like email addresses (mick@alby.com) but are for
+                    sending bitcoin. Most Lightning wallets provide lightning
+                    addresses. We recommend:
+                  </>
+                }
               >
                 <HStack
                   width={'full'}
