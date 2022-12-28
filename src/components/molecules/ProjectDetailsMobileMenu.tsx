@@ -34,8 +34,8 @@ export const ProjectDetailsMobileMenu = ({
       bottom={0}
       transform={`translateY(${
         showMobileMenu
-          ? `-${mobileNavBarDimensions.height * 2.25 + paddingAmount}px`
-          : `${mobileNavBarDimensions.height * 2.25 + paddingAmount}px`
+          ? `-${mobileNavBarDimensions.height + paddingAmount}px`
+          : `${mobileNavBarDimensions.height + paddingAmount}px`
       })`}
       transition="all 0.35s ease-in-out"
       left={0}
