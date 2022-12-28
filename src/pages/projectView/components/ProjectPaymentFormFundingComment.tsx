@@ -57,7 +57,7 @@ export const ProjectPaymentFormFundingComment = ({
   useEffect(() => {
     if (REACT_APP_GIPHY_API_KEY) {
       const giphy = new GiphyFetch(
-        REACT_APP_GIPHY_API_KEY || 'p8H1UK6bKvfSpkvCFOty7a8bfK6stpVf',
+        REACT_APP_GIPHY_API_KEY || 'Vcrx5mgdcrDgWVS1UsPiINK4NFyStV0Q',
       );
       setGiphyFetch(giphy);
     }
