@@ -10,17 +10,22 @@ import {
   Tr,
   HStack,
   VStack,
+  Checkbox,
 } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+import { CSVLink } from 'react-csv';
+
 import { Funder, Project } from '../../types/generated/graphql';
 import {
   LinkableAvatar,
   SatoshiAmount,
   AnonymousAvatar,
+  ButtonComponent,
 } from '../../components/ui';
 import { DateTime } from 'luxon';
 import { computeFunderBadges } from '../../helpers';
 import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges';
+import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi';
 
 type TableData = {
   header: string;
@@ -30,7 +35,12 @@ type TableData = {
 };
 
 export const ProjectContributors = ({ project }: { project: Project }) => {
-  const funders = project.funders || [];
+  const funders = (project.funders as Funder[]) || [];
+
+  const [selectedFunders, setSelectedFunders] = useState<Funder[]>([]);
+  const [csvData, setCsvData] = useState<(string | number)[][]>([]);
+
+  const [copied, setCopied] = useState(false);
 
   const tableData: TableData[] = useMemo(
     () => [
@@ -109,20 +119,157 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
     [project],
   );
 
+  const checkIfAllIsSelected = () => {
+    return selectedFunders.length === funders.length;
+  };
+
+  const checkIfSelected = (funderId?: string) => {
+    return funderId
+      ? selectedFunders.some((selectedFunder) => selectedFunder.id === funderId)
+      : false;
+  };
+
+  const handleCheckClicked = (event: any, funder: Funder) => {
+    if (event.target.checked) {
+      const newSelectedFunders = [...selectedFunders, funder];
+      setSelectedFunders(newSelectedFunders);
+    } else {
+      const newSelectedFunders = selectedFunders.filter(
+        (selectedFunder) => selectedFunder.id !== funder.id,
+      );
+      setSelectedFunders(newSelectedFunders);
+    }
+  };
+
+  const handleAllCheckClicked = () => {
+    const allIsSelected = checkIfAllIsSelected();
+    if (allIsSelected) {
+      setSelectedFunders([]);
+    } else {
+      setSelectedFunders(funders as Funder[]);
+    }
+  };
+
+  const getCsvData = () => {
+    const csvData: (string | number)[][] = [];
+
+    const headerData = tableData.map((column) => column.header);
+    csvData.push(headerData);
+
+    selectedFunders.map((funder) => {
+      if (funder) {
+        let rewardValue = '';
+        funder.rewards.map((reward) => {
+          rewardValue = rewardValue
+            ? `${rewardValue}:${reward?.projectReward.name}(${reward?.quantity}x)`
+            : `${reward?.projectReward.name}(${reward?.quantity}x)`;
+        });
+        const dateString = funder.confirmedAt
+          ? DateTime.fromMillis(parseInt(funder.confirmedAt, 10)).toFormat(
+              'yyyy / mm / dd',
+            )
+          : '-';
+
+        const funderData = [
+          funder.user?.username || '',
+          funder.amountFunded || '',
+          rewardValue || '',
+          dateString || '',
+          funder.user?.email || '',
+        ];
+        csvData.push(funderData);
+      }
+    });
+    return csvData;
+  };
+
+  const handleCopy = () => {
+    const csvData = getCsvData();
+
+    const textString = csvData
+      .map((funderData) => {
+        return funderData.join(',');
+      })
+      .join('\n');
+
+    navigator.clipboard.writeText(textString);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
+  const handleDownloadCSV = (_: any, done: any) => {
+    if (selectedFunders.length === 0) {
+      return;
+    }
+
+    const csvData = getCsvData();
+    setCsvData(csvData);
+    done();
+  };
+
   return (
     <>
       <GridItem colSpan={18} display="flex" justifyContent={'center'}>
         <VStack maxWidth="1200px" width="100%" alignItems="center">
-          <HStack width="100%">
+          <HStack width="100%" justifyContent="space-between">
             <Text
               fontSize={'16px'}
               fontWeight={600}
             >{`${funders.length} Contributers`}</Text>
+            <HStack>
+              <ButtonComponent
+                size="sm"
+                primary={copied}
+                onClick={handleCopy}
+                leftIcon={
+                  copied ? (
+                    <BiCheck fontSize="20px" />
+                  ) : (
+                    <BiCopy fontSize="20px" />
+                  )
+                }
+                disabled={selectedFunders.length === 0}
+              >
+                {copied ? 'Copied' : 'Copy'}
+              </ButtonComponent>
+              {selectedFunders.length === 0 ? (
+                <ButtonComponent
+                  size="sm"
+                  leftIcon={<BiDownload fontSize="20px" />}
+                  disabled
+                >
+                  Download CSV
+                </ButtonComponent>
+              ) : (
+                <CSVLink
+                  data={csvData}
+                  asyncOnClick
+                  onClick={handleDownloadCSV}
+                >
+                  <ButtonComponent
+                    size="sm"
+                    leftIcon={<BiDownload style={{ fontSize: '20px' }} />}
+                  >
+                    Download CSV
+                  </ButtonComponent>
+                </CSVLink>
+              )}
+            </HStack>
           </HStack>
           <TableContainer width="100%">
             <Table size="sm">
               <Thead backgroundColor={'brand.primary100'}>
                 <Tr>
+                  <Th maxWidth="30px">
+                    <Checkbox
+                      size="lg"
+                      colorScheme="teal"
+                      isChecked={checkIfAllIsSelected()}
+                      onChange={handleAllCheckClicked}
+                    />
+                  </Th>
                   {tableData.map((row) => {
                     return (
                       <Th key={row.key} paddingY="10px">
@@ -134,26 +281,37 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
               </Thead>
               <Tbody>
                 {funders.map((funder) => {
-                  return (
-                    <Tr key={funder?.id}>
-                      {tableData.map((row) => {
-                        let value: any = '';
-                        if (row.value) {
-                          value = row.value(funder);
-                        } else if (row.render) {
-                          value = row.render(funder);
-                        } else {
-                          value = funder && funder[row.key as keyof Funder];
-                        }
+                  if (funder)
+                    return (
+                      <Tr key={funder.id}>
+                        <Td maxWidth="30px">
+                          <Checkbox
+                            size="lg"
+                            colorScheme="teal"
+                            isChecked={checkIfSelected(funder.id)}
+                            onChange={(event) =>
+                              handleCheckClicked(event, funder)
+                            }
+                          />
+                        </Td>
+                        {tableData.map((row) => {
+                          let value: any = '';
+                          if (row.value) {
+                            value = row.value(funder);
+                          } else if (row.render) {
+                            value = row.render(funder);
+                          } else {
+                            value = funder && funder[row.key as keyof Funder];
+                          }
 
-                        return (
-                          <Td key={row.key} fontSize="14px">
-                            {value}
-                          </Td>
-                        );
-                      })}
-                    </Tr>
-                  );
+                          return (
+                            <Td key={row.key} fontSize="14px">
+                              {value}
+                            </Td>
+                          );
+                        })}
+                      </Tr>
+                    );
                 })}
               </Tbody>
             </Table>
