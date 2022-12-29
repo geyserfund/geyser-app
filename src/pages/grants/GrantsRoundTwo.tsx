@@ -20,7 +20,7 @@ import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
 import { GrantDevelopers } from './components/GrantDevs';
-import { GrantsChristmasUrl } from '../../constants';
+import { GrantsRound2Url } from '../../constants';
 
 const grants = [
   {
@@ -86,7 +86,7 @@ export const GrantsRoundTwo = () => {
             <FaArrowLeft /> See all Grants
           </Button>
           <Box display="flex" justifyContent={'center'}>
-            <Image height={'200px'} src={GrantsChristmasUrl} />
+            <Image height={'200px'} src={GrantsRound2Url} />
           </Box>
           <Box
             display="flex"

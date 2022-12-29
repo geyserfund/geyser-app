@@ -111,3 +111,5 @@ export const umarUrl =
 
 export const GrantsChristmasUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/christmas-grants.png';
+export const GrantsRound2Url =
+  'https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-2';
