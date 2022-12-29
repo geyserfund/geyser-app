@@ -64,9 +64,19 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
           id
           username
           imageUrl
+          email
+        }
+        rewards {
+          quantity
+          projectReward {
+            id
+            name
+          }
         }
         amountFunded
         confirmed
+        confirmedAt
+        timesFunded
       }
       grantees {
         id

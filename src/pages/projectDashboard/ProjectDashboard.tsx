@@ -4,6 +4,7 @@ import {
   Button,
   Grid,
   GridItem,
+  HStack,
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
@@ -24,13 +25,16 @@ import { ProjectSettings } from './ProjectSettings';
 import { RewardSettings } from './RewardSettings';
 import { getPath } from '../../constants';
 import { Owner } from '../../types/generated/graphql';
+import { ProjectContributors } from './ProjectContributors';
 
-export type TDashboardTabs =
-  | 'entries'
-  | 'funds'
-  | 'milestones'
-  | 'rewards'
-  | 'project settings';
+enum DashboardTabs {
+  entries = 'entries',
+  funds = 'funds',
+  milestones = 'milestones',
+  rewards = 'rewards',
+  projectDescription = 'project description',
+  contributors = 'contributors',
+}
 
 export const ProjectDashboard = () => {
   const isMobile = isMobileMode();
@@ -40,7 +44,9 @@ export const ProjectDashboard = () => {
 
   const { user, setNav } = useAuthContext();
 
-  const [activeTab, setActiveTab] = useState<TDashboardTabs>('entries');
+  const [activeTab, setActiveTab] = useState<DashboardTabs>(
+    DashboardTabs.entries,
+  );
 
   useEffect(() => {
     try {
@@ -50,7 +56,7 @@ export const ProjectDashboard = () => {
     }
   }, [locationState]);
 
-  const handleTabSelection = async (selectedTab: TDashboardTabs) => {
+  const handleTabSelection = async (selectedTab: DashboardTabs) => {
     if (selectedTab !== activeTab) {
       await getProject({ fetchPolicy: 'no-cache' });
     }
@@ -84,10 +90,6 @@ export const ProjectDashboard = () => {
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
-  if (loading) {
-    return <Loader />;
-  }
-
   if (error || !data || !data.project) {
     return <NotFoundPage />;
   }
@@ -99,23 +101,33 @@ export const ProjectDashboard = () => {
   const { project } = data;
 
   const renderTabs = () => {
+    if (loading) {
+      return (
+        <GridItem colSpan={8} display="flex" justifyContent="center">
+          <Loader />
+        </GridItem>
+      );
+    }
+
     switch (activeTab) {
-      case 'entries':
+      case DashboardTabs.entries:
         return <ProjectDashboardEntries project={project} />;
-      case 'milestones':
+      case DashboardTabs.milestones:
         return <MilestoneSettings project={project} />;
-      case 'rewards':
+      case DashboardTabs.rewards:
         return <RewardSettings project={project} />;
-      case 'funds':
+      case DashboardTabs.funds:
         return <ProjectFundingSettings project={project} />;
-      case 'project settings':
+      case DashboardTabs.projectDescription:
         return <ProjectSettings project={project} />;
+      case DashboardTabs.contributors:
+        return <ProjectContributors project={project} />;
       default:
         return <ProjectDashboardEntries project={project} />;
     }
   };
 
-  const renderButton = (nav: TDashboardTabs) => {
+  const renderButton = (nav: DashboardTabs) => {
     return (
       <Box
         borderBottom="3px solid"
@@ -139,12 +151,13 @@ export const ProjectDashboard = () => {
     );
   };
 
-  const navList: TDashboardTabs[] = [
-    'entries',
-    'funds',
-    'milestones',
-    'rewards',
-    'project settings',
+  const navList: DashboardTabs[] = [
+    DashboardTabs.projectDescription,
+    DashboardTabs.entries,
+    DashboardTabs.contributors,
+    DashboardTabs.funds,
+    DashboardTabs.rewards,
+    DashboardTabs.milestones,
   ];
 
   return (
@@ -179,17 +192,21 @@ export const ProjectDashboard = () => {
             Back
           </ButtonComponent>
         </GridItem>
-        <GridItem colSpan={8} display="flex" justifyContent="center">
-          <VStack
-            spacing="30px"
+        <GridItem
+          colSpan={8}
+          display="flex"
+          justifyContent="center"
+          overflowX={isMobile ? 'auto' : undefined}
+        >
+          <HStack
+            spacing="0px"
             width="100%"
             minWidth="350px"
             display="flex"
-            flexDirection="column"
             alignItems="center"
           >
-            <Box display="flex">{navList.map((nav) => renderButton(nav))}</Box>
-          </VStack>
+            {navList.map((nav) => renderButton(nav))}
+          </HStack>
         </GridItem>
         <GridItem colSpan={5} display="flex" justifyContent="center">
           <VStack
@@ -211,11 +228,13 @@ export const ProjectDashboard = () => {
         }
         padding={isMobile ? '10px' : '40px 40px 20px 40px'}
       >
-        <GridItem
-          colSpan={isLargerThan1280 ? 5 : 2}
-          display="flex"
-          justifyContent="flex-start"
-        ></GridItem>
+        {activeTab !== DashboardTabs.contributors && (
+          <GridItem
+            colSpan={isLargerThan1280 ? 5 : 2}
+            display="flex"
+            justifyContent="flex-start"
+          ></GridItem>
+        )}
 
         {renderTabs()}
       </Grid>
