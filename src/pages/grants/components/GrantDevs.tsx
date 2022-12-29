@@ -20,13 +20,6 @@ const members = [
     link: 'https://twitter.com/umarabox',
     image: umarUrl,
   },
-  {
-    name: 'Vinayak',
-    role: 'Developer',
-
-    link: 'https://twitter.com/ConorOkus',
-    image: conorUrl,
-  },
 ];
 
 export const GrantDevelopers = () => {

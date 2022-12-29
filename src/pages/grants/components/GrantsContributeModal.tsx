@@ -62,7 +62,7 @@ export const defaultGrantContribution = {
 export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
   const { toast } = useNotification();
   const { user } = useAuthContext();
-  const { getSatoshisAmount } = useBTCConverter();
+  const { getSatoshisFromUSDCents } = useBTCConverter();
   const fundingFlow = useFundingFlow();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -76,10 +76,19 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
 
   const { data: grantsData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: GRANTS_PROJECT_NAME } },
+    onCompleted(data) {
+      if (!data?.project?.id) {
+        toast({
+          status: 'error',
+          title: 'Failed to fetch grants project.',
+          description: 'Please refresh the page and try again.',
+        });
+      }
+    },
     onError() {
       toast({
         status: 'error',
-        title: 'Something went wrong.',
+        title: 'Failed to fetch grants project.',
         description: 'Please refresh the page and try again.',
       });
     },
@@ -136,12 +145,13 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
   const handleFormConfirmClick = () => {
     const isValid = validateForm();
 
-    if (!grantsData) {
+    if (!grantsData?.project?.id) {
       toast({
         status: 'error',
         title: 'Something went wrong.',
         description: 'Please refresh the page and try again.',
       });
+      return;
     }
 
     if (isValid) {
@@ -150,7 +160,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
         anonymous: Boolean(user),
         ...(state.amount !== 0 && {
           donationInput: {
-            donationAmount: getSatoshisAmount(state.amount * 100),
+            donationAmount: getSatoshisFromUSDCents(state.amount * 100),
           },
         }),
         metadataInput: {
@@ -354,7 +364,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           You contributed{' '}
           <span style={{ fontWeight: 'bold' }}>
             {' '}
-            {getSatoshisAmount(state.amount * 100)} sats{' '}
+            {getSatoshisFromUSDCents(state.amount * 100)} sats{' '}
           </span>{' '}
           to the Geyser Grants Pool.
         </Text>
@@ -414,7 +424,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
         }}
         backgroundColor="brand.primary400"
       >
-        Contribute
+        Sponsor
       </Button>
 
       <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
