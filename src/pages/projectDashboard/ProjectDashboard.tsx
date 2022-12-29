@@ -6,12 +6,9 @@ import {
   GridItem,
   HStack,
   useMediaQuery,
-  VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { BiLeftArrowAlt } from 'react-icons/bi';
 import { useHistory, useLocation, useParams } from 'react-router';
-import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { useAuthContext } from '../../context';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
@@ -84,10 +81,6 @@ export const ProjectDashboard = () => {
     },
   );
 
-  const handleBack = () => {
-    history.push(getPath('project', projectId));
-  };
-
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   if (error || !data || !data.project) {
@@ -153,9 +146,9 @@ export const ProjectDashboard = () => {
 
   const navList: DashboardTabs[] = [
     DashboardTabs.projectDescription,
-    DashboardTabs.entries,
     DashboardTabs.contributors,
     DashboardTabs.funds,
+    DashboardTabs.entries,
     DashboardTabs.rewards,
     DashboardTabs.milestones,
   ];
@@ -168,55 +161,22 @@ export const ProjectDashboard = () => {
       height="100%"
       justifyContent="space-between"
     >
-      <Grid
+      <HStack
         width="100%"
-        templateColumns={
-          isLargerThan1280
-            ? 'repeat(18, 1fr)'
-            : isMobile
-            ? 'repeat(6, 1fr)'
-            : 'repeat(15, 1fr)'
-        }
-        padding={isMobile ? '10px' : '40px 40px 20px 40px'}
+        justifyContent="center"
+        marginTop={isMobile ? '10px' : '30px'}
+        overflowX={isMobile ? 'auto' : undefined}
       >
-        <GridItem
-          colSpan={isLargerThan1280 ? 5 : 2}
+        <HStack
+          spacing="0px"
+          minWidth="350px"
           display="flex"
-          justifyContent="flex-start"
+          alignItems="center"
         >
-          <ButtonComponent
-            onClick={handleBack}
-            leftIcon={<BiLeftArrowAlt style={{ fontSize: '25px' }} />}
-          >
-            {' '}
-            Back
-          </ButtonComponent>
-        </GridItem>
-        <GridItem
-          colSpan={8}
-          display="flex"
-          justifyContent="center"
-          overflowX={isMobile ? 'auto' : undefined}
-        >
-          <HStack
-            spacing="0px"
-            width="100%"
-            minWidth="350px"
-            display="flex"
-            alignItems="center"
-          >
-            {navList.map((nav) => renderButton(nav))}
-          </HStack>
-        </GridItem>
-        <GridItem colSpan={5} display="flex" justifyContent="center">
-          <VStack
-            justifyContent="center"
-            alignItems="flex-start"
-            maxWidth="370px"
-            spacing="10px"
-          ></VStack>
-        </GridItem>
-      </Grid>
+          {navList.map((nav) => renderButton(nav))}
+        </HStack>
+      </HStack>
+
       <Grid
         width="100%"
         templateColumns={
