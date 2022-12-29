@@ -23,6 +23,7 @@ import { RewardSettings } from './RewardSettings';
 import { getPath } from '../../constants';
 import { Owner } from '../../types/generated/graphql';
 import { ProjectContributors } from './ProjectContributors';
+import { ProjectStats } from './ProjectStats';
 
 enum DashboardTabs {
   entries = 'entries',
@@ -31,6 +32,7 @@ enum DashboardTabs {
   rewards = 'rewards',
   projectDescription = 'project description',
   contributors = 'contributors',
+  stats = 'stats',
 }
 
 export const ProjectDashboard = () => {
@@ -115,6 +117,8 @@ export const ProjectDashboard = () => {
         return <ProjectSettings project={project} />;
       case DashboardTabs.contributors:
         return <ProjectContributors project={project} />;
+      case DashboardTabs.stats:
+        return <ProjectStats project={project} />;
       default:
         return <ProjectDashboardEntries project={project} />;
     }
@@ -151,6 +155,7 @@ export const ProjectDashboard = () => {
     DashboardTabs.entries,
     DashboardTabs.rewards,
     DashboardTabs.milestones,
+    DashboardTabs.stats,
   ];
 
   return (
