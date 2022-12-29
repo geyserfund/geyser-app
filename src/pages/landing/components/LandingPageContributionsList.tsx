@@ -79,7 +79,7 @@ export const LandingPageContributionsList = () => {
                 count={contribution.count}
                 width={{
                   base: '100%',
-                  md: '375px',
+                  md: '382px',
                 }}
               />
             );

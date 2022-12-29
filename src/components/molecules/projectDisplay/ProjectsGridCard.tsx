@@ -3,6 +3,8 @@ import {
   Heading,
   HStack,
   Image,
+  LinkBox,
+  LinkOverlay,
   Text,
   useColorModeValue,
   VStack,
@@ -29,94 +31,94 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
     });
 
   return (
-    <Box
-      width={'full'}
-      maxWidth={'284px'}
-      bg={useColorModeValue('white', 'gray.900')}
-      borderWidth="3px"
-      borderColor={'brand.neutral300'}
-      rounded={'md'}
-      overflow={'hidden'}
-      onClick={handleClick}
-      spacing={2.5}
-      {...rest}
-    >
+    <LinkBox style={{ textDecoration: 'none' }}>
       <Box
-        height={'202px'}
-        width="full"
-        bg={'gray.100'}
-        pos={'relative'}
-        display="flex"
-        justifyContent={'center'}
-        alignItems="center"
+        width={'full'}
+        maxWidth={'284px'}
+        bg={useColorModeValue('white', 'gray.900')}
+        borderWidth="3px"
+        cursor="pointer"
+        borderColor={'brand.neutral300'}
+        rounded={'md'}
+        _hover={{ boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)' }}
+        overflow={'hidden'}
+        spacing={2.5}
+        {...rest}
       >
-        <Image
-          src={project.image || ''}
+        <Box
+          height={'202px'}
           width="full"
-          height="full"
-          fallback={<ProjectImageListItemPlaceholder padding="3em" />}
-          objectFit="cover"
-        />
-      </Box>
-
-      <Box paddingX={'12px'} paddingY={4}>
-        <Box>
-          <Heading
-            color={useColorModeValue('gray.700', 'white')}
-            fontSize={'18px'}
-            fontFamily={'body'}
-            fontWeight={600}
-            noOfLines={1}
-          >
-            {project.title}
-          </Heading>
-
-          <Box
-            mt={6}
-            display="flex"
-            space="x-6"
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Box display="flex" flexDirection={'column'} alignItems={'center'}>
-              <Text fontWeight={600}>{project.funders.length}</Text>
-
-              <Text
-                fontSize={'xs'}
-                color={'brand.neutral600'}
-                fontFamily={'mono'}
-                textTransform="uppercase"
-              >
-                Contributors
-              </Text>
-            </Box>
-
-            <Box
-              display="flex"
-              flexDirection={'column'}
-              alignItems={'center'}
-              marginTop="-6px"
+          bg={'gray.100'}
+          pos={'relative'}
+          display="flex"
+          justifyContent={'center'}
+          alignItems="center"
+        >
+          <LinkOverlay href={getPath('project', project.name)}>
+            <Image
+              src={project.image || ''}
+              width="full"
+              height="full"
+              fallback={<ProjectImageListItemPlaceholder padding="3em" />}
+              objectFit="cover"
+            />
+          </LinkOverlay>
+        </Box>
+        <Box paddingX={6} paddingY={4}>
+          <VStack spacing={4} alignItems="flex-start">
+            <Heading
+              color={useColorModeValue('gray.700', 'white')}
+              fontSize={'2xl'}
+              fontFamily={'body'}
+              noOfLines={1}
             >
-              <SatoshiAmount fontWeight={600}>{project.balance}</SatoshiAmount>
+              {project.title}
+            </Heading>
 
-              <Text
-                fontSize={'xs'}
-                color={'brand.neutral600'}
-                fontFamily={'mono'}
-                textTransform="uppercase"
-              >
-                Funded
-              </Text>
-            </Box>
+            <HStack
+              mt={6}
+              direction={'row'}
+              spacing={0}
+              align={'center'}
+              alignSelf="center"
+            >
+              <VStack spacing={0.25} align={'center'} paddingX={2}>
+                <Text fontWeight={600}>{project.funders.length}</Text>
 
-            <ProjectStatusLabel project={project} marginTop="18px" />
-          </Box>
+                <Text
+                  fontSize={'xs'}
+                  color={'brand.neutral600'}
+                  fontFamily={'mono'}
+                  textTransform="uppercase"
+                >
+                  Contributors
+                </Text>
+              </VStack>
 
-          <Text noOfLines={5} mt={2} textAlign="justify" size="sm">
-            {project.description}
-          </Text>
+              <VStack spacing={0.25} align={'center'} paddingX={2}>
+                <SatoshiAmount fontWeight={600}>
+                  {project.balance}
+                </SatoshiAmount>
+
+                <Text
+                  fontSize={'xs'}
+                  color={'brand.neutral600'}
+                  fontFamily={'mono'}
+                  textTransform="uppercase"
+                >
+                  Funded
+                </Text>
+              </VStack>
+
+              <ProjectStatusLabel project={project} paddingX={2} />
+            </HStack>
+
+            <Text noOfLines={5} textAlign="left" size="sm">
+              {project.description}
+            </Text>
+          </VStack>
         </Box>
       </Box>
-    </Box>
+    </LinkBox>
   );
 };
