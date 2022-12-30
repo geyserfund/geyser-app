@@ -4,7 +4,7 @@ export interface FundingTxWithCount extends FundingTx {
   count?: number;
 }
 
-const ThresholdTimeToAggregateTransactions = 3600000;
+const ThresholdTimeToAggregateTransactions = 3600000; // 60 * 60 * 1000  -> 1 hour;
 
 export const aggregateTransactions = (
   data: FundingTx[],
@@ -64,7 +64,7 @@ export const aggregateTransactions = (
     let amount = 0;
 
     sortedTransaction.map((transaction) => {
-      if (transaction && transaction.amount) {
+      if (transaction?.amount) {
         amount += transaction.amount;
       }
     });
