@@ -6,5 +6,6 @@ export const fonts = {
   myanmar: 'Myanmar-Khyay',
   interBlack: "'Inter/Black', sans-serif;",
   mono: "'Courier Prime', monospace;",
+  livvic: `'Livvic', sans-serif;`,
   courier: "'courier-std', monospace;",
 };

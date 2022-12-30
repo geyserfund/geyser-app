@@ -1,12 +1,14 @@
 import React from 'react';
 import { Box, Text, Avatar, Link } from '@chakra-ui/react';
-import Brad from '../../../assets/brad.png';
-import Zucco from '../../../assets/zucco.jpg';
-import Lucas from '../../../assets/lucas.jpg';
-import Conor from '../../../assets/conor.jpg';
-import Des from '../../../assets/des.jpg';
-import Prince from '../../../assets/prince.jpg';
-import Crypto from '../../../assets/crypto.jpg';
+import {
+  bradUrl,
+  conorUrl,
+  cryptoUrl,
+  desUrl,
+  lucasUrl,
+  princeUrl,
+  zuccoUrl,
+} from '../../../constants';
 
 interface BoardMemberProps {
   image: string;
@@ -59,43 +61,43 @@ const boardMembers = [
     name: 'Brad Mills',
     handle: 'bradmillscan',
     link: 'https://twitter.com/bradmillscan',
-    image: Brad,
+    image: bradUrl,
   },
   {
     name: 'Giacomo von Zucco',
     handle: 'giacomozucco',
     link: 'https://twitter.com/giacomozucco',
-    image: Zucco,
+    image: zuccoUrl,
   },
   {
     name: 'Lucas Ferreira',
     handle: 'lucasdcf',
     link: 'https://twitter.com/lucasdcf',
-    image: Lucas,
+    image: lucasUrl,
   },
   {
     name: 'Conor Okus',
     handle: 'ConorOkus',
     link: 'https://twitter.com/ConorOkus',
-    image: Conor,
+    image: conorUrl,
   },
   {
     name: 'Desiree Dickerson',
     handle: 'dickerson_des',
     link: 'https://twitter.com/dickerson_des',
-    image: Des,
+    image: desUrl,
   },
   {
     name: 'Daniel Prince',
     handle: 'PrinceySOV',
     link: 'https://twitter.com/PrinceySOV',
-    image: Prince,
+    image: princeUrl,
   },
   {
     name: 'cryptograffiti',
     handle: 'cryptograffiti',
     link: 'https://twitter.com/cryptograffiti',
-    image: Crypto,
+    image: cryptoUrl,
   },
 ];
 

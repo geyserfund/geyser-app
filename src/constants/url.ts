@@ -86,3 +86,37 @@ export const LandingBannerPatternUrl =
 
 export const LandingLetTheSatsFlowUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow.svg';
+// Grant Board Member Images
+export const pacoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/paco.jpg';
+export const lucasUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/lucas.jpg';
+export const desUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/des.jpg';
+export const danialUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/danial.svg';
+export const bradUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/brad.png';
+export const abubakarUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/abubakar.svg';
+export const princeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/prince.jpg';
+export const cryptoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/crypto.jpg';
+export const zuccoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/zucco.jpg';
+export const conorUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/conor.jpg';
+
+export const tachiraUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/tachira.svg';
+
+export const umarUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/umar.svg';
+
+// Grant Assets
+
+export const GrantsChristmasUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/christmas-grants.png';
+export const GrantsRound2Url =
+  'https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-2';

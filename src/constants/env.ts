@@ -30,4 +30,8 @@ if (!process.env.REACT_APP_GIPHY_API_KEY) {
   console.warn('Missing GIPHY API key from environment variables');
 }
 
+if (!process.env.REACT_APP_AIR_TABLE_KEY) {
+  console.warn('Missing AIR_TABLE_KEY API key from environment variables');
+}
+
 export const { REACT_APP_AIR_TABLE_KEY, REACT_APP_GIPHY_API_KEY } = process.env;

@@ -42,6 +42,24 @@ export const TopBanner = () => {
     }
   }, [summaryError]);
 
+  const satsDataArray = [
+    [
+      projectsSummaryData.projectsCount &&
+        projectsSummaryData.projectsCount.toLocaleString(),
+      'Projects',
+    ],
+    [
+      projectsSummaryData.fundedTotal &&
+        projectsSummaryData.fundedTotal.toLocaleString(),
+      'Sats Raised',
+    ],
+    [
+      projectsSummaryData.fundersCount &&
+        projectsSummaryData.fundersCount.toLocaleString(),
+      'Pleb Contributors',
+    ],
+  ];
+
   return (
     <VStack
       width="full"
@@ -65,36 +83,41 @@ export const TopBanner = () => {
           </VStack>
 
           <HStack fontSize={'sm'} spacing={4} textColor={'brand.neutral700'}>
-            {[
-              [projectsSummaryData.projectsCount, 'Projects'],
-              [projectsSummaryData.fundedTotal, 'Sats Raised'],
-              [projectsSummaryData.fundersCount, 'Pleb Contributors'],
-            ].map((statsData, index) => {
-              return (
-                <Stack
-                  spacing={1.5}
-                  key={index}
-                  justifyContent="flex-start"
-                  alignItems={'center'}
-                  direction={isMobile ? 'column' : 'row'}
-                >
-                  {isSummaryLoading ? (
-                    <Skeleton w="25px" h="25px" />
-                  ) : (
-                    <Text fontWeight={'bold'} textColor={colors.neutral900}>
-                      {statsData[0]}
-                    </Text>
-                  )}
-
-                  <Text
-                    textColor={colors.neutral700}
-                    textTransform={'uppercase'}
+            {isSummaryLoading ? (
+              <HStack
+                spacing={1.5}
+                justifyContent="flex-start"
+                alignItems={'center'}
+              >
+                <Skeleton w="25px" h="25px" />
+              </HStack>
+            ) : (
+              satsDataArray.map((statsData, index) => {
+                return (
+                  <HStack
+                    spacing={1.5}
+                    key={index}
+                    justifyContent="flex-start"
+                    alignItems={'center'}
                   >
-                    {statsData[1]}
-                  </Text>
-                </Stack>
-              );
-            })}
+                    {isSummaryLoading ? (
+                      <Skeleton w="25px" h="25px" />
+                    ) : (
+                      <Text fontWeight={'bold'} textColor={colors.neutral900}>
+                        {statsData[0]}
+                      </Text>
+                    )}
+
+                    <Text
+                      textColor={colors.neutral700}
+                      textTransform={'uppercase'}
+                    >
+                      {statsData[1]}
+                    </Text>
+                  </HStack>
+                );
+              })
+            )}
           </HStack>
         </Stack>
       </Container>

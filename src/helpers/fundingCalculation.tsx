@@ -10,7 +10,7 @@ const internationalShippingCost = __production__ ? 60 : 0.06;
 
 export const useFundCalc = (state: IFundForm) => {
   const { btcRate } = useBtcContext();
-  const { getUSDAmount, getSatoshisAmount } = useBTCConverter();
+  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter();
 
   const getTotalAmount = (type: 'sats' | 'dollar', projectName: string) => {
     const shippingAmount = hasShipping(projectName) ? getShippingCost() : 0;
@@ -18,7 +18,7 @@ export const useFundCalc = (state: IFundForm) => {
     if (type === 'sats') {
       const rewardsCost =
         state.rewardCurrency === RewardCurrency.Usdcent
-          ? getSatoshisAmount(state.rewardsCost)
+          ? getSatoshisFromUSDCents(state.rewardsCost)
           : state.rewardsCost;
 
       return Math.round(rewardsCost) + state.donationAmount + shippingAmount;
