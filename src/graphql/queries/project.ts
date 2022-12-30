@@ -66,13 +66,6 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
           imageUrl
           email
         }
-        rewards {
-          quantity
-          projectReward {
-            id
-            name
-          }
-        }
         amountFunded
         confirmed
         confirmedAt
@@ -258,6 +251,31 @@ export const QUERY_GET_PROJECT_FUNDERS = gql`
         }
         imageUrl
       }
+    }
+  }
+`;
+
+export const QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS = gql`
+  query Query($input: GetFundersInput!) {
+    getFunders(input: $input) {
+      id
+      user {
+        id
+        username
+        imageUrl
+        email
+      }
+      rewards {
+        quantity
+        projectReward {
+          id
+          name
+        }
+      }
+      amountFunded
+      confirmed
+      confirmedAt
+      timesFunded
     }
   }
 `;

@@ -23,9 +23,12 @@ import {
   ButtonComponent,
 } from '../../components/ui';
 import { DateTime } from 'luxon';
-import { computeFunderBadges } from '../../helpers';
+import { computeFunderBadges, ScrollInvoke } from '../../helpers';
 import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges';
 import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi';
+import { useQueryWithPagination } from '../../hooks';
+import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql';
+import Loader from '../../components/ui/Loader';
 
 type TableData = {
   header: string;
@@ -35,7 +38,15 @@ type TableData = {
 };
 
 export const ProjectContributors = ({ project }: { project: Project }) => {
-  const funders = (project.funders as Funder[]) || [];
+  const funders = useQueryWithPagination<Funder>({
+    queryName: 'getFunders',
+    itemLimit: 10,
+    query: QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS,
+    where: { projectId: parseInt(project.id, 10) },
+    orderBy: {
+      amountFunded: 'desc',
+    },
+  });
 
   const [selectedFunders, setSelectedFunders] = useState<Funder[]>([]);
   const [csvData, setCsvData] = useState<(string | number)[][]>([]);
@@ -120,7 +131,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
   );
 
   const checkIfAllIsSelected = () => {
-    return selectedFunders.length === funders.length;
+    return selectedFunders.length === funders.data.length;
   };
 
   const checkIfSelected = (funderId?: string) => {
@@ -146,7 +157,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
     if (allIsSelected) {
       setSelectedFunders([]);
     } else {
-      setSelectedFunders(funders as Funder[]);
+      setSelectedFunders(funders.data as Funder[]);
     }
   };
 
@@ -209,6 +220,14 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
     done();
   };
 
+  if (funders.isLoading) {
+    return (
+      <GridItem colSpan={18} display="flex" justifyContent={'center'}>
+        <Loader />
+      </GridItem>
+    );
+  }
+
   return (
     <>
       <GridItem colSpan={18} display="flex" justifyContent={'center'}>
@@ -217,7 +236,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
             <Text
               fontSize={'16px'}
               fontWeight={600}
-            >{`${funders.length} Contributers`}</Text>
+            >{`${project.fundersCount} Contributers`}</Text>
             <HStack>
               <ButtonComponent
                 size="sm"
@@ -280,7 +299,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
                 </Tr>
               </Thead>
               <Tbody>
-                {funders.map((funder) => {
+                {funders.data.map((funder) => {
                   if (funder)
                     return (
                       <Tr key={funder.id}>
@@ -316,6 +335,12 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
               </Tbody>
             </Table>
           </TableContainer>
+          <ScrollInvoke
+            elementId="app-route-content-root"
+            onScrollEnd={funders.fetchNext}
+            isLoading={funders.isLoadingMore}
+            noMoreItems={funders.noMoreItems}
+          />
         </VStack>
       </GridItem>
     </>
