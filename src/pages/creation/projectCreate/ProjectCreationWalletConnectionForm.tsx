@@ -309,7 +309,7 @@ export const ProjectCreationWalletConnectionForm = ({
               ) : null}
 
               <WalletConnectionOptionInfoBox
-                primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
+                primaryText="Easy setup process for beginners and Geyser charges a 2% operational fee per transaction."
                 secondaryText={
                   <>
                     <Link
@@ -319,9 +319,10 @@ export const ProjectCreationWalletConnectionForm = ({
                     >
                       Lightning Addresses
                     </Link>{' '}
-                    look like email addresses (mick@alby.com) but are for
-                    sending bitcoin. Most Lightning wallets provide lightning
-                    addresses. We recommend:
+                    are like an email address, but for your Bitcoin. You can
+                    receive your funds from both lightning and onchain
+                    transactions. Get your own lightning access using these
+                    recommended apps.
                   </>
                 }
               >
@@ -367,8 +368,8 @@ export const ProjectCreationWalletConnectionForm = ({
               ) : null}
 
               <WalletConnectionOptionInfoBox
-                primaryText="More challenging to setup, but you own your funds."
-                secondaryText="Connect your Lightning node to receive incoming transactions directly. Don't have a node? You can create a node on the cloud using:"
+                primaryText="Connect your node, manage your own liquidity, and Geyser won't charge any fees."
+                secondaryText="Connect your Lightning node to receive incoming transactions directly. Beware that your node's liquidity remains your own responsibility. Don't have a node? You can get one on the cloud using Voltage."
               >
                 <HStack width={'full'} justifyContent={'flex-start'}>
                   <Link isExternal href={VoltageExplainerPageForGeyserURL}>

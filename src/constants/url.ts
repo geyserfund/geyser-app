@@ -86,6 +86,10 @@ export const LandingBannerPatternUrl =
 
 export const LandingLetTheSatsFlowUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow.svg';
+
+export const LaunchImage2Url =
+  'https://storage.googleapis.com/geyser-projects-media/app/launchImage.png';
+
 // Grant Board Member Images
 export const pacoUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/paco.jpg';

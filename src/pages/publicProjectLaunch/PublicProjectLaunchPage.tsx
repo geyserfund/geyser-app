@@ -18,7 +18,12 @@ import { TwitterConnect } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { useAuthContext } from '../../context';
 import { hasTwitterAccount, isMobileMode } from '../../utils';
-import { LaunchProjectRocketUrl, colors, getPath } from '../../constants';
+import {
+  LaunchProjectRocketUrl,
+  colors,
+  getPath,
+  LaunchImage2Url,
+} from '../../constants';
 
 const useStyles = createUseStyles({
   backIcon: {
@@ -92,13 +97,13 @@ export const PublicProjectLaunchPage = () => {
               fontSize="30px"
               fontWeight={700}
               paddingTop={isMobile ? 5 : 0}
-              paddingBottom="20%"
+              paddingBottom="10%"
             >
               {' '}
               Create A New Project
             </Text>
-            <VStack width="100%" justifyContent="center">
-              <Image src={LaunchProjectRocketUrl} />
+            <VStack spacing="20px" width="100%" justifyContent="center">
+              <Image src={LaunchImage2Url} />
               <Text fontSize="18px" fontWeight={600} color={colors.neutral900}>
                 Transform your ideas into real world projects backed by your
                 community
@@ -108,10 +113,15 @@ export const PublicProjectLaunchPage = () => {
                 width="90%"
                 fontSize="15px"
               >
-                <ListItem>Reward your contributors with perks</ListItem>
-                <ListItem>Keep community up to date with entries</ListItem>
-                <ListItem>Keep ownership of your funds</ListItem>
-                <ListItem>Geyser tip of 2% paid by contributors</ListItem>
+                <ListItem>🌍 Raise funds from anywhere in the world.</ListItem>
+                <ListItem>🔑 Remain in control of your funds.</ListItem>
+                <ListItem>
+                  🖋 Keep your community up to date by writing Entries.
+                </ListItem>
+                <ListItem>🎁 Reward your contributors with perks.</ListItem>
+                <ListItem>
+                  💸 Low 2% fees and no fees for node-runners.
+                </ListItem>
               </UnorderedList>
 
               {!loading ? (
@@ -120,8 +130,8 @@ export const PublicProjectLaunchPage = () => {
                 (user && !hasTwitterAccount(user)) ? (
                   <VStack>
                     <Text color={colors.neutral700} paddingBottom={3}>
-                      We require creators to login with Twitter to create a
-                      project.
+                      We require creators to login with Twitter to start their
+                      Geyser projects.
                     </Text>
 
                     <TwitterConnect />
