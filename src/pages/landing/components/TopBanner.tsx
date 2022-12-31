@@ -11,14 +11,17 @@ import {
 } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 
-import BannerPattern from '../../../assets/banner-pattern.png';
-import { colors } from '../../../constants';
-import { useNotification } from '../../../utils';
+import {
+  colors,
+  LandingBannerPatternUrl,
+  LandingLetTheSatsFlowUrl,
+} from '../../../constants';
+import { isMobileMode, useNotification } from '../../../utils';
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
-import SatsFlowSVG from '../../../assets/images/let-the-sats-flow.svg';
 
 export const TopBanner = () => {
   const { toast } = useNotification();
+  const isMobile = isMobileMode();
 
   const {
     loading: isSummaryLoading,
@@ -58,7 +61,11 @@ export const TopBanner = () => {
   ];
 
   return (
-    <VStack width="full" align="center" backgroundImage={BannerPattern}>
+    <VStack
+      width="full"
+      align="center"
+      backgroundImage={LandingBannerPatternUrl}
+    >
       <Container maxW={'5xl'}>
         <Stack
           textAlign={'center'}
@@ -67,7 +74,7 @@ export const TopBanner = () => {
           py={{ base: 6, md: 8 }}
         >
           <VStack spacing={3}>
-            <Image src={SatsFlowSVG} maxHeight="76px" />
+            <Image src={LandingLetTheSatsFlowUrl} maxHeight="76px" />
 
             <Heading as="h1" fontWeight={'bold'} size="lg" lineHeight={'110%'}>
               Play a part in world-changing ideas by contributing to them and

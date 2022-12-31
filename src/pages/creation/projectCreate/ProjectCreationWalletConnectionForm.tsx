@@ -309,8 +309,22 @@ export const ProjectCreationWalletConnectionForm = ({
               ) : null}
 
               <WalletConnectionOptionInfoBox
-                primaryText="Easy setup process for beginners, but you trust the wallets with your funds."
-                secondaryText="Lightning Addresses look like email addresses (mick@alby.com) but are for sending bitcoin. Most Lightning wallets provide lightning addresses. We recommend:"
+                primaryText="Easy setup process for beginners and Geyser charges a 2% operational fee per transaction."
+                secondaryText={
+                  <>
+                    <Link
+                      textDecoration="underline"
+                      href="https://lightningaddress.com/"
+                      isExternal
+                    >
+                      Lightning Addresses
+                    </Link>{' '}
+                    are like an email address, but for your Bitcoin. You can
+                    receive your funds from both lightning and onchain
+                    transactions. Get your own lightning access using these
+                    recommended apps.
+                  </>
+                }
               >
                 <HStack
                   width={'full'}
@@ -354,8 +368,8 @@ export const ProjectCreationWalletConnectionForm = ({
               ) : null}
 
               <WalletConnectionOptionInfoBox
-                primaryText="More challenging to setup, but you own your funds."
-                secondaryText="Connect your Lightning node to receive incoming transactions directly. Don't have a node? You can create a node on the cloud using:"
+                primaryText="Connect your node, manage your own liquidity, and Geyser won't charge any fees."
+                secondaryText="Connect your Lightning node to receive incoming transactions directly. Beware that your node's liquidity remains your own responsibility. Don't have a node? You can get one on the cloud using Voltage."
               >
                 <HStack width={'full'} justifyContent={'flex-start'}>
                   <Link isExternal href={VoltageExplainerPageForGeyserURL}>
@@ -372,8 +386,8 @@ export const ProjectCreationWalletConnectionForm = ({
             primary
             isFullWidth
             onClick={handleProjectLaunchSelected}
-            isLoading={isCreateWalletLoading || isEvaluatingLightningAddress}
-            disabled={isSubmitEnabled === false}
+            isLoading={isCreateWalletLoading}
+            disabled={isSubmitEnabled === false || isEvaluatingLightningAddress}
           >
             <>
               <BiRocket style={{ marginRight: '10px' }} />
@@ -385,7 +399,7 @@ export const ProjectCreationWalletConnectionForm = ({
             <ButtonComponent
               isFullWidth
               onClick={() => onSaveAsDraftSelected(createWalletInput!)}
-              isLoading={isCreateWalletLoading || isEvaluatingLightningAddress}
+              disabled={isCreateWalletLoading || isEvaluatingLightningAddress}
             >
               Save As Draft
             </ButtonComponent>

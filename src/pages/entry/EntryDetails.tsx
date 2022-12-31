@@ -72,7 +72,12 @@ export const EntryDetails = ({ entry }: Props) => {
 
       <Box flex={1} width="100%">
         {entry.content && (
-          <ProjectEntryEditor name="content" value={entry.content} isReadOnly />
+          <ProjectEntryEditor
+            name="content"
+            value={entry.content}
+            isReadOnly
+            noPadding
+          />
         )}
       </Box>
     </VStack>

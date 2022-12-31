@@ -4,6 +4,8 @@ export interface FundingTxWithCount extends FundingTx {
   count?: number;
 }
 
+const ThresholdTimeToAggregateTransactions = 3600000; // 60 * 60 * 1000  -> 1 hour;
+
 export const aggregateTransactions = (
   data: FundingTx[],
 ): FundingTxWithCount[] => {
@@ -37,12 +39,15 @@ export const aggregateTransactions = (
       if (
         f1.id !== f2.id &&
         (f1.funder.id === f2.funder.id || (isAnon(f1) && isAnon(f2))) &&
-        f1.amount === f2.amount &&
         f1.projectId === f2.projectId &&
         f2.method === FundingMethod.PodcastKeysend
       ) {
         if (
-          matches.some((match) => Math.abs(match.paidAt - f2.paidAt) <= 75000)
+          matches.some(
+            (match) =>
+              Math.abs(match.paidAt - f2.paidAt) <=
+              ThresholdTimeToAggregateTransactions,
+          )
         ) {
           matches.push(f2);
           groupedTxIds.push(f2.id);
@@ -56,8 +61,17 @@ export const aggregateTransactions = (
   groupedTxs.map((transactions) => {
     const sortedTransaction = transactions.sort((a, b) => a.paidAt - b.paidAt);
 
+    let amount = 0;
+
+    sortedTransaction.map((transaction) => {
+      if (transaction?.amount) {
+        amount += transaction.amount;
+      }
+    });
+
     const newContribution = {
       ...sortedTransaction[0],
+      amount,
       count: sortedTransaction.length,
     };
 

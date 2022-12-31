@@ -3,35 +3,32 @@ import {
   Heading,
   HStack,
   Image,
-  LinkBox,
-  LinkOverlay,
+  Link as LinkChakra,
   Text,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import { useHistory } from 'react-router';
-import { getPath } from '../../../constants';
+import { BsFillCheckCircleFill } from 'react-icons/bs';
 
+import SatoshiPng from '../../../assets/satoshi.png';
+import { getPath, fonts, colors } from '../../../constants';
 import { Project } from '../../../types/generated/graphql';
-import { ICard, ProjectStatusLabel, SatoshiAmount } from '../../ui';
+import { ICard } from '../../ui';
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
+import { getShortAmountLabel } from '../../../utils';
+import { Link } from 'react-router-dom';
 type Props = ICard & {
   project: Project;
   onClick?: () => void;
 };
 
 export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
-  const history = useHistory();
-
-  const handleClick =
-    onClick ||
-    (() => {
-      history.push(getPath('project', project.name));
-    });
-
   return (
-    <LinkBox style={{ textDecoration: 'none' }}>
+    <Link
+      to={getPath('project', project.name)}
+      style={{ textDecoration: 'none' }}
+    >
       <Box
         width={'full'}
         maxWidth={'284px'}
@@ -40,21 +37,30 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
         cursor="pointer"
         borderColor={'brand.neutral300'}
         rounded={'md'}
-        _hover={{ boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)' }}
         overflow={'hidden'}
         spacing={2.5}
+        _hover={{
+          borderColor: 'brand.neutral500',
+          boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)',
+          cursor: 'pointer',
+        }}
+        transition="border-color 0.3s ease-in-out"
         {...rest}
       >
-        <Box
-          height={'202px'}
-          width="full"
-          bg={'gray.100'}
-          pos={'relative'}
-          display="flex"
-          justifyContent={'center'}
-          alignItems="center"
+        <LinkChakra
+          href={project.image || ''}
+          isExternal
+          onClick={(event) => event.stopPropagation()}
         >
-          <LinkOverlay href={getPath('project', project.name)}>
+          <Box
+            height={'202px'}
+            width="full"
+            bg={'gray.100'}
+            pos={'relative'}
+            display="flex"
+            justifyContent={'center'}
+            alignItems="center"
+          >
             <Image
               src={project.image || ''}
               width="full"
@@ -62,9 +68,9 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               fallback={<ProjectImageListItemPlaceholder padding="3em" />}
               objectFit="cover"
             />
-          </LinkOverlay>
-        </Box>
-        <Box paddingX={6} paddingY={4}>
+          </Box>
+        </LinkChakra>
+        <Box paddingX="18px" paddingY={'14px'}>
           <VStack spacing={4} alignItems="flex-start">
             <Heading
               color={useColorModeValue('gray.700', 'white')}
@@ -76,41 +82,63 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
             </Heading>
 
             <HStack
+              width="100%"
               mt={6}
               direction={'row'}
               spacing={0}
               align={'center'}
-              alignSelf="center"
+              justifyContent={'space-between'}
             >
-              <VStack spacing={0.25} align={'center'} paddingX={2}>
-                <Text fontWeight={600}>{project.funders.length}</Text>
+              <VStack alignItems={'center'}>
+                <Text fontSize="16px" fontWeight={600} fontFamily={fonts.mono}>
+                  {project.funders.length}
+                </Text>
 
                 <Text
-                  fontSize={'xs'}
+                  fontSize="12px"
                   color={'brand.neutral600'}
-                  fontFamily={'mono'}
+                  fontFamily={fonts.mono}
                   textTransform="uppercase"
                 >
-                  Contributors
+                  funders
                 </Text>
               </VStack>
 
-              <VStack spacing={0.25} align={'center'} paddingX={2}>
-                <SatoshiAmount fontWeight={600}>
-                  {project.balance}
-                </SatoshiAmount>
-
+              <VStack alignItems={'center'}>
+                <HStack spacing="3px">
+                  <Image src={SatoshiPng} height="20px" />
+                  <Text
+                    fontSize="16px"
+                    fontWeight={600}
+                    fontFamily={fonts.mono}
+                  >
+                    {getShortAmountLabel(project.balance)}
+                  </Text>
+                </HStack>
                 <Text
-                  fontSize={'xs'}
+                  fontSize="12px"
                   color={'brand.neutral600'}
-                  fontFamily={'mono'}
+                  fontFamily={fonts.mono}
                   textTransform="uppercase"
                 >
                   Funded
                 </Text>
               </VStack>
 
-              <ProjectStatusLabel project={project} paddingX={2} />
+              <VStack>
+                <BsFillCheckCircleFill
+                  color={colors.primary500}
+                  fontSize="20px"
+                />
+                <Text
+                  fontSize="12px"
+                  fontFamily={fonts.mono}
+                  color="brand.primary500"
+                  textTransform="uppercase"
+                >
+                  RUNNING
+                </Text>
+              </VStack>
             </HStack>
 
             <Text noOfLines={5} textAlign="left" size="sm">
@@ -119,6 +147,6 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
           </VStack>
         </Box>
       </Box>
-    </LinkBox>
+    </Link>
   );
 };
