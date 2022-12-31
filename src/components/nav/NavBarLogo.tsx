@@ -1,11 +1,9 @@
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
 import React from 'react';
-import LogoLight from '../../assets/logo-brand.svg';
 import LogoDark from '../../assets/logo-dark.svg';
-import LogoName from '../../assets/logo-name-grey.svg';
-import LogoNameDark from '../../assets/logo-name-dark.svg';
-import LogoGrey from '../../assets/geysersmallgrey.svg';
+import LogoName from '../../assets/logo-name-brand.svg';
+import LogoSmall from '../../assets/logo-brand.svg';
 import { useColorMode } from '@chakra-ui/color-mode';
 import { useMediaQuery } from '@chakra-ui/media-query';
 import { HTMLChakraProps } from '@chakra-ui/system';
@@ -43,7 +41,7 @@ export const NavBarLogo = ({
     colorMode === 'light'
       ? useFullOne
         ? LogoName
-        : LogoGrey
+        : LogoSmall
       : useFullOne
       ? LogoName
       : LogoDark;
