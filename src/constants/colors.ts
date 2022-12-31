@@ -1,6 +1,7 @@
 export const colors = {
   primary: '#20ECC7',
   primaryTint: '#12CEAC',
+  primaryText: '#10CAA8',
   textBlack: '#000000',
   textWhite: '#FFFFFF',
   textGrey: '#6E6E6E',
@@ -51,6 +52,7 @@ export const colors = {
   neutral100: '#F4F4F4',
   neutral200: '#E9ECEF',
   neutral300: '#DEE2E6',
+  neutral400: '#CED4DA',
   neutral500: '#ADB5BD',
   neutral600: '#6C757D',
   neutral700: '#495057',

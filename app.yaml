@@ -21,4 +21,4 @@ env_variables:
   APP_URL: https://geyser.fund
   MIN_INITIAL_FUNDING: 1
   NODE_ENV: production
-service_account: "geyser-frontend-app-engine@geyser-mvp-prod.iam.gserviceaccount.com"
+service_account: 'geyser-frontend-app-engine@geyser-mvp-prod.iam.gserviceaccount.com'

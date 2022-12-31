@@ -12,13 +12,13 @@ export const useBTCConverter = () => {
     return satoshis * btcRate * 100;
   };
 
-  const getSatoshisAmount = (usdCents: USDCents): Satoshis => {
+  const getSatoshisFromUSDCents = (usdCents: USDCents): Satoshis => {
     return Math.round(usdCents / 100 / btcRate);
   };
 
   return {
     getUSDAmount,
     getUSDCentsAmount,
-    getSatoshisAmount,
+    getSatoshisFromUSDCents,
   };
 };

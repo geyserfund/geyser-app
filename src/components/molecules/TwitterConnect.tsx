@@ -120,7 +120,7 @@ export const TwitterConnect = ({ onClose }: Props) => {
       leftIcon={<Icon as={SiTwitter} />}
       onClick={handleClick}
     >
-      Twitter
+      Connect Twitter
     </ButtonComponent>
   );
 };

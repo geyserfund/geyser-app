@@ -65,7 +65,7 @@ export const WalletOfSatoshiLightningAddressURL =
 export const BitNobURL = 'https://bitnob.com/';
 export const AmbossUrl = 'https://amboss.space/node/';
 
-// Asset Urls
+// External Platform Image Urls
 export const BoostCLILogoUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/boostcli.png';
 export const BreezLogoUrl =
@@ -78,3 +78,58 @@ export const CuriocasterLogoUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/curiocaster.png';
 export const PodverseLogoUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/podverse.png';
+
+// App Assets
+
+export const LandingBannerPatternUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/banner-pattern.png';
+
+export const LandingLetTheSatsFlowUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow.svg';
+
+export const LaunchImage2Url =
+  'https://storage.googleapis.com/geyser-projects-media/app/launchImage.png';
+
+// Grant Board Member Images
+export const pacoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/paco.jpg';
+export const lucasUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/lucas.jpg';
+export const desUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/des.jpg';
+export const danialUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/danial.svg';
+export const bradUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/brad.png';
+export const abubakarUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/abubakar.svg';
+export const princeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/prince.jpg';
+export const cryptoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/crypto.jpg';
+export const zuccoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/zucco.jpg';
+export const conorUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/conor.jpg';
+
+export const tachiraUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/tachira.svg';
+
+export const umarUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/umar.svg';
+
+// Grant Assets
+
+export const GrantsChristmasUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/christmas-grants.png';
+export const GrantsRound2Url =
+  'https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-2';
+
+export const GrantsBitcoinCulture =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-culture.svg';
+export const GrantsBitcoinDevelopment =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-development.svg';
+export const GrantsBitcoinEducation =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-education.svg';
+export const GrantsHero =
+  'https://storage.googleapis.com/geyser-projects-media/grants/grant-hero.svg';

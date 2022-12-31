@@ -26,8 +26,8 @@ import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
 import { getPath, routerPathNames } from '../constants';
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
 import { ProfilePage } from '../pages/profile/ProfilePage';
-import { Project as OldProjectView } from '../pages/project';
-import { GrantsMaintenancePage } from '../pages/grants/GrantsMaintenancePage';
+import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne';
+import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo';
 
 export const customHistory = createBrowserHistory();
 
@@ -51,14 +51,20 @@ export const Router = () => {
             <Route path="/failed-authentication">
               <FailedAuth />
             </Route>
-            {/* <Route path={getPath('grants')} component={GrantsLandingPage} /> */}
-            <Route path={getPath('grants')} component={GrantsMaintenancePage} />
+            <Route path={'/grants/roundone'}>
+              <GrantsRoundOne />
+            </Route>
+            <Route path={'/grants/roundtwo'}>
+              <GrantsRoundTwo />
+            </Route>
+            <Route path={'/grants'} component={GrantsLandingPage} />
+
             <Route
               path={getPath('publicProjectLaunch')}
               component={PublicProjectLaunchPage}
             />
             {/* Begin: Old Grants Routes to be retired soon */}
-            <Route path="/project/bitcoineducation">
+            {/* <Route path="/project/bitcoineducation">
               <OldProjectView projectId="bitcoineducation" />
             </Route>
             <Route path="/project/bitcoinculture">
@@ -66,7 +72,7 @@ export const Router = () => {
             </Route>
             <Route path="/project/bitcoinbuilders">
               <OldProjectView projectId="bitcoinbuilders" />
-            </Route>
+            </Route> */}
             {/* End: Old Grants Routes to be retired soon */}
             <Route
               path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`}

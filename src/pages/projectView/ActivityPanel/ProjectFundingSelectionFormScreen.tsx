@@ -207,21 +207,6 @@ export const ProjectFundingSelectionFormScreen = ({
           <HStack
             justifyContent={'space-between'}
             width={'full'}
-            fontSize={'14px'}
-          >
-            <Text
-              fontSize="14px"
-              textColor={'brand.neutral700'}
-              fontWeight={'normal'}
-            >
-              {'Geyser fee'}
-            </Text>
-            <Text>{!noFeeProjects.includes(name) ? '2%' : '0%'}</Text>
-          </HStack>
-
-          <HStack
-            justifyContent={'space-between'}
-            width={'full'}
             fontSize={'10px'}
           >
             <SectionTitle>Total</SectionTitle>
