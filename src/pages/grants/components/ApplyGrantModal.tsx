@@ -225,7 +225,7 @@ export const ApplyGrantModal = ({
               }}
               isFullWidth
             >
-              Confirm
+              {user?.id ? 'Apply' : 'Confirm'}
             </Button>
           ) : (
             <Button isFullWidth disabled>

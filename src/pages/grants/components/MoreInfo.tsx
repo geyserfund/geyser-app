@@ -1,21 +1,27 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Link, Text, TextProps } from '@chakra-ui/react';
 import React from 'react';
 import { fonts } from '../../../constants/fonts';
 import shareicon from '../../../assets/shareico.svg';
+import { GrantsFAQUrl } from '../../../constants';
 
-export const MoreInfo = () => {
+interface MoreInfoProps {
+  titleProps?: TextProps;
+}
+
+export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
   return (
     <>
       <Box mt={4}>
         <Text
           fontWeight={'bold'}
-          fontSize="large"
+          fontSize="19px"
           fontFamily={fonts.interBlack}
+          {...titleProps}
         >
           More Information
         </Text>
         <Text
-          mt={5}
+          mt="5px"
           color="brand.neutral600"
           fontSize={'14px'}
           textAlign="justify"
@@ -33,17 +39,20 @@ export const MoreInfo = () => {
           reached. For more information see this doc.
         </Text>
         <Box w={20} mt="4" mb={10}>
-          <Box
-            boxShadow="lg"
-            px="4"
-            gap={4}
-            py={'2'}
-            alignItems="center"
-            display="flex"
-          >
-            <Text fontWeight={'600'}>Faq</Text>
-            <img src={shareicon} alt="icon" />
-          </Box>
+          <Link href={GrantsFAQUrl} isExternal>
+            <Box
+              boxShadow="lg"
+              px="4"
+              gap={4}
+              py={'2'}
+              alignItems="center"
+              display="flex"
+              borderRadius="4px"
+            >
+              <Text fontWeight={'600'}>Faq</Text>
+              <img src={shareicon} alt="icon" />
+            </Box>
+          </Link>
         </Box>
       </Box>
     </>

@@ -133,3 +133,8 @@ export const GrantsBitcoinEducation =
   'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-education.png';
 export const GrantsHero =
   'https://storage.googleapis.com/geyser-projects-media/grants/grant-hero.png';
+
+// Geyser Notion Links
+
+export const GrantsFAQUrl =
+  'https://geyser.notion.site/About-Geyser-Grants-fad8a130545d4597a3750a17a7ce301f';

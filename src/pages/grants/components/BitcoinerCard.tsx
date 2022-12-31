@@ -1,18 +1,6 @@
 import React from 'react';
 
-import { isMobileMode } from '../../../utils';
-
-import {
-  Grid,
-  GridItem,
-  Box,
-  Text,
-  Avatar,
-  Wrap,
-  WrapItem,
-  Center,
-  Link,
-} from '@chakra-ui/react';
+import { Box, Text, Avatar, WrapItem, Center, Link } from '@chakra-ui/react';
 
 interface BitcoinersProp {
   image: string;
@@ -22,13 +10,12 @@ interface BitcoinersProp {
 }
 
 export const BitcoinerCard = ({ image, name, role, link }: BitcoinersProp) => {
-  const isMobile = isMobileMode();
   return (
     <Link href={link} isExternal style={{ textDecoration: 'none' }}>
       <WrapItem>
         <Center>
           <Box
-            boxShadow={'md'}
+            boxShadow={'sm'}
             display="flex"
             p="2"
             width={'165px'}
@@ -36,6 +23,11 @@ export const BitcoinerCard = ({ image, name, role, link }: BitcoinersProp) => {
             alignItems={'center'}
             justifyContent="center"
             flexDirection="column"
+            _hover={{ shadow: 'lg' }}
+            transition="box-shadow ease-out 0.3s"
+            borderRadius="4px"
+            border="1px solid"
+            borderColor="brand.neutral100"
           >
             <Box width={'60px'} height="60px" rounded={'full'}>
               <Avatar src={image} size="full" />
