@@ -45,7 +45,6 @@ export const CustomGrantCard = ({
             borderTopRightRadius="12px"
             borderTopLeftRadius="12px"
             overflow="hidden"
-            borderBottom="1px solid"
           >
             <img src={banner} width="100%" />
           </Box>
