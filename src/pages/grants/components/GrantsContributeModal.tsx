@@ -306,12 +306,12 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
       </FormControl>
       <FormControl mb={3}>
         <FormLabel fontWeight={'700'} fontSize="14px">
-          Leave us comment (optional)
+          Leave us a comment (optional)
         </FormLabel>
         <Input
           _placeholder={{ fontSize: '12px' }}
           _focus={{ borderColor: 'brand.primary' }}
-          placeholder="satoshi@geyser.fund"
+          placeholder="Love what you guys are doing. Let the Sats flow!"
           name="comment"
           value={state.comment}
           onChange={setTarget}
@@ -319,7 +319,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
       </FormControl>
       <Box>
         <Text fontWeight={'700'} fontSize="14px">
-          Add a Profile Image Link (optional)
+          Add a profile image link (optional)
         </Text>
         <Text fontWeight={'400'} fontSize="11px">
           If you would like to feature your profile or business in the Grant
@@ -332,7 +332,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           size={'lg'}
           _placeholder={{ fontSize: '12px' }}
           _focus={{ borderColor: 'brand.primary' }}
-          placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAccAAABvCAMAAACuGvu3AAAAe1BMVEX////60ij+9tb60SP60R36zwD61U..."
+          placeholder="https://pbs.twimg.com/profile_images/1554429112978120706/yr1hXl6R_400x400.jpg"
         />
       </Box>
       <Box mt={4}>
@@ -407,7 +407,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
       case fundingStages.completed:
         return completedScreen();
       default:
-        return contributionForm();
+        return qrSection();
     }
   };
 
