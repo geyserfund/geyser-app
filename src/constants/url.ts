@@ -124,3 +124,12 @@ export const GrantsChristmasUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/christmas-grants.png';
 export const GrantsRound2Url =
   'https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-2';
+
+export const GrantsBitcoinCulture =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-culture.svg';
+export const GrantsBitcoinDevelopment =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-development.svg';
+export const GrantsBitcoinEducation =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-education.svg';
+export const GrantsHero =
+  'https://storage.googleapis.com/geyser-projects-media/grants/grant-hero.svg';
