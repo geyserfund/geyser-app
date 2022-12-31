@@ -407,7 +407,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
       case fundingStages.completed:
         return completedScreen();
       default:
-        return qrSection();
+        return contributionForm();
     }
   };
 
