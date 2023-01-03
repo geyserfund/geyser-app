@@ -1,73 +1,107 @@
 import React from 'react';
 
-import { HStack, Text } from '@chakra-ui/react';
+import { Stack, StackDirection, Text } from '@chakra-ui/react';
 import { HTMLChakraProps } from '@chakra-ui/system';
-import {
-  BsFillCheckCircleFill,
-  BsFillXCircleFill,
-  BsExclamationCircleFill,
-} from 'react-icons/bs';
+import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
 
 import { colors } from '../../constants';
-import { Project } from '../../types/generated/graphql';
+import { Project, WalletStatus } from '../../types/generated/graphql';
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: Project;
+  fontSize?: string;
+  fontFamily?: string;
+  direction?: StackDirection;
 }
 
 export const ProjectStatusLabel = ({
   project,
-  ...rest
+  fontSize,
+  fontFamily,
+  direction = 'row',
 }: IProjectStatusLabel) => {
-  // This function will need to be refactored to use project.status
+  const commonStyles = {
+    fontWeight: 'semibold',
+    fontFamily,
+    fontSize: fontSize || '12px',
+  };
 
-  const renderLabel = () => {
+  const getIcon = () => {
+    if (
+      project?.wallets[0] &&
+      project.wallets[0]?.state?.status === WalletStatus.Inactive
+    ) {
+      return <BsFillXCircleFill color={colors.secondaryRed} />;
+    }
+
+    if (
+      project?.wallets[0] &&
+      project.wallets[0].state.status === WalletStatus.Unstable
+    ) {
+      return <BsFillXCircleFill color={colors.secondaryGold} />;
+    }
+
+    if (project.active) {
+      return <BsFillCheckCircleFill color={colors.primary600} />;
+    }
+
+    if (project.draft) {
+      return <BsFillXCircleFill color={colors.neutral500} />;
+    }
+
+    return <BsFillXCircleFill color={colors.neutral500} />;
+  };
+
+  const getLabel = () => {
+    if (
+      project?.wallets[0] &&
+      project.wallets[0].state.status === WalletStatus.Inactive
+    ) {
+      return (
+        <Text color={colors.secondaryRed} {...commonStyles}>
+          INACTIVE WALLET
+        </Text>
+      );
+    }
+
+    if (
+      project?.wallets[0] &&
+      project.wallets[0].state.status === WalletStatus.Unstable
+    ) {
+      return (
+        <Text color={colors.secondaryGold} {...commonStyles}>
+          UNSTABLE WALLET
+        </Text>
+      );
+    }
+
     if (project.active) {
       return (
-        <HStack {...rest}>
-          <Text
-            fontWeight={'semibold'}
-            fontSize="12px"
-            color="brand.primary800"
-            textTransform="uppercase"
-          >
-            RUNNING
-          </Text>
-          <BsFillCheckCircleFill color={colors.primary800} />
-        </HStack>
+        <Text color={colors.primary600} {...commonStyles}>
+          RUNNING
+        </Text>
       );
     }
 
     if (project.draft) {
       return (
-        <HStack>
-          <Text
-            fontWeight={'semibold'}
-            fontSize="12px"
-            color={'orange'}
-            textTransform="uppercase"
-          >
-            DRAFT
-          </Text>
-          <BsExclamationCircleFill color={'orange'} />
-        </HStack>
+        <Text color={colors.neutral500} {...commonStyles}>
+          DRAFT
+        </Text>
       );
     }
 
     return (
-      <HStack>
-        <Text
-          fontWeight={'semibold'}
-          fontSize="12px"
-          color={colors.neutral500}
-          textTransform="uppercase"
-        >
-          INACTIVE
-        </Text>
-        <BsFillXCircleFill color={colors.neutral500} />
-      </HStack>
+      <Text color={colors.neutral500} {...commonStyles}>
+        INACTIVE
+      </Text>
     );
   };
 
-  return renderLabel();
+  return (
+    <Stack direction={direction}>
+      {getIcon()}
+      {getLabel()}
+    </Stack>
+  );
 };

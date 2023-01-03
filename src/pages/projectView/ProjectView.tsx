@@ -57,7 +57,7 @@ export const ProjectView = () => {
     },
   );
 
-  if (loading) {
+  if (loading || error) {
     return <Loader />;
   }
 
