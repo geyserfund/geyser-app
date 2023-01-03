@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { ApplyGrantModal } from './ApplyGrantModal';
 import { SatoshiIconTilted } from '../../../components/icons';
@@ -24,7 +24,16 @@ export const ApplyGrantCard = ({
   contributed,
 }: GrantsProp) => {
   return (
-    <Box rounded="md" borderWidth="1px" minWidth={'100%'}>
+    <Box
+      rounded="md"
+      shadow="sm"
+      borderWidth="1px"
+      borderColor="brand.neutral100"
+      minWidth={'100%'}
+      overflow="hidden"
+      _hover={{ shadow: 'lg' }}
+      transition="box-shadow ease-out 0.3s"
+    >
       <Box width={'100%'}>
         <img src={image} width={'100%'} />
       </Box>

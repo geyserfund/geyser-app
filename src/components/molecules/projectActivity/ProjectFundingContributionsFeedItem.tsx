@@ -18,6 +18,7 @@ import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';
 import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon';
+import { fonts } from '../../../constants/fonts';
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx;
@@ -94,14 +95,18 @@ export const ProjectFundingContributionsFeedItem = ({
             )}
             {count && count > 1 && (
               <HStack
-                backgroundColor="brand.neutral300"
-                px="5px"
-                borderRadius="4px"
+                backgroundColor="brand.gray100"
+                px="3px"
+                borderRadius="sm"
                 spacing="2px"
               >
-                <Text fontSize="12px" fontWeight={500}>{`${count}x`}</Text>
-                <LightningIcon height="18px" width="12px" />
-                <Text fontSize="12px" fontWeight={500}>
+                <Text
+                  fontFamily={fonts.inter}
+                  fontSize="12px"
+                  fontWeight={500}
+                >{`${count}x`}</Text>
+                <LightningIcon height="15px" width="10px" />
+                <Text fontFamily={fonts.inter} fontSize="12px" fontWeight={500}>
                   STREAMS
                 </Text>
               </HStack>

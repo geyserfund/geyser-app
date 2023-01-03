@@ -10,6 +10,7 @@ type Props = TextProps & {
   isLoading?: boolean;
   shouldShowDollarConversion?: boolean;
   wrapperClassName?: string;
+  scale?: number;
 };
 
 export const SatoshiAmount = ({
@@ -20,6 +21,7 @@ export const SatoshiAmount = ({
   shouldShowDollarConversion,
   wrapperClassName,
   children,
+  scale,
   ...rest
 }: Props) => {
   const btcConverter = useBTCConverter();
@@ -32,7 +34,7 @@ export const SatoshiAmount = ({
         size = parseInt(fontSize.split('px')[0], 10);
       }
 
-      return (size / 14) * 0.4;
+      return (size / 14) * (scale || 0.4);
     }
 
     return 0.8;

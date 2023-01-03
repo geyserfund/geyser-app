@@ -306,7 +306,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               : 'hidden'
           }
         >
-          <FaBitcoin fontSize={'2.5em'} />
+          <FaBitcoin fontSize={'120px'} />
           <Text fontSize={'10px'} fontWeight={400}>
             Scan this QR code to fund with Bitcoin on any wallet (on-chain or
             lightning). If you are paying onchain, the transaction will be

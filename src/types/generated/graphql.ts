@@ -575,6 +575,7 @@ export type Mutation = {
   updateUser: User;
   /** This operation is currently not supported. */
   updateWallet: Wallet;
+  updateWalletState: Wallet;
 };
 
 export type MutationConfirmAmbassadorArgs = {
@@ -683,6 +684,10 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUpdateWalletArgs = {
   input: UpdateWalletInput;
+};
+
+export type MutationUpdateWalletStateArgs = {
+  input: UpdateWalletStateInput;
 };
 
 export type OffsetBasedPaginationInput = {
@@ -1078,6 +1083,12 @@ export type UpdateWalletInput = {
   name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>;
 };
 
+export type UpdateWalletStateInput = {
+  status: WalletStatus;
+  statusCode: WalletStatusCode;
+  walletId: Scalars['BigInt'];
+};
+
 export type User = {
   __typename?: 'User';
   /** Details on the participation of a User in a project. */
@@ -1162,7 +1173,38 @@ export type Wallet = {
   id: Scalars['BigInt'];
   /** Wallet name */
   name?: Maybe<Scalars['name_String_minLength_5_maxLength_60']>;
+  state: WalletState;
 };
+
+export type WalletState = {
+  __typename?: 'WalletState';
+  /**
+   * The status field is meant to be displayed in the the public view of a project to provide insight to the user
+   * that wants to contribute to the project.
+   */
+  status: WalletStatus;
+  /**
+   * The status code is a more descriptive field about the wallet status. It is meant to be displayed to the
+   * project creator to help them understand what is wrong with their wallet connection. The field can only be queried
+   * by the project creator.
+   */
+  statusCode: WalletStatusCode;
+};
+
+export enum WalletStatus {
+  Inactive = 'INACTIVE',
+  Ok = 'OK',
+  Unstable = 'UNSTABLE',
+}
+
+export enum WalletStatusCode {
+  NotFound = 'NOT_FOUND',
+  NoRoute = 'NO_ROUTE',
+  Ok = 'OK',
+  Unknown = 'UNKNOWN',
+  Unreachable = 'UNREACHABLE',
+  WalletLocked = 'WALLET_LOCKED',
+}
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -1386,6 +1428,7 @@ export type ResolversTypes = {
   UpdateProjectRewardInput: UpdateProjectRewardInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
+  UpdateWalletStateInput: UpdateWalletStateInput;
   User: ResolverTypeWrapper<User>;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
@@ -1398,6 +1441,9 @@ export type ResolversTypes = {
       connectionDetails: ResolversTypes['ConnectionDetails'];
     }
   >;
+  WalletState: ResolverTypeWrapper<WalletState>;
+  WalletStatus: WalletStatus;
+  WalletStatusCode: WalletStatusCode;
   amount_Float_NotNull_min_1: ResolverTypeWrapper<
     Scalars['amount_Float_NotNull_min_1']
   >;
@@ -1579,6 +1625,7 @@ export type ResolversParentTypes = {
   UpdateProjectRewardInput: UpdateProjectRewardInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
+  UpdateWalletStateInput: UpdateWalletStateInput;
   User: User;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
@@ -1589,6 +1636,7 @@ export type ResolversParentTypes = {
   Wallet: Omit<Wallet, 'connectionDetails'> & {
     connectionDetails: ResolversParentTypes['ConnectionDetails'];
   };
+  WalletState: WalletState;
   amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1'];
   amount_Float_min_1: Scalars['amount_Float_min_1'];
   comment_String_maxLength_280: Scalars['comment_String_maxLength_280'];
@@ -2161,6 +2209,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateWalletArgs, 'input'>
   >;
+  updateWalletState?: Resolver<
+    ResolversTypes['Wallet'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateWalletStateArgs, 'input'>
+  >;
 };
 
 export type OwnerResolvers<
@@ -2589,6 +2643,20 @@ export type WalletResolvers<
     ParentType,
     ContextType
   >;
+  state?: Resolver<ResolversTypes['WalletState'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type WalletStateResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['WalletState'] = ResolversParentTypes['WalletState'],
+> = {
+  status?: Resolver<ResolversTypes['WalletStatus'], ParentType, ContextType>;
+  statusCode?: Resolver<
+    ResolversTypes['WalletStatusCode'],
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2843,6 +2911,7 @@ export type Resolvers<ContextType = any> = {
   User?: UserResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
+  WalletState?: WalletStateResolvers<ContextType>;
   amount_Float_NotNull_min_1?: GraphQLScalarType;
   amount_Float_min_1?: GraphQLScalarType;
   comment_String_maxLength_280?: GraphQLScalarType;

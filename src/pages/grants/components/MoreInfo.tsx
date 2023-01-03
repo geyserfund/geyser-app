@@ -1,49 +1,60 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Link, Text, TextProps } from '@chakra-ui/react';
 import React from 'react';
 import { fonts } from '../../../constants/fonts';
 import shareicon from '../../../assets/shareico.svg';
+import { GrantsFAQUrl } from '../../../constants';
 
-export const MoreInfo = () => {
+interface MoreInfoProps {
+  titleProps?: TextProps;
+}
+
+export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
   return (
     <>
       <Box mt={4}>
         <Text
           fontWeight={'bold'}
-          fontSize="large"
+          fontSize="19px"
           fontFamily={fonts.interBlack}
+          {...titleProps}
         >
           More Information
         </Text>
         <Text
-          mt={5}
+          mt="5px"
           color="brand.neutral600"
           fontSize={'14px'}
           textAlign="justify"
         >
-          Bitcoin is signal, everything else is noise. We created Geyser Grants
+          {`Bitcoin is signal, everything else is noise. We created Geyser Grants
           to help broadcast more Bitcoin signal into the world. That is, to
           accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin
-          awarenes, enabling Bitcoin culture, and supporting needed development.
-          Through these grants we will be supporting Bitcoin educators,
-          developers, entrepreneurs and creatives with the resources they need
-          to bootstrap their initiatives. We accept Bitcoin contributions for
-          each individual grant and take no fees at this stage. When the Round
-          goes live applications will be opened, and they will be evaluated once
-          the Rounds close. Grants will be given away as soon as the goal is
-          reached. For more information see this doc.
+          awareness, enabling Bitcoin culture, and supporting needed
+          development. Through these grants we will be supporting Bitcoin
+          educators, developers, entrepreneurs and creatives with the resources
+          they need to bootstrap their initiatives. We accept Bitcoin
+          contributions for each individual grant and don't charge any grants
+          operations fees - Geyser charges no fee to node-running projects, and
+          2% to projects that use a lightning address. When the Round goes live
+          applications will be opened, and they will be evaluated once the
+          Rounds close. Grants will be given away as soon as the goal is
+          reached. For more information see this doc.`}
         </Text>
         <Box w={20} mt="4" mb={10}>
-          <Box
-            boxShadow="lg"
-            px="4"
-            gap={4}
-            py={'2'}
-            alignItems="center"
-            display="flex"
-          >
-            <Text fontWeight={'600'}>Faq</Text>
-            <img src={shareicon} alt="icon" />
-          </Box>
+          <Link href={GrantsFAQUrl} isExternal>
+            <Box
+              boxShadow="lg"
+              px="4"
+              gap={4}
+              py={'2'}
+              alignItems="center"
+              display="flex"
+              borderRadius="4px"
+            >
+              <Text fontWeight={'600'}>Faq</Text>
+              <img src={shareicon} alt="icon" />
+            </Box>
+          </Link>
         </Box>
       </Box>
     </>

@@ -85,14 +85,12 @@ const ConnectAccounts = ({
   const { user } = useAuthContext();
   const [setLnurlState] = setModalStates;
   return (
-    <Box justifyContent="center" alignItems="center">
-      <Text fontSize="md" color="brand.textGrey2" fontWeight="bold" mb={1}>
-        Connect
+    <VStack justifyContent="center" alignItems="center">
+      <Text color="brand.textGrey2" fontSize="12px" marginBottom={5}>
+        Connecting with Twitter or Lightning allows you to keep track of your
+        favorite projects and to launch your own projects.
       </Text>
-      <Text color="brand.textGrey2" marginBottom={5}>
-        Connect more profiles.
-      </Text>
-      <Stack>
+      <Stack width="100%">
         {!hasTwitterAccount(user) && showTwitter && (
           <TwitterConnect onClose={onClose} />
         )}
@@ -103,7 +101,7 @@ const ConnectAccounts = ({
           />
         )}
       </Stack>
-    </Box>
+    </VStack>
   );
 };
 

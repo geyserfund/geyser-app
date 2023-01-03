@@ -1,6 +1,5 @@
 import {
   Checkbox,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,6 +10,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { BsExclamation, BsQuestion } from 'react-icons/bs';
+import { DescriptionLinkWithIconComponent } from '../../../../components/molecules';
 import {
   ButtonComponent,
   TextArea,
@@ -179,10 +180,19 @@ export const NodeAdditionModal = ({
               Add a Node
             </Text>
 
-            <Text fontSize={'14px'} fontWeight="medium">
-              We currently support non-Tor nodes. So Tor nodes (including
-              Umbrel) will not work at this time.
+            <Text
+              fontSize={'14px'}
+              fontWeight="medium"
+              color="brand.neutral600"
+            >
+              We currently support non-Tor nodes. So Tor nodes will not work at
+              this time.
             </Text>
+            <DescriptionLinkWithIconComponent
+              title="Keep in mind that you are responsible for managing the liquidity
+                  of your node. Find out more."
+              icon={<BsExclamation fontSize="50px" color="brand.neutral900" />}
+            />
           </VStack>
         </ModalHeader>
 
@@ -219,9 +229,13 @@ export const NodeAdditionModal = ({
               </Checkbox>
 
               {isVoltage ? (
-                <Link isExternal href={VoltageNodeConnectionDemoURL}>
-                  Find our demo here on how to load a Voltage node.
-                </Link>
+                <DescriptionLinkWithIconComponent
+                  title="Find our demo here on how to load a Voltage node."
+                  link={VoltageNodeConnectionDemoURL}
+                  icon={
+                    <BsQuestion fontSize={'30px'} color="brand.neutral900" />
+                  }
+                />
               ) : null}
             </VStack>
 

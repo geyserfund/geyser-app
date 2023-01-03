@@ -65,7 +65,7 @@ export const WalletOfSatoshiLightningAddressURL =
 export const BitNobURL = 'https://bitnob.com/';
 export const AmbossUrl = 'https://amboss.space/node/';
 
-// Asset Urls
+// External Platform Image Urls
 export const BoostCLILogoUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/boostcli.png';
 export const BreezLogoUrl =
@@ -78,6 +78,17 @@ export const CuriocasterLogoUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/curiocaster.png';
 export const PodverseLogoUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/podverse.png';
+
+// App Assets
+
+export const LandingBannerPatternUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/banner-pattern.png';
+
+export const LandingLetTheSatsFlowUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow.svg';
+
+export const LaunchImage2Url =
+  'https://storage.googleapis.com/geyser-projects-media/app/launchImage.png';
 
 // Grant Board Member Images
 export const pacoUrl =
@@ -113,3 +124,17 @@ export const GrantsChristmasUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/christmas-grants.png';
 export const GrantsRound2Url =
   'https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-2';
+
+export const GrantsBitcoinCulture =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-culture.png';
+export const GrantsBitcoinDevelopment =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-development.png';
+export const GrantsBitcoinEducation =
+  'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-education.png';
+export const GrantsHero =
+  'https://storage.googleapis.com/geyser-projects-media/grants/grant-hero.png';
+
+// Geyser Notion Links
+
+export const GrantsFAQUrl =
+  'https://geyser.notion.site/About-Geyser-Grants-fad8a130545d4597a3750a17a7ce301f';

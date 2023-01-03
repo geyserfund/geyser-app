@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Box,
   Button,
@@ -13,19 +13,21 @@ import { isMobileMode, isMediumScreen } from '../../utils';
 import { fonts } from '../../constants/fonts';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useHistory } from 'react-router';
-import { useNotification } from '../../utils';
 
 import { ApplyGrantCard } from './components/ApplyGrantCard';
 import satwalletimg from '../../assets/walletsats.svg';
 import { AppFooter } from '../../components/molecules';
-import granthero from '../../assets/granthero.svg';
-import bitedu from '../../assets/bitcoineducation.svg';
-import bitcul from '../../assets/bitcoinculture.svg';
-import bitdev from '../../assets/bitcoindevelopment.svg';
+
 import { ButtonComponent } from '../../components/ui';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Board } from './components/Board';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
+import {
+  GrantsBitcoinCulture,
+  GrantsBitcoinDevelopment,
+  GrantsBitcoinEducation,
+  GrantsHero,
+} from '../../constants';
 
 const grants = [
   {
@@ -36,7 +38,7 @@ const grants = [
       'The aim of this grant is to support not-for-profit efforts and initiatives going towards Bitcoin education. Bitcoin is a tool for individual freedom and self-sovereignty. It is enabling a revolution that will take humanity to the next level by providing financial freedom and accessibility to the world, and a return to a sound financial system. And yet, most people still see it as a tool for gambling, money for criminals, a ponzi scheme, or an ecological nightmare. This is why the work of Bitcoin educators is so important. Much work is still needed to empower people around the world to use Bitcoin as a tool for escaping rampant inflation, financial censorship and banklessness. For more information, see here.',
     contributed: '1.1M',
     distributed: '0',
-    image: bitedu,
+    image: GrantsBitcoinEducation,
   },
   {
     title: 'Bitcoin Development',
@@ -46,7 +48,7 @@ const grants = [
       'The aim of this grant is to support not-for-profit efforts and initiatives going towards Bitcoin education. Bitcoin is a tool for individual freedom and self-sovereignty. It is enabling a revolution that will take humanity to the next level by providing financial freedom and accessibility to the world, and a return to a sound financial system. And yet, most people still see it as a tool for gambling, money for criminals, a ponzi scheme, or an ecological nightmare. This is why the work of Bitcoin educators is so important. Much work is still needed to empower people around the world to use Bitcoin as a tool for escaping rampant inflation, financial censorship and banklessness. For more information, see here.',
     contributed: '12,231,955',
     distributed: '231,955',
-    image: bitdev,
+    image: GrantsBitcoinDevelopment,
   },
   {
     title: 'Bitcoin Culture',
@@ -56,7 +58,7 @@ const grants = [
       'The aim of this grant is to support not-for-profit efforts and initiatives going towards Bitcoin education. Bitcoin is a tool for individual freedom and self-sovereignty. It is enabling a revolution that will take humanity to the next level by providing financial freedom and accessibility to the world, and a return to a sound financial system. And yet, most people still see it as a tool for gambling, money for criminals, a ponzi scheme, or an ecological nightmare. This is why the work of Bitcoin educators is so important. Much work is still needed to empower people around the world to use Bitcoin as a tool for escaping rampant inflation, financial censorship and banklessness. For more information, see here.',
     contributed: '12,231,955',
     distributed: '231,955',
-    image: bitcul,
+    image: GrantsBitcoinCulture,
   },
 ];
 
@@ -152,7 +154,7 @@ export const GrantsRoundOne = () => {
           <Box display="flex" flexDirection={'column'} alignItems="center">
             <Box color={'brand.primary500'} my={8}>
               <Box>
-                <img src={granthero} />
+                <img src={GrantsHero} />
               </Box>
             </Box>
 
