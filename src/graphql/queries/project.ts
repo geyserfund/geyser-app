@@ -194,6 +194,12 @@ export const QUERY_PROJECTS = gql`
           }
           confirmed
         }
+        wallets {
+          state {
+            status
+            statusCode
+          }
+        }
       }
     }
   }

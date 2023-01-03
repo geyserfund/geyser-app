@@ -10,6 +10,7 @@ import { Project, WalletStatus } from '../../types/generated/graphql';
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: Project;
   fontSize?: string;
+  iconSize?: string;
   fontFamily?: string;
   direction?: StackDirection;
 }
@@ -18,6 +19,7 @@ export const ProjectStatusLabel = ({
   project,
   fontSize,
   fontFamily,
+  iconSize = '16px',
   direction = 'row',
 }: IProjectStatusLabel) => {
   const commonStyles = {
@@ -31,25 +33,33 @@ export const ProjectStatusLabel = ({
       project?.wallets[0] &&
       project.wallets[0]?.state?.status === WalletStatus.Inactive
     ) {
-      return <BsFillXCircleFill color={colors.secondaryRed} />;
+      return (
+        <BsFillXCircleFill fontSize={iconSize} color={colors.secondaryRed} />
+      );
     }
 
     if (
       project?.wallets[0] &&
       project.wallets[0].state.status === WalletStatus.Unstable
     ) {
-      return <BsFillXCircleFill color={colors.secondaryGold} />;
+      return (
+        <BsFillXCircleFill fontSize={iconSize} color={colors.secondaryGold} />
+      );
     }
 
     if (project.active) {
-      return <BsFillCheckCircleFill color={colors.primary600} />;
+      return (
+        <BsFillCheckCircleFill fontSize={iconSize} color={colors.primary500} />
+      );
     }
 
     if (project.draft) {
-      return <BsFillXCircleFill color={colors.neutral500} />;
+      return (
+        <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />
+      );
     }
 
-    return <BsFillXCircleFill color={colors.neutral500} />;
+    return <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />;
   };
 
   const getLabel = () => {
@@ -77,7 +87,7 @@ export const ProjectStatusLabel = ({
 
     if (project.active) {
       return (
-        <Text color={colors.primary600} {...commonStyles}>
+        <Text color={colors.primary500} {...commonStyles}>
           RUNNING
         </Text>
       );
@@ -99,7 +109,7 @@ export const ProjectStatusLabel = ({
   };
 
   return (
-    <Stack direction={direction}>
+    <Stack direction={direction} alignItems="center">
       {getIcon()}
       {getLabel()}
     </Stack>
