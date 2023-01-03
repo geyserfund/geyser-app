@@ -11,6 +11,7 @@ import {
   FormLabel,
   Select,
   HStack,
+  VStack,
 } from '@chakra-ui/react';
 import React, { useState, useContext, useMemo, useEffect } from 'react';
 import { FaCheck } from 'react-icons/fa';
@@ -46,7 +47,7 @@ export type GrantApplicantInput = {
   grantType: string;
   link: string;
   name: string;
-  amount: number;
+  goals: string;
 };
 
 export const defaultGrantApplicant = {
@@ -55,7 +56,7 @@ export const defaultGrantApplicant = {
   grantType: 'Bitcoin Education',
   link: '',
   name: '',
-  amount: 0,
+  goals: '',
 };
 
 enum GrantApplicationStages {
@@ -84,7 +85,7 @@ export const ApplyGrantModal = ({
   const { state, setState, setTarget } = useFormState<GrantApplicantInput>(
     defaultGrantApplicant,
   );
-  const { area, amount, email, grantType, link, name } = state;
+  const { area, goals, email, grantType, link, name } = state;
 
   const [formError, setFormError] = useState<
     FormStateError<GrantApplicantInput>
@@ -109,7 +110,7 @@ export const ApplyGrantModal = ({
         Grant: grantType,
         'Project Link': link,
         Contact: email,
-        Amount: `${amount}`,
+        Goals: goals,
         Region: area,
         'Twitter ID': externalAccounts[0]?.externalUsername,
         Links: '',
@@ -145,8 +146,8 @@ export const ApplyGrantModal = ({
       isValid = false;
     }
 
-    if (!state.amount) {
-      error.amount = 'Amount cannot be zero';
+    if (!state.goals) {
+      error.goals = 'this is a required required field';
       isValid = false;
     }
 
@@ -191,6 +192,9 @@ export const ApplyGrantModal = ({
         width={'100%'}
         display={isClose ? 'block' : 'flex'}
         justifyContent={'center'}
+        borderTopRightRadius="4px"
+        borderTopLeftRadius="4px"
+        overflow="hidden"
       >
         <img src={image} width={isClose ? '100%' : '60%'} />
       </Box>
@@ -199,7 +203,7 @@ export const ApplyGrantModal = ({
         <Text fontWeight={'600'} mb={2} fontSize="18px">
           {title}
         </Text>
-        <Text fontWeight={'500'} mb={2} fontSize="13px">
+        <Text fontWeight={400} mb={2} fontSize="13px">
           {subtitle}
         </Text>
         <Box my={4}>
@@ -221,7 +225,7 @@ export const ApplyGrantModal = ({
               }}
               isFullWidth
             >
-              Confirm
+              {user?.id ? 'Apply' : 'Confirm'}
             </Button>
           ) : (
             <Button isFullWidth disabled>
@@ -237,105 +241,119 @@ export const ApplyGrantModal = ({
     <>
       {hasTwitterAccount(user) ? (
         <ModalBody>
-          <Text fontWeight={'700'} mb={2} mt={4} fontSize="22px">
+          <Text
+            fontWeight={'700'}
+            color="brand.gray700"
+            mb={2}
+            mt={4}
+            fontSize="22px"
+          >
             Apply
           </Text>
+          <VStack spacing="15px" marginTop="25px">
+            <FormControl mb={3}>
+              <FormLabel fontWeight={400} fontSize="14px">
+                Which Grant are you applying to?
+              </FormLabel>
+              <Select
+                _placeholder={{ fontSize: '12px' }}
+                _focus={{ borderColor: 'brand.primary' }}
+                name="grantType"
+                value={state.grantType}
+                onChange={setTarget}
+              >
+                {' '}
+                <option value="Bitcoin Education">Bitcoin Education</option>
+                <option value="Bitcoin Culture">Bitcoin Culture</option>
+                <option value="Bitcoin Builders">Bitcoin Builders</option>
+              </Select>
+            </FormControl>
+            <FormControl mb={3}>
+              <FormLabel fontWeight={400} fontSize="14px">
+                What’s your project name?
+              </FormLabel>
+              <TextInputBox
+                placeholder="Bitcoin for Fairness"
+                _placeholder={{ fontSize: '12px' }}
+                _focus={{ borderColor: 'brand.primary' }}
+                name="name"
+                value={state.name}
+                onChange={setTarget}
+                error={formError.name}
+              />
+            </FormControl>
+            <Box>
+              <Text fontWeight={400} fontSize="14px">
+                Drop your Geyser or Bolt.fun project or entry link with an
+                explainer of your project idea and intent
+              </Text>
 
-          <FormControl mb={3}>
-            <FormLabel fontWeight={'500'} fontSize="12px">
-              Which Grant are you applying to?
-            </FormLabel>
-            <Select
-              _placeholder={{ fontSize: '12px' }}
-              _focus={{ borderColor: 'brand.primary' }}
-              name="grantType"
-              value={state.grantType}
-              onChange={setTarget}
-            >
-              {' '}
-              <option value="Bitcoin Education">Bitcoin Education</option>
-              <option value="Bitcoin Culture">Bitcoin Culture</option>
-              <option value="Bitcoin Builders">Bitcoin Builders</option>
-            </Select>
-          </FormControl>
-          <FormControl mb={3}>
-            <FormLabel fontWeight={'500'} fontSize="12px">
-              What’s your project name?
-            </FormLabel>
-            <TextInputBox
-              placeholder="Bitcoin for Fairness"
-              _placeholder={{ fontSize: '12px' }}
-              _focus={{ borderColor: 'brand.primary' }}
-              name="name"
-              value={state.name}
-              onChange={setTarget}
-              error={formError.name}
-            />
-          </FormControl>
-          <Box>
-            <Text fontWeight={'500'} fontSize="12px">
-              Drop your Geyser or Bolt.fun project or entry link with an
-              explainer of your project idea and intent
-            </Text>
+              <TextArea
+                mt={3}
+                name="link"
+                value={state.link}
+                onChange={setTarget}
+                error={formError.link}
+                size={'md'}
+                _placeholder={{ fontSize: '12px' }}
+                _focus={{ borderColor: 'brand.primary' }}
+                placeholder="https://geyser.fund/project/bitcoin-for-fairness"
+              />
+            </Box>
+            <FormControl mb={3}>
+              <FormLabel fontWeight={400} fontSize="14px">
+                What are your main project milestones and goals?
+              </FormLabel>
+              <TextArea
+                mt={3}
+                name="goals"
+                value={state.goals}
+                onChange={setTarget}
+                error={formError.goals}
+                size={'md'}
+                _placeholder={{ fontSize: '12px' }}
+                _focus={{ borderColor: 'brand.primary' }}
+                placeholder="The project aims to raise 5,000 $ for ...."
+              />
+            </FormControl>
+            <FormControl mb={3} mt={3}>
+              <FormLabel fontWeight={400} fontSize="14px">
+                Which area of the world will you be focusing your efforts on?
+              </FormLabel>
+              <Select
+                _placeholder={{ fontSize: '12px' }}
+                _focus={{ borderColor: 'brand.primary' }}
+                name="area"
+                value={state.area}
+                onChange={setTarget}
+              >
+                <option value="Asia">Asia</option>
+                <option value="South america">South america</option>
+                <option value="North America">North America</option>
+                <option value="Africa">Africa</option>
+                <option value="Europe">Europe</option>
+                <option value="Oceania">Oceania</option>
+                <option value="Online">Online</option>
+                Online
+              </Select>
+            </FormControl>
+            <FormControl mb={3}>
+              <FormLabel fontWeight={'700'} fontSize="12px">
+                Email
+              </FormLabel>
+              <TextInputBox
+                _placeholder={{ fontSize: '12px' }}
+                placeholder="Yolo@protonmail.com"
+                _focus={{ borderColor: 'brand.primary' }}
+                name="email"
+                value={state.email}
+                onChange={setTarget}
+                error={formError.email}
+              />
+            </FormControl>
+          </VStack>
 
-            <TextArea
-              mt={3}
-              name="link"
-              value={state.link}
-              onChange={setTarget}
-              error={formError.link}
-              size={'md'}
-              _placeholder={{ fontSize: '12px' }}
-              _focus={{ borderColor: 'brand.primary' }}
-              placeholder="https://geyser.fund/project/bitcoin-for-fairness"
-            />
-          </Box>
-          <FormControl mb={3}>
-            <FormLabel fontWeight={'500'} fontSize="12px">
-              How much money are you looking for to achieve your specific goal
-              ($) ?
-            </FormLabel>
-            <TextInputBox
-              placeholder="10,000"
-              _placeholder={{ fontSize: '12px' }}
-              _focus={{ borderColor: 'brand.primary' }}
-              name="amount"
-              value={state.amount}
-              onChange={setTarget}
-              error={formError.amount}
-            />
-          </FormControl>
-          <FormControl mb={3} mt={3}>
-            <FormLabel fontWeight={'500'} fontSize="12px">
-              Which area of th world will you be focusing your efforts on?
-            </FormLabel>
-            <Select
-              _placeholder={{ fontSize: '12px' }}
-              _focus={{ borderColor: 'brand.primary' }}
-              name="area"
-              value={state.area}
-              onChange={setTarget}
-            >
-              {' '}
-              <option value="option1">Online</option>
-            </Select>
-          </FormControl>
-          <FormControl mb={3}>
-            <FormLabel fontWeight={'700'} fontSize="12px">
-              Email
-            </FormLabel>
-            <TextInputBox
-              _placeholder={{ fontSize: '12px' }}
-              placeholder="Yolo@protonmail.com"
-              _focus={{ borderColor: 'brand.primary' }}
-              name="email"
-              value={state.email}
-              onChange={setTarget}
-              error={formError.email}
-            />
-          </FormControl>
-
-          <Box mt={4}>
+          <Box mt="20px">
             {loading ? (
               <Button
                 isLoading
@@ -383,7 +401,7 @@ export const ApplyGrantModal = ({
   );
 
   const completion = () => (
-    <>
+    <ModalBody>
       <Text fontWeight={'700'} fontSize="22px">
         Apply
       </Text>
@@ -402,10 +420,10 @@ export const ApplyGrantModal = ({
           <FaCheck />
         </Box>
       </Box>
-      <Text fontSize={'14px'} textAlign="center" fontWeight={'500'}>
+      <Text fontSize={'14px'} textAlign="center" fontWeight={400}>
         Application Submitted
       </Text>
-    </>
+    </ModalBody>
   );
 
   const renderBody = () => {
@@ -433,7 +451,7 @@ export const ApplyGrantModal = ({
           onClick={onOpen}
           backgroundColor="brand.primary400"
         >
-          view
+          View
         </Button>
       ) : (
         <Button
@@ -447,10 +465,10 @@ export const ApplyGrantModal = ({
         </Button>
       )}
 
-      <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
+      <Modal isCentered isOpen={isOpen} onClose={handleClose} size="md">
         {OverlayOne}
 
-        <ModalContent bg="transparent" boxShadow={0}>
+        <ModalContent bg="transparent" boxShadow={0} maxWidth="400px">
           <HStack width="100%" justifyContent="space-between" mb={2}>
             <Box>
               {applicationStages === GrantApplicationStages.form && (
@@ -482,7 +500,7 @@ export const ApplyGrantModal = ({
           </HStack>
 
           <Box bg="brand.bgWhite" pb={3} borderRadius="4px">
-            <ModalBody>{renderBody()}</ModalBody>
+            {renderBody()}
           </Box>
         </ModalContent>
       </Modal>

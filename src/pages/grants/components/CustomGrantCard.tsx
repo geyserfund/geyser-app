@@ -1,9 +1,7 @@
 import { Box, Text } from '@chakra-ui/react';
 import React from 'react';
 import { ListText } from './ListText';
-import { GrantTextType } from '../../../types/types';
 import { isMobileMode } from '../../../utils';
-import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
 interface GrantProps {
@@ -33,7 +31,6 @@ export const CustomGrantCard = ({
   distributed,
 }: GrantProps) => {
   const isMobile = isMobileMode();
-  const history = useHistory();
 
   return (
     <Link to={to}>
@@ -44,8 +41,12 @@ export const CustomGrantCard = ({
         borderRadius="12px"
       >
         {showBanner ? (
-          <Box borderRadius="12px">
-            <img src={banner} width="100%" style={{ borderRadius: '11px' }} />
+          <Box
+            borderTopRightRadius="12px"
+            borderTopLeftRadius="12px"
+            overflow="hidden"
+          >
+            <img src={banner} width="100%" />
           </Box>
         ) : null}
         <Box display="flex" flexDirection={'column'} p="4">
