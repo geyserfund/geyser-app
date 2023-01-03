@@ -96,6 +96,10 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       wallets {
         id
         name
+        state {
+          status
+          statusCode
+        }
         connectionDetails {
           ... on LightningAddressConnectionDetails {
             lightningAddress
@@ -189,6 +193,12 @@ export const QUERY_PROJECTS = gql`
             imageUrl
           }
           confirmed
+        }
+        wallets {
+          state {
+            status
+            statusCode
+          }
         }
       }
     }
