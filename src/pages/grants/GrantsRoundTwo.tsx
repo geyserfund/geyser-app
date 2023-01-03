@@ -86,7 +86,7 @@ export const GrantsRoundTwo = () => {
             <FaArrowLeft /> See all Grants
           </Button>
           <Box display="flex" justifyContent={'center'}>
-            <Image height={'200px'} src={GrantsRound2Url} />
+            <Image height={'300px'} src={GrantsRound2Url} />
           </Box>
           <Box
             display="flex"
@@ -149,7 +149,12 @@ export const GrantsRoundTwo = () => {
               </Text>
             </Box>
 
-            <Box minWidth={'100%'} borderRadius="12px">
+            <Box
+              minWidth={'100%'}
+              borderRadius="12px"
+              rounded="md"
+              overflow="hidden"
+            >
               <img
                 src={
                   'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'
@@ -203,7 +208,7 @@ export const GrantsRoundTwo = () => {
           </Box>
           <BoardMembers />
 
-          <MoreInfo />
+          <MoreInfo titleProps={{ fontSize: '24px' }} />
           <Box my={8}>
             <Text
               fontFamily={fonts.interBlack}
@@ -232,12 +237,15 @@ export const GrantsRoundTwo = () => {
             justifyContent="center"
             alignItems={'center'}
           >
-            <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
-              <img src={satwalletimg} width="195px" />
-
+            <Box width="100%" display="flex" alignItems={'center'} my={4}>
               <>
                 {typeof link === 'string' && link.trim().length === 0 ? (
-                  <Box display="flex" alignItems={'center'} gap={4}>
+                  <Box
+                    display="flex"
+                    width="100%"
+                    justifyContent={'center'}
+                    gap={4}
+                  >
                     {[1, 2].map((item) => (
                       <Box
                         height={'34px'}
@@ -263,7 +271,11 @@ export const GrantsRoundTwo = () => {
               >
                 <GrantsContributeModal onLink={setLink} />
 
-                <Box display="flex" alignItems={'center'}>
+                <Box
+                  display="flex"
+                  alignItems={'center'}
+                  marginTop={isMobile ? '15px' : '0px'}
+                >
                   <Text
                     fontSize={'13px'}
                     fontWeight="500"
