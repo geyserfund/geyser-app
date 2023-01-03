@@ -237,12 +237,15 @@ export const GrantsRoundTwo = () => {
             justifyContent="center"
             alignItems={'center'}
           >
-            <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
-              {/* <img src={satwalletimg} width="195px" /> */}
-
+            <Box width="100%" display="flex" alignItems={'center'} my={4}>
               <>
                 {typeof link === 'string' && link.trim().length === 0 ? (
-                  <Box display="flex" alignItems={'center'} gap={4}>
+                  <Box
+                    display="flex"
+                    width="100%"
+                    justifyContent={'center'}
+                    gap={4}
+                  >
                     {[1, 2].map((item) => (
                       <Box
                         height={'34px'}
@@ -268,7 +271,11 @@ export const GrantsRoundTwo = () => {
               >
                 <GrantsContributeModal onLink={setLink} />
 
-                <Box display="flex" alignItems={'center'}>
+                <Box
+                  display="flex"
+                  alignItems={'center'}
+                  marginTop={isMobile ? '15px' : '0px'}
+                >
                   <Text
                     fontSize={'13px'}
                     fontWeight="500"
