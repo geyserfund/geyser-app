@@ -12,7 +12,7 @@ import {
   VStack,
   Checkbox,
 } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CSVLink } from 'react-csv';
 
 import { Funder, Project } from '../../types/generated/graphql';
@@ -23,7 +23,7 @@ import {
   ButtonComponent,
 } from '../../components/ui';
 import { DateTime } from 'luxon';
-import { computeFunderBadges, ScrollInvoke } from '../../helpers';
+import { computeFunderBadges } from '../../helpers';
 import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges';
 import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi';
 import { useQueryWithPagination } from '../../hooks';
@@ -38,20 +38,31 @@ type TableData = {
 };
 
 export const ProjectContributors = ({ project }: { project: Project }) => {
-  const funders = useQueryWithPagination<Funder>({
-    queryName: 'getFunders',
-    itemLimit: 10,
-    query: QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS,
-    where: { projectId: parseInt(project.id, 10) },
-    orderBy: {
-      amountFunded: 'desc',
-    },
-  });
-
   const [selectedFunders, setSelectedFunders] = useState<Funder[]>([]);
   const [csvData, setCsvData] = useState<(string | number)[][]>([]);
 
   const [copied, setCopied] = useState(false);
+
+  const funders = useQueryWithPagination<Funder>({
+    queryName: 'getDashboardFunders',
+    itemLimit: 100,
+    query: QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS,
+    where: { projectId: parseInt(project.id, 10), confirmed: true },
+    orderBy: {
+      confirmedAt: 'desc',
+    },
+  });
+
+  useEffect(() => {
+    if (
+      funders?.data &&
+      !funders.isLoading &&
+      !funders.isLoadingMore.current &&
+      !funders.noMoreItems.current
+    ) {
+      funders.fetchNext();
+    }
+  }, [funders]);
 
   const tableData: TableData[] = useMemo(
     () => [
@@ -233,10 +244,18 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
       <GridItem colSpan={18} display="flex" justifyContent={'center'}>
         <VStack maxWidth="1200px" width="100%" alignItems="center">
           <HStack width="100%" justifyContent="space-between">
-            <Text
-              fontSize={'16px'}
-              fontWeight={600}
-            >{`${project.fundersCount} Contributers`}</Text>
+            <HStack>
+              <Text
+                fontSize={'16px'}
+                fontWeight={600}
+              >{`${project.fundersCount} Contributers`}</Text>
+              {selectedFunders.length > 0 && (
+                <Text
+                  fontSize={'14px'}
+                >{`( ${selectedFunders.length} selected )`}</Text>
+              )}
+            </HStack>
+
             <HStack>
               <ButtonComponent
                 size="sm"
@@ -335,12 +354,12 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
               </Tbody>
             </Table>
           </TableContainer>
-          <ScrollInvoke
+          {/* <ScrollInvoke
             elementId="app-route-content-root"
             onScrollEnd={funders.fetchNext}
             isLoading={funders.isLoadingMore}
             noMoreItems={funders.noMoreItems}
-          />
+          /> */}
         </VStack>
       </GridItem>
     </>

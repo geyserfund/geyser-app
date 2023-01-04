@@ -266,8 +266,8 @@ export const QUERY_GET_PROJECT_FUNDERS = gql`
 `;
 
 export const QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS = gql`
-  query Query($input: GetFundersInput!) {
-    getFunders(input: $input) {
+  query GetDashboardFunders($input: GetFundersInput) {
+    getDashboardFunders(input: $input) {
       id
       user {
         id
