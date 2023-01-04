@@ -16,7 +16,11 @@ import {
   LandingBannerPatternUrl,
   LandingLetTheSatsFlowUrl,
 } from '../../../constants';
-import { isMobileMode, useNotification } from '../../../utils';
+import {
+  getShortAmountLabel,
+  isMobileMode,
+  useNotification,
+} from '../../../utils';
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
 
 export const TopBanner = () => {
@@ -82,7 +86,15 @@ export const TopBanner = () => {
             </Heading>
           </VStack>
 
-          <HStack fontSize={'sm'} spacing={4} textColor={'brand.neutral700'}>
+          <HStack
+            fontSize={'sm'}
+            spacing={4}
+            textColor={'brand.neutral700'}
+            backgroundColor={colors.bgWhite}
+            padding="5px 10px"
+            borderRadius="4px"
+            shadow="md"
+          >
             {isSummaryLoading ? (
               <HStack
                 spacing={1.5}
@@ -94,17 +106,18 @@ export const TopBanner = () => {
             ) : (
               satsDataArray.map((statsData, index) => {
                 return (
-                  <HStack
+                  <Stack
                     spacing={1.5}
                     key={index}
                     justifyContent="flex-start"
                     alignItems={'center'}
+                    direction={isMobile ? 'column' : 'row'}
                   >
                     {isSummaryLoading ? (
                       <Skeleton w="25px" h="25px" />
                     ) : (
                       <Text fontWeight={'bold'} textColor={colors.neutral900}>
-                        {statsData[0]}
+                        {getShortAmountLabel(parseInt(statsData[0], 10))}
                       </Text>
                     )}
 
@@ -114,7 +127,7 @@ export const TopBanner = () => {
                     >
                       {statsData[1]}
                     </Text>
-                  </HStack>
+                  </Stack>
                 );
               })
             )}
