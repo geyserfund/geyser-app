@@ -377,6 +377,12 @@ export type FundinginvoiceCancel = {
   success: Scalars['Boolean'];
 };
 
+export type GetDashboardFundersWhereInput = {
+  confirmed?: InputMaybe<Scalars['Boolean']>;
+  projectId?: InputMaybe<Scalars['BigInt']>;
+  sourceResourceInput?: InputMaybe<ResourceInput>;
+};
+
 export type GetEntriesInput = {
   orderBy?: InputMaybe<GetEntriesOrderByInput>;
   pagination?: InputMaybe<PaginationInput>;
@@ -404,7 +410,8 @@ export type GetFundersInput = {
 };
 
 export type GetFundersOrderByInput = {
-  amountFunded: OrderByOptions;
+  amountFunded?: InputMaybe<OrderByOptions>;
+  confirmedAt?: InputMaybe<OrderByOptions>;
 };
 
 export type GetFundingTxsInput = {
@@ -876,6 +883,7 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']>;
   entry?: Maybe<Entry>;
   fundingTx: FundingTx;
+  getDashboardFunders: Array<Maybe<Funder>>;
   /** Returns all published entries. */
   getEntries: Array<Maybe<Entry>>;
   getFunders: Array<Maybe<Funder>>;
@@ -903,6 +911,10 @@ export type QueryEntryArgs = {
 
 export type QueryFundingTxArgs = {
   id: Scalars['BigInt'];
+};
+
+export type QueryGetDashboardFundersArgs = {
+  input?: InputMaybe<GetFundersInput>;
 };
 
 export type QueryGetEntriesArgs = {
@@ -1206,6 +1218,12 @@ export enum WalletStatusCode {
   WalletLocked = 'WALLET_LOCKED',
 }
 
+export type GetDashboardFundersInput = {
+  orderBy?: InputMaybe<GetFundersOrderByInput>;
+  pagination?: InputMaybe<PaginationInput>;
+  where?: InputMaybe<GetDashboardFundersWhereInput>;
+};
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
@@ -1365,6 +1383,7 @@ export type ResolversTypes = {
     }
   >;
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
   GetEntriesWhereInput: GetEntriesWhereInput;
@@ -1479,6 +1498,7 @@ export type ResolversTypes = {
     Scalars['email_String_format_email']
   >;
   fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>;
+  getDashboardFundersInput: GetDashboardFundersInput;
   name_String_NotNull_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_NotNull_maxLength_100']
   >;
@@ -1567,6 +1587,7 @@ export type ResolversParentTypes = {
     sourceResource?: Maybe<ResolversParentTypes['SourceResource']>;
   };
   FundinginvoiceCancel: FundinginvoiceCancel;
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
   GetEntriesWhereInput: GetEntriesWhereInput;
@@ -1650,6 +1671,7 @@ export type ResolversParentTypes = {
   email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email'];
   email_String_format_email: Scalars['email_String_format_email'];
   fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1'];
+  getDashboardFundersInput: GetDashboardFundersInput;
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
@@ -2451,6 +2473,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryFundingTxArgs, 'id'>
+  >;
+  getDashboardFunders?: Resolver<
+    Array<Maybe<ResolversTypes['Funder']>>,
+    ParentType,
+    ContextType,
+    Partial<QueryGetDashboardFundersArgs>
   >;
   getEntries?: Resolver<
     Array<Maybe<ResolversTypes['Entry']>>,

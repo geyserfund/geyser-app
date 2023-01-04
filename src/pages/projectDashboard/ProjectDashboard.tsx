@@ -4,13 +4,11 @@ import {
   Button,
   Grid,
   GridItem,
+  HStack,
   useMediaQuery,
-  VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { BiLeftArrowAlt } from 'react-icons/bi';
 import { useHistory, useLocation, useParams } from 'react-router';
-import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { useAuthContext } from '../../context';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
@@ -24,13 +22,18 @@ import { ProjectSettings } from './ProjectSettings';
 import { RewardSettings } from './RewardSettings';
 import { getPath } from '../../constants';
 import { Owner } from '../../types/generated/graphql';
+import { ProjectContributors } from './ProjectContributors';
+import { ProjectStats } from './ProjectStats';
 
-export type TDashboardTabs =
-  | 'entries'
-  | 'funds'
-  | 'milestones'
-  | 'rewards'
-  | 'project settings';
+enum DashboardTabs {
+  entries = 'entries',
+  funds = 'funds',
+  milestones = 'milestones',
+  rewards = 'rewards',
+  projectDescription = 'project description',
+  contributors = 'contributors',
+  stats = 'stats',
+}
 
 export const ProjectDashboard = () => {
   const isMobile = isMobileMode();
@@ -40,7 +43,9 @@ export const ProjectDashboard = () => {
 
   const { user, setNav } = useAuthContext();
 
-  const [activeTab, setActiveTab] = useState<TDashboardTabs>('entries');
+  const [activeTab, setActiveTab] = useState<DashboardTabs>(
+    DashboardTabs.entries,
+  );
 
   useEffect(() => {
     try {
@@ -50,7 +55,7 @@ export const ProjectDashboard = () => {
     }
   }, [locationState]);
 
-  const handleTabSelection = async (selectedTab: TDashboardTabs) => {
+  const handleTabSelection = async (selectedTab: DashboardTabs) => {
     if (selectedTab !== activeTab) {
       await getProject({ fetchPolicy: 'no-cache' });
     }
@@ -78,15 +83,7 @@ export const ProjectDashboard = () => {
     },
   );
 
-  const handleBack = () => {
-    history.push(getPath('project', projectId));
-  };
-
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
-
-  if (loading) {
-    return <Loader />;
-  }
 
   if (error || !data || !data.project) {
     return <NotFoundPage />;
@@ -99,23 +96,35 @@ export const ProjectDashboard = () => {
   const { project } = data;
 
   const renderTabs = () => {
+    if (loading) {
+      return (
+        <GridItem colSpan={8} display="flex" justifyContent="center">
+          <Loader />
+        </GridItem>
+      );
+    }
+
     switch (activeTab) {
-      case 'entries':
+      case DashboardTabs.entries:
         return <ProjectDashboardEntries project={project} />;
-      case 'milestones':
+      case DashboardTabs.milestones:
         return <MilestoneSettings project={project} />;
-      case 'rewards':
+      case DashboardTabs.rewards:
         return <RewardSettings project={project} />;
-      case 'funds':
+      case DashboardTabs.funds:
         return <ProjectFundingSettings project={project} />;
-      case 'project settings':
+      case DashboardTabs.projectDescription:
         return <ProjectSettings project={project} />;
+      case DashboardTabs.contributors:
+        return <ProjectContributors project={project} />;
+      case DashboardTabs.stats:
+        return <ProjectStats project={project} />;
       default:
         return <ProjectDashboardEntries project={project} />;
     }
   };
 
-  const renderButton = (nav: TDashboardTabs) => {
+  const renderButton = (nav: DashboardTabs) => {
     return (
       <Box
         borderBottom="3px solid"
@@ -139,12 +148,14 @@ export const ProjectDashboard = () => {
     );
   };
 
-  const navList: TDashboardTabs[] = [
-    'entries',
-    'funds',
-    'milestones',
-    'rewards',
-    'project settings',
+  const navList: DashboardTabs[] = [
+    DashboardTabs.projectDescription,
+    DashboardTabs.contributors,
+    DashboardTabs.funds,
+    DashboardTabs.entries,
+    DashboardTabs.rewards,
+    DashboardTabs.milestones,
+    DashboardTabs.stats,
   ];
 
   return (
@@ -155,51 +166,22 @@ export const ProjectDashboard = () => {
       height="100%"
       justifyContent="space-between"
     >
-      <Grid
+      <HStack
         width="100%"
-        templateColumns={
-          isLargerThan1280
-            ? 'repeat(18, 1fr)'
-            : isMobile
-            ? 'repeat(6, 1fr)'
-            : 'repeat(15, 1fr)'
-        }
-        padding={isMobile ? '10px' : '40px 40px 20px 40px'}
+        justifyContent="center"
+        marginTop={isMobile ? '10px' : '30px'}
+        overflowX={isMobile ? 'auto' : undefined}
       >
-        <GridItem
-          colSpan={isLargerThan1280 ? 5 : 2}
+        <HStack
+          spacing="0px"
+          minWidth="350px"
           display="flex"
-          justifyContent="flex-start"
+          alignItems="center"
         >
-          <ButtonComponent
-            onClick={handleBack}
-            leftIcon={<BiLeftArrowAlt style={{ fontSize: '25px' }} />}
-          >
-            {' '}
-            Back
-          </ButtonComponent>
-        </GridItem>
-        <GridItem colSpan={8} display="flex" justifyContent="center">
-          <VStack
-            spacing="30px"
-            width="100%"
-            minWidth="350px"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-          >
-            <Box display="flex">{navList.map((nav) => renderButton(nav))}</Box>
-          </VStack>
-        </GridItem>
-        <GridItem colSpan={5} display="flex" justifyContent="center">
-          <VStack
-            justifyContent="center"
-            alignItems="flex-start"
-            maxWidth="370px"
-            spacing="10px"
-          ></VStack>
-        </GridItem>
-      </Grid>
+          {navList.map((nav) => renderButton(nav))}
+        </HStack>
+      </HStack>
+
       <Grid
         width="100%"
         templateColumns={
@@ -211,11 +193,13 @@ export const ProjectDashboard = () => {
         }
         padding={isMobile ? '10px' : '40px 40px 20px 40px'}
       >
-        <GridItem
-          colSpan={isLargerThan1280 ? 5 : 2}
-          display="flex"
-          justifyContent="flex-start"
-        ></GridItem>
+        {activeTab !== DashboardTabs.contributors && (
+          <GridItem
+            colSpan={isLargerThan1280 ? 5 : 2}
+            display="flex"
+            justifyContent="flex-start"
+          ></GridItem>
+        )}
 
         {renderTabs()}
       </Grid>
