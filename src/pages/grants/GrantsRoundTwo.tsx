@@ -15,7 +15,6 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useHistory } from 'react-router';
 import { ApplyGrantCard } from './components/ApplyGrantCard';
 import { BoardMembers } from './components/BoardMembers';
-import satwalletimg from '../../assets/walletsats.svg';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
@@ -25,7 +24,7 @@ import { GrantsRound2Url } from '../../constants';
 const grants = [
   {
     title: 'Communities & Meetups',
-    subtitle: 'ROUND 2: DECEMBER',
+    subtitle: 'ROUND 2: JAN 2023',
     image:
       'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-2%20copy.jpg',
     name: 'Bitcoin for Free Speech',
@@ -35,7 +34,7 @@ const grants = [
   },
   {
     title: 'Bitcoin Translations',
-    subtitle: 'ROUND 2: DECEMBER',
+    subtitle: 'ROUND 2: JAN 2023',
     image:
       'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-1%20copy.jpg',
     name: 'Visual Artists for Bitcoin',
@@ -45,7 +44,7 @@ const grants = [
   },
   {
     title: 'Bitcoin Visual Art',
-    subtitle: 'ROUND 2: DECEMBER',
+    subtitle: 'ROUND 2: JAN 2023',
     image:
       'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-3%20copy.jpg',
     name: 'Bitcoin Open Source',

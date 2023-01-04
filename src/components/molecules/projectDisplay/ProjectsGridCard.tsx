@@ -3,7 +3,6 @@ import {
   Heading,
   HStack,
   Image,
-  Link as LinkChakra,
   Text,
   useColorModeValue,
   VStack,
@@ -46,29 +45,23 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
         transition="border-color 0.3s ease-in-out"
         {...rest}
       >
-        <LinkChakra
-          href={project.image || ''}
-          isExternal
-          onClick={(event) => event.stopPropagation()}
+        <Box
+          height={'202px'}
+          width="full"
+          bg={'gray.100'}
+          pos={'relative'}
+          display="flex"
+          justifyContent={'center'}
+          alignItems="center"
         >
-          <Box
-            height={'202px'}
+          <Image
+            src={project.image || ''}
             width="full"
-            bg={'gray.100'}
-            pos={'relative'}
-            display="flex"
-            justifyContent={'center'}
-            alignItems="center"
-          >
-            <Image
-              src={project.image || ''}
-              width="full"
-              height="full"
-              fallback={<ProjectImageListItemPlaceholder padding="3em" />}
-              objectFit="cover"
-            />
-          </Box>
-        </LinkChakra>
+            height="full"
+            fallback={<ProjectImageListItemPlaceholder padding="3em" />}
+            objectFit="cover"
+          />
+        </Box>
         <Box paddingX="18px" paddingY={'14px'}>
           <VStack spacing={4} alignItems="flex-start">
             <Heading

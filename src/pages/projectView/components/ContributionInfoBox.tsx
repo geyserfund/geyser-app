@@ -282,7 +282,7 @@ export const ContributionInfoBox = ({
             textColor={'brand.neutral700'}
             fontWeight={'normal'}
           >
-            {isNoFees ? `( 0 %)` : `( 2 %)`}
+            {isNoFees ? `(0%)` : `(2%)`}
           </Text>
         </HStack>
       </HStack>
