@@ -43,7 +43,7 @@ export const ExternalAccountLinkIcon = ({
     }
   }, [source]);
 
-  if (['project', 'entry', 'geyser'].includes(source)) {
+  if (source === 'geyser') {
     return null;
   }
 
