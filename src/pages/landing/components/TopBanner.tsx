@@ -91,7 +91,7 @@ export const TopBanner = () => {
             spacing={4}
             textColor={'brand.neutral700'}
             backgroundColor={colors.bgWhite}
-            padding="5px 10px"
+            padding="5px 15px"
             borderRadius="4px"
             shadow="md"
           >
