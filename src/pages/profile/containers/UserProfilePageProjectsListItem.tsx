@@ -24,6 +24,12 @@ const GET_PROJECT = gql`
       funders {
         id
       }
+      wallets {
+        state {
+          status
+          statusCode
+        }
+      }
     }
   }
 `;

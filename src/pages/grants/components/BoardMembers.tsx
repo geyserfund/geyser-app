@@ -37,7 +37,7 @@ const members = [
   },
   {
     name: 'Des',
-    link: '',
+    link: 'https://twitter.com/dickerson_des',
     image: desUrl,
   },
   {

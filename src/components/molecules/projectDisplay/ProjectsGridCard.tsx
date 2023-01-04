@@ -3,18 +3,16 @@ import {
   Heading,
   HStack,
   Image,
-  Link as LinkChakra,
   Text,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import { BsFillCheckCircleFill } from 'react-icons/bs';
 
 import SatoshiPng from '../../../assets/satoshi.png';
-import { getPath, fonts, colors } from '../../../constants';
+import { getPath, fonts } from '../../../constants';
 import { Project } from '../../../types/generated/graphql';
-import { ICard } from '../../ui';
+import { ICard, ProjectStatusLabel } from '../../ui';
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
 import { getShortAmountLabel } from '../../../utils';
 import { Link } from 'react-router-dom';
@@ -47,29 +45,23 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
         transition="border-color 0.3s ease-in-out"
         {...rest}
       >
-        <LinkChakra
-          href={project.image || ''}
-          isExternal
-          onClick={(event) => event.stopPropagation()}
+        <Box
+          height={'202px'}
+          width="full"
+          bg={'gray.100'}
+          pos={'relative'}
+          display="flex"
+          justifyContent={'center'}
+          alignItems="center"
         >
-          <Box
-            height={'202px'}
+          <Image
+            src={project.image || ''}
             width="full"
-            bg={'gray.100'}
-            pos={'relative'}
-            display="flex"
-            justifyContent={'center'}
-            alignItems="center"
-          >
-            <Image
-              src={project.image || ''}
-              width="full"
-              height="full"
-              fallback={<ProjectImageListItemPlaceholder padding="3em" />}
-              objectFit="cover"
-            />
-          </Box>
-        </LinkChakra>
+            height="full"
+            fallback={<ProjectImageListItemPlaceholder padding="3em" />}
+            objectFit="cover"
+          />
+        </Box>
         <Box paddingX="18px" paddingY={'14px'}>
           <VStack spacing={4} alignItems="flex-start">
             <Heading
@@ -86,7 +78,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               mt={6}
               direction={'row'}
               spacing={0}
-              align={'center'}
+              align={'flex-end'}
               justifyContent={'space-between'}
             >
               <VStack alignItems={'center'}>
@@ -125,20 +117,12 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
                 </Text>
               </VStack>
 
-              <VStack>
-                <BsFillCheckCircleFill
-                  color={colors.primary500}
-                  fontSize="20px"
-                />
-                <Text
-                  fontSize="12px"
-                  fontFamily={fonts.mono}
-                  color="brand.primary500"
-                  textTransform="uppercase"
-                >
-                  RUNNING
-                </Text>
-              </VStack>
+              <ProjectStatusLabel
+                project={project}
+                fontFamily={fonts.mono}
+                iconSize="20px"
+                direction="column"
+              />
             </HStack>
 
             <Text noOfLines={5} textAlign="left" size="sm">

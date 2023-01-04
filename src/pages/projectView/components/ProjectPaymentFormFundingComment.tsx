@@ -6,6 +6,7 @@ import { Grid } from '@giphy/react-components';
 import {
   Box,
   Button,
+  HStack,
   HTMLChakraProps,
   Image,
   Input,
@@ -68,7 +69,7 @@ export const ProjectPaymentFormFundingComment = ({
 
   return (
     <Box {...rest}>
-      <Box width="100%" position="relative">
+      <HStack width="100%" position="relative">
         <TextArea
           pr={16}
           placeholder="Leave a public message here."
@@ -87,7 +88,7 @@ export const ProjectPaymentFormFundingComment = ({
           <CloseIcon position="absolute" top="31px" right="29px" />
         )}
 
-        <Box zIndex="10" position="absolute" right={2} top={0}>
+        <Box zIndex="10" position="absolute" right={2}>
           {selectedGIF ? (
             <Image
               src={`${selectedGIF.images.preview_webp.url}`}
@@ -109,7 +110,7 @@ export const ProjectPaymentFormFundingComment = ({
             </Button>
           )}
         </Box>
-      </Box>
+      </HStack>
 
       <Modal
         onClose={() => {

@@ -256,7 +256,6 @@ export const ApplyGrantModal = ({
                 Which Grant are you applying to?
               </FormLabel>
               <Select
-                _placeholder={{ fontSize: '12px' }}
                 _focus={{ borderColor: 'brand.primary' }}
                 name="grantType"
                 value={state.grantType}
@@ -274,7 +273,6 @@ export const ApplyGrantModal = ({
               </FormLabel>
               <TextInputBox
                 placeholder="Bitcoin for Fairness"
-                _placeholder={{ fontSize: '12px' }}
                 _focus={{ borderColor: 'brand.primary' }}
                 name="name"
                 value={state.name}
@@ -284,8 +282,14 @@ export const ApplyGrantModal = ({
             </FormControl>
             <Box>
               <Text fontWeight={400} fontSize="14px">
-                Drop your Geyser or Bolt.fun project or entry link with an
-                explainer of your project idea and intent
+                Drop your Geyser or Bolt.fun project link with an explainer of
+                your project idea and intent.
+              </Text>
+              <Text fontWeight={400} fontSize="12px">
+                Make sure to explain the problem you are trying to solve and how
+                your project aims to tackle it. You can write Entries (articles)
+                to provide more depth and Milestones to divide your plan in
+                phases.
               </Text>
 
               <TextArea
@@ -295,7 +299,6 @@ export const ApplyGrantModal = ({
                 onChange={setTarget}
                 error={formError.link}
                 size={'md'}
-                _placeholder={{ fontSize: '12px' }}
                 _focus={{ borderColor: 'brand.primary' }}
                 placeholder="https://geyser.fund/project/bitcoin-for-fairness"
               />
@@ -311,7 +314,6 @@ export const ApplyGrantModal = ({
                 onChange={setTarget}
                 error={formError.goals}
                 size={'md'}
-                _placeholder={{ fontSize: '12px' }}
                 _focus={{ borderColor: 'brand.primary' }}
                 placeholder="The project aims to raise 5,000 $ for ...."
               />
@@ -321,7 +323,6 @@ export const ApplyGrantModal = ({
                 Which area of the world will you be focusing your efforts on?
               </FormLabel>
               <Select
-                _placeholder={{ fontSize: '12px' }}
                 _focus={{ borderColor: 'brand.primary' }}
                 name="area"
                 value={state.area}
@@ -342,7 +343,6 @@ export const ApplyGrantModal = ({
                 Email
               </FormLabel>
               <TextInputBox
-                _placeholder={{ fontSize: '12px' }}
                 placeholder="Yolo@protonmail.com"
                 _focus={{ borderColor: 'brand.primary' }}
                 name="email"
@@ -468,7 +468,15 @@ export const ApplyGrantModal = ({
       <Modal isCentered isOpen={isOpen} onClose={handleClose} size="md">
         {OverlayOne}
 
-        <ModalContent bg="transparent" boxShadow={0} maxWidth="400px">
+        <ModalContent
+          bg="transparent"
+          boxShadow={0}
+          marginX="10px"
+          maxWidth="450px"
+          maxHeight="calc(100% - 120px)"
+          display="flex"
+          flexDirection="column"
+        >
           <HStack width="100%" justifyContent="space-between" mb={2}>
             <Box>
               {applicationStages === GrantApplicationStages.form && (
@@ -499,7 +507,13 @@ export const ApplyGrantModal = ({
             </Button>
           </HStack>
 
-          <Box bg="brand.bgWhite" pb={3} borderRadius="4px">
+          <Box
+            flex="1"
+            bg="brand.bgWhite"
+            pb={3}
+            borderRadius="4px"
+            overflowY="auto"
+          >
             {renderBody()}
           </Box>
         </ModalContent>
