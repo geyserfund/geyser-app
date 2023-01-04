@@ -80,7 +80,7 @@ export const ProjectCreate = () => {
 
   const [formError, setFormError] = useState<{ [key: string]: string }>({});
 
-  const [createProject] = useMutation<
+  const [createProject, { loading: createLoading }] = useMutation<
     CreateProjectMutationResponseData,
     { input: ProjectCreationVariables }
   >(MUTATION_CREATE_PROJECT, {
@@ -114,7 +114,7 @@ export const ProjectCreate = () => {
     },
   });
 
-  const [updateProject] = useMutation<
+  const [updateProject, { loading: updateLoading }] = useMutation<
     UpdateProjectMutationResponseData,
     { input: ProjectUpdateVariables }
   >(MUTATION_UPDATE_PROJECT, {
@@ -419,10 +419,11 @@ export const ProjectCreate = () => {
                 />
               </VStack>
               <ButtonComponent
-                isLoading={loading}
+                isLoading={loading || createLoading || updateLoading}
                 primary
                 isFullWidth
                 onClick={handleNextButtonTapped}
+                isDisabled={createLoading || updateLoading}
               >
                 Next
               </ButtonComponent>
