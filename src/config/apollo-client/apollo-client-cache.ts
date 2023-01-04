@@ -58,6 +58,10 @@ export const cache: InMemoryCache = new InMemoryCache({
           keyArgs: ['input', ['where', 'orderby']],
           merge,
         },
+        getDashboardFunders: {
+          keyArgs: ['input', ['where', 'orderby']],
+          merge,
+        },
         projects: {
           // Don't cache separate results based on
           // any of this field's arguments.
