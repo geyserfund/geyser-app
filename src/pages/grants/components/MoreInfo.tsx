@@ -41,15 +41,17 @@ export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
           reached. For more information see this doc.`}
         </Text>
         <Box w={20} mt="4" mb={10}>
-          <Link href={GrantsFAQUrl} isExternal>
+          <Link href={GrantsFAQUrl} isExternal _focus={{}}>
             <Box
-              boxShadow="lg"
+              shadow="md"
               px="4"
               gap={4}
               py={'2'}
               alignItems="center"
               display="flex"
               borderRadius="4px"
+              _hover={{ shadow: 'xl' }}
+              transition="all ease-out 0.3s"
             >
               <Text fontWeight={'600'}>Faq</Text>
               <img src={shareicon} alt="icon" />

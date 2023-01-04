@@ -263,7 +263,6 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
                 border="2px solid #20ECC7"
                 value={state.amount}
                 name="amount"
-                _placeholder={{ fontWeight: 'bold' }}
                 variant={'outline'}
                 isInvalid={Boolean(formError?.amount)}
                 onChange={setTarget}
@@ -284,7 +283,6 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
         </FormLabel>
         <Input
           placeholder="Satoshi"
-          _placeholder={{ fontSize: '12px' }}
           _focus={{ borderColor: 'brand.primary' }}
           name="name"
           value={state.name}
@@ -296,7 +294,6 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           Email/contact (optional)
         </FormLabel>
         <Input
-          _placeholder={{ fontSize: '12px' }}
           placeholder="satoshi@geyser.fund"
           _focus={{ borderColor: 'brand.primary' }}
           value={state.email}
@@ -309,7 +306,6 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           Leave us a comment (optional)
         </FormLabel>
         <Input
-          _placeholder={{ fontSize: '12px' }}
           _focus={{ borderColor: 'brand.primary' }}
           placeholder="Love what you guys are doing. Let the Sats flow!"
           name="comment"
@@ -330,9 +326,8 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           mt={3}
           onChange={linkChangeHandler}
           size={'lg'}
-          _placeholder={{ fontSize: '12px' }}
           _focus={{ borderColor: 'brand.primary' }}
-          placeholder="https://pbs.twimg.com/profile_images/1554429112978120706/yr1hXl6R_400x400.jpg"
+          placeholder="https://pbs.twimg.com/profile_images/15544291/img_400x400.jpg"
         />
       </Box>
       <Box mt={4}>
