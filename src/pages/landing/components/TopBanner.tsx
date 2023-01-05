@@ -22,6 +22,7 @@ import {
   useNotification,
 } from '../../../utils';
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
+import Loader from '../../../components/ui/Loader';
 
 export const TopBanner = () => {
   const { toast } = useNotification();
@@ -101,7 +102,7 @@ export const TopBanner = () => {
                 justifyContent="flex-start"
                 alignItems={'center'}
               >
-                <Skeleton w="25px" h="25px" />
+                <Loader size="md" />
               </HStack>
             ) : (
               satsDataArray.map((statsData, index) => {
