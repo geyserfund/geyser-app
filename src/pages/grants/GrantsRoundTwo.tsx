@@ -290,7 +290,7 @@ export const GrantsRoundTwo = () => {
                       <WrapItem key={sponsor.name}>
                         <Image
                           borderRadius="4px"
-                          width="100px"
+                          height="70px"
                           src={sponsor.imageUrl}
                         />
                       </WrapItem>
