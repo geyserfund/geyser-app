@@ -201,7 +201,7 @@ export const GrantsLandingPage = () => {
                   applicants="-"
                   grant="100 M"
                   title="Geyser Grants Round 2"
-                  date="DEC 2022"
+                  date="JAN 2023"
                   to={'/grants/roundtwo'}
                   sponsors={sponsors.map((sponsor) => sponsor.imageUrl)}
                 />
