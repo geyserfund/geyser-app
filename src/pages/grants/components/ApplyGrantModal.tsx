@@ -447,13 +447,12 @@ export const ApplyGrantModal = ({
     <>
       {isClose ? (
         <Button
-          bg="brand.primary400"
           mt={3}
           size="sm"
           minWidth={'100%'}
           fontSize="14px"
           onClick={onOpen}
-          backgroundColor="brand.primary400"
+          backgroundColor="brand.primary"
         >
           View
         </Button>
