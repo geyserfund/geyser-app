@@ -35,7 +35,7 @@ const grants = [
     name: 'Bitcoin for Free Speech',
     applicants: 0,
     about:
-      'This grant is for all projects creating bitcoin communities irl (in real life). In-person bitcoin spaces and meetups  allow for quality information to spread and enable the forging of deeper social networks. This in term, results in a more resilient bitcoin network. We want to enable these creators to continue building grassroots bitcoin communities globally.',
+      'This grant is for all projects creating bitcoin communities irl (in real life). In-person bitcoin spaces and meetups  allow for quality information to spread and enable the forging of deeper social networks. This in turn, results in a more resilient bitcoin network. We want to enable these creators to continue building grassroots bitcoin communities globally.',
   },
   {
     title: 'Bitcoin Translations',

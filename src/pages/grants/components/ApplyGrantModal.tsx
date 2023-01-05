@@ -109,7 +109,6 @@ export const ApplyGrantModal = ({
         'Project Name': name,
         Grant: grantType,
         'Project Link': link,
-        Contact: email,
         Goals: goals,
         Region: area,
         'Twitter ID': externalAccounts[0]?.externalUsername,
@@ -383,7 +382,8 @@ export const ApplyGrantModal = ({
             </Text>
             <Text fontWeight={'400'} mb={2} fontSize="15px">
               You need to link your Twitter account to apply to a Grant. This is
-              to verify your identity and
+              to verify your identity and that you are not impersonating someone
+              else
             </Text>
 
             <Box mt={6}>
