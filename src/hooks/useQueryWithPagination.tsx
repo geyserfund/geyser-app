@@ -5,7 +5,7 @@ import { usePaginationHook } from './usePaginationHook';
 
 export type useQueryWithPaginationProps = {
   query: DocumentNode;
-  queryName: string;
+  queryName: string | string[];
   itemLimit?: number;
   where?: any;
   orderBy?: any;
@@ -24,25 +24,24 @@ export const useQueryWithPagination = <Type,>({
     throw Error('Invalid query');
   }
 
-  const { error, loading, fetchMore } = useQuery<QueryResponseData<Type>>(
-    query,
-    {
-      variables: {
-        input: {
-          pagination: {
-            take: itemLimit,
-          },
-          where,
-          orderBy,
+  const { error, loading, fetchMore, refetch } = useQuery<
+    QueryResponseData<Type>
+  >(query, {
+    variables: {
+      input: {
+        pagination: {
+          take: itemLimit,
         },
-        fetch,
+        where,
+        orderBy,
       },
-      onCompleted(data) {
-        const resultItems = data[queryName];
-        handleDataUpdate(resultItems);
-      },
+      fetch,
     },
-  );
+    onCompleted(data) {
+      const resultItems = getNestedValue(data, queryName);
+      handleDataUpdate(resultItems);
+    },
+  });
 
   const { data, isLoadingMore, fetchNext, noMoreItems, handleDataUpdate } =
     usePaginationHook<Type>({
@@ -61,5 +60,20 @@ export const useQueryWithPagination = <Type,>({
     data,
     error,
     fetchNext,
+    refetch,
   };
+};
+
+export const getNestedValue = (obj: any, name: string | string[]) => {
+  if (typeof name === 'string') {
+    return obj[name];
+  }
+
+  if (typeof name === 'object') {
+    let finalValue = obj;
+    name.map((val) => {
+      finalValue = finalValue[val];
+    });
+    return finalValue;
+  }
 };
