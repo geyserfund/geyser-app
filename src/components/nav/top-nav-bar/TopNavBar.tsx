@@ -17,7 +17,13 @@ import { TopNavBarMenu } from './TopNavBarMenu';
 import { isMobileMode } from '../../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { AuthContext } from '../../../context';
-import { useLocation, useHistory, useRouteMatch, match } from 'react-router';
+import {
+  useLocation,
+  useHistory,
+  useRouteMatch,
+  match,
+  useParams,
+} from 'react-router';
 import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
@@ -45,8 +51,13 @@ const routesForHidingTopNav = [
   `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
 ];
 
+const routesForShowingProjectButton = [
+  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
+];
+
 const customTitleRoutes = [
   `/${routerPathNames.project}/:projectId/`,
+  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
   `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
   `/${routerPathNames.entry}/:entryId`,
 ];
@@ -54,6 +65,12 @@ const navItemsRoutes = [
   `/`,
   `/${routerPathNames.discover}`,
   `/${routerPathNames.grants}`,
+  `/${routerPathNames.grants}/roundtwo`,
+  `/${routerPathNames.grants}/roundone`,
+];
+
+const routesForHidingDashboardButton = [
+  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
 ];
 
 const routesForHidingDropdownMenu = [
@@ -100,6 +117,7 @@ const routesForEnablingProjectLaunchButton = [
 export const TopNavBar = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
+  const params = useParams<{ projectId: string }>();
 
   const currentPathName = history.location.pathname;
 
@@ -131,8 +149,14 @@ export const TopNavBar = () => {
 
   const routeMatchesForHidingTopNav = routesForHidingTopNav.map(useRouteMatch);
 
+  const routeMatchesForProjectButton =
+    routesForShowingProjectButton.map(useRouteMatch);
+
   const routeMatchesForEnablingSignInButton =
     routesForEnablingSignInButton.map(useRouteMatch);
+
+  const routeMatchesForHidingDashboardButton =
+    routesForHidingDashboardButton.map(useRouteMatch);
 
   const routeMatchesForHidingDropdownMenu =
     routesForHidingDropdownMenu.map(useRouteMatch);
@@ -167,6 +191,13 @@ export const TopNavBar = () => {
 
   const handleMyProjectsButtonPress = () => {
     history.push(getPath('userProfile', user.id));
+  };
+
+  const handleProjectButtonPress = () => {
+    const projectName =
+      currentProjectRouteMatch?.params?.projectId ||
+      navigationContext.projectName;
+    history.push(getPath('project', projectName));
   };
 
   const handleProjectDashboardButtonPress = () => {
@@ -213,6 +244,13 @@ export const TopNavBar = () => {
     });
   }, [routeMatchesForHidingTopNav]);
 
+  const shouldShowProjectButton: boolean = useMemo(() => {
+    return (
+      routeMatchesForProjectButton.some((routeMatch) => {
+        return (routeMatch as match)?.isExact;
+      }) && Boolean(navigationContext)
+    );
+  }, [routeMatchesForProjectButton]);
   /**
    * Logic:
    *  - Available to all not logged-in users.
@@ -270,7 +308,10 @@ export const TopNavBar = () => {
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      (isViewingOwnProject || userHasOnlyOneProject)
+      (isViewingOwnProject || userHasOnlyOneProject) &&
+      !routeMatchesForHidingDashboardButton.some((routeMatch) => {
+        return (routeMatch as match)?.isExact;
+      })
     );
   }, [
     isMobile,
@@ -278,6 +319,7 @@ export const TopNavBar = () => {
     isUserAProjectCreator,
     isViewingOwnProject,
     userHasOnlyOneProject,
+    routeMatchesForHidingDashboardButton,
   ]);
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -374,9 +416,11 @@ export const TopNavBar = () => {
    *  - Shown for creators on the project creation flow pages.
    */
   const shouldShowCustomTitle: boolean = useMemo(() => {
-    return routesMatchesForShowingCustomTitle.some((routeMatch) => {
-      return (routeMatch as match)?.isExact;
-    });
+    return (
+      routesMatchesForShowingCustomTitle.some((routeMatch) => {
+        return (routeMatch as match)?.isExact;
+      }) && Boolean(navigationContext)
+    );
   }, [routesMatchesForShowingCustomTitle]);
 
   const shouldShowNavItems: boolean = useMemo(() => {
@@ -396,10 +440,8 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={useColorModeValue('brand.bgWhite', 'brand.bgDark')}
+        bg={useColorModeValue('brand.bgGrey4', 'brand.bgDark')}
         px={4}
-        borderBottom={'1px solid'}
-        borderBottomColor={'brand.bgGrey3'}
         backdropFilter="blur(2px)"
         position="fixed"
         top={0}
@@ -416,9 +458,11 @@ export const TopNavBar = () => {
           <NavBarLogo marginRight={isMobile ? 0 : 5} />
 
           {shouldShowCustomTitle ? (
-            <Heading as={'h3'} noOfLines={1} size="sm">
-              {navigationContext.projectTitle}
-            </Heading>
+            <Link to={navigationContext.projectPath}>
+              <Heading as={'h3'} noOfLines={1} size="sm">
+                {navigationContext.projectTitle}
+              </Heading>
+            </Link>
           ) : null}
 
           <HStack alignItems={'center'} spacing={2}>
@@ -474,6 +518,17 @@ export const TopNavBar = () => {
                 My Projects
               </ButtonComponent>
             ) : null}
+
+            {shouldShowProjectButton && (
+              <ButtonComponent
+                variant={'solid'}
+                fontSize="md"
+                backgroundColor="brand.primary400"
+                onClick={handleProjectButtonPress}
+              >
+                Project
+              </ButtonComponent>
+            )}
 
             {shouldShowProjectLaunchButton ? (
               <ButtonComponent

@@ -377,6 +377,12 @@ export type FundinginvoiceCancel = {
   success: Scalars['Boolean'];
 };
 
+export type GetDashboardFundersWhereInput = {
+  confirmed?: InputMaybe<Scalars['Boolean']>;
+  projectId?: InputMaybe<Scalars['BigInt']>;
+  sourceResourceInput?: InputMaybe<ResourceInput>;
+};
+
 export type GetEntriesInput = {
   orderBy?: InputMaybe<GetEntriesOrderByInput>;
   pagination?: InputMaybe<PaginationInput>;
@@ -404,7 +410,8 @@ export type GetFundersInput = {
 };
 
 export type GetFundersOrderByInput = {
-  amountFunded: OrderByOptions;
+  amountFunded?: InputMaybe<OrderByOptions>;
+  confirmedAt?: InputMaybe<OrderByOptions>;
 };
 
 export type GetFundingTxsInput = {
@@ -575,6 +582,7 @@ export type Mutation = {
   updateUser: User;
   /** This operation is currently not supported. */
   updateWallet: Wallet;
+  updateWalletState: Wallet;
 };
 
 export type MutationConfirmAmbassadorArgs = {
@@ -683,6 +691,10 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUpdateWalletArgs = {
   input: UpdateWalletInput;
+};
+
+export type MutationUpdateWalletStateArgs = {
+  input: UpdateWalletStateInput;
 };
 
 export type OffsetBasedPaginationInput = {
@@ -871,6 +883,7 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']>;
   entry?: Maybe<Entry>;
   fundingTx: FundingTx;
+  getDashboardFunders: Array<Maybe<Funder>>;
   /** Returns all published entries. */
   getEntries: Array<Maybe<Entry>>;
   getFunders: Array<Maybe<Funder>>;
@@ -898,6 +911,10 @@ export type QueryEntryArgs = {
 
 export type QueryFundingTxArgs = {
   id: Scalars['BigInt'];
+};
+
+export type QueryGetDashboardFundersArgs = {
+  input?: InputMaybe<GetFundersInput>;
 };
 
 export type QueryGetEntriesArgs = {
@@ -1078,6 +1095,12 @@ export type UpdateWalletInput = {
   name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>;
 };
 
+export type UpdateWalletStateInput = {
+  status: WalletStatus;
+  statusCode: WalletStatusCode;
+  walletId: Scalars['BigInt'];
+};
+
 export type User = {
   __typename?: 'User';
   /** Details on the participation of a User in a project. */
@@ -1162,6 +1185,43 @@ export type Wallet = {
   id: Scalars['BigInt'];
   /** Wallet name */
   name?: Maybe<Scalars['name_String_minLength_5_maxLength_60']>;
+  state: WalletState;
+};
+
+export type WalletState = {
+  __typename?: 'WalletState';
+  /**
+   * The status field is meant to be displayed in the the public view of a project to provide insight to the user
+   * that wants to contribute to the project.
+   */
+  status: WalletStatus;
+  /**
+   * The status code is a more descriptive field about the wallet status. It is meant to be displayed to the
+   * project creator to help them understand what is wrong with their wallet connection. The field can only be queried
+   * by the project creator.
+   */
+  statusCode: WalletStatusCode;
+};
+
+export enum WalletStatus {
+  Inactive = 'INACTIVE',
+  Ok = 'OK',
+  Unstable = 'UNSTABLE',
+}
+
+export enum WalletStatusCode {
+  NotFound = 'NOT_FOUND',
+  NoRoute = 'NO_ROUTE',
+  Ok = 'OK',
+  Unknown = 'UNKNOWN',
+  Unreachable = 'UNREACHABLE',
+  WalletLocked = 'WALLET_LOCKED',
+}
+
+export type GetDashboardFundersInput = {
+  orderBy?: InputMaybe<GetFundersOrderByInput>;
+  pagination?: InputMaybe<PaginationInput>;
+  where?: InputMaybe<GetDashboardFundersWhereInput>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1323,6 +1383,7 @@ export type ResolversTypes = {
     }
   >;
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
   GetEntriesWhereInput: GetEntriesWhereInput;
@@ -1386,6 +1447,7 @@ export type ResolversTypes = {
   UpdateProjectRewardInput: UpdateProjectRewardInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
+  UpdateWalletStateInput: UpdateWalletStateInput;
   User: ResolverTypeWrapper<User>;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
@@ -1398,6 +1460,9 @@ export type ResolversTypes = {
       connectionDetails: ResolversTypes['ConnectionDetails'];
     }
   >;
+  WalletState: ResolverTypeWrapper<WalletState>;
+  WalletStatus: WalletStatus;
+  WalletStatusCode: WalletStatusCode;
   amount_Float_NotNull_min_1: ResolverTypeWrapper<
     Scalars['amount_Float_NotNull_min_1']
   >;
@@ -1433,6 +1498,7 @@ export type ResolversTypes = {
     Scalars['email_String_format_email']
   >;
   fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>;
+  getDashboardFundersInput: GetDashboardFundersInput;
   name_String_NotNull_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_NotNull_maxLength_100']
   >;
@@ -1521,6 +1587,7 @@ export type ResolversParentTypes = {
     sourceResource?: Maybe<ResolversParentTypes['SourceResource']>;
   };
   FundinginvoiceCancel: FundinginvoiceCancel;
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
   GetEntriesWhereInput: GetEntriesWhereInput;
@@ -1579,6 +1646,7 @@ export type ResolversParentTypes = {
   UpdateProjectRewardInput: UpdateProjectRewardInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
+  UpdateWalletStateInput: UpdateWalletStateInput;
   User: User;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
@@ -1589,6 +1657,7 @@ export type ResolversParentTypes = {
   Wallet: Omit<Wallet, 'connectionDetails'> & {
     connectionDetails: ResolversParentTypes['ConnectionDetails'];
   };
+  WalletState: WalletState;
   amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1'];
   amount_Float_min_1: Scalars['amount_Float_min_1'];
   comment_String_maxLength_280: Scalars['comment_String_maxLength_280'];
@@ -1602,6 +1671,7 @@ export type ResolversParentTypes = {
   email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email'];
   email_String_format_email: Scalars['email_String_format_email'];
   fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1'];
+  getDashboardFundersInput: GetDashboardFundersInput;
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
@@ -2161,6 +2231,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateWalletArgs, 'input'>
   >;
+  updateWalletState?: Resolver<
+    ResolversTypes['Wallet'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateWalletStateArgs, 'input'>
+  >;
 };
 
 export type OwnerResolvers<
@@ -2398,6 +2474,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryFundingTxArgs, 'id'>
   >;
+  getDashboardFunders?: Resolver<
+    Array<Maybe<ResolversTypes['Funder']>>,
+    ParentType,
+    ContextType,
+    Partial<QueryGetDashboardFundersArgs>
+  >;
   getEntries?: Resolver<
     Array<Maybe<ResolversTypes['Entry']>>,
     ParentType,
@@ -2586,6 +2668,20 @@ export type WalletResolvers<
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<
     Maybe<ResolversTypes['name_String_minLength_5_maxLength_60']>,
+    ParentType,
+    ContextType
+  >;
+  state?: Resolver<ResolversTypes['WalletState'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type WalletStateResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['WalletState'] = ResolversParentTypes['WalletState'],
+> = {
+  status?: Resolver<ResolversTypes['WalletStatus'], ParentType, ContextType>;
+  statusCode?: Resolver<
+    ResolversTypes['WalletStatusCode'],
     ParentType,
     ContextType
   >;
@@ -2843,6 +2939,7 @@ export type Resolvers<ContextType = any> = {
   User?: UserResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
+  WalletState?: WalletStateResolvers<ContextType>;
   amount_Float_NotNull_min_1?: GraphQLScalarType;
   amount_Float_min_1?: GraphQLScalarType;
   comment_String_maxLength_280?: GraphQLScalarType;

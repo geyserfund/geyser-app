@@ -49,7 +49,7 @@ export const MilestoneAdditionModal = ({
   onSubmit,
 }: Props) => {
   const { toast } = useNotification();
-  const { getUSDCentsAmount, getSatoshisAmount } = useBTCConverter();
+  const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter();
 
   const [_milestones, _setMilestones] =
     useState<TMilestone[]>(availableMilestones);
@@ -79,7 +79,9 @@ export const MilestoneAdditionModal = ({
   const getMutationConvertedMilestoneAmount = (
     amount: Satoshis | USDollars,
   ): Satoshis => {
-    return isFormInputUsingSatoshis ? amount : getSatoshisAmount(amount * 100);
+    return isFormInputUsingSatoshis
+      ? amount
+      : getSatoshisFromUSDCents(amount * 100);
   };
 
   const getFormConvertedMilestoneAmount = (

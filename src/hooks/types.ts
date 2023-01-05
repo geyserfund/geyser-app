@@ -9,6 +9,7 @@ export type PaginationHookReturn<T> = {
   data: T[];
   count?: number;
   fetchNext: () => Promise<void>;
+  refetch: any;
 };
 
 export type QueryResponseData<T> = {

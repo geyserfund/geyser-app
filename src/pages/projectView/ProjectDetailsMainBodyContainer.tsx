@@ -146,7 +146,7 @@ export const ProjectDetailsMainBodyContainer = ({
       >
         <ProjectDetailsMobileMenu
           showMobileMenu={showMobileMenu}
-          fundButtonFunction={handleFundClick}
+          fundButtonFunction={handleFundClickMobile}
           transitionButtonFunction={handleViewClick}
         />
 

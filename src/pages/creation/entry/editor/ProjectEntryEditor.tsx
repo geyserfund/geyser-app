@@ -14,10 +14,11 @@ type Rules = string;
 
 type StyleProps = {
   isReadOnly?: boolean;
+  noPadding?: boolean;
 };
 
 const useStyles = createUseStyles<Rules, StyleProps>({
-  container: ({ isReadOnly }: StyleProps) => ({
+  container: ({ isReadOnly, noPadding }: StyleProps) => ({
     width: '100%',
     height: '100%',
     position: 'relative',
@@ -45,6 +46,8 @@ const useStyles = createUseStyles<Rules, StyleProps>({
 
     '& .ql-editor': {
       paddingBottom: '70px !important',
+      paddingLeft: noPadding ? '0px !important' : undefined,
+      paddingRight: noPadding ? '0px !important' : undefined,
       overflow: 'hidden',
     },
 
@@ -103,6 +106,7 @@ type Props = {
   handleChange?: (name: string, content: string) => void;
   isReadOnly?: boolean;
   focusFlag?: string;
+  noPadding?: boolean;
 };
 
 const editorDOMID = 'editor';
@@ -113,6 +117,7 @@ export const ProjectEntryEditor = ({
   handleChange,
   isReadOnly,
   focusFlag,
+  noPadding,
 }: Props) => {
   const [_quillObj, _setQuillObj] = useState<Quill>();
   const quillObj = useRef(_quillObj);
@@ -123,7 +128,7 @@ export const ProjectEntryEditor = ({
   };
 
   const { toast } = useNotification();
-  const classes = useStyles({ isReadOnly });
+  const classes = useStyles({ isReadOnly, noPadding });
 
   const editorModules = {
     toolbar: {

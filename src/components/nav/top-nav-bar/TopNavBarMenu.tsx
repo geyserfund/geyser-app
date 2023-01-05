@@ -46,20 +46,20 @@ export const TopNavBarMenu = ({
         py={2.5}
         aria-label="options"
         transition="all 0.2s"
+        maxHeight="40px"
         borderRadius="md"
-        _hover={{ bg: 'gray.400' }}
-        _expanded={{ bg: 'brand.primary400' }}
-        _focus={{ boxShadow: 'outline' }}
         color={textColor}
-        backgroundColor={useColorModeValue(
-          'brand.neutral200',
-          'brand.neutral800',
-        )}
-        variant="solid"
+        backgroundColor="brand.white"
+        _hover={{ backgroundColor: colors.gray200 }}
+        border={'1px'}
+        borderColor="brand.bgGrey3"
         sx={styles.buttonCommon}
       >
-        <HStack color={useColorModeValue('brand.gray500', 'brand.gray200')}>
-          <HamburgerIcon />
+        <HStack
+          color={useColorModeValue('brand.gray500', 'brand.gray200')}
+          background="transparent"
+        >
+          <HamburgerIcon color={'#ADB5BD'} />
 
           {isLoggedIn ? (
             <Avatar height="22px" width="22px" src={user.imageUrl || ''} />

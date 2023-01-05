@@ -6,6 +6,7 @@ import { Grid } from '@giphy/react-components';
 import {
   Box,
   Button,
+  HStack,
   HTMLChakraProps,
   Image,
   Input,
@@ -19,10 +20,11 @@ import {
   useBoolean,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GifIcon } from '../../../components/icons';
 import { TextArea } from '../../../components/ui';
 import { isMobileMode } from '../../../utils';
+import { REACT_APP_GIPHY_API_KEY } from '../../../constants';
 
 type Props = HTMLChakraProps<'div'> & {
   comment: string;
@@ -44,6 +46,7 @@ export const ProjectPaymentFormFundingComment = ({
     onClose: onGIFModalClosed,
   } = useDisclosure();
 
+  const [giphyFetch, setGiphyFetch] = useState<GiphyFetch | any>();
   const [gifSearch, setGifSearch] = useState('bitcoin');
   const [selectedGIF, setSelectedGIF] = useState<IGif | null>(null);
 
@@ -51,16 +54,22 @@ export const ProjectPaymentFormFundingComment = ({
     useBoolean(false);
   const [focus, setFocus] = useState(true);
 
-  // TODO: remove hardcoded API key
-  const giphyFetch = new GiphyFetch('AqeIUD33qyHnMwLDSDWP0da9lCSu0LXx');
+  // TODO: remove the static value
+  useEffect(() => {
+    if (REACT_APP_GIPHY_API_KEY) {
+      const giphy = new GiphyFetch(
+        REACT_APP_GIPHY_API_KEY || 'Vcrx5mgdcrDgWVS1UsPiINK4NFyStV0Q',
+      );
+      setGiphyFetch(giphy);
+    }
+  }, []);
 
-  const fetchGifs = (offset: number) => {
+  const fetchGifs = (offset: number) =>
     giphyFetch.search(gifSearch, { offset, sort: 'relevant', limit: 9 });
-  };
 
   return (
     <Box {...rest}>
-      <Box width="100%" position="relative">
+      <HStack width="100%" position="relative">
         <TextArea
           pr={16}
           placeholder="Leave a public message here."
@@ -79,7 +88,7 @@ export const ProjectPaymentFormFundingComment = ({
           <CloseIcon position="absolute" top="31px" right="29px" />
         )}
 
-        <Box zIndex="10" position="absolute" right={2} top={0}>
+        <Box zIndex="10" position="absolute" right={2}>
           {selectedGIF ? (
             <Image
               src={`${selectedGIF.images.preview_webp.url}`}
@@ -101,7 +110,7 @@ export const ProjectPaymentFormFundingComment = ({
             </Button>
           )}
         </Box>
-      </Box>
+      </HStack>
 
       <Modal
         onClose={() => {

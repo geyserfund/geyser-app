@@ -48,7 +48,7 @@ export const ImageWithReload = ({
       setHasValidSource(false);
       componentRef.current = 0;
       toast({
-        title: 'failed to upload image',
+        title: 'failed to load image',
         description: 'Please try again',
         status: 'error',
       });
@@ -100,9 +100,11 @@ export const ImageWithReload = ({
 
   return (
     <>
-      {!hasValidSource && renderDefaultImage()}
-      {loading && renderSkeletonImage()}
-      {renderSourceImage()}
+      {hasValidSource
+        ? loading
+          ? renderSkeletonImage()
+          : renderSourceImage()
+        : renderDefaultImage()}
     </>
   );
 };

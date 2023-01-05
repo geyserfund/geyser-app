@@ -1,10 +1,12 @@
 import {
   Avatar,
+  Box,
   Divider,
   HStack,
   HTMLChakraProps,
   Stack,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
@@ -19,7 +21,8 @@ import { Project, ProjectReward } from '../../../types/generated/graphql';
 import { Satoshis } from '../../../types/types';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
-import { noFeeProjects } from '../../../constants';
+import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../constants';
+import { BsInfoCircle } from 'react-icons/bs';
 
 export enum ContributionInfoBoxVersion {
   // eslint-disable-next-line no-unused-vars
@@ -70,7 +73,6 @@ export const ContributionInfoBox = ({
   contributionAmount,
   referenceCode,
   isFunderAnonymous,
-  showGeyserFee = true,
   funderEmail,
   funderUsername,
   funderAvatarURL,
@@ -107,6 +109,20 @@ export const ContributionInfoBox = ({
   const hasSelectedRewards =
     formState.rewardsByIDAndCount &&
     Object.entries(formState.rewardsByIDAndCount).length > 0;
+
+  const hadOwnNode = () => {
+    const currentProject = project.wallets && project.wallets[0];
+    const { connectionDetails } = currentProject;
+
+    switch (connectionDetails.__typename) {
+      case 'LightningAddressConnectionDetails':
+        return false;
+      default:
+        return true;
+    }
+  };
+
+  const isNoFees = noFeeProjects.includes(project.name) || hadOwnNode();
 
   const { getTotalAmount } = useFundCalc(formState);
   return (
@@ -232,30 +248,44 @@ export const ContributionInfoBox = ({
         </>
       )}
 
-      {showGeyserFee && (
-        <>
-          <ContributionInfoBoxDivider version={version} />
-          <HStack justifyContent={'space-between'} width={'full'}>
-            <Text
-              fontSize="14px"
-              textColor={'brand.neutral700'}
-              fontWeight={'normal'}
-            >
-              Geyser fee
-            </Text>
+      <ContributionInfoBoxDivider version={version} />
+      <HStack justifyContent={'space-between'} width={'full'}>
+        <HStack>
+          <Text
+            fontSize="14px"
+            textColor={'brand.neutral700'}
+            fontWeight={'normal'}
+          >
+            Geyser fee
+          </Text>
+          <Tooltip
+            borderRadius="4px"
+            label={GEYSER_FEE_DISCLAIMER}
+            placement="top"
+          >
+            <Box as="span">
+              <BsInfoCircle fontSize="12px" />
+            </Box>
+          </Tooltip>
+        </HStack>
 
-            <SatoshiAmount
-              fontSize="14px"
-              textColor={'brand.neutral700'}
-              fontWeight={'medium'}
-            >
-              {!noFeeProjects.includes(project.name)
-                ? Math.round(contributionAmount * 0.02)
-                : 0}
-            </SatoshiAmount>
-          </HStack>
-        </>
-      )}
+        <HStack>
+          <SatoshiAmount
+            fontSize="14px"
+            textColor={'brand.neutral700'}
+            fontWeight={'medium'}
+          >
+            {isNoFees ? 0 : Math.round(contributionAmount * 0.02)}
+          </SatoshiAmount>
+          <Text
+            fontSize="14px"
+            textColor={'brand.neutral700'}
+            fontWeight={'normal'}
+          >
+            {isNoFees ? `(0%)` : `(2%)`}
+          </Text>
+        </HStack>
+      </HStack>
 
       <ContributionInfoBoxDivider version={version} />
       <HStack justifyContent={'space-between'} width={'full'} fontSize={'10px'}>
