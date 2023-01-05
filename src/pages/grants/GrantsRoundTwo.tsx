@@ -6,8 +6,10 @@ import {
   Image,
   Link,
   Text,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { isMobileMode } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
@@ -20,6 +22,9 @@ import { AppFooter } from '../../components/molecules';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
 import { GrantDevelopers } from './components/GrantDevs';
 import { GrantsRound2Url } from '../../constants';
+import { ButtonComponent } from '../../components/ui';
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
+import { getGrantSponsorRecords } from '../../api';
 
 const grants = [
   {
@@ -54,10 +59,49 @@ const grants = [
   },
 ];
 
+export type GrantSponsor = {
+  name: string;
+  amount: number;
+  imageUrl: string;
+};
+
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
-  const [link, setLink] = useState<string>('');
+
+  const [copy, setCopy] = useState(false);
+
+  const [sponsors, setSponsers] = useState<GrantSponsor[]>([]);
+
+  const handleCompleteContribution = (value: GrantSponsor) => {
+    if (value.amount >= 1000) {
+      setSponsers([...sponsors, value]);
+    }
+  };
+
+  const handleCopyOnchain = () => {
+    navigator.clipboard.writeText('grants@geyser.fund');
+    setCopy(true);
+    setTimeout(() => {
+      setCopy(false);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const getSponsors = async () => {
+      const sponsorResponse = await getGrantSponsorRecords();
+
+      const listSponsers = sponsorResponse.map((sponsor: any) => ({
+        name: sponsor.fields.Name,
+        amount: sponsor.fields.Amount,
+        imageUrl: sponsor.fields['PFP link'],
+      }));
+
+      setSponsers(listSponsers);
+    };
+
+    getSponsors();
+  }, []);
 
   return (
     <>
@@ -240,7 +284,19 @@ export const GrantsRoundTwo = () => {
           >
             <Box width="100%" display="flex" alignItems={'center'} my={4}>
               <>
-                {typeof link === 'string' && link.trim().length === 0 ? (
+                {sponsors.length > 0 ? (
+                  <Wrap width="100%" justify="center">
+                    {sponsors.map((sponsor) => (
+                      <WrapItem key={sponsor.name}>
+                        <Image
+                          borderRadius="4px"
+                          width="100px"
+                          src={sponsor.imageUrl}
+                        />
+                      </WrapItem>
+                    ))}
+                  </Wrap>
+                ) : (
                   <Box
                     display="flex"
                     width="100%"
@@ -257,8 +313,6 @@ export const GrantsRoundTwo = () => {
                       ></Box>
                     ))}
                   </Box>
-                ) : (
-                  <img src={link} width="100px" />
                 )}
               </>
             </Box>
@@ -270,7 +324,7 @@ export const GrantsRoundTwo = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <GrantsContributeModal onLink={setLink} />
+                <GrantsContributeModal onLink={handleCompleteContribution} />
 
                 <Box
                   display="flex"
@@ -285,10 +339,14 @@ export const GrantsRoundTwo = () => {
                   >
                     Or sending SATs to our lightning address:{' '}
                   </Text>
-                  <Text decoration={'underline'} color="brand.primary">
-                    {' '}
-                    <a href="">grants@geyser.fund.</a>
-                  </Text>
+                  <ButtonComponent
+                    size="sm"
+                    primary={copy}
+                    onClick={handleCopyOnchain}
+                    leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
+                  >
+                    grants@geyser.fund
+                  </ButtonComponent>
                 </Box>
               </Box>
             </Box>
