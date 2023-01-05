@@ -123,7 +123,7 @@ export const umarUrl =
 export const GrantsChristmasUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/christmas-grants.png';
 export const GrantsRound2Url =
-  'https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-2';
+  'https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-2.png';
 
 export const GrantsBitcoinCulture =
   'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-culture.png';

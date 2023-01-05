@@ -1,9 +1,10 @@
 import { PaginationInput } from '../types/generated/graphql';
 import { useListenerState } from './useListenerState';
+import { getNestedValue } from './useQueryWithPagination';
 
 export type usePaginationHookProps = {
   fetchMore: any;
-  queryName: string;
+  queryName: string | string[];
   itemLimit?: number;
   cursorID?: number;
   where?: any;
@@ -91,18 +92,20 @@ export const usePaginationHook = <Type,>({
         },
       },
       updateQuery: (_: any, { fetchMoreResult }: any) => {
-        if (fetchMoreResult[queryName].length < itemLimit) {
+        const data = getNestedValue(fetchMoreResult, queryName);
+
+        if (data.length < itemLimit) {
           setNoMoreItems(true);
         }
 
-        handlePaginationChange(fetchMoreResult[queryName]);
+        handlePaginationChange(data);
 
-        const mappedData = handleMapData(fetchMoreResult[queryName]);
+        const mappedData = handleMapData(data);
 
         setList([...list.current, ...mappedData]);
 
         if (
-          fetchMoreResult[queryName].length === itemLimit &&
+          data.length === itemLimit &&
           mappedData.length <= thresholdNoOfAggregatedResultsToFetchMore &&
           (count ? count < noOfTimesToRefetchMore : true)
         ) {

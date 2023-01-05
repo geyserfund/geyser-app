@@ -1,8 +1,8 @@
 /* eslint-disable complexity */
-import React, { useEffect } from 'react';
-import { Box, Text, Button } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Text } from '@chakra-ui/react';
 import { useTheme } from '@chakra-ui/react';
-import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
+import { isMobileMode } from '../../utils';
 import { fonts } from '../../constants/fonts';
 import borderimg from '../../assets/border.svg';
 import satwalletimg from '../../assets/walletsats.svg';
@@ -11,14 +11,26 @@ import { CustomGrantCard } from './components/CustomGrantCard';
 import { MoreInfo } from './components/MoreInfo';
 import { AppFooter } from '../../components/molecules';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
+import { ButtonComponent } from '../../components/ui';
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
-  const [link, setLink] = React.useState('');
+
+  const [copy, setCopy] = useState(false);
+  const [link, setLink] = useState('');
 
   const theme = useTheme();
   const linkHandler = (link: React.SetStateAction<string>) => {
     setLink(link);
+  };
+
+  const handleCopyOnchain = () => {
+    navigator.clipboard.writeText('grants@geyser.fund');
+    setCopy(true);
+    setTimeout(() => {
+      setCopy(false);
+    }, 1000);
   };
 
   return (
@@ -178,10 +190,14 @@ export const GrantsLandingPage = () => {
                     >
                       Or sending SATs to our lightning address:{' '}
                     </Text>
-                    <Text decoration={'underline'} color="brand.primary">
-                      {' '}
-                      <a href="">grants@geyser.fund.</a>
-                    </Text>
+                    <ButtonComponent
+                      size="sm"
+                      primary={copy}
+                      onClick={handleCopyOnchain}
+                      leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
+                    >
+                      grants@geyser.fund
+                    </ButtonComponent>
                   </Box>
                 )}
               </Box>
@@ -207,7 +223,7 @@ export const GrantsLandingPage = () => {
                   title="Geyser Grants Round 2"
                   date="DEC 2022"
                   to={'/grants/roundtwo'}
-                  sponsors={[satwalletimg, borderimg]}
+                  sponsors={[borderimg]}
                 />
               </Box>
               <Box mt={7}>

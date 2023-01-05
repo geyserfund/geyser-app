@@ -48,5 +48,7 @@ export const UserProfilePageProjectsListItem = ({ projectID }: Props) => {
     { variables: { where: { id: projectID } } },
   );
 
-  return data ? <ProjectsGridCard project={data.project} /> : null;
+  return data ? (
+    <ProjectsGridCard project={data.project} height="100%" />
+  ) : null;
 };

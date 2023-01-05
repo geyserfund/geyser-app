@@ -420,8 +420,12 @@ export const ApplyGrantModal = ({
           <FaCheck />
         </Box>
       </Box>
-      <Text fontSize={'14px'} textAlign="center" fontWeight={400}>
+      <Text fontSize={'20px'} textAlign="center" fontWeight={600}>
         Application Submitted
+      </Text>
+      <Text fontSize="14px" fontWeight={400} marginTop="20px">
+        You can review your application status at the bottom of the Grants Round
+        #2 Page.
       </Text>
     </ModalBody>
   );
@@ -443,13 +447,12 @@ export const ApplyGrantModal = ({
     <>
       {isClose ? (
         <Button
-          bg="brand.primary400"
           mt={3}
           size="sm"
           minWidth={'100%'}
           fontSize="14px"
           onClick={onOpen}
-          backgroundColor="brand.primary400"
+          backgroundColor="brand.primary"
         >
           View
         </Button>

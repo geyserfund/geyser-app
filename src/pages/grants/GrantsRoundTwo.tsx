@@ -73,6 +73,7 @@ export const GrantsRoundTwo = () => {
           my={4}
           width={isMobile ? '100%' : '909px'}
           px={isMobile ? '1rem' : ''}
+          position="relative"
         >
           <Button
             size={'sm'}
@@ -81,11 +82,12 @@ export const GrantsRoundTwo = () => {
             gap={2}
             onClick={() => history.goBack()}
             fontSize="sm"
+            position={isMobile ? 'relative' : 'absolute'}
           >
             <FaArrowLeft /> See all Grants
           </Button>
           <Box display="flex" justifyContent={'center'}>
-            <Image height={'300px'} src={GrantsRound2Url} />
+            <Image height={'220px'} src={GrantsRound2Url} />
           </Box>
           <Box
             display="flex"
