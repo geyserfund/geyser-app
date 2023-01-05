@@ -48,21 +48,9 @@ export const TopBanner = () => {
   }, [summaryError]);
 
   const satsDataArray = [
-    [
-      projectsSummaryData.projectsCount &&
-        projectsSummaryData.projectsCount.toLocaleString(),
-      'Projects',
-    ],
-    [
-      projectsSummaryData.fundedTotal &&
-        projectsSummaryData.fundedTotal.toLocaleString(),
-      'Sats Raised',
-    ],
-    [
-      projectsSummaryData.fundersCount &&
-        projectsSummaryData.fundersCount.toLocaleString(),
-      'Pleb Contributors',
-    ],
+    [projectsSummaryData.projectsCount, 'Projects'],
+    [projectsSummaryData.fundedTotal, 'Sats Raised'],
+    [projectsSummaryData.fundersCount, 'Pleb Contributors'],
   ];
 
   return (
