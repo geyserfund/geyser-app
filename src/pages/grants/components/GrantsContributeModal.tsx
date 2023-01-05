@@ -108,6 +108,12 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
 
   useEffect(() => {
     if (fundState === fundingStages.completed) {
+      onLink(state.imageUrl);
+    }
+  }, [fundState]);
+
+  useEffect(() => {
+    if (fundState === fundingStages.completed) {
       setModalHeader('Contribution Successful');
       const data = {
         records: [
@@ -132,7 +138,6 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
 
   const linkChangeHandler = (e: any) => {
     setValue('imageUrl', e.target.value);
-    onLink(e.target.value);
   };
 
   const handleClose = () => {
@@ -156,7 +161,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
 
     if (isValid) {
       const input: FundingInput = {
-        projectId: Number(grantsData?.project.id),
+        projectId: Number(grantsData?.project?.id),
         anonymous: Boolean(user),
         ...(state.amount !== 0 && {
           donationInput: {
@@ -417,7 +422,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           onOpen();
           gotoNextStage();
         }}
-        backgroundColor="brand.primary400"
+        backgroundColor="brand.primary"
       >
         Sponsor
       </Button>

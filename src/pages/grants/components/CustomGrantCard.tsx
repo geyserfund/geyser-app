@@ -69,6 +69,7 @@ export const CustomGrantCard = ({
                     px="14px"
                     py={'5px'}
                     fontWeight="500"
+                    borderRadius="4px"
                   >
                     ACTIVE
                   </Text>

@@ -28,8 +28,6 @@ import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
 import { getPath, routerPathNames } from '../../../constants';
-import satlogo from '../../../assets/satgrey.svg';
-import { fonts } from '../../../constants/fonts';
 import { Link } from 'react-router-dom';
 
 const navItems = [
@@ -67,6 +65,8 @@ const navItemsRoutes = [
   `/`,
   `/${routerPathNames.discover}`,
   `/${routerPathNames.grants}`,
+  `/${routerPathNames.grants}/roundtwo`,
+  `/${routerPathNames.grants}/roundone`,
 ];
 
 const routesForHidingDashboardButton = [
