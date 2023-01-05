@@ -59,7 +59,7 @@ export const defaultGrantContribution = {
   name: '',
 };
 
-export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
+export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
   const { toast } = useNotification();
   const { user } = useAuthContext();
   const { getSatoshisFromUSDCents } = useBTCConverter();
@@ -107,8 +107,8 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
   }, [state]);
 
   useEffect(() => {
-    if (fundState === fundingStages.completed) {
-      onLink(state.imageUrl);
+    if (fundState === fundingStages.completed && onLink) {
+      onLink(state);
     }
   }, [fundState]);
 
@@ -323,9 +323,9 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           Add a profile image link (optional)
         </Text>
         <Text fontWeight={'400'} fontSize="11px">
-          If you would like to feature your profile or business in the Grant
+          If you fund over $1,000 we will feature your PFP or logo in the Grant
           page drop the Image link in here and we will add it to the list of
-          sponsors on the Grant page and the landing page
+          sponsors on the Grant page and the landing page.
         </Text>
         <Textarea
           mt={3}
@@ -333,6 +333,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink: any }) => {
           size={'lg'}
           _focus={{ borderColor: 'brand.primary' }}
           placeholder="https://pbs.twimg.com/profile_images/15544291/img_400x400.jpg"
+          disabled={state.amount < 1000}
         />
       </Box>
       <Box mt={4}>

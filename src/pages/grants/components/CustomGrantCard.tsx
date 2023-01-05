@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 import { ListText } from './ListText';
 import { isMobileMode } from '../../../utils';
@@ -117,7 +117,7 @@ export const CustomGrantCard = ({
               </Text>
               {sponsors.map((item, idx) => (
                 <Box key={idx * 2} mr={3}>
-                  <img src={item} alt="logo" />
+                  <Image src={item} alt="logo" maxHeight="30px" />
                 </Box>
               ))}
             </Box>
