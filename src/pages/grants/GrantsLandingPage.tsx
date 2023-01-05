@@ -1,8 +1,8 @@
 /* eslint-disable complexity */
-import React, { useEffect } from 'react';
-import { Box, Text, Button } from '@chakra-ui/react';
+import React from 'react';
+import { Box, Text } from '@chakra-ui/react';
 import { useTheme } from '@chakra-ui/react';
-import { isMobileMode, isMediumScreen, useNotification } from '../../utils';
+import { isMobileMode } from '../../utils';
 import { fonts } from '../../constants/fonts';
 import borderimg from '../../assets/border.svg';
 import satwalletimg from '../../assets/walletsats.svg';
@@ -207,7 +207,7 @@ export const GrantsLandingPage = () => {
                   title="Geyser Grants Round 2"
                   date="DEC 2022"
                   to={'/grants/roundtwo'}
-                  sponsors={[satwalletimg, borderimg]}
+                  sponsors={[borderimg]}
                 />
               </Box>
               <Box mt={7}>
