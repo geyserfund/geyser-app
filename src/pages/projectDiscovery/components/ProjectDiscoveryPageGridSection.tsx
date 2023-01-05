@@ -14,7 +14,6 @@ import {
   MenuList,
   Box,
   Center,
-  Button,
   VStack,
 } from '@chakra-ui/react';
 
@@ -32,6 +31,8 @@ import {
 } from '../../../types/generated/graphql';
 import { RiSortDesc } from 'react-icons/ri';
 import { ProjectDiscoveryPageGridItems } from './ProjectDiscoveryPageGridItems';
+import { useListenerState } from '../../../hooks';
+import { ScrollInvoke } from '../../../helpers';
 
 type ResponseData = {
   projects: {
@@ -67,8 +68,9 @@ export const ProjectDiscoveryPageGridSection = () => {
     });
   };
 
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [isShowingAllProjects, setIsShowingAllProjects] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useListenerState(false);
+  const [isShowingAllProjects, setIsShowingAllProjects] =
+    useListenerState(false);
 
   const [
     getProjects,
@@ -318,14 +320,17 @@ export const ProjectDiscoveryPageGridSection = () => {
                 <ProjectDiscoveryPageGridItems projects={projects} />
               )}
 
-              {isShowingAllProjects === false &&
+              {isShowingAllProjects.current === false &&
               Boolean(error) === false &&
               projects.length > 0 ? (
                 <>
-                  {isLoadingMore === false ? (
-                    <Button onClick={handleLoadMoreButtonTapped}>
-                      View More
-                    </Button>
+                  {isLoadingMore.current === false ? (
+                    <ScrollInvoke
+                      elementId="app-route-content-root"
+                      onScrollEnd={handleLoadMoreButtonTapped}
+                      isLoading={isLoadingMore}
+                      noMoreItems={isShowingAllProjects}
+                    />
                   ) : (
                     <Loader />
                   )}
