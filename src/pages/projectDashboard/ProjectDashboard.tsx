@@ -44,7 +44,7 @@ export const ProjectDashboard = () => {
   const { user, setNav } = useAuthContext();
 
   const [activeTab, setActiveTab] = useState<DashboardTabs>(
-    DashboardTabs.entries,
+    DashboardTabs.projectDescription,
   );
 
   useEffect(() => {
