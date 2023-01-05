@@ -71,3 +71,25 @@ export const createGrantContributionRecord = async (data: any) => {
       console.log(err);
     });
 };
+
+export const getGrantSponsorRecords = async () => {
+  return fetch(
+    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Contributors?fields%5B%5D=Name&fields%5B%5D=Amount&fields%5B%5D=PFP%20link&filterByFormula=Amount%3E1000',
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((res) => {
+      return res.records;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

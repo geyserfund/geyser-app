@@ -1,10 +1,9 @@
 /* eslint-disable complexity */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { useTheme } from '@chakra-ui/react';
-import { isMobileMode } from '../../utils';
+import { getRandomOrb, isMobileMode } from '../../utils';
 import { fonts } from '../../constants/fonts';
-import borderimg from '../../assets/border.svg';
 import satwalletimg from '../../assets/walletsats.svg';
 import { ListText } from './components/ListText';
 import { CustomGrantCard } from './components/CustomGrantCard';
@@ -13,17 +12,22 @@ import { AppFooter } from '../../components/molecules';
 import { GrantsContributeModal } from './components/GrantsContributeModal';
 import { ButtonComponent } from '../../components/ui';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
+import { GrantSponsor } from './GrantsRoundTwo';
+import { getGrantSponsorRecords } from '../../api';
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
 
   const [copy, setCopy] = useState(false);
-  const [link, setLink] = useState('');
+  const [sponsors, setSponsers] = useState<GrantSponsor[]>([]);
+
+  const handleCompleteContribution = (value: GrantSponsor) => {
+    if (value.amount >= 1000) {
+      setSponsers([...sponsors, value]);
+    }
+  };
 
   const theme = useTheme();
-  const linkHandler = (link: React.SetStateAction<string>) => {
-    setLink(link);
-  };
 
   const handleCopyOnchain = () => {
     navigator.clipboard.writeText('grants@geyser.fund');
@@ -33,6 +37,22 @@ export const GrantsLandingPage = () => {
     }, 1000);
   };
 
+  useEffect(() => {
+    const getSponsors = async () => {
+      const sponsorResponse = await getGrantSponsorRecords();
+
+      const listSponsers = sponsorResponse.map((sponsor: any) => ({
+        name: sponsor.fields.Name,
+        amount: sponsor.fields.Amount,
+        imageUrl: sponsor.fields['PFP link'],
+      }));
+
+      setSponsers(listSponsers);
+    };
+
+    getSponsors();
+  }, []);
+  console.log('checking sponsors', sponsors);
   return (
     <>
       <Box
@@ -112,46 +132,6 @@ export const GrantsLandingPage = () => {
                   isSatLogo={true}
                 />
               </Box>
-              <Box
-                mt={3}
-                display="flex"
-                justifyContent={'center'}
-                alignItems="center"
-              >
-                {isMobile === true && (
-                  <Box
-                    display={'flex'}
-                    mr={2}
-                    mt={4}
-                    flexDirection="column"
-                    alignItems={'end'}
-                  >
-                    <img src={satwalletimg} />
-                    <Text
-                      color={'brand.neutral600'}
-                      fontSize="8px"
-                      mr={2}
-                      fontWeight="700"
-                    >
-                      SPONSORS
-                    </Text>
-                  </Box>
-                )}
-                {[1, 2, 3].map((item, idx) => (
-                  <>
-                    {isMobile === true && (
-                      <Box
-                        key={idx}
-                        bg="brand.neutral200"
-                        rounded={'full'}
-                        mr={2}
-                        width="25px"
-                        height={'25px'}
-                      ></Box>
-                    )}
-                  </>
-                ))}
-              </Box>
 
               <Box
                 display="flex"
@@ -159,7 +139,7 @@ export const GrantsLandingPage = () => {
                 mt="6"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <GrantsContributeModal onLink={linkHandler} />
+                <GrantsContributeModal onLink={handleCompleteContribution} />
                 {isMobile ? (
                   <Text
                     fontSize={'13px'}
@@ -171,14 +151,14 @@ export const GrantsLandingPage = () => {
                     Contribute to the Bitcoin ecosystem by becoming a Geyser
                     Grants sponsor. You can also easily contribute by sending or
                     streaming recurring payments to
-                    <Text
-                      variant="span"
-                      decoration={'underline'}
-                      color="brand.primary"
+                    <ButtonComponent
+                      size="sm"
+                      primary={copy}
+                      onClick={handleCopyOnchain}
+                      leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
                     >
-                      {' '}
-                      <a href="">grants@geyser.fund.</a>
-                    </Text>
+                      grants@geyser.fund
+                    </ButtonComponent>
                   </Text>
                 ) : (
                   <Box display="flex" alignItems={'center'}>
@@ -223,7 +203,7 @@ export const GrantsLandingPage = () => {
                   title="Geyser Grants Round 2"
                   date="DEC 2022"
                   to={'/grants/roundtwo'}
-                  sponsors={[borderimg]}
+                  sponsors={sponsors.map((sponsor) => sponsor.imageUrl)}
                 />
               </Box>
               <Box mt={7}>
@@ -243,7 +223,12 @@ export const GrantsLandingPage = () => {
                   title="Geyser Grants Round 1"
                   date="AUG 2022"
                   to={'/grants/roundone'}
-                  sponsors={[borderimg, satwalletimg]}
+                  sponsors={[
+                    getRandomOrb(10),
+                    getRandomOrb(20),
+                    getRandomOrb(30),
+                    satwalletimg,
+                  ]}
                 />
               </Box>
               <MoreInfo />
