@@ -13,13 +13,14 @@ import { GrantsContributeModal } from './components/GrantsContributeModal';
 import { ButtonComponent } from '../../components/ui';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { GrantSponsor } from './GrantsRoundTwo';
-import { getGrantSponsorRecords } from '../../api';
+import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
 
   const [copy, setCopy] = useState(false);
   const [sponsors, setSponsers] = useState<GrantSponsor[]>([]);
+  const [applicationCount, setApplicationCount] = useState('-');
 
   const handleCompleteContribution = (value: GrantSponsor) => {
     if (value.amount >= 1000) {
@@ -50,9 +51,15 @@ export const GrantsLandingPage = () => {
       setSponsers(listSponsers);
     };
 
+    const getApplicants = async () => {
+      const applicantResponse = await getGrantApplicants();
+      setApplicationCount(`${applicantResponse.length}`);
+    };
+
     getSponsors();
+    getApplicants();
   }, []);
-  console.log('checking sponsors', sponsors);
+
   return (
     <>
       <Box
@@ -198,7 +205,7 @@ export const GrantsLandingPage = () => {
                   banner={
                     'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'
                   }
-                  applicants="-"
+                  applicants={applicationCount}
                   grant="100 M"
                   title="Geyser Grants Round 2"
                   date="JAN 2023"

@@ -93,3 +93,29 @@ export const getGrantSponsorRecords = async () => {
       console.log(err);
     });
 };
+
+export const getGrantApplicants = async (): Promise<
+  {
+    fields: { Grant: string };
+  }[]
+> => {
+  return fetch(
+    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Applicants?fields%5B%5D=Grant',
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((res) => {
+      return res.records;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
