@@ -3,7 +3,7 @@ import { isMobileMode } from '../../../utils';
 
 import { Box, Wrap } from '@chakra-ui/react';
 import { BitcoinerCard } from './BitcoinerCard';
-import { conorUrl, tachiraUrl, umarUrl } from '../../../constants';
+import { tachiraUrl, umarUrl } from '../../../constants';
 
 const members = [
   {

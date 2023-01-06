@@ -9,6 +9,7 @@ import {
   desUrl,
   lucasUrl,
   pacoUrl,
+  zuccoUrl,
 } from '../../../constants';
 
 const members = [
@@ -44,6 +45,11 @@ const members = [
     name: 'Paco de la India',
     image: pacoUrl,
     link: 'https://twitter.com/RunwithBitcoin',
+  },
+  {
+    name: 'Giacomo Zucco',
+    image: zuccoUrl,
+    link: 'https://twitter.com/giacomozucco',
   },
 ];
 
