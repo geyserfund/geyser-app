@@ -19,12 +19,7 @@ import { MdClose } from 'react-icons/md';
 
 import { useAuthContext } from '../../../context';
 import { createApplicantRecordRound2 } from '../../../api';
-import {
-  hasTwitterAccount,
-  useNotification,
-  validEmail,
-  validUrl,
-} from '../../../utils';
+import { hasTwitterAccount, useNotification, validUrl } from '../../../utils';
 import { TwitterConnect } from '../../../components/molecules';
 import { TextInputBox, TextArea } from '../../../components/ui';
 import { AuthContext } from '../../../context';
@@ -43,7 +38,6 @@ interface Grant {
 
 export type GrantApplicantInput = {
   area: string;
-  email: string;
   grantType: string;
   link: string;
   name: string;
@@ -52,8 +46,7 @@ export type GrantApplicantInput = {
 
 export const defaultGrantApplicant = {
   area: 'Online',
-  email: '',
-  grantType: 'Bitcoin Education',
+  grantType: 'Translations',
   link: '',
   name: '',
   goals: '',
@@ -64,6 +57,27 @@ enum GrantApplicationStages {
   form = 'form',
   complete = 'complete',
 }
+
+export enum GrantCategory {
+  translations = 'Translations',
+  visualArt = 'Visual Art',
+  communities = 'Communities',
+}
+
+export const GrantOptions = [
+  {
+    label: 'Bitcoin Translations',
+    value: GrantCategory.translations,
+  },
+  {
+    label: 'Bitcoin Visual Art',
+    value: GrantCategory.visualArt,
+  },
+  {
+    label: 'Bitcoin Communities',
+    value: GrantCategory.communities,
+  },
+];
 
 export const ApplyGrantModal = ({
   applicant,
@@ -85,7 +99,7 @@ export const ApplyGrantModal = ({
   const { state, setState, setTarget } = useFormState<GrantApplicantInput>(
     defaultGrantApplicant,
   );
-  const { area, goals, email, grantType, link, name } = state;
+  const { area, goals, grantType, link, name } = state;
 
   const [formError, setFormError] = useState<
     FormStateError<GrantApplicantInput>
@@ -155,14 +169,6 @@ export const ApplyGrantModal = ({
       isValid = false;
     } else if (!validUrl.test(state.link)) {
       error.link = 'Link needs to be a valid URL';
-      isValid = false;
-    }
-
-    if (!state.email) {
-      error.email = 'Email is a required field';
-      isValid = false;
-    } else if (!validEmail.test(state.email)) {
-      error.email = 'Email needs to be valid';
       isValid = false;
     }
 
@@ -260,10 +266,11 @@ export const ApplyGrantModal = ({
                 value={state.grantType}
                 onChange={setTarget}
               >
-                {' '}
-                <option value="Bitcoin Education">Bitcoin Education</option>
-                <option value="Bitcoin Culture">Bitcoin Culture</option>
-                <option value="Bitcoin Builders">Bitcoin Builders</option>
+                {GrantOptions.map((grant) => (
+                  <option key={grant.value} value={grant.value}>
+                    {grant.label}
+                  </option>
+                ))}
               </Select>
             </FormControl>
             <FormControl mb={3}>
@@ -336,19 +343,6 @@ export const ApplyGrantModal = ({
                 <option value="Online">Online</option>
                 Online
               </Select>
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel fontWeight={'700'} fontSize="12px">
-                Email
-              </FormLabel>
-              <TextInputBox
-                placeholder="Yolo@protonmail.com"
-                _focus={{ borderColor: 'brand.primary' }}
-                name="email"
-                value={state.email}
-                onChange={setTarget}
-                error={formError.email}
-              />
             </FormControl>
           </VStack>
 

@@ -24,36 +24,37 @@ import { GrantDevelopers } from './components/GrantDevs';
 import { GrantsRound2Url } from '../../constants';
 import { ButtonComponent } from '../../components/ui';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import { getGrantSponsorRecords } from '../../api';
+import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
+import { GrantCategory } from './components/ApplyGrantModal';
 
 const grants = [
   {
+    key: GrantCategory.communities,
     title: 'Communities & Meetups',
     subtitle: 'ROUND 2: JAN 2023',
     image:
       'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-2%20copy.jpg',
     name: 'Bitcoin for Free Speech',
-    applicants: 0,
     about:
       'This grant is for all projects creating bitcoin communities irl (in real life). In-person bitcoin spaces and meetups  allow for quality information to spread and enable the forging of deeper social networks. This in turn, results in a more resilient bitcoin network. We want to enable these creators to continue building grassroots bitcoin communities globally.',
   },
   {
+    key: GrantCategory.translations,
     title: 'Bitcoin Translations',
     subtitle: 'ROUND 2: JAN 2023',
     image:
       'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-1%20copy.jpg',
     name: 'Visual Artists for Bitcoin',
-    applicants: 0,
     about:
       'Bitcoin content is spreading like wildfire. But language represent the biggest blocker to learning more about it, as most content remains written in English. By supporting translators in this space we want to keep supporting those that make Bitcoin content available to everyone around the world.',
   },
   {
+    key: GrantCategory.visualArt,
     title: 'Bitcoin Visual Art',
     subtitle: 'ROUND 2: JAN 2023',
     image:
       'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-3%20copy.jpg',
     name: 'Bitcoin Open Source',
-    applicants: 0,
     about:
       "This grant is for all creative projects that focus on explaining and showcasing bitcoin through visual mediums. Creating culture and art around bitcoin is a key way of educating the world about bitcoin's history, mythology, technology and ideological significance. Let's support Bitcoin artists!",
   },
@@ -65,6 +66,14 @@ export type GrantSponsor = {
   imageUrl: string;
 };
 
+type CaregorizedApplications = { [key: string]: any[] };
+
+const defaultApplications: CaregorizedApplications = {
+  [GrantCategory.translations]: [],
+  [GrantCategory.communities]: [],
+  [GrantCategory.visualArt]: [],
+};
+
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
@@ -72,6 +81,8 @@ export const GrantsRoundTwo = () => {
   const [copy, setCopy] = useState(false);
 
   const [sponsors, setSponsers] = useState<GrantSponsor[]>([]);
+  const [categorizedApplicaitons, setCategorizedApplicaitons] =
+    useState<CaregorizedApplications>(defaultApplications);
 
   const handleCompleteContribution = (value: GrantSponsor) => {
     if (value.amount >= 1000) {
@@ -100,7 +111,31 @@ export const GrantsRoundTwo = () => {
       setSponsers(listSponsers);
     };
 
+    const getApplicants = async () => {
+      const applicantResponse = await getGrantApplicants();
+
+      const categorized: CaregorizedApplications = defaultApplications;
+
+      applicantResponse.map((application) => {
+        switch (application.fields.Grant) {
+          case GrantCategory.translations:
+            categorized[GrantCategory.translations].push(application);
+            break;
+          case GrantCategory.communities:
+            categorized[GrantCategory.communities].push(application);
+            break;
+          case GrantCategory.visualArt:
+            categorized[GrantCategory.visualArt].push(application);
+            break;
+          default:
+            break;
+        }
+      });
+      setCategorizedApplicaitons(categorized);
+    };
+
     getSponsors();
+    getApplicants();
   }, []);
 
   return (
@@ -220,7 +255,7 @@ export const GrantsRoundTwo = () => {
                     subtitle={item.subtitle}
                     about={item.about}
                     image={item.image}
-                    applicant={item.applicants}
+                    applicant={categorizedApplicaitons[item.key].length}
                   />
                 </GridItem>
               ))}
@@ -373,13 +408,15 @@ export const GrantsRoundTwo = () => {
             >
               Applications
             </Text>
-            <Box>
+            <Box
+              height={isMobile ? 'calc(100vh - 230px)' : 'calc(100vh - 220px)'}
+            >
               <iframe
                 className="airtable-embed"
                 src="https://airtable.com/embed/shrfeI21FWzyCqHZy?backgroundColor=teal"
                 frameBorder="0"
                 width="100%"
-                height="533"
+                height="100%"
               ></iframe>
             </Box>
           </Box>
