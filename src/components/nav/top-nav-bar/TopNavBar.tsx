@@ -38,6 +38,7 @@ const navItems = [
   {
     name: 'Grants',
     to: '/grants',
+    new: true,
   },
   {
     name: 'About',
@@ -483,14 +484,28 @@ export const TopNavBar = () => {
                       </a>
                     ) : (
                       <Link key={idx} to={item.to}>
-                        <Text
-                          fontWeight={'500'}
-                          textDecoration="none"
-                          fontSize="16px"
-                          color={'brand.neutral700'}
-                        >
-                          {item.name}
-                        </Text>
+                        <Box position="relative" padding="5px 7px">
+                          <Text
+                            fontWeight={'500'}
+                            textDecoration="none"
+                            fontSize="16px"
+                            color={'brand.neutral700'}
+                          >
+                            {item.name}
+                          </Text>
+                          {item.new && (
+                            <Box
+                              rounded="full"
+                              position="absolute"
+                              height="15px"
+                              width="15px"
+                              backgroundColor="brand.primary"
+                              right="-4px"
+                              top="-2px"
+                              zIndex={-1}
+                            />
+                          )}
+                        </Box>
                       </Link>
                     )}
                   </>
