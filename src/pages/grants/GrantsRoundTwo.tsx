@@ -48,7 +48,7 @@ const grants = [
       'Bitcoin content is spreading like wildfire. But language represent the biggest blocker to learning more about it, as most content remains written in English. By supporting translators in this space we want to keep supporting those that make Bitcoin content available to everyone around the world.',
   },
   {
-    title: 'Bitcoin Visual Art',
+    title: 'Bitcoin Visual Arts',
     subtitle: 'ROUND 2: JAN 2023',
     image:
       'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-3%20copy.jpg',

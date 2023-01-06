@@ -262,9 +262,9 @@ export const ApplyGrantModal = ({
                 onChange={setTarget}
               >
                 {' '}
-                <option value="Bitcoin Education">Bitcoin Education</option>
-                <option value="Bitcoin Culture">Bitcoin Culture</option>
-                <option value="Bitcoin Builders">Bitcoin Builders</option>
+                <option value="Bitcoin Translators">Bitcoin Translators</option>
+                <option value="Bitcoin Visual Arts">Bitcoin Visual Arts</option>
+                <option value="Bitcoin Communities">Bitcoin Communities</option>
               </Select>
             </FormControl>
             <FormControl mb={3}>
