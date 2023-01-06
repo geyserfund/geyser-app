@@ -53,7 +53,7 @@ export type GrantApplicantInput = {
 export const defaultGrantApplicant = {
   area: 'Online',
   email: '',
-  grantType: 'Bitcoin Education',
+  grantType: 'Translations',
   link: '',
   name: '',
   goals: '',
@@ -64,6 +64,27 @@ enum GrantApplicationStages {
   form = 'form',
   complete = 'complete',
 }
+
+export enum GrantCategory {
+  translations = 'Translations',
+  visualArt = 'Visual Art',
+  communities = 'Communities',
+}
+
+export const GrantOptions = [
+  {
+    label: 'Bitcoin Translations',
+    value: GrantCategory.translations,
+  },
+  {
+    label: 'Bitcoin Visual Art',
+    value: GrantCategory.visualArt,
+  },
+  {
+    label: 'Bitcoin Communities',
+    value: GrantCategory.communities,
+  },
+];
 
 export const ApplyGrantModal = ({
   applicant,
@@ -261,10 +282,11 @@ export const ApplyGrantModal = ({
                 value={state.grantType}
                 onChange={setTarget}
               >
-                {' '}
-                <option value="Bitcoin Translators">Bitcoin Translators</option>
-                <option value="Bitcoin Visual Arts">Bitcoin Visual Arts</option>
-                <option value="Bitcoin Communities">Bitcoin Communities</option>
+                {GrantOptions.map((grant) => (
+                  <option key={grant.value} value={grant.value}>
+                    {grant.label}
+                  </option>
+                ))}
               </Select>
             </FormControl>
             <FormControl mb={3}>
