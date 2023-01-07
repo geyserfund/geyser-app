@@ -42,6 +42,11 @@ export const ProjectView = () => {
       },
 
       onCompleted(data) {
+        if (!data?.project) {
+          history.replace(getPath('notFound'));
+          return;
+        }
+
         const { project } = data;
 
         setNav({
@@ -57,12 +62,8 @@ export const ProjectView = () => {
     },
   );
 
-  if (loading || error) {
+  if (loading || error || !data) {
     return <Loader />;
-  }
-
-  if (error || !data || !data.project) {
-    return history.replace(getPath('notFound'));
   }
 
   return (
