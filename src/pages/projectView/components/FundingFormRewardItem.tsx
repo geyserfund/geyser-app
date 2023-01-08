@@ -159,6 +159,7 @@ export const FundingFormRewardItem = ({
             width="100%"
             height="192px"
             objectFit="cover"
+            noCacheId={(Math.random() + 1).toString(36).substring(7)}
           />
         </Box>
       )}

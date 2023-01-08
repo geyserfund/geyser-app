@@ -304,6 +304,7 @@ export const RewardAdditionModal = ({
                       borderRadius="4px"
                       src={rewards.current.image}
                       maxHeight="200px"
+                      noCacheId={(Math.random() + 1).toString(36).substring(7)}
                     />
                   </HStack>
                 ) : (
