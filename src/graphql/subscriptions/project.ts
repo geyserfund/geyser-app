@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const PROJECT_CREATION_SUBSCRIPTION = gql`
-  subscription ProjectCreatedSubscription {
-    projectCreated {
+export const PROJECT_ACTIVATION_SUBSCRIPTION = gql`
+  subscription ProjectActivationSubscription {
+    projectActivated {
       project {
         id
         title

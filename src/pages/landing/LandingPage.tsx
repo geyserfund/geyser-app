@@ -17,10 +17,7 @@ import { ActivityView, LandingPageProjectsList, TopBanner } from './components';
 import { BsArrowRight } from 'react-icons/bs';
 import { dimensions, getPath } from '../../constants';
 import { useSubscription } from '@apollo/client';
-import {
-  PROJECT_CREATION_SUBSCRIPTION,
-  FUNDING_TX_CONFIRMED_SUBSCRIPTION,
-} from '../../graphql/subscriptions';
+import { ACTIVITY_CREATION_SUBSCRIPTION } from '../../graphql/subscriptions';
 import { isMobileMode } from '../../utils';
 
 const { topNavBar: topNavBarDimensions } = dimensions;
@@ -33,35 +30,19 @@ export const LandingPage = () => {
 
     Used to demonstrate the project and fundingTx subscriptions
   */
-  const { data } = useSubscription(PROJECT_CREATION_SUBSCRIPTION, {
+  const { data } = useSubscription(ACTIVITY_CREATION_SUBSCRIPTION, {
     // variables: { },
   });
 
-  const { data: fundingTxsConfirmedSubData } = useSubscription(
-    FUNDING_TX_CONFIRMED_SUBSCRIPTION,
-    {
-      // variables: { },
-    },
-  );
-
-  const [projects, setProjects] = useState([]);
-  const [fundingTxs, setFundingTxs] = useState([]);
-  console.log('fundingTxs', fundingTxs);
+  const [activities, setActivities] = useState([]);
+  console.log('activities', activities);
 
   useEffect(() => {
-    if (data?.projectCreated) {
-      setProjects([...projects, data.projectCreated.project]);
+    if (data?.activityCreated) {
+      console.log('DATA', data.activityCreated);
+      setActivities([...activities, data.activityCreated]);
     }
   }, [data]);
-
-  useEffect(() => {
-    if (fundingTxsConfirmedSubData?.fundingTxConfirmed) {
-      setFundingTxs([
-        ...fundingTxs,
-        fundingTxsConfirmedSubData.fundingTxConfirmed.fundingTx,
-      ]);
-    }
-  });
   /* END PLACEHOLDER */
 
   return (
@@ -72,18 +53,9 @@ export const LandingPage = () => {
       height="full"
     >
       {/* PLACEHOLDER START */}
-      {projects.map((project) => {
-        console.log('PROJECT', project);
-        return <Text key={project.id}> New project: {project.name} </Text>;
-      })}
-      {fundingTxs.map((fundingTx) => {
-        console.log('FUNDING TX', fundingTx);
-        return (
-          <Text key={fundingTx.id}>
-            {' '}
-            New confirmed funding tx: {fundingTx.id}{' '}
-          </Text>
-        );
+      {activities.map((activity) => {
+        console.log('ACTIVITY', activity);
+        return <Text key={activity.id}> New activity: {activity.id} </Text>;
       })}
       {/* PLACEHOLDER END */}
       <TopBanner />
