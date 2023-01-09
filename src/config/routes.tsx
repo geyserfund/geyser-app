@@ -23,7 +23,7 @@ import { EntryPage } from '../pages/entry/EntryPage';
 import { NotAuthorized } from '../pages/notAuthorized';
 import { ProjectDashboard } from '../pages/projectDashboard';
 import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
-import { getPath, routerPathNames } from '../constants';
+import { dimensions, getPath, routerPathNames } from '../constants';
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
 import { ProfilePage } from '../pages/profile/ProfilePage';
 import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne';
@@ -43,7 +43,13 @@ export const Router = () => {
       <Box height="100vh">
         <TopNavBar />
 
-        <Box id="app-route-content-root" height="100vh" overflowY="auto">
+        <Box
+          id="app-route-content-root"
+          // height={`calc(100vh - ${dimensions.topNavBar.desktop.height}px`}
+          height={`100vh`}
+          paddingTop={`${dimensions.topNavBar.desktop.height}px`}
+          overflowY="auto"
+        >
           <Switch>
             <Route path="/auth/twitter">
               <TwitterSuccess />

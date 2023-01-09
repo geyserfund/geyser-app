@@ -144,7 +144,6 @@ export const ProjectDiscoveryPageGridSection = () => {
     return (
       <Container
         position="relative"
-        paddingTop={`${topNavBarDimensions.desktop.height}px`}
         height="100%"
         display={'flex'}
         justifyContent="center"
@@ -166,7 +165,6 @@ export const ProjectDiscoveryPageGridSection = () => {
     return (
       <Container
         position="relative"
-        paddingTop={`${topNavBarDimensions.desktop.height}px`}
         height="100%"
         display={'flex'}
         justifyContent="center"
@@ -183,7 +181,6 @@ export const ProjectDiscoveryPageGridSection = () => {
     return (
       <Container
         position="relative"
-        paddingTop={`${topNavBarDimensions.desktop.height}px`}
         height="100%"
         display={'flex'}
         justifyContent="center"

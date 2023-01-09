@@ -19,20 +19,21 @@ export const LeaderboardView = () => {
   const isMobile = isMobileMode();
   return (
     <Box
-      width={{
-        base: 'full',
-        md: '300px',
-        lg: '400px',
-      }}
-      maxWidth={{
-        base: 'full',
-        md: '300px',
-        lg: '400px',
-      }}
+      // width={{
+      //   base: 'full',
+      //   md: '300px',
+      //   lg: '400px',
+      // }}
+      // maxWidth={{
+      //   base: 'full',
+      //   md: '300px',
+      //   lg: '400px',
+      // }}
       flexBasis={1}
       height="full"
     >
       <VStack
+        minWidth="250px"
         alignItems="left"
         paddingRight={isMobile ? '0px' : '30px'}
         spacing={4}

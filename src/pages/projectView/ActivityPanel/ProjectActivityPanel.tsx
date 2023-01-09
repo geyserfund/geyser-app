@@ -241,8 +241,8 @@ export const ProjectActivityPanel = ({
         justifyContent="flex-start"
         alignItems="center"
         backgroundColor="#FFFFFF"
-        marginTop={isMobile ? '61px' : '90px'}
-        height={isMobile ? 'calc(100% - 61px)' : 'calc(100% - 90px)'}
+        marginTop={'20px'}
+        height={'calc(100% - 20px)'}
         borderTopLeftRadius={isMobile ? '' : '22px'}
         boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
       >

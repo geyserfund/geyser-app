@@ -45,7 +45,7 @@ const useStyles = createUseStyles<Rules, Styles>({
   },
   detailsContainer: ({ isMobile }: Styles) => ({
     height: '100%',
-    paddingTop: isMobile ? '61px' : '71px',
+    // paddingTop: isMobile ? '61px' : '71px',
     overflowY: 'scroll',
     WebkitOverflowScrolling: 'touch',
     display: 'flex',

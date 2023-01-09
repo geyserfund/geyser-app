@@ -12,12 +12,7 @@ export const LandingPage = () => {
   const isMobile = isMobileMode();
 
   return (
-    <Box
-      position="relative"
-      paddingTop={`${topNavBarDimensions.desktop.height}px`}
-      width="full"
-      height="full"
-    >
+    <Box position="relative" width="full" height="full">
       <TopBanner />
 
       <Stack
