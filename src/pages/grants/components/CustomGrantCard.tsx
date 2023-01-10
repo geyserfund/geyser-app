@@ -115,11 +115,12 @@ export const CustomGrantCard = ({
               >
                 SPONSORS
               </Text>
-              {sponsors.map((item, idx) => (
-                <Box key={idx * 2} mr={3}>
-                  <Image src={item} alt="logo" maxHeight="30px" />
-                </Box>
-              ))}
+              {sponsors &&
+                sponsors.map((item, idx) => (
+                  <Box key={idx * 2} mr={3}>
+                    <Image src={item} alt="logo" height="30px" />
+                  </Box>
+                ))}
             </Box>
           )}
         </Box>
