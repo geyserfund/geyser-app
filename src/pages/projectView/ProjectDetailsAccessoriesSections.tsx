@@ -83,7 +83,7 @@ export const ProjectDetailsAccessoriesSections = ({
         project.entries &&
         project.entries.sort(
           (a, b) =>
-            parseInt(a?.createdAt || '', 10) - parseInt(b.createdAt || '', 10),
+            parseInt(b?.createdAt || '', 10) - parseInt(a?.createdAt || '', 10),
         );
       return sortedEntries.map((entry) => {
         if (entry) {
