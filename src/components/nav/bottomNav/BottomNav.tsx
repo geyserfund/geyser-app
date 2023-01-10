@@ -1,6 +1,6 @@
 import { Box, HStack, Slide } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiTwotoneRocket } from 'react-icons/ai';
 import { BiHomeAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
@@ -31,6 +31,12 @@ export const BottomNav = ({ showNavBar }: BottomNavProps) => {
       setAnimationEnded(true);
     }
   };
+
+  useEffect(() => {
+    if (!showNavBar && animationEnded) {
+      setAnimationEnded(false);
+    }
+  }, [showNavBar, animationEnded]);
 
   if (!animationEnded) {
     return (
