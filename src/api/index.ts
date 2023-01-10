@@ -74,7 +74,7 @@ export const createGrantContributionRecord = async (data: any) => {
 
 export const getGrantSponsorRecords = async () => {
   return fetch(
-    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Contributors?fields%5B%5D=Name&fields%5B%5D=Amount&fields%5B%5D=PFP%20link&filterByFormula=Amount%3E1000',
+    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Contributors?fields%5B%5D=Name&fields%5B%5D=Amount&fields%5B%5D=PFP%20link&filterByFormula=Amount%3E%3D1000',
     {
       method: 'GET',
       headers: {

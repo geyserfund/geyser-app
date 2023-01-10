@@ -47,7 +47,6 @@ export const GrantsLandingPage = () => {
         amount: sponsor.fields.Amount,
         imageUrl: sponsor.fields['PFP link'],
       }));
-
       setSponsers(listSponsers);
     };
 
@@ -59,6 +58,8 @@ export const GrantsLandingPage = () => {
     getSponsors();
     getApplicants();
   }, []);
+
+  const sponsorImages = sponsors.map((sponsor) => sponsor.imageUrl);
 
   return (
     <>
@@ -210,7 +211,7 @@ export const GrantsLandingPage = () => {
                   title="Geyser Grants Round 2"
                   date="JAN 2023"
                   to={'/grants/roundtwo'}
-                  sponsors={sponsors.map((sponsor) => sponsor.imageUrl)}
+                  sponsors={sponsorImages}
                 />
               </Box>
               <Box mt={7}>

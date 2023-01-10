@@ -89,7 +89,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
         fundersCount
         amountFunded
         published
-
+        createdAt
         creator {
           id
           username
