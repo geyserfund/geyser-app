@@ -237,3 +237,34 @@ export const fadeIn = {
     animation: '$fade-in 0.5s ease-out both',
   },
 };
+
+export const slideUpBottomDynamic = (distance: number, time: number) => ({
+  '@-webkit-keyframes slide-up-bottom-dynamic': {
+    from: {
+      webkitTransform: `translateY(${distance}px)`,
+      transform: `translateY(${distance}px)`,
+      opacity: 0,
+    },
+    to: {
+      webkitTransform: 'translateY(0)',
+      transform: 'translateY(0)',
+      opacity: 1,
+    },
+  },
+  '@keyframes slide-up-bottom-dynamic': {
+    from: {
+      webkitTransform: `translateY(${distance}px)`,
+      transform: `translateY(${distance}px)`,
+      opacity: 0,
+    },
+    to: {
+      webkitTransform: 'translateY(0)',
+      transform: 'translateY(0)',
+      opacity: 1,
+    },
+  },
+  slideOutRightDynamic: {
+    webkitAnimation: `$slide-up-bottom-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
+    animation: `$slide-up-bottom-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
+  },
+});
