@@ -4,16 +4,18 @@ import { useListenerState } from './useListenerState';
 interface UseScrollDirectionProps {
   elementId: string;
   loading?: boolean;
+  initialValue?: boolean;
 }
 
 export const useScrollDirection = ({
   elementId,
   loading,
+  initialValue,
 }: UseScrollDirectionProps) => {
   const [prevValue, setPrevValue] = useListenerState(0);
   const [value, setValue] = useListenerState(0);
 
-  const [isScrollingUp, setIsScrollingUp] = useState(false);
+  const [isScrollingUp, setIsScrollingUp] = useState(initialValue || false);
 
   useEffect(() => {
     if (loading) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { useFundingFormState } from '../../../hooks';
 import {
   FundingResourceType,
@@ -11,19 +11,43 @@ import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContai
 
 type Props = {
   project: Project;
-  detailOpen: boolean;
   fundingFlow: any;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   resourceType?: string;
   resourceId?: number;
 };
 
+export enum MobileViews {
+  description = 'description',
+  contribution = 'contribution',
+  leaderboard = 'leaderBoard',
+  funding = 'funding',
+}
+
+type MobileViewContextProps = {
+  view: MobileViews;
+  setView: (view: MobileViews) => void;
+};
+
+const defaultMobileViewContext = {
+  view: MobileViews.description,
+  setView: (view: MobileViews) => {},
+};
+
+export const MobileViewContext = createContext<MobileViewContextProps>(
+  defaultMobileViewContext,
+);
+
+export const useMobileView = () => useContext(MobileViewContext);
+
 export const ProjectDetailsViewContainer = ({
   project,
-  detailOpen,
-  setDetailOpen,
   fundingFlow,
 }: Props) => {
+  const [detailOpen, setDetailOpen] = useState(true);
+  const [mobileView, setMobileView] = useState<MobileViews>(
+    MobileViews.description,
+  );
+
   const fundForm = useFundingFormState({
     /*
      * Passing an empty array as fallback would probably make
@@ -36,7 +60,9 @@ export const ProjectDetailsViewContainer = ({
   const { setFundState, fundState } = fundingFlow;
 
   return (
-    <>
+    <MobileViewContext.Provider
+      value={{ view: mobileView, setView: setMobileView }}
+    >
       <Head
         title={project.title}
         description={project.description}
@@ -47,8 +73,6 @@ export const ProjectDetailsViewContainer = ({
       <ProjectDetailsMainBodyContainer
         {...{
           project,
-          detailOpen,
-          setDetailOpen,
           fundState,
           setFundState,
           updateReward: fundForm.updateReward,
@@ -57,10 +81,10 @@ export const ProjectDetailsViewContainer = ({
 
       <ProjectActivityPanel
         project={project}
-        {...{ detailOpen, setDetailOpen, fundingFlow, fundForm }}
+        {...{ fundingFlow, fundForm }}
         resourceType={FundingResourceType.Project}
         resourceId={project.id}
       />
-    </>
+    </MobileViewContext.Provider>
   );
 };

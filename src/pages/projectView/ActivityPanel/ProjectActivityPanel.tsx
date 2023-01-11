@@ -22,12 +22,11 @@ import {
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
+import { MobileViews, useMobileView } from '../containers';
 
 type Props = {
   project: Project;
-  detailOpen: boolean;
   fundingFlow: any;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   resourceType: FundingResourceType;
   resourceId: number;
   fundForm: IFundFormState;
@@ -35,8 +34,6 @@ type Props = {
 
 export const ProjectActivityPanel = ({
   project,
-  detailOpen,
-  setDetailOpen,
   fundingFlow,
   fundForm,
   resourceType,
@@ -47,6 +44,7 @@ export const ProjectActivityPanel = ({
   const { btcRate } = useBtcContext();
   const isMobile = isMobileMode();
 
+  const { view, setView } = useMobileView();
   // required for knowing the rewards and the funds
   const {
     state: formState,
@@ -74,7 +72,13 @@ export const ProjectActivityPanel = ({
 
   const [fadeStarted, setFadeStarted] = useState(false);
 
-  const classes = useStyles({ isMobile, detailOpen, fadeStarted });
+  const inView = [
+    MobileViews.contribution,
+    MobileViews.leaderboard,
+    MobileViews.funding,
+  ].includes(view);
+
+  const classes = useStyles({ isMobile, inView, fadeStarted });
 
   useEffect(() => {
     if (user && user.id) {
@@ -156,7 +160,7 @@ export const ProjectActivityPanel = ({
 
   const handleViewClick = () => {
     setFadeStarted(true);
-    setDetailOpen(true);
+    setView(MobileViews.description);
     setTimeout(() => {
       setFadeStarted(false);
     }, 500);
@@ -229,9 +233,9 @@ export const ProjectActivityPanel = ({
   return (
     <>
       <Box
-        overflow="auto"
+        // overflow="auto"
         className={classNames(classes.container, {
-          [classes.slideInRight]: isMobile && !detailOpen,
+          [classes.slideInRight]: isMobile && inView,
           [classes.fadeOut]: isMobile && fadeStarted,
         })}
         flex={!isMobile ? 2 : undefined}

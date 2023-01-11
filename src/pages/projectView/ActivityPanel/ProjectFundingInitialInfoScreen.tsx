@@ -26,6 +26,8 @@ import {
   QUERY_GET_PROJECT_FUNDERS,
 } from '../../../graphql';
 import { useQueryWithPagination } from '../../../hooks';
+import { ProjectNavBar } from '../../../components/nav';
+import { MobileViews, useMobileView } from '../containers';
 
 type Props = {
   project: Project;
@@ -46,7 +48,8 @@ export const ProjectFundingInitialInfoScreen = ({
   fundingTx,
 }: Props) => {
   const isMobile = isMobileMode();
-  const [view, setView] = useState('activity');
+  const [tab, setTab] = useState('activity');
+  const { view } = useMobileView();
 
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]
@@ -80,12 +83,20 @@ export const ProjectFundingInitialInfoScreen = ({
     }
   }, [fundingTx]);
 
+  useEffect(() => {
+    if (view === MobileViews.contribution) {
+      setTab('activity');
+    } else if (view === MobileViews.leaderboard) {
+      setTab('leaderBoard');
+    }
+  }, [view]);
+
   if (test) {
     return <InfoPageSkeleton />;
   }
 
   const renderActivityList = () => {
-    switch (view) {
+    switch (tab) {
       case 'activity':
         return (
           <ProjectContributionList
@@ -95,6 +106,81 @@ export const ProjectFundingInitialInfoScreen = ({
       default:
         return <ProjectLeaderboardList project={project} funders={funders} />;
     }
+  };
+
+  const contributionButton = () => {
+    return (
+      <>
+        <Button
+          _hover={{ backgroundColor: 'none' }}
+          w="100%"
+          rounded="none"
+          bg="none"
+          fontWeight={tab === 'activity' ? 'bold' : 'normal'}
+          fontSize="16px"
+          marginTop="10px"
+          onClick={() => setTab('activity')}
+        >
+          Contributions{' '}
+          <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+            {project.fundingTxsCount}
+          </Text>
+        </Button>
+        <Box
+          bg={tab === 'activity' ? 'darkgrey' : 'lightgrey'}
+          w="100%"
+          h="3px"
+          rounded="lg"
+        ></Box>
+      </>
+    );
+  };
+
+  const leaderBoardButton = () => {
+    return (
+      <>
+        <Button
+          _hover={{ backgroundColor: 'none' }}
+          w="100%"
+          rounded="none"
+          bg="none"
+          fontWeight={tab === 'activity' ? 'normal' : 'bold'}
+          fontSize="16px"
+          marginTop="10px"
+          onClick={() => setTab('leaderboard')}
+        >
+          Leaderboard{' '}
+          <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+            {project.fundersCount}
+          </Text>
+        </Button>
+        <Box
+          bg={tab === 'activity' ? 'lightgrey' : 'darkgrey'}
+          w="100%"
+          h="3px"
+          rounded="lg"
+        ></Box>
+      </>
+    );
+  };
+
+  const renderTabsList = () => {
+    if (isMobile) {
+      switch (view) {
+        case MobileViews.contribution:
+          return <Box w="100%">{contributionButton()}</Box>;
+        case MobileViews.leaderboard:
+          return <Box w="100%">{leaderBoardButton()}</Box>;
+        default:
+      }
+    }
+
+    return (
+      <>
+        <Box w="50%">{contributionButton()}</Box>
+        <Box w="50%">{leaderBoardButton()}</Box>
+      </>
+    );
   };
 
   return (
@@ -137,52 +223,7 @@ export const ProjectFundingInitialInfoScreen = ({
         flex="1"
       >
         <Box display="flex" marginBottom="10px" w="95%">
-          <Box w="50%">
-            <Button
-              _hover={{ backgroundColor: 'none' }}
-              w="100%"
-              rounded="none"
-              bg="none"
-              fontWeight={view === 'activity' ? 'bold' : 'normal'}
-              fontSize="16px"
-              marginTop="10px"
-              onClick={() => setView('activity')}
-            >
-              Contributions{' '}
-              <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {project.fundingTxsCount}
-              </Text>
-            </Button>
-            <Box
-              bg={view === 'activity' ? 'darkgrey' : 'lightgrey'}
-              w="100%"
-              h="3px"
-              rounded="lg"
-            ></Box>
-          </Box>
-          <Box w="50%">
-            <Button
-              _hover={{ backgroundColor: 'none' }}
-              w="100%"
-              rounded="none"
-              bg="none"
-              fontWeight={view === 'activity' ? 'normal' : 'bold'}
-              fontSize="16px"
-              marginTop="10px"
-              onClick={() => setView('leaderboard')}
-            >
-              Leaderboard{' '}
-              <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {project.fundersCount}
-              </Text>
-            </Button>
-            <Box
-              bg={view === 'activity' ? 'lightgrey' : 'darkgrey'}
-              w="100%"
-              h="3px"
-              rounded="lg"
-            ></Box>
-          </Box>
+          {renderTabsList()}
         </Box>
         {renderActivityList()}
       </Box>

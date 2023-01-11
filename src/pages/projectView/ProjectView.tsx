@@ -28,7 +28,7 @@ export const ProjectView = () => {
   const history = useHistory();
 
   const { setNav } = useAuthContext();
-  const [detailOpen, setDetailOpen] = useState(true);
+
   const fundingFlow = useFundingFlow();
 
   const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
@@ -82,8 +82,7 @@ export const ProjectView = () => {
         bg="brand.bgGrey4"
       >
         <ProjectDetailsViewContainer
-          {...{ project: data.project, detailOpen, setDetailOpen, fundingFlow }}
-          {...{ project: data.project, detailOpen, setDetailOpen, fundingFlow }}
+          {...{ project: data.project, fundingFlow }}
         />
       </Box>
     </Box>
