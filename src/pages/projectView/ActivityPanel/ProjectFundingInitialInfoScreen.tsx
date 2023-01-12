@@ -166,6 +166,13 @@ export const ProjectFundingInitialInfoScreen = ({
         default:
       }
     }
+
+    return (
+      <HStack width="100%" spacing="0px">
+        <Box w="50%">{contributionButton()}</Box>;
+        <Box w="50%">{leaderBoardButton()}</Box>;
+      </HStack>
+    );
   };
 
   return (
