@@ -21,6 +21,9 @@ import {
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { compactMap } from '../../utils/compactMap';
 import { getPath } from '../../constants';
+import { ProjectProvider } from '../projectView';
+import { isMobileMode } from '../../utils';
+import { ProjectNav } from '../../components/nav';
 
 export const EntryPage = () => {
   const { entryId } = useParams<{ entryId: string }>();
@@ -116,12 +119,13 @@ const EntryViewWrapper = ({
   setDetailOpen,
   fundingFlow,
 }: IEntryViewWrapper) => {
+  const isMobile = isMobileMode();
   const rewards =
     (project.rewards && compactMap<ProjectReward>(project.rewards)) || [];
   const fundForm = useFundingFormState({ rewards });
   const { setFundState } = fundingFlow;
   return (
-    <>
+    <ProjectProvider project={project}>
       <Head
         title={`${entry.title} - ${project.title}`}
         description={entry.description}
@@ -136,6 +140,7 @@ const EntryViewWrapper = ({
         resourceType={FundingResourceType.Entry}
         resourceId={entry.id}
       />
-    </>
+      {isMobile && <ProjectNav />}
+    </ProjectProvider>
   );
 };
