@@ -6,14 +6,14 @@ type Rules = string;
 
 interface IStyles {
   isMobile?: boolean;
-  detailOpen?: boolean;
+  inView?: boolean;
   fadeStarted?: boolean;
 }
 
 export const useStyles = createUseStyles<Rules, IStyles>({
-  container: ({ isMobile, detailOpen, fadeStarted }: IStyles) => ({
+  container: ({ isMobile, inView, fadeStarted }: IStyles) => ({
     position: fadeStarted ? 'absolute' : 'relative',
-    display: !isMobile || !detailOpen || fadeStarted ? 'flex' : 'none',
+    display: !isMobile || inView || fadeStarted ? 'flex' : 'none',
     top: fadeStarted ? 0 : undefined,
     left: fadeStarted ? 0 : undefined,
   }),
@@ -34,6 +34,6 @@ export const useStyles = createUseStyles<Rules, IStyles>({
     flexDirection: 'column',
     boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
   },
-  ...slideInRight,
-  ...fadeOut,
+  // ...slideInRight,
+  // ...fadeOut,
 });

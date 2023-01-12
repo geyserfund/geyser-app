@@ -1,14 +1,10 @@
 import { Box, VStack, Text } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { fadeOut, slideInLeft } from '../../css';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { colors, IFundingStages, getPath } from '../../constants';
-import {
-  AppFooter,
-  ProjectDetailsMobileMenu,
-} from '../../components/molecules';
+import { AppFooter } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages } from '../../constants';
 import { ProjectDetailsAccessoriesSections } from './ProjectDetailsAccessoriesSections';
@@ -17,18 +13,19 @@ import { Project } from '../../types/generated/graphql';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../context';
 import { ProjectDetailsCard } from './components/ProjectDetailsCard';
+import { MobileViews, useProject } from './containers';
 
 type Rules = string;
 
 type Styles = {
   isMobile: boolean;
-  detailOpen: boolean;
+  inView: boolean;
   fadeStarted: boolean;
 };
 
 const useStyles = createUseStyles<Rules, Styles>({
-  container: ({ isMobile, detailOpen, fadeStarted }: Styles) => ({
-    display: !isMobile || detailOpen || fadeStarted ? 'flex' : 'none',
+  container: ({ isMobile, inView, fadeStarted }: Styles) => ({
+    display: !isMobile || inView || fadeStarted ? 'flex' : 'none',
     position: fadeStarted ? 'absolute' : 'relative',
     top: fadeStarted ? 0 : undefined,
     left: fadeStarted ? 0 : undefined,
@@ -45,20 +42,18 @@ const useStyles = createUseStyles<Rules, Styles>({
   },
   detailsContainer: ({ isMobile }: Styles) => ({
     height: '100%',
-    paddingTop: isMobile ? '61px' : '71px',
+    // paddingTop: isMobile ? '61px' : '71px',
     overflowY: 'scroll',
     WebkitOverflowScrolling: 'touch',
     display: 'flex',
     flexDirection: 'column',
   }),
-  ...slideInLeft,
-  ...fadeOut,
+  // ...slideInLeft,
+  // ...fadeOut,
 });
 
 type Props = {
   project: Project;
-  detailOpen: boolean;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   fundState: IFundingStages;
   setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
   updateReward: UpdateReward;
@@ -66,8 +61,6 @@ type Props = {
 
 export const ProjectDetailsMainBodyContainer = ({
   project,
-  detailOpen,
-  setDetailOpen,
   fundState,
   setFundState,
   updateReward,
@@ -75,12 +68,13 @@ export const ProjectDetailsMainBodyContainer = ({
   const isMobile = isMobileMode();
   const isDark = isDarkMode();
 
-  const [fadeStarted, setFadeStarted] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [showMobileMenu, setShowMobileMenu] = useState(true);
-  const scrollDiv = useRef(document.createElement('div'));
+  const { mobileView, setMobileView } = useProject();
 
-  const classes = useStyles({ isMobile, detailOpen, fadeStarted });
+  const inView = mobileView === MobileViews.description;
+
+  const [fadeStarted, setFadeStarted] = useState(false);
+
+  const classes = useStyles({ isMobile, inView, fadeStarted });
   const history = useHistory();
 
   const { user, navigationContext } = useAuthContext();
@@ -89,21 +83,13 @@ export const ProjectDetailsMainBodyContainer = ({
     Number(user.id),
   );
 
-  const handleViewClick = () => {
-    setDetailOpen(false);
-    setFadeStarted(true);
-    setTimeout(() => {
-      setFadeStarted(false);
-    }, 500);
-  };
-
   const handleFundClick = () => {
     setFundState(fundingStages.form);
   };
 
   const handleFundClickMobile = () => {
     setFundState(fundingStages.form);
-    setDetailOpen(false);
+    setMobileView(MobileViews.funding);
     setFadeStarted(true);
     setTimeout(() => {
       setFadeStarted(false);
@@ -118,7 +104,7 @@ export const ProjectDetailsMainBodyContainer = ({
   return (
     <Box
       className={classNames(classes.container, {
-        [classes.slideInLeft]: isMobile && detailOpen,
+        [classes.slideInLeft]: isMobile && inView,
         [classes.fadeOut]: isMobile && fadeStarted,
       })}
       backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
@@ -128,28 +114,7 @@ export const ProjectDetailsMainBodyContainer = ({
       flexDirection="column"
       overflow="hidden"
     >
-      <Box
-        className={classes.detailsContainer}
-        id="project-scroll-container"
-        ref={scrollDiv}
-        onScroll={() => {
-          if (isMobile) {
-            if (scrollDiv.current.scrollTop > scrollPosition) {
-              setShowMobileMenu(false);
-            } else {
-              setShowMobileMenu(true);
-            }
-
-            setScrollPosition(scrollDiv.current.scrollTop);
-          }
-        }}
-      >
-        <ProjectDetailsMobileMenu
-          showMobileMenu={showMobileMenu}
-          fundButtonFunction={handleFundClickMobile}
-          transitionButtonFunction={handleViewClick}
-        />
-
+      <Box className={classes.detailsContainer} id="project-scroll-container">
         <VStack alignItems="center" width="100%" flex="1">
           <VStack
             spacing="20px"

@@ -175,7 +175,7 @@ export const EntryPreview = () => {
       <VStack
         background={'brand.bgGrey4'}
         position="relative"
-        paddingTop={isMobile ? '150px' : '130px'}
+        paddingTop={'70px'}
         height="100%"
         alignItems="center"
         justifyContent="center"

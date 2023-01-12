@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
-import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
@@ -14,6 +14,7 @@ import {
 } from '../../types/generated/graphql';
 import { getPath } from '../../constants';
 import { ProjectDetailsViewContainer } from './containers';
+import { isMobileMode } from '../../utils';
 
 type ResponseData = {
   project: Project;
@@ -26,9 +27,10 @@ type QueryVariables = {
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const history = useHistory();
+  const isMobile = isMobileMode();
 
   const { setNav } = useAuthContext();
-  const [detailOpen, setDetailOpen] = useState(true);
+
   const fundingFlow = useFundingFlow();
 
   const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
@@ -42,6 +44,11 @@ export const ProjectView = () => {
       },
 
       onCompleted(data) {
+        if (!data?.project) {
+          history.replace(getPath('notFound'));
+          return;
+        }
+
         const { project } = data;
 
         setNav({
@@ -57,12 +64,8 @@ export const ProjectView = () => {
     },
   );
 
-  if (loading || error) {
+  if (loading || error || !data) {
     return <Loader />;
-  }
-
-  if (error || !data || !data.project) {
-    return history.replace(getPath('notFound'));
   }
 
   return (
@@ -79,10 +82,10 @@ export const ProjectView = () => {
         overflow="hidden"
         position="relative"
         bg="brand.bgGrey4"
+        flexDirection={isMobile ? 'column' : 'row'}
       >
         <ProjectDetailsViewContainer
-          {...{ project: data.project, detailOpen, setDetailOpen, fundingFlow }}
-          {...{ project: data.project, detailOpen, setDetailOpen, fundingFlow }}
+          {...{ project: data.project, fundingFlow }}
         />
       </Box>
     </Box>

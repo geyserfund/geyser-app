@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useListenerState } from '../hooks';
 
 interface ScrollInvokeProps {
-  elementId: string;
+  elementId?: string;
   onScrollEnd: () => Promise<void>;
   isLoading?: React.MutableRefObject<boolean>;
   noMoreItems?: React.MutableRefObject<boolean>;
@@ -20,17 +20,25 @@ export const ScrollInvoke = ({
   const [prevValue, setPrevValue] = useListenerState(false);
 
   useEffect(() => {
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.addEventListener('scroll', handleScroll);
+    if (elementId) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.addEventListener('scroll', handleScroll);
+      }
+
+      return () => {
+        if (element) {
+          element.removeEventListener('scroll', handleScroll);
+        }
+      };
     }
 
+    document.addEventListener('scroll', handleScroll);
+
     return () => {
-      if (element) {
-        element.removeEventListener('scroll', handleScroll);
-      }
+      document.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [elementId]);
 
   async function handleScroll(this: HTMLElement) {
     if (
@@ -43,9 +51,22 @@ export const ScrollInvoke = ({
 
     setLoading(true);
 
+    let scrollHeight = 0;
+    let scrollTop = 0;
+    let clientHeight = 0;
+
+    if (elementId) {
+      scrollHeight = this.scrollHeight;
+      scrollTop = this.scrollHeight;
+      clientHeight = this.clientHeight;
+    } else {
+      scrollHeight = document.scrollingElement?.scrollHeight || 0;
+      scrollTop = document.scrollingElement?.scrollTop || 0;
+      clientHeight = document.scrollingElement?.clientHeight || 0;
+    }
+
     const isInView =
-      this.scrollHeight - this.scrollTop - this.clientHeight <=
-      ThresholdHeightBeforeScrollEnd;
+      scrollHeight - scrollTop - clientHeight <= ThresholdHeightBeforeScrollEnd;
     if (isInView && prevValue.current !== isInView) {
       await onScrollEnd();
     }

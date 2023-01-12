@@ -1,9 +1,6 @@
 import { Box, VStack, HStack, Text } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import {
-  ProjectActivityActionsToolbar,
-  ActivityBrief,
-} from '../../../components/molecules';
+import { ActivityBrief } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
 import {
@@ -26,11 +23,10 @@ import {
   QUERY_GET_PROJECT_FUNDERS,
 } from '../../../graphql';
 import { useQueryWithPagination } from '../../../hooks';
+import { MobileViews, useProject } from '../containers';
 
 type Props = {
   project: Project;
-  handleViewClick: () => void;
-  onFundProjectTapped: () => void;
   btcRate: number;
   test?: boolean;
   fundingTx: any;
@@ -39,14 +35,13 @@ type Props = {
 const itemLimit = 50;
 
 export const ProjectFundingInitialInfoScreen = ({
-  handleViewClick,
-  onFundProjectTapped,
   project,
   test,
   fundingTx,
 }: Props) => {
   const isMobile = isMobileMode();
-  const [view, setView] = useState('activity');
+  const [tab, setTab] = useState('activity');
+  const { mobileView, setMobileView } = useProject();
 
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]
@@ -80,12 +75,20 @@ export const ProjectFundingInitialInfoScreen = ({
     }
   }, [fundingTx]);
 
+  useEffect(() => {
+    if (mobileView === MobileViews.contribution) {
+      setTab('activity');
+    } else if (mobileView === MobileViews.leaderboard) {
+      setTab('leaderBoard');
+    }
+  }, [mobileView]);
+
   if (test) {
     return <InfoPageSkeleton />;
   }
 
   const renderActivityList = () => {
-    switch (view) {
+    switch (tab) {
       case 'activity':
         return (
           <ProjectContributionList
@@ -97,10 +100,78 @@ export const ProjectFundingInitialInfoScreen = ({
     }
   };
 
+  const contributionButton = () => {
+    return (
+      <>
+        <Button
+          _hover={{ backgroundColor: 'none' }}
+          w="100%"
+          rounded="none"
+          bg="none"
+          fontWeight={tab === 'activity' ? 'bold' : 'normal'}
+          fontSize="16px"
+          marginTop="10px"
+          onClick={() => setTab('activity')}
+        >
+          Contributions{' '}
+          <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+            {project.fundingTxsCount}
+          </Text>
+        </Button>
+        <Box
+          bg={tab === 'activity' ? 'darkgrey' : 'lightgrey'}
+          w="100%"
+          h="3px"
+          rounded="lg"
+        ></Box>
+      </>
+    );
+  };
+
+  const leaderBoardButton = () => {
+    return (
+      <>
+        <Button
+          _hover={{ backgroundColor: 'none' }}
+          w="100%"
+          rounded="none"
+          bg="none"
+          fontWeight={tab === 'activity' ? 'normal' : 'bold'}
+          fontSize="16px"
+          marginTop="10px"
+          onClick={() => setTab('leaderboard')}
+        >
+          Leaderboard{' '}
+          <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+            {project.fundersCount}
+          </Text>
+        </Button>
+        <Box
+          bg={tab === 'activity' ? 'lightgrey' : 'darkgrey'}
+          w="100%"
+          h="3px"
+          rounded="lg"
+        ></Box>
+      </>
+    );
+  };
+
+  const renderTabsList = () => {
+    if (isMobile) {
+      switch (mobileView) {
+        case MobileViews.contribution:
+          return <Box w="100%">{contributionButton()}</Box>;
+        case MobileViews.leaderboard:
+          return <Box w="100%">{leaderBoardButton()}</Box>;
+        default:
+      }
+    }
+  };
+
   return (
     <VStack
       padding={isMobile ? '10px 5px 0px 5px' : '10px 20px'}
-      spacing="12px"
+      spacing="0px"
       width="100%"
       height="100%"
       overflowY="hidden"
@@ -116,17 +187,12 @@ export const ProjectFundingInitialInfoScreen = ({
           backgroundColor={
             project.active ? 'brand.primary' : 'brand.grayPlaceholder'
           }
-          onClick={onFundProjectTapped}
+          onClick={() => setMobileView(MobileViews.funding)}
           isDisabled={project.active === false}
         >
           Contribute
         </ButtonComponent>
       ) : null}
-
-      <ProjectActivityActionsToolbar
-        fundButtonFunction={onFundProjectTapped}
-        transitionButtonFunction={handleViewClick}
-      />
 
       <Box
         width="100%"
@@ -137,52 +203,7 @@ export const ProjectFundingInitialInfoScreen = ({
         flex="1"
       >
         <Box display="flex" marginBottom="10px" w="95%">
-          <Box w="50%">
-            <Button
-              _hover={{ backgroundColor: 'none' }}
-              w="100%"
-              rounded="none"
-              bg="none"
-              fontWeight={view === 'activity' ? 'bold' : 'normal'}
-              fontSize="16px"
-              marginTop="10px"
-              onClick={() => setView('activity')}
-            >
-              Contributions{' '}
-              <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {project.fundingTxsCount}
-              </Text>
-            </Button>
-            <Box
-              bg={view === 'activity' ? 'darkgrey' : 'lightgrey'}
-              w="100%"
-              h="3px"
-              rounded="lg"
-            ></Box>
-          </Box>
-          <Box w="50%">
-            <Button
-              _hover={{ backgroundColor: 'none' }}
-              w="100%"
-              rounded="none"
-              bg="none"
-              fontWeight={view === 'activity' ? 'normal' : 'bold'}
-              fontSize="16px"
-              marginTop="10px"
-              onClick={() => setView('leaderboard')}
-            >
-              Leaderboard{' '}
-              <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
-                {project.fundersCount}
-              </Text>
-            </Button>
-            <Box
-              bg={view === 'activity' ? 'lightgrey' : 'darkgrey'}
-              w="100%"
-              h="3px"
-              rounded="lg"
-            ></Box>
-          </Box>
+          {renderTabsList()}
         </Box>
         {renderActivityList()}
       </Box>

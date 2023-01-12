@@ -287,7 +287,7 @@ export const EntryCreateEdit = () => {
       <VStack
         background={'brand.bgGrey4'}
         position="relative"
-        paddingTop={isMobile ? '61px' : '71px'}
+        paddingTop={isMobile ? '0px' : '15px'}
         height="100%"
         justifyContent="space-between"
       >

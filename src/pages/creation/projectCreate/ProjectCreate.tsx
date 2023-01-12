@@ -295,7 +295,6 @@ export const ProjectCreate = () => {
     <Box
       background={'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
       height="100%"
       justifyContent="space-between"
     >
