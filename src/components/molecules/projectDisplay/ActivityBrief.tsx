@@ -7,6 +7,7 @@ import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
 import { SatoshiAmount } from '../../ui';
 import { Project, ProjectMilestone } from '../../../types/generated/graphql';
 import { noFeeProjects, GEYSER_FEE } from '../../../constants';
+import { isMobileMode } from '../../../utils';
 
 interface IActivityBrief {
   loading?: boolean;
@@ -28,6 +29,7 @@ const useStyles = createUseStyles({
 
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const classes = useStyles();
+  const isMobile = isMobileMode();
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>();
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0);
 
@@ -114,12 +116,14 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const showCountdown = project.active && Boolean(project.expiresAt);
 
   return (
-    <HStack width="100%" padding="20px" justifyContent="space-between">
+    <HStack width="100%" padding="10px 20px" justifyContent="space-between">
       {renderCircularProgress()}
       <VStack flex="1" spacing="5px" width="100%" overflow="hidden">
-        <Text fontSize="18px" fontWeight={600} color="brand.neutral900">
-          {project.title}
-        </Text>
+        {!isMobile && (
+          <Text fontSize="18px" fontWeight={600} color="brand.neutral900">
+            {project.title}
+          </Text>
+        )}
         <SatoshiAmount
           fontSize="32px"
           fontFamily={fonts.courier}

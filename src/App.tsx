@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { client, customHistory, Router, theme } from './config';
+import { client, customHistory, theme } from './config';
 import { ApolloProvider } from '@apollo/client';
 import { AuthProvider } from './context';
 import { BtcProvider } from './context/btc';
 import { Head } from './utils/Head';
 import { Router as BrowserRouter } from 'react-router-dom';
+import { AppLayout } from './AppLayout';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -14,7 +15,7 @@ export const App = () => (
         <AuthProvider>
           <BtcProvider>
             <Head />
-            <Router />
+            <AppLayout />
           </BtcProvider>
         </AuthProvider>
       </ApolloProvider>

@@ -69,6 +69,7 @@ const initialFunding = {
   status: FundingStatus.Unpaid,
   invoiceStatus: InvoiceStatus.Unpaid,
   amount: 0,
+  projectId: '',
   paymentRequest: '',
   address: '',
   canceled: false,

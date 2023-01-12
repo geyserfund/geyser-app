@@ -40,7 +40,6 @@ const useStyles = createUseStyles<Rules, IStyles>({
   },
   detailsContainer: ({ isMobile }: IStyles) => ({
     height: '100%',
-    paddingTop: isMobile ? '61px' : '71px',
     overflowY: 'scroll',
     WebkitOverflowScrolling: 'touch',
     display: 'flex',
@@ -129,11 +128,11 @@ export const EntryContainer = ({
           <VStack
             spacing="20px"
             alignItems="left"
-            marginTop={isMobile ? '0px' : '20px'}
+            marginTop={'20px'}
             width={'full'}
             maxWidth="1000px"
             height={'full'}
-            padding={isMobile ? '20px 10px 50px 10px' : '20px 40px 70px 40px'}
+            padding={isMobile ? '0px 10px 50px 10px' : '0px 40px 70px 40px'}
           >
             <EntryDetails entry={entry} />
           </VStack>

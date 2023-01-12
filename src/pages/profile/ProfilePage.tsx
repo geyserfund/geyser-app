@@ -88,7 +88,6 @@ export const ProfilePage = () => {
     return (
       <Container
         position="relative"
-        paddingTop={`${topNavBarDimensions.desktop.height}px`}
         height="100%"
         display={'flex'}
         justifyContent="center"
@@ -111,7 +110,6 @@ export const ProfilePage = () => {
       position="relative"
       width="full"
       height="full"
-      paddingTop={`${topNavBarDimensions.desktop.height}px`}
       backgroundColor={isInDarkMode ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
     >
       <Container

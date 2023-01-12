@@ -64,9 +64,9 @@ export const GrantsLandingPage = () => {
   return (
     <>
       <Box
-        paddingTop={isMobile ? '81px' : '91px'}
+        paddingTop={isMobile ? '10px' : '20px'}
         bg={theme.colors.brand.bgGrey4}
-        minHeight="100vh"
+        minHeight="100%"
       >
         <Box my={5} px={isMobile ? '1rem' : ''}>
           <Text

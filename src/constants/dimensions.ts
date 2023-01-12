@@ -7,4 +7,7 @@ export const dimensions = {
       height: 56,
     },
   },
+  bottomNavBar: {
+    desktopHeight: 60,
+  },
 };

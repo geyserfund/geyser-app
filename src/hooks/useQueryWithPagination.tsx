@@ -27,6 +27,7 @@ export const useQueryWithPagination = <Type,>({
   const { error, loading, fetchMore, refetch } = useQuery<
     QueryResponseData<Type>
   >(query, {
+    fetchPolicy: 'network-only',
     variables: {
       input: {
         pagination: {

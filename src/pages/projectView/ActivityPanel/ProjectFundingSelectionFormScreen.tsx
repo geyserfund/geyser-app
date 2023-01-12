@@ -14,7 +14,7 @@ import {
   SectionTitle,
   TextInputBox,
 } from '../../../components/ui';
-import { MAX_FUNDING_AMOUNT_USD, noFeeProjects } from '../../../constants';
+import { MAX_FUNDING_AMOUNT_USD } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 import { IProjectType } from '../../../interfaces';
@@ -104,14 +104,16 @@ export const ProjectFundingSelectionFormScreen = ({
       alignItems="flex-start"
       backgroundColor="#FFFFFF"
     >
-      <CloseButton
-        position="absolute"
-        right={0}
-        top={0}
-        _hover={{ bg: 'none' }}
-        _active={{ bg: 'none' }}
-        onClick={handleCloseButton}
-      />
+      {!isMobile && (
+        <CloseButton
+          position="absolute"
+          right={0}
+          top={0}
+          _hover={{ bg: 'none' }}
+          _active={{ bg: 'none' }}
+          onClick={handleCloseButton}
+        />
+      )}
 
       <Box width="100%" overflowY="auto" flex={1}>
         <FundingFormSection
