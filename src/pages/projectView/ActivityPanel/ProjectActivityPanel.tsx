@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AuthModal } from '../../../components/molecules';
 import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
 import { SuccessScreen } from './SuccessScreen';
@@ -44,7 +44,7 @@ export const ProjectActivityPanel = ({
   const { btcRate } = useBtcContext();
   const isMobile = isMobileMode();
 
-  const { mobileView, setMobileView } = useProject();
+  const { mobileView } = useProject();
   // required for knowing the rewards and the funds
   const {
     state: formState,
@@ -103,6 +103,10 @@ export const ProjectActivityPanel = ({
   const handleCloseButton = () => {
     resetFundingFlow();
     resetForm();
+  };
+
+  const handleQRCloseButton = () => {
+    setFundState(fundingStages.form);
   };
 
   const formatFundingInput = (state: IFundForm) => {
@@ -213,7 +217,7 @@ export const ProjectActivityPanel = ({
             project={project}
             fundingFlow={fundingFlow}
             amounts={amounts}
-            handleCloseButton={handleCloseButton}
+            handleCloseButton={handleQRCloseButton}
           />
         );
       case fundingStages.completed:

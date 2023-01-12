@@ -3,7 +3,7 @@ import React from 'react';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { ScrollInvoke } from '../../../helpers';
 import { PaginationHookReturn } from '../../../hooks/types';
-import { FundingTxWithCount } from '../../../utils';
+import { FundingTxWithCount, isMobileMode } from '../../../utils';
 
 interface ProjectContributionListProps {
   fundingTxs: PaginationHookReturn<FundingTxWithCount>;
@@ -12,6 +12,7 @@ interface ProjectContributionListProps {
 export const ProjectContributionList = ({
   fundingTxs,
 }: ProjectContributionListProps) => {
+  const isMobile = isMobileMode();
   return (
     <VStack
       id="project-activity-list-container"
@@ -33,7 +34,7 @@ export const ProjectContributionList = ({
       ))}
 
       <ScrollInvoke
-        elementId="project-activity-list-container"
+        elementId={!isMobile ? 'project-activity-list-container' : undefined}
         onScrollEnd={fundingTxs.fetchNext}
         isLoading={fundingTxs.isLoadingMore}
         noMoreItems={fundingTxs.noMoreItems}

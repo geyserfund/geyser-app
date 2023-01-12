@@ -35,7 +35,7 @@ export const ProjectLeaderboardList = ({
         />
       ))}
       <ScrollInvoke
-        elementId="project-leaderboard-list-container"
+        elementId={!isMobile ? 'project-leaderboard-list-container' : undefined}
         onScrollEnd={funders.fetchNext}
         isLoading={funders.isLoadingMore}
         noMoreItems={funders.noMoreItems}

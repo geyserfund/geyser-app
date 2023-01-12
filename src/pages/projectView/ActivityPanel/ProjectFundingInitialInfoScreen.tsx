@@ -1,9 +1,6 @@
 import { Box, VStack, HStack, Text } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import {
-  ProjectActivityActionsToolbar,
-  ActivityBrief,
-} from '../../../components/molecules';
+import { ActivityBrief } from '../../../components/molecules';
 import { ButtonComponent } from '../../../components/ui';
 import { SatoshiIconTilted } from '../../../components/icons';
 import {
@@ -169,19 +166,12 @@ export const ProjectFundingInitialInfoScreen = ({
         default:
       }
     }
-
-    return (
-      <>
-        <Box w="50%">{contributionButton()}</Box>
-        <Box w="50%">{leaderBoardButton()}</Box>
-      </>
-    );
   };
 
   return (
     <VStack
       padding={isMobile ? '10px 5px 0px 5px' : '10px 20px'}
-      spacing="12px"
+      spacing="0px"
       width="100%"
       height="100%"
       overflowY="hidden"
@@ -203,11 +193,6 @@ export const ProjectFundingInitialInfoScreen = ({
           Contribute
         </ButtonComponent>
       ) : null}
-
-      <ProjectActivityActionsToolbar
-        fundButtonFunction={() => setMobileView(MobileViews.funding)}
-        // transitionButtonFunction={handleViewClick}
-      />
 
       <Box
         width="100%"

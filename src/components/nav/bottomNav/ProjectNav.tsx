@@ -1,4 +1,11 @@
-import { Button, HStack, Slide, Text, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  HStack,
+  Slide,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BsHeartFill, BsLightningChargeFill } from 'react-icons/bs';
 import { fonts } from '../../../constants';
@@ -7,24 +14,10 @@ import { MobileViews, useProject } from '../../../pages/projectView';
 import { DescriptionIcon, LeaderBoardIcon } from '../../icons';
 
 export const ProjectNav = () => {
-  const { loading, mobileView } = useProject();
+  const { mobileView } = useProject();
 
-  const descriptionScrollUp = useScrollDirection({
-    elementId: 'project-scroll-container',
+  const isScrollingUp = useScrollDirection({
     initialValue: true,
-    loading,
-    mobileView,
-  });
-  const contributionScrollUp = useScrollDirection({
-    elementId: 'project-activity-list-container',
-    initialValue: true,
-    loading,
-    mobileView,
-  });
-  const leaderboardScrollUp = useScrollDirection({
-    elementId: 'project-leaderboard-list-container',
-    initialValue: true,
-    loading,
     mobileView,
   });
 
@@ -32,63 +25,40 @@ export const ProjectNav = () => {
   const [noTransition, setNoTransition] = useState(true);
 
   useEffect(() => {
-    switch (mobileView) {
-      case MobileViews.description:
-        handleTransition(descriptionScrollUp);
-        break;
-      case MobileViews.contribution:
-        handleTransition(contributionScrollUp);
-        break;
-      case MobileViews.leaderboard:
-        handleTransition(leaderboardScrollUp);
-        break;
-      case MobileViews.funding:
-        onOpen();
-        break;
-
-      default:
-        break;
-    }
-  }, [
-    descriptionScrollUp,
-    contributionScrollUp,
-    leaderboardScrollUp,
-    mobileView,
-  ]);
-
-  const handleTransition = (isView: boolean) => {
-    if (isView) {
+    if (isScrollingUp) {
       onOpen();
     } else {
       setNoTransition(false);
       onClose();
     }
-  };
+  }, [isScrollingUp, mobileView]);
 
   return (
-    <Slide
-      direction="bottom"
-      in={isOpen}
-      style={{
-        zIndex: 10,
-        position: mobileView === MobileViews.funding ? 'relative' : 'fixed',
-      }}
-      unmountOnExit
-      transition={
-        noTransition
-          ? {
-              exit: {
-                duration: 0,
-              },
-              enter: {
-                duration: 0,
-              },
-            }
-          : undefined
-      }
-    >
-      <ProjectNavUI />
-    </Slide>
+    <>
+      {<Box width="100%" height="60px"></Box>}
+      <Slide
+        direction="bottom"
+        in={isOpen}
+        style={{
+          zIndex: 10,
+        }}
+        unmountOnExit
+        transition={
+          noTransition
+            ? {
+                exit: {
+                  duration: 0,
+                },
+                enter: {
+                  duration: 0,
+                },
+              }
+            : undefined
+        }
+      >
+        <ProjectNavUI />
+      </Slide>
+    </>
   );
 };
 
@@ -149,10 +119,16 @@ export const ProjectNavUI = () => {
         <Button
           size="sm"
           backgroundColor={
-            mobileView === MobileViews.funding ? 'brand.primary' : 'transparent'
+            mobileView === MobileViews.funding
+              ? 'brand.neutral500'
+              : 'brand.primary'
           }
           border="1px solid"
-          borderColor="brand.primary"
+          borderColor={
+            mobileView === MobileViews.funding
+              ? 'brand.neutral500'
+              : 'brand.primary'
+          }
           _hover={{}}
           leftIcon={<BsLightningChargeFill />}
           onClick={() => {

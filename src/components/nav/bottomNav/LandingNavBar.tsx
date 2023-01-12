@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { BiHomeAlt } from 'react-icons/bi';
 import { FaHandHoldingUsd } from 'react-icons/fa';
@@ -41,39 +41,43 @@ export const LandingNavBar = () => {
 
   if (shouldShowLandingNav) {
     return (
-      <HStack
-        backgroundColor="brand.neutral50"
-        width="100%"
-        bottom="0px"
-        height="60px"
-        borderTop="2px solid"
-        borderTopColor="brand.neutral200"
-        paddingX="15%"
-        justifyContent="center"
-        alignItems="center"
-        spacing="40px"
-      >
-        {LandingNavItems.map(({ name, path, Icon }) => {
-          const isActive = useRouteMatch(path)?.isExact;
-          console.log('checking isActive', useRouteMatch(path));
-          return (
-            <Link key={name} to={path}>
-              <VStack spacing="0px">
-                <Icon
-                  fontSize="20px"
-                  color={isActive ? 'black' : colors.neutral500}
-                />
-                <Text
-                  fontFamily={fonts.mono}
-                  color={isActive ? 'black' : colors.neutral600}
-                >
-                  {name}
-                </Text>
-              </VStack>
-            </Link>
-          );
-        })}
-      </HStack>
+      <>
+        <Box height="60px" width="100%"></Box>
+        <HStack
+          backgroundColor="brand.neutral50"
+          width="100%"
+          height="60px"
+          borderTop="2px solid"
+          borderTopColor="brand.neutral200"
+          paddingX="15%"
+          justifyContent="center"
+          alignItems="center"
+          spacing="40px"
+          position="fixed"
+          bottom="0px"
+        >
+          {LandingNavItems.map(({ name, path, Icon }) => {
+            const isActive = useRouteMatch(path)?.isExact;
+            console.log('checking isActive', useRouteMatch(path));
+            return (
+              <Link key={name} to={path}>
+                <VStack spacing="0px">
+                  <Icon
+                    fontSize="20px"
+                    color={isActive ? 'black' : colors.neutral500}
+                  />
+                  <Text
+                    fontFamily={fonts.mono}
+                    color={isActive ? 'black' : colors.neutral600}
+                  >
+                    {name}
+                  </Text>
+                </VStack>
+              </Link>
+            );
+          })}
+        </HStack>
+      </>
     );
   }
 

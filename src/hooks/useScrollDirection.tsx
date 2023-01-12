@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useListenerState } from './useListenerState';
 
 interface UseScrollDirectionProps {
-  elementId: string;
+  elementId?: string;
   loading?: boolean;
   initialValue?: boolean;
   mobileView?: string;
@@ -24,29 +24,43 @@ export const useScrollDirection = ({
       return;
     }
 
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.addEventListener('scroll', handleScroll);
+    if (elementId) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.addEventListener('scroll', handleScroll);
+      }
+
+      return () => {
+        if (element) {
+          element.removeEventListener('scroll', handleScroll);
+        }
+      };
     }
 
+    document.addEventListener('scroll', handleScroll);
+
     return () => {
-      if (element) {
-        element.removeEventListener('scroll', handleScroll);
-      }
+      document.removeEventListener('scroll', handleScroll);
     };
-  }, [loading, mobileView]);
+  }, [loading, mobileView, elementId]);
 
   async function handleScroll(this: HTMLElement) {
-    if (value.current !== 0) {
-      if (prevValue.current > value.current && value.current > this.scrollTop) {
-        setIsScrollingUp(true);
-      } else {
-        setIsScrollingUp(false);
-      }
+    let scrollTop = 0;
+
+    if (elementId) {
+      scrollTop = this.scrollTop;
+    } else {
+      scrollTop = document.scrollingElement?.scrollTop || 0;
+    }
+
+    if (prevValue.current > value.current && value.current > scrollTop) {
+      setIsScrollingUp(true);
+    } else if (scrollTop > 0) {
+      setIsScrollingUp(false);
     }
 
     setPrevValue(value.current);
-    setValue(this.scrollTop);
+    setValue(scrollTop);
   }
 
   return isScrollingUp;
