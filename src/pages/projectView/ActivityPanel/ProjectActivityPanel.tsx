@@ -22,7 +22,7 @@ import {
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
-import { MobileViews, useMobileView } from '../containers';
+import { MobileViews, useProject } from '../containers';
 
 type Props = {
   project: Project;
@@ -44,7 +44,7 @@ export const ProjectActivityPanel = ({
   const { btcRate } = useBtcContext();
   const isMobile = isMobileMode();
 
-  const { view, setView } = useMobileView();
+  const { mobileView, setMobileView } = useProject();
   // required for knowing the rewards and the funds
   const {
     state: formState,
@@ -76,7 +76,7 @@ export const ProjectActivityPanel = ({
     MobileViews.contribution,
     MobileViews.leaderboard,
     MobileViews.funding,
-  ].includes(view);
+  ].includes(mobileView);
 
   const classes = useStyles({ isMobile, inView, fadeStarted });
 
@@ -160,7 +160,7 @@ export const ProjectActivityPanel = ({
 
   const handleViewClick = () => {
     setFadeStarted(true);
-    setView(MobileViews.description);
+    setMobileView(MobileViews.description);
     setTimeout(() => {
       setFadeStarted(false);
     }, 500);

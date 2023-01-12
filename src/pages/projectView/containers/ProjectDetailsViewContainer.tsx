@@ -1,13 +1,16 @@
-import React, { createContext, useContext, useState } from 'react';
+import React from 'react';
+import { ProjectNav } from '../../../components/nav/bottomNav/ProjectNav';
 import { useFundingFormState } from '../../../hooks';
 import {
   FundingResourceType,
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
+import { isMobileMode } from '../../../utils';
 import { Head } from '../../../utils/Head';
 import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel';
 import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer';
+import { ProjectProvider } from './ProjectContext';
 
 type Props = {
   project: Project;
@@ -16,38 +19,10 @@ type Props = {
   resourceId?: number;
 };
 
-export enum MobileViews {
-  description = 'description',
-  contribution = 'contribution',
-  leaderboard = 'leaderBoard',
-  funding = 'funding',
-}
-
-type MobileViewContextProps = {
-  view: MobileViews;
-  setView: (view: MobileViews) => void;
-};
-
-const defaultMobileViewContext = {
-  view: MobileViews.description,
-  setView: (view: MobileViews) => {},
-};
-
-export const MobileViewContext = createContext<MobileViewContextProps>(
-  defaultMobileViewContext,
-);
-
-export const useMobileView = () => useContext(MobileViewContext);
-
 export const ProjectDetailsViewContainer = ({
   project,
   fundingFlow,
 }: Props) => {
-  const [detailOpen, setDetailOpen] = useState(true);
-  const [mobileView, setMobileView] = useState<MobileViews>(
-    MobileViews.description,
-  );
-
   const fundForm = useFundingFormState({
     /*
      * Passing an empty array as fallback would probably make
@@ -57,12 +32,12 @@ export const ProjectDetailsViewContainer = ({
     rewards: (project.rewards as ProjectReward[]) || undefined,
   });
 
+  const isMobile = isMobileMode();
+
   const { setFundState, fundState } = fundingFlow;
 
   return (
-    <MobileViewContext.Provider
-      value={{ view: mobileView, setView: setMobileView }}
-    >
+    <ProjectProvider project={project}>
       <Head
         title={project.title}
         description={project.description}
@@ -85,6 +60,8 @@ export const ProjectDetailsViewContainer = ({
         resourceType={FundingResourceType.Project}
         resourceId={project.id}
       />
-    </MobileViewContext.Provider>
+
+      {isMobile && <ProjectNav />}
+    </ProjectProvider>
   );
 };

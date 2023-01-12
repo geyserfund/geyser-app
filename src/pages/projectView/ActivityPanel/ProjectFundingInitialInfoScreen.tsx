@@ -26,8 +26,7 @@ import {
   QUERY_GET_PROJECT_FUNDERS,
 } from '../../../graphql';
 import { useQueryWithPagination } from '../../../hooks';
-import { ProjectNavBar } from '../../../components/nav';
-import { MobileViews, useMobileView } from '../containers';
+import { MobileViews, useProject } from '../containers';
 
 type Props = {
   project: Project;
@@ -49,7 +48,7 @@ export const ProjectFundingInitialInfoScreen = ({
 }: Props) => {
   const isMobile = isMobileMode();
   const [tab, setTab] = useState('activity');
-  const { view } = useMobileView();
+  const { mobileView } = useProject();
 
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]
@@ -84,12 +83,12 @@ export const ProjectFundingInitialInfoScreen = ({
   }, [fundingTx]);
 
   useEffect(() => {
-    if (view === MobileViews.contribution) {
+    if (mobileView === MobileViews.contribution) {
       setTab('activity');
-    } else if (view === MobileViews.leaderboard) {
+    } else if (mobileView === MobileViews.leaderboard) {
       setTab('leaderBoard');
     }
-  }, [view]);
+  }, [mobileView]);
 
   if (test) {
     return <InfoPageSkeleton />;
@@ -166,7 +165,7 @@ export const ProjectFundingInitialInfoScreen = ({
 
   const renderTabsList = () => {
     if (isMobile) {
-      switch (view) {
+      switch (mobileView) {
         case MobileViews.contribution:
           return <Box w="100%">{contributionButton()}</Box>;
         case MobileViews.leaderboard:

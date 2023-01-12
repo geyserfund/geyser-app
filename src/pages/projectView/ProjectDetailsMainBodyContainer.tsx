@@ -1,14 +1,10 @@
 import { Box, VStack, Text } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { fadeOut, slideInLeft } from '../../css';
 import { isDarkMode, isMobileMode } from '../../utils';
 import { colors, IFundingStages, getPath } from '../../constants';
-import {
-  AppFooter,
-  ProjectDetailsMobileMenu,
-} from '../../components/molecules';
+import { AppFooter } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { fundingStages } from '../../constants';
 import { ProjectDetailsAccessoriesSections } from './ProjectDetailsAccessoriesSections';
@@ -17,8 +13,7 @@ import { Project } from '../../types/generated/graphql';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../context';
 import { ProjectDetailsCard } from './components/ProjectDetailsCard';
-import { ProjectNavBar } from '../../components/nav';
-import { MobileViews, useMobileView } from './containers';
+import { MobileViews, useProject } from './containers';
 
 type Rules = string;
 
@@ -53,8 +48,8 @@ const useStyles = createUseStyles<Rules, Styles>({
     display: 'flex',
     flexDirection: 'column',
   }),
-  ...slideInLeft,
-  ...fadeOut,
+  // ...slideInLeft,
+  // ...fadeOut,
 });
 
 type Props = {
@@ -73,9 +68,9 @@ export const ProjectDetailsMainBodyContainer = ({
   const isMobile = isMobileMode();
   const isDark = isDarkMode();
 
-  const { view, setView } = useMobileView();
+  const { mobileView, setMobileView } = useProject();
 
-  const inView = view === MobileViews.description;
+  const inView = mobileView === MobileViews.description;
 
   const [fadeStarted, setFadeStarted] = useState(false);
 
@@ -94,7 +89,7 @@ export const ProjectDetailsMainBodyContainer = ({
 
   const handleFundClickMobile = () => {
     setFundState(fundingStages.form);
-    setView(MobileViews.funding);
+    setMobileView(MobileViews.funding);
     setFadeStarted(true);
     setTimeout(() => {
       setFadeStarted(false);
@@ -170,7 +165,6 @@ export const ProjectDetailsMainBodyContainer = ({
         </VStack>
         <AppFooter />
       </Box>
-      {isMobile && <ProjectNavBar elementId="project-scroll-container" />}
     </Box>
   );
 };

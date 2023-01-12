@@ -1,7 +1,6 @@
 import { VStack } from '@chakra-ui/react';
 import React from 'react';
 import { ProjectFundingLeaderboardFeedItem } from '../../../components/molecules';
-import { ProjectNavBar } from '../../../components/nav';
 import { ScrollInvoke } from '../../../helpers';
 import { PaginationHookReturn } from '../../../hooks/types';
 import { Funder, Project } from '../../../types/generated/graphql';
@@ -19,33 +18,28 @@ export const ProjectLeaderboardList = ({
   const isMobile = isMobileMode();
 
   return (
-    <>
-      <VStack
-        id="project-leaderboard-list-container"
-        spacing={'8px'}
-        width="100%"
-        overflow="auto"
-        height={isMobile ? 'calc(100% - 44px)' : '100%'}
-        paddingBottom="10px"
-      >
-        {funders.data.map((funder, index) => (
-          <ProjectFundingLeaderboardFeedItem
-            key={index}
-            funder={funder}
-            leaderboardPosition={index + 1}
-            project={project}
-          />
-        ))}
-        <ScrollInvoke
-          elementId="project-leaderboard-list-container"
-          onScrollEnd={funders.fetchNext}
-          isLoading={funders.isLoadingMore}
-          noMoreItems={funders.noMoreItems}
+    <VStack
+      id="project-leaderboard-list-container"
+      spacing={'8px'}
+      width="100%"
+      overflow="auto"
+      height={isMobile ? 'calc(100% - 44px)' : '100%'}
+      paddingBottom="10px"
+    >
+      {funders.data.map((funder, index) => (
+        <ProjectFundingLeaderboardFeedItem
+          key={index}
+          funder={funder}
+          leaderboardPosition={index + 1}
+          project={project}
         />
-        {isMobile && (
-          <ProjectNavBar elementId={'project-leaderboard-list-container'} />
-        )}
-      </VStack>
-    </>
+      ))}
+      <ScrollInvoke
+        elementId="project-leaderboard-list-container"
+        onScrollEnd={funders.fetchNext}
+        isLoading={funders.isLoadingMore}
+        noMoreItems={funders.noMoreItems}
+      />
+    </VStack>
   );
 };

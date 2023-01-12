@@ -5,12 +5,14 @@ interface UseScrollDirectionProps {
   elementId: string;
   loading?: boolean;
   initialValue?: boolean;
+  mobileView?: string;
 }
 
 export const useScrollDirection = ({
   elementId,
   loading,
   initialValue,
+  mobileView,
 }: UseScrollDirectionProps) => {
   const [prevValue, setPrevValue] = useListenerState(0);
   const [value, setValue] = useListenerState(0);
@@ -32,7 +34,7 @@ export const useScrollDirection = ({
         element.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [loading]);
+  }, [loading, mobileView]);
 
   async function handleScroll(this: HTMLElement) {
     if (value.current !== 0) {

@@ -34,6 +34,6 @@ export const useStyles = createUseStyles<Rules, IStyles>({
     flexDirection: 'column',
     boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
   },
-  ...slideInRight,
-  ...fadeOut,
+  // ...slideInRight,
+  // ...fadeOut,
 });
