@@ -65,36 +65,11 @@ export const EntryContainer = ({
   const isMobile = isMobileMode();
   const isDark = isDarkMode();
 
-  const [fadeStarted, setFadeStarted] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [showMobileMenu, setShowMobileMenu] = useState(true);
-  const scrollDiv = useRef(document.createElement('div'));
-
   const classes = useStyles({ isMobile, detailOpen, fadeStarted });
-
-  const handleViewClick = () => {
-    setDetailOpen(false);
-    setFadeStarted(true);
-    setTimeout(() => {
-      setFadeStarted(false);
-    }, 500);
-  };
-
-  const handleFundClick = () => {
-    setFundState(fundingStages.form);
-    setDetailOpen(false);
-    setFadeStarted(true);
-    setTimeout(() => {
-      setFadeStarted(false);
-    }, 500);
-  };
 
   return (
     <Box
-      className={classNames(classes.container, {
-        [classes.slideInLeft]: isMobile && detailOpen,
-        [classes.fadeOut]: isMobile && fadeStarted,
-      })}
+      className={classNames(classes.container)}
       backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
       flex={!isMobile ? 3 : undefined}
       height="100%"
@@ -102,28 +77,7 @@ export const EntryContainer = ({
       flexDirection="column"
       overflow="hidden"
     >
-      <Box
-        className={classes.detailsContainer}
-        id="project-scroll-container"
-        ref={scrollDiv}
-        onScroll={() => {
-          if (isMobile) {
-            if (scrollDiv.current.scrollTop > scrollPosition) {
-              setShowMobileMenu(false);
-            } else {
-              setShowMobileMenu(true);
-            }
-
-            setScrollPosition(scrollDiv.current.scrollTop);
-          }
-        }}
-      >
-        <ProjectDetailsMobileMenu
-          showMobileMenu={showMobileMenu}
-          fundButtonFunction={handleFundClick}
-          transitionButtonFunction={handleViewClick}
-        />
-
+      <Box className={classes.detailsContainer} id="project-scroll-container">
         <VStack alignItems="center" width="100%" flex="1">
           <VStack
             spacing="20px"

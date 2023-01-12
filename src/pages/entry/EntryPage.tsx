@@ -28,6 +28,7 @@ import { ProjectNav } from '../../components/nav';
 export const EntryPage = () => {
   const { entryId } = useParams<{ entryId: string }>();
   const history = useHistory();
+  const isMobile = isMobileMode();
 
   const { setNav } = useAuthContext();
 
@@ -90,6 +91,7 @@ export const EntryPage = () => {
         width="100%"
         height="100%"
         display="flex"
+        flexDirection={isMobile ? 'column' : 'row'}
         overflow="hidden"
         position="relative"
         bg="brand.bgGrey4"
