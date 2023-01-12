@@ -60,7 +60,6 @@ export const ProjectActivityPanel = ({
     amounts,
     fundingRequestLoading,
     fundingTx,
-    gotoNextStage,
     resetFundingFlow,
     requestFunding,
   } = fundingFlow;
@@ -71,21 +70,20 @@ export const ProjectActivityPanel = ({
     onClose: loginOnClose,
   } = useDisclosure();
 
-  const [fadeStarted, setFadeStarted] = useState(false);
-
   const inView = [
     MobileViews.contribution,
     MobileViews.leaderboard,
     MobileViews.funding,
   ].includes(mobileView);
 
-  const classes = useStyles({ isMobile, inView, fadeStarted });
+  const classes = useStyles({ isMobile, inView });
 
   useEffect(() => {
     if (mobileView === MobileViews.funding) {
       setFundState(fundingStages.form);
     } else {
-      setFundState(fundingStages.initial);
+      resetFundingFlow();
+      resetForm();
     }
   }, [mobileView]);
 
@@ -101,10 +99,6 @@ export const ProjectActivityPanel = ({
       setFormState('anonymous', true);
     }
   }, [formState.anonymous]);
-
-  const handleFundProjectButtonTapped = () => {
-    gotoNextStage();
-  };
 
   const handleCloseButton = () => {
     resetFundingFlow();
@@ -167,14 +161,6 @@ export const ProjectActivityPanel = ({
     requestFunding(input);
   };
 
-  const handleViewClick = () => {
-    setFadeStarted(true);
-    setMobileView(MobileViews.description);
-    setTimeout(() => {
-      setFadeStarted(false);
-    }, 500);
-  };
-
   const getActivityHeight = () => {
     if (isMobile && mobileView === MobileViews.funding) {
       return 'calc(100% - 80px)';
@@ -194,8 +180,6 @@ export const ProjectActivityPanel = ({
           <ProjectFundingInitialInfoScreen
             {...{
               project,
-              handleViewClick,
-              onFundProjectTapped: handleFundProjectButtonTapped,
               fundingTx,
               btcRate,
               test: false,
@@ -250,10 +234,7 @@ export const ProjectActivityPanel = ({
   return (
     <>
       <Box
-        className={classNames(classes.container, {
-          [classes.slideInRight]: isMobile && inView,
-          [classes.fadeOut]: isMobile && fadeStarted,
-        })}
+        className={classNames(classes.container)}
         flex={!isMobile ? 2 : undefined}
         maxWidth={isMobile ? 'auto' : '450px'}
         width={isMobile ? '100%' : undefined}

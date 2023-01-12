@@ -11,13 +11,13 @@ const {
 
 interface IProjectActivityActionsToolbarProps {
   fundButtonFunction: any;
-  transitionButtonFunction: any;
+  // transitionButtonFunction: any;
 }
 
 export const ProjectActivityActionsToolbar = ({
   fundButtonFunction,
-  transitionButtonFunction,
-}: IProjectActivityActionsToolbarProps) => {
+}: // transitionButtonFunction,
+IProjectActivityActionsToolbarProps) => {
   const isMobile = isMobileMode();
 
   if (isMobile) {
@@ -33,14 +33,14 @@ export const ProjectActivityActionsToolbar = ({
         bg="white"
         zIndex={100}
       >
-        <ButtonComponent primary onClick={fundButtonFunction} w="75%">
+        <ButtonComponent primary onClick={fundButtonFunction} w="100%">
           <HStack>
             <BoltIcon /> <Text fontSize="xs">Fund Project</Text>
           </HStack>
         </ButtonComponent>
-        <ButtonComponent w="25%" onClick={transitionButtonFunction}>
+        {/* <ButtonComponent w="25%" onClick={transitionButtonFunction}>
           Description
-        </ButtonComponent>
+        </ButtonComponent> */}
       </HStack>
     );
   }

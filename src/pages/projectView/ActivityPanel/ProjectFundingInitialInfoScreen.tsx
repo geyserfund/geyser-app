@@ -30,8 +30,6 @@ import { MobileViews, useProject } from '../containers';
 
 type Props = {
   project: Project;
-  handleViewClick: () => void;
-  onFundProjectTapped: () => void;
   btcRate: number;
   test?: boolean;
   fundingTx: any;
@@ -40,15 +38,13 @@ type Props = {
 const itemLimit = 50;
 
 export const ProjectFundingInitialInfoScreen = ({
-  handleViewClick,
-  onFundProjectTapped,
   project,
   test,
   fundingTx,
 }: Props) => {
   const isMobile = isMobileMode();
   const [tab, setTab] = useState('activity');
-  const { mobileView } = useProject();
+  const { mobileView, setMobileView } = useProject();
 
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]
@@ -201,7 +197,7 @@ export const ProjectFundingInitialInfoScreen = ({
           backgroundColor={
             project.active ? 'brand.primary' : 'brand.grayPlaceholder'
           }
-          onClick={onFundProjectTapped}
+          onClick={() => setMobileView(MobileViews.funding)}
           isDisabled={project.active === false}
         >
           Contribute
@@ -209,8 +205,8 @@ export const ProjectFundingInitialInfoScreen = ({
       ) : null}
 
       <ProjectActivityActionsToolbar
-        fundButtonFunction={onFundProjectTapped}
-        transitionButtonFunction={handleViewClick}
+        fundButtonFunction={() => setMobileView(MobileViews.funding)}
+        // transitionButtonFunction={handleViewClick}
       />
 
       <Box
