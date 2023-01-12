@@ -56,6 +56,7 @@ export const ProjectActivityPanel = ({
 
   const {
     fundState,
+    setFundState,
     amounts,
     fundingRequestLoading,
     fundingTx,
@@ -79,6 +80,14 @@ export const ProjectActivityPanel = ({
   ].includes(mobileView);
 
   const classes = useStyles({ isMobile, inView, fadeStarted });
+
+  useEffect(() => {
+    if (mobileView === MobileViews.funding) {
+      setFundState(fundingStages.form);
+    } else {
+      setFundState(fundingStages.initial);
+    }
+  }, [mobileView]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -166,6 +175,14 @@ export const ProjectActivityPanel = ({
     }, 500);
   };
 
+  const getActivityHeight = () => {
+    if (isMobile && mobileView === MobileViews.funding) {
+      return 'calc(100% - 80px)';
+    }
+
+    return 'calc(100% - 20px)';
+  };
+
   const renderPanelContent = () => {
     if (!project || !project.id) {
       return <InfoPageSkeleton />;
@@ -233,7 +250,6 @@ export const ProjectActivityPanel = ({
   return (
     <>
       <Box
-        // overflow="auto"
         className={classNames(classes.container, {
           [classes.slideInRight]: isMobile && inView,
           [classes.fadeOut]: isMobile && fadeStarted,
@@ -246,7 +262,7 @@ export const ProjectActivityPanel = ({
         alignItems="center"
         backgroundColor="#FFFFFF"
         marginTop={'20px'}
-        height={'calc(100% - 20px)'}
+        height={getActivityHeight()}
         borderTopLeftRadius={isMobile ? '' : '22px'}
         boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
       >

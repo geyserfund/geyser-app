@@ -7,7 +7,7 @@ import { MobileViews, useProject } from '../../../pages/projectView';
 import { DescriptionIcon, LeaderBoardIcon } from '../../icons';
 
 export const ProjectNav = () => {
-  const { loading, mobileView, setMobileView, project } = useProject();
+  const { loading, mobileView } = useProject();
 
   const descriptionScrollUp = useScrollDirection({
     elementId: 'project-scroll-container',
@@ -65,22 +65,15 @@ export const ProjectNav = () => {
     }
   };
 
-  const getColor = (value: string) => {
-    if (value === mobileView) {
-      return 'black';
-    }
-
-    return 'brand.neutral600';
-  };
-
-  const transactionCount = project?.fundingTxsCount;
-  const fundersCount = project?.fundersCount;
-
   return (
     <Slide
       direction="bottom"
       in={isOpen}
-      style={{ zIndex: 10 }}
+      style={{
+        zIndex: 10,
+        position: mobileView === MobileViews.funding ? 'relative' : 'fixed',
+      }}
+      unmountOnExit
       transition={
         noTransition
           ? {
@@ -94,60 +87,81 @@ export const ProjectNav = () => {
           : undefined
       }
     >
-      <HStack
-        backgroundColor="brand.neutral50"
-        width="100%"
-        bottom="0px"
-        height="60px"
-        borderTop="2px solid"
-        borderTopColor="brand.neutral200"
-        paddingX="20px"
-        justifyContent="center"
-        alignItems="center"
-        spacing="40px"
-      >
-        <Button
-          variant="ghost"
-          onClick={() => setMobileView(MobileViews.description)}
-          color={getColor(MobileViews.description)}
-          _hover={{}}
-        >
-          <DescriptionIcon fontSize="20px" />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => setMobileView(MobileViews.contribution)}
-          color={getColor(MobileViews.contribution)}
-          leftIcon={<BsHeartFill fontSize="20px" />}
-          _hover={{}}
-        >
-          {transactionCount && (
-            <Text font={fonts.mono}>{transactionCount}</Text>
-          )}
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => setMobileView(MobileViews.leaderboard)}
-          color={getColor(MobileViews.leaderboard)}
-          _hover={{}}
-        >
-          <LeaderBoardIcon fontSize="20px" />
-          {fundersCount && <Text font={fonts.mono}>{fundersCount}</Text>}
-        </Button>
-        <HStack>
-          <Button
-            size="sm"
-            background="transparent"
-            border="1px solid"
-            borderColor="brand.primary"
-            _hover={{}}
-            leftIcon={<BsLightningChargeFill />}
-            onClick={() => setMobileView(MobileViews.funding)}
-          >
-            Contribute
-          </Button>
-        </HStack>
-      </HStack>
+      <ProjectNavUI />
     </Slide>
+  );
+};
+
+export const ProjectNavUI = () => {
+  const { mobileView, setMobileView, project } = useProject();
+
+  const getTextColor = (value: string) => {
+    if (value === mobileView) {
+      return 'black';
+    }
+
+    return 'brand.neutral600';
+  };
+
+  const transactionCount = project?.fundingTxsCount;
+  const fundersCount = project?.fundersCount;
+
+  return (
+    <HStack
+      backgroundColor="brand.neutral50"
+      width="100%"
+      bottom="0px"
+      height="60px"
+      borderTop="2px solid"
+      borderTopColor="brand.neutral200"
+      paddingX="20px"
+      justifyContent="center"
+      alignItems="center"
+      spacing="40px"
+    >
+      <Button
+        variant="ghost"
+        onClick={() => setMobileView(MobileViews.description)}
+        color={getTextColor(MobileViews.description)}
+        _hover={{}}
+      >
+        <DescriptionIcon fontSize="20px" />
+      </Button>
+      <Button
+        variant="ghost"
+        onClick={() => setMobileView(MobileViews.contribution)}
+        color={getTextColor(MobileViews.contribution)}
+        leftIcon={<BsHeartFill fontSize="20px" />}
+        _hover={{}}
+      >
+        {transactionCount && <Text font={fonts.mono}>{transactionCount}</Text>}
+      </Button>
+      <Button
+        variant="ghost"
+        onClick={() => setMobileView(MobileViews.leaderboard)}
+        color={getTextColor(MobileViews.leaderboard)}
+        _hover={{}}
+      >
+        <LeaderBoardIcon fontSize="20px" />
+        {fundersCount && <Text font={fonts.mono}>{fundersCount}</Text>}
+      </Button>
+      <HStack>
+        <Button
+          size="sm"
+          backgroundColor={
+            mobileView === MobileViews.funding ? 'brand.primary' : 'transparent'
+          }
+          border="1px solid"
+          borderColor="brand.primary"
+          _hover={{}}
+          leftIcon={<BsLightningChargeFill />}
+          onClick={() => {
+            setMobileView(MobileViews.funding);
+          }}
+        >
+          Contribute
+        </Button>
+      </HStack>
+    </HStack>
   );
 };
