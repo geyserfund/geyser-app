@@ -76,6 +76,15 @@ export const ProjectNavUI = () => {
   const transactionCount = project?.fundingTxsCount;
   const fundersCount = project?.fundersCount;
 
+  const handleClick = (value: MobileViews) => {
+    if (mobileView === value) {
+      document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setMobileView(value);
+      document.scrollingElement?.scrollTo({ top: 0 });
+    }
+  };
+
   return (
     <HStack
       backgroundColor="brand.neutral50"
@@ -91,7 +100,7 @@ export const ProjectNavUI = () => {
     >
       <Button
         variant="ghost"
-        onClick={() => setMobileView(MobileViews.description)}
+        onClick={() => handleClick(MobileViews.description)}
         color={getTextColor(MobileViews.description)}
         _hover={{}}
       >
@@ -99,7 +108,7 @@ export const ProjectNavUI = () => {
       </Button>
       <Button
         variant="ghost"
-        onClick={() => setMobileView(MobileViews.contribution)}
+        onClick={() => handleClick(MobileViews.contribution)}
         color={getTextColor(MobileViews.contribution)}
         leftIcon={<BsHeartFill fontSize="20px" />}
         _hover={{}}
@@ -108,7 +117,7 @@ export const ProjectNavUI = () => {
       </Button>
       <Button
         variant="ghost"
-        onClick={() => setMobileView(MobileViews.leaderboard)}
+        onClick={() => handleClick(MobileViews.leaderboard)}
         color={getTextColor(MobileViews.leaderboard)}
         _hover={{}}
       >
@@ -132,7 +141,7 @@ export const ProjectNavUI = () => {
           _hover={{}}
           leftIcon={<BsLightningChargeFill />}
           onClick={() => {
-            setMobileView(MobileViews.funding);
+            handleClick(MobileViews.funding);
           }}
         >
           Contribute

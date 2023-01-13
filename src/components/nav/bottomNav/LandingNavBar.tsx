@@ -39,6 +39,10 @@ export const LandingNavBar = () => {
     });
   }, [routeMatchesForShowingLandingMenu]);
 
+  const handleScrollUp = () => {
+    document.scrollingElement?.scrollTo({ top: 0 });
+  };
+
   if (shouldShowLandingNav) {
     return (
       <>
@@ -60,7 +64,7 @@ export const LandingNavBar = () => {
             const isActive = useRouteMatch(path)?.isExact;
             console.log('checking isActive', useRouteMatch(path));
             return (
-              <Link key={name} to={path}>
+              <Link key={name} to={path} onClick={handleScrollUp}>
                 <VStack spacing="0px">
                   <Icon
                     fontSize="20px"
