@@ -24,6 +24,7 @@ import {
 } from '../../../graphql';
 import { useQueryWithPagination } from '../../../hooks';
 import { MobileViews, useProject } from '../containers';
+import { StickToTop } from '../../../components/layouts';
 
 type Props = {
   project: Project;
@@ -160,9 +161,25 @@ export const ProjectFundingInitialInfoScreen = ({
     if (isMobile) {
       switch (mobileView) {
         case MobileViews.contribution:
-          return <Box w="100%">{contributionButton()}</Box>;
+          return (
+            <StickToTop
+              id="contribute-tab-activity-table"
+              w="100%"
+              _onStick={{ w: 'calc(100% - 29px)' }}
+            >
+              {contributionButton()}
+            </StickToTop>
+          );
         case MobileViews.leaderboard:
-          return <Box w="100%">{leaderBoardButton()}</Box>;
+          return (
+            <StickToTop
+              id="contribute-tab-activity-table"
+              w="100%"
+              _onStick={{ w: 'calc(100% - 29px)' }}
+            >
+              {leaderBoardButton()}
+            </StickToTop>
+          );
         default:
       }
     }

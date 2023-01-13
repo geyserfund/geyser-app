@@ -39,8 +39,16 @@ export const LandingNavBar = () => {
     });
   }, [routeMatchesForShowingLandingMenu]);
 
-  const handleScrollUp = () => {
-    document.scrollingElement?.scrollTo({ top: 0 });
+  const handleScrollUp = (path: string) => {
+    const currentRoute = routeMatchesForShowingLandingMenu.find(
+      (routeMatch) => (routeMatch as match)?.isExact,
+    );
+
+    if (currentRoute?.path === path) {
+      document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.scrollingElement?.scrollTo({ top: 0 });
+    }
   };
 
   if (shouldShowLandingNav) {
@@ -64,7 +72,7 @@ export const LandingNavBar = () => {
             const isActive = useRouteMatch(path)?.isExact;
             console.log('checking isActive', useRouteMatch(path));
             return (
-              <Link key={name} to={path} onClick={handleScrollUp}>
+              <Link key={name} to={path} onClick={() => handleScrollUp(path)}>
                 <VStack spacing="0px">
                   <Icon
                     fontSize="20px"
