@@ -1,29 +1,25 @@
 import { Box, VStack } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { fadeOut, slideInLeft } from '../../css';
 import { isDarkMode, isMobileMode } from '../../utils';
-import { IFundingStages } from '../../constants';
-import {
-  AppFooter,
-  ProjectDetailsMobileMenu,
-} from '../../components/molecules';
-import { fundingStages } from '../../constants';
+import { AppFooter } from '../../components/molecules';
 import { EntryDetails } from './EntryDetails';
 import { Entry } from '../../types/generated/graphql';
+import { MobileViews, useProject } from '../projectView';
 
 type Rules = string;
 
 interface IStyles {
   isMobile: boolean;
-  detailOpen: boolean;
-  fadeStarted: boolean;
+  inView: boolean;
+  fadeStarted?: boolean;
 }
 
 const useStyles = createUseStyles<Rules, IStyles>({
-  container: ({ isMobile, detailOpen, fadeStarted }: IStyles) => ({
-    display: !isMobile || detailOpen || fadeStarted ? 'flex' : 'none',
+  container: ({ isMobile, inView, fadeStarted }: IStyles) => ({
+    display: !isMobile || inView || fadeStarted ? 'flex' : 'none',
     position: fadeStarted ? 'absolute' : 'relative',
     top: fadeStarted ? 0 : undefined,
     left: fadeStarted ? 0 : undefined,
@@ -52,20 +48,17 @@ const useStyles = createUseStyles<Rules, IStyles>({
 interface IActivityProps {
   entry: Entry;
   detailOpen: boolean;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
 }
 
-export const EntryContainer = ({
-  entry,
-  detailOpen,
-  setDetailOpen,
-  setFundState,
-}: IActivityProps) => {
+export const EntryContainer = ({ entry }: IActivityProps) => {
   const isMobile = isMobileMode();
   const isDark = isDarkMode();
 
-  const classes = useStyles({ isMobile, detailOpen, fadeStarted });
+  const { mobileView } = useProject();
+
+  const inView = mobileView === MobileViews.description;
+
+  const classes = useStyles({ isMobile, inView });
 
   return (
     <Box
@@ -91,7 +84,6 @@ export const EntryContainer = ({
             <EntryDetails entry={entry} />
           </VStack>
         </VStack>
-
         <AppFooter />
       </Box>
     </Box>
