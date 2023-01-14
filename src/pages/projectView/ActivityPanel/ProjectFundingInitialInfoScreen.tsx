@@ -111,7 +111,6 @@ export const ProjectFundingInitialInfoScreen = ({
           bg="none"
           fontWeight={tab === 'activity' ? 'bold' : 'normal'}
           fontSize="16px"
-          marginTop="10px"
           onClick={() => setTab('activity')}
         >
           Contributions{' '}
@@ -139,7 +138,6 @@ export const ProjectFundingInitialInfoScreen = ({
           bg="none"
           fontWeight={tab === 'activity' ? 'normal' : 'bold'}
           fontSize="16px"
-          marginTop="10px"
           onClick={() => setTab('leaderboard')}
         >
           Leaderboard{' '}
@@ -194,7 +192,7 @@ export const ProjectFundingInitialInfoScreen = ({
 
   return (
     <VStack
-      padding={isMobile ? '10px 5px 0px 5px' : '10px 20px'}
+      padding={isMobile ? '0px 5px 0px 5px' : '10px 20px'}
       spacing="0px"
       width="100%"
       height="100%"
