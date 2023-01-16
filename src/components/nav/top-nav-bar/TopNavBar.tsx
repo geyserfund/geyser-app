@@ -449,6 +449,8 @@ export const TopNavBar = () => {
         left={0}
         width="full"
         zIndex={1000}
+        borderBottom="1px solid"
+        borderBottomColor="brand.neutral100"
       >
         <HStack
           h={16}

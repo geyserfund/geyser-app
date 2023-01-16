@@ -7,7 +7,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { BsHeartFill, BsLightningChargeFill } from 'react-icons/bs';
+import { BsHeart, BsLightningChargeFill } from 'react-icons/bs';
 import { fonts } from '../../../constants';
 import { useScrollDirection } from '../../../hooks';
 import { MobileViews, useProject } from '../../../pages/projectView';
@@ -97,21 +97,24 @@ export const ProjectNavUI = () => {
       justifyContent="center"
       alignItems="center"
       spacing="40px"
+      paddingBottoim="2px"
     >
       <Button
         variant="ghost"
         onClick={() => handleClick(MobileViews.description)}
         color={getTextColor(MobileViews.description)}
         _hover={{}}
+        padding="5px"
       >
-        <DescriptionIcon fontSize="20px" />
+        <DescriptionIcon boxSize={8} />
       </Button>
       <Button
         variant="ghost"
         onClick={() => handleClick(MobileViews.contribution)}
         color={getTextColor(MobileViews.contribution)}
-        leftIcon={<BsHeartFill fontSize="20px" />}
+        leftIcon={<BsHeart fontSize="24px" />}
         _hover={{}}
+        padding="5px"
       >
         {transactionCount && <Text font={fonts.mono}>{transactionCount}</Text>}
       </Button>
@@ -120,8 +123,9 @@ export const ProjectNavUI = () => {
         onClick={() => handleClick(MobileViews.leaderboard)}
         color={getTextColor(MobileViews.leaderboard)}
         _hover={{}}
+        paddingX="3px"
       >
-        <LeaderBoardIcon fontSize="20px" />
+        <LeaderBoardIcon boxSize={8} />
         {fundersCount && <Text font={fonts.mono}>{fundersCount}</Text>}
       </Button>
       <HStack>
@@ -139,6 +143,7 @@ export const ProjectNavUI = () => {
               : 'brand.primary'
           }
           _hover={{}}
+          padding="5px"
           leftIcon={<BsLightningChargeFill />}
           onClick={() => {
             handleClick(MobileViews.funding);

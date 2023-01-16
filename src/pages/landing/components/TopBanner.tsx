@@ -6,7 +6,6 @@ import {
   Skeleton,
   Image,
   Container,
-  Heading,
   Stack,
 } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
@@ -23,6 +22,7 @@ import {
 } from '../../../utils';
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
+import { H1, H3 } from '../../../components/typography';
 
 export const TopBanner = () => {
   const { toast } = useNotification();
@@ -59,7 +59,7 @@ export const TopBanner = () => {
       align="center"
       backgroundImage={LandingBannerPatternUrl}
     >
-      <Container maxW={'5xl'}>
+      <Container maxW={'6xl'}>
         <Stack
           textAlign={'center'}
           align={'center'}
@@ -69,10 +69,14 @@ export const TopBanner = () => {
           <VStack spacing={3}>
             <Image src={LandingLetTheSatsFlowUrl} maxHeight="76px" />
 
-            <Heading as="h1" fontWeight={'bold'} size="lg" lineHeight={'110%'}>
+            <H1>
               Play a part in world-changing ideas by contributing to them and
               launching them on Geyser!
-            </Heading>
+            </H1>
+            <H3>
+              Support the creators of the new digital economy & Launch your
+              project ideas in just a few clicks to start receiving Sats!
+            </H3>
           </VStack>
 
           <HStack

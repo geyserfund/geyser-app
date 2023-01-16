@@ -15,6 +15,7 @@ import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem';
 import { AuthContext } from '../../../context';
 import { getPath } from '../../../constants/router-paths';
 import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem';
+import { Link } from 'react-router-dom';
 
 type Props = {
   shouldShowDashboardMenuItem: boolean;
@@ -115,32 +116,23 @@ export const TopNavBarMenu = ({
 
         {isLoggedIn ? (
           <>
-            <MenuItem padding={0}>
-              <MenuItemLink
-                destinationPath={getPath('userProfile', user.id)}
-                px={0}
-                py={0}
-                _focus={{ boxShadow: 'none' }}
-              >
-                <NavBarUserProfileMenuItem />
-              </MenuItemLink>
+            <MenuItem
+              padding={0}
+              as={Link}
+              to={getPath('userProfile', user.id)}
+              _focus={{ boxShadow: 'none' }}
+            >
+              <NavBarUserProfileMenuItem />
             </MenuItem>
 
             {isUserAProjectCreator && user.ownerOf[0]?.project ? (
-              <MenuItem padding={0}>
-                <MenuItemLink
-                  destinationPath={getPath(
-                    'project',
-                    user.ownerOf[0].project.name,
-                  )}
-                  px={0}
-                  py={0}
-                  _focus={{ boxShadow: 'none' }}
-                >
-                  <NavBarUserProjectMenuItem
-                    project={user.ownerOf[0].project}
-                  />
-                </MenuItemLink>
+              <MenuItem
+                padding={0}
+                as={Link}
+                to={getPath('project', user.ownerOf[0].project.name)}
+                _focus={{ boxShadow: 'none' }}
+              >
+                <NavBarUserProjectMenuItem project={user.ownerOf[0].project} />
               </MenuItem>
             ) : null}
 
@@ -148,22 +140,20 @@ export const TopNavBarMenu = ({
           </>
         ) : null}
 
-        <MenuItem fontWeight={'bold'}>
-          <MenuItemLink destinationPath={getPath('index')}>
-            Recent Activity
-          </MenuItemLink>
+        <MenuItem as={Link} to={getPath('index')} fontWeight={'bold'}>
+          Recent Activity
         </MenuItem>
 
-        <MenuItem fontWeight={'bold'}>
-          <MenuItemLink destinationPath={getPath('projectDiscovery')}>
-            Discover Projects
-          </MenuItemLink>
+        <MenuItem
+          fontWeight={'bold'}
+          as={Link}
+          to={getPath('projectDiscovery')}
+        >
+          Discover Projects
         </MenuItem>
 
-        <MenuItem fontWeight={'bold'}>
-          <MenuItemLink destinationPath={getPath('grants')}>
-            Grants
-          </MenuItemLink>
+        <MenuItem fontWeight={'bold'} as={Link} to={getPath('grants')}>
+          Grants
         </MenuItem>
 
         <MenuDivider />

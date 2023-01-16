@@ -1,10 +1,8 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
-import { BiHomeAlt } from 'react-icons/bi';
-import { FaHandHoldingUsd } from 'react-icons/fa';
-import { RiLightbulbFlashLine } from 'react-icons/ri';
 import { Link, match, useRouteMatch } from 'react-router-dom';
-import { colors, fonts, routerPathNames } from '../../../constants';
+import { colors, routerPathNames } from '../../../constants';
+import { GrantsNavIcon, HomeNavIcon, ProjectNavIcon } from '../../icons';
 
 const routesForShowingLandingMenu = [
   `/`,
@@ -15,17 +13,17 @@ const routesForShowingLandingMenu = [
 const LandingNavItems = [
   {
     name: 'Home',
-    Icon: BiHomeAlt,
+    Icon: HomeNavIcon,
     path: '/',
   },
   {
     name: 'Projects',
-    Icon: RiLightbulbFlashLine,
+    Icon: ProjectNavIcon,
     path: '/discover',
   },
   {
     name: 'Grants',
-    Icon: FaHandHoldingUsd,
+    Icon: GrantsNavIcon,
     path: '/grants',
   },
 ];
@@ -64,28 +62,28 @@ export const LandingNavBar = () => {
           paddingX="15%"
           justifyContent="center"
           alignItems="center"
-          spacing="40px"
+          spacing="25%"
           position="fixed"
           bottom="0px"
+          paddingBottom="2px"
         >
           {LandingNavItems.map(({ name, path, Icon }) => {
             const isActive = useRouteMatch(path)?.isExact;
-            console.log('checking isActive', useRouteMatch(path));
             return (
-              <Link key={name} to={path} onClick={() => handleScrollUp(path)}>
-                <VStack spacing="0px">
-                  <Icon
-                    fontSize="20px"
-                    color={isActive ? 'black' : colors.neutral500}
-                  />
-                  <Text
-                    fontFamily={fonts.mono}
-                    color={isActive ? 'black' : colors.neutral600}
-                  >
-                    {name}
-                  </Text>
-                </VStack>
-              </Link>
+              <Button
+                as={Link}
+                to={path}
+                key={name}
+                variant="ghost"
+                onClick={() => handleScrollUp(path)}
+                _hover={{}}
+                _focus={{}}
+              >
+                <Icon
+                  boxSize={8}
+                  color={isActive ? 'black' : colors.neutral500}
+                />
+              </Button>
             );
           })}
         </HStack>
