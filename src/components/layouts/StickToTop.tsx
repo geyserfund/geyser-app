@@ -90,7 +90,7 @@ export const StickToTop = ({
         ref={containerRef}
         backgroundColor="brand.bgWhite"
         position={stick.current ? 'fixed' : 'static'}
-        top="60px"
+        top="65px"
         zIndex={10}
         {...rest}
         {...onStick}
