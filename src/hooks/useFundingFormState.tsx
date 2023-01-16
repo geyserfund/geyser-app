@@ -5,6 +5,7 @@ import { useBTCConverter } from '../helpers';
 
 import { IRewardCount } from '../interfaces';
 import { ProjectReward, RewardCurrency } from '../types/generated/graphql';
+import { Satoshis } from '../types/types';
 
 export interface IFundForm {
   donationAmount: number;
@@ -102,7 +103,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
             state.rewardCurrency === RewardCurrency.Usdcent
               ? reward.cost
               : // Assume sats if not USD cents
-                getUSDCentsAmount(reward.cost);
+                getUSDCentsAmount(reward.cost as Satoshis);
 
           rewardsCost +=
             cost * newRewardsCountInfo[rewardID as keyof ProjectReward];

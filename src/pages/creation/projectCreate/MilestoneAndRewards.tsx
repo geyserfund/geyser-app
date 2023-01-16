@@ -12,7 +12,6 @@ import React, { useState } from 'react';
 import {
   ButtonComponent,
   IconButtonComponent,
-  Linkin,
   SatoshiAmount,
   UndecoratedLink,
 } from '../../../components/ui';
