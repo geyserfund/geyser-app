@@ -162,14 +162,14 @@ export const ProjectDashboard = () => {
     <Box
       background={'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
+      paddingBottom={10}
       height="100%"
       justifyContent="space-between"
     >
       <HStack
         width="100%"
         justifyContent="center"
-        marginTop={isMobile ? '10px' : '30px'}
+        paddingTop={isMobile ? '10px' : '30px'}
         overflowX={isMobile ? 'auto' : undefined}
       >
         <HStack

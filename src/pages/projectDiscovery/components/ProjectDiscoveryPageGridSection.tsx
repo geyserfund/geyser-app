@@ -4,7 +4,6 @@ import {
   Divider,
   Grid,
   GridItem,
-  Heading,
   HStack,
   Text,
   IconButton,
@@ -34,6 +33,7 @@ import { useListenerState } from '../../../hooks';
 import { ScrollInvoke } from '../../../helpers';
 import { StickToTop } from '../../../components/layouts';
 import { isMobileMode } from '../../../utils';
+import { H3 } from '../../../components/typography';
 
 type ResponseData = {
   projects: {
@@ -208,13 +208,14 @@ export const ProjectDiscoveryPageGridSection = () => {
       display={'flex'}
       justifyContent="center"
       flexDirection="row"
-      paddingY={20}
+      paddingTop="30px"
+      paddingBottom={isMobile ? 10 : 20}
     >
       <Center
         width={'full'}
         paddingX={{
           base: 4,
-          md: 10,
+          lg: 10,
         }}
       >
         <Grid
@@ -242,9 +243,7 @@ export const ProjectDiscoveryPageGridSection = () => {
                 alignItems={['center', 'baseline']}
                 spacing={0}
               >
-                <Heading as={'h3'} size="md">
-                  All Geyser Projects
-                </Heading>
+                <H3>All Geyser Projects</H3>
 
                 <Menu closeOnSelect placement="bottom-start">
                   <MenuButton
