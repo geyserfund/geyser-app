@@ -245,13 +245,14 @@ export const TopNavBar = () => {
     });
   }, [routeMatchesForHidingTopNav]);
 
-  const shouldShowProjectButton: boolean = useMemo(() => {
-    return (
-      routeMatchesForProjectButton.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
-      }) && Boolean(navigationContext)
-    );
-  }, [routeMatchesForProjectButton]);
+  const shouldShowProjectButton: boolean =
+    useMemo(() => {
+      return (
+        routeMatchesForProjectButton.some((routeMatch) => {
+          return (routeMatch as match)?.isExact;
+        }) && Boolean(navigationContext)
+      );
+    }, [routeMatchesForProjectButton]) && !isMobile;
   /**
    * Logic:
    *  - Available to all not logged-in users.
