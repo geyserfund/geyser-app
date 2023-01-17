@@ -29,7 +29,7 @@ import {
   MUTATION_CREATE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations';
-import { commaFormatted, useNotification } from '../../../../utils';
+import { commaFormatted, toInt, useNotification } from '../../../../utils';
 import {
   ProjectReward,
   RewardCurrency,
@@ -55,7 +55,7 @@ type CreateRewardMutationResponseData = {
 };
 
 type UpdateRewardMutationResponseData = {
-  updatedReward: ProjectReward;
+  updateProjectReward: ProjectReward;
 };
 
 export const RewardAdditionModal = ({
@@ -111,13 +111,14 @@ export const RewardAdditionModal = ({
     UpdateRewardMutationResponseData,
     { input: ProjectRewardUpdateVariables }
   >(MUTATION_UPDATE_PROJECT_REWARD, {
-    onCompleted({ updatedReward }) {
+    onCompleted({ updateProjectReward }) {
       toast({
         title: 'Successfully updated!',
-        description: `Reward ${updatedReward.name} was successfully updated`,
+        description: `Reward ${updateProjectReward.name} was successfully updated`,
         status: 'success',
       });
-      onSubmit(updatedReward);
+      console.log('checking ', updateProjectReward);
+      onSubmit(updateProjectReward);
       onClose();
     },
     onError(error) {
@@ -144,7 +145,7 @@ export const RewardAdditionModal = ({
 
   const getRewardUpdateInputVariables = (): ProjectRewardUpdateVariables => {
     return {
-      projectRewardId: (rewards.current as ProjectReward).id,
+      projectRewardId: toInt((rewards.current as ProjectReward).id),
       cost: rewards.current.cost,
       costCurrency: RewardCurrency.Usdcent,
       description: rewards.current.description,

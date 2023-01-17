@@ -100,6 +100,7 @@ export const RewardCard = ({
             width="335px"
             height="192px"
             objectFit="cover"
+            noCacheId={(Math.random() + 1).toString(36).substring(7)}
           />
         </Box>
 

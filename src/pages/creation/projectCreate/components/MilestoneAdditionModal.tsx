@@ -235,7 +235,7 @@ export const MilestoneAdditionModal = ({
     let isValid = true;
     const totalErrors: any = [];
 
-    milestones.current.map((milestone) => {
+    milestones.current.map((milestone, index) => {
       const errors: any = {};
       if (!milestone.name) {
         errors.name = 'Name is a required field.';
@@ -246,7 +246,15 @@ export const MilestoneAdditionModal = ({
       }
 
       if (!milestone.amount || milestone.amount < 1) {
-        errors.amount = 'Amount needs to be at least 1 satoshi';
+        errors.amount = 'Amount needs to be at least 1 satoshi.';
+        isValid = false;
+      }
+
+      if (
+        index > 0 &&
+        milestones.current[index - 1].amount > milestone.amount
+      ) {
+        errors.amount = 'Amount must to be at greater than previous milestone.';
         isValid = false;
       }
 
