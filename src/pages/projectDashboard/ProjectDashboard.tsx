@@ -31,7 +31,7 @@ enum DashboardTabs {
   funds = 'funds',
   milestones = 'milestones',
   rewards = 'rewards',
-  projectDescription = 'project description',
+  editProject = 'edit project',
   contributors = 'contributors',
   stats = 'stats',
 }
@@ -45,7 +45,7 @@ export const ProjectDashboard = () => {
   const { user, setNav } = useAuthContext();
 
   const [activeTab, setActiveTab] = useState<DashboardTabs>(
-    DashboardTabs.projectDescription,
+    DashboardTabs.editProject,
   );
 
   useEffect(() => {
@@ -114,7 +114,7 @@ export const ProjectDashboard = () => {
         return <RewardSettings project={project} />;
       case DashboardTabs.funds:
         return <ProjectFundingSettings project={project} />;
-      case DashboardTabs.projectDescription:
+      case DashboardTabs.editProject:
         return <ProjectSettings project={project} />;
       case DashboardTabs.contributors:
         return <ProjectContributors project={project} />;
@@ -150,7 +150,7 @@ export const ProjectDashboard = () => {
   };
 
   const navList: DashboardTabs[] = [
-    DashboardTabs.projectDescription,
+    DashboardTabs.editProject,
     DashboardTabs.contributors,
     DashboardTabs.funds,
     DashboardTabs.entries,
