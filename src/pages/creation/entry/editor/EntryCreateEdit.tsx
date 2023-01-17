@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
 
-import { isMobileMode, useNotification } from '../../../../utils';
+import { isMobileMode, toInt, useNotification } from '../../../../utils';
 import { CreateNav } from './CreateNav';
 import { BsImage } from 'react-icons/bs';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
@@ -140,7 +140,7 @@ export const EntryCreateEdit = () => {
         const { image, title, description, content } = value;
         const input: IEntryCreateInput = {
           projectId:
-            projectData && projectData.project && projectData.project.id,
+            projectData && projectData.project && toInt(projectData.project.id),
           type: 'article',
           title,
           description,
@@ -164,7 +164,7 @@ export const EntryCreateEdit = () => {
     const { image, title, description, content } = params;
     if (form) {
       const input: IEntryUpdateInput = {
-        entryId: form.current.id,
+        entryId: toInt(form.current.id),
         title,
         description,
         content,
