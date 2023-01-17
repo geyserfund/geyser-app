@@ -61,7 +61,7 @@ export const ProjectDetailsViewContainer = ({
         resourceId={project.id}
       />
 
-      {isMobile && <ProjectNav />}
+      {isMobile && <ProjectNav fixed />}
     </ProjectProvider>
   );
 };

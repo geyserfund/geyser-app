@@ -7,13 +7,15 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { BsHeart, BsLightningChargeFill } from 'react-icons/bs';
-import { fonts } from '../../../constants';
+import { BiHeart, BiNews, BiTrophy } from 'react-icons/bi';
+import { BsLightningChargeFill } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
+import { fonts, getPath } from '../../../constants';
+import { useAuthContext } from '../../../context';
 import { useScrollDirection } from '../../../hooks';
 import { MobileViews, useProject } from '../../../pages/projectView';
-import { DescriptionIcon, LeaderBoardIcon } from '../../icons';
 
-export const ProjectNav = () => {
+export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
   const { mobileView } = useProject();
 
   const isScrollingUp = useScrollDirection({
@@ -27,11 +29,11 @@ export const ProjectNav = () => {
   useEffect(() => {
     if (isScrollingUp) {
       onOpen();
-    } else {
+    } else if (!fixed) {
       setNoTransition(false);
       onClose();
     }
-  }, [isScrollingUp, mobileView]);
+  }, [isScrollingUp, mobileView, fixed]);
 
   return (
     <>
@@ -64,6 +66,7 @@ export const ProjectNav = () => {
 
 export const ProjectNavUI = () => {
   const { mobileView, setMobileView, project } = useProject();
+  const { user } = useAuthContext();
 
   const getTextColor = (value: string) => {
     if (value === mobileView) {
@@ -75,6 +78,8 @@ export const ProjectNavUI = () => {
 
   const transactionCount = project?.fundingTxsCount;
   const fundersCount = project?.fundersCount;
+
+  const isOwner = project?.owners[0]?.user?.id === user.id;
 
   const handleClick = (value: MobileViews) => {
     if (mobileView === value) {
@@ -93,10 +98,10 @@ export const ProjectNavUI = () => {
       height="60px"
       borderTop="2px solid"
       borderTopColor="brand.neutral200"
-      paddingX="20px"
+      paddingX="10px"
       justifyContent="center"
       alignItems="center"
-      spacing="40px"
+      spacing="28px"
       paddingBottoim="2px"
     >
       <Button
@@ -104,17 +109,17 @@ export const ProjectNavUI = () => {
         onClick={() => handleClick(MobileViews.description)}
         color={getTextColor(MobileViews.description)}
         _hover={{}}
-        padding="5px"
+        paddingX="5px"
       >
-        <DescriptionIcon boxSize={8} />
+        <BiNews fontSize="30px" />
       </Button>
       <Button
         variant="ghost"
         onClick={() => handleClick(MobileViews.contribution)}
         color={getTextColor(MobileViews.contribution)}
-        leftIcon={<BsHeart fontSize="24px" />}
+        leftIcon={<BiHeart fontSize="30px" />}
         _hover={{}}
-        padding="5px"
+        paddingX="5px"
       >
         {transactionCount && <Text font={fonts.mono}>{transactionCount}</Text>}
       </Button>
@@ -122,35 +127,58 @@ export const ProjectNavUI = () => {
         variant="ghost"
         onClick={() => handleClick(MobileViews.leaderboard)}
         color={getTextColor(MobileViews.leaderboard)}
+        leftIcon={<BiTrophy fontSize="30px" />}
         _hover={{}}
-        paddingX="3px"
+        paddingX="5px"
       >
-        <LeaderBoardIcon boxSize={8} />
         {fundersCount && <Text font={fonts.mono}>{fundersCount}</Text>}
       </Button>
       <HStack>
-        <Button
-          size="sm"
-          backgroundColor={
-            mobileView === MobileViews.funding
-              ? 'brand.neutral500'
-              : 'brand.primary'
-          }
-          border="1px solid"
-          borderColor={
-            mobileView === MobileViews.funding
-              ? 'brand.neutral500'
-              : 'brand.primary'
-          }
-          _hover={{}}
-          padding="5px"
-          leftIcon={<BsLightningChargeFill />}
-          onClick={() => {
-            handleClick(MobileViews.funding);
-          }}
-        >
-          Contribute
-        </Button>
+        {isOwner ? (
+          <Button
+            as={Link}
+            to={getPath('projectDashboard', project.name)}
+            size="sm"
+            backgroundColor={
+              mobileView === MobileViews.funding
+                ? 'brand.neutral500'
+                : 'brand.primary'
+            }
+            border="1px solid"
+            borderColor={
+              mobileView === MobileViews.funding
+                ? 'brand.neutral500'
+                : 'brand.primary'
+            }
+            _hover={{}}
+            paddingX="5px"
+          >
+            Dashboard
+          </Button>
+        ) : (
+          <Button
+            size="sm"
+            backgroundColor={
+              mobileView === MobileViews.funding
+                ? 'brand.neutral500'
+                : 'brand.primary'
+            }
+            border="1px solid"
+            borderColor={
+              mobileView === MobileViews.funding
+                ? 'brand.neutral500'
+                : 'brand.primary'
+            }
+            _hover={{}}
+            padding="5px"
+            leftIcon={<BsLightningChargeFill />}
+            onClick={() => {
+              handleClick(MobileViews.funding);
+            }}
+          >
+            Contribute
+          </Button>
+        )}
       </HStack>
     </HStack>
   );

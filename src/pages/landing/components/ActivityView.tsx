@@ -18,7 +18,7 @@ export const ActivityView = ({ ...rest }: Props) => {
         >
           <VStack
             alignItems="flex-start"
-            paddingY="10px"
+            paddingTop="10px"
             backgroundColor="bgWhite"
           >
             <H3>Contributions</H3>
