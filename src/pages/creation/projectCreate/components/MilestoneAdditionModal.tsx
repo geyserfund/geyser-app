@@ -23,7 +23,7 @@ import {
 } from '../../../../graphql/mutations';
 import { useBTCConverter } from '../../../../helpers';
 import { Satoshis, USDollars } from '../../../../types/types';
-import { useNotification } from '../../../../utils';
+import { toInt, useNotification } from '../../../../utils';
 import { TMilestone } from '../types';
 
 type Props = {
@@ -152,14 +152,14 @@ export const MilestoneAdditionModal = ({
         filteredMilestones.map(async (milestone) => {
           const createMilestoneInput = {
             ...milestone,
-            projectId,
+            projectId: toInt(projectId),
           };
 
           if (milestone.id) {
             await updateMilestone({
               variables: {
                 input: {
-                  projectMilestoneId: milestone.id,
+                  projectMilestoneId: toInt(milestone.id),
                   name: milestone.name,
                   description: milestone.description,
                   amount: milestone.amount,
@@ -204,7 +204,7 @@ export const MilestoneAdditionModal = ({
     if (currentMilestone && currentMilestone.id) {
       try {
         await removeMilestone({
-          variables: { projectMilestoneId: currentMilestone.id },
+          variables: { projectMilestoneId: toInt(currentMilestone.id) },
         });
         setMilestones(newMilestones);
       } catch (error) {

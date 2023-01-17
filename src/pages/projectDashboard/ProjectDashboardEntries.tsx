@@ -11,7 +11,7 @@ import {
 import { ButtonComponent } from '../../components/ui';
 import { getPath } from '../../constants';
 import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations';
-import { useNotification } from '../../utils';
+import { toInt, useNotification } from '../../utils';
 import {
   Entry,
   Project,
@@ -81,7 +81,9 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
     }
 
     try {
-      await deleteEntry({ variables: { deleteEntryId: selectedEntry.id } });
+      await deleteEntry({
+        variables: { deleteEntryId: toInt(selectedEntry.id) },
+      });
 
       if (selectedEntry.published) {
         const newLive = liveEntries.filter(

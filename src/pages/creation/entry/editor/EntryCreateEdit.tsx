@@ -104,7 +104,7 @@ export const EntryCreateEdit = () => {
   useEffect(() => {
     if (params && params.entryId) {
       try {
-        getPost({ variables: { id: parseInt(params.entryId, 10) } });
+        getPost({ variables: { id: toInt(params.entryId) } });
       } catch {
         history.push(getPath('notFound'));
       }

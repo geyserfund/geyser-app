@@ -16,7 +16,7 @@ import {
 import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
 import { IEntryUpdateInput } from '../../../interfaces/entry';
 import { Owner } from '../../../types/generated/graphql';
-import { isMobileMode, useNotification } from '../../../utils';
+import { isMobileMode, toInt, useNotification } from '../../../utils';
 import { defaultEntry } from './editor';
 import { CreateNav } from './editor/CreateNav';
 import { TEntry } from './types';
@@ -64,7 +64,7 @@ export const EntryPreview = () => {
 
   useEffect(() => {
     if (params && params.entryId) {
-      getPost({ variables: { id: params.entryId } });
+      getPost({ variables: { id: toInt(params.entryId) } });
     }
   }, [params]);
 
@@ -79,7 +79,7 @@ export const EntryPreview = () => {
       const { image, title, description, content, id } = entry;
       try {
         const input: IEntryUpdateInput = {
-          entryId: id,
+          entryId: toInt(id),
           title,
           description,
           content,
@@ -138,7 +138,7 @@ export const EntryPreview = () => {
         await handleUpdateEntry();
       }
 
-      await publishPost({ variables: { id: entry.id } });
+      await publishPost({ variables: { id: toInt(entry.id) } });
     } catch (error) {
       toast({
         title: 'Post publish failed',

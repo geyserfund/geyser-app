@@ -35,6 +35,10 @@ import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { useBtcContext } from '../../../context/btc';
 import { Subscribe } from '../../../components/nav/Subscribe';
 import { FaTelegramPlane } from 'react-icons/fa';
+import {
+  FundingInput,
+  FundingResourceType,
+} from '../../../types/generated/graphql';
 
 interface ContributeButtonProps {
   active: boolean;
@@ -112,7 +116,7 @@ export const ContributeButton = ({
   };
 
   const handleFund = async () => {
-    const input: IFundingInput = {
+    const input: FundingInput = {
       projectId: Number(project.id),
       anonymous: true,
       donationInput: {
@@ -120,7 +124,7 @@ export const ContributeButton = ({
       },
       sourceResourceInput: {
         resourceId: Number(project.id),
-        resourceType: 'project',
+        resourceType: FundingResourceType.Project,
       },
     };
     requestFunding(input);

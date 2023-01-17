@@ -21,6 +21,7 @@ import {
 } from '../../../components/ui';
 import {
   isMobileMode,
+  toInt,
   useNotification,
   validateEmail,
   validLightningAddress,
@@ -151,7 +152,7 @@ export const ProjectCreate = () => {
   const [getProjectById, { loading, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME_OR_ID,
     {
-      variables: { where: { id: params.projectId } },
+      variables: { where: { id: toInt(params.projectId) } },
       onCompleted(data) {
         if (data && data.project) {
           setForm({
