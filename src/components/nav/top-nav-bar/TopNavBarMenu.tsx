@@ -16,6 +16,7 @@ import { AuthContext } from '../../../context';
 import { getPath } from '../../../constants/router-paths';
 import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem';
 import { Link } from 'react-router-dom';
+import { ButtonComponent } from '../../ui';
 
 type Props = {
   shouldShowDashboardMenuItem: boolean;
@@ -71,13 +72,14 @@ export const TopNavBarMenu = ({
       <MenuList width="150px">
         {shouldShowSignInMenuItem ? (
           <>
-            <MenuItem
-              onClick={onSignInSelected}
-              color="brand.primary700"
-              px={4}
-              py={2}
-            >
-              Connect
+            <MenuItem px={4} py={2}>
+              <ButtonComponent
+                variant="solid"
+                width="100%"
+                onClick={onSignInSelected}
+              >
+                Connect
+              </ButtonComponent>
             </MenuItem>
 
             <MenuDivider />
@@ -86,13 +88,15 @@ export const TopNavBarMenu = ({
 
         {shouldShowDashboardMenuItem ? (
           <>
-            <MenuItem
-              onClick={onDashboardSelected}
-              color="brand.primary700"
-              px={4}
-              py={2}
-            >
-              Dashboard
+            <MenuItem px={4} py={2}>
+              <ButtonComponent
+                primary
+                variant="solid"
+                width="100%"
+                onClick={onDashboardSelected}
+              >
+                Dashboard
+              </ButtonComponent>
             </MenuItem>
 
             <MenuDivider />
@@ -101,13 +105,15 @@ export const TopNavBarMenu = ({
 
         {shouldShowMyProjectsMenuItem ? (
           <>
-            <MenuItem
-              onClick={onMyProjectsSelected}
-              color="brand.primary700"
-              px={4}
-              py={2}
-            >
-              My Projects
+            <MenuItem px={4} py={2}>
+              <ButtonComponent
+                primary
+                variant="solid"
+                width="100%"
+                onClick={onMyProjectsSelected}
+              >
+                My Projects
+              </ButtonComponent>
             </MenuItem>
 
             <MenuDivider />
