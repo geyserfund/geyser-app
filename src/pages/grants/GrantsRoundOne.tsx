@@ -74,7 +74,7 @@ export const GrantsRoundOne = () => {
   return (
     <>
       <Box
-        paddingTop={isMobile ? '81px' : '91px'}
+        paddingTop={isMobile ? '10px' : '20px'}
         bg={'brand.bgGrey4'}
         minHeight="100vh"
         display="flex"

@@ -3,8 +3,8 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from 'graphql';
-export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+export type Maybe<T> = T | undefined | null;
+export type InputMaybe<T> = T | undefined | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
@@ -55,6 +55,20 @@ export type Scalars = {
   title_String_maxLength_60: any;
   title_String_maxLength_150: any;
 };
+
+export type Activity = {
+  __typename?: 'Activity';
+  id?: Maybe<Scalars['String']>;
+  resource?: Maybe<ActivityResource>;
+};
+
+export type ActivityCreatedSubscriptionResponse =
+  | Entry
+  | FundingTx
+  | Project
+  | ProjectReward;
+
+export type ActivityResource = Entry | FundingTx | Project | ProjectReward;
 
 export type Ambassador = {
   __typename?: 'Ambassador';
@@ -145,6 +159,10 @@ export type CursorInput = {
   id: Scalars['Int'];
 };
 
+export type CursorInputString = {
+  id: Scalars['String'];
+};
+
 export type DonationFundingInput = {
   /** The donation amount, in satoshis. */
   donationAmount: Scalars['donationAmount_Int_NotNull_min_1'];
@@ -177,6 +195,11 @@ export type Entry = {
   title: Scalars['title_String_NotNull_maxLength_60'];
   type: EntryType;
   updatedAt: Scalars['String'];
+};
+
+export type EntryPublishedSubscriptionResponse = {
+  __typename?: 'EntryPublishedSubscriptionResponse';
+  entry: Entry;
 };
 
 export enum EntryStatus {
@@ -214,7 +237,7 @@ export type Funder = {
   /** Boolean value indicating whether at least one of the funding transactions of the Funder were confirmed. */
   confirmed: Scalars['Boolean'];
   /** Time at which the first confirmed funding transactions of the Funder was confirmed. */
-  confirmedAt?: Maybe<Scalars['String']>;
+  confirmedAt?: Maybe<Scalars['Date']>;
   id: Scalars['BigInt'];
   rewards: Array<Maybe<FunderReward>>;
   /** Number of (confirmed) times a Funder funded a particular project. */
@@ -371,10 +394,33 @@ export type FundingTx = {
   uuid: Scalars['String'];
 };
 
+export type FundingTxConfirmedSubscriptionResponse = {
+  __typename?: 'FundingTxConfirmedSubscriptionResponse';
+  fundingTx: FundingTx;
+};
+
 export type FundinginvoiceCancel = {
   __typename?: 'FundinginvoiceCancel';
   id: Scalars['BigInt'];
   success: Scalars['Boolean'];
+};
+
+export type GetActivitiesInput = {
+  pagination?: InputMaybe<GetActivityPaginationInput>;
+  where?: InputMaybe<GetActivityWhereInput>;
+};
+
+export type GetActivityOrderByInput = {
+  createdAt?: InputMaybe<Scalars['Date']>;
+};
+
+export type GetActivityPaginationInput = {
+  cursor?: InputMaybe<CursorInputString>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+export type GetActivityWhereInput = {
+  projectId?: InputMaybe<Scalars['BigInt']>;
 };
 
 export type GetDashboardFundersWhereInput = {
@@ -409,6 +455,7 @@ export type GetFundersInput = {
   where?: InputMaybe<GetFunderWhereInput>;
 };
 
+/** only one sort field can be used at one time */
 export type GetFundersOrderByInput = {
   amountFunded?: InputMaybe<OrderByOptions>;
   confirmedAt?: InputMaybe<OrderByOptions>;
@@ -767,6 +814,7 @@ export type Project = {
   sponsors: Array<Maybe<Sponsor>>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
+  status?: Maybe<ProjectStatus>;
   /** Public title of the project. */
   title: Scalars['title_String_NotNull_maxLength_60'];
   type: ProjectType;
@@ -777,6 +825,11 @@ export type Project = {
 
 export type ProjectEntriesArgs = {
   input?: InputMaybe<ProjectEntriesGetInput>;
+};
+
+export type ProjectActivatedSubscriptionResponse = {
+  __typename?: 'ProjectActivatedSubscriptionResponse';
+  project: Project;
 };
 
 export type ProjectEntriesGetInput = {
@@ -830,6 +883,7 @@ export enum ProjectStatus {
   Active = 'active',
   Deleted = 'deleted',
   Draft = 'draft',
+  Inactive = 'inactive',
 }
 
 export enum ProjectType {
@@ -883,6 +937,8 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']>;
   entry?: Maybe<Entry>;
   fundingTx: FundingTx;
+  /** Returns all activities. */
+  getActivities: Array<Maybe<Activity>>;
   getDashboardFunders: Array<Maybe<Funder>>;
   /** Returns all published entries. */
   getEntries: Array<Maybe<Entry>>;
@@ -911,6 +967,10 @@ export type QueryEntryArgs = {
 
 export type QueryFundingTxArgs = {
   id: Scalars['BigInt'];
+};
+
+export type QueryGetActivitiesArgs = {
+  input?: InputMaybe<GetActivitiesInput>;
 };
 
 export type QueryGetDashboardFundersArgs = {
@@ -1023,6 +1083,10 @@ export type Sponsor = {
 export type Subscription = {
   __typename?: 'Subscription';
   _?: Maybe<Scalars['Boolean']>;
+  activityCreated: ActivityCreatedSubscriptionResponse;
+  entryPublished: EntryPublishedSubscriptionResponse;
+  fundingTxConfirmed: FundingTxConfirmedSubscriptionResponse;
+  projectActivated: ProjectActivatedSubscriptionResponse;
 };
 
 export type UniqueProjectQueryInput = {
@@ -1331,6 +1395,21 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Activity: ResolverTypeWrapper<
+    Omit<Activity, 'resource'> & {
+      resource?: Maybe<ResolversTypes['ActivityResource']>;
+    }
+  >;
+  ActivityCreatedSubscriptionResponse:
+    | ResolversTypes['Entry']
+    | ResolversTypes['FundingTx']
+    | ResolversTypes['Project']
+    | ResolversTypes['ProjectReward'];
+  ActivityResource:
+    | ResolversTypes['Entry']
+    | ResolversTypes['FundingTx']
+    | ResolversTypes['Project']
+    | ResolversTypes['ProjectReward'];
   Ambassador: ResolverTypeWrapper<Ambassador>;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
@@ -1347,9 +1426,11 @@ export type ResolversTypes = {
   CreateWalletInput: CreateWalletInput;
   Currency: Currency;
   CursorInput: CursorInput;
+  CursorInputString: CursorInputString;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   DonationFundingInput: DonationFundingInput;
   Entry: ResolverTypeWrapper<Entry>;
+  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>;
   EntryStatus: EntryStatus;
   EntryType: EntryType;
   ExternalAccount: ResolverTypeWrapper<ExternalAccount>;
@@ -1382,7 +1463,12 @@ export type ResolversTypes = {
       sourceResource?: Maybe<ResolversTypes['SourceResource']>;
     }
   >;
+  FundingTxConfirmedSubscriptionResponse: ResolverTypeWrapper<FundingTxConfirmedSubscriptionResponse>;
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
+  GetActivitiesInput: GetActivitiesInput;
+  GetActivityOrderByInput: GetActivityOrderByInput;
+  GetActivityPaginationInput: GetActivityPaginationInput;
+  GetActivityWhereInput: GetActivityWhereInput;
   GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
@@ -1416,6 +1502,7 @@ export type ResolversTypes = {
   OwnerOf: ResolverTypeWrapper<OwnerOf>;
   PaginationInput: PaginationInput;
   Project: ResolverTypeWrapper<Project>;
+  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>;
@@ -1543,6 +1630,19 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Activity: Omit<Activity, 'resource'> & {
+    resource?: Maybe<ResolversParentTypes['ActivityResource']>;
+  };
+  ActivityCreatedSubscriptionResponse:
+    | ResolversParentTypes['Entry']
+    | ResolversParentTypes['FundingTx']
+    | ResolversParentTypes['Project']
+    | ResolversParentTypes['ProjectReward'];
+  ActivityResource:
+    | ResolversParentTypes['Entry']
+    | ResolversParentTypes['FundingTx']
+    | ResolversParentTypes['Project']
+    | ResolversParentTypes['ProjectReward'];
   Ambassador: Ambassador;
   AmountSummary: AmountSummary;
   BigInt: Scalars['BigInt'];
@@ -1558,9 +1658,11 @@ export type ResolversParentTypes = {
   CreateProjectRewardInput: CreateProjectRewardInput;
   CreateWalletInput: CreateWalletInput;
   CursorInput: CursorInput;
+  CursorInputString: CursorInputString;
   Date: Scalars['Date'];
   DonationFundingInput: DonationFundingInput;
   Entry: Entry;
+  EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse;
   ExternalAccount: ExternalAccount;
   FileUploadInput: FileUploadInput;
   Float: Scalars['Float'];
@@ -1586,7 +1688,12 @@ export type ResolversParentTypes = {
   FundingTx: Omit<FundingTx, 'sourceResource'> & {
     sourceResource?: Maybe<ResolversParentTypes['SourceResource']>;
   };
+  FundingTxConfirmedSubscriptionResponse: FundingTxConfirmedSubscriptionResponse;
   FundinginvoiceCancel: FundinginvoiceCancel;
+  GetActivitiesInput: GetActivitiesInput;
+  GetActivityOrderByInput: GetActivityOrderByInput;
+  GetActivityPaginationInput: GetActivityPaginationInput;
+  GetActivityWhereInput: GetActivityWhereInput;
   GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
@@ -1617,6 +1724,7 @@ export type ResolversParentTypes = {
   OwnerOf: OwnerOf;
   PaginationInput: PaginationInput;
   Project: Project;
+  ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
   ProjectMilestone: ProjectMilestone;
@@ -1712,6 +1820,41 @@ export type ConstraintDirectiveResolver<
   Args = ConstraintDirectiveArgs,
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
+export type ActivityResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity'],
+> = {
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  resource?: Resolver<
+    Maybe<ResolversTypes['ActivityResource']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ActivityCreatedSubscriptionResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ActivityCreatedSubscriptionResponse'] = ResolversParentTypes['ActivityCreatedSubscriptionResponse'],
+> = {
+  __resolveType: TypeResolveFn<
+    'Entry' | 'FundingTx' | 'Project' | 'ProjectReward',
+    ParentType,
+    ContextType
+  >;
+};
+
+export type ActivityResourceResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ActivityResource'] = ResolversParentTypes['ActivityResource'],
+> = {
+  __resolveType: TypeResolveFn<
+    'Entry' | 'FundingTx' | 'Project' | 'ProjectReward',
+    ParentType,
+    ContextType
+  >;
+};
+
 export type AmbassadorResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Ambassador'] = ResolversParentTypes['Ambassador'],
@@ -1795,6 +1938,14 @@ export type EntryResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EntryPublishedSubscriptionResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['EntryPublishedSubscriptionResponse'] = ResolversParentTypes['EntryPublishedSubscriptionResponse'],
+> = {
+  entry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ExternalAccountResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ExternalAccount'] = ResolversParentTypes['ExternalAccount'],
@@ -1822,7 +1973,7 @@ export type FunderResolvers<
   >;
   confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   confirmedAt?: Resolver<
-    Maybe<ResolversTypes['String']>,
+    Maybe<ResolversTypes['Date']>,
     ParentType,
     ContextType
   >;
@@ -1950,6 +2101,14 @@ export type FundingTxResolvers<
   >;
   status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>;
   uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FundingTxConfirmedSubscriptionResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FundingTxConfirmedSubscriptionResponse'] = ResolversParentTypes['FundingTxConfirmedSubscriptionResponse'],
+> = {
+  fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2354,6 +2513,11 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >;
+  status?: Resolver<
+    Maybe<ResolversTypes['ProjectStatus']>,
+    ParentType,
+    ContextType
+  >;
   title?: Resolver<
     ResolversTypes['title_String_NotNull_maxLength_60'],
     ParentType,
@@ -2362,6 +2526,14 @@ export type ProjectResolvers<
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectActivatedSubscriptionResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectActivatedSubscriptionResponse'] = ResolversParentTypes['ProjectActivatedSubscriptionResponse'],
+> = {
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2473,6 +2645,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryFundingTxArgs, 'id'>
+  >;
+  getActivities?: Resolver<
+    Array<Maybe<ResolversTypes['Activity']>>,
+    ParentType,
+    ContextType,
+    Partial<QueryGetActivitiesArgs>
   >;
   getDashboardFunders?: Resolver<
     Array<Maybe<ResolversTypes['Funder']>>,
@@ -2596,6 +2774,30 @@ export type SubscriptionResolvers<
   _?: SubscriptionResolver<
     Maybe<ResolversTypes['Boolean']>,
     '_',
+    ParentType,
+    ContextType
+  >;
+  activityCreated?: SubscriptionResolver<
+    ResolversTypes['ActivityCreatedSubscriptionResponse'],
+    'activityCreated',
+    ParentType,
+    ContextType
+  >;
+  entryPublished?: SubscriptionResolver<
+    ResolversTypes['EntryPublishedSubscriptionResponse'],
+    'entryPublished',
+    ParentType,
+    ContextType
+  >;
+  fundingTxConfirmed?: SubscriptionResolver<
+    ResolversTypes['FundingTxConfirmedSubscriptionResponse'],
+    'fundingTxConfirmed',
+    ParentType,
+    ContextType
+  >;
+  projectActivated?: SubscriptionResolver<
+    ResolversTypes['ProjectActivatedSubscriptionResponse'],
+    'projectActivated',
     ParentType,
     ContextType
   >;
@@ -2899,12 +3101,16 @@ export interface Title_String_MaxLength_150ScalarConfig
 }
 
 export type Resolvers<ContextType = any> = {
+  Activity?: ActivityResolvers<ContextType>;
+  ActivityCreatedSubscriptionResponse?: ActivityCreatedSubscriptionResponseResolvers<ContextType>;
+  ActivityResource?: ActivityResourceResolvers<ContextType>;
   Ambassador?: AmbassadorResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Entry?: EntryResolvers<ContextType>;
+  EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>;
   ExternalAccount?: ExternalAccountResolvers<ContextType>;
   Funder?: FunderResolvers<ContextType>;
   FunderReward?: FunderRewardResolvers<ContextType>;
@@ -2914,6 +3120,7 @@ export type Resolvers<ContextType = any> = {
   FundingPendingResponse?: FundingPendingResponseResolvers<ContextType>;
   FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>;
   FundingTx?: FundingTxResolvers<ContextType>;
+  FundingTxConfirmedSubscriptionResponse?: FundingTxConfirmedSubscriptionResponseResolvers<ContextType>;
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>;
   Grantee?: GranteeResolvers<ContextType>;
   GranteeSubmissionResponse?: GranteeSubmissionResponseResolvers<ContextType>;
@@ -2926,6 +3133,7 @@ export type Resolvers<ContextType = any> = {
   Owner?: OwnerResolvers<ContextType>;
   OwnerOf?: OwnerOfResolvers<ContextType>;
   Project?: ProjectResolvers<ContextType>;
+  ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>;
   ProjectMilestone?: ProjectMilestoneResolvers<ContextType>;
   ProjectReward?: ProjectRewardResolvers<ContextType>;
   ProjectStatistics?: ProjectStatisticsResolvers<ContextType>;

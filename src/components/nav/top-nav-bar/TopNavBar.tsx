@@ -245,13 +245,14 @@ export const TopNavBar = () => {
     });
   }, [routeMatchesForHidingTopNav]);
 
-  const shouldShowProjectButton: boolean = useMemo(() => {
-    return (
-      routeMatchesForProjectButton.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
-      }) && Boolean(navigationContext)
-    );
-  }, [routeMatchesForProjectButton]);
+  const shouldShowProjectButton: boolean =
+    useMemo(() => {
+      return (
+        routeMatchesForProjectButton.some((routeMatch) => {
+          return (routeMatch as match)?.isExact;
+        }) && Boolean(navigationContext)
+      );
+    }, [routeMatchesForProjectButton]) && !isMobile;
   /**
    * Logic:
    *  - Available to all not logged-in users.
@@ -449,6 +450,8 @@ export const TopNavBar = () => {
         left={0}
         width="full"
         zIndex={1000}
+        borderBottom="1px solid"
+        borderBottomColor="brand.neutral100"
       >
         <HStack
           h={16}

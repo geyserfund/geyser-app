@@ -18,12 +18,7 @@ import { TwitterConnect } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { useAuthContext } from '../../context';
 import { hasTwitterAccount, isMobileMode } from '../../utils';
-import {
-  LaunchProjectRocketUrl,
-  colors,
-  getPath,
-  LaunchImage2Url,
-} from '../../constants';
+import { colors, getPath, LaunchImage2Url } from '../../constants';
 
 const useStyles = createUseStyles({
   backIcon: {
@@ -51,7 +46,6 @@ export const PublicProjectLaunchPage = () => {
     <Box
       background={'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
       height="100%"
       justifyContent="space-between"
     >

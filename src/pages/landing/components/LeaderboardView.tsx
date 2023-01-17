@@ -26,7 +26,12 @@ export const LeaderboardView = () => {
         spacing={4}
       >
         <VStack alignItems="left">
-          <HStack justify="space-between" align="center" my="5px">
+          <HStack
+            justify="space-between"
+            align="center"
+            my="5px"
+            paddingTop="15px"
+          >
             <Heading as="h5" size="sm">
               Top Projects
             </Heading>

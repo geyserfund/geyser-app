@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Container,
   Divider,
   Grid,
   GridItem,
-  Heading,
   HStack,
   Text,
   IconButton,
@@ -20,7 +19,6 @@ import {
 import { useLazyQuery } from '@apollo/client';
 import { AlertBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
-import { dimensions } from '../../../constants';
 import { QUERY_PROJECTS } from '../../../graphql';
 import {
   Project,
@@ -33,6 +31,9 @@ import { RiSortDesc } from 'react-icons/ri';
 import { ProjectDiscoveryPageGridItems } from './ProjectDiscoveryPageGridItems';
 import { useListenerState } from '../../../hooks';
 import { ScrollInvoke } from '../../../helpers';
+import { StickToTop } from '../../../components/layouts';
+import { isMobileMode } from '../../../utils';
+import { H3 } from '../../../components/typography';
 
 type ResponseData = {
   projects: {
@@ -44,14 +45,14 @@ type QueryVariables = {
   input: ProjectsGetQueryInput;
 };
 
-const { topNavBar: topNavBarDimensions } = dimensions;
-
 export const ProjectDiscoveryPageGridSection = () => {
   const pagingItemLimit = 12;
 
   const [orderByOption, setOrderByOption] = useState<ProjectsOrderByInput>({
     createdAt: OrderByOptions.Desc,
   });
+
+  const isMobile = isMobileMode();
 
   const handleOrderBySelectionChanged = async (
     newOption: ProjectsOrderByInput,
@@ -140,8 +141,8 @@ export const ProjectDiscoveryPageGridSection = () => {
     getProjects();
   }, []);
 
-  const ErrorView = () => {
-    return (
+  const ErrorView = useCallback(
+    () => (
       <Container
         position="relative"
         height="100%"
@@ -158,11 +159,12 @@ export const ProjectDiscoveryPageGridSection = () => {
           />
         </Center>
       </Container>
-    );
-  };
+    ),
+    [],
+  );
 
-  const PageLoadingView = () => {
-    return (
+  const PageLoadingView = useCallback(
+    () => (
       <Container
         position="relative"
         height="100%"
@@ -174,11 +176,12 @@ export const ProjectDiscoveryPageGridSection = () => {
           <Loader />
         </Center>
       </Container>
-    );
-  };
+    ),
+    [],
+  );
 
-  const EmptyStateView = () => {
-    return (
+  const EmptyStateView = useCallback(
+    () => (
       <Container
         position="relative"
         height="100%"
@@ -196,21 +199,22 @@ export const ProjectDiscoveryPageGridSection = () => {
           />
         </Center>
       </Container>
-    );
-  };
+    ),
+    [],
+  );
 
   return (
     <Box
       display={'flex'}
       justifyContent="center"
       flexDirection="row"
-      paddingY={20}
+      paddingBottom={isMobile ? 10 : 20}
     >
       <Center
         width={'full'}
         paddingX={{
           base: 4,
-          md: 10,
+          lg: 10,
         }}
       >
         <Grid
@@ -228,85 +232,93 @@ export const ProjectDiscoveryPageGridSection = () => {
           justifyContent={'center'}
         >
           <GridItem area={'header'}>
-            <HStack
-              justifyContent={'space-between'}
-              alignItems={['center', 'baseline']}
-              spacing={0}
+            <StickToTop
+              disable={!isMobile}
+              id="discovery-page-all-container"
+              _onStick={{ width: 'calc(100% - 30px)' }}
             >
-              <Heading as={'h3'} size="md">
-                All Geyser Projects
-              </Heading>
+              <HStack
+                justifyContent={'space-between'}
+                alignItems={['center', 'baseline']}
+                paddingTop="10px"
+                spacing={0}
+              >
+                <H3 paddingY="5px">All Geyser Projects</H3>
 
-              <Menu closeOnSelect placement="bottom-start">
-                <MenuButton
-                  as={IconButton}
-                  fontSize={'1.5em'}
-                  variant="ghost"
-                  aria-label="Project Sorting"
-                  icon={<RiSortDesc />}
-                />
+                <Menu closeOnSelect placement="bottom-start">
+                  <MenuButton
+                    as={IconButton}
+                    fontSize={'1.5em'}
+                    variant="ghost"
+                    aria-label="Project Sorting"
+                    icon={<RiSortDesc />}
+                  />
 
-                <MenuList>
-                  <Text padding={3} color="brand.gray500" fontWeight={'medium'}>
-                    Sort By:
-                  </Text>
+                  <MenuList>
+                    <Text
+                      padding={3}
+                      color="brand.gray500"
+                      fontWeight={'medium'}
+                    >
+                      Sort By:
+                    </Text>
 
-                  <MenuItem
-                    fontWeight={'semibold'}
-                    onSelect={() => {
-                      handleOrderBySelectionChanged({
-                        createdAt: OrderByOptions.Desc,
-                      });
-                    }}
-                    onClick={() => {
-                      handleOrderBySelectionChanged({
-                        createdAt: OrderByOptions.Desc,
-                      });
-                    }}
-                  >
-                    Newest Projects
-                  </MenuItem>
+                    <MenuItem
+                      fontWeight={'semibold'}
+                      onSelect={() => {
+                        handleOrderBySelectionChanged({
+                          createdAt: OrderByOptions.Desc,
+                        });
+                      }}
+                      onClick={() => {
+                        handleOrderBySelectionChanged({
+                          createdAt: OrderByOptions.Desc,
+                        });
+                      }}
+                    >
+                      Newest Projects
+                    </MenuItem>
 
-                  <MenuItem
-                    fontWeight={'semibold'}
-                    onSelect={() => {
-                      handleOrderBySelectionChanged({
-                        createdAt: OrderByOptions.Asc,
-                      });
-                    }}
-                    onClick={() => {
-                      handleOrderBySelectionChanged({
-                        createdAt: OrderByOptions.Asc,
-                      });
-                    }}
-                  >
-                    Oldest Projects
-                  </MenuItem>
+                    <MenuItem
+                      fontWeight={'semibold'}
+                      onSelect={() => {
+                        handleOrderBySelectionChanged({
+                          createdAt: OrderByOptions.Asc,
+                        });
+                      }}
+                      onClick={() => {
+                        handleOrderBySelectionChanged({
+                          createdAt: OrderByOptions.Asc,
+                        });
+                      }}
+                    >
+                      Oldest Projects
+                    </MenuItem>
 
-                  <MenuItem
-                    fontWeight={'semibold'}
-                    onSelect={() => {
-                      handleOrderBySelectionChanged({
-                        balance: OrderByOptions.Desc,
-                      });
-                    }}
-                    onClick={() => {
-                      handleOrderBySelectionChanged({
-                        balance: OrderByOptions.Desc,
-                      });
-                    }}
-                  >
-                    Amount Funded
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </HStack>
+                    <MenuItem
+                      fontWeight={'semibold'}
+                      onSelect={() => {
+                        handleOrderBySelectionChanged({
+                          balance: OrderByOptions.Desc,
+                        });
+                      }}
+                      onClick={() => {
+                        handleOrderBySelectionChanged({
+                          balance: OrderByOptions.Desc,
+                        });
+                      }}
+                    >
+                      Amount Funded
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </HStack>
+              <Divider borderWidth="2px" />
+            </StickToTop>
           </GridItem>
 
           <GridItem area={'main'}>
-            <VStack spacing={16}>
-              <Divider borderWidth="2px" />
-
+            <VStack spacing={16} paddingTop="10px">
               {isPageLoading ? (
                 <PageLoadingView />
               ) : projects.length === 0 ? (

@@ -21,10 +21,14 @@ import {
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
 import { compactMap } from '../../utils/compactMap';
 import { getPath } from '../../constants';
+import { ProjectProvider } from '../projectView';
+import { isMobileMode, toInt } from '../../utils';
+import { ProjectNav } from '../../components/nav';
 
 export const EntryPage = () => {
   const { entryId } = useParams<{ entryId: string }>();
   const history = useHistory();
+  const isMobile = isMobileMode();
 
   const { setNav } = useAuthContext();
 
@@ -33,7 +37,7 @@ export const EntryPage = () => {
 
   useEffect(() => {
     if (entryId) {
-      getEntry({ variables: { id: entryId } });
+      getEntry({ variables: { id: toInt(entryId) } });
     }
   }, [entryId]);
 
@@ -57,7 +61,7 @@ export const EntryPage = () => {
       onCompleted(data) {
         const { entry } = data;
 
-        getProject({ variables: { where: { id: entry.project.id } } });
+        getProject({ variables: { where: { id: toInt(entry.project.id) } } });
       },
       onError(error) {
         console.error(error);
@@ -87,6 +91,7 @@ export const EntryPage = () => {
         width="100%"
         height="100%"
         display="flex"
+        flexDirection={isMobile ? 'column' : 'row'}
         overflow="hidden"
         position="relative"
         bg="brand.bgGrey4"
@@ -116,12 +121,13 @@ const EntryViewWrapper = ({
   setDetailOpen,
   fundingFlow,
 }: IEntryViewWrapper) => {
+  const isMobile = isMobileMode();
   const rewards =
     (project.rewards && compactMap<ProjectReward>(project.rewards)) || [];
   const fundForm = useFundingFormState({ rewards });
   const { setFundState } = fundingFlow;
   return (
-    <>
+    <ProjectProvider project={project}>
       <Head
         title={`${entry.title} - ${project.title}`}
         description={entry.description}
@@ -136,6 +142,7 @@ const EntryViewWrapper = ({
         resourceType={FundingResourceType.Entry}
         resourceId={entry.id}
       />
-    </>
+      {isMobile && <ProjectNav />}
+    </ProjectProvider>
   );
 };

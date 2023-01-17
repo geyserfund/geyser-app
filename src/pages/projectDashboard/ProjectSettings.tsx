@@ -7,7 +7,7 @@ import {
   InputGroup,
   Input,
   InputRightAddon,
-  Checkbox,
+  Switch,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
@@ -23,8 +23,9 @@ import {
 import { colors } from '../../constants';
 import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
-import { IProject } from '../../interfaces';
 import {
+  isMobileMode,
+  toInt,
   useNotification,
   validateEmail,
   validLightningAddress,
@@ -35,10 +36,12 @@ import {
   ProjectValidations,
   UserValidations,
 } from '../../constants/validations';
+import { Project, ProjectStatus } from '../../types/generated/graphql';
 
-export const ProjectSettings = ({ project }: { project: IProject }) => {
+export const ProjectSettings = ({ project }: { project: Project }) => {
   const params = useParams<{ projectId: string }>();
   const isEdit = Boolean(params.projectId);
+  const isMobile = isMobileMode();
 
   const { toast } = useNotification();
 
@@ -58,7 +61,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     project.expiresAt
-      ? DateTime.fromMillis(parseInt(project.expiresAt, 10)).toJSDate()
+      ? DateTime.fromMillis(toInt(project.expiresAt)).toJSDate()
       : undefined,
   );
   const [finalDate, setFinalDate] = useState<string>();
@@ -88,7 +91,7 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       setForm({
         title: project.title,
         name: project.name,
-        image: project.image,
+        image: project.image || undefined,
         description: project.description,
         email: user.email || '',
       });
@@ -164,12 +167,12 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
       updateProject({
         variables: {
           input: {
-            projectId: project.id,
+            projectId: toInt(project.id),
             title: form.title,
             image: form.image,
             description: form.description,
             expiresAt: finalDate || null,
-            ...(deactivate && { active: !deactivate }),
+            ...{ active: !deactivate },
           },
         },
       });
@@ -338,17 +341,17 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
                 as ongoing.
               </Text>
             </VStack>
-            {project.active && (
+            {project.status !== ProjectStatus.Deleted && (
               <VStack width="100%" alignItems="flex-start">
                 <Text>Deactivate</Text>
-                <Checkbox
+                <Switch
                   defaultChecked={deactivate}
                   onChange={handleDeactivate}
                   colorScheme="red"
                 >
                   {' '}
                   Deactivate Project
-                </Checkbox>
+                </Switch>
                 <Text fontSize="12px">
                   Deactivating your project would not allow others to fund your
                   project, but your project will still be visible to everyone
@@ -368,34 +371,35 @@ export const ProjectSettings = ({ project }: { project: IProject }) => {
           </VStack>
         </VStack>
       </GridItem>
-      <GridItem colSpan={5} display="flex" justifyContent="center">
-        <VStack
-          justifyContent="center"
-          alignItems="flex-start"
-          maxWidth="370px"
-          spacing="10px"
-        >
+      <GridItem
+        colSpan={isMobile ? 8 : 5}
+        display="flex"
+        justifyContent="center"
+      >
+        <VStack justifyContent="center" alignItems="flex-start" spacing="10px">
           <Text>Preview</Text>
-          <Card padding="16px 10px" overflow="hidden" width="100%">
-            <ImageWithReload
-              src={form.image}
-              noCacheId={(Math.random() + 1).toString(36).substring(7)}
-              height="222px"
-              width="350px"
-            />
-            <Text>geyser.fund/project</Text>
-            <Text fontSize="28px" fontWeight={700}>
-              {form.title || 'Project Title'}
-            </Text>
-            <Text
-              fontSize="16px"
-              color="brand.textGrey"
-              wordBreak="break-word"
-              isTruncated
-            >
-              {form.description || 'project description'}
-            </Text>
-          </Card>
+          <HStack width="100%" justifyContent="center">
+            <Card padding="16px 10px" overflow="hidden" maxWidth="370px">
+              <ImageWithReload
+                src={form.image}
+                noCacheId={(Math.random() + 1).toString(36).substring(7)}
+                height="222px"
+                width="350px"
+              />
+              <Text>geyser.fund/project</Text>
+              <Text fontSize="28px" fontWeight={700}>
+                {form.title || 'Project Title'}
+              </Text>
+              <Text
+                fontSize="16px"
+                color="brand.textGrey"
+                wordBreak="break-word"
+                isTruncated
+              >
+                {form.description || 'project description'}
+              </Text>
+            </Card>
+          </HStack>
         </VStack>
       </GridItem>
     </>

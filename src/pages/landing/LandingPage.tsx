@@ -3,10 +3,7 @@ import { Box, Divider, Stack } from '@chakra-ui/react';
 import { AppFooter } from '../../components/molecules';
 
 import { ActivityView, LeaderboardView, TopBanner } from './components';
-import { dimensions } from '../../constants';
 import { isMobileMode } from '../../utils';
-
-const { topNavBar: topNavBarDimensions } = dimensions;
 
 export const LandingPage = () => {
   const isMobile = isMobileMode();
@@ -20,7 +17,7 @@ export const LandingPage = () => {
           base: 'column',
           md: 'row',
         }}
-        paddingY="30px"
+        paddingBottom="30px"
         paddingX={isMobile ? '10px' : '60px'}
         width="full"
         height="auto"
