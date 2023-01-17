@@ -6,7 +6,7 @@ import Loader from '../../components/ui/Loader';
 import { customHistory } from '../../config';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { NotFoundPage } from '../notFound';
-import { Head } from '../../utils/Head';
+import { Head } from '../../config/Head';
 import Details from './Details';
 import { useFundingFlow } from '../../hooks';
 import { Grants } from '../grants/Grants';
