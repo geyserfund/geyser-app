@@ -212,7 +212,7 @@ export const ProjectCreate = () => {
         updateProject({
           variables: {
             input: {
-              projectId: data?.project?.id,
+              projectId: toInt(data?.project?.id),
               title: form.title,
               image: form.image,
               description: form.description,

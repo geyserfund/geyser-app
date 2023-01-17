@@ -133,7 +133,7 @@ export const RewardAdditionModal = ({
   const getRewardCreationInputVariables =
     (): ProjectRewardCreationVariables => {
       return {
-        projectId,
+        projectId: toInt(projectId),
         cost: rewards.current.cost,
         costCurrency: rewards.current.costCurrency,
         description: rewards.current.description,
