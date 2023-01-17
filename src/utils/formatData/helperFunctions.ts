@@ -51,11 +51,3 @@ export const numberWithCommas = (x: string | number) => {
 
   return value;
 };
-
-export const toInt = (val: any) => {
-  return parseInt(`${val}`, 10);
-};
-
-export const isProjectActive = (project: Project) => {
-  return project.status === ProjectStatus.Active;
-};

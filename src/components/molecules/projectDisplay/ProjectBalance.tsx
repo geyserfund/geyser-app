@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Text } from '@chakra-ui/layout';
 import { SatoshiIconTilted } from '../../icons';
-import { commaFormatted } from '../../../utils/tools/helperFunctions';
+import { commaFormatted } from '../../../utils/formatData/helperFunctions';
 import { BsCurrencyBitcoin } from 'react-icons/bs';
 
 interface IProjectBalance {

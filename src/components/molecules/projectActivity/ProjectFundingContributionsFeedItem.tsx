@@ -12,7 +12,7 @@ import {
 import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
 import { LightningIcon, SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
-import { commaFormatted } from '../../../utils/tools/helperFunctions';
+import { commaFormatted } from '../../../utils/formatData/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';
