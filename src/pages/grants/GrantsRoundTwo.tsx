@@ -141,7 +141,7 @@ export const GrantsRoundTwo = () => {
   return (
     <>
       <Box
-        paddingTop={isMobile ? '81px' : '91px'}
+        paddingTop={isMobile ? '10px' : '20px'}
         bg={'brand.bgGrey4'}
         minHeight="100vh"
         display="flex"
@@ -152,6 +152,7 @@ export const GrantsRoundTwo = () => {
           my={4}
           width={isMobile ? '100%' : '909px'}
           px={isMobile ? '1rem' : ''}
+          paddingBottom="20px"
           position="relative"
         >
           <Button
@@ -409,7 +410,7 @@ export const GrantsRoundTwo = () => {
               Applications
             </Text>
             <Box
-              height={isMobile ? 'calc(100vh - 230px)' : 'calc(100vh - 220px)'}
+              height={isMobile ? 'calc(100vh - 170px)' : 'calc(100vh - 220px)'}
             >
               <iframe
                 className="airtable-embed"

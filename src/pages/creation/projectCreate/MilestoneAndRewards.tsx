@@ -12,7 +12,6 @@ import React, { useState } from 'react';
 import {
   ButtonComponent,
   IconButtonComponent,
-  Linkin,
   SatoshiAmount,
   UndecoratedLink,
 } from '../../../components/ui';
@@ -248,7 +247,6 @@ export const MilestoneAndRewards = () => {
     <Box
       background={'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
       height="100%"
       justifyContent="space-between"
     >

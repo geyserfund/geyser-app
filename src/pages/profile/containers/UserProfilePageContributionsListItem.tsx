@@ -2,6 +2,7 @@ import React from 'react';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules/projectActivity/ProjectFundingContributionsFeedItem';
 import { gql, useQuery } from '@apollo/client';
+import { toInt } from '../../../utils';
 
 type Props = {
   fundingTxID: number;
@@ -61,7 +62,7 @@ export const UserProfilePageContributionsListItem = ({
 }: Props) => {
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_FUNDING_TX_FOR_USER_CONTRIBUTION,
-    { variables: { fundingTxId: fundingTxID } },
+    { variables: { fundingTxId: toInt(fundingTxID) } },
   );
 
   const project =

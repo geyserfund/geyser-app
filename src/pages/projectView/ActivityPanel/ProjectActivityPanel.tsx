@@ -166,10 +166,6 @@ export const ProjectActivityPanel = ({
   };
 
   const getActivityHeight = () => {
-    if (isMobile && mobileView === MobileViews.funding) {
-      return 'calc(100% - 80px)';
-    }
-
     return 'calc(100% - 20px)';
   };
 
@@ -246,10 +242,10 @@ export const ProjectActivityPanel = ({
         justifyContent="flex-start"
         alignItems="center"
         backgroundColor="#FFFFFF"
-        marginTop={'20px'}
+        marginTop={isMobile ? '0px' : '20px'}
         height={getActivityHeight()}
         borderTopLeftRadius={isMobile ? '' : '22px'}
-        boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
+        boxShadow="-8px -8px 12px -8px rgba(0, 0, 0, 0.1)"
       >
         {renderPanelContent()}
       </Box>

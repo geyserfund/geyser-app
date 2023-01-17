@@ -27,7 +27,9 @@ export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
           return (
             <GridItem
               key={ownerOf.project.id}
-              colSpan={{ base: 3, sm: 3, md: 3, lg: 1 }}
+              colSpan={{ lg: 1, md: 2, sm: 4, base: 4 }}
+              display="flex"
+              justifyContent="center"
             >
               <UserProfilePageProjectsListItem projectID={ownerOf.project.id} />
             </GridItem>

@@ -31,6 +31,7 @@ import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
 import { FundingFormRewardItem } from './components/FundingFormRewardItem';
 import { Project } from '../../types/generated/graphql';
+import { MobileViews, useProject } from './containers';
 
 const useStyles = createUseStyles({
   navButton: {
@@ -54,6 +55,8 @@ export const ProjectDetailsAccessoriesSections = ({
   const classes = useStyles();
   const isMobile = isMobileMode();
   const history = useHistory();
+
+  const { setMobileView } = useProject();
 
   const { user } = useAuthContext();
 
@@ -106,7 +109,7 @@ export const ProjectDetailsAccessoriesSections = ({
                 onClick={() => {
                   if (fundState === fundingStages.initial) {
                     updateReward({ id: reward.id, count: 1 });
-                    setFundState(fundingStages.form);
+                    setMobileView(MobileViews.funding);
                   }
                 }}
                 item={{ ...reward }}

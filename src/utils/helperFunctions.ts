@@ -49,3 +49,7 @@ export const numberWithCommas = (x: string | number) => {
 
   return value;
 };
+
+export const toInt = (val: any) => {
+  return parseInt(`${val}`, 10);
+};
