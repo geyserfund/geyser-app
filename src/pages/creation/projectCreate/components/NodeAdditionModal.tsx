@@ -20,9 +20,10 @@ import {
 import { VoltageNodeConnectionDemoURL } from '../../../../constants';
 import { ProjectNodeValidations } from '../../../../constants/validations';
 import { isMobileMode } from '../../../../utils';
-import { checkMacaroonPermissions } from '../../../../utils/checkMacaroonPermissions';
-import { isSecp256k1Compressed } from '../../../../utils/isSecp256k1Compressed';
-import { isTorV3Address } from '../../../../utils/isTorV3Address';
+import { checkMacaroonPermissions } from '../../../../utils/validations/checkMacaroonPermissions';
+import { isSecp256k1Compressed } from '../../../../utils/validations/isSecp256k1Compressed';
+import { isTorV3Address } from '../../../../utils/validations/isTorV3Address';
+
 import { TNodeInput } from '../types';
 
 type Props = {
