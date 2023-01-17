@@ -171,7 +171,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
             image: form.image,
             description: form.description,
             expiresAt: finalDate || null,
-            ...(deactivate && { active: !deactivate }),
+            ...{ active: !deactivate },
           },
         },
       });
