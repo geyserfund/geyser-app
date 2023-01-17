@@ -45,7 +45,7 @@ type QueryVariables = {
 export const UserProfilePageProjectsListItem = ({ projectID }: Props) => {
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_PROJECT,
-    { variables: { where: { id: projectID } } },
+    { variables: { where: { id: parseInt(`${projectID}`, 10) } } },
   );
 
   return data ? (
