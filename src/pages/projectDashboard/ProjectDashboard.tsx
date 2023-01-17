@@ -171,6 +171,12 @@ export const ProjectDashboard = () => {
         justifyContent="center"
         paddingTop={isMobile ? '10px' : '30px'}
         overflowX={isMobile ? 'auto' : undefined}
+        __css={{
+          '::-webkit-scrollbar': {
+            height: '0px',
+            display: 'none',
+          },
+        }}
       >
         <HStack
           spacing="0px"
