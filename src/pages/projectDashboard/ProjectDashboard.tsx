@@ -24,6 +24,7 @@ import { getPath } from '../../constants';
 import { Owner } from '../../types/generated/graphql';
 import { ProjectContributors } from './ProjectContributors';
 import { ProjectStats } from './ProjectStats';
+import { noScrollBar } from '../../css';
 
 enum DashboardTabs {
   entries = 'entries',
@@ -171,12 +172,7 @@ export const ProjectDashboard = () => {
         justifyContent="center"
         paddingTop={isMobile ? '10px' : '30px'}
         overflowX={isMobile ? 'auto' : undefined}
-        __css={{
-          '::-webkit-scrollbar': {
-            height: '0px',
-            display: 'none',
-          },
-        }}
+        __css={noScrollBar}
       >
         <HStack
           spacing="0px"

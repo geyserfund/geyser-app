@@ -111,7 +111,7 @@ export const ProfilePage = () => {
     >
       <Container
         width="full"
-        maxWidth={'86%'}
+        maxWidth={'1080px'}
         height="auto"
         minHeight={'full'}
         paddingY={{

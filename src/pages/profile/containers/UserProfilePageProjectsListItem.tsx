@@ -5,6 +5,7 @@ import {
   UniqueProjectQueryInput,
 } from '../../../types/generated/graphql';
 import { ProjectsGridCard } from '../../../components/molecules/projectDisplay/ProjectsGridCard';
+import { toInt } from '../../../utils';
 
 type Props = {
   projectID: number;
@@ -45,10 +46,10 @@ type QueryVariables = {
 export const UserProfilePageProjectsListItem = ({ projectID }: Props) => {
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_PROJECT,
-    { variables: { where: { id: parseInt(`${projectID}`, 10) } } },
+    { variables: { where: { id: toInt(projectID) } } },
   );
 
   return data ? (
-    <ProjectsGridCard project={data.project} height="100%" />
+    <ProjectsGridCard project={data.project} height="100%" width="100%" />
   ) : null;
 };
