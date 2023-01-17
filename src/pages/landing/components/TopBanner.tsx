@@ -22,7 +22,7 @@ import {
 } from '../../../utils';
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
-import { H1, H3 } from '../../../components/typography';
+import { H2, H3 } from '../../../components/typography';
 
 export const TopBanner = () => {
   const { toast } = useNotification();
@@ -69,10 +69,10 @@ export const TopBanner = () => {
           <VStack spacing={3}>
             <Image src={LandingLetTheSatsFlowUrl} maxHeight="76px" />
 
-            <H1>
+            <H2>
               Play a part in world-changing ideas by contributing to them and
               launching them on Geyser!
-            </H1>
+            </H2>
             <H3>
               Support the creators of the new digital economy & Launch your
               project ideas in just a few clicks to start receiving Sats!

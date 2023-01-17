@@ -23,7 +23,7 @@ export const H2 = ({ children, ...rest }: HeadingProps) => {
   return (
     <Heading
       as="h2"
-      fontSize={isMobile ? '18px' : '24px'}
+      fontSize={isMobile ? '20px' : '24px'}
       fontWeight={700}
       fontFamily={fonts.inter}
       {...rest}

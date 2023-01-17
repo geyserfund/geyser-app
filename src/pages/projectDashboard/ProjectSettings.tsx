@@ -25,6 +25,7 @@ import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
 import {
   isMobileMode,
+  toInt,
   useNotification,
   validateEmail,
   validLightningAddress,
@@ -60,7 +61,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     project.expiresAt
-      ? DateTime.fromMillis(parseInt(project.expiresAt, 10)).toJSDate()
+      ? DateTime.fromMillis(toInt(project.expiresAt)).toJSDate()
       : undefined,
   );
   const [finalDate, setFinalDate] = useState<string>();
@@ -166,7 +167,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
       updateProject({
         variables: {
           input: {
-            projectId: parseInt(`${project.id}`, 10),
+            projectId: toInt(project.id),
             title: form.title,
             image: form.image,
             description: form.description,

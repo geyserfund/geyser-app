@@ -14,7 +14,7 @@ import { ButtonComponent } from '../../components/ui';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { GrantSponsor } from './GrantsRoundTwo';
 import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
-import { H1, H3 } from '../../components/typography';
+import { H2, H3 } from '../../components/typography';
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
@@ -87,9 +87,9 @@ export const GrantsLandingPage = () => {
           >
             Geyser Grants
           </Text>
-          <H1 textAlign="center" paddingY="10px">
+          <H2 textAlign="center" paddingY="10px">
             Empowering{isMobile ? <br /> : null} bitcoin creators
-          </H1>
+          </H2>
           <H3 textAlign="center" color={'brand.neutral600'}>
             Funding educators, creatives and builders doing Bitcoin-only
             projects on Geyser. <br /> Funded by bitcoiners who want to change
