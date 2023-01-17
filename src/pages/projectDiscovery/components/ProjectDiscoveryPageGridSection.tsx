@@ -208,7 +208,6 @@ export const ProjectDiscoveryPageGridSection = () => {
       display={'flex'}
       justifyContent="center"
       flexDirection="row"
-      paddingTop="30px"
       paddingBottom={isMobile ? 10 : 20}
     >
       <Center
@@ -241,9 +240,10 @@ export const ProjectDiscoveryPageGridSection = () => {
               <HStack
                 justifyContent={'space-between'}
                 alignItems={['center', 'baseline']}
+                paddingTop="10px"
                 spacing={0}
               >
-                <H3>All Geyser Projects</H3>
+                <H3 paddingY="5px">All Geyser Projects</H3>
 
                 <Menu closeOnSelect placement="bottom-start">
                   <MenuButton
@@ -318,7 +318,7 @@ export const ProjectDiscoveryPageGridSection = () => {
           </GridItem>
 
           <GridItem area={'main'}>
-            <VStack spacing={16}>
+            <VStack spacing={16} paddingTop="10px">
               {isPageLoading ? (
                 <PageLoadingView />
               ) : projects.length === 0 ? (

@@ -17,7 +17,7 @@ export const LandingPage = () => {
           base: 'column',
           md: 'row',
         }}
-        paddingY="30px"
+        paddingBottom="30px"
         paddingX={isMobile ? '10px' : '60px'}
         width="full"
         height="auto"

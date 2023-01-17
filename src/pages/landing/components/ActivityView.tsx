@@ -21,7 +21,7 @@ export const ActivityView = ({ ...rest }: Props) => {
             paddingTop="10px"
             backgroundColor="bgWhite"
           >
-            <H3>Contributions</H3>
+            <H3 paddingY="5px">Contributions</H3>
             <Divider borderWidth={'2px'} zIndex={-1} borderRadius="full" />
           </VStack>
         </StickToTop>

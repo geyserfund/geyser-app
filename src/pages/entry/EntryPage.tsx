@@ -22,7 +22,7 @@ import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeho
 import { compactMap } from '../../utils/compactMap';
 import { getPath } from '../../constants';
 import { ProjectProvider } from '../projectView';
-import { isMobileMode } from '../../utils';
+import { isMobileMode, toInt } from '../../utils';
 import { ProjectNav } from '../../components/nav';
 
 export const EntryPage = () => {
@@ -37,7 +37,7 @@ export const EntryPage = () => {
 
   useEffect(() => {
     if (entryId) {
-      getEntry({ variables: { id: entryId } });
+      getEntry({ variables: { id: toInt(entryId) } });
     }
   }, [entryId]);
 
@@ -61,7 +61,7 @@ export const EntryPage = () => {
       onCompleted(data) {
         const { entry } = data;
 
-        getProject({ variables: { where: { id: entry.project.id } } });
+        getProject({ variables: { where: { id: toInt(entry.project.id) } } });
       },
       onError(error) {
         console.error(error);
