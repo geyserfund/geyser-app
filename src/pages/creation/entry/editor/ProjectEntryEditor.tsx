@@ -182,6 +182,7 @@ export const ProjectEntryEditor = ({
       modules: editorModules,
       readOnly: isReadOnly,
       theme: 'snow',
+      placeholder: 'The description of the entry .....',
     });
 
     if (value) {

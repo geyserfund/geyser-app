@@ -249,7 +249,7 @@ export const EntryCreateEdit = () => {
   const handleKeyDown = (event: any) => {
     if (event) {
       if (event.target.name === 'title') {
-        if (event.key === 'ArrowDown') {
+        if (event.key === 'ArrowDown' || event.key === 'Enter') {
           event.preventDefault();
           document.getElementById('entry-description-input')?.focus();
         }
@@ -257,7 +257,11 @@ export const EntryCreateEdit = () => {
         if (event.key === 'ArrowUp') {
           event.preventDefault();
           document.getElementById('entry-title-input')?.focus();
-        } else if (event.key === 'ArrowDown' || event.key === 'Tab') {
+        } else if (
+          event.key === 'ArrowDown' ||
+          event.key === 'Tab' ||
+          event.key === 'Enter'
+        ) {
           event.preventDefault();
           const newDate = new Date();
           setFocusFlag(newDate.toISOString());
