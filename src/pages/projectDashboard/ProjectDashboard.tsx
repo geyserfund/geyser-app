@@ -36,6 +36,8 @@ enum DashboardTabs {
   stats = 'stats',
 }
 
+let storedTab = DashboardTabs.editProject;
+
 export const ProjectDashboard = () => {
   const isMobile = isMobileMode();
   const { projectId } = useParams<{ projectId: string }>();
@@ -44,9 +46,7 @@ export const ProjectDashboard = () => {
 
   const { user, setNav } = useAuthContext();
 
-  const [activeTab, setActiveTab] = useState<DashboardTabs>(
-    DashboardTabs.editProject,
-  );
+  const [activeTab, setActiveTab] = useState<DashboardTabs>(storedTab);
 
   useEffect(() => {
     try {
@@ -62,6 +62,7 @@ export const ProjectDashboard = () => {
     }
 
     setActiveTab(selectedTab);
+    storedTab = selectedTab;
   };
 
   const [getProject, { loading, error, data }] = useLazyQuery(

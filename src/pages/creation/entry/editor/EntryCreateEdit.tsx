@@ -230,6 +230,14 @@ export const EntryCreateEdit = () => {
     }
   };
 
+  const onBack = () => {
+    if (history.length > 1) {
+      history.goBack();
+    } else {
+      history.push(getPath('project', params.projectId));
+    }
+  };
+
   const onImageUpload = (url: string) =>
     setForm({ ...form.current, image: url });
 
@@ -287,6 +295,7 @@ export const EntryCreateEdit = () => {
         }
         onSave={onSave}
         onPreview={onPreview}
+        onBack={onBack}
       />
       <VStack
         background={'brand.bgGrey4'}
