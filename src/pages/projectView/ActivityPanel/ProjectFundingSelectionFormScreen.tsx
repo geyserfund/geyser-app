@@ -6,7 +6,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useRef } from 'react';
 import { BoltIcon } from '../../../components/icons';
 import {
   ButtonComponent,
@@ -52,6 +52,8 @@ export const ProjectFundingSelectionFormScreen = ({
   const { getTotalAmount } = useFundCalc(formState);
 
   const { toast } = useNotification();
+  const commentContainerRef = useRef<any>(null);
+
   const hasRewards = rewards && rewards.length > 0;
   const hasSelectedRewards =
     formState.rewardsByIDAndCount &&
@@ -103,6 +105,11 @@ export const ProjectFundingSelectionFormScreen = ({
       position="relative"
       alignItems="flex-start"
       backgroundColor="#FFFFFF"
+      marginBottom={
+        isMobile && commentContainerRef.current
+          ? `${commentContainerRef.current.offsetHeight}px`
+          : undefined
+      }
     >
       {!isMobile && (
         <CloseButton
@@ -124,6 +131,14 @@ export const ProjectFundingSelectionFormScreen = ({
             formState,
           }}
         />
+      </Box>
+      <VStack
+        backgroundColor={'white'}
+        position={isMobile ? 'fixed' : 'relative'}
+        bottom={isMobile ? '60px' : '0px'}
+        paddingBottom="5px"
+        width={isMobile ? 'calc(100% - 20px)' : '100%'}
+      >
         {hasRewards && (
           <Divider
             borderTopWidth="3px"
@@ -132,116 +147,116 @@ export const ProjectFundingSelectionFormScreen = ({
             marginTop="0px !important"
           />
         )}
-      </Box>
-
-      <VStack
-        padding={2}
-        width={'full'}
-        borderRadius={'md'}
-        backgroundColor={'brand.neutral100'}
-        spacing={2}
-      >
-        <VStack spacing={1.5} alignItems="flex-start" width={'full'}>
-          <SectionTitle>Comment</SectionTitle>
-
-          <ProjectPaymentFormFundingComment
-            comment={formState.comment}
-            setTarget={setTarget}
-            setFormState={setFormState}
-            width={'full'}
-          />
-
-          {formState.rewardsCost && (
-            <Box width="100%">
-              <TextInputBox
-                type="email"
-                name="email"
-                fontSize="14px"
-                backgroundColor={'brand.bgWhite'}
-                placeholder="Contact Email"
-                value={formState.email}
-                onChange={setTarget}
-              />
-            </Box>
-          )}
-        </VStack>
-
         <VStack
+          ref={commentContainerRef}
           padding={2}
-          color={'brand.neutral700'}
-          fontWeight={'medium'}
-          width={'full'}
-          alignItems="flex-start"
+          width={'100%'}
+          borderRadius={'md'}
+          backgroundColor={'brand.neutral100'}
           spacing={2}
         >
-          {hasRewards && hasSelectedRewards ? (
+          <VStack spacing={1.5} alignItems="flex-start" width={'full'}>
+            <SectionTitle>Comment</SectionTitle>
+
+            <ProjectPaymentFormFundingComment
+              comment={formState.comment}
+              setTarget={setTarget}
+              setFormState={setFormState}
+              width={'full'}
+            />
+
+            {formState.rewardsCost && (
+              <Box width="100%">
+                <TextInputBox
+                  type="email"
+                  name="email"
+                  fontSize="14px"
+                  backgroundColor={'brand.bgWhite'}
+                  placeholder="Contact Email"
+                  value={formState.email}
+                  onChange={setTarget}
+                />
+              </Box>
+            )}
+          </VStack>
+
+          <VStack
+            padding={2}
+            color={'brand.neutral700'}
+            fontWeight={'medium'}
+            width={'full'}
+            alignItems="flex-start"
+            spacing={2}
+          >
+            {hasRewards && hasSelectedRewards ? (
+              <HStack
+                justifyContent={'space-between'}
+                width={'full'}
+                alignItems="flex-start"
+                color="brand.neutral700"
+              >
+                <Text
+                  flex={0}
+                  fontSize="14px"
+                  textColor={'brand.neutral700'}
+                  fontWeight={'normal'}
+                >
+                  Rewards
+                </Text>
+                <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
+                  {Object.entries(formState.rewardsByIDAndCount!).map(
+                    ([key, value]) => {
+                      const reward = rewards.find(({ id }) => id === key);
+                      if (reward) {
+                        return (
+                          <Text key={key}>
+                            {value}x {reward.name}
+                          </Text>
+                        );
+                      }
+                    },
+                  )}
+                </VStack>
+              </HStack>
+            ) : null}
+
             <HStack
               justifyContent={'space-between'}
               width={'full'}
-              alignItems="flex-start"
-              color="brand.neutral700"
+              fontSize={'10px'}
             >
-              <Text
-                flex={0}
-                fontSize="14px"
-                textColor={'brand.neutral700'}
-                fontWeight={'normal'}
-              >
-                Rewards
-              </Text>
-              <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
-                {Object.entries(formState.rewardsByIDAndCount!).map(
-                  ([key, value]) => {
-                    const reward = rewards.find(({ id }) => id === key);
-                    if (reward) {
-                      return (
-                        <Text key={key}>
-                          {value}x {reward.name}
-                        </Text>
-                      );
-                    }
-                  },
-                )}
-              </VStack>
+              <SectionTitle>Total</SectionTitle>
+
+              <HStack>
+                <SatoshiAmount
+                  color="#1A1A1A"
+                  fontWeight="bold"
+                  marginLeft={'auto'}
+                  fontSize={'21px'}
+                >
+                  {getTotalAmount('sats', name)}
+                </SatoshiAmount>
+
+                <Text color="#1A1A1A" fontWeight="bold" fontSize={'21px'}>
+                  {`($${getTotalAmount('dollar', name)})`}
+                </Text>
+              </HStack>
             </HStack>
-          ) : null}
+          </VStack>
 
-          <HStack
-            justifyContent={'space-between'}
-            width={'full'}
-            fontSize={'10px'}
-          >
-            <SectionTitle>Total</SectionTitle>
-
-            <HStack>
-              <SatoshiAmount
-                color="#1A1A1A"
-                fontWeight="bold"
-                marginLeft={'auto'}
-                fontSize={'21px'}
-              >
-                {getTotalAmount('sats', name)}
-              </SatoshiAmount>
-
-              <Text color="#1A1A1A" fontWeight="bold" fontSize={'21px'}>
-                {`($${getTotalAmount('dollar', name)})`}
-              </Text>
-            </HStack>
-          </HStack>
+          <Box width="100%" marginTop={2}>
+            <ButtonComponent
+              isLoading={fundingRequestLoading}
+              primary
+              standard
+              leftIcon={<BoltIcon />}
+              width="100%"
+              onClick={submit}
+            >
+              Fund Project
+            </ButtonComponent>
+          </Box>
         </VStack>
-
-        <Box width="100%" marginTop={2}>
-          <ButtonComponent
-            isLoading={fundingRequestLoading}
-            primary
-            standard
-            leftIcon={<BoltIcon />}
-            width="100%"
-            onClick={submit}
-          >
-            Fund Project
-          </ButtonComponent>
-        </Box>
       </VStack>
     </VStack>
   );
