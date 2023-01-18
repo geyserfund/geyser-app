@@ -1,11 +1,7 @@
-import { Avatar, Box, HStack, Text, useDisclosure } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router';
+import { Avatar, Box, HStack, Text } from '@chakra-ui/react';
+import React from 'react';
 import { LogoBlack } from '../../../../components/nav';
-import {
-  ButtonComponent,
-  IconButtonComponent,
-} from '../../../../components/ui';
+import { ButtonComponent } from '../../../../components/ui';
 import { useAuthContext } from '../../../../context';
 import { isMobileMode } from '../../../../utils';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
@@ -36,7 +32,6 @@ export const CreateNav = ({
         width="100%"
         justifyContent="center"
         background={'rgba(252,252,252,0.9)'}
-        // borderBottom={showBorder ? '1px solid rgba(0,0,0,0)' : '1px solid rgba(233,233,233,0.9)'}
         borderBottom={'1px solid rgba(233,233,233,0.9)'}
         boxSizing="border-box"
         position="fixed"
@@ -53,7 +48,7 @@ export const CreateNav = ({
         >
           <HStack spacing="5px" justifyContent="center" alignItems="center">
             <LogoBlack />
-            <Avatar height="40px" width="40px" src={user.imageUrl} />
+            <Avatar height="40px" width="40px" src={`${user.imageUrl}`} />
             <Text fontWeight={600} fontSize="16px">
               {user.username}
             </Text>

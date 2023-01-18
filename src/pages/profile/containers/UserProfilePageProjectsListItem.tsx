@@ -20,8 +20,7 @@ const GET_PROJECT = gql`
       description
       image
       balance
-      active
-      draft
+      status
       funders {
         id
       }

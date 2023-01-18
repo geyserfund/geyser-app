@@ -133,7 +133,7 @@ export const RecipientButton = ({
         <ModalOverlay />
         <ModalContent>
           <HStack p={6}>
-            <Image src={image} alt="icon" rounded="lg" w="100px" mr={1} />
+            <Image src={`${image}`} alt="icon" rounded="lg" w="100px" mr={1} />
             <Box>
               <ModalHeader fontWeight="bold" fontSize="2xl" p={0}>
                 {submitting ? 'Applying' : 'Apply'}

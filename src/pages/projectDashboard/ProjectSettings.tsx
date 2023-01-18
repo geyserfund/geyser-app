@@ -173,7 +173,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
             image: form.image,
             description: form.description,
             expiresAt: finalDate || null,
-            ...{ active: !deactivate },
+            status: deactivate ? ProjectStatus.Inactive : ProjectStatus.Active,
           },
         },
       });
