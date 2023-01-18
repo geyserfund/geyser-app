@@ -224,6 +224,7 @@ export const ProjectFundingInitialInfoScreen = ({
         alignItems="center"
         overflow="hidden"
         flex="1"
+        paddingTop="10px"
       >
         <Box display="flex" marginBottom="10px" w="95%">
           {renderTabsList()}
