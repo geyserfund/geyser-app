@@ -42,7 +42,13 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
       let selectedMilestone: ProjectMilestone | undefined;
 
       project.milestones.map((milestone, index) => {
-        if (milestone && milestone.amount >= balance && !selectedMilestone) {
+        const hasNextMilestone =
+          project.milestones && Boolean(project.milestones[index + 1]);
+        if (
+          milestone &&
+          (milestone.amount >= balance || !hasNextMilestone) &&
+          !selectedMilestone
+        ) {
           selectedMilestone = milestone;
           setCurrentMilestone(milestone);
           setMilestoneIndex(index + 1);
