@@ -1,4 +1,4 @@
-import { User } from '../types/generated/graphql';
+import { User } from '../../types/generated/graphql';
 
 export const hasTwitterAccount = (user: User) => {
   if (!user) {

@@ -20,13 +20,8 @@ import {
 } from '@chakra-ui/react';
 import React, { useState, useEffect, useMemo } from 'react';
 import { FaCheck } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import {
-  fundingStages,
-  getPath,
-  MAX_FUNDING_AMOUNT_USD,
-} from '../../../constants';
+import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants';
 import { useAuthContext } from '../../../context';
 import { useFormState, useFundingFlow } from '../../../hooks';
 import { useBTCConverter } from '../../../helpers';
@@ -38,7 +33,7 @@ import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/ActivityP
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import { createGrantContributionRecord } from '../../../api';
 import { FormStateError } from '../../../interfaces';
-import { useNotification } from '../../../utils';
+import { toInt, useNotification } from '../../../utils';
 
 const GRANTS_PROJECT_NAME = 'grants';
 const defaultModalHeader = 'Contribute';
@@ -161,7 +156,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
 
     if (isValid) {
       const input: FundingInput = {
-        projectId: Number(grantsData?.project?.id),
+        projectId: toInt(grantsData?.project?.id),
         anonymous: Boolean(user),
         ...(state.amount !== 0 && {
           donationInput: {
@@ -172,7 +167,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
           ...(state.comment && { comment: state.comment }),
         },
         sourceResourceInput: {
-          resourceId: Number(grantsData?.project.id),
+          resourceId: toInt(grantsData?.project.id),
           resourceType: FundingResourceType.Project,
         },
       };
@@ -360,21 +355,20 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
             <FaCheck />
           </Box>
         </Box>
-
         <Text fontSize={'14px'}>
-          You contributed{' '}
+          Your{' '}
           <span style={{ fontWeight: 'bold' }}>
             {' '}
             {getSatoshisFromUSDCents(state.amount * 100)} sats{' '}
           </span>{' '}
-          to the Geyser Grants Pool.
+          contribution to Geyser Grants Round 2 was successful!
         </Text>
         <Text fontSize={'14px'}>
-          100 % of the funds are used to support the Bitcoin ecosystem through{' '}
-          <Link to={getPath('projectDiscovery')}>Geyser Projects</Link>.
+          Your donation will help accelerate bitcoin adoption by recognizing and
+          pushing forward bitcoin projects.
         </Text>
         <Text fontSize={'14px'}>
-          Donations are non-refundable and not tax deductible. You contributed
+          Donations are non-refundable and not tax deductible.
         </Text>
         {!fundingTx.onChain && (
           <Text mt={4} fontSize={'14px'}>

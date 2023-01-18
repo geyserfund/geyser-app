@@ -16,6 +16,7 @@ import {
   UserProfilePageEntriesList,
   UserProfilePageProjectsList,
 } from '.';
+import { noScrollBar } from '../../../css';
 
 type Props = {
   profileUser: User;
@@ -57,44 +58,41 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
   return (
     <Tabs variant={'line'} height="full" width="full" isLazy>
       <Stack spacing={'-0.125em'} zIndex={1}>
-        <TabList
-          borderBottomWidth={0}
-          borderRadius="sm"
-          zIndex={1}
-          paddingX="22px"
-        >
-          {tabData.map((tabItem: TabData, index: number) => (
-            <Tab
-              key={index}
-              fontSize="16px"
-              color={'brand.neutral900'}
-              _selected={styles.selectedTab}
-            >
-              <HStack
-                justifyContent={'center'}
-                alignItems={'center'}
-                spacing={'6px'}
-                fontSize="18px"
+        <HStack width="100%" overflowX="auto" __css={noScrollBar}>
+          <TabList borderBottomWidth={0} borderRadius="sm" zIndex={1}>
+            {tabData.map((tabItem: TabData, index: number) => (
+              <Tab
+                key={index}
+                fontSize="16px"
+                color={'brand.neutral900'}
+                _selected={styles.selectedTab}
               >
-                <Text fontSize={'inherit'}>{tabItem.title}</Text>
+                <HStack
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  spacing={'6px'}
+                  fontSize="18px"
+                >
+                  <Text fontSize={'inherit'}>{tabItem.title}</Text>
 
-                {tabItem.itemCount === 0 ? (
-                  ''
-                ) : (
-                  <Text
-                    fontSize={'inherit'}
-                    backgroundColor="brand.neutral200"
-                    padding="0.33em"
-                    lineHeight={1}
-                    borderRadius="0.25em"
-                  >
-                    {tabItem.itemCount}
-                  </Text>
-                )}
-              </HStack>
-            </Tab>
-          ))}
-        </TabList>
+                  {tabItem.itemCount === 0 ? (
+                    ''
+                  ) : (
+                    <Text
+                      fontSize={'inherit'}
+                      backgroundColor="brand.neutral200"
+                      padding="0.33em"
+                      lineHeight={1}
+                      borderRadius="0.25em"
+                    >
+                      {tabItem.itemCount}
+                    </Text>
+                  )}
+                </HStack>
+              </Tab>
+            ))}
+          </TabList>
+        </HStack>
 
         <Divider borderWidth={'2px'} />
       </Stack>

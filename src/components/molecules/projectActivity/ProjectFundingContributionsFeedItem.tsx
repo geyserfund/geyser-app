@@ -8,12 +8,11 @@ import {
   useColorModeValue,
   HStack,
   VStack,
-  Link,
 } from '@chakra-ui/react';
 import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
-import { FountainIcon, LightningIcon, SatoshiIconTilted } from '../../icons';
+import { LightningIcon, SatoshiIconTilted } from '../../icons';
 import { getDaysAgo } from '../../../utils';
-import { commaFormatted } from '../../../utils/helperFunctions';
+import { commaFormatted } from '../../../utils/formatData/helperFunctions';
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { renderFunderBadges } from './renderFunderBadges';

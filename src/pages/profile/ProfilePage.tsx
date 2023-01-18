@@ -10,16 +10,13 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { AppFooter } from '../../components/molecules';
-import { isDarkMode } from '../../utils';
+import { isDarkMode, toInt } from '../../utils';
 import { useAuthContext } from '../../context';
 import { defaultUser } from '../../defaults';
 import { AlertBox } from '../../components/ui';
-import { dimensions } from '../../constants';
 import { User, UserGetInput } from '../../types/generated/graphql';
 import { USER_PROFILE_QUERY } from '../../graphql';
 import { UserProfilePageHeader, UserProfilePageTabs } from './components';
-
-const { topNavBar: topNavBarDimensions } = dimensions;
 
 type ResponseData = {
   user: User;
@@ -57,7 +54,7 @@ export const ProfilePage = () => {
     if (params.userId) {
       const variables: QueryVariables = {
         where: {
-          id: params.userId,
+          id: toInt(params.userId),
         },
       };
       queryCurrentUser({ variables });
@@ -88,7 +85,6 @@ export const ProfilePage = () => {
     return (
       <Container
         position="relative"
-        paddingTop={`${topNavBarDimensions.desktop.height}px`}
         height="100%"
         display={'flex'}
         justifyContent="center"
@@ -111,12 +107,11 @@ export const ProfilePage = () => {
       position="relative"
       width="full"
       height="full"
-      paddingTop={`${topNavBarDimensions.desktop.height}px`}
       backgroundColor={isInDarkMode ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
     >
       <Container
         width="full"
-        maxWidth={'86%'}
+        maxWidth={'1080px'}
         height="auto"
         minHeight={'full'}
         paddingY={{

@@ -23,7 +23,7 @@ import {
 } from '../../../../graphql/mutations';
 import { useBTCConverter } from '../../../../helpers';
 import { Satoshis, USDollars } from '../../../../types/types';
-import { useNotification } from '../../../../utils';
+import { toInt, useNotification } from '../../../../utils';
 import { TMilestone } from '../types';
 
 type Props = {
@@ -152,14 +152,14 @@ export const MilestoneAdditionModal = ({
         filteredMilestones.map(async (milestone) => {
           const createMilestoneInput = {
             ...milestone,
-            projectId,
+            projectId: toInt(projectId),
           };
 
           if (milestone.id) {
             await updateMilestone({
               variables: {
                 input: {
-                  projectMilestoneId: milestone.id,
+                  projectMilestoneId: toInt(milestone.id),
                   name: milestone.name,
                   description: milestone.description,
                   amount: milestone.amount,
@@ -175,7 +175,7 @@ export const MilestoneAdditionModal = ({
           });
           if (data?.createProjectMilestone?.id) {
             return {
-              id: data.createProjectMilestone.id,
+              id: toInt(data.createProjectMilestone.id),
               ...milestone,
             };
           }
@@ -204,7 +204,7 @@ export const MilestoneAdditionModal = ({
     if (currentMilestone && currentMilestone.id) {
       try {
         await removeMilestone({
-          variables: { projectMilestoneId: currentMilestone.id },
+          variables: { projectMilestoneId: toInt(currentMilestone.id) },
         });
         setMilestones(newMilestones);
       } catch (error) {
@@ -235,7 +235,7 @@ export const MilestoneAdditionModal = ({
     let isValid = true;
     const totalErrors: any = [];
 
-    milestones.current.map((milestone) => {
+    milestones.current.map((milestone, index) => {
       const errors: any = {};
       if (!milestone.name) {
         errors.name = 'Name is a required field.';
@@ -246,7 +246,15 @@ export const MilestoneAdditionModal = ({
       }
 
       if (!milestone.amount || milestone.amount < 1) {
-        errors.amount = 'Amount needs to be at least 1 satoshi';
+        errors.amount = 'Amount needs to be at least 1 satoshi.';
+        isValid = false;
+      }
+
+      if (
+        index > 0 &&
+        milestones.current[index - 1].amount > milestone.amount
+      ) {
+        errors.amount = 'Amount must to be at greater than previous milestone.';
         isValid = false;
       }
 

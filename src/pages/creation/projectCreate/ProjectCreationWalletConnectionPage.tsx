@@ -8,7 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { isMobileMode, useNotification } from '../../../utils';
+import { isMobileMode, toInt, useNotification } from '../../../utils';
 import { colors, getPath } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import { useQuery } from '@apollo/client';
@@ -51,7 +51,7 @@ export const ProjectCreationWalletConnectionPage = () => {
   } = useQuery<ResponseDataForGetProject, QueryVariablesForGetProject>(
     QUERY_PROJECT_BY_NAME_OR_ID,
     {
-      variables: { where: { id: params.projectId } },
+      variables: { where: { id: toInt(params.projectId) } },
       onError() {
         toast({
           title: 'Error fetching project',
@@ -85,7 +85,6 @@ export const ProjectCreationWalletConnectionPage = () => {
     <Box
       background={'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
       height="100%"
       justifyContent="space-between"
     >

@@ -16,7 +16,7 @@ import {
   TextInputBox,
   UndecoratedLink,
 } from '../../../components/ui';
-import { useNotification, validateEmail } from '../../../utils';
+import { toInt, useNotification, validateEmail } from '../../../utils';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { TNodeInput } from './types';
 import { BiRocket } from 'react-icons/bi';
@@ -164,7 +164,7 @@ export const ProjectCreationWalletConnectionForm = ({
 
   const createWalletInput: CreateWalletInput | null = useMemo(() => {
     const resourceInput: ResourceInput = {
-      resourceId: project.id,
+      resourceId: toInt(project.id),
       resourceType: FundingResourceType.Project,
     };
 
@@ -288,7 +288,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   <TextInputBox
                     name="lightning-address"
                     type={'email'}
-                    placeholder={'Enter your Lightning Address'}
+                    placeholder={'satoshi@getalby.com'}
                     value={lightningAddressFormValue}
                     onChange={(event) => {
                       setLightningAddressFormValue(event.target.value);

@@ -32,6 +32,10 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  if (isMobile) {
+    return null;
+  }
+
   return (
     <VStack
       position="static"

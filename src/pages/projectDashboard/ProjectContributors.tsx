@@ -29,6 +29,7 @@ import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi';
 import { useQueryWithPagination } from '../../hooks';
 import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql';
 import Loader from '../../components/ui/Loader';
+import { toInt } from '../../utils';
 
 type TableData = {
   header: string;
@@ -47,7 +48,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
     queryName: 'getDashboardFunders',
     itemLimit: 100,
     query: QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS,
-    where: { projectId: parseInt(project.id, 10), confirmed: true },
+    where: { projectId: toInt(project.id), confirmed: true },
     orderBy: {
       confirmedAt: 'desc',
     },
@@ -123,8 +124,8 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
         key: 'date',
         value: (val: Funder) => {
           const dateString = val.confirmedAt
-            ? DateTime.fromMillis(parseInt(val.confirmedAt, 10)).toFormat(
-                'yyyy / mm / dd',
+            ? DateTime.fromMillis(toInt(val.confirmedAt)).toFormat(
+                'yyyy / MM / dd',
               )
             : '-';
           return dateString;
@@ -134,7 +135,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
         header: 'Email',
         key: 'email',
         value: (val: Funder) => {
-          return val.user?.email || '';
+          return val.rewards.length > 0 ? val.user?.email || '-' : '-';
         },
       },
     ],
@@ -248,7 +249,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
               <Text
                 fontSize={'16px'}
                 fontWeight={600}
-              >{`${project.fundersCount} Contributers`}</Text>
+              >{`${project.fundersCount} Contributors`}</Text>
               {selectedFunders.length > 0 && (
                 <Text
                   fontSize={'14px'}

@@ -1,14 +1,10 @@
-import { Avatar, Box, HStack, Text, useDisclosure } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router';
-import { LogoBlack } from '../../../../components/nav';
-import {
-  ButtonComponent,
-  IconButtonComponent,
-} from '../../../../components/ui';
+import { Avatar, Box, HStack } from '@chakra-ui/react';
+import React from 'react';
+import { ButtonComponent } from '../../../../components/ui';
 import { useAuthContext } from '../../../../context';
 import { isMobileMode } from '../../../../utils';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
+import { NavBarLogo } from '../../../../components/nav/NavBarLogo';
 
 interface ICreateNavProps {
   isSaving: boolean;
@@ -52,11 +48,13 @@ export const CreateNav = ({
           margin={isMobile ? '10px' : '15px 40px 15px 40px'}
         >
           <HStack spacing="5px" justifyContent="center" alignItems="center">
-            <LogoBlack />
-            <Avatar height="40px" width="40px" src={user.imageUrl} />
-            <Text fontWeight={600} fontSize="16px">
-              {user.username}
-            </Text>
+            <NavBarLogo small />
+            <Avatar
+              borderRadius="6px"
+              height="40px"
+              width="40px"
+              src={user.imageUrl || ''}
+            />
           </HStack>
           <HStack>
             {onBack && (

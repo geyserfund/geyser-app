@@ -2,6 +2,7 @@ import React from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { Entry } from '../../../types/generated/graphql';
 import { ProjectEntryCard } from '../../../components/molecules';
+import { toInt } from '../../../utils';
 
 type Props = {
   entryID: number;
@@ -36,7 +37,7 @@ type QueryVariables = {
 export const UserProfilePageEntriesListItem = ({ entryID }: Props) => {
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_ENTRY,
-    { variables: { entryID } },
+    { variables: { entryID: toInt(entryID) } },
   );
 
   return data ? <ProjectEntryCard entry={data.entry} /> : null;

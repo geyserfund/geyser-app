@@ -5,7 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import { colors } from '../../../../constants';
 import { fonts } from '../../../../constants/fonts';
 import { useSignedUploadAPI } from '../../../../hooks';
-import { useNotification } from '../../../../utils';
+import { isMobileMode, useNotification } from '../../../../utils';
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader';
 import ImageEdit from 'quill-image-edit-module';
@@ -15,20 +15,20 @@ type Rules = string;
 type StyleProps = {
   isReadOnly?: boolean;
   noPadding?: boolean;
+  isMobile?: boolean;
 };
 
 const useStyles = createUseStyles<Rules, StyleProps>({
-  container: ({ isReadOnly, noPadding }: StyleProps) => ({
+  container: ({ isReadOnly, noPadding, isMobile }: StyleProps) => ({
     width: '100%',
     height: '100%',
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
-    minHeight: '350px',
 
     '& .ql-toolbar': {
       position: 'fixed',
-      display: isReadOnly ? 'none' : 'block',
+      display: isReadOnly ? 'none' : 'flex',
       bottom: '20px',
       float: 'center',
       zIndex: 99,
@@ -36,6 +36,14 @@ const useStyles = createUseStyles<Rules, StyleProps>({
       borderRadius: '4px',
       borderWidth: '0px',
       boxShadow: '0px 3px 12px rgba(0, 0, 0, 0.1)',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      maxWidth: '100%',
+      overflowX: 'auto',
+      '& .ql-formats': {
+        display: 'flex',
+        margin: isMobile ? '0px' : '0px 10px',
+      },
     },
 
     '& .ql-container': {
@@ -119,6 +127,8 @@ export const ProjectEntryEditor = ({
   focusFlag,
   noPadding,
 }: Props) => {
+  const isMobile = isMobileMode();
+
   const [_quillObj, _setQuillObj] = useState<Quill>();
   const quillObj = useRef(_quillObj);
 
@@ -128,7 +138,7 @@ export const ProjectEntryEditor = ({
   };
 
   const { toast } = useNotification();
-  const classes = useStyles({ isReadOnly, noPadding });
+  const classes = useStyles({ isReadOnly, noPadding, isMobile });
 
   const editorModules = {
     toolbar: {
@@ -182,6 +192,7 @@ export const ProjectEntryEditor = ({
       modules: editorModules,
       readOnly: isReadOnly,
       theme: 'snow',
+      placeholder: 'The description of the entry .....',
     });
 
     if (value) {

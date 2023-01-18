@@ -117,6 +117,10 @@ export const tachiraUrl =
 
 export const umarUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/umar.svg';
+export const joeNakamotoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/joeNakamoto.jpg';
+export const carlaUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/carla.jpg';
 
 // Grant Assets
 

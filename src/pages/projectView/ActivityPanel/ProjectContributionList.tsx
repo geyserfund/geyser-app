@@ -13,14 +13,13 @@ export const ProjectContributionList = ({
   fundingTxs,
 }: ProjectContributionListProps) => {
   const isMobile = isMobileMode();
-
   return (
     <VStack
       id="project-activity-list-container"
       spacing={'8px'}
       width="100%"
       overflow="auto"
-      height={isMobile ? 'calc(100% - 44px)' : '100%'}
+      height={'100%'}
       paddingBottom="10px"
     >
       {fundingTxs.data.map((fundingTx, index) => (
@@ -35,7 +34,7 @@ export const ProjectContributionList = ({
       ))}
 
       <ScrollInvoke
-        elementId="project-activity-list-container"
+        elementId={!isMobile ? 'project-activity-list-container' : undefined}
         onScrollEnd={fundingTxs.fetchNext}
         isLoading={fundingTxs.isLoadingMore}
         noMoreItems={fundingTxs.noMoreItems}

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AuthModal } from '../../../components/molecules';
 import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
 import { SuccessScreen } from './SuccessScreen';
 import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
-import { isMobileMode } from '../../../utils';
+import { isMobileMode, toInt } from '../../../utils';
 import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
 
 import { AuthContext } from '../../../context';
@@ -22,12 +22,11 @@ import {
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
+import { MobileViews, useProject } from '../containers';
 
 type Props = {
   project: Project;
-  detailOpen: boolean;
   fundingFlow: any;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   resourceType: FundingResourceType;
   resourceId: number;
   fundForm: IFundFormState;
@@ -35,8 +34,6 @@ type Props = {
 
 export const ProjectActivityPanel = ({
   project,
-  detailOpen,
-  setDetailOpen,
   fundingFlow,
   fundForm,
   resourceType,
@@ -47,6 +44,7 @@ export const ProjectActivityPanel = ({
   const { btcRate } = useBtcContext();
   const isMobile = isMobileMode();
 
+  const { mobileView } = useProject();
   // required for knowing the rewards and the funds
   const {
     state: formState,
@@ -58,10 +56,10 @@ export const ProjectActivityPanel = ({
 
   const {
     fundState,
+    setFundState,
     amounts,
     fundingRequestLoading,
     fundingTx,
-    gotoNextStage,
     resetFundingFlow,
     requestFunding,
   } = fundingFlow;
@@ -72,9 +70,22 @@ export const ProjectActivityPanel = ({
     onClose: loginOnClose,
   } = useDisclosure();
 
-  const [fadeStarted, setFadeStarted] = useState(false);
+  const inView = [
+    MobileViews.contribution,
+    MobileViews.leaderboard,
+    MobileViews.funding,
+  ].includes(mobileView);
 
-  const classes = useStyles({ isMobile, detailOpen, fadeStarted });
+  const classes = useStyles({ isMobile, inView });
+
+  useEffect(() => {
+    if (mobileView === MobileViews.funding) {
+      setFundState(fundingStages.form);
+    } else {
+      resetFundingFlow();
+      resetForm();
+    }
+  }, [mobileView]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -89,13 +100,13 @@ export const ProjectActivityPanel = ({
     }
   }, [formState.anonymous]);
 
-  const handleFundProjectButtonTapped = () => {
-    gotoNextStage();
-  };
-
   const handleCloseButton = () => {
     resetFundingFlow();
     resetForm();
+  };
+
+  const handleQRCloseButton = () => {
+    setFundState(fundingStages.form);
   };
 
   const formatFundingInput = (state: IFundForm) => {
@@ -112,7 +123,7 @@ export const ProjectActivityPanel = ({
     } = state;
 
     const input: IFundingInput = {
-      projectId: Number(project.id),
+      projectId: toInt(project.id),
       anonymous,
       ...(donationAmount !== 0 && { donationInput: { donationAmount } }),
       metadataInput: {
@@ -121,7 +132,7 @@ export const ProjectActivityPanel = ({
         ...(comment && { comment }),
       },
       sourceResourceInput: {
-        resourceId: resourceId || Number(project.id),
+        resourceId: toInt(resourceId) || toInt(project.id),
         resourceType: resourceType || 'project',
       },
     };
@@ -132,7 +143,7 @@ export const ProjectActivityPanel = ({
       rewardsByIDAndCount
     ) {
       const rewardsArray = Object.keys(rewardsByIDAndCount).map((key) => ({
-        id: parseInt(key, 10),
+        id: toInt(key),
         quantity: rewardsByIDAndCount[key as keyof ProjectReward],
       }));
       const filteredRewards = rewardsArray.filter(
@@ -154,12 +165,8 @@ export const ProjectActivityPanel = ({
     requestFunding(input);
   };
 
-  const handleViewClick = () => {
-    setFadeStarted(true);
-    setDetailOpen(true);
-    setTimeout(() => {
-      setFadeStarted(false);
-    }, 500);
+  const getActivityHeight = () => {
+    return 'calc(100% - 20px)';
   };
 
   const renderPanelContent = () => {
@@ -173,8 +180,6 @@ export const ProjectActivityPanel = ({
           <ProjectFundingInitialInfoScreen
             {...{
               project,
-              handleViewClick,
-              onFundProjectTapped: handleFundProjectButtonTapped,
               fundingTx,
               btcRate,
               test: false,
@@ -208,7 +213,7 @@ export const ProjectActivityPanel = ({
             project={project}
             fundingFlow={fundingFlow}
             amounts={amounts}
-            handleCloseButton={handleCloseButton}
+            handleCloseButton={handleQRCloseButton}
           />
         );
       case fundingStages.completed:
@@ -229,11 +234,7 @@ export const ProjectActivityPanel = ({
   return (
     <>
       <Box
-        overflow="auto"
-        className={classNames(classes.container, {
-          [classes.slideInRight]: isMobile && !detailOpen,
-          [classes.fadeOut]: isMobile && fadeStarted,
-        })}
+        className={classNames(classes.container)}
         flex={!isMobile ? 2 : undefined}
         maxWidth={isMobile ? 'auto' : '450px'}
         width={isMobile ? '100%' : undefined}
@@ -241,10 +242,10 @@ export const ProjectActivityPanel = ({
         justifyContent="flex-start"
         alignItems="center"
         backgroundColor="#FFFFFF"
-        marginTop={isMobile ? '61px' : '90px'}
-        height={isMobile ? 'calc(100% - 61px)' : 'calc(100% - 90px)'}
+        marginTop={isMobile ? '0px' : '20px'}
+        height={getActivityHeight()}
         borderTopLeftRadius={isMobile ? '' : '22px'}
-        boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
+        boxShadow="-8px -8px 12px -8px rgba(0, 0, 0, 0.1)"
       >
         {renderPanelContent()}
       </Box>

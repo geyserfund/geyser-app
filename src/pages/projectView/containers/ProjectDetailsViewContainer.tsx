@@ -1,27 +1,26 @@
 import React from 'react';
+import { ProjectNav } from '../../../components/nav/bottomNav/ProjectNav';
 import { useFundingFormState } from '../../../hooks';
 import {
   FundingResourceType,
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
-import { Head } from '../../../utils/Head';
+import { isMobileMode } from '../../../utils';
+import { Head } from '../../../config/Head';
 import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel';
 import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer';
+import { ProjectProvider } from './ProjectContext';
 
 type Props = {
   project: Project;
-  detailOpen: boolean;
   fundingFlow: any;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   resourceType?: string;
   resourceId?: number;
 };
 
 export const ProjectDetailsViewContainer = ({
   project,
-  detailOpen,
-  setDetailOpen,
   fundingFlow,
 }: Props) => {
   const fundForm = useFundingFormState({
@@ -33,10 +32,12 @@ export const ProjectDetailsViewContainer = ({
     rewards: (project.rewards as ProjectReward[]) || undefined,
   });
 
+  const isMobile = isMobileMode();
+
   const { setFundState, fundState } = fundingFlow;
 
   return (
-    <>
+    <ProjectProvider project={project}>
       <Head
         title={project.title}
         description={project.description}
@@ -47,8 +48,6 @@ export const ProjectDetailsViewContainer = ({
       <ProjectDetailsMainBodyContainer
         {...{
           project,
-          detailOpen,
-          setDetailOpen,
           fundState,
           setFundState,
           updateReward: fundForm.updateReward,
@@ -57,10 +56,12 @@ export const ProjectDetailsViewContainer = ({
 
       <ProjectActivityPanel
         project={project}
-        {...{ detailOpen, setDetailOpen, fundingFlow, fundForm }}
+        {...{ fundingFlow, fundForm }}
         resourceType={FundingResourceType.Project}
         resourceId={project.id}
       />
-    </>
+
+      {isMobile && <ProjectNav fixed />}
+    </ProjectProvider>
   );
 };

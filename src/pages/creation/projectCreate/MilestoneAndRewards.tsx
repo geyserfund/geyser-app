@@ -12,11 +12,10 @@ import React, { useState } from 'react';
 import {
   ButtonComponent,
   IconButtonComponent,
-  Linkin,
   SatoshiAmount,
   UndecoratedLink,
 } from '../../../components/ui';
-import { isMobileMode, useNotification } from '../../../utils';
+import { isMobileMode, toInt, useNotification } from '../../../utils';
 import { TMilestone } from './types';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
@@ -108,7 +107,7 @@ export const MilestoneAndRewards = () => {
   const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
 
   const { loading, data } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
-    variables: { where: { id: params.projectId } },
+    variables: { where: { id: toInt(params.projectId) } },
     fetchPolicy: 'network-only',
     onError() {
       toast({
@@ -156,7 +155,7 @@ export const MilestoneAndRewards = () => {
 
   const handleNext = () => {
     const updateProjectInput: any = {
-      projectId: data?.project?.id,
+      projectId: toInt(data?.project?.id),
       // TODO: Use enums from back-end after they're implemented (https://discord.com/channels/940363862723690546/960539150602342400/1032372207264997386)
       // rewardCurrency: isSatoshiRewards ? RewardCurrency.BTC : RewardCurrency.Usdcent,
       rewardCurrency: RewardCurrency.Usdcent,
@@ -184,7 +183,7 @@ export const MilestoneAndRewards = () => {
       await updateReward({
         variables: {
           input: {
-            projectRewardId: id,
+            projectRewardId: toInt(id),
             deleted: true,
             name: currentReward?.name,
             cost: currentReward?.cost,
@@ -248,7 +247,6 @@ export const MilestoneAndRewards = () => {
     <Box
       background={'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
       height="100%"
       justifyContent="space-between"
     >

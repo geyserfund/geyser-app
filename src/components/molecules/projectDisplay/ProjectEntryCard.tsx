@@ -73,6 +73,7 @@ export const ProjectEntryCard = ({
         base: '100%',
         xl: '798px',
       }}
+      shadow="sm"
       maxWidth={'798px'}
       direction={{ base: 'column', md: 'row' }}
       backgroundColor={colorMode === 'light' ? 'white' : 'gray.900'}

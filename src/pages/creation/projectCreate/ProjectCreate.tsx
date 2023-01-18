@@ -21,6 +21,7 @@ import {
 } from '../../../components/ui';
 import {
   isMobileMode,
+  toInt,
   useNotification,
   validateEmail,
   validLightningAddress,
@@ -151,7 +152,7 @@ export const ProjectCreate = () => {
   const [getProjectById, { loading, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME_OR_ID,
     {
-      variables: { where: { id: params.projectId } },
+      variables: { where: { id: toInt(params.projectId) } },
       onCompleted(data) {
         if (data && data.project) {
           setForm({
@@ -211,7 +212,7 @@ export const ProjectCreate = () => {
         updateProject({
           variables: {
             input: {
-              projectId: data?.project?.id,
+              projectId: toInt(data?.project?.id),
               title: form.title,
               image: form.image,
               description: form.description,
@@ -295,7 +296,6 @@ export const ProjectCreate = () => {
     <Box
       background={'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
       height="100%"
       justifyContent="space-between"
     >

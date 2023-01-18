@@ -12,7 +12,6 @@ export const NotAuthorized = () => (
     justifyContent="center"
     alignItems="center"
     spacing="10px"
-    paddingTop="60px"
   >
     <BiErrorAlt fontSize="80px" />
     <Text fontSize="20px">Oops!</Text>

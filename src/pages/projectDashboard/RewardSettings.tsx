@@ -15,7 +15,7 @@ import {
   ProjectReward,
   RewardCurrency,
 } from '../../types/generated/graphql';
-import { useNotification } from '../../utils';
+import { toInt, useNotification } from '../../utils';
 import { RewardAdditionModal } from '../creation/projectCreate/components/RewardAdditionModal';
 
 export const RewardSettings = ({ project }: { project: Project }) => {
@@ -80,7 +80,7 @@ export const RewardSettings = ({ project }: { project: Project }) => {
       await updateReward({
         variables: {
           input: {
-            projectRewardId: id,
+            projectRewardId: toInt(id),
             deleted: true,
             name: currentReward?.name,
             cost: currentReward?.cost,

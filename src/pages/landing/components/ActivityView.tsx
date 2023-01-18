@@ -1,69 +1,33 @@
 import React from 'react';
-import {
-  TabList,
-  Tab,
-  Tabs,
-  TabPanel,
-  TabPanels,
-  Divider,
-  Stack,
-  HTMLChakraProps,
-  Box,
-} from '@chakra-ui/react';
+import { Divider, HTMLChakraProps, Box, VStack } from '@chakra-ui/react';
 // import { LandingPageProjectsEntriesList } from './LandingPageProjectsEntriesList';
 import { LandingPageContributionsList } from './LandingPageContributionsList';
-
-type ActivityViewTab = {
-  title: string;
-  component: React.ElementType;
-};
+import { H3 } from '../../../components/typography';
+import { StickToTop } from '../../../components/layouts';
 
 type Props = HTMLChakraProps<'div'> & {};
 
-const styles = {
-  selectedTab: {
-    borderBottom: '4px solid',
-    borderBottomColor: 'brand.primary',
-    fontWeight: 'medium',
-  },
-};
-
 export const ActivityView = ({ ...rest }: Props) => {
-  const tabs: ActivityViewTab[] = [
-    {
-      title: 'Contributions',
-      component: LandingPageContributionsList,
-    },
-    // TODO: remove and refactor with the new landing page design
-    // {
-    //   title: 'Entries',
-    //   component: LandingPageProjectsEntriesList,
-    // },
-  ];
-
   return (
     <Box {...rest}>
-      <Tabs variant={'line'} height="full" width="full" isLazy>
-        <Stack spacing={'-0.125em'} zIndex={1}>
-          <TabList borderBottomWidth={0} borderRadius="sm" zIndex={1}>
-            {tabs.map((tab, index) => (
-              <Tab _selected={styles.selectedTab} key={index}>
-                {tab.title}
-              </Tab>
-            ))}
-          </TabList>
+      <VStack height="full" width="full" alignItems="flex-start">
+        <StickToTop
+          id="landing-page-contributionTitle"
+          width="100%"
+          _onStick={{ width: 'calc(100% - 20px)' }}
+        >
+          <VStack
+            alignItems="flex-start"
+            paddingTop="10px"
+            backgroundColor="bgWhite"
+          >
+            <H3 paddingY="5px">Contributions</H3>
+            <Divider borderWidth={'1px'} zIndex={-1} borderRadius="full" />
+          </VStack>
+        </StickToTop>
 
-          <Divider borderWidth={'2px'} zIndex={-1} borderRadius="full" />
-        </Stack>
-
-        <TabPanels width="100%">
-          {tabs.map((tab, index) => (
-            <TabPanel key={index} mt={6} p={0}>
-              <tab.component></tab.component>
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+        <LandingPageContributionsList />
+      </VStack>
     </Box>
   );
 };
