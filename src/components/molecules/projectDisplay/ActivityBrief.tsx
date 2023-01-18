@@ -122,7 +122,11 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const showCountdown = project.active && Boolean(project.expiresAt);
 
   return (
-    <HStack width="100%" padding="10px 20px" justifyContent="space-between">
+    <HStack
+      width="100%"
+      padding={isMobile ? '20px 20px 0px 20px' : '10px 20px'}
+      justifyContent="space-between"
+    >
       {renderCircularProgress()}
       <VStack flex="1" spacing="5px" width="100%" overflow="hidden">
         {!isMobile && (
