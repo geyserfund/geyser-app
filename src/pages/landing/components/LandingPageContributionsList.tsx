@@ -51,7 +51,7 @@ export const LandingPageContributionsList = () => {
   }
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader width="100%" />;
   }
 
   if (contributions?.length === 0) {

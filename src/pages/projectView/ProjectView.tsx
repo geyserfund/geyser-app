@@ -65,7 +65,7 @@ export const ProjectView = () => {
   );
 
   if (loading || error || !data) {
-    return <Loader />;
+    return <Loader paddingTop="65px" />;
   }
 
   return (

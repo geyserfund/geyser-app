@@ -103,7 +103,7 @@ export const ProjectDetailsCard = ({
     return (
       <Text color="brand.primary800" fontWeight={500}>
         {contributorsCount}{' '}
-        {contributorsCount === 1 ? 'contributor' : 'contributors'} |
+        {contributorsCount === 1 ? 'contributor' : 'contributors'}
       </Text>
     );
   };
@@ -198,22 +198,29 @@ export const ProjectDetailsCard = ({
         </VStack>
         {renderMilestone()}
         {project.funders.length > 0 && (
-          <HStack width="100%" justifyContent="center">
+          <Stack
+            direction={isMobile ? 'column' : 'row'}
+            width="100%"
+            justifyContent="space-around"
+            alignItems={'center'}
+          >
             {renderContributorsCount()}
             {renderYourFunding()}
-          </HStack>
+          </Stack>
         )}
-        <Button
-          isFullWidth
-          backgroundColor={
-            project.active ? 'brand.primary' : 'brand.grayPlaceholder'
-          }
-          leftIcon={<BoltIcon />}
-          onClick={fundButtonFunction}
-          isDisabled={project.active === false}
-        >
-          Contribute
-        </Button>
+        {!isMobile && (
+          <Button
+            isFullWidth
+            backgroundColor={
+              project.active ? 'brand.primary' : 'brand.grayPlaceholder'
+            }
+            leftIcon={<BoltIcon />}
+            onClick={fundButtonFunction}
+            isDisabled={project.active === false}
+          >
+            Contribute
+          </Button>
+        )}
       </VStack>
     </Card>
   );

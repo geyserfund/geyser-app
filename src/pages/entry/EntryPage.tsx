@@ -70,7 +70,7 @@ export const EntryPage = () => {
     });
 
   if (loadingPosts || loading || !projectData) {
-    return <Loader />;
+    return <Loader paddingTop="65px" />;
   }
 
   if (error || !entryData || !entryData.entry || projectError) {
