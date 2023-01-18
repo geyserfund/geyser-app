@@ -81,7 +81,7 @@ export const GrantsRoundTwo = () => {
   const [copy, setCopy] = useState(false);
 
   const [sponsors, setSponsers] = useState<GrantSponsor[]>([]);
-  const [categorizedApplicaitons, setCategorizedApplicaitons] =
+  const [categorizedApplications, setCategorizedApplications] =
     useState<CaregorizedApplications>(defaultApplications);
 
   const handleCompleteContribution = (value: GrantSponsor) => {
@@ -111,6 +111,10 @@ export const GrantsRoundTwo = () => {
       setSponsers(listSponsers);
     };
 
+    getSponsors();
+  }, []);
+
+  useEffect(() => {
     const getApplicants = async () => {
       const applicantResponse = await getGrantApplicants();
 
@@ -131,10 +135,9 @@ export const GrantsRoundTwo = () => {
             break;
         }
       });
-      setCategorizedApplicaitons(categorized);
+      setCategorizedApplications(categorized);
     };
 
-    getSponsors();
     getApplicants();
   }, []);
 
@@ -256,7 +259,7 @@ export const GrantsRoundTwo = () => {
                     subtitle={item.subtitle}
                     about={item.about}
                     image={item.image}
-                    applicant={categorizedApplicaitons[item.key].length}
+                    applicant={categorizedApplications[item.key].length}
                   />
                 </GridItem>
               ))}
