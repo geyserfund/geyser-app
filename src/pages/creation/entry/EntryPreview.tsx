@@ -40,7 +40,7 @@ export const EntryPreview = () => {
     {
       onCompleted(data) {
         if (data.entry === null) {
-          history.push(getPath('notAuthorized'));
+          history.push(getPath('notFound'));
         }
       },
     },
