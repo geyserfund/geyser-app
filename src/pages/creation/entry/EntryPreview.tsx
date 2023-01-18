@@ -16,7 +16,7 @@ import {
 import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
 import { IEntryUpdateInput } from '../../../interfaces/entry';
 import { Owner } from '../../../types/generated/graphql';
-import { isMobileMode, toInt, useNotification } from '../../../utils';
+import { toInt, useNotification } from '../../../utils';
 import { defaultEntry } from './editor';
 import { CreateNav } from './editor/CreateNav';
 import { TEntry } from './types';
@@ -26,7 +26,6 @@ let isEdited = false;
 export const EntryPreview = () => {
   const params = useParams<{ entryId: string; projectId: string }>();
 
-  const isMobile = isMobileMode();
   const { toast } = useNotification();
   const history = useHistory();
   const { setNav } = useAuthContext();
@@ -36,8 +35,16 @@ export const EntryPreview = () => {
 
   const [entry, setEntry] = useState<TEntry>(defaultEntry);
 
-  const [getPost, { loading: loadingPosts, error, data: entryData }] =
-    useLazyQuery(QUERY_GET_ENTRY);
+  const [getPost, { loading: loadingPosts, data: entryData }] = useLazyQuery(
+    QUERY_GET_ENTRY,
+    {
+      onCompleted(data) {
+        if (data.entry === null) {
+          history.push(getPath('notAuthorized'));
+        }
+      },
+    },
+  );
 
   const [updatePost, { data: updateData, loading: updatePostLoading }] =
     useMutation(MUTATION_UPDATE_ENTRY);

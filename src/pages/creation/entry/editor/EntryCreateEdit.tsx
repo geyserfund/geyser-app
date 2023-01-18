@@ -81,7 +81,13 @@ export const EntryCreateEdit = () => {
     useMutation(MUTATION_UPDATE_ENTRY);
 
   const [getPost, { loading: loadingPosts, error, data: entryData }] =
-    useLazyQuery(QUERY_GET_ENTRY);
+    useLazyQuery(QUERY_GET_ENTRY, {
+      onCompleted(data) {
+        if (data.entry === null) {
+          history.push(getPath('notAuthorized'));
+        }
+      },
+    });
 
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: params.projectId } },
