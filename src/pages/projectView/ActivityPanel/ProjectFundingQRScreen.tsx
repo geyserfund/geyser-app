@@ -64,6 +64,7 @@ export const ProjectFundingQRScreen = ({
         funderEmail={state.email}
         funderAvatarURL={state.funderAvatarURL}
         backgroundColor={'brand.neutral100'}
+        showGeyserFee={true}
       />
       <HStack>
         <Text>

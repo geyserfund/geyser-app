@@ -24,17 +24,21 @@ import QRCode from 'react-qr-code';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
-import { useNotification, isMobileMode } from '../../../utils';
+import { useNotification, isMobileMode, toInt } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
 import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { IProject, IFundingInput } from '../../../interfaces';
+import { IProject } from '../../../interfaces';
 import { useFundingFlow } from '../../../hooks';
 import { fundingStages, GeyserTelegramUrl } from '../../../constants';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { useBtcContext } from '../../../context/btc';
 import { Subscribe } from '../../../components/nav/Subscribe';
 import { FaTelegramPlane } from 'react-icons/fa';
+import {
+  FundingInput,
+  FundingResourceType,
+} from '../../../types/generated/graphql';
 
 interface ContributeButtonProps {
   active: boolean;
@@ -112,15 +116,15 @@ export const ContributeButton = ({
   };
 
   const handleFund = async () => {
-    const input: IFundingInput = {
-      projectId: Number(project.id),
+    const input: FundingInput = {
+      projectId: toInt(project.id),
       anonymous: true,
       donationInput: {
         donationAmount: parseInt((contributeAmount / btcRate).toFixed(0)),
       },
       sourceResourceInput: {
-        resourceId: Number(project.id),
-        resourceType: 'project',
+        resourceId: toInt(project.id),
+        resourceType: FundingResourceType.Project,
       },
     };
     requestFunding(input);

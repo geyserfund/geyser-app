@@ -81,17 +81,20 @@ export const ProjectDetailsCard = ({
       }
 
       return (
-        <HStack>
-          <Text color="brand.primary800" fontWeight={500}>
-            {'You contributed'}
-          </Text>
-          <SatoshiAmount color="brand.primary800" fontWeight={500}>
-            {currentFund.amountFunded}
-          </SatoshiAmount>
-          <Text color="brand.primary800" fontWeight={500}>
-            {' towards this project'}
-          </Text>
-        </HStack>
+        <>
+          {!isMobile && <Text color="brand.primary800">|</Text>}
+          <HStack>
+            <Text color="brand.primary800" fontWeight={500}>
+              {'You contributed'}
+            </Text>
+            <SatoshiAmount color="brand.primary800" fontWeight={500}>
+              {currentFund.amountFunded}
+            </SatoshiAmount>
+            <Text color="brand.primary800" fontWeight={500}>
+              {' towards this project'}
+            </Text>
+          </HStack>
+        </>
       );
     }
 
@@ -103,7 +106,7 @@ export const ProjectDetailsCard = ({
     return (
       <Text color="brand.primary800" fontWeight={500}>
         {contributorsCount}{' '}
-        {contributorsCount === 1 ? 'contributor' : 'contributors'} |
+        {contributorsCount === 1 ? 'contributor' : 'contributors'}
       </Text>
     );
   };
@@ -198,22 +201,29 @@ export const ProjectDetailsCard = ({
         </VStack>
         {renderMilestone()}
         {project.funders.length > 0 && (
-          <HStack width="100%" justifyContent="center">
+          <Stack
+            direction={isMobile ? 'column' : 'row'}
+            width="100%"
+            justifyContent="center"
+            alignItems={'center'}
+          >
             {renderContributorsCount()}
             {renderYourFunding()}
-          </HStack>
+          </Stack>
         )}
-        <Button
-          isFullWidth
-          backgroundColor={
-            project.active ? 'brand.primary' : 'brand.grayPlaceholder'
-          }
-          leftIcon={<BoltIcon />}
-          onClick={fundButtonFunction}
-          isDisabled={project.active === false}
-        >
-          Contribute
-        </Button>
+        {!isMobile && (
+          <Button
+            isFullWidth
+            backgroundColor={
+              project.active ? 'brand.primary' : 'brand.grayPlaceholder'
+            }
+            leftIcon={<BoltIcon />}
+            onClick={fundButtonFunction}
+            isDisabled={project.active === false}
+          >
+            Contribute
+          </Button>
+        )}
       </VStack>
     </Card>
   );

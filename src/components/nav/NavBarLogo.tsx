@@ -14,6 +14,7 @@ type Props = HTMLChakraProps<'div'> & {
   className?: string;
   imageClassName?: string;
   full?: boolean;
+  small?: boolean;
 };
 
 const useStyles = createUseStyles({
@@ -28,6 +29,7 @@ export const NavBarLogo = ({
   className,
   imageClassName,
   full,
+  small,
   ...rest
 }: Props) => {
   const classes = useStyles();
@@ -35,7 +37,7 @@ export const NavBarLogo = ({
   const history = useHistory();
   const [isLargerThan720] = useMediaQuery('(min-width: 900px)');
 
-  const useFullOne = isLargerThan720 || full;
+  const useFullOne = (isLargerThan720 || full) && !small;
 
   const imageToUse =
     colorMode === 'light'

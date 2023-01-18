@@ -111,7 +111,7 @@ export const OwnerSponsorCard = ({
               width="40px"
               height="40px"
               name={owner.user.username}
-              src={owner.user.imageUrl}
+              src={`${owner.user.imageUrl}`}
             />
           </Link>
 

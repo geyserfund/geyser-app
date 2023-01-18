@@ -26,7 +26,7 @@ import {
 } from '../../constants';
 import { useAuthContext } from '../../context';
 import { UpdateReward } from '../../hooks';
-import { isMobileMode } from '../../utils';
+import { isMobileMode, toInt } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
 import { FundingFormRewardItem } from './components/FundingFormRewardItem';
@@ -108,7 +108,7 @@ export const ProjectDetailsAccessoriesSections = ({
               <FundingFormRewardItem
                 onClick={() => {
                   if (fundState === fundingStages.initial) {
-                    updateReward({ id: reward.id, count: 1 });
+                    updateReward({ id: toInt(reward.id), count: 1 });
                     setMobileView(MobileViews.funding);
                   }
                 }}

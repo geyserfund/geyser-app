@@ -101,7 +101,10 @@ export const ProjectNavUI = () => {
       paddingX="10px"
       justifyContent="center"
       alignItems="center"
-      spacing="28px"
+      spacing={{
+        base: '35px',
+        md: '50px',
+      }}
       paddingBottoim="2px"
     >
       <Button

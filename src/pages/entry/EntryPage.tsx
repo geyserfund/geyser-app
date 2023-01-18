@@ -60,6 +60,9 @@ export const EntryPage = () => {
     useLazyQuery(QUERY_GET_ENTRY, {
       onCompleted(data) {
         const { entry } = data;
+        if (!entry) {
+          history.push(getPath('notFound'));
+        }
 
         getProject({ variables: { where: { id: toInt(entry.project.id) } } });
       },
@@ -70,7 +73,7 @@ export const EntryPage = () => {
     });
 
   if (loadingPosts || loading || !projectData) {
-    return <Loader />;
+    return <Loader paddingTop="65px" />;
   }
 
   if (error || !entryData || !entryData.entry || projectError) {
