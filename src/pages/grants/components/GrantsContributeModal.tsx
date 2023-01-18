@@ -360,21 +360,20 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
             <FaCheck />
           </Box>
         </Box>
-
         <Text fontSize={'14px'}>
-          You contributed{' '}
+          Your{' '}
           <span style={{ fontWeight: 'bold' }}>
             {' '}
             {getSatoshisFromUSDCents(state.amount * 100)} sats{' '}
           </span>{' '}
-          to the Geyser Grants Pool.
+          contribution to Geyser Grants Round 2 was successful!
         </Text>
         <Text fontSize={'14px'}>
-          100 % of the funds are used to support the Bitcoin ecosystem through{' '}
-          <Link to={getPath('projectDiscovery')}>Geyser Projects</Link>.
+          Your donation will help accelerate bitcoin adoption by recognizing and
+          pushing forward bitcoin projects.
         </Text>
         <Text fontSize={'14px'}>
-          Donations are non-refundable and not tax deductible. You contributed
+          Donations are non-refundable and not tax deductible.
         </Text>
         {!fundingTx.onChain && (
           <Text mt={4} fontSize={'14px'}>
