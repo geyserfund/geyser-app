@@ -13,6 +13,7 @@ interface IButtonComponentP extends ButtonProps {
   standard?: boolean;
   circular?: boolean;
   ref?: any;
+  to?: string;
 }
 
 const useStyles = createUseStyles({
