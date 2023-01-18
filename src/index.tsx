@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { App } from './App';
 import { GlobalStyles } from './config';
 import reportWebVitals from './reportWebVitals';
-import * as serviceWorker from './utils/serviceWorker';
+import * as serviceWorker from './utils/tools/serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>

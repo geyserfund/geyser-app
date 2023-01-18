@@ -1,4 +1,4 @@
-import { FundingMethod, FundingTx } from '../types/generated/graphql';
+import { FundingMethod, FundingTx } from '../../types/generated/graphql';
 
 export interface FundingTxWithCount extends FundingTx {
   count?: number;

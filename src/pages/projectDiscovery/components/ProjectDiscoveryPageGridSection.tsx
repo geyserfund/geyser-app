@@ -335,7 +335,9 @@ export const ProjectDiscoveryPageGridSection = () => {
                 <>
                   {isLoadingMore.current === false ? (
                     <ScrollInvoke
-                      elementId="app-route-content-root"
+                      elementId={
+                        isMobile ? undefined : 'app-route-content-root'
+                      }
                       onScrollEnd={handleLoadMoreButtonTapped}
                       isLoading={isLoadingMore}
                       noMoreItems={isShowingAllProjects}

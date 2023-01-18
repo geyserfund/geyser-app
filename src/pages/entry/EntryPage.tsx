@@ -2,7 +2,7 @@ import { useLazyQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
-import { Head } from '../../utils/Head';
+import { Head } from '../../config/Head';
 import Loader from '../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { NotFoundPage } from '../notFound';
@@ -19,7 +19,7 @@ import {
   ProjectReward,
 } from '../../types/generated/graphql';
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
-import { compactMap } from '../../utils/compactMap';
+import { compactMap } from '../../utils/formatData/compactMap';
 import { getPath } from '../../constants';
 import { ProjectProvider } from '../projectView';
 import { isMobileMode, toInt } from '../../utils';

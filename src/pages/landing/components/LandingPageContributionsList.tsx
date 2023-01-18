@@ -5,7 +5,11 @@ import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
 import { FundingMethod, Project } from '../../../types/generated/graphql';
-import { aggregateTransactions, FundingTxWithCount } from '../../../utils';
+import {
+  aggregateTransactions,
+  FundingTxWithCount,
+  isMobileMode,
+} from '../../../utils';
 import { ScrollInvoke } from '../../../helpers';
 import { useQueryWithPagination } from '../../../hooks';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
@@ -13,6 +17,7 @@ import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
 const itemLimit = 50;
 
 export const LandingPageContributionsList = () => {
+  const isMobile = isMobileMode();
   const {
     isLoading,
     isLoadingMore,
@@ -90,7 +95,7 @@ export const LandingPageContributionsList = () => {
       </VStack>
 
       <ScrollInvoke
-        elementId="app-route-content-root"
+        elementId={isMobile ? undefined : 'app-route-content-root'}
         onScrollEnd={fetchNext}
         isLoading={isLoadingMore}
         noMoreItems={noMoreItems}

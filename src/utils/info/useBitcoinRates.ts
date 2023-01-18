@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchBitcoinRates } from '../api';
+import { fetchBitcoinRates } from '../../api';
 
 interface IuseBitcoinRates {
   loading: boolean;
