@@ -117,7 +117,6 @@ export const RewardAdditionModal = ({
         description: `Reward ${updateProjectReward.name} was successfully updated`,
         status: 'success',
       });
-      console.log('checking ', updateProjectReward);
       onSubmit(updateProjectReward);
       onClose();
     },
