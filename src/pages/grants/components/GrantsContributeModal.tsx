@@ -20,13 +20,8 @@ import {
 } from '@chakra-ui/react';
 import React, { useState, useEffect, useMemo } from 'react';
 import { FaCheck } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import {
-  fundingStages,
-  getPath,
-  MAX_FUNDING_AMOUNT_USD,
-} from '../../../constants';
+import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants';
 import { useAuthContext } from '../../../context';
 import { useFormState, useFundingFlow } from '../../../hooks';
 import { useBTCConverter } from '../../../helpers';
@@ -38,7 +33,7 @@ import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/ActivityP
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import { createGrantContributionRecord } from '../../../api';
 import { FormStateError } from '../../../interfaces';
-import { useNotification } from '../../../utils';
+import { toInt, useNotification } from '../../../utils';
 
 const GRANTS_PROJECT_NAME = 'grants';
 const defaultModalHeader = 'Contribute';
@@ -161,7 +156,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
 
     if (isValid) {
       const input: FundingInput = {
-        projectId: Number(grantsData?.project?.id),
+        projectId: toInt(grantsData?.project?.id),
         anonymous: Boolean(user),
         ...(state.amount !== 0 && {
           donationInput: {
@@ -172,7 +167,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
           ...(state.comment && { comment: state.comment }),
         },
         sourceResourceInput: {
-          resourceId: Number(grantsData?.project.id),
+          resourceId: toInt(grantsData?.project.id),
           resourceType: FundingResourceType.Project,
         },
       };

@@ -145,8 +145,7 @@ export const EntryCreateEdit = () => {
       ) {
         const { image, title, description, content } = value;
         const input: IEntryCreateInput = {
-          projectId:
-            projectData && projectData.project && toInt(projectData.project.id),
+          projectId: toInt(projectData?.project?.id),
           type: 'article',
           title,
           description,

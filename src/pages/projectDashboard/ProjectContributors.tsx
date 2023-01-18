@@ -48,7 +48,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
     queryName: 'getDashboardFunders',
     itemLimit: 100,
     query: QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS,
-    where: { projectId: parseInt(project.id, 10), confirmed: true },
+    where: { projectId: toInt(project.id), confirmed: true },
     orderBy: {
       confirmedAt: 'desc',
     },

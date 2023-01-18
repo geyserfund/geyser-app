@@ -7,6 +7,7 @@ import {
   aggregateTransactions,
   FundingTxWithCount,
   isMobileMode,
+  toInt,
 } from '../../../utils';
 import {
   Button,
@@ -53,14 +54,14 @@ export const ProjectFundingInitialInfoScreen = ({
     queryName: 'getFundingTxs',
     query: QUERY_GET_FUNDING_TXS_LANDING,
     resultMap: aggregateTransactions,
-    where: { projectId: parseInt(project.id, 10) },
+    where: { projectId: toInt(project.id) },
   });
 
   const funders = useQueryWithPagination<Funder>({
     queryName: 'getFunders',
     itemLimit,
     query: QUERY_GET_PROJECT_FUNDERS,
-    where: { projectId: parseInt(project.id, 10) },
+    where: { projectId: toInt(project.id) },
     orderBy: {
       amountFunded: 'desc',
     },

@@ -175,7 +175,7 @@ export const MilestoneAdditionModal = ({
           });
           if (data?.createProjectMilestone?.id) {
             return {
-              id: data.createProjectMilestone.id,
+              id: toInt(data.createProjectMilestone.id),
               ...milestone,
             };
           }
