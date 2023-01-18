@@ -5,7 +5,7 @@ import { isMobileMode } from '../../utils';
 export default function ApplicantAirTableEmbed() {
   const isMobile = isMobileMode();
   return (
-    <Box height={isMobile ? 'calc(100vh - 170px)' : 'calc(100vh - 220px)'}>
+    <Box height={isMobile ? 'calc(100vh - 230px)' : 'calc(100vh - 250px)'}>
       <iframe
         className="airtable-embed"
         src="https://airtable.com/embed/shrfeI21FWzyCqHZy?backgroundColor=teal"
