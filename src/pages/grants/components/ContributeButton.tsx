@@ -27,7 +27,7 @@ import { ButtonComponent } from '../../../components/ui';
 import { useNotification, isMobileMode } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
-import { commaFormatted } from '../../../utils/helperFunctions';
+import { commaFormatted } from '../../../utils/formatData/helperFunctions';
 import { IProject, IFundingInput } from '../../../interfaces';
 import { useFundingFlow } from '../../../hooks';
 import { fundingStages, GeyserTelegramUrl } from '../../../constants';

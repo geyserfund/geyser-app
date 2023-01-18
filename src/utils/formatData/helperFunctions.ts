@@ -1,3 +1,5 @@
+import { Project, ProjectStatus } from '../../types/generated/graphql';
+
 export const commaFormatted = (amount: number) =>
   amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
@@ -48,8 +50,4 @@ export const numberWithCommas = (x: string | number) => {
   }
 
   return value;
-};
-
-export const toInt = (val: any) => {
-  return parseInt(`${val}`, 10);
 };

@@ -1,6 +1,6 @@
 import { Link, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { Head } from '../../utils/Head';
+import { Head } from '../../config/Head';
 import { BiErrorAlt } from 'react-icons/bi';
 
 export const NotFoundPage = () => (

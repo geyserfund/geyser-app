@@ -1,4 +1,4 @@
-import { anonymousOrbBaseUrl } from '../constants';
+import { anonymousOrbBaseUrl } from '../../constants';
 
 export const getRandom = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1) + min);
