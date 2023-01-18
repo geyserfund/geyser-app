@@ -80,13 +80,13 @@ export const GrantsRoundTwo = () => {
 
   const [copy, setCopy] = useState(false);
 
-  const [sponsors, setSponsers] = useState<GrantSponsor[]>([]);
+  const [sponsors, setSponsors] = useState<GrantSponsor[]>([]);
   const [categorizedApplications, setCategorizedApplications] =
     useState<CaregorizedApplications>(defaultApplications);
 
   const handleCompleteContribution = (value: GrantSponsor) => {
     if (value.amount >= 1000) {
-      setSponsers([...sponsors, value]);
+      setSponsors([...sponsors, value]);
     }
   };
 
@@ -102,13 +102,13 @@ export const GrantsRoundTwo = () => {
     const getSponsors = async () => {
       const sponsorResponse = await getGrantSponsorRecords();
 
-      const listSponsers = sponsorResponse.map((sponsor: any) => ({
+      const listSponsors = sponsorResponse.map((sponsor: any) => ({
         name: sponsor.fields.Name,
         amount: sponsor.fields.Amount,
         imageUrl: sponsor.fields['PFP link'],
       }));
 
-      setSponsers(listSponsers);
+      setSponsors(listSponsors);
     };
 
     getSponsors();
