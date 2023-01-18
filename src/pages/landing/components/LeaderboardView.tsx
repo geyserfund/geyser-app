@@ -53,7 +53,7 @@ export const LeaderboardView = () => {
             </Link>
           </HStack>
 
-          <Divider borderWidth="2px" borderRadius="full" />
+          <Divider borderWidth="1px" borderRadius="full" />
         </VStack>
 
         <LandingPageProjectsList />
