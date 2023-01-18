@@ -25,7 +25,7 @@ const useStyles = createUseStyles<Rules, StyleProps>({
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
-
+    minHeight: '350px',
     '& .ql-toolbar': {
       position: 'fixed',
       display: isReadOnly ? 'none' : 'flex',
