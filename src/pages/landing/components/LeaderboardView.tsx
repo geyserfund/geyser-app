@@ -30,7 +30,7 @@ export const LeaderboardView = () => {
             justify="space-between"
             align="center"
             my="5px"
-            paddingTop="15px"
+            paddingTop="10px"
           >
             <Heading as="h5" size="sm">
               Top Projects

@@ -81,17 +81,20 @@ export const ProjectDetailsCard = ({
       }
 
       return (
-        <HStack>
-          <Text color="brand.primary800" fontWeight={500}>
-            {'You contributed'}
-          </Text>
-          <SatoshiAmount color="brand.primary800" fontWeight={500}>
-            {currentFund.amountFunded}
-          </SatoshiAmount>
-          <Text color="brand.primary800" fontWeight={500}>
-            {' towards this project'}
-          </Text>
-        </HStack>
+        <>
+          {!isMobile && <Text color="brand.primary800">|</Text>}
+          <HStack>
+            <Text color="brand.primary800" fontWeight={500}>
+              {'You contributed'}
+            </Text>
+            <SatoshiAmount color="brand.primary800" fontWeight={500}>
+              {currentFund.amountFunded}
+            </SatoshiAmount>
+            <Text color="brand.primary800" fontWeight={500}>
+              {' towards this project'}
+            </Text>
+          </HStack>
+        </>
       );
     }
 
@@ -201,7 +204,7 @@ export const ProjectDetailsCard = ({
           <Stack
             direction={isMobile ? 'column' : 'row'}
             width="100%"
-            justifyContent="space-around"
+            justifyContent="center"
             alignItems={'center'}
           >
             {renderContributorsCount()}
