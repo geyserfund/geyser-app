@@ -36,7 +36,7 @@ type Props = HTMLChakraProps<'div'> & {
   contributionAmount: Satoshis;
   referenceCode?: string;
   isFunderAnonymous?: boolean;
-  showGeyserFee?: boolean;
+  showGeyserFee: boolean;
   funderEmail?: string;
   funderUsername?: string;
   funderAvatarURL?: string;
@@ -76,6 +76,7 @@ export const ContributionInfoBox = ({
   funderEmail,
   funderUsername,
   funderAvatarURL,
+  showGeyserFee,
   // rewardsEarned = {},
   version,
   ...rest
@@ -247,45 +248,48 @@ export const ContributionInfoBox = ({
           </HStack>
         </>
       )}
+      {showGeyserFee && (
+        <>
+          <ContributionInfoBoxDivider version={version} />
+          <HStack justifyContent={'space-between'} width={'full'}>
+            <HStack>
+              <Text
+                fontSize="14px"
+                textColor={'brand.neutral700'}
+                fontWeight={'normal'}
+              >
+                Geyser fee
+              </Text>
+              <Tooltip
+                borderRadius="4px"
+                label={GEYSER_FEE_DISCLAIMER}
+                placement="top"
+              >
+                <Box as="span">
+                  <BsInfoCircle fontSize="12px" />
+                </Box>
+              </Tooltip>
+            </HStack>
 
-      <ContributionInfoBoxDivider version={version} />
-      <HStack justifyContent={'space-between'} width={'full'}>
-        <HStack>
-          <Text
-            fontSize="14px"
-            textColor={'brand.neutral700'}
-            fontWeight={'normal'}
-          >
-            Geyser fee
-          </Text>
-          <Tooltip
-            borderRadius="4px"
-            label={GEYSER_FEE_DISCLAIMER}
-            placement="top"
-          >
-            <Box as="span">
-              <BsInfoCircle fontSize="12px" />
-            </Box>
-          </Tooltip>
-        </HStack>
-
-        <HStack>
-          <SatoshiAmount
-            fontSize="14px"
-            textColor={'brand.neutral700'}
-            fontWeight={'medium'}
-          >
-            {isNoFees ? 0 : Math.round(contributionAmount * 0.02)}
-          </SatoshiAmount>
-          <Text
-            fontSize="14px"
-            textColor={'brand.neutral700'}
-            fontWeight={'normal'}
-          >
-            {isNoFees ? `(0%)` : `(2%)`}
-          </Text>
-        </HStack>
-      </HStack>
+            <HStack>
+              <SatoshiAmount
+                fontSize="14px"
+                textColor={'brand.neutral700'}
+                fontWeight={'medium'}
+              >
+                {isNoFees ? 0 : Math.round(contributionAmount * 0.02)}
+              </SatoshiAmount>
+              <Text
+                fontSize="14px"
+                textColor={'brand.neutral700'}
+                fontWeight={'normal'}
+              >
+                {isNoFees ? `(0%)` : `(2%)`}
+              </Text>
+            </HStack>
+          </HStack>
+        </>
+      )}
 
       <ContributionInfoBoxDivider version={version} />
       <HStack justifyContent={'space-between'} width={'full'} fontSize={'10px'}>
