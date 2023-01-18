@@ -361,9 +361,8 @@ export const EntryCreateEdit = () => {
                 _focus={{ border: 'none' }}
                 placeholder="The Entry Title"
                 color="brand.gray500"
-                fontSize="40px"
+                fontSize={isMobile ? '35px' : '40px'}
                 fontWeight={700}
-                marginTop="20px"
                 paddingBottom="5px"
                 name="title"
                 value={form.current.title}
@@ -377,7 +376,7 @@ export const EntryCreateEdit = () => {
                 _focus={{ border: 'none' }}
                 placeholder="The summary of this entry"
                 color="brand.gray500"
-                fontSize="26px"
+                fontSize={isMobile ? '20px' : '26px'}
                 fontWeight={600}
                 name="description"
                 value={form.current.description}
