@@ -313,7 +313,7 @@ export const ProjectDiscoveryPageGridSection = () => {
                   </MenuList>
                 </Menu>
               </HStack>
-              <Divider borderWidth="2px" />
+              <Divider borderWidth="1px" />
             </StickToTop>
           </GridItem>
 

@@ -42,7 +42,13 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
       let selectedMilestone: ProjectMilestone | undefined;
 
       project.milestones.map((milestone, index) => {
-        if (milestone && milestone.amount >= balance && !selectedMilestone) {
+        const hasNextMilestone =
+          project.milestones && Boolean(project.milestones[index + 1]);
+        if (
+          milestone &&
+          (milestone.amount >= balance || !hasNextMilestone) &&
+          !selectedMilestone
+        ) {
           selectedMilestone = milestone;
           setCurrentMilestone(milestone);
           setMilestoneIndex(index + 1);
@@ -116,7 +122,11 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const showCountdown = project.active && Boolean(project.expiresAt);
 
   return (
-    <HStack width="100%" padding="10px 20px" justifyContent="space-between">
+    <HStack
+      width="100%"
+      padding={isMobile ? '20px 20px 0px 20px' : '10px 20px'}
+      justifyContent="space-between"
+    >
       {renderCircularProgress()}
       <VStack flex="1" spacing="5px" width="100%" overflow="hidden">
         {!isMobile && (

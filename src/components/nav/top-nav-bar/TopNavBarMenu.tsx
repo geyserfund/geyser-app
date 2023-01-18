@@ -22,8 +22,10 @@ type Props = {
   shouldShowDashboardMenuItem: boolean;
   shouldShowSignInMenuItem: boolean;
   shouldShowMyProjectsMenuItem: boolean;
+  shouldShowMyProjectButtonInsideDropdownMenu: boolean;
   onDashboardSelected: () => void;
   onMyProjectsSelected: () => void;
+  onMyProjectSelected: () => void;
   onSignInSelected: () => void;
   onSignOutSelected: () => void;
 };
@@ -32,9 +34,11 @@ export const TopNavBarMenu = ({
   shouldShowSignInMenuItem,
   shouldShowDashboardMenuItem,
   shouldShowMyProjectsMenuItem,
+  shouldShowMyProjectButtonInsideDropdownMenu,
   onSignInSelected,
   onDashboardSelected,
   onMyProjectsSelected,
+  onMyProjectSelected,
   onSignOutSelected,
 }: Props) => {
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
@@ -112,7 +116,24 @@ export const TopNavBarMenu = ({
                 width="100%"
                 onClick={onMyProjectsSelected}
               >
-                My Projects
+                View my projects
+              </ButtonComponent>
+            </MenuItem>
+
+            <MenuDivider />
+          </>
+        ) : null}
+
+        {shouldShowMyProjectButtonInsideDropdownMenu ? (
+          <>
+            <MenuItem px={4} py={2}>
+              <ButtonComponent
+                primary
+                variant="solid"
+                width="100%"
+                onClick={onMyProjectSelected}
+              >
+                View my project
               </ButtonComponent>
             </MenuItem>
 

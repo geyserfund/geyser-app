@@ -3,7 +3,7 @@ import { AuthModal } from '../../../components/molecules';
 import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
 import { SuccessScreen } from './SuccessScreen';
 import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
-import { isMobileMode } from '../../../utils';
+import { isMobileMode, toInt } from '../../../utils';
 import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
 
 import { AuthContext } from '../../../context';
@@ -123,7 +123,7 @@ export const ProjectActivityPanel = ({
     } = state;
 
     const input: IFundingInput = {
-      projectId: Number(project.id),
+      projectId: toInt(project.id),
       anonymous,
       ...(donationAmount !== 0 && { donationInput: { donationAmount } }),
       metadataInput: {
@@ -132,7 +132,7 @@ export const ProjectActivityPanel = ({
         ...(comment && { comment }),
       },
       sourceResourceInput: {
-        resourceId: resourceId || Number(project.id),
+        resourceId: toInt(resourceId) || toInt(project.id),
         resourceType: resourceType || 'project',
       },
     };
@@ -143,7 +143,7 @@ export const ProjectActivityPanel = ({
       rewardsByIDAndCount
     ) {
       const rewardsArray = Object.keys(rewardsByIDAndCount).map((key) => ({
-        id: parseInt(key, 10),
+        id: toInt(key),
         quantity: rewardsByIDAndCount[key as keyof ProjectReward],
       }));
       const filteredRewards = rewardsArray.filter(

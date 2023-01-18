@@ -4,7 +4,7 @@ import { client, customHistory, theme } from './config';
 import { ApolloProvider } from '@apollo/client';
 import { AuthProvider } from './context';
 import { BtcProvider } from './context/btc';
-import { Head } from './utils/Head';
+import { Head } from './config/Head';
 import { Router as BrowserRouter } from 'react-router-dom';
 import { AppLayout } from './AppLayout';
 

@@ -14,6 +14,7 @@ import { colors } from '../../../constants';
 import { IRewardCount } from '../../../interfaces';
 import { ImageWithReload } from '../../../components/ui';
 import { ProjectReward } from '../../../types/generated/graphql';
+import { toInt } from '../../../utils';
 
 const useStyles = createUseStyles({
   container: {
@@ -77,7 +78,7 @@ export const FundingFormRewardItem = ({
     const newCount = count + 1;
     setCount(newCount);
     if (updateCount) {
-      updateCount({ id: item.id, count: newCount });
+      updateCount({ id: toInt(item.id), count: newCount });
     }
   };
 
@@ -86,7 +87,7 @@ export const FundingFormRewardItem = ({
       const newCount = count - 1;
       setCount(newCount);
       if (updateCount) {
-        updateCount({ id: item.id, count: newCount });
+        updateCount({ id: toInt(item.id), count: newCount });
       }
     }
   };

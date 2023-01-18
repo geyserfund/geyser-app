@@ -1,4 +1,4 @@
-import { Maybe } from '../types/generated/graphql';
+import { Maybe } from '../../types/generated/graphql';
 
 export const compactMap = <T>(arr: Maybe<T>[]): T[] =>
   arr

@@ -7,7 +7,7 @@ import { IFundingAmounts } from '../interfaces';
 import { IFundingStages } from '../constants';
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { MUTATION_FUND } from '../graphql';
-import { sha256, useNotification } from '../utils';
+import { sha256, toInt, useNotification } from '../utils';
 import { RejectionError, WebLNProvider } from 'webln';
 
 import {
@@ -136,7 +136,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     FundingTXQueryInput
   >(QUERY_GET_FUNDING_TX_STATUS_AND_INVOICE_STATUS, {
     variables: {
-      fundingTxID: fundingTx.id,
+      fundingTxID: toInt(fundingTx.id),
     },
     fetchPolicy: 'network-only',
   });
