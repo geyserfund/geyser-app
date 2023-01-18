@@ -15,8 +15,8 @@ import {
 } from '../../../graphql/mutations/entries';
 import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
 import { IEntryUpdateInput } from '../../../interfaces/entry';
-import { Owner } from '../../../types/generated/graphql';
-import { isMobileMode, useNotification } from '../../../utils';
+import { Owner, Project } from '../../../types/generated/graphql';
+import { isDraft, useNotification } from '../../../utils';
 import { defaultEntry } from './editor';
 import { CreateNav } from './editor/CreateNav';
 import { TEntry } from './types';
@@ -26,7 +26,6 @@ let isEdited = false;
 export const EntryPreview = () => {
   const params = useParams<{ entryId: string; projectId: string }>();
 
-  const isMobile = isMobileMode();
   const { toast } = useNotification();
   const history = useHistory();
   const { setNav } = useAuthContext();
@@ -36,31 +35,35 @@ export const EntryPreview = () => {
 
   const [entry, setEntry] = useState<TEntry>(defaultEntry);
 
-  const [getPost, { loading: loadingPosts, error, data: entryData }] =
+  const [getPost, { loading: loadingPosts, data: entryData }] =
     useLazyQuery(QUERY_GET_ENTRY);
 
-  const [updatePost, { data: updateData, loading: updatePostLoading }] =
-    useMutation(MUTATION_UPDATE_ENTRY);
+  const [updatePost, { loading: updatePostLoading }] = useMutation(
+    MUTATION_UPDATE_ENTRY,
+  );
 
-  const [publishPost, publishData] = useMutation(MUTATION_PUBLISH_ENTRY);
+  const [publishPost] = useMutation(MUTATION_PUBLISH_ENTRY);
 
-  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
-    variables: { where: { name: params.projectId } },
-    onCompleted(data) {
-      setNav({
-        projectName: data.project.name,
-        projectTitle: data.project.title,
-        projectPath: getPath('project', data.project.name),
-        projectOwnerIDs:
-          data.project.owners.map((ownerInfo: Owner) => {
-            return Number(ownerInfo.user.id || -1);
-          }) || [],
-      });
+  const { loading, data: projectData } = useQuery<{ project: Project }>(
+    QUERY_PROJECT_BY_NAME_OR_ID,
+    {
+      variables: { where: { name: params.projectId } },
+      onCompleted(data) {
+        setNav({
+          projectName: data.project.name,
+          projectTitle: data.project.title,
+          projectPath: getPath('project', data.project.name),
+          projectOwnerIDs:
+            data.project.owners.map((ownerInfo: Owner) => {
+              return Number(ownerInfo.user.id || -1);
+            }) || [],
+        });
+      },
+      onError() {
+        history.push(getPath('notFound'));
+      },
     },
-    onError() {
-      history.push(getPath('notFound'));
-    },
-  });
+  );
 
   useEffect(() => {
     if (params && params.entryId) {
@@ -272,7 +275,7 @@ export const EntryPreview = () => {
               <Text>Where should Satoshi donations go to?</Text>
               <TextInputBox
                 isDisabled
-                value={`${projectData.project.name}@geyser.fund`}
+                value={`${projectData?.project.name}@geyser.fund`}
               />
             </VStack>
           )}
@@ -290,7 +293,7 @@ export const EntryPreview = () => {
                 Go to Entry
               </ButtonComponent>
             </VStack>
-          ) : projectData.project.draft ? (
+          ) : isDraft(projectData?.project.status) ? (
             <>
               <Text>
                 You cannot publish an entry in an inactive project. Finish the
@@ -302,7 +305,7 @@ export const EntryPreview = () => {
                 isFullWidth
                 onClick={() =>
                   history.push(
-                    getPath('projectDashboard', projectData.project.name),
+                    getPath('projectDashboard', projectData?.project.name),
                   )
                 }
               >

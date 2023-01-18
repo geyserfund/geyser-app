@@ -25,6 +25,7 @@ import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
 import {
   isMobileMode,
+  isActive,
   toInt,
   useNotification,
   validateEmail,
@@ -65,7 +66,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
       : undefined,
   );
   const [finalDate, setFinalDate] = useState<string>();
-  const [deactivate, setDeactivate] = useState(!project.active);
+  const [deactivate, setDeactivate] = useState(!isActive(project.status));
 
   const [updateProject, { loading: updateLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,

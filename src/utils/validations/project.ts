@@ -1,5 +1,9 @@
-import { Project, ProjectStatus } from '../../types/generated/graphql';
+import { Maybe, ProjectStatus } from '../../types/generated/graphql';
 
-export const isProjectActive = (project: Project) => {
-  return project.status === ProjectStatus.Active;
+export const isActive = (status: Maybe<ProjectStatus>) => {
+  return status ? status === ProjectStatus.Active : false;
+};
+
+export const isDraft = (status: Maybe<ProjectStatus>) => {
+  return status ? status === ProjectStatus.Draft : false;
 };

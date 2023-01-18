@@ -28,18 +28,22 @@ import { useNotification, isMobileMode } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
 import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { IProject, IFundingInput } from '../../../interfaces';
 import { useFundingFlow } from '../../../hooks';
 import { fundingStages, GeyserTelegramUrl } from '../../../constants';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { useBtcContext } from '../../../context/btc';
 import { Subscribe } from '../../../components/nav/Subscribe';
 import { FaTelegramPlane } from 'react-icons/fa';
+import {
+  FundingInput,
+  FundingResourceType,
+  Project,
+} from '../../../types/generated/graphql';
 
 interface ContributeButtonProps {
   active: boolean;
   title: string;
-  project: IProject;
+  project: Project;
 }
 
 export const ContributeButton = ({
@@ -112,7 +116,7 @@ export const ContributeButton = ({
   };
 
   const handleFund = async () => {
-    const input: IFundingInput = {
+    const input: FundingInput = {
       projectId: Number(project.id),
       anonymous: true,
       donationInput: {
@@ -120,7 +124,7 @@ export const ContributeButton = ({
       },
       sourceResourceInput: {
         resourceId: Number(project.id),
-        resourceType: 'project',
+        resourceType: FundingResourceType.Project,
       },
     };
     requestFunding(input);
@@ -175,7 +179,7 @@ export const ContributeButton = ({
         <ModalContent>
           <HStack p={6}>
             <Image
-              src={project.image}
+              src={`${project.image}`}
               alt="icon"
               rounded="lg"
               w="100px"
@@ -322,7 +326,7 @@ export const ContributeButton = ({
         <ModalContent>
           <HStack p={6}>
             <Image
-              src={project.image}
+              src={`${project.image}`}
               alt="icon"
               rounded="lg"
               w="100px"

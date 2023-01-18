@@ -17,8 +17,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       updatedAt
       expiresAt
       image
-      active
-      draft
+      status
       rewardCurrency
       fundersCount
       fundingTxsCount
@@ -154,7 +153,7 @@ export const QUERY_GRANTS = gql`
         fundingGoal
         createdAt
         expiresAt
-        active
+        status
         media
         image
       }
@@ -177,8 +176,7 @@ export const QUERY_PROJECTS = gql`
         updatedAt
         expiresAt
         image
-        active
-        draft
+        status
         media
         owners {
           id

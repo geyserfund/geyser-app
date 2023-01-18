@@ -7,6 +7,7 @@ import {
   aggregateTransactions,
   FundingTxWithCount,
   isMobileMode,
+  isActive,
 } from '../../../utils';
 import {
   Button,
@@ -207,10 +208,10 @@ export const ProjectFundingInitialInfoScreen = ({
           leftIcon={<SatoshiIconTilted />}
           width="100%"
           backgroundColor={
-            project.active ? 'brand.primary' : 'brand.grayPlaceholder'
+            isActive(project.status) ? 'brand.primary' : 'brand.grayPlaceholder'
           }
           onClick={() => setMobileView(MobileViews.funding)}
-          isDisabled={project.active === false}
+          isDisabled={!isActive(project.status)}
         >
           Contribute
         </ButtonComponent>
