@@ -249,7 +249,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
               <Text
                 fontSize={'16px'}
                 fontWeight={600}
-              >{`${project.fundersCount} Contributers`}</Text>
+              >{`${project.fundersCount} Contributors`}</Text>
               {selectedFunders.length > 0 && (
                 <Text
                   fontSize={'14px'}
