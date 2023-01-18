@@ -288,7 +288,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   <TextInputBox
                     name="lightning-address"
                     type={'email'}
-                    placeholder={'Enter your Lightning Address'}
+                    placeholder={'satoshi@getalby.com'}
                     value={lightningAddressFormValue}
                     onChange={(event) => {
                       setLightningAddressFormValue(event.target.value);
