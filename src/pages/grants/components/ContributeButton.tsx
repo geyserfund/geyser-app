@@ -24,7 +24,7 @@ import QRCode from 'react-qr-code';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
 import { ButtonComponent } from '../../../components/ui';
-import { useNotification, isMobileMode } from '../../../utils';
+import { useNotification, isMobileMode, toInt } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
 import { commaFormatted } from '../../../utils/formatData/helperFunctions';
@@ -117,13 +117,13 @@ export const ContributeButton = ({
 
   const handleFund = async () => {
     const input: FundingInput = {
-      projectId: Number(project.id),
+      projectId: toInt(project.id),
       anonymous: true,
       donationInput: {
         donationAmount: parseInt((contributeAmount / btcRate).toFixed(0)),
       },
       sourceResourceInput: {
-        resourceId: Number(project.id),
+        resourceId: toInt(project.id),
         resourceType: FundingResourceType.Project,
       },
     };

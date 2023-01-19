@@ -5,8 +5,10 @@ import { BitcoinerCard } from './BitcoinerCard';
 import {
   abubakarUrl,
   bradUrl,
+  carlaUrl,
   danialUrl,
   desUrl,
+  joeNakamotoUrl,
   lucasUrl,
   pacoUrl,
   zuccoUrl,
@@ -50,6 +52,16 @@ const members = [
     name: 'Giacomo Zucco',
     image: zuccoUrl,
     link: 'https://twitter.com/giacomozucco',
+  },
+  {
+    name: 'CARLA',
+    image: carlaUrl,
+    link: 'https://twitter.com/thecryptoc0up1e',
+  },
+  {
+    name: 'Joe Nakamoto',
+    image: joeNakamotoUrl,
+    link: 'https://twitter.com/JoeNakamoto',
   },
 ];
 

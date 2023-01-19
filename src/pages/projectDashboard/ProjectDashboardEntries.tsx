@@ -11,7 +11,7 @@ import {
 import { ButtonComponent } from '../../components/ui';
 import { getPath } from '../../constants';
 import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations';
-import { useNotification } from '../../utils';
+import { toInt, useNotification } from '../../utils';
 import {
   Entry,
   Project,
@@ -41,7 +41,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
   const { loading } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_DASHBOARD_DATA,
     {
-      variables: { where: { id: project.id } },
+      variables: { where: { id: toInt(project.id) } },
       onCompleted: (data) => {
         const live = data.project.publishedEntries;
         const draft = data.project.unpublishedEntries;
@@ -81,7 +81,9 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
     }
 
     try {
-      await deleteEntry({ variables: { deleteEntryId: selectedEntry.id } });
+      await deleteEntry({
+        variables: { deleteEntryId: toInt(selectedEntry.id) },
+      });
 
       if (selectedEntry.published) {
         const newLive = liveEntries.filter(

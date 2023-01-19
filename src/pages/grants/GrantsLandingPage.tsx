@@ -88,12 +88,12 @@ export const GrantsLandingPage = () => {
             Geyser Grants
           </Text>
           <H2 textAlign="center" paddingY="10px">
-            Empowering{isMobile ? <br /> : null} bitcoin creators
+            Empowering bitcoin creators
           </H2>
           <H3 textAlign="center" color={'brand.neutral600'}>
             Funding educators, creatives and builders doing Bitcoin-only
             projects on Geyser. <br /> Funded by bitcoiners who want to change
-            {isMobile ? <br /> : ''} the world.
+            the world.
           </H3>
 
           <Box
@@ -152,6 +152,7 @@ export const GrantsLandingPage = () => {
                     <ButtonComponent
                       size="sm"
                       primary={copy}
+                      marginLeft="5px"
                       onClick={handleCopyOnchain}
                       leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
                     >

@@ -81,17 +81,20 @@ export const ProjectDetailsCard = ({
       }
 
       return (
-        <HStack>
-          <Text color="brand.primary800" fontWeight={500}>
-            {'You contributed'}
-          </Text>
-          <SatoshiAmount color="brand.primary800" fontWeight={500}>
-            {currentFund.amountFunded}
-          </SatoshiAmount>
-          <Text color="brand.primary800" fontWeight={500}>
-            {' towards this project'}
-          </Text>
-        </HStack>
+        <>
+          {!isMobile && <Text color="brand.primary800">|</Text>}
+          <HStack>
+            <Text color="brand.primary800" fontWeight={500}>
+              {'You contributed'}
+            </Text>
+            <SatoshiAmount color="brand.primary800" fontWeight={500}>
+              {currentFund.amountFunded}
+            </SatoshiAmount>
+            <Text color="brand.primary800" fontWeight={500}>
+              {' towards this project'}
+            </Text>
+          </HStack>
+        </>
       );
     }
 
@@ -103,7 +106,7 @@ export const ProjectDetailsCard = ({
     return (
       <Text color="brand.primary800" fontWeight={500}>
         {contributorsCount}{' '}
-        {contributorsCount === 1 ? 'contributor' : 'contributors'} |
+        {contributorsCount === 1 ? 'contributor' : 'contributors'}
       </Text>
     );
   };
@@ -194,26 +197,37 @@ export const ProjectDetailsCard = ({
           <Text color="brand.neutral600" textAlign="left">
             Objective
           </Text>
-          <Text color="brand.neutral800">{project.description}</Text>
+          <Text color="brand.neutral800" wordBreak="break-word">
+            {project.description}
+          </Text>
         </VStack>
         {renderMilestone()}
         {project.funders.length > 0 && (
-          <HStack width="100%" justifyContent="center">
+          <Stack
+            direction={isMobile ? 'column' : 'row'}
+            width="100%"
+            justifyContent="center"
+            alignItems={'center'}
+          >
             {renderContributorsCount()}
             {renderYourFunding()}
-          </HStack>
+          </Stack>
         )}
-        <Button
-          isFullWidth
-          backgroundColor={
-            isActive(project.status) ? 'brand.primary' : 'brand.grayPlaceholder'
-          }
-          leftIcon={<BoltIcon />}
-          onClick={fundButtonFunction}
-          isDisabled={isActive(project.status) === false}
-        >
-          Contribute
-        </Button>
+        {!isMobile && (
+          <Button
+            isFullWidth
+            backgroundColor={
+              isActive(project.status)
+                ? 'brand.primary'
+                : 'brand.grayPlaceholder'
+            }
+            leftIcon={<BoltIcon />}
+            onClick={fundButtonFunction}
+            isDisabled={isActive(project.status) === false}
+          >
+            Contribute
+          </Button>
+        )}
       </VStack>
     </Card>
   );

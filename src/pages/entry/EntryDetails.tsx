@@ -7,6 +7,7 @@ import { BiLeftArrowAlt } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import { Entry } from '../../types/generated/graphql';
 import { getPath } from '../../constants';
+import { ButtonComponent } from '../../components/ui';
 
 type Props = {
   entry: Entry;
@@ -18,18 +19,14 @@ export const EntryDetails = ({ entry }: Props) => {
   return (
     <VStack width="100%" alignItems="flex-start" height={'100%'}>
       {/* At the moment entries are always tied to a project so we can force unwrap this term */}
-      <Link to={getPath('project', entry.project!.name)}>
-        <Box
-          display="flex"
-          size="xs"
-          borderWidth="0px"
-          boxShadow="none!"
-          _hover={{ cursor: 'pointer' }}
-        >
-          <BiLeftArrowAlt fontSize="15px" />{' '}
-          <Text fontSize="10px">View project</Text>
-        </Box>
-      </Link>
+      <ButtonComponent
+        size="sm"
+        as={Link}
+        to={getPath('project', entry.project!.name)}
+        leftIcon={<BiLeftArrowAlt fontSize="15px" />}
+      >
+        View project
+      </ButtonComponent>
 
       <Box>
         <Text fontSize="35px" fontWeight={700} color="brand.neutral900">
