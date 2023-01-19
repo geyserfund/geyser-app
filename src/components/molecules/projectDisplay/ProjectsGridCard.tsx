@@ -127,7 +127,12 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               />
             </HStack>
 
-            <Text noOfLines={5} textAlign="left" size="sm">
+            <Text
+              noOfLines={5}
+              textAlign="left"
+              size="sm"
+              wordBreak="break-word"
+            >
               {project.description}
             </Text>
           </VStack>

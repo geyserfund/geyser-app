@@ -10,7 +10,7 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { isMobileMode } from '../../utils';
+import { isMobileMode, useNotification } from '../../utils';
 import satsymbol from '../../assets/satsymbolprimary.svg';
 import { fonts } from '../../constants/fonts';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -26,6 +26,8 @@ import { ButtonComponent } from '../../components/ui';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
 import { GrantCategory } from './components/ApplyGrantModal';
+import ApplicantAirTableEmbed from './ApplicantAirTableEmbed';
+import Loader from '../../components/ui/Loader';
 
 const grants = [
   {
@@ -77,8 +79,12 @@ const defaultApplications: CaregorizedApplications = {
 export const GrantsRoundTwo = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
+  const { toast } = useNotification();
 
   const [copy, setCopy] = useState(false);
+
+  const [applicantLoading, setApplicantLoading] = useState(false);
+  const [sponsorLoading, setSponsorLoading] = useState(false);
 
   const [sponsors, setSponsors] = useState<GrantSponsor[]>([]);
   const [categorizedApplications, setCategorizedApplications] =
@@ -100,15 +106,24 @@ export const GrantsRoundTwo = () => {
 
   useEffect(() => {
     const getSponsors = async () => {
-      const sponsorResponse = await getGrantSponsorRecords();
+      setSponsorLoading(true);
+      try {
+        const sponsorResponse = await getGrantSponsorRecords();
 
-      const listSponsors = sponsorResponse.map((sponsor: any) => ({
-        name: sponsor.fields.Name,
-        amount: sponsor.fields.Amount,
-        imageUrl: sponsor.fields['PFP link'],
-      }));
+        const listSponsors = sponsorResponse.map((sponsor: any) => ({
+          name: sponsor.fields.Name,
+          amount: sponsor.fields.Amount,
+          imageUrl: sponsor.fields['PFP link'],
+        }));
+        setSponsors(listSponsors);
+      } catch (error) {
+        toast({
+          status: 'error',
+          title: 'Failed to fetch sponsors',
+        });
+      }
 
-      setSponsors(listSponsors);
+      setSponsorLoading(false);
     };
 
     getSponsors();
@@ -116,26 +131,36 @@ export const GrantsRoundTwo = () => {
 
   useEffect(() => {
     const getApplicants = async () => {
-      const applicantResponse = await getGrantApplicants();
+      setApplicantLoading(true);
+      try {
+        const applicantResponse = await getGrantApplicants();
+        const categorized: CaregorizedApplications = defaultApplications;
 
-      const categorized: CaregorizedApplications = defaultApplications;
+        applicantResponse.map((application) => {
+          switch (application.fields.Grant) {
+            case GrantCategory.translations:
+              categorized[GrantCategory.translations].push(application);
+              break;
+            case GrantCategory.communities:
+              categorized[GrantCategory.communities].push(application);
+              break;
+            case GrantCategory.visualArt:
+              categorized[GrantCategory.visualArt].push(application);
+              break;
+            default:
+              break;
+          }
+        });
 
-      applicantResponse.map((application) => {
-        switch (application.fields.Grant) {
-          case GrantCategory.translations:
-            categorized[GrantCategory.translations].push(application);
-            break;
-          case GrantCategory.communities:
-            categorized[GrantCategory.communities].push(application);
-            break;
-          case GrantCategory.visualArt:
-            categorized[GrantCategory.visualArt].push(application);
-            break;
-          default:
-            break;
-        }
-      });
-      setCategorizedApplications(categorized);
+        setCategorizedApplications(categorized);
+      } catch (error) {
+        toast({
+          status: 'error',
+          title: 'Failed to fetch applicants',
+        });
+      }
+
+      setApplicantLoading(false);
     };
 
     getApplicants();
@@ -245,25 +270,31 @@ export const GrantsRoundTwo = () => {
                 }
               />
             </Box>
-
-            <Grid
-              templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
-              gap={6}
-              minWidth="100%"
-              mt={8}
-            >
-              {grants.map((item) => (
-                <GridItem w={'100%'} key={item.name}>
-                  <ApplyGrantCard
-                    title={item.title}
-                    subtitle={item.subtitle}
-                    about={item.about}
-                    image={item.image}
-                    applicant={categorizedApplications[item.key].length}
-                  />
-                </GridItem>
-              ))}
-            </Grid>
+            {applicantLoading || sponsorLoading ? (
+              <Loader paddingTop="20px" />
+            ) : (
+              <Grid
+                templateColumns={{
+                  base: 'repeat(1, 1fr)',
+                  md: 'repeat(3, 1fr)',
+                }}
+                gap={6}
+                minWidth="100%"
+                mt={8}
+              >
+                {grants.map((item) => (
+                  <GridItem w={'100%'} key={item.name}>
+                    <ApplyGrantCard
+                      title={item.title}
+                      subtitle={item.subtitle}
+                      about={item.about}
+                      image={item.image}
+                      applicant={categorizedApplications[item.key].length}
+                    />
+                  </GridItem>
+                ))}
+              </Grid>
+            )}
           </Box>
 
           <Box display={'flex'} justifyContent="center" my={6}>
@@ -412,17 +443,7 @@ export const GrantsRoundTwo = () => {
             >
               Applications
             </Text>
-            <Box
-              height={isMobile ? 'calc(100vh - 170px)' : 'calc(100vh - 220px)'}
-            >
-              <iframe
-                className="airtable-embed"
-                src="https://airtable.com/embed/shrfeI21FWzyCqHZy?backgroundColor=teal"
-                frameBorder="0"
-                width="100%"
-                height="100%"
-              ></iframe>
-            </Box>
+            <ApplicantAirTableEmbed />
           </Box>
         </Box>
         <AppFooter />
