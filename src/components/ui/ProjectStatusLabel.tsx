@@ -6,6 +6,7 @@ import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
 
 import { colors } from '../../constants';
 import { Project, WalletStatus } from '../../types/generated/graphql';
+import { isActive, isDraft } from '../../utils';
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: Project;
@@ -47,13 +48,13 @@ export const ProjectStatusLabel = ({
       );
     }
 
-    if (project.active) {
+    if (isActive(project.status)) {
       return (
         <BsFillCheckCircleFill fontSize={iconSize} color={colors.primary500} />
       );
     }
 
-    if (project.draft) {
+    if (isDraft(project.status)) {
       return (
         <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />
       );
@@ -85,7 +86,7 @@ export const ProjectStatusLabel = ({
       );
     }
 
-    if (project.active) {
+    if (isActive(project.status)) {
       return (
         <Text color={colors.primary500} {...commonStyles}>
           RUNNING
@@ -93,7 +94,7 @@ export const ProjectStatusLabel = ({
       );
     }
 
-    if (project.draft) {
+    if (isDraft(project.status)) {
       return (
         <Text color={colors.neutral500} {...commonStyles}>
           DRAFT

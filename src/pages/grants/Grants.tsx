@@ -13,14 +13,14 @@ import {
 import { AppFooter } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
 import { SatoshiIconTilted } from '../../components/icons';
-import { isMediumScreen, isMobileMode } from '../../utils';
-import { IProject } from '../../interfaces';
+import { isActive, isMediumScreen, isMobileMode } from '../../utils';
 import { Subscribe } from '../../components/nav/Subscribe';
 import { RecipientButton } from './components/RecipientButton';
 import { ContributeButton } from './components/ContributeButton';
 import { Board } from './components/Board';
 import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
 import { createUseStyles } from 'react-jss';
+import { Project } from '../../types/generated/graphql';
 
 const useStyles = createUseStyles({
   iframe: {
@@ -29,7 +29,7 @@ const useStyles = createUseStyles({
   },
 });
 
-export const Grants = ({ project }: { project: IProject }) => {
+export const Grants = ({ project }: { project: Project }) => {
   const [applicants, setApplicants] = useState(['loading']);
   const classes = useStyles();
 
@@ -89,7 +89,7 @@ export const Grants = ({ project }: { project: IProject }) => {
             <Image
               w={isMobile ? '300px' : '375px'}
               rounded="md"
-              src={project.image && project.image}
+              src={project.image || ''}
               alt="grant"
               margin={isMedium ? '0 auto' : ''}
             />
@@ -271,7 +271,7 @@ export const Grants = ({ project }: { project: IProject }) => {
             </HStack>
             <Box display="flex" justifyContent="center">
               <ContributeButton
-                active={project.active}
+                active={isActive(project.status)}
                 title="Contribute"
                 project={project}
               />
@@ -313,8 +313,8 @@ export const Grants = ({ project }: { project: IProject }) => {
               {project.sponsors.map((sponsor) => (
                 <Link
                   isExternal
-                  href={sponsor.url}
-                  key={sponsor.id}
+                  href={`${sponsor?.url}`}
+                  key={`${sponsor?.id}`}
                   mx={project.sponsors.length > 1 ? (isMobile ? 0 : 2.5) : 0}
                 >
                   <Box
@@ -331,7 +331,7 @@ export const Grants = ({ project }: { project: IProject }) => {
                     transition="box-shadow 0.3s ease-in-out"
                     mb={5}
                   >
-                    <Image src={sponsor.image} w="200px" />
+                    <Image src={`${sponsor?.image}`} w="200px" />
                   </Box>
                 </Link>
               ))}
