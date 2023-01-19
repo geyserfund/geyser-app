@@ -1,6 +1,7 @@
 import { __production__ } from '../constants';
 import { useBtcContext } from '../context/btc';
 import { IFundForm } from '../hooks';
+import { Satoshis, USDCents } from '../types';
 import { RewardCurrency } from '../types/generated/graphql';
 import { hasShipping } from '../utils';
 import { useBTCConverter } from './useBTCConverter';
@@ -18,20 +19,20 @@ export const useFundCalc = (state: IFundForm) => {
     if (type === 'sats') {
       const rewardsCost =
         state.rewardCurrency === RewardCurrency.Usdcent
-          ? getSatoshisFromUSDCents(state.rewardsCost)
+          ? getSatoshisFromUSDCents(state.rewardsCost as USDCents)
           : state.rewardsCost;
 
       return Math.round(rewardsCost) + state.donationAmount + shippingAmount;
     }
 
     const donationDollarAmount = Math.round(
-      getUSDAmount(state.donationAmount + shippingAmount),
+      getUSDAmount((state.donationAmount + shippingAmount) as Satoshis),
     );
 
     const rewardsDollarCost =
       state.rewardCurrency === RewardCurrency.Usdcent
         ? state.rewardsCost / 100
-        : getUSDAmount(state.rewardsCost) / 100;
+        : getUSDAmount(state.rewardsCost as Satoshis) / 100;
 
     return donationDollarAmount + rewardsDollarCost;
   };

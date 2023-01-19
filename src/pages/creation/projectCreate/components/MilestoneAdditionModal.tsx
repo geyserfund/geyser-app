@@ -22,7 +22,7 @@ import {
   MUTATION_UPDATE_PROJECT_MILESTONE,
 } from '../../../../graphql/mutations';
 import { useBTCConverter } from '../../../../helpers';
-import { Satoshis, USDollars } from '../../../../types/types';
+import { Satoshis, USDCents, USDollars } from '../../../../types/types';
 import { toInt, useNotification } from '../../../../utils';
 import { TMilestone } from '../types';
 
@@ -38,7 +38,7 @@ export const defaultMilestone = {
   name: '',
   projectId: 0,
   description: '',
-  amount: 0,
+  amount: 0 as Satoshis,
 };
 
 export const MilestoneAdditionModal = ({
@@ -80,24 +80,24 @@ export const MilestoneAdditionModal = ({
     amount: Satoshis | USDollars,
   ): Satoshis => {
     return isFormInputUsingSatoshis
-      ? amount
-      : getSatoshisFromUSDCents(amount * 100);
+      ? (amount as Satoshis)
+      : getSatoshisFromUSDCents((amount * 100) as USDCents);
   };
 
   const getFormConvertedMilestoneAmount = (
     satoshiAmount: Satoshis,
   ): Satoshis | USDollars => {
     if (isFormInputUsingSatoshis) {
-      return satoshiAmount;
+      return satoshiAmount as Satoshis;
     }
 
     const usdCentsAmount = getUSDCentsAmount(satoshiAmount);
 
     // Dollar value rounded to two decimal places
-    return Math.round(usdCentsAmount) / 100;
+    return (Math.round(usdCentsAmount) / 100) as USDollars;
   };
 
-  const handleAmountChange = (newAmount: number, itemIndex: number) => {
+  const handleAmountChange = (newAmount: Satoshis, itemIndex: number) => {
     const newMilestone = { ...milestones.current[itemIndex] };
 
     if (newMilestone) {
