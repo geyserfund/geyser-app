@@ -32,6 +32,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const isMobile = isMobileMode();
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>();
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0);
+  const [prevMilestone, setPrevMilestone] = useState(0);
 
   const balance = noFeeProjects.includes(project.name)
     ? project.balance
@@ -40,58 +41,65 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
       let selectedMilestone: ProjectMilestone | undefined;
+      let prevTotal = 0;
 
       project.milestones.map((milestone, index) => {
         const hasNextMilestone =
           project.milestones && Boolean(project.milestones[index + 1]);
-        if (
-          milestone &&
-          (milestone.amount >= balance || !hasNextMilestone) &&
-          !selectedMilestone
-        ) {
-          selectedMilestone = milestone;
-          setCurrentMilestone(milestone);
-          setMilestoneIndex(index + 1);
+        if (!selectedMilestone) {
+          if (milestone && (milestone.amount >= balance || !hasNextMilestone)) {
+            selectedMilestone = milestone;
+            setCurrentMilestone(milestone);
+            setMilestoneIndex(index + 1);
+          } else {
+            prevTotal = milestone?.amount || 0;
+          }
         }
       });
+      setPrevMilestone(prevTotal);
     }
   }, [project]);
 
   const getTrackColor = () => {
-    switch (milestoneIndex) {
+    switch (milestoneIndex % 3) {
       case 1:
-        return undefined;
+        if (milestoneIndex === 1) return undefined;
+        return 'brand.primary800';
       case 2:
         return 'brand.primary400';
-      case 3:
-        return 'brand.primary700';
+      case 0:
+        return 'brand.primary600';
       default:
         return undefined;
     }
   };
 
   const getColor = () => {
-    switch (milestoneIndex) {
+    switch (milestoneIndex % 3) {
       case 1:
         return 'brand.primary400';
       case 2:
-        return 'brand.primary700';
-      case 3:
-        return 'brand.primary400';
+        return 'brand.primary600';
+      case 0:
+        return 'brand.primary800';
       default:
-        return 'brand.primary400';
+        return 'brand.primary300';
     }
   };
 
   const renderCircularProgress = () => {
     if (currentMilestone) {
-      const percentage = (balance / currentMilestone.amount) * 100;
+      const circularPercentage =
+        ((balance - prevMilestone) /
+          (currentMilestone.amount - prevMilestone)) *
+        100;
+
       return (
         <CircularProgress
           capIsRound
           isIndeterminate={loading}
           className={classes.circularProgress}
-          value={percentage}
+          value={circularPercentage}
           size="105px"
           thickness="15px"
           color={getColor()}
@@ -105,7 +113,11 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
 
   const getMilestoneValue = () => {
     if (currentMilestone) {
-      const percentage = Math.ceil((balance / currentMilestone.amount) * 100);
+      const percentage = Math.ceil(
+        ((balance - prevMilestone) /
+          (currentMilestone.amount - prevMilestone)) *
+          100,
+      );
       return (
         <Text
           fontSize="14px"

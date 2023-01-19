@@ -197,7 +197,9 @@ export const ProjectDetailsCard = ({
           <Text color="brand.neutral600" textAlign="left">
             Objective
           </Text>
-          <Text color="brand.neutral800">{project.description}</Text>
+          <Text color="brand.neutral800" wordBreak="break-word">
+            {project.description}
+          </Text>
         </VStack>
         {renderMilestone()}
         {project.funders.length > 0 && (

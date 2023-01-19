@@ -45,6 +45,7 @@ export const colors = {
   primary600: '#03A88A',
   primary700: '#00866D',
   primary800: '#006452',
+  primary900: '#004236',
 
   secondaryPink: '#FC257A',
 

@@ -8,6 +8,8 @@ const routesForShowingLandingMenu = [
   `/`,
   `/${routerPathNames.discover}`,
   `/${routerPathNames.grants}`,
+  `/${routerPathNames.grants}/roundone`,
+  `/${routerPathNames.grants}/roundtwo`,
 ];
 
 const LandingNavItems = [
@@ -68,7 +70,8 @@ export const LandingNavBar = () => {
           paddingBottom="2px"
         >
           {LandingNavItems.map(({ name, path, Icon }) => {
-            const isActive = useRouteMatch(path)?.isExact;
+            const isActive =
+              path === '/' ? useRouteMatch(path)?.isExact : useRouteMatch(path);
             return (
               <Button
                 as={Link}
