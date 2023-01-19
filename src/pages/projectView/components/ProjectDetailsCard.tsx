@@ -21,7 +21,7 @@ import { AvatarElement } from './AvatarElement';
 import { useAuthContext } from '../../../context';
 import { Project } from '../../../types/generated/graphql';
 import { getPath, HomeUrl, AmbossUrl } from '../../../constants';
-import { isMobileMode } from '../../../utils';
+import { isActive, isMobileMode } from '../../../utils';
 
 export const ProjectDetailsCard = ({
   project,
@@ -217,11 +217,13 @@ export const ProjectDetailsCard = ({
           <Button
             isFullWidth
             backgroundColor={
-              project.active ? 'brand.primary' : 'brand.grayPlaceholder'
+              isActive(project.status)
+                ? 'brand.primary'
+                : 'brand.grayPlaceholder'
             }
             leftIcon={<BoltIcon />}
             onClick={fundButtonFunction}
-            isDisabled={project.active === false}
+            isDisabled={isActive(project.status) === false}
           >
             Contribute
           </Button>

@@ -32,7 +32,6 @@ export const CreateNav = ({
         width="100%"
         justifyContent="center"
         background={'rgba(252,252,252,0.9)'}
-        // borderBottom={showBorder ? '1px solid rgba(0,0,0,0)' : '1px solid rgba(233,233,233,0.9)'}
         borderBottom={'1px solid rgba(233,233,233,0.9)'}
         boxSizing="border-box"
         position="fixed"
@@ -53,7 +52,7 @@ export const CreateNav = ({
               borderRadius="6px"
               height="40px"
               width="40px"
-              src={user.imageUrl || ''}
+              src={`${user.imageUrl}`}
             />
           </HStack>
           <HStack>

@@ -23,8 +23,6 @@ export type ProjectUpdateVariables = {
   name?: string;
   image?: string;
   description?: string;
-  active?: boolean;
-  draft?: boolean;
   expiresAt?: string;
   type?: ProjectType;
   rewardCurrency?: RewardCurrency;

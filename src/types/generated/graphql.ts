@@ -40,6 +40,7 @@ export type Scalars = {
   email_String_NotNull_format_email: any;
   email_String_format_email: any;
   fundingGoal_Int_min_1: any;
+  link_String_NotNull_format_uri: any;
   name_String_NotNull_maxLength_100: any;
   name_String_NotNull_minLength_3_maxLength_60: any;
   name_String_NotNull_minLength_3_maxLength_280: any;
@@ -49,6 +50,7 @@ export type Scalars = {
   pubkey_String_minLength_66_maxLength_66: any;
   quantity_Int_NotNull_min_1: any;
   rewardsCost_Int_NotNull_min_0: any;
+  shortDescription_String_maxLength_500: any;
   stock_Int_min_0: any;
   title_String_NotNull_maxLength_60: any;
   title_String_NotNull_maxLength_150: any;
@@ -62,13 +64,22 @@ export type Activity = {
   resource?: Maybe<ActivityResource>;
 };
 
-export type ActivityCreatedSubscriptionResponse =
-  | Entry
-  | FundingTx
-  | Project
-  | ProjectReward;
+export type ActivityCreatedSubscriptionInput = {
+  where?: InputMaybe<ActivityCreatedSubscriptionWhereInput>;
+};
+
+export type ActivityCreatedSubscriptionWhereInput = {
+  resourceType?: InputMaybe<ActivityResourceType>;
+};
 
 export type ActivityResource = Entry | FundingTx | Project | ProjectReward;
+
+export enum ActivityResourceType {
+  Entry = 'entry',
+  FundingTx = 'funding_tx',
+  Project = 'project',
+  ProjectReward = 'project_reward',
+}
 
 export type Ambassador = {
   __typename?: 'Ambassador';
@@ -119,6 +130,10 @@ export type CreateProjectInput = {
   name: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   /** The currency used to price rewards for the project. Currently only USDCENT supported. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
+  shortDescription?: InputMaybe<
+    Scalars['shortDescription_String_maxLength_500']
+  >;
+  thumbnailImage?: InputMaybe<Scalars['String']>;
   /** Public title of the project. */
   title: Scalars['title_String_NotNull_maxLength_60'];
   type?: InputMaybe<ProjectType>;
@@ -421,6 +436,7 @@ export type GetActivityPaginationInput = {
 
 export type GetActivityWhereInput = {
   projectId?: InputMaybe<Scalars['BigInt']>;
+  resourceType?: InputMaybe<ActivityResourceType>;
 };
 
 export type GetDashboardFundersWhereInput = {
@@ -619,6 +635,8 @@ export type Mutation = {
   fundingInvoiceCancel: FundinginvoiceCancel;
   fundingInvoiceRefresh: FundingTx;
   fundingPend: FundingPendingResponse;
+  projectLinkAdd: Project;
+  projectLinkRemove: Project;
   /** Makes the Entry public. */
   publishEntry: Entry;
   unlinkExternalAccount: User;
@@ -708,6 +726,14 @@ export type MutationFundingPendArgs = {
   input: FundingPendingInput;
 };
 
+export type MutationProjectLinkAddArgs = {
+  input: ProjectLinkMutationInput;
+};
+
+export type MutationProjectLinkRemoveArgs = {
+  input: ProjectLinkMutationInput;
+};
+
 export type MutationPublishEntryArgs = {
   id: Scalars['BigInt'];
 };
@@ -774,17 +800,13 @@ export type PaginationInput = {
 
 export type Project = {
   __typename?: 'Project';
-  /** @deprecated this field will soon be replaced by the status field */
-  active: Scalars['Boolean'];
   /** @deprecated No longer supported */
   ambassadors: Array<Maybe<Ambassador>>;
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int'];
   createdAt: Scalars['String'];
-  /** A short description of the project. */
+  /** Description of the project. */
   description?: Maybe<Scalars['description_String_maxLength_2200']>;
-  /** @deprecated this field will soon be replaced by the status field */
-  draft: Scalars['Boolean'];
   /**
    * By default, returns all the entries of a project, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
@@ -800,8 +822,8 @@ export type Project = {
   /** @deprecated No longer supported */
   grantees: Array<Maybe<Grantee>>;
   id: Scalars['BigInt'];
-  /** Main project image. */
   image?: Maybe<Scalars['String']>;
+  links: Array<Maybe<Scalars['String']>>;
   /** @deprecated No longer supported */
   media: Array<Maybe<Scalars['String']>>;
   milestones?: Maybe<Array<Maybe<ProjectMilestone>>>;
@@ -810,11 +832,15 @@ export type Project = {
   owners: Array<Owner>;
   rewardCurrency?: Maybe<RewardCurrency>;
   rewards?: Maybe<Array<Maybe<ProjectReward>>>;
+  /** Short description of the project. */
+  shortDescription?: Maybe<Scalars['shortDescription_String_maxLength_500']>;
   /** @deprecated No longer supported */
   sponsors: Array<Maybe<Sponsor>>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
   status?: Maybe<ProjectStatus>;
+  /** Main project image. */
+  thumbnailImage?: Maybe<Scalars['String']>;
   /** Public title of the project. */
   title: Scalars['title_String_NotNull_maxLength_60'];
   type: ProjectType;
@@ -840,6 +866,11 @@ export type ProjectEntriesGetWhereInput = {
   published?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type ProjectLinkMutationInput = {
+  link: Scalars['link_String_NotNull_format_uri'];
+  projectId: Scalars['BigInt'];
+};
+
 export type ProjectMilestone = {
   __typename?: 'ProjectMilestone';
   /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
@@ -855,7 +886,10 @@ export type ProjectReward = {
   backers: Scalars['Int'];
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int'];
-  /** Currency used for the cost */
+  /**
+   * Currency used for the cost
+   * @deprecated No longer supported
+   */
   costCurrency: RewardCurrency;
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
@@ -893,10 +927,10 @@ export enum ProjectType {
 }
 
 export type ProjectWhereInput = {
-  active?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['BigInt']>;
   /** Unique name for the project. Used for the project URL and lightning address. */
   name?: InputMaybe<Scalars['name_String_minLength_3_maxLength_280']>;
+  status?: InputMaybe<ProjectStatus>;
   type?: InputMaybe<ProjectType>;
 };
 
@@ -1083,10 +1117,14 @@ export type Sponsor = {
 export type Subscription = {
   __typename?: 'Subscription';
   _?: Maybe<Scalars['Boolean']>;
-  activityCreated: ActivityCreatedSubscriptionResponse;
+  activityCreated: ActivityResource;
   entryPublished: EntryPublishedSubscriptionResponse;
   fundingTxConfirmed: FundingTxConfirmedSubscriptionResponse;
   projectActivated: ProjectActivatedSubscriptionResponse;
+};
+
+export type SubscriptionActivityCreatedArgs = {
+  input?: InputMaybe<ActivityCreatedSubscriptionInput>;
 };
 
 export type UniqueProjectQueryInput = {
@@ -1105,10 +1143,8 @@ export type UpdateEntryInput = {
 };
 
 export type UpdateProjectInput = {
-  active?: InputMaybe<Scalars['Boolean']>;
-  /** A short description of the project. */
+  /** Description of the project. */
   description?: InputMaybe<Scalars['description_String_maxLength_2200']>;
-  draft?: InputMaybe<Scalars['Boolean']>;
   expiresAt?: InputMaybe<Scalars['String']>;
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>;
   /** Main project image. */
@@ -1116,8 +1152,14 @@ export type UpdateProjectInput = {
   projectId: Scalars['BigInt'];
   /** The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
-  /** Current status of the project, either active, draft or deleted. */
+  /** A short description of the project. */
+  shortDescription?: InputMaybe<
+    Scalars['shortDescription_String_maxLength_500']
+  >;
+  /** Current status of the project */
   status?: InputMaybe<ProjectStatus>;
+  /** Project header image. */
+  thumbnailImage?: InputMaybe<Scalars['String']>;
   /** Public title of the project. */
   title?: InputMaybe<Scalars['title_String_maxLength_60']>;
   type?: InputMaybe<ProjectType>;
@@ -1240,7 +1282,7 @@ export type UserProjectsGetInput = {
 };
 
 export type UserProjectsGetWhereInput = {
-  draft?: InputMaybe<Scalars['Boolean']>;
+  status?: InputMaybe<ProjectStatus>;
 };
 
 export type Wallet = {
@@ -1400,16 +1442,14 @@ export type ResolversTypes = {
       resource?: Maybe<ResolversTypes['ActivityResource']>;
     }
   >;
-  ActivityCreatedSubscriptionResponse:
-    | ResolversTypes['Entry']
-    | ResolversTypes['FundingTx']
-    | ResolversTypes['Project']
-    | ResolversTypes['ProjectReward'];
+  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
+  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
   ActivityResource:
     | ResolversTypes['Entry']
     | ResolversTypes['FundingTx']
     | ResolversTypes['Project']
     | ResolversTypes['ProjectReward'];
+  ActivityResourceType: ActivityResourceType;
   Ambassador: ResolverTypeWrapper<Ambassador>;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
@@ -1505,6 +1545,7 @@ export type ResolversTypes = {
   ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
+  ProjectLinkMutationInput: ProjectLinkMutationInput;
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>;
   ProjectReward: ResolverTypeWrapper<ProjectReward>;
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>;
@@ -1586,6 +1627,9 @@ export type ResolversTypes = {
   >;
   fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>;
   getDashboardFundersInput: GetDashboardFundersInput;
+  link_String_NotNull_format_uri: ResolverTypeWrapper<
+    Scalars['link_String_NotNull_format_uri']
+  >;
   name_String_NotNull_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_NotNull_maxLength_100']
   >;
@@ -1613,6 +1657,9 @@ export type ResolversTypes = {
   rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<
     Scalars['rewardsCost_Int_NotNull_min_0']
   >;
+  shortDescription_String_maxLength_500: ResolverTypeWrapper<
+    Scalars['shortDescription_String_maxLength_500']
+  >;
   stock_Int_min_0: ResolverTypeWrapper<Scalars['stock_Int_min_0']>;
   title_String_NotNull_maxLength_60: ResolverTypeWrapper<
     Scalars['title_String_NotNull_maxLength_60']
@@ -1633,11 +1680,8 @@ export type ResolversParentTypes = {
   Activity: Omit<Activity, 'resource'> & {
     resource?: Maybe<ResolversParentTypes['ActivityResource']>;
   };
-  ActivityCreatedSubscriptionResponse:
-    | ResolversParentTypes['Entry']
-    | ResolversParentTypes['FundingTx']
-    | ResolversParentTypes['Project']
-    | ResolversParentTypes['ProjectReward'];
+  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
+  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
   ActivityResource:
     | ResolversParentTypes['Entry']
     | ResolversParentTypes['FundingTx']
@@ -1727,6 +1771,7 @@ export type ResolversParentTypes = {
   ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
+  ProjectLinkMutationInput: ProjectLinkMutationInput;
   ProjectMilestone: ProjectMilestone;
   ProjectReward: ProjectReward;
   ProjectStatistics: ProjectStatistics;
@@ -1780,6 +1825,7 @@ export type ResolversParentTypes = {
   email_String_format_email: Scalars['email_String_format_email'];
   fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1'];
   getDashboardFundersInput: GetDashboardFundersInput;
+  link_String_NotNull_format_uri: Scalars['link_String_NotNull_format_uri'];
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
@@ -1789,6 +1835,7 @@ export type ResolversParentTypes = {
   pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66'];
   quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1'];
   rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0'];
+  shortDescription_String_maxLength_500: Scalars['shortDescription_String_maxLength_500'];
   stock_Int_min_0: Scalars['stock_Int_min_0'];
   title_String_NotNull_maxLength_60: Scalars['title_String_NotNull_maxLength_60'];
   title_String_NotNull_maxLength_150: Scalars['title_String_NotNull_maxLength_150'];
@@ -1831,17 +1878,6 @@ export type ActivityResolvers<
     ContextType
   >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ActivityCreatedSubscriptionResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ActivityCreatedSubscriptionResponse'] = ResolversParentTypes['ActivityCreatedSubscriptionResponse'],
-> = {
-  __resolveType: TypeResolveFn<
-    'Entry' | 'FundingTx' | 'Project' | 'ProjectReward',
-    ParentType,
-    ContextType
-  >;
 };
 
 export type ActivityResourceResolvers<
@@ -2342,6 +2378,18 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationFundingPendArgs, 'input'>
   >;
+  projectLinkAdd?: Resolver<
+    ResolversTypes['Project'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectLinkAddArgs, 'input'>
+  >;
+  projectLinkRemove?: Resolver<
+    ResolversTypes['Project'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectLinkRemoveArgs, 'input'>
+  >;
   publishEntry?: Resolver<
     ResolversTypes['Entry'],
     ParentType,
@@ -2420,7 +2468,6 @@ export type ProjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
 > = {
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   ambassadors?: Resolver<
     Array<Maybe<ResolversTypes['Ambassador']>>,
     ParentType,
@@ -2433,7 +2480,6 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >;
-  draft?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   entries?: Resolver<
     Array<Maybe<ResolversTypes['Entry']>>,
     ParentType,
@@ -2477,6 +2523,11 @@ export type ProjectResolvers<
   >;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  links?: Resolver<
+    Array<Maybe<ResolversTypes['String']>>,
+    ParentType,
+    ContextType
+  >;
   media?: Resolver<
     Array<Maybe<ResolversTypes['String']>>,
     ParentType,
@@ -2503,6 +2554,11 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >;
+  shortDescription?: Resolver<
+    Maybe<ResolversTypes['shortDescription_String_maxLength_500']>,
+    ParentType,
+    ContextType
+  >;
   sponsors?: Resolver<
     Array<Maybe<ResolversTypes['Sponsor']>>,
     ParentType,
@@ -2515,6 +2571,11 @@ export type ProjectResolvers<
   >;
   status?: Resolver<
     Maybe<ResolversTypes['ProjectStatus']>,
+    ParentType,
+    ContextType
+  >;
+  thumbnailImage?: Resolver<
+    Maybe<ResolversTypes['String']>,
     ParentType,
     ContextType
   >;
@@ -2778,10 +2839,11 @@ export type SubscriptionResolvers<
     ContextType
   >;
   activityCreated?: SubscriptionResolver<
-    ResolversTypes['ActivityCreatedSubscriptionResponse'],
+    ResolversTypes['ActivityResource'],
     'activityCreated',
     ParentType,
-    ContextType
+    ContextType,
+    Partial<SubscriptionActivityCreatedArgs>
   >;
   entryPublished?: SubscriptionResolver<
     ResolversTypes['EntryPublishedSubscriptionResponse'],
@@ -2991,6 +3053,14 @@ export interface FundingGoal_Int_Min_1ScalarConfig
   name: 'fundingGoal_Int_min_1';
 }
 
+export interface Link_String_NotNull_Format_UriScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['link_String_NotNull_format_uri'],
+    any
+  > {
+  name: 'link_String_NotNull_format_uri';
+}
+
 export interface Name_String_NotNull_MaxLength_100ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['name_String_NotNull_maxLength_100'],
@@ -3063,6 +3133,14 @@ export interface RewardsCost_Int_NotNull_Min_0ScalarConfig
   name: 'rewardsCost_Int_NotNull_min_0';
 }
 
+export interface ShortDescription_String_MaxLength_500ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['shortDescription_String_maxLength_500'],
+    any
+  > {
+  name: 'shortDescription_String_maxLength_500';
+}
+
 export interface Stock_Int_Min_0ScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['stock_Int_min_0'], any> {
   name: 'stock_Int_min_0';
@@ -3102,7 +3180,6 @@ export interface Title_String_MaxLength_150ScalarConfig
 
 export type Resolvers<ContextType = any> = {
   Activity?: ActivityResolvers<ContextType>;
-  ActivityCreatedSubscriptionResponse?: ActivityCreatedSubscriptionResponseResolvers<ContextType>;
   ActivityResource?: ActivityResourceResolvers<ContextType>;
   Ambassador?: AmbassadorResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
@@ -3161,6 +3238,7 @@ export type Resolvers<ContextType = any> = {
   email_String_NotNull_format_email?: GraphQLScalarType;
   email_String_format_email?: GraphQLScalarType;
   fundingGoal_Int_min_1?: GraphQLScalarType;
+  link_String_NotNull_format_uri?: GraphQLScalarType;
   name_String_NotNull_maxLength_100?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_60?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_280?: GraphQLScalarType;
@@ -3170,6 +3248,7 @@ export type Resolvers<ContextType = any> = {
   pubkey_String_minLength_66_maxLength_66?: GraphQLScalarType;
   quantity_Int_NotNull_min_1?: GraphQLScalarType;
   rewardsCost_Int_NotNull_min_0?: GraphQLScalarType;
+  shortDescription_String_maxLength_500?: GraphQLScalarType;
   stock_Int_min_0?: GraphQLScalarType;
   title_String_NotNull_maxLength_60?: GraphQLScalarType;
   title_String_NotNull_maxLength_150?: GraphQLScalarType;

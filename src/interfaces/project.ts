@@ -1,6 +1,6 @@
 import { IParticipant, IFunder, ISponsor, IGrantee } from './participant';
 import { IFundingTx } from './funding';
-import { User } from '../types/generated/graphql';
+import { ProjectStatus, User } from '../types/generated/graphql';
 
 export type IProjectType = 'reward' | 'grant' | 'donation';
 
@@ -16,8 +16,7 @@ export interface IProject {
   updatedAt: string;
   expiresAt: string;
   image?: string;
-  active: boolean;
-  draft?: boolean;
+  status?: ProjectStatus;
   ownerConfirmed: string;
   fundsClaimed: string;
   media: string[];
