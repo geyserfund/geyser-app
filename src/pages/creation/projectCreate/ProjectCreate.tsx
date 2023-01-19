@@ -316,7 +316,6 @@ export const ProjectCreate = () => {
   const sideView = (
     <VStack
       justifyContent="flex-start"
-      marginTop={isMobile ? '0px' : '20%'}
       alignItems="flex-start"
       maxWidth="370px"
       spacing="10px"

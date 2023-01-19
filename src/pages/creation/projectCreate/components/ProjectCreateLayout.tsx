@@ -102,6 +102,7 @@ export const ProjectCreateLayout = ({
           colSpan={isLargerThan1280 ? 4 : 2}
           display="flex"
           justifyContent={'center'}
+          paddingTop={isMobile ? '0px' : '20%'}
         >
           {sideView}
         </GridItem>

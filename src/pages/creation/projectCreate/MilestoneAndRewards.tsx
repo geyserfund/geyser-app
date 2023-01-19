@@ -311,6 +311,7 @@ export const MilestoneAndRewards = () => {
     <>
       <ProjectCreateLayout
         handleBack={handleBack}
+        sideView={sideView}
         title="Milestones & Rewards"
         subtitle="Step 2 of 3"
         percentage={67}
