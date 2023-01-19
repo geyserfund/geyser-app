@@ -6,6 +6,7 @@ import {
   Input,
   InputGroup,
   InputRightAddon,
+  Link,
   Text,
   useMediaQuery,
   VStack,
@@ -28,9 +29,9 @@ import {
 } from '../../../utils';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { ProjectCreationVariables, ProjectUpdateVariables } from './types';
-import { BiLeftArrowAlt } from 'react-icons/bi';
+import { BiInfoCircle, BiLeftArrowAlt } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { colors, getPath } from '../../../constants';
+import { colors, commonMarkdownUrl, getPath } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import { useLazyQuery, useMutation } from '@apollo/client';
@@ -43,6 +44,7 @@ import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import { Project } from '../../../types/generated/graphql';
 import { ProjectValidations } from '../../../constants/validations/project';
 import { UserValidations } from '../../../constants/validations';
+import { ProjectCreateLayout } from './components/ProjectCreateLayout';
 
 type CreateProjectMutationResponseData = {
   createProject: Project | null;
@@ -55,6 +57,11 @@ type UpdateProjectMutationResponseData = {
 const useStyles = createUseStyles({
   backIcon: {
     fontSize: '25px',
+  },
+  rowItem: {
+    width: '100%',
+    alignItems: 'flex-start',
+    spacing: '5px',
   },
 });
 
@@ -79,7 +86,7 @@ export const ProjectCreate = () => {
     name: '',
   });
 
-  const [formError, setFormError] = useState<{ [key: string]: string }>({});
+  const [formError, setFormError] = useState<{ [key: string]: any }>({});
 
   const [createProject, { loading: createLoading }] = useMutation<
     CreateProjectMutationResponseData,
@@ -194,7 +201,21 @@ export const ProjectCreate = () => {
         value.length > ProjectValidations.description.maxLength
       ) {
         setFormError({
-          description: `Character limit: ${ProjectValidations.description.maxLength}/${value.length}`,
+          description: (
+            <HStack
+              width="100%"
+              justifyContent="space-between"
+              paddingTop="5px"
+            >
+              <Text fontSize="12px" color="brand.error">
+                Character limit:
+              </Text>
+              <Text
+                fontSize="12px"
+                color="brand.error"
+              >{` ${ProjectValidations.description.maxLength}/${value.length}`}</Text>
+            </HStack>
+          ),
         });
       } else {
         setFormError({});
@@ -292,175 +313,158 @@ export const ProjectCreate = () => {
     getProjectById();
   }, [params.projectId]);
 
-  return (
-    <Box
-      background={'brand.bgGrey4'}
-      position="relative"
-      height="100%"
-      justifyContent="space-between"
+  const sideView = (
+    <VStack
+      justifyContent="flex-start"
+      marginTop={isMobile ? '0px' : '20%'}
+      alignItems="flex-start"
+      maxWidth="370px"
+      spacing="10px"
     >
-      <Grid
-        width="100%"
-        templateColumns={
-          isLargerThan1280
-            ? 'repeat(6, 1fr)'
-            : isMobile
-            ? 'repeat(2, 1fr)'
-            : 'repeat(5, 1fr)'
-        }
-        padding={isMobile ? '10px' : '40px 40px 20px 40px'}
-      >
-        <GridItem
-          colSpan={isLargerThan1280 ? 2 : 1}
-          display="flex"
-          justifyContent="flex-start"
+      <Text>Preview</Text>
+      <Card padding="16px 10px" overflow="hidden" width="100%">
+        <ImageWithReload
+          src={form.image}
+          height="222px"
+          width="350px"
+          noCacheId={(Math.random() + 1).toString(36).substring(7)}
+        />
+        <Text>geyser.fund/project</Text>
+        <Text fontSize="28px" fontWeight={700}>
+          {form.title || 'Project Title'}
+        </Text>
+        <Text
+          fontSize="16px"
+          color="brand.textGrey"
+          wordBreak="break-word"
+          isTruncated
         >
-          <ButtonComponent
-            onClick={handleBack}
-            leftIcon={<BiLeftArrowAlt className={classes.backIcon} />}
-          >
-            {' '}
-            Back
-          </ButtonComponent>
-        </GridItem>
-        <GridItem colSpan={2} display="flex" justifyContent="center">
-          <VStack
-            spacing="30px"
-            width="100%"
-            maxWidth="400px"
-            minWidth="350px"
-            marginBottom="40px"
-            display="flex"
-            flexDirection="column"
-            alignItems="flex-start"
-          >
-            <VStack width="100%" spacing="40px" alignItems="flex-start">
-              <Text color="brand.gray500" fontSize="30px" fontWeight={700}>
-                {' '}
-                Create A New Project
-              </Text>
-              <TitleWithProgressBar
-                paddingBottom="20px"
-                title="Project details"
-                subTitle="Step 1 of 3"
-                percentage={33}
-              />
-            </VStack>
-            <VStack width="100%" alignItems="flex-start">
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Project Title</Text>
-                <TextInputBox
-                  name="title"
-                  onChange={handleChange}
-                  value={form.title}
-                  error={formError.title}
-                  onBlur={() => !isEditingExistingProject && getProject()}
-                />
-              </VStack>
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Lightning Address Preview</Text>
-                <InputGroup size="md" borderRadius="4px">
-                  <Input
-                    name="name"
-                    onChange={handleChange}
-                    value={form.name}
-                    isInvalid={Boolean(formError.name)}
-                    focusBorderColor={colors.primary}
-                    disabled={isEditingExistingProject}
-                    onBlur={() => !isEditingExistingProject && getProject()}
-                  />
-                  <InputRightAddon>@geyser.fund</InputRightAddon>
-                </InputGroup>
-                {formError.name && (
-                  <Text color="brand.error" fontSize="12px">
-                    {formError.name}
-                  </Text>
-                )}
-              </VStack>
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Project Image</Text>
-                <FileUpload onUploadComplete={handleUpload}>
-                  <HStack
-                    borderRadius="4px"
-                    backgroundColor="brand.bgGrey"
-                    width="100%"
-                    height="70px"
-                    justifyContent="center"
-                    alignItems="center"
-                    _hover={{ backgroundColor: 'brand.gray300' }}
-                  >
-                    <AiOutlineUpload />
-                    <Text>Select a header image</Text>
-                  </HStack>
-                </FileUpload>
-                <Text fontSize="10px" color="brand.neutral700">
-                  For best fit, pick an image around 800px x 200px. Image size
-                  limit: 10MB.
-                </Text>
-              </VStack>
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Main Objective</Text>
-                <TextArea
-                  name="description"
-                  value={form.description}
-                  onChange={handleChange}
-                  error={formError.description}
-                />
-              </VStack>
+          {form.description || 'project description'}
+        </Text>
+      </Card>
+    </VStack>
+  );
 
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Project E-mail</Text>
-                <TextInputBox
-                  name="email"
-                  value={user.email || form.email}
-                  onChange={handleChange}
-                  error={formError.email}
-                  isDisabled={Boolean(user.email)}
-                />
-              </VStack>
-              <ButtonComponent
-                isLoading={loading || createLoading || updateLoading}
-                primary
-                isFullWidth
-                onClick={handleNextButtonTapped}
-                isDisabled={createLoading || updateLoading}
-              >
-                Next
-              </ButtonComponent>
-            </VStack>
-          </VStack>
-        </GridItem>
-        <GridItem colSpan={2} display="flex" justifyContent="center">
-          <VStack
-            justifyContent="center"
-            alignItems="flex-start"
-            maxWidth="370px"
-            spacing="10px"
-          >
-            <Text>Preview</Text>
-            <Card padding="16px 10px" overflow="hidden" width="100%">
-              <ImageWithReload
-                src={form.image}
-                height="222px"
-                width="350px"
-                noCacheId={(Math.random() + 1).toString(36).substring(7)}
-              />
-              <Text>geyser.fund/project</Text>
-              <Text fontSize="28px" fontWeight={700}>
-                {form.title || 'Project Title'}
-              </Text>
+  return (
+    <ProjectCreateLayout
+      handleBack={handleBack}
+      sideView={sideView}
+      title="Project details"
+      subtitle="Step 1 of 3"
+      percentage={33}
+    >
+      <VStack width="100%" alignItems="flex-start">
+        <VStack className={classes.rowItem}>
+          <Text>Project Title</Text>
+          <TextInputBox
+            name="title"
+            onChange={handleChange}
+            value={form.title}
+            error={formError.title}
+            onBlur={() => !isEditingExistingProject && getProject()}
+          />
+        </VStack>
+        <VStack className={classes.rowItem}>
+          <Text>Lightning Address Preview</Text>
+          <InputGroup size="md" borderRadius="4px">
+            <Input
+              name="name"
+              onChange={handleChange}
+              value={form.name}
+              isInvalid={Boolean(formError.name)}
+              focusBorderColor={colors.primary}
+              disabled={isEditingExistingProject}
+              onBlur={() => !isEditingExistingProject && getProject()}
+            />
+            <InputRightAddon>@geyser.fund</InputRightAddon>
+          </InputGroup>
+          {formError.name && (
+            <Text color="brand.error" fontSize="12px">
+              {formError.name}
+            </Text>
+          )}
+        </VStack>
+        <VStack className={classes.rowItem}>
+          <Text>Project Image</Text>
+          <FileUpload onUploadComplete={handleUpload}>
+            <HStack
+              borderRadius="4px"
+              backgroundColor="brand.bgGrey"
+              width="100%"
+              height="70px"
+              justifyContent="center"
+              alignItems="center"
+              _hover={{ backgroundColor: 'brand.gray300' }}
+            >
+              <AiOutlineUpload />
+              <Text>Select a header image</Text>
+            </HStack>
+          </FileUpload>
+          <Text fontSize="12px" color="brand.neutral700">
+            For best fit, pick an image around 800px x 200px. Image size limit:
+            10MB.
+          </Text>
+        </VStack>
+        <VStack className={classes.rowItem}>
+          <Text>Main Objective</Text>
+          <TextArea
+            name="description"
+            minHeight="120px"
+            maxHeight="800px"
+            height="fit-content"
+            overflowY="auto"
+            value={form.description}
+            onChange={handleChange}
+            error={formError.description}
+          />
+          {!formError.description && (
+            <HStack width="100%" justifyContent="space-between">
+              <HStack spacing="5px">
+                <Text fontSize="12px" color="brand.neutral700">
+                  For **Bold** and *Italic*, see more{' '}
+                </Text>
+                <HStack
+                  as={Link}
+                  href={commonMarkdownUrl}
+                  isExternal
+                  spacing="0px"
+                  _focus={{}}
+                >
+                  <BiInfoCircle />
+                  <Text fontSize="12px" color="brand.neutral700">
+                    HTML MarkDown
+                  </Text>
+                </HStack>
+              </HStack>
+
               <Text
-                fontSize="16px"
-                color="brand.textGrey"
-                wordBreak="break-word"
-                isTruncated
-              >
-                {form.description || 'project description'}
-              </Text>
-            </Card>
-          </VStack>
-        </GridItem>
-      </Grid>
-    </Box>
+                fontSize="12px"
+                color="brand.neutral700"
+              >{`${form.description.length}/${ProjectValidations.description.maxLength}`}</Text>
+            </HStack>
+          )}
+        </VStack>
+
+        <VStack className={classes.rowItem}>
+          <Text>Project E-mail</Text>
+          <TextInputBox
+            name="email"
+            value={user.email || form.email}
+            onChange={handleChange}
+            error={formError.email}
+            isDisabled={Boolean(user.email)}
+          />
+        </VStack>
+        <ButtonComponent
+          isLoading={loading || createLoading || updateLoading}
+          primary
+          isFullWidth
+          onClick={handleNextButtonTapped}
+          isDisabled={createLoading || updateLoading}
+        >
+          Next
+        </ButtonComponent>
+      </VStack>
+    </ProjectCreateLayout>
   );
 };
