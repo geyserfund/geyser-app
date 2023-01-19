@@ -14,6 +14,7 @@ import { ButtonComponent } from '../../components/ui';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
 import { GrantSponsor } from './GrantsRoundTwo';
 import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
+import { H2, H3 } from '../../components/typography';
 
 export const GrantsLandingPage = () => {
   const isMobile = isMobileMode();
@@ -86,26 +87,15 @@ export const GrantsLandingPage = () => {
           >
             Geyser Grants
           </Text>
-          <Text
-            fontFamily={fonts.interBlack}
-            fontSize={isMobile ? '35' : '44px'}
-            fontWeight="700"
-            textAlign="center"
-            justify="center"
-          >
-            Empowering{isMobile ? <br /> : null} bitcoin creators
-          </Text>
-          <Text
-            fontSize={isMobile ? '15px' : '16px'}
-            fontWeight="500"
-            color={'brand.neutral600'}
-            textAlign="center"
-            justify="center"
-          >
+          <H2 textAlign="center" paddingY="10px">
+            Empowering bitcoin creators
+          </H2>
+          <H3 textAlign="center" color={'brand.neutral600'}>
             Funding educators, creatives and builders doing Bitcoin-only
-            projects on Geyser. {isMobile ? <br /> : <br />} Funded by
-            bitcoiners who want to change{isMobile ? <br /> : ''} the world.
-          </Text>
+            projects on Geyser. <br /> Funded by bitcoiners who want to change
+            the world.
+          </H3>
+
           <Box
             display="flex"
             justifyContent={'center'}
@@ -162,6 +152,7 @@ export const GrantsLandingPage = () => {
                     <ButtonComponent
                       size="sm"
                       primary={copy}
+                      marginLeft="5px"
                       onClick={handleCopyOnchain}
                       leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
                     >

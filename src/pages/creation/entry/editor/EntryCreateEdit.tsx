@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
 
-import { isMobileMode, useNotification } from '../../../../utils';
+import { isMobileMode, toInt, useNotification } from '../../../../utils';
 import { CreateNav } from './CreateNav';
 import { BsImage } from 'react-icons/bs';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
@@ -81,7 +81,13 @@ export const EntryCreateEdit = () => {
     useMutation(MUTATION_UPDATE_ENTRY);
 
   const [getPost, { loading: loadingPosts, error, data: entryData }] =
-    useLazyQuery(QUERY_GET_ENTRY);
+    useLazyQuery(QUERY_GET_ENTRY, {
+      onCompleted(data) {
+        if (data.entry === null) {
+          history.push(getPath('notAuthorized'));
+        }
+      },
+    });
 
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: params.projectId } },
@@ -104,7 +110,7 @@ export const EntryCreateEdit = () => {
   useEffect(() => {
     if (params && params.entryId) {
       try {
-        getPost({ variables: { id: parseInt(params.entryId, 10) } });
+        getPost({ variables: { id: toInt(params.entryId) } });
       } catch {
         history.push(getPath('notFound'));
       }
@@ -139,8 +145,7 @@ export const EntryCreateEdit = () => {
       ) {
         const { image, title, description, content } = value;
         const input: IEntryCreateInput = {
-          projectId:
-            projectData && projectData.project && projectData.project.id,
+          projectId: toInt(projectData?.project?.id),
           type: 'article',
           title,
           description,
@@ -164,7 +169,7 @@ export const EntryCreateEdit = () => {
     const { image, title, description, content } = params;
     if (form) {
       const input: IEntryUpdateInput = {
-        entryId: form.current.id,
+        entryId: toInt(form.current.id),
         title,
         description,
         content,
@@ -230,6 +235,14 @@ export const EntryCreateEdit = () => {
     }
   };
 
+  const onBack = () => {
+    if (history.length > 1) {
+      history.goBack();
+    } else {
+      history.push(getPath('project', params.projectId));
+    }
+  };
+
   const onImageUpload = (url: string) =>
     setForm({ ...form.current, image: url });
 
@@ -249,7 +262,7 @@ export const EntryCreateEdit = () => {
   const handleKeyDown = (event: any) => {
     if (event) {
       if (event.target.name === 'title') {
-        if (event.key === 'ArrowDown') {
+        if (event.key === 'ArrowDown' || event.key === 'Enter') {
           event.preventDefault();
           document.getElementById('entry-description-input')?.focus();
         }
@@ -257,7 +270,11 @@ export const EntryCreateEdit = () => {
         if (event.key === 'ArrowUp') {
           event.preventDefault();
           document.getElementById('entry-title-input')?.focus();
-        } else if (event.key === 'ArrowDown' || event.key === 'Tab') {
+        } else if (
+          event.key === 'ArrowDown' ||
+          event.key === 'Tab' ||
+          event.key === 'Enter'
+        ) {
           event.preventDefault();
           const newDate = new Date();
           setFocusFlag(newDate.toISOString());
@@ -283,6 +300,7 @@ export const EntryCreateEdit = () => {
         }
         onSave={onSave}
         onPreview={onPreview}
+        onBack={onBack}
       />
       <VStack
         background={'brand.bgGrey4'}
@@ -309,7 +327,7 @@ export const EntryCreateEdit = () => {
             alignItems="flex-start"
             paddingBottom="80px"
           >
-            <Box marginTop="20px" width="100%" px="16px">
+            <Box marginTop="20px" width="100%" px="15px">
               <FileUpload onUploadComplete={onImageUpload}>
                 <>
                   {form.current.image ? (
@@ -343,10 +361,10 @@ export const EntryCreateEdit = () => {
                 _focus={{ border: 'none' }}
                 placeholder="The Entry Title"
                 color="brand.gray500"
-                fontSize="40px"
+                fontSize={isMobile ? '35px' : '40px'}
                 fontWeight={700}
-                marginTop="20px"
                 paddingBottom="5px"
+                paddingX="15px"
                 name="title"
                 value={form.current.title}
                 onChange={handleInput}
@@ -359,7 +377,8 @@ export const EntryCreateEdit = () => {
                 _focus={{ border: 'none' }}
                 placeholder="The summary of this entry"
                 color="brand.gray500"
-                fontSize="26px"
+                fontSize={isMobile ? '20px' : '26px'}
+                paddingX="15px"
                 fontWeight={600}
                 name="description"
                 value={form.current.description}

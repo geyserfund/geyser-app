@@ -24,16 +24,19 @@ import { getPath } from '../../constants';
 import { Owner } from '../../types/generated/graphql';
 import { ProjectContributors } from './ProjectContributors';
 import { ProjectStats } from './ProjectStats';
+import { noScrollBar } from '../../css';
 
 enum DashboardTabs {
   entries = 'entries',
   funds = 'funds',
   milestones = 'milestones',
   rewards = 'rewards',
-  projectDescription = 'project description',
+  editProject = 'edit project',
   contributors = 'contributors',
   stats = 'stats',
 }
+
+let storedTab = DashboardTabs.editProject;
 
 export const ProjectDashboard = () => {
   const isMobile = isMobileMode();
@@ -43,9 +46,7 @@ export const ProjectDashboard = () => {
 
   const { user, setNav } = useAuthContext();
 
-  const [activeTab, setActiveTab] = useState<DashboardTabs>(
-    DashboardTabs.projectDescription,
-  );
+  const [activeTab, setActiveTab] = useState<DashboardTabs>(storedTab);
 
   useEffect(() => {
     try {
@@ -61,6 +62,7 @@ export const ProjectDashboard = () => {
     }
 
     setActiveTab(selectedTab);
+    storedTab = selectedTab;
   };
 
   const [getProject, { loading, error, data }] = useLazyQuery(
@@ -113,7 +115,7 @@ export const ProjectDashboard = () => {
         return <RewardSettings project={project} />;
       case DashboardTabs.funds:
         return <ProjectFundingSettings project={project} />;
-      case DashboardTabs.projectDescription:
+      case DashboardTabs.editProject:
         return <ProjectSettings project={project} />;
       case DashboardTabs.contributors:
         return <ProjectContributors project={project} />;
@@ -149,7 +151,7 @@ export const ProjectDashboard = () => {
   };
 
   const navList: DashboardTabs[] = [
-    DashboardTabs.projectDescription,
+    DashboardTabs.editProject,
     DashboardTabs.contributors,
     DashboardTabs.funds,
     DashboardTabs.entries,
@@ -162,15 +164,16 @@ export const ProjectDashboard = () => {
     <Box
       background={'brand.bgGrey4'}
       position="relative"
-      paddingTop="60px"
+      paddingBottom={10}
       height="100%"
       justifyContent="space-between"
     >
       <HStack
         width="100%"
         justifyContent="center"
-        marginTop={isMobile ? '10px' : '30px'}
+        paddingTop={isMobile ? '10px' : '30px'}
         overflowX={isMobile ? 'auto' : undefined}
+        __css={noScrollBar}
       >
         <HStack
           spacing="0px"

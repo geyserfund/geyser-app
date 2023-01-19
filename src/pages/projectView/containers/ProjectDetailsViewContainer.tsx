@@ -7,7 +7,7 @@ import {
   ProjectReward,
 } from '../../../types/generated/graphql';
 import { isMobileMode } from '../../../utils';
-import { Head } from '../../../utils/Head';
+import { Head } from '../../../config/Head';
 import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel';
 import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer';
 import { ProjectProvider } from './ProjectContext';
@@ -61,7 +61,7 @@ export const ProjectDetailsViewContainer = ({
         resourceId={project.id}
       />
 
-      {isMobile && <ProjectNav />}
+      {isMobile && <ProjectNav fixed />}
     </ProjectProvider>
   );
 };

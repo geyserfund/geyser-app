@@ -7,6 +7,7 @@ import {
   aggregateTransactions,
   FundingTxWithCount,
   isMobileMode,
+  toInt,
 } from '../../../utils';
 import {
   Button,
@@ -24,6 +25,7 @@ import {
 } from '../../../graphql';
 import { useQueryWithPagination } from '../../../hooks';
 import { MobileViews, useProject } from '../containers';
+import { StickToTop } from '../../../components/layouts';
 
 type Props = {
   project: Project;
@@ -52,14 +54,14 @@ export const ProjectFundingInitialInfoScreen = ({
     queryName: 'getFundingTxs',
     query: QUERY_GET_FUNDING_TXS_LANDING,
     resultMap: aggregateTransactions,
-    where: { projectId: parseInt(project.id, 10) },
+    where: { projectId: toInt(project.id) },
   });
 
   const funders = useQueryWithPagination<Funder>({
     queryName: 'getFunders',
     itemLimit,
     query: QUERY_GET_PROJECT_FUNDERS,
-    where: { projectId: parseInt(project.id, 10) },
+    where: { projectId: toInt(project.id) },
     orderBy: {
       amountFunded: 'desc',
     },
@@ -110,7 +112,6 @@ export const ProjectFundingInitialInfoScreen = ({
           bg="none"
           fontWeight={tab === 'activity' ? 'bold' : 'normal'}
           fontSize="16px"
-          marginTop="10px"
           onClick={() => setTab('activity')}
         >
           Contributions{' '}
@@ -121,7 +122,7 @@ export const ProjectFundingInitialInfoScreen = ({
         <Box
           bg={tab === 'activity' ? 'darkgrey' : 'lightgrey'}
           w="100%"
-          h="3px"
+          h="2px"
           rounded="lg"
         ></Box>
       </>
@@ -138,7 +139,6 @@ export const ProjectFundingInitialInfoScreen = ({
           bg="none"
           fontWeight={tab === 'activity' ? 'normal' : 'bold'}
           fontSize="16px"
-          marginTop="10px"
           onClick={() => setTab('leaderboard')}
         >
           Leaderboard{' '}
@@ -149,7 +149,7 @@ export const ProjectFundingInitialInfoScreen = ({
         <Box
           bg={tab === 'activity' ? 'lightgrey' : 'darkgrey'}
           w="100%"
-          h="3px"
+          h="2px"
           rounded="lg"
         ></Box>
       </>
@@ -160,9 +160,25 @@ export const ProjectFundingInitialInfoScreen = ({
     if (isMobile) {
       switch (mobileView) {
         case MobileViews.contribution:
-          return <Box w="100%">{contributionButton()}</Box>;
+          return (
+            <StickToTop
+              id="contribute-tab-activity-table"
+              w="100%"
+              _onStick={{ w: 'calc(100% - 29px)' }}
+            >
+              {contributionButton()}
+            </StickToTop>
+          );
         case MobileViews.leaderboard:
-          return <Box w="100%">{leaderBoardButton()}</Box>;
+          return (
+            <StickToTop
+              id="contribute-tab-activity-table"
+              w="100%"
+              _onStick={{ w: 'calc(100% - 29px)' }}
+            >
+              {leaderBoardButton()}
+            </StickToTop>
+          );
         default:
       }
     }
@@ -177,7 +193,7 @@ export const ProjectFundingInitialInfoScreen = ({
 
   return (
     <VStack
-      padding={isMobile ? '10px 5px 0px 5px' : '10px 20px'}
+      padding={isMobile ? '0px 5px 0px 5px' : '10px 20px'}
       spacing="0px"
       width="100%"
       height="100%"
@@ -208,6 +224,7 @@ export const ProjectFundingInitialInfoScreen = ({
         alignItems="center"
         overflow="hidden"
         flex="1"
+        paddingTop="10px"
       >
         <Box display="flex" marginBottom="10px" w="95%">
           {renderTabsList()}

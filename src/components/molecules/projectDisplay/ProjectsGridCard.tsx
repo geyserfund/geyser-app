@@ -14,7 +14,7 @@ import { getPath, fonts } from '../../../constants';
 import { Project } from '../../../types/generated/graphql';
 import { ICard, ProjectStatusLabel } from '../../ui';
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
-import { getShortAmountLabel } from '../../../utils';
+import { getShortAmountLabel, isMobileMode } from '../../../utils';
 import { Link } from 'react-router-dom';
 type Props = ICard & {
   project: Project;
@@ -22,6 +22,7 @@ type Props = ICard & {
 };
 
 export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
+  const isMobile = isMobileMode();
   return (
     <Link
       to={getPath('project', project.name)}
@@ -30,6 +31,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
       <Box
         width={'full'}
         maxWidth={'284px'}
+        minWidth={isMobile ? '284px' : '250px'}
         bg={useColorModeValue('white', 'gray.900')}
         borderWidth="3px"
         cursor="pointer"
@@ -125,7 +127,12 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               />
             </HStack>
 
-            <Text noOfLines={5} textAlign="left" size="sm">
+            <Text
+              noOfLines={5}
+              textAlign="left"
+              size="sm"
+              wordBreak="break-word"
+            >
               {project.description}
             </Text>
           </VStack>

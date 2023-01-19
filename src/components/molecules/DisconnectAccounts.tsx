@@ -8,7 +8,7 @@ import { ExternalAccountComponent } from '../ui';
 import { SiTwitter } from 'react-icons/si';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
-import { useNotification } from '../../utils';
+import { toInt, useNotification } from '../../utils';
 import { defaultUser } from '../../defaults';
 
 interface IAccountConnection {
@@ -27,7 +27,7 @@ const DisconnectAccount = ({ id, icon, username }: IAccountConnection) => {
 
   const handleAccountDisconnect = async () => {
     try {
-      await unlinkAccount({ variables: { id } });
+      await unlinkAccount({ variables: { id: toInt(id) } });
     } catch (_) {}
   };
 

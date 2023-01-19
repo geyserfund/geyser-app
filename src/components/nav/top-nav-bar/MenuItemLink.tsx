@@ -23,6 +23,8 @@ export const MenuItemLink = ({
           _hover={{ textDecoration: 'none' }}
           href={destinationPath}
           isExternal
+          width="100%"
+          _focus={{}}
           {...rest}
         >
           {children}
@@ -35,6 +37,8 @@ export const MenuItemLink = ({
           textDecoration="none"
           _hover={{ textDecoration: 'none' }}
           to={destinationPath}
+          width="100%"
+          _focus={{}}
           {...rest}
         >
           {children}

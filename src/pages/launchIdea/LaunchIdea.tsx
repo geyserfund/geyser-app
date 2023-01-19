@@ -119,7 +119,7 @@ export const LaunchIdea = () => {
   );
 
   return (
-    <Box display="flex" justifyContent="center" paddingTop="60px">
+    <Box display="flex" justifyContent="center">
       <VStack
         spacing="50px"
         maxWidth="1370px"

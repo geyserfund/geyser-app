@@ -47,21 +47,21 @@ export const cache: InMemoryCache = new InMemoryCache({
 
           merge: mergeIdentifiableCollectionUsingCursorIDs,
         },
-        getFundingTxs: {
-          // Don't cache separate results based on
-          // any of this field's arguments.
-          // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
-          keyArgs: ['input', ['where']],
-          merge,
-        },
-        getFunders: {
-          keyArgs: ['input', ['where', 'orderby']],
-          merge,
-        },
-        getDashboardFunders: {
-          keyArgs: ['input', ['where', 'orderby']],
-          merge,
-        },
+        // getFundingTxs: {
+        //   // Don't cache separate results based on
+        //   // any of this field's arguments.
+        //   // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
+        //   keyArgs: ['input', ['where']],
+        //   merge,
+        // },
+        // getFunders: {
+        //   keyArgs: ['input', ['where', 'orderby']],
+        //   merge,
+        // },
+        // getDashboardFunders: {
+        //   keyArgs: ['input', ['where', 'orderby']],
+        //   merge,
+        // },
         projects: {
           // Don't cache separate results based on
           // any of this field's arguments.

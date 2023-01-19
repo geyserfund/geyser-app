@@ -20,7 +20,7 @@ type Rules = string;
 type Styles = {
   isMobile: boolean;
   inView: boolean;
-  fadeStarted: boolean;
+  fadeStarted?: boolean;
 };
 
 const useStyles = createUseStyles<Rules, Styles>({
@@ -72,9 +72,7 @@ export const ProjectDetailsMainBodyContainer = ({
 
   const inView = mobileView === MobileViews.description;
 
-  const [fadeStarted, setFadeStarted] = useState(false);
-
-  const classes = useStyles({ isMobile, inView, fadeStarted });
+  const classes = useStyles({ isMobile, inView });
   const history = useHistory();
 
   const { user, navigationContext } = useAuthContext();
@@ -90,10 +88,6 @@ export const ProjectDetailsMainBodyContainer = ({
   const handleFundClickMobile = () => {
     setFundState(fundingStages.form);
     setMobileView(MobileViews.funding);
-    setFadeStarted(true);
-    setTimeout(() => {
-      setFadeStarted(false);
-    }, 500);
   };
 
   const handleConnectNodeClick = () => {
@@ -103,10 +97,7 @@ export const ProjectDetailsMainBodyContainer = ({
 
   return (
     <Box
-      className={classNames(classes.container, {
-        [classes.slideInLeft]: isMobile && inView,
-        [classes.fadeOut]: isMobile && fadeStarted,
-      })}
+      className={classNames(classes.container)}
       backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
       flex={!isMobile ? 3 : undefined}
       height="100%"

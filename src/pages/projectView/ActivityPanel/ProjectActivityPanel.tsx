@@ -3,7 +3,7 @@ import { AuthModal } from '../../../components/molecules';
 import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
 import { SuccessScreen } from './SuccessScreen';
 import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
-import { isMobileMode } from '../../../utils';
+import { isMobileMode, toInt } from '../../../utils';
 import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
 
 import { AuthContext } from '../../../context';
@@ -123,7 +123,7 @@ export const ProjectActivityPanel = ({
     } = state;
 
     const input: IFundingInput = {
-      projectId: Number(project.id),
+      projectId: toInt(project.id),
       anonymous,
       ...(donationAmount !== 0 && { donationInput: { donationAmount } }),
       metadataInput: {
@@ -132,7 +132,7 @@ export const ProjectActivityPanel = ({
         ...(comment && { comment }),
       },
       sourceResourceInput: {
-        resourceId: resourceId || Number(project.id),
+        resourceId: toInt(resourceId) || toInt(project.id),
         resourceType: resourceType || 'project',
       },
     };
@@ -143,7 +143,7 @@ export const ProjectActivityPanel = ({
       rewardsByIDAndCount
     ) {
       const rewardsArray = Object.keys(rewardsByIDAndCount).map((key) => ({
-        id: parseInt(key, 10),
+        id: toInt(key),
         quantity: rewardsByIDAndCount[key as keyof ProjectReward],
       }));
       const filteredRewards = rewardsArray.filter(
@@ -166,10 +166,6 @@ export const ProjectActivityPanel = ({
   };
 
   const getActivityHeight = () => {
-    if (isMobile && mobileView === MobileViews.funding) {
-      return 'calc(100% - 80px)';
-    }
-
     return 'calc(100% - 20px)';
   };
 
@@ -246,10 +242,10 @@ export const ProjectActivityPanel = ({
         justifyContent="flex-start"
         alignItems="center"
         backgroundColor="#FFFFFF"
-        marginTop={'20px'}
+        marginTop={isMobile ? '0px' : '20px'}
         height={getActivityHeight()}
         borderTopLeftRadius={isMobile ? '' : '22px'}
-        boxShadow="0px 3px 12px rgba(0, 0, 0, 0.1)"
+        boxShadow="-8px -8px 12px -8px rgba(0, 0, 0, 0.1)"
       >
         {renderPanelContent()}
       </Box>

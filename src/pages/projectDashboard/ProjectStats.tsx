@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss';
 import { SatoshiAmount } from '../../components/ui';
 import { colors } from '../../constants';
 import { fonts } from '../../constants/fonts';
-import { numberWithCommas } from '../../utils';
+import { numberWithCommas, toInt } from '../../utils';
 import {
   Project,
   UniqueProjectQueryInput,
@@ -43,7 +43,7 @@ export const ProjectStats = ({ project }: { project: Project }) => {
   const { loading, data } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_DASHBOARD_DATA,
     {
-      variables: { where: { id: project.id } },
+      variables: { where: { id: toInt(project.id) } },
     },
   );
 
