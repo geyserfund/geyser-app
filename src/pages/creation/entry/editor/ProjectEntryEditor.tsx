@@ -57,6 +57,15 @@ const useStyles = createUseStyles<Rules, StyleProps>({
       paddingLeft: noPadding ? '0px !important' : undefined,
       paddingRight: noPadding ? '0px !important' : undefined,
       overflow: 'hidden',
+      '&.ql-blank': {
+        '&:before': {
+          fontFamily: fonts.inter,
+          fontSize: '18px',
+          lineHeight: 1.5,
+          fontStyle: 'normal',
+          color: colors.grayPlaceholder,
+        },
+      },
     },
 
     '& .ql-editor li': {

@@ -327,7 +327,7 @@ export const EntryCreateEdit = () => {
             alignItems="flex-start"
             paddingBottom="80px"
           >
-            <Box marginTop="20px" width="100%" px="16px">
+            <Box marginTop="20px" width="100%" px="15px">
               <FileUpload onUploadComplete={onImageUpload}>
                 <>
                   {form.current.image ? (
@@ -364,6 +364,7 @@ export const EntryCreateEdit = () => {
                 fontSize={isMobile ? '35px' : '40px'}
                 fontWeight={700}
                 paddingBottom="5px"
+                paddingX="15px"
                 name="title"
                 value={form.current.title}
                 onChange={handleInput}
@@ -377,6 +378,7 @@ export const EntryCreateEdit = () => {
                 placeholder="The summary of this entry"
                 color="brand.gray500"
                 fontSize={isMobile ? '20px' : '26px'}
+                paddingX="15px"
                 fontWeight={600}
                 name="description"
                 value={form.current.description}
