@@ -1,8 +1,9 @@
 import { HStack, Text, TextProps } from '@chakra-ui/react';
 import React from 'react';
 import { useBTCConverter } from '../../helpers';
-import { numberWithCommas } from '../../utils';
+import { numberWithCommas, toInt } from '../../utils';
 import { SatoshiIconTilted } from '../icons';
+import { Satoshis } from '../../types';
 
 type Props = TextProps & {
   label?: string;
@@ -65,7 +66,7 @@ export const SatoshiAmount = ({
           fontSize={fontSize}
           {...rest}
         >
-          (${btcConverter.getUSDAmount(Number(children)).toFixed(2)})
+          (${btcConverter.getUSDAmount(toInt(children) as Satoshis).toFixed(2)})
         </Text>
       ) : null}
     </HStack>
