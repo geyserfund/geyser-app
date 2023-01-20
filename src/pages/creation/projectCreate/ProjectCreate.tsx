@@ -422,7 +422,7 @@ export const ProjectCreate = () => {
                 >
                   <BiInfoCircle />
                   <Text fontSize="12px" color="brand.neutral700">
-                    HTML MarkDown
+                    MarkDown
                   </Text>
                 </HStack>
               </HStack>

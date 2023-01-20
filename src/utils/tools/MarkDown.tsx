@@ -1,13 +1,25 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import ReactMarkdown from 'react-markdown';
 import { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
 
-interface MarkDownProps extends ReactMarkdownOptions {}
+interface MarkDownProps extends ReactMarkdownOptions {
+  color?: string;
+  wordBreak?: string;
+}
 
-const useStyles = createUseStyles({
-  container: {
+type Rules = string;
+
+type StyleProps = {
+  color?: string;
+  wordBreak?: string;
+};
+
+const useStyles = createUseStyles<Rules, StyleProps>({
+  container: ({ color, wordBreak }) => ({
+    color: color || 'inherit',
+    wordBreak: wordBreak || 'break-word',
     '& a': {
       textDecoration: 'underline',
     },
@@ -17,11 +29,23 @@ const useStyles = createUseStyles({
     '& ol': {
       paddingLeft: '25px',
     },
-  },
+  }),
 });
 
-export const MarkDown = ({ children, className, ...rest }: MarkDownProps) => {
-  const classes = useStyles();
+export const MarkDown = ({
+  children,
+  className,
+  color,
+  wordBreak,
+  ...rest
+}: MarkDownProps) => {
+  const classes = useStyles({});
+
+  const newValue = children ? children.replaceAll('\n', '\\\n') : '';
+  const finalValue =
+    newValue[newValue.length - 2] === '\\'
+      ? newValue.slice(0, newValue.length - 2)
+      : newValue;
   return (
     <ReactMarkdown
       className={classNames(classes.container, className)}
@@ -32,7 +56,7 @@ export const MarkDown = ({ children, className, ...rest }: MarkDownProps) => {
       }}
       {...rest}
     >
-      {children}
+      {finalValue}
     </ReactMarkdown>
   );
 };
