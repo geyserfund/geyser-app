@@ -17,18 +17,12 @@ import { TopNavBarMenu } from './TopNavBarMenu';
 import { isMobileMode } from '../../../utils';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { AuthContext } from '../../../context';
-import {
-  useLocation,
-  useHistory,
-  useRouteMatch,
-  match,
-  useParams,
-} from 'react-router';
+import { useLocation, useHistory, match } from 'react-router';
 import { customHistory } from '../../../config';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
 import { getPath, routerPathNames } from '../../../constants';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 
 const navItems = [
   {
@@ -119,7 +113,6 @@ const routesForEnablingProjectLaunchButton = [
 export const TopNavBar = () => {
   const isMobile = isMobileMode();
   const history = useHistory();
-  const params = useParams<{ projectId: string }>();
 
   const currentPathName = history.location.pathname;
 
@@ -316,7 +309,7 @@ export const TopNavBar = () => {
       isMobile === false &&
       isLoggedIn &&
       isUserAProjectCreator &&
-      (isViewingOwnProject || userHasOnlyOneProject) &&
+      isViewingOwnProject &&
       !routeMatchesForHidingDashboardButton.some((routeMatch) => {
         return (routeMatch as match)?.isExact;
       })
@@ -326,7 +319,6 @@ export const TopNavBar = () => {
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
-    userHasOnlyOneProject,
     routeMatchesForHidingDashboardButton,
   ]);
 
@@ -411,26 +403,6 @@ export const TopNavBar = () => {
         return Boolean(routeMatch) === false;
       }) &&
       !userHasOnlyOneProject
-    );
-  }, [
-    routeMatchesForHidingMyProjectsButton,
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    isViewingOwnProject,
-    userHasOnlyOneProject,
-  ]);
-
-  const shouldShowMyProjectButtonInsideDropdownMenu: boolean = useMemo(() => {
-    return (
-      isMobile === true &&
-      isLoggedIn &&
-      isUserAProjectCreator &&
-      isViewingOwnProject === false &&
-      routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
-        return Boolean(routeMatch) === false;
-      }) &&
-      userHasOnlyOneProject
     );
   }, [
     routeMatchesForHidingMyProjectsButton,
@@ -641,15 +613,11 @@ export const TopNavBar = () => {
                 shouldShowMyProjectsMenuItem={
                   shouldShowMyProjectsButtonInsideDropdownMenu
                 }
-                shouldShowMyProjectButtonInsideDropdownMenu={
-                  shouldShowMyProjectButtonInsideDropdownMenu
-                }
                 shouldShowSignInMenuItem={
                   shouldShowSignInButtonInsideDropdownMenu
                 }
                 onDashboardSelected={handleProjectDashboardButtonPress}
                 onMyProjectsSelected={handleMyProjectsButtonPress}
-                onMyProjectSelected={handleMyProjectButtonPress}
                 onSignInSelected={loginOnOpen}
                 onSignOutSelected={logout}
               />
