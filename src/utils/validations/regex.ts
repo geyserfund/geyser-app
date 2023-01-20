@@ -8,5 +8,5 @@ export const validUrl = new RegExp(
 );
 
 export const matchMarkDownSpecialKeysAtLineEnd = new RegExp(
-  /\n(?!.*(\*|_|#|-))/g,
+  /\n(?!.*(\*|_|#|-|\`|[0-9]+(\.|\))))/g,
 );
