@@ -114,7 +114,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
 
   if (loading) {
     return (
-      <GridItem colSpan={8} display="flex" justifyContent="center">
+      <GridItem colSpan={6} display="flex" justifyContent="center">
         <Loader />
       </GridItem>
     );
@@ -122,7 +122,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
 
   return (
     <>
-      <GridItem colSpan={8} display="flex" justifyContent="center">
+      <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
           width="100%"

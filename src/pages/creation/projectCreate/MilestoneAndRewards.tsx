@@ -1,27 +1,13 @@
-import {
-  Box,
-  Grid,
-  GridItem,
-  HStack,
-  Text,
-  useDisclosure,
-  useMediaQuery,
-  VStack,
-} from '@chakra-ui/react';
+import { HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import {
   ButtonComponent,
   IconButtonComponent,
   SatoshiAmount,
-  UndecoratedLink,
 } from '../../../components/ui';
-import { isMobileMode, toInt, useNotification } from '../../../utils';
-import { TMilestone } from './types';
-import { BiLeftArrowAlt } from 'react-icons/bi';
-import { createUseStyles } from 'react-jss';
+import { toInt, useNotification } from '../../../utils';
 import { colors, getPath } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
-import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import {
   MilestoneAdditionModal,
   defaultMilestone,
@@ -42,19 +28,15 @@ import {
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
 
-import type { Project, ProjectReward } from '../../../types/generated/graphql';
+import type {
+  Project,
+  ProjectMilestone,
+  ProjectReward,
+} from '../../../types/generated/graphql';
 import { RewardCurrency } from '../../../types/generated/graphql';
 import { ProjectCreateLayout } from './components/ProjectCreateLayout';
 
-const useStyles = createUseStyles({
-  backIcon: {
-    fontSize: '25px',
-  },
-});
-
 export const MilestoneAndRewards = () => {
-  const isMobile = isMobileMode();
-  const classes = useStyles();
   const history = useHistory();
   const params = useParams<{ projectId: string }>();
 
@@ -65,7 +47,7 @@ export const MilestoneAndRewards = () => {
 
   const [finalDate, setFinalDate] = useState<string>('');
 
-  const [milestones, setMilestones] = useState<TMilestone[]>([]);
+  const [milestones, setMilestones] = useState<ProjectMilestone[]>([]);
   const [rewards, setRewards] = useState<ProjectReward[]>([]);
   const [selectedReward, setSelectedReward] = useState<ProjectReward>();
 
@@ -132,7 +114,7 @@ export const MilestoneAndRewards = () => {
     },
   });
 
-  const handleMilestoneSubmit = (milestones: TMilestone[]) => {
+  const handleMilestoneSubmit = (milestones: ProjectMilestone[]) => {
     setMilestones(milestones);
     onMilestoneClose();
   };
@@ -237,8 +219,6 @@ export const MilestoneAndRewards = () => {
     setSelectedDate(undefined);
     setFinalDate('');
   };
-
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   if (loading) {
     return <Loader />;

@@ -1,5 +1,5 @@
 import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { colors } from '../../constants';
 import { useListenerState } from '../../hooks';
@@ -31,18 +31,21 @@ export const TextArea = ({
   error,
   minHeight,
   maxHeight,
-  onChange,
   supportMarkup,
+  value,
   ...rest
 }: ITextBoxProps) => {
   const classes = useStyles();
 
   const [dynamicHeight, setDynamicHeight] = useListenerState(minHeight);
 
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
   const getIntFromHeight = (val: any) => toInt(`${val}`.split('px')[0]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { scrollHeight, offsetHeight, textLength } = event.currentTarget;
+  const handleDynamicHeight = (target: HTMLTextAreaElement) => {
+    const { scrollHeight, offsetHeight, textLength } = target;
+    console.log('checking tagert', scrollHeight, offsetHeight, textLength);
     if (textLength > minTextToReturnBackTo) {
       if (
         minHeight &&
@@ -61,20 +64,23 @@ export const TextArea = ({
     } else {
       setDynamicHeight(minHeight);
     }
-
-    if (onChange) {
-      onChange(event);
-    }
   };
+
+  useEffect(() => {
+    if (textAreaRef?.current) {
+      handleDynamicHeight(textAreaRef.current);
+    }
+  }, [value]);
 
   return (
     <Box width="100%">
       <Textarea
+        ref={textAreaRef}
         isInvalid={Boolean(error)}
         className={classes.inputElement}
         minHeight={minHeight ? dynamicHeight.current : undefined}
+        value={value}
         {...rest}
-        onChange={handleChange}
       >
         {children}
       </Textarea>

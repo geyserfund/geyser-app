@@ -8,6 +8,8 @@ import {
   Input,
   InputRightAddon,
   Switch,
+  Link,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
@@ -20,7 +22,7 @@ import {
   TextArea,
   TextInputBox,
 } from '../../components/ui';
-import { colors } from '../../constants';
+import { colors, commonMarkdownUrl } from '../../constants';
 import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
 import {
@@ -38,6 +40,7 @@ import {
   UserValidations,
 } from '../../constants/validations';
 import { Project, ProjectStatus } from '../../types/generated/graphql';
+import { BiInfoCircle } from 'react-icons/bi';
 
 export const ProjectSettings = ({ project }: { project: Project }) => {
   const params = useParams<{ projectId: string }>();
@@ -47,6 +50,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
 
   const { user } = useAuthContext();
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   const [form, setForm] = useState<ProjectCreationVariables>({
     title: '',
@@ -56,7 +60,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
     name: '',
   });
 
-  const [formError, setFormError] = useState<{ [key: string]: string }>({});
+  const [formError, setFormError] = useState<{ [key: string]: any }>({});
   const [selectedButton, setSelectedButton] = useState(
     project.expiresAt ? 'custom' : 'ongoing',
   );
@@ -125,7 +129,21 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         value.length > ProjectValidations.description.maxLength
       ) {
         setFormError({
-          description: `Character Limit: ${ProjectValidations.description.maxLength}/${value.length}`,
+          description: (
+            <HStack
+              width="100%"
+              justifyContent="space-between"
+              paddingTop="5px"
+            >
+              <Text fontSize="12px" color="brand.error">
+                Character limit:
+              </Text>
+              <Text
+                fontSize="12px"
+                color="brand.error"
+              >{` ${ProjectValidations.description.maxLength}/${value.length}`}</Text>
+            </HStack>
+          ),
         });
       } else {
         setFormError({});
@@ -233,12 +251,16 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
 
   return (
     <>
-      <GridItem colSpan={8} display="flex" justifyContent="center">
+      <GridItem
+        colSpan={isLargerThan1280 ? 6 : 2}
+        display="flex"
+        justifyContent="center"
+      >
         <VStack
           spacing="30px"
           width="100%"
           minWidth="350px"
-          maxWidth="400px"
+          maxWidth="600px"
           marginBottom="40px"
           display="flex"
           flexDirection="column"
@@ -297,11 +319,41 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
             <VStack width="100%" alignItems="flex-start">
               <Text>Main Objective</Text>
               <TextArea
+                minHeight="120px"
+                maxHeight="800px"
+                height="fit-content"
+                overflowY="auto"
                 name="description"
                 value={form.description}
                 onChange={handleChange}
                 error={formError.description}
               />
+              {!formError.description && (
+                <HStack width="100%" justifyContent="space-between">
+                  <HStack spacing="5px">
+                    <Text fontSize="12px" color="brand.neutral700">
+                      For **Bold** and *Italic*, see more{' '}
+                    </Text>
+                    <HStack
+                      as={Link}
+                      href={commonMarkdownUrl}
+                      isExternal
+                      spacing="0px"
+                      _focus={{}}
+                    >
+                      <BiInfoCircle />
+                      <Text fontSize="12px" color="brand.neutral700">
+                        HTML MarkDown
+                      </Text>
+                    </HStack>
+                  </HStack>
+
+                  <Text
+                    fontSize="12px"
+                    color="brand.neutral700"
+                  >{`${form.description.length}/${ProjectValidations.description.maxLength}`}</Text>
+                </HStack>
+              )}
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
@@ -373,8 +425,10 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         </VStack>
       </GridItem>
       <GridItem
-        colSpan={isMobile ? 8 : 5}
+        colSpan={isLargerThan1280 ? 3 : 2}
         display="flex"
+        marginTop={isMobile ? '0px' : '0px'}
+        alignItems="flex-start"
         justifyContent="center"
       >
         <VStack justifyContent="center" alignItems="flex-start" spacing="10px">
