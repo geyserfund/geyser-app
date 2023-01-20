@@ -65,6 +65,10 @@ export const UserProfilePageContributionsListItem = ({
     { variables: { fundingTxId: toInt(fundingTxID) } },
   );
 
+  if (error || loading) {
+    return null;
+  }
+
   const project =
     data?.fundingTx.sourceResource?.__typename === 'Project'
       ? (data.fundingTx.sourceResource! as Project)

@@ -40,5 +40,9 @@ export const UserProfilePageEntriesListItem = ({ entryID }: Props) => {
     { variables: { entryID: toInt(entryID) } },
   );
 
+  if (error || loading) {
+    return null;
+  }
+
   return data ? <ProjectEntryCard entry={data.entry} /> : null;
 };

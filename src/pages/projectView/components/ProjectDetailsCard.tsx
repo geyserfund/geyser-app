@@ -10,6 +10,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+
 import {
   Card,
   SatoshiAmount,
@@ -21,7 +22,7 @@ import { AvatarElement } from './AvatarElement';
 import { useAuthContext } from '../../../context';
 import { Project } from '../../../types/generated/graphql';
 import { getPath, HomeUrl, AmbossUrl } from '../../../constants';
-import { isActive, isMobileMode } from '../../../utils';
+import { isActive, isMobileMode, MarkDown } from '../../../utils';
 
 export const ProjectDetailsCard = ({
   project,
@@ -197,9 +198,7 @@ export const ProjectDetailsCard = ({
           <Text color="brand.neutral600" textAlign="left">
             Objective
           </Text>
-          <Text color="brand.neutral800" wordBreak="break-word">
-            {project.description}
-          </Text>
+          <MarkDown color='"brand.neutral800"'>{project.description}</MarkDown>
         </VStack>
         {renderMilestone()}
         {project.funders.length > 0 && (

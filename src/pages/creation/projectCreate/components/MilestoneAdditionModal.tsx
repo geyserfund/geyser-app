@@ -22,24 +22,25 @@ import {
   MUTATION_UPDATE_PROJECT_MILESTONE,
 } from '../../../../graphql/mutations';
 import { useBTCConverter } from '../../../../helpers';
+import { ProjectMilestone } from '../../../../types';
 import { Satoshis, USDCents, USDollars } from '../../../../types/types';
 import { toInt, useNotification } from '../../../../utils';
-import { TMilestone } from '../types';
 
 type Props = {
   isOpen: boolean;
-  onClose: (newMilestones: TMilestone[]) => void;
-  onSubmit: (newMilestones: TMilestone[]) => void;
-  availableMilestones: TMilestone[];
+  onClose: (newMilestones: ProjectMilestone[]) => void;
+  onSubmit: (newMilestones: ProjectMilestone[]) => void;
+  availableMilestones: ProjectMilestone[];
   projectId?: number;
 };
 
 export const defaultMilestone = {
+  id: 0,
   name: '',
   projectId: 0,
   description: '',
   amount: 0 as Satoshis,
-};
+} as ProjectMilestone;
 
 export const MilestoneAdditionModal = ({
   isOpen,
@@ -52,11 +53,11 @@ export const MilestoneAdditionModal = ({
   const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter();
 
   const [_milestones, _setMilestones] =
-    useState<TMilestone[]>(availableMilestones);
+    useState<ProjectMilestone[]>(availableMilestones);
 
   const milestones = useRef(_milestones);
 
-  const setMilestones = (value: TMilestone[]) => {
+  const setMilestones = (value: ProjectMilestone[]) => {
     milestones.current = value;
     _setMilestones(value);
   };
@@ -70,9 +71,9 @@ export const MilestoneAdditionModal = ({
     setMilestones([...milestones.current, defaultMilestone]);
   };
 
-  const getFilteredMilestones = (): TMilestone[] => {
+  const getFilteredMilestones = (): ProjectMilestone[] => {
     return milestones.current.filter(
-      (milestone: TMilestone) => milestone.amount > 0 && milestone.name,
+      (milestone: ProjectMilestone) => milestone.amount > 0 && milestone.name,
     );
   };
 
@@ -152,6 +153,7 @@ export const MilestoneAdditionModal = ({
         filteredMilestones.map(async (milestone) => {
           const createMilestoneInput = {
             ...milestone,
+            id: undefined,
             projectId: toInt(projectId),
           };
 
@@ -175,8 +177,8 @@ export const MilestoneAdditionModal = ({
           });
           if (data?.createProjectMilestone?.id) {
             return {
-              id: toInt(data.createProjectMilestone.id),
               ...milestone,
+              id: toInt(data.createProjectMilestone.id),
             };
           }
 
@@ -328,7 +330,9 @@ export const MilestoneAdditionModal = ({
                 <AmountInputWithSatoshiToggle
                   isUsingSatoshis={isFormInputUsingSatoshis}
                   onUnitTypeChanged={setIsFormInputUsingSatoshis}
-                  value={getFormConvertedMilestoneAmount(milestone.amount)}
+                  value={getFormConvertedMilestoneAmount(
+                    milestone.amount as Satoshis,
+                  )}
                   onValueChanged={(newAmount: Satoshis | USDollars) =>
                     handleAmountChange(
                       getMutationConvertedMilestoneAmount(newAmount),

@@ -48,6 +48,10 @@ export const UserProfilePageProjectsListItem = ({ projectID }: Props) => {
     { variables: { where: { id: toInt(projectID) } } },
   );
 
+  if (error || loading) {
+    return null;
+  }
+
   return data ? (
     <ProjectsGridCard project={data.project} height="100%" width="100%" />
   ) : null;

@@ -1,27 +1,13 @@
-import {
-  Box,
-  Grid,
-  GridItem,
-  HStack,
-  Text,
-  useDisclosure,
-  useMediaQuery,
-  VStack,
-} from '@chakra-ui/react';
+import { HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import {
   ButtonComponent,
   IconButtonComponent,
   SatoshiAmount,
-  UndecoratedLink,
 } from '../../../components/ui';
-import { isMobileMode, toInt, useNotification } from '../../../utils';
-import { TMilestone } from './types';
-import { BiLeftArrowAlt } from 'react-icons/bi';
-import { createUseStyles } from 'react-jss';
+import { toInt, useNotification } from '../../../utils';
 import { colors, getPath } from '../../../constants';
 import { useHistory, useParams } from 'react-router';
-import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
 import {
   MilestoneAdditionModal,
   defaultMilestone,
@@ -42,18 +28,15 @@ import {
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import Loader from '../../../components/ui/Loader';
 
-import type { Project, ProjectReward } from '../../../types/generated/graphql';
+import type {
+  Project,
+  ProjectMilestone,
+  ProjectReward,
+} from '../../../types/generated/graphql';
 import { RewardCurrency } from '../../../types/generated/graphql';
-
-const useStyles = createUseStyles({
-  backIcon: {
-    fontSize: '25px',
-  },
-});
+import { ProjectCreateLayout } from './components/ProjectCreateLayout';
 
 export const MilestoneAndRewards = () => {
-  const isMobile = isMobileMode();
-  const classes = useStyles();
   const history = useHistory();
   const params = useParams<{ projectId: string }>();
 
@@ -64,7 +47,7 @@ export const MilestoneAndRewards = () => {
 
   const [finalDate, setFinalDate] = useState<string>('');
 
-  const [milestones, setMilestones] = useState<TMilestone[]>([]);
+  const [milestones, setMilestones] = useState<ProjectMilestone[]>([]);
   const [rewards, setRewards] = useState<ProjectReward[]>([]);
   const [selectedReward, setSelectedReward] = useState<ProjectReward>();
 
@@ -131,7 +114,7 @@ export const MilestoneAndRewards = () => {
     },
   });
 
-  const handleMilestoneSubmit = (milestones: TMilestone[]) => {
+  const handleMilestoneSubmit = (milestones: ProjectMilestone[]) => {
     setMilestones(milestones);
     onMilestoneClose();
   };
@@ -237,210 +220,148 @@ export const MilestoneAndRewards = () => {
     setFinalDate('');
   };
 
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
-
   if (loading) {
     return <Loader />;
   }
 
-  return (
-    <Box
-      background={'brand.bgGrey4'}
-      position="relative"
-      height="100%"
-      justifyContent="space-between"
+  const sideView = (
+    <VStack
+      alignItems="flex-start"
+      maxWidth="370px"
+      spacing="10px"
+      width="100%"
     >
-      <Grid
-        width="100%"
-        templateColumns={
-          isLargerThan1280
-            ? 'repeat(6, 1fr)'
-            : isMobile
-            ? 'repeat(2, 1fr)'
-            : 'repeat(5, 1fr)'
-        }
-        padding={isMobile ? '10px' : '40px 40px 20px 40px'}
-      >
-        <GridItem
-          colSpan={isLargerThan1280 ? 2 : 1}
-          display="flex"
-          justifyContent="flex-start"
-        >
-          <UndecoratedLink href={`/launch/${params.projectId}`}>
-            <ButtonComponent
-              leftIcon={
-                <BiLeftArrowAlt
-                  className={classes.backIcon}
-                  onClick={handleBack}
-                />
-              }
+      {milestones.length > 0 && (
+        <>
+          <HStack justifyContent="space-between" width="100%">
+            <Text fontSize="18px" fontWeight={500}>
+              MILESTONES
+            </Text>
+            <IconButtonComponent aria-label="edit" onClick={openMilestone}>
+              <EditIcon />
+            </IconButtonComponent>
+          </HStack>
+
+          {milestones.map((milestone, index) => (
+            <VStack
+              key={index}
+              width="100%"
+              border="1px solid"
+              borderColor={colors.gray300}
+              borderRadius="4px"
+              alignItems="flex-start"
+              padding="10px"
             >
-              Back
-            </ButtonComponent>
-          </UndecoratedLink>
-        </GridItem>
-        <GridItem
-          colSpan={2}
-          display="flex"
-          justifyContent={isMobile ? 'center' : 'flex-start'}
-        >
-          <VStack
-            spacing="30px"
-            width="100%"
-            maxWidth="400px"
-            minWidth="350px"
-            marginBottom="40px"
-            display="flex"
-            flexDirection="column"
-            alignItems="flex-start"
-          >
-            <VStack width="100%" spacing="40px" alignItems="flex-start">
-              <Text color="brand.gray500" fontSize="30px" fontWeight={700}>
-                {' '}
-                Create new Project
-              </Text>
-              <TitleWithProgressBar
-                paddingBottom="20px"
-                title="Milestones & Rewards"
-                subTitle="Step 2 of 3"
-                percentage={67}
+              <Text>{milestone.name}</Text>
+              <SatoshiAmount>{milestone.amount}</SatoshiAmount>
+            </VStack>
+          ))}
+        </>
+      )}
+
+      {rewards.length > 0 ? (
+        <>
+          <HStack justifyContent="space-between" width="100%">
+            <Text fontSize="18px" fontWeight={500}>
+              Rewards
+            </Text>
+          </HStack>
+
+          <VStack width="100%">
+            {rewards.map((reward, index) => (
+              <RewardCard
+                key="index"
+                width="100%"
+                reward={reward}
+                isSatoshi={isSatoshiRewards}
+                handleEdit={() => {
+                  setSelectedReward(reward);
+                  openReward();
+                }}
+                handleRemove={() => triggerRewardRemoval(reward.id)}
               />
-            </VStack>
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Fundraising deadline</Text>
-              <HStack width="100%" justifyContent="space-around">
-                <ButtonComponent
-                  primary={selectedButton === 'ongoing'}
-                  onClick={handleOngoingSelect}
-                >
-                  Ongoing
-                </ButtonComponent>
-                <ButtonComponent
-                  primary={selectedButton === 'month'}
-                  onClick={handleMonthSelect}
-                >
-                  1 Month
-                </ButtonComponent>
-                <CalendarButton
-                  primary={selectedButton === 'custom'}
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                >
-                  Custom
-                </CalendarButton>
-              </HStack>
-              <Text fontSize="12px">
-                Add a deadline for your project if you have one, or just keep it
-                as ongoing.
-              </Text>
-            </VStack>
-            <VStack width="100%" alignItems="flex-start" spacing="40px">
-              <VStack width="100%" alignItems="flex-start">
-                <Text name="title">Project Milestones (optional)</Text>
-                <ButtonComponent isFullWidth onClick={openMilestone}>
-                  Add a Milestone
-                </ButtonComponent>
-                <Text fontSize="12px">
-                  Milestones help you and your community keep track of your
-                  progress and set your expectations. You can edit Milestones
-                  later.
-                </Text>
-              </VStack>
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Rewards (optional)</Text>
-                <ButtonComponent
-                  isFullWidth
-                  onClick={() => {
-                    setSelectedReward(undefined);
-                    openReward();
-                  }}
-                >
-                  Add a Reward
-                </ButtonComponent>
-                <Text fontSize="12px">
-                  Rewards are a powerful way of exchanging value with your
-                  community. Check here our list of prohibited items. You can
-                  edit or add Rewards later.
-                </Text>
-              </VStack>
-              <ButtonComponent
-                primary
-                isFullWidth
-                onClick={handleNext}
-                isLoading={updateProjectLoading}
-              >
-                Continue
-              </ButtonComponent>
-            </VStack>
+            ))}
           </VStack>
-        </GridItem>
+        </>
+      ) : null}
+    </VStack>
+  );
 
-        <GridItem colSpan={2} display="flex" justifyContent="center">
-          <VStack
-            alignItems="flex-start"
-            maxWidth="370px"
-            spacing="10px"
-            width="100%"
+  return (
+    <>
+      <ProjectCreateLayout
+        handleBack={handleBack}
+        sideView={sideView}
+        title="Milestones & Rewards"
+        subtitle="Step 2 of 3"
+        percentage={67}
+      >
+        <VStack width="100%" alignItems="flex-start">
+          <Text>Fundraising deadline</Text>
+          <HStack width="100%" justifyContent="space-around">
+            <ButtonComponent
+              primary={selectedButton === 'ongoing'}
+              onClick={handleOngoingSelect}
+            >
+              Ongoing
+            </ButtonComponent>
+            <ButtonComponent
+              primary={selectedButton === 'month'}
+              onClick={handleMonthSelect}
+            >
+              1 Month
+            </ButtonComponent>
+            <CalendarButton
+              primary={selectedButton === 'custom'}
+              value={selectedDate}
+              onChange={handleDateChange}
+            >
+              Custom
+            </CalendarButton>
+          </HStack>
+          <Text fontSize="12px">
+            Add a deadline for your project if you have one, or just keep it as
+            ongoing.
+          </Text>
+        </VStack>
+        <VStack width="100%" alignItems="flex-start" spacing="40px">
+          <VStack width="100%" alignItems="flex-start">
+            <Text name="title">Project Milestones (optional)</Text>
+            <ButtonComponent isFullWidth onClick={openMilestone}>
+              Add a Milestone
+            </ButtonComponent>
+            <Text fontSize="12px">
+              Milestones help you and your community keep track of your progress
+              and set your expectations. You can edit Milestones later.
+            </Text>
+          </VStack>
+          <VStack width="100%" alignItems="flex-start">
+            <Text>Rewards (optional)</Text>
+            <ButtonComponent
+              isFullWidth
+              onClick={() => {
+                setSelectedReward(undefined);
+                openReward();
+              }}
+            >
+              Add a Reward
+            </ButtonComponent>
+            <Text fontSize="12px">
+              Rewards are a powerful way of exchanging value with your
+              community. Check here our list of prohibited items. You can edit
+              or add Rewards later.
+            </Text>
+          </VStack>
+          <ButtonComponent
+            primary
+            isFullWidth
+            onClick={handleNext}
+            isLoading={updateProjectLoading}
           >
-            {milestones.length > 0 && (
-              <>
-                <HStack justifyContent="space-between" width="100%">
-                  <Text fontSize="18px" fontWeight={500}>
-                    MILESTONES
-                  </Text>
-                  <IconButtonComponent
-                    aria-label="edit"
-                    onClick={openMilestone}
-                  >
-                    <EditIcon />
-                  </IconButtonComponent>
-                </HStack>
-
-                {milestones.map((milestone, index) => (
-                  <VStack
-                    key={index}
-                    width="100%"
-                    border="1px solid"
-                    borderColor={colors.gray300}
-                    borderRadius="4px"
-                    alignItems="flex-start"
-                    padding="10px"
-                  >
-                    <Text>{milestone.name}</Text>
-                    <SatoshiAmount>{milestone.amount}</SatoshiAmount>
-                  </VStack>
-                ))}
-              </>
-            )}
-
-            {rewards.length > 0 ? (
-              <>
-                <HStack justifyContent="space-between" width="100%">
-                  <Text fontSize="18px" fontWeight={500}>
-                    Rewards
-                  </Text>
-                </HStack>
-
-                <VStack width="100%">
-                  {rewards.map((reward, index) => (
-                    <RewardCard
-                      key="index"
-                      width="100%"
-                      reward={reward}
-                      isSatoshi={isSatoshiRewards}
-                      handleEdit={() => {
-                        setSelectedReward(reward);
-                        openReward();
-                      }}
-                      handleRemove={() => triggerRewardRemoval(reward.id)}
-                    />
-                  ))}
-                </VStack>
-              </>
-            ) : null}
-          </VStack>
-        </GridItem>
-      </Grid>
+            Continue
+          </ButtonComponent>
+        </VStack>
+      </ProjectCreateLayout>
 
       {isMilestoneOpen && (
         <MilestoneAdditionModal
@@ -471,6 +392,6 @@ export const MilestoneAndRewards = () => {
         description={'Are you sure you want to remove the reward'}
         confirm={() => handleRemoveReward(selectedReward?.id)}
       />
-    </Box>
+    </>
   );
 };
