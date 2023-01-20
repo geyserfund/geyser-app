@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { createUseStyles } from 'react-jss';
 import ReactMarkdown from 'react-markdown';
 import { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
+import { matchMarkDownSpecialKeysAtLineEnd } from '../validations/regex';
 
 interface MarkDownProps extends ReactMarkdownOptions {
   color?: string;
@@ -41,7 +42,9 @@ export const MarkDown = ({
 }: MarkDownProps) => {
   const classes = useStyles({});
 
-  const newValue = children ? children.replaceAll('\n', '\\\n') : '';
+  const newValue = children
+    ? children.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '\\\n')
+    : '';
   const finalValue =
     newValue[newValue.length - 2] === '\\'
       ? newValue.slice(0, newValue.length - 2)

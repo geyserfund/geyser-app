@@ -6,3 +6,7 @@ export const validLightningAddress = new RegExp(/[^a-z0-9-_]+/g);
 export const validUrl = new RegExp(
   /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi,
 );
+
+export const matchMarkDownSpecialKeysAtLineEnd = new RegExp(
+  /\n(?!.*(\*|_|#|-))/g,
+);
