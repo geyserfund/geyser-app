@@ -10,7 +10,6 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 
 import {
   Card,
@@ -23,7 +22,7 @@ import { AvatarElement } from './AvatarElement';
 import { useAuthContext } from '../../../context';
 import { Project } from '../../../types/generated/graphql';
 import { getPath, HomeUrl, AmbossUrl } from '../../../constants';
-import { isActive, isMobileMode } from '../../../utils';
+import { isActive, isMobileMode, MarkDown } from '../../../utils';
 
 export const ProjectDetailsCard = ({
   project,
@@ -200,7 +199,7 @@ export const ProjectDetailsCard = ({
             Objective
           </Text>
           <Text color="brand.neutral800" wordBreak="break-word">
-            <ReactMarkdown>{project.description}</ReactMarkdown>
+            <MarkDown>{project.description}</MarkDown>
           </Text>
         </VStack>
         {renderMilestone()}

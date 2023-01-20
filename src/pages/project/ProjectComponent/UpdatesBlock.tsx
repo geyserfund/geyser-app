@@ -11,9 +11,8 @@ import {
 import React from 'react';
 import { TwitterComponent } from '../../../components/ui';
 import { IProjectUpdate } from '../../../interfaces';
-import ReactMarkdown from 'react-markdown';
 import { useStyles } from './styles';
-import { getFormattedDate, isMobileMode } from '../../../utils';
+import { getFormattedDate, isMobileMode, MarkDown } from '../../../utils';
 import { YoutubeEmbed } from '../../../components/molecules/YoutubeEmbed';
 
 interface IUpdatesBlock {
@@ -63,13 +62,9 @@ export const UpdatesBlock = ({ projectUpdate, media }: IUpdatesBlock) => {
   const renderParagraphList = (list: string[]) => (
     <>
       {list.map((block: string) => (
-        <ReactMarkdown
-          key={block}
-          className={classes.texts}
-          linkTarget="_blank"
-        >
+        <MarkDown key={block} className={classes.texts} linkTarget="_blank">
           {block}
-        </ReactMarkdown>
+        </MarkDown>
       ))}
     </>
   );
@@ -78,7 +73,7 @@ export const UpdatesBlock = ({ projectUpdate, media }: IUpdatesBlock) => {
     <UnorderedList paddingLeft="18px">
       {list.map((block: string) => (
         <ListItem key={block} className={classes.texts}>
-          <ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
+          <MarkDown>{block}</MarkDown>
         </ListItem>
       ))}
     </UnorderedList>
@@ -88,7 +83,7 @@ export const UpdatesBlock = ({ projectUpdate, media }: IUpdatesBlock) => {
     <OrderedList paddingLeft="18px">
       {list.map((block: string) => (
         <ListItem key={block} className={classes.texts}>
-          <ReactMarkdown linkTarget="_blank">{block}</ReactMarkdown>
+          <MarkDown>{block}</MarkDown>
         </ListItem>
       ))}
     </OrderedList>

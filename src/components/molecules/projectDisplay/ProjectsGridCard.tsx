@@ -14,9 +14,8 @@ import { getPath, fonts } from '../../../constants';
 import { Project } from '../../../types/generated/graphql';
 import { ICard, ProjectStatusLabel } from '../../ui';
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
-import { getShortAmountLabel, isMobileMode } from '../../../utils';
+import { getShortAmountLabel, isMobileMode, MarkDown } from '../../../utils';
 import { Link } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 
 type Props = ICard & {
   project: Project;
@@ -135,7 +134,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               size="sm"
               wordBreak="break-word"
             >
-              <ReactMarkdown>{project.description}</ReactMarkdown>
+              <MarkDown>{project.description}</MarkDown>
             </Text>
           </VStack>
         </Box>

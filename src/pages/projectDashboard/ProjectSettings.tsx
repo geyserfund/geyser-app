@@ -14,7 +14,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { useParams } from 'react-router';
-import ReactMarkdown from 'react-markdown';
 
 import { CalendarButton, FileUpload } from '../../components/molecules';
 import {
@@ -34,6 +33,7 @@ import {
   useNotification,
   validateEmail,
   validLightningAddress,
+  MarkDown,
 } from '../../utils';
 import { ProjectCreationVariables } from '../creation/projectCreate/types';
 import { DateTime } from 'luxon';
@@ -453,9 +453,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
                 wordBreak="break-word"
                 isTruncated
               >
-                <ReactMarkdown>
-                  {form.description || 'project description'}
-                </ReactMarkdown>
+                <MarkDown>{form.description || 'project description'}</MarkDown>
               </Text>
             </Card>
           </HStack>

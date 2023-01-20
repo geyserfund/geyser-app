@@ -14,7 +14,6 @@ import { BiInfoCircle } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
 import { useHistory, useParams } from 'react-router';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import ReactMarkdown from 'react-markdown';
 
 import {
   MUTATION_CREATE_PROJECT,
@@ -29,6 +28,7 @@ import {
   TextInputBox,
 } from '../../../components/ui';
 import {
+  MarkDown,
   toInt,
   useNotification,
   validateEmail,
@@ -332,9 +332,7 @@ export const ProjectCreate = () => {
           wordBreak="break-word"
           isTruncated
         >
-          <ReactMarkdown>
-            {form.description || 'project description'}
-          </ReactMarkdown>
+          <MarkDown>{form.description || 'project description'}</MarkDown>
         </Text>
       </Card>
     </VStack>

@@ -10,12 +10,11 @@ import {
   Link,
   Skeleton,
 } from '@chakra-ui/react';
-import ReactMarkdown from 'react-markdown';
 
 import { AppFooter } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
 import { SatoshiIconTilted } from '../../components/icons';
-import { isActive, isMediumScreen, isMobileMode } from '../../utils';
+import { isActive, isMediumScreen, isMobileMode, MarkDown } from '../../utils';
 import { Subscribe } from '../../components/nav/Subscribe';
 import { RecipientButton } from './components/RecipientButton';
 import { ContributeButton } from './components/ContributeButton';
@@ -107,7 +106,7 @@ export const Grants = ({ project }: { project: Project }) => {
               my={isMobile ? 2 : 0}
               mx={isMobile ? 5 : 0}
             >
-              <ReactMarkdown>{project.description}</ReactMarkdown>
+              <MarkDown>{project.description}</MarkDown>
               For more information, see{' '}
               <Link
                 textDecoration="underline"
