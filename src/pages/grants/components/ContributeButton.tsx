@@ -28,7 +28,6 @@ import { useNotification, isMobileMode, toInt } from '../../../utils';
 import Loader from '../../../components/ui/Loader';
 import { createCreatorRecord } from '../../../api';
 import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { IProject } from '../../../interfaces';
 import { useFundingFlow } from '../../../hooks';
 import { fundingStages, GeyserTelegramUrl } from '../../../constants';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
@@ -38,12 +37,13 @@ import { FaTelegramPlane } from 'react-icons/fa';
 import {
   FundingInput,
   FundingResourceType,
+  Project,
 } from '../../../types/generated/graphql';
 
 interface ContributeButtonProps {
   active: boolean;
   title: string;
-  project: IProject;
+  project: Project;
 }
 
 export const ContributeButton = ({
@@ -179,7 +179,7 @@ export const ContributeButton = ({
         <ModalContent>
           <HStack p={6}>
             <Image
-              src={project.image}
+              src={`${project.image}`}
               alt="icon"
               rounded="lg"
               w="100px"
@@ -326,7 +326,7 @@ export const ContributeButton = ({
         <ModalContent>
           <HStack p={6}>
             <Image
-              src={project.image}
+              src={`${project.image}`}
               alt="icon"
               rounded="lg"
               w="100px"

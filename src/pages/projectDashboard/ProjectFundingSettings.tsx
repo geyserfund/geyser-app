@@ -1,4 +1,10 @@
-import { HStack, Text, VStack, GridItem } from '@chakra-ui/react';
+import {
+  HStack,
+  Text,
+  VStack,
+  GridItem,
+  useMediaQuery,
+} from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react';
 import { useHistory } from 'react-router';
 
@@ -20,6 +26,8 @@ import { CheckCircleIcon } from '@chakra-ui/icons';
 export const ProjectFundingSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
   const history = useHistory();
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+
   const [nodeData, setNodeData] = useState<TNodeInput>();
   const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false);
 
@@ -157,12 +165,16 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
 
   return (
     <>
-      <GridItem colSpan={8} display="flex" justifyContent="center">
+      <GridItem
+        colSpan={isLargerThan1280 ? 6 : 2}
+        display="flex"
+        justifyContent="center"
+      >
         <VStack
           spacing="40px"
           width="100%"
           minWidth="350px"
-          maxWidth="400px"
+          maxWidth="600px"
           marginBottom="40px"
           display="flex"
           flexDirection="column"
@@ -180,7 +192,11 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
         </VStack>
       </GridItem>
       {nodeData && (
-        <GridItem colSpan={5} display="flex" justifyContent="center">
+        <GridItem
+          colSpan={isLargerThan1280 ? 3 : 2}
+          display="flex"
+          justifyContent="center"
+        >
           <VStack
             justifyContent="flex-start"
             alignItems="flex-start"

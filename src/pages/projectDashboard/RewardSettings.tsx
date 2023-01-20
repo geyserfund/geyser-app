@@ -119,7 +119,7 @@ export const RewardSettings = ({ project }: { project: Project }) => {
 
   return (
     <>
-      <GridItem colSpan={8} display="flex" justifyContent="center">
+      <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
           width="100%"

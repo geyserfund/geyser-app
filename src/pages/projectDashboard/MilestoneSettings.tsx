@@ -14,14 +14,14 @@ import {
 } from '../../components/ui';
 import { colors } from '../../constants';
 import { IProject } from '../../interfaces';
+import { ProjectMilestone } from '../../types';
 import {
   defaultMilestone,
   MilestoneAdditionModal,
 } from '../creation/projectCreate/components';
-import { TMilestone } from '../creation/projectCreate/types';
 
 export const MilestoneSettings = ({ project }: { project: IProject }) => {
-  const [milestones, setMilestones] = useState<TMilestone[]>([]);
+  const [milestones, setMilestones] = useState<ProjectMilestone[]>([]);
 
   const {
     isOpen: isMilestoneModalOpen,
@@ -35,19 +35,19 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
     }
   }, [project]);
 
-  const handleMilestoneSubmit = (newMilestones: TMilestone[]) => {
+  const handleMilestoneSubmit = (newMilestones: ProjectMilestone[]) => {
     setMilestones(newMilestones);
     onMilestoneModalClose();
   };
 
-  const handleMilestoneModalClose = (newMilestones: TMilestone[]) => {
+  const handleMilestoneModalClose = (newMilestones: ProjectMilestone[]) => {
     setMilestones(newMilestones);
     onMilestoneModalClose();
   };
 
   return (
     <>
-      <GridItem colSpan={8} display="flex" justifyContent="center">
+      <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
           width="100%"

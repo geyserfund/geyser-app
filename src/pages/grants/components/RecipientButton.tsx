@@ -27,12 +27,13 @@ import { AuthContext } from '../../../context';
 import { SiTwitter } from 'react-icons/si';
 import Icon from '@chakra-ui/icon';
 import { AUTH_SERVICE_ENDPOINT } from '../../../constants';
+import { Maybe } from '../../../types/generated/graphql';
 
 interface RecipientButtonProps {
   active: boolean;
   title: string;
   grant: string;
-  image?: string;
+  image?: Maybe<string>;
 }
 
 export const RecipientButton = ({
@@ -132,7 +133,7 @@ export const RecipientButton = ({
         <ModalOverlay />
         <ModalContent>
           <HStack p={6}>
-            <Image src={image} alt="icon" rounded="lg" w="100px" mr={1} />
+            <Image src={`${image}`} alt="icon" rounded="lg" w="100px" mr={1} />
             <Box>
               <ModalHeader fontWeight="bold" fontSize="2xl" p={0}>
                 {submitting ? 'Applying' : 'Apply'}

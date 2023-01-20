@@ -36,6 +36,7 @@ module.exports = {
     camelcase: 'warn',
     'react/prop-types': 0,
     'react/display-name': 0,
+    'no-undef': 0,
     'no-restricted-syntax': [
       'off',
       {

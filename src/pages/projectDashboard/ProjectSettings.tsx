@@ -8,10 +8,13 @@ import {
   Input,
   InputRightAddon,
   Switch,
+  Link,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { useParams } from 'react-router';
+
 import { CalendarButton, FileUpload } from '../../components/molecules';
 import {
   ButtonComponent,
@@ -20,15 +23,17 @@ import {
   TextArea,
   TextInputBox,
 } from '../../components/ui';
-import { colors } from '../../constants';
+import { colors, commonMarkdownUrl } from '../../constants';
 import { useAuthContext } from '../../context';
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
 import {
   isMobileMode,
+  isActive,
   toInt,
   useNotification,
   validateEmail,
   validLightningAddress,
+  MarkDown,
 } from '../../utils';
 import { ProjectCreationVariables } from '../creation/projectCreate/types';
 import { DateTime } from 'luxon';
@@ -37,6 +42,9 @@ import {
   UserValidations,
 } from '../../constants/validations';
 import { Project, ProjectStatus } from '../../types/generated/graphql';
+import { BiInfoCircle } from 'react-icons/bi';
+import { Body2 } from '../../components/typography';
+import { CharacterLimitError } from '../../components/errors';
 
 export const ProjectSettings = ({ project }: { project: Project }) => {
   const params = useParams<{ projectId: string }>();
@@ -46,6 +54,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
 
   const { user } = useAuthContext();
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   const [form, setForm] = useState<ProjectCreationVariables>({
     title: '',
@@ -55,7 +64,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
     name: '',
   });
 
-  const [formError, setFormError] = useState<{ [key: string]: string }>({});
+  const [formError, setFormError] = useState<{ [key: string]: any }>({});
   const [selectedButton, setSelectedButton] = useState(
     project.expiresAt ? 'custom' : 'ongoing',
   );
@@ -65,7 +74,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
       : undefined,
   );
   const [finalDate, setFinalDate] = useState<string>();
-  const [deactivate, setDeactivate] = useState(!project.active);
+  const [deactivate, setDeactivate] = useState(!isActive(project.status));
 
   const [updateProject, { loading: updateLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,
@@ -117,14 +126,24 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         value.length > ProjectValidations.title.maxLength
       ) {
         setFormError({
-          title: `Character Limit: ${ProjectValidations.title.maxLength}/${value.length}`,
+          title: (
+            <CharacterLimitError
+              length={value.length}
+              limit={ProjectValidations.title.maxLength}
+            />
+          ),
         });
       } else if (
         name === 'description' &&
         value.length > ProjectValidations.description.maxLength
       ) {
         setFormError({
-          description: `Character Limit: ${ProjectValidations.description.maxLength}/${value.length}`,
+          description: (
+            <CharacterLimitError
+              length={value.length}
+              limit={ProjectValidations.description.maxLength}
+            />
+          ),
         });
       } else {
         setFormError({});
@@ -172,7 +191,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
             image: form.image,
             description: form.description,
             expiresAt: finalDate || null,
-            ...{ active: !deactivate },
+            status: deactivate ? ProjectStatus.Inactive : ProjectStatus.Active,
           },
         },
       });
@@ -232,20 +251,24 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
 
   return (
     <>
-      <GridItem colSpan={8} display="flex" justifyContent="center">
+      <GridItem
+        colSpan={isLargerThan1280 ? 6 : 2}
+        display="flex"
+        justifyContent="center"
+      >
         <VStack
           spacing="30px"
           width="100%"
           minWidth="350px"
-          maxWidth="400px"
+          maxWidth="600px"
           marginBottom="40px"
           display="flex"
           flexDirection="column"
           alignItems="center"
         >
-          <VStack width="100%" alignItems="flex-start">
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Project Title</Text>
+          <VStack width="100%" alignItems="flex-start" spacing="24px">
+            <VStack width="100%" alignItems="flex-start" spacing="5px">
+              <Body2>Project Title</Body2>
               <TextInputBox
                 name="title"
                 onChange={handleChange}
@@ -253,8 +276,8 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
                 error={formError.title}
               />
             </VStack>
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Lightning Address Preview</Text>
+            <VStack width="100%" alignItems="flex-start" spacing="5px">
+              <Body2>Lightning Address Preview</Body2>
               <InputGroup size="md" borderRadius="4px">
                 <Input
                   name="name"
@@ -272,8 +295,8 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
                 </Text>
               )}
             </VStack>
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Project Image</Text>
+            <VStack width="100%" alignItems="flex-start" spacing="5px">
+              <Body2>Project Image</Body2>
               <FileUpload onUploadComplete={handleUpload}>
                 <HStack
                   borderRadius="4px"
@@ -293,18 +316,48 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
                 limit: 10MB.
               </Text>
             </VStack>
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Main Objective</Text>
+            <VStack width="100%" alignItems="flex-start" spacing="5px">
+              <Body2>Main Objective</Body2>
               <TextArea
+                minHeight="120px"
+                maxHeight="800px"
+                height="fit-content"
+                overflowY="auto"
                 name="description"
                 value={form.description}
                 onChange={handleChange}
                 error={formError.description}
               />
+              {!formError.description && (
+                <HStack width="100%" justifyContent="space-between">
+                  <HStack spacing="5px">
+                    <Text fontSize="12px" color="brand.neutral700">
+                      For **Bold** and *Italic*, see more{' '}
+                    </Text>
+                    <HStack
+                      as={Link}
+                      href={commonMarkdownUrl}
+                      isExternal
+                      spacing="0px"
+                      _focus={{}}
+                    >
+                      <BiInfoCircle />
+                      <Text fontSize="12px" color="brand.neutral700">
+                        MarkDown
+                      </Text>
+                    </HStack>
+                  </HStack>
+
+                  <Text
+                    fontSize="12px"
+                    color="brand.neutral700"
+                  >{`${form.description.length}/${ProjectValidations.description.maxLength}`}</Text>
+                </HStack>
+              )}
             </VStack>
 
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Project E-mail</Text>
+            <VStack width="100%" alignItems="flex-start" spacing="5px">
+              <Body2>Project E-mail</Body2>
               <TextInputBox
                 name="email"
                 value={user.email || form.email}
@@ -313,8 +366,8 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
                 isDisabled={Boolean(user.email)}
               />
             </VStack>
-            <VStack width="100%" alignItems="flex-start">
-              <Text>Fundraising deadline</Text>
+            <VStack width="100%" alignItems="flex-start" spacing="5px">
+              <Body2>Fundraising deadline</Body2>
               <HStack width="100%" justifyContent="space-around">
                 <ButtonComponent
                   primary={selectedButton === 'ongoing'}
@@ -342,8 +395,8 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
               </Text>
             </VStack>
             {project.status !== ProjectStatus.Deleted && (
-              <VStack width="100%" alignItems="flex-start">
-                <Text>Deactivate</Text>
+              <VStack width="100%" alignItems="flex-start" spacing="5px">
+                <Body2>Deactivate</Body2>
                 <Switch
                   defaultChecked={deactivate}
                   onChange={handleDeactivate}
@@ -372,8 +425,10 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         </VStack>
       </GridItem>
       <GridItem
-        colSpan={isMobile ? 8 : 5}
+        colSpan={isLargerThan1280 ? 3 : 2}
         display="flex"
+        marginTop={isMobile ? '0px' : '0px'}
+        alignItems="flex-start"
         justifyContent="center"
       >
         <VStack justifyContent="center" alignItems="flex-start" spacing="10px">
@@ -390,14 +445,9 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
               <Text fontSize="28px" fontWeight={700}>
                 {form.title || 'Project Title'}
               </Text>
-              <Text
-                fontSize="16px"
-                color="brand.textGrey"
-                wordBreak="break-word"
-                isTruncated
-              >
+              <MarkDown fontSize="16px" color={colors.textGrey}>
                 {form.description || 'project description'}
-              </Text>
+              </MarkDown>
             </Card>
           </HStack>
         </VStack>

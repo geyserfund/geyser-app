@@ -26,7 +26,7 @@ import {
 } from '../../constants';
 import { useAuthContext } from '../../context';
 import { UpdateReward } from '../../hooks';
-import { isMobileMode, toInt } from '../../utils';
+import { isActive, isDraft, isMobileMode, toInt } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
 import { FundingFormRewardItem } from './components/FundingFormRewardItem';
@@ -76,7 +76,8 @@ export const ProjectDetailsAccessoriesSections = ({
     user?.id && user.id === project.owners[0].user.id;
 
   const canCreateEntries: boolean =
-    isUserOwnerOfCurrentProject && (project.active || project.draft);
+    isUserOwnerOfCurrentProject &&
+    (isActive(project.status) || isDraft(project.status));
 
   const [isSmallerThan1265] = useMediaQuery('(max-width: 1265px)');
 

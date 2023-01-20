@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, GridItem, SimpleGrid } from '@chakra-ui/react';
+import { GridItem, SimpleGrid } from '@chakra-ui/react';
 import { OwnerOf, User, Maybe } from '../../../types/generated/graphql';
 import { AlertBox } from '../../../components/ui';
 import { UserProfilePageProjectsListItem } from '../containers';

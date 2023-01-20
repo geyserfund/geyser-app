@@ -9,7 +9,6 @@ export * from './ImageBar';
 export * from './CustomToggle';
 export * from './FundingStatus';
 export * from './AlertBox';
-export * from './StatusBar';
 export * from './UndecoratedLink';
 export * from './TwitterComponent';
 export * from './SectionTitle';

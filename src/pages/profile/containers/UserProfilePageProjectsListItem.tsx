@@ -20,8 +20,7 @@ const GET_PROJECT = gql`
       description
       image
       balance
-      active
-      draft
+      status
       funders {
         id
       }
@@ -48,6 +47,10 @@ export const UserProfilePageProjectsListItem = ({ projectID }: Props) => {
     GET_PROJECT,
     { variables: { where: { id: toInt(projectID) } } },
   );
+
+  if (error || loading) {
+    return null;
+  }
 
   return data ? (
     <ProjectsGridCard project={data.project} height="100%" width="100%" />

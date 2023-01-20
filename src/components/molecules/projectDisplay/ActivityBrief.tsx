@@ -7,7 +7,7 @@ import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
 import { SatoshiAmount } from '../../ui';
 import { Project, ProjectMilestone } from '../../../types/generated/graphql';
 import { noFeeProjects, GEYSER_FEE } from '../../../constants';
-import { isMobileMode } from '../../../utils';
+import { isActive, isMobileMode } from '../../../utils';
 
 interface IActivityBrief {
   loading?: boolean;
@@ -131,7 +131,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
     return null;
   };
 
-  const showCountdown = project.active && Boolean(project.expiresAt);
+  const showCountdown = isActive(project.status) && Boolean(project.expiresAt);
 
   return (
     <HStack
