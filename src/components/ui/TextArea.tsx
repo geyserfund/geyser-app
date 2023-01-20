@@ -24,7 +24,7 @@ interface ITextBoxProps extends TextareaProps {
 }
 
 const HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET = 4;
-let minTextToReturnBackTo = 0;
+let minTextToReturnBackTo = 5;
 
 export const TextArea = ({
   children,
@@ -45,24 +45,23 @@ export const TextArea = ({
 
   const handleDynamicHeight = (target: HTMLTextAreaElement) => {
     const { scrollHeight, offsetHeight, textLength } = target;
-    console.log('checking tagert', scrollHeight, offsetHeight, textLength);
-    if (textLength > minTextToReturnBackTo) {
-      if (
-        minHeight &&
-        maxHeight &&
-        scrollHeight > offsetHeight &&
-        scrollHeight <= getIntFromHeight(maxHeight)
-      ) {
-        if (!minTextToReturnBackTo) {
-          minTextToReturnBackTo = textLength - 1;
-        }
-
-        setDynamicHeight(
-          `${scrollHeight + HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET}px`,
-        );
-      }
-    } else {
+    if (textLength < minTextToReturnBackTo) {
       setDynamicHeight(minHeight);
+    }
+
+    if (
+      minHeight &&
+      maxHeight &&
+      scrollHeight > offsetHeight &&
+      scrollHeight <= getIntFromHeight(maxHeight)
+    ) {
+      if (!minTextToReturnBackTo) {
+        minTextToReturnBackTo = textLength - 1;
+      }
+
+      setDynamicHeight(
+        `${scrollHeight + HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET}px`,
+      );
     }
   };
 

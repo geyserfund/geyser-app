@@ -323,14 +323,9 @@ export const ProjectCreate = () => {
         <Text fontSize="28px" fontWeight={700}>
           {form.title || 'Project Title'}
         </Text>
-        <Text
-          fontSize="16px"
-          color="brand.textGrey"
-          wordBreak="break-word"
-          isTruncated
-        >
-          <MarkDown>{form.description || 'project description'}</MarkDown>
-        </Text>
+        <MarkDown fontSize="16px" color="brand.textGrey">
+          {form.description || 'project description'}
+        </MarkDown>
       </Card>
     </VStack>
   );

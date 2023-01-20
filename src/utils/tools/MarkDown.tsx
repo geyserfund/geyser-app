@@ -8,6 +8,7 @@ import { matchMarkDownSpecialKeysAtLineEnd } from '../validations/regex';
 interface MarkDownProps extends ReactMarkdownOptions {
   color?: string;
   wordBreak?: string;
+  fontSize?: any;
 }
 
 type Rules = string;
@@ -15,12 +16,14 @@ type Rules = string;
 type StyleProps = {
   color?: string;
   wordBreak?: string;
+  fontSize?: any;
 };
 
 const useStyles = createUseStyles<Rules, StyleProps>({
-  container: ({ color, wordBreak }) => ({
+  container: ({ color, wordBreak, fontSize }) => ({
     color: color || 'inherit',
     wordBreak: wordBreak || 'break-word',
+    fontSize,
     '& a': {
       textDecoration: 'underline',
     },
@@ -38,9 +41,10 @@ export const MarkDown = ({
   className,
   color,
   wordBreak,
+  fontSize,
   ...rest
 }: MarkDownProps) => {
-  const classes = useStyles({});
+  const classes = useStyles({ color, wordBreak, fontSize });
 
   const newValue = children
     ? children.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '\\\n')
