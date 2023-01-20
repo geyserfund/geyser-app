@@ -10,6 +10,8 @@ import {
   Link,
   Skeleton,
 } from '@chakra-ui/react';
+import ReactMarkdown from 'react-markdown';
+
 import { AppFooter } from '../../components/molecules';
 import { InfoTooltip } from '../../components/ui';
 import { SatoshiIconTilted } from '../../components/icons';
@@ -105,7 +107,8 @@ export const Grants = ({ project }: { project: Project }) => {
               my={isMobile ? 2 : 0}
               mx={isMobile ? 5 : 0}
             >
-              {project.description} For more information, see{' '}
+              <ReactMarkdown>{project.description}</ReactMarkdown>
+              For more information, see{' '}
               <Link
                 textDecoration="underline"
                 href="https://geyser.notion.site/Geyser-Grants-Applicants-fad8a130545d4597a3750a17a7ce301f"

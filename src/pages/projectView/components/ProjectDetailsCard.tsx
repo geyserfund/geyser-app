@@ -10,6 +10,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+
 import {
   Card,
   SatoshiAmount,
@@ -198,7 +200,7 @@ export const ProjectDetailsCard = ({
             Objective
           </Text>
           <Text color="brand.neutral800" wordBreak="break-word">
-            {project.description}
+            <ReactMarkdown>{project.description}</ReactMarkdown>
           </Text>
         </VStack>
         {renderMilestone()}

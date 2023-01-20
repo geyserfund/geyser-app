@@ -1,17 +1,25 @@
 import {
-  Box,
-  Grid,
-  GridItem,
   HStack,
   Input,
   InputGroup,
   InputRightAddon,
   Link,
   Text,
-  useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { AiOutlineUpload } from 'react-icons/ai';
+import { ProjectCreationVariables, ProjectUpdateVariables } from './types';
+import { BiInfoCircle } from 'react-icons/bi';
+import { createUseStyles } from 'react-jss';
+import { useHistory, useParams } from 'react-router';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import ReactMarkdown from 'react-markdown';
+
+import {
+  MUTATION_CREATE_PROJECT,
+  MUTATION_UPDATE_PROJECT,
+} from '../../../graphql/mutations';
 import { FileUpload } from '../../../components/molecules';
 import {
   ButtonComponent,
@@ -21,29 +29,17 @@ import {
   TextInputBox,
 } from '../../../components/ui';
 import {
-  isMobileMode,
   toInt,
   useNotification,
   validateEmail,
   validLightningAddress,
 } from '../../../utils';
-import { AiOutlineUpload } from 'react-icons/ai';
-import { ProjectCreationVariables, ProjectUpdateVariables } from './types';
-import { BiInfoCircle, BiLeftArrowAlt } from 'react-icons/bi';
-import { createUseStyles } from 'react-jss';
-import { colors, commonMarkdownUrl, getPath } from '../../../constants';
-import { useHistory, useParams } from 'react-router';
-import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import {
-  MUTATION_CREATE_PROJECT,
-  MUTATION_UPDATE_PROJECT,
-} from '../../../graphql/mutations';
 import { useAuthContext } from '../../../context';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import { Project } from '../../../types/generated/graphql';
 import { ProjectValidations } from '../../../constants/validations/project';
 import { UserValidations } from '../../../constants/validations';
+import { colors, commonMarkdownUrl, getPath } from '../../../constants';
 import { ProjectCreateLayout } from './components/ProjectCreateLayout';
 
 type CreateProjectMutationResponseData = {
@@ -66,9 +62,7 @@ const useStyles = createUseStyles({
 });
 
 export const ProjectCreate = () => {
-  const isMobile = isMobileMode();
   const classes = useStyles();
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   const params = useParams<{ projectId: string }>();
   const isEditingExistingProject = Boolean(params.projectId);
@@ -338,7 +332,9 @@ export const ProjectCreate = () => {
           wordBreak="break-word"
           isTruncated
         >
-          {form.description || 'project description'}
+          <ReactMarkdown>
+            {form.description || 'project description'}
+          </ReactMarkdown>
         </Text>
       </Card>
     </VStack>

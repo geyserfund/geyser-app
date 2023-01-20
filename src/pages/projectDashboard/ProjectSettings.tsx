@@ -14,6 +14,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { useParams } from 'react-router';
+import ReactMarkdown from 'react-markdown';
+
 import { CalendarButton, FileUpload } from '../../components/molecules';
 import {
   ButtonComponent,
@@ -451,7 +453,9 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
                 wordBreak="break-word"
                 isTruncated
               >
-                {form.description || 'project description'}
+                <ReactMarkdown>
+                  {form.description || 'project description'}
+                </ReactMarkdown>
               </Text>
             </Card>
           </HStack>

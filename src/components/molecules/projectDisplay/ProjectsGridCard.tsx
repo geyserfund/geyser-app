@@ -16,6 +16,8 @@ import { ICard, ProjectStatusLabel } from '../../ui';
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
 import { getShortAmountLabel, isMobileMode } from '../../../utils';
 import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+
 type Props = ICard & {
   project: Project;
   onClick?: () => void;
@@ -133,7 +135,7 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
               size="sm"
               wordBreak="break-word"
             >
-              {project.description}
+              <ReactMarkdown>{project.description}</ReactMarkdown>
             </Text>
           </VStack>
         </Box>
