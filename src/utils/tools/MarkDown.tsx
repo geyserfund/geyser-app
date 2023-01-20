@@ -9,9 +9,7 @@ interface MarkDownProps extends ReactMarkdownOptions {}
 const useStyles = createUseStyles({
   container: {
     '& a': {
-      '&:hover': {
-        textDecoration: 'underline',
-      },
+      textDecoration: 'underline',
     },
     '& ul': {
       paddingLeft: '25px',

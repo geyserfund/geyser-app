@@ -41,6 +41,8 @@ import { ProjectValidations } from '../../../constants/validations/project';
 import { UserValidations } from '../../../constants/validations';
 import { colors, commonMarkdownUrl, getPath } from '../../../constants';
 import { ProjectCreateLayout } from './components/ProjectCreateLayout';
+import { Body2 } from '../../../components/typography';
+import { CharacterLimitError } from '../../../components/errors';
 
 type CreateProjectMutationResponseData = {
   createProject: Project | null;
@@ -57,7 +59,6 @@ const useStyles = createUseStyles({
   rowItem: {
     width: '100%',
     alignItems: 'flex-start',
-    spacing: '5px',
   },
 });
 
@@ -188,7 +189,12 @@ export const ProjectCreate = () => {
         value.length > ProjectValidations.title.maxLength
       ) {
         setFormError({
-          title: `Character limit: ${ProjectValidations.title.maxLength}/${value.length}`,
+          title: (
+            <CharacterLimitError
+              length={value.length}
+              limit={ProjectValidations.title.maxLength}
+            />
+          ),
         });
       } else if (
         name === 'description' &&
@@ -196,19 +202,10 @@ export const ProjectCreate = () => {
       ) {
         setFormError({
           description: (
-            <HStack
-              width="100%"
-              justifyContent="space-between"
-              paddingTop="5px"
-            >
-              <Text fontSize="12px" color="brand.error">
-                Character limit:
-              </Text>
-              <Text
-                fontSize="12px"
-                color="brand.error"
-              >{` ${ProjectValidations.description.maxLength}/${value.length}`}</Text>
-            </HStack>
+            <CharacterLimitError
+              length={value.length}
+              limit={ProjectValidations.description.maxLength}
+            />
           ),
         });
       } else {
@@ -346,9 +343,9 @@ export const ProjectCreate = () => {
       subtitle="Step 1 of 3"
       percentage={33}
     >
-      <VStack width="100%" alignItems="flex-start">
-        <VStack className={classes.rowItem}>
-          <Text>Project Title</Text>
+      <VStack width="100%" alignItems="flex-start" spacing="24px">
+        <VStack className={classes.rowItem} spacing="5px">
+          <Body2>Project Title</Body2>
           <TextInputBox
             name="title"
             onChange={handleChange}
@@ -357,8 +354,8 @@ export const ProjectCreate = () => {
             onBlur={() => !isEditingExistingProject && getProject()}
           />
         </VStack>
-        <VStack className={classes.rowItem}>
-          <Text>Lightning Address Preview</Text>
+        <VStack className={classes.rowItem} spacing="5px">
+          <Body2>Lightning Address Preview</Body2>
           <InputGroup size="md" borderRadius="4px">
             <Input
               name="name"
@@ -377,8 +374,8 @@ export const ProjectCreate = () => {
             </Text>
           )}
         </VStack>
-        <VStack className={classes.rowItem}>
-          <Text>Project Image</Text>
+        <VStack className={classes.rowItem} spacing="5px">
+          <Body2>Project Image</Body2>
           <FileUpload onUploadComplete={handleUpload}>
             <HStack
               borderRadius="4px"
@@ -398,8 +395,8 @@ export const ProjectCreate = () => {
             10MB.
           </Text>
         </VStack>
-        <VStack className={classes.rowItem}>
-          <Text>Main Objective</Text>
+        <VStack className={classes.rowItem} spacing="5px">
+          <Body2>Main Objective</Body2>
           <TextArea
             name="description"
             minHeight="120px"
@@ -438,8 +435,8 @@ export const ProjectCreate = () => {
           )}
         </VStack>
 
-        <VStack className={classes.rowItem}>
-          <Text>Project E-mail</Text>
+        <VStack className={classes.rowItem} spacing="5px">
+          <Body2>Project E-mail</Body2>
           <TextInputBox
             name="email"
             value={user.email || form.email}
