@@ -120,6 +120,13 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         newForm.name = sanitizedName;
       }
 
+      if (name === 'name') {
+        const sanitizedName = `${value}`
+          .toLocaleLowerCase()
+          .replaceAll(validLightningAddress, '');
+        newForm.name = sanitizedName;
+      }
+
       setForm(newForm);
       if (
         name === 'title' &&
