@@ -34,6 +34,7 @@ import { ScrollInvoke } from '../../../helpers';
 import { StickToTop } from '../../../components/layouts';
 import { isMobileMode } from '../../../utils';
 import { H3 } from '../../../components/typography';
+import { ID } from '../../../constants/components';
 
 type ResponseData = {
   projects: {
@@ -335,9 +336,7 @@ export const ProjectDiscoveryPageGridSection = () => {
                 <>
                   {isLoadingMore.current === false ? (
                     <ScrollInvoke
-                      elementId={
-                        isMobile ? undefined : 'app-route-content-root'
-                      }
+                      elementId={isMobile ? undefined : ID.root}
                       onScrollEnd={handleLoadMoreButtonTapped}
                       isLoading={isLoadingMore}
                       noMoreItems={isShowingAllProjects}
