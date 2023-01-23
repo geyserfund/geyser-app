@@ -14,6 +14,8 @@ import { fonts, getPath } from '../../../constants';
 import { useAuthContext } from '../../../context';
 import { useScrollDirection } from '../../../hooks';
 import { MobileViews, useProject } from '../../../pages/projectView';
+import { WalletStatus } from '../../../types';
+import { isActive } from '../../../utils';
 
 export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
   const { mobileView } = useProject();
@@ -90,6 +92,14 @@ export const ProjectNavUI = () => {
     }
   };
 
+  const isFundingDisabled =
+    !isActive(project.status) ||
+    !project.wallets ||
+    project.wallets[0].state.status !== WalletStatus.Ok;
+
+  const showGreyButton =
+    mobileView === MobileViews.funding || isFundingDisabled;
+
   return (
     <HStack
       backgroundColor="brand.neutral50"
@@ -162,18 +172,13 @@ export const ProjectNavUI = () => {
           <Button
             size="sm"
             backgroundColor={
-              mobileView === MobileViews.funding
-                ? 'brand.neutral500'
-                : 'brand.primary'
+              showGreyButton ? 'brand.neutral500' : 'brand.primary'
             }
             border="1px solid"
-            borderColor={
-              mobileView === MobileViews.funding
-                ? 'brand.neutral500'
-                : 'brand.primary'
-            }
+            borderColor={showGreyButton ? 'brand.neutral500' : 'brand.primary'}
             _hover={{}}
             padding="5px"
+            disabled={isFundingDisabled}
             leftIcon={<BsLightningChargeFill />}
             onClick={() => {
               handleClick(MobileViews.funding);
