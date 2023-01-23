@@ -41,6 +41,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
   const { loading } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_DASHBOARD_DATA,
     {
+      fetchPolicy: 'network-only',
       variables: { where: { id: toInt(project.id) } },
       onCompleted: (data) => {
         const live = data.project.publishedEntries;
