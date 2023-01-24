@@ -100,7 +100,7 @@ export const ProjectDashboard = () => {
   const renderTabs = () => {
     if (loading) {
       return (
-        <GridItem colSpan={8} display="flex" justifyContent="center">
+        <GridItem colSpan={6} display="flex" justifyContent="center">
           <Loader />
         </GridItem>
       );

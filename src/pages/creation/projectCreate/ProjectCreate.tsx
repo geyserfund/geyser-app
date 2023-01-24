@@ -182,6 +182,13 @@ export const ProjectCreate = () => {
         newForm.name = sanitizedName;
       }
 
+      if (name === 'name') {
+        const sanitizedName = `${value}`
+          .toLocaleLowerCase()
+          .replaceAll(validLightningAddress, '');
+        newForm.name = sanitizedName;
+      }
+
       setForm(newForm);
 
       if (

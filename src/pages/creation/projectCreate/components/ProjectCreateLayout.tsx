@@ -69,9 +69,9 @@ export const ProjectCreateLayout = ({
           </ButtonComponent>
         </GridItem>
         <GridItem
-          colSpan={isLargerThan1280 ? 5 : 2}
+          colSpan={isLargerThan1280 ? 6 : 2}
           display="flex"
-          justifyContent={isMobile ? 'center' : 'flex-start'}
+          justifyContent={'center'}
         >
           <VStack
             spacing="30px"
@@ -99,7 +99,7 @@ export const ProjectCreateLayout = ({
           </VStack>
         </GridItem>
         <GridItem
-          colSpan={isLargerThan1280 ? 4 : 2}
+          colSpan={isLargerThan1280 ? 3 : 2}
           display="flex"
           justifyContent={'center'}
           paddingTop={isMobile ? '0px' : '20%'}

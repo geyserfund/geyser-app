@@ -25,7 +25,7 @@ import { ProjectEntryEditor } from './ProjectEntryEditor';
 import Loader from '../../../../components/ui/Loader';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql';
 import { useAuthContext } from '../../../../context';
-import { Owner } from '../../../../types/generated/graphql';
+import { Owner, Project } from '../../../../types/generated/graphql';
 import { ProjectEntryValidations } from '../../../../constants/validations';
 
 const useStyles = createUseStyles({
@@ -59,7 +59,7 @@ export const EntryCreateEdit = () => {
   const { toast } = useNotification();
   const history = useHistory();
   const params = useParams<{ entryId: string; projectId: string }>();
-  const { setNav } = useAuthContext();
+  const { setNav, user } = useAuthContext();
 
   const classes = useStyles();
 
@@ -92,6 +92,12 @@ export const EntryCreateEdit = () => {
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
+      const project = data.project as Project;
+
+      if (!project.owners.some((owner) => owner.user.id === user.id)) {
+        history.push(getPath('notAuthorized'));
+      }
+
       setNav({
         projectName: data.project.name,
         projectTitle: data.project.title,
@@ -283,7 +289,7 @@ export const EntryCreateEdit = () => {
     }
   };
 
-  if (params.entryId && !form.current.id) {
+  if (loading || (params.entryId && !form.current.id)) {
     return <Loader />;
   }
 

@@ -49,10 +49,9 @@ export const MarkDown = ({
   const newValue = children
     ? children.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '\\\n')
     : '';
-  const finalValue =
-    newValue[newValue.length - 2] === '\\'
-      ? newValue.slice(0, newValue.length - 2)
-      : newValue;
+
+  const finalValue = getRidOfEndSlash(newValue);
+
   return (
     <ReactMarkdown
       className={classNames(classes.container, className)}
@@ -66,4 +65,13 @@ export const MarkDown = ({
       {finalValue}
     </ReactMarkdown>
   );
+};
+
+const getRidOfEndSlash = (value: string): string => {
+  if (value[value.length - 2] === '\\') {
+    const newValue = value.slice(0, value.length - 2);
+    return getRidOfEndSlash(newValue);
+  }
+
+  return value;
 };

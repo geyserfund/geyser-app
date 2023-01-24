@@ -57,7 +57,7 @@ export const ScrollInvoke = ({
 
     if (elementId) {
       scrollHeight = this.scrollHeight;
-      scrollTop = this.scrollHeight;
+      scrollTop = this.scrollTop;
       clientHeight = this.clientHeight;
     } else {
       scrollHeight = document.scrollingElement?.scrollHeight || 0;

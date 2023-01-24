@@ -1,6 +1,7 @@
 import { VStack } from '@chakra-ui/react';
 import React from 'react';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
+import { ID } from '../../../constants/components';
 import { ScrollInvoke } from '../../../helpers';
 import { PaginationHookReturn } from '../../../hooks/types';
 import { FundingTxWithCount, isMobileMode } from '../../../utils';
@@ -13,9 +14,10 @@ export const ProjectContributionList = ({
   fundingTxs,
 }: ProjectContributionListProps) => {
   const isMobile = isMobileMode();
+  const id = ID.project.activity.contribution;
   return (
     <VStack
-      id="project-activity-list-container"
+      id={id}
       spacing={'8px'}
       width="100%"
       overflow="auto"
@@ -34,7 +36,7 @@ export const ProjectContributionList = ({
       ))}
 
       <ScrollInvoke
-        elementId={!isMobile ? 'project-activity-list-container' : undefined}
+        elementId={!isMobile ? id : undefined}
         onScrollEnd={fundingTxs.fetchNext}
         isLoading={fundingTxs.isLoadingMore}
         noMoreItems={fundingTxs.noMoreItems}
