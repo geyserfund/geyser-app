@@ -92,11 +92,7 @@ export const ProjectNavUI = () => {
     }
   };
 
-  const isFundingDisabled =
-    !isActive(project.status) ||
-    !project.wallets ||
-    project.wallets[0].state.status !== WalletStatus.Ok;
-
+  const isFundingDisabled = !isActive(project.status);
   const showGreyButton =
     mobileView === MobileViews.funding || isFundingDisabled;
 

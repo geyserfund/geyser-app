@@ -110,8 +110,7 @@ export const ProjectDetailsAccessoriesSections = ({
                 onClick={() => {
                   if (
                     fundState === fundingStages.initial &&
-                    isActive(project.status) &&
-                    project.wallets[0]?.state.status === WalletStatus.Ok
+                    isActive(project.status)
                   ) {
                     updateReward({ id: toInt(reward.id), count: 1 });
                     setMobileView(MobileViews.funding);
