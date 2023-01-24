@@ -30,7 +30,7 @@ import { isActive, isDraft, isMobileMode, toInt } from '../../utils';
 import { MilestoneComponent } from './components/MilestoneComponent';
 import { BiPlus } from 'react-icons/bi';
 import { FundingFormRewardItem } from './components/FundingFormRewardItem';
-import { Project } from '../../types/generated/graphql';
+import { Project, WalletStatus } from '../../types/generated/graphql';
 import { MobileViews, useProject } from './containers';
 
 const useStyles = createUseStyles({
@@ -108,7 +108,10 @@ export const ProjectDetailsAccessoriesSections = ({
             <GridItem key={reward.id} colSpan={isSmallerThan1265 ? 2 : 1}>
               <FundingFormRewardItem
                 onClick={() => {
-                  if (fundState === fundingStages.initial) {
+                  if (
+                    fundState === fundingStages.initial &&
+                    isActive(project.status)
+                  ) {
                     updateReward({ id: toInt(reward.id), count: 1 });
                     setMobileView(MobileViews.funding);
                   }

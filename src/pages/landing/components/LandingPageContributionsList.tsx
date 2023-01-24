@@ -13,6 +13,7 @@ import {
 import { ScrollInvoke } from '../../../helpers';
 import { useQueryWithPagination } from '../../../hooks';
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
+import { ID } from '../../../constants/components';
 
 const itemLimit = 50;
 
@@ -95,7 +96,7 @@ export const LandingPageContributionsList = () => {
       </VStack>
 
       <ScrollInvoke
-        elementId={isMobile ? undefined : 'app-route-content-root'}
+        elementId={isMobile ? undefined : ID.root}
         onScrollEnd={fetchNext}
         isLoading={isLoadingMore}
         noMoreItems={noMoreItems}
