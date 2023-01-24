@@ -12,8 +12,7 @@ import {
 import React from 'react';
 import { TwitterComponent } from '../../../components/ui';
 import { IProjectBlock, IProjectDetail } from '../../../interfaces';
-import { isMobileMode } from '../../../utils';
-import ReactMarkdown from 'react-markdown';
+import { isMobileMode, MarkDown } from '../../../utils';
 import { useStyles } from './styles';
 import { YoutubeEmbed } from '../../../components/molecules/YoutubeEmbed';
 interface IDetailsBlock {
@@ -98,9 +97,7 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
     if (block.body && block.body.length > 0) {
       return block.body.map((body: string) => (
         <Box key={body} id={block.key}>
-          <ReactMarkdown className={classes.texts} linkTarget="_blank">
-            {body}
-          </ReactMarkdown>
+          <MarkDown className={classes.texts}>{body}</MarkDown>
         </Box>
       ));
     }
@@ -112,7 +109,7 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
     <UnorderedList paddingLeft="18px">
       {block.body.map((body: string) => (
         <ListItem key={body} className={classes.texts}>
-          <ReactMarkdown linkTarget="_blank">{body}</ReactMarkdown>
+          <MarkDown>{body}</MarkDown>
         </ListItem>
       ))}
     </UnorderedList>
@@ -122,7 +119,7 @@ export const DetailsBlock = ({ projectDetails, media }: IDetailsBlock) => {
     <OrderedList paddingLeft="18px">
       {block.body.map((body: string) => (
         <ListItem key={body} className={classes.texts}>
-          <ReactMarkdown linkTarget="_blank">{body}</ReactMarkdown>
+          <MarkDown>{body}</MarkDown>
         </ListItem>
       ))}
     </OrderedList>

@@ -7,6 +7,7 @@ import { Fade } from '@chakra-ui/react';
 import { dimensions } from './constants';
 import { isMobileMode } from './utils';
 import { Router } from './config';
+import { ID } from './constants/components';
 
 export const AppLayout = () => {
   const { loading } = useAuthContext();
@@ -22,7 +23,7 @@ export const AppLayout = () => {
         <TopNavBar />
 
         <Box
-          id="app-route-content-root"
+          id={ID.root}
           maxHeight="100%"
           flex="1"
           paddingTop={`${dimensions.topNavBar.desktop.height}px`}

@@ -20,6 +20,7 @@ export const ME = gql`
           name
           image
           title
+          status
         }
       }
     }
@@ -56,6 +57,7 @@ export const USER_PROFILE_QUERY = gql`
           description
           media
           createdAt
+          status
         }
       }
       ownerOf {
@@ -68,7 +70,7 @@ export const USER_PROFILE_QUERY = gql`
           fundingGoal
           createdAt
           updatedAt
-          active
+          status
           media
           expiresAt
           funders {

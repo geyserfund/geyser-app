@@ -1,6 +1,6 @@
 export * from './colors';
 export * from './currency';
-export * from './dimensions';
+export * from './components/dimensions';
 export * from './styles';
 export * from './env';
 export * from './url';

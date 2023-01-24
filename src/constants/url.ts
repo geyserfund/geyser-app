@@ -142,3 +142,7 @@ export const GrantsHero =
 
 export const GrantsFAQUrl =
   'https://geyser.notion.site/About-Geyser-Grants-fad8a130545d4597a3750a17a7ce301f';
+
+// External website Links
+
+export const commonMarkdownUrl = 'https://commonmark.org/help/';

@@ -7,8 +7,7 @@ export const MUTATION_CREATE_PROJECT = gql`
       title
       name
       description
-      active
-      draft
+      status
       type
       image
       owners {
@@ -34,8 +33,7 @@ export const MUTATION_UPDATE_PROJECT = gql`
       name
       description
       image
-      active
-      draft
+      status
       type
     }
   }

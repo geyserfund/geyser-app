@@ -355,12 +355,6 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
               </Tbody>
             </Table>
           </TableContainer>
-          {/* <ScrollInvoke
-            elementId="app-route-content-root"
-            onScrollEnd={funders.fetchNext}
-            isLoading={funders.isLoadingMore}
-            noMoreItems={funders.noMoreItems}
-          /> */}
         </VStack>
       </GridItem>
     </>

@@ -100,7 +100,7 @@ export const ProjectDashboard = () => {
   const renderTabs = () => {
     if (loading) {
       return (
-        <GridItem colSpan={8} display="flex" justifyContent="center">
+        <GridItem colSpan={6} display="flex" justifyContent="center">
           <Loader />
         </GridItem>
       );
@@ -189,16 +189,22 @@ export const ProjectDashboard = () => {
         width="100%"
         templateColumns={
           isLargerThan1280
-            ? 'repeat(18, 1fr)'
+            ? 'repeat(12, 1fr)'
             : isMobile
-            ? 'repeat(6, 1fr)'
-            : 'repeat(15, 1fr)'
+            ? 'repeat(2, 1fr)'
+            : 'repeat(5, 1fr)'
         }
-        padding={isMobile ? '10px' : '40px 40px 20px 40px'}
+        padding={
+          isMobile
+            ? '10px'
+            : isLargerThan1280
+            ? '40px 40px 20px 40px'
+            : '40px 20px 20px 20px'
+        }
       >
         {activeTab !== DashboardTabs.contributors && (
           <GridItem
-            colSpan={isLargerThan1280 ? 5 : 2}
+            colSpan={isLargerThan1280 ? 3 : 1}
             display="flex"
             justifyContent="flex-start"
           ></GridItem>

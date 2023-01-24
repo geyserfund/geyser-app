@@ -34,6 +34,7 @@ import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import { createGrantContributionRecord } from '../../../api';
 import { FormStateError } from '../../../interfaces';
 import { toInt, useNotification } from '../../../utils';
+import { USDCents } from '../../../types';
 
 const GRANTS_PROJECT_NAME = 'grants';
 const defaultModalHeader = 'Contribute';
@@ -160,7 +161,9 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
         anonymous: Boolean(user),
         ...(state.amount !== 0 && {
           donationInput: {
-            donationAmount: getSatoshisFromUSDCents(state.amount * 100),
+            donationAmount: getSatoshisFromUSDCents(
+              (state.amount * 100) as USDCents,
+            ),
           },
         }),
         metadataInput: {
@@ -359,7 +362,9 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
           Your{' '}
           <span style={{ fontWeight: 'bold' }}>
             {' '}
-            {getSatoshisFromUSDCents(state.amount * 100)} sats{' '}
+            {getSatoshisFromUSDCents(
+              (state.amount * 100) as USDCents,
+            )} sats{' '}
           </span>{' '}
           contribution to Geyser Grants Round 2 was successful!
         </Text>
