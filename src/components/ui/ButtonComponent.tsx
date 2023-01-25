@@ -1,19 +1,19 @@
-import { Button, ButtonProps } from '@chakra-ui/button';
-import { useColorModeValue } from '@chakra-ui/color-mode';
-import { Box } from '@chakra-ui/layout';
-import classNames from 'classnames';
-import { createUseStyles } from 'react-jss';
+import { Button, ButtonProps } from '@chakra-ui/button'
+import { useColorModeValue } from '@chakra-ui/color-mode'
+import { Box } from '@chakra-ui/layout'
+import classNames from 'classnames'
+import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../styles';
-import { buttonCommon } from '../../styles/common';
+import { colors } from '../../styles'
+import { buttonCommon } from '../../styles/common'
 
 interface IButtonComponentP extends ButtonProps {
-  className?: string;
-  primary?: boolean;
-  standard?: boolean;
-  circular?: boolean;
-  ref?: any;
-  to?: string;
+  className?: string
+  primary?: boolean
+  standard?: boolean
+  circular?: boolean
+  ref?: any
+  to?: string
 }
 
 const useStyles = createUseStyles({
@@ -36,7 +36,7 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
+})
 
 export const ButtonComponent = ({
   ref,
@@ -51,10 +51,10 @@ export const ButtonComponent = ({
   color,
   ...rest
 }: IButtonComponentP) => {
-  const classes = useStyles();
-  const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark);
-  const defaultColor = useColorModeValue(colors.textBlack, colors.textWhite);
-  const textColor = color || defaultColor;
+  const classes = useStyles()
+  const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark)
+  const defaultColor = useColorModeValue(colors.textBlack, colors.textWhite)
+  const textColor = color || defaultColor
 
   return (
     <Button
@@ -87,5 +87,5 @@ export const ButtonComponent = ({
         {children}
       </Box>
     </Button>
-  );
-};
+  )
+}

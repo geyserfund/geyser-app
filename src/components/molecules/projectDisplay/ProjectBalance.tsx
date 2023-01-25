@@ -1,13 +1,13 @@
-import { Box, Text } from '@chakra-ui/layout';
-import { useState } from 'react';
-import { BsCurrencyBitcoin } from 'react-icons/bs';
+import { Box, Text } from '@chakra-ui/layout'
+import { useState } from 'react'
+import { BsCurrencyBitcoin } from 'react-icons/bs'
 
-import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { SatoshiIconTilted } from '../../icons';
+import { commaFormatted } from '../../../utils/formatData/helperFunctions'
+import { SatoshiIconTilted } from '../../icons'
 
 interface IProjectBalance {
-  balance: number;
-  rate: number;
+  balance: number
+  rate: number
 }
 
 const USDBalance = ({ balance }: { balance: number }) => (
@@ -19,11 +19,11 @@ const USDBalance = ({ balance }: { balance: number }) => (
       {balance.toFixed(2)}
     </Text>
   </>
-);
+)
 
 const BTCBalance = ({ balance }: { balance: number }) => {
   // Let bitcoins = 0;
-  const displaySatoshis = balance < 1000000;
+  const displaySatoshis = balance < 1000000
 
   return displaySatoshis ? (
     <>
@@ -39,11 +39,11 @@ const BTCBalance = ({ balance }: { balance: number }) => {
         {parseFloat((balance / 100000000).toFixed(4))}
       </Text>
     </>
-  );
-};
+  )
+}
 
 export const ProjectBalance = ({ balance, rate }: IProjectBalance) => {
-  const [hover, setHover] = useState(false);
+  const [hover, setHover] = useState(false)
 
   return (
     <Box>
@@ -64,5 +64,5 @@ export const ProjectBalance = ({ balance, rate }: IProjectBalance) => {
         RAISED
       </Text>
     </Box>
-  );
-};
+  )
+}

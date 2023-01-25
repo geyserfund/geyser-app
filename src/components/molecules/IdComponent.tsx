@@ -1,13 +1,13 @@
-import { Avatar } from '@chakra-ui/avatar';
-import { HStack, Text } from '@chakra-ui/layout';
+import { Avatar } from '@chakra-ui/avatar'
+import { HStack, Text } from '@chakra-ui/layout'
 
-import { UserSkeleton } from '../ui';
+import { UserSkeleton } from '../ui'
 
 export interface IIdComponent {
-  URL: string;
-  username: string;
-  fullName: string;
-  twitter: boolean;
+  URL: string
+  username: string
+  fullName: string
+  twitter: boolean
 }
 
 export const IdComponent = ({ URL, username, fullName }: IIdComponent) => (
@@ -26,4 +26,4 @@ export const IdComponent = ({ URL, username, fullName }: IIdComponent) => (
     />
     <Text> {username}</Text>
   </HStack>
-);
+)

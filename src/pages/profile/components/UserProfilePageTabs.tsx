@@ -8,25 +8,25 @@ import {
   TabPanels,
   Tabs,
   Text,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
 
-import { noScrollBar } from '../../../styles/common';
-import { User } from '../../../types/generated/graphql';
+import { noScrollBar } from '../../../styles/common'
+import { User } from '../../../types/generated/graphql'
 import {
   UserProfilePageContributionsList,
   UserProfilePageEntriesList,
   UserProfilePageProjectsList,
-} from '.';
+} from '.'
 
 type Props = {
-  profileUser: User;
-};
+  profileUser: User
+}
 
 type TabData = {
-  title: string;
-  itemCount: number;
-  component: React.ElementType;
-};
+  title: string
+  itemCount: number
+  component: React.ElementType
+}
 
 const styles = {
   selectedTab: {
@@ -34,7 +34,7 @@ const styles = {
     borderBottomColor: 'brand.primary',
     fontWeight: 'bold',
   },
-};
+}
 
 export const UserProfilePageTabs = ({ profileUser }: Props) => {
   const tabData: TabData[] = [
@@ -53,7 +53,7 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
       itemCount: profileUser.fundingTxs.length,
       component: UserProfilePageContributionsList,
     },
-  ];
+  ]
 
   return (
     <Tabs variant={'line'} height="full" width="full" isLazy>
@@ -105,5 +105,5 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
         ))}
       </TabPanels>
     </Tabs>
-  );
-};
+  )
+}

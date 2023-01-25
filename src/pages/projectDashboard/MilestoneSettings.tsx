@@ -1,50 +1,44 @@
-import { EditIcon } from '@chakra-ui/icons';
-import {
-  GridItem,
-  HStack,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { EditIcon } from '@chakra-ui/icons'
+import { GridItem, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
 import {
   ButtonComponent,
   IconButtonComponent,
   SatoshiAmount,
-} from '../../components/ui';
-import { IProject } from '../../interfaces';
-import { colors } from '../../styles';
-import { ProjectMilestone } from '../../types';
+} from '../../components/ui'
+import { IProject } from '../../interfaces'
+import { colors } from '../../styles'
+import { ProjectMilestone } from '../../types'
 import {
   defaultMilestone,
   MilestoneAdditionModal,
-} from '../creation/projectCreate/components';
+} from '../creation/projectCreate/components'
 
 export const MilestoneSettings = ({ project }: { project: IProject }) => {
-  const [milestones, setMilestones] = useState<ProjectMilestone[]>([]);
+  const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
 
   const {
     isOpen: isMilestoneModalOpen,
     onClose: onMilestoneModalClose,
     onOpen: openMilestoneModal,
-  } = useDisclosure();
+  } = useDisclosure()
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
-      setMilestones(project.milestones);
+      setMilestones(project.milestones)
     }
-  }, [project]);
+  }, [project])
 
   const handleMilestoneSubmit = (newMilestones: ProjectMilestone[]) => {
-    setMilestones(newMilestones);
-    onMilestoneModalClose();
-  };
+    setMilestones(newMilestones)
+    onMilestoneModalClose()
+  }
 
   const handleMilestoneModalClose = (newMilestones: ProjectMilestone[]) => {
-    setMilestones(newMilestones);
-    onMilestoneModalClose();
-  };
+    setMilestones(newMilestones)
+    onMilestoneModalClose()
+  }
 
   return (
     <>
@@ -119,5 +113,5 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
         />
       ) : null}
     </>
-  );
-};
+  )
+}

@@ -8,27 +8,27 @@ import {
   Text,
   Wrap,
   WrapItem,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
-import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import { useNavigate } from 'react-router';
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { FaArrowLeft } from 'react-icons/fa'
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri'
+import { useNavigate } from 'react-router'
 
-import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
-import satsymbol from '../../assets/satsymbolprimary.svg';
-import { AppFooter } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
-import Loader from '../../components/ui/Loader';
-import { GrantsRound2Url } from '../../constants';
-import { fonts } from '../../styles';
-import { useMobileMode, useNotification } from '../../utils';
-import ApplicantAirTableEmbed from './ApplicantAirTableEmbed';
-import { ApplyGrantCard } from './components/ApplyGrantCard';
-import { GrantCategory } from './components/ApplyGrantModal';
-import { BoardMembers } from './components/BoardMembers';
-import { GrantDevelopers } from './components/GrantDevs';
-import { GrantsContributeModal } from './components/GrantsContributeModal';
-import { MoreInfo } from './components/MoreInfo';
+import { getGrantApplicants, getGrantSponsorRecords } from '../../api'
+import satsymbol from '../../assets/satsymbolprimary.svg'
+import { AppFooter } from '../../components/molecules'
+import { ButtonComponent } from '../../components/ui'
+import Loader from '../../components/ui/Loader'
+import { GrantsRound2Url } from '../../constants'
+import { fonts } from '../../styles'
+import { useMobileMode, useNotification } from '../../utils'
+import ApplicantAirTableEmbed from './ApplicantAirTableEmbed'
+import { ApplyGrantCard } from './components/ApplyGrantCard'
+import { GrantCategory } from './components/ApplyGrantModal'
+import { BoardMembers } from './components/BoardMembers'
+import { GrantDevelopers } from './components/GrantDevs'
+import { GrantsContributeModal } from './components/GrantsContributeModal'
+import { MoreInfo } from './components/MoreInfo'
 
 const grants = [
   {
@@ -61,111 +61,111 @@ const grants = [
     about:
       "This grant is for all creative projects that focus on explaining and showcasing bitcoin through visual mediums. Creating culture and art around bitcoin is a key way of educating the world about bitcoin's history, mythology, technology and ideological significance. Let's support Bitcoin artists!",
   },
-];
+]
 
 export type GrantSponsor = {
-  name: string;
-  amount: number;
-  imageUrl: string;
-};
+  name: string
+  amount: number
+  imageUrl: string
+}
 
-type CaregorizedApplications = { [key: string]: any[] };
+type CaregorizedApplications = { [key: string]: any[] }
 
 const defaultApplications: CaregorizedApplications = {
   [GrantCategory.translations]: [],
   [GrantCategory.communities]: [],
   [GrantCategory.visualArt]: [],
-};
+}
 
 export const GrantsRoundTwo = () => {
-  const isMobile = useMobileMode();
-  const navigate = useNavigate();
-  const { toast } = useNotification();
+  const isMobile = useMobileMode()
+  const navigate = useNavigate()
+  const { toast } = useNotification()
 
-  const [copy, setCopy] = useState(false);
+  const [copy, setCopy] = useState(false)
 
-  const [applicantLoading, setApplicantLoading] = useState(false);
-  const [sponsorLoading, setSponsorLoading] = useState(false);
+  const [applicantLoading, setApplicantLoading] = useState(false)
+  const [sponsorLoading, setSponsorLoading] = useState(false)
 
-  const [sponsors, setSponsors] = useState<GrantSponsor[]>([]);
+  const [sponsors, setSponsors] = useState<GrantSponsor[]>([])
   const [categorizedApplications, setCategorizedApplications] =
-    useState<CaregorizedApplications>(defaultApplications);
+    useState<CaregorizedApplications>(defaultApplications)
 
   const handleCompleteContribution = (value: GrantSponsor) => {
     if (value.amount >= 1000) {
-      setSponsors([...sponsors, value]);
+      setSponsors([...sponsors, value])
     }
-  };
+  }
 
   const handleCopyOnchain = () => {
-    navigator.clipboard.writeText('grants@geyser.fund');
-    setCopy(true);
+    navigator.clipboard.writeText('grants@geyser.fund')
+    setCopy(true)
     setTimeout(() => {
-      setCopy(false);
-    }, 1000);
-  };
+      setCopy(false)
+    }, 1000)
+  }
 
   useEffect(() => {
     const getSponsors = async () => {
-      setSponsorLoading(true);
+      setSponsorLoading(true)
       try {
-        const sponsorResponse = await getGrantSponsorRecords();
+        const sponsorResponse = await getGrantSponsorRecords()
 
         const listSponsors = sponsorResponse.map((sponsor: any) => ({
           name: sponsor.fields.Name,
           amount: sponsor.fields.Amount,
           imageUrl: sponsor.fields['PFP link'],
-        }));
-        setSponsors(listSponsors);
+        }))
+        setSponsors(listSponsors)
       } catch (error) {
         toast({
           status: 'error',
           title: 'Failed to fetch sponsors',
-        });
+        })
       }
 
-      setSponsorLoading(false);
-    };
+      setSponsorLoading(false)
+    }
 
-    getSponsors();
-  }, []);
+    getSponsors()
+  }, [])
 
   useEffect(() => {
     const getApplicants = async () => {
-      setApplicantLoading(true);
+      setApplicantLoading(true)
       try {
-        const applicantResponse = await getGrantApplicants();
-        const categorized: CaregorizedApplications = defaultApplications;
+        const applicantResponse = await getGrantApplicants()
+        const categorized: CaregorizedApplications = defaultApplications
 
         applicantResponse.map((application) => {
           switch (application.fields.Grant) {
             case GrantCategory.translations:
-              categorized[GrantCategory.translations].push(application);
-              break;
+              categorized[GrantCategory.translations].push(application)
+              break
             case GrantCategory.communities:
-              categorized[GrantCategory.communities].push(application);
-              break;
+              categorized[GrantCategory.communities].push(application)
+              break
             case GrantCategory.visualArt:
-              categorized[GrantCategory.visualArt].push(application);
-              break;
+              categorized[GrantCategory.visualArt].push(application)
+              break
             default:
-              break;
+              break
           }
-        });
+        })
 
-        setCategorizedApplications(categorized);
+        setCategorizedApplications(categorized)
       } catch (error) {
         toast({
           status: 'error',
           title: 'Failed to fetch applicants',
-        });
+        })
       }
 
-      setApplicantLoading(false);
-    };
+      setApplicantLoading(false)
+    }
 
-    getApplicants();
-  }, []);
+    getApplicants()
+  }, [])
 
   return (
     <>
@@ -450,5 +450,5 @@ export const GrantsRoundTwo = () => {
         <AppFooter />
       </Box>
     </>
-  );
-};
+  )
+}

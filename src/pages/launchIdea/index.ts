@@ -1,1 +1,1 @@
-export * from './LaunchIdea';
+export * from './LaunchIdea'

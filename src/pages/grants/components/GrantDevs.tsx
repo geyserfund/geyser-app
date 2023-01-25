@@ -1,8 +1,8 @@
-import { Box, Wrap } from '@chakra-ui/react';
+import { Box, Wrap } from '@chakra-ui/react'
 
-import { tachiraUrl, umarUrl } from '../../../constants';
-import { useMobileMode } from '../../../utils';
-import { BitcoinerCard } from './BitcoinerCard';
+import { tachiraUrl, umarUrl } from '../../../constants'
+import { useMobileMode } from '../../../utils'
+import { BitcoinerCard } from './BitcoinerCard'
 
 const members = [
   {
@@ -19,10 +19,10 @@ const members = [
     link: 'https://twitter.com/umarabox',
     image: umarUrl,
   },
-];
+]
 
 export const GrantDevelopers = () => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   return (
     <Box display={'flex'} justifyContent="center">
       <Box width={isMobile ? '100%' : '600px'}>
@@ -39,5 +39,5 @@ export const GrantDevelopers = () => {
         </Wrap>
       </Box>
     </Box>
-  );
-};
+  )
+}

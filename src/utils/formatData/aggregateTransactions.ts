@@ -1,40 +1,40 @@
-import { FundingMethod, FundingTx } from '../../types/generated/graphql';
+import { FundingMethod, FundingTx } from '../../types/generated/graphql'
 
 export interface FundingTxWithCount extends FundingTx {
-  count?: number;
+  count?: number
 }
 
-const ThresholdTimeToAggregateTransactions = 3600000; // 60 * 60 * 1000  -> 1 hour;
+const ThresholdTimeToAggregateTransactions = 3600000 // 60 * 60 * 1000  -> 1 hour;
 
 export const aggregateTransactions = (
   data: FundingTx[],
 ): FundingTxWithCount[] => {
-  const aggregatedTxs: FundingTxWithCount[] = [];
+  const aggregatedTxs: FundingTxWithCount[] = []
 
   // Array of group of alike FundingTx that are grouped together based on defined categories.
-  const groupedTxs: FundingTx[][] = [];
+  const groupedTxs: FundingTx[][] = []
 
   // List of FundingTx IDs that are already a part of a group, and need to be skipped.
-  const groupedTxIds: string[] = [];
+  const groupedTxIds: string[] = []
 
   data.map((f1) => {
     if (groupedTxIds.includes(f1.id)) {
-      return;
+      return
     }
 
     // If a FundingTx iterating from the first loop has not been grouped, will start a new group,
 
-    const matches = [f1];
-    groupedTxIds.push(f1.id);
+    const matches = [f1]
+    groupedTxIds.push(f1.id)
 
     data.map((f2) => {
       if (groupedTxIds.includes(f2.id)) {
-        return;
+        return
       }
       // We start the second loop to match items with this first Item that started a new match group, skipping FundingTx that are already grouped.
 
       const isAnon = (f: FundingTx) =>
-        f.funder.user === null || f.funder.user === undefined;
+        f.funder.user === null || f.funder.user === undefined
 
       if (
         f1.id !== f2.id &&
@@ -49,34 +49,34 @@ export const aggregateTransactions = (
               ThresholdTimeToAggregateTransactions,
           )
         ) {
-          matches.push(f2);
-          groupedTxIds.push(f2.id);
+          matches.push(f2)
+          groupedTxIds.push(f2.id)
         }
       }
-    });
-    groupedTxs.push(matches);
-  });
+    })
+    groupedTxs.push(matches)
+  })
 
   // Each group of matches, is then changed into a single FundingTx with the count of the length of the matches.
   groupedTxs.map((transactions) => {
-    const sortedTransaction = transactions.sort((a, b) => a.paidAt - b.paidAt);
+    const sortedTransaction = transactions.sort((a, b) => a.paidAt - b.paidAt)
 
-    let amount = 0;
+    let amount = 0
 
     sortedTransaction.map((transaction) => {
       if (transaction?.amount) {
-        amount += transaction.amount;
+        amount += transaction.amount
       }
-    });
+    })
 
     const newContribution = {
       ...sortedTransaction[0],
       amount,
       count: sortedTransaction.length,
-    };
+    }
 
-    aggregatedTxs.push(newContribution);
-  });
+    aggregatedTxs.push(newContribution)
+  })
 
-  return aggregatedTxs;
-};
+  return aggregatedTxs
+}

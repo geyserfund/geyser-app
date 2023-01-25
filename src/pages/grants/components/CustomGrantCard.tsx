@@ -1,21 +1,21 @@
-import { Box, Image, Text } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Box, Image, Text } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
-import { useMobileMode } from '../../../utils';
-import { ListText } from './ListText';
+import { useMobileMode } from '../../../utils'
+import { ListText } from './ListText'
 
 interface GrantProps {
-  title: string;
-  date: string;
-  status: boolean;
-  to: string;
-  showBanner: boolean;
-  applicants?: string;
-  grant?: string;
-  banner?: string;
-  grantees?: string;
-  distributed?: string;
-  sponsors?: Array<string>;
+  title: string
+  date: string
+  status: boolean
+  to: string
+  showBanner: boolean
+  applicants?: string
+  grant?: string
+  banner?: string
+  grantees?: string
+  distributed?: string
+  sponsors?: Array<string>
 }
 export const CustomGrantCard = ({
   title,
@@ -30,7 +30,7 @@ export const CustomGrantCard = ({
   banner,
   distributed,
 }: GrantProps) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
   return (
     <Link to={to}>
@@ -126,5 +126,5 @@ export const CustomGrantCard = ({
         </Box>
       </Box>
     </Link>
-  );
-};
+  )
+}

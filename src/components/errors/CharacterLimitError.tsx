@@ -1,9 +1,9 @@
-import { HStack, StackProps, Text } from '@chakra-ui/react';
+import { HStack, StackProps, Text } from '@chakra-ui/react'
 
 interface CharacterLimitErrorProps extends StackProps {
-  length: number;
-  limit: number;
-  message?: string;
+  length: number
+  limit: number
+  message?: string
 }
 
 export const CharacterLimitError = ({
@@ -24,5 +24,5 @@ export const CharacterLimitError = ({
       </Text>
       <Text fontSize="12px" color="brand.error">{` ${length}/${limit}`}</Text>
     </HStack>
-  );
-};
+  )
+}

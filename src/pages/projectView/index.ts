@@ -1,2 +1,2 @@
-export * from './containers';
-export * from './ProjectView';
+export * from './containers'
+export * from './ProjectView'

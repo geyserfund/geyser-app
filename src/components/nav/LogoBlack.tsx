@@ -1,15 +1,15 @@
-import { Image } from '@chakra-ui/image';
-import { Box } from '@chakra-ui/layout';
-import { HTMLChakraProps } from '@chakra-ui/system';
-import { createUseStyles } from 'react-jss';
-import { useNavigate } from 'react-router';
+import { Image } from '@chakra-ui/image'
+import { Box } from '@chakra-ui/layout'
+import { HTMLChakraProps } from '@chakra-ui/system'
+import { createUseStyles } from 'react-jss'
+import { useNavigate } from 'react-router'
 
-import geyserBlack from '../../assets/images/geyser-short-black.svg';
+import geyserBlack from '../../assets/images/geyser-short-black.svg'
 
 interface ILogoP extends HTMLChakraProps<'div'> {
-  className?: string;
-  imageClassName?: string;
-  full?: boolean;
+  className?: string
+  imageClassName?: string
+  full?: boolean
 }
 
 const useStyles = createUseStyles({
@@ -18,7 +18,7 @@ const useStyles = createUseStyles({
       cursor: 'pointer',
     },
   },
-});
+})
 
 export const LogoBlack = ({
   className,
@@ -26,12 +26,12 @@ export const LogoBlack = ({
   full,
   ...rest
 }: ILogoP) => {
-  const classes = useStyles();
-  const navigate = useNavigate();
+  const classes = useStyles()
+  const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate('/');
-  };
+    navigate('/')
+  }
 
   return (
     <Box
@@ -47,5 +47,5 @@ export const LogoBlack = ({
         objectFit="contain"
       />
     </Box>
-  );
-};
+  )
+}

@@ -1,7 +1,7 @@
-import { Link, Text, VStack } from '@chakra-ui/react';
-import { BiErrorAlt } from 'react-icons/bi';
+import { Link, Text, VStack } from '@chakra-ui/react'
+import { BiErrorAlt } from 'react-icons/bi'
 
-import { Head } from '../../config/Head';
+import { Head } from '../../config/Head'
 
 export const NotFoundPage = () => (
   <>
@@ -28,4 +28,4 @@ export const NotFoundPage = () => (
       </Text>
     </VStack>
   </>
-);
+)

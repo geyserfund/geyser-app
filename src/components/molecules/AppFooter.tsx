@@ -7,8 +7,8 @@ import {
   useDisclosure,
   VStack,
   Wrap,
-} from '@chakra-ui/react';
-import { FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+} from '@chakra-ui/react'
+import { FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 
 import {
   AnalyticsUrl,
@@ -18,22 +18,22 @@ import {
   GeyserTelegramUrl,
   GeyserTermsAndConditionsURL,
   GeyserTwitterUrl,
-} from '../../constants';
-import { useMobileMode } from '../../utils';
-import { Subscribe } from '../nav/Subscribe';
-import { ButtonComponent } from '../ui';
+} from '../../constants'
+import { useMobileMode } from '../../utils'
+import { Subscribe } from '../nav/Subscribe'
+import { ButtonComponent } from '../ui'
 
 interface IFooter {
-  wrapperClassName?: string;
+  wrapperClassName?: string
 }
 
 export const AppFooter = ({ wrapperClassName }: IFooter) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   if (isMobile) {
-    return null;
+    return null
   }
 
   return (
@@ -129,5 +129,5 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
 		</Text> */}
       <Subscribe {...{ isOpen, onClose }} style="button-modal" />
     </VStack>
-  );
-};
+  )
+}

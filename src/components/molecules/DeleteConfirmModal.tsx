@@ -8,16 +8,16 @@ import {
   ModalOverlay,
   Text,
   VStack,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
 
-import { ButtonComponent } from '../ui';
+import { ButtonComponent } from '../ui'
 
 interface IDeleteConfirmModal {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  description?: string;
-  confirm: () => any;
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  description?: string
+  confirm: () => any
 }
 
 export const DeleteConfirmModal = ({
@@ -49,4 +49,4 @@ export const DeleteConfirmModal = ({
       </ModalBody>
     </ModalContent>
   </Modal>
-);
+)

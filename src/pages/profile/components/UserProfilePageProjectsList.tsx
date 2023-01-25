@@ -1,12 +1,12 @@
-import { GridItem, SimpleGrid } from '@chakra-ui/react';
+import { GridItem, SimpleGrid } from '@chakra-ui/react'
 
-import { AlertBox } from '../../../components/ui';
-import { Maybe, OwnerOf, User } from '../../../types/generated/graphql';
-import { UserProfilePageProjectsListItem } from '../containers';
+import { AlertBox } from '../../../components/ui'
+import { Maybe, OwnerOf, User } from '../../../types/generated/graphql'
+import { UserProfilePageProjectsListItem } from '../containers'
 
 type Props = {
-  profileUser: User;
-};
+  profileUser: User
+}
 
 export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
   if (profileUser.ownerOf.length === 0) {
@@ -17,7 +17,7 @@ export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
         colorScheme={'gray'}
         title="There are currently no projects."
       />
-    );
+    )
   }
 
   return (
@@ -33,9 +33,9 @@ export const UserProfilePageProjectsList = ({ profileUser }: Props) => {
             >
               <UserProfilePageProjectsListItem projectID={ownerOf.project.id} />
             </GridItem>
-          );
+          )
         }
       })}
     </SimpleGrid>
-  );
-};
+  )
+}

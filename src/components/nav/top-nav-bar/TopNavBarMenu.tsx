@@ -1,28 +1,28 @@
-import { useColorModeValue } from '@chakra-ui/color-mode';
-import { HamburgerIcon } from '@chakra-ui/icons';
-import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
-import { Avatar, HStack, MenuDivider } from '@chakra-ui/react';
-import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useColorModeValue } from '@chakra-ui/color-mode'
+import { HamburgerIcon } from '@chakra-ui/icons'
+import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
+import { Avatar, HStack, MenuDivider } from '@chakra-ui/react'
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
 
-import { AboutUsUrl, FAQUrl, FeedbackUrl, getPath } from '../../../constants';
-import { AuthContext } from '../../../context';
-import { colors } from '../../../styles';
-import { buttonCommon } from '../../../styles/common';
-import { ButtonComponent } from '../../ui';
-import { MenuItemLink } from './MenuItemLink';
-import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem';
-import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem';
+import { AboutUsUrl, FAQUrl, FeedbackUrl, getPath } from '../../../constants'
+import { AuthContext } from '../../../context'
+import { colors } from '../../../styles'
+import { buttonCommon } from '../../../styles/common'
+import { ButtonComponent } from '../../ui'
+import { MenuItemLink } from './MenuItemLink'
+import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem'
+import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem'
 
 type Props = {
-  shouldShowDashboardMenuItem: boolean;
-  shouldShowSignInMenuItem: boolean;
-  shouldShowMyProjectsMenuItem: boolean;
-  onDashboardSelected: () => void;
-  onMyProjectsSelected: () => void;
-  onSignInSelected: () => void;
-  onSignOutSelected: () => void;
-};
+  shouldShowDashboardMenuItem: boolean
+  shouldShowSignInMenuItem: boolean
+  shouldShowMyProjectsMenuItem: boolean
+  onDashboardSelected: () => void
+  onMyProjectsSelected: () => void
+  onSignInSelected: () => void
+  onSignOutSelected: () => void
+}
 
 export const TopNavBarMenu = ({
   shouldShowSignInMenuItem,
@@ -33,9 +33,9 @@ export const TopNavBarMenu = ({
   onMyProjectsSelected,
   onSignOutSelected,
 }: Props) => {
-  const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
+  const textColor = useColorModeValue(colors.textBlack, colors.textWhite)
 
-  const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext);
+  const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext)
 
   return (
     <Menu placement="bottom-end">
@@ -194,5 +194,5 @@ export const TopNavBarMenu = ({
         ) : null}
       </MenuList>
     </Menu>
-  );
-};
+  )
+}

@@ -5,12 +5,12 @@ import {
   LinkBox,
   LinkOverlay,
   Text,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
 
-import { SatoshiIconTilted } from '../../../components/icons';
-import { getPath } from '../../../constants';
-import { Project } from '../../../types/generated/graphql';
-import { useMobileMode } from '../../../utils';
+import { SatoshiIconTilted } from '../../../components/icons'
+import { getPath } from '../../../constants'
+import { Project } from '../../../types/generated/graphql'
+import { useMobileMode } from '../../../utils'
 
 export const GrantCard = ({
   project,
@@ -20,14 +20,14 @@ export const GrantCard = ({
   status,
   marginRight,
 }: {
-  project: Project;
-  number: string;
-  distributed: string;
-  date: string;
-  status: string;
-  marginRight?: boolean;
+  project: Project
+  number: string
+  distributed: string
+  date: string
+  status: string
+  marginRight?: boolean
 }) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
   return (
     <Box
@@ -138,5 +138,5 @@ export const GrantCard = ({
         </LinkBox>
       </Box>
     </Box>
-  );
-};
+  )
+}

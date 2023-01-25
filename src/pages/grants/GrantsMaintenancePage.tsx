@@ -1,4 +1,4 @@
-import { Image, Text, VStack } from '@chakra-ui/react';
+import { Image, Text, VStack } from '@chakra-ui/react'
 
 export const GrantsMaintenancePage = () => {
   return (
@@ -29,5 +29,5 @@ export const GrantsMaintenancePage = () => {
         to be notified on when they are back online.
       </Text>
     </VStack>
-  );
-};
+  )
+}

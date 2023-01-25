@@ -1,5 +1,5 @@
-import { useColorMode } from '@chakra-ui/color-mode';
+import { useColorMode } from '@chakra-ui/color-mode'
 
 export const useDarkMode = () => {
-  return useColorMode().colorMode === 'dark';
-};
+  return useColorMode().colorMode === 'dark'
+}

@@ -1,5 +1,5 @@
-import { useMutation } from '@apollo/client';
-import { CloseIcon } from '@chakra-ui/icons';
+import { useMutation } from '@apollo/client'
+import { CloseIcon } from '@chakra-ui/icons'
 import {
   HStack,
   Modal,
@@ -10,30 +10,30 @@ import {
   ModalOverlay,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+} from '@chakra-ui/react'
+import { useRef, useState } from 'react'
 
-import { AmountInputWithSatoshiToggle } from '../../../../components/molecules';
-import { ButtonComponent, TextInputBox } from '../../../../components/ui';
-import { MilestoneValidations } from '../../../../constants/validations';
+import { AmountInputWithSatoshiToggle } from '../../../../components/molecules'
+import { ButtonComponent, TextInputBox } from '../../../../components/ui'
+import { MilestoneValidations } from '../../../../constants/validations'
 import {
   MUTATION_CREATE_PROJECT_MILESTONE,
   MUTATION_DELETE_PROJECT_MILESTONE,
   MUTATION_UPDATE_PROJECT_MILESTONE,
-} from '../../../../graphql/mutations';
-import { useBTCConverter } from '../../../../helpers';
-import { colors } from '../../../../styles';
-import { ProjectMilestone } from '../../../../types';
-import { Satoshis, USDCents, USDollars } from '../../../../types/types';
-import { toInt, useNotification } from '../../../../utils';
+} from '../../../../graphql/mutations'
+import { useBTCConverter } from '../../../../helpers'
+import { colors } from '../../../../styles'
+import { ProjectMilestone } from '../../../../types'
+import { Satoshis, USDCents, USDollars } from '../../../../types/types'
+import { toInt, useNotification } from '../../../../utils'
 
 type Props = {
-  isOpen: boolean;
-  onClose: (newMilestones: ProjectMilestone[]) => void;
-  onSubmit: (newMilestones: ProjectMilestone[]) => void;
-  availableMilestones: ProjectMilestone[];
-  projectId?: number;
-};
+  isOpen: boolean
+  onClose: (newMilestones: ProjectMilestone[]) => void
+  onSubmit: (newMilestones: ProjectMilestone[]) => void
+  availableMilestones: ProjectMilestone[]
+  projectId?: number
+}
 
 export const defaultMilestone = {
   id: 0,
@@ -41,7 +41,7 @@ export const defaultMilestone = {
   projectId: 0,
   description: '',
   amount: 0 as Satoshis,
-} as ProjectMilestone;
+} as ProjectMilestone
 
 export const MilestoneAdditionModal = ({
   isOpen,
@@ -50,104 +50,103 @@ export const MilestoneAdditionModal = ({
   availableMilestones,
   onSubmit,
 }: Props) => {
-  const { toast } = useNotification();
-  const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter();
+  const { toast } = useNotification()
+  const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
   const [_milestones, _setMilestones] =
-    useState<ProjectMilestone[]>(availableMilestones);
+    useState<ProjectMilestone[]>(availableMilestones)
 
-  const milestones = useRef(_milestones);
+  const milestones = useRef(_milestones)
 
   const setMilestones = (value: ProjectMilestone[]) => {
-    milestones.current = value;
-    _setMilestones(value);
-  };
+    milestones.current = value
+    _setMilestones(value)
+  }
 
-  const [isFormInputUsingSatoshis, setIsFormInputUsingSatoshis] =
-    useState(true);
+  const [isFormInputUsingSatoshis, setIsFormInputUsingSatoshis] = useState(true)
 
-  const [formError, setFormError] = useState<any>([]);
+  const [formError, setFormError] = useState<any>([])
 
   const handleAddMilestone = () => {
-    setMilestones([...milestones.current, defaultMilestone]);
-  };
+    setMilestones([...milestones.current, defaultMilestone])
+  }
 
   const getFilteredMilestones = (): ProjectMilestone[] => {
     return milestones.current.filter(
       (milestone: ProjectMilestone) => milestone.amount > 0 && milestone.name,
-    );
-  };
+    )
+  }
 
   const getMutationConvertedMilestoneAmount = (
     amount: Satoshis | USDollars,
   ): Satoshis => {
     return isFormInputUsingSatoshis
       ? (amount as Satoshis)
-      : getSatoshisFromUSDCents((amount * 100) as USDCents);
-  };
+      : getSatoshisFromUSDCents((amount * 100) as USDCents)
+  }
 
   const getFormConvertedMilestoneAmount = (
     satoshiAmount: Satoshis,
   ): Satoshis | USDollars => {
     if (isFormInputUsingSatoshis) {
-      return satoshiAmount as Satoshis;
+      return satoshiAmount as Satoshis
     }
 
-    const usdCentsAmount = getUSDCentsAmount(satoshiAmount);
+    const usdCentsAmount = getUSDCentsAmount(satoshiAmount)
 
     // Dollar value rounded to two decimal places
-    return (Math.round(usdCentsAmount) / 100) as USDollars;
-  };
+    return (Math.round(usdCentsAmount) / 100) as USDollars
+  }
 
   const handleAmountChange = (newAmount: Satoshis, itemIndex: number) => {
-    const newMilestone = { ...milestones.current[itemIndex] };
+    const newMilestone = { ...milestones.current[itemIndex] }
 
     if (newMilestone) {
-      newMilestone.amount = newAmount;
+      newMilestone.amount = newAmount
 
-      milestones.current[itemIndex] = newMilestone;
+      milestones.current[itemIndex] = newMilestone
     }
 
-    setFormError([]);
-    setMilestones(milestones.current);
-  };
+    setFormError([])
+    setMilestones(milestones.current)
+  }
 
   const handleTextChange = (event: any, itemIndex: number) => {
     if (event) {
       const newMilestones = milestones.current.map((milestone, index) => {
         if (index === itemIndex) {
-          return { ...milestone, name: event.target.value };
+          return { ...milestone, name: event.target.value }
         }
 
-        return milestone;
-      });
-      setFormError([]);
-      setMilestones(newMilestones);
+        return milestone
+      })
+      setFormError([])
+      setMilestones(newMilestones)
     }
-  };
+  }
 
   const handleModalClose = () => {
-    const isValid = validateMilestones();
+    const isValid = validateMilestones()
 
     if (!isValid) {
-      onClose(milestones.current);
+      onClose(milestones.current)
     }
 
-    onClose(getFilteredMilestones());
-  };
+    onClose(getFilteredMilestones())
+  }
 
   /**
    * TODO: REFACTOR -- This updates all milestones, even unchanged ones.
    * We should refactor it to only update the relevant milestones.
    */
   const handleConfirmMilestone = async () => {
-    const isValid = validateMilestones();
+    const isValid = validateMilestones()
 
     if (!isValid) {
-      return;
+      return
     }
 
-    const filteredMilestones = getFilteredMilestones();
+    const filteredMilestones = getFilteredMilestones()
 
     try {
       const newMilestones = await Promise.all(
@@ -156,7 +155,7 @@ export const MilestoneAdditionModal = ({
             ...milestone,
             id: undefined,
             projectId: toInt(projectId),
-          };
+          }
 
           if (milestone.id) {
             await updateMilestone({
@@ -168,97 +167,97 @@ export const MilestoneAdditionModal = ({
                   amount: milestone.amount,
                 },
               },
-            });
+            })
 
-            return milestone;
+            return milestone
           }
 
           const { data } = await createMilestone({
             variables: { input: createMilestoneInput },
-          });
+          })
           if (data?.createProjectMilestone?.id) {
             return {
               ...milestone,
               id: toInt(data.createProjectMilestone.id),
-            };
+            }
           }
 
-          throw Error('missing id for created project milestone');
+          throw Error('missing id for created project milestone')
         }),
-      );
-      onSubmit(newMilestones);
+      )
+      onSubmit(newMilestones)
     } catch (error) {
       toast({
         title: 'Something went wrong',
         description: 'Please try again.',
         status: 'error',
-      });
+      })
     }
-  };
+  }
 
   const handleRemoveMilestone = async (itemIndex: number) => {
     const currentMilestone = milestones.current.find(
       (milestone, index) => index === itemIndex,
-    );
+    )
     const newMilestones = milestones.current.filter(
       (milestone, index) => index !== itemIndex,
-    );
+    )
 
     if (currentMilestone && currentMilestone.id) {
       try {
         await removeMilestone({
           variables: { projectMilestoneId: toInt(currentMilestone.id) },
-        });
-        setMilestones(newMilestones);
+        })
+        setMilestones(newMilestones)
       } catch (error) {
         toast({
           title: 'Something went wrong',
           description: `${error}`,
           status: 'error',
-        });
+        })
       }
     } else {
-      setMilestones(newMilestones);
+      setMilestones(newMilestones)
     }
-  };
+  }
 
   const [createMilestone, { loading: createMilestoneLoading }] = useMutation(
     MUTATION_CREATE_PROJECT_MILESTONE,
-  );
+  )
 
   const [updateMilestone, { loading: updateMilestoneLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT_MILESTONE,
-  );
+  )
 
   const [removeMilestone, { loading: removeMilestoneLoading }] = useMutation(
     MUTATION_DELETE_PROJECT_MILESTONE,
-  );
+  )
 
   const validateMilestones = () => {
-    let isValid = true;
-    const totalErrors: any = [];
+    let isValid = true
+    const totalErrors: any = []
 
     milestones.current.map((milestone, index) => {
-      const errors: any = {};
+      const errors: any = {}
       if (!milestone.name) {
-        errors.name = 'Name is a required field.';
-        isValid = false;
+        errors.name = 'Name is a required field.'
+        isValid = false
       } else if (milestone.name.length > MilestoneValidations.name.maxLength) {
-        errors.name = `Name cannot be longer than ${MilestoneValidations.name.maxLength} characters.`;
-        isValid = false;
+        errors.name = `Name cannot be longer than ${MilestoneValidations.name.maxLength} characters.`
+        isValid = false
       }
 
       if (!milestone.amount || milestone.amount < 1) {
-        errors.amount = 'Amount needs to be at least 1 satoshi.';
-        isValid = false;
+        errors.amount = 'Amount needs to be at least 1 satoshi.'
+        isValid = false
       }
 
       if (
         index > 0 &&
         milestones.current[index - 1].amount > milestone.amount
       ) {
-        errors.amount = 'Amount must to be at greater than previous milestone.';
-        isValid = false;
+        errors.amount = 'Amount must to be at greater than previous milestone.'
+        isValid = false
       }
 
       if (
@@ -266,19 +265,19 @@ export const MilestoneAdditionModal = ({
         milestone.description.length >
           MilestoneValidations.description.maxLength
       ) {
-        errors.description = `Description cannot be longer than ${MilestoneValidations.description.maxLength} characters.`;
-        isValid = false;
+        errors.description = `Description cannot be longer than ${MilestoneValidations.description.maxLength} characters.`
+        isValid = false
       }
 
-      totalErrors.push(errors);
-    });
+      totalErrors.push(errors)
+    })
 
     if (!isValid) {
-      setFormError(totalErrors);
+      setFormError(totalErrors)
     }
 
-    return isValid;
-  };
+    return isValid
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={handleModalClose} size="sm" isCentered>
@@ -365,5 +364,5 @@ export const MilestoneAdditionModal = ({
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}

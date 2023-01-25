@@ -4,17 +4,17 @@ import {
   AlertIcon,
   AlertProps,
   AlertTitle,
-} from '@chakra-ui/react';
-import { MdOutlineReportGmailerrorred } from 'react-icons/md';
+} from '@chakra-ui/react'
+import { MdOutlineReportGmailerrorred } from 'react-icons/md'
 
 type Props = AlertProps & {
-  title: string;
+  title: string
 
   /**
    * A longer description message for the alert.
    */
-  message?: string;
-};
+  message?: string
+}
 
 export const AlertBox = ({ title, message, ...rest }: Props) => (
   <Alert
@@ -33,4 +33,4 @@ export const AlertBox = ({ title, message, ...rest }: Props) => (
     </AlertTitle>
     <AlertDescription maxWidth="sm">{message}</AlertDescription>
   </Alert>
-);
+)

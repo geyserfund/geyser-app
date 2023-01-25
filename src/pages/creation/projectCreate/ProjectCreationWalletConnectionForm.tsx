@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { gql, useLazyQuery, useMutation } from '@apollo/client'
 import {
   HStack,
   Image,
@@ -10,31 +10,31 @@ import {
   Text,
   useDisclosure,
   VStack,
-} from '@chakra-ui/react';
-import { useEffect, useMemo, useState } from 'react';
-import { AiOutlineSetting } from 'react-icons/ai';
-import { BiRocket } from 'react-icons/bi';
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
+} from '@chakra-ui/react'
+import { useEffect, useMemo, useState } from 'react'
+import { AiOutlineSetting } from 'react-icons/ai'
+import { BiRocket } from 'react-icons/bi'
+import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
-import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png';
-import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png';
-import WalletOfSatoshiPNG from '../../../assets/images/third-party-icons/wallet-of-satoshi@3x.png';
-import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
+import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png'
+import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png'
+import WalletOfSatoshiPNG from '../../../assets/images/third-party-icons/wallet-of-satoshi@3x.png'
+import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg'
 import {
   ButtonComponent,
   TextInputBox,
   UndecoratedLink,
-} from '../../../components/ui';
-import Loader from '../../../components/ui/Loader';
+} from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
 import {
   AlbyLightningAddressURL,
   BitNobURL,
   GeyserTermsAndConditionsURL,
   VoltageExplainerPageForGeyserURL,
   WalletOfSatoshiLightningAddressURL,
-} from '../../../constants';
-import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
-import { colors } from '../../../styles';
+} from '../../../constants'
+import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations'
+import { colors } from '../../../styles'
 import {
   CreateWalletInput,
   FundingResourceType,
@@ -42,19 +42,19 @@ import {
   LndNodeType,
   Project,
   ResourceInput,
-} from '../../../types/generated/graphql';
-import { toInt, useNotification, validateEmail } from '../../../utils';
-import { NodeAdditionModal } from './components/NodeAdditionModal';
-import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox';
-import { TNodeInput } from './types';
+} from '../../../types/generated/graphql'
+import { toInt, useNotification, validateEmail } from '../../../utils'
+import { NodeAdditionModal } from './components/NodeAdditionModal'
+import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox'
+import { TNodeInput } from './types'
 
 type Props = {
-  project: Project;
-  onProjectLaunchSelected: (_: CreateWalletInput) => void;
-  onSaveAsDraftSelected?: (_: CreateWalletInput) => void;
-  triggerWallet?: boolean;
-  setNodeInput?: React.Dispatch<React.SetStateAction<TNodeInput | undefined>>;
-};
+  project: Project
+  onProjectLaunchSelected: (_: CreateWalletInput) => void
+  onSaveAsDraftSelected?: (_: CreateWalletInput) => void
+  triggerWallet?: boolean
+  setNodeInput?: React.Dispatch<React.SetStateAction<TNodeInput | undefined>>
+}
 
 export enum ConnectionOption {
   LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
@@ -73,12 +73,12 @@ export enum LNAddressEvaluationState {
 }
 
 type LightningAddressVerificationQueryVariables = {
-  lightningAddress: string;
-};
+  lightningAddress: string
+}
 
 type LightningAddressVerificationResponseData = {
-  lightningAddressVerify: LightningAddressVerifyResponse;
-};
+  lightningAddressVerify: LightningAddressVerifyResponse
+}
 
 export const QUERY_LIGHTNING_ADDRESS_EVALUATION = gql`
   query LightningAddressVerify($lightningAddress: String) {
@@ -87,7 +87,7 @@ export const QUERY_LIGHTNING_ADDRESS_EVALUATION = gql`
       valid
     }
   }
-`;
+`
 
 export const ProjectCreationWalletConnectionForm = ({
   project,
@@ -96,46 +96,45 @@ export const ProjectCreationWalletConnectionForm = ({
   triggerWallet,
   setNodeInput: setNode,
 }: Props) => {
-  const { toast } = useNotification();
+  const { toast } = useNotification()
 
-  const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined);
+  const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined)
 
-  const [lightningAddressFormValue, setLightningAddressFormValue] =
-    useState('');
+  const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
 
   const [lightningAddressFormError, setLightningAddressFormError] = useState<
     string | null
-  >(null);
+  >(null)
 
   const [lnAddressEvaluationState, setLnAddressEvaluationState] =
-    useState<LNAddressEvaluationState>(LNAddressEvaluationState.IDLE);
+    useState<LNAddressEvaluationState>(LNAddressEvaluationState.IDLE)
 
-  const [connectionOption, setConnectionOption] = useState<string>('');
+  const [connectionOption, setConnectionOption] = useState<string>('')
 
   const {
     isOpen: isWalletOpen,
     onClose: onWalletClose,
     onOpen: openWallet,
-  } = useDisclosure();
+  } = useDisclosure()
 
   useEffect(() => {
     if (triggerWallet) {
-      openWallet();
+      openWallet()
     }
-  }, [triggerWallet]);
+  }, [triggerWallet])
 
   useEffect(() => {
     if (setNode) {
-      setNode(nodeInput);
+      setNode(nodeInput)
     }
-  }, [nodeInput]);
+  }, [nodeInput])
 
   const onSubmit = (value: TNodeInput) => {
-    setNodeInput(value);
+    setNodeInput(value)
     if (setNode) {
-      setNode(value);
+      setNode(value)
     }
-  };
+  }
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
     useLazyQuery<
@@ -147,29 +146,29 @@ export const ProjectCreationWalletConnectionForm = ({
       },
       onCompleted({ lightningAddressVerify: { valid } }) {
         if (Boolean(valid) === false) {
-          setLnAddressEvaluationState(LNAddressEvaluationState.FAILED);
+          setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
           setLightningAddressFormError(
             'We could not validate this as a working Lightning Address.',
-          );
+          )
         } else {
-          setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED);
+          setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
         }
       },
-    });
+    })
 
   const [createWallet, { loading: isCreateWalletLoading }] = useMutation(
     MUTATION_CREATE_WALLET,
-  );
+  )
 
   const createWalletInput: CreateWalletInput | null = useMemo(() => {
     const resourceInput: ResourceInput = {
       resourceId: toInt(project.id),
       resourceType: FundingResourceType.Project,
-    };
+    }
 
     if (connectionOption === ConnectionOption.PERSONAL_NODE) {
       if (Boolean(nodeInput) === false) {
-        return null;
+        return null
       }
 
       return {
@@ -189,7 +188,7 @@ export const ProjectCreationWalletConnectionForm = ({
         },
         name: nodeInput!.name,
         resourceInput,
-      };
+      }
     }
 
     if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
@@ -198,79 +197,79 @@ export const ProjectCreationWalletConnectionForm = ({
           lightningAddress: lightningAddressFormValue,
         },
         resourceInput,
-      };
+      }
     }
 
-    return null;
-  }, [project, nodeInput, connectionOption, lightningAddressFormValue]);
+    return null
+  }, [project, nodeInput, connectionOption, lightningAddressFormValue])
 
   const isSubmitEnabled = useMemo(() => {
     if (createWalletInput === null) {
-      return false;
+      return false
     }
 
     return (
       connectionOption === ConnectionOption.PERSONAL_NODE ||
       (connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
         Boolean(lightningAddressFormValue) === true)
-    );
-  }, [connectionOption, lightningAddressFormValue, createWalletInput]);
+    )
+  }, [connectionOption, lightningAddressFormValue, createWalletInput])
 
   const validateLightningAddress = async () => {
     if (lightningAddressFormError === null) {
-      await evaluateLightningAddress();
+      await evaluateLightningAddress()
     }
-  };
+  }
 
   const handleProjectLaunchSelected = async () => {
-    await validateLightningAddress();
+    await validateLightningAddress()
 
     try {
-      await createWallet({ variables: { input: createWalletInput } });
-      onProjectLaunchSelected(createWalletInput!);
+      await createWallet({ variables: { input: createWalletInput } })
+      onProjectLaunchSelected(createWalletInput!)
     } catch (error) {
       toast({
         title: 'Something went wrong',
         description: `${error}`,
         status: 'error',
-      });
+      })
     }
-  };
+  }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
     if (lightningAddress.length === 0) {
-      setLightningAddressFormError(`Lightning Address can't be empty.`);
+      setLightningAddressFormError(`Lightning Address can't be empty.`)
     } else if (lightningAddress.endsWith('@geyser.fund')) {
       setLightningAddressFormError(
         `Custom Lightning Addresses can't end with "@geyser.fund".`,
-      );
+      )
     } else if (validateEmail(lightningAddress) === false) {
       setLightningAddressFormError(
         `Please use a valid email-formatted address for your Lightning Address.`,
-      );
+      )
     } else {
-      setLightningAddressFormError(null);
+      setLightningAddressFormError(null)
     }
-  };
+  }
 
   const renderRightElementContent = () => {
     if (isEvaluatingLightningAddress) {
-      return <Loader size="md"></Loader>;
+      return <Loader size="md"></Loader>
     }
 
     switch (lnAddressEvaluationState) {
       case LNAddressEvaluationState.IDLE:
-        return null;
+        return null
       case LNAddressEvaluationState.LOADING:
-        return <Loader size="md"></Loader>;
+        return <Loader size="md"></Loader>
       case LNAddressEvaluationState.FAILED:
-        return <BsFillXCircleFill fill={colors.error} size="24px" />;
+        return <BsFillXCircleFill fill={colors.error} size="24px" />
       case LNAddressEvaluationState.SUCCEEDED:
-        return <BsFillCheckCircleFill fill={colors.primary500} size="24px" />;
+        return <BsFillCheckCircleFill fill={colors.primary500} size="24px" />
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <>
@@ -290,8 +289,8 @@ export const ProjectCreationWalletConnectionForm = ({
                     placeholder={'satoshi@getalby.com'}
                     value={lightningAddressFormValue}
                     onChange={(event) => {
-                      setLightningAddressFormValue(event.target.value);
-                      validateLightningAddressFormat(event.target.value);
+                      setLightningAddressFormValue(event.target.value)
+                      validateLightningAddressFormat(event.target.value)
                     }}
                     onBlur={validateLightningAddress}
                     isInvalid={Boolean(lightningAddressFormError)}
@@ -424,5 +423,5 @@ export const ProjectCreationWalletConnectionForm = ({
         onSubmit={onSubmit}
       />
     </>
-  );
-};
+  )
+}

@@ -1,46 +1,46 @@
-import { useLazyQuery } from '@apollo/client';
-import { Box } from '@chakra-ui/layout';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useLazyQuery } from '@apollo/client'
+import { Box } from '@chakra-ui/layout'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
 
-import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
-import { ProjectNav } from '../../components/nav';
-import Loader from '../../components/ui/Loader';
-import { Head } from '../../config/Head';
-import { getPath } from '../../constants';
-import { useAuthContext } from '../../context';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
-import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
-import { useFundingFlow, useFundingFormState } from '../../hooks';
+import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg'
+import { ProjectNav } from '../../components/nav'
+import Loader from '../../components/ui/Loader'
+import { Head } from '../../config/Head'
+import { getPath } from '../../constants'
+import { useAuthContext } from '../../context'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
+import { QUERY_GET_ENTRY } from '../../graphql/queries/entries'
+import { useFundingFlow, useFundingFormState } from '../../hooks'
 import {
   Entry,
   FundingResourceType,
   Owner,
   Project,
   ProjectReward,
-} from '../../types/generated/graphql';
-import { toInt, useMobileMode } from '../../utils';
-import { compactMap } from '../../utils/formatData/compactMap';
-import { NotFoundPage } from '../notFound';
-import { ProjectProvider } from '../projectView';
-import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
-import { EntryContainer } from './EntryContainer';
+} from '../../types/generated/graphql'
+import { toInt, useMobileMode } from '../../utils'
+import { compactMap } from '../../utils/formatData/compactMap'
+import { NotFoundPage } from '../notFound'
+import { ProjectProvider } from '../projectView'
+import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel'
+import { EntryContainer } from './EntryContainer'
 
 export const EntryPage = () => {
-  const { entryId } = useParams<{ entryId: string }>();
-  const navigate = useNavigate();
-  const isMobile = useMobileMode();
+  const { entryId } = useParams<{ entryId: string }>()
+  const navigate = useNavigate()
+  const isMobile = useMobileMode()
 
-  const { setNav } = useAuthContext();
+  const { setNav } = useAuthContext()
 
-  const [detailOpen, setDetailOpen] = useState(true);
-  const fundingFlow = useFundingFlow();
+  const [detailOpen, setDetailOpen] = useState(true)
+  const fundingFlow = useFundingFlow()
 
   useEffect(() => {
     if (entryId) {
-      getEntry({ variables: { id: toInt(entryId) } });
+      getEntry({ variables: { id: toInt(entryId) } })
     }
-  }, [entryId]);
+  }, [entryId])
 
   const [getProject, { loading, error: projectError, data: projectData }] =
     useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
@@ -51,38 +51,38 @@ export const EntryPage = () => {
           projectPath: getPath('project', data.project.name),
           projectOwnerIDs:
             data.project.owners.map((ownerInfo: Owner) => {
-              return Number(ownerInfo.user.id || -1);
+              return Number(ownerInfo.user.id || -1)
             }) || [],
-        });
+        })
       },
-    });
+    })
 
   const [getEntry, { loading: loadingPosts, error, data: entryData }] =
     useLazyQuery(QUERY_GET_ENTRY, {
       onCompleted(data) {
-        const { entry } = data;
+        const { entry } = data
         if (!entry) {
-          navigate(getPath('notFound'));
+          navigate(getPath('notFound'))
         }
 
-        getProject({ variables: { where: { id: toInt(entry.project.id) } } });
+        getProject({ variables: { where: { id: toInt(entry.project.id) } } })
       },
       onError(error) {
-        console.error(error);
-        navigate(getPath('notFound'));
+        console.error(error)
+        navigate(getPath('notFound'))
       },
-    });
+    })
 
   if (loadingPosts || loading || !projectData) {
-    return <Loader paddingTop="65px" />;
+    return <Loader paddingTop="65px" />
   }
 
   if (error || !entryData || !entryData.entry || projectError) {
-    return <NotFoundPage />;
+    return <NotFoundPage />
   }
 
-  const project = projectData && projectData.project;
-  const entry = entryData && entryData.entry;
+  const project = projectData && projectData.project
+  const entry = entryData && entryData.entry
 
   return (
     <Box
@@ -105,17 +105,17 @@ export const EntryPage = () => {
         />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 interface IEntryViewWrapper {
-  project: Project;
-  entry: Entry;
-  detailOpen: boolean;
-  fundingFlow: any;
-  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  resourceType?: string;
-  resourceId?: number;
+  project: Project
+  entry: Entry
+  detailOpen: boolean
+  fundingFlow: any
+  setDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+  resourceType?: string
+  resourceId?: number
 }
 
 const EntryViewWrapper = ({
@@ -125,11 +125,11 @@ const EntryViewWrapper = ({
   setDetailOpen,
   fundingFlow,
 }: IEntryViewWrapper) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   const rewards =
-    (project.rewards && compactMap<ProjectReward>(project.rewards)) || [];
-  const fundForm = useFundingFormState({ rewards });
-  const { setFundState } = fundingFlow;
+    (project.rewards && compactMap<ProjectReward>(project.rewards)) || []
+  const fundForm = useFundingFormState({ rewards })
+  const { setFundState } = fundingFlow
   return (
     <ProjectProvider project={project}>
       <Head
@@ -148,5 +148,5 @@ const EntryViewWrapper = ({
       />
       {isMobile && <ProjectNav />}
     </ProjectProvider>
-  );
-};
+  )
+}

@@ -6,25 +6,25 @@ import {
   Text,
   useColorModeValue,
   VStack,
-} from '@chakra-ui/react';
-import { HTMLChakraProps } from '@chakra-ui/system';
+} from '@chakra-ui/react'
+import { HTMLChakraProps } from '@chakra-ui/system'
 
-import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
-import { fonts } from '../../../styles';
-import { FundingTx, Project } from '../../../types/generated/graphql';
-import { getDaysAgo } from '../../../utils';
-import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { LightningIcon, SatoshiIconTilted } from '../../icons';
-import { AnonymousAvatar, LinkableAvatar, ProjectAvatarLink } from '../../ui';
-import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon';
-import { renderFunderBadges } from './renderFunderBadges';
+import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
+import { fonts } from '../../../styles'
+import { FundingTx, Project } from '../../../types/generated/graphql'
+import { getDaysAgo } from '../../../utils'
+import { commaFormatted } from '../../../utils/formatData/helperFunctions'
+import { LightningIcon, SatoshiIconTilted } from '../../icons'
+import { AnonymousAvatar, LinkableAvatar, ProjectAvatarLink } from '../../ui'
+import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon'
+import { renderFunderBadges } from './renderFunderBadges'
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTx;
-  showsProjectLink?: boolean;
-  linkedProject?: Project;
-  count?: number;
-};
+  fundingTx: FundingTx
+  showsProjectLink?: boolean
+  linkedProject?: Project
+  count?: number
+}
 
 export const ProjectFundingContributionsFeedItem = ({
   fundingTx,
@@ -32,22 +32,22 @@ export const ProjectFundingContributionsFeedItem = ({
   count,
   ...rest
 }: Props) => {
-  const { funder } = fundingTx;
+  const { funder } = fundingTx
 
-  const isFunderAnonymous = Boolean(funder?.user) === false;
-  const timeAgo = getDaysAgo(fundingTx?.paidAt || '');
-  const wasMadeOnChain = fundingTx.onChain;
+  const isFunderAnonymous = Boolean(funder?.user) === false
+  const timeAgo = getDaysAgo(fundingTx?.paidAt || '')
+  const wasMadeOnChain = fundingTx.onChain
 
   const avatarMetadata = getAvatarMetadata({
     funder,
     source: fundingTx.source,
-  });
+  })
 
   const funderBadges = computeFunderBadges({
     creationDateStringOfFundedContent:
       fundingTx.sourceResource?.createdAt || '',
     funder,
-  });
+  })
 
   return (
     <Box
@@ -154,5 +154,5 @@ export const ProjectFundingContributionsFeedItem = ({
         </Stack>
       </VStack>
     </Box>
-  );
-};
+  )
+}

@@ -29,7 +29,7 @@ export const slideInRight = {
     animation:
       '$slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
   },
-};
+}
 
 export const slideInLeft = {
   '@-webkit-keyframes slide-in-left': {
@@ -62,7 +62,7 @@ export const slideInLeft = {
     animation:
       '$slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
   },
-};
+}
 
 export const slideInLeftDynamic = (distance: number, time: number) => ({
   '@-webkit-keyframes slide-in-left-dynamic': {
@@ -93,7 +93,7 @@ export const slideInLeftDynamic = (distance: number, time: number) => ({
     webkitAnimation: `$slide-in-left-dynamic ${time}s cubic-bezier(0.250, 0.460, 0.450, 0.940) both`,
     animation: `$slide-in-left-dynamic ${time}s cubic-bezier(0.250, 0.460, 0.450, 0.940) both`,
   },
-});
+})
 
 export const slideOutRight = {
   '@-webkit-keyframes slide-out-right': {
@@ -126,7 +126,7 @@ export const slideOutRight = {
     animation:
       '$slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
   },
-};
+}
 
 export const slideOutRightDynamic = (distance: number, time: number) => ({
   '@-webkit-keyframes slide-out-right-dynamic': {
@@ -157,7 +157,7 @@ export const slideOutRightDynamic = (distance: number, time: number) => ({
     webkitAnimation: `$slide-out-right-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
     animation: `$slide-out-right-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
   },
-});
+})
 
 export const slideOutLeft = {
   '@-webkit-keyframes slide-out-left': {
@@ -190,7 +190,7 @@ export const slideOutLeft = {
     animation:
       '$slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
   },
-};
+}
 
 export const fadeOut = {
   '@-webkit-keyframes fade-out': {
@@ -213,7 +213,7 @@ export const fadeOut = {
     webkitAnimation: '$fade-out 0.5s ease-out both',
     animation: '$fade-out 0.5s ease-out both',
   },
-};
+}
 
 export const fadeIn = {
   '@-webkit-keyframes fade-in': {
@@ -236,7 +236,7 @@ export const fadeIn = {
     webkitAnimation: '$fade-in 0.5s ease-out both',
     animation: '$fade-in 0.5s ease-out both',
   },
-};
+}
 
 export const slideUpBottomDynamic = (distance: number, time: number) => ({
   '@-webkit-keyframes slide-up-bottom-dynamic': {
@@ -267,4 +267,4 @@ export const slideUpBottomDynamic = (distance: number, time: number) => ({
     webkitAnimation: `$slide-up-bottom-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
     animation: `$slide-up-bottom-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
   },
-});
+})

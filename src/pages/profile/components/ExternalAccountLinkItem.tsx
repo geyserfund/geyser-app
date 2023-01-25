@@ -3,20 +3,20 @@ import {
   Link,
   ThemeComponentProps,
   ThemeTypings,
-} from '@chakra-ui/react';
-import { ReactElement, useMemo } from 'react';
-import { BsTwitter } from 'react-icons/bs';
-import { createUseStyles } from 'react-jss';
-import { Link as ReactRouterLink } from 'react-router-dom';
+} from '@chakra-ui/react'
+import { ReactElement, useMemo } from 'react'
+import { BsTwitter } from 'react-icons/bs'
+import { createUseStyles } from 'react-jss'
+import { Link as ReactRouterLink } from 'react-router-dom'
 
-import { FountainIcon } from '../../../components/icons';
-import { GeyserHomepageUrl } from '../../../constants';
-import { colors } from '../../../styles';
-import { ExternalAccount } from '../../../types/generated/graphql';
+import { FountainIcon } from '../../../components/icons'
+import { GeyserHomepageUrl } from '../../../constants'
+import { colors } from '../../../styles'
+import { ExternalAccount } from '../../../types/generated/graphql'
 
 type Props = {
-  account: ExternalAccount;
-};
+  account: ExternalAccount
+}
 
 const useStyles = createUseStyles({
   linkContainer: {
@@ -27,66 +27,66 @@ const useStyles = createUseStyles({
     fontWeight: '500',
     textDecoration: 'none',
   },
-});
+})
 
 export const ExternalAccountLinkItem = ({ account }: Props) => {
-  const { type, externalUsername } = account;
-  const styles = useStyles();
+  const { type, externalUsername } = account
+  const styles = useStyles()
 
   const linkDestination: string = useMemo(() => {
     switch (type) {
       case 'twitter':
-        return `https://twitter.com/${externalUsername}`;
+        return `https://twitter.com/${externalUsername}`
       case 'Fountain':
-        return `https://www.fountain.fm/${account.externalUsername}`;
+        return `https://www.fountain.fm/${account.externalUsername}`
       default:
-        return `${GeyserHomepageUrl}`;
+        return `${GeyserHomepageUrl}`
     }
-  }, [type, externalUsername]);
+  }, [type, externalUsername])
 
   const isLinkExternal: boolean = useMemo(() => {
     switch (type) {
       case 'twitter':
-        return true;
+        return true
       case 'Fountain':
-        return true;
+        return true
       default:
-        return false;
+        return false
     }
-  }, [type]);
+  }, [type])
 
   const buttonIcon: ReactElement = useMemo(() => {
     switch (type) {
       case 'twitter':
-        return <BsTwitter />;
+        return <BsTwitter />
       case 'Fountain':
-        return <FountainIcon />;
+        return <FountainIcon />
       default:
-        return <></>;
+        return <></>
     }
-  }, [type]);
+  }, [type])
 
   const buttonVariant: ThemeComponentProps['variant'] = useMemo(() => {
     switch (type) {
       case 'twitter':
-        return 'solid';
+        return 'solid'
       case 'Fountain':
-        return 'ghost';
+        return 'ghost'
       default:
-        return 'ghost';
+        return 'ghost'
     }
-  }, [type]);
+  }, [type])
 
   const buttonColorScheme: ThemeTypings['colorSchemes'] | '' = useMemo(() => {
     switch (type) {
       case 'twitter':
-        return 'twitter';
+        return 'twitter'
       case 'Fountain':
-        return '';
+        return ''
       default:
-        return '';
+        return ''
     }
-  }, [type]);
+  }, [type])
 
   return isLinkExternal ? (
     <Link href={linkDestination} isExternal className={styles.linkContainer}>
@@ -114,5 +114,5 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
         {account.externalUsername}
       </Button>
     </Link>
-  );
-};
+  )
+}

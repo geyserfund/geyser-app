@@ -1,17 +1,17 @@
-import { Stack, StackDirection, Text } from '@chakra-ui/react';
-import { HTMLChakraProps } from '@chakra-ui/system';
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
+import { Stack, StackDirection, Text } from '@chakra-ui/react'
+import { HTMLChakraProps } from '@chakra-ui/system'
+import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
-import { colors } from '../../styles';
-import { Project, WalletStatus } from '../../types/generated/graphql';
-import { isActive, isDraft } from '../../utils';
+import { colors } from '../../styles'
+import { Project, WalletStatus } from '../../types/generated/graphql'
+import { isActive, isDraft } from '../../utils'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
-  project: Project;
-  fontSize?: string;
-  iconSize?: string;
-  fontFamily?: string;
-  direction?: StackDirection;
+  project: Project
+  fontSize?: string
+  iconSize?: string
+  fontFamily?: string
+  direction?: StackDirection
 }
 
 export const ProjectStatusLabel = ({
@@ -25,7 +25,7 @@ export const ProjectStatusLabel = ({
     fontWeight: 'semibold',
     fontFamily,
     fontSize: fontSize || '12px',
-  };
+  }
 
   const getIcon = () => {
     if (
@@ -34,7 +34,7 @@ export const ProjectStatusLabel = ({
     ) {
       return (
         <BsFillXCircleFill fontSize={iconSize} color={colors.secondaryRed} />
-      );
+      )
     }
 
     if (
@@ -43,23 +43,21 @@ export const ProjectStatusLabel = ({
     ) {
       return (
         <BsFillXCircleFill fontSize={iconSize} color={colors.secondaryGold} />
-      );
+      )
     }
 
     if (isActive(project.status)) {
       return (
         <BsFillCheckCircleFill fontSize={iconSize} color={colors.primary500} />
-      );
+      )
     }
 
     if (isDraft(project.status)) {
-      return (
-        <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />
-      );
+      return <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />
     }
 
-    return <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />;
-  };
+    return <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />
+  }
 
   const getLabel = () => {
     if (
@@ -70,7 +68,7 @@ export const ProjectStatusLabel = ({
         <Text color={colors.secondaryRed} {...commonStyles}>
           INACTIVE WALLET
         </Text>
-      );
+      )
     }
 
     if (
@@ -81,7 +79,7 @@ export const ProjectStatusLabel = ({
         <Text color={colors.secondaryGold} {...commonStyles}>
           UNSTABLE WALLET
         </Text>
-      );
+      )
     }
 
     if (isActive(project.status)) {
@@ -89,7 +87,7 @@ export const ProjectStatusLabel = ({
         <Text color={colors.primary500} {...commonStyles}>
           RUNNING
         </Text>
-      );
+      )
     }
 
     if (isDraft(project.status)) {
@@ -97,20 +95,20 @@ export const ProjectStatusLabel = ({
         <Text color={colors.neutral500} {...commonStyles}>
           DRAFT
         </Text>
-      );
+      )
     }
 
     return (
       <Text color={colors.neutral500} {...commonStyles}>
         INACTIVE
       </Text>
-    );
-  };
+    )
+  }
 
   return (
     <Stack direction={direction} alignItems="center">
       {getIcon()}
       {getLabel()}
     </Stack>
-  );
-};
+  )
+}

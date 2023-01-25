@@ -1,7 +1,7 @@
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react'
 
 interface IProgressBar extends BoxProps {
-  value: number;
+  value: number
 }
 
 export const ProgressBar = ({ value, ...rest }: IProgressBar) => (
@@ -19,4 +19,4 @@ export const ProgressBar = ({ value, ...rest }: IProgressBar) => (
       backgroundColor="brand.primary"
     ></Box>
   </Box>
-);
+)

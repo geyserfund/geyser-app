@@ -1,80 +1,74 @@
-import { useMutation } from '@apollo/client';
-import {
-  GridItem,
-  HStack,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client'
+import { GridItem, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
-import { DeleteConfirmModal, RewardCard } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
-import { MUTATION_UPDATE_PROJECT_REWARD } from '../../graphql/mutations';
+import { DeleteConfirmModal, RewardCard } from '../../components/molecules'
+import { ButtonComponent } from '../../components/ui'
+import { MUTATION_UPDATE_PROJECT_REWARD } from '../../graphql/mutations'
 import {
   Project,
   ProjectReward,
   RewardCurrency,
-} from '../../types/generated/graphql';
-import { toInt, useNotification } from '../../utils';
-import { RewardAdditionModal } from '../creation/projectCreate/components/RewardAdditionModal';
+} from '../../types/generated/graphql'
+import { toInt, useNotification } from '../../utils'
+import { RewardAdditionModal } from '../creation/projectCreate/components/RewardAdditionModal'
 
 export const RewardSettings = ({ project }: { project: Project }) => {
-  const { toast } = useNotification();
+  const { toast } = useNotification()
 
-  const [rewards, setRewards] = useState<ProjectReward[]>([]);
-  const [selectedReward, setSelectedReward] = useState<ProjectReward>();
+  const [rewards, setRewards] = useState<ProjectReward[]>([])
+  const [selectedReward, setSelectedReward] = useState<ProjectReward>()
 
   const {
     isOpen: isRewardOpen,
     onClose: onRewardClose,
     onOpen: openReward,
-  } = useDisclosure();
+  } = useDisclosure()
 
   const {
     isOpen: isRewardDeleteOpen,
     onClose: onRewardDeleteClose,
     onOpen: openRewardDelete,
-  } = useDisclosure();
+  } = useDisclosure()
 
   const isSatoshi =
     project.rewardCurrency !== null &&
     project.rewardCurrency !== undefined &&
-    project.rewardCurrency !== RewardCurrency.Usdcent;
+    project.rewardCurrency !== RewardCurrency.Usdcent
 
-  const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
+  const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD)
 
   useEffect(() => {
     if (project.rewards && project.rewards.length > 0) {
-      setRewards(project.rewards.map((reward) => reward!));
+      setRewards(project.rewards.map((reward) => reward!))
     }
-  }, [project]);
+  }, [project])
 
   const handleRewardUpdate = (addReward: ProjectReward) => {
-    const findReward = rewards.find((reward) => reward.id === addReward.id);
+    const findReward = rewards.find((reward) => reward.id === addReward.id)
 
     if (findReward) {
       const newRewards = rewards.map((reward) => {
         if (reward.id === addReward.id) {
-          return addReward;
+          return addReward
         }
 
-        return reward;
-      });
+        return reward
+      })
 
-      setRewards(newRewards);
+      setRewards(newRewards)
     } else {
-      setRewards([...rewards, addReward]);
+      setRewards([...rewards, addReward])
     }
-  };
+  }
 
   const handleRemoveReward = async (id?: number) => {
     if (!id) {
-      return;
+      return
     }
 
     try {
-      const currentReward = rewards.find((reward) => reward.id === id);
+      const currentReward = rewards.find((reward) => reward.id === id)
 
       await updateReward({
         variables: {
@@ -86,35 +80,35 @@ export const RewardSettings = ({ project }: { project: Project }) => {
             costCurrency: RewardCurrency.Usdcent,
           },
         },
-      });
-      const newRewards = rewards.filter((reward) => reward.id !== id);
-      setRewards(newRewards);
+      })
+      const newRewards = rewards.filter((reward) => reward.id !== id)
+      setRewards(newRewards)
 
-      onRewardDeleteClose();
+      onRewardDeleteClose()
 
       toast({
         title: 'Successfully removed!',
         description: `Reward ${currentReward?.name} was successfully removed`,
         status: 'success',
-      });
+      })
     } catch (error) {
       toast({
         title: 'Failed to remove reward',
         description: `${error}`,
         status: 'error',
-      });
+      })
     }
-  };
+  }
 
   const triggerRewardRemoval = (id?: number) => {
-    const currentReward = rewards.find((reward) => reward.id === id);
+    const currentReward = rewards.find((reward) => reward.id === id)
     if (!currentReward) {
-      return;
+      return
     }
 
-    setSelectedReward(currentReward);
-    openRewardDelete();
-  };
+    setSelectedReward(currentReward)
+    openRewardDelete()
+  }
 
   return (
     <>
@@ -135,8 +129,8 @@ export const RewardSettings = ({ project }: { project: Project }) => {
               <ButtonComponent
                 w="full"
                 onClick={() => {
-                  setSelectedReward(undefined);
-                  openReward();
+                  setSelectedReward(undefined)
+                  openReward()
                 }}
               >
                 Add a reward
@@ -169,8 +163,8 @@ export const RewardSettings = ({ project }: { project: Project }) => {
                         reward={reward}
                         isSatoshi={isSatoshi}
                         handleEdit={() => {
-                          setSelectedReward(reward);
-                          openReward();
+                          setSelectedReward(reward)
+                          openReward()
                         }}
                         handleRemove={() => triggerRewardRemoval(reward.id)}
                       />
@@ -201,5 +195,5 @@ export const RewardSettings = ({ project }: { project: Project }) => {
         confirm={() => handleRemoveReward(selectedReward?.id)}
       />
     </>
-  );
-};
+  )
+}

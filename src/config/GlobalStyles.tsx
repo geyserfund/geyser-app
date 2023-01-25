@@ -1,4 +1,4 @@
-import { Global } from '@emotion/react';
+import { Global } from '@emotion/react'
 
 export const GlobalStyles = () => (
   <Global
@@ -50,4 +50,4 @@ export const GlobalStyles = () => (
         }
       `}
   />
-);
+)

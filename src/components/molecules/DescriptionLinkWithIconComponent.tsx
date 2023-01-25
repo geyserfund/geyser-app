@@ -1,9 +1,9 @@
-import { HStack, Link, Text } from '@chakra-ui/react';
+import { HStack, Link, Text } from '@chakra-ui/react'
 
 interface DescriptionLinkWithIconComponentProps {
-  title: string;
-  link?: string;
-  icon?: React.ReactNode;
+  title: string
+  link?: string
+  icon?: React.ReactNode
 }
 
 export const DescriptionLinkWithIconComponent = ({
@@ -34,5 +34,5 @@ export const DescriptionLinkWithIconComponent = ({
         </Text>
       )}
     </HStack>
-  );
-};
+  )
+}

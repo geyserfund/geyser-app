@@ -5,20 +5,20 @@ import {
   Text,
   useMediaQuery,
   VStack,
-} from '@chakra-ui/react';
-import { BiLeftArrowAlt } from 'react-icons/bi';
+} from '@chakra-ui/react'
+import { BiLeftArrowAlt } from 'react-icons/bi'
 
-import TitleWithProgressBar from '../../../../components/molecules/TitleWithProgressBar';
-import { ButtonComponent } from '../../../../components/ui';
-import { useMobileMode } from '../../../../utils';
+import TitleWithProgressBar from '../../../../components/molecules/TitleWithProgressBar'
+import { ButtonComponent } from '../../../../components/ui'
+import { useMobileMode } from '../../../../utils'
 
 interface ProjectCreateLayoutProps {
-  children: React.ReactNode;
-  sideView?: React.ReactNode;
-  handleBack: () => void;
-  title: string;
-  subtitle: string;
-  percentage: number;
+  children: React.ReactNode
+  sideView?: React.ReactNode
+  handleBack: () => void
+  title: string
+  subtitle: string
+  percentage: number
 }
 
 export const ProjectCreateLayout = ({
@@ -29,8 +29,8 @@ export const ProjectCreateLayout = ({
   subtitle,
   percentage,
 }: ProjectCreateLayoutProps) => {
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
-  const isMobile = useMobileMode();
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
+  const isMobile = useMobileMode()
 
   return (
     <Box
@@ -108,5 +108,5 @@ export const ProjectCreateLayout = ({
         </GridItem>
       </Grid>
     </Box>
-  );
-};
+  )
+}

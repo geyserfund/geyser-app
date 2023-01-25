@@ -1,17 +1,17 @@
-import { VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react'
 
-import { AlertBox } from '../../../components/ui';
-import { User } from '../../../types/generated/graphql';
-import { UserProfilePageContributionsListItem } from '../containers';
+import { AlertBox } from '../../../components/ui'
+import { User } from '../../../types/generated/graphql'
+import { UserProfilePageContributionsListItem } from '../containers'
 
 type Props = {
-  profileUser: User;
-};
+  profileUser: User
+}
 
 export const UserProfilePageContributionsList = ({ profileUser }: Props) => {
   const contributionIDs: number[] = profileUser.fundingTxs
     .map((contribution) => contribution?.id)
-    .filter(Boolean);
+    .filter(Boolean)
 
   if (contributionIDs.length === 0) {
     return (
@@ -21,7 +21,7 @@ export const UserProfilePageContributionsList = ({ profileUser }: Props) => {
         colorScheme={'gray'}
         title="There are currently no contributions."
       />
-    );
+    )
   }
 
   return (
@@ -33,5 +33,5 @@ export const UserProfilePageContributionsList = ({ profileUser }: Props) => {
         />
       ))}
     </VStack>
-  );
-};
+  )
+}

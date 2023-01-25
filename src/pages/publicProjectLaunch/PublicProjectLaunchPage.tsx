@@ -8,39 +8,39 @@ import {
   UnorderedList,
   useMediaQuery,
   VStack,
-} from '@chakra-ui/react';
-import { BiLeftArrowAlt } from 'react-icons/bi';
-import { createUseStyles } from 'react-jss';
-import { useNavigate } from 'react-router-dom';
+} from '@chakra-ui/react'
+import { BiLeftArrowAlt } from 'react-icons/bi'
+import { createUseStyles } from 'react-jss'
+import { useNavigate } from 'react-router-dom'
 
-import { TwitterConnect } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
-import { getPath, LaunchImage2Url } from '../../constants';
-import { useAuthContext } from '../../context';
-import { colors } from '../../styles';
-import { hasTwitterAccount, useMobileMode } from '../../utils';
+import { TwitterConnect } from '../../components/molecules'
+import { ButtonComponent } from '../../components/ui'
+import { getPath, LaunchImage2Url } from '../../constants'
+import { useAuthContext } from '../../context'
+import { colors } from '../../styles'
+import { hasTwitterAccount, useMobileMode } from '../../utils'
 
 const useStyles = createUseStyles({
   backIcon: {
     fontSize: '25px',
   },
-});
+})
 
 export const PublicProjectLaunchPage = () => {
-  const isMobile = useMobileMode();
-  const { loading, user } = useAuthContext();
-  const navigate = useNavigate();
-  const classes = useStyles();
+  const isMobile = useMobileMode()
+  const { loading, user } = useAuthContext()
+  const navigate = useNavigate()
+  const classes = useStyles()
 
   const handleBack = () => {
-    navigate('/');
-  };
+    navigate('/')
+  }
 
   const handleNext = () => {
-    navigate(getPath('privateProjectLaunch'));
-  };
+    navigate(getPath('privateProjectLaunch'))
+  }
 
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
   return (
     <Box
@@ -155,5 +155,5 @@ export const PublicProjectLaunchPage = () => {
         </GridItem>
       </Grid>
     </Box>
-  );
-};
+  )
+}

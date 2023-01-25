@@ -1,36 +1,36 @@
-import { useMutation } from '@apollo/client';
-import { SmallCloseIcon } from '@chakra-ui/icons';
-import { Box, Text } from '@chakra-ui/layout';
-import { HStack, IconButton } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { BsLightningChargeFill } from 'react-icons/bs';
-import { SiTwitter } from 'react-icons/si';
+import { useMutation } from '@apollo/client'
+import { SmallCloseIcon } from '@chakra-ui/icons'
+import { Box, Text } from '@chakra-ui/layout'
+import { HStack, IconButton } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import { BsLightningChargeFill } from 'react-icons/bs'
+import { SiTwitter } from 'react-icons/si'
 
-import { useAuthContext } from '../../context';
-import { defaultUser } from '../../defaults';
-import { MUTATION_UNLINK_ACCOUNT } from '../../graphql';
-import { toInt, useNotification } from '../../utils';
-import { ExternalAccountComponent } from '../ui';
+import { useAuthContext } from '../../context'
+import { defaultUser } from '../../defaults'
+import { MUTATION_UNLINK_ACCOUNT } from '../../graphql'
+import { toInt, useNotification } from '../../utils'
+import { ExternalAccountComponent } from '../ui'
 
 interface IAccountConnection {
-  id: number;
-  username: string;
-  icon: any;
-  manage?: boolean;
+  id: number
+  username: string
+  icon: any
+  manage?: boolean
 }
 
 const DisconnectAccount = ({ id, icon, username }: IAccountConnection) => {
-  const { setUser } = useAuthContext();
-  const { toast } = useNotification();
+  const { setUser } = useAuthContext()
+  const { toast } = useNotification()
   const [unlinkAccount, { data, loading: unlinkLoading, error }] = useMutation(
     MUTATION_UNLINK_ACCOUNT,
-  );
+  )
 
   const handleAccountDisconnect = async () => {
     try {
-      await unlinkAccount({ variables: { id: toInt(id) } });
+      await unlinkAccount({ variables: { id: toInt(id) } })
     } catch (_) {}
-  };
+  }
 
   useEffect(() => {
     if (error) {
@@ -38,15 +38,15 @@ const DisconnectAccount = ({ id, icon, username }: IAccountConnection) => {
         title: 'Failed to unlink account',
         description: `${error.message}`,
         status: 'error',
-      });
+      })
     }
-  }, [error]);
+  }, [error])
 
   useEffect(() => {
     if (data && !unlinkLoading) {
-      setUser({ ...defaultUser, ...data.unlinkExternalAccount });
+      setUser({ ...defaultUser, ...data.unlinkExternalAccount })
     }
-  }, [data]);
+  }, [data])
 
   return (
     <HStack
@@ -66,17 +66,17 @@ const DisconnectAccount = ({ id, icon, username }: IAccountConnection) => {
         onClick={handleAccountDisconnect}
       />
     </HStack>
-  );
-};
+  )
+}
 
 export const DisconnectAccounts = () => {
-  const { user } = useAuthContext();
+  const { user } = useAuthContext()
   const twitterAccount = user.externalAccounts.find(
     (account) => account?.type === 'twitter',
-  );
+  )
   const lnurlAccounts = user.externalAccounts.filter(
     (account) => account?.type === 'lnurl',
-  );
+  )
 
   return (
     <Box justifyContent="center" alignItems="center">
@@ -109,5 +109,5 @@ export const DisconnectAccounts = () => {
         />
       )}
     </Box>
-  );
-};
+  )
+}

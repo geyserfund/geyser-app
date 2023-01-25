@@ -1,18 +1,18 @@
-import { HStack, Text, TextProps } from '@chakra-ui/react';
+import { HStack, Text, TextProps } from '@chakra-ui/react'
 
-import { useBTCConverter } from '../../helpers';
-import { Satoshis } from '../../types';
-import { numberWithCommas, toInt } from '../../utils';
-import { SatoshiIconTilted } from '../icons';
+import { useBTCConverter } from '../../helpers'
+import { Satoshis } from '../../types'
+import { numberWithCommas, toInt } from '../../utils'
+import { SatoshiIconTilted } from '../icons'
 
 type Props = TextProps & {
-  label?: string;
-  extra?: string;
-  isLoading?: boolean;
-  shouldShowDollarConversion?: boolean;
-  wrapperClassName?: string;
-  scale?: number;
-};
+  label?: string
+  extra?: string
+  isLoading?: boolean
+  shouldShowDollarConversion?: boolean
+  wrapperClassName?: string
+  scale?: number
+}
 
 export const SatoshiAmount = ({
   label,
@@ -25,21 +25,21 @@ export const SatoshiAmount = ({
   scale,
   ...rest
 }: Props) => {
-  const btcConverter = useBTCConverter();
+  const btcConverter = useBTCConverter()
 
   const getScale = () => {
     if (fontSize) {
-      let size = 0;
+      let size = 0
 
       if (typeof fontSize === 'string') {
-        size = parseInt(fontSize.split('px')[0], 10);
+        size = parseInt(fontSize.split('px')[0], 10)
       }
 
-      return (size / 14) * (scale || 0.4);
+      return (size / 14) * (scale || 0.4)
     }
 
-    return 0.8;
-  };
+    return 0.8
+  }
 
   return (
     <HStack alignItems="center" className={wrapperClassName}>
@@ -70,5 +70,5 @@ export const SatoshiAmount = ({
         </Text>
       ) : null}
     </HStack>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -8,25 +8,25 @@ import {
   Link,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import React from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate } from 'react-router';
+} from '@chakra-ui/react'
+import React from 'react'
+import { FaArrowLeft } from 'react-icons/fa'
+import { useNavigate } from 'react-router'
 
-import satwalletimg from '../../assets/walletsats.svg';
-import { AppFooter } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
+import satwalletimg from '../../assets/walletsats.svg'
+import { AppFooter } from '../../components/molecules'
+import { ButtonComponent } from '../../components/ui'
 import {
   GrantsBitcoinCulture,
   GrantsBitcoinDevelopment,
   GrantsBitcoinEducation,
   GrantsHero,
-} from '../../constants';
-import { fonts } from '../../styles';
-import { useMediumScreen, useMobileMode } from '../../utils';
-import { ApplyGrantCard } from './components/ApplyGrantCard';
-import { Board } from './components/Board';
-import { GrantsContributeModal } from './components/GrantsContributeModal';
+} from '../../constants'
+import { fonts } from '../../styles'
+import { useMediumScreen, useMobileMode } from '../../utils'
+import { ApplyGrantCard } from './components/ApplyGrantCard'
+import { Board } from './components/Board'
+import { GrantsContributeModal } from './components/GrantsContributeModal'
 
 const grants = [
   {
@@ -59,16 +59,16 @@ const grants = [
     distributed: '231,955',
     image: GrantsBitcoinCulture,
   },
-];
+]
 
 export const GrantsRoundOne = () => {
-  const isMobile = useMobileMode();
-  const navigate = useNavigate();
-  const isMedium = useMediumScreen();
-  const [link, setLink] = React.useState('');
+  const isMobile = useMobileMode()
+  const navigate = useNavigate()
+  const isMedium = useMediumScreen()
+  const [link, setLink] = React.useState('')
   const linkHandler = (link: React.SetStateAction<string>) => {
-    setLink(link);
-  };
+    setLink(link)
+  }
 
   return (
     <>
@@ -324,5 +324,5 @@ export const GrantsRoundOne = () => {
         <AppFooter />
       </Box>
     </>
-  );
-};
+  )
+}

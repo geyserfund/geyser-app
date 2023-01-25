@@ -1,4 +1,4 @@
-import { DownloadIcon } from '@chakra-ui/icons';
+import { DownloadIcon } from '@chakra-ui/icons'
 import {
   Box,
   Link,
@@ -10,14 +10,14 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-} from '@chakra-ui/react';
-import React from 'react';
-import { QRCode } from 'react-qrcode-logo';
+} from '@chakra-ui/react'
+import React from 'react'
+import { QRCode } from 'react-qrcode-logo'
 
-import LogoLight from '../../../assets/logo-dark-green.svg';
-import { ButtonComponent } from '../../../components/ui';
-import { API_SERVICE_ENDPOINT } from '../../../constants';
-import { encodeLNURL, useMobileMode } from '../../../utils';
+import LogoLight from '../../../assets/logo-dark-green.svg'
+import { ButtonComponent } from '../../../components/ui'
+import { API_SERVICE_ENDPOINT } from '../../../constants'
+import { encodeLNURL, useMobileMode } from '../../../utils'
 
 function ModalProjectImage({ image }: { image: string }) {
   return (
@@ -29,20 +29,20 @@ function ModalProjectImage({ image }: { image: string }) {
       backgroundPosition="center"
       id="modal-image"
     />
-  );
+  )
 }
 
-const ModalImage = React.memo(ModalProjectImage);
+const ModalImage = React.memo(ModalProjectImage)
 
 interface IQRModal {
-  isOpen: boolean;
-  onClose: () => void;
-  name: string;
-  image?: string;
-  projectId: string;
-  title: string;
-  setCopy: any;
-  imageDownload: string;
+  isOpen: boolean
+  onClose: () => void
+  name: string
+  image?: string
+  projectId: string
+  title: string
+  setCopy: any
+  imageDownload: string
 }
 
 export const ProjectFundingQRModal = ({
@@ -55,18 +55,18 @@ export const ProjectFundingQRModal = ({
   setCopy,
   imageDownload,
 }: IQRModal) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
   const lnurlPayUrl = encodeLNURL(
     `${API_SERVICE_ENDPOINT}/lnurl/pay?projectId=${projectId}`,
-  );
+  )
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
-        setCopy(false);
-        onClose();
+        setCopy(false)
+        onClose()
       }}
       size={isMobile ? 'md' : 'xl'}
       isCentered
@@ -175,5 +175,5 @@ export const ProjectFundingQRModal = ({
         </ModalFooter>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}

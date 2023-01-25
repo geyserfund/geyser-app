@@ -1,19 +1,19 @@
-import { Box, HStack, Link, Stack, Text, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
-import { createUseStyles } from 'react-jss';
+import { Box, HStack, Link, Stack, Text, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
+import { createUseStyles } from 'react-jss'
 
-import { createCreatorRecord } from '../../api';
-import { EnvelopeIcon, LightningIcon, RopeIcon } from '../../components/icons';
+import { createCreatorRecord } from '../../api'
+import { EnvelopeIcon, LightningIcon, RopeIcon } from '../../components/icons'
 import {
   ButtonComponent,
   Card,
   SectionTitle,
   TextArea,
   TextInputBox,
-} from '../../components/ui';
-import Loader from '../../components/ui/Loader';
-import { GeyserFAQUrl } from '../../constants';
-import { useMobileMode, useNotification } from '../../utils';
+} from '../../components/ui'
+import Loader from '../../components/ui/Loader'
+import { GeyserFAQUrl } from '../../constants'
+import { useMobileMode, useNotification } from '../../utils'
 
 const useStyles = createUseStyles({
   iconContainer: {
@@ -30,25 +30,25 @@ const useStyles = createUseStyles({
     maxWidth: '700px',
     padding: '40px 25px',
   },
-});
+})
 
 export const LaunchIdea = () => {
-  const isMobile = useMobileMode();
-  const classes = useStyles();
+  const isMobile = useMobileMode()
+  const classes = useStyles()
 
-  const { toast } = useNotification();
+  const { toast } = useNotification()
 
-  const [form, setForm] = useState({ email: '', description: '' });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ email: '', description: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (event: any) => {
-    const { name } = event.target;
-    const { value } = event.target;
+    const { name } = event.target
+    const { value } = event.target
     if (name) {
-      setForm({ ...form, [name]: value });
+      setForm({ ...form, [name]: value })
     }
-  };
+  }
 
   const handleSubmitForm = async () => {
     if (!form.email) {
@@ -56,7 +56,7 @@ export const LaunchIdea = () => {
         title: 'Empty email',
         description: 'please provide your email',
         status: 'error',
-      });
+      })
     }
 
     if (!form.description) {
@@ -64,11 +64,11 @@ export const LaunchIdea = () => {
         title: 'Empty description',
         description: 'description of your idea is required',
         status: 'error',
-      });
+      })
     }
 
     try {
-      setSubmitting(true);
+      setSubmitting(true)
       const records = [
         {
           fields: {
@@ -77,20 +77,20 @@ export const LaunchIdea = () => {
             Type: ['Creator'],
           },
         },
-      ];
-      const value = await createCreatorRecord({ records });
-      console.log('checking value', value);
-      setSubmitted(true);
+      ]
+      const value = await createCreatorRecord({ records })
+      console.log('checking value', value)
+      setSubmitted(true)
     } catch (error) {
       toast({
         title: 'Something went wrong',
         description: 'Please try again',
         status: 'error',
-      });
+      })
     }
 
-    setSubmitting(false);
-  };
+    setSubmitting(false)
+  }
 
   const SuccesfullySubmitted = () => (
     <Card className={classes.cardContainer}>
@@ -106,7 +106,7 @@ export const LaunchIdea = () => {
         </Text>
       </VStack>
     </Card>
-  );
+  )
 
   const Loading = () => (
     <Card
@@ -118,7 +118,7 @@ export const LaunchIdea = () => {
     >
       <Loader />
     </Card>
-  );
+  )
 
   return (
     <Box display="flex" justifyContent="center">
@@ -223,5 +223,5 @@ export const LaunchIdea = () => {
         )}
       </VStack>
     </Box>
-  );
-};
+  )
+}

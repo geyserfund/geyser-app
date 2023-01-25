@@ -1,33 +1,33 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom'
 
-import { getPath, routerPathNames } from '../constants';
-import { FailedAuth, TwitterSuccess } from '../pages/auth';
-import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit';
-import { EntryPreview } from '../pages/creation/entry/EntryPreview';
+import { getPath, routerPathNames } from '../constants'
+import { FailedAuth, TwitterSuccess } from '../pages/auth'
+import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
+import { EntryPreview } from '../pages/creation/entry/EntryPreview'
 import {
   MilestoneAndRewards,
   ProjectCreate,
   ProjectCreationWalletConnectionPage,
-} from '../pages/creation/projectCreate';
-import { EntryPage } from '../pages/entry/EntryPage';
-import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage';
-import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne';
-import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo';
-import { LandingPage } from '../pages/landing';
-import { NotAuthorized } from '../pages/notAuthorized';
-import { NotFoundPage } from '../pages/notFound';
-import { ProfilePage } from '../pages/profile/ProfilePage';
-import { ProjectDashboard } from '../pages/projectDashboard';
-import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
-import { ProjectView } from '../pages/projectView';
-import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
-import { PrivateRoute } from './PrivateRoute';
+} from '../pages/creation/projectCreate'
+import { EntryPage } from '../pages/entry/EntryPage'
+import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage'
+import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne'
+import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo'
+import { LandingPage } from '../pages/landing'
+import { NotAuthorized } from '../pages/notAuthorized'
+import { NotFoundPage } from '../pages/notFound'
+import { ProfilePage } from '../pages/profile/ProfilePage'
+import { ProjectDashboard } from '../pages/projectDashboard'
+import { ProjectDiscoveryPage } from '../pages/projectDiscovery'
+import { ProjectView } from '../pages/projectView'
+import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch'
+import { PrivateRoute } from './PrivateRoute'
 
 type PlatformRoutes = {
-  path: string;
-  element: () => JSX.Element;
-  authenticated?: boolean;
-};
+  path: string
+  element: () => JSX.Element
+  authenticated?: boolean
+}
 
 const platformRoutes = [
   {
@@ -126,7 +126,7 @@ const platformRoutes = [
     path: getPath('landingPage'),
     element: LandingPage,
   },
-] as PlatformRoutes[];
+] as PlatformRoutes[]
 
 export const Router = () => (
   <Routes>
@@ -142,10 +142,10 @@ export const Router = () => (
               </PrivateRoute>
             }
           />
-        );
+        )
       }
 
-      return <Route key={path} path={path} element={<Element />} />;
+      return <Route key={path} path={path} element={<Element />} />
     })}
   </Routes>
-);
+)

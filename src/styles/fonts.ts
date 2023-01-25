@@ -8,4 +8,4 @@ export const fonts = {
   mono: "'Courier Prime', monospace;",
   livvic: `'Livvic', sans-serif;`,
   courier: "'courier-std', monospace;",
-};
+}

@@ -1,22 +1,22 @@
-import { ProjectNav } from '../../../components/nav/bottomNav/ProjectNav';
-import { Head } from '../../../config/Head';
-import { useFundingFormState } from '../../../hooks';
+import { ProjectNav } from '../../../components/nav/bottomNav/ProjectNav'
+import { Head } from '../../../config/Head'
+import { useFundingFormState } from '../../../hooks'
 import {
   FundingResourceType,
   Project,
   ProjectReward,
-} from '../../../types/generated/graphql';
-import { useMobileMode } from '../../../utils';
-import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel';
-import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer';
-import { ProjectProvider } from './ProjectContext';
+} from '../../../types/generated/graphql'
+import { useMobileMode } from '../../../utils'
+import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel'
+import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer'
+import { ProjectProvider } from './ProjectContext'
 
 type Props = {
-  project: Project;
-  fundingFlow: any;
-  resourceType?: string;
-  resourceId?: number;
-};
+  project: Project
+  fundingFlow: any
+  resourceType?: string
+  resourceId?: number
+}
 
 export const ProjectDetailsViewContainer = ({
   project,
@@ -29,11 +29,11 @@ export const ProjectDetailsViewContainer = ({
      * for an undefined value.
      */
     rewards: (project.rewards as ProjectReward[]) || undefined,
-  });
+  })
 
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
-  const { setFundState, fundState } = fundingFlow;
+  const { setFundState, fundState } = fundingFlow
 
   return (
     <ProjectProvider project={project}>
@@ -62,5 +62,5 @@ export const ProjectDetailsViewContainer = ({
 
       {isMobile && <ProjectNav fixed />}
     </ProjectProvider>
-  );
-};
+  )
+}

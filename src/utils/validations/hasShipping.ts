@@ -1,1 +1,1 @@
-export const hasShipping = (name: string) => false;
+export const hasShipping = (name: string) => false

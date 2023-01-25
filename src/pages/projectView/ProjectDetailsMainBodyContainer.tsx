@@ -1,28 +1,28 @@
-import { Box, Text, VStack } from '@chakra-ui/react';
-import classNames from 'classnames';
-import { createUseStyles } from 'react-jss';
-import { useNavigate } from 'react-router-dom';
+import { Box, Text, VStack } from '@chakra-ui/react'
+import classNames from 'classnames'
+import { createUseStyles } from 'react-jss'
+import { useNavigate } from 'react-router-dom'
 
-import { AppFooter } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
-import { getPath, IFundingStages } from '../../constants';
-import { fundingStages } from '../../constants';
-import { useAuthContext } from '../../context';
-import { UpdateReward } from '../../hooks';
-import { colors } from '../../styles';
-import { Project } from '../../types/generated/graphql';
-import { useDarkMode, useMobileMode } from '../../utils';
-import { ProjectDetailsCard } from './components/ProjectDetailsCard';
-import { MobileViews, useProject } from './containers';
-import { ProjectDetailsAccessoriesSections } from './ProjectDetailsAccessoriesSections';
+import { AppFooter } from '../../components/molecules'
+import { ButtonComponent } from '../../components/ui'
+import { getPath, IFundingStages } from '../../constants'
+import { fundingStages } from '../../constants'
+import { useAuthContext } from '../../context'
+import { UpdateReward } from '../../hooks'
+import { colors } from '../../styles'
+import { Project } from '../../types/generated/graphql'
+import { useDarkMode, useMobileMode } from '../../utils'
+import { ProjectDetailsCard } from './components/ProjectDetailsCard'
+import { MobileViews, useProject } from './containers'
+import { ProjectDetailsAccessoriesSections } from './ProjectDetailsAccessoriesSections'
 
-type Rules = string;
+type Rules = string
 
 type Styles = {
-  isMobile: boolean;
-  inView: boolean;
-  fadeStarted?: boolean;
-};
+  isMobile: boolean
+  inView: boolean
+  fadeStarted?: boolean
+}
 
 const useStyles = createUseStyles<Rules, Styles>({
   container: ({ isMobile, inView, fadeStarted }: Styles) => ({
@@ -48,14 +48,14 @@ const useStyles = createUseStyles<Rules, Styles>({
     display: 'flex',
     flexDirection: 'column',
   },
-});
+})
 
 type Props = {
-  project: Project;
-  fundState: IFundingStages;
-  setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>;
-  updateReward: UpdateReward;
-};
+  project: Project
+  fundState: IFundingStages
+  setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
+  updateReward: UpdateReward
+}
 
 export const ProjectDetailsMainBodyContainer = ({
   project,
@@ -63,35 +63,35 @@ export const ProjectDetailsMainBodyContainer = ({
   setFundState,
   updateReward,
 }: Props) => {
-  const isMobile = useMobileMode();
-  const isDark = useDarkMode();
+  const isMobile = useMobileMode()
+  const isDark = useDarkMode()
 
-  const { mobileView, setMobileView } = useProject();
+  const { mobileView, setMobileView } = useProject()
 
-  const inView = mobileView === MobileViews.description;
+  const inView = mobileView === MobileViews.description
 
-  const classes = useStyles({ isMobile, inView });
-  const navigate = useNavigate();
+  const classes = useStyles({ isMobile, inView })
+  const navigate = useNavigate()
 
-  const { user, navigationContext } = useAuthContext();
+  const { user, navigationContext } = useAuthContext()
 
   const isViewerTheProjectOwner = navigationContext.projectOwnerIDs.includes(
     Number(user.id),
-  );
+  )
 
   const handleFundClick = () => {
-    setFundState(fundingStages.form);
-  };
+    setFundState(fundingStages.form)
+  }
 
   const handleFundClickMobile = () => {
-    setFundState(fundingStages.form);
-    setMobileView(MobileViews.funding);
-  };
+    setFundState(fundingStages.form)
+    setMobileView(MobileViews.funding)
+  }
 
   const handleConnectNodeClick = () => {
-    const nodeConfigurationPath = getPath('launchProjectWithNode', project.id);
-    navigate(nodeConfigurationPath);
-  };
+    const nodeConfigurationPath = getPath('launchProjectWithNode', project.id)
+    navigate(nodeConfigurationPath)
+  }
 
   return (
     <Box
@@ -155,5 +155,5 @@ export const ProjectDetailsMainBodyContainer = ({
         <AppFooter />
       </Box>
     </Box>
-  );
-};
+  )
+}

@@ -1,18 +1,18 @@
-import { Box, VStack } from '@chakra-ui/react';
+import { Box, VStack } from '@chakra-ui/react'
 
-import { DonationInput } from '../../components/molecules';
-import { SectionTitle } from '../../components/ui';
-import { IFundForm } from '../../hooks';
-import { IRewardCount } from '../../interfaces';
-import { ProjectReward } from '../../types/generated/graphql';
-import { FundingFormRewardItem } from './components/FundingFormRewardItem';
+import { DonationInput } from '../../components/molecules'
+import { SectionTitle } from '../../components/ui'
+import { IFundForm } from '../../hooks'
+import { IRewardCount } from '../../interfaces'
+import { ProjectReward } from '../../types/generated/graphql'
+import { FundingFormRewardItem } from './components/FundingFormRewardItem'
 
 type Props = {
-  setFormState: any;
-  updateReward: (_: IRewardCount) => void;
-  rewards?: ProjectReward[];
-  formState?: IFundForm;
-};
+  setFormState: any
+  updateReward: (_: IRewardCount) => void
+  rewards?: ProjectReward[]
+  formState?: IFundForm
+}
 
 export const FundingFormSection = ({
   setFormState,
@@ -23,9 +23,9 @@ export const FundingFormSection = ({
   const getRewardCount = (rewardId: number) =>
     formState?.rewardsByIDAndCount
       ? formState?.rewardsByIDAndCount[`${rewardId}` as keyof ProjectReward]
-      : 0;
+      : 0
 
-  const hasRewards = rewards && rewards.length > 0;
+  const hasRewards = rewards && rewards.length > 0
 
   return (
     <VStack
@@ -64,5 +64,5 @@ export const FundingFormSection = ({
         </Box>
       )}
     </VStack>
-  );
-};
+  )
+}

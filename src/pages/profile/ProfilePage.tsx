@@ -1,4 +1,4 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client'
 import {
   Box,
   Center,
@@ -6,48 +6,48 @@ import {
   HStack,
   Skeleton,
   VStack,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router';
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router'
 
-import { AppFooter } from '../../components/molecules';
-import { AlertBox } from '../../components/ui';
-import { useAuthContext } from '../../context';
-import { defaultUser } from '../../defaults';
-import { USER_PROFILE_QUERY } from '../../graphql';
-import { User, UserGetInput } from '../../types/generated/graphql';
-import { toInt, useDarkMode } from '../../utils';
-import { UserProfilePageHeader, UserProfilePageTabs } from './components';
+import { AppFooter } from '../../components/molecules'
+import { AlertBox } from '../../components/ui'
+import { useAuthContext } from '../../context'
+import { defaultUser } from '../../defaults'
+import { USER_PROFILE_QUERY } from '../../graphql'
+import { User, UserGetInput } from '../../types/generated/graphql'
+import { toInt, useDarkMode } from '../../utils'
+import { UserProfilePageHeader, UserProfilePageTabs } from './components'
 
 type ResponseData = {
-  user: User;
-};
+  user: User
+}
 
 type QueryVariables = {
-  where: UserGetInput;
-};
+  where: UserGetInput
+}
 
 export const ProfilePage = () => {
-  const isInDarkMode = useDarkMode();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const isInDarkMode = useDarkMode()
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const { user: currentAppUser } = useAuthContext();
-  const params = useParams<{ userId: string }>();
+  const { user: currentAppUser } = useAuthContext()
+  const params = useParams<{ userId: string }>()
 
   const [
     queryCurrentUser,
     { loading: profileLoading, error, data: userProfileData },
-  ] = useLazyQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY);
+  ] = useLazyQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY)
 
   const isViewingOwnProfile = () =>
-    location.pathname === `/profile/${currentAppUser.id}`;
+    location.pathname === `/profile/${currentAppUser.id}`
 
-  const [userProfile, setUserProfile] = useState<User>({ ...defaultUser });
+  const [userProfile, setUserProfile] = useState<User>({ ...defaultUser })
 
   const handleLaunchIdea = () => {
-    navigate('/launch');
-  };
+    navigate('/launch')
+  }
 
   /*
 	useEffect functions
@@ -58,30 +58,30 @@ export const ProfilePage = () => {
         where: {
           id: toInt(params.userId),
         },
-      };
-      queryCurrentUser({ variables });
+      }
+      queryCurrentUser({ variables })
     }
-  }, [params]);
+  }, [params])
 
   useEffect(() => {
     if (userProfileData && userProfileData.user) {
-      const user = userProfileData.user as User;
+      const user = userProfileData.user as User
 
       setUserProfile({
         ...userProfile,
         ...user,
-      });
+      })
     }
-  }, [userProfileData]);
+  }, [userProfileData])
 
   useEffect(() => {
     if (isViewingOwnProfile()) {
       setUserProfile({
         ...userProfile,
         ...currentAppUser,
-      });
+      })
     }
-  }, [currentAppUser]);
+  }, [currentAppUser])
 
   if (error) {
     return (
@@ -101,7 +101,7 @@ export const ProfilePage = () => {
           />
         </Center>
       </Container>
-    );
+    )
   }
 
   return (
@@ -144,8 +144,8 @@ export const ProfilePage = () => {
 
       <AppFooter />
     </Box>
-  );
-};
+  )
+}
 
 const ProjectSkeleton = () => {
   return (
@@ -174,5 +174,5 @@ const ProjectSkeleton = () => {
         </HStack>
       </VStack>
     </>
-  );
-};
+  )
+}

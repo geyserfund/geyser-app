@@ -1,1 +1,1 @@
-export const EditorNav = () => <div>EditorNav</div>;
+export const EditorNav = () => <div>EditorNav</div>

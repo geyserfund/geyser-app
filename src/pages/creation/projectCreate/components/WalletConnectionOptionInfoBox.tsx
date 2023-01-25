@@ -1,9 +1,9 @@
-import { Box, HTMLChakraProps, Text, VStack } from '@chakra-ui/react';
+import { Box, HTMLChakraProps, Text, VStack } from '@chakra-ui/react'
 
 type Props = HTMLChakraProps<'div'> & {
-  primaryText: string | React.ReactElement;
-  secondaryText: string | React.ReactElement;
-};
+  primaryText: string | React.ReactElement
+  secondaryText: string | React.ReactElement
+}
 
 export const WalletConnectionOptionInfoBox = ({
   primaryText,
@@ -28,5 +28,5 @@ export const WalletConnectionOptionInfoBox = ({
         {children}
       </VStack>
     </Box>
-  );
-};
+  )
+}

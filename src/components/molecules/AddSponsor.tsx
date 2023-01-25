@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/layout';
+import { Box, Text } from '@chakra-ui/layout'
 import {
   Modal,
   ModalBody,
@@ -6,17 +6,17 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-} from '@chakra-ui/modal';
-import { createUseStyles } from 'react-jss';
+} from '@chakra-ui/modal'
+import { createUseStyles } from 'react-jss'
 
-import { AddSponsorUrl } from '../../constants';
-import { ButtonComponent, UndecoratedLink } from '../ui';
+import { AddSponsorUrl } from '../../constants'
+import { ButtonComponent, UndecoratedLink } from '../ui'
 
 interface IConnectTwitter {
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-  description?: string;
+  isOpen: boolean
+  onClose: () => void
+  title?: string
+  description?: string
 }
 
 const useStyles = createUseStyles({
@@ -25,13 +25,13 @@ const useStyles = createUseStyles({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-});
+})
 
 export const AddSponsor = ({ isOpen, onClose }: IConnectTwitter) => {
-  const classes = useStyles();
-  const useTitle = 'Become a sponsor';
+  const classes = useStyles()
+  const useTitle = 'Become a sponsor'
   const useDescription =
-    'Interested in sponsoring this project? Click continue to let us know your details and we can quickly add you as a sponsor.';
+    'Interested in sponsoring this project? Click continue to let us know your details and we can quickly add you as a sponsor.'
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -55,5 +55,5 @@ export const AddSponsor = ({ isOpen, onClose }: IConnectTwitter) => {
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}

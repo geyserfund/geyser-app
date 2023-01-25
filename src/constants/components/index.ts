@@ -1,2 +1,2 @@
-export * from './dimensions';
-export * from './id';
+export * from './dimensions'
+export * from './id'

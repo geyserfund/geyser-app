@@ -63,4 +63,4 @@ export const colors = {
   secondaryYellow: '#FFE600',
   secondaryRed: '#DF3634',
   secondaryGold: '#C7BB50',
-};
+}

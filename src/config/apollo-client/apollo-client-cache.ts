@@ -1,8 +1,8 @@
-import { InMemoryCache } from '@apollo/client';
+import { InMemoryCache } from '@apollo/client'
 
 type IdentifiableCollection = {
-  id: number;
-}[];
+  id: number
+}[]
 
 const mergeIdentifiableCollectionUsingCursorIDs = (
   // eslint-disable-next-line default-param-last
@@ -11,8 +11,8 @@ const mergeIdentifiableCollectionUsingCursorIDs = (
   incoming: IdentifiableCollection = [],
   // { args }: FieldFunctionOptions,
 ) => {
-  return [...existing, ...incoming];
-};
+  return [...existing, ...incoming]
+}
 
 // The fetch policy still had issues when multiple queries were done in the same component,
 // and this caused me to end up store and merge to our own state, instead of apollo
@@ -72,4 +72,4 @@ export const cache: InMemoryCache = new InMemoryCache({
       },
     },
   },
-});
+})

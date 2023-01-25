@@ -1,8 +1,8 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/layout';
-import { useState } from 'react';
+import { Box, HStack, Text, VStack } from '@chakra-ui/layout'
+import { useState } from 'react'
 
 export const Badge = ({ badge }: { badge: string }) => {
-  const [hover, setHover] = useState(false);
+  const [hover, setHover] = useState(false)
   return (
     <Box
       position="relative"
@@ -17,7 +17,7 @@ export const Badge = ({ badge }: { badge: string }) => {
           badge === '👑' ||
           badge === '⭐'
         ) {
-          setHover(true);
+          setHover(true)
         }
       }}
       onMouseLeave={() => setHover(false)}
@@ -76,7 +76,7 @@ export const Badge = ({ badge }: { badge: string }) => {
       )}
       <Text fontSize="10px">{badge}</Text>
     </Box>
-  );
-};
+  )
+}
 
-export default Badge;
+export default Badge

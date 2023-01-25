@@ -8,55 +8,51 @@ import {
   Text,
   Tooltip,
   VStack,
-} from '@chakra-ui/react';
-import { useState } from 'react';
+} from '@chakra-ui/react'
+import { useState } from 'react'
 
-import { AmbossIcon, BoltIcon, ShareIcon } from '../../../components/icons';
-import {
-  Card,
-  ProjectStatusLabel,
-  SatoshiAmount,
-} from '../../../components/ui';
-import { AmbossUrl, getPath, HomeUrl } from '../../../constants';
-import { useAuthContext } from '../../../context';
-import { Project } from '../../../types/generated/graphql';
-import { isActive, MarkDown, useMobileMode } from '../../../utils';
-import { AvatarElement } from './AvatarElement';
-import { ProjectLightningQR } from './ProjectLightningQR';
+import { AmbossIcon, BoltIcon, ShareIcon } from '../../../components/icons'
+import { Card, ProjectStatusLabel, SatoshiAmount } from '../../../components/ui'
+import { AmbossUrl, getPath, HomeUrl } from '../../../constants'
+import { useAuthContext } from '../../../context'
+import { Project } from '../../../types/generated/graphql'
+import { isActive, MarkDown, useMobileMode } from '../../../utils'
+import { AvatarElement } from './AvatarElement'
+import { ProjectLightningQR } from './ProjectLightningQR'
 
 export const ProjectDetailsCard = ({
   project,
   fundButtonFunction,
 }: {
   project: Project & {
-    wallets?: { connectionDetails?: { pubkey?: string } }[];
-  };
-  fundButtonFunction: any;
+    wallets?: { connectionDetails?: { pubkey?: string } }[]
+  }
+  fundButtonFunction: any
 }) => {
-  const { user } = useAuthContext();
-  const isMobile = useMobileMode();
+  const { user } = useAuthContext()
+  const isMobile = useMobileMode()
 
-  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false);
-  const owner = project.owners[0];
+  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false)
+  const owner = project.owners[0]
 
   const handleShareButtonTapped = () => {
-    const relativePath = getPath('project', project.name);
+    const relativePath = getPath('project', project.name)
 
-    navigator.clipboard.writeText(`${HomeUrl}${relativePath}`);
-    setHasCopiedSharingLink(true);
-  };
+    navigator.clipboard.writeText(`${HomeUrl}${relativePath}`)
+    setHasCopiedSharingLink(true)
+  }
 
   const renderMilestone = () => {
     if (!project.milestones) {
-      return null;
+      return null
     }
 
     const currentMilestone = project.milestones.find(
       (milestone) => Number(milestone?.amount) > project.balance,
-    );
+    )
 
     if (!currentMilestone) {
-      return null;
+      return null
     }
 
     return (
@@ -70,17 +66,17 @@ export const ProjectDetailsCard = ({
           <Text color="brand.neutral800"> to go.</Text>
         </HStack>
       </VStack>
-    );
-  };
+    )
+  }
 
   const renderYourFunding = () => {
     if (project.funders.length > 0) {
       const currentFund = project.funders.find(
         (funder) => funder?.user?.id === user.id,
-      );
+      )
 
       if (!currentFund) {
-        return null;
+        return null
       }
 
       return (
@@ -98,21 +94,21 @@ export const ProjectDetailsCard = ({
             </Text>
           </HStack>
         </>
-      );
+      )
     }
 
-    return null;
-  };
+    return null
+  }
 
   const renderContributorsCount = () => {
-    const contributorsCount = project.funders.length;
+    const contributorsCount = project.funders.length
     return (
       <Text color="brand.primary800" fontWeight={500}>
         {contributorsCount}{' '}
         {contributorsCount === 1 ? 'contributor' : 'contributors'}
       </Text>
-    );
-  };
+    )
+  }
 
   return (
     <Card padding="24px" backgroundColor="brand.bgWhite">
@@ -232,5 +228,5 @@ export const ProjectDetailsCard = ({
         )}
       </VStack>
     </Card>
-  );
-};
+  )
+}

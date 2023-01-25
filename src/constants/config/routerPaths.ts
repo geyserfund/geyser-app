@@ -13,7 +13,7 @@ export const routerPathNames = {
   milestonesAndRewards: 'milestones',
   node: 'node',
   discover: 'discover',
-};
+}
 
 // TODO: These definitions are currently a WIP.
 // (Getting them started as part of the changes for
@@ -44,15 +44,15 @@ const pathsMap = {
   projectDashboard: (projectID: string) =>
     `/${routerPathNames.project}/${projectID}/${routerPathNames.projectDashboard}`,
   entry: (entryID: string) => `/${routerPathNames.entry}/${entryID}`,
-};
+}
 
-type PathsMap = typeof pathsMap;
+type PathsMap = typeof pathsMap
 
 export const getPath = <TRoute extends keyof PathsMap>(
   route: TRoute,
   ...params: Parameters<PathsMap[TRoute]>
 ) => {
-  const pathCallback: (...args: any[]) => string = pathsMap[route];
+  const pathCallback: (...args: any[]) => string = pathsMap[route]
 
-  return pathCallback(...params);
-};
+  return pathCallback(...params)
+}

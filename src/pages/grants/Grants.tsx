@@ -8,36 +8,31 @@ import {
   Skeleton,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { createUseStyles } from 'react-jss';
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { createUseStyles } from 'react-jss'
 
-import { SatoshiIconTilted } from '../../components/icons';
-import { AppFooter } from '../../components/molecules';
-import { Subscribe } from '../../components/nav/Subscribe';
-import { InfoTooltip } from '../../components/ui';
-import { VITE_APP_AIR_TABLE_KEY } from '../../constants';
-import { Project } from '../../types/generated/graphql';
-import {
-  isActive,
-  MarkDown,
-  useMediumScreen,
-  useMobileMode,
-} from '../../utils';
-import { Board } from './components/Board';
-import { ContributeButton } from './components/ContributeButton';
-import { RecipientButton } from './components/RecipientButton';
+import { SatoshiIconTilted } from '../../components/icons'
+import { AppFooter } from '../../components/molecules'
+import { Subscribe } from '../../components/nav/Subscribe'
+import { InfoTooltip } from '../../components/ui'
+import { VITE_APP_AIR_TABLE_KEY } from '../../constants'
+import { Project } from '../../types/generated/graphql'
+import { isActive, MarkDown, useMediumScreen, useMobileMode } from '../../utils'
+import { Board } from './components/Board'
+import { ContributeButton } from './components/ContributeButton'
+import { RecipientButton } from './components/RecipientButton'
 
 const useStyles = createUseStyles({
   iframe: {
     background: 'transparent',
     border: '1px solid #ccc',
   },
-});
+})
 
 export const Grants = ({ project }: { project: Project }) => {
-  const [applicants, setApplicants] = useState(['loading']);
-  const classes = useStyles();
+  const [applicants, setApplicants] = useState(['loading'])
+  const classes = useStyles()
 
   const getGrantApplicants = async () => {
     fetch(
@@ -56,17 +51,17 @@ export const Grants = ({ project }: { project: Project }) => {
           ? data.records?.filter(
               (applicant: any) => applicant.fields.Grant === project.title,
             )
-          : [];
-        setApplicants(applications);
-      });
-  };
+          : []
+        setApplicants(applications)
+      })
+  }
 
   useEffect(() => {
-    getGrantApplicants();
-  }, []);
+    getGrantApplicants()
+  }, [])
 
-  const isMedium = useMediumScreen();
-  const isMobile = useMobileMode();
+  const isMedium = useMediumScreen()
+  const isMobile = useMobileMode()
 
   return (
     <>
@@ -389,5 +384,5 @@ export const Grants = ({ project }: { project: Project }) => {
       </Box>
       <AppFooter />
     </>
-  );
-};
+  )
+}

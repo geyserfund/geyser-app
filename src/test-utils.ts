@@ -1,21 +1,17 @@
-import {render} from '@testing-library/react';
+import { render } from '@testing-library/react'
 
 const customRender = (ui: React.ReactElement, options = {}) =>
+  render(ui, {
+    // Wrap provider(s) here if needed
 
-	render(ui, {
+    wrapper: ({ children }) => children,
 
-		// Wrap provider(s) here if needed
+    ...options,
+  })
 
-		wrapper: ({children}) => children,
-
-		...options,
-
-	});
-
-export * from '@testing-library/react';
-
-export {default as userEvent} from '@testing-library/user-event';
+export * from '@testing-library/react'
+export { default as userEvent } from '@testing-library/user-event'
 
 // Override render export
 
-export {customRender as render};
+export { customRender as render }

@@ -1,2 +1,2 @@
-export * from './env';
-export * from './routerPaths';
+export * from './env'
+export * from './routerPaths'

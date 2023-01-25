@@ -1,1 +1,1 @@
-export const PlainInput = () => <div>PlainText</div>;
+export const PlainInput = () => <div>PlainText</div>

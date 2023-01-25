@@ -1,29 +1,29 @@
-import { HStack, Text, VStack } from '@chakra-ui/layout';
-import { CloseButton, IconButton, Link } from '@chakra-ui/react';
-import { FaTelegramPlane } from 'react-icons/fa';
+import { HStack, Text, VStack } from '@chakra-ui/layout'
+import { CloseButton, IconButton, Link } from '@chakra-ui/react'
+import { FaTelegramPlane } from 'react-icons/fa'
 
-import { SectionTitle } from '../../../components/ui';
-import { GeyserTelegramUrl } from '../../../constants';
-import { useFundCalc } from '../../../helpers/fundingCalculation';
-import { IFundForm } from '../../../hooks';
-import { IFundingAmounts, IProject } from '../../../interfaces';
-import { fonts } from '../../../styles';
-import { Satoshis } from '../../../types';
-import { Project } from '../../../types/generated/graphql';
-import { useMobileMode } from '../../../utils';
+import { SectionTitle } from '../../../components/ui'
+import { GeyserTelegramUrl } from '../../../constants'
+import { useFundCalc } from '../../../helpers/fundingCalculation'
+import { IFundForm } from '../../../hooks'
+import { IFundingAmounts, IProject } from '../../../interfaces'
+import { fonts } from '../../../styles'
+import { Satoshis } from '../../../types'
+import { Project } from '../../../types/generated/graphql'
+import { useMobileMode } from '../../../utils'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
-} from '../components/ContributionInfoBox';
-import { ProjectFundingQRScreenQRCodeSection } from './ProjectFundingQRScreenQRCodeSection';
+} from '../components/ContributionInfoBox'
+import { ProjectFundingQRScreenQRCodeSection } from './ProjectFundingQRScreenQRCodeSection'
 
 type Props = {
-  handleCloseButton: () => void;
-  fundingFlow: any;
-  amounts: IFundingAmounts;
-  state: IFundForm;
-  project: Project | IProject;
-};
+  handleCloseButton: () => void
+  fundingFlow: any
+  amounts: IFundingAmounts
+  state: IFundForm
+  project: Project | IProject
+}
 
 export const ProjectFundingQRScreen = ({
   fundingFlow,
@@ -31,8 +31,8 @@ export const ProjectFundingQRScreen = ({
   project,
   handleCloseButton,
 }: Props) => {
-  const { getTotalAmount } = useFundCalc(state);
-  const isMobile = useMobileMode();
+  const { getTotalAmount } = useFundCalc(state)
+  const isMobile = useMobileMode()
 
   return (
     <VStack
@@ -97,5 +97,5 @@ export const ProjectFundingQRScreen = ({
         claims or reward fulfillment.
       </Text>
     </VStack>
-  );
-};
+  )
+}

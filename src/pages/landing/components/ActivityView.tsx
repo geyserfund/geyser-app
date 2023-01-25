@@ -1,10 +1,10 @@
-import { Box, Divider, HTMLChakraProps, VStack } from '@chakra-ui/react';
+import { Box, Divider, HTMLChakraProps, VStack } from '@chakra-ui/react'
 
-import { StickToTop } from '../../../components/layouts';
-import { H3 } from '../../../components/typography';
-import { LandingPageContributionsList } from './LandingPageContributionsList';
+import { StickToTop } from '../../../components/layouts'
+import { H3 } from '../../../components/typography'
+import { LandingPageContributionsList } from './LandingPageContributionsList'
 
-type Props = HTMLChakraProps<'div'>;
+type Props = HTMLChakraProps<'div'>
 
 export const ActivityView = ({ ...rest }: Props) => {
   return (
@@ -28,5 +28,5 @@ export const ActivityView = ({ ...rest }: Props) => {
         <LandingPageContributionsList />
       </VStack>
     </Box>
-  );
-};
+  )
+}

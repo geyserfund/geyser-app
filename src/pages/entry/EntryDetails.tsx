@@ -1,20 +1,20 @@
-import { Avatar, Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
-import { DateTime } from 'luxon';
-import { BiLeftArrowAlt } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
+import { Avatar, Box, HStack, Image, Text, VStack } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
+import { BiLeftArrowAlt } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 
-import { ProjectFundersCountIndicator } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
-import { getPath } from '../../constants';
-import { Entry } from '../../types/generated/graphql';
-import { ProjectEntryEditor } from '../creation/entry/editor';
+import { ProjectFundersCountIndicator } from '../../components/molecules'
+import { ButtonComponent } from '../../components/ui'
+import { getPath } from '../../constants'
+import { Entry } from '../../types/generated/graphql'
+import { ProjectEntryEditor } from '../creation/entry/editor'
 
 type Props = {
-  entry: Entry;
-};
+  entry: Entry
+}
 
 export const EntryDetails = ({ entry }: Props) => {
-  const headerImageSrc = entry.image || entry.project?.image;
+  const headerImageSrc = entry.image || entry.project?.image
 
   return (
     <VStack width="100%" alignItems="flex-start" height={'100%'}>
@@ -78,5 +78,5 @@ export const EntryDetails = ({ entry }: Props) => {
         )}
       </Box>
     </VStack>
-  );
-};
+  )
+}

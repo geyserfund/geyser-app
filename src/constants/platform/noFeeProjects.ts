@@ -49,4 +49,4 @@ export const noFeeProjects = [
   'binkbonkbank',
   'bitcointwitter',
   'bitcoinracing',
-];
+]

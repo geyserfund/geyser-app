@@ -1,12 +1,12 @@
-import { IProjectType, ISelectOption } from '../../interfaces';
+import { IProjectType, ISelectOption } from '../../interfaces'
 
 export const fundingStages: {
-  loading: IFundingStages;
-  initial: IFundingStages;
-  form: IFundingStages;
-  started: IFundingStages;
-  completed: IFundingStages;
-  canceled: IFundingStages;
+  loading: IFundingStages
+  initial: IFundingStages
+  form: IFundingStages
+  started: IFundingStages
+  completed: IFundingStages
+  canceled: IFundingStages
 } = {
   loading: 'loading',
   initial: 'initial',
@@ -14,7 +14,7 @@ export const fundingStages: {
   started: 'started',
   completed: 'completed',
   canceled: 'canceled',
-};
+}
 
 export const stageList: IFundingStages[] = [
   'loading',
@@ -23,7 +23,7 @@ export const stageList: IFundingStages[] = [
   'started',
   'completed',
   'canceled',
-];
+]
 
 export type IFundingStages =
   | 'loading'
@@ -31,15 +31,15 @@ export type IFundingStages =
   | 'form'
   | 'started'
   | 'completed'
-  | 'canceled';
+  | 'canceled'
 
 export const authModalStates: {
-  loading: IAuthModalState;
-  initial: IAuthModalState;
-  lnurl: IAuthModalState;
-  connect: IAuthModalState;
-  completed: IAuthModalState;
-  manage: IAuthModalState;
+  loading: IAuthModalState
+  initial: IAuthModalState
+  lnurl: IAuthModalState
+  connect: IAuthModalState
+  completed: IAuthModalState
+  manage: IAuthModalState
 } = {
   loading: 'loading',
   initial: 'initial',
@@ -47,7 +47,7 @@ export const authModalStates: {
   connect: 'connect',
   completed: 'completed',
   manage: 'manage',
-};
+}
 
 export type IAuthModalState =
   | 'loading'
@@ -55,22 +55,22 @@ export type IAuthModalState =
   | 'lnurl'
   | 'completed'
   | 'connect'
-  | 'manage';
+  | 'manage'
 
 export const projectTypes = {
   donation: 'donation' as IProjectType,
   reward: 'reward' as IProjectType,
   grant: 'grant' as IProjectType,
-};
+}
 
-export type FundingTxStatus = 'unpaid' | 'paid' | 'canceled' | 'pending';
+export type FundingTxStatus = 'unpaid' | 'paid' | 'canceled' | 'pending'
 
-export type ShippingDestination = 'national' | 'international';
+export type ShippingDestination = 'national' | 'international'
 
 export const shippingTypes = {
   national: 'national' as ShippingDestination,
   international: 'international' as ShippingDestination,
-};
+}
 
 export const SelectCountryOptions: ISelectOption[] = [
   {
@@ -81,4 +81,4 @@ export const SelectCountryOptions: ISelectOption[] = [
     label: 'Deliver outside the USA',
     value: 'international',
   },
-];
+]

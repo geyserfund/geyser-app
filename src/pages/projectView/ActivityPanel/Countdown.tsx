@@ -1,22 +1,22 @@
-import { Box, HStack, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Box, HStack, Text } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
-import { fonts } from '../../../styles';
-import { getCountDown } from '../../../utils';
+import { fonts } from '../../../styles'
+import { getCountDown } from '../../../utils'
 
 export const Countdown = ({ endDate }: { endDate: string }) => {
-  const [countDown, setCountDown] = useState('');
+  const [countDown, setCountDown] = useState('')
   const handleCountDown = () => {
-    const countDown = getCountDown(endDate);
-    setCountDown(countDown);
-  };
+    const countDown = getCountDown(endDate)
+    setCountDown(countDown)
+  }
 
   useEffect(() => {
-    const interval = setInterval(handleCountDown, 1000);
+    const interval = setInterval(handleCountDown, 1000)
     return () => {
-      clearInterval(interval);
-    };
-  }, [endDate]);
+      clearInterval(interval)
+    }
+  }, [endDate])
 
   return (
     <HStack>
@@ -35,5 +35,5 @@ export const Countdown = ({ endDate }: { endDate: string }) => {
         color="brand.neutral600"
       >{`${countDown}`}</Text>
     </HStack>
-  );
-};
+  )
+}

@@ -10,7 +10,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "prepare": "husky install",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.{ts, tsx,js, jsx, css}' --write",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.{ts, tsx, js, jsx, css}' --write",
     "format": "prettier --config .prettierrc 'src/**/*.{ts, js, tsx, jsx, css}' --write",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix"

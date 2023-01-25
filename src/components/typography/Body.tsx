@@ -1,15 +1,15 @@
-import { Text, TextProps } from '@chakra-ui/react';
+import { Text, TextProps } from '@chakra-ui/react'
 
-import { fonts } from '../../styles';
-import { useMobileMode } from '../../utils';
+import { fonts } from '../../styles'
+import { useMobileMode } from '../../utils'
 
 interface BodyProps extends TextProps {
-  semiBold?: boolean;
-  bold?: boolean;
+  semiBold?: boolean
+  bold?: boolean
 }
 
 export const Body1 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   return (
     <Text
       fontSize={isMobile ? '14px' : '16px'}
@@ -20,11 +20,11 @@ export const Body1 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
     >
       {children}
     </Text>
-  );
-};
+  )
+}
 
 export const Body2 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   return (
     <Text
       fontSize={isMobile ? '12px' : '14px'}
@@ -35,8 +35,8 @@ export const Body2 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
     >
       {children}
     </Text>
-  );
-};
+  )
+}
 
 export const Caption = ({ children, bold, semiBold, ...rest }: BodyProps) => {
   return (
@@ -49,5 +49,5 @@ export const Caption = ({ children, bold, semiBold, ...rest }: BodyProps) => {
     >
       {children}
     </Text>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 
-import { ArrowForwardIcon, CheckIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon, CheckIcon } from '@chakra-ui/icons'
 import {
   Box,
   HStack,
@@ -18,22 +18,22 @@ import {
   ModalOverlay,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+} from '@chakra-ui/react'
+import { useState } from 'react'
+import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 
-import { createCreatorRecord } from '../../api';
-import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
-import { useMobileMode, useNotification, validateEmail } from '../../utils';
-import { ButtonComponent, TextInputBox } from '../ui';
+import { createCreatorRecord } from '../../api'
+import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants'
+import { useMobileMode, useNotification, validateEmail } from '../../utils'
+import { ButtonComponent, TextInputBox } from '../ui'
 
 interface ISubscribe {
-  isOpen?: boolean;
-  onClose?: any;
-  style: string;
-  interest?: string;
-  parentState?: React.Dispatch<React.SetStateAction<boolean>>;
-  titleSize?: string;
+  isOpen?: boolean
+  onClose?: any
+  style: string
+  interest?: string
+  parentState?: React.Dispatch<React.SetStateAction<boolean>>
+  titleSize?: string
 }
 
 export const Subscribe = ({
@@ -44,31 +44,31 @@ export const Subscribe = ({
   parentState,
   titleSize,
 }: ISubscribe) => {
-  const { toast } = useNotification();
-  const isMobile = useMobileMode();
-  const [submitting, setSubmitting] = useState(false);
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const { toast } = useNotification()
+  const isMobile = useMobileMode()
+  const [submitting, setSubmitting] = useState(false)
+  const [email, setEmail] = useState('')
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
 
   const handleEmail = (event: any) => {
     if (error) {
-      setError('');
+      setError('')
     }
 
-    setEmail(event.target.value);
-  };
+    setEmail(event.target.value)
+  }
 
   const handleConfirm = async () => {
-    const res = validateEmail(email);
+    const res = validateEmail(email)
     if (!res) {
-      setError('Please enter a valid email address.');
-      return;
+      setError('Please enter a valid email address.')
+      return
     }
 
     try {
-      setSubmitting(true);
-      let records;
+      setSubmitting(true)
+      let records
       if (interest === 'grants') {
         records = [
           {
@@ -78,7 +78,7 @@ export const Subscribe = ({
               fldOWbMeUVrRjXrYu: ['Geyser Grants'],
             },
           },
-        ];
+        ]
       } else {
         records = [
           {
@@ -87,36 +87,36 @@ export const Subscribe = ({
               Type: ['Subscriber'],
             },
           },
-        ];
+        ]
       }
 
-      await createCreatorRecord({ records });
+      await createCreatorRecord({ records })
 
-      setSubmitting(false);
-      setSuccess(true);
+      setSubmitting(false)
+      setSuccess(true)
 
       if (parentState) {
-        parentState(true);
+        parentState(true)
       }
 
       toast({
         title: 'Succesfully subscribed to Geyser',
         status: 'success',
-      });
+      })
     } catch (error) {
       toast({
         title: 'Something went wrong',
         description: 'Please try again',
         status: 'error',
-      });
+      })
     }
-  };
+  }
 
   const handleClose = () => {
-    setSuccess(false);
-    setEmail('');
-    onClose();
-  };
+    setSuccess(false)
+    setEmail('')
+    onClose()
+  }
 
   return (
     <>
@@ -302,5 +302,5 @@ export const Subscribe = ({
         <></>
       )}
     </>
-  );
-};
+  )
+}

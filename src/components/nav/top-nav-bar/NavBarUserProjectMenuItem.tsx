@@ -1,11 +1,11 @@
-import { Container, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Container, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 
-import { Project } from '../../../types/generated/graphql';
-import { ProjectListItemImage } from '../../molecules';
+import { Project } from '../../../types/generated/graphql'
+import { ProjectListItemImage } from '../../molecules'
 
 type Props = {
-  project: Project;
-};
+  project: Project
+}
 
 export const NavBarUserProjectMenuItem = ({ project }: Props) => {
   return (
@@ -37,5 +37,5 @@ export const NavBarUserProjectMenuItem = ({ project }: Props) => {
         </HStack>
       </VStack>
     </Container>
-  );
-};
+  )
+}

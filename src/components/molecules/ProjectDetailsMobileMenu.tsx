@@ -1,18 +1,18 @@
-import { Box, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react'
 
-import { dimensions } from '../../constants';
-import { useMobileMode } from '../../utils';
-import { BoltIcon } from '../icons';
-import { ButtonComponent } from '../ui';
+import { dimensions } from '../../constants'
+import { useMobileMode } from '../../utils'
+import { BoltIcon } from '../icons'
+import { ButtonComponent } from '../ui'
 
 const {
   topNavBar: { mobile: mobileNavBarDimensions },
-} = dimensions;
+} = dimensions
 
 interface IProjectDetailsMobileMenuProps {
-  showMobileMenu?: boolean;
-  fundButtonFunction: any;
-  transitionButtonFunction: any;
+  showMobileMenu?: boolean
+  fundButtonFunction: any
+  transitionButtonFunction: any
 }
 
 export const ProjectDetailsMobileMenu = ({
@@ -20,11 +20,11 @@ export const ProjectDetailsMobileMenu = ({
   fundButtonFunction,
   transitionButtonFunction: handleViewClick,
 }: IProjectDetailsMobileMenuProps) => {
-  const isMobile = useMobileMode();
-  const paddingAmount = 16;
+  const isMobile = useMobileMode()
+  const paddingAmount = 16
 
   if (isMobile === false) {
-    return null;
+    return null
   }
 
   return (
@@ -58,5 +58,5 @@ export const ProjectDetailsMobileMenu = ({
         </ButtonComponent>
       </HStack>
     </Box>
-  );
-};
+  )
+}

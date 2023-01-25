@@ -1,12 +1,12 @@
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react'
 
-import { colors } from '../../../styles';
+import { colors } from '../../../styles'
 
 type Props = {
-  borderRadius?: string;
-  backgroundColor?: string;
-  padding?: string;
-};
+  borderRadius?: string
+  backgroundColor?: string
+  padding?: string
+}
 
 export const ProjectImageListItemPlaceholder = ({
   borderRadius = 'md',
@@ -37,5 +37,5 @@ export const ProjectImageListItemPlaceholder = ({
         />
       </svg>
     </Box>
-  );
-};
+  )
+}

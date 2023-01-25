@@ -7,16 +7,16 @@ import {
   Link,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import { BsArrowRight } from 'react-icons/bs';
-import { Link as ReactRouterLink } from 'react-router-dom';
+} from '@chakra-ui/react'
+import { BsArrowRight } from 'react-icons/bs'
+import { Link as ReactRouterLink } from 'react-router-dom'
 
-import { getPath } from '../../../constants';
-import { useMobileMode } from '../../../utils';
-import { LandingPageProjectsList } from './LandingPageProjectsList';
+import { getPath } from '../../../constants'
+import { useMobileMode } from '../../../utils'
+import { LandingPageProjectsList } from './LandingPageProjectsList'
 
 export const LeaderboardView = () => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   return (
     <Box flexBasis={1} height="full">
       <VStack
@@ -59,5 +59,5 @@ export const LeaderboardView = () => {
         <LandingPageProjectsList />
       </VStack>
     </Box>
-  );
-};
+  )
+}

@@ -1,10 +1,10 @@
-import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
-import { createUseStyles } from 'react-jss';
+import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react'
+import { useEffect, useRef } from 'react'
+import { createUseStyles } from 'react-jss'
 
-import { useListenerState } from '../../hooks';
-import { colors } from '../../styles';
-import { toInt } from '../../utils';
+import { useListenerState } from '../../hooks'
+import { colors } from '../../styles'
+import { toInt } from '../../utils'
 
 const useStyles = createUseStyles({
   inputElement: {
@@ -17,15 +17,15 @@ const useStyles = createUseStyles({
       borderColor: colors.gray300,
     },
   },
-});
+})
 
 interface ITextBoxProps extends TextareaProps {
-  error?: React.ReactNode;
-  supportMarkup?: boolean;
+  error?: React.ReactNode
+  supportMarkup?: boolean
 }
 
-const HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET = 4;
-let minTextToReturnBackTo = 5;
+const HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET = 4
+let minTextToReturnBackTo = 5
 
 export const TextArea = ({
   children,
@@ -36,18 +36,18 @@ export const TextArea = ({
   value,
   ...rest
 }: ITextBoxProps) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const [dynamicHeight, setDynamicHeight] = useListenerState(minHeight);
+  const [dynamicHeight, setDynamicHeight] = useListenerState(minHeight)
 
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
-  const getIntFromHeight = (val: any) => toInt(`${val}`.split('px')[0]);
+  const getIntFromHeight = (val: any) => toInt(`${val}`.split('px')[0])
 
   const handleDynamicHeight = (target: HTMLTextAreaElement) => {
-    const { scrollHeight, offsetHeight, textLength } = target;
+    const { scrollHeight, offsetHeight, textLength } = target
     if (textLength < minTextToReturnBackTo) {
-      setDynamicHeight(minHeight);
+      setDynamicHeight(minHeight)
     }
 
     if (
@@ -57,20 +57,20 @@ export const TextArea = ({
       scrollHeight <= getIntFromHeight(maxHeight)
     ) {
       if (!minTextToReturnBackTo) {
-        minTextToReturnBackTo = textLength - 1;
+        minTextToReturnBackTo = textLength - 1
       }
 
       setDynamicHeight(
         `${scrollHeight + HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET}px`,
-      );
+      )
     }
-  };
+  }
 
   useEffect(() => {
     if (textAreaRef?.current) {
-      handleDynamicHeight(textAreaRef.current);
+      handleDynamicHeight(textAreaRef.current)
     }
-  }, [value]);
+  }, [value])
 
   return (
     <Box width="100%">
@@ -94,5 +94,5 @@ export const TextArea = ({
         )
       ) : null}
     </Box>
-  );
-};
+  )
+}

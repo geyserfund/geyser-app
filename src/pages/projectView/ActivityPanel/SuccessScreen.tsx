@@ -1,27 +1,27 @@
-import { Center, CloseButton, Text, VStack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import ReactConfetti from 'react-confetti';
-import { BiCopyAlt } from 'react-icons/bi';
-import { HiOutlineCheck, HiOutlineSpeakerphone } from 'react-icons/hi';
+import { Center, CloseButton, Text, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import ReactConfetti from 'react-confetti'
+import { BiCopyAlt } from 'react-icons/bi'
+import { HiOutlineCheck, HiOutlineSpeakerphone } from 'react-icons/hi'
 
-import { ButtonComponent } from '../../../components/ui';
-import { BotTwitterUrl } from '../../../constants';
-import { useFundCalc } from '../../../helpers';
-import { IFundForm } from '../../../hooks';
-import { IFundingTx, IProject } from '../../../interfaces';
-import { Satoshis } from '../../../types';
-import { FundingTx, Project } from '../../../types/generated/graphql';
+import { ButtonComponent } from '../../../components/ui'
+import { BotTwitterUrl } from '../../../constants'
+import { useFundCalc } from '../../../helpers'
+import { IFundForm } from '../../../hooks'
+import { IFundingTx, IProject } from '../../../interfaces'
+import { Satoshis } from '../../../types'
+import { FundingTx, Project } from '../../../types/generated/graphql'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
-} from '../components/ContributionInfoBox';
+} from '../components/ContributionInfoBox'
 
 type Props = {
-  fundingState: IFundForm;
-  fundingTx: FundingTx | IFundingTx;
-  project: Project | IProject;
-  handleCloseButton: () => void;
-};
+  fundingState: IFundForm
+  fundingTx: FundingTx | IFundingTx
+  project: Project | IProject
+  handleCloseButton: () => void
+}
 
 export const SuccessScreen = ({
   fundingState,
@@ -29,22 +29,22 @@ export const SuccessScreen = ({
   project,
   handleCloseButton,
 }: Props) => {
-  const [hasCopiedProjectLink, setCopy] = useState(false);
+  const [hasCopiedProjectLink, setCopy] = useState(false)
 
-  const { getTotalAmount } = useFundCalc(fundingState);
+  const { getTotalAmount } = useFundCalc(fundingState)
 
   const shareProjectWithFriends = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopy(true);
-  };
+    navigator.clipboard.writeText(window.location.href)
+    setCopy(true)
+  }
 
   useEffect(() => {
     if (hasCopiedProjectLink) {
       setTimeout(() => {
-        setCopy(false);
-      }, 2000);
+        setCopy(false)
+      }, 2000)
     }
-  }, [hasCopiedProjectLink]);
+  }, [hasCopiedProjectLink])
 
   return (
     <VStack
@@ -128,5 +128,5 @@ export const SuccessScreen = ({
         </ButtonComponent>
       </VStack>
     </VStack>
-  );
-};
+  )
+}

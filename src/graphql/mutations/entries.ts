@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const MUTATION_CREATE_ENTRY = gql`
   mutation Mutation($input: CreateEntryInput!) {
@@ -19,7 +19,7 @@ export const MUTATION_CREATE_ENTRY = gql`
       }
     }
   }
-`;
+`
 
 export const MUTATION_UPDATE_ENTRY = gql`
   mutation UpdateEntry($input: UpdateEntryInput!) {
@@ -40,7 +40,7 @@ export const MUTATION_UPDATE_ENTRY = gql`
       }
     }
   }
-`;
+`
 
 export const MUTATION_PUBLISH_ENTRY = gql`
   mutation Mutation($id: BigInt!) {
@@ -61,7 +61,7 @@ export const MUTATION_PUBLISH_ENTRY = gql`
       }
     }
   }
-`;
+`
 
 export const MUTATION_DELETE_ENTRY = gql`
   mutation DeleteEntry($deleteEntryId: BigInt!) {
@@ -70,4 +70,4 @@ export const MUTATION_DELETE_ENTRY = gql`
       title
     }
   }
-`;
+`

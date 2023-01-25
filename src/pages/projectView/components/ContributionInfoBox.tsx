@@ -8,21 +8,21 @@ import {
   Text,
   Tooltip,
   VStack,
-} from '@chakra-ui/react';
-import { BsInfoCircle } from 'react-icons/bs';
-import { createUseStyles } from 'react-jss';
+} from '@chakra-ui/react'
+import { BsInfoCircle } from 'react-icons/bs'
+import { createUseStyles } from 'react-jss'
 
 import {
   AnonymousAvatar,
   SatoshiAmount,
   SectionTitle,
-} from '../../../components/ui';
-import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../constants';
-import { useFundCalc } from '../../../helpers/fundingCalculation';
-import { IFundForm } from '../../../hooks';
-import { IBadge } from '../../../interfaces';
-import { Project, ProjectReward } from '../../../types/generated/graphql';
-import { Satoshis } from '../../../types/types';
+} from '../../../components/ui'
+import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../constants'
+import { useFundCalc } from '../../../helpers/fundingCalculation'
+import { IFundForm } from '../../../hooks'
+import { IBadge } from '../../../interfaces'
+import { Project, ProjectReward } from '../../../types/generated/graphql'
+import { Satoshis } from '../../../types/types'
 
 export enum ContributionInfoBoxVersion {
   NEUTRAL = 'neutral',
@@ -31,40 +31,40 @@ export enum ContributionInfoBoxVersion {
 }
 
 type Props = HTMLChakraProps<'div'> & {
-  project: Project;
-  contributionAmount: Satoshis;
-  referenceCode?: string;
-  isFunderAnonymous?: boolean;
-  showGeyserFee: boolean;
-  funderEmail?: string;
-  funderUsername?: string;
-  funderAvatarURL?: string;
-  rewardsEarned?: { [rewardID: string]: number };
-  badgesEarned?: IBadge[];
-  formState: IFundForm;
-  version: ContributionInfoBoxVersion;
-};
+  project: Project
+  contributionAmount: Satoshis
+  referenceCode?: string
+  isFunderAnonymous?: boolean
+  showGeyserFee: boolean
+  funderEmail?: string
+  funderUsername?: string
+  funderAvatarURL?: string
+  rewardsEarned?: { [rewardID: string]: number }
+  badgesEarned?: IBadge[]
+  formState: IFundForm
+  version: ContributionInfoBoxVersion
+}
 
 const useStyles = createUseStyles({
   divider: {
     borderColor: 'white',
     mixBlendMode: 'screen',
   },
-});
+})
 
 const ContributionInfoBoxDivider = ({
   version,
 }: {
-  version: ContributionInfoBoxVersion;
+  version: ContributionInfoBoxVersion
 }) => {
-  const styles = useStyles();
+  const styles = useStyles()
 
   if (version === ContributionInfoBoxVersion.PRIMARY) {
-    return <Divider className={styles.divider} orientation="horizontal" />;
+    return <Divider className={styles.divider} orientation="horizontal" />
   }
 
-  return <Divider />;
-};
+  return <Divider />
+}
 
 export const ContributionInfoBox = ({
   project,
@@ -104,27 +104,27 @@ export const ContributionInfoBox = ({
 
   const rewards = project.rewards?.filter(
     (reward) => reward !== null,
-  ) as ProjectReward[];
-  const hasRewards = rewards && rewards.length > 0;
+  ) as ProjectReward[]
+  const hasRewards = rewards && rewards.length > 0
   const hasSelectedRewards =
     formState.rewardsByIDAndCount &&
-    Object.entries(formState.rewardsByIDAndCount).length > 0;
+    Object.entries(formState.rewardsByIDAndCount).length > 0
 
   const hadOwnNode = () => {
-    const currentProject = project.wallets && project.wallets[0];
-    const { connectionDetails } = currentProject;
+    const currentProject = project.wallets && project.wallets[0]
+    const { connectionDetails } = currentProject
 
     switch (connectionDetails.__typename) {
       case 'LightningAddressConnectionDetails':
-        return false;
+        return false
       default:
-        return true;
+        return true
     }
-  };
+  }
 
-  const isNoFees = noFeeProjects.includes(project.name) || hadOwnNode();
+  const isNoFees = noFeeProjects.includes(project.name) || hadOwnNode()
 
-  const { getTotalAmount } = useFundCalc(formState);
+  const { getTotalAmount } = useFundCalc(formState)
   return (
     <VStack
       padding={2}
@@ -228,7 +228,7 @@ export const ContributionInfoBox = ({
             <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
               {Object.entries(formState.rewardsByIDAndCount!).map(
                 ([key, value]) => {
-                  const reward = rewards!.find(({ id }) => id === key);
+                  const reward = rewards!.find(({ id }) => id === key)
                   if (reward) {
                     return (
                       <Text
@@ -239,7 +239,7 @@ export const ContributionInfoBox = ({
                       >
                         {value} x {reward.name}
                       </Text>
-                    );
+                    )
                   }
                 },
               )}
@@ -310,5 +310,5 @@ export const ContributionInfoBox = ({
         </HStack>
       </HStack>
     </VStack>
-  );
-};
+  )
+}

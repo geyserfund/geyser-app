@@ -1,2 +1,2 @@
-export * from './ProjectContext';
-export * from './ProjectDetailsViewContainer';
+export * from './ProjectContext'
+export * from './ProjectDetailsViewContainer'

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const MUTATION_CREATE_PROJECT = gql`
   mutation CreateProject($input: CreateProjectInput!) {
@@ -23,7 +23,7 @@ export const MUTATION_CREATE_PROJECT = gql`
       }
     }
   }
-`;
+`
 
 export const MUTATION_UPDATE_PROJECT = gql`
   mutation UpdateProject($input: UpdateProjectInput!) {
@@ -37,7 +37,7 @@ export const MUTATION_UPDATE_PROJECT = gql`
       type
     }
   }
-`;
+`
 
 export const MUTATION_CREATE_PROJECT_REWARD = gql`
   mutation CreateProjectReward($input: CreateProjectRewardInput) {
@@ -53,7 +53,7 @@ export const MUTATION_CREATE_PROJECT_REWARD = gql`
       sold
     }
   }
-`;
+`
 
 export const MUTATION_UPDATE_PROJECT_REWARD = gql`
   mutation UpdateProjectReward($input: UpdateProjectRewardInput) {
@@ -69,7 +69,7 @@ export const MUTATION_UPDATE_PROJECT_REWARD = gql`
       sold
     }
   }
-`;
+`
 
 export const MUTATION_CREATE_PROJECT_MILESTONE = gql`
   mutation CreateProjectMilestone($input: CreateProjectMilestoneInput) {
@@ -80,7 +80,7 @@ export const MUTATION_CREATE_PROJECT_MILESTONE = gql`
       amount
     }
   }
-`;
+`
 
 export const MUTATION_UPDATE_PROJECT_MILESTONE = gql`
   mutation UpdateProjectMilestone($input: UpdateProjectMilestoneInput) {
@@ -91,10 +91,10 @@ export const MUTATION_UPDATE_PROJECT_MILESTONE = gql`
       amount
     }
   }
-`;
+`
 
 export const MUTATION_DELETE_PROJECT_MILESTONE = gql`
   mutation DeleteProjectMilestone($projectMilestoneId: BigInt!) {
     deleteProjectMilestone(projectMilestoneId: $projectMilestoneId)
   }
-`;
+`

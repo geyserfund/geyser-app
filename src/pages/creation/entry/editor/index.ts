@@ -1,2 +1,2 @@
-export * from './ProjectEntryEditor';
-export * from './EntryCreateEdit';
+export * from './ProjectEntryEditor'
+export * from './EntryCreateEdit'

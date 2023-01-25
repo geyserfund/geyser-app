@@ -1,23 +1,23 @@
-import { CloseIcon } from '@chakra-ui/icons';
-import { Box, HStack, Text, VStack } from '@chakra-ui/react';
-import { BiPencil } from 'react-icons/bi';
+import { CloseIcon } from '@chakra-ui/icons'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { BiPencil } from 'react-icons/bi'
 
-import { TRewards } from '../../../pages/creation/projectCreate/types';
-import { colors } from '../../../styles';
-import { ProjectReward } from '../../../types/generated/graphql';
+import { TRewards } from '../../../pages/creation/projectCreate/types'
+import { colors } from '../../../styles'
+import { ProjectReward } from '../../../types/generated/graphql'
 import {
   ICard,
   IconButtonComponent,
   ImageWithReload,
   SatoshiAmount,
-} from '../../ui';
+} from '../../ui'
 
 type Props = ICard & {
-  reward: TRewards | ProjectReward;
-  isSatoshi: boolean;
-  handleEdit?: any;
-  handleRemove?: any;
-};
+  reward: TRewards | ProjectReward
+  isSatoshi: boolean
+  handleEdit?: any
+  handleRemove?: any
+}
 
 export const RewardCard = ({
   reward,
@@ -108,5 +108,5 @@ export const RewardCard = ({
         </Text>
       </VStack>
     </Box>
-  );
-};
+  )
+}

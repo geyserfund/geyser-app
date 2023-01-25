@@ -1,4 +1,4 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client'
 import {
   Box,
   Center,
@@ -14,51 +14,51 @@ import {
   MenuList,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { RiSortDesc } from 'react-icons/ri';
+} from '@chakra-ui/react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { RiSortDesc } from 'react-icons/ri'
 
-import { StickToTop } from '../../../components/layouts';
-import { H3 } from '../../../components/typography';
-import { AlertBox } from '../../../components/ui';
-import Loader from '../../../components/ui/Loader';
-import { ID } from '../../../constants/components';
-import { QUERY_PROJECTS } from '../../../graphql';
-import { ScrollInvoke } from '../../../helpers';
-import { useListenerState } from '../../../hooks';
+import { StickToTop } from '../../../components/layouts'
+import { H3 } from '../../../components/typography'
+import { AlertBox } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { ID } from '../../../constants/components'
+import { QUERY_PROJECTS } from '../../../graphql'
+import { ScrollInvoke } from '../../../helpers'
+import { useListenerState } from '../../../hooks'
 import {
   OrderByOptions,
   PaginationInput,
   Project,
   ProjectsGetQueryInput,
   ProjectsOrderByInput,
-} from '../../../types/generated/graphql';
-import { useMobileMode } from '../../../utils';
-import { ProjectDiscoveryPageGridItems } from './ProjectDiscoveryPageGridItems';
+} from '../../../types/generated/graphql'
+import { useMobileMode } from '../../../utils'
+import { ProjectDiscoveryPageGridItems } from './ProjectDiscoveryPageGridItems'
 
 type ResponseData = {
   projects: {
-    projects: Project[];
-  };
-};
+    projects: Project[]
+  }
+}
 
 type QueryVariables = {
-  input: ProjectsGetQueryInput;
-};
+  input: ProjectsGetQueryInput
+}
 
 export const ProjectDiscoveryPageGridSection = () => {
-  const pagingItemLimit = 12;
+  const pagingItemLimit = 12
 
   const [orderByOption, setOrderByOption] = useState<ProjectsOrderByInput>({
     createdAt: OrderByOptions.Desc,
-  });
+  })
 
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
   const handleOrderBySelectionChanged = async (
     newOption: ProjectsOrderByInput,
   ) => {
-    setOrderByOption(newOption);
+    setOrderByOption(newOption)
 
     await getProjects({
       variables: {
@@ -67,12 +67,12 @@ export const ProjectDiscoveryPageGridSection = () => {
         },
       },
       fetchPolicy: 'no-cache',
-    });
-  };
+    })
+  }
 
-  const [isLoadingMore, setIsLoadingMore] = useListenerState(false);
+  const [isLoadingMore, setIsLoadingMore] = useListenerState(false)
   const [isShowingAllProjects, setIsShowingAllProjects] =
-    useListenerState(false);
+    useListenerState(false)
 
   const [
     getProjects,
@@ -86,12 +86,12 @@ export const ProjectDiscoveryPageGridSection = () => {
         orderBy: [orderByOption],
       },
     },
-  });
+  })
 
   const paginationInput: PaginationInput = useMemo(() => {
     const options: PaginationInput = {
       take: pagingItemLimit,
-    };
+    }
 
     if ((projectsResponseData?.projects.projects ?? []).length > 0) {
       options.cursor = {
@@ -100,18 +100,18 @@ export const ProjectDiscoveryPageGridSection = () => {
             (projectsResponseData?.projects.projects ?? []).length - 1
           ].id,
         ),
-      };
+      }
     }
 
-    return options;
-  }, [projectsResponseData?.projects.projects, pagingItemLimit]);
+    return options
+  }, [projectsResponseData?.projects.projects, pagingItemLimit])
 
   const projects: Project[] = useMemo(() => {
-    return projectsResponseData?.projects.projects ?? [];
-  }, [projectsResponseData?.projects.projects]);
+    return projectsResponseData?.projects.projects ?? []
+  }, [projectsResponseData?.projects.projects])
 
   const handleLoadMoreButtonTapped = async () => {
-    setIsLoadingMore(true);
+    setIsLoadingMore(true)
 
     await fetchMore({
       variables: {
@@ -122,7 +122,7 @@ export const ProjectDiscoveryPageGridSection = () => {
       },
       updateQuery(_previousResult, { fetchMoreResult }) {
         if (fetchMoreResult.projects.projects.length < pagingItemLimit) {
-          setIsShowingAllProjects(true);
+          setIsShowingAllProjects(true)
         }
 
         // return all data and let our `InMemoryCache` type policies handle
@@ -131,16 +131,16 @@ export const ProjectDiscoveryPageGridSection = () => {
           projects: {
             projects: [...projects, ...fetchMoreResult.projects.projects],
           },
-        };
+        }
       },
-    });
+    })
 
-    setIsLoadingMore(false);
-  };
+    setIsLoadingMore(false)
+  }
 
   useEffect(() => {
-    getProjects();
-  }, []);
+    getProjects()
+  }, [])
 
   const ErrorView = useCallback(
     () => (
@@ -162,7 +162,7 @@ export const ProjectDiscoveryPageGridSection = () => {
       </Container>
     ),
     [],
-  );
+  )
 
   const PageLoadingView = useCallback(
     () => (
@@ -179,7 +179,7 @@ export const ProjectDiscoveryPageGridSection = () => {
       </Container>
     ),
     [],
-  );
+  )
 
   const EmptyStateView = useCallback(
     () => (
@@ -202,7 +202,7 @@ export const ProjectDiscoveryPageGridSection = () => {
       </Container>
     ),
     [],
-  );
+  )
 
   return (
     <Box
@@ -269,12 +269,12 @@ export const ProjectDiscoveryPageGridSection = () => {
                       onSelect={() => {
                         handleOrderBySelectionChanged({
                           createdAt: OrderByOptions.Desc,
-                        });
+                        })
                       }}
                       onClick={() => {
                         handleOrderBySelectionChanged({
                           createdAt: OrderByOptions.Desc,
-                        });
+                        })
                       }}
                     >
                       Newest Projects
@@ -285,12 +285,12 @@ export const ProjectDiscoveryPageGridSection = () => {
                       onSelect={() => {
                         handleOrderBySelectionChanged({
                           createdAt: OrderByOptions.Asc,
-                        });
+                        })
                       }}
                       onClick={() => {
                         handleOrderBySelectionChanged({
                           createdAt: OrderByOptions.Asc,
-                        });
+                        })
                       }}
                     >
                       Oldest Projects
@@ -301,12 +301,12 @@ export const ProjectDiscoveryPageGridSection = () => {
                       onSelect={() => {
                         handleOrderBySelectionChanged({
                           balance: OrderByOptions.Desc,
-                        });
+                        })
                       }}
                       onClick={() => {
                         handleOrderBySelectionChanged({
                           balance: OrderByOptions.Desc,
-                        });
+                        })
                       }}
                     >
                       Amount Funded
@@ -351,5 +351,5 @@ export const ProjectDiscoveryPageGridSection = () => {
         </Grid>
       </Center>
     </Box>
-  );
-};
+  )
+}

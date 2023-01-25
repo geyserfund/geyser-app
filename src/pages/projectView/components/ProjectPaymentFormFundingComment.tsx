@@ -1,4 +1,4 @@
-import { CloseIcon, SearchIcon } from '@chakra-ui/icons';
+import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -15,22 +15,22 @@ import {
   ModalOverlay,
   useBoolean,
   useDisclosure,
-} from '@chakra-ui/react';
-import { GiphyFetch } from '@giphy/js-fetch-api';
-import { IGif } from '@giphy/js-types';
-import { Grid } from '@giphy/react-components';
-import { useEffect, useState } from 'react';
+} from '@chakra-ui/react'
+import { GiphyFetch } from '@giphy/js-fetch-api'
+import { IGif } from '@giphy/js-types'
+import { Grid } from '@giphy/react-components'
+import { useEffect, useState } from 'react'
 
-import { GifIcon } from '../../../components/icons';
-import { TextArea } from '../../../components/ui';
-import { VITE_APP_GIPHY_API_KEY } from '../../../constants';
-import { useMobileMode } from '../../../utils';
+import { GifIcon } from '../../../components/icons'
+import { TextArea } from '../../../components/ui'
+import { VITE_APP_GIPHY_API_KEY } from '../../../constants'
+import { useMobileMode } from '../../../utils'
 
 type Props = HTMLChakraProps<'div'> & {
-  comment: string;
-  setTarget: (_: any) => void;
-  setFormState: any;
-};
+  comment: string
+  setTarget: (_: any) => void
+  setFormState: any
+}
 
 export const ProjectPaymentFormFundingComment = ({
   comment,
@@ -38,31 +38,31 @@ export const ProjectPaymentFormFundingComment = ({
   setFormState,
   ...rest
 }: Props) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
   const {
     isOpen: isGIFModalOpen,
     onOpen: onGIFModalOpened,
     onClose: onGIFModalClosed,
-  } = useDisclosure();
+  } = useDisclosure()
 
-  const [giphyFetch, setGiphyFetch] = useState<GiphyFetch | any>();
-  const [gifSearch, setGifSearch] = useState('bitcoin');
-  const [selectedGIF, setSelectedGIF] = useState<IGif | null>(null);
+  const [giphyFetch, setGiphyFetch] = useState<GiphyFetch | any>()
+  const [gifSearch, setGifSearch] = useState('bitcoin')
+  const [selectedGIF, setSelectedGIF] = useState<IGif | null>(null)
 
   const [isHoveringOverGIFButton, setIsHoveringOverGIFButton] =
-    useBoolean(false);
-  const [focus, setFocus] = useState(true);
+    useBoolean(false)
+  const [focus, setFocus] = useState(true)
 
   useEffect(() => {
     if (VITE_APP_GIPHY_API_KEY) {
-      const giphy = new GiphyFetch(VITE_APP_GIPHY_API_KEY);
-      setGiphyFetch(giphy);
+      const giphy = new GiphyFetch(VITE_APP_GIPHY_API_KEY)
+      setGiphyFetch(giphy)
     }
-  }, []);
+  }, [])
 
   const fetchGifs = (offset: number) =>
-    giphyFetch.search(gifSearch, { offset, sort: 'relevant', limit: 9 });
+    giphyFetch.search(gifSearch, { offset, sort: 'relevant', limit: 9 })
 
   return (
     <Box {...rest}>
@@ -97,8 +97,8 @@ export const ProjectPaymentFormFundingComment = ({
               onMouseEnter={setIsHoveringOverGIFButton.on}
               onMouseLeave={setIsHoveringOverGIFButton.off}
               onClick={() => {
-                setSelectedGIF(null);
-                setIsHoveringOverGIFButton.off();
+                setSelectedGIF(null)
+                setIsHoveringOverGIFButton.off()
               }}
             />
           ) : (
@@ -111,8 +111,8 @@ export const ProjectPaymentFormFundingComment = ({
 
       <Modal
         onClose={() => {
-          setGifSearch('bitcoin');
-          onGIFModalClosed();
+          setGifSearch('bitcoin')
+          onGIFModalClosed()
         }}
         isOpen={isGIFModalOpen}
         isCentered
@@ -152,9 +152,9 @@ export const ProjectPaymentFormFundingComment = ({
                   hideAttribution={true}
                   key={gifSearch}
                   onGifClick={(gif: any) => {
-                    setSelectedGIF(gif);
-                    setFormState('media', gif.images.original.webp);
-                    onGIFModalClosed();
+                    setSelectedGIF(gif)
+                    setFormState('media', gif.images.original.webp)
+                    onGIFModalClosed()
                   }}
                 />
               </Box>
@@ -163,5 +163,5 @@ export const ProjectPaymentFormFundingComment = ({
         </ModalContent>
       </Modal>
     </Box>
-  );
-};
+  )
+}

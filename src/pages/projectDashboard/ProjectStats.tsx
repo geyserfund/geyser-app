@@ -1,16 +1,13 @@
-import { useQuery } from '@apollo/client';
-import { GridItem, HStack, Text, VStack } from '@chakra-ui/react';
-import { createUseStyles } from 'react-jss';
+import { useQuery } from '@apollo/client'
+import { GridItem, HStack, Text, VStack } from '@chakra-ui/react'
+import { createUseStyles } from 'react-jss'
 
-import { SatoshiAmount } from '../../components/ui';
-import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql';
-import { colors } from '../../styles';
-import { fonts } from '../../styles';
-import {
-  Project,
-  UniqueProjectQueryInput,
-} from '../../types/generated/graphql';
-import { numberWithCommas, toInt } from '../../utils';
+import { SatoshiAmount } from '../../components/ui'
+import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
+import { colors } from '../../styles'
+import { fonts } from '../../styles'
+import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
+import { numberWithCommas, toInt } from '../../utils'
 
 const useStyles = createUseStyles({
   statBox: {
@@ -27,37 +24,37 @@ const useStyles = createUseStyles({
     fontSize: '16px',
     color: colors.neutral600,
   },
-});
+})
 
 type ResponseData = {
-  project: Project;
-};
+  project: Project
+}
 
 type QueryVariables = {
-  where: UniqueProjectQueryInput;
-};
+  where: UniqueProjectQueryInput
+}
 
 export const ProjectStats = ({ project }: { project: Project }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   const { loading, data } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_DASHBOARD_DATA,
     {
       variables: { where: { id: toInt(project.id) } },
     },
-  );
+  )
 
-  const visitorsCount = data?.project?.statistics?.totalVisitors || 0;
+  const visitorsCount = data?.project?.statistics?.totalVisitors || 0
 
   const getFundersToVisitorsPercentage = (): number => {
     if (visitorsCount === 0) {
-      return 100;
+      return 100
     }
 
-    const fundersCount = project.fundersCount || 0;
+    const fundersCount = project.fundersCount || 0
 
-    return (fundersCount / visitorsCount) * 100;
-  };
+    return (fundersCount / visitorsCount) * 100
+  }
 
   return (
     <>
@@ -115,5 +112,5 @@ export const ProjectStats = ({ project }: { project: Project }) => {
         ></VStack>
       </GridItem>
     </>
-  );
-};
+  )
+}

@@ -1,29 +1,29 @@
-import { useQuery } from '@apollo/client';
-import { List, ListItem } from '@chakra-ui/react';
+import { useQuery } from '@apollo/client'
+import { List, ListItem } from '@chakra-ui/react'
 
-import { AlertBox } from '../../../components/ui';
-import Loader from '../../../components/ui/Loader';
-import { QUERY_PROJECTS } from '../../../graphql';
+import { AlertBox } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { QUERY_PROJECTS } from '../../../graphql'
 import {
   OrderByOptions,
   Project,
   ProjectsGetQueryInput,
-} from '../../../types/generated/graphql';
-import { LandingPageProjectsListItem } from './LandingPageProjectsListItem';
+} from '../../../types/generated/graphql'
+import { LandingPageProjectsListItem } from './LandingPageProjectsListItem'
 
 type Props = {
-  itemLimit?: number;
-};
+  itemLimit?: number
+}
 
 type ResponseData = {
   projects: {
-    projects: Project[];
-  };
-};
+    projects: Project[]
+  }
+}
 
 type QueryVariables = {
-  input: ProjectsGetQueryInput;
-};
+  input: ProjectsGetQueryInput
+}
 
 export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
   const {
@@ -40,7 +40,7 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
       },
     },
     fetchPolicy: 'no-cache',
-  });
+  })
 
   if (error) {
     return (
@@ -50,14 +50,14 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
         title="An error occurred while attempting to fetch projects."
         message="Please try refreshing the page. You may also want to contact support if the problem persists."
       />
-    );
+    )
   }
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader />
   }
 
-  const projects = projectsResponseData?.projects.projects || [];
+  const projects = projectsResponseData?.projects.projects || []
 
   if (projects.length === 0) {
     return (
@@ -68,7 +68,7 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
         title="There are currently no projects."
         message="Please try refreshing the page. You may also want to contact support if the problem persists."
       />
-    );
+    )
   }
 
   return (
@@ -83,5 +83,5 @@ export const LandingPageProjectsList = ({ itemLimit = 14 }: Props) => {
         ))}
       </List>
     </>
-  );
-};
+  )
+}

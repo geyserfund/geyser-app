@@ -1,38 +1,38 @@
-import { useQuery } from '@apollo/client';
-import { HStack, Text, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
-import { BiPencil } from 'react-icons/bi';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { useQuery } from '@apollo/client'
+import { HStack, Text, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
+import { BiPencil } from 'react-icons/bi'
+import { Navigate, useNavigate, useParams } from 'react-router'
 
-import { IconButtonComponent } from '../../../components/ui';
-import Loader from '../../../components/ui/Loader';
-import { getPath } from '../../../constants';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
-import { colors } from '../../../styles';
+import { IconButtonComponent } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { getPath } from '../../../constants'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
+import { colors } from '../../../styles'
 import {
   Project,
   UniqueProjectQueryInput,
-} from '../../../types/generated/graphql';
-import { toInt, useNotification } from '../../../utils';
-import { ProjectCreationWalletConnectionForm } from '.';
-import { ProjectCreateLayout } from './components/ProjectCreateLayout';
-import { TNodeInput } from './types';
+} from '../../../types/generated/graphql'
+import { toInt, useNotification } from '../../../utils'
+import { ProjectCreationWalletConnectionForm } from '.'
+import { ProjectCreateLayout } from './components/ProjectCreateLayout'
+import { TNodeInput } from './types'
 
 type ResponseDataForGetProject = {
-  project: Project;
-};
+  project: Project
+}
 
 type QueryVariablesForGetProject = {
-  where: UniqueProjectQueryInput;
-};
+  where: UniqueProjectQueryInput
+}
 
 export const ProjectCreationWalletConnectionPage = () => {
-  const navigate = useNavigate();
-  const params = useParams<{ projectId: string }>();
-  const { toast } = useNotification();
+  const navigate = useNavigate()
+  const params = useParams<{ projectId: string }>()
+  const { toast } = useNotification()
 
-  const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined);
-  const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false);
+  const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined)
+  const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false)
 
   const {
     loading: isGetProjectLoading,
@@ -46,29 +46,29 @@ export const ProjectCreationWalletConnectionPage = () => {
         toast({
           title: 'Error fetching project',
           status: 'error',
-        });
+        })
       },
     },
-  );
+  )
 
   const handleBackButtonTapped = () => {
-    navigate(-1);
-  };
+    navigate(-1)
+  }
 
   const handleProjectLaunch = async () => {
-    navigate(getPath('project', responseData?.project.name));
-  };
+    navigate(getPath('project', responseData?.project.name))
+  }
 
   const handleSavingAsDraft = async () => {
-    navigate(getPath('project', responseData?.project.name));
-  };
+    navigate(getPath('project', responseData?.project.name))
+  }
 
   if (isGetProjectLoading) {
-    return <Loader />;
+    return <Loader />
   }
 
   if (projectLoadingError || !responseData || !responseData.project) {
-    return <Navigate to={getPath('notFound')} />;
+    return <Navigate to={getPath('notFound')} />
   }
 
   const sideView = (
@@ -105,7 +105,7 @@ export const ProjectCreationWalletConnectionPage = () => {
         </VStack>
       )}
     </VStack>
-  );
+  )
 
   return (
     <ProjectCreateLayout
@@ -123,5 +123,5 @@ export const ProjectCreationWalletConnectionPage = () => {
         setNodeInput={setNodeInput}
       />
     </ProjectCreateLayout>
-  );
-};
+  )
+}

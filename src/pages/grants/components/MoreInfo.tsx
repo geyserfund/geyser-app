@@ -1,11 +1,11 @@
-import { Box, Link, Text, TextProps } from '@chakra-ui/react';
+import { Box, Link, Text, TextProps } from '@chakra-ui/react'
 
-import shareicon from '../../../assets/shareico.svg';
-import { GrantsFAQUrl } from '../../../constants';
-import { fonts } from '../../../styles';
+import shareicon from '../../../assets/shareico.svg'
+import { GrantsFAQUrl } from '../../../constants'
+import { fonts } from '../../../styles'
 
 interface MoreInfoProps {
-  titleProps?: TextProps;
+  titleProps?: TextProps
 }
 
 export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
@@ -60,5 +60,5 @@ export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
         </Box>
       </Box>
     </>
-  );
-};
+  )
+}

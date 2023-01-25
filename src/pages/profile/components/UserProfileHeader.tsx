@@ -1,4 +1,4 @@
-import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons'
 import {
   Avatar,
   Button,
@@ -12,28 +12,28 @@ import {
   VStack,
   Wrap,
   WrapItem,
-} from '@chakra-ui/react';
-import { BsLightningChargeFill } from 'react-icons/bs';
+} from '@chakra-ui/react'
+import { BsLightningChargeFill } from 'react-icons/bs'
 
-import { useAuthContext } from '../../../context';
-import { User } from '../../../types/generated/graphql';
-import { getRandomOrb } from '../../../utils';
-import { ExternalAccountLinkItem } from '.';
+import { useAuthContext } from '../../../context'
+import { User } from '../../../types/generated/graphql'
+import { getRandomOrb } from '../../../utils'
+import { ExternalAccountLinkItem } from '.'
 
 type Props = {
-  profileUser: User;
-  onProjectCreateSelected?: () => void;
-};
+  profileUser: User
+  onProjectCreateSelected?: () => void
+}
 
 export const UserProfilePageHeader = ({
   profileUser,
   onProjectCreateSelected,
 }: Props) => {
-  const { user: currentAppUser, loginOnOpen } = useAuthContext();
+  const { user: currentAppUser, loginOnOpen } = useAuthContext()
 
-  const isUserViewingOwnProfile = currentAppUser.id === profileUser.id;
-  const shouldShowCreationButton = isUserViewingOwnProfile;
-  const shouldShowSettingsButton = isUserViewingOwnProfile;
+  const isUserViewingOwnProfile = currentAppUser.id === profileUser.id
+  const shouldShowCreationButton = isUserViewingOwnProfile
+  const shouldShowSettingsButton = isUserViewingOwnProfile
 
   return (
     <VStack width="100%" spacing={4}>
@@ -99,7 +99,7 @@ export const UserProfilePageHeader = ({
                   <ExternalAccountLinkItem key={account.id} account={account} />
                 )}
               </WrapItem>
-            );
+            )
           }
         })}
 
@@ -116,5 +116,5 @@ export const UserProfilePageHeader = ({
         ) : null}
       </Wrap>
     </VStack>
-  );
-};
+  )
+}

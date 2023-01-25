@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client'
 import {
   HStack,
   Input,
@@ -7,51 +7,51 @@ import {
   Link,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { AiOutlineUpload } from 'react-icons/ai';
-import { BiInfoCircle } from 'react-icons/bi';
-import { createUseStyles } from 'react-jss';
-import { useNavigate, useParams } from 'react-router';
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { AiOutlineUpload } from 'react-icons/ai'
+import { BiInfoCircle } from 'react-icons/bi'
+import { createUseStyles } from 'react-jss'
+import { useNavigate, useParams } from 'react-router'
 
-import { CharacterLimitError } from '../../../components/errors';
-import { FileUpload } from '../../../components/molecules';
-import { Body2 } from '../../../components/typography';
+import { CharacterLimitError } from '../../../components/errors'
+import { FileUpload } from '../../../components/molecules'
+import { Body2 } from '../../../components/typography'
 import {
   ButtonComponent,
   Card,
   ImageWithReload,
   TextArea,
   TextInputBox,
-} from '../../../components/ui';
-import { commonMarkdownUrl, getPath } from '../../../constants';
-import { UserValidations } from '../../../constants/validations';
-import { ProjectValidations } from '../../../constants/validations/project';
-import { useAuthContext } from '../../../context';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
+} from '../../../components/ui'
+import { commonMarkdownUrl, getPath } from '../../../constants'
+import { UserValidations } from '../../../constants/validations'
+import { ProjectValidations } from '../../../constants/validations/project'
+import { useAuthContext } from '../../../context'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import {
   MUTATION_CREATE_PROJECT,
   MUTATION_UPDATE_PROJECT,
-} from '../../../graphql/mutations';
-import { colors } from '../../../styles';
-import { Project } from '../../../types/generated/graphql';
+} from '../../../graphql/mutations'
+import { colors } from '../../../styles'
+import { Project } from '../../../types/generated/graphql'
 import {
   MarkDown,
   toInt,
   useNotification,
   validateEmail,
   validLightningAddress,
-} from '../../../utils';
-import { ProjectCreateLayout } from './components/ProjectCreateLayout';
-import { ProjectCreationVariables, ProjectUpdateVariables } from './types';
+} from '../../../utils'
+import { ProjectCreateLayout } from './components/ProjectCreateLayout'
+import { ProjectCreationVariables, ProjectUpdateVariables } from './types'
 
 type CreateProjectMutationResponseData = {
-  createProject: Project | null;
-};
+  createProject: Project | null
+}
 
 type UpdateProjectMutationResponseData = {
-  updateProject: Project | null;
-};
+  updateProject: Project | null
+}
 
 const useStyles = createUseStyles({
   backIcon: {
@@ -61,18 +61,18 @@ const useStyles = createUseStyles({
     width: '100%',
     alignItems: 'flex-start',
   },
-});
+})
 
 export const ProjectCreate = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const params = useParams<{ projectId: string }>();
-  const isEditingExistingProject = Boolean(params.projectId);
+  const params = useParams<{ projectId: string }>()
+  const isEditingExistingProject = Boolean(params.projectId)
 
-  const navigate = useNavigate();
-  const { toast } = useNotification();
+  const navigate = useNavigate()
+  const { toast } = useNotification()
 
-  const { user, setUser } = useAuthContext();
+  const { user, setUser } = useAuthContext()
 
   const [form, setForm] = useState<ProjectCreationVariables>({
     title: '',
@@ -80,9 +80,9 @@ export const ProjectCreate = () => {
     image: undefined,
     email: '',
     name: '',
-  });
+  })
 
-  const [formError, setFormError] = useState<{ [key: string]: any }>({});
+  const [formError, setFormError] = useState<{ [key: string]: any }>({})
 
   const [createProject, { loading: createLoading }] = useMutation<
     CreateProjectMutationResponseData,
@@ -95,18 +95,18 @@ export const ProjectCreate = () => {
             project: createdProject,
             owner: createdProject.owners[0],
           },
-        ]);
+        ])
 
         setUser({
           ...user,
           ...{
             ownerOf: newOwnershipInfo,
           },
-        });
+        })
 
         navigate(
           getPath('launchProjectWithMilestonesAndRewards', createdProject.id),
-        );
+        )
       }
     },
     onError(error) {
@@ -114,9 +114,9 @@ export const ProjectCreate = () => {
         title: 'project creation failed!',
         description: `${error}`,
         status: 'error',
-      });
+      })
     },
-  });
+  })
 
   const [updateProject, { loading: updateLoading }] = useMutation<
     UpdateProjectMutationResponseData,
@@ -128,16 +128,16 @@ export const ProjectCreate = () => {
           'launchProjectWithMilestonesAndRewards',
           params.projectId || '',
         ),
-      );
+      )
     },
     onError(error) {
       toast({
         title: 'project update failed!',
         description: `${error}`,
         status: 'error',
-      });
+      })
     },
-  });
+  })
 
   const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: {
@@ -150,10 +150,10 @@ export const ProjectCreate = () => {
         setFormError({
           ...formError,
           name: 'This lightning address is already taken.',
-        });
+        })
       }
     },
-  });
+  })
 
   const [getProjectById, { loading, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME_OR_ID,
@@ -167,33 +167,33 @@ export const ProjectCreate = () => {
             image: data.project.image,
             description: data.project.description,
             email: user.email || '',
-          });
+          })
         }
       },
     },
-  );
+  )
 
   const handleChange = (event: any) => {
     if (event) {
-      const { name, value } = event.target;
+      const { name, value } = event.target
 
-      const newForm = { ...form, [name]: value || '' };
+      const newForm = { ...form, [name]: value || '' }
 
       if (name === 'title' && !isEditingExistingProject) {
-        const projectName: string = value.split(' ').join('').toLowerCase();
-        const sanitizedName = projectName.replaceAll(validLightningAddress, '');
+        const projectName: string = value.split(' ').join('').toLowerCase()
+        const sanitizedName = projectName.replaceAll(validLightningAddress, '')
 
-        newForm.name = sanitizedName;
+        newForm.name = sanitizedName
       }
 
       if (name === 'name') {
         const sanitizedName = `${value}`
           .toLocaleLowerCase()
-          .replaceAll(validLightningAddress, '');
-        newForm.name = sanitizedName;
+          .replaceAll(validLightningAddress, '')
+        newForm.name = sanitizedName
       }
 
-      setForm(newForm);
+      setForm(newForm)
 
       if (
         name === 'title' &&
@@ -206,7 +206,7 @@ export const ProjectCreate = () => {
               limit={ProjectValidations.title.maxLength}
             />
           ),
-        });
+        })
       } else if (
         name === 'description' &&
         value.length > ProjectValidations.description.maxLength
@@ -218,17 +218,17 @@ export const ProjectCreate = () => {
               limit={ProjectValidations.description.maxLength}
             />
           ),
-        });
+        })
       } else {
-        setFormError({});
+        setFormError({})
       }
     }
-  };
+  }
 
-  const handleUpload = (url: string) => setForm({ ...form, image: url });
+  const handleUpload = (url: string) => setForm({ ...form, image: url })
 
   const handleNextButtonTapped = () => {
-    const isValid = validateForm();
+    const isValid = validateForm()
 
     if (isValid) {
       if (isEditingExistingProject) {
@@ -241,7 +241,7 @@ export const ProjectCreate = () => {
               description: form.description,
             },
           },
-        });
+        })
       } else {
         createProject({
           variables: {
@@ -250,70 +250,70 @@ export const ProjectCreate = () => {
               email: user.email || form.email,
             },
           },
-        });
+        })
       }
     }
-  };
+  }
 
   const validateForm = () => {
-    const errors: any = {};
+    const errors: any = {}
 
-    let isValid = true;
+    let isValid = true
 
     if (!form.title) {
-      errors.title = 'Title is a required field.';
-      isValid = false;
+      errors.title = 'Title is a required field.'
+      isValid = false
     } else if (form.title.length > ProjectValidations.title.maxLength) {
-      errors.title = `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`;
-      isValid = false;
+      errors.title = `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`
+      isValid = false
     }
 
     if (!form.name) {
-      errors.name = 'Project name is a required field.';
-      isValid = false;
+      errors.name = 'Project name is a required field.'
+      isValid = false
     } else if (
       form.name.length < ProjectValidations.name.minLength ||
       form.name.length > ProjectValidations.name.maxLength
     ) {
-      errors.name = `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`;
-      isValid = false;
+      errors.name = `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`
+      isValid = false
     }
 
     if (!form.description) {
-      errors.description = 'Project objective is a required field.';
-      isValid = false;
+      errors.description = 'Project objective is a required field.'
+      isValid = false
     } else if (
       form.description.length > ProjectValidations.description.maxLength
     ) {
-      errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`;
-      isValid = false;
+      errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`
+      isValid = false
     }
 
     if (!form.email && !user.email) {
-      errors.email = 'Email address is a required field.';
-      isValid = false;
+      errors.email = 'Email address is a required field.'
+      isValid = false
     } else if (!user.email && !validateEmail(form.email)) {
-      errors.email = 'Please enter a valid email address.';
-      isValid = false;
+      errors.email = 'Please enter a valid email address.'
+      isValid = false
     } else if (form.email.length > UserValidations.email.maxLength) {
-      errors.email = `Email address should be shorter than ${UserValidations.email.maxLength} characters.`;
-      isValid = false;
+      errors.email = `Email address should be shorter than ${UserValidations.email.maxLength} characters.`
+      isValid = false
     }
 
     if (!isValid) {
-      setFormError(errors);
+      setFormError(errors)
     }
 
-    return isValid;
-  };
+    return isValid
+  }
 
   const handleBack = () => {
-    navigate(getPath('publicProjectLaunch'));
-  };
+    navigate(getPath('publicProjectLaunch'))
+  }
 
   useEffect(() => {
-    getProjectById();
-  }, [params.projectId]);
+    getProjectById()
+  }, [params.projectId])
 
   const sideView = (
     <VStack
@@ -339,7 +339,7 @@ export const ProjectCreate = () => {
         </MarkDown>
       </Card>
     </VStack>
-  );
+  )
 
   return (
     <ProjectCreateLayout
@@ -462,5 +462,5 @@ export const ProjectCreate = () => {
         </ButtonComponent>
       </VStack>
     </ProjectCreateLayout>
-  );
-};
+  )
+}

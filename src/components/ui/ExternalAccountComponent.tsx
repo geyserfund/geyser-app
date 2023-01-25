@@ -1,10 +1,10 @@
-import { ButtonProps, Icon } from '@chakra-ui/react';
+import { ButtonProps, Icon } from '@chakra-ui/react'
 
-import { ButtonComponent } from './';
+import { ButtonComponent } from './'
 
 interface IExternalAccountComponentProps extends ButtonProps {
-  icon: any;
-  username: string;
+  icon: any
+  username: string
 }
 
 export const ExternalAccountComponent = ({
@@ -21,4 +21,4 @@ export const ExternalAccountComponent = ({
   >
     {username}
   </ButtonComponent>
-);
+)

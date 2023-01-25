@@ -1,2 +1,2 @@
-export const SATOSHIS_IN_BTC = 100_000_000;
-export const BTC_IN_SATOSHI = 1 / SATOSHIS_IN_BTC;
+export const SATOSHIS_IN_BTC = 100_000_000
+export const BTC_IN_SATOSHI = 1 / SATOSHIS_IN_BTC

@@ -1,6 +1,6 @@
-import { Image, VStack } from '@chakra-ui/react';
+import { Image, VStack } from '@chakra-ui/react'
 
-import LogoNameLight from '../../assets/logo-name-brand.svg';
+import LogoNameLight from '../../assets/logo-name-brand.svg'
 
 export const LoadingPage = () => (
   <VStack
@@ -21,4 +21,4 @@ export const LoadingPage = () => (
 				<Progress size="xs" isIndeterminate colorScheme="teal" />
 			</Box> */}
   </VStack>
-);
+)

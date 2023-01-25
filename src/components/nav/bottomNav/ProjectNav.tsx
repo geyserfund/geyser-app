@@ -5,38 +5,38 @@ import {
   Slide,
   Text,
   useDisclosure,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { BiHeart, BiNews, BiTrophy } from 'react-icons/bi';
-import { BsLightningChargeFill } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { BiHeart, BiNews, BiTrophy } from 'react-icons/bi'
+import { BsLightningChargeFill } from 'react-icons/bs'
+import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../constants';
-import { useAuthContext } from '../../../context';
-import { useScrollDirection } from '../../../hooks';
-import { MobileViews, useProject } from '../../../pages/projectView';
-import { fonts } from '../../../styles';
-import { isActive } from '../../../utils';
+import { getPath } from '../../../constants'
+import { useAuthContext } from '../../../context'
+import { useScrollDirection } from '../../../hooks'
+import { MobileViews, useProject } from '../../../pages/projectView'
+import { fonts } from '../../../styles'
+import { isActive } from '../../../utils'
 
 export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
-  const { mobileView } = useProject();
+  const { mobileView } = useProject()
 
   const isScrollingUp = useScrollDirection({
     initialValue: true,
     mobileView,
-  });
+  })
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [noTransition, setNoTransition] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [noTransition, setNoTransition] = useState(true)
 
   useEffect(() => {
     if (isScrollingUp) {
-      onOpen();
+      onOpen()
     } else if (!fixed) {
-      setNoTransition(false);
-      onClose();
+      setNoTransition(false)
+      onClose()
     }
-  }, [isScrollingUp, mobileView, fixed]);
+  }, [isScrollingUp, mobileView, fixed])
 
   return (
     <>
@@ -64,38 +64,37 @@ export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
         <ProjectNavUI />
       </Slide>
     </>
-  );
-};
+  )
+}
 
 export const ProjectNavUI = () => {
-  const { mobileView, setMobileView, project } = useProject();
-  const { user } = useAuthContext();
+  const { mobileView, setMobileView, project } = useProject()
+  const { user } = useAuthContext()
 
   const getTextColor = (value: string) => {
     if (value === mobileView) {
-      return 'black';
+      return 'black'
     }
 
-    return 'brand.neutral600';
-  };
+    return 'brand.neutral600'
+  }
 
-  const transactionCount = project?.fundingTxsCount;
-  const fundersCount = project?.fundersCount;
+  const transactionCount = project?.fundingTxsCount
+  const fundersCount = project?.fundersCount
 
-  const isOwner = project?.owners[0]?.user?.id === user.id;
+  const isOwner = project?.owners[0]?.user?.id === user.id
 
   const handleClick = (value: MobileViews) => {
     if (mobileView === value) {
-      document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' });
+      document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
-      setMobileView(value);
-      document.scrollingElement?.scrollTo({ top: 0 });
+      setMobileView(value)
+      document.scrollingElement?.scrollTo({ top: 0 })
     }
-  };
+  }
 
-  const isFundingDisabled = !isActive(project.status);
-  const showGreyButton =
-    mobileView === MobileViews.funding || isFundingDisabled;
+  const isFundingDisabled = !isActive(project.status)
+  const showGreyButton = mobileView === MobileViews.funding || isFundingDisabled
 
   return (
     <HStack
@@ -180,7 +179,7 @@ export const ProjectNavUI = () => {
             disabled={isFundingDisabled}
             leftIcon={<BsLightningChargeFill />}
             onClick={() => {
-              handleClick(MobileViews.funding);
+              handleClick(MobileViews.funding)
             }}
           >
             Contribute
@@ -188,5 +187,5 @@ export const ProjectNavUI = () => {
         )}
       </HStack>
     </HStack>
-  );
-};
+  )
+}

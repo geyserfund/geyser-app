@@ -1,43 +1,43 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { GridItem, useDisclosure, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
-import { BiPlus } from 'react-icons/bi';
-import { useNavigate } from 'react-router';
+import { useMutation, useQuery } from '@apollo/client'
+import { GridItem, useDisclosure, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
+import { BiPlus } from 'react-icons/bi'
+import { useNavigate } from 'react-router'
 
 import {
   DeleteConfirmModal,
   ProjectEntryCard,
   ProjectSectionBar,
-} from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
-import Loader from '../../components/ui/Loader';
-import { getPath } from '../../constants';
-import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql';
-import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations';
+} from '../../components/molecules'
+import { ButtonComponent } from '../../components/ui'
+import Loader from '../../components/ui/Loader'
+import { getPath } from '../../constants'
+import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
+import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations'
 import {
   Entry,
   Project,
   UniqueProjectQueryInput,
-} from '../../types/generated/graphql';
-import { toInt, useNotification } from '../../utils';
+} from '../../types/generated/graphql'
+import { toInt, useNotification } from '../../utils'
 
 type ResponseData = {
   project: Project & {
-    publishedEntries: Entry[];
-    unpublishedEntries: Entry[];
-  };
-};
+    publishedEntries: Entry[]
+    unpublishedEntries: Entry[]
+  }
+}
 
 type QueryVariables = {
-  where: UniqueProjectQueryInput;
-};
+  where: UniqueProjectQueryInput
+}
 
 export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
-  const navigate = useNavigate();
-  const { toast } = useNotification();
+  const navigate = useNavigate()
+  const { toast } = useNotification()
 
-  const [liveEntries, setLiveEntries] = useState<Entry[]>([]);
-  const [draftEntries, setDraftEntries] = useState<Entry[]>([]);
+  const [liveEntries, setLiveEntries] = useState<Entry[]>([])
+  const [draftEntries, setDraftEntries] = useState<Entry[]>([])
 
   const { loading } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_DASHBOARD_DATA,
@@ -45,81 +45,81 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
       fetchPolicy: 'network-only',
       variables: { where: { id: toInt(project.id) } },
       onCompleted(data) {
-        const live = data.project.publishedEntries;
-        const draft = data.project.unpublishedEntries;
+        const live = data.project.publishedEntries
+        const draft = data.project.unpublishedEntries
 
-        setLiveEntries(live as Entry[]);
-        setDraftEntries(draft as Entry[]);
+        setLiveEntries(live as Entry[])
+        setDraftEntries(draft as Entry[])
       },
     },
-  );
+  )
 
   const {
     isOpen: isDeleteEntryOpen,
     onClose: closeDeleteEntry,
     onOpen: openDeleteEntry,
-  } = useDisclosure();
+  } = useDisclosure()
 
-  const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY);
+  const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY)
 
-  const [selectedEntry, setSelectedEntry] = useState<Entry>();
+  const [selectedEntry, setSelectedEntry] = useState<Entry>()
 
   const handleCreateEntry = () => {
-    navigate(getPath('projectEntryCreation', project.name));
-  };
+    navigate(getPath('projectEntryCreation', project.name))
+  }
 
   const handleEntryEditButtonTapped = (entry: Entry) => {
-    navigate(getPath('projectEntryDetails', project.name, entry.id));
-  };
+    navigate(getPath('projectEntryDetails', project.name, entry.id))
+  }
 
   const triggerDeleteEntry = (entry: Entry) => {
-    setSelectedEntry(entry);
-    openDeleteEntry();
-  };
+    setSelectedEntry(entry)
+    openDeleteEntry()
+  }
 
   const handleRemoveEntry = async () => {
     if (!selectedEntry || !selectedEntry.id) {
-      return;
+      return
     }
 
     try {
       await deleteEntry({
         variables: { deleteEntryId: toInt(selectedEntry.id) },
-      });
+      })
 
       if (selectedEntry.published) {
         const newLive = liveEntries.filter(
           (entry) => entry.id !== selectedEntry.id,
-        );
-        setLiveEntries(newLive);
+        )
+        setLiveEntries(newLive)
       } else {
         const newDraft = draftEntries.filter(
           (entry) => entry.id !== selectedEntry.id,
-        );
-        setDraftEntries(newDraft);
+        )
+        setDraftEntries(newDraft)
       }
 
       toast({
         title: 'Successfully removed entry',
         status: 'success',
-      });
+      })
     } catch (error) {
       toast({
         title: 'Failed to remove entry',
         description: `${error}`,
         status: 'error',
-      });
+      })
     }
 
-    closeDeleteEntry();
-  };
+    closeDeleteEntry()
+  }
 
   if (loading) {
     return (
       <GridItem colSpan={6} display="flex" justifyContent="center">
         <Loader />
       </GridItem>
-    );
+    )
   }
 
   return (
@@ -142,7 +142,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
               />
               <VStack w="100%">
                 {liveEntries?.map((entry) => {
-                  const entryWithProject = { ...entry, project };
+                  const entryWithProject = { ...entry, project }
 
                   return (
                     <ProjectEntryCard
@@ -151,7 +151,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                       onEdit={() => handleEntryEditButtonTapped(entry)}
                       onDelete={() => triggerDeleteEntry(entry)}
                     />
-                  );
+                  )
                 })}
               </VStack>
               <ButtonComponent w="full" onClick={handleCreateEntry}>
@@ -167,7 +167,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
 
               <VStack>
                 {draftEntries?.map((entry) => {
-                  const entryWithProject = { ...entry, project };
+                  const entryWithProject = { ...entry, project }
 
                   return (
                     <ProjectEntryCard
@@ -176,7 +176,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                       onEdit={() => handleEntryEditButtonTapped(entry)}
                       onDelete={() => triggerDeleteEntry(entry)}
                     />
-                  );
+                  )
                 })}
               </VStack>
             </VStack>
@@ -199,5 +199,5 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
         confirm={handleRemoveEntry}
       />
     </>
-  );
-};
+  )
+}

@@ -1,10 +1,10 @@
-import { Heading, HeadingProps } from '@chakra-ui/react';
+import { Heading, HeadingProps } from '@chakra-ui/react'
 
-import { fonts } from '../../styles';
-import { useMobileMode } from '../../utils';
+import { fonts } from '../../styles'
+import { useMobileMode } from '../../utils'
 
 export const H1 = ({ children, ...rest }: HeadingProps) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   return (
     <Heading
       as="h1"
@@ -15,11 +15,11 @@ export const H1 = ({ children, ...rest }: HeadingProps) => {
     >
       {children}
     </Heading>
-  );
-};
+  )
+}
 
 export const H2 = ({ children, ...rest }: HeadingProps) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   return (
     <Heading
       as="h2"
@@ -30,11 +30,11 @@ export const H2 = ({ children, ...rest }: HeadingProps) => {
     >
       {children}
     </Heading>
-  );
-};
+  )
+}
 
 export const H3 = ({ children, ...rest }: HeadingProps) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   return (
     <Heading
       as="h3"
@@ -45,5 +45,5 @@ export const H3 = ({ children, ...rest }: HeadingProps) => {
     >
       {children}
     </Heading>
-  );
-};
+  )
+}

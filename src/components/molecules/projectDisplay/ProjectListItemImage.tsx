@@ -1,15 +1,15 @@
-import { Box, HTMLChakraProps, Image } from '@chakra-ui/react';
+import { Box, HTMLChakraProps, Image } from '@chakra-ui/react'
 
-import { IProject } from '../../../interfaces';
-import { Project } from '../../../types/generated/graphql';
-import { ProjectImageListItemPlaceholder } from '..';
+import { IProject } from '../../../interfaces'
+import { Project } from '../../../types/generated/graphql'
+import { ProjectImageListItemPlaceholder } from '..'
 
 type Props = HTMLChakraProps<'div'> & {
-  imageSrc?: string;
-  project: Project | IProject;
-  boxSize?: string;
-  borderRadius?: string;
-};
+  imageSrc?: string
+  project: Project | IProject
+  boxSize?: string
+  borderRadius?: string
+}
 
 export const ProjectListItemImage = ({
   imageSrc,
@@ -18,7 +18,7 @@ export const ProjectListItemImage = ({
   borderRadius = 'md',
   ...rest
 }: Props) => {
-  const imageSource = imageSrc ?? (project.image || '');
+  const imageSource = imageSrc ?? (project.image || '')
 
   return (
     <Box boxSize={boxSize} {...rest}>
@@ -32,5 +32,5 @@ export const ProjectListItemImage = ({
         alt={`Main image for ${project.name}`}
       />
     </Box>
-  );
-};
+  )
+}

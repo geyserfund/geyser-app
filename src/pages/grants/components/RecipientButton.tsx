@@ -1,6 +1,6 @@
-import Icon from '@chakra-ui/icon';
-import { CheckIcon } from '@chakra-ui/icons';
-import { VStack } from '@chakra-ui/layout';
+import Icon from '@chakra-ui/icon'
+import { CheckIcon } from '@chakra-ui/icons'
+import { VStack } from '@chakra-ui/layout'
 import {
   Box,
   HStack,
@@ -17,24 +17,24 @@ import {
   Text,
   Textarea,
   useDisclosure,
-} from '@chakra-ui/react';
-import React, { useContext, useEffect, useState } from 'react';
-import { SiTwitter } from 'react-icons/si';
+} from '@chakra-ui/react'
+import React, { useContext, useEffect, useState } from 'react'
+import { SiTwitter } from 'react-icons/si'
 
-import { createApplicantRecord } from '../../../api';
-import { Subscribe } from '../../../components/nav/Subscribe';
-import { ButtonComponent, UndecoratedLink } from '../../../components/ui';
-import Loader from '../../../components/ui/Loader';
-import { AUTH_SERVICE_ENDPOINT } from '../../../constants';
-import { AuthContext } from '../../../context';
-import { Maybe } from '../../../types/generated/graphql';
-import { useMobileMode, useNotification } from '../../../utils';
+import { createApplicantRecord } from '../../../api'
+import { Subscribe } from '../../../components/nav/Subscribe'
+import { ButtonComponent, UndecoratedLink } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { AUTH_SERVICE_ENDPOINT } from '../../../constants'
+import { AuthContext } from '../../../context'
+import { Maybe } from '../../../types/generated/graphql'
+import { useMobileMode, useNotification } from '../../../utils'
 
 interface RecipientButtonProps {
-  active: boolean;
-  title: string;
-  grant: string;
-  image?: Maybe<string>;
+  active: boolean
+  title: string
+  grant: string
+  image?: Maybe<string>
 }
 
 export const RecipientButton = ({
@@ -43,37 +43,37 @@ export const RecipientButton = ({
   grant,
   image,
 }: RecipientButtonProps) => {
-  const isMobile = useMobileMode();
-  const [step, setStep] = useState(0);
-  const [grantee, setGrantee] = useState('');
-  const [description, setDescription] = useState('');
-  const [url, setUrl] = useState('');
-  const [stage, setStage] = useState('');
-  const [region, setRegion] = useState('');
-  const [contact, setContact] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const { toast } = useNotification();
-  const initialRef = React.useRef(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [subscribed, setSubscribed] = useState(false);
-  const { user } = useContext(AuthContext);
+  const isMobile = useMobileMode()
+  const [step, setStep] = useState(0)
+  const [grantee, setGrantee] = useState('')
+  const [description, setDescription] = useState('')
+  const [url, setUrl] = useState('')
+  const [stage, setStage] = useState('')
+  const [region, setRegion] = useState('')
+  const [contact, setContact] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const { toast } = useNotification()
+  const initialRef = React.useRef(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [subscribed, setSubscribed] = useState(false)
+  const { user } = useContext(AuthContext)
 
-  const [copy, setCopy] = useState(false);
+  const [copy, setCopy] = useState(false)
   useEffect(() => {
     if (copy) {
       setTimeout(() => {
-        setCopy(false);
-      }, 2000);
+        setCopy(false)
+      }, 2000)
     }
-  }, [copy]);
+  }, [copy])
 
   const handleSubmission = async () => {
     try {
-      setSubmitting(true);
-      const userCopy = JSON.parse(JSON.stringify(user));
+      setSubmitting(true)
+      const userCopy = JSON.parse(JSON.stringify(user))
       const twitterID = userCopy.externalAccounts.find(
         (account: any) => account.type === 'twitter',
-      ).externalId;
+      ).externalId
       const records = [
         {
           fields: {
@@ -87,41 +87,41 @@ export const RecipientButton = ({
             fld0eyFwj2EWLH8Yh: twitterID,
           },
         },
-      ];
-      await createApplicantRecord({ records });
-      setStep(1);
+      ]
+      await createApplicantRecord({ records })
+      setStep(1)
     } catch (_) {
       toast({
         title: 'Something went wrong',
         description: 'Please try again',
         status: 'error',
-      });
+      })
     }
 
-    setSubmitting(false);
-  };
+    setSubmitting(false)
+  }
 
   const close = () => {
-    setGrantee('');
-    setDescription('');
-    setUrl('');
-    setStage('');
-    setRegion('');
-    setContact('');
-    setSubscribed(false);
-    setStep(0);
-    onClose();
-  };
+    setGrantee('')
+    setDescription('')
+    setUrl('')
+    setStage('')
+    setRegion('')
+    setContact('')
+    setSubscribed(false)
+    setStep(0)
+    onClose()
+  }
 
   const renderModal = () => {
     if (step === 0) {
-      return renderFormModal();
+      return renderFormModal()
     }
 
     if (step === 1) {
-      return renderSuccessModal();
+      return renderSuccessModal()
     }
-  };
+  }
 
   const renderFormModal = () => (
     <>
@@ -274,7 +274,7 @@ export const RecipientButton = ({
         </ModalContent>
       </Modal>
     </>
-  );
+  )
 
   const renderSuccessModal = () => (
     <Modal onClose={close} isOpen={isOpen} isCentered>
@@ -333,7 +333,7 @@ export const RecipientButton = ({
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
+  )
 
   return (
     <>
@@ -343,12 +343,12 @@ export const RecipientButton = ({
         standard
         w="100%"
         onClick={() => {
-          onOpen();
+          onOpen()
         }}
       >
         {title}
       </ButtonComponent>
       {renderModal()}
     </>
-  );
-};
+  )
+}

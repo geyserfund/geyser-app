@@ -1,22 +1,22 @@
-import { HStack, Link, Text } from '@chakra-ui/layout';
-import { Avatar } from '@chakra-ui/react';
-import { ReactElement } from 'react';
-import { FaUser } from 'react-icons/fa';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { HStack, Link, Text } from '@chakra-ui/layout'
+import { Avatar } from '@chakra-ui/react'
+import { ReactElement } from 'react'
+import { FaUser } from 'react-icons/fa'
+import { Link as ReactRouterLink } from 'react-router-dom'
 
-import { getPath } from '../../constants';
-import { useMediumScreen, useMobileMode } from '../../utils';
+import { getPath } from '../../constants'
+import { useMediumScreen, useMobileMode } from '../../utils'
 
 type Props = {
-  avatarUsername: string;
-  userProfileID: string;
-  imageSrc: string;
-  textColor?: string;
-  badgeElements?: ReactElement[];
-  badgeNames?: string[];
-  fontSize?: number | string;
-  imageSize?: number | string;
-};
+  avatarUsername: string
+  userProfileID: string
+  imageSrc: string
+  textColor?: string
+  badgeElements?: ReactElement[]
+  badgeNames?: string[]
+  fontSize?: number | string
+  imageSize?: number | string
+}
 
 export const LinkableAvatar = ({
   avatarUsername,
@@ -28,22 +28,22 @@ export const LinkableAvatar = ({
   fontSize = '16px',
   imageSize = '30px',
 }: Props) => {
-  const isMedium = useMediumScreen();
-  const isMobile = useMobileMode();
+  const isMedium = useMediumScreen()
+  const isMobile = useMobileMode()
 
   const calculateBadgesLength = () => {
     if (!badgeNames) {
-      return 0;
+      return 0
     }
 
     return badgeNames.reduce((accumulatedLength, badgeName) => {
-      return accumulatedLength + badgeName.length;
-    }, 0);
-  };
+      return accumulatedLength + badgeName.length
+    }, 0)
+  }
 
   const getFormattedUsername = () => {
     if (!avatarUsername) {
-      return;
+      return
     }
 
     if (
@@ -52,14 +52,14 @@ export const LinkableAvatar = ({
         avatarUsername.length > (isMedium ? 12 : 21)) ||
       (!badgeElements && avatarUsername.length > (isMedium ? 12 : 21))
     ) {
-      return `${avatarUsername.slice(0, isMedium ? 10 : 19)}...`;
+      return `${avatarUsername.slice(0, isMedium ? 10 : 19)}...`
     }
 
     if (
       badgeElements &&
       badgeElements.length >= (isMobile ? 2 : isMedium ? 1 : 3)
     ) {
-      return;
+      return
     }
 
     if (
@@ -67,11 +67,11 @@ export const LinkableAvatar = ({
       badgeElements.length &&
       avatarUsername.length + calculateBadgesLength() > (isMedium ? 13 : 21)
     ) {
-      return `${avatarUsername.slice(0, isMedium ? 3 : 6)}...`;
+      return `${avatarUsername.slice(0, isMedium ? 3 : 6)}...`
     }
 
-    return avatarUsername;
-  };
+    return avatarUsername
+  }
 
   return (
     <Link
@@ -109,5 +109,5 @@ export const LinkableAvatar = ({
         {badgeElements}
       </HStack>
     </Link>
-  );
-};
+  )
+}

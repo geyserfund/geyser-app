@@ -1,16 +1,16 @@
-import { HStack, Text } from '@chakra-ui/react';
+import { HStack, Text } from '@chakra-ui/react'
 
-import { dimensions } from '../../../constants';
-import { useMobileMode } from '../../../utils';
-import { BoltIcon } from '../../icons';
-import { ButtonComponent } from '../../ui';
+import { dimensions } from '../../../constants'
+import { useMobileMode } from '../../../utils'
+import { BoltIcon } from '../../icons'
+import { ButtonComponent } from '../../ui'
 
 const {
   topNavBar: { mobile: mobileNavBarDimensions },
-} = dimensions;
+} = dimensions
 
 interface IProjectActivityActionsToolbarProps {
-  fundButtonFunction: any;
+  fundButtonFunction: any
   // transitionButtonFunction: any;
 }
 
@@ -18,7 +18,7 @@ export const ProjectActivityActionsToolbar = ({
   fundButtonFunction,
 }: // transitionButtonFunction,
 IProjectActivityActionsToolbarProps) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
   if (isMobile) {
     return (
@@ -42,8 +42,8 @@ IProjectActivityActionsToolbarProps) => {
           Description
         </ButtonComponent> */}
       </HStack>
-    );
+    )
   }
 
-  return null;
-};
+  return null
+}

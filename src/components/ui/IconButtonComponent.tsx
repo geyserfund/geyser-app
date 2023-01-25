@@ -1,19 +1,19 @@
-import { IconButton, IconButtonProps } from '@chakra-ui/button';
-import { useColorModeValue } from '@chakra-ui/color-mode';
+import { IconButton, IconButtonProps } from '@chakra-ui/button'
+import { useColorModeValue } from '@chakra-ui/color-mode'
 
-import { colors } from '../../styles';
-import { buttonCommon } from '../../styles/common';
+import { colors } from '../../styles'
+import { buttonCommon } from '../../styles/common'
 
 interface IIconButtonComponentP extends IconButtonProps {
-  primary?: boolean;
+  primary?: boolean
 }
 
 export const IconButtonComponent = ({
   primary,
   ...rest
 }: IIconButtonComponentP) => {
-  const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark);
-  const textColor = useColorModeValue(colors.textBlack, colors.textWhite);
+  const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark)
+  const textColor = useColorModeValue(colors.textBlack, colors.textWhite)
 
   return (
     <IconButton
@@ -25,5 +25,5 @@ export const IconButtonComponent = ({
       {...rest}
       sx={buttonCommon}
     />
-  );
-};
+  )
+}

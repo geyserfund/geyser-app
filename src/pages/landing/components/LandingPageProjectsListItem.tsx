@@ -5,19 +5,19 @@ import {
   Image,
   Link,
   Text,
-} from '@chakra-ui/react';
-import { Link as ReactRouterLink } from 'react-router-dom';
+} from '@chakra-ui/react'
+import { Link as ReactRouterLink } from 'react-router-dom'
 
-import { ProjectImageListItemPlaceholder } from '../../../components/molecules';
-import { getPath } from '../../../constants';
-import { Project } from '../../../types/generated/graphql';
+import { ProjectImageListItemPlaceholder } from '../../../components/molecules'
+import { getPath } from '../../../constants'
+import { Project } from '../../../types/generated/graphql'
 
 type Props = HTMLChakraProps<'div'> & {
-  project: Project;
-};
+  project: Project
+}
 
 export const LandingPageProjectsListItem = ({ project, ...rest }: Props) => {
-  const projectImageSrc = project.image || '';
+  const projectImageSrc = project.image || ''
 
   return (
     <Link
@@ -50,5 +50,5 @@ export const LandingPageProjectsListItem = ({ project, ...rest }: Props) => {
         </Text>
       </HStack>
     </Link>
-  );
-};
+  )
+}

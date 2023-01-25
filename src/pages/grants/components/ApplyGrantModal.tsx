@@ -12,37 +12,37 @@ import {
   Text,
   useDisclosure,
   VStack,
-} from '@chakra-ui/react';
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { BiLeftArrowAlt } from 'react-icons/bi';
-import { FaCheck } from 'react-icons/fa';
-import { MdClose } from 'react-icons/md';
+} from '@chakra-ui/react'
+import { useContext, useEffect, useMemo, useState } from 'react'
+import { BiLeftArrowAlt } from 'react-icons/bi'
+import { FaCheck } from 'react-icons/fa'
+import { MdClose } from 'react-icons/md'
 
-import { createApplicantRecordRound2 } from '../../../api';
-import { TwitterConnect } from '../../../components/molecules';
-import { TextArea, TextInputBox } from '../../../components/ui';
-import { useAuthContext } from '../../../context';
-import { AuthContext } from '../../../context';
-import { useFormState } from '../../../hooks';
-import { FormStateError } from '../../../interfaces';
-import { hasTwitterAccount, useNotification, validUrl } from '../../../utils';
+import { createApplicantRecordRound2 } from '../../../api'
+import { TwitterConnect } from '../../../components/molecules'
+import { TextArea, TextInputBox } from '../../../components/ui'
+import { useAuthContext } from '../../../context'
+import { AuthContext } from '../../../context'
+import { useFormState } from '../../../hooks'
+import { FormStateError } from '../../../interfaces'
+import { hasTwitterAccount, useNotification, validUrl } from '../../../utils'
 
 interface Grant {
-  applicant: number;
-  title: string;
-  subtitle: string;
-  about: string;
-  image: string;
-  isClose: boolean;
+  applicant: number
+  title: string
+  subtitle: string
+  about: string
+  image: string
+  isClose: boolean
 }
 
 export type GrantApplicantInput = {
-  area: string;
-  grantType: string;
-  link: string;
-  name: string;
-  goals: string;
-};
+  area: string
+  grantType: string
+  link: string
+  name: string
+  goals: string
+}
 
 export const defaultGrantApplicant = {
   area: 'Online',
@@ -50,7 +50,7 @@ export const defaultGrantApplicant = {
   link: '',
   name: '',
   goals: '',
-};
+}
 
 enum GrantApplicationStages {
   info = 'info',
@@ -77,7 +77,7 @@ export const GrantOptions = [
     label: 'Bitcoin Communities',
     value: GrantCategory.communities,
   },
-];
+]
 
 export const ApplyGrantModal = ({
   applicant,
@@ -87,37 +87,37 @@ export const ApplyGrantModal = ({
   isClose,
   about,
 }: Grant) => {
-  const { user } = useAuthContext();
-  const { toast } = useNotification();
-  const { externalAccounts } = user;
+  const { user } = useAuthContext()
+  const { toast } = useNotification()
+  const { externalAccounts } = user
 
-  const { loginOnClose } = useContext(AuthContext);
-  const { onClose: onLoginAlertModalClose } = useDisclosure();
+  const { loginOnClose } = useContext(AuthContext)
+  const { onClose: onLoginAlertModalClose } = useDisclosure()
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { state, setState, setTarget } = useFormState<GrantApplicantInput>(
     defaultGrantApplicant,
-  );
-  const { area, goals, grantType, link, name } = state;
+  )
+  const { area, goals, grantType, link, name } = state
 
   const [formError, setFormError] = useState<
     FormStateError<GrantApplicantInput>
-  >({});
+  >({})
 
   const [applicationStages, setApplicationStages] =
-    useState<GrantApplicationStages>(GrantApplicationStages.info);
+    useState<GrantApplicationStages>(GrantApplicationStages.info)
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const submitForm = async () => {
-    const isValid = validateForm();
+    const isValid = validateForm()
 
     if (!isValid) {
-      return;
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
     const data = {
       fields: {
         'Project Name': name,
@@ -128,58 +128,58 @@ export const ApplyGrantModal = ({
         'Twitter ID': externalAccounts[0]?.externalUsername,
         Links: '',
       },
-    };
+    }
     try {
-      await createApplicantRecordRound2(data);
-      setApplicationStages(GrantApplicationStages.complete);
-      setState(defaultGrantApplicant);
+      await createApplicantRecordRound2(data)
+      setApplicationStages(GrantApplicationStages.complete)
+      setState(defaultGrantApplicant)
     } catch (error) {
       toast({
         status: 'error',
         title: 'Failed to submit application',
         description: 'Please try again later.',
-      });
+      })
     }
 
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   const handleClose = () => {
-    onClose();
-    setApplicationStages(GrantApplicationStages.info);
-    setState(defaultGrantApplicant);
-  };
+    onClose()
+    setApplicationStages(GrantApplicationStages.info)
+    setState(defaultGrantApplicant)
+  }
 
   const validateForm = () => {
-    const error: FormStateError<GrantApplicantInput> = {};
-    let isValid = true;
+    const error: FormStateError<GrantApplicantInput> = {}
+    let isValid = true
 
     if (!state.name) {
-      error.name = 'Name is a required field';
-      isValid = false;
+      error.name = 'Name is a required field'
+      isValid = false
     }
 
     if (!state.goals) {
-      error.goals = 'this is a required required field';
-      isValid = false;
+      error.goals = 'this is a required required field'
+      isValid = false
     }
 
     if (!state.link) {
-      error.link = 'Link is a required field.';
-      isValid = false;
+      error.link = 'Link is a required field.'
+      isValid = false
     } else if (!validUrl.test(state.link)) {
-      error.link = 'Link needs to be a valid URL';
-      isValid = false;
+      error.link = 'Link needs to be a valid URL'
+      isValid = false
     }
 
-    setFormError(error);
+    setFormError(error)
 
-    return isValid;
-  };
+    return isValid
+  }
 
   useEffect(() => {
-    setFormError({});
-  }, [state]);
+    setFormError({})
+  }, [state])
 
   const OverlayOne = useMemo(
     () => (
@@ -189,7 +189,7 @@ export const ApplyGrantModal = ({
       />
     ),
     [],
-  );
+  )
 
   const grantInfo = () => (
     <>
@@ -226,7 +226,7 @@ export const ApplyGrantModal = ({
             <Button
               bg="brand.primary"
               onClick={() => {
-                setApplicationStages(GrantApplicationStages.form);
+                setApplicationStages(GrantApplicationStages.form)
               }}
               w="full"
             >
@@ -240,7 +240,7 @@ export const ApplyGrantModal = ({
         </Box>
       </ModalBody>
     </>
-  );
+  )
 
   const applicationForm = () => (
     <>
@@ -383,8 +383,8 @@ export const ApplyGrantModal = ({
             <Box mt={6}>
               <TwitterConnect
                 onClose={() => {
-                  loginOnClose();
-                  onLoginAlertModalClose();
+                  loginOnClose()
+                  onLoginAlertModalClose()
                 }}
               />
             </Box>
@@ -392,7 +392,7 @@ export const ApplyGrantModal = ({
         </>
       )}
     </>
-  );
+  )
 
   const completion = () => (
     <ModalBody>
@@ -422,20 +422,20 @@ export const ApplyGrantModal = ({
         #2 Page.
       </Text>
     </ModalBody>
-  );
+  )
 
   const renderBody = () => {
     switch (applicationStages) {
       case GrantApplicationStages.info:
-        return grantInfo();
+        return grantInfo()
       case GrantApplicationStages.form:
-        return applicationForm();
+        return applicationForm()
       case GrantApplicationStages.complete:
-        return completion();
+        return completion()
       default:
-        return grantInfo();
+        return grantInfo()
     }
-  };
+  }
 
   return (
     <>
@@ -516,5 +516,5 @@ export const ApplyGrantModal = ({
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}
