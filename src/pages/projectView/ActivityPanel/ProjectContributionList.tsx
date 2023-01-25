@@ -1,10 +1,10 @@
 import { VStack } from '@chakra-ui/react';
-import React from 'react';
+
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { ID } from '../../../constants/components';
 import { ScrollInvoke } from '../../../helpers';
 import { PaginationHookReturn } from '../../../hooks/types';
-import { FundingTxWithCount, isMobileMode } from '../../../utils';
+import { FundingTxWithCount, useMobileMode } from '../../../utils';
 
 interface ProjectContributionListProps {
   fundingTxs: PaginationHookReturn<FundingTxWithCount>;
@@ -13,7 +13,7 @@ interface ProjectContributionListProps {
 export const ProjectContributionList = ({
   fundingTxs,
 }: ProjectContributionListProps) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const id = ID.project.activity.contribution;
   return (
     <VStack

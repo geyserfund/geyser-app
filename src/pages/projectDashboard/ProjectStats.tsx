@@ -1,16 +1,16 @@
 import { useQuery } from '@apollo/client';
 import { GridItem, HStack, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
 import { createUseStyles } from 'react-jss';
+
 import { SatoshiAmount } from '../../components/ui';
-import { colors } from '../../constants';
-import { fonts } from '../../constants/fonts';
-import { numberWithCommas, toInt } from '../../utils';
+import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql';
+import { colors } from '../../styles';
+import { fonts } from '../../styles';
 import {
   Project,
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql';
-import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql';
+import { numberWithCommas, toInt } from '../../utils';
 
 const useStyles = createUseStyles({
   statBox: {

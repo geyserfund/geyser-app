@@ -1,23 +1,23 @@
-import { HTMLChakraProps } from '@chakra-ui/system';
-import React from 'react';
 import {
+  Box,
+  HStack,
   Image,
   Stack,
-  Box,
   Text,
   useColorModeValue,
-  HStack,
   VStack,
 } from '@chakra-ui/react';
-import { LinkableAvatar, AnonymousAvatar, ProjectAvatarLink } from '../../ui';
-import { LightningIcon, SatoshiIconTilted } from '../../icons';
+import { HTMLChakraProps } from '@chakra-ui/system';
+
+import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
+import { fonts } from '../../../styles';
+import { FundingTx, Project } from '../../../types/generated/graphql';
 import { getDaysAgo } from '../../../utils';
 import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
-import { FundingTx, Project } from '../../../types/generated/graphql';
-import { renderFunderBadges } from './renderFunderBadges';
+import { LightningIcon, SatoshiIconTilted } from '../../icons';
+import { AnonymousAvatar, LinkableAvatar, ProjectAvatarLink } from '../../ui';
 import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon';
-import { fonts } from '../../../constants/fonts';
+import { renderFunderBadges } from './renderFunderBadges';
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx;
@@ -48,11 +48,6 @@ export const ProjectFundingContributionsFeedItem = ({
       fundingTx.sourceResource?.createdAt || '',
     funder,
   });
-
-  const isFromFountain = fundingTx.source === 'Fountain';
-  const funderFountainUserName = fundingTx.funder?.user?.externalAccounts?.find(
-    (account) => account?.type === 'Fountain',
-  )?.externalUsername;
 
   return (
     <Box

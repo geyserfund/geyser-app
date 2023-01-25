@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import { useDisclosure } from '@chakra-ui/hooks';
+import { Box } from '@chakra-ui/layout';
 import {
   Heading,
   HStack,
@@ -9,20 +10,23 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
-import { NavBarLogo } from '../NavBarLogo';
-import { Box } from '@chakra-ui/layout';
-import { TopNavBarMenu } from './TopNavBarMenu';
-import { isMobileMode } from '../../../utils';
-import { useDisclosure } from '@chakra-ui/hooks';
+import { useContext, useEffect, useMemo } from 'react';
+import {
+  Link,
+  matchPath,
+  useLocation,
+  useMatch,
+  useNavigate,
+} from 'react-router-dom';
+
+import { getPath, routerPathNames } from '../../../constants';
 import { AuthContext } from '../../../context';
-import { useLocation, useHistory, match } from 'react-router';
-import { customHistory } from '../../../config';
+import { useMobileMode } from '../../../utils';
 import { AuthModal } from '../../molecules';
 import { ButtonComponent } from '../../ui';
-import { getPath, routerPathNames } from '../../../constants';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { NavBarLogo } from '../NavBarLogo';
+import { TopNavBarMenu } from './TopNavBarMenu';
 
 const navItems = [
   {
@@ -111,13 +115,16 @@ const routesForEnablingProjectLaunchButton = [
  * the top navigation bar.
  */
 export const TopNavBar = () => {
-  const isMobile = isMobileMode();
-  const history = useHistory();
+  const isMobile = useMobileMode();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const currentPathName = history.location.pathname;
+  const currentPathName = location.pathname;
 
-  const currentProjectRouteMatch: match<Record<string, any>> | null =
-    useRouteMatch(`/${routerPathNames.project}/:projectId/`);
+  const currentProjectRouteMatch = matchPath(
+    `/${routerPathNames.project}/:projectId/`,
+    currentPathName,
+  );
 
   const {
     isOpen: isLoginAlertModalOpen,
@@ -137,71 +144,74 @@ export const TopNavBar = () => {
     navigationContext,
   } = useContext(AuthContext);
 
-  const { state } = useLocation<{
-    loggedOut?: boolean;
-    refresh?: boolean;
-  }>();
+  const {
+    state,
+  }: {
+    state: {
+      loggedOut?: boolean;
+      refresh?: boolean;
+    };
+  } = useLocation();
 
-  const routeMatchesForHidingTopNav = routesForHidingTopNav.map(useRouteMatch);
+  const routeMatchesForHidingTopNav = routesForHidingTopNav.map(useMatch);
 
   const routeMatchesForProjectButton =
-    routesForShowingProjectButton.map(useRouteMatch);
+    routesForShowingProjectButton.map(useMatch);
 
   const routeMatchesForEnablingSignInButton =
-    routesForEnablingSignInButton.map(useRouteMatch);
+    routesForEnablingSignInButton.map(useMatch);
 
   const routeMatchesForHidingDashboardButton =
-    routesForHidingDashboardButton.map(useRouteMatch);
+    routesForHidingDashboardButton.map(useMatch);
 
   const routeMatchesForHidingDropdownMenu =
-    routesForHidingDropdownMenu.map(useRouteMatch);
+    routesForHidingDropdownMenu.map(useMatch);
 
   const routeMatchesForHidingMyProjectsButton =
-    routesForHidingMyProjectsButton.map(useRouteMatch);
+    routesForHidingMyProjectsButton.map(useMatch);
 
   const routesMatchesForEnablingProjectLaunchButton =
-    routesForEnablingProjectLaunchButton.map(useRouteMatch);
+    routesForEnablingProjectLaunchButton.map(useMatch);
 
-  const routesMatchesForShowingCustomTitle =
-    customTitleRoutes.map(useRouteMatch);
-  const routesMatchesForShowingNavItems = navItemsRoutes.map(useRouteMatch);
+  const routesMatchesForShowingCustomTitle = customTitleRoutes.map(useMatch);
+  const routesMatchesForShowingNavItems = navItemsRoutes.map(useMatch);
 
   useEffect(() => {
     if (state && state.loggedOut) {
       logout();
       onLoginAlertModalOpen();
 
-      customHistory.replace(customHistory.location.pathname, {});
+      navigate(location.pathname, { state: {} });
     }
 
     if (state && state.refresh) {
       queryCurrentUser();
-      customHistory.replace(customHistory.location.pathname, {});
+      navigate(location.pathname, { state: {} });
     }
   }, [state]);
 
   const handleProjectLaunchButtonPress = () => {
-    history.push(getPath('publicProjectLaunch'));
+    navigate(getPath('publicProjectLaunch'));
   };
 
   const handleMyProjectsButtonPress = () => {
-    history.push(getPath('userProfile', user.id));
+    navigate(getPath('userProfile', user.id));
   };
 
   const handleMyProjectButtonPress = () => {
-    history.push(getPath('project', user.ownerOf[0]?.project?.name));
+    navigate(getPath('project', user.ownerOf[0]?.project?.name));
   };
 
   const handleProjectButtonPress = () => {
     const projectName =
       currentProjectRouteMatch?.params?.projectId ||
       navigationContext.projectName;
-    history.push(getPath('project', projectName));
+    navigate(getPath('project', projectName));
   };
 
   const handleProjectDashboardButtonPress = () => {
     if (userHasOnlyOneProject) {
-      history.push(getPath('projectDashboard', user.ownerOf[0]?.project?.name));
+      navigate(getPath('projectDashboard', user.ownerOf[0]?.project?.name));
       return;
     }
 
@@ -210,9 +220,9 @@ export const TopNavBar = () => {
       navigationContext.projectName;
 
     if (projectName) {
-      history.push(getPath('projectDashboard', projectName));
+      navigate(getPath('projectDashboard', projectName));
     } else {
-      history.push(getPath('landingPage'));
+      navigate(getPath('landingPage'));
     }
   };
 
@@ -225,12 +235,7 @@ export const TopNavBar = () => {
         currentPathName.startsWith(`/${routerPathNames.project}`)) &&
       navigationContext.projectOwnerIDs.includes(Number(user.id))
     );
-  }, [
-    user.id,
-    navigationContext.projectOwnerIDs,
-    currentPathName,
-    routerPathNames,
-  ]);
+  }, [user.id, navigationContext.projectOwnerIDs, currentPathName]);
 
   const userHasOnlyOneProject: boolean = useMemo(
     () => user && user.ownerOf && user.ownerOf.length === 1,
@@ -238,20 +243,20 @@ export const TopNavBar = () => {
   );
 
   const shouldTopNavBeHidden: boolean = useMemo(() => {
-    return routeMatchesForHidingTopNav.some((routeMatch) => {
-      return (routeMatch as match)?.isExact;
-    });
+    return routeMatchesForHidingTopNav.some((routeMatch) =>
+      Boolean(routeMatch),
+    );
   }, [routeMatchesForHidingTopNav]);
 
   const shouldShowProjectButton: boolean = useMemo(() => {
     return (
       !isMobile &&
       routeMatchesForProjectButton.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
+        return Boolean(routeMatch);
       }) &&
       Boolean(navigationContext)
     );
-  }, [routeMatchesForProjectButton, isMobile]);
+  }, [routeMatchesForProjectButton, isMobile, navigationContext]);
   /**
    * Logic:
    *  - Available to all not logged-in users.
@@ -267,7 +272,7 @@ export const TopNavBar = () => {
       isLoggedIn === false &&
       isMobile === false &&
       routeMatchesForEnablingSignInButton.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
+        return Boolean(routeMatch);
       })
     );
   }, [routeMatchesForEnablingSignInButton, isLoggedIn, isMobile]);
@@ -277,7 +282,7 @@ export const TopNavBar = () => {
       isLoggedIn === false &&
       isMobile === true &&
       routeMatchesForEnablingSignInButton.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
+        return Boolean(routeMatch);
       })
     );
   }, [routeMatchesForEnablingSignInButton, isLoggedIn, isMobile]);
@@ -311,7 +316,7 @@ export const TopNavBar = () => {
       isUserAProjectCreator &&
       isViewingOwnProject &&
       !routeMatchesForHidingDashboardButton.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
+        return Boolean(routeMatch);
       })
     );
   }, [
@@ -329,7 +334,7 @@ export const TopNavBar = () => {
       isUserAProjectCreator &&
       (isViewingOwnProject || userHasOnlyOneProject) &&
       !routeMatchesForHidingDashboardButton.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
+        return Boolean(routeMatch);
       })
     );
   }, [
@@ -338,6 +343,7 @@ export const TopNavBar = () => {
     isUserAProjectCreator,
     isViewingOwnProject,
     userHasOnlyOneProject,
+    routeMatchesForHidingDashboardButton,
   ]);
 
   /**
@@ -426,7 +432,7 @@ export const TopNavBar = () => {
       (isLoggedIn === false ||
         (isLoggedIn && isUserAProjectCreator === false)) &&
       routesMatchesForEnablingProjectLaunchButton.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
+        return Boolean(routeMatch);
       })
     );
   }, [
@@ -442,10 +448,10 @@ export const TopNavBar = () => {
   const shouldShowCustomTitle: boolean = useMemo(() => {
     return (
       routesMatchesForShowingCustomTitle.some((routeMatch) => {
-        return (routeMatch as match)?.isExact;
+        return Boolean(routeMatch);
       }) && Boolean(navigationContext)
     );
-  }, [routesMatchesForShowingCustomTitle]);
+  }, [routesMatchesForShowingCustomTitle, navigationContext]);
 
   const shouldShowNavItems: boolean = useMemo(() => {
     if (isMobile) {
@@ -453,7 +459,7 @@ export const TopNavBar = () => {
     }
 
     return routesMatchesForShowingNavItems.some((routeMatch) => {
-      return (routeMatch as match)?.isExact;
+      return Boolean(routeMatch);
     });
   }, [routesMatchesForShowingNavItems, isMobile]);
 
@@ -464,7 +470,7 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={useColorModeValue('brand.bgGrey4', 'brand.bgDark')}
+        bg={'brand.bgGrey4'}
         px={4}
         backdropFilter="blur(2px)"
         position="fixed"

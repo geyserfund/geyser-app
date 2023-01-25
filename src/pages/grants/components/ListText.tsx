@@ -1,8 +1,8 @@
 import { Box, Text } from '@chakra-ui/react';
-import React from 'react';
-import satsymbol from '../../../assets/satoshi.png';
-import { fonts } from '../../../constants/fonts';
 import { useTheme } from '@chakra-ui/react';
+
+import satsymbol from '../../../assets/satoshi.png';
+import { fonts } from '../../../styles';
 import { GrantTextType } from '../../../types/types';
 
 export const ListText = ({ title, subtitle, isSatLogo }: GrantTextType) => {

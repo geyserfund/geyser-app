@@ -1,9 +1,8 @@
-import React from 'react';
-import { isMobileMode } from '../../../utils';
-
 import { Box, Wrap } from '@chakra-ui/react';
-import { BitcoinerCard } from './BitcoinerCard';
+
 import { tachiraUrl, umarUrl } from '../../../constants';
+import { useMobileMode } from '../../../utils';
+import { BitcoinerCard } from './BitcoinerCard';
 
 const members = [
   {
@@ -23,10 +22,10 @@ const members = [
 ];
 
 export const GrantDevelopers = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   return (
     <Box display={'flex'} justifyContent="center">
-      <Box width={isMobile ? '100%' : '600px'} md="">
+      <Box width={isMobile ? '100%' : '600px'}>
         <Wrap spacing="20px" align="center" justify={'center'}>
           {members.map((item, idx) => (
             <BitcoinerCard

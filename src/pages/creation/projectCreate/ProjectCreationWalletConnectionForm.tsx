@@ -1,3 +1,4 @@
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import {
   HStack,
   Image,
@@ -10,29 +11,30 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { AiOutlineSetting } from 'react-icons/ai';
+import { BiRocket } from 'react-icons/bi';
+import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
+
+import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png';
+import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png';
+import WalletOfSatoshiPNG from '../../../assets/images/third-party-icons/wallet-of-satoshi@3x.png';
+import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
 import {
   ButtonComponent,
   TextInputBox,
   UndecoratedLink,
 } from '../../../components/ui';
-import { toInt, useNotification, validateEmail } from '../../../utils';
-import { AiOutlineSetting } from 'react-icons/ai';
-import { TNodeInput } from './types';
-import { BiRocket } from 'react-icons/bi';
+import Loader from '../../../components/ui/Loader';
 import {
   AlbyLightningAddressURL,
   BitNobURL,
-  colors,
   GeyserTermsAndConditionsURL,
   VoltageExplainerPageForGeyserURL,
   WalletOfSatoshiLightningAddressURL,
 } from '../../../constants';
-import { NodeAdditionModal } from './components/NodeAdditionModal';
-import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg';
-import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png';
-import WalletOfSatoshiPNG from '../../../assets/images/third-party-icons/wallet-of-satoshi@3x.png';
-import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png';
+import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
+import { colors } from '../../../styles';
 import {
   CreateWalletInput,
   FundingResourceType,
@@ -41,11 +43,10 @@ import {
   Project,
   ResourceInput,
 } from '../../../types/generated/graphql';
-import Loader from '../../../components/ui/Loader';
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
+import { toInt, useNotification, validateEmail } from '../../../utils';
+import { NodeAdditionModal } from './components/NodeAdditionModal';
 import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox';
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
-import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations';
+import { TNodeInput } from './types';
 
 type Props = {
   project: Project;
@@ -56,20 +57,18 @@ type Props = {
 };
 
 export enum ConnectionOption {
-  // eslint-disable-next-line no-unused-vars
   LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
-  // eslint-disable-next-line no-unused-vars
+
   PERSONAL_NODE = 'PERSONAL_NODE',
 }
 
 export enum LNAddressEvaluationState {
-  // eslint-disable-next-line no-unused-vars
   IDLE = 'IDLE',
-  // eslint-disable-next-line no-unused-vars
+
   LOADING = 'LOADING',
-  // eslint-disable-next-line no-unused-vars
+
   FAILED = 'FAILED',
-  // eslint-disable-next-line no-unused-vars
+
   SUCCEEDED = 'SUCCEEDED',
 }
 
@@ -357,7 +356,7 @@ export const ProjectCreationWalletConnectionForm = ({
               </Radio>
 
               {connectionOption === ConnectionOption.PERSONAL_NODE ? (
-                <ButtonComponent isFullWidth onClick={openWallet}>
+                <ButtonComponent w="full" onClick={openWallet}>
                   {' '}
                   <AiOutlineSetting
                     style={{ marginRight: '5px' }}
@@ -384,7 +383,7 @@ export const ProjectCreationWalletConnectionForm = ({
         <VStack width="100%" alignItems="flex-start">
           <ButtonComponent
             primary
-            isFullWidth
+            w="full"
             onClick={handleProjectLaunchSelected}
             isLoading={isCreateWalletLoading}
             disabled={isSubmitEnabled === false || isEvaluatingLightningAddress}
@@ -397,7 +396,7 @@ export const ProjectCreationWalletConnectionForm = ({
 
           {onSaveAsDraftSelected && (
             <ButtonComponent
-              isFullWidth
+              w="full"
               onClick={() => onSaveAsDraftSelected(createWalletInput!)}
               disabled={isCreateWalletLoading || isEvaluatingLightningAddress}
             >

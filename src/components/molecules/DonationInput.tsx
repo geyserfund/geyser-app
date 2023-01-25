@@ -1,22 +1,23 @@
 import {
+  Button,
+  HStack,
   Input,
   InputGroup,
+  InputGroupProps,
   InputLeftElement,
   InputProps,
   InputRightElement,
-  Button,
   useDisclosure,
-  InputGroupProps,
   VStack,
-  HStack,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiDollar } from 'react-icons/bi';
 import { BsArrowRepeat } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
+
 import { useBtcContext } from '../../context/btc';
+import { colors } from '../../styles';
 import {
   CrownIcon,
   MedalIcon,

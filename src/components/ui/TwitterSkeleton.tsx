@@ -1,6 +1,5 @@
 import { Box } from '@chakra-ui/layout';
 import { SkeletonCircle, SkeletonText } from '@chakra-ui/skeleton';
-import React from 'react';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({

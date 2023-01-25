@@ -1,4 +1,3 @@
-import React, { useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -7,33 +6,33 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import Loader from '../../../components/ui/Loader';
-import { FundingStatus, InvoiceStatus } from '../../../types/generated/graphql';
-import { QRCode } from 'react-qrcode-logo';
-import { RiLinkUnlink } from 'react-icons/ri';
-import { colors } from '../../../constants';
-import { ButtonComponent } from '../../../components/ui';
-import { FaBitcoin, FaCopy } from 'react-icons/fa';
-import LogoDark from '../../../assets/logo-dark.svg';
-import LogoPrimary from '../../../assets/logo-brand.svg';
+import { useMemo, useState } from 'react';
 import { BiRefresh } from 'react-icons/bi';
 import { BsExclamationCircle } from 'react-icons/bs';
+import { FaBitcoin, FaCopy } from 'react-icons/fa';
+import { RiLinkUnlink } from 'react-icons/ri';
+import { QRCode } from 'react-qrcode-logo';
+
+import LogoPrimary from '../../../assets/logo-brand.svg';
+import LogoDark from '../../../assets/logo-dark.svg';
+import { ButtonComponent } from '../../../components/ui';
+import Loader from '../../../components/ui/Loader';
+import { colors } from '../../../styles';
+import { FundingStatus, InvoiceStatus } from '../../../types/generated/graphql';
 
 type Props = {
   fundingFlow: any;
 };
 
-// eslint-disable-next-line no-unused-vars
 enum QRDisplayState {
-  // eslint-disable-next-line no-unused-vars
   REFRESHING = 'REFRESHING',
-  // eslint-disable-next-line no-unused-vars
+
   AWAITING_PAYMENT = 'AWAITING_PAYMENT',
-  // eslint-disable-next-line no-unused-vars
+
   AWAITING_PAYMENT_WEB_LN = 'AWAITING_PAYMENT_WEB_LN',
-  // eslint-disable-next-line no-unused-vars
+
   INVOICE_CANCELLED = 'INVOICE_CANCELLED',
-  // eslint-disable-next-line no-unused-vars
+
   FUNDING_CANCELED = 'FUNDING_CANCELED',
 }
 
@@ -188,7 +187,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   const PaymentRequestCopyButton = ({ ...rest }: HTMLChakraProps<'button'>) => {
     return (
       <ButtonComponent
-        isFullWidth
+        w="full"
         onClick={handleCopyButtonTapped}
         _disabled={{
           opacity: hasCopiedQRCode ? '1' : '0.4',

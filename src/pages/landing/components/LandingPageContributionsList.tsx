@@ -1,24 +1,23 @@
-import React from 'react';
 import { VStack } from '@chakra-ui/react';
 
-import Loader from '../../../components/ui/Loader';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
 import { AlertBox } from '../../../components/ui';
+import Loader from '../../../components/ui/Loader';
+import { ID } from '../../../constants/components';
+import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
+import { ScrollInvoke } from '../../../helpers';
+import { useQueryWithPagination } from '../../../hooks';
 import { FundingMethod, Project } from '../../../types/generated/graphql';
 import {
   aggregateTransactions,
   FundingTxWithCount,
-  isMobileMode,
+  useMobileMode,
 } from '../../../utils';
-import { ScrollInvoke } from '../../../helpers';
-import { useQueryWithPagination } from '../../../hooks';
-import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
-import { ID } from '../../../constants/components';
 
 const itemLimit = 50;
 
 export const LandingPageContributionsList = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const {
     isLoading,
     isLoadingMore,

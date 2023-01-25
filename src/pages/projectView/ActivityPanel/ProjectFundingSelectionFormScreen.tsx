@@ -6,7 +6,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
+
 import { BoltIcon } from '../../../components/icons';
 import {
   ButtonComponent,
@@ -18,10 +19,10 @@ import { MAX_FUNDING_AMOUNT_USD } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
 import { IFundForm } from '../../../hooks';
 import { IProjectType } from '../../../interfaces';
-import { useNotification } from '../../../utils';
 import { ProjectReward } from '../../../types/generated/graphql';
-import { FundingFormSection } from '../FundingFormSection';
+import { useNotification } from '../../../utils';
 import { ProjectPaymentFormFundingComment } from '../components/ProjectPaymentFormFundingComment';
+import { FundingFormSection } from '../FundingFormSection';
 
 type Props = {
   isMobile: boolean;

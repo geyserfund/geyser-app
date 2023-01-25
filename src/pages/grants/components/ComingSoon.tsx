@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Box, Text, Image, HStack, Skeleton } from '@chakra-ui/react';
-import { isMobileMode } from '../../../utils';
+import { Box, HStack, Image, Skeleton, Text } from '@chakra-ui/react';
+import { useState } from 'react';
+
 import { SatoshiIconTilted } from '../../../components/icons';
+import { useMobileMode } from '../../../utils';
 
 interface ComingSoonProps {
   image: string;
@@ -16,7 +17,7 @@ export const ComingSoon = ({
   title,
   marginRight,
 }: ComingSoonProps) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const [imageLoad, setImageLoad] = useState(false);
   return (
     <Box

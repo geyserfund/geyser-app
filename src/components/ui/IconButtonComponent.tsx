@@ -1,8 +1,8 @@
-import React from 'react';
-
 import { IconButton, IconButtonProps } from '@chakra-ui/button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { colors, styles } from '../../constants';
+
+import { colors } from '../../styles';
+import { buttonCommon } from '../../styles/common';
 
 interface IIconButtonComponentP extends IconButtonProps {
   primary?: boolean;
@@ -23,7 +23,7 @@ export const IconButtonComponent = ({
       color={primary ? 'black' : textColor}
       _hover={primary ? { bg: 'brand.primaryTint' } : undefined}
       {...rest}
-      sx={styles.buttonCommon}
+      sx={buttonCommon}
     />
   );
 };

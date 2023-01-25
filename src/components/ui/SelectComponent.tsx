@@ -1,9 +1,9 @@
-import React from 'react';
-import Select from 'react-select';
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
-import classNames from 'classnames';
 import { useDisclosure } from '@chakra-ui/react';
+import classNames from 'classnames';
+import { createUseStyles } from 'react-jss';
+import Select from 'react-select';
+
+import { colors } from '../../styles';
 
 const useStyles = createUseStyles({
   focused: {

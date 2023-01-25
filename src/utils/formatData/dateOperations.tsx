@@ -1,4 +1,4 @@
-import { DateTime, Interval, Duration } from 'luxon';
+import { DateTime, Duration, Interval } from 'luxon';
 
 export const getDaysAgo = (date: string) => {
   const dateTime = DateTime.fromMillis(parseInt(date, 10));

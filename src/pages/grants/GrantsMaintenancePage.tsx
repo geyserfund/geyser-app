@@ -1,5 +1,4 @@
-import React from 'react';
-import { Image, VStack, Text } from '@chakra-ui/react';
+import { Image, Text, VStack } from '@chakra-ui/react';
 
 export const GrantsMaintenancePage = () => {
   return (

@@ -5,7 +5,6 @@ import {
   AlertProps,
   AlertTitle,
 } from '@chakra-ui/react';
-import React from 'react';
 import { MdOutlineReportGmailerrorred } from 'react-icons/md';
 
 type Props = AlertProps & {

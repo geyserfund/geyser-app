@@ -1,7 +1,7 @@
 import { HStack, Text } from '@chakra-ui/react';
-import React from 'react';
 import { BsHeartFill } from 'react-icons/bs';
-import { colors } from '../../../constants';
+
+import { colors } from '../../../styles';
 
 type Props = {
   count: number;

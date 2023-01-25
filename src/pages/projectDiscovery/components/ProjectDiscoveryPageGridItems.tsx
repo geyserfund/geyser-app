@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { GridItem, SimpleGrid } from '@chakra-ui/react';
 
 import { Project } from '../../../types/generated/graphql';

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
+
 import { Project } from '../../../types/generated/graphql';
 
 export enum MobileViews {
@@ -16,7 +17,7 @@ type ProjectContextProps = {
 
 const defaultProjectContext = {
   mobileView: MobileViews.description,
-  setMobileView: (view: MobileViews) => {},
+  setMobileView(view: MobileViews) {},
   project: {} as Project,
 };
 

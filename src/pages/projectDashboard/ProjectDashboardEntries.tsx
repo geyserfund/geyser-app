@@ -1,24 +1,25 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { GridItem, useDisclosure, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
+
 import {
   DeleteConfirmModal,
   ProjectEntryCard,
   ProjectSectionBar,
 } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
+import Loader from '../../components/ui/Loader';
 import { getPath } from '../../constants';
+import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql';
 import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations';
-import { toInt, useNotification } from '../../utils';
 import {
   Entry,
   Project,
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql';
-import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql';
-import Loader from '../../components/ui/Loader';
+import { toInt, useNotification } from '../../utils';
 
 type ResponseData = {
   project: Project & {
@@ -32,7 +33,7 @@ type QueryVariables = {
 };
 
 export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { toast } = useNotification();
 
   const [liveEntries, setLiveEntries] = useState<Entry[]>([]);
@@ -43,7 +44,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
     {
       fetchPolicy: 'network-only',
       variables: { where: { id: toInt(project.id) } },
-      onCompleted: (data) => {
+      onCompleted(data) {
         const live = data.project.publishedEntries;
         const draft = data.project.unpublishedEntries;
 
@@ -64,11 +65,11 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
   const [selectedEntry, setSelectedEntry] = useState<Entry>();
 
   const handleCreateEntry = () => {
-    history.push(getPath('projectEntryCreation', project.name));
+    navigate(getPath('projectEntryCreation', project.name));
   };
 
   const handleEntryEditButtonTapped = (entry: Entry) => {
-    history.push(getPath('projectEntryDetails', project.name, entry.id));
+    navigate(getPath('projectEntryDetails', project.name, entry.id));
   };
 
   const triggerDeleteEntry = (entry: Entry) => {
@@ -153,7 +154,7 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
                   );
                 })}
               </VStack>
-              <ButtonComponent isFullWidth onClick={handleCreateEntry}>
+              <ButtonComponent w="full" onClick={handleCreateEntry}>
                 <BiPlus style={{ marginRight: '10px' }} />
                 Create a new Entry
               </ButtonComponent>

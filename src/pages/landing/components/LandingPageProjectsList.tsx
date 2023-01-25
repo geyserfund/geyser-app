@@ -1,15 +1,15 @@
-import React from 'react';
+import { useQuery } from '@apollo/client';
 import { List, ListItem } from '@chakra-ui/react';
+
 import { AlertBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
-import { LandingPageProjectsListItem } from './LandingPageProjectsListItem';
+import { QUERY_PROJECTS } from '../../../graphql';
 import {
   OrderByOptions,
   Project,
   ProjectsGetQueryInput,
 } from '../../../types/generated/graphql';
-import { useQuery } from '@apollo/client';
-import { QUERY_PROJECTS } from '../../../graphql';
+import { LandingPageProjectsListItem } from './LandingPageProjectsListItem';
 
 type Props = {
   itemLimit?: number;

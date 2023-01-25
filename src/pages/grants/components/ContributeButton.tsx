@@ -1,44 +1,45 @@
 /* eslint-disable radix */
 
-import React, { useEffect, useState } from 'react';
+import { CheckIcon } from '@chakra-ui/icons';
+import { VStack } from '@chakra-ui/layout';
 import {
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   Box,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Input,
-  Image,
   HStack,
+  IconButton,
+  Image,
+  Input,
   InputGroup,
   InputLeftElement,
   Link,
-  IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
 } from '@chakra-ui/react';
-import QRCode from 'react-qr-code';
-import { CheckIcon } from '@chakra-ui/icons';
-import { VStack } from '@chakra-ui/layout';
-import { ButtonComponent } from '../../../components/ui';
-import { useNotification, isMobileMode, toInt } from '../../../utils';
-import Loader from '../../../components/ui/Loader';
-import { createCreatorRecord } from '../../../api';
-import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { useFundingFlow } from '../../../hooks';
-import { fundingStages, GeyserTelegramUrl } from '../../../constants';
-import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import { useBtcContext } from '../../../context/btc';
-import { Subscribe } from '../../../components/nav/Subscribe';
+import React, { useEffect, useState } from 'react';
 import { FaTelegramPlane } from 'react-icons/fa';
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
+import QRCode from 'react-qr-code';
+
+import { createCreatorRecord } from '../../../api';
+import { Subscribe } from '../../../components/nav/Subscribe';
+import { ButtonComponent } from '../../../components/ui';
+import Loader from '../../../components/ui/Loader';
+import { fundingStages, GeyserTelegramUrl } from '../../../constants';
+import { useBtcContext } from '../../../context/btc';
+import { useFundingFlow } from '../../../hooks';
 import {
   FundingInput,
   FundingResourceType,
   Project,
 } from '../../../types/generated/graphql';
+import { toInt, useMobileMode, useNotification } from '../../../utils';
+import { commaFormatted } from '../../../utils/formatData/helperFunctions';
 
 interface ContributeButtonProps {
   active: boolean;
@@ -72,7 +73,7 @@ export const ContributeButton = ({
   const [thousandAmount, setThousandAmount] = useState(false);
   const [hundredAmount, setHundredAmount] = useState(false);
 
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   useEffect(() => {
     if (copy) {
@@ -374,7 +375,7 @@ export const ContributeButton = ({
           </ModalBody>
           <ModalFooter display="block">
             <ButtonComponent
-              isFullWidth
+              w="full"
               primary={copy}
               onClick={handleCopyOnchain}
               leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}

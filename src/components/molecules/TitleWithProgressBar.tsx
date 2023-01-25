@@ -1,6 +1,6 @@
 import { Box, BoxProps, HStack, Text } from '@chakra-ui/react';
-import React from 'react';
 import { resolveTripleslashReference } from 'typescript';
+
 import { ProgressBar } from '../ui';
 
 interface ITitleWithProgressBar extends BoxProps {

@@ -1,5 +1,4 @@
 import { Box, HTMLChakraProps, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
 
 type Props = HTMLChakraProps<'div'> & {
   primaryText: string | React.ReactElement;

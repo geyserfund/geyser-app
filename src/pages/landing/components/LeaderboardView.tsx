@@ -8,15 +8,15 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { Link as ReactRouterLink } from 'react-router-dom';
-import React from 'react';
 import { BsArrowRight } from 'react-icons/bs';
+import { Link as ReactRouterLink } from 'react-router-dom';
+
 import { getPath } from '../../../constants';
-import { isMobileMode } from '../../../utils';
+import { useMobileMode } from '../../../utils';
 import { LandingPageProjectsList } from './LandingPageProjectsList';
 
 export const LeaderboardView = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   return (
     <Box flexBasis={1} height="full">
       <VStack

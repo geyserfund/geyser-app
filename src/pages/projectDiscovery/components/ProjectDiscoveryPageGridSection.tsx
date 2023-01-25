@@ -1,40 +1,40 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLazyQuery } from '@apollo/client';
 import {
+  Box,
+  Center,
   Container,
   Divider,
   Grid,
   GridItem,
   HStack,
-  Text,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Box,
-  Center,
+  Text,
   VStack,
 } from '@chakra-ui/react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { RiSortDesc } from 'react-icons/ri';
 
-import { useLazyQuery } from '@apollo/client';
+import { StickToTop } from '../../../components/layouts';
+import { H3 } from '../../../components/typography';
 import { AlertBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
+import { ID } from '../../../constants/components';
 import { QUERY_PROJECTS } from '../../../graphql';
+import { ScrollInvoke } from '../../../helpers';
+import { useListenerState } from '../../../hooks';
 import {
+  OrderByOptions,
+  PaginationInput,
   Project,
   ProjectsGetQueryInput,
   ProjectsOrderByInput,
-  OrderByOptions,
-  PaginationInput,
 } from '../../../types/generated/graphql';
-import { RiSortDesc } from 'react-icons/ri';
+import { useMobileMode } from '../../../utils';
 import { ProjectDiscoveryPageGridItems } from './ProjectDiscoveryPageGridItems';
-import { useListenerState } from '../../../hooks';
-import { ScrollInvoke } from '../../../helpers';
-import { StickToTop } from '../../../components/layouts';
-import { isMobileMode } from '../../../utils';
-import { H3 } from '../../../components/typography';
-import { ID } from '../../../constants/components';
 
 type ResponseData = {
   projects: {
@@ -53,7 +53,7 @@ export const ProjectDiscoveryPageGridSection = () => {
     createdAt: OrderByOptions.Desc,
   });
 
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const handleOrderBySelectionChanged = async (
     newOption: ProjectsOrderByInput,
@@ -120,7 +120,7 @@ export const ProjectDiscoveryPageGridSection = () => {
           orderBy: [orderByOption],
         },
       },
-      updateQuery: (_previousResult, { fetchMoreResult }) => {
+      updateQuery(_previousResult, { fetchMoreResult }) {
         if (fetchMoreResult.projects.projects.length < pagingItemLimit) {
           setIsShowingAllProjects(true);
         }

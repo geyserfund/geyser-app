@@ -1,5 +1,4 @@
 import { HStack, StackProps, Text } from '@chakra-ui/react';
-import React from 'react';
 
 interface CharacterLimitErrorProps extends StackProps {
   length: number;

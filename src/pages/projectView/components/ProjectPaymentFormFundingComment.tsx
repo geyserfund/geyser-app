@@ -1,8 +1,4 @@
 import { CloseIcon, SearchIcon } from '@chakra-ui/icons';
-import { GiphyFetch } from '@giphy/js-fetch-api';
-import { IGif } from '@giphy/js-types';
-import { Grid } from '@giphy/react-components';
-
 import {
   Box,
   Button,
@@ -20,11 +16,15 @@ import {
   useBoolean,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { GiphyFetch } from '@giphy/js-fetch-api';
+import { IGif } from '@giphy/js-types';
+import { Grid } from '@giphy/react-components';
+import { useEffect, useState } from 'react';
+
 import { GifIcon } from '../../../components/icons';
 import { TextArea } from '../../../components/ui';
-import { isMobileMode } from '../../../utils';
-import { REACT_APP_GIPHY_API_KEY } from '../../../constants';
+import { VITE_APP_GIPHY_API_KEY } from '../../../constants';
+import { useMobileMode } from '../../../utils';
 
 type Props = HTMLChakraProps<'div'> & {
   comment: string;
@@ -38,7 +38,7 @@ export const ProjectPaymentFormFundingComment = ({
   setFormState,
   ...rest
 }: Props) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const {
     isOpen: isGIFModalOpen,
@@ -54,12 +54,9 @@ export const ProjectPaymentFormFundingComment = ({
     useBoolean(false);
   const [focus, setFocus] = useState(true);
 
-  // TODO: remove the static value
   useEffect(() => {
-    if (REACT_APP_GIPHY_API_KEY) {
-      const giphy = new GiphyFetch(
-        REACT_APP_GIPHY_API_KEY || 'Vcrx5mgdcrDgWVS1UsPiINK4NFyStV0Q',
-      );
+    if (VITE_APP_GIPHY_API_KEY) {
+      const giphy = new GiphyFetch(VITE_APP_GIPHY_API_KEY);
       setGiphyFetch(giphy);
     }
   }, []);

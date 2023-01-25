@@ -1,43 +1,44 @@
-import { HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import {
-  ButtonComponent,
-  IconButtonComponent,
-  SatoshiAmount,
-} from '../../../components/ui';
-import { toInt, useNotification } from '../../../utils';
-import { colors, getPath } from '../../../constants';
-import { useHistory, useParams } from 'react-router';
-import {
-  MilestoneAdditionModal,
-  defaultMilestone,
-  RewardAdditionModal,
-} from './components';
+import { useMutation, useQuery } from '@apollo/client';
 import { EditIcon } from '@chakra-ui/icons';
+import { HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { DateTime } from 'luxon';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+
 import {
   CalendarButton,
   DeleteConfirmModal,
   RewardCard,
 } from '../../../components/molecules';
-import { DateTime } from 'luxon';
-import { useMutation, useQuery } from '@apollo/client';
+import {
+  ButtonComponent,
+  IconButtonComponent,
+  SatoshiAmount,
+} from '../../../components/ui';
+import Loader from '../../../components/ui/Loader';
+import { getPath } from '../../../constants';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import {
   MUTATION_UPDATE_PROJECT,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../graphql/mutations';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
-import Loader from '../../../components/ui/Loader';
-
+import { colors } from '../../../styles';
 import type {
   Project,
   ProjectMilestone,
   ProjectReward,
 } from '../../../types/generated/graphql';
 import { RewardCurrency } from '../../../types/generated/graphql';
+import { toInt, useNotification } from '../../../utils';
+import {
+  defaultMilestone,
+  MilestoneAdditionModal,
+  RewardAdditionModal,
+} from './components';
 import { ProjectCreateLayout } from './components/ProjectCreateLayout';
 
 export const MilestoneAndRewards = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const params = useParams<{ projectId: string }>();
 
   const { toast } = useNotification();
@@ -75,7 +76,7 @@ export const MilestoneAndRewards = () => {
     MUTATION_UPDATE_PROJECT,
     {
       onCompleted() {
-        history.push(getPath('launchProjectWithNode', params.projectId));
+        navigate(getPath('launchProjectWithNode', params.projectId || ''));
       },
       onError(error) {
         toast({
@@ -153,7 +154,7 @@ export const MilestoneAndRewards = () => {
   };
 
   const handleBack = () => {
-    history.push(`/launch/${params.projectId}`);
+    navigate(`/launch/${params.projectId}`);
   };
 
   const handleRemoveReward = async (id?: number) => {
@@ -326,8 +327,8 @@ export const MilestoneAndRewards = () => {
         </VStack>
         <VStack width="100%" alignItems="flex-start" spacing="40px">
           <VStack width="100%" alignItems="flex-start">
-            <Text name="title">Project Milestones (optional)</Text>
-            <ButtonComponent isFullWidth onClick={openMilestone}>
+            <Text>Project Milestones (optional)</Text>
+            <ButtonComponent w="full" onClick={openMilestone}>
               Add a Milestone
             </ButtonComponent>
             <Text fontSize="12px">
@@ -338,7 +339,7 @@ export const MilestoneAndRewards = () => {
           <VStack width="100%" alignItems="flex-start">
             <Text>Rewards (optional)</Text>
             <ButtonComponent
-              isFullWidth
+              w="full"
               onClick={() => {
                 setSelectedReward(undefined);
                 openReward();
@@ -354,7 +355,7 @@ export const MilestoneAndRewards = () => {
           </VStack>
           <ButtonComponent
             primary
-            isFullWidth
+            w="full"
             onClick={handleNext}
             isLoading={updateProjectLoading}
           >

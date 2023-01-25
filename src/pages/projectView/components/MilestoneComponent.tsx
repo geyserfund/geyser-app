@@ -1,5 +1,5 @@
 import { Checkbox, HStack, Text } from '@chakra-ui/react';
-import React from 'react';
+
 import { SatoshiAmount } from '../../../components/ui';
 
 type Props = {

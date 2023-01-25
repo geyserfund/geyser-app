@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const express = require('express');
 const handler = require('serve-handler');
 const prerender = require('prerender-node');
 
 console.log(
   `ENV VAR CHECK:\n\tPORT: ${
-    process.env.PORT
-  }\n\PRERENDER_TOKEN: not null -> ${Boolean(process.env.PRERENDER_TOKEN)}`,
+    process.env.VITE_PORT
+  }\nPRERENDER_TOKEN: not null -> ${Boolean(process.env.PRERENDER_TOKEN)}`,
 );
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.VITE_PORT || 3001;
 const app = express();
 
 app.use(
@@ -25,7 +26,7 @@ app.use(
 
 app.use((request, response) => {
   return handler(request, response, {
-    public: './build',
+    public: './dist',
     rewrites: [{ source: '*', destination: '/index.html' }],
   });
 });

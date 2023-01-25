@@ -1,6 +1,7 @@
 import { DateTime, Interval } from 'luxon';
-import { IBadge, IFunder, IProject } from '../interfaces';
-import { Funder, Project } from '../types/generated/graphql';
+
+import { IBadge, IFunder } from '../interfaces';
+import { Funder } from '../types/generated/graphql';
 
 interface IBadges {
   [threshold: string]: IBadge;
@@ -40,7 +41,7 @@ const roleBadges: IBadges = {
 interface Props {
   creationDateStringOfFundedContent: string;
   funder: Funder | IFunder;
-  useShortForm?: Boolean;
+  useShortForm?: boolean;
 }
 
 /**

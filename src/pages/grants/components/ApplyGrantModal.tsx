@@ -1,31 +1,31 @@
 import {
+  Box,
   Button,
+  FormControl,
+  FormLabel,
+  HStack,
   Modal,
   ModalBody,
   ModalContent,
   ModalOverlay,
-  useDisclosure,
-  Box,
-  Text,
-  FormControl,
-  FormLabel,
   Select,
-  HStack,
+  Text,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState, useContext, useMemo, useEffect } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { BiLeftArrowAlt } from 'react-icons/bi';
 import { FaCheck } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 
-import { useAuthContext } from '../../../context';
 import { createApplicantRecordRound2 } from '../../../api';
-import { hasTwitterAccount, useNotification, validUrl } from '../../../utils';
 import { TwitterConnect } from '../../../components/molecules';
-import { TextInputBox, TextArea } from '../../../components/ui';
+import { TextArea, TextInputBox } from '../../../components/ui';
+import { useAuthContext } from '../../../context';
 import { AuthContext } from '../../../context';
 import { useFormState } from '../../../hooks';
 import { FormStateError } from '../../../interfaces';
-import { BiLeftArrowAlt } from 'react-icons/bi';
+import { hasTwitterAccount, useNotification, validUrl } from '../../../utils';
 
 interface Grant {
   applicant: number;
@@ -33,7 +33,7 @@ interface Grant {
   subtitle: string;
   about: string;
   image: string;
-  isClose: Boolean;
+  isClose: boolean;
 }
 
 export type GrantApplicantInput = {
@@ -218,7 +218,7 @@ export const ApplyGrantModal = ({
             alignContent="center"
             flexDirection={'column'}
           >
-            <Text justify="center">{about}</Text>
+            <Text textAlign="center">{about}</Text>
           </Box>
         </Box>
         <Box mt={4}>
@@ -228,12 +228,12 @@ export const ApplyGrantModal = ({
               onClick={() => {
                 setApplicationStages(GrantApplicationStages.form);
               }}
-              isFullWidth
+              w="full"
             >
               {user?.id ? 'Apply' : 'Confirm'}
             </Button>
           ) : (
-            <Button isFullWidth disabled>
+            <Button w="full" disabled>
               Apply
             </Button>
           )}
@@ -352,14 +352,14 @@ export const ApplyGrantModal = ({
                 isLoading
                 loadingText="Loading"
                 bg="brand.primary"
-                isFullWidth
+                w="full"
                 isDisabled
                 spinnerPlacement="start"
               >
                 Submit
               </Button>
             ) : (
-              <Button bg="brand.primary" onClick={submitForm} isFullWidth>
+              <Button bg="brand.primary" onClick={submitForm} w="full">
                 Submit
               </Button>
             )}
@@ -454,7 +454,7 @@ export const ApplyGrantModal = ({
         <Button
           variant={'outline'}
           size="sm"
-          isFullWidth
+          w="full"
           onClick={onOpen}
           style={{ border: 'solid 2px #20ECC7' }}
         >

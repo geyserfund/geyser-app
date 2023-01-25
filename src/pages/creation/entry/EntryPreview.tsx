@@ -1,8 +1,9 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Box, Image, Input, Text, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsCheckLg } from 'react-icons/bs';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+
 import { ButtonComponent, TextInputBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { getPath } from '../../../constants';
@@ -16,7 +17,7 @@ import {
 import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
 import { IEntryUpdateInput } from '../../../interfaces/entry';
 import { Owner, Project } from '../../../types/generated/graphql';
-import { toInt, isDraft, useNotification } from '../../../utils';
+import { isDraft, toInt, useNotification } from '../../../utils';
 import { defaultEntry } from './editor';
 import { CreateNav } from './editor/CreateNav';
 import { TEntry } from './types';
@@ -27,7 +28,7 @@ export const EntryPreview = () => {
   const params = useParams<{ entryId: string; projectId: string }>();
 
   const { toast } = useNotification();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { setNav } = useAuthContext();
 
   const [isEntryPublished, setIsEntryPublished] = useState(false);
@@ -40,7 +41,7 @@ export const EntryPreview = () => {
     {
       onCompleted(data) {
         if (data.entry === null) {
-          history.push(getPath('notFound'));
+          navigate(getPath('notFound'));
         }
       },
     },
@@ -68,7 +69,7 @@ export const EntryPreview = () => {
         });
       },
       onError() {
-        history.push(getPath('notFound'));
+        navigate(getPath('notFound'));
       },
     },
   );
@@ -115,9 +116,11 @@ export const EntryPreview = () => {
   };
 
   const onBack = () => {
-    history.push(
-      getPath('projectEntryDetails', params.projectId, params.entryId),
-    );
+    if (params.projectId && params.entryId) {
+      navigate(
+        getPath('projectEntryDetails', params.projectId, params.entryId),
+      );
+    }
   };
 
   const handleInput = (event: any) => {
@@ -162,13 +165,17 @@ export const EntryPreview = () => {
   };
 
   const handleGoToPost = () => {
-    history.push(getPath('entry', params.entryId));
+    if (params.entryId) {
+      navigate(getPath('entry', params.entryId));
+    }
   };
 
   const handleTwitterShareButtonTapped = () => {
-    navigator.clipboard.writeText(getPath('entry', params.entryId));
+    if (params.entryId) {
+      navigator.clipboard.writeText(getPath('entry', params.entryId));
 
-    setHasCopiedSharingLink(true);
+      setHasCopiedSharingLink(true);
+    }
   };
 
   if (loadingPosts || loading) {
@@ -290,14 +297,14 @@ export const EntryPreview = () => {
           {isEntryPublished ? (
             <VStack width="100%">
               <ButtonComponent
-                isFullWidth
+                w="full"
                 onClick={handleTwitterShareButtonTapped}
                 primary={hasCopiedSharingLink}
               >
                 {hasCopiedSharingLink ? 'Copied Link!' : 'Share on Twitter'}
               </ButtonComponent>
 
-              <ButtonComponent primary isFullWidth onClick={handleGoToPost}>
+              <ButtonComponent primary w="full" onClick={handleGoToPost}>
                 Go to Entry
               </ButtonComponent>
             </VStack>
@@ -310,9 +317,9 @@ export const EntryPreview = () => {
               </Text>
               <ButtonComponent
                 primary
-                isFullWidth
+                w="full"
                 onClick={() =>
-                  history.push(
+                  navigate(
                     getPath('projectDashboard', projectData?.project.name),
                   )
                 }
@@ -321,7 +328,7 @@ export const EntryPreview = () => {
               </ButtonComponent>
             </>
           ) : (
-            <ButtonComponent primary isFullWidth onClick={handlePublish}>
+            <ButtonComponent primary w="full" onClick={handlePublish}>
               Publish
             </ButtonComponent>
           )}

@@ -1,5 +1,5 @@
 import { Link, LinkProps } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 type Props = LinkProps & {

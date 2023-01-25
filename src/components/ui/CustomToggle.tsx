@@ -1,9 +1,10 @@
 import { Box, Text } from '@chakra-ui/layout';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
-import { isDarkMode } from '../../utils';
+
+import { colors } from '../../styles';
+import { useDarkMode } from '../../utils';
 
 const useStyles = createUseStyles({
   toggleContainer: ({ isDark }: { isDark: boolean }) => ({
@@ -69,7 +70,7 @@ export const CustomToggle = ({
   onChange,
   name,
 }: ICustomToggle) => {
-  const isDark = isDarkMode();
+  const isDark = useDarkMode();
   const classes = useStyles({ isDark });
   const [anonymous, setAnonymous] = useState(value);
 

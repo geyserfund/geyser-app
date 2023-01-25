@@ -1,20 +1,21 @@
-import { Box, Text, VStack, HStack } from '@chakra-ui/layout';
+import { HStack, Text, VStack } from '@chakra-ui/layout';
 import { CloseButton, IconButton, Link } from '@chakra-ui/react';
-import React from 'react';
-import { SectionTitle } from '../../../components/ui';
-import { isMobileMode } from '../../../utils';
-import { IFundingAmounts, IProject } from '../../../interfaces';
-import { IFundForm } from '../../../hooks';
 import { FaTelegramPlane } from 'react-icons/fa';
+
+import { SectionTitle } from '../../../components/ui';
 import { GeyserTelegramUrl } from '../../../constants';
 import { useFundCalc } from '../../../helpers/fundingCalculation';
+import { IFundForm } from '../../../hooks';
+import { IFundingAmounts, IProject } from '../../../interfaces';
+import { fonts } from '../../../styles';
+import { Satoshis } from '../../../types';
 import { Project } from '../../../types/generated/graphql';
+import { useMobileMode } from '../../../utils';
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
 } from '../components/ContributionInfoBox';
 import { ProjectFundingQRScreenQRCodeSection } from './ProjectFundingQRScreenQRCodeSection';
-import { fonts } from '../../../constants/fonts';
 
 type Props = {
   handleCloseButton: () => void;
@@ -31,7 +32,7 @@ export const ProjectFundingQRScreen = ({
   handleCloseButton,
 }: Props) => {
   const { getTotalAmount } = useFundCalc(state);
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   return (
     <VStack
@@ -57,7 +58,7 @@ export const ProjectFundingQRScreen = ({
         formState={state}
         version={ContributionInfoBoxVersion.NEUTRAL}
         project={project as Project}
-        contributionAmount={getTotalAmount('sats', project.name)}
+        contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
         rewardsEarned={state.rewardsByIDAndCount}
         isFunderAnonymous={state.anonymous}
         funderUsername={state.funderUsername}

@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
-import { Button, VStack, Divider } from '@chakra-ui/react';
+import { Button, Divider, VStack } from '@chakra-ui/react';
+import { useMemo, useState } from 'react';
 
+import { ProjectEntryCard } from '../../../components/molecules';
+import { AlertBox } from '../../../components/ui';
 import Loader from '../../../components/ui/Loader';
 import { useAllGeyserProjectEntries } from '../../../hooks';
-import { AlertBox } from '../../../components/ui';
-import { ProjectEntryCard } from '../../../components/molecules';
 import { Entry, PaginationInput } from '../../../types/generated/graphql';
 
 type Props = {
@@ -46,7 +46,7 @@ export const LandingPageProjectsEntriesList = ({ itemLimit = 5 }: Props) => {
           pagination: paginationInput,
         },
       },
-      updateQuery: (previousResult, { fetchMoreResult }) => {
+      updateQuery(previousResult, { fetchMoreResult }) {
         if (fetchMoreResult.getEntries.length < itemLimit) {
           setIsShowingAllEntries(true);
         }

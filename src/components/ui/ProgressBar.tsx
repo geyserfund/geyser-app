@@ -1,5 +1,4 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import React from 'react';
 
 interface IProgressBar extends BoxProps {
   value: number;

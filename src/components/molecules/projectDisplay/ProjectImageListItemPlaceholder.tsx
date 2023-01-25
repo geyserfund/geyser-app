@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
-import React from 'react';
-import { colors } from '../../../constants';
+
+import { colors } from '../../../styles';
 
 type Props = {
   borderRadius?: string;

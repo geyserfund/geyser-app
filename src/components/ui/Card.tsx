@@ -1,7 +1,6 @@
 import { Box } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import classNames from 'classnames';
-import React from 'react';
 import { createUseStyles } from 'react-jss';
 
 export interface ICard extends HTMLChakraProps<'div'> {

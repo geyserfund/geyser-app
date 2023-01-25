@@ -11,10 +11,10 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules';
 import { ButtonComponent, TextInputBox } from '../../../../components/ui';
-import { colors } from '../../../../constants';
 import { MilestoneValidations } from '../../../../constants/validations';
 import {
   MUTATION_CREATE_PROJECT_MILESTONE,
@@ -22,6 +22,7 @@ import {
   MUTATION_UPDATE_PROJECT_MILESTONE,
 } from '../../../../graphql/mutations';
 import { useBTCConverter } from '../../../../helpers';
+import { colors } from '../../../../styles';
 import { ProjectMilestone } from '../../../../types';
 import { Satoshis, USDCents, USDollars } from '../../../../types/types';
 import { toInt, useNotification } from '../../../../utils';
@@ -345,11 +346,11 @@ export const MilestoneAdditionModal = ({
             ))}
           </VStack>
           <VStack spacing="10px">
-            <ButtonComponent isFullWidth onClick={handleAddMilestone}>
+            <ButtonComponent w="full" onClick={handleAddMilestone}>
               Add a Milestone
             </ButtonComponent>
             <ButtonComponent
-              isFullWidth
+              w="full"
               primary
               isLoading={
                 createMilestoneLoading ||

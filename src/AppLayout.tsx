@@ -1,17 +1,17 @@
-import React from 'react';
 import { Box } from '@chakra-ui/layout';
+import { Fade } from '@chakra-ui/react';
+
 import { LandingNavBar, TopNavBar } from './components/nav';
+import { Router } from './config';
+import { dimensions } from './constants';
+import { ID } from './constants/components';
 import { useAuthContext } from './context';
 import { LoadingPage } from './pages/loading';
-import { Fade } from '@chakra-ui/react';
-import { dimensions } from './constants';
-import { isMobileMode } from './utils';
-import { Router } from './config';
-import { ID } from './constants/components';
+import { useMobileMode } from './utils';
 
 export const AppLayout = () => {
   const { loading } = useAuthContext();
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   if (loading) {
     return <LoadingPage />;

@@ -1,9 +1,9 @@
 import { HStack, Text, TextProps } from '@chakra-ui/react';
-import React from 'react';
+
 import { useBTCConverter } from '../../helpers';
+import { Satoshis } from '../../types';
 import { numberWithCommas, toInt } from '../../utils';
 import { SatoshiIconTilted } from '../icons';
-import { Satoshis } from '../../types';
 
 type Props = TextProps & {
   label?: string;

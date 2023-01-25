@@ -1,32 +1,32 @@
-import React, { useEffect } from 'react';
+import { useQuery } from '@apollo/client';
 import {
+  Container,
   HStack,
+  Image,
+  Skeleton,
+  Stack,
   Text,
   VStack,
-  Skeleton,
-  Image,
-  Container,
-  Stack,
 } from '@chakra-ui/react';
-import { useQuery } from '@apollo/client';
+import { useEffect } from 'react';
 
+import { H2, H3 } from '../../../components/typography';
+import Loader from '../../../components/ui/Loader';
 import {
-  colors,
   LandingBannerPatternUrl,
   LandingLetTheSatsFlowUrl,
 } from '../../../constants';
+import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
+import { colors } from '../../../styles';
 import {
   getShortAmountLabel,
-  isMobileMode,
+  useMobileMode,
   useNotification,
 } from '../../../utils';
-import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
-import Loader from '../../../components/ui/Loader';
-import { H2, H3 } from '../../../components/typography';
 
 export const TopBanner = () => {
   const { toast } = useNotification();
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const {
     loading: isSummaryLoading,

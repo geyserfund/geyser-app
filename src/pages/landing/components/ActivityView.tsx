@@ -1,11 +1,10 @@
-import React from 'react';
-import { Divider, HTMLChakraProps, Box, VStack } from '@chakra-ui/react';
-// import { LandingPageProjectsEntriesList } from './LandingPageProjectsEntriesList';
-import { LandingPageContributionsList } from './LandingPageContributionsList';
-import { H3 } from '../../../components/typography';
-import { StickToTop } from '../../../components/layouts';
+import { Box, Divider, HTMLChakraProps, VStack } from '@chakra-ui/react';
 
-type Props = HTMLChakraProps<'div'> & {};
+import { StickToTop } from '../../../components/layouts';
+import { H3 } from '../../../components/typography';
+import { LandingPageContributionsList } from './LandingPageContributionsList';
+
+type Props = HTMLChakraProps<'div'>;
 
 export const ActivityView = ({ ...rest }: Props) => {
   return (

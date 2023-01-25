@@ -1,6 +1,6 @@
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
-import { fadeOut, slideInRight } from '../../../css';
+
+import { colors } from '../../../styles';
 
 type Rules = string;
 

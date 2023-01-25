@@ -1,12 +1,11 @@
-import React from 'react';
 import { Box, Divider, Stack } from '@chakra-ui/react';
-import { AppFooter } from '../../components/molecules';
 
+import { AppFooter } from '../../components/molecules';
+import { useMobileMode } from '../../utils';
 import { ActivityView, LeaderboardView, TopBanner } from './components';
-import { isMobileMode } from '../../utils';
 
 export const LandingPage = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   return (
     <Box position="relative" width="full" height="full">

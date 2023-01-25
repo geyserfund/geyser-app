@@ -1,7 +1,7 @@
-import React from 'react';
 import { GridItem, SimpleGrid } from '@chakra-ui/react';
-import { OwnerOf, User, Maybe } from '../../../types/generated/graphql';
+
 import { AlertBox } from '../../../components/ui';
+import { Maybe, OwnerOf, User } from '../../../types/generated/graphql';
 import { UserProfilePageProjectsListItem } from '../containers';
 
 type Props = {

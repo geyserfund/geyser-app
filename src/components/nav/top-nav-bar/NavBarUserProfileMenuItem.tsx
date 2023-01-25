@@ -1,5 +1,6 @@
-import { Avatar, Heading, HStack, VStack, Text } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import { Avatar, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { useContext } from 'react';
+
 import { AuthContext } from '../../../context';
 
 export const NavBarUserProfileMenuItem = () => {

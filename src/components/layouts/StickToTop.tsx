@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, BoxProps } from '@chakra-ui/react';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+
 import { useListenerState } from '../../hooks';
 
 interface StickToTopProps extends BoxProps {
   id: string;
   scrollContainerId?: string;
-  offset?: string;
+  offset?: number;
   disable?: boolean;
   _onStick?: BoxProps;
 }
@@ -13,7 +15,7 @@ interface StickToTopProps extends BoxProps {
 export const StickToTop = ({
   id,
   scrollContainerId,
-  offset,
+  offset = 0,
   disable,
   children,
   _onStick,
@@ -70,7 +72,7 @@ export const StickToTop = ({
           currentElement.scrollTop +
           currentElement.clientTop -
           scrollTop <=
-        0
+        offset
       ) {
         setStick(true);
       } else {

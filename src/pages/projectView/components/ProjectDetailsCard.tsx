@@ -9,30 +9,32 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
+import { AmbossIcon, BoltIcon, ShareIcon } from '../../../components/icons';
 import {
   Card,
-  SatoshiAmount,
   ProjectStatusLabel,
+  SatoshiAmount,
 } from '../../../components/ui';
-import { ProjectLightningQR } from './ProjectLightningQR';
-import { BoltIcon, ShareIcon, AmbossIcon } from '../../../components/icons';
-import { AvatarElement } from './AvatarElement';
+import { AmbossUrl, getPath, HomeUrl } from '../../../constants';
 import { useAuthContext } from '../../../context';
 import { Project } from '../../../types/generated/graphql';
-import { getPath, HomeUrl, AmbossUrl } from '../../../constants';
-import { isActive, isMobileMode, MarkDown } from '../../../utils';
+import { isActive, MarkDown, useMobileMode } from '../../../utils';
+import { AvatarElement } from './AvatarElement';
+import { ProjectLightningQR } from './ProjectLightningQR';
 
 export const ProjectDetailsCard = ({
   project,
   fundButtonFunction,
 }: {
-  project: Project;
+  project: Project & {
+    wallets?: { connectionDetails?: { pubkey?: string } }[];
+  };
   fundButtonFunction: any;
 }) => {
   const { user } = useAuthContext();
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false);
   const owner = project.owners[0];
@@ -167,27 +169,28 @@ export const ProjectDetailsCard = ({
                 onClick={handleShareButtonTapped}
               />
             </Tooltip>
-            {project.wallets && project.wallets[0]?.connectionDetails?.pubkey && (
-              <IconButton
-                size="sm"
-                _hover={{
-                  backgroundColor: 'none',
-                  border: '1px solid #20ECC7',
-                }}
-                _active={{ backgroundColor: 'brand.primary' }}
-                bg="none"
-                icon={<AmbossIcon fontSize="20px" />}
-                aria-label="share"
-                onClick={() =>
-                  window
-                    .open(
-                      `${AmbossUrl}${project.wallets[0].connectionDetails.pubkey}`,
-                      '_blank',
-                    )
-                    ?.focus()
-                }
-              />
-            )}
+            {project.wallets &&
+              project.wallets[0]?.connectionDetails?.pubkey && (
+                <IconButton
+                  size="sm"
+                  _hover={{
+                    backgroundColor: 'none',
+                    border: '1px solid #20ECC7',
+                  }}
+                  _active={{ backgroundColor: 'brand.primary' }}
+                  bg="none"
+                  icon={<AmbossIcon fontSize="20px" />}
+                  aria-label="share"
+                  onClick={() =>
+                    window
+                      .open(
+                        `${AmbossUrl}${project.wallets[0].connectionDetails.pubkey}`,
+                        '_blank',
+                      )
+                      ?.focus()
+                  }
+                />
+              )}
           </HStack>
         </VStack>
         <HStack>
@@ -214,7 +217,7 @@ export const ProjectDetailsCard = ({
         )}
         {!isMobile && (
           <Button
-            isFullWidth
+            w="full"
             backgroundColor={
               isActive(project.status)
                 ? 'brand.primary'

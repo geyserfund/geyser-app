@@ -1,31 +1,32 @@
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import {
+  GridItem,
   HStack,
   Text,
-  VStack,
-  GridItem,
   useMediaQuery,
+  VStack,
 } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
-import { useHistory } from 'react-router';
-
+import { useMemo, useState } from 'react';
 import { BiPencil } from 'react-icons/bi';
+import { useNavigate } from 'react-router';
+
 import { IconButtonComponent } from '../../components/ui';
-import { TNodeInput } from '../creation/projectCreate/types';
-import { colors, getPath } from '../../constants';
-import { useNotification } from '../../utils';
+import { getPath } from '../../constants';
+import { colors } from '../../styles';
 import {
   LightningAddressConnectionDetails,
   LndConnectionDetailsPrivate,
   Project,
   Wallet,
 } from '../../types/generated/graphql';
-import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView';
+import { useNotification } from '../../utils';
 import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate';
-import { CheckCircleIcon } from '@chakra-ui/icons';
+import { TNodeInput } from '../creation/projectCreate/types';
+import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView';
 
 export const ProjectFundingSettings = ({ project }: { project: Project }) => {
   const { toast } = useNotification();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   const [nodeData, setNodeData] = useState<TNodeInput>();
@@ -36,7 +37,7 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
   }, [project.wallets]);
 
   const handleProjectLaunch = async () => {
-    history.push(getPath('project', project.name));
+    navigate(getPath('project', project.name));
     toast({
       status: 'success',
       title: 'Wallet updated!',

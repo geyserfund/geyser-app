@@ -1,8 +1,7 @@
-import { Avatar, HStack, Text, Link } from '@chakra-ui/react';
-import React from 'react';
+import { Avatar, HStack, Link, Text } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { getPath } from '../../constants';
 
+import { getPath } from '../../constants';
 import { Project } from '../../types/generated/graphql';
 
 type Props = {

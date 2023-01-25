@@ -1,5 +1,5 @@
-import React from 'react';
 import { Avatar, Stack } from '@chakra-ui/react';
+
 import { getRandomOrb } from '../../utils';
 import { UserSkeleton } from './UserSkeleton';
 

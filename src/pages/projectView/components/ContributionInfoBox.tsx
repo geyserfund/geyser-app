@@ -9,25 +9,24 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
+import { BsInfoCircle } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
+
 import {
   AnonymousAvatar,
   SatoshiAmount,
   SectionTitle,
 } from '../../../components/ui';
+import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../constants';
+import { useFundCalc } from '../../../helpers/fundingCalculation';
+import { IFundForm } from '../../../hooks';
 import { IBadge } from '../../../interfaces';
 import { Project, ProjectReward } from '../../../types/generated/graphql';
 import { Satoshis } from '../../../types/types';
-import { useFundCalc } from '../../../helpers/fundingCalculation';
-import { IFundForm } from '../../../hooks';
-import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../constants';
-import { BsInfoCircle } from 'react-icons/bs';
 
 export enum ContributionInfoBoxVersion {
-  // eslint-disable-next-line no-unused-vars
   NEUTRAL = 'neutral',
-  // eslint-disable-next-line no-unused-vars
+
   PRIMARY = 'primary',
 }
 

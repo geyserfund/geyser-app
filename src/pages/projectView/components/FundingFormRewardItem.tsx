@@ -8,11 +8,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
-import { IRewardCount } from '../../../interfaces';
+
 import { ImageWithReload } from '../../../components/ui';
+import { IRewardCount } from '../../../interfaces';
+import { colors } from '../../../styles';
 import { ProjectReward } from '../../../types/generated/graphql';
 import { toInt } from '../../../utils';
 

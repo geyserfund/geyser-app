@@ -1,7 +1,8 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import TweetEmbed from 'react-tweet-embed';
+
 import Loader from './Loader';
 
 const useStyles = createUseStyles({
@@ -36,7 +37,7 @@ export const TwitterComponent = ({
       {twitterLoading && <Loader />}
       <TweetEmbed
         className={classNames(classes.twitter, className)}
-        id={id}
+        tweetId={id}
         options={{ conversation: 'none', ...options }}
         onTweetLoadSuccess={() => setTwitterLoading(false)}
         {...rest}

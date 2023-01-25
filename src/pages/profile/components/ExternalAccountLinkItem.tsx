@@ -1,16 +1,18 @@
-import React, { useMemo, ReactElement } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Button,
   Link,
   ThemeComponentProps,
   ThemeTypings,
 } from '@chakra-ui/react';
-import { ExternalAccount } from '../../../types/generated/graphql';
-import { colors, GeyserHomepageUrl } from '../../../constants';
+import { ReactElement, useMemo } from 'react';
 import { BsTwitter } from 'react-icons/bs';
-import { FountainIcon } from '../../../components/icons';
 import { createUseStyles } from 'react-jss';
+import { Link as ReactRouterLink } from 'react-router-dom';
+
+import { FountainIcon } from '../../../components/icons';
+import { GeyserHomepageUrl } from '../../../constants';
+import { colors } from '../../../styles';
+import { ExternalAccount } from '../../../types/generated/graphql';
 
 type Props = {
   account: ExternalAccount;

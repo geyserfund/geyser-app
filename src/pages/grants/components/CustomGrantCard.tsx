@@ -1,8 +1,8 @@
 import { Box, Image, Text } from '@chakra-ui/react';
-import React from 'react';
-import { ListText } from './ListText';
-import { isMobileMode } from '../../../utils';
 import { Link } from 'react-router-dom';
+
+import { useMobileMode } from '../../../utils';
+import { ListText } from './ListText';
 
 interface GrantProps {
   title: string;
@@ -30,7 +30,7 @@ export const CustomGrantCard = ({
   banner,
   distributed,
 }: GrantProps) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   return (
     <Link to={to}>

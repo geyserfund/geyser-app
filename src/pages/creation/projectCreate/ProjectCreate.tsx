@@ -1,3 +1,4 @@
+import { useLazyQuery, useMutation } from '@apollo/client';
 import {
   HStack,
   Input,
@@ -7,19 +8,15 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
-import { ProjectCreationVariables, ProjectUpdateVariables } from './types';
 import { BiInfoCircle } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { useHistory, useParams } from 'react-router';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useNavigate, useParams } from 'react-router';
 
-import {
-  MUTATION_CREATE_PROJECT,
-  MUTATION_UPDATE_PROJECT,
-} from '../../../graphql/mutations';
+import { CharacterLimitError } from '../../../components/errors';
 import { FileUpload } from '../../../components/molecules';
+import { Body2 } from '../../../components/typography';
 import {
   ButtonComponent,
   Card,
@@ -27,6 +24,17 @@ import {
   TextArea,
   TextInputBox,
 } from '../../../components/ui';
+import { commonMarkdownUrl, getPath } from '../../../constants';
+import { UserValidations } from '../../../constants/validations';
+import { ProjectValidations } from '../../../constants/validations/project';
+import { useAuthContext } from '../../../context';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
+import {
+  MUTATION_CREATE_PROJECT,
+  MUTATION_UPDATE_PROJECT,
+} from '../../../graphql/mutations';
+import { colors } from '../../../styles';
+import { Project } from '../../../types/generated/graphql';
 import {
   MarkDown,
   toInt,
@@ -34,15 +42,8 @@ import {
   validateEmail,
   validLightningAddress,
 } from '../../../utils';
-import { useAuthContext } from '../../../context';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
-import { Project } from '../../../types/generated/graphql';
-import { ProjectValidations } from '../../../constants/validations/project';
-import { UserValidations } from '../../../constants/validations';
-import { colors, commonMarkdownUrl, getPath } from '../../../constants';
 import { ProjectCreateLayout } from './components/ProjectCreateLayout';
-import { Body2 } from '../../../components/typography';
-import { CharacterLimitError } from '../../../components/errors';
+import { ProjectCreationVariables, ProjectUpdateVariables } from './types';
 
 type CreateProjectMutationResponseData = {
   createProject: Project | null;
@@ -68,7 +69,7 @@ export const ProjectCreate = () => {
   const params = useParams<{ projectId: string }>();
   const isEditingExistingProject = Boolean(params.projectId);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const { toast } = useNotification();
 
   const { user, setUser } = useAuthContext();
@@ -103,7 +104,7 @@ export const ProjectCreate = () => {
           },
         });
 
-        history.push(
+        navigate(
           getPath('launchProjectWithMilestonesAndRewards', createdProject.id),
         );
       }
@@ -122,8 +123,11 @@ export const ProjectCreate = () => {
     { input: ProjectUpdateVariables }
   >(MUTATION_UPDATE_PROJECT, {
     onCompleted() {
-      history.push(
-        getPath('launchProjectWithMilestonesAndRewards', params.projectId),
+      navigate(
+        getPath(
+          'launchProjectWithMilestonesAndRewards',
+          params.projectId || '',
+        ),
       );
     },
     onError(error) {
@@ -304,7 +308,7 @@ export const ProjectCreate = () => {
   };
 
   const handleBack = () => {
-    history.push(getPath('publicProjectLaunch'));
+    navigate(getPath('publicProjectLaunch'));
   };
 
   useEffect(() => {
@@ -450,7 +454,7 @@ export const ProjectCreate = () => {
         <ButtonComponent
           isLoading={loading || createLoading || updateLoading}
           primary
-          isFullWidth
+          w="full"
           onClick={handleNextButtonTapped}
           isDisabled={createLoading || updateLoading}
         >

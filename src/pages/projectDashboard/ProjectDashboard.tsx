@@ -7,24 +7,25 @@ import {
   HStack,
   useMediaQuery,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router';
+
 import Loader from '../../components/ui/Loader';
+import { getPath } from '../../constants';
 import { useAuthContext } from '../../context';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
-import { isMobileMode } from '../../utils';
+import { noScrollBar } from '../../styles/common';
+import { Owner } from '../../types/generated/graphql';
+import { useMobileMode } from '../../utils';
 import { NotAuthorized } from '../notAuthorized';
 import { NotFoundPage } from '../notFound';
-import { ProjectDashboardEntries } from './ProjectDashboardEntries';
 import { MilestoneSettings } from './MilestoneSettings';
+import { ProjectContributors } from './ProjectContributors';
+import { ProjectDashboardEntries } from './ProjectDashboardEntries';
 import { ProjectFundingSettings } from './ProjectFundingSettings';
 import { ProjectSettings } from './ProjectSettings';
-import { RewardSettings } from './RewardSettings';
-import { getPath } from '../../constants';
-import { Owner } from '../../types/generated/graphql';
-import { ProjectContributors } from './ProjectContributors';
 import { ProjectStats } from './ProjectStats';
-import { noScrollBar } from '../../css';
+import { RewardSettings } from './RewardSettings';
 
 enum DashboardTabs {
   entries = 'entries',
@@ -39,10 +40,11 @@ enum DashboardTabs {
 let storedTab = DashboardTabs.editProject;
 
 export const ProjectDashboard = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const { projectId } = useParams<{ projectId: string }>();
-  const { state: locationState } = useLocation<{ loggedOut?: boolean }>();
-  const history = useHistory();
+  const { state: locationState }: { state: { loggedOut?: boolean } } =
+    useLocation();
+  const navigate = useNavigate();
 
   const { user, setNav } = useAuthContext();
 
@@ -52,7 +54,7 @@ export const ProjectDashboard = () => {
     try {
       getProject();
     } catch (_) {
-      history.push(getPath('notFound'));
+      navigate(getPath('notFound'));
     }
   }, [locationState]);
 

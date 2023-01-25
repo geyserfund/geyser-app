@@ -1,7 +1,7 @@
 import { Box, Input, InputProps, Text } from '@chakra-ui/react';
-import React from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
+
+import { colors } from '../../styles';
 
 const useStyles = createUseStyles({
   inputElement: {

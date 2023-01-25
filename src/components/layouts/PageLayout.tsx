@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import React from 'react';
+
 import { dimensions } from '../../constants';
 
 interface PageLayoutProps {

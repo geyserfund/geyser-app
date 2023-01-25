@@ -1,7 +1,7 @@
-import React from 'react';
 import { VStack } from '@chakra-ui/react';
-import { User } from '../../../types/generated/graphql';
+
 import { AlertBox } from '../../../components/ui';
+import { User } from '../../../types/generated/graphql';
 import { UserProfilePageContributionsListItem } from '../containers';
 
 type Props = {

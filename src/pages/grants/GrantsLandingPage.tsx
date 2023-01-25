@@ -1,23 +1,23 @@
-/* eslint-disable complexity */
-import React, { useEffect, useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { useTheme } from '@chakra-ui/react';
-import { getRandomOrb, isMobileMode } from '../../utils';
-import { fonts } from '../../constants/fonts';
-import satwalletimg from '../../assets/walletsats.svg';
-import { ListText } from './components/ListText';
-import { CustomGrantCard } from './components/CustomGrantCard';
-import { MoreInfo } from './components/MoreInfo';
-import { AppFooter } from '../../components/molecules';
-import { GrantsContributeModal } from './components/GrantsContributeModal';
-import { ButtonComponent } from '../../components/ui';
+import { useEffect, useState } from 'react';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import { GrantSponsor } from './GrantsRoundTwo';
+
 import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
+import satwalletimg from '../../assets/walletsats.svg';
+import { AppFooter } from '../../components/molecules';
 import { H2, H3 } from '../../components/typography';
+import { ButtonComponent } from '../../components/ui';
+import { fonts } from '../../styles';
+import { getRandomOrb, useMobileMode } from '../../utils';
+import { CustomGrantCard } from './components/CustomGrantCard';
+import { GrantsContributeModal } from './components/GrantsContributeModal';
+import { ListText } from './components/ListText';
+import { MoreInfo } from './components/MoreInfo';
+import { GrantSponsor } from './GrantsRoundTwo';
 
 export const GrantsLandingPage = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const [copy, setCopy] = useState(false);
   const [sponsors, setSponsers] = useState<GrantSponsor[]>([]);

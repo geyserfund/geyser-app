@@ -1,5 +1,4 @@
 import { Link, LinkProps } from '@chakra-ui/react';
-import React from 'react';
 
 type Props = LinkProps & {
   children: any;

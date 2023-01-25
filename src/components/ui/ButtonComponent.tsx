@@ -1,11 +1,11 @@
-import React from 'react';
-
 import { Button, ButtonProps } from '@chakra-ui/button';
-import { createUseStyles } from 'react-jss';
-import classNames from 'classnames';
-import { Box } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { colors, styles } from '../../constants';
+import { Box } from '@chakra-ui/layout';
+import classNames from 'classnames';
+import { createUseStyles } from 'react-jss';
+
+import { colors } from '../../styles';
+import { buttonCommon } from '../../styles/common';
 
 interface IButtonComponentP extends ButtonProps {
   className?: string;
@@ -53,8 +53,8 @@ export const ButtonComponent = ({
 }: IButtonComponentP) => {
   const classes = useStyles();
   const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark);
-  const textColor =
-    color || useColorModeValue(colors.textBlack, colors.textWhite);
+  const defaultColor = useColorModeValue(colors.textBlack, colors.textWhite);
+  const textColor = color || defaultColor;
 
   return (
     <Button
@@ -77,7 +77,7 @@ export const ButtonComponent = ({
       fontWeight="medium"
       color={color}
       {...rest}
-      sx={styles.buttonCommon}
+      sx={buttonCommon}
     >
       <Box
         as="span"

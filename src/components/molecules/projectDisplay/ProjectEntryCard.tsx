@@ -1,3 +1,4 @@
+import { CloseIcon } from '@chakra-ui/icons';
 import {
   Badge,
   Flex,
@@ -10,16 +11,17 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
-import { useHistory } from 'react-router';
-import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
-import { BsHeartFill } from 'react-icons/bs';
-import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
-import { colors, getPath } from '../../../constants';
-import { ProjectListItemImage } from './ProjectListItemImage';
-import { CloseIcon } from '@chakra-ui/icons';
+import { useMemo } from 'react';
 import { BiPencil } from 'react-icons/bi';
+import { BsHeartFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+
+import { getPath } from '../../../constants';
+import { colors } from '../../../styles';
 import { Entry, EntryStatus } from '../../../types/generated/graphql';
+import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
+import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
+import { ProjectListItemImage } from './ProjectListItemImage';
 
 type Props = ICard & {
   entry: Entry;
@@ -35,7 +37,7 @@ export const ProjectEntryCard = ({
   onDelete,
   ...rest
 }: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { colorMode } = useColorMode();
 
   const isDraft = useMemo(() => {
@@ -45,7 +47,7 @@ export const ProjectEntryCard = ({
   const handleClick =
     onClick ||
     (() => {
-      history.push(getPath('entry', `${entry.id}`));
+      navigate(getPath('entry', `${entry.id}`));
     });
 
   const handleEdit = (event: React.MouseEvent<HTMLButtonElement>) => {

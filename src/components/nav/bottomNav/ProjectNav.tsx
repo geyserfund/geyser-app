@@ -6,15 +6,16 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiHeart, BiNews, BiTrophy } from 'react-icons/bi';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
-import { fonts, getPath } from '../../../constants';
+
+import { getPath } from '../../../constants';
 import { useAuthContext } from '../../../context';
 import { useScrollDirection } from '../../../hooks';
 import { MobileViews, useProject } from '../../../pages/projectView';
-import { WalletStatus } from '../../../types';
+import { fonts } from '../../../styles';
 import { isActive } from '../../../utils';
 
 export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
@@ -111,7 +112,7 @@ export const ProjectNavUI = () => {
         base: '35px',
         md: '50px',
       }}
-      paddingBottoim="2px"
+      paddingBottom="2px"
     >
       <Button
         variant="ghost"
@@ -130,7 +131,9 @@ export const ProjectNavUI = () => {
         _hover={{}}
         paddingX="5px"
       >
-        {transactionCount && <Text font={fonts.mono}>{transactionCount}</Text>}
+        {transactionCount && (
+          <Text fontFamily={fonts.mono}>{transactionCount}</Text>
+        )}
       </Button>
       <Button
         variant="ghost"
@@ -140,7 +143,7 @@ export const ProjectNavUI = () => {
         _hover={{}}
         paddingX="5px"
       >
-        {fundersCount && <Text font={fonts.mono}>{fundersCount}</Text>}
+        {fundersCount && <Text fontFamily={fonts.mono}>{fundersCount}</Text>}
       </Button>
       <HStack>
         {isOwner ? (

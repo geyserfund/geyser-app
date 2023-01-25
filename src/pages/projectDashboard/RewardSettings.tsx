@@ -1,12 +1,13 @@
 import { useMutation } from '@apollo/client';
 import {
+  GridItem,
   HStack,
   Text,
   useDisclosure,
   VStack,
-  GridItem,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import { DeleteConfirmModal, RewardCard } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../graphql/mutations';
@@ -36,12 +37,10 @@ export const RewardSettings = ({ project }: { project: Project }) => {
     onOpen: openRewardDelete,
   } = useDisclosure();
 
-  const [isSatoshi, setIsSatoshi] = useState(
-    /* to be replaced with an actual check on RewardCurrency.Sats when we add it to the enum */
+  const isSatoshi =
     project.rewardCurrency !== null &&
-      project.rewardCurrency !== undefined &&
-      project.rewardCurrency !== RewardCurrency.Usdcent,
-  );
+    project.rewardCurrency !== undefined &&
+    project.rewardCurrency !== RewardCurrency.Usdcent;
 
   const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD);
 
@@ -134,7 +133,7 @@ export const RewardSettings = ({ project }: { project: Project }) => {
             <VStack width="100%" alignItems="flex-start">
               <Text>Rewards </Text>
               <ButtonComponent
-                isFullWidth
+                w="full"
                 onClick={() => {
                   setSelectedReward(undefined);
                   openReward();

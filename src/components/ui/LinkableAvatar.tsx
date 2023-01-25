@@ -1,10 +1,11 @@
-import React, { ReactElement } from 'react';
-import { Text, HStack, Link } from '@chakra-ui/layout';
+import { HStack, Link, Text } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/react';
-import { isMediumScreen, isMobileMode } from '../../utils';
+import { ReactElement } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { Link as ReactRouterLink } from 'react-router-dom';
+
 import { getPath } from '../../constants';
+import { useMediumScreen, useMobileMode } from '../../utils';
 
 type Props = {
   avatarUsername: string;
@@ -27,8 +28,8 @@ export const LinkableAvatar = ({
   fontSize = '16px',
   imageSize = '30px',
 }: Props) => {
-  const isMedium = isMediumScreen();
-  const isMobile = isMobileMode();
+  const isMedium = useMediumScreen();
+  const isMobile = useMobileMode();
 
   const calculateBadgesLength = () => {
     if (!badgeNames) {

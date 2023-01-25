@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
 import { Button, Image, Link, Text } from '@chakra-ui/react';
-import { FundingTx } from '../../../types/generated/graphql';
+import { useMemo } from 'react';
+
 import {
   BoostCLILogoUrl,
   BreezLogoUrl,
@@ -9,6 +9,7 @@ import {
   FountainLogoUrl,
   PodverseLogoUrl,
 } from '../../../constants';
+import { FundingTx } from '../../../types/generated/graphql';
 
 type ExternalAccountLinkIconProps = {
   fundingTx: FundingTx;

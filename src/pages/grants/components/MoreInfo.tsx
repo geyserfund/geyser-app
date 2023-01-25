@@ -1,8 +1,8 @@
 import { Box, Link, Text, TextProps } from '@chakra-ui/react';
-import React from 'react';
-import { fonts } from '../../../constants/fonts';
+
 import shareicon from '../../../assets/shareico.svg';
 import { GrantsFAQUrl } from '../../../constants';
+import { fonts } from '../../../styles';
 
 interface MoreInfoProps {
   titleProps?: TextProps;

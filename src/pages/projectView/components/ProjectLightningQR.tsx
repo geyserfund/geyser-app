@@ -1,9 +1,10 @@
 import { Button, IconButton, Tooltip, useDisclosure } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
-import React, { useState } from 'react';
+import { useState } from 'react';
+
 import { BoltIcon, QrIcon } from '../../../components/icons';
-import { ProjectFundingQRModal } from './ProjectFundingQRModal';
 import { Project } from '../../../types/generated/graphql';
+import { ProjectFundingQRModal } from './ProjectFundingQRModal';
 
 interface ILightningQR {
   project: Project;

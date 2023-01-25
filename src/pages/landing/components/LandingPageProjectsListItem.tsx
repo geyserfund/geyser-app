@@ -1,13 +1,13 @@
 import {
+  Box,
   HStack,
   HTMLChakraProps,
-  Text,
   Image,
   Link,
-  Box,
+  Text,
 } from '@chakra-ui/react';
-import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
+
 import { ProjectImageListItemPlaceholder } from '../../../components/molecules';
 import { getPath } from '../../../constants';
 import { Project } from '../../../types/generated/graphql';

@@ -1,11 +1,12 @@
-import { Button } from '@chakra-ui/react';
-import React, { forwardRef, useState } from 'react';
-import DatePicker from 'react-datepicker';
-import { ButtonComponent } from '../ui';
 import 'react-datepicker/dist/react-datepicker.css';
-import { createUseStyles } from 'react-jss';
-import { getFormattedDate } from '../../utils';
+
 import { DateTime } from 'luxon';
+import { forwardRef } from 'react';
+import DatePicker from 'react-datepicker';
+import { createUseStyles } from 'react-jss';
+
+import { getFormattedDate } from '../../utils';
+import { ButtonComponent } from '../ui';
 
 interface ICalendarButton {
   children: React.ReactNode;

@@ -8,18 +8,18 @@ import {
   VStack,
   Wrap,
 } from '@chakra-ui/react';
-import React from 'react';
-import { FaTelegramPlane, FaTwitter, FaPodcast } from 'react-icons/fa';
+import { FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+
 import {
   AnalyticsUrl,
+  GeyserHomepageUrl,
+  GeyserPodcastUrl,
   GeyserPrivacyUrl,
   GeyserTelegramUrl,
-  GeyserTwitterUrl,
-  GeyserPodcastUrl,
-  GeyserHomepageUrl,
   GeyserTermsAndConditionsURL,
+  GeyserTwitterUrl,
 } from '../../constants';
-import { isMobileMode } from '../../utils';
+import { useMobileMode } from '../../utils';
 import { Subscribe } from '../nav/Subscribe';
 import { ButtonComponent } from '../ui';
 
@@ -28,7 +28,7 @@ interface IFooter {
 }
 
 export const AppFooter = ({ wrapperClassName }: IFooter) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

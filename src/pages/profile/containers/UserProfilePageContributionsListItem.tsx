@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { FundingTx, Project } from '../../../types/generated/graphql';
 import { ProjectFundingContributionsFeedItem } from '../../../components/molecules/projectActivity/ProjectFundingContributionsFeedItem';
 import { gql, useQuery } from '@apollo/client';

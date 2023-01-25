@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { CircularProgress, HStack, Text } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/layout';
+import { CircularProgress, HStack, Text } from '@chakra-ui/react';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
-import { BsCurrencyBitcoin } from 'react-icons/bs';
-import { isDarkMode } from '../../../utils';
-import { SatoshiIconTilted } from '../../icons';
-import { createUseStyles } from 'react-jss';
-import { commaFormatted } from '../../../utils/formatData/helperFunctions';
+import { useState } from 'react';
 import { IconBaseProps } from 'react-icons';
+import { BsCurrencyBitcoin } from 'react-icons/bs';
+import { createUseStyles } from 'react-jss';
+
+import { useDarkMode } from '../../../utils';
+import { commaFormatted } from '../../../utils/formatData/helperFunctions';
+import { SatoshiIconTilted } from '../../icons';
 
 interface IProjectBalanceCircularProgress {
   balance: number;
@@ -59,7 +60,7 @@ export const ProjectBalanceCircularProgress = ({
   loading,
 }: IProjectBalanceCircularProgress) => {
   const classes = useStyles();
-  const isDark = isDarkMode();
+  const isDark = useDarkMode();
   const balanceUSD = (balance * rate).toFixed(2);
   const percentage = (balance / goal) * 100;
 

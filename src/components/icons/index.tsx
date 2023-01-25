@@ -1,25 +1,25 @@
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
-import React from 'react';
 import { ImageProps } from '@chakra-ui/react';
-import StarPng from '../../assets/star.png';
+
+import BoltSvg from '../../assets/bolt.svg';
 import CrownPng from '../../assets/crown.png';
+import EnvelopePng from '../../assets/envelope.png';
+import GifSvg from '../../assets/gif.svg';
+import GiftPng from '../../assets/gift.png';
+import HourglassPng from '../../assets/hourglass.png';
+import InfoSvg from '../../assets/i.svg';
 import LightningPng from '../../assets/lightning.png';
 import MagnifyPng from '../../assets/magnify.png';
 import MedalPng from '../../assets/medal.png';
-import TrophyPng from '../../assets/trophy.png';
-import HourglassPng from '../../assets/hourglass.png';
-import GiftPng from '../../assets/gift.png';
-import GifSvg from '../../assets/gif.svg';
-import EnvelopePng from '../../assets/envelope.png';
+import QrSvg from '../../assets/qr.svg';
 import RopePng from '../../assets/rope.png';
-import InfoSvg from '../../assets/i.svg';
 import SatoshiPng from '../../assets/satoshi.png';
 import SatoshiTilted from '../../assets/satoshi-tilted.svg';
 import SatoshiTiltedDash from '../../assets/satoshi-tilted-dash.svg';
-import QrSvg from '../../assets/qr.svg';
-import BoltSvg from '../../assets/bolt.svg';
 import ShareSvg from '../../assets/share.svg';
+import StarPng from '../../assets/star.png';
+import TrophyPng from '../../assets/trophy.png';
 import { FountainLogoUrl } from '../../constants';
 
 export const SatoshiIcon = ({

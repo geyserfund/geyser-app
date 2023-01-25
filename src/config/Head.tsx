@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { useLocation } from 'react-router';
 import { Helmet } from 'react-helmet';
+import { useLocation } from 'react-router';
+
 import {
   DefaultMetaDescription,
   DefaultMetaImage,
@@ -8,7 +9,7 @@ import {
   DefaultMetaTwitterCard,
   DefaultMetaTwitterSite,
   DefaultMetaType,
-} from '../constants/metaTags';
+} from '../constants';
 type HeadProps = {
   title?: string;
   description?: string;

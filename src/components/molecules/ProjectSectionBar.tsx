@@ -1,5 +1,4 @@
 import { Badge, HStack, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
 
 interface IProjectSectionBar {
   name: string;

@@ -1,16 +1,17 @@
-import { DocumentNode, useQuery } from '@apollo/client';
-import { isDocumentNode } from '@apollo/client/utilities';
-import { PaginationHookReturn, QueryResponseData } from './types';
-import { usePaginationHook } from './usePaginationHook';
+import { DocumentNode, useQuery } from '@apollo/client'
+import { isDocumentNode } from '@apollo/client/utilities'
+
+import { PaginationHookReturn, QueryResponseData } from './types'
+import { usePaginationHook } from './usePaginationHook'
 
 export type useQueryWithPaginationProps = {
-  query: DocumentNode;
-  queryName: string | string[];
-  itemLimit?: number;
-  where?: any;
-  orderBy?: any;
-  resultMap?: (_: any[]) => any[];
-};
+  query: DocumentNode
+  queryName: string | string[]
+  itemLimit?: number
+  where?: any
+  orderBy?: any
+  resultMap?: (_: any[]) => any[]
+}
 
 export const useQueryWithPagination = <Type,>({
   itemLimit = 10,
@@ -21,7 +22,7 @@ export const useQueryWithPagination = <Type,>({
   orderBy,
 }: useQueryWithPaginationProps): PaginationHookReturn<Type> => {
   if (!isDocumentNode(query)) {
-    throw Error('Invalid query');
+    throw Error('Invalid query')
   }
 
   const { error, loading, fetchMore, refetch } = useQuery<
@@ -39,10 +40,10 @@ export const useQueryWithPagination = <Type,>({
       fetch,
     },
     onCompleted(data) {
-      const resultItems = getNestedValue(data, queryName);
-      handleDataUpdate(resultItems);
+      const resultItems = getNestedValue(data, queryName)
+      handleDataUpdate(resultItems)
     },
-  });
+  })
 
   const { data, isLoadingMore, fetchNext, noMoreItems, handleDataUpdate } =
     usePaginationHook<Type>({
@@ -52,7 +53,7 @@ export const useQueryWithPagination = <Type,>({
       itemLimit,
       where,
       orderBy,
-    });
+    })
 
   return {
     isLoading: loading,
@@ -62,19 +63,19 @@ export const useQueryWithPagination = <Type,>({
     error,
     fetchNext,
     refetch,
-  };
-};
+  }
+}
 
 export const getNestedValue = (obj: any, name: string | string[]) => {
   if (typeof name === 'string') {
-    return obj[name];
+    return obj[name]
   }
 
   if (typeof name === 'object') {
-    let finalValue = obj;
+    let finalValue = obj
     name.map((val) => {
-      finalValue = finalValue[val];
-    });
-    return finalValue;
+      finalValue = finalValue[val]
+    })
+    return finalValue
   }
-};
+}

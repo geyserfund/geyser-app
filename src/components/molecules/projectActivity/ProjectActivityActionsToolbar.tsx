@@ -1,9 +1,9 @@
-import React from 'react';
-import { isMobileMode } from '../../../utils';
 import { HStack, Text } from '@chakra-ui/react';
-import { ButtonComponent } from '../../ui';
-import { BoltIcon } from '../../icons';
+
 import { dimensions } from '../../../constants';
+import { useMobileMode } from '../../../utils';
+import { BoltIcon } from '../../icons';
+import { ButtonComponent } from '../../ui';
 
 const {
   topNavBar: { mobile: mobileNavBarDimensions },
@@ -18,7 +18,7 @@ export const ProjectActivityActionsToolbar = ({
   fundButtonFunction,
 }: // transitionButtonFunction,
 IProjectActivityActionsToolbarProps) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   if (isMobile) {
     return (

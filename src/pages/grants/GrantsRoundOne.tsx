@@ -1,33 +1,32 @@
-import React from 'react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
   Grid,
   GridItem,
+  Image,
   Link,
   Text,
   VStack,
-  Image,
 } from '@chakra-ui/react';
-import { isMobileMode, isMediumScreen } from '../../utils';
-import { fonts } from '../../constants/fonts';
+import React from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 
-import { ApplyGrantCard } from './components/ApplyGrantCard';
 import satwalletimg from '../../assets/walletsats.svg';
 import { AppFooter } from '../../components/molecules';
-
 import { ButtonComponent } from '../../components/ui';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Board } from './components/Board';
-import { GrantsContributeModal } from './components/GrantsContributeModal';
 import {
   GrantsBitcoinCulture,
   GrantsBitcoinDevelopment,
   GrantsBitcoinEducation,
   GrantsHero,
 } from '../../constants';
+import { fonts } from '../../styles';
+import { useMediumScreen, useMobileMode } from '../../utils';
+import { ApplyGrantCard } from './components/ApplyGrantCard';
+import { Board } from './components/Board';
+import { GrantsContributeModal } from './components/GrantsContributeModal';
 
 const grants = [
   {
@@ -63,9 +62,9 @@ const grants = [
 ];
 
 export const GrantsRoundOne = () => {
-  const isMobile = isMobileMode();
-  const history = useHistory();
-  const isMedium = isMediumScreen();
+  const isMobile = useMobileMode();
+  const navigate = useNavigate();
+  const isMedium = useMediumScreen();
   const [link, setLink] = React.useState('');
   const linkHandler = (link: React.SetStateAction<string>) => {
     setLink(link);
@@ -91,7 +90,7 @@ export const GrantsRoundOne = () => {
             bg="brand.bgWhite"
             variant={'outline'}
             gap={2}
-            onClick={() => history.goBack()}
+            onClick={() => navigate(-1)}
             fontSize="sm"
           >
             <FaArrowLeft /> See all Grants
@@ -124,7 +123,7 @@ export const GrantsRoundOne = () => {
               fontSize={isMobile ? '30' : '35px'}
               fontWeight="700"
               textAlign="center"
-              justify="center"
+              justifyContent="center"
             >
               Round 1
             </Text>
@@ -145,7 +144,7 @@ export const GrantsRoundOne = () => {
             fontWeight="500"
             color={'brand.neutral600'}
             textAlign="center"
-            justify="center"
+            justifyContent="center"
           >
             Funding educators, creatives and builders doing Bitcoin-only
             projects on Geyser.{isMobile ? '' : <br />} Funded by bitcoin

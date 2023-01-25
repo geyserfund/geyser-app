@@ -20,7 +20,7 @@ services:
     build:
       context: ./faker
       args:
-        - APOLLO_KEY=$APOLLO_KEY
+        - VITE_APP_APOLLO_KEY=$APOLLO_KEY
     image: graphql-faker
     env_file: .env
     ports:

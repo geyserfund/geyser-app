@@ -1,5 +1,5 @@
-import { Box, Icon, Text, Button, ButtonProps } from '@chakra-ui/react';
-import React from 'react';
+import { ButtonProps, Icon } from '@chakra-ui/react';
+
 import { ButtonComponent } from './';
 
 interface IExternalAccountComponentProps extends ButtonProps {

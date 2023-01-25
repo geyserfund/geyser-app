@@ -1,40 +1,41 @@
+import { useQuery } from '@apollo/client';
 import {
-  VStack,
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalCloseButton,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
   Box,
-  Text,
+  Button,
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   InputGroup,
   InputLeftElement,
   Link as ChakraLink,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  Textarea,
+  useDisclosure,
+  VStack,
 } from '@chakra-ui/react';
-import React, { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
-import { useQuery } from '@apollo/client';
+
+import { createGrantContributionRecord } from '../../../api';
 import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants';
 import { useAuthContext } from '../../../context';
-import { useFormState, useFundingFlow } from '../../../hooks';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
 import { useBTCConverter } from '../../../helpers';
+import { useFormState, useFundingFlow } from '../../../hooks';
+import { FormStateError } from '../../../interfaces';
+import { USDCents } from '../../../types';
 import {
   FundingInput,
   FundingResourceType,
 } from '../../../types/generated/graphql';
-import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/ActivityPanel/ProjectFundingQRScreenQRCodeSection';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
-import { createGrantContributionRecord } from '../../../api';
-import { FormStateError } from '../../../interfaces';
 import { toInt, useNotification } from '../../../utils';
-import { USDCents } from '../../../types';
+import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/ActivityPanel/ProjectFundingQRScreenQRCodeSection';
 
 const GRANTS_PROJECT_NAME = 'grants';
 const defaultModalHeader = 'Contribute';
@@ -335,7 +336,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
         />
       </Box>
       <Box mt={4}>
-        <Button bg="brand.primary" onClick={handleFormConfirmClick} isFullWidth>
+        <Button bg="brand.primary" onClick={handleFormConfirmClick} w="full">
           Confirm
         </Button>
       </Box>

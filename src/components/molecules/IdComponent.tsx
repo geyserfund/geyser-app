@@ -1,6 +1,6 @@
 import { Avatar } from '@chakra-ui/avatar';
-import { HStack, Text, Box } from '@chakra-ui/layout';
-import React from 'react';
+import { HStack, Text } from '@chakra-ui/layout';
+
 import { UserSkeleton } from '../ui';
 
 export interface IIdComponent {

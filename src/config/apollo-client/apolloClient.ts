@@ -5,9 +5,9 @@ import {
   from,
   NormalizedCacheObject,
 } from '@apollo/client';
-import { API_SERVICE_ENDPOINT } from '../../constants';
 import { onError } from '@apollo/client/link/error';
-import { customHistory } from '..';
+
+import { API_SERVICE_ENDPOINT } from '../../constants';
 import { cache } from './apollo-client-cache';
 
 const httpLink = createHttpLink({
@@ -20,9 +20,7 @@ const errorLink = onError(({ graphQLErrors }) => {
     for (const err of graphQLErrors) {
       if (err && err.extensions && err.extensions.code) {
         if (err.extensions.code === 'UNAUTHENTICATED') {
-          customHistory.push(customHistory.location.pathname, {
-            loggedOut: true,
-          });
+          window.location.href = `${window.location.pathname}?loggedOut=true`;
         }
       }
     }

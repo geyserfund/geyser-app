@@ -1,7 +1,7 @@
-import { Box, Text, HStack } from '@chakra-ui/react';
-import React from 'react';
+import { Box, HStack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { fonts } from '../../../constants/fonts';
+
+import { fonts } from '../../../styles';
 import { getCountDown } from '../../../utils';
 
 export const Countdown = ({ endDate }: { endDate: string }) => {

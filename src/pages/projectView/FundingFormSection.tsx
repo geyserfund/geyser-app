@@ -1,11 +1,11 @@
-import React from 'react';
 import { Box, VStack } from '@chakra-ui/react';
+
 import { DonationInput } from '../../components/molecules';
 import { SectionTitle } from '../../components/ui';
-import { IRewardCount } from '../../interfaces';
 import { IFundForm } from '../../hooks';
-import { FundingFormRewardItem } from './components/FundingFormRewardItem';
+import { IRewardCount } from '../../interfaces';
 import { ProjectReward } from '../../types/generated/graphql';
+import { FundingFormRewardItem } from './components/FundingFormRewardItem';
 
 type Props = {
   setFormState: any;

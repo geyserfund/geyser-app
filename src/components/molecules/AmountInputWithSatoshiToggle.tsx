@@ -1,19 +1,19 @@
 import {
+  Button,
   Input,
   InputGroup,
+  InputGroupProps,
   InputLeftElement,
   InputProps,
   InputRightElement,
-  Button,
-  InputGroupProps,
   Text,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React from 'react';
 import { BiDollar } from 'react-icons/bi';
 import { BsArrowRepeat } from 'react-icons/bs';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
+
+import { colors } from '../../styles';
 import { Satoshis, USDollars } from '../../types/types';
 import { SatoshiIconTilted } from '../icons';
 
@@ -77,7 +77,7 @@ export const AmountInputWithSatoshiToggle = ({
       ? parseInt(event.target.value, 10)
       : parseFloat(event.target.value);
 
-    onValueChanged(value);
+    onValueChanged(value as Satoshis);
   };
 
   return (

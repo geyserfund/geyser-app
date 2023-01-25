@@ -1,19 +1,20 @@
-import { Box, VStack, Text } from '@chakra-ui/react';
+import { Box, Text, VStack } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { isDarkMode, isMobileMode } from '../../utils';
-import { colors, IFundingStages, getPath } from '../../constants';
+import { useNavigate } from 'react-router-dom';
+
 import { AppFooter } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
+import { getPath, IFundingStages } from '../../constants';
 import { fundingStages } from '../../constants';
-import { ProjectDetailsAccessoriesSections } from './ProjectDetailsAccessoriesSections';
-import { UpdateReward } from '../../hooks';
-import { Project } from '../../types/generated/graphql';
-import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../context';
+import { UpdateReward } from '../../hooks';
+import { colors } from '../../styles';
+import { Project } from '../../types/generated/graphql';
+import { useDarkMode, useMobileMode } from '../../utils';
 import { ProjectDetailsCard } from './components/ProjectDetailsCard';
 import { MobileViews, useProject } from './containers';
+import { ProjectDetailsAccessoriesSections } from './ProjectDetailsAccessoriesSections';
 
 type Rules = string;
 
@@ -40,16 +41,13 @@ const useStyles = createUseStyles<Rules, Styles>({
     width: '100%',
     fontSize: '14px',
   },
-  detailsContainer: ({ isMobile }: Styles) => ({
+  detailsContainer: {
     height: '100%',
-    // paddingTop: isMobile ? '61px' : '71px',
-    overflowY: 'scroll',
+    overflowY: 'auto',
     WebkitOverflowScrolling: 'touch',
     display: 'flex',
     flexDirection: 'column',
-  }),
-  // ...slideInLeft,
-  // ...fadeOut,
+  },
 });
 
 type Props = {
@@ -65,15 +63,15 @@ export const ProjectDetailsMainBodyContainer = ({
   setFundState,
   updateReward,
 }: Props) => {
-  const isMobile = isMobileMode();
-  const isDark = isDarkMode();
+  const isMobile = useMobileMode();
+  const isDark = useDarkMode();
 
   const { mobileView, setMobileView } = useProject();
 
   const inView = mobileView === MobileViews.description;
 
   const classes = useStyles({ isMobile, inView });
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { user, navigationContext } = useAuthContext();
 
@@ -92,7 +90,7 @@ export const ProjectDetailsMainBodyContainer = ({
 
   const handleConnectNodeClick = () => {
     const nodeConfigurationPath = getPath('launchProjectWithNode', project.id);
-    history.push(nodeConfigurationPath);
+    navigate(nodeConfigurationPath);
   };
 
   return (
@@ -138,7 +136,7 @@ export const ProjectDetailsMainBodyContainer = ({
 
                 <ButtonComponent
                   primary={true}
-                  isFullWidth={true}
+                  w="full"
                   onClick={handleConnectNodeClick}
                 >
                   Connect Wallet

@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
-import { Box, Text } from '@chakra-ui/layout';
-import { SmallCloseIcon } from '@chakra-ui/icons';
-import { HStack, IconButton } from '@chakra-ui/react';
 import { useMutation } from '@apollo/client';
-import { MUTATION_UNLINK_ACCOUNT } from '../../graphql';
-import { ExternalAccountComponent } from '../ui';
-import { SiTwitter } from 'react-icons/si';
+import { SmallCloseIcon } from '@chakra-ui/icons';
+import { Box, Text } from '@chakra-ui/layout';
+import { HStack, IconButton } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { BsLightningChargeFill } from 'react-icons/bs';
+import { SiTwitter } from 'react-icons/si';
+
 import { useAuthContext } from '../../context';
-import { toInt, useNotification } from '../../utils';
 import { defaultUser } from '../../defaults';
+import { MUTATION_UNLINK_ACCOUNT } from '../../graphql';
+import { toInt, useNotification } from '../../utils';
+import { ExternalAccountComponent } from '../ui';
 
 interface IAccountConnection {
   id: number;

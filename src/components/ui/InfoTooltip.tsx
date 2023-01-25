@@ -1,6 +1,7 @@
-import { InfoIcon } from '../icons';
 import { Box, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+import { InfoIcon } from '../icons';
 
 interface IInfoTooltip {
   title: string;

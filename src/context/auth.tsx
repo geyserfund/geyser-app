@@ -1,16 +1,17 @@
 import { ApolloError, useLazyQuery } from '@apollo/client';
-import React, {
+import { useDisclosure } from '@chakra-ui/react';
+import {
   createContext,
-  useState,
-  useEffect,
-  useContext,
   Dispatch,
   SetStateAction,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
-import { ME } from '../graphql';
+
 import { AUTH_SERVICE_ENDPOINT } from '../constants';
 import { defaultUser } from '../defaults';
-import { useDisclosure } from '@chakra-ui/react';
+import { ME } from '../graphql';
 import { User } from '../types/generated/graphql';
 
 const defaultContext: AuthContextProps = {
@@ -18,21 +19,21 @@ const defaultContext: AuthContextProps = {
   user: defaultUser,
   loading: false,
   error: undefined,
-  logout: () => {},
+  logout() {},
   isAuthModalOpen: false,
   isUserAProjectCreator: false,
-  loginOnOpen: () => {},
-  loginOnClose: () => {},
-  setIsLoggedIn: () => {},
-  queryCurrentUser: () => {},
-  setUser: (user: User) => {},
+  loginOnOpen() {},
+  loginOnClose() {},
+  setIsLoggedIn() {},
+  queryCurrentUser() {},
+  setUser(user: User) {},
   navigationContext: {
     projectName: '',
     projectTitle: '',
     projectPath: '',
     projectOwnerIDs: [],
   },
-  setNav: () => {},
+  setNav() {},
 };
 
 export type NavigationContextProps = {
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
-    onCompleted: (data: { me: User }) => {
+    onCompleted(data: { me: User }) {
       if (data && data.me) {
         setUser({ ...defaultUser, ...data.me });
         setIsLoggedIn(true);

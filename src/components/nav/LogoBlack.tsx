@@ -1,10 +1,10 @@
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
-import React from 'react';
-import geyserBlack from '../../assets/images/geyser-short-black.svg';
 import { HTMLChakraProps } from '@chakra-ui/system';
-import { useHistory } from 'react-router';
 import { createUseStyles } from 'react-jss';
+import { useNavigate } from 'react-router';
+
+import geyserBlack from '../../assets/images/geyser-short-black.svg';
 
 interface ILogoP extends HTMLChakraProps<'div'> {
   className?: string;
@@ -27,10 +27,10 @@ export const LogoBlack = ({
   ...rest
 }: ILogoP) => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    history.push('/');
+    navigate('/');
   };
 
   return (

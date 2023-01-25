@@ -9,13 +9,12 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
-import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
+
 import { computeFunderBadges } from '../../../helpers';
 import { UserProjectContribution } from '../../../types/generated/graphql';
-
-import { isDarkMode } from '../../../utils';
+import { useDarkMode } from '../../../utils';
 import { Card, ICard } from '../../ui';
 
 type Props = ICard & {
@@ -62,7 +61,7 @@ export const ProjectContributionCard = ({
   ...rest
 }: Props) => {
   const classes = useStyles();
-  const isDark = isDarkMode();
+  const isDark = useDarkMode();
 
   const { project } = contribution;
 
@@ -92,7 +91,7 @@ export const ProjectContributionCard = ({
           <Text fontSize="12px" width="100%" height="35px" noOfLines={2}>
             {project.description}
           </Text>
-          <HStack sapcing="5px" width="100%"></HStack>
+          <HStack spacing="5px" width="100%"></HStack>
         </VStack>
         <Box width="100%" paddingX="10px">
           <RenderBadges contribution={contribution} />

@@ -1,13 +1,14 @@
 import { CircularProgress, HStack, Text, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
-import { fonts } from '../../../constants/fonts';
+
+import { GEYSER_FEE, noFeeProjects } from '../../../constants';
 import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
-import { SatoshiAmount } from '../../ui';
+import { colors } from '../../../styles';
+import { fonts } from '../../../styles';
 import { Project, ProjectMilestone } from '../../../types/generated/graphql';
-import { noFeeProjects, GEYSER_FEE } from '../../../constants';
-import { isActive, isMobileMode } from '../../../utils';
+import { isActive, useMobileMode } from '../../../utils';
+import { SatoshiAmount } from '../../ui';
 
 interface IActivityBrief {
   loading?: boolean;
@@ -29,7 +30,7 @@ const useStyles = createUseStyles({
 
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const classes = useStyles();
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>();
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0);
   const [prevMilestone, setPrevMilestone] = useState(0);

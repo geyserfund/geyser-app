@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Text, Avatar, Link } from '@chakra-ui/react';
+import { Avatar, Box, Link, Text } from '@chakra-ui/react';
+
 import {
   bradUrl,
   conorUrl,

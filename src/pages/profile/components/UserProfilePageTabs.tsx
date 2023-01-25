@@ -1,22 +1,22 @@
-import React from 'react';
 import {
-  TabList,
+  Divider,
+  HStack,
+  Stack,
   Tab,
-  Tabs,
+  TabList,
   TabPanel,
   TabPanels,
-  Divider,
-  Stack,
+  Tabs,
   Text,
-  HStack,
 } from '@chakra-ui/react';
+
+import { noScrollBar } from '../../../styles/common';
 import { User } from '../../../types/generated/graphql';
 import {
   UserProfilePageContributionsList,
   UserProfilePageEntriesList,
   UserProfilePageProjectsList,
 } from '.';
-import { noScrollBar } from '../../../css';
 
 type Props = {
   profileUser: User;

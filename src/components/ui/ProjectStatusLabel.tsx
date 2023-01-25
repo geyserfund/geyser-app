@@ -1,10 +1,8 @@
-import React from 'react';
-
 import { Stack, StackDirection, Text } from '@chakra-ui/react';
 import { HTMLChakraProps } from '@chakra-ui/system';
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs';
 
-import { colors } from '../../constants';
+import { colors } from '../../styles';
 import { Project, WalletStatus } from '../../types/generated/graphql';
 import { isActive, isDraft } from '../../utils';
 

@@ -1,5 +1,7 @@
 import {
+  Checkbox,
   GridItem,
+  HStack,
   Table,
   TableContainer,
   Tbody,
@@ -8,27 +10,25 @@ import {
   Th,
   Thead,
   Tr,
-  HStack,
   VStack,
-  Checkbox,
 } from '@chakra-ui/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { DateTime } from 'luxon';
+import { useEffect, useMemo, useState } from 'react';
 import { CSVLink } from 'react-csv';
+import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi';
 
-import { Funder, Project } from '../../types/generated/graphql';
+import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges';
 import {
-  LinkableAvatar,
-  SatoshiAmount,
   AnonymousAvatar,
   ButtonComponent,
+  LinkableAvatar,
+  SatoshiAmount,
 } from '../../components/ui';
-import { DateTime } from 'luxon';
-import { computeFunderBadges } from '../../helpers';
-import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges';
-import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi';
-import { useQueryWithPagination } from '../../hooks';
-import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql';
 import Loader from '../../components/ui/Loader';
+import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql';
+import { computeFunderBadges } from '../../helpers';
+import { useQueryWithPagination } from '../../hooks';
+import { Funder, Project } from '../../types/generated/graphql';
 import { toInt } from '../../utils';
 
 type TableData = {
@@ -70,7 +70,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
       {
         header: 'Name',
         key: 'name',
-        render: (val: Funder) => {
+        render(val: Funder) {
           const funderBadges = computeFunderBadges({
             creationDateStringOfFundedContent: project.createdAt || '',
             funder: val,
@@ -109,7 +109,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
       {
         header: 'Reward',
         key: 'reward',
-        value: (val: Funder) => {
+        value(val: Funder) {
           let value = '';
           val.rewards.map((reward) => {
             value = value
@@ -122,7 +122,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
       {
         header: 'Date',
         key: 'date',
-        value: (val: Funder) => {
+        value(val: Funder) {
           const dateString = val.confirmedAt
             ? DateTime.fromMillis(toInt(val.confirmedAt)).toFormat(
                 'yyyy / MM / dd',
@@ -134,7 +134,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
       {
         header: 'Email',
         key: 'email',
-        value: (val: Funder) => {
+        value(val: Funder) {
           return val.rewards.length > 0 ? val.user?.email || '-' : '-';
         },
       },

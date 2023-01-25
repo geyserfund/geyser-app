@@ -1,28 +1,28 @@
-import React, { useContext, useEffect } from 'react';
-import { AuthModal } from '../../../components/molecules';
-import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
-import { SuccessScreen } from './SuccessScreen';
-import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
-import { isMobileMode, toInt } from '../../../utils';
-import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
-
-import { AuthContext } from '../../../context';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import classNames from 'classnames';
-import { useStyles } from './styles';
-import {
-  ProjectFundingInitialInfoScreen,
-  InfoPageSkeleton,
-} from './ProjectFundingInitialInfoScreen';
+import { useContext, useEffect } from 'react';
+
+import { AuthModal } from '../../../components/molecules';
 import { fundingStages } from '../../../constants';
-import { IFundForm, IFundFormState } from '../../../hooks';
+import { AuthContext } from '../../../context';
 import { useBtcContext } from '../../../context/btc';
+import { IFundForm, IFundFormState } from '../../../hooks';
+import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
 import {
   FundingResourceType,
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
+import { toInt, useMobileMode } from '../../../utils';
 import { MobileViews, useProject } from '../containers';
+import {
+  InfoPageSkeleton,
+  ProjectFundingInitialInfoScreen,
+} from './ProjectFundingInitialInfoScreen';
+import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
+import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
+import { useStyles } from './styles';
+import { SuccessScreen } from './SuccessScreen';
 
 type Props = {
   project: Project;
@@ -42,7 +42,7 @@ export const ProjectActivityPanel = ({
   const { user } = useContext(AuthContext);
 
   const { btcRate } = useBtcContext();
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const { mobileView } = useProject();
   // required for knowing the rewards and the funds

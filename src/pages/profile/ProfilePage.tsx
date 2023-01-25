@@ -1,21 +1,22 @@
 import { useLazyQuery } from '@apollo/client';
 import {
   Box,
+  Center,
+  Container,
   HStack,
   Skeleton,
   VStack,
-  Center,
-  Container,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router';
+
 import { AppFooter } from '../../components/molecules';
-import { isDarkMode, toInt } from '../../utils';
+import { AlertBox } from '../../components/ui';
 import { useAuthContext } from '../../context';
 import { defaultUser } from '../../defaults';
-import { AlertBox } from '../../components/ui';
-import { User, UserGetInput } from '../../types/generated/graphql';
 import { USER_PROFILE_QUERY } from '../../graphql';
+import { User, UserGetInput } from '../../types/generated/graphql';
+import { toInt, useDarkMode } from '../../utils';
 import { UserProfilePageHeader, UserProfilePageTabs } from './components';
 
 type ResponseData = {
@@ -27,8 +28,9 @@ type QueryVariables = {
 };
 
 export const ProfilePage = () => {
-  const isInDarkMode = isDarkMode();
-  const history = useHistory();
+  const isInDarkMode = useDarkMode();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const { user: currentAppUser } = useAuthContext();
   const params = useParams<{ userId: string }>();
@@ -39,12 +41,12 @@ export const ProfilePage = () => {
   ] = useLazyQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY);
 
   const isViewingOwnProfile = () =>
-    history.location.pathname === `/profile/${currentAppUser.id}`;
+    location.pathname === `/profile/${currentAppUser.id}`;
 
   const [userProfile, setUserProfile] = useState<User>({ ...defaultUser });
 
   const handleLaunchIdea = () => {
-    history.push('/launch');
+    navigate('/launch');
   };
 
   /*

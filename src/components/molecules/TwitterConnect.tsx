@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { ButtonComponent } from '../ui';
-import { SiTwitter } from 'react-icons/si';
+import { useLazyQuery } from '@apollo/client';
 import Icon from '@chakra-ui/icon';
+import { useEffect, useState } from 'react';
+import { SiTwitter } from 'react-icons/si';
+
 import { AUTH_SERVICE_ENDPOINT } from '../../constants';
 import { useAuthContext } from '../../context';
-import { useNotification, hasTwitterAccount } from '../../utils';
-import { useLazyQuery } from '@apollo/client';
+import { defaultUser } from '../../defaults';
 import { ME } from '../../graphql';
 import { User } from '../../types/generated/graphql';
-import { defaultUser } from '../../defaults';
+import { hasTwitterAccount, useNotification } from '../../utils';
+import { ButtonComponent } from '../ui';
 
 type Props = {
   onClose?: () => void;
@@ -19,7 +20,7 @@ export const TwitterConnect = ({ onClose }: Props) => {
   const { toast } = useNotification();
 
   const [queryCurrentUser, { stopPolling }] = useLazyQuery(ME, {
-    onCompleted: (data: { me: User }) => {
+    onCompleted(data: { me: User }) {
       if (data && data.me) {
         const hasTwitter = hasTwitterAccount(data.me);
 
@@ -114,7 +115,7 @@ export const TwitterConnect = ({ onClose }: Props) => {
 
   return (
     <ButtonComponent
-      isFullWidth
+      w="full"
       primary
       standard
       leftIcon={<Icon as={SiTwitter} />}

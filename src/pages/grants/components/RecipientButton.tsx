@@ -1,33 +1,34 @@
-import React, { useEffect, useState, useContext } from 'react';
-import {
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  Box,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Input,
-  Textarea,
-  Image,
-  HStack,
-  Select,
-} from '@chakra-ui/react';
+import Icon from '@chakra-ui/icon';
 import { CheckIcon } from '@chakra-ui/icons';
 import { VStack } from '@chakra-ui/layout';
-import { ButtonComponent, UndecoratedLink } from '../../../components/ui';
-import { isMobileMode, useNotification } from '../../../utils';
-import Loader from '../../../components/ui/Loader';
+import {
+  Box,
+  HStack,
+  Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  Text,
+  Textarea,
+  useDisclosure,
+} from '@chakra-ui/react';
+import React, { useContext, useEffect, useState } from 'react';
+import { SiTwitter } from 'react-icons/si';
+
 import { createApplicantRecord } from '../../../api';
 import { Subscribe } from '../../../components/nav/Subscribe';
-import { AuthContext } from '../../../context';
-import { SiTwitter } from 'react-icons/si';
-import Icon from '@chakra-ui/icon';
+import { ButtonComponent, UndecoratedLink } from '../../../components/ui';
+import Loader from '../../../components/ui/Loader';
 import { AUTH_SERVICE_ENDPOINT } from '../../../constants';
+import { AuthContext } from '../../../context';
 import { Maybe } from '../../../types/generated/graphql';
+import { useMobileMode, useNotification } from '../../../utils';
 
 interface RecipientButtonProps {
   active: boolean;
@@ -42,7 +43,7 @@ export const RecipientButton = ({
   grant,
   image,
 }: RecipientButtonProps) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const [step, setStep] = useState(0);
   const [grantee, setGrantee] = useState('');
   const [description, setDescription] = useState('');
@@ -238,7 +239,7 @@ export const RecipientButton = ({
                 </Text>
                 <UndecoratedLink href={`${AUTH_SERVICE_ENDPOINT}/twitter`}>
                   <ButtonComponent
-                    isFullWidth
+                    w="full"
                     primary
                     standard
                     leftIcon={<Icon as={SiTwitter} />}

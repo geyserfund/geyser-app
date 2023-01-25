@@ -1,7 +1,9 @@
 import { Box, Button, HStack } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
-import { Link, match, useRouteMatch } from 'react-router-dom';
-import { colors, routerPathNames } from '../../../constants';
+import { useMemo } from 'react';
+import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom';
+
+import { routerPathNames } from '../../../constants';
+import { colors } from '../../../styles';
 import { GrantsNavIcon, HomeNavIcon, ProjectNavIcon } from '../../icons';
 
 const routesForShowingLandingMenu = [
@@ -31,20 +33,27 @@ const LandingNavItems = [
 ];
 
 export const LandingNavBar = () => {
-  const routeMatchesForShowingLandingMenu =
-    routesForShowingLandingMenu.map(useRouteMatch);
-  const shouldShowLandingNav: boolean = useMemo(() => {
-    return routeMatchesForShowingLandingMenu.some((routeMatch) => {
-      return (routeMatch as match)?.isExact;
-    });
-  }, [routeMatchesForShowingLandingMenu]);
+  const location = useLocation();
+
+  const routeMatchesForShowingLandingMenu = matchRoutes(
+    routesForShowingLandingMenu.map((val) => ({ path: val })),
+    location,
+  );
+
+  const shouldShowLandingNav = useMemo(
+    () =>
+      routeMatchesForShowingLandingMenu?.some((routeMatch) =>
+        Boolean(routeMatch),
+      ),
+    [routeMatchesForShowingLandingMenu],
+  );
 
   const handleScrollUp = (path: string) => {
-    const currentRoute = routeMatchesForShowingLandingMenu.find(
-      (routeMatch) => (routeMatch as match)?.isExact,
+    const currentRoute = routeMatchesForShowingLandingMenu?.find((routeMatch) =>
+      Boolean(routeMatch),
     );
 
-    if (currentRoute?.path === path) {
+    if (currentRoute?.pathname === path) {
       document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       document.scrollingElement?.scrollTo({ top: 0 });
@@ -70,8 +79,7 @@ export const LandingNavBar = () => {
           paddingBottom="2px"
         >
           {LandingNavItems.map(({ name, path, Icon }) => {
-            const isActive =
-              path === '/' ? useRouteMatch(path)?.isExact : useRouteMatch(path);
+            const isActive = Boolean(matchPath(path, location.pathname));
             return (
               <Button
                 as={Link}

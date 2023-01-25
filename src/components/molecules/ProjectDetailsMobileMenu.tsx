@@ -1,9 +1,9 @@
-import React from 'react';
-import { isMobileMode } from '../../utils';
 import { Box, HStack, Text } from '@chakra-ui/react';
-import { ButtonComponent } from '../ui';
-import { BoltIcon } from '../icons';
+
 import { dimensions } from '../../constants';
+import { useMobileMode } from '../../utils';
+import { BoltIcon } from '../icons';
+import { ButtonComponent } from '../ui';
 
 const {
   topNavBar: { mobile: mobileNavBarDimensions },
@@ -20,7 +20,7 @@ export const ProjectDetailsMobileMenu = ({
   fundButtonFunction,
   transitionButtonFunction: handleViewClick,
 }: IProjectDetailsMobileMenuProps) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const paddingAmount = 16;
 
   if (isMobile === false) {

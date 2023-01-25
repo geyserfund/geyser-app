@@ -1,5 +1,4 @@
 import { Link, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
 import { BiErrorAlt } from 'react-icons/bi';
 
 export const NotAuthorized = () => (

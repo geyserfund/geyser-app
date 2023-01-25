@@ -1,13 +1,12 @@
-import React from 'react';
 import { ProjectNav } from '../../../components/nav/bottomNav/ProjectNav';
+import { Head } from '../../../config/Head';
 import { useFundingFormState } from '../../../hooks';
 import {
   FundingResourceType,
   Project,
   ProjectReward,
 } from '../../../types/generated/graphql';
-import { isMobileMode } from '../../../utils';
-import { Head } from '../../../config/Head';
+import { useMobileMode } from '../../../utils';
 import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel';
 import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer';
 import { ProjectProvider } from './ProjectContext';
@@ -32,7 +31,7 @@ export const ProjectDetailsViewContainer = ({
     rewards: (project.rewards as ProjectReward[]) || undefined,
   });
 
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const { setFundState, fundState } = fundingFlow;
 

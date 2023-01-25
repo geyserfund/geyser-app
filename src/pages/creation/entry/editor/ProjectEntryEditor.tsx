@@ -1,14 +1,15 @@
-import { Quill } from 'react-quill';
-import React, { useEffect, useRef, useState } from 'react';
-import { createUseStyles } from 'react-jss';
 import 'react-quill/dist/quill.snow.css';
-import { colors } from '../../../../constants';
-import { fonts } from '../../../../constants/fonts';
-import { useSignedUploadAPI } from '../../../../hooks';
-import { isMobileMode, useNotification } from '../../../../utils';
+
+import ImageEdit from 'quill-image-edit-module';
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader';
-import ImageEdit from 'quill-image-edit-module';
+import { useEffect, useRef, useState } from 'react';
+import { createUseStyles } from 'react-jss';
+import { Quill } from 'react-quill';
+
+import { getSignedUploadAPI } from '../../../../hooks';
+import { colors, fonts } from '../../../../styles';
+import { useMobileMode, useNotification } from '../../../../utils';
 
 type Rules = string;
 
@@ -128,6 +129,8 @@ type Props = {
 
 const editorDOMID = 'editor';
 
+type QuillType = InstanceType<typeof Quill>;
+
 export const ProjectEntryEditor = ({
   name,
   value,
@@ -136,12 +139,12 @@ export const ProjectEntryEditor = ({
   focusFlag,
   noPadding,
 }: Props) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
-  const [_quillObj, _setQuillObj] = useState<Quill>();
+  const [_quillObj, _setQuillObj] = useState<QuillType>();
   const quillObj = useRef(_quillObj);
 
-  const setQuillObj = (value: Quill) => {
+  const setQuillObj = (value: QuillType) => {
     quillObj.current = value;
     _setQuillObj(value);
   };
@@ -164,9 +167,9 @@ export const ProjectEntryEditor = ({
       ],
     },
     imageUploader: {
-      upload: async (file: any) => {
+      async upload(file: any) {
         try {
-          const response = await useSignedUploadAPI(file);
+          const response = await getSignedUploadAPI(file);
           return response;
         } catch {
           toast({

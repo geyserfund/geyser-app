@@ -9,25 +9,26 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { isMobileMode, useNotification } from '../../utils';
-import satsymbol from '../../assets/satsymbolprimary.svg';
-import { fonts } from '../../constants/fonts';
+import { useEffect, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useHistory } from 'react-router';
-import { ApplyGrantCard } from './components/ApplyGrantCard';
-import { BoardMembers } from './components/BoardMembers';
-import { MoreInfo } from './components/MoreInfo';
-import { AppFooter } from '../../components/molecules';
-import { GrantsContributeModal } from './components/GrantsContributeModal';
-import { GrantDevelopers } from './components/GrantDevs';
-import { GrantsRound2Url } from '../../constants';
-import { ButtonComponent } from '../../components/ui';
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
+import { useNavigate } from 'react-router';
+
 import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
-import { GrantCategory } from './components/ApplyGrantModal';
-import ApplicantAirTableEmbed from './ApplicantAirTableEmbed';
+import satsymbol from '../../assets/satsymbolprimary.svg';
+import { AppFooter } from '../../components/molecules';
+import { ButtonComponent } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
+import { GrantsRound2Url } from '../../constants';
+import { fonts } from '../../styles';
+import { useMobileMode, useNotification } from '../../utils';
+import ApplicantAirTableEmbed from './ApplicantAirTableEmbed';
+import { ApplyGrantCard } from './components/ApplyGrantCard';
+import { GrantCategory } from './components/ApplyGrantModal';
+import { BoardMembers } from './components/BoardMembers';
+import { GrantDevelopers } from './components/GrantDevs';
+import { GrantsContributeModal } from './components/GrantsContributeModal';
+import { MoreInfo } from './components/MoreInfo';
 
 const grants = [
   {
@@ -77,8 +78,8 @@ const defaultApplications: CaregorizedApplications = {
 };
 
 export const GrantsRoundTwo = () => {
-  const isMobile = isMobileMode();
-  const history = useHistory();
+  const isMobile = useMobileMode();
+  const navigate = useNavigate();
   const { toast } = useNotification();
 
   const [copy, setCopy] = useState(false);
@@ -188,7 +189,7 @@ export const GrantsRoundTwo = () => {
             bg="brand.bgWhite"
             variant={'outline'}
             gap={2}
-            onClick={() => history.goBack()}
+            onClick={() => navigate(-1)}
             fontSize="sm"
             position={isMobile ? 'relative' : 'absolute'}
           >
@@ -219,7 +220,7 @@ export const GrantsRoundTwo = () => {
             fontWeight="500"
             color={'brand.neutral600'}
             textAlign="center"
-            justify="center"
+            justifyContent="center"
           >
             Funding educators, creatives and builders doing Bitcoin-only
             projects on Geyser.{isMobile ? '' : <br />} Funded by bitcoin

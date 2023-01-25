@@ -1,5 +1,5 @@
-import { Box, Text, HStack, VStack } from '@chakra-ui/layout';
-import React, { useState } from 'react';
+import { Box, HStack, Text, VStack } from '@chakra-ui/layout';
+import { useState } from 'react';
 
 export const Badge = ({ badge }: { badge: string }) => {
   const [hover, setHover] = useState(false);

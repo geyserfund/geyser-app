@@ -9,8 +9,9 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BsExclamation, BsQuestion } from 'react-icons/bs';
+
 import { DescriptionLinkWithIconComponent } from '../../../../components/molecules';
 import {
   ButtonComponent,
@@ -19,11 +20,10 @@ import {
 } from '../../../../components/ui';
 import { VoltageNodeConnectionDemoURL } from '../../../../constants';
 import { ProjectNodeValidations } from '../../../../constants/validations';
-import { isMobileMode } from '../../../../utils';
+import { useMobileMode } from '../../../../utils';
 import { checkMacaroonPermissions } from '../../../../utils/validations/checkMacaroonPermissions';
 import { isSecp256k1Compressed } from '../../../../utils/validations/isSecp256k1Compressed';
 import { isTorV3Address } from '../../../../utils/validations/isTorV3Address';
-
 import { TNodeInput } from '../types';
 
 type Props = {
@@ -49,7 +49,7 @@ export const NodeAdditionModal = ({
   nodeInput,
   onSubmit,
 }: Props) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const [isVoltage, setIsVoltage] = useState(false);
   const [form, setForm] = useState<TNodeInput>(nodeInput || defaultNode);
@@ -305,7 +305,7 @@ export const NodeAdditionModal = ({
           </VStack>
 
           <VStack spacing="10px" paddingX="20px">
-            <ButtonComponent isFullWidth primary onClick={handleSubmit}>
+            <ButtonComponent w="full" primary onClick={handleSubmit}>
               Confirm
             </ButtonComponent>
           </VStack>

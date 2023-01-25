@@ -1,5 +1,5 @@
-import { Heading, HStack, VStack, Text, Container } from '@chakra-ui/react';
-import React from 'react';
+import { Container, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+
 import { Project } from '../../../types/generated/graphql';
 import { ProjectListItemImage } from '../../molecules';
 

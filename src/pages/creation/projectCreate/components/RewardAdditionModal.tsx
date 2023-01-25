@@ -13,9 +13,10 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { BiDollar } from 'react-icons/bi';
+
 import { SatoshiIconTilted } from '../../../../components/icons';
 import { FileUpload } from '../../../../components/molecules';
 import {
@@ -24,22 +25,21 @@ import {
   TextArea,
   TextInputBox,
 } from '../../../../components/ui';
-
+import { ProjectRewardValidations } from '../../../../constants/validations';
+import { defaultProjectReward } from '../../../../defaults';
 import {
   MUTATION_CREATE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations';
-import { commaFormatted, toInt, useNotification } from '../../../../utils';
 import {
   ProjectReward,
   RewardCurrency,
 } from '../../../../types/generated/graphql';
-import { defaultProjectReward } from '../../../../defaults';
+import { commaFormatted, toInt, useNotification } from '../../../../utils';
 import {
   ProjectRewardCreationVariables,
   ProjectRewardUpdateVariables,
 } from '../types';
-import { ProjectRewardValidations } from '../../../../constants/validations';
 
 type Props = {
   isOpen: boolean;
@@ -356,7 +356,7 @@ export const RewardAdditionModal = ({
           <VStack spacing="10px">
             <ButtonComponent
               isLoading={createRewardLoading || updateRewardLoading}
-              isFullWidth
+              w="full"
               primary
               onClick={handleConfirmReward}
             >

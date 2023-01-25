@@ -1,8 +1,8 @@
 import { Box, HTMLChakraProps, Image } from '@chakra-ui/react';
-import React from 'react';
-import { ProjectImageListItemPlaceholder } from '..';
+
 import { IProject } from '../../../interfaces';
 import { Project } from '../../../types/generated/graphql';
+import { ProjectImageListItemPlaceholder } from '..';
 
 type Props = HTMLChakraProps<'div'> & {
   imageSrc?: string;

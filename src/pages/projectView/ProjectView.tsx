@@ -1,20 +1,19 @@
-/* eslint-disable no-unreachable */
-import React from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+
 import Loader from '../../components/ui/Loader';
+import { getPath } from '../../constants';
+import { useAuthContext } from '../../context';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { useFundingFlow } from '../../hooks';
-import { useAuthContext } from '../../context';
 import {
   Owner,
   Project,
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql';
-import { getPath } from '../../constants';
+import { useMobileMode } from '../../utils';
 import { ProjectDetailsViewContainer } from './containers';
-import { isMobileMode } from '../../utils';
 
 type ResponseData = {
   project: Project;
@@ -26,8 +25,8 @@ type QueryVariables = {
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const history = useHistory();
-  const isMobile = isMobileMode();
+  const navigate = useNavigate();
+  const isMobile = useMobileMode();
 
   const { setNav } = useAuthContext();
 
@@ -40,12 +39,12 @@ export const ProjectView = () => {
       fetchPolicy: 'network-only',
 
       onError() {
-        history.push(getPath('notFound'));
+        navigate(getPath('notFound'));
       },
 
       onCompleted(data) {
         if (!data?.project) {
-          history.replace(getPath('notFound'));
+          navigate(getPath('notFound'));
           return;
         }
 

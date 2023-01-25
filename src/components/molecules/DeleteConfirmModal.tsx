@@ -1,16 +1,15 @@
 import {
+  HStack,
   Modal,
+  ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
   Text,
-  ModalCloseButton,
-  ModalBody,
-  Box,
   VStack,
-  HStack,
 } from '@chakra-ui/react';
-import React from 'react';
+
 import { ButtonComponent } from '../ui';
 
 interface IDeleteConfirmModal {

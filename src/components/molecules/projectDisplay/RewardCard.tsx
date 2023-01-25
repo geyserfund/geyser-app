@@ -1,11 +1,10 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box, HStack, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
 import { BiPencil } from 'react-icons/bi';
-import { colors } from '../../../constants';
 
-import { ProjectReward } from '../../../types/generated/graphql';
 import { TRewards } from '../../../pages/creation/projectCreate/types';
+import { colors } from '../../../styles';
+import { ProjectReward } from '../../../types/generated/graphql';
 import {
   ICard,
   IconButtonComponent,

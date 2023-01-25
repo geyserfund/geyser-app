@@ -1,8 +1,9 @@
 import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
+
 import { useListenerState } from '../../hooks';
+import { colors } from '../../styles';
 import { toInt } from '../../utils';
 
 const useStyles = createUseStyles({

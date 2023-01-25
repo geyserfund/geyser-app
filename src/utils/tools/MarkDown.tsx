@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import React from 'react';
 import { createUseStyles } from 'react-jss';
 import ReactMarkdown from 'react-markdown';
 import { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
+
 import { matchMarkDownSpecialKeysAtLineEnd } from '../validations/regex';
 
 interface MarkDownProps extends ReactMarkdownOptions {

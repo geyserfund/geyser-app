@@ -1,21 +1,25 @@
 import { useMutation } from '@apollo/client';
 import {
-  HStack,
-  Text,
-  VStack,
   GridItem,
-  InputGroup,
+  HStack,
   Input,
+  InputGroup,
   InputRightAddon,
-  Switch,
   Link,
+  Switch,
+  Text,
   useMediaQuery,
+  VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { DateTime } from 'luxon';
+import { useEffect, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
+import { BiInfoCircle } from 'react-icons/bi';
 import { useParams } from 'react-router';
 
+import { CharacterLimitError } from '../../components/errors';
 import { CalendarButton, FileUpload } from '../../components/molecules';
+import { Body2 } from '../../components/typography';
 import {
   ButtonComponent,
   Card,
@@ -23,33 +27,30 @@ import {
   TextArea,
   TextInputBox,
 } from '../../components/ui';
-import { colors, commonMarkdownUrl } from '../../constants';
-import { useAuthContext } from '../../context';
-import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
-import {
-  isMobileMode,
-  isActive,
-  toInt,
-  useNotification,
-  validateEmail,
-  validLightningAddress,
-  MarkDown,
-} from '../../utils';
-import { ProjectCreationVariables } from '../creation/projectCreate/types';
-import { DateTime } from 'luxon';
+import { commonMarkdownUrl } from '../../constants';
 import {
   ProjectValidations,
   UserValidations,
 } from '../../constants/validations';
+import { useAuthContext } from '../../context';
+import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
+import { colors } from '../../styles';
 import { Project, ProjectStatus } from '../../types/generated/graphql';
-import { BiInfoCircle } from 'react-icons/bi';
-import { Body2 } from '../../components/typography';
-import { CharacterLimitError } from '../../components/errors';
+import {
+  isActive,
+  MarkDown,
+  toInt,
+  useMobileMode,
+  useNotification,
+  validateEmail,
+  validLightningAddress,
+} from '../../utils';
+import { ProjectCreationVariables } from '../creation/projectCreate/types';
 
 export const ProjectSettings = ({ project }: { project: Project }) => {
   const params = useParams<{ projectId: string }>();
   const isEdit = Boolean(params.projectId);
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const { toast } = useNotification();
 
@@ -423,7 +424,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
             <ButtonComponent
               isLoading={updateLoading}
               primary
-              isFullWidth
+              w="full"
               onClick={handleNext}
             >
               Save

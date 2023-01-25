@@ -1,13 +1,13 @@
 import { Avatar, Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
-import React from 'react';
-import { ProjectFundersCountIndicator } from '../../components/molecules';
-import { ProjectEntryEditor } from '../creation/entry/editor';
 import { BiLeftArrowAlt } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
-import { Entry } from '../../types/generated/graphql';
-import { getPath } from '../../constants';
+
+import { ProjectFundersCountIndicator } from '../../components/molecules';
 import { ButtonComponent } from '../../components/ui';
+import { getPath } from '../../constants';
+import { Entry } from '../../types/generated/graphql';
+import { ProjectEntryEditor } from '../creation/entry/editor';
 
 type Props = {
   entry: Entry;

@@ -1,32 +1,32 @@
-import { Box, VStack, HStack, Text } from '@chakra-ui/layout';
-import React, { useEffect, useState } from 'react';
-import { ActivityBrief } from '../../../components/molecules';
-import { ButtonComponent } from '../../../components/ui';
-import { SatoshiIconTilted } from '../../../components/icons';
-import {
-  aggregateTransactions,
-  FundingTxWithCount,
-  isMobileMode,
-  isActive,
-  toInt,
-} from '../../../utils';
+import { Box, HStack, Text, VStack } from '@chakra-ui/layout';
 import {
   Button,
   Skeleton,
   SkeletonCircle,
   SkeletonText,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
-import { Funder, Project } from '../../../types/generated/graphql';
-import { ProjectContributionList } from './ProjectContributionList';
-import { ProjectLeaderboardList } from './ProjectLeaderboardList';
+import { SatoshiIconTilted } from '../../../components/icons';
+import { StickToTop } from '../../../components/layouts';
+import { ActivityBrief } from '../../../components/molecules';
+import { ButtonComponent } from '../../../components/ui';
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
   QUERY_GET_PROJECT_FUNDERS,
 } from '../../../graphql';
 import { useQueryWithPagination } from '../../../hooks';
+import { Funder, Project } from '../../../types/generated/graphql';
+import {
+  aggregateTransactions,
+  FundingTxWithCount,
+  isActive,
+  toInt,
+  useMobileMode,
+} from '../../../utils';
 import { MobileViews, useProject } from '../containers';
-import { StickToTop } from '../../../components/layouts';
+import { ProjectContributionList } from './ProjectContributionList';
+import { ProjectLeaderboardList } from './ProjectLeaderboardList';
 
 type Props = {
   project: Project;
@@ -42,7 +42,7 @@ export const ProjectFundingInitialInfoScreen = ({
   test,
   fundingTx,
 }: Props) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const [tab, setTab] = useState('activity');
   const { mobileView, setMobileView } = useProject();
 
@@ -237,7 +237,7 @@ export const ProjectFundingInitialInfoScreen = ({
 };
 
 export const InfoPageSkeleton = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   return (
     <VStack

@@ -1,12 +1,12 @@
-import { Box, Text, HStack } from '@chakra-ui/layout';
+import { Box, HStack, Text } from '@chakra-ui/layout';
 import { HTMLChakraProps } from '@chakra-ui/system';
-import React from 'react';
-import { getAvatarMetadata, computeFunderBadges } from '../../../helpers';
+
+import { computeFunderBadges, getAvatarMetadata } from '../../../helpers';
+import { Funder, Project } from '../../../types/generated/graphql';
 import { commaFormatted } from '../../../utils';
 import { SatoshiIconTilted } from '../../icons';
 import { AnonymousAvatar, LinkableAvatar } from '../../ui';
 import { renderFunderBadges } from './renderFunderBadges';
-import { Funder, Project } from '../../../types/generated/graphql';
 
 type Props = HTMLChakraProps<'div'> & {
   project: Project;

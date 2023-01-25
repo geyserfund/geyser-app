@@ -1,16 +1,17 @@
 import { useLazyQuery } from '@apollo/client';
 import { Box } from '@chakra-ui/layout';
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
-import { Head } from '../../config/Head';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+
+import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
+import { ProjectNav } from '../../components/nav';
 import Loader from '../../components/ui/Loader';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
-import { NotFoundPage } from '../notFound';
-import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
-import { useFundingFlow, useFundingFormState } from '../../hooks';
+import { Head } from '../../config/Head';
+import { getPath } from '../../constants';
 import { useAuthContext } from '../../context';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
 import { QUERY_GET_ENTRY } from '../../graphql/queries/entries';
-import { EntryContainer } from './EntryContainer';
+import { useFundingFlow, useFundingFormState } from '../../hooks';
 import {
   Entry,
   FundingResourceType,
@@ -18,17 +19,17 @@ import {
   Project,
   ProjectReward,
 } from '../../types/generated/graphql';
-import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
+import { toInt, useMobileMode } from '../../utils';
 import { compactMap } from '../../utils/formatData/compactMap';
-import { getPath } from '../../constants';
+import { NotFoundPage } from '../notFound';
 import { ProjectProvider } from '../projectView';
-import { isMobileMode, toInt } from '../../utils';
-import { ProjectNav } from '../../components/nav';
+import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel';
+import { EntryContainer } from './EntryContainer';
 
 export const EntryPage = () => {
   const { entryId } = useParams<{ entryId: string }>();
-  const history = useHistory();
-  const isMobile = isMobileMode();
+  const navigate = useNavigate();
+  const isMobile = useMobileMode();
 
   const { setNav } = useAuthContext();
 
@@ -61,14 +62,14 @@ export const EntryPage = () => {
       onCompleted(data) {
         const { entry } = data;
         if (!entry) {
-          history.push(getPath('notFound'));
+          navigate(getPath('notFound'));
         }
 
         getProject({ variables: { where: { id: toInt(entry.project.id) } } });
       },
       onError(error) {
         console.error(error);
-        history.push(getPath('notFound'));
+        navigate(getPath('notFound'));
       },
     });
 
@@ -124,7 +125,7 @@ const EntryViewWrapper = ({
   setDetailOpen,
   fundingFlow,
 }: IEntryViewWrapper) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const rewards =
     (project.rewards && compactMap<ProjectReward>(project.rewards)) || [];
   const fundForm = useFundingFormState({ rewards });

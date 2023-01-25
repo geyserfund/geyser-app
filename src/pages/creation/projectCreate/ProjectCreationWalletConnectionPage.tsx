@@ -1,30 +1,22 @@
-import {
-  Box,
-  Grid,
-  GridItem,
-  HStack,
-  Text,
-  useMediaQuery,
-  VStack,
-} from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { isMobileMode, toInt, useNotification } from '../../../utils';
-import { colors, getPath } from '../../../constants';
-import { useHistory, useParams } from 'react-router';
 import { useQuery } from '@apollo/client';
+import { HStack, Text, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
+import { BiPencil } from 'react-icons/bi';
+import { Navigate, useNavigate, useParams } from 'react-router';
+
+import { IconButtonComponent } from '../../../components/ui';
+import Loader from '../../../components/ui/Loader';
+import { getPath } from '../../../constants';
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
+import { colors } from '../../../styles';
 import {
   Project,
   UniqueProjectQueryInput,
 } from '../../../types/generated/graphql';
-import Loader from '../../../components/ui/Loader';
+import { toInt, useNotification } from '../../../utils';
 import { ProjectCreationWalletConnectionForm } from '.';
-import { Redirect } from 'react-router-dom';
-import { ButtonComponent, IconButtonComponent } from '../../../components/ui';
-import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar';
-import { BiLeftArrowAlt, BiPencil } from 'react-icons/bi';
-import { TNodeInput } from './types';
 import { ProjectCreateLayout } from './components/ProjectCreateLayout';
+import { TNodeInput } from './types';
 
 type ResponseDataForGetProject = {
   project: Project;
@@ -35,12 +27,9 @@ type QueryVariablesForGetProject = {
 };
 
 export const ProjectCreationWalletConnectionPage = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const params = useParams<{ projectId: string }>();
   const { toast } = useNotification();
-
-  const isMobile = isMobileMode();
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
   const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined);
   const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false);
@@ -63,15 +52,15 @@ export const ProjectCreationWalletConnectionPage = () => {
   );
 
   const handleBackButtonTapped = () => {
-    history.goBack();
+    navigate(-1);
   };
 
   const handleProjectLaunch = async () => {
-    history.push(getPath('project', responseData?.project.name));
+    navigate(getPath('project', responseData?.project.name));
   };
 
   const handleSavingAsDraft = async () => {
-    history.push(getPath('project', responseData?.project.name));
+    navigate(getPath('project', responseData?.project.name));
   };
 
   if (isGetProjectLoading) {
@@ -79,7 +68,7 @@ export const ProjectCreationWalletConnectionPage = () => {
   }
 
   if (projectLoadingError || !responseData || !responseData.project) {
-    return <Redirect to={getPath('notFound')} />;
+    return <Navigate to={getPath('notFound')} />;
   }
 
   const sideView = (

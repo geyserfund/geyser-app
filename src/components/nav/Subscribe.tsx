@@ -1,7 +1,15 @@
 /* eslint-disable complexity */
 
-import React, { useState } from 'react';
+import { ArrowForwardIcon, CheckIcon } from '@chakra-ui/icons';
 import {
+  Box,
+  HStack,
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,22 +17,15 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  Link,
-  IconButton,
-  HStack,
   VStack,
-  Input,
-  Box,
-  Icon,
-  InputGroup,
-  InputRightElement,
 } from '@chakra-ui/react';
-import { ButtonComponent, TextInputBox } from '../ui';
-import { createCreatorRecord } from '../../api';
-import { useNotification, validateEmail, isMobileMode } from '../../utils';
+import { useState } from 'react';
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
-import { CheckIcon, ArrowForwardIcon } from '@chakra-ui/icons';
+
+import { createCreatorRecord } from '../../api';
 import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants';
+import { useMobileMode, useNotification, validateEmail } from '../../utils';
+import { ButtonComponent, TextInputBox } from '../ui';
 
 interface ISubscribe {
   isOpen?: boolean;
@@ -44,7 +45,7 @@ export const Subscribe = ({
   titleSize,
 }: ISubscribe) => {
   const { toast } = useNotification();
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const [submitting, setSubmitting] = useState(false);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -169,7 +170,7 @@ export const Subscribe = ({
                   </HStack>
                 )}
                 <ButtonComponent
-                  isFullWidth
+                  w="full"
                   primary
                   onClick={success ? handleClose : handleConfirm}
                   disabled={!email}

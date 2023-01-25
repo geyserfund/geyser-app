@@ -1,14 +1,14 @@
+import { useColorMode } from '@chakra-ui/color-mode';
 import { Image } from '@chakra-ui/image';
 import { Box } from '@chakra-ui/layout';
-import React from 'react';
-import LogoDark from '../../assets/logo-dark.svg';
-import LogoName from '../../assets/logo-name-brand.svg';
-import LogoSmall from '../../assets/logo-brand.svg';
-import { useColorMode } from '@chakra-ui/color-mode';
 import { useMediaQuery } from '@chakra-ui/media-query';
 import { HTMLChakraProps } from '@chakra-ui/system';
-import { useHistory } from 'react-router';
 import { createUseStyles } from 'react-jss';
+import { useNavigate } from 'react-router';
+
+import LogoSmall from '../../assets/logo-brand.svg';
+import LogoDark from '../../assets/logo-dark.svg';
+import LogoName from '../../assets/logo-name-brand.svg';
 
 type Props = HTMLChakraProps<'div'> & {
   className?: string;
@@ -34,7 +34,7 @@ export const NavBarLogo = ({
 }: Props) => {
   const classes = useStyles();
   const { colorMode } = useColorMode();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isLargerThan720] = useMediaQuery('(min-width: 900px)');
 
   const useFullOne = (isLargerThan720 || full) && !small;
@@ -49,7 +49,7 @@ export const NavBarLogo = ({
       : LogoDark;
 
   const handleClick = () => {
-    history.push('/');
+    navigate('/');
   };
 
   return (

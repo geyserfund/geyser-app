@@ -1,5 +1,5 @@
-import { Box, Image, Progress, VStack } from '@chakra-ui/react';
-import React from 'react';
+import { Image, VStack } from '@chakra-ui/react';
+
 import LogoNameLight from '../../assets/logo-name-brand.svg';
 
 export const LoadingPage = () => (

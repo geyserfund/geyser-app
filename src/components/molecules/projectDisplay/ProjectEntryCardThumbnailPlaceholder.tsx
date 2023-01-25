@@ -1,7 +1,6 @@
-import { HTMLChakraProps } from '@chakra-ui/react';
-import React from 'react';
 import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
+
+import { colors } from '../../../styles';
 
 const useStyles = createUseStyles({
   thumbnailImagePlaceholder: {
@@ -13,7 +12,7 @@ const useStyles = createUseStyles({
   },
 });
 
-type Props = HTMLChakraProps<'svg'> & {};
+type Props = React.SVGProps<SVGSVGElement>;
 
 export const ProjectEntryCardThumbnailPlaceholder = ({ ...rest }: Props) => {
   const styles = useStyles();

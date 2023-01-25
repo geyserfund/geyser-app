@@ -1,19 +1,19 @@
-import { PaginationInput } from '../types/generated/graphql';
-import { useListenerState } from './useListenerState';
-import { getNestedValue } from './useQueryWithPagination';
+import { PaginationInput } from '../types/generated/graphql'
+import { useListenerState } from './useListenerState'
+import { getNestedValue } from './useQueryWithPagination'
 
 export type usePaginationHookProps = {
-  fetchMore: any;
-  queryName: string | string[];
-  itemLimit?: number;
-  cursorID?: number;
-  where?: any;
-  orderBy?: any;
-  resultMap?: (_: any[]) => any[];
-};
+  fetchMore: any
+  queryName: string | string[]
+  itemLimit?: number
+  cursorID?: number
+  where?: any
+  orderBy?: any
+  resultMap?: (_: any[]) => any[]
+}
 
-const thresholdNoOfAggregatedResultsToFetchMore = 10;
-const noOfTimesToRefetchMore = 5;
+const thresholdNoOfAggregatedResultsToFetchMore = 10
+const noOfTimesToRefetchMore = 5
 
 export const usePaginationHook = <Type,>({
   fetchMore,
@@ -24,64 +24,64 @@ export const usePaginationHook = <Type,>({
   orderBy,
   resultMap,
 }: usePaginationHookProps) => {
-  const [list, setList] = useListenerState<Type[]>([]);
+  const [list, setList] = useListenerState<Type[]>([])
 
-  const [noMoreItems, setNoMoreItems] = useListenerState(false);
+  const [noMoreItems, setNoMoreItems] = useListenerState(false)
 
-  const [isLoadingMore, setIsLoadingMore] = useListenerState(false);
+  const [isLoadingMore, setIsLoadingMore] = useListenerState(false)
 
   const [pagination, setPagination] = useListenerState<PaginationInput>({
     take: itemLimit,
     ...(cursorID !== undefined && { id: cursorID }),
-  });
+  })
 
   const handleDataUpdate = (data: Type[]) => {
     if (data && data.length > 0) {
       if (data.length < itemLimit) {
-        setNoMoreItems(true);
+        setNoMoreItems(true)
       }
 
-      handlePaginationChange(data);
+      handlePaginationChange(data)
 
-      const mappedData = handleMapData(data);
+      const mappedData = handleMapData(data)
 
       if (
         data.length === itemLimit &&
         mappedData.length < thresholdNoOfAggregatedResultsToFetchMore &&
         !noMoreItems.current
       ) {
-        fetchNext();
+        fetchNext()
       }
 
-      setList(mappedData);
+      setList(mappedData)
     }
-  };
+  }
 
   const handlePaginationChange = (tempData: any[]) => {
     if (tempData.length > 0) {
-      const options: PaginationInput = {};
+      const options: PaginationInput = {}
       options.cursor = {
         id: Number(tempData[tempData.length - 1].id),
-      };
-      options.take = itemLimit;
-      setPagination(options);
+      }
+      options.take = itemLimit
+      setPagination(options)
     }
-  };
+  }
 
   const handleMapData = (data: Type[]) => {
     if (resultMap) {
-      return resultMap(data);
+      return resultMap(data)
     }
 
-    return data;
-  };
+    return data
+  }
 
   const fetchNext = async (count?: number) => {
     if (noMoreItems.current) {
-      return;
+      return
     }
 
-    setIsLoadingMore(true);
+    setIsLoadingMore(true)
 
     await fetchMore({
       variables: {
@@ -91,33 +91,33 @@ export const usePaginationHook = <Type,>({
           orderBy,
         },
       },
-      updateQuery: (_: any, { fetchMoreResult }: any) => {
-        const data = getNestedValue(fetchMoreResult, queryName);
+      updateQuery(_: any, { fetchMoreResult }: any) {
+        const data = getNestedValue(fetchMoreResult, queryName)
 
         if (data.length < itemLimit) {
-          setNoMoreItems(true);
+          setNoMoreItems(true)
         }
 
-        handlePaginationChange(data);
+        handlePaginationChange(data)
 
-        const mappedData = handleMapData(data);
+        const mappedData = handleMapData(data)
 
-        setList([...list.current, ...mappedData]);
+        setList([...list.current, ...mappedData])
 
         if (
           data.length === itemLimit &&
           mappedData.length <= thresholdNoOfAggregatedResultsToFetchMore &&
           (count ? count < noOfTimesToRefetchMore : true)
         ) {
-          fetchNext(count ? count + 1 : 1);
+          fetchNext(count ? count + 1 : 1)
         }
 
-        return null;
+        return null
       },
-    });
+    })
 
-    setIsLoadingMore(false);
-  };
+    setIsLoadingMore(false)
+  }
 
   return {
     handleDataUpdate,
@@ -125,5 +125,5 @@ export const usePaginationHook = <Type,>({
     fetchNext,
     noMoreItems,
     data: list.current,
-  };
-};
+  }
+}

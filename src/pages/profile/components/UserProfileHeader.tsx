@@ -1,4 +1,4 @@
-import React from 'react';
+import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Button,
@@ -10,15 +10,15 @@ import {
   MenuList,
   Text,
   VStack,
-  WrapItem,
   Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
-import { User } from '../../../types/generated/graphql';
-import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
-import { getRandomOrb } from '../../../utils';
-import { useAuthContext } from '../../../context';
-import { ExternalAccountLinkItem } from '.';
 import { BsLightningChargeFill } from 'react-icons/bs';
+
+import { useAuthContext } from '../../../context';
+import { User } from '../../../types/generated/graphql';
+import { getRandomOrb } from '../../../utils';
+import { ExternalAccountLinkItem } from '.';
 
 type Props = {
   profileUser: User;

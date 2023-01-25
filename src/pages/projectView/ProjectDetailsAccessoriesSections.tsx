@@ -10,9 +10,11 @@ import {
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
+import { BiPlus } from 'react-icons/bi';
 import { createUseStyles } from 'react-jss';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
+
 import {
   ProjectEntryCard,
   ProjectSectionBar,
@@ -26,11 +28,10 @@ import {
 } from '../../constants';
 import { useAuthContext } from '../../context';
 import { UpdateReward } from '../../hooks';
-import { isActive, isDraft, isMobileMode, toInt } from '../../utils';
-import { MilestoneComponent } from './components/MilestoneComponent';
-import { BiPlus } from 'react-icons/bi';
+import { Project } from '../../types/generated/graphql';
+import { isActive, isDraft, toInt, useMobileMode } from '../../utils';
 import { FundingFormRewardItem } from './components/FundingFormRewardItem';
-import { Project, WalletStatus } from '../../types/generated/graphql';
+import { MilestoneComponent } from './components/MilestoneComponent';
 import { MobileViews, useProject } from './containers';
 
 const useStyles = createUseStyles({
@@ -53,8 +54,8 @@ export const ProjectDetailsAccessoriesSections = ({
   fundState,
 }: Props) => {
   const classes = useStyles();
-  const isMobile = isMobileMode();
-  const history = useHistory();
+  const isMobile = useMobileMode();
+  const navigate = useNavigate();
 
   const { setMobileView } = useProject();
 
@@ -171,7 +172,7 @@ export const ProjectDetailsAccessoriesSections = ({
   };
 
   const handleCreateNewEntry = () => [
-    history.push(getPath('projectEntryCreation', project.name)),
+    navigate(getPath('projectEntryCreation', project.name)),
   ];
 
   return (
@@ -227,7 +228,7 @@ export const ProjectDetailsAccessoriesSections = ({
             <>
               <ButtonComponent
                 onClick={handleCreateNewEntry}
-                isFullWidth
+                w="full"
                 disabled={Boolean(canCreateEntries) === false}
               >
                 <BiPlus style={{ marginRight: '10px' }} />

@@ -1,16 +1,16 @@
-import React from 'react';
 import {
   Box,
-  Text,
   HStack,
   Image,
   LinkBox,
   LinkOverlay,
+  Text,
 } from '@chakra-ui/react';
+
 import { SatoshiIconTilted } from '../../../components/icons';
-import { isMobileMode } from '../../../utils';
-import { Project } from '../../../types/generated/graphql';
 import { getPath } from '../../../constants';
+import { Project } from '../../../types/generated/graphql';
+import { useMobileMode } from '../../../utils';
 
 export const GrantCard = ({
   project,
@@ -27,7 +27,7 @@ export const GrantCard = ({
   status: string;
   marginRight?: boolean;
 }) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   return (
     <Box
@@ -53,7 +53,7 @@ export const GrantCard = ({
               h={isMobile ? '325px' : '350px'}
               objectFit="cover"
               borderRadius="4px"
-              src={project.image}
+              src={`${project.image}`}
               alt="grant"
             />
 

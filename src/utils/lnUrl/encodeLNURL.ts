@@ -1,4 +1,5 @@
 import { bech32 } from 'bech32';
+import { Buffer } from 'buffer';
 
 const rules = {
   prefix: 'lnurl',

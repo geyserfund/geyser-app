@@ -1,4 +1,5 @@
-import { Box, Text, Stack } from '@chakra-ui/layout';
+import Icon from '@chakra-ui/icon';
+import { Box, Stack, Text } from '@chakra-ui/layout';
 import {
   Modal,
   ModalBody,
@@ -7,26 +8,26 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal';
+import { HStack, Link, VStack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { BsLightningChargeFill } from 'react-icons/bs';
 import { QRCode } from 'react-qrcode-logo';
-import React, { useEffect, useState } from 'react';
-import { ButtonComponent } from '../ui';
-import Icon from '@chakra-ui/icon';
+import { useLocation, useNavigate } from 'react-router';
+
+import LogoDarkGreen from '../../assets/logo-dark-green.svg';
 import {
   AUTH_SERVICE_ENDPOINT,
-  IAuthModalState,
   authModalStates,
+  IAuthModalState,
 } from '../../constants';
-import { useHistory } from 'react-router';
-import { BsLightningChargeFill } from 'react-icons/bs';
 import { useAuthContext } from '../../context';
-import { useNotification, isMobileMode, hasTwitterAccount } from '../../utils';
-import LogoDarkGreen from '../../assets/logo-dark-green.svg';
-import { HStack, Link, VStack } from '@chakra-ui/react';
-import { TwitterConnect } from '.';
-import Loader from '../ui/Loader';
-import { DisconnectAccounts } from '.';
-import { User } from '../../types/generated/graphql';
 import { defaultUser } from '../../defaults';
+import { User } from '../../types/generated/graphql';
+import { hasTwitterAccount, useMobileMode, useNotification } from '../../utils';
+import { ButtonComponent } from '../ui';
+import Loader from '../ui/Loader';
+import { TwitterConnect } from '.';
+import { DisconnectAccounts } from '.';
 
 interface IAuthModal {
   isOpen: boolean;
@@ -62,7 +63,7 @@ const LnurlConnect = ({
 
   return (
     <ButtonComponent
-      isFullWidth
+      w="100%"
       primary
       standard
       backgroundColor="#ffe600"
@@ -123,9 +124,10 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     isAuthModalOpen: loginIsOpen,
   } = useAuthContext();
   const { toast } = useNotification();
-  const isMobile = isMobileMode();
-  const history = useHistory();
-  const isMe = () => history.location.pathname === `/profile/${user.id}`;
+  const isMobile = useMobileMode();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMe = () => location.pathname === `/profile/${user.id}`;
 
   const [qrContent, setQrContent] = useState('');
   const [modalState, setModalState] = useState<IAuthModalState>(
@@ -185,7 +187,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
   };
 
   /*
-	useEffect Functions
+	UseEffect Functions
 	*/
   useEffect(() => {
     updateModalState();
@@ -341,8 +343,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
 
   const handlePrivateRouteModalClose = () => {
     if (privateRoute) {
-      history.goBack();
-      onClose();
+      navigate(-1);
     }
   };
 

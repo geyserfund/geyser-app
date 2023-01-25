@@ -1,6 +1,7 @@
 import { Box, HStack, Link, Stack, Text, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createUseStyles } from 'react-jss';
+
 import { createCreatorRecord } from '../../api';
 import { EnvelopeIcon, LightningIcon, RopeIcon } from '../../components/icons';
 import {
@@ -12,7 +13,7 @@ import {
 } from '../../components/ui';
 import Loader from '../../components/ui/Loader';
 import { GeyserFAQUrl } from '../../constants';
-import { isMobileMode, useNotification } from '../../utils';
+import { useMobileMode, useNotification } from '../../utils';
 
 const useStyles = createUseStyles({
   iconContainer: {
@@ -32,7 +33,7 @@ const useStyles = createUseStyles({
 });
 
 export const LaunchIdea = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const classes = useStyles();
 
   const { toast } = useNotification();
@@ -78,6 +79,7 @@ export const LaunchIdea = () => {
         },
       ];
       const value = await createCreatorRecord({ records });
+      console.log('checking value', value);
       setSubmitted(true);
     } catch (error) {
       toast({
@@ -152,7 +154,7 @@ export const LaunchIdea = () => {
               <Box className={classes.iconContainer}>
                 <RopeIcon height="33px" width="33px" />
               </Box>
-              <Text fontSize="18px" overFlowWrap="break-word">
+              <Text fontSize="18px" wordBreak="break-word">
                 Create accountability by leveraging your network as ambassadors
                 & sponsors.
               </Text>
@@ -211,7 +213,7 @@ export const LaunchIdea = () => {
               <ButtonComponent
                 primary
                 standard
-                isFullWidth
+                w="full"
                 onClick={handleSubmitForm}
               >
                 Submit

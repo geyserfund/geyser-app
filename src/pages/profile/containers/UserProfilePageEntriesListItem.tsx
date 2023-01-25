@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { gql, useQuery } from '@apollo/client';
 import { Entry } from '../../../types/generated/graphql';
 import { ProjectEntryCard } from '../../../components/molecules';

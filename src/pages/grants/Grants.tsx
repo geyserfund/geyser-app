@@ -1,27 +1,32 @@
 /* eslint-disable complexity */
 
-import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Text,
   HStack,
   Image,
-  VStack,
   Link,
   Skeleton,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
-
-import { AppFooter } from '../../components/molecules';
-import { InfoTooltip } from '../../components/ui';
-import { SatoshiIconTilted } from '../../components/icons';
-import { isActive, isMediumScreen, isMobileMode, MarkDown } from '../../utils';
-import { Subscribe } from '../../components/nav/Subscribe';
-import { RecipientButton } from './components/RecipientButton';
-import { ContributeButton } from './components/ContributeButton';
-import { Board } from './components/Board';
-import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
+import { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
+
+import { SatoshiIconTilted } from '../../components/icons';
+import { AppFooter } from '../../components/molecules';
+import { Subscribe } from '../../components/nav/Subscribe';
+import { InfoTooltip } from '../../components/ui';
+import { VITE_APP_AIR_TABLE_KEY } from '../../constants';
 import { Project } from '../../types/generated/graphql';
+import {
+  isActive,
+  MarkDown,
+  useMediumScreen,
+  useMobileMode,
+} from '../../utils';
+import { Board } from './components/Board';
+import { ContributeButton } from './components/ContributeButton';
+import { RecipientButton } from './components/RecipientButton';
 
 const useStyles = createUseStyles({
   iframe: {
@@ -40,7 +45,7 @@ export const Grants = ({ project }: { project: Project }) => {
       {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
+          Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
           'Content-Type': 'application/json',
         },
       },
@@ -60,8 +65,8 @@ export const Grants = ({ project }: { project: Project }) => {
     getGrantApplicants();
   }, []);
 
-  const isMedium = isMediumScreen();
-  const isMobile = isMobileMode();
+  const isMedium = useMediumScreen();
+  const isMobile = useMobileMode();
 
   return (
     <>
