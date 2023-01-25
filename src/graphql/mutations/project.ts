@@ -46,7 +46,6 @@ export const MUTATION_CREATE_PROJECT_REWARD = gql`
       name
       description
       cost
-      costCurrency
       image
       deleted
       stock
@@ -62,7 +61,6 @@ export const MUTATION_UPDATE_PROJECT_REWARD = gql`
       name
       description
       cost
-      costCurrency
       image
       deleted
       stock
