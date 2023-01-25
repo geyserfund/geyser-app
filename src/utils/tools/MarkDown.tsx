@@ -46,12 +46,7 @@ export const MarkDown = ({
 }: MarkDownProps) => {
   const classes = useStyles({ color, wordBreak, fontSize });
 
-  const newValue = children
-    ? children.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '\\\n')
-    : '';
-
-  const finalValue = getRidOfEndSlash(newValue);
-
+  const finalValue = formatString(children);
   return (
     <ReactMarkdown
       className={classNames(classes.container, className)}
@@ -65,6 +60,20 @@ export const MarkDown = ({
       {finalValue}
     </ReactMarkdown>
   );
+};
+
+const formatString = (value: string): string => {
+  const adjustForLineChange = value
+    ? value.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '\\\n')
+    : '';
+
+  const adjustedForMultiParagrah = adjustForLineChange.replaceAll(
+    /\n\n/g,
+    '\n\\\n',
+  );
+
+  const finalValue = getRidOfEndSlash(adjustedForMultiParagrah);
+  return finalValue;
 };
 
 const getRidOfEndSlash = (value: string): string => {
