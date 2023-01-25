@@ -1,9 +1,0 @@
-{
-  "short_name": "Geyser Fund",
-  "name": "Geyser Fund",
-  "icons": [],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
-}
