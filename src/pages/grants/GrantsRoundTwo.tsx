@@ -317,7 +317,7 @@ export const GrantsRoundTwo = () => {
               Principled Bitcoiners Board
             </Text>
             <Text color={'brand.neutral600'} fontWeight="600">
-              The baord will be responsible for reviewing and evaluating the
+              The board will be responsible for reviewing and evaluating the
               applications.
             </Text>
           </Box>
