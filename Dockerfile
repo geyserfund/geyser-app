@@ -29,7 +29,7 @@ FROM dependencies AS build
 WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
-COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.js .prettierrc ./
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.cjs .prettierrc ./
 
 ARG VITE_APP_API_ENDPOINT
 ARG VITE_APP_AIR_TABLE_KEY
