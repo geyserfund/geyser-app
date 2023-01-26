@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from '@chakra-ui/button'
-import { useColorModeValue } from '@chakra-ui/color-mode'
 import { Box } from '@chakra-ui/layout'
+import { useColorModeValue } from '@chakra-ui/system'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 

@@ -5,12 +5,12 @@ services:
     build:
       context: .
       target: base
-    command: sh -c "yarn install && yarn dev"
+    command: sh -c "RUN_DOCKER=true && yarn install && yarn dev"
     working_dir: /usr/app
     image: geyser-app
     env_file: .env
     ports:
-      - '3001:3001'
+      - '3000:3000'
     volumes:
       - .:/usr/app:cached
 
@@ -20,7 +20,7 @@ services:
     build:
       context: ./faker
       args:
-        - VITE_APP_APOLLO_KEY=$APOLLO_KEY
+        - APOLLO_KEY=$APOLLO_KEY
     image: graphql-faker
     env_file: .env
     ports:

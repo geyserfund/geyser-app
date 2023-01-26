@@ -1,8 +1,7 @@
-import { useColorMode } from '@chakra-ui/color-mode'
 import { Image } from '@chakra-ui/image'
 import { Box } from '@chakra-ui/layout'
 import { useMediaQuery } from '@chakra-ui/media-query'
-import { HTMLChakraProps } from '@chakra-ui/system'
+import { HTMLChakraProps, useColorMode } from '@chakra-ui/system'
 import { createUseStyles } from 'react-jss'
 import { useNavigate } from 'react-router'
 
@@ -39,6 +38,7 @@ export const NavBarLogo = ({
 
   const useFullOne = (isLargerThan720 || full) && !small
 
+  console.log('checking colormode', colorMode)
   const imageToUse =
     colorMode === 'light'
       ? useFullOne

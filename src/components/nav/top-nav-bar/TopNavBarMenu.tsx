@@ -1,7 +1,7 @@
-import { useColorModeValue } from '@chakra-ui/color-mode'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
 import { Avatar, HStack, MenuDivider } from '@chakra-ui/react'
+import { useColorModeValue } from '@chakra-ui/system'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
