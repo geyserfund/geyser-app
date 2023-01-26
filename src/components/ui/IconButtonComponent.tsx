@@ -1,5 +1,5 @@
 import { IconButton, IconButtonProps } from '@chakra-ui/button'
-import { useColorModeValue } from '@chakra-ui/color-mode'
+import { useColorModeValue } from '@chakra-ui/system'
 
 import { colors } from '../../styles'
 import { buttonCommon } from '../../styles/common'

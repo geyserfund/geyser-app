@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
-    "@chakra-ui/color-mode": "^2.1.11",
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/media-query": "^3.2.11",
     "@chakra-ui/react": "^2.4.9",

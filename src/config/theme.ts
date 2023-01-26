@@ -3,6 +3,7 @@ import { extendTheme } from '@chakra-ui/react'
 import { colors, fonts } from '../styles'
 
 export const theme = extendTheme({
+  initialColorMode: 'light',
   colors: {
     brand: {
       ...colors,
