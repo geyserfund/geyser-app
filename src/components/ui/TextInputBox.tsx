@@ -14,7 +14,7 @@ const useStyles = createUseStyles({
 })
 
 type Props = InputProps & {
-  error?: string | null
+  error?: React.ReactNode
 }
 
 export const TextInputBox = ({ children, error, ...rest }: Props) => {
@@ -30,9 +30,13 @@ export const TextInputBox = ({ children, error, ...rest }: Props) => {
       </Input>
 
       {error ? (
-        <Text color="brand.error" fontSize="12px">
-          {error}
-        </Text>
+        typeof error === 'object' ? (
+          error
+        ) : (
+          <Text color="brand.error" fontSize="12px">
+            {error}
+          </Text>
+        )
       ) : null}
     </Box>
   )

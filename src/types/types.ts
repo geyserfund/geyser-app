@@ -15,3 +15,7 @@ export type GrantTextType = {
   subtitle?: string
   isSatLogo: boolean
 }
+
+export type FormError<T> = {
+  [key in keyof T]?: React.ReactNode
+}

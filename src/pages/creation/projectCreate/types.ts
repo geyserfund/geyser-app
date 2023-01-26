@@ -9,6 +9,7 @@ export type ProjectCreationVariables = {
   title: string
   name: string
   image?: string
+  headerImage?: string
   description: string
   email: string
   expiresAt?: string
