@@ -1,49 +1,50 @@
 /* eslint-disable radix */
 
-import React, { useEffect, useState } from 'react';
+import { CheckIcon } from '@chakra-ui/icons'
+import { VStack } from '@chakra-ui/layout'
 import {
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   Box,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Input,
-  Image,
   HStack,
+  IconButton,
+  Image,
+  Input,
   InputGroup,
   InputLeftElement,
   Link,
-  IconButton,
-} from '@chakra-ui/react';
-import QRCode from 'react-qr-code';
-import { CheckIcon } from '@chakra-ui/icons';
-import { VStack } from '@chakra-ui/layout';
-import { ButtonComponent } from '../../../components/ui';
-import { useNotification, isMobileMode, toInt } from '../../../utils';
-import Loader from '../../../components/ui/Loader';
-import { createCreatorRecord } from '../../../api';
-import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { useFundingFlow } from '../../../hooks';
-import { fundingStages, GeyserTelegramUrl } from '../../../constants';
-import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import { useBtcContext } from '../../../context/btc';
-import { Subscribe } from '../../../components/nav/Subscribe';
-import { FaTelegramPlane } from 'react-icons/fa';
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { FaTelegramPlane } from 'react-icons/fa'
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri'
+import QRCode from 'react-qr-code'
+
+import { createCreatorRecord } from '../../../api'
+import { Subscribe } from '../../../components/nav/Subscribe'
+import { ButtonComponent } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { fundingStages, GeyserTelegramUrl } from '../../../constants'
+import { useBtcContext } from '../../../context/btc'
+import { useFundingFlow } from '../../../hooks'
 import {
   FundingInput,
   FundingResourceType,
   Project,
-} from '../../../types/generated/graphql';
+} from '../../../types/generated/graphql'
+import { toInt, useMobileMode, useNotification } from '../../../utils'
+import { commaFormatted } from '../../../utils/formatData/helperFunctions'
 
 interface ContributeButtonProps {
-  active: boolean;
-  title: string;
-  project: Project;
+  active: boolean
+  title: string
+  project: Project
 }
 
 export const ContributeButton = ({
@@ -51,36 +52,36 @@ export const ContributeButton = ({
   title,
   project,
 }: ContributeButtonProps) => {
-  const [name, setName] = useState('');
-  const [contact, setContact] = useState('');
-  const [contributeAmount, setContributeAmount] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState(false);
-  const [copy, setCopy] = useState(false);
-  const { toast } = useNotification();
-  const initialRef = React.useRef(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { btcRate } = useBtcContext();
+  const [name, setName] = useState('')
+  const [contact, setContact] = useState('')
+  const [contributeAmount, setContributeAmount] = useState(0)
+  const [submitting, setSubmitting] = useState(false)
+  const [message, setMessage] = useState(false)
+  const [copy, setCopy] = useState(false)
+  const { toast } = useNotification()
+  const initialRef = React.useRef(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { btcRate } = useBtcContext()
   const {
     fundState,
     fundingTx,
     gotoNextStage,
     resetFundingFlow,
     requestFunding,
-  } = useFundingFlow({ hasWebLN: false });
-  const [subscribed, setSubscribed] = useState(false);
-  const [thousandAmount, setThousandAmount] = useState(false);
-  const [hundredAmount, setHundredAmount] = useState(false);
+  } = useFundingFlow({ hasWebLN: false })
+  const [subscribed, setSubscribed] = useState(false)
+  const [thousandAmount, setThousandAmount] = useState(false)
+  const [hundredAmount, setHundredAmount] = useState(false)
 
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode()
 
   useEffect(() => {
     if (copy) {
       setTimeout(() => {
-        setCopy(false);
-      }, 2000);
+        setCopy(false)
+      }, 2000)
     }
-  }, [copy]);
+  }, [copy])
 
   useEffect(() => {
     if (fundState === 'completed') {
@@ -96,24 +97,24 @@ export const ContributeButton = ({
               fldNsoC4hNwXXYBUZ: contributeAmount,
             },
           },
-        ];
-        createCreatorRecord({ records });
+        ]
+        createCreatorRecord({ records })
       }
     }
-  }, [fundState]);
+  }, [fundState])
 
-  const { address } = fundingTx;
+  const { address } = fundingTx
 
   const getOnchainAddress = () => {
     const bitcoins =
-      parseInt((contributeAmount / btcRate).toFixed(0)) / 100000000;
-    return `bitcoin:${address}?amount=${bitcoins}`;
-  };
+      parseInt((contributeAmount / btcRate).toFixed(0)) / 100000000
+    return `bitcoin:${address}?amount=${bitcoins}`
+  }
 
   const handleCopyOnchain = () => {
-    navigator.clipboard.writeText(getOnchainAddress());
-    setCopy(true);
-  };
+    navigator.clipboard.writeText(getOnchainAddress())
+    setCopy(true)
+  }
 
   const handleFund = async () => {
     const input: FundingInput = {
@@ -126,46 +127,46 @@ export const ContributeButton = ({
         resourceId: toInt(project.id),
         resourceType: FundingResourceType.Project,
       },
-    };
-    requestFunding(input);
-  };
+    }
+    requestFunding(input)
+  }
 
   const handleConfirm = async () => {
     if (parseInt((contributeAmount / btcRate).toFixed(0)) > 15000000) {
-      setMessage(true);
+      setMessage(true)
     } else if (contributeAmount === 0) {
       toast({
         title: 'Payment below 1 sats is not allowed at the moment.',
         description: 'Please update the amount.',
         status: 'error',
-      });
+      })
     } else {
       try {
-        setSubmitting(true);
-        handleFund();
+        setSubmitting(true)
+        handleFund()
       } catch (_) {
         toast({
           title: 'Something went wrong',
           description: 'Please try again',
           status: 'error',
-        });
-        setSubmitting(false);
+        })
+        setSubmitting(false)
       }
     }
-  };
+  }
 
   const close = () => {
-    setName('');
-    setContact('');
-    setContributeAmount(0);
-    setThousandAmount(false);
-    setHundredAmount(false);
-    setSubmitting(false);
-    setMessage(false);
-    setSubscribed(false);
-    resetFundingFlow();
-    onClose();
-  };
+    setName('')
+    setContact('')
+    setContributeAmount(0)
+    setThousandAmount(false)
+    setHundredAmount(false)
+    setSubmitting(false)
+    setMessage(false)
+    setSubscribed(false)
+    resetFundingFlow()
+    onClose()
+  }
 
   const renderFormModal = () => (
     <>
@@ -231,12 +232,12 @@ export const ContributeButton = ({
                     border={hundredAmount ? '3px solid #20ECC7' : ''}
                     onClick={() => {
                       if (thousandAmount) {
-                        setThousandAmount(false);
+                        setThousandAmount(false)
                       }
 
-                      setMessage(false);
-                      setContributeAmount(100);
-                      setHundredAmount(true);
+                      setMessage(false)
+                      setContributeAmount(100)
+                      setHundredAmount(true)
                     }}
                   >
                     $100
@@ -245,12 +246,12 @@ export const ContributeButton = ({
                     border={thousandAmount ? '3px solid #20ECC7' : ''}
                     onClick={() => {
                       if (hundredAmount) {
-                        setHundredAmount(false);
+                        setHundredAmount(false)
                       }
 
-                      setMessage(false);
-                      setContributeAmount(1000);
-                      setThousandAmount(true);
+                      setMessage(false)
+                      setContributeAmount(1000)
+                      setThousandAmount(true)
                     }}
                   >
                     $1000
@@ -268,18 +269,18 @@ export const ContributeButton = ({
                       fontWeight="bold"
                       onChange={(event) => {
                         if (message) {
-                          setMessage(false);
+                          setMessage(false)
                         }
 
                         if (thousandAmount || hundredAmount) {
-                          setThousandAmount(false);
-                          setHundredAmount(false);
+                          setThousandAmount(false)
+                          setHundredAmount(false)
                         }
 
                         if (parseInt(event.target.value, 10) > 0) {
-                          setContributeAmount(parseInt(event.target.value, 10));
+                          setContributeAmount(parseInt(event.target.value, 10))
                         } else {
-                          setContributeAmount(0);
+                          setContributeAmount(0)
                         }
                       }}
                       value={contributeAmount <= 0 ? '' : contributeAmount}
@@ -317,7 +318,7 @@ export const ContributeButton = ({
         </ModalContent>
       </Modal>
     </>
-  );
+  )
 
   const renderPaymentModal = () => (
     <>
@@ -374,7 +375,7 @@ export const ContributeButton = ({
           </ModalBody>
           <ModalFooter display="block">
             <ButtonComponent
-              isFullWidth
+              w="full"
               primary={copy}
               onClick={handleCopyOnchain}
               leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
@@ -399,7 +400,7 @@ export const ContributeButton = ({
         </ModalContent>
       </Modal>
     </>
-  );
+  )
 
   const renderSuccessModal = () => (
     <Modal onClose={close} isOpen={isOpen} isCentered>
@@ -470,22 +471,22 @@ export const ContributeButton = ({
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
+  )
 
   const renderModal = () => {
     switch (fundState) {
       case fundingStages.initial:
-        return null;
+        return null
       case fundingStages.form:
-        return renderFormModal();
+        return renderFormModal()
       case fundingStages.started:
-        return renderPaymentModal();
+        return renderPaymentModal()
       case fundingStages.completed:
-        return renderSuccessModal();
+        return renderSuccessModal()
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <>
@@ -495,13 +496,13 @@ export const ContributeButton = ({
         standard
         w="100%"
         onClick={() => {
-          onOpen();
-          gotoNextStage();
+          onOpen()
+          gotoNextStage()
         }}
       >
         {title}
       </ButtonComponent>
       {renderModal()}
     </>
-  );
-};
+  )
+}

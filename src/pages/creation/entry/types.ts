@@ -1,16 +1,16 @@
 export type TcreateEntry = {
-  content?: string;
-  image?: string;
-  description?: string;
-  title?: string;
-};
+  content?: string
+  image?: string
+  description?: string
+  title?: string
+}
 
 export type TEntry = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  content: string;
-  published: boolean;
-  type: string;
-};
+  id: number
+  title: string
+  description: string
+  image: string
+  content: string
+  published: boolean
+  type: string
+}

@@ -1,1 +1,1 @@
-export * from './PublicProjectLaunchPage';
+export * from './PublicProjectLaunchPage'

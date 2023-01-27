@@ -1,4 +1,3 @@
-import React, { useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -6,34 +5,34 @@ import {
   HTMLChakraProps,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import Loader from '../../../components/ui/Loader';
-import { FundingStatus, InvoiceStatus } from '../../../types/generated/graphql';
-import { QRCode } from 'react-qrcode-logo';
-import { RiLinkUnlink } from 'react-icons/ri';
-import { colors } from '../../../constants';
-import { ButtonComponent } from '../../../components/ui';
-import { FaBitcoin, FaCopy } from 'react-icons/fa';
-import LogoDark from '../../../assets/logo-dark.svg';
-import LogoPrimary from '../../../assets/logo-brand.svg';
-import { BiRefresh } from 'react-icons/bi';
-import { BsExclamationCircle } from 'react-icons/bs';
+} from '@chakra-ui/react'
+import { useMemo, useState } from 'react'
+import { BiRefresh } from 'react-icons/bi'
+import { BsExclamationCircle } from 'react-icons/bs'
+import { FaBitcoin, FaCopy } from 'react-icons/fa'
+import { RiLinkUnlink } from 'react-icons/ri'
+import { QRCode } from 'react-qrcode-logo'
+
+import LogoPrimary from '../../../assets/logo-brand.svg'
+import LogoDark from '../../../assets/logo-dark.svg'
+import { ButtonComponent } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { colors } from '../../../styles'
+import { FundingStatus, InvoiceStatus } from '../../../types/generated/graphql'
 
 type Props = {
-  fundingFlow: any;
-};
+  fundingFlow: any
+}
 
-// eslint-disable-next-line no-unused-vars
 enum QRDisplayState {
-  // eslint-disable-next-line no-unused-vars
   REFRESHING = 'REFRESHING',
-  // eslint-disable-next-line no-unused-vars
+
   AWAITING_PAYMENT = 'AWAITING_PAYMENT',
-  // eslint-disable-next-line no-unused-vars
+
   AWAITING_PAYMENT_WEB_LN = 'AWAITING_PAYMENT_WEB_LN',
-  // eslint-disable-next-line no-unused-vars
+
   INVOICE_CANCELLED = 'INVOICE_CANCELLED',
-  // eslint-disable-next-line no-unused-vars
+
   FUNDING_CANCELED = 'FUNDING_CANCELED',
 }
 
@@ -56,13 +55,13 @@ const FundingErrorView = () => {
         </Text>
       </VStack>
     </VStack>
-  );
-};
+  )
+}
 
 const InvoiceErrorView = ({
   onRefreshSelected,
 }: {
-  onRefreshSelected: () => void;
+  onRefreshSelected: () => void
 }) => {
   return (
     <VStack
@@ -94,12 +93,12 @@ const InvoiceErrorView = ({
         Refresh
       </Button>
     </VStack>
-  );
-};
+  )
+}
 
 export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
-  const [hasCopiedQRCode, setHasCopiedQRCode] = useState(false);
-  const [errorFromRefresh, setErrorFromRefresh] = useState<string | null>(null);
+  const [hasCopiedQRCode, setHasCopiedQRCode] = useState(false)
+  const [errorFromRefresh, setErrorFromRefresh] = useState<string | null>(null)
 
   const {
     fundingTx,
@@ -110,29 +109,29 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     fundingRequestLoading,
     hasWebLN,
     weblnErrored,
-  } = fundingFlow;
+  } = fundingFlow
 
   const qrDisplayState = useMemo(() => {
     if (invoiceRefreshLoading || fundingRequestLoading) {
-      return QRDisplayState.REFRESHING;
+      return QRDisplayState.REFRESHING
     }
 
     if (fundingRequestErrored || fundingTx.status === FundingStatus.Canceled) {
-      return QRDisplayState.FUNDING_CANCELED;
+      return QRDisplayState.FUNDING_CANCELED
     }
 
     if (
       fundingTx.invoiceStatus === InvoiceStatus.Canceled ||
       invoiceRefreshErrored
     ) {
-      return QRDisplayState.INVOICE_CANCELLED;
+      return QRDisplayState.INVOICE_CANCELLED
     }
 
     if (hasWebLN && !weblnErrored) {
-      return QRDisplayState.AWAITING_PAYMENT_WEB_LN;
+      return QRDisplayState.AWAITING_PAYMENT_WEB_LN
     }
 
-    return QRDisplayState.AWAITING_PAYMENT;
+    return QRDisplayState.AWAITING_PAYMENT
   }, [
     invoiceRefreshLoading,
     fundingRequestLoading,
@@ -142,53 +141,53 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     errorFromRefresh,
     invoiceRefreshErrored,
     fundingRequestErrored,
-  ]);
+  ])
 
   const value = useMemo(() => {
     // QUESTION: What should we do if the `paymentRequest` property returned
     // from the `fundingInvoiceRefresh` mutation is null?
 
-    const { id, paymentRequest, address, amount } = fundingTx;
+    const { id, paymentRequest, address, amount } = fundingTx
 
     if (id === 0) {
-      return '';
+      return ''
     }
 
-    let value;
+    let value
     if ((!address && !paymentRequest) || !amount) {
-      setErrorFromRefresh('Could not fetch funding data');
+      setErrorFromRefresh('Could not fetch funding data')
     }
 
-    const btcAmount = amount / 10 ** 8;
+    const btcAmount = amount / 10 ** 8
 
     // If no on-chain address could be generated, only show the payment request
     if (!address) {
-      value = paymentRequest;
+      value = paymentRequest
     }
 
     // If no payment request could be generated, only show the on-chain option
     if (!paymentRequest) {
-      value = `bitcoin:${address}?amount=${btcAmount}`;
+      value = `bitcoin:${address}?amount=${btcAmount}`
     }
 
-    value = `bitcoin:${address}?amount=${btcAmount}&lightning=${paymentRequest}`;
-    return value;
-  }, [fundingTx, fundingTx.paymentRequest, fundingTx.address]);
+    value = `bitcoin:${address}?amount=${btcAmount}&lightning=${paymentRequest}`
+    return value
+  }, [fundingTx, fundingTx.paymentRequest, fundingTx.address])
 
   const handleCopyButtonTapped = () => {
-    navigator.clipboard.writeText(value!);
+    navigator.clipboard.writeText(value!)
 
-    setHasCopiedQRCode(true);
+    setHasCopiedQRCode(true)
 
     setTimeout(() => {
-      setHasCopiedQRCode(false);
-    }, 500);
-  };
+      setHasCopiedQRCode(false)
+    }, 500)
+  }
 
   const PaymentRequestCopyButton = ({ ...rest }: HTMLChakraProps<'button'>) => {
     return (
       <ButtonComponent
-        isFullWidth
+        w="full"
         onClick={handleCopyButtonTapped}
         _disabled={{
           opacity: hasCopiedQRCode ? '1' : '0.4',
@@ -208,8 +207,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           <Text>{hasCopiedQRCode ? 'Copied' : 'Copy'}</Text>
         </HStack>
       </ButtonComponent>
-    );
-  };
+    )
+  }
 
   const renderQrBox = () => {
     switch (qrDisplayState) {
@@ -266,7 +265,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               </HStack>
             </Box>
           </VStack>
-        );
+        )
 
       case QRDisplayState.AWAITING_PAYMENT_WEB_LN:
         return (
@@ -276,12 +275,12 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               <Text>Awaiting Payment</Text>
             </VStack>
           </VStack>
-        );
+        )
       case QRDisplayState.INVOICE_CANCELLED:
-        return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />;
+        return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />
 
       case QRDisplayState.FUNDING_CANCELED:
-        return <FundingErrorView />;
+        return <FundingErrorView />
 
       default:
         return (
@@ -291,9 +290,9 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               <Text>Generating Invoice</Text>
             </VStack>
           </VStack>
-        );
+        )
     }
-  };
+  }
 
   return (
     <VStack spacing={4}>
@@ -325,5 +324,5 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
         }
       />
     </VStack>
-  );
-};
+  )
+}

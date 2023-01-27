@@ -1,9 +1,8 @@
-import React from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react'
 
-import { TopBanner } from '../landing/components';
-import { AppFooter } from '../../components/molecules';
-import { ProjectDiscoveryPageGridSection } from './components';
+import { AppFooter } from '../../components/molecules'
+import { TopBanner } from '../landing/components'
+import { ProjectDiscoveryPageGridSection } from './components'
 
 export const ProjectDiscoveryPage = () => {
   return (
@@ -14,5 +13,5 @@ export const ProjectDiscoveryPage = () => {
 
       <AppFooter />
     </Box>
-  );
-};
+  )
+}

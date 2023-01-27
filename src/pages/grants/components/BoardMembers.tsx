@@ -1,7 +1,5 @@
-import React from 'react';
-import { isMobileMode } from '../../../utils';
-import { Box, Wrap, WrapItem } from '@chakra-ui/react';
-import { BitcoinerCard } from './BitcoinerCard';
+import { Box, Wrap, WrapItem } from '@chakra-ui/react'
+
 import {
   abubakarUrl,
   bradUrl,
@@ -12,7 +10,9 @@ import {
   lucasUrl,
   pacoUrl,
   zuccoUrl,
-} from '../../../constants';
+} from '../../../constants'
+import { useMobileMode } from '../../../utils'
+import { BitcoinerCard } from './BitcoinerCard'
 
 const members = [
   {
@@ -63,14 +63,14 @@ const members = [
     image: joeNakamotoUrl,
     link: 'https://twitter.com/JoeNakamoto',
   },
-];
+]
 
 export const BoardMembers = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode()
 
   return (
     <Box display={'flex'} justifyContent="center">
-      <Box width={isMobile ? '100%' : '600px'} md="">
+      <Box width={isMobile ? '100%' : '600px'}>
         <Wrap spacing="20px" justify="center">
           {members.map((item, idx) => (
             <WrapItem key={idx}>
@@ -84,5 +84,5 @@ export const BoardMembers = () => {
         </Wrap>
       </Box>
     </Box>
-  );
-};
+  )
+}

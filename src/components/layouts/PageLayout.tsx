@@ -1,13 +1,13 @@
-import { Box } from '@chakra-ui/react';
-import React from 'react';
-import { dimensions } from '../../constants';
+import { Box } from '@chakra-ui/react'
+
+import { dimensions } from '../../constants'
 
 interface PageLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const PageLayout = ({ children }: PageLayoutProps) => {
-  console.log('');
+  console.log('')
   return (
     <Box
       position="relative"
@@ -17,5 +17,5 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
     >
       {children}
     </Box>
-  );
-};
+  )
+}

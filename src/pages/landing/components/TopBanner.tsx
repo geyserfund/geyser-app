@@ -1,41 +1,40 @@
-import React, { useEffect } from 'react';
+import { useQuery } from '@apollo/client'
 import {
+  Container,
   HStack,
+  Image,
+  Skeleton,
+  Stack,
   Text,
   VStack,
-  Skeleton,
-  Image,
-  Container,
-  Stack,
-} from '@chakra-ui/react';
-import { useQuery } from '@apollo/client';
+} from '@chakra-ui/react'
+import { useEffect } from 'react'
 
+import { H2, H3 } from '../../../components/typography'
+import Loader from '../../../components/ui/Loader'
 import {
-  colors,
   LandingBannerPatternUrl,
   LandingLetTheSatsFlowUrl,
-} from '../../../constants';
+} from '../../../constants'
+import { ALL_PROJECTS_SUMMARY } from '../../../graphql'
+import { colors } from '../../../styles'
 import {
   getShortAmountLabel,
-  isMobileMode,
+  useMobileMode,
   useNotification,
-} from '../../../utils';
-import { ALL_PROJECTS_SUMMARY } from '../../../graphql';
-import Loader from '../../../components/ui/Loader';
-import { H2, H3 } from '../../../components/typography';
+} from '../../../utils'
 
 export const TopBanner = () => {
-  const { toast } = useNotification();
-  const isMobile = isMobileMode();
+  const { toast } = useNotification()
+  const isMobile = useMobileMode()
 
   const {
     loading: isSummaryLoading,
     error: summaryError,
     data: summaryData,
-  } = useQuery(ALL_PROJECTS_SUMMARY);
+  } = useQuery(ALL_PROJECTS_SUMMARY)
 
-  const projectsSummaryData =
-    (summaryData && summaryData.projectsSummary) || {};
+  const projectsSummaryData = (summaryData && summaryData.projectsSummary) || {}
 
   useEffect(() => {
     if (summaryError) {
@@ -43,15 +42,15 @@ export const TopBanner = () => {
         title: 'Could not load summary data',
         description: 'Please refresh the page',
         status: 'error',
-      });
+      })
     }
-  }, [summaryError]);
+  }, [summaryError])
 
   const satsDataArray = [
     [projectsSummaryData.projectsCount, 'Projects'],
     [projectsSummaryData.fundedTotal, 'Sats Raised'],
     [projectsSummaryData.fundersCount, 'Pleb Contributors'],
-  ];
+  ]
 
   return (
     <VStack
@@ -121,12 +120,12 @@ export const TopBanner = () => {
                       {statsData[1]}
                     </Text>
                   </Stack>
-                );
+                )
               })
             )}
           </HStack>
         </Stack>
       </Container>
     </VStack>
-  );
-};
+  )
+}

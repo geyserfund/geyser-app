@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
-import { client, customHistory, theme } from './config';
-import { ApolloProvider } from '@apollo/client';
-import { AuthProvider } from './context';
-import { BtcProvider } from './context/btc';
-import { Head } from './config/Head';
-import { Router as BrowserRouter } from 'react-router-dom';
-import { AppLayout } from './AppLayout';
+import { ApolloProvider } from '@apollo/client'
+import { ChakraProvider } from '@chakra-ui/react'
+import { BrowserRouter } from 'react-router-dom'
+
+import { AppLayout } from './AppLayout'
+import { client, theme } from './config'
+import { Head } from './config/Head'
+import { AuthProvider } from './context'
+import { BtcProvider } from './context/btc'
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <BrowserRouter history={customHistory}>
+    <BrowserRouter>
       <ApolloProvider client={client}>
         <AuthProvider>
           <BtcProvider>
@@ -21,4 +21,4 @@ export const App = () => (
       </ApolloProvider>
     </BrowserRouter>
   </ChakraProvider>
-);
+)

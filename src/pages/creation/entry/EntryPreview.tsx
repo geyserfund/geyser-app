@@ -1,56 +1,57 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Box, Image, Input, Text, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { BsCheckLg } from 'react-icons/bs';
-import { useHistory, useParams } from 'react-router';
-import { ButtonComponent, TextInputBox } from '../../../components/ui';
-import Loader from '../../../components/ui/Loader';
-import { getPath } from '../../../constants';
-import { ProjectEntryValidations } from '../../../constants/validations';
-import { useAuthContext } from '../../../context';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
+import { Box, Image, Input, Text, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { BsCheckLg } from 'react-icons/bs'
+import { useNavigate, useParams } from 'react-router'
+
+import { ButtonComponent, TextInputBox } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { getPath } from '../../../constants'
+import { ProjectEntryValidations } from '../../../constants/validations'
+import { useAuthContext } from '../../../context'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import {
   MUTATION_PUBLISH_ENTRY,
   MUTATION_UPDATE_ENTRY,
-} from '../../../graphql/mutations/entries';
-import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries';
-import { IEntryUpdateInput } from '../../../interfaces/entry';
-import { Owner, Project } from '../../../types/generated/graphql';
-import { toInt, isDraft, useNotification } from '../../../utils';
-import { defaultEntry } from './editor';
-import { CreateNav } from './editor/CreateNav';
-import { TEntry } from './types';
+} from '../../../graphql/mutations/entries'
+import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries'
+import { IEntryUpdateInput } from '../../../interfaces/entry'
+import { Owner, Project } from '../../../types/generated/graphql'
+import { isDraft, toInt, useNotification } from '../../../utils'
+import { defaultEntry } from './editor'
+import { CreateNav } from './editor/CreateNav'
+import { TEntry } from './types'
 
-let isEdited = false;
+let isEdited = false
 
 export const EntryPreview = () => {
-  const params = useParams<{ entryId: string; projectId: string }>();
+  const params = useParams<{ entryId: string; projectId: string }>()
 
-  const { toast } = useNotification();
-  const history = useHistory();
-  const { setNav } = useAuthContext();
+  const { toast } = useNotification()
+  const navigate = useNavigate()
+  const { setNav } = useAuthContext()
 
-  const [isEntryPublished, setIsEntryPublished] = useState(false);
-  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false);
+  const [isEntryPublished, setIsEntryPublished] = useState(false)
+  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false)
 
-  const [entry, setEntry] = useState<TEntry>(defaultEntry);
+  const [entry, setEntry] = useState<TEntry>(defaultEntry)
 
   const [getPost, { loading: loadingPosts, data: entryData }] = useLazyQuery(
     QUERY_GET_ENTRY,
     {
       onCompleted(data) {
         if (data.entry === null) {
-          history.push(getPath('notFound'));
+          navigate(getPath('notFound'))
         }
       },
     },
-  );
+  )
 
   const [updatePost, { loading: updatePostLoading }] = useMutation(
     MUTATION_UPDATE_ENTRY,
-  );
+  )
 
-  const [publishPost] = useMutation(MUTATION_PUBLISH_ENTRY);
+  const [publishPost] = useMutation(MUTATION_PUBLISH_ENTRY)
 
   const { loading, data: projectData } = useQuery<{ project: Project }>(
     QUERY_PROJECT_BY_NAME_OR_ID,
@@ -63,31 +64,31 @@ export const EntryPreview = () => {
           projectPath: getPath('project', data.project.name),
           projectOwnerIDs:
             data.project.owners.map((ownerInfo: Owner) => {
-              return Number(ownerInfo.user.id || -1);
+              return Number(ownerInfo.user.id || -1)
             }) || [],
-        });
+        })
       },
       onError() {
-        history.push(getPath('notFound'));
+        navigate(getPath('notFound'))
       },
     },
-  );
+  )
 
   useEffect(() => {
     if (params && params.entryId) {
-      getPost({ variables: { id: toInt(params.entryId) } });
+      getPost({ variables: { id: toInt(params.entryId) } })
     }
-  }, [params]);
+  }, [params])
 
   useEffect(() => {
     if (entryData && entryData.entry) {
-      setEntry(entryData.entry);
+      setEntry(entryData.entry)
     }
-  }, [entryData]);
+  }, [entryData])
 
   const handleUpdateEntry = async () => {
     if (entry) {
-      const { image, title, description, content, id } = entry;
+      const { image, title, description, content, id } = entry
       try {
         const input: IEntryUpdateInput = {
           entryId: toInt(id),
@@ -95,84 +96,88 @@ export const EntryPreview = () => {
           description,
           content,
           image,
-        };
-        await updatePost({ variables: { input } });
-        isEdited = false;
+        }
+        await updatePost({ variables: { input } })
+        isEdited = false
       } catch (error) {
         toast({
           title: 'Post update failed',
           description: 'Please try again later',
           status: 'error',
-        });
+        })
       }
     }
-  };
+  }
 
   const onSave = () => {
     if (entry) {
-      handleUpdateEntry();
+      handleUpdateEntry()
     }
-  };
+  }
 
   const onBack = () => {
-    history.push(
-      getPath('projectEntryDetails', params.projectId, params.entryId),
-    );
-  };
+    if (params.projectId && params.entryId) {
+      navigate(getPath('projectEntryDetails', params.projectId, params.entryId))
+    }
+  }
 
   const handleInput = (event: any) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     if (
       name === 'title' &&
       value.length > ProjectEntryValidations.title.maxLength
     ) {
-      return;
+      return
     }
 
     if (
       name === 'description' &&
       value.length > ProjectEntryValidations.description.maxLength
     ) {
-      return;
+      return
     }
 
     if (name) {
-      const newForm = { ...entry, [name]: value };
-      setEntry(newForm);
-      isEdited = true;
+      const newForm = { ...entry, [name]: value }
+      setEntry(newForm)
+      isEdited = true
     }
-  };
+  }
 
   const handlePublish = async () => {
     try {
       if (isEdited) {
-        await handleUpdateEntry();
+        await handleUpdateEntry()
       }
 
-      await publishPost({ variables: { id: toInt(entry.id) } });
+      await publishPost({ variables: { id: toInt(entry.id) } })
     } catch (error) {
       toast({
         title: 'Post publish failed',
         description: 'Please try again later',
         status: 'error',
-      });
+      })
     }
 
-    setIsEntryPublished(true);
-  };
+    setIsEntryPublished(true)
+  }
 
   const handleGoToPost = () => {
-    history.push(getPath('entry', params.entryId));
-  };
+    if (params.entryId) {
+      navigate(getPath('entry', params.entryId))
+    }
+  }
 
   const handleTwitterShareButtonTapped = () => {
-    navigator.clipboard.writeText(getPath('entry', params.entryId));
+    if (params.entryId) {
+      navigator.clipboard.writeText(getPath('entry', params.entryId))
 
-    setHasCopiedSharingLink(true);
-  };
+      setHasCopiedSharingLink(true)
+    }
+  }
 
   if (loadingPosts || loading) {
-    return <Loader />;
+    return <Loader />
   }
 
   return (
@@ -290,14 +295,14 @@ export const EntryPreview = () => {
           {isEntryPublished ? (
             <VStack width="100%">
               <ButtonComponent
-                isFullWidth
+                w="full"
                 onClick={handleTwitterShareButtonTapped}
                 primary={hasCopiedSharingLink}
               >
                 {hasCopiedSharingLink ? 'Copied Link!' : 'Share on Twitter'}
               </ButtonComponent>
 
-              <ButtonComponent primary isFullWidth onClick={handleGoToPost}>
+              <ButtonComponent primary w="full" onClick={handleGoToPost}>
                 Go to Entry
               </ButtonComponent>
             </VStack>
@@ -310,9 +315,9 @@ export const EntryPreview = () => {
               </Text>
               <ButtonComponent
                 primary
-                isFullWidth
+                w="full"
                 onClick={() =>
-                  history.push(
+                  navigate(
                     getPath('projectDashboard', projectData?.project.name),
                   )
                 }
@@ -321,12 +326,12 @@ export const EntryPreview = () => {
               </ButtonComponent>
             </>
           ) : (
-            <ButtonComponent primary isFullWidth onClick={handlePublish}>
+            <ButtonComponent primary w="full" onClick={handlePublish}>
               Publish
             </ButtonComponent>
           )}
         </VStack>
       </VStack>
     </>
-  );
-};
+  )
+}

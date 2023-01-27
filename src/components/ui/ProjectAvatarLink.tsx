@@ -1,20 +1,19 @@
-import { Avatar, HStack, Text, Link } from '@chakra-ui/react';
-import React from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
-import { getPath } from '../../constants';
+import { Avatar, HStack, Link, Text } from '@chakra-ui/react'
+import { Link as ReactRouterLink } from 'react-router-dom'
 
-import { Project } from '../../types/generated/graphql';
+import { getPath } from '../../constants'
+import { Project } from '../../types/generated/graphql'
 
 type Props = {
-  project: Project;
-  textColor?: string;
-};
+  project: Project
+  textColor?: string
+}
 
 export const ProjectAvatarLink = ({
   project,
   textColor = 'brand.neutral700',
 }: Props) => {
-  const avatarSrc = project.image;
+  const avatarSrc = project.image
 
   return (
     <Link
@@ -29,5 +28,5 @@ export const ProjectAvatarLink = ({
         </Text>
       </HStack>
     </Link>
-  );
-};
+  )
+}

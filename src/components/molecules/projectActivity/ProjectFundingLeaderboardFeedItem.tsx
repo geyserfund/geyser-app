@@ -1,18 +1,18 @@
-import { Box, Text, HStack } from '@chakra-ui/layout';
-import { HTMLChakraProps } from '@chakra-ui/system';
-import React from 'react';
-import { getAvatarMetadata, computeFunderBadges } from '../../../helpers';
-import { commaFormatted } from '../../../utils';
-import { SatoshiIconTilted } from '../../icons';
-import { AnonymousAvatar, LinkableAvatar } from '../../ui';
-import { renderFunderBadges } from './renderFunderBadges';
-import { Funder, Project } from '../../../types/generated/graphql';
+import { Box, HStack, Text } from '@chakra-ui/layout'
+import { HTMLChakraProps } from '@chakra-ui/system'
+
+import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
+import { Funder, Project } from '../../../types/generated/graphql'
+import { commaFormatted } from '../../../utils'
+import { SatoshiIconTilted } from '../../icons'
+import { AnonymousAvatar, LinkableAvatar } from '../../ui'
+import { renderFunderBadges } from './renderFunderBadges'
 
 type Props = HTMLChakraProps<'div'> & {
-  project: Project;
-  funder: Funder;
-  leaderboardPosition: number;
-};
+  project: Project
+  funder: Funder
+  leaderboardPosition: number
+}
 
 export const ProjectFundingLeaderboardFeedItem = ({
   funder,
@@ -20,12 +20,12 @@ export const ProjectFundingLeaderboardFeedItem = ({
   project,
   ...rest
 }: Props) => {
-  const anonymous = !funder.user;
-  const avatarMetadata = getAvatarMetadata({ funder });
+  const anonymous = !funder.user
+  const avatarMetadata = getAvatarMetadata({ funder })
   const funderBadges = computeFunderBadges({
     creationDateStringOfFundedContent: project.createdAt,
     funder,
-  });
+  })
 
   return (
     <Box
@@ -62,5 +62,5 @@ export const ProjectFundingLeaderboardFeedItem = ({
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}

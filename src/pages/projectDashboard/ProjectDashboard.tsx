@@ -1,4 +1,4 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client'
 import {
   Box,
   Button,
@@ -6,25 +6,25 @@ import {
   GridItem,
   HStack,
   useMediaQuery,
-} from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
-import Loader from '../../components/ui/Loader';
-import { useAuthContext } from '../../context';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
-import { isMobileMode } from '../../utils';
-import { NotAuthorized } from '../notAuthorized';
-import { NotFoundPage } from '../notFound';
-import { ProjectDashboardEntries } from './ProjectDashboardEntries';
-import { MilestoneSettings } from './MilestoneSettings';
-import { ProjectFundingSettings } from './ProjectFundingSettings';
-import { ProjectSettings } from './ProjectSettings';
-import { RewardSettings } from './RewardSettings';
-import { getPath } from '../../constants';
-import { Owner } from '../../types/generated/graphql';
-import { ProjectContributors } from './ProjectContributors';
-import { ProjectStats } from './ProjectStats';
-import { noScrollBar } from '../../css';
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router'
+
+import Loader from '../../components/ui/Loader'
+import { getPath } from '../../constants'
+import { useAuthContext } from '../../context'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
+import { noScrollBar } from '../../styles/common'
+import { Owner } from '../../types/generated/graphql'
+import { useMobileMode } from '../../utils'
+import { MilestoneSettings } from './MilestoneSettings'
+import { ProjectContributors } from './ProjectContributors'
+import { ProjectDashboardEntries } from './ProjectDashboardEntries'
+import { ProjectDescription } from './ProjectDescription'
+import { ProjectFundingSettings } from './ProjectFundingSettings'
+import { ProjectSettings } from './ProjectSettings'
+import { ProjectStats } from './ProjectStats'
+import { RewardSettings } from './RewardSettings'
 
 enum DashboardTabs {
   entries = 'entries',
@@ -34,68 +34,70 @@ enum DashboardTabs {
   editProject = 'edit project',
   contributors = 'contributors',
   stats = 'stats',
+  settings = 'settings',
 }
 
-let storedTab = DashboardTabs.editProject;
+let storedTab = DashboardTabs.editProject
 
 export const ProjectDashboard = () => {
-  const isMobile = isMobileMode();
-  const { projectId } = useParams<{ projectId: string }>();
-  const { state: locationState } = useLocation<{ loggedOut?: boolean }>();
-  const history = useHistory();
+  const isMobile = useMobileMode()
+  const { projectId } = useParams<{ projectId: string }>()
+  const { state: locationState }: { state: { loggedOut?: boolean } } =
+    useLocation()
+  const navigate = useNavigate()
 
-  const { user, setNav } = useAuthContext();
+  const { user, setNav } = useAuthContext()
 
-  const [activeTab, setActiveTab] = useState<DashboardTabs>(storedTab);
+  const [activeTab, setActiveTab] = useState<DashboardTabs>(storedTab)
 
   useEffect(() => {
     try {
-      getProject();
+      getProject()
     } catch (_) {
-      history.push(getPath('notFound'));
+      navigate(getPath('notFound'))
     }
-  }, [locationState]);
+  }, [locationState])
 
   const handleTabSelection = async (selectedTab: DashboardTabs) => {
     if (selectedTab !== activeTab) {
-      await getProject({ fetchPolicy: 'no-cache' });
+      await getProject({ fetchPolicy: 'no-cache' })
     }
 
-    setActiveTab(selectedTab);
-    storedTab = selectedTab;
-  };
+    setActiveTab(selectedTab)
+    storedTab = selectedTab
+  }
 
-  const [getProject, { loading, error, data }] = useLazyQuery(
+  const [getProject, { loading, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: {
         where: { name: projectId },
       },
       onCompleted(data) {
+        if (data.project.owners[0].user.id !== user.id) {
+          navigate(getPath('notAuthorized'))
+        }
+
         setNav({
           projectName: data.project.name,
           projectTitle: data.project.title,
           projectPath: `${getPath('project', data.project.name)}`,
           projectOwnerIDs:
             data.project.owners.map((ownerInfo: Owner) => {
-              return Number(ownerInfo.user.id || -1);
+              return Number(ownerInfo.user.id || -1)
             }) || [],
-        });
+        })
       },
     },
-  );
+  )
 
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
-  if (error || !data || !data.project) {
-    return <NotFoundPage />;
+  if (loading || !data || !data.project) {
+    return <Loader />
   }
 
-  if (data.project.owners[0].user.id !== user.id) {
-    return <NotAuthorized />;
-  }
-
-  const { project } = data;
+  const { project } = data
 
   const renderTabs = () => {
     if (loading) {
@@ -103,28 +105,30 @@ export const ProjectDashboard = () => {
         <GridItem colSpan={6} display="flex" justifyContent="center">
           <Loader />
         </GridItem>
-      );
+      )
     }
 
     switch (activeTab) {
       case DashboardTabs.entries:
-        return <ProjectDashboardEntries project={project} />;
+        return <ProjectDashboardEntries project={project} />
       case DashboardTabs.milestones:
-        return <MilestoneSettings project={project} />;
+        return <MilestoneSettings project={project} />
       case DashboardTabs.rewards:
-        return <RewardSettings project={project} />;
+        return <RewardSettings project={project} />
       case DashboardTabs.funds:
-        return <ProjectFundingSettings project={project} />;
+        return <ProjectFundingSettings project={project} />
       case DashboardTabs.editProject:
-        return <ProjectSettings project={project} />;
+        return <ProjectDescription project={project} />
       case DashboardTabs.contributors:
-        return <ProjectContributors project={project} />;
+        return <ProjectContributors project={project} />
       case DashboardTabs.stats:
-        return <ProjectStats project={project} />;
+        return <ProjectStats project={project} />
+      case DashboardTabs.settings:
+        return <ProjectSettings project={project} />
       default:
-        return <ProjectDashboardEntries project={project} />;
+        return <ProjectDashboardEntries project={project} />
     }
-  };
+  }
 
   const renderButton = (nav: DashboardTabs) => {
     return (
@@ -147,8 +151,8 @@ export const ProjectDashboard = () => {
           {nav}
         </Button>
       </Box>
-    );
-  };
+    )
+  }
 
   const navList: DashboardTabs[] = [
     DashboardTabs.editProject,
@@ -158,7 +162,8 @@ export const ProjectDashboard = () => {
     DashboardTabs.rewards,
     DashboardTabs.milestones,
     DashboardTabs.stats,
-  ];
+    DashboardTabs.settings,
+  ]
 
   return (
     <Box
@@ -213,5 +218,5 @@ export const ProjectDashboard = () => {
         {renderTabs()}
       </Grid>
     </Box>
-  );
-};
+  )
+}

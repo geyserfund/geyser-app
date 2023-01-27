@@ -1,35 +1,36 @@
-import { Button, IconButton, Tooltip, useDisclosure } from '@chakra-ui/react';
-import html2canvas from 'html2canvas';
-import React, { useState } from 'react';
-import { BoltIcon, QrIcon } from '../../../components/icons';
-import { ProjectFundingQRModal } from './ProjectFundingQRModal';
-import { Project } from '../../../types/generated/graphql';
+import { Button, IconButton, Tooltip, useDisclosure } from '@chakra-ui/react'
+import html2canvas from 'html2canvas'
+import { useState } from 'react'
+
+import { BoltIcon, QrIcon } from '../../../components/icons'
+import { Project } from '../../../types/generated/graphql'
+import { ProjectFundingQRModal } from './ProjectFundingQRModal'
 
 interface ILightningQR {
-  project: Project;
+  project: Project
 }
 
 export const ProjectLightningQR = ({ project }: ILightningQR) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { name } = project;
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { name } = project
 
-  const [copy, setCopy] = useState(false);
-  const [imageDownload, setImageDownload] = useState('');
+  const [copy, setCopy] = useState(false)
+  const [imageDownload, setImageDownload] = useState('')
 
   const handleAddressCopy = () => {
-    navigator.clipboard.writeText(`${name}@geyser.fund`);
-    setCopy(true);
-  };
+    navigator.clipboard.writeText(`${name}@geyser.fund`)
+    setCopy(true)
+  }
 
   const capture = () => {
     if (document.getElementById('lnaddress-qr')) {
       html2canvas(document.getElementById('lnaddress-qr')!, {
         useCORS: true,
       }).then((canvas) => {
-        setImageDownload(canvas.toDataURL('image/png', 1.0));
-      });
+        setImageDownload(canvas.toDataURL('image/png', 1.0))
+      })
     }
-  };
+  }
 
   return (
     <>
@@ -61,12 +62,12 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
           icon={<QrIcon />}
           aria-label="qr"
           onClick={() => {
-            setCopy(false);
-            onOpen();
+            setCopy(false)
+            onOpen()
             if (imageDownload.length === 0) {
               setTimeout(() => {
-                capture();
-              }, 2100);
+                capture()
+              }, 2100)
             }
           }}
         />
@@ -83,5 +84,5 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
         imageDownload={imageDownload}
       />
     </>
-  );
-};
+  )
+}

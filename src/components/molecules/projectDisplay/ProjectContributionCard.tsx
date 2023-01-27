@@ -7,21 +7,20 @@ import {
   VStack,
   Wrap,
   WrapItem,
-} from '@chakra-ui/react';
-import classNames from 'classnames';
-import React from 'react';
-import { createUseStyles } from 'react-jss';
-import { Link } from 'react-router-dom';
-import { computeFunderBadges } from '../../../helpers';
-import { UserProjectContribution } from '../../../types/generated/graphql';
+} from '@chakra-ui/react'
+import classNames from 'classnames'
+import { createUseStyles } from 'react-jss'
+import { Link } from 'react-router-dom'
 
-import { isDarkMode } from '../../../utils';
-import { Card, ICard } from '../../ui';
+import { computeFunderBadges } from '../../../helpers'
+import { UserProjectContribution } from '../../../types/generated/graphql'
+import { useDarkMode } from '../../../utils'
+import { Card, ICard } from '../../ui'
 
 type Props = ICard & {
-  className?: string;
-  contribution: UserProjectContribution;
-};
+  className?: string
+  contribution: UserProjectContribution
+}
 
 const useStyles = createUseStyles({
   container: {
@@ -54,19 +53,19 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))',
   },
-});
+})
 
 export const ProjectContributionCard = ({
   contribution,
   className,
   ...rest
 }: Props) => {
-  const classes = useStyles();
-  const isDark = isDarkMode();
+  const classes = useStyles()
+  const isDark = useDarkMode()
 
-  const { project } = contribution;
+  const { project } = contribution
 
-  const imgSrc = project.image;
+  const imgSrc = project.image
 
   return (
     <Link to={`/project/${project.name}`}>
@@ -92,22 +91,22 @@ export const ProjectContributionCard = ({
           <Text fontSize="12px" width="100%" height="35px" noOfLines={2}>
             {project.description}
           </Text>
-          <HStack sapcing="5px" width="100%"></HStack>
+          <HStack spacing="5px" width="100%"></HStack>
         </VStack>
         <Box width="100%" paddingX="10px">
           <RenderBadges contribution={contribution} />
         </Box>
       </Card>
     </Link>
-  );
-};
+  )
+}
 
 const RenderBadges = ({
   contribution,
 }: {
-  contribution: UserProjectContribution;
+  contribution: UserProjectContribution
 }) => {
-  const { project, funder, isSponsor, isFunder } = contribution;
+  const { project, funder, isSponsor, isFunder } = contribution
   const badges =
     isFunder && funder
       ? computeFunderBadges({
@@ -115,20 +114,20 @@ const RenderBadges = ({
           funder,
           useShortForm: false,
         })
-      : [];
+      : []
 
   if (badges.length === 0) {
     badges.push({
       badge: 'Funder',
       description: 'The user funded this project!',
-    });
+    })
   }
 
   if (isSponsor) {
     badges.push({
       badge: 'Sponsor',
       description: 'The user is a sponsor of this project!',
-    });
+    })
   }
 
   return (
@@ -149,5 +148,5 @@ const RenderBadges = ({
         </WrapItem>
       ))}
     </Wrap>
-  );
-};
+  )
+}

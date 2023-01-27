@@ -1,12 +1,12 @@
-import { Box, BoxProps, HStack, Text } from '@chakra-ui/react';
-import React from 'react';
-import { resolveTripleslashReference } from 'typescript';
-import { ProgressBar } from '../ui';
+import { Box, BoxProps, HStack, Text } from '@chakra-ui/react'
+import { resolveTripleslashReference } from 'typescript'
+
+import { ProgressBar } from '../ui'
 
 interface ITitleWithProgressBar extends BoxProps {
-  title: string;
-  subTitle: string;
-  percentage: number;
+  title: string
+  subTitle: string
+  percentage: number
 }
 
 export default function TitleWithProgressBar({
@@ -28,5 +28,5 @@ export default function TitleWithProgressBar({
         <ProgressBar flex="1" value={percentage} />
       </HStack>
     </Box>
-  );
+  )
 }

@@ -1,13 +1,13 @@
-import { Checkbox, HStack, Text } from '@chakra-ui/react';
-import React from 'react';
-import { SatoshiAmount } from '../../../components/ui';
+import { Checkbox, HStack, Text } from '@chakra-ui/react'
+
+import { SatoshiAmount } from '../../../components/ui'
 
 type Props = {
-  name: string;
-  description: string;
-  amountRemaining: number;
-  isReached?: boolean;
-};
+  name: string
+  description: string
+  amountRemaining: number
+  isReached?: boolean
+}
 
 export const MilestoneComponent = ({
   name,
@@ -29,4 +29,4 @@ export const MilestoneComponent = ({
       </>
     )}
   </HStack>
-);
+)

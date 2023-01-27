@@ -3,131 +3,227 @@ import {
   Button,
   HStack,
   IconButton,
-  Image,
+  Link,
   Stack,
   Text,
   Tooltip,
   VStack,
-} from '@chakra-ui/react';
-import React, { useState } from 'react';
+  Wrap,
+} from '@chakra-ui/react'
+import { useState } from 'react'
+import { BsHeartFill } from 'react-icons/bs'
 
 import {
+  AmbossIcon,
+  BoltIcon,
+  SatoshiIcon,
+  ShareIcon,
+} from '../../../components/icons'
+import { Body2, Caption, H3, MonoBody1 } from '../../../components/typography'
+import {
   Card,
-  SatoshiAmount,
+  IconButtonComponent,
+  ImageWithReload,
   ProjectStatusLabel,
-} from '../../../components/ui';
-import { ProjectLightningQR } from './ProjectLightningQR';
-import { BoltIcon, ShareIcon, AmbossIcon } from '../../../components/icons';
-import { AvatarElement } from './AvatarElement';
-import { useAuthContext } from '../../../context';
-import { Project } from '../../../types/generated/graphql';
-import { getPath, HomeUrl, AmbossUrl } from '../../../constants';
-import { isActive, isMobileMode, MarkDown } from '../../../utils';
+  SatoshiAmount,
+} from '../../../components/ui'
+import { AmbossUrl, getPath, HomeUrl } from '../../../constants'
+import { useAuthContext } from '../../../context'
+import { getIconForLink } from '../../../helpers/getIconForLinks'
+import { colors } from '../../../styles'
+import { Project } from '../../../types/generated/graphql'
+import {
+  getShortAmountLabel,
+  isActive,
+  MarkDown,
+  useMobileMode,
+} from '../../../utils'
+import { AvatarElement } from './AvatarElement'
+import { ProjectLightningQR } from './ProjectLightningQR'
 
 export const ProjectDetailsCard = ({
   project,
   fundButtonFunction,
 }: {
-  project: Project;
-  fundButtonFunction: any;
+  project: Project & {
+    wallets?: { connectionDetails?: { pubkey?: string } }[]
+  }
+  fundButtonFunction: any
 }) => {
-  const { user } = useAuthContext();
-  const isMobile = isMobileMode();
+  const { user } = useAuthContext()
+  const isMobile = useMobileMode()
 
-  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false);
-  const owner = project.owners[0];
+  const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false)
+  const owner = project.owners[0]
 
   const handleShareButtonTapped = () => {
-    const relativePath = getPath('project', project.name);
+    const relativePath = getPath('project', project.name)
 
-    navigator.clipboard.writeText(`${HomeUrl}${relativePath}`);
-    setHasCopiedSharingLink(true);
-  };
+    navigator.clipboard.writeText(`${HomeUrl}${relativePath}`)
+    setHasCopiedSharingLink(true)
+  }
 
   const renderMilestone = () => {
     if (!project.milestones) {
-      return null;
+      return null
     }
 
     const currentMilestone = project.milestones.find(
       (milestone) => Number(milestone?.amount) > project.balance,
-    );
+    )
 
     if (!currentMilestone) {
-      return null;
+      return null
     }
 
     return (
       <VStack alignItems="flex-start">
-        <Text color="brand.neutral600">Next Milestone</Text>
-        <HStack>
-          <Text color="brand.neutral800">{`${currentMilestone?.name}: ${currentMilestone?.description} - `}</Text>
+        <Body2 semiBold color="brand.neutral600">
+          Next Milestone
+        </Body2>
+        <Wrap>
+          <Text
+            paddingTop="2px"
+            color="brand.neutral800"
+          >{`${currentMilestone?.name}: ${currentMilestone?.description} : `}</Text>
           <SatoshiAmount>
             {currentMilestone.amount - project.balance}
           </SatoshiAmount>
-          <Text color="brand.neutral800"> to go.</Text>
-        </HStack>
+          <Text paddingTop="2px" color="brand.neutral800">
+            {' '}
+            to go.
+          </Text>
+        </Wrap>
       </VStack>
-    );
-  };
+    )
+  }
 
   const renderYourFunding = () => {
-    if (project.funders.length > 0) {
-      const currentFund = project.funders.find(
-        (funder) => funder?.user?.id === user.id,
-      );
+    const currentFund = project.funders.find(
+      (funder) => funder?.user?.id === user.id,
+    )
 
-      if (!currentFund) {
-        return null;
-      }
-
-      return (
-        <>
-          {!isMobile && <Text color="brand.primary800">|</Text>}
-          <HStack>
-            <Text color="brand.primary800" fontWeight={500}>
-              {'You contributed'}
-            </Text>
-            <SatoshiAmount color="brand.primary800" fontWeight={500}>
-              {currentFund.amountFunded}
-            </SatoshiAmount>
-            <Text color="brand.primary800" fontWeight={500}>
-              {' towards this project'}
-            </Text>
+    return (
+      <HStack
+        height="72px"
+        w="100%"
+        borderRadius="4px"
+        backgroundColor="brand.neutral100"
+        spacing="60px"
+        justifyContent="center"
+      >
+        <VStack>
+          <HStack spacing="5px">
+            <BsHeartFill color={colors.neutral500} />
+            <MonoBody1>
+              {getShortAmountLabel(project.fundersCount || 0)}
+            </MonoBody1>
           </HStack>
-        </>
-      );
+          <Caption>CONTRIBUTORS</Caption>
+        </VStack>
+        <VStack>
+          <HStack spacing="5px">
+            <SatoshiIcon scale={0.7} />
+            <MonoBody1>{getShortAmountLabel(project.balance)}</MonoBody1>
+          </HStack>
+          <Caption>TOTAL CONTRIBUTED</Caption>
+        </VStack>
+        {currentFund && (
+          <VStack>
+            <HStack spacing="5px">
+              <SatoshiIcon scale={0.7} />
+              <MonoBody1>
+                {getShortAmountLabel(currentFund.amountFunded || 0)}
+              </MonoBody1>
+            </HStack>
+
+            <Caption>YOU CONTRIBUTED</Caption>
+          </VStack>
+        )}
+      </HStack>
+    )
+  }
+
+  const renderLinks = () => {
+    if (project.links && project.links.length > 0) {
+      return (
+        <HStack>
+          <Body2 semiBold color="brand.neutral600">
+            Links
+          </Body2>
+          <HStack>
+            {project.links.map((link) => {
+              const Icon = getIconForLink(link)
+              return (
+                <IconButtonComponent
+                  size="sm"
+                  variant="ghost"
+                  backgroundColor="transparent"
+                  boxShadow="none"
+                  aria-label="link-icon"
+                  key={link}
+                  as={Link}
+                  href={link || ''}
+                  isExternal
+                >
+                  <Icon fontSize="20px" />
+                </IconButtonComponent>
+              )
+            })}
+          </HStack>
+        </HStack>
+      )
     }
 
-    return null;
-  };
-
-  const renderContributorsCount = () => {
-    const contributorsCount = project.funders.length;
-    return (
-      <Text color="brand.primary800" fontWeight={500}>
-        {contributorsCount}{' '}
-        {contributorsCount === 1 ? 'contributor' : 'contributors'}
-      </Text>
-    );
-  };
+    return null
+  }
 
   return (
-    <Card padding="24px" backgroundColor="brand.bgWhite">
-      <VStack alignItems="flex-start" width="100%" spacing="18px">
-        {project.image && (
-          <Box width="100%" overflow="hidden">
-            <Image
-              borderRadius="4px"
-              width="100%"
-              height="100%"
-              src={project.image}
-              maxH="210px"
-              objectFit="cover"
-            />
-          </Box>
-        )}
-
+    <Card
+      border="2px solid"
+      borderColor="brand.neutral200"
+      borderRadius="4px"
+      boxShadow="none"
+      shadow="sm"
+    >
+      <VStack position="relative">
+        <Box width="100%" height="230px" overflow="hidden">
+          <ImageWithReload
+            grey
+            width="100%"
+            height="100%"
+            src={project.image || undefined}
+            maxH="210px"
+            objectFit="cover"
+          />
+        </Box>
+        <Box
+          width="155px"
+          height="155px"
+          borderRadius="12px"
+          border="2px solid white"
+          overflow="hidden"
+          position="absolute"
+          bottom="-30px"
+          left="24px"
+        >
+          <ImageWithReload
+            grey
+            width="100%"
+            height="100%"
+            src={project.thumbnailImage || undefined}
+            maxH="230px"
+            objectFit="cover"
+          />
+        </Box>
+      </VStack>
+      <VStack
+        marginTop="10px"
+        padding="24px"
+        alignItems="flex-start"
+        width="100%"
+        spacing="18px"
+      >
         <VStack width="100%" spacing="10px" alignItems="flex-start">
           <Stack
             direction={isMobile ? 'column' : 'row'}
@@ -167,54 +263,48 @@ export const ProjectDetailsCard = ({
                 onClick={handleShareButtonTapped}
               />
             </Tooltip>
-            {project.wallets && project.wallets[0]?.connectionDetails?.pubkey && (
-              <IconButton
-                size="sm"
-                _hover={{
-                  backgroundColor: 'none',
-                  border: '1px solid #20ECC7',
-                }}
-                _active={{ backgroundColor: 'brand.primary' }}
-                bg="none"
-                icon={<AmbossIcon fontSize="20px" />}
-                aria-label="share"
-                onClick={() =>
-                  window
-                    .open(
-                      `${AmbossUrl}${project.wallets[0].connectionDetails.pubkey}`,
-                      '_blank',
-                    )
-                    ?.focus()
-                }
-              />
-            )}
+            {project.wallets &&
+              project.wallets[0]?.connectionDetails?.pubkey && (
+                <IconButton
+                  size="sm"
+                  _hover={{
+                    backgroundColor: 'none',
+                    border: '1px solid #20ECC7',
+                  }}
+                  _active={{ backgroundColor: 'brand.primary' }}
+                  bg="none"
+                  icon={<AmbossIcon fontSize="20px" />}
+                  aria-label="share"
+                  onClick={() =>
+                    window
+                      .open(
+                        `${AmbossUrl}${project.wallets[0].connectionDetails.pubkey}`,
+                        '_blank',
+                      )
+                      ?.focus()
+                  }
+                />
+              )}
           </HStack>
         </VStack>
         <HStack>
-          <Text color="brand.neutral600">Creator</Text>
+          <H3>{project.shortDescription}</H3>
+        </HStack>
+        <HStack>
+          <Body2 semiBold color="brand.neutral600">
+            Creator
+          </Body2>
           <AvatarElement user={owner.user} />
         </HStack>
+        {renderLinks()}
         <VStack alignItems="flex-start">
-          <Text color="brand.neutral600" textAlign="left">
-            Objective
-          </Text>
           <MarkDown color='"brand.neutral800"'>{project.description}</MarkDown>
         </VStack>
         {renderMilestone()}
-        {project.funders.length > 0 && (
-          <Stack
-            direction={isMobile ? 'column' : 'row'}
-            width="100%"
-            justifyContent="center"
-            alignItems={'center'}
-          >
-            {renderContributorsCount()}
-            {renderYourFunding()}
-          </Stack>
-        )}
+        {renderYourFunding()}
         {!isMobile && (
           <Button
-            isFullWidth
+            w="full"
             backgroundColor={
               isActive(project.status)
                 ? 'brand.primary'
@@ -229,5 +319,5 @@ export const ProjectDetailsCard = ({
         )}
       </VStack>
     </Card>
-  );
-};
+  )
+}

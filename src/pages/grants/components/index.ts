@@ -1,2 +1,2 @@
-export * from './ContributeButton';
-export * from './RecipientButton';
+export * from './ContributeButton'
+export * from './RecipientButton'

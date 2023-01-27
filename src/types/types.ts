@@ -1,17 +1,21 @@
-declare const __nominalType: unique symbol;
+declare const __nominalType: unique symbol
 
 export type Nominal<Type, Identifier> = Type & {
-  readonly [__nominalType]: Identifier;
-};
+  readonly [__nominalType]: Identifier
+}
 
-export type Satoshis = Nominal<number, 'Satoshis'>;
-export type USDCents = Nominal<number, 'USDCents'>;
-export type USDollars = Nominal<number, 'USDollars'>;
+export type Satoshis = Nominal<number, 'Satoshis'>
+export type USDCents = Nominal<number, 'USDCents'>
+export type USDollars = Nominal<number, 'USDollars'>
 
-export type Satoshi = number;
+export type Satoshi = number
 
 export type GrantTextType = {
-  title: string;
-  subtitle: string;
-  isSatLogo: boolean;
-};
+  title?: string
+  subtitle?: string
+  isSatLogo: boolean
+}
+
+export type FormError<T> = {
+  [key in keyof T]?: React.ReactNode
+}

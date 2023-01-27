@@ -1,129 +1,151 @@
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import { LandingPage } from '../pages/landing';
-import { createBrowserHistory } from 'history';
-import { NotFoundPage } from '../pages/notFound';
-import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage';
-import { TwitterSuccess, FailedAuth } from '../pages/auth';
-import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit';
-import { EntryPreview } from '../pages/creation/entry/EntryPreview';
+import { Route, Routes } from 'react-router-dom'
+
+import { getPath, routerPathNames } from '../constants'
+import { FailedAuth, TwitterSuccess } from '../pages/auth'
+import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
+import { EntryPreview } from '../pages/creation/entry/EntryPreview'
 import {
   MilestoneAndRewards,
   ProjectCreate,
   ProjectCreationWalletConnectionPage,
-} from '../pages/creation/projectCreate';
-import { PrivateRoute } from './PrivateRoute';
-import { ProjectView } from '../pages/projectView';
-import { EntryPage } from '../pages/entry/EntryPage';
-import { NotAuthorized } from '../pages/notAuthorized';
-import { ProjectDashboard } from '../pages/projectDashboard';
-import { ProjectDiscoveryPage } from '../pages/projectDiscovery';
-import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch';
-import { ProfilePage } from '../pages/profile/ProfilePage';
-import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne';
-import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo';
-import { getPath, routerPathNames } from '../constants';
+} from '../pages/creation/projectCreate'
+import { EntryPage } from '../pages/entry/EntryPage'
+import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage'
+import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne'
+import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo'
+import { LandingPage } from '../pages/landing'
+import { NotAuthorized } from '../pages/notAuthorized'
+import { NotFoundPage } from '../pages/notFound'
+import { ProfilePage } from '../pages/profile/ProfilePage'
+import { ProjectDashboard } from '../pages/projectDashboard'
+import { ProjectDiscoveryPage } from '../pages/projectDiscovery'
+import { ProjectView } from '../pages/projectView'
+import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch'
+import { PrivateRoute } from './PrivateRoute'
 
-export const customHistory = createBrowserHistory();
+type PlatformRoutes = {
+  path: string
+  element: () => JSX.Element
+  authenticated?: boolean
+}
 
-export const Router = () => {
-  return (
-    <Switch>
-      <Route path="/auth/twitter">
-        <TwitterSuccess />
-      </Route>
-      <Route path="/failed-authentication">
-        <FailedAuth />
-      </Route>
-      <Route path={'/grants/roundone'}>
-        <GrantsRoundOne />
-      </Route>
-      <Route path={'/grants/roundtwo'}>
-        <GrantsRoundTwo />
-      </Route>
-      <Route path={'/grants'} component={GrantsLandingPage} />
+const platformRoutes = [
+  {
+    path: '/auth/twitter',
+    element: TwitterSuccess,
+  },
+  {
+    path: '/failed-authentication',
+    element: FailedAuth,
+  },
+  {
+    path: '/grants/roundone',
+    element: GrantsRoundOne,
+  },
+  {
+    path: '/grants/roundtwo',
+    element: GrantsRoundTwo,
+  },
+  {
+    path: '/grants',
+    element: GrantsLandingPage,
+  },
+  {
+    path: getPath('publicProjectLaunch'),
+    element: PublicProjectLaunchPage,
+  },
+  {
+    path: `/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`,
+    element: ProjectCreationWalletConnectionPage,
+    authenticated: true,
+  },
+  {
+    path: `/${routerPathNames.launchProject}/:projectId/${routerPathNames.milestonesAndRewards}`,
+    element: MilestoneAndRewards,
+  },
+  {
+    path: `${getPath('privateProjectLaunch')}/:projectId`,
+    element: ProjectCreate,
+    authenticated: true,
+  },
+  {
+    path: getPath('privateProjectLaunch'),
+    element: ProjectCreate,
+    authenticated: true,
+  },
+  {
+    path: `/${routerPathNames.userProfile}/:userId`,
+    element: ProfilePage,
+    authenticated: true,
+  },
+  {
+    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+    element: EntryPreview,
+    authenticated: true,
+  },
+  {
+    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+    element: EntryCreateEdit,
+    authenticated: true,
+  },
+  {
+    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+    element: EntryCreateEdit,
+    authenticated: true,
+  },
+  {
+    path: `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
+    element: ProjectDashboard,
+    authenticated: true,
+  },
+  {
+    path: `/${routerPathNames.project}/:projectId`,
+    element: ProjectView,
+  },
+  {
+    path: `/${routerPathNames.entry}/:entryId`,
+    element: EntryPage,
+  },
+  {
+    path: getPath('notFound'),
+    element: NotFoundPage,
+  },
+  {
+    path: getPath('notAuthorized'),
+    element: NotAuthorized,
+  },
+  {
+    path: getPath('projectDiscovery'),
+    element: ProjectDiscoveryPage,
+  },
+  {
+    path: getPath('index'),
+    element: LandingPage,
+  },
+  {
+    path: getPath('landingPage'),
+    element: LandingPage,
+  },
+] as PlatformRoutes[]
 
-      <Route
-        path={getPath('publicProjectLaunch')}
-        component={PublicProjectLaunchPage}
-      />
-      <Route
-        path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`}
-      >
-        <PrivateRoute>
-          <ProjectCreationWalletConnectionPage />
-        </PrivateRoute>
-      </Route>
-      <Route
-        path={`/${routerPathNames.launchProject}/:projectId/${routerPathNames.milestonesAndRewards}`}
-      >
-        <PrivateRoute>
-          <MilestoneAndRewards />
-        </PrivateRoute>
-      </Route>
-      <Route path={`${getPath('privateProjectLaunch')}/:projectId`}>
-        <PrivateRoute>
-          <ProjectCreate />
-        </PrivateRoute>
-      </Route>
-      <Route path={`${getPath('privateProjectLaunch')}`}>
-        <PrivateRoute>
-          <ProjectCreate />
-        </PrivateRoute>
-      </Route>
-      <Route
-        path={`/${routerPathNames.userProfile}/:userId`}
-        component={ProfilePage}
-      />
-      {/* The <Project> view is an old view. We will delete it after the migration to the new views is completed. */}
-      <Redirect from="/projects/:projectId" to="/project/:projectId" />
-      <Route path="/project/grants">
-        <Redirect to="/grants" />
-      </Route>
-      <Route
-        path={`/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`}
-      >
-        <PrivateRoute>
-          <EntryPreview />
-        </PrivateRoute>
-      </Route>
-      <Route
-        path={`/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`}
-      >
-        <PrivateRoute>
-          <EntryCreateEdit />
-        </PrivateRoute>
-      </Route>
-      <Route
-        path={`/${routerPathNames.project}/:projectId/${routerPathNames.entry}`}
-      >
-        <PrivateRoute>
-          <EntryCreateEdit />
-        </PrivateRoute>
-      </Route>
-      <Route
-        path={`/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`}
-      >
-        <PrivateRoute>
-          <ProjectDashboard />
-        </PrivateRoute>
-      </Route>
-      <Route
-        path={`/${routerPathNames.project}/:projectId`}
-        component={ProjectView}
-      />
-      <Route
-        path={`/${routerPathNames.entry}/:entryId`}
-        component={EntryPage}
-      />
-      <Route path={getPath('notFound')} component={NotFoundPage} />
-      <Route path={getPath('notAuthorized')} component={NotAuthorized} />
-      <Route
-        path={getPath('projectDiscovery')}
-        component={ProjectDiscoveryPage}
-      />
-      <Route path={getPath('index')} component={LandingPage} />
-      <Route path={getPath('landingPage')} component={LandingPage} />
-    </Switch>
-  );
-};
+export const Router = () => (
+  <Routes>
+    {platformRoutes.map(({ path, element: Element, authenticated }) => {
+      if (authenticated) {
+        return (
+          <Route
+            key={path}
+            path={path}
+            element={
+              <PrivateRoute>
+                <Element />
+              </PrivateRoute>
+            }
+          />
+        )
+      }
+
+      return <Route key={path} path={path} element={<Element />} />
+    })}
+  </Routes>
+)

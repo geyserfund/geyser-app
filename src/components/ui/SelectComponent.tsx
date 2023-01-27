@@ -1,9 +1,9 @@
-import React from 'react';
-import Select from 'react-select';
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
-import classNames from 'classnames';
-import { useDisclosure } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react'
+import classNames from 'classnames'
+import { createUseStyles } from 'react-jss'
+import Select from 'react-select'
+
+import { colors } from '../../styles'
 
 const useStyles = createUseStyles({
   focused: {
@@ -37,7 +37,7 @@ const useStyles = createUseStyles({
       color: 'black',
     },
   },
-});
+})
 
 export const SelectComponent = ({
   name,
@@ -45,12 +45,12 @@ export const SelectComponent = ({
   className,
   ...rest
 }: any) => {
-  const { isOpen: focused, onOpen: onFocus, onClose: onBlur } = useDisclosure();
-  const classes = useStyles();
+  const { isOpen: focused, onOpen: onFocus, onClose: onBlur } = useDisclosure()
+  const classes = useStyles()
 
   const onSelect = (option: any) => {
-    onChange(name, option.value);
-  };
+    onChange(name, option.value)
+  }
 
   return (
     <Select
@@ -63,5 +63,5 @@ export const SelectComponent = ({
       onChange={onSelect}
       {...rest}
     />
-  );
-};
+  )
+}

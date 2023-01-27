@@ -1,1 +1,1 @@
-export * from './CharacterLimitError';
+export * from './CharacterLimitError'

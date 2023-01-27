@@ -6,4 +6,4 @@ export const ID = {
       leaderboard: 'project-leaderboard-list-container',
     },
   },
-};
+}

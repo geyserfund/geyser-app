@@ -1,11 +1,11 @@
-import { Link, LinkProps } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link, LinkProps } from '@chakra-ui/react'
+import { ReactNode } from 'react'
+import { Link as ReactRouterLink } from 'react-router-dom'
 
 type Props = LinkProps & {
-  destinationPath: string;
-  children: ReactNode;
-};
+  destinationPath: string
+  children: ReactNode
+}
 
 export const MenuItemLink = ({
   children,
@@ -45,5 +45,5 @@ export const MenuItemLink = ({
         </Link>
       )}
     </>
-  );
-};
+  )
+}

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Text, Avatar, Link } from '@chakra-ui/react';
+import { Avatar, Box, Link, Text } from '@chakra-ui/react'
+
 import {
   bradUrl,
   conorUrl,
@@ -8,13 +8,13 @@ import {
   lucasUrl,
   princeUrl,
   zuccoUrl,
-} from '../../../constants';
+} from '../../../constants'
 
 interface BoardMemberProps {
-  image: string;
-  name: string;
-  link: string;
-  handle: string;
+  image: string
+  name: string
+  link: string
+  handle: string
 }
 
 const BoardMember = ({ image, name, link, handle }: BoardMemberProps) => (
@@ -54,7 +54,7 @@ const BoardMember = ({ image, name, link, handle }: BoardMemberProps) => (
       </Box>
     </Box>
   </Box>
-);
+)
 
 const boardMembers = [
   {
@@ -99,7 +99,7 @@ const boardMembers = [
     link: 'https://twitter.com/cryptograffiti',
     image: cryptoUrl,
   },
-];
+]
 
 export const Board = () => (
   <Box
@@ -127,4 +127,4 @@ export const Board = () => (
 			</Box>
 		</Box> */}
   </Box>
-);
+)

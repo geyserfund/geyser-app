@@ -1,3 +1,3 @@
-export * from './Heading';
-export * from './Body';
-export * from './Mono';
+export * from './Body'
+export * from './Heading'
+export * from './Mono'

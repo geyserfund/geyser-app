@@ -1,5 +1,4 @@
-import React from 'react';
-import { Icon, IconProps } from '@chakra-ui/react';
+import { Icon, IconProps } from '@chakra-ui/react'
 
 export const AmbossIcon = (props: IconProps) => (
   <Icon width="22" height="22" viewBox="0 0 22 22" fill="none" {...props}>
@@ -10,7 +9,7 @@ export const AmbossIcon = (props: IconProps) => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
 export const HomeNavIcon = (props: IconProps) => (
   <Icon
@@ -28,7 +27,7 @@ export const HomeNavIcon = (props: IconProps) => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
 export const ProjectNavIcon = (props: IconProps) => (
   <Icon
@@ -84,7 +83,7 @@ export const ProjectNavIcon = (props: IconProps) => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
 export const GrantsNavIcon = (props: IconProps) => (
   <Icon
@@ -114,4 +113,4 @@ export const GrantsNavIcon = (props: IconProps) => (
       strokeWidth="0.6"
     />
   </Icon>
-);
+)

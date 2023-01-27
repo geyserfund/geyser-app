@@ -1,56 +1,51 @@
-import {
-  HStack,
-  Text,
-  VStack,
-  GridItem,
-  useMediaQuery,
-} from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
-import { useHistory } from 'react-router';
+import { CheckCircleIcon } from '@chakra-ui/icons'
+import { GridItem, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
+import { useMemo, useState } from 'react'
+import { BiPencil } from 'react-icons/bi'
+import { useNavigate } from 'react-router'
 
-import { BiPencil } from 'react-icons/bi';
-import { IconButtonComponent } from '../../components/ui';
-import { TNodeInput } from '../creation/projectCreate/types';
-import { colors, getPath } from '../../constants';
-import { useNotification } from '../../utils';
+import { IconButtonComponent } from '../../components/ui'
+import { getPath } from '../../constants'
+import { colors } from '../../styles'
 import {
   LightningAddressConnectionDetails,
   LndConnectionDetailsPrivate,
   Project,
   Wallet,
-} from '../../types/generated/graphql';
-import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView';
-import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate';
-import { CheckCircleIcon } from '@chakra-ui/icons';
+} from '../../types/generated/graphql'
+import { useNotification } from '../../utils'
+import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate'
+import { TNodeInput } from '../creation/projectCreate/types'
+import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView'
 
 export const ProjectFundingSettings = ({ project }: { project: Project }) => {
-  const { toast } = useNotification();
-  const history = useHistory();
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+  const { toast } = useNotification()
+  const navigate = useNavigate()
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
-  const [nodeData, setNodeData] = useState<TNodeInput>();
-  const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false);
+  const [nodeData, setNodeData] = useState<TNodeInput>()
+  const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false)
 
   const projectWallet: Wallet | undefined = useMemo(() => {
-    return project.wallets && project.wallets[0];
-  }, [project.wallets]);
+    return project.wallets && project.wallets[0]
+  }, [project.wallets])
 
   const handleProjectLaunch = async () => {
-    history.push(getPath('project', project.name));
+    navigate(getPath('project', project.name))
     toast({
       status: 'success',
       title: 'Wallet updated!',
       description: 'Project is now active',
-    });
-  };
+    })
+  }
 
   const renderWalletConnectionDetails = () => {
-    const { connectionDetails } = projectWallet;
-    let castedConnectionDetails;
+    const { connectionDetails } = projectWallet
+    let castedConnectionDetails
     switch (connectionDetails.__typename) {
       case 'LightningAddressConnectionDetails':
         castedConnectionDetails =
-          connectionDetails as LightningAddressConnectionDetails;
+          connectionDetails as LightningAddressConnectionDetails
 
         return (
           <GridItem colSpan={8} display="flex" justifyContent="center">
@@ -58,11 +53,11 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
               lightningAddress={castedConnectionDetails.lightningAddress}
             />
           </GridItem>
-        );
+        )
 
       default:
         castedConnectionDetails =
-          connectionDetails as LndConnectionDetailsPrivate;
+          connectionDetails as LndConnectionDetailsPrivate
         return (
           <>
             <VStack
@@ -159,9 +154,9 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
               information for security reasons.
             </Text>
           </>
-        );
+        )
     }
-  };
+  }
 
   return (
     <>
@@ -233,5 +228,5 @@ export const ProjectFundingSettings = ({ project }: { project: Project }) => {
         </GridItem>
       )}
     </>
-  );
-};
+  )
+}

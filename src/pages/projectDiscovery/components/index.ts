@@ -1,1 +1,1 @@
-export * from './ProjectDiscoveryPageGridSection';
+export * from './ProjectDiscoveryPageGridSection'

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
   query GetProject(
@@ -10,6 +10,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       title
       name
       type
+      shortDescription
       description
       balance
       fundingGoal
@@ -17,6 +18,8 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       updatedAt
       expiresAt
       image
+      thumbnailImage
+      links
       status
       rewardCurrency
       fundersCount
@@ -121,7 +124,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       }
     }
   }
-`;
+`
 
 export const QUERY_PROJECT_FUNDING_DATA = gql`
   query GetProjectFundingData($where: UniqueProjectQueryInput!) {
@@ -139,7 +142,7 @@ export const QUERY_PROJECT_FUNDING_DATA = gql`
       }
     }
   }
-`;
+`
 
 export const QUERY_GRANTS = gql`
   query projects($input: ProjectsGetQueryInput) {
@@ -159,7 +162,7 @@ export const QUERY_GRANTS = gql`
       }
     }
   }
-`;
+`
 
 export const QUERY_PROJECTS = gql`
   query projects($input: ProjectsGetQueryInput) {
@@ -204,7 +207,7 @@ export const QUERY_PROJECTS = gql`
       }
     }
   }
-`;
+`
 
 export const ALL_PROJECTS_SUMMARY = gql`
   query ProjectsSummary {
@@ -214,7 +217,7 @@ export const ALL_PROJECTS_SUMMARY = gql`
       projectsCount
     }
   }
-`;
+`
 
 export const QUERY_PROJECT_DASHBOARD_DATA = gql`
   query ProjectDashboardData($where: UniqueProjectQueryInput!) {
@@ -238,7 +241,7 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
       }
     }
   }
-`;
+`
 
 export const QUERY_GET_PROJECT_FUNDERS = gql`
   query Query($input: GetFundersInput!) {
@@ -261,7 +264,7 @@ export const QUERY_GET_PROJECT_FUNDERS = gql`
       }
     }
   }
-`;
+`
 
 export const QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS = gql`
   query GetDashboardFunders($input: GetFundersInput) {
@@ -286,4 +289,4 @@ export const QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS = gql`
       timesFunded
     }
   }
-`;
+`

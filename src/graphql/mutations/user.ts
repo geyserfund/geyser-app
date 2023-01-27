@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const MUTATION_UNLINK_ACCOUNT = gql`
   mutation UnlinkExternalAccount($id: BigInt!) {
@@ -15,4 +15,4 @@ export const MUTATION_UNLINK_ACCOUNT = gql`
       }
     }
   }
-`;
+`

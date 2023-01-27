@@ -5,7 +5,7 @@
 
 dev.geyser.fund {
 	tls internal
-	reverse_proxy geyser-app-standalone:3001
+	reverse_proxy geyser-app-standalone:3000
 }
 
 api.dev.geyser.fund {
@@ -15,5 +15,5 @@ api.dev.geyser.fund {
 
 staging.geyser.fund {
     tls internal
-    reverse_proxy geyser-app-standalone:3001
+    reverse_proxy geyser-app-standalone:3000
 }

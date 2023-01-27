@@ -1,9 +1,8 @@
-import React from 'react';
-import { createUseStyles } from 'react-jss';
-import YouTube, { YouTubeProps } from 'react-youtube';
+import { createUseStyles } from 'react-jss'
+import YouTube, { YouTubeProps } from 'react-youtube'
 
 interface IYoutubeEmbed {
-  videoId: string;
+  videoId: string
 }
 
 const useStyles = createUseStyles({
@@ -12,15 +11,15 @@ const useStyles = createUseStyles({
     borderRadius: '4px',
     overflow: 'hidden',
   },
-});
+})
 
 export const YoutubeEmbed = ({ videoId }: IYoutubeEmbed) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   const onPlayerReady: YouTubeProps['onReady'] = (event) => {
     // Access to player in all event handlers via event.target
-    event.target.pauseVideo();
-  };
+    event.target.pauseVideo()
+  }
 
   const opts: YouTubeProps['opts'] = {
     height: '390',
@@ -29,7 +28,7 @@ export const YoutubeEmbed = ({ videoId }: IYoutubeEmbed) => {
       // https://developers.google.com/youtube/player_parameters
       autoplay: 1,
     },
-  };
+  }
   return (
     <YouTube
       className={classes.youtubeContainer}
@@ -37,5 +36,5 @@ export const YoutubeEmbed = ({ videoId }: IYoutubeEmbed) => {
       opts={opts}
       onReady={onPlayerReady}
     />
-  );
-};
+  )
+}
