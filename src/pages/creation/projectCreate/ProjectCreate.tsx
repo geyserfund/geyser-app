@@ -16,7 +16,7 @@ import {
 } from '../../../graphql/mutations'
 import { FormError } from '../../../types'
 import { Project } from '../../../types/generated/graphql'
-import { MarkDown, toInt, useNotification, validateEmail } from '../../../utils'
+import { toInt, useNotification, validateEmail } from '../../../utils'
 import {
   ProjectCreateForm,
   ProjectCreateFormValidation,
