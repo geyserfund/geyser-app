@@ -1,19 +1,13 @@
 import { useMutation } from '@apollo/client'
 import { GridItem, Switch, Text, useMediaQuery, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { Body2 } from '../../components/typography'
 import { ButtonComponent, TextInputBox } from '../../components/ui'
 import { useAuthContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
 import { FormError, Project, ProjectStatus } from '../../types'
-import {
-  isActive,
-  toInt,
-  useMobileMode,
-  useNotification,
-  validateEmail,
-} from '../../utils'
+import { isActive, toInt, useMobileMode, useNotification } from '../../utils'
 import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
 

@@ -17,8 +17,6 @@ import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
 import { noScrollBar } from '../../styles/common'
 import { Owner } from '../../types/generated/graphql'
 import { useMobileMode } from '../../utils'
-import { NotAuthorized } from '../notAuthorized'
-import { NotFoundPage } from '../notFound'
 import { MilestoneSettings } from './MilestoneSettings'
 import { ProjectContributors } from './ProjectContributors'
 import { ProjectDashboardEntries } from './ProjectDashboardEntries'
@@ -69,7 +67,7 @@ export const ProjectDashboard = () => {
     storedTab = selectedTab
   }
 
-  const [getProject, { loading, error, data }] = useLazyQuery(
+  const [getProject, { loading, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: {

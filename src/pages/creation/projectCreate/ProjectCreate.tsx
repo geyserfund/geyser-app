@@ -1,16 +1,11 @@
 import { useLazyQuery, useMutation } from '@apollo/client'
-import { Box, Text, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router'
 
 import { Body2 } from '../../../components/typography'
-import {
-  ButtonComponent,
-  Card,
-  ImageWithReload,
-  TextInputBox,
-} from '../../../components/ui'
+import { ButtonComponent, TextInputBox } from '../../../components/ui'
 import { getPath } from '../../../constants'
 import { UserValidations } from '../../../constants/validations'
 import { useAuthContext } from '../../../context'

@@ -13,15 +13,10 @@ import {
 import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
-import {
-  MUTATION_ADD_PROJECT_LINK,
-  MUTATION_REMOVE_PROJECT_LINK,
-  MUTATION_UPDATE_PROJECT_REWARD,
-} from '../../../graphql/mutations'
+import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../graphql/mutations'
 import { colors } from '../../../styles'
 import type {
   Project,
-  ProjectLinkMutationInput,
   ProjectMilestone,
   ProjectReward,
 } from '../../../types/generated/graphql'
