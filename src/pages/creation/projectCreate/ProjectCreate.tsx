@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation } from '@apollo/client'
-import { Text, VStack } from '@chakra-ui/react'
+import { Box, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router'
@@ -19,7 +19,6 @@ import {
   MUTATION_CREATE_PROJECT,
   MUTATION_UPDATE_PROJECT,
 } from '../../../graphql/mutations'
-import { useFormState } from '../../../hooks'
 import { FormError } from '../../../types'
 import { Project } from '../../../types/generated/graphql'
 import { MarkDown, toInt, useNotification, validateEmail } from '../../../utils'
@@ -28,6 +27,8 @@ import {
   ProjectCreateFormValidation,
 } from './components/ProjectCreateForm'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
+import { ProjectFundraisingDeadline } from './components/ProjectFundraisingDeadline'
+import { ProjectPreviewComponent } from './components/ProjectPreviewComponent'
 import { ProjectCreationVariables, ProjectUpdateVariables } from './types'
 
 type CreateProjectMutationResponseData = {
@@ -59,15 +60,12 @@ export const ProjectCreate = () => {
 
   const { user, setUser } = useAuthContext()
 
-  const {
-    state: form,
-    setState: setForm,
-    setTarget,
-  } = useFormState<ProjectCreationVariables>({
+  const [form, setForm] = useState<ProjectCreationVariables>({
     title: '',
+    shortDescription: '',
     description: '',
-    image: undefined,
-    headerImage: '',
+    image: '',
+    thumbnailImage: '',
     email: '',
     name: '',
   })
@@ -131,23 +129,24 @@ export const ProjectCreate = () => {
     },
   })
 
-  const [getProjectById, { loading, data }] = useLazyQuery(
-    QUERY_PROJECT_BY_NAME_OR_ID,
-    {
-      variables: { where: { id: toInt(params.projectId) } },
-      onCompleted(data) {
-        if (data && data.project) {
-          setForm({
-            title: data.project.title,
-            name: data.project.name,
-            image: data.project.image,
-            description: data.project.description,
-            email: user.email || '',
-          })
-        }
-      },
+  const [getProjectById, { loading, data }] = useLazyQuery<{
+    project: Project
+  }>(QUERY_PROJECT_BY_NAME_OR_ID, {
+    variables: { where: { id: toInt(params.projectId) } },
+    onCompleted(data) {
+      if (data && data.project) {
+        setForm({
+          title: data.project.title,
+          name: data.project.name,
+          image: `${data.project.image}`,
+          thumbnailImage: `${data.project.thumbnailImage}`,
+          shortDescription: data.project.shortDescription,
+          description: data.project.description,
+          email: user.email || '',
+        })
+      }
     },
-  )
+  })
 
   const handleNextButtonTapped = () => {
     const isValid = validateForm()
@@ -159,7 +158,9 @@ export const ProjectCreate = () => {
             input: {
               projectId: toInt(data?.project?.id),
               title: form.title,
-              image: form.image,
+              image: `${form.image}`,
+              thumbnailImage: `${form.thumbnailImage}`,
+              shortDescription: form.shortDescription,
               description: form.description,
             },
           },
@@ -202,59 +203,37 @@ export const ProjectCreate = () => {
     navigate(getPath('publicProjectLaunch'))
   }
 
+  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, email: event.target.value })
+  }
+
   useEffect(() => {
     getProjectById()
   }, [params.projectId])
 
-  const sideView = (
-    <VStack
-      justifyContent="flex-start"
-      alignItems="flex-start"
-      maxWidth="370px"
-      spacing="10px"
-    >
-      <Text>Preview</Text>
-      <Card padding="16px 10px" overflow="hidden" width="100%">
-        <ImageWithReload
-          src={form.image}
-          height="222px"
-          width="350px"
-          noCacheId={(Math.random() + 1).toString(36).substring(7)}
-        />
-        <Text>geyser.fund/project</Text>
-        <Text fontSize="28px" fontWeight={700}>
-          {form.title || 'Project Title'}
-        </Text>
-        <MarkDown fontSize="16px" color="brand.textGrey">
-          {form.description || 'project description'}
-        </MarkDown>
-      </Card>
-    </VStack>
-  )
-
   return (
     <ProjectCreateLayout
       handleBack={handleBack}
-      sideView={sideView}
+      sideView={<ProjectPreviewComponent data={form} />}
       title="Project details"
       subtitle="Step 1 of 3"
       percentage={33}
     >
       <VStack width="100%" alignItems="flex-start" spacing="24px">
-        {
-          <ProjectCreateForm
-            form={form}
-            formError={formError}
-            setForm={setForm}
-            setFormError={setFormError}
-          />
-        }
+        <ProjectCreateForm
+          form={form}
+          formError={formError}
+          setForm={setForm}
+          setFormError={setFormError}
+        />
+        <ProjectFundraisingDeadline form={form} setForm={setForm} />
+
         <VStack className={classes.rowItem} spacing="5px">
           <Body2>Project E-mail</Body2>
           <TextInputBox
             name="email"
             value={user.email || form.email}
-            onChange={setTarget}
+            onChange={handleEmail}
             error={formError.email}
             isDisabled={Boolean(user.email)}
           />

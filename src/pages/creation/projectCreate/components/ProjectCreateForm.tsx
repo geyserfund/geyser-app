@@ -23,9 +23,10 @@ import { FormError } from '../../../../types'
 import { validLightningAddress } from '../../../../utils'
 
 type ProjectCreate = {
-  title: string
-  name: string
-  description: string
+  title?: string
+  name?: string
+  shortDescription?: string
+  description?: string
   image?: string
   headerImage?: string
 }
@@ -57,6 +58,16 @@ export const ProjectCreateFormValidation = (form: ProjectCreate) => {
     form.name.length > ProjectValidations.name.maxLength
   ) {
     errors.name = `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`
+    isValid = false
+  }
+
+  if (!form.shortDescription) {
+    errors.shortDescription = 'Project objective is a required field.'
+    isValid = false
+  } else if (
+    form.shortDescription.length > ProjectValidations.shortDescription.maxLength
+  ) {
+    errors.shortDescription = `Project objective should be shorter than ${ProjectValidations.shortDescription.maxLength} characters.`
     isValid = false
   }
 
@@ -98,9 +109,10 @@ export const ProjectCreateForm = ({
     },
   })
 
-  const handleImageUpload = (url: string) => setForm({ ...form, image: url })
+  const handleImageUpload = (url: string) =>
+    setForm({ ...form, thumbnailImage: url })
   const handleHeaderImageUpload = (url: string) =>
-    setForm({ ...form, headerImage: url })
+    setForm({ ...form, image: url })
 
   const handleChange = (event: any) => {
     if (event) {
@@ -145,6 +157,18 @@ export const ProjectCreateForm = ({
             <CharacterLimitError
               length={value.length}
               limit={ProjectValidations.description.maxLength}
+            />
+          ),
+        })
+      } else if (
+        name === 'shortDescription' &&
+        value.length > ProjectValidations.shortDescription.maxLength
+      ) {
+        setFormError({
+          shortDescription: (
+            <CharacterLimitError
+              length={value.length}
+              limit={ProjectValidations.shortDescription.maxLength}
             />
           ),
         })
@@ -228,14 +252,35 @@ export const ProjectCreateForm = ({
         </Text>
       </VStack>
       <VStack {...rowStyles}>
-        <Body2>Main Objective</Body2>
+        <Body2>Project objective</Body2>
+        <TextArea
+          name="shortDescription"
+          noOfLines={2}
+          height="fit-content"
+          overflowY="auto"
+          value={form.shortDescription || ''}
+          onChange={handleChange}
+          error={formError.shortDescription}
+        />
+        {!formError.shortDescription && (
+          <HStack width="100%" justifyContent="space-between">
+            <Text fontSize="12px" color="brand.neutral700" />
+            <Text
+              fontSize="12px"
+              color="brand.neutral700"
+            >{`${form?.shortDescription?.length}/${ProjectValidations.shortDescription.maxLength}`}</Text>
+          </HStack>
+        )}
+      </VStack>
+      <VStack {...rowStyles}>
+        <Body2>Description</Body2>
         <TextArea
           name="description"
           minHeight="120px"
           maxHeight="800px"
           height="fit-content"
           overflowY="auto"
-          value={form.description}
+          value={form.description || ''}
           onChange={handleChange}
           error={formError.description}
         />
@@ -262,7 +307,7 @@ export const ProjectCreateForm = ({
             <Text
               fontSize="12px"
               color="brand.neutral700"
-            >{`${form.description.length}/${ProjectValidations.description.maxLength}`}</Text>
+            >{`${form?.description?.length}/${ProjectValidations.description.maxLength}`}</Text>
           </HStack>
         )}
       </VStack>

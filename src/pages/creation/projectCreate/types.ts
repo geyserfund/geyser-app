@@ -9,7 +9,8 @@ export type ProjectCreationVariables = {
   title: string
   name: string
   image?: string
-  headerImage?: string
+  thumbnailImage?: string
+  shortDescription: string
   description: string
   email: string
   expiresAt?: string
@@ -23,6 +24,8 @@ export type ProjectUpdateVariables = {
   title?: string
   name?: string
   image?: string
+  thumbnailImage?: string
+  shortDescription?: string
   description?: string
   expiresAt?: string
   type?: ProjectType
