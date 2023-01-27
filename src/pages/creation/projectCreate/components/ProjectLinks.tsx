@@ -123,16 +123,15 @@ export const ProjectLinks = ({ links, setLinks }: ProjectLinksProps) => {
     index: number,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const newLinkList = links.map((val, i) =>
-      i === index ? event.target.value : val,
-    )
-    setLinks(newLinkList)
-
-    if (!event.target.value || validUrl.test(event.target.value)) {
+    const { value } = event.target
+    if (!value || validUrl.test(value)) {
       setLinkError({ ...linkError, [index]: false })
     } else {
       setLinkError({ ...linkError, [index]: true })
     }
+
+    const newLinkList = links.map((val, i) => (i === index ? value : val))
+    setLinks(newLinkList)
   }
 
   return (

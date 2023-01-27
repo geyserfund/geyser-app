@@ -70,6 +70,10 @@ export const ProjectDescription = ({ project }: { project: Project }) => {
         description: project.description,
         name: project.name,
       })
+      if (project?.links?.length > 0) {
+        const existingLinks = project.links.filter((link) => link) as string[]
+        setLinks(existingLinks)
+      }
     }
   }, [project])
 
@@ -89,10 +93,10 @@ export const ProjectDescription = ({ project }: { project: Project }) => {
           input: {
             projectId: toInt(project.id),
             title: form.title,
-            image: project.image || undefined,
-            thumbnailImage: project.thumbnailImage || undefined,
-            shortDescription: project.shortDescription,
-            description: project.description,
+            image: form.image || undefined,
+            thumbnailImage: form.thumbnailImage || undefined,
+            shortDescription: form.shortDescription,
+            description: form.description,
           },
         },
       })

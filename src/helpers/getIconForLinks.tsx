@@ -15,56 +15,56 @@ import { Maybe } from '../types'
 
 export const getIconForLink = (value: Maybe<string>) => {
   if (!value) {
-    return <BsGlobe />
+    return BsGlobe
   }
 
   if (value?.toLowerCase().includes('twitter')) {
-    return <BsTwitter />
+    return BsTwitter
   }
 
   if (value?.toLowerCase().includes('linkedin')) {
-    return <BsLinkedin />
+    return BsLinkedin
   }
 
   if (value?.toLowerCase().includes('medium')) {
-    return <BsMedium />
+    return BsMedium
   }
 
   if (value?.toLowerCase().includes('linkedin')) {
-    return <BsMedium />
+    return BsMedium
   }
 
   if (value?.toLowerCase().includes('facebook')) {
-    return <BsFacebook />
+    return BsFacebook
   }
 
   if (value?.toLowerCase().includes('facebook')) {
-    return <BsFacebook />
+    return BsFacebook
   }
 
   if (value?.toLowerCase().includes('reddit')) {
-    return <BsFacebook />
+    return BsFacebook
   }
 
   if (value?.toLowerCase().includes('slack')) {
-    return <BsSlack />
+    return BsSlack
   }
 
   if (value?.toLowerCase().includes('slack')) {
-    return <BsSkype />
+    return BsSkype
   }
 
   if (value?.toLowerCase().includes('pinterest')) {
-    return <BsPinterest />
+    return BsPinterest
   }
 
   if (value?.toLowerCase().includes('github')) {
-    return <BsGithub />
+    return BsGithub
   }
 
   if (value?.toLowerCase().includes('discord')) {
-    return <BsDiscord />
+    return BsDiscord
   }
 
-  return <BsGlobe />
+  return BsGlobe
 }

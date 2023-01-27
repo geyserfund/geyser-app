@@ -44,7 +44,7 @@ export const ProjectActivityPanel = ({
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
-  const { mobileView } = useProject()
+  const { mobileView, setMobileView } = useProject()
   // required for knowing the rewards and the funds
   const {
     state: formState,
@@ -101,6 +101,7 @@ export const ProjectActivityPanel = ({
   }, [formState.anonymous])
 
   const handleCloseButton = () => {
+    setMobileView(MobileViews.contribution)
     resetFundingFlow()
     resetForm()
   }
@@ -245,6 +246,7 @@ export const ProjectActivityPanel = ({
         marginTop={isMobile ? '0px' : '20px'}
         height={getActivityHeight()}
         borderTopLeftRadius={isMobile ? '' : '22px'}
+        overflow="hidden"
         boxShadow="-8px -8px 12px -8px rgba(0, 0, 0, 0.1)"
       >
         {renderPanelContent()}

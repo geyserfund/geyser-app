@@ -8,11 +8,18 @@ import {
   Text,
   Tooltip,
   VStack,
+  Wrap,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { BsHeartFill } from 'react-icons/bs'
 
-import { AmbossIcon, BoltIcon, ShareIcon } from '../../../components/icons'
-import { Body2, H3 } from '../../../components/typography'
+import {
+  AmbossIcon,
+  BoltIcon,
+  SatoshiIcon,
+  ShareIcon,
+} from '../../../components/icons'
+import { Body2, Caption, H3, MonoBody1 } from '../../../components/typography'
 import {
   Card,
   IconButtonComponent,
@@ -23,8 +30,14 @@ import {
 import { AmbossUrl, getPath, HomeUrl } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { getIconForLink } from '../../../helpers/getIconForLinks'
+import { colors } from '../../../styles'
 import { Project } from '../../../types/generated/graphql'
-import { isActive, MarkDown, useMobileMode } from '../../../utils'
+import {
+  getShortAmountLabel,
+  isActive,
+  MarkDown,
+  useMobileMode,
+} from '../../../utils'
 import { AvatarElement } from './AvatarElement'
 import { ProjectLightningQR } from './ProjectLightningQR'
 
@@ -65,56 +78,69 @@ export const ProjectDetailsCard = ({
 
     return (
       <VStack alignItems="flex-start">
-        <Text color="brand.neutral600">Next Milestone</Text>
-        <HStack>
-          <Text color="brand.neutral800">{`${currentMilestone?.name}: ${currentMilestone?.description} - `}</Text>
+        <Body2 semiBold color="brand.neutral600">
+          Next Milestone
+        </Body2>
+        <Wrap>
+          <Text
+            paddingTop="2px"
+            color="brand.neutral800"
+          >{`${currentMilestone?.name}: ${currentMilestone?.description} : `}</Text>
           <SatoshiAmount>
             {currentMilestone.amount - project.balance}
           </SatoshiAmount>
-          <Text color="brand.neutral800"> to go.</Text>
-        </HStack>
+          <Text paddingTop="2px" color="brand.neutral800">
+            {' '}
+            to go.
+          </Text>
+        </Wrap>
       </VStack>
     )
   }
 
   const renderYourFunding = () => {
-    if (project.funders.length > 0) {
-      const currentFund = project.funders.find(
-        (funder) => funder?.user?.id === user.id,
-      )
+    const currentFund = project.funders.find(
+      (funder) => funder?.user?.id === user.id,
+    )
 
-      if (!currentFund) {
-        return null
-      }
-
-      return (
-        <>
-          {!isMobile && <Text color="brand.primary800">|</Text>}
-          <HStack>
-            <Text color="brand.primary800" fontWeight={500}>
-              {'You contributed'}
-            </Text>
-            <SatoshiAmount color="brand.primary800" fontWeight={500}>
-              {currentFund.amountFunded}
-            </SatoshiAmount>
-            <Text color="brand.primary800" fontWeight={500}>
-              {' towards this project'}
-            </Text>
-          </HStack>
-        </>
-      )
-    }
-
-    return null
-  }
-
-  const renderContributorsCount = () => {
-    const contributorsCount = project.funders.length
     return (
-      <Text color="brand.primary800" fontWeight={500}>
-        {contributorsCount}{' '}
-        {contributorsCount === 1 ? 'contributor' : 'contributors'}
-      </Text>
+      <HStack
+        height="72px"
+        w="100%"
+        borderRadius="4px"
+        backgroundColor="brand.neutral100"
+        spacing="60px"
+        justifyContent="center"
+      >
+        <VStack>
+          <HStack spacing="5px">
+            <BsHeartFill color={colors.neutral500} />
+            <MonoBody1>
+              {getShortAmountLabel(project.fundersCount || 0)}
+            </MonoBody1>
+          </HStack>
+          <Caption>CONTRIBUTORS</Caption>
+        </VStack>
+        <VStack>
+          <HStack spacing="5px">
+            <SatoshiIcon scale={0.7} />
+            <MonoBody1>{getShortAmountLabel(project.balance)}</MonoBody1>
+          </HStack>
+          <Caption>TOTAL CONTRIBUTED</Caption>
+        </VStack>
+        {currentFund && (
+          <VStack>
+            <HStack spacing="5px">
+              <SatoshiIcon scale={0.7} />
+              <MonoBody1>
+                {getShortAmountLabel(currentFund.amountFunded || 0)}
+              </MonoBody1>
+            </HStack>
+
+            <Caption>YOU CONTRIBUTED</Caption>
+          </VStack>
+        )}
+      </HStack>
     )
   }
 
@@ -127,16 +153,20 @@ export const ProjectDetailsCard = ({
           </Body2>
           <HStack>
             {project.links.map((link) => {
-              const icon = getIconForLink(link)
+              const Icon = getIconForLink(link)
               return (
                 <IconButtonComponent
+                  size="sm"
+                  variant="ghost"
+                  backgroundColor="transparent"
+                  boxShadow="none"
                   aria-label="link-icon"
                   key={link}
                   as={Link}
                   href={link || ''}
                   isExternal
                 >
-                  {icon}
+                  <Icon fontSize="20px" />
                 </IconButtonComponent>
               )
             })}
@@ -268,23 +298,10 @@ export const ProjectDetailsCard = ({
         </HStack>
         {renderLinks()}
         <VStack alignItems="flex-start">
-          <Text color="brand.neutral600" textAlign="left">
-            Objective
-          </Text>
           <MarkDown color='"brand.neutral800"'>{project.description}</MarkDown>
         </VStack>
         {renderMilestone()}
-        {project.funders.length > 0 && (
-          <Stack
-            direction={isMobile ? 'column' : 'row'}
-            width="100%"
-            justifyContent="center"
-            alignItems={'center'}
-          >
-            {renderContributorsCount()}
-            {renderYourFunding()}
-          </Stack>
-        )}
+        {renderYourFunding()}
         {!isMobile && (
           <Button
             w="full"

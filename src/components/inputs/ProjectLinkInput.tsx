@@ -1,11 +1,11 @@
 import { CloseIcon } from '@chakra-ui/icons'
 import { Box, HStack, Input, InputProps, StackProps } from '@chakra-ui/react'
-import React from 'react'
+import { IconType } from 'react-icons'
 
 import { IconButtonComponent } from '../ui'
 
 interface ProjectLinkInputProps extends StackProps {
-  leftIcon: React.ReactNode
+  leftIcon: IconType
   inputProps?: InputProps
   handleClose: () => void
   value?: string
@@ -14,7 +14,7 @@ interface ProjectLinkInputProps extends StackProps {
 }
 
 export const ProjectLinkInput = ({
-  leftIcon,
+  leftIcon: LeftIcon,
   inputProps,
   handleClose,
   value,
@@ -33,7 +33,9 @@ export const ProjectLinkInput = ({
       borderColor="brand.neutral200"
       {...rest}
     >
-      <Box paddingX="12px">{leftIcon}</Box>
+      <Box paddingX="12px">
+        <LeftIcon />
+      </Box>
       <Input
         border="1px solid"
         borderRadius="4px !important"

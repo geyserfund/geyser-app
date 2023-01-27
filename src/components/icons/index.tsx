@@ -22,13 +22,19 @@ import StarPng from '../../assets/star.png'
 import TrophyPng from '../../assets/trophy.png'
 import { FountainLogoUrl } from '../../constants'
 
+interface SatoshiIconProps extends ImageProps {
+  scale?: number
+  wrapperClass?: string
+  isDark?: boolean
+}
+
 export const SatoshiIcon = ({
   scale = 1,
   wrapperClass,
   isDark,
   color,
   ...rest
-}: any) => {
+}: SatoshiIconProps) => {
   const getFilter = () => {
     if (color === 'brand.primary') {
       return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)'
