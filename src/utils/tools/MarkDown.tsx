@@ -44,7 +44,6 @@ export const MarkDown = ({
   fontSize,
   ...rest
 }: MarkDownProps) => {
-
   const classes = useStyles({ color, wordBreak, fontSize })
 
   const finalValue = formatString(children)
@@ -77,20 +76,6 @@ const formatString = (value: string): string => {
   const finalValue = getRidOfEndSlash(adjustedForMultiParagrah)
   return finalValue
 }
-
-const formatString = (value: string): string => {
-  const adjustForLineChange = value
-    ? value.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '\\\n')
-    : '';
-
-  const adjustedForMultiParagrah = adjustForLineChange.replaceAll(
-    /\n\n/g,
-    '\n\\\n',
-  );
-
-  const finalValue = getRidOfEndSlash(adjustedForMultiParagrah);
-  return finalValue;
-};
 
 const getRidOfEndSlash = (value: string): string => {
   if (value[value.length - 2] === '\\') {
