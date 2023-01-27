@@ -1,10 +1,10 @@
-import { Container, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
-import { colors } from '../../constants';
+import { Container, Text, VStack } from '@chakra-ui/react'
+
+import { colors } from '../../styles'
 
 type Props = {
-  lightningAddress: string;
-};
+  lightningAddress: string
+}
 
 // TODO: This view should eventually support updates.
 
@@ -39,5 +39,5 @@ export const ProjectFundingSettingsLightningAddressView = ({
         </Text>
       </VStack>
     </Container>
-  );
-};
+  )
+}

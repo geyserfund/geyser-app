@@ -1,2 +1,2 @@
-export * from './ProjectDiscoveryPage';
-export * from './components';
+export * from './components'
+export * from './ProjectDiscoveryPage'

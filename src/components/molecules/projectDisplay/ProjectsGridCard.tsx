@@ -6,24 +6,24 @@ import {
   Text,
   useColorModeValue,
   VStack,
-} from '@chakra-ui/react';
-import React from 'react';
+} from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
-import SatoshiPng from '../../../assets/satoshi.png';
-import { getPath, fonts } from '../../../constants';
-import { Project } from '../../../types/generated/graphql';
-import { ICard, ProjectStatusLabel } from '../../ui';
-import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder';
-import { getShortAmountLabel, isMobileMode, MarkDown } from '../../../utils';
-import { Link } from 'react-router-dom';
+import SatoshiPng from '../../../assets/satoshi.png'
+import { getPath } from '../../../constants'
+import { fonts } from '../../../styles'
+import { Project } from '../../../types/generated/graphql'
+import { getShortAmountLabel, MarkDown, useMobileMode } from '../../../utils'
+import { ICard, ProjectStatusLabel } from '../../ui'
+import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder'
 
 type Props = ICard & {
-  project: Project;
-  onClick?: () => void;
-};
+  project: Project
+  onClick?: () => void
+}
 
-export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
-  const isMobile = isMobileMode();
+export const ProjectsGridCard = ({ project, ...rest }: Props) => {
+  const isMobile = useMobileMode()
   return (
     <Link
       to={getPath('project', project.name)}
@@ -140,5 +140,5 @@ export const ProjectsGridCard = ({ project, onClick, ...rest }: Props) => {
         </Box>
       </Box>
     </Link>
-  );
-};
+  )
+}

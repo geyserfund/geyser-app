@@ -1,6 +1,7 @@
-import * as React from 'react';
-import { useLocation } from 'react-router';
-import { Helmet } from 'react-helmet';
+import * as React from 'react'
+import { Helmet } from 'react-helmet'
+import { useLocation } from 'react-router'
+
 import {
   DefaultMetaDescription,
   DefaultMetaImage,
@@ -8,14 +9,14 @@ import {
   DefaultMetaTwitterCard,
   DefaultMetaTwitterSite,
   DefaultMetaType,
-} from '../constants/metaTags';
+} from '../constants'
 type HeadProps = {
-  title?: string;
-  description?: string;
-  image?: string;
-  type?: string;
-  children?: React.ReactNode;
-};
+  title?: string
+  description?: string
+  image?: string
+  type?: string
+  children?: React.ReactNode
+}
 
 export const Head: React.FC<HeadProps> = (tags) => {
   const {
@@ -24,8 +25,8 @@ export const Head: React.FC<HeadProps> = (tags) => {
     image = DefaultMetaImage,
     type = DefaultMetaType,
     children,
-  } = tags;
-  const location = useLocation();
+  } = tags
+  const location = useLocation()
   return (
     <Helmet>
       <title>{title} | Geyser</title>
@@ -42,5 +43,5 @@ export const Head: React.FC<HeadProps> = (tags) => {
       <meta property="twitter:site" content={DefaultMetaTwitterSite} />
       {children}
     </Helmet>
-  );
-};
+  )
+}

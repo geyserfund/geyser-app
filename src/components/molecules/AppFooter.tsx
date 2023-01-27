@@ -7,33 +7,33 @@ import {
   useDisclosure,
   VStack,
   Wrap,
-} from '@chakra-ui/react';
-import React from 'react';
-import { FaTelegramPlane, FaTwitter, FaPodcast } from 'react-icons/fa';
+} from '@chakra-ui/react'
+import { FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
+
 import {
   AnalyticsUrl,
+  GeyserHomepageUrl,
+  GeyserPodcastUrl,
   GeyserPrivacyUrl,
   GeyserTelegramUrl,
-  GeyserTwitterUrl,
-  GeyserPodcastUrl,
-  GeyserHomepageUrl,
   GeyserTermsAndConditionsURL,
-} from '../../constants';
-import { isMobileMode } from '../../utils';
-import { Subscribe } from '../nav/Subscribe';
-import { ButtonComponent } from '../ui';
+  GeyserTwitterUrl,
+} from '../../constants'
+import { useMobileMode } from '../../utils'
+import { Subscribe } from '../nav/Subscribe'
+import { ButtonComponent } from '../ui'
 
 interface IFooter {
-  wrapperClassName?: string;
+  wrapperClassName?: string
 }
 
 export const AppFooter = ({ wrapperClassName }: IFooter) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode()
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   if (isMobile) {
-    return null;
+    return null
   }
 
   return (
@@ -129,5 +129,5 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
 		</Text> */}
       <Subscribe {...{ isOpen, onClose }} style="button-modal" />
     </VStack>
-  );
-};
+  )
+}

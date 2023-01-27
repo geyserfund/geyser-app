@@ -1,10 +1,10 @@
-import React from 'react';
-import { Box, Text, VStack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import { isMobileMode } from '../../utils';
+import { Box, Text, VStack } from '@chakra-ui/react';
+
+import { useMobileMode } from '../../utils';
 
 export const FailedAuth = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   return (
     <VStack
       height="100vh"

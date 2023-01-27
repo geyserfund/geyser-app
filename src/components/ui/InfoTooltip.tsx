@@ -1,12 +1,13 @@
-import { InfoIcon } from '../icons';
-import { Box, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Box, Text } from '@chakra-ui/react'
+import { useState } from 'react'
+
+import { InfoIcon } from '../icons'
 
 interface IInfoTooltip {
-  title: string;
-  description: string;
-  options: React.CSSProperties;
-  width: string;
+  title: string
+  description: string
+  options: React.CSSProperties
+  width: string
 }
 
 export const InfoTooltip = ({
@@ -15,8 +16,8 @@ export const InfoTooltip = ({
   options,
   width,
 }: IInfoTooltip) => {
-  const [hover, setHover] = useState(false);
-  const { top, left } = options;
+  const [hover, setHover] = useState(false)
+  const { top, left } = options
 
   return (
     <Box position="relative">
@@ -55,10 +56,10 @@ export const InfoTooltip = ({
         rounded="full"
         p="2px"
         onMouseEnter={() => {
-          setHover(true);
+          setHover(true)
         }}
         onMouseLeave={() => setHover(false)}
       />
     </Box>
-  );
-};
+  )
+}

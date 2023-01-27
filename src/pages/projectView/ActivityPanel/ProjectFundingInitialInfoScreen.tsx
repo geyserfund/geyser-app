@@ -1,54 +1,54 @@
-import { Box, VStack, HStack, Text } from '@chakra-ui/layout';
-import React, { useEffect, useState } from 'react';
-import { ActivityBrief } from '../../../components/molecules';
-import { ButtonComponent } from '../../../components/ui';
-import { SatoshiIconTilted } from '../../../components/icons';
-import {
-  aggregateTransactions,
-  FundingTxWithCount,
-  isMobileMode,
-  isActive,
-  toInt,
-} from '../../../utils';
+import { Box, HStack, Text, VStack } from '@chakra-ui/layout'
 import {
   Button,
   Skeleton,
   SkeletonCircle,
   SkeletonText,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
-import { Funder, Project } from '../../../types/generated/graphql';
-import { ProjectContributionList } from './ProjectContributionList';
-import { ProjectLeaderboardList } from './ProjectLeaderboardList';
+import { SatoshiIconTilted } from '../../../components/icons'
+import { StickToTop } from '../../../components/layouts'
+import { ActivityBrief } from '../../../components/molecules'
+import { ButtonComponent } from '../../../components/ui'
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
   QUERY_GET_PROJECT_FUNDERS,
-} from '../../../graphql';
-import { useQueryWithPagination } from '../../../hooks';
-import { MobileViews, useProject } from '../containers';
-import { StickToTop } from '../../../components/layouts';
+} from '../../../graphql'
+import { useQueryWithPagination } from '../../../hooks'
+import { Funder, Project } from '../../../types/generated/graphql'
+import {
+  aggregateTransactions,
+  FundingTxWithCount,
+  isActive,
+  toInt,
+  useMobileMode,
+} from '../../../utils'
+import { MobileViews, useProject } from '../containers'
+import { ProjectContributionList } from './ProjectContributionList'
+import { ProjectLeaderboardList } from './ProjectLeaderboardList'
 
 type Props = {
-  project: Project;
-  btcRate: number;
-  test?: boolean;
-  fundingTx: any;
-};
+  project: Project
+  btcRate: number
+  test?: boolean
+  fundingTx: any
+}
 
-const itemLimit = 50;
+const itemLimit = 50
 
 export const ProjectFundingInitialInfoScreen = ({
   project,
   test,
   fundingTx,
 }: Props) => {
-  const isMobile = isMobileMode();
-  const [tab, setTab] = useState('activity');
-  const { mobileView, setMobileView } = useProject();
+  const isMobile = useMobileMode()
+  const [tab, setTab] = useState('activity')
+  const { mobileView, setMobileView } = useProject()
 
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]
-  >([]);
+  >([])
 
   const fundingTxs = useQueryWithPagination<FundingTxWithCount>({
     itemLimit,
@@ -56,7 +56,7 @@ export const ProjectFundingInitialInfoScreen = ({
     query: QUERY_GET_FUNDING_TXS_LANDING,
     resultMap: aggregateTransactions,
     where: { projectId: toInt(project.id) },
-  });
+  })
 
   const funders = useQueryWithPagination<Funder>({
     queryName: 'getFunders',
@@ -66,28 +66,28 @@ export const ProjectFundingInitialInfoScreen = ({
     orderBy: {
       amountFunded: 'desc',
     },
-  });
+  })
 
   useEffect(() => {
-    setAggregatedFundingTxs(fundingTxs.data);
-  }, [fundingTxs.data]);
+    setAggregatedFundingTxs(fundingTxs.data)
+  }, [fundingTxs.data])
 
   useEffect(() => {
     if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
-      setAggregatedFundingTxs([fundingTx, ...aggregatedFundingTxs]);
+      setAggregatedFundingTxs([fundingTx, ...aggregatedFundingTxs])
     }
-  }, [fundingTx]);
+  }, [fundingTx])
 
   useEffect(() => {
     if (mobileView === MobileViews.contribution) {
-      setTab('activity');
+      setTab('activity')
     } else if (mobileView === MobileViews.leaderboard) {
-      setTab('leaderBoard');
+      setTab('leaderBoard')
     }
-  }, [mobileView]);
+  }, [mobileView])
 
   if (test) {
-    return <InfoPageSkeleton />;
+    return <InfoPageSkeleton />
   }
 
   const renderActivityList = () => {
@@ -97,11 +97,11 @@ export const ProjectFundingInitialInfoScreen = ({
           <ProjectContributionList
             fundingTxs={{ ...fundingTxs, data: aggregatedFundingTxs }}
           />
-        );
+        )
       default:
-        return <ProjectLeaderboardList project={project} funders={funders} />;
+        return <ProjectLeaderboardList project={project} funders={funders} />
     }
-  };
+  }
 
   const contributionButton = () => {
     return (
@@ -127,8 +127,8 @@ export const ProjectFundingInitialInfoScreen = ({
           rounded="lg"
         ></Box>
       </>
-    );
-  };
+    )
+  }
 
   const leaderBoardButton = () => {
     return (
@@ -154,8 +154,8 @@ export const ProjectFundingInitialInfoScreen = ({
           rounded="lg"
         ></Box>
       </>
-    );
-  };
+    )
+  }
 
   const renderTabsList = () => {
     if (isMobile) {
@@ -169,7 +169,7 @@ export const ProjectFundingInitialInfoScreen = ({
             >
               {contributionButton()}
             </StickToTop>
-          );
+          )
         case MobileViews.leaderboard:
           return (
             <StickToTop
@@ -179,7 +179,7 @@ export const ProjectFundingInitialInfoScreen = ({
             >
               {leaderBoardButton()}
             </StickToTop>
-          );
+          )
         default:
       }
     }
@@ -189,8 +189,8 @@ export const ProjectFundingInitialInfoScreen = ({
         <Box w="50%">{contributionButton()}</Box>;
         <Box w="50%">{leaderBoardButton()}</Box>;
       </HStack>
-    );
-  };
+    )
+  }
 
   return (
     <VStack
@@ -233,11 +233,11 @@ export const ProjectFundingInitialInfoScreen = ({
         {renderActivityList()}
       </Box>
     </VStack>
-  );
-};
+  )
+}
 
 export const InfoPageSkeleton = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode()
 
   return (
     <VStack
@@ -282,5 +282,5 @@ export const InfoPageSkeleton = () => {
         </VStack>
       </Box>
     </VStack>
-  );
-};
+  )
+}

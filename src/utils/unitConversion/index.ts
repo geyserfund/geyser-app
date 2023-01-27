@@ -1,2 +1,2 @@
-export * from './BTCConversionUtils';
-export * from './typeConversion';
+export * from './BTCConversionUtils'
+export * from './typeConversion'

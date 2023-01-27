@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const MUTATION_CREATE_WALLET = gql`
   mutation CreateWallet($input: CreateWalletInput!) {
@@ -7,7 +7,7 @@ export const MUTATION_CREATE_WALLET = gql`
       name
     }
   }
-`;
+`
 
 export const MUTATION_UPDATE_WALLET = gql`
   mutation UpdateWallet($input: UpdateWalletInput!) {
@@ -16,4 +16,4 @@ export const MUTATION_UPDATE_WALLET = gql`
       name
     }
   }
-`;
+`

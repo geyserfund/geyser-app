@@ -8,30 +8,30 @@ import {
   ModalOverlay,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { BsExclamation, BsQuestion } from 'react-icons/bs';
-import { DescriptionLinkWithIconComponent } from '../../../../components/molecules';
+} from '@chakra-ui/react'
+import { useState } from 'react'
+import { BsExclamation, BsQuestion } from 'react-icons/bs'
+
+import { DescriptionLinkWithIconComponent } from '../../../../components/molecules'
 import {
   ButtonComponent,
   TextArea,
   TextInputBox,
-} from '../../../../components/ui';
-import { VoltageNodeConnectionDemoURL } from '../../../../constants';
-import { ProjectNodeValidations } from '../../../../constants/validations';
-import { isMobileMode } from '../../../../utils';
-import { checkMacaroonPermissions } from '../../../../utils/validations/checkMacaroonPermissions';
-import { isSecp256k1Compressed } from '../../../../utils/validations/isSecp256k1Compressed';
-import { isTorV3Address } from '../../../../utils/validations/isTorV3Address';
-
-import { TNodeInput } from '../types';
+} from '../../../../components/ui'
+import { VoltageNodeConnectionDemoURL } from '../../../../constants'
+import { ProjectNodeValidations } from '../../../../constants/validations'
+import { useMobileMode } from '../../../../utils'
+import { checkMacaroonPermissions } from '../../../../utils/validations/checkMacaroonPermissions'
+import { isSecp256k1Compressed } from '../../../../utils/validations/isSecp256k1Compressed'
+import { isTorV3Address } from '../../../../utils/validations/isTorV3Address'
+import { TNodeInput } from '../types'
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (_: TNodeInput) => void;
-  nodeInput?: TNodeInput;
-};
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (_: TNodeInput) => void
+  nodeInput?: TNodeInput
+}
 
 export const defaultNode = {
   name: '',
@@ -41,7 +41,7 @@ export const defaultNode = {
   invoiceMacaroon: '',
   tlsCert: '',
   grpc: '',
-};
+}
 
 export const NodeAdditionModal = ({
   isOpen,
@@ -49,116 +49,116 @@ export const NodeAdditionModal = ({
   nodeInput,
   onSubmit,
 }: Props) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode()
 
-  const [isVoltage, setIsVoltage] = useState(false);
-  const [form, setForm] = useState<TNodeInput>(nodeInput || defaultNode);
-  const [formError, setFormError] = useState<any>({});
+  const [isVoltage, setIsVoltage] = useState(false)
+  const [form, setForm] = useState<TNodeInput>(nodeInput || defaultNode)
+  const [formError, setFormError] = useState<any>({})
 
   const handleTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setFormError({});
+    setFormError({})
 
-    const { name, value } = event.target;
+    const { name, value } = event.target
 
-    setForm({ ...form, [name]: value });
-  };
+    setForm({ ...form, [name]: value })
+  }
 
   const handleVoltageNodeToggled = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setFormError({});
+    setFormError({})
 
-    const isVoltageNode = event.target.checked;
+    const isVoltageNode = event.target.checked
 
-    setIsVoltage(isVoltageNode);
-  };
+    setIsVoltage(isVoltageNode)
+  }
 
   const handleSubmit = () => {
-    const isValid = validateForm();
+    const isValid = validateForm()
     if (isValid) {
-      onSubmit({ ...form, isVoltage });
-      onClose();
+      onSubmit({ ...form, isVoltage })
+      onClose()
     }
-  };
+  }
 
   const validateForm = () => {
-    const errors: any = {};
-    let isValid = true;
+    const errors: any = {}
+    let isValid = true
 
-    const additionalText = ' is a required field';
+    const additionalText = ' is a required field'
 
     if (!form.name) {
-      errors.name = 'Node name' + additionalText;
-      isValid = false;
+      errors.name = 'Node name' + additionalText
+      isValid = false
     } else if (form.name.length > ProjectNodeValidations.nodeName.maxLength) {
-      errors.name = `Node name cannot be longer than ${ProjectNodeValidations.nodeName.maxLength} characters.`;
-      isValid = false;
+      errors.name = `Node name cannot be longer than ${ProjectNodeValidations.nodeName.maxLength} characters.`
+      isValid = false
     }
 
     if (!form.hostname) {
-      errors.hostname = 'Host name' + additionalText;
-      isValid = false;
+      errors.hostname = 'Host name' + additionalText
+      isValid = false
     } else {
-      const val = isTorV3Address(form.hostname);
+      const val = isTorV3Address(form.hostname)
       if (val) {
-        errors.hostname = 'Tor addresses are currently not supported';
-        isValid = false;
+        errors.hostname = 'Tor addresses are currently not supported'
+        isValid = false
       }
     }
 
     if (!form.publicKey) {
-      errors.publicKey = 'Public Key' + additionalText;
-      isValid = false;
+      errors.publicKey = 'Public Key' + additionalText
+      isValid = false
     } else if (
       form.publicKey.length !== ProjectNodeValidations.publicKey.length
     ) {
-      errors.publicKey = `Public Key must be ${ProjectNodeValidations.publicKey.length} characters long.`;
-      isValid = false;
+      errors.publicKey = `Public Key must be ${ProjectNodeValidations.publicKey.length} characters long.`
+      isValid = false
     } else {
-      const val = isSecp256k1Compressed(form.publicKey);
+      const val = isSecp256k1Compressed(form.publicKey)
       if (!val) {
-        errors.publicKey = 'The Public Key is wrongly formatted.';
-        isValid = false;
+        errors.publicKey = 'The Public Key is wrongly formatted.'
+        isValid = false
       }
     }
 
     if (!form.invoiceMacaroon) {
-      errors.invoiceMacaroon = 'Invoice Macaroon' + additionalText;
-      isValid = false;
+      errors.invoiceMacaroon = 'Invoice Macaroon' + additionalText
+      isValid = false
     } else if (
       form.invoiceMacaroon.length >
       ProjectNodeValidations.invoiceMacaroon.maxLength
     ) {
-      errors.invoiceMacaroon = `Invoice Macaroon cannot be longer than ${ProjectNodeValidations.invoiceMacaroon.maxLength} characters.`;
-      isValid = false;
+      errors.invoiceMacaroon = `Invoice Macaroon cannot be longer than ${ProjectNodeValidations.invoiceMacaroon.maxLength} characters.`
+      isValid = false
     } else {
-      const val = checkMacaroonPermissions(form.invoiceMacaroon);
+      const val = checkMacaroonPermissions(form.invoiceMacaroon)
       if (val) {
-        errors.invoiceMacaroon = val;
-        isValid = false;
+        errors.invoiceMacaroon = val
+        isValid = false
       }
     }
 
     if (!isVoltage) {
       if (!form.tlsCert) {
-        errors.tlsCert = 'TLS certificate' + additionalText;
-        isValid = false;
+        errors.tlsCert = 'TLS certificate' + additionalText
+        isValid = false
       }
     }
 
     if (!isVoltage && !form.grpc) {
-      errors.grpc = 'gRPC port' + additionalText;
-      isValid = false;
+      errors.grpc = 'gRPC port' + additionalText
+      isValid = false
     }
 
     if (!isValid) {
-      setFormError(errors);
+      setFormError(errors)
     }
 
-    return isValid;
-  };
+    return isValid
+  }
 
   return (
     <Modal
@@ -305,12 +305,12 @@ export const NodeAdditionModal = ({
           </VStack>
 
           <VStack spacing="10px" paddingX="20px">
-            <ButtonComponent isFullWidth primary onClick={handleSubmit}>
+            <ButtonComponent w="full" primary onClick={handleSubmit}>
               Confirm
             </ButtonComponent>
           </VStack>
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}

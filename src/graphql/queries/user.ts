@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const ME = gql`
   query Me {
@@ -25,7 +25,7 @@ export const ME = gql`
       }
     }
   }
-`;
+`
 
 export const USER_PROFILE_QUERY = gql`
   query User($where: UserGetInput!) {
@@ -92,4 +92,4 @@ export const USER_PROFILE_QUERY = gql`
       }
     }
   }
-`;
+`

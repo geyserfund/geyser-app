@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const MUTATION_FUND = gql`
   mutation Fund($input: FundingInput!) {
@@ -33,4 +33,4 @@ export const MUTATION_FUND = gql`
       }
     }
   }
-`;
+`

@@ -1,12 +1,10 @@
-import React from 'react';
-
-import { Box, Text, Avatar, WrapItem, Center, Link } from '@chakra-ui/react';
+import { Avatar, Box, Center, Link, Text, WrapItem } from '@chakra-ui/react'
 
 interface BitcoinersProp {
-  image: string;
-  name: string;
-  role?: string;
-  link: string;
+  image: string
+  name: string
+  role?: string
+  link: string
 }
 
 export const BitcoinerCard = ({ image, name, role, link }: BitcoinersProp) => {
@@ -42,5 +40,5 @@ export const BitcoinerCard = ({ image, name, role, link }: BitcoinersProp) => {
         </Center>
       </WrapItem>
     </Link>
-  );
-};
+  )
+}

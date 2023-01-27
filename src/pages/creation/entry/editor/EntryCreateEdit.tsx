@@ -1,32 +1,33 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
-
-import { isMobileMode, toInt, useNotification } from '../../../../utils';
-import { CreateNav } from './CreateNav';
-import { BsImage } from 'react-icons/bs';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
+import { BsImage } from 'react-icons/bs';
+import { createUseStyles } from 'react-jss';
+import { useLocation, useNavigate, useParams } from 'react-router';
+
+import { FileUpload } from '../../../../components/molecules';
+import { ImageWithReload } from '../../../../components/ui';
+import Loader from '../../../../components/ui/Loader';
+import { getPath } from '../../../../constants';
+import { ProjectEntryValidations } from '../../../../constants/validations';
+import { useAuthContext } from '../../../../context';
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql';
 import {
   MUTATION_CREATE_ENTRY,
   MUTATION_UPDATE_ENTRY,
 } from '../../../../graphql/mutations/entries';
+import { QUERY_GET_ENTRY } from '../../../../graphql/queries/entries';
+import { useDebounce } from '../../../../hooks';
 import {
   IEntryCreateInput,
   IEntryUpdateInput,
 } from '../../../../interfaces/entry';
-import { TcreateEntry, TEntry } from '../types';
-import { useDebounce } from '../../../../hooks';
-import { useHistory, useParams } from 'react-router';
-import { QUERY_GET_ENTRY } from '../../../../graphql/queries/entries';
-import { FileUpload } from '../../../../components/molecules';
-import { createUseStyles } from 'react-jss';
-import { colors, getPath } from '../../../../constants';
-import { ImageWithReload } from '../../../../components/ui';
-import { ProjectEntryEditor } from './ProjectEntryEditor';
-import Loader from '../../../../components/ui/Loader';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql';
-import { useAuthContext } from '../../../../context';
+import { colors } from '../../../../styles';
 import { Owner, Project } from '../../../../types/generated/graphql';
-import { ProjectEntryValidations } from '../../../../constants/validations';
+import { toInt, useMobileMode, useNotification } from '../../../../utils';
+import { TcreateEntry, TEntry } from '../types';
+import { CreateNav } from './CreateNav';
+import { ProjectEntryEditor } from './ProjectEntryEditor';
 
 const useStyles = createUseStyles({
   uploadContainer: {
@@ -55,9 +56,10 @@ export const defaultEntry = {
 };
 
 export const EntryCreateEdit = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
   const { toast } = useNotification();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
   const params = useParams<{ entryId: string; projectId: string }>();
   const { setNav, user } = useAuthContext();
 
@@ -77,17 +79,23 @@ export const EntryCreateEdit = () => {
   const [createPost, { data: createData, loading: createPostLoading }] =
     useMutation(MUTATION_CREATE_ENTRY);
 
-  const [updatePost, { data: updateData, loading: updatePostLoading }] =
-    useMutation(MUTATION_UPDATE_ENTRY);
+  const [updatePost, { loading: updatePostLoading }] = useMutation(
+    MUTATION_UPDATE_ENTRY,
+  );
 
-  const [getPost, { loading: loadingPosts, error, data: entryData }] =
-    useLazyQuery(QUERY_GET_ENTRY, {
+  const [getPost, { loading: loadingPosts, data: entryData }] = useLazyQuery(
+    QUERY_GET_ENTRY,
+    {
+      onError() {
+        navigate(getPath('notFound'));
+      },
       onCompleted(data) {
         if (data.entry === null) {
-          history.push(getPath('notAuthorized'));
+          navigate(getPath('notAuthorized'));
         }
       },
-    });
+    },
+  );
 
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: params.projectId } },
@@ -95,7 +103,7 @@ export const EntryCreateEdit = () => {
       const project = data.project as Project;
 
       if (!project.owners.some((owner) => owner.user.id === user.id)) {
-        history.push(getPath('notAuthorized'));
+        navigate(getPath('notAuthorized'));
       }
 
       setNav({
@@ -109,7 +117,7 @@ export const EntryCreateEdit = () => {
       });
     },
     onError() {
-      history.push(getPath('notFound'));
+      navigate(getPath('notFound'));
     },
   });
 
@@ -118,7 +126,7 @@ export const EntryCreateEdit = () => {
       try {
         getPost({ variables: { id: toInt(params.entryId) } });
       } catch {
-        history.push(getPath('notFound'));
+        navigate(getPath('notFound'));
       }
     }
   }, [params]);
@@ -229,9 +237,7 @@ export const EntryCreateEdit = () => {
 
   const onPreview = () => {
     if (form.current && form.current.id) {
-      history.push(
-        `/project/${params.projectId}/entry/${form.current.id}/preview`,
-      );
+      navigate(`/project/${params.projectId}/entry/${form.current.id}/preview`);
     } else {
       toast({
         title: 'Cannot preview',
@@ -242,10 +248,10 @@ export const EntryCreateEdit = () => {
   };
 
   const onBack = () => {
-    if (history.length > 1) {
-      history.goBack();
+    if (location.key) {
+      navigate(-1);
     } else {
-      history.push(getPath('project', params.projectId));
+      navigate(getPath('project', params.projectId || ''));
     }
   };
 
@@ -289,7 +295,7 @@ export const EntryCreateEdit = () => {
     }
   };
 
-  if (loading || (params.entryId && !form.current.id)) {
+  if (loading || loadingPosts || (params.entryId && !form.current.id)) {
     return <Loader />;
   }
 

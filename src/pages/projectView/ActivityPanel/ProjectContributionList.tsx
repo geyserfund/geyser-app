@@ -1,20 +1,20 @@
-import { VStack } from '@chakra-ui/react';
-import React from 'react';
-import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
-import { ID } from '../../../constants/components';
-import { ScrollInvoke } from '../../../helpers';
-import { PaginationHookReturn } from '../../../hooks/types';
-import { FundingTxWithCount, isMobileMode } from '../../../utils';
+import { VStack } from '@chakra-ui/react'
+
+import { ProjectFundingContributionsFeedItem } from '../../../components/molecules'
+import { ID } from '../../../constants/components'
+import { ScrollInvoke } from '../../../helpers'
+import { PaginationHookReturn } from '../../../hooks/types'
+import { FundingTxWithCount, useMobileMode } from '../../../utils'
 
 interface ProjectContributionListProps {
-  fundingTxs: PaginationHookReturn<FundingTxWithCount>;
+  fundingTxs: PaginationHookReturn<FundingTxWithCount>
 }
 
 export const ProjectContributionList = ({
   fundingTxs,
 }: ProjectContributionListProps) => {
-  const isMobile = isMobileMode();
-  const id = ID.project.activity.contribution;
+  const isMobile = useMobileMode()
+  const id = ID.project.activity.contribution
   return (
     <VStack
       id={id}
@@ -42,5 +42,5 @@ export const ProjectContributionList = ({
         noMoreItems={fundingTxs.noMoreItems}
       />
     </VStack>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import { useToast, UseToastOptions } from '@chakra-ui/react';
+import { useToast, UseToastOptions } from '@chakra-ui/react'
 // "subtle" | "solid" | "left-accent" | "top-accent"
 
 export const useNotification = (options?: UseToastOptions | undefined) => {
@@ -11,6 +11,6 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
       marginTop: 65,
     },
     ...options,
-  });
-  return { toast };
-};
+  })
+  return { toast }
+}

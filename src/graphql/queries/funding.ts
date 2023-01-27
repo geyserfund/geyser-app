@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 /**
  * - https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts
@@ -28,7 +28,7 @@ export const QUERY_GET_FUNDING = gql`
       }
     }
   }
-`;
+`
 
 /**
  * - https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts
@@ -73,4 +73,4 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
       }
     }
   }
-`;
+`

@@ -1,60 +1,61 @@
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client'
 import {
-  HStack,
-  Text,
-  VStack,
   GridItem,
-  InputGroup,
+  HStack,
   Input,
+  InputGroup,
   InputRightAddon,
-  Switch,
   Link,
+  Switch,
+  Text,
   useMediaQuery,
-} from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { AiOutlineUpload } from 'react-icons/ai';
-import { useParams } from 'react-router';
+  VStack,
+} from '@chakra-ui/react'
+import { DateTime } from 'luxon'
+import { useEffect, useState } from 'react'
+import { AiOutlineUpload } from 'react-icons/ai'
+import { BiInfoCircle } from 'react-icons/bi'
+import { useParams } from 'react-router'
 
-import { CalendarButton, FileUpload } from '../../components/molecules';
+import { CharacterLimitError } from '../../components/errors'
+import { CalendarButton, FileUpload } from '../../components/molecules'
+import { Body2 } from '../../components/typography'
 import {
   ButtonComponent,
   Card,
   ImageWithReload,
   TextArea,
   TextInputBox,
-} from '../../components/ui';
-import { colors, commonMarkdownUrl } from '../../constants';
-import { useAuthContext } from '../../context';
-import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations';
-import {
-  isMobileMode,
-  isActive,
-  toInt,
-  useNotification,
-  validateEmail,
-  validLightningAddress,
-  MarkDown,
-} from '../../utils';
-import { ProjectCreationVariables } from '../creation/projectCreate/types';
-import { DateTime } from 'luxon';
+} from '../../components/ui'
+import { commonMarkdownUrl } from '../../constants'
 import {
   ProjectValidations,
   UserValidations,
-} from '../../constants/validations';
-import { Project, ProjectStatus } from '../../types/generated/graphql';
-import { BiInfoCircle } from 'react-icons/bi';
-import { Body2 } from '../../components/typography';
-import { CharacterLimitError } from '../../components/errors';
+} from '../../constants/validations'
+import { useAuthContext } from '../../context'
+import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
+import { colors } from '../../styles'
+import { Project, ProjectStatus } from '../../types/generated/graphql'
+import {
+  isActive,
+  MarkDown,
+  toInt,
+  useMobileMode,
+  useNotification,
+  validateEmail,
+  validLightningAddress,
+} from '../../utils'
+import { ProjectCreationVariables } from '../creation/projectCreate/types'
 
 export const ProjectSettings = ({ project }: { project: Project }) => {
-  const params = useParams<{ projectId: string }>();
-  const isEdit = Boolean(params.projectId);
-  const isMobile = isMobileMode();
+  const params = useParams<{ projectId: string }>()
+  const isEdit = Boolean(params.projectId)
+  const isMobile = useMobileMode()
 
-  const { toast } = useNotification();
+  const { toast } = useNotification()
 
-  const { user } = useAuthContext();
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+  const { user } = useAuthContext()
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
   const [form, setForm] = useState<ProjectCreationVariables>({
     title: '',
@@ -62,19 +63,19 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
     image: '',
     email: '',
     name: '',
-  });
+  })
 
-  const [formError, setFormError] = useState<{ [key: string]: any }>({});
+  const [formError, setFormError] = useState<{ [key: string]: any }>({})
   const [selectedButton, setSelectedButton] = useState(
     project.expiresAt ? 'custom' : 'ongoing',
-  );
+  )
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     project.expiresAt
       ? DateTime.fromMillis(toInt(project.expiresAt)).toJSDate()
       : undefined,
-  );
-  const [finalDate, setFinalDate] = useState<string>();
-  const [deactivate, setDeactivate] = useState(!isActive(project.status));
+  )
+  const [finalDate, setFinalDate] = useState<string>()
+  const [deactivate, setDeactivate] = useState(!isActive(project.status))
 
   const [updateProject, { loading: updateLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT,
@@ -83,17 +84,17 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         toast({
           title: 'Project updated successfully!',
           status: 'success',
-        });
+        })
       },
       onError(error) {
         toast({
           title: 'project update failed!',
           description: `${error}`,
           status: 'error',
-        });
+        })
       },
     },
-  );
+  )
 
   useEffect(() => {
     if (project && project.id) {
@@ -103,31 +104,31 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         image: project.image || undefined,
         description: project.description,
         email: user.email || '',
-      });
+      })
     }
-  }, [project]);
+  }, [project])
 
   const handleChange = (event: any) => {
     if (event) {
-      const { name, value } = event.target;
+      const { name, value } = event.target
 
-      const newForm = { ...form, [name]: value || '' };
+      const newForm = { ...form, [name]: value || '' }
 
       if (name === 'title' && !isEdit) {
-        const projectName: string = value.split(' ').join('').toLowerCase();
-        const sanitizedName = projectName.replaceAll(validLightningAddress, '');
+        const projectName: string = value.split(' ').join('').toLowerCase()
+        const sanitizedName = projectName.replaceAll(validLightningAddress, '')
 
-        newForm.name = sanitizedName;
+        newForm.name = sanitizedName
       }
 
       if (name === 'name') {
         const sanitizedName = `${value}`
           .toLocaleLowerCase()
-          .replaceAll(validLightningAddress, '');
-        newForm.name = sanitizedName;
+          .replaceAll(validLightningAddress, '')
+        newForm.name = sanitizedName
       }
 
-      setForm(newForm);
+      setForm(newForm)
       if (
         name === 'title' &&
         value.length > ProjectValidations.title.maxLength
@@ -139,7 +140,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
               limit={ProjectValidations.title.maxLength}
             />
           ),
-        });
+        })
       } else if (
         name === 'description' &&
         value.length > ProjectValidations.description.maxLength
@@ -151,44 +152,44 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
               limit={ProjectValidations.description.maxLength}
             />
           ),
-        });
+        })
       } else {
-        setFormError({});
+        setFormError({})
       }
     }
-  };
+  }
 
   const handleDateChange = (value: Date) => {
-    setSelectedButton('custom');
-    setSelectedDate(value);
-    setFinalDate(`${value.getTime()}`);
-  };
+    setSelectedButton('custom')
+    setSelectedDate(value)
+    setFinalDate(`${value.getTime()}`)
+  }
 
   const handleMonthSelect = () => {
-    setSelectedButton('month');
-    const dateMonth = DateTime.now().plus({ months: 1 });
-    setSelectedDate(undefined);
-    setFinalDate(`${dateMonth.toJSDate().getTime()}`);
-  };
+    setSelectedButton('month')
+    const dateMonth = DateTime.now().plus({ months: 1 })
+    setSelectedDate(undefined)
+    setFinalDate(`${dateMonth.toJSDate().getTime()}`)
+  }
 
   const handleOngoingSelect = () => {
-    setSelectedButton('ongoing');
-    setSelectedDate(undefined);
-    setFinalDate('');
-  };
+    setSelectedButton('ongoing')
+    setSelectedDate(undefined)
+    setFinalDate('')
+  }
 
-  const handleUpload = (url: string) => setForm({ ...form, image: url });
+  const handleUpload = (url: string) => setForm({ ...form, image: url })
   const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event) {
-      setDeactivate(event.target.checked);
+      setDeactivate(event.target.checked)
     }
-  };
+  }
 
   const handleNext = () => {
-    const isValid = validateForm();
+    const isValid = validateForm()
 
-    const newForm = form;
-    newForm.email = user.email || form.email;
+    const newForm = form
+    newForm.email = user.email || form.email
     if (isValid) {
       updateProject({
         variables: {
@@ -201,60 +202,60 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
             status: deactivate ? ProjectStatus.Inactive : ProjectStatus.Active,
           },
         },
-      });
+      })
     }
-  };
+  }
 
   const validateForm = () => {
-    const errors: any = {};
-    let isValid = true;
+    const errors: any = {}
+    let isValid = true
 
     if (!form.name) {
-      errors.name = 'Project name is a required field.';
-      isValid = false;
+      errors.name = 'Project name is a required field.'
+      isValid = false
     } else if (
       form.name.length < ProjectValidations.name.minLength ||
       form.name.length > ProjectValidations.name.maxLength
     ) {
-      errors.name = `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`;
-      isValid = false;
+      errors.name = `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`
+      isValid = false
     }
 
     if (!form.title) {
-      errors.title = 'Title is a required field.';
-      isValid = false;
+      errors.title = 'Title is a required field.'
+      isValid = false
     } else if (form.title.length > ProjectValidations.title.maxLength) {
-      errors.title = `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`;
-      isValid = false;
+      errors.title = `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`
+      isValid = false
     }
 
     if (!form.description) {
-      errors.description = 'Project objective is a required field.';
-      isValid = false;
+      errors.description = 'Project objective is a required field.'
+      isValid = false
     } else if (
       form.description.length > ProjectValidations.description.maxLength
     ) {
-      errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`;
-      isValid = false;
+      errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`
+      isValid = false
     }
 
     if (!form.email && !user.email) {
-      errors.email = 'Email address is a required field.';
-      isValid = false;
+      errors.email = 'Email address is a required field.'
+      isValid = false
     } else if (!user.email && !validateEmail(form.email)) {
-      errors.email = 'Please enter a valid email address.';
-      isValid = false;
+      errors.email = 'Please enter a valid email address.'
+      isValid = false
     } else if (form.email.length > UserValidations.email.maxLength) {
-      errors.email = `Email address should be shorter than ${UserValidations.email.maxLength} characters.`;
-      isValid = false;
+      errors.email = `Email address should be shorter than ${UserValidations.email.maxLength} characters.`
+      isValid = false
     }
 
     if (!isValid) {
-      setFormError(errors);
+      setFormError(errors)
     }
 
-    return isValid;
-  };
+    return isValid
+  }
 
   return (
     <>
@@ -423,7 +424,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
             <ButtonComponent
               isLoading={updateLoading}
               primary
-              isFullWidth
+              w="full"
               onClick={handleNext}
             >
               Save
@@ -460,5 +461,5 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         </VStack>
       </GridItem>
     </>
-  );
-};
+  )
+}

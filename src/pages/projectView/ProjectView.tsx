@@ -1,37 +1,36 @@
-/* eslint-disable no-unreachable */
-import React from 'react';
-import { useQuery } from '@apollo/client';
-import { Box } from '@chakra-ui/layout';
-import { useHistory, useParams } from 'react-router';
-import Loader from '../../components/ui/Loader';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql';
-import { useFundingFlow } from '../../hooks';
-import { useAuthContext } from '../../context';
+import { useQuery } from '@apollo/client'
+import { Box } from '@chakra-ui/layout'
+import { useNavigate, useParams } from 'react-router'
+
+import Loader from '../../components/ui/Loader'
+import { getPath } from '../../constants'
+import { useAuthContext } from '../../context'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
+import { useFundingFlow } from '../../hooks'
 import {
   Owner,
   Project,
   UniqueProjectQueryInput,
-} from '../../types/generated/graphql';
-import { getPath } from '../../constants';
-import { ProjectDetailsViewContainer } from './containers';
-import { isMobileMode } from '../../utils';
+} from '../../types/generated/graphql'
+import { useMobileMode } from '../../utils'
+import { ProjectDetailsViewContainer } from './containers'
 
 type ResponseData = {
-  project: Project;
-};
+  project: Project
+}
 
 type QueryVariables = {
-  where: UniqueProjectQueryInput;
-};
+  where: UniqueProjectQueryInput
+}
 
 export const ProjectView = () => {
-  const { projectId } = useParams<{ projectId: string }>();
-  const history = useHistory();
-  const isMobile = isMobileMode();
+  const { projectId } = useParams<{ projectId: string }>()
+  const navigate = useNavigate()
+  const isMobile = useMobileMode()
 
-  const { setNav } = useAuthContext();
+  const { setNav } = useAuthContext()
 
-  const fundingFlow = useFundingFlow();
+  const fundingFlow = useFundingFlow()
 
   const { loading, error, data } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_BY_NAME_OR_ID,
@@ -40,16 +39,16 @@ export const ProjectView = () => {
       fetchPolicy: 'network-only',
 
       onError() {
-        history.push(getPath('notFound'));
+        navigate(getPath('notFound'))
       },
 
       onCompleted(data) {
         if (!data?.project) {
-          history.replace(getPath('notFound'));
-          return;
+          navigate(getPath('notFound'))
+          return
         }
 
-        const { project } = data;
+        const { project } = data
 
         setNav({
           projectName: project.name,
@@ -57,15 +56,15 @@ export const ProjectView = () => {
           projectPath: getPath('project', project.name),
           projectOwnerIDs:
             project.owners.map((ownerInfo: Owner) => {
-              return Number(ownerInfo.user.id || -1);
+              return Number(ownerInfo.user.id || -1)
             }) || [],
-        });
+        })
       },
     },
-  );
+  )
 
   if (loading || error || !data) {
-    return <Loader paddingTop="65px" />;
+    return <Loader paddingTop="65px" />
   }
 
   return (
@@ -89,5 +88,5 @@ export const ProjectView = () => {
         />
       </Box>
     </Box>
-  );
-};
+  )
+}

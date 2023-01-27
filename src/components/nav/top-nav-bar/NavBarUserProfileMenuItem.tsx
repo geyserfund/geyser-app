@@ -1,9 +1,10 @@
-import { Avatar, Heading, HStack, VStack, Text } from '@chakra-ui/react';
-import React, { useContext } from 'react';
-import { AuthContext } from '../../../context';
+import { Avatar, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { useContext } from 'react'
+
+import { AuthContext } from '../../../context'
 
 export const NavBarUserProfileMenuItem = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext)
 
   return (
     <VStack spacing={2} padding={4} alignItems="flex-start">
@@ -24,5 +25,5 @@ export const NavBarUserProfileMenuItem = () => {
         </Heading>
       </HStack>
     </VStack>
-  );
-};
+  )
+}

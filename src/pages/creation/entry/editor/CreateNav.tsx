@@ -1,10 +1,10 @@
 import { Avatar, Box, HStack } from '@chakra-ui/react';
-import React from 'react';
+import { MdOutlineArrowBackIos } from 'react-icons/md';
+
+import { NavBarLogo } from '../../../../components/nav/NavBarLogo';
 import { ButtonComponent } from '../../../../components/ui';
 import { useAuthContext } from '../../../../context';
-import { isMobileMode } from '../../../../utils';
-import { MdOutlineArrowBackIos } from 'react-icons/md';
-import { NavBarLogo } from '../../../../components/nav/NavBarLogo';
+import { useMobileMode } from '../../../../utils';
 
 interface ICreateNavProps {
   isSaving: boolean;
@@ -21,7 +21,7 @@ export const CreateNav = ({
   onPreview,
   onBack,
 }: ICreateNavProps) => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode();
 
   const { user } = useAuthContext();
 

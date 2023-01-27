@@ -1,17 +1,18 @@
-import { CircularProgress, HStack, Text, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
-import { fonts } from '../../../constants/fonts';
-import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown';
-import { SatoshiAmount } from '../../ui';
-import { Project, ProjectMilestone } from '../../../types/generated/graphql';
-import { noFeeProjects, GEYSER_FEE } from '../../../constants';
-import { isActive, isMobileMode } from '../../../utils';
+import { CircularProgress, HStack, Text, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { createUseStyles } from 'react-jss'
+
+import { GEYSER_FEE, noFeeProjects } from '../../../constants'
+import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown'
+import { colors } from '../../../styles'
+import { fonts } from '../../../styles'
+import { Project, ProjectMilestone } from '../../../types/generated/graphql'
+import { isActive, useMobileMode } from '../../../utils'
+import { SatoshiAmount } from '../../ui'
 
 interface IActivityBrief {
-  loading?: boolean;
-  project: Project;
+  loading?: boolean
+  project: Project
 }
 
 const useStyles = createUseStyles({
@@ -25,74 +26,74 @@ const useStyles = createUseStyles({
       justifyContent: 'center',
     },
   },
-});
+})
 
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
-  const classes = useStyles();
-  const isMobile = isMobileMode();
-  const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>();
-  const [milestoneIndex, setMilestoneIndex] = useState<number>(0);
-  const [prevMilestone, setPrevMilestone] = useState(0);
+  const classes = useStyles()
+  const isMobile = useMobileMode()
+  const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
+  const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
+  const [prevMilestone, setPrevMilestone] = useState(0)
 
   const balance = noFeeProjects.includes(project.name)
     ? project.balance
-    : Math.round(project.balance * (1 - GEYSER_FEE));
+    : Math.round(project.balance * (1 - GEYSER_FEE))
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
-      let selectedMilestone: ProjectMilestone | undefined;
-      let prevTotal = 0;
+      let selectedMilestone: ProjectMilestone | undefined
+      let prevTotal = 0
 
       project.milestones.map((milestone, index) => {
         const hasNextMilestone =
-          project.milestones && Boolean(project.milestones[index + 1]);
+          project.milestones && Boolean(project.milestones[index + 1])
         if (!selectedMilestone) {
           if (milestone && (milestone.amount >= balance || !hasNextMilestone)) {
-            selectedMilestone = milestone;
-            setCurrentMilestone(milestone);
-            setMilestoneIndex(index + 1);
+            selectedMilestone = milestone
+            setCurrentMilestone(milestone)
+            setMilestoneIndex(index + 1)
           } else {
-            prevTotal = milestone?.amount || 0;
+            prevTotal = milestone?.amount || 0
           }
         }
-      });
-      setPrevMilestone(prevTotal);
+      })
+      setPrevMilestone(prevTotal)
     }
-  }, [project]);
+  }, [project])
 
   const getTrackColor = () => {
     switch (milestoneIndex % 3) {
       case 1:
-        if (milestoneIndex === 1) return undefined;
-        return 'brand.primary800';
+        if (milestoneIndex === 1) return undefined
+        return 'brand.primary800'
       case 2:
-        return 'brand.primary400';
+        return 'brand.primary400'
       case 0:
-        return 'brand.primary600';
+        return 'brand.primary600'
       default:
-        return undefined;
+        return undefined
     }
-  };
+  }
 
   const getColor = () => {
     switch (milestoneIndex % 3) {
       case 1:
-        return 'brand.primary400';
+        return 'brand.primary400'
       case 2:
-        return 'brand.primary600';
+        return 'brand.primary600'
       case 0:
-        return 'brand.primary800';
+        return 'brand.primary800'
       default:
-        return 'brand.primary300';
+        return 'brand.primary300'
     }
-  };
+  }
 
   const renderCircularProgress = () => {
     if (currentMilestone) {
       const circularPercentage =
         ((balance - prevMilestone) /
           (currentMilestone.amount - prevMilestone)) *
-        100;
+        100
 
       return (
         <CircularProgress
@@ -105,11 +106,11 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           color={getColor()}
           trackColor={getTrackColor()}
         />
-      );
+      )
     }
 
-    return null;
-  };
+    return null
+  }
 
   const getMilestoneValue = () => {
     if (currentMilestone) {
@@ -117,7 +118,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
         ((balance - prevMilestone) /
           (currentMilestone.amount - prevMilestone)) *
           100,
-      );
+      )
       return (
         <Text
           fontSize="14px"
@@ -125,13 +126,13 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           color={colors.neutral600}
           maxW="100%"
         >{`${percentage}% of ${currentMilestone.name}`}</Text>
-      );
+      )
     }
 
-    return null;
-  };
+    return null
+  }
 
-  const showCountdown = isActive(project.status) && Boolean(project.expiresAt);
+  const showCountdown = isActive(project.status) && Boolean(project.expiresAt)
 
   return (
     <HStack
@@ -160,5 +161,5 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
         {showCountdown && <Countdown endDate={project.expiresAt!} />}
       </VStack>
     </HStack>
-  );
-};
+  )
+}

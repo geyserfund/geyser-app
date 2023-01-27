@@ -1,37 +1,38 @@
-import { Image, ImageProps, Skeleton } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import { useNotification } from '../../utils';
-import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg';
+import { Image, ImageProps, Skeleton } from '@chakra-ui/react'
+import { useEffect, useRef, useState } from 'react'
+
+import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg'
+import { useNotification } from '../../utils'
 
 interface IImageWithReload extends ImageProps {
-  noCacheId?: string;
+  noCacheId?: string
 }
 
-const MAX_RETRIES = 10;
-const BACKOFF = 1.2;
-const MILLISECONDS = 1_000;
+const MAX_RETRIES = 10
+const BACKOFF = 1.2
+const MILLISECONDS = 1_000
 
 export const ImageWithReload = ({
   src,
   noCacheId, // noCacheId allows us to prevent not retrying an image upload due to caching
   ...rest
 }: IImageWithReload) => {
-  const { toast } = useNotification();
-  const componentRef = useRef<number>();
+  const { toast } = useNotification()
+  const componentRef = useRef<number>()
 
-  const [hasValidSource, setHasValidSource] = useState(Boolean(src));
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    componentRef.current = 0;
-  }, []);
+  const [hasValidSource, setHasValidSource] = useState(Boolean(src))
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    setHasValidSource(Boolean(src));
-  }, [noCacheId]);
+    componentRef.current = 0
+  }, [])
+
+  useEffect(() => {
+    setHasValidSource(Boolean(src))
+  }, [noCacheId])
 
   const handleError = ({ currentTarget }: any) => {
-    setLoading(true);
+    setLoading(true)
 
     if (
       componentRef.current !== null &&
@@ -39,27 +40,27 @@ export const ImageWithReload = ({
       componentRef.current < MAX_RETRIES
     ) {
       setTimeout(() => {
-        currentTarget.onerror = null;
-        currentTarget.src = src;
-        componentRef.current! += 1;
-      }, BACKOFF ** componentRef.current * MILLISECONDS);
+        currentTarget.onerror = null
+        currentTarget.src = src
+        componentRef.current! += 1
+      }, BACKOFF ** componentRef.current * MILLISECONDS)
     } else {
-      setLoading(false);
-      setHasValidSource(false);
-      componentRef.current = 0;
+      setLoading(false)
+      setHasValidSource(false)
+      componentRef.current = 0
       toast({
         title: 'failed to load image',
         description: 'Please try again',
         status: 'error',
-      });
+      })
     }
-  };
+  }
 
   const handleLoad = () => {
-    componentRef.current = 0;
-    setLoading(false);
-    setHasValidSource(true);
-  };
+    componentRef.current = 0
+    setLoading(false)
+    setHasValidSource(true)
+  }
 
   const renderDefaultImage = () => {
     return (
@@ -69,8 +70,8 @@ export const ImageWithReload = ({
         height="222px"
         width="350px"
       />
-    );
-  };
+    )
+  }
 
   const renderSkeletonImage = () => {
     return (
@@ -81,8 +82,8 @@ export const ImageWithReload = ({
           maxHeight={rest.maxHeight || '500px'}
         />
       </>
-    );
-  };
+    )
+  }
 
   const renderSourceImage = () => {
     return (
@@ -95,13 +96,13 @@ export const ImageWithReload = ({
         onLoad={handleLoad}
         {...rest}
       />
-    );
-  };
+    )
+  }
 
   return (
     <>
       {hasValidSource ? loading && renderSkeletonImage() : renderDefaultImage()}
       {hasValidSource && renderSourceImage()}
     </>
-  );
-};
+  )
+}

@@ -1,3 +1,4 @@
+import { CloseIcon } from '@chakra-ui/icons'
 import {
   Badge,
   Flex,
@@ -9,24 +10,25 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
-} from '@chakra-ui/react';
-import React, { useMemo } from 'react';
-import { useHistory } from 'react-router';
-import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui';
-import { BsHeartFill } from 'react-icons/bs';
-import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder';
-import { colors, getPath } from '../../../constants';
-import { ProjectListItemImage } from './ProjectListItemImage';
-import { CloseIcon } from '@chakra-ui/icons';
-import { BiPencil } from 'react-icons/bi';
-import { Entry, EntryStatus } from '../../../types/generated/graphql';
+} from '@chakra-ui/react'
+import { useMemo } from 'react'
+import { BiPencil } from 'react-icons/bi'
+import { BsHeartFill } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
+
+import { getPath } from '../../../constants'
+import { colors } from '../../../styles'
+import { Entry, EntryStatus } from '../../../types/generated/graphql'
+import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
+import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
+import { ProjectListItemImage } from './ProjectListItemImage'
 
 type Props = ICard & {
-  entry: Entry;
-  onClick?: () => void;
-  onEdit?: () => void;
-  onDelete?: () => void;
-};
+  entry: Entry
+  onClick?: () => void
+  onEdit?: () => void
+  onDelete?: () => void
+}
 
 export const ProjectEntryCard = ({
   entry,
@@ -35,36 +37,36 @@ export const ProjectEntryCard = ({
   onDelete,
   ...rest
 }: Props) => {
-  const history = useHistory();
-  const { colorMode } = useColorMode();
+  const navigate = useNavigate()
+  const { colorMode } = useColorMode()
 
   const isDraft = useMemo(() => {
-    return entry.status === EntryStatus.Unpublished;
-  }, [entry.status]);
+    return entry.status === EntryStatus.Unpublished
+  }, [entry.status])
 
   const handleClick =
     onClick ||
     (() => {
-      history.push(getPath('entry', `${entry.id}`));
-    });
+      navigate(getPath('entry', `${entry.id}`))
+    })
 
   const handleEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
+    event.stopPropagation()
     if (onEdit) {
-      onEdit();
+      onEdit()
     }
-  };
+  }
 
   const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
+    event.stopPropagation()
     if (onDelete) {
-      onDelete();
+      onDelete()
     }
-  };
+  }
 
   const hoverEffect = {
     backgroundColor: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
-  };
+  }
 
   return (
     <Stack
@@ -214,5 +216,5 @@ export const ProjectEntryCard = ({
         </Stack>
       </Stack>
     </Stack>
-  );
-};
+  )
+}

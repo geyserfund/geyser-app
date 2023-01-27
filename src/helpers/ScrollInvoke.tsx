@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
-import { useListenerState } from '../hooks';
+import { useEffect } from 'react'
+
+import { useListenerState } from '../hooks'
 
 interface ScrollInvokeProps {
-  elementId?: string;
-  onScrollEnd: () => Promise<void>;
-  isLoading?: React.MutableRefObject<boolean>;
-  noMoreItems?: React.MutableRefObject<boolean>;
+  elementId?: string
+  onScrollEnd: () => Promise<void>
+  isLoading?: React.MutableRefObject<boolean>
+  noMoreItems?: React.MutableRefObject<boolean>
 }
 
-const ThresholdHeightBeforeScrollEnd = 300;
+const ThresholdHeightBeforeScrollEnd = 300
 
 export const ScrollInvoke = ({
   elementId,
@@ -16,29 +17,29 @@ export const ScrollInvoke = ({
   isLoading,
   noMoreItems,
 }: ScrollInvokeProps) => {
-  const [loading, setLoading] = useListenerState(false);
-  const [prevValue, setPrevValue] = useListenerState(false);
+  const [loading, setLoading] = useListenerState(false)
+  const [prevValue, setPrevValue] = useListenerState(false)
 
   useEffect(() => {
     if (elementId) {
-      const element = document.getElementById(elementId);
+      const element = document.getElementById(elementId)
       if (element) {
-        element.addEventListener('scroll', handleScroll);
+        element.addEventListener('scroll', handleScroll)
       }
 
       return () => {
         if (element) {
-          element.removeEventListener('scroll', handleScroll);
+          element.removeEventListener('scroll', handleScroll)
         }
-      };
+      }
     }
 
-    document.addEventListener('scroll', handleScroll);
+    document.addEventListener('scroll', handleScroll)
 
     return () => {
-      document.removeEventListener('scroll', handleScroll);
-    };
-  }, [elementId]);
+      document.removeEventListener('scroll', handleScroll)
+    }
+  }, [elementId])
 
   async function handleScroll(this: HTMLElement) {
     if (
@@ -46,36 +47,34 @@ export const ScrollInvoke = ({
       (noMoreItems && noMoreItems.current) ||
       loading.current
     ) {
-      return;
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
-    let scrollHeight = 0;
-    let scrollTop = 0;
-    let clientHeight = 0;
+    let scrollHeight = 0
+    let scrollTop = 0
+    let clientHeight = 0
 
     if (elementId) {
-      scrollHeight = this.scrollHeight;
-      scrollTop = this.scrollTop;
-      clientHeight = this.clientHeight;
+      scrollHeight = this.scrollHeight
+      scrollTop = this.scrollTop
+      clientHeight = this.clientHeight
     } else {
-      scrollHeight = document.scrollingElement?.scrollHeight || 0;
-      scrollTop = document.scrollingElement?.scrollTop || 0;
-      clientHeight = document.scrollingElement?.clientHeight || 0;
+      scrollHeight = document.scrollingElement?.scrollHeight || 0
+      scrollTop = document.scrollingElement?.scrollTop || 0
+      clientHeight = document.scrollingElement?.clientHeight || 0
     }
 
     const isInView =
-      scrollHeight - scrollTop - clientHeight <= ThresholdHeightBeforeScrollEnd;
+      scrollHeight - scrollTop - clientHeight <= ThresholdHeightBeforeScrollEnd
     if (isInView && prevValue.current !== isInView) {
-      await onScrollEnd();
+      await onScrollEnd()
     }
 
-    setPrevValue(isInView);
-    setLoading(false);
+    setPrevValue(isInView)
+    setLoading(false)
   }
 
-  return (
-    <div id={`landing-page-contributions-list-refetch-${elementId}`}></div>
-  );
-};
+  return <div id={`landing-page-contributions-list-refetch-${elementId}`}></div>
+}

@@ -1,15 +1,15 @@
-import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client'
+
+import { ProjectsGridCard } from '../../../components/molecules/projectDisplay/ProjectsGridCard'
 import {
   Project,
   UniqueProjectQueryInput,
-} from '../../../types/generated/graphql';
-import { ProjectsGridCard } from '../../../components/molecules/projectDisplay/ProjectsGridCard';
-import { toInt } from '../../../utils';
+} from '../../../types/generated/graphql'
+import { toInt } from '../../../utils'
 
 type Props = {
-  projectID: number;
-};
+  projectID: number
+}
 
 const GET_PROJECT = gql`
   query GetProject($where: UniqueProjectQueryInput!) {
@@ -32,27 +32,27 @@ const GET_PROJECT = gql`
       }
     }
   }
-`;
+`
 
 type ResponseData = {
-  project: Project;
-};
+  project: Project
+}
 
 type QueryVariables = {
-  where: UniqueProjectQueryInput;
-};
+  where: UniqueProjectQueryInput
+}
 
 export const UserProfilePageProjectsListItem = ({ projectID }: Props) => {
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_PROJECT,
     { variables: { where: { id: toInt(projectID) } } },
-  );
+  )
 
   if (error || loading) {
-    return null;
+    return null
   }
 
   return data ? (
     <ProjectsGridCard project={data.project} height="100%" width="100%" />
-  ) : null;
-};
+  ) : null
+}

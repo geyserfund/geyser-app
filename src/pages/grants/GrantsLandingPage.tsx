@@ -1,66 +1,66 @@
-/* eslint-disable complexity */
-import React, { useEffect, useState } from 'react';
-import { Box, Text } from '@chakra-ui/react';
-import { useTheme } from '@chakra-ui/react';
-import { getRandomOrb, isMobileMode } from '../../utils';
-import { fonts } from '../../constants/fonts';
-import satwalletimg from '../../assets/walletsats.svg';
-import { ListText } from './components/ListText';
-import { CustomGrantCard } from './components/CustomGrantCard';
-import { MoreInfo } from './components/MoreInfo';
-import { AppFooter } from '../../components/molecules';
-import { GrantsContributeModal } from './components/GrantsContributeModal';
-import { ButtonComponent } from '../../components/ui';
-import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri';
-import { GrantSponsor } from './GrantsRoundTwo';
-import { getGrantApplicants, getGrantSponsorRecords } from '../../api';
-import { H2, H3 } from '../../components/typography';
+import { Box, Text } from '@chakra-ui/react'
+import { useTheme } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri'
+
+import { getGrantApplicants, getGrantSponsorRecords } from '../../api'
+import satwalletimg from '../../assets/walletsats.svg'
+import { AppFooter } from '../../components/molecules'
+import { H2, H3 } from '../../components/typography'
+import { ButtonComponent } from '../../components/ui'
+import { fonts } from '../../styles'
+import { getRandomOrb, useMobileMode } from '../../utils'
+import { CustomGrantCard } from './components/CustomGrantCard'
+import { GrantsContributeModal } from './components/GrantsContributeModal'
+import { ListText } from './components/ListText'
+import { MoreInfo } from './components/MoreInfo'
+import { GrantSponsor } from './GrantsRoundTwo'
 
 export const GrantsLandingPage = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode()
 
-  const [copy, setCopy] = useState(false);
-  const [sponsors, setSponsers] = useState<GrantSponsor[]>([]);
-  const [applicationCount, setApplicationCount] = useState('-');
+  const [copy, setCopy] = useState(false)
+  const [sponsors, setSponsers] = useState<GrantSponsor[]>([])
+  const [applicationCount, setApplicationCount] = useState('-')
 
   const handleCompleteContribution = (value: GrantSponsor) => {
     if (value.amount >= 1000) {
-      setSponsers([...sponsors, value]);
+      setSponsers([...sponsors, value])
     }
-  };
+  }
 
-  const theme = useTheme();
+  const theme = useTheme()
 
   const handleCopyOnchain = () => {
-    navigator.clipboard.writeText('grants@geyser.fund');
-    setCopy(true);
+    navigator.clipboard.writeText('grants@geyser.fund')
+    setCopy(true)
     setTimeout(() => {
-      setCopy(false);
-    }, 1000);
-  };
+      setCopy(false)
+    }, 1000)
+  }
 
   useEffect(() => {
     const getSponsors = async () => {
-      const sponsorResponse = await getGrantSponsorRecords();
+      const sponsorResponse = await getGrantSponsorRecords()
 
       const listSponsers = sponsorResponse.map((sponsor: any) => ({
         name: sponsor.fields.Name,
         amount: sponsor.fields.Amount,
         imageUrl: sponsor.fields['PFP link'],
-      }));
-      setSponsers(listSponsers);
-    };
+      }))
+      setSponsers(listSponsers)
+    }
 
     const getApplicants = async () => {
-      const applicantResponse = await getGrantApplicants();
-      setApplicationCount(`${applicantResponse.length}`);
-    };
+      const applicantResponse = await getGrantApplicants()
+      setApplicationCount(`${applicantResponse.length}`)
+    }
 
-    getSponsors();
-    getApplicants();
-  }, []);
+    getSponsors()
+    getApplicants()
+  }, [])
 
-  const sponsorImages = sponsors.map((sponsor) => sponsor.imageUrl);
+  const sponsorImages = sponsors.map((sponsor) => sponsor.imageUrl)
 
   return (
     <>
@@ -237,5 +237,5 @@ export const GrantsLandingPage = () => {
         <AppFooter />
       </Box>
     </>
-  );
-};
+  )
+}

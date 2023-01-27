@@ -1,17 +1,17 @@
-import { Box, HStack, Text } from '@chakra-ui/react';
-import React from 'react';
-import { ApplyGrantModal } from './ApplyGrantModal';
-import { SatoshiIconTilted } from '../../../components/icons';
+import { Box, HStack, Text } from '@chakra-ui/react'
+
+import { SatoshiIconTilted } from '../../../components/icons'
+import { ApplyGrantModal } from './ApplyGrantModal'
 
 interface GrantsProp {
-  applicant: number;
-  distributed?: string;
-  contributed?: string;
-  title: string;
-  subtitle: string;
-  about: string;
-  image: string;
-  isClose?: Boolean;
+  applicant: number
+  distributed?: string
+  contributed?: string
+  title: string
+  subtitle: string
+  about: string
+  image: string
+  isClose?: boolean
 }
 export const ApplyGrantCard = ({
   title,
@@ -109,5 +109,5 @@ export const ApplyGrantCard = ({
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}

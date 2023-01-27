@@ -1,6 +1,5 @@
-import { Link, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
-import { BiErrorAlt } from 'react-icons/bi';
+import { Link, Text, VStack } from '@chakra-ui/react'
+import { BiErrorAlt } from 'react-icons/bi'
 
 export const NotAuthorized = () => (
   <VStack
@@ -24,4 +23,4 @@ export const NotAuthorized = () => (
       or this <Link>feedback form.</Link>
     </Text>
   </VStack>
-);
+)

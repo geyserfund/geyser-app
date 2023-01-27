@@ -5,37 +5,38 @@ import {
   HStack,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import React, { useRef } from 'react';
-import { BoltIcon } from '../../../components/icons';
+} from '@chakra-ui/react'
+import { useRef } from 'react'
+
+import { BoltIcon } from '../../../components/icons'
 import {
   ButtonComponent,
   SatoshiAmount,
   SectionTitle,
   TextInputBox,
-} from '../../../components/ui';
-import { MAX_FUNDING_AMOUNT_USD } from '../../../constants';
-import { useFundCalc } from '../../../helpers/fundingCalculation';
-import { IFundForm } from '../../../hooks';
-import { IProjectType } from '../../../interfaces';
-import { useNotification } from '../../../utils';
-import { ProjectReward } from '../../../types/generated/graphql';
-import { FundingFormSection } from '../FundingFormSection';
-import { ProjectPaymentFormFundingComment } from '../components/ProjectPaymentFormFundingComment';
+} from '../../../components/ui'
+import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
+import { useFundCalc } from '../../../helpers/fundingCalculation'
+import { IFundForm } from '../../../hooks'
+import { IProjectType } from '../../../interfaces'
+import { ProjectReward } from '../../../types/generated/graphql'
+import { useNotification } from '../../../utils'
+import { ProjectPaymentFormFundingComment } from '../components/ProjectPaymentFormFundingComment'
+import { FundingFormSection } from '../FundingFormSection'
 
 type Props = {
-  isMobile: boolean;
-  fundingRequestLoading: boolean;
-  handleCloseButton: () => void;
-  formState: IFundForm;
-  setTarget: (_: any) => void;
-  updateReward: any;
-  setFormState: any;
-  handleFund: () => void;
-  type: IProjectType;
-  rewards?: ProjectReward[];
-  name: string;
-};
+  isMobile: boolean
+  fundingRequestLoading: boolean
+  handleCloseButton: () => void
+  formState: IFundForm
+  setTarget: (_: any) => void
+  updateReward: any
+  setFormState: any
+  handleFund: () => void
+  type: IProjectType
+  rewards?: ProjectReward[]
+  name: string
+}
 
 export const ProjectFundingSelectionFormScreen = ({
   isMobile,
@@ -49,21 +50,21 @@ export const ProjectFundingSelectionFormScreen = ({
   rewards,
   name,
 }: Props) => {
-  const { getTotalAmount } = useFundCalc(formState);
+  const { getTotalAmount } = useFundCalc(formState)
 
-  const { toast } = useNotification();
-  const commentContainerRef = useRef<any>(null);
+  const { toast } = useNotification()
+  const commentContainerRef = useRef<any>(null)
 
-  const hasRewards = rewards && rewards.length > 0;
+  const hasRewards = rewards && rewards.length > 0
   const hasSelectedRewards =
     formState.rewardsByIDAndCount &&
-    Object.entries(formState.rewardsByIDAndCount).length > 0;
+    Object.entries(formState.rewardsByIDAndCount).length > 0
   const submit = () => {
-    const valid = validateFundingAmount();
+    const valid = validateFundingAmount()
     if (valid) {
-      handleFund();
+      handleFund()
     }
-  };
+  }
 
   const validateFundingAmount = () => {
     if (getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD) {
@@ -72,8 +73,8 @@ export const ProjectFundingSelectionFormScreen = ({
         description:
           'Please update the amount, or contact us for donating a higher amount.',
         status: 'error',
-      });
-      return false;
+      })
+      return false
     }
 
     if (getTotalAmount('sats', name) < 1) {
@@ -81,8 +82,8 @@ export const ProjectFundingSelectionFormScreen = ({
         title: 'The payment minimum is 1 satoshi.',
         description: 'Please update the amount.',
         status: 'error',
-      });
-      return false;
+      })
+      return false
     }
 
     if (formState.rewardsCost && !formState.email) {
@@ -90,12 +91,12 @@ export const ProjectFundingSelectionFormScreen = ({
         title: 'Email is a required field when donating for a reward.',
         description: 'Please enter an email.',
         status: 'error',
-      });
-      return false;
+      })
+      return false
     }
 
-    return true;
-  };
+    return true
+  }
 
   return (
     <VStack
@@ -206,13 +207,13 @@ export const ProjectFundingSelectionFormScreen = ({
                 <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
                   {Object.entries(formState.rewardsByIDAndCount!).map(
                     ([key, value]) => {
-                      const reward = rewards.find(({ id }) => id === key);
+                      const reward = rewards.find(({ id }) => id === key)
                       if (reward) {
                         return (
                           <Text key={key}>
                             {value}x {reward.name}
                           </Text>
-                        );
+                        )
                       }
                     },
                   )}
@@ -259,5 +260,5 @@ export const ProjectFundingSelectionFormScreen = ({
         </VStack>
       </VStack>
     </VStack>
-  );
-};
+  )
+}

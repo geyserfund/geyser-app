@@ -1,4 +1,4 @@
-import React from 'react';
+import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons'
 import {
   Avatar,
   Button,
@@ -10,30 +10,30 @@ import {
   MenuList,
   Text,
   VStack,
-  WrapItem,
   Wrap,
-} from '@chakra-ui/react';
-import { User } from '../../../types/generated/graphql';
-import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
-import { getRandomOrb } from '../../../utils';
-import { useAuthContext } from '../../../context';
-import { ExternalAccountLinkItem } from '.';
-import { BsLightningChargeFill } from 'react-icons/bs';
+  WrapItem,
+} from '@chakra-ui/react'
+import { BsLightningChargeFill } from 'react-icons/bs'
+
+import { useAuthContext } from '../../../context'
+import { User } from '../../../types/generated/graphql'
+import { getRandomOrb } from '../../../utils'
+import { ExternalAccountLinkItem } from '.'
 
 type Props = {
-  profileUser: User;
-  onProjectCreateSelected?: () => void;
-};
+  profileUser: User
+  onProjectCreateSelected?: () => void
+}
 
 export const UserProfilePageHeader = ({
   profileUser,
   onProjectCreateSelected,
 }: Props) => {
-  const { user: currentAppUser, loginOnOpen } = useAuthContext();
+  const { user: currentAppUser, loginOnOpen } = useAuthContext()
 
-  const isUserViewingOwnProfile = currentAppUser.id === profileUser.id;
-  const shouldShowCreationButton = isUserViewingOwnProfile;
-  const shouldShowSettingsButton = isUserViewingOwnProfile;
+  const isUserViewingOwnProfile = currentAppUser.id === profileUser.id
+  const shouldShowCreationButton = isUserViewingOwnProfile
+  const shouldShowSettingsButton = isUserViewingOwnProfile
 
   return (
     <VStack width="100%" spacing={4}>
@@ -99,7 +99,7 @@ export const UserProfilePageHeader = ({
                   <ExternalAccountLinkItem key={account.id} account={account} />
                 )}
               </WrapItem>
-            );
+            )
           }
         })}
 
@@ -116,5 +116,5 @@ export const UserProfilePageHeader = ({
         ) : null}
       </Wrap>
     </VStack>
-  );
-};
+  )
+}

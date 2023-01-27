@@ -1,1 +1,1 @@
-export * from './encodeLNURL';
+export * from './encodeLNURL'

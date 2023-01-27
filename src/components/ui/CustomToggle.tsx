@@ -1,9 +1,10 @@
-import { Box, Text } from '@chakra-ui/layout';
-import classNames from 'classnames';
-import React, { useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
-import { isDarkMode } from '../../utils';
+import { Box, Text } from '@chakra-ui/layout'
+import classNames from 'classnames'
+import { useState } from 'react'
+import { createUseStyles } from 'react-jss'
+
+import { colors } from '../../styles'
+import { useDarkMode } from '../../utils'
 
 const useStyles = createUseStyles({
   toggleContainer: ({ isDark }: { isDark: boolean }) => ({
@@ -52,14 +53,14 @@ const useStyles = createUseStyles({
     backgroundColor: colors.primary,
     zIndex: 4,
   },
-});
+})
 
 interface ICustomToggle {
-  value: boolean;
-  onChange: any;
-  first: string;
-  second: string;
-  name?: string;
+  value: boolean
+  onChange: any
+  first: string
+  second: string
+  name?: string
 }
 
 export const CustomToggle = ({
@@ -69,14 +70,14 @@ export const CustomToggle = ({
   onChange,
   name,
 }: ICustomToggle) => {
-  const isDark = isDarkMode();
-  const classes = useStyles({ isDark });
-  const [anonymous, setAnonymous] = useState(value);
+  const isDark = useDarkMode()
+  const classes = useStyles({ isDark })
+  const [anonymous, setAnonymous] = useState(value)
 
   const handleToggle = () => {
-    setAnonymous(!anonymous);
-    onChange({ target: { name, value: !anonymous } });
-  };
+    setAnonymous(!anonymous)
+    onChange({ target: { name, value: !anonymous } })
+  }
 
   return (
     <Box className={classes.toggleContainer} onClick={handleToggle}>
@@ -96,5 +97,5 @@ export const CustomToggle = ({
         <Text>{second}</Text>
       </Box>
     </Box>
-  );
-};
+  )
+}

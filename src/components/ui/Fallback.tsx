@@ -1,4 +1,3 @@
-import { Text } from '@chakra-ui/layout';
-import React from 'react';
+import { Text } from '@chakra-ui/layout'
 
-export const Fallback = () => <Text>Loading...</Text>;
+export const Fallback = () => <Text>Loading...</Text>

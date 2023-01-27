@@ -1,7 +1,7 @@
-import { Box, Input, InputProps, Text } from '@chakra-ui/react';
-import React from 'react';
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
+import { Box, Input, InputProps, Text } from '@chakra-ui/react'
+import { createUseStyles } from 'react-jss'
+
+import { colors } from '../../styles'
 
 const useStyles = createUseStyles({
   inputElement: {
@@ -11,14 +11,14 @@ const useStyles = createUseStyles({
       boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
     },
   },
-});
+})
 
 type Props = InputProps & {
-  error?: string | null;
-};
+  error?: string | null
+}
 
 export const TextInputBox = ({ children, error, ...rest }: Props) => {
-  const classes = useStyles();
+  const classes = useStyles()
   return (
     <Box width="100%">
       <Input
@@ -35,5 +35,5 @@ export const TextInputBox = ({ children, error, ...rest }: Props) => {
         </Text>
       ) : null}
     </Box>
-  );
-};
+  )
+}

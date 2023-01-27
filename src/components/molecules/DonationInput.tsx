@@ -1,30 +1,31 @@
 import {
+  Button,
+  HStack,
   Input,
   InputGroup,
+  InputGroupProps,
   InputLeftElement,
   InputProps,
   InputRightElement,
-  Button,
   useDisclosure,
-  InputGroupProps,
   VStack,
-  HStack,
-} from '@chakra-ui/react';
-import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { BiDollar } from 'react-icons/bi';
-import { BsArrowRepeat } from 'react-icons/bs';
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../constants';
-import { useBtcContext } from '../../context/btc';
+} from '@chakra-ui/react'
+import classNames from 'classnames'
+import { useEffect, useState } from 'react'
+import { BiDollar } from 'react-icons/bi'
+import { BsArrowRepeat } from 'react-icons/bs'
+import { createUseStyles } from 'react-jss'
+
+import { useBtcContext } from '../../context/btc'
+import { colors } from '../../styles'
 import {
   CrownIcon,
   MedalIcon,
   SatoshiIconTilted,
   StarIcon,
   TrophyIcon,
-} from '../icons';
-import { ButtonComponent } from '../ui';
+} from '../icons'
+import { ButtonComponent } from '../ui'
 
 const useStyles = createUseStyles({
   inputElement: {
@@ -60,12 +61,12 @@ const useStyles = createUseStyles({
       borderColor: colors.normalLightGreen,
     },
   },
-});
+})
 
 interface IDonationInputProps extends InputProps {
-  name: string;
-  onChange: any;
-  inputGroup?: InputGroupProps;
+  name: string
+  onChange: any
+  inputGroup?: InputGroupProps
 }
 
 export const DonationInput = ({
@@ -75,39 +76,39 @@ export const DonationInput = ({
   inputGroup,
   ...rest
 }: IDonationInputProps) => {
-  const { btcRate } = useBtcContext();
+  const { btcRate } = useBtcContext()
 
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const { isOpen: isSatoshi, onToggle } = useDisclosure();
-  const isDollar = !isSatoshi;
+  const { isOpen: isSatoshi, onToggle } = useDisclosure()
+  const isDollar = !isSatoshi
 
-  const [satoshi, setSatoshi] = useState(0);
-  const [dollar, setDollar] = useState(0.0);
+  const [satoshi, setSatoshi] = useState(0)
+  const [dollar, setDollar] = useState(0.0)
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseInt(event.target.value, 10);
+    const val = parseInt(event.target.value, 10)
     if (isDollar) {
-      setDollar(val);
-      setSatoshi(Math.round(val / btcRate));
+      setDollar(val)
+      setSatoshi(Math.round(val / btcRate))
     } else {
-      setSatoshi(val);
-      setDollar(Math.round(val * btcRate));
+      setSatoshi(val)
+      setDollar(Math.round(val * btcRate))
     }
-  };
+  }
 
   useEffect(() => {
     if (!satoshi) {
-      onChange(name, 0);
+      onChange(name, 0)
     } else {
-      onChange(name, satoshi);
+      onChange(name, satoshi)
     }
-  }, [satoshi]);
+  }, [satoshi])
 
   const handleDefaultAmountButtonClick = (val: number) => {
-    setDollar(val);
-    setSatoshi(Math.round(val / btcRate));
-  };
+    setDollar(val)
+    setSatoshi(Math.round(val / btcRate))
+  }
 
   return (
     <VStack>
@@ -173,5 +174,5 @@ export const DonationInput = ({
         </InputRightElement>
       </InputGroup>
     </VStack>
-  );
-};
+  )
+}

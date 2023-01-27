@@ -1,13 +1,13 @@
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
-import { fadeOut, slideInRight } from '../../../css';
+import { createUseStyles } from 'react-jss'
 
-type Rules = string;
+import { colors } from '../../../styles'
+
+type Rules = string
 
 interface IStyles {
-  isMobile?: boolean;
-  inView?: boolean;
-  fadeStarted?: boolean;
+  isMobile?: boolean
+  inView?: boolean
+  fadeStarted?: boolean
 }
 
 export const useStyles = createUseStyles<Rules, IStyles>({
@@ -36,4 +36,4 @@ export const useStyles = createUseStyles<Rules, IStyles>({
   },
   // ...slideInRight,
   // ...fadeOut,
-});
+})

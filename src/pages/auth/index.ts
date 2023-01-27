@@ -1,2 +1,2 @@
-export * from './TwitterSuccess';
-export * from './FailedAuth';
+export * from './TwitterSuccess'
+export * from './FailedAuth'
