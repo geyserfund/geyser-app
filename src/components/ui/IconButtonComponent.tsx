@@ -6,6 +6,8 @@ import { buttonCommon } from '../../styles/common'
 
 interface IIconButtonComponentP extends IconButtonProps {
   primary?: boolean
+  href?: string
+  isExternal?: boolean
 }
 
 export const IconButtonComponent = ({

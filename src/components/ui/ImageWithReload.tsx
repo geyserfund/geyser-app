@@ -33,7 +33,7 @@ export const ImageWithReload = ({
 
   useEffect(() => {
     setHasValidSource(Boolean(src))
-  }, [noCacheId])
+  }, [noCacheId, src])
 
   const handleError = ({ currentTarget }: any) => {
     setLoading(true)

@@ -3,7 +3,7 @@ import {
   Button,
   HStack,
   IconButton,
-  Image,
+  Link,
   Stack,
   Text,
   Tooltip,
@@ -12,9 +12,17 @@ import {
 import { useState } from 'react'
 
 import { AmbossIcon, BoltIcon, ShareIcon } from '../../../components/icons'
-import { Card, ProjectStatusLabel, SatoshiAmount } from '../../../components/ui'
+import { Body2, H3 } from '../../../components/typography'
+import {
+  Card,
+  IconButtonComponent,
+  ImageWithReload,
+  ProjectStatusLabel,
+  SatoshiAmount,
+} from '../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../constants'
 import { useAuthContext } from '../../../context'
+import { getIconForLink } from '../../../helpers/getIconForLinks'
 import { Project } from '../../../types/generated/graphql'
 import { isActive, MarkDown, useMobileMode } from '../../../utils'
 import { AvatarElement } from './AvatarElement'
@@ -110,22 +118,82 @@ export const ProjectDetailsCard = ({
     )
   }
 
-  return (
-    <Card padding="24px" backgroundColor="brand.bgWhite">
-      <VStack alignItems="flex-start" width="100%" spacing="18px">
-        {project.image && (
-          <Box width="100%" overflow="hidden">
-            <Image
-              borderRadius="4px"
-              width="100%"
-              height="100%"
-              src={project.image}
-              maxH="210px"
-              objectFit="cover"
-            />
-          </Box>
-        )}
+  const renderLinks = () => {
+    if (project.links && project.links.length > 0) {
+      return (
+        <HStack>
+          <Body2 semiBold color="brand.neutral600">
+            Links
+          </Body2>
+          <HStack>
+            {project.links.map((link) => {
+              const icon = getIconForLink(link)
+              return (
+                <IconButtonComponent
+                  aria-label="link-icon"
+                  key={link}
+                  as={Link}
+                  href={link || ''}
+                  isExternal
+                >
+                  {icon}
+                </IconButtonComponent>
+              )
+            })}
+          </HStack>
+        </HStack>
+      )
+    }
 
+    return null
+  }
+
+  return (
+    <Card
+      border="2px solid"
+      borderColor="brand.neutral200"
+      borderRadius="4px"
+      boxShadow="none"
+      shadow="sm"
+    >
+      <VStack position="relative">
+        <Box width="100%" height="230px" overflow="hidden">
+          <ImageWithReload
+            grey
+            width="100%"
+            height="100%"
+            src={project.image || undefined}
+            maxH="210px"
+            objectFit="cover"
+          />
+        </Box>
+        <Box
+          width="155px"
+          height="155px"
+          borderRadius="12px"
+          border="2px solid white"
+          overflow="hidden"
+          position="absolute"
+          bottom="-30px"
+          left="24px"
+        >
+          <ImageWithReload
+            grey
+            width="100%"
+            height="100%"
+            src={project.thumbnailImage || undefined}
+            maxH="230px"
+            objectFit="cover"
+          />
+        </Box>
+      </VStack>
+      <VStack
+        marginTop="10px"
+        padding="24px"
+        alignItems="flex-start"
+        width="100%"
+        spacing="18px"
+      >
         <VStack width="100%" spacing="10px" alignItems="flex-start">
           <Stack
             direction={isMobile ? 'column' : 'row'}
@@ -190,9 +258,15 @@ export const ProjectDetailsCard = ({
           </HStack>
         </VStack>
         <HStack>
-          <Text color="brand.neutral600">Creator</Text>
+          <H3>{project.shortDescription}</H3>
+        </HStack>
+        <HStack>
+          <Body2 semiBold color="brand.neutral600">
+            Creator
+          </Body2>
           <AvatarElement user={owner.user} />
         </HStack>
+        {renderLinks()}
         <VStack alignItems="flex-start">
           <Text color="brand.neutral600" textAlign="left">
             Objective
