@@ -17,11 +17,10 @@ import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
 import { noScrollBar } from '../../styles/common'
 import { Owner } from '../../types/generated/graphql'
 import { useMobileMode } from '../../utils'
-import { NotAuthorized } from '../notAuthorized'
-import { NotFoundPage } from '../notFound'
 import { MilestoneSettings } from './MilestoneSettings'
 import { ProjectContributors } from './ProjectContributors'
 import { ProjectDashboardEntries } from './ProjectDashboardEntries'
+import { ProjectDescription } from './ProjectDescription'
 import { ProjectFundingSettings } from './ProjectFundingSettings'
 import { ProjectSettings } from './ProjectSettings'
 import { ProjectStats } from './ProjectStats'
@@ -35,6 +34,7 @@ enum DashboardTabs {
   editProject = 'edit project',
   contributors = 'contributors',
   stats = 'stats',
+  settings = 'settings',
 }
 
 let storedTab = DashboardTabs.editProject
@@ -67,13 +67,17 @@ export const ProjectDashboard = () => {
     storedTab = selectedTab
   }
 
-  const [getProject, { loading, error, data }] = useLazyQuery(
+  const [getProject, { loading, data }] = useLazyQuery(
     QUERY_PROJECT_BY_NAME_OR_ID,
     {
       variables: {
         where: { name: projectId },
       },
       onCompleted(data) {
+        if (data.project.owners[0].user.id !== user.id) {
+          navigate(getPath('notAuthorized'))
+        }
+
         setNav({
           projectName: data.project.name,
           projectTitle: data.project.title,
@@ -89,12 +93,8 @@ export const ProjectDashboard = () => {
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
-  if (error || !data || !data.project) {
-    return <NotFoundPage />
-  }
-
-  if (data.project.owners[0].user.id !== user.id) {
-    return <NotAuthorized />
+  if (loading || !data || !data.project) {
+    return <Loader />
   }
 
   const { project } = data
@@ -118,11 +118,13 @@ export const ProjectDashboard = () => {
       case DashboardTabs.funds:
         return <ProjectFundingSettings project={project} />
       case DashboardTabs.editProject:
-        return <ProjectSettings project={project} />
+        return <ProjectDescription project={project} />
       case DashboardTabs.contributors:
         return <ProjectContributors project={project} />
       case DashboardTabs.stats:
         return <ProjectStats project={project} />
+      case DashboardTabs.settings:
+        return <ProjectSettings project={project} />
       default:
         return <ProjectDashboardEntries project={project} />
     }
@@ -160,6 +162,7 @@ export const ProjectDashboard = () => {
     DashboardTabs.rewards,
     DashboardTabs.milestones,
     DashboardTabs.stats,
+    DashboardTabs.settings,
   ]
 
   return (

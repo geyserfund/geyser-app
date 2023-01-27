@@ -10,6 +10,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       title
       name
       type
+      shortDescription
       description
       balance
       fundingGoal
@@ -17,6 +18,8 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       updatedAt
       expiresAt
       image
+      thumbnailImage
+      links
       status
       rewardCurrency
       fundersCount

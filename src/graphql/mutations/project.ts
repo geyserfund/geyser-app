@@ -96,3 +96,19 @@ export const MUTATION_DELETE_PROJECT_MILESTONE = gql`
     deleteProjectMilestone(projectMilestoneId: $projectMilestoneId)
   }
 `
+
+export const MUTATION_ADD_PROJECT_LINK = gql`
+  mutation ProjectLinkAdd($input: ProjectLinkMutationInput!) {
+    projectLinkAdd(input: $input) {
+      id
+    }
+  }
+`
+
+export const MUTATION_REMOVE_PROJECT_LINK = gql`
+  mutation ProjectLinkRemove($input: ProjectLinkMutationInput!) {
+    projectLinkRemove(input: $input) {
+      id
+    }
+  }
+`

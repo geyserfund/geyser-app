@@ -1,15 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { EditIcon } from '@chakra-ui/icons'
 import { HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
-import { DateTime } from 'luxon'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import {
-  CalendarButton,
-  DeleteConfirmModal,
-  RewardCard,
-} from '../../../components/molecules'
+import { DeleteConfirmModal, RewardCard } from '../../../components/molecules'
 import {
   ButtonComponent,
   IconButtonComponent,
@@ -18,10 +13,7 @@ import {
 import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
-import {
-  MUTATION_UPDATE_PROJECT,
-  MUTATION_UPDATE_PROJECT_REWARD,
-} from '../../../graphql/mutations'
+import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../graphql/mutations'
 import { colors } from '../../../styles'
 import type {
   Project,
@@ -36,17 +28,13 @@ import {
   RewardAdditionModal,
 } from './components'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
+import { ProjectLinks, useProjectLinks } from './components/ProjectLinks'
 
 export const MilestoneAndRewards = () => {
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
 
   const { toast } = useNotification()
-
-  const [selectedButton, setSelectedButton] = useState('ongoing')
-  const [selectedDate, setSelectedDate] = useState<Date>()
-
-  const [finalDate, setFinalDate] = useState<string>('')
 
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
   const [rewards, setRewards] = useState<ProjectReward[]>([])
@@ -71,22 +59,6 @@ export const MilestoneAndRewards = () => {
   } = useDisclosure()
 
   const [isSatoshiRewards, setIsSatoshiRewards] = useState(false)
-
-  const [updateProject, { loading: updateProjectLoading }] = useMutation(
-    MUTATION_UPDATE_PROJECT,
-    {
-      onCompleted() {
-        navigate(getPath('launchProjectWithNode', params.projectId || ''))
-      },
-      onError(error) {
-        toast({
-          title: 'Something went wrong',
-          description: `${error}`,
-          status: 'error',
-        })
-      },
-    },
-  )
 
   const [updateReward] = useMutation(MUTATION_UPDATE_PROJECT_REWARD)
 
@@ -115,6 +87,10 @@ export const MilestoneAndRewards = () => {
     },
   })
 
+  const { links, setLinks, handleLinks, linkError } = useProjectLinks({
+    project: data?.project,
+  })
+
   const handleMilestoneSubmit = (milestones: ProjectMilestone[]) => {
     setMilestones(milestones)
     onMilestoneClose()
@@ -137,20 +113,18 @@ export const MilestoneAndRewards = () => {
     }
   }
 
-  const handleNext = () => {
-    const updateProjectInput: any = {
-      projectId: toInt(data?.project?.id),
-      // TODO: Use enums from back-end after they're implemented (https://discord.com/channels/940363862723690546/960539150602342400/1032372207264997386)
-      // rewardCurrency: isSatoshiRewards ? RewardCurrency.BTC : RewardCurrency.Usdcent,
-      rewardCurrency: RewardCurrency.Usdcent,
-      expiresAt: finalDate || null,
+  const handleNext = async () => {
+    if (linkError.includes(true)) {
+      toast({
+        status: 'error',
+        title: 'Invalid link provided',
+        description: 'Please update the link before proceding',
+      })
+      return
     }
 
-    if (rewards.length > 0) {
-      updateProjectInput.type = 'reward'
-    }
-
-    updateProject({ variables: { input: updateProjectInput } })
+    await handleLinks()
+    navigate(getPath('launchProjectWithNode', params.projectId || ''))
   }
 
   const handleBack = () => {
@@ -200,25 +174,6 @@ export const MilestoneAndRewards = () => {
 
     setSelectedReward(currentReward)
     openRewardDelete()
-  }
-
-  const handleDateChange = (value: Date) => {
-    setSelectedButton('custom')
-    setSelectedDate(value)
-    setFinalDate(`${value.getTime()}`)
-  }
-
-  const handleMonthSelect = () => {
-    setSelectedButton('month')
-    const dateMonth = DateTime.now().plus({ months: 1 })
-    setSelectedDate(undefined)
-    setFinalDate(`${dateMonth.toJSDate().getTime()}`)
-  }
-
-  const handleOngoingSelect = () => {
-    setSelectedButton('ongoing')
-    setSelectedDate(undefined)
-    setFinalDate('')
   }
 
   if (loading) {
@@ -297,35 +252,8 @@ export const MilestoneAndRewards = () => {
         subtitle="Step 2 of 3"
         percentage={67}
       >
-        <VStack width="100%" alignItems="flex-start">
-          <Text>Fundraising deadline</Text>
-          <HStack width="100%" justifyContent="space-around">
-            <ButtonComponent
-              primary={selectedButton === 'ongoing'}
-              onClick={handleOngoingSelect}
-            >
-              Ongoing
-            </ButtonComponent>
-            <ButtonComponent
-              primary={selectedButton === 'month'}
-              onClick={handleMonthSelect}
-            >
-              1 Month
-            </ButtonComponent>
-            <CalendarButton
-              primary={selectedButton === 'custom'}
-              value={selectedDate}
-              onChange={handleDateChange}
-            >
-              Custom
-            </CalendarButton>
-          </HStack>
-          <Text fontSize="12px">
-            Add a deadline for your project if you have one, or just keep it as
-            ongoing.
-          </Text>
-        </VStack>
         <VStack width="100%" alignItems="flex-start" spacing="40px">
+          <ProjectLinks links={links} setLinks={setLinks} />
           <VStack width="100%" alignItems="flex-start">
             <Text>Project Milestones (optional)</Text>
             <ButtonComponent w="full" onClick={openMilestone}>
@@ -353,12 +281,7 @@ export const MilestoneAndRewards = () => {
               or add Rewards later.
             </Text>
           </VStack>
-          <ButtonComponent
-            primary
-            w="full"
-            onClick={handleNext}
-            isLoading={updateProjectLoading}
-          >
+          <ButtonComponent primary w="full" onClick={handleNext}>
             Continue
           </ButtonComponent>
         </VStack>

@@ -1,4 +1,4 @@
-import { Image, ImageProps, Skeleton } from '@chakra-ui/react'
+import { Box, Image, ImageProps, Skeleton } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 
 import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg'
@@ -6,6 +6,8 @@ import { useNotification } from '../../utils'
 
 interface IImageWithReload extends ImageProps {
   noCacheId?: string
+  defaultImage?: string
+  grey?: boolean
 }
 
 const MAX_RETRIES = 10
@@ -14,6 +16,8 @@ const MILLISECONDS = 1_000
 
 export const ImageWithReload = ({
   src,
+  defaultImage,
+  grey,
   noCacheId, // noCacheId allows us to prevent not retrying an image upload due to caching
   ...rest
 }: IImageWithReload) => {
@@ -29,7 +33,7 @@ export const ImageWithReload = ({
 
   useEffect(() => {
     setHasValidSource(Boolean(src))
-  }, [noCacheId])
+  }, [noCacheId, src])
 
   const handleError = ({ currentTarget }: any) => {
     setLoading(true)
@@ -63,12 +67,23 @@ export const ImageWithReload = ({
   }
 
   const renderDefaultImage = () => {
+    if (grey) {
+      return (
+        <Box
+          height="100%"
+          width="100%"
+          backgroundColor="brand.neutral200"
+        ></Box>
+      )
+    }
+
     return (
       <Image
-        src={GeyserTempImage}
+        src={defaultImage || GeyserTempImage}
         maxHeight="500px"
         height="222px"
         width="350px"
+        {...rest}
       />
     )
   }

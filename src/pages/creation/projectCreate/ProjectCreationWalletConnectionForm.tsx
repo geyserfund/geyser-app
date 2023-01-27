@@ -385,7 +385,11 @@ export const ProjectCreationWalletConnectionForm = ({
             w="full"
             onClick={handleProjectLaunchSelected}
             isLoading={isCreateWalletLoading}
-            disabled={isSubmitEnabled === false || isEvaluatingLightningAddress}
+            disabled={
+              isSubmitEnabled === false ||
+              isEvaluatingLightningAddress ||
+              Boolean(lightningAddressFormError)
+            }
           >
             <>
               <BiRocket style={{ marginRight: '10px' }} />

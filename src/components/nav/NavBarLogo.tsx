@@ -38,7 +38,6 @@ export const NavBarLogo = ({
 
   const useFullOne = (isLargerThan720 || full) && !small
 
-  console.log('checking colormode', colorMode)
   const imageToUse =
     colorMode === 'light'
       ? useFullOne
