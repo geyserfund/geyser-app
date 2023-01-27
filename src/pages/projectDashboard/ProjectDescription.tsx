@@ -6,7 +6,7 @@ import { ButtonComponent } from '../../components/ui'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
 import { FormError } from '../../types'
 import { Project } from '../../types/generated/graphql'
-import { toInt, useMobileMode, useNotification, validUrl } from '../../utils'
+import { toInt, useMobileMode, useNotification } from '../../utils'
 import {
   ProjectCreateForm,
   ProjectCreateFormValidation,
@@ -23,7 +23,9 @@ export const ProjectDescription = ({ project }: { project: Project }) => {
 
   const { toast } = useNotification()
 
-  const { links, setLinks, handleLinks } = useProjectLinks({ project })
+  const { links, setLinks, handleLinks, linkError } = useProjectLinks({
+    project,
+  })
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
@@ -78,13 +80,7 @@ export const ProjectDescription = ({ project }: { project: Project }) => {
   }, [project])
 
   const handleNext = async () => {
-    let isValid = validateForm()
-
-    links.map((link) => {
-      if (link && !validUrl.test(link)) {
-        isValid = false
-      }
-    })
+    const isValid = validateForm()
 
     if (isValid) {
       await handleLinks()
@@ -104,10 +100,14 @@ export const ProjectDescription = ({ project }: { project: Project }) => {
   }
 
   const validateForm = () => {
-    const { errors, isValid } = ProjectCreateFormValidation(form)
+    let { errors, isValid } = ProjectCreateFormValidation(form)
 
     if (!isValid) {
       setFormError(errors)
+    }
+
+    if (linkError.includes(true)) {
+      isValid = true
     }
 
     return isValid

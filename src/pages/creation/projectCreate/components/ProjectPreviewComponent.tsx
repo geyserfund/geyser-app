@@ -57,9 +57,6 @@ export const ProjectPreviewComponent = ({
           </Box>
         </Box>
         <VStack padding="10px" width="100%" alignItems="flex-start">
-          <Text fontWeight={700} fontSize="11px">
-            geyser.fund/project
-          </Text>
           <Text fontSize="28px" fontWeight={700}>
             {data.title || 'Project Title'}
           </Text>

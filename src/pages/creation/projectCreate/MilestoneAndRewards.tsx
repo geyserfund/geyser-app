@@ -21,7 +21,7 @@ import type {
   ProjectReward,
 } from '../../../types/generated/graphql'
 import { RewardCurrency } from '../../../types/generated/graphql'
-import { toInt, useNotification, validUrl } from '../../../utils'
+import { toInt, useNotification } from '../../../utils'
 import {
   defaultMilestone,
   MilestoneAdditionModal,
@@ -87,7 +87,7 @@ export const MilestoneAndRewards = () => {
     },
   })
 
-  const { links, setLinks, handleLinks } = useProjectLinks({
+  const { links, setLinks, handleLinks, linkError } = useProjectLinks({
     project: data?.project,
   })
 
@@ -114,15 +114,7 @@ export const MilestoneAndRewards = () => {
   }
 
   const handleNext = async () => {
-    let isValid = true
-
-    links.map((link) => {
-      if (link && !validUrl.test(link)) {
-        isValid = false
-      }
-    })
-
-    if (!isValid) {
+    if (linkError.includes(true)) {
       toast({
         status: 'error',
         title: 'Invalid link provided',

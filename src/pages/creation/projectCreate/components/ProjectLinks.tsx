@@ -19,7 +19,9 @@ interface ProjectLinksProps {
 }
 
 export const useProjectLinks = ({ project }: { project: Project }) => {
-  const [links, setLinks] = useState<string[]>([''])
+  const [links, _setLinks] = useState<string[]>([''])
+
+  const [linkError, setLinkError] = useState<boolean[]>([false])
 
   const { toast } = useNotification()
 
@@ -46,6 +48,29 @@ export const useProjectLinks = ({ project }: { project: Project }) => {
       },
     },
   )
+
+  const setLinks = (links: string[]) => {
+    const errors = [] as boolean[]
+
+    links.map((link, index) => {
+      try {
+        const url = new URL(link)
+
+        const isDuplicate = links.indexOf(link) !== index
+        if (url.protocol === 'https' && !isDuplicate) {
+          errors.push(false)
+        } else {
+          errors.push(true)
+        }
+      } catch (error) {
+        errors.push(true)
+      }
+    })
+
+    setLinkError(errors)
+
+    _setLinks(links)
+  }
 
   const handleLinks = async () => {
     const finalLinks = links.filter((link) => link)
@@ -89,7 +114,7 @@ export const useProjectLinks = ({ project }: { project: Project }) => {
     }
   }
 
-  return { links, setLinks, handleLinks }
+  return { links, setLinks, linkError, handleLinks }
 }
 
 export const ProjectLinks = ({ links, setLinks }: ProjectLinksProps) => {
