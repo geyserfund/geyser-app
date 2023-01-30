@@ -11,7 +11,8 @@ import {
   Wrap,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { BsHeartFill } from 'react-icons/bs'
+import { BsHeartFill, BsLink45Deg } from 'react-icons/bs'
+import { CgProfile } from 'react-icons/cg'
 
 import {
   AmbossIcon,
@@ -147,10 +148,8 @@ export const ProjectDetailsCard = ({
   const renderLinks = () => {
     if (project.links && project.links.length > 0) {
       return (
-        <HStack>
-          <Body2 semiBold color="brand.neutral600">
-            Links
-          </Body2>
+        <HStack spacing="12px">
+          <BsLink45Deg color={colors.neutral600} fontSize="22px" />
           <HStack>
             {project.links.map((link) => {
               const Icon = getIconForLink(link)
@@ -290,11 +289,9 @@ export const ProjectDetailsCard = ({
         <HStack>
           <H3>{project.shortDescription}</H3>
         </HStack>
-        <HStack>
-          <Body2 semiBold color="brand.neutral600">
-            Creator
-          </Body2>
-          <AvatarElement user={owner.user} />
+        <HStack spacing="16px" alignItems="center">
+          <CgProfile color={colors.neutral600} fontSize="22px" />
+          <AvatarElement borderRadius="50%" user={owner.user} />
         </HStack>
         {renderLinks()}
         <VStack alignItems="flex-start">
