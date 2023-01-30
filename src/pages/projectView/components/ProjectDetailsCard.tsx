@@ -182,7 +182,7 @@ export const ProjectDetailsCard = ({
     <Card
       border="2px solid"
       borderColor="brand.neutral200"
-      borderRadius="4px"
+      borderRadius="8px"
       boxShadow="none"
       shadow="sm"
     >
@@ -200,7 +200,7 @@ export const ProjectDetailsCard = ({
         <Box
           width="155px"
           height="155px"
-          borderRadius="12px"
+          borderRadius="8 px"
           border="2px solid white"
           overflow="hidden"
           position="absolute"
