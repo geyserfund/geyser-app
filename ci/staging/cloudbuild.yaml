@@ -37,7 +37,7 @@ steps:
         --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \
         --build-arg VITE_APP_AIR_TABLE_KEY=$$AIRTABLE_API_KEY \
         --build-arg VITE_APP_GIPHY_API_KEY=$$GIPHY_API_KEY \
-        --build-arg VITE_APP_ENV=${_VITE_APP_ENV} \
+        --build-arg VITE_APP_ENV=${_REACT_APP_ENV} \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest . \
         && \

@@ -3,7 +3,7 @@ type ExtendProcessEnv = 'production' | 'staging' | 'development' | 'test'
 /*
  App Environment
 */
-const VITE_APP_ENV = import.meta.env.MODE as ExtendProcessEnv
+const VITE_APP_ENV = import.meta.env.VITE_APP_ENV as ExtendProcessEnv
 
 export const __production__ = VITE_APP_ENV === 'production'
 export const __development__ = VITE_APP_ENV === 'development'
