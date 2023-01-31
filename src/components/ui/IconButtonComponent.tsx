@@ -8,10 +8,12 @@ interface IIconButtonComponentP extends IconButtonProps {
   primary?: boolean
   href?: string
   isExternal?: boolean
+  noBorder?: boolean
 }
 
 export const IconButtonComponent = ({
   primary,
+  noBorder,
   ...rest
 }: IIconButtonComponentP) => {
   const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark)
@@ -25,7 +27,7 @@ export const IconButtonComponent = ({
       color={primary ? 'black' : textColor}
       _hover={primary ? { bg: 'brand.primaryTint' } : undefined}
       {...rest}
-      sx={buttonCommon}
+      sx={!noBorder ? buttonCommon : undefined}
     />
   )
 }

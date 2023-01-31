@@ -548,7 +548,7 @@ export const TopNavBar = () => {
                 backgroundColor="brand.primary400"
                 onClick={handleProjectDashboardButtonPress}
               >
-                Dashboard
+                Project dashboard
               </ButtonComponent>
             ) : null}
 

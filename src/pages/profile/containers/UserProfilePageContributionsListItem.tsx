@@ -38,6 +38,7 @@ const GET_FUNDING_TX_FOR_USER_CONTRIBUTION = gql`
           id
           name
           title
+          thumbnailImage
           image
         }
         ... on Entry {
