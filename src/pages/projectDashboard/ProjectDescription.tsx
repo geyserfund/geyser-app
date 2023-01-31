@@ -135,7 +135,7 @@ export const ProjectDescription = ({ project }: { project: Project }) => {
               {...{ form, setForm, formError, setFormError, isEdit: true }}
             />
 
-            <ProjectLinks {...{ links, setLinks }} />
+            <ProjectLinks {...{ links, setLinks, linkError }} />
 
             <ButtonComponent
               isLoading={updateLoading}

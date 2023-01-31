@@ -90,11 +90,6 @@ export const RewardAdditionModal = ({
     { input: ProjectRewardCreationVariables }
   >(MUTATION_CREATE_PROJECT_REWARD, {
     onCompleted(data) {
-      toast({
-        title: 'Successfully created!',
-        description: `Reward ${data.createProjectReward.name} was successfully created`,
-        status: 'success',
-      })
       onSubmit(data.createProjectReward)
       onClose()
     },

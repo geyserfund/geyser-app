@@ -1,7 +1,8 @@
 import { Box, Text, VStack } from '@chakra-ui/react'
 
+import { H2, H3 } from '../../../../components/typography'
 import { Card, ImageWithReload } from '../../../../components/ui'
-import { MarkDown } from '../../../../utils'
+import { MarkDown, useMobileMode } from '../../../../utils'
 
 interface ProjectPreviewComponentProps {
   data: {
@@ -16,18 +17,19 @@ interface ProjectPreviewComponentProps {
 export const ProjectPreviewComponent = ({
   data,
 }: ProjectPreviewComponentProps) => {
+  const isMobile = useMobileMode()
   return (
     <VStack
       justifyContent="flex-start"
       alignItems="flex-start"
       minWidth="350px"
-      maxWidth="370px"
+      maxWidth="350px"
       spacing="10px"
     >
       <Text>Preview</Text>
       <Card overflow="hidden" width="100%">
         <Box position="relative" marginBottom="10px">
-          <Box height="100px" overflow="hidden">
+          <Box height="100px" overflow="hidden" backgroundColor="white">
             <ImageWithReload
               grey
               src={data.image}
@@ -46,6 +48,7 @@ export const ProjectPreviewComponent = ({
             position="absolute"
             bottom="-10px"
             left="10px"
+            backgroundColor="white"
           >
             <ImageWithReload
               grey
@@ -57,13 +60,16 @@ export const ProjectPreviewComponent = ({
           </Box>
         </Box>
         <VStack padding="10px" width="100%" alignItems="flex-start">
-          <Text fontSize="28px" fontWeight={700}>
+          <H2 width="100%" isTruncated>
             {data.title || 'Project Title'}
-          </Text>
-          <Text fontSize="14px" fontWeight={700}>
+          </H2>
+          <H3 wordBreak="break-all">
             {data.shortDescription || 'Project Objective'}
-          </Text>
-          <MarkDown fontSize="16px" color="brand.textGrey">
+          </H3>
+          <MarkDown
+            fontSize={isMobile ? '14px' : '16px'}
+            color="brand.textGrey"
+          >
             {data.description || 'Project Description'}
           </MarkDown>
         </VStack>
