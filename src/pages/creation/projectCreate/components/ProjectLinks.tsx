@@ -11,11 +11,12 @@ import {
 } from '../../../../graphql/mutations'
 import { getIconForLink } from '../../../../helpers/getIconForLinks'
 import { Maybe, Project, ProjectLinkMutationInput } from '../../../../types'
-import { toInt, useNotification, validUrl } from '../../../../utils'
+import { toInt, useNotification } from '../../../../utils'
 
 interface ProjectLinksProps {
   links: string[]
   setLinks: (_: string[]) => void
+  linkError?: boolean[]
 }
 
 export const useProjectLinks = ({ project }: { project: Project }) => {
@@ -24,6 +25,13 @@ export const useProjectLinks = ({ project }: { project: Project }) => {
   const [linkError, setLinkError] = useState<boolean[]>([false])
 
   const { toast } = useNotification()
+
+  useEffect(() => {
+    if (project?.links?.length > 0) {
+      const newLinks = project.links.filter((val) => val) as string[]
+      _setLinks(newLinks)
+    }
+  }, [project])
 
   const [addLink] = useMutation<ProjectLinkMutationInput>(
     MUTATION_ADD_PROJECT_LINK,
@@ -57,7 +65,7 @@ export const useProjectLinks = ({ project }: { project: Project }) => {
         const url = new URL(link)
 
         const isDuplicate = links.indexOf(link) !== index
-        if (url.protocol === 'https' && !isDuplicate) {
+        if (url.protocol.includes('https') && !isDuplicate) {
           errors.push(false)
         } else {
           errors.push(true)
@@ -117,10 +125,12 @@ export const useProjectLinks = ({ project }: { project: Project }) => {
   return { links, setLinks, linkError, handleLinks }
 }
 
-export const ProjectLinks = ({ links, setLinks }: ProjectLinksProps) => {
+export const ProjectLinks = ({
+  links,
+  setLinks,
+  linkError = [],
+}: ProjectLinksProps) => {
   const rowStyles = { width: '100%', alignItems: 'flex-start', spacing: '5px' }
-
-  const [linkError, setLinkError] = useState<any>({})
 
   const handleClose = (val: Maybe<string>) => {
     const newLinks = links.filter((link) => link !== val)
@@ -149,12 +159,6 @@ export const ProjectLinks = ({ links, setLinks }: ProjectLinksProps) => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { value } = event.target
-    if (!value || validUrl.test(value)) {
-      setLinkError({ ...linkError, [index]: false })
-    } else {
-      setLinkError({ ...linkError, [index]: true })
-    }
-
     const newLinkList = links.map((val, i) => (i === index ? value : val))
     setLinks(newLinkList)
   }

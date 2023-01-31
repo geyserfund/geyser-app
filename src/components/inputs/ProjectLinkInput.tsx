@@ -47,7 +47,7 @@ export const ProjectLinkInput = ({
         isInvalid={isError}
         _focusVisible={{
           borderColor: isError ? 'red' : colors.normalLightGreen,
-          boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+          boxShadow: !isError && `0 0 0 1px ${colors.normalLightGreen}`,
         }}
         {...inputProps}
       />
