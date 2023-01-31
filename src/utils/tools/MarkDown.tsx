@@ -3,8 +3,6 @@ import { createUseStyles } from 'react-jss'
 import ReactMarkdown from 'react-markdown'
 import { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown'
 
-import { matchMarkDownSpecialKeysAtLineEnd } from '../validations/regex'
-
 interface MarkDownProps extends ReactMarkdownOptions {
   color?: string
   wordBreak?: string
@@ -28,10 +26,10 @@ const useStyles = createUseStyles<Rules, StyleProps>({
       textDecoration: 'underline',
     },
     '& ul': {
-      paddingLeft: '25px',
+      paddingLeft: '20px',
     },
     '& ol': {
-      paddingLeft: '25px',
+      paddingLeft: '20px',
     },
   }),
 })
@@ -65,23 +63,7 @@ export const MarkDown = ({
 
 const formatString = (value: string): string => {
   const adjustForLineChange = value
-    ? value.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '\\\n')
+    ? value.replaceAll(/\n/g, '&nbsp;  \n\n')
     : ''
-
-  const adjustedForMultiParagrah = adjustForLineChange.replaceAll(
-    /\n\n/g,
-    '\n\\\n',
-  )
-
-  const finalValue = getRidOfEndSlash(adjustedForMultiParagrah)
-  return finalValue
-}
-
-const getRidOfEndSlash = (value: string): string => {
-  if (value[value.length - 2] === '\\') {
-    const newValue = value.slice(0, value.length - 2)
-    return getRidOfEndSlash(newValue)
-  }
-
-  return value
+  return adjustForLineChange
 }
