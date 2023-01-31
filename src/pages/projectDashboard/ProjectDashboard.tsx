@@ -94,7 +94,7 @@ export const ProjectDashboard = () => {
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
   if (loading || !data || !data.project) {
-    return <Loader />
+    return <Loader alignItems="flex-start" paddingTop="120px" />
   }
 
   const { project } = data
