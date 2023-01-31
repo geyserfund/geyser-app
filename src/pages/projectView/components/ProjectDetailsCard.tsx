@@ -101,7 +101,11 @@ export const ProjectDetailsCard = ({
     if (project.links && project.links.length > 0) {
       return (
         <HStack spacing="12px">
-          <BsLink45Deg color={colors.neutral600} fontSize="22px" />
+          <Tooltip label={'Links'} placement="top">
+            <Box>
+              <BsLink45Deg color={colors.neutral600} fontSize="22px" />
+            </Box>
+          </Tooltip>
           <HStack>
             {project.links.map((link) => {
               const Icon = getIconForLink(link)
@@ -109,13 +113,12 @@ export const ProjectDetailsCard = ({
                 <IconButtonComponent
                   size="sm"
                   variant="ghost"
-                  backgroundColor="transparent"
-                  boxShadow="none"
                   aria-label="link-icon"
                   key={link}
                   as={Link}
                   href={link || ''}
                   isExternal
+                  noBorder
                 >
                   <Icon fontSize="20px" />
                 </IconButtonComponent>
@@ -254,7 +257,11 @@ export const ProjectDetailsCard = ({
           <H3>{project.shortDescription}</H3>
         </HStack>
         <HStack spacing="16px" alignItems="center">
-          <CgProfile color={colors.neutral600} fontSize="22px" />
+          <Tooltip label={'Creator'} placement="top">
+            <Box>
+              <CgProfile color={colors.neutral600} fontSize="22px" />
+            </Box>
+          </Tooltip>
           <AvatarElement borderRadius="50%" user={owner.user} />
         </HStack>
         {renderLinks()}
