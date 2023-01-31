@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   HStack,
   IconButton,
   Link,
@@ -8,37 +7,25 @@ import {
   Text,
   Tooltip,
   VStack,
-  Wrap,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { BsHeartFill, BsLink45Deg } from 'react-icons/bs'
 import { CgProfile } from 'react-icons/cg'
 
-import {
-  AmbossIcon,
-  BoltIcon,
-  SatoshiIcon,
-  ShareIcon,
-} from '../../../components/icons'
-import { Body2, Caption, H3, MonoBody1 } from '../../../components/typography'
+import { AmbossIcon, SatoshiIcon, ShareIcon } from '../../../components/icons'
+import { Caption, H3, MonoBody1 } from '../../../components/typography'
 import {
   Card,
   IconButtonComponent,
   ImageWithReload,
   ProjectStatusLabel,
-  SatoshiAmount,
 } from '../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { getIconForLink } from '../../../helpers/getIconForLinks'
 import { colors } from '../../../styles'
 import { Project } from '../../../types/generated/graphql'
-import {
-  getShortAmountLabel,
-  isActive,
-  MarkDown,
-  useMobileMode,
-} from '../../../utils'
+import { getShortAmountLabel, MarkDown, useMobileMode } from '../../../utils'
 import { AvatarElement } from './AvatarElement'
 import { ProjectLightningQR } from './ProjectLightningQR'
 
@@ -62,41 +49,6 @@ export const ProjectDetailsCard = ({
 
     navigator.clipboard.writeText(`${HomeUrl}${relativePath}`)
     setHasCopiedSharingLink(true)
-  }
-
-  const renderMilestone = () => {
-    if (!project.milestones) {
-      return null
-    }
-
-    const currentMilestone = project.milestones.find(
-      (milestone) => Number(milestone?.amount) > project.balance,
-    )
-
-    if (!currentMilestone) {
-      return null
-    }
-
-    return (
-      <VStack alignItems="flex-start">
-        <Body2 semiBold color="brand.neutral600">
-          Next Milestone
-        </Body2>
-        <Wrap>
-          <Text
-            paddingTop="2px"
-            color="brand.neutral800"
-          >{`${currentMilestone?.name}: ${currentMilestone?.description} : `}</Text>
-          <SatoshiAmount>
-            {currentMilestone.amount - project.balance}
-          </SatoshiAmount>
-          <Text paddingTop="2px" color="brand.neutral800">
-            {' '}
-            to go.
-          </Text>
-        </Wrap>
-      </VStack>
-    )
   }
 
   const renderYourFunding = () => {
@@ -308,7 +260,6 @@ export const ProjectDetailsCard = ({
         <VStack alignItems="flex-start">
           <MarkDown color='"brand.neutral800"'>{project.description}</MarkDown>
         </VStack>
-        {renderMilestone()}
         {renderYourFunding()}
       </VStack>
     </Card>
