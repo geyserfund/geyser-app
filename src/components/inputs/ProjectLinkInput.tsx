@@ -33,9 +33,9 @@ export const ProjectLinkInput = ({
       borderColor="brand.neutral200"
       {...rest}
     >
-      <Box paddingX="12px">
+      <HStack paddingX="12px" width="50px">
         <LeftIcon />
-      </Box>
+      </HStack>
       <Input
         border="1px solid"
         borderRadius="4px !important"
