@@ -1,36 +1,36 @@
-import React, { useContext, useEffect } from 'react';
-import { AuthModal } from '../../../components/molecules';
-import { IFundingInput, IRewardFundingInput } from '../../../interfaces';
-import { SuccessScreen } from './SuccessScreen';
-import { ProjectFundingQRScreen } from './ProjectFundingQRScreen';
-import { isMobileMode, toInt } from '../../../utils';
-import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen';
+import { Box, useDisclosure } from '@chakra-ui/react'
+import classNames from 'classnames'
+import { useContext, useEffect } from 'react'
 
-import { AuthContext } from '../../../context';
-import { Box, useDisclosure } from '@chakra-ui/react';
-import classNames from 'classnames';
-import { useStyles } from './styles';
-import {
-  ProjectFundingInitialInfoScreen,
-  InfoPageSkeleton,
-} from './ProjectFundingInitialInfoScreen';
-import { fundingStages } from '../../../constants';
-import { IFundForm, IFundFormState } from '../../../hooks';
-import { useBtcContext } from '../../../context/btc';
+import { AuthModal } from '../../../components/molecules'
+import { fundingStages } from '../../../constants'
+import { AuthContext } from '../../../context'
+import { useBtcContext } from '../../../context/btc'
+import { IFundForm, IFundFormState } from '../../../hooks'
+import { IFundingInput, IRewardFundingInput } from '../../../interfaces'
 import {
   FundingResourceType,
   Project,
   ProjectReward,
-} from '../../../types/generated/graphql';
-import { MobileViews, useProject } from '../containers';
+} from '../../../types/generated/graphql'
+import { toInt, useMobileMode } from '../../../utils'
+import { MobileViews, useProject } from '../containers'
+import {
+  InfoPageSkeleton,
+  ProjectFundingInitialInfoScreen,
+} from './ProjectFundingInitialInfoScreen'
+import { ProjectFundingQRScreen } from './ProjectFundingQRScreen'
+import { ProjectFundingSelectionFormScreen } from './ProjectFundingSelectionFormScreen'
+import { useStyles } from './styles'
+import { SuccessScreen } from './SuccessScreen'
 
 type Props = {
-  project: Project;
-  fundingFlow: any;
-  resourceType: FundingResourceType;
-  resourceId: number;
-  fundForm: IFundFormState;
-};
+  project: Project
+  fundingFlow: any
+  resourceType: FundingResourceType
+  resourceId: number
+  fundForm: IFundFormState
+}
 
 export const ProjectActivityPanel = ({
   project,
@@ -39,12 +39,12 @@ export const ProjectActivityPanel = ({
   resourceType,
   resourceId,
 }: Props) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext)
 
-  const { btcRate } = useBtcContext();
-  const isMobile = isMobileMode();
+  const { btcRate } = useBtcContext()
+  const isMobile = useMobileMode()
 
-  const { mobileView } = useProject();
+  const { mobileView, setMobileView } = useProject()
   // required for knowing the rewards and the funds
   const {
     state: formState,
@@ -52,7 +52,7 @@ export const ProjectActivityPanel = ({
     setState: setFormState,
     updateReward,
     resetForm,
-  } = fundForm;
+  } = fundForm
 
   const {
     fundState,
@@ -62,52 +62,53 @@ export const ProjectActivityPanel = ({
     fundingTx,
     resetFundingFlow,
     requestFunding,
-  } = fundingFlow;
+  } = fundingFlow
 
   const {
     isOpen: loginIsOpen,
     onOpen: loginOnOpen,
     onClose: loginOnClose,
-  } = useDisclosure();
+  } = useDisclosure()
 
   const inView = [
     MobileViews.contribution,
     MobileViews.leaderboard,
     MobileViews.funding,
-  ].includes(mobileView);
+  ].includes(mobileView)
 
-  const classes = useStyles({ isMobile, inView });
+  const classes = useStyles({ isMobile, inView })
 
   useEffect(() => {
     if (mobileView === MobileViews.funding) {
-      setFundState(fundingStages.form);
+      setFundState(fundingStages.form)
     } else {
-      resetFundingFlow();
-      resetForm();
+      resetFundingFlow()
+      resetForm()
     }
-  }, [mobileView]);
+  }, [mobileView])
 
   useEffect(() => {
     if (user && user.id) {
-      setFormState('anonymous', false);
+      setFormState('anonymous', false)
     }
-  }, [user]);
+  }, [user])
 
   useEffect(() => {
     if (!formState.anonymous && (!user || !user.id)) {
-      loginOnOpen();
-      setFormState('anonymous', true);
+      loginOnOpen()
+      setFormState('anonymous', true)
     }
-  }, [formState.anonymous]);
+  }, [formState.anonymous])
 
   const handleCloseButton = () => {
-    resetFundingFlow();
-    resetForm();
-  };
+    setMobileView(MobileViews.contribution)
+    resetFundingFlow()
+    resetForm()
+  }
 
   const handleQRCloseButton = () => {
-    setFundState(fundingStages.form);
-  };
+    setFundState(fundingStages.form)
+  }
 
   const formatFundingInput = (state: IFundForm) => {
     const {
@@ -120,7 +121,7 @@ export const ProjectActivityPanel = ({
       anonymous,
       comment,
       media,
-    } = state;
+    } = state
 
     const input: IFundingInput = {
       projectId: toInt(project.id),
@@ -135,7 +136,7 @@ export const ProjectActivityPanel = ({
         resourceId: toInt(resourceId) || toInt(project.id),
         resourceType: resourceType || 'project',
       },
-    };
+    }
 
     if (
       state.rewardsByIDAndCount &&
@@ -145,33 +146,33 @@ export const ProjectActivityPanel = ({
       const rewardsArray = Object.keys(rewardsByIDAndCount).map((key) => ({
         id: toInt(key),
         quantity: rewardsByIDAndCount[key as keyof ProjectReward],
-      }));
+      }))
       const filteredRewards = rewardsArray.filter(
         (reward) => reward.quantity !== 0,
-      );
+      )
       const rewardInput: IRewardFundingInput = {
         shipping: { cost, destination },
         rewards: filteredRewards,
         rewardsCost: Math.round(rewardsCost / btcRate),
-      };
-      input.rewardInput = rewardInput;
+      }
+      input.rewardInput = rewardInput
     }
 
-    return input;
-  };
+    return input
+  }
 
   const handleFund = async () => {
-    const input = formatFundingInput(formState);
-    requestFunding(input);
-  };
+    const input = formatFundingInput(formState)
+    requestFunding(input)
+  }
 
   const getActivityHeight = () => {
-    return 'calc(100% - 20px)';
-  };
+    return 'calc(100% - 20px)'
+  }
 
   const renderPanelContent = () => {
     if (!project || !project.id) {
-      return <InfoPageSkeleton />;
+      return <InfoPageSkeleton />
     }
 
     switch (fundState) {
@@ -185,7 +186,7 @@ export const ProjectActivityPanel = ({
               test: false,
             }}
           />
-        );
+        )
       case fundingStages.form:
         return (
           <ProjectFundingSelectionFormScreen
@@ -205,7 +206,7 @@ export const ProjectActivityPanel = ({
               name: project.name,
             }}
           />
-        );
+        )
       case fundingStages.started:
         return (
           <ProjectFundingQRScreen
@@ -215,7 +216,7 @@ export const ProjectActivityPanel = ({
             amounts={amounts}
             handleCloseButton={handleQRCloseButton}
           />
-        );
+        )
       case fundingStages.completed:
         return (
           <SuccessScreen
@@ -224,12 +225,12 @@ export const ProjectActivityPanel = ({
             fundingTx={fundingTx}
             handleCloseButton={handleCloseButton}
           />
-        );
+        )
 
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <>
@@ -244,13 +245,16 @@ export const ProjectActivityPanel = ({
         backgroundColor="#FFFFFF"
         marginTop={isMobile ? '0px' : '20px'}
         height={getActivityHeight()}
-        borderTopLeftRadius={isMobile ? '' : '22px'}
-        boxShadow="-8px -8px 12px -8px rgba(0, 0, 0, 0.1)"
+        borderTopLeftRadius={isMobile ? '' : '8px'}
+        overflow="hidden"
+        borderTop={isMobile ? 'none' : '2px solid'}
+        borderLeft="2px solid"
+        borderColor="brand.neutral200"
       >
         {renderPanelContent()}
       </Box>
 
       <AuthModal isOpen={loginIsOpen} onClose={loginOnClose} />
     </>
-  );
-};
+  )
+}

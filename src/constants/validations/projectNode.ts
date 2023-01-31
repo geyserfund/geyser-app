@@ -8,4 +8,4 @@ export const ProjectNodeValidations = {
   invoiceMacaroon: {
     maxLength: 280,
   },
-};
+}

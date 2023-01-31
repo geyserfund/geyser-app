@@ -1,38 +1,38 @@
 /* eslint-disable complexity */
 
-import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Text,
   HStack,
   Image,
-  VStack,
   Link,
   Skeleton,
-} from '@chakra-ui/react';
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { createUseStyles } from 'react-jss'
 
-import { AppFooter } from '../../components/molecules';
-import { InfoTooltip } from '../../components/ui';
-import { SatoshiIconTilted } from '../../components/icons';
-import { isActive, isMediumScreen, isMobileMode, MarkDown } from '../../utils';
-import { Subscribe } from '../../components/nav/Subscribe';
-import { RecipientButton } from './components/RecipientButton';
-import { ContributeButton } from './components/ContributeButton';
-import { Board } from './components/Board';
-import { REACT_APP_AIR_TABLE_KEY } from '../../constants';
-import { createUseStyles } from 'react-jss';
-import { Project } from '../../types/generated/graphql';
+import { SatoshiIconTilted } from '../../components/icons'
+import { AppFooter } from '../../components/molecules'
+import { Subscribe } from '../../components/nav/Subscribe'
+import { InfoTooltip } from '../../components/ui'
+import { VITE_APP_AIR_TABLE_KEY } from '../../constants'
+import { Project } from '../../types/generated/graphql'
+import { isActive, MarkDown, useMediumScreen, useMobileMode } from '../../utils'
+import { Board } from './components/Board'
+import { ContributeButton } from './components/ContributeButton'
+import { RecipientButton } from './components/RecipientButton'
 
 const useStyles = createUseStyles({
   iframe: {
     background: 'transparent',
     border: '1px solid #ccc',
   },
-});
+})
 
 export const Grants = ({ project }: { project: Project }) => {
-  const [applicants, setApplicants] = useState(['loading']);
-  const classes = useStyles();
+  const [applicants, setApplicants] = useState(['loading'])
+  const classes = useStyles()
 
   const getGrantApplicants = async () => {
     fetch(
@@ -40,7 +40,7 @@ export const Grants = ({ project }: { project: Project }) => {
       {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${REACT_APP_AIR_TABLE_KEY}`,
+          Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
           'Content-Type': 'application/json',
         },
       },
@@ -51,17 +51,17 @@ export const Grants = ({ project }: { project: Project }) => {
           ? data.records?.filter(
               (applicant: any) => applicant.fields.Grant === project.title,
             )
-          : [];
-        setApplicants(applications);
-      });
-  };
+          : []
+        setApplicants(applications)
+      })
+  }
 
   useEffect(() => {
-    getGrantApplicants();
-  }, []);
+    getGrantApplicants()
+  }, [])
 
-  const isMedium = isMediumScreen();
-  const isMobile = isMobileMode();
+  const isMedium = useMediumScreen()
+  const isMobile = useMobileMode()
 
   return (
     <>
@@ -384,5 +384,5 @@ export const Grants = ({ project }: { project: Project }) => {
       </Box>
       <AppFooter />
     </>
-  );
-};
+  )
+}

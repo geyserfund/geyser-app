@@ -1,4 +1,5 @@
-import { Box, Text, Stack } from '@chakra-ui/layout';
+import Icon from '@chakra-ui/icon'
+import { Box, Stack, Text } from '@chakra-ui/layout'
 import {
   Modal,
   ModalBody,
@@ -6,44 +7,44 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-} from '@chakra-ui/modal';
-import { QRCode } from 'react-qrcode-logo';
-import React, { useEffect, useState } from 'react';
-import { ButtonComponent } from '../ui';
-import Icon from '@chakra-ui/icon';
+} from '@chakra-ui/modal'
+import { HStack, Link, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { BsLightningChargeFill } from 'react-icons/bs'
+import { QRCode } from 'react-qrcode-logo'
+import { useLocation, useNavigate } from 'react-router'
+
+import LogoDarkGreen from '../../assets/logo-dark-green.svg'
 import {
   AUTH_SERVICE_ENDPOINT,
-  IAuthModalState,
   authModalStates,
-} from '../../constants';
-import { useHistory } from 'react-router';
-import { BsLightningChargeFill } from 'react-icons/bs';
-import { useAuthContext } from '../../context';
-import { useNotification, isMobileMode, hasTwitterAccount } from '../../utils';
-import LogoDarkGreen from '../../assets/logo-dark-green.svg';
-import { HStack, Link, VStack } from '@chakra-ui/react';
-import { TwitterConnect } from '.';
-import Loader from '../ui/Loader';
-import { DisconnectAccounts } from '.';
-import { User } from '../../types/generated/graphql';
-import { defaultUser } from '../../defaults';
+  IAuthModalState,
+} from '../../constants'
+import { useAuthContext } from '../../context'
+import { defaultUser } from '../../defaults'
+import { User } from '../../types/generated/graphql'
+import { hasTwitterAccount, useMobileMode, useNotification } from '../../utils'
+import { ButtonComponent } from '../ui'
+import Loader from '../ui/Loader'
+import { TwitterConnect } from '.'
+import { DisconnectAccounts } from '.'
 
 interface IAuthModal {
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-  description?: string;
-  showTwitter?: boolean;
-  showLightning?: boolean;
-  privateRoute?: boolean;
+  isOpen: boolean
+  onClose: () => void
+  title?: string
+  description?: string
+  showTwitter?: boolean
+  showLightning?: boolean
+  privateRoute?: boolean
 }
 
 const LnurlConnect = ({
   setQrContent,
   setLnurlState,
 }: {
-  setQrContent: any;
-  setLnurlState: any;
+  setQrContent: any
+  setLnurlState: any
 }) => {
   const handleLnurlLogin = async () => {
     fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, {
@@ -52,17 +53,17 @@ const LnurlConnect = ({
     })
       .then((response) => response.json())
       .then(({ lnurl }) => {
-        setQrContent(lnurl);
-        setLnurlState();
+        setQrContent(lnurl)
+        setLnurlState()
       })
       .catch((err) => {
-        console.log(err);
-      });
-  };
+        console.log(err)
+      })
+  }
 
   return (
     <ButtonComponent
-      isFullWidth
+      w="100%"
       primary
       standard
       backgroundColor="#ffe600"
@@ -72,8 +73,8 @@ const LnurlConnect = ({
     >
       Lightning
     </ButtonComponent>
-  );
-};
+  )
+}
 
 const ConnectAccounts = ({
   setModalStates,
@@ -82,8 +83,8 @@ const ConnectAccounts = ({
   showTwitter,
   showLightning,
 }: any) => {
-  const { user } = useAuthContext();
-  const [setLnurlState] = setModalStates;
+  const { user } = useAuthContext()
+  const [setLnurlState] = setModalStates
   return (
     <VStack justifyContent="center" alignItems="center">
       <Text color="brand.textGrey2" fontSize="12px" marginBottom={5}>
@@ -102,8 +103,8 @@ const ConnectAccounts = ({
         )}
       </Stack>
     </VStack>
-  );
-};
+  )
+}
 
 export const AuthModal = (authModalProps: IAuthModal) => {
   const {
@@ -114,40 +115,41 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     showTwitter = true,
     showLightning = true,
     privateRoute = false,
-  } = authModalProps;
+  } = authModalProps
 
   const {
     user,
     setUser,
     isLoggedIn,
     isAuthModalOpen: loginIsOpen,
-  } = useAuthContext();
-  const { toast } = useNotification();
-  const isMobile = isMobileMode();
-  const history = useHistory();
-  const isMe = () => history.location.pathname === `/profile/${user.id}`;
+  } = useAuthContext()
+  const { toast } = useNotification()
+  const isMobile = useMobileMode()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isMe = () => location.pathname === `/profile/${user.id}`
 
-  const [qrContent, setQrContent] = useState('');
+  const [qrContent, setQrContent] = useState('')
   const [modalState, setModalState] = useState<IAuthModalState>(
     isMe() ? authModalStates.manage : authModalStates.initial,
-  );
+  )
   const [modalTitle, setModalTitle] = useState(
     title ||
       (modalState === authModalStates.manage ? 'Manage accounts' : 'Connect'),
-  );
-  const [modalDescription, setModalDescription] = useState(description);
-  const [copy, setcopy] = useState(false);
+  )
+  const [modalDescription, setModalDescription] = useState(description)
+  const [copy, setcopy] = useState(false)
 
   /*
 	Handler Functions
 	*/
   const handleCopy = () => {
-    navigator.clipboard.writeText(qrContent);
-    setcopy(true);
+    navigator.clipboard.writeText(qrContent)
+    setcopy(true)
     setTimeout(() => {
-      setcopy(false);
-    }, 2000);
-  };
+      setcopy(false)
+    }, 2000)
+  }
 
   /*
 	Set Modal State Functions
@@ -155,48 +157,46 @@ export const AuthModal = (authModalProps: IAuthModal) => {
   const updateModalState = () => {
     if (isLoggedIn && isMe()) {
       if (modalState !== authModalStates.manage) {
-        setManageState();
+        setManageState()
       }
     } else if (modalState !== authModalStates.initial) {
-      setInitialState();
+      setInitialState()
     }
-  };
+  }
 
   const setLnurlState = () => {
-    setModalTitle('Connect with Lightning');
-    setModalDescription(
-      'Scan the QR code to connect to your Lightning wallet.',
-    );
-    setModalState(authModalStates.lnurl);
-  };
+    setModalTitle('Connect with Lightning')
+    setModalDescription('Scan the QR code to connect to your Lightning wallet.')
+    setModalState(authModalStates.lnurl)
+  }
 
   const setManageState = () => {
-    setModalTitle('Manage Accounts');
-    setModalDescription('');
-    setModalState(authModalStates.manage);
-  };
+    setModalTitle('Manage Accounts')
+    setModalDescription('')
+    setModalState(authModalStates.manage)
+  }
 
   const setInitialState = () => {
-    setModalTitle('Connect');
+    setModalTitle('Connect')
     setModalDescription(
       'Connect to launch your idea and to appear as a contributor when you fund an initiative.',
-    );
-    setModalState(authModalStates.initial);
-  };
+    )
+    setModalState(authModalStates.initial)
+  }
 
   /*
-	useEffect Functions
+	UseEffect Functions
 	*/
   useEffect(() => {
-    updateModalState();
-  }, [loginIsOpen]);
+    updateModalState()
+  }, [loginIsOpen])
 
   useEffect(() => {
     if (modalState === 'lnurl') {
-      setModalTitle('Connect with Lightning');
+      setModalTitle('Connect with Lightning')
 
       const id = setInterval(() => {
-        let hasError = false;
+        let hasError = false
 
         fetch(`${AUTH_SERVICE_ENDPOINT}/access-token`, {
           credentials: 'include',
@@ -204,41 +204,41 @@ export const AuthModal = (authModalProps: IAuthModal) => {
         })
           .then((response) => {
             if (!(response.status >= 200 && response.status < 400)) {
-              hasError = true;
+              hasError = true
             }
 
-            return response.json();
+            return response.json()
           })
           .then((response) => {
             if (hasError) {
-              setModalTitle('Please try again.');
-              throw new Error(response.reason);
+              setModalTitle('Please try again.')
+              throw new Error(response.reason)
             }
 
-            const { user: userData }: { user: User } = response;
+            const { user: userData }: { user: User } = response
 
             if (userData) {
-              setUser({ ...defaultUser, ...userData });
-              onClose();
+              setUser({ ...defaultUser, ...userData })
+              onClose()
             }
           })
           .catch((err) => {
-            setModalTitle('Please try again.');
-            setModalDescription('The authentication failed.');
+            setModalTitle('Please try again.')
+            setModalDescription('The authentication failed.')
             setModalState(
               isMe() ? authModalStates.manage : authModalStates.initial,
-            );
+            )
             toast({
               title: 'Something went wrong',
               description: `The authentication request failed: ${err.message}.`,
               status: 'error',
-            });
-          });
-      }, 1000);
+            })
+          })
+      }, 1000)
 
-      return () => clearInterval(id);
+      return () => clearInterval(id)
     }
-  }, [modalState]);
+  }, [modalState])
 
   const renderModalBody = () => {
     switch (modalState) {
@@ -303,7 +303,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               </ButtonComponent>
             </Box>
           </>
-        );
+        )
 
       case 'manage':
         return (
@@ -318,7 +318,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
             <Box borderBottom="1px solid lightgrey" pb={5}></Box>
             <DisconnectAccounts />
           </>
-        );
+        )
 
       default:
         return (
@@ -331,9 +331,9 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               showLightning={showLightning}
             />
           </Box>
-        );
+        )
     }
-  };
+  }
 
   // TODO: Fix the line below. This is intended to check if the previous route was internal. Replace the "Go Back" button
   // with a "Go To Home" button if the previous route was external.
@@ -341,10 +341,9 @@ export const AuthModal = (authModalProps: IAuthModal) => {
 
   const handlePrivateRouteModalClose = () => {
     if (privateRoute) {
-      history.goBack();
-      onClose();
+      navigate(-1)
     }
-  };
+  }
 
   return (
     <Modal
@@ -391,5 +390,5 @@ export const AuthModal = (authModalProps: IAuthModal) => {
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}

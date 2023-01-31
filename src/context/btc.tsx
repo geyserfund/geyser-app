@@ -1,10 +1,11 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { fetchBitcoinRates } from '../api';
-import { BTC_IN_SATOSHI } from '../constants';
+import { createContext, useContext, useEffect, useState } from 'react'
+
+import { fetchBitcoinRates } from '../api'
+import { BTC_IN_SATOSHI } from '../constants'
 
 const defaultContext = {
   btcRate: 0,
-};
+}
 
 interface IBtcContext {
   /**
@@ -14,28 +15,28 @@ interface IBtcContext {
    *
    * (See: https://github.com/geyserfund/geyser-app/pull/361#discussion_r999694992)
    */
-  btcRate: number;
+  btcRate: number
 }
 
-export const BtcContext = createContext<IBtcContext>(defaultContext);
+export const BtcContext = createContext<IBtcContext>(defaultContext)
 
 export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
-  const [btcRate, setBtcRate] = useState(0);
+  const [btcRate, setBtcRate] = useState(0)
 
   useEffect(() => {
     const getBitcoinRates = async () => {
-      const usdRate = await fetchBitcoinRates();
-      const satoshirate = usdRate * BTC_IN_SATOSHI;
+      const usdRate = await fetchBitcoinRates()
+      const satoshirate = usdRate * BTC_IN_SATOSHI
 
-      setBtcRate(satoshirate);
-    };
+      setBtcRate(satoshirate)
+    }
 
-    getBitcoinRates();
-  }, []);
+    getBitcoinRates()
+  }, [])
 
   return (
     <BtcContext.Provider value={{ btcRate }}>{children}</BtcContext.Provider>
-  );
-};
+  )
+}
 
-export const useBtcContext = () => useContext(BtcContext);
+export const useBtcContext = () => useContext(BtcContext)

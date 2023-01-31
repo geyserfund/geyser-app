@@ -1,2 +1,2 @@
-export * from './PageLayout';
-export * from './StickToTop';
+export * from './PageLayout'
+export * from './StickToTop'

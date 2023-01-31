@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client'
 import {
   HStack,
   Input,
@@ -12,51 +12,51 @@ import {
   ModalOverlay,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import { AiOutlineUpload } from 'react-icons/ai';
-import { BiDollar } from 'react-icons/bi';
-import { SatoshiIconTilted } from '../../../../components/icons';
-import { FileUpload } from '../../../../components/molecules';
+} from '@chakra-ui/react'
+import { useEffect, useRef, useState } from 'react'
+import { AiOutlineUpload } from 'react-icons/ai'
+import { BiDollar } from 'react-icons/bi'
+
+import { SatoshiIconTilted } from '../../../../components/icons'
+import { FileUpload } from '../../../../components/molecules'
 import {
   ButtonComponent,
   ImageWithReload,
   TextArea,
   TextInputBox,
-} from '../../../../components/ui';
-
+} from '../../../../components/ui'
+import { ProjectRewardValidations } from '../../../../constants/validations'
+import { defaultProjectReward } from '../../../../defaults'
 import {
   MUTATION_CREATE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,
-} from '../../../../graphql/mutations';
-import { commaFormatted, toInt, useNotification } from '../../../../utils';
+} from '../../../../graphql/mutations'
 import {
   ProjectReward,
   RewardCurrency,
-} from '../../../../types/generated/graphql';
-import { defaultProjectReward } from '../../../../defaults';
+} from '../../../../types/generated/graphql'
+import { commaFormatted, toInt, useNotification } from '../../../../utils'
 import {
   ProjectRewardCreationVariables,
   ProjectRewardUpdateVariables,
-} from '../types';
-import { ProjectRewardValidations } from '../../../../constants/validations';
+} from '../types'
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (_: ProjectReward) => void;
-  reward?: ProjectReward;
-  isSatoshi: boolean;
-  projectId: number;
-};
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (_: ProjectReward) => void
+  reward?: ProjectReward
+  isSatoshi: boolean
+  projectId: number
+}
 
 type CreateRewardMutationResponseData = {
-  createProjectReward: ProjectReward;
-};
+  createProjectReward: ProjectReward
+}
 
 type UpdateRewardMutationResponseData = {
-  updateProjectReward: ProjectReward;
-};
+  updateProjectReward: ProjectReward
+}
 
 export const RewardAdditionModal = ({
   isOpen,
@@ -66,46 +66,41 @@ export const RewardAdditionModal = ({
   projectId,
   isSatoshi,
 }: Props) => {
-  const { toast } = useNotification();
+  const { toast } = useNotification()
 
   const [formCostDollarValue, setFormCostDollarValue] = useState(
     (availableReward || defaultProjectReward).cost / 100,
-  );
+  )
 
   const [_rewards, _setRewards] = useState<ProjectReward>(
     availableReward || defaultProjectReward,
-  );
+  )
 
-  const rewards = useRef(_rewards);
+  const rewards = useRef(_rewards)
 
   const setRewards = (value: ProjectReward) => {
-    rewards.current = value;
-    _setRewards(value);
-  };
+    rewards.current = value
+    _setRewards(value)
+  }
 
-  const [formError, setFormError] = useState<any>({});
+  const [formError, setFormError] = useState<any>({})
 
   const [createReward, { loading: createRewardLoading }] = useMutation<
     CreateRewardMutationResponseData,
     { input: ProjectRewardCreationVariables }
   >(MUTATION_CREATE_PROJECT_REWARD, {
     onCompleted(data) {
-      toast({
-        title: 'Successfully created!',
-        description: `Reward ${data.createProjectReward.name} was successfully created`,
-        status: 'success',
-      });
-      onSubmit(data.createProjectReward);
-      onClose();
+      onSubmit(data.createProjectReward)
+      onClose()
     },
     onError(error) {
       toast({
         title: 'Failed to create reward',
         description: `${error}`,
         status: 'error',
-      });
+      })
     },
-  });
+  })
 
   const [updateReward, { loading: updateRewardLoading }] = useMutation<
     UpdateRewardMutationResponseData,
@@ -116,18 +111,18 @@ export const RewardAdditionModal = ({
         title: 'Successfully updated!',
         description: `Reward ${updateProjectReward.name} was successfully updated`,
         status: 'success',
-      });
-      onSubmit(updateProjectReward);
-      onClose();
+      })
+      onSubmit(updateProjectReward)
+      onClose()
     },
     onError(error) {
       toast({
         title: 'Failed to update reward',
         description: `${error}`,
         status: 'error',
-      });
+      })
     },
-  });
+  })
 
   const getRewardCreationInputVariables =
     (): ProjectRewardCreationVariables => {
@@ -139,8 +134,8 @@ export const RewardAdditionModal = ({
         image: rewards.current.image || undefined,
         name: rewards.current.name,
         stock: rewards.current.stock || undefined,
-      };
-    };
+      }
+    }
 
   const getRewardUpdateInputVariables = (): ProjectRewardUpdateVariables => {
     return {
@@ -151,80 +146,80 @@ export const RewardAdditionModal = ({
       image: rewards.current.image || undefined,
       name: rewards.current.name,
       stock: rewards.current.stock || undefined,
-    };
-  };
+    }
+  }
 
   useEffect(() => {
     if (availableReward && availableReward !== rewards.current) {
-      setRewards(availableReward);
+      setRewards(availableReward)
     }
-  }, [availableReward]);
+  }, [availableReward])
 
   const handleTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setFormError({});
-    const { name, value } = event.target;
+    setFormError({})
+    const { name, value } = event.target
     if (name) {
-      setRewards({ ...rewards.current, [name]: value });
+      setRewards({ ...rewards.current, [name]: value })
     }
-  };
+  }
 
   const handleCostAmountChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setFormError({});
+    setFormError({})
 
     // Dollar value rounded to two decimal places
-    const dollarValue = Math.round(parseFloat(event.target.value) * 100) / 100;
+    const dollarValue = Math.round(parseFloat(event.target.value) * 100) / 100
 
-    setFormCostDollarValue(dollarValue);
+    setFormCostDollarValue(dollarValue)
 
     // set cost with the dollar value converted to cents
-    setRewards({ ...rewards.current, ...{ cost: dollarValue * 100 } });
-  };
+    setRewards({ ...rewards.current, ...{ cost: dollarValue * 100 } })
+  }
 
   const handleConfirmReward = () => {
-    const isValid = validateReward();
+    const isValid = validateReward()
 
     if (!isValid) {
-      return;
+      return
     }
 
     if ((rewards.current as ProjectReward).id) {
       updateReward({
         variables: { input: getRewardUpdateInputVariables() },
-      });
+      })
     } else {
       createReward({
         variables: {
           input: getRewardCreationInputVariables(),
         },
-      });
+      })
     }
-  };
+  }
 
   const handleUpload = (url: string) => {
-    setRewards({ ...rewards.current, image: url });
-  };
+    setRewards({ ...rewards.current, image: url })
+  }
 
   const validateReward = () => {
-    const errors: any = {};
-    let isValid = true;
+    const errors: any = {}
+    let isValid = true
 
     if (!rewards.current.name) {
-      errors.name = 'Name is a required field';
-      isValid = false;
+      errors.name = 'Name is a required field'
+      isValid = false
     } else if (
       rewards.current.name.length > ProjectRewardValidations.name.maxLength
     ) {
-      errors.name = `Name should be less than ${ProjectRewardValidations.name.maxLength} characters`;
-      isValid = false;
+      errors.name = `Name should be less than ${ProjectRewardValidations.name.maxLength} characters`
+      isValid = false
     }
 
     if (!rewards.current.cost || rewards.current.cost <= 0) {
-      errors.cost = `Cost must be greater than 0.`;
-      isValid = false;
+      errors.cost = `Cost must be greater than 0.`
+      isValid = false
     }
 
     if (
@@ -233,8 +228,8 @@ export const RewardAdditionModal = ({
     ) {
       errors.cost = `Cost must be less than $${commaFormatted(
         ProjectRewardValidations.cost.maxUSDCentsAmount / 100,
-      )}.`;
-      isValid = false;
+      )}.`
+      isValid = false
     }
 
     if (
@@ -242,16 +237,16 @@ export const RewardAdditionModal = ({
       rewards.current.description.length >
         ProjectRewardValidations.description.maxLength
     ) {
-      errors.description = `Description should be less than ${ProjectRewardValidations.description.maxLength} characters`;
-      isValid = false;
+      errors.description = `Description should be less than ${ProjectRewardValidations.description.maxLength} characters`
+      isValid = false
     }
 
     if (!isValid) {
-      setFormError(errors);
+      setFormError(errors)
     }
 
-    return isValid;
-  };
+    return isValid
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
@@ -356,7 +351,7 @@ export const RewardAdditionModal = ({
           <VStack spacing="10px">
             <ButtonComponent
               isLoading={createRewardLoading || updateRewardLoading}
-              isFullWidth
+              w="full"
               primary
               onClick={handleConfirmReward}
             >
@@ -366,5 +361,5 @@ export const RewardAdditionModal = ({
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}

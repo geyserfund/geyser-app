@@ -1,21 +1,20 @@
-import { Image } from '@chakra-ui/image';
-import { Box } from '@chakra-ui/layout';
-import React from 'react';
-import LogoDark from '../../assets/logo-dark.svg';
-import LogoName from '../../assets/logo-name-brand.svg';
-import LogoSmall from '../../assets/logo-brand.svg';
-import { useColorMode } from '@chakra-ui/color-mode';
-import { useMediaQuery } from '@chakra-ui/media-query';
-import { HTMLChakraProps } from '@chakra-ui/system';
-import { useHistory } from 'react-router';
-import { createUseStyles } from 'react-jss';
+import { Image } from '@chakra-ui/image'
+import { Box } from '@chakra-ui/layout'
+import { useMediaQuery } from '@chakra-ui/media-query'
+import { HTMLChakraProps, useColorMode } from '@chakra-ui/system'
+import { createUseStyles } from 'react-jss'
+import { useNavigate } from 'react-router'
+
+import LogoSmall from '../../assets/logo-brand.svg'
+import LogoDark from '../../assets/logo-dark.svg'
+import LogoName from '../../assets/logo-name-brand.svg'
 
 type Props = HTMLChakraProps<'div'> & {
-  className?: string;
-  imageClassName?: string;
-  full?: boolean;
-  small?: boolean;
-};
+  className?: string
+  imageClassName?: string
+  full?: boolean
+  small?: boolean
+}
 
 const useStyles = createUseStyles({
   container: {
@@ -23,7 +22,7 @@ const useStyles = createUseStyles({
       cursor: 'pointer',
     },
   },
-});
+})
 
 export const NavBarLogo = ({
   className,
@@ -32,12 +31,12 @@ export const NavBarLogo = ({
   small,
   ...rest
 }: Props) => {
-  const classes = useStyles();
-  const { colorMode } = useColorMode();
-  const history = useHistory();
-  const [isLargerThan720] = useMediaQuery('(min-width: 900px)');
+  const classes = useStyles()
+  const { colorMode } = useColorMode()
+  const navigate = useNavigate()
+  const [isLargerThan720] = useMediaQuery('(min-width: 900px)')
 
-  const useFullOne = (isLargerThan720 || full) && !small;
+  const useFullOne = (isLargerThan720 || full) && !small
 
   const imageToUse =
     colorMode === 'light'
@@ -46,11 +45,11 @@ export const NavBarLogo = ({
         : LogoSmall
       : useFullOne
       ? LogoName
-      : LogoDark;
+      : LogoDark
 
   const handleClick = () => {
-    history.push('/');
-  };
+    navigate('/')
+  }
 
   return (
     <Box
@@ -66,5 +65,5 @@ export const NavBarLogo = ({
         objectFit="contain"
       />
     </Box>
-  );
-};
+  )
+}

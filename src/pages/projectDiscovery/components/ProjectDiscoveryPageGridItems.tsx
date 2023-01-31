@@ -1,12 +1,11 @@
-import React from 'react';
-import { GridItem, SimpleGrid } from '@chakra-ui/react';
+import { GridItem, SimpleGrid } from '@chakra-ui/react'
 
-import { Project } from '../../../types/generated/graphql';
-import { ProjectsGridCard } from '../../../components/molecules/projectDisplay/ProjectsGridCard';
+import { ProjectsGridCard } from '../../../components/molecules/projectDisplay/ProjectsGridCard'
+import { Project } from '../../../types/generated/graphql'
 
 type Props = {
-  projects: Project[];
-};
+  projects: Project[]
+}
 
 export const ProjectDiscoveryPageGridItems = ({ projects }: Props) => {
   return (
@@ -17,5 +16,5 @@ export const ProjectDiscoveryPageGridItems = ({ projects }: Props) => {
         </GridItem>
       ))}
     </SimpleGrid>
-  );
-};
+  )
+}

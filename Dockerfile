@@ -29,13 +29,13 @@ FROM dependencies AS build
 WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
-COPY tsconfig.json .eslintrc.js .prettierrc ./
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.cjs .prettierrc ./
 
-ARG REACT_APP_API_ENDPOINT
-ARG REACT_APP_AIR_TABLE_KEY
-ARG REACT_APP_GIPHY_API_KEY
-ARG REACT_APP_ENV
-ARG REACT_APP_AUTH_SERVICE_ENDPOINT
+ARG VITE_APP_API_ENDPOINT
+ARG VITE_APP_AIR_TABLE_KEY
+ARG VITE_APP_GIPHY_API_KEY
+ARG VITE_APP_ENV
+ARG VITE_APP_AUTH_SERVICE_ENDPOINT
 RUN /bin/sh -c "printenv > .env && yarn build"
 RUN rm -rf ./src
 
@@ -49,7 +49,7 @@ COPY server.ts package.json yarn.lock ./
 
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
-COPY --from=build /usr/app/build ./build
+COPY --from=build /usr/app/dist ./dist
 
 # RUN yarn global add serve
 CMD node -r dotenv/config server.ts

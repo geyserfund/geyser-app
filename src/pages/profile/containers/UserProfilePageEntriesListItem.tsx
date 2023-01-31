@@ -1,12 +1,12 @@
-import React from 'react';
-import { gql, useQuery } from '@apollo/client';
-import { Entry } from '../../../types/generated/graphql';
-import { ProjectEntryCard } from '../../../components/molecules';
-import { toInt } from '../../../utils';
+import { gql, useQuery } from '@apollo/client'
+
+import { ProjectEntryCard } from '../../../components/molecules'
+import { Entry } from '../../../types/generated/graphql'
+import { toInt } from '../../../utils'
 
 type Props = {
-  entryID: number;
-};
+  entryID: number
+}
 
 const GET_ENTRY = gql`
   query GetEntry($entryID: BigInt!) {
@@ -24,25 +24,25 @@ const GET_ENTRY = gql`
       }
     }
   }
-`;
+`
 
 type ResponseData = {
-  entry: Entry;
-};
+  entry: Entry
+}
 
 type QueryVariables = {
-  entryID: number;
-};
+  entryID: number
+}
 
 export const UserProfilePageEntriesListItem = ({ entryID }: Props) => {
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_ENTRY,
     { variables: { entryID: toInt(entryID) } },
-  );
+  )
 
   if (error || loading) {
-    return null;
+    return null
   }
 
-  return data ? <ProjectEntryCard entry={data.entry} /> : null;
-};
+  return data ? <ProjectEntryCard entry={data.entry} /> : null
+}

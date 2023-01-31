@@ -1,18 +1,22 @@
-import React from 'react';
-import { Box } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react'
 
-import { TopBanner } from '../landing/components';
-import { AppFooter } from '../../components/molecules';
-import { ProjectDiscoveryPageGridSection } from './components';
+import { AppFooter } from '../../components/molecules'
+import { TopBanner } from '../landing/components'
+import { ProjectDiscoveryPageGridSection } from './components'
 
 export const ProjectDiscoveryPage = () => {
   return (
-    <Box position="relative" width="full" height="full">
+    <VStack
+      position="relative"
+      width="100%"
+      height="100%"
+      justifyContent="space-between"
+    >
       <TopBanner />
 
       <ProjectDiscoveryPageGridSection />
 
       <AppFooter />
-    </Box>
-  );
-};
+    </VStack>
+  )
+}

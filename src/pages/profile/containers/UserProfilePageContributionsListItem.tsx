@@ -1,12 +1,12 @@
-import React from 'react';
-import { FundingTx, Project } from '../../../types/generated/graphql';
-import { ProjectFundingContributionsFeedItem } from '../../../components/molecules/projectActivity/ProjectFundingContributionsFeedItem';
-import { gql, useQuery } from '@apollo/client';
-import { toInt } from '../../../utils';
+import { gql, useQuery } from '@apollo/client'
+
+import { ProjectFundingContributionsFeedItem } from '../../../components/molecules/projectActivity/ProjectFundingContributionsFeedItem'
+import { FundingTx, Project } from '../../../types/generated/graphql'
+import { toInt } from '../../../utils'
 
 type Props = {
-  fundingTxID: number;
-};
+  fundingTxID: number
+}
 
 const GET_FUNDING_TX_FOR_USER_CONTRIBUTION = gql`
   query GetFundingTxForUserContribution($fundingTxId: BigInt!) {
@@ -38,6 +38,7 @@ const GET_FUNDING_TX_FOR_USER_CONTRIBUTION = gql`
           id
           name
           title
+          thumbnailImage
           image
         }
         ... on Entry {
@@ -47,15 +48,15 @@ const GET_FUNDING_TX_FOR_USER_CONTRIBUTION = gql`
       }
     }
   }
-`;
+`
 
 type ResponseData = {
-  fundingTx: FundingTx;
-};
+  fundingTx: FundingTx
+}
 
 type QueryVariables = {
-  fundingTxId: number;
-};
+  fundingTxId: number
+}
 
 export const UserProfilePageContributionsListItem = ({
   fundingTxID,
@@ -63,16 +64,16 @@ export const UserProfilePageContributionsListItem = ({
   const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
     GET_FUNDING_TX_FOR_USER_CONTRIBUTION,
     { variables: { fundingTxId: toInt(fundingTxID) } },
-  );
+  )
 
   if (error || loading) {
-    return null;
+    return null
   }
 
   const project =
     data?.fundingTx.sourceResource?.__typename === 'Project'
       ? (data.fundingTx.sourceResource! as Project)
-      : undefined;
+      : undefined
 
   return data ? (
     <ProjectFundingContributionsFeedItem
@@ -83,5 +84,5 @@ export const UserProfilePageContributionsListItem = ({
       }}
       linkedProject={project}
     />
-  ) : null;
-};
+  ) : null
+}

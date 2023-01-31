@@ -1,1 +1,1 @@
-export const hasOnChain = (name: string) => name !== 'anatomyofbitcoin';
+export const hasOnChain = (name: string) => name !== 'anatomyofbitcoin'

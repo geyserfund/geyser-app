@@ -1,46 +1,46 @@
 import {
-  Text,
-  Grid,
   Box,
-  VStack,
+  Grid,
   GridItem,
-  UnorderedList,
-  ListItem,
   Image,
+  ListItem,
+  Text,
+  UnorderedList,
   useMediaQuery,
-} from '@chakra-ui/react';
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { BiLeftArrowAlt } from 'react-icons/bi';
-import { createUseStyles } from 'react-jss';
+  VStack,
+} from '@chakra-ui/react'
+import { BiLeftArrowAlt } from 'react-icons/bi'
+import { createUseStyles } from 'react-jss'
+import { useNavigate } from 'react-router-dom'
 
-import { TwitterConnect } from '../../components/molecules';
-import { ButtonComponent } from '../../components/ui';
-import { useAuthContext } from '../../context';
-import { hasTwitterAccount, isMobileMode } from '../../utils';
-import { colors, getPath, LaunchImage2Url } from '../../constants';
+import { TwitterConnect } from '../../components/molecules'
+import { ButtonComponent } from '../../components/ui'
+import { getPath, LaunchImage2Url } from '../../constants'
+import { useAuthContext } from '../../context'
+import { colors } from '../../styles'
+import { hasTwitterAccount, useMobileMode } from '../../utils'
 
 const useStyles = createUseStyles({
   backIcon: {
     fontSize: '25px',
   },
-});
+})
 
 export const PublicProjectLaunchPage = () => {
-  const isMobile = isMobileMode();
-  const { loading, user } = useAuthContext();
-  const history = useHistory();
-  const classes = useStyles();
+  const isMobile = useMobileMode()
+  const { loading, user } = useAuthContext()
+  const navigate = useNavigate()
+  const classes = useStyles()
 
   const handleBack = () => {
-    history.push('/');
-  };
+    navigate('/')
+  }
 
   const handleNext = () => {
-    history.push(getPath('privateProjectLaunch'));
-  };
+    navigate(getPath('privateProjectLaunch'))
+  }
 
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
   return (
     <Box
@@ -144,7 +144,7 @@ export const PublicProjectLaunchPage = () => {
                   </VStack>
                 ) : (
                   <Box width="100%" paddingTop={5}>
-                    <ButtonComponent primary isFullWidth onClick={handleNext}>
+                    <ButtonComponent primary w="full" onClick={handleNext}>
                       Continue
                     </ButtonComponent>
                   </Box>
@@ -155,5 +155,5 @@ export const PublicProjectLaunchPage = () => {
         </GridItem>
       </Grid>
     </Box>
-  );
-};
+  )
+}

@@ -1,5 +1,4 @@
-import { Box, BoxProps } from '@chakra-ui/react';
-import React from 'react';
+import { Box, BoxProps } from '@chakra-ui/react'
 
 export const UserSkeleton = (props: BoxProps) => {
   return (
@@ -10,5 +9,5 @@ export const UserSkeleton = (props: BoxProps) => {
       backgroundColor="brand.gray50"
       {...props}
     />
-  );
-};
+  )
+}

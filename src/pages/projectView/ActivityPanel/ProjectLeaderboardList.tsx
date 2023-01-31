@@ -1,23 +1,23 @@
-import { VStack } from '@chakra-ui/react';
-import React from 'react';
-import { ProjectFundingLeaderboardFeedItem } from '../../../components/molecules';
-import { ID } from '../../../constants/components';
-import { ScrollInvoke } from '../../../helpers';
-import { PaginationHookReturn } from '../../../hooks/types';
-import { Funder, Project } from '../../../types/generated/graphql';
-import { isMobileMode } from '../../../utils';
+import { VStack } from '@chakra-ui/react'
+
+import { ProjectFundingLeaderboardFeedItem } from '../../../components/molecules'
+import { ID } from '../../../constants/components'
+import { ScrollInvoke } from '../../../helpers'
+import { PaginationHookReturn } from '../../../hooks/types'
+import { Funder, Project } from '../../../types/generated/graphql'
+import { useMobileMode } from '../../../utils'
 
 interface ProjectLeaderboardListProps {
-  project: Project;
-  funders: PaginationHookReturn<Funder>;
+  project: Project
+  funders: PaginationHookReturn<Funder>
 }
 
 export const ProjectLeaderboardList = ({
   project,
   funders,
 }: ProjectLeaderboardListProps) => {
-  const isMobile = isMobileMode();
-  const id = ID.project.activity.leaderboard;
+  const isMobile = useMobileMode()
+  const id = ID.project.activity.leaderboard
   return (
     <VStack
       id={id}
@@ -42,5 +42,5 @@ export const ProjectLeaderboardList = ({
         noMoreItems={funders.noMoreItems}
       />
     </VStack>
-  );
-};
+  )
+}

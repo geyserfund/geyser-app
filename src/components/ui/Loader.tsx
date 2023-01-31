@@ -1,9 +1,8 @@
-import { Box, BoxProps } from '@chakra-ui/react';
-import { Spinner } from '@chakra-ui/spinner';
-import React from 'react';
+import { Box, BoxProps } from '@chakra-ui/react'
+import { Spinner } from '@chakra-ui/spinner'
 
 interface ILoader extends BoxProps {
-  size?: string;
+  size?: string
 }
 
 const Loader = ({ size, ...rest }: ILoader) => (
@@ -22,6 +21,6 @@ const Loader = ({ size, ...rest }: ILoader) => (
       size={size ? size : 'xl'}
     />
   </Box>
-);
+)
 
-export default Loader;
+export default Loader

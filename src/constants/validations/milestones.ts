@@ -5,4 +5,4 @@ export const MilestoneValidations = {
   description: {
     maxLength: 250,
   },
-};
+}

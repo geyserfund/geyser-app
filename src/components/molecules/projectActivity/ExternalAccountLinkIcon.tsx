@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
-import { Button, Image, Link, Text } from '@chakra-ui/react';
-import { FundingTx } from '../../../types/generated/graphql';
+import { Button, Image, Link, Text } from '@chakra-ui/react'
+import { useMemo } from 'react'
+
 import {
   BoostCLILogoUrl,
   BreezLogoUrl,
@@ -8,11 +8,12 @@ import {
   CuriocasterLogoUrl,
   FountainLogoUrl,
   PodverseLogoUrl,
-} from '../../../constants';
+} from '../../../constants'
+import { FundingTx } from '../../../types/generated/graphql'
 
 type ExternalAccountLinkIconProps = {
-  fundingTx: FundingTx;
-};
+  fundingTx: FundingTx
+}
 
 const sourceUrlMap: any = {
   Curiocaster: CuriocasterLogoUrl,
@@ -21,30 +22,30 @@ const sourceUrlMap: any = {
   Breez: BreezLogoUrl,
   Podverse: PodverseLogoUrl,
   Fountain: FountainLogoUrl,
-};
+}
 
 export const ExternalAccountLinkIcon = ({
   fundingTx,
 }: ExternalAccountLinkIconProps) => {
-  const { source, funder } = fundingTx;
+  const { source, funder } = fundingTx
 
   const getExternalAccount = (type: string) => {
     return funder.user?.externalAccounts.find(
       (account) => account?.type === type,
-    )?.externalUsername;
-  };
+    )?.externalUsername
+  }
 
   const linkDestination: string = useMemo(() => {
     switch (source) {
       case 'Fountain':
-        return `https://www.fountain.fm/${getExternalAccount('Fountain')}`;
+        return `https://www.fountain.fm/${getExternalAccount('Fountain')}`
       default:
-        return '';
+        return ''
     }
-  }, [source]);
+  }, [source])
 
   if (source === 'geyser') {
-    return null;
+    return null
   }
 
   return (
@@ -61,5 +62,5 @@ export const ExternalAccountLinkIcon = ({
         </Button>
       </Link>
     </>
-  );
-};
+  )
+}

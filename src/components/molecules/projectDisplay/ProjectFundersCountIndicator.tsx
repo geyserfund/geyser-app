@@ -1,11 +1,11 @@
-import { HStack, Text } from '@chakra-ui/react';
-import React from 'react';
-import { BsHeartFill } from 'react-icons/bs';
-import { colors } from '../../../constants';
+import { HStack, Text } from '@chakra-ui/react'
+import { BsHeartFill } from 'react-icons/bs'
+
+import { colors } from '../../../styles'
 
 type Props = {
-  count: number;
-};
+  count: number
+}
 
 export const ProjectFundersCountIndicator = ({ count }: Props) => (
   <HStack
@@ -19,4 +19,4 @@ export const ProjectFundersCountIndicator = ({ count }: Props) => (
     </Text>
     <BsHeartFill color={colors.neutral500} />
   </HStack>
-);
+)

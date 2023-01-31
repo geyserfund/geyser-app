@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const QUERY_GET_ENTRY = gql`
   query Entry($id: BigInt!) {
@@ -26,7 +26,7 @@ export const QUERY_GET_ENTRY = gql`
       }
     }
   }
-`;
+`
 
 /**
  * @returns `Entry`
@@ -50,7 +50,7 @@ export const QUERY_ALL_GEYSER_PROJECT_ENTRIES = gql`
       }
     }
   }
-`;
+`
 
 export const QUERY_GET_SIGNED_URL = gql`
   query GetSignedUploadUrl($input: FileUploadInput!) {
@@ -59,4 +59,4 @@ export const QUERY_GET_SIGNED_URL = gql`
       distributionUrl
     }
   }
-`;
+`

@@ -1,8 +1,9 @@
-import classNames from 'classnames';
-import React, { useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import TweetEmbed from 'react-tweet-embed';
-import Loader from './Loader';
+import classNames from 'classnames'
+import { useState } from 'react'
+import { createUseStyles } from 'react-jss'
+import TweetEmbed from 'react-tweet-embed'
+
+import Loader from './Loader'
 
 const useStyles = createUseStyles({
   twitter: {
@@ -13,13 +14,13 @@ const useStyles = createUseStyles({
       width: '200px !important',
     },
   },
-});
+})
 
 interface ITwitterComponent {
-  id: string;
-  options?: any;
-  className?: string;
-  [key: string]: any;
+  id: string
+  options?: any
+  className?: string
+  [key: string]: any
 }
 
 export const TwitterComponent = ({
@@ -28,21 +29,21 @@ export const TwitterComponent = ({
   id,
   ...rest
 }: ITwitterComponent) => {
-  const classes = useStyles();
-  const [twitterLoading, setTwitterLoading] = useState(true);
+  const classes = useStyles()
+  const [twitterLoading, setTwitterLoading] = useState(true)
 
   return (
     <>
       {twitterLoading && <Loader />}
       <TweetEmbed
         className={classNames(classes.twitter, className)}
-        id={id}
+        tweetId={id}
         options={{ conversation: 'none', ...options }}
         onTweetLoadSuccess={() => setTwitterLoading(false)}
         {...rest}
       />
     </>
-  );
-};
+  )
+}
 
-export default TwitterComponent;
+export default TwitterComponent

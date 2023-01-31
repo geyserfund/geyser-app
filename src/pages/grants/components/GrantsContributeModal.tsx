@@ -1,51 +1,52 @@
+import { useQuery } from '@apollo/client'
 import {
-  VStack,
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalCloseButton,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
   Box,
-  Text,
+  Button,
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   InputGroup,
   InputLeftElement,
   Link as ChakraLink,
-} from '@chakra-ui/react';
-import React, { useState, useEffect, useMemo } from 'react';
-import { FaCheck } from 'react-icons/fa';
-import { useQuery } from '@apollo/client';
-import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants';
-import { useAuthContext } from '../../../context';
-import { useFormState, useFundingFlow } from '../../../hooks';
-import { useBTCConverter } from '../../../helpers';
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  Textarea,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
+import { useEffect, useMemo, useState } from 'react'
+import { FaCheck } from 'react-icons/fa'
+
+import { createGrantContributionRecord } from '../../../api'
+import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants'
+import { useAuthContext } from '../../../context'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
+import { useBTCConverter } from '../../../helpers'
+import { useFormState, useFundingFlow } from '../../../hooks'
+import { FormStateError } from '../../../interfaces'
+import { USDCents } from '../../../types'
 import {
   FundingInput,
   FundingResourceType,
-} from '../../../types/generated/graphql';
-import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/ActivityPanel/ProjectFundingQRScreenQRCodeSection';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql';
-import { createGrantContributionRecord } from '../../../api';
-import { FormStateError } from '../../../interfaces';
-import { toInt, useNotification } from '../../../utils';
-import { USDCents } from '../../../types';
+} from '../../../types/generated/graphql'
+import { toInt, useNotification } from '../../../utils'
+import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/ActivityPanel/ProjectFundingQRScreenQRCodeSection'
 
-const GRANTS_PROJECT_NAME = 'grants';
-const defaultModalHeader = 'Contribute';
+const GRANTS_PROJECT_NAME = 'grants'
+const defaultModalHeader = 'Contribute'
 
 export type GrantContributeInput = {
-  amount: number;
-  email?: string;
-  comment?: string;
-  imageUrl?: string;
-  name?: string;
-};
+  amount: number
+  email?: string
+  comment?: string
+  imageUrl?: string
+  name?: string
+}
 
 export const defaultGrantContribution = {
   amount: 0,
@@ -53,22 +54,22 @@ export const defaultGrantContribution = {
   comment: '',
   link: '',
   name: '',
-};
+}
 
 export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
-  const { toast } = useNotification();
-  const { user } = useAuthContext();
-  const { getSatoshisFromUSDCents } = useBTCConverter();
-  const fundingFlow = useFundingFlow();
+  const { toast } = useNotification()
+  const { user } = useAuthContext()
+  const { getSatoshisFromUSDCents } = useBTCConverter()
+  const fundingFlow = useFundingFlow()
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [modalHeader, setModalHeader] = useState(defaultModalHeader);
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [modalHeader, setModalHeader] = useState(defaultModalHeader)
 
   const { state, setState, setTarget, setValue } =
-    useFormState<GrantContributeInput>(defaultGrantContribution);
+    useFormState<GrantContributeInput>(defaultGrantContribution)
 
   const [formError, setFormError] =
-    useState<FormStateError<GrantContributeInput>>();
+    useState<FormStateError<GrantContributeInput>>()
 
   const { data: grantsData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: GRANTS_PROJECT_NAME } },
@@ -78,7 +79,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
           status: 'error',
           title: 'Failed to fetch grants project.',
           description: 'Please refresh the page and try again.',
-        });
+        })
       }
     },
     onError() {
@@ -86,9 +87,9 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
         status: 'error',
         title: 'Failed to fetch grants project.',
         description: 'Please refresh the page and try again.',
-      });
+      })
     },
-  });
+  })
 
   const {
     fundState,
@@ -96,21 +97,21 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
     gotoNextStage,
     resetFundingFlow,
     requestFunding,
-  } = fundingFlow;
+  } = fundingFlow
 
   useEffect(() => {
-    setFormError({});
-  }, [state]);
+    setFormError({})
+  }, [state])
 
   useEffect(() => {
     if (fundState === fundingStages.completed && onLink) {
-      onLink(state);
+      onLink(state)
     }
-  }, [fundState]);
+  }, [fundState])
 
   useEffect(() => {
     if (fundState === fundingStages.completed) {
-      setModalHeader('Contribution Successful');
+      setModalHeader('Contribution Successful')
       const data = {
         records: [
           {
@@ -123,36 +124,36 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
             },
           },
         ],
-      };
+      }
       try {
-        createGrantContributionRecord(data);
+        createGrantContributionRecord(data)
       } catch (error) {
-        console.log('checking error', error);
+        console.log('checking error', error)
       }
     }
-  }, [fundState]);
+  }, [fundState])
 
   const linkChangeHandler = (e: any) => {
-    setValue('imageUrl', e.target.value);
-  };
+    setValue('imageUrl', e.target.value)
+  }
 
   const handleClose = () => {
-    resetFundingFlow();
-    setModalHeader(defaultModalHeader);
-    setState(defaultGrantContribution);
-    onClose();
-  };
+    resetFundingFlow()
+    setModalHeader(defaultModalHeader)
+    setState(defaultGrantContribution)
+    onClose()
+  }
 
   const handleFormConfirmClick = () => {
-    const isValid = validateForm();
+    const isValid = validateForm()
 
     if (!grantsData?.project?.id) {
       toast({
         status: 'error',
         title: 'Something went wrong.',
         description: 'Please refresh the page and try again.',
-      });
-      return;
+      })
+      return
     }
 
     if (isValid) {
@@ -173,32 +174,32 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
           resourceId: toInt(grantsData?.project.id),
           resourceType: FundingResourceType.Project,
         },
-      };
+      }
 
-      requestFunding(input);
-      gotoNextStage();
+      requestFunding(input)
+      gotoNextStage()
     }
-  };
+  }
 
   const validateForm = () => {
     if (state.amount && state.amount !== 0) {
-      return true;
+      return true
     }
 
     if (!state.amount || state.amount === 0) {
-      setFormError({ amount: 'amount is required' });
-      return false;
+      setFormError({ amount: 'amount is required' })
+      return false
     }
 
     if (state.amount > MAX_FUNDING_AMOUNT_USD) {
       setFormError({
         amount: `amount cannot be greater than $${MAX_FUNDING_AMOUNT_USD} in value`,
-      });
-      return false;
+      })
+      return false
     }
 
-    return true;
-  };
+    return true
+  }
 
   const OverlayOne = useMemo(
     () => (
@@ -208,7 +209,7 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
       />
     ),
     [],
-  );
+  )
 
   const contributionForm = () => (
     <Box>
@@ -335,12 +336,12 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
         />
       </Box>
       <Box mt={4}>
-        <Button bg="brand.primary" onClick={handleFormConfirmClick} isFullWidth>
+        <Button bg="brand.primary" onClick={handleFormConfirmClick} w="full">
           Confirm
         </Button>
       </Box>
     </Box>
-  );
+  )
 
   const completedScreen = () => {
     return (
@@ -393,23 +394,23 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
           </Text>
         )}
       </VStack>
-    );
-  };
+    )
+  }
 
   const qrSection = () => (
     <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
-  );
+  )
 
   const renderModalBody = () => {
     switch (fundState) {
       case fundingStages.started:
-        return qrSection();
+        return qrSection()
       case fundingStages.completed:
-        return completedScreen();
+        return completedScreen()
       default:
-        return contributionForm();
+        return contributionForm()
     }
-  };
+  }
 
   return (
     <>
@@ -419,8 +420,8 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
         px={10}
         mr="2"
         onClick={() => {
-          onOpen();
-          gotoNextStage();
+          onOpen()
+          gotoNextStage()
         }}
         backgroundColor="brand.primary"
       >
@@ -438,5 +439,5 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}

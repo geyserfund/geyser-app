@@ -1,9 +1,10 @@
-import { DateTime, Interval } from 'luxon';
-import { IBadge, IFunder, IProject } from '../interfaces';
-import { Funder, Project } from '../types/generated/graphql';
+import { DateTime, Interval } from 'luxon'
+
+import { IBadge, IFunder } from '../interfaces'
+import { Funder } from '../types/generated/graphql'
 
 interface IBadges {
-  [threshold: string]: IBadge;
+  [threshold: string]: IBadge
 }
 
 const amountBadges: IBadges = {
@@ -23,7 +24,7 @@ const amountBadges: IBadges = {
     badge: '⭐️',
     description: 'This user funded more than 10,000,000 sats!',
   },
-};
+}
 
 const roleBadges: IBadges = {
   funder: {
@@ -35,12 +36,12 @@ const roleBadges: IBadges = {
     description:
       'This user funded within the first 24 hours of the project start!',
   },
-};
+}
 
 interface Props {
-  creationDateStringOfFundedContent: string;
-  funder: Funder | IFunder;
-  useShortForm?: Boolean;
+  creationDateStringOfFundedContent: string
+  funder: Funder | IFunder
+  useShortForm?: boolean
 }
 
 /**
@@ -53,38 +54,35 @@ export const computeFunderBadges = ({
   funder,
   useShortForm = true,
 }: Props): IBadge[] => {
-  const { amountFunded, timesFunded } = funder;
+  const { amountFunded, timesFunded } = funder
 
   if (!amountFunded || amountFunded === 0) {
-    return [];
+    return []
   }
 
-  const funderBadges: IBadge[] = [];
+  const funderBadges: IBadge[] = []
 
   // Check if earned amount badge
   const amountBadgeIndex: string | undefined = Object.keys(amountBadges)
     .reverse()
-    .find((threshold) => amountFunded > Number(threshold));
+    .find((threshold) => amountFunded > Number(threshold))
 
   if (amountBadgeIndex) {
-    funderBadges.push(amountBadges[amountBadgeIndex]);
+    funderBadges.push(amountBadges[amountBadgeIndex])
   }
 
   // Check if early funder
   if (funder.confirmedAt) {
     const funderConfirmedAt = DateTime.fromMillis(
       parseInt(funder.confirmedAt, 10),
-    );
+    )
     const projectCreatedAt = DateTime.fromMillis(
       parseInt(creationDateStringOfFundedContent, 10),
-    );
-    const interval = Interval.fromDateTimes(
-      projectCreatedAt,
-      funderConfirmedAt,
-    );
+    )
+    const interval = Interval.fromDateTimes(projectCreatedAt, funderConfirmedAt)
 
     if (interval.length('hours') < 24) {
-      funderBadges.push(roleBadges.earlyFunder);
+      funderBadges.push(roleBadges.earlyFunder)
     }
   }
 
@@ -93,11 +91,11 @@ export const computeFunderBadges = ({
     funderBadges.push({
       badge: `${timesFunded}x`,
       description: `This user funded this project ${timesFunded} times!`,
-    });
+    })
   }
 
   if (funderBadges.length === 0 || useShortForm) {
-    return funderBadges;
+    return funderBadges
   }
 
   const longFormBadges = funderBadges.map((funderBadge) => ({
@@ -105,7 +103,7 @@ export const computeFunderBadges = ({
     badge: funderBadge.badge.includes('Funder')
       ? funderBadge.badge
       : funderBadge.badge + ' Funder',
-  }));
+  }))
 
-  return longFormBadges;
-};
+  return longFormBadges
+}

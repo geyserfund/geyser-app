@@ -1,20 +1,20 @@
-import { Box, VStack } from '@chakra-ui/react';
-import classNames from 'classnames';
-import React from 'react';
-import { createUseStyles } from 'react-jss';
-import { fadeOut, slideInLeft } from '../../css';
-import { isDarkMode, isMobileMode } from '../../utils';
-import { AppFooter } from '../../components/molecules';
-import { EntryDetails } from './EntryDetails';
-import { Entry } from '../../types/generated/graphql';
-import { MobileViews, useProject } from '../projectView';
+import { Box, VStack } from '@chakra-ui/react'
+import classNames from 'classnames'
+import { createUseStyles } from 'react-jss'
 
-type Rules = string;
+import { AppFooter } from '../../components/molecules'
+import { fadeOut, slideInLeft } from '../../styles/animations'
+import { Entry } from '../../types/generated/graphql'
+import { useDarkMode, useMobileMode } from '../../utils'
+import { MobileViews, useProject } from '../projectView'
+import { EntryDetails } from './EntryDetails'
+
+type Rules = string
 
 interface IStyles {
-  isMobile: boolean;
-  inView: boolean;
-  fadeStarted?: boolean;
+  isMobile: boolean
+  inView: boolean
+  fadeStarted?: boolean
 }
 
 const useStyles = createUseStyles<Rules, IStyles>({
@@ -43,22 +43,22 @@ const useStyles = createUseStyles<Rules, IStyles>({
   }),
   ...slideInLeft,
   ...fadeOut,
-});
+})
 
 interface IActivityProps {
-  entry: Entry;
-  detailOpen: boolean;
+  entry: Entry
+  detailOpen: boolean
 }
 
 export const EntryContainer = ({ entry }: IActivityProps) => {
-  const isMobile = isMobileMode();
-  const isDark = isDarkMode();
+  const isMobile = useMobileMode()
+  const isDark = useDarkMode()
 
-  const { mobileView } = useProject();
+  const { mobileView } = useProject()
 
-  const inView = mobileView === MobileViews.description;
+  const inView = mobileView === MobileViews.description
 
-  const classes = useStyles({ isMobile, inView });
+  const classes = useStyles({ isMobile, inView })
 
   return (
     <Box
@@ -87,5 +87,5 @@ export const EntryContainer = ({ entry }: IActivityProps) => {
         <AppFooter />
       </Box>
     </Box>
-  );
-};
+  )
+}

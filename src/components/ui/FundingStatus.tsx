@@ -1,8 +1,7 @@
-import { Box, Text } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Text } from '@chakra-ui/react'
 
 interface IFundingStatusProp {
-  open?: boolean;
+  open?: boolean
 }
 
 export const FundingStatus = ({ open }: IFundingStatusProp) => (
@@ -16,4 +15,4 @@ export const FundingStatus = ({ open }: IFundingStatusProp) => (
     />
     <Text>{open ? 'CROWDFUNDING OPEN' : 'CROWDFUNDING CLOSED'}</Text>
   </Box>
-);
+)

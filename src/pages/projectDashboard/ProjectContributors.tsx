@@ -1,5 +1,7 @@
 import {
+  Checkbox,
   GridItem,
+  HStack,
   Table,
   TableContainer,
   Tbody,
@@ -8,41 +10,39 @@ import {
   Th,
   Thead,
   Tr,
-  HStack,
   VStack,
-  Checkbox,
-} from '@chakra-ui/react';
-import React, { useEffect, useMemo, useState } from 'react';
-import { CSVLink } from 'react-csv';
+} from '@chakra-ui/react'
+import { DateTime } from 'luxon'
+import { useEffect, useMemo, useState } from 'react'
+import { CSVLink } from 'react-csv'
+import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi'
 
-import { Funder, Project } from '../../types/generated/graphql';
+import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges'
 import {
-  LinkableAvatar,
-  SatoshiAmount,
   AnonymousAvatar,
   ButtonComponent,
-} from '../../components/ui';
-import { DateTime } from 'luxon';
-import { computeFunderBadges } from '../../helpers';
-import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges';
-import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi';
-import { useQueryWithPagination } from '../../hooks';
-import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql';
-import Loader from '../../components/ui/Loader';
-import { toInt } from '../../utils';
+  LinkableAvatar,
+  SatoshiAmount,
+} from '../../components/ui'
+import Loader from '../../components/ui/Loader'
+import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql'
+import { computeFunderBadges } from '../../helpers'
+import { useQueryWithPagination } from '../../hooks'
+import { Funder, Project } from '../../types/generated/graphql'
+import { toInt } from '../../utils'
 
 type TableData = {
-  header: string;
-  key: string | number;
-  render?: (val: any) => React.ReactNode;
-  value?: (val: any) => string | number;
-};
+  header: string
+  key: string | number
+  render?: (val: any) => React.ReactNode
+  value?: (val: any) => string | number
+}
 
 export const ProjectContributors = ({ project }: { project: Project }) => {
-  const [selectedFunders, setSelectedFunders] = useState<Funder[]>([]);
-  const [csvData, setCsvData] = useState<(string | number)[][]>([]);
+  const [selectedFunders, setSelectedFunders] = useState<Funder[]>([])
+  const [csvData, setCsvData] = useState<(string | number)[][]>([])
 
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState(false)
 
   const funders = useQueryWithPagination<Funder>({
     queryName: 'getDashboardFunders',
@@ -52,7 +52,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
     orderBy: {
       confirmedAt: 'desc',
     },
-  });
+  })
 
   useEffect(() => {
     if (
@@ -61,21 +61,21 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
       !funders.isLoadingMore.current &&
       !funders.noMoreItems.current
     ) {
-      funders.fetchNext();
+      funders.fetchNext()
     }
-  }, [funders]);
+  }, [funders])
 
   const tableData: TableData[] = useMemo(
     () => [
       {
         header: 'Name',
         key: 'name',
-        render: (val: Funder) => {
+        render(val: Funder) {
           const funderBadges = computeFunderBadges({
             creationDateStringOfFundedContent: project.createdAt || '',
             funder: val,
-          });
-          const isFunderAnonymous = Boolean(val?.user) === false;
+          })
+          const isFunderAnonymous = Boolean(val?.user) === false
           if (isFunderAnonymous) {
             return (
               <AnonymousAvatar
@@ -83,7 +83,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
                 imageSize={'20px'}
                 textColor="brand.neutral900"
               />
-            );
+            )
           }
 
           return (
@@ -94,7 +94,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
               badgeNames={funderBadges.map((badge) => badge.badge)}
               badgeElements={renderFunderBadges(funderBadges)}
             />
-          );
+          )
         },
       },
       {
@@ -109,89 +109,89 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
       {
         header: 'Reward',
         key: 'reward',
-        value: (val: Funder) => {
-          let value = '';
+        value(val: Funder) {
+          let value = ''
           val.rewards.map((reward) => {
             value = value
               ? `${value}, ${reward?.projectReward.name}(${reward?.quantity}x)`
-              : `${reward?.projectReward.name}(${reward?.quantity}x)`;
-          });
-          return value;
+              : `${reward?.projectReward.name}(${reward?.quantity}x)`
+          })
+          return value
         },
       },
       {
         header: 'Date',
         key: 'date',
-        value: (val: Funder) => {
+        value(val: Funder) {
           const dateString = val.confirmedAt
             ? DateTime.fromMillis(toInt(val.confirmedAt)).toFormat(
                 'yyyy / MM / dd',
               )
-            : '-';
-          return dateString;
+            : '-'
+          return dateString
         },
       },
       {
         header: 'Email',
         key: 'email',
-        value: (val: Funder) => {
-          return val.rewards.length > 0 ? val.user?.email || '-' : '-';
+        value(val: Funder) {
+          return val.rewards.length > 0 ? val.user?.email || '-' : '-'
         },
       },
     ],
     [project],
-  );
+  )
 
   const checkIfAllIsSelected = () => {
-    return selectedFunders.length === funders.data.length;
-  };
+    return selectedFunders.length === funders.data.length
+  }
 
   const checkIfSelected = (funderId?: string) => {
     return funderId
       ? selectedFunders.some((selectedFunder) => selectedFunder.id === funderId)
-      : false;
-  };
+      : false
+  }
 
   const handleCheckClicked = (event: any, funder: Funder) => {
     if (event.target.checked) {
-      const newSelectedFunders = [...selectedFunders, funder];
-      setSelectedFunders(newSelectedFunders);
+      const newSelectedFunders = [...selectedFunders, funder]
+      setSelectedFunders(newSelectedFunders)
     } else {
       const newSelectedFunders = selectedFunders.filter(
         (selectedFunder) => selectedFunder.id !== funder.id,
-      );
-      setSelectedFunders(newSelectedFunders);
+      )
+      setSelectedFunders(newSelectedFunders)
     }
-  };
+  }
 
   const handleAllCheckClicked = () => {
-    const allIsSelected = checkIfAllIsSelected();
+    const allIsSelected = checkIfAllIsSelected()
     if (allIsSelected) {
-      setSelectedFunders([]);
+      setSelectedFunders([])
     } else {
-      setSelectedFunders(funders.data as Funder[]);
+      setSelectedFunders(funders.data as Funder[])
     }
-  };
+  }
 
   const getCsvData = () => {
-    const csvData: (string | number)[][] = [];
+    const csvData: (string | number)[][] = []
 
-    const headerData = tableData.map((column) => column.header);
-    csvData.push(headerData);
+    const headerData = tableData.map((column) => column.header)
+    csvData.push(headerData)
 
     selectedFunders.map((funder) => {
       if (funder) {
-        let rewardValue = '';
+        let rewardValue = ''
         funder.rewards.map((reward) => {
           rewardValue = rewardValue
             ? `${rewardValue}:${reward?.projectReward.name}(${reward?.quantity}x)`
-            : `${reward?.projectReward.name}(${reward?.quantity}x)`;
-        });
+            : `${reward?.projectReward.name}(${reward?.quantity}x)`
+        })
         const dateString = funder.confirmedAt
           ? DateTime.fromMillis(parseInt(funder.confirmedAt, 10)).toFormat(
               'yyyy / mm / dd',
             )
-          : '-';
+          : '-'
 
         const funderData = [
           funder.user?.username || '',
@@ -199,45 +199,45 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
           rewardValue || '',
           dateString || '',
           funder.user?.email || '',
-        ];
-        csvData.push(funderData);
+        ]
+        csvData.push(funderData)
       }
-    });
-    return csvData;
-  };
+    })
+    return csvData
+  }
 
   const handleCopy = () => {
-    const csvData = getCsvData();
+    const csvData = getCsvData()
 
     const textString = csvData
       .map((funderData) => {
-        return funderData.join(',');
+        return funderData.join(',')
       })
-      .join('\n');
+      .join('\n')
 
-    navigator.clipboard.writeText(textString);
-    setCopied(true);
+    navigator.clipboard.writeText(textString)
+    setCopied(true)
     setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  };
+      setCopied(false)
+    }, 2000)
+  }
 
   const handleDownloadCSV = (_: any, done: any) => {
     if (selectedFunders.length === 0) {
-      return;
+      return
     }
 
-    const csvData = getCsvData();
-    setCsvData(csvData);
-    done();
-  };
+    const csvData = getCsvData()
+    setCsvData(csvData)
+    done()
+  }
 
   if (funders.isLoading) {
     return (
       <GridItem colSpan={18} display="flex" justifyContent={'center'}>
         <Loader />
       </GridItem>
-    );
+    )
   }
 
   return (
@@ -314,7 +314,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
                       <Th key={row.key} paddingY="10px">
                         <Text textTransform="capitalize">{row.header}</Text>
                       </Th>
-                    );
+                    )
                   })}
                 </Tr>
               </Thead>
@@ -334,23 +334,23 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
                           />
                         </Td>
                         {tableData.map((row) => {
-                          let value: any = '';
+                          let value: any = ''
                           if (row.value) {
-                            value = row.value(funder);
+                            value = row.value(funder)
                           } else if (row.render) {
-                            value = row.render(funder);
+                            value = row.render(funder)
                           } else {
-                            value = funder && funder[row.key as keyof Funder];
+                            value = funder && funder[row.key as keyof Funder]
                           }
 
                           return (
                             <Td key={row.key} fontSize="14px">
                               {value}
                             </Td>
-                          );
+                          )
                         })}
                       </Tr>
-                    );
+                    )
                 })}
               </Tbody>
             </Table>
@@ -358,5 +358,5 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
         </VStack>
       </GridItem>
     </>
-  );
-};
+  )
+}

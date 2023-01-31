@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { CircularProgress, HStack, Text } from '@chakra-ui/react';
-import { Box } from '@chakra-ui/layout';
-import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
-import { BsCurrencyBitcoin } from 'react-icons/bs';
-import { isDarkMode } from '../../../utils';
-import { SatoshiIconTilted } from '../../icons';
-import { createUseStyles } from 'react-jss';
-import { commaFormatted } from '../../../utils/formatData/helperFunctions';
-import { IconBaseProps } from 'react-icons';
+import { Box } from '@chakra-ui/layout'
+import { CircularProgress, HStack, Text } from '@chakra-ui/react'
+import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat'
+import { useState } from 'react'
+import { IconBaseProps } from 'react-icons'
+import { BsCurrencyBitcoin } from 'react-icons/bs'
+import { createUseStyles } from 'react-jss'
+
+import { useDarkMode } from '../../../utils'
+import { commaFormatted } from '../../../utils/formatData/helperFunctions'
+import { SatoshiIconTilted } from '../../icons'
 
 interface IProjectBalanceCircularProgress {
-  balance: number;
-  goal: number;
-  rate: number;
-  loading: boolean;
+  balance: number
+  goal: number
+  rate: number
+  loading: boolean
 }
 
 const useStyles = createUseStyles({
@@ -29,15 +30,15 @@ const useStyles = createUseStyles({
       justifyContent: 'center',
     },
   },
-});
+})
 
 const BTCBalance = (params: {
-  balance: number;
-  pixelFontSize?: number;
-  color?: IconBaseProps['color'];
+  balance: number
+  pixelFontSize?: number
+  color?: IconBaseProps['color']
 }) => {
-  const { balance, pixelFontSize } = params;
-  const displaySatoshis = balance < 1000000;
+  const { balance, pixelFontSize } = params
+  const displaySatoshis = balance < 1000000
 
   return displaySatoshis ? (
     <>
@@ -49,8 +50,8 @@ const BTCBalance = (params: {
       <BsCurrencyBitcoin />
       {parseFloat((balance / 100000000).toFixed(4))}
     </>
-  );
-};
+  )
+}
 
 export const ProjectBalanceCircularProgress = ({
   goal,
@@ -58,31 +59,31 @@ export const ProjectBalanceCircularProgress = ({
   balance,
   loading,
 }: IProjectBalanceCircularProgress) => {
-  const classes = useStyles();
-  const isDark = isDarkMode();
-  const balanceUSD = (balance * rate).toFixed(2);
-  const percentage = (balance / goal) * 100;
+  const classes = useStyles()
+  const isDark = useDarkMode()
+  const balanceUSD = (balance * rate).toFixed(2)
+  const percentage = (balance / goal) * 100
 
-  const [display, setDisplay] = useState(false);
+  const [display, setDisplay] = useState(false)
 
   const getDisplayPercent = (percent: number) => {
     if (percent < 1) {
-      return percent.toFixed(2);
+      return percent.toFixed(2)
     }
 
-    return percent.toFixed();
-  };
+    return percent.toFixed()
+  }
 
   const handleClick = () => {
-    setDisplay(!display);
-  };
+    setDisplay(!display)
+  }
 
   const handleMouseOver = () => {
-    setDisplay(true);
+    setDisplay(true)
     setTimeout(() => {
-      setDisplay(false);
-    }, 5000);
-  };
+      setDisplay(false)
+    }, 5000)
+  }
 
   const getStat = () => (
     <Stat textAlign="center" borderRadius="50%">
@@ -117,7 +118,7 @@ export const ProjectBalanceCircularProgress = ({
         <BTCBalance balance={goal} pixelFontSize={12} />
       </HStack>
     </Stat>
-  );
+  )
 
   return (
     <>
@@ -159,5 +160,5 @@ export const ProjectBalanceCircularProgress = ({
         </Box>
       )}
     </>
-  );
-};
+  )
+}

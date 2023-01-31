@@ -1,4 +1,4 @@
-import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import {
   Box,
   HStack,
@@ -6,15 +6,16 @@ import {
   Text,
   useDisclosure,
   VStack,
-} from '@chakra-ui/react';
-import classNames from 'classnames';
-import React, { useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import { colors } from '../../../constants';
-import { IRewardCount } from '../../../interfaces';
-import { ImageWithReload } from '../../../components/ui';
-import { ProjectReward } from '../../../types/generated/graphql';
-import { toInt } from '../../../utils';
+} from '@chakra-ui/react'
+import classNames from 'classnames'
+import { useState } from 'react'
+import { createUseStyles } from 'react-jss'
+
+import { ImageWithReload } from '../../../components/ui'
+import { IRewardCount } from '../../../interfaces'
+import { colors } from '../../../styles'
+import { ProjectReward } from '../../../types/generated/graphql'
+import { toInt } from '../../../utils'
 
 const useStyles = createUseStyles({
   container: {
@@ -50,14 +51,14 @@ const useStyles = createUseStyles({
     fontSize: '12px',
     height: '40px',
   },
-});
+})
 
 interface IRewardItemProps {
-  item: ProjectReward;
-  updateCount?: (_: IRewardCount) => void;
-  count?: number;
-  readOnly?: boolean;
-  onClick?: any;
+  item: ProjectReward
+  updateCount?: (_: IRewardCount) => void
+  count?: number
+  readOnly?: boolean
+  onClick?: any
 }
 
 export const FundingFormRewardItem = ({
@@ -67,32 +68,32 @@ export const FundingFormRewardItem = ({
   readOnly,
   onClick,
 }: IRewardItemProps) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const { cost, name, backers, description } = item;
+  const { cost, name, backers, description } = item
 
-  const [count, setCount] = useState(initialCount || 0);
-  const { isOpen: focus, onOpen: setFocus, onClose: setBlur } = useDisclosure();
+  const [count, setCount] = useState(initialCount || 0)
+  const { isOpen: focus, onOpen: setFocus, onClose: setBlur } = useDisclosure()
 
   const handleAdd = () => {
-    const newCount = count + 1;
-    setCount(newCount);
+    const newCount = count + 1
+    setCount(newCount)
     if (updateCount) {
-      updateCount({ id: toInt(item.id), count: newCount });
+      updateCount({ id: toInt(item.id), count: newCount })
     }
-  };
+  }
 
   const handleRemove = () => {
     if (count > 0) {
-      const newCount = count - 1;
-      setCount(newCount);
+      const newCount = count - 1
+      setCount(newCount)
       if (updateCount) {
-        updateCount({ id: toInt(item.id), count: newCount });
+        updateCount({ id: toInt(item.id), count: newCount })
       }
     }
-  };
+  }
 
-  const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />;
+  const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />
 
   return (
     <Box
@@ -165,5 +166,5 @@ export const FundingFormRewardItem = ({
       )}
       <Text marginTop="5px">{description}</Text>
     </Box>
-  );
-};
+  )
+}

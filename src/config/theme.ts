@@ -1,8 +1,9 @@
-import { extendTheme } from '@chakra-ui/react';
-import { colors } from '../constants';
-import { fonts } from '../constants/fonts';
+import { extendTheme } from '@chakra-ui/react'
+
+import { colors, fonts } from '../styles'
 
 export const theme = extendTheme({
+  initialColorMode: 'light',
   colors: {
     brand: {
       ...colors,
@@ -63,4 +64,4 @@ export const theme = extendTheme({
       },
     },
   },
-});
+})

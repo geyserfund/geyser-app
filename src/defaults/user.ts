@@ -1,4 +1,4 @@
-import { User } from '../types/generated/graphql';
+import { User } from '../types/generated/graphql'
 
 export const defaultUser: User = {
   __typename: 'User',
@@ -12,4 +12,4 @@ export const defaultUser: User = {
   entries: [],
   fundingTxs: [],
   projects: [],
-};
+}

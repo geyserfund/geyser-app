@@ -1,23 +1,11 @@
-import {
-  GraphQLResolveInfo,
-  GraphQLScalarType,
-  GraphQLScalarTypeConfig,
-} from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | undefined | null;
 export type InputMaybe<T> = T | undefined | null;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
-  [P in K]-?: NonNullable<T[P]>;
-};
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -78,7 +66,7 @@ export enum ActivityResourceType {
   Entry = 'entry',
   FundingTx = 'funding_tx',
   Project = 'project',
-  ProjectReward = 'project_reward',
+  ProjectReward = 'project_reward'
 }
 
 export type Ambassador = {
@@ -96,10 +84,7 @@ export type AmountSummary = {
   total: Scalars['Int'];
 };
 
-export type ConnectionDetails =
-  | LightningAddressConnectionDetails
-  | LndConnectionDetailsPrivate
-  | LndConnectionDetailsPublic;
+export type ConnectionDetails = LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic;
 
 export type CreateEntryInput = {
   content?: InputMaybe<Scalars['String']>;
@@ -130,9 +115,7 @@ export type CreateProjectInput = {
   name: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   /** The currency used to price rewards for the project. Currently only USDCENT supported. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
-  shortDescription?: InputMaybe<
-    Scalars['shortDescription_String_maxLength_500']
-  >;
+  shortDescription?: InputMaybe<Scalars['shortDescription_String_maxLength_500']>;
   thumbnailImage?: InputMaybe<Scalars['String']>;
   /** Public title of the project. */
   title: Scalars['title_String_NotNull_maxLength_60'];
@@ -167,7 +150,7 @@ export type CreateWalletInput = {
 };
 
 export enum Currency {
-  Usdcent = 'USDCENT',
+  Usdcent = 'USDCENT'
 }
 
 export type CursorInput = {
@@ -220,13 +203,13 @@ export type EntryPublishedSubscriptionResponse = {
 export enum EntryStatus {
   Deleted = 'deleted',
   Published = 'published',
-  Unpublished = 'unpublished',
+  Unpublished = 'unpublished'
 }
 
 export enum EntryType {
   Article = 'article',
   Podcast = 'podcast',
-  Video = 'video',
+  Video = 'video'
 }
 
 export type ExternalAccount = {
@@ -335,7 +318,7 @@ export enum FundingMethod {
   GeyserQr = 'geyser_qr',
   LnAddress = 'ln_address',
   LnurlPay = 'lnurl_pay',
-  PodcastKeysend = 'podcast_keysend',
+  PodcastKeysend = 'podcast_keysend'
 }
 
 export type FundingMutationResponse = {
@@ -378,14 +361,14 @@ export type FundingQueryResponse = {
 export enum FundingResourceType {
   Entry = 'entry',
   Project = 'project',
-  User = 'user',
+  User = 'user'
 }
 
 export enum FundingStatus {
   Canceled = 'canceled',
   Paid = 'paid',
   Pending = 'pending',
-  Unpaid = 'unpaid',
+  Unpaid = 'unpaid'
 }
 
 export type FundingTx = {
@@ -521,7 +504,7 @@ export type GranteeSubmissionResponse = {
 export enum InvoiceStatus {
   Canceled = 'canceled',
   Paid = 'paid',
-  Unpaid = 'unpaid',
+  Unpaid = 'unpaid'
 }
 
 export type LightningAddressConnectionDetails = {
@@ -610,7 +593,7 @@ export type LndConnectionDetailsUpdateInput = {
 export enum LndNodeType {
   Custom = 'custom',
   Geyser = 'geyser',
-  Voltage = 'voltage',
+  Voltage = 'voltage'
 }
 
 export type Mutation = {
@@ -650,121 +633,151 @@ export type Mutation = {
   updateWalletState: Wallet;
 };
 
+
 export type MutationConfirmAmbassadorArgs = {
   id: Scalars['BigInt'];
 };
+
 
 export type MutationCreateAmbassadorArgs = {
   projectId: Scalars['BigInt'];
 };
 
+
 export type MutationCreateEntryArgs = {
   input: CreateEntryInput;
 };
+
 
 export type MutationCreateGranteeArgs = {
   input: CreateGranteeInput;
 };
 
+
 export type MutationCreateProjectArgs = {
   input: CreateProjectInput;
 };
+
 
 export type MutationCreateProjectMilestoneArgs = {
   input?: InputMaybe<CreateProjectMilestoneInput>;
 };
 
+
 export type MutationCreateProjectRewardArgs = {
   input?: InputMaybe<CreateProjectRewardInput>;
 };
+
 
 export type MutationCreateSponsorArgs = {
   projectId: Scalars['BigInt'];
 };
 
+
 export type MutationCreateWalletArgs = {
   input: CreateWalletInput;
 };
+
 
 export type MutationDeleteEntryArgs = {
   id: Scalars['BigInt'];
 };
 
+
 export type MutationDeleteProjectMilestoneArgs = {
   projectMilestoneId: Scalars['BigInt'];
 };
+
 
 export type MutationFundArgs = {
   input: FundingInput;
 };
 
+
 export type MutationFundingCancelArgs = {
   input: FundingCancelInput;
 };
+
 
 export type MutationFundingClaimAnonymousArgs = {
   uuid: Scalars['String'];
 };
 
+
 export type MutationFundingConfirmArgs = {
   input: FundingConfirmInput;
 };
+
 
 export type MutationFundingCreateFromPodcastKeysendArgs = {
   input?: InputMaybe<FundingCreateFromPodcastKeysendInput>;
 };
 
+
 export type MutationFundingInvoiceCancelArgs = {
   invoiceId: Scalars['String'];
 };
+
 
 export type MutationFundingInvoiceRefreshArgs = {
   fundingTxId: Scalars['BigInt'];
 };
 
+
 export type MutationFundingPendArgs = {
   input: FundingPendingInput;
 };
+
 
 export type MutationProjectLinkAddArgs = {
   input: ProjectLinkMutationInput;
 };
 
+
 export type MutationProjectLinkRemoveArgs = {
   input: ProjectLinkMutationInput;
 };
+
 
 export type MutationPublishEntryArgs = {
   id: Scalars['BigInt'];
 };
 
+
 export type MutationUnlinkExternalAccountArgs = {
   id: Scalars['BigInt'];
 };
+
 
 export type MutationUpdateEntryArgs = {
   input: UpdateEntryInput;
 };
 
+
 export type MutationUpdateProjectArgs = {
   input: UpdateProjectInput;
 };
+
 
 export type MutationUpdateProjectMilestoneArgs = {
   input?: InputMaybe<UpdateProjectMilestoneInput>;
 };
 
+
 export type MutationUpdateProjectRewardArgs = {
   input?: InputMaybe<UpdateProjectRewardInput>;
 };
+
 
 export type MutationUpdateUserArgs = {
   input?: InputMaybe<UpdateUserInput>;
 };
 
+
 export type MutationUpdateWalletArgs = {
   input: UpdateWalletInput;
 };
+
 
 export type MutationUpdateWalletStateArgs = {
   input: UpdateWalletStateInput;
@@ -777,7 +790,7 @@ export type OffsetBasedPaginationInput = {
 
 export enum OrderByOptions {
   Asc = 'asc',
-  Desc = 'desc',
+  Desc = 'desc'
 }
 
 export type Owner = {
@@ -849,6 +862,7 @@ export type Project = {
   wallets: Array<Wallet>;
 };
 
+
 export type ProjectEntriesArgs = {
   input?: InputMaybe<ProjectEntriesGetInput>;
 };
@@ -917,13 +931,13 @@ export enum ProjectStatus {
   Active = 'active',
   Deleted = 'deleted',
   Draft = 'draft',
-  Inactive = 'inactive',
+  Inactive = 'inactive'
 }
 
 export enum ProjectType {
   Donation = 'donation',
   Grant = 'grant',
-  Reward = 'reward',
+  Reward = 'reward'
 }
 
 export type ProjectWhereInput = {
@@ -995,65 +1009,81 @@ export type Query = {
   user: User;
 };
 
+
 export type QueryEntryArgs = {
   id: Scalars['BigInt'];
 };
+
 
 export type QueryFundingTxArgs = {
   id: Scalars['BigInt'];
 };
 
+
 export type QueryGetActivitiesArgs = {
   input?: InputMaybe<GetActivitiesInput>;
 };
+
 
 export type QueryGetDashboardFundersArgs = {
   input?: InputMaybe<GetFundersInput>;
 };
 
+
 export type QueryGetEntriesArgs = {
   input?: InputMaybe<GetEntriesInput>;
 };
+
 
 export type QueryGetFundersArgs = {
   input: GetFundersInput;
 };
 
+
 export type QueryGetFundingTxsArgs = {
   input?: InputMaybe<GetFundingTxsInput>;
 };
+
 
 export type QueryGetProjectPubkeyArgs = {
   projectId: Scalars['BigInt'];
 };
 
+
 export type QueryGetProjectRewardArgs = {
   id: Scalars['BigInt'];
 };
+
 
 export type QueryGetProjectRewardsArgs = {
   input: GetProjectRewardInput;
 };
 
+
 export type QueryGetSignedUploadUrlArgs = {
   input: FileUploadInput;
 };
+
 
 export type QueryGetWalletArgs = {
   id: Scalars['BigInt'];
 };
 
+
 export type QueryLightningAddressVerifyArgs = {
   lightningAddress?: InputMaybe<Scalars['String']>;
 };
+
 
 export type QueryProjectArgs = {
   where: UniqueProjectQueryInput;
 };
 
+
 export type QueryProjectsArgs = {
   input?: InputMaybe<ProjectsGetQueryInput>;
 };
+
 
 export type QueryUserArgs = {
   where: UserGetInput;
@@ -1065,7 +1095,7 @@ export type ResourceInput = {
 };
 
 export enum RewardCurrency {
-  Usdcent = 'USDCENT',
+  Usdcent = 'USDCENT'
 }
 
 export type RewardFundingInput = {
@@ -1086,7 +1116,7 @@ export type RewardInput = {
 
 export enum ShippingDestination {
   International = 'international',
-  National = 'national',
+  National = 'national'
 }
 
 export type ShippingInput = {
@@ -1123,6 +1153,7 @@ export type Subscription = {
   projectActivated: ProjectActivatedSubscriptionResponse;
 };
 
+
 export type SubscriptionActivityCreatedArgs = {
   input?: InputMaybe<ActivityCreatedSubscriptionInput>;
 };
@@ -1153,9 +1184,7 @@ export type UpdateProjectInput = {
   /** The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
   /** A short description of the project. */
-  shortDescription?: InputMaybe<
-    Scalars['shortDescription_String_maxLength_500']
-  >;
+  shortDescription?: InputMaybe<Scalars['shortDescription_String_maxLength_500']>;
   /** Current status of the project */
   status?: InputMaybe<ProjectStatus>;
   /** Project header image. */
@@ -1230,16 +1259,17 @@ export type User = {
   ownerOf: Array<Maybe<OwnerOf>>;
   /**
    * Returns the projects of a user. By default, this field returns all the projects for that user, both draft and non-draft.
-   * To filter the result set, an explicit input can be passed that specifies a value of true or false for the draft field.
-   * An unpublished project is only returned if the requesting user is the owner of the project.
+   * To filter the result set, an explicit input can be passed that specifies a value of the status field.
    */
   projects: Array<Maybe<Project>>;
   username: Scalars['String'];
 };
 
+
 export type UserEntriesArgs = {
   input?: InputMaybe<UserEntriesGetInput>;
 };
+
 
 export type UserProjectsArgs = {
   input?: InputMaybe<UserProjectsGetInput>;
@@ -1312,7 +1342,7 @@ export type WalletState = {
 export enum WalletStatus {
   Inactive = 'INACTIVE',
   Ok = 'OK',
-  Unstable = 'UNSTABLE',
+  Unstable = 'UNSTABLE'
 }
 
 export enum WalletStatusCode {
@@ -1321,7 +1351,7 @@ export enum WalletStatusCode {
   Ok = 'OK',
   Unknown = 'UNKNOWN',
   Unreachable = 'UNREACHABLE',
-  WalletLocked = 'WALLET_LOCKED',
+  WalletLocked = 'WALLET_LOCKED'
 }
 
 export type GetDashboardFundersInput = {
@@ -1330,55 +1360,40 @@ export type GetDashboardFundersInput = {
   where?: InputMaybe<GetDashboardFundersWhereInput>;
 };
 
+
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
+
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
-  | ResolverFn<TResult, TParent, TContext, TArgs>
-  | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo,
+  info: GraphQLResolveInfo
 ) => Promise<TResult> | TResult;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo,
+  info: GraphQLResolveInfo
 ) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo,
+  info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-export interface SubscriptionSubscriberObject<
-  TResult,
-  TKey extends string,
-  TParent,
-  TContext,
-  TArgs,
-> {
-  subscribe: SubscriptionSubscribeFn<
-    { [key in TKey]: TResult },
-    TParent,
-    TContext,
-    TArgs
-  >;
-  resolve?: SubscriptionResolveFn<
-    TResult,
-    { [key in TKey]: TResult },
-    TContext,
-    TArgs
-  >;
+export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
 
 export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
@@ -1386,78 +1401,44 @@ export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
   resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
 }
 
-export type SubscriptionObject<
-  TResult,
-  TKey extends string,
-  TParent,
-  TContext,
-  TArgs,
-> =
+export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<
-  TResult,
-  TKey extends string,
-  TParent = {},
-  TContext = {},
-  TArgs = {},
-> =
-  | ((
-      ...args: any[]
-    ) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   parent: TParent,
   context: TContext,
-  info: GraphQLResolveInfo,
+  info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
-  obj: T,
-  context: TContext,
-  info: GraphQLResolveInfo,
-) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
-export type DirectiveResolverFn<
-  TResult = {},
-  TParent = {},
-  TContext = {},
-  TArgs = {},
-> = (
+export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo,
+  info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Activity: ResolverTypeWrapper<
-    Omit<Activity, 'resource'> & {
-      resource?: Maybe<ResolversTypes['ActivityResource']>;
-    }
-  >;
+  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource?: Maybe<ResolversTypes['ActivityResource']> }>;
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityResource:
-    | ResolversTypes['Entry']
-    | ResolversTypes['FundingTx']
-    | ResolversTypes['Project']
-    | ResolversTypes['ProjectReward'];
+  ActivityResource: ResolversTypes['Entry'] | ResolversTypes['FundingTx'] | ResolversTypes['Project'] | ResolversTypes['ProjectReward'];
   ActivityResourceType: ActivityResourceType;
   Ambassador: ResolverTypeWrapper<Ambassador>;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  ConnectionDetails:
-    | ResolversTypes['LightningAddressConnectionDetails']
-    | ResolversTypes['LndConnectionDetailsPrivate']
-    | ResolversTypes['LndConnectionDetailsPublic'];
+  ConnectionDetails: ResolversTypes['LightningAddressConnectionDetails'] | ResolversTypes['LndConnectionDetailsPrivate'] | ResolversTypes['LndConnectionDetailsPublic'];
   CreateEntryInput: CreateEntryInput;
   CreateGranteeInput: CreateGranteeInput;
   CreateProjectInput: CreateProjectInput;
@@ -1498,11 +1479,7 @@ export type ResolversTypes = {
   FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>;
   FundingResourceType: FundingResourceType;
   FundingStatus: FundingStatus;
-  FundingTx: ResolverTypeWrapper<
-    Omit<FundingTx, 'sourceResource'> & {
-      sourceResource?: Maybe<ResolversTypes['SourceResource']>;
-    }
-  >;
+  FundingTx: ResolverTypeWrapper<Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }>;
   FundingTxConfirmedSubscriptionResponse: ResolverTypeWrapper<FundingTxConfirmedSubscriptionResponse>;
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
   GetActivitiesInput: GetActivitiesInput;
@@ -1583,118 +1560,53 @@ export type ResolversTypes = {
   UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>;
   UserProjectsGetInput: UserProjectsGetInput;
   UserProjectsGetWhereInput: UserProjectsGetWhereInput;
-  Wallet: ResolverTypeWrapper<
-    Omit<Wallet, 'connectionDetails'> & {
-      connectionDetails: ResolversTypes['ConnectionDetails'];
-    }
-  >;
+  Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
   WalletState: ResolverTypeWrapper<WalletState>;
   WalletStatus: WalletStatus;
   WalletStatusCode: WalletStatusCode;
-  amount_Float_NotNull_min_1: ResolverTypeWrapper<
-    Scalars['amount_Float_NotNull_min_1']
-  >;
+  amount_Float_NotNull_min_1: ResolverTypeWrapper<Scalars['amount_Float_NotNull_min_1']>;
   amount_Float_min_1: ResolverTypeWrapper<Scalars['amount_Float_min_1']>;
-  comment_String_maxLength_280: ResolverTypeWrapper<
-    Scalars['comment_String_maxLength_280']
-  >;
-  cost_Float_NotNull_min_1_max_1000000: ResolverTypeWrapper<
-    Scalars['cost_Float_NotNull_min_1_max_1000000']
-  >;
-  cost_Int_NotNull_min_0: ResolverTypeWrapper<
-    Scalars['cost_Int_NotNull_min_0']
-  >;
-  description_String_NotNull_maxLength_250: ResolverTypeWrapper<
-    Scalars['description_String_NotNull_maxLength_250']
-  >;
-  description_String_NotNull_maxLength_2200: ResolverTypeWrapper<
-    Scalars['description_String_NotNull_maxLength_2200']
-  >;
-  description_String_maxLength_250: ResolverTypeWrapper<
-    Scalars['description_String_maxLength_250']
-  >;
-  description_String_maxLength_2200: ResolverTypeWrapper<
-    Scalars['description_String_maxLength_2200']
-  >;
-  donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<
-    Scalars['donationAmount_Int_NotNull_min_1']
-  >;
-  email_String_NotNull_format_email: ResolverTypeWrapper<
-    Scalars['email_String_NotNull_format_email']
-  >;
-  email_String_format_email: ResolverTypeWrapper<
-    Scalars['email_String_format_email']
-  >;
+  comment_String_maxLength_280: ResolverTypeWrapper<Scalars['comment_String_maxLength_280']>;
+  cost_Float_NotNull_min_1_max_1000000: ResolverTypeWrapper<Scalars['cost_Float_NotNull_min_1_max_1000000']>;
+  cost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_0']>;
+  description_String_NotNull_maxLength_250: ResolverTypeWrapper<Scalars['description_String_NotNull_maxLength_250']>;
+  description_String_NotNull_maxLength_2200: ResolverTypeWrapper<Scalars['description_String_NotNull_maxLength_2200']>;
+  description_String_maxLength_250: ResolverTypeWrapper<Scalars['description_String_maxLength_250']>;
+  description_String_maxLength_2200: ResolverTypeWrapper<Scalars['description_String_maxLength_2200']>;
+  donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<Scalars['donationAmount_Int_NotNull_min_1']>;
+  email_String_NotNull_format_email: ResolverTypeWrapper<Scalars['email_String_NotNull_format_email']>;
+  email_String_format_email: ResolverTypeWrapper<Scalars['email_String_format_email']>;
   fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>;
   getDashboardFundersInput: GetDashboardFundersInput;
-  link_String_NotNull_format_uri: ResolverTypeWrapper<
-    Scalars['link_String_NotNull_format_uri']
-  >;
-  name_String_NotNull_maxLength_100: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_maxLength_100']
-  >;
-  name_String_NotNull_minLength_3_maxLength_60: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_3_maxLength_60']
-  >;
-  name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_3_maxLength_280']
-  >;
-  name_String_maxLength_100: ResolverTypeWrapper<
-    Scalars['name_String_maxLength_100']
-  >;
-  name_String_minLength_3_maxLength_280: ResolverTypeWrapper<
-    Scalars['name_String_minLength_3_maxLength_280']
-  >;
-  name_String_minLength_5_maxLength_60: ResolverTypeWrapper<
-    Scalars['name_String_minLength_5_maxLength_60']
-  >;
-  pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<
-    Scalars['pubkey_String_minLength_66_maxLength_66']
-  >;
-  quantity_Int_NotNull_min_1: ResolverTypeWrapper<
-    Scalars['quantity_Int_NotNull_min_1']
-  >;
-  rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<
-    Scalars['rewardsCost_Int_NotNull_min_0']
-  >;
-  shortDescription_String_maxLength_500: ResolverTypeWrapper<
-    Scalars['shortDescription_String_maxLength_500']
-  >;
+  link_String_NotNull_format_uri: ResolverTypeWrapper<Scalars['link_String_NotNull_format_uri']>;
+  name_String_NotNull_maxLength_100: ResolverTypeWrapper<Scalars['name_String_NotNull_maxLength_100']>;
+  name_String_NotNull_minLength_3_maxLength_60: ResolverTypeWrapper<Scalars['name_String_NotNull_minLength_3_maxLength_60']>;
+  name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<Scalars['name_String_NotNull_minLength_3_maxLength_280']>;
+  name_String_maxLength_100: ResolverTypeWrapper<Scalars['name_String_maxLength_100']>;
+  name_String_minLength_3_maxLength_280: ResolverTypeWrapper<Scalars['name_String_minLength_3_maxLength_280']>;
+  name_String_minLength_5_maxLength_60: ResolverTypeWrapper<Scalars['name_String_minLength_5_maxLength_60']>;
+  pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<Scalars['pubkey_String_minLength_66_maxLength_66']>;
+  quantity_Int_NotNull_min_1: ResolverTypeWrapper<Scalars['quantity_Int_NotNull_min_1']>;
+  rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['rewardsCost_Int_NotNull_min_0']>;
+  shortDescription_String_maxLength_500: ResolverTypeWrapper<Scalars['shortDescription_String_maxLength_500']>;
   stock_Int_min_0: ResolverTypeWrapper<Scalars['stock_Int_min_0']>;
-  title_String_NotNull_maxLength_60: ResolverTypeWrapper<
-    Scalars['title_String_NotNull_maxLength_60']
-  >;
-  title_String_NotNull_maxLength_150: ResolverTypeWrapper<
-    Scalars['title_String_NotNull_maxLength_150']
-  >;
-  title_String_maxLength_60: ResolverTypeWrapper<
-    Scalars['title_String_maxLength_60']
-  >;
-  title_String_maxLength_150: ResolverTypeWrapper<
-    Scalars['title_String_maxLength_150']
-  >;
+  title_String_NotNull_maxLength_60: ResolverTypeWrapper<Scalars['title_String_NotNull_maxLength_60']>;
+  title_String_NotNull_maxLength_150: ResolverTypeWrapper<Scalars['title_String_NotNull_maxLength_150']>;
+  title_String_maxLength_60: ResolverTypeWrapper<Scalars['title_String_maxLength_60']>;
+  title_String_maxLength_150: ResolverTypeWrapper<Scalars['title_String_maxLength_150']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Activity: Omit<Activity, 'resource'> & {
-    resource?: Maybe<ResolversParentTypes['ActivityResource']>;
-  };
+  Activity: Omit<Activity, 'resource'> & { resource?: Maybe<ResolversParentTypes['ActivityResource']> };
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityResource:
-    | ResolversParentTypes['Entry']
-    | ResolversParentTypes['FundingTx']
-    | ResolversParentTypes['Project']
-    | ResolversParentTypes['ProjectReward'];
+  ActivityResource: ResolversParentTypes['Entry'] | ResolversParentTypes['FundingTx'] | ResolversParentTypes['Project'] | ResolversParentTypes['ProjectReward'];
   Ambassador: Ambassador;
   AmountSummary: AmountSummary;
   BigInt: Scalars['BigInt'];
   Boolean: Scalars['Boolean'];
-  ConnectionDetails:
-    | ResolversParentTypes['LightningAddressConnectionDetails']
-    | ResolversParentTypes['LndConnectionDetailsPrivate']
-    | ResolversParentTypes['LndConnectionDetailsPublic'];
+  ConnectionDetails: ResolversParentTypes['LightningAddressConnectionDetails'] | ResolversParentTypes['LndConnectionDetailsPrivate'] | ResolversParentTypes['LndConnectionDetailsPublic'];
   CreateEntryInput: CreateEntryInput;
   CreateGranteeInput: CreateGranteeInput;
   CreateProjectInput: CreateProjectInput;
@@ -1729,9 +1641,7 @@ export type ResolversParentTypes = {
   FundingPendingOnChainInput: FundingPendingOnChainInput;
   FundingPendingResponse: FundingPendingResponse;
   FundingQueryResponse: FundingQueryResponse;
-  FundingTx: Omit<FundingTx, 'sourceResource'> & {
-    sourceResource?: Maybe<ResolversParentTypes['SourceResource']>;
-  };
+  FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> };
   FundingTxConfirmedSubscriptionResponse: FundingTxConfirmedSubscriptionResponse;
   FundinginvoiceCancel: FundinginvoiceCancel;
   GetActivitiesInput: GetActivitiesInput;
@@ -1786,9 +1696,7 @@ export type ResolversParentTypes = {
   RewardInput: RewardInput;
   ShippingInput: ShippingInput;
   SignedUploadUrl: SignedUploadUrl;
-  SourceResource:
-    | ResolversParentTypes['Entry']
-    | ResolversParentTypes['Project'];
+  SourceResource: ResolversParentTypes['Entry'] | ResolversParentTypes['Project'];
   Sponsor: Sponsor;
   String: Scalars['String'];
   Subscription: {};
@@ -1807,9 +1715,7 @@ export type ResolversParentTypes = {
   UserProjectContribution: UserProjectContribution;
   UserProjectsGetInput: UserProjectsGetInput;
   UserProjectsGetWhereInput: UserProjectsGetWhereInput;
-  Wallet: Omit<Wallet, 'connectionDetails'> & {
-    connectionDetails: ResolversParentTypes['ConnectionDetails'];
-  };
+  Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] };
   WalletState: WalletState;
   amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1'];
   amount_Float_min_1: Scalars['amount_Float_min_1'];
@@ -1860,51 +1766,26 @@ export type ConstraintDirectiveArgs = {
   uniqueTypeName?: Maybe<Scalars['String']>;
 };
 
-export type ConstraintDirectiveResolver<
-  Result,
-  Parent,
-  ContextType = any,
-  Args = ConstraintDirectiveArgs,
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type ConstraintDirectiveResolver<Result, Parent, ContextType = any, Args = ConstraintDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type ActivityResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity'],
-> = {
+export type ActivityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity']> = {
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  resource?: Resolver<
-    Maybe<ResolversTypes['ActivityResource']>,
-    ParentType,
-    ContextType
-  >;
+  resource?: Resolver<Maybe<ResolversTypes['ActivityResource']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ActivityResourceResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ActivityResource'] = ResolversParentTypes['ActivityResource'],
-> = {
-  __resolveType: TypeResolveFn<
-    'Entry' | 'FundingTx' | 'Project' | 'ProjectReward',
-    ParentType,
-    ContextType
-  >;
+export type ActivityResourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivityResource'] = ResolversParentTypes['ActivityResource']> = {
+  __resolveType: TypeResolveFn<'Entry' | 'FundingTx' | 'Project' | 'ProjectReward', ParentType, ContextType>;
 };
 
-export type AmbassadorResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Ambassador'] = ResolversParentTypes['Ambassador'],
-> = {
+export type AmbassadorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ambassador'] = ResolversParentTypes['Ambassador']> = {
   confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AmountSummaryResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['AmountSummary'] = ResolversParentTypes['AmountSummary'],
-> = {
+export type AmountSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['AmountSummary'] = ResolversParentTypes['AmountSummary']> = {
   donationAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rewardsCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   shippingCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -1912,914 +1793,342 @@ export type AmountSummaryResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface BigIntScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
+export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
   name: 'BigInt';
 }
 
-export type ConnectionDetailsResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ConnectionDetails'] = ResolversParentTypes['ConnectionDetails'],
-> = {
-  __resolveType: TypeResolveFn<
-    | 'LightningAddressConnectionDetails'
-    | 'LndConnectionDetailsPrivate'
-    | 'LndConnectionDetailsPublic',
-    ParentType,
-    ContextType
-  >;
+export type ConnectionDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ConnectionDetails'] = ResolversParentTypes['ConnectionDetails']> = {
+  __resolveType: TypeResolveFn<'LightningAddressConnectionDetails' | 'LndConnectionDetailsPrivate' | 'LndConnectionDetailsPublic', ParentType, ContextType>;
 };
 
-export interface DateScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
 }
 
-export type EntryResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Entry'] = ResolversParentTypes['Entry'],
-> = {
+export type EntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Entry'] = ResolversParentTypes['Entry']> = {
   amountFunded?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   creator?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  description?: Resolver<
-    ResolversTypes['description_String_NotNull_maxLength_2200'],
-    ParentType,
-    ContextType
-  >;
+  description?: Resolver<ResolversTypes['description_String_NotNull_maxLength_2200'], ParentType, ContextType>;
   fundersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  fundingTxs?: Resolver<
-    Array<Maybe<ResolversTypes['FundingTx']>>,
-    ParentType,
-    ContextType
-  >;
+  fundingTxs?: Resolver<Array<Maybe<ResolversTypes['FundingTx']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType>;
   published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  publishedAt?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  publishedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['EntryStatus'], ParentType, ContextType>;
-  title?: Resolver<
-    ResolversTypes['title_String_NotNull_maxLength_60'],
-    ParentType,
-    ContextType
-  >;
+  title?: Resolver<ResolversTypes['title_String_NotNull_maxLength_60'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['EntryType'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EntryPublishedSubscriptionResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['EntryPublishedSubscriptionResponse'] = ResolversParentTypes['EntryPublishedSubscriptionResponse'],
-> = {
+export type EntryPublishedSubscriptionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['EntryPublishedSubscriptionResponse'] = ResolversParentTypes['EntryPublishedSubscriptionResponse']> = {
   entry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ExternalAccountResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ExternalAccount'] = ResolversParentTypes['ExternalAccount'],
-> = {
+export type ExternalAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['ExternalAccount'] = ResolversParentTypes['ExternalAccount']> = {
   externalId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  externalUsername?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType
-  >;
+  externalUsername?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   public?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FunderResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Funder'] = ResolversParentTypes['Funder'],
-> = {
-  amountFunded?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
+export type FunderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Funder'] = ResolversParentTypes['Funder']> = {
+  amountFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  confirmedAt?: Resolver<
-    Maybe<ResolversTypes['Date']>,
-    ParentType,
-    ContextType
-  >;
+  confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  rewards?: Resolver<
-    Array<Maybe<ResolversTypes['FunderReward']>>,
-    ParentType,
-    ContextType
-  >;
+  rewards?: Resolver<Array<Maybe<ResolversTypes['FunderReward']>>, ParentType, ContextType>;
   timesFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FunderRewardResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FunderReward'] = ResolversParentTypes['FunderReward'],
-> = {
-  projectReward?: Resolver<
-    ResolversTypes['ProjectReward'],
-    ParentType,
-    ContextType
-  >;
+export type FunderRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['FunderReward'] = ResolversParentTypes['FunderReward']> = {
+  projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundingCancelResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FundingCancelResponse'] = ResolversParentTypes['FundingCancelResponse'],
-> = {
+export type FundingCancelResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingCancelResponse'] = ResolversParentTypes['FundingCancelResponse']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundingConfirmResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FundingConfirmResponse'] = ResolversParentTypes['FundingConfirmResponse'],
-> = {
+export type FundingConfirmResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingConfirmResponse'] = ResolversParentTypes['FundingConfirmResponse']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  missedSettleEvents?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
+  missedSettleEvents?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundingMutationResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FundingMutationResponse'] = ResolversParentTypes['FundingMutationResponse'],
-> = {
-  amountSummary?: Resolver<
-    Maybe<ResolversTypes['AmountSummary']>,
-    ParentType,
-    ContextType
-  >;
-  fundingTx?: Resolver<
-    Maybe<ResolversTypes['FundingTx']>,
-    ParentType,
-    ContextType
-  >;
+export type FundingMutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingMutationResponse'] = ResolversParentTypes['FundingMutationResponse']> = {
+  amountSummary?: Resolver<Maybe<ResolversTypes['AmountSummary']>, ParentType, ContextType>;
+  fundingTx?: Resolver<Maybe<ResolversTypes['FundingTx']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundingPendingResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FundingPendingResponse'] = ResolversParentTypes['FundingPendingResponse'],
-> = {
+export type FundingPendingResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingPendingResponse'] = ResolversParentTypes['FundingPendingResponse']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundingQueryResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FundingQueryResponse'] = ResolversParentTypes['FundingQueryResponse'],
-> = {
-  fundingTx?: Resolver<
-    Maybe<ResolversTypes['FundingTx']>,
-    ParentType,
-    ContextType
-  >;
+export type FundingQueryResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingQueryResponse'] = ResolversParentTypes['FundingQueryResponse']> = {
+  fundingTx?: Resolver<Maybe<ResolversTypes['FundingTx']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundingTxResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FundingTx'] = ResolversParentTypes['FundingTx'],
-> = {
+export type FundingTxResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingTx'] = ResolversParentTypes['FundingTx']> = {
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   invoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  invoiceStatus?: Resolver<
-    ResolversTypes['InvoiceStatus'],
-    ParentType,
-    ContextType
-  >;
+  invoiceStatus?: Resolver<ResolversTypes['InvoiceStatus'], ParentType, ContextType>;
   media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  method?: Resolver<
-    Maybe<ResolversTypes['FundingMethod']>,
-    ParentType,
-    ContextType
-  >;
+  method?: Resolver<Maybe<ResolversTypes['FundingMethod']>, ParentType, ContextType>;
   onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  paymentRequest?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  sourceResource?: Resolver<
-    Maybe<ResolversTypes['SourceResource']>,
-    ParentType,
-    ContextType
-  >;
+  sourceResource?: Resolver<Maybe<ResolversTypes['SourceResource']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>;
   uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundingTxConfirmedSubscriptionResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FundingTxConfirmedSubscriptionResponse'] = ResolversParentTypes['FundingTxConfirmedSubscriptionResponse'],
-> = {
+export type FundingTxConfirmedSubscriptionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingTxConfirmedSubscriptionResponse'] = ResolversParentTypes['FundingTxConfirmedSubscriptionResponse']> = {
   fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundinginvoiceCancelResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FundinginvoiceCancel'] = ResolversParentTypes['FundinginvoiceCancel'],
-> = {
+export type FundinginvoiceCancelResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundinginvoiceCancel'] = ResolversParentTypes['FundinginvoiceCancel']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GranteeResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Grantee'] = ResolversParentTypes['Grantee'],
-> = {
+export type GranteeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Grantee'] = ResolversParentTypes['Grantee']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GranteeSubmissionResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['GranteeSubmissionResponse'] = ResolversParentTypes['GranteeSubmissionResponse'],
-> = {
-  grantees?: Resolver<
-    Array<Maybe<ResolversTypes['Grantee']>>,
-    ParentType,
-    ContextType
-  >;
+export type GranteeSubmissionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GranteeSubmissionResponse'] = ResolversParentTypes['GranteeSubmissionResponse']> = {
+  grantees?: Resolver<Array<Maybe<ResolversTypes['Grantee']>>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LightningAddressConnectionDetailsResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['LightningAddressConnectionDetails'] = ResolversParentTypes['LightningAddressConnectionDetails'],
-> = {
-  lightningAddress?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType
-  >;
+export type LightningAddressConnectionDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['LightningAddressConnectionDetails'] = ResolversParentTypes['LightningAddressConnectionDetails']> = {
+  lightningAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LightningAddressVerifyResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['LightningAddressVerifyResponse'] = ResolversParentTypes['LightningAddressVerifyResponse'],
-> = {
+export type LightningAddressVerifyResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['LightningAddressVerifyResponse'] = ResolversParentTypes['LightningAddressVerifyResponse']> = {
   reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LndConnectionDetailsResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['LndConnectionDetails'] = ResolversParentTypes['LndConnectionDetails'],
-> = {
+export type LndConnectionDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['LndConnectionDetails'] = ResolversParentTypes['LndConnectionDetails']> = {
   __resolveType: TypeResolveFn<null, ParentType, ContextType>;
   grpcPort?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   hostname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  lndNodeType?: Resolver<
-    ResolversTypes['LndNodeType'],
-    ParentType,
-    ContextType
-  >;
+  lndNodeType?: Resolver<ResolversTypes['LndNodeType'], ParentType, ContextType>;
   macaroon?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tlsCertificate?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  tlsCertificate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
-export type LndConnectionDetailsPrivateResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['LndConnectionDetailsPrivate'] = ResolversParentTypes['LndConnectionDetailsPrivate'],
-> = {
+export type LndConnectionDetailsPrivateResolvers<ContextType = any, ParentType extends ResolversParentTypes['LndConnectionDetailsPrivate'] = ResolversParentTypes['LndConnectionDetailsPrivate']> = {
   grpcPort?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   hostname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  lndNodeType?: Resolver<
-    ResolversTypes['LndNodeType'],
-    ParentType,
-    ContextType
-  >;
+  lndNodeType?: Resolver<ResolversTypes['LndNodeType'], ParentType, ContextType>;
   macaroon?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  pubkey?: Resolver<
-    Maybe<ResolversTypes['pubkey_String_minLength_66_maxLength_66']>,
-    ParentType,
-    ContextType
-  >;
-  tlsCertificate?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  pubkey?: Resolver<Maybe<ResolversTypes['pubkey_String_minLength_66_maxLength_66']>, ParentType, ContextType>;
+  tlsCertificate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LndConnectionDetailsPublicResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['LndConnectionDetailsPublic'] = ResolversParentTypes['LndConnectionDetailsPublic'],
-> = {
-  pubkey?: Resolver<
-    Maybe<ResolversTypes['pubkey_String_minLength_66_maxLength_66']>,
-    ParentType,
-    ContextType
-  >;
+export type LndConnectionDetailsPublicResolvers<ContextType = any, ParentType extends ResolversParentTypes['LndConnectionDetailsPublic'] = ResolversParentTypes['LndConnectionDetailsPublic']> = {
+  pubkey?: Resolver<Maybe<ResolversTypes['pubkey_String_minLength_66_maxLength_66']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MutationResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
-> = {
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  confirmAmbassador?: Resolver<
-    ResolversTypes['Ambassador'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationConfirmAmbassadorArgs, 'id'>
-  >;
-  createAmbassador?: Resolver<
-    ResolversTypes['Ambassador'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateAmbassadorArgs, 'projectId'>
-  >;
-  createEntry?: Resolver<
-    ResolversTypes['Entry'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateEntryArgs, 'input'>
-  >;
-  createGrantee?: Resolver<
-    ResolversTypes['Grantee'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateGranteeArgs, 'input'>
-  >;
-  createProject?: Resolver<
-    ResolversTypes['Project'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateProjectArgs, 'input'>
-  >;
-  createProjectMilestone?: Resolver<
-    ResolversTypes['ProjectMilestone'],
-    ParentType,
-    ContextType,
-    Partial<MutationCreateProjectMilestoneArgs>
-  >;
-  createProjectReward?: Resolver<
-    ResolversTypes['ProjectReward'],
-    ParentType,
-    ContextType,
-    Partial<MutationCreateProjectRewardArgs>
-  >;
-  createSponsor?: Resolver<
-    ResolversTypes['Sponsor'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateSponsorArgs, 'projectId'>
-  >;
-  createWallet?: Resolver<
-    ResolversTypes['Wallet'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateWalletArgs, 'input'>
-  >;
-  deleteEntry?: Resolver<
-    ResolversTypes['Entry'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteEntryArgs, 'id'>
-  >;
-  deleteProjectMilestone?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteProjectMilestoneArgs, 'projectMilestoneId'>
-  >;
-  fund?: Resolver<
-    ResolversTypes['FundingMutationResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationFundArgs, 'input'>
-  >;
-  fundingCancel?: Resolver<
-    ResolversTypes['FundingCancelResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationFundingCancelArgs, 'input'>
-  >;
-  fundingClaimAnonymous?: Resolver<
-    ResolversTypes['FundingMutationResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationFundingClaimAnonymousArgs, 'uuid'>
-  >;
-  fundingConfirm?: Resolver<
-    ResolversTypes['FundingConfirmResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationFundingConfirmArgs, 'input'>
-  >;
-  fundingCreateFromPodcastKeysend?: Resolver<
-    ResolversTypes['FundingTx'],
-    ParentType,
-    ContextType,
-    Partial<MutationFundingCreateFromPodcastKeysendArgs>
-  >;
-  fundingInvoiceCancel?: Resolver<
-    ResolversTypes['FundinginvoiceCancel'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationFundingInvoiceCancelArgs, 'invoiceId'>
-  >;
-  fundingInvoiceRefresh?: Resolver<
-    ResolversTypes['FundingTx'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationFundingInvoiceRefreshArgs, 'fundingTxId'>
-  >;
-  fundingPend?: Resolver<
-    ResolversTypes['FundingPendingResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationFundingPendArgs, 'input'>
-  >;
-  projectLinkAdd?: Resolver<
-    ResolversTypes['Project'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationProjectLinkAddArgs, 'input'>
-  >;
-  projectLinkRemove?: Resolver<
-    ResolversTypes['Project'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationProjectLinkRemoveArgs, 'input'>
-  >;
-  publishEntry?: Resolver<
-    ResolversTypes['Entry'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationPublishEntryArgs, 'id'>
-  >;
-  unlinkExternalAccount?: Resolver<
-    ResolversTypes['User'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUnlinkExternalAccountArgs, 'id'>
-  >;
-  updateEntry?: Resolver<
-    ResolversTypes['Entry'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateEntryArgs, 'input'>
-  >;
-  updateProject?: Resolver<
-    ResolversTypes['Project'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateProjectArgs, 'input'>
-  >;
-  updateProjectMilestone?: Resolver<
-    ResolversTypes['ProjectMilestone'],
-    ParentType,
-    ContextType,
-    Partial<MutationUpdateProjectMilestoneArgs>
-  >;
-  updateProjectReward?: Resolver<
-    ResolversTypes['ProjectReward'],
-    ParentType,
-    ContextType,
-    Partial<MutationUpdateProjectRewardArgs>
-  >;
-  updateUser?: Resolver<
-    ResolversTypes['User'],
-    ParentType,
-    ContextType,
-    Partial<MutationUpdateUserArgs>
-  >;
-  updateWallet?: Resolver<
-    ResolversTypes['Wallet'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateWalletArgs, 'input'>
-  >;
-  updateWalletState?: Resolver<
-    ResolversTypes['Wallet'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateWalletStateArgs, 'input'>
-  >;
+  confirmAmbassador?: Resolver<ResolversTypes['Ambassador'], ParentType, ContextType, RequireFields<MutationConfirmAmbassadorArgs, 'id'>>;
+  createAmbassador?: Resolver<ResolversTypes['Ambassador'], ParentType, ContextType, RequireFields<MutationCreateAmbassadorArgs, 'projectId'>>;
+  createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
+  createGrantee?: Resolver<ResolversTypes['Grantee'], ParentType, ContextType, RequireFields<MutationCreateGranteeArgs, 'input'>>;
+  createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
+  createProjectMilestone?: Resolver<ResolversTypes['ProjectMilestone'], ParentType, ContextType, Partial<MutationCreateProjectMilestoneArgs>>;
+  createProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, Partial<MutationCreateProjectRewardArgs>>;
+  createSponsor?: Resolver<ResolversTypes['Sponsor'], ParentType, ContextType, RequireFields<MutationCreateSponsorArgs, 'projectId'>>;
+  createWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationCreateWalletArgs, 'input'>>;
+  deleteEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationDeleteEntryArgs, 'id'>>;
+  deleteProjectMilestone?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProjectMilestoneArgs, 'projectMilestoneId'>>;
+  fund?: Resolver<ResolversTypes['FundingMutationResponse'], ParentType, ContextType, RequireFields<MutationFundArgs, 'input'>>;
+  fundingCancel?: Resolver<ResolversTypes['FundingCancelResponse'], ParentType, ContextType, RequireFields<MutationFundingCancelArgs, 'input'>>;
+  fundingClaimAnonymous?: Resolver<ResolversTypes['FundingMutationResponse'], ParentType, ContextType, RequireFields<MutationFundingClaimAnonymousArgs, 'uuid'>>;
+  fundingConfirm?: Resolver<ResolversTypes['FundingConfirmResponse'], ParentType, ContextType, RequireFields<MutationFundingConfirmArgs, 'input'>>;
+  fundingCreateFromPodcastKeysend?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, Partial<MutationFundingCreateFromPodcastKeysendArgs>>;
+  fundingInvoiceCancel?: Resolver<ResolversTypes['FundinginvoiceCancel'], ParentType, ContextType, RequireFields<MutationFundingInvoiceCancelArgs, 'invoiceId'>>;
+  fundingInvoiceRefresh?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, RequireFields<MutationFundingInvoiceRefreshArgs, 'fundingTxId'>>;
+  fundingPend?: Resolver<ResolversTypes['FundingPendingResponse'], ParentType, ContextType, RequireFields<MutationFundingPendArgs, 'input'>>;
+  projectLinkAdd?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectLinkAddArgs, 'input'>>;
+  projectLinkRemove?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectLinkRemoveArgs, 'input'>>;
+  publishEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationPublishEntryArgs, 'id'>>;
+  unlinkExternalAccount?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUnlinkExternalAccountArgs, 'id'>>;
+  updateEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationUpdateEntryArgs, 'input'>>;
+  updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'input'>>;
+  updateProjectMilestone?: Resolver<ResolversTypes['ProjectMilestone'], ParentType, ContextType, Partial<MutationUpdateProjectMilestoneArgs>>;
+  updateProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, Partial<MutationUpdateProjectRewardArgs>>;
+  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, Partial<MutationUpdateUserArgs>>;
+  updateWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletArgs, 'input'>>;
+  updateWalletState?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletStateArgs, 'input'>>;
 };
 
-export type OwnerResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Owner'] = ResolversParentTypes['Owner'],
-> = {
+export type OwnerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Owner'] = ResolversParentTypes['Owner']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type OwnerOfResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['OwnerOf'] = ResolversParentTypes['OwnerOf'],
-> = {
+export type OwnerOfResolvers<ContextType = any, ParentType extends ResolversParentTypes['OwnerOf'] = ResolversParentTypes['OwnerOf']> = {
   owner?: Resolver<Maybe<ResolversTypes['Owner']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
-> = {
-  ambassadors?: Resolver<
-    Array<Maybe<ResolversTypes['Ambassador']>>,
-    ParentType,
-    ContextType
-  >;
+export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
+  ambassadors?: Resolver<Array<Maybe<ResolversTypes['Ambassador']>>, ParentType, ContextType>;
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  description?: Resolver<
-    Maybe<ResolversTypes['description_String_maxLength_2200']>,
-    ParentType,
-    ContextType
-  >;
-  entries?: Resolver<
-    Array<Maybe<ResolversTypes['Entry']>>,
-    ParentType,
-    ContextType,
-    Partial<ProjectEntriesArgs>
-  >;
-  expiresAt?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  funders?: Resolver<
-    Array<Maybe<ResolversTypes['Funder']>>,
-    ParentType,
-    ContextType
-  >;
-  fundersCount?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
-  fundingGoal?: Resolver<
-    Maybe<ResolversTypes['fundingGoal_Int_min_1']>,
-    ParentType,
-    ContextType
-  >;
-  fundingTxs?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['FundingTx']>>>,
-    ParentType,
-    ContextType
-  >;
-  fundingTxsCount?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
-  grantees?: Resolver<
-    Array<Maybe<ResolversTypes['Grantee']>>,
-    ParentType,
-    ContextType
-  >;
+  description?: Resolver<Maybe<ResolversTypes['description_String_maxLength_2200']>, ParentType, ContextType>;
+  entries?: Resolver<Array<Maybe<ResolversTypes['Entry']>>, ParentType, ContextType, Partial<ProjectEntriesArgs>>;
+  expiresAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  funders?: Resolver<Array<Maybe<ResolversTypes['Funder']>>, ParentType, ContextType>;
+  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  fundingGoal?: Resolver<Maybe<ResolversTypes['fundingGoal_Int_min_1']>, ParentType, ContextType>;
+  fundingTxs?: Resolver<Maybe<Array<Maybe<ResolversTypes['FundingTx']>>>, ParentType, ContextType>;
+  fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  grantees?: Resolver<Array<Maybe<ResolversTypes['Grantee']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  links?: Resolver<
-    Array<Maybe<ResolversTypes['String']>>,
-    ParentType,
-    ContextType
-  >;
-  media?: Resolver<
-    Array<Maybe<ResolversTypes['String']>>,
-    ParentType,
-    ContextType
-  >;
-  milestones?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['ProjectMilestone']>>>,
-    ParentType,
-    ContextType
-  >;
-  name?: Resolver<
-    ResolversTypes['name_String_NotNull_minLength_3_maxLength_280'],
-    ParentType,
-    ContextType
-  >;
+  links?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  media?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  milestones?: Resolver<Maybe<Array<Maybe<ResolversTypes['ProjectMilestone']>>>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['name_String_NotNull_minLength_3_maxLength_280'], ParentType, ContextType>;
   owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
-  rewardCurrency?: Resolver<
-    Maybe<ResolversTypes['RewardCurrency']>,
-    ParentType,
-    ContextType
-  >;
-  rewards?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['ProjectReward']>>>,
-    ParentType,
-    ContextType
-  >;
-  shortDescription?: Resolver<
-    Maybe<ResolversTypes['shortDescription_String_maxLength_500']>,
-    ParentType,
-    ContextType
-  >;
-  sponsors?: Resolver<
-    Array<Maybe<ResolversTypes['Sponsor']>>,
-    ParentType,
-    ContextType
-  >;
-  statistics?: Resolver<
-    Maybe<ResolversTypes['ProjectStatistics']>,
-    ParentType,
-    ContextType
-  >;
-  status?: Resolver<
-    Maybe<ResolversTypes['ProjectStatus']>,
-    ParentType,
-    ContextType
-  >;
-  thumbnailImage?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  title?: Resolver<
-    ResolversTypes['title_String_NotNull_maxLength_60'],
-    ParentType,
-    ContextType
-  >;
+  rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
+  rewards?: Resolver<Maybe<Array<Maybe<ResolversTypes['ProjectReward']>>>, ParentType, ContextType>;
+  shortDescription?: Resolver<Maybe<ResolversTypes['shortDescription_String_maxLength_500']>, ParentType, ContextType>;
+  sponsors?: Resolver<Array<Maybe<ResolversTypes['Sponsor']>>, ParentType, ContextType>;
+  statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>;
+  thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['title_String_NotNull_maxLength_60'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectActivatedSubscriptionResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProjectActivatedSubscriptionResponse'] = ResolversParentTypes['ProjectActivatedSubscriptionResponse'],
-> = {
+export type ProjectActivatedSubscriptionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectActivatedSubscriptionResponse'] = ResolversParentTypes['ProjectActivatedSubscriptionResponse']> = {
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectMilestoneResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProjectMilestone'] = ResolversParentTypes['ProjectMilestone'],
-> = {
+export type ProjectMilestoneResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectMilestone'] = ResolversParentTypes['ProjectMilestone']> = {
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  description?: Resolver<
-    Maybe<ResolversTypes['description_String_maxLength_250']>,
-    ParentType,
-    ContextType
-  >;
+  description?: Resolver<Maybe<ResolversTypes['description_String_maxLength_250']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  name?: Resolver<
-    ResolversTypes['name_String_NotNull_maxLength_100'],
-    ParentType,
-    ContextType
-  >;
+  name?: Resolver<ResolversTypes['name_String_NotNull_maxLength_100'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectRewardResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
-> = {
+export type ProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward']> = {
   backers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  costCurrency?: Resolver<
-    ResolversTypes['RewardCurrency'],
-    ParentType,
-    ContextType
-  >;
+  costCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  description?: Resolver<
-    Maybe<ResolversTypes['description_String_maxLength_250']>,
-    ParentType,
-    ContextType
-  >;
+  description?: Resolver<Maybe<ResolversTypes['description_String_maxLength_250']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<
-    ResolversTypes['name_String_NotNull_maxLength_100'],
-    ParentType,
-    ContextType
-  >;
+  name?: Resolver<ResolversTypes['name_String_NotNull_maxLength_100'], ParentType, ContextType>;
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectStatisticsResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProjectStatistics'] = ResolversParentTypes['ProjectStatistics'],
-> = {
+export type ProjectStatisticsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectStatistics'] = ResolversParentTypes['ProjectStatistics']> = {
   totalPageviews?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalVisitors?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectsResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProjectsResponse'] = ResolversParentTypes['ProjectsResponse'],
-> = {
-  projects?: Resolver<
-    Array<Maybe<ResolversTypes['Project']>>,
-    ParentType,
-    ContextType
-  >;
-  summary?: Resolver<
-    Maybe<ResolversTypes['ProjectsSummary']>,
-    ParentType,
-    ContextType
-  >;
+export type ProjectsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectsResponse'] = ResolversParentTypes['ProjectsResponse']> = {
+  projects?: Resolver<Array<Maybe<ResolversTypes['Project']>>, ParentType, ContextType>;
+  summary?: Resolver<Maybe<ResolversTypes['ProjectsSummary']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectsSummaryResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProjectsSummary'] = ResolversParentTypes['ProjectsSummary'],
-> = {
+export type ProjectsSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectsSummary'] = ResolversParentTypes['ProjectsSummary']> = {
   fundedTotal?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  fundersCount?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
-  projectsCount?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
+  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  projectsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type QueryResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
-> = {
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  entry?: Resolver<
-    Maybe<ResolversTypes['Entry']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryEntryArgs, 'id'>
-  >;
-  fundingTx?: Resolver<
-    ResolversTypes['FundingTx'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryFundingTxArgs, 'id'>
-  >;
-  getActivities?: Resolver<
-    Array<Maybe<ResolversTypes['Activity']>>,
-    ParentType,
-    ContextType,
-    Partial<QueryGetActivitiesArgs>
-  >;
-  getDashboardFunders?: Resolver<
-    Array<Maybe<ResolversTypes['Funder']>>,
-    ParentType,
-    ContextType,
-    Partial<QueryGetDashboardFundersArgs>
-  >;
-  getEntries?: Resolver<
-    Array<Maybe<ResolversTypes['Entry']>>,
-    ParentType,
-    ContextType,
-    Partial<QueryGetEntriesArgs>
-  >;
-  getFunders?: Resolver<
-    Array<Maybe<ResolversTypes['Funder']>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetFundersArgs, 'input'>
-  >;
-  getFundingTxs?: Resolver<
-    Array<Maybe<ResolversTypes['FundingTx']>>,
-    ParentType,
-    ContextType,
-    Partial<QueryGetFundingTxsArgs>
-  >;
-  getProjectPubkey?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetProjectPubkeyArgs, 'projectId'>
-  >;
-  getProjectReward?: Resolver<
-    ResolversTypes['ProjectReward'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetProjectRewardArgs, 'id'>
-  >;
-  getProjectRewards?: Resolver<
-    Array<Maybe<ResolversTypes['ProjectReward']>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetProjectRewardsArgs, 'input'>
-  >;
-  getSignedUploadUrl?: Resolver<
-    ResolversTypes['SignedUploadUrl'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetSignedUploadUrlArgs, 'input'>
-  >;
-  getWallet?: Resolver<
-    ResolversTypes['Wallet'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetWalletArgs, 'id'>
-  >;
-  lightningAddressVerify?: Resolver<
-    ResolversTypes['LightningAddressVerifyResponse'],
-    ParentType,
-    ContextType,
-    Partial<QueryLightningAddressVerifyArgs>
-  >;
+  entry?: Resolver<Maybe<ResolversTypes['Entry']>, ParentType, ContextType, RequireFields<QueryEntryArgs, 'id'>>;
+  fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, RequireFields<QueryFundingTxArgs, 'id'>>;
+  getActivities?: Resolver<Array<Maybe<ResolversTypes['Activity']>>, ParentType, ContextType, Partial<QueryGetActivitiesArgs>>;
+  getDashboardFunders?: Resolver<Array<Maybe<ResolversTypes['Funder']>>, ParentType, ContextType, Partial<QueryGetDashboardFundersArgs>>;
+  getEntries?: Resolver<Array<Maybe<ResolversTypes['Entry']>>, ParentType, ContextType, Partial<QueryGetEntriesArgs>>;
+  getFunders?: Resolver<Array<Maybe<ResolversTypes['Funder']>>, ParentType, ContextType, RequireFields<QueryGetFundersArgs, 'input'>>;
+  getFundingTxs?: Resolver<Array<Maybe<ResolversTypes['FundingTx']>>, ParentType, ContextType, Partial<QueryGetFundingTxsArgs>>;
+  getProjectPubkey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryGetProjectPubkeyArgs, 'projectId'>>;
+  getProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<QueryGetProjectRewardArgs, 'id'>>;
+  getProjectRewards?: Resolver<Array<Maybe<ResolversTypes['ProjectReward']>>, ParentType, ContextType, RequireFields<QueryGetProjectRewardsArgs, 'input'>>;
+  getSignedUploadUrl?: Resolver<ResolversTypes['SignedUploadUrl'], ParentType, ContextType, RequireFields<QueryGetSignedUploadUrlArgs, 'input'>>;
+  getWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<QueryGetWalletArgs, 'id'>>;
+  lightningAddressVerify?: Resolver<ResolversTypes['LightningAddressVerifyResponse'], ParentType, ContextType, Partial<QueryLightningAddressVerifyArgs>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  project?: Resolver<
-    Maybe<ResolversTypes['Project']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryProjectArgs, 'where'>
-  >;
-  projects?: Resolver<
-    ResolversTypes['ProjectsResponse'],
-    ParentType,
-    ContextType,
-    Partial<QueryProjectsArgs>
-  >;
-  projectsSummary?: Resolver<
-    ResolversTypes['ProjectsSummary'],
-    ParentType,
-    ContextType
-  >;
+  project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'where'>>;
+  projects?: Resolver<ResolversTypes['ProjectsResponse'], ParentType, ContextType, Partial<QueryProjectsArgs>>;
+  projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  user?: Resolver<
-    ResolversTypes['User'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryUserArgs, 'where'>
-  >;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
 };
 
-export type SignedUploadUrlResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['SignedUploadUrl'] = ResolversParentTypes['SignedUploadUrl'],
-> = {
+export type SignedUploadUrlResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignedUploadUrl'] = ResolversParentTypes['SignedUploadUrl']> = {
   distributionUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   uploadUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SourceResourceResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['SourceResource'] = ResolversParentTypes['SourceResource'],
-> = {
+export type SourceResourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['SourceResource'] = ResolversParentTypes['SourceResource']> = {
   __resolveType: TypeResolveFn<'Entry' | 'Project', ParentType, ContextType>;
 };
 
-export type SponsorResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Sponsor'] = ResolversParentTypes['Sponsor'],
-> = {
+export type SponsorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Sponsor'] = ResolversParentTypes['Sponsor']> = {
   confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2828,90 +2137,29 @@ export type SponsorResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SubscriptionResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription'],
-> = {
-  _?: SubscriptionResolver<
-    Maybe<ResolversTypes['Boolean']>,
-    '_',
-    ParentType,
-    ContextType
-  >;
-  activityCreated?: SubscriptionResolver<
-    ResolversTypes['ActivityResource'],
-    'activityCreated',
-    ParentType,
-    ContextType,
-    Partial<SubscriptionActivityCreatedArgs>
-  >;
-  entryPublished?: SubscriptionResolver<
-    ResolversTypes['EntryPublishedSubscriptionResponse'],
-    'entryPublished',
-    ParentType,
-    ContextType
-  >;
-  fundingTxConfirmed?: SubscriptionResolver<
-    ResolversTypes['FundingTxConfirmedSubscriptionResponse'],
-    'fundingTxConfirmed',
-    ParentType,
-    ContextType
-  >;
-  projectActivated?: SubscriptionResolver<
-    ResolversTypes['ProjectActivatedSubscriptionResponse'],
-    'projectActivated',
-    ParentType,
-    ContextType
-  >;
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, "_", ParentType, ContextType>;
+  activityCreated?: SubscriptionResolver<ResolversTypes['ActivityResource'], "activityCreated", ParentType, ContextType, Partial<SubscriptionActivityCreatedArgs>>;
+  entryPublished?: SubscriptionResolver<ResolversTypes['EntryPublishedSubscriptionResponse'], "entryPublished", ParentType, ContextType>;
+  fundingTxConfirmed?: SubscriptionResolver<ResolversTypes['FundingTxConfirmedSubscriptionResponse'], "fundingTxConfirmed", ParentType, ContextType>;
+  projectActivated?: SubscriptionResolver<ResolversTypes['ProjectActivatedSubscriptionResponse'], "projectActivated", ParentType, ContextType>;
 };
 
-export type UserResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User'],
-> = {
-  contributions?: Resolver<
-    Array<Maybe<ResolversTypes['UserProjectContribution']>>,
-    ParentType,
-    ContextType
-  >;
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  contributions?: Resolver<Array<Maybe<ResolversTypes['UserProjectContribution']>>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  entries?: Resolver<
-    Array<Maybe<ResolversTypes['Entry']>>,
-    ParentType,
-    ContextType,
-    Partial<UserEntriesArgs>
-  >;
-  externalAccounts?: Resolver<
-    Array<Maybe<ResolversTypes['ExternalAccount']>>,
-    ParentType,
-    ContextType
-  >;
-  fundingTxs?: Resolver<
-    Array<Maybe<ResolversTypes['FundingTx']>>,
-    ParentType,
-    ContextType
-  >;
+  entries?: Resolver<Array<Maybe<ResolversTypes['Entry']>>, ParentType, ContextType, Partial<UserEntriesArgs>>;
+  externalAccounts?: Resolver<Array<Maybe<ResolversTypes['ExternalAccount']>>, ParentType, ContextType>;
+  fundingTxs?: Resolver<Array<Maybe<ResolversTypes['FundingTx']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  ownerOf?: Resolver<
-    Array<Maybe<ResolversTypes['OwnerOf']>>,
-    ParentType,
-    ContextType
-  >;
-  projects?: Resolver<
-    Array<Maybe<ResolversTypes['Project']>>,
-    ParentType,
-    ContextType,
-    Partial<UserProjectsArgs>
-  >;
+  ownerOf?: Resolver<Array<Maybe<ResolversTypes['OwnerOf']>>, ParentType, ContextType>;
+  projects?: Resolver<Array<Maybe<ResolversTypes['Project']>>, ParentType, ContextType, Partial<UserProjectsArgs>>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UserProjectContributionResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['UserProjectContribution'] = ResolversParentTypes['UserProjectContribution'],
-> = {
+export type UserProjectContributionResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserProjectContribution'] = ResolversParentTypes['UserProjectContribution']> = {
   funder?: Resolver<Maybe<ResolversTypes['Funder']>, ParentType, ContextType>;
   isAmbassador?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isFunder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -2920,261 +2168,133 @@ export type UserProjectContributionResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WalletResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Wallet'] = ResolversParentTypes['Wallet'],
-> = {
-  connectionDetails?: Resolver<
-    ResolversTypes['ConnectionDetails'],
-    ParentType,
-    ContextType
-  >;
+export type WalletResolvers<ContextType = any, ParentType extends ResolversParentTypes['Wallet'] = ResolversParentTypes['Wallet']> = {
+  connectionDetails?: Resolver<ResolversTypes['ConnectionDetails'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  name?: Resolver<
-    Maybe<ResolversTypes['name_String_minLength_5_maxLength_60']>,
-    ParentType,
-    ContextType
-  >;
+  name?: Resolver<Maybe<ResolversTypes['name_String_minLength_5_maxLength_60']>, ParentType, ContextType>;
   state?: Resolver<ResolversTypes['WalletState'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WalletStateResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['WalletState'] = ResolversParentTypes['WalletState'],
-> = {
+export type WalletStateResolvers<ContextType = any, ParentType extends ResolversParentTypes['WalletState'] = ResolversParentTypes['WalletState']> = {
   status?: Resolver<ResolversTypes['WalletStatus'], ParentType, ContextType>;
-  statusCode?: Resolver<
-    ResolversTypes['WalletStatusCode'],
-    ParentType,
-    ContextType
-  >;
+  statusCode?: Resolver<ResolversTypes['WalletStatusCode'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface Amount_Float_NotNull_Min_1ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['amount_Float_NotNull_min_1'],
-    any
-  > {
+export interface Amount_Float_NotNull_Min_1ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['amount_Float_NotNull_min_1'], any> {
   name: 'amount_Float_NotNull_min_1';
 }
 
-export interface Amount_Float_Min_1ScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes['amount_Float_min_1'], any> {
+export interface Amount_Float_Min_1ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['amount_Float_min_1'], any> {
   name: 'amount_Float_min_1';
 }
 
-export interface Comment_String_MaxLength_280ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['comment_String_maxLength_280'],
-    any
-  > {
+export interface Comment_String_MaxLength_280ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['comment_String_maxLength_280'], any> {
   name: 'comment_String_maxLength_280';
 }
 
-export interface Cost_Float_NotNull_Min_1_Max_1000000ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['cost_Float_NotNull_min_1_max_1000000'],
-    any
-  > {
+export interface Cost_Float_NotNull_Min_1_Max_1000000ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['cost_Float_NotNull_min_1_max_1000000'], any> {
   name: 'cost_Float_NotNull_min_1_max_1000000';
 }
 
-export interface Cost_Int_NotNull_Min_0ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['cost_Int_NotNull_min_0'],
-    any
-  > {
+export interface Cost_Int_NotNull_Min_0ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['cost_Int_NotNull_min_0'], any> {
   name: 'cost_Int_NotNull_min_0';
 }
 
-export interface Description_String_NotNull_MaxLength_250ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['description_String_NotNull_maxLength_250'],
-    any
-  > {
+export interface Description_String_NotNull_MaxLength_250ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['description_String_NotNull_maxLength_250'], any> {
   name: 'description_String_NotNull_maxLength_250';
 }
 
-export interface Description_String_NotNull_MaxLength_2200ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['description_String_NotNull_maxLength_2200'],
-    any
-  > {
+export interface Description_String_NotNull_MaxLength_2200ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['description_String_NotNull_maxLength_2200'], any> {
   name: 'description_String_NotNull_maxLength_2200';
 }
 
-export interface Description_String_MaxLength_250ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['description_String_maxLength_250'],
-    any
-  > {
+export interface Description_String_MaxLength_250ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['description_String_maxLength_250'], any> {
   name: 'description_String_maxLength_250';
 }
 
-export interface Description_String_MaxLength_2200ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['description_String_maxLength_2200'],
-    any
-  > {
+export interface Description_String_MaxLength_2200ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['description_String_maxLength_2200'], any> {
   name: 'description_String_maxLength_2200';
 }
 
-export interface DonationAmount_Int_NotNull_Min_1ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['donationAmount_Int_NotNull_min_1'],
-    any
-  > {
+export interface DonationAmount_Int_NotNull_Min_1ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['donationAmount_Int_NotNull_min_1'], any> {
   name: 'donationAmount_Int_NotNull_min_1';
 }
 
-export interface Email_String_NotNull_Format_EmailScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['email_String_NotNull_format_email'],
-    any
-  > {
+export interface Email_String_NotNull_Format_EmailScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['email_String_NotNull_format_email'], any> {
   name: 'email_String_NotNull_format_email';
 }
 
-export interface Email_String_Format_EmailScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['email_String_format_email'],
-    any
-  > {
+export interface Email_String_Format_EmailScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['email_String_format_email'], any> {
   name: 'email_String_format_email';
 }
 
-export interface FundingGoal_Int_Min_1ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['fundingGoal_Int_min_1'],
-    any
-  > {
+export interface FundingGoal_Int_Min_1ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['fundingGoal_Int_min_1'], any> {
   name: 'fundingGoal_Int_min_1';
 }
 
-export interface Link_String_NotNull_Format_UriScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['link_String_NotNull_format_uri'],
-    any
-  > {
+export interface Link_String_NotNull_Format_UriScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['link_String_NotNull_format_uri'], any> {
   name: 'link_String_NotNull_format_uri';
 }
 
-export interface Name_String_NotNull_MaxLength_100ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_NotNull_maxLength_100'],
-    any
-  > {
+export interface Name_String_NotNull_MaxLength_100ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['name_String_NotNull_maxLength_100'], any> {
   name: 'name_String_NotNull_maxLength_100';
 }
 
-export interface Name_String_NotNull_MinLength_3_MaxLength_60ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_NotNull_minLength_3_maxLength_60'],
-    any
-  > {
+export interface Name_String_NotNull_MinLength_3_MaxLength_60ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['name_String_NotNull_minLength_3_maxLength_60'], any> {
   name: 'name_String_NotNull_minLength_3_maxLength_60';
 }
 
-export interface Name_String_NotNull_MinLength_3_MaxLength_280ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_NotNull_minLength_3_maxLength_280'],
-    any
-  > {
+export interface Name_String_NotNull_MinLength_3_MaxLength_280ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['name_String_NotNull_minLength_3_maxLength_280'], any> {
   name: 'name_String_NotNull_minLength_3_maxLength_280';
 }
 
-export interface Name_String_MaxLength_100ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_maxLength_100'],
-    any
-  > {
+export interface Name_String_MaxLength_100ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['name_String_maxLength_100'], any> {
   name: 'name_String_maxLength_100';
 }
 
-export interface Name_String_MinLength_3_MaxLength_280ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_minLength_3_maxLength_280'],
-    any
-  > {
+export interface Name_String_MinLength_3_MaxLength_280ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['name_String_minLength_3_maxLength_280'], any> {
   name: 'name_String_minLength_3_maxLength_280';
 }
 
-export interface Name_String_MinLength_5_MaxLength_60ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['name_String_minLength_5_maxLength_60'],
-    any
-  > {
+export interface Name_String_MinLength_5_MaxLength_60ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['name_String_minLength_5_maxLength_60'], any> {
   name: 'name_String_minLength_5_maxLength_60';
 }
 
-export interface Pubkey_String_MinLength_66_MaxLength_66ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['pubkey_String_minLength_66_maxLength_66'],
-    any
-  > {
+export interface Pubkey_String_MinLength_66_MaxLength_66ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['pubkey_String_minLength_66_maxLength_66'], any> {
   name: 'pubkey_String_minLength_66_maxLength_66';
 }
 
-export interface Quantity_Int_NotNull_Min_1ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['quantity_Int_NotNull_min_1'],
-    any
-  > {
+export interface Quantity_Int_NotNull_Min_1ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['quantity_Int_NotNull_min_1'], any> {
   name: 'quantity_Int_NotNull_min_1';
 }
 
-export interface RewardsCost_Int_NotNull_Min_0ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['rewardsCost_Int_NotNull_min_0'],
-    any
-  > {
+export interface RewardsCost_Int_NotNull_Min_0ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['rewardsCost_Int_NotNull_min_0'], any> {
   name: 'rewardsCost_Int_NotNull_min_0';
 }
 
-export interface ShortDescription_String_MaxLength_500ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['shortDescription_String_maxLength_500'],
-    any
-  > {
+export interface ShortDescription_String_MaxLength_500ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['shortDescription_String_maxLength_500'], any> {
   name: 'shortDescription_String_maxLength_500';
 }
 
-export interface Stock_Int_Min_0ScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes['stock_Int_min_0'], any> {
+export interface Stock_Int_Min_0ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['stock_Int_min_0'], any> {
   name: 'stock_Int_min_0';
 }
 
-export interface Title_String_NotNull_MaxLength_60ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['title_String_NotNull_maxLength_60'],
-    any
-  > {
+export interface Title_String_NotNull_MaxLength_60ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['title_String_NotNull_maxLength_60'], any> {
   name: 'title_String_NotNull_maxLength_60';
 }
 
-export interface Title_String_NotNull_MaxLength_150ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['title_String_NotNull_maxLength_150'],
-    any
-  > {
+export interface Title_String_NotNull_MaxLength_150ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['title_String_NotNull_maxLength_150'], any> {
   name: 'title_String_NotNull_maxLength_150';
 }
 
-export interface Title_String_MaxLength_60ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['title_String_maxLength_60'],
-    any
-  > {
+export interface Title_String_MaxLength_60ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['title_String_maxLength_60'], any> {
   name: 'title_String_maxLength_60';
 }
 
-export interface Title_String_MaxLength_150ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['title_String_maxLength_150'],
-    any
-  > {
+export interface Title_String_MaxLength_150ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['title_String_maxLength_150'], any> {
   name: 'title_String_maxLength_150';
 }
 

@@ -1,23 +1,21 @@
-import classNames from 'classnames';
-import React from 'react';
-import { createUseStyles } from 'react-jss';
-import ReactMarkdown from 'react-markdown';
-import { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
-import { matchMarkDownSpecialKeysAtLineEnd } from '../validations/regex';
+import classNames from 'classnames'
+import { createUseStyles } from 'react-jss'
+import ReactMarkdown from 'react-markdown'
+import { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown'
 
 interface MarkDownProps extends ReactMarkdownOptions {
-  color?: string;
-  wordBreak?: string;
-  fontSize?: any;
+  color?: string
+  wordBreak?: string
+  fontSize?: any
 }
 
-type Rules = string;
+type Rules = string
 
 type StyleProps = {
-  color?: string;
-  wordBreak?: string;
-  fontSize?: any;
-};
+  color?: string
+  wordBreak?: string
+  fontSize?: any
+}
 
 const useStyles = createUseStyles<Rules, StyleProps>({
   container: ({ color, wordBreak, fontSize }) => ({
@@ -28,13 +26,13 @@ const useStyles = createUseStyles<Rules, StyleProps>({
       textDecoration: 'underline',
     },
     '& ul': {
-      paddingLeft: '25px',
+      paddingLeft: '20px',
     },
     '& ol': {
-      paddingLeft: '25px',
+      paddingLeft: '20px',
     },
   }),
-});
+})
 
 export const MarkDown = ({
   children,
@@ -44,9 +42,10 @@ export const MarkDown = ({
   fontSize,
   ...rest
 }: MarkDownProps) => {
-  const classes = useStyles({ color, wordBreak, fontSize });
+  const classes = useStyles({ color, wordBreak, fontSize })
 
-  const finalValue = formatString(children);
+  const finalValue = formatString(children)
+
   return (
     <ReactMarkdown
       className={classNames(classes.container, className)}
@@ -59,28 +58,12 @@ export const MarkDown = ({
     >
       {finalValue}
     </ReactMarkdown>
-  );
-};
+  )
+}
 
 const formatString = (value: string): string => {
   const adjustForLineChange = value
-    ? value.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '\\\n')
-    : '';
-
-  const adjustedForMultiParagrah = adjustForLineChange.replaceAll(
-    /\n\n/g,
-    '\n\\\n',
-  );
-
-  const finalValue = getRidOfEndSlash(adjustedForMultiParagrah);
-  return finalValue;
-};
-
-const getRidOfEndSlash = (value: string): string => {
-  if (value[value.length - 2] === '\\') {
-    const newValue = value.slice(0, value.length - 2);
-    return getRidOfEndSlash(newValue);
-  }
-
-  return value;
-};
+    ? value.replaceAll(/\n/g, '&nbsp;  \n\n')
+    : ''
+  return adjustForLineChange
+}

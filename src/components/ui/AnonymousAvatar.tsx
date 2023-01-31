@@ -1,14 +1,14 @@
-import React from 'react';
-import { Avatar, Stack } from '@chakra-ui/react';
-import { getRandomOrb } from '../../utils';
-import { UserSkeleton } from './UserSkeleton';
+import { Avatar, Stack } from '@chakra-ui/react'
+
+import { getRandomOrb } from '../../utils'
+import { UserSkeleton } from './UserSkeleton'
 
 type Props = {
-  seed: number;
-  image?: string;
-  imageSize?: number | string;
-  textColor?: string;
-};
+  seed: number
+  image?: string
+  imageSize?: number | string
+  textColor?: string
+}
 
 export const AnonymousAvatar = ({
   seed,
@@ -41,4 +41,4 @@ export const AnonymousAvatar = ({
       icon={<UserSkeleton />}
     />
   </Stack>
-);
+)

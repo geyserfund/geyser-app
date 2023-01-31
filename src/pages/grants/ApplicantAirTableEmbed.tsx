@@ -1,9 +1,9 @@
-import { Box } from '@chakra-ui/react';
-import React from 'react';
-import { isMobileMode } from '../../utils';
+import { Box } from '@chakra-ui/react'
+
+import { useMobileMode } from '../../utils'
 
 export default function ApplicantAirTableEmbed() {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode()
   return (
     <Box height={isMobile ? 'calc(100vh - 230px)' : 'calc(100vh - 250px)'}>
       <iframe
@@ -14,5 +14,5 @@ export default function ApplicantAirTableEmbed() {
         height="100%"
       ></iframe>
     </Box>
-  );
+  )
 }

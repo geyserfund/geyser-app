@@ -1,24 +1,23 @@
-import React from 'react';
-import { VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react'
 
-import Loader from '../../../components/ui/Loader';
-import { ProjectFundingContributionsFeedItem } from '../../../components/molecules';
-import { AlertBox } from '../../../components/ui';
-import { FundingMethod, Project } from '../../../types/generated/graphql';
+import { ProjectFundingContributionsFeedItem } from '../../../components/molecules'
+import { AlertBox } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { ID } from '../../../constants/components'
+import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql'
+import { ScrollInvoke } from '../../../helpers'
+import { useQueryWithPagination } from '../../../hooks'
+import { FundingMethod, Project } from '../../../types/generated/graphql'
 import {
   aggregateTransactions,
   FundingTxWithCount,
-  isMobileMode,
-} from '../../../utils';
-import { ScrollInvoke } from '../../../helpers';
-import { useQueryWithPagination } from '../../../hooks';
-import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql';
-import { ID } from '../../../constants/components';
+  useMobileMode,
+} from '../../../utils'
 
-const itemLimit = 50;
+const itemLimit = 50
 
 export const LandingPageContributionsList = () => {
-  const isMobile = isMobileMode();
+  const isMobile = useMobileMode()
   const {
     isLoading,
     isLoadingMore,
@@ -43,7 +42,7 @@ export const LandingPageContributionsList = () => {
         },
       ],
     },
-  });
+  })
 
   if (error) {
     return (
@@ -53,11 +52,11 @@ export const LandingPageContributionsList = () => {
         title="An error occurred while attempting to fetch contributions."
         message="Please try refreshing the page. You may also want to contact support if the problem persists."
       />
-    );
+    )
   }
 
   if (isLoading) {
-    return <Loader width="100%" />;
+    return <Loader width="100%" />
   }
 
   if (contributions?.length === 0) {
@@ -69,7 +68,7 @@ export const LandingPageContributionsList = () => {
         title="There are currently no project contributions."
         message="Please try refreshing the page. You may also want to contact support if the problem persists."
       />
-    );
+    )
   }
 
   return (
@@ -88,10 +87,10 @@ export const LandingPageContributionsList = () => {
                   md: '382px',
                 }}
               />
-            );
+            )
           }
 
-          return null;
+          return null
         })}
       </VStack>
 
@@ -102,5 +101,5 @@ export const LandingPageContributionsList = () => {
         noMoreItems={noMoreItems}
       />
     </VStack>
-  );
-};
+  )
+}

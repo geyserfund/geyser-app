@@ -1,24 +1,23 @@
 import {
+  HStack,
   Modal,
+  ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
   Text,
-  ModalCloseButton,
-  ModalBody,
-  Box,
   VStack,
-  HStack,
-} from '@chakra-ui/react';
-import React from 'react';
-import { ButtonComponent } from '../ui';
+} from '@chakra-ui/react'
+
+import { ButtonComponent } from '../ui'
 
 interface IDeleteConfirmModal {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  description?: string;
-  confirm: () => any;
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  description?: string
+  confirm: () => any
 }
 
 export const DeleteConfirmModal = ({
@@ -50,4 +49,4 @@ export const DeleteConfirmModal = ({
       </ModalBody>
     </ModalContent>
   </Modal>
-);
+)

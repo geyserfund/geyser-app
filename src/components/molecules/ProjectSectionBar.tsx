@@ -1,10 +1,9 @@
-import { Badge, HStack, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
+import { Badge, HStack, Text, VStack } from '@chakra-ui/react'
 
 interface IProjectSectionBar {
-  name: string;
-  number?: string | number;
-  rightSection?: React.ReactNode;
+  name: string
+  number?: string | number
+  rightSection?: React.ReactNode
 }
 
 export const ProjectSectionBar = ({
@@ -28,4 +27,4 @@ export const ProjectSectionBar = ({
       {rightSection}
     </HStack>
   </VStack>
-);
+)

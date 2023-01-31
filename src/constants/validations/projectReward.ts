@@ -8,4 +8,4 @@ export const ProjectRewardValidations = {
   cost: {
     maxUSDCentsAmount: 1_000_000,
   },
-};
+}

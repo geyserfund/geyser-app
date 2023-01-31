@@ -1,12 +1,11 @@
-import { Link, LinkProps } from '@chakra-ui/react';
-import React from 'react';
+import { Link, LinkProps } from '@chakra-ui/react'
 
 type Props = LinkProps & {
-  children: any;
-};
+  children: any
+}
 
 export const UndecoratedLink = ({ children, ...rest }: Props) => (
   <Link {...rest} _hover={{ textDecoration: 'none' }}>
     {children}
   </Link>
-);
+)
