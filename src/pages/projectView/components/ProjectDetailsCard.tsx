@@ -310,21 +310,6 @@ export const ProjectDetailsCard = ({
         </VStack>
         {renderMilestone()}
         {renderYourFunding()}
-        {!isMobile && (
-          <Button
-            w="full"
-            backgroundColor={
-              isActive(project.status)
-                ? 'brand.primary'
-                : 'brand.grayPlaceholder'
-            }
-            leftIcon={<BoltIcon />}
-            onClick={fundButtonFunction}
-            isDisabled={isActive(project.status) === false}
-          >
-            Contribute
-          </Button>
-        )}
       </VStack>
     </Card>
   )
