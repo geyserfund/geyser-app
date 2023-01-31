@@ -131,6 +131,7 @@ export const ProjectDetailsCard = ({
 
   return (
     <Card
+      backgroundColor="white"
       border="2px solid"
       borderColor="brand.neutral200"
       borderRadius="8px"
