@@ -207,149 +207,143 @@ export const ProjectDiscoveryPageGridSection = () => {
   return (
     <Box
       display={'flex'}
+      width="100%"
+      flex="1"
       justifyContent="center"
       flexDirection="row"
+      paddingX={{
+        base: 4,
+        lg: 10,
+      }}
       paddingBottom={isMobile ? 10 : 20}
     >
-      <Center
-        width={'full'}
-        paddingX={{
-          base: 4,
-          lg: 10,
-        }}
-      >
-        <Grid
-          templateAreas={`
+      <Grid
+        templateAreas={`
             "header"
             "main"
           `}
-          gridTemplateRows={'50px 1fr'}
-          gridTemplateColumns={'1fr'}
-          width="full"
-          maxWidth="927px"
-          minHeight="100%"
-          height="auto"
-          gap="1"
-          justifyContent={'center'}
-        >
-          <GridItem area={'header'}>
-            <StickToTop
-              disable={!isMobile}
-              id="discovery-page-all-container"
-              _onStick={{ width: 'calc(100% - 30px)' }}
+        gridTemplateRows={'50px 1fr'}
+        gridTemplateColumns={'1fr'}
+        width="full"
+        maxWidth="927px"
+        minHeight="100%"
+        height="auto"
+        gap="1"
+        justifyContent={'center'}
+      >
+        <GridItem area={'header'}>
+          <StickToTop
+            disable={!isMobile}
+            id="discovery-page-all-container"
+            _onStick={{ width: 'calc(100% - 30px)' }}
+          >
+            <HStack
+              justifyContent={'space-between'}
+              alignItems={['center', 'baseline']}
+              paddingTop="10px"
+              spacing={0}
             >
-              <HStack
-                justifyContent={'space-between'}
-                alignItems={['center', 'baseline']}
-                paddingTop="10px"
-                spacing={0}
-              >
-                <H3 paddingY="5px">All Geyser Projects</H3>
+              <H3 paddingY="5px">All Geyser Projects</H3>
 
-                <Menu closeOnSelect placement="bottom-start">
-                  <MenuButton
-                    as={IconButton}
-                    fontSize={'1.5em'}
-                    variant="ghost"
-                    aria-label="Project Sorting"
-                    icon={<RiSortDesc />}
+              <Menu closeOnSelect placement="bottom-start">
+                <MenuButton
+                  as={IconButton}
+                  fontSize={'1.5em'}
+                  variant="ghost"
+                  aria-label="Project Sorting"
+                  icon={<RiSortDesc />}
+                />
+
+                <MenuList>
+                  <Text padding={3} color="brand.gray500" fontWeight={'medium'}>
+                    Sort By:
+                  </Text>
+
+                  <MenuItem
+                    fontWeight={'semibold'}
+                    onSelect={() => {
+                      handleOrderBySelectionChanged({
+                        createdAt: OrderByOptions.Desc,
+                      })
+                    }}
+                    onClick={() => {
+                      handleOrderBySelectionChanged({
+                        createdAt: OrderByOptions.Desc,
+                      })
+                    }}
+                  >
+                    Newest Projects
+                  </MenuItem>
+
+                  <MenuItem
+                    fontWeight={'semibold'}
+                    onSelect={() => {
+                      handleOrderBySelectionChanged({
+                        createdAt: OrderByOptions.Asc,
+                      })
+                    }}
+                    onClick={() => {
+                      handleOrderBySelectionChanged({
+                        createdAt: OrderByOptions.Asc,
+                      })
+                    }}
+                  >
+                    Oldest Projects
+                  </MenuItem>
+
+                  <MenuItem
+                    fontWeight={'semibold'}
+                    onSelect={() => {
+                      handleOrderBySelectionChanged({
+                        balance: OrderByOptions.Desc,
+                      })
+                    }}
+                    onClick={() => {
+                      handleOrderBySelectionChanged({
+                        balance: OrderByOptions.Desc,
+                      })
+                    }}
+                  >
+                    Amount Funded
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </HStack>
+            <Divider borderWidth="1px" />
+          </StickToTop>
+        </GridItem>
+
+        <GridItem area={'main'}>
+          <VStack spacing={16} paddingTop="10px">
+            {isPageLoading ? (
+              <PageLoadingView />
+            ) : projects.length === 0 ? (
+              <EmptyStateView />
+            ) : error ? (
+              <ErrorView />
+            ) : (
+              <ProjectDiscoveryPageGridItems projects={projects} />
+            )}
+
+            {isShowingAllProjects.current === false &&
+            Boolean(error) === false &&
+            projects.length > 0 ? (
+              <>
+                {isLoadingMore.current === false ? (
+                  <ScrollInvoke
+                    elementId={isMobile ? undefined : ID.root}
+                    onScrollEnd={handleLoadMoreButtonTapped}
+                    isLoading={isLoadingMore}
+                    noMoreItems={isShowingAllProjects}
                   />
-
-                  <MenuList>
-                    <Text
-                      padding={3}
-                      color="brand.gray500"
-                      fontWeight={'medium'}
-                    >
-                      Sort By:
-                    </Text>
-
-                    <MenuItem
-                      fontWeight={'semibold'}
-                      onSelect={() => {
-                        handleOrderBySelectionChanged({
-                          createdAt: OrderByOptions.Desc,
-                        })
-                      }}
-                      onClick={() => {
-                        handleOrderBySelectionChanged({
-                          createdAt: OrderByOptions.Desc,
-                        })
-                      }}
-                    >
-                      Newest Projects
-                    </MenuItem>
-
-                    <MenuItem
-                      fontWeight={'semibold'}
-                      onSelect={() => {
-                        handleOrderBySelectionChanged({
-                          createdAt: OrderByOptions.Asc,
-                        })
-                      }}
-                      onClick={() => {
-                        handleOrderBySelectionChanged({
-                          createdAt: OrderByOptions.Asc,
-                        })
-                      }}
-                    >
-                      Oldest Projects
-                    </MenuItem>
-
-                    <MenuItem
-                      fontWeight={'semibold'}
-                      onSelect={() => {
-                        handleOrderBySelectionChanged({
-                          balance: OrderByOptions.Desc,
-                        })
-                      }}
-                      onClick={() => {
-                        handleOrderBySelectionChanged({
-                          balance: OrderByOptions.Desc,
-                        })
-                      }}
-                    >
-                      Amount Funded
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
-              </HStack>
-              <Divider borderWidth="1px" />
-            </StickToTop>
-          </GridItem>
-
-          <GridItem area={'main'}>
-            <VStack spacing={16} paddingTop="10px">
-              {isPageLoading ? (
-                <PageLoadingView />
-              ) : projects.length === 0 ? (
-                <EmptyStateView />
-              ) : error ? (
-                <ErrorView />
-              ) : (
-                <ProjectDiscoveryPageGridItems projects={projects} />
-              )}
-
-              {isShowingAllProjects.current === false &&
-              Boolean(error) === false &&
-              projects.length > 0 ? (
-                <>
-                  {isLoadingMore.current === false ? (
-                    <ScrollInvoke
-                      elementId={isMobile ? undefined : ID.root}
-                      onScrollEnd={handleLoadMoreButtonTapped}
-                      isLoading={isLoadingMore}
-                      noMoreItems={isShowingAllProjects}
-                    />
-                  ) : (
-                    <Loader />
-                  )}
-                </>
-              ) : null}
-            </VStack>
-          </GridItem>
-        </Grid>
-      </Center>
+                ) : (
+                  <Loader />
+                )}
+              </>
+            ) : null}
+          </VStack>
+        </GridItem>
+      </Grid>
     </Box>
   )
 }

@@ -253,7 +253,11 @@ export const MilestoneAndRewards = () => {
         percentage={67}
       >
         <VStack width="100%" alignItems="flex-start" spacing="40px">
-          <ProjectLinks links={links} setLinks={setLinks} />
+          <ProjectLinks
+            links={links}
+            setLinks={setLinks}
+            linkError={linkError}
+          />
           <VStack width="100%" alignItems="flex-start">
             <Text>Project Milestones (optional)</Text>
             <ButtonComponent w="full" onClick={openMilestone}>

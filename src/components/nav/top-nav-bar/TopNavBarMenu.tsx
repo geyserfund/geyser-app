@@ -123,6 +123,7 @@ export const TopNavBarMenu = ({
               as={Link}
               to={getPath('userProfile', user.id)}
               _focus={{ boxShadow: 'none' }}
+              _hover={{ backgroundColor: 'brand.neutral200' }}
             >
               <NavBarUserProfileMenuItem />
             </MenuItem>

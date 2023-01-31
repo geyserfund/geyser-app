@@ -245,9 +245,11 @@ export const ProjectActivityPanel = ({
         backgroundColor="#FFFFFF"
         marginTop={isMobile ? '0px' : '20px'}
         height={getActivityHeight()}
-        borderTopLeftRadius={isMobile ? '' : '22px'}
+        borderTopLeftRadius={isMobile ? '' : '8px'}
         overflow="hidden"
-        boxShadow="-8px -8px 12px -8px rgba(0, 0, 0, 0.1)"
+        borderTop={isMobile ? 'none' : '2px solid'}
+        borderLeft="2px solid"
+        borderColor="brand.neutral200"
       >
         {renderPanelContent()}
       </Box>

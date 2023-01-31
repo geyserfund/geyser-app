@@ -42,7 +42,9 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
         <Button
           size="sm"
           leftIcon={<BoltIcon scale={0.8} />}
-          _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
+          border="1px solid"
+          borderColor="transparent"
+          _hover={{ backgroundColor: 'none', borderColor: '#20ECC7' }}
           _active={{ backgroundColor: 'brand.primary' }}
           bg="none"
           fontWeight="medium"
@@ -56,7 +58,9 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
 
       <Tooltip label="View Project QR Code" placement="top">
         <IconButton
-          _hover={{ backgroundColor: 'none', border: '1px solid #20ECC7' }}
+          border="1px solid"
+          borderColor="transparent"
+          _hover={{ backgroundColor: 'none', borderColor: '#20ECC7' }}
           _active={{ backgroundColor: 'brand.primary' }}
           bg="none"
           icon={<QrIcon />}
