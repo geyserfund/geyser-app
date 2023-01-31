@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { EditIcon } from '@chakra-ui/icons'
 import { HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
+import { BiPencil } from 'react-icons/bi'
 import { useNavigate, useParams } from 'react-router'
 
 import { DeleteConfirmModal, RewardCard } from '../../../components/molecules'
@@ -191,10 +191,10 @@ export const MilestoneAndRewards = () => {
         <>
           <HStack justifyContent="space-between" width="100%">
             <Text fontSize="18px" fontWeight={500}>
-              MILESTONES
+              Milestones
             </Text>
             <IconButtonComponent aria-label="edit" onClick={openMilestone}>
-              <EditIcon />
+              <BiPencil />
             </IconButtonComponent>
           </HStack>
 
