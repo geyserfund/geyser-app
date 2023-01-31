@@ -72,6 +72,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
               fontSize={'2xl'}
               fontFamily={'body'}
               noOfLines={1}
+              wordBreak="break-all"
             >
               {project.title}
             </Heading>
