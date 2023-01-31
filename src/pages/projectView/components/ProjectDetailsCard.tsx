@@ -65,7 +65,7 @@ export const ProjectDetailsCard = ({
         spacing="60px"
         justifyContent="center"
       >
-        <VStack>
+        <VStack spacing="0px">
           <HStack spacing="5px">
             <BsHeartFill color={colors.neutral500} />
             <MonoBody1>
@@ -74,7 +74,7 @@ export const ProjectDetailsCard = ({
           </HStack>
           <Caption>CONTRIBUTORS</Caption>
         </VStack>
-        <VStack>
+        <VStack spacing="0px">
           <HStack spacing="5px">
             <SatoshiIcon scale={0.7} />
             <MonoBody1>{getShortAmountLabel(project.balance)}</MonoBody1>
@@ -82,7 +82,7 @@ export const ProjectDetailsCard = ({
           <Caption>TOTAL CONTRIBUTED</Caption>
         </VStack>
         {currentFund && (
-          <VStack>
+          <VStack spacing="0px">
             <HStack spacing="5px">
               <SatoshiIcon scale={0.7} />
               <MonoBody1>
