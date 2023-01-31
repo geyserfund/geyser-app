@@ -186,7 +186,12 @@ export const ProjectDetailsCard = ({
       shadow="sm"
     >
       <VStack position="relative">
-        <Box width="100%" height="230px" overflow="hidden">
+        <Box
+          width="100%"
+          height="230px"
+          overflow="hidden"
+          backgroundColor="white"
+        >
           <ImageWithReload
             grey
             width="100%"
@@ -205,6 +210,7 @@ export const ProjectDetailsCard = ({
           position="absolute"
           bottom="-30px"
           left="24px"
+          backgroundColor="white"
         >
           <ImageWithReload
             grey
