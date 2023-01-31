@@ -172,12 +172,14 @@ export const QUERY_PROJECTS = gql`
         title
         name
         type
+        shortDescription
         description
         balance
         fundingGoal
         createdAt
         updatedAt
         expiresAt
+        thumbnailImage
         image
         status
         media

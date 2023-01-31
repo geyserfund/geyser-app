@@ -17,8 +17,10 @@ const GET_PROJECT = gql`
       id
       name
       title
+      shortDescription
       description
       image
+      thumbnailImage
       balance
       status
       funders {

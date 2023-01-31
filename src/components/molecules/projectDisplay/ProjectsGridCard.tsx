@@ -58,7 +58,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
           alignItems="center"
         >
           <Image
-            src={project.image || ''}
+            src={project.thumbnailImage || ''}
             width="full"
             height="full"
             fallback={<ProjectImageListItemPlaceholder padding="3em" />}
@@ -134,7 +134,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
               size="sm"
               wordBreak="break-word"
             >
-              <MarkDown>{project.description}</MarkDown>
+              {project.shortDescription}
             </Text>
           </VStack>
         </Box>

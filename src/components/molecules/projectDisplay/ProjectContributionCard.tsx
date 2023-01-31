@@ -65,7 +65,7 @@ export const ProjectContributionCard = ({
 
   const { project } = contribution
 
-  const imgSrc = project.image
+  const imgSrc = project.thumbnailImage
 
   return (
     <Link to={`/project/${project.name}`}>

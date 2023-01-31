@@ -13,7 +13,7 @@ export const ProjectAvatarLink = ({
   project,
   textColor = 'brand.neutral700',
 }: Props) => {
-  const avatarSrc = project.image
+  const avatarSrc = project.thumbnailImage || ''
 
   return (
     <Link
@@ -22,7 +22,7 @@ export const ProjectAvatarLink = ({
       color={textColor}
     >
       <HStack spacing={1}>
-        <Avatar borderRadius="4px" src={avatarSrc || ''} boxSize={'1em'} />
+        <Avatar borderRadius="4px" src={avatarSrc} boxSize={'1em'} />
         <Text fontWeight={'bold'} noOfLines={1}>
           {project.title}
         </Text>
