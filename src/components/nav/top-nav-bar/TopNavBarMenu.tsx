@@ -91,7 +91,7 @@ export const TopNavBarMenu = ({
                 width="100%"
                 onClick={onDashboardSelected}
               >
-                Dashboard
+                Project dashboard
               </ButtonComponent>
             </MenuItem>
 
