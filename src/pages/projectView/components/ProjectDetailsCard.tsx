@@ -236,7 +236,12 @@ export const ProjectDetailsCard = ({
             justifyContent="space-between"
             width="100%"
           >
-            <Text fontSize="30px" fontWeight={700}>
+            <Text
+              fontSize="30px"
+              fontWeight={700}
+              width="100%"
+              wordBreak="break-all"
+            >
               {project.title}
             </Text>
             <ProjectStatusLabel project={project} />
