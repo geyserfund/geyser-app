@@ -1,10 +1,10 @@
-import { CloseIcon } from '@chakra-ui/icons';
-import { Box, Text, VStack } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons'
+import { Box, Text, VStack } from '@chakra-ui/react'
 
-import { useMobileMode } from '../../utils';
+import { useMobileMode } from '../../utils'
 
 export const FailedAuth = () => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
   return (
     <VStack
       height="100vh"
@@ -36,8 +36,8 @@ export const FailedAuth = () => {
         w={isMobile ? '90%' : '550px'}
         textAlign="center"
       >
-        Authentication failed. Please go back to try again.
+        Authentication failed. Please clear Cache / Cookies and try again.
       </Text>
     </VStack>
-  );
-};
+  )
+}
