@@ -143,7 +143,12 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
       {renderCircularProgress()}
       <VStack flex="1" spacing="5px" width="100%" overflow="hidden">
         {!isMobile && (
-          <Text fontSize="18px" fontWeight={600} color="brand.neutral900">
+          <Text
+            fontSize="18px"
+            fontWeight={600}
+            color="brand.neutral900"
+            wordBreak="break-all"
+          >
             {project.title}
           </Text>
         )}

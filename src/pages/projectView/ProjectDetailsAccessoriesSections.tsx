@@ -103,7 +103,11 @@ export const ProjectDetailsAccessoriesSections = ({
       return project.rewards.map((reward) => {
         if (reward) {
           return (
-            <GridItem key={reward.id} colSpan={isSmallerThan1265 ? 2 : 1}>
+            <GridItem
+              key={reward.id}
+              colSpan={isSmallerThan1265 ? 2 : 1}
+              maxWidth="350px"
+            >
               <FundingFormRewardItem
                 onClick={() => {
                   if (
@@ -260,6 +264,7 @@ export const ProjectDetailsAccessoriesSections = ({
           <ProjectSectionBar name={'Rewards'} number={rewardsLength} />
 
           <SimpleGrid
+            width="100%"
             columns={isSmallerThan1265 ? 1 : 2}
             spacingX={7}
             spacingY={8}

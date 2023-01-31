@@ -13,7 +13,7 @@ import SatoshiPng from '../../../assets/satoshi.png'
 import { getPath } from '../../../constants'
 import { fonts } from '../../../styles'
 import { Project } from '../../../types/generated/graphql'
-import { getShortAmountLabel, MarkDown, useMobileMode } from '../../../utils'
+import { getShortAmountLabel, useMobileMode } from '../../../utils'
 import { ICard, ProjectStatusLabel } from '../../ui'
 import { ProjectImageListItemPlaceholder } from './ProjectImageListItemPlaceholder'
 
@@ -58,7 +58,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
           alignItems="center"
         >
           <Image
-            src={project.image || ''}
+            src={project.thumbnailImage || ''}
             width="full"
             height="full"
             fallback={<ProjectImageListItemPlaceholder padding="3em" />}
@@ -72,6 +72,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
               fontSize={'2xl'}
               fontFamily={'body'}
               noOfLines={1}
+              wordBreak="break-all"
             >
               {project.title}
             </Heading>
@@ -134,7 +135,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
               size="sm"
               wordBreak="break-word"
             >
-              <MarkDown>{project.description}</MarkDown>
+              {project.shortDescription}
             </Text>
           </VStack>
         </Box>

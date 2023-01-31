@@ -82,7 +82,7 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
         onClose={onClose}
         setCopy={setCopy}
         name={project.name}
-        image={project.image || ''}
+        image={project.thumbnailImage || ''}
         projectId={project.id}
         title={project.title}
         imageDownload={imageDownload}
