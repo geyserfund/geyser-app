@@ -65,6 +65,7 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
           name
           title
           image
+          thumbnailImage
         }
         ... on Entry {
           id

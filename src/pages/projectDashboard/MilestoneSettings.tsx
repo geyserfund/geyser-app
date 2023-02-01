@@ -1,6 +1,6 @@
-import { EditIcon } from '@chakra-ui/icons'
 import { GridItem, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { BiPencil } from 'react-icons/bi'
 
 import {
   ButtonComponent,
@@ -70,13 +70,13 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
                 <>
                   <HStack justifyContent="space-between" width="100%">
                     <Text fontSize="18px" fontWeight={500}>
-                      MILESTONES
+                      Milestones
                     </Text>
                     <IconButtonComponent
                       aria-label="edit"
                       onClick={openMilestoneModal}
                     >
-                      <EditIcon />
+                      <BiPencil />
                     </IconButtonComponent>
                   </HStack>
 
