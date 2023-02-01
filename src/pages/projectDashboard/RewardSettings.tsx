@@ -4,18 +4,16 @@ import { useEffect, useState } from 'react'
 
 import { DeleteConfirmModal, RewardCard } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
+import { useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../graphql/mutations'
-import {
-  Project,
-  ProjectReward,
-  RewardCurrency,
-} from '../../types/generated/graphql'
+import { ProjectReward, RewardCurrency } from '../../types/generated/graphql'
 import { toInt, useNotification } from '../../utils'
 import { RewardAdditionModal } from '../creation/projectCreate/components/RewardAdditionModal'
 
-export const RewardSettings = ({ project }: { project: Project }) => {
+export const RewardSettings = () => {
   const { toast } = useNotification()
 
+  const { project } = useProjectContext()
   const [rewards, setRewards] = useState<ProjectReward[]>([])
   const [selectedReward, setSelectedReward] = useState<ProjectReward>()
 

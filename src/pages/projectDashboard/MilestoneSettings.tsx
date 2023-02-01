@@ -7,7 +7,7 @@ import {
   IconButtonComponent,
   SatoshiAmount,
 } from '../../components/ui'
-import { IProject } from '../../interfaces'
+import { useProjectContext } from '../../context'
 import { colors } from '../../styles'
 import { ProjectMilestone } from '../../types'
 import {
@@ -15,8 +15,10 @@ import {
   MilestoneAdditionModal,
 } from '../creation/projectCreate/components'
 
-export const MilestoneSettings = ({ project }: { project: IProject }) => {
+export const MilestoneSettings = () => {
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
+
+  const { project } = useProjectContext()
 
   const {
     isOpen: isMilestoneModalOpen,
@@ -26,7 +28,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
-      setMilestones(project.milestones)
+      setMilestones(project.milestones as ProjectMilestone[])
     }
   }, [project])
 

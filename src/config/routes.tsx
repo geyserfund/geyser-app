@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 
-import { getPath, routerPathNames } from '../constants'
+import { getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
 import { EntryPreview } from '../pages/creation/entry/EntryPreview'
@@ -17,7 +17,17 @@ import { LandingPage } from '../pages/landing'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
 import { ProfilePage } from '../pages/profile/ProfilePage'
-import { ProjectDashboard } from '../pages/projectDashboard'
+import { ProjectContributors } from '../pages/projectDashboard'
+import {
+  MilestoneSettings,
+  ProjectDashboard,
+  ProjectDashboardEntries,
+  ProjectDescription,
+  ProjectFundingSettings,
+  ProjectSettings,
+  ProjectStats,
+  RewardSettings,
+} from '../pages/projectDashboard'
 import { ProjectDiscoveryPage } from '../pages/projectDiscovery'
 import { ProjectView } from '../pages/projectView'
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch'
@@ -27,6 +37,8 @@ type PlatformRoutes = {
   path: string
   element: () => JSX.Element
   authenticated?: boolean
+  isIndex?: boolean
+  nested?: PlatformRoutes[]
 }
 
 const platformRoutes = [
@@ -55,12 +67,12 @@ const platformRoutes = [
     element: PublicProjectLaunchPage,
   },
   {
-    path: `/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`,
+    path: `/${PathName.launchProject}/:projectId/${PathName.node}`,
     element: ProjectCreationWalletConnectionPage,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.launchProject}/:projectId/${routerPathNames.milestonesAndRewards}`,
+    path: `/${PathName.launchProject}/:projectId/${PathName.milestonesAndRewards}`,
     element: MilestoneAndRewards,
   },
   {
@@ -74,36 +86,71 @@ const platformRoutes = [
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.userProfile}/:userId`,
+    path: `/${PathName.userProfile}/:userId`,
     element: ProfilePage,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+    path: `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
     element: EntryPreview,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+    path: `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
     element: EntryCreateEdit,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+    path: `/${PathName.project}/:projectId/${PathName.entry}`,
     element: EntryCreateEdit,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
+    path: `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
     element: ProjectDashboard,
     authenticated: true,
+    nested: [
+      {
+        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
+        element: ProjectDescription,
+        isIndex: true,
+      },
+      {
+        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
+        element: ProjectContributors,
+      },
+      {
+        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardFunds}`,
+        element: ProjectFundingSettings,
+      },
+      {
+        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardEntries}`,
+        element: ProjectDashboardEntries,
+      },
+      {
+        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
+        element: RewardSettings,
+      },
+      {
+        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardMilestones}`,
+        element: MilestoneSettings,
+      },
+      {
+        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardStats}`,
+        element: ProjectStats,
+      },
+      {
+        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
+        element: ProjectSettings,
+      },
+    ],
   },
   {
-    path: `/${routerPathNames.project}/:projectId`,
+    path: `/${PathName.project}/:projectId`,
     element: ProjectView,
   },
   {
-    path: `/${routerPathNames.entry}/:entryId`,
+    path: `/${PathName.entry}/:entryId`,
     element: EntryPage,
   },
   {
@@ -128,24 +175,30 @@ const platformRoutes = [
   },
 ] as PlatformRoutes[]
 
-export const Router = () => (
-  <Routes>
-    {platformRoutes.map(({ path, element: Element, authenticated }) => {
-      if (authenticated) {
-        return (
-          <Route
-            key={path}
-            path={path}
-            element={
-              <PrivateRoute>
-                <Element />
-              </PrivateRoute>
-            }
-          />
+export const Router = () => {
+  const renderRoutes = (routes: PlatformRoutes[]) => {
+    return routes.map(
+      ({ path, element: Element, authenticated, nested, isIndex }) => {
+        const renderElement = authenticated ? (
+          <PrivateRoute>
+            <Element />
+          </PrivateRoute>
+        ) : (
+          <Element />
         )
-      }
+        // index routes cannot have children routes
+        if (isIndex) {
+          return <Route index key={path} element={renderElement} />
+        }
 
-      return <Route key={path} path={path} element={<Element />} />
-    })}
-  </Routes>
-)
+        return (
+          <Route key={path} path={path} element={renderElement}>
+            {nested?.length && renderRoutes(nested)}
+          </Route>
+        )
+      },
+    )
+  }
+
+  return <Routes>{renderRoutes(platformRoutes)}</Routes>
+}

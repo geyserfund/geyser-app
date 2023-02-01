@@ -14,6 +14,7 @@ import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../graphql/mutations'
+import { useProjectLinksState } from '../../../hooks/graphqlState'
 import { colors } from '../../../styles'
 import type {
   Project,
@@ -28,7 +29,7 @@ import {
   RewardAdditionModal,
 } from './components'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
-import { ProjectLinks, useProjectLinks } from './components/ProjectLinks'
+import { ProjectLinks } from './components/ProjectLinks'
 
 export const MilestoneAndRewards = () => {
   const navigate = useNavigate()
@@ -87,7 +88,7 @@ export const MilestoneAndRewards = () => {
     },
   })
 
-  const { links, setLinks, handleLinks, linkError } = useProjectLinks({
+  const { links, setLinks, handleLinks, linkError } = useProjectLinksState({
     project: data?.project,
   })
 

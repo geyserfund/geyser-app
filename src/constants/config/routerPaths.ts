@@ -1,18 +1,26 @@
-export const routerPathNames = {
-  projectDiscovery: 'discover',
-  grants: 'grants',
-  entry: 'entry',
-  notFound: 'not-found',
-  notAuthorized: 'not-authorized',
-  _deprecatedPathNameForProject: 'project',
-  project: 'project',
-  launchProject: 'launch',
-  userProfile: 'profile',
-  projectDashboard: 'dashboard',
-  preview: 'preview',
-  milestonesAndRewards: 'milestones',
-  node: 'node',
-  discover: 'discover',
+export enum PathName {
+  projectDiscovery = 'discover',
+  grants = 'grants',
+  entry = 'entry',
+  notFound = 'not-found',
+  notAuthorized = 'not-authorized',
+  _deprecatedPathNameForProject = 'project',
+  project = 'project',
+  launchProject = 'launch',
+  userProfile = 'profile',
+  projectDashboard = 'dashboard',
+  preview = 'preview',
+  milestonesAndRewards = 'milestones',
+  node = 'node',
+  discover = 'discover',
+  dashboardDescription = 'description',
+  dashboardContributors = 'contributors',
+  dashboardFunds = 'funds',
+  dashboardEntries = 'entries',
+  dashboardRewards = 'rewards',
+  dashboardMilestones = 'milestones',
+  dashboardStats = 'stats',
+  dashboardSettings = 'settings',
 }
 
 // TODO: These definitions are currently a WIP.
@@ -22,28 +30,27 @@ export const routerPathNames = {
 const pathsMap = {
   index: () => '/',
   landingPage: () => '/',
-  projectDiscovery: () => `/${routerPathNames.projectDiscovery}`,
-  grants: () => `/${routerPathNames.grants}`,
-  notFound: () => `/${routerPathNames.notFound}`,
-  notAuthorized: () => `/${routerPathNames.notAuthorized}`,
+  projectDiscovery: () => `/${PathName.projectDiscovery}`,
+  grants: () => `/${PathName.grants}`,
+  notFound: () => `/${PathName.notFound}`,
+  notAuthorized: () => `/${PathName.notAuthorized}`,
   _deprecatedPathForProject: (projectName: string) =>
-    `/${routerPathNames._deprecatedPathNameForProject}/${projectName}`,
-  project: (projectName: string) =>
-    `/${routerPathNames.project}/${projectName}`,
+    `/${PathName._deprecatedPathNameForProject}/${projectName}`,
+  project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectEntryCreation: (projectName: string) =>
-    `/${routerPathNames.project}/${projectName}/${routerPathNames.entry}`,
+    `/${PathName.project}/${projectName}/${PathName.entry}`,
   projectEntryDetails: (projectName: string, entryID: string) =>
-    `/${routerPathNames.project}/${projectName}/${routerPathNames.entry}/${entryID}`,
-  publicProjectLaunch: () => `/${routerPathNames.launchProject}/start`,
-  privateProjectLaunch: () => `/${routerPathNames.launchProject}`,
+    `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
+  publicProjectLaunch: () => `/${PathName.launchProject}/start`,
+  privateProjectLaunch: () => `/${PathName.launchProject}`,
   launchProjectWithNode: (projectID: string) =>
-    `/${routerPathNames.launchProject}/${projectID}/${routerPathNames.node}`,
+    `/${PathName.launchProject}/${projectID}/${PathName.node}`,
   launchProjectWithMilestonesAndRewards: (projectID: string) =>
-    `/${routerPathNames.launchProject}/${projectID}/${routerPathNames.milestonesAndRewards}`,
-  userProfile: (userID: string) => `/${routerPathNames.userProfile}/${userID}`,
+    `/${PathName.launchProject}/${projectID}/${PathName.milestonesAndRewards}`,
+  userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   projectDashboard: (projectID: string) =>
-    `/${routerPathNames.project}/${projectID}/${routerPathNames.projectDashboard}`,
-  entry: (entryID: string) => `/${routerPathNames.entry}/${entryID}`,
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
+  entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
 }
 
 type PathsMap = typeof pathsMap

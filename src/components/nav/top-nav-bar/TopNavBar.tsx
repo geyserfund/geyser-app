@@ -20,7 +20,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { getPath, routerPathNames } from '../../../constants'
+import { getPath, PathName } from '../../../constants'
 import { AuthContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { AuthModal } from '../../molecules'
@@ -45,47 +45,47 @@ const navItems = [
 ]
 
 const routesForHidingTopNav = [
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${PathName.project}/:projectId/${PathName.entry}`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
 ]
 
 const routesForShowingProjectButton = [
-  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
+  `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
 ]
 
 const customTitleRoutes = [
-  `/${routerPathNames.project}/:projectId/`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.entry}/:entryId`,
+  `/${PathName.project}/:projectId/`,
+  `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
+  `/${PathName.project}/:projectId/${PathName.entry}`,
+  `/${PathName.entry}/:entryId`,
 ]
 const navItemsRoutes = [
   `/`,
-  `/${routerPathNames.discover}`,
-  `/${routerPathNames.grants}`,
-  `/${routerPathNames.grants}/roundtwo`,
-  `/${routerPathNames.grants}/roundone`,
+  `/${PathName.discover}`,
+  `/${PathName.grants}`,
+  `/${PathName.grants}/roundtwo`,
+  `/${PathName.grants}/roundone`,
 ]
 
 const routesForHidingDashboardButton = [
-  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
+  `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
 ]
 
 const routesForHidingDropdownMenu = [
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${PathName.project}/:projectId/${PathName.entry}`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
 ]
 
 const routesForHidingMyProjectsButton = [
-  `/${routerPathNames._deprecatedPathNameForProject}/:projectId`,
-  `/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
-  `/${routerPathNames.userProfile}/:userId`,
+  `/${PathName._deprecatedPathNameForProject}/:projectId`,
+  `/${PathName.entry}/:entryId`,
+  `/${PathName.project}/:projectId/${PathName.entry}`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
+  `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
+  `/${PathName.userProfile}/:userId`,
 ]
 
 const routesForEnablingSignInButton = [
@@ -95,12 +95,12 @@ const routesForEnablingSignInButton = [
   getPath('grants'),
   getPath('notFound'),
   getPath('notAuthorized'),
-  `/${routerPathNames.userProfile}/:userId`,
-  `/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.project}/:projectId/`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${PathName.userProfile}/:userId`,
+  `/${PathName.entry}/:entryId`,
+  `/${PathName.project}/:projectId/`,
+  `/${PathName.project}/:projectId/${PathName.entry}`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
 ]
 
 const routesForEnablingProjectLaunchButton = [
@@ -122,7 +122,7 @@ export const TopNavBar = () => {
   const currentPathName = location.pathname
 
   const currentProjectRouteMatch = matchPath(
-    `/${routerPathNames.project}/:projectId/`,
+    `/${PathName.project}/:projectId/`,
     currentPathName,
   )
 
@@ -228,11 +228,11 @@ export const TopNavBar = () => {
 
   const isViewingOwnProject: boolean = useMemo(() => {
     return (
-      (currentPathName.startsWith(`/${routerPathNames.entry}`) ||
+      (currentPathName.startsWith(`/${PathName.entry}`) ||
         currentPathName.startsWith(
-          `/${routerPathNames._deprecatedPathNameForProject}`,
+          `/${PathName._deprecatedPathNameForProject}`,
         ) ||
-        currentPathName.startsWith(`/${routerPathNames.project}`)) &&
+        currentPathName.startsWith(`/${PathName.project}`)) &&
       navigationContext.projectOwnerIDs.includes(Number(user.id))
     )
   }, [user.id, navigationContext.projectOwnerIDs, currentPathName])

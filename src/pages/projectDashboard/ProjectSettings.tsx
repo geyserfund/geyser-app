@@ -4,9 +4,9 @@ import { useState } from 'react'
 
 import { Body2 } from '../../components/typography'
 import { ButtonComponent, TextInputBox } from '../../components/ui'
-import { useAuthContext } from '../../context'
+import { useAuthContext, useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
-import { FormError, Project, ProjectStatus } from '../../types'
+import { FormError, ProjectStatus } from '../../types'
 import { isActive, toInt, useMobileMode, useNotification } from '../../utils'
 import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
@@ -17,10 +17,12 @@ type ProjectSettingsForm = {
   status: ProjectStatus
 }
 
-export const ProjectSettings = ({ project }: { project: Project }) => {
+export const ProjectSettings = () => {
   const { user } = useAuthContext()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
+
+  const { project } = useProjectContext()
 
   const [form, setForm] = useState<ProjectSettingsForm>({
     expiresAt: project.expiresAt || '',

@@ -25,10 +25,11 @@ import {
   SatoshiAmount,
 } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
+import { useProjectContext } from '../../context'
 import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql'
 import { computeFunderBadges } from '../../helpers'
 import { useQueryWithPagination } from '../../hooks'
-import { Funder, Project } from '../../types/generated/graphql'
+import { Funder } from '../../types/generated/graphql'
 import { toInt } from '../../utils'
 
 type TableData = {
@@ -38,7 +39,9 @@ type TableData = {
   value?: (val: any) => string | number
 }
 
-export const ProjectContributors = ({ project }: { project: Project }) => {
+export const ProjectContributors = () => {
+  const { project } = useProjectContext()
+
   const [selectedFunders, setSelectedFunders] = useState<Funder[]>([])
   const [csvData, setCsvData] = useState<(string | number)[][]>([])
 

@@ -31,10 +31,11 @@ export const MUTATION_UPDATE_PROJECT = gql`
       id
       title
       name
+      shortDescription
       description
       image
+      thumbnailImage
       status
-      type
     }
   }
 `

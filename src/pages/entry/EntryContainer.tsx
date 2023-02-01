@@ -3,10 +3,10 @@ import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 
 import { AppFooter } from '../../components/molecules'
+import { MobileViews, useProjectContext } from '../../context'
 import { fadeOut, slideInLeft } from '../../styles/animations'
 import { Entry } from '../../types/generated/graphql'
 import { useDarkMode, useMobileMode } from '../../utils'
-import { MobileViews, useProject } from '../projectView'
 import { EntryDetails } from './EntryDetails'
 
 type Rules = string
@@ -54,7 +54,7 @@ export const EntryContainer = ({ entry }: IActivityProps) => {
   const isMobile = useMobileMode()
   const isDark = useDarkMode()
 
-  const { mobileView } = useProject()
+  const { mobileView } = useProjectContext()
 
   const inView = mobileView === MobileViews.description
 

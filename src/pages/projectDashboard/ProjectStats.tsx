@@ -3,6 +3,7 @@ import { GridItem, HStack, Text, VStack } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
 import { SatoshiAmount } from '../../components/ui'
+import { useProjectContext } from '../../context'
 import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
 import { colors } from '../../styles'
 import { fonts } from '../../styles'
@@ -34,8 +35,10 @@ type QueryVariables = {
   where: UniqueProjectQueryInput
 }
 
-export const ProjectStats = ({ project }: { project: Project }) => {
+export const ProjectStats = () => {
   const classes = useStyles()
+
+  const { project } = useProjectContext()
 
   const { loading, data } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_DASHBOARD_DATA,

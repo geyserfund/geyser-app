@@ -12,6 +12,7 @@ import {
 import { ButtonComponent } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
+import { useProjectContext } from '../../context'
 import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
 import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations'
 import {
@@ -32,9 +33,10 @@ type QueryVariables = {
   where: UniqueProjectQueryInput
 }
 
-export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
+export const ProjectDashboardEntries = () => {
   const navigate = useNavigate()
   const { toast } = useNotification()
+  const { project } = useProjectContext()
 
   const [liveEntries, setLiveEntries] = useState<Entry[]>([])
   const [draftEntries, setDraftEntries] = useState<Entry[]>([])

@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router'
 
 import { IconButtonComponent } from '../../components/ui'
 import { getPath } from '../../constants'
+import { useProjectContext } from '../../context'
 import { colors } from '../../styles'
 import {
   LightningAddressConnectionDetails,
   LndConnectionDetailsPrivate,
-  Project,
   Wallet,
 } from '../../types/generated/graphql'
 import { useNotification } from '../../utils'
@@ -18,10 +18,12 @@ import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate'
 import { TNodeInput } from '../creation/projectCreate/types'
 import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView'
 
-export const ProjectFundingSettings = ({ project }: { project: Project }) => {
+export const ProjectFundingSettings = () => {
   const { toast } = useNotification()
   const navigate = useNavigate()
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
+
+  const { project } = useProjectContext()
 
   const [nodeData, setNodeData] = useState<TNodeInput>()
   const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false)

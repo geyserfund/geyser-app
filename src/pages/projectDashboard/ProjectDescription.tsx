@@ -3,28 +3,28 @@ import { GridItem, useMediaQuery, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { ButtonComponent } from '../../components/ui'
+import { useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
-import { FormError } from '../../types'
-import { Project } from '../../types/generated/graphql'
+import { useProjectLinksState } from '../../hooks/graphqlState'
+import { FormError, Project } from '../../types'
 import { toInt, useMobileMode, useNotification } from '../../utils'
 import {
   ProjectCreateForm,
   ProjectCreateFormValidation,
 } from '../creation/projectCreate/components/ProjectCreateForm'
-import {
-  ProjectLinks,
-  useProjectLinks,
-} from '../creation/projectCreate/components/ProjectLinks'
+import { ProjectLinks } from '../creation/projectCreate/components/ProjectLinks'
 import { ProjectPreviewComponent } from '../creation/projectCreate/components/ProjectPreviewComponent'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
 
-export const ProjectDescription = ({ project }: { project: Project }) => {
+export const ProjectDescription = () => {
   const isMobile = useMobileMode()
-
   const { toast } = useNotification()
 
-  const { links, setLinks, handleLinks, linkError } = useProjectLinks({
+  const { project, updateProject } = useProjectContext()
+
+  const { links, setLinks, handleLinks, linkError } = useProjectLinksState({
     project,
+    updateProject,
   })
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
@@ -42,24 +42,27 @@ export const ProjectDescription = ({ project }: { project: Project }) => {
     {},
   )
 
-  const [updateProject, { loading: updateLoading }] = useMutation(
-    MUTATION_UPDATE_PROJECT,
-    {
-      onCompleted() {
-        toast({
-          title: 'Project updated successfully!',
-          status: 'success',
-        })
-      },
-      onError(error) {
-        toast({
-          title: 'project update failed!',
-          description: `${error}`,
-          status: 'error',
-        })
-      },
+  const [updateProjectMutation, { loading: updateLoading }] = useMutation<{
+    updateProject: Project
+  }>(MUTATION_UPDATE_PROJECT, {
+    onCompleted(data) {
+      if (updateProject) {
+        updateProject(data.updateProject)
+      }
+
+      toast({
+        title: 'Project updated successfully!',
+        status: 'success',
+      })
     },
-  )
+    onError(error) {
+      toast({
+        title: 'project update failed!',
+        description: `${error}`,
+        status: 'error',
+      })
+    },
+  })
 
   useEffect(() => {
     if (project && project.id) {
@@ -84,7 +87,7 @@ export const ProjectDescription = ({ project }: { project: Project }) => {
 
     if (isValid) {
       await handleLinks()
-      updateProject({
+      updateProjectMutation({
         variables: {
           input: {
             projectId: toInt(project.id),
