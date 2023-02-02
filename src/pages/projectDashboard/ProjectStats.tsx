@@ -9,6 +9,7 @@ import { colors } from '../../styles'
 import { fonts } from '../../styles'
 import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
 import { numberWithCommas, toInt } from '../../utils'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 const useStyles = createUseStyles({
   statBox: {
@@ -60,7 +61,7 @@ export const ProjectStats = () => {
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
@@ -114,6 +115,6 @@ export const ProjectStats = () => {
           spacing="10px"
         ></VStack>
       </GridItem>
-    </>
+    </DashboardGridLayout>
   )
 }

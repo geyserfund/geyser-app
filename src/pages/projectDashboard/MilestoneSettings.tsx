@@ -14,6 +14,7 @@ import {
   defaultMilestone,
   MilestoneAdditionModal,
 } from '../creation/projectCreate/components'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 export const MilestoneSettings = () => {
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
@@ -43,7 +44,7 @@ export const MilestoneSettings = () => {
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
@@ -114,6 +115,6 @@ export const MilestoneSettings = () => {
           projectId={parseInt(`${project.id}`, 10)}
         />
       ) : null}
-    </>
+    </DashboardGridLayout>
   )
 }

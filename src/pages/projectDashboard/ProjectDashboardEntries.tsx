@@ -21,6 +21,7 @@ import {
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql'
 import { toInt, useNotification } from '../../utils'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 type ResponseData = {
   project: Project & {
@@ -117,15 +118,11 @@ export const ProjectDashboardEntries = () => {
   }
 
   if (loading) {
-    return (
-      <GridItem colSpan={6} display="flex" justifyContent="center">
-        <Loader />
-      </GridItem>
-    )
+    return <Loader />
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
@@ -200,6 +197,6 @@ export const ProjectDashboardEntries = () => {
         description={'Are you sure you want to remove the entry'}
         confirm={handleRemoveEntry}
       />
-    </>
+    </DashboardGridLayout>
   )
 }

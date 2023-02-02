@@ -9,6 +9,7 @@ import { MUTATION_UPDATE_PROJECT_REWARD } from '../../graphql/mutations'
 import { ProjectReward, RewardCurrency } from '../../types/generated/graphql'
 import { toInt, useNotification } from '../../utils'
 import { RewardAdditionModal } from '../creation/projectCreate/components/RewardAdditionModal'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 export const RewardSettings = () => {
   const { toast } = useNotification()
@@ -109,7 +110,7 @@ export const RewardSettings = () => {
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
@@ -192,6 +193,6 @@ export const RewardSettings = () => {
         description={'Are you sure you want to remove the reward'}
         confirm={() => handleRemoveReward(selectedReward?.id)}
       />
-    </>
+    </DashboardGridLayout>
   )
 }

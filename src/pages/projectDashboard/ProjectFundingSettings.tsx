@@ -16,7 +16,8 @@ import {
 import { useNotification } from '../../utils'
 import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate'
 import { TNodeInput } from '../creation/projectCreate/types'
-import { ProjectFundingSettingsLightningAddressView } from './ProjectFundingSettingsLightningAddressView'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
+import { ProjectFundingSettingsLightningAddressView } from './components/ProjectFundingSettingsLightningAddressView'
 
 export const ProjectFundingSettings = () => {
   const { toast } = useNotification()
@@ -161,7 +162,7 @@ export const ProjectFundingSettings = () => {
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem
         colSpan={isLargerThan1280 ? 6 : 2}
         display="flex"
@@ -229,6 +230,6 @@ export const ProjectFundingSettings = () => {
           </VStack>
         </GridItem>
       )}
-    </>
+    </DashboardGridLayout>
   )
 }

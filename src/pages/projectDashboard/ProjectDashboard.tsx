@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  GridItem,
-  HStack,
-  useMediaQuery,
-} from '@chakra-ui/react'
+import { Box, Button, HStack, useMediaQuery } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 
@@ -31,6 +24,7 @@ enum DashboardTabs {
 export const ProjectDashboard = () => {
   const isMobile = useMobileMode()
   const { projectId } = useParams<{ projectId: string }>()
+  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -102,8 +96,6 @@ export const ProjectDashboard = () => {
     },
   })
 
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
-
   if (loading) {
     return <Loader alignItems="flex-start" paddingTop="120px" />
   }
@@ -148,6 +140,7 @@ export const ProjectDashboard = () => {
     return <Loader />
   }
 
+  console.log('checking isLarger than', isLargerThan1280)
   return (
     <Box
       background={'brand.bgGrey4'}
@@ -172,35 +165,9 @@ export const ProjectDashboard = () => {
           {navList.map((nav) => renderButton(nav))}
         </HStack>
       </HStack>
-
-      <Grid
-        width="100%"
-        templateColumns={
-          isLargerThan1280
-            ? 'repeat(12, 1fr)'
-            : isMobile
-            ? 'repeat(2, 1fr)'
-            : 'repeat(5, 1fr)'
-        }
-        padding={
-          isMobile
-            ? '10px'
-            : isLargerThan1280
-            ? '40px 40px 20px 40px'
-            : '40px 20px 20px 20px'
-        }
-      >
-        {activeTab !== DashboardTabs.contributors && (
-          <GridItem
-            colSpan={isLargerThan1280 ? 3 : 1}
-            display="flex"
-            justifyContent="flex-start"
-          ></GridItem>
-        )}
-        <ProjectProvider project={project}>
-          <Outlet />
-        </ProjectProvider>
-      </Grid>
+      <ProjectProvider project={project}>
+        <Outlet />
+      </ProjectProvider>
     </Box>
   )
 }

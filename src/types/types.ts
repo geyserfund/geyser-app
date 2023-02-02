@@ -19,3 +19,7 @@ export type GrantTextType = {
 export type FormError<T> = {
   [key in keyof T]?: React.ReactNode
 }
+
+export type MutationInput<T> = {
+  input: T
+}

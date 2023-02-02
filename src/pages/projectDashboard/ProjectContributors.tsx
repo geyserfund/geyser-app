@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  Fade,
   GridItem,
   HStack,
   Table,
@@ -236,16 +237,12 @@ export const ProjectContributors = () => {
   }
 
   if (funders.isLoading) {
-    return (
-      <GridItem colSpan={18} display="flex" justifyContent={'center'}>
-        <Loader />
-      </GridItem>
-    )
+    return <Loader />
   }
 
   return (
-    <>
-      <GridItem colSpan={18} display="flex" justifyContent={'center'}>
+    <Fade in>
+      <HStack width="100%" justifyContent={'center'} paddingTop="20px">
         <VStack maxWidth="1200px" width="100%" alignItems="center">
           <HStack width="100%" justifyContent="space-between">
             <HStack>
@@ -359,7 +356,7 @@ export const ProjectContributors = () => {
             </Table>
           </TableContainer>
         </VStack>
-      </GridItem>
-    </>
+      </HStack>
+    </Fade>
   )
 }

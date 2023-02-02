@@ -102,6 +102,7 @@ export const MUTATION_ADD_PROJECT_LINK = gql`
   mutation ProjectLinkAdd($input: ProjectLinkMutationInput!) {
     projectLinkAdd(input: $input) {
       id
+      links
     }
   }
 `
@@ -110,6 +111,7 @@ export const MUTATION_REMOVE_PROJECT_LINK = gql`
   mutation ProjectLinkRemove($input: ProjectLinkMutationInput!) {
     projectLinkRemove(input: $input) {
       id
+      links
     }
   }
 `

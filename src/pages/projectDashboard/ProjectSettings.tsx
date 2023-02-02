@@ -10,6 +10,7 @@ import { FormError, ProjectStatus } from '../../types'
 import { isActive, toInt, useMobileMode, useNotification } from '../../utils'
 import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 type ProjectSettingsForm = {
   expiresAt?: string
@@ -92,9 +93,8 @@ export const ProjectSettings = () => {
     return isValid
   }
 
-  console.log('checking form', form)
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem
         colSpan={isLargerThan1280 ? 6 : 2}
         display="flex"
@@ -159,6 +159,6 @@ export const ProjectSettings = () => {
         alignItems="flex-start"
         justifyContent="center"
       ></GridItem>
-    </>
+    </DashboardGridLayout>
   )
 }

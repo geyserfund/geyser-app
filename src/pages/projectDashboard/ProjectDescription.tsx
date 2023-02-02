@@ -15,6 +15,7 @@ import {
 import { ProjectLinks } from '../creation/projectCreate/components/ProjectLinks'
 import { ProjectPreviewComponent } from '../creation/projectCreate/components/ProjectPreviewComponent'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 export const ProjectDescription = () => {
   const isMobile = useMobileMode()
@@ -117,7 +118,7 @@ export const ProjectDescription = () => {
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem
         colSpan={isLargerThan1280 ? 6 : 2}
         display="flex"
@@ -160,6 +161,6 @@ export const ProjectDescription = () => {
       >
         <ProjectPreviewComponent data={form} />
       </GridItem>
-    </>
+    </DashboardGridLayout>
   )
 }

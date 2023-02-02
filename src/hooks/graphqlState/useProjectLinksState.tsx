@@ -5,10 +5,16 @@ import {
   MUTATION_ADD_PROJECT_LINK,
   MUTATION_REMOVE_PROJECT_LINK,
 } from '../../graphql/mutations'
-import { Project, ProjectLinkMutationInput } from '../../types'
+import { MutationInput, Project, ProjectLinkMutationInput } from '../../types'
 import { toInt, useNotification } from '../../utils'
 
-export const useProjectLinksState = ({ project }: { project: Project }) => {
+export const useProjectLinksState = ({
+  project,
+  updateProject,
+}: {
+  project: Project
+  updateProject?: (_: Project) => void
+}) => {
   const [links, _setLinks] = useState<string[]>([''])
 
   const [linkError, setLinkError] = useState<boolean[]>([false])
@@ -22,29 +28,39 @@ export const useProjectLinksState = ({ project }: { project: Project }) => {
     }
   }, [project])
 
-  const [addLink] = useMutation<ProjectLinkMutationInput>(
-    MUTATION_ADD_PROJECT_LINK,
-    {
-      onError() {
-        toast({
-          title: 'Error adding project link',
-          status: 'error',
-        })
-      },
+  const [addLink] = useMutation<
+    { projectLinkAdd: Project },
+    MutationInput<ProjectLinkMutationInput>
+  >(MUTATION_ADD_PROJECT_LINK, {
+    onError() {
+      toast({
+        title: 'Error adding project link',
+        status: 'error',
+      })
     },
-  )
+    onCompleted(data) {
+      if (updateProject) {
+        updateProject(data.projectLinkAdd)
+      }
+    },
+  })
 
-  const [removeLink] = useMutation<ProjectLinkMutationInput>(
-    MUTATION_REMOVE_PROJECT_LINK,
-    {
-      onError() {
-        toast({
-          title: 'Error removing project link',
-          status: 'error',
-        })
-      },
+  const [removeLink] = useMutation<
+    { projectLinkRemove: Project },
+    MutationInput<ProjectLinkMutationInput>
+  >(MUTATION_REMOVE_PROJECT_LINK, {
+    onError() {
+      toast({
+        title: 'Error removing project link',
+        status: 'error',
+      })
     },
-  )
+    onCompleted(data) {
+      if (updateProject) {
+        updateProject(data.projectLinkRemove)
+      }
+    },
+  })
 
   const setLinks = (links: string[]) => {
     const errors = [] as boolean[]
