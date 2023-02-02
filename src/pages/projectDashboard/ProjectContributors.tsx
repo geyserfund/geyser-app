@@ -1,7 +1,6 @@
 import {
   Checkbox,
   Fade,
-  GridItem,
   HStack,
   Table,
   TableContainer,
