@@ -21,6 +21,9 @@ export enum PathName {
   dashboardMilestones = 'milestones',
   dashboardStats = 'stats',
   dashboardSettings = 'settings',
+  projectId = ':projectId',
+  userId = ':userId',
+  entryId = ':entryId',
 }
 
 // TODO: These definitions are currently a WIP.
@@ -36,10 +39,15 @@ const pathsMap = {
   notAuthorized: () => `/${PathName.notAuthorized}`,
   _deprecatedPathForProject: (projectName: string) =>
     `/${PathName._deprecatedPathNameForProject}/${projectName}`,
+
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectEntryCreation: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}`,
   projectEntryDetails: (projectName: string, entryID: string) =>
+    `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
+  projectEntryPreview: (projectName: string, entryID: string) =>
+    `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}/preview`,
+  projectEntryEdit: (projectName: string, entryID: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
   publicProjectLaunch: () => `/${PathName.launchProject}/start`,
   privateProjectLaunch: () => `/${PathName.launchProject}`,
@@ -50,6 +58,22 @@ const pathsMap = {
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   projectDashboard: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
+  dashboardDescription: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
+  dashboardContributors: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
+  dashboardFunding: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardFunds}`,
+  dashboardEntries: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardEntries}`,
+  dashboardRewards: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
+  dashboardMilestones: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardMilestones}`,
+  dashboardStats: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStats}`,
+  dashboardSettings: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
 }
 

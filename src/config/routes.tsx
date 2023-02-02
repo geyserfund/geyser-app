@@ -67,12 +67,12 @@ const platformRoutes = [
     element: PublicProjectLaunchPage,
   },
   {
-    path: `/${PathName.launchProject}/:projectId/${PathName.node}`,
+    path: getPath('launchProjectWithNode', PathName.projectId),
     element: ProjectCreationWalletConnectionPage,
     authenticated: true,
   },
   {
-    path: `/${PathName.launchProject}/:projectId/${PathName.milestonesAndRewards}`,
+    path: getPath('launchProjectWithMilestonesAndRewards', PathName.projectId),
     element: MilestoneAndRewards,
   },
   {
@@ -86,71 +86,71 @@ const platformRoutes = [
     authenticated: true,
   },
   {
-    path: `/${PathName.userProfile}/:userId`,
+    path: getPath('userProfile', PathName.userId),
     element: ProfilePage,
     authenticated: true,
   },
   {
-    path: `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
+    path: getPath('projectEntryDetails', PathName.projectId, PathName.entryId),
     element: EntryPreview,
     authenticated: true,
   },
   {
-    path: `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
+    path: getPath('projectEntryEdit', PathName.projectId, PathName.entryId),
     element: EntryCreateEdit,
     authenticated: true,
   },
   {
-    path: `/${PathName.project}/:projectId/${PathName.entry}`,
+    path: getPath('projectEntryCreation', PathName.projectId),
     element: EntryCreateEdit,
     authenticated: true,
   },
   {
-    path: `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
+    path: getPath('projectDashboard', PathName.projectId),
     element: ProjectDashboard,
     authenticated: true,
     nested: [
       {
-        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
+        path: getPath('dashboardDescription', PathName.projectId),
         element: ProjectDescription,
         isIndex: true,
       },
       {
-        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
+        path: getPath('dashboardContributors', PathName.projectId),
         element: ProjectContributors,
       },
       {
-        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardFunds}`,
+        path: getPath('dashboardFunding', PathName.projectId),
         element: ProjectFundingSettings,
       },
       {
-        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardEntries}`,
+        path: getPath('dashboardEntries', PathName.projectId),
         element: ProjectDashboardEntries,
       },
       {
-        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
+        path: getPath('dashboardRewards', PathName.projectId),
         element: RewardSettings,
       },
       {
-        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardMilestones}`,
+        path: getPath('dashboardMilestones', PathName.projectId),
         element: MilestoneSettings,
       },
       {
-        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardStats}`,
+        path: getPath('dashboardStats', PathName.projectId),
         element: ProjectStats,
       },
       {
-        path: `/${PathName.project}/:projectId/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
+        path: getPath('dashboardSettings', PathName.projectId),
         element: ProjectSettings,
       },
     ],
   },
   {
-    path: `/${PathName.project}/:projectId`,
+    path: getPath('project', PathName.projectId),
     element: ProjectView,
   },
   {
-    path: `/${PathName.entry}/:entryId`,
+    path: getPath('entry', PathName.entryId),
     element: EntryPage,
   },
   {
