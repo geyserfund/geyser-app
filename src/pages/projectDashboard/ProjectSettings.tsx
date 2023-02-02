@@ -6,7 +6,7 @@ import { Body2 } from '../../components/typography'
 import { ButtonComponent, TextInputBox } from '../../components/ui'
 import { useAuthContext, useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
-import { FormError, ProjectStatus } from '../../types'
+import { FormError, Project, ProjectStatus } from '../../types'
 import { isActive, toInt, useMobileMode, useNotification } from '../../utils'
 import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
@@ -23,7 +23,7 @@ export const ProjectSettings = () => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
 
-  const { project } = useProjectContext()
+  const { project, updateProject } = useProjectContext()
 
   const [form, setForm] = useState<ProjectSettingsForm>({
     expiresAt: project.expiresAt || '',
@@ -35,24 +35,27 @@ export const ProjectSettings = () => {
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
-  const [updateProject, { loading: updateLoading }] = useMutation(
-    MUTATION_UPDATE_PROJECT,
-    {
-      onCompleted() {
-        toast({
-          title: 'Project updated successfully!',
-          status: 'success',
-        })
-      },
-      onError(error) {
-        toast({
-          title: 'project update failed!',
-          description: `${error}`,
-          status: 'error',
-        })
-      },
+  const [updateProjectMutation, { loading: updateLoading }] = useMutation<{
+    updateProject: Project
+  }>(MUTATION_UPDATE_PROJECT, {
+    onCompleted(data) {
+      if (data?.updateProject && updateProject) {
+        updateProject(data.updateProject)
+      }
+
+      toast({
+        title: 'Project updated successfully!',
+        status: 'success',
+      })
     },
-  )
+    onError(error) {
+      toast({
+        title: 'project update failed!',
+        description: `${error}`,
+        status: 'error',
+      })
+    },
+  })
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, email: event.target.value })
@@ -70,7 +73,7 @@ export const ProjectSettings = () => {
     const newForm = form
     newForm.email = user.email || form.email
     if (isValid) {
-      updateProject({
+      updateProjectMutation({
         variables: {
           input: {
             projectId: toInt(project.id),
