@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { GEYSER_FEE, noFeeProjects } from '../../../constants'
-import { Countdown } from '../../../pages/projectView/ActivityPanel/Countdown'
+import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
 import { colors } from '../../../styles'
 import { fonts } from '../../../styles'
 import { Project, ProjectMilestone } from '../../../types/generated/graphql'

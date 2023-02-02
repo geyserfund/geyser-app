@@ -14,11 +14,12 @@ import {
 import { useMemo } from 'react'
 import { BiPencil } from 'react-icons/bi'
 import { BsHeartFill } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { colors } from '../../../styles'
 import { Entry, EntryStatus } from '../../../types/generated/graphql'
+import { CardLayout } from '../../layouts'
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
 import { ProjectListItemImage } from './ProjectListItemImage'
@@ -64,29 +65,21 @@ export const ProjectEntryCard = ({
     }
   }
 
-  const hoverEffect = {
-    backgroundColor: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
-  }
-
   return (
-    <Stack
-      borderRadius="lg"
+    <CardLayout
+      hover
+      display="flex"
+      as={Link}
+      to={getPath('entry', `${entry.id}`)}
+      padding={4}
       width={{
         base: '100%',
         xl: '798px',
       }}
-      shadow="sm"
       maxWidth={'798px'}
       direction={{ base: 'column', md: 'row' }}
-      backgroundColor={colorMode === 'light' ? 'white' : 'gray.900'}
-      _hover={isDraft ? undefined : hoverEffect}
-      transition={'background-color 0.3s ease-in-out'}
-      padding={4}
       cursor={isDraft ? 'auto' : 'pointer'}
-      overflow="hidden"
       alignItems={{ base: 'flex-start', md: 'center' }}
-      onClick={isDraft ? undefined : handleClick}
-      {...rest}
     >
       <Flex
         flex={1}
@@ -215,6 +208,6 @@ export const ProjectEntryCard = ({
           </Badge>
         </Stack>
       </Stack>
-    </Stack>
+    </CardLayout>
   )
 }
