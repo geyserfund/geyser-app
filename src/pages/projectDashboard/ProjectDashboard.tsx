@@ -73,6 +73,7 @@ export const ProjectDashboard = () => {
   }
 
   const { loading, project } = useProjectState(projectId || '', {
+    fetchPolicy: 'network-only',
     onError() {
       navigate(getPath('notFound'))
     },
