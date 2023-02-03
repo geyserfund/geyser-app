@@ -186,6 +186,7 @@ export const ProjectEntryCard = ({
             >
               <ProjectListItemImage
                 boxSize="30px"
+                imageSrc={entry.project.thumbnailImage || ''}
                 project={entry.project}
                 flexShrink={0}
               />
