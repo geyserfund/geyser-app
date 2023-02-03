@@ -1,4 +1,4 @@
-import { Box, Button, HStack, useMediaQuery } from '@chakra-ui/react'
+import { Box, Button, HStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 
@@ -24,7 +24,6 @@ enum DashboardTabs {
 export const ProjectDashboard = () => {
   const isMobile = useMobileMode()
   const { projectId } = useParams<{ projectId: string }>()
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -35,10 +34,10 @@ export const ProjectDashboard = () => {
 
   useEffect(() => {
     if (location.pathname) {
-      const splitedValue = location.pathname.split(
-        `${PathName.projectDashboard}/`,
+      const splitValue = location.pathname.split(
+        `${PathName.projectDashboard}`,
       )[1]
-      const pathName = checkValue(splitedValue)
+      const pathName = checkValue(splitValue)
       setActiveTab(pathName)
     }
   }, [location])
@@ -51,25 +50,11 @@ export const ProjectDashboard = () => {
     )
   }
 
-  const checkValue = (splitedValue: string) => {
-    switch (splitedValue) {
-      case DashboardTabs.entries:
-        return DashboardTabs.entries
-      case DashboardTabs.funds:
-        return DashboardTabs.funds
-      case DashboardTabs.milestones:
-        return DashboardTabs.milestones
-      case DashboardTabs.rewards:
-        return DashboardTabs.rewards
-      case DashboardTabs.contributors:
-        return DashboardTabs.contributors
-      case DashboardTabs.stats:
-        return DashboardTabs.stats
-      case DashboardTabs.settings:
-        return DashboardTabs.settings
-      default:
-        return DashboardTabs.editProject
-    }
+  const checkValue = (splitValue: string) => {
+    if (splitValue === '' || splitValue === '/')
+      return DashboardTabs.editProject
+
+    return splitValue.replaceAll('/', '') as DashboardTabs
   }
 
   const { loading, project } = useProjectState(projectId || '', {
@@ -141,7 +126,6 @@ export const ProjectDashboard = () => {
     return <Loader />
   }
 
-  console.log('checking isLarger than', isLargerThan1280)
   return (
     <Box
       background={'brand.bgGrey4'}
