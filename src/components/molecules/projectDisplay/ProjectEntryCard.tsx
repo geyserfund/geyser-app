@@ -1,6 +1,7 @@
 import { CloseIcon } from '@chakra-ui/icons'
 import {
   Badge,
+  Box,
   Flex,
   Heading,
   HStack,
@@ -16,9 +17,11 @@ import { BsHeartFill } from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
-import { colors } from '../../../styles'
+import { colors, fonts } from '../../../styles'
 import { Entry, EntryStatus } from '../../../types/generated/graphql'
+import { getShortAmountLabel } from '../../../utils'
 import { CardLayout } from '../../layouts'
+import { MonoBody1, MonoBody2 } from '../../typography'
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
 import { ProjectListItemImage } from './ProjectListItemImage'
@@ -65,16 +68,13 @@ export const ProjectEntryCard = ({
       padding="12px"
       width={{
         base: '100%',
-        xl: '798px',
       }}
-      maxWidth={'798px'}
       direction={{ base: 'column', md: 'row' }}
       cursor={isDraft ? 'auto' : 'pointer'}
       alignItems={{ base: 'flex-start', md: 'center' }}
     >
-      <Flex
-        flex={1}
-        width={{
+      <Box
+        minWidth={{
           base: 'full',
           md: '142px',
         }}
@@ -94,7 +94,7 @@ export const ProjectEntryCard = ({
           alt={entry.title}
           fallback={<ProjectEntryCardThumbnailPlaceholder />}
         />
-      </Flex>
+      </Box>
 
       <Stack
         flex={1}
@@ -147,53 +147,65 @@ export const ProjectEntryCard = ({
         <Spacer />
 
         <Stack
-          align={'center'}
+          align={'start'}
           justify={'start'}
-          direction={'row'}
+          direction={{ base: 'column', lg: 'row' }}
           spacing={'22px'}
           wrap={{
             base: 'wrap',
             sm: 'nowrap',
           }}
+          overflow="hidden"
         >
           <HStack spacing={'12px'} align={'center'} flex={0}>
             <HStack spacing={1}>
-              <Text color="brand.primary" fontWeight={'bold'}>
+              <MonoBody1 color="brand.primary" fontWeight={'bold'}>
                 {entry.fundersCount}
-              </Text>
+              </MonoBody1>
               <BsHeartFill color={colors.primary} />
             </HStack>
 
-            <SatoshiAmount color="brand.primary" fontWeight="bold">
-              {entry.amountFunded}
+            <SatoshiAmount
+              fontFamily={fonts.mono}
+              color="brand.primary"
+              fontSize="16px"
+              fontWeight="bold"
+              scale={0.8}
+            >
+              {getShortAmountLabel(entry.amountFunded)}
             </SatoshiAmount>
           </HStack>
 
           {entry.project ? (
             <HStack
+              flex={1}
               spacing={1.5}
               alignItems="center"
               justifyContent="flex-start"
+              overflow="hidden"
             >
               <ProjectListItemImage
-                imageSrc={entry.image || ''}
+                boxSize="30px"
                 project={entry.project}
                 flexShrink={0}
               />
 
-              <Text color="brand.neutral600" textTransform={'uppercase'}>
+              <Text
+                color="brand.neutral600"
+                textTransform={'uppercase'}
+                overflow="hidden"
+                isTruncated
+              >
                 {entry.project?.title}
               </Text>
             </HStack>
           ) : null}
 
           <Badge
-            flex={0}
             textTransform="uppercase"
             fontSize={'10px'}
             fontWeight="regular"
-            padding={1}
-            borderRadius={0.5}
+            borderRadius="4px"
             display="flex"
           >
             {entry.type}

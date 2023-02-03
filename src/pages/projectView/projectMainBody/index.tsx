@@ -13,7 +13,7 @@ import { UpdateReward } from '../../../hooks'
 import { Project } from '../../../types/generated/graphql'
 import { useDarkMode, useMobileMode } from '../../../utils'
 import { NoWallet } from './components'
-import { Entries, Summary } from './sections'
+import { Creator, Entries, Summary } from './sections'
 import { Milestones } from './sections/Milestones'
 import { Rewards } from './sections/Rewards'
 import { SectionNav } from './sections/SectionNav'
@@ -103,6 +103,7 @@ export const ProjectMainBody = ({
             <Summary />
 
             {isViewerTheProjectOwner && <NoWallet project={project} />}
+            {isViewerTheProjectOwner && <Creator />}
 
             <SectionNav />
 

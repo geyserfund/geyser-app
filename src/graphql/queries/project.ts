@@ -227,6 +227,10 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
       unpublishedEntries: entries(input: { where: { published: false } }) {
         id
         title
+        image
+        description
+        fundersCount
+        amountFunded
         published
         publishedAt
         status
@@ -234,6 +238,10 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
       publishedEntries: entries(input: { where: { published: true } }) {
         id
         title
+        image
+        description
+        fundersCount
+        amountFunded
         published
         publishedAt
         status

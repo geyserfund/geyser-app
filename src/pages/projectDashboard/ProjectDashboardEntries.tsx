@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { GridItem, useDisclosure, VStack } from '@chakra-ui/react'
+import { GridItem, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useNavigate } from 'react-router'
@@ -122,10 +122,16 @@ export const ProjectDashboardEntries = () => {
   }
 
   return (
-    <DashboardGridLayout>
-      <GridItem colSpan={6} display="flex" justifyContent="center">
+    <>
+      <HStack
+        width="100%"
+        display="flex"
+        justifyContent="center"
+        paddingTop="40px"
+      >
         <VStack
           spacing="30px"
+          maxWidth="980px"
           width="100%"
           minWidth="350px"
           marginBottom="40px"
@@ -139,7 +145,7 @@ export const ProjectDashboardEntries = () => {
                 name="Live"
                 number={liveEntries && liveEntries.length}
               />
-              <VStack w="100%">
+              <VStack>
                 {liveEntries?.map((entry) => {
                   const entryWithProject = { ...entry, project }
 
@@ -158,7 +164,7 @@ export const ProjectDashboardEntries = () => {
                 Create a new Entry
               </ButtonComponent>
             </VStack>
-            <VStack w="100%">
+            <VStack w="100%" spacing="30px">
               <ProjectSectionBar
                 name="Drafts"
                 number={draftEntries && draftEntries.length}
@@ -181,15 +187,7 @@ export const ProjectDashboardEntries = () => {
             </VStack>
           </VStack>
         </VStack>
-      </GridItem>
-      <GridItem colSpan={5} display="flex" justifyContent="center">
-        <VStack
-          justifyContent="center"
-          alignItems="flex-start"
-          maxWidth="370px"
-          spacing="10px"
-        ></VStack>
-      </GridItem>
+      </HStack>
       <DeleteConfirmModal
         isOpen={isDeleteEntryOpen}
         onClose={closeDeleteEntry}
@@ -197,6 +195,6 @@ export const ProjectDashboardEntries = () => {
         description={'Are you sure you want to remove the entry'}
         confirm={handleRemoveEntry}
       />
-    </DashboardGridLayout>
+    </>
   )
 }

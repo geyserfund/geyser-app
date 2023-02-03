@@ -19,7 +19,9 @@ export const ProjectFundingSummary = ({ project }: { project: Project }) => {
       w="100%"
       borderRadius="4px"
       backgroundColor="brand.neutral100"
-      spacing="60px"
+      spacing={{
+        base: '10px',
+      }}
       justifyContent="center"
     >
       <VStack spacing="0px">

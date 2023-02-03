@@ -1,3 +1,4 @@
+export * from './Creator'
 export * from './Entries'
 export * from './Milestones'
 export * from './Rewards'
