@@ -45,7 +45,9 @@ export const Milestones = () => {
       spacing="25px"
     >
       <ProjectSectionBar name={'Milestones'} number={milestoneLength} />
-      <VStack alignItems="flex-start">{renderMilestones()}</VStack>
+      <VStack alignItems="flex-start" spacing="12px">
+        {renderMilestones()}
+      </VStack>
     </CardLayout>
   )
 }

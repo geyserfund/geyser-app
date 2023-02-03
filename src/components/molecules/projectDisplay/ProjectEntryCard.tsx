@@ -9,7 +9,6 @@ import {
   Stack,
   Text,
   useColorMode,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { BiPencil } from 'react-icons/bi'
@@ -26,14 +25,12 @@ import { ProjectListItemImage } from './ProjectListItemImage'
 
 type Props = ICard & {
   entry: Entry
-  onClick?: () => void
   onEdit?: () => void
   onDelete?: () => void
 }
 
 export const ProjectEntryCard = ({
   entry,
-  onClick,
   onEdit,
   onDelete,
   ...rest
@@ -44,12 +41,6 @@ export const ProjectEntryCard = ({
   const isDraft = useMemo(() => {
     return entry.status === EntryStatus.Unpublished
   }, [entry.status])
-
-  const handleClick =
-    onClick ||
-    (() => {
-      navigate(getPath('entry', `${entry.id}`))
-    })
 
   const handleEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
@@ -71,7 +62,7 @@ export const ProjectEntryCard = ({
       display="flex"
       as={Link}
       to={getPath('entry', `${entry.id}`)}
-      padding={4}
+      padding="12px"
       width={{
         base: '100%',
         xl: '798px',
@@ -107,8 +98,9 @@ export const ProjectEntryCard = ({
 
       <Stack
         flex={1}
+        height="100%"
         flexDirection="column"
-        justifyContent="center"
+        justifyContent="space-between"
         alignItems="flex-start"
         p={1}
         pt={2}
