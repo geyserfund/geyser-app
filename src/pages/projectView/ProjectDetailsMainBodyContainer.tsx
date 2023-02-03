@@ -7,13 +7,12 @@ import { AppFooter } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
 import { getPath, IFundingStages } from '../../constants'
 import { fundingStages } from '../../constants'
-import { useAuthContext } from '../../context'
+import { MobileViews, useAuthContext, useProjectContext } from '../../context'
 import { UpdateReward } from '../../hooks'
 import { colors } from '../../styles'
 import { Project } from '../../types/generated/graphql'
 import { useDarkMode, useMobileMode } from '../../utils'
 import { ProjectDetailsCard } from './components/ProjectDetailsCard'
-import { MobileViews, useProject } from './containers'
 import { ProjectDetailsAccessoriesSections } from './ProjectDetailsAccessoriesSections'
 
 type Rules = string
@@ -66,7 +65,7 @@ export const ProjectDetailsMainBodyContainer = ({
   const isMobile = useMobileMode()
   const isDark = useDarkMode()
 
-  const { mobileView, setMobileView } = useProject()
+  const { mobileView, setMobileView } = useProjectContext()
 
   const inView = mobileView === MobileViews.description
 

@@ -1,6 +1,6 @@
 import {
   Checkbox,
-  GridItem,
+  Fade,
   HStack,
   Table,
   TableContainer,
@@ -25,10 +25,11 @@ import {
   SatoshiAmount,
 } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
+import { useProjectContext } from '../../context'
 import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql'
 import { computeFunderBadges } from '../../helpers'
 import { useQueryWithPagination } from '../../hooks'
-import { Funder, Project } from '../../types/generated/graphql'
+import { Funder } from '../../types/generated/graphql'
 import { toInt } from '../../utils'
 
 type TableData = {
@@ -38,7 +39,9 @@ type TableData = {
   value?: (val: any) => string | number
 }
 
-export const ProjectContributors = ({ project }: { project: Project }) => {
+export const ProjectContributors = () => {
+  const { project } = useProjectContext()
+
   const [selectedFunders, setSelectedFunders] = useState<Funder[]>([])
   const [csvData, setCsvData] = useState<(string | number)[][]>([])
 
@@ -233,16 +236,12 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
   }
 
   if (funders.isLoading) {
-    return (
-      <GridItem colSpan={18} display="flex" justifyContent={'center'}>
-        <Loader />
-      </GridItem>
-    )
+    return <Loader />
   }
 
   return (
-    <>
-      <GridItem colSpan={18} display="flex" justifyContent={'center'}>
+    <Fade in>
+      <HStack width="100%" justifyContent={'center'} paddingTop="20px">
         <VStack maxWidth="1200px" width="100%" alignItems="center">
           <HStack width="100%" justifyContent="space-between">
             <HStack>
@@ -356,7 +355,7 @@ export const ProjectContributors = ({ project }: { project: Project }) => {
             </Table>
           </TableContainer>
         </VStack>
-      </GridItem>
-    </>
+      </HStack>
+    </Fade>
   )
 }

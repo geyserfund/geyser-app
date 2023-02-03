@@ -11,6 +11,7 @@ import { SatoshiIconTilted } from '../../../components/icons'
 import { StickToTop } from '../../../components/layouts'
 import { ActivityBrief } from '../../../components/molecules'
 import { ButtonComponent } from '../../../components/ui'
+import { MobileViews, useProjectContext } from '../../../context'
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
   QUERY_GET_PROJECT_FUNDERS,
@@ -24,7 +25,6 @@ import {
   toInt,
   useMobileMode,
 } from '../../../utils'
-import { MobileViews, useProject } from '../containers'
 import { ProjectContributionList } from './ProjectContributionList'
 import { ProjectLeaderboardList } from './ProjectLeaderboardList'
 
@@ -44,7 +44,7 @@ export const ProjectFundingInitialInfoScreen = ({
 }: Props) => {
   const isMobile = useMobileMode()
   const [tab, setTab] = useState('activity')
-  const { mobileView, setMobileView } = useProject()
+  const { mobileView, setMobileView } = useProjectContext()
 
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]

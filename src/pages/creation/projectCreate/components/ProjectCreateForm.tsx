@@ -196,7 +196,7 @@ export const ProjectCreateForm = ({
           <Input
             name="name"
             onChange={handleChange}
-            value={form.name}
+            value={form.name || ''}
             isInvalid={Boolean(formError.name)}
             focusBorderColor={colors.primary}
             disabled={isEdit}
