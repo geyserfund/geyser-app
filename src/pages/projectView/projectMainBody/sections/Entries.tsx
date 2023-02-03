@@ -1,4 +1,6 @@
-import { Center, Text, VStack } from '@chakra-ui/react'
+import { useMutation } from '@apollo/client'
+import { Center, Text, useDisclosure } from '@chakra-ui/react'
+import { useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,16 +12,73 @@ import {
 import { ButtonComponent } from '../../../../components/ui'
 import { getPath, ID } from '../../../../constants'
 import { useAuthContext, useProjectContext } from '../../../../context'
-import { isActive, isDraft } from '../../../../utils'
+import { MUTATION_DELETE_ENTRY } from '../../../../graphql/mutations'
+import { Entry } from '../../../../types'
+import { isActive, isDraft, useNotification } from '../../../../utils'
 
 export const Entries = () => {
   const navigate = useNavigate()
 
   const { user } = useAuthContext()
   const { project } = useProjectContext()
+  const { toast } = useNotification()
+
+  const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY)
+
+  const {
+    isOpen: isDeleteEntryOpen,
+    onClose: closeDeleteEntry,
+    onOpen: openDeleteEntry,
+  } = useDisclosure()
+  const [selectedEntry, setSelectedEntry] = useState<Entry>()
 
   const hasEntries = project.entries && project.entries.length > 0
   const entriesLength = project.entries ? project.entries.length : 0
+
+  const isUserOwnerOfCurrentProject: boolean =
+    user?.id && user.id === project.owners[0].user.id
+
+  const canCreateEntries: boolean =
+    isUserOwnerOfCurrentProject &&
+    (isActive(project.status) || isDraft(project.status))
+
+  const handleCreateNewEntry = () => [
+    navigate(getPath('projectEntryCreation', project.name)),
+  ]
+
+  const handleEntryEditButtonTapped = (entry: Entry) => {
+    navigate(getPath('projectEntryDetails', project.name, entry.id))
+  }
+
+  const triggerDeleteEntry = (entry: Entry) => {
+    setSelectedEntry(entry)
+    openDeleteEntry()
+  }
+
+  const handleRemoveEntry = async () => {
+    if (!selectedEntry || !selectedEntry.id) {
+      return
+    }
+
+    try {
+      await deleteEntry({
+        variables: { deleteEntryId: toInt(selectedEntry.id) },
+      })
+
+      toast({
+        title: 'Successfully removed entry',
+        status: 'success',
+      })
+    } catch (error) {
+      toast({
+        title: 'Failed to remove entry',
+        description: `${error}`,
+        status: 'error',
+      })
+    }
+
+    closeDeleteEntry()
+  }
 
   const renderEntries = () => {
     if (project.entries && project.entries.length > 0) {
@@ -39,17 +98,6 @@ export const Entries = () => {
 
     return <Text>There are no any entries available </Text>
   }
-
-  const isUserOwnerOfCurrentProject: boolean =
-    user?.id && user.id === project.owners[0].user.id
-
-  const canCreateEntries: boolean =
-    isUserOwnerOfCurrentProject &&
-    (isActive(project.status) || isDraft(project.status))
-
-  const handleCreateNewEntry = () => [
-    navigate(getPath('projectEntryCreation', project.name)),
-  ]
 
   if (!hasEntries && !isUserOwnerOfCurrentProject) {
     return null

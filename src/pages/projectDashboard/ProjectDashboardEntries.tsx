@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { GridItem, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import { HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useNavigate } from 'react-router'
@@ -21,7 +21,6 @@ import {
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql'
 import { toInt, useNotification } from '../../utils'
-import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 type ResponseData = {
   project: Project & {
@@ -145,7 +144,7 @@ export const ProjectDashboardEntries = () => {
                 name="Live"
                 number={liveEntries && liveEntries.length}
               />
-              <VStack>
+              <VStack width="100%">
                 {liveEntries?.map((entry) => {
                   const entryWithProject = { ...entry, project }
 
@@ -170,7 +169,7 @@ export const ProjectDashboardEntries = () => {
                 number={draftEntries && draftEntries.length}
               />
 
-              <VStack>
+              <VStack width="100%">
                 {draftEntries?.map((entry) => {
                   const entryWithProject = { ...entry, project }
 
