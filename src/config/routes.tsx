@@ -91,12 +91,12 @@ const platformRoutes = [
     authenticated: true,
   },
   {
-    path: getPath('projectEntryDetails', PathName.projectId, PathName.entryId),
+    path: getPath('projectEntryPreview', PathName.projectId, PathName.entryId),
     element: EntryPreview,
     authenticated: true,
   },
   {
-    path: getPath('projectEntryEdit', PathName.projectId, PathName.entryId),
+    path: getPath('projectEntryDetails', PathName.projectId, PathName.entryId),
     element: EntryCreateEdit,
     authenticated: true,
   },

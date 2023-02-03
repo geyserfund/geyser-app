@@ -47,8 +47,6 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
   projectEntryPreview: (projectName: string, entryID: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}/preview`,
-  projectEntryEdit: (projectName: string, entryID: string) =>
-    `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
   publicProjectLaunch: () => `/${PathName.launchProject}/start`,
   privateProjectLaunch: () => `/${PathName.launchProject}`,
   launchProjectWithNode: (projectID: string) =>
