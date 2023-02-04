@@ -7,7 +7,7 @@ import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
-import { Project, ProjectReward, RewardCurrency } from '../../../../types'
+import { Project, ProjectReward } from '../../../../types'
 import { RewardAdditionModal } from '../../../creation/projectCreate/components'
 
 export const Creator = () => {
@@ -21,9 +21,9 @@ export const Creator = () => {
     onOpen: openReward,
   } = useDisclosure()
 
-  const handleRewardAdd = (updateReward: ProjectReward) => {
+  const handleRewardAdd = (addReward: ProjectReward) => {
     const newRewards = project.rewards as ProjectReward[]
-    updateProject({ rewards: [...newRewards, updateReward] } as Project)
+    updateProject({ rewards: [...newRewards, addReward] } as Project)
   }
 
   return (
