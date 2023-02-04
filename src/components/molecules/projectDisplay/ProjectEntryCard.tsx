@@ -2,27 +2,25 @@ import { CloseIcon } from '@chakra-ui/icons'
 import {
   Badge,
   Box,
-  Flex,
-  Heading,
   HStack,
   Image,
   Spacer,
   Stack,
   Text,
-  useColorMode,
 } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { BiPencil } from 'react-icons/bi'
 import { BsHeartFill } from 'react-icons/bs'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { colors, fonts } from '../../../styles'
 import { Entry, EntryStatus } from '../../../types/generated/graphql'
 import { getShortAmountLabel } from '../../../utils'
 import { CardLayout } from '../../layouts'
-import { MonoBody1, MonoBody2 } from '../../typography'
+import { Body1, H2, MonoBody1 } from '../../typography'
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
+import { EntryStatusLabel } from '../../ui/EntryStatusLabel'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
 import { ProjectListItemImage } from './ProjectListItemImage'
 
@@ -39,7 +37,6 @@ export const ProjectEntryCard = ({
   ...rest
 }: Props) => {
   const navigate = useNavigate()
-  const { colorMode } = useColorMode()
 
   const isDraft = useMemo(() => {
     return entry.status === EntryStatus.Unpublished
@@ -59,12 +56,15 @@ export const ProjectEntryCard = ({
     }
   }
 
+  const handleClick = () => {
+    navigate(getPath('entry', `${entry.id}`))
+  }
+
   return (
     <CardLayout
       hover
       display="flex"
-      as={Link}
-      to={getPath('entry', `${entry.id}`)}
+      onClick={handleClick}
       padding="12px"
       width={{
         base: '100%',
@@ -99,57 +99,71 @@ export const ProjectEntryCard = ({
       <Stack
         flex={1}
         height="100%"
+        width={{
+          base: 'full',
+          md: 'calc(100% - 142px)',
+        }}
         flexDirection="column"
         justifyContent="space-between"
         alignItems="flex-start"
         p={1}
         pt={2}
       >
-        <HStack w="100%" justifyContent="space-between">
-          <Heading fontSize={'2xl'} fontFamily={'body'} noOfLines={[0, 1]}>
+        <Stack
+          direction={{ base: 'column-reverse', md: 'row' }}
+          w="100%"
+          justifyContent="space-between"
+          overflow="hidden"
+        >
+          <H2 flex="1" overflow="hidden" isTruncated>
             {entry.title}
-          </Heading>
+          </H2>
 
-          <HStack>
-            {onEdit && (
-              <IconButtonComponent
-                aria-label="edit-entry"
-                size="sm"
-                icon={<BiPencil />}
-                onClick={handleEdit}
-              />
-            )}
-            {onDelete && (
-              <IconButtonComponent
-                aria-label="remove-entry"
-                size="sm"
-                icon={<CloseIcon />}
-                backgroundColor="red.100"
-                _hover={{ backgroundColor: 'red.300' }}
-                onClick={handleDelete}
-              />
-            )}
+          <HStack justifyContent={{ base: 'space-between', md: 'start' }}>
+            <Box>
+              <EntryStatusLabel entry={entry} />
+            </Box>
+            <Box>
+              {onEdit && (
+                <IconButtonComponent
+                  noBorder
+                  aria-label="edit-entry"
+                  size="sm"
+                  borderWidth="0"
+                  icon={<BiPencil fontSize="16px" />}
+                  onClick={handleEdit}
+                />
+              )}
+              {onDelete && (
+                <IconButtonComponent
+                  noBorder
+                  aria-label="remove-entry"
+                  size="sm"
+                  icon={<CloseIcon />}
+                  _hover={{ backgroundColor: 'red.100' }}
+                  onClick={handleDelete}
+                />
+              )}
+            </Box>
           </HStack>
-        </HStack>
+        </Stack>
 
-        <Text
+        <Body1
           marginTop="2"
-          color={
-            colorMode === 'light' ? 'brand.neutral600' : 'brand.neutral200'
-          }
+          color={'brand.neutral600'}
           fontSize="lg"
           as={'p'}
           noOfLines={[0, 2]}
         >
           {entry.description}
-        </Text>
+        </Body1>
 
         <Spacer />
 
         <Stack
-          align={'start'}
-          justify={'start'}
-          direction={{ base: 'column', lg: 'row' }}
+          align="center"
+          justify="start"
+          direction={'row'}
           spacing={'22px'}
           wrap={{
             base: 'wrap',
@@ -185,7 +199,7 @@ export const ProjectEntryCard = ({
               overflow="hidden"
             >
               <ProjectListItemImage
-                boxSize="30px"
+                boxSize="28px"
                 imageSrc={entry.project.thumbnailImage || ''}
                 project={entry.project}
                 flexShrink={0}

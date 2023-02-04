@@ -103,8 +103,8 @@ export const Summary = () => {
             <Text
               fontSize="30px"
               fontWeight={700}
-              width="100%"
               wordBreak="break-all"
+              isTruncated
             >
               {project.title}
             </Text>

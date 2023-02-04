@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 import { Project } from '../types'
+import { useAuthContext } from './auth'
 
 export enum MobileViews {
   description = 'description',
@@ -17,12 +18,14 @@ type ProjectState = {
 type ProjectContextProps = {
   mobileView: MobileViews
   setMobileView: (view: MobileViews) => void
+  isProjectOwner: boolean
 } & ProjectState
 
 const defaultProjectContext = {
   mobileView: MobileViews.description,
   setMobileView(view: MobileViews) {},
   project: {} as Project,
+  isProjectOwner: false,
 }
 
 export const ProjectContext = createContext<ProjectContextProps>(
@@ -39,10 +42,26 @@ export const ProjectProvider = ({
   const [mobileView, setMobileView] = useState<MobileViews>(
     MobileViews.description,
   )
+  const [isProjectOwner, setIsProjectOwner] = useState(false)
+  const { user } = useAuthContext()
+
+  useEffect(() => {
+    if (project.id && project.owners[0].user.id === user.id) {
+      setIsProjectOwner(true)
+    } else {
+      setIsProjectOwner(false)
+    }
+  }, [project.id, user])
 
   return (
     <ProjectContext.Provider
-      value={{ mobileView, setMobileView, project, updateProject }}
+      value={{
+        mobileView,
+        setMobileView,
+        project,
+        isProjectOwner,
+        updateProject,
+      }}
     >
       {children}
     </ProjectContext.Provider>

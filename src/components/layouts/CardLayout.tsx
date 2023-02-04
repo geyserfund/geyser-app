@@ -1,6 +1,6 @@
 import { Stack, StackProps } from '@chakra-ui/react'
 
-interface CardLayoutProps extends StackProps {
+export interface CardLayoutProps extends StackProps {
   hover?: boolean
   click?: boolean
   to?: string

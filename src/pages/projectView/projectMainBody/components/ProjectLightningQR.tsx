@@ -58,6 +58,7 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
 
       <Tooltip label="View Project QR Code" placement="top">
         <IconButton
+          size="sm"
           border="1px solid"
           borderColor="transparent"
           _hover={{ backgroundColor: 'none', borderColor: '#20ECC7' }}

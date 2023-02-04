@@ -1,11 +1,14 @@
 import { HStack, Stack } from '@chakra-ui/react'
 import { BsBoxArrowUpRight } from 'react-icons/bs'
+import { Link, useParams } from 'react-router-dom'
 
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
-import { CardLayout } from '../../../../components/layouts'
+import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
+import { getPath } from '../../../../constants'
 
 export const Creator = () => {
+  const params = useParams<{ projectId: string }>()
   return (
     <CardLayout direction="column" spacing="20px">
       <H3>Create content</H3>
@@ -18,6 +21,8 @@ export const Creator = () => {
         spacing="20px"
       >
         <CreationCardItem
+          as={Link}
+          to={getPath('projectEntryCreation', `${params.projectId}`)}
           icon={<EntryEditIcon />}
           title="Write a blog"
           description="Engage your community with articles about your project updates"
@@ -38,17 +43,20 @@ export const Creator = () => {
   )
 }
 
+interface CreationCardItemProps extends CardLayoutProps {
+  icon: React.ReactNode
+  title: string
+  description: string
+}
+
 export const CreationCardItem = ({
   icon,
   title,
   description,
-}: {
-  icon: React.ReactNode
-  title: string
-  description: string
-}) => {
+  ...rest
+}: CreationCardItemProps) => {
   return (
-    <CardLayout click hover height="100%" padding="12px">
+    <CardLayout hover height="100%" padding="12px" {...rest}>
       <HStack>
         {icon}
         <H3>{title}</H3>

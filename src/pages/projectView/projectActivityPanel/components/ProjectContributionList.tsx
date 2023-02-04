@@ -24,7 +24,7 @@ export const ProjectContributionList = ({
       height={'100%'}
       paddingBottom="10px"
     >
-      {fundingTxs.data.map((fundingTx, index) => (
+      {fundingTxs.data.map((fundingTx) => (
         <>
           <ProjectFundingContributionsFeedItem
             key={fundingTx.id}
