@@ -1,10 +1,4 @@
-import {
-  GridItem,
-  SimpleGrid,
-  Text,
-  useMediaQuery,
-  VStack,
-} from '@chakra-ui/react'
+import { GridItem, SimpleGrid, Text, useMediaQuery } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../../components/layouts'
 import { ProjectSectionBar } from '../../../../components/molecules'

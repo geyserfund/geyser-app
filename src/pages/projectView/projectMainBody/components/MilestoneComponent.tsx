@@ -1,4 +1,4 @@
-import { Checkbox, HStack, Text, Wrap } from '@chakra-ui/react'
+import { Checkbox, HStack, Wrap } from '@chakra-ui/react'
 
 import { Body1, H3 } from '../../../../components/typography'
 import { SatoshiAmount } from '../../../../components/ui'
