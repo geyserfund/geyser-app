@@ -8,6 +8,7 @@ interface IImageWithReload extends ImageProps {
   noCacheId?: string
   defaultImage?: string
   grey?: boolean
+  empty?: boolean
 }
 
 const MAX_RETRIES = 10
@@ -18,6 +19,7 @@ export const ImageWithReload = ({
   src,
   defaultImage,
   grey,
+  empty,
   noCacheId, // noCacheId allows us to prevent not retrying an image upload due to caching
   ...rest
 }: IImageWithReload) => {
@@ -112,6 +114,10 @@ export const ImageWithReload = ({
         {...rest}
       />
     )
+  }
+
+  if (empty && !hasValidSource) {
+    return null
   }
 
   return (

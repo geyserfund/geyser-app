@@ -5,6 +5,7 @@ import { BiPencil } from 'react-icons/bi'
 import { TRewards } from '../../../pages/creation/projectCreate/types'
 import { colors } from '../../../styles'
 import { ProjectReward } from '../../../types/generated/graphql'
+import { CardLayout } from '../../layouts'
 import {
   ICard,
   IconButtonComponent,
@@ -26,16 +27,22 @@ export const RewardCard = ({
   handleRemove,
   ...rest
 }: Props) => {
+  const onEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+    if (handleEdit) {
+      handleEdit()
+    }
+  }
+
+  const onRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+    if (handleRemove) {
+      handleRemove()
+    }
+  }
+
   return (
-    <Box
-      border="2px solid"
-      borderColor={colors.bgLightGrey}
-      borderRadius="12px"
-      alignItems="flex-start"
-      padding="10px"
-      _hover={{ borderColor: colors.gray300 }}
-      {...rest}
-    >
+    <CardLayout hover click alignItems="flex-start" padding="10px" {...rest}>
       <VStack width="100%">
         <HStack width="100%" justifyContent={'space-between'} paddingX="4px">
           <HStack>
@@ -74,26 +81,28 @@ export const RewardCard = ({
           <HStack>
             {handleEdit && (
               <IconButtonComponent
+                noBorder
                 aria-label="edit-reward"
                 size="sm"
-                icon={<BiPencil />}
-                onClick={handleEdit}
+                icon={<BiPencil fontSize="16px" />}
+                onClick={onEdit}
               />
             )}
             {handleRemove && (
               <IconButtonComponent
+                noBorder
                 aria-label="edit-reward"
                 size="sm"
                 icon={<CloseIcon />}
-                backgroundColor="red.100"
-                _hover={{ backgroundColor: 'red.300' }}
-                onClick={handleRemove}
+                _hover={{ backgroundColor: 'red.100' }}
+                onClick={onRemove}
               />
             )}
           </HStack>
         </HStack>
         <Box>
           <ImageWithReload
+            empty
             borderRadius="4px"
             src={reward.image || ''}
             width="335px"
@@ -107,6 +116,6 @@ export const RewardCard = ({
           {reward.description}
         </Text>
       </VStack>
-    </Box>
+    </CardLayout>
   )
 }

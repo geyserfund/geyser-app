@@ -15,6 +15,7 @@ export const CardLayout = ({
 }: CardLayoutProps) => {
   return (
     <Stack
+      tabIndex={-1}
       overflow={'hidden'}
       backgroundColor="white"
       border="2px solid"

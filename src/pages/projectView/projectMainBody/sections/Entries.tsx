@@ -25,7 +25,17 @@ export const Entries = () => {
   const { project, isProjectOwner, updateProject } = useProjectContext()
   const { toast } = useNotification()
 
-  const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY)
+  const [selectedEntry, setSelectedEntry] = useState<Entry>()
+
+  const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY, {
+    onCompleted() {
+      const newEntries = project.entries.filter(
+        (entry) => entry?.id !== selectedEntry?.id,
+      )
+      updateProject({ entries: newEntries } as Project)
+      setSelectedEntry(undefined)
+    },
+  })
   const [fetchUnpublishedEntries] = useLazyQuery<{ project: Project }>(
     QUERY_PROJECT_UNPUBLISHED_ENTRIES,
     {
@@ -54,7 +64,6 @@ export const Entries = () => {
     onClose: closeDeleteEntry,
     onOpen: openDeleteEntry,
   } = useDisclosure()
-  const [selectedEntry, setSelectedEntry] = useState<Entry>()
 
   const hasEntries = project.entries && project.entries.length > 0
   const entriesLength = project.entries ? project.entries.length : 0

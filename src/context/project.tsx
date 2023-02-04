@@ -16,15 +16,18 @@ type ProjectState = {
 }
 
 type ProjectContextProps = {
+  project: Project
+  updateProject: (updateProject: Project) => void
   mobileView: MobileViews
   setMobileView: (view: MobileViews) => void
   isProjectOwner: boolean
-} & ProjectState
+}
 
 const defaultProjectContext = {
   mobileView: MobileViews.description,
   setMobileView(view: MobileViews) {},
   project: {} as Project,
+  updateProject() {},
   isProjectOwner: false,
 }
 
@@ -53,6 +56,12 @@ export const ProjectProvider = ({
     }
   }, [project.id, user])
 
+  const handleUpdateProject = (value: Project) => {
+    if (updateProject) {
+      updateProject(value)
+    }
+  }
+
   return (
     <ProjectContext.Provider
       value={{
@@ -60,7 +69,7 @@ export const ProjectProvider = ({
         setMobileView,
         project,
         isProjectOwner,
-        updateProject,
+        updateProject: handleUpdateProject,
       }}
     >
       {children}
