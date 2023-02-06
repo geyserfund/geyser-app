@@ -1,28 +1,27 @@
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.snow.css'
 
-import ImageEdit from 'quill-image-edit-module';
+import ImageEdit from 'quill-image-edit-module'
 // @ts-ignore
-import ImageUploader from 'quill-image-uploader';
-import { useEffect, useRef, useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import { Quill } from 'react-quill';
+import ImageUploader from 'quill-image-uploader'
+import { useEffect, useRef, useState } from 'react'
+import { createUseStyles } from 'react-jss'
+import { Quill } from 'react-quill'
 
-import { getSignedUploadAPI } from '../../../../hooks';
-import { colors, fonts } from '../../../../styles';
-import { useMobileMode, useNotification } from '../../../../utils';
+import { getSignedUploadAPI } from '../../../../hooks'
+import { colors, fonts } from '../../../../styles'
+import { useMobileMode, useNotification } from '../../../../utils'
 
-type Rules = string;
+type Rules = string
 
 type StyleProps = {
-  isReadOnly?: boolean;
-  noPadding?: boolean;
-  isMobile?: boolean;
-};
+  isReadOnly?: boolean
+  noPadding?: boolean
+  isMobile?: boolean
+}
 
 const useStyles = createUseStyles<Rules, StyleProps>({
   container: ({ isReadOnly, noPadding, isMobile }: StyleProps) => ({
     width: '100%',
-    height: '100%',
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
@@ -103,7 +102,7 @@ const useStyles = createUseStyles<Rules, StyleProps>({
     },
     '& .ql-video': {
       width: '100%',
-      height: '100%',
+      height: '40vw',
       maxHeight: '500px',
     },
     '& button.ql-active': {
@@ -116,20 +115,20 @@ const useStyles = createUseStyles<Rules, StyleProps>({
       fill: `${colors.primary} !important`,
     },
   }),
-});
+})
 
 type Props = {
-  name: string;
-  value: string;
-  handleChange?: (name: string, content: string) => void;
-  isReadOnly?: boolean;
-  focusFlag?: string;
-  noPadding?: boolean;
-};
+  name: string
+  value: string
+  handleChange?: (name: string, content: string) => void
+  isReadOnly?: boolean
+  focusFlag?: string
+  noPadding?: boolean
+}
 
-const editorDOMID = 'editor';
+const editorDOMID = 'editor'
 
-type QuillType = InstanceType<typeof Quill>;
+type QuillType = InstanceType<typeof Quill>
 
 export const ProjectEntryEditor = ({
   name,
@@ -139,18 +138,18 @@ export const ProjectEntryEditor = ({
   focusFlag,
   noPadding,
 }: Props) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
-  const [_quillObj, _setQuillObj] = useState<QuillType>();
-  const quillObj = useRef(_quillObj);
+  const [_quillObj, _setQuillObj] = useState<QuillType>()
+  const quillObj = useRef(_quillObj)
 
   const setQuillObj = (value: QuillType) => {
-    quillObj.current = value;
-    _setQuillObj(value);
-  };
+    quillObj.current = value
+    _setQuillObj(value)
+  }
 
-  const { toast } = useNotification();
-  const classes = useStyles({ isReadOnly, noPadding, isMobile });
+  const { toast } = useNotification()
+  const classes = useStyles({ isReadOnly, noPadding, isMobile })
 
   const editorModules = {
     toolbar: {
@@ -169,15 +168,15 @@ export const ProjectEntryEditor = ({
     imageUploader: {
       async upload(file: any) {
         try {
-          const response = await getSignedUploadAPI(file);
-          return response;
+          const response = await getSignedUploadAPI(file)
+          return response
         } catch {
           toast({
             title: 'Something went wrong',
             description: 'Image upload failed, please try again.',
             status: 'error',
-          });
-          return false;
+          })
+          return false
         }
       },
     },
@@ -194,27 +193,27 @@ export const ProjectEntryEditor = ({
         border: 'none',
       },
     },
-  };
+  }
 
   useEffect(() => {
-    Quill.register('modules/imageUploader', ImageUploader);
-    Quill.register('modules/imageEdit', ImageEdit);
+    Quill.register('modules/imageUploader', ImageUploader)
+    Quill.register('modules/imageEdit', ImageEdit)
 
     const editor = new Quill(`#${editorDOMID}`, {
       modules: editorModules,
       readOnly: isReadOnly,
       theme: 'snow',
       placeholder: 'The description of the entry .....',
-    });
+    })
 
     if (value) {
-      const textValue = JSON.parse(value);
+      const textValue = JSON.parse(value)
 
-      editor.updateContents(textValue, 'api');
+      editor.updateContents(textValue, 'api')
     }
 
     editor.on('text-change', (delta) => {
-      const contents = quillObj.current?.getContents();
+      const contents = quillObj.current?.getContents()
 
       if (
         delta &&
@@ -223,13 +222,13 @@ export const ProjectEntryEditor = ({
         delta.ops[2].attributes &&
         delta.ops[2].attributes.imageBlot
       ) {
-        return;
+        return
       }
 
       if (handleChange) {
-        handleChange(name, JSON.stringify(contents));
+        handleChange(name, JSON.stringify(contents))
       }
-    });
+    })
 
     editor.keyboard.addBinding(
       {
@@ -237,22 +236,22 @@ export const ProjectEntryEditor = ({
       },
       function (range) {
         if (range.index === 0 && range.length === 0) {
-          document.getElementById('entry-description-input')?.focus();
-          return false;
+          document.getElementById('entry-description-input')?.focus()
+          return false
         }
 
-        return true;
+        return true
       },
-    );
+    )
 
-    setQuillObj(editor);
-  }, []);
+    setQuillObj(editor)
+  }, [])
 
   useEffect(() => {
     if (focusFlag) {
-      quillObj.current?.focus();
+      quillObj.current?.focus()
     }
-  }, [focusFlag]);
+  }, [focusFlag])
 
   return (
     <div className={classes.container}>
@@ -260,5 +259,5 @@ export const ProjectEntryEditor = ({
         <div id="drag-and-drop-container"></div>
       </div>
     </div>
-  );
-};
+  )
+}
