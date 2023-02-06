@@ -1,5 +1,6 @@
 import { HStack, Stack, useDisclosure } from '@chakra-ui/react'
 import { BsBoxArrowUpRight } from 'react-icons/bs'
+import { RiFlag2Line } from 'react-icons/ri'
 import { Link, useParams } from 'react-router-dom'
 
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
@@ -7,8 +8,12 @@ import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
-import { Project, ProjectReward } from '../../../../types'
-import { RewardAdditionModal } from '../../../creation/projectCreate/components'
+import { Project, ProjectMilestone, ProjectReward } from '../../../../types'
+import {
+  defaultMilestone,
+  MilestoneAdditionModal,
+  RewardAdditionModal,
+} from '../../../creation/projectCreate/components'
 
 export const Creator = () => {
   const params = useParams<{ projectId: string }>()
@@ -21,9 +26,20 @@ export const Creator = () => {
     onOpen: openReward,
   } = useDisclosure()
 
+  const {
+    isOpen: isMilestoneModalOpen,
+    onClose: onMilestoneModalClose,
+    onOpen: openMilestoneModal,
+  } = useDisclosure()
+
   const handleRewardAdd = (addReward: ProjectReward) => {
     const newRewards = project.rewards as ProjectReward[]
     updateProject({ rewards: [...newRewards, addReward] } as Project)
+  }
+
+  const handleMilestoneSubmit = (newMilestones: ProjectMilestone[]) => {
+    updateProject({ milestones: newMilestones } as Project)
+    onMilestoneModalClose()
   }
 
   return (
@@ -53,9 +69,10 @@ export const Creator = () => {
             onClick={openReward}
           />
           <CreationCardItem
-            icon={<BsBoxArrowUpRight />}
-            title="Learn tips & tricks"
-            description="Read about what makes crowdfunding projects successful"
+            icon={<RiFlag2Line fontSize="22px" />}
+            title="Edit Milestones"
+            description="Clarify your next steps by keeping your milestones up to date"
+            onClick={openMilestoneModal}
           />
         </Stack>
       </CardLayout>
@@ -65,6 +82,19 @@ export const Creator = () => {
           onClose={onRewardClose}
           onSubmit={handleRewardAdd}
           isSatoshi={false}
+          projectId={parseInt(`${project.id}`, 10)}
+        />
+      )}
+      {isMilestoneModalOpen && (
+        <MilestoneAdditionModal
+          isOpen={isMilestoneModalOpen}
+          onClose={onMilestoneModalClose}
+          availableMilestones={
+            project?.milestones && project.milestones.length > 0
+              ? (project.milestones as ProjectMilestone[])
+              : [defaultMilestone]
+          }
+          onSubmit={handleMilestoneSubmit}
           projectId={parseInt(`${project.id}`, 10)}
         />
       )}

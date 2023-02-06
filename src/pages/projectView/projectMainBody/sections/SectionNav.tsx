@@ -46,7 +46,7 @@ export const SectionNav = () => {
             }
             onClick={handleEntriesClick}
           >
-            Entries
+            Blogs
           </Button>
         )}
         {(isRewardBased || isProjectOwner) && (

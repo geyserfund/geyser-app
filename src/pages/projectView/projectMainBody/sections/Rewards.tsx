@@ -176,7 +176,7 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
     )
   }
 
-  if (!isRewardBased && !isProjectOwner) {
+  if (!isRewardBased) {
     return null
   }
 

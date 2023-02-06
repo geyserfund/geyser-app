@@ -101,7 +101,7 @@ export const EntryPreview = () => {
         isEdited = false
       } catch (error) {
         toast({
-          title: 'Post update failed',
+          title: 'Blog update failed',
           description: 'Please try again later',
           status: 'error',
         })
@@ -153,7 +153,7 @@ export const EntryPreview = () => {
       await publishPost({ variables: { id: toInt(entry.id) } })
     } catch (error) {
       toast({
-        title: 'Post publish failed',
+        title: 'Blog publish failed',
         description: 'Please try again later',
         status: 'error',
       })
@@ -207,7 +207,7 @@ export const EntryPreview = () => {
           paddingBottom="80px"
         >
           <Text fontSize="33px" fontWeight={600} color="brand.gray500">
-            {isEntryPublished ? 'Share entry' : 'Publish entry'}
+            {isEntryPublished ? 'Share blog' : 'Publish blog'}
           </Text>
 
           {isEntryPublished ? (
@@ -220,7 +220,7 @@ export const EntryPreview = () => {
                 <BsCheckLg />
               </Box>
 
-              <Text>Your entry is live!</Text>
+              <Text>Your blog is live!</Text>
             </VStack>
           ) : null}
 
@@ -303,7 +303,7 @@ export const EntryPreview = () => {
               </ButtonComponent>
 
               <ButtonComponent primary w="full" onClick={handleGoToPost}>
-                Go to Entry
+                Go to blog
               </ButtonComponent>
             </VStack>
           ) : isDraft(projectData?.project.status) ? (

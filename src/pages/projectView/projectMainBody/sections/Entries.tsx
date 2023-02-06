@@ -132,7 +132,7 @@ export const Entries = () => {
     return <Text>There are no any entries available </Text>
   }
 
-  if (!hasEntries && !isProjectOwner) {
+  if (!hasEntries) {
     return null
   }
 
@@ -146,7 +146,7 @@ export const Entries = () => {
         flexDirection="column"
         padding="24px"
       >
-        <ProjectSectionBar name={'Entries'} number={entriesLength} />
+        <ProjectSectionBar name={'Blogs'} number={entriesLength} />
 
         {renderEntries()}
 

@@ -1,7 +1,7 @@
 export enum PathName {
   projectDiscovery = 'discover',
   grants = 'grants',
-  entry = 'entry',
+  entry = 'blog',
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
   _deprecatedPathNameForProject = 'project',
