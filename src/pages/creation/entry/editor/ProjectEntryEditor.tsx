@@ -209,7 +209,7 @@ export const ProjectEntryEditor = ({
     if (value) {
       const textValue = JSON.parse(value)
 
-      editor.updateContents(textValue, 'api')
+      editor.setContents(textValue, 'api')
     }
 
     editor.on('text-change', (delta) => {
