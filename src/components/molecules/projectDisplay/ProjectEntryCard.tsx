@@ -1,13 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import {
-  Badge,
-  Box,
-  HStack,
-  Image,
-  Spacer,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, HStack, Image, Spacer, Stack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { BiPencil } from 'react-icons/bi'
@@ -24,7 +16,6 @@ import { Body1, Caption, H2, MonoBody1 } from '../../typography'
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
 import { EntryStatusLabel } from '../../ui/EntryStatusLabel'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
-import { ProjectListItemImage } from './ProjectListItemImage'
 
 type Props = ICard & {
   entry: Entry
