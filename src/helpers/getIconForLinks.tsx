@@ -12,6 +12,7 @@ import {
   BsMastodon,
   BsMedium,
   BsPinterest,
+  BsReddit,
   BsSkype,
   BsSlack,
   BsSnapchat,
@@ -50,12 +51,8 @@ export const getIconForLink = (value: Maybe<string>) => {
     return BsFacebook
   }
 
-  if (value?.toLowerCase().includes('facebook')) {
-    return BsFacebook
-  }
-
   if (value?.toLowerCase().includes('reddit')) {
-    return BsFacebook
+    return BsReddit
   }
 
   if (value?.toLowerCase().includes('slack')) {
