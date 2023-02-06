@@ -8,17 +8,19 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { BiPencil } from 'react-icons/bi'
 import { BsHeartFill } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
+import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
 import { colors, fonts } from '../../../styles'
 import { Entry, EntryStatus } from '../../../types/generated/graphql'
-import { getShortAmountLabel } from '../../../utils'
+import { getShortAmountLabel, toInt } from '../../../utils'
 import { CardLayout } from '../../layouts'
-import { Body1, H2, MonoBody1 } from '../../typography'
+import { Body1, Caption, H2, MonoBody1 } from '../../typography'
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
 import { EntryStatusLabel } from '../../ui/EntryStatusLabel'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
@@ -193,41 +195,15 @@ export const ProjectEntryCard = ({
             </SatoshiAmount>
           </HStack>
 
-          {entry.project ? (
-            <HStack
-              flex={1}
-              spacing={1.5}
-              alignItems="center"
-              justifyContent="flex-start"
-              overflow="hidden"
-            >
-              <ProjectListItemImage
-                boxSize="28px"
-                imageSrc={entry.project.thumbnailImage || ''}
-                project={entry.project}
-                flexShrink={0}
-              />
+          <AvatarElement borderRadius="50%" user={entry.creator} />
 
-              <Text
-                color="brand.neutral600"
-                textTransform={'uppercase'}
-                overflow="hidden"
-                isTruncated
-              >
-                {entry.project?.title}
-              </Text>
-            </HStack>
-          ) : null}
-
-          <Badge
-            textTransform="uppercase"
-            fontSize={'10px'}
-            fontWeight="regular"
-            borderRadius="4px"
-            display="flex"
-          >
-            {entry.type}
-          </Badge>
+          {entry.publishedAt && (
+            <Caption>
+              {DateTime.fromMillis(toInt(entry.publishedAt)).toFormat(
+                'dd LLL yyyy',
+              )}
+            </Caption>
+          )}
         </Stack>
       </Stack>
     </CardLayout>
