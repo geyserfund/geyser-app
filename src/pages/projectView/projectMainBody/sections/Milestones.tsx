@@ -50,7 +50,7 @@ export const Milestones = () => {
     return <Text>There are no milestones available.</Text>
   }
 
-  if (!hasMilestones) {
+  if (!hasMilestones && !isProjectOwner) {
     return null
   }
 

@@ -1,16 +1,16 @@
 import { Badge, Button, HStack, VStack } from '@chakra-ui/react'
 
-import { ID, projectTypes } from '../../../../constants'
+import { ID } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 
 export const SectionNav = () => {
-  const { project } = useProjectContext()
+  const { project, isProjectOwner } = useProjectContext()
 
   const entriesLength = project.entries ? project.entries.length : 0
   const rewardsLength = project.rewards ? project.rewards.length : 0
   const milestoneLength = project.milestones ? project.milestones.length : 0
 
-  const isRewardBased = project.type === projectTypes.reward
+  const isRewardBased = project.rewards && project.rewards.length > 0
   const hasMilestones = project.milestones && project.milestones.length > 0
   const hasEntries = project.entries && project.entries.length > 0
 
@@ -38,7 +38,7 @@ export const SectionNav = () => {
   return (
     <VStack width="100%" spacing="40px">
       <HStack justifyContent="center" spacing="13px">
-        {hasEntries && (
+        {(hasEntries || isProjectOwner) && (
           <Button
             background="none"
             rightIcon={
@@ -49,7 +49,7 @@ export const SectionNav = () => {
             Entries
           </Button>
         )}
-        {isRewardBased && (
+        {(isRewardBased || isProjectOwner) && (
           <Button
             background="none"
             rightIcon={
@@ -60,7 +60,7 @@ export const SectionNav = () => {
             Rewards
           </Button>
         )}
-        {hasMilestones && (
+        {(hasMilestones || isProjectOwner) && (
           <Button
             background="none"
             rightIcon={

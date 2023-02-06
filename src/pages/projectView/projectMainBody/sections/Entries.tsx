@@ -1,7 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { Center, Text, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { BiPlus } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -10,9 +9,8 @@ import {
   ProjectEntryCard,
   ProjectSectionBar,
 } from '../../../../components/molecules'
-import { ButtonComponent } from '../../../../components/ui'
 import { getPath, ID } from '../../../../constants'
-import { useAuthContext, useProjectContext } from '../../../../context'
+import { useProjectContext } from '../../../../context'
 import { QUERY_PROJECT_UNPUBLISHED_ENTRIES } from '../../../../graphql'
 import { MUTATION_DELETE_ENTRY } from '../../../../graphql/mutations'
 import { Entry, Project } from '../../../../types'
@@ -21,7 +19,6 @@ import { isActive, isDraft, toInt, useNotification } from '../../../../utils'
 export const Entries = () => {
   const navigate = useNavigate()
 
-  const { user } = useAuthContext()
   const { project, isProjectOwner, updateProject } = useProjectContext()
   const { toast } = useNotification()
 
@@ -68,16 +65,8 @@ export const Entries = () => {
   const hasEntries = project.entries && project.entries.length > 0
   const entriesLength = project.entries ? project.entries.length : 0
 
-  const isUserOwnerOfCurrentProject: boolean =
-    user?.id && user.id === project.owners[0].user.id
-
   const canCreateEntries: boolean =
-    isUserOwnerOfCurrentProject &&
-    (isActive(project.status) || isDraft(project.status))
-
-  const handleCreateNewEntry = () => [
-    navigate(getPath('projectEntryCreation', project.name)),
-  ]
+    isProjectOwner && (isActive(project.status) || isDraft(project.status))
 
   const handleEntryEditButtonTapped = (entry: Entry) => {
     navigate(getPath('projectEntryDetails', project.name, entry.id))
@@ -143,7 +132,7 @@ export const Entries = () => {
     return <Text>There are no any entries available </Text>
   }
 
-  if (!hasEntries && !isUserOwnerOfCurrentProject) {
+  if (!hasEntries && !isProjectOwner) {
     return null
   }
 
@@ -161,31 +150,18 @@ export const Entries = () => {
 
         {renderEntries()}
 
-        {isUserOwnerOfCurrentProject && (
-          <>
-            <ButtonComponent
-              onClick={handleCreateNewEntry}
-              w="full"
-              disabled={Boolean(canCreateEntries) === false}
+        {isProjectOwner && Boolean(canCreateEntries) === false && (
+          <Center>
+            <Text
+              textColor={'brand.neutral600'}
+              textAlign="center"
+              paddingX={2}
             >
-              <BiPlus style={{ marginRight: '10px' }} />
-              Create A New Entry
-            </ButtonComponent>
-
-            {Boolean(canCreateEntries) === false ? (
-              <Center>
-                <Text
-                  textColor={'brand.neutral600'}
-                  textAlign="center"
-                  paddingX={2}
-                >
-                  You cannot publish an entry in an inactive project. Finish the
-                  project configuration or re-activate the project to publish
-                  this entry.
-                </Text>
-              </Center>
-            ) : null}
-          </>
+              You cannot publish an entry in an inactive project. Finish the
+              project configuration or re-activate the project to publish this
+              entry.
+            </Text>
+          </Center>
         )}
       </CardLayout>
       <DeleteConfirmModal

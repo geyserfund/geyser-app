@@ -14,12 +14,7 @@ import {
   ProjectSectionBar,
   RewardCard,
 } from '../../../../components/molecules'
-import {
-  fundingStages,
-  ID,
-  IFundingStages,
-  projectTypes,
-} from '../../../../constants'
+import { fundingStages, ID, IFundingStages } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../../graphql/mutations'
 import { UpdateReward } from '../../../../hooks'
@@ -62,8 +57,8 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
 
   const [updateRewardMutation] = useMutation(MUTATION_UPDATE_PROJECT_REWARD)
 
-  const isRewardBased = project.type === projectTypes.reward
   const rewardsLength = project.rewards ? project.rewards.length : 0
+  const isRewardBased = project?.rewards && project.rewards.length > 0
 
   const triggerRewardRemoval = (id?: number) => {
     const currentReward = project?.rewards?.find((reward) => reward?.id === id)
@@ -181,7 +176,7 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
     )
   }
 
-  if (!isRewardBased) {
+  if (!isRewardBased && !isProjectOwner) {
     return null
   }
 
