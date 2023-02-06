@@ -76,7 +76,6 @@ const platformRoutes = [
   {
     path: `/${routerPathNames.userProfile}/:userId`,
     element: ProfilePage,
-    authenticated: true,
   },
   {
     path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
