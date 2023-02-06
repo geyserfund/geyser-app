@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@chakra-ui/button'
-import { Box, Link } from '@chakra-ui/layout'
+import { Box } from '@chakra-ui/layout'
 import { useColorModeValue } from '@chakra-ui/system'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
@@ -15,7 +15,7 @@ interface IButtonComponentP extends ButtonProps {
   noBorder?: boolean
   ref?: any
   to?: string
-  href: string
+  href?: string
   isExternal?: boolean
 }
 
