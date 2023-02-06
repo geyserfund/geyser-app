@@ -24,6 +24,7 @@ import {
   ProjectFundingSummary,
   ProjectLightningQR,
   ProjectLinks,
+  ProjectMenu,
 } from '../components'
 
 export const Summary = () => {
@@ -31,10 +32,12 @@ export const Summary = () => {
 
   const {
     project,
+    isProjectOwner,
   }: {
     project: Project & {
       wallets?: { connectionDetails?: { pubkey?: string } }[]
     }
+    isProjectOwner: boolean
   } = useProjectContext()
 
   const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false)
@@ -94,22 +97,27 @@ export const Summary = () => {
         spacing="18px"
       >
         <VStack width="100%" spacing="10px" alignItems="flex-start">
-          <Stack
-            direction={isMobile ? 'column' : 'row'}
-            spacing="0px"
-            justifyContent="space-between"
-            width="100%"
-          >
-            <Text
-              fontSize="30px"
-              fontWeight={700}
-              wordBreak="break-all"
-              isTruncated
+          <HStack width="100%">
+            <Stack
+              flex="1"
+              direction={isMobile ? 'column' : 'row'}
+              spacing="0px"
+              justifyContent="space-between"
+              overflow="hidden"
             >
-              {project.title}
-            </Text>
-            <ProjectStatusLabel project={project} />
-          </Stack>
+              <Text
+                fontSize="30px"
+                fontWeight={700}
+                wordBreak="break-all"
+                isTruncated
+              >
+                {project.title}
+              </Text>
+
+              <ProjectStatusLabel project={project} />
+            </Stack>
+            {isProjectOwner && <ProjectMenu projectName={project.name} />}
+          </HStack>
 
           <HStack
             flexWrap="wrap"
