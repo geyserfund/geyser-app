@@ -1,4 +1,10 @@
-import { HStack, Stack, useDisclosure } from '@chakra-ui/react'
+import {
+  HStack,
+  Link as ChakraLink,
+  Stack,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { BsBoxArrowUpRight } from 'react-icons/bs'
 import { RiFlag2Line } from 'react-icons/ri'
 import { Link, useParams } from 'react-router-dom'
@@ -6,7 +12,8 @@ import { Link, useParams } from 'react-router-dom'
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
-import { getPath } from '../../../../constants'
+import { ButtonComponent } from '../../../../components/ui'
+import { getPath, LearnAboutCrowdfundingUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { Project, ProjectMilestone, ProjectReward } from '../../../../types'
 import {
@@ -45,7 +52,23 @@ export const Creator = () => {
   return (
     <>
       <CardLayout direction="column" spacing="20px">
-        <H3>Create content</H3>
+        <HStack width="100%" justifyContent="space-between">
+          <H3>Create content</H3>
+          <ButtonComponent
+            isExternal
+            as={ChakraLink}
+            href={LearnAboutCrowdfundingUrl}
+            variant="ghost"
+            size={{ base: 'xs', md: 'sm' }}
+            noBorder
+            leftIcon={<BsBoxArrowUpRight />}
+            paddingX="0px"
+          >
+            <Text fontSize={{ base: '10px', md: '12px' }}>
+              Learn more about crowdFunding
+            </Text>
+          </ButtonComponent>
+        </HStack>
         <Stack
           height="100%"
           direction={{
@@ -69,7 +92,7 @@ export const Creator = () => {
             onClick={openReward}
           />
           <CreationCardItem
-            icon={<RiFlag2Line fontSize="22px" />}
+            icon={<RiFlag2Line fontSize="30px" />}
             title="Edit Milestones"
             description="Clarify your next steps by keeping your milestones up to date"
             onClick={openMilestoneModal}

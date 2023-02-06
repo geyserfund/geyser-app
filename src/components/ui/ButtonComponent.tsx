@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@chakra-ui/button'
-import { Box } from '@chakra-ui/layout'
+import { Box, Link } from '@chakra-ui/layout'
 import { useColorModeValue } from '@chakra-ui/system'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
@@ -12,8 +12,11 @@ interface IButtonComponentP extends ButtonProps {
   primary?: boolean
   standard?: boolean
   circular?: boolean
+  noBorder?: boolean
   ref?: any
   to?: string
+  href: string
+  isExternal?: boolean
 }
 
 const useStyles = createUseStyles({
@@ -49,6 +52,7 @@ export const ButtonComponent = ({
   backgroundColor,
   _hover,
   color,
+  noBorder,
   ...rest
 }: IButtonComponentP) => {
   const classes = useStyles()
@@ -77,7 +81,7 @@ export const ButtonComponent = ({
       fontWeight="medium"
       color={color}
       {...rest}
-      sx={buttonCommon}
+      sx={!noBorder ? buttonCommon : {}}
     >
       <Box
         as="span"

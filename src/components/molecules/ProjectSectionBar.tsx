@@ -19,7 +19,7 @@ export const ProjectSectionBar = ({
     borderBottom="2px solid"
     borderColor="brand.neutral300"
   >
-    <HStack width="100%" marginBottom="10px" justifyContent="space-between">
+    <HStack width="100%" marginBottom="3px" justifyContent="space-between">
       <HStack>
         <H3 color="brand.neutral800">{name}</H3>
         {number && (
