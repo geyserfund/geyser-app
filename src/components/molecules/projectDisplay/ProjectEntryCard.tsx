@@ -110,41 +110,43 @@ export const ProjectEntryCard = ({
         pt={2}
       >
         <Stack
-          direction={{ base: 'column-reverse', md: 'row' }}
-          w="100%"
+          width="100%"
+          direction="row"
           justifyContent="space-between"
-          overflow="hidden"
+          alignItems="start"
         >
-          <H2 flex="1" overflow="hidden" isTruncated>
-            {entry.title}
-          </H2>
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            justifyContent="space-between"
+            overflow="hidden"
+          >
+            <H2 width="100%" overflow="hidden" isTruncated>
+              {entry.title}
+            </H2>
+            <EntryStatusLabel entry={entry} />
+          </Stack>
 
-          <HStack justifyContent={{ base: 'space-between', md: 'start' }}>
-            <Box>
-              <EntryStatusLabel entry={entry} />
-            </Box>
-            <Box>
-              {onEdit && (
-                <IconButtonComponent
-                  noBorder
-                  aria-label="edit-entry"
-                  size="sm"
-                  borderWidth="0"
-                  icon={<BiPencil fontSize="16px" />}
-                  onClick={handleEdit}
-                />
-              )}
-              {onDelete && (
-                <IconButtonComponent
-                  noBorder
-                  aria-label="remove-entry"
-                  size="sm"
-                  icon={<CloseIcon />}
-                  _hover={{ backgroundColor: 'red.100' }}
-                  onClick={handleDelete}
-                />
-              )}
-            </Box>
+          <HStack>
+            {onEdit && (
+              <IconButtonComponent
+                noBorder
+                aria-label="edit-entry"
+                size="sm"
+                borderWidth="0"
+                icon={<BiPencil fontSize="16px" />}
+                onClick={handleEdit}
+              />
+            )}
+            {onDelete && (
+              <IconButtonComponent
+                noBorder
+                aria-label="remove-entry"
+                size="sm"
+                icon={<CloseIcon />}
+                _hover={{ backgroundColor: 'red.100' }}
+                onClick={handleDelete}
+              />
+            )}
           </HStack>
         </Stack>
 
@@ -161,17 +163,18 @@ export const ProjectEntryCard = ({
         <Spacer />
 
         <Stack
+          width="100%"
           align="center"
           justify="start"
           direction={'row'}
-          spacing={'22px'}
+          spacing={{ base: '10px', md: '22px' }}
           wrap={{
             base: 'wrap',
             sm: 'nowrap',
           }}
           overflow="hidden"
         >
-          <HStack spacing={'12px'} align={'center'} flex={0}>
+          <HStack spacing={'10px'} align={'center'} flex={0}>
             <HStack spacing={1}>
               <MonoBody1 color="brand.primary" fontWeight={'bold'}>
                 {entry.fundersCount}
