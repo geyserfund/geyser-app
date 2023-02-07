@@ -144,6 +144,8 @@ export const GrantsFAQUrl =
   'https://geyser.notion.site/About-Geyser-Grants-fad8a130545d4597a3750a17a7ce301f'
 export const LearnAboutCrowdfundingUrl =
   'https://geyser.notion.site/Crowdfunding-Resources-134d19c1214741a7bae5d0bf9b8c8463'
+export const GeyserProhibitedItemsUrl =
+  'https://geyser.notion.site/Prohibited-items-a67b8e1e050d433ca747a3522833a7f3'
 
 // External website Links
 

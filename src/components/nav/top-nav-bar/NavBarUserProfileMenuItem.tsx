@@ -7,7 +7,7 @@ export const NavBarUserProfileMenuItem = () => {
   const { user } = useContext(AuthContext)
 
   return (
-    <VStack spacing={2} padding={4} alignItems="flex-start">
+    <VStack spacing={2} padding={4} alignItems="flex-start" width="100%">
       <Text
         textTransform={'uppercase'}
         fontSize="xs"

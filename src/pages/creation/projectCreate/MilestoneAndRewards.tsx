@@ -11,7 +11,7 @@ import {
   SatoshiAmount,
 } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
-import { getPath, GeyserTermsAndConditionsURL } from '../../../constants'
+import { getPath, GeyserProhibitedItemsUrl } from '../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../graphql/mutations'
 import { useProjectLinksState } from '../../../hooks/graphqlState'
@@ -283,7 +283,7 @@ export const MilestoneAndRewards = () => {
             <Text fontSize="12px">
               Rewards are a powerful way of exchanging value with your
               community.{' '}
-              <Link isExternal href={GeyserTermsAndConditionsURL}>
+              <Link isExternal href={GeyserProhibitedItemsUrl}>
                 Check here
               </Link>{' '}
               our list of prohibited items. You can edit or add Rewards later.
