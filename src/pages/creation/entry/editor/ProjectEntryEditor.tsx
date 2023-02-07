@@ -22,7 +22,6 @@ type StyleProps = {
 const useStyles = createUseStyles<Rules, StyleProps>({
   container: ({ isReadOnly, noPadding, isMobile }: StyleProps) => ({
     width: '100%',
-    height: '100%',
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
@@ -103,7 +102,7 @@ const useStyles = createUseStyles<Rules, StyleProps>({
     },
     '& .ql-video': {
       width: '100%',
-      height: '100%',
+      height: '40vw',
       maxHeight: '500px',
     },
     '& button.ql-active': {
@@ -210,7 +209,7 @@ export const ProjectEntryEditor = ({
     if (value) {
       const textValue = JSON.parse(value)
 
-      editor.updateContents(textValue, 'api')
+      editor.setContents(textValue, 'api')
     }
 
     editor.on('text-change', (delta) => {

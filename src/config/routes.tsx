@@ -85,7 +85,6 @@ const platformRoutes = [
   {
     path: getPath('userProfile', PathName.userId),
     element: ProfilePage,
-    authenticated: true,
   },
   {
     path: getPath('projectEntryPreview', PathName.projectId, PathName.entryId),
