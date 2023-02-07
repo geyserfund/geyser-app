@@ -14,7 +14,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
-import { AiOutlineUpload } from 'react-icons/ai'
 import { BiDollar } from 'react-icons/bi'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
@@ -24,6 +23,7 @@ import {
   ImageWithReload,
   TextArea,
   TextInputBox,
+  UploadBox,
 } from '../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../constants/validations'
 import { defaultProjectReward } from '../../../../defaults'
@@ -292,7 +292,10 @@ export const RewardAdditionModal = ({
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <FileUpload onUploadComplete={handleUpload}>
+              <FileUpload
+                onUploadComplete={handleUpload}
+                onLoading={<UploadBox loading />}
+              >
                 {rewards.current.image ? (
                   <HStack justifyContent="center">
                     <ImageWithReload
@@ -302,18 +305,7 @@ export const RewardAdditionModal = ({
                     />
                   </HStack>
                 ) : (
-                  <HStack
-                    borderRadius="4px"
-                    backgroundColor="brand.bgGrey"
-                    width="100%"
-                    height="70px"
-                    justifyContent="center"
-                    alignItems="center"
-                    _hover={{ backgroundColor: 'brand.gray300' }}
-                  >
-                    <AiOutlineUpload />
-                    <Text>Add image</Text>
-                  </HStack>
+                  <UploadBox title="Add image" />
                 )}
               </FileUpload>
             </VStack>

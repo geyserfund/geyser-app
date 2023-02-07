@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { API_SERVICE_ENDPOINT, GeyserAssetDomainUrl } from '../constants'
 import { QUERY_GET_SIGNED_URL } from '../graphql/queries/entries'
@@ -15,47 +15,61 @@ export const useSignedUpload = ({
 }) => {
   const { toast } = useNotification()
 
-  const [getSignedUrl, { data: urlData }] = useLazyQuery(QUERY_GET_SIGNED_URL)
+  const [getSignedUrl] = useLazyQuery(QUERY_GET_SIGNED_URL, {
+    onError() {
+      failedToast()
+      setIsLoading(false)
+    },
+    onCompleted(data) {
+      if (data?.getSignedUploadUrl && currentFile) {
+        handleFileUpload(data.getSignedUploadUrl, currentFile)
+      }
+    },
+  })
   const [currentFile, setCurrentFile] = useState<any>()
 
-  useEffect(() => {
-    if (urlData && urlData.getSignedUploadUrl && currentFile) {
-      handleFileUpload()
-    }
-  }, [urlData, currentFile])
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleFileUpload = async () => {
-    if (urlData && urlData.getSignedUploadUrl && currentFile) {
-      try {
-        await fetch(urlData.getSignedUploadUrl.uploadUrl, {
-          method: 'PUT',
-          body: currentFile,
-          headers: {
-            'Content-Type': currentFile.type,
-          },
-        })
+  const handleFileUpload = async (getSignedUploadUrl: any, file: File) => {
+    try {
+      await fetch(getSignedUploadUrl.uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
+      })
 
-        const imageUrl = `${GeyserAssetDomainUrl}${urlData.getSignedUploadUrl.distributionUrl}`
-        onUpload(imageUrl, currentFile)
-      } catch (error) {
-        console.log('checking error', error)
-        toast({
-          title: 'failed to upload image',
-          description: 'Please try again',
-          status: 'error',
-        })
-      }
+      const imageUrl = `${GeyserAssetDomainUrl}${getSignedUploadUrl.distributionUrl}`
+      onUpload(imageUrl, currentFile)
+    } catch {
+      failedToast()
     }
+
+    setIsLoading(false)
+  }
+
+  const failedToast = () => {
+    toast({
+      title: 'failed to upload image',
+      description: 'Please try again',
+      status: 'error',
+    })
   }
 
   const uploadFile = (file: any) => {
     setCurrentFile(file)
-    getSignedUrl({
-      variables: { input: { name: file.name, type: file.type } },
-    })
+    try {
+      setIsLoading(true)
+      getSignedUrl({
+        variables: { input: { name: file.name, type: file.type } },
+      })
+    } catch {
+      setIsLoading(false)
+    }
   }
 
-  return uploadFile
+  return { uploadFile, isLoading }
 }
 
 export const getSignedUploadAPI = async (file: any): Promise<string> => {
