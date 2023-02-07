@@ -1,8 +1,8 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client'
+import { ApolloError, gql, useLazyQuery, useMutation } from '@apollo/client'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
-import { fundingStages, stageList } from '../constants'
+import { ApolloErrors, fundingStages, stageList } from '../constants'
 import { IFundingStages } from '../constants'
 import { AuthContext } from '../context'
 import { MUTATION_FUND } from '../graphql'
@@ -115,6 +115,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundState, setFundState] = useState<IFundingStages>(
     fundingStages.initial,
   )
+  const [error, setError] = useState('')
 
   const [fundingRequestErrored, setFundingRequestErrored] = useState(false)
   const [invoiceRefreshErrored, setInvoiceRefreshErrored] = useState(false)
@@ -227,7 +228,15 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           })
         }
       },
-      onError(_) {
+      onError(error: ApolloError) {
+        if (
+          error?.graphQLErrors[0] &&
+          error?.graphQLErrors[0]?.extensions?.code ===
+            ApolloErrors.BAD_USER_INPUT
+        ) {
+          setError(error?.graphQLErrors[0].message)
+        }
+
         setFundingRequestErrored(true)
         clearInterval(fundInterval)
         toast({
@@ -352,6 +361,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     requestFunding,
     refreshFundingInvoice,
     setFundState,
+    error,
     hasWebLN: hasWebLN && Boolean(webln),
   }
 }
