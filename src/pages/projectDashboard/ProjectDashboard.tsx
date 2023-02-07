@@ -11,10 +11,7 @@ import { Owner } from '../../types/generated/graphql'
 import { useMobileMode } from '../../utils'
 
 enum DashboardTabs {
-  entries = 'entries',
   funds = 'funds',
-  milestones = 'milestones',
-  rewards = 'rewards',
   editProject = 'edit project',
   contributors = 'contributors',
   stats = 'stats',
@@ -115,9 +112,6 @@ export const ProjectDashboard = () => {
     DashboardTabs.editProject,
     DashboardTabs.contributors,
     DashboardTabs.funds,
-    DashboardTabs.entries,
-    DashboardTabs.rewards,
-    DashboardTabs.milestones,
     DashboardTabs.stats,
     DashboardTabs.settings,
   ]

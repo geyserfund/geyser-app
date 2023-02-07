@@ -92,6 +92,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
         amountFunded
         published
         createdAt
+        publishedAt
         creator {
           id
           username
@@ -220,6 +221,29 @@ export const ALL_PROJECTS_SUMMARY = gql`
     }
   }
 `
+export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
+  query ProjectDashboardData($where: UniqueProjectQueryInput!) {
+    project(where: $where) {
+      entries: entries(input: { where: { published: false } }) {
+        id
+        title
+        description
+        image
+        type
+        fundersCount
+        amountFunded
+        published
+        publishedAt
+        createdAt
+        creator {
+          id
+          username
+          imageUrl
+        }
+      }
+    }
+  }
+`
 
 export const QUERY_PROJECT_DASHBOARD_DATA = gql`
   query ProjectDashboardData($where: UniqueProjectQueryInput!) {
@@ -227,6 +251,10 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
       unpublishedEntries: entries(input: { where: { published: false } }) {
         id
         title
+        image
+        description
+        fundersCount
+        amountFunded
         published
         publishedAt
         status
@@ -234,6 +262,10 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
       publishedEntries: entries(input: { where: { published: true } }) {
         id
         title
+        image
+        description
+        fundersCount
+        amountFunded
         published
         publishedAt
         status
