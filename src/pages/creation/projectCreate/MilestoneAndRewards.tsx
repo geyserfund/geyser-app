@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { HStack, Link, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { BiPencil } from 'react-icons/bi'
 import { useNavigate, useParams } from 'react-router'
@@ -11,7 +11,7 @@ import {
   SatoshiAmount,
 } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
-import { getPath } from '../../../constants'
+import { getPath, GeyserTermsAndConditionsURL } from '../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../graphql/mutations'
 import { useProjectLinksState } from '../../../hooks/graphqlState'
@@ -282,8 +282,11 @@ export const MilestoneAndRewards = () => {
             </ButtonComponent>
             <Text fontSize="12px">
               Rewards are a powerful way of exchanging value with your
-              community. Check here our list of prohibited items. You can edit
-              or add Rewards later.
+              community.{' '}
+              <Link isExternal href={GeyserTermsAndConditionsURL}>
+                Check here
+              </Link>{' '}
+              our list of prohibited items. You can edit or add Rewards later.
             </Text>
           </VStack>
           <ButtonComponent primary w="full" onClick={handleNext}>
