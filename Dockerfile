@@ -13,7 +13,7 @@ FROM base AS dependencies
 WORKDIR /usr/app
 
 # Install production packages
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 RUN yarn install --production
 RUN cp -R node_modules prod_node_modules
 
@@ -29,7 +29,7 @@ FROM dependencies AS build
 WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
-COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.cjs .prettierrc ./
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.cjs .prettierrc .yarnrc.yml  ./
 
 ARG VITE_APP_API_ENDPOINT
 ARG VITE_APP_AIR_TABLE_KEY
