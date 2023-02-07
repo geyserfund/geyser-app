@@ -170,7 +170,9 @@ export const EntryPreview = () => {
 
   const handleTwitterShareButtonTapped = () => {
     if (params.entryId) {
-      navigator.clipboard.writeText(getPath('entry', params.entryId))
+      navigator.clipboard.writeText(
+        `${window.location.origin}${getPath('entry', params.entryId)}`,
+      )
 
       setHasCopiedSharingLink(true)
     }
@@ -309,9 +311,9 @@ export const EntryPreview = () => {
           ) : isDraft(projectData?.project.status) ? (
             <>
               <Text>
-                You cannot publish an entry in an inactive project. Finish the
+                You cannot publish a blog in an inactive project. Finish the
                 project configuration or re-activate the project to publish this
-                entry.
+                blog.
               </Text>
               <ButtonComponent
                 primary
