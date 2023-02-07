@@ -3,11 +3,13 @@ import { GridItem, HStack, Text, VStack } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
 import { SatoshiAmount } from '../../components/ui'
+import { useProjectContext } from '../../context'
 import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
 import { colors } from '../../styles'
 import { fonts } from '../../styles'
 import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
 import { numberWithCommas, toInt } from '../../utils'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 const useStyles = createUseStyles({
   statBox: {
@@ -34,8 +36,10 @@ type QueryVariables = {
   where: UniqueProjectQueryInput
 }
 
-export const ProjectStats = ({ project }: { project: Project }) => {
+export const ProjectStats = () => {
   const classes = useStyles()
+
+  const { project } = useProjectContext()
 
   const { loading, data } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_DASHBOARD_DATA,
@@ -57,7 +61,7 @@ export const ProjectStats = ({ project }: { project: Project }) => {
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
@@ -111,6 +115,6 @@ export const ProjectStats = ({ project }: { project: Project }) => {
           spacing="10px"
         ></VStack>
       </GridItem>
-    </>
+    </DashboardGridLayout>
   )
 }

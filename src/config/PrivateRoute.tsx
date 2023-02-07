@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { PathMatch, useMatch, useNavigate, useParams } from 'react-router'
 
 import { AuthModal } from '../components/molecules'
-import { getPath, routerPathNames } from '../constants'
+import { getPath, PathName } from '../constants'
 import { useAuthContext } from '../context'
 import { LoadingPage } from '../pages/loading'
 import { hasTwitterAccount } from '../utils'
@@ -14,9 +14,9 @@ interface IPrivateRoute {
 const privateProjectLaunchRoutes = [getPath('privateProjectLaunch')]
 
 const projectEntryCreationRoutes = [
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
-  `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+  `/${PathName.project}/:projectId/${PathName.entry}`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
+  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
 ]
 
 export const PrivateRoute = ({ children }: IPrivateRoute) => {

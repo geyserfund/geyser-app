@@ -229,11 +229,12 @@ export const ApplyGrantModal = ({
                 setApplicationStages(GrantApplicationStages.form)
               }}
               w="full"
+              isDisabled
             >
               {user?.id ? 'Apply' : 'Confirm'}
             </Button>
           ) : (
-            <Button w="full" disabled>
+            <Button w="full" isDisabled>
               Apply
             </Button>
           )}

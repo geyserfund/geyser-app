@@ -4,12 +4,13 @@ import { useState } from 'react'
 
 import { Body2 } from '../../components/typography'
 import { ButtonComponent, TextInputBox } from '../../components/ui'
-import { useAuthContext } from '../../context'
+import { useAuthContext, useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
 import { FormError, Project, ProjectStatus } from '../../types'
 import { isActive, toInt, useMobileMode, useNotification } from '../../utils'
 import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 type ProjectSettingsForm = {
   expiresAt?: string
@@ -17,10 +18,12 @@ type ProjectSettingsForm = {
   status: ProjectStatus
 }
 
-export const ProjectSettings = ({ project }: { project: Project }) => {
+export const ProjectSettings = () => {
   const { user } = useAuthContext()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
+
+  const { project, updateProject } = useProjectContext()
 
   const [form, setForm] = useState<ProjectSettingsForm>({
     expiresAt: project.expiresAt || '',
@@ -32,24 +35,27 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
-  const [updateProject, { loading: updateLoading }] = useMutation(
-    MUTATION_UPDATE_PROJECT,
-    {
-      onCompleted() {
-        toast({
-          title: 'Project updated successfully!',
-          status: 'success',
-        })
-      },
-      onError(error) {
-        toast({
-          title: 'project update failed!',
-          description: `${error}`,
-          status: 'error',
-        })
-      },
+  const [updateProjectMutation, { loading: updateLoading }] = useMutation<{
+    updateProject: Project
+  }>(MUTATION_UPDATE_PROJECT, {
+    onCompleted(data) {
+      if (data?.updateProject && updateProject) {
+        updateProject(data.updateProject)
+      }
+
+      toast({
+        title: 'Project updated successfully!',
+        status: 'success',
+      })
     },
-  )
+    onError(error) {
+      toast({
+        title: 'project update failed!',
+        description: `${error}`,
+        status: 'error',
+      })
+    },
+  })
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, email: event.target.value })
@@ -67,7 +73,7 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
     const newForm = form
     newForm.email = user.email || form.email
     if (isValid) {
-      updateProject({
+      updateProjectMutation({
         variables: {
           input: {
             projectId: toInt(project.id),
@@ -90,9 +96,8 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
     return isValid
   }
 
-  console.log('checking form', form)
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem
         colSpan={isLargerThan1280 ? 6 : 2}
         display="flex"
@@ -157,6 +162,6 @@ export const ProjectSettings = ({ project }: { project: Project }) => {
         alignItems="flex-start"
         justifyContent="center"
       ></GridItem>
-    </>
+    </DashboardGridLayout>
   )
 }

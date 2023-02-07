@@ -1,6 +1,6 @@
 import { Container, Text, VStack } from '@chakra-ui/react'
 
-import { colors } from '../../styles'
+import { colors } from '../../../styles'
 
 type Props = {
   lightningAddress: string

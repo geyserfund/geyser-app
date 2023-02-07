@@ -23,13 +23,12 @@ import {
   IFundingStages,
   projectTypes,
 } from '../../constants'
-import { useAuthContext } from '../../context'
+import { MobileViews, useAuthContext, useProjectContext } from '../../context'
 import { UpdateReward } from '../../hooks'
 import { Project } from '../../types/generated/graphql'
 import { isActive, isDraft, toInt, useMobileMode } from '../../utils'
 import { FundingFormRewardItem } from './components/FundingFormRewardItem'
 import { MilestoneComponent } from './components/MilestoneComponent'
-import { MobileViews, useProject } from './containers'
 
 const useStyles = createUseStyles({
   navButton: {
@@ -54,7 +53,7 @@ export const ProjectDetailsAccessoriesSections = ({
   const isMobile = useMobileMode()
   const navigate = useNavigate()
 
-  const { setMobileView } = useProject()
+  const { setMobileView } = useProjectContext()
 
   const { user } = useAuthContext()
 

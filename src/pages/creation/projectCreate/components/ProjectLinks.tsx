@@ -1,128 +1,16 @@
-import { useMutation } from '@apollo/client'
 import { Box, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { ProjectLinkInput } from '../../../../components/inputs'
 import { Body2, Caption } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
-import {
-  MUTATION_ADD_PROJECT_LINK,
-  MUTATION_REMOVE_PROJECT_LINK,
-} from '../../../../graphql/mutations'
 import { getIconForLink } from '../../../../helpers/getIconForLinks'
-import { Maybe, Project, ProjectLinkMutationInput } from '../../../../types'
-import { toInt, useNotification } from '../../../../utils'
+import { Maybe } from '../../../../types'
 
 interface ProjectLinksProps {
   links: string[]
   setLinks: (_: string[]) => void
   linkError?: boolean[]
-}
-
-export const useProjectLinks = ({ project }: { project: Project }) => {
-  const [links, _setLinks] = useState<string[]>([''])
-
-  const [linkError, setLinkError] = useState<boolean[]>([false])
-
-  const { toast } = useNotification()
-
-  useEffect(() => {
-    if (project?.links?.length > 0) {
-      const newLinks = project.links.filter((val) => val) as string[]
-      _setLinks(newLinks)
-    }
-  }, [project])
-
-  const [addLink] = useMutation<ProjectLinkMutationInput>(
-    MUTATION_ADD_PROJECT_LINK,
-    {
-      onError() {
-        toast({
-          title: 'Error adding project link',
-          status: 'error',
-        })
-      },
-    },
-  )
-
-  const [removeLink] = useMutation<ProjectLinkMutationInput>(
-    MUTATION_REMOVE_PROJECT_LINK,
-    {
-      onError() {
-        toast({
-          title: 'Error removing project link',
-          status: 'error',
-        })
-      },
-    },
-  )
-
-  const setLinks = (links: string[]) => {
-    const errors = [] as boolean[]
-
-    links.map((link, index) => {
-      try {
-        const url = new URL(link)
-
-        const isDuplicate = links.indexOf(link) !== index
-        if (url.protocol.includes('https') && !isDuplicate) {
-          errors.push(false)
-        } else {
-          errors.push(true)
-        }
-      } catch (error) {
-        errors.push(true)
-      }
-    })
-
-    setLinkError(errors)
-
-    _setLinks(links)
-  }
-
-  const handleLinks = async () => {
-    const finalLinks = links.filter((link) => link)
-    const addLinks =
-      project?.links?.length > 0
-        ? finalLinks.filter((link) => !project.links.includes(link))
-        : finalLinks
-    const removeLinks =
-      project?.links?.length > 0
-        ? project.links.filter((link) => !finalLinks.includes(link as string))
-        : []
-
-    if (addLinks.length > 0) {
-      await Promise.all(
-        addLinks.map(async (link) => {
-          await addLink({
-            variables: {
-              input: {
-                projectId: toInt(project.id),
-                link,
-              },
-            },
-          })
-        }),
-      )
-    }
-
-    if (removeLinks.length > 0) {
-      await Promise.all(
-        removeLinks.map(async (link) => {
-          await removeLink({
-            variables: {
-              input: {
-                projectId: toInt(project.id),
-                link,
-              },
-            },
-          })
-        }),
-      )
-    }
-  }
-
-  return { links, setLinks, linkError, handleLinks }
 }
 
 export const ProjectLinks = ({

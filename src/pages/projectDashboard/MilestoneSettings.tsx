@@ -7,16 +7,19 @@ import {
   IconButtonComponent,
   SatoshiAmount,
 } from '../../components/ui'
-import { IProject } from '../../interfaces'
+import { useProjectContext } from '../../context'
 import { colors } from '../../styles'
 import { ProjectMilestone } from '../../types'
 import {
   defaultMilestone,
   MilestoneAdditionModal,
 } from '../creation/projectCreate/components'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
-export const MilestoneSettings = ({ project }: { project: IProject }) => {
+export const MilestoneSettings = () => {
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
+
+  const { project } = useProjectContext()
 
   const {
     isOpen: isMilestoneModalOpen,
@@ -26,7 +29,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
-      setMilestones(project.milestones)
+      setMilestones(project.milestones as ProjectMilestone[])
     }
   }, [project])
 
@@ -41,7 +44,7 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
@@ -112,6 +115,6 @@ export const MilestoneSettings = ({ project }: { project: IProject }) => {
           projectId={parseInt(`${project.id}`, 10)}
         />
       ) : null}
-    </>
+    </DashboardGridLayout>
   )
 }

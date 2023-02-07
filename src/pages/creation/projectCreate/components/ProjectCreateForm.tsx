@@ -9,13 +9,12 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { AiOutlineUpload } from 'react-icons/ai'
 import { BiInfoCircle } from 'react-icons/bi'
 
 import { CharacterLimitError } from '../../../../components/errors'
 import { FileUpload } from '../../../../components/molecules'
 import { Body2 } from '../../../../components/typography'
-import { TextArea, TextInputBox } from '../../../../components/ui'
+import { TextArea, TextInputBox, UploadBox } from '../../../../components/ui'
 import { commonMarkdownUrl, ProjectValidations } from '../../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql'
 import { colors } from '../../../../styles'
@@ -196,7 +195,7 @@ export const ProjectCreateForm = ({
           <Input
             name="name"
             onChange={handleChange}
-            value={form.name}
+            value={form.name || ''}
             isInvalid={Boolean(formError.name)}
             focusBorderColor={colors.primary}
             disabled={isEdit}
@@ -212,19 +211,11 @@ export const ProjectCreateForm = ({
       </VStack>
       <VStack width="100%" alignItems="flex-start" spacing="5px">
         <Body2>Project Image</Body2>
-        <FileUpload onUploadComplete={handleImageUpload}>
-          <HStack
-            borderRadius="4px"
-            backgroundColor="brand.bgGrey"
-            width="100%"
-            height="70px"
-            justifyContent="center"
-            alignItems="center"
-            _hover={{ backgroundColor: 'brand.gray300' }}
-          >
-            <AiOutlineUpload />
-            <Text>Select an image</Text>
-          </HStack>
+        <FileUpload
+          onUploadComplete={handleImageUpload}
+          onLoading={<UploadBox loading />}
+        >
+          <UploadBox />
         </FileUpload>
         <Text fontSize="10px" color="brand.neutral700">
           For best fit, pick a square image. Image size limit: 10MB.
@@ -232,19 +223,11 @@ export const ProjectCreateForm = ({
       </VStack>
       <VStack width="100%" alignItems="flex-start" spacing="5px">
         <Body2>Header Image</Body2>
-        <FileUpload onUploadComplete={handleHeaderImageUpload}>
-          <HStack
-            borderRadius="4px"
-            backgroundColor="brand.bgGrey"
-            width="100%"
-            height="70px"
-            justifyContent="center"
-            alignItems="center"
-            _hover={{ backgroundColor: 'brand.gray300' }}
-          >
-            <AiOutlineUpload />
-            <Text>Select an image</Text>
-          </HStack>
+        <FileUpload
+          onUploadComplete={handleHeaderImageUpload}
+          onLoading={<UploadBox loading />}
+        >
+          <UploadBox />
         </FileUpload>
         <Text fontSize="10px" color="brand.neutral700">
           For best fit, pick an image around 800px x 200px. Image size limit:

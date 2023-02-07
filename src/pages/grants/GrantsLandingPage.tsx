@@ -193,7 +193,7 @@ export const GrantsLandingPage = () => {
                 </Text>
                 <CustomGrantCard
                   showBanner={true}
-                  status={true}
+                  status={false}
                   banner={
                     'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'
                   }
