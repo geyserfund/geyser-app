@@ -45,7 +45,7 @@ RUN rm -rf ./src
 FROM base AS production
 
 WORKDIR /usr/app
-COPY server.ts package.json yarn.lock ./
+COPY server.ts package.json yarn.lock .yarnrc.yml ./
 
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
