@@ -1,5 +1,6 @@
 import { ProjectNav } from '../../../components/nav/bottomNav/ProjectNav'
 import { Head } from '../../../config/Head'
+import { ProjectProvider } from '../../../context'
 import { useFundingFormState } from '../../../hooks'
 import {
   FundingResourceType,
@@ -9,7 +10,6 @@ import {
 import { useMobileMode } from '../../../utils'
 import { ProjectActivityPanel } from '../ActivityPanel/ProjectActivityPanel'
 import { ProjectDetailsMainBodyContainer } from '../ProjectDetailsMainBodyContainer'
-import { ProjectProvider } from './ProjectContext'
 
 type Props = {
   project: Project

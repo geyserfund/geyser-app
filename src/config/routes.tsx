@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 
-import { getPath, routerPathNames } from '../constants'
+import { getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
 import { EntryPreview } from '../pages/creation/entry/EntryPreview'
@@ -17,7 +17,17 @@ import { LandingPage } from '../pages/landing'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
 import { ProfilePage } from '../pages/profile/ProfilePage'
-import { ProjectDashboard } from '../pages/projectDashboard'
+import { ProjectContributors } from '../pages/projectDashboard'
+import {
+  MilestoneSettings,
+  ProjectDashboard,
+  ProjectDashboardEntries,
+  ProjectDescription,
+  ProjectFundingSettings,
+  ProjectSettings,
+  ProjectStats,
+  RewardSettings,
+} from '../pages/projectDashboard'
 import { ProjectDiscoveryPage } from '../pages/projectDiscovery'
 import { ProjectView } from '../pages/projectView'
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch'
@@ -27,6 +37,8 @@ type PlatformRoutes = {
   path: string
   element: () => JSX.Element
   authenticated?: boolean
+  isIndex?: boolean
+  nested?: PlatformRoutes[]
 }
 
 const platformRoutes = [
@@ -55,12 +67,12 @@ const platformRoutes = [
     element: PublicProjectLaunchPage,
   },
   {
-    path: `/${routerPathNames.launchProject}/:projectId/${routerPathNames.node}`,
+    path: getPath('launchProjectWithNode', PathName.projectId),
     element: ProjectCreationWalletConnectionPage,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.launchProject}/:projectId/${routerPathNames.milestonesAndRewards}`,
+    path: getPath('launchProjectWithMilestonesAndRewards', PathName.projectId),
     element: MilestoneAndRewards,
   },
   {
@@ -74,35 +86,70 @@ const platformRoutes = [
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.userProfile}/:userId`,
+    path: getPath('userProfile', PathName.userId),
     element: ProfilePage,
   },
   {
-    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId/${routerPathNames.preview}`,
+    path: getPath('projectEntryPreview', PathName.projectId, PathName.entryId),
     element: EntryPreview,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}/:entryId`,
+    path: getPath('projectEntryDetails', PathName.projectId, PathName.entryId),
     element: EntryCreateEdit,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.project}/:projectId/${routerPathNames.entry}`,
+    path: getPath('projectEntryCreation', PathName.projectId),
     element: EntryCreateEdit,
     authenticated: true,
   },
   {
-    path: `/${routerPathNames.project}/:projectId/${routerPathNames.projectDashboard}`,
+    path: getPath('projectDashboard', PathName.projectId),
     element: ProjectDashboard,
     authenticated: true,
+    nested: [
+      {
+        path: getPath('dashboardDescription', PathName.projectId),
+        element: ProjectDescription,
+        isIndex: true,
+      },
+      {
+        path: getPath('dashboardContributors', PathName.projectId),
+        element: ProjectContributors,
+      },
+      {
+        path: getPath('dashboardFunding', PathName.projectId),
+        element: ProjectFundingSettings,
+      },
+      {
+        path: getPath('dashboardEntries', PathName.projectId),
+        element: ProjectDashboardEntries,
+      },
+      {
+        path: getPath('dashboardRewards', PathName.projectId),
+        element: RewardSettings,
+      },
+      {
+        path: getPath('dashboardMilestones', PathName.projectId),
+        element: MilestoneSettings,
+      },
+      {
+        path: getPath('dashboardStats', PathName.projectId),
+        element: ProjectStats,
+      },
+      {
+        path: getPath('dashboardSettings', PathName.projectId),
+        element: ProjectSettings,
+      },
+    ],
   },
   {
-    path: `/${routerPathNames.project}/:projectId`,
+    path: getPath('project', PathName.projectId),
     element: ProjectView,
   },
   {
-    path: `/${routerPathNames.entry}/:entryId`,
+    path: getPath('entry', PathName.entryId),
     element: EntryPage,
   },
   {
@@ -127,24 +174,30 @@ const platformRoutes = [
   },
 ] as PlatformRoutes[]
 
-export const Router = () => (
-  <Routes>
-    {platformRoutes.map(({ path, element: Element, authenticated }) => {
-      if (authenticated) {
-        return (
-          <Route
-            key={path}
-            path={path}
-            element={
-              <PrivateRoute>
-                <Element />
-              </PrivateRoute>
-            }
-          />
+export const Router = () => {
+  const renderRoutes = (routes: PlatformRoutes[]) => {
+    return routes.map(
+      ({ path, element: Element, authenticated, nested, isIndex }) => {
+        const renderElement = authenticated ? (
+          <PrivateRoute>
+            <Element />
+          </PrivateRoute>
+        ) : (
+          <Element />
         )
-      }
+        // index routes cannot have children routes
+        if (isIndex) {
+          return <Route index key={path} element={renderElement} />
+        }
 
-      return <Route key={path} path={path} element={<Element />} />
-    })}
-  </Routes>
-)
+        return (
+          <Route key={path} path={path} element={renderElement}>
+            {nested?.length && renderRoutes(nested)}
+          </Route>
+        )
+      },
+    )
+  }
+
+  return <Routes>{renderRoutes(platformRoutes)}</Routes>
+}

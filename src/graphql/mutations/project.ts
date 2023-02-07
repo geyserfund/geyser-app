@@ -31,10 +31,12 @@ export const MUTATION_UPDATE_PROJECT = gql`
       id
       title
       name
+      shortDescription
       description
       image
+      thumbnailImage
       status
-      type
+      expiresAt
     }
   }
 `
@@ -101,6 +103,7 @@ export const MUTATION_ADD_PROJECT_LINK = gql`
   mutation ProjectLinkAdd($input: ProjectLinkMutationInput!) {
     projectLinkAdd(input: $input) {
       id
+      links
     }
   }
 `
@@ -109,6 +112,7 @@ export const MUTATION_REMOVE_PROJECT_LINK = gql`
   mutation ProjectLinkRemove($input: ProjectLinkMutationInput!) {
     projectLinkRemove(input: $input) {
       id
+      links
     }
   }
 `

@@ -12,6 +12,7 @@ import {
 import { ButtonComponent } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
+import { useProjectContext } from '../../context'
 import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
 import { MUTATION_DELETE_ENTRY } from '../../graphql/mutations'
 import {
@@ -20,6 +21,7 @@ import {
   UniqueProjectQueryInput,
 } from '../../types/generated/graphql'
 import { toInt, useNotification } from '../../utils'
+import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 type ResponseData = {
   project: Project & {
@@ -32,9 +34,10 @@ type QueryVariables = {
   where: UniqueProjectQueryInput
 }
 
-export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
+export const ProjectDashboardEntries = () => {
   const navigate = useNavigate()
   const { toast } = useNotification()
+  const { project } = useProjectContext()
 
   const [liveEntries, setLiveEntries] = useState<Entry[]>([])
   const [draftEntries, setDraftEntries] = useState<Entry[]>([])
@@ -115,15 +118,11 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
   }
 
   if (loading) {
-    return (
-      <GridItem colSpan={6} display="flex" justifyContent="center">
-        <Loader />
-      </GridItem>
-    )
+    return <Loader />
   }
 
   return (
-    <>
+    <DashboardGridLayout>
       <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
@@ -198,6 +197,6 @@ export const ProjectDashboardEntries = ({ project }: { project: Project }) => {
         description={'Are you sure you want to remove the entry'}
         confirm={handleRemoveEntry}
       />
-    </>
+    </DashboardGridLayout>
   )
 }

@@ -13,13 +13,13 @@ import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { useAuthContext } from '../../../context'
+import { MobileViews, useProjectContext } from '../../../context'
 import { useScrollDirection } from '../../../hooks'
-import { MobileViews, useProject } from '../../../pages/projectView'
 import { fonts } from '../../../styles'
 import { isActive } from '../../../utils'
 
 export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
-  const { mobileView } = useProject()
+  const { mobileView } = useProjectContext()
 
   const isScrollingUp = useScrollDirection({
     initialValue: true,
@@ -68,7 +68,7 @@ export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
 }
 
 export const ProjectNavUI = () => {
-  const { mobileView, setMobileView, project } = useProject()
+  const { mobileView, setMobileView, project } = useProjectContext()
   const { user } = useAuthContext()
 
   const getTextColor = (value: string) => {

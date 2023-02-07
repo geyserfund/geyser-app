@@ -8,15 +8,22 @@ type URL = string
 
 interface IFileUpload {
   children: React.ReactNode
+  onLoading?: React.ReactNode
   onUploadComplete: (_: URL) => void
 }
 
-export const FileUpload = ({ children, onUploadComplete }: IFileUpload) => {
-  const upload = useSignedUpload({ onUpload: onUploadComplete })
+export const FileUpload = ({
+  children,
+  onUploadComplete,
+  onLoading,
+}: IFileUpload) => {
+  const { uploadFile, isLoading } = useSignedUpload({
+    onUpload: onUploadComplete,
+  })
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
-    upload(file)
+    uploadFile(file)
   }, [])
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -27,7 +34,7 @@ export const FileUpload = ({ children, onUploadComplete }: IFileUpload) => {
   return (
     <Box {...getRootProps()} width="100%" _hover={{ cursor: 'pointer' }}>
       <input {...getInputProps()} />
-      {children}
+      {isLoading && onLoading ? onLoading : children}
     </Box>
   )
 }

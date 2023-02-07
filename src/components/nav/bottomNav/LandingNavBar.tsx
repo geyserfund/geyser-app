@@ -2,16 +2,16 @@ import { Box, Button, HStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
-import { routerPathNames } from '../../../constants'
+import { PathName } from '../../../constants'
 import { colors } from '../../../styles'
 import { GrantsNavIcon, HomeNavIcon, ProjectNavIcon } from '../../icons'
 
 const routesForShowingLandingMenu = [
   `/`,
-  `/${routerPathNames.discover}`,
-  `/${routerPathNames.grants}`,
-  `/${routerPathNames.grants}/roundone`,
-  `/${routerPathNames.grants}/roundtwo`,
+  `/${PathName.discover}`,
+  `/${PathName.grants}`,
+  `/${PathName.grants}/roundone`,
+  `/${PathName.grants}/roundtwo`,
 ]
 
 const LandingNavItems = [

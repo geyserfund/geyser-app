@@ -191,7 +191,7 @@ export const ProjectEntryCard = ({
               justifyContent="flex-start"
             >
               <ProjectListItemImage
-                imageSrc={entry.image || ''}
+                imageSrc={entry.project.thumbnailImage || ''}
                 project={entry.project}
                 flexShrink={0}
               />

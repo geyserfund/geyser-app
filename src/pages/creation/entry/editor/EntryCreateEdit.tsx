@@ -1,33 +1,33 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
-import { BsImage } from 'react-icons/bs';
-import { createUseStyles } from 'react-jss';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
+import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
+import { useEffect, useRef, useState } from 'react'
+import { BsImage } from 'react-icons/bs'
+import { createUseStyles } from 'react-jss'
+import { useLocation, useNavigate, useParams } from 'react-router'
 
-import { FileUpload } from '../../../../components/molecules';
-import { ImageWithReload } from '../../../../components/ui';
-import Loader from '../../../../components/ui/Loader';
-import { getPath } from '../../../../constants';
-import { ProjectEntryValidations } from '../../../../constants/validations';
-import { useAuthContext } from '../../../../context';
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql';
+import { FileUpload } from '../../../../components/molecules'
+import { ImageWithReload } from '../../../../components/ui'
+import Loader from '../../../../components/ui/Loader'
+import { getPath } from '../../../../constants'
+import { ProjectEntryValidations } from '../../../../constants/validations'
+import { useAuthContext } from '../../../../context'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql'
 import {
   MUTATION_CREATE_ENTRY,
   MUTATION_UPDATE_ENTRY,
-} from '../../../../graphql/mutations/entries';
-import { QUERY_GET_ENTRY } from '../../../../graphql/queries/entries';
-import { useDebounce } from '../../../../hooks';
+} from '../../../../graphql/mutations/entries'
+import { QUERY_GET_ENTRY } from '../../../../graphql/queries/entries'
+import { useDebounce } from '../../../../hooks'
 import {
   IEntryCreateInput,
   IEntryUpdateInput,
-} from '../../../../interfaces/entry';
-import { colors } from '../../../../styles';
-import { Owner, Project } from '../../../../types/generated/graphql';
-import { toInt, useMobileMode, useNotification } from '../../../../utils';
-import { TcreateEntry, TEntry } from '../types';
-import { CreateNav } from './CreateNav';
-import { ProjectEntryEditor } from './ProjectEntryEditor';
+} from '../../../../interfaces/entry'
+import { colors } from '../../../../styles'
+import { Owner, Project } from '../../../../types/generated/graphql'
+import { toInt, useMobileMode, useNotification } from '../../../../utils'
+import { TcreateEntry, TEntry } from '../types'
+import { CreateNav } from './CreateNav'
+import { ProjectEntryEditor } from './ProjectEntryEditor'
 
 const useStyles = createUseStyles({
   uploadContainer: {
@@ -43,7 +43,7 @@ const useStyles = createUseStyles({
       transition: 'background-color 0.5s ease',
     },
   },
-});
+})
 
 export const defaultEntry = {
   id: 0,
@@ -53,57 +53,57 @@ export const defaultEntry = {
   content: '',
   published: false,
   type: 'article',
-};
+}
 
 export const EntryCreateEdit = () => {
-  const isMobile = useMobileMode();
-  const { toast } = useNotification();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const params = useParams<{ entryId: string; projectId: string }>();
-  const { setNav, user } = useAuthContext();
+  const isMobile = useMobileMode()
+  const { toast } = useNotification()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const params = useParams<{ entryId: string; projectId: string }>()
+  const { setNav, user } = useAuthContext()
 
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const [_form, _setForm] = useState<TEntry>(defaultEntry);
-  const form = useRef(_form);
+  const [_form, _setForm] = useState<TEntry>(defaultEntry)
+  const form = useRef(_form)
   const setForm = (value: TEntry) => {
-    form.current = value;
-    _setForm(value);
-  };
+    form.current = value
+    _setForm(value)
+  }
 
-  const [focusFlag, setFocusFlag] = useState('');
+  const [focusFlag, setFocusFlag] = useState('')
 
-  const debouncedUpdateEntry = useDebounce(form.current, 1000);
+  const debouncedUpdateEntry = useDebounce(form.current, 1000)
 
   const [createPost, { data: createData, loading: createPostLoading }] =
-    useMutation(MUTATION_CREATE_ENTRY);
+    useMutation(MUTATION_CREATE_ENTRY)
 
   const [updatePost, { loading: updatePostLoading }] = useMutation(
     MUTATION_UPDATE_ENTRY,
-  );
+  )
 
   const [getPost, { loading: loadingPosts, data: entryData }] = useLazyQuery(
     QUERY_GET_ENTRY,
     {
       onError() {
-        navigate(getPath('notFound'));
+        navigate(getPath('notFound'))
       },
       onCompleted(data) {
         if (data.entry === null) {
-          navigate(getPath('notAuthorized'));
+          navigate(getPath('notAuthorized'))
         }
       },
     },
-  );
+  )
 
   const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
-      const project = data.project as Project;
+      const project = data.project as Project
 
       if (!project.owners.some((owner) => owner.user.id === user.id)) {
-        navigate(getPath('notAuthorized'));
+        navigate(getPath('notAuthorized'))
       }
 
       setNav({
@@ -112,42 +112,42 @@ export const EntryCreateEdit = () => {
         projectPath: getPath('project', data.project.name),
         projectOwnerIDs:
           data.project.owners.map((ownerInfo: Owner) => {
-            return Number(ownerInfo.user.id || -1);
+            return Number(ownerInfo.user.id || -1)
           }) || [],
-      });
+      })
     },
     onError() {
-      navigate(getPath('notFound'));
+      navigate(getPath('notFound'))
     },
-  });
+  })
 
   useEffect(() => {
     if (params && params.entryId) {
       try {
-        getPost({ variables: { id: toInt(params.entryId) } });
+        getPost({ variables: { id: toInt(params.entryId) } })
       } catch {
-        navigate(getPath('notFound'));
+        navigate(getPath('notFound'))
       }
     }
-  }, [params]);
+  }, [params])
 
   useEffect(() => {
     if (entryData && entryData.entry) {
-      setForm(entryData.entry);
+      setForm(entryData.entry)
     }
-  }, [entryData]);
+  }, [entryData])
 
   useEffect(() => {
     if (createData && createData.createEntry) {
-      setForm(createData.createEntry);
+      setForm(createData.createEntry)
     }
-  }, [createData]);
+  }, [createData])
 
   useEffect(() => {
     if (debouncedUpdateEntry && debouncedUpdateEntry.id) {
-      handleUpdateEntry(debouncedUpdateEntry);
+      handleUpdateEntry(debouncedUpdateEntry)
     }
-  }, [debouncedUpdateEntry]);
+  }, [debouncedUpdateEntry])
 
   const handleCreateEntry = async (value: TcreateEntry) => {
     if (!form.current || !form.current.id) {
@@ -157,7 +157,7 @@ export const EntryCreateEdit = () => {
         form.current.description ||
         form.current.image
       ) {
-        const { image, title, description, content } = value;
+        const { image, title, description, content } = value
         const input: IEntryCreateInput = {
           projectId: toInt(projectData?.project?.id),
           type: 'article',
@@ -165,22 +165,22 @@ export const EntryCreateEdit = () => {
           description,
           content,
           image,
-        };
+        }
         try {
-          await createPost({ variables: { input } });
+          await createPost({ variables: { input } })
         } catch (error) {
           toast({
             title: 'Post creation failed',
             description: 'Please try again later',
             status: 'error',
-          });
+          })
         }
       }
     }
-  };
+  }
 
   const handleUpdateEntry = async (params: TcreateEntry) => {
-    const { image, title, description, content } = params;
+    const { image, title, description, content } = params
     if (form) {
       const input: IEntryUpdateInput = {
         entryId: toInt(form.current.id),
@@ -188,115 +188,114 @@ export const EntryCreateEdit = () => {
         description,
         content,
         image,
-      };
+      }
       try {
-        await updatePost({ variables: { input } });
+        await updatePost({ variables: { input } })
       } catch (error) {
         toast({
           title: 'Post update failed',
           description: 'Please try again later',
           status: 'error',
-        });
+        })
       }
     }
-  };
+  }
 
   const handleContentUpdate = (name: string, value: string) => {
-    const newForm = { ...form.current, [name]: value };
-    setForm(newForm);
-    handleCreateEntry(newForm);
-  };
+    const newForm = { ...form.current, [name]: value }
+    setForm(newForm)
+    handleCreateEntry(newForm)
+  }
 
   const handleInput = (event: any) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
 
     if (
       name === 'title' &&
       value.length > ProjectEntryValidations.title.maxLength
     ) {
-      return;
+      return
     }
 
     if (
       name === 'description' &&
       value.length > ProjectEntryValidations.description.maxLength
     ) {
-      return;
+      return
     }
 
     if (name) {
-      const newForm = { ...form.current, [name]: value };
-      setForm(newForm);
-      handleCreateEntry(newForm);
+      const newForm = { ...form.current, [name]: value }
+      setForm(newForm)
+      handleCreateEntry(newForm)
     }
-  };
+  }
 
   const onSave = () => {
-    handleUpdateEntry(form.current);
-  };
+    handleUpdateEntry(form.current)
+  }
 
   const onPreview = () => {
     if (form.current && form.current.id) {
-      navigate(`/project/${params.projectId}/entry/${form.current.id}/preview`);
+      navigate(`/project/${params.projectId}/entry/${form.current.id}/preview`)
     } else {
       toast({
         title: 'Cannot preview',
         description: 'Please edit your content before preview',
         status: 'info',
-      });
+      })
     }
-  };
+  }
 
   const onBack = () => {
     if (location.key) {
-      navigate(-1);
+      navigate(-1)
     } else {
-      navigate(getPath('project', params.projectId || ''));
+      navigate(getPath('project', params.projectId || ''))
     }
-  };
+  }
 
   const onImageUpload = (url: string) =>
-    setForm({ ...form.current, image: url });
+    setForm({ ...form.current, image: url })
 
-  const isEdit =
-    Boolean(createData?.createEntry?.id) || Boolean(params.entryId);
+  const isEdit = Boolean(createData?.createEntry?.id) || Boolean(params.entryId)
 
   const handleEvent = (event: BeforeUnloadEvent) => {
-    event.preventDefault();
-    event.returnValue = 'are you there';
-    return event;
-  };
+    event.preventDefault()
+    event.returnValue = 'are you there'
+    return event
+  }
 
   useEffect(() => {
-    addEventListener('beforeunload', handleEvent, { once: true });
-  }, []);
+    addEventListener('beforeunload', handleEvent, { once: true })
+  }, [])
 
   const handleKeyDown = (event: any) => {
     if (event) {
       if (event.target.name === 'title') {
         if (event.key === 'ArrowDown' || event.key === 'Enter') {
-          event.preventDefault();
-          document.getElementById('entry-description-input')?.focus();
+          event.preventDefault()
+          document.getElementById('entry-description-input')?.focus()
         }
       } else if (event.target.name === 'description') {
         if (event.key === 'ArrowUp') {
-          event.preventDefault();
-          document.getElementById('entry-title-input')?.focus();
+          event.preventDefault()
+          document.getElementById('entry-title-input')?.focus()
         } else if (
           event.key === 'ArrowDown' ||
           event.key === 'Tab' ||
           event.key === 'Enter'
         ) {
-          event.preventDefault();
-          const newDate = new Date();
-          setFocusFlag(newDate.toISOString());
+          event.preventDefault()
+          const newDate = new Date()
+          setFocusFlag(newDate.toISOString())
         }
       }
     }
-  };
+  }
 
   if (loading || loadingPosts || (params.entryId && !form.current.id)) {
-    return <Loader />;
+    return <Loader />
   }
 
   return (
@@ -411,5 +410,5 @@ export const EntryCreateEdit = () => {
         </Box>
       </VStack>
     </>
-  );
-};
+  )
+}

@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react'
 
 import { AuthModal } from '../../../components/molecules'
 import { fundingStages } from '../../../constants'
-import { AuthContext } from '../../../context'
+import { AuthContext, MobileViews, useProjectContext } from '../../../context'
 import { useBtcContext } from '../../../context/btc'
 import { IFundForm, IFundFormState } from '../../../hooks'
 import { IFundingInput, IRewardFundingInput } from '../../../interfaces'
@@ -14,7 +14,6 @@ import {
   ProjectReward,
 } from '../../../types/generated/graphql'
 import { toInt, useMobileMode } from '../../../utils'
-import { MobileViews, useProject } from '../containers'
 import {
   InfoPageSkeleton,
   ProjectFundingInitialInfoScreen,
@@ -44,7 +43,7 @@ export const ProjectActivityPanel = ({
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
-  const { mobileView, setMobileView } = useProject()
+  const { mobileView, setMobileView } = useProjectContext()
   // required for knowing the rewards and the funds
   const {
     state: formState,
