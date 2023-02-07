@@ -1,5 +1,6 @@
-import { Stack, StackDirection, Text } from '@chakra-ui/react'
+import { Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
+import { useEffect, useState } from 'react'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
 import { colors } from '../../styles'
@@ -12,6 +13,43 @@ interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   iconSize?: string
   fontFamily?: string
   direction?: StackDirection
+}
+
+export enum ProjectStatusLabels {
+  UNSTABLE_WALLET = 'UNSTABLE WALLET',
+  INACTIVE_WALLET = 'INACTIVE WALLET',
+  RUNNING = 'RUNNING',
+  DRAFT = 'DRAFT',
+  INACTIVE = 'INACTIVE',
+}
+
+export const ProjectStatusColors = {
+  [ProjectStatusLabels.UNSTABLE_WALLET]: colors.secondaryRed,
+  [ProjectStatusLabels.INACTIVE_WALLET]: colors.secondaryGold,
+  [ProjectStatusLabels.RUNNING]: colors.primary500,
+  [ProjectStatusLabels.DRAFT]: colors.neutral500,
+  [ProjectStatusLabels.INACTIVE]: colors.neutral500,
+}
+
+export const ProjectStatusIcons = {
+  [ProjectStatusLabels.UNSTABLE_WALLET]: BsFillXCircleFill,
+  [ProjectStatusLabels.INACTIVE_WALLET]: BsFillXCircleFill,
+  [ProjectStatusLabels.RUNNING]: BsFillCheckCircleFill,
+  [ProjectStatusLabels.DRAFT]: BsFillXCircleFill,
+  [ProjectStatusLabels.INACTIVE]: BsFillXCircleFill,
+}
+
+export const ProjectStatusTooltip = {
+  [ProjectStatusLabels.UNSTABLE_WALLET]:
+    'The last time someone tried to send funds to this wallet, there was a liquidity issue. ',
+  [ProjectStatusLabels.INACTIVE_WALLET]:
+    'The last time someone tried to make a transaction to this project, the invoice generation failed. ',
+  [ProjectStatusLabels.RUNNING]:
+    'This project is live and wallet running smoothly. ',
+  [ProjectStatusLabels.DRAFT]:
+    'This project has not been launched yet and is only visible to the project creator ',
+  [ProjectStatusLabels.INACTIVE]:
+    'This project has been deactivated by the project creator.',
 }
 
 export const ProjectStatusLabel = ({
@@ -27,88 +65,56 @@ export const ProjectStatusLabel = ({
     fontSize: fontSize || '12px',
   }
 
-  const getIcon = () => {
-    if (
-      project?.wallets[0] &&
-      project.wallets[0]?.state?.status === WalletStatus.Inactive
-    ) {
-      return (
-        <BsFillXCircleFill fontSize={iconSize} color={colors.secondaryRed} />
-      )
+  const [status, setStatus] = useState<ProjectStatusLabels>(
+    ProjectStatusLabels.DRAFT,
+  )
+
+  useEffect(() => {
+    if (!project) {
+      return
     }
 
-    if (
-      project?.wallets[0] &&
-      project.wallets[0].state.status === WalletStatus.Unstable
-    ) {
-      return (
-        <BsFillXCircleFill fontSize={iconSize} color={colors.secondaryGold} />
-      )
+    const getStatus = () => {
+      if (
+        project?.wallets[0] &&
+        project.wallets[0].state.status === WalletStatus.Inactive
+      ) {
+        return ProjectStatusLabels.INACTIVE_WALLET
+      }
+
+      if (
+        project?.wallets[0] &&
+        project.wallets[0].state.status === WalletStatus.Unstable
+      ) {
+        return ProjectStatusLabels.UNSTABLE_WALLET
+      }
+
+      if (isActive(project.status)) {
+        return ProjectStatusLabels.RUNNING
+      }
+
+      if (isDraft(project.status)) {
+        return ProjectStatusLabels.DRAFT
+      }
+
+      return ProjectStatusLabels.INACTIVE
     }
 
-    if (isActive(project.status)) {
-      return (
-        <BsFillCheckCircleFill fontSize={iconSize} color={colors.primary500} />
-      )
-    }
+    const currentStatus = getStatus()
+    setStatus(currentStatus)
+  }, [project])
 
-    if (isDraft(project.status)) {
-      return <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />
-    }
-
-    return <BsFillXCircleFill fontSize={iconSize} color={colors.neutral500} />
-  }
-
-  const getLabel = () => {
-    if (
-      project?.wallets[0] &&
-      project.wallets[0].state.status === WalletStatus.Inactive
-    ) {
-      return (
-        <Text color={colors.secondaryRed} {...commonStyles}>
-          INACTIVE WALLET
-        </Text>
-      )
-    }
-
-    if (
-      project?.wallets[0] &&
-      project.wallets[0].state.status === WalletStatus.Unstable
-    ) {
-      return (
-        <Text color={colors.secondaryGold} {...commonStyles}>
-          UNSTABLE WALLET
-        </Text>
-      )
-    }
-
-    if (isActive(project.status)) {
-      return (
-        <Text color={colors.primary500} {...commonStyles}>
-          RUNNING
-        </Text>
-      )
-    }
-
-    if (isDraft(project.status)) {
-      return (
-        <Text color={colors.neutral500} {...commonStyles}>
-          DRAFT
-        </Text>
-      )
-    }
-
-    return (
-      <Text color={colors.neutral500} {...commonStyles}>
-        INACTIVE
-      </Text>
-    )
-  }
-
+  const Icon = ProjectStatusIcons[status]
+  const color = ProjectStatusColors[status]
+  const tooltip = ProjectStatusTooltip[status]
   return (
-    <Stack direction={direction} alignItems="center">
-      {getIcon()}
-      {getLabel()}
-    </Stack>
+    <Tooltip label={tooltip} placement="top" size="sm">
+      <Stack direction={direction} alignItems="center">
+        <Icon fontSize={iconSize} color={color} />
+        <Text color={color} {...commonStyles}>
+          {status}
+        </Text>
+      </Stack>
+    </Tooltip>
   )
 }
