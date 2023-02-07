@@ -93,6 +93,8 @@ const routesForEnablingSignInButton = [
   getPath('landingPage'),
   getPath('projectDiscovery'),
   getPath('grants'),
+  getPath('grantsRoundOne'),
+  getPath('grantsRoundTwo'),
   getPath('notFound'),
   getPath('notAuthorized'),
   `/${PathName.userProfile}/:userId`,
@@ -107,6 +109,8 @@ const routesForEnablingProjectLaunchButton = [
   getPath('index'),
   getPath('landingPage'),
   getPath('grants'),
+  getPath('grantsRoundOne'),
+  getPath('grantsRoundTwo'),
   getPath('projectDiscovery'),
 ]
 
