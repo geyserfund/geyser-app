@@ -1,0 +1,4 @@
+export enum ApolloErrors {
+  BAD_USER_INPUT = 'BAD_USER_INPUT',
+  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
+}

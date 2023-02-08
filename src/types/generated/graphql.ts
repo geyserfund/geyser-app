@@ -18,8 +18,8 @@ export type Scalars = {
   amount_Float_NotNull_min_1: any;
   amount_Float_min_1: any;
   comment_String_maxLength_280: any;
-  cost_Float_NotNull_min_1_max_1000000: any;
   cost_Int_NotNull_min_0: any;
+  cost_Int_NotNull_min_1_max_1000000: any;
   description_String_NotNull_maxLength_250: any;
   description_String_NotNull_maxLength_2200: any;
   description_String_maxLength_250: any;
@@ -57,7 +57,11 @@ export type ActivityCreatedSubscriptionInput = {
 };
 
 export type ActivityCreatedSubscriptionWhereInput = {
+  countryCode?: InputMaybe<Scalars['String']>;
+  projectIds?: InputMaybe<Array<Scalars['BigInt']>>;
+  region?: InputMaybe<Scalars['String']>;
   resourceType?: InputMaybe<ActivityResourceType>;
+  tagIds?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type ActivityResource = Entry | FundingTx | Project | ProjectReward;
@@ -86,6 +90,12 @@ export type AmountSummary = {
 
 export type ConnectionDetails = LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic;
 
+export type Country = {
+  __typename?: 'Country';
+  code: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type CreateEntryInput = {
   content?: InputMaybe<Scalars['String']>;
   /** Short description of the Entry. */
@@ -105,6 +115,8 @@ export type CreateGranteeInput = {
 };
 
 export type CreateProjectInput = {
+  /** Project ISO3166 country code */
+  countryCode?: InputMaybe<Scalars['String']>;
   /** A short description of the project. */
   description: Scalars['description_String_NotNull_maxLength_2200'];
   email: Scalars['email_String_NotNull_format_email'];
@@ -113,6 +125,8 @@ export type CreateProjectInput = {
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
   name: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
+  /** Project region */
+  region?: InputMaybe<Scalars['String']>;
   /** The currency used to price rewards for the project. Currently only USDCENT supported. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
   shortDescription?: InputMaybe<Scalars['shortDescription_String_maxLength_500']>;
@@ -132,7 +146,7 @@ export type CreateProjectMilestoneInput = {
 
 export type CreateProjectRewardInput = {
   /** Cost of the reward, currently only in USD cents */
-  cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
+  cost: Scalars['cost_Int_NotNull_min_1_max_1000000'];
   /** Currency used for the cost */
   costCurrency: RewardCurrency;
   description: Scalars['description_String_NotNull_maxLength_250'];
@@ -418,8 +432,11 @@ export type GetActivityPaginationInput = {
 };
 
 export type GetActivityWhereInput = {
-  projectId?: InputMaybe<Scalars['BigInt']>;
+  countryCode?: InputMaybe<Scalars['String']>;
+  projectIds?: InputMaybe<Array<Scalars['BigInt']>>;
+  region?: InputMaybe<Scalars['String']>;
   resourceType?: InputMaybe<ActivityResourceType>;
+  tagIds?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type GetDashboardFundersWhereInput = {
@@ -596,6 +613,12 @@ export enum LndNodeType {
   Voltage = 'voltage'
 }
 
+export type Location = {
+  __typename?: 'Location';
+  country?: Maybe<Country>;
+  region?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
@@ -620,6 +643,8 @@ export type Mutation = {
   fundingPend: FundingPendingResponse;
   projectLinkAdd: Project;
   projectLinkRemove: Project;
+  projectTagAdd: Array<Tag>;
+  projectTagRemove: Array<Tag>;
   /** Makes the Entry public. */
   publishEntry: Entry;
   unlinkExternalAccount: User;
@@ -665,7 +690,7 @@ export type MutationCreateProjectMilestoneArgs = {
 
 
 export type MutationCreateProjectRewardArgs = {
-  input?: InputMaybe<CreateProjectRewardInput>;
+  input: CreateProjectRewardInput;
 };
 
 
@@ -739,6 +764,16 @@ export type MutationProjectLinkRemoveArgs = {
 };
 
 
+export type MutationProjectTagAddArgs = {
+  input: ProjectTagMutationInput;
+};
+
+
+export type MutationProjectTagRemoveArgs = {
+  input: ProjectTagMutationInput;
+};
+
+
 export type MutationPublishEntryArgs = {
   id: Scalars['BigInt'];
 };
@@ -765,12 +800,12 @@ export type MutationUpdateProjectMilestoneArgs = {
 
 
 export type MutationUpdateProjectRewardArgs = {
-  input?: InputMaybe<UpdateProjectRewardInput>;
+  input: UpdateProjectRewardInput;
 };
 
 
 export type MutationUpdateUserArgs = {
-  input?: InputMaybe<UpdateUserInput>;
+  input: UpdateUserInput;
 };
 
 
@@ -837,6 +872,7 @@ export type Project = {
   id: Scalars['BigInt'];
   image?: Maybe<Scalars['String']>;
   links: Array<Maybe<Scalars['String']>>;
+  location?: Maybe<Location>;
   /** @deprecated No longer supported */
   media: Array<Maybe<Scalars['String']>>;
   milestones?: Maybe<Array<Maybe<ProjectMilestone>>>;
@@ -852,6 +888,7 @@ export type Project = {
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
   status?: Maybe<ProjectStatus>;
+  tags: Array<Tag>;
   /** Main project image. */
   thumbnailImage?: Maybe<Scalars['String']>;
   /** Public title of the project. */
@@ -870,6 +907,12 @@ export type ProjectEntriesArgs = {
 export type ProjectActivatedSubscriptionResponse = {
   __typename?: 'ProjectActivatedSubscriptionResponse';
   project: Project;
+};
+
+export type ProjectCountriesGetResult = {
+  __typename?: 'ProjectCountriesGetResult';
+  count: Scalars['Int'];
+  country: Country;
 };
 
 export type ProjectEntriesGetInput = {
@@ -892,6 +935,12 @@ export type ProjectMilestone = {
   description?: Maybe<Scalars['description_String_maxLength_250']>;
   id: Scalars['BigInt'];
   name: Scalars['name_String_NotNull_maxLength_100'];
+};
+
+export type ProjectRegionsGetResult = {
+  __typename?: 'ProjectRegionsGetResult';
+  count: Scalars['Int'];
+  region: Scalars['String'];
 };
 
 export type ProjectReward = {
@@ -934,6 +983,11 @@ export enum ProjectStatus {
   Inactive = 'inactive'
 }
 
+export type ProjectTagMutationInput = {
+  projectId: Scalars['BigInt'];
+  tagId: Scalars['Int'];
+};
+
 export enum ProjectType {
   Donation = 'donation',
   Grant = 'grant',
@@ -941,10 +995,14 @@ export enum ProjectType {
 }
 
 export type ProjectWhereInput = {
+  countryCode?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['BigInt']>;
   /** Unique name for the project. Used for the project URL and lightning address. */
   name?: InputMaybe<Scalars['name_String_minLength_3_maxLength_280']>;
+  region?: InputMaybe<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<ProjectStatus>;
+  tagIds?: InputMaybe<Array<Scalars['Int']>>;
   type?: InputMaybe<ProjectType>;
 };
 
@@ -1001,11 +1059,14 @@ export type Query = {
   lightningAddressVerify: LightningAddressVerifyResponse;
   me?: Maybe<User>;
   project?: Maybe<Project>;
+  projectCountriesGet: Array<ProjectCountriesGetResult>;
+  projectRegionsGet: Array<ProjectRegionsGetResult>;
   /** By default, returns a list of all active projects. */
   projects: ProjectsResponse;
   /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary;
   statusCheck: Scalars['Boolean'];
+  tagsGet: Array<TagsGetResult>;
   user: User;
 };
 
@@ -1158,6 +1219,19 @@ export type SubscriptionActivityCreatedArgs = {
   input?: InputMaybe<ActivityCreatedSubscriptionInput>;
 };
 
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['Int'];
+  label: Scalars['String'];
+};
+
+export type TagsGetResult = {
+  __typename?: 'TagsGetResult';
+  count: Scalars['Int'];
+  id: Scalars['Int'];
+  label: Scalars['String'];
+};
+
 export type UniqueProjectQueryInput = {
   id?: InputMaybe<Scalars['BigInt']>;
   /** Unique name for the project. Used for the project URL and lightning address. */
@@ -1174,6 +1248,8 @@ export type UpdateEntryInput = {
 };
 
 export type UpdateProjectInput = {
+  /** Project ISO3166 country code */
+  countryCode?: InputMaybe<Scalars['String']>;
   /** Description of the project. */
   description?: InputMaybe<Scalars['description_String_maxLength_2200']>;
   expiresAt?: InputMaybe<Scalars['String']>;
@@ -1181,6 +1257,8 @@ export type UpdateProjectInput = {
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
   projectId: Scalars['BigInt'];
+  /** Project region */
+  region?: InputMaybe<Scalars['String']>;
   /** The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum. */
   rewardCurrency?: InputMaybe<RewardCurrency>;
   /** A short description of the project. */
@@ -1204,7 +1282,7 @@ export type UpdateProjectMilestoneInput = {
 
 export type UpdateProjectRewardInput = {
   /** Cost of the reward, priced in USD cents */
-  cost: Scalars['cost_Float_NotNull_min_1_max_1000000'];
+  cost: Scalars['cost_Int_NotNull_min_1_max_1000000'];
   /** Currency used for the cost */
   costCurrency: RewardCurrency;
   /** Soft deletes the reward. */
@@ -1439,6 +1517,7 @@ export type ResolversTypes = {
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ConnectionDetails: ResolversTypes['LightningAddressConnectionDetails'] | ResolversTypes['LndConnectionDetailsPrivate'] | ResolversTypes['LndConnectionDetailsPublic'];
+  Country: ResolverTypeWrapper<Country>;
   CreateEntryInput: CreateEntryInput;
   CreateGranteeInput: CreateGranteeInput;
   CreateProjectInput: CreateProjectInput;
@@ -1512,6 +1591,7 @@ export type ResolversTypes = {
   LndConnectionDetailsPublic: ResolverTypeWrapper<LndConnectionDetailsPublic>;
   LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
   LndNodeType: LndNodeType;
+  Location: ResolverTypeWrapper<Location>;
   Mutation: ResolverTypeWrapper<{}>;
   OffsetBasedPaginationInput: OffsetBasedPaginationInput;
   OrderByOptions: OrderByOptions;
@@ -1520,13 +1600,16 @@ export type ResolversTypes = {
   PaginationInput: PaginationInput;
   Project: ResolverTypeWrapper<Project>;
   ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>;
+  ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>;
+  ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
   ProjectReward: ResolverTypeWrapper<ProjectReward>;
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>;
   ProjectStatus: ProjectStatus;
+  ProjectTagMutationInput: ProjectTagMutationInput;
   ProjectType: ProjectType;
   ProjectWhereInput: ProjectWhereInput;
   ProjectsGetQueryInput: ProjectsGetQueryInput;
@@ -1545,6 +1628,8 @@ export type ResolversTypes = {
   Sponsor: ResolverTypeWrapper<Sponsor>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
+  Tag: ResolverTypeWrapper<Tag>;
+  TagsGetResult: ResolverTypeWrapper<TagsGetResult>;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
   UpdateEntryInput: UpdateEntryInput;
   UpdateProjectInput: UpdateProjectInput;
@@ -1567,8 +1652,8 @@ export type ResolversTypes = {
   amount_Float_NotNull_min_1: ResolverTypeWrapper<Scalars['amount_Float_NotNull_min_1']>;
   amount_Float_min_1: ResolverTypeWrapper<Scalars['amount_Float_min_1']>;
   comment_String_maxLength_280: ResolverTypeWrapper<Scalars['comment_String_maxLength_280']>;
-  cost_Float_NotNull_min_1_max_1000000: ResolverTypeWrapper<Scalars['cost_Float_NotNull_min_1_max_1000000']>;
   cost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_0']>;
+  cost_Int_NotNull_min_1_max_1000000: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_1_max_1000000']>;
   description_String_NotNull_maxLength_250: ResolverTypeWrapper<Scalars['description_String_NotNull_maxLength_250']>;
   description_String_NotNull_maxLength_2200: ResolverTypeWrapper<Scalars['description_String_NotNull_maxLength_2200']>;
   description_String_maxLength_250: ResolverTypeWrapper<Scalars['description_String_maxLength_250']>;
@@ -1607,6 +1692,7 @@ export type ResolversParentTypes = {
   BigInt: Scalars['BigInt'];
   Boolean: Scalars['Boolean'];
   ConnectionDetails: ResolversParentTypes['LightningAddressConnectionDetails'] | ResolversParentTypes['LndConnectionDetailsPrivate'] | ResolversParentTypes['LndConnectionDetailsPublic'];
+  Country: Country;
   CreateEntryInput: CreateEntryInput;
   CreateGranteeInput: CreateGranteeInput;
   CreateProjectInput: CreateProjectInput;
@@ -1672,6 +1758,7 @@ export type ResolversParentTypes = {
   LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
   LndConnectionDetailsPublic: LndConnectionDetailsPublic;
   LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
+  Location: Location;
   Mutation: {};
   OffsetBasedPaginationInput: OffsetBasedPaginationInput;
   Owner: Owner;
@@ -1679,12 +1766,15 @@ export type ResolversParentTypes = {
   PaginationInput: PaginationInput;
   Project: Project;
   ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse;
+  ProjectCountriesGetResult: ProjectCountriesGetResult;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
   ProjectMilestone: ProjectMilestone;
+  ProjectRegionsGetResult: ProjectRegionsGetResult;
   ProjectReward: ProjectReward;
   ProjectStatistics: ProjectStatistics;
+  ProjectTagMutationInput: ProjectTagMutationInput;
   ProjectWhereInput: ProjectWhereInput;
   ProjectsGetQueryInput: ProjectsGetQueryInput;
   ProjectsOrderByInput: ProjectsOrderByInput;
@@ -1700,6 +1790,8 @@ export type ResolversParentTypes = {
   Sponsor: Sponsor;
   String: Scalars['String'];
   Subscription: {};
+  Tag: Tag;
+  TagsGetResult: TagsGetResult;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
   UpdateEntryInput: UpdateEntryInput;
   UpdateProjectInput: UpdateProjectInput;
@@ -1720,8 +1812,8 @@ export type ResolversParentTypes = {
   amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1'];
   amount_Float_min_1: Scalars['amount_Float_min_1'];
   comment_String_maxLength_280: Scalars['comment_String_maxLength_280'];
-  cost_Float_NotNull_min_1_max_1000000: Scalars['cost_Float_NotNull_min_1_max_1000000'];
   cost_Int_NotNull_min_0: Scalars['cost_Int_NotNull_min_0'];
+  cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000'];
   description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250'];
   description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200'];
   description_String_maxLength_250: Scalars['description_String_maxLength_250'];
@@ -1799,6 +1891,12 @@ export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 
 export type ConnectionDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ConnectionDetails'] = ResolversParentTypes['ConnectionDetails']> = {
   __resolveType: TypeResolveFn<'LightningAddressConnectionDetails' | 'LndConnectionDetailsPrivate' | 'LndConnectionDetailsPublic', ParentType, ContextType>;
+};
+
+export type CountryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Country'] = ResolversParentTypes['Country']> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -1969,6 +2067,12 @@ export type LndConnectionDetailsPublicResolvers<ContextType = any, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type LocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = {
+  country?: Resolver<Maybe<ResolversTypes['Country']>, ParentType, ContextType>;
+  region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   confirmAmbassador?: Resolver<ResolversTypes['Ambassador'], ParentType, ContextType, RequireFields<MutationConfirmAmbassadorArgs, 'id'>>;
@@ -1977,7 +2081,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createGrantee?: Resolver<ResolversTypes['Grantee'], ParentType, ContextType, RequireFields<MutationCreateGranteeArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
   createProjectMilestone?: Resolver<ResolversTypes['ProjectMilestone'], ParentType, ContextType, Partial<MutationCreateProjectMilestoneArgs>>;
-  createProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, Partial<MutationCreateProjectRewardArgs>>;
+  createProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationCreateProjectRewardArgs, 'input'>>;
   createSponsor?: Resolver<ResolversTypes['Sponsor'], ParentType, ContextType, RequireFields<MutationCreateSponsorArgs, 'projectId'>>;
   createWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationCreateWalletArgs, 'input'>>;
   deleteEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationDeleteEntryArgs, 'id'>>;
@@ -1992,13 +2096,15 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   fundingPend?: Resolver<ResolversTypes['FundingPendingResponse'], ParentType, ContextType, RequireFields<MutationFundingPendArgs, 'input'>>;
   projectLinkAdd?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectLinkAddArgs, 'input'>>;
   projectLinkRemove?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectLinkRemoveArgs, 'input'>>;
+  projectTagAdd?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagAddArgs, 'input'>>;
+  projectTagRemove?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagRemoveArgs, 'input'>>;
   publishEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationPublishEntryArgs, 'id'>>;
   unlinkExternalAccount?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUnlinkExternalAccountArgs, 'id'>>;
   updateEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationUpdateEntryArgs, 'input'>>;
   updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'input'>>;
   updateProjectMilestone?: Resolver<ResolversTypes['ProjectMilestone'], ParentType, ContextType, Partial<MutationUpdateProjectMilestoneArgs>>;
-  updateProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, Partial<MutationUpdateProjectRewardArgs>>;
-  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, Partial<MutationUpdateUserArgs>>;
+  updateProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationUpdateProjectRewardArgs, 'input'>>;
+  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
   updateWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletArgs, 'input'>>;
   updateWalletState?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletStateArgs, 'input'>>;
 };
@@ -2031,6 +2137,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   links?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   media?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   milestones?: Resolver<Maybe<Array<Maybe<ResolversTypes['ProjectMilestone']>>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['name_String_NotNull_minLength_3_maxLength_280'], ParentType, ContextType>;
@@ -2041,6 +2148,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   sponsors?: Resolver<Array<Maybe<ResolversTypes['Sponsor']>>, ParentType, ContextType>;
   statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>;
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
   thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['title_String_NotNull_maxLength_60'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
@@ -2054,11 +2162,23 @@ export type ProjectActivatedSubscriptionResponseResolvers<ContextType = any, Par
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectCountriesGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectCountriesGetResult'] = ResolversParentTypes['ProjectCountriesGetResult']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  country?: Resolver<ResolversTypes['Country'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectMilestoneResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectMilestone'] = ResolversParentTypes['ProjectMilestone']> = {
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['description_String_maxLength_250']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['name_String_NotNull_maxLength_100'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRegionsGetResult'] = ResolversParentTypes['ProjectRegionsGetResult']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  region?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2112,9 +2232,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   lightningAddressVerify?: Resolver<ResolversTypes['LightningAddressVerifyResponse'], ParentType, ContextType, Partial<QueryLightningAddressVerifyArgs>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'where'>>;
+  projectCountriesGet?: Resolver<Array<ResolversTypes['ProjectCountriesGetResult']>, ParentType, ContextType>;
+  projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>;
   projects?: Resolver<ResolversTypes['ProjectsResponse'], ParentType, ContextType, Partial<QueryProjectsArgs>>;
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
 };
 
@@ -2143,6 +2266,19 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   entryPublished?: SubscriptionResolver<ResolversTypes['EntryPublishedSubscriptionResponse'], "entryPublished", ParentType, ContextType>;
   fundingTxConfirmed?: SubscriptionResolver<ResolversTypes['FundingTxConfirmedSubscriptionResponse'], "fundingTxConfirmed", ParentType, ContextType>;
   projectActivated?: SubscriptionResolver<ResolversTypes['ProjectActivatedSubscriptionResponse'], "projectActivated", ParentType, ContextType>;
+};
+
+export type TagResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TagsGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['TagsGetResult'] = ResolversParentTypes['TagsGetResult']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -2194,12 +2330,12 @@ export interface Comment_String_MaxLength_280ScalarConfig extends GraphQLScalarT
   name: 'comment_String_maxLength_280';
 }
 
-export interface Cost_Float_NotNull_Min_1_Max_1000000ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['cost_Float_NotNull_min_1_max_1000000'], any> {
-  name: 'cost_Float_NotNull_min_1_max_1000000';
-}
-
 export interface Cost_Int_NotNull_Min_0ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['cost_Int_NotNull_min_0'], any> {
   name: 'cost_Int_NotNull_min_0';
+}
+
+export interface Cost_Int_NotNull_Min_1_Max_1000000ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['cost_Int_NotNull_min_1_max_1000000'], any> {
+  name: 'cost_Int_NotNull_min_1_max_1000000';
 }
 
 export interface Description_String_NotNull_MaxLength_250ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['description_String_NotNull_maxLength_250'], any> {
@@ -2305,6 +2441,7 @@ export type Resolvers<ContextType = any> = {
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>;
+  Country?: CountryResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Entry?: EntryResolvers<ContextType>;
   EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>;
@@ -2326,12 +2463,15 @@ export type Resolvers<ContextType = any> = {
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
   LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
   LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;
+  Location?: LocationResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Owner?: OwnerResolvers<ContextType>;
   OwnerOf?: OwnerOfResolvers<ContextType>;
   Project?: ProjectResolvers<ContextType>;
   ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>;
+  ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>;
   ProjectMilestone?: ProjectMilestoneResolvers<ContextType>;
+  ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
   ProjectReward?: ProjectRewardResolvers<ContextType>;
   ProjectStatistics?: ProjectStatisticsResolvers<ContextType>;
   ProjectsResponse?: ProjectsResponseResolvers<ContextType>;
@@ -2341,6 +2481,8 @@ export type Resolvers<ContextType = any> = {
   SourceResource?: SourceResourceResolvers<ContextType>;
   Sponsor?: SponsorResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  Tag?: TagResolvers<ContextType>;
+  TagsGetResult?: TagsGetResultResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
@@ -2348,8 +2490,8 @@ export type Resolvers<ContextType = any> = {
   amount_Float_NotNull_min_1?: GraphQLScalarType;
   amount_Float_min_1?: GraphQLScalarType;
   comment_String_maxLength_280?: GraphQLScalarType;
-  cost_Float_NotNull_min_1_max_1000000?: GraphQLScalarType;
   cost_Int_NotNull_min_0?: GraphQLScalarType;
+  cost_Int_NotNull_min_1_max_1000000?: GraphQLScalarType;
   description_String_NotNull_maxLength_250?: GraphQLScalarType;
   description_String_NotNull_maxLength_2200?: GraphQLScalarType;
   description_String_maxLength_250?: GraphQLScalarType;

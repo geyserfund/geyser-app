@@ -15,6 +15,7 @@ import { QRCode } from 'react-qrcode-logo'
 
 import LogoPrimary from '../../../../assets/logo-brand.svg'
 import LogoDark from '../../../../assets/logo-dark.svg'
+import { Body2 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { colors } from '../../../../styles'
@@ -39,24 +40,21 @@ enum QRDisplayState {
   FUNDING_CANCELED = 'FUNDING_CANCELED',
 }
 
-const FundingErrorView = () => {
+const FundingErrorView = ({ error }: { error?: string }) => {
   return (
     <VStack
       height={248}
       width={252}
-      spacing={4}
+      spacing="10px"
+      padding={3}
       backgroundColor={'brand.bgLightRed'}
       justifyContent="center"
       borderRadius={'md'}
     >
       <BsExclamationCircle fontSize={'2em'} />
 
-      <VStack spacing={1}>
-        <Text fontWeight={700} fontSize="14px" padding={5} align="center">
-          Funding failed to get initiated or was canceled. Please try again or
-          contact the project creator if the error persists.
-        </Text>
-      </VStack>
+      <Body2 bold>Funding failed</Body2>
+      {error && <Body2 fontSize="12px">{`Error: ${error}`}</Body2>}
     </VStack>
   )
 }
@@ -70,19 +68,16 @@ const InvoiceErrorView = ({
     <VStack
       height={248}
       width={252}
-      spacing={4}
+      spacing="10px"
+      padding={3}
       backgroundColor={'brand.primary100'}
       justifyContent="center"
       borderRadius={'md'}
     >
       <BsExclamationCircle fontSize={'2em'} />
 
-      <VStack spacing={1}>
-        <Text fontWeight={700} fontSize="14px">
-          Invoice was cancelled or expired.
-        </Text>
-        <Text>Click refresh to try again</Text>
-      </VStack>
+      <Body2 bold>Invoice was cancelled or expired.</Body2>
+      <Body2>Click refresh to try again</Body2>
 
       <Button
         leftIcon={<BiRefresh fontSize={'2em'} />}
@@ -112,6 +107,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     fundingRequestLoading,
     hasWebLN,
     weblnErrored,
+    error,
   } = fundingFlow
 
   const qrDisplayState = useMemo(() => {
@@ -283,7 +279,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
         return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />
 
       case QRDisplayState.FUNDING_CANCELED:
-        return <FundingErrorView />
+        return <FundingErrorView error={error} />
 
       default:
         return (
@@ -302,10 +298,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
       <VStack spacing={4}>
         <HStack
           spacing={4}
-          visibility={
-            qrDisplayState === QRDisplayState.AWAITING_PAYMENT
-              ? 'visible'
-              : 'hidden'
+          display={
+            qrDisplayState === QRDisplayState.AWAITING_PAYMENT ? 'flex' : 'none'
           }
         >
           <FaBitcoin fontSize={'120px'} />

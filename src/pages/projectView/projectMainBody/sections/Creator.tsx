@@ -81,7 +81,7 @@ export const Creator = () => {
             as={Link}
             to={getPath('projectEntryCreation', `${params.projectId}`)}
             icon={<EntryEditIcon />}
-            title="Write a blog"
+            title="Write an entry"
             description="Engage your community with articles about your project updates"
           />
           <CreationCardItem

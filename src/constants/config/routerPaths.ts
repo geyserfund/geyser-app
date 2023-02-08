@@ -1,7 +1,9 @@
 export enum PathName {
   projectDiscovery = 'discover',
   grants = 'grants',
-  entry = 'blog',
+  grantsRoundOne = 'roundone',
+  grantsRoundTwo = 'roundtwo',
+  entry = 'entry',
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
   _deprecatedPathNameForProject = 'project',
@@ -32,11 +34,12 @@ const pathsMap = {
   landingPage: () => '/',
   projectDiscovery: () => `/${PathName.projectDiscovery}`,
   grants: () => `/${PathName.grants}`,
+  grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
+  grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
   notFound: () => `/${PathName.notFound}`,
   notAuthorized: () => `/${PathName.notAuthorized}`,
   _deprecatedPathForProject: (projectName: string) =>
     `/${PathName._deprecatedPathNameForProject}/${projectName}`,
-
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectEntryCreation: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}`,

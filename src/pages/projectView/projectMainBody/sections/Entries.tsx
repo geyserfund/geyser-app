@@ -146,7 +146,7 @@ export const Entries = () => {
         flexDirection="column"
         padding="24px"
       >
-        <ProjectSectionBar name={'Blogs'} number={entriesLength} />
+        <ProjectSectionBar name={'Entries'} number={entriesLength} />
 
         {renderEntries()}
 

@@ -24,6 +24,7 @@ import {
   isActive,
   toInt,
   useMobileMode,
+  useNotification,
 } from '../../../../utils'
 import { ProjectContributionList } from '../components/ProjectContributionList'
 import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
@@ -43,9 +44,11 @@ export const ProjectFundingInitialInfoScreen = ({
   fundingTx,
 }: Props) => {
   const isMobile = useMobileMode()
-  const [tab, setTab] = useState('activity')
+  const { toast } = useNotification()
+
   const { mobileView, setMobileView } = useProjectContext()
 
+  const [tab, setTab] = useState('activity')
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]
   >([])
@@ -56,6 +59,14 @@ export const ProjectFundingInitialInfoScreen = ({
     query: QUERY_GET_FUNDING_TXS_LANDING,
     resultMap: aggregateTransactions,
     where: { projectId: toInt(project.id) },
+    options: {
+      onError() {
+        toast({
+          status: 'error',
+          title: 'Failed to fetch contributions',
+        })
+      },
+    },
   })
 
   const funders = useQueryWithPagination<Funder>({
@@ -65,6 +76,14 @@ export const ProjectFundingInitialInfoScreen = ({
     where: { projectId: toInt(project.id) },
     orderBy: {
       amountFunded: 'desc',
+    },
+    options: {
+      onError() {
+        toast({
+          status: 'error',
+          title: 'Failed to fetch contributors leaderboard',
+        })
+      },
     },
   })
 

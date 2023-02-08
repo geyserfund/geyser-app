@@ -25,7 +25,7 @@ export const ProjectMenu = ({ projectName }: { projectName: string }) => {
       />
       <MenuList>
         <MenuItem as={Link} to={getPath('projectDashboard', projectName)}>
-          Edit Project
+          Edit project
         </MenuItem>
       </MenuList>
     </Menu>

@@ -170,7 +170,7 @@ export const EntryCreateEdit = () => {
           await createEntry({ variables: { input } })
         } catch (error) {
           toast({
-            title: 'Blog creation failed',
+            title: 'Entry creation failed',
             description: 'Please try again later',
             status: 'error',
           })
@@ -193,7 +193,7 @@ export const EntryCreateEdit = () => {
         await updateEntry({ variables: { input } })
       } catch (error) {
         toast({
-          title: 'Blog update failed',
+          title: 'Entry update failed',
           description: 'Please try again later',
           status: 'error',
         })
@@ -377,7 +377,7 @@ export const EntryCreateEdit = () => {
                 border="none"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
-                placeholder="The Blog Title"
+                placeholder="The Entry Title"
                 color="brand.gray500"
                 fontSize={isMobile ? '35px' : '40px'}
                 fontWeight={700}
@@ -394,7 +394,7 @@ export const EntryCreateEdit = () => {
                 border="none"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
-                placeholder="The summary of this blog"
+                placeholder="The summary of this entry"
                 color="brand.gray500"
                 fontSize={isMobile ? '20px' : '26px'}
                 paddingX="15px"

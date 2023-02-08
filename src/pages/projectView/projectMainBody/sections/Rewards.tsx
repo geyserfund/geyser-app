@@ -1,11 +1,5 @@
 import { useMutation } from '@apollo/client'
-import {
-  GridItem,
-  SimpleGrid,
-  Text,
-  useDisclosure,
-  useMediaQuery,
-} from '@chakra-ui/react'
+import { GridItem, Text, useDisclosure, Wrap, WrapItem } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -35,8 +29,6 @@ type Props = {
 export const Rewards = ({ fundState, updateReward }: Props) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
-
-  const [isSmallerThan1265] = useMediaQuery('(max-width: 1265px)')
 
   const { project, setMobileView, updateProject, isProjectOwner } =
     useProjectContext()
@@ -130,12 +122,9 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
       return project.rewards.map((reward) => {
         if (reward) {
           return (
-            <GridItem
-              key={reward.id}
-              colSpan={isSmallerThan1265 ? 2 : 1}
-              maxWidth="350px"
-            >
+            <WrapItem key={reward.id}>
               <RewardCard
+                maxWidth="350px"
                 key={reward.id}
                 width="100%"
                 reward={reward}
@@ -163,7 +152,7 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
                   }
                 }}
               />
-            </GridItem>
+            </WrapItem>
           )
         }
       })
@@ -192,14 +181,9 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
       >
         <ProjectSectionBar name={'Rewards'} number={rewardsLength} />
 
-        <SimpleGrid
-          width="100%"
-          columns={isSmallerThan1265 ? 1 : 2}
-          spacingX={7}
-          spacingY={8}
-        >
+        <Wrap width="100%" spacing="20px" justify="center">
           {renderRewards()}
-        </SimpleGrid>
+        </Wrap>
       </CardLayout>
       {isRewardOpen && (
         <RewardAdditionModal
