@@ -14,6 +14,7 @@ import {
 import { useRef, useState } from 'react'
 
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules'
+import { Body2 } from '../../../../components/typography'
 import { ButtonComponent, TextInputBox } from '../../../../components/ui'
 import { MilestoneValidations } from '../../../../constants/validations'
 import {
@@ -287,6 +288,9 @@ export const MilestoneAdditionModal = ({
           <Text fontSize="18px" fontWeight={600}>
             Select Milestones
           </Text>
+          <Body2 color="brand.neutral900">
+            Milestones help you clarify your next steps, aims and objectives
+          </Body2>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody width="100%">

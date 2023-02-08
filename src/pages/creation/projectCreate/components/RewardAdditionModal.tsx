@@ -18,6 +18,7 @@ import { BiDollar } from 'react-icons/bi'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
 import { FileUpload } from '../../../../components/molecules'
+import { Body2 } from '../../../../components/typography'
 import {
   ButtonComponent,
   ImageWithReload,
@@ -254,8 +255,12 @@ export const RewardAdditionModal = ({
       <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
         <ModalHeader paddingX="20px">
           <Text fontSize="18px" fontWeight={600}>
-            Add a Reward
+            Reward
           </Text>
+          <Body2 color="brand.neutral900">
+            Adding rewards and items that can be purchased makes it more
+            worthwhile for contributors to fund your project
+          </Body2>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody width="100%">
