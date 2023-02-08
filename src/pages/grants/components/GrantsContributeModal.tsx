@@ -35,7 +35,7 @@ import {
   FundingResourceType,
 } from '../../../types/generated/graphql'
 import { toInt, useNotification } from '../../../utils'
-import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/ActivityPanel/ProjectFundingQRScreenQRCodeSection'
+import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/projectActivityPanel/components/ProjectFundingQRScreenQRCodeSection'
 
 const GRANTS_PROJECT_NAME = 'grants'
 const defaultModalHeader = 'Contribute'

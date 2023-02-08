@@ -5,5 +5,10 @@ export const ID = {
       contribution: 'project-activity-list-container',
       leaderboard: 'project-leaderboard-list-container',
     },
+    view: {
+      entries: 'project-main-entries-container',
+      rewards: 'project-main-rewards-container',
+      milestones: 'project-main-milestones-container',
+    },
   },
 }

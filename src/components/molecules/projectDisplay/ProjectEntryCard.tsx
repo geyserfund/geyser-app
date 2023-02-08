@@ -1,54 +1,39 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import {
-  Badge,
-  Flex,
-  Heading,
-  HStack,
-  Image,
-  Spacer,
-  Stack,
-  Text,
-  useColorMode,
-  useColorModeValue,
-} from '@chakra-ui/react'
+import { Box, HStack, Image, Spacer, Stack } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { BiPencil } from 'react-icons/bi'
 import { BsHeartFill } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
-import { colors } from '../../../styles'
+import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
+import { colors, fonts } from '../../../styles'
 import { Entry, EntryStatus } from '../../../types/generated/graphql'
+import { getShortAmountLabel, toInt } from '../../../utils'
+import { CardLayout } from '../../layouts'
+import { Body1, Caption, H2, MonoBody1 } from '../../typography'
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
+import { EntryStatusLabel } from '../../ui/EntryStatusLabel'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
-import { ProjectListItemImage } from './ProjectListItemImage'
 
 type Props = ICard & {
   entry: Entry
-  onClick?: () => void
   onEdit?: () => void
   onDelete?: () => void
 }
 
 export const ProjectEntryCard = ({
   entry,
-  onClick,
   onEdit,
   onDelete,
   ...rest
 }: Props) => {
   const navigate = useNavigate()
-  const { colorMode } = useColorMode()
 
   const isDraft = useMemo(() => {
     return entry.status === EntryStatus.Unpublished
   }, [entry.status])
-
-  const handleClick =
-    onClick ||
-    (() => {
-      navigate(getPath('entry', `${entry.id}`))
-    })
 
   const handleEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
@@ -64,33 +49,25 @@ export const ProjectEntryCard = ({
     }
   }
 
-  const hoverEffect = {
-    backgroundColor: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
+  const handleClick = () => {
+    navigate(getPath('entry', `${entry.id}`))
   }
 
   return (
-    <Stack
-      borderRadius="lg"
+    <CardLayout
+      hover
+      display="flex"
+      onClick={handleClick}
+      padding="12px"
       width={{
         base: '100%',
-        xl: '798px',
       }}
-      shadow="sm"
-      maxWidth={'798px'}
       direction={{ base: 'column', md: 'row' }}
-      backgroundColor={colorMode === 'light' ? 'white' : 'gray.900'}
-      _hover={isDraft ? undefined : hoverEffect}
-      transition={'background-color 0.3s ease-in-out'}
-      padding={4}
       cursor={isDraft ? 'auto' : 'pointer'}
-      overflow="hidden"
       alignItems={{ base: 'flex-start', md: 'center' }}
-      onClick={isDraft ? undefined : handleClick}
-      {...rest}
     >
-      <Flex
-        flex={1}
-        width={{
+      <Box
+        minWidth={{
           base: 'full',
           md: '142px',
         }}
@@ -110,111 +87,116 @@ export const ProjectEntryCard = ({
           alt={entry.title}
           fallback={<ProjectEntryCardThumbnailPlaceholder />}
         />
-      </Flex>
+      </Box>
 
       <Stack
         flex={1}
+        height="100%"
+        width={{
+          base: 'full',
+          md: 'calc(100% - 142px)',
+        }}
         flexDirection="column"
-        justifyContent="center"
+        justifyContent="space-between"
         alignItems="flex-start"
         p={1}
         pt={2}
       >
-        <HStack w="100%" justifyContent="space-between">
-          <Heading fontSize={'2xl'} fontFamily={'body'} noOfLines={[0, 1]}>
-            {entry.title}
-          </Heading>
+        <Stack
+          width="100%"
+          direction="row"
+          justifyContent="space-between"
+          alignItems="start"
+        >
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            justifyContent="space-between"
+            overflow="hidden"
+          >
+            <H2 width="100%" overflow="hidden" isTruncated>
+              {entry.title}
+            </H2>
+            <EntryStatusLabel entry={entry} />
+          </Stack>
 
           <HStack>
             {onEdit && (
               <IconButtonComponent
+                noBorder
                 aria-label="edit-entry"
                 size="sm"
-                icon={<BiPencil />}
+                borderWidth="0"
+                icon={<BiPencil fontSize="16px" />}
                 onClick={handleEdit}
               />
             )}
             {onDelete && (
               <IconButtonComponent
+                noBorder
                 aria-label="remove-entry"
                 size="sm"
                 icon={<CloseIcon />}
-                backgroundColor="red.100"
-                _hover={{ backgroundColor: 'red.300' }}
+                _hover={{ backgroundColor: 'red.100' }}
                 onClick={handleDelete}
               />
             )}
           </HStack>
-        </HStack>
+        </Stack>
 
-        <Text
+        <Body1
           marginTop="2"
-          color={
-            colorMode === 'light' ? 'brand.neutral600' : 'brand.neutral200'
-          }
+          color={'brand.neutral600'}
           fontSize="lg"
           as={'p'}
           noOfLines={[0, 2]}
         >
           {entry.description}
-        </Text>
+        </Body1>
 
         <Spacer />
 
         <Stack
-          align={'center'}
-          justify={'start'}
+          width="100%"
+          align="center"
+          justify="start"
           direction={'row'}
-          spacing={'22px'}
+          spacing={{ base: '10px', md: '22px' }}
           wrap={{
             base: 'wrap',
             sm: 'nowrap',
           }}
+          overflow="hidden"
         >
-          <HStack spacing={'12px'} align={'center'} flex={0}>
+          <HStack spacing={'10px'} align={'center'} flex={0}>
             <HStack spacing={1}>
-              <Text color="brand.primary" fontWeight={'bold'}>
+              <MonoBody1 color="brand.primary" fontWeight={'bold'}>
                 {entry.fundersCount}
-              </Text>
+              </MonoBody1>
               <BsHeartFill color={colors.primary} />
             </HStack>
 
-            <SatoshiAmount color="brand.primary" fontWeight="bold">
-              {entry.amountFunded}
+            <SatoshiAmount
+              fontFamily={fonts.mono}
+              color="brand.primary"
+              fontSize="16px"
+              fontWeight="bold"
+              scale={0.8}
+            >
+              {getShortAmountLabel(entry.amountFunded)}
             </SatoshiAmount>
           </HStack>
 
-          {entry.project ? (
-            <HStack
-              spacing={1.5}
-              alignItems="center"
-              justifyContent="flex-start"
-            >
-              <ProjectListItemImage
-                imageSrc={entry.project.thumbnailImage || ''}
-                project={entry.project}
-                flexShrink={0}
-              />
+          <AvatarElement borderRadius="50%" user={entry.creator} />
 
-              <Text color="brand.neutral600" textTransform={'uppercase'}>
-                {entry.project?.title}
-              </Text>
-            </HStack>
-          ) : null}
-
-          <Badge
-            flex={0}
-            textTransform="uppercase"
-            fontSize={'10px'}
-            fontWeight="regular"
-            padding={1}
-            borderRadius={0.5}
-            display="flex"
-          >
-            {entry.type}
-          </Badge>
+          {entry.publishedAt && (
+            <Caption>
+              {DateTime.fromMillis(toInt(entry.publishedAt)).toFormat(
+                'dd LLL yyyy',
+              )}
+            </Caption>
+          )}
         </Stack>
       </Stack>
-    </Stack>
+    </CardLayout>
   )
 }

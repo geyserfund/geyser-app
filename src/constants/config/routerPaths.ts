@@ -1,7 +1,7 @@
 export enum PathName {
   projectDiscovery = 'discover',
   grants = 'grants',
-  entry = 'entry',
+  entry = 'blog',
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
   _deprecatedPathNameForProject = 'project',
@@ -16,9 +16,6 @@ export enum PathName {
   dashboardDescription = 'description',
   dashboardContributors = 'contributors',
   dashboardFunds = 'funds',
-  dashboardEntries = 'entries',
-  dashboardRewards = 'rewards',
-  dashboardMilestones = 'milestones',
   dashboardStats = 'stats',
   dashboardSettings = 'settings',
   projectId = ':projectId',
@@ -62,12 +59,6 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
   dashboardFunding: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardFunds}`,
-  dashboardEntries: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardEntries}`,
-  dashboardRewards: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
-  dashboardMilestones: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardMilestones}`,
   dashboardStats: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStats}`,
   dashboardSettings: (projectID: string) =>
