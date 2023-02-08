@@ -33,14 +33,12 @@ import {
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../graphql/mutations'
 import {
+  CreateProjectRewardInput,
   ProjectReward,
   RewardCurrency,
+  UpdateProjectRewardInput,
 } from '../../../../types/generated/graphql'
 import { commaFormatted, toInt, useNotification } from '../../../../utils'
-import {
-  ProjectRewardCreationVariables,
-  ProjectRewardUpdateVariables,
-} from '../types'
 
 type Props = {
   isOpen: boolean
@@ -88,7 +86,7 @@ export const RewardAdditionModal = ({
 
   const [createReward, { loading: createRewardLoading }] = useMutation<
     CreateRewardMutationResponseData,
-    { input: ProjectRewardCreationVariables }
+    { input: CreateProjectRewardInput }
   >(MUTATION_CREATE_PROJECT_REWARD, {
     onCompleted(data) {
       onSubmit(data.createProjectReward)
@@ -105,7 +103,7 @@ export const RewardAdditionModal = ({
 
   const [updateReward, { loading: updateRewardLoading }] = useMutation<
     UpdateRewardMutationResponseData,
-    { input: ProjectRewardUpdateVariables }
+    { input: UpdateProjectRewardInput }
   >(MUTATION_UPDATE_PROJECT_REWARD, {
     onCompleted({ updateProjectReward }) {
       toast({
@@ -125,20 +123,19 @@ export const RewardAdditionModal = ({
     },
   })
 
-  const getRewardCreationInputVariables =
-    (): ProjectRewardCreationVariables => {
-      return {
-        projectId: toInt(projectId),
-        cost: rewards.current.cost,
-        costCurrency: rewards.current.costCurrency,
-        description: rewards.current.description,
-        image: rewards.current.image || undefined,
-        name: rewards.current.name,
-        stock: rewards.current.stock || undefined,
-      }
+  const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
+    return {
+      projectId: toInt(projectId),
+      cost: rewards.current.cost,
+      costCurrency: rewards.current.costCurrency,
+      description: rewards.current.description,
+      image: rewards.current.image || undefined,
+      name: rewards.current.name,
+      stock: rewards.current.stock || undefined,
     }
+  }
 
-  const getRewardUpdateInputVariables = (): ProjectRewardUpdateVariables => {
+  const getRewardUpdateInputVariables = (): UpdateProjectRewardInput => {
     return {
       projectRewardId: toInt((rewards.current as ProjectReward).id),
       cost: rewards.current.cost,
@@ -177,7 +174,7 @@ export const RewardAdditionModal = ({
     setFormCostDollarValue(dollarValue)
 
     // set cost with the dollar value converted to cents
-    setRewards({ ...rewards.current, ...{ cost: dollarValue * 100 } })
+    setRewards({ ...rewards.current, ...{ cost: toInt(dollarValue * 100) } })
   }
 
   const handleConfirmReward = () => {
