@@ -189,7 +189,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             description: 'Please use the invoice instead.',
             status: 'info',
           })
-        } else {
+        } else if (fundState !== fundingStages.completed) {
           toast({
             title: 'Oops! Something went wrong with WebLN.',
             description: 'Please use the invoice instead.',
