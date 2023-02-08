@@ -203,7 +203,7 @@ export const ProjectEntryEditor = ({
       modules: editorModules,
       readOnly: isReadOnly,
       theme: 'snow',
-      placeholder: 'The description of the entry .....',
+      placeholder: 'The description of the blog .....',
     })
 
     if (value) {

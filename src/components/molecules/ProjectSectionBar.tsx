@@ -1,4 +1,6 @@
-import { Badge, HStack, Text, VStack } from '@chakra-ui/react'
+import { Badge, HStack, VStack } from '@chakra-ui/react'
+
+import { H3 } from '../typography'
 
 interface IProjectSectionBar {
   name: string
@@ -17,12 +19,14 @@ export const ProjectSectionBar = ({
     borderBottom="2px solid"
     borderColor="brand.neutral300"
   >
-    <HStack width="100%" marginBottom="10px" justifyContent="space-between">
+    <HStack width="100%" marginBottom="3px" justifyContent="space-between">
       <HStack>
-        <Text fontSize="18px" color="brand.neutral900">
-          {name}
-        </Text>
-        {number && <Badge>{number}</Badge>}
+        <H3 color="brand.neutral800">{name}</H3>
+        {number && (
+          <Badge borderRadius="4px" paddingX="2" fontSize={'15px'}>
+            {number}
+          </Badge>
+        )}
       </HStack>
       {rightSection}
     </HStack>
