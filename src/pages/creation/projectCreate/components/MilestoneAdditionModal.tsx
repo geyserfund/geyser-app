@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import {
   HStack,
+  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -15,7 +16,11 @@ import { useRef, useState } from 'react'
 
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules'
 import { Body2 } from '../../../../components/typography'
-import { ButtonComponent, TextInputBox } from '../../../../components/ui'
+import {
+  ButtonComponent,
+  IconButtonComponent,
+  TextInputBox,
+} from '../../../../components/ui'
 import { MilestoneValidations } from '../../../../constants/validations'
 import {
   MUTATION_CREATE_PROJECT_MILESTONE,
@@ -315,14 +320,15 @@ export const MilestoneAdditionModal = ({
                   <Text marginTop="10px" marginBottom="5px">
                     {`Milestone ${index + 1}`}
                   </Text>
-                  <ButtonComponent
+                  <IconButtonComponent
+                    noBorder
+                    aria-label="remove-milestone-button"
                     size="xs"
                     padding="7px"
                     rounded="full"
                     onClick={() => handleRemoveMilestone(index)}
-                  >
-                    <CloseIcon fontSize="10px" />
-                  </ButtonComponent>
+                    icon={<CloseIcon fontSize="10px" />}
+                  />
                 </HStack>
                 <TextInputBox
                   placeholder={'Enter a Milestone Title'}
