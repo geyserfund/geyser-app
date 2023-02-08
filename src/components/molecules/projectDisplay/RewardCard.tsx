@@ -102,7 +102,6 @@ export const RewardCard = ({
         </HStack>
         <Box>
           <ImageWithReload
-            empty
             borderRadius="4px"
             src={reward.image || ''}
             width="335px"
