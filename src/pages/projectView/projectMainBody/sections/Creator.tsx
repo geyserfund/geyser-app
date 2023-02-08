@@ -65,7 +65,7 @@ export const Creator = () => {
             paddingX="0px"
           >
             <Text fontSize={{ base: '10px', md: '12px' }}>
-              Learn more about crowdFunding
+              Learn more about crowdfunding
             </Text>
           </ButtonComponent>
         </HStack>
