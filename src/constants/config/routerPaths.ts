@@ -3,7 +3,7 @@ export enum PathName {
   grants = 'grants',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
-  entry = 'blog',
+  entry = 'entry',
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
   _deprecatedPathNameForProject = 'project',
