@@ -57,6 +57,7 @@ module.exports = {
     'react/display-name': 0,
     'no-undef': 0,
     'new-cap': 0,
+    'no-alert': 0,
     'no-restricted-syntax': [
       'off',
       {
