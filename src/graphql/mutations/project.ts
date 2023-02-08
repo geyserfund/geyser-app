@@ -57,7 +57,7 @@ export const MUTATION_CREATE_PROJECT_REWARD = gql`
 `
 
 export const MUTATION_UPDATE_PROJECT_REWARD = gql`
-  mutation UpdateProjectReward($input: UpdateProjectRewardInput) {
+  mutation UpdateProjectReward($input: UpdateProjectRewardInput!) {
     updateProjectReward(input: $input) {
       id
       name
