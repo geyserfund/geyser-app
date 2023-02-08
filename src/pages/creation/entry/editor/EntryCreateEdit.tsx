@@ -1,5 +1,5 @@
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BsImage } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 import { useLocation, useNavigate, useParams } from 'react-router'
