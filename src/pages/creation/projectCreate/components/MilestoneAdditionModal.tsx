@@ -14,7 +14,12 @@ import {
 import { useRef, useState } from 'react'
 
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules'
-import { ButtonComponent, TextInputBox } from '../../../../components/ui'
+import { Body2 } from '../../../../components/typography'
+import {
+  ButtonComponent,
+  IconButtonComponent,
+  TextInputBox,
+} from '../../../../components/ui'
 import { MilestoneValidations } from '../../../../constants/validations'
 import {
   MUTATION_CREATE_PROJECT_MILESTONE,
@@ -287,6 +292,9 @@ export const MilestoneAdditionModal = ({
           <Text fontSize="18px" fontWeight={600}>
             Select Milestones
           </Text>
+          <Body2 color="brand.neutral900">
+            Milestones help you clarify your next steps, aims and objectives
+          </Body2>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody width="100%">
@@ -311,14 +319,15 @@ export const MilestoneAdditionModal = ({
                   <Text marginTop="10px" marginBottom="5px">
                     {`Milestone ${index + 1}`}
                   </Text>
-                  <ButtonComponent
+                  <IconButtonComponent
+                    noBorder
+                    aria-label="remove-milestone-button"
                     size="xs"
                     padding="7px"
                     rounded="full"
                     onClick={() => handleRemoveMilestone(index)}
-                  >
-                    <CloseIcon fontSize="10px" />
-                  </ButtonComponent>
+                    icon={<CloseIcon fontSize="10px" />}
+                  />
                 </HStack>
                 <TextInputBox
                   placeholder={'Enter a Milestone Title'}

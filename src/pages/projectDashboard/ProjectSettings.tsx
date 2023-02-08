@@ -1,11 +1,12 @@
 import { useMutation } from '@apollo/client'
 import { GridItem, Switch, Text, useMediaQuery, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Body2 } from '../../components/typography'
 import { ButtonComponent, TextInputBox } from '../../components/ui'
 import { useAuthContext, useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
+import { useBeforeClose } from '../../hooks'
 import { FormError, Project, ProjectStatus } from '../../types'
 import { isActive, toInt, useMobileMode, useNotification } from '../../utils'
 import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
@@ -26,14 +27,34 @@ export const ProjectSettings = () => {
   const { project, updateProject } = useProjectContext()
 
   const [form, setForm] = useState<ProjectSettingsForm>({
-    expiresAt: project.expiresAt || '',
+    expiresAt: project.expiresAt as string,
     email: '',
     status: project.status as ProjectStatus,
   })
+
   const [deactivate, setDeactivate] = useState(!isActive(project.status))
   const [formError, setFormError] = useState<FormError<ProjectSettingsForm>>({})
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
+
+  const { setIsFormDirty } = useBeforeClose()
+
+  useEffect(() => {
+    const isFormDirty = () => {
+      if (
+        ((Boolean(form.expiresAt) || Boolean(project.expiresAt)) &&
+          `${form.expiresAt}` !== `${project.expiresAt}`) ||
+        form.status !==
+          (deactivate ? ProjectStatus.Inactive : ProjectStatus.Active)
+      ) {
+        return true
+      }
+
+      return false
+    }
+
+    setIsFormDirty(isFormDirty())
+  }, [project, form, deactivate])
 
   const [updateProjectMutation, { loading: updateLoading }] = useMutation<{
     updateProject: Project

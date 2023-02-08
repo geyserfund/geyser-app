@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { ButtonComponent } from '../../components/ui'
 import { useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
+import { useBeforeClose } from '../../hooks'
 import { useProjectLinksState } from '../../hooks/graphqlState'
 import { FormError, Project } from '../../types'
 import { toInt, useMobileMode, useNotification } from '../../utils'
@@ -38,6 +39,22 @@ export const ProjectDescription = () => {
     image: '',
     thumbnailImage: '',
   })
+  const { setIsFormDirty } = useBeforeClose()
+
+  useEffect(() => {
+    if (
+      project.title !== form.title ||
+      project.shortDescription !== form.shortDescription ||
+      project.description !== form.description ||
+      project.image !== form.image ||
+      project.thumbnailImage !== form.thumbnailImage ||
+      links.some((link) => !project.links.includes(link))
+    ) {
+      setIsFormDirty(true)
+    } else {
+      setIsFormDirty(false)
+    }
+  }, [project, form, links])
 
   const [formError, setFormError] = useState<FormError<ProjectUpdateVariables>>(
     {},

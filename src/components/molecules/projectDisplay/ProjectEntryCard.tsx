@@ -12,7 +12,7 @@ import { colors, fonts } from '../../../styles'
 import { Entry, EntryStatus } from '../../../types/generated/graphql'
 import { getShortAmountLabel, toInt } from '../../../utils'
 import { CardLayout } from '../../layouts'
-import { Body1, Caption, H2, MonoBody1 } from '../../typography'
+import { Body1, Body2, H2, MonoBody1 } from '../../typography'
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
 import { EntryStatusLabel } from '../../ui/EntryStatusLabel'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
@@ -23,12 +23,7 @@ type Props = ICard & {
   onDelete?: () => void
 }
 
-export const ProjectEntryCard = ({
-  entry,
-  onEdit,
-  onDelete,
-  ...rest
-}: Props) => {
+export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
   const navigate = useNavigate()
 
   const isDraft = useMemo(() => {
@@ -161,10 +156,6 @@ export const ProjectEntryCard = ({
           justify="start"
           direction={'row'}
           spacing={{ base: '10px', md: '22px' }}
-          wrap={{
-            base: 'wrap',
-            sm: 'nowrap',
-          }}
           overflow="hidden"
         >
           <HStack spacing={'10px'} align={'center'} flex={0}>
@@ -186,14 +177,18 @@ export const ProjectEntryCard = ({
             </SatoshiAmount>
           </HStack>
 
-          <AvatarElement borderRadius="50%" user={entry.creator} />
+          <AvatarElement
+            borderRadius="50%"
+            user={entry.creator}
+            wrapperProps={{ overflow: 'hidden' }}
+          />
 
           {entry.publishedAt && (
-            <Caption>
+            <Body2 whiteSpace="nowrap">
               {DateTime.fromMillis(toInt(entry.publishedAt)).toFormat(
                 'dd LLL yyyy',
               )}
-            </Caption>
+            </Body2>
           )}
         </Stack>
       </Stack>

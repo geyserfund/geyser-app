@@ -101,7 +101,7 @@ export const EntryPreview = () => {
         isEdited = false
       } catch (error) {
         toast({
-          title: 'Blog update failed',
+          title: 'Entry update failed',
           description: 'Please try again later',
           status: 'error',
         })
@@ -153,7 +153,7 @@ export const EntryPreview = () => {
       await publishPost({ variables: { id: toInt(entry.id) } })
     } catch (error) {
       toast({
-        title: 'Blog publish failed',
+        title: 'Entry publish failed',
         description: 'Please try again later',
         status: 'error',
       })
@@ -170,7 +170,9 @@ export const EntryPreview = () => {
 
   const handleTwitterShareButtonTapped = () => {
     if (params.entryId) {
-      navigator.clipboard.writeText(getPath('entry', params.entryId))
+      navigator.clipboard.writeText(
+        `${window.location.origin}${getPath('entry', params.entryId)}`,
+      )
 
       setHasCopiedSharingLink(true)
     }
@@ -207,7 +209,7 @@ export const EntryPreview = () => {
           paddingBottom="80px"
         >
           <Text fontSize="33px" fontWeight={600} color="brand.gray500">
-            {isEntryPublished ? 'Share blog' : 'Publish blog'}
+            {isEntryPublished ? 'Share entry' : 'Publish entry'}
           </Text>
 
           {isEntryPublished ? (
@@ -220,7 +222,7 @@ export const EntryPreview = () => {
                 <BsCheckLg />
               </Box>
 
-              <Text>Your blog is live!</Text>
+              <Text>Your entry is live!</Text>
             </VStack>
           ) : null}
 
@@ -303,13 +305,13 @@ export const EntryPreview = () => {
               </ButtonComponent>
 
               <ButtonComponent primary w="full" onClick={handleGoToPost}>
-                Go to blog
+                Go to entry
               </ButtonComponent>
             </VStack>
           ) : isDraft(projectData?.project.status) ? (
             <>
               <Text>
-                You cannot publish an entry in an inactive project. Finish the
+                You cannot publish a entry in an inactive project. Finish the
                 project configuration or re-activate the project to publish this
                 entry.
               </Text>
