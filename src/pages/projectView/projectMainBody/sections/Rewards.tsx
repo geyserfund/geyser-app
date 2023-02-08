@@ -1,12 +1,5 @@
 import { useMutation } from '@apollo/client'
-import {
-  GridItem,
-  Text,
-  useDisclosure,
-  useMediaQuery,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react'
+import { GridItem, Text, useDisclosure, Wrap, WrapItem } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -36,8 +29,6 @@ type Props = {
 export const Rewards = ({ fundState, updateReward }: Props) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
-
-  const [isSmallerThan1265] = useMediaQuery('(max-width: 1265px)')
 
   const { project, setMobileView, updateProject, isProjectOwner } =
     useProjectContext()

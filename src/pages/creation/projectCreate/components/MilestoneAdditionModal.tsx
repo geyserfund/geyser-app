@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import {
   HStack,
-  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
