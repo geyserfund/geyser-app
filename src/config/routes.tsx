@@ -19,14 +19,11 @@ import { NotFoundPage } from '../pages/notFound'
 import { ProfilePage } from '../pages/profile/ProfilePage'
 import { ProjectContributors } from '../pages/projectDashboard'
 import {
-  MilestoneSettings,
   ProjectDashboard,
-  ProjectDashboardEntries,
   ProjectDescription,
   ProjectFundingSettings,
   ProjectSettings,
   ProjectStats,
-  RewardSettings,
 } from '../pages/projectDashboard'
 import { ProjectDiscoveryPage } from '../pages/projectDiscovery'
 import { ProjectView } from '../pages/projectView'
@@ -121,18 +118,6 @@ const platformRoutes = [
       {
         path: getPath('dashboardFunding', PathName.projectId),
         element: ProjectFundingSettings,
-      },
-      {
-        path: getPath('dashboardEntries', PathName.projectId),
-        element: ProjectDashboardEntries,
-      },
-      {
-        path: getPath('dashboardRewards', PathName.projectId),
-        element: RewardSettings,
-      },
-      {
-        path: getPath('dashboardMilestones', PathName.projectId),
-        element: MilestoneSettings,
       },
       {
         path: getPath('dashboardStats', PathName.projectId),

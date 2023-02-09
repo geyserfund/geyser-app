@@ -101,7 +101,7 @@ export const EntryPreview = () => {
         isEdited = false
       } catch (error) {
         toast({
-          title: 'Post update failed',
+          title: 'Entry update failed',
           description: 'Please try again later',
           status: 'error',
         })
@@ -153,7 +153,7 @@ export const EntryPreview = () => {
       await publishPost({ variables: { id: toInt(entry.id) } })
     } catch (error) {
       toast({
-        title: 'Post publish failed',
+        title: 'Entry publish failed',
         description: 'Please try again later',
         status: 'error',
       })
@@ -170,7 +170,9 @@ export const EntryPreview = () => {
 
   const handleTwitterShareButtonTapped = () => {
     if (params.entryId) {
-      navigator.clipboard.writeText(getPath('entry', params.entryId))
+      navigator.clipboard.writeText(
+        `${window.location.origin}${getPath('entry', params.entryId)}`,
+      )
 
       setHasCopiedSharingLink(true)
     }
@@ -303,13 +305,13 @@ export const EntryPreview = () => {
               </ButtonComponent>
 
               <ButtonComponent primary w="full" onClick={handleGoToPost}>
-                Go to Entry
+                Go to entry
               </ButtonComponent>
             </VStack>
           ) : isDraft(projectData?.project.status) ? (
             <>
               <Text>
-                You cannot publish an entry in an inactive project. Finish the
+                You cannot publish a entry in an inactive project. Finish the
                 project configuration or re-activate the project to publish this
                 entry.
               </Text>

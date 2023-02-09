@@ -191,7 +191,7 @@ export const NodeAdditionModal = ({
             </Text>
             <DescriptionLinkWithIconComponent
               title="Keep in mind that you are responsible for managing the liquidity
-                  of your node. Find out more."
+                  of your node."
               icon={<BsExclamation fontSize="50px" color="brand.neutral900" />}
             />
           </VStack>

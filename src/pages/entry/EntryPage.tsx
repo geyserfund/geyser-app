@@ -23,7 +23,7 @@ import {
 import { toInt, useMobileMode } from '../../utils'
 import { compactMap } from '../../utils/formatData/compactMap'
 import { NotFoundPage } from '../notFound'
-import { ProjectActivityPanel } from '../projectView/ActivityPanel/ProjectActivityPanel'
+import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
 import { EntryContainer } from './EntryContainer'
 
 export const EntryPage = () => {

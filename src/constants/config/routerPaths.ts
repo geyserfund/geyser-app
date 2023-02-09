@@ -1,6 +1,8 @@
 export enum PathName {
   projectDiscovery = 'discover',
   grants = 'grants',
+  grantsRoundOne = 'roundone',
+  grantsRoundTwo = 'roundtwo',
   entry = 'entry',
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
@@ -16,9 +18,6 @@ export enum PathName {
   dashboardDescription = 'description',
   dashboardContributors = 'contributors',
   dashboardFunds = 'funds',
-  dashboardEntries = 'entries',
-  dashboardRewards = 'rewards',
-  dashboardMilestones = 'milestones',
   dashboardStats = 'stats',
   dashboardSettings = 'settings',
   projectId = ':projectId',
@@ -35,11 +34,12 @@ const pathsMap = {
   landingPage: () => '/',
   projectDiscovery: () => `/${PathName.projectDiscovery}`,
   grants: () => `/${PathName.grants}`,
+  grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
+  grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
   notFound: () => `/${PathName.notFound}`,
   notAuthorized: () => `/${PathName.notAuthorized}`,
   _deprecatedPathForProject: (projectName: string) =>
     `/${PathName._deprecatedPathNameForProject}/${projectName}`,
-
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectEntryCreation: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}`,
@@ -62,12 +62,6 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
   dashboardFunding: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardFunds}`,
-  dashboardEntries: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardEntries}`,
-  dashboardRewards: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
-  dashboardMilestones: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardMilestones}`,
   dashboardStats: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStats}`,
   dashboardSettings: (projectID: string) =>

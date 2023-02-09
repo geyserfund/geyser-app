@@ -24,6 +24,7 @@ import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
 import { User } from '../../types/generated/graphql'
 import { hasTwitterAccount, useMobileMode, useNotification } from '../../utils'
+import { Caption } from '../typography'
 import { ButtonComponent } from '../ui'
 import Loader from '../ui/Loader'
 import { TwitterConnect } from '.'
@@ -102,6 +103,11 @@ const ConnectAccounts = ({
           />
         )}
       </Stack>
+      <Caption paddingTop="5px">
+        {
+          "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again."
+        }
+      </Caption>
     </VStack>
   )
 }

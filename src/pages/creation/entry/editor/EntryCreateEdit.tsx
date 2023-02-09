@@ -76,14 +76,14 @@ export const EntryCreateEdit = () => {
 
   const debouncedUpdateEntry = useDebounce(form.current, 1000)
 
-  const [createPost, { data: createData, loading: createPostLoading }] =
+  const [createEntry, { data: createData, loading: createEntryLoading }] =
     useMutation(MUTATION_CREATE_ENTRY)
 
-  const [updatePost, { loading: updatePostLoading }] = useMutation(
+  const [updateEntry, { loading: updateEntryLoading }] = useMutation(
     MUTATION_UPDATE_ENTRY,
   )
 
-  const [getPost, { loading: loadingPosts, data: entryData }] = useLazyQuery(
+  const [getEntry, { loading: loadingPosts, data: entryData }] = useLazyQuery(
     QUERY_GET_ENTRY,
     {
       onError() {
@@ -124,7 +124,7 @@ export const EntryCreateEdit = () => {
   useEffect(() => {
     if (params && params.entryId) {
       try {
-        getPost({ variables: { id: toInt(params.entryId) } })
+        getEntry({ variables: { id: toInt(params.entryId) } })
       } catch {
         navigate(getPath('notFound'))
       }
@@ -167,10 +167,10 @@ export const EntryCreateEdit = () => {
           image,
         }
         try {
-          await createPost({ variables: { input } })
+          await createEntry({ variables: { input } })
         } catch (error) {
           toast({
-            title: 'Post creation failed',
+            title: 'Entry creation failed',
             description: 'Please try again later',
             status: 'error',
           })
@@ -190,10 +190,10 @@ export const EntryCreateEdit = () => {
         image,
       }
       try {
-        await updatePost({ variables: { input } })
+        await updateEntry({ variables: { input } })
       } catch (error) {
         toast({
-          title: 'Post update failed',
+          title: 'Entry update failed',
           description: 'Please try again later',
           status: 'error',
         })
@@ -237,7 +237,13 @@ export const EntryCreateEdit = () => {
 
   const onPreview = () => {
     if (form.current && form.current.id) {
-      navigate(`/project/${params.projectId}/entry/${form.current.id}/preview`)
+      navigate(
+        getPath(
+          'projectEntryPreview',
+          `${params.projectId}`,
+          `${form.current.id}`,
+        ),
+      )
     } else {
       toast({
         title: 'Cannot preview',
@@ -301,9 +307,9 @@ export const EntryCreateEdit = () => {
   return (
     <>
       <CreateNav
-        isSaving={createPostLoading || updatePostLoading}
+        isSaving={createEntryLoading || updateEntryLoading}
         saveText={
-          createPostLoading || updatePostLoading
+          createEntryLoading || updateEntryLoading
             ? 'Saving'
             : isEdit
             ? 'Saved'
@@ -370,6 +376,7 @@ export const EntryCreateEdit = () => {
                 id={'entry-title-input'}
                 border="none"
                 _focus={{ border: 'none' }}
+                _focusVisible={{}}
                 placeholder="The Entry Title"
                 color="brand.gray500"
                 fontSize={isMobile ? '35px' : '40px'}
@@ -386,6 +393,7 @@ export const EntryCreateEdit = () => {
                 id={'entry-description-input'}
                 border="none"
                 _focus={{ border: 'none' }}
+                _focusVisible={{}}
                 placeholder="The summary of this entry"
                 color="brand.gray500"
                 fontSize={isMobile ? '20px' : '26px'}

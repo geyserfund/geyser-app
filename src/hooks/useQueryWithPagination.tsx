@@ -1,4 +1,4 @@
-import { DocumentNode, useQuery } from '@apollo/client'
+import { DocumentNode, OperationVariables, useQuery } from '@apollo/client'
 import { isDocumentNode } from '@apollo/client/utilities'
 
 import { PaginationHookReturn, QueryResponseData } from './types'
@@ -11,6 +11,7 @@ export type useQueryWithPaginationProps = {
   where?: any
   orderBy?: any
   resultMap?: (_: any[]) => any[]
+  options?: OperationVariables
 }
 
 export const useQueryWithPagination = <Type,>({
@@ -20,6 +21,7 @@ export const useQueryWithPagination = <Type,>({
   queryName,
   resultMap,
   orderBy,
+  options,
 }: useQueryWithPaginationProps): PaginationHookReturn<Type> => {
   if (!isDocumentNode(query)) {
     throw Error('Invalid query')
@@ -39,9 +41,13 @@ export const useQueryWithPagination = <Type,>({
       },
       fetch,
     },
+    ...options,
     onCompleted(data) {
       const resultItems = getNestedValue(data, queryName)
       handleDataUpdate(resultItems)
+      if (options && options.onCompleted) {
+        options.onCompleted(data)
+      }
     },
   })
 

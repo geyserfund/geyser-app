@@ -12,7 +12,11 @@
     "prettier-format": "prettier --config .prettierrc 'src/**/*.{ts, tsx, js, jsx, css}' --write",
     "format": "prettier --config .prettierrc 'src/**/*.{ts, js, tsx, jsx, css}' --write",
     "lint": "eslint src/**/*.{ts,tsx}",
-    "lint:fix": "eslint src/**/*.{ts,tsx} --fix"
+    "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
+    "graph:format": "prettier --write \"src/types/generated/graphql.ts\"",
+    "graph:fetch": "run(){ rover graph fetch geyser-graph@$1 > ./schema.graphql; }; run",
+    "graph:generate": "run(){ yarn graph:fetch $1 && graphql-codegen --config codegen.yaml && rm schema.graphql && yarn graph:format; }; run",
+    "graph:generate:staging": "yarn graph:generate staging"
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
