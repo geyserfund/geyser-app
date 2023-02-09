@@ -114,7 +114,7 @@ export const ProjectCreateForm = ({
     if (
       !isEdit &&
       form?.name &&
-      form.name.length > MIN_LENGTH_TO_QUERY_PROJECT
+      form.name.length >= MIN_LENGTH_TO_QUERY_PROJECT
     ) {
       getProject()
     }
