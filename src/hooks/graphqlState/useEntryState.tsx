@@ -78,8 +78,7 @@ export const useEntryState = (
     onCompleted(data) {
       setSaving(false)
       if (data.createEntry) {
-        setBaseEntry(data.createEntry)
-        setEntry(data.createEntry)
+        sync(data.createEntry)
       }
     },
   })
@@ -114,8 +113,7 @@ export const useEntryState = (
     ...options,
     onCompleted(data) {
       if (data.entry) {
-        setEntry(data.entry)
-        setBaseEntry(data.entry)
+        sync(data.entry)
       }
 
       if (options?.onCompleted) {
@@ -135,6 +133,11 @@ export const useEntryState = (
     setHasDiff(isDiff)
     setIsFormDirty(isDiff)
   }, [entry, baseEntry])
+
+  const sync = (value: Entry) => {
+    setBaseEntry(value)
+    setEntry(value)
+  }
 
   const updateEntry = (value: Partial<Entry>) => {
     setEntry({ ...entry, ...value })
