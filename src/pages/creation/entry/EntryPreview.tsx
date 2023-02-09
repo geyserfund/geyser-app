@@ -8,7 +8,7 @@ import { ButtonComponent, TextInputBox } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
 import { ProjectEntryValidations } from '../../../constants/validations'
-import { useAuthContext } from '../../../context'
+import { useNavContext } from '../../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import {
   MUTATION_PUBLISH_ENTRY,
@@ -29,7 +29,7 @@ export const EntryPreview = () => {
 
   const { toast } = useNotification()
   const navigate = useNavigate()
-  const { setNav } = useAuthContext()
+  const { setNavData } = useNavContext()
 
   const [isEntryPublished, setIsEntryPublished] = useState(false)
   const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false)
@@ -58,7 +58,7 @@ export const EntryPreview = () => {
     {
       variables: { where: { name: params.projectId } },
       onCompleted(data) {
-        setNav({
+        setNavData({
           projectName: data.project.name,
           projectTitle: data.project.title,
           projectPath: getPath('project', data.project.name),

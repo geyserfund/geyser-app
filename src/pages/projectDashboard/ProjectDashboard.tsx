@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 
 import Loader from '../../components/ui/Loader'
 import { getPath, PathName } from '../../constants'
-import { ProjectProvider, useAuthContext } from '../../context'
+import { ProjectProvider, useAuthContext, useNavContext } from '../../context'
 import { useProjectState } from '../../hooks/graphqlState'
 import { noScrollBar } from '../../styles/common'
 import { Owner } from '../../types/generated/graphql'
@@ -25,7 +25,8 @@ export const ProjectDashboard = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { user, setNav } = useAuthContext()
+  const { user } = useAuthContext()
+  const { setNavData } = useNavContext()
 
   const [activeTab, setActiveTab] = useState<DashboardTabs>()
 
@@ -66,7 +67,7 @@ export const ProjectDashboard = () => {
           navigate(getPath('notAuthorized'))
         }
 
-        setNav({
+        setNavData({
           projectName: project.name,
           projectTitle: project.title,
           projectPath: `${getPath('project', project.name)}`,

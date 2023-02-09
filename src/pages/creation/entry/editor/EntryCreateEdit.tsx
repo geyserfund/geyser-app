@@ -9,7 +9,7 @@ import { ImageWithReload } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { getPath } from '../../../../constants'
 import { ProjectEntryValidations } from '../../../../constants/validations'
-import { useAuthContext } from '../../../../context'
+import { useAuthContext, useNavContext } from '../../../../context'
 import { useDebounce } from '../../../../hooks'
 import { useEntryState } from '../../../../hooks/graphqlState'
 import { colors } from '../../../../styles'
@@ -50,7 +50,8 @@ export const EntryCreateEdit = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams<{ entryId: string; projectId: string }>()
-  const { setNav, user } = useAuthContext()
+  const { user } = useAuthContext()
+  const { setNavData } = useNavContext()
 
   const classes = useStyles()
 
@@ -74,7 +75,7 @@ export const EntryCreateEdit = () => {
           navigate(getPath('notAuthorized'))
         }
 
-        setNav({
+        setNavData({
           projectName: project.name,
           projectTitle: project.title,
           projectPath: getPath('project', project.name),
@@ -230,6 +231,7 @@ export const EntryCreateEdit = () => {
                       overflow="hidden"
                     >
                       <ImageWithReload
+                        grey
                         width="100%"
                         objectFit="cover"
                         src={entry.image}
