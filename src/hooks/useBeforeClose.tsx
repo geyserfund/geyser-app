@@ -7,7 +7,7 @@ export const useBeforeClose = () => {
   const handleEvent = (event: BeforeUnloadEvent) => {
     if (isFormDirty.current) {
       event.preventDefault()
-      event.returnValue = 'are you there'
+      event.returnValue = 'true'
       return event
     }
 

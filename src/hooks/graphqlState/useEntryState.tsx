@@ -18,6 +18,7 @@ import {
   toInt,
   useNotification,
 } from '../../utils'
+import { useBeforeClose } from '../useBeforeClose'
 import { useListenerState } from '../useListenerState'
 
 type TEntryVariables = {
@@ -51,6 +52,7 @@ export const useEntryState = (
   options?: QueryHookOptions<TEntryData, TEntryVariables>,
 ) => {
   const { toast } = useNotification()
+  const { setIsFormDirty } = useBeforeClose()
 
   const [entry, setEntry] = useState<Entry>({} as Entry)
   const [baseEntry, setBaseEntry] = useState<Entry>({} as Entry)
@@ -72,7 +74,8 @@ export const useEntryState = (
     onCompleted(data) {
       setSaving(false)
       if (data.createEntry) {
-        setBaseEntry({ ...baseEntry, ...data.createEntry })
+        setBaseEntry(data.createEntry)
+        setEntry(data.createEntry)
       }
     },
   })
@@ -122,6 +125,11 @@ export const useEntryState = (
       getEntryQuery()
     }
   }, [entryId])
+
+  useEffect(() => {
+    const isDiff = checkDiff(entry, baseEntry)
+    setIsFormDirty(isDiff)
+  }, [entry, baseEntry])
 
   const updateEntry = (value: Partial<Entry>) => {
     setEntry({ ...entry, ...value })

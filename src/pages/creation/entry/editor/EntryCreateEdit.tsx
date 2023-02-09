@@ -13,7 +13,11 @@ import { useAuthContext, useNavContext } from '../../../../context'
 import { useDebounce } from '../../../../hooks'
 import { useEntryState } from '../../../../hooks/graphqlState'
 import { colors } from '../../../../styles'
-import { Owner, Project } from '../../../../types/generated/graphql'
+import {
+  EntryStatus,
+  Owner,
+  Project,
+} from '../../../../types/generated/graphql'
 import { toInt, useMobileMode, useNotification } from '../../../../utils'
 import { CreateNav } from './CreateNav'
 import { ProjectEntryEditor } from './ProjectEntryEditor'
@@ -94,7 +98,7 @@ export const EntryCreateEdit = () => {
   const debouncedUpdateEntry = useDebounce(entry, 1000)
 
   useEffect(() => {
-    if (debouncedUpdateEntry) {
+    if (debouncedUpdateEntry && entry.status !== EntryStatus.Unpublished) {
       saveEntry()
     }
   }, [debouncedUpdateEntry])
@@ -150,16 +154,6 @@ export const EntryCreateEdit = () => {
   const onImageUpload = (url: string) => updateEntry({ image: url })
 
   const isEdit = Boolean(entry.id)
-
-  const handleEvent = (event: BeforeUnloadEvent) => {
-    event.preventDefault()
-    event.returnValue = 'are you there'
-    return event
-  }
-
-  useEffect(() => {
-    addEventListener('beforeunload', handleEvent, { once: true })
-  }, [])
 
   const handleKeyDown = (event: any) => {
     if (event) {

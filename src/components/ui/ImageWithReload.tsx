@@ -9,6 +9,7 @@ interface IImageWithReload extends ImageProps {
   defaultImage?: string
   grey?: boolean
   empty?: boolean
+  showDefault?: boolean
 }
 
 const MAX_RETRIES = 10

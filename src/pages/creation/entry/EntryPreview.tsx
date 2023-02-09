@@ -1,10 +1,15 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
-import { Box, Image, Input, Text, VStack } from '@chakra-ui/react'
+import { Box, Input, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsCheckLg } from 'react-icons/bs'
 import { useNavigate, useParams } from 'react-router'
 
-import { ButtonComponent, TextInputBox } from '../../../components/ui'
+import { CardLayout } from '../../../components/layouts'
+import {
+  ButtonComponent,
+  ImageWithReload,
+  TextInputBox,
+} from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
 import { ProjectEntryValidations } from '../../../constants/validations'
@@ -51,7 +56,11 @@ export const EntryPreview = () => {
     MUTATION_UPDATE_ENTRY,
   )
 
-  const [publishPost] = useMutation(MUTATION_PUBLISH_ENTRY)
+  const [publishPost] = useMutation(MUTATION_PUBLISH_ENTRY, {
+    onCompleted() {
+      setIsEntryPublished(true)
+    },
+  })
 
   const { loading, data: projectData } = useQuery<{ project: Project }>(
     QUERY_PROJECT_BY_NAME_OR_ID,
@@ -158,8 +167,6 @@ export const EntryPreview = () => {
         status: 'error',
       })
     }
-
-    setIsEntryPublished(true)
   }
 
   const handleGoToPost = () => {
@@ -190,7 +197,7 @@ export const EntryPreview = () => {
         onSave={onSave}
         onBack={onBack}
       />
-      <VStack
+      <CardLayout
         background={'brand.bgGrey4'}
         position="relative"
         paddingTop={'70px'}
@@ -236,51 +243,51 @@ export const EntryPreview = () => {
             border="1px solid"
             borderColor="brand.neutral200"
             borderRadius="4px"
-            padding="3px"
           >
-            {entry.image && (
-              <Box height="220px" width="350px" overflow="hidden">
-                <Image
-                  src={entry.image}
-                  height="350px"
-                  width="350px"
-                  objectFit="cover"
-                />
-              </Box>
-            )}
+            <Box height="220px" width="350px" overflow="hidden">
+              <ImageWithReload
+                src={entry.image}
+                height="220px"
+                width="350px"
+                objectFit="cover"
+              />
+            </Box>
+            <VStack width="100%" padding="5px">
+              <Text fontSize="11px" color="brand.gray500">
+                {`geyser.fund/${projectData?.project?.name}`}
+              </Text>
 
-            <Text fontSize="11px" color="brand.gray500">
-              {`geyser.fund/${projectData?.project?.name}`}
-            </Text>
-
-            <Input
-              border="none"
-              _focus={{ border: 'none' }}
-              placeholder="Title"
-              color="brand.gray500"
-              fontSize="28px"
-              fontWeight={700}
-              marginTop="20px"
-              paddingX="0"
-              name="title"
-              value={entry.title}
-              onChange={handleInput}
-              disabled={isEntryPublished}
-            />
-            <Input
-              border="none"
-              _focus={{ border: 'none' }}
-              placeholder="Title"
-              color="brand.gray500"
-              fontSize="16px"
-              fontWeight={700}
-              marginTop="0px"
-              paddingX="0"
-              name="description"
-              value={entry.description}
-              onChange={handleInput}
-              disabled={isEntryPublished}
-            />
+              <Input
+                border="none"
+                _focus={{ border: 'none' }}
+                _focusVisible={{}}
+                placeholder="Title"
+                color="brand.gray500"
+                fontSize="28px"
+                fontWeight={700}
+                marginTop="20px"
+                paddingX="0"
+                name="title"
+                value={entry.title}
+                onChange={handleInput}
+                disabled={isEntryPublished}
+              />
+              <Input
+                border="none"
+                _focus={{ border: 'none' }}
+                _focusVisible={{}}
+                placeholder="Title"
+                color="brand.gray500"
+                fontSize="16px"
+                fontWeight={700}
+                marginTop="0px"
+                paddingX="0"
+                name="description"
+                value={entry.description}
+                onChange={handleInput}
+                disabled={isEntryPublished}
+              />
+            </VStack>
           </VStack>
           {!isEntryPublished && (
             <VStack alignItems="flex-start" width="100%">
@@ -333,7 +340,7 @@ export const EntryPreview = () => {
             </ButtonComponent>
           )}
         </VStack>
-      </VStack>
+      </CardLayout>
     </>
   )
 }
