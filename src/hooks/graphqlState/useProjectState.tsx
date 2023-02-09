@@ -1,5 +1,5 @@
 import { QueryHookOptions, useQuery } from '@apollo/client'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
 import { Project } from '../../types'
@@ -22,7 +22,7 @@ export const useProjectState = (
   options?: QueryHookOptions<TProjectData, TProjectVariables>,
   type: 'name' | 'id' = 'name',
 ) => {
-  const [project, setProject] = useListenerState<Project>({} as Project)
+  const [project, setProject] = useState<Project>({} as Project)
 
   const { loading } = useQuery<TProjectData, TProjectVariables>(
     QUERY_PROJECT_BY_NAME_OR_ID,
@@ -41,9 +41,9 @@ export const useProjectState = (
     },
   )
 
-  const updateProject = useCallback((value: Project) => {
-    setProject({ ...project.current, ...value })
-  }, [])
+  const updateProject = (value: Project) => {
+    setProject({ ...project, ...value })
+  }
 
-  return { loading, project: project.current, updateProject }
+  return { loading, project, updateProject }
 }

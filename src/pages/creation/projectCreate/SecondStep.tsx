@@ -23,11 +23,6 @@ import type {
 } from '../../../types/generated/graphql'
 import { RewardCurrency } from '../../../types/generated/graphql'
 import { toInt, useNotification } from '../../../utils'
-import {
-  defaultMilestone,
-  MilestoneAdditionModal,
-  RewardAdditionModal,
-} from './components'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectLinks } from './components/ProjectLinks'
 
@@ -40,18 +35,6 @@ export const MilestoneAndRewards = () => {
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
   const [rewards, setRewards] = useState<ProjectReward[]>([])
   const [selectedReward, setSelectedReward] = useState<ProjectReward>()
-
-  const {
-    isOpen: isMilestoneOpen,
-    onClose: onMilestoneClose,
-    onOpen: openMilestone,
-  } = useDisclosure()
-
-  const {
-    isOpen: isRewardOpen,
-    onClose: onRewardClose,
-    onOpen: openReward,
-  } = useDisclosure()
 
   const {
     isOpen: isRewardDeleteOpen,
@@ -91,28 +74,6 @@ export const MilestoneAndRewards = () => {
   const { links, setLinks, handleLinks, linkError } = useProjectLinksState({
     project: data?.project,
   })
-
-  const handleMilestoneSubmit = (milestones: ProjectMilestone[]) => {
-    setMilestones(milestones)
-    onMilestoneClose()
-  }
-
-  const handleRewardUpdate = (addReward: ProjectReward) => {
-    const findReward = rewards.find((reward) => reward.id === addReward.id)
-
-    if (findReward) {
-      const newRewards = rewards.map((reward) => {
-        if (reward.id === addReward.id) {
-          return addReward
-        }
-
-        return reward
-      })
-      setRewards(newRewards)
-    } else {
-      setRewards([...rewards, addReward])
-    }
-  }
 
   const handleNext = async () => {
     if (linkError.includes(true)) {
@@ -187,61 +148,7 @@ export const MilestoneAndRewards = () => {
       maxWidth="370px"
       spacing="10px"
       width="100%"
-    >
-      {milestones.length > 0 && (
-        <>
-          <HStack justifyContent="space-between" width="100%">
-            <Text fontSize="18px" fontWeight={500}>
-              Milestones
-            </Text>
-            <IconButtonComponent aria-label="edit" onClick={openMilestone}>
-              <BiPencil />
-            </IconButtonComponent>
-          </HStack>
-
-          {milestones.map((milestone, index) => (
-            <VStack
-              key={index}
-              width="100%"
-              border="1px solid"
-              borderColor={colors.gray300}
-              borderRadius="4px"
-              alignItems="flex-start"
-              padding="10px"
-            >
-              <Text>{milestone.name}</Text>
-              <SatoshiAmount>{milestone.amount}</SatoshiAmount>
-            </VStack>
-          ))}
-        </>
-      )}
-
-      {rewards.length > 0 ? (
-        <>
-          <HStack justifyContent="space-between" width="100%">
-            <Text fontSize="18px" fontWeight={500}>
-              Rewards
-            </Text>
-          </HStack>
-
-          <VStack width="100%">
-            {rewards.map((reward, index) => (
-              <RewardCard
-                key="index"
-                width="100%"
-                reward={reward}
-                isSatoshi={isSatoshiRewards}
-                handleEdit={() => {
-                  setSelectedReward(reward)
-                  openReward()
-                }}
-                handleRemove={() => triggerRewardRemoval(reward.id)}
-              />
-            ))}
-          </VStack>
-        </>
-      ) : null}
-    </VStack>
+    ></VStack>
   )
 
   return (
@@ -249,7 +156,7 @@ export const MilestoneAndRewards = () => {
       <ProjectCreateLayout
         handleBack={handleBack}
         sideView={sideView}
-        title="Milestones & Rewards"
+        title="Project details"
         subtitle="Step 2 of 3"
         percentage={67}
       >
@@ -259,64 +166,13 @@ export const MilestoneAndRewards = () => {
             setLinks={setLinks}
             linkError={linkError}
           />
-          <VStack width="100%" alignItems="flex-start">
-            <Text>Project Milestones (optional)</Text>
-            <ButtonComponent w="full" onClick={openMilestone}>
-              Add a Milestone
-            </ButtonComponent>
-            <Text fontSize="12px">
-              Milestones help you and your community keep track of your progress
-              and set your expectations. You can edit Milestones later.
-            </Text>
-          </VStack>
-          <VStack width="100%" alignItems="flex-start">
-            <Text>Rewards (optional)</Text>
-            <ButtonComponent
-              w="full"
-              onClick={() => {
-                setSelectedReward(undefined)
-                openReward()
-              }}
-            >
-              Add a Reward
-            </ButtonComponent>
-            <Text fontSize="12px">
-              Rewards are a powerful way of exchanging value with your
-              community.{' '}
-              <Link isExternal href={GeyserProhibitedItemsUrl}>
-                Check here
-              </Link>{' '}
-              our list of prohibited items. You can edit or add Rewards later.
-            </Text>
-          </VStack>
+
           <ButtonComponent primary w="full" onClick={handleNext}>
             Continue
           </ButtonComponent>
         </VStack>
       </ProjectCreateLayout>
 
-      {isMilestoneOpen && (
-        <MilestoneAdditionModal
-          isOpen={isMilestoneOpen}
-          onClose={onMilestoneClose}
-          availableMilestones={
-            milestones.length > 0 ? milestones : [defaultMilestone]
-          }
-          onSubmit={handleMilestoneSubmit}
-          projectId={data?.project?.id}
-        />
-      )}
-
-      {isRewardOpen && (
-        <RewardAdditionModal
-          isOpen={isRewardOpen}
-          onClose={onRewardClose}
-          reward={selectedReward}
-          onSubmit={handleRewardUpdate}
-          isSatoshi={isSatoshiRewards}
-          projectId={data?.project?.id}
-        />
-      )}
       <DeleteConfirmModal
         isOpen={isRewardDeleteOpen}
         onClose={onRewardDeleteClose}

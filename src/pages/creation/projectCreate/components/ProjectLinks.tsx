@@ -26,7 +26,7 @@ export const ProjectLinks = ({
   }
 
   const addNewLink = () => {
-    if (links[links.length - 1] === '') {
+    if (links[links.length - 1] === '' || links.length >= 7) {
       return
     }
 
