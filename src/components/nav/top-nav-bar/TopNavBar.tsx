@@ -11,7 +11,7 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react'
-import { useContext, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
   Link,
   matchPath,
@@ -21,7 +21,7 @@ import {
 } from 'react-router-dom'
 
 import { getPath, PathName } from '../../../constants'
-import { AuthContext, useAuthContext, useNavContext } from '../../../context'
+import { useAuthContext, useNavContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { AuthModal } from '../../molecules'
 import { ButtonComponent } from '../../ui'
