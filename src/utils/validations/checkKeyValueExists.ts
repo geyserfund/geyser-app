@@ -23,3 +23,13 @@ export const checkKeyValueExists = (
   })
   return isValid
 }
+
+export const checkDiff = (val1: any, val2: any) => {
+  let isDiff = false
+  Object.keys(val1).map((key1) => {
+    if (val1[key1] !== val2[key1]) {
+      isDiff = true
+    }
+  })
+  return isDiff
+}

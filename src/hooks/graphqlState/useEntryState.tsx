@@ -1,5 +1,5 @@
 import { QueryHookOptions, useLazyQuery, useMutation } from '@apollo/client'
-import { useCallback, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { QUERY_GET_ENTRY_FOR_ADD_EDIT } from '../../graphql'
 import {
@@ -12,7 +12,12 @@ import {
   EntryType,
   UpdateEntryInput,
 } from '../../types'
-import { checkKeyValueExists, toInt, useNotification } from '../../utils'
+import {
+  checkDiff,
+  checkKeyValueExists,
+  toInt,
+  useNotification,
+} from '../../utils'
 import { useListenerState } from '../useListenerState'
 
 type TEntryVariables = {
@@ -32,55 +37,65 @@ type TEntryData = {
   entry: Entry
 }
 
+type TEntryCreateData = {
+  createEntry: Entry
+}
+
+type TEntryUpdateData = {
+  updateEntry: Entry
+}
+
 export const useEntryState = (
   projectId: number,
   entryId?: number | string,
   options?: QueryHookOptions<TEntryData, TEntryVariables>,
 ) => {
   const { toast } = useNotification()
-  const [entry, setEntry] = useListenerState<Entry>({} as Entry)
+
+  const [entry, setEntry] = useState<Entry>({} as Entry)
+  const [baseEntry, setBaseEntry] = useState<Entry>({} as Entry)
 
   const [saving, setSaving] = useListenerState(false)
 
-  const [createEntryMutation] = useMutation<TEntryData, TEntryCreateVariables>(
-    MUTATION_CREATE_ENTRY,
-    {
-      onError() {
-        setSaving(false)
-        toast({
-          title: 'Entry creation failed',
-          description: 'Please try again later',
-          status: 'error',
-        })
-      },
-      onCompleted(data) {
-        setSaving(false)
-        if (data.entry) {
-          setEntry({ ...entry.current, ...data.entry })
-        }
-      },
+  const [createEntryMutation] = useMutation<
+    TEntryCreateData,
+    TEntryCreateVariables
+  >(MUTATION_CREATE_ENTRY, {
+    onError() {
+      setSaving(false)
+      toast({
+        title: 'Entry creation failed',
+        description: 'Please try again later',
+        status: 'error',
+      })
     },
-  )
+    onCompleted(data) {
+      setSaving(false)
+      if (data.createEntry) {
+        setBaseEntry({ ...baseEntry, ...data.createEntry })
+      }
+    },
+  })
 
-  const [updateEntryMutation] = useMutation<TEntryData, TEntryUpdateVariables>(
-    MUTATION_UPDATE_ENTRY,
-    {
-      onError() {
-        setSaving(false)
-        toast({
-          title: 'Entry update failed',
-          description: 'Please try again later',
-          status: 'error',
-        })
-      },
-      onCompleted(data) {
-        setSaving(false)
-        if (data.entry) {
-          setEntry({ ...entry.current, ...data.entry })
-        }
-      },
+  const [updateEntryMutation] = useMutation<
+    TEntryUpdateData,
+    TEntryUpdateVariables
+  >(MUTATION_UPDATE_ENTRY, {
+    onError() {
+      setSaving(false)
+      toast({
+        title: 'Entry update failed',
+        description: 'Please try again later',
+        status: 'error',
+      })
     },
-  )
+    onCompleted(data) {
+      setSaving(false)
+      if (data.updateEntry) {
+        setBaseEntry({ ...baseEntry, ...data.updateEntry })
+      }
+    },
+  })
 
   const [getEntryQuery, { loading }] = useLazyQuery<
     TEntryData,
@@ -93,6 +108,7 @@ export const useEntryState = (
     onCompleted(data) {
       if (data.entry) {
         setEntry(data.entry)
+        setBaseEntry(data.entry)
       }
 
       if (options?.onCompleted) {
@@ -107,9 +123,9 @@ export const useEntryState = (
     }
   }, [entryId])
 
-  const updateEntry = useCallback((value: Partial<Entry>) => {
-    setEntry({ ...entry.current, ...value })
-  }, [])
+  const updateEntry = (value: Partial<Entry>) => {
+    setEntry({ ...entry, ...value })
+  }
 
   const saveEntry = () => {
     if (saving.current) {
@@ -117,32 +133,34 @@ export const useEntryState = (
     }
 
     const isValid = checkKeyValueExists(
-      entry.current,
+      entry,
       ['content', 'description', 'image', 'title'],
       'any',
     )
 
-    if (!isValid) {
+    const isDiff = checkDiff(entry, baseEntry)
+
+    if (!isValid || !isDiff) {
       return
     }
 
-    if (entryId || entry.current.id) {
+    if (entryId || Boolean(baseEntry.id)) {
       const input: UpdateEntryInput = {
-        content: entry.current.content,
-        description: entry.current.description,
-        entryId: toInt(entry.current.id),
-        image: entry.current.image,
-        title: entry.current.title,
+        content: entry.content,
+        description: entry.description,
+        entryId: toInt(baseEntry.id),
+        image: entry.image,
+        title: entry.title,
       }
       setSaving(true)
       updateEntryMutation({ variables: { input } })
     } else {
       const input: CreateEntryInput = {
         projectId: toInt(projectId),
-        content: entry.current.content,
-        description: entry.current.description,
-        image: entry.current.image,
-        title: entry.current.title,
+        content: entry.content,
+        description: entry.description || '',
+        image: entry.image,
+        title: entry.title || '',
         type: EntryType.Article,
       }
       setSaving(true)
@@ -153,7 +171,7 @@ export const useEntryState = (
   return {
     loading,
     saving: saving.current,
-    entry: entry.current,
+    entry,
     updateEntry,
     saveEntry,
   }

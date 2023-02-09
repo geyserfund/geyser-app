@@ -58,7 +58,11 @@ export const EntryCreateEdit = () => {
   const [focusFlag, setFocusFlag] = useState('')
 
   const { loading, saving, updateEntry, entry, saveEntry } = useEntryState(
-    toInt(params.projectId),
+    toInt(
+      user?.ownerOf?.find(
+        (project) => project?.project?.name === params.projectId,
+      )?.project?.id || '',
+    ),
     params.entryId,
     {
       onError() {
