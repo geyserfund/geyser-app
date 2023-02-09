@@ -46,6 +46,8 @@ type TEntryUpdateData = {
   updateEntry: Entry
 }
 
+const entryEditKeyList = ['content', 'description', 'image', 'title']
+
 export const useEntryState = (
   projectId: number,
   entryId?: number | string,
@@ -56,6 +58,8 @@ export const useEntryState = (
 
   const [entry, setEntry] = useState<Entry>({} as Entry)
   const [baseEntry, setBaseEntry] = useState<Entry>({} as Entry)
+
+  const [hasDiff, setHasDiff] = useState(false)
 
   const [saving, setSaving] = useListenerState(false)
 
@@ -127,7 +131,8 @@ export const useEntryState = (
   }, [entryId])
 
   useEffect(() => {
-    const isDiff = checkDiff(entry, baseEntry)
+    const isDiff = checkDiff(entry, baseEntry, entryEditKeyList)
+    setHasDiff(isDiff)
     setIsFormDirty(isDiff)
   }, [entry, baseEntry])
 
@@ -140,13 +145,9 @@ export const useEntryState = (
       return
     }
 
-    const isValid = checkKeyValueExists(
-      entry,
-      ['content', 'description', 'image', 'title'],
-      'any',
-    )
+    const isValid = checkKeyValueExists(entry, entryEditKeyList, 'any')
 
-    const isDiff = checkDiff(entry, baseEntry)
+    const isDiff = checkDiff(entry, baseEntry, entryEditKeyList)
 
     if (!isValid || !isDiff) {
       return
@@ -180,6 +181,7 @@ export const useEntryState = (
     loading,
     saving: saving.current,
     entry,
+    hasDiff,
     updateEntry,
     saveEntry,
   }

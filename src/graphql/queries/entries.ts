@@ -41,6 +41,7 @@ export const QUERY_GET_ENTRY_FOR_ADD_EDIT = gql`
       updatedAt
       publishedAt
       fundersCount
+      status
       type
       creator {
         id

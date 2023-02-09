@@ -61,44 +61,45 @@ export const EntryCreateEdit = () => {
 
   const [focusFlag, setFocusFlag] = useState('')
 
-  const { loading, saving, updateEntry, entry, saveEntry } = useEntryState(
-    toInt(
-      user?.ownerOf?.find(
-        (project) => project?.project?.name === params.projectId,
-      )?.project?.id || '',
-    ),
-    params.entryId,
-    {
-      onError() {
-        navigate(getPath('notFound'))
+  const { loading, saving, updateEntry, hasDiff, entry, saveEntry } =
+    useEntryState(
+      toInt(
+        user?.ownerOf?.find(
+          (project) => project?.project?.name === params.projectId,
+        )?.project?.id || '',
+      ),
+      params.entryId,
+      {
+        onError() {
+          navigate(getPath('notFound'))
+        },
+        onCompleted(data) {
+          if (data.entry === null) {
+            navigate(getPath('notAuthorized'))
+          }
+
+          const project = data.entry.project as Project
+
+          if (!project.owners.some((owner) => owner.user.id === user.id)) {
+            navigate(getPath('notAuthorized'))
+          }
+
+          setNavData({
+            projectName: project.name,
+            projectTitle: project.title,
+            projectPath: getPath('project', project.name),
+            projectOwnerIDs:
+              project.owners.map((ownerInfo: Owner) => {
+                return Number(ownerInfo.user.id || -1)
+              }) || [],
+          })
+        },
       },
-      onCompleted(data) {
-        if (data.entry === null) {
-          navigate(getPath('notAuthorized'))
-        }
-
-        const project = data.entry.project as Project
-
-        if (!project.owners.some((owner) => owner.user.id === user.id)) {
-          navigate(getPath('notAuthorized'))
-        }
-
-        setNavData({
-          projectName: project.name,
-          projectTitle: project.title,
-          projectPath: getPath('project', project.name),
-          projectOwnerIDs:
-            project.owners.map((ownerInfo: Owner) => {
-              return Number(ownerInfo.user.id || -1)
-            }) || [],
-        })
-      },
-    },
-  )
+    )
   const debouncedUpdateEntry = useDebounce(entry, 1000)
 
   useEffect(() => {
-    if (debouncedUpdateEntry && entry.status !== EntryStatus.Unpublished) {
+    if (debouncedUpdateEntry && entry.status !== EntryStatus.Published) {
       saveEntry()
     }
   }, [debouncedUpdateEntry])
@@ -179,6 +180,22 @@ export const EntryCreateEdit = () => {
     }
   }
 
+  const getSaveButtonText = () => {
+    if (saving) {
+      return 'Saving'
+    }
+
+    if (isEdit) {
+      if (hasDiff) {
+        return 'Save'
+      }
+
+      return 'Saved'
+    }
+
+    return 'Save draft'
+  }
+
   if (loading) {
     return <Loader />
   }
@@ -187,7 +204,7 @@ export const EntryCreateEdit = () => {
     <>
       <CreateNav
         isSaving={saving}
-        saveText={saving ? 'Saving' : isEdit ? 'Saved' : 'Save draft'}
+        saveText={getSaveButtonText()}
         onSave={saveEntry}
         onPreview={onPreview}
         onBack={onBack}
