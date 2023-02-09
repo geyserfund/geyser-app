@@ -26,7 +26,7 @@ export const ProjectLinks = ({
   }
 
   const addNewLink = () => {
-    if (links[links.length - 1] === '') {
+    if (links[links.length - 1] === '' && links.length <= 7) {
       return
     }
 
@@ -69,7 +69,11 @@ export const ProjectLinks = ({
           )
         })}
       <Box w="full" paddingTop="10px">
-        <ButtonComponent w="full" onClick={addNewLink}>
+        <ButtonComponent
+          w="full"
+          onClick={addNewLink}
+          isDisabled={links.length > 7}
+        >
           Add Project Link
         </ButtonComponent>
       </Box>
