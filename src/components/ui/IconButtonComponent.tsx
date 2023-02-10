@@ -22,7 +22,9 @@ export const IconButtonComponent = ({
   return (
     <IconButton
       variant="solid"
-      backgroundColor={primary ? 'brand.primary' : backgroundColor}
+      backgroundColor={
+        noBorder ? 'transparent' : primary ? 'brand.primary' : backgroundColor
+      }
       borderRadius="50%"
       color={primary ? 'black' : textColor}
       _hover={primary ? { bg: 'brand.primaryTint' } : undefined}

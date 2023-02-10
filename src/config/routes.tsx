@@ -5,7 +5,7 @@ import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
 import { EntryPreview } from '../pages/creation/entry/EntryPreview'
 import {
-  MilestoneAndRewards,
+  ProjectAdditionalDetails,
   ProjectCreate,
   ProjectCreationWalletConnectionPage,
 } from '../pages/creation/projectCreate'
@@ -69,8 +69,8 @@ const platformRoutes = [
     authenticated: true,
   },
   {
-    path: getPath('launchProjectWithMilestonesAndRewards', PathName.projectId),
-    element: MilestoneAndRewards,
+    path: getPath('launchProjectDetails', PathName.projectId),
+    element: ProjectAdditionalDetails,
   },
   {
     path: `${getPath('privateProjectLaunch')}/:projectId`,

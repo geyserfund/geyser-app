@@ -12,7 +12,7 @@ export enum PathName {
   userProfile = 'profile',
   projectDashboard = 'dashboard',
   preview = 'preview',
-  milestonesAndRewards = 'milestones',
+  launchProjectDetails = 'details',
   node = 'node',
   discover = 'discover',
   dashboardDescription = 'description',
@@ -51,8 +51,8 @@ const pathsMap = {
   privateProjectLaunch: () => `/${PathName.launchProject}`,
   launchProjectWithNode: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.node}`,
-  launchProjectWithMilestonesAndRewards: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.milestonesAndRewards}`,
+  launchProjectDetails: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   projectDashboard: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
