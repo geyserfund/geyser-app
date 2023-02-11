@@ -5,9 +5,8 @@ type IdentifiableCollection = {
 }[]
 
 const mergeIdentifiableCollectionUsingCursorIDs = (
-  // eslint-disable-next-line default-param-last
   existing: IdentifiableCollection = [],
-  // eslint-disable-next-line default-param-last
+
   incoming: IdentifiableCollection = [],
   // { args }: FieldFunctionOptions,
 ) => {

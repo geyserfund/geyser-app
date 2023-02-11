@@ -1,10 +1,10 @@
-import { Box } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { Box } from '@chakra-ui/react'
+import { useEffect } from 'react'
 
 export const TwitterSuccess = () => {
   useEffect(() => {
-    window.close();
-  });
+    window.close()
+  })
 
-  return <Box>something</Box>;
-};
+  return <Box>something</Box>
+}
