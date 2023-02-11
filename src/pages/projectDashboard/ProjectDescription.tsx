@@ -24,7 +24,7 @@ export const ProjectDescription = () => {
 
   const { project, updateProject } = useProjectContext()
 
-  const { links, setLinks, handleLinks, linkError } = useProjectLinksState({
+  const { links, setLinks, saveLinks, linkError } = useProjectLinksState({
     project,
     updateProject,
   })
@@ -104,7 +104,7 @@ export const ProjectDescription = () => {
     const isValid = validateForm()
 
     if (isValid) {
-      await handleLinks()
+      await saveLinks()
       updateProjectMutation({
         variables: {
           input: {

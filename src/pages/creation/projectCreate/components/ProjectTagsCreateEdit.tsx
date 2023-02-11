@@ -1,10 +1,9 @@
 import { useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
-import classNames from 'classnames'
 import { useState } from 'react'
 import { createUseStyles } from 'react-jss'
-import Select, { MultiValue } from 'react-select'
+import { MultiValue } from 'react-select'
 
 import { Body1, Body2, Caption } from '../../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../../components/ui'
