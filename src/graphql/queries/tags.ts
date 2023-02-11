@@ -9,3 +9,24 @@ export const QUERY_TAGS = gql`
     }
   }
 `
+
+export const QUERY_COUNTRIES = gql`
+  query ProjectCountriesGet {
+    projectCountriesGet {
+      count
+      country {
+        code
+        name
+      }
+    }
+  }
+`
+
+export const QUERY_REGION = gql`
+  query ProjectRegionsGet {
+    projectRegionsGet {
+      count
+      region
+    }
+  }
+`

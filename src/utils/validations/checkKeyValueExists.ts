@@ -24,7 +24,11 @@ export const checkKeyValueExists = (
   return isValid
 }
 
-export const checkDiff = (val1: any, val2: any, keys?: string[]) => {
+export const checkDiff = <T extends {}>(
+  val1: T,
+  val2: T,
+  keys?: (keyof T)[],
+) => {
   let isDiff = false
 
   if (keys) {
@@ -36,8 +40,8 @@ export const checkDiff = (val1: any, val2: any, keys?: string[]) => {
     return isDiff
   }
 
-  Object.keys(val1).map((key1) => {
-    if (val1[key1] !== val2[key1]) {
+  Object.keys(val1)?.map((key1) => {
+    if (val1[key1 as keyof T] !== val2[key1 as keyof T]) {
       isDiff = true
     }
   })

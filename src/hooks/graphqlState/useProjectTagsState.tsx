@@ -71,7 +71,7 @@ export const useProjectTagsState = ({
     },
   })
 
-  const handleTags = async () => {
+  const saveTags = async () => {
     const addTags =
       project?.tags?.length > 0
         ? tags.filter((tag) => !project.tags.some((tag2) => tag.id === tag2.id))
@@ -122,7 +122,7 @@ export const useProjectTagsState = ({
   return {
     tags,
     setTags: newSetTag,
-    handleTags,
+    saveTags,
     loading,
   }
 }

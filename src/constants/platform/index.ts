@@ -1,5 +1,4 @@
 export * from './copy'
-export * from './countryCodes'
 export * from './currency'
 export * from './events'
 export * from './geyserFee'

@@ -1,14 +1,22 @@
 import { useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
-import { MultiValue } from 'react-select'
+import { SingleValue } from 'react-select'
 
 import { Body1, Body2, Caption } from '../../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../../components/ui'
-import { QUERY_TAGS } from '../../../../graphql/queries/tags'
+import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphql/queries/tags'
 import { colors } from '../../../../styles'
+import {
+  Country,
+  Location,
+  Maybe,
+  Project,
+  ProjectCountriesGetResult,
+  ProjectRegionsGetResult,
+} from '../../../../types'
 
 const useStyles = createUseStyles({
   container: {
@@ -36,36 +44,76 @@ const useStyles = createUseStyles({
   },
 })
 
-type ProjectRegionProps = StackProps
+interface ProjectRegionProps extends StackProps {
+  location: Maybe<Location>
+  updateProject: (_: Project) => void
+}
 
-export const ProjectRegion = ({ ...rest }: ProjectRegionProps) => {
+export const ProjectRegion = ({
+  location,
+  updateProject,
+  ...rest
+}: ProjectRegionProps) => {
   const classes = useStyles()
 
   const [inputValue, setInputValue] = useState('')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  //   const handleChange = (value: MultiValue<RegionsGetResult>) => {
-  //     const newRegion: Region = { id: value[0].id, label: value[0].label }
-  //     if (!tags.some((tag) => tag.id === newRegion.id)) {
-  //       updateRegions([...tags, newRegion])
-  //     } else {
-  //       updateRegions(tags.filter((tag) => tag.id !== newRegion.id))
-  //     }
-  //   }
+  const [options, setOptions] = useState<Country[]>([])
 
-  //   const handleInputChange = (newValue: string) => {
-  //     setInputValue(newValue)
-  //     if (newValue?.length >= 2) {
-  //       onOpen()
-  //     } else {
-  //       onClose()
-  //     }
-  //   }
+  const { loading: countriesLoading, data: countries } = useQuery<{
+    projectCountriesGet: ProjectCountriesGetResult[]
+  }>(QUERY_COUNTRIES)
 
-  //   const removeRegion = (id: number) => {
-  //     updateRegions(tags.filter((tag) => tag.id !== id))
-  //   }
+  const { loading: regionsLoading, data: regions } = useQuery<{
+    projectRegionsGet: ProjectRegionsGetResult[]
+  }>(QUERY_REGION)
 
-  //   const isDisabled = tags.length >= 3
+  useEffect(() => {
+    if (!countries || !regions) {
+      return
+    }
+
+    const countryOptions = countries.projectCountriesGet.map(
+      (val) => val.country,
+    )
+
+    const regionOptions = regions.projectRegionsGet.map((val) => ({
+      name: val.region,
+      code: val.region,
+    }))
+
+    setOptions([...countryOptions, ...regionOptions])
+  }, [countries, regions])
+
+  const handleChange = (value: SingleValue<Country>) => {
+    if (value?.code === value?.name) {
+      updateProject({ location: { region: value?.name } } as Project)
+    } else {
+      updateProject({ location: { country: value } } as Project)
+    }
+  }
+
+  const handleInputChange = (newValue: string) => {
+    setInputValue(newValue)
+    if (newValue?.length >= 1) {
+      onOpen()
+    } else {
+      onClose()
+    }
+  }
+
+  const removeRegion = () => {
+    updateProject({ location: {} } as Project)
+  }
+
+  const isLoading = countriesLoading || regionsLoading
+
+  const displayLocation = location?.country?.name
+    ? location?.region
+      ? `${location?.country?.name} ( ${location?.region} )`
+      : location?.country?.name
+    : location?.region || ''
 
   return (
     <VStack className={classes.container} {...rest}>
@@ -75,43 +123,38 @@ export const ProjectRegion = ({ ...rest }: ProjectRegionProps) => {
         country or region
       </Caption>
       <VStack className={classes.tagContainer} spacing="10px">
-        <SelectComponent<RegionsGetResult, true>
-          isMulti
-          isDisabled={isDisabled}
+        <SelectComponent<Country, false>
           menuIsOpen={isOpen}
           className={classes.select}
           onChange={handleChange}
-          isLoading={loading}
           name="tags"
           placeholder="Select region"
           value={[]}
-          options={tagOptions}
-          getOptionLabel={(option: RegionsGetResult) => option.label}
-          getOptionValue={(option: RegionsGetResult) => option.label}
+          isLoading={isLoading}
+          options={options}
+          getOptionLabel={(option: Country) => option.name}
+          getOptionValue={(option: Country) => option.code}
           onInputChange={handleInputChange}
           inputValue={inputValue}
         />
         <HStack width="100%" spacing="10px">
-          {tags.map((tag) => {
-            return (
-              <HStack
-                key={tag.id}
-                borderRadius="4px"
-                paddingLeft="8px"
-                backgroundColor="brand.neutral100"
-              >
-                <Body1 semiBold>{tag.label}</Body1>
-                <IconButtonComponent
-                  noBorder
-                  size="xs"
-                  borderRadius="8px"
-                  aria-label="remove-tag-close-icon"
-                  onClick={() => removeRegion(tag.id)}
-                  icon={<CloseIcon />}
-                />
-              </HStack>
-            )
-          })}
+          {displayLocation && (
+            <HStack
+              borderRadius="4px"
+              paddingLeft="8px"
+              backgroundColor="brand.neutral100"
+            >
+              <Body1 semiBold>{displayLocation}</Body1>
+              <IconButtonComponent
+                noBorder
+                size="xs"
+                borderRadius="8px"
+                aria-label="remove-tag-close-icon"
+                onClick={removeRegion}
+                icon={<CloseIcon />}
+              />
+            </HStack>
+          )}
         </HStack>
       </VStack>
     </VStack>

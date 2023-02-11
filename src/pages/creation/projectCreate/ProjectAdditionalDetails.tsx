@@ -10,6 +10,7 @@ import {
 } from '../../../hooks/graphqlState'
 import { useProjectTagsState } from '../../../hooks/graphqlState/useProjectTagsState'
 import { toInt, useNotification } from '../../../utils'
+import { ProjectRegion } from './components'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectLinks } from './components/ProjectLinks'
 import { ProjectTagsCreateEdit } from './components/ProjectTagsCreateEdit'
@@ -20,7 +21,7 @@ export const ProjectAdditionalDetails = () => {
 
   const { toast } = useNotification()
 
-  const { loading, project, updateProject } = useProjectState(
+  const { loading, project, updateProject, saveProject } = useProjectState(
     toInt(params.projectId),
     {
       fetchPolicy: 'network-only',
@@ -34,23 +35,19 @@ export const ProjectAdditionalDetails = () => {
     'id',
   )
 
-  const { links, setLinks, handleLinks, linkError } = useProjectLinksState({
+  const { links, setLinks, saveLinks, linkError } = useProjectLinksState({
     project,
     updateProject,
   })
-  const { tags, setTags } = useProjectTagsState({ project, updateProject })
+  const { tags, setTags, saveTags } = useProjectTagsState({
+    project,
+    updateProject,
+  })
 
   const handleNext = async () => {
-    if (linkError.includes(true)) {
-      toast({
-        status: 'error',
-        title: 'Invalid link provided',
-        description: 'Please update the link before proceding',
-      })
-      return
-    }
-
-    await handleLinks()
+    await saveLinks()
+    await saveTags()
+    await saveProject()
     navigate(getPath('launchProjectWithNode', params.projectId || ''))
   }
 
@@ -77,6 +74,11 @@ export const ProjectAdditionalDetails = () => {
             linkError={linkError}
           />
           <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
+
+          <ProjectRegion
+            location={project.location}
+            updateProject={updateProject}
+          />
 
           <ButtonComponent primary w="full" onClick={handleNext}>
             Continue
