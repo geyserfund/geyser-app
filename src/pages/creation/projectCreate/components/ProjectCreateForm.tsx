@@ -38,6 +38,8 @@ interface ProjectCreateFormProps {
   setFormError: any
 }
 
+const MIN_LENGTH_TO_QUERY_PROJECT = 3
+
 export const ProjectCreateFormValidation = (form: ProjectCreate) => {
   const errors = {} as { [key: string]: string }
   let isValid = true
@@ -107,6 +109,16 @@ export const ProjectCreateForm = ({
       }
     },
   })
+
+  const handleProjectFetch = () => {
+    if (
+      !isEdit &&
+      form?.name &&
+      form.name.length >= MIN_LENGTH_TO_QUERY_PROJECT
+    ) {
+      getProject()
+    }
+  }
 
   const handleImageUpload = (url: string) =>
     setForm({ ...form, thumbnailImage: url })
@@ -186,7 +198,7 @@ export const ProjectCreateForm = ({
           onChange={handleChange}
           value={form.title}
           error={formError.title}
-          onBlur={() => !isEdit && getProject()}
+          onBlur={handleProjectFetch}
         />
       </VStack>
       <VStack {...rowStyles}>
@@ -199,7 +211,7 @@ export const ProjectCreateForm = ({
             isInvalid={Boolean(formError.name)}
             focusBorderColor={colors.primary}
             disabled={isEdit}
-            onBlur={() => !isEdit && getProject()}
+            onBlur={handleProjectFetch}
           />
           <InputRightAddon>@geyser.fund</InputRightAddon>
         </InputGroup>

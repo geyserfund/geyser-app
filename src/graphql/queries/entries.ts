@@ -28,6 +28,40 @@ export const QUERY_GET_ENTRY = gql`
   }
 `
 
+export const QUERY_GET_ENTRY_FOR_ADD_EDIT = gql`
+  query Entry($id: BigInt!) {
+    entry(id: $id) {
+      id
+      title
+      description
+      image
+      published
+      content
+      createdAt
+      updatedAt
+      publishedAt
+      fundersCount
+      status
+      type
+      creator {
+        id
+        username
+        imageUrl
+      }
+      project {
+        id
+        title
+        name
+        owners {
+          user {
+            id
+          }
+        }
+      }
+    }
+  }
+`
+
 /**
  * @returns `Entry`
  */

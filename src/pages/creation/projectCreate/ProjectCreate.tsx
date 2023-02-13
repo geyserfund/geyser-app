@@ -203,7 +203,9 @@ export const ProjectCreate = () => {
   }
 
   useEffect(() => {
-    getProjectById()
+    if (params.projectId) {
+      getProjectById()
+    }
   }, [params.projectId])
 
   return (
