@@ -11,7 +11,7 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react'
-import { useContext, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
   Link,
   matchPath,
@@ -21,7 +21,7 @@ import {
 } from 'react-router-dom'
 
 import { getPath, PathName } from '../../../constants'
-import { AuthContext } from '../../../context'
+import { useAuthContext, useNavContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { AuthModal } from '../../molecules'
 import { ButtonComponent } from '../../ui'
@@ -145,8 +145,9 @@ export const TopNavBar = () => {
     isAuthModalOpen,
     loginOnOpen,
     loginOnClose,
-    navigationContext,
-  } = useContext(AuthContext)
+  } = useAuthContext()
+
+  const { navData } = useNavContext()
 
   const {
     state,
@@ -208,8 +209,7 @@ export const TopNavBar = () => {
 
   const handleProjectButtonPress = () => {
     const projectName =
-      currentProjectRouteMatch?.params?.projectId ||
-      navigationContext.projectName
+      currentProjectRouteMatch?.params?.projectId || navData.projectName
     navigate(getPath('project', projectName))
   }
 
@@ -220,8 +220,7 @@ export const TopNavBar = () => {
     }
 
     const projectName =
-      currentProjectRouteMatch?.params?.projectId ||
-      navigationContext.projectName
+      currentProjectRouteMatch?.params?.projectId || navData.projectName
 
     if (projectName) {
       navigate(getPath('projectDashboard', projectName))
@@ -237,9 +236,9 @@ export const TopNavBar = () => {
           `/${PathName._deprecatedPathNameForProject}`,
         ) ||
         currentPathName.startsWith(`/${PathName.project}`)) &&
-      navigationContext.projectOwnerIDs.includes(Number(user.id))
+      navData.projectOwnerIDs.includes(Number(user.id))
     )
-  }, [user.id, navigationContext.projectOwnerIDs, currentPathName])
+  }, [user.id, navData.projectOwnerIDs, currentPathName])
 
   const userHasOnlyOneProject: boolean = useMemo(
     () => user && user.ownerOf && user.ownerOf.length === 1,
@@ -256,9 +255,9 @@ export const TopNavBar = () => {
       routeMatchesForProjectButton.some((routeMatch) => {
         return Boolean(routeMatch)
       }) &&
-      Boolean(navigationContext)
+      Boolean(navData)
     )
-  }, [routeMatchesForProjectButton, isMobile, navigationContext])
+  }, [routeMatchesForProjectButton, isMobile, navData])
   /**
    * Logic:
    *  - Available to all not logged-in users.
@@ -451,9 +450,9 @@ export const TopNavBar = () => {
     return (
       routesMatchesForShowingCustomTitle.some((routeMatch) => {
         return Boolean(routeMatch)
-      }) && Boolean(navigationContext)
+      }) && Boolean(navData)
     )
-  }, [routesMatchesForShowingCustomTitle, navigationContext])
+  }, [routesMatchesForShowingCustomTitle, navData])
 
   const shouldShowNavItems: boolean = useMemo(() => {
     if (isMobile) {
@@ -492,9 +491,9 @@ export const TopNavBar = () => {
           <NavBarLogo marginRight={isMobile ? 0 : 5} />
 
           {shouldShowCustomTitle ? (
-            <Link to={navigationContext.projectPath}>
+            <Link to={navData.projectPath}>
               <Heading as={'h3'} noOfLines={1} size="sm">
-                {navigationContext.projectTitle}
+                {navData.projectTitle}
               </Heading>
             </Link>
           ) : null}

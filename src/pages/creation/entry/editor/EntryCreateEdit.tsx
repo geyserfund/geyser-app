@@ -1,6 +1,5 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BsImage } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 import { useLocation, useNavigate, useParams } from 'react-router'
@@ -10,22 +9,16 @@ import { ImageWithReload } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { getPath } from '../../../../constants'
 import { ProjectEntryValidations } from '../../../../constants/validations'
-import { useAuthContext } from '../../../../context'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql'
-import {
-  MUTATION_CREATE_ENTRY,
-  MUTATION_UPDATE_ENTRY,
-} from '../../../../graphql/mutations/entries'
-import { QUERY_GET_ENTRY } from '../../../../graphql/queries/entries'
+import { useAuthContext, useNavContext } from '../../../../context'
 import { useDebounce } from '../../../../hooks'
-import {
-  IEntryCreateInput,
-  IEntryUpdateInput,
-} from '../../../../interfaces/entry'
+import { useEntryState } from '../../../../hooks/graphqlState'
 import { colors } from '../../../../styles'
-import { Owner, Project } from '../../../../types/generated/graphql'
+import {
+  EntryStatus,
+  Owner,
+  Project,
+} from '../../../../types/generated/graphql'
 import { toInt, useMobileMode, useNotification } from '../../../../utils'
-import { TcreateEntry, TEntry } from '../types'
 import { CreateNav } from './CreateNav'
 import { ProjectEntryEditor } from './ProjectEntryEditor'
 
@@ -61,150 +54,58 @@ export const EntryCreateEdit = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams<{ entryId: string; projectId: string }>()
-  const { setNav, user } = useAuthContext()
+  const { user } = useAuthContext()
+  const { setNavData } = useNavContext()
 
   const classes = useStyles()
 
-  const [_form, _setForm] = useState<TEntry>(defaultEntry)
-  const form = useRef(_form)
-  const setForm = (value: TEntry) => {
-    form.current = value
-    _setForm(value)
-  }
-
   const [focusFlag, setFocusFlag] = useState('')
 
-  const debouncedUpdateEntry = useDebounce(form.current, 1000)
+  const { loading, saving, updateEntry, hasDiff, entry, saveEntry } =
+    useEntryState(
+      toInt(
+        user?.ownerOf?.find(
+          (project) => project?.project?.name === params.projectId,
+        )?.project?.id || '',
+      ),
+      params.entryId,
+      {
+        onError() {
+          navigate(getPath('notFound'))
+        },
+        onCompleted(data) {
+          if (data.entry === null) {
+            navigate(getPath('notAuthorized'))
+          }
 
-  const [createEntry, { data: createData, loading: createEntryLoading }] =
-    useMutation(MUTATION_CREATE_ENTRY)
+          const project = data.entry.project as Project
 
-  const [updateEntry, { loading: updateEntryLoading }] = useMutation(
-    MUTATION_UPDATE_ENTRY,
-  )
+          if (!project.owners.some((owner) => owner.user.id === user.id)) {
+            navigate(getPath('notAuthorized'))
+          }
 
-  const [getEntry, { loading: loadingPosts, data: entryData }] = useLazyQuery(
-    QUERY_GET_ENTRY,
-    {
-      onError() {
-        navigate(getPath('notFound'))
+          setNavData({
+            projectName: project.name,
+            projectTitle: project.title,
+            projectPath: getPath('project', project.name),
+            projectOwnerIDs:
+              project.owners.map((ownerInfo: Owner) => {
+                return Number(ownerInfo.user.id || -1)
+              }) || [],
+          })
+        },
       },
-      onCompleted(data) {
-        if (data.entry === null) {
-          navigate(getPath('notAuthorized'))
-        }
-      },
-    },
-  )
-
-  const { loading, data: projectData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
-    variables: { where: { name: params.projectId } },
-    onCompleted(data) {
-      const project = data.project as Project
-
-      if (!project.owners.some((owner) => owner.user.id === user.id)) {
-        navigate(getPath('notAuthorized'))
-      }
-
-      setNav({
-        projectName: data.project.name,
-        projectTitle: data.project.title,
-        projectPath: getPath('project', data.project.name),
-        projectOwnerIDs:
-          data.project.owners.map((ownerInfo: Owner) => {
-            return Number(ownerInfo.user.id || -1)
-          }) || [],
-      })
-    },
-    onError() {
-      navigate(getPath('notFound'))
-    },
-  })
+    )
+  const debouncedUpdateEntry = useDebounce(entry, 1000)
 
   useEffect(() => {
-    if (params && params.entryId) {
-      try {
-        getEntry({ variables: { id: toInt(params.entryId) } })
-      } catch {
-        navigate(getPath('notFound'))
-      }
-    }
-  }, [params])
-
-  useEffect(() => {
-    if (entryData && entryData.entry) {
-      setForm(entryData.entry)
-    }
-  }, [entryData])
-
-  useEffect(() => {
-    if (createData && createData.createEntry) {
-      setForm(createData.createEntry)
-    }
-  }, [createData])
-
-  useEffect(() => {
-    if (debouncedUpdateEntry && debouncedUpdateEntry.id) {
-      handleUpdateEntry(debouncedUpdateEntry)
+    if (debouncedUpdateEntry && entry.status !== EntryStatus.Published) {
+      saveEntry()
     }
   }, [debouncedUpdateEntry])
 
-  const handleCreateEntry = async (value: TcreateEntry) => {
-    if (!form.current || !form.current.id) {
-      if (
-        form.current.content ||
-        form.current.title ||
-        form.current.description ||
-        form.current.image
-      ) {
-        const { image, title, description, content } = value
-        const input: IEntryCreateInput = {
-          projectId: toInt(projectData?.project?.id),
-          type: 'article',
-          title,
-          description,
-          content,
-          image,
-        }
-        try {
-          await createEntry({ variables: { input } })
-        } catch (error) {
-          toast({
-            title: 'Entry creation failed',
-            description: 'Please try again later',
-            status: 'error',
-          })
-        }
-      }
-    }
-  }
-
-  const handleUpdateEntry = async (params: TcreateEntry) => {
-    const { image, title, description, content } = params
-    if (form) {
-      const input: IEntryUpdateInput = {
-        entryId: toInt(form.current.id),
-        title,
-        description,
-        content,
-        image,
-      }
-      try {
-        await updateEntry({ variables: { input } })
-      } catch (error) {
-        toast({
-          title: 'Entry update failed',
-          description: 'Please try again later',
-          status: 'error',
-        })
-      }
-    }
-  }
-
   const handleContentUpdate = (name: string, value: string) => {
-    const newForm = { ...form.current, [name]: value }
-    setForm(newForm)
-    handleCreateEntry(newForm)
+    updateEntry({ [name]: value })
   }
 
   const handleInput = (event: any) => {
@@ -225,24 +126,14 @@ export const EntryCreateEdit = () => {
     }
 
     if (name) {
-      const newForm = { ...form.current, [name]: value }
-      setForm(newForm)
-      handleCreateEntry(newForm)
+      updateEntry({ [name]: value })
     }
   }
 
-  const onSave = () => {
-    handleUpdateEntry(form.current)
-  }
-
   const onPreview = () => {
-    if (form.current && form.current.id) {
+    if (entry.id) {
       navigate(
-        getPath(
-          'projectEntryPreview',
-          `${params.projectId}`,
-          `${form.current.id}`,
-        ),
+        getPath('projectEntryPreview', `${params.projectId}`, `${entry.id}`),
       )
     } else {
       toast({
@@ -261,20 +152,9 @@ export const EntryCreateEdit = () => {
     }
   }
 
-  const onImageUpload = (url: string) =>
-    setForm({ ...form.current, image: url })
+  const onImageUpload = (url: string) => updateEntry({ image: url })
 
-  const isEdit = Boolean(createData?.createEntry?.id) || Boolean(params.entryId)
-
-  const handleEvent = (event: BeforeUnloadEvent) => {
-    event.preventDefault()
-    event.returnValue = 'are you there'
-    return event
-  }
-
-  useEffect(() => {
-    addEventListener('beforeunload', handleEvent, { once: true })
-  }, [])
+  const isEdit = Boolean(entry.id)
 
   const handleKeyDown = (event: any) => {
     if (event) {
@@ -300,22 +180,32 @@ export const EntryCreateEdit = () => {
     }
   }
 
-  if (loading || loadingPosts || (params.entryId && !form.current.id)) {
+  const getSaveButtonText = () => {
+    if (saving) {
+      return 'Saving'
+    }
+
+    if (isEdit) {
+      if (hasDiff) {
+        return 'Save'
+      }
+
+      return 'Saved'
+    }
+
+    return 'Save draft'
+  }
+
+  if (loading) {
     return <Loader />
   }
 
   return (
     <>
       <CreateNav
-        isSaving={createEntryLoading || updateEntryLoading}
-        saveText={
-          createEntryLoading || updateEntryLoading
-            ? 'Saving'
-            : isEdit
-            ? 'Saved'
-            : 'Save draft'
-        }
-        onSave={onSave}
+        isSaving={saving}
+        saveText={getSaveButtonText()}
+        onSave={saveEntry}
         onPreview={onPreview}
         onBack={onBack}
       />
@@ -347,7 +237,7 @@ export const EntryCreateEdit = () => {
             <Box marginTop="20px" width="100%" px="15px">
               <FileUpload onUploadComplete={onImageUpload}>
                 <>
-                  {form.current.image ? (
+                  {entry.image ? (
                     <HStack
                       width={'100%'}
                       justifyContent="center"
@@ -356,9 +246,10 @@ export const EntryCreateEdit = () => {
                       overflow="hidden"
                     >
                       <ImageWithReload
+                        grey
                         width="100%"
                         objectFit="cover"
-                        src={form.current.image}
+                        src={entry.image}
                       />
                     </HStack>
                   ) : (
@@ -384,7 +275,7 @@ export const EntryCreateEdit = () => {
                 paddingBottom="5px"
                 paddingX="15px"
                 name="title"
-                value={form.current.title}
+                value={entry.title}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
               />
@@ -400,7 +291,7 @@ export const EntryCreateEdit = () => {
                 paddingX="15px"
                 fontWeight={600}
                 name="description"
-                value={form.current.description}
+                value={entry.description}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
               />
@@ -410,7 +301,7 @@ export const EntryCreateEdit = () => {
               <ProjectEntryEditor
                 name="content"
                 handleChange={handleContentUpdate}
-                value={form.current.content}
+                value={entry.content as string}
                 focusFlag={focusFlag}
               />
             </Box>

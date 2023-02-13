@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AppLayout } from './AppLayout'
 import { client, theme } from './config'
 import { Head } from './config/Head'
-import { AuthProvider } from './context'
+import { AuthProvider, NavProvider } from './context'
 import { BtcProvider } from './context/btc'
 
 export const App = () => (
@@ -13,10 +13,12 @@ export const App = () => (
     <BrowserRouter>
       <ApolloProvider client={client}>
         <AuthProvider>
-          <BtcProvider>
-            <Head />
-            <AppLayout />
-          </BtcProvider>
+          <NavProvider>
+            <BtcProvider>
+              <Head />
+              <AppLayout />
+            </BtcProvider>
+          </NavProvider>
         </AuthProvider>
       </ApolloProvider>
     </BrowserRouter>

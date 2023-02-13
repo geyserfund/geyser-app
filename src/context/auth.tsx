@@ -27,16 +27,9 @@ const defaultContext: AuthContextProps = {
   setIsLoggedIn() {},
   queryCurrentUser() {},
   setUser(user: User) {},
-  navigationContext: {
-    projectName: '',
-    projectTitle: '',
-    projectPath: '',
-    projectOwnerIDs: [],
-  },
-  setNav() {},
 }
 
-export type NavigationContextProps = {
+export type NavContextProps = {
   projectName: string
   projectTitle: string
   projectPath: string
@@ -56,8 +49,6 @@ type AuthContextProps = {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
   queryCurrentUser: () => void
   setUser: (user: User) => void
-  navigationContext: NavigationContextProps
-  setNav: React.Dispatch<React.SetStateAction<NavigationContextProps>>
 }
 
 export const AuthContext = createContext<AuthContextProps>(defaultContext)
@@ -66,14 +57,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true)
   const [initialLoad, setInitialLoad] = useState(false)
 
-  const [nav, setNav] = useState<NavigationContextProps>({
-    projectName: '',
-    projectTitle: '',
-    projectPath: '',
-    projectOwnerIDs: [],
-  })
-
   const [user, setUser] = useState<User>(defaultUser)
+
   const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -140,8 +125,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isAuthModalOpen: loginIsOpen,
         loginOnOpen,
         loginOnClose,
-        navigationContext: nav,
-        setNav,
       }}
     >
       {children}
