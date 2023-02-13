@@ -45,9 +45,9 @@ export const ProjectAdditionalDetails = () => {
   })
 
   const handleNext = async () => {
-    await saveLinks()
-    await saveTags()
-    await saveProject()
+    saveLinks()
+    saveTags()
+    saveProject()
     navigate(getPath('launchProjectWithNode', params.projectId || ''))
   }
 

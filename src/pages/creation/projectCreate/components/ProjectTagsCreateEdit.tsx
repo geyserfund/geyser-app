@@ -1,15 +1,21 @@
-import { useQuery } from '@apollo/client'
-import { CloseIcon } from '@chakra-ui/icons'
+import { useMutation, useQuery } from '@apollo/client'
+import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { createUseStyles } from 'react-jss'
-import { MultiValue } from 'react-select'
+import { components, MenuProps, MultiValue } from 'react-select'
 
 import { Body1, Body2, Caption } from '../../../../components/typography'
-import { IconButtonComponent, SelectComponent } from '../../../../components/ui'
+import {
+  ButtonComponent,
+  IconButtonComponent,
+  SelectComponent,
+} from '../../../../components/ui'
+import { MUTATION_TAG_CREATE } from '../../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../../graphql/queries/tags'
 import { colors } from '../../../../styles'
-import { Tag, TagsGetResult } from '../../../../types'
+import { Tag, TagCreateInput, TagsGetResult } from '../../../../types'
+import { useNotification } from '../../../../utils'
 
 const useStyles = createUseStyles({
   container: {
@@ -48,6 +54,7 @@ export const ProjectTagsCreateEdit = ({
   ...rest
 }: ProjectTagsCreateEditProps) => {
   const classes = useStyles()
+  const { toast } = useNotification()
 
   const [tagOptions, setTagOptions] = useState<TagsGetResult[]>([])
   const [inputValue, setInputValue] = useState('')
@@ -57,6 +64,25 @@ export const ProjectTagsCreateEdit = ({
   const { loading } = useQuery<{ tagsGet: TagsGetResult[] }>(QUERY_TAGS, {
     onCompleted(data) {
       setTagOptions(data.tagsGet)
+    },
+  })
+
+  const [createTag, { loading: createLoading }] = useMutation<
+    { tagCreate: Tag },
+    { input: TagCreateInput }
+  >(MUTATION_TAG_CREATE, {
+    onError() {
+      toast({
+        status: 'error',
+        title: 'failed to create new tag',
+      })
+    },
+    onCompleted(data) {
+      if (data.tagCreate) {
+        updateTags([...tags, data.tagCreate])
+        setInputValue('')
+        onClose()
+      }
     },
   })
 
@@ -71,7 +97,7 @@ export const ProjectTagsCreateEdit = ({
 
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue)
-    if (newValue?.length >= 2) {
+    if (newValue?.length >= 1) {
       onOpen()
     } else {
       onClose()
@@ -82,7 +108,43 @@ export const ProjectTagsCreateEdit = ({
     updateTags(tags.filter((tag) => tag.id !== id))
   }
 
+  const handleCreateTag = () => {
+    if (inputValue.length >= 3) {
+      createTag({
+        variables: {
+          input: {
+            label: inputValue,
+          },
+        },
+      })
+    }
+  }
+
+  const Menu = (props: MenuProps<TagsGetResult, true, any>) => {
+    return (
+      <components.Menu<TagsGetResult, true, any> {...props}>
+        {props.children}
+        {showAddTag && (
+          <HStack padding="5px">
+            <ButtonComponent
+              variant="ghost"
+              isDisabled={disableShowAddTag}
+              leftIcon={<AddIcon />}
+              onClick={handleCreateTag}
+            >
+              add tag
+            </ButtonComponent>
+          </HStack>
+        )}
+      </components.Menu>
+    )
+  }
+
   const isDisabled = tags.length >= 3
+  const showAddTag = !tagOptions.some((tag) =>
+    tag.label.toLowerCase().includes(inputValue.toLowerCase()),
+  )
+  const disableShowAddTag = inputValue.length < 3 || createLoading
 
   return (
     <VStack className={classes.container} {...rest}>
@@ -107,6 +169,7 @@ export const ProjectTagsCreateEdit = ({
           getOptionValue={(option: TagsGetResult) => option.label}
           onInputChange={handleInputChange}
           inputValue={inputValue}
+          components={{ Menu }}
         />
         <HStack width="100%" spacing="10px">
           {tags.map((tag) => {

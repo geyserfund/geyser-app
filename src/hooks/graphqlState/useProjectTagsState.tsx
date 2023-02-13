@@ -9,6 +9,7 @@ import {
   MutationInput,
   Project,
   ProjectLinkMutationInput,
+  ProjectTagMutationInput,
   Tag,
 } from '../../types'
 import { toInt, useNotification } from '../../utils'
@@ -32,11 +33,11 @@ export const useProjectTagsState = ({
 
   const [addTag, { loading: addTagLoading }] = useMutation<
     { projectTagAdd: Tag },
-    MutationInput<ProjectLinkMutationInput>
+    MutationInput<ProjectTagMutationInput>
   >(MUTATION_PROJECT_TAG_ADD, {
     onError() {
       toast({
-        title: 'Error adding project link',
+        title: 'failed to add project tag',
         status: 'error',
       })
     },
@@ -52,11 +53,11 @@ export const useProjectTagsState = ({
   })
   const [removeTag, { loading: removeTagLoading }] = useMutation<
     { projectTagRemove: Tag },
-    MutationInput<ProjectLinkMutationInput>
+    MutationInput<ProjectTagMutationInput>
   >(MUTATION_PROJECT_TAG__REMOVE, {
     onError() {
       toast({
-        title: 'Error removing project link',
+        title: 'failed to remove project tag',
         status: 'error',
       })
     },
@@ -83,12 +84,12 @@ export const useProjectTagsState = ({
 
     if (addTags.length > 0) {
       await Promise.all(
-        addTags.map(async (link) => {
+        addTags.map(async (tag) => {
           await addTag({
             variables: {
               input: {
                 projectId: toInt(project.id),
-                link,
+                tagId: tag.id,
               },
             },
           })
@@ -98,12 +99,12 @@ export const useProjectTagsState = ({
 
     if (removeTags.length > 0) {
       await Promise.all(
-        removeTags.map(async (link) => {
+        removeTags.map(async (tag) => {
           await removeTag({
             variables: {
               input: {
                 projectId: toInt(project.id),
-                link,
+                tagId: tag.id,
               },
             },
           })
@@ -114,14 +115,9 @@ export const useProjectTagsState = ({
 
   const loading = addTagLoading || removeTagLoading
 
-  const newSetTag = (val: Tag[]) => {
-    console.log('checking values that are in here', val)
-    setTags(val)
-  }
-
   return {
     tags,
-    setTags: newSetTag,
+    setTags,
     saveTags,
     loading,
   }

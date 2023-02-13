@@ -68,6 +68,9 @@ const useStyles = createUseStyles({
       backgroundColor: colors.neutral50,
       zIndex: 9,
     },
+    '& .platform__select__menu-notice': {
+      textAlign: 'start',
+    },
     '& .platform__select__menu-list': {
       borderTopWidth: '0px !important',
     },

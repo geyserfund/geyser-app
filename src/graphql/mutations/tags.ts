@@ -17,3 +17,11 @@ export const MUTATION_PROJECT_TAG__REMOVE = gql`
     }
   }
 `
+export const MUTATION_TAG_CREATE = gql`
+  mutation TagCreate($input: TagCreateInput!) {
+    tagCreate(input: $input) {
+      id
+      label
+    }
+  }
+`

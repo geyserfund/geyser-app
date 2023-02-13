@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
 import { Project, UpdateProjectInput } from '../../types'
-import { checkDiff, toInt, useNotification } from '../../utils'
+import { checkDiff, getDiff, toInt, useNotification } from '../../utils'
 
 type TProjectVariables = {
   where?: {
@@ -71,7 +71,7 @@ export const useProjectState = (
   }
 
   const saveProject = async () => {
-    const isDiff = checkDiff(project, baseProject, [
+    const [isDiff, diffKeys] = getDiff(project, baseProject, [
       'location',
       'description',
       'expiresAt',
@@ -88,20 +88,18 @@ export const useProjectState = (
       return
     }
 
-    const input = {
-      countryCode: project.location?.country?.code,
-      description: project.description,
-      expiresAt: project.expiresAt,
-      fundingGoal: project.fundingGoal,
-      image: project.image,
-      projectId: project.id,
-      region: project.location?.region,
-      rewardCurrency: project.rewardCurrency,
-      shortDescription: project.shortDescription,
-      status: project.status,
-      thumbnailImage: project.thumbnailImage,
-      title: project.title,
-    } as UpdateProjectInput
+    const input = {} as UpdateProjectInput
+
+    diffKeys.map((key) => {
+      if (key === 'location') {
+        input.countryCode = project.location?.country?.code
+        input.region = project.location?.region
+        return
+      }
+
+      input[key as keyof UpdateProjectInput] = project[key]
+    })
+    input.projectId = toInt(project.id)
 
     await updateProjectMutation({ variables: { input } })
   }
