@@ -36,6 +36,7 @@ export const MUTATION_UPDATE_PROJECT = gql`
       image
       thumbnailImage
       status
+      links
       expiresAt
     }
   }

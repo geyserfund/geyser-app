@@ -2,8 +2,8 @@ import { GridItem, VStack } from '@chakra-ui/react'
 
 import { ButtonComponent } from '../../components/ui'
 import { useProjectContext } from '../../context'
-import { useProjectLinksState } from '../../hooks/graphqlState'
 import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
+import { useProjectLinksValidation } from '../../hooks/validations'
 import { useNotification } from '../../utils'
 import { ProjectRegion } from '../creation/projectCreate/components'
 import { ProjectLinks } from '../creation/projectCreate/components/ProjectLinks'
@@ -15,8 +15,7 @@ export const ProjectDetails = () => {
 
   const { project, updateProject, saveProject } = useProjectContext()
 
-  const { links, setLinks, saveLinks, linkError } = useProjectLinksState({
-    project,
+  const {  setLinks, linkError } = useProjectLinksValidation({
     updateProject,
   })
   const { tags, setTags, saveTags } = useProjectTagsState({
@@ -26,7 +25,6 @@ export const ProjectDetails = () => {
 
   const handleNext = async () => {
     try {
-      await saveLinks()
       await saveProject()
       await saveTags()
       toast({
@@ -62,7 +60,7 @@ export const ProjectDetails = () => {
 
             <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
-            <ProjectLinks {...{ links, setLinks, linkError }} />
+            <ProjectLinks {...{ links: project.links as string[], setLinks, linkError }} />
 
             <ButtonComponent primary w="full" onClick={handleNext}>
               Save
