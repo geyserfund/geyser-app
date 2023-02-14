@@ -88,9 +88,11 @@ export const ProjectRegion = ({
 
   const handleChange = (value: SingleValue<Country>) => {
     if (value?.code === value?.name) {
-      updateProject({ location: { region: value?.name } } as Project)
+      updateProject({
+        location: { region: value?.name, country: { code: '', name: '' } },
+      } as Project)
     } else {
-      updateProject({ location: { country: value } } as Project)
+      updateProject({ location: { country: value, region: '' } } as Project)
     }
   }
 

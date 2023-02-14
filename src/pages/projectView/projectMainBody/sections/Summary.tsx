@@ -7,24 +7,30 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
 import { useState } from 'react'
+import { AiOutlineCalendar } from 'react-icons/ai'
 import { CgProfile } from 'react-icons/cg'
+import { FiTag } from 'react-icons/fi'
+import { GrLocation } from 'react-icons/gr'
 
 import { AmbossIcon, ShareIcon } from '../../../../components/icons'
 import { CardLayout } from '../../../../components/layouts'
-import { H3 } from '../../../../components/typography'
+import { Body2, H3 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { colors } from '../../../../styles'
 import { Project } from '../../../../types/generated/graphql'
-import { MarkDown, useMobileMode } from '../../../../utils'
+import { MarkDown, toInt, useMobileMode } from '../../../../utils'
 import {
   AvatarElement,
   ProjectFundingSummary,
   ProjectLightningQR,
   ProjectLinks,
   ProjectMenu,
+  SummaryInfoLine,
+  TagBox,
 } from '../components'
 
 export const Summary = () => {
@@ -172,15 +178,59 @@ export const Summary = () => {
         <HStack>
           <H3>{project.shortDescription}</H3>
         </HStack>
-        <HStack spacing="16px" alignItems="center">
-          <Tooltip label={'Creator'} placement="top">
-            <Box>
-              <CgProfile color={colors.neutral600} fontSize="22px" />
-            </Box>
-          </Tooltip>
+        <SummaryInfoLine
+          label="Creator"
+          icon={<CgProfile color={colors.neutral600} fontSize="22px" />}
+        >
           <AvatarElement borderRadius="50%" user={owner.user} />
-        </HStack>
+        </SummaryInfoLine>
+
         <ProjectLinks links={project.links as string[]} />
+        <HStack spacing="28px">
+          {project.tags?.length > 0 && (
+            <SummaryInfoLine
+              label="Tags"
+              icon={<FiTag color={colors.neutral600} fontSize="22px" />}
+            >
+              <HStack>
+                {project.tags.map((tag) => {
+                  return <TagBox key={tag.id}>{tag.label}</TagBox>
+                })}
+              </HStack>
+            </SummaryInfoLine>
+          )}
+
+          {(project.location?.country?.name || project.location?.region) && (
+            <SummaryInfoLine
+              label="Region"
+              icon={<GrLocation color={colors.neutral600} fontSize="22px" />}
+            >
+              <HStack spacing="5px">
+                {project?.location?.country?.name && (
+                  <TagBox>{project?.location?.country?.name}</TagBox>
+                )}
+                {project?.location?.region && (
+                  <TagBox>{project?.location?.region}</TagBox>
+                )}
+              </HStack>
+            </SummaryInfoLine>
+          )}
+
+          <SummaryInfoLine
+            label="Launched"
+            icon={
+              <AiOutlineCalendar color={colors.neutral600} fontSize="22px" />
+            }
+          >
+            <Body2
+              semiBold
+              color={colors.neutral600}
+            >{`Launched ${DateTime.fromMillis(
+              toInt(project.createdAt),
+            ).toFormat('dd LLL yyyy')}`}</Body2>
+          </SummaryInfoLine>
+        </HStack>
+
         <VStack alignItems="flex-start">
           <MarkDown color='"brand.neutral800"'>{project.description}</MarkDown>
         </VStack>

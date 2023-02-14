@@ -35,6 +35,13 @@ export const MUTATION_UPDATE_PROJECT = gql`
       description
       image
       thumbnailImage
+      location {
+        country {
+          name
+          code
+        }
+        region
+      }
       status
       expiresAt
     }
