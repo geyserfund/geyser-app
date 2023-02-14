@@ -20,7 +20,7 @@ export type ProjectCreationVariables = {
 }
 
 export type ProjectUpdateVariables = {
-  projectId: number
+  projectId?: number
   title?: string
   name?: string
   image?: string

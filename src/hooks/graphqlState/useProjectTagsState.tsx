@@ -8,7 +8,6 @@ import {
 import {
   MutationInput,
   Project,
-  ProjectLinkMutationInput,
   ProjectTagMutationInput,
   Tag,
 } from '../../types'
@@ -32,7 +31,7 @@ export const useProjectTagsState = ({
   }, [project])
 
   const [addTag, { loading: addTagLoading }] = useMutation<
-    { projectTagAdd: Tag },
+    { projectTagAdd: Tag[] },
     MutationInput<ProjectTagMutationInput>
   >(MUTATION_PROJECT_TAG_ADD, {
     onError() {
@@ -42,17 +41,15 @@ export const useProjectTagsState = ({
       })
     },
     onCompleted(data) {
-      if (updateProject) {
+      if (updateProject && data.projectTagAdd) {
         updateProject({
-          tags: project.tags
-            ? [...project.tags, data.projectTagAdd]
-            : [data.projectTagAdd],
+          tags: data.projectTagAdd,
         } as Project)
       }
     },
   })
   const [removeTag, { loading: removeTagLoading }] = useMutation<
-    { projectTagRemove: Tag },
+    { projectTagRemove: Tag[] },
     MutationInput<ProjectTagMutationInput>
   >(MUTATION_PROJECT_TAG__REMOVE, {
     onError() {
@@ -62,11 +59,9 @@ export const useProjectTagsState = ({
       })
     },
     onCompleted(data) {
-      if (updateProject) {
+      if (updateProject && data.projectTagRemove) {
         updateProject({
-          tags: project.tags
-            ? project.tags.filter((tag) => tag.id !== data.projectTagRemove.id)
-            : [],
+          tags: data.projectTagRemove,
         } as Project)
       }
     },

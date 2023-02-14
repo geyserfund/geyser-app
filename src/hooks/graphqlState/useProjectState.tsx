@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
 import { Project, UpdateProjectInput } from '../../types'
-import { checkDiff, getDiff, toInt, useNotification } from '../../utils'
+import { getDiff, toInt, useNotification } from '../../utils'
 
 type TProjectVariables = {
   where?: {

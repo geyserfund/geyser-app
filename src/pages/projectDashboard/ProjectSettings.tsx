@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { GridItem, Switch, Text, useMediaQuery, VStack } from '@chakra-ui/react'
+import { GridItem, Switch, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { Body2 } from '../../components/typography'
@@ -8,7 +8,7 @@ import { useAuthContext, useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
 import { useBeforeClose } from '../../hooks'
 import { FormError, Project, ProjectStatus } from '../../types'
-import { isActive, toInt, useMobileMode, useNotification } from '../../utils'
+import { isActive, toInt, useNotification } from '../../utils'
 import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
@@ -21,7 +21,6 @@ type ProjectSettingsForm = {
 
 export const ProjectSettings = () => {
   const { user } = useAuthContext()
-  const isMobile = useMobileMode()
   const { toast } = useNotification()
 
   const { project, updateProject } = useProjectContext()
@@ -34,8 +33,6 @@ export const ProjectSettings = () => {
 
   const [deactivate, setDeactivate] = useState(!isActive(project.status))
   const [formError, setFormError] = useState<FormError<ProjectSettingsForm>>({})
-
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
   const { setIsFormDirty } = useBeforeClose()
 
@@ -119,11 +116,7 @@ export const ProjectSettings = () => {
 
   return (
     <DashboardGridLayout>
-      <GridItem
-        colSpan={isLargerThan1280 ? 6 : 2}
-        display="flex"
-        justifyContent="center"
-      >
+      <GridItem colSpan={6} display="flex" justifyContent="center">
         <VStack
           spacing="30px"
           width="100%"
@@ -176,13 +169,6 @@ export const ProjectSettings = () => {
           </VStack>
         </VStack>
       </GridItem>
-      <GridItem
-        colSpan={isLargerThan1280 ? 3 : 2}
-        display="flex"
-        marginTop={isMobile ? '0px' : '0px'}
-        alignItems="flex-start"
-        justifyContent="center"
-      ></GridItem>
     </DashboardGridLayout>
   )
 }

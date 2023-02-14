@@ -17,10 +17,11 @@ import { LandingPage } from '../pages/landing'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
 import { ProfilePage } from '../pages/profile/ProfilePage'
-import { ProjectContributors } from '../pages/projectDashboard'
 import {
+  ProjectContributors,
   ProjectDashboard,
   ProjectDescription,
+  ProjectDetails,
   ProjectFundingSettings,
   ProjectSettings,
   ProjectStats,
@@ -114,6 +115,14 @@ const platformRoutes = [
       {
         path: getPath('dashboardContributors', PathName.projectId),
         element: ProjectContributors,
+      },
+      {
+        path: getPath('dashboardContributors', PathName.projectId),
+        element: ProjectContributors,
+      },
+      {
+        path: getPath('dashboardDetails', PathName.projectId),
+        element: ProjectDetails,
       },
       {
         path: getPath('dashboardFunding', PathName.projectId),

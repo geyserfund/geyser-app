@@ -18,7 +18,7 @@ import { TextArea, TextInputBox, UploadBox } from '../../../../components/ui'
 import { commonMarkdownUrl, ProjectValidations } from '../../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql'
 import { colors } from '../../../../styles'
-import { FormError } from '../../../../types'
+import { FormError, Project } from '../../../../types'
 import { validLightningAddress } from '../../../../utils'
 
 type ProjectCreate = {
@@ -40,7 +40,7 @@ interface ProjectCreateFormProps {
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
-export const ProjectCreateFormValidation = (form: ProjectCreate) => {
+export const ProjectCreateFormValidation = (form: Partial<Project>) => {
   const errors = {} as { [key: string]: string }
   let isValid = true
   if (!form.title) {

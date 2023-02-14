@@ -6,14 +6,12 @@ import { ButtonComponent } from '../../components/ui'
 import { useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
 import { useBeforeClose } from '../../hooks'
-import { useProjectLinksState } from '../../hooks/graphqlState'
 import { FormError, Project } from '../../types'
-import { toInt, useMobileMode, useNotification } from '../../utils'
+import { checkDiff, toInt, useMobileMode, useNotification } from '../../utils'
 import {
   ProjectCreateForm,
   ProjectCreateFormValidation,
 } from '../creation/projectCreate/components/ProjectCreateForm'
-import { ProjectLinks } from '../creation/projectCreate/components/ProjectLinks'
 import { ProjectPreviewComponent } from '../creation/projectCreate/components/ProjectPreviewComponent'
 import { ProjectUpdateVariables } from '../creation/projectCreate/types'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
@@ -23,11 +21,6 @@ export const ProjectDescription = () => {
   const { toast } = useNotification()
 
   const { project, updateProject } = useProjectContext()
-
-  const { links, setLinks, saveLinks, linkError } = useProjectLinksState({
-    project,
-    updateProject,
-  })
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
@@ -42,19 +35,16 @@ export const ProjectDescription = () => {
   const { setIsFormDirty } = useBeforeClose()
 
   useEffect(() => {
-    if (
-      project.title !== form.title ||
-      project.shortDescription !== form.shortDescription ||
-      project.description !== form.description ||
-      project.image !== form.image ||
-      project.thumbnailImage !== form.thumbnailImage ||
-      links.some((link) => !project.links.includes(link))
-    ) {
-      setIsFormDirty(true)
-    } else {
-      setIsFormDirty(false)
-    }
-  }, [project, form, links])
+    const isDiff = checkDiff(project as ProjectUpdateVariables, form, [
+      'title',
+      'shortDescription',
+      'description',
+      'image',
+      'thumbnailImage',
+    ])
+
+    setIsFormDirty(isDiff)
+  }, [project, form])
 
   const [formError, setFormError] = useState<FormError<ProjectUpdateVariables>>(
     {},
@@ -93,10 +83,6 @@ export const ProjectDescription = () => {
         description: project.description,
         name: project.name,
       })
-      if (project?.links?.length > 0) {
-        const existingLinks = project.links.filter((link) => link) as string[]
-        setLinks(existingLinks)
-      }
     }
   }, [project])
 
@@ -104,7 +90,6 @@ export const ProjectDescription = () => {
     const isValid = validateForm()
 
     if (isValid) {
-      await saveLinks()
       updateProjectMutation({
         variables: {
           input: {
@@ -121,14 +106,10 @@ export const ProjectDescription = () => {
   }
 
   const validateForm = () => {
-    let { errors, isValid } = ProjectCreateFormValidation(form)
+    const { errors, isValid } = ProjectCreateFormValidation(form)
 
     if (!isValid) {
       setFormError(errors)
-    }
-
-    if (linkError.includes(true)) {
-      isValid = true
     }
 
     return isValid
@@ -155,8 +136,6 @@ export const ProjectDescription = () => {
             <ProjectCreateForm
               {...{ form, setForm, formError, setFormError, isEdit: true }}
             />
-
-            <ProjectLinks {...{ links, setLinks, linkError }} />
 
             <ButtonComponent
               isLoading={updateLoading}

@@ -14,6 +14,7 @@ enum DashboardTabs {
   funds = 'funds',
   editProject = 'edit project',
   contributors = 'contributors',
+  details = 'details',
   stats = 'stats',
   settings = 'settings',
 }
@@ -55,30 +56,31 @@ export const ProjectDashboard = () => {
     return splitValue.replaceAll('/', '') as DashboardTabs
   }
 
-  const { loading, project } = useProjectState(projectId || '', {
-    fetchPolicy: 'network-only',
-    onError() {
-      navigate(getPath('notFound'))
-    },
-    onCompleted(data) {
-      const { project } = data
-      if (project) {
-        if (project.owners[0].user.id !== user.id) {
-          navigate(getPath('notAuthorized'))
-        }
+  const { loading, saving, project, updateProject, saveProject } =
+    useProjectState(projectId || '', {
+      fetchPolicy: 'network-only',
+      onError() {
+        navigate(getPath('notFound'))
+      },
+      onCompleted(data) {
+        const { project } = data
+        if (project) {
+          if (project.owners[0].user.id !== user.id) {
+            navigate(getPath('notAuthorized'))
+          }
 
-        setNavData({
-          projectName: project.name,
-          projectTitle: project.title,
-          projectPath: `${getPath('project', project.name)}`,
-          projectOwnerIDs:
-            project.owners.map((ownerInfo: Owner) => {
-              return Number(ownerInfo.user.id || -1)
-            }) || [],
-        })
-      }
-    },
-  })
+          setNavData({
+            projectName: project.name,
+            projectTitle: project.title,
+            projectPath: `${getPath('project', project.name)}`,
+            projectOwnerIDs:
+              project.owners.map((ownerInfo: Owner) => {
+                return Number(ownerInfo.user.id || -1)
+              }) || [],
+          })
+        }
+      },
+    })
 
   if (loading) {
     return <Loader alignItems="flex-start" paddingTop="120px" />
@@ -112,6 +114,7 @@ export const ProjectDashboard = () => {
   const navList: DashboardTabs[] = [
     DashboardTabs.editProject,
     DashboardTabs.contributors,
+    DashboardTabs.details,
     DashboardTabs.funds,
     DashboardTabs.stats,
     DashboardTabs.settings,
@@ -145,7 +148,12 @@ export const ProjectDashboard = () => {
           {navList.map((nav) => renderButton(nav))}
         </HStack>
       </HStack>
-      <ProjectProvider project={project}>
+      <ProjectProvider
+        project={project}
+        updateProject={updateProject}
+        saveProject={saveProject}
+        saving={saving}
+      >
         <Outlet />
       </ProjectProvider>
     </Box>
