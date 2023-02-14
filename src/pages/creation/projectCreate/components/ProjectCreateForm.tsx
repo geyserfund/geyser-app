@@ -19,7 +19,7 @@ import { commonMarkdownUrl, ProjectValidations } from '../../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql'
 import { colors } from '../../../../styles'
 import { FormError, Project } from '../../../../types'
-import { validLightningAddress } from '../../../../utils'
+import { toMediumImageUrl, validLightningAddress } from '../../../../utils'
 
 type ProjectCreate = {
   title?: string
@@ -120,10 +120,13 @@ export const ProjectCreateForm = ({
     }
   }
 
-  const handleImageUpload = (url: string) =>
-    setForm({ ...form, thumbnailImage: url })
-  const handleHeaderImageUpload = (url: string) =>
+  const handleImageUpload = (url: string) => {
+    setForm({ ...form, thumbnailImage: toMediumImageUrl(url) })
+  }
+
+  const handleHeaderImageUpload = (url: string) => {
     setForm({ ...form, image: url })
+  }
 
   const handleChange = (event: any) => {
     if (event) {
