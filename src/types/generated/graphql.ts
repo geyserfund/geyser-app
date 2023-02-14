@@ -251,7 +251,7 @@ export type Funder = {
   /** Time at which the first confirmed funding transactions of the Funder was confirmed. */
   confirmedAt?: Maybe<Scalars['Date']>;
   /** Funder's funding txs. */
-  fundingTxs?: Array<FundingTx>;
+  fundingTxs: Array<FundingTx>;
   id: Scalars['BigInt'];
   rewards: Array<Maybe<FunderReward>>;
   /** Number of (confirmed) times a Funder funded a particular project. */

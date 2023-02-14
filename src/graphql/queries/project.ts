@@ -319,6 +319,8 @@ export const QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS = gql`
         id
         username
         imageUrl
+      }
+      fundingTxs {
         email
       }
       rewards {
