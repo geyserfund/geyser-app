@@ -76,6 +76,7 @@ export const ImageWithReload = ({
           height="100%"
           width="100%"
           backgroundColor="brand.neutral200"
+          {...rest}
         ></Box>
       )
     }

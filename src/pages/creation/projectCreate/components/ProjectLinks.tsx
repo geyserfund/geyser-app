@@ -69,7 +69,11 @@ export const ProjectLinks = ({
           )
         })}
       <Box w="full" paddingTop="10px">
-        <ButtonComponent w="full" onClick={addNewLink}>
+        <ButtonComponent
+          w="full"
+          onClick={addNewLink}
+          isDisabled={links.length >= 7}
+        >
           Add Project Link
         </ButtonComponent>
       </Box>
