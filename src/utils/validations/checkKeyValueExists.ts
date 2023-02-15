@@ -29,7 +29,10 @@ export const checkDiff = <T extends {}>(
   val2: T,
   keys?: (keyof T)[],
 ): boolean => {
-  return (keys || (Object.keys(val1) as (keyof T)[])).some((key) => {
+  const loopVal =
+    Object.keys(val1).length >= Object.keys(val2).length ? val1 : val2
+
+  return (keys || (Object.keys(loopVal) as (keyof T)[])).some((key) => {
     if (val1[key] && val2[key] && typeof val1[key] === 'object') {
       return checkDiff(val1[key] as object, val2[key] as object)
     }
@@ -43,8 +46,11 @@ export const getDiff = <T extends {}>(
   val2: T,
   keys?: Partial<keyof T>[],
 ): [boolean, Partial<keyof T>[]] => {
+  const loopVal =
+    Object.keys(val1).length >= Object.keys(val2).length ? val1 : val2
+
   const diffKeys =
-    (keys || (Object.keys(val1) as (keyof T)[])).filter((key) => {
+    (keys || (Object.keys(loopVal) as (keyof T)[])).filter((key) => {
       if (val1[key] && val2[key] && typeof val1[key] === 'object') {
         return checkDiff(val1[key] as object, val2[key] as object)
       }

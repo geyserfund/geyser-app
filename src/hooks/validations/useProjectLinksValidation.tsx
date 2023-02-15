@@ -14,6 +14,11 @@ export const useProjectLinksValidation = ({
 
     links.map((link, index) => {
       try {
+        if (!link) {
+          errors.push(false)
+          return
+        }
+
         const url = new URL(link)
 
         const isDuplicate = links.indexOf(link) !== index
