@@ -98,6 +98,11 @@ export const useProjectState = (
         return
       }
 
+      if (key === 'links') {
+        input.links = project.links.filter((link) => link)
+        return
+      }
+
       input[key as keyof UpdateProjectInput] = project[key]
     })
     input.projectId = toInt(project.id)
