@@ -42,6 +42,15 @@ export const ProjectAdditionalDetails = () => {
   })
 
   const handleNext = async () => {
+    if (linkError.includes(true)) {
+      toast({
+        status: 'warning',
+        title: 'failed to update project',
+        description: 'please enter a valid url for project links',
+      })
+      return
+    }
+
     saveTags()
     saveProject()
     navigate(getPath('launchProjectWithNode', params.projectId || ''))
