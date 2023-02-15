@@ -1,4 +1,5 @@
 import { GridItem, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 
 import { ButtonComponent } from '../../components/ui'
 import { useProjectContext } from '../../context'
@@ -13,9 +14,10 @@ import { DashboardGridLayout } from './components/DashboardGridLayout'
 export const ProjectDetails = () => {
   const { toast } = useNotification()
 
+  const [saving, setSaving] = useState(false)
   const { project, updateProject, saveProject } = useProjectContext()
 
-  const {  setLinks, linkError } = useProjectLinksValidation({
+  const { setLinks, linkError } = useProjectLinksValidation({
     updateProject,
   })
   const { tags, setTags, saveTags } = useProjectTagsState({
@@ -24,6 +26,7 @@ export const ProjectDetails = () => {
   })
 
   const handleNext = async () => {
+    setSaving(true)
     try {
       await saveProject()
       await saveTags()
@@ -37,6 +40,8 @@ export const ProjectDetails = () => {
         title: 'failed to update project',
       })
     }
+
+    setSaving(false)
   }
 
   return (
@@ -60,9 +65,16 @@ export const ProjectDetails = () => {
 
             <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
-            <ProjectLinks {...{ links: project.links as string[], setLinks, linkError }} />
+            <ProjectLinks
+              {...{ links: project.links as string[], setLinks, linkError }}
+            />
 
-            <ButtonComponent primary w="full" onClick={handleNext}>
+            <ButtonComponent
+              isLoading={saving}
+              primary
+              w="full"
+              onClick={handleNext}
+            >
               Save
             </ButtonComponent>
           </VStack>
