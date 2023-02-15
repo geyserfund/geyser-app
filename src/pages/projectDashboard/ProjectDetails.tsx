@@ -26,6 +26,15 @@ export const ProjectDetails = () => {
   })
 
   const handleNext = async () => {
+    if (linkError.includes(true)) {
+      toast({
+        status: 'warning',
+        title: 'failed to update project',
+        description: 'please enter a valid url for project links',
+      })
+      return
+    }
+
     setSaving(true)
     try {
       await saveProject()
