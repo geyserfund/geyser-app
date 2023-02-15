@@ -120,6 +120,12 @@ export const ProjectTagsCreateEdit = ({
     }
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' && showAddTag) {
+      handleCreateTag()
+    }
+  }
+
   const Menu = (props: MenuProps<TagsGetResult, true, any>) => {
     return (
       <components.Menu<TagsGetResult, true, any> {...props}>
@@ -168,6 +174,7 @@ export const ProjectTagsCreateEdit = ({
           getOptionLabel={(option: TagsGetResult) => option.label}
           getOptionValue={(option: TagsGetResult) => option.label}
           onInputChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           inputValue={inputValue}
           components={{ Menu }}
         />

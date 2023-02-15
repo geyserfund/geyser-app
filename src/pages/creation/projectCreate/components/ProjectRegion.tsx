@@ -106,7 +106,9 @@ export const ProjectRegion = ({
   }
 
   const removeRegion = () => {
-    updateProject({ location: {} } as Project)
+    updateProject({
+      location: { region: '', country: { code: '', name: '' } },
+    } as Project)
   }
 
   const isLoading = countriesLoading || regionsLoading

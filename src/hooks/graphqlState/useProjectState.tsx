@@ -82,6 +82,7 @@ export const useProjectState = (
       'status',
       'thumbnailImage',
       'title',
+      'links',
     ])
 
     if (!isDiff) {
