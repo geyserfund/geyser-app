@@ -43,6 +43,7 @@ export const MUTATION_UPDATE_PROJECT = gql`
         region
       }
       status
+      links
       expiresAt
     }
   }

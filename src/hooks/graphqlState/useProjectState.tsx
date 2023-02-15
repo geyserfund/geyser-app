@@ -82,6 +82,7 @@ export const useProjectState = (
       'status',
       'thumbnailImage',
       'title',
+      'links',
     ])
 
     if (!isDiff) {
@@ -94,6 +95,11 @@ export const useProjectState = (
       if (key === 'location') {
         input.countryCode = project.location?.country?.code
         input.region = project.location?.region
+        return
+      }
+
+      if (key === 'links') {
+        input.links = project.links.filter((link) => link)
         return
       }
 

@@ -1,9 +1,10 @@
 import { GridItem, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 
 import { ButtonComponent } from '../../components/ui'
 import { useProjectContext } from '../../context'
-import { useProjectLinksState } from '../../hooks/graphqlState'
 import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
+import { useProjectLinksValidation } from '../../hooks/validations'
 import { useNotification } from '../../utils'
 import { ProjectRegion } from '../creation/projectCreate/components'
 import { ProjectLinks } from '../creation/projectCreate/components/ProjectLinks'
@@ -13,10 +14,10 @@ import { DashboardGridLayout } from './components/DashboardGridLayout'
 export const ProjectDetails = () => {
   const { toast } = useNotification()
 
+  const [saving, setSaving] = useState(false)
   const { project, updateProject, saveProject } = useProjectContext()
 
-  const { links, setLinks, saveLinks, linkError } = useProjectLinksState({
-    project,
+  const { setLinks, linkError } = useProjectLinksValidation({
     updateProject,
   })
   const { tags, setTags, saveTags } = useProjectTagsState({
@@ -25,8 +26,17 @@ export const ProjectDetails = () => {
   })
 
   const handleNext = async () => {
+    if (linkError.includes(true)) {
+      toast({
+        status: 'warning',
+        title: 'failed to update project',
+        description: 'please enter a valid url for project links',
+      })
+      return
+    }
+
+    setSaving(true)
     try {
-      await saveLinks()
       await saveProject()
       await saveTags()
       toast({
@@ -39,6 +49,8 @@ export const ProjectDetails = () => {
         title: 'failed to update project',
       })
     }
+
+    setSaving(false)
   }
 
   return (
@@ -62,9 +74,16 @@ export const ProjectDetails = () => {
 
             <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
-            <ProjectLinks {...{ links, setLinks, linkError }} />
+            <ProjectLinks
+              {...{ links: project.links as string[], setLinks, linkError }}
+            />
 
-            <ButtonComponent primary w="full" onClick={handleNext}>
+            <ButtonComponent
+              isLoading={saving}
+              primary
+              w="full"
+              onClick={handleNext}
+            >
               Save
             </ButtonComponent>
           </VStack>

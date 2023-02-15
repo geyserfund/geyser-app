@@ -4,11 +4,9 @@ import { useNavigate, useParams } from 'react-router'
 import { ButtonComponent } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
-import {
-  useProjectLinksState,
-  useProjectState,
-} from '../../../hooks/graphqlState'
+import { useProjectState } from '../../../hooks/graphqlState'
 import { useProjectTagsState } from '../../../hooks/graphqlState/useProjectTagsState'
+import { useProjectLinksValidation } from '../../../hooks/validations'
 import { toInt, useNotification } from '../../../utils'
 import { ProjectRegion } from './components'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
@@ -35,8 +33,7 @@ export const ProjectAdditionalDetails = () => {
     'id',
   )
 
-  const { links, setLinks, saveLinks, linkError } = useProjectLinksState({
-    project,
+  const { setLinks, linkError } = useProjectLinksValidation({
     updateProject,
   })
   const { tags, setTags, saveTags } = useProjectTagsState({
@@ -45,7 +42,15 @@ export const ProjectAdditionalDetails = () => {
   })
 
   const handleNext = async () => {
-    saveLinks()
+    if (linkError.includes(true)) {
+      toast({
+        status: 'warning',
+        title: 'failed to update project',
+        description: 'please enter a valid url for project links',
+      })
+      return
+    }
+
     saveTags()
     saveProject()
     navigate(getPath('launchProjectWithNode', params.projectId || ''))
@@ -69,7 +74,7 @@ export const ProjectAdditionalDetails = () => {
       >
         <VStack width="100%" alignItems="flex-start" spacing="40px">
           <ProjectLinks
-            links={links}
+            links={project.links as string[]}
             setLinks={setLinks}
             linkError={linkError}
           />
