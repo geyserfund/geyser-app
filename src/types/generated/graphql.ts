@@ -29,7 +29,7 @@ export type Scalars = {
   email_String_format_email: any;
   fundingGoal_Int_min_1: any;
   link_String_NotNull_format_uri: any;
-  links_List_String_format_uri: any;
+  links_List_String_NotNull_format_uri: any;
   name_String_NotNull_maxLength_100: any;
   name_String_NotNull_minLength_3_maxLength_60: any;
   name_String_NotNull_minLength_3_maxLength_280: any;
@@ -1291,7 +1291,7 @@ export type UpdateProjectInput = {
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
   /** Project links */
-  links?: InputMaybe<Array<InputMaybe<Scalars['links_List_String_format_uri']>>>;
+  links?: InputMaybe<Array<Scalars['links_List_String_NotNull_format_uri']>>;
   projectId: Scalars['BigInt'];
   /** Project region */
   region?: InputMaybe<Scalars['String']>;
@@ -1705,7 +1705,7 @@ export type ResolversTypes = {
   fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>;
   getDashboardFundersInput: GetDashboardFundersInput;
   link_String_NotNull_format_uri: ResolverTypeWrapper<Scalars['link_String_NotNull_format_uri']>;
-  links_List_String_format_uri: ResolverTypeWrapper<Scalars['links_List_String_format_uri']>;
+  links_List_String_NotNull_format_uri: ResolverTypeWrapper<Scalars['links_List_String_NotNull_format_uri']>;
   name_String_NotNull_maxLength_100: ResolverTypeWrapper<Scalars['name_String_NotNull_maxLength_100']>;
   name_String_NotNull_minLength_3_maxLength_60: ResolverTypeWrapper<Scalars['name_String_NotNull_minLength_3_maxLength_60']>;
   name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<Scalars['name_String_NotNull_minLength_3_maxLength_280']>;
@@ -1870,7 +1870,7 @@ export type ResolversParentTypes = {
   fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1'];
   getDashboardFundersInput: GetDashboardFundersInput;
   link_String_NotNull_format_uri: Scalars['link_String_NotNull_format_uri'];
-  links_List_String_format_uri: Scalars['links_List_String_format_uri'];
+  links_List_String_NotNull_format_uri: Scalars['links_List_String_NotNull_format_uri'];
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
@@ -2426,8 +2426,8 @@ export interface Link_String_NotNull_Format_UriScalarConfig extends GraphQLScala
   name: 'link_String_NotNull_format_uri';
 }
 
-export interface Links_List_String_Format_UriScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['links_List_String_format_uri'], any> {
-  name: 'links_List_String_format_uri';
+export interface Links_List_String_NotNull_Format_UriScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['links_List_String_NotNull_format_uri'], any> {
+  name: 'links_List_String_NotNull_format_uri';
 }
 
 export interface Name_String_NotNull_MaxLength_100ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['name_String_NotNull_maxLength_100'], any> {
@@ -2557,7 +2557,7 @@ export type Resolvers<ContextType = any> = {
   email_String_format_email?: GraphQLScalarType;
   fundingGoal_Int_min_1?: GraphQLScalarType;
   link_String_NotNull_format_uri?: GraphQLScalarType;
-  links_List_String_format_uri?: GraphQLScalarType;
+  links_List_String_NotNull_format_uri?: GraphQLScalarType;
   name_String_NotNull_maxLength_100?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_60?: GraphQLScalarType;
   name_String_NotNull_minLength_3_maxLength_280?: GraphQLScalarType;
