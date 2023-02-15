@@ -157,7 +157,7 @@ export const GrantsRoundTwo = () => {
       } catch (error) {
         toast({
           status: 'error',
-          title: 'Failed to fetch applicants',
+          title: 'failed to fetch applicants',
         })
       }
 

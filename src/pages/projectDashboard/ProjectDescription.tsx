@@ -35,7 +35,7 @@ export const ProjectDescription = () => {
   const { setIsFormDirty } = useBeforeClose()
 
   useEffect(() => {
-    const isDiff = checkDiff(project as ProjectUpdateVariables, form, [
+    const isDiff = checkDiff(project as Partial<ProjectUpdateVariables>, form, [
       'title',
       'shortDescription',
       'description',

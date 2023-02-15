@@ -128,7 +128,11 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
       try {
         createGrantContributionRecord(data)
       } catch (error) {
-        console.log('checking error', error)
+        toast({
+          status: 'error',
+          title: 'failed to record contribution',
+          description: 'please contact us if this happended despite payment ',
+        })
       }
     }
   }, [fundState])

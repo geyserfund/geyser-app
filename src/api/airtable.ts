@@ -41,9 +41,6 @@ export const createApplicantRecordRound2 = async (data: any) =>
   })
     .then((response) => response.json())
     .then((res) => res)
-    .catch((err) => {
-      console.log(err)
-    })
 
 export const createGrantContributionRecord = async (data: any) =>
   fetch('https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Contributors', {
@@ -56,9 +53,6 @@ export const createGrantContributionRecord = async (data: any) =>
   })
     .then((response) => response.json())
     .then((res) => res)
-    .catch((err) => {
-      console.log(err)
-    })
 
 export const getGrantSponsorRecords = async () =>
   fetch(
@@ -73,9 +67,6 @@ export const getGrantSponsorRecords = async () =>
   )
     .then((response) => response.json())
     .then((res) => res.records)
-    .catch((err) => {
-      console.log(err)
-    })
 
 export const getGrantApplicants = async (): Promise<
   {
@@ -94,6 +85,3 @@ export const getGrantApplicants = async (): Promise<
   )
     .then((response) => response.json())
     .then((res) => res.records)
-    .catch((err) => {
-      console.log(err)
-    })
