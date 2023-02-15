@@ -85,7 +85,7 @@ export const useProjectLinksState = ({
     _setLinks(links)
   }
 
-  const handleLinks = async () => {
+  const saveLinks = async () => {
     const finalLinks = links.filter((link) => link)
     const addLinks =
       project?.links?.length > 0
@@ -127,5 +127,5 @@ export const useProjectLinksState = ({
     }
   }
 
-  return { links, setLinks, linkError, handleLinks }
+  return { links, setLinks, linkError, saveLinks }
 }

@@ -13,14 +13,18 @@ export enum MobileViews {
 type ProjectState = {
   project: Project
   updateProject?: (updateProject: Project) => void
+  saveProject?: () => Promise<void>
+  saving?: boolean
 }
 
 type ProjectContextProps = {
   project: Project
   updateProject: (updateProject: Project) => void
+  saveProject: () => Promise<void>
   mobileView: MobileViews
   setMobileView: (view: MobileViews) => void
   isProjectOwner: boolean
+  saving?: boolean
 }
 
 const defaultProjectContext = {
@@ -28,7 +32,9 @@ const defaultProjectContext = {
   setMobileView(view: MobileViews) {},
   project: {} as Project,
   updateProject() {},
+  async saveProject() {},
   isProjectOwner: false,
+  saving: false,
 }
 
 export const ProjectContext = createContext<ProjectContextProps>(
@@ -39,7 +45,9 @@ export const useProjectContext = () => useContext(ProjectContext)
 
 export const ProjectProvider = ({
   project,
-  updateProject,
+  updateProject = defaultProjectContext.updateProject,
+  saveProject = defaultProjectContext.saveProject,
+  saving,
   children,
 }: { children: React.ReactNode } & ProjectState) => {
   const [mobileView, setMobileView] = useState<MobileViews>(
@@ -56,12 +64,6 @@ export const ProjectProvider = ({
     }
   }, [project.id, user])
 
-  const handleUpdateProject = (value: Project) => {
-    if (updateProject) {
-      updateProject(value)
-    }
-  }
-
   return (
     <ProjectContext.Provider
       value={{
@@ -69,7 +71,9 @@ export const ProjectProvider = ({
         setMobileView,
         project,
         isProjectOwner,
-        updateProject: handleUpdateProject,
+        updateProject,
+        saveProject,
+        saving,
       }}
     >
       {children}

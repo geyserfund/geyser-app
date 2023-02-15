@@ -9,7 +9,7 @@ import { AppFooter } from '../../components/molecules'
 import { H2, H3 } from '../../components/typography'
 import { ButtonComponent } from '../../components/ui'
 import { fonts } from '../../styles'
-import { getRandomOrb, useMobileMode } from '../../utils'
+import { getRandomOrb, useMobileMode, useNotification } from '../../utils'
 import { CustomGrantCard } from './components/CustomGrantCard'
 import { GrantsContributeModal } from './components/GrantsContributeModal'
 import { ListText } from './components/ListText'
@@ -18,6 +18,8 @@ import { GrantSponsor } from './GrantsRoundTwo'
 
 export const GrantsLandingPage = () => {
   const isMobile = useMobileMode()
+
+  const { toast } = useNotification()
 
   const [copy, setCopy] = useState(false)
   const [sponsors, setSponsers] = useState<GrantSponsor[]>([])
@@ -41,19 +43,33 @@ export const GrantsLandingPage = () => {
 
   useEffect(() => {
     const getSponsors = async () => {
-      const sponsorResponse = await getGrantSponsorRecords()
+      try {
+        const sponsorResponse = await getGrantSponsorRecords()
 
-      const listSponsers = sponsorResponse.map((sponsor: any) => ({
-        name: sponsor.fields.Name,
-        amount: sponsor.fields.Amount,
-        imageUrl: sponsor.fields['PFP link'],
-      }))
-      setSponsers(listSponsers)
+        const listSponsers = sponsorResponse.map((sponsor: any) => ({
+          name: sponsor.fields.Name,
+          amount: sponsor.fields.Amount,
+          imageUrl: sponsor.fields['PFP link'],
+        }))
+        setSponsers(listSponsers)
+      } catch (error) {
+        toast({
+          status: 'error',
+          title: 'failed to fetch grant sponsors',
+        })
+      }
     }
 
     const getApplicants = async () => {
-      const applicantResponse = await getGrantApplicants()
-      setApplicationCount(`${applicantResponse.length}`)
+      try {
+        const applicantResponse = await getGrantApplicants()
+        setApplicationCount(`${applicantResponse.length}`)
+      } catch (error) {
+        toast({
+          status: 'error',
+          title: 'failed to fetch grant applicants',
+        })
+      }
     }
 
     getSponsors()

@@ -120,7 +120,7 @@ export type CreateProjectInput = {
   /** A short description of the project. */
   description: Scalars['description_String_NotNull_maxLength_2200'];
   email: Scalars['email_String_NotNull_format_email'];
-  expiresAt?: InputMaybe<Scalars['String']>;
+  expiresAt?: InputMaybe<Scalars['Date']>;
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>;
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
@@ -250,11 +250,19 @@ export type Funder = {
   confirmed: Scalars['Boolean'];
   /** Time at which the first confirmed funding transactions of the Funder was confirmed. */
   confirmedAt?: Maybe<Scalars['Date']>;
+  /** Funder's funding txs. */
+  fundingTxs: Array<FundingTx>;
   id: Scalars['BigInt'];
   rewards: Array<Maybe<FunderReward>>;
   /** Number of (confirmed) times a Funder funded a particular project. */
   timesFunded?: Maybe<Scalars['Int']>;
   user?: Maybe<User>;
+};
+
+
+/** The Funder type contains a User's funding details over a particular project. */
+export type FunderFundingTxsArgs = {
+  input?: InputMaybe<GetFunderFundingTxsInput>;
 };
 
 export type FunderReward = {
@@ -390,6 +398,7 @@ export type FundingTx = {
   address?: Maybe<Scalars['String']>;
   amount: Scalars['Int'];
   comment?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
   funder: Funder;
   id: Scalars['BigInt'];
   invoiceId: Scalars['String'];
@@ -457,6 +466,15 @@ export type GetEntriesOrderByInput = {
 
 export type GetEntriesWhereInput = {
   projectId?: InputMaybe<Scalars['BigInt']>;
+};
+
+export type GetFunderFundingTxsInput = {
+  where?: InputMaybe<GetFunderFundingTxsWhereInput>;
+};
+
+export type GetFunderFundingTxsWhereInput = {
+  method?: InputMaybe<FundingMethod>;
+  status?: InputMaybe<FundingStatus>;
 };
 
 export type GetFunderWhereInput = {
@@ -641,12 +659,15 @@ export type Mutation = {
   fundingInvoiceCancel: FundinginvoiceCancel;
   fundingInvoiceRefresh: FundingTx;
   fundingPend: FundingPendingResponse;
+  projectFollow: Scalars['Boolean'];
   projectLinkAdd: Project;
   projectLinkRemove: Project;
   projectTagAdd: Array<Tag>;
   projectTagRemove: Array<Tag>;
+  projectUnfollow: Scalars['Boolean'];
   /** Makes the Entry public. */
   publishEntry: Entry;
+  tagCreate: Tag;
   unlinkExternalAccount: User;
   updateEntry: Entry;
   updateProject: Project;
@@ -754,6 +775,11 @@ export type MutationFundingPendArgs = {
 };
 
 
+export type MutationProjectFollowArgs = {
+  input: ProjectFollowMutationInput;
+};
+
+
 export type MutationProjectLinkAddArgs = {
   input: ProjectLinkMutationInput;
 };
@@ -774,8 +800,18 @@ export type MutationProjectTagRemoveArgs = {
 };
 
 
+export type MutationProjectUnfollowArgs = {
+  input: ProjectFollowMutationInput;
+};
+
+
 export type MutationPublishEntryArgs = {
   id: Scalars['BigInt'];
+};
+
+
+export type MutationTagCreateArgs = {
+  input: TagCreateInput;
 };
 
 
@@ -862,6 +898,7 @@ export type Project = {
    */
   entries: Array<Maybe<Entry>>;
   expiresAt?: Maybe<Scalars['String']>;
+  followers: Array<Maybe<User>>;
   funders: Array<Maybe<Funder>>;
   fundersCount?: Maybe<Scalars['Int']>;
   fundingGoal?: Maybe<Scalars['fundingGoal_Int_min_1']>;
@@ -921,6 +958,10 @@ export type ProjectEntriesGetInput = {
 
 export type ProjectEntriesGetWhereInput = {
   published?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ProjectFollowMutationInput = {
+  projectId: Scalars['BigInt'];
 };
 
 export type ProjectLinkMutationInput = {
@@ -1225,6 +1266,10 @@ export type Tag = {
   label: Scalars['String'];
 };
 
+export type TagCreateInput = {
+  label: Scalars['String'];
+};
+
 export type TagsGetResult = {
   __typename?: 'TagsGetResult';
   count: Scalars['Int'];
@@ -1252,7 +1297,7 @@ export type UpdateProjectInput = {
   countryCode?: InputMaybe<Scalars['String']>;
   /** Description of the project. */
   description?: InputMaybe<Scalars['description_String_maxLength_2200']>;
-  expiresAt?: InputMaybe<Scalars['String']>;
+  expiresAt?: InputMaybe<Scalars['Date']>;
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>;
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>;
@@ -1335,6 +1380,7 @@ export type User = {
   id: Scalars['BigInt'];
   imageUrl?: Maybe<Scalars['String']>;
   ownerOf: Array<Maybe<OwnerOf>>;
+  projectFollows: Array<Maybe<Project>>;
   /**
    * Returns the projects of a user. By default, this field returns all the projects for that user, both draft and non-draft.
    * To filter the result set, an explicit input can be passed that specifies a value of the status field.
@@ -1569,6 +1615,8 @@ export type ResolversTypes = {
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
   GetEntriesWhereInput: GetEntriesWhereInput;
+  GetFunderFundingTxsInput: GetFunderFundingTxsInput;
+  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput;
   GetFunderWhereInput: GetFunderWhereInput;
   GetFundersInput: GetFundersInput;
   GetFundersOrderByInput: GetFundersOrderByInput;
@@ -1603,6 +1651,7 @@ export type ResolversTypes = {
   ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
+  ProjectFollowMutationInput: ProjectFollowMutationInput;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>;
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
@@ -1629,6 +1678,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
   Tag: ResolverTypeWrapper<Tag>;
+  TagCreateInput: TagCreateInput;
   TagsGetResult: ResolverTypeWrapper<TagsGetResult>;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
   UpdateEntryInput: UpdateEntryInput;
@@ -1738,6 +1788,8 @@ export type ResolversParentTypes = {
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
   GetEntriesWhereInput: GetEntriesWhereInput;
+  GetFunderFundingTxsInput: GetFunderFundingTxsInput;
+  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput;
   GetFunderWhereInput: GetFunderWhereInput;
   GetFundersInput: GetFundersInput;
   GetFundersOrderByInput: GetFundersOrderByInput;
@@ -1769,6 +1821,7 @@ export type ResolversParentTypes = {
   ProjectCountriesGetResult: ProjectCountriesGetResult;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
+  ProjectFollowMutationInput: ProjectFollowMutationInput;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
   ProjectMilestone: ProjectMilestone;
   ProjectRegionsGetResult: ProjectRegionsGetResult;
@@ -1791,6 +1844,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Subscription: {};
   Tag: Tag;
+  TagCreateInput: TagCreateInput;
   TagsGetResult: TagsGetResult;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
   UpdateEntryInput: UpdateEntryInput;
@@ -1941,6 +1995,7 @@ export type FunderResolvers<ContextType = any, ParentType extends ResolversParen
   amountFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType, Partial<FunderFundingTxsArgs>>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   rewards?: Resolver<Array<Maybe<ResolversTypes['FunderReward']>>, ParentType, ContextType>;
   timesFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1990,6 +2045,7 @@ export type FundingTxResolvers<ContextType = any, ParentType extends ResolversPa
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   invoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2094,11 +2150,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   fundingInvoiceCancel?: Resolver<ResolversTypes['FundinginvoiceCancel'], ParentType, ContextType, RequireFields<MutationFundingInvoiceCancelArgs, 'invoiceId'>>;
   fundingInvoiceRefresh?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, RequireFields<MutationFundingInvoiceRefreshArgs, 'fundingTxId'>>;
   fundingPend?: Resolver<ResolversTypes['FundingPendingResponse'], ParentType, ContextType, RequireFields<MutationFundingPendArgs, 'input'>>;
+  projectFollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectFollowArgs, 'input'>>;
   projectLinkAdd?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectLinkAddArgs, 'input'>>;
   projectLinkRemove?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectLinkRemoveArgs, 'input'>>;
   projectTagAdd?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagAddArgs, 'input'>>;
   projectTagRemove?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagRemoveArgs, 'input'>>;
+  projectUnfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectUnfollowArgs, 'input'>>;
   publishEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationPublishEntryArgs, 'id'>>;
+  tagCreate?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationTagCreateArgs, 'input'>>;
   unlinkExternalAccount?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUnlinkExternalAccountArgs, 'id'>>;
   updateEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationUpdateEntryArgs, 'input'>>;
   updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'input'>>;
@@ -2128,6 +2187,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   description?: Resolver<Maybe<ResolversTypes['description_String_maxLength_2200']>, ParentType, ContextType>;
   entries?: Resolver<Array<Maybe<ResolversTypes['Entry']>>, ParentType, ContextType, Partial<ProjectEntriesArgs>>;
   expiresAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  followers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
   funders?: Resolver<Array<Maybe<ResolversTypes['Funder']>>, ParentType, ContextType>;
   fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   fundingGoal?: Resolver<Maybe<ResolversTypes['fundingGoal_Int_min_1']>, ParentType, ContextType>;
@@ -2290,6 +2350,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   ownerOf?: Resolver<Array<Maybe<ResolversTypes['OwnerOf']>>, ParentType, ContextType>;
+  projectFollows?: Resolver<Array<Maybe<ResolversTypes['Project']>>, ParentType, ContextType>;
   projects?: Resolver<Array<Maybe<ResolversTypes['Project']>>, ParentType, ContextType, Partial<UserProjectsArgs>>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

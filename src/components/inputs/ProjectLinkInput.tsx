@@ -53,6 +53,7 @@ export const ProjectLinkInput = ({
       />
       <Box paddingX="5px" backgroundColor="white" border="none">
         <IconButtonComponent
+          noBorder
           variant="ghost"
           size="sm"
           aria-label="close-icon"

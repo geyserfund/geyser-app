@@ -60,7 +60,7 @@ const initialAmounts = {
   rewardsCost: 0,
 }
 
-const initialFunding = {
+const initialFunding: FundingTx = {
   id: 0,
   uuid: '',
   invoiceId: '',
@@ -70,7 +70,6 @@ const initialFunding = {
   projectId: '',
   paymentRequest: '',
   address: '',
-  canceled: false,
   comment: '',
   media: '',
   paidAt: '',
@@ -82,8 +81,8 @@ const initialFunding = {
     timesFunded: 0,
     confirmed: false,
     confirmedAt: '',
-    badges: [],
     rewards: [],
+    fundingTxs: [],
   },
 }
 

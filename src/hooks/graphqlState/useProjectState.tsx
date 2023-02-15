@@ -1,10 +1,10 @@
-import { QueryHookOptions, useQuery } from '@apollo/client'
-import { useCallback } from 'react'
+import { QueryHookOptions, useMutation, useQuery } from '@apollo/client'
+import { useState } from 'react'
 
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
-import { Project } from '../../types'
-import { toInt } from '../../utils'
-import { useListenerState } from '../useListenerState'
+import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
+import { Project, UpdateProjectInput } from '../../types'
+import { getDiff, toInt, useNotification } from '../../utils'
 
 type TProjectVariables = {
   where?: {
@@ -22,7 +22,10 @@ export const useProjectState = (
   options?: QueryHookOptions<TProjectData, TProjectVariables>,
   type: 'name' | 'id' = 'name',
 ) => {
-  const [project, setProject] = useListenerState<Project>({} as Project)
+  const { toast } = useNotification()
+
+  const [project, setProject] = useState<Project>({} as Project)
+  const [baseProject, setBaseProject] = useState<Project>({} as Project)
 
   const { loading } = useQuery<TProjectData, TProjectVariables>(
     QUERY_PROJECT_BY_NAME_OR_ID,
@@ -33,7 +36,7 @@ export const useProjectState = (
       ...options,
       onCompleted(data) {
         const { project } = data
-        setProject(project)
+        syncProject(project)
         if (options?.onCompleted) {
           options?.onCompleted(data)
         }
@@ -41,9 +44,65 @@ export const useProjectState = (
     },
   )
 
-  const updateProject = useCallback((value: Project) => {
-    setProject({ ...project.current, ...value })
-  }, [])
+  const [updateProjectMutation, { loading: saving }] = useMutation<
+    { updateProject: Project },
+    { input: UpdateProjectInput }
+  >(MUTATION_UPDATE_PROJECT, {
+    onError() {
+      toast({
+        status: 'error',
+        title: 'failed to update project',
+      })
+    },
+    onCompleted(data) {
+      if (data.updateProject) {
+        syncProject({ ...baseProject, ...data.updateProject })
+      }
+    },
+  })
 
-  return { loading, project: project.current, updateProject }
+  const syncProject = (project: Project) => {
+    setProject(project)
+    setBaseProject(project)
+  }
+
+  const updateProject = (value: Project) => {
+    setProject({ ...project, ...value })
+  }
+
+  const saveProject = async () => {
+    const [isDiff, diffKeys] = getDiff(project, baseProject, [
+      'location',
+      'description',
+      'expiresAt',
+      'fundingGoal',
+      'image',
+      'rewardCurrency',
+      'shortDescription',
+      'status',
+      'thumbnailImage',
+      'title',
+    ])
+
+    if (!isDiff) {
+      return
+    }
+
+    const input = {} as UpdateProjectInput
+
+    diffKeys.map((key) => {
+      if (key === 'location') {
+        input.countryCode = project.location?.country?.code
+        input.region = project.location?.region
+        return
+      }
+
+      input[key as keyof UpdateProjectInput] = project[key]
+    })
+    input.projectId = toInt(project.id)
+
+    await updateProjectMutation({ variables: { input } })
+  }
+
+  return { loading, saving, project, updateProject, saveProject }
 }

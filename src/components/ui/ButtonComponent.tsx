@@ -42,7 +42,6 @@ const useStyles = createUseStyles({
 })
 
 export const ButtonComponent = ({
-  ref,
   className,
   variant,
   primary,
@@ -62,7 +61,6 @@ export const ButtonComponent = ({
 
   return (
     <Button
-      ref={ref}
       className={classNames(
         className,
         { [classes.container]: standard },

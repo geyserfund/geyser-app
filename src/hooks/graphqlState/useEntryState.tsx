@@ -46,7 +46,12 @@ type TEntryUpdateData = {
   updateEntry: Entry
 }
 
-const entryEditKeyList = ['content', 'description', 'image', 'title']
+const entryEditKeyList: (keyof Entry)[] = [
+  'content',
+  'description',
+  'image',
+  'title',
+]
 
 export const useEntryState = (
   projectId: number,
