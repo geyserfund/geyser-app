@@ -77,10 +77,10 @@ export const useProjectTagsState = ({
         ? project.tags.filter((tag) => !tags.some((tag2) => tag.id === tag2.id))
         : []
 
-    if (addTags.length > 0) {
+    if (removeTags.length > 0) {
       await Promise.all(
-        addTags.map(async (tag) => {
-          await addTag({
+        removeTags.map(async (tag) => {
+          await removeTag({
             variables: {
               input: {
                 projectId: toInt(project.id),
@@ -92,10 +92,10 @@ export const useProjectTagsState = ({
       )
     }
 
-    if (removeTags.length > 0) {
+    if (addTags.length > 0) {
       await Promise.all(
-        removeTags.map(async (tag) => {
-          await removeTag({
+        addTags.map(async (tag) => {
+          await addTag({
             variables: {
               input: {
                 projectId: toInt(project.id),
