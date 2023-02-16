@@ -3,6 +3,7 @@ import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { getPath } from '../../constants'
 import { Project } from '../../types/generated/graphql'
+import { toSmallImageUrl } from '../../utils'
 
 type Props = {
   project: Project
@@ -13,7 +14,7 @@ export const ProjectAvatarLink = ({
   project,
   textColor = 'brand.neutral700',
 }: Props) => {
-  const avatarSrc = project.thumbnailImage || ''
+  const avatarSrc = toSmallImageUrl(project.thumbnailImage || '')
 
   return (
     <Link
