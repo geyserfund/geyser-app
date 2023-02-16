@@ -20,7 +20,7 @@ import {
   defaultMilestone,
   MilestoneAdditionModal,
   RewardAdditionModal,
-} from '../../../creation/projectCreate/components'
+} from '../components'
 
 export const Creator = () => {
   const params = useParams<{ projectId: string }>()

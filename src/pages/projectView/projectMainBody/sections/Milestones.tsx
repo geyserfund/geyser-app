@@ -7,10 +7,7 @@ import { IconButtonComponent } from '../../../../components/ui'
 import { ID } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { Project, ProjectMilestone } from '../../../../types'
-import {
-  defaultMilestone,
-  MilestoneAdditionModal,
-} from '../../../creation/projectCreate/components'
+import { defaultMilestone, MilestoneAdditionModal } from '../components'
 import { MilestoneComponent } from '../components/MilestoneComponent'
 
 export const Milestones = () => {

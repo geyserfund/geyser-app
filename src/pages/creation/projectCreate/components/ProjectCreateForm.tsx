@@ -18,8 +18,8 @@ import { TextArea, TextInputBox, UploadBox } from '../../../../components/ui'
 import { commonMarkdownUrl, ProjectValidations } from '../../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql'
 import { colors } from '../../../../styles'
-import { FormError } from '../../../../types'
-import { validLightningAddress } from '../../../../utils'
+import { FormError, Project } from '../../../../types'
+import { toMediumImageUrl, validLightningAddress } from '../../../../utils'
 
 type ProjectCreate = {
   title?: string
@@ -40,7 +40,7 @@ interface ProjectCreateFormProps {
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
-export const ProjectCreateFormValidation = (form: ProjectCreate) => {
+export const ProjectCreateFormValidation = (form: Partial<Project>) => {
   const errors = {} as { [key: string]: string }
   let isValid = true
   if (!form.title) {
@@ -120,10 +120,13 @@ export const ProjectCreateForm = ({
     }
   }
 
-  const handleImageUpload = (url: string) =>
-    setForm({ ...form, thumbnailImage: url })
-  const handleHeaderImageUpload = (url: string) =>
+  const handleImageUpload = (url: string) => {
+    setForm({ ...form, thumbnailImage: toMediumImageUrl(url) })
+  }
+
+  const handleHeaderImageUpload = (url: string) => {
     setForm({ ...form, image: url })
+  }
 
   const handleChange = (event: any) => {
     if (event) {

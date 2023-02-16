@@ -157,7 +157,7 @@ export const GrantsRoundTwo = () => {
       } catch (error) {
         toast({
           status: 'error',
-          title: 'Failed to fetch applicants',
+          title: 'failed to fetch applicants',
         })
       }
 
@@ -356,7 +356,7 @@ export const GrantsRoundTwo = () => {
             <Box width="100%" display="flex" alignItems={'center'} my={4}>
               <>
                 {sponsors.length > 0 ? (
-                  <Wrap width="100%" justify="center">
+                  <Wrap width="100%" justify="center" spacing="25px">
                     {sponsors.map((sponsor) => (
                       <WrapItem key={sponsor.name}>
                         <Image

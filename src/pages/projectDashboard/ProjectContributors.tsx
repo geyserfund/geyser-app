@@ -138,7 +138,9 @@ export const ProjectContributors = () => {
         header: 'Email',
         key: 'email',
         value(val: Funder) {
-          return val.rewards.length > 0 ? val.user?.email || '-' : '-'
+          return val.rewards.length > 0
+            ? val.fundingTxs?.find((val) => val.email)?.email || '-'
+            : '-'
         },
       },
     ],

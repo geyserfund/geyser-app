@@ -1,9 +1,10 @@
-import { Box, HStack, Link, Tooltip } from '@chakra-ui/react'
+import { HStack, Link } from '@chakra-ui/react'
 import { BsLink45Deg } from 'react-icons/bs'
 
 import { IconButtonComponent } from '../../../../components/ui'
 import { getIconForLink } from '../../../../helpers/getIconForLinks'
 import { colors } from '../../../../styles'
+import { SummaryInfoLine } from './SummaryInfoLine'
 
 export const ProjectLinks = ({ links }: { links: string[] }) => {
   const hasLinks = links?.length > 0
@@ -13,12 +14,10 @@ export const ProjectLinks = ({ links }: { links: string[] }) => {
   }
 
   return (
-    <HStack spacing="12px">
-      <Tooltip label={'Links'} placement="top">
-        <Box>
-          <BsLink45Deg color={colors.neutral600} fontSize="22px" />
-        </Box>
-      </Tooltip>
+    <SummaryInfoLine
+      label="Links"
+      icon={<BsLink45Deg color={colors.neutral600} fontSize="22px" />}
+    >
       <HStack>
         {links.map((link) => {
           const Icon = getIconForLink(link)
@@ -38,6 +37,6 @@ export const ProjectLinks = ({ links }: { links: string[] }) => {
           )
         })}
       </HStack>
-    </HStack>
+    </SummaryInfoLine>
   )
 }
