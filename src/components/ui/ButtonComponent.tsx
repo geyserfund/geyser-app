@@ -71,11 +71,11 @@ export const ButtonComponent = ({
       backgroundColor={
         backgroundColor ? backgroundColor : primary ? 'brand.primary' : bgColor
       }
-      borderRadius={circular ? '50px' : standard ? '4px' : undefined}
+      borderRadius={circular ? '50px' : standard ? '8px' : undefined}
       _hover={
         _hover ? _hover : primary ? { bg: 'brand.primaryTint' } : undefined
       }
-      fontSize="12px"
+      fontSize="14px"
       fontWeight="medium"
       color={color}
       {...rest}

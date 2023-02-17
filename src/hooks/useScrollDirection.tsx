@@ -7,6 +7,7 @@ interface UseScrollDirectionProps {
   loading?: boolean
   initialValue?: boolean
   mobileView?: string
+  direction?: string
 }
 
 export const useScrollDirection = ({

@@ -1,4 +1,5 @@
 export * from './ActivityView'
+export * from './GradientBanner'
 export * from './LandingPageContributionsList'
 export * from './LandingPageProjectsList'
 export * from './LandingPageProjectsListItem'

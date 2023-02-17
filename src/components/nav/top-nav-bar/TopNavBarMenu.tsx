@@ -40,11 +40,10 @@ export const TopNavBarMenu = ({
   return (
     <Menu placement="bottom-end">
       <MenuButton
-        px={2.5}
-        py={2.5}
+        padding="5px 8px"
         aria-label="options"
         transition="all 0.2s"
-        maxHeight="40px"
+        maxHeight="32px"
         borderRadius="md"
         color={textColor}
         backgroundColor="brand.white"
@@ -56,8 +55,9 @@ export const TopNavBarMenu = ({
         <HStack
           color={useColorModeValue('brand.gray500', 'brand.gray200')}
           background="transparent"
+          spacing="4px"
         >
-          <HamburgerIcon color={'#ADB5BD'} />
+          <HamburgerIcon color={'#ADB5BD'} fontSize="22px" />
 
           {isLoggedIn ? (
             <Avatar height="22px" width="22px" src={user.imageUrl || ''} />

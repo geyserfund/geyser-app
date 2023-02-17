@@ -1,6 +1,7 @@
 import { Box, BoxProps } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 
+import { dimensions } from '../../constants'
 import { useListenerState } from '../../hooks'
 
 interface StickToTopProps extends BoxProps {
@@ -91,7 +92,7 @@ export const StickToTop = ({
         ref={containerRef}
         backgroundColor="brand.bgWhite"
         position={stick.current ? 'fixed' : 'static'}
-        top="65px"
+        top={`${dimensions.topNavBar.desktop.height}px`}
         zIndex={10}
         {...rest}
         {...onStick}

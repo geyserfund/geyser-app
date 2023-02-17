@@ -22,6 +22,7 @@ import {
 
 import { getPath, PathName } from '../../../constants'
 import { useAuthContext, useNavContext } from '../../../context'
+import { useScrollDirection } from '../../../hooks'
 import { useMobileMode } from '../../../utils'
 import { AuthModal } from '../../molecules'
 import { ButtonComponent } from '../../ui'
@@ -114,6 +115,11 @@ const routesForEnablingProjectLaunchButton = [
   getPath('projectDiscovery'),
 ]
 
+const routesForTransparentBackground = [
+  getPath('index'),
+  getPath('projectDiscovery'),
+]
+
 /**
  * "Container" component for elements and appearance of
  * the top navigation bar.
@@ -180,6 +186,9 @@ export const TopNavBar = () => {
 
   const routesMatchesForShowingCustomTitle = customTitleRoutes.map(useMatch)
   const routesMatchesForShowingNavItems = navItemsRoutes.map(useMatch)
+
+  const routeMatchesForTransaparentBackground =
+    routesForTransparentBackground.map(useMatch)
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -464,6 +473,19 @@ export const TopNavBar = () => {
     })
   }, [routesMatchesForShowingNavItems, isMobile])
 
+  const isScrollingUp = useScrollDirection({
+    elementId: isMobile ? '' : 'app-route-content-root',
+    initialValue: true,
+  })
+  const showHaveTransparentBackground: boolean = useMemo(() => {
+    return (
+      isScrollingUp &&
+      routeMatchesForTransaparentBackground.some((routeMatch) => {
+        return Boolean(routeMatch)
+      })
+    )
+  }, [routeMatchesForTransaparentBackground])
+
   if (shouldTopNavBeHidden) {
     return null
   }
@@ -471,19 +493,21 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={'brand.bgGrey4'}
+        bg={showHaveTransparentBackground ? 'transparent' : 'brand.bgGrey4'}
         px={4}
-        backdropFilter="blur(2px)"
         position="fixed"
         top={0}
         left={0}
         width="full"
         zIndex={1000}
         borderBottom="2px solid"
-        borderBottomColor="brand.neutral100"
+        borderBottomColor={
+          showHaveTransparentBackground ? 'transparent' : 'brand.neutral100'
+        }
+        transition="background 0.5s ease-out"
       >
         <HStack
-          h={16}
+          py="6px"
           alignItems={'center'}
           justifyContent={'space-between'}
           overflow="hidden"
@@ -546,8 +570,8 @@ export const TopNavBar = () => {
             ) : null}
             {shouldShowDashboardButton ? (
               <ButtonComponent
+                size="sm"
                 variant={'solid'}
-                fontSize="md"
                 backgroundColor="brand.primary400"
                 onClick={handleProjectDashboardButtonPress}
               >
@@ -558,7 +582,7 @@ export const TopNavBar = () => {
             {shouldShowMyProjectsButton ? (
               <ButtonComponent
                 variant={'solid'}
-                fontSize="md"
+                size="sm"
                 backgroundColor="brand.primary400"
                 onClick={handleMyProjectsButtonPress}
               >
@@ -569,7 +593,7 @@ export const TopNavBar = () => {
             {shouldShowMyProjectButton ? (
               <ButtonComponent
                 variant={'solid'}
-                fontSize="md"
+                size="sm"
                 backgroundColor="brand.primary400"
                 onClick={handleMyProjectButtonPress}
               >
@@ -580,7 +604,7 @@ export const TopNavBar = () => {
             {shouldShowProjectButton && (
               <ButtonComponent
                 variant={'solid'}
-                fontSize="md"
+                size="sm"
                 backgroundColor="brand.primary400"
                 onClick={handleProjectButtonPress}
               >
@@ -591,7 +615,7 @@ export const TopNavBar = () => {
             {shouldShowProjectLaunchButton ? (
               <ButtonComponent
                 variant={'solid'}
-                fontSize="md"
+                size="sm"
                 backgroundColor="brand.primary400"
                 onClick={handleProjectLaunchButtonPress}
               >
@@ -601,8 +625,8 @@ export const TopNavBar = () => {
 
             {shouldShowSignInButton ? (
               <ButtonComponent
+                size="sm"
                 variant={'solid'}
-                fontSize="md"
                 backgroundColor="white"
                 borderWidth={1}
                 borderColor={'brand.neutral200'}
