@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
-import BannerGlowImage from '../../../assets/bannerGlow.svg'
-import { Body2, MonoBody1 } from '../../../components/typography'
+import BannerGlowImage from '../../../assets/top_Banner.svg'
+import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import Loader from '../../../components/ui/Loader'
 import { dimensions, LetTheSatsFlow3DUrl } from '../../../constants'
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql'
@@ -54,7 +54,9 @@ export const GradientBanner = () => {
       width="full"
       align="center"
       backgroundImage={BannerGlowImage}
-      backgroundSize="contain"
+      backgroundPosition="50% 50%"
+      backgroundSize="cover"
+      marginBottom="25px"
     >
       <Container maxW={'6xl'}>
         <Stack
@@ -62,64 +64,61 @@ export const GradientBanner = () => {
           align={'center'}
           spacing="17px"
           paddingBottom="12px"
+          position="relative"
         >
           <VStack
             spacing={3}
-            marginTop={`${dimensions.topNavBar.desktop.height - 10}px`}
+            marginTop={`${dimensions.topNavBar.desktop.height - 24}px`}
+            marginBottom={{ base: '70px', md: '60px' }}
           >
             <Image src={LetTheSatsFlow3DUrl} maxHeight="76px" />
           </VStack>
 
-          <HStack
-            fontSize={'sm'}
-            spacing={4}
-            textColor={'brand.neutral700'}
-            backgroundColor={'brand.primary100'}
+          <VStack
+            position="absolute"
+            bottom="-20px"
+            backgroundColor={'white'}
             boxShadow="0px 0px 8.11659px rgba(0, 0, 0, 0.1)"
-            padding="5px 15px"
+            padding="10px 20px"
             borderRadius="8px"
+            spacing="10px"
+            color={'brand.neutral900'}
           >
-            {isSummaryLoading ? (
-              <HStack
-                spacing={1.5}
-                justifyContent="flex-start"
-                alignItems={'center'}
-              >
-                <Loader size="md" />
-              </HStack>
-            ) : (
-              satsDataArray.map((statsData, index) => {
-                return (
-                  <Stack
-                    spacing={isMobile ? 0 : 1.5}
-                    key={index}
-                    justifyContent="flex-start"
-                    alignItems={'center'}
-                    direction={isMobile ? 'column' : 'row'}
-                  >
-                    {isSummaryLoading ? (
-                      <Skeleton w="25px" h="25px" />
-                    ) : (
-                      <MonoBody1
-                        bold
-                        textColor={colors.neutral600}
-                        marginTop="2px"
-                      >
-                        {getShortAmountLabel(parseInt(statsData[0], 10))}
-                      </MonoBody1>
-                    )}
-
-                    <Body2
-                      textColor={colors.neutral600}
-                      textTransform={'uppercase'}
+            <H3>Play a part in world-changing ideas</H3>
+            <HStack fontSize={'sm'} spacing={4}>
+              {isSummaryLoading ? (
+                <HStack
+                  spacing={1.5}
+                  justifyContent="flex-start"
+                  alignItems={'center'}
+                >
+                  <Loader size="md" />
+                </HStack>
+              ) : (
+                satsDataArray.map((statsData, index) => {
+                  return (
+                    <Stack
+                      spacing={isMobile ? 0 : 1.5}
+                      key={index}
+                      justifyContent="flex-start"
+                      alignItems={'center'}
+                      direction={isMobile ? 'column' : 'row'}
                     >
-                      {statsData[1]}
-                    </Body2>
-                  </Stack>
-                )
-              })
-            )}
-          </HStack>
+                      {isSummaryLoading ? (
+                        <Skeleton w="25px" h="25px" />
+                      ) : (
+                        <MonoBody1 bold marginTop="2px">
+                          {getShortAmountLabel(parseInt(statsData[0], 10))}
+                        </MonoBody1>
+                      )}
+
+                      <Body2 textTransform={'uppercase'}>{statsData[1]}</Body2>
+                    </Stack>
+                  )
+                })
+              )}
+            </HStack>
+          </VStack>
         </Stack>
       </Container>
     </VStack>
