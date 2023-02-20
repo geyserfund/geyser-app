@@ -1,13 +1,10 @@
-import { Box, Divider, Stack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 
-import { AppFooter } from '../../components/molecules'
 import { dimensions } from '../../constants'
-import { useMobileMode } from '../../utils'
-import { ActivityView, GradientBanner, LeaderboardView } from './components'
+import { GradientBanner } from './components'
+import { LandingProjectsPage } from './LandingProjectsPage'
 
 export const LandingPage = () => {
-  const isMobile = useMobileMode()
-
   return (
     <Box
       marginTop={`-${dimensions.topNavBar.desktop.height}px`}
@@ -16,36 +13,19 @@ export const LandingPage = () => {
       height="full"
     >
       <GradientBanner />
+      <HStack width="100%" justifyContent="center" spacing="80px">
+        <VStack>
+          <Text>Filters</Text>
+        </VStack>
 
-      <Stack
-        direction={{
-          base: 'column',
-          md: 'row',
-        }}
-        paddingBottom="30px"
-        paddingX={isMobile ? '10px' : '60px'}
-        width="full"
-        height="auto"
-        minHeight={'full'}
-        overflow="hidden"
-        spacing={'64px'}
-      >
-        <ActivityView
-          flexGrow={1}
-          minWidth={{
-            base: 'full',
-            sm: '400px',
-          }}
-        />
-        {!isMobile && (
-          <>
-            <Divider orientation="vertical" borderWidth={'1px'} height="auto" />
-            <LeaderboardView />
-          </>
-        )}
-      </Stack>
+        <VStack flex={1} maxWidth="800px">
+          <LandingProjectsPage />
+        </VStack>
 
-      <AppFooter />
+        <VStack>
+          <Text>Project leaderboard</Text>
+        </VStack>
+      </HStack>
     </Box>
   )
 }
