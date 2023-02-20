@@ -18,7 +18,7 @@ export const ProjectLinks = ({ links }: { links: string[] }) => {
       label="Links"
       icon={<BsLink45Deg color={colors.neutral600} fontSize="22px" />}
     >
-      <HStack>
+      <HStack spacing="5px">
         {links.map((link) => {
           const Icon = getIconForLink(link)
           return (

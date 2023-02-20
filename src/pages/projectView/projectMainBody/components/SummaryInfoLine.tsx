@@ -12,7 +12,7 @@ export const SummaryInfoLine = ({
   ...rest
 }: SummaryInfoLineProps) => {
   return (
-    <HStack spacing="16px" alignItems="center" {...rest}>
+    <HStack spacing="8px" alignItems="center" {...rest}>
       <Tooltip label={label} placement="top">
         {icon}
       </Tooltip>
