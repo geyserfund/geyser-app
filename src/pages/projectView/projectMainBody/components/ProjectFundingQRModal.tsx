@@ -11,8 +11,8 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react'
-import html2canvas from 'html2canvas'
-import { createRef, useEffect, useState } from 'react'
+import * as htmlToImage from 'html-to-image'
+import { useCallback, useState } from 'react'
 
 import { ButtonComponent } from '../../../../components/ui'
 import { API_SERVICE_ENDPOINT } from '../../../../constants'
@@ -37,20 +37,25 @@ export const ProjectFundingQRModal = ({
   setCopy,
 }: IQRModal) => {
   const isMobile = useMobileMode()
-  const bannerRef = createRef<HTMLDivElement>()
   const [imageDownload, setImageDownload] = useState<string | undefined>()
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (bannerRef.current) {
-        html2canvas(bannerRef.current, {
-          useCORS: true,
-        }).then((canvas) => {
-          setImageDownload(canvas.toDataURL('image/png', 1.0))
-        })
-      }
-    }, 1000)
-  }, [bannerRef])
+  const bannerRef = useCallback((node: HTMLDivElement) => {
+    if (!node) {
+      return
+    }
+
+    htmlToImage
+      .toPng(node, { style: { opacity: '1', position: 'static' } })
+      .then((image) => {
+        setImageDownload(image)
+      })
+      .catch((error) => {
+        console.error(
+          'oops, something went wrong rendering the html to image',
+          error,
+        )
+      })
+  }, [])
 
   const lnurlPayUrl = encodeLNURL(
     `${API_SERVICE_ENDPOINT}/lnurl/pay?projectId=${projectId}`,
