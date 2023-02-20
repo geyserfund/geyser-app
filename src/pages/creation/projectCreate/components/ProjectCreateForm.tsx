@@ -18,8 +18,8 @@ import { TextArea, TextInputBox, UploadBox } from '../../../../components/ui'
 import { commonMarkdownUrl, ProjectValidations } from '../../../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql'
 import { colors } from '../../../../styles'
-import { FormError } from '../../../../types'
-import { validLightningAddress } from '../../../../utils'
+import { FormError, Project } from '../../../../types'
+import { toMediumImageUrl, validLightningAddress } from '../../../../utils'
 
 type ProjectCreate = {
   title?: string
@@ -38,7 +38,9 @@ interface ProjectCreateFormProps {
   setFormError: any
 }
 
-export const ProjectCreateFormValidation = (form: ProjectCreate) => {
+const MIN_LENGTH_TO_QUERY_PROJECT = 3
+
+export const ProjectCreateFormValidation = (form: Partial<Project>) => {
   const errors = {} as { [key: string]: string }
   let isValid = true
   if (!form.title) {
@@ -108,10 +110,23 @@ export const ProjectCreateForm = ({
     },
   })
 
-  const handleImageUpload = (url: string) =>
-    setForm({ ...form, thumbnailImage: url })
-  const handleHeaderImageUpload = (url: string) =>
+  const handleProjectFetch = () => {
+    if (
+      !isEdit &&
+      form?.name &&
+      form.name.length >= MIN_LENGTH_TO_QUERY_PROJECT
+    ) {
+      getProject()
+    }
+  }
+
+  const handleImageUpload = (url: string) => {
+    setForm({ ...form, thumbnailImage: toMediumImageUrl(url) })
+  }
+
+  const handleHeaderImageUpload = (url: string) => {
     setForm({ ...form, image: url })
+  }
 
   const handleChange = (event: any) => {
     if (event) {
@@ -186,7 +201,7 @@ export const ProjectCreateForm = ({
           onChange={handleChange}
           value={form.title}
           error={formError.title}
-          onBlur={() => !isEdit && getProject()}
+          onBlur={handleProjectFetch}
         />
       </VStack>
       <VStack {...rowStyles}>
@@ -199,7 +214,7 @@ export const ProjectCreateForm = ({
             isInvalid={Boolean(formError.name)}
             focusBorderColor={colors.primary}
             disabled={isEdit}
-            onBlur={() => !isEdit && getProject()}
+            onBlur={handleProjectFetch}
           />
           <InputRightAddon>@geyser.fund</InputRightAddon>
         </InputGroup>

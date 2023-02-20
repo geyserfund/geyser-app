@@ -26,7 +26,7 @@ import {
   useMobileMode,
   useNotification,
 } from '../../../../utils'
-import { RewardAdditionModal } from '../../../creation/projectCreate/components'
+import { RewardAdditionModal } from '../components'
 
 type Props = {
   updateReward: UpdateReward

@@ -8,7 +8,7 @@ import { ProjectNav } from '../../components/nav'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config/Head'
 import { getPath } from '../../constants'
-import { useAuthContext } from '../../context'
+import { useNavContext } from '../../context'
 import { ProjectProvider } from '../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
 import { QUERY_GET_ENTRY } from '../../graphql/queries/entries'
@@ -31,7 +31,7 @@ export const EntryPage = () => {
   const navigate = useNavigate()
   const isMobile = useMobileMode()
 
-  const { setNav } = useAuthContext()
+  const { setNavData } = useNavContext()
 
   const [detailOpen, setDetailOpen] = useState(true)
   const fundingFlow = useFundingFlow()
@@ -45,7 +45,7 @@ export const EntryPage = () => {
   const [getProject, { loading, error: projectError, data: projectData }] =
     useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
       onCompleted(data) {
-        setNav({
+        setNavData({
           projectName: data.project.name,
           projectTitle: data.project.title,
           projectPath: getPath('project', data.project.name),

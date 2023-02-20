@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router'
 
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
-import { useAuthContext } from '../../context'
+import { useNavContext } from '../../context'
 import { useFundingFlow } from '../../hooks'
 import { useProjectState } from '../../hooks/graphqlState'
 import { Owner } from '../../types/generated/graphql'
@@ -15,7 +15,7 @@ export const ProjectView = () => {
   const navigate = useNavigate()
   const isMobile = useMobileMode()
 
-  const { setNav } = useAuthContext()
+  const { setNavData } = useNavContext()
 
   const fundingFlow = useFundingFlow()
 
@@ -34,7 +34,7 @@ export const ProjectView = () => {
 
       const { project } = data
 
-      setNav({
+      setNavData({
         projectName: project.name,
         projectTitle: project.title,
         projectPath: getPath('project', project.name),

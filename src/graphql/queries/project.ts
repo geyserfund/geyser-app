@@ -24,6 +24,17 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       rewardCurrency
       fundersCount
       fundingTxsCount
+      location {
+        country {
+          name
+          code
+        }
+        region
+      }
+      tags {
+        id
+        label
+      }
       owners {
         id
         user {
@@ -308,6 +319,8 @@ export const QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS = gql`
         id
         username
         imageUrl
+      }
+      fundingTxs {
         email
       }
       rewards {

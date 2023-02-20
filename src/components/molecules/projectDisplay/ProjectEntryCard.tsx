@@ -95,7 +95,6 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
         justifyContent="space-between"
         alignItems="flex-start"
         p={1}
-        pt={2}
       >
         <Stack
           width="100%"
@@ -104,9 +103,12 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
           alignItems="start"
         >
           <Stack
+            flex={1}
             direction={{ base: 'column', md: 'row' }}
             justifyContent="space-between"
+            alignItems="center"
             overflow="hidden"
+            pt={1}
           >
             <H2 width="100%" overflow="hidden" isTruncated>
               {entry.title}

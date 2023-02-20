@@ -29,9 +29,9 @@ export const ProjectLinkInput = ({
       size="md"
       padding="12px 5px"
       backgroundColor="white"
-      borderRadius="4px"
+      borderRadius="8px"
       border="1px solid"
-      borderColor="brand.neutral200"
+      borderColor="brand.neutral400"
       {...rest}
     >
       <HStack justifyContent="center" width="50px">
@@ -53,6 +53,7 @@ export const ProjectLinkInput = ({
       />
       <Box paddingX="5px" backgroundColor="white" border="none">
         <IconButtonComponent
+          noBorder
           variant="ghost"
           size="sm"
           aria-label="close-icon"

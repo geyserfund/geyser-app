@@ -12,4 +12,5 @@ export const defaultUser: User = {
   entries: [],
   fundingTxs: [],
   projects: [],
+  projectFollows: [],
 }

@@ -7,6 +7,7 @@ import { IFundingStages } from '../../../constants'
 import {
   MobileViews,
   useAuthContext,
+  useNavContext,
   useProjectContext,
 } from '../../../context'
 import { UpdateReward } from '../../../hooks'
@@ -74,9 +75,10 @@ export const ProjectMainBody = ({
 
   const classes = useStyles({ isMobile, inView })
 
-  const { user, navigationContext } = useAuthContext()
+  const { user } = useAuthContext()
+  const { navData } = useNavContext()
 
-  const isViewerTheProjectOwner = navigationContext.projectOwnerIDs.includes(
+  const isViewerTheProjectOwner = navData.projectOwnerIDs.includes(
     Number(user.id),
   )
 

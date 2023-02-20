@@ -89,9 +89,7 @@ export const ProjectCreate = () => {
           },
         })
 
-        navigate(
-          getPath('launchProjectWithMilestonesAndRewards', createdProject.id),
-        )
+        navigate(getPath('launchProjectDetails', createdProject.id))
       }
     },
     onError(error) {
@@ -108,12 +106,7 @@ export const ProjectCreate = () => {
     { input: ProjectUpdateVariables }
   >(MUTATION_UPDATE_PROJECT, {
     onCompleted() {
-      navigate(
-        getPath(
-          'launchProjectWithMilestonesAndRewards',
-          params.projectId || '',
-        ),
-      )
+      navigate(getPath('launchProjectDetails', params.projectId || ''))
     },
     onError(error) {
       toast({
@@ -203,7 +196,9 @@ export const ProjectCreate = () => {
   }
 
   useEffect(() => {
-    getProjectById()
+    if (params.projectId) {
+      getProjectById()
+    }
   }, [params.projectId])
 
   return (

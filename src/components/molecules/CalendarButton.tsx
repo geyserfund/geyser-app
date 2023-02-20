@@ -30,7 +30,7 @@ export const CalendarButton = ({
   const classes = useStyles()
 
   const ExampleCustomInput = forwardRef<any, any>(({ onClick }, ref) => (
-    <ButtonComponent primary={primary} onClick={onClick} ref={ref}>
+    <ButtonComponent primary={primary} onClick={onClick}>
       {value ? getFormattedDate(value.getTime()) : children}
     </ButtonComponent>
   ))

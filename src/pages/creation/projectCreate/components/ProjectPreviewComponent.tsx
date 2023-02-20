@@ -2,7 +2,7 @@ import { Box, Text, VStack } from '@chakra-ui/react'
 
 import { H2, H3 } from '../../../../components/typography'
 import { Card, ImageWithReload } from '../../../../components/ui'
-import { MarkDown, useMobileMode } from '../../../../utils'
+import { MarkDown, toSmallImageUrl, useMobileMode } from '../../../../utils'
 
 interface ProjectPreviewComponentProps {
   data: {
@@ -52,7 +52,7 @@ export const ProjectPreviewComponent = ({
           >
             <ImageWithReload
               grey
-              src={data.thumbnailImage}
+              src={toSmallImageUrl(data.thumbnailImage || '')}
               height="100%"
               width="100%"
               noCacheId={(Math.random() + 1).toString(36).substring(7)}

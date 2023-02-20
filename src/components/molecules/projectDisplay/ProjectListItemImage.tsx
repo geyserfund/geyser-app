@@ -1,6 +1,7 @@
 import { Box, HTMLChakraProps, Image } from '@chakra-ui/react'
 
 import { Project } from '../../../types/generated/graphql'
+import { toSmallImageUrl } from '../../../utils'
 import { ProjectImageListItemPlaceholder } from '..'
 
 type Props = HTMLChakraProps<'div'> & {
@@ -17,7 +18,7 @@ export const ProjectListItemImage = ({
   borderRadius = 'md',
   ...rest
 }: Props) => {
-  const imageSource = imageSrc ?? (project.thumbnailImage || '')
+  const imageSource = toSmallImageUrl(project.thumbnailImage || '')
 
   return (
     <Box boxSize={boxSize} {...rest}>

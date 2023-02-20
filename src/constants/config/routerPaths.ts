@@ -12,11 +12,12 @@ export enum PathName {
   userProfile = 'profile',
   projectDashboard = 'dashboard',
   preview = 'preview',
-  milestonesAndRewards = 'milestones',
+  launchProjectDetails = 'details',
   node = 'node',
   discover = 'discover',
   dashboardDescription = 'description',
   dashboardContributors = 'contributors',
+  dashboardDetails = 'details',
   dashboardFunds = 'funds',
   dashboardStats = 'stats',
   dashboardSettings = 'settings',
@@ -51,8 +52,8 @@ const pathsMap = {
   privateProjectLaunch: () => `/${PathName.launchProject}`,
   launchProjectWithNode: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.node}`,
-  launchProjectWithMilestonesAndRewards: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.milestonesAndRewards}`,
+  launchProjectDetails: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   projectDashboard: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
@@ -60,6 +61,8 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
   dashboardContributors: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
+  dashboardDetails: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardDetails}`,
   dashboardFunding: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardFunds}`,
   dashboardStats: (projectID: string) =>
