@@ -6,6 +6,7 @@ import { useMobileMode } from '../../utils'
 interface BodyProps extends TextProps {
   semiBold?: boolean
   bold?: boolean
+  to?: string
 }
 
 export const Body1 = ({ children, bold, semiBold, ...rest }: BodyProps) => {

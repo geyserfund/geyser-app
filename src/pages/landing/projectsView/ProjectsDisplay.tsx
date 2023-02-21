@@ -37,7 +37,7 @@ export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
   return (
     <ProjectRowLayout
       title={tag?.label || 'Recent Projects'}
-      subtitle={tag ? 'trending in' : ''}
+      subtitle={tag ? 'Trending in' : ''}
     >
       <Stack direction={{ base: 'column', md: 'row' }} spacing="20px">
         {projectList &&
