@@ -2,7 +2,7 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 
 import { dimensions } from '../../constants'
 import { GradientBanner } from './components'
-import { LandingProjectsPage } from './LandingProjectsPage'
+import { ProjectsView } from './projectsView'
 
 export const LandingPage = () => {
   return (
@@ -19,7 +19,7 @@ export const LandingPage = () => {
         </VStack>
 
         <VStack flex={1} maxWidth="800px">
-          <LandingProjectsPage />
+          <ProjectsView />
         </VStack>
 
         <VStack>

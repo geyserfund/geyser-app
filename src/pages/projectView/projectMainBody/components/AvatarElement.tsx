@@ -14,7 +14,12 @@ export const AvatarElement = ({
   wrapperProps,
   ...rest
 }: IAvatarElement) => (
-  <HStack as={Link} to={`/profile/${user.id}`} {...wrapperProps}>
+  <HStack
+    as={Link}
+    to={`/profile/${user.id}`}
+    overflow="hidden"
+    {...wrapperProps}
+  >
     <Avatar size="xs" borderRadius="4px" src={`${user.imageUrl}`} {...rest} />
     <Body2 semiBold color="brand.neutral600" isTruncated>
       {user.username}
