@@ -1,10 +1,19 @@
-import { Avatar, Box, HStack, Image, Text, VStack } from '@chakra-ui/react'
+import {
+  Avatar,
+  Box,
+  HStack,
+  Image,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
 import { ProjectFundersCountIndicator } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
+import { EntryStatusLabel } from '../../components/ui/EntryStatusLabel'
 import { getPath } from '../../constants'
 import { Entry } from '../../types/generated/graphql'
 import { ProjectEntryEditor } from '../creation/entry/editor'
@@ -28,11 +37,17 @@ export const EntryDetails = ({ entry }: Props) => {
         View project
       </ButtonComponent>
 
-      <Box>
+      <Stack
+        direction={{ base: 'column', md: 'row' }}
+        overflow="hidden"
+        width="100%"
+        justifyContent="space-between"
+      >
         <Text fontSize="35px" fontWeight={700} color="brand.neutral900">
           {entry.title}
         </Text>
-      </Box>
+        <EntryStatusLabel entry={entry} />
+      </Stack>
 
       {headerImageSrc ? (
         <HStack

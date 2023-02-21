@@ -113,9 +113,9 @@ export const ProjectDashboard = () => {
 
   const navList: DashboardTabs[] = [
     DashboardTabs.editProject,
-    DashboardTabs.contributors,
     DashboardTabs.details,
     DashboardTabs.funds,
+    DashboardTabs.contributors,
     DashboardTabs.stats,
     DashboardTabs.settings,
   ]

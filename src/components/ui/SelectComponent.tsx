@@ -72,6 +72,7 @@ const useStyles = createUseStyles({
       textAlign: 'start',
     },
     '& .platform__select__menu-list': {
+      maxHeight: '190px',
       borderTopWidth: '0px !important',
     },
     '& .platform__select__option': {
