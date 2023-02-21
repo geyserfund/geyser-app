@@ -3,21 +3,23 @@ import { StackProps, VStack } from '@chakra-ui/react'
 import { H3 } from '../../../../components/typography'
 import { colors } from '../../../../styles'
 
-interface ProjectDiscoveryComponentComponent extends StackProps {
+interface ProjectRowLayoutComponent extends StackProps {
   title: string
   subtitle?: string
   children: React.ReactNode
 }
 
-export const ProjectDiscoveryComponent = ({
+export const ProjectRowLayout = ({
   title,
   subtitle,
   children,
-}: ProjectDiscoveryComponentComponent) => {
+}: ProjectRowLayoutComponent) => {
   return (
     <VStack alignItems="start" spacing="30px">
       <H3 color="brand.primary600">
-        <span color={colors.neutral800}>{subtitle}</span>
+        {subtitle && (
+          <span style={{ color: colors.neutral800 }}>{`${subtitle} `}</span>
+        )}
         {title}
       </H3>
       {children}

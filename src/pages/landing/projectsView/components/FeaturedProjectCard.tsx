@@ -1,19 +1,14 @@
-import { AddIcon } from '@chakra-ui/icons'
-import { Box, HStack, Image, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 
-import { SatoshiPng } from '../../../../assets'
 import { H2, H3 } from '../../../../components/typography'
-import { IconButtonComponent } from '../../../../components/ui'
-import { fonts } from '../../../../styles'
 import { Project } from '../../../../types'
-import { getShortAmountLabel } from '../../../../utils'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
-import { ProjectDiscoveryComponent } from './ProjectDiscoveryComponent'
 import { ProjectFundingStatWithFollow } from './ProjectFundingStatWithFollow'
+import { ProjectRowLayout } from './ProjectRowLayout'
 
 export const FeaturedProjectCard = ({ project }: { project: Project }) => {
   return (
-    <ProjectDiscoveryComponent title="Featured Project" width="100%">
+    <ProjectRowLayout title="Featured Project" width="100%">
       <HStack width="100%" height="245px" alignItems="start" spacing="20px">
         <Box flex={4} height="100%" borderRadius="8px" overflow="hidden">
           <Image
@@ -51,6 +46,6 @@ export const FeaturedProjectCard = ({ project }: { project: Project }) => {
           />
         </VStack>
       </HStack>
-    </ProjectDiscoveryComponent>
+    </ProjectRowLayout>
   )
 }

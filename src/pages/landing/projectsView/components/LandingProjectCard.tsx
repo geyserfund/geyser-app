@@ -15,11 +15,15 @@ export const LandingProjectCard = ({ project }: { project: Project }) => {
       as={Link}
       to={getPath('project', project.name)}
       padding="0px"
-      width="240px"
+      width={{ base: 'full', md: '240px' }}
       direction={{ base: 'row', md: 'column' }}
       spacing="0px"
     >
-      <Box width="full" height="200px" overflow="hidden">
+      <Box
+        width={{ base: '120px', md: 'full' }}
+        height={{ base: '120px', md: '200px' }}
+        overflow="hidden"
+      >
         <Image
           width="100%"
           height="100%"
@@ -27,18 +31,24 @@ export const LandingProjectCard = ({ project }: { project: Project }) => {
           src={project.thumbnailImage || ''}
         />
       </Box>
-      <VStack width="100%" padding="10px" alignItems="start">
-        <ProjectFundingStatWithFollow
-          width="100%"
-          justifyContent={'space-between'}
-          project={project}
-        />
+      <VStack
+        width={{ base: 'auto', md: '100%' }}
+        padding="10px"
+        alignItems="start"
+        justifyContent="center"
+      >
         <H3 isTruncated width="100%">
           {project.title}
         </H3>
         <Box width="100%" overflow="hidden">
           <AvatarElement borderRadius="50%" user={project.owners[0].user} />
         </Box>
+        <ProjectFundingStatWithFollow
+          width="100%"
+          project={project}
+          justifyContent={{ base: 'start', md: 'space-between' }}
+          spacing="30px"
+        />
       </VStack>
     </CardLayout>
   )

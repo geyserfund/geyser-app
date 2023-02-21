@@ -1,11 +1,18 @@
 import { CardLayout } from '../../../components/layouts'
 import { Owner, Project, User } from '../../../types'
-import { FeaturedProjectCard, ProjectDiscoveryComponent } from './components'
-import { ProjectDisplay } from './ProjectDisplay'
+import { FeaturedProjectCard } from './components'
+import { ProjectsDisplay } from './ProjectsDisplay'
+
+const listOfTags = [
+  { label: 'education', id: 41 },
+  { label: 'culture', id: 42 },
+  { label: 'communities', id: 43 },
+  { label: 'games', id: 44 },
+]
 
 export const ProjectsView = () => {
   return (
-    <CardLayout w="full" spacing="50px">
+    <CardLayout w="full" spacing="50px" padding="20px">
       <FeaturedProjectCard
         project={
           {
@@ -25,9 +32,11 @@ export const ProjectsView = () => {
           } as Project
         }
       />
-      <ProjectDiscoveryComponent title="Featured Project">
-        <ProjectDisplay />
-      </ProjectDiscoveryComponent>
+
+      <ProjectsDisplay />
+      {listOfTags.map((tag) => {
+        return <ProjectsDisplay key={tag.id} tag={tag} />
+      })}
     </CardLayout>
   )
 }
