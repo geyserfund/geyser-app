@@ -97,6 +97,7 @@ export const EntryCreateEdit = () => {
       },
     )
   const debouncedUpdateEntry = useDebounce(entry, 1000)
+  const isEdit = Boolean(entry.id)
 
   useEffect(() => {
     if (debouncedUpdateEntry && entry.status !== EntryStatus.Published) {
@@ -131,7 +132,7 @@ export const EntryCreateEdit = () => {
   }
 
   const onPreview = () => {
-    if (entry.id) {
+    if (isEdit) {
       navigate(
         getPath('projectEntryPreview', `${params.projectId}`, `${entry.id}`),
       )
@@ -153,8 +154,6 @@ export const EntryCreateEdit = () => {
   }
 
   const onImageUpload = (url: string) => updateEntry({ image: url })
-
-  const isEdit = Boolean(entry.id)
 
   const handleKeyDown = (event: any) => {
     if (event) {
