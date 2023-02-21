@@ -6,6 +6,7 @@ import {
   Text,
   Tooltip,
   VStack,
+  Wrap,
 } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
@@ -186,17 +187,18 @@ export const Summary = () => {
         </SummaryInfoLine>
 
         <ProjectLinks links={project.links as string[]} />
-        <HStack spacing="28px">
+        <Wrap spacing="18px">
           {project.tags?.length > 0 && (
             <SummaryInfoLine
               label="Tags"
               icon={<FiTag color={colors.neutral600} fontSize="22px" />}
+              alignItems="start"
             >
-              <HStack>
+              <Wrap>
                 {project.tags.map((tag) => {
                   return <TagBox key={tag.id}>{tag.label}</TagBox>
                 })}
-              </HStack>
+              </Wrap>
             </SummaryInfoLine>
           )}
 
@@ -205,14 +207,14 @@ export const Summary = () => {
               label="Region"
               icon={<GrLocation color={colors.neutral600} fontSize="22px" />}
             >
-              <HStack spacing="5px">
+              <Wrap spacing="5px">
                 {project?.location?.country?.name && (
                   <TagBox>{project?.location?.country?.name}</TagBox>
                 )}
                 {project?.location?.region && (
                   <TagBox>{project?.location?.region}</TagBox>
                 )}
-              </HStack>
+              </Wrap>
             </SummaryInfoLine>
           )}
 
@@ -229,7 +231,7 @@ export const Summary = () => {
               toInt(project.createdAt),
             ).toFormat('dd LLL yyyy')}`}</Body2>
           </SummaryInfoLine>
-        </HStack>
+        </Wrap>
 
         <VStack alignItems="flex-start">
           <MarkDown color='"brand.neutral800"'>{project.description}</MarkDown>
