@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
+import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { Project } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
@@ -24,7 +25,8 @@ export const LandingProjectCard = ({ project }: { project: Project }) => {
         height={{ base: '120px', xl: '200px' }}
         overflow="hidden"
       >
-        <Image
+        <ImageWithReload
+          grey
           width="100%"
           height="100%"
           objectFit="cover"

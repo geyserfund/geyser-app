@@ -525,9 +525,9 @@ export const TopNavBar = () => {
           <HStack alignItems={'center'} spacing={2}>
             {shouldShowNavItems ? (
               <Box display={'flex'} alignItems="center" gap={4} mr={4}>
-                {navItems.map((item, idx) => (
-                  <>
-                    {item.name === 'About' ? (
+                {navItems.map((item, idx) => {
+                  if (item.name === 'About') {
+                    return (
                       <a key={idx} href={item.to}>
                         <Text
                           fontWeight={'500'}
@@ -538,34 +538,36 @@ export const TopNavBar = () => {
                           {item.name}
                         </Text>
                       </a>
-                    ) : (
-                      <Link key={idx} to={item.to}>
-                        <Box position="relative" padding="5px 7px">
-                          <Text
-                            fontWeight={'500'}
-                            textDecoration="none"
-                            fontSize="16px"
-                            color={'brand.neutral700'}
-                          >
-                            {item.name}
-                          </Text>
-                          {item.new && (
-                            <Box
-                              rounded="full"
-                              position="absolute"
-                              height="15px"
-                              width="15px"
-                              backgroundColor="brand.primary"
-                              right="-4px"
-                              top="-2px"
-                              zIndex={-1}
-                            />
-                          )}
-                        </Box>
-                      </Link>
-                    )}
-                  </>
-                ))}
+                    )
+                  }
+
+                  return (
+                    <Link key={idx} to={item.to}>
+                      <Box position="relative" padding="5px 7px">
+                        <Text
+                          fontWeight={'500'}
+                          textDecoration="none"
+                          fontSize="16px"
+                          color={'brand.neutral700'}
+                        >
+                          {item.name}
+                        </Text>
+                        {item.new && (
+                          <Box
+                            rounded="full"
+                            position="absolute"
+                            height="15px"
+                            width="15px"
+                            backgroundColor="brand.primary"
+                            right="-4px"
+                            top="-2px"
+                            zIndex={-1}
+                          />
+                        )}
+                      </Box>
+                    </Link>
+                  )
+                })}
               </Box>
             ) : null}
             {shouldShowDashboardButton ? (
