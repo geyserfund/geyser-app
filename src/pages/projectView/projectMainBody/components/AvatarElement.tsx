@@ -13,12 +13,11 @@ export const AvatarElement = ({
   user,
   wrapperProps,
   ...rest
-}: IAvatarElement) =>
-  user ? (
-    <HStack as={Link} to={`/profile/${user.id}`} {...wrapperProps}>
-      <Avatar size="xs" borderRadius="4px" src={`${user.imageUrl}`} {...rest} />
-      <Body2 semiBold color="brand.neutral600" isTruncated>
-        {user.username}
-      </Body2>
-    </HStack>
-  ) : null
+}: IAvatarElement) => (
+  <HStack as={Link} to={`/profile/${user.id}`} {...wrapperProps}>
+    <Avatar size="xs" borderRadius="4px" src={`${user.imageUrl}`} {...rest} />
+    <Body2 semiBold color="brand.neutral600" isTruncated>
+      {user.username}
+    </Body2>
+  </HStack>
+)
