@@ -7,15 +7,17 @@ import { User } from '../../../../types/generated/graphql'
 interface IAvatarElement extends AvatarProps {
   user: User
   wrapperProps?: StackProps
+  noLink?: boolean
 }
 
 export const AvatarElement = ({
   user,
   wrapperProps,
+  noLink,
   ...rest
 }: IAvatarElement) => (
   <HStack
-    as={Link}
+    as={noLink ? 'div' : Link}
     to={`/profile/${user.id}`}
     overflow="hidden"
     {...wrapperProps}

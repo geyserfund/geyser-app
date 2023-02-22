@@ -15,13 +15,13 @@ export const LandingProjectCard = ({ project }: { project: Project }) => {
       as={Link}
       to={getPath('project', project.name)}
       padding="0px"
-      width={{ base: 'full', md: '240px' }}
-      direction={{ base: 'row', md: 'column' }}
+      width={{ base: 'full', xl: '240px' }}
+      direction={{ base: 'row', xl: 'column' }}
       spacing="0px"
     >
       <Box
-        width={{ base: '120px', md: 'full' }}
-        height={{ base: '120px', md: '200px' }}
+        width={{ base: '120px', xl: 'full' }}
+        height={{ base: '120px', xl: '200px' }}
         overflow="hidden"
       >
         <Image
@@ -32,22 +32,28 @@ export const LandingProjectCard = ({ project }: { project: Project }) => {
         />
       </Box>
       <VStack
-        width={{ base: 'auto', md: '100%' }}
+        width={{ base: 'auto', xl: '100%' }}
+        minWidth={{ base: '250px', md: 'auto' }}
         padding="10px"
         alignItems="start"
         justifyContent="center"
+        overflow="hidden"
       >
         <H3 isTruncated width="100%">
           {project.title}
         </H3>
         <Box width="100%" overflow="hidden">
-          <AvatarElement borderRadius="50%" user={project.owners[0].user} />
+          <AvatarElement
+            borderRadius="50%"
+            user={project.owners[0].user}
+            noLink
+          />
         </Box>
         <ProjectFundingStatWithFollow
           width="100%"
           project={project}
-          justifyContent={{ base: 'start', md: 'space-between' }}
-          spacing="30px"
+          justifyContent={{ base: 'start', xl: 'space-between' }}
+          spacing={{ base: '30px', xl: '0px' }}
         />
       </VStack>
     </CardLayout>
