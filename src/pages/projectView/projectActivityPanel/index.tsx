@@ -235,7 +235,7 @@ export const ProjectActivityPanel = ({
     <>
       <Box
         className={classNames(classes.container)}
-        flex={!isMobile ? 2 : undefined}
+        flex={2}
         maxWidth={isMobile ? 'auto' : '450px'}
         width={isMobile ? '100%' : undefined}
         flexDirection="column"
@@ -244,7 +244,7 @@ export const ProjectActivityPanel = ({
         backgroundColor="#FFFFFF"
         marginTop={isMobile ? '0px' : '20px'}
         height={getActivityHeight()}
-        borderTopLeftRadius={isMobile ? '' : '8px'}
+        borderTopLeftRadius={isMobile ? 'initial' : '8px'}
         overflow="hidden"
         borderTop={isMobile ? 'none' : '2px solid'}
         borderLeft="2px solid"
