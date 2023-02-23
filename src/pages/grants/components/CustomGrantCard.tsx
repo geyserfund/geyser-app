@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { useMobileMode } from '../../../utils'
 import { ListText } from './ListText'
+import { SponsorList } from './SponsorList'
 
 interface GrantProps {
   title: string
@@ -46,83 +47,74 @@ export const CustomGrantCard = ({
             borderTopLeftRadius="12px"
             overflow="hidden"
           >
-            <img src={banner} width="100%" />
+            <Image
+              objectFit="cover"
+              src={banner}
+              minWidth={'100%'}
+              height={isMobile ? '273px' : undefined}
+            />
           </Box>
         ) : null}
         <Box display="flex" flexDirection={'column'} p="4">
           <Box
             display="flex"
-            justifyContent={'space-between'}
-            alignItems={isMobile ? 'center' : 'center'}
+            justifyContent="space-between"
+            alignItems="left"
             flexDirection={isMobile ? 'column' : 'row'}
           >
             <Box>
               <Box display="flex" alignItems="start">
-                <Text mr={4} fontWeight="bold" fontSize={'16px'}>
+                <Text mr={4} fontWeight="bold" fontSize="18px">
                   {title}
                 </Text>
-
-                {status ? (
-                  <Text
-                    bg="brand.primary100"
-                    fontSize={'10px'}
-                    px="14px"
-                    py={'5px'}
-                    fontWeight="500"
-                    borderRadius="4px"
-                  >
-                    ACTIVE
-                  </Text>
-                ) : null}
+                <Text
+                  bg={status ? 'brand.primary100' : 'brand.neutral200'}
+                  fontSize={'14px'}
+                  px="14px"
+                  py={'5px'}
+                  fontWeight="500"
+                  borderRadius="4px"
+                >
+                  {status ? 'ACTIVE' : 'CLOSED'}
+                </Text>
               </Box>
               <Text color={'brand.neutral600'}>{date}</Text>
             </Box>
-            {showBanner ? (
-              <Box display="flex" alignItems={'center'}>
-                <Box mr={4}>
+            <Box mt={6} px={6}>
+              {status ? (
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
                   <ListText
                     title={applicants}
                     subtitle="APPLICANTS"
                     isSatLogo={false}
                   />
+                  <ListText title={grant} subtitle="GRANT" isSatLogo={true} />
                 </Box>
-                <ListText title={grant} subtitle="GRANT" isSatLogo={true} />
-              </Box>
-            ) : (
-              <Box display="flex" alignItems={'center'}>
-                <Box mr={4}>
+              ) : (
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-around"
+                >
                   <ListText
                     title={grantees}
                     subtitle="APPLICANTS"
                     isSatLogo={false}
                   />
+                  <ListText
+                    title={distributed}
+                    subtitle="GRANT"
+                    isSatLogo={true}
+                  />
                 </Box>
-                <ListText
-                  title={distributed}
-                  subtitle="GRANT"
-                  isSatLogo={true}
-                />
-              </Box>
-            )}
-          </Box>
-          {isMobile !== true && (
-            <Box display={'flex'} alignItems="center" mt={6}>
-              <Text
-                color={'brand.neutral600'}
-                fontSize="11px"
-                mr={2}
-                fontWeight="700"
-              >
-                SPONSORS
-              </Text>
-              {sponsors &&
-                sponsors.map((item, idx) => (
-                  <Box key={idx * 2} mr={3}>
-                    <Image src={item} alt="logo" height="30px" />
-                  </Box>
-                ))}
+              )}
             </Box>
-          )}
+          </Box>
+          {!isMobile && <SponsorList sponsors={sponsors} />}
         </Box>
       </Box>
     </Link>

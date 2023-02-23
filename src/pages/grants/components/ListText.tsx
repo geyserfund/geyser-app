@@ -1,34 +1,53 @@
-import { Box, Text } from '@chakra-ui/react'
-import { useTheme } from '@chakra-ui/react'
+import { Box, Image, ImageProps, Text, TextProps } from '@chakra-ui/react'
 
 import satsymbol from '../../../assets/satoshi.png'
-import { fonts } from '../../../styles'
-import { GrantTextType } from '../../../types/types'
+import { colors, fonts } from '../../../styles'
 
-export const ListText = ({ title, subtitle, isSatLogo }: GrantTextType) => {
-  const theme = useTheme()
+export type Props = {
+  isSatLogo?: boolean
+  title?: string
+  subtitle: string
+  titleProps?: TextProps
+  subtitleProps?: TextProps
+  satLogoProps?: ImageProps
+}
 
+export const ListText = ({
+  title,
+  subtitle,
+  isSatLogo,
+  titleProps = {},
+  subtitleProps = {},
+  satLogoProps = {},
+}: Props) => {
   return (
-    <Box display={'flex'} alignItems="center" flexDirection={'column'}>
-      <Box display={'flex'} alignItems="center">
+    <Box display={'flex'} alignItems="center" flexDirection="column">
+      <Box display={'flex'} alignItems="center" height="34px">
         {isSatLogo ? (
           <Box mr={1}>
-            <img src={satsymbol} width="8px" alt="satsymbol" />
+            <Image
+              src={satsymbol}
+              height="18px"
+              alt="satsymbol"
+              {...satLogoProps}
+            />
           </Box>
         ) : null}
         <Text
-          fontWeight={'800'}
-          fontSize={'18px'}
+          fontWeight={'700'}
+          fontSize={'19px'}
           fontFamily={fonts.interBlack}
+          {...titleProps}
         >
-          {title}
+          {title || '-'}
         </Text>
       </Box>
       <Text
         fontWeight={'700'}
-        fontSize="9px"
+        fontSize="13px"
         fontFamily={fonts.interBlack}
-        color={theme.colors.brand.neutral600}
+        color={colors.gray500}
+        {...subtitleProps}
       >
         {subtitle}
       </Text>
