@@ -17,10 +17,9 @@ export const Filters = ({ filters, updateFilter, ...rest }: FiltersProps) => {
         leftIcon={<SearchIcon color={colors.neutral700} />}
         placeholder="Search"
       />
-      <AccordionLayout>
-        <FilterByTags {...{ filters, updateFilter }} />
-        <FilterByRegion {...{ filters, updateFilter }} />
-      </AccordionLayout>
+
+      <FilterByTags {...{ filters, updateFilter }} />
+      <FilterByRegion {...{ filters, updateFilter }} />
     </VStack>
   )
 }

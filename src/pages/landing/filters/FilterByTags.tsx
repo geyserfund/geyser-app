@@ -87,7 +87,7 @@ export const FilterByTags = ({
     <CardLayout
       width="100%"
       direction="column"
-      padding="15px"
+      padding="10px"
       spacing="10px"
       {...rest}
     >

@@ -7,6 +7,7 @@ import { colors } from '../../styles'
 
 const useStyles = createUseStyles({
   inputElement: {
+    width: '100%',
     '& .platform__select__control': {
       borderRadius: '8px',
       borderWidth: '2px',
@@ -77,7 +78,7 @@ const useStyles = createUseStyles({
 export function SelectComponent<T, S extends boolean>({
   className,
   ...rest
-}: StateManagerProps<T, S, any>) {
+}: { fullWidth?: boolean } & StateManagerProps<T, S, any>) {
   const classes = useStyles()
   return (
     <Select

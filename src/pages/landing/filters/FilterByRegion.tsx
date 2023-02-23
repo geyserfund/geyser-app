@@ -1,11 +1,24 @@
 import { useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
-import { Divider, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+  Box,
+  Divider,
+  HStack,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { CiLocationOn } from 'react-icons/ci'
 import { SingleValue } from 'react-select'
 
-import { CardLayout, CardLayoutProps } from '../../../components/layouts'
+import { CardLayoutProps } from '../../../components/layouts'
+import {
+  AccordionItemLayout,
+  AccordionLayout,
+} from '../../../components/layouts/AccordionLayout'
 import { Body1 } from '../../../components/typography'
 import {
   ButtonComponent,
@@ -22,6 +35,7 @@ import {
   ProjectRegionsGetResult,
 } from '../../../types'
 import { RenderCountries, RenderRegions } from './components'
+
 interface FilterByRegionProps extends CardLayoutProps, FilterState {}
 
 export const FilterByRegion = ({
@@ -145,79 +159,96 @@ export const FilterByRegion = ({
   }
 
   return (
-    <CardLayout
-      hover
-      width="100%"
-      direction="column"
-      padding={isOpen ? '15px' : '0px'}
-      spacing="10px"
-      {...rest}
-    >
-      {isOpen ? (
-        <>
-          <HStack width="100%" position="relative" alignItems="center">
-            <CiLocationOn color={colors.neutral600} />
-            <Body1 color={colors.neutral600}>Filter by location</Body1>
-            <IconButtonComponent
-              noBorder
-              size="xs"
-              aria-label="filter-close-icon"
-              position="absolute"
-              right="-5px"
-              icon={<CloseIcon />}
-              onClick={onClose}
-            />
-          </HStack>
-
-          <SelectComponent<Country, false>
-            menuIsOpen={selectMenuOpen}
-            onBlur={onSelectMenuClose}
-            options={options}
-            value={[]}
-            getOptionLabel={(option) => option.name}
-            onChange={handleRegionSelect}
-            onInputChange={handleInputChange}
-            placeholder="Find country or region"
-          />
-          <VStack width="100%" alignItems="start" spacing="5px">
-            <RenderRegions
-              region={region}
-              regions={regions}
-              handleClick={handleRegionClick}
-            />
-            <Divider />
-            <RenderCountries
-              countries={countries}
-              countryCode={countryCode}
-              handleClick={handleCountryClick}
-            />
-          </VStack>
-        </>
-      ) : (
-        <ButtonComponent
-          noBorder
-          onClick={onOpen}
-          w="full"
-          _hover={{}}
-          paddingX="10px"
-        >
-          <HStack width="100%" position="relative">
-            <CiLocationOn color={colors.neutral600} fontSize="20px" />
-            <Body1 color={colors.neutral900}>{getCurrentButtonName()}</Body1>
-            {isSelected && (
-              <IconButtonComponent
-                noBorder
-                size="xs"
-                aria-label="filter-close-icon"
-                position="absolute"
-                right="-5px"
-                icon={<CloseIcon />}
-                onClick={handleClear}
-              />
+    <AccordionLayout>
+      <AccordionItemLayout hover width="100%" padding={'0px'} {...rest}>
+        {({ isExpanded }) => (
+          <>
+            {!isExpanded && (
+              <AccordionButton as={Box} padding="0px">
+                <ButtonComponent
+                  noBorder
+                  onClick={onOpen}
+                  w="full"
+                  _hover={{}}
+                  paddingX="10px"
+                  paddingY="5px"
+                >
+                  <HStack width="100%" position="relative">
+                    <CiLocationOn color={colors.neutral600} fontSize="20px" />
+                    <Body1 color={colors.neutral900}>
+                      {getCurrentButtonName()}
+                    </Body1>
+                    {isSelected && (
+                      <IconButtonComponent
+                        noBorder
+                        size="xs"
+                        position="absolute"
+                        right="-5px"
+                        aria-label="filter-close-icon"
+                        icon={<CloseIcon />}
+                        onClick={handleClear}
+                      />
+                    )}
+                  </HStack>
+                  {!isSelected && <AccordionIcon />}
+                </ButtonComponent>
+              </AccordionButton>
             )}
-          </HStack>
-        </ButtonComponent>
-      )}
-    </CardLayout>
+            <AccordionPanel
+              as={VStack}
+              width="100%"
+              spacing="10px"
+              padding="10px"
+            >
+              <HStack width="100%" position="relative" alignItems="center">
+                <CiLocationOn color={colors.neutral600} fontSize="20px" />
+                <Body1 color={colors.neutral600}>Filter by location</Body1>
+                <AccordionButton
+                  width="auto"
+                  position="absolute"
+                  right="-5px"
+                  padding="0px"
+                  rounded="full"
+                >
+                  <IconButtonComponent
+                    noBorder
+                    size="xs"
+                    aria-label="filter-close-icon"
+                    icon={<CloseIcon />}
+                    onClick={onClose}
+                  />
+                </AccordionButton>
+              </HStack>
+              <HStack width="100%">
+                <SelectComponent<Country, false>
+                  menuIsOpen={selectMenuOpen}
+                  onBlur={onSelectMenuClose}
+                  options={options}
+                  value={[]}
+                  getOptionLabel={(option) => option.name}
+                  onChange={handleRegionSelect}
+                  onInputChange={handleInputChange}
+                  placeholder="Find country or region"
+                />
+              </HStack>
+
+              <VStack width="100%" alignItems="start" spacing="5px">
+                <RenderRegions
+                  region={region}
+                  regions={regions}
+                  handleClick={handleRegionClick}
+                />
+                <Divider />
+                <RenderCountries
+                  countries={countries}
+                  countryCode={countryCode}
+                  handleClick={handleCountryClick}
+                />
+              </VStack>
+            </AccordionPanel>
+          </>
+        )}
+      </AccordionItemLayout>
+    </AccordionLayout>
   )
 }
