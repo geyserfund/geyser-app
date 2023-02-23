@@ -1,14 +1,12 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Link, Text, Tooltip } from '@chakra-ui/react'
 import { useTheme } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri'
 
 import { getGrantApplicants, getGrantSponsorRecords } from '../../api'
 import satwalletimg from '../../assets/walletsats.svg'
 import { AppFooter } from '../../components/molecules'
 import { H2, H3 } from '../../components/typography'
-import { ButtonComponent } from '../../components/ui'
-import { fonts } from '../../styles'
+import { colors, fonts } from '../../styles'
 import { getRandomOrb, useMobileMode, useNotification } from '../../utils'
 import { CustomGrantCard } from './components/CustomGrantCard'
 import { GrantsContributeModal } from './components/GrantsContributeModal'
@@ -87,23 +85,28 @@ export const GrantsLandingPage = () => {
       >
         <Box my={5} px={isMobile ? '1rem' : ''}>
           <Text
-            fontSize={isMobile ? '4xl' : '48px'}
+            fontSize={isMobile ? '4xl' : '44px'}
             fontWeight="medium"
             textAlign="center"
           >
             🥳
           </Text>
           <Text
-            fontSize={'27px'}
-            fontWeight="900"
+            fontSize={'25px'}
+            fontWeight="bold"
             textAlign="center"
-            fontFamily={fonts.livvic}
+            fontFamily={fonts.header}
             textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
             color={'brand.primary500'}
           >
-            Geyser Grants
+            GEYSER GRANTS
           </Text>
-          <H2 textAlign="center" paddingY="10px">
+          <H2
+            textAlign="center"
+            paddingY="10px"
+            fontSize="44px"
+            fontWeight="700"
+          >
             Empowering bitcoin creators
           </H2>
           <H3 textAlign="center" color={'brand.neutral600'}>
@@ -132,21 +135,27 @@ export const GrantsLandingPage = () => {
               justifyContent="center"
               alignItems={'center'}
             >
-              <Box display="flex" alignItems={'center'}>
-                <Box mr={6}>
-                  <ListText
-                    title="351 M"
-                    subtitle="GRANT CONTRIBUTIONS "
-                    isSatLogo={true}
-                  />
-                </Box>
+              <Box
+                display="flex"
+                alignItems="center"
+                width="100%"
+                justifyContent="space-around"
+              >
                 <ListText
+                  titleProps={{ fontSize: '24px' }}
+                  title="351 M"
+                  subtitle="GRANT CONTRIBUTIONS"
+                  subtitleProps={{ fontSize: '10px' }}
+                  isSatLogo={true}
+                />
+                <ListText
+                  titleProps={{ fontSize: '24px' }}
                   title="100 M"
                   subtitle="GRANTS DISTRIBUTED"
+                  subtitleProps={{ fontSize: '10px' }}
                   isSatLogo={true}
                 />
               </Box>
-
               <Box
                 display="flex"
                 alignItems={'center'}
@@ -156,43 +165,36 @@ export const GrantsLandingPage = () => {
                 <GrantsContributeModal onLink={handleCompleteContribution} />
                 {isMobile ? (
                   <Text
-                    fontSize={'13px'}
+                    fontSize={'14px'}
                     fontWeight="500"
                     mt={3}
-                    textAlign="justify"
                     color="brand.neutral600"
                   >
                     Contribute to the Bitcoin ecosystem by becoming a Geyser
                     Grants sponsor. You can also easily contribute by sending or
-                    streaming recurring payments to
-                    <ButtonComponent
-                      size="sm"
-                      primary={copy}
-                      marginLeft="5px"
+                    streaming recurring payments to{' '}
+                    <Link
+                      textColor={copy ? undefined : colors.primary500}
+                      href="#"
                       onClick={handleCopyOnchain}
-                      leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
                     >
                       grants@geyser.fund
-                    </ButtonComponent>
+                    </Link>
                   </Text>
                 ) : (
                   <Box display="flex" alignItems={'center'}>
-                    <Text
-                      fontSize={'13px'}
-                      fontWeight="500"
-                      mr={1}
-                      color="brand.neutral600"
-                    >
+                    <Text fontWeight="500" mr={1} color="brand.neutral600">
                       Or sending SATs to our lightning address:{' '}
+                      <Tooltip label="Copied to clipboard!" isOpen={copy}>
+                        <Link
+                          textColor={copy ? undefined : colors.primary500}
+                          href="#"
+                          onClick={handleCopyOnchain}
+                        >
+                          grants@geyser.fund
+                        </Link>
+                      </Tooltip>
                     </Text>
-                    <ButtonComponent
-                      size="sm"
-                      primary={copy}
-                      onClick={handleCopyOnchain}
-                      leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
-                    >
-                      grants@geyser.fund
-                    </ButtonComponent>
                   </Box>
                 )}
               </Box>
@@ -209,11 +211,11 @@ export const GrantsLandingPage = () => {
                 </Text>
                 <CustomGrantCard
                   showBanner={true}
-                  status={false}
+                  status={true}
                   banner={
                     'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'
                   }
-                  applicants={applicationCount}
+                  grantees={applicationCount}
                   grant="100 M"
                   title="Geyser Grants Round 2"
                   date="JAN 2023"
@@ -228,7 +230,7 @@ export const GrantsLandingPage = () => {
                   mb={1}
                   fontFamily={fonts.interBlack}
                 >
-                  Previous Grant
+                  Previous Grants
                 </Text>
                 <CustomGrantCard
                   showBanner={false}
