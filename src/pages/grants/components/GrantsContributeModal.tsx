@@ -420,16 +420,18 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
     <>
       <Button
         variant={'solid'}
-        fontSize="sm"
-        px={10}
+        fontWeight="500"
+        fontSize="16px"
+        px={12}
         mr="2"
+        height={10}
         onClick={() => {
           onOpen()
           gotoNextStage()
         }}
         backgroundColor="brand.primary"
       >
-        Sponsor
+        Contribute
       </Button>
 
       <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
