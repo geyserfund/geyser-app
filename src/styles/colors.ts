@@ -48,6 +48,9 @@ export const colors = {
   primary900: '#004236',
 
   secondaryPink: '#FC257A',
+  secondaryYellow: '#FFE600',
+  secondaryRed: '#DF3634',
+  secondaryGold: '#C7BB50',
 
   neutral50: '#FCFCFC',
   neutral100: '#F4F4F4',
@@ -59,8 +62,4 @@ export const colors = {
   neutral700: '#495057',
   neutral800: '#343A40',
   neutral900: '#212529',
-
-  secondaryYellow: '#FFE600',
-  secondaryRed: '#DF3634',
-  secondaryGold: '#C7BB50',
 }

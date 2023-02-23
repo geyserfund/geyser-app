@@ -3,16 +3,13 @@ import { useEffect, useState } from 'react'
 import { TagsGetResult } from '../../../../types'
 import { FilterListItem } from './FilterListButton'
 
-const MAX_TAG_INDEX_DEFAULT_VIEW = 5
-const MAX_TAG_INDEX_EXTENDED_VIEW = 9
-
 export const RenderTags = ({
-  isOpen,
+  max,
   allTags,
   tagIds,
   handleClick,
 }: {
-  isOpen: boolean
+  max?: number
   allTags: TagsGetResult[]
   tagIds: number[]
   handleClick: (_: TagsGetResult) => void
@@ -22,23 +19,23 @@ export const RenderTags = ({
   useEffect(() => {
     const selectedTags = allTags.filter((tag) => tagIds.includes(tag.id))
 
-    const maxNumberOfSelectableTags = isOpen
-      ? MAX_TAG_INDEX_EXTENDED_VIEW
-      : MAX_TAG_INDEX_DEFAULT_VIEW
+    if (max) {
+      let toBeRenderedTags = allTags.slice(0, max)
 
-    let toBeRenderedTags = allTags.slice(0, maxNumberOfSelectableTags)
-
-    selectedTags.map((selectedTag) => {
-      if (
-        !toBeRenderedTags.some(
-          (toBeRenderedTag) => toBeRenderedTag.id === selectedTag.id,
-        )
-      ) {
-        toBeRenderedTags = [selectedTag, ...toBeRenderedTags]
-      }
-    })
-    setTagsToRender(toBeRenderedTags)
-  }, [allTags, tagIds, isOpen])
+      selectedTags.map((selectedTag) => {
+        if (
+          !toBeRenderedTags.some(
+            (toBeRenderedTag) => toBeRenderedTag.id === selectedTag.id,
+          )
+        ) {
+          toBeRenderedTags = [selectedTag, ...toBeRenderedTags]
+        }
+      })
+      setTagsToRender(toBeRenderedTags)
+    } else {
+      setTagsToRender(allTags)
+    }
+  }, [allTags, tagIds, max])
 
   return (
     <>

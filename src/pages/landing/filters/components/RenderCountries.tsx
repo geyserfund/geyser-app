@@ -6,10 +6,12 @@ import { FilterListItem } from './FilterListButton'
 const MAX_COUNTRY_INDEX_VIEW = 9
 
 export const RenderCountries = ({
+  max,
   countries,
   countryCode,
   handleClick,
 }: {
+  max?: number
   countries: ProjectCountriesGetResult[]
   countryCode: string
   handleClick: (_: string) => void
@@ -20,25 +22,30 @@ export const RenderCountries = ({
 
   useEffect(() => {
     if (countries.length > 0) {
-      const selectedCountries = countries.filter(
-        (country) => country.country.code === countryCode,
-      )
+      if (max) {
+        const selectedCountries = countries.filter(
+          (country) => country.country.code === countryCode,
+        )
 
-      let toBeRenderedCountries = countries.slice(0, MAX_COUNTRY_INDEX_VIEW)
+        let toBeRenderedCountries = countries.slice(0, max)
 
-      selectedCountries.map((selectedCountry) => {
-        if (
-          !toBeRenderedCountries.some(
-            (toBeRenderedCountry) =>
-              toBeRenderedCountry.country.code === selectedCountry.country.code,
-          )
-        ) {
-          toBeRenderedCountries = [selectedCountry, ...toBeRenderedCountries]
-        }
-      })
-      setCountriesToRender(toBeRenderedCountries)
+        selectedCountries.map((selectedCountry) => {
+          if (
+            !toBeRenderedCountries.some(
+              (toBeRenderedCountry) =>
+                toBeRenderedCountry.country.code ===
+                selectedCountry.country.code,
+            )
+          ) {
+            toBeRenderedCountries = [selectedCountry, ...toBeRenderedCountries]
+          }
+        })
+        setCountriesToRender(toBeRenderedCountries)
+      } else {
+        setCountriesToRender(countries)
+      }
     }
-  }, [countries, countryCode])
+  }, [countries, countryCode, max])
 
   return (
     <>

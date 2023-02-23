@@ -62,15 +62,15 @@ const useStyles = createUseStyles({
     '& .platform__select__indicator-separator ': {
       display: 'none',
     },
-    '& .platform__select__indicator ': {
+    '& .platform__select__dropdown-indicator ': {
       display: 'none',
     },
     '& .platform__select__option--is-focused': {
       backgroundColor: colors.neutral200,
     },
     '& .platform__select__option--is-selected': {
-      backgroundColor: colors.bgLightGreen,
-      color: 'black',
+      backgroundColor: colors.bgWhite,
+      color: colors.neutral600,
     },
   },
 })

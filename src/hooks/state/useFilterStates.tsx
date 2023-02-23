@@ -1,12 +1,13 @@
 import { useState } from 'react'
 
-import { ProjectStatus } from '../../types'
+import { ProjectStatus, ProjectType } from '../../types'
 
 export type FilterType = {
   countryCode: string
   region: string
   search: string
   status?: ProjectStatus
+  type?: ProjectType
   tagIds: number[]
 }
 

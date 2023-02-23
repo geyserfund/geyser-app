@@ -6,6 +6,7 @@ import { TextInputBox } from '../../../components/ui'
 import { FilterState } from '../../../hooks/state'
 import { colors } from '../../../styles'
 import { FilterByRegion } from './FilterByRegion'
+import { FilterByStatus } from './FilterByStatus'
 import { FilterByTags } from './FilterByTags'
 
 interface FiltersProps extends StackProps, FilterState {}
@@ -20,6 +21,7 @@ export const Filters = ({ filters, updateFilter, ...rest }: FiltersProps) => {
 
       <FilterByTags {...{ filters, updateFilter }} />
       <FilterByRegion {...{ filters, updateFilter }} />
+      <FilterByStatus {...{ filters, updateFilter }} />
     </VStack>
   )
 }

@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react'
 import { ProjectRegionsGetResult } from '../../../../types'
 import { FilterListItem } from './FilterListButton'
 
-const MAX_REGION_INDEX_VIEW = 4
-
 export const RenderRegions = ({
+  max,
   regions,
   region,
   handleClick,
 }: {
+  max?: number
   regions: ProjectRegionsGetResult[]
   region: string
   handleClick: (_: string) => void
@@ -20,23 +20,27 @@ export const RenderRegions = ({
 
   useEffect(() => {
     if (regions.length > 0) {
-      const selectedRegions = regions.filter((reg) => reg.region === region)
+      if (max) {
+        const selectedRegions = regions.filter((reg) => reg.region === region)
 
-      let toBeRenderedRegions = regions.slice(0, MAX_REGION_INDEX_VIEW)
+        let toBeRenderedRegions = regions.slice(0, max)
 
-      selectedRegions.map((selectedRegion) => {
-        if (
-          !toBeRenderedRegions.some(
-            (toBeRenderedRegion) =>
-              toBeRenderedRegion.region === selectedRegion.region,
-          )
-        ) {
-          toBeRenderedRegions = [selectedRegion, ...toBeRenderedRegions]
-        }
-      })
-      setRegionsToRender(toBeRenderedRegions)
+        selectedRegions.map((selectedRegion) => {
+          if (
+            !toBeRenderedRegions.some(
+              (toBeRenderedRegion) =>
+                toBeRenderedRegion.region === selectedRegion.region,
+            )
+          ) {
+            toBeRenderedRegions = [selectedRegion, ...toBeRenderedRegions]
+          }
+        })
+        setRegionsToRender(toBeRenderedRegions)
+      } else {
+        setRegionsToRender(regions)
+      }
     }
-  }, [regions, region])
+  }, [regions, region, max])
 
   return (
     <>
