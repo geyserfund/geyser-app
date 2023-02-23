@@ -21,9 +21,8 @@ export const LandingProjectCard = ({ project }: { project: Project }) => {
       spacing="0px"
     >
       <Box
-        width={{ base: '120px', xl: 'full' }}
-        height={{ base: '120px', xl: '200px' }}
-        overflow="hidden"
+        width={{ base: '125px', xl: 'full' }}
+        height={{ base: '125px', xl: '200px' }}
       >
         <ImageWithReload
           grey
@@ -34,8 +33,9 @@ export const LandingProjectCard = ({ project }: { project: Project }) => {
         />
       </Box>
       <VStack
+        flex={1}
         width={{ base: 'auto', xl: '100%' }}
-        minWidth={{ base: '250px', md: 'auto' }}
+        minWidth={{ base: '170px', md: 'auto' }}
         padding="10px"
         alignItems="start"
         justifyContent="center"
@@ -54,8 +54,12 @@ export const LandingProjectCard = ({ project }: { project: Project }) => {
         <ProjectFundingStatWithFollow
           width="100%"
           project={project}
-          justifyContent={{ base: 'start', xl: 'space-between' }}
-          spacing={{ base: '30px', xl: '0px' }}
+          justifyContent={{
+            base: 'space-between',
+            sm: 'start',
+            xl: 'space-between',
+          }}
+          spacing={{ base: '0px', sm: '30px', xl: '0px' }}
         />
       </VStack>
     </CardLayout>

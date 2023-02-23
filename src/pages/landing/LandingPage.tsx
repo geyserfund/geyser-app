@@ -1,6 +1,7 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 
 import { dimensions } from '../../constants'
+import { useFilterStates } from '../../hooks/state'
 import { useMobileMode } from '../../utils'
 import { GradientBanner } from './components'
 import { TabBar } from './components/TabBar'
@@ -9,6 +10,7 @@ import { ProjectsView } from './projectsView'
 
 export const LandingPage = () => {
   const isMobile = useMobileMode()
+  const [filters, updateFilter] = useFilterStates()
   return (
     <Box
       marginTop={`-${dimensions.topNavBar.desktop.height}px`}
@@ -25,23 +27,30 @@ export const LandingPage = () => {
         justifyContent="center"
         alignItems="start"
         spacing={{ base: '30px', xl: '50px' }}
-        paddingX="30px"
+        paddingX={{ base: '10px', lg: '20px' }}
       >
         {!isMobile && (
-          <Filters width="full" minWidth="220px" maxWidth="320px" />
+          <Filters
+            {...{ filters, updateFilter }}
+            flex={1}
+            width="full"
+            minWidth="220px"
+            maxWidth="320px"
+          />
         )}
 
         <VStack
-          flex={1}
+          flex={2}
           maxWidth="800px"
           minWidth={{ base: '100%', md: '400px' }}
         >
           <TabBar />
-          <ProjectsView />
+          <ProjectsView {...{ filters, updateFilter }} />
         </VStack>
 
         {!isMobile && (
           <VStack
+            flex={1}
             width="full"
             minWidth="220px"
             maxWidth="320px"

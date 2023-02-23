@@ -1,5 +1,9 @@
 import { CardLayout } from '../../../components/layouts'
+import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../../graphql'
+import { useQueryWithPagination } from '../../../hooks'
+import { FilterState } from '../../../hooks/state'
 import { Owner, Project, User } from '../../../types'
+import { QUERY_PROJECT_FOR_LANDING_PAGE } from '../projects.graphql'
 import { FeaturedProjectCard } from './components'
 import { ProjectsDisplay } from './ProjectsDisplay'
 
@@ -10,7 +14,22 @@ const listOfTags = [
   { label: 'games', id: 44 },
 ]
 
-export const ProjectsView = () => {
+type ProjectsViewProps = FilterState
+
+export const ProjectsView = ({ filters }: ProjectsViewProps) => {
+  // const {
+  //   isLoading,
+  //   isLoadingMore,
+  //   noMoreItems,
+  //   data: contributions,
+  //   error,
+  //   fetchNext,
+  // } = useQueryWithPagination<>({
+  //   itemLimit,
+  //   queryName: 'getFundingTxs',
+  //   query: QUERY_PROJECT_FOR_LANDING_PAGE,
+  // })
+
   return (
     <CardLayout w="full" spacing="50px" padding="20px">
       <FeaturedProjectCard

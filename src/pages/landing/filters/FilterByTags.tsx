@@ -1,22 +1,45 @@
 import { useQuery } from '@apollo/client'
-import { Badge, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import { CloseIcon } from '@chakra-ui/icons'
+import { HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { HiOutlineTag } from 'react-icons/hi'
+import { MultiValue } from 'react-select'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
-import { ButtonComponent } from '../../../components/ui'
+import {
+  ButtonComponent,
+  IconButtonComponent,
+  SelectComponent,
+} from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
 import { QUERY_TAGS } from '../../../graphql/queries'
+import { FilterState } from '../../../hooks/state'
 import { colors } from '../../../styles'
-import { Tag, TagsGetResult } from '../../../types'
+import { TagsGetResult } from '../../../types'
+import { useNotification } from '../../../utils'
+import { RenderTags } from './components'
 
-interface FilterByTagsProps extends CardLayoutProps {
-  tags?: Tag[]
-  setTags?: (_: Tag[]) => void
-}
+interface FilterByTagsProps extends CardLayoutProps, FilterState {}
 
-export const FilterByTags = ({ tags }: FilterByTagsProps) => {
+export const FilterByTags = ({
+  filters,
+  updateFilter,
+  ...rest
+}: FilterByTagsProps) => {
+  const { toast } = useNotification()
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const { tagIds } = filters
+
+  const {
+    isOpen: selectMenuOpen,
+    onOpen: onSelectMenuOpen,
+    onClose: onSelectMenuClose,
+  } = useDisclosure()
+
+  const isDisabled = tagIds.length >= 5
+
   const [allTags, setAllTags] = useState<TagsGetResult[]>([])
 
   const { loading } = useQuery<{ tagsGet: TagsGetResult[] }>(QUERY_TAGS, {
@@ -27,32 +50,80 @@ export const FilterByTags = ({ tags }: FilterByTagsProps) => {
       }
     },
   })
-  const tagsToRender = isOpen ? allTags.slice(0, 9) : allTags.slice(0, 4)
+
+  const handleTagsSelection = (newValue: MultiValue<TagsGetResult>) => {
+    updateFilter({ tagIds: [...tagIds, newValue[0].id] })
+  }
+
+  const handleTagsClick = (tag: TagsGetResult) => {
+    if (tagIds.includes(tag.id)) {
+      updateFilter({ tagIds: tagIds.filter((val) => val !== tag.id) })
+    } else {
+      if (isDisabled) {
+        toast({
+          status: 'warning',
+          title: 'cannot select more than 5 tags',
+        })
+        return
+      }
+
+      updateFilter({ tagIds: [...tagIds, tag.id] })
+    }
+  }
+
+  const handleInputChange = (newValue: string) => {
+    if (newValue?.length >= 1) {
+      onSelectMenuOpen()
+    } else {
+      onSelectMenuClose()
+    }
+  }
+
+  if (loading) {
+    return <Loader />
+  }
+
   return (
-    <CardLayout width="100%" direction="column" padding="20px" spacing="20px">
-      <HStack>
+    <CardLayout
+      width="100%"
+      direction="column"
+      padding="15px"
+      spacing="10px"
+      {...rest}
+    >
+      <HStack width="100%" position="relative">
         <HiOutlineTag color={colors.neutral600} />
         <Body1 color={colors.neutral600}>Filter by project tags</Body1>
+        {isOpen && (
+          <IconButtonComponent
+            noBorder
+            size="xs"
+            aria-label="filter-close-icon"
+            position="absolute"
+            right="-5px"
+            top="-5px"
+            icon={<CloseIcon />}
+            onClick={onClose}
+          />
+        )}
       </HStack>
-      <VStack width="100%" alignItems="start">
-        {tagsToRender.map((tag) => {
-          const isActive = tags?.some((tagValue) => tagValue.id === tag.id)
-          return (
-            <ButtonComponent
-              size="sm"
-              w="full"
-              noBorder
-              key={tag.id}
-              backgroundColor={isActive ? 'brand.neutral100' : 'white'}
-              position="relative"
-            >
-              <HStack width="100%" justifyContent="start">
-                <Body1 color="brand.neutral900">{tag.label}</Body1>
-                <Badge rounded="full">{tag.count}</Badge>
-              </HStack>
-            </ButtonComponent>
-          )
-        })}
+      {isOpen && (
+        <SelectComponent<TagsGetResult, true>
+          isMulti
+          isDisabled={isDisabled}
+          menuIsOpen={selectMenuOpen}
+          onBlur={onSelectMenuClose}
+          options={allTags}
+          value={[]}
+          getOptionLabel={(option) => option.label}
+          onChange={handleTagsSelection}
+          onInputChange={handleInputChange}
+        />
+      )}
+      <VStack width="100%" alignItems="start" spacing="5px">
+        <RenderTags
+          {...{ isOpen, allTags, tagIds, handleClick: handleTagsClick }}
+        />
       </VStack>
       {!isOpen && (
         <ButtonComponent size="sm" onClick={onOpen}>
