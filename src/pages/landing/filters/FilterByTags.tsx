@@ -19,8 +19,8 @@ import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { ButtonComponent, SelectComponent } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
+import { useFilterContext } from '../../../context'
 import { QUERY_TAGS } from '../../../graphql/queries'
-import { FilterState } from '../../../hooks/state'
 import { colors } from '../../../styles'
 import { TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
@@ -28,15 +28,13 @@ import { RenderTags } from './components'
 
 const MAX_TAG_INDEX_DEFAULT_VIEW = 5
 
-interface FilterByTagsProps extends CardLayoutProps, FilterState {}
+type FilterByTagsProps = CardLayoutProps
 
-export const FilterByTags = ({
-  filters,
-  updateFilter,
-  ...rest
-}: FilterByTagsProps) => {
+export const FilterByTags = ({ ...rest }: FilterByTagsProps) => {
   const { toast } = useNotification()
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const { filters, updateFilter } = useFilterContext()
 
   const { tagIds = [] } = filters
 

@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react'
 
 import { CloseIconButton } from '../../../components/buttons'
 import { TextInputBox } from '../../../components/ui'
+import { useFilterContext } from '../../../context'
 import { useDebounce } from '../../../hooks'
-import { FilterState } from '../../../hooks/state'
 import { colors } from '../../../styles'
 
-export const FilterBySearch = ({ filters, updateFilter }: FilterState) => {
+export const FilterBySearch = () => {
+  const { updateFilter } = useFilterContext()
+
   const [search, setSearch] = useState('')
 
   const debouncedSearch = useDebounce(search, 1000)

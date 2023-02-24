@@ -15,7 +15,7 @@ import { SlLocationPin } from 'react-icons/sl'
 
 import { Body2 } from '../../../components/typography'
 import Loader from '../../../components/ui/Loader'
-import { FilterState, useFilterContext } from '../../../context'
+import { useFilterContext } from '../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../graphql/queries'
 import {
   OrderByOptions,

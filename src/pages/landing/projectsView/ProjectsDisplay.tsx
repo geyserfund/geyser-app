@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { Stack } from '@chakra-ui/react'
 
-import { FilterState } from '../../../hooks/state'
+import { useFilterContext } from '../../../context'
 import {
   GetProjectsMostFundedOfTheWeekInput,
   ProjectsMostFundedOfTheWeekGet,
@@ -10,13 +10,15 @@ import {
 import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 import { LandingProjectCard, ProjectRowLayout } from './components'
 
-interface ProjectDisplayProps extends FilterState {
+interface ProjectDisplayProps {
   tag?: Tag
 }
 
 const NO_OF_PROJECT_TO_LOAD = 3
 
-export const ProjectsDisplay = ({ tag, updateFilter }: ProjectDisplayProps) => {
+export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
+  const { updateFilter, updateSort } = useFilterContext()
+
   const { data, loading } = useQuery<
     { projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet[] },
     { input: GetProjectsMostFundedOfTheWeekInput }
@@ -31,9 +33,11 @@ export const ProjectsDisplay = ({ tag, updateFilter }: ProjectDisplayProps) => {
 
   const onSeeAllClick = () => {
     if (tag) {
-      updateFilter({ tagIds: [tag.id], sort: { recent: true } })
+      updateFilter({ tagIds: [tag.id] })
+      updateSort({ recent: true })
     } else {
-      updateFilter({ recent: true, sort: { recent: true } })
+      updateFilter({ recent: true })
+      updateSort({ recent: true })
     }
   }
 

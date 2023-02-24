@@ -22,8 +22,8 @@ import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { ButtonComponent, SelectComponent } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
+import { useFilterContext } from '../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries'
-import { FilterState } from '../../../hooks/state'
 import { colors } from '../../../styles'
 import {
   Country,
@@ -32,13 +32,10 @@ import {
 } from '../../../types'
 import { RenderCountries, RenderRegions } from './components'
 
-interface FilterByRegionProps extends CardLayoutProps, FilterState {}
+type FilterByRegionProps = CardLayoutProps
 
-export const FilterByRegion = ({
-  filters,
-  updateFilter,
-  ...rest
-}: FilterByRegionProps) => {
+export const FilterByRegion = ({ ...rest }: FilterByRegionProps) => {
+  const { filters, updateFilter } = useFilterContext()
   const { countryCode, region } = filters
 
   const { isOpen, onOpen, onClose } = useDisclosure()

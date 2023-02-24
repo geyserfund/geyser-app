@@ -1,5 +1,4 @@
 import { CardLayout } from '../../../components/layouts'
-import { FilterState } from '../../../hooks/state'
 import { FeaturedProjectCard } from './components'
 import { ProjectsDisplay } from './ProjectsDisplay'
 
@@ -10,20 +9,14 @@ const listOfTags = [
   { label: 'games', id: 44 },
 ]
 
-export const LandingProjectList = ({ filters, updateFilter }: FilterState) => {
+export const LandingProjectList = () => {
   return (
     <CardLayout w="full" spacing="50px" padding="20px">
       <FeaturedProjectCard projectName="bitcoinconferenceinlagos" />
 
-      <ProjectsDisplay {...{ filters, updateFilter }} />
+      <ProjectsDisplay />
       {listOfTags.map((tag) => {
-        return (
-          <ProjectsDisplay
-            key={tag.id}
-            tag={tag}
-            {...{ filters, updateFilter }}
-          />
-        )
+        return <ProjectsDisplay key={tag.id} tag={tag} />
       })}
     </CardLayout>
   )

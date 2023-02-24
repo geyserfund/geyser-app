@@ -7,10 +7,8 @@ import { colors } from '../../../styles'
 import {
   FeedNavIcon,
   GrantsNavIcon,
-  HomeNavIcon,
   HomeNavIcon2,
   LeaderboardNavIcon,
-  ProjectNavIcon,
 } from '../../icons'
 
 const routesForShowingLandingMenu = [

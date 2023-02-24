@@ -18,22 +18,19 @@ import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
 import { projectTypes } from '../../../constants'
-import { FilterState } from '../../../hooks/state'
+import { useFilterContext } from '../../../context'
 import { colors } from '../../../styles'
 import { ProjectStatus, ProjectType } from '../../../types'
 
-interface FilterByStatusProps extends CardLayoutProps, FilterState {}
+type FilterByStatusProps = CardLayoutProps
 
 type StatusAndType = {
   status?: ProjectStatus
   type?: ProjectType
 }
 
-export const FilterByStatus = ({
-  filters,
-  updateFilter,
-  ...rest
-}: FilterByStatusProps) => {
+export const FilterByStatus = ({ ...rest }: FilterByStatusProps) => {
+  const { filters, updateFilter } = useFilterContext()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const handleClick = ({ status, type }: StatusAndType) => {

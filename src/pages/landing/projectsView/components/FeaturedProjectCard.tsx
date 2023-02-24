@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
