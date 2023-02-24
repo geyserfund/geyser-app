@@ -11,7 +11,7 @@ export const RenderRegions = ({
 }: {
   max?: number
   regions: ProjectRegionsGetResult[]
-  region: string
+  region?: string
   handleClick: (_: string) => void
 }) => {
   const [regionsToRender, setRegionsToRender] = useState<

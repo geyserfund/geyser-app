@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import {
   Button,
-  ButtonProps,
   HStack,
   Modal,
   ModalBody,
@@ -13,10 +12,11 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
+import { CloseIconButton } from '../../../components/buttons'
 import { ProjectNavIcon, RewardGiftIcon } from '../../../components/icons'
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
-import { ButtonComponent, IconButtonComponent } from '../../../components/ui'
+import { ButtonComponent } from '../../../components/ui'
 import { projectTypes } from '../../../constants'
 import { FilterState } from '../../../hooks/state'
 import { colors } from '../../../styles'
@@ -42,41 +42,26 @@ export const FilterByStatus = ({
     } else {
       updateFilter({ status, type: undefined })
     }
+
+    onClose()
   }
 
-  const getButtonContent = ({ status, type }: StatusAndType) => {
-    if (type && type === projectTypes.reward) {
-      return (
-        <>
-          <RewardGiftIcon mr="10px" />
-          Projects with perks
-        </>
-      )
-    }
-
-    switch (status) {
-      case ProjectStatus.Deleted:
-        return (
-          <>
-            <ProjectNavIcon mr="10px" color="brand.secondaryRed" />
-            Closed projects
-          </>
-        )
-      default:
-        return (
-          <>
-            <ProjectNavIcon mr="10px" color="brand.primary500" />
-            Active projects
-          </>
-        )
-    }
+  const handleClear = () => {
+    updateFilter({ status: undefined, type: undefined })
   }
+
+  const isSelected = filters.type || filters.status
 
   const options = [
     { type: ProjectType.Reward },
     { status: ProjectStatus.Active },
     { status: ProjectStatus.Deleted },
   ]
+
+  const { icon, text } = getStatusTypeButtonContent({
+    status: filters.status,
+    type: filters.type,
+  })
 
   return (
     <>
@@ -85,7 +70,9 @@ export const FilterByStatus = ({
         width="100%"
         direction="column"
         padding={'0px'}
-        spacing="10px"
+        position="relative"
+        justifyContent="center"
+        spacing="0px"
         {...rest}
       >
         <ButtonComponent
@@ -95,18 +82,20 @@ export const FilterByStatus = ({
           _hover={{}}
           paddingX="10px"
         >
-          <HStack width="100%" position="relative">
-            {getButtonContent({ status: filters.status, type: filters.type })}
-            <IconButtonComponent
-              noBorder
-              size="xs"
-              aria-label="filter-close-icon"
-              position="absolute"
-              right="-5px"
-              icon={<ChevronRightIcon fontSize="20px" />}
-            />
+          <HStack width="100%" spacing="10px">
+            {icon}
+            <Body1 color={colors.neutral900}>{text}</Body1>
           </HStack>
         </ButtonComponent>
+        {isSelected ? (
+          <CloseIconButton
+            position="absolute"
+            right="10px"
+            onClick={handleClear}
+          />
+        ) : (
+          <ChevronRightIcon position="absolute" right="10px" fontSize="20px" />
+        )}
       </CardLayout>
       <Modal isOpen={isOpen} onClose={onClose} size="xs">
         <ModalOverlay />
@@ -117,24 +106,37 @@ export const FilterByStatus = ({
             </HStack>
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody as={VStack} overflow="hidden" paddingX="0px">
+          <ModalBody
+            as={VStack}
+            overflow="hidden"
+            paddingX="0px"
+            paddingBottom="20px"
+          >
             <VStack
               width="100%"
               alignItems="start"
-              spacing="5px"
-              paddingX="50px"
+              spacing="20px"
+              paddingX="30px"
             >
               {options.map((option, index) => {
                 const isActive =
                   filters.type === option.type &&
                   filters.status === option.status
+                const { icon, text } = getStatusTypeButtonContent(option)
                 return (
                   <Button
                     key={index}
-                    {...getStatusFilterButtonStyles(isActive)}
+                    background={isActive ? 'brand.neutral100' : 'white'}
+                    color="brand.neutral800"
                     onClick={() => handleClick(option)}
+                    w="100%"
+                    display="flex"
+                    justifyContent="start"
                   >
-                    {getButtonContent(option)}
+                    {icon}
+                    <Body1 ml="10px" color={colors.neutral900}>
+                      {text}
+                    </Body1>
                   </Button>
                 )
               })}
@@ -146,10 +148,24 @@ export const FilterByStatus = ({
   )
 }
 
-const getStatusFilterButtonStyles = (isActive?: boolean): ButtonProps => ({
-  w: 'full',
-  display: 'flex',
-  justifyContent: 'start',
-  background: isActive ? 'brand.neutral100' : 'white',
-  color: 'brand.neutral800',
-})
+export const getStatusTypeButtonContent = ({ status, type }: StatusAndType) => {
+  if (type && type === projectTypes.reward) {
+    return {
+      icon: <RewardGiftIcon height="20px" />,
+      text: 'Projects with perks',
+    }
+  }
+
+  switch (status) {
+    case ProjectStatus.Deleted:
+      return {
+        icon: <ProjectNavIcon color="brand.secondaryRed" height="20px" />,
+        text: 'Inactive Projects',
+      }
+    default:
+      return {
+        icon: <ProjectNavIcon color="brand.primary500" height="20px" />,
+        text: 'Active projects',
+      }
+  }
+}

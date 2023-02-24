@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client'
-import { CloseIcon } from '@chakra-ui/icons'
 import {
   Box,
   HStack,
@@ -39,7 +38,7 @@ export const FilterByTags = ({
   const { toast } = useNotification()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { tagIds } = filters
+  const { tagIds = [] } = filters
 
   const {
     isOpen: selectMenuOpen,

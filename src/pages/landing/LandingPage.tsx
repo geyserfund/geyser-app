@@ -42,7 +42,8 @@ export const LandingPage = () => {
         <VStack
           flex={2}
           maxWidth="800px"
-          minWidth={{ base: '100%', md: '400px' }}
+          minWidth={{ base: '100%', md: '400px', xl: '800px' }}
+          paddingBottom="40px"
         >
           <TabBar />
           <ProjectsView {...{ filters, updateFilter }} />

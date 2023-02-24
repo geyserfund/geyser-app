@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { ChevronRightIcon, CloseIcon } from '@chakra-ui/icons'
+import { ChevronRightIcon } from '@chakra-ui/icons'
 import {
   Box,
   Divider,
@@ -14,17 +14,13 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { CiLocationOn } from 'react-icons/ci'
-import { HiOutlineTag } from 'react-icons/hi'
+import { SlLocationPin } from 'react-icons/sl'
 import { SingleValue } from 'react-select'
 
+import { CloseIconButton } from '../../../components/buttons'
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
-import {
-  ButtonComponent,
-  IconButtonComponent,
-  SelectComponent,
-} from '../../../components/ui'
+import { ButtonComponent, SelectComponent } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries'
 import { FilterState } from '../../../hooks/state'
@@ -104,9 +100,9 @@ export const FilterByRegion = ({
     }
 
     if (option.code === option.name) {
-      updateFilter({ countryCode: '', region: option.code })
+      updateFilter({ countryCode: undefined, region: option.code })
     } else {
-      updateFilter({ countryCode: option.code, region: '' })
+      updateFilter({ countryCode: option.code, region: undefined })
     }
   }
 
@@ -116,27 +112,33 @@ export const FilterByRegion = ({
     } else {
       onSelectMenuClose()
     }
+
+    onClose()
   }
 
   const handleRegionClick = (selectedRegion: string) => {
     if (selectedRegion === region) {
-      updateFilter({ region: '' })
+      updateFilter({ region: undefined })
     } else {
-      updateFilter({ countryCode: '', region: selectedRegion })
+      updateFilter({ countryCode: undefined, region: selectedRegion })
     }
+
+    onClose()
   }
 
   const handleCountryClick = (selectedCountryCode: string) => {
     if (selectedCountryCode === countryCode) {
-      updateFilter({ countryCode: '' })
+      updateFilter({ countryCode: undefined })
     } else {
-      updateFilter({ countryCode: selectedCountryCode, region: '' })
+      updateFilter({ countryCode: selectedCountryCode, region: undefined })
     }
+
+    onClose()
   }
 
   const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
-    updateFilter({ countryCode: '', region: '' })
+    updateFilter({ countryCode: undefined, region: undefined })
   }
 
   const getCurrentButtonName = () => {
@@ -175,7 +177,9 @@ export const FilterByRegion = ({
         width="100%"
         direction="column"
         padding={'0px'}
-        spacing="10px"
+        position="relative"
+        justifyContent="center"
+        spacing="0px"
         {...rest}
       >
         <ButtonComponent
@@ -185,38 +189,31 @@ export const FilterByRegion = ({
           _hover={{}}
           paddingX="10px"
         >
-          <HStack width="100%" position="relative">
-            <CiLocationOn color={colors.neutral600} fontSize="20px" />
+          <HStack width="100%">
+            <SlLocationPin color={colors.neutral600} fontSize="20px" />
             <Body1 color={colors.neutral900}>{getCurrentButtonName()}</Body1>
-            {isSelected ? (
-              <IconButtonComponent
-                noBorder
-                size="xs"
-                aria-label="filter-close-icon"
-                position="absolute"
-                right="-5px"
-                icon={<CloseIcon />}
-                onClick={handleClear}
-              />
-            ) : (
-              <IconButtonComponent
-                noBorder
-                size="xs"
-                aria-label="filter-close-icon"
-                position="absolute"
-                right="-5px"
-                icon={<ChevronRightIcon fontSize="20px" />}
-              />
-            )}
           </HStack>
         </ButtonComponent>
+        {isSelected ? (
+          <CloseIconButton
+            position="absolute"
+            right="10px"
+            onClick={handleClear}
+          />
+        ) : (
+          <ChevronRightIcon position="absolute" right="10px" fontSize="20px" />
+        )}
       </CardLayout>
       <Modal isOpen={isOpen} onClose={onClose} size="sm">
         <ModalOverlay />
         <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
           <ModalHeader>
             <HStack width="100%" position="relative" alignItems="center">
-              <CiLocationOn color={colors.neutral600} fontSize="20px" />
+              <SlLocationPin
+                stroke={colors.neutral600}
+                color={colors.neutral600}
+                fontSize="20px"
+              />
               <Body1 color={colors.neutral600}>Filter by location</Body1>
             </HStack>
           </ModalHeader>

@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 import { ProjectCountriesGetResult } from '../../../../types'
 import { FilterListItem } from './FilterListButton'
 
-const MAX_COUNTRY_INDEX_VIEW = 9
-
 export const RenderCountries = ({
   max,
   countries,
@@ -13,7 +11,7 @@ export const RenderCountries = ({
 }: {
   max?: number
   countries: ProjectCountriesGetResult[]
-  countryCode: string
+  countryCode?: string
   handleClick: (_: string) => void
 }) => {
   const [countriesToRender, setCountriesToRender] = useState<

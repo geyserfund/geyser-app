@@ -1,3 +1,4 @@
+import { CloseIcon } from '@chakra-ui/icons'
 import { Badge, HStack } from '@chakra-ui/react'
 
 import { Body1 } from '../../../../components/typography'
@@ -32,6 +33,7 @@ export const FilterListItem = ({
         <Body1 color="brand.neutral900">{label}</Body1>
         <Badge rounded="full">{count}</Badge>
       </HStack>
+      {isActive && <CloseIcon fontSize={'10px'} />}
     </ButtonComponent>
   )
 }

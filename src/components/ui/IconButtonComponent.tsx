@@ -4,7 +4,7 @@ import { useColorModeValue } from '@chakra-ui/system'
 import { colors } from '../../styles'
 import { buttonCommon } from '../../styles/common'
 
-interface IIconButtonComponentP extends IconButtonProps {
+export interface IconButtonComponentProps extends IconButtonProps {
   primary?: boolean
   href?: string
   isExternal?: boolean
@@ -15,7 +15,7 @@ export const IconButtonComponent = ({
   primary,
   noBorder,
   ...rest
-}: IIconButtonComponentP) => {
+}: IconButtonComponentProps) => {
   const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark)
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite)
 
