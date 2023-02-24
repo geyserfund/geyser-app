@@ -165,6 +165,11 @@ const platformRoutes = [
   {
     path: getPath('landingPage'),
     element: LandingPage,
+    // nested: [
+    //   {
+
+    //   }
+    // ]
   },
 ] as PlatformRoutes[]
 

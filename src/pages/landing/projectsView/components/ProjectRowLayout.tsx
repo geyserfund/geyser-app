@@ -20,7 +20,7 @@ export const ProjectRowLayout = ({
   ...rest
 }: ProjectRowLayoutComponent) => {
   return (
-    <VStack alignItems="start" spacing="30px" {...rest}>
+    <VStack alignItems="start" spacing="10px" {...rest}>
       <HStack width="100%" justifyContent="space-between">
         <H3 color="brand.primary600">
           {subtitle && (

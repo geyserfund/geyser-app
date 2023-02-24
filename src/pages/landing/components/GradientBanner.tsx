@@ -14,7 +14,6 @@ import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import Loader from '../../../components/ui/Loader'
 import { dimensions, LetTheSatsFlow3DUrl } from '../../../constants'
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql'
-import { colors } from '../../../styles'
 import {
   getShortAmountLabel,
   useMobileMode,
@@ -77,8 +76,8 @@ export const GradientBanner = () => {
           <VStack
             position="absolute"
             bottom="-20px"
-            backgroundColor={'white'}
-            boxShadow="0px 0px 8.11659px rgba(0, 0, 0, 0.1)"
+            backgroundColor={'brand.primary50'}
+            shadow="md"
             padding="10px 20px"
             borderRadius="8px"
             spacing="10px"

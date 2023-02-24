@@ -1,5 +1,6 @@
 export enum PathName {
   projectDiscovery = 'discover',
+  landingFeed = 'feed',
   grants = 'grants',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
@@ -33,6 +34,7 @@ export enum PathName {
 const pathsMap = {
   index: () => '/',
   landingPage: () => '/',
+  landingFeed: () => `/${PathName.landingFeed}`,
   projectDiscovery: () => `/${PathName.projectDiscovery}`,
   grants: () => `/${PathName.grants}`,
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,

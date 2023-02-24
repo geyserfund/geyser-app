@@ -30,8 +30,16 @@ export const FilterListItem = ({
       onClick={() => handleClick(value)}
     >
       <HStack width="100%" justifyContent="start">
-        <Body1 color="brand.neutral900">{label}</Body1>
-        <Badge rounded="full">{count}</Badge>
+        <Body1 color="brand.neutral900" semiBold>
+          {label}
+        </Body1>
+        <Badge
+          rounded="full"
+          color="brand.neutral900"
+          backgroundColor="brand.neutral200"
+        >
+          {count}
+        </Badge>
       </HStack>
       {isActive && <CloseIcon fontSize={'10px'} />}
     </ButtonComponent>

@@ -15,8 +15,8 @@ import { SlLocationPin } from 'react-icons/sl'
 
 import { Body2 } from '../../../components/typography'
 import Loader from '../../../components/ui/Loader'
+import { FilterState, useFilterContext } from '../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../graphql/queries'
-import { FilterState } from '../../../hooks/state'
 import {
   OrderByOptions,
   ProjectCountriesGetResult,
@@ -25,9 +25,9 @@ import {
 import { getStatusTypeButtonContent } from '../filters/FilterByStatus'
 import { TagComponent } from './components'
 
-type FilterTopBarProps = FilterState
+export const FilterTopBar = () => {
+  const { filters, updateFilter } = useFilterContext()
 
-export const FilterTopBar = ({ filters, updateFilter }: FilterTopBarProps) => {
   const { tagIds = [], region, countryCode, search, type, status } = filters
 
   const { loading: tagsLoading, data } = useQuery<{ tagsGet: TagsGetResult[] }>(
@@ -132,7 +132,7 @@ export const FilterTopBar = ({ filters, updateFilter }: FilterTopBarProps) => {
         {renderFilterTags()}
         {renderFilterRegion()}
       </HStack>
-      <SortMenu {...{ filters, updateFilter }} />
+      <SortMenu />
     </HStack>
   )
 }
@@ -144,8 +144,8 @@ enum SortOptions {
   oldestProjects = 'Oldest projects',
 }
 
-export const SortMenu = ({ filters, updateFilter }: FilterState) => {
-  const { sort } = filters
+export const SortMenu = () => {
+  const { sort, updateSort, updateFilter } = useFilterContext()
 
   const getCurrentSelection = () => {
     if (sort.recent) {
@@ -170,15 +170,15 @@ export const SortMenu = ({ filters, updateFilter }: FilterState) => {
   const onSortSelect = (value: SortOptions) => {
     switch (value) {
       case SortOptions.oldestProjects:
-        updateFilter({ sort: { createdAt: OrderByOptions.Asc } })
+        updateSort({ createdAt: OrderByOptions.Asc })
         break
 
       case SortOptions.mostRecentProjects:
-        updateFilter({ sort: { createdAt: OrderByOptions.Desc } })
+        updateSort({ createdAt: OrderByOptions.Desc })
         break
 
       case SortOptions.mostFundedAllTime:
-        updateFilter({ sort: { balance: OrderByOptions.Desc } })
+        updateSort({ balance: OrderByOptions.Desc })
         break
 
       default:
@@ -187,8 +187,8 @@ export const SortMenu = ({ filters, updateFilter }: FilterState) => {
           type: undefined,
           region: undefined,
           countryCode: undefined,
-          sort: { recent: true },
         })
+        updateSort({ recent: true })
         break
     }
   }

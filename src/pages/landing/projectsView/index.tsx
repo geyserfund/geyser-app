@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 
-import { FilterState } from '../../../hooks/state'
+import { useFilterContext } from '../../../context'
 import { checkKeyValueExists } from '../../../utils'
 import { PaginatedView, TrendingView } from './FilteredProjectList'
 import { LandingProjectList } from './LandingProjectList'
 
-type ProjectsViewProps = FilterState
+export const ProjectsView = () => {
+  const { filters, sort } = useFilterContext()
 
-export const ProjectsView = ({ filters, updateFilter }: ProjectsViewProps) => {
   const checkIfRenderFilter = useCallback(() => {
     if (
       checkKeyValueExists(
@@ -24,7 +24,7 @@ export const ProjectsView = ({ filters, updateFilter }: ProjectsViewProps) => {
   }, [filters])
 
   const checkIfRecent = useCallback(() => {
-    if (filters.sort && filters.sort.recent) {
+    if (sort.recent) {
       return true
     }
 
@@ -33,11 +33,11 @@ export const ProjectsView = ({ filters, updateFilter }: ProjectsViewProps) => {
 
   if (checkIfRenderFilter()) {
     if (checkIfRecent()) {
-      return <TrendingView {...{ filters, updateFilter }} />
+      return <TrendingView />
     }
 
-    return <PaginatedView {...{ filters, updateFilter }} />
+    return <PaginatedView />
   }
 
-  return <LandingProjectList {...{ filters, updateFilter }} />
+  return <LandingProjectList />
 }

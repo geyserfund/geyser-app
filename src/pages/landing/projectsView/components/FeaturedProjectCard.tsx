@@ -1,8 +1,12 @@
 import { useQuery } from '@apollo/client'
 import { Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
+import { CardLayout } from '../../../../components/layouts'
 import { H2, H3 } from '../../../../components/typography'
+import { ImageWithReload } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
+import { getPath } from '../../../../constants'
 import { Project, UniqueProjectQueryInput } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
 import { QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE } from '../../projects.graphql'
@@ -33,14 +37,31 @@ export const FeaturedProjectCard = ({
 
   return (
     <ProjectRowLayout title="Featured Project" width="100%">
-      <HStack width="100%" height="245px" alignItems="start" spacing="20px">
-        <Box flex={4} height="100%" borderRadius="8px" overflow="hidden">
-          <Image
+      <CardLayout
+        noborder
+        hover
+        direction="row"
+        width="100%"
+        height="245px"
+        alignItems="start"
+        spacing="20px"
+        padding="0px"
+        as={Link}
+        to={getPath('project', projectName)}
+      >
+        <Box
+          flex={4}
+          height="100%"
+          borderTopRightRadius="8px"
+          borderBottomRightRadius="8px"
+          overflow="hidden"
+        >
+          <ImageWithReload
             height="full"
             width="full"
-            src="https://picsum.photos/200/300"
+            src={`${project.thumbnailImage}`}
             objectFit="cover"
-          ></Image>
+          />
         </Box>
         <VStack
           flex={3}
@@ -51,7 +72,7 @@ export const FeaturedProjectCard = ({
           overflow="hidden"
         >
           <H2 color="brand.neutral700"> {project.title} </H2>
-          <AvatarElement user={project.owners[0].user} />
+          <AvatarElement rounded="full" user={project.owners[0].user} />
           <H3
             color="brand.neutral800"
             isTruncated
@@ -69,7 +90,7 @@ export const FeaturedProjectCard = ({
             bold
           />
         </VStack>
-      </HStack>
+      </CardLayout>
     </ProjectRowLayout>
   )
 }

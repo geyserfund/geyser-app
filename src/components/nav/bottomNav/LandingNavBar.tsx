@@ -4,7 +4,14 @@ import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
 import { PathName } from '../../../constants'
 import { colors } from '../../../styles'
-import { GrantsNavIcon, HomeNavIcon, ProjectNavIcon } from '../../icons'
+import {
+  FeedNavIcon,
+  GrantsNavIcon,
+  HomeNavIcon,
+  HomeNavIcon2,
+  LeaderboardNavIcon,
+  ProjectNavIcon,
+} from '../../icons'
 
 const routesForShowingLandingMenu = [
   `/`,
@@ -17,12 +24,17 @@ const routesForShowingLandingMenu = [
 const LandingNavItems = [
   {
     name: 'Home',
-    Icon: HomeNavIcon,
+    Icon: HomeNavIcon2,
     path: '/',
   },
   {
     name: 'Projects',
-    Icon: ProjectNavIcon,
+    Icon: FeedNavIcon,
+    path: '/discover',
+  },
+  {
+    name: 'Projects',
+    Icon: LeaderboardNavIcon,
     path: '/discover',
   },
   {

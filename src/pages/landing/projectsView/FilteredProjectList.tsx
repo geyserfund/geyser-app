@@ -2,10 +2,11 @@ import { useQuery } from '@apollo/client'
 import { GridItem, SimpleGrid, Text } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../components/layouts'
+import Loader from '../../../components/ui/Loader'
 import { ID } from '../../../constants'
+import { useFilterContext } from '../../../context'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
-import { FilterState } from '../../../hooks/state'
 import {
   GetProjectsMostFundedOfTheWeekInput,
   Project,
@@ -21,20 +22,18 @@ import { FilterTopBar } from './FilterTopBar'
 
 const NO_OF_PROJECT_TO_LOAD_FILTER_VIEW = 20
 
-interface FilteredProjectListProps extends FilterState {
+interface FilteredProjectListProps {
   projects: Project[]
   error?: any
 }
 
 export const FilteredProjectList = ({
-  filters,
-  updateFilter,
   projects,
   error,
 }: FilteredProjectListProps) => {
   return (
     <CardLayout w="full" spacing="30px" padding="20px">
-      <FilterTopBar {...{ filters, updateFilter }} />
+      <FilterTopBar />
       {error ? (
         <Text> Could not find any results</Text>
       ) : (
@@ -56,9 +55,13 @@ export const FilteredProjectList = ({
   )
 }
 
-export const PaginatedView = ({ filters, updateFilter }: FilterState) => {
+export const PaginatedView = () => {
   const isMobile = useMobileMode()
-  const { sort, recent, ...restFilters } = filters
+
+  const {
+    filters: { recent, ...restFilters },
+    sort: restSort,
+  } = useFilterContext()
 
   const {
     isLoading,
@@ -72,12 +75,16 @@ export const PaginatedView = ({ filters, updateFilter }: FilterState) => {
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
     where: { ...restFilters },
-    orderBy: sort,
+    orderBy: restSort,
   })
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <>
-      <FilteredProjectList {...{ filters, updateFilter, projects, error }} />
+      <FilteredProjectList {...{ projects, error }} />
       <ScrollInvoke
         elementId={isMobile ? undefined : ID.root}
         onScrollEnd={fetchNext}
@@ -88,8 +95,11 @@ export const PaginatedView = ({ filters, updateFilter }: FilterState) => {
   )
 }
 
-export const TrendingView = ({ filters, updateFilter }: FilterState) => {
-  const { tagIds = [] } = filters
+export const TrendingView = () => {
+  const {
+    filters: { tagIds = [] },
+  } = useFilterContext()
+
   const { data, loading, error } = useQuery<
     { projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet[] },
     { input: GetProjectsMostFundedOfTheWeekInput }
@@ -106,5 +116,9 @@ export const TrendingView = ({ filters, updateFilter }: FilterState) => {
       (returnvalue) => returnvalue.project,
     ) || []
 
-  return <FilteredProjectList {...{ filters, updateFilter, projects, error }} />
+  if (loading) {
+    return <Loader />
+  }
+
+  return <FilteredProjectList {...{ projects, error }} />
 }
