@@ -2,10 +2,9 @@ import { useCallback } from 'react'
 
 import { useFilterContext } from '../../../context'
 import { checkKeyValueExists } from '../../../utils'
-import { PaginatedView, TrendingView } from './FilteredProjectList'
-import { LandingProjectList } from './LandingProjectList'
+import { DefaultView, PaginatedView, TrendingView } from './views'
 
-export const ProjectsView = () => {
+export const LandingPageProjects = () => {
   const { filters, sort } = useFilterContext()
 
   const checkIfRenderFilter = useCallback(() => {
@@ -39,5 +38,5 @@ export const ProjectsView = () => {
     return <PaginatedView />
   }
 
-  return <LandingProjectList />
+  return <DefaultView />
 }

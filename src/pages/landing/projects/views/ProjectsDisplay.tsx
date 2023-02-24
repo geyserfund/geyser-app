@@ -1,14 +1,14 @@
 import { useQuery } from '@apollo/client'
 import { Stack } from '@chakra-ui/react'
 
-import { useFilterContext } from '../../../context'
+import { useFilterContext } from '../../../../context'
 import {
   GetProjectsMostFundedOfTheWeekInput,
   ProjectsMostFundedOfTheWeekGet,
   Tag,
-} from '../../../types'
-import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
-import { LandingProjectCard, ProjectRowLayout } from './components'
+} from '../../../../types'
+import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
+import { LandingProjectCard, ProjectRowLayout } from '../components'
 
 interface ProjectDisplayProps {
   tag?: Tag

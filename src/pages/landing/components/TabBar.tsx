@@ -22,7 +22,7 @@ export const TabBar = () => {
       </Body1>
       <Body1
         as={Link}
-        to={getPath('projectDiscovery')}
+        to={getPath('landingFeed')}
         flex={1}
         textAlign="center"
         borderRadius="8px"

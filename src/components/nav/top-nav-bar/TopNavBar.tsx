@@ -118,6 +118,7 @@ const routesForEnablingProjectLaunchButton = [
 const routesForTransparentBackground = [
   getPath('index'),
   getPath('projectDiscovery'),
+  getPath('landingFeed'),
 ]
 
 /**

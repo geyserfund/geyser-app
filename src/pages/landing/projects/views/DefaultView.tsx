@@ -1,5 +1,5 @@
-import { CardLayout } from '../../../components/layouts'
-import { FeaturedProjectCard } from './components'
+import { CardLayout } from '../../../../components/layouts'
+import { FeaturedProjectCard } from '../components'
 import { ProjectsDisplay } from './ProjectsDisplay'
 
 const listOfTags = [
@@ -9,7 +9,7 @@ const listOfTags = [
   { label: 'games', id: 44 },
 ]
 
-export const LandingProjectList = () => {
+export const DefaultView = () => {
   return (
     <CardLayout w="full" spacing="50px" padding="20px">
       <FeaturedProjectCard projectName="bitcoinconferenceinlagos" />

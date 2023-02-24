@@ -13,17 +13,17 @@ import { BsSliders } from 'react-icons/bs'
 import { HiOutlineTag } from 'react-icons/hi'
 import { SlLocationPin } from 'react-icons/sl'
 
-import { Body2 } from '../../../components/typography'
-import Loader from '../../../components/ui/Loader'
-import { useFilterContext } from '../../../context'
-import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../graphql/queries'
+import { Body2 } from '../../../../components/typography'
+import Loader from '../../../../components/ui/Loader'
+import { useFilterContext } from '../../../../context'
+import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import {
   OrderByOptions,
   ProjectCountriesGetResult,
   TagsGetResult,
-} from '../../../types'
-import { getStatusTypeButtonContent } from '../filters/FilterByStatus'
-import { TagComponent } from './components'
+} from '../../../../types'
+import { getStatusTypeButtonContent } from '../../filters/FilterByStatus'
+import { TagComponent } from '../components'
 
 export const FilterTopBar = () => {
   const { filters, updateFilter } = useFilterContext()
