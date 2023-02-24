@@ -1,6 +1,5 @@
 import { CardLayout } from '../../../components/layouts'
 import { FilterState } from '../../../hooks/state'
-import { Owner, Project, User } from '../../../types'
 import { FeaturedProjectCard } from './components'
 import { ProjectsDisplay } from './ProjectsDisplay'
 
@@ -14,25 +13,7 @@ const listOfTags = [
 export const LandingProjectList = ({ filters, updateFilter }: FilterState) => {
   return (
     <CardLayout w="full" spacing="50px" padding="20px">
-      <FeaturedProjectCard
-        project={
-          {
-            title: 'The bushido of Bitcoin',
-            shortDescription:
-              'The best book ever written about Bitcoin is coming out very soon. Get ready for it! Aleks is going to be exploring the power of bitcoin from a new angle that you’ve never expected before',
-            fundersCount: 30,
-            balance: 3500000,
-            owners: [
-              {
-                user: {
-                  username: 'Svetski.info',
-                  imageUrl: 'https://picsum.photos/200/300',
-                } as User,
-              } as Owner,
-            ],
-          } as Project
-        }
-      />
+      <FeaturedProjectCard projectName="bitcoinconferenceinlagos" />
 
       <ProjectsDisplay {...{ filters, updateFilter }} />
       {listOfTags.map((tag) => {

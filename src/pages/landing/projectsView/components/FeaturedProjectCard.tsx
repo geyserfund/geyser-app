@@ -1,12 +1,36 @@
+import { useQuery } from '@apollo/client'
 import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 
 import { H2, H3 } from '../../../../components/typography'
-import { Project } from '../../../../types'
+import Loader from '../../../../components/ui/Loader'
+import { Project, UniqueProjectQueryInput } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
+import { QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE } from '../../projects.graphql'
 import { ProjectFundingStatWithFollow } from './ProjectFundingStatWithFollow'
 import { ProjectRowLayout } from './ProjectRowLayout'
 
-export const FeaturedProjectCard = ({ project }: { project: Project }) => {
+export const FeaturedProjectCard = ({
+  projectName,
+}: {
+  projectName: string
+}) => {
+  const { data, loading } = useQuery<
+    { project: Project },
+    { where: UniqueProjectQueryInput }
+  >(QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE, {
+    variables: {
+      where: {
+        name: projectName,
+      },
+    },
+  })
+
+  const project = data?.project
+
+  if (!project || loading) {
+    return <Loader />
+  }
+
   return (
     <ProjectRowLayout title="Featured Project" width="100%">
       <HStack width="100%" height="245px" alignItems="start" spacing="20px">
