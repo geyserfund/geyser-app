@@ -1,6 +1,6 @@
 import { CardLayout } from '../../../../components/layouts'
-import { FeaturedProjectCard } from '../components'
-import { ProjectsDisplay } from './ProjectsDisplay'
+import { ProjectsDisplay } from '../components/ProjectsDisplay'
+import { FeaturedProjectCard } from '../elements'
 
 const listOfTags = [
   { label: 'education', id: 41 },

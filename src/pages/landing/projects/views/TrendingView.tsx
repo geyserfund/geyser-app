@@ -7,7 +7,7 @@ import {
   ProjectsMostFundedOfTheWeekGet,
 } from '../../../../types'
 import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
-import { FilteredProjectList } from './FilteredProjectList'
+import { FilteredProjectList } from '../components/FilteredProjectList'
 
 const NO_OF_PROJECT_TO_LOAD_FILTER_VIEW = 20
 

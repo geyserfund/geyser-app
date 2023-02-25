@@ -2,7 +2,7 @@ import { GridItem, SimpleGrid, Text } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Project } from '../../../../types'
-import { LandingProjectCard } from '../components'
+import { LandingProjectCard } from '../elements'
 import { FilterTopBar } from './FilterTopBar'
 
 interface FilteredProjectListProps {

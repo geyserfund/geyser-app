@@ -8,6 +8,7 @@ const ProjectParametersForLandingPage = `{
   fundersCount
   fundingTxsCount
   thumbnailImage
+  shortDescription
   tags {
     id
     label

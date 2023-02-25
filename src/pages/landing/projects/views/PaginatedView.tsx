@@ -6,7 +6,7 @@ import { useQueryWithPagination } from '../../../../hooks'
 import { Project } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
-import { FilteredProjectList } from './FilteredProjectList'
+import { FilteredProjectList } from '../components/FilteredProjectList'
 
 export const PaginatedView = () => {
   const isMobile = useMobileMode()

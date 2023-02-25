@@ -35,14 +35,15 @@ export const FeaturedProjectCard = ({
     return <Loader />
   }
 
+  console.log('checking featured project', project)
   return (
     <ProjectRowLayout title="Featured Project" width="100%">
       <CardLayout
         noborder
         hover
-        direction="row"
+        direction={{ base: 'column', sm: 'row' }}
         width="100%"
-        height="245px"
+        height={{ base: 'auto', sm: '245px' }}
         alignItems="start"
         spacing="20px"
         padding="0px"
@@ -50,8 +51,8 @@ export const FeaturedProjectCard = ({
         to={getPath('project', projectName)}
       >
         <Box
-          flex={4}
-          height="100%"
+          width={{ base: '100%', sm: '55%' }}
+          height={{ base: '240px', sm: '100%' }}
           borderTopRightRadius="8px"
           borderBottomRightRadius="8px"
           overflow="hidden"
@@ -64,21 +65,17 @@ export const FeaturedProjectCard = ({
           />
         </Box>
         <VStack
-          flex={3}
+          width={{ base: '100%', sm: '45%' }}
           height="100%"
+          minWidth="200px"
           alignItems="start"
           justifyContent="start"
           spacing="10px"
           overflow="hidden"
         >
           <H2 color="brand.neutral700"> {project.title} </H2>
-          <AvatarElement rounded="full" user={project.owners[0].user} />
-          <H3
-            color="brand.neutral800"
-            isTruncated
-            noOfLines={5}
-            whiteSpace="normal"
-          >
+          <AvatarElement noLink rounded="full" user={project.owners[0].user} />
+          <H3 color="brand.neutral800" isTruncated whiteSpace="normal">
             {project.shortDescription}
           </H3>
           <ProjectFundingStatWithFollow

@@ -1,9 +1,9 @@
 import { StackProps, VStack } from '@chakra-ui/react'
 
-import { FilterByRegion } from './FilterByRegion'
 import { FilterBySearch } from './FilterBySearch'
-import { FilterByStatus } from './FilterByStatus'
-import { FilterByTags } from './FilterByTags'
+import { FilterByRegion } from './region'
+import { FilterByStatus } from './status'
+import { FilterByTags } from './tags'
 
 type FiltersProps = StackProps
 

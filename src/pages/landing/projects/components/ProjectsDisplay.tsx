@@ -8,7 +8,7 @@ import {
   Tag,
 } from '../../../../types'
 import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
-import { LandingProjectCard, ProjectRowLayout } from '../components'
+import { LandingProjectCard, ProjectRowLayout } from '../elements'
 
 interface ProjectDisplayProps {
   tag?: Tag

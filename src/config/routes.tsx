@@ -14,7 +14,7 @@ import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage'
 import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne'
 import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo'
 import { LandingPage } from '../pages/landing'
-import { FeedView } from '../pages/landing/feed'
+import { LandingFeed } from '../pages/landing/feed'
 import { LandingPageProjects } from '../pages/landing/projects'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
@@ -175,7 +175,7 @@ const platformRoutes = [
       },
       {
         path: getPath('landingFeed'),
-        element: FeedView,
+        element: LandingFeed,
       },
     ],
   },

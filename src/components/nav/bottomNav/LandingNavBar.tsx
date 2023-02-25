@@ -2,7 +2,7 @@ import { Box, Button, HStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
-import { PathName } from '../../../constants'
+import { getPath } from '../../../constants'
 import { colors } from '../../../styles'
 import {
   FeedNavIcon,
@@ -10,13 +10,15 @@ import {
   HomeNavIcon2,
   LeaderboardNavIcon,
 } from '../../icons'
+import { Caption } from '../../typography'
 
 const routesForShowingLandingMenu = [
-  `/`,
-  `/${PathName.discover}`,
-  `/${PathName.grants}`,
-  `/${PathName.grants}/roundone`,
-  `/${PathName.grants}/roundtwo`,
+  getPath('landingPage'),
+  getPath('landingFeed'),
+  getPath('projectDiscovery'),
+  getPath('grants'),
+  getPath('grantsRoundOne'),
+  getPath('grantsRoundTwo'),
 ]
 
 const LandingNavItems = [
@@ -26,12 +28,12 @@ const LandingNavItems = [
     path: '/',
   },
   {
-    name: 'Projects',
+    name: 'Feed',
     Icon: FeedNavIcon,
-    path: '/discover',
+    path: '/feed',
   },
   {
-    name: 'Projects',
+    name: 'Leaderboard',
     Icon: LeaderboardNavIcon,
     path: '/discover',
   },
@@ -99,11 +101,19 @@ export const LandingNavBar = () => {
                 onClick={() => handleScrollUp(path)}
                 _hover={{}}
                 _focus={{}}
+                display="flex"
+                flexDirection="column"
               >
                 <Icon
                   boxSize={8}
                   color={isActive ? 'black' : colors.neutral500}
                 />
+                <Caption
+                  semiBold
+                  color={isActive ? 'black' : colors.neutral500}
+                >
+                  {name}
+                </Caption>
               </Button>
             )
           })}

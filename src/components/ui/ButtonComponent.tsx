@@ -1,7 +1,8 @@
 import { Button, ButtonProps } from '@chakra-ui/button'
 import { Box } from '@chakra-ui/layout'
-import { useColorModeValue } from '@chakra-ui/system'
+import { ComponentWithAs, useColorModeValue } from '@chakra-ui/system'
 import classNames from 'classnames'
+import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { colors } from '../../styles'
@@ -41,53 +42,65 @@ const useStyles = createUseStyles({
   },
 })
 
-export const ButtonComponent = ({
-  className,
-  variant,
-  primary,
-  children,
-  standard,
-  circular,
-  backgroundColor,
-  _hover,
-  color,
-  noBorder,
-  ...rest
-}: IButtonComponentP) => {
-  const classes = useStyles()
-  const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark)
-  const defaultColor = useColorModeValue(colors.textBlack, colors.textWhite)
-  const textColor = color || defaultColor
+export type Ref = ComponentWithAs<'button', ButtonProps>
 
-  return (
-    <Button
-      className={classNames(
-        className,
-        { [classes.container]: standard },
-        { primary },
-      )}
-      variant={variant || 'solid'}
-      minWidth={standard ? '200px' : ''}
-      backgroundColor={
-        backgroundColor ? backgroundColor : primary ? 'brand.primary' : bgColor
-      }
-      borderRadius={circular ? '50px' : standard ? '8px' : undefined}
-      _hover={
-        _hover ? _hover : primary ? { bg: 'brand.primaryTint' } : undefined
-      }
-      fontSize="14px"
-      fontWeight="medium"
-      color={color}
-      {...rest}
-      sx={!noBorder ? buttonCommon : {}}
-    >
-      <Box
-        as="span"
-        className={classes.text}
-        textColor={primary ? 'black' : textColor}
+export const ButtonComponent = forwardRef<Ref, IButtonComponentP>(
+  (
+    {
+      className,
+      variant,
+      primary,
+      children,
+      standard,
+      circular,
+      backgroundColor,
+      _hover,
+      color,
+      noBorder,
+      ...rest
+    },
+    ref,
+  ) => {
+    const classes = useStyles()
+    const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark)
+    const defaultColor = useColorModeValue(colors.textBlack, colors.textWhite)
+    const textColor = color || defaultColor
+
+    return (
+      <Button
+        ref={ref}
+        className={classNames(
+          className,
+          { [classes.container]: standard },
+          { primary },
+        )}
+        variant={variant || 'solid'}
+        minWidth={standard ? '200px' : ''}
+        backgroundColor={
+          backgroundColor
+            ? backgroundColor
+            : primary
+            ? 'brand.primary'
+            : bgColor
+        }
+        borderRadius={circular ? '50px' : standard ? '8px' : undefined}
+        _hover={
+          _hover ? _hover : primary ? { bg: 'brand.primaryTint' } : undefined
+        }
+        fontSize="14px"
+        fontWeight="medium"
+        color={color}
+        {...rest}
+        sx={!noBorder ? buttonCommon : {}}
       >
-        {children}
-      </Box>
-    </Button>
-  )
-}
+        <Box
+          as="span"
+          className={classes.text}
+          textColor={primary ? 'black' : textColor}
+        >
+          {children}
+        </Box>
+      </Button>
+    )
+  },
+)

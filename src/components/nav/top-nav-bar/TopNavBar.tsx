@@ -508,7 +508,7 @@ export const TopNavBar = () => {
         transition="background 0.5s ease-out"
       >
         <HStack
-          py="6px"
+          paddingY="10px"
           alignItems={'center'}
           justifyContent={'space-between'}
           overflow="hidden"

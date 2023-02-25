@@ -39,7 +39,7 @@ export const LandingPage = () => {
             minWidth={{ base: '100%', md: '400px', xl: '800px' }}
             paddingBottom="40px"
           >
-            <TabBar />
+            {!isMobile && <TabBar />}
             <Outlet />
           </VStack>
 

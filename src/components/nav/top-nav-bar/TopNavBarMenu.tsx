@@ -46,7 +46,7 @@ export const TopNavBarMenu = ({
         maxHeight="32px"
         borderRadius="md"
         color={textColor}
-        backgroundColor="brand.white"
+        backgroundColor="brand.bgWhite"
         _hover={{ backgroundColor: colors.gray200 }}
         border={'1px'}
         borderColor="brand.bgGrey3"
@@ -54,7 +54,6 @@ export const TopNavBarMenu = ({
       >
         <HStack
           color={useColorModeValue('brand.gray500', 'brand.gray200')}
-          background="transparent"
           spacing="4px"
         >
           <HamburgerIcon color={'#ADB5BD'} fontSize="22px" />
