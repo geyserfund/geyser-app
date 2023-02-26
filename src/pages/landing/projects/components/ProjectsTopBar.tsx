@@ -1,9 +1,5 @@
 import {
   Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
   Drawer,
   DrawerBody,
@@ -20,8 +16,10 @@ import { BsSliders } from 'react-icons/bs'
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { FilterByRegion } from '../../filters/region'
+import { MobileSort } from '../../filters/sort/MobileSort'
 import { FilterByStatus } from '../../filters/status'
 import { FilterByTags } from '../../filters/tags'
+import { FilterTopBar } from './FilterTopBar'
 
 export const ProjectsTopBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -60,7 +58,7 @@ export const ProjectsTopBar = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader color="brand.neutral600">Tweak</DrawerHeader>
+          <DrawerHeader color="brand.neutral600">Sort & Filter</DrawerHeader>
 
           <DrawerBody paddingX="0px">
             <FilterAndSorts />
@@ -74,6 +72,7 @@ export const ProjectsTopBar = () => {
 export const FilterAndSorts = () => {
   return (
     <Accordion allowToggle>
+      <FilterTopBar padding="10px" />
       <Box width="100%" padding="8px 30px" backgroundColor="brand.neutral200">
         <Body1 semiBold color="brand.neutral800">
           Filter
@@ -88,22 +87,7 @@ export const FilterAndSorts = () => {
           Sort
         </Body1>
       </Box>
-      <AccordionItem>
-        <h2>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              Section 2 title
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-        </h2>
-        <AccordionPanel pb={4}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </AccordionPanel>
-      </AccordionItem>
+      <MobileSort />
     </Accordion>
   )
 }

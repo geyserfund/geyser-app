@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { SearchIcon } from '@chakra-ui/icons'
-import { HStack } from '@chakra-ui/react'
+import { HStack, StackProps, Wrap } from '@chakra-ui/react'
 import { HiOutlineTag } from 'react-icons/hi'
 import { SlLocationPin } from 'react-icons/sl'
 
@@ -8,12 +8,14 @@ import Loader from '../../../../components/ui/Loader'
 import { useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
+import { useMobileMode } from '../../../../utils'
 import { SortMenu } from '../../filters/sort/SortMenu'
 import { getStatusTypeButtonContent } from '../../filters/status'
 import { TagComponent } from '../elements'
 
-export const FilterTopBar = () => {
+export const FilterTopBar = (props: StackProps) => {
   const { filters, updateFilter } = useFilterContext()
+  const isMobile = useMobileMode()
 
   const { tagIds = [], region, countryCode, search, type, status } = filters
 
@@ -116,14 +118,14 @@ export const FilterTopBar = () => {
   }
 
   return (
-    <HStack width="100%" justifyContent="space-between">
-      <HStack>
+    <HStack width="100%" justifyContent="space-between" {...props}>
+      <Wrap>
         {renderFilterSearch()}
         {renderFilterStatusType()}
         {renderFilterTags()}
         {renderFilterRegion()}
-      </HStack>
-      <SortMenu />
+      </Wrap>
+      {!isMobile && <SortMenu />}
     </HStack>
   )
 }

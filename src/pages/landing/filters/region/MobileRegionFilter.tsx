@@ -34,7 +34,7 @@ export const MobileRegionFilter = ({
 }: MobileRegionFilterProps) => {
   return (
     <AccordionItem {...rest}>
-      <AccordionButton>
+      <AccordionButton paddingY="15px">
         <HStack width="100%">
           <SlLocationPin fontSize="20px" color={colors.neutral600} />
           <Body1 fontSize="16px" color={colors.neutral800}>
@@ -47,7 +47,7 @@ export const MobileRegionFilter = ({
         as={VStack}
         overflow="hidden"
         paddingX="0px"
-        maxHeight="500px"
+        maxHeight="400px"
       >
         <RegionFilterBody {...{ regions, countries, options, onClose() {} }} />
       </AccordionPanel>

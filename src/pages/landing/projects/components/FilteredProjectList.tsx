@@ -2,6 +2,7 @@ import { GridItem, SimpleGrid, Text } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Project } from '../../../../types'
+import { useMobileMode } from '../../../../utils'
 import { LandingProjectCard } from '../elements'
 import { FilterTopBar } from './FilterTopBar'
 
@@ -14,9 +15,10 @@ export const FilteredProjectList = ({
   projects,
   error,
 }: FilteredProjectListProps) => {
+  const isMobile = useMobileMode()
   return (
     <CardLayout w="full" spacing="30px" padding="20px">
-      <FilterTopBar />
+      {!isMobile && <FilterTopBar />}
       {error ? (
         <Text> Could not find any results</Text>
       ) : (

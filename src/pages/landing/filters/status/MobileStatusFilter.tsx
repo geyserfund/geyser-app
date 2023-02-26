@@ -23,7 +23,7 @@ export const MobileStatusFilter = ({
 }: MobileStatusFilterProps) => {
   return (
     <AccordionItem {...rest}>
-      <AccordionButton>
+      <AccordionButton paddingY="15px">
         <HStack width="100%">
           <HStack width="100%" spacing="10px">
             <button.icon color={button.color} height="20px" />

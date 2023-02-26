@@ -35,7 +35,6 @@ export const FeaturedProjectCard = ({
     return <Loader />
   }
 
-  console.log('checking featured project', project)
   return (
     <ProjectRowLayout title="Featured Project" width="100%">
       <CardLayout
