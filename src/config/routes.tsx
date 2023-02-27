@@ -15,6 +15,7 @@ import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne'
 import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo'
 import { LandingPage } from '../pages/landing'
 import { LandingFeed } from '../pages/landing/feed'
+import { MobileLeaderboard } from '../pages/landing/projectLeaderboard'
 import { LandingPageProjects } from '../pages/landing/projects'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
@@ -163,6 +164,10 @@ const platformRoutes = [
   {
     path: getPath('index'),
     element: LandingPage,
+  },
+  {
+    path: getPath('leaderboard'),
+    element: MobileLeaderboard,
   },
   {
     path: getPath('landingPage'),

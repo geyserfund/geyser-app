@@ -17,14 +17,12 @@ interface UseMostFundedOfTheWeekProjectsStateProps
     TMostFundedOfTheWeekProjectsData,
     TMostFundedOfTheWeekProjectsVariables
   > {
-  take?: number
+  take: number
   tagIds?: number[]
 }
 
-const DEFAULT_NUMBER_OF_PROJECTS = 3
-
 export const useMostFundedOfTheWeekProjectsState = ({
-  take = DEFAULT_NUMBER_OF_PROJECTS,
+  take,
   tagIds,
   ...options
 }: UseMostFundedOfTheWeekProjectsStateProps) => {

@@ -15,6 +15,7 @@ import { Caption } from '../../typography'
 const routesForShowingLandingMenu = [
   getPath('landingPage'),
   getPath('landingFeed'),
+  getPath('leaderboard'),
   getPath('projectDiscovery'),
   getPath('grants'),
   getPath('grantsRoundOne'),
@@ -35,7 +36,7 @@ const LandingNavItems = [
   {
     name: 'Leaderboard',
     Icon: LeaderboardNavIcon,
-    path: '/discover',
+    path: '/leaderboard',
   },
   {
     name: 'Grants',

@@ -9,14 +9,12 @@ type TProjectsData = {
 
 interface UseProjectsStateProps
   extends QueryHookOptions<TProjectsData, ProjectsGetQueryInput> {
-  take?: number
+  take: number
   tagIds?: number[]
 }
 
-const DEFAULT_NUMBER_OF_PROJECTS = 3
-
 export const useProjectsState = ({
-  take = DEFAULT_NUMBER_OF_PROJECTS,
+  take,
   tagIds,
   ...options
 }: UseProjectsStateProps) => {
