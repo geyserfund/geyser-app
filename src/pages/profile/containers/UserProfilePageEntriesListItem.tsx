@@ -18,6 +18,11 @@ const GET_ENTRY = gql`
       fundersCount
       amountFunded
       type
+      creator {
+        id
+        imageUrl
+        username
+      }
       project {
         id
         title
