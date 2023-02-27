@@ -1,4 +1,11 @@
-import { Box, Image, ImageProps, Text, TextProps } from '@chakra-ui/react'
+import {
+  Box,
+  BoxProps,
+  Image,
+  ImageProps,
+  Text,
+  TextProps,
+} from '@chakra-ui/react'
 
 import satsymbol from '../../../assets/satoshi.png'
 import { colors, fonts } from '../../../styles'
@@ -19,9 +26,10 @@ export const ListText = ({
   titleProps = {},
   subtitleProps = {},
   satLogoProps = {},
-}: Props) => {
+  ...props
+}: Props & BoxProps) => {
   return (
-    <Box display={'flex'} alignItems="center" flexDirection="column">
+    <Box display={'flex'} alignItems="center" flexDirection="column" {...props}>
       <Box display={'flex'} alignItems="center" height="34px">
         {isSatLogo ? (
           <Box mr={1}>

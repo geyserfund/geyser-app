@@ -10,7 +10,7 @@ export const SponsorList = ({
   titleProps,
   ...props
 }: Props & BoxProps) => {
-  return (
+  return sponsors.length ? (
     <Box display="flex" alignItems="center" mt={6} {...props}>
       <Box {...titleProps}>
         <Text color="brand.neutral600" fontSize="11px" mr={2} fontWeight="700">
@@ -25,5 +25,5 @@ export const SponsorList = ({
         ))}
       </Box>
     </Box>
-  )
+  ) : null
 }

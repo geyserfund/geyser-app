@@ -1,6 +1,7 @@
 import { Box, Image, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
+import { colors } from '../../../styles'
 import { useMobileMode } from '../../../utils'
 import { ListText } from './ListText'
 import { SponsorList } from './SponsorList'
@@ -38,7 +39,7 @@ export const CustomGrantCard = ({
       <Box
         minWidth={'100%'}
         cursor="pointer"
-        border={'2px solid #E9ECEF'}
+        border={`2px solid ${colors.neutral200}`}
         borderRadius="12px"
       >
         {showBanner ? (
@@ -55,14 +56,14 @@ export const CustomGrantCard = ({
             />
           </Box>
         ) : null}
-        <Box display="flex" flexDirection={'column'} p="4">
+        <Box display="flex" flexDirection="column" p="4">
           <Box
             display="flex"
             justifyContent="space-between"
             alignItems="left"
             flexDirection={isMobile ? 'column' : 'row'}
           >
-            <Box>
+            <Box py={2}>
               <Box display="flex" alignItems="start">
                 <Text mr={4} fontWeight="bold" fontSize="18px">
                   {title}
@@ -71,7 +72,7 @@ export const CustomGrantCard = ({
                   bg={status ? 'brand.primary100' : 'brand.neutral200'}
                   fontSize={'14px'}
                   px="14px"
-                  py={'5px'}
+                  py="5px"
                   fontWeight="500"
                   borderRadius="4px"
                 >
@@ -80,19 +81,25 @@ export const CustomGrantCard = ({
               </Box>
               <Text color={'brand.neutral600'}>{date}</Text>
             </Box>
-            <Box mt={6} px={6}>
+            <Box mt={isMobile ? 4 : 1} px={6}>
               {status ? (
                 <Box
                   display="flex"
                   alignItems="center"
-                  justifyContent="space-between"
+                  justifyContent="space-around"
                 >
                   <ListText
+                    mx={4}
                     title={applicants}
                     subtitle="APPLICANTS"
                     isSatLogo={false}
                   />
-                  <ListText title={grant} subtitle="GRANT" isSatLogo={true} />
+                  <ListText
+                    mx={4}
+                    title={grant}
+                    subtitle="GRANT"
+                    isSatLogo={true}
+                  />
                 </Box>
               ) : (
                 <Box
@@ -101,11 +108,13 @@ export const CustomGrantCard = ({
                   justifyContent="space-around"
                 >
                   <ListText
+                    mx={4}
                     title={grantees}
                     subtitle="APPLICANTS"
                     isSatLogo={false}
                   />
                   <ListText
+                    mx={4}
                     title={distributed}
                     subtitle="GRANT"
                     isSatLogo={true}
