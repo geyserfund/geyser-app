@@ -32,7 +32,7 @@ export const LandingPageProjects = () => {
     }
 
     return false
-  }, [filters])
+  }, [sort])
 
   const renderView = () => {
     if (checkIfRenderFilter()) {

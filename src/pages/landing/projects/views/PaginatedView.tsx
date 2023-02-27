@@ -8,6 +8,8 @@ import { useMobileMode } from '../../../../utils'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
 import { FilteredProjectList } from '../components/FilteredProjectList'
 
+const TOTAL_PROJECTS_TO_FETCH = 20
+
 export const PaginatedView = () => {
   const isMobile = useMobileMode()
 
@@ -24,7 +26,7 @@ export const PaginatedView = () => {
     error,
     fetchNext,
   } = useQueryWithPagination<Project>({
-    itemLimit: 20,
+    itemLimit: TOTAL_PROJECTS_TO_FETCH,
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
     where: { ...restFilters },

@@ -47,7 +47,8 @@ export const usePaginationHook = <Type,>({
 
       if (
         data.length === itemLimit &&
-        mappedData.length < thresholdNoOfAggregatedResultsToFetchMore &&
+        data.length - mappedData.length >
+          thresholdNoOfAggregatedResultsToFetchMore &&
         !noMoreItems.current
       ) {
         fetchNext()

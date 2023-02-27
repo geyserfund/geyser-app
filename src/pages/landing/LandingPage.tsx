@@ -1,4 +1,4 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
 import { dimensions } from '../../constants'
@@ -7,6 +7,7 @@ import { useMobileMode } from '../../utils'
 import { GradientBanner } from './components'
 import { TabBar } from './components/TabBar'
 import { Filters } from './filters'
+import { ProjectLeaderboard } from './projectLeaderboard'
 
 export const LandingPage = () => {
   const isMobile = useMobileMode()
@@ -44,15 +45,7 @@ export const LandingPage = () => {
           </VStack>
 
           {!isMobile && (
-            <VStack
-              flex={1}
-              width="full"
-              minWidth="220px"
-              maxWidth="320px"
-              border="1px solid black"
-            >
-              <Text>Project leaderboard</Text>
-            </VStack>
+            <ProjectLeaderboard flex={1} minWidth="220px" maxWidth="320px" />
           )}
         </HStack>
       </Box>

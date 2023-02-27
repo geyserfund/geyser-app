@@ -5,7 +5,7 @@ import { H3 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { colors } from '../../../../styles'
 
-interface ProjectRowLayoutComponent extends StackProps {
+export interface ProjectRowLayoutProps extends StackProps {
   title: string
   subtitle?: string
   children: React.ReactNode
@@ -18,7 +18,7 @@ export const ProjectRowLayout = ({
   children,
   onSeeAllClick,
   ...rest
-}: ProjectRowLayoutComponent) => {
+}: ProjectRowLayoutProps) => {
   return (
     <VStack alignItems="start" spacing="10px" {...rest}>
       <HStack width="100%" justifyContent="space-between">

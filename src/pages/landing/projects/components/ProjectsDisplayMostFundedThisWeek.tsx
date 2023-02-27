@@ -1,14 +1,13 @@
 import { useQuery } from '@apollo/client'
 
+import Loader from '../../../../components/ui/Loader'
 import { useFilterContext } from '../../../../context'
 import {
-  OrderByOptions,
-  Project,
-  ProjectsGetQueryInput,
-  ProjectsResponse,
+  GetProjectsMostFundedOfTheWeekInput,
+  ProjectsMostFundedOfTheWeekGet,
   Tag,
 } from '../../../../types'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
+import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
 import { ProjectDisplayBody } from '../elements'
 
 interface ProjectDisplayProps {
@@ -17,19 +16,19 @@ interface ProjectDisplayProps {
 
 const NO_OF_PROJECT_TO_LOAD = 3
 
-export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
+export const ProjectsDisplayMostFundedThisWeek = ({
+  tag,
+}: ProjectDisplayProps) => {
   const { updateFilter, updateSort } = useFilterContext()
 
   const { data, loading } = useQuery<
-    { projects: ProjectsResponse },
-    { input: ProjectsGetQueryInput }
-  >(QUERY_PROJECTS_FOR_LANDING_PAGE, {
+    { projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet[] },
+    { input: GetProjectsMostFundedOfTheWeekInput }
+  >(QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE, {
     variables: {
       input: {
-        where: {
-          tagIds: tag ? [tag.id] : [],
-        },
-        pagination: { take: NO_OF_PROJECT_TO_LOAD },
+        tagIds: tag ? [tag.id] : [],
+        take: NO_OF_PROJECT_TO_LOAD,
       },
     },
   })
@@ -37,17 +36,20 @@ export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
   const onSeeAllClick = () => {
     if (tag) {
       updateFilter({ tagIds: [tag.id] })
-      updateSort({ createdAt: OrderByOptions.Desc })
+      updateSort({ recent: true })
     } else {
       updateFilter({ recent: true })
-      updateSort({ createdAt: OrderByOptions.Desc })
+      updateSort({ recent: true })
     }
   }
 
-  const projectList = (data?.projects.projects.slice(0, 3) as Project[]) || []
+  const projectList =
+    data?.projectsMostFundedOfTheWeekGet.map(
+      (projectData) => projectData.project,
+    ) || []
 
   if (loading) {
-    return null
+    return <Loader />
   }
 
   return (

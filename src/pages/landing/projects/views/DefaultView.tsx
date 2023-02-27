@@ -1,5 +1,8 @@
 import { CardLayout } from '../../../../components/layouts'
-import { ProjectsDisplay } from '../components/ProjectsDisplay'
+import {
+  ProjectsDisplay,
+  ProjectsDisplayMostFundedThisWeek,
+} from '../components'
 import { FeaturedProjectCard } from '../elements'
 
 const listOfTags = [
@@ -16,7 +19,7 @@ export const DefaultView = () => {
 
       <ProjectsDisplay />
       {listOfTags.map((tag) => {
-        return <ProjectsDisplay key={tag.id} tag={tag} />
+        return <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
       })}
     </CardLayout>
   )
