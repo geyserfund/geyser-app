@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Box, HStack, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { Body1 } from '../../../../components/typography'
@@ -18,15 +18,17 @@ export const LeaderboardCardListItem = ({ project }: { project: Project }) => {
       _hover={{ backgroundColor: 'neutral.100' }}
       width="100%"
     >
-      <ImageWithReload
-        grey
-        height="60px"
-        width="60px"
-        borderRadius="8px"
-        alt={`${project.name}-thumbnail-image`}
-        src={toSmallImageUrl(`${project.thumbnailImage}`)}
-      />
-      <VStack overflow="hidden">
+      <Box height="60px" width="60px" borderRadius="8px" overflow="hidden">
+        <ImageWithReload
+          h="full"
+          w="full"
+          grey
+          alt={`${project.name}-thumbnail-image`}
+          src={toSmallImageUrl(`${project.thumbnailImage}`)}
+        />
+      </Box>
+
+      <VStack flex={1} overflow="hidden">
         <Body1 color="brand.neutral900" isTruncated bold width="100%">
           {project.title}
         </Body1>

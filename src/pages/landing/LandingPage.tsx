@@ -23,7 +23,7 @@ export const LandingPage = () => {
       >
         <GradientBanner />
         <HStack
-          marginTop="50px"
+          marginTop={{ base: '30px', md: '50px' }}
           width="100%"
           justifyContent="center"
           alignItems="start"
