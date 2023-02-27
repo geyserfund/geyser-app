@@ -139,6 +139,7 @@ export const GrantsLandingPage = () => {
                 display="flex"
                 alignItems="center"
                 width="100%"
+                px={isMobile ? undefined : '25%'}
                 justifyContent="space-around"
               >
                 <ListText
