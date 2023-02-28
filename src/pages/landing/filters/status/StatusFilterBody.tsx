@@ -36,7 +36,7 @@ export const StatusFilterBody = ({
   const options = [
     { type: ProjectType.Reward },
     { status: ProjectStatus.Active },
-    { status: ProjectStatus.Deleted },
+    { status: ProjectStatus.Inactive },
   ]
 
   return (

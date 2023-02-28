@@ -53,7 +53,7 @@ export const getStatusTypeButtonContent = ({
   }
 
   switch (status) {
-    case ProjectStatus.Deleted:
+    case ProjectStatus.Inactive:
       return {
         icon: ProjectNavIcon,
         text: 'Inactive Projects',

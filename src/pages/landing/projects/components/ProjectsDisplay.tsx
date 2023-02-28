@@ -28,9 +28,10 @@ export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
     variables: {
       input: {
         where: {
-          tagIds: tag ? [tag.id] : [],
+          tagIds: tag ? [tag.id] : undefined,
         },
         pagination: { take: NO_OF_PROJECT_TO_LOAD },
+        orderBy: [{ createdAt: OrderByOptions.Desc }],
       },
     },
   })
@@ -49,6 +50,10 @@ export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
 
   if (loading) {
     return <ProjectsDisplaySkeleton />
+  }
+
+  if (projectList.length === 0) {
+    return null
   }
 
   return (

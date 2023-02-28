@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
+import { disableSortByTrending } from '../pages/landing/filters/sort'
 import { ProjectsOrderByInput, ProjectStatus, ProjectType } from '../types'
 
 export type FilterType = {
@@ -28,15 +29,25 @@ const defaultFilterContext = {
   updateSort() {},
 }
 
+const defaultSort = { createdAt: 'desc' } as SortType
+
 export const FilterContext = createContext<FilterState>(defaultFilterContext)
 
 export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const [filters, setFilters] = useState<FilterType>({} as FilterType)
-  const [sort, setSort] = useState<SortType>({ createdAt: 'desc' } as SortType)
+  const [sort, setSort] = useState<SortType>(defaultSort)
 
   const updateFilter = (value: Partial<FilterType>) => {
     setFilters({ ...filters, recent: false, ...value })
   }
+
+  useEffect(() => {
+    if (sort.recent) {
+      if (disableSortByTrending(filters)) {
+        setSort(defaultSort)
+      }
+    }
+  }, [filters, sort])
 
   const updateSort = (value: Partial<SortType>) => {
     setSort({ ...value })

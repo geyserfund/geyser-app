@@ -5,10 +5,7 @@ import { useQueryWithPagination } from '../../../../hooks'
 import { Project } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
-import {
-  FilteredProjectList,
-  FilteredProjectListSkeleton,
-} from '../components/FilteredProjectList'
+import { FilteredProjectList } from '../components/FilteredProjectList'
 
 const TOTAL_PROJECTS_TO_FETCH = 20
 
@@ -16,7 +13,7 @@ export const PaginatedView = () => {
   const isMobile = useMobileMode()
 
   const {
-    filters: { recent, ...restFilters },
+    filters: { recent, tagIds, ...restFilters },
     sort: restSort,
   } = useFilterContext()
 
@@ -31,23 +28,21 @@ export const PaginatedView = () => {
     itemLimit: TOTAL_PROJECTS_TO_FETCH,
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
-    where: { ...restFilters },
-    orderBy: restSort,
+    where: { ...restFilters, tagIds: tagIds?.length ? tagIds : undefined },
+    orderBy: [restSort],
   })
-
-  if (isLoading) {
-    return <FilteredProjectListSkeleton />
-  }
 
   return (
     <>
-      <FilteredProjectList {...{ projects, error }} />
-      <ScrollInvoke
-        elementId={isMobile ? undefined : ID.root}
-        onScrollEnd={fetchNext}
-        isLoading={isLoadingMore}
-        noMoreItems={noMoreItems}
-      />
+      <FilteredProjectList {...{ projects, error, loading: isLoading }} />
+      {!isLoading && (
+        <ScrollInvoke
+          elementId={isMobile ? undefined : ID.root}
+          onScrollEnd={fetchNext}
+          isLoading={isLoadingMore}
+          noMoreItems={noMoreItems}
+        />
+      )}
     </>
   )
 }

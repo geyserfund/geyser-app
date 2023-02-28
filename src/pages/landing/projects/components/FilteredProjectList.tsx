@@ -1,4 +1,4 @@
-import { GridItem, HStack, SimpleGrid, Skeleton, Text } from '@chakra-ui/react'
+import { GridItem, SimpleGrid, Text } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Project } from '../../../../types'
@@ -9,11 +9,13 @@ import { FilterTopBar } from './FilterTopBar'
 interface FilteredProjectListProps {
   projects: Project[]
   error?: any
+  loading?: boolean
 }
 
 export const FilteredProjectList = ({
   projects,
   error,
+  loading,
 }: FilteredProjectListProps) => {
   const isMobile = useMobileMode()
   return (
@@ -27,13 +29,17 @@ export const FilteredProjectList = ({
           spacingX="20px"
           spacingY="20px"
         >
-          {projects.map((project) => {
-            return (
-              <GridItem key={project.id} overflow="hidden">
-                <LandingProjectCard project={project} />
-              </GridItem>
-            )
-          })}
+          {loading ? (
+            <FilteredProjectListSkeleton />
+          ) : (
+            projects.map((project) => {
+              return (
+                <GridItem key={project.id} overflow="hidden">
+                  <LandingProjectCard project={project} />
+                </GridItem>
+              )
+            })
+          )}
         </SimpleGrid>
       )}
     </CardLayout>
@@ -42,19 +48,14 @@ export const FilteredProjectList = ({
 
 export const FilteredProjectListSkeleton = () => {
   return (
-    <CardLayout w="full" spacing="30px" padding="20px">
-      <HStack width="100%" justifyContent="space-between">
-        <Skeleton height="20px" borderRadius="8px" width="10%" />
-      </HStack>
-      <SimpleGrid columns={{ base: 1, xl: 3 }} spacingX="20px" spacingY="20px">
-        {[1, 2, 3, 4, 5, 6].map((value) => {
-          return (
-            <GridItem key={value} overflow="hidden">
-              <LandingProjectCardSkeleton />
-            </GridItem>
-          )
-        })}
-      </SimpleGrid>
-    </CardLayout>
+    <>
+      {[1, 2, 3, 4, 5, 6].map((value) => {
+        return (
+          <GridItem key={value} overflow="hidden">
+            <LandingProjectCardSkeleton />
+          </GridItem>
+        )
+      })}
+    </>
   )
 }

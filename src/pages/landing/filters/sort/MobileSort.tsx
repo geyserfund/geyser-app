@@ -13,7 +13,8 @@ import { BsSliders } from 'react-icons/bs'
 import { Body1 } from '../../../../components/typography'
 import { useFilterContext } from '../../../../context'
 import { colors } from '../../../../styles'
-import { getCurrentSelection, SortBody } from './SortMenu'
+import { SortBody } from './SortBody'
+import { getCurrentSelection } from './sortSelection'
 
 type MobileSortProps = AccordionItemProps
 

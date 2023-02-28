@@ -6,10 +6,7 @@ import {
   ProjectsMostFundedOfTheWeekGet,
 } from '../../../../types'
 import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
-import {
-  FilteredProjectList,
-  FilteredProjectListSkeleton,
-} from '../components/FilteredProjectList'
+import { FilteredProjectList } from '../components/FilteredProjectList'
 
 const NO_OF_PROJECT_TO_LOAD_FILTER_VIEW = 20
 
@@ -34,9 +31,5 @@ export const TrendingView = () => {
       (returnvalue) => returnvalue.project,
     ) || []
 
-  if (loading) {
-    return <FilteredProjectListSkeleton />
-  }
-
-  return <FilteredProjectList {...{ projects, error }} />
+  return <FilteredProjectList {...{ projects, error, loading }} />
 }
