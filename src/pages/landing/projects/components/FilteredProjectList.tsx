@@ -18,6 +18,25 @@ export const FilteredProjectList = ({
   loading,
 }: FilteredProjectListProps) => {
   const isMobile = useMobileMode()
+
+  const renderProjects = () => {
+    if (loading) {
+      return <FilteredProjectListSkeleton />
+    }
+
+    if (projects.length === 0) {
+      return <Text>No Match. Please update filters</Text>
+    }
+
+    return projects.map((project) => {
+      return (
+        <GridItem key={project.id} overflow="hidden">
+          <LandingProjectCard project={project} />
+        </GridItem>
+      )
+    })
+  }
+
   return (
     <CardLayout w="full" spacing="30px" padding="20px">
       {!isMobile && <FilterTopBar />}
@@ -29,17 +48,7 @@ export const FilteredProjectList = ({
           spacingX="20px"
           spacingY="20px"
         >
-          {loading ? (
-            <FilteredProjectListSkeleton />
-          ) : (
-            projects.map((project) => {
-              return (
-                <GridItem key={project.id} overflow="hidden">
-                  <LandingProjectCard project={project} />
-                </GridItem>
-              )
-            })
-          )}
+          {renderProjects()}
         </SimpleGrid>
       )}
     </CardLayout>

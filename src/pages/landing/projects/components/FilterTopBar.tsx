@@ -87,15 +87,17 @@ export const FilterTopBar = (props: StackProps) => {
   }
 
   const renderFilterSearch = () => {
-    if (search) {
-      return (
-        <TagComponent
-          label={search}
-          icon={<SearchIcon />}
-          onClick={() => updateFilter({ search: undefined })}
-        />
-      )
+    if (!search) {
+      return null
     }
+
+    return (
+      <TagComponent
+        label={search}
+        icon={<SearchIcon />}
+        onClick={() => updateFilter({ search: undefined })}
+      />
+    )
   }
 
   const renderFilterStatusType = () => {
@@ -117,20 +119,34 @@ export const FilterTopBar = (props: StackProps) => {
     )
   }
 
-  return (
-    <HStack
-      width="100%"
-      justifyContent="space-between"
-      alignItems="start"
-      {...props}
-    >
-      <Wrap>
-        {renderFilterSearch()}
-        {renderFilterStatusType()}
-        {renderFilterTags()}
-        {renderFilterRegion()}
-      </Wrap>
-      {!isMobile && <SortMenu />}
-    </HStack>
-  )
+  const viewFilterSearch = renderFilterSearch()
+  const viewFilterStatusType = renderFilterStatusType()
+  const viewFilterTags = renderFilterTags()
+  const viewFilterRegion = renderFilterRegion()
+
+  if (
+    viewFilterSearch ||
+    viewFilterStatusType ||
+    viewFilterTags ||
+    viewFilterRegion
+  ) {
+    return (
+      <HStack
+        width="100%"
+        justifyContent="space-between"
+        alignItems="start"
+        {...props}
+      >
+        <Wrap>
+          {viewFilterSearch}
+          {viewFilterStatusType}
+          {viewFilterTags}
+          {viewFilterRegion}
+        </Wrap>
+        {!isMobile && <SortMenu />}
+      </HStack>
+    )
+  }
+
+  return null
 }

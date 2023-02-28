@@ -9,6 +9,7 @@ import {
   DrawerOverlay,
   HStack,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react'
 import { useRef } from 'react'
 import { BsSliders } from 'react-icons/bs'
@@ -28,27 +29,30 @@ export const ProjectsTopBar = () => {
 
   return (
     <>
-      <HStack
+      <VStack
         width="100%"
         borderBottom="2px solid"
         borderColor="brand.neutral200"
-        justifyContent="space-between"
-        paddingY="6px"
+        spacing="0px"
       >
-        <Body1 semiBold color="black">
-          Projects
-        </Body1>
-        <ButtonComponent
-          ref={btnRef}
-          noBorder
-          size="sm"
-          color="brand.neutral800"
-          rightIcon={<BsSliders fontSize="16px" />}
-          onClick={onOpen}
-        >
-          Sort & filter
-        </ButtonComponent>
-      </HStack>
+        <HStack width="100%" justifyContent="space-between" paddingY="6px">
+          <Body1 semiBold color="black">
+            Projects
+          </Body1>
+          <ButtonComponent
+            ref={btnRef}
+            noBorder
+            size="sm"
+            color="brand.neutral800"
+            rightIcon={<BsSliders fontSize="16px" />}
+            onClick={onOpen}
+          >
+            Sort & filter
+          </ButtonComponent>
+        </HStack>
+        <FilterTopBar paddingBottom="10px" />
+      </VStack>
+
       <Drawer
         isOpen={isOpen}
         placement="right"

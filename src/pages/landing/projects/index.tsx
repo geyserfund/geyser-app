@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 
 import { StickToTop } from '../../../components/layouts'
-import { dimensions } from '../../../constants'
 import { useFilterContext } from '../../../context'
 import { checkKeyValueExists, useMobileMode } from '../../../utils'
 import { ProjectsTopBar } from './components'
