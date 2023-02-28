@@ -52,6 +52,10 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     return <ProjectsDisplaySkeleton />
   }
 
+  if (projectList.length === 0) {
+    return null
+  }
+
   return (
     <ProjectDisplayBody
       title={tag?.label || 'Recent Projects'}
