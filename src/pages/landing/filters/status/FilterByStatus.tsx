@@ -57,7 +57,7 @@ export const getStatusTypeButtonContent = ({
       return {
         icon: ProjectNavIcon,
         text: 'Inactive Projects',
-        color: 'brand.secondaryRed',
+        color: 'brand.neutral600',
       }
     default:
       return {
