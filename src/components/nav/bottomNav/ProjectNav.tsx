@@ -21,7 +21,7 @@ import { isActive } from '../../../utils'
 export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
   const { mobileView } = useProjectContext()
 
-  const isScrollingUp = useScrollDirection({
+  const { isScrollingUp } = useScrollDirection({
     initialValue: true,
     mobileView,
   })

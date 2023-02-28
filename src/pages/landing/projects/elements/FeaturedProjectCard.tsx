@@ -76,7 +76,12 @@ export const FeaturedProjectCard = ({
           overflow="hidden"
         >
           <H2 color="brand.neutral700"> {project.title} </H2>
-          <AvatarElement noLink rounded="full" user={project.owners[0].user} />
+          <AvatarElement
+            wrapperProps={{ minHeight: '20px' }}
+            noLink
+            rounded="full"
+            user={project.owners[0].user}
+          />
           <H3 color="brand.neutral800" isTruncated whiteSpace="normal">
             {project.shortDescription}
           </H3>

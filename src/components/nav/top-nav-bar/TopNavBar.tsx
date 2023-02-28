@@ -474,13 +474,13 @@ export const TopNavBar = () => {
     })
   }, [routesMatchesForShowingNavItems, isMobile])
 
-  const isScrollingUp = useScrollDirection({
+  const { scrollTop } = useScrollDirection({
     elementId: isMobile ? '' : 'app-route-content-root',
     initialValue: true,
   })
   const showHaveTransparentBackground: boolean = useMemo(() => {
     return (
-      isScrollingUp &&
+      scrollTop <= 50 &&
       routeMatchesForTransaparentBackground.some((routeMatch) => {
         return Boolean(routeMatch)
       })
