@@ -18,7 +18,7 @@ import { ButtonComponent } from '../../../../components/ui'
 import { FilterByRegion } from '../../filters/region'
 import { MobileSort } from '../../filters/sort/MobileSort'
 import { FilterByStatus } from '../../filters/status'
-import { FilterByTags } from '../../filters/tags'
+import { FilterByTags } from '../../filters/tag'
 import { FilterTopBar } from './FilterTopBar'
 
 export const ProjectsTopBar = () => {

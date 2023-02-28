@@ -3,7 +3,7 @@ import { StackProps, VStack } from '@chakra-ui/react'
 import { FilterBySearch } from './FilterBySearch'
 import { FilterByRegion } from './region'
 import { FilterByStatus } from './status'
-import { FilterByTags } from './tags'
+import { FilterByTags } from './tag'
 
 type FiltersProps = StackProps
 
