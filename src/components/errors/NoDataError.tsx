@@ -9,7 +9,7 @@ interface NoDataErrorProps extends StackProps {
 
 export const NoDataError = ({ message, ...props }: NoDataErrorProps) => {
   return (
-    <VStack w="full" {...props} justifyContent="center">
+    <VStack w="full" {...props} justifyContent="center" paddingY="20px">
       <BiErrorAlt fontSize="40px" color={colors.secondaryRed} />
       <Text>{message || 'Failed to fetch data'}</Text>
     </VStack>
