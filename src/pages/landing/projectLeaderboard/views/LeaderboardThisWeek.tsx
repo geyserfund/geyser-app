@@ -1,9 +1,8 @@
 import { StackProps } from '@chakra-ui/react'
 
 import { NoDataError } from '../../../../components/errors'
-import Loader from '../../../../components/ui/Loader'
 import { useMostFundedOfTheWeekProjectsState } from '../../../../hooks/graphqlState'
-import { LeaderboardBody } from '../components'
+import { LeaderboardBody, LeaderboardBodySkeleton } from '../components'
 
 interface LeaderboardThisWeekProps extends StackProps {
   items?: number
@@ -22,7 +21,7 @@ export const LeaderboardThisWeek = ({
   }
 
   if (loading) {
-    return <Loader />
+    return <LeaderboardBodySkeleton />
   }
 
   return <LeaderboardBody projects={projects} {...rest} />

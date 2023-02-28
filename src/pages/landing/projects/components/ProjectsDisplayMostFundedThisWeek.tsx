@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client'
 
-import Loader from '../../../../components/ui/Loader'
 import { useFilterContext } from '../../../../context'
 import {
   GetProjectsMostFundedOfTheWeekInput,
@@ -9,6 +8,7 @@ import {
 } from '../../../../types'
 import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
 import { ProjectDisplayBody } from '../elements'
+import { ProjectsDisplaySkeleton } from './ProjectsDisplay'
 
 interface ProjectDisplayProps {
   tag?: Tag
@@ -49,7 +49,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     ) || []
 
   if (loading) {
-    return <Loader />
+    return <ProjectsDisplaySkeleton />
   }
 
   return (
