@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -32,7 +32,7 @@ export const FeaturedProjectCard = ({
   const project = data?.project
 
   if (!project || loading) {
-    return <Loader />
+    return <FeaturedProjectSkeleton />
   }
 
   return (
@@ -86,6 +86,40 @@ export const FeaturedProjectCard = ({
             bold
           />
         </VStack>
+      </CardLayout>
+    </ProjectRowLayout>
+  )
+}
+
+export const FeaturedProjectSkeleton = () => {
+  return (
+    <ProjectRowLayout title="Featured Project" width="100%">
+      <CardLayout
+        noborder
+        direction={{ base: 'column', sm: 'row' }}
+        width="100%"
+        height={{ base: 'auto', sm: '245px' }}
+        alignItems="start"
+        spacing="20px"
+        padding="0px"
+      >
+        <Skeleton
+          width={{ base: '100%', sm: '55%' }}
+          height={{ base: '240px', sm: '100%' }}
+          borderTopRightRadius="8px"
+          borderBottomRightRadius="8px"
+          overflow="hidden"
+        />
+
+        <SkeletonText
+          width={{ base: '100%', sm: '45%' }}
+          height="100%"
+          minWidth="200px"
+          alignItems="start"
+          justifyContent="start"
+          spacing="10px"
+          overflow="hidden"
+        />
       </CardLayout>
     </ProjectRowLayout>
   )
