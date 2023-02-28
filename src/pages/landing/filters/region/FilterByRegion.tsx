@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
+import { Skeleton } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
-import Loader from '../../../../components/ui/Loader'
 import { useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphql/queries'
 import {
@@ -81,7 +81,7 @@ export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
   }
 
   if (countriesLoading || regionsLoading) {
-    return <Loader />
+    return <Skeleton borderRadius="8px" w="full" height="40px" />
   }
 
   if (mobile) {

@@ -52,7 +52,6 @@ export const LandingPageProjects = () => {
         <StickToTop
           id="landing-page-mobile-projects-sort-filter"
           width="100%"
-          offset={dimensions.topNavBar.desktop.height - 20}
           _onStick={{ width: 'calc(100% - 20px)' }}
         >
           <ProjectsTopBar />

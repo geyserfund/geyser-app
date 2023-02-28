@@ -97,14 +97,14 @@ export const DesktopFilterLayoutSkeleton = () => {
         <HiOutlineTag color={colors.neutral600} />
         <Body1 color={colors.neutral600}>Filter by project tags</Body1>
       </HStack>
-      <VStack width="100%" alignItems="start" spacing="5px">
+      <VStack width="100%" alignItems="start" spacing="10px">
         {[1, 2, 3, 4, 5].map((val) => {
           return (
-            <Skeleton key={val} height="20px" borderRadius="8px" width="60%" />
+            <Skeleton key={val} height="25px" borderRadius="8px" width="60%" />
           )
         })}
       </VStack>
-      <Skeleton height="20px" borderRadius="8px" width="100%" />
+      <Skeleton height="25px" borderRadius="8px" width="100%" />
     </CardLayout>
   )
 }

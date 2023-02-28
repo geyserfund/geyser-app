@@ -60,7 +60,6 @@ export const LeaderboardTopbar = ({
     <StickToTop
       id="landing-page-mobile-projects-leaderboard-list"
       width="100%"
-      offset={dimensions.topNavBar.desktop.height - 20}
       _onStick={{ width: 'calc(100% - 20px)' }}
     >
       <HStack

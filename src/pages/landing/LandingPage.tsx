@@ -1,7 +1,8 @@
 import { Box, HStack, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
-import { dimensions } from '../../constants'
+import { StickToTop } from '../../components/layouts'
+import { dimensions, ID } from '../../constants'
 import { FilterProvider } from '../../context'
 import { useMobileMode } from '../../utils'
 import { GradientBanner } from './components'
@@ -31,7 +32,23 @@ export const LandingPage = () => {
           paddingX={{ base: '10px', lg: '20px' }}
         >
           {!isMobile && (
-            <Filters flex={1} width="full" minWidth="220px" maxWidth="320px" />
+            <VStack
+              id={ID.landing.filters.wrapper}
+              flex={1}
+              width="full"
+              minWidth="220px"
+              maxWidth="320px"
+            >
+              <StickToTop
+                id={ID.landing.filters.body}
+                scrollContainerId={ID.root}
+                wrapperId={ID.landing.filters.wrapper}
+                width="100%"
+                offset={dimensions.topNavBar.desktop.height + 20}
+              >
+                <Filters />
+              </StickToTop>
+            </VStack>
           )}
 
           <VStack
@@ -45,7 +62,23 @@ export const LandingPage = () => {
           </VStack>
 
           {!isMobile && (
-            <ProjectLeaderboard flex={1} minWidth="220px" maxWidth="320px" />
+            <VStack
+              id={ID.landing.filters.wrapper}
+              flex={1}
+              width="full"
+              minWidth="220px"
+              maxWidth="320px"
+            >
+              <StickToTop
+                id={ID.landing.leaderboard.body}
+                scrollContainerId={ID.root}
+                wrapperId={ID.landing.leaderboard.wrapper}
+                width="100%"
+                offset={dimensions.topNavBar.desktop.height + 20}
+              >
+                <ProjectLeaderboard />
+              </StickToTop>
+            </VStack>
           )}
         </HStack>
       </Box>

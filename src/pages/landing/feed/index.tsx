@@ -2,7 +2,6 @@ import { HStack } from '@chakra-ui/react'
 
 import { CardLayout, StickToTop } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
-import { dimensions } from '../../../constants'
 import { useMobileMode } from '../../../utils'
 import { Contributions } from './Contributions'
 
@@ -14,7 +13,6 @@ export const LandingFeed = () => {
         <StickToTop
           id="landing-page-mobile-projects-activity-list"
           width="100%"
-          offset={dimensions.topNavBar.desktop.height - 20}
           _onStick={{ width: 'calc(100% - 20px)' }}
         >
           <ActivityTopbar />

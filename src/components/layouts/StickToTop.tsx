@@ -7,6 +7,7 @@ import { useListenerState } from '../../hooks'
 interface StickToTopProps extends BoxProps {
   id: string
   scrollContainerId?: string
+  wrapperId?: string
   offset?: number
   disable?: boolean
   _onStick?: BoxProps
@@ -15,7 +16,8 @@ interface StickToTopProps extends BoxProps {
 export const StickToTop = ({
   id,
   scrollContainerId,
-  offset = 0,
+  wrapperId,
+  offset = dimensions.topNavBar.desktop.height,
   disable,
   children,
   _onStick,
@@ -23,10 +25,17 @@ export const StickToTop = ({
 }: StickToTopProps) => {
   const [stick, setStick] = useListenerState(false)
   const containerRef = useRef<any>(null)
+  const [wrapperElement, setWrapperElement] =
+    useListenerState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (disable) {
       return
+    }
+
+    if (wrapperId) {
+      const wrapperElement = document.getElementById(wrapperId)
+      setWrapperElement(wrapperElement)
     }
 
     if (scrollContainerId) {
@@ -81,7 +90,9 @@ export const StickToTop = ({
     }
   }
 
-  const onStick = stick.current ? _onStick : {}
+  const onStick = stick.current
+    ? _onStick || { width: wrapperElement.current?.clientWidth }
+    : {}
 
   const palceholderId = `${id}-placeholder`
 
@@ -92,7 +103,7 @@ export const StickToTop = ({
         ref={containerRef}
         backgroundColor="brand.bgWhite"
         position={stick.current ? 'fixed' : 'static'}
-        top={`${dimensions.topNavBar.desktop.height}px`}
+        top={`${offset}px`}
         zIndex={10}
         {...rest}
         {...onStick}
