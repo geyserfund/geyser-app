@@ -1,10 +1,12 @@
 import { HStack, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, StickToTop } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
-import { dimensions } from '../../../constants'
+import { getPath, ID } from '../../../constants'
+import { DEFAULT_MOBILE_BREAK_POINT } from '../../../utils'
 import { LeaderboardAllTime, LeaderboardThisWeek } from './views'
 
 enum LeaderboardTabs {
@@ -13,11 +15,19 @@ enum LeaderboardTabs {
 }
 
 export const MobileLeaderboard = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (window.innerWidth > DEFAULT_MOBILE_BREAK_POINT) {
+      navigate(getPath('landingPage'))
+    }
+  }, [])
+
   const [tab, setTab] = useState<LeaderboardTabs>(LeaderboardTabs.thisWeek)
 
   const renderTabs = () => {
     return (
-      <VStack>
+      <>
         <LeaderboardThisWeek
           display={tab === LeaderboardTabs.thisWeek ? 'flex' : 'none'}
           items={20}
@@ -26,7 +36,7 @@ export const MobileLeaderboard = () => {
           display={tab === LeaderboardTabs.allTime ? 'flex' : 'none'}
           items={20}
         />
-      </VStack>
+      </>
     )
   }
 
@@ -40,9 +50,17 @@ export const MobileLeaderboard = () => {
       alignItems={'center'}
       position="relative"
     >
-      <LeaderboardTopbar tab={tab} setTab={setTab} />
+      <VStack id={ID.leaderboard.wrapper} maxWidth="500px" width="100%">
+        <StickToTop
+          id={ID.leaderboard.body}
+          wrapperId={ID.leaderboard.wrapper}
+          width="100%"
+        >
+          <LeaderboardTopbar tab={tab} setTab={setTab} />
+        </StickToTop>
+      </VStack>
 
-      <VStack maxWidth="500px" spacing="0px" position="relative">
+      <VStack maxWidth="500px" width="100%" spacing="0px" position="relative">
         {renderTabs()}
       </VStack>
     </CardLayout>
@@ -57,11 +75,7 @@ export const LeaderboardTopbar = ({
   setTab: React.Dispatch<React.SetStateAction<LeaderboardTabs>>
 }) => {
   return (
-    <StickToTop
-      id="landing-page-mobile-projects-leaderboard-list"
-      width="100%"
-      _onStick={{ width: 'calc(100% - 20px)' }}
-    >
+    <VStack w="full">
       <HStack
         width="100%"
         borderBottom="2px solid"
@@ -81,6 +95,7 @@ export const LeaderboardTopbar = ({
         <ButtonComponent
           noBorder
           flex={1}
+          size="sm"
           borderRadius="8px"
           backgroundColor={
             tab === LeaderboardTabs.thisWeek ? 'neutral.100' : 'white'
@@ -92,6 +107,7 @@ export const LeaderboardTopbar = ({
         <ButtonComponent
           noBorder
           flex={1}
+          size="sm"
           borderRadius="8px"
           backgroundColor={
             tab === LeaderboardTabs.allTime ? 'neutral.100' : 'white'
@@ -101,6 +117,6 @@ export const LeaderboardTopbar = ({
           All time
         </ButtonComponent>
       </HStack>
-    </StickToTop>
+    </VStack>
   )
 }

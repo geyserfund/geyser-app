@@ -10,6 +10,10 @@ export const ID = {
       body: 'landing-page-leaderboard',
     },
   },
+  leaderboard: {
+    wrapper: 'mobile-leaderboard-wrapper',
+    body: 'mobile-leaderboard-body',
+  },
   project: {
     activity: {
       contribution: 'project-activity-list-container',
