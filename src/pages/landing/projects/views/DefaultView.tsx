@@ -1,5 +1,3 @@
-import { HStack, Skeleton, SkeletonText } from '@chakra-ui/react'
-
 import { CardLayout } from '../../../../components/layouts'
 import {
   ProjectsDisplay,

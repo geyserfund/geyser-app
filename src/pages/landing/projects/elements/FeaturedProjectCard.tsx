@@ -1,11 +1,10 @@
 import { useQuery } from '@apollo/client'
-import { Box, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
+import { Box, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import Loader from '../../../../components/ui/Loader'
 import { getPath } from '../../../../constants'
 import { Project, UniqueProjectQueryInput } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
@@ -31,7 +30,11 @@ export const FeaturedProjectCard = ({
 
   const project = data?.project
 
-  if (!project || loading) {
+  if (loading) {
+    return <FeaturedProjectSkeleton />
+  }
+
+  if (!project) {
     return <FeaturedProjectSkeleton />
   }
 
@@ -106,12 +109,10 @@ export const FeaturedProjectSkeleton = () => {
         <Skeleton
           width={{ base: '100%', sm: '55%' }}
           height={{ base: '240px', sm: '100%' }}
-          borderTopRightRadius="8px"
-          borderBottomRightRadius="8px"
+          borderRadius="8px"
           overflow="hidden"
         />
-
-        <SkeletonText
+        <VStack
           width={{ base: '100%', sm: '45%' }}
           height="100%"
           minWidth="200px"
@@ -119,7 +120,17 @@ export const FeaturedProjectSkeleton = () => {
           justifyContent="start"
           spacing="10px"
           overflow="hidden"
-        />
+        >
+          <Skeleton borderRadius="8px" width="80%" height="20px" />
+          <Skeleton borderRadius="8px" width="60%" height="20px" />
+          <Skeleton borderRadius="8px" width="100%" height="20px" />
+          <SkeletonText noOfLines={5} width="100%" />
+          <HStack>
+            <Skeleton borderRadius="8px" height="40px" width="40px" />
+            <Skeleton borderRadius="8px" height="40px" width="40px" />
+            <Skeleton borderRadius="8px" height="40px" width="40px" />
+          </HStack>
+        </VStack>
       </CardLayout>
     </ProjectRowLayout>
   )
