@@ -16,7 +16,11 @@ export const ProjectLinks = ({ links }: { links: string[] }) => {
   return (
     <SummaryInfoLine
       label="Links"
-      icon={<BsLink45Deg color={colors.neutral600} fontSize="22px" />}
+      icon={
+        <span>
+          <BsLink45Deg color={colors.neutral600} fontSize="22px" />
+        </span>
+      }
     >
       <HStack spacing="5px">
         {links.map((link) => {

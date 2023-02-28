@@ -181,7 +181,11 @@ export const Summary = () => {
         </HStack>
         <SummaryInfoLine
           label="Creator"
-          icon={<CgProfile color={colors.neutral600} fontSize="22px" />}
+          icon={
+            <span>
+              <CgProfile color={colors.neutral600} fontSize="22px" />
+            </span>
+          }
         >
           <AvatarElement borderRadius="50%" user={owner.user} />
         </SummaryInfoLine>
@@ -191,7 +195,11 @@ export const Summary = () => {
           {project.tags?.length > 0 && (
             <SummaryInfoLine
               label="Tags"
-              icon={<FiTag color={colors.neutral600} fontSize="22px" />}
+              icon={
+                <span>
+                  <FiTag color={colors.neutral600} fontSize="22px" />
+                </span>
+              }
               alignItems="start"
             >
               <Wrap>
@@ -205,7 +213,11 @@ export const Summary = () => {
           {(project.location?.country?.name || project.location?.region) && (
             <SummaryInfoLine
               label="Region"
-              icon={<GrLocation color={colors.neutral600} fontSize="22px" />}
+              icon={
+                <span>
+                  <GrLocation color={colors.neutral600} fontSize="22px" />
+                </span>
+              }
             >
               <Wrap spacing="5px">
                 {project?.location?.country?.name && (
@@ -221,7 +233,9 @@ export const Summary = () => {
           <SummaryInfoLine
             label="Launched"
             icon={
-              <AiOutlineCalendar color={colors.neutral600} fontSize="22px" />
+              <span>
+                <AiOutlineCalendar color={colors.neutral600} fontSize="22px" />
+              </span>
             }
           >
             <Body2

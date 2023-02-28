@@ -25,14 +25,12 @@ export const ProjectContributionList = ({
       paddingBottom="10px"
     >
       {fundingTxs.data.map((fundingTx) => (
-        <>
-          <ProjectFundingContributionsFeedItem
-            key={fundingTx.id}
-            fundingTx={fundingTx}
-            count={fundingTx.count}
-            width={'95%'}
-          />
-        </>
+        <ProjectFundingContributionsFeedItem
+          key={fundingTx.id}
+          fundingTx={fundingTx}
+          count={fundingTx.count}
+          width={'95%'}
+        />
       ))}
 
       <ScrollInvoke

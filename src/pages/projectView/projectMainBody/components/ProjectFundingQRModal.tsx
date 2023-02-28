@@ -11,51 +11,51 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react'
-import React from 'react'
-import { QRCode } from 'react-qrcode-logo'
+import * as htmlToImage from 'html-to-image'
+import { useCallback, useState } from 'react'
 
-import LogoLight from '../../../../assets/logo-dark-green.svg'
 import { ButtonComponent } from '../../../../components/ui'
 import { API_SERVICE_ENDPOINT } from '../../../../constants'
 import { encodeLNURL, useMobileMode } from '../../../../utils'
-
-function ModalProjectImage({ image }: { image: string }) {
-  return (
-    <Box
-      borderLeftRadius="lg"
-      backgroundImage={image}
-      w="50%"
-      backgroundSize="cover"
-      backgroundPosition="center"
-      id="modal-image"
-    />
-  )
-}
-
-const ModalImage = React.memo(ModalProjectImage)
+import { ProjectFundingBanner } from './ProjectFundingBanner'
 
 interface IQRModal {
   isOpen: boolean
   onClose: () => void
   name: string
-  image?: string
   projectId: string
   title: string
   setCopy: any
-  imageDownload: string
 }
 
 export const ProjectFundingQRModal = ({
   isOpen,
   onClose,
   name,
-  image,
   projectId,
   title,
   setCopy,
-  imageDownload,
 }: IQRModal) => {
   const isMobile = useMobileMode()
+  const [imageDownload, setImageDownload] = useState<string | undefined>()
+
+  const bannerRef = useCallback((node: HTMLDivElement) => {
+    if (!node) {
+      return
+    }
+
+    htmlToImage
+      .toPng(node, { style: { opacity: '1', position: 'static' } })
+      .then((image) => {
+        setImageDownload(image)
+      })
+      .catch((error) => {
+        console.error(
+          'oops, something went wrong rendering the html to image',
+          error,
+        )
+      })
+  }, [])
 
   const lnurlPayUrl = encodeLNURL(
     `${API_SERVICE_ENDPOINT}/lnurl/pay?projectId=${projectId}`,
@@ -68,87 +68,31 @@ export const ProjectFundingQRModal = ({
         setCopy(false)
         onClose()
       }}
-      size={isMobile ? 'md' : 'xl'}
+      size={isMobile ? 'md' : '3xl'}
       isCentered
     >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Text fontSize="3xl">Project QR code</Text>
+          <Text fontSize="3xl">Share project on social media</Text>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text mb={5} fontWeight="medium">
             Lightning addresses and QR codes make it possible for anyone to fund
-            projects from anywhere.
+            projects from anywhere. Share one of the image and let the sats
+            flow!
           </Text>
-
-          <Box display="flex" w="100%" id="lnaddress-qr">
-            {image && <ModalImage image={image} />}
-
-            <Box
-              bg="brand.primary"
-              w="50%"
-              p={5}
-              borderRightRadius="lg"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box>
-                <Text textAlign="center" fontWeight="bold" fontSize="1xl">
-                  {title}
-                </Text>
-                <Text textAlign="center" fontSize={isMobile ? '6px' : '8px'}>
-                  CONTRIBUTE TO THIS PROJECT WITH A LIGHTNING QR CODE OR
-                  LIGHTNING ADDRESS
-                </Text>
-
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  p={1}
-                  bgColor="#fff"
-                  borderRadius="lg"
-                  marginTop={2}
-                  marginBottom={2}
-                >
-                  <QRCode
-                    qrStyle="dots"
-                    logoImage={LogoLight}
-                    eyeRadius={2}
-                    logoHeight={30}
-                    logoWidth={30}
-                    removeQrCodeBehindLogo={true}
-                    bgColor="#fff"
-                    fgColor="#004236"
-                    size={isMobile ? 121 : 165}
-                    value={lnurlPayUrl}
-                  />
-                </Box>
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  paddingTop={1}
-                >
-                  <Text
-                    id="lightning-address"
-                    textAlign="center"
-                    fontWeight="bold"
-                    wordBreak="break-all"
-                    fontSize={isMobile ? '8px' : '12px'}
-                  >
-                    {name}@geyser.fund
-                  </Text>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
+          <ProjectFundingBanner
+            banner={imageDownload}
+            ref={bannerRef}
+            lnurlPayUrl={lnurlPayUrl}
+            title={title}
+          />
         </ModalBody>
         <ModalFooter>
           <Box w="100%">
-            {imageDownload.length === 0 ? (
+            {!imageDownload ? (
               <ButtonComponent
                 disabled={true}
                 isLoading={true}
