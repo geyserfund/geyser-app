@@ -23,8 +23,10 @@ export const LeaderboardBody = ({
 
   return (
     <VStack width="100%" spacing="10px" {...rest}>
-      <LeaderboardFeatureProject project={featuredCard} paddingTop="10px" />
-      {restOfTheCards.map((project) => (
+      {featuredCard && (
+        <LeaderboardFeatureProject project={featuredCard} paddingTop="10px" />
+      )}
+      {restOfTheCards?.map((project) => (
         <LeaderboardCardListItem key={project.id} project={project} />
       ))}
     </VStack>
