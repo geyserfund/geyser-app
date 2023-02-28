@@ -118,7 +118,12 @@ export const FilterTopBar = (props: StackProps) => {
   }
 
   return (
-    <HStack width="100%" justifyContent="space-between" {...props}>
+    <HStack
+      width="100%"
+      justifyContent="space-between"
+      alignItems="start"
+      {...props}
+    >
       <Wrap>
         {renderFilterSearch()}
         {renderFilterStatusType()}

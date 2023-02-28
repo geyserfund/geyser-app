@@ -1,14 +1,6 @@
 import { useQuery } from '@apollo/client'
-import {
-  HStack,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-  Stack,
-  VStack,
-} from '@chakra-ui/react'
+import { HStack, Skeleton, Stack, VStack } from '@chakra-ui/react'
 
-import { CardLayout } from '../../../../components/layouts'
 import { useFilterContext } from '../../../../context'
 import {
   OrderByOptions,
@@ -18,7 +10,7 @@ import {
   Tag,
 } from '../../../../types'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
-import { ProjectDisplayBody } from '../elements'
+import { LandingProjectCardSkeleton, ProjectDisplayBody } from '../elements'
 
 interface ProjectDisplayProps {
   tag?: Tag
@@ -82,37 +74,7 @@ export const ProjectsDisplaySkeleton = () => {
         spacing="20px"
       >
         {[1, 2, 3].map((value) => {
-          return (
-            <CardLayout
-              key={value}
-              padding="0px"
-              width={{ base: 'full', xl: '240px' }}
-              direction={{ base: 'row', xl: 'column' }}
-              spacing="0px"
-            >
-              <Skeleton
-                width={{ base: '125px', xl: 'full' }}
-                height={{ base: '125px', xl: '200px' }}
-              ></Skeleton>
-              <VStack
-                flex={1}
-                width={{ base: 'auto', xl: '100%' }}
-                minWidth={{ base: '170px', md: 'auto' }}
-                padding="10px"
-                alignItems="start"
-                justifyContent="center"
-                overflow="hidden"
-              >
-                <Skeleton borderRadius="8px" width="100%" height="20px" />
-                <HStack width="100%" overflow="hidden">
-                  <SkeletonCircle size={'20px'} />
-                  <SkeletonText flex="1" noOfLines={1} />
-                </HStack>
-                <Skeleton borderRadius="8px" width="100%" height="20px" />
-                <Skeleton borderRadius="8px" width="100%" height="20px" />
-              </VStack>
-            </CardLayout>
-          )
+          return <LandingProjectCardSkeleton key={value} />
         })}
       </Stack>
     </VStack>

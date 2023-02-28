@@ -25,13 +25,13 @@ export const SortMenu = () => {
 
   return (
     <Menu>
-      <MenuButton
-        as={Button}
-        size="xs"
-        rightIcon={<BsSliders fontSize="16px" />}
-        backgroundColor="brand.neutral100"
-      >
-        <Body2 semiBold>{getCurrentSelection(sort)}</Body2>
+      <MenuButton as={Button} size="xs" backgroundColor="brand.neutral100">
+        <HStack overflow="hidden">
+          <Body2 semiBold isTruncated>
+            {getCurrentSelection(sort)}
+          </Body2>
+          <BsSliders fontSize="16px" />
+        </HStack>
       </MenuButton>
       <MenuList>
         <HStack width="100%" padding="5px 10px" justifyContent="space-between">

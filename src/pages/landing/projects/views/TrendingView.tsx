@@ -1,13 +1,15 @@
 import { useQuery } from '@apollo/client'
 
-import Loader from '../../../../components/ui/Loader'
 import { useFilterContext } from '../../../../context'
 import {
   GetProjectsMostFundedOfTheWeekInput,
   ProjectsMostFundedOfTheWeekGet,
 } from '../../../../types'
 import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
-import { FilteredProjectList } from '../components/FilteredProjectList'
+import {
+  FilteredProjectList,
+  FilteredProjectListSkeleton,
+} from '../components/FilteredProjectList'
 
 const NO_OF_PROJECT_TO_LOAD_FILTER_VIEW = 20
 
@@ -33,7 +35,7 @@ export const TrendingView = () => {
     ) || []
 
   if (loading) {
-    return <Loader />
+    return <FilteredProjectListSkeleton />
   }
 
   return <FilteredProjectList {...{ projects, error }} />
