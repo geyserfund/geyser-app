@@ -13,7 +13,7 @@ import { useState } from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { CgProfile } from 'react-icons/cg'
 import { FiTag } from 'react-icons/fi'
-import { GrLocation } from 'react-icons/gr'
+import { SlLocationPin } from 'react-icons/sl'
 import { Link } from 'react-router-dom'
 
 import { AmbossIcon, ShareIcon } from '../../../../components/icons'
@@ -224,7 +224,7 @@ export const Summary = () => {
               label="Region"
               icon={
                 <span>
-                  <GrLocation color={colors.neutral600} fontSize="22px" />
+                  <SlLocationPin color={colors.neutral600} fontSize="22px" />
                 </span>
               }
             >
