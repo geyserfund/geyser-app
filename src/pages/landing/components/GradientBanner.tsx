@@ -1,17 +1,10 @@
 import { useQuery } from '@apollo/client'
-import {
-  Container,
-  HStack,
-  Image,
-  Skeleton,
-  Stack,
-  VStack,
-} from '@chakra-ui/react'
+import { Container, HStack, Image, Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
 import BannerGlowImage from '../../../assets/top_Banner.svg'
+import { SkeletonLayout } from '../../../components/layouts'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
-import Loader from '../../../components/ui/Loader'
 import { dimensions, LetTheSatsFlow3DUrl } from '../../../constants'
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql'
 import {
@@ -86,13 +79,7 @@ export const GradientBanner = () => {
             <H3>Play a part in world-changing ideas</H3>
             <HStack fontSize={'sm'} spacing={4}>
               {isSummaryLoading ? (
-                <HStack
-                  spacing={1.5}
-                  justifyContent="flex-start"
-                  alignItems={'center'}
-                >
-                  <Loader size="md" />
-                </HStack>
+                <SummarySkeleton />
               ) : (
                 satsDataArray.map((statsData, index) => {
                   return (
@@ -103,13 +90,9 @@ export const GradientBanner = () => {
                       alignItems={'center'}
                       direction={isMobile ? 'column' : 'row'}
                     >
-                      {isSummaryLoading ? (
-                        <Skeleton w="25px" h="25px" />
-                      ) : (
-                        <MonoBody1 bold marginTop="2px">
-                          {getShortAmountLabel(parseInt(statsData[0], 10))}
-                        </MonoBody1>
-                      )}
+                      <MonoBody1 bold marginTop="2px">
+                        {getShortAmountLabel(parseInt(statsData[0], 10))}
+                      </MonoBody1>
 
                       <Body2 textTransform={'uppercase'}>{statsData[1]}</Body2>
                     </Stack>
@@ -121,5 +104,25 @@ export const GradientBanner = () => {
         </Stack>
       </Container>
     </VStack>
+  )
+}
+
+export const SummarySkeleton = () => {
+  return (
+    <HStack
+      width="100%"
+      spacing={1.5}
+      justifyContent="flex-start"
+      alignItems={'center'}
+    >
+      {[1, 2, 3].map((value) => {
+        return (
+          <HStack key={value} flex={1}>
+            <SkeletonLayout width="30px" />
+            <SkeletonLayout width="80px" />
+          </HStack>
+        )
+      })}
+    </HStack>
   )
 }

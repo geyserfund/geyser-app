@@ -14,6 +14,7 @@ import { AiOutlineCalendar } from 'react-icons/ai'
 import { CgProfile } from 'react-icons/cg'
 import { FiTag } from 'react-icons/fi'
 import { GrLocation } from 'react-icons/gr'
+import { Link } from 'react-router-dom'
 
 import { AmbossIcon, ShareIcon } from '../../../../components/icons'
 import { CardLayout } from '../../../../components/layouts'
@@ -204,7 +205,15 @@ export const Summary = () => {
             >
               <Wrap>
                 {project.tags.map((tag) => {
-                  return <TagBox key={tag.id}>{tag.label}</TagBox>
+                  return (
+                    <Link
+                      key={tag.id}
+                      to={getPath('landingPage')}
+                      state={{ tagId: tag.id }}
+                    >
+                      <TagBox>{tag.label}</TagBox>
+                    </Link>
+                  )
                 })}
               </Wrap>
             </SummaryInfoLine>

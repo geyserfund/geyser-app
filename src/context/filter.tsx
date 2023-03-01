@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { disableSortByTrending } from '../pages/landing/filters/sort'
 import { ProjectsOrderByInput, ProjectStatus, ProjectType } from '../types'
+import { toInt } from '../utils'
 
 export type FilterType = {
   countryCode?: string
@@ -39,6 +41,9 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const [filters, setFilters] = useState<FilterType>({} as FilterType)
   const [sort, setSort] = useState<SortType>(defaultSort)
 
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const updateFilter = (value: Partial<FilterType>) => {
     setFilters({ ...filters, recent: false, ...value })
   }
@@ -50,6 +55,13 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [filters, sort])
+
+  useEffect(() => {
+    if (location.state?.tagId) {
+      updateFilter({ tagIds: [toInt(location.state?.tagId)] })
+      navigate('', { state: null })
+    }
+  }, [location])
 
   const updateSort = (value: Partial<SortType>) => {
     setSort({ ...value })
