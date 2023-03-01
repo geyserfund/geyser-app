@@ -15,8 +15,6 @@ export const Countdown = ({
   ...props
 }: Props & BoxProps) => {
   const { days, hours, minutes } = useCountdown(endDate)
-    .shiftTo('days', 'hours', 'minutes', 'seconds')
-    .toObject()
 
   const Divider = (
     <Text as="span" {...dividerProps}>
