@@ -31,13 +31,8 @@ import { TopNavBarMenu } from './TopNavBarMenu'
 
 const navItems = [
   {
-    name: 'Projects',
-    to: '/discover',
-  },
-  {
     name: 'Grants',
     to: '/grants',
-    new: true,
   },
   {
     name: 'About',
@@ -63,7 +58,7 @@ const customTitleRoutes = [
 ]
 const navItemsRoutes = [
   `/`,
-  `/${PathName.discover}`,
+  getPath('landingFeed'),
   `/${PathName.grants}`,
   `/${PathName.grants}/roundtwo`,
   `/${PathName.grants}/roundone`,

@@ -26,6 +26,7 @@ export const LeaderboardFeatureProject = ({
       direction="column"
       w="100%"
       overflow="hidden"
+      _hover={{ backgroundColor: 'neutral.100' }}
       {...rest}
     >
       <Box height="200px" borderRadius="8px" overflow="hidden">
