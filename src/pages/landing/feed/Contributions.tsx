@@ -1,7 +1,6 @@
 import { Divider, VStack } from '@chakra-ui/react'
 
 import { AlertBox } from '../../../components/ui'
-import Loader from '../../../components/ui/Loader'
 import { ID } from '../../../constants/components'
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../graphql'
 import { ScrollInvoke } from '../../../helpers'
@@ -12,7 +11,10 @@ import {
   FundingTxWithCount,
   useMobileMode,
 } from '../../../utils'
-import { ContributionActivityItem } from './components'
+import {
+  ContributionActivityItem,
+  ContributionActivityItemSkeleton,
+} from './components'
 
 const itemLimit = 50
 
@@ -56,7 +58,7 @@ export const Contributions = () => {
   }
 
   if (isLoading) {
-    return <Loader width="100%" />
+    return <ContributionsSkeleton />
   }
 
   if (contributions?.length === 0) {
@@ -77,9 +79,13 @@ export const Contributions = () => {
         {contributions.map((contribution: FundingTxWithCount, index) => {
           if (contribution.sourceResource?.__typename === 'Project') {
             return (
-              <>
+              <VStack
+                key={contribution.id}
+                alignItems={'center'}
+                width="full"
+                spacing={'12px'}
+              >
                 <ContributionActivityItem
-                  key={contribution.id}
                   linkedProject={contribution.sourceResource as Project}
                   fundingTx={contribution}
                   count={contribution.count}
@@ -95,7 +101,7 @@ export const Contributions = () => {
                     color="brand.200"
                   />
                 )}
-              </>
+              </VStack>
             )
           }
 
@@ -109,6 +115,29 @@ export const Contributions = () => {
         isLoading={isLoadingMore}
         noMoreItems={noMoreItems}
       />
+    </VStack>
+  )
+}
+
+export const ContributionsSkeleton = () => {
+  return (
+    <VStack flexDirection={'column'} spacing={6} width="full" paddingX="20px">
+      <VStack alignItems={'center'} width="full" spacing={'12px'}>
+        {[1, 2, 3].map((value) => {
+          return (
+            <VStack key={value} width="full">
+              <ContributionActivityItemSkeleton />
+              {value < 3 && (
+                <Divider
+                  borderBottomWidth="2px"
+                  maxWidth="500px"
+                  color="brand.200"
+                />
+              )}
+            </VStack>
+          )
+        })}
+      </VStack>
     </VStack>
   )
 }

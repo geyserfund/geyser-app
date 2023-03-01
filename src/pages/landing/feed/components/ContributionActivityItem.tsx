@@ -165,6 +165,11 @@ export const ContributionActivityItemSkeleton = () => {
         <SkeletonLayout width="20%" />
         <SkeletonLayout width="10%" />
       </HStack>
+      <SkeletonLayout height="80px" />
+      <HStack w="full">
+        <SkeletonLayout width="10%" />
+        <SkeletonLayout width="10%" />
+      </HStack>
     </VStack>
   )
 }
