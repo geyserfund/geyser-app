@@ -16,7 +16,5 @@ export const useCountdown = (endDate?: number) => {
     return () => clearInterval(interval)
   }, [endDate])
 
-  return duration
-    .shiftTo('days', 'hours', 'minutes', 'seconds')
-    .toObject()
+  return duration.shiftTo('days', 'hours', 'minutes', 'seconds').toObject()
 }
