@@ -82,7 +82,7 @@ export const FilterFooter = () => {
             size="sm"
             background={'none'}
             aria-label="Geyser Podcasts"
-            icon={<NostrSvgIcon fontSize="20px" />}
+            icon={<NostrSvgIcon height="20px" width="20px" />}
             marginLeft="5px"
           />
         </Link>

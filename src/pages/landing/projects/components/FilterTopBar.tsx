@@ -7,6 +7,7 @@ import { SlLocationPin } from 'react-icons/sl'
 import Loader from '../../../../components/ui/Loader'
 import { useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
+import { colors } from '../../../../styles'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { SortMenu } from '../../filters/sort/SortMenu'
@@ -47,7 +48,7 @@ export const FilterTopBar = (props: StackProps) => {
           return (
             <TagComponent
               key={tag.id}
-              icon={<HiOutlineTag />}
+              icon={<HiOutlineTag color={colors.neutral500} />}
               label={tag.label}
               onClick={() => handleClearTag(tag.id)}
             />
@@ -66,7 +67,7 @@ export const FilterTopBar = (props: StackProps) => {
         return (
           <TagComponent
             label={country.country.name}
-            icon={<SlLocationPin />}
+            icon={<SlLocationPin color={colors.neutral500} />}
             onClick={() => updateFilter({ countryCode: undefined })}
           />
         )
@@ -77,7 +78,7 @@ export const FilterTopBar = (props: StackProps) => {
       return (
         <TagComponent
           label={region}
-          icon={<SlLocationPin />}
+          icon={<SlLocationPin color={colors.neutral500} />}
           onClick={() => updateFilter({ region: undefined })}
         />
       )
@@ -94,7 +95,7 @@ export const FilterTopBar = (props: StackProps) => {
     return (
       <TagComponent
         label={search}
-        icon={<SearchIcon />}
+        icon={<SearchIcon color={colors.neutral500} />}
         onClick={() => updateFilter({ search: undefined })}
       />
     )
