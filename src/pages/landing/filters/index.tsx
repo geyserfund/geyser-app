@@ -1,6 +1,7 @@
 import { StackProps, VStack } from '@chakra-ui/react'
 
 import { FilterBySearch } from './FilterBySearch'
+import { FilterFooter } from './FilterFooter'
 import { FilterByRegion } from './region'
 import { FilterByStatus } from './status'
 import { FilterByTags } from './tag'
@@ -14,6 +15,7 @@ export const Filters = ({ ...rest }: FiltersProps) => {
       <FilterByTags />
       <FilterByRegion />
       <FilterByStatus />
+      <FilterFooter />
     </VStack>
   )
 }

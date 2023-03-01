@@ -20,6 +20,7 @@ export interface FilterState {
   updateFilter: (value: Partial<FilterType>) => void
   sort: SortType
   updateSort: (value: Partial<SortType>) => void
+  clearFilter: () => void
 }
 
 const defaultFilterContext = {
@@ -27,6 +28,7 @@ const defaultFilterContext = {
   updateFilter() {},
   sort: {},
   updateSort() {},
+  clearFilter() {},
 }
 
 const defaultSort = { createdAt: 'desc' } as SortType
@@ -53,6 +55,10 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     setSort({ ...value })
   }
 
+  const clearFilter = () => {
+    setFilters({} as FilterType)
+  }
+
   return (
     <FilterContext.Provider
       value={{
@@ -60,6 +66,7 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
         updateFilter,
         sort,
         updateSort,
+        clearFilter,
       }}
     >
       {children}

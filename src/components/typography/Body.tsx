@@ -16,7 +16,6 @@ export const Body1 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
       fontSize={isMobile ? '14px' : '16px'}
       fontWeight={bold ? 600 : semiBold ? 500 : 400}
       fontFamily={fonts.inter}
-      color="brand.neutral700"
       {...rest}
     >
       {children}
@@ -31,7 +30,6 @@ export const Body2 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
       fontSize={isMobile ? '12px' : '14px'}
       fontWeight={bold ? 600 : semiBold ? 500 : 400}
       fontFamily={fonts.inter}
-      color="brand.neutral700"
       {...rest}
     >
       {children}
@@ -45,7 +43,6 @@ export const Caption = ({ children, bold, semiBold, ...rest }: BodyProps) => {
       fontSize="10px"
       fontWeight={bold ? 600 : semiBold ? 500 : 400}
       fontFamily={fonts.inter}
-      color="brand.neutral700"
       {...rest}
     >
       {children}
