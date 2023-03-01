@@ -93,7 +93,7 @@ export const LandingLetTheSatsFlowUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow.svg'
 
 export const LetTheSatsFlow3DUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow-2.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow-3.png'
 
 export const LaunchImage2Url =
   'https://storage.googleapis.com/geyser-projects-media/app/launchImage.png'
