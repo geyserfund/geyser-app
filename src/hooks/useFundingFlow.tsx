@@ -14,6 +14,7 @@ import {
   InvoiceStatus,
 } from '../types/generated/graphql'
 import { sha256, toInt, useNotification } from '../utils'
+import { useListenerState } from './useListenerState'
 
 type FundingTXQueryResponseData = {
   fundingTx: FundingTx
@@ -122,7 +123,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const [invoiceRefreshLoading, setRefreshingInvoice] = useState(false)
 
-  const [fundingTx, setFundingTx] = useState<FundingTx>({
+  const [fundingTxRef, setFundingTx] = useListenerState<FundingTx>({
     ...initialFunding,
     funder: { ...initialFunding.funder, user },
   })
@@ -133,11 +134,18 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     FundingTXQueryResponseData,
     FundingTXQueryInput
   >(QUERY_GET_FUNDING_TX_STATUS_AND_INVOICE_STATUS, {
-    variables: {
-      fundingTxID: toInt(fundingTx.id),
-    },
     fetchPolicy: 'network-only',
   })
+
+  const checkFundingStatus = () => {
+    if (fundingTxRef.current.id) {
+      getFundingStatus({
+        variables: {
+          fundingTxID: toInt(fundingTxRef.current.id),
+        },
+      })
+    }
+  }
 
   const startWebLNFlow = async (fundingTx: FundingTx) => {
     let succeeded = false
@@ -149,11 +157,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
       await webln.enable()
 
-      if (!fundingTx.paymentRequest) {
+      if (!fundingTxRef.current.paymentRequest) {
         throw new Error('payment request not found')
       }
 
-      const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
+      const { preimage } = await webln.sendPayment(
+        fundingTxRef.current.paymentRequest,
+      )
       const paymentHash = await sha256(preimage)
       return paymentHash
     }
@@ -161,7 +171,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     return requestWebLNPayment()
       .then((paymentHash) => {
         // Check preimage
-        if (paymentHash === fundingTx.invoiceId) {
+        if (paymentHash === fundingTxRef.current.invoiceId) {
           gotoNextStage()
           succeeded = true
           return succeeded
@@ -211,12 +221,12 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           if (hasBolt11 && hasWebLN && webln) {
             startWebLNFlow(data.fund.fundingTx).then((success) => {
               if (!success) {
-                fundInterval = setInterval(getFundingStatus, 1500)
+                fundInterval = setInterval(checkFundingStatus, 1500)
                 setWebLNErrored(true)
               }
             })
           } else {
-            fundInterval = setInterval(getFundingStatus, 1500)
+            fundInterval = setInterval(checkFundingStatus, 1500)
           }
         } catch (_) {
           setFundingRequestErrored(true)
@@ -254,12 +264,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
       */
       if (
-        (fundingStatus.fundingTx.invoiceStatus !== fundingTx.invoiceStatus ||
-          fundingStatus.fundingTx.status !== fundingTx.status) &&
-        fundingStatus.fundingTx.invoiceId === fundingTx.invoiceId
+        (fundingStatus.fundingTx.invoiceStatus !==
+          fundingTxRef.current.invoiceStatus ||
+          fundingStatus.fundingTx.status !== fundingTxRef.current.status) &&
+        fundingStatus.fundingTx.invoiceId === fundingTxRef.current.invoiceId
       ) {
         setFundingTx({
-          ...fundingTx,
+          ...fundingTxRef.current,
           ...fundingStatus.fundingTx,
         })
       }
@@ -267,7 +278,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       if (
         fundingStatus.fundingTx.status === FundingStatus.Paid ||
         (fundingStatus.fundingTx.status === FundingStatus.Pending &&
-          fundingTx.onChain)
+          fundingTxRef.current.onChain)
       ) {
         clearInterval(fundInterval)
         gotoNextStage()
@@ -301,7 +312,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     InvoiceRefreshMutationInput
   >(REFRESH_FUNDING_INVOICE, {
     variables: {
-      fundingTxID: fundingTx.id,
+      fundingTxID: fundingTxRef.current.id,
     },
     onError(_) {
       setInvoiceRefreshErrored(true)
@@ -312,7 +323,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const refreshFundingInvoice = async () => {
     try {
       setFundingTx({
-        ...fundingTx,
+        ...fundingTxRef.current,
         invoiceStatus: InvoiceStatus.Unpaid,
       })
       /*
@@ -324,7 +335,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
       if (data) {
         setFundingTx({
-          ...fundingTx,
+          ...fundingTxRef.current,
           ...data.fundingInvoiceRefresh,
         })
         setRefreshingInvoice(false)
@@ -354,7 +365,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     weblnErrored,
     fundState,
     amounts,
-    fundingTx,
+    fundingTx: fundingTxRef.current,
     gotoNextStage,
     resetFundingFlow,
     requestFunding,
