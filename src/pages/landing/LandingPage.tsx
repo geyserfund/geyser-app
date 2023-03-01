@@ -63,7 +63,7 @@ export const LandingPage = () => {
 
           {!isMobile && (
             <VStack
-              id={ID.landing.filters.wrapper}
+              id={ID.landing.leaderboard.wrapper}
               flex={1}
               width="full"
               minWidth="220px"

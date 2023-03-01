@@ -39,7 +39,6 @@ export const useQueryWithPagination = <Type,>({
         where,
         orderBy,
       },
-      fetch,
     },
     ...options,
     onCompleted(data) {

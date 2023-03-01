@@ -128,7 +128,8 @@ export const FilterTopBar = (props: StackProps) => {
     viewFilterSearch ||
     viewFilterStatusType ||
     viewFilterTags ||
-    viewFilterRegion
+    viewFilterRegion ||
+    (!isMobile && filters.recent)
   ) {
     return (
       <HStack

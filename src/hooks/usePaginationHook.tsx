@@ -36,7 +36,7 @@ export const usePaginationHook = <Type,>({
   })
 
   const handleDataUpdate = (data: Type[]) => {
-    if (data && data.length > 0) {
+    if (data) {
       if (data.length < itemLimit) {
         setNoMoreItems(true)
       }
