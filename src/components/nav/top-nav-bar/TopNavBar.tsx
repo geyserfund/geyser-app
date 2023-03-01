@@ -33,6 +33,7 @@ const navItems = [
   {
     name: 'Grants',
     to: '/grants',
+    new: false,
   },
   {
     name: 'About',
