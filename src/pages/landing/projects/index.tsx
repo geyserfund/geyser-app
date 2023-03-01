@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { StickToTop } from '../../../components/layouts'
 import { useFilterContext } from '../../../context'
 import { checkKeyValueExists, useMobileMode } from '../../../utils'
+import { FilterBySearch } from '../filters/FilterBySearch'
 import { ProjectsTopBar } from './components'
 import { DefaultView, PaginatedView, TrendingView } from './views'
 
@@ -48,13 +49,16 @@ export const LandingPageProjects = () => {
   return (
     <>
       {isMobileMode && (
-        <StickToTop
-          id="landing-page-mobile-projects-sort-filter"
-          width="100%"
-          _onStick={{ width: 'calc(100% - 20px)' }}
-        >
-          <ProjectsTopBar />
-        </StickToTop>
+        <>
+          <StickToTop
+            id="landing-page-mobile-projects-sort-filter"
+            width="100%"
+            _onStick={{ width: 'calc(100% - 20px)' }}
+          >
+            <ProjectsTopBar />
+          </StickToTop>
+          <FilterBySearch />
+        </>
       )}
       {renderView()}
     </>

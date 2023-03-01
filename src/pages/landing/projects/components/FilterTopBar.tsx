@@ -126,7 +126,7 @@ export const FilterTopBar = (props: StackProps) => {
   const viewFilterRegion = renderFilterRegion()
 
   if (
-    viewFilterSearch ||
+    (!isMobile && viewFilterSearch) ||
     viewFilterStatusType ||
     viewFilterTags ||
     viewFilterRegion ||
