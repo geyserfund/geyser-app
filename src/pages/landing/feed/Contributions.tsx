@@ -86,12 +86,12 @@ export const Contributions = () => {
                   width={{
                     base: '100%',
                   }}
-                  maxWidth="600px"
+                  maxWidth="500px"
                 />
                 {index < contributions.length - 1 && (
                   <Divider
                     borderBottomWidth="2px"
-                    maxWidth="600px"
+                    maxWidth="500px"
                     color="brand.200"
                   />
                 )}

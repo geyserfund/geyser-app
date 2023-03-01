@@ -10,6 +10,7 @@ import {
 import { HTMLChakraProps } from '@chakra-ui/system'
 
 import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
+import { SkeletonLayout } from '../../../../components/layouts'
 import { ExternalAccountLinkIcon } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
 import {
@@ -154,5 +155,16 @@ export const ContributionActivityItem = ({
         </Stack>
       </VStack>
     </Box>
+  )
+}
+
+export const ContributionActivityItemSkeleton = () => {
+  return (
+    <VStack w="full" maxWidth="500px">
+      <HStack w="full" justifyContent="space-between">
+        <SkeletonLayout width="20%" />
+        <SkeletonLayout width="10%" />
+      </HStack>
+    </VStack>
   )
 }
