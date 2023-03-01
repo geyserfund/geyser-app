@@ -88,6 +88,7 @@ const routesForHidingMyProjectsButton = [
 const routesForEnablingSignInButton = [
   getPath('index'),
   getPath('landingPage'),
+  getPath('landingFeed'),
   getPath('projectDiscovery'),
   getPath('grants'),
   getPath('grantsRoundOne'),
@@ -105,6 +106,7 @@ const routesForEnablingSignInButton = [
 const routesForEnablingProjectLaunchButton = [
   getPath('index'),
   getPath('landingPage'),
+  getPath('landingFeed'),
   getPath('grants'),
   getPath('grantsRoundOne'),
   getPath('grantsRoundTwo'),
@@ -113,7 +115,6 @@ const routesForEnablingProjectLaunchButton = [
 
 const routesForTransparentBackground = [
   getPath('index'),
-  getPath('projectDiscovery'),
   getPath('landingFeed'),
 ]
 

@@ -123,11 +123,11 @@ export const ContributionsSkeleton = () => {
   return (
     <VStack flexDirection={'column'} spacing={6} width="full" paddingX="20px">
       <VStack alignItems={'center'} width="full" spacing={'12px'}>
-        {[1, 2, 3].map((value) => {
+        {[1, 2, 3, 4, 5, 6].map((value) => {
           return (
             <VStack key={value} width="full">
               <ContributionActivityItemSkeleton />
-              {value < 3 && (
+              {value < 6 && (
                 <Divider
                   borderBottomWidth="2px"
                   maxWidth="500px"

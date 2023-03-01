@@ -14,17 +14,17 @@ export const LandingPage = () => {
   const isMobile = useMobileMode()
   return (
     <FilterProvider>
-      <Box
+      <VStack
         marginTop={`-${dimensions.topNavBar.desktop.height}px`}
         position="relative"
         width="100%"
         minHeight="100%"
         height="auto"
         overflowX="hidden"
+        spacing={{ base: '30px', md: '50px' }}
       >
         <GradientBanner />
         <HStack
-          marginTop={{ base: '30px', md: '50px' }}
           width="100%"
           justifyContent="center"
           alignItems="start"
@@ -81,7 +81,7 @@ export const LandingPage = () => {
             </VStack>
           )}
         </HStack>
-      </Box>
+      </VStack>
     </FilterProvider>
   )
 }

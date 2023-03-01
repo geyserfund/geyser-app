@@ -18,7 +18,7 @@ export const LandingFeed = () => {
           <ActivityTopbar />
         </StickToTop>
       )}
-      <CardLayout w="100%" paddingX="0px">
+      <CardLayout w="full" paddingX="0px">
         <Contributions />
       </CardLayout>
     </>
