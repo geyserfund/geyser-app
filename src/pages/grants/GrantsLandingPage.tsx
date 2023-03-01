@@ -144,18 +144,20 @@ export const GrantsLandingPage = () => {
               >
                 <ListText
                   titleProps={{ fontSize: '24px' }}
-                  title="351 M"
                   subtitle="GRANT CONTRIBUTIONS"
                   subtitleProps={{ fontSize: '10px' }}
                   isSatLogo={true}
-                />
+                >
+                  351 M
+                </ListText>
                 <ListText
                   titleProps={{ fontSize: '24px' }}
-                  title="100 M"
                   subtitle="GRANTS DISTRIBUTED"
                   subtitleProps={{ fontSize: '10px' }}
                   isSatLogo={true}
-                />
+                >
+                  100 M
+                </ListText>
               </Box>
               <Box
                 display="flex"

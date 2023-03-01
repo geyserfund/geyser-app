@@ -88,18 +88,12 @@ export const CustomGrantCard = ({
                   alignItems="center"
                   justifyContent="space-around"
                 >
-                  <ListText
-                    mx={4}
-                    title={applicants}
-                    subtitle="APPLICANTS"
-                    isSatLogo={false}
-                  />
-                  <ListText
-                    mx={4}
-                    title={grant}
-                    subtitle="GRANT"
-                    isSatLogo={true}
-                  />
+                  <ListText mx={4} subtitle="APPLICANTS" isSatLogo={false}>
+                    {applicants}
+                  </ListText>
+                  <ListText mx={4} subtitle="GRANT" isSatLogo={true}>
+                    {grant}
+                  </ListText>
                 </Box>
               ) : (
                 <Box
@@ -107,18 +101,12 @@ export const CustomGrantCard = ({
                   alignItems="center"
                   justifyContent="space-around"
                 >
-                  <ListText
-                    mx={4}
-                    title={grantees}
-                    subtitle="APPLICANTS"
-                    isSatLogo={false}
-                  />
-                  <ListText
-                    mx={4}
-                    title={distributed}
-                    subtitle="GRANT"
-                    isSatLogo={true}
-                  />
+                  <ListText mx={4} subtitle="APPLICANTS" isSatLogo={false}>
+                    {grantees}
+                  </ListText>
+                  <ListText mx={4} subtitle="GRANT" isSatLogo={true}>
+                    {distributed}
+                  </ListText>
                 </Box>
               )}
             </Box>

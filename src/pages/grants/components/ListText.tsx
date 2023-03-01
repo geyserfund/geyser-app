@@ -1,64 +1,58 @@
-import {
-  Box,
-  BoxProps,
-  Image,
-  ImageProps,
-  Text,
-  TextProps,
-} from '@chakra-ui/react'
+import { Box, BoxProps, IconProps, Text, TextProps } from '@chakra-ui/react'
+import { PropsWithChildren, ReactNode } from 'react'
 
-import satsymbol from '../../../assets/satoshi.png'
+import { SatSymbolIcon } from '../../../components/icons/svg/SatSymbolIcon'
 import { colors, fonts } from '../../../styles'
 
 export type Props = {
   isSatLogo?: boolean
-  title?: string
-  subtitle: string
+  subtitle?: ReactNode
   titleProps?: TextProps
   subtitleProps?: TextProps
-  satLogoProps?: ImageProps
+  satLogoProps?: IconProps
 }
 
 export const ListText = ({
-  title,
   subtitle,
   isSatLogo,
   titleProps = {},
   subtitleProps = {},
   satLogoProps = {},
+  children,
   ...props
-}: Props & BoxProps) => {
+}: PropsWithChildren<Props & BoxProps>) => {
   return (
     <Box display={'flex'} alignItems="center" flexDirection="column" {...props}>
-      <Box display={'flex'} alignItems="center" height="34px">
+      <Box display={'flex'} alignItems="center" pt={1}>
         {isSatLogo ? (
           <Box mr={1}>
-            <Image
-              src={satsymbol}
-              height="18px"
-              alt="satsymbol"
-              {...satLogoProps}
-            />
+            <SatSymbolIcon {...satLogoProps} />
           </Box>
         ) : null}
+        {typeof children === 'string' ? (
+          <Text
+            fontWeight={'700'}
+            fontSize={'19px'}
+            fontFamily={fonts.interBlack}
+            {...titleProps}
+          >
+            {children || '-'}
+          </Text>
+        ) : (
+          children
+        )}
+      </Box>
+      {subtitle && (
         <Text
           fontWeight={'700'}
-          fontSize={'19px'}
+          fontSize="13px"
           fontFamily={fonts.interBlack}
-          {...titleProps}
+          color={colors.gray500}
+          {...subtitleProps}
         >
-          {title || '-'}
+          {subtitle}
         </Text>
-      </Box>
-      <Text
-        fontWeight={'700'}
-        fontSize="13px"
-        fontFamily={fonts.interBlack}
-        color={colors.gray500}
-        {...subtitleProps}
-      >
-        {subtitle}
-      </Text>
+      )}
     </Box>
   )
 }
