@@ -1,4 +1,4 @@
-import { Box, HStack, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
 import { StickToTop } from '../../components/layouts'
