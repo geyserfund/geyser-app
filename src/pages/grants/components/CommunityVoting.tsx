@@ -35,14 +35,14 @@ export const CommunityVoting = ({ projects }: Props) => {
               <H3 fontSize="18px">{project.title}</H3>
               <Text>{project.shortDescription}</Text>
             </Box>
-            {!isMobile && <Box width="166px">
-              <Button height="51px" variant="hugeContained">
-                Vote
-              </Button>
-              <WidgetItem subtitle="worth of votes">
-              2.2M
-              </WidgetItem>
-            </Box>}
+            {!isMobile && (
+              <Box width="166px">
+                <Button height="51px" variant="hugeContained">
+                  Vote
+                </Button>
+                <WidgetItem subtitle="worth of votes">2.2M</WidgetItem>
+              </Box>
+            )}
           </Box>
           <Box pl={2} filter="opacity(0.4)">
             {project.funders.filter(Boolean).map(
@@ -65,9 +65,11 @@ export const CommunityVoting = ({ projects }: Props) => {
                 ),
             )}
           </Box>
-          {isMobile && <Button mt={3} height="57px" variant="hugeContained">
-            Vote
-          </Button>}
+          {isMobile && (
+            <Button mt={3} height="57px" variant="hugeContained">
+              Vote
+            </Button>
+          )}
         </SectionCard>
       ))}
     </SectionCard>
