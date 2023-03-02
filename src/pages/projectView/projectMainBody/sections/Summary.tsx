@@ -229,9 +229,10 @@ export const Summary = () => {
               }
             >
               <Wrap spacing="5px">
-                {project?.location?.country?.name && (
-                  <TagBox>{project?.location?.country?.name}</TagBox>
-                )}
+                {project?.location?.country?.name &&
+                  project.location.country.name !== 'Online' && (
+                    <TagBox>{project?.location?.country?.name}</TagBox>
+                  )}
                 {project?.location?.region && (
                   <TagBox>{project?.location?.region}</TagBox>
                 )}
