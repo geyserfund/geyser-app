@@ -86,7 +86,7 @@ export const LandingNavBar = () => {
           paddingX="15%"
           justifyContent="center"
           alignItems="center"
-          spacing="25%"
+          spacing="20%"
           position="fixed"
           bottom="0px"
           paddingBottom="2px"
