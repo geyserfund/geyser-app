@@ -22,7 +22,7 @@ export const LeaderboardAllTime = ({
     itemLimit: items,
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
-    orderBy: { createdAt: OrderByOptions.Desc },
+    orderBy: { balance: OrderByOptions.Desc },
   })
 
   if (error) {
