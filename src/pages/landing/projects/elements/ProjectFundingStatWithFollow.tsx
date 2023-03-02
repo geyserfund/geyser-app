@@ -53,6 +53,7 @@ export const ProjectFundingStatWithFollow = ({
         aria-label="project-follow-icon"
         icon={<AddIcon />}
         borderRadius="8px"
+        isDisabled={true} // disabled this for now, will work with this with the follow feature
       />
     </HStack>
   )
