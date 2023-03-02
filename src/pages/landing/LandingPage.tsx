@@ -45,6 +45,8 @@ export const LandingPage = () => {
                 wrapperId={ID.landing.filters.wrapper}
                 width="100%"
                 offset={dimensions.topNavBar.desktop.height + 20}
+                bias={20}
+                buffer={10}
               >
                 <Filters />
               </StickToTop>
@@ -75,6 +77,8 @@ export const LandingPage = () => {
                 wrapperId={ID.landing.leaderboard.wrapper}
                 width="100%"
                 offset={dimensions.topNavBar.desktop.height + 20}
+                bias={20}
+                buffer={10}
               >
                 <ProjectLeaderboard />
               </StickToTop>

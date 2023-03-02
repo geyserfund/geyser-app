@@ -8,9 +8,9 @@ interface StickToTopProps extends BoxProps {
   id: string
   scrollContainerId?: string // leave empty if mobile view, else the ID of the container that is scrolling
   wrapperId?: string // Immediate wrapper of the component, required, for container width after position is updated
-  offset?: number // This is the number of pixels from the top, you want the element to be stuck at.
-  bias?: number // This is the number of pixels, to trigger the offset early
-  buffer?: number // This is number of pixels, that act as a bugger where we don't toggle unless the difference in scroll exceeds this number
+  offset?: number // position of the element from the top
+  bias?: number // Triggers move to position before this many pixels.
+  buffer?: number // Prevents toggle back until the difference in scroll exceeds this number
   disable?: boolean
   _onStick?: BoxProps
 }
@@ -22,6 +22,7 @@ export const StickToTop = ({
   scrollContainerId,
   wrapperId,
   bias = 0,
+  buffer = 0,
   offset = dimensions.topNavBar.desktop.height,
   disable,
   children,
@@ -88,7 +89,7 @@ export const StickToTop = ({
         scrollTop
       if (scrollValue <= offset + bias) {
         setStick(true)
-      } else if (scrollValue > bias ? offset + bias + BUFFER_PIXELS : offset) {
+      } else if (scrollValue > offset + bias + buffer) {
         setStick(false)
       }
     }
