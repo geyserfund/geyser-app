@@ -10,13 +10,7 @@ export const getCurrentSelection = (sort: SortType) => {
   }
 
   if (sort.createdAt) {
-    if (sort.createdAt === OrderByOptions.Asc) {
-      return SortOptions.oldestProjects
-    }
-
-    if (sort.createdAt === OrderByOptions.Desc) {
-      return SortOptions.mostRecentProjects
-    }
+    return SortOptions.mostRecentProjects
   }
 
   if (sort.balance === OrderByOptions.Desc) {

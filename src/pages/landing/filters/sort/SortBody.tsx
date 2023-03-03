@@ -8,7 +8,6 @@ export enum SortOptions {
   mostFundedThisWeek = 'Most funded this week',
   mostFundedAllTime = 'Most funded all time',
   mostRecentProjects = 'Most recent projects',
-  oldestProjects = 'Oldest projects',
 }
 
 export const SortBody = () => {
@@ -16,10 +15,6 @@ export const SortBody = () => {
 
   const onSortSelect = (value: SortOptions) => {
     switch (value) {
-      case SortOptions.oldestProjects:
-        updateSort({ createdAt: OrderByOptions.Asc })
-        break
-
       case SortOptions.mostRecentProjects:
         updateSort({ createdAt: OrderByOptions.Desc })
         break
@@ -45,7 +40,6 @@ export const SortBody = () => {
     SortOptions.mostFundedThisWeek,
     SortOptions.mostFundedAllTime,
     SortOptions.mostRecentProjects,
-    SortOptions.oldestProjects,
   ]
 
   const renderButtons = disableSortByTrending(filters)
