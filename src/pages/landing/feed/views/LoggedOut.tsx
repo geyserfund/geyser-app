@@ -1,9 +1,9 @@
 import { Box, Image, VStack } from '@chakra-ui/react'
 
-import { FeedLoggedOutImage } from '../../../assets'
-import { Body1 } from '../../../components/typography'
-import { ButtonComponent } from '../../../components/ui'
-import { useAuthContext } from '../../../context'
+import { FeedLoggedOutImage } from '../../../../assets'
+import { Body1 } from '../../../../components/typography'
+import { ButtonComponent } from '../../../../components/ui'
+import { useAuthContext } from '../../../../context'
 
 export const LoggedOut = () => {
   const { loginOnOpen } = useAuthContext()
