@@ -13,7 +13,8 @@ import { useState } from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { CgProfile } from 'react-icons/cg'
 import { FiTag } from 'react-icons/fi'
-import { GrLocation } from 'react-icons/gr'
+import { SlLocationPin } from 'react-icons/sl'
+import { Link } from 'react-router-dom'
 
 import { AmbossIcon, ShareIcon } from '../../../../components/icons'
 import { CardLayout } from '../../../../components/layouts'
@@ -181,7 +182,11 @@ export const Summary = () => {
         </HStack>
         <SummaryInfoLine
           label="Creator"
-          icon={<CgProfile color={colors.neutral600} fontSize="22px" />}
+          icon={
+            <span>
+              <CgProfile color={colors.neutral600} fontSize="22px" />
+            </span>
+          }
         >
           <AvatarElement borderRadius="50%" user={owner.user} />
         </SummaryInfoLine>
@@ -191,12 +196,24 @@ export const Summary = () => {
           {project.tags?.length > 0 && (
             <SummaryInfoLine
               label="Tags"
-              icon={<FiTag color={colors.neutral600} fontSize="22px" />}
+              icon={
+                <span>
+                  <FiTag color={colors.neutral600} fontSize="22px" />
+                </span>
+              }
               alignItems="start"
             >
               <Wrap>
                 {project.tags.map((tag) => {
-                  return <TagBox key={tag.id}>{tag.label}</TagBox>
+                  return (
+                    <Link
+                      key={tag.id}
+                      to={getPath('landingPage')}
+                      state={{ tagId: tag.id }}
+                    >
+                      <TagBox>{tag.label}</TagBox>
+                    </Link>
+                  )
                 })}
               </Wrap>
             </SummaryInfoLine>
@@ -205,12 +222,17 @@ export const Summary = () => {
           {(project.location?.country?.name || project.location?.region) && (
             <SummaryInfoLine
               label="Region"
-              icon={<GrLocation color={colors.neutral600} fontSize="22px" />}
+              icon={
+                <span>
+                  <SlLocationPin color={colors.neutral600} fontSize="22px" />
+                </span>
+              }
             >
               <Wrap spacing="5px">
-                {project?.location?.country?.name && (
-                  <TagBox>{project?.location?.country?.name}</TagBox>
-                )}
+                {project?.location?.country?.name &&
+                  project.location.country.name !== 'Online' && (
+                    <TagBox>{project?.location?.country?.name}</TagBox>
+                  )}
                 {project?.location?.region && (
                   <TagBox>{project?.location?.region}</TagBox>
                 )}
@@ -221,7 +243,9 @@ export const Summary = () => {
           <SummaryInfoLine
             label="Launched"
             icon={
-              <AiOutlineCalendar color={colors.neutral600} fontSize="22px" />
+              <span>
+                <AiOutlineCalendar color={colors.neutral600} fontSize="22px" />
+              </span>
             }
           >
             <Body2

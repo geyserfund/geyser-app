@@ -2,6 +2,7 @@ import { Box, Divider, HTMLChakraProps, VStack } from '@chakra-ui/react'
 
 import { StickToTop } from '../../../components/layouts'
 import { H3 } from '../../../components/typography'
+import { dimensions } from '../../../constants'
 import { LandingPageContributionsList } from './LandingPageContributionsList'
 
 type Props = HTMLChakraProps<'div'>
@@ -13,6 +14,7 @@ export const ActivityView = ({ ...rest }: Props) => {
         <StickToTop
           id="landing-page-contributionTitle"
           width="100%"
+          offset={dimensions.topNavBar.desktop.height}
           _onStick={{ width: 'calc(100% - 20px)' }}
         >
           <VStack

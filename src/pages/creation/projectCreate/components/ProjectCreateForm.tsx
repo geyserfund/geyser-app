@@ -206,7 +206,7 @@ export const ProjectCreateForm = ({
       </VStack>
       <VStack {...rowStyles}>
         <Body2>Lightning Address Preview</Body2>
-        <InputGroup size="md" borderRadius="4px">
+        <InputGroup size="md" borderRadius="8px">
           <Input
             name="name"
             onChange={handleChange}

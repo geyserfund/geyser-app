@@ -1,45 +1,91 @@
-import { Box, Divider, Stack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
+import { Outlet } from 'react-router-dom'
 
-import { AppFooter } from '../../components/molecules'
+import { StickToTop } from '../../components/layouts'
+import { dimensions, ID } from '../../constants'
+import { FilterProvider } from '../../context'
 import { useMobileMode } from '../../utils'
-import { ActivityView, LeaderboardView, TopBanner } from './components'
+import { GradientBanner } from './components'
+import { TabBar } from './components/TabBar'
+import { Filters } from './filters'
+import { ProjectLeaderboard } from './projectLeaderboard'
 
 export const LandingPage = () => {
   const isMobile = useMobileMode()
-
   return (
-    <Box position="relative" width="full" height="full">
-      <TopBanner />
-
-      <Stack
-        direction={{
-          base: 'column',
-          md: 'row',
-        }}
-        paddingBottom="30px"
-        paddingX={isMobile ? '10px' : '60px'}
-        width="full"
+    <FilterProvider>
+      <VStack
+        marginTop={`-${dimensions.topNavBar.desktop.height}px`}
+        position="relative"
+        width="100%"
+        minHeight="100%"
         height="auto"
-        minHeight={'full'}
-        overflow="hidden"
-        spacing={'64px'}
+        overflowX="hidden"
+        spacing={{ base: '30px', md: '50px' }}
       >
-        <ActivityView
-          flexGrow={1}
-          minWidth={{
-            base: 'full',
-            sm: '400px',
-          }}
-        />
-        {!isMobile && (
-          <>
-            <Divider orientation="vertical" borderWidth={'1px'} height="auto" />
-            <LeaderboardView />
-          </>
-        )}
-      </Stack>
+        <GradientBanner />
+        <HStack
+          width="100%"
+          justifyContent="center"
+          alignItems="start"
+          spacing={{ base: '30px', xl: '3%' }}
+          paddingX={{ base: '10px', lg: '20px' }}
+        >
+          {!isMobile && (
+            <VStack
+              id={ID.landing.filters.wrapper}
+              flex={1}
+              width="full"
+              minWidth="220px"
+              maxWidth="320px"
+            >
+              <StickToTop
+                id={ID.landing.filters.body}
+                scrollContainerId={ID.root}
+                wrapperId={ID.landing.filters.wrapper}
+                width="100%"
+                offset={dimensions.topNavBar.desktop.height + 20}
+                bias={20}
+                buffer={10}
+              >
+                <Filters />
+              </StickToTop>
+            </VStack>
+          )}
 
-      <AppFooter />
-    </Box>
+          <VStack
+            flex={2}
+            maxWidth="800px"
+            minWidth={{ base: '100%', md: '400px', xl: '800px' }}
+            paddingBottom="40px"
+          >
+            {!isMobile && <TabBar />}
+            <Outlet />
+          </VStack>
+
+          {!isMobile && (
+            <VStack
+              id={ID.landing.leaderboard.wrapper}
+              flex={1}
+              width="full"
+              minWidth="220px"
+              maxWidth="320px"
+            >
+              <StickToTop
+                id={ID.landing.leaderboard.body}
+                scrollContainerId={ID.root}
+                wrapperId={ID.landing.leaderboard.wrapper}
+                width="100%"
+                offset={dimensions.topNavBar.desktop.height + 20}
+                bias={20}
+                buffer={10}
+              >
+                <ProjectLeaderboard />
+              </StickToTop>
+            </VStack>
+          )}
+        </HStack>
+      </VStack>
+    </FilterProvider>
   )
 }

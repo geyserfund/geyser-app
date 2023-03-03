@@ -1,5 +1,4 @@
 import { Button, IconButton, Tooltip, useDisclosure } from '@chakra-ui/react'
-import html2canvas from 'html2canvas'
 import { useState } from 'react'
 
 import { BoltIcon, QrIcon } from '../../../../components/icons'
@@ -15,21 +14,10 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
   const { name } = project
 
   const [copy, setCopy] = useState(false)
-  const [imageDownload, setImageDownload] = useState('')
 
   const handleAddressCopy = () => {
     navigator.clipboard.writeText(`${name}@geyser.fund`)
     setCopy(true)
-  }
-
-  const capture = () => {
-    if (document.getElementById('lnaddress-qr')) {
-      html2canvas(document.getElementById('lnaddress-qr')!, {
-        useCORS: true,
-      }).then((canvas) => {
-        setImageDownload(canvas.toDataURL('image/png', 1.0))
-      })
-    }
   }
 
   return (
@@ -69,11 +57,6 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
           onClick={() => {
             setCopy(false)
             onOpen()
-            if (imageDownload.length === 0) {
-              setTimeout(() => {
-                capture()
-              }, 2100)
-            }
           }}
         />
       </Tooltip>
@@ -83,10 +66,8 @@ export const ProjectLightningQR = ({ project }: ILightningQR) => {
         onClose={onClose}
         setCopy={setCopy}
         name={project.name}
-        image={project.thumbnailImage || ''}
         projectId={project.id}
         title={project.title}
-        imageDownload={imageDownload}
       />
     </>
   )

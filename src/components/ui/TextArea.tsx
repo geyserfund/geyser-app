@@ -8,6 +8,7 @@ import { toInt } from '../../utils'
 
 const useStyles = createUseStyles({
   inputElement: {
+    borderRadius: '8px',
     borderWidth: '2px',
     '&:focus': {
       borderColor: `${colors.normalLightGreen} !important`,

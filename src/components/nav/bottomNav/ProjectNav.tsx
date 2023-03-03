@@ -21,7 +21,7 @@ import { isActive } from '../../../utils'
 export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
   const { mobileView } = useProjectContext()
 
-  const isScrollingUp = useScrollDirection({
+  const { isScrollingUp } = useScrollDirection({
     initialValue: true,
     mobileView,
   })
@@ -176,11 +176,9 @@ export const ProjectNavUI = () => {
             borderColor={showGreyButton ? 'brand.neutral500' : 'brand.primary'}
             _hover={{}}
             padding="5px"
-            disabled={isFundingDisabled}
+            isDisabled={isFundingDisabled}
             leftIcon={<BsLightningChargeFill />}
-            onClick={() => {
-              handleClick(MobileViews.funding)
-            }}
+            onClick={() => handleClick(MobileViews.funding)}
           >
             Contribute
           </Button>
