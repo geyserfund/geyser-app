@@ -8,7 +8,7 @@ import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { Project, UniqueProjectQueryInput } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
-import { QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE } from '../../projects.graphql'
+import { QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE } from '../projects.graphql'
 import { ProjectFundingStatWithFollow } from './ProjectFundingStatWithFollow'
 import { ProjectRowLayout } from './ProjectRowLayout'
 

@@ -2,11 +2,22 @@ import { HStack } from '@chakra-ui/react'
 
 import { CardLayout, StickToTop } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
+import { useAuthContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { Contributions } from './Contributions'
+import { LoggedOut } from './LoggedOut'
 
 export const LandingFeed = () => {
+  const { isLoggedIn, loading } = useAuthContext()
   const isMobileMode = useMobileMode()
+  if (loading) {
+    return null
+  }
+
+  if (!isLoggedIn) {
+    return <LoggedOut />
+  }
+
   return (
     <>
       {isMobileMode && (
@@ -18,6 +29,8 @@ export const LandingFeed = () => {
           <ActivityTopbar />
         </StickToTop>
       )}
+      {}
+
       <CardLayout w="full" paddingX="0px">
         <Contributions />
       </CardLayout>

@@ -9,7 +9,7 @@ import {
   ProjectsResponse,
   Tag,
 } from '../../../../types'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
+import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 import { LandingProjectCardSkeleton, ProjectDisplayBody } from '../elements'
 
 interface ProjectDisplayProps {

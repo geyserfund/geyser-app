@@ -1,3 +1,4 @@
+import FeedLoggedOutImage from './feedLoggedOut.svg'
 import SatoshiPng from './satoshi.png'
 
-export { SatoshiPng }
+export { FeedLoggedOutImage, SatoshiPng }
