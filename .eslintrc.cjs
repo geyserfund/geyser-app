@@ -58,6 +58,7 @@ module.exports = {
     'no-undef': 0,
     'new-cap': 0,
     'no-alert': 0,
+    'testing-library/render-result-naming-convention': 0,
     'no-restricted-syntax': [
       'off',
       {

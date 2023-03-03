@@ -8,7 +8,11 @@ type Props = {
   mobileBreakpoint: number
 }
 
-export const useMobileMode = (props: Props = { mobileBreakpoint: 900 }) => {
+export const DEFAULT_MOBILE_BREAK_POINT = 900
+
+export const useMobileMode = (
+  props: Props = { mobileBreakpoint: DEFAULT_MOBILE_BREAK_POINT },
+) => {
   const [isMobile] = useMediaQuery(`(max-width: ${props.mobileBreakpoint}px)`)
 
   return isMobile

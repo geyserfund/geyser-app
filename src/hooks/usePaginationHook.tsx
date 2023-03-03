@@ -36,7 +36,7 @@ export const usePaginationHook = <Type,>({
   })
 
   const handleDataUpdate = (data: Type[]) => {
-    if (data && data.length > 0) {
+    if (data) {
       if (data.length < itemLimit) {
         setNoMoreItems(true)
       }
@@ -47,7 +47,8 @@ export const usePaginationHook = <Type,>({
 
       if (
         data.length === itemLimit &&
-        mappedData.length < thresholdNoOfAggregatedResultsToFetchMore &&
+        data.length - mappedData.length >
+          thresholdNoOfAggregatedResultsToFetchMore &&
         !noMoreItems.current
       ) {
         fetchNext()

@@ -523,6 +523,11 @@ export type GetProjectRewardWhereInput = {
   projectId: Scalars['BigInt'];
 };
 
+export type GetProjectsMostFundedOfTheWeekInput = {
+  tagIds: Array<InputMaybe<Scalars['Int']>>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
 export type Grantee = {
   __typename?: 'Grantee';
   id: Scalars['BigInt'];
@@ -1093,6 +1098,7 @@ export type Query = {
   projectRegionsGet: Array<ProjectRegionsGetResult>;
   /** By default, returns a list of all active projects. */
   projects: ProjectsResponse;
+  projectsMostFundedOfTheWeekGet: Array<Maybe<ProjectsMostFundedOfTheWeekGet>>;
   /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary;
   statusCheck: Scalars['Boolean'];
@@ -1173,6 +1179,11 @@ export type QueryProjectArgs = {
 
 export type QueryProjectsArgs = {
   input?: InputMaybe<ProjectsGetQueryInput>;
+};
+
+
+export type QueryProjectsMostFundedOfTheWeekGetArgs = {
+  input?: InputMaybe<GetProjectsMostFundedOfTheWeekInput>;
 };
 
 
@@ -1475,6 +1486,14 @@ export type GetDashboardFundersInput = {
   where?: InputMaybe<GetDashboardFundersWhereInput>;
 };
 
+export type ProjectsMostFundedOfTheWeekGet = {
+  __typename?: 'projectsMostFundedOfTheWeekGet';
+  fundersCount: Scalars['Int'];
+  fundingAmount: Scalars['BigInt'];
+  project: Project;
+  tagId?: Maybe<Scalars['Int']>;
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1616,6 +1635,7 @@ export type ResolversTypes = {
   GetFundingTxsWhereInput: GetFundingTxsWhereInput;
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
+  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
   Grantee: ResolverTypeWrapper<Grantee>;
   GranteeSubmissionResponse: ResolverTypeWrapper<GranteeSubmissionResponse>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -1712,6 +1732,7 @@ export type ResolversTypes = {
   name_String_maxLength_100: ResolverTypeWrapper<Scalars['name_String_maxLength_100']>;
   name_String_minLength_3_maxLength_280: ResolverTypeWrapper<Scalars['name_String_minLength_3_maxLength_280']>;
   name_String_minLength_5_maxLength_60: ResolverTypeWrapper<Scalars['name_String_minLength_5_maxLength_60']>;
+  projectsMostFundedOfTheWeekGet: ResolverTypeWrapper<ProjectsMostFundedOfTheWeekGet>;
   pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<Scalars['pubkey_String_minLength_66_maxLength_66']>;
   quantity_Int_NotNull_min_1: ResolverTypeWrapper<Scalars['quantity_Int_NotNull_min_1']>;
   rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['rewardsCost_Int_NotNull_min_0']>;
@@ -1790,6 +1811,7 @@ export type ResolversParentTypes = {
   GetFundingTxsWhereInput: GetFundingTxsWhereInput;
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
+  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
   Grantee: Grantee;
   GranteeSubmissionResponse: GranteeSubmissionResponse;
   Int: Scalars['Int'];
@@ -1877,6 +1899,7 @@ export type ResolversParentTypes = {
   name_String_maxLength_100: Scalars['name_String_maxLength_100'];
   name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280'];
   name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60'];
+  projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet;
   pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66'];
   quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1'];
   rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0'];
@@ -2286,6 +2309,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectCountriesGet?: Resolver<Array<ResolversTypes['ProjectCountriesGetResult']>, ParentType, ContextType>;
   projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>;
   projects?: Resolver<ResolversTypes['ProjectsResponse'], ParentType, ContextType, Partial<QueryProjectsArgs>>;
+  projectsMostFundedOfTheWeekGet?: Resolver<Array<Maybe<ResolversTypes['projectsMostFundedOfTheWeekGet']>>, ParentType, ContextType, Partial<QueryProjectsMostFundedOfTheWeekGetArgs>>;
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
@@ -2454,6 +2478,14 @@ export interface Name_String_MinLength_5_MaxLength_60ScalarConfig extends GraphQ
   name: 'name_String_minLength_5_maxLength_60';
 }
 
+export type ProjectsMostFundedOfTheWeekGetResolvers<ContextType = any, ParentType extends ResolversParentTypes['projectsMostFundedOfTheWeekGet'] = ResolversParentTypes['projectsMostFundedOfTheWeekGet']> = {
+  fundersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  fundingAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  tagId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface Pubkey_String_MinLength_66_MaxLength_66ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['pubkey_String_minLength_66_maxLength_66'], any> {
   name: 'pubkey_String_minLength_66_maxLength_66';
 }
@@ -2564,6 +2596,7 @@ export type Resolvers<ContextType = any> = {
   name_String_maxLength_100?: GraphQLScalarType;
   name_String_minLength_3_maxLength_280?: GraphQLScalarType;
   name_String_minLength_5_maxLength_60?: GraphQLScalarType;
+  projectsMostFundedOfTheWeekGet?: ProjectsMostFundedOfTheWeekGetResolvers<ContextType>;
   pubkey_String_minLength_66_maxLength_66?: GraphQLScalarType;
   quantity_Int_NotNull_min_1?: GraphQLScalarType;
   rewardsCost_Int_NotNull_min_0?: GraphQLScalarType;

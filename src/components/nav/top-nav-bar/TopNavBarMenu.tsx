@@ -1,6 +1,6 @@
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
-import { Avatar, HStack, MenuDivider } from '@chakra-ui/react'
+import { Avatar, HStack, MenuDivider, Stack } from '@chakra-ui/react'
 import { useColorModeValue } from '@chakra-ui/system'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
@@ -40,14 +40,13 @@ export const TopNavBarMenu = ({
   return (
     <Menu placement="bottom-end">
       <MenuButton
-        px={2.5}
-        py={2.5}
+        padding="5px 8px"
         aria-label="options"
         transition="all 0.2s"
-        maxHeight="40px"
+        maxHeight="32px"
         borderRadius="md"
         color={textColor}
-        backgroundColor="brand.white"
+        backgroundColor="brand.bgWhite"
         _hover={{ backgroundColor: colors.gray200 }}
         border={'1px'}
         borderColor="brand.bgGrey3"
@@ -55,9 +54,9 @@ export const TopNavBarMenu = ({
       >
         <HStack
           color={useColorModeValue('brand.gray500', 'brand.gray200')}
-          background="transparent"
+          spacing="4px"
         >
-          <HamburgerIcon color={'#ADB5BD'} />
+          <HamburgerIcon color={'#ADB5BD'} fontSize="22px" />
 
           {isLoggedIn ? (
             <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
@@ -68,7 +67,7 @@ export const TopNavBarMenu = ({
       <MenuList width="150px">
         {shouldShowSignInMenuItem ? (
           <>
-            <MenuItem px={4} py={2}>
+            <MenuItem as={Stack} px={4} py={2}>
               <ButtonComponent
                 variant="solid"
                 width="100%"
@@ -84,7 +83,7 @@ export const TopNavBarMenu = ({
 
         {shouldShowDashboardMenuItem ? (
           <>
-            <MenuItem px={4} py={2}>
+            <MenuItem as={Stack} px={4} py={2}>
               <ButtonComponent
                 primary
                 variant="solid"
@@ -101,7 +100,7 @@ export const TopNavBarMenu = ({
 
         {shouldShowMyProjectsMenuItem ? (
           <>
-            <MenuItem px={4} py={2}>
+            <MenuItem as={Stack} px={4} py={2}>
               <ButtonComponent
                 primary
                 variant="solid"

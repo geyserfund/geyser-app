@@ -13,7 +13,8 @@ import { useState } from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { CgProfile } from 'react-icons/cg'
 import { FiTag } from 'react-icons/fi'
-import { GrLocation } from 'react-icons/gr'
+import { SlLocationPin } from 'react-icons/sl'
+import { Link } from 'react-router-dom'
 
 import { AmbossIcon, ShareIcon } from '../../../../components/icons'
 import { CardLayout } from '../../../../components/layouts'
@@ -204,7 +205,15 @@ export const Summary = () => {
             >
               <Wrap>
                 {project.tags.map((tag) => {
-                  return <TagBox key={tag.id}>{tag.label}</TagBox>
+                  return (
+                    <Link
+                      key={tag.id}
+                      to={getPath('landingPage')}
+                      state={{ tagId: tag.id }}
+                    >
+                      <TagBox>{tag.label}</TagBox>
+                    </Link>
+                  )
                 })}
               </Wrap>
             </SummaryInfoLine>
@@ -215,14 +224,15 @@ export const Summary = () => {
               label="Region"
               icon={
                 <span>
-                  <GrLocation color={colors.neutral600} fontSize="22px" />
+                  <SlLocationPin color={colors.neutral600} fontSize="22px" />
                 </span>
               }
             >
               <Wrap spacing="5px">
-                {project?.location?.country?.name && (
-                  <TagBox>{project?.location?.country?.name}</TagBox>
-                )}
+                {project?.location?.country?.name &&
+                  project.location.country.name !== 'Online' && (
+                    <TagBox>{project?.location?.country?.name}</TagBox>
+                  )}
                 {project?.location?.region && (
                   <TagBox>{project?.location?.region}</TagBox>
                 )}

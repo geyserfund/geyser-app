@@ -22,6 +22,7 @@ import {
 
 import { getPath, PathName } from '../../../constants'
 import { useAuthContext, useNavContext } from '../../../context'
+import { useScrollDirection } from '../../../hooks'
 import { useMobileMode } from '../../../utils'
 import { AuthModal } from '../../molecules'
 import { ButtonComponent } from '../../ui'
@@ -30,13 +31,9 @@ import { TopNavBarMenu } from './TopNavBarMenu'
 
 const navItems = [
   {
-    name: 'Projects',
-    to: '/discover',
-  },
-  {
     name: 'Grants',
     to: '/grants',
-    new: true,
+    new: false,
   },
   {
     name: 'About',
@@ -62,7 +59,7 @@ const customTitleRoutes = [
 ]
 const navItemsRoutes = [
   `/`,
-  `/${PathName.discover}`,
+  getPath('landingFeed'),
   `/${PathName.grants}`,
   `/${PathName.grants}/roundtwo`,
   `/${PathName.grants}/roundone`,
@@ -91,6 +88,7 @@ const routesForHidingMyProjectsButton = [
 const routesForEnablingSignInButton = [
   getPath('index'),
   getPath('landingPage'),
+  getPath('landingFeed'),
   getPath('projectDiscovery'),
   getPath('grants'),
   getPath('grantsRoundOne'),
@@ -108,10 +106,16 @@ const routesForEnablingSignInButton = [
 const routesForEnablingProjectLaunchButton = [
   getPath('index'),
   getPath('landingPage'),
+  getPath('landingFeed'),
   getPath('grants'),
   getPath('grantsRoundOne'),
   getPath('grantsRoundTwo'),
   getPath('projectDiscovery'),
+]
+
+const routesForTransparentBackground = [
+  getPath('index'),
+  getPath('landingFeed'),
 ]
 
 /**
@@ -180,6 +184,9 @@ export const TopNavBar = () => {
 
   const routesMatchesForShowingCustomTitle = customTitleRoutes.map(useMatch)
   const routesMatchesForShowingNavItems = navItemsRoutes.map(useMatch)
+
+  const routeMatchesForTransaparentBackground =
+    routesForTransparentBackground.map(useMatch)
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -464,6 +471,19 @@ export const TopNavBar = () => {
     })
   }, [routesMatchesForShowingNavItems, isMobile])
 
+  const { scrollTop } = useScrollDirection({
+    elementId: isMobile ? '' : 'app-route-content-root',
+    initialValue: true,
+  })
+  const showHaveTransparentBackground: boolean = useMemo(() => {
+    return (
+      scrollTop <= 50 &&
+      routeMatchesForTransaparentBackground.some((routeMatch) => {
+        return Boolean(routeMatch)
+      })
+    )
+  }, [routeMatchesForTransaparentBackground])
+
   if (shouldTopNavBeHidden) {
     return null
   }
@@ -471,19 +491,21 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={'brand.bgGrey4'}
+        bg={showHaveTransparentBackground ? 'transparent' : 'brand.bgGrey4'}
         px={4}
-        backdropFilter="blur(2px)"
         position="fixed"
         top={0}
         left={0}
         width="full"
         zIndex={1000}
         borderBottom="2px solid"
-        borderBottomColor="brand.neutral100"
+        borderBottomColor={
+          showHaveTransparentBackground ? 'transparent' : 'brand.neutral100'
+        }
+        transition="background 0.5s ease-out"
       >
         <HStack
-          h={16}
+          paddingY="10px"
           alignItems={'center'}
           justifyContent={'space-between'}
           overflow="hidden"
@@ -501,9 +523,9 @@ export const TopNavBar = () => {
           <HStack alignItems={'center'} spacing={2}>
             {shouldShowNavItems ? (
               <Box display={'flex'} alignItems="center" gap={4} mr={4}>
-                {navItems.map((item, idx) => (
-                  <>
-                    {item.name === 'About' ? (
+                {navItems.map((item, idx) => {
+                  if (item.name === 'About') {
+                    return (
                       <a key={idx} href={item.to}>
                         <Text
                           fontWeight={'500'}
@@ -514,40 +536,42 @@ export const TopNavBar = () => {
                           {item.name}
                         </Text>
                       </a>
-                    ) : (
-                      <Link key={idx} to={item.to}>
-                        <Box position="relative" padding="5px 7px">
-                          <Text
-                            fontWeight={'500'}
-                            textDecoration="none"
-                            fontSize="16px"
-                            color={'brand.neutral700'}
-                          >
-                            {item.name}
-                          </Text>
-                          {item.new && (
-                            <Box
-                              rounded="full"
-                              position="absolute"
-                              height="15px"
-                              width="15px"
-                              backgroundColor="brand.primary"
-                              right="-4px"
-                              top="-2px"
-                              zIndex={-1}
-                            />
-                          )}
-                        </Box>
-                      </Link>
-                    )}
-                  </>
-                ))}
+                    )
+                  }
+
+                  return (
+                    <Link key={idx} to={item.to}>
+                      <Box position="relative" padding="5px 7px">
+                        <Text
+                          fontWeight={'500'}
+                          textDecoration="none"
+                          fontSize="16px"
+                          color={'brand.neutral700'}
+                        >
+                          {item.name}
+                        </Text>
+                        {item.new && (
+                          <Box
+                            rounded="full"
+                            position="absolute"
+                            height="15px"
+                            width="15px"
+                            backgroundColor="brand.primary"
+                            right="-4px"
+                            top="-2px"
+                            zIndex={-1}
+                          />
+                        )}
+                      </Box>
+                    </Link>
+                  )
+                })}
               </Box>
             ) : null}
             {shouldShowDashboardButton ? (
               <ButtonComponent
+                size="sm"
                 variant={'solid'}
-                fontSize="md"
                 backgroundColor="brand.primary400"
                 onClick={handleProjectDashboardButtonPress}
               >
@@ -558,7 +582,7 @@ export const TopNavBar = () => {
             {shouldShowMyProjectsButton ? (
               <ButtonComponent
                 variant={'solid'}
-                fontSize="md"
+                size="sm"
                 backgroundColor="brand.primary400"
                 onClick={handleMyProjectsButtonPress}
               >
@@ -569,7 +593,7 @@ export const TopNavBar = () => {
             {shouldShowMyProjectButton ? (
               <ButtonComponent
                 variant={'solid'}
-                fontSize="md"
+                size="sm"
                 backgroundColor="brand.primary400"
                 onClick={handleMyProjectButtonPress}
               >
@@ -580,7 +604,7 @@ export const TopNavBar = () => {
             {shouldShowProjectButton && (
               <ButtonComponent
                 variant={'solid'}
-                fontSize="md"
+                size="sm"
                 backgroundColor="brand.primary400"
                 onClick={handleProjectButtonPress}
               >
@@ -591,7 +615,7 @@ export const TopNavBar = () => {
             {shouldShowProjectLaunchButton ? (
               <ButtonComponent
                 variant={'solid'}
-                fontSize="md"
+                size="sm"
                 backgroundColor="brand.primary400"
                 onClick={handleProjectLaunchButtonPress}
               >
@@ -601,8 +625,8 @@ export const TopNavBar = () => {
 
             {shouldShowSignInButton ? (
               <ButtonComponent
+                size="sm"
                 variant={'solid'}
-                fontSize="md"
                 backgroundColor="white"
                 borderWidth={1}
                 borderColor={'brand.neutral200'}

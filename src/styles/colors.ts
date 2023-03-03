@@ -1,3 +1,15 @@
+export const neutralColors = {
+  50: '#FCFCFC',
+  100: '#F4F4F4',
+  200: '#E9ECEF',
+  300: '#DEE2E6',
+  400: '#CED4DA',
+  500: '#ADB5BD',
+  600: '#6C757D',
+  700: '#495057',
+  800: '#343A40',
+  900: '#212529',
+}
 export const colors = {
   primary: '#20ECC7',
   primaryTint: '#12CEAC',
@@ -49,6 +61,9 @@ export const colors = {
   primary900: '#004236',
 
   secondaryPink: '#FC257A',
+  secondaryYellow: '#FFE600',
+  secondaryRed: '#DF3634',
+  secondaryGold: '#C7BB50',
 
   neutral50: '#FCFCFC',
   neutral100: '#F4F4F4',
@@ -60,8 +75,4 @@ export const colors = {
   neutral700: '#495057',
   neutral800: '#343A40',
   neutral900: '#212529',
-
-  secondaryYellow: '#FFE600',
-  secondaryRed: '#DF3634',
-  secondaryGold: '#C7BB50',
 }
