@@ -1,5 +1,6 @@
 import { GridItem, SimpleGrid, Text } from '@chakra-ui/react'
 
+import { NoDataError } from '../../../../components/errors'
 import { CardLayout } from '../../../../components/layouts'
 import { Project } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
@@ -41,7 +42,7 @@ export const FilteredProjectList = ({
     <CardLayout w="full" spacing="30px" padding="20px">
       {!isMobile && <FilterTopBar />}
       {error ? (
-        <Text> Could not find any results</Text>
+        <NoDataError />
       ) : (
         <SimpleGrid
           columns={{ base: 1, xl: 3 }}
