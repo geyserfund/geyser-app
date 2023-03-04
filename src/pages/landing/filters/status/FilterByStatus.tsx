@@ -62,7 +62,7 @@ export const getStatusTypeButtonContent = ({
     default:
       return {
         icon: ProjectNavIcon,
-        text: 'Active projects',
+        text: 'Active Projects',
         color: 'brand.primary500',
       }
   }
