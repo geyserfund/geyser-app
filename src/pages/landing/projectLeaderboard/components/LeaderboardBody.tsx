@@ -18,8 +18,7 @@ export const LeaderboardBody = ({
   projects,
   ...rest
 }: LeaderboardBodyProps) => {
-  const featuredCard = projects[0]
-  const restOfTheCards = projects.slice(1)
+  const [featuredCard, ...restOfTheCards] = projects
 
   return (
     <VStack width="100%" spacing="10px" {...rest}>
