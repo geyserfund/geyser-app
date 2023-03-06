@@ -1,5 +1,6 @@
 export * from './ActivityView'
 export * from './GradientBanner'
+export * from './LandingEntryCard'
 export * from './LandingPageContributionsList'
 export * from './LandingPageProjectsList'
 export * from './LandingPageProjectsListItem'

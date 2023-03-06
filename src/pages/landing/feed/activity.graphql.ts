@@ -73,6 +73,19 @@ export const RewardQueryParametersForLandingPage = `{
   rewardName: name
   sold
   stock
+  rewardProject: project {
+    id
+    name
+    title
+    owners {
+      id
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+  }
 }`
 
 export const QUERY_ACTIVITIES_FOR_LANDING_PAGE = gql`

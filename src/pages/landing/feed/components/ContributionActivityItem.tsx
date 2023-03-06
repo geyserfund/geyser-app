@@ -55,13 +55,7 @@ export const ContributionActivityItem = ({
   })
 
   return (
-    <Box
-      w="full"
-      bg={useColorModeValue('white', 'gray.900')}
-      px={'26px'}
-      py={'10px'}
-      {...rest}
-    >
+    <Box w="full" bg={useColorModeValue('white', 'gray.900')} {...rest}>
       <VStack flexDirection="column" spacing={'6px'} overflow={'hidden'}>
         {/* Funding Stats Header */}
 

@@ -43,6 +43,7 @@ export const ActivityFeed = () => {
 
         if (activity.resource.__typename === ActivityResource.projectReward) {
           newActivity.resource.name = activity.resource.rewardName
+          newActivity.resource.project = activity.resource.rewardProject
         }
 
         return newActivity
@@ -73,8 +74,9 @@ export const ActivityFeed = () => {
       <VStack
         alignItems={'center'}
         width="full"
-        spacing={'12px'}
+        spacing={'20px'}
         maxWidth="500px"
+        paddingX="10px"
       >
         <ActivityList activities={activities} />
       </VStack>

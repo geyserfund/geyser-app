@@ -1,18 +1,18 @@
 import { HStack, VStack } from '@chakra-ui/react'
 
 import { Body2 } from '../../../../components/typography'
-import { Project } from '../../../../types'
+import { Entry } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
-import { LandingProjectCard } from '../../components'
+import { LandingEntryCard } from '../../components'
 
-export const ProjectActivityItem = ({ project }: { project: Project }) => {
+export const EntryActivityItem = ({ entry }: { entry: Entry }) => {
   return (
     <VStack w="full">
       <HStack w="full" justifyContent="start">
-        <AvatarElement rounded="full" user={project.owners[0].user} />
+        <AvatarElement rounded="full" user={entry.creator} />
         <Body2>published a new entry</Body2>
       </HStack>
-      <LandingProjectCard project={project} isMobile />
+      <LandingEntryCard entry={entry} isMobile />
     </VStack>
   )
 }
