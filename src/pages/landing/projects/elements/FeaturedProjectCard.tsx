@@ -8,8 +8,8 @@ import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { Project, UniqueProjectQueryInput } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
+import { FundingStatWithFollow } from '../../components/FundingStatWithFollow'
 import { QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE } from '../projects.graphql'
-import { ProjectFundingStatWithFollow } from './ProjectFundingStatWithFollow'
 import { ProjectRowLayout } from './ProjectRowLayout'
 
 export const FeaturedProjectCard = ({
@@ -85,12 +85,13 @@ export const FeaturedProjectCard = ({
           <H3 color="brand.neutral800" isTruncated whiteSpace="normal">
             {project.shortDescription}
           </H3>
-          <ProjectFundingStatWithFollow
+          <FundingStatWithFollow
             flex={1}
             pb={1}
             align={'flex-end'}
             justifyContent={'space-between'}
-            project={project}
+            fundersCount={project.fundersCount || 0}
+            amountFunded={project.balance}
             bold
           />
         </VStack>

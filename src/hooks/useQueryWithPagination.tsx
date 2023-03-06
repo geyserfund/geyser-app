@@ -42,6 +42,7 @@ export const useQueryWithPagination = <Type,>({
     },
     ...options,
     onCompleted(data) {
+      console.log('checking data', data)
       const resultItems = getNestedValue(data, queryName)
       handleDataUpdate(resultItems)
       if (options && options.onCompleted) {

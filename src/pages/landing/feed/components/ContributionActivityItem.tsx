@@ -56,6 +56,7 @@ export const ContributionActivityItem = ({
 
   return (
     <Box
+      w="full"
       bg={useColorModeValue('white', 'gray.900')}
       px={'26px'}
       py={'10px'}

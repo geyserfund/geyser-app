@@ -4,7 +4,10 @@ import { NoDataError } from '../../../../components/errors'
 import { CardLayout } from '../../../../components/layouts'
 import { Project } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
-import { LandingProjectCard, LandingProjectCardSkeleton } from '../elements'
+import {
+  LandingProjectCard,
+  LandingProjectCardSkeleton,
+} from '../../components'
 import { FilterTopBar } from './FilterTopBar'
 
 interface FilteredProjectListProps {

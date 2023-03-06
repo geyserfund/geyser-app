@@ -9,8 +9,9 @@ import {
   ProjectsResponse,
   Tag,
 } from '../../../../types'
+import { LandingProjectCardSkeleton } from '../../components'
+import { ProjectDisplayBody } from '../elements'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
-import { LandingProjectCardSkeleton, ProjectDisplayBody } from '../elements'
 
 interface ProjectDisplayProps {
   tag?: Tag

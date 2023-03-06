@@ -4,6 +4,7 @@ import { CardLayout, StickToTop } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { useAuthContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
+import { ActivityFeed } from './ActivityFeed'
 import { Contributions } from './Contributions'
 import { LoggedOut } from './views/LoggedOut'
 
@@ -32,7 +33,7 @@ export const LandingFeed = () => {
       {}
 
       <CardLayout w="full" paddingX="0px">
-        <Contributions />
+        <ActivityFeed />
       </CardLayout>
     </>
   )

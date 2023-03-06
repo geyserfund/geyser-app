@@ -1,27 +1,28 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { HStack, Image, StackProps, Text, VStack } from '@chakra-ui/react'
 
-import { SatoshiPng } from '../../../../assets'
-import { MonoBody1 } from '../../../../components/typography'
-import { IconButtonComponent } from '../../../../components/ui'
-import { fonts } from '../../../../styles'
-import { Project } from '../../../../types'
-import { getShortAmountLabel } from '../../../../utils'
+import { SatoshiPng } from '../../../assets'
+import { MonoBody1 } from '../../../components/typography'
+import { IconButtonComponent } from '../../../components/ui'
+import { fonts } from '../../../styles'
+import { getShortAmountLabel } from '../../../utils'
 
-interface ProjectFundingStatWithFollowProps extends StackProps {
-  project: Project
+interface FundingStatWithFollowProps extends StackProps {
+  fundersCount: number
+  amountFunded: number
   bold?: boolean
 }
 
-export const ProjectFundingStatWithFollow = ({
-  project,
+export const FundingStatWithFollow = ({
   bold,
+  fundersCount,
+  amountFunded,
   ...rest
-}: ProjectFundingStatWithFollowProps) => {
+}: FundingStatWithFollowProps) => {
   return (
     <HStack direction={'row'} spacing="20px" {...rest}>
       <VStack alignItems={'center'} spacing={0}>
-        <MonoBody1 bold={bold}>{project.fundersCount}</MonoBody1>
+        <MonoBody1 bold={bold}>{fundersCount}</MonoBody1>
 
         <Text
           fontSize="12px"
@@ -36,9 +37,7 @@ export const ProjectFundingStatWithFollow = ({
       <VStack alignItems={'center'} spacing={0}>
         <HStack spacing="3px">
           <Image src={SatoshiPng} height="18px" />
-          <MonoBody1 bold={bold}>
-            {getShortAmountLabel(project.balance)}
-          </MonoBody1>
+          <MonoBody1 bold={bold}>{getShortAmountLabel(amountFunded)}</MonoBody1>
         </HStack>
         <Text
           fontSize="12px"
