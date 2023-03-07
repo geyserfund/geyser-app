@@ -32,10 +32,10 @@ export const DesktopActivityFilter = ({
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const handleClear = () => {
-    updateFilter({ status: undefined, type: undefined })
+    updateFilter({ activity: undefined })
   }
 
-  const isSelected = filters.type || filters.status
+  const isSelected = filters.activity
 
   return (
     <>

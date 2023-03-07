@@ -1,9 +1,9 @@
 import { Icon } from '@chakra-ui/react'
+import { BsCardText } from 'react-icons/bs'
 import { FaHeart } from 'react-icons/fa'
 
 import {
   EntryEditIcon,
-  FeedNavIcon,
   ProjectNavIcon,
   RewardGiftIcon,
 } from '../../../../components/icons'
@@ -63,7 +63,7 @@ export const getActivityButtonContent = (
 
     default:
       return {
-        icon: FeedNavIcon,
+        icon: (props) => <Icon fontSize="20px" as={BsCardText} {...props} />,
         text: 'All activity',
         color: 'brand.neutral600',
       }

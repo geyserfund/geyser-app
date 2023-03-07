@@ -105,10 +105,7 @@ export const LandingNavBar = () => {
                 display="flex"
                 flexDirection="column"
               >
-                <Icon
-                  boxSize={8}
-                  color={isActive ? 'black' : colors.neutral500}
-                />
+                <Icon color={isActive ? 'black' : colors.neutral500} />
                 <Caption
                   semiBold
                   color={isActive ? 'black' : colors.neutral500}
