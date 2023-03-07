@@ -9,7 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
-import { H3 } from '../../../components/typography'
+import { Body2, H3 } from '../../../components/typography'
 import { ImageWithReload } from '../../../components/ui'
 import { getPath } from '../../../constants'
 import { Project } from '../../../types'
@@ -19,11 +19,13 @@ import { FundingStatWithFollow } from './FundingStatWithFollow'
 interface LandingProjectCardProps extends CardLayoutProps {
   project: Project
   isMobile?: boolean
+  showDescription?: boolean
 }
 
 export const LandingProjectCard = ({
   project,
   isMobile,
+  showDescription,
   ...rest
 }: LandingProjectCardProps) => {
   const navigate = useNavigate()
@@ -46,8 +48,8 @@ export const LandingProjectCard = ({
       {...rest}
     >
       <Box
-        width={getResponsiveValue({ base: '125px', xl: 'full' })}
-        height={getResponsiveValue({ base: '125px', xl: '200px' })}
+        width={getResponsiveValue({ base: '150px', xl: 'full' })}
+        height={getResponsiveValue({ base: 'auto', xl: '200px' })}
       >
         <ImageWithReload
           grey
@@ -69,6 +71,17 @@ export const LandingProjectCard = ({
         <H3 isTruncated width="100%">
           {project.title}
         </H3>
+        {showDescription && (
+          <Body2
+            color="neutral.800"
+            noOfLines={2}
+            width="100%"
+            isTruncated
+            whiteSpace="normal"
+          >
+            {project.shortDescription}
+          </Body2>
+        )}
         <Box width="100%" overflow="hidden">
           <AvatarElement
             borderRadius="50%"

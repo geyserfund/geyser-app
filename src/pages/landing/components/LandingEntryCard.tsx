@@ -41,8 +41,8 @@ export const LandingEntryCard = ({
       {...rest}
     >
       <Box
-        width={getResponsiveValue({ base: '125px', xl: 'full' })}
-        height={getResponsiveValue({ base: '125px', xl: '200px' })}
+        width={getResponsiveValue({ base: '150px', xl: 'full' })}
+        height={getResponsiveValue({ base: 'auto', xl: '200px' })}
       >
         <ImageWithReload
           grey

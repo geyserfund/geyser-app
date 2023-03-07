@@ -3,12 +3,13 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
 import { Project } from '../../../../types'
-import { LandingProjectCard } from '../../components'
+import { LandingProjectCard, TimeAgo } from '../../components'
 
 export const ProjectActivityItem = ({ project }: { project: Project }) => {
   const owner = project.owners[0].user
+
   return (
-    <VStack w="full">
+    <VStack w="full" alignItems="start">
       <HStack w="full" justifyContent="start">
         <LinkableAvatar
           imageSrc={`${owner.imageUrl}`}
@@ -19,7 +20,8 @@ export const ProjectActivityItem = ({ project }: { project: Project }) => {
         />
         <Body2>launched a new Project</Body2>
       </HStack>
-      <LandingProjectCard project={project} isMobile />
+      <LandingProjectCard project={project} isMobile showDescription />
+      <TimeAgo date={project.createdAt || ''} />
     </VStack>
   )
 }

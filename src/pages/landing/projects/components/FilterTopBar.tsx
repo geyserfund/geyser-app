@@ -4,7 +4,6 @@ import { HStack, StackProps, Wrap } from '@chakra-ui/react'
 import { HiOutlineTag } from 'react-icons/hi'
 import { SlLocationPin } from 'react-icons/sl'
 
-import Loader from '../../../../components/ui/Loader'
 import { useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import { colors } from '../../../../styles'
@@ -42,7 +41,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
   }>(QUERY_COUNTRIES)
 
   if (tagsLoading || countriesLoading) {
-    return <Loader />
+    return null
   }
 
   const handleClearTag = (tagId: number) => {

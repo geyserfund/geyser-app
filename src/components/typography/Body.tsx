@@ -3,7 +3,7 @@ import { Text, TextProps } from '@chakra-ui/react'
 import { fonts } from '../../styles'
 import { useMobileMode } from '../../utils'
 
-interface BodyProps extends TextProps {
+export interface BodyProps extends TextProps {
   semiBold?: boolean
   bold?: boolean
   to?: string

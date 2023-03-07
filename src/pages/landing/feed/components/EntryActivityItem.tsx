@@ -4,12 +4,12 @@ import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { Entry } from '../../../../types'
-import { LandingEntryCard } from '../../components'
+import { LandingEntryCard, TimeAgo } from '../../components'
 
 export const EntryActivityItem = ({ entry }: { entry: Entry }) => {
   const { creator } = entry
   return (
-    <VStack w="full">
+    <VStack w="full" alignItems="start">
       <HStack w="full" justifyContent="start">
         <LinkableAvatar
           imageSrc={`${creator.imageUrl}`}
@@ -31,6 +31,7 @@ export const EntryActivityItem = ({ entry }: { entry: Entry }) => {
         </Body2>
       </HStack>
       <LandingEntryCard entry={entry} isMobile />
+      <TimeAgo date={`${entry.publishedAt}`} />
     </VStack>
   )
 }

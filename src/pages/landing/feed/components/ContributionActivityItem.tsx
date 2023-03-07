@@ -15,25 +15,24 @@ import { ExternalAccountLinkIcon } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
 import {
   AnonymousAvatar,
+  AvatarLink,
   LinkableAvatar,
-  ProjectAvatarLink,
 } from '../../../../components/ui'
+import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
-import { FundingTx, Project } from '../../../../types/generated/graphql'
-import { getDaysAgo } from '../../../../utils'
+import { FundingTx } from '../../../../types/generated/graphql'
+import { getDaysAgo, toSmallImageUrl } from '../../../../utils'
 import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx
   showsProjectLink?: boolean
-  linkedProject?: Project
   count?: number
 }
 
 export const ContributionActivityItem = ({
   fundingTx,
-  linkedProject,
   count,
   ...rest
 }: Props) => {
@@ -53,6 +52,30 @@ export const ContributionActivityItem = ({
       fundingTx.sourceResource?.createdAt || '',
     funder,
   })
+
+  const renderResource = () => {
+    const resource = fundingTx.sourceResource
+    switch (resource?.__typename) {
+      case 'Project':
+        return (
+          <AvatarLink
+            title={resource.title}
+            path={getPath('project', resource.name)}
+            imageSrc={toSmallImageUrl(`${resource.thumbnailImage}`)}
+          />
+        )
+      case 'Entry':
+        return (
+          <AvatarLink
+            title={resource.title}
+            path={getPath('project', resource.id)}
+            imageSrc={toSmallImageUrl(`${resource.image}`)}
+          />
+        )
+      default:
+        return null
+    }
+  }
 
   return (
     <Box w="full" bg={useColorModeValue('white', 'gray.900')} {...rest}>
@@ -139,12 +162,12 @@ export const ContributionActivityItem = ({
 
             <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
-            {linkedProject ? (
+            {fundingTx.sourceResource && (
               <>
                 <Text>▶</Text>
-                <ProjectAvatarLink project={linkedProject} />
+                {renderResource()}
               </>
-            ) : null}
+            )}
           </HStack>
         </Stack>
       </VStack>
