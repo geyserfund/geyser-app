@@ -2,7 +2,12 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { disableSortByTrending } from '../pages/landing/filters/sort'
-import { ProjectsOrderByInput, ProjectStatus, ProjectType } from '../types'
+import {
+  ActivityResourceType,
+  ProjectsOrderByInput,
+  ProjectStatus,
+  ProjectType,
+} from '../types'
 import { toInt } from '../utils'
 
 export type FilterType = {
@@ -13,6 +18,7 @@ export type FilterType = {
   type?: ProjectType
   tagIds?: number[]
   recent?: boolean
+  activity?: ActivityResourceType
 }
 
 export type SortType = { recent?: boolean } & ProjectsOrderByInput

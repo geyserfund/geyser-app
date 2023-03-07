@@ -12,7 +12,7 @@ export const RewardActivityItem = ({ reward }: { reward: ProjectReward }) => {
 
   return (
     <VStack w="full">
-      <HStack w="full" justifyContent="start" flexWrap="wrap">
+      <HStack w="full" justifyContent="start">
         <LinkableAvatar
           imageSrc={`${owner.imageUrl}`}
           avatarUsername={owner.username}
@@ -21,11 +21,16 @@ export const RewardActivityItem = ({ reward }: { reward: ProjectReward }) => {
           textColor="brand.neutral600"
         />
         <Body2>created a new reward for</Body2>
-        <Link to={getPath('project', reward.project.name)}>
-          <Body2 semiBold _hover={{ textDecoration: 'underline' }}>
-            {reward.project.title}
-          </Body2>
-        </Link>
+        <Body2
+          as={Link}
+          to={getPath('project', reward.project.name)}
+          semiBold
+          _hover={{ textDecoration: 'underline' }}
+          isTruncated
+          flex={1}
+        >
+          {reward.project.title}
+        </Body2>
       </HStack>
       <RewardItem reward={reward} />
     </VStack>

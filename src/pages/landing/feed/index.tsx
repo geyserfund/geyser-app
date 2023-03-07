@@ -4,6 +4,7 @@ import { CardLayout, StickToTop } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { useAuthContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
+import { MobileTopBar } from '../filters/mobile/MobileTopBar'
 import { ActivityFeed } from './ActivityFeed'
 import { LoggedOut } from './views/LoggedOut'
 
@@ -26,10 +27,9 @@ export const LandingFeed = () => {
           width="100%"
           _onStick={{ width: 'calc(100% - 20px)' }}
         >
-          <ActivityTopbar />
+          <MobileTopBar title="Activity" subTitle="Filter" />
         </StickToTop>
       )}
-      {}
 
       <CardLayout w="full" paddingX="0px">
         <ActivityFeed />

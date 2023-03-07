@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Box, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { H2, H3 } from '../../../../components/typography'
@@ -17,6 +17,7 @@ export const FeaturedProjectCard = ({
 }: {
   projectName: string
 }) => {
+  const navigate = useNavigate()
   const { data, loading } = useQuery<
     { project: Project },
     { where: UniqueProjectQueryInput }
@@ -49,8 +50,7 @@ export const FeaturedProjectCard = ({
         alignItems="start"
         spacing="20px"
         padding="0px"
-        as={Link}
-        to={getPath('project', projectName)}
+        onClick={() => navigate(getPath('project', projectName))}
       >
         <Box
           width={{ base: '100%', sm: '55%' }}
@@ -92,6 +92,7 @@ export const FeaturedProjectCard = ({
             justifyContent={'space-between'}
             fundersCount={project.fundersCount || 0}
             amountFunded={project.balance}
+            projectId={project.id}
             bold
           />
         </VStack>

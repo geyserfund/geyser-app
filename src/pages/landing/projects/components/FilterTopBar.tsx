@@ -10,15 +10,28 @@ import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import { colors } from '../../../../styles'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
+import { getActivityButtonContent } from '../../filters/activity'
 import { SortMenu } from '../../filters/sort/SortMenu'
 import { getStatusTypeButtonContent } from '../../filters/status'
 import { TagComponent } from '../elements'
 
-export const FilterTopBar = (props: StackProps) => {
+interface FilterTopBarProps extends StackProps {
+  noSort?: boolean
+}
+
+export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
   const { filters, updateFilter } = useFilterContext()
   const isMobile = useMobileMode()
 
-  const { tagIds = [], region, countryCode, search, type, status } = filters
+  const {
+    tagIds = [],
+    region,
+    countryCode,
+    search,
+    type,
+    status,
+    activity,
+  } = filters
 
   const { loading: tagsLoading, data } = useQuery<{ tagsGet: TagsGetResult[] }>(
     QUERY_TAGS,
@@ -120,16 +133,33 @@ export const FilterTopBar = (props: StackProps) => {
     )
   }
 
+  const renderFilterActivity = () => {
+    if (!activity) {
+      return null
+    }
+
+    const { icon: Icon, text, color } = getActivityButtonContent(activity)
+    return (
+      <TagComponent
+        label={text}
+        icon={<Icon height="20px" color={color} />}
+        onClick={() => updateFilter({ activity: undefined })}
+      />
+    )
+  }
+
   const viewFilterSearch = renderFilterSearch()
   const viewFilterStatusType = renderFilterStatusType()
   const viewFilterTags = renderFilterTags()
   const viewFilterRegion = renderFilterRegion()
+  const viewFilterActivity = renderFilterActivity()
 
   if (
     (!isMobile && viewFilterSearch) ||
     viewFilterStatusType ||
     viewFilterTags ||
     viewFilterRegion ||
+    viewFilterActivity ||
     (!isMobile && filters.recent)
   ) {
     return (
@@ -137,15 +167,16 @@ export const FilterTopBar = (props: StackProps) => {
         width="100%"
         justifyContent="space-between"
         alignItems="start"
-        {...props}
+        {...rest}
       >
         <Wrap>
+          {viewFilterActivity}
           {viewFilterSearch}
           {viewFilterStatusType}
           {viewFilterTags}
           {viewFilterRegion}
         </Wrap>
-        {!isMobile && <SortMenu />}
+        {!isMobile && !noSort && <SortMenu />}
       </HStack>
     )
   }

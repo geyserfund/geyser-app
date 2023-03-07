@@ -4,7 +4,7 @@ import { StickToTop } from '../../../components/layouts'
 import { useFilterContext } from '../../../context'
 import { checkKeyValueExists, useMobileMode } from '../../../utils'
 import { FilterBySearch } from '../filters/FilterBySearch'
-import { ProjectsTopBar } from './components'
+import { MobileTopBar } from '../filters/mobile/MobileTopBar'
 import { DefaultView, PaginatedView, TrendingView } from './views'
 
 export const LandingPageProjects = () => {
@@ -55,7 +55,7 @@ export const LandingPageProjects = () => {
             width="100%"
             _onStick={{ width: 'calc(100% - 20px)' }}
           >
-            <ProjectsTopBar />
+            <MobileTopBar title="Projects" />
           </StickToTop>
           <FilterBySearch />
         </>

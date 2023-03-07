@@ -1,5 +1,5 @@
 import { Box, VStack } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { H3 } from '../../../components/typography'
@@ -20,6 +20,8 @@ export const LandingEntryCard = ({
   isMobile,
   ...rest
 }: LandingEntryCardProps) => {
+  const navigate = useNavigate()
+
   const getResponsiveValue = (value: any) => {
     if (isMobile) {
       return { base: value.base }
@@ -31,8 +33,7 @@ export const LandingEntryCard = ({
   return (
     <CardLayout
       hover
-      as={Link}
-      to={getPath('entry', entry.id)}
+      onClick={() => navigate(getPath('entry', entry.id))}
       padding="0px"
       width={getResponsiveValue({ base: 'full', xl: '240px' })}
       direction={getResponsiveValue({ base: 'row', xl: 'column' })}
@@ -69,6 +70,7 @@ export const LandingEntryCard = ({
         <FundingStatWithFollow
           fundersCount={entry.fundersCount}
           amountFunded={entry.amountFunded}
+          projectId={entry.project?.id}
           width="100%"
           justifyContent={
             isMobile

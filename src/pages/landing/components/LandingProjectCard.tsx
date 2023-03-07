@@ -6,7 +6,7 @@ import {
   SkeletonText,
   VStack,
 } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { H3 } from '../../../components/typography'
@@ -26,6 +26,7 @@ export const LandingProjectCard = ({
   isMobile,
   ...rest
 }: LandingProjectCardProps) => {
+  const navigate = useNavigate()
   const getResponsiveValue = (value: any) => {
     if (isMobile) {
       return { base: value.base }
@@ -37,8 +38,7 @@ export const LandingProjectCard = ({
   return (
     <CardLayout
       hover
-      as={Link}
-      to={getPath('project', project.name)}
+      onClick={() => navigate(getPath('project', project.name))}
       padding="0px"
       width={getResponsiveValue({ base: 'full', xl: '240px' })}
       direction={getResponsiveValue({ base: 'row', xl: 'column' })}
@@ -80,6 +80,7 @@ export const LandingProjectCard = ({
           width="100%"
           fundersCount={project.fundersCount || 0}
           amountFunded={project.balance}
+          projectId={project.id}
           justifyContent={{
             base: 'space-between',
             sm: 'start',

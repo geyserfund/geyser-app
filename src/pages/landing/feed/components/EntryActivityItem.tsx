@@ -1,7 +1,8 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { HStack, Link, VStack } from '@chakra-ui/react'
 
 import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
+import { getPath } from '../../../../constants'
 import { Entry } from '../../../../types'
 import { LandingEntryCard } from '../../components'
 
@@ -17,7 +18,17 @@ export const EntryActivityItem = ({ entry }: { entry: Entry }) => {
           imageSize={'24px'}
           textColor="brand.neutral600"
         />
-        <Body2>published a new entry</Body2>
+        <Body2>published a new entry for</Body2>
+        <Body2
+          as={Link}
+          to={getPath('project', entry.project?.name)}
+          semiBold
+          _hover={{ textDecoration: 'underline' }}
+          isTruncated
+          flex={1}
+        >
+          {entry.project?.title}
+        </Body2>
       </HStack>
       <LandingEntryCard entry={entry} isMobile />
     </VStack>

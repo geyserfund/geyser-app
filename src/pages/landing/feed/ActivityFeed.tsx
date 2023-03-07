@@ -2,10 +2,12 @@ import { Divider, VStack } from '@chakra-ui/react'
 
 import { AlertBox } from '../../../components/ui'
 import { ID } from '../../../constants/components'
+import { useAuthContext, useFilterContext } from '../../../context'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
 import { Activity } from '../../../types/generated/graphql'
 import { useMobileMode } from '../../../utils'
+import { FilterTopBar } from '../projects/components'
 import {
   ActivityResource,
   QUERY_ACTIVITIES_FOR_LANDING_PAGE,
@@ -17,6 +19,10 @@ const itemLimit = 50
 
 export const ActivityFeed = () => {
   const isMobile = useMobileMode()
+  const { followedProjects } = useAuthContext()
+  const { filters } = useFilterContext()
+  const { activity, tagIds, region, countryCode } = filters
+
   const {
     isLoading,
     isLoadingMore,
@@ -47,6 +53,13 @@ export const ActivityFeed = () => {
       })
       return newActivities
     },
+    where: {
+      countryCode,
+      region,
+      resourceType: activity,
+      tagIds,
+      projectIds: followedProjects.map((project) => project.id),
+    },
   })
 
   if (error) {
@@ -64,8 +77,6 @@ export const ActivityFeed = () => {
     return <ContributionsSkeleton />
   }
 
-  console.log('checking activities', activities)
-
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
       <VStack
@@ -75,6 +86,7 @@ export const ActivityFeed = () => {
         maxWidth="500px"
         paddingX="10px"
       >
+        {!isMobile && <FilterTopBar noSort />}
         <ActivityList activities={activities} />
       </VStack>
 
