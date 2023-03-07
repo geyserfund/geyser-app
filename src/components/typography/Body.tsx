@@ -14,7 +14,7 @@ export const Body1 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
   return (
     <Text
       fontSize={isMobile ? '14px' : '16px'}
-      fontWeight={bold ? 600 : semiBold ? 500 : 400}
+      fontWeight={bold ? 600 : semiBold ? 500 : 'inherited'}
       fontFamily={fonts.inter}
       {...rest}
     >
@@ -28,7 +28,7 @@ export const Body2 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
   return (
     <Text
       fontSize={isMobile ? '12px' : '14px'}
-      fontWeight={bold ? 600 : semiBold ? 500 : 400}
+      fontWeight={bold ? 600 : semiBold ? 500 : 'inherited'}
       fontFamily={fonts.inter}
       {...rest}
     >
@@ -41,7 +41,7 @@ export const Caption = ({ children, bold, semiBold, ...rest }: BodyProps) => {
   return (
     <Text
       fontSize="10px"
-      fontWeight={bold ? 600 : semiBold ? 500 : 400}
+      fontWeight={bold ? 600 : semiBold ? 500 : 'inherited'}
       fontFamily={fonts.inter}
       {...rest}
     >

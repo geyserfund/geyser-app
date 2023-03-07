@@ -62,6 +62,7 @@ export const EntryQueryParametersForLandingPage = `{
   creator {
     id
     imageUrl
+    username
   }
 }`
 

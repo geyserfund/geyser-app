@@ -61,7 +61,7 @@ export const ContributionActivityItem = ({
 
         <Box display="flex" justifyContent="space-between" width={'full'}>
           {/* Funder Avatar */}
-          <HStack>
+          <HStack w="100%">
             {isFunderAnonymous ? (
               <HStack spacing={2}>
                 <AnonymousAvatar
@@ -76,9 +76,8 @@ export const ContributionActivityItem = ({
                 imageSrc={funder.user?.imageUrl || ''}
                 avatarUsername={funder.user?.username || ''}
                 userProfileID={funder.user?.id}
-                fontSize={'14px'}
-                imageSize={'20px'}
-                textColor="brand.neutral900"
+                imageSize={'24px'}
+                textColor="brand.neutral600"
                 badgeNames={funderBadges.map((badge) => badge.badge)}
                 badgeElements={renderFunderBadges(funderBadges)}
               />

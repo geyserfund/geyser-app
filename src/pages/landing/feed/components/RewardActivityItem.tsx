@@ -1,18 +1,31 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2 } from '../../../../components/typography'
-import { ImageWithReload } from '../../../../components/ui'
+import { ImageWithReload, LinkableAvatar } from '../../../../components/ui'
+import { getPath } from '../../../../constants'
 import { ProjectReward } from '../../../../types'
-import { AvatarElement } from '../../../projectView/projectMainBody/components'
 
 export const RewardActivityItem = ({ reward }: { reward: ProjectReward }) => {
+  const owner = reward.project.owners[0].user
+
   return (
     <VStack w="full">
       <HStack w="full" justifyContent="start" flexWrap="wrap">
-        <AvatarElement rounded="full" user={reward.project.owners[0].user} />
+        <LinkableAvatar
+          imageSrc={`${owner.imageUrl}`}
+          avatarUsername={owner.username}
+          userProfileID={owner.id}
+          imageSize={'24px'}
+          textColor="brand.neutral600"
+        />
         <Body2>created a new reward for</Body2>
-        <Body2 semiBold>{reward.project.title}</Body2>
+        <Link to={getPath('project', reward.project.name)}>
+          <Body2 semiBold _hover={{ textDecoration: 'underline' }}>
+            {reward.project.title}
+          </Body2>
+        </Link>
       </HStack>
       <RewardItem reward={reward} />
     </VStack>
@@ -30,7 +43,7 @@ export const RewardItem = ({ reward }: { reward: ProjectReward }) => {
     >
       {reward.image && (
         <Box w="full" height="210px">
-          <ImageWithReload grey src={`${reward.image}`} />
+          <ImageWithReload w="full" h="full" grey src={`${reward.image}`} />
         </Box>
       )}
       <VStack w="full" padding="10px" alignItems="start">

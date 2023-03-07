@@ -60,6 +60,8 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     if (location.state?.tagId) {
       updateFilter({ tagIds: [toInt(location.state?.tagId)] })
       navigate('', { state: null })
+    } else {
+      setFilters({})
     }
   }, [location])
 
