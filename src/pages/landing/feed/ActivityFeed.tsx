@@ -4,10 +4,7 @@ import { AlertBox } from '../../../components/ui'
 import { ID } from '../../../constants/components'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
-import {
-  Activity,
-  ActivityResourceType,
-} from '../../../types/generated/graphql'
+import { Activity } from '../../../types/generated/graphql'
 import { useMobileMode } from '../../../utils'
 import {
   ActivityResource,

@@ -1,11 +1,4 @@
-import {
-  Box,
-  HStack,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
