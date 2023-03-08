@@ -15,11 +15,12 @@ import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 
 interface ProjectDisplayProps {
   tag?: Tag
+  seeAllText?: string
 }
 
 const NO_OF_PROJECT_TO_LOAD = 3
 
-export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
+export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
   const { updateFilter, updateSort } = useFilterContext()
 
   const { data, loading } = useQuery<
@@ -63,6 +64,7 @@ export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
       subtitle={tag?.label ? 'Trending in' : ''}
       projects={projectList}
       onSeeAllClick={onSeeAllClick}
+      seeAllText={seeAllText}
     />
   )
 }
