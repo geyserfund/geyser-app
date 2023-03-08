@@ -37,7 +37,7 @@ export const ActivityList = ({ activities }: { activities: Activity[] }) => {
         return (
           <>
             {renderActivity(activity)}
-            {index < activities.length && (
+            {index < activities.length - 1 && (
               <Divider
                 borderBottomWidth="2px"
                 maxWidth="500px"

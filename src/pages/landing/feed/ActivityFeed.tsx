@@ -77,7 +77,7 @@ export const ActivityFeed = () => {
     return <ContributionsSkeleton />
   }
 
-  if (followedProjects.length === 0) {
+  if (followedProjects.length === 0 || activities.length === 0) {
     return <NoFollowedProjects />
   }
 
