@@ -100,7 +100,6 @@ export const StickToTop = ({
     : {}
 
   const palceholderId = `${id}-placeholder`
-
   return (
     <>
       <Box
@@ -116,7 +115,10 @@ export const StickToTop = ({
         {children}
       </Box>
       {stick.current && (
-        <Box id={palceholderId} height={containerRef.current?.offsetHeight} />
+        <Box
+          id={palceholderId}
+          height={`${containerRef.current?.offsetHeight}px`}
+        />
       )}
     </>
   )
