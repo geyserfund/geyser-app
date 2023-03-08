@@ -77,7 +77,7 @@ export const ActivityFeed = () => {
     return <ContributionsSkeleton />
   }
 
-  if (followedProjects.length === 0 || activities.length === 0) {
+  if (followedProjects.length === 0) {
     return <NoFollowedProjects />
   }
 
@@ -90,7 +90,7 @@ export const ActivityFeed = () => {
         maxWidth="500px"
         paddingX="10px"
       >
-        {!isMobile && <FilterTopBar noSort />}
+        {!isMobile && <FilterTopBar noSort paddingBottom="20px" />}
         <ActivityList activities={activities} />
       </VStack>
 

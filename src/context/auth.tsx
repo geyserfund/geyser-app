@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (initialLoad) {
-      setLoading(loadingUser)
+      setLoading(loadingUser || loadingUserProjectFollows)
     }
   }, [loadingUser])
 
