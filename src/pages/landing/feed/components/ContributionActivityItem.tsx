@@ -163,10 +163,14 @@ export const ContributionActivityItem = ({
             <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
             {fundingTx.sourceResource && (
-              <>
+              <HStack
+                backgroundColor="neutral.100"
+                padding="2px 10px"
+                borderRadius="8px"
+              >
                 <Text>▶</Text>
                 {renderResource()}
-              </>
+              </HStack>
             )}
           </HStack>
         </Stack>

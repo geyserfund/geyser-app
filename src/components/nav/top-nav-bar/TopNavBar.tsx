@@ -41,19 +41,26 @@ const navItems = [
   },
 ]
 
+const dashboardRoutes = [
+  getPath('projectDashboard', PathName.projectId),
+  getPath('dashboardContributors', PathName.projectId),
+  getPath('dashboardDetails', PathName.projectId),
+  getPath('dashboardFunding', PathName.projectId),
+  getPath('dashboardSettings', PathName.projectId),
+  getPath('dashboardStats', PathName.projectId),
+]
+
 const routesForHidingTopNav = [
   `/${PathName.project}/:projectId/${PathName.entry}`,
   `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
   `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
 ]
 
-const routesForShowingProjectButton = [
-  `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
-]
+const routesForShowingProjectButton = dashboardRoutes
 
 const customTitleRoutes = [
   `/${PathName.project}/:projectId/`,
-  `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
+  ...dashboardRoutes,
   `/${PathName.project}/:projectId/${PathName.entry}`,
   `/${PathName.entry}/:entryId`,
 ]
@@ -65,9 +72,7 @@ const navItemsRoutes = [
   `/${PathName.grants}/roundone`,
 ]
 
-const routesForHidingDashboardButton = [
-  `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
-]
+const routesForHidingDashboardButton = [...dashboardRoutes]
 
 const routesForHidingDropdownMenu = [
   `/${PathName.project}/:projectId/${PathName.entry}`,
@@ -81,7 +86,7 @@ const routesForHidingMyProjectsButton = [
   `/${PathName.project}/:projectId/${PathName.entry}`,
   `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
   `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
-  `/${PathName.project}/:projectId/${PathName.projectDashboard}`,
+  ...dashboardRoutes,
   `/${PathName.userProfile}/:userId`,
 ]
 

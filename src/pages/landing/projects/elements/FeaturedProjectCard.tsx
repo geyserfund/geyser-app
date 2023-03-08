@@ -31,11 +31,7 @@ export const FeaturedProjectCard = ({
 
   const project = data?.project
 
-  if (loading) {
-    return <FeaturedProjectSkeleton />
-  }
-
-  if (!project) {
+  if (loading || !project) {
     return <FeaturedProjectSkeleton />
   }
 

@@ -1,11 +1,13 @@
 import { useMatch, useNavigate } from 'react-router-dom'
 
-import { CardLayout } from '../../../components/layouts'
+import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { ButtonComponent } from '../../../components/ui'
 import { getPath } from '../../../constants'
 import { useFilterContext } from '../../../context'
 
-export const TabBar = () => {
+type TabBarProps = CardLayoutProps
+
+export const TabBar = (props: TabBarProps) => {
   const { clearFilter } = useFilterContext()
   const navigate = useNavigate()
 
@@ -25,7 +27,7 @@ export const TabBar = () => {
   }
 
   return (
-    <CardLayout padding="10px" direction="row" width="100%">
+    <CardLayout padding="10px" direction="row" width="100%" {...props}>
       <ButtonComponent
         noBorder
         size="sm"

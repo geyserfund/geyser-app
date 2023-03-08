@@ -1,7 +1,6 @@
 import { Text, TextProps } from '@chakra-ui/react'
 
 import { fonts } from '../../styles'
-import { useMobileMode } from '../../utils'
 
 interface MonoProps extends TextProps {
   semiBold?: boolean
@@ -14,10 +13,9 @@ export const MonoHeader = ({
   semiBold,
   ...rest
 }: MonoProps) => {
-  const isMobile = useMobileMode()
   return (
     <Text
-      fontSize={isMobile ? '26px' : '30px'}
+      fontSize={{ base: '26px', md: '30px' }}
       fontWeight={bold ? 600 : semiBold ? 500 : 400}
       fontFamily={fonts.mono}
       {...rest}
@@ -28,10 +26,9 @@ export const MonoHeader = ({
 }
 
 export const MonoBody1 = ({ children, bold, semiBold, ...rest }: MonoProps) => {
-  const isMobile = useMobileMode()
   return (
     <Text
-      fontSize={isMobile ? '14px' : '16px'}
+      fontSize={{ base: '14px', md: '16px' }}
       fontWeight={bold ? 600 : semiBold ? 500 : 400}
       fontFamily={fonts.mono}
       {...rest}
@@ -42,10 +39,9 @@ export const MonoBody1 = ({ children, bold, semiBold, ...rest }: MonoProps) => {
 }
 
 export const MonoBody2 = ({ children, bold, semiBold, ...rest }: MonoProps) => {
-  const isMobile = useMobileMode()
   return (
     <Text
-      fontSize={isMobile ? '12px' : '14px'}
+      fontSize={{ base: '12px', md: '14px' }}
       fontWeight={bold ? 600 : semiBold ? 500 : 400}
       fontFamily={fonts.mono}
       {...rest}

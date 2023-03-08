@@ -26,6 +26,8 @@ export const LandingFeed = () => {
           id="landing-page-mobile-projects-activity-list"
           width="100%"
           _onStick={{ width: 'calc(100% - 20px)' }}
+          bias={10}
+          buffer={10}
         >
           <MobileTopBar title="Activity" subTitle="Filter" />
         </StickToTop>

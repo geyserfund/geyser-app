@@ -13,6 +13,7 @@ import {
   QUERY_ACTIVITIES_FOR_LANDING_PAGE,
 } from './activity.graphql'
 import { ContributionActivityItemSkeleton } from './components'
+import { NoFollowedProjects } from './views'
 import { ActivityList } from './views/ActivityList'
 
 const itemLimit = 50
@@ -37,19 +38,18 @@ export const ActivityFeed = () => {
     resultMap(rawActivities: any[]) {
       // Re-mapping aliased keys to stick to Generated Types
       const newActivities = rawActivities.map((activity) => {
-        const newActivity = { ...activity }
-        if (activity.resource.__typename === ActivityResource.entry) {
-          newActivity.resource.fundersCount =
-            activity.resource.entryFundersCount
-          newActivity.resource.description = activity.resource.entrydescription
+        const newResource = { ...activity.resource }
+        if (newResource.__typename === ActivityResource.entry) {
+          newResource.fundersCount = newResource.entryFundersCount
+          newResource.description = newResource.entrydescription
         }
 
-        if (activity.resource.__typename === ActivityResource.projectReward) {
-          newActivity.resource.name = activity.resource.rewardName
-          newActivity.resource.project = activity.resource.rewardProject
+        if (newResource.__typename === ActivityResource.projectReward) {
+          newResource.name = newResource.rewardName
+          newResource.project = newResource.rewardProject
         }
 
-        return newActivity
+        return { ...activity, resource: newResource }
       })
       return newActivities
     },
@@ -75,6 +75,10 @@ export const ActivityFeed = () => {
 
   if (isLoading) {
     return <ContributionsSkeleton />
+  }
+
+  if (followedProjects.length === 0) {
+    return <NoFollowedProjects />
   }
 
   return (

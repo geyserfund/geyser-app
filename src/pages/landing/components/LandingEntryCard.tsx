@@ -43,6 +43,7 @@ export const LandingEntryCard = ({
       <Box
         width={getResponsiveValue({ base: '150px', xl: 'full' })}
         height={getResponsiveValue({ base: 'auto', xl: '200px' })}
+        maxHeight={getResponsiveValue({ base: '170px', xl: 'auto' })}
       >
         <ImageWithReload
           grey
@@ -81,7 +82,7 @@ export const LandingEntryCard = ({
                   xl: 'space-between',
                 }
           }
-          spacing={isMobile ? '30px' : { base: '0px', sm: '30px', xl: '0px' }}
+          spacing={isMobile ? '30px' : { base: '0px', sm: '25px', xl: '0px' }}
         />
       </VStack>
     </CardLayout>
