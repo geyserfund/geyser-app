@@ -20,7 +20,7 @@ export const ProjectActivityItem = ({ project }: { project: Project }) => {
         />
         <Body2>launched a new Project</Body2>
       </HStack>
-      <LandingProjectCard project={project} isMobile showDescription />
+      <LandingProjectCard project={project} isMobile />
       <TimeAgo date={project.createdAt || ''} />
     </VStack>
   )

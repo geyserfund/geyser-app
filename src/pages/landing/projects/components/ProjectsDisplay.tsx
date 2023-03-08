@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { HStack, Skeleton, Stack, VStack } from '@chakra-ui/react'
 
+import { LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { useFilterContext } from '../../../../context'
 import {
   OrderByOptions,
@@ -9,7 +10,6 @@ import {
   ProjectsResponse,
   Tag,
 } from '../../../../types'
-import { LandingProjectCardSkeleton } from '../../components'
 import { ProjectDisplayBody } from '../elements'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 
@@ -80,7 +80,7 @@ export const ProjectsDisplaySkeleton = () => {
         spacing="20px"
       >
         {[1, 2, 3].map((value) => {
-          return <LandingProjectCardSkeleton key={value} />
+          return <LandingCardBaseSkeleton key={value} />
         })}
       </Stack>
     </VStack>

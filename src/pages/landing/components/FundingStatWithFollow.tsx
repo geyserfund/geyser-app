@@ -14,7 +14,7 @@ import { fonts } from '../../../styles'
 import { MutationProjectFollowArgs } from '../../../types'
 import { getShortAmountLabel, toInt } from '../../../utils'
 
-interface FundingStatWithFollowProps extends StackProps {
+export interface FundingStatWithFollowProps extends StackProps {
   fundersCount: number
   amountFunded: number
   projectId: number
