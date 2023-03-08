@@ -85,7 +85,7 @@ export const LandingCardBase = ({
           width="100%"
           fundersCount={fundersCount}
           amountFunded={amountFunded}
-          projectId={amountFunded}
+          projectId={projectId}
           justifyContent={{
             base: 'space-between',
             sm: 'start',
