@@ -137,7 +137,7 @@ export const Subscribe = ({
                 <Text>
                   {success
                     ? 'Thanks for signing up. We’ll be sharing more info about Geyser projects and product soon. To join our community find us on Telegram and Twitter.'
-                    : 'To get information on the latest Geyser projects and product, subscribe by dropping your email below.'}
+                    : 'To get information on the latest Geyser projects and product subscribe by dropping your email below.'}
                 </Text>
                 {!success && (
                   <TextInputBox
