@@ -10,7 +10,7 @@ interface StickToTopProps extends BoxProps {
   wrapperId?: string // Immediate wrapper of the component, required, for container width after position is updated
   offset?: number // position of the element from the top
   bias?: number // Triggers move to position before this many pixels.
-  buffer?: number // Prevents toggle back until the difference in scroll exceeds this number
+  buffer?: number // Prevents toggle back to position until the difference in scroll exceeds this number
   disable?: boolean
   _onStick?: BoxProps
 }
