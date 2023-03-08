@@ -19,6 +19,7 @@ export const LandingProjectCard = ({
 
   return (
     <LandingCardBase
+      isMobile
       onClick={() => navigate(getPath('project', project.name))}
       imageSrc={toSmallImageUrl(`${project.thumbnailImage}`)}
       title={project.title}
