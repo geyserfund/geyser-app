@@ -13,6 +13,7 @@ import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
 import { SkeletonLayout } from '../../../../components/layouts'
 import { ExternalAccountLinkIcon } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
+import { Caption } from '../../../../components/typography'
 import {
   AnonymousAvatar,
   AvatarLink,
@@ -154,16 +155,17 @@ export const ContributionActivityItem = ({
 
           {/* Timestamp and Funded-Project Info */}
 
-          <HStack color="brand.neutral700" spacing={2}>
-            <Text fontSize={'xs'} noOfLines={1}>
+          <HStack w="full" color="brand.neutral700" spacing={2}>
+            <Caption whiteSpace="nowrap">
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
-            </Text>
+            </Caption>
 
             <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
             {fundingTx.sourceResource && (
               <HStack
+                overflow="hidden"
                 backgroundColor="neutral.100"
                 padding="2px 10px"
                 borderRadius="8px"

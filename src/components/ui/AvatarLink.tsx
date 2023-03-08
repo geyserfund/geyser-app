@@ -20,13 +20,18 @@ export const AvatarLink = ({
   const avatarSrc = toSmallImageUrl(imageSrc)
 
   return (
-    <Link as={ReactRouterLink} to={path} color={textColor}>
-      <HStack spacing={1}>
-        <Avatar borderRadius="4px" src={avatarSrc} boxSize={'1em'} />
-        <Body2 semiBold isTruncated _hover={{ textDecoration: 'underline' }}>
-          {title}
-        </Body2>
-      </HStack>
-    </Link>
+    <HStack
+      as={ReactRouterLink}
+      to={path}
+      color={textColor}
+      spacing={1}
+      w="full"
+      overflow="hidden"
+    >
+      <Avatar borderRadius="4px" src={avatarSrc} boxSize={'1em'} />
+      <Body2 semiBold isTruncated _hover={{ textDecoration: 'underline' }}>
+        {title}
+      </Body2>
+    </HStack>
   )
 }

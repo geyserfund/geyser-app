@@ -80,7 +80,14 @@ export const LandingPage = () => {
                 bias={20}
                 buffer={10}
               >
-                <ProjectLeaderboard />
+                <ProjectLeaderboard
+                  maxHeight={`${
+                    window.innerHeight -
+                    dimensions.topNavBar.desktop.height -
+                    40
+                  }px`}
+                  overflowY="auto"
+                />
               </StickToTop>
             </VStack>
           )}
