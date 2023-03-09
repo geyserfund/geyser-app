@@ -31,6 +31,11 @@ import { TopNavBarMenu } from './TopNavBarMenu'
 
 const navItems = [
   {
+    name: 'Projects',
+    to: '/',
+    disableFor: ['/'],
+  },
+  {
     name: 'Grants',
     to: '/grants',
     new: false,
@@ -542,6 +547,10 @@ export const TopNavBar = () => {
                         </Text>
                       </a>
                     )
+                  }
+
+                  if (item.disableFor?.includes(location.pathname)) {
+                    return null
                   }
 
                   return (
