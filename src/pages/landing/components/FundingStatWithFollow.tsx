@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client'
-import { AddIcon, MinusIcon } from '@chakra-ui/icons'
+import { AddIcon } from '@chakra-ui/icons'
 import { HStack, Image, StackProps, Text, VStack } from '@chakra-ui/react'
+import { RiUserFollowLine } from 'react-icons/ri'
 
 import { SatoshiPng } from '../../../assets'
 import { MonoBody1 } from '../../../components/typography'
@@ -111,15 +112,21 @@ export const FundingStatWithFollow = ({
           icon={<AddIcon />}
           borderRadius="8px"
           onClick={handleFollow}
+          _hover={{ border: `2px solid`, borderColor: 'brand.primary600' }}
         />
       ) : (
         <IconButtonComponent
           size="sm"
           aria-label="project-unfollow-icon"
           isLoading={unfollowLoading}
-          icon={<MinusIcon />}
+          icon={<RiUserFollowLine fontSize="16px" />}
           borderRadius="8px"
           onClick={handleUnFollow}
+          color="brand.primary600"
+          boxShadow="none !important"
+          border="1px solid"
+          borderColor="brand.primary600"
+          _hover={{ border: `2px solid`, borderColor: 'brand.secondaryRed' }}
         />
       )}
     </HStack>

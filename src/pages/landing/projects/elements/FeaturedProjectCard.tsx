@@ -84,7 +84,7 @@ export const FeaturedProjectCard = ({
           <FundingStatWithFollow
             flex={1}
             pb={1}
-            align={'flex-end'}
+            align={'center'}
             justifyContent={'space-between'}
             fundersCount={project.fundersCount || 0}
             amountFunded={project.balance}
