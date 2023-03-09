@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer'
+
 export const sha256 = async (hex: string) => {
   // Encode as UTF-8
   // const msgBuffer = new TextEncoder().encode(message);

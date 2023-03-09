@@ -1,5 +1,6 @@
 export * from './AvatarElement'
 export * from './ContributionInfoBox'
+export * from './FollowButton'
 export * from './FundingFormRewardItem'
 export * from './MilestoneAdditionModal'
 export * from './MilestoneComponent'

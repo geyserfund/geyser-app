@@ -53,7 +53,7 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
       itemCount: profileUser.fundingTxs.length,
       component: UserProfilePageContributionsList,
     },
-  ]
+  ].filter((data) => data.itemCount > 0 || data.title === 'Contributions')
 
   return (
     <Tabs variant={'line'} height="full" width="full" isLazy>

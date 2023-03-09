@@ -10,6 +10,7 @@ interface IImageWithReload extends ImageProps {
   grey?: boolean
   empty?: boolean
   showDefault?: boolean
+  showError?: boolean
 }
 
 const MAX_RETRIES = 10
@@ -18,6 +19,7 @@ const MILLISECONDS = 1_000
 
 export const ImageWithReload = ({
   src,
+  showError,
   defaultImage,
   grey,
   empty,
@@ -55,11 +57,13 @@ export const ImageWithReload = ({
       setLoading(false)
       setHasValidSource(false)
       componentRef.current = 0
-      toast({
-        title: 'failed to load image',
-        description: 'Please try again',
-        status: 'error',
-      })
+      if (showError) {
+        toast({
+          title: 'failed to load image',
+          description: 'Please try again',
+          status: 'error',
+        })
+      }
     }
   }
 

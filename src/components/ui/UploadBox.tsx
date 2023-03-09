@@ -11,7 +11,7 @@ interface UploadBoxProps extends StackProps {
 export const UploadBox = ({ loading, title, ...rest }: UploadBoxProps) => {
   return (
     <HStack
-      borderRadius="4px"
+      borderRadius="8px"
       backgroundColor="brand.bgGrey"
       width="100%"
       height="70px"

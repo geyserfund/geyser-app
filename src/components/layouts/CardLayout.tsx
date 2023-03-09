@@ -1,6 +1,7 @@
 import { Stack, StackProps } from '@chakra-ui/react'
 
 export interface CardLayoutProps extends StackProps {
+  noborder?: boolean
   hover?: boolean
   click?: boolean
   to?: string
@@ -9,6 +10,7 @@ export interface CardLayoutProps extends StackProps {
 
 export const CardLayout = ({
   children,
+  noborder,
   click,
   hover,
   ...rest
@@ -19,7 +21,7 @@ export const CardLayout = ({
       overflow={'hidden'}
       backgroundColor="white"
       border="2px solid"
-      borderColor="brand.neutral200"
+      borderColor={noborder ? 'transparent' : 'brand.neutral200'}
       borderRadius="8px"
       boxShadow="none"
       padding="24px"
@@ -28,6 +30,7 @@ export const CardLayout = ({
       }
       _active={click ? { borderColor: 'brand.primary' } : {}}
       _focus={click ? { borderColor: 'brand.primary' } : {}}
+      transition="border-color 0.5s"
       {...rest}
     >
       {children}

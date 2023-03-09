@@ -1,20 +1,29 @@
 import { Box, BoxProps } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 
+import { dimensions } from '../../constants'
 import { useListenerState } from '../../hooks'
 
 interface StickToTopProps extends BoxProps {
   id: string
-  scrollContainerId?: string
-  offset?: number
+  scrollContainerId?: string // leave empty if mobile view, else the ID of the container that is scrolling
+  wrapperId?: string // Immediate wrapper of the component, required, for container width after position is updated
+  offset?: number // position of the element from the top
+  bias?: number // Triggers move to position before this many pixels.
+  buffer?: number // Prevents toggle back to position until the difference in scroll exceeds this number
   disable?: boolean
   _onStick?: BoxProps
 }
 
+export const BUFFER_PIXELS = 5
+
 export const StickToTop = ({
   id,
   scrollContainerId,
-  offset = 0,
+  wrapperId,
+  bias = 0,
+  buffer = 0,
+  offset = dimensions.topNavBar.desktop.height,
   disable,
   children,
   _onStick,
@@ -22,10 +31,17 @@ export const StickToTop = ({
 }: StickToTopProps) => {
   const [stick, setStick] = useListenerState(false)
   const containerRef = useRef<any>(null)
+  const [wrapperElement, setWrapperElement] =
+    useListenerState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (disable) {
       return
+    }
+
+    if (wrapperId) {
+      const wrapperElement = document.getElementById(wrapperId)
+      setWrapperElement(wrapperElement)
     }
 
     if (scrollContainerId) {
@@ -66,24 +82,24 @@ export const StickToTop = ({
     }
 
     if (currentElement) {
-      if (
+      const scrollValue =
         currentElement.offsetTop -
-          currentElement.scrollTop +
-          currentElement.clientTop -
-          scrollTop <=
-        offset
-      ) {
+        currentElement.scrollTop +
+        currentElement.clientTop -
+        scrollTop
+      if (scrollValue <= offset + bias) {
         setStick(true)
-      } else {
+      } else if (scrollValue > offset + bias + buffer) {
         setStick(false)
       }
     }
   }
 
-  const onStick = stick.current ? _onStick : {}
+  const onStick = stick.current
+    ? _onStick || { width: wrapperElement.current?.clientWidth }
+    : {}
 
   const palceholderId = `${id}-placeholder`
-
   return (
     <>
       <Box
@@ -91,7 +107,7 @@ export const StickToTop = ({
         ref={containerRef}
         backgroundColor="brand.bgWhite"
         position={stick.current ? 'fixed' : 'static'}
-        top="65px"
+        top={`${offset}px`}
         zIndex={10}
         {...rest}
         {...onStick}
@@ -99,7 +115,10 @@ export const StickToTop = ({
         {children}
       </Box>
       {stick.current && (
-        <Box id={palceholderId} height={containerRef.current?.offsetHeight} />
+        <Box
+          id={palceholderId}
+          height={`${containerRef.current?.offsetHeight}px`}
+        />
       )}
     </>
   )

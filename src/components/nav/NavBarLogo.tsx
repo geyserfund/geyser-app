@@ -59,7 +59,7 @@ export const NavBarLogo = ({
     >
       <Image
         className={imageClassName}
-        height="40px"
+        height="32px"
         src={imageToUse}
         alt="geyser logo image"
         objectFit="contain"

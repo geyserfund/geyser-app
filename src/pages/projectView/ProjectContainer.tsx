@@ -10,6 +10,7 @@ import {
 import { useMobileMode } from '../../utils'
 import { ProjectActivityPanel } from './projectActivityPanel'
 import { ProjectMainBody } from './projectMainBody'
+import { ProjectBackButton } from './projectMainBody/components/ProjectBackButton'
 
 type Props = {
   project: Project
@@ -45,7 +46,7 @@ export const ProjectContainer = ({
         image={project.image || ''}
         type="article"
       />
-
+      <ProjectBackButton />
       <ProjectMainBody
         {...{
           project,

@@ -14,6 +14,8 @@ export const FAQUrl =
   'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3'
 export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf'
 
+// Geyser footer Links
+
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
 export const GeyserTelegramUrl = 'https://t.me/+EZ5otIPhVcxhMmFk'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
@@ -22,6 +24,9 @@ export const GeyserPrivacyUrl =
   'https://geyser.notion.site/Geyser-Privacy-Policy-7d008651271249b18d6886edbb2edaba'
 export const GeyserTermsAndConditionsURL =
   'https://geyser.notion.site/Terms-Conditions-815ff42c97af4cdf8861011a8a4c1fe0'
+
+export const GeyserNostrUrl =
+  'https://snort.social/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
 
 export const SubscribeUrl = 'https://airtable.com/shrE0ffCRdX6CkYYw'
 export const StartCrowdFundUrl = 'https://airtable.com/shrOzN3U8ePy4Y0uf'
@@ -87,6 +92,9 @@ export const LandingBannerPatternUrl =
 export const LandingLetTheSatsFlowUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow.svg'
 
+export const LetTheSatsFlow3DUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow-3.png'
+
 export const LaunchImage2Url =
   'https://storage.googleapis.com/geyser-projects-media/app/launchImage.png'
 
@@ -137,6 +145,9 @@ export const GrantsBitcoinEducation =
   'https://storage.googleapis.com/geyser-projects-media/grants/bitcoin-education.png'
 export const GrantsHero =
   'https://storage.googleapis.com/geyser-projects-media/grants/grant-hero.png'
+
+export const NoResultsSearchUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/empty-search.png'
 
 // Geyser Notion Links
 

@@ -1,21 +1,19 @@
 import { Text, TextProps } from '@chakra-ui/react'
 
 import { fonts } from '../../styles'
-import { useMobileMode } from '../../utils'
 
-interface BodyProps extends TextProps {
+export interface BodyProps extends TextProps {
   semiBold?: boolean
   bold?: boolean
+  to?: string
 }
 
 export const Body1 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
-  const isMobile = useMobileMode()
   return (
     <Text
-      fontSize={isMobile ? '14px' : '16px'}
-      fontWeight={bold ? 600 : semiBold ? 500 : 400}
+      fontSize={{ base: '14px', md: '16px' }}
+      fontWeight={bold ? 600 : semiBold ? 500 : 'inherited'}
       fontFamily={fonts.inter}
-      color="brand.neutral700"
       {...rest}
     >
       {children}
@@ -24,13 +22,11 @@ export const Body1 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
 }
 
 export const Body2 = ({ children, bold, semiBold, ...rest }: BodyProps) => {
-  const isMobile = useMobileMode()
   return (
     <Text
-      fontSize={isMobile ? '12px' : '14px'}
-      fontWeight={bold ? 600 : semiBold ? 500 : 400}
+      fontSize={{ base: '12px', md: '14px' }}
+      fontWeight={bold ? 600 : semiBold ? 500 : 'inherited'}
       fontFamily={fonts.inter}
-      color="brand.neutral700"
       {...rest}
     >
       {children}
@@ -42,9 +38,8 @@ export const Caption = ({ children, bold, semiBold, ...rest }: BodyProps) => {
   return (
     <Text
       fontSize="10px"
-      fontWeight={bold ? 600 : semiBold ? 500 : 400}
+      fontWeight={bold ? 600 : semiBold ? 500 : 'inherited'}
       fontFamily={fonts.inter}
-      color="brand.neutral700"
       {...rest}
     >
       {children}

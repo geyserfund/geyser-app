@@ -7,6 +7,7 @@ interface UseScrollDirectionProps {
   loading?: boolean
   initialValue?: boolean
   mobileView?: string
+  direction?: string
 }
 
 export const useScrollDirection = ({
@@ -19,6 +20,7 @@ export const useScrollDirection = ({
   const [value, setValue] = useListenerState(0)
 
   const [isScrollingUp, setIsScrollingUp] = useState(initialValue || false)
+  const [scrollTop, setScrollTop] = useState(0)
 
   useEffect(() => {
     if (loading) {
@@ -54,6 +56,7 @@ export const useScrollDirection = ({
       scrollTop = document.scrollingElement?.scrollTop || 0
     }
 
+    setScrollTop(scrollTop)
     if (prevValue.current > value.current && value.current > scrollTop) {
       setIsScrollingUp(true)
     } else if (scrollTop > 0) {
@@ -64,5 +67,5 @@ export const useScrollDirection = ({
     setValue(scrollTop)
   }
 
-  return isScrollingUp
+  return { isScrollingUp, scrollTop }
 }

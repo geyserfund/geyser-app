@@ -87,7 +87,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
             >
               <VStack alignItems={'center'}>
                 <Text fontSize="16px" fontWeight={600} fontFamily={fonts.mono}>
-                  {project.funders.length}
+                  {project.fundersCount}
                 </Text>
 
                 <Text
