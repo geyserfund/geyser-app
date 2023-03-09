@@ -54,9 +54,8 @@ export const LandingCardBase = ({
       {...rest}
     >
       <Box
-        width={getResponsiveValue({ base: '150px', xl: 'full' })}
-        height={getResponsiveValue({ base: 'auto', xl: '200px' })}
-        maxHeight={getResponsiveValue({ base: '170px', xl: 'auto' })}
+        width={getResponsiveValue({ base: '125px', xl: 'full' })}
+        height={getResponsiveValue({ base: '125px', xl: '200px' })}
       >
         <ImageWithReload
           grey
@@ -72,7 +71,7 @@ export const LandingCardBase = ({
         minWidth={getResponsiveValue({ base: '170px', md: 'auto' })}
         padding="10px"
         alignItems="start"
-        justifyContent="center"
+        justifyContent="space-between"
         overflow="hidden"
       >
         <H3 isTruncated width="100%">
@@ -86,11 +85,15 @@ export const LandingCardBase = ({
           fundersCount={fundersCount}
           amountFunded={amountFunded}
           projectId={projectId}
-          justifyContent={{
-            base: 'space-between',
-            sm: 'start',
-            xl: 'space-between',
-          }}
+          justifyContent={
+            isMobile
+              ? 'start'
+              : {
+                  base: 'space-between',
+                  sm: 'start',
+                  xl: 'space-between',
+                }
+          }
           spacing={isMobile ? '25px' : { base: '0px', sm: '25px', xl: '0px' }}
         />
       </VStack>

@@ -4,6 +4,7 @@ import { HStack, StackProps, Wrap } from '@chakra-ui/react'
 import { HiOutlineTag } from 'react-icons/hi'
 import { SlLocationPin } from 'react-icons/sl'
 
+import { H3 } from '../../../../components/typography'
 import { useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import { colors } from '../../../../styles'
@@ -19,7 +20,7 @@ interface FilterTopBarProps extends StackProps {
 }
 
 export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
-  const { filters, updateFilter } = useFilterContext()
+  const { filters, updateFilter, sort } = useFilterContext()
   const isMobile = useMobileMode()
 
   const {
@@ -30,6 +31,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     type,
     status,
     activity,
+    recent,
   } = filters
 
   const { loading: tagsLoading, data } = useQuery<{ tagsGet: TagsGetResult[] }>(
@@ -147,11 +149,29 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     )
   }
 
+  const renderRecentProjects = () => {
+    if (!recent) {
+      return null
+    }
+
+    let value = ''
+    if (sort.balance) {
+      value = 'Most funded all time'
+    } else if (sort.createdAt) {
+      value = 'Most recent projects'
+    } else if (sort.recent) {
+      value = 'Most funded this week'
+    }
+
+    return <H3 color="brand.primary600">{value}</H3>
+  }
+
   const viewFilterSearch = renderFilterSearch()
   const viewFilterStatusType = renderFilterStatusType()
   const viewFilterTags = renderFilterTags()
   const viewFilterRegion = renderFilterRegion()
   const viewFilterActivity = renderFilterActivity()
+  const viewRecentProjects = renderRecentProjects()
 
   if (
     (!isMobile && viewFilterSearch) ||
@@ -169,6 +189,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
         {...rest}
       >
         <Wrap>
+          {viewRecentProjects}
           {viewFilterActivity}
           {viewFilterSearch}
           {viewFilterStatusType}
