@@ -5,9 +5,8 @@ type IdentifiableCollection = {
 }[]
 
 const mergeIdentifiableCollectionUsingCursorIDs = (
-  // eslint-disable-next-line default-param-last
   existing: IdentifiableCollection = [],
-  // eslint-disable-next-line default-param-last
+
   incoming: IdentifiableCollection = [],
   // { args }: FieldFunctionOptions,
 ) => {
@@ -66,7 +65,7 @@ export const cache: InMemoryCache = new InMemoryCache({
           // Don't cache separate results based on
           // any of this field's arguments.
           // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
-          keyArgs: false,
+          keyArgs: ['input', ['where', 'orderby']],
           merge: false,
         },
       },
