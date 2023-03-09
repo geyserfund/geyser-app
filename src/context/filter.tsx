@@ -60,14 +60,12 @@ export const FilterProvider = ({
   const navigate = useNavigate()
 
   const updateFilter = (value: Partial<FilterType>) => {
-    setFilters({ ...filters, recent: false, ...value })
-  }
-
-  useEffect(() => {
     if (isLandingFeedPage && !isLoggedIn) {
       navigate('/', { state: { save: true } })
     }
-  }, [filters])
+
+    setFilters({ ...filters, recent: false, ...value })
+  }
 
   useEffect(() => {
     if (sort.recent) {
