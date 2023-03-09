@@ -3,9 +3,13 @@ import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2 } from '../../../../components/typography'
-import { ImageWithReload, LinkableAvatar } from '../../../../components/ui'
+import {
+  ImageWithReload,
+  LinkableAvatar,
+  SatoshiAmount,
+} from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { ProjectReward } from '../../../../types'
+import { ProjectReward, RewardCurrency } from '../../../../types'
 
 export const RewardActivityItem = ({ reward }: { reward: ProjectReward }) => {
   const owner = reward.project.owners[0].user
@@ -54,12 +58,15 @@ export const RewardItem = ({ reward }: { reward: ProjectReward }) => {
       <VStack w="full" padding="10px" alignItems="start">
         <HStack w="full">
           <VStack spacing="0px">
-            <Text color="brand.textBlack" fontWeight="bold">
-              {/*
-                    Divided by 100 as cost is in cents
-                  */}
-              {`$ ${reward.cost / 100}`}
-            </Text>
+            {reward.project.rewardCurrency === RewardCurrency.Usdcent ? (
+              <Text color="brand.textBlack" fontWeight="bold">
+                {`$ ${reward.cost / 100}`}
+              </Text>
+            ) : (
+              <SatoshiAmount fontSize="12px" color="brand.textBlack">
+                {reward.cost}
+              </SatoshiAmount>
+            )}
 
             <Text fontSize="12px" color="brand.textBlack" fontWeight="bold">
               per item
