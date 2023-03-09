@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 import { StickToTop } from '../../components/layouts'
 import { dimensions, ID } from '../../constants'
-import { FilterProvider } from '../../context'
+import { FilterProvider, useAuthContext } from '../../context'
 import { useMobileMode } from '../../utils'
 import { GradientBanner } from './components'
 import { TabBar } from './components/TabBar'
@@ -12,8 +12,9 @@ import { ProjectLeaderboard } from './projectLeaderboard'
 
 export const LandingPage = () => {
   const isMobile = useMobileMode()
+  const { isLoggedIn } = useAuthContext()
   return (
-    <FilterProvider>
+    <FilterProvider isLoggedIn={isLoggedIn}>
       <VStack
         marginTop={`-${dimensions.topNavBar.desktop.height}px`}
         position="relative"
@@ -80,7 +81,14 @@ export const LandingPage = () => {
                 bias={20}
                 buffer={10}
               >
-                <ProjectLeaderboard />
+                <ProjectLeaderboard
+                  maxHeight={`${
+                    window.innerHeight -
+                    dimensions.topNavBar.desktop.height -
+                    40
+                  }px`}
+                  overflowY="auto"
+                />
               </StickToTop>
             </VStack>
           )}

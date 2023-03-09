@@ -1,10 +1,13 @@
-import { GridItem, SimpleGrid, Text } from '@chakra-ui/react'
+import { GridItem, SimpleGrid } from '@chakra-ui/react'
 
 import { NoDataError } from '../../../../components/errors'
-import { CardLayout } from '../../../../components/layouts'
+import {
+  CardLayout,
+  LandingCardBaseSkeleton,
+} from '../../../../components/layouts'
 import { Project } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
-import { LandingProjectCard, LandingProjectCardSkeleton } from '../elements'
+import { LandingProjectCard, NoSearchResults } from '../../components'
 import { FilterTopBar } from './FilterTopBar'
 
 interface FilteredProjectListProps {
@@ -26,7 +29,11 @@ export const FilteredProjectList = ({
     }
 
     if (projects.length === 0) {
-      return <Text>No Match. Please update filters</Text>
+      return (
+        <GridItem colSpan={{ base: 1, xl: 3 }} overflow="hidden">
+          <NoSearchResults />
+        </GridItem>
+      )
     }
 
     return projects.map((project) => {
@@ -62,7 +69,7 @@ export const FilteredProjectListSkeleton = () => {
       {[1, 2, 3, 4, 5, 6].map((value) => {
         return (
           <GridItem key={value} overflow="hidden">
-            <LandingProjectCardSkeleton />
+            <LandingCardBaseSkeleton />
           </GridItem>
         )
       })}

@@ -1,6 +1,6 @@
 import { QueryHookOptions, useQuery } from '@apollo/client'
 
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../pages/landing/projects.graphql'
+import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../pages/landing/projects/projects.graphql'
 import { Project, ProjectsGetQueryInput } from '../../types'
 
 type TProjectsData = {

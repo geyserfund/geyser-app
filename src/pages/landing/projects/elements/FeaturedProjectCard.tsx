@@ -1,6 +1,13 @@
 import { useQuery } from '@apollo/client'
-import { Box, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import {
+  Box,
+  HStack,
+  Skeleton,
+  SkeletonText,
+  Stack,
+  VStack,
+} from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { H2, H3 } from '../../../../components/typography'
@@ -8,8 +15,8 @@ import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { Project, UniqueProjectQueryInput } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
-import { QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE } from '../../projects.graphql'
-import { ProjectFundingStatWithFollow } from './ProjectFundingStatWithFollow'
+import { FundingStatWithFollow } from '../../components/FundingStatWithFollow'
+import { QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE } from '../projects.graphql'
 import { ProjectRowLayout } from './ProjectRowLayout'
 
 export const FeaturedProjectCard = ({
@@ -17,6 +24,7 @@ export const FeaturedProjectCard = ({
 }: {
   projectName: string
 }) => {
+  const navigate = useNavigate()
   const { data, loading } = useQuery<
     { project: Project },
     { where: UniqueProjectQueryInput }
@@ -30,27 +38,23 @@ export const FeaturedProjectCard = ({
 
   const project = data?.project
 
-  if (loading) {
-    return <FeaturedProjectSkeleton />
-  }
-
-  if (!project) {
+  if (loading || !project) {
     return <FeaturedProjectSkeleton />
   }
 
   return (
     <ProjectRowLayout title="Featured Project" width="100%">
-      <CardLayout
-        noborder
-        hover
+      <Stack
         direction={{ base: 'column', sm: 'row' }}
         width="100%"
         height={{ base: 'auto', sm: '245px' }}
         alignItems="start"
-        spacing="20px"
+        spacing="0px"
         padding="0px"
-        as={Link}
-        to={getPath('project', projectName)}
+        borderRadius="8px"
+        overflow="hidden"
+        onClick={() => navigate(getPath('project', projectName))}
+        _hover={{ backgroundColor: 'neutral.100', cursor: 'pointer' }}
       >
         <Box
           width={{ base: '100%', sm: '55%' }}
@@ -74,6 +78,7 @@ export const FeaturedProjectCard = ({
           justifyContent="start"
           spacing="10px"
           overflow="hidden"
+          padding="10px"
         >
           <H2 color="brand.neutral700"> {project.title} </H2>
           <AvatarElement
@@ -82,19 +87,25 @@ export const FeaturedProjectCard = ({
             rounded="full"
             user={project.owners[0].user}
           />
-          <H3 color="brand.neutral800" isTruncated whiteSpace="normal">
+          <H3
+            color="brand.neutral800"
+            noOfLines={3}
+            isTruncated
+            whiteSpace="normal"
+          >
             {project.shortDescription}
           </H3>
-          <ProjectFundingStatWithFollow
+          <FundingStatWithFollow
             flex={1}
-            pb={1}
-            align={'flex-end'}
+            align={'center'}
             justifyContent={'space-between'}
-            project={project}
+            fundersCount={project.fundersCount || 0}
+            amountFunded={project.balance}
+            projectId={project.id}
             bold
           />
         </VStack>
-      </CardLayout>
+      </Stack>
     </ProjectRowLayout>
   )
 }

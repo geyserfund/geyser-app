@@ -20,6 +20,7 @@ export const AvatarElement = ({
     as={noLink ? 'div' : Link}
     to={`/profile/${user.id}`}
     overflow="hidden"
+    _hover={noLink ? {} : { textDecoration: 'underline', fontWeight: 500 }}
     {...wrapperProps}
   >
     <Avatar size="xs" borderRadius="4px" src={`${user.imageUrl}`} {...rest} />

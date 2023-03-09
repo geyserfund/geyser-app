@@ -1,4 +1,5 @@
 export * from './CardLayout'
+export * from './LandingCardBase'
 export * from './PageLayout'
 export * from './SkeletonLayout'
 export * from './StickToTop'

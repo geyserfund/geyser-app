@@ -1,6 +1,6 @@
 import { QueryHookOptions, useQuery } from '@apollo/client'
 
-import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../pages/landing/projects.graphql'
+import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../pages/landing/projects/projects.graphql'
 import {
   GetProjectsMostFundedOfTheWeekInput,
   ProjectsMostFundedOfTheWeekGet,

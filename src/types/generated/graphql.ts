@@ -524,7 +524,7 @@ export type GetProjectRewardWhereInput = {
 };
 
 export type GetProjectsMostFundedOfTheWeekInput = {
-  tagIds: Array<InputMaybe<Scalars['Int']>>;
+  tagIds?: InputMaybe<Array<Scalars['Int']>>;
   take?: InputMaybe<Scalars['Int']>;
 };
 
@@ -1001,6 +1001,7 @@ export type ProjectReward = {
   image?: Maybe<Scalars['String']>;
   /** Name of the reward. */
   name: Scalars['name_String_NotNull_maxLength_100'];
+  project: Project;
   sold: Scalars['Int'];
   stock?: Maybe<Scalars['Int']>;
 };
@@ -2265,6 +2266,7 @@ export type ProjectRewardResolvers<ContextType = any, ParentType extends Resolve
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['name_String_NotNull_maxLength_100'], ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

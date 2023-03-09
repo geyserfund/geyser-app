@@ -2,11 +2,23 @@ import { HStack } from '@chakra-ui/react'
 
 import { CardLayout, StickToTop } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
+import { useAuthContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
-import { Contributions } from './Contributions'
+import { MobileTopBar } from '../filters/mobile/MobileTopBar'
+import { ActivityFeed } from './ActivityFeed'
+import { LoggedOut } from './views/LoggedOut'
 
 export const LandingFeed = () => {
+  const { isLoggedIn, loading } = useAuthContext()
   const isMobileMode = useMobileMode()
+  if (loading) {
+    return null
+  }
+
+  if (!isLoggedIn) {
+    return <LoggedOut />
+  }
+
   return (
     <>
       {isMobileMode && (
@@ -14,12 +26,15 @@ export const LandingFeed = () => {
           id="landing-page-mobile-projects-activity-list"
           width="100%"
           _onStick={{ width: 'calc(100% - 20px)' }}
+          bias={10}
+          buffer={10}
         >
-          <ActivityTopbar />
+          <MobileTopBar title="Activity" subTitle="Filter" />
         </StickToTop>
       )}
+
       <CardLayout w="full" paddingX="0px">
-        <Contributions />
+        <ActivityFeed />
       </CardLayout>
     </>
   )
