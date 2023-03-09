@@ -120,15 +120,11 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
       return null
     }
 
-    const {
-      icon: Icon,
-      text,
-      color,
-    } = getStatusTypeButtonContent({ type, status })
+    const { icon: Icon, text } = getStatusTypeButtonContent({ type, status })
     return (
       <TagComponent
         label={text}
-        icon={<Icon height="20px" color={color} />}
+        icon={<Icon height="18px" color={colors.neutral500} />}
         onClick={() => updateFilter({ type: undefined, status: undefined })}
       />
     )
