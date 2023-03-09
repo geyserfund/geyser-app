@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import { AddIcon } from '@chakra-ui/icons'
 import {
   HStack,
@@ -14,13 +13,9 @@ import { SatoshiPng } from '../../../assets'
 import { MonoBody1 } from '../../../components/typography'
 import { IconButtonComponent } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
-import {
-  MUTATION_FOLLOW_PROJECT,
-  MUTATION_UNFOLLOW_PROJECT,
-} from '../../../graphql/mutations'
+import { useFollowProject } from '../../../hooks/graphqlState'
 import { fonts } from '../../../styles'
-import { MutationProjectFollowArgs } from '../../../types'
-import { getShortAmountLabel, toInt } from '../../../utils'
+import { getShortAmountLabel } from '../../../utils'
 
 export interface FundingStatWithFollowProps extends StackProps {
   fundersCount: number
@@ -36,52 +31,15 @@ export const FundingStatWithFollow = ({
   projectId,
   ...rest
 }: FundingStatWithFollowProps) => {
-  const { isLoggedIn, followedProjects, queryFollowedProjects } =
-    useAuthContext()
+  const { isLoggedIn } = useAuthContext()
 
-  const [followProject, { loading: followLoading }] = useMutation<
-    any,
-    MutationProjectFollowArgs
-  >(MUTATION_FOLLOW_PROJECT, {
-    variables: {
-      input: {
-        projectId: toInt(projectId),
-      },
-    },
-    onCompleted() {
-      queryFollowedProjects()
-    },
-  })
-
-  const [unFollowProject, { loading: unfollowLoading }] = useMutation<
-    any,
-    MutationProjectFollowArgs
-  >(MUTATION_UNFOLLOW_PROJECT, {
-    variables: {
-      input: {
-        projectId: toInt(projectId),
-      },
-    },
-    onCompleted() {
-      queryFollowedProjects()
-    },
-  })
-
-  const isFollowed = Boolean(
-    followedProjects.find((project) => toInt(project?.id) === toInt(projectId)),
-  )
-
-  const handleFollow = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation()
-    event.nativeEvent.stopImmediatePropagation()
-    followProject()
-  }
-
-  const handleUnFollow = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation()
-    event.nativeEvent.stopImmediatePropagation()
-    unFollowProject()
-  }
+  const {
+    isFollowed,
+    handleFollow,
+    handleUnFollow,
+    followLoading,
+    unfollowLoading,
+  } = useFollowProject(projectId)
 
   return (
     <HStack direction={'row'} spacing="20px" {...rest}>

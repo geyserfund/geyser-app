@@ -1,16 +1,17 @@
-import { ButtonProps } from '@chakra-ui/react'
+import { Avatar, ButtonProps } from '@chakra-ui/react'
 import { useMatch, useNavigate } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { ButtonComponent } from '../../../components/ui'
 import { getPath } from '../../../constants'
-import { useFilterContext } from '../../../context'
+import { useAuthContext, useFilterContext } from '../../../context'
 
 type TabBarProps = CardLayoutProps
 
 export const TabBar = (props: TabBarProps) => {
   const { clearFilter } = useFilterContext()
   const navigate = useNavigate()
+  const { user } = useAuthContext()
 
   const isCurrentTabProjects = useMatch(getPath('landingPage'))
 
@@ -43,6 +44,11 @@ export const TabBar = (props: TabBarProps) => {
         backgroundColor={!isCurrentTabProjects ? 'brand.neutral100' : 'white'}
         onClick={handleActivityClick}
       >
+        {user.imageUrl ? (
+          <Avatar height="23px" width="23px" src={user.imageUrl} mr="10px" />
+        ) : (
+          ''
+        )}
         Activity
       </ButtonComponent>
     </CardLayout>
