@@ -7,6 +7,7 @@ import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
 import { Activity } from '../../../types/generated/graphql'
 import { useMobileMode } from '../../../utils'
+import { NoSearchResults } from '../components'
 import { FilterTopBar } from '../projects/components'
 import {
   ActivityResource,
@@ -79,6 +80,10 @@ export const ActivityFeed = () => {
 
   if (followedProjects.length === 0) {
     return <NoFollowedProjects />
+  }
+
+  if (activities.length === 0) {
+    return <NoSearchResults />
   }
 
   return (
