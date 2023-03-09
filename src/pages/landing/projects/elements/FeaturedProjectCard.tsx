@@ -1,5 +1,12 @@
 import { useQuery } from '@apollo/client'
-import { Box, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Skeleton,
+  SkeletonText,
+  Stack,
+  VStack,
+} from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -37,16 +44,17 @@ export const FeaturedProjectCard = ({
 
   return (
     <ProjectRowLayout title="Featured Project" width="100%">
-      <CardLayout
-        noborder
-        hover
+      <Stack
         direction={{ base: 'column', sm: 'row' }}
         width="100%"
         height={{ base: 'auto', sm: '245px' }}
         alignItems="start"
-        spacing="20px"
+        spacing="0px"
         padding="0px"
+        borderRadius="8px"
+        overflow="hidden"
         onClick={() => navigate(getPath('project', projectName))}
+        _hover={{ backgroundColor: 'neutral.100', cursor: 'pointer' }}
       >
         <Box
           width={{ base: '100%', sm: '55%' }}
@@ -70,6 +78,7 @@ export const FeaturedProjectCard = ({
           justifyContent="start"
           spacing="10px"
           overflow="hidden"
+          padding="10px"
         >
           <H2 color="brand.neutral700"> {project.title} </H2>
           <AvatarElement
@@ -78,12 +87,16 @@ export const FeaturedProjectCard = ({
             rounded="full"
             user={project.owners[0].user}
           />
-          <H3 color="brand.neutral800" isTruncated whiteSpace="normal">
+          <H3
+            color="brand.neutral800"
+            noOfLines={3}
+            isTruncated
+            whiteSpace="normal"
+          >
             {project.shortDescription}
           </H3>
           <FundingStatWithFollow
             flex={1}
-            pb={1}
             align={'center'}
             justifyContent={'space-between'}
             fundersCount={project.fundersCount || 0}
@@ -92,7 +105,7 @@ export const FeaturedProjectCard = ({
             bold
           />
         </VStack>
-      </CardLayout>
+      </Stack>
     </ProjectRowLayout>
   )
 }
