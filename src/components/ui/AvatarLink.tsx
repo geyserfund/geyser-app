@@ -1,4 +1,4 @@
-import { Avatar, HStack, Link } from '@chakra-ui/react'
+import { Avatar, HStack } from '@chakra-ui/react'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { toSmallImageUrl } from '../../utils'
