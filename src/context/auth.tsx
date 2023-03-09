@@ -95,6 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     setUser(defaultUser)
+    setFollowedProjects([])
 
     fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
       credentials: 'include',

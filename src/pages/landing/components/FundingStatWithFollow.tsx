@@ -1,7 +1,14 @@
 import { useMutation } from '@apollo/client'
 import { AddIcon } from '@chakra-ui/icons'
-import { HStack, Image, StackProps, Text, VStack } from '@chakra-ui/react'
-import { RiUserFollowLine } from 'react-icons/ri'
+import {
+  HStack,
+  Image,
+  StackProps,
+  Text,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react'
+import { BsFillHeartFill } from 'react-icons/bs'
 
 import { SatoshiPng } from '../../../assets'
 import { MonoBody1 } from '../../../components/typography'
@@ -29,7 +36,8 @@ export const FundingStatWithFollow = ({
   projectId,
   ...rest
 }: FundingStatWithFollowProps) => {
-  const { followedProjects, queryFollowedProjects } = useAuthContext()
+  const { isLoggedIn, followedProjects, queryFollowedProjects } =
+    useAuthContext()
 
   const [followProject, { loading: followLoading }] = useMutation<
     any,
@@ -105,37 +113,45 @@ export const FundingStatWithFollow = ({
         </Text>
       </VStack>
       {!isFollowed ? (
-        <IconButtonComponent
-          size="sm"
-          aria-label="project-follow-icon"
-          isLoading={followLoading}
-          icon={<AddIcon />}
-          borderRadius="8px"
-          onClick={handleFollow}
-          _hover={{
-            border: `2px solid`,
-            borderColor: 'brand.primary600',
-            color: 'brand.primary600',
-          }}
-        />
+        <Tooltip
+          label={isLoggedIn ? 'follow project' : 'login to follow project'}
+          placement="top"
+        >
+          <IconButtonComponent
+            size="sm"
+            aria-label="project-follow-icon"
+            isLoading={followLoading}
+            icon={<AddIcon />}
+            borderRadius="8px"
+            onClick={handleFollow}
+            isDisabled={!isLoggedIn}
+            _hover={{
+              border: `2px solid`,
+              borderColor: 'brand.primary600',
+              color: 'brand.primary600',
+            }}
+          />
+        </Tooltip>
       ) : (
-        <IconButtonComponent
-          size="sm"
-          aria-label="project-unfollow-icon"
-          isLoading={unfollowLoading}
-          icon={<RiUserFollowLine fontSize="16px" />}
-          borderRadius="8px"
-          onClick={handleUnFollow}
-          boxShadow="none !important"
-          color="brand.primary600"
-          border={`1px solid`}
-          borderColor="brand.primary600"
-          _hover={{
-            border: `2px solid`,
-            borderColor: 'brand.secondaryRed',
-            color: 'brand.secondaryRed',
-          }}
-        />
+        <Tooltip label={'unfollow project'} placement="top">
+          <IconButtonComponent
+            size="sm"
+            aria-label="project-unfollow-icon"
+            isLoading={unfollowLoading}
+            icon={<BsFillHeartFill fontSize="14px" />}
+            borderRadius="8px"
+            onClick={handleUnFollow}
+            boxShadow="none !important"
+            color="brand.primary500"
+            border={`1px solid`}
+            borderColor="brand.primary500"
+            _hover={{
+              border: `2px solid`,
+              borderColor: 'brand.secondaryRed',
+              color: 'brand.secondaryRed',
+            }}
+          />
+        </Tooltip>
       )}
     </HStack>
   )

@@ -1,5 +1,6 @@
 import { IconButton, IconButtonProps } from '@chakra-ui/button'
 import { useColorModeValue } from '@chakra-ui/system'
+import { forwardRef } from 'react'
 
 import { colors } from '../../styles'
 
@@ -10,16 +11,16 @@ export interface IconButtonComponentProps extends IconButtonProps {
   noBorder?: boolean
 }
 
-export const IconButtonComponent = ({
-  primary,
-  noBorder,
-  ...rest
-}: IconButtonComponentProps) => {
+export const IconButtonComponent = forwardRef<
+  HTMLButtonElement,
+  IconButtonComponentProps
+>(({ primary, noBorder, ...rest }, ref) => {
   const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark)
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite)
 
   return (
     <IconButton
+      ref={ref}
       variant="solid"
       backgroundColor={
         noBorder ? 'transparent' : primary ? 'brand.primary' : backgroundColor
@@ -31,4 +32,4 @@ export const IconButtonComponent = ({
       {...rest}
     />
   )
-}
+})

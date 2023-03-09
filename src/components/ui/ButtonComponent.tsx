@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from '@chakra-ui/button'
 import { Box } from '@chakra-ui/layout'
-import { ComponentWithAs, useColorModeValue } from '@chakra-ui/system'
+import { useColorModeValue } from '@chakra-ui/system'
 import classNames from 'classnames'
 import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
@@ -42,9 +42,7 @@ const useStyles = createUseStyles({
   },
 })
 
-export type Ref = ComponentWithAs<'button', ButtonProps>
-
-export const ButtonComponent = forwardRef<Ref, IButtonComponentP>(
+export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
   (
     {
       className,
