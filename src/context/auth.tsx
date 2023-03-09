@@ -123,9 +123,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (initialLoad) {
-      setLoading(loadingUser || loadingUserProjectFollows)
+      setLoading(loadingUser)
     }
-  }, [loadingUser, loadingUserProjectFollows])
+  }, [loadingUser])
 
   return (
     <AuthContext.Provider
