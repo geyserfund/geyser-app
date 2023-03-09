@@ -112,7 +112,11 @@ export const FundingStatWithFollow = ({
           icon={<AddIcon />}
           borderRadius="8px"
           onClick={handleFollow}
-          _hover={{ border: `2px solid`, borderColor: 'brand.primary600' }}
+          _hover={{
+            border: `2px solid`,
+            borderColor: 'brand.primary600',
+            color: 'brand.primary600',
+          }}
         />
       ) : (
         <IconButtonComponent
@@ -122,11 +126,15 @@ export const FundingStatWithFollow = ({
           icon={<RiUserFollowLine fontSize="16px" />}
           borderRadius="8px"
           onClick={handleUnFollow}
-          color="brand.primary600"
           boxShadow="none !important"
-          border="1px solid"
+          color="brand.primary600"
+          border={`1px solid`}
           borderColor="brand.primary600"
-          _hover={{ border: `2px solid`, borderColor: 'brand.secondaryRed' }}
+          _hover={{
+            border: `2px solid`,
+            borderColor: 'brand.secondaryRed',
+            color: 'brand.secondaryRed',
+          }}
         />
       )}
     </HStack>
