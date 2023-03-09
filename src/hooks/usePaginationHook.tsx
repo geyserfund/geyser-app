@@ -114,7 +114,6 @@ export const usePaginationHook = <Type,>({
             thresholdNoOfAggregatedResultsToFetchMore &&
           (count ? count < noOfTimesToRefetchMore : true)
         ) {
-          console.log('did it get here', data.length, mappedData.length)
           fetchNext(count ? count + 1 : 1)
         }
 

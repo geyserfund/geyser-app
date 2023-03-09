@@ -79,6 +79,7 @@ export const RewardQueryParametersForLandingPage = `{
     id
     name
     title
+    rewardCurrency
     owners {
       id
       user {
