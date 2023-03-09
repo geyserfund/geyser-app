@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useLazyQuery<{ me: User }>(ME_PROJECT_FOLLOWS, {
       fetchPolicy: 'network-only',
       onCompleted(data) {
-        if (data?.me.projectFollows) {
+        if (data?.me?.projectFollows) {
           setFollowedProjects(data?.me.projectFollows as Project[])
         }
       },
@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (initialLoad) {
       setLoading(loadingUser || loadingUserProjectFollows)
     }
-  }, [loadingUser])
+  }, [loadingUser, loadingUserProjectFollows])
 
   return (
     <AuthContext.Provider
