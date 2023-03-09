@@ -21,7 +21,7 @@ interface ProjectDisplayProps {
 const NO_OF_PROJECT_TO_LOAD = 3
 
 export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
-  const { updateFilter, updateSort } = useFilterContext()
+  const { updateFilter } = useFilterContext()
 
   const { data, loading } = useQuery<
     { projects: ProjectsResponse },
@@ -41,10 +41,8 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
   const onSeeAllClick = () => {
     if (tag) {
       updateFilter({ tagIds: [tag.id] })
-      updateSort({ createdAt: OrderByOptions.Desc })
     } else {
       updateFilter({ recent: true })
-      updateSort({ createdAt: OrderByOptions.Desc })
     }
   }
 
