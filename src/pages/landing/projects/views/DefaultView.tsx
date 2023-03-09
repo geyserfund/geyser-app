@@ -11,7 +11,7 @@ export const DefaultView = () => {
     <CardLayout w="full" spacing="50px" padding="20px">
       <FeaturedProjectCard projectName={getFeaturedProject()} />
 
-      <ProjectsDisplay />
+      <ProjectsDisplay seeAllText="See all projects" />
       {getListOfTags().map((tag) => {
         return <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
       })}

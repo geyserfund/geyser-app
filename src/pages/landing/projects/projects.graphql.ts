@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-const ProjectParametersForLandingPage = `{
+export const ProjectParametersForLandingPage = `{
   id
   name
   balance

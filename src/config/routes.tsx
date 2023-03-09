@@ -29,7 +29,6 @@ import {
   ProjectSettings,
   ProjectStats,
 } from '../pages/projectDashboard'
-import { ProjectDiscoveryPage } from '../pages/projectDiscovery'
 import { ProjectView } from '../pages/projectView'
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch'
 import { PrivateRoute } from './PrivateRoute'
@@ -156,10 +155,6 @@ const platformRoutes = [
   {
     path: getPath('notAuthorized'),
     element: NotAuthorized,
-  },
-  {
-    path: getPath('projectDiscovery'),
-    element: ProjectDiscoveryPage,
   },
   {
     path: getPath('index'),

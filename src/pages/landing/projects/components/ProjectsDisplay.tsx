@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { HStack, Skeleton, Stack, VStack } from '@chakra-ui/react'
 
+import { LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { useFilterContext } from '../../../../context'
 import {
   OrderByOptions,
@@ -9,16 +10,17 @@ import {
   ProjectsResponse,
   Tag,
 } from '../../../../types'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
-import { LandingProjectCardSkeleton, ProjectDisplayBody } from '../elements'
+import { ProjectDisplayBody } from '../elements'
+import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 
 interface ProjectDisplayProps {
   tag?: Tag
+  seeAllText?: string
 }
 
 const NO_OF_PROJECT_TO_LOAD = 3
 
-export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
+export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
   const { updateFilter, updateSort } = useFilterContext()
 
   const { data, loading } = useQuery<
@@ -62,6 +64,7 @@ export const ProjectsDisplay = ({ tag }: ProjectDisplayProps) => {
       subtitle={tag?.label ? 'Trending in' : ''}
       projects={projectList}
       onSeeAllClick={onSeeAllClick}
+      seeAllText={seeAllText}
     />
   )
 }
@@ -79,7 +82,7 @@ export const ProjectsDisplaySkeleton = () => {
         spacing="20px"
       >
         {[1, 2, 3].map((value) => {
-          return <LandingProjectCardSkeleton key={value} />
+          return <LandingCardBaseSkeleton key={value} />
         })}
       </Stack>
     </VStack>

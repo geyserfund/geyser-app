@@ -1,5 +1,6 @@
 import {
   Box,
+  ButtonProps,
   HStack,
   IconButton,
   Stack,
@@ -27,6 +28,7 @@ import { Project } from '../../../../types/generated/graphql'
 import { MarkDown, toInt, useMobileMode } from '../../../../utils'
 import {
   AvatarElement,
+  FollowButton,
   ProjectFundingSummary,
   ProjectLightningQR,
   ProjectLinks,
@@ -141,13 +143,7 @@ export const Summary = () => {
               closeOnClick={false}
             >
               <IconButton
-                size="sm"
-                _hover={{
-                  backgroundColor: 'none',
-                  border: '1px solid #20ECC7',
-                }}
-                _active={{ backgroundColor: 'brand.primary' }}
-                bg="none"
+                {...greenBorderButtonStyles}
                 icon={<ShareIcon />}
                 aria-label="share"
                 onClick={handleShareButtonTapped}
@@ -156,13 +152,7 @@ export const Summary = () => {
             {project.wallets &&
               project.wallets[0]?.connectionDetails?.pubkey && (
                 <IconButton
-                  size="sm"
-                  _hover={{
-                    backgroundColor: 'none',
-                    border: '1px solid #20ECC7',
-                  }}
-                  _active={{ backgroundColor: 'brand.primary' }}
-                  bg="none"
+                  {...greenBorderButtonStyles}
                   icon={<AmbossIcon fontSize="20px" />}
                   aria-label="share"
                   onClick={() =>
@@ -175,6 +165,7 @@ export const Summary = () => {
                   }
                 />
               )}
+            <FollowButton projectId={project.id} />
           </HStack>
         </VStack>
         <HStack>
@@ -264,4 +255,14 @@ export const Summary = () => {
       </VStack>
     </CardLayout>
   )
+}
+
+const greenBorderButtonStyles: ButtonProps = {
+  size: 'sm',
+  _hover: {
+    backgroundColor: 'none',
+    border: '1px solid #20ECC7',
+  },
+  _active: { backgroundColor: 'brand.primary' },
+  bg: 'none',
 }

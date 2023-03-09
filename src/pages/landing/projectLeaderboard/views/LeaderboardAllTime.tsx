@@ -4,7 +4,7 @@ import { NoDataError } from '../../../../components/errors'
 import Loader from '../../../../components/ui/Loader'
 import { useQueryWithPagination } from '../../../../hooks'
 import { OrderByOptions, Project } from '../../../../types'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
+import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects/projects.graphql'
 import { LeaderboardBody } from '../components'
 interface LeaderboardAllTimeProps extends StackProps {
   items?: number

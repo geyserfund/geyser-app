@@ -27,6 +27,18 @@ export const ME = gql`
   }
 `
 
+export const ME_PROJECT_FOLLOWS = gql`
+  query Me {
+    me {
+      projectFollows {
+        id
+        title
+        name
+      }
+    }
+  }
+`
+
 export const USER_PROFILE_QUERY = gql`
   query User($where: UserGetInput!) {
     user(where: $where) {

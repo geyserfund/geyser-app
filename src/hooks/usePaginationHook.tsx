@@ -1,4 +1,5 @@
 import { PaginationInput } from '../types/generated/graphql'
+import { validNumber } from '../utils'
 import { useListenerState } from './useListenerState'
 import { getNestedValue } from './useQueryWithPagination'
 
@@ -12,7 +13,7 @@ export type usePaginationHookProps = {
   resultMap?: (_: any[]) => any[]
 }
 
-const thresholdNoOfAggregatedResultsToFetchMore = 10
+const thresholdNoOfAggregatedResultsToFetchMore = 5
 const noOfTimesToRefetchMore = 5
 
 export const usePaginationHook = <Type,>({
@@ -62,7 +63,9 @@ export const usePaginationHook = <Type,>({
     if (tempData.length > 0) {
       const options: PaginationInput = {}
       options.cursor = {
-        id: Number(tempData[tempData.length - 1].id),
+        id: validNumber.test(`${tempData[tempData.length - 1].id}`)
+          ? Number(tempData[tempData.length - 1].id)
+          : tempData[tempData.length - 1].id,
       }
       options.take = itemLimit
       setPagination(options)
@@ -104,12 +107,14 @@ export const usePaginationHook = <Type,>({
         const mappedData = handleMapData(data)
 
         setList([...list.current, ...mappedData])
-
+        // If the aggregated length of the data is too small next pagination is automatically fetched
         if (
           data.length === itemLimit &&
-          mappedData.length <= thresholdNoOfAggregatedResultsToFetchMore &&
+          data.length - mappedData.length >=
+            thresholdNoOfAggregatedResultsToFetchMore &&
           (count ? count < noOfTimesToRefetchMore : true)
         ) {
+          console.log('did it get here', data.length, mappedData.length)
           fetchNext(count ? count + 1 : 1)
         }
 

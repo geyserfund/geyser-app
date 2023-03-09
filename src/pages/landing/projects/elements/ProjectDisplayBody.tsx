@@ -1,15 +1,13 @@
 import { Stack } from '@chakra-ui/react'
 
 import { Project } from '../../../../types'
-import {
-  LandingProjectCard,
-  ProjectRowLayout,
-  ProjectRowLayoutProps,
-} from '../elements'
+import { LandingProjectCard } from '../../components'
+import { ProjectRowLayout, ProjectRowLayoutProps } from '../elements'
 
 interface ProjectDisplayBodyProps
   extends Omit<ProjectRowLayoutProps, 'children'> {
   projects: Project[]
+  seeAllText?: string
 }
 
 export const ProjectDisplayBody = ({
@@ -17,6 +15,7 @@ export const ProjectDisplayBody = ({
   subtitle,
   projects,
   onSeeAllClick,
+  seeAllText,
 }: ProjectDisplayBodyProps) => {
   return (
     <ProjectRowLayout
@@ -24,6 +23,7 @@ export const ProjectDisplayBody = ({
       subtitle={subtitle}
       width="100%"
       onSeeAllClick={onSeeAllClick}
+      seeAllText={seeAllText}
     >
       <Stack
         width="100%"
