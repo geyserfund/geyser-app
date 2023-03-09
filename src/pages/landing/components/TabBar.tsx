@@ -1,3 +1,4 @@
+import { ButtonProps } from '@chakra-ui/react'
 import { useMatch, useNavigate } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
@@ -30,23 +31,15 @@ export const TabBar = (props: TabBarProps) => {
     <CardLayout padding="10px" direction="row" width="100%" {...props}>
       <ButtonComponent
         noBorder
-        size="sm"
-        flex={1}
-        textAlign="center"
+        {...buttonStyles}
         backgroundColor={isCurrentTabProjects ? 'brand.neutral100' : 'white'}
-        borderRadius="8px"
-        padding="5px"
         onClick={handleProjectsClick}
       >
         Projects
       </ButtonComponent>
       <ButtonComponent
         noBorder
-        size="sm"
-        flex={1}
-        textAlign="center"
-        borderRadius="8px"
-        padding="5px"
+        {...buttonStyles}
         backgroundColor={!isCurrentTabProjects ? 'brand.neutral100' : 'white'}
         onClick={handleActivityClick}
       >
@@ -54,4 +47,13 @@ export const TabBar = (props: TabBarProps) => {
       </ButtonComponent>
     </CardLayout>
   )
+}
+
+const buttonStyles: ButtonProps = {
+  size: 'sm',
+  flex: 1,
+  textAlign: 'center',
+  borderRadius: '8px',
+  padding: '5px',
+  fontSize: '16px',
 }

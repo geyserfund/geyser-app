@@ -75,7 +75,7 @@ export const LeaderboardTopbar = ({
   setTab: React.Dispatch<React.SetStateAction<LeaderboardTabs>>
 }) => {
   return (
-    <VStack w="full">
+    <VStack w="full" spacing="0px">
       <HStack
         width="100%"
         borderBottom="2px solid"
@@ -96,6 +96,7 @@ export const LeaderboardTopbar = ({
           noBorder
           flex={1}
           size="sm"
+          fontSize="16px"
           borderRadius="8px"
           backgroundColor={
             tab === LeaderboardTabs.thisWeek ? 'neutral.100' : 'white'
@@ -108,6 +109,7 @@ export const LeaderboardTopbar = ({
           noBorder
           flex={1}
           size="sm"
+          fontSize="16px"
           borderRadius="8px"
           backgroundColor={
             tab === LeaderboardTabs.allTime ? 'neutral.100' : 'white'

@@ -17,9 +17,11 @@ export const ProjectLeaderboard = (props: ProjectLeaderboardProps) => {
   return (
     <CardLayout padding="20px" {...props}>
       <H3 color="brand.primary600">Project leaderboard</H3>
-      <Tabs variant="unstyled">
+      <Tabs variant="unstyled" size="sm">
         <TabList>
-          <Tab {...tabButtonStyles}>This week</Tab>
+          <Tab {...tabButtonStyles} whiteSpace="nowrap">
+            This week
+          </Tab>
           <Tab {...tabButtonStyles}>All time</Tab>
         </TabList>
         <TabPanels>
@@ -37,6 +39,8 @@ export const ProjectLeaderboard = (props: ProjectLeaderboardProps) => {
 
 const tabButtonStyles: TabProps = {
   borderRadius: '8px',
+  fontSize: '16px',
+  fontWeight: 500,
   flex: 1,
   _selected: { backgroundColor: 'neutral.100' },
 }
