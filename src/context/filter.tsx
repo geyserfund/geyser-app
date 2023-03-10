@@ -9,7 +9,6 @@ import {
   ProjectStatus,
   ProjectType,
 } from '../types'
-import { toInt } from '../utils'
 
 export type FilterType = {
   countryCode?: string
