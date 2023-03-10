@@ -200,7 +200,7 @@ export const Summary = () => {
                     <Link
                       key={tag.id}
                       to={getPath('landingPage')}
-                      state={{ tagId: tag.id }}
+                      state={{ filter: { tagIds: [tag.id] } }}
                     >
                       <TagBox>{tag.label}</TagBox>
                     </Link>
@@ -222,10 +222,30 @@ export const Summary = () => {
               <Wrap spacing="5px">
                 {project?.location?.country?.name &&
                   project.location.country.name !== 'Online' && (
-                    <TagBox>{project?.location?.country?.name}</TagBox>
+                    <Link
+                      key={project?.location?.country?.name}
+                      to={getPath('landingPage')}
+                      state={{
+                        filter: {
+                          countryCode: project?.location?.country?.code,
+                        },
+                      }}
+                    >
+                      <TagBox>{project?.location?.country?.name}</TagBox>
+                    </Link>
                   )}
                 {project?.location?.region && (
-                  <TagBox>{project?.location?.region}</TagBox>
+                  <Link
+                    key={project?.location?.region}
+                    to={getPath('landingPage')}
+                    state={{
+                      filter: {
+                        region: project?.location?.region,
+                      },
+                    }}
+                  >
+                    <TagBox>{project?.location?.region}</TagBox>
+                  </Link>
                 )}
               </Wrap>
             </SummaryInfoLine>
