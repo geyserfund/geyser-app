@@ -75,10 +75,10 @@ export const FilterProvider = ({
     }
   }, [filters, sort])
   useEffect(() => {
-    if (location.state?.tagId) {
-      updateFilter({ tagIds: [toInt(location.state?.tagId)] })
+    if (location.state?.save) {
       navigate('', { state: null })
-    } else if (location.state?.save) {
+    } else if (location.state?.filter) {
+      updateFilter(location.state.filter)
       navigate('', { state: null })
     } else {
       setFilters({})
