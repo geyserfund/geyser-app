@@ -29,7 +29,6 @@ export const SortBody = () => {
           type: undefined,
           region: undefined,
           countryCode: undefined,
-          recent: true,
         })
         updateSort({ recent: true })
         break
