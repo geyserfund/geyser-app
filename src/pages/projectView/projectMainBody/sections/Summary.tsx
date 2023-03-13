@@ -1,5 +1,6 @@
 import {
   Box,
+  ButtonProps,
   HStack,
   IconButton,
   Stack,
@@ -27,6 +28,7 @@ import { Project } from '../../../../types/generated/graphql'
 import { MarkDown, toInt, useMobileMode } from '../../../../utils'
 import {
   AvatarElement,
+  FollowButton,
   ProjectFundingSummary,
   ProjectLightningQR,
   ProjectLinks,
@@ -141,13 +143,7 @@ export const Summary = () => {
               closeOnClick={false}
             >
               <IconButton
-                size="sm"
-                _hover={{
-                  backgroundColor: 'none',
-                  border: '1px solid #20ECC7',
-                }}
-                _active={{ backgroundColor: 'brand.primary' }}
-                bg="none"
+                {...greenBorderButtonStyles}
                 icon={<ShareIcon />}
                 aria-label="share"
                 onClick={handleShareButtonTapped}
@@ -156,13 +152,7 @@ export const Summary = () => {
             {project.wallets &&
               project.wallets[0]?.connectionDetails?.pubkey && (
                 <IconButton
-                  size="sm"
-                  _hover={{
-                    backgroundColor: 'none',
-                    border: '1px solid #20ECC7',
-                  }}
-                  _active={{ backgroundColor: 'brand.primary' }}
-                  bg="none"
+                  {...greenBorderButtonStyles}
                   icon={<AmbossIcon fontSize="20px" />}
                   aria-label="share"
                   onClick={() =>
@@ -175,6 +165,7 @@ export const Summary = () => {
                   }
                 />
               )}
+            <FollowButton projectId={project.id} />
           </HStack>
         </VStack>
         <HStack>
@@ -209,7 +200,7 @@ export const Summary = () => {
                     <Link
                       key={tag.id}
                       to={getPath('landingPage')}
-                      state={{ tagId: tag.id }}
+                      state={{ filter: { tagIds: [tag.id] } }}
                     >
                       <TagBox>{tag.label}</TagBox>
                     </Link>
@@ -229,11 +220,32 @@ export const Summary = () => {
               }
             >
               <Wrap spacing="5px">
-                {project?.location?.country?.name && (
-                  <TagBox>{project?.location?.country?.name}</TagBox>
-                )}
+                {project?.location?.country?.name &&
+                  project.location.country.name !== 'Online' && (
+                    <Link
+                      key={project?.location?.country?.name}
+                      to={getPath('landingPage')}
+                      state={{
+                        filter: {
+                          countryCode: project?.location?.country?.code,
+                        },
+                      }}
+                    >
+                      <TagBox>{project?.location?.country?.name}</TagBox>
+                    </Link>
+                  )}
                 {project?.location?.region && (
-                  <TagBox>{project?.location?.region}</TagBox>
+                  <Link
+                    key={project?.location?.region}
+                    to={getPath('landingPage')}
+                    state={{
+                      filter: {
+                        region: project?.location?.region,
+                      },
+                    }}
+                  >
+                    <TagBox>{project?.location?.region}</TagBox>
+                  </Link>
                 )}
               </Wrap>
             </SummaryInfoLine>
@@ -263,4 +275,14 @@ export const Summary = () => {
       </VStack>
     </CardLayout>
   )
+}
+
+const greenBorderButtonStyles: ButtonProps = {
+  size: 'sm',
+  _hover: {
+    backgroundColor: 'none',
+    border: '1px solid #20ECC7',
+  },
+  _active: { backgroundColor: 'brand.primary' },
+  bg: 'none',
 }

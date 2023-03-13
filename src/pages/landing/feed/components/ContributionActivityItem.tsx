@@ -13,27 +13,27 @@ import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
 import { SkeletonLayout } from '../../../../components/layouts'
 import { ExternalAccountLinkIcon } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
+import { Caption } from '../../../../components/typography'
 import {
   AnonymousAvatar,
+  AvatarLink,
   LinkableAvatar,
-  ProjectAvatarLink,
 } from '../../../../components/ui'
+import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
-import { FundingTx, Project } from '../../../../types/generated/graphql'
-import { getDaysAgo } from '../../../../utils'
+import { FundingTx } from '../../../../types/generated/graphql'
+import { getDaysAgo, toSmallImageUrl } from '../../../../utils'
 import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx
   showsProjectLink?: boolean
-  linkedProject?: Project
   count?: number
 }
 
 export const ContributionActivityItem = ({
   fundingTx,
-  linkedProject,
   count,
   ...rest
 }: Props) => {
@@ -54,19 +54,38 @@ export const ContributionActivityItem = ({
     funder,
   })
 
+  const renderResource = () => {
+    const resource = fundingTx.sourceResource
+    switch (resource?.__typename) {
+      case 'Project':
+        return (
+          <AvatarLink
+            title={resource.title}
+            path={getPath('project', resource.name)}
+            imageSrc={toSmallImageUrl(`${resource.thumbnailImage}`)}
+          />
+        )
+      case 'Entry':
+        return (
+          <AvatarLink
+            title={resource.title}
+            path={getPath('project', resource.id)}
+            imageSrc={toSmallImageUrl(`${resource.image}`)}
+          />
+        )
+      default:
+        return null
+    }
+  }
+
   return (
-    <Box
-      bg={useColorModeValue('white', 'gray.900')}
-      px={'26px'}
-      py={'10px'}
-      {...rest}
-    >
+    <Box w="full" bg={useColorModeValue('white', 'gray.900')} {...rest}>
       <VStack flexDirection="column" spacing={'6px'} overflow={'hidden'}>
         {/* Funding Stats Header */}
 
         <Box display="flex" justifyContent="space-between" width={'full'}>
           {/* Funder Avatar */}
-          <HStack>
+          <HStack w="100%">
             {isFunderAnonymous ? (
               <HStack spacing={2}>
                 <AnonymousAvatar
@@ -81,9 +100,8 @@ export const ContributionActivityItem = ({
                 imageSrc={funder.user?.imageUrl || ''}
                 avatarUsername={funder.user?.username || ''}
                 userProfileID={funder.user?.id}
-                fontSize={'14px'}
-                imageSize={'20px'}
-                textColor="brand.neutral900"
+                imageSize={'24px'}
+                textColor="brand.neutral600"
                 badgeNames={funderBadges.map((badge) => badge.badge)}
                 badgeElements={renderFunderBadges(funderBadges)}
               />
@@ -137,20 +155,25 @@ export const ContributionActivityItem = ({
 
           {/* Timestamp and Funded-Project Info */}
 
-          <HStack color="brand.neutral700" spacing={2}>
-            <Text fontSize={'xs'} noOfLines={1}>
+          <HStack w="full" color="brand.neutral700" spacing={2}>
+            <Caption whiteSpace="nowrap">
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
-            </Text>
+            </Caption>
 
             <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
-            {linkedProject ? (
-              <>
+            {fundingTx.sourceResource && (
+              <HStack
+                overflow="hidden"
+                backgroundColor="neutral.100"
+                padding="2px 10px"
+                borderRadius="8px"
+              >
                 <Text>▶</Text>
-                <ProjectAvatarLink project={linkedProject} />
-              </>
-            ) : null}
+                {renderResource()}
+              </HStack>
+            )}
           </HStack>
         </Stack>
       </VStack>

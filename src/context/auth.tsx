@@ -11,8 +11,8 @@ import {
 
 import { AUTH_SERVICE_ENDPOINT } from '../constants'
 import { defaultUser } from '../defaults'
-import { ME } from '../graphql'
-import { User } from '../types/generated/graphql'
+import { ME, ME_PROJECT_FOLLOWS } from '../graphql'
+import { Project, User } from '../types/generated/graphql'
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
@@ -27,6 +27,8 @@ const defaultContext: AuthContextProps = {
   setIsLoggedIn() {},
   queryCurrentUser() {},
   setUser(user: User) {},
+  followedProjects: [],
+  queryFollowedProjects() {},
 }
 
 export type NavContextProps = {
@@ -49,6 +51,8 @@ type AuthContextProps = {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
   queryCurrentUser: () => void
   setUser: (user: User) => void
+  followedProjects: Project[]
+  queryFollowedProjects: () => void
 }
 
 export const AuthContext = createContext<AuthContextProps>(defaultContext)
@@ -58,6 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialLoad, setInitialLoad] = useState(false)
 
   const [user, setUser] = useState<User>(defaultUser)
+  const [followedProjects, setFollowedProjects] = useState<Project[]>([])
 
   const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -72,6 +77,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     },
   })
 
+  const [queryFollowedProjects] = useLazyQuery<{ me: User }>(
+    ME_PROJECT_FOLLOWS,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted(data) {
+        if (data?.me?.projectFollows) {
+          setFollowedProjects(data?.me.projectFollows as Project[])
+        }
+      },
+    },
+  )
+
   const {
     isOpen: loginIsOpen,
     onOpen: loginOnOpen,
@@ -80,6 +97,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     setUser(defaultUser)
+    setFollowedProjects([])
 
     fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
       credentials: 'include',
@@ -89,6 +107,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     try {
       queryCurrentUser()
+      queryFollowedProjects()
     } catch (_) {
       setIsLoggedIn(false)
     }
@@ -125,6 +144,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isAuthModalOpen: loginIsOpen,
         loginOnOpen,
         loginOnClose,
+        followedProjects,
+        queryFollowedProjects,
       }}
     >
       {children}

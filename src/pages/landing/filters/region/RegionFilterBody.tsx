@@ -42,6 +42,8 @@ export const RegionFilterBody = ({
     } else {
       updateFilter({ countryCode: option.code, region: undefined })
     }
+
+    onClose()
   }
 
   const handleInputChange = (newValue: string) => {
@@ -50,8 +52,6 @@ export const RegionFilterBody = ({
     } else {
       onSelectMenuClose()
     }
-
-    onClose()
   }
 
   const handleRegionClick = (selectedRegion: string) => {

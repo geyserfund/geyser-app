@@ -124,3 +124,15 @@ export const MUTATION_REMOVE_PROJECT_LINK = gql`
     }
   }
 `
+
+export const MUTATION_FOLLOW_PROJECT = gql`
+  mutation Mutation($input: ProjectFollowMutationInput!) {
+    projectFollow(input: $input)
+  }
+`
+
+export const MUTATION_UNFOLLOW_PROJECT = gql`
+  mutation ProjectUnfollow($input: ProjectFollowMutationInput!) {
+    projectUnfollow(input: $input)
+  }
+`

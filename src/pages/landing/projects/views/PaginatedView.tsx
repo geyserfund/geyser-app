@@ -4,8 +4,8 @@ import { ScrollInvoke } from '../../../../helpers'
 import { useQueryWithPagination } from '../../../../hooks'
 import { Project } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects.graphql'
 import { FilteredProjectList } from '../components/FilteredProjectList'
+import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 
 const TOTAL_PROJECTS_TO_FETCH = 20
 

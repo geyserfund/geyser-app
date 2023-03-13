@@ -100,7 +100,7 @@ export const ProjectMainBody = ({
             marginTop={isMobile ? '0px' : '20px'}
             maxWidth="1000px"
             w="100%"
-            padding={isMobile ? '20px 10px 50px 10px' : '0px 40px 70px 40px'}
+            padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
           >
             <Summary />
 

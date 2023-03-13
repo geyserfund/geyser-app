@@ -60,7 +60,10 @@ export const GradientBanner = () => {
         >
           <VStack
             spacing={3}
-            marginTop={`${dimensions.topNavBar.desktop.height - 24}px`}
+            marginTop={{
+              base: `${dimensions.topNavBar.desktop.height}px`,
+              lg: `${dimensions.topNavBar.desktop.height - 24}px`,
+            }}
             marginBottom={{ base: '70px', md: '60px' }}
           >
             <Image src={LetTheSatsFlow3DUrl} maxHeight="76px" />
@@ -108,21 +111,23 @@ export const GradientBanner = () => {
 }
 
 export const SummarySkeleton = () => {
+  const isMobile = useMobileMode()
   return (
-    <HStack
-      width="100%"
-      spacing={1.5}
-      justifyContent="flex-start"
-      alignItems={'center'}
-    >
+    <>
       {[1, 2, 3].map((value) => {
         return (
-          <HStack key={value} flex={1}>
+          <Stack
+            spacing={isMobile ? 1 : 1.5}
+            key={value}
+            justifyContent="flex-start"
+            alignItems={'center'}
+            direction={isMobile ? 'column' : 'row'}
+          >
             <SkeletonLayout width="30px" />
             <SkeletonLayout width="80px" />
-          </HStack>
+          </Stack>
         )
       })}
-    </HStack>
+    </>
   )
 }

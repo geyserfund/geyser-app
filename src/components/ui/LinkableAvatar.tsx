@@ -1,4 +1,4 @@
-import { HStack, Link, Text } from '@chakra-ui/layout'
+import { HStack, Link } from '@chakra-ui/layout'
 import { Avatar } from '@chakra-ui/react'
 import { ReactElement } from 'react'
 import { FaUser } from 'react-icons/fa'
@@ -6,6 +6,7 @@ import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { getPath } from '../../constants'
 import { useMediumScreen, useMobileMode } from '../../utils'
+import { Body2 } from '../typography'
 
 type Props = {
   avatarUsername: string
@@ -16,6 +17,7 @@ type Props = {
   badgeNames?: string[]
   fontSize?: number | string
   imageSize?: number | string
+  showFullUsername?: boolean
 }
 
 export const LinkableAvatar = ({
@@ -25,8 +27,9 @@ export const LinkableAvatar = ({
   textColor,
   badgeNames,
   badgeElements,
-  fontSize = '16px',
+  fontSize,
   imageSize = '30px',
+  showFullUsername,
 }: Props) => {
   const isMedium = useMediumScreen()
   const isMobile = useMobileMode()
@@ -44,6 +47,10 @@ export const LinkableAvatar = ({
   const getFormattedUsername = () => {
     if (!avatarUsername) {
       return
+    }
+
+    if (showFullUsername) {
+      return avatarUsername
     }
 
     if (
@@ -98,13 +105,14 @@ export const LinkableAvatar = ({
           icon={<FaUser size={'1em'} />}
         />
 
-        <Text
+        <Body2
           fontSize={fontSize}
-          _hover={{ fontWeight: 500, textDecoration: 'underline' }}
+          semiBold
+          _hover={{ textDecoration: 'underline' }}
         >
           {' '}
           {getFormattedUsername()}
-        </Text>
+        </Body2>
 
         {badgeElements}
       </HStack>

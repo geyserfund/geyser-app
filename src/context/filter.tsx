@@ -1,9 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 
+import { getPath } from '../constants'
 import { disableSortByTrending } from '../pages/landing/filters/sort'
-import { ProjectsOrderByInput, ProjectStatus, ProjectType } from '../types'
-import { toInt } from '../utils'
+import {
+  ActivityResourceType,
+  ProjectsOrderByInput,
+  ProjectStatus,
+  ProjectType,
+} from '../types'
 
 export type FilterType = {
   countryCode?: string
@@ -13,6 +18,7 @@ export type FilterType = {
   type?: ProjectType
   tagIds?: number[]
   recent?: boolean
+  activity?: ActivityResourceType
 }
 
 export type SortType = { recent?: boolean } & ProjectsOrderByInput
@@ -37,14 +43,26 @@ const defaultSort = { createdAt: 'desc' } as SortType
 
 export const FilterContext = createContext<FilterState>(defaultFilterContext)
 
-export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
+export const FilterProvider = ({
+  children,
+  isLoggedIn,
+}: {
+  children: React.ReactNode
+  isLoggedIn?: boolean
+}) => {
   const [filters, setFilters] = useState<FilterType>({} as FilterType)
   const [sort, setSort] = useState<SortType>(defaultSort)
+
+  const isLandingFeedPage = useMatch(getPath('landingFeed'))
 
   const location = useLocation()
   const navigate = useNavigate()
 
   const updateFilter = (value: Partial<FilterType>) => {
+    if (isLandingFeedPage && !isLoggedIn) {
+      navigate('/', { state: { save: true } })
+    }
+
     setFilters({ ...filters, recent: false, ...value })
   }
 
@@ -55,13 +73,16 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [filters, sort])
-
   useEffect(() => {
-    if (location.state?.tagId) {
-      updateFilter({ tagIds: [toInt(location.state?.tagId)] })
+    if (location.state?.save) {
       navigate('', { state: null })
+    } else if (location.state?.filter) {
+      updateFilter(location.state.filter)
+      navigate('', { state: null })
+    } else {
+      setFilters({})
     }
-  }, [location])
+  }, [location.pathname])
 
   const updateSort = (value: Partial<SortType>) => {
     setSort({ ...value })

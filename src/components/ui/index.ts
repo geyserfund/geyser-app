@@ -1,5 +1,6 @@
 export * from './AlertBox'
 export * from './AnonymousAvatar'
+export * from './AvatarLink'
 export * from './Badge'
 export * from './ButtonComponent'
 export * from './Card'

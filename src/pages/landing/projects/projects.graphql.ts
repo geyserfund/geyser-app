@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-const ProjectParametersForLandingPage = `{
+export const ProjectParametersForLandingPage = `{
   id
   name
   balance
@@ -47,30 +47,3 @@ query Project($where: UniqueProjectQueryInput!) {
   project(where: $where) ${ProjectParametersForLandingPage}
 }
 `
-
-// {
-//     "input": {
-//       "pagination": {
-//         "cursor": {
-//           "id": null
-//         },
-//         "take": null
-//       },
-//       "orderBy": [
-//         {
-//           "balance": null,
-//           "createdAt": null
-//         }
-//       ],
-//       "where": {
-//         "countryCode": null,
-//         "id": null,
-//         "name": null,
-//         "region": null,
-//         "search": null,
-//         "status": null,
-//         "tagIds": null,
-//         "type": null
-//       }
-//     }
-//   }

@@ -20,10 +20,12 @@ export const RenderRegions = ({
 
   useEffect(() => {
     if (regions.length > 0) {
+      const usedRegions = regions.filter((reg) => reg.count > 0)
+
       if (max) {
         const selectedRegions = regions.filter((reg) => reg.region === region)
 
-        let toBeRenderedRegions = regions.slice(0, max)
+        let toBeRenderedRegions = usedRegions.slice(0, max)
 
         selectedRegions.map((selectedRegion) => {
           if (
@@ -37,7 +39,7 @@ export const RenderRegions = ({
         })
         setRegionsToRender(toBeRenderedRegions)
       } else {
-        setRegionsToRender(regions)
+        setRegionsToRender(usedRegions)
       }
     }
   }, [regions, region, max])

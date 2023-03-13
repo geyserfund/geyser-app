@@ -10,6 +10,7 @@ export interface ProjectRowLayoutProps extends StackProps {
   subtitle?: string
   children: React.ReactNode
   onSeeAllClick?: () => void
+  seeAllText?: string
 }
 
 export const ProjectRowLayout = ({
@@ -17,6 +18,7 @@ export const ProjectRowLayout = ({
   subtitle,
   children,
   onSeeAllClick,
+  seeAllText,
   ...rest
 }: ProjectRowLayoutProps) => {
   return (
@@ -35,7 +37,7 @@ export const ProjectRowLayout = ({
             rightIcon={<ChevronRightIcon fontSize="25px" />}
             onClick={onSeeAllClick}
           >
-            See all
+            {seeAllText || 'See all'}
           </ButtonComponent>
         )}
       </HStack>

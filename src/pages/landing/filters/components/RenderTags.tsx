@@ -18,9 +18,10 @@ export const RenderTags = ({
 
   useEffect(() => {
     const selectedTags = allTags.filter((tag) => tagIds.includes(tag.id))
+    const usedTags = allTags.filter((tag) => tag.count > 0)
 
     if (max) {
-      let toBeRenderedTags = allTags.slice(0, max)
+      let toBeRenderedTags = usedTags.slice(0, max)
 
       selectedTags.map((selectedTag) => {
         if (
@@ -33,7 +34,7 @@ export const RenderTags = ({
       })
       setTagsToRender(toBeRenderedTags)
     } else {
-      setTagsToRender(allTags)
+      setTagsToRender(usedTags)
     }
   }, [allTags, tagIds, max])
 

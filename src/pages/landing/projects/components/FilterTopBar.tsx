@@ -4,21 +4,35 @@ import { HStack, StackProps, Wrap } from '@chakra-ui/react'
 import { HiOutlineTag } from 'react-icons/hi'
 import { SlLocationPin } from 'react-icons/sl'
 
-import Loader from '../../../../components/ui/Loader'
+import { H3 } from '../../../../components/typography'
 import { useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import { colors } from '../../../../styles'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
+import { getActivityButtonContent } from '../../filters/activity'
 import { SortMenu } from '../../filters/sort/SortMenu'
 import { getStatusTypeButtonContent } from '../../filters/status'
 import { TagComponent } from '../elements'
 
-export const FilterTopBar = (props: StackProps) => {
-  const { filters, updateFilter } = useFilterContext()
+interface FilterTopBarProps extends StackProps {
+  noSort?: boolean
+}
+
+export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
+  const { filters, updateFilter, sort } = useFilterContext()
   const isMobile = useMobileMode()
 
-  const { tagIds = [], region, countryCode, search, type, status } = filters
+  const {
+    tagIds = [],
+    region,
+    countryCode,
+    search,
+    type,
+    status,
+    activity,
+    recent,
+  } = filters
 
   const { loading: tagsLoading, data } = useQuery<{ tagsGet: TagsGetResult[] }>(
     QUERY_TAGS,
@@ -29,7 +43,7 @@ export const FilterTopBar = (props: StackProps) => {
   }>(QUERY_COUNTRIES)
 
   if (tagsLoading || countriesLoading) {
-    return <Loader />
+    return null
   }
 
   const handleClearTag = (tagId: number) => {
@@ -106,30 +120,61 @@ export const FilterTopBar = (props: StackProps) => {
       return null
     }
 
-    const {
-      icon: Icon,
-      text,
-      color,
-    } = getStatusTypeButtonContent({ type, status })
+    const { icon: Icon, text } = getStatusTypeButtonContent({ type, status })
+    return (
+      <TagComponent
+        label={text}
+        icon={<Icon height="18px" color={colors.neutral500} />}
+        onClick={() => updateFilter({ type: undefined, status: undefined })}
+      />
+    )
+  }
+
+  const renderFilterActivity = () => {
+    if (!activity) {
+      return null
+    }
+
+    const { icon: Icon, text, color } = getActivityButtonContent(activity)
     return (
       <TagComponent
         label={text}
         icon={<Icon height="20px" color={color} />}
-        onClick={() => updateFilter({ type: undefined, status: undefined })}
+        onClick={() => updateFilter({ activity: undefined })}
       />
     )
+  }
+
+  const renderRecentProjects = () => {
+    if (!recent) {
+      return null
+    }
+
+    let value = ''
+    if (sort.balance) {
+      value = 'Most funded all time'
+    } else if (sort.createdAt) {
+      value = 'Most recent projects'
+    } else if (sort.recent) {
+      value = 'Most funded this week'
+    }
+
+    return <H3 color="brand.primary600">{value}</H3>
   }
 
   const viewFilterSearch = renderFilterSearch()
   const viewFilterStatusType = renderFilterStatusType()
   const viewFilterTags = renderFilterTags()
   const viewFilterRegion = renderFilterRegion()
+  const viewFilterActivity = renderFilterActivity()
+  const viewRecentProjects = renderRecentProjects()
 
   if (
     (!isMobile && viewFilterSearch) ||
     viewFilterStatusType ||
     viewFilterTags ||
     viewFilterRegion ||
+    viewFilterActivity ||
     (!isMobile && filters.recent)
   ) {
     return (
@@ -137,15 +182,17 @@ export const FilterTopBar = (props: StackProps) => {
         width="100%"
         justifyContent="space-between"
         alignItems="start"
-        {...props}
+        {...rest}
       >
         <Wrap>
+          {viewRecentProjects}
+          {viewFilterActivity}
           {viewFilterSearch}
           {viewFilterStatusType}
           {viewFilterTags}
           {viewFilterRegion}
         </Wrap>
-        {!isMobile && <SortMenu />}
+        {!isMobile && !noSort && <SortMenu />}
       </HStack>
     )
   }

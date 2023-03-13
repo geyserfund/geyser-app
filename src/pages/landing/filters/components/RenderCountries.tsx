@@ -20,12 +20,13 @@ export const RenderCountries = ({
 
   useEffect(() => {
     if (countries.length > 0) {
+      const usedCountries = countries.filter((country) => country.count > 0)
       if (max) {
         const selectedCountries = countries.filter(
           (country) => country.country.code === countryCode,
         )
 
-        let toBeRenderedCountries = countries.slice(0, max)
+        let toBeRenderedCountries = usedCountries.slice(0, max)
 
         selectedCountries.map((selectedCountry) => {
           if (
@@ -40,7 +41,7 @@ export const RenderCountries = ({
         })
         setCountriesToRender(toBeRenderedCountries)
       } else {
-        setCountriesToRender(countries)
+        setCountriesToRender(usedCountries)
       }
     }
   }, [countries, countryCode, max])

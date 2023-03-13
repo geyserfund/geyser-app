@@ -199,11 +199,11 @@ export const ProjectContributors = () => {
           : '-'
 
         const funderData = [
-          funder.user?.username || '',
-          funder.amountFunded || '',
-          rewardValue || '',
-          dateString || '',
-          funder.user?.email || '',
+          funder.user?.username || '-',
+          funder.amountFunded || '-',
+          rewardValue || '-',
+          dateString || '-',
+          funder.fundingTxs?.find((val) => val.email)?.email || '-',
         ]
         csvData.push(funderData)
       }
@@ -270,7 +270,7 @@ export const ProjectContributors = () => {
                     <BiCopy fontSize="20px" />
                   )
                 }
-                disabled={selectedFunders.length === 0}
+                isDisabled={selectedFunders.length === 0}
               >
                 {copied ? 'Copied' : 'Copy'}
               </ButtonComponent>
@@ -278,7 +278,7 @@ export const ProjectContributors = () => {
                 <ButtonComponent
                   size="sm"
                   leftIcon={<BiDownload fontSize="20px" />}
-                  disabled
+                  isDisabled
                 >
                   Download CSV
                 </ButtonComponent>
