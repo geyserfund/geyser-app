@@ -57,6 +57,8 @@ export const EntryCreateEdit = () => {
   const { user } = useAuthContext()
   const { setNavData } = useNavContext()
 
+  const [richTextEditorLoading, setRichTextEditorLoading] = useState(true)
+
   const classes = useStyles()
 
   const [focusFlag, setFocusFlag] = useState('')
@@ -84,6 +86,7 @@ export const EntryCreateEdit = () => {
             navigate(getPath('notAuthorized'))
           }
 
+          setRichTextEditorLoading(false)
           setNavData({
             projectName: project.name,
             projectTitle: project.title,
@@ -199,13 +202,17 @@ export const EntryCreateEdit = () => {
     return <Loader />
   }
 
+  console.log('checking entry', entry)
+
+  const isPublished = entry.status === EntryStatus.Published
+
   return (
     <>
       <CreateNav
         isSaving={saving}
         saveText={getSaveButtonText()}
         onSave={saveEntry}
-        onPreview={onPreview}
+        onPreview={!isPublished ? onPreview : undefined}
         onBack={onBack}
       />
       <VStack
@@ -297,12 +304,14 @@ export const EntryCreateEdit = () => {
             </VStack>
 
             <Box flex={1} width="100%">
-              <ProjectEntryEditor
-                name="content"
-                handleChange={handleContentUpdate}
-                value={entry.content as string}
-                focusFlag={focusFlag}
-              />
+              {!richTextEditorLoading && (
+                <ProjectEntryEditor
+                  name="content"
+                  handleChange={handleContentUpdate}
+                  value={entry.content as string}
+                  focusFlag={focusFlag}
+                />
+              )}
             </Box>
           </VStack>
         </Box>
