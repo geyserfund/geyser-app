@@ -51,7 +51,7 @@ export const RewardItem = ({ reward }: { reward: ProjectReward }) => {
       overflow="hidden"
     >
       {reward.image && (
-        <Box w="full" height="210px">
+        <Box w="full" h="full" maxHeight="210px" overflow="hidden">
           <ImageWithReload w="full" h="full" grey src={`${reward.image}`} />
         </Box>
       )}
