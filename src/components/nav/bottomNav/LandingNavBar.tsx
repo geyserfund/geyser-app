@@ -29,7 +29,7 @@ const LandingNavItems = [
     path: '/',
   },
   {
-    name: 'Feed',
+    name: 'Activity',
     Icon: FeedNavIcon,
     path: '/feed',
   },
