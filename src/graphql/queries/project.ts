@@ -62,7 +62,6 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
       }
       sponsors {
         id
-        confirmed
         url
         image
         user {
@@ -83,9 +82,6 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
         confirmed
         confirmedAt
         timesFunded
-      }
-      grantees {
-        id
       }
       milestones {
         id

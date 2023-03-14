@@ -10,6 +10,19 @@ export const neutralColors = {
   800: '#343A40',
   900: '#212529',
 }
+
+export const primaryColors = {
+  50: '#E9FFFB',
+  100: '#B7FFF2',
+  200: '#86FFE9',
+  300: '#54FFE0',
+  400: '#6BE7CE',
+  500: '#10CAA8',
+  600: '#03A88A',
+  700: '#00866D',
+  800: '#006452',
+  900: '#004236',
+}
 export const colors = {
   primary: '#20ECC7',
   primaryTint: '#12CEAC',
