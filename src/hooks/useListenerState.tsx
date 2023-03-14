@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 
 export const useListenerState = <Type,>(
   initialValue: Type,
-): [React.MutableRefObject<Type>, (value: Type) => void] => {
+): [React.MutableRefObject<Type>, (value: Type) => void, Type] => {
   const [_state, _setState] = useState(initialValue)
   const state = useRef(_state)
   const setState = (value: Type) => {
@@ -10,5 +10,5 @@ export const useListenerState = <Type,>(
     _setState(value)
   }
 
-  return [state, setState]
+  return [state, setState, _state]
 }
