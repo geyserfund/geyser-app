@@ -251,11 +251,11 @@ export const ProjectContributors = () => {
                 fontSize={'16px'}
                 fontWeight={600}
               >{`${project.fundersCount} Contributors`}</Text>
-              {selectedFunders.length > 0 && (
-                <Text
-                  fontSize={'14px'}
-                >{`( ${selectedFunders.length} selected )`}</Text>
-              )}
+              <Text fontSize={'14px'}>
+                {selectedFunders.length > 0
+                  ? `( ${selectedFunders.length} selected )`
+                  : '( none selected )'}
+              </Text>
             </HStack>
 
             <HStack>
