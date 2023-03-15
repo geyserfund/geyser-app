@@ -131,7 +131,7 @@ export const GrantsRoundTwo = ({
     }
 
     getSponsors()
-  }, [])
+  }, [toast])
 
   useEffect(() => {
     const getApplicants = async () => {

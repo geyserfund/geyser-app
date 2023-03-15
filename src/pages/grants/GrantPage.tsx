@@ -1,13 +1,11 @@
-import { Box, Button, Container, Image } from '@chakra-ui/react'
+import { Box, Container, Image } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useParams } from 'react-router-dom'
 
-import { BoltSvgIcon } from '../../components/icons'
 import { Body1, H1, H3 } from '../../components/typography'
 import { StatusLabel } from '../../components/ui/StatusLabel'
 import { useAnimatedClipboard } from '../../hooks/useAnimatedClipboard'
-import { colors } from '../../styles'
 import {
   GrantApplicant,
   GrantApplicantStatus,
@@ -23,7 +21,7 @@ import { ContributionsWidget } from './components/ContributionsWidget'
 import { DistributionChart } from './components/DistributionChart'
 import { MoreInfo } from './components/MoreInfo'
 import { SectionCard } from './components/SectionCard'
-import { CONTRIBUTION_ADDRESS } from './constants'
+import { CONTRIBUTION_ADDRESS, GRANT_STATUS_MAP } from './constants'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
 import { useGrant } from './hooks/useGrant'
@@ -66,7 +64,7 @@ export const GrantPage = () => {
         description: 'Please refresh the page and try again.',
       })
     }
-  }, [error])
+  }, [error, toast])
 
   const [handleCopyAddress, hasCopied] =
     useAnimatedClipboard(CONTRIBUTION_ADDRESS)
@@ -118,7 +116,9 @@ export const GrantPage = () => {
         <Box p={5}>
           {isMobile ? null : (
             <Box pb={2}>
-              <StatusLabel>ACTIVE</StatusLabel>
+              <StatusLabel textTransform="uppercase">
+                {GRANT_STATUS_MAP[grant.status]}
+              </StatusLabel>
             </Box>
           )}
           <Box
@@ -130,20 +130,6 @@ export const GrantPage = () => {
           >
             <Box pt={2}>
               <H1>{grant.title}</H1>
-            </Box>
-            <Box pt={isMobile ? 4 : 2} justifySelf="end">
-              <Button
-                onClick={() => handleCopyAddress()}
-                height={8}
-                textColor={hasCopied ? colors.primary500 : undefined}
-                variant="outlined"
-              >
-                <BoltSvgIcon
-                  color={hasCopied ? colors.primary500 : undefined}
-                  mr={2}
-                />
-                {CONTRIBUTION_ADDRESS}
-              </Button>
             </Box>
           </Box>
           <Box pt={4}>

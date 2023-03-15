@@ -7,27 +7,30 @@ import { ProjectFundingQRScreenQRCodeSection } from '../projectView/projectActiv
 import { FundingComplete } from './stages/FundingComplete'
 import { FundingForm, ProjectFundingFormState } from './stages/FundingForm'
 
-const CONTRIBUTION_TITLE = 'Contribute'
 const SUCCESS_TITLE = 'Contribution Successfull'
 
 interface Props {
   project: Project | undefined
   user: User
-  onTitleChange?(title: string): void
+  onTitleChange?(title: string | null): void
 }
+
+const noop = () => {}
 
 export const ProjectFunding = ({
   project,
   user,
-  onTitleChange = () => {},
+  onTitleChange = noop,
 }: Props) => {
   const fundingFlow = useFundingFlow()
 
-  const [title, setTitle] = useState(CONTRIBUTION_TITLE)
+  const [title, setTitle] = useState<string | null>(null)
 
   useEffect(() => {
-    onTitleChange(title)
-  }, [title])
+    if (title) {
+      onTitleChange(title)
+    }
+  }, [onTitleChange, title])
 
   const [formState, setFormState] = useState<
     ProjectFundingFormState | undefined
