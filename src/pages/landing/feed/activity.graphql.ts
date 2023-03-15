@@ -95,6 +95,7 @@ export const QUERY_ACTIVITIES_FOR_LANDING_PAGE = gql`
   query GetActivities($input: GetActivitiesInput) {
     getActivities(input: $input) {
       id
+      createdAt
       resource {
         ... on Entry ${EntryQueryParametersForLandingPage}
         ... on Project ${ProjectParametersForLandingPage}

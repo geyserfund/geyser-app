@@ -49,8 +49,9 @@ export type Scalars = {
 
 export type Activity = {
   __typename?: 'Activity';
-  id?: Maybe<Scalars['String']>;
-  resource?: Maybe<ActivityResource>;
+  createdAt: Scalars['Date'];
+  id: Scalars['String'];
+  resource: ActivityResource;
 };
 
 export type ActivityCreatedSubscriptionInput = {
@@ -1602,7 +1603,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource?: Maybe<ResolversTypes['ActivityResource']> }>;
+  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>;
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
   ActivityResource: ResolversTypes['Entry'] | ResolversTypes['FundingTx'] | ResolversTypes['Project'] | ResolversTypes['ProjectReward'];
@@ -1791,7 +1792,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Activity: Omit<Activity, 'resource'> & { resource?: Maybe<ResolversParentTypes['ActivityResource']> };
+  Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] };
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
   ActivityResource: ResolversParentTypes['Entry'] | ResolversParentTypes['FundingTx'] | ResolversParentTypes['Project'] | ResolversParentTypes['ProjectReward'];
@@ -1979,8 +1980,9 @@ export type ConstraintDirectiveArgs = {
 export type ConstraintDirectiveResolver<Result, Parent, ContextType = any, Args = ConstraintDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type ActivityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity']> = {
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  resource?: Resolver<Maybe<ResolversTypes['ActivityResource']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  resource?: Resolver<ResolversTypes['ActivityResource'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
