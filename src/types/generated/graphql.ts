@@ -109,12 +109,6 @@ export type CreateEntryInput = {
   type: EntryType;
 };
 
-export type CreateGranteeInput = {
-  name: Scalars['String'];
-  projectId: Scalars['BigInt'];
-  url: Scalars['String'];
-};
-
 export type CreateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']>;
@@ -528,19 +522,70 @@ export type GetProjectsMostFundedOfTheWeekInput = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
-export type Grantee = {
-  __typename?: 'Grantee';
+export type Grant = {
+  __typename?: 'Grant';
+  applicants: Array<Maybe<GrantApplicant>>;
+  balance: Scalars['Int'];
+  description?: Maybe<Scalars['String']>;
   id: Scalars['BigInt'];
+  image?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  url: Scalars['String'];
+  shortDescription: Scalars['String'];
+  sponsors: Array<Maybe<Sponsor>>;
+  status: GrantStatusEnum;
+  statuses: Array<GrantStatus>;
+  title: Scalars['String'];
 };
 
-export type GranteeSubmissionResponse = {
-  __typename?: 'GranteeSubmissionResponse';
-  grantees: Array<Maybe<Grantee>>;
-  message: Scalars['String'];
-  success: Scalars['Boolean'];
+export type GrantApplicant = {
+  __typename?: 'GrantApplicant';
+  funding: GrantApplicantFunding;
+  grant: Grant;
+  project: Project;
+  status: GrantApplicantStatus;
 };
+
+export type GrantApplicantFunding = {
+  __typename?: 'GrantApplicantFunding';
+  /** The amount of funding the grant applicant has received from the community. */
+  communityFunding: Scalars['Int'];
+  /**
+   * The amount of funding that the Grant applicant has been confirmed to receive. Can only be confirmed after the
+   * grant has been closed.
+   */
+  grantAmount: Scalars['Int'];
+  /** The amount of funding that the grant applicant has received. */
+  grantAmountDistributed: Scalars['Int'];
+};
+
+export enum GrantApplicantStatus {
+  Accepted = 'ACCEPTED',
+  Canceled = 'CANCELED',
+  Funded = 'FUNDED',
+  Pending = 'PENDING',
+  Rejected = 'REJECTED'
+}
+
+export type GrantGetInput = {
+  where: GrantGetWhereInput;
+};
+
+export type GrantGetWhereInput = {
+  id: Scalars['BigInt'];
+};
+
+export type GrantStatus = {
+  __typename?: 'GrantStatus';
+  endAt: Scalars['Date'];
+  startAt: Scalars['Date'];
+  status: GrantStatusEnum;
+};
+
+export enum GrantStatusEnum {
+  ApplicationsOpen = 'APPLICATIONS_OPEN',
+  Closed = 'CLOSED',
+  FundingOpen = 'FUNDING_OPEN'
+}
 
 export enum InvoiceStatus {
   Canceled = 'canceled',
@@ -646,14 +691,10 @@ export type Location = {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
-  confirmAmbassador: Ambassador;
-  createAmbassador: Ambassador;
   createEntry: Entry;
-  createGrantee: Grantee;
   createProject: Project;
   createProjectMilestone: ProjectMilestone;
   createProjectReward: ProjectReward;
-  createSponsor: Sponsor;
   createWallet: Wallet;
   deleteEntry: Entry;
   deleteProjectMilestone: Scalars['Boolean'];
@@ -684,23 +725,8 @@ export type Mutation = {
 };
 
 
-export type MutationConfirmAmbassadorArgs = {
-  id: Scalars['BigInt'];
-};
-
-
-export type MutationCreateAmbassadorArgs = {
-  projectId: Scalars['BigInt'];
-};
-
-
 export type MutationCreateEntryArgs = {
   input: CreateEntryInput;
-};
-
-
-export type MutationCreateGranteeArgs = {
-  input: CreateGranteeInput;
 };
 
 
@@ -716,11 +742,6 @@ export type MutationCreateProjectMilestoneArgs = {
 
 export type MutationCreateProjectRewardArgs = {
   input: CreateProjectRewardInput;
-};
-
-
-export type MutationCreateSponsorArgs = {
-  projectId: Scalars['BigInt'];
 };
 
 
@@ -898,8 +919,8 @@ export type Project = {
   fundingGoal?: Maybe<Scalars['fundingGoal_Int_min_1']>;
   fundingTxs?: Maybe<Array<Maybe<FundingTx>>>;
   fundingTxsCount?: Maybe<Scalars['Int']>;
-  /** @deprecated No longer supported */
-  grantees: Array<Maybe<Grantee>>;
+  /** Returns the project's grant applications. */
+  grants: Array<Maybe<GrantApplicant>>;
   id: Scalars['BigInt'];
   image?: Maybe<Scalars['String']>;
   links: Array<Maybe<Scalars['String']>>;
@@ -1092,6 +1113,8 @@ export type Query = {
   getProjectRewards: Array<Maybe<ProjectReward>>;
   getSignedUploadUrl: SignedUploadUrl;
   getWallet: Wallet;
+  grant: Grant;
+  grants: Array<Grant>;
   lightningAddressVerify: LightningAddressVerifyResponse;
   me?: Maybe<User>;
   project?: Maybe<Project>;
@@ -1168,6 +1191,11 @@ export type QueryGetWalletArgs = {
 };
 
 
+export type QueryGrantArgs = {
+  input: GrantGetInput;
+};
+
+
 export type QueryLightningAddressVerifyArgs = {
   lightningAddress?: InputMaybe<Scalars['String']>;
 };
@@ -1240,12 +1268,22 @@ export type SourceResource = Entry | Project;
 
 export type Sponsor = {
   __typename?: 'Sponsor';
-  confirmed: Scalars['Boolean'];
+  createdAt: Scalars['Date'];
   id: Scalars['BigInt'];
   image?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  status: SponsorStatus;
   url?: Maybe<Scalars['String']>;
-  user: User;
+  user?: Maybe<User>;
 };
+
+export enum SponsorStatus {
+  Accepted = 'ACCEPTED',
+  Canceled = 'CANCELED',
+  Confirmed = 'CONFIRMED',
+  Pending = 'PENDING',
+  Rejected = 'REJECTED'
+}
 
 export type Subscription = {
   __typename?: 'Subscription';
@@ -1576,7 +1614,6 @@ export type ResolversTypes = {
   ConnectionDetails: ResolversTypes['LightningAddressConnectionDetails'] | ResolversTypes['LndConnectionDetailsPrivate'] | ResolversTypes['LndConnectionDetailsPublic'];
   Country: ResolverTypeWrapper<Country>;
   CreateEntryInput: CreateEntryInput;
-  CreateGranteeInput: CreateGranteeInput;
   CreateProjectInput: CreateProjectInput;
   CreateProjectMilestoneInput: CreateProjectMilestoneInput;
   CreateProjectRewardInput: CreateProjectRewardInput;
@@ -1637,8 +1674,14 @@ export type ResolversTypes = {
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
   GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
-  Grantee: ResolverTypeWrapper<Grantee>;
-  GranteeSubmissionResponse: ResolverTypeWrapper<GranteeSubmissionResponse>;
+  Grant: ResolverTypeWrapper<Grant>;
+  GrantApplicant: ResolverTypeWrapper<GrantApplicant>;
+  GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>;
+  GrantApplicantStatus: GrantApplicantStatus;
+  GrantGetInput: GrantGetInput;
+  GrantGetWhereInput: GrantGetWhereInput;
+  GrantStatus: ResolverTypeWrapper<GrantStatus>;
+  GrantStatusEnum: GrantStatusEnum;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   InvoiceStatus: InvoiceStatus;
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
@@ -1687,6 +1730,7 @@ export type ResolversTypes = {
   SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>;
   SourceResource: ResolversTypes['Entry'] | ResolversTypes['Project'];
   Sponsor: ResolverTypeWrapper<Sponsor>;
+  SponsorStatus: SponsorStatus;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
   Tag: ResolverTypeWrapper<Tag>;
@@ -1758,7 +1802,6 @@ export type ResolversParentTypes = {
   ConnectionDetails: ResolversParentTypes['LightningAddressConnectionDetails'] | ResolversParentTypes['LndConnectionDetailsPrivate'] | ResolversParentTypes['LndConnectionDetailsPublic'];
   Country: Country;
   CreateEntryInput: CreateEntryInput;
-  CreateGranteeInput: CreateGranteeInput;
   CreateProjectInput: CreateProjectInput;
   CreateProjectMilestoneInput: CreateProjectMilestoneInput;
   CreateProjectRewardInput: CreateProjectRewardInput;
@@ -1813,8 +1856,12 @@ export type ResolversParentTypes = {
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
   GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
-  Grantee: Grantee;
-  GranteeSubmissionResponse: GranteeSubmissionResponse;
+  Grant: Grant;
+  GrantApplicant: GrantApplicant;
+  GrantApplicantFunding: GrantApplicantFunding;
+  GrantGetInput: GrantGetInput;
+  GrantGetWhereInput: GrantGetWhereInput;
+  GrantStatus: GrantStatus;
   Int: Scalars['Int'];
   LightningAddressConnectionDetails: LightningAddressConnectionDetails;
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
@@ -2091,17 +2138,40 @@ export type FundinginvoiceCancelResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GranteeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Grantee'] = ResolversParentTypes['Grantee']> = {
+export type GrantResolvers<ContextType = any, ParentType extends ResolversParentTypes['Grant'] = ResolversParentTypes['Grant']> = {
+  applicants?: Resolver<Array<Maybe<ResolversTypes['GrantApplicant']>>, ParentType, ContextType>;
+  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  shortDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sponsors?: Resolver<Array<Maybe<ResolversTypes['Sponsor']>>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['GrantStatusEnum'], ParentType, ContextType>;
+  statuses?: Resolver<Array<ResolversTypes['GrantStatus']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GranteeSubmissionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GranteeSubmissionResponse'] = ResolversParentTypes['GranteeSubmissionResponse']> = {
-  grantees?: Resolver<Array<Maybe<ResolversTypes['Grantee']>>, ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+export type GrantApplicantResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantApplicant'] = ResolversParentTypes['GrantApplicant']> = {
+  funding?: Resolver<ResolversTypes['GrantApplicantFunding'], ParentType, ContextType>;
+  grant?: Resolver<ResolversTypes['Grant'], ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['GrantApplicantStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GrantApplicantFundingResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantApplicantFunding'] = ResolversParentTypes['GrantApplicantFunding']> = {
+  communityFunding?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  grantAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  grantAmountDistributed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GrantStatusResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantStatus'] = ResolversParentTypes['GrantStatus']> = {
+  endAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  startAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['GrantStatusEnum'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2148,14 +2218,10 @@ export type LocationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  confirmAmbassador?: Resolver<ResolversTypes['Ambassador'], ParentType, ContextType, RequireFields<MutationConfirmAmbassadorArgs, 'id'>>;
-  createAmbassador?: Resolver<ResolversTypes['Ambassador'], ParentType, ContextType, RequireFields<MutationCreateAmbassadorArgs, 'projectId'>>;
   createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
-  createGrantee?: Resolver<ResolversTypes['Grantee'], ParentType, ContextType, RequireFields<MutationCreateGranteeArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
   createProjectMilestone?: Resolver<ResolversTypes['ProjectMilestone'], ParentType, ContextType, Partial<MutationCreateProjectMilestoneArgs>>;
   createProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationCreateProjectRewardArgs, 'input'>>;
-  createSponsor?: Resolver<ResolversTypes['Sponsor'], ParentType, ContextType, RequireFields<MutationCreateSponsorArgs, 'projectId'>>;
   createWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationCreateWalletArgs, 'input'>>;
   deleteEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationDeleteEntryArgs, 'id'>>;
   deleteProjectMilestone?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProjectMilestoneArgs, 'projectMilestoneId'>>;
@@ -2208,7 +2274,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   fundingGoal?: Resolver<Maybe<ResolversTypes['fundingGoal_Int_min_1']>, ParentType, ContextType>;
   fundingTxs?: Resolver<Maybe<Array<Maybe<ResolversTypes['FundingTx']>>>, ParentType, ContextType>;
   fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  grantees?: Resolver<Array<Maybe<ResolversTypes['Grantee']>>, ParentType, ContextType>;
+  grants?: Resolver<Array<Maybe<ResolversTypes['GrantApplicant']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   links?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
@@ -2305,6 +2371,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getProjectRewards?: Resolver<Array<Maybe<ResolversTypes['ProjectReward']>>, ParentType, ContextType, RequireFields<QueryGetProjectRewardsArgs, 'input'>>;
   getSignedUploadUrl?: Resolver<ResolversTypes['SignedUploadUrl'], ParentType, ContextType, RequireFields<QueryGetSignedUploadUrlArgs, 'input'>>;
   getWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<QueryGetWalletArgs, 'id'>>;
+  grant?: Resolver<ResolversTypes['Grant'], ParentType, ContextType, RequireFields<QueryGrantArgs, 'input'>>;
+  grants?: Resolver<Array<ResolversTypes['Grant']>, ParentType, ContextType>;
   lightningAddressVerify?: Resolver<ResolversTypes['LightningAddressVerifyResponse'], ParentType, ContextType, Partial<QueryLightningAddressVerifyArgs>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'where'>>;
@@ -2329,11 +2397,13 @@ export type SourceResourceResolvers<ContextType = any, ParentType extends Resolv
 };
 
 export type SponsorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Sponsor'] = ResolversParentTypes['Sponsor']> = {
-  confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['SponsorStatus'], ParentType, ContextType>;
   url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2546,8 +2616,10 @@ export type Resolvers<ContextType = any> = {
   FundingTx?: FundingTxResolvers<ContextType>;
   FundingTxConfirmedSubscriptionResponse?: FundingTxConfirmedSubscriptionResponseResolvers<ContextType>;
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>;
-  Grantee?: GranteeResolvers<ContextType>;
-  GranteeSubmissionResponse?: GranteeSubmissionResponseResolvers<ContextType>;
+  Grant?: GrantResolvers<ContextType>;
+  GrantApplicant?: GrantApplicantResolvers<ContextType>;
+  GrantApplicantFunding?: GrantApplicantFundingResolvers<ContextType>;
+  GrantStatus?: GrantStatusResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
   LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>;
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;

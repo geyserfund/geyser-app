@@ -1,6 +1,6 @@
 import { extendTheme } from '@chakra-ui/react'
 
-import { colors, fonts, neutralColors } from '../styles'
+import { colors, fonts, neutralColors, primaryColors } from '../styles'
 
 export const theme = extendTheme({
   initialColorMode: 'light',
@@ -9,6 +9,7 @@ export const theme = extendTheme({
       ...colors,
     },
     neutral: neutralColors,
+    primary: primaryColors,
   },
   fonts: {
     heading: fonts.brand,

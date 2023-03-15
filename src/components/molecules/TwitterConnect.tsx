@@ -53,13 +53,7 @@ export const TwitterConnect = ({ onClose }: Props) => {
         } catch (error) {
           stopPolling()
           setPollAuthStatus(false)
-          toast({
-            title: 'Something went wrong',
-            description: `The authentication request failed: ${
-              (error as Error).message
-            }.`,
-            status: 'error',
-          })
+          handleToastError((error as Error).message)
         }
 
         if (statusRes && statusRes.status === 200) {
@@ -72,11 +66,7 @@ export const TwitterConnect = ({ onClose }: Props) => {
             }
 
             setPollAuthStatus(false)
-            toast({
-              title: 'Something went wrong',
-              description: `The authentication request failed: ${reason}.`,
-              status: 'error',
-            })
+            handleToastError(reason)
           }
         }
       }, 1000)
@@ -101,16 +91,19 @@ export const TwitterConnect = ({ onClose }: Props) => {
           'noopener,noreferrer',
         )
       } else {
-        toast({
-          title: 'Something went wrong',
-          description:
-            'The authentication request failed: could not get authentication token.',
-          status: 'error',
-        })
+        handleToastError('could not get authentication token.')
       }
     } catch (err) {
-      console.log('err', err)
+      handleToastError()
     }
+  }
+
+  const handleToastError = (reason?: string) => {
+    toast({
+      title: 'Something went wrong',
+      description: `The authentication request failed. ${reason}.`,
+      status: 'error',
+    })
   }
 
   return (

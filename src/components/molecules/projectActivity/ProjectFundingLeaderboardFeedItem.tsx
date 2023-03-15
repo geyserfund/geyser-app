@@ -28,15 +28,7 @@ export const ProjectFundingLeaderboardFeedItem = ({
   })
 
   return (
-    <Box
-      padding="10px 25px"
-      mt={2}
-      width="95%"
-      boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"
-      _hover={{ boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)' }}
-      borderRadius="12px"
-      {...rest}
-    >
+    <Box padding="5px 25px" mt={2} borderRadius="12px" {...rest}>
       <Box display="flex" justifyContent="space-between">
         <HStack>
           <Text fontWeight="bold" mr={2}>
