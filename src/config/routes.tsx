@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
@@ -183,27 +183,31 @@ const platformRoutes = [
 
 export const Router = () => {
   const renderRoutes = (routes: PlatformRoutes[]) => {
-    return routes.map(
-      ({ path, element: Element, authenticated, nested, isIndex }) => {
-        const renderElement = authenticated ? (
-          <PrivateRoute>
+    return [
+      ...routes.map(
+        ({ path, element: Element, authenticated, nested, isIndex }) => {
+          const renderElement = authenticated ? (
+            <PrivateRoute>
+              <Element />
+            </PrivateRoute>
+          ) : (
             <Element />
-          </PrivateRoute>
-        ) : (
-          <Element />
-        )
-        // index routes cannot have children routes
-        if (isIndex) {
-          return <Route index key={path} element={renderElement} />
-        }
+          )
+          // index routes cannot have children routes
+          if (isIndex) {
+            return <Route index key={path} element={renderElement} />
+          }
 
-        return (
-          <Route key={path} path={path} element={renderElement}>
-            {nested?.length && renderRoutes(nested)}
-          </Route>
-        )
-      },
-    )
+          return (
+            <Route key={path} path={path} element={renderElement}>
+              {nested?.length && renderRoutes(nested)}
+            </Route>
+          )
+        },
+      ),
+      // The default route if a random route is used
+      <Route key="*" path="*" element={<Navigate to="/" replace />} />,
+    ]
   }
 
   return <Routes>{renderRoutes(platformRoutes)}</Routes>

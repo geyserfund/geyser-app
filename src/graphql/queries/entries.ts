@@ -12,6 +12,7 @@ export const QUERY_GET_ENTRY = gql`
       createdAt
       updatedAt
       publishedAt
+      status
       fundersCount
       type
       creator {
