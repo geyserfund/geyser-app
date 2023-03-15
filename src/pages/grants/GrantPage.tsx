@@ -66,9 +66,6 @@ export const GrantPage = () => {
     }
   }, [error, toast])
 
-  const [handleCopyAddress, hasCopied] =
-    useAnimatedClipboard(CONTRIBUTION_ADDRESS)
-
   if (loading || !grant) {
     return null
   }
