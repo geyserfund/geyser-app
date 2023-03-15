@@ -1,8 +1,9 @@
 import { gql, useQuery } from '@apollo/client'
 
-import { ProjectEntryCard } from '../../../components/molecules'
 import { Entry } from '../../../types/generated/graphql'
 import { toInt } from '../../../utils'
+import { LandingEntryCard } from '../../landing/components'
+import { EntryQueryParametersForLandingPage } from '../../landing/feed/activity.graphql'
 
 type Props = {
   entryID: number
@@ -10,24 +11,7 @@ type Props = {
 
 const GET_ENTRY = gql`
   query GetEntry($entryID: BigInt!) {
-    entry(id: $entryID) {
-      id
-      title
-      description
-      image
-      fundersCount
-      amountFunded
-      type
-      creator {
-        id
-        imageUrl
-        username
-      }
-      project {
-        id
-        title
-      }
-    }
+    entry(id: $entryID) ${EntryQueryParametersForLandingPage}
   }
 `
 
@@ -49,5 +33,7 @@ export const UserProfilePageEntriesListItem = ({ entryID }: Props) => {
     return null
   }
 
-  return data ? <ProjectEntryCard entry={data.entry} /> : null
+  return data ? (
+    <LandingEntryCard entry={data.entry} isMobile maxWidth="500px" />
+  ) : null
 }
