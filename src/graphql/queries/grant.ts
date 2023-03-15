@@ -11,6 +11,7 @@ export const QUERY_GRANTS = gql`
       status
       statuses {
         status
+        endAt
         startAt
       }
       sponsors {
@@ -37,6 +38,7 @@ export const QUERY_GRANT = gql`
       status
       statuses {
         status
+        endAt
         startAt
       }
       applicants {

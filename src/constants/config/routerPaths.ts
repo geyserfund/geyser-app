@@ -38,7 +38,8 @@ const pathsMap = {
   landingFeed: () => `/${PathName.landingFeed}`,
   leaderboard: () => `/${PathName.leaderboard}`,
   projectDiscovery: () => `/${PathName.projectDiscovery}`,
-  grants: () => `/${PathName.grants}`,
+  grants: (grantId?: string) =>
+    grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`,
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
   notFound: () => `/${PathName.notFound}`,

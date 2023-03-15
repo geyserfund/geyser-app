@@ -1,4 +1,6 @@
 import { Box, Button, Image, Text } from '@chakra-ui/react'
+import classNames from 'classnames'
+import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
 import { H3 } from '../../../components/typography'
@@ -17,9 +19,22 @@ interface Props {
   title?: string
 }
 
+const useStyles = createUseStyles({
+  desktopImage: {
+    width: '144px',
+  },
+  mobileImage: {
+    width: '90px',
+  },
+  image: {
+    display: 'block',
+    height: '101px',
+  },
+})
+
 export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
   const isMobile = useMobileMode()
-
+  const classes = useStyles()
   const modalProps = useProjectFundingModal()
 
   if (!applicants) {
@@ -40,8 +55,14 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
           <SectionCard my={3} p={2} key={project.id}>
             <Box display="flex">
               {project.thumbnailImage && (
-                <Box mr={3}>
-                  <Link to={projectLink}>
+                <Box mr={3} height={'101px'}>
+                  <Link
+                    to={projectLink}
+                    className={classNames(
+                      classes.image,
+                      isMobile ? classes.mobileImage : classes.desktopImage,
+                    )}
+                  >
                     <Image
                       objectFit="cover"
                       borderRadius="7px"
@@ -63,7 +84,7 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
               </Box>
               {!isMobile && (
                 <Box
-                  width="166px"
+                  minWidth="166px"
                   pr={4}
                   display="flex"
                   flexDirection="column"

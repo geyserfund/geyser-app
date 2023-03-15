@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { QUERY_GRANT } from '../../../graphql/queries/grant'
 import { Grant } from '../../../types'
@@ -19,12 +19,10 @@ export const useGrant = (id?: string | number) => {
     variables,
   )
 
-  console.log({ data })
-
   return {
     grant: data ? data.grant : null,
     error,
     loading,
-    refetch: useCallback(() => refetch(variables), [variables]),
+    refetch,
   }
 }

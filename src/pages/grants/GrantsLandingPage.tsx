@@ -3,6 +3,7 @@ import { useTheme } from '@chakra-ui/react'
 
 import { AppFooter } from '../../components/molecules'
 import { H2, H3 } from '../../components/typography'
+import { getPath } from '../../constants'
 import { useAnimatedClipboard } from '../../hooks/useAnimatedClipboard'
 import { colors, fonts } from '../../styles'
 import { Grant, GrantStatusEnum } from '../../types'
@@ -194,7 +195,7 @@ export const GrantsLandingPage = () => {
                   </Text>
                   <CustomGrantCard
                     grant={activeGrant}
-                    to={`/grants/${activeGrant?.id}`}
+                    to={getPath('grants', activeGrant.id)}
                     showBanner
                   />
                 </Box>
@@ -211,7 +212,7 @@ export const GrantsLandingPage = () => {
                 {inactiveGrants.map((grant) => (
                   <CustomGrantCard
                     key={grant.id}
-                    to={`/grants/${grant.id}`}
+                    to={getPath('grants', grant.id)}
                     showBanner={false}
                     grant={grant}
                   />

@@ -18,11 +18,12 @@ export const ProjectFundingModal = ({
   close,
   props,
 }: ProjectFundingModalProps) => {
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState<string | null>(null)
   const { user } = useAuthContext()
 
   useEffect(() => {
-    if (props && props.project && props.project.title) {
+    console.log('effect', props)
+    if (props?.project?.title) {
       setTitle(props.project.title)
     }
   }, [props])

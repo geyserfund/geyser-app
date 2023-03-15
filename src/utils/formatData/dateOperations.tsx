@@ -132,7 +132,12 @@ export const getCountDown = (date: string) => {
   return duration.toFormat("d 'days : ' h'h :' m'm : ' s's")
 }
 
-export const getCountDownDuration = (date = 0) => {
+export const getCountDownDuration = (date?: number | null) => {
+  const noDuration = Duration.fromObject({ hours: 0 })
+  if (!date) {
+    return noDuration
+  }
+
   const dateTime = DateTime.fromMillis(date)
   const currentDateTime = DateTime.now()
 
@@ -141,7 +146,7 @@ export const getCountDownDuration = (date = 0) => {
     return i.toDuration()
   }
 
-  return Duration.fromObject({ hours: 0 })
+  return noDuration
 }
 
 export const getFormattedDate = (date: number | string) => {
