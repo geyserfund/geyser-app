@@ -1,4 +1,4 @@
-import { Divider, VStack } from '@chakra-ui/react'
+import { Divider } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'

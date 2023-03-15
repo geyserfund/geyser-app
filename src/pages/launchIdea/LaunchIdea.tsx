@@ -79,6 +79,7 @@ export const LaunchIdea = () => {
         },
       ]
       await createCreatorRecord({ records })
+      setSubmitted(true)
     } catch (error) {
       toast({
         title: 'Something went wrong',
