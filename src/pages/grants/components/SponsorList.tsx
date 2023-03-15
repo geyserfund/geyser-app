@@ -1,7 +1,9 @@
-import { Box, BoxProps, Image, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Image, Link, Text } from '@chakra-ui/react'
+
+import { Maybe, Sponsor } from '../../../types'
 
 interface Props {
-  sponsors?: Array<string>
+  sponsors?: Array<Maybe<Sponsor>>
   titleProps?: BoxProps
 }
 
@@ -17,12 +19,16 @@ export const SponsorList = ({
           SPONSORS
         </Text>
       </Box>
-      <Box display="flex">
-        {sponsors.map((item) => (
-          <Box key={item} mr={3}>
-            <Image src={item} alt="logo" height="30px" />
-          </Box>
-        ))}
+      <Box display="flex" flexWrap="wrap">
+        {sponsors.map((item) =>
+          item && item.image ? (
+            <Box key={item.id} mr={3}>
+              <Link as={'div'} href={item.url || '#'}>
+                <Image src={item.image} alt="sponsor logo" height="30px" />
+              </Link>
+            </Box>
+          ) : null,
+        )}
       </Box>
     </Box>
   ) : null

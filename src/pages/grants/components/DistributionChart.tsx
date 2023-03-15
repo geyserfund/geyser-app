@@ -2,7 +2,7 @@ import { Box, BoxProps, Text } from '@chakra-ui/react'
 
 import { H3 } from '../../../components/typography'
 import { colors } from '../../../styles'
-import { Project } from '../../../types'
+import { GrantApplicant } from '../../../types'
 import { SectionCard } from './SectionCard'
 
 const CHART_BAR_COLORS = [
@@ -14,29 +14,39 @@ const CHART_BAR_COLORS = [
 ]
 
 interface Props {
-  // @TODO: remove percentage prop once grants pass this info
-  projects: Array<Project & { percentage: number }>
+  applicants: Array<GrantApplicant>
 }
 
-export const DistributionChart = ({ projects }: Props) => {
-  const maxPercentage = Math.max(
-    ...projects.map((project) => project.percentage),
-  )
+export const DistributionChart = ({ applicants }: Props) => {
+  const total = applicants.reduce((prev, curr) => {
+    return prev + (curr?.funding.communityFunding || 0)
+  }, 0)
+
+  const percentages: Array<GrantApplicant & { percentage: number }> =
+    applicants.map((applicant) => ({
+      ...applicant,
+      percentage: Math.round(
+        ((applicant.funding?.communityFunding || 0) * 100) / (total || 1),
+      ),
+    }))
+
+  const maxPercentage = Math.max(...percentages.map((p) => p.percentage))
+
   return (
     <SectionCard p={5}>
       <H3>Grant distribution status</H3>
       <Box py={2}>
-        {projects
+        {percentages
           .sort((a, b) => {
             return a.percentage < b.percentage ? 1 : -1
           })
-          .map((project, i) => (
+          .map(({ project, percentage }, i) => (
             <Item
               key={project.id}
-              bg={CHART_BAR_COLORS[i]}
+              bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
               title={project.title}
-              percentage={project.percentage}
-              width={Math.trunc((project.percentage * 100) / maxPercentage)}
+              percentage={percentage}
+              width={Math.trunc((percentage * 100) / maxPercentage)}
             />
           ))}
       </Box>

@@ -33,11 +33,12 @@ import { USDCents } from '../../../types'
 import {
   FundingInput,
   FundingResourceType,
+  Project,
 } from '../../../types/generated/graphql'
 import { toInt, useNotification } from '../../../utils'
 import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/projectActivityPanel/components/ProjectFundingQRScreenQRCodeSection'
+import { GRANTS_PROJECT_NAME } from '../constants'
 
-const GRANTS_PROJECT_NAME = 'grants'
 const defaultModalHeader = 'Contribute'
 
 export type GrantContributeInput = {
@@ -56,13 +57,17 @@ export const defaultGrantContribution = {
   name: '',
 }
 
-export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
+interface Props {
+  onSuccess?: (input: GrantContributeInput, project?: Project) => unknown
+}
+
+export const GrantsContributeModal = ({ onSuccess }: Props) => {
   const { toast } = useNotification()
   const { user } = useAuthContext()
   const { getSatoshisFromUSDCents } = useBTCConverter()
   const fundingFlow = useFundingFlow()
-
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [modalHeader, setModalHeader] = useState(defaultModalHeader)
 
   const { state, setState, setTarget, setValue } =
@@ -104,8 +109,8 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
   }, [state])
 
   useEffect(() => {
-    if (fundState === fundingStages.completed && onLink) {
-      onLink(state)
+    if (fundState === fundingStages.completed && onSuccess) {
+      onSuccess(state, grantsData?.project)
     }
   }, [fundState])
 
@@ -426,24 +431,25 @@ export const GrantsContributeModal = ({ onLink }: { onLink?: any }) => {
         mr="2"
         height={10}
         onClick={() => {
-          onOpen()
           gotoNextStage()
+          onOpen()
         }}
         backgroundColor="brand.primary"
       >
         Contribute
       </Button>
-
-      <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
-        {OverlayOne}
-        <ModalContent bg="transparent" boxShadow={0}>
-          <Box borderRadius="4px" bg="brand.bgWhite" pb={3}>
-            <ModalHeader pb={2}>{modalHeader}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>{renderModalBody()}</ModalBody>
-          </Box>
-        </ModalContent>
-      </Modal>
+      {isOpen && (
+        <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
+          {OverlayOne}
+          <ModalContent bg="transparent" boxShadow={0}>
+            <Box borderRadius="4px" bg="brand.bgWhite" pb={3}>
+              <ModalHeader pb={2}>{modalHeader}</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>{renderModalBody()}</ModalBody>
+            </Box>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   )
 }
