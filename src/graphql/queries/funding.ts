@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { FundingTxQueryParameterForLandingPage } from '../../pages/landing/feed/activity.graphql'
+
 /**
  * - https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts
  * - [`FundingTx` type](https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts#L44)
@@ -36,42 +38,6 @@ export const QUERY_GET_FUNDING = gql`
  */
 export const QUERY_GET_FUNDING_TXS_LANDING = gql`
   query GetFundingTxs($input: GetFundingTxsInput) {
-    getFundingTxs(input: $input) {
-      id
-      comment
-      amount
-      funder {
-        id
-        user {
-          id
-          username
-          imageUrl
-          externalAccounts {
-            externalUsername
-            public
-            type
-          }
-        }
-      }
-      paidAt
-      onChain
-      media
-      source
-      method
-      projectId
-      sourceResource {
-        ... on Project {
-          id
-          name
-          title
-          image
-          thumbnailImage
-        }
-        ... on Entry {
-          id
-          image
-        }
-      }
-    }
+    getFundingTxs(input: $input) ${FundingTxQueryParameterForLandingPage}
   }
 `
