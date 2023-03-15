@@ -7,6 +7,7 @@ import {
   Image,
   Link,
   Text,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import React from 'react'
@@ -17,15 +18,18 @@ import satwalletimg from '../../assets/walletsats.svg'
 import { AppFooter } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
 import {
+  getPath,
   GrantsBitcoinCulture,
   GrantsBitcoinDevelopment,
   GrantsBitcoinEducation,
   GrantsHero,
 } from '../../constants'
 import { fonts } from '../../styles'
+import { GrantApplicant } from '../../types'
 import { useMediumScreen, useMobileMode } from '../../utils'
 import { ApplyGrantCard } from './components/ApplyGrantCard'
 import { Board } from './components/Board'
+import { CommunityVoting } from './components/CommunityVoting'
 import { GrantsContributeModal } from './components/GrantsContributeModal'
 
 const grants = [
@@ -61,14 +65,17 @@ const grants = [
   },
 ]
 
-export const GrantsRoundOne = () => {
+export const GrantsRoundOne = ({
+  applicants,
+}: {
+  applicants?: GrantApplicant[]
+}) => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
   const isMedium = useMediumScreen()
   const [link, setLink] = React.useState('')
-  const linkHandler = (link: React.SetStateAction<string>) => {
-    setLink(link)
-  }
+
+  const modalProps = useDisclosure()
 
   return (
     <>
@@ -179,6 +186,17 @@ export const GrantsRoundOne = () => {
               ))}
             </Grid>
           </Box>
+
+          {applicants && applicants.length ? (
+            <Box my={5}>
+              <CommunityVoting
+                title="Grant Winners"
+                applicants={applicants}
+                canVote={false}
+              />
+            </Box>
+          ) : null}
+
           <Box my={8}>
             <Text
               fontFamily={fonts.interBlack}
@@ -252,7 +270,23 @@ export const GrantsRoundOne = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <GrantsContributeModal onLink={linkHandler} />
+                <Button
+                  variant={'solid'}
+                  fontWeight="500"
+                  fontSize="16px"
+                  px={12}
+                  mr="2"
+                  height={10}
+                  onClick={() => modalProps.onOpen()}
+                  backgroundColor="brand.primary"
+                >
+                  Contribute
+                </Button>
+                <GrantsContributeModal
+                  onSuccess={(_contribution, project) =>
+                    project && setLink(getPath('project', project.name))
+                  }
+                />
 
                 <Box display="flex" alignItems={'center'}>
                   <Text

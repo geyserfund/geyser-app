@@ -533,10 +533,10 @@ export const TopNavBar = () => {
           <HStack alignItems={'center'} spacing={2}>
             {shouldShowNavItems ? (
               <Box display={'flex'} alignItems="center" gap={4} mr={4}>
-                {navItems.map((item, idx) => {
+                {navItems.map((item) => {
                   if (item.name === 'About') {
                     return (
-                      <a key={idx} href={item.to}>
+                      <a key={item.to} href={item.to}>
                         <Text
                           fontWeight={'500'}
                           textDecoration="none"
@@ -554,7 +554,7 @@ export const TopNavBar = () => {
                   }
 
                   return (
-                    <Link key={idx} to={item.to}>
+                    <Link key={item.to} to={item.to}>
                       <Box position="relative" padding="5px 7px">
                         <Text
                           fontWeight={'500'}

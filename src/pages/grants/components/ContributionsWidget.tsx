@@ -1,5 +1,4 @@
 import { Box, Text } from '@chakra-ui/react'
-import { DateTime } from 'luxon'
 import { createUseStyles } from 'react-jss'
 
 import { BadgeIcon } from '../../../components/icons/svg/BadgeIcon'
@@ -12,8 +11,10 @@ import { useMobileMode } from '../../../utils'
 import { WidgetItem } from './WidgetItem'
 
 interface Props {
-  balance: string
-  contributions: string
+  balance?: string
+  contributions?: string
+  endDateSubtitle: string
+  endDateTimestamp: number
 }
 
 const useStyles = createUseStyles({
@@ -23,7 +24,12 @@ const useStyles = createUseStyles({
   },
 })
 
-export const ContributionsWidget = ({ balance, contributions }: Props) => {
+export const ContributionsWidget = ({
+  balance,
+  contributions,
+  endDateTimestamp,
+  endDateSubtitle,
+}: Props) => {
   const classes = useStyles()
   const isMobile = useMobileMode()
 
@@ -43,9 +49,9 @@ export const ContributionsWidget = ({ balance, contributions }: Props) => {
             height="100%"
             color="brand.primary500"
           />
-          <WidgetItem subtitle="Time left to vote">
+          <WidgetItem subtitle={endDateSubtitle}>
             <Countdown
-              endDate={DateTime.fromObject({ year: 2023, month: 4 }).toMillis()}
+              endDate={endDateTimestamp}
               sectionProps={{
                 color: colors.primary500,
                 fontSize: '22px',
@@ -79,7 +85,7 @@ export const ContributionsWidget = ({ balance, contributions }: Props) => {
             height="100%"
             color="brand.primary500"
           />
-          <WidgetItem subtitle="Worth of votes">{balance}</WidgetItem>
+          <WidgetItem subtitle="Worth of votes">{contributions}</WidgetItem>
         </Box>
       </Box>
       <Box
