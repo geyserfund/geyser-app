@@ -22,7 +22,6 @@ export const ProjectFundingModal = ({
   const { user } = useAuthContext()
 
   useEffect(() => {
-    console.log('effect', props)
     if (props?.project?.title) {
       setTitle(props.project.title)
     }
