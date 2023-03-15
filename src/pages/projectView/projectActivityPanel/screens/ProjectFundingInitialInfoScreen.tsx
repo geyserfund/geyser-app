@@ -184,7 +184,7 @@ export const ProjectFundingInitialInfoScreen = ({
             <StickToTop
               id="contribute-tab-activity-table"
               w="100%"
-              _onStick={{ w: 'calc(100% - 29px)' }}
+              _onStick={{ w: 'calc(100% - 20px)' }}
             >
               {contributionButton()}
             </StickToTop>
@@ -194,7 +194,7 @@ export const ProjectFundingInitialInfoScreen = ({
             <StickToTop
               id="contribute-tab-activity-table"
               w="100%"
-              _onStick={{ w: 'calc(100% - 29px)' }}
+              _onStick={{ w: 'calc(100% - 20px)' }}
             >
               {leaderBoardButton()}
             </StickToTop>
@@ -213,7 +213,7 @@ export const ProjectFundingInitialInfoScreen = ({
 
   return (
     <VStack
-      padding={isMobile ? '0px 5px 0px 5px' : '10px 20px'}
+      padding={{ base: '0px 10px 0px 10px', lg: '10px 20px' }}
       spacing="0px"
       width="100%"
       height="100%"
@@ -246,7 +246,7 @@ export const ProjectFundingInitialInfoScreen = ({
         flex="1"
         paddingTop="10px"
       >
-        <Box display="flex" marginBottom="10px" w="95%">
+        <Box display="flex" marginBottom="10px" w="100%">
           {renderTabsList()}
         </Box>
         {renderActivityList()}

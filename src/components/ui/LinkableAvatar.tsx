@@ -1,7 +1,7 @@
 import { HStack, Link } from '@chakra-ui/layout'
 import { Avatar } from '@chakra-ui/react'
 import { ReactElement } from 'react'
-import { FaUser } from 'react-icons/fa'
+import { FaUserCircle } from 'react-icons/fa'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { getPath } from '../../constants'
@@ -102,7 +102,8 @@ export const LinkableAvatar = ({
               lineHeight: `${imageSize}`,
             },
           }}
-          icon={<FaUser size={'1em'} />}
+          color="neutral.600"
+          icon={<FaUserCircle fontSize="25px" size={'1em'} />}
         />
 
         <Body2

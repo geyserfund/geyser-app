@@ -78,8 +78,7 @@ export const LaunchIdea = () => {
           },
         },
       ]
-      const value = await createCreatorRecord({ records })
-      console.log('checking value', value)
+      await createCreatorRecord({ records })
       setSubmitted(true)
     } catch (error) {
       toast({
