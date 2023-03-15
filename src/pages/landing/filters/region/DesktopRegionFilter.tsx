@@ -75,15 +75,20 @@ export const DesktopRegionFilter = ({
             <SlLocationPin color={colors.neutral600} fontSize="20px" />
             <Body1 color={colors.neutral900}>{label}</Body1>
           </HStack>
+          {!isSelected && (
+            <ChevronRightIcon
+              position="absolute"
+              right="10px"
+              fontSize="20px"
+            />
+          )}
         </ButtonComponent>
-        {isSelected ? (
+        {isSelected && (
           <CloseIconButton
             position="absolute"
             right="10px"
             onClick={handleClear}
           />
-        ) : (
-          <ChevronRightIcon position="absolute" right="10px" fontSize="20px" />
         )}
       </CardLayout>
       <Modal isOpen={isOpen} onClose={onClose} size="sm">
