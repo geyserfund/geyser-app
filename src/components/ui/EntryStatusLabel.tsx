@@ -25,8 +25,7 @@ export const EntryStatusLabel = ({
     fontFamily,
     fontSize: fontSize || '12px',
   }
-
-  if (entry.status === EntryStatus.Published || entry.published) {
+  if (entry.status === EntryStatus.Published) {
     return null
   }
 

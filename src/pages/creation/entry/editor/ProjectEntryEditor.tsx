@@ -1,9 +1,10 @@
 import 'react-quill/dist/quill.snow.css'
 
+import { DeltaStatic } from 'quill'
 import ImageEdit from 'quill-image-edit-module'
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Quill } from 'react-quill'
 
@@ -212,24 +213,6 @@ export const ProjectEntryEditor = ({
       editor.setContents(textValue, 'api')
     }
 
-    editor.on('text-change', (delta) => {
-      const contents = quillObj.current?.getContents()
-
-      if (
-        delta &&
-        delta.ops &&
-        delta.ops[2] &&
-        delta.ops[2].attributes &&
-        delta.ops[2].attributes.imageBlot
-      ) {
-        return
-      }
-
-      if (handleChange) {
-        handleChange(name, JSON.stringify(contents))
-      }
-    })
-
     editor.keyboard.addBinding(
       {
         key: 'up',
@@ -246,6 +229,35 @@ export const ProjectEntryEditor = ({
 
     setQuillObj(editor)
   }, [])
+
+  const handleQueryChange = useCallback(
+    (delta: DeltaStatic) => {
+      const contents = quillObj.current?.getContents()
+
+      if (
+        delta &&
+        delta.ops &&
+        delta.ops[2] &&
+        delta.ops[2].attributes &&
+        delta.ops[2].attributes.imageBlot
+      ) {
+        return
+      }
+
+      if (handleChange) {
+        handleChange(name, JSON.stringify(contents))
+      }
+    },
+    [handleChange],
+  )
+
+  useEffect(() => {
+    quillObj.current?.on('text-change', handleQueryChange)
+
+    return () => {
+      quillObj.current?.off('text-change', handleQueryChange)
+    }
+  }, [handleChange, quillObj])
 
   useEffect(() => {
     if (focusFlag) {

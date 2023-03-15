@@ -98,6 +98,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
         fundersCount
         amountFunded
         published
+        status
         createdAt
         publishedAt
         creator {
@@ -241,6 +242,7 @@ export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
         amountFunded
         published
         publishedAt
+        status
         createdAt
         creator {
           id
