@@ -9,6 +9,7 @@ import { AboutUsUrl, FAQUrl, FeedbackUrl, getPath } from '../../../constants'
 import { AuthContext } from '../../../context'
 import { colors } from '../../../styles'
 import { buttonCommon } from '../../../styles/common'
+import { ProjectStatus } from '../../../types'
 import { ButtonComponent } from '../../ui'
 import { MenuItemLink } from './MenuItemLink'
 import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem'
@@ -36,6 +37,13 @@ export const TopNavBarMenu = ({
   const textColor = useColorModeValue(colors.textBlack, colors.textWhite)
 
   const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext)
+
+  const toDisplayProject =
+    user.ownerOf?.length > 0
+      ? user.ownerOf.find(
+          (data) => data?.project?.status === ProjectStatus.Active,
+        )?.project || user.ownerOf[0]?.project
+      : undefined
 
   return (
     <Menu placement="bottom-end">
@@ -129,16 +137,16 @@ export const TopNavBarMenu = ({
               <NavBarUserProfileMenuItem />
             </MenuItem>
 
-            {isUserAProjectCreator && user.ownerOf[0]?.project ? (
+            {isUserAProjectCreator && toDisplayProject && (
               <MenuItem
                 padding={0}
                 as={Link}
-                to={getPath('project', user.ownerOf[0].project.name)}
+                to={getPath('project', toDisplayProject.name)}
                 _focus={{ boxShadow: 'none' }}
               >
-                <NavBarUserProjectMenuItem project={user.ownerOf[0].project} />
+                <NavBarUserProjectMenuItem project={toDisplayProject} />
               </MenuItem>
-            ) : null}
+            )}
 
             <MenuDivider />
           </>
