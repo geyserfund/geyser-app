@@ -38,6 +38,12 @@ export const ProjectFunding = ({
 
   const { fundState } = fundingFlow
 
+  useEffect(() => {
+    if (fundState === fundingStages.completed) {
+      setTitle(SUCCESS_TITLE)
+    }
+  }, [fundState])
+
   if (!project) {
     return null
   }
@@ -46,13 +52,7 @@ export const ProjectFunding = ({
     case fundingStages.started:
       return <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
     case fundingStages.completed:
-      return (
-        <FundingComplete
-          formState={formState}
-          onSuccess={() => setTitle(SUCCESS_TITLE)}
-          fundingFlow={fundingFlow}
-        />
-      )
+      return <FundingComplete formState={formState} fundingFlow={fundingFlow} />
     default:
       return (
         <FundingForm

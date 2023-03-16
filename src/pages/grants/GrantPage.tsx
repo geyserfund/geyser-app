@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom'
 
 import { Body1, H1, H3 } from '../../components/typography'
 import { StatusLabel } from '../../components/ui/StatusLabel'
-import { useAnimatedClipboard } from '../../hooks/useAnimatedClipboard'
 import {
   GrantApplicant,
   GrantApplicantStatus,
@@ -21,7 +20,7 @@ import { ContributionsWidget } from './components/ContributionsWidget'
 import { DistributionChart } from './components/DistributionChart'
 import { MoreInfo } from './components/MoreInfo'
 import { SectionCard } from './components/SectionCard'
-import { CONTRIBUTION_ADDRESS, GRANT_STATUS_MAP } from './constants'
+import { GRANT_STATUS_MAP } from './constants'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
 import { useGrant } from './hooks/useGrant'
