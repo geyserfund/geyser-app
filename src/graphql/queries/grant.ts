@@ -9,6 +9,7 @@ export const QUERY_GRANTS = gql`
       shortDescription
       description
       status
+      image
       statuses {
         status
         endAt
