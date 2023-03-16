@@ -91,9 +91,7 @@ export const FundingForm = ({
         anonymous: Boolean(user),
         ...(state.amount !== 0 && {
           donationInput: {
-            donationAmount: getSatoshisFromUSDCents(
-              (state.amount * 100) as USDCents,
-            ),
+            donationAmount: state.amount,
           },
         }),
         metadataInput: {

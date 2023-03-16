@@ -78,7 +78,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
               <Text color={'brand.neutral600'}>
                 {getFormattedDate(
                   grant.statuses.find(
-                    (status) => status.status === GrantStatusEnum.FundingOpen,
+                    (status) => status.status === GrantStatusEnum.Closed,
                   )?.startAt,
                 )}
               </Text>
