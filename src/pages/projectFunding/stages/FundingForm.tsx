@@ -10,25 +10,23 @@ import { useState } from 'react'
 
 import { DonationInput } from '../../../components/molecules'
 import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
-import { useBTCConverter } from '../../../helpers'
 import { useFormState, UseFundingFlowReturn } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import {
   FundingInput,
   FundingResourceType,
   Project,
-  USDCents,
   User,
 } from '../../../types'
 import { useNotification } from '../../../utils'
 
 export type ProjectFundingFormState = {
-  amount: number
+  donationAmount: number
   comment: string
 }
 
 const defaultFormState = {
-  amount: 0,
+  donationAmount: 0,
   comment: '',
 }
 
@@ -48,7 +46,6 @@ export const FundingForm = ({
   const { gotoNextStage, requestFunding } = fundingFlow
 
   const { toast } = useNotification()
-  const { getSatoshisFromUSDCents } = useBTCConverter()
   const { state, setTarget, setValue } =
     useFormState<ProjectFundingFormState>(defaultFormState)
 
@@ -56,14 +53,14 @@ export const FundingForm = ({
     useState<FormStateError<ProjectFundingFormState> | void>()
 
   const validateForm = () => {
-    if (!state.amount || state.amount === 0) {
-      setFormError({ amount: 'amount is required' })
+    if (!state.donationAmount || state.donationAmount === 0) {
+      setFormError({ donationAmount: 'amount is required' })
       return false
     }
 
-    if (state.amount > MAX_FUNDING_AMOUNT_USD) {
+    if (state.donationAmount > MAX_FUNDING_AMOUNT_USD) {
       setFormError({
-        amount: `amount cannot be greater than $${MAX_FUNDING_AMOUNT_USD} in value`,
+        donationAmount: `amount cannot be greater than $${MAX_FUNDING_AMOUNT_USD} in value`,
       })
       return false
     }
@@ -89,11 +86,9 @@ export const FundingForm = ({
       const input: FundingInput = {
         projectId: Number(project.id),
         anonymous: Boolean(user),
-        ...(state.amount !== 0 && {
-          donationInput: {
-            donationAmount: state.amount,
-          },
-        }),
+        donationInput: {
+          donationAmount: state.donationAmount,
+        },
         metadataInput: {
           ...(state.comment && { comment: state.comment }),
         },
@@ -118,12 +113,12 @@ export const FundingForm = ({
       <Box mb={3}>
         <DonationInput
           inputGroup={{ padding: '2px' }}
-          name="amount"
+          name="donationAmount"
           onChange={setValue}
         />
-        {formError?.amount && (
+        {formError?.donationAmount && (
           <Text color="brand.error" fontSize="12px">
-            {formError?.amount}
+            {formError?.donationAmount}
           </Text>
         )}
       </Box>

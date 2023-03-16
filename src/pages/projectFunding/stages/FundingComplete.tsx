@@ -1,9 +1,7 @@
 import { Box, Link as ChakraLink, Text, VStack } from '@chakra-ui/react'
 import { FaCheck } from 'react-icons/fa'
 
-import { useBTCConverter } from '../../../helpers'
 import { UseFundingFlowReturn } from '../../../hooks'
-import { USDCents } from '../../../types'
 import { ProjectFundingFormState } from './FundingForm'
 
 interface Props {
@@ -15,8 +13,6 @@ export const FundingComplete = ({
   fundingFlow: { fundingTx },
   formState,
 }: Props) => {
-  const { getSatoshisFromUSDCents } = useBTCConverter()
-
   return (
     <VStack justify={'center'} spacing={5}>
       <Box display="flex" justifyContent={'center'} my={4}>
@@ -37,9 +33,7 @@ export const FundingComplete = ({
           Your{' '}
           <span style={{ fontWeight: 'bold' }}>
             {' '}
-            {getSatoshisFromUSDCents(
-              (formState.amount * 100) as USDCents,
-            )} sats{' '}
+            {formState.donationAmount} sats{' '}
           </span>{' '}
           contribution to Geyser Grants Round 2 was successful!
         </Text>
