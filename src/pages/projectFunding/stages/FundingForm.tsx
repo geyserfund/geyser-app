@@ -43,7 +43,7 @@ export const FundingForm = ({
   fundingFlow,
   onFundingRequested = () => {},
 }: Props) => {
-  const { requestFunding, fundState } = fundingFlow
+  const { requestFunding } = fundingFlow
 
   const { toast } = useNotification()
   const { state, setTarget, setValue } =

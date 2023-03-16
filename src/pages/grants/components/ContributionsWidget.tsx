@@ -1,17 +1,18 @@
-import { Box, Image, Text } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
-import orangePillAppLogo from '../../../assets/orange-pill-app-logo.png'
 import { BadgeIcon } from '../../../components/icons/svg/BadgeIcon'
 import { ContributionsIcon } from '../../../components/icons/svg/ContributionsIcon'
-import { GeyserLogoNameIcon } from '../../../components/icons/svg/GeyserLogoNameIcon'
 import { TimerIcon } from '../../../components/icons/svg/TimerIcon'
 import { Countdown } from '../../../components/ui/Countdown'
 import { colors, fonts } from '../../../styles'
+import { Maybe, Sponsor } from '../../../types'
 import { useMobileMode } from '../../../utils'
+import { SponsorList } from './SponsorList'
 import { WidgetItem } from './WidgetItem'
 
 interface Props {
+  sponsors?: Maybe<Sponsor>[]
   balance?: string
   contributions?: string
   endDateSubtitle: string
@@ -26,6 +27,7 @@ const useStyles = createUseStyles({
 })
 
 export const ContributionsWidget = ({
+  sponsors,
   balance,
   contributions,
   endDateTimestamp,
@@ -95,21 +97,9 @@ export const ContributionsWidget = ({
         alignItems="center"
         justifyContent="center"
       >
-        <Text fontSize="18px">Sponsored by</Text>
-        <GeyserLogoNameIcon
-          ml={3}
-          color={colors.neutral900}
-          width="82px"
-          height="26px"
-        />
-        <Image
-          mt={1}
-          ml={3}
-          height="28px"
-          objectFit="cover"
-          src={orangePillAppLogo}
-          alt="OrangePill App logo"
-        />
+        <SponsorList sponsors={sponsors}>
+          <Text fontSize="18px">Sponsored by</Text>
+        </SponsorList>
       </Box>
     </Box>
   )
