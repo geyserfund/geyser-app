@@ -10,6 +10,7 @@ import {
   ProjectCreationWalletConnectionPage,
 } from '../pages/creation/projectCreate'
 import { EntryPage } from '../pages/entry/EntryPage'
+import { GrantPage } from '../pages/grants/GrantPage'
 import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage'
 import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne'
 import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo'
@@ -61,6 +62,10 @@ const platformRoutes = [
   {
     path: '/grants',
     element: GrantsLandingPage,
+  },
+  {
+    path: '/grants/:grantId',
+    element: GrantPage,
   },
   {
     path: getPath('publicProjectLaunch'),

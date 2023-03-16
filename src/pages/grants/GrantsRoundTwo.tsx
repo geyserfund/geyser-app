@@ -21,13 +21,18 @@ import { ButtonComponent } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
 import { GrantsRound2Url } from '../../constants'
 import { fonts } from '../../styles'
+import { GrantApplicant } from '../../types'
 import { useMobileMode, useNotification } from '../../utils'
 import ApplicantAirTableEmbed from './ApplicantAirTableEmbed'
 import { ApplyGrantCard } from './components/ApplyGrantCard'
 import { GrantCategory } from './components/ApplyGrantModal'
 import { BoardMembers } from './components/BoardMembers'
+import { CommunityVoting } from './components/CommunityVoting'
 import { GrantDevelopers } from './components/GrantDevs'
-import { GrantsContributeModal } from './components/GrantsContributeModal'
+import {
+  GrantContributeInput,
+  GrantsContributeModal,
+} from './components/GrantsContributeModal'
 import { MoreInfo } from './components/MoreInfo'
 
 const grants = [
@@ -77,7 +82,11 @@ const defaultApplications: CaregorizedApplications = {
   [GrantCategory.visualArt]: [],
 }
 
-export const GrantsRoundTwo = () => {
+export const GrantsRoundTwo = ({
+  applicants,
+}: {
+  applicants?: GrantApplicant[]
+}) => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
   const { toast } = useNotification()
@@ -87,15 +96,9 @@ export const GrantsRoundTwo = () => {
   const [applicantLoading, setApplicantLoading] = useState(false)
   const [sponsorLoading, setSponsorLoading] = useState(false)
 
-  const [sponsors, setSponsors] = useState<GrantSponsor[]>([])
+  const [sponsors, setSponsors] = useState<GrantContributeInput[]>([])
   const [categorizedApplications, setCategorizedApplications] =
     useState<CaregorizedApplications>(defaultApplications)
-
-  const handleCompleteContribution = (value: GrantSponsor) => {
-    if (value.amount >= 1000) {
-      setSponsors([...sponsors, value])
-    }
-  }
 
   const handleCopyOnchain = () => {
     navigator.clipboard.writeText('grants@geyser.fund')
@@ -128,7 +131,7 @@ export const GrantsRoundTwo = () => {
     }
 
     getSponsors()
-  }, [])
+  }, [toast])
 
   useEffect(() => {
     const getApplicants = async () => {
@@ -298,6 +301,16 @@ export const GrantsRoundTwo = () => {
             )}
           </Box>
 
+          {applicants && applicants.length ? (
+            <Box my={5}>
+              <CommunityVoting
+                title="Grant Winners"
+                applicants={applicants}
+                canVote={false}
+              />
+            </Box>
+          ) : null}
+
           <Box display={'flex'} justifyContent="center" my={6}>
             <Text fontWeight={'400'} fontSize="14px" color={'brand.neutral600'}>
               Designs by
@@ -395,7 +408,13 @@ export const GrantsRoundTwo = () => {
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <GrantsContributeModal onLink={handleCompleteContribution} />
+                <GrantsContributeModal
+                  onSuccess={(contribution) => {
+                    if (contribution.amount >= 1000) {
+                      setSponsors([...sponsors, contribution])
+                    }
+                  }}
+                />
 
                 <Box
                   display="flex"
