@@ -101,6 +101,7 @@ export const DonationInput = ({
     if (!satoshi) {
       onChange(name, 0)
     } else {
+      console.log({ isDollar, isSatoshi, satoshi, dollar })
       onChange(name, satoshi)
     }
   }, [satoshi])
@@ -148,7 +149,7 @@ export const DonationInput = ({
           {isSatoshi ? <SatoshiIconTilted /> : <BiDollar fontSize="25px" />}
         </InputLeftElement>
         <Input
-          value={satoshi > 0 ? (isSatoshi ? satoshi : dollar) : undefined}
+          value={satoshi > 0 ? (isSatoshi ? satoshi : dollar) : ''}
           type="number"
           className={classNames(classes.inputElement, className)}
           onChange={handleInput}
