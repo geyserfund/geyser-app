@@ -1,6 +1,7 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Image, Text } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
+import orangePillAppLogo from '../../../assets/orange-pill-app-logo.png'
 import { BadgeIcon } from '../../../components/icons/svg/BadgeIcon'
 import { ContributionsIcon } from '../../../components/icons/svg/ContributionsIcon'
 import { GeyserLogoNameIcon } from '../../../components/icons/svg/GeyserLogoNameIcon'
@@ -96,10 +97,18 @@ export const ContributionsWidget = ({
       >
         <Text fontSize="18px">Sponsored by</Text>
         <GeyserLogoNameIcon
-          ml={2}
+          ml={3}
           color={colors.neutral900}
           width="82px"
           height="26px"
+        />
+        <Image
+          mt={1}
+          ml={3}
+          height="28px"
+          objectFit="cover"
+          src={orangePillAppLogo}
+          alt="OrangePill App logo"
         />
       </Box>
     </Box>

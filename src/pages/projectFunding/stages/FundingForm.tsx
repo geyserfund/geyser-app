@@ -43,7 +43,7 @@ export const FundingForm = ({
   fundingFlow,
   onFundingRequested = () => {},
 }: Props) => {
-  const { gotoNextStage, requestFunding } = fundingFlow
+  const { requestFunding, fundState } = fundingFlow
 
   const { toast } = useNotification()
   const { state, setTarget, setValue } =
@@ -69,7 +69,7 @@ export const FundingForm = ({
   }
 
   const onSubmit = () => {
-    setFormError()
+    setFormError({})
 
     const isValid = validateForm()
 
@@ -99,7 +99,6 @@ export const FundingForm = ({
       }
 
       requestFunding(input)
-      gotoNextStage()
       onFundingRequested(state)
     }
   }
@@ -107,6 +106,8 @@ export const FundingForm = ({
   return (
     <Box>
       <Text fontWeight={'500'} mb={2} fontSize="16px">
+        {fundState}
+        <br />
         Vote for this project by funding towards it below! 1 Sat = 1 Vote. To
         receive a project reward contribute from the project page.
       </Text>
