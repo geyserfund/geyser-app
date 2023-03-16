@@ -1,4 +1,5 @@
 import { Box, BoxProps, Image, Link, Text } from '@chakra-ui/react'
+import { PropsWithChildren } from 'react'
 
 import { Maybe, Sponsor } from '../../../types'
 
@@ -10,16 +11,19 @@ interface Props {
 export const SponsorList = ({
   sponsors = [],
   titleProps,
+  children,
   ...props
-}: Props & BoxProps) => {
+}: PropsWithChildren<Props & BoxProps>) => {
   return sponsors.length ? (
     <Box display="flex" alignItems="center" mt={6} {...props}>
-      <Box {...titleProps}>
-        <Text color="brand.neutral600" fontSize="11px" mr={2} fontWeight="700">
-          SPONSORS
-        </Text>
-      </Box>
-      <Box display="flex" flexWrap="wrap">
+      {children || (
+        <Box {...titleProps}>
+          <Text color="brand.neutral600" fontSize="11px" fontWeight="700">
+            SPONSORS
+          </Text>
+        </Box>
+      )}
+      <Box ml={2} display="flex" flexWrap="wrap">
         {sponsors.map((item) =>
           item && item.image ? (
             <Box key={item.id} mr={3}>

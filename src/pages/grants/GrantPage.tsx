@@ -134,6 +134,7 @@ export const GrantPage = () => {
               {grant.description}
             </Body1>
             <ContributionsWidget
+              sponsors={grant.sponsors}
               endDateSubtitle={GRANT_STATUS_COUNTDOWN_TITLES[grant.status]}
               endDateTimestamp={votingEndDate}
               balance={getShortAmountLabel(grant.balance || 0)}

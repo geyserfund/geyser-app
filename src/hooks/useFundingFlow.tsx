@@ -1,5 +1,5 @@
 import { ApolloError, gql, useLazyQuery, useMutation } from '@apollo/client'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
 import { ApolloErrors, fundingStages, stageList } from '../constants'
@@ -287,11 +287,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     }
   }, [fundState])
 
-  const gotoNextStage = () => {
-    const currentIndex = stageList.indexOf(fundState)
-    const nextState = stageList[currentIndex + 1]
-    setFundState(nextState)
-  }
+  const gotoNextStage = useCallback(() => {
+    setFundState((currentState) => {
+      const currentIndex = stageList.indexOf(currentState)
+      const nextState = stageList[currentIndex + 1]
+      return nextState
+    })
+  }, [])
 
   const requestFunding = async (input: FundingInput) => {
     gotoNextStage()
