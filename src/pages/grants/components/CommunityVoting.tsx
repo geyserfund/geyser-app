@@ -127,15 +127,26 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
                   ),
               )}
             </Box>
-            {canVote && isMobile && (
-              <Button
-                onClick={() => modalProps.open({ project })}
-                mt={3}
-                height="57px"
-                variant="hugeContained"
-              >
-                Vote
-              </Button>
+            {isMobile && (
+              <Box display="flex" pl={6}>
+                <Box pt={2}>
+                  <WidgetItem subtitle="worth of votes">
+                    {getShortAmountLabel(funding.communityFunding || 0)}
+                  </WidgetItem>
+                </Box>
+                {canVote && (
+                  <Box ml={8} flexGrow={1}>
+                    <Button
+                      onClick={() => modalProps.open({ project })}
+                      mt={3}
+                      height="57px"
+                      variant="hugeContained"
+                    >
+                      Vote
+                    </Button>
+                  </Box>
+                )}
+              </Box>
             )}
           </SectionCard>
         )
