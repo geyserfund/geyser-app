@@ -7,7 +7,6 @@ interface PageLayoutProps {
 }
 
 export const PageLayout = ({ children }: PageLayoutProps) => {
-  console.log('')
   return (
     <Box
       position="relative"

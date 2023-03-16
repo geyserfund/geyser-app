@@ -15,6 +15,8 @@ import {
 } from '../types/generated/graphql'
 import { sha256, toInt, useNotification } from '../utils'
 
+export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
+
 type FundingTXQueryResponseData = {
   fundingTx: FundingTx
 }

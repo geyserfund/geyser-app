@@ -1,5 +1,6 @@
-import { AddIcon, MinusIcon } from '@chakra-ui/icons'
+import { AddIcon } from '@chakra-ui/icons'
 import { Button } from '@chakra-ui/react'
+import { BsFillHeartFill } from 'react-icons/bs'
 
 import { useAuthContext } from '../../../../context'
 import { useFollowProject } from '../../../../hooks/graphqlState'
@@ -22,15 +23,16 @@ export const FollowButton = ({ projectId }: { projectId: number }) => {
         _hover={{
           backgroundColor: 'none',
           borderColor: 'brand.secondaryRed',
+          color: 'brand.secondaryRed',
         }}
         _active={{ backgroundColor: 'brand.secondaryRed' }}
-        border="1px solid"
-        borderColor="neutral.200"
-        leftIcon={<MinusIcon />}
+        borderColor="primary.500"
+        color="primary.500"
+        leftIcon={<BsFillHeartFill fontSize="14px" />}
         onClick={handleUnFollow}
         isLoading={unfollowLoading}
       >
-        Unfollow
+        Following
       </Button>
     )
   }
@@ -39,7 +41,10 @@ export const FollowButton = ({ projectId }: { projectId: number }) => {
     <Button
       variant="ghost"
       {...buttonStyle}
-      border="1px solid"
+      _hover={{
+        backgroundColor: 'none',
+        borderColor: 'brand.primary',
+      }}
       borderColor="neutral.200"
       leftIcon={<AddIcon />}
       onClick={handleFollow}
@@ -53,10 +58,6 @@ export const FollowButton = ({ projectId }: { projectId: number }) => {
 
 const buttonStyle = {
   size: 'sm',
-  _hover: {
-    backgroundColor: 'none',
-    border: '1px solid #20ECC7',
-  },
-  _active: { backgroundColor: 'brand.primary' },
   bg: 'none',
+  border: '1px solid',
 }

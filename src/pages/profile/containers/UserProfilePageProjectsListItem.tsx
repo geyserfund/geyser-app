@@ -1,38 +1,19 @@
 import { gql, useQuery } from '@apollo/client'
 
-import { ProjectsGridCard } from '../../../components/molecules/projectDisplay/ProjectsGridCard'
 import {
   Project,
   UniqueProjectQueryInput,
 } from '../../../types/generated/graphql'
 import { toInt } from '../../../utils'
-
+import { LandingProjectCard } from '../../landing/components'
+import { ProjectParametersForLandingPage } from '../../landing/projects/projects.graphql'
 type Props = {
   projectID: number
 }
 
 const GET_PROJECT = gql`
   query GetProject($where: UniqueProjectQueryInput!) {
-    project(where: $where) {
-      id
-      name
-      title
-      shortDescription
-      description
-      image
-      thumbnailImage
-      balance
-      status
-      funders {
-        id
-      }
-      wallets {
-        state {
-          status
-          statusCode
-        }
-      }
-    }
+    project(where: $where) ${ProjectParametersForLandingPage}
   }
 `
 
@@ -54,7 +35,5 @@ export const UserProfilePageProjectsListItem = ({ projectID }: Props) => {
     return null
   }
 
-  return data ? (
-    <ProjectsGridCard project={data.project} height="100%" width="100%" />
-  ) : null
+  return data ? <LandingProjectCard project={data.project} /> : null
 }

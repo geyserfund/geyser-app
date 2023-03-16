@@ -35,6 +35,7 @@ type Props = HTMLChakraProps<'div'> & {
 export const ContributionActivityItem = ({
   fundingTx,
   count,
+  showsProjectLink,
   ...rest
 }: Props) => {
   const { funder } = fundingTx
@@ -163,7 +164,7 @@ export const ContributionActivityItem = ({
 
             <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
-            {fundingTx.sourceResource && (
+            {showsProjectLink && fundingTx.sourceResource && (
               <HStack
                 overflow="hidden"
                 backgroundColor="neutral.100"

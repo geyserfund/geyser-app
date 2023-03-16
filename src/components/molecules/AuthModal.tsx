@@ -47,6 +47,7 @@ const LnurlConnect = ({
   setQrContent: any
   setLnurlState: any
 }) => {
+  const { toast } = useNotification()
   const handleLnurlLogin = async () => {
     fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, {
       credentials: 'include',
@@ -58,7 +59,11 @@ const LnurlConnect = ({
         setLnurlState()
       })
       .catch((err) => {
-        console.log(err)
+        toast({
+          status: 'error',
+          title: 'Something went wrong.',
+          description: 'Please try again',
+        })
       })
   }
 

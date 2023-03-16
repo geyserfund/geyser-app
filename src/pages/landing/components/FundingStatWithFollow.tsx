@@ -26,8 +26,8 @@ export interface FundingStatWithFollowProps extends StackProps {
 
 export const FundingStatWithFollow = ({
   bold,
-  fundersCount,
-  amountFunded,
+  fundersCount = 0,
+  amountFunded = 0,
   projectId,
   ...rest
 }: FundingStatWithFollowProps) => {

@@ -2,7 +2,7 @@ import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsImage } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { FileUpload } from '../../../../components/molecules'
 import { ImageWithReload } from '../../../../components/ui'
@@ -52,13 +52,13 @@ export const EntryCreateEdit = () => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
   const navigate = useNavigate()
-  const location = useLocation()
   const params = useParams<{ entryId: string; projectId: string }>()
   const { user } = useAuthContext()
   const { setNavData } = useNavContext()
 
   const classes = useStyles()
 
+  const [isEdit, setIsEdit] = useState(false)
   const [focusFlag, setFocusFlag] = useState('')
 
   const { loading, saving, updateEntry, hasDiff, entry, saveEntry } =
@@ -70,12 +70,13 @@ export const EntryCreateEdit = () => {
       ),
       params.entryId,
       {
+        fetchPolicy: 'network-only',
         onError() {
           navigate(getPath('notFound'))
         },
         onCompleted(data) {
           if (data.entry === null) {
-            navigate(getPath('notAuthorized'))
+            navigate(getPath('notFound'))
           }
 
           const project = data.entry.project as Project
@@ -97,13 +98,18 @@ export const EntryCreateEdit = () => {
       },
     )
   const debouncedUpdateEntry = useDebounce(entry, 1000)
-  const isEdit = Boolean(entry.id)
 
   useEffect(() => {
     if (debouncedUpdateEntry && entry.status !== EntryStatus.Published) {
       saveEntry()
     }
   }, [debouncedUpdateEntry])
+
+  useEffect(() => {
+    if (entry.id) {
+      setIsEdit(true)
+    }
+  }, [entry])
 
   const handleContentUpdate = (name: string, value: string) => {
     updateEntry({ [name]: value })
@@ -146,11 +152,7 @@ export const EntryCreateEdit = () => {
   }
 
   const onBack = () => {
-    if (location.key) {
-      navigate(-1)
-    } else {
-      navigate(getPath('project', params.projectId || ''))
-    }
+    navigate(getPath('project', params.projectId || ''))
   }
 
   const onImageUpload = (url: string) => updateEntry({ image: url })
@@ -199,13 +201,15 @@ export const EntryCreateEdit = () => {
     return <Loader />
   }
 
+  const isPublished = entry.status === EntryStatus.Published
+
   return (
     <>
       <CreateNav
         isSaving={saving}
         saveText={getSaveButtonText()}
         onSave={saveEntry}
-        onPreview={onPreview}
+        onPreview={!isPublished ? onPreview : undefined}
         onBack={onBack}
       />
       <VStack

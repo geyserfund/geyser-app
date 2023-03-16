@@ -21,7 +21,7 @@ import {
 } from '../../../graphql/mutations/entries'
 import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries'
 import { IEntryUpdateInput } from '../../../interfaces/entry'
-import { Owner, Project } from '../../../types/generated/graphql'
+import { EntryStatus, Owner, Project } from '../../../types/generated/graphql'
 import { isDraft, toInt, useNotification } from '../../../utils'
 import { defaultEntry } from './editor'
 import { CreateNav } from './editor/CreateNav'
@@ -47,6 +47,10 @@ export const EntryPreview = () => {
       onCompleted(data) {
         if (data.entry === null) {
           navigate(getPath('notFound'))
+        }
+
+        if (data.entry.status === EntryStatus.Published) {
+          navigate(getPath('entry', `${params.entryId}`))
         }
       },
     },
