@@ -3,14 +3,16 @@ import { createUseStyles } from 'react-jss'
 
 import { BadgeIcon } from '../../../components/icons/svg/BadgeIcon'
 import { ContributionsIcon } from '../../../components/icons/svg/ContributionsIcon'
-import { GeyserLogoNameIcon } from '../../../components/icons/svg/GeyserLogoNameIcon'
 import { TimerIcon } from '../../../components/icons/svg/TimerIcon'
 import { Countdown } from '../../../components/ui/Countdown'
 import { colors, fonts } from '../../../styles'
+import { Maybe, Sponsor } from '../../../types'
 import { useMobileMode } from '../../../utils'
+import { SponsorList } from './SponsorList'
 import { WidgetItem } from './WidgetItem'
 
 interface Props {
+  sponsors?: Maybe<Sponsor>[]
   balance?: string
   contributions?: string
   endDateSubtitle: string
@@ -25,6 +27,7 @@ const useStyles = createUseStyles({
 })
 
 export const ContributionsWidget = ({
+  sponsors,
   balance,
   contributions,
   endDateTimestamp,
@@ -94,13 +97,9 @@ export const ContributionsWidget = ({
         alignItems="center"
         justifyContent="center"
       >
-        <Text fontSize="18px">Sponsored by</Text>
-        <GeyserLogoNameIcon
-          ml={2}
-          color={colors.neutral900}
-          width="82px"
-          height="26px"
-        />
+        <SponsorList sponsors={sponsors}>
+          <Text fontSize="18px">Sponsored by</Text>
+        </SponsorList>
       </Box>
     </Box>
   )

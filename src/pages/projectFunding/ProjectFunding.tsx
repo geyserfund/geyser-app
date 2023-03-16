@@ -36,9 +36,13 @@ export const ProjectFunding = ({
     ProjectFundingFormState | undefined
   >()
 
-  const { fundState } = fundingFlow
+  const { fundState, setFundState } = fundingFlow
 
   useEffect(() => {
+    if (fundState === fundingStages.initial) {
+      setFundState(fundingStages.form)
+    }
+
     if (fundState === fundingStages.completed) {
       setTitle(SUCCESS_TITLE)
     }

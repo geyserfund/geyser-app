@@ -43,7 +43,7 @@ export const FundingForm = ({
   fundingFlow,
   onFundingRequested = () => {},
 }: Props) => {
-  const { gotoNextStage, requestFunding } = fundingFlow
+  const { requestFunding } = fundingFlow
 
   const { toast } = useNotification()
   const { state, setTarget, setValue } =
@@ -69,7 +69,7 @@ export const FundingForm = ({
   }
 
   const onSubmit = () => {
-    setFormError()
+    setFormError({})
 
     const isValid = validateForm()
 
@@ -99,7 +99,6 @@ export const FundingForm = ({
       }
 
       requestFunding(input)
-      gotoNextStage()
       onFundingRequested(state)
     }
   }
