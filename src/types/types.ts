@@ -10,12 +10,6 @@ export type USDollars = Nominal<number, 'USDollars'>
 
 export type Satoshi = number
 
-export type GrantTextType = {
-  title?: string
-  subtitle?: string
-  isSatLogo: boolean
-}
-
 export type FormError<T> = {
   [key in keyof T]?: React.ReactNode
 }
