@@ -10,6 +10,7 @@ import { useState } from 'react'
 
 import { DonationInput } from '../../../components/molecules'
 import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
+import { useBtcContext } from '../../../context/btc'
 import { useFormState, UseFundingFlowReturn } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import {
@@ -43,6 +44,7 @@ export const FundingForm = ({
   fundingFlow,
   onFundingRequested = () => {},
 }: Props) => {
+  const { btcRate } = useBtcContext()
   const { requestFunding } = fundingFlow
 
   const { toast } = useNotification()
@@ -58,7 +60,9 @@ export const FundingForm = ({
       return false
     }
 
-    if (state.donationAmount > MAX_FUNDING_AMOUNT_USD) {
+    const amountInDollars = state.donationAmount * btcRate
+
+    if (amountInDollars > MAX_FUNDING_AMOUNT_USD) {
       setFormError({
         donationAmount: `amount cannot be greater than $${MAX_FUNDING_AMOUNT_USD} in value`,
       })
