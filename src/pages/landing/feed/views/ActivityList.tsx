@@ -14,7 +14,12 @@ export const ActivityList = ({ activities }: { activities: Activity[] }) => {
 
     switch (activity.resource.__typename) {
       case ActivityResource.fundingTx:
-        return <ContributionActivityItem fundingTx={activity.resource} />
+        return (
+          <ContributionActivityItem
+            fundingTx={activity.resource}
+            showsProjectLink
+          />
+        )
       case ActivityResource.project:
         return <ProjectActivityItem project={activity.resource} />
       case ActivityResource.entry:
