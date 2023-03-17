@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client'
 import { Box, Container, HStack, Image, Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
-import BannerGlowImage from '../../../assets/top_Banner.svg'
 import { SkeletonLayout } from '../../../components/layouts'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import { dimensions, LetTheSatsFlow3DUrl } from '../../../constants'
