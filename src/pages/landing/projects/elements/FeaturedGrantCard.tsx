@@ -84,7 +84,7 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
 
 export const FeaturedGrantSkeleton = () => {
   return (
-    <ProjectRowLayout title="Featured Project" width="100%">
+    <ProjectRowLayout title="Featured Grant" width="100%">
       <CardLayout
         noborder
         direction={{ base: 'column', sm: 'row' }}
