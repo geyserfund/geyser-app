@@ -37,6 +37,7 @@ export const QUERY_GRANT = gql`
       description
       balance
       status
+      image
       statuses {
         status
         endAt
@@ -50,6 +51,14 @@ export const QUERY_GRANT = gql`
           thumbnailImage
           shortDescription
           description
+          funders {
+            id
+            user {
+              id
+              username
+              imageUrl
+            }
+          }
         }
         status
         funding {
