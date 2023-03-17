@@ -1,10 +1,12 @@
-import { Box, Container, Image } from '@chakra-ui/react'
+import { Box, Button, Container, Image } from '@chakra-ui/react'
 import { useEffect } from 'react'
+import { FaArrowLeft } from 'react-icons/fa'
 import { createUseStyles } from 'react-jss'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Body1, H1, H3 } from '../../components/typography'
 import { StatusLabel } from '../../components/ui/StatusLabel'
+import { getPath } from '../../constants'
 import {
   GrantApplicant,
   GrantApplicantStatus,
@@ -52,6 +54,7 @@ export const GrantPage = () => {
   const { grantId } = useParams<{ grantId: string }>()
   const isMobile = useMobileMode()
   const classes = useStyles()
+  const navigate = useNavigate()
 
   const { grant, loading, error } = useGrant(grantId)
 
@@ -96,6 +99,17 @@ export const GrantPage = () => {
 
   return (
     <Container className={classes.container} px={6}>
+      <Button
+        mt={4}
+        size="sm"
+        bg="brand.bgWhite"
+        variant="outline"
+        gap={2}
+        onClick={() => navigate(getPath('grants'))}
+        fontSize="sm"
+      >
+        <FaArrowLeft /> See all Grants
+      </Button>
       <SectionCard>
         {grant.image ? (
           <Box
