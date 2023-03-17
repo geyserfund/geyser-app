@@ -6,7 +6,6 @@ import { H2, H3 } from '../../components/typography'
 import { getPath } from '../../constants'
 import { useAnimatedClipboard } from '../../hooks/useAnimatedClipboard'
 import { colors, fonts } from '../../styles'
-import { Grant, GrantStatusEnum } from '../../types'
 import { getShortAmountLabel, useMobileMode } from '../../utils'
 import { CustomGrantCard } from './components/CustomGrantCard'
 import { GrantsContributeModal } from './components/GrantsContributeModal'
@@ -20,7 +19,7 @@ export const GrantsLandingPage = () => {
 
   const theme = useTheme()
 
-  const { grants } = useGrants()
+  const { grants, activeGrant, inactiveGrants } = useGrants()
 
   const [handleCopyAddress, hasCopied] =
     useAnimatedClipboard(CONTRIBUTION_ADDRESS)
@@ -28,14 +27,6 @@ export const GrantsLandingPage = () => {
   if (!grants || !grants.length) {
     return null
   }
-
-  const activeGrant = grants
-    .filter((grant) => grant.status !== GrantStatusEnum.Closed)
-    .at(0) as Grant
-
-  const inactiveGrants = grants.filter(
-    (grant) => grant.status === GrantStatusEnum.Closed,
-  )
 
   return (
     <>
