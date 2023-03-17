@@ -18,6 +18,7 @@ import LogoDark from '../../../../assets/logo-dark.svg'
 import { Body2 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
+import { UseFundingFlowReturn } from '../../../../hooks'
 import { colors } from '../../../../styles'
 import {
   FundingStatus,
@@ -25,7 +26,7 @@ import {
 } from '../../../../types/generated/graphql'
 
 type Props = {
-  fundingFlow: any
+  fundingFlow: UseFundingFlowReturn
 }
 
 enum QRDisplayState {
@@ -52,7 +53,6 @@ const FundingErrorView = ({ error }: { error?: string }) => {
       borderRadius={'md'}
     >
       <BsExclamationCircle fontSize={'2em'} />
-
       <Body2 bold>Funding failed</Body2>
       {error && <Body2 fontSize="12px">{`Error: ${error}`}</Body2>}
     </VStack>
@@ -174,7 +174,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   }, [fundingTx, fundingTx.paymentRequest, fundingTx.address])
 
   const handleCopyButtonTapped = () => {
-    navigator.clipboard.writeText(value!)
+    navigator.clipboard.writeText(value)
 
     setHasCopiedQRCode(true)
 
@@ -223,7 +223,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               {hasCopiedQRCode ? (
                 <Box borderColor={colors.primary}>
                   <QRCode
-                    value={value!}
+                    value={value}
                     size={208}
                     bgColor={colors.bgWhite}
                     fgColor={colors.primary}
@@ -241,7 +241,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                   borderColor={colors.textBlack}
                 >
                   <QRCode
-                    value={value!}
+                    value={value}
                     size={208}
                     bgColor={colors.bgWhite}
                     fgColor={colors.textBlack}

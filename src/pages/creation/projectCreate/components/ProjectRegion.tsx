@@ -45,7 +45,7 @@ const useStyles = createUseStyles({
 })
 
 interface ProjectRegionProps extends StackProps {
-  location: Maybe<Location>
+  location?: Maybe<Location>
   updateProject: (_: Project) => void
 }
 

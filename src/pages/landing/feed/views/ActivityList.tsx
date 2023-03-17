@@ -18,6 +18,7 @@ export const ActivityList = ({ activities }: { activities: Activity[] }) => {
           <ContributionActivityItem
             fundingTx={activity.resource}
             dateTime={activity.createdAt}
+            showsProjectLink
           />
         )
       case ActivityResource.project:

@@ -23,6 +23,26 @@ export const theme = extendTheme({
         fontWeight: 'normal', // Normally, it is "semibold"
         height: '200px',
       },
+      variants: {
+        outlined: {
+          border: `1px solid ${colors.neutral200}`,
+          background: colors.bgGrey4,
+          color: colors.neutral900,
+          fontSize: '16px',
+          padding: '2px 5px',
+        },
+        hugeContained: {
+          background: colors.primary400,
+          width: '100%',
+          borderRadius: '8px',
+          padding: '10px 30px',
+          fontSize: '22px',
+          color: colors.neutral800,
+          textTransform: 'uppercase',
+          fontFamily: fonts.livvic,
+          fontWeight: 700,
+        },
+      },
     },
     Text: {
       baseStyle: {

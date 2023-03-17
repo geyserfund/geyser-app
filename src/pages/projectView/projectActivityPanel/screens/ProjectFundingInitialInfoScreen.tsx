@@ -213,7 +213,7 @@ export const ProjectFundingInitialInfoScreen = ({
 
   return (
     <VStack
-      padding={isMobile ? '0px 10px 0px 10px' : '10px 20px'}
+      padding={{ base: '0px 10px 0px 10px', lg: '10px 20px' }}
       spacing="0px"
       width="100%"
       height="100%"

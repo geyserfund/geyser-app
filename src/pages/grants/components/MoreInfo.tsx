@@ -11,7 +11,7 @@ interface MoreInfoProps {
 export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
   return (
     <>
-      <Box mt={4}>
+      <Box mt={8}>
         <Text
           fontWeight={'bold'}
           fontSize="19px"
@@ -53,7 +53,7 @@ export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
               _hover={{ shadow: 'xl' }}
               transition="all ease-out 0.3s"
             >
-              <Text fontWeight={'600'}>Faq</Text>
+              <Text fontWeight={'600'}>faq</Text>
               <img src={shareicon} alt="icon" />
             </Box>
           </Link>
