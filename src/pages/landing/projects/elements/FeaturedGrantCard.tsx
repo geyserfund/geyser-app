@@ -24,7 +24,7 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
   const navigate = useNavigate()
 
   if (loading || !grant) {
-    return <FeaturedProjectSkeleton />
+    return <FeaturedGrantSkeleton />
   }
 
   return (
@@ -82,7 +82,7 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
   )
 }
 
-export const FeaturedProjectSkeleton = () => {
+export const FeaturedGrantSkeleton = () => {
   return (
     <ProjectRowLayout title="Featured Project" width="100%">
       <CardLayout
