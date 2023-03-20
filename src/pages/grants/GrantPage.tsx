@@ -1,12 +1,14 @@
 import { Box, Button, Container, Image } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { PropsWithChildren, useEffect } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Body1, H1, H3 } from '../../components/typography'
+import Loader from '../../components/ui/Loader'
 import { StatusLabel } from '../../components/ui/StatusLabel'
-import { getPath } from '../../constants'
+import { Head } from '../../config'
+import { DefaultMetaImage, getPath } from '../../constants'
 import {
   GrantApplicant,
   GrantApplicantStatus,
@@ -43,6 +45,19 @@ const useStyles = createUseStyles({
   },
 })
 
+const PageContainer = ({
+  children,
+  image,
+}: PropsWithChildren<{ image?: string }>) => {
+  const classes = useStyles()
+  return (
+    <Container className={classes.container} px={6}>
+      <Head image={image || DefaultMetaImage} />
+      {children}
+    </Container>
+  )
+}
+
 const GRANT_STATUS_COUNTDOWN_TITLES = {
   [GrantStatusEnum.ApplicationsOpen]: 'Countdown to grant going live',
   [GrantStatusEnum.FundingOpen]: 'Time left to vote',
@@ -53,8 +68,8 @@ export const GrantPage = () => {
   const { toast } = useNotification()
   const { grantId } = useParams<{ grantId: string }>()
   const isMobile = useMobileMode()
-  const classes = useStyles()
   const navigate = useNavigate()
+  const classes = useStyles()
 
   const { grant, loading, error } = useGrant(grantId)
 
@@ -69,7 +84,11 @@ export const GrantPage = () => {
   }, [error, toast])
 
   if (loading || !grant) {
-    return null
+    return (
+      <PageContainer>
+        <Loader paddingTop="20px" />
+      </PageContainer>
+    )
   }
 
   const votingEndDate = grant.statuses.find(
@@ -94,11 +113,17 @@ export const GrantPage = () => {
   }
 
   if (grant.name === 'grant-round-002') {
-    return <GrantsRoundTwo applicants={applicants} />
+    return (
+      <GrantsRoundTwo
+        isLoading={loading}
+        sponsors={grant.sponsors}
+        applicants={applicants}
+      />
+    )
   }
 
   return (
-    <Container className={classes.container} px={6}>
+    <PageContainer>
       <Button
         mt={4}
         size="sm"
@@ -165,6 +190,6 @@ export const GrantPage = () => {
       <DistributionChart applicants={applicants} />
       <CommunityVoting applicants={applicants} canVote={canVote} />
       <MoreInfo />
-    </Container>
+    </PageContainer>
   )
 }

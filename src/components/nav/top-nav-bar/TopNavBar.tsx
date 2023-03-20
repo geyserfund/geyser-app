@@ -37,7 +37,8 @@ const navItems = [
   },
   {
     name: 'Grants',
-    to: '/grants',
+    to: `/${PathName.grants}`,
+    disableFor: [`/${PathName.grants}`],
     new: false,
   },
   {
@@ -73,8 +74,7 @@ const navItemsRoutes = [
   `/`,
   getPath('landingFeed'),
   `/${PathName.grants}`,
-  `/${PathName.grants}/roundtwo`,
-  `/${PathName.grants}/roundone`,
+  `/${PathName.grants}/:grantId`,
 ]
 
 const routesForHidingDashboardButton = [...dashboardRoutes]
@@ -100,11 +100,12 @@ const routesForEnablingSignInButton = [
   getPath('landingPage'),
   getPath('landingFeed'),
   getPath('projectDiscovery'),
-  getPath('grants'),
   getPath('grantsRoundOne'),
   getPath('grantsRoundTwo'),
   getPath('notFound'),
   getPath('notAuthorized'),
+  `/${PathName.grants}`,
+  `/${PathName.grants}/:grantId`,
   `/${PathName.userProfile}/:userId`,
   `/${PathName.entry}/:entryId`,
   `/${PathName.project}/:projectId/`,
@@ -117,10 +118,9 @@ const routesForEnablingProjectLaunchButton = [
   getPath('index'),
   getPath('landingPage'),
   getPath('landingFeed'),
-  getPath('grants'),
-  getPath('grantsRoundOne'),
-  getPath('grantsRoundTwo'),
   getPath('projectDiscovery'),
+  `/${PathName.grants}`,
+  `/${PathName.grants}/:grantId`,
 ]
 
 const routesForTransparentBackground = [
