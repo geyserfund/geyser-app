@@ -79,7 +79,7 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
                   <H3 fontSize="18px">{project.title}</H3>
                 </Link>
                 <Link to={projectLink}>
-                  <Text>{project.description}</Text>
+                  <Text noOfLines={4}>{project.description}</Text>
                 </Link>
               </Box>
               {!isMobile && (
