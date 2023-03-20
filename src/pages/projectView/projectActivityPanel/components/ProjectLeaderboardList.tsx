@@ -23,11 +23,12 @@ export const ProjectLeaderboardList = ({
   return (
     <CardLayout
       id={id}
-      spacing={'8px'}
+      noborder
+      spacing={'20px'}
       width="100%"
       overflow="auto"
       height={isMobile ? 'calc(100% - 44px)' : '100%'}
-      padding="10px"
+      padding="0px"
       marginBottom={{ base: '20px', lg: '0px' }}
     >
       {funders.data.map((funder, index) => {
