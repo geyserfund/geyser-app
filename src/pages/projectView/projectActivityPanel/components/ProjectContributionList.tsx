@@ -20,11 +20,12 @@ export const ProjectContributionList = ({
   return (
     <CardLayout
       id={id}
+      noborder
       spacing={'20px'}
       width="100%"
       overflow="auto"
       height={'100%'}
-      padding="15px"
+      padding="0px"
     >
       {fundingTxs.data.map((fundingTx, index) => {
         return (

@@ -2,12 +2,7 @@ import { __development__, __production__, __staging__ } from '../config'
 
 export const getListOfTags = () => {
   if (__development__) {
-    return [
-      { label: 'education', id: 41 },
-      { label: 'culture', id: 42 },
-      { label: 'communities', id: 43 },
-      { label: 'games', id: 44 },
-    ]
+    return productionTagsList
   }
 
   if (__staging__) {
@@ -23,7 +18,7 @@ export const getListOfTags = () => {
 
 export const getFeaturedProject = () => {
   if (__development__) {
-    return 'bitcoinconferenceinlagos'
+    return 'nostrhackweek'
   }
 
   if (__staging__) {

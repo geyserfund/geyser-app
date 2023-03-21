@@ -5,11 +5,13 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ButtonComponent } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
+import { useMobileMode } from '../../../../utils'
 
 export const ProjectBackButton = () => {
   const { mobileView } = useProjectContext()
   const navigate = useNavigate()
   const location = useLocation()
+  const isMobile = useMobileMode()
 
   const handleGoBack = () => {
     if (location.key) {
@@ -19,7 +21,7 @@ export const ProjectBackButton = () => {
     }
   }
 
-  if (mobileView && mobileView !== MobileViews.description) {
+  if (isMobile && mobileView && mobileView !== MobileViews.description) {
     return null
   }
 

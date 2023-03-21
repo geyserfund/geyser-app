@@ -10,8 +10,15 @@ import {
 } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { ProjectReward, RewardCurrency } from '../../../../types'
+import { TimeAgo } from '../../components'
 
-export const RewardActivityItem = ({ reward }: { reward: ProjectReward }) => {
+export const RewardActivityItem = ({
+  reward,
+  dateTime,
+}: {
+  reward: ProjectReward
+  dateTime?: string
+}) => {
   const owner = reward.project.owners[0].user
 
   return (
@@ -37,6 +44,7 @@ export const RewardActivityItem = ({ reward }: { reward: ProjectReward }) => {
         </Body2>
       </HStack>
       <RewardItem reward={reward} />
+      <TimeAgo date={dateTime || ''} />
     </VStack>
   )
 }
