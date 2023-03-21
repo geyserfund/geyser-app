@@ -14,7 +14,7 @@ import { BsLightningChargeFill } from 'react-icons/bs'
 import { QRCode } from 'react-qrcode-logo'
 import { useLocation, useNavigate } from 'react-router'
 
-import LogoDarkGreen from '../../assets/logo-dark-green.svg'
+import { LogoDarkGreenImage } from '../../assets'
 import {
   AUTH_SERVICE_ENDPOINT,
   authModalStates,
@@ -269,7 +269,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
                 <Link href={`lightning:${qrContent}`}>
                   <QRCode
                     qrStyle="dots"
-                    logoImage={LogoDarkGreen}
+                    logoImage={LogoDarkGreenImage}
                     logoHeight={30}
                     logoWidth={30}
                     eyeRadius={2}

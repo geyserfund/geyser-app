@@ -19,11 +19,15 @@ const externalAccountIconMap = {
   nostr: NostrSvgIcon,
 } as { [key: string]: any }
 
+interface ExternalAccountDisplayProps {
+  account: ExternalAccount
+  isEdit?: boolean
+}
+
 export const ExternalAccountDisplay = ({
   account,
-}: {
-  account: ExternalAccount
-}) => {
+  isEdit,
+}: ExternalAccountDisplayProps) => {
   const Icon = externalAccountIconMap[account.type]
   return (
     <HStack
@@ -38,7 +42,7 @@ export const ExternalAccountDisplay = ({
         <Icon height="20px" width="20px" />
         <Body2>{account.externalUsername}</Body2>
       </HStack>
-      <CloseIconButton />
+      {isEdit && <CloseIconButton />}
     </HStack>
   )
 }

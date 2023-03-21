@@ -1,13 +1,13 @@
-import { Button, Tooltip } from '@chakra-ui/react'
+import { Button, ButtonProps, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import { BoltIcon } from '../../../../components/icons'
 
-interface ILightningQR {
+interface ILightningQR extends ButtonProps {
   name: string
 }
 
-export const LightningAddress = ({ name }: ILightningQR) => {
+export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
   const [copy, setCopy] = useState(false)
 
   const handleAddressCopy = () => {
@@ -34,6 +34,7 @@ export const LightningAddress = ({ name }: ILightningQR) => {
           onClick={handleAddressCopy}
           color="#2F423E"
           id="lightning-address"
+          {...rest}
         >
           {name}@geyser.fund
         </Button>
