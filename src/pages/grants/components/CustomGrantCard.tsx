@@ -97,6 +97,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 </Box>
               ) : (
                 <Box
+                  mt={2}
                   display="flex"
                   alignItems="center"
                   justifyContent="space-around"
