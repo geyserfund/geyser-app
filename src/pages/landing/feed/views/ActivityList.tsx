@@ -17,15 +17,31 @@ export const ActivityList = ({ activities }: { activities: Activity[] }) => {
         return (
           <ContributionActivityItem
             fundingTx={activity.resource}
+            dateTime={activity.createdAt}
             showsProjectLink
           />
         )
       case ActivityResource.project:
-        return <ProjectActivityItem project={activity.resource} />
+        return (
+          <ProjectActivityItem
+            project={activity.resource}
+            dateTime={activity.createdAt}
+          />
+        )
       case ActivityResource.entry:
-        return <EntryActivityItem entry={activity.resource} />
+        return (
+          <EntryActivityItem
+            entry={activity.resource}
+            dateTime={activity.createdAt}
+          />
+        )
       case ActivityResource.projectReward:
-        return <RewardActivityItem reward={activity.resource} />
+        return (
+          <RewardActivityItem
+            reward={activity.resource}
+            dateTime={activity.createdAt}
+          />
+        )
 
       default:
         return null

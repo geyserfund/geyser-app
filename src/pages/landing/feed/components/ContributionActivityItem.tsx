@@ -28,12 +28,13 @@ import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTx
+  dateTime?: string
   showsProjectLink?: boolean
   count?: number
 }
-
 export const ContributionActivityItem = ({
   fundingTx,
+  dateTime,
   count,
   showsProjectLink,
   ...rest
@@ -41,7 +42,7 @@ export const ContributionActivityItem = ({
   const { funder } = fundingTx
 
   const isFunderAnonymous = Boolean(funder?.user) === false
-  const timeAgo = getDaysAgo(fundingTx?.paidAt || '')
+  const timeAgo = getDaysAgo(dateTime || '')
   const wasMadeOnChain = fundingTx.onChain
 
   const avatarMetadata = getAvatarMetadata({

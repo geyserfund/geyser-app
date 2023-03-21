@@ -76,5 +76,5 @@ export const ScrollInvoke = ({
     setLoading(false)
   }
 
-  return <div id={`landing-page-contributions-list-refetch-${elementId}`}></div>
+  return null
 }

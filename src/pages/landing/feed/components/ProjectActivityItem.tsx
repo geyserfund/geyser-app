@@ -5,7 +5,13 @@ import { LinkableAvatar } from '../../../../components/ui'
 import { Project } from '../../../../types'
 import { LandingProjectCard, TimeAgo } from '../../components'
 
-export const ProjectActivityItem = ({ project }: { project: Project }) => {
+export const ProjectActivityItem = ({
+  project,
+  dateTime,
+}: {
+  project: Project
+  dateTime?: string
+}) => {
   const owner = project.owners[0].user
 
   return (
@@ -21,7 +27,7 @@ export const ProjectActivityItem = ({ project }: { project: Project }) => {
         <Body2>launched a new Project</Body2>
       </HStack>
       <LandingProjectCard project={project} isMobile />
-      <TimeAgo date={project.createdAt || ''} />
+      <TimeAgo date={dateTime || ''} />
     </VStack>
   )
 }

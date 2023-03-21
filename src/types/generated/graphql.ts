@@ -62,10 +62,11 @@ export type Scalars = {
 }
 
 export type Activity = {
-  __typename?: 'Activity'
-  id?: Maybe<Scalars['String']>
-  resource?: Maybe<ActivityResource>
-}
+  __typename?: 'Activity';
+  createdAt: Scalars['Date'];
+  id: Scalars['String'];
+  resource: ActivityResource;
+};
 
 export type ActivityCreatedSubscriptionInput = {
   where?: InputMaybe<ActivityCreatedSubscriptionWhereInput>
@@ -1609,464 +1610,410 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Activity: ResolverTypeWrapper<
-    Omit<Activity, 'resource'> & {
-      resource?: Maybe<ResolversTypes['ActivityResource']>
-    }
-  >
-  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput
-  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput
-  ActivityResource:
-    | ResolversTypes['Entry']
-    | ResolversTypes['FundingTx']
-    | ResolversTypes['Project']
-    | ResolversTypes['ProjectReward']
-  ActivityResourceType: ActivityResourceType
-  Ambassador: ResolverTypeWrapper<Ambassador>
-  AmountSummary: ResolverTypeWrapper<AmountSummary>
-  BigInt: ResolverTypeWrapper<Scalars['BigInt']>
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
-  ConnectionDetails:
-    | ResolversTypes['LightningAddressConnectionDetails']
-    | ResolversTypes['LndConnectionDetailsPrivate']
-    | ResolversTypes['LndConnectionDetailsPublic']
-  Country: ResolverTypeWrapper<Country>
-  CreateEntryInput: CreateEntryInput
-  CreateProjectInput: CreateProjectInput
-  CreateProjectMilestoneInput: CreateProjectMilestoneInput
-  CreateProjectRewardInput: CreateProjectRewardInput
-  CreateWalletInput: CreateWalletInput
-  Currency: Currency
-  CursorInput: CursorInput
-  CursorInputString: CursorInputString
-  Date: ResolverTypeWrapper<Scalars['Date']>
-  DonationFundingInput: DonationFundingInput
-  Entry: ResolverTypeWrapper<Entry>
-  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>
-  EntryStatus: EntryStatus
-  EntryType: EntryType
-  ExternalAccount: ResolverTypeWrapper<ExternalAccount>
-  FileUploadInput: FileUploadInput
-  Float: ResolverTypeWrapper<Scalars['Float']>
-  Funder: ResolverTypeWrapper<Funder>
-  FunderReward: ResolverTypeWrapper<FunderReward>
-  FundingCancelInput: FundingCancelInput
-  FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>
-  FundingConfirmInput: FundingConfirmInput
-  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input
-  FundingConfirmOffChainInput: FundingConfirmOffChainInput
-  FundingConfirmOnChainInput: FundingConfirmOnChainInput
-  FundingConfirmResponse: ResolverTypeWrapper<FundingConfirmResponse>
-  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput
-  FundingInput: FundingInput
-  FundingMetadataInput: FundingMetadataInput
-  FundingMethod: FundingMethod
-  FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>
-  FundingPendingInput: FundingPendingInput
-  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input
-  FundingPendingOffChainInput: FundingPendingOffChainInput
-  FundingPendingOnChainInput: FundingPendingOnChainInput
-  FundingPendingResponse: ResolverTypeWrapper<FundingPendingResponse>
-  FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>
-  FundingResourceType: FundingResourceType
-  FundingStatus: FundingStatus
-  FundingTx: ResolverTypeWrapper<
-    Omit<FundingTx, 'sourceResource'> & {
-      sourceResource?: Maybe<ResolversTypes['SourceResource']>
-    }
-  >
-  FundingTxConfirmedSubscriptionResponse: ResolverTypeWrapper<FundingTxConfirmedSubscriptionResponse>
-  FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
-  GetActivitiesInput: GetActivitiesInput
-  GetActivityOrderByInput: GetActivityOrderByInput
-  GetActivityPaginationInput: GetActivityPaginationInput
-  GetActivityWhereInput: GetActivityWhereInput
-  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput
-  GetEntriesInput: GetEntriesInput
-  GetEntriesOrderByInput: GetEntriesOrderByInput
-  GetEntriesWhereInput: GetEntriesWhereInput
-  GetFunderFundingTxsInput: GetFunderFundingTxsInput
-  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput
-  GetFunderWhereInput: GetFunderWhereInput
-  GetFundersInput: GetFundersInput
-  GetFundersOrderByInput: GetFundersOrderByInput
-  GetFundingTxsInput: GetFundingTxsInput
-  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput
-  GetFundingTxsWhereInput: GetFundingTxsWhereInput
-  GetProjectRewardInput: GetProjectRewardInput
-  GetProjectRewardWhereInput: GetProjectRewardWhereInput
-  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput
-  Grant: ResolverTypeWrapper<Grant>
-  GrantApplicant: ResolverTypeWrapper<GrantApplicant>
-  GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>
-  GrantApplicantStatus: GrantApplicantStatus
-  GrantGetInput: GrantGetInput
-  GrantGetWhereInput: GrantGetWhereInput
-  GrantStatus: ResolverTypeWrapper<GrantStatus>
-  GrantStatusEnum: GrantStatusEnum
-  Int: ResolverTypeWrapper<Scalars['Int']>
-  InvoiceStatus: InvoiceStatus
-  LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>
-  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
-  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
-  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>
-  LndConnectionDetails: never
-  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput
-  LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>
-  LndConnectionDetailsPublic: ResolverTypeWrapper<LndConnectionDetailsPublic>
-  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
-  LndNodeType: LndNodeType
-  Location: ResolverTypeWrapper<Location>
-  Mutation: ResolverTypeWrapper<{}>
-  OffsetBasedPaginationInput: OffsetBasedPaginationInput
-  OrderByOptions: OrderByOptions
-  Owner: ResolverTypeWrapper<Owner>
-  OwnerOf: ResolverTypeWrapper<OwnerOf>
-  PaginationInput: PaginationInput
-  Project: ResolverTypeWrapper<Project>
-  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>
-  ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>
-  ProjectEntriesGetInput: ProjectEntriesGetInput
-  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
-  ProjectFollowMutationInput: ProjectFollowMutationInput
-  ProjectLinkMutationInput: ProjectLinkMutationInput
-  ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>
-  ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
-  ProjectReward: ResolverTypeWrapper<ProjectReward>
-  ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
-  ProjectStatus: ProjectStatus
-  ProjectTagMutationInput: ProjectTagMutationInput
-  ProjectType: ProjectType
-  ProjectWhereInput: ProjectWhereInput
-  ProjectsGetQueryInput: ProjectsGetQueryInput
-  ProjectsOrderByInput: ProjectsOrderByInput
-  ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>
-  ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>
-  Query: ResolverTypeWrapper<{}>
-  ResourceInput: ResourceInput
-  RewardCurrency: RewardCurrency
-  RewardFundingInput: RewardFundingInput
-  RewardInput: RewardInput
-  ShippingDestination: ShippingDestination
-  ShippingInput: ShippingInput
-  SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>
-  SourceResource: ResolversTypes['Entry'] | ResolversTypes['Project']
-  Sponsor: ResolverTypeWrapper<Sponsor>
-  SponsorStatus: SponsorStatus
-  String: ResolverTypeWrapper<Scalars['String']>
-  Subscription: ResolverTypeWrapper<{}>
-  Tag: ResolverTypeWrapper<Tag>
-  TagCreateInput: TagCreateInput
-  TagsGetResult: ResolverTypeWrapper<TagsGetResult>
-  UniqueProjectQueryInput: UniqueProjectQueryInput
-  UpdateEntryInput: UpdateEntryInput
-  UpdateProjectInput: UpdateProjectInput
-  UpdateProjectMilestoneInput: UpdateProjectMilestoneInput
-  UpdateProjectRewardInput: UpdateProjectRewardInput
-  UpdateUserInput: UpdateUserInput
-  UpdateWalletInput: UpdateWalletInput
-  UpdateWalletStateInput: UpdateWalletStateInput
-  User: ResolverTypeWrapper<User>
-  UserEntriesGetInput: UserEntriesGetInput
-  UserEntriesGetWhereInput: UserEntriesGetWhereInput
-  UserGetInput: UserGetInput
-  UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>
-  UserProjectsGetInput: UserProjectsGetInput
-  UserProjectsGetWhereInput: UserProjectsGetWhereInput
-  Wallet: ResolverTypeWrapper<
-    Omit<Wallet, 'connectionDetails'> & {
-      connectionDetails: ResolversTypes['ConnectionDetails']
-    }
-  >
-  WalletState: ResolverTypeWrapper<WalletState>
-  WalletStatus: WalletStatus
-  WalletStatusCode: WalletStatusCode
-  amount_Float_NotNull_min_1: ResolverTypeWrapper<
-    Scalars['amount_Float_NotNull_min_1']
-  >
-  amount_Float_min_1: ResolverTypeWrapper<Scalars['amount_Float_min_1']>
-  comment_String_maxLength_280: ResolverTypeWrapper<
-    Scalars['comment_String_maxLength_280']
-  >
-  cost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_0']>
-  cost_Int_NotNull_min_1_max_1000000: ResolverTypeWrapper<
-    Scalars['cost_Int_NotNull_min_1_max_1000000']
-  >
-  description_String_NotNull_maxLength_250: ResolverTypeWrapper<
-    Scalars['description_String_NotNull_maxLength_250']
-  >
-  description_String_NotNull_maxLength_2200: ResolverTypeWrapper<
-    Scalars['description_String_NotNull_maxLength_2200']
-  >
-  description_String_maxLength_250: ResolverTypeWrapper<
-    Scalars['description_String_maxLength_250']
-  >
-  description_String_maxLength_2200: ResolverTypeWrapper<
-    Scalars['description_String_maxLength_2200']
-  >
-  donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<
-    Scalars['donationAmount_Int_NotNull_min_1']
-  >
-  email_String_NotNull_format_email: ResolverTypeWrapper<
-    Scalars['email_String_NotNull_format_email']
-  >
-  email_String_format_email: ResolverTypeWrapper<
-    Scalars['email_String_format_email']
-  >
-  fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>
-  getDashboardFundersInput: GetDashboardFundersInput
-  link_String_NotNull_format_uri: ResolverTypeWrapper<
-    Scalars['link_String_NotNull_format_uri']
-  >
-  links_List_String_NotNull_format_uri: ResolverTypeWrapper<
-    Scalars['links_List_String_NotNull_format_uri']
-  >
-  name_String_NotNull_maxLength_100: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_maxLength_100']
-  >
-  name_String_NotNull_minLength_3_maxLength_60: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_3_maxLength_60']
-  >
-  name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<
-    Scalars['name_String_NotNull_minLength_3_maxLength_280']
-  >
-  name_String_maxLength_100: ResolverTypeWrapper<
-    Scalars['name_String_maxLength_100']
-  >
-  name_String_minLength_3_maxLength_280: ResolverTypeWrapper<
-    Scalars['name_String_minLength_3_maxLength_280']
-  >
-  name_String_minLength_5_maxLength_60: ResolverTypeWrapper<
-    Scalars['name_String_minLength_5_maxLength_60']
-  >
-  projectsMostFundedOfTheWeekGet: ResolverTypeWrapper<ProjectsMostFundedOfTheWeekGet>
-  pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<
-    Scalars['pubkey_String_minLength_66_maxLength_66']
-  >
-  quantity_Int_NotNull_min_1: ResolverTypeWrapper<
-    Scalars['quantity_Int_NotNull_min_1']
-  >
-  rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<
-    Scalars['rewardsCost_Int_NotNull_min_0']
-  >
-  shortDescription_String_maxLength_500: ResolverTypeWrapper<
-    Scalars['shortDescription_String_maxLength_500']
-  >
-  stock_Int_min_0: ResolverTypeWrapper<Scalars['stock_Int_min_0']>
-  title_String_NotNull_maxLength_60: ResolverTypeWrapper<
-    Scalars['title_String_NotNull_maxLength_60']
-  >
-  title_String_NotNull_maxLength_150: ResolverTypeWrapper<
-    Scalars['title_String_NotNull_maxLength_150']
-  >
-  title_String_maxLength_60: ResolverTypeWrapper<
-    Scalars['title_String_maxLength_60']
-  >
-  title_String_maxLength_150: ResolverTypeWrapper<
-    Scalars['title_String_maxLength_150']
-  >
-}
+  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>;
+  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
+  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
+  ActivityResource: ResolversTypes['Entry'] | ResolversTypes['FundingTx'] | ResolversTypes['Project'] | ResolversTypes['ProjectReward'];
+  ActivityResourceType: ActivityResourceType;
+  Ambassador: ResolverTypeWrapper<Ambassador>;
+  AmountSummary: ResolverTypeWrapper<AmountSummary>;
+  BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  ConnectionDetails: ResolversTypes['LightningAddressConnectionDetails'] | ResolversTypes['LndConnectionDetailsPrivate'] | ResolversTypes['LndConnectionDetailsPublic'];
+  Country: ResolverTypeWrapper<Country>;
+  CreateEntryInput: CreateEntryInput;
+  CreateProjectInput: CreateProjectInput;
+  CreateProjectMilestoneInput: CreateProjectMilestoneInput;
+  CreateProjectRewardInput: CreateProjectRewardInput;
+  CreateWalletInput: CreateWalletInput;
+  Currency: Currency;
+  CursorInput: CursorInput;
+  CursorInputString: CursorInputString;
+  Date: ResolverTypeWrapper<Scalars['Date']>;
+  DonationFundingInput: DonationFundingInput;
+  Entry: ResolverTypeWrapper<Entry>;
+  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>;
+  EntryStatus: EntryStatus;
+  EntryType: EntryType;
+  ExternalAccount: ResolverTypeWrapper<ExternalAccount>;
+  FileUploadInput: FileUploadInput;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  Funder: ResolverTypeWrapper<Funder>;
+  FunderReward: ResolverTypeWrapper<FunderReward>;
+  FundingCancelInput: FundingCancelInput;
+  FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>;
+  FundingConfirmInput: FundingConfirmInput;
+  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input;
+  FundingConfirmOffChainInput: FundingConfirmOffChainInput;
+  FundingConfirmOnChainInput: FundingConfirmOnChainInput;
+  FundingConfirmResponse: ResolverTypeWrapper<FundingConfirmResponse>;
+  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput;
+  FundingInput: FundingInput;
+  FundingMetadataInput: FundingMetadataInput;
+  FundingMethod: FundingMethod;
+  FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>;
+  FundingPendingInput: FundingPendingInput;
+  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
+  FundingPendingOffChainInput: FundingPendingOffChainInput;
+  FundingPendingOnChainInput: FundingPendingOnChainInput;
+  FundingPendingResponse: ResolverTypeWrapper<FundingPendingResponse>;
+  FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>;
+  FundingResourceType: FundingResourceType;
+  FundingStatus: FundingStatus;
+  FundingTx: ResolverTypeWrapper<Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }>;
+  FundingTxConfirmedSubscriptionResponse: ResolverTypeWrapper<FundingTxConfirmedSubscriptionResponse>;
+  FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
+  GetActivitiesInput: GetActivitiesInput;
+  GetActivityOrderByInput: GetActivityOrderByInput;
+  GetActivityPaginationInput: GetActivityPaginationInput;
+  GetActivityWhereInput: GetActivityWhereInput;
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
+  GetEntriesInput: GetEntriesInput;
+  GetEntriesOrderByInput: GetEntriesOrderByInput;
+  GetEntriesWhereInput: GetEntriesWhereInput;
+  GetFunderFundingTxsInput: GetFunderFundingTxsInput;
+  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput;
+  GetFunderWhereInput: GetFunderWhereInput;
+  GetFundersInput: GetFundersInput;
+  GetFundersOrderByInput: GetFundersOrderByInput;
+  GetFundingTxsInput: GetFundingTxsInput;
+  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput;
+  GetFundingTxsWhereInput: GetFundingTxsWhereInput;
+  GetProjectRewardInput: GetProjectRewardInput;
+  GetProjectRewardWhereInput: GetProjectRewardWhereInput;
+  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
+  Grant: ResolverTypeWrapper<Grant>;
+  GrantApplicant: ResolverTypeWrapper<GrantApplicant>;
+  GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>;
+  GrantApplicantStatus: GrantApplicantStatus;
+  GrantGetInput: GrantGetInput;
+  GrantGetWhereInput: GrantGetWhereInput;
+  GrantStatus: ResolverTypeWrapper<GrantStatus>;
+  GrantStatusEnum: GrantStatusEnum;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  InvoiceStatus: InvoiceStatus;
+  LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
+  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
+  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
+  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>;
+  LndConnectionDetails: never;
+  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
+  LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
+  LndConnectionDetailsPublic: ResolverTypeWrapper<LndConnectionDetailsPublic>;
+  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
+  LndNodeType: LndNodeType;
+  Location: ResolverTypeWrapper<Location>;
+  Mutation: ResolverTypeWrapper<{}>;
+  OffsetBasedPaginationInput: OffsetBasedPaginationInput;
+  OrderByOptions: OrderByOptions;
+  Owner: ResolverTypeWrapper<Owner>;
+  OwnerOf: ResolverTypeWrapper<OwnerOf>;
+  PaginationInput: PaginationInput;
+  Project: ResolverTypeWrapper<Project>;
+  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>;
+  ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>;
+  ProjectEntriesGetInput: ProjectEntriesGetInput;
+  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
+  ProjectFollowMutationInput: ProjectFollowMutationInput;
+  ProjectLinkMutationInput: ProjectLinkMutationInput;
+  ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>;
+  ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
+  ProjectReward: ResolverTypeWrapper<ProjectReward>;
+  ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>;
+  ProjectStatus: ProjectStatus;
+  ProjectTagMutationInput: ProjectTagMutationInput;
+  ProjectType: ProjectType;
+  ProjectWhereInput: ProjectWhereInput;
+  ProjectsGetQueryInput: ProjectsGetQueryInput;
+  ProjectsOrderByInput: ProjectsOrderByInput;
+  ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>;
+  ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>;
+  Query: ResolverTypeWrapper<{}>;
+  ResourceInput: ResourceInput;
+  RewardCurrency: RewardCurrency;
+  RewardFundingInput: RewardFundingInput;
+  RewardInput: RewardInput;
+  ShippingDestination: ShippingDestination;
+  ShippingInput: ShippingInput;
+  SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>;
+  SourceResource: ResolversTypes['Entry'] | ResolversTypes['Project'];
+  Sponsor: ResolverTypeWrapper<Sponsor>;
+  SponsorStatus: SponsorStatus;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  Subscription: ResolverTypeWrapper<{}>;
+  Tag: ResolverTypeWrapper<Tag>;
+  TagCreateInput: TagCreateInput;
+  TagsGetResult: ResolverTypeWrapper<TagsGetResult>;
+  UniqueProjectQueryInput: UniqueProjectQueryInput;
+  UpdateEntryInput: UpdateEntryInput;
+  UpdateProjectInput: UpdateProjectInput;
+  UpdateProjectMilestoneInput: UpdateProjectMilestoneInput;
+  UpdateProjectRewardInput: UpdateProjectRewardInput;
+  UpdateUserInput: UpdateUserInput;
+  UpdateWalletInput: UpdateWalletInput;
+  UpdateWalletStateInput: UpdateWalletStateInput;
+  User: ResolverTypeWrapper<User>;
+  UserEntriesGetInput: UserEntriesGetInput;
+  UserEntriesGetWhereInput: UserEntriesGetWhereInput;
+  UserGetInput: UserGetInput;
+  UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>;
+  UserProjectsGetInput: UserProjectsGetInput;
+  UserProjectsGetWhereInput: UserProjectsGetWhereInput;
+  Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
+  WalletState: ResolverTypeWrapper<WalletState>;
+  WalletStatus: WalletStatus;
+  WalletStatusCode: WalletStatusCode;
+  amount_Float_NotNull_min_1: ResolverTypeWrapper<Scalars['amount_Float_NotNull_min_1']>;
+  amount_Float_min_1: ResolverTypeWrapper<Scalars['amount_Float_min_1']>;
+  comment_String_maxLength_280: ResolverTypeWrapper<Scalars['comment_String_maxLength_280']>;
+  cost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_0']>;
+  cost_Int_NotNull_min_1_max_1000000: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_1_max_1000000']>;
+  description_String_NotNull_maxLength_250: ResolverTypeWrapper<Scalars['description_String_NotNull_maxLength_250']>;
+  description_String_NotNull_maxLength_2200: ResolverTypeWrapper<Scalars['description_String_NotNull_maxLength_2200']>;
+  description_String_maxLength_250: ResolverTypeWrapper<Scalars['description_String_maxLength_250']>;
+  description_String_maxLength_2200: ResolverTypeWrapper<Scalars['description_String_maxLength_2200']>;
+  donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<Scalars['donationAmount_Int_NotNull_min_1']>;
+  email_String_NotNull_format_email: ResolverTypeWrapper<Scalars['email_String_NotNull_format_email']>;
+  email_String_format_email: ResolverTypeWrapper<Scalars['email_String_format_email']>;
+  fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>;
+  getDashboardFundersInput: GetDashboardFundersInput;
+  link_String_NotNull_format_uri: ResolverTypeWrapper<Scalars['link_String_NotNull_format_uri']>;
+  links_List_String_NotNull_format_uri: ResolverTypeWrapper<Scalars['links_List_String_NotNull_format_uri']>;
+  name_String_NotNull_maxLength_100: ResolverTypeWrapper<Scalars['name_String_NotNull_maxLength_100']>;
+  name_String_NotNull_minLength_3_maxLength_60: ResolverTypeWrapper<Scalars['name_String_NotNull_minLength_3_maxLength_60']>;
+  name_String_NotNull_minLength_3_maxLength_280: ResolverTypeWrapper<Scalars['name_String_NotNull_minLength_3_maxLength_280']>;
+  name_String_maxLength_100: ResolverTypeWrapper<Scalars['name_String_maxLength_100']>;
+  name_String_minLength_3_maxLength_280: ResolverTypeWrapper<Scalars['name_String_minLength_3_maxLength_280']>;
+  name_String_minLength_5_maxLength_60: ResolverTypeWrapper<Scalars['name_String_minLength_5_maxLength_60']>;
+  projectsMostFundedOfTheWeekGet: ResolverTypeWrapper<ProjectsMostFundedOfTheWeekGet>;
+  pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<Scalars['pubkey_String_minLength_66_maxLength_66']>;
+  quantity_Int_NotNull_min_1: ResolverTypeWrapper<Scalars['quantity_Int_NotNull_min_1']>;
+  rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['rewardsCost_Int_NotNull_min_0']>;
+  shortDescription_String_maxLength_500: ResolverTypeWrapper<Scalars['shortDescription_String_maxLength_500']>;
+  stock_Int_min_0: ResolverTypeWrapper<Scalars['stock_Int_min_0']>;
+  title_String_NotNull_maxLength_60: ResolverTypeWrapper<Scalars['title_String_NotNull_maxLength_60']>;
+  title_String_NotNull_maxLength_150: ResolverTypeWrapper<Scalars['title_String_NotNull_maxLength_150']>;
+  title_String_maxLength_60: ResolverTypeWrapper<Scalars['title_String_maxLength_60']>;
+  title_String_maxLength_150: ResolverTypeWrapper<Scalars['title_String_maxLength_150']>;
+};
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Activity: Omit<Activity, 'resource'> & {
-    resource?: Maybe<ResolversParentTypes['ActivityResource']>
-  }
-  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput
-  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput
-  ActivityResource:
-    | ResolversParentTypes['Entry']
-    | ResolversParentTypes['FundingTx']
-    | ResolversParentTypes['Project']
-    | ResolversParentTypes['ProjectReward']
-  Ambassador: Ambassador
-  AmountSummary: AmountSummary
-  BigInt: Scalars['BigInt']
-  Boolean: Scalars['Boolean']
-  ConnectionDetails:
-    | ResolversParentTypes['LightningAddressConnectionDetails']
-    | ResolversParentTypes['LndConnectionDetailsPrivate']
-    | ResolversParentTypes['LndConnectionDetailsPublic']
-  Country: Country
-  CreateEntryInput: CreateEntryInput
-  CreateProjectInput: CreateProjectInput
-  CreateProjectMilestoneInput: CreateProjectMilestoneInput
-  CreateProjectRewardInput: CreateProjectRewardInput
-  CreateWalletInput: CreateWalletInput
-  CursorInput: CursorInput
-  CursorInputString: CursorInputString
-  Date: Scalars['Date']
-  DonationFundingInput: DonationFundingInput
-  Entry: Entry
-  EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse
-  ExternalAccount: ExternalAccount
-  FileUploadInput: FileUploadInput
-  Float: Scalars['Float']
-  Funder: Funder
-  FunderReward: FunderReward
-  FundingCancelInput: FundingCancelInput
-  FundingCancelResponse: FundingCancelResponse
-  FundingConfirmInput: FundingConfirmInput
-  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input
-  FundingConfirmOffChainInput: FundingConfirmOffChainInput
-  FundingConfirmOnChainInput: FundingConfirmOnChainInput
-  FundingConfirmResponse: FundingConfirmResponse
-  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput
-  FundingInput: FundingInput
-  FundingMetadataInput: FundingMetadataInput
-  FundingMutationResponse: FundingMutationResponse
-  FundingPendingInput: FundingPendingInput
-  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input
-  FundingPendingOffChainInput: FundingPendingOffChainInput
-  FundingPendingOnChainInput: FundingPendingOnChainInput
-  FundingPendingResponse: FundingPendingResponse
-  FundingQueryResponse: FundingQueryResponse
-  FundingTx: Omit<FundingTx, 'sourceResource'> & {
-    sourceResource?: Maybe<ResolversParentTypes['SourceResource']>
-  }
-  FundingTxConfirmedSubscriptionResponse: FundingTxConfirmedSubscriptionResponse
-  FundinginvoiceCancel: FundinginvoiceCancel
-  GetActivitiesInput: GetActivitiesInput
-  GetActivityOrderByInput: GetActivityOrderByInput
-  GetActivityPaginationInput: GetActivityPaginationInput
-  GetActivityWhereInput: GetActivityWhereInput
-  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput
-  GetEntriesInput: GetEntriesInput
-  GetEntriesOrderByInput: GetEntriesOrderByInput
-  GetEntriesWhereInput: GetEntriesWhereInput
-  GetFunderFundingTxsInput: GetFunderFundingTxsInput
-  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput
-  GetFunderWhereInput: GetFunderWhereInput
-  GetFundersInput: GetFundersInput
-  GetFundersOrderByInput: GetFundersOrderByInput
-  GetFundingTxsInput: GetFundingTxsInput
-  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput
-  GetFundingTxsWhereInput: GetFundingTxsWhereInput
-  GetProjectRewardInput: GetProjectRewardInput
-  GetProjectRewardWhereInput: GetProjectRewardWhereInput
-  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput
-  Grant: Grant
-  GrantApplicant: GrantApplicant
-  GrantApplicantFunding: GrantApplicantFunding
-  GrantGetInput: GrantGetInput
-  GrantGetWhereInput: GrantGetWhereInput
-  GrantStatus: GrantStatus
-  Int: Scalars['Int']
-  LightningAddressConnectionDetails: LightningAddressConnectionDetails
-  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
-  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
-  LightningAddressVerifyResponse: LightningAddressVerifyResponse
-  LndConnectionDetails: never
-  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput
-  LndConnectionDetailsPrivate: LndConnectionDetailsPrivate
-  LndConnectionDetailsPublic: LndConnectionDetailsPublic
-  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
-  Location: Location
-  Mutation: {}
-  OffsetBasedPaginationInput: OffsetBasedPaginationInput
-  Owner: Owner
-  OwnerOf: OwnerOf
-  PaginationInput: PaginationInput
-  Project: Project
-  ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse
-  ProjectCountriesGetResult: ProjectCountriesGetResult
-  ProjectEntriesGetInput: ProjectEntriesGetInput
-  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
-  ProjectFollowMutationInput: ProjectFollowMutationInput
-  ProjectLinkMutationInput: ProjectLinkMutationInput
-  ProjectMilestone: ProjectMilestone
-  ProjectRegionsGetResult: ProjectRegionsGetResult
-  ProjectReward: ProjectReward
-  ProjectStatistics: ProjectStatistics
-  ProjectTagMutationInput: ProjectTagMutationInput
-  ProjectWhereInput: ProjectWhereInput
-  ProjectsGetQueryInput: ProjectsGetQueryInput
-  ProjectsOrderByInput: ProjectsOrderByInput
-  ProjectsResponse: ProjectsResponse
-  ProjectsSummary: ProjectsSummary
-  Query: {}
-  ResourceInput: ResourceInput
-  RewardFundingInput: RewardFundingInput
-  RewardInput: RewardInput
-  ShippingInput: ShippingInput
-  SignedUploadUrl: SignedUploadUrl
-  SourceResource:
-    | ResolversParentTypes['Entry']
-    | ResolversParentTypes['Project']
-  Sponsor: Sponsor
-  String: Scalars['String']
-  Subscription: {}
-  Tag: Tag
-  TagCreateInput: TagCreateInput
-  TagsGetResult: TagsGetResult
-  UniqueProjectQueryInput: UniqueProjectQueryInput
-  UpdateEntryInput: UpdateEntryInput
-  UpdateProjectInput: UpdateProjectInput
-  UpdateProjectMilestoneInput: UpdateProjectMilestoneInput
-  UpdateProjectRewardInput: UpdateProjectRewardInput
-  UpdateUserInput: UpdateUserInput
-  UpdateWalletInput: UpdateWalletInput
-  UpdateWalletStateInput: UpdateWalletStateInput
-  User: User
-  UserEntriesGetInput: UserEntriesGetInput
-  UserEntriesGetWhereInput: UserEntriesGetWhereInput
-  UserGetInput: UserGetInput
-  UserProjectContribution: UserProjectContribution
-  UserProjectsGetInput: UserProjectsGetInput
-  UserProjectsGetWhereInput: UserProjectsGetWhereInput
-  Wallet: Omit<Wallet, 'connectionDetails'> & {
-    connectionDetails: ResolversParentTypes['ConnectionDetails']
-  }
-  WalletState: WalletState
-  amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1']
-  amount_Float_min_1: Scalars['amount_Float_min_1']
-  comment_String_maxLength_280: Scalars['comment_String_maxLength_280']
-  cost_Int_NotNull_min_0: Scalars['cost_Int_NotNull_min_0']
-  cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000']
-  description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250']
-  description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200']
-  description_String_maxLength_250: Scalars['description_String_maxLength_250']
-  description_String_maxLength_2200: Scalars['description_String_maxLength_2200']
-  donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1']
-  email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email']
-  email_String_format_email: Scalars['email_String_format_email']
-  fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1']
-  getDashboardFundersInput: GetDashboardFundersInput
-  link_String_NotNull_format_uri: Scalars['link_String_NotNull_format_uri']
-  links_List_String_NotNull_format_uri: Scalars['links_List_String_NotNull_format_uri']
-  name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100']
-  name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60']
-  name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280']
-  name_String_maxLength_100: Scalars['name_String_maxLength_100']
-  name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280']
-  name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60']
-  projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet
-  pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66']
-  quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1']
-  rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0']
-  shortDescription_String_maxLength_500: Scalars['shortDescription_String_maxLength_500']
-  stock_Int_min_0: Scalars['stock_Int_min_0']
-  title_String_NotNull_maxLength_60: Scalars['title_String_NotNull_maxLength_60']
-  title_String_NotNull_maxLength_150: Scalars['title_String_NotNull_maxLength_150']
-  title_String_maxLength_60: Scalars['title_String_maxLength_60']
-  title_String_maxLength_150: Scalars['title_String_maxLength_150']
-}
+  Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] };
+  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
+  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
+  ActivityResource: ResolversParentTypes['Entry'] | ResolversParentTypes['FundingTx'] | ResolversParentTypes['Project'] | ResolversParentTypes['ProjectReward'];
+  Ambassador: Ambassador;
+  AmountSummary: AmountSummary;
+  BigInt: Scalars['BigInt'];
+  Boolean: Scalars['Boolean'];
+  ConnectionDetails: ResolversParentTypes['LightningAddressConnectionDetails'] | ResolversParentTypes['LndConnectionDetailsPrivate'] | ResolversParentTypes['LndConnectionDetailsPublic'];
+  Country: Country;
+  CreateEntryInput: CreateEntryInput;
+  CreateProjectInput: CreateProjectInput;
+  CreateProjectMilestoneInput: CreateProjectMilestoneInput;
+  CreateProjectRewardInput: CreateProjectRewardInput;
+  CreateWalletInput: CreateWalletInput;
+  CursorInput: CursorInput;
+  CursorInputString: CursorInputString;
+  Date: Scalars['Date'];
+  DonationFundingInput: DonationFundingInput;
+  Entry: Entry;
+  EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse;
+  ExternalAccount: ExternalAccount;
+  FileUploadInput: FileUploadInput;
+  Float: Scalars['Float'];
+  Funder: Funder;
+  FunderReward: FunderReward;
+  FundingCancelInput: FundingCancelInput;
+  FundingCancelResponse: FundingCancelResponse;
+  FundingConfirmInput: FundingConfirmInput;
+  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input;
+  FundingConfirmOffChainInput: FundingConfirmOffChainInput;
+  FundingConfirmOnChainInput: FundingConfirmOnChainInput;
+  FundingConfirmResponse: FundingConfirmResponse;
+  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput;
+  FundingInput: FundingInput;
+  FundingMetadataInput: FundingMetadataInput;
+  FundingMutationResponse: FundingMutationResponse;
+  FundingPendingInput: FundingPendingInput;
+  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
+  FundingPendingOffChainInput: FundingPendingOffChainInput;
+  FundingPendingOnChainInput: FundingPendingOnChainInput;
+  FundingPendingResponse: FundingPendingResponse;
+  FundingQueryResponse: FundingQueryResponse;
+  FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> };
+  FundingTxConfirmedSubscriptionResponse: FundingTxConfirmedSubscriptionResponse;
+  FundinginvoiceCancel: FundinginvoiceCancel;
+  GetActivitiesInput: GetActivitiesInput;
+  GetActivityOrderByInput: GetActivityOrderByInput;
+  GetActivityPaginationInput: GetActivityPaginationInput;
+  GetActivityWhereInput: GetActivityWhereInput;
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
+  GetEntriesInput: GetEntriesInput;
+  GetEntriesOrderByInput: GetEntriesOrderByInput;
+  GetEntriesWhereInput: GetEntriesWhereInput;
+  GetFunderFundingTxsInput: GetFunderFundingTxsInput;
+  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput;
+  GetFunderWhereInput: GetFunderWhereInput;
+  GetFundersInput: GetFundersInput;
+  GetFundersOrderByInput: GetFundersOrderByInput;
+  GetFundingTxsInput: GetFundingTxsInput;
+  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput;
+  GetFundingTxsWhereInput: GetFundingTxsWhereInput;
+  GetProjectRewardInput: GetProjectRewardInput;
+  GetProjectRewardWhereInput: GetProjectRewardWhereInput;
+  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
+  Grant: Grant;
+  GrantApplicant: GrantApplicant;
+  GrantApplicantFunding: GrantApplicantFunding;
+  GrantGetInput: GrantGetInput;
+  GrantGetWhereInput: GrantGetWhereInput;
+  GrantStatus: GrantStatus;
+  Int: Scalars['Int'];
+  LightningAddressConnectionDetails: LightningAddressConnectionDetails;
+  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
+  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
+  LightningAddressVerifyResponse: LightningAddressVerifyResponse;
+  LndConnectionDetails: never;
+  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
+  LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
+  LndConnectionDetailsPublic: LndConnectionDetailsPublic;
+  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
+  Location: Location;
+  Mutation: {};
+  OffsetBasedPaginationInput: OffsetBasedPaginationInput;
+  Owner: Owner;
+  OwnerOf: OwnerOf;
+  PaginationInput: PaginationInput;
+  Project: Project;
+  ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse;
+  ProjectCountriesGetResult: ProjectCountriesGetResult;
+  ProjectEntriesGetInput: ProjectEntriesGetInput;
+  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
+  ProjectFollowMutationInput: ProjectFollowMutationInput;
+  ProjectLinkMutationInput: ProjectLinkMutationInput;
+  ProjectMilestone: ProjectMilestone;
+  ProjectRegionsGetResult: ProjectRegionsGetResult;
+  ProjectReward: ProjectReward;
+  ProjectStatistics: ProjectStatistics;
+  ProjectTagMutationInput: ProjectTagMutationInput;
+  ProjectWhereInput: ProjectWhereInput;
+  ProjectsGetQueryInput: ProjectsGetQueryInput;
+  ProjectsOrderByInput: ProjectsOrderByInput;
+  ProjectsResponse: ProjectsResponse;
+  ProjectsSummary: ProjectsSummary;
+  Query: {};
+  ResourceInput: ResourceInput;
+  RewardFundingInput: RewardFundingInput;
+  RewardInput: RewardInput;
+  ShippingInput: ShippingInput;
+  SignedUploadUrl: SignedUploadUrl;
+  SourceResource: ResolversParentTypes['Entry'] | ResolversParentTypes['Project'];
+  Sponsor: Sponsor;
+  String: Scalars['String'];
+  Subscription: {};
+  Tag: Tag;
+  TagCreateInput: TagCreateInput;
+  TagsGetResult: TagsGetResult;
+  UniqueProjectQueryInput: UniqueProjectQueryInput;
+  UpdateEntryInput: UpdateEntryInput;
+  UpdateProjectInput: UpdateProjectInput;
+  UpdateProjectMilestoneInput: UpdateProjectMilestoneInput;
+  UpdateProjectRewardInput: UpdateProjectRewardInput;
+  UpdateUserInput: UpdateUserInput;
+  UpdateWalletInput: UpdateWalletInput;
+  UpdateWalletStateInput: UpdateWalletStateInput;
+  User: User;
+  UserEntriesGetInput: UserEntriesGetInput;
+  UserEntriesGetWhereInput: UserEntriesGetWhereInput;
+  UserGetInput: UserGetInput;
+  UserProjectContribution: UserProjectContribution;
+  UserProjectsGetInput: UserProjectsGetInput;
+  UserProjectsGetWhereInput: UserProjectsGetWhereInput;
+  Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] };
+  WalletState: WalletState;
+  amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1'];
+  amount_Float_min_1: Scalars['amount_Float_min_1'];
+  comment_String_maxLength_280: Scalars['comment_String_maxLength_280'];
+  cost_Int_NotNull_min_0: Scalars['cost_Int_NotNull_min_0'];
+  cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000'];
+  description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250'];
+  description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200'];
+  description_String_maxLength_250: Scalars['description_String_maxLength_250'];
+  description_String_maxLength_2200: Scalars['description_String_maxLength_2200'];
+  donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1'];
+  email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email'];
+  email_String_format_email: Scalars['email_String_format_email'];
+  fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1'];
+  getDashboardFundersInput: GetDashboardFundersInput;
+  link_String_NotNull_format_uri: Scalars['link_String_NotNull_format_uri'];
+  links_List_String_NotNull_format_uri: Scalars['links_List_String_NotNull_format_uri'];
+  name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100'];
+  name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60'];
+  name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280'];
+  name_String_maxLength_100: Scalars['name_String_maxLength_100'];
+  name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280'];
+  name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60'];
+  projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet;
+  pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66'];
+  quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1'];
+  rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0'];
+  shortDescription_String_maxLength_500: Scalars['shortDescription_String_maxLength_500'];
+  stock_Int_min_0: Scalars['stock_Int_min_0'];
+  title_String_NotNull_maxLength_60: Scalars['title_String_NotNull_maxLength_60'];
+  title_String_NotNull_maxLength_150: Scalars['title_String_NotNull_maxLength_150'];
+  title_String_maxLength_60: Scalars['title_String_maxLength_60'];
+  title_String_maxLength_150: Scalars['title_String_maxLength_150'];
+};
 
 export type ConstraintDirectiveArgs = {
-  contains?: Maybe<Scalars['String']>
-  endsWith?: Maybe<Scalars['String']>
-  exclusiveMax?: Maybe<Scalars['Float']>
-  exclusiveMin?: Maybe<Scalars['Float']>
-  format?: Maybe<Scalars['String']>
-  max?: Maybe<Scalars['Float']>
-  maxLength?: Maybe<Scalars['Int']>
-  min?: Maybe<Scalars['Float']>
-  minLength?: Maybe<Scalars['Int']>
-  multipleOf?: Maybe<Scalars['Float']>
-  notContains?: Maybe<Scalars['String']>
-  pattern?: Maybe<Scalars['String']>
-  startsWith?: Maybe<Scalars['String']>
-  uniqueTypeName?: Maybe<Scalars['String']>
+  contains?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
+  exclusiveMax?: Maybe<Scalars['Float']>;
+  exclusiveMin?: Maybe<Scalars['Float']>;
+  format?: Maybe<Scalars['String']>;
+  max?: Maybe<Scalars['Float']>;
+  maxLength?: Maybe<Scalars['Int']>;
+  min?: Maybe<Scalars['Float']>;
+  minLength?: Maybe<Scalars['Int']>;
+  multipleOf?: Maybe<Scalars['Float']>;
+  notContains?: Maybe<Scalars['String']>;
+  pattern?: Maybe<Scalars['String']>;
+  startsWith?: Maybe<Scalars['String']>;
+  uniqueTypeName?: Maybe<Scalars['String']>;
+};
+
+export type ConstraintDirectiveResolver<Result, Parent, ContextType = any, Args = ConstraintDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type ActivityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity']> = {
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  resource?: Resolver<ResolversTypes['ActivityResource'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ActivityResourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivityResource'] = ResolversParentTypes['ActivityResource']> = {
+  __resolveType: TypeResolveFn<'Entry' | 'FundingTx' | 'Project' | 'ProjectReward', ParentType, ContextType>;
+};
+
+export type AmbassadorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ambassador'] = ResolversParentTypes['Ambassador']> = {
+  confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AmountSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['AmountSummary'] = ResolversParentTypes['AmountSummary']> = {
+  donationAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rewardsCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  shippingCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
+  name: 'BigInt';
 }
 
 export type ConstraintDirectiveResolver<
