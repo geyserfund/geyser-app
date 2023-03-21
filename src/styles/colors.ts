@@ -90,4 +90,8 @@ export const colors = {
   neutral700: '#495057',
   neutral800: '#343A40',
   neutral900: '#212529',
+
+  twitter: '#2AA9E0',
+  nostr: '#670C8B',
+  lightning: '#FFE600',
 }
