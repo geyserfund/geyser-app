@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client'
-import { Box, Center, Container, Stack, VStack, Wrap } from '@chakra-ui/react'
+import { Box, Center, Container, Stack, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router'
 

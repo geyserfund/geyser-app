@@ -20,7 +20,7 @@ import { MobileLeaderboard } from '../pages/landing/projectLeaderboard'
 import { LandingPageProjects } from '../pages/landing/projects'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
-import { ProfilePage } from '../pages/profile/ProfilePage'
+import { Profile } from '../pages/profile'
 import {
   ProjectContributors,
   ProjectDashboard,
@@ -92,7 +92,7 @@ const platformRoutes = [
   },
   {
     path: getPath('userProfile', PathName.userId),
-    element: ProfilePage,
+    element: Profile,
   },
   {
     path: getPath('projectEntryPreview', PathName.projectId, PathName.entryId),

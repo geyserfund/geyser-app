@@ -1,12 +1,12 @@
-import { Avatar, Button, HStack } from '@chakra-ui/react'
+import { Avatar, HStack } from '@chakra-ui/react'
 import { BsTwitter } from 'react-icons/bs'
 
 import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
-import { LightningIcon } from '../../../components/icons/svg'
 import { CardLayout } from '../../../components/layouts'
 import { Body2, H1 } from '../../../components/typography'
 import { colors } from '../../../styles'
 import { ExternalAccount, User } from '../../../types'
+import { LightningAddress } from '../../projectView/projectMainBody/components'
 
 export const AccountInfo = ({ user }: { user: User }) => {
   return (
@@ -16,12 +16,10 @@ export const AccountInfo = ({ user }: { user: User }) => {
         h="100px"
         w="100px"
         border="2px solid"
-        borderColor="neutral.200"
+        borderColor="neutral.200 !important"
       />
       <H1>{user.username}</H1>
-      <Button
-        leftIcon={<LightningIcon />}
-      >{`${user.username}@geyser.fund`}</Button>
+      <LightningAddress name={user.username} />
       {user.externalAccounts.map((externalAccount) => {
         if (externalAccount) {
           return (

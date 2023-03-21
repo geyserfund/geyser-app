@@ -29,8 +29,9 @@ import { MarkDown, toInt, useMobileMode } from '../../../../utils'
 import {
   AvatarElement,
   FollowButton,
+  LightningAddress,
+  ProjectFundingQR,
   ProjectFundingSummary,
-  ProjectLightningQR,
   ProjectLinks,
   ProjectMenu,
   SummaryInfoLine,
@@ -135,8 +136,8 @@ export const Summary = () => {
             alignItems="center"
             spacing={1}
           >
-            <ProjectLightningQR project={project} />
-
+            <LightningAddress name={project.name} />
+            <ProjectFundingQR project={project} />
             <Tooltip
               label={hasCopiedSharingLink ? 'Copied!' : 'Share Project'}
               placement="top"
