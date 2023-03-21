@@ -28,7 +28,7 @@ export const ProjectFundingLeaderboardFeedItem = ({
   })
 
   return (
-    <Box padding="5px 25px" mt={2} borderRadius="12px" {...rest}>
+    <Box borderRadius="12px" {...rest}>
       <Box display="flex" justifyContent="space-between">
         <HStack>
           <Text fontWeight="bold" mr={2}>

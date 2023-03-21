@@ -53,35 +53,3 @@ export const createGrantContributionRecord = async (data: any) =>
   })
     .then((response) => response.json())
     .then((res) => res)
-
-export const getGrantSponsorRecords = async () =>
-  fetch(
-    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Contributors?fields%5B%5D=Name&fields%5B%5D=Amount&fields%5B%5D=PFP%20link&filterByFormula=Amount%3E%3D1000',
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    },
-  )
-    .then((response) => response.json())
-    .then((res) => res.records)
-
-export const getGrantApplicants = async (): Promise<
-  {
-    fields: { Grant: string }
-  }[]
-> =>
-  fetch(
-    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Grant%20Applicants?fields%5B%5D=Grant',
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    },
-  )
-    .then((response) => response.json())
-    .then((res) => res.records)

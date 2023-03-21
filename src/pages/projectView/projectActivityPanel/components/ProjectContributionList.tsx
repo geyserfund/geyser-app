@@ -1,4 +1,4 @@
-import { Divider } from '@chakra-ui/react'
+import { Divider, VStack } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -20,36 +20,38 @@ export const ProjectContributionList = ({
   return (
     <CardLayout
       id={id}
-      spacing={'20px'}
+      noborder
       width="100%"
       overflow="auto"
       height={'100%'}
-      padding="15px"
+      padding="0px"
     >
-      {fundingTxs.data.map((fundingTx, index) => {
-        return (
-          <Fragment key={fundingTx.id}>
-            <ContributionActivityItem
-              fundingTx={fundingTx}
-              count={fundingTx.count}
-            />
-            {index < fundingTxs.data.length - 1 && (
-              <Divider
-                borderBottomWidth="2px"
-                maxWidth="500px"
-                color="brand.200"
+      <VStack spacing={'15px'} marginTop="20px" paddingRight="10px">
+        {fundingTxs.data.map((fundingTx, index) => {
+          return (
+            <Fragment key={fundingTx.id}>
+              <ContributionActivityItem
+                fundingTx={fundingTx}
+                count={fundingTx.count}
               />
-            )}
-          </Fragment>
-        )
-      })}
+              {index < fundingTxs.data.length - 1 && (
+                <Divider
+                  borderBottomWidth="2px"
+                  maxWidth="500px"
+                  borderColor="neutral.200"
+                />
+              )}
+            </Fragment>
+          )
+        })}
 
-      <ScrollInvoke
-        elementId={!isMobile ? id : undefined}
-        onScrollEnd={fundingTxs.fetchNext}
-        isLoading={fundingTxs.isLoadingMore}
-        noMoreItems={fundingTxs.noMoreItems}
-      />
+        <ScrollInvoke
+          elementId={!isMobile ? id : undefined}
+          onScrollEnd={fundingTxs.fetchNext}
+          isLoading={fundingTxs.isLoadingMore}
+          noMoreItems={fundingTxs.noMoreItems}
+        />
+      </VStack>
     </CardLayout>
   )
 }
