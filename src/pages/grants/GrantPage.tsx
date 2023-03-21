@@ -8,11 +8,12 @@ import { Body1, H1, H3 } from '../../components/typography'
 import Loader from '../../components/ui/Loader'
 import { StatusLabel } from '../../components/ui/StatusLabel'
 import { Head } from '../../config'
-import { DefaultMetaImage, getPath } from '../../constants'
+import { getPath } from '../../constants'
 import {
   GrantApplicant,
   GrantApplicantStatus,
   GrantStatusEnum,
+  Maybe,
 } from '../../types'
 import {
   getShortAmountLabel,
@@ -48,11 +49,11 @@ const useStyles = createUseStyles({
 const PageContainer = ({
   children,
   image,
-}: PropsWithChildren<{ image?: string }>) => {
+}: PropsWithChildren<{ image?: Maybe<string> }>) => {
   const classes = useStyles()
   return (
     <Container className={classes.container} px={6}>
-      <Head image={image || DefaultMetaImage} />
+      <Head image={image || ''} />
       {children}
     </Container>
   )
@@ -123,7 +124,7 @@ export const GrantPage = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer image={grant.image}>
       <Button
         mt={4}
         size="sm"
