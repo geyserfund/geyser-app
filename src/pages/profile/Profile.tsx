@@ -1,9 +1,8 @@
 import { useLazyQuery } from '@apollo/client'
-import { Box, Center, Container, Stack, VStack } from '@chakra-ui/react'
+import { Center, Container, Stack, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router'
 
-import { AppFooter } from '../../components/molecules'
 import { AlertBox } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
 import { useAuthContext } from '../../context'
@@ -11,7 +10,7 @@ import { defaultUser } from '../../defaults'
 import { USER_PROFILE_QUERY } from '../../graphql'
 import { User, UserGetInput } from '../../types/generated/graphql'
 import { toInt } from '../../utils'
-import { AccountInfo, Badges, ContributorDashboard } from './views'
+import { AccountInfo, Badges, CreateProject } from './views'
 
 type ResponseData = {
   user: User
@@ -98,20 +97,24 @@ export const Profile = () => {
   }
 
   return (
-    <Box
+    <VStack
       position="relative"
       width="full"
       height="full"
       backgroundColor={'brand.bgGrey4'}
+      paddingTop={{ base: '40', lg: '80px' }}
     >
-      <Stack direction={{ base: 'column', lg: 'row' }}>
+      <Stack
+        direction={{ base: 'column', lg: 'row' }}
+        width="100%"
+        maxWidth="1000px"
+      >
         <AccountInfo user={userProfile} />
         <VStack>
-          <ContributorDashboard />
           <Badges />
         </VStack>
+        <CreateProject />
       </Stack>
-      <AppFooter />
-    </Box>
+    </VStack>
   )
 }
