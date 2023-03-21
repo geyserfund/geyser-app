@@ -37,8 +37,8 @@ const navItems = [
   },
   {
     name: 'Grants',
-    to: `/${PathName.grants}`,
-    disableFor: [`/${PathName.grants}`],
+    to: getPath('grants'),
+    disableFor: [getPath('grants')],
     new: false,
   },
   {
