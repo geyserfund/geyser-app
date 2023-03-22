@@ -1,23 +1,12 @@
-import { HStack } from '@chakra-ui/react'
-import { BsTwitter } from 'react-icons/bs'
+import { useMutation } from '@apollo/client'
+import { Box, Link, Tooltip } from '@chakra-ui/react'
+import { useState } from 'react'
 
-import { CloseIconButton } from '../../../components/buttons'
-import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
-import { Body2 } from '../../../components/typography'
-import { colors } from '../../../styles'
+import { useAuthContext } from '../../../context'
+import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
 import { ExternalAccount } from '../../../types'
-
-const externalAccountColorMap = {
-  twitter: colors.twitter,
-  lightning: colors.lightning,
-  nostr: colors.nostr,
-} as { [key: string]: string }
-
-const externalAccountIconMap = {
-  twitter: BsTwitter,
-  lightning: BoltSvgIcon,
-  nostr: NostrSvgIcon,
-} as { [key: string]: any }
+import { toInt, useNotification } from '../../../utils'
+import { ExternalAccountBody } from './ExternalAccountBody'
 
 interface ExternalAccountDisplayProps {
   account: ExternalAccount
@@ -28,21 +17,69 @@ export const ExternalAccountDisplay = ({
   account,
   isEdit,
 }: ExternalAccountDisplayProps) => {
-  const Icon = externalAccountIconMap[account.type]
+  const [copy, setCopy] = useState(false)
+
+  const handleCopyPubkey = () => {
+    navigator.clipboard.writeText(account.externalId)
+    setCopy(true)
+    setTimeout(() => {
+      setCopy(false)
+    }, 1000)
+  }
+
+  const { setUser, user } = useAuthContext()
+  const { toast } = useNotification()
+  const [unlinkAccount] = useMutation(MUTATION_UNLINK_ACCOUNT, {
+    onError(error) {
+      toast({
+        title: 'Failed to unlink account',
+        description: `${error.message}`,
+        status: 'error',
+      })
+    },
+    onCompleted(data) {
+      setUser({ ...user, ...data.unlinkExternalAccount })
+    },
+  })
+
+  const handleAccountDisconnect = () => {
+    unlinkAccount({ variables: { id: toInt(account.id) } })
+  }
+
+  const isNostr = account.type === 'nostr'
+  const isTwitter = account.type === 'twitter'
+
+  if (isTwitter) {
+    return (
+      <ExternalAccountBody
+        account={account}
+        handleDelete={isEdit ? handleAccountDisconnect : undefined}
+        as={Link}
+        href={`https://twitter.com/${account.externalUsername}`}
+        isExternal
+      />
+    )
+  }
+
+  if (isNostr) {
+    return (
+      <Tooltip label={copy ? 'copied!' : 'copy'} placement="top-start">
+        <Box w="full">
+          <ExternalAccountBody
+            account={account}
+            handleDelete={isEdit ? handleAccountDisconnect : undefined}
+            onClick={handleCopyPubkey}
+            backgroundColor={copy ? 'primary.200' : 'neutral.100'}
+          />
+        </Box>
+      </Tooltip>
+    )
+  }
+
   return (
-    <HStack
-      w="100%"
-      backgroundColor="neutral.100"
-      borderRadius="8px"
-      color={externalAccountColorMap[account.type]}
-      padding="10px"
-      justifyContent="space-between"
-    >
-      <HStack>
-        <Icon height="20px" width="20px" />
-        <Body2>{account.externalUsername}</Body2>
-      </HStack>
-      {isEdit && <CloseIconButton />}
-    </HStack>
+    <ExternalAccountBody
+      account={account}
+      handleDelete={isEdit ? handleAccountDisconnect : undefined}
+    />
   )
 }

@@ -1,7 +1,5 @@
-import { Button, useDisclosure, VStack } from '@chakra-ui/react'
-import { BsTwitter } from 'react-icons/bs'
+import { VStack } from '@chakra-ui/react'
 
-import { BoltSvgIcon, NostrSvgIcon } from '../../components/icons'
 import { Body1, Body2 } from '../../components/typography'
 import { User } from '../../types'
 import { ConnectWithLightning } from './ConnectWithLightning'

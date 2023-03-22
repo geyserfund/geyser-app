@@ -48,7 +48,10 @@ export const ConnectWithLightning = (props: ConnectWithLightningProps) => {
       >
         Lightning
       </Button>
-      <ConnectWithLightningModal isOpen={isOpen} onClose={onClose} />
+      {/* To make sure the polling gets stopped, the component is demounted. */}
+      {isOpen && (
+        <ConnectWithLightningModal isOpen={isOpen} onClose={onClose} />
+      )}
     </>
   )
 }
@@ -128,6 +131,7 @@ export const ConnectWithLightningModal = ({
           }
         })
         .catch((err) => {
+          clearInterval(id)
           toast({
             title: 'Something went wrong',
             description: `The authentication request failed: ${err.message}.`,
