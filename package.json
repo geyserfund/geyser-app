@@ -67,6 +67,7 @@
     "webln": "^0.3.2"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^2.3.0",
     "@commitlint/cli": "^17.4.2",
     "@commitlint/config-conventional": "^17.4.2",
     "@graphql-codegen/cli": "^3.2.1",

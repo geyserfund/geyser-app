@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
 import { colors, fonts, neutralColors, primaryColors } from '../styles'
 
@@ -48,6 +48,24 @@ export const theme = extendTheme({
       baseStyle: {
         fontSize: '14px',
       },
+      variants: {
+        h3: () => ({
+          fontWeight: 600,
+          fontSize: '18px',
+          lineHeight: 1.4,
+        }),
+        h2: () => ({
+          fontWeight: 700,
+          fontSize: '24px',
+          lineHeight: 1.4,
+        }),
+        body1: ({ theme }: StyleFunctionProps) => ({
+          fontWeight: 500,
+          lineHeight: 1.6,
+          fontSize: '16px',
+          color: theme.colors.neutral[600],
+        }),
+      },
     },
     Divider: {
       variant: {
@@ -59,7 +77,7 @@ export const theme = extendTheme({
     },
     Radio: {
       variants: {
-        primary: ({ colorScheme = 'primary' }) => ({
+        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
           color: `brand.${colorScheme}400`,
           control: {
             _checked: {
