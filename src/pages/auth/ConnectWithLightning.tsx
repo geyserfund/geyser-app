@@ -1,19 +1,24 @@
 import {
   Box,
+  Button,
+  ButtonProps,
   HStack,
   Link,
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
   Text,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 
 import { LogoDarkGreenImage } from '../../assets'
+import { BoltSvgIcon } from '../../components/icons'
 import { ButtonComponent } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
@@ -25,6 +30,27 @@ import { useMobileMode, useNotification } from '../../utils'
 interface ConnectWithLightningModalProps {
   isOpen: boolean
   onClose: () => void
+}
+
+type ConnectWithLightningProps = ButtonProps
+
+export const ConnectWithLightning = (props: ConnectWithLightningProps) => {
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  return (
+    <>
+      <Button
+        w="100%"
+        backgroundColor="brand.lightning"
+        leftIcon={<BoltSvgIcon height="20px" width="20px" />}
+        _hover={{}}
+        onClick={onOpen}
+        {...props}
+      >
+        Lightning
+      </Button>
+      <ConnectWithLightningModal isOpen={isOpen} onClose={onClose} />
+    </>
+  )
 }
 
 export const ConnectWithLightningModal = ({
@@ -122,6 +148,7 @@ export const ConnectWithLightningModal = ({
             Connect with Lightning
           </Text>
         </ModalHeader>
+        <ModalCloseButton />
         <ModalBody width="100%">
           <Box
             justifyContent="center"

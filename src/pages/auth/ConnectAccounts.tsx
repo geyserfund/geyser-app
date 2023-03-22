@@ -4,7 +4,9 @@ import { BsTwitter } from 'react-icons/bs'
 import { BoltSvgIcon, NostrSvgIcon } from '../../components/icons'
 import { Body1, Body2 } from '../../components/typography'
 import { User } from '../../types'
-import { ConnectWithLightningModal } from './ConnectWithLightningModal'
+import { ConnectWithLightning } from './ConnectWithLightning'
+import { ConnectWithNostr } from './ConnectWithNostr'
+import { ConnectWithTwitter } from './ConnectWithTwitter'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
   // const displayNostrButton = !user.externalAccounts.some(
@@ -14,8 +16,6 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
   // const displayTwitterButton = !user.externalAccounts.some(
   //   (externalAccount) => externalAccount?.type === 'twitter',
   // )
-
-  const { isOpen, onClose, onOpen } = useDisclosure()
 
   const displayNostrButton = true
 
@@ -29,40 +29,10 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
           Connect more social profiles to your Geyser account so you can login
           from more devices and accounts.
         </Body2>
-        {displayTwitterButton && (
-          <Button
-            w="100%"
-            backgroundColor="brand.twitter"
-            leftIcon={<BsTwitter />}
-            color="white"
-            _hover={{}}
-          >
-            Twitter
-          </Button>
-        )}
-        {displayNostrButton && (
-          <Button
-            w="100%"
-            backgroundColor="brand.nostr"
-            leftIcon={<NostrSvgIcon height="20px" width="20px" />}
-            color="white"
-            _hover={{}}
-          >
-            Nostr
-          </Button>
-        )}
-        <Button
-          w="100%"
-          backgroundColor="brand.lightning"
-          leftIcon={<BoltSvgIcon height="20px" width="20px" />}
-          _hover={{}}
-          onClick={onOpen}
-        >
-          Lightning
-        </Button>
+        {displayTwitterButton && <ConnectWithTwitter />}
+        {displayNostrButton && <ConnectWithNostr />}
+        <ConnectWithLightning />
       </VStack>
-
-      <ConnectWithLightningModal isOpen={isOpen} onClose={onClose} />
     </>
   )
 }

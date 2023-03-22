@@ -26,10 +26,10 @@ export const Profile = () => {
   const { user: currentAppUser } = useAuthContext()
   const params = useParams<{ userId: string }>()
 
-  const [
-    queryCurrentUser,
-    { loading: profileLoading, error, data: userProfileData },
-  ] = useLazyQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY, {
+  const [queryCurrentUser, { loading: profileLoading, error }] = useLazyQuery<
+    ResponseData,
+    QueryVariables
+  >(USER_PROFILE_QUERY, {
     onCompleted(data) {
       if (data && data.user) {
         const user = data.user as User
@@ -46,9 +46,6 @@ export const Profile = () => {
 
   const [userProfile, setUserProfile] = useState<User>({ ...defaultUser })
 
-  /*
-	useEffect functions
-	*/
   useEffect(() => {
     if (params.userId) {
       const variables: QueryVariables = {
@@ -59,8 +56,6 @@ export const Profile = () => {
       queryCurrentUser({ variables })
     }
   }, [params])
-
-  useEffect(() => {}, [userProfileData])
 
   useEffect(() => {
     if (isViewingOwnProfile()) {
