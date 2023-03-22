@@ -6,6 +6,7 @@ import { useAuthContext } from '../../../context'
 import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
 import { ExternalAccount } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
+import { ExternalAccountType } from '../../auth'
 import { ExternalAccountBody } from './ExternalAccountBody'
 
 interface ExternalAccountDisplayProps {
@@ -46,8 +47,8 @@ export const ExternalAccountDisplay = ({
     unlinkAccount({ variables: { id: toInt(account.id) } })
   }
 
-  const isNostr = account.type === 'nostr'
-  const isTwitter = account.type === 'twitter'
+  const isNostr = account.type === ExternalAccountType.nostr
+  const isTwitter = account.type === ExternalAccountType.twitter
 
   if (isTwitter) {
     return (

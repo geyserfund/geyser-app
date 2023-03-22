@@ -106,7 +106,7 @@ export const Profile = () => {
       >
         <AccountInfo user={userProfile} />
         <VStack>
-          <Badges />
+          <Badges user={userProfile} />
         </VStack>
         <CreateProject />
       </Stack>

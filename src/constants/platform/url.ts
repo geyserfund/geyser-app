@@ -161,3 +161,8 @@ export const GeyserProhibitedItemsUrl =
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
+
+// BADGES
+
+export const BadgesGroupUrl =
+  'https://storage.googleapis.com/geyser-projects-media/badge/badges-group.png'

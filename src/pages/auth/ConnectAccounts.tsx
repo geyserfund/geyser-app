@@ -15,9 +15,15 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
   //   (externalAccount) => externalAccount?.type === 'twitter',
   // )
 
+  // const displayLighntingButton = !user.externalAccounts.some(
+  //   (externalAccount) => externalAccount?.type === 'lightning',
+  // )
+
   const displayNostrButton = true
 
   const displayTwitterButton = true
+
+  const displayLighntingButton = true
 
   return (
     <>
@@ -29,7 +35,7 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
         </Body2>
         {displayTwitterButton && <ConnectWithTwitter />}
         {displayNostrButton && <ConnectWithNostr />}
-        <ConnectWithLightning />
+        {displayLighntingButton && <ConnectWithLightning />}
       </VStack>
     </>
   )
