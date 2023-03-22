@@ -40,11 +40,18 @@ export const ContributionsWidget = ({
     <Box className={classes.container} pb={4} pt={2} mt={4}>
       <Box
         display="flex"
-        flexDir={isMobile ? 'column' : 'row'}
+        flexWrap="wrap"
         alignItems="center"
         justifyContent="space-around"
       >
-        <Box display="flex" alignItems="start" my={2}>
+        <Box
+          px={2}
+          width={isMobile ? '100%' : undefined}
+          display="flex"
+          alignItems="start"
+          justifyContent="center"
+          my={2}
+        >
           <TimerIcon
             mt={1}
             mr={2}
@@ -70,7 +77,7 @@ export const ContributionsWidget = ({
             />
           </WidgetItem>
         </Box>
-        <Box display="flex" alignItems="start" my={2}>
+        <Box px={2} display="flex" alignItems="start" my={2}>
           <BadgeIcon
             mt={1}
             mr={2}
@@ -80,7 +87,7 @@ export const ContributionsWidget = ({
           />
           <WidgetItem subtitle="Geyser grant">{balance}</WidgetItem>
         </Box>
-        <Box display="flex" alignItems="start" my={2}>
+        <Box px={2} display="flex" alignItems="start" my={2}>
           <ContributionsIcon
             mt={1}
             mr={2}

@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client'
-import { Container, HStack, Image, Stack, VStack } from '@chakra-ui/react'
+import { Box, Container, HStack, Image, Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
-import BannerGlowImage from '../../../assets/top_Banner.svg'
 import { SkeletonLayout } from '../../../components/layouts'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import { dimensions, LetTheSatsFlow3DUrl } from '../../../constants'
@@ -12,6 +11,7 @@ import {
   useMobileMode,
   useNotification,
 } from '../../../utils'
+import { BannerBackground } from './BannerBackground'
 
 export const GradientBanner = () => {
   const { toast } = useNotification()
@@ -45,11 +45,15 @@ export const GradientBanner = () => {
     <VStack
       width="full"
       align="center"
-      backgroundImage={BannerGlowImage}
-      backgroundPosition="50% 50%"
-      backgroundSize="cover"
+      // backgroundImage={BannerGlowImage}
+      // backgroundPosition="50% 50%"
+      // backgroundSize="cover"
       marginBottom="25px"
+      position="relative"
     >
+      <Box w="full" h="full" position="absolute">
+        <BannerBackground />
+      </Box>
       <Container maxW={'6xl'}>
         <Stack
           textAlign={'center'}
