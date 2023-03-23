@@ -115,7 +115,7 @@ export const useNostrBadges = (pubKey: string) => {
     }
   }
 
-  return { badges, claimABadge, loading }
+  return { badges, claimABadge, loading, claiming }
 }
 
 const parseBadgesFromProfileEvents = (event: Event): string[] => {
