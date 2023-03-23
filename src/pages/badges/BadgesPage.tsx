@@ -5,6 +5,7 @@ import { CardLayout } from '../../components/layouts'
 import { User } from '../../types'
 import BadgeItem from './BadgeItem'
 import BadgeList from './BadgeList'
+import { BadgesFAQ } from './BadgesFAQ'
 
 const FUNDERS_BADGES = {
   contributionAmounts: [
@@ -55,9 +56,11 @@ export const BadgesPage = () => {
 
   return (
     <Container maxWidth="5xl" pt={10}>
-      <VStack spacing={4} justify="center" textAlign="center">
+      <VStack spacing={4} justify="center" textAlign="center" mb={12}>
         <Container maxWidth="xl">
-          <Text variant="h2">Geyser badges</Text>
+          <Text mb={4} variant="h2">
+            Geyser badges
+          </Text>
           <Text variant="body1">
             To recognize active users, Geyser issues and awards users with Nostr
             badges, which can more fully recognize their actions.
@@ -83,6 +86,9 @@ export const BadgesPage = () => {
               </BadgeList>
             </Box>
           </CardLayout>
+        </Box>
+        <Box pt={6} width="100%">
+          <BadgesFAQ />
         </Box>
       </VStack>
     </Container>

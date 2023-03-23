@@ -7,9 +7,11 @@ import { ConnectWithNostr } from './ConnectWithNostr'
 import { ConnectWithTwitter } from './ConnectWithTwitter'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
-  // const displayNostrButton = !user.externalAccounts.some(
-  //   (externalAccount) => externalAccount?.type === 'nostr',
-  // )
+  const hasNostrAccount = user.externalAccounts.some(
+    (externalAccount) => externalAccount?.type === 'nostr',
+  )
+
+  const displayNostrButton = !hasNostrAccount && window.nostr
 
   // const displayTwitterButton = !user.externalAccounts.some(
   //   (externalAccount) => externalAccount?.type === 'twitter',
@@ -18,8 +20,6 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
   // const displayLighntingButton = !user.externalAccounts.some(
   //   (externalAccount) => externalAccount?.type === 'lightning',
   // )
-
-  const displayNostrButton = true
 
   const displayTwitterButton = true
 
