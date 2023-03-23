@@ -98,11 +98,15 @@ export const Profile = () => {
       height="full"
       backgroundColor={'brand.bgGrey4'}
       paddingTop={{ base: '40', lg: '80px' }}
+      paddingX={{ base: '10px', lg: '40px' }}
     >
       <Stack
         direction={{ base: 'column', lg: 'row' }}
         width="100%"
-        maxWidth="1000px"
+        height="full"
+        maxWidth="1500px"
+        spacing={{ base: '20px', lg: '80px' }}
+        alignItems={{ base: 'center', lg: 'start' }}
       >
         <AccountInfo user={userProfile} />
         <VStack>

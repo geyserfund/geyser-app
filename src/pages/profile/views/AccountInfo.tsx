@@ -1,10 +1,8 @@
-import { Avatar, Button, VStack } from '@chakra-ui/react'
-import { BsTwitter } from 'react-icons/bs'
+import { Avatar } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
-import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
 import { CardLayout } from '../../../components/layouts'
-import { Body1, Body2, H1 } from '../../../components/typography'
+import { H1 } from '../../../components/typography'
 import { User } from '../../../types'
 import { ConnectAccounts } from '../../auth'
 import { LightningAddress } from '../../projectView/projectMainBody/components'
@@ -20,7 +18,6 @@ export const AccountInfo = ({ user }: { user: User }) => {
       padding="20px"
       direction="column"
       alignItems="start"
-      width="100%"
       maxWidth="400px"
       spacing="10px"
     >

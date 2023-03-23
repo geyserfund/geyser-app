@@ -41,7 +41,7 @@ export const ExternalAccountBody = ({
 
   const handleOnCloseClick = handleDelete
     ? (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation()
+        event.preventDefault()
         onOpen()
       }
     : undefined

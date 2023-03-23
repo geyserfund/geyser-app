@@ -1,7 +1,7 @@
 import { Image, VStack } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../components/layouts'
-import { Body2, H1 } from '../../../components/typography'
+import { Body2, H1, H2 } from '../../../components/typography'
 import { BadgesGroupUrl } from '../../../constants'
 import { User } from '../../../types'
 import { ExternalAccountType } from '../../auth'
@@ -14,8 +14,8 @@ export const Badges = ({ user }: { user: User }) => {
 
   const hasBadgeNoNostr = numberOfBadges && !hasNostr
   return (
-    <CardLayout padding="20px">
-      <H1>Badges</H1>
+    <CardLayout padding="20px" maxWidth="540px">
+      <H2>Badges</H2>
       <Body2 color="neutral.700">
         Geyser badges are earned for launching successful projects, contributing
         to them and being an active community member.{' '}
