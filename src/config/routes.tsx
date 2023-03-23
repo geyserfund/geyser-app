@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
+import { BadgesPage } from '../pages/badges/BadgesPage'
 import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
 import { EntryPreview } from '../pages/creation/entry/EntryPreview'
 import {
@@ -169,6 +170,10 @@ const platformRoutes = [
   {
     path: getPath('leaderboard'),
     element: MobileLeaderboard,
+  },
+  {
+    path: getPath('badges'),
+    element: BadgesPage,
   },
   {
     path: getPath('landingPage'),

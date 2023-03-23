@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  ButtonProps,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,20 +8,21 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  useDisclosure,
 } from '@chakra-ui/react'
 
 import { NostrSvgIcon } from '../../components/icons'
+import { signMessage } from '../../utils/nostr/nip07'
 
 interface ConnectWithNostrModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-type ConnectWithNostrProps = ButtonProps
+export const ConnectWithNostr = () => {
+  const onClickHandler = () => {
+    signMessage('geyser.fund').then(console.log)
+  }
 
-export const ConnectWithNostr = (props: ConnectWithNostrProps) => {
-  const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <>
       <Button
@@ -31,11 +31,10 @@ export const ConnectWithNostr = (props: ConnectWithNostrProps) => {
         leftIcon={<NostrSvgIcon height="20px" width="20px" />}
         color="white"
         _hover={{}}
-        onClick={onOpen}
+        onClick={() => onClickHandler()}
       >
         Nostr
       </Button>
-      <ConnectWithNostrModal isOpen={isOpen} onClose={onClose} />
     </>
   )
 }

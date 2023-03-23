@@ -8,7 +8,7 @@ interface IAvatarElement extends AvatarProps {
   avatarOnly?: boolean
   user: User
   wrapperProps?: StackProps
-  noLink?: boolean
+  noLink?: BooleanConstructor
 }
 
 export const AvatarElement = ({
@@ -18,9 +18,7 @@ export const AvatarElement = ({
   noLink,
   ...rest
 }: IAvatarElement) => {
-  const avatar = (
-    <Avatar size="xs" borderRadius="4px" src={`${user.imageUrl}`} {...rest} />
-  )
+  const avatar = <AvatarCircle src={`${user.imageUrl}`} {...rest} />
 
   if (avatarOnly) {
     return <Box {...wrapperProps}>{avatar}</Box>
@@ -41,3 +39,7 @@ export const AvatarElement = ({
     </HStack>
   )
 }
+
+export const AvatarCircle = (props: AvatarProps) => (
+  <Avatar size="xs" borderRadius="4px" {...props} />
+)
