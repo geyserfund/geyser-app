@@ -2,14 +2,14 @@ import { useMutation } from '@apollo/client'
 import { Box, Link, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 
-import { useAuthContext } from '../../../context'
 import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
 import { ExternalAccount } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
 import { ExternalAccountType } from '../../auth'
+import { UserProfileState } from '../type'
 import { ExternalAccountBody } from './ExternalAccountBody'
 
-interface ExternalAccountDisplayProps {
+interface ExternalAccountDisplayProps extends UserProfileState {
   account: ExternalAccount
   isEdit?: boolean
 }
@@ -17,6 +17,8 @@ interface ExternalAccountDisplayProps {
 export const ExternalAccountDisplay = ({
   account,
   isEdit,
+  userProfile,
+  setUserProfile,
 }: ExternalAccountDisplayProps) => {
   const [copy, setCopy] = useState(false)
 
@@ -28,7 +30,6 @@ export const ExternalAccountDisplay = ({
     }, 1000)
   }
 
-  const { setUser, user } = useAuthContext()
   const { toast } = useNotification()
   const [unlinkAccount] = useMutation(MUTATION_UNLINK_ACCOUNT, {
     onError(error) {
@@ -39,7 +40,7 @@ export const ExternalAccountDisplay = ({
       })
     },
     onCompleted(data) {
-      setUser({ ...user, ...data.unlinkExternalAccount })
+      setUserProfile({ ...userProfile, ...data.unlinkExternalAccount })
     },
   })
 
