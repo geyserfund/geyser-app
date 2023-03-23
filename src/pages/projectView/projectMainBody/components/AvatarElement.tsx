@@ -8,7 +8,7 @@ interface IAvatarElement extends AvatarProps {
   avatarOnly?: boolean
   user: User
   wrapperProps?: StackProps
-  noLink?: BooleanConstructor
+  noLink?: boolean
 }
 
 export const AvatarElement = ({
