@@ -1,21 +1,38 @@
-import { Image, VStack } from '@chakra-ui/react'
+import { HStack, Image, VStack, Wrap } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../components/layouts'
-import { Body2, H1 } from '../../../components/typography'
+import { Body2, H2 } from '../../../components/typography'
+import Loader from '../../../components/ui/Loader'
 import { BadgesGroupUrl } from '../../../constants'
+import { NostrBadges, useNostrBadges } from '../../../hooks/useNostrBadges'
 import { User } from '../../../types'
 import { ExternalAccountType } from '../../auth'
 
-export const Badges = ({ user }: { user: User }) => {
-  const hasNostr = user.externalAccounts.some(
+export const Badges = ({
+  userProfile,
+  isEdit,
+}: {
+  userProfile: User
+  isEdit: boolean
+}) => {
+  const { badges, loading } = useNostrBadges(
+    'c849ecee7b8e350249cee3b15bba5a1dc73e70dea3ddafa0787d128db6c048fe',
+  )
+
+  const hasNostr = userProfile.externalAccounts.some(
     (externalAccount) => externalAccount?.type === ExternalAccountType.nostr,
   )
-  const numberOfBadges = 5
+  const numberOfBadges = badges.length
 
-  const hasBadgeNoNostr = numberOfBadges && !hasNostr
+  const hasBadgeNoNostrForOwn = badges.length > 0 && !hasNostr && isEdit
+
+  if (loading) {
+    return <Loader />
+  }
+
   return (
     <CardLayout padding="20px">
-      <H1>Badges</H1>
+      <H2>Badges</H2>
       <Body2 color="neutral.700">
         Geyser badges are earned for launching successful projects, contributing
         to them and being an active community member.{' '}
@@ -27,14 +44,26 @@ export const Badges = ({ user }: { user: User }) => {
             ? `${numberOfBadges} Geyser badges`
             : 'No Geyser badges'}
         </Body2>
-        {hasBadgeNoNostr && (
+        {hasBadgeNoNostrForOwn && (
           <Body2 color="neutral.700">
             Login with Nostr to claim the badges you earned!
           </Body2>
         )}
       </VStack>
 
-      {hasBadgeNoNostr && <Image alt="badges-group" src={BadgesGroupUrl} />}
+      {hasBadgeNoNostrForOwn && (
+        <HStack w="full" justifyContent="center">
+          <Image maxWidth="400px" alt="badges-group" src={BadgesGroupUrl} />
+        </HStack>
+      )}
     </CardLayout>
+  )
+}
+
+export const ClaimBadge = ({ badges }: { badges: NostrBadges }) => {
+  return (
+    <Wrap w="full">
+      <VStack></VStack>
+    </Wrap>
   )
 }

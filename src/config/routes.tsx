@@ -21,7 +21,7 @@ import { MobileLeaderboard } from '../pages/landing/projectLeaderboard'
 import { LandingPageProjects } from '../pages/landing/projects'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
-import { Profile, ProfilePage } from '../pages/profile'
+import { Profile } from '../pages/profile'
 import {
   ProjectContributors,
   ProjectDashboard,

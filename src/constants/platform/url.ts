@@ -149,6 +149,9 @@ export const GrantsHero =
 export const NoResultsSearchUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/empty-search.png'
 
+export const ProjectLaunch3DUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/project-launch-3d.png'
+
 // Geyser Notion Links
 
 export const GrantsFAQUrl =

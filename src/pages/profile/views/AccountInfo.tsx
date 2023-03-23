@@ -1,55 +1,56 @@
-import { Avatar, Button, VStack } from '@chakra-ui/react'
-import { BsTwitter } from 'react-icons/bs'
-import { useParams } from 'react-router-dom'
+import { Avatar } from '@chakra-ui/react'
 
-import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
 import { CardLayout } from '../../../components/layouts'
-import { Body1, Body2, H1 } from '../../../components/typography'
-import { User } from '../../../types'
+import { H1 } from '../../../components/typography'
 import { ConnectAccounts } from '../../auth'
 import { LightningAddress } from '../../projectView/projectMainBody/components'
 import { ExternalAccountDisplay } from '../components'
+import { UserProfileState } from '../type'
 
-export const AccountInfo = ({ user }: { user: User }) => {
-  const params = useParams<{ userId: string }>()
+interface AccountInfoProps extends UserProfileState {
+  isEdit: boolean
+}
 
-  const isEdit = user.id === params.userId
-
+export const AccountInfo = ({
+  userProfile,
+  setUserProfile,
+  isEdit,
+}: AccountInfoProps) => {
   return (
     <CardLayout
       padding="20px"
       direction="column"
       alignItems="start"
-      width="100%"
-      maxWidth="400px"
       spacing="10px"
     >
       <Avatar
-        src={`${user.imageUrl}`}
+        src={`${userProfile.imageUrl}`}
         h="100px"
         w="100px"
         border="2px solid"
         borderColor="neutral.200 !important"
       />
-      <H1>{user.username}</H1>
+      <H1>{userProfile.username}</H1>
       <LightningAddress
-        name={user.username}
+        name={userProfile.username}
         border="1px solid"
         borderColor="neutral.200"
         backgroundColor="neutral.100"
       />
-      {user.externalAccounts.map((externalAccount) => {
+      {userProfile.externalAccounts.map((externalAccount) => {
         if (externalAccount) {
           return (
             <ExternalAccountDisplay
               key={externalAccount?.id}
               account={externalAccount}
+              userProfile={userProfile}
+              setUserProfile={setUserProfile}
               isEdit={isEdit}
             />
           )
         }
       })}
-      {isEdit && <ConnectAccounts user={user} />}
+      {isEdit && <ConnectAccounts user={userProfile} />}
     </CardLayout>
   )
 }

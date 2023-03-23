@@ -1,5 +1,11 @@
 import { useLazyQuery } from '@apollo/client'
-import { Center, Container, Stack, VStack } from '@chakra-ui/react'
+import {
+  Center,
+  Container,
+  GridItem,
+  SimpleGrid,
+  VStack,
+} from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router'
 
@@ -22,9 +28,10 @@ type QueryVariables = {
 
 export const Profile = () => {
   const location = useLocation()
-
   const { user: currentAppUser } = useAuthContext()
   const params = useParams<{ userId: string }>()
+
+  const [userProfile, setUserProfile] = useState<User>({ ...defaultUser })
 
   const [queryCurrentUser, { loading: profileLoading, error }] = useLazyQuery<
     ResponseData,
@@ -33,18 +40,22 @@ export const Profile = () => {
     onCompleted(data) {
       if (data && data.user) {
         const user = data.user as User
-        setUserProfile({
-          ...userProfile,
-          ...user,
-        })
+        if (isViewingOwnProfile) {
+          setUserProfile({
+            ...currentAppUser,
+            ...user,
+          })
+        } else {
+          setUserProfile({
+            ...user,
+          })
+        }
       }
     },
   })
 
-  const isViewingOwnProfile = () =>
+  const isViewingOwnProfile =
     location.pathname === `/profile/${currentAppUser.id}`
-
-  const [userProfile, setUserProfile] = useState<User>({ ...defaultUser })
 
   useEffect(() => {
     if (params.userId) {
@@ -58,7 +69,7 @@ export const Profile = () => {
   }, [params])
 
   useEffect(() => {
-    if (isViewingOwnProfile()) {
+    if (isViewingOwnProfile) {
       setUserProfile({
         ...userProfile,
         ...currentAppUser,
@@ -98,18 +109,30 @@ export const Profile = () => {
       height="full"
       backgroundColor={'brand.bgGrey4'}
       paddingTop={{ base: '40', lg: '80px' }}
+      paddingX={{ base: '10px', lg: '40px' }}
     >
-      <Stack
-        direction={{ base: 'column', lg: 'row' }}
+      <SimpleGrid
+        columns={{ base: 1, lg: 7 }}
+        spacingX={{ lg: '40px', xl: '80px' }}
+        spacingY="20px"
         width="100%"
-        maxWidth="1000px"
+        height="full"
+        maxWidth="1500px"
       >
-        <AccountInfo user={userProfile} />
-        <VStack>
-          <Badges user={userProfile} />
-        </VStack>
-        <CreateProject />
-      </Stack>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <AccountInfo
+            userProfile={userProfile}
+            setUserProfile={setUserProfile}
+            isEdit={isViewingOwnProfile}
+          />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, lg: 3 }}>
+          <Badges userProfile={userProfile} isEdit={isViewingOwnProfile} />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          {isViewingOwnProfile && <CreateProject />}
+        </GridItem>
+      </SimpleGrid>
     </VStack>
   )
 }
