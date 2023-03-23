@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react'
 import { useDebounce } from './useDebounce'
 
 const relays = [
-  'wss://relay.snort.social',
   'wss://relay.damus.io',
-  'wss://nostr-pub.wellorder.net',
+  'wss://relay.snort.social',
+  'wss://nos.lol',
 ]
 // TODO: Replace by geyser's pub key
 const GEYSER_PUB_KEY =
