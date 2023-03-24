@@ -6,7 +6,13 @@ import { getPath } from '../../../../constants'
 import { Entry } from '../../../../types'
 import { LandingEntryCard, TimeAgo } from '../../components'
 
-export const EntryActivityItem = ({ entry }: { entry: Entry }) => {
+export const EntryActivityItem = ({
+  entry,
+  dateTime,
+}: {
+  entry: Entry
+  dateTime?: string
+}) => {
   const { creator } = entry
   return (
     <VStack w="full" alignItems="start">
@@ -31,7 +37,7 @@ export const EntryActivityItem = ({ entry }: { entry: Entry }) => {
         </Body2>
       </HStack>
       <LandingEntryCard entry={entry} isMobile />
-      <TimeAgo date={`${entry.publishedAt}`} />
+      <TimeAgo date={`${dateTime}`} />
     </VStack>
   )
 }

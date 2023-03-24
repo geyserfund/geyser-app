@@ -1,72 +1,29 @@
 import {
   Box,
   Button,
-  Grid,
-  GridItem,
   Image,
   Link,
   Text,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri'
 import { useNavigate } from 'react-router'
 
-import { getGrantApplicants, getGrantSponsorRecords } from '../../api'
 import satsymbol from '../../assets/satsymbolprimary.svg'
 import { AppFooter } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
-import Loader from '../../components/ui/Loader'
 import { GrantsRound2Url } from '../../constants'
 import { fonts } from '../../styles'
-import { GrantApplicant } from '../../types'
-import { useMobileMode, useNotification } from '../../utils'
-import ApplicantAirTableEmbed from './ApplicantAirTableEmbed'
-import { ApplyGrantCard } from './components/ApplyGrantCard'
-import { GrantCategory } from './components/ApplyGrantModal'
+import { GrantApplicant, Maybe, Sponsor } from '../../types'
+import { useMobileMode } from '../../utils'
 import { BoardMembers } from './components/BoardMembers'
 import { CommunityVoting } from './components/CommunityVoting'
 import { GrantDevelopers } from './components/GrantDevs'
-import {
-  GrantContributeInput,
-  GrantsContributeModal,
-} from './components/GrantsContributeModal'
+import { GrantsContributeModal } from './components/GrantsContributeModal'
 import { MoreInfo } from './components/MoreInfo'
-
-const grants = [
-  {
-    key: GrantCategory.communities,
-    title: 'Communities & Meetups',
-    subtitle: 'ROUND 2: JAN 2023',
-    image:
-      'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-2%20copy.jpg',
-    name: 'Bitcoin for Free Speech',
-    about:
-      'This grant is for all projects creating bitcoin communities irl (in real life). In-person bitcoin spaces and meetups  allow for quality information to spread and enable the forging of deeper social networks. This in turn, results in a more resilient bitcoin network. We want to enable these creators to continue building grassroots bitcoin communities globally.',
-  },
-  {
-    key: GrantCategory.translations,
-    title: 'Bitcoin Translations',
-    subtitle: 'ROUND 2: JAN 2023',
-    image:
-      'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-1%20copy.jpg',
-    name: 'Visual Artists for Bitcoin',
-    about:
-      'Bitcoin content is spreading like wildfire. But language represent the biggest blocker to learning more about it, as most content remains written in English. By supporting translators in this space we want to keep supporting those that make Bitcoin content available to everyone around the world.',
-  },
-  {
-    key: GrantCategory.visualArt,
-    title: 'Bitcoin Visual Art',
-    subtitle: 'ROUND 2: JAN 2023',
-    image:
-      'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-thumbnail-3%20copy.jpg',
-    name: 'Bitcoin Open Source',
-    about:
-      "This grant is for all creative projects that focus on explaining and showcasing bitcoin through visual mediums. Creating culture and art around bitcoin is a key way of educating the world about bitcoin's history, mythology, technology and ideological significance. Let's support Bitcoin artists!",
-  },
-]
 
 export type GrantSponsor = {
   name: string
@@ -74,31 +31,19 @@ export type GrantSponsor = {
   imageUrl: string
 }
 
-type CaregorizedApplications = { [key: string]: any[] }
-
-const defaultApplications: CaregorizedApplications = {
-  [GrantCategory.translations]: [],
-  [GrantCategory.communities]: [],
-  [GrantCategory.visualArt]: [],
-}
-
 export const GrantsRoundTwo = ({
+  isLoading,
+  sponsors,
   applicants,
 }: {
+  isLoading: boolean
   applicants?: GrantApplicant[]
+  sponsors?: Maybe<Sponsor>[]
 }) => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
-  const { toast } = useNotification()
 
   const [copy, setCopy] = useState(false)
-
-  const [applicantLoading, setApplicantLoading] = useState(false)
-  const [sponsorLoading, setSponsorLoading] = useState(false)
-
-  const [sponsors, setSponsors] = useState<GrantContributeInput[]>([])
-  const [categorizedApplications, setCategorizedApplications] =
-    useState<CaregorizedApplications>(defaultApplications)
 
   const handleCopyOnchain = () => {
     navigator.clipboard.writeText('grants@geyser.fund')
@@ -107,68 +52,6 @@ export const GrantsRoundTwo = ({
       setCopy(false)
     }, 1000)
   }
-
-  useEffect(() => {
-    const getSponsors = async () => {
-      setSponsorLoading(true)
-      try {
-        const sponsorResponse = await getGrantSponsorRecords()
-
-        const listSponsors = sponsorResponse.map((sponsor: any) => ({
-          name: sponsor.fields.Name,
-          amount: sponsor.fields.Amount,
-          imageUrl: sponsor.fields['PFP link'],
-        }))
-        setSponsors(listSponsors)
-      } catch (error) {
-        toast({
-          status: 'error',
-          title: 'Failed to fetch sponsors',
-        })
-      }
-
-      setSponsorLoading(false)
-    }
-
-    getSponsors()
-  }, [toast])
-
-  useEffect(() => {
-    const getApplicants = async () => {
-      setApplicantLoading(true)
-      try {
-        const applicantResponse = await getGrantApplicants()
-        const categorized: CaregorizedApplications = defaultApplications
-
-        applicantResponse.map((application) => {
-          switch (application.fields.Grant) {
-            case GrantCategory.translations:
-              categorized[GrantCategory.translations].push(application)
-              break
-            case GrantCategory.communities:
-              categorized[GrantCategory.communities].push(application)
-              break
-            case GrantCategory.visualArt:
-              categorized[GrantCategory.visualArt].push(application)
-              break
-            default:
-              break
-          }
-        })
-
-        setCategorizedApplications(categorized)
-      } catch (error) {
-        toast({
-          status: 'error',
-          title: 'failed to fetch applicants',
-        })
-      }
-
-      setApplicantLoading(false)
-    }
-
-    getApplicants()
-  }, [])
 
   return (
     <>
@@ -274,42 +157,16 @@ export const GrantsRoundTwo = ({
                 }
               />
             </Box>
-            {applicantLoading || sponsorLoading ? (
-              <Loader paddingTop="20px" />
-            ) : (
-              <Grid
-                templateColumns={{
-                  base: 'repeat(1, 1fr)',
-                  md: 'repeat(3, 1fr)',
-                }}
-                gap={6}
-                minWidth="100%"
-                mt={8}
-              >
-                {grants.map((item) => (
-                  <GridItem w={'100%'} key={item.name}>
-                    <ApplyGrantCard
-                      title={item.title}
-                      subtitle={item.subtitle}
-                      about={item.about}
-                      image={item.image}
-                      applicant={categorizedApplications[item.key].length}
-                    />
-                  </GridItem>
-                ))}
-              </Grid>
+            {applicants && Boolean(applicants.length) && (
+              <Box my={5}>
+                <CommunityVoting
+                  title="Grant Winners"
+                  applicants={applicants}
+                  canVote={false}
+                />
+              </Box>
             )}
           </Box>
-
-          {applicants && applicants.length ? (
-            <Box my={5}>
-              <CommunityVoting
-                title="Grant Winners"
-                applicants={applicants}
-                canVote={false}
-              />
-            </Box>
-          ) : null}
 
           <Box display={'flex'} justifyContent="center" my={6}>
             <Text fontWeight={'400'} fontSize="14px" color={'brand.neutral600'}>
@@ -368,17 +225,22 @@ export const GrantsRoundTwo = ({
           >
             <Box width="100%" display="flex" alignItems={'center'} my={4}>
               <>
-                {sponsors.length > 0 ? (
+                {sponsors && sponsors.length > 0 ? (
                   <Wrap width="100%" justify="center" spacing="25px">
-                    {sponsors.map((sponsor) => (
-                      <WrapItem key={sponsor.name}>
-                        <Image
-                          borderRadius="4px"
-                          height="70px"
-                          src={sponsor.imageUrl}
-                        />
-                      </WrapItem>
-                    ))}
+                    {sponsors.map(
+                      (sponsor) =>
+                        sponsor && (
+                          <WrapItem key={sponsor.name}>
+                            {sponsor.image ? (
+                              <Image
+                                borderRadius="4px"
+                                height="70px"
+                                src={sponsor.image}
+                              />
+                            ) : null}
+                          </WrapItem>
+                        ),
+                    )}
                   </Wrap>
                 ) : (
                   <Box
@@ -408,13 +270,7 @@ export const GrantsRoundTwo = ({
                 mt="3"
                 flexDirection={isMobile ? 'column' : 'row'}
               >
-                <GrantsContributeModal
-                  onSuccess={(contribution) => {
-                    if (contribution.amount >= 1000) {
-                      setSponsors([...sponsors, contribution])
-                    }
-                  }}
-                />
+                <GrantsContributeModal />
 
                 <Box
                   display="flex"
@@ -463,7 +319,6 @@ export const GrantsRoundTwo = ({
             >
               Applications
             </Text>
-            <ApplicantAirTableEmbed />
           </Box>
         </Box>
         <AppFooter />

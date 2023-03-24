@@ -89,7 +89,7 @@ export const FundingForm = ({
     if (isValid) {
       const input: FundingInput = {
         projectId: Number(project.id),
-        anonymous: Boolean(user),
+        anonymous: !user,
         donationInput: {
           donationAmount: state.donationAmount,
         },
