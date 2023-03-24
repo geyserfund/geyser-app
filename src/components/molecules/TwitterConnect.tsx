@@ -5,7 +5,6 @@ import { SiTwitter } from 'react-icons/si'
 
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
-import { defaultUser } from '../../defaults'
 import { ME } from '../../graphql'
 import { User } from '../../types/generated/graphql'
 import { hasTwitterAccount, useNotification } from '../../utils'
@@ -16,7 +15,7 @@ type Props = {
 }
 
 export const TwitterConnect = ({ onClose }: Props) => {
-  const { setUser, setIsLoggedIn } = useAuthContext()
+  const { login } = useAuthContext()
   const { toast } = useNotification()
 
   const [queryCurrentUser, { stopPolling }] = useLazyQuery(ME, {
@@ -30,8 +29,7 @@ export const TwitterConnect = ({ onClose }: Props) => {
           }
 
           stopPolling()
-          setUser({ ...defaultUser, ...data.me })
-          setIsLoggedIn(true)
+          login(data.me)
         }
       }
     },
@@ -114,7 +112,7 @@ export const TwitterConnect = ({ onClose }: Props) => {
       leftIcon={<Icon as={SiTwitter} />}
       onClick={handleClick}
     >
-      Connect Twitter
+      Twitter
     </ButtonComponent>
   )
 }

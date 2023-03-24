@@ -24,11 +24,13 @@ import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
 import { User } from '../../types/generated/graphql'
 import { hasTwitterAccount, useMobileMode, useNotification } from '../../utils'
+import { hasNostrAccount } from '../../utils/validations/hasNostrAccount'
 import { Caption } from '../typography'
 import { ButtonComponent } from '../ui'
 import Loader from '../ui/Loader'
 import { TwitterConnect } from '.'
 import { DisconnectAccounts } from '.'
+import { NostrConnect } from './NostrConnect'
 
 interface IAuthModal {
   isOpen: boolean
@@ -36,6 +38,7 @@ interface IAuthModal {
   title?: string
   description?: string
   showTwitter?: boolean
+  showNostr?: boolean
   showLightning?: boolean
   privateRoute?: boolean
 }
@@ -87,6 +90,7 @@ const ConnectAccounts = ({
   setQrContent,
   onClose,
   showTwitter,
+  showNostr,
   showLightning,
 }: any) => {
   const { user } = useAuthContext()
@@ -101,6 +105,7 @@ const ConnectAccounts = ({
         {!hasTwitterAccount(user) && showTwitter && (
           <TwitterConnect onClose={onClose} />
         )}
+        {!hasNostrAccount(user) && showNostr && <NostrConnect />}
         {showLightning && (
           <LnurlConnect
             setLnurlState={setLnurlState}
@@ -124,6 +129,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     title,
     description,
     showTwitter = true,
+    showNostr = true,
     showLightning = true,
     privateRoute = false,
   } = authModalProps
@@ -323,6 +329,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               setQrContent={setQrContent}
               setModalStates={[setLnurlState]}
               onClose={onClose}
+              showNostr={showNostr}
               showTwitter={showTwitter}
               showLightning={showLightning}
             />
@@ -338,6 +345,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               setQrContent={setQrContent}
               setModalStates={[setLnurlState]}
               onClose={onClose}
+              showNostr={showNostr}
               showTwitter={showTwitter}
               showLightning={showLightning}
             />
@@ -346,7 +354,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     }
   }
 
-  // TODO: Fix the line below. This is intended to check if the previous route was internal. Replace the "Go Back" button
+  // @TODO: Fix the line below. This is intended to check if the previous route was internal. Replace the "Go Back" button
   // with a "Go To Home" button if the previous route was external.
   // const previousInternal = document.referrer && new URL(document.referrer).origin === new URL(history.location.pathname).origin;
 
