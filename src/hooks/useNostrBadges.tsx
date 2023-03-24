@@ -13,7 +13,7 @@ const relays = [
 ]
 // TODO: Replace by geyser's pub key
 const GEYSER_PUB_KEY =
-  '8b0a2beaf6ebef925e8e78f8f0ada41f7898b8da72a8971b89988bf7857d369f'
+  'c4776021f4613652a73b6bbbf988992ed028271569d6e9e94320118fb826a569'
 
 export const useNostrBadges = (pubKey: string) => {
   const [pool, setPool] = useState<SimplePool>()

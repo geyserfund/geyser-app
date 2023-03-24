@@ -1,12 +1,15 @@
+import { useQuery } from '@apollo/client'
 import { Button, HStack, Image, VStack, Wrap } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../components/layouts'
 import { Body2, H2 } from '../../../components/typography'
+import { ButtonComponent } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { BadgesGroupUrl, getPath } from '../../../constants'
-import { NostrBadges, useNostrBadges } from '../../../hooks/useNostrBadges'
-import { User } from '../../../types'
+import { QUERY_GET_USER_BADGES } from '../../../graphql/queries/badges'
+import { useNostrBadges } from '../../../hooks/useNostrBadges'
+import { User, UserBadge } from '../../../types'
 import { ExternalAccountType } from '../../auth'
 
 export const Badges = ({
@@ -17,19 +20,41 @@ export const Badges = ({
   isEdit: boolean
 }) => {
   const { badges, loading } = useNostrBadges(
-    'c849ecee7b8e350249cee3b15bba5a1dc73e70dea3ddafa0787d128db6c048fe',
+    userProfile.externalAccounts.find(
+      (account) => account?.type === ExternalAccountType.nostr,
+    )?.externalId || '',
   )
+
+  const { data: userBadgesData, loading: userBadgeLoading } = useQuery<{
+    userBadges: UserBadge[]
+  }>(QUERY_GET_USER_BADGES, {
+    variables: { input: { where: { userId: userProfile.id } } },
+  })
 
   const hasNostr = userProfile.externalAccounts.some(
     (externalAccount) => externalAccount?.type === ExternalAccountType.nostr,
   )
+
   const numberOfBadges = badges.length
 
   const hasBadgeNoNostrForOwn = badges.length > 0 && !hasNostr && isEdit
 
-  if (loading) {
+  if (loading || userBadgeLoading) {
     return <Loader />
   }
+
+  const userBadges = userBadgesData?.userBadges
+
+  const claimedBadges =
+    userBadges?.filter((userbadge) =>
+      badges.some((badge) => badge.name === userbadge.badge.uniqueName),
+    ) || []
+
+  const unClaimedBadges =
+    userBadges?.filter(
+      (userbadge) =>
+        !badges.some((badge) => badge.name === userbadge.badge.uniqueName),
+    ) || []
 
   return (
     <CardLayout padding="20px">
@@ -58,6 +83,13 @@ export const Badges = ({
         </HStack>
       )}
 
+      {hasNostr && (
+        <>
+          <RenderBadges badges={claimedBadges} isClaimed />
+          <RenderBadges badges={unClaimedBadges} />
+        </>
+      )}
+
       <Button as={Link} to={getPath('badges')}>
         {' '}
         Go to Badges page
@@ -66,10 +98,27 @@ export const Badges = ({
   )
 }
 
-export const ClaimBadge = ({ badges }: { badges: NostrBadges }) => {
+export const RenderBadges = ({
+  badges,
+  isClaimed,
+}: {
+  badges: UserBadge[]
+  isClaimed?: boolean
+}) => {
   return (
     <Wrap w="full">
-      <VStack></VStack>
+      {badges.map((badge) => {
+        return (
+          <VStack key={badge.id}>
+            <Image src={badge.badge.image} />
+            {!isClaimed && (
+              <ButtonComponent primary isDisabled>
+                Claim
+              </ButtonComponent>
+            )}
+          </VStack>
+        )
+      })}
     </Wrap>
   )
 }

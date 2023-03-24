@@ -10,15 +10,16 @@ import { Body2 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { BotTwitterUrl, getPath } from '../../../../constants'
 import { useAuthContext } from '../../../../context'
-import {
-  BADGES_QUERY,
-  QUERY_GET_USER_BADGES,
-} from '../../../../graphql/queries/badges'
+import { QUERY_GET_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
 import { IFundingTx, IProject } from '../../../../interfaces'
 import { Satoshis } from '../../../../types'
-import { Badge, FundingTx, Project } from '../../../../types/generated/graphql'
+import {
+  FundingTx,
+  Project,
+  UserBadge,
+} from '../../../../types/generated/graphql'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
@@ -29,17 +30,6 @@ type Props = {
   fundingTx: FundingTx | IFundingTx
   project: Project | IProject
   handleCloseButton: () => void
-}
-
-type UserBadge = {
-  badgeAwardEventId: string
-  badgeDefinitionEventId: string
-  createdAt: string
-  fundingTxId: string
-  id: string
-  status: string
-  updatedAt: string
-  userId: string
 }
 
 export const SuccessScreen = ({
@@ -59,8 +49,6 @@ export const SuccessScreen = ({
     setCopy(true)
   }
 
-  const { data: badgesData } = useQuery<{ badges: Badge[] }>(BADGES_QUERY)
-
   const { data } = useQuery<{ userBadges: UserBadge[] }>(
     QUERY_GET_USER_BADGES,
     {
@@ -77,12 +65,7 @@ export const SuccessScreen = ({
   }, [hasCopiedProjectLink])
 
   const userBadge = data?.userBadges[0]
-  const currentBadge =
-    badgesData?.badges && badgesData?.badges.length > 0
-      ? badgesData?.badges.find(
-          (badge) => badge.id === userBadge?.badgeDefinitionEventId,
-        )
-      : undefined
+  const currentBadge = userBadge ? userBadge.badge : undefined
 
   return (
     <VStack

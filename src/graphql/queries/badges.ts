@@ -16,14 +16,22 @@ export const BADGES_QUERY = gql`
 export const QUERY_GET_USER_BADGES = gql`
   query UserBadges($input: BadgesGetInput!) {
     userBadges(input: $input) {
-      badgeAwardEventId
-      badgeDefinitionEventId
-      createdAt
-      fundingTxId
-      id
-      status
-      updatedAt
+      badge {
+        name
+        thumb
+        uniqueName
+        image
+        id
+        description
+        createdAt
+      }
       userId
+      updatedAt
+      status
+      id
+      fundingTxId
+      createdAt
+      badgeAwardEventId
     }
   }
 `
