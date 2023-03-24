@@ -8,15 +8,15 @@ import {
 
 interface BadgeItemProps {
   image: string
-  title: string
+  name: string
   description: string
-  winners: User[]
+  winners?: User[]
 }
 
-const BadgeItem = ({ image, title, description, winners }: BadgeItemProps) => {
-  const topWinners = winners.slice(0, 7)
+const BadgeItem = ({ image, name, description, winners }: BadgeItemProps) => {
+  const topWinners = winners ? winners.slice(0, 7) : []
 
-  const hasLeftoverWinners = winners.length > topWinners.length
+  const hasLeftoverWinners = winners ? winners.length > topWinners.length : 0
 
   if (hasLeftoverWinners) {
     topWinners.pop()
@@ -25,7 +25,7 @@ const BadgeItem = ({ image, title, description, winners }: BadgeItemProps) => {
   return (
     <VStack justify="center" maxWidth="272px">
       <Image alt="badge" src={image} />
-      <Text variant="h3">{title}</Text>
+      <Text variant="h3">{name}</Text>
       <Text>{description}</Text>
       <HStack>
         {topWinners.map((user) => (
@@ -43,7 +43,7 @@ const BadgeItem = ({ image, title, description, winners }: BadgeItemProps) => {
             user={user}
           />
         ))}
-        {hasLeftoverWinners && (
+        {winners && hasLeftoverWinners && (
           <AvatarCircle>+{winners.length - topWinners.length}</AvatarCircle>
         )}
       </HStack>
