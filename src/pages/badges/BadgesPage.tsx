@@ -1,58 +1,15 @@
 import { Box, Container, Text, VStack } from '@chakra-ui/react'
 
-import defaultBadge from '../../assets/badges/temporary-badge.png'
 import { CardLayout } from '../../components/layouts'
-import { User } from '../../types'
+import { useBadges } from '../../graphql/hooks/useBadges'
 import BadgeItem from './BadgeItem'
 import BadgeList from './BadgeList'
 import { BadgesFAQ } from './BadgesFAQ'
 
-const FUNDERS_BADGES = {
-  contributionAmounts: [
-    {
-      id: 1,
-      title: 'Geyser Funder 100k',
-      description:
-        'This badge is awarded to the honorable plebs that made at least one contribution on Geyser.fund.',
-      image: defaultBadge,
-      winners: [
-        {
-          id: 1,
-          imageUrl: defaultBadge,
-        },
-      ] as User[],
-    },
-    {
-      id: 1,
-      title: 'Geyser Funder 100k',
-      description:
-        'This badge is awarded to the honorable plebs that made at least one contribution on Geyser.fund.',
-      image: defaultBadge,
-      winners: [
-        {
-          id: 1,
-          imageUrl: defaultBadge,
-        },
-      ] as User[],
-    },
-    {
-      id: 1,
-      title: 'Geyser Funder 100k',
-      description:
-        'This badge is awarded to the honorable plebs that made at least one contribution on Geyser.fund.',
-      image: defaultBadge,
-      winners: [
-        {
-          id: 1,
-          imageUrl: defaultBadge,
-        },
-      ] as User[],
-    },
-  ],
-}
-
 export const BadgesPage = () => {
-  const funderBadges = FUNDERS_BADGES
+  const { badges } = useBadges()
+
+  console.log({ badges })
 
   return (
     <Container maxWidth="5xl" pt={10}>
@@ -66,27 +23,43 @@ export const BadgesPage = () => {
             badges, which can more fully recognize their actions.
           </Text>
         </Container>
-        <Box pt={6} width="100%">
-          <CardLayout width="100%">
-            <Text
-              textAlign="left"
-              width="100%"
-              borderBottom="2px solid"
-              borderColor="neutral.200"
-              pb={1}
-              variant="h3"
-            >
-              Funders badges
-            </Text>
-            <Box>
-              <BadgeList title="Contribution amounts">
-                {funderBadges.contributionAmounts.map((badge) => (
-                  <BadgeItem key={badge.id} {...badge} />
-                ))}
-              </BadgeList>
-            </Box>
-          </CardLayout>
-        </Box>
+        {badges &&
+          Object.keys(badges).map((category) => {
+            return (
+              <Box key={category} pt={6} width="100%">
+                <CardLayout width="100%">
+                  <Box pb={4}>
+                    <Text
+                      textAlign="left"
+                      width="100%"
+                      borderBottom="2px solid"
+                      borderColor="neutral.200"
+                      pb={1}
+                      variant="h3"
+                    >
+                      {category}
+                    </Text>
+                    {badges[category] &&
+                      Object.keys(badges[category]).map((subcategory) => {
+                        return (
+                          <Box key={subcategory}>
+                            <BadgeList title={subcategory}>
+                              {badges[category][subcategory] &&
+                                badges[category][subcategory].map(
+                                  (badge) =>
+                                    badge && (
+                                      <BadgeItem key={badge.id} {...badge} />
+                                    ),
+                                )}
+                            </BadgeList>
+                          </Box>
+                        )
+                      })}
+                  </Box>
+                </CardLayout>
+              </Box>
+            )
+          })}
         <Box pt={6} width="100%">
           <BadgesFAQ />
         </Box>

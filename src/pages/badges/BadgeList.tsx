@@ -5,11 +5,16 @@ interface BadgeListProps {
   title: string
 }
 
-const BadgeList = ({ children }: PropsWithChildren<BadgeListProps>) => {
+const BadgeList = ({ children, title }: PropsWithChildren<BadgeListProps>) => {
   return (
-    <VStack pt={3}>
-      <Box width="100%" borderBottom="2px solid neutral.200" textAlign="center">
-        <Text variant="h3">Contribution amounts</Text>
+    <VStack pt={6}>
+      <Box
+        width="100%"
+        borderBottom="2px solid neutral.200"
+        textAlign="center"
+        pb={2}
+      >
+        <Text variant="h3">{title}</Text>
       </Box>
       <HStack flexWrap="wrap">{children}</HStack>
     </VStack>

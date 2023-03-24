@@ -8,6 +8,7 @@ declare global {
         [x: string]: unknown
         content: string
       }): Promise<{ sig: string }>
+      signSchnorr(s: string): Promise<string>
     }
   }
 }
