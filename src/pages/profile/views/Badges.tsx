@@ -1,9 +1,10 @@
-import { HStack, Image, VStack, Wrap } from '@chakra-ui/react'
+import { Button, HStack, Image, VStack, Wrap } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../components/layouts'
 import { Body2, H2 } from '../../../components/typography'
 import Loader from '../../../components/ui/Loader'
-import { BadgesGroupUrl } from '../../../constants'
+import { BadgesGroupUrl, getPath } from '../../../constants'
 import { NostrBadges, useNostrBadges } from '../../../hooks/useNostrBadges'
 import { User } from '../../../types'
 import { ExternalAccountType } from '../../auth'
@@ -56,6 +57,11 @@ export const Badges = ({
           <Image maxWidth="400px" alt="badges-group" src={BadgesGroupUrl} />
         </HStack>
       )}
+
+      <Button as={Link} to={getPath('badges')}>
+        {' '}
+        Go to Badges page
+      </Button>
     </CardLayout>
   )
 }

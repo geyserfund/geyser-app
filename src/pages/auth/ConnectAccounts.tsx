@@ -13,17 +13,17 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
 
   const displayNostrButton = !hasNostrAccount && window.nostr
 
-  // const displayTwitterButton = !user.externalAccounts.some(
-  //   (externalAccount) => externalAccount?.type === 'twitter',
-  // )
+  const displayTwitterButton = !user.externalAccounts.some(
+    (externalAccount) => externalAccount?.type === 'twitter',
+  )
 
-  // const displayLighntingButton = !user.externalAccounts.some(
-  //   (externalAccount) => externalAccount?.type === 'lightning',
-  // )
+  const displayLighntingButton = !user.externalAccounts.some(
+    (externalAccount) => externalAccount?.type === 'lightning',
+  )
 
-  const displayTwitterButton = true
-
-  const displayLighntingButton = true
+  if (!displayNostrButton && !displayTwitterButton && !displayTwitterButton) {
+    return null
+  }
 
   return (
     <>
