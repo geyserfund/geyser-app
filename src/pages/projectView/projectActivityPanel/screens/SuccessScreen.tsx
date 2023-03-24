@@ -1,16 +1,24 @@
-import { Center, CloseButton, Text, VStack } from '@chakra-ui/react'
+import { useQuery } from '@apollo/client'
+import { Center, CloseButton, Image, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import ReactConfetti from 'react-confetti'
 import { BiCopyAlt } from 'react-icons/bi'
 import { HiOutlineCheck, HiOutlineSpeakerphone } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
 
+import { Body2 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
-import { BotTwitterUrl } from '../../../../constants'
+import { BotTwitterUrl, getPath } from '../../../../constants'
+import { useAuthContext } from '../../../../context'
+import {
+  BADGES_QUERY,
+  QUERY_GET_USER_BADGES,
+} from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
 import { IFundingTx, IProject } from '../../../../interfaces'
 import { Satoshis } from '../../../../types'
-import { FundingTx, Project } from '../../../../types/generated/graphql'
+import { Badge, FundingTx, Project } from '../../../../types/generated/graphql'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
@@ -23,12 +31,25 @@ type Props = {
   handleCloseButton: () => void
 }
 
+type UserBadge = {
+  badgeAwardEventId: string
+  badgeDefinitionEventId: string
+  createdAt: string
+  fundingTxId: string
+  id: string
+  status: string
+  updatedAt: string
+  userId: string
+}
+
 export const SuccessScreen = ({
   fundingState,
   fundingTx,
   project,
   handleCloseButton,
 }: Props) => {
+  const { user } = useAuthContext()
+
   const [hasCopiedProjectLink, setCopy] = useState(false)
 
   const { getTotalAmount } = useFundCalc(fundingState)
@@ -38,6 +59,15 @@ export const SuccessScreen = ({
     setCopy(true)
   }
 
+  const { data: badgesData } = useQuery<{ badges: Badge[] }>(BADGES_QUERY)
+
+  const { data } = useQuery<{ userBadges: UserBadge[] }>(
+    QUERY_GET_USER_BADGES,
+    {
+      variables: { input: { where: { fundingTxId: fundingTx.id } } },
+    },
+  )
+
   useEffect(() => {
     if (hasCopiedProjectLink) {
       setTimeout(() => {
@@ -45,6 +75,14 @@ export const SuccessScreen = ({
       }, 2000)
     }
   }, [hasCopiedProjectLink])
+
+  const userBadge = data?.userBadges[0]
+  const currentBadge =
+    badgesData?.badges && badgesData?.badges.length > 0
+      ? badgesData?.badges.find(
+          (badge) => badge.id === userBadge?.badgeDefinitionEventId,
+        )
+      : undefined
 
   return (
     <VStack
@@ -80,14 +118,24 @@ export const SuccessScreen = ({
           <Text fontSize="22px" fontWeight={'semibold'} textAlign="center">
             Contribution Successful!
           </Text>
+          {currentBadge && user ? (
+            <VStack w="full">
+              <Image src={currentBadge.image} width="150px" />
 
-          <Center
-            boxSize={'85px'}
-            borderRadius="full"
-            backgroundColor={'brand.neutral50'}
-          >
-            <HiOutlineCheck color={'brand.textBlack'} fontSize="3rem" />
-          </Center>
+              <Body2>You won a Nostr badge!</Body2>
+              <Body2 as={Link} to={getPath('userProfile', user.id)}>
+                Go to your profile page to check it out
+              </Body2>
+            </VStack>
+          ) : (
+            <Center
+              boxSize={'85px'}
+              borderRadius="full"
+              backgroundColor={'brand.neutral50'}
+            >
+              <HiOutlineCheck color={'brand.textBlack'} fontSize="3rem" />
+            </Center>
+          )}
         </VStack>
 
         <Text textAlign={'left'}>
