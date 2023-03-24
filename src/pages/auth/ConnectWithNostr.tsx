@@ -32,6 +32,7 @@ export const ConnectWithNostr = () => {
         color="white"
         _hover={{}}
         onClick={() => onClickHandler()}
+        isDisabled
       >
         Nostr
       </Button>
