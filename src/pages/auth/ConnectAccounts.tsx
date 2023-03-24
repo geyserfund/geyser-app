@@ -21,7 +21,7 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
     (externalAccount) => externalAccount?.type === 'lightning',
   )
 
-  if (!displayNostrButton && !displayTwitterButton && !displayTwitterButton) {
+  if (!displayNostrButton && !displayTwitterButton && !displayLighntingButton) {
     return null
   }
 
