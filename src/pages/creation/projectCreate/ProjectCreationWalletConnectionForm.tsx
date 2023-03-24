@@ -37,11 +37,9 @@ import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations'
 import { colors } from '../../../styles'
 import {
   CreateWalletInput,
-  FundingResourceType,
   LightningAddressVerifyResponse,
   LndNodeType,
   Project,
-  ResourceInput,
   WalletResourceType,
 } from '../../../types/generated/graphql'
 import { toInt, useNotification, validateEmail } from '../../../utils'
