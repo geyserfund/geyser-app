@@ -177,12 +177,13 @@ export const GrantPage = () => {
               sponsors={grant.sponsors}
               endDateSubtitle={GRANT_STATUS_COUNTDOWN_TITLES[grant.status]}
               endDateTimestamp={votingEndDate}
-              balance={getShortAmountLabel(grant.balance || 0)}
+              balance={getShortAmountLabel(grant.balance || 0, true)}
               contributions={getShortAmountLabel(
                 grant.applicants.reduce(
                   (prev, curr) => prev + (curr?.funding.communityFunding || 0),
                   0,
                 ) || 0,
+                true,
               )}
             />
           </Box>

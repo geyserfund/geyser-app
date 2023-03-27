@@ -34,7 +34,7 @@ export const SponsorList = ({
         {sponsors.map((item) =>
           item && item.image ? (
             <Box key={item.id} mr={3}>
-              <Link href={item.url || '#'}>
+              <Link target="_blank" href={item.url || '#'}>
                 <Image src={item.image} alt="sponsor logo" height="30px" />
               </Link>
             </Box>
