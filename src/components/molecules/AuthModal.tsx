@@ -22,6 +22,7 @@ import {
 } from '../../constants'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
+import { ConnectWithNostr } from '../../pages/auth/ConnectWithNostr'
 import { User } from '../../types/generated/graphql'
 import { hasTwitterAccount, useMobileMode, useNotification } from '../../utils'
 import { hasNostrAccount } from '../../utils/validations/hasNostrAccount'
@@ -30,7 +31,6 @@ import { ButtonComponent } from '../ui'
 import Loader from '../ui/Loader'
 import { TwitterConnect } from '.'
 import { DisconnectAccounts } from '.'
-import { NostrConnect } from './NostrConnect'
 
 interface IAuthModal {
   isOpen: boolean
@@ -105,7 +105,7 @@ const ConnectAccounts = ({
         {!hasTwitterAccount(user) && showTwitter && (
           <TwitterConnect onClose={onClose} />
         )}
-        {!hasNostrAccount(user) && showNostr && <NostrConnect />}
+        {!hasNostrAccount(user) && showNostr && <ConnectWithNostr />}
         {showLightning && (
           <LnurlConnect
             setLnurlState={setLnurlState}

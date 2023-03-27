@@ -8,8 +8,9 @@ import { ButtonComponent } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { BadgesGroupUrl, getPath } from '../../../constants'
 import { QUERY_GET_USER_BADGES } from '../../../graphql/queries/badges'
-import { useNostrBadges } from '../../../hooks/useNostrBadges'
+import { ClaimABadgeProps, useNostrBadges } from '../../../hooks/useNostrBadges'
 import { User, UserBadge } from '../../../types'
+import { toInt } from '../../../utils'
 import { ExternalAccountType } from '../../auth'
 
 export const Badges = ({
@@ -19,7 +20,7 @@ export const Badges = ({
   userProfile: User
   isEdit: boolean
 }) => {
-  const { badges, loading } = useNostrBadges(
+  const { badges, loading, claimABadge } = useNostrBadges(
     userProfile.externalAccounts.find(
       (account) => account?.type === ExternalAccountType.nostr,
     )?.externalId || '',
@@ -28,33 +29,47 @@ export const Badges = ({
   const { data: userBadgesData, loading: userBadgeLoading } = useQuery<{
     userBadges: UserBadge[]
   }>(QUERY_GET_USER_BADGES, {
-    variables: { input: { where: { userId: userProfile.id } } },
+    variables: { input: { where: { userId: toInt(userProfile.id) } } },
   })
 
   const hasNostr = userProfile.externalAccounts.some(
     (externalAccount) => externalAccount?.type === ExternalAccountType.nostr,
   )
 
-  const numberOfBadges = badges.length
-
-  const hasBadgeNoNostrForOwn = badges.length > 0 && !hasNostr && isEdit
-
   if (loading || userBadgeLoading) {
     return <Loader />
   }
 
-  const userBadges = userBadgesData?.userBadges
+  const userBadges = userBadgesData?.userBadges || []
+  const hasBadgeNoNostrForOwn = userBadges.length > 0 && !hasNostr && isEdit
+  const numberOfBadges = badges?.length || 0
 
   const claimedBadges =
-    userBadges?.filter((userbadge) =>
-      badges.some((badge) => badge.name === userbadge.badge.uniqueName),
-    ) || []
+    (badges.length > 0 &&
+      userBadges?.filter((userbadge) =>
+        badges.some((badge) => badge.name === userbadge.badge.uniqueName),
+      )) ||
+    []
 
   const unClaimedBadges =
-    userBadges?.filter(
-      (userbadge) =>
-        !badges.some((badge) => badge.name === userbadge.badge.uniqueName),
-    ) || []
+    badges.length > 0
+      ? userBadges?.filter(
+          (userbadge) =>
+            !badges.some((badge) => badge.name === userbadge.badge.uniqueName),
+        ) || []
+      : userBadges
+
+  const getTitleToDisplay = () => {
+    if (isEdit) {
+      return userBadges.length
+        ? `${userBadges.length} Geyser badges`
+        : 'No Geyser badges'
+    }
+
+    return numberOfBadges
+      ? `${numberOfBadges} Geyser badges`
+      : 'No Geyser badges'
+  }
 
   return (
     <CardLayout padding="20px">
@@ -66,9 +81,7 @@ export const Badges = ({
 
       <VStack background="neutral.100" borderRadius="8px" padding="10px 15px">
         <Body2 color="neutral.900" semiBold>
-          {numberOfBadges
-            ? `${numberOfBadges} Geyser badges`
-            : 'No Geyser badges'}
+          {getTitleToDisplay()}
         </Body2>
         {hasBadgeNoNostrForOwn && (
           <Body2 color="neutral.700">
@@ -85,8 +98,14 @@ export const Badges = ({
 
       {hasNostr && (
         <>
-          <RenderBadges badges={claimedBadges} isClaimed />
-          <RenderBadges badges={unClaimedBadges} />
+          <RenderBadges
+            claimABadge={claimABadge}
+            badges={claimedBadges}
+            isClaimed
+          />
+          {isEdit && (
+            <RenderBadges claimABadge={claimABadge} badges={unClaimedBadges} />
+          )}
         </>
       )}
 
@@ -101,18 +120,25 @@ export const Badges = ({
 export const RenderBadges = ({
   badges,
   isClaimed,
+  claimABadge,
 }: {
   badges: UserBadge[]
   isClaimed?: boolean
+  claimABadge: (_: ClaimABadgeProps) => void
 }) => {
   return (
-    <Wrap w="full">
+    <Wrap w="full" justifyContent="space-between">
       {badges.map((badge) => {
+        const handleClick = () =>
+          claimABadge({
+            badgeId: badge.badge.uniqueName,
+            badgeAwardId: badge.badgeAwardEventId || '',
+          })
         return (
           <VStack key={badge.id}>
-            <Image src={badge.badge.image} />
+            <Image maxWidth="175px" src={badge.badge.image} />
             {!isClaimed && (
-              <ButtonComponent primary isDisabled>
+              <ButtonComponent primary onClick={handleClick}>
                 Claim
               </ButtonComponent>
             )}

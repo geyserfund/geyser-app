@@ -44,8 +44,8 @@ export const useNostrExtensonLogin = () => {
       )
 
       const { k1 } = await getSecret.json()
-
-      const sig = await sha256(await signMessage(k1))
+      const hashedK1 = await sha256(k1)
+      const sig = await signMessage(hashedK1)
 
       const sendSignature = await fetch(
         `${AUTH_SERVICE_ENDPOINT}/nostr?pubkey=${pubkey}&k1=${k1}&sig=${sig}`,

@@ -1,9 +1,10 @@
 import 'websocket-polyfill'
 
-import { Filter, getEventHash, signEvent } from 'nostr-tools'
+import { Filter, getEventHash } from 'nostr-tools'
 import { Event, SimplePool } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
+import { signEvent } from '../utils/nostr/nip07'
 import { useDebounce } from './useDebounce'
 
 const relays = [
@@ -14,6 +15,12 @@ const relays = [
 // TODO: Replace by geyser's pub key
 const GEYSER_PUB_KEY =
   'c4776021f4613652a73b6bbbf988992ed028271569d6e9e94320118fb826a569'
+
+export type ClaimABadgeProps = {
+  badgeId: string
+  badgeAwardId: string
+  onFail?: any
+}
 
 export const useNostrBadges = (pubKey: string) => {
   const [pool, setPool] = useState<SimplePool>()
@@ -71,15 +78,11 @@ export const useNostrBadges = (pubKey: string) => {
     badgeId,
     badgeAwardId,
     onFail,
-  }: {
-    badgeId: string
-    badgeAwardId: string
-    onFail?: any
-  }) => {
+  }: ClaimABadgeProps) => {
     if (pool) {
       setClaiming(true)
       const event = await handleFetchProfileBadges(pubKey, pool)
-
+      console.log('checking event', event)
       let eventToPublish = (event || {}) as any
       const badgeToAdd = [
         ['a', `30009:${GEYSER_PUB_KEY}:${badgeId}`],
@@ -94,11 +97,11 @@ export const useNostrBadges = (pubKey: string) => {
           content: 'hello world',
         } as any
         eventToPublish.id = getEventHash(eventToPublish)
-        eventToPublish.sig = signEvent(eventToPublish, pubKey) // this is where you sign with private key replaccing pubkey
       } else {
         eventToPublish.tags = [...eventToPublish.tags, ...badgeToAdd]
-        eventToPublish.sig = signEvent(eventToPublish, pubKey) // this is where you sign with private key replaccing pubkey
       }
+
+      eventToPublish.sig = await signEvent(eventToPublish) // this is where you sign with private key replaccing pubkey
 
       const pub = pool.publish(relays, eventToPublish) // this is where you sign with private key replaccing pubkey
 
@@ -107,6 +110,7 @@ export const useNostrBadges = (pubKey: string) => {
         setBadgeIds([...badgeIds, badgeId])
       })
       pub.on('failed', (reason: any) => {
+        console.log('checking daild', reason)
         setClaiming(false)
         if (onFail) {
           onFail(reason)
