@@ -26,7 +26,7 @@ steps:
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build . \
         && \
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build
-    secretEnv: ['AIRTABLE_API_KEY', 'GIPHY_API_KEY']
+    secretEnv: ['AIRTABLE_API_KEY', 'GIPHY_API_KEY', 'GEYSER_NOSTR_PUBKEY']
   - id: 'Update Image: latest'
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -48,7 +48,7 @@ steps:
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
         && \
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA
-    secretEnv: ['AIRTABLE_API_KEY', 'GIPHY_API_KEY']
+    secretEnv: ['AIRTABLE_API_KEY', 'GIPHY_API_KEY', 'GEYSER_NOSTR_PUBKEY']
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
