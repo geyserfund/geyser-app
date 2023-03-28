@@ -4,6 +4,7 @@ import { Filter, getEventHash } from 'nostr-tools'
 import { Event, SimplePool } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
+import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
 import { signEvent } from '../utils/nostr/nip07'
 import { useDebounce } from './useDebounce'
 
@@ -12,9 +13,6 @@ const relays = [
   'wss://relay.snort.social',
   'wss://nos.lol',
 ]
-// TODO: Replace by geyser's pub key
-const GEYSER_PUB_KEY =
-  'c4776021f4613652a73b6bbbf988992ed028271569d6e9e94320118fb826a569'
 
 export type ClaimABadgeProps = {
   badgeId: string
@@ -38,7 +36,7 @@ export const useNostrBadges = (pubKey: string) => {
       const badgeFilter = {} as Filter
 
       badgeFilter.kinds = [30009]
-      badgeFilter.authors = [GEYSER_PUB_KEY]
+      badgeFilter.authors = [VITE_APP_GEYSER_NOSTR_PUBKEY]
       badgeFilter['#d'] = debouncedBadgeIds
 
       const events = await pool?.list(relays, [badgeFilter])
@@ -62,7 +60,6 @@ export const useNostrBadges = (pubKey: string) => {
       setPool(simplePool)
 
       const event = await handleFetchProfileBadges(pubKey, simplePool)
-
       const parsedBadges = event ? parseBadgesFromProfileEvents(event) : []
       setBadgeIds(parsedBadges)
 
@@ -85,7 +82,7 @@ export const useNostrBadges = (pubKey: string) => {
       console.log('checking event', event)
       let eventToPublish = (event || {}) as any
       const badgeToAdd = [
-        ['a', `30009:${GEYSER_PUB_KEY}:${badgeId}`],
+        ['a', `30009:${VITE_APP_GEYSER_NOSTR_PUBKEY}:${badgeId}`],
         ['e', badgeAwardId],
       ]
       if (!event) {
@@ -102,7 +99,7 @@ export const useNostrBadges = (pubKey: string) => {
       }
 
       eventToPublish.sig = await signEvent(eventToPublish) // this is where you sign with private key replaccing pubkey
-
+      console.log('checking eventToPublish', eventToPublish)
       const pub = pool.publish(relays, eventToPublish) // this is where you sign with private key replaccing pubkey
 
       pub.on('ok', () => {
