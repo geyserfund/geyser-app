@@ -33,7 +33,6 @@ export const ProjectContributionList = ({
               <ContributionActivityItem
                 fundingTx={fundingTx}
                 count={fundingTx.count}
-                dateTime={fundingTx.paidAt}
               />
               {index < fundingTxs.data.length - 1 && (
                 <Divider
