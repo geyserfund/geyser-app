@@ -77,10 +77,6 @@ export const Profile = () => {
     }
   }, [currentAppUser])
 
-  if (profileLoading) {
-    return <Loader />
-  }
-
   if (error) {
     return (
       <Container
@@ -108,7 +104,7 @@ export const Profile = () => {
       width="full"
       height="full"
       backgroundColor={'brand.bgGrey4'}
-      paddingTop={{ base: '40', lg: '80px' }}
+      paddingTop={{ base: '20px', lg: '80px' }}
       paddingX={{ base: '10px', lg: '40px' }}
     >
       <SimpleGrid
@@ -124,6 +120,7 @@ export const Profile = () => {
             userProfile={userProfile}
             setUserProfile={setUserProfile}
             isEdit={isViewingOwnProfile}
+            isLoading={profileLoading}
           />
         </GridItem>
         <GridItem colSpan={{ base: 1, lg: 3 }}>

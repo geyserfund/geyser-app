@@ -1,6 +1,6 @@
-import { Avatar } from '@chakra-ui/react'
+import { Avatar, SkeletonCircle } from '@chakra-ui/react'
 
-import { CardLayout } from '../../../components/layouts'
+import { CardLayout, SkeletonLayout } from '../../../components/layouts'
 import { H1 } from '../../../components/typography'
 import { ConnectAccounts } from '../../auth'
 import { LightningAddress } from '../../projectView/projectMainBody/components'
@@ -9,13 +9,19 @@ import { UserProfileState } from '../type'
 
 interface AccountInfoProps extends UserProfileState {
   isEdit: boolean
+  isLoading?: boolean
 }
 
 export const AccountInfo = ({
   userProfile,
   setUserProfile,
   isEdit,
+  isLoading,
 }: AccountInfoProps) => {
+  if (isLoading) {
+    return <AccountInfoSkeleton />
+  }
+
   return (
     <CardLayout
       padding="20px"
@@ -51,6 +57,23 @@ export const AccountInfo = ({
         }
       })}
       {isEdit && <ConnectAccounts user={userProfile} />}
+    </CardLayout>
+  )
+}
+
+export const AccountInfoSkeleton = () => {
+  return (
+    <CardLayout
+      padding="20px"
+      direction="column"
+      alignItems="start"
+      spacing="10px"
+    >
+      <SkeletonCircle height="100px" width="100px" />
+      <SkeletonLayout height="25px" width="60%" />
+      <SkeletonLayout height="32px" width="80%" />
+      <SkeletonLayout height="44px" width="100%" />
+      <SkeletonLayout height="44px" width="100%" />
     </CardLayout>
   )
 }
