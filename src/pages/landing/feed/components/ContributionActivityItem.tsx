@@ -23,7 +23,7 @@ import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
 import { FundingTx } from '../../../../types/generated/graphql'
-import { getDaysAgo, toSmallImageUrl } from '../../../../utils'
+import { getDaysAgo, getRandomOrb, toSmallImageUrl } from '../../../../utils'
 import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
 
 type Props = HTMLChakraProps<'div'> & {
@@ -99,7 +99,7 @@ export const ContributionActivityItem = ({
               </HStack>
             ) : (
               <LinkableAvatar
-                imageSrc={funder.user?.imageUrl || ''}
+                imageSrc={funder.user?.imageUrl || getRandomOrb(funder.id)}
                 avatarUsername={funder.user?.username || ''}
                 userProfileID={funder.user?.id}
                 imageSize={'24px'}
@@ -138,7 +138,9 @@ export const ContributionActivityItem = ({
         <Stack marginTop="6px" width="100%" spacing={'6px'}>
           {/* Funding Comment */}
 
-          {fundingTx.comment ? <Text>{fundingTx.comment}</Text> : null}
+          {fundingTx.comment ? (
+            <Text fontFamily={fonts.courier}>{fundingTx.comment}</Text>
+          ) : null}
 
           {/* Funding Media Attachment */}
 
