@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router'
 
 import { AlertBox } from '../../components/ui'
-import Loader from '../../components/ui/Loader'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
 import { USER_PROFILE_QUERY } from '../../graphql'
@@ -124,7 +123,11 @@ export const Profile = () => {
           />
         </GridItem>
         <GridItem colSpan={{ base: 1, lg: 3 }}>
-          <Badges userProfile={userProfile} isEdit={isViewingOwnProfile} />
+          <Badges
+            userProfile={userProfile}
+            isEdit={isViewingOwnProfile}
+            isLoading={profileLoading}
+          />
         </GridItem>
         <GridItem colSpan={{ base: 1, lg: 2 }}>
           {isViewingOwnProfile && <CreateProject />}

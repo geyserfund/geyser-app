@@ -2,10 +2,9 @@ import { useQuery } from '@apollo/client'
 import { Button, HStack, Image, VStack, Wrap } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../components/layouts'
+import { CardLayout, SkeletonLayout } from '../../../components/layouts'
 import { Body2, H2 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
-import Loader from '../../../components/ui/Loader'
 import { BadgesGroupUrl, getPath } from '../../../constants'
 import { QUERY_GET_USER_BADGES } from '../../../graphql/queries/badges'
 import { ClaimABadgeProps, useNostrBadges } from '../../../hooks/useNostrBadges'
@@ -16,11 +15,17 @@ import { ExternalAccountType } from '../../auth'
 export const Badges = ({
   userProfile,
   isEdit,
+  isLoading,
 }: {
   userProfile: User
   isEdit: boolean
+  isLoading: boolean
 }) => {
-  const { badges, loading, claimABadge } = useNostrBadges(
+  const {
+    badges: nostrBadges,
+    loading: nostrBadgesLoading,
+    claimABadge,
+  } = useNostrBadges(
     userProfile.externalAccounts.find(
       (account) => account?.type === ExternalAccountType.nostr,
     )?.externalId || '',
@@ -36,26 +41,24 @@ export const Badges = ({
     (externalAccount) => externalAccount?.type === ExternalAccountType.nostr,
   )
 
-  if (loading || userBadgeLoading) {
-    return <Loader />
-  }
-
   const userBadges = userBadgesData?.userBadges || []
   const hasBadgeNoNostrForOwn = userBadges.length > 0 && !hasNostr && isEdit
-  const numberOfBadges = badges?.length || 0
+  const numberOfBadges = nostrBadges?.length || 0
 
   const claimedBadges =
-    (badges.length > 0 &&
+    (nostrBadges.length > 0 &&
       userBadges?.filter((userbadge) =>
-        badges.some((badge) => badge.name === userbadge.badge.uniqueName),
+        nostrBadges.some((badge) => badge.name === userbadge.badge.uniqueName),
       )) ||
     []
 
   const unClaimedBadges =
-    badges.length > 0
+    nostrBadges.length > 0
       ? userBadges?.filter(
           (userbadge) =>
-            !badges.some((badge) => badge.name === userbadge.badge.uniqueName),
+            !nostrBadges.some(
+              (badge) => badge.name === userbadge.badge.uniqueName,
+            ),
         ) || []
       : userBadges
 
@@ -71,6 +74,55 @@ export const Badges = ({
       : 'No Geyser badges'
   }
 
+  const renderBadgesBody = () => {
+    if (nostrBadgesLoading || userBadgeLoading || isLoading) {
+      return (
+        <Wrap w="full" justifyContent="space-between">
+          <SkeletonLayout height="150px" width="150px" />
+          <SkeletonLayout height="150px" width="150px" />
+          <SkeletonLayout height="150px" width="150px" />
+        </Wrap>
+      )
+    }
+
+    return (
+      <>
+        <VStack background="neutral.100" borderRadius="8px" padding="10px 15px">
+          <Body2 color="neutral.900" semiBold>
+            {getTitleToDisplay()}
+          </Body2>
+          {hasBadgeNoNostrForOwn && (
+            <Body2 color="neutral.700">
+              Login with Nostr to claim the badges you earned!
+            </Body2>
+          )}
+        </VStack>
+
+        {hasBadgeNoNostrForOwn && (
+          <HStack w="full" justifyContent="center">
+            <Image maxWidth="400px" alt="badges-group" src={BadgesGroupUrl} />
+          </HStack>
+        )}
+
+        {hasNostr && (
+          <>
+            <RenderBadges
+              claimABadge={claimABadge}
+              badges={claimedBadges}
+              isClaimed
+            />
+            {isEdit && (
+              <RenderBadges
+                claimABadge={claimABadge}
+                badges={unClaimedBadges}
+              />
+            )}
+          </>
+        )}
+      </>
+    )
+  }
+
   return (
     <CardLayout padding="20px">
       <H2>Badges</H2>
@@ -79,35 +131,7 @@ export const Badges = ({
         to them and being an active community member.{' '}
       </Body2>
 
-      <VStack background="neutral.100" borderRadius="8px" padding="10px 15px">
-        <Body2 color="neutral.900" semiBold>
-          {getTitleToDisplay()}
-        </Body2>
-        {hasBadgeNoNostrForOwn && (
-          <Body2 color="neutral.700">
-            Login with Nostr to claim the badges you earned!
-          </Body2>
-        )}
-      </VStack>
-
-      {hasBadgeNoNostrForOwn && (
-        <HStack w="full" justifyContent="center">
-          <Image maxWidth="400px" alt="badges-group" src={BadgesGroupUrl} />
-        </HStack>
-      )}
-
-      {hasNostr && (
-        <>
-          <RenderBadges
-            claimABadge={claimABadge}
-            badges={claimedBadges}
-            isClaimed
-          />
-          {isEdit && (
-            <RenderBadges claimABadge={claimABadge} badges={unClaimedBadges} />
-          )}
-        </>
-      )}
+      {renderBadgesBody()}
 
       <Button as={Link} to={getPath('badges')}>
         {' '}
