@@ -1,30 +1,51 @@
 export const commaFormatted = (amount: number) =>
   amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
-export const getShortAmountLabel = (amount: number) => {
+export const getShortAmountLabel = (amount: number, decimal?: boolean) => {
+  let result = 0
+  let divisor = 1
+  let symbol = ''
+  let rest = 0
+
   if (amount < 1000) {
-    return `${amount}`
+    result = amount
   }
 
   if (amount >= 1000 && amount < 1000000) {
-    const newAmount = Math.round(amount / 1000)
-    return `${newAmount}K`
+    divisor = 1000
+    symbol = 'K'
+    rest = amount % divisor
+    result = Math.round(amount / divisor)
   }
 
   if (amount >= 1000000 && amount < 1000000000) {
-    const newAmount = Math.round(amount / 1000000)
-    return `${newAmount}M`
+    divisor = 1000000
+    symbol = 'M'
+    rest = amount % divisor
+    result = Math.round(amount / divisor)
   }
 
   if (amount >= 1000000000 && amount < 1000000000000) {
-    const newAmount = Math.round(amount / 1000000000)
-    return `${newAmount}B`
+    divisor = 1000000000
+    symbol = 'B'
+    rest = amount % divisor
+    result = Math.round(amount / divisor)
   }
 
-  if (amount >= 1000000000000 && amount < 10000000000000000) {
-    const newAmount = Math.round(amount / 1000000000000)
-    return `${newAmount}T`
+  if (amount >= 1000000000000) {
+    divisor = 1000000000000
+    symbol = 'T'
+    rest = amount % divisor
+    result = Math.round(amount / divisor)
   }
+
+  const restDigit = rest.toString().charAt(0)
+
+  if (decimal && Number(restDigit)) {
+    return `${result}.${restDigit}${symbol}`
+  }
+
+  return `${result}${symbol}`
 }
 
 export const validateFundingAmount = (amount: number, btcRate: number) => {

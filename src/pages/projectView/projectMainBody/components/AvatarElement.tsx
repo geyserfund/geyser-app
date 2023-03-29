@@ -2,11 +2,13 @@ import { Avatar, AvatarProps, Box, HStack, StackProps } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { Body2 } from '../../../../components/typography'
-import { User } from '../../../../types/generated/graphql'
+import { Maybe, User } from '../../../../types/generated/graphql'
+import { getRandomOrb } from '../../../../utils'
 
 interface IAvatarElement extends AvatarProps {
   avatarOnly?: boolean
-  user: User
+  user: Maybe<User>
+  seed?: number
   wrapperProps?: StackProps
   noLink?: boolean
 }
@@ -14,15 +16,16 @@ interface IAvatarElement extends AvatarProps {
 export const AvatarElement = ({
   avatarOnly = false,
   user,
+  seed,
   wrapperProps,
   noLink,
   ...rest
 }: IAvatarElement) => {
-  const avatar = (
-    <Avatar size="xs" borderRadius="4px" src={`${user.imageUrl}`} {...rest} />
-  )
+  const image = user?.imageUrl || getRandomOrb(seed || 1)
 
-  if (avatarOnly) {
+  const avatar = <Avatar size="xs" borderRadius="4px" src={image} {...rest} />
+
+  if (avatarOnly || !user) {
     return <Box {...wrapperProps}>{avatar}</Box>
   }
 
