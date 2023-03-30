@@ -87,7 +87,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
             </Text>
           </Box>
           <Box mt={isMobile ? 4 : 1} px={6}>
-            {!isActive ? (
+            {isActive ? (
               <Box
                 display="flex"
                 alignItems="center"
