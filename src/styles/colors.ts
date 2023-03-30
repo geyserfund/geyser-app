@@ -92,6 +92,7 @@ export const colors = {
   neutral900: '#212529',
 
   twitter: '#2AA9E0',
+  twitterDark: '#0d5a82',
 
   nostr: '#670C8B',
   nostrDark: '#52095c',

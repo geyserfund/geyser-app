@@ -1,29 +1,11 @@
-import { useLazyQuery } from '@apollo/client'
-
 import { AUTH_SERVICE_ENDPOINT } from '../constants'
 import { useAuthContext } from '../context'
-import { ME } from '../graphql'
-import { User } from '../types'
 import { sha256, useNotification } from '../utils'
 import { getPubkey, signMessage } from '../utils/nostr/nip07'
-import { hasNostrAccount } from '../utils/validations/hasNostrAccount'
 
 export const useNostrExtensonLogin = () => {
   const { toast } = useNotification()
-  const { login, getAuthToken } = useAuthContext()
-
-  const [queryCurrentUser] = useLazyQuery(ME, {
-    onCompleted(data: { me: User }) {
-      if (data && data.me) {
-        const hasNostr = hasNostrAccount(data.me)
-
-        if (hasNostr) {
-          login(data.me)
-        }
-      }
-    },
-    fetchPolicy: 'network-only',
-  })
+  const { getAuthToken, queryCurrentUser } = useAuthContext()
 
   const connect = async () => {
     try {
@@ -47,28 +29,29 @@ export const useNostrExtensonLogin = () => {
       const hashedK1 = await sha256(k1)
       const sig = await signMessage(hashedK1)
 
-      const sendSignature = await fetch(
+      const response = await fetch(
         `${AUTH_SERVICE_ENDPOINT}/nostr?pubkey=${pubkey}&k1=${k1}&sig=${sig}`,
         {
           credentials: 'include',
           redirect: 'follow',
         },
       )
-
-      const { user } = await sendSignature.json()
-
-      if (!user) {
-        throw new Error('Error creating user')
+      if (response.status >= 200 && response.status <= 400) {
+        queryCurrentUser()
+      } else {
+        throwErrorToast()
       }
-
-      return queryCurrentUser()
-    } catch (e) {
-      toast({
-        status: 'error',
-        title: 'Something went wrong.',
-        description: 'Please try again',
-      })
+    } catch {
+      throwErrorToast()
     }
+  }
+
+  const throwErrorToast = () => {
+    toast({
+      status: 'error',
+      title: 'Something went wrong.',
+      description: 'Please try again',
+    })
   }
 
   return { connect }

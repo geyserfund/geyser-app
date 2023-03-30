@@ -47,7 +47,9 @@ const ConnectAccounts = ({
         {!hasTwitterAccount(user) && showTwitter && (
           <ConnectWithTwitter onClose={onClose} />
         )}
-        {!hasNostrAccount(user) && showNostr && <ConnectWithNostr />}
+        {!hasNostrAccount(user) && showNostr && (
+          <ConnectWithNostr onClose={onClose} />
+        )}
         {showLightning && <ConnectWithLightning />}
       </Stack>
       <Caption paddingTop="5px">
