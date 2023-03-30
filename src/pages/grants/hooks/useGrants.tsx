@@ -14,9 +14,9 @@ export const useGrants = () => {
   const activeGrant = useMemo(
     () =>
       data
-        ? (data.grants
-            .filter((grant) => grant.status !== GrantStatusEnum.Closed)
-            .at(0) as Grant)
+        ? (data.grants.find(
+            (grant) => grant.status !== GrantStatusEnum.Closed,
+          ) as Grant)
         : null,
     [data],
   )

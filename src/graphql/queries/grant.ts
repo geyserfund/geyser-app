@@ -15,6 +15,14 @@ export const QUERY_GRANTS = gql`
         endAt
         startAt
       }
+      applicants {
+        status
+        funding {
+          communityFunding
+          grantAmount
+          grantAmountDistributed
+        }
+      }
       sponsors {
         id
         name

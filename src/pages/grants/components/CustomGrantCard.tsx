@@ -34,6 +34,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
 
   return (
     <Box
+      mt={3}
       onClick={() => navigate(to)}
       minWidth={'100%'}
       cursor="pointer"
@@ -86,7 +87,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
             </Text>
           </Box>
           <Box mt={isMobile ? 4 : 1} px={6}>
-            {isActive ? (
+            {!isActive ? (
               <Box
                 display="flex"
                 alignItems="center"
@@ -122,7 +123,9 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
             )}
           </Box>
         </Box>
-        {!isMobile && <SponsorList sponsors={grant.sponsors} />}
+        {!isMobile && (
+          <SponsorList justifyContent="start" sponsors={grant.sponsors} />
+        )}
       </Box>
     </Box>
   )
