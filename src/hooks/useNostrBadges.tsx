@@ -69,7 +69,7 @@ export const useNostrBadges = (pubKey: string) => {
     }
 
     handleEventsInit()
-  }, [])
+  }, [pubKey])
 
   const claimABadge = async ({
     badgeId,
