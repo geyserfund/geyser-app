@@ -87,7 +87,13 @@ export const Badges = ({
 
     return (
       <>
-        <VStack background="neutral.100" borderRadius="8px" padding="10px 15px">
+        <VStack
+          background="neutral.100"
+          borderRadius="8px"
+          padding="5px 15px"
+          width="fit-content"
+          alignSelf="center"
+        >
           <Body2 color="neutral.900" semiBold>
             {getTitleToDisplay()}
           </Body2>
@@ -133,7 +139,7 @@ export const Badges = ({
 
       {renderBadgesBody()}
 
-      <Button as={Link} to={getPath('badges')}>
+      <Button variant="outlined" as={Link} to={getPath('badges')}>
         {' '}
         Go to Badges page
       </Button>

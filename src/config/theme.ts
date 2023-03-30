@@ -25,11 +25,17 @@ export const theme = extendTheme({
       },
       variants: {
         outlined: {
-          border: `1px solid ${colors.neutral200}`,
-          background: colors.bgGrey4,
+          border: `2px solid`,
+          borderColor: colors.neutral200,
           color: colors.neutral900,
           fontSize: '16px',
           padding: '2px 5px',
+          _hover: {
+            borderColor: colors.neutral400,
+          },
+          _active: {
+            backgroundColor: colors.neutral200,
+          },
         },
         hugeContained: {
           background: colors.primary400,
