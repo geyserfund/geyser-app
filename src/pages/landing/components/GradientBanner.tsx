@@ -7,7 +7,9 @@ import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import { dimensions, LetTheSatsFlow3DUrl } from '../../../constants'
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql'
 import {
+  getBitcoinAmount,
   getShortAmountLabel,
+  toInt,
   useMobileMode,
   useNotification,
 } from '../../../utils'
@@ -37,8 +39,8 @@ export const GradientBanner = () => {
 
   const satsDataArray = [
     [projectsSummaryData.projectsCount, 'Projects'],
-    [projectsSummaryData.fundedTotal, 'Sats Raised'],
-    [projectsSummaryData.fundersCount, 'Pleb Contributors'],
+    [projectsSummaryData.fundedTotal, 'Bitcoin Raised'],
+    [projectsSummaryData.fundersCount, 'Contributors'],
   ]
 
   return (
@@ -98,7 +100,9 @@ export const GradientBanner = () => {
                       direction={isMobile ? 'column' : 'row'}
                     >
                       <MonoBody1 bold marginTop="2px">
-                        {getShortAmountLabel(parseInt(statsData[0], 10))}
+                        {index === 1
+                          ? getBitcoinAmount(toInt(statsData[0]), true)
+                          : getShortAmountLabel(toInt(statsData[0]))}
                       </MonoBody1>
 
                       <Body2 textTransform={'uppercase'}>{statsData[1]}</Body2>

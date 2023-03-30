@@ -1,6 +1,18 @@
 export const commaFormatted = (amount: number) =>
   amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
+export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
+  const divisor = 100000000
+  const rest = amount % divisor
+  const result = Math.round(amount / divisor)
+
+  const restDigit = rest.toString().charAt(0)
+
+  if (decimal && Number(restDigit)) {
+    return `${result}.${restDigit}`
+  }
+}
+
 export const getShortAmountLabel = (amount: number, decimal?: boolean) => {
   let result = 0
   let divisor = 1
