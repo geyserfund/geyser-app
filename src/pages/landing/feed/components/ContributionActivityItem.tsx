@@ -42,7 +42,7 @@ export const ContributionActivityItem = ({
   const { funder } = fundingTx
 
   const isFunderAnonymous = Boolean(funder?.user) === false
-  const timeAgo = getDaysAgo(dateTime || '')
+  const timeAgo = getDaysAgo(dateTime || fundingTx.paidAt)
   const wasMadeOnChain = fundingTx.onChain
 
   const avatarMetadata = getAvatarMetadata({

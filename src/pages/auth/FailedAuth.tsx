@@ -60,7 +60,10 @@ export const FailedAuthComponent = () => {
       >
         <CloseIcon w={7} h={7} />
       </Box>
-      <Body1>Authentication failed. Please try again.</Body1>
+      <Body1>Authentication failed.</Body1>
+      <Body1>
+        {"Please clear your browser's cache & cookies and try again."}
+      </Body1>
 
       <ButtonComponent
         as={Link}

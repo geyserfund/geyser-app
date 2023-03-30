@@ -95,6 +95,7 @@ export const useNostrBadges = (pubKey: string) => {
         } as any
         eventToPublish.id = getEventHash(eventToPublish)
       } else {
+        eventToPublish.id = getEventHash(eventToPublish)
         eventToPublish.tags = [...eventToPublish.tags, ...badgeToAdd]
       }
 
