@@ -95,8 +95,8 @@ export const useNostrBadges = (pubKey: string) => {
         } as any
         eventToPublish.id = getEventHash(eventToPublish)
       } else {
-        eventToPublish.id = getEventHash(eventToPublish)
         eventToPublish.tags = [...eventToPublish.tags, ...badgeToAdd]
+        eventToPublish.id = getEventHash(eventToPublish)
       }
 
       eventToPublish.sig = await signEvent(eventToPublish) // this is where you sign with private key replaccing pubkey
