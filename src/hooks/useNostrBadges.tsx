@@ -133,9 +133,12 @@ const parseBadgesFromProfileEvents = (event: Event): string[] => {
   const badges: string[] = []
 
   event.tags.map((tag, index) => {
-    if (tag[0] === 'a' && event.tags[index + 1]) {
-      const id = tag[1].split(':')[2]
-      badges.push(id)
+    if (tag[0] === 'a' && event.tags[index + 1][0] === 'e') {
+      const authorPubKey = tag[1].split(':')[1]
+      if (authorPubKey === VITE_APP_GEYSER_NOSTR_PUBKEY) {
+        const id = tag[1].split(':')[2]
+        badges.push(id)
+      }
     }
   })
   return badges
