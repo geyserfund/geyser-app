@@ -26,7 +26,7 @@ export const Badges = ({
   const [unClaimedBadges, setUnClaimedBadges] = useState<UserBadge[]>([])
 
   const {
-    badges: nostrBadges,
+    badgeIds: nostrBadgeIds,
     loading: nostrBadgesLoading,
     claimABadge,
   } = useNostrBadges(
@@ -45,35 +45,31 @@ export const Badges = ({
   useEffect(() => {
     if (userBadges.length > 0) {
       const claimedBadges =
-        (nostrBadges.length > 0 &&
+        (nostrBadgeIds.length > 0 &&
           userBadges?.filter((userbadge) =>
-            nostrBadges.some(
-              (badge) => badge.id === userbadge.badge.uniqueName,
-            ),
+            nostrBadgeIds.includes(userbadge.badge.uniqueName),
           )) ||
         []
 
       const unClaimedBadges =
-        nostrBadges.length > 0
+        nostrBadgeIds.length > 0
           ? userBadges?.filter(
               (userbadge) =>
-                !nostrBadges.some(
-                  (badge) => badge.id === userbadge.badge.uniqueName,
-                ),
+                !nostrBadgeIds.includes(userbadge.badge.uniqueName),
             ) || []
           : userBadges
 
       setClaimedBadges(claimedBadges)
       setUnClaimedBadges(unClaimedBadges)
     }
-  }, [nostrBadges, userBadges])
+  }, [nostrBadgeIds, userBadges])
 
   const hasNostr = userProfile.externalAccounts.some(
     (externalAccount) => externalAccount?.type === ExternalAccountType.nostr,
   )
 
   const hasBadgeNoNostrForOwn = userBadges.length > 0 && !hasNostr && isEdit
-  const numberOfBadges = nostrBadges?.length || 0
+  const numberOfBadges = nostrBadgeIds?.length || 0
 
   const getTitleToDisplay = () => {
     if (isEdit) {

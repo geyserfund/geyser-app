@@ -136,7 +136,7 @@ export const Summary = () => {
             alignItems="center"
             spacing={1}
           >
-            <LightningAddress name={project.name} />
+            <LightningAddress name={`${project.name}@geyser.fund`} />
             <ProjectFundingQR project={project} />
             <Tooltip
               label={hasCopiedSharingLink ? 'Copied!' : 'Share Project'}

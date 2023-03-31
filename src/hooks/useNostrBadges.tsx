@@ -1,13 +1,12 @@
 import 'websocket-polyfill'
 
-import { Filter, getEventHash, Relay, relayInit } from 'nostr-tools'
+import { getEventHash, Relay, relayInit } from 'nostr-tools'
 import { Event } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
 import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
 import { useNotification } from '../utils'
 import { signEvent } from '../utils/nostr/nip07'
-import { useDebounce } from './useDebounce'
 
 const relayUri = 'wss://relay.damus.io'
 
@@ -27,37 +26,29 @@ export const useNostrBadges = (pubKey: string) => {
   const [claiming, setClaiming] = useState(true)
 
   const [badgeIds, setBadgeIds] = useState<string[]>([])
-  const [badges, setBadges] = useState<NostrBadges[]>([])
+  // TODO these are for when  we do have to fetch badges data from nostr
+  // const [badges, setBadges] = useState<NostrBadges[]>([])
 
-  const debouncedBadgeIds = useDebounce(badgeIds, 1000)
+  // const handleFetchBadges = async (badgeIds: string[]) => {
+  //   const badgeFilter = {} as Filter
 
-  useEffect(() => {
-    const handleFetchBadges = async () => {
-      const badgeFilter = {} as Filter
+  //   badgeFilter.kinds = [30009]
+  //   badgeFilter.authors = [VITE_APP_GEYSER_NOSTR_PUBKEY]
+  //   badgeFilter['#d'] = badgeIds
 
-      badgeFilter.kinds = [30009]
-      badgeFilter.authors = [VITE_APP_GEYSER_NOSTR_PUBKEY]
-      badgeFilter['#d'] = debouncedBadgeIds
+  //   const events = await relay?.list([badgeFilter])
 
-      const events = await relay?.list([badgeFilter])
+  //   if (events) {
+  //     const parsedBadges = parseBadgesFromDefinitionEvent(events)
+  //     setBadges(parsedBadges)
+  //   }
 
-      if (events) {
-        const parsedBadges = parseBadgesFromDefinitionEvent(events)
-        setBadges(parsedBadges)
-      }
-
-      setLoading(false)
-    }
-
-    if (debouncedBadgeIds.length > 0) {
-      handleFetchBadges()
-    }
-  }, [debouncedBadgeIds])
+  //   setLoading(false)
+  // }
 
   useEffect(() => {
     const handleEventsInit = async () => {
       const relayInstance = relayInit(relayUri)
-      console.log(' is it here', relay)
       relayInstance.on('connect', async () => {
         console.log('connected')
         setRelay(relayInstance)
@@ -121,10 +112,9 @@ export const useNostrBadges = (pubKey: string) => {
         setClaiming(false)
         isClaiming?.(false)
         setBadgeIds([...badgeIds, badgeId])
-
         toast({
           status: 'success',
-          title: 'Congratulations !!!',
+          title: 'Congratulations!',
           description: 'You claimed the geyser badge on nostr.',
         })
       })
@@ -139,7 +129,7 @@ export const useNostrBadges = (pubKey: string) => {
     }
   }
 
-  return { badges, claimABadge, loading, claiming }
+  return { badgeIds, claimABadge, loading, claiming }
 }
 
 const parseBadgesFromProfileEvents = (event: Event): string[] => {
@@ -155,24 +145,24 @@ const parseBadgesFromProfileEvents = (event: Event): string[] => {
   return badges
 }
 
-const parseBadgesFromDefinitionEvent = (events: Event[]): NostrBadges[] => {
-  const badges = [] as NostrBadges[]
+// const parseBadgesFromDefinitionEvent = (events: Event[]): NostrBadges[] => {
+//   const badges = [] as NostrBadges[]
 
-  events.map((event) => {
-    const badge = {} as NostrBadges
-    event.tags.map((tag) => {
-      if (tag[0] === 'd') {
-        badge.id = tag[1]
-      } else {
-        badge[tag[0] as keyof NostrBadges] = tag[1]
-      }
-    })
+//   events.map((event) => {
+//     const badge = {} as NostrBadges
+//     event.tags.map((tag) => {
+//       if (tag[0] === 'd') {
+//         badge.id = tag[1]
+//       } else {
+//         badge[tag[0] as keyof NostrBadges] = tag[1]
+//       }
+//     })
 
-    badges.push(badge)
-  })
+//     badges.push(badge)
+//   })
 
-  return badges
-}
+//   return badges
+// }
 
 export type NostrBadges = {
   id: string

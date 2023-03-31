@@ -22,6 +22,12 @@ export const AccountInfo = ({
     return <AccountInfoSkeleton />
   }
 
+  const lightningAddress =
+    userProfile.wallet?.connectionDetails.__typename ===
+    'LightningAddressConnectionDetails'
+      ? userProfile.wallet.connectionDetails.lightningAddress
+      : ''
+
   return (
     <CardLayout
       padding="20px"
@@ -37,12 +43,15 @@ export const AccountInfo = ({
         borderColor="neutral.200 !important"
       />
       <H1>{userProfile.username}</H1>
-      <LightningAddress
-        name={userProfile.username}
-        border="1px solid"
-        borderColor="neutral.200"
-        backgroundColor="neutral.100"
-      />
+      {lightningAddress && (
+        <LightningAddress
+          name={lightningAddress}
+          border="1px solid"
+          borderColor="neutral.200"
+          backgroundColor="neutral.100"
+        />
+      )}
+
       {userProfile.externalAccounts.map((externalAccount) => {
         if (externalAccount) {
           return (

@@ -11,7 +11,7 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
   const [copy, setCopy] = useState(false)
 
   const handleAddressCopy = () => {
-    navigator.clipboard.writeText(`${name}@geyser.fund`)
+    navigator.clipboard.writeText(name)
     setCopy(true)
   }
 
@@ -36,7 +36,7 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
           id="lightning-address"
           {...rest}
         >
-          {name}@geyser.fund
+          {name}
         </Button>
       </Tooltip>
     </>

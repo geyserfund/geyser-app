@@ -45,6 +45,14 @@ export const USER_PROFILE_QUERY = gql`
       id
       username
       imageUrl
+      wallet {
+        id
+        connectionDetails {
+          ... on LightningAddressConnectionDetails {
+            lightningAddress
+          }
+        }
+      }
       externalAccounts {
         id
         type
