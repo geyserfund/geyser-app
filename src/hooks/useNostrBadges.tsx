@@ -80,25 +80,24 @@ export const useNostrBadges = (pubKey: string) => {
       setClaiming(true)
       const event = await handleFetchProfileBadges(pubKey, pool)
       console.log('checking event', event)
-      let eventToPublish = (event || {}) as any
+      const eventToPublish = {
+        kind: 30008,
+        pubkey: pubKey,
+        created_at: Math.floor(Date.now() / 1000),
+        tags: [['d', 'profile_badges']],
+        content: '',
+      } as any
       const badgeToAdd = [
         ['a', `30009:${VITE_APP_GEYSER_NOSTR_PUBKEY}:${badgeId}`],
         ['e', badgeAwardId],
       ]
       if (!event) {
-        eventToPublish = {
-          kind: 30008,
-          pubkey: pubKey,
-          created_at: Math.floor(Date.now() / 1000),
-          tags: [['d', 'profile_badges'], ...badgeToAdd],
-          content: 'hello world',
-        } as any
-        eventToPublish.id = getEventHash(eventToPublish)
+        eventToPublish.tags = [['d', 'profile_badges'], ...badgeToAdd]
       } else {
-        eventToPublish.tags = [...eventToPublish.tags, ...badgeToAdd]
-        eventToPublish.id = getEventHash(eventToPublish)
+        eventToPublish.tags = [...event.tags, ...badgeToAdd]
       }
 
+      eventToPublish.id = getEventHash(eventToPublish)
       eventToPublish.sig = await signEvent(eventToPublish) // this is where you sign with private key replaccing pubkey
       console.log('checking eventToPublish', eventToPublish)
       const pub = pool.publish(relays, eventToPublish) // this is where you sign with private key replaccing pubkey
