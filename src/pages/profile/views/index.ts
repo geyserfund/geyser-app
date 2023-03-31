@@ -1,3 +1,3 @@
 export * from './AccountInfo'
-export * from './Badges'
+export * from './badges'
 export * from './CreateProject'

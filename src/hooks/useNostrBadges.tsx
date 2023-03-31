@@ -26,8 +26,8 @@ export const useNostrBadges = (pubKey: string) => {
   const [claiming, setClaiming] = useState(true)
 
   const [badgeIds, setBadgeIds] = useState<string[]>([])
-  console.log('checking badgeId updates', badgeIds)
-  // TODO these are for when  we do have to fetch badges data from nostr
+
+  // NOTE: these are for when  we do have to fetch badges data from nostr
   // const [badges, setBadges] = useState<NostrBadges[]>([])
 
   // const handleFetchBadges = async (badgeIds: string[]) => {
@@ -107,8 +107,6 @@ export const useNostrBadges = (pubKey: string) => {
       const pub = relay.publish(eventToPublish) // this is where you sign with private key replaccing pubkey
 
       pub.on('ok', () => {
-        console.log('is it getting here')
-
         setClaiming(false)
         isClaiming?.(false)
         setBadgeIds([...badgeIds, badgeId])
@@ -119,7 +117,6 @@ export const useNostrBadges = (pubKey: string) => {
         })
       })
       pub.on('failed', (reason: any) => {
-        console.log('checking daild', reason)
         setClaiming(false)
         isClaiming?.(false)
         if (onFail) {
@@ -141,10 +138,10 @@ const parseBadgesFromProfileEvents = (event: Event): string[] => {
       badges.push(id)
     }
   })
-  console.log('checking badges insideee', badges)
   return badges
 }
 
+// NOTE: for parsing badge dat from nostr badge definition event
 // const parseBadgesFromDefinitionEvent = (events: Event[]): NostrBadges[] => {
 //   const badges = [] as NostrBadges[]
 

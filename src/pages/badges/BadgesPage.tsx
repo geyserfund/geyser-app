@@ -9,8 +9,6 @@ import { BadgesFAQ } from './BadgesFAQ'
 export const BadgesPage = () => {
   const { badges } = useBadges()
 
-  console.log({ badges })
-
   return (
     <Container maxWidth="5xl" pt={10}>
       <VStack spacing={4} justify="center" textAlign="center" mb={12}>
