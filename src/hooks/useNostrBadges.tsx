@@ -26,6 +26,7 @@ export const useNostrBadges = (pubKey: string) => {
   const [claiming, setClaiming] = useState(true)
 
   const [badgeIds, setBadgeIds] = useState<string[]>([])
+  console.log('checking badgeId updates', badgeIds)
   // TODO these are for when  we do have to fetch badges data from nostr
   // const [badges, setBadges] = useState<NostrBadges[]>([])
 
@@ -50,7 +51,6 @@ export const useNostrBadges = (pubKey: string) => {
     const handleEventsInit = async () => {
       const relayInstance = relayInit(relayUri)
       relayInstance.on('connect', async () => {
-        console.log('connected')
         setRelay(relayInstance)
         const event = await relayInstance.get({
           kinds: [30008],
@@ -59,9 +59,7 @@ export const useNostrBadges = (pubKey: string) => {
         const parsedBadges = event ? parseBadgesFromProfileEvents(event) : []
         setBadgeIds(parsedBadges)
 
-        if (parsedBadges.length === 0) {
-          setLoading(false)
-        }
+        setLoading(false)
       })
       relayInstance.on('error', () => {
         setLoading(false)
@@ -109,6 +107,8 @@ export const useNostrBadges = (pubKey: string) => {
       const pub = relay.publish(eventToPublish) // this is where you sign with private key replaccing pubkey
 
       pub.on('ok', () => {
+        console.log('is it getting here')
+
         setClaiming(false)
         isClaiming?.(false)
         setBadgeIds([...badgeIds, badgeId])
@@ -141,7 +141,7 @@ const parseBadgesFromProfileEvents = (event: Event): string[] => {
       badges.push(id)
     }
   })
-
+  console.log('checking badges insideee', badges)
   return badges
 }
 

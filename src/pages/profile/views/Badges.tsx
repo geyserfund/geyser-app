@@ -22,6 +22,126 @@ export const Badges = ({
   isEdit: boolean
   isLoading: boolean
 }) => {
+  const { data: userBadgesData, loading: userBadgeLoading } = useQuery<{
+    userBadges: UserBadge[]
+  }>(QUERY_GET_USER_BADGES, {
+    variables: { input: { where: { userId: toInt(userProfile.id) } } },
+  })
+
+  const renderBadgesBody = () => {
+    if (userBadgeLoading || isLoading) {
+      return <BadgesBodySkeleton />
+    }
+
+    return (
+      <BadgesBody
+        {...{
+          userBadges: userBadgesData?.userBadges || [],
+          userProfile,
+          isEdit,
+        }}
+      />
+    )
+  }
+
+  return (
+    <CardLayout padding="20px">
+      <H2>Badges</H2>
+      <Body2 color="neutral.700">
+        Geyser badges are earned for launching successful projects, contributing
+        to them and being an active community member.{' '}
+      </Body2>
+
+      {renderBadgesBody()}
+
+      <Button variant="outlined" as={Link} to={getPath('badges')}>
+        {' '}
+        Go to Badges page
+      </Button>
+    </CardLayout>
+  )
+}
+
+export const BadgesBodySkeleton = () => {
+  return (
+    <Wrap w="full" justifyContent="space-between">
+      <SkeletonLayout height="150px" width="150px" />
+      <SkeletonLayout height="150px" width="150px" />
+      <SkeletonLayout height="150px" width="150px" />
+    </Wrap>
+  )
+}
+
+interface BadgesBodyProps {
+  userBadges: UserBadge[]
+  isEdit: boolean
+  userProfile: User
+}
+
+export const BadgesBody = ({
+  userBadges,
+  userProfile,
+  isEdit,
+}: BadgesBodyProps) => {
+  const nostrId =
+    userProfile.externalAccounts.find(
+      (account) => account?.type === ExternalAccountType.nostr,
+    )?.externalId || ''
+  const hasBadgeNoNostrForOwn = userBadges.length > 0 && !nostrId && isEdit
+
+  const getTitleToDisplay = () => {
+    return userBadges.length
+      ? `${userBadges.length} Geyser badges`
+      : 'No Geyser badges'
+  }
+
+  return (
+    <>
+      <VStack
+        background="neutral.100"
+        borderRadius="8px"
+        padding="5px 15px"
+        width="fit-content"
+        alignSelf="center"
+      >
+        {isEdit && (
+          <Body2 color="neutral.900" semiBold>
+            {getTitleToDisplay()}
+          </Body2>
+        )}
+        {hasBadgeNoNostrForOwn && (
+          <Body2 color="neutral.700">
+            Login with Nostr to claim the badges you earned!
+          </Body2>
+        )}
+      </VStack>
+
+      {hasBadgeNoNostrForOwn && (
+        <HStack w="full" justifyContent="center">
+          <Image maxWidth="400px" alt="badges-group" src={BadgesGroupUrl} />
+        </HStack>
+      )}
+
+      {nostrId && (
+        <RenderBadges
+          nostrId={nostrId}
+          userBadges={userBadges}
+          isEdit={isEdit}
+        />
+      )}
+    </>
+  )
+}
+
+export const RenderBadges = ({
+  nostrId,
+  userBadges,
+  isEdit,
+}: {
+  nostrId: string
+  userBadges: UserBadge[]
+  isEdit: boolean
+}) => {
   const [claimedBadges, setClaimedBadges] = useState<UserBadge[]>([])
   const [unClaimedBadges, setUnClaimedBadges] = useState<UserBadge[]>([])
 
@@ -29,18 +149,7 @@ export const Badges = ({
     badgeIds: nostrBadgeIds,
     loading: nostrBadgesLoading,
     claimABadge,
-  } = useNostrBadges(
-    userProfile.externalAccounts.find(
-      (account) => account?.type === ExternalAccountType.nostr,
-    )?.externalId || '',
-  )
-
-  const { data: userBadgesData, loading: userBadgeLoading } = useQuery<{
-    userBadges: UserBadge[]
-  }>(QUERY_GET_USER_BADGES, {
-    variables: { input: { where: { userId: toInt(userProfile.id) } } },
-  })
-  const userBadges = userBadgesData?.userBadges || []
+  } = useNostrBadges(nostrId)
 
   useEffect(() => {
     if (userBadges.length > 0) {
@@ -64,104 +173,48 @@ export const Badges = ({
     }
   }, [nostrBadgeIds, userBadges])
 
-  const hasNostr = userProfile.externalAccounts.some(
-    (externalAccount) => externalAccount?.type === ExternalAccountType.nostr,
-  )
-
-  const hasBadgeNoNostrForOwn = userBadges.length > 0 && !hasNostr && isEdit
   const numberOfBadges = nostrBadgeIds?.length || 0
 
   const getTitleToDisplay = () => {
-    if (isEdit) {
-      return userBadges.length
-        ? `${userBadges.length} Geyser badges`
-        : 'No Geyser badges'
-    }
-
     return numberOfBadges
       ? `${numberOfBadges} Geyser badges`
       : 'No Geyser badges'
   }
 
-  const renderBadgesBody = () => {
-    if (nostrBadgesLoading || userBadgeLoading || isLoading) {
-      return (
-        <Wrap w="full" justifyContent="space-between">
-          <SkeletonLayout height="150px" width="150px" />
-          <SkeletonLayout height="150px" width="150px" />
-          <SkeletonLayout height="150px" width="150px" />
-        </Wrap>
-      )
-    }
-
-    return (
-      <>
-        <VStack
-          background="neutral.100"
-          borderRadius="8px"
-          padding="5px 15px"
-          width="fit-content"
-          alignSelf="center"
-        >
-          <Body2 color="neutral.900" semiBold>
-            {getTitleToDisplay()}
-          </Body2>
-          {hasBadgeNoNostrForOwn && (
-            <Body2 color="neutral.700">
-              Login with Nostr to claim the badges you earned!
-            </Body2>
-          )}
-        </VStack>
-
-        {hasBadgeNoNostrForOwn && (
-          <HStack w="full" justifyContent="center">
-            <Image maxWidth="400px" alt="badges-group" src={BadgesGroupUrl} />
-          </HStack>
-        )}
-
-        {hasNostr && (
-          <Wrap w="full" justifyContent="space-between">
-            {claimedBadges.map((userBadge) => {
-              return (
-                <BadgeItem
-                  isClaimed
-                  key={userBadge.id}
-                  userBadge={userBadge}
-                  claimABadge={claimABadge}
-                />
-              )
-            })}
-            {isEdit &&
-              unClaimedBadges.map((userBadge) => {
-                return (
-                  <BadgeItem
-                    key={userBadge.id}
-                    userBadge={userBadge}
-                    claimABadge={claimABadge}
-                  />
-                )
-              })}
-          </Wrap>
-        )}
-      </>
-    )
+  if (nostrBadgesLoading) {
+    return <BadgesBodySkeleton />
   }
 
   return (
-    <CardLayout padding="20px">
-      <H2>Badges</H2>
-      <Body2 color="neutral.700">
-        Geyser badges are earned for launching successful projects, contributing
-        to them and being an active community member.{' '}
-      </Body2>
-
-      {renderBadgesBody()}
-
-      <Button variant="outlined" as={Link} to={getPath('badges')}>
-        {' '}
-        Go to Badges page
-      </Button>
-    </CardLayout>
+    <>
+      {!isEdit && (
+        <Body2 color="neutral.900" semiBold>
+          {getTitleToDisplay()}
+        </Body2>
+      )}
+      <Wrap w="full" justifyContent="space-between">
+        {claimedBadges.map((userBadge) => {
+          return (
+            <BadgeItem
+              isClaimed
+              key={userBadge.id}
+              userBadge={userBadge}
+              claimABadge={claimABadge}
+            />
+          )
+        })}
+        {isEdit &&
+          unClaimedBadges.map((userBadge) => {
+            return (
+              <BadgeItem
+                key={userBadge.id}
+                userBadge={userBadge}
+                claimABadge={claimABadge}
+              />
+            )
+          })}
+      </Wrap>
+    </>
   )
 }
 
