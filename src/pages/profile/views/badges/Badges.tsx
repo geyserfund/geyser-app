@@ -51,10 +51,12 @@ export const Badges = ({
 
       {renderBadgesBody()}
 
-      <Button variant="outlined" as={Link} to={getPath('badges')}>
-        {' '}
-        Go to badges page
-      </Button>
+      {isEdit && (
+        <Button variant="outlined" as={Link} to={getPath('badges')}>
+          {' '}
+          Go to badges page
+        </Button>
+      )}
     </CardLayout>
   )
 }
