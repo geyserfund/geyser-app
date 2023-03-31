@@ -5,15 +5,11 @@ import { Event } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
 import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
+import { useNotification } from '../utils'
 import { signEvent } from '../utils/nostr/nip07'
 import { useDebounce } from './useDebounce'
 
 const relayUri = 'wss://relay.damus.io'
-// [
-//   ,
-//   'wss://relay.snort.social',
-//   // 'wss://nos.lol',
-// ]
 
 export type ClaimABadgeProps = {
   badgeId: string
@@ -23,6 +19,8 @@ export type ClaimABadgeProps = {
 }
 
 export const useNostrBadges = (pubKey: string) => {
+  const { toast } = useNotification()
+
   const [relay, setRelay] = useState<Relay>()
 
   const [loading, setLoading] = useState(true)
@@ -96,7 +94,7 @@ export const useNostrBadges = (pubKey: string) => {
         kinds: [30008],
         authors: [pubKey],
       })
-      console.log('checking event', event)
+
       const eventToPublish = {
         kind: 30008,
         pubkey: pubKey,
@@ -120,10 +118,15 @@ export const useNostrBadges = (pubKey: string) => {
       const pub = relay.publish(eventToPublish) // this is where you sign with private key replaccing pubkey
 
       pub.on('ok', () => {
-        console.log('publishing was okay.')
         setClaiming(false)
         isClaiming?.(false)
         setBadgeIds([...badgeIds, badgeId])
+
+        toast({
+          status: 'success',
+          title: 'Congratulations !!!',
+          description: 'You claimed the geyser badge on nostr.',
+        })
       })
       pub.on('failed', (reason: any) => {
         console.log('checking daild', reason)

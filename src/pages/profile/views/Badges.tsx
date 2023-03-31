@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Button, HStack, Image, VStack, Wrap } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { CardLayout, SkeletonLayout } from '../../../components/layouts'
@@ -22,6 +22,9 @@ export const Badges = ({
   isEdit: boolean
   isLoading: boolean
 }) => {
+  const [claimedBadges, setClaimedBadges] = useState<UserBadge[]>([])
+  const [unClaimedBadges, setUnClaimedBadges] = useState<UserBadge[]>([])
+
   const {
     badges: nostrBadges,
     loading: nostrBadgesLoading,
@@ -37,30 +40,41 @@ export const Badges = ({
   }>(QUERY_GET_USER_BADGES, {
     variables: { input: { where: { userId: toInt(userProfile.id) } } },
   })
+  const userBadges = userBadgesData?.userBadges || []
+
+  useEffect(() => {
+    if (userBadges.length > 0) {
+      const claimedBadges =
+        (nostrBadges.length > 0 &&
+          userBadges?.filter((userbadge) =>
+            nostrBadges.some(
+              (badge) => badge.id === userbadge.badge.uniqueName,
+            ),
+          )) ||
+        []
+
+      const unClaimedBadges =
+        nostrBadges.length > 0
+          ? userBadges?.filter(
+              (userbadge) =>
+                !nostrBadges.some(
+                  (badge) => badge.id === userbadge.badge.uniqueName,
+                ),
+            ) || []
+          : userBadges
+
+      setClaimedBadges(claimedBadges)
+      setUnClaimedBadges(unClaimedBadges)
+    }
+  }, [nostrBadges, userBadges])
 
   const hasNostr = userProfile.externalAccounts.some(
     (externalAccount) => externalAccount?.type === ExternalAccountType.nostr,
   )
 
-  const userBadges = userBadgesData?.userBadges || []
   const hasBadgeNoNostrForOwn = userBadges.length > 0 && !hasNostr && isEdit
   const numberOfBadges = nostrBadges?.length || 0
-  const claimedBadges =
-    (nostrBadges.length > 0 &&
-      userBadges?.filter((userbadge) =>
-        nostrBadges.some((badge) => badge.id === userbadge.badge.uniqueName),
-      )) ||
-    []
 
-  const unClaimedBadges =
-    nostrBadges.length > 0
-      ? userBadges?.filter(
-          (userbadge) =>
-            !nostrBadges.some(
-              (badge) => badge.id === userbadge.badge.uniqueName,
-            ),
-        ) || []
-      : userBadges
   const getTitleToDisplay = () => {
     if (isEdit) {
       return userBadges.length
@@ -110,19 +124,28 @@ export const Badges = ({
         )}
 
         {hasNostr && (
-          <>
-            <RenderBadges
-              claimABadge={claimABadge}
-              userBadges={claimedBadges}
-              isClaimed
-            />
-            {isEdit && (
-              <RenderBadges
-                claimABadge={claimABadge}
-                userBadges={unClaimedBadges}
-              />
-            )}
-          </>
+          <Wrap w="full" justifyContent="space-between">
+            {claimedBadges.map((userBadge) => {
+              return (
+                <BadgeItem
+                  isClaimed
+                  key={userBadge.id}
+                  userBadge={userBadge}
+                  claimABadge={claimABadge}
+                />
+              )
+            })}
+            {isEdit &&
+              unClaimedBadges.map((userBadge) => {
+                return (
+                  <BadgeItem
+                    key={userBadge.id}
+                    userBadge={userBadge}
+                    claimABadge={claimABadge}
+                  />
+                )
+              })}
+          </Wrap>
         )}
       </>
     )
@@ -143,33 +166,6 @@ export const Badges = ({
         Go to Badges page
       </Button>
     </CardLayout>
-  )
-}
-
-interface RenderBadgesProp {
-  userBadges: UserBadge[]
-  isClaimed?: boolean
-  claimABadge: (_: ClaimABadgeProps) => void
-}
-
-export const RenderBadges = ({
-  userBadges,
-  isClaimed,
-  claimABadge,
-}: RenderBadgesProp) => {
-  return (
-    <Wrap w="full" justifyContent="space-between">
-      {userBadges.map((userBadge) => {
-        return (
-          <BadgeItem
-            key={userBadge.id}
-            userBadge={userBadge}
-            isClaimed={isClaimed}
-            claimABadge={claimABadge}
-          />
-        )
-      })}
-    </Wrap>
   )
 }
 
