@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Button, HStack, Image, VStack, Wrap } from '@chakra-ui/react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { CardLayout, SkeletonLayout } from '../../../components/layouts'
@@ -154,6 +155,7 @@ export const RenderBadges = ({
   isClaimed?: boolean
   claimABadge: (_: ClaimABadgeProps) => void
 }) => {
+  const [claiming, setClaiming] = useState(false)
   return (
     <Wrap w="full" justifyContent="space-between">
       {badges.map((badge) => {
@@ -161,6 +163,7 @@ export const RenderBadges = ({
           claimABadge({
             badgeId: badge.badge.uniqueName,
             badgeAwardId: badge.badgeAwardEventId || '',
+            isClaiming: setClaiming,
           })
         return (
           <VStack key={badge.id}>
@@ -169,7 +172,11 @@ export const RenderBadges = ({
               {badge.badge.name}
             </Body2>
             {!isClaimed && (
-              <ButtonComponent primary onClick={handleClick}>
+              <ButtonComponent
+                primary
+                onClick={handleClick}
+                isLoading={claiming}
+              >
                 Claim
               </ButtonComponent>
             )}

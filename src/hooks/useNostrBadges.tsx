@@ -11,13 +11,14 @@ import { useDebounce } from './useDebounce'
 const relays = [
   'wss://relay.damus.io',
   'wss://relay.snort.social',
-  'wss://nos.lol',
+  // 'wss://nos.lol',
 ]
 
 export type ClaimABadgeProps = {
   badgeId: string
   badgeAwardId: string
   onFail?: any
+  isClaiming?: (claiming: boolean) => void
 }
 
 export const useNostrBadges = (pubKey: string) => {
@@ -75,9 +76,11 @@ export const useNostrBadges = (pubKey: string) => {
     badgeId,
     badgeAwardId,
     onFail,
+    isClaiming,
   }: ClaimABadgeProps) => {
     if (pool) {
       setClaiming(true)
+      isClaiming?.(true)
       const event = await handleFetchProfileBadges(pubKey, pool)
       console.log('checking event', event)
       const eventToPublish = {
@@ -99,17 +102,19 @@ export const useNostrBadges = (pubKey: string) => {
 
       eventToPublish.id = getEventHash(eventToPublish)
       eventToPublish.sig = await signEvent(eventToPublish) // this is where you sign with private key replaccing pubkey
-      console.log('checking eventToPublish', eventToPublish)
+
       const pub = pool.publish(relays, eventToPublish) // this is where you sign with private key replaccing pubkey
 
       pub.on('ok', () => {
         console.log('publishing was okay.')
         setClaiming(false)
+        isClaiming?.(false)
         setBadgeIds([...badgeIds, badgeId])
       })
       pub.on('failed', (reason: any) => {
         console.log('checking daild', reason)
         setClaiming(false)
+        isClaiming?.(false)
         if (onFail) {
           onFail(reason)
         }
