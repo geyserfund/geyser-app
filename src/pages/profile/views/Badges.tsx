@@ -47,9 +47,7 @@ export const Badges = ({
   const claimedBadges =
     (nostrBadges.length > 0 &&
       userBadges?.filter((userbadge) =>
-        nostrBadges.some(
-          (badge) => badge.id === userbadge.badgeDefinitionEventId,
-        ),
+        nostrBadges.some((badge) => badge.id === userbadge.badge.uniqueName),
       )) ||
     []
 
@@ -58,11 +56,10 @@ export const Badges = ({
       ? userBadges?.filter(
           (userbadge) =>
             !nostrBadges.some(
-              (badge) => badge.id === userbadge.badgeDefinitionEventId,
+              (badge) => badge.id === userbadge.badge.uniqueName,
             ),
         ) || []
       : userBadges
-
   const getTitleToDisplay = () => {
     if (isEdit) {
       return userBadges.length
@@ -167,7 +164,10 @@ export const RenderBadges = ({
           })
         return (
           <VStack key={badge.id}>
-            <Image maxWidth="175px" src={badge.badge.image} />
+            <Image width="175px" maxWidth="175px" src={badge.badge.image} />
+            <Body2 color="neutral.600" isTruncated>
+              {badge.badge.name}
+            </Body2>
             {!isClaimed && (
               <ButtonComponent primary onClick={handleClick}>
                 Claim
