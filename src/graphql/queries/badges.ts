@@ -31,7 +31,6 @@ export const QUERY_GET_USER_BADGES = gql`
       id
       fundingTxId
       createdAt
-      badgeDefinitionEventId
       badgeAwardEventId
     }
   }
