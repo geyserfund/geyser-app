@@ -113,13 +113,13 @@ export const Badges = ({
           <>
             <RenderBadges
               claimABadge={claimABadge}
-              badges={claimedBadges}
+              userBadges={claimedBadges}
               isClaimed
             />
             {isEdit && (
               <RenderBadges
                 claimABadge={claimABadge}
-                badges={unClaimedBadges}
+                userBadges={unClaimedBadges}
               />
             )}
           </>
@@ -146,43 +146,66 @@ export const Badges = ({
   )
 }
 
-export const RenderBadges = ({
-  badges,
-  isClaimed,
-  claimABadge,
-}: {
-  badges: UserBadge[]
+interface RenderBadgesProp {
+  userBadges: UserBadge[]
   isClaimed?: boolean
   claimABadge: (_: ClaimABadgeProps) => void
-}) => {
-  const [claiming, setClaiming] = useState(false)
+}
+
+export const RenderBadges = ({
+  userBadges,
+  isClaimed,
+  claimABadge,
+}: RenderBadgesProp) => {
   return (
     <Wrap w="full" justifyContent="space-between">
-      {badges.map((badge) => {
-        const handleClick = () =>
-          claimABadge({
-            badgeId: badge.badge.uniqueName,
-            badgeAwardId: badge.badgeAwardEventId || '',
-            isClaiming: setClaiming,
-          })
+      {userBadges.map((userBadge) => {
         return (
-          <VStack key={badge.id}>
-            <Image width="175px" maxWidth="175px" src={badge.badge.image} />
-            <Body2 color="neutral.600" isTruncated>
-              {badge.badge.name}
-            </Body2>
-            {!isClaimed && (
-              <ButtonComponent
-                primary
-                onClick={handleClick}
-                isLoading={claiming}
-              >
-                Claim
-              </ButtonComponent>
-            )}
-          </VStack>
+          <BadgeItem
+            key={userBadge.id}
+            userBadge={userBadge}
+            isClaimed={isClaimed}
+            claimABadge={claimABadge}
+          />
         )
       })}
     </Wrap>
+  )
+}
+
+interface BadgeItemProps {
+  userBadge: UserBadge
+  isClaimed?: boolean
+  claimABadge: (_: ClaimABadgeProps) => void
+}
+
+export const BadgeItem = ({
+  userBadge,
+  isClaimed,
+  claimABadge,
+}: BadgeItemProps) => {
+  const { badge } = userBadge
+
+  const [claiming, setClaiming] = useState(false)
+  const handleClick = () => {
+    claimABadge({
+      badgeId: badge.uniqueName,
+      badgeAwardId: userBadge.badgeAwardEventId || '',
+      isClaiming: setClaiming,
+    })
+  }
+
+  return (
+    <VStack key={userBadge.id}>
+      <Image width="175px" maxWidth="175px" src={badge.image} />
+      <Body2 color="neutral.600" isTruncated>
+        {badge.name}
+      </Body2>
+      {!isClaimed && (
+        <ButtonComponent primary onClick={handleClick} isLoading={claiming}>
+          Claim
+        </ButtonComponent>
+      )}
+    </VStack>
   )
 }

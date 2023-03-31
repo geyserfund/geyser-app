@@ -1,18 +1,19 @@
 import 'websocket-polyfill'
 
-import { Filter, getEventHash } from 'nostr-tools'
-import { Event, SimplePool } from 'nostr-tools'
+import { Filter, getEventHash, Relay, relayInit } from 'nostr-tools'
+import { Event } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
 import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
 import { signEvent } from '../utils/nostr/nip07'
 import { useDebounce } from './useDebounce'
 
-const relays = [
-  'wss://relay.damus.io',
-  'wss://relay.snort.social',
-  // 'wss://nos.lol',
-]
+const relayUri = 'wss://relay.damus.io'
+// [
+//   ,
+//   'wss://relay.snort.social',
+//   // 'wss://nos.lol',
+// ]
 
 export type ClaimABadgeProps = {
   badgeId: string
@@ -22,7 +23,7 @@ export type ClaimABadgeProps = {
 }
 
 export const useNostrBadges = (pubKey: string) => {
-  const [pool, setPool] = useState<SimplePool>()
+  const [relay, setRelay] = useState<Relay>()
 
   const [loading, setLoading] = useState(true)
   const [claiming, setClaiming] = useState(true)
@@ -40,7 +41,7 @@ export const useNostrBadges = (pubKey: string) => {
       badgeFilter.authors = [VITE_APP_GEYSER_NOSTR_PUBKEY]
       badgeFilter['#d'] = debouncedBadgeIds
 
-      const events = await pool?.list(relays, [badgeFilter])
+      const events = await relay?.list([badgeFilter])
 
       if (events) {
         const parsedBadges = parseBadgesFromDefinitionEvent(events)
@@ -57,16 +58,26 @@ export const useNostrBadges = (pubKey: string) => {
 
   useEffect(() => {
     const handleEventsInit = async () => {
-      const simplePool = new SimplePool()
-      setPool(simplePool)
+      const relayInstance = relayInit(relayUri)
+      console.log(' is it here', relay)
+      relayInstance.on('connect', async () => {
+        console.log('connected')
+        setRelay(relayInstance)
+        const event = await relayInstance.get({
+          kinds: [30008],
+          authors: [pubKey],
+        })
+        const parsedBadges = event ? parseBadgesFromProfileEvents(event) : []
+        setBadgeIds(parsedBadges)
 
-      const event = await handleFetchProfileBadges(pubKey, simplePool)
-      const parsedBadges = event ? parseBadgesFromProfileEvents(event) : []
-      setBadgeIds(parsedBadges)
-
-      if (parsedBadges.length === 0) {
+        if (parsedBadges.length === 0) {
+          setLoading(false)
+        }
+      })
+      relayInstance.on('error', () => {
         setLoading(false)
-      }
+      })
+      await relayInstance.connect()
     }
 
     handleEventsInit()
@@ -78,10 +89,13 @@ export const useNostrBadges = (pubKey: string) => {
     onFail,
     isClaiming,
   }: ClaimABadgeProps) => {
-    if (pool) {
+    if (relay) {
       setClaiming(true)
       isClaiming?.(true)
-      const event = await handleFetchProfileBadges(pubKey, pool)
+      const event = await relay.get({
+        kinds: [30008],
+        authors: [pubKey],
+      })
       console.log('checking event', event)
       const eventToPublish = {
         kind: 30008,
@@ -103,7 +117,7 @@ export const useNostrBadges = (pubKey: string) => {
       eventToPublish.id = getEventHash(eventToPublish)
       eventToPublish.sig = await signEvent(eventToPublish) // this is where you sign with private key replaccing pubkey
 
-      const pub = pool.publish(relays, eventToPublish) // this is where you sign with private key replaccing pubkey
+      const pub = relay.publish(eventToPublish) // this is where you sign with private key replaccing pubkey
 
       pub.on('ok', () => {
         console.log('publishing was okay.')
@@ -155,13 +169,6 @@ const parseBadgesFromDefinitionEvent = (events: Event[]): NostrBadges[] => {
   })
 
   return badges
-}
-
-const handleFetchProfileBadges = (pubkey: string, simplePool: SimplePool) => {
-  return simplePool.get(relays, {
-    kinds: [30008],
-    authors: [pubkey],
-  })
 }
 
 export type NostrBadges = {
