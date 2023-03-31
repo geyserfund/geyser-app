@@ -104,6 +104,7 @@ export const useNostrBadges = (pubKey: string) => {
       const pub = pool.publish(relays, eventToPublish) // this is where you sign with private key replaccing pubkey
 
       pub.on('ok', () => {
+        console.log('publishing was okay.')
         setClaiming(false)
         setBadgeIds([...badgeIds, badgeId])
       })
@@ -138,7 +139,6 @@ const parseBadgesFromDefinitionEvent = (events: Event[]): NostrBadges[] => {
 
   events.map((event) => {
     const badge = {} as NostrBadges
-
     event.tags.map((tag) => {
       if (tag[0] === 'd') {
         badge.id = tag[1]

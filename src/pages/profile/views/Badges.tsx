@@ -44,11 +44,12 @@ export const Badges = ({
   const userBadges = userBadgesData?.userBadges || []
   const hasBadgeNoNostrForOwn = userBadges.length > 0 && !hasNostr && isEdit
   const numberOfBadges = nostrBadges?.length || 0
-
   const claimedBadges =
     (nostrBadges.length > 0 &&
       userBadges?.filter((userbadge) =>
-        nostrBadges.some((badge) => badge.name === userbadge.badge.uniqueName),
+        nostrBadges.some(
+          (badge) => badge.id === userbadge.badgeDefinitionEventId,
+        ),
       )) ||
     []
 
@@ -57,7 +58,7 @@ export const Badges = ({
       ? userBadges?.filter(
           (userbadge) =>
             !nostrBadges.some(
-              (badge) => badge.name === userbadge.badge.uniqueName,
+              (badge) => badge.id === userbadge.badgeDefinitionEventId,
             ),
         ) || []
       : userBadges

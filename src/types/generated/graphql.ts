@@ -601,7 +601,7 @@ export type GrantGetWhereInput = {
 
 export type GrantStatus = {
   __typename?: 'GrantStatus';
-  endAt: Scalars['Date'];
+  endAt?: Maybe<Scalars['Date']>;
   startAt: Scalars['Date'];
   status: GrantStatusEnum;
 };
@@ -1492,6 +1492,7 @@ export type UserBadge = {
   __typename?: 'UserBadge';
   badge: Badge;
   badgeAwardEventId?: Maybe<Scalars['String']>;
+  badgeDefinitionEventId: Scalars['String'];
   createdAt: Scalars['Date'];
   fundingTxId?: Maybe<Scalars['BigInt']>;
   id: Scalars['BigInt'];
@@ -1675,12 +1676,19 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type ResolversUnionTypes = {
+  ActivityResource: ( Entry ) | ( Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> } ) | ( Project ) | ( ProjectReward );
+  ConnectionDetails: ( LightningAddressConnectionDetails ) | ( LndConnectionDetailsPrivate ) | ( LndConnectionDetailsPublic );
+  SourceResource: ( Entry ) | ( Project );
+};
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>;
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityResource: ResolversTypes['Entry'] | ResolversTypes['FundingTx'] | ResolversTypes['Project'] | ResolversTypes['ProjectReward'];
+  ActivityResource: ResolverTypeWrapper<ResolversUnionTypes['ActivityResource']>;
   ActivityResourceType: ActivityResourceType;
   Ambassador: ResolverTypeWrapper<Ambassador>;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
@@ -1690,7 +1698,7 @@ export type ResolversTypes = {
   BadgesGetWhereInput: BadgesGetWhereInput;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  ConnectionDetails: ResolversTypes['LightningAddressConnectionDetails'] | ResolversTypes['LndConnectionDetailsPrivate'] | ResolversTypes['LndConnectionDetailsPublic'];
+  ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes['ConnectionDetails']>;
   Country: ResolverTypeWrapper<Country>;
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
@@ -1807,7 +1815,7 @@ export type ResolversTypes = {
   ShippingDestination: ShippingDestination;
   ShippingInput: ShippingInput;
   SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>;
-  SourceResource: ResolversTypes['Entry'] | ResolversTypes['Project'];
+  SourceResource: ResolverTypeWrapper<ResolversUnionTypes['SourceResource']>;
   Sponsor: ResolverTypeWrapper<Sponsor>;
   SponsorStatus: SponsorStatus;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -1877,7 +1885,7 @@ export type ResolversParentTypes = {
   Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] };
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityResource: ResolversParentTypes['Entry'] | ResolversParentTypes['FundingTx'] | ResolversParentTypes['Project'] | ResolversParentTypes['ProjectReward'];
+  ActivityResource: ResolversUnionTypes['ActivityResource'];
   Ambassador: Ambassador;
   AmountSummary: AmountSummary;
   Badge: Badge;
@@ -1886,7 +1894,7 @@ export type ResolversParentTypes = {
   BadgesGetWhereInput: BadgesGetWhereInput;
   BigInt: Scalars['BigInt'];
   Boolean: Scalars['Boolean'];
-  ConnectionDetails: ResolversParentTypes['LightningAddressConnectionDetails'] | ResolversParentTypes['LndConnectionDetailsPrivate'] | ResolversParentTypes['LndConnectionDetailsPublic'];
+  ConnectionDetails: ResolversUnionTypes['ConnectionDetails'];
   Country: Country;
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
@@ -1988,7 +1996,7 @@ export type ResolversParentTypes = {
   RewardInput: RewardInput;
   ShippingInput: ShippingInput;
   SignedUploadUrl: SignedUploadUrl;
-  SourceResource: ResolversParentTypes['Entry'] | ResolversParentTypes['Project'];
+  SourceResource: ResolversUnionTypes['SourceResource'];
   Sponsor: Sponsor;
   String: Scalars['String'];
   Subscription: {};
@@ -2270,7 +2278,7 @@ export type GrantApplicantFundingResolvers<ContextType = any, ParentType extends
 };
 
 export type GrantStatusResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantStatus'] = ResolversParentTypes['GrantStatus']> = {
-  endAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  endAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   startAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['GrantStatusEnum'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2554,6 +2562,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type UserBadgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserBadge'] = ResolversParentTypes['UserBadge']> = {
   badge?: Resolver<ResolversTypes['Badge'], ParentType, ContextType>;
   badgeAwardEventId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  badgeDefinitionEventId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   fundingTxId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
