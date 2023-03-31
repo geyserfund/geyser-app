@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Tooltip } from '@chakra-ui/react'
+import { Button, ButtonProps, Text, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import { BoltIcon } from '../../../../components/icons'
@@ -36,7 +36,7 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
           id="lightning-address"
           {...rest}
         >
-          {name}
+          <Text isTruncated>{name}</Text>
         </Button>
       </Tooltip>
     </>

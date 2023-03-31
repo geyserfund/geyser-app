@@ -49,6 +49,8 @@ export const AccountInfo = ({
           border="1px solid"
           borderColor="neutral.200"
           backgroundColor="neutral.100"
+          overflow="hidden"
+          w="full"
         />
       )}
 
