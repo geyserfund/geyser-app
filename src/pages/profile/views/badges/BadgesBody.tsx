@@ -1,4 +1,11 @@
-import { HStack, Image, VStack, Wrap } from '@chakra-ui/react'
+import {
+  GridItem,
+  HStack,
+  Image,
+  SimpleGrid,
+  SkeletonText,
+  VStack,
+} from '@chakra-ui/react'
 
 import { SkeletonLayout } from '../../../../components/layouts'
 import { Body2 } from '../../../../components/typography'
@@ -68,12 +75,42 @@ export const BadgesBody = ({
   )
 }
 
-export const BadgesBodySkeleton = () => {
+export const BadgesBodySkeleton = ({ noTop }: { noTop?: boolean }) => {
   return (
-    <Wrap w="full" justifyContent="space-between">
-      <SkeletonLayout height="150px" width="150px" />
-      <SkeletonLayout height="150px" width="150px" />
-      <SkeletonLayout height="150px" width="150px" />
-    </Wrap>
+    <>
+      {!noTop && (
+        <SkeletonLayout height="30px" width="200px" alignSelf="center" />
+      )}
+      <SimpleGrid
+        columns={{ base: 1, sm: 2, md: 3, lg: 2, xl: 3 }}
+        spacingX="20px"
+        spacingY="40px"
+        w="full"
+      >
+        {[1, 2, 3].map((value) => {
+          return (
+            <GridItem
+              key={value}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              paddingTop="20px"
+            >
+              <SkeletonLayout
+                height="63px"
+                width="63px"
+                transform="rotate(-45deg)"
+              />
+              <SkeletonText
+                borderRadius="8px"
+                pt="20px"
+                width="60%"
+                noOfLines={2}
+              />
+            </GridItem>
+          )
+        })}
+      </SimpleGrid>
+    </>
   )
 }

@@ -29,11 +29,9 @@ export const BadgeItem = ({
   }
 
   return (
-    <VStack key={userBadge.id}>
+    <VStack key={userBadge.id} overflow="hidden">
       <Image width="175px" maxWidth="175px" src={badge.image} />
-      <Body2 color="neutral.600" isTruncated>
-        {badge.name}
-      </Body2>
+      <Body2 color="neutral.600">{badge.name}</Body2>
       {!isClaimed && (
         <ButtonComponent primary onClick={handleClick} isLoading={claiming}>
           Claim
