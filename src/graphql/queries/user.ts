@@ -44,6 +44,7 @@ export const USER_PROFILE_QUERY = gql`
     user(where: $where) {
       id
       username
+      bio
       imageUrl
       wallet {
         id
