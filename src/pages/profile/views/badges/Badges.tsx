@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
-import { Button } from '@chakra-ui/react'
+import { Button, HStack, Link as ChakraLink } from '@chakra-ui/react'
+import { BsBoxArrowUpRight } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -43,7 +44,20 @@ export const Badges = ({
 
   return (
     <CardLayout padding="20px">
-      <H2>Badges</H2>
+      <HStack w="full" justifyContent="space-between">
+        <H2>Badges</H2>
+        {!isEdit && (
+          <Button
+            as={ChakraLink}
+            href={getPath('badges')}
+            isExternal
+            size="sm"
+            leftIcon={<BsBoxArrowUpRight />}
+          >
+            See badges
+          </Button>
+        )}
+      </HStack>
       <Body2 color="neutral.700">
         Geyser badges are earned for launching successful projects, contributing
         to them and being an active community member.{' '}
