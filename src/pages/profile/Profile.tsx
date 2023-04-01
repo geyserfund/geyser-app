@@ -7,7 +7,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useParams } from 'react-router'
+import { useParams } from 'react-router'
 
 import { AlertBox } from '../../components/ui'
 import { useAuthContext } from '../../context'
@@ -26,7 +26,6 @@ type QueryVariables = {
 }
 
 export const Profile = () => {
-  const location = useLocation()
   const { user: currentAppUser } = useAuthContext()
   const params = useParams<{ userId: string }>()
 
@@ -46,8 +45,8 @@ export const Profile = () => {
   })
 
   const isViewingOwnProfile = useMemo(
-    () => location.pathname === `/profile/${currentAppUser.id}`,
-    [currentAppUser.id, location.pathname],
+    () => params.userId === currentAppUser.id,
+    [params.userId, currentAppUser.id],
   )
 
   useEffect(() => {
