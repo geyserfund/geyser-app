@@ -79,7 +79,7 @@ export const BadgesBodySkeleton = ({ noTop }: { noTop?: boolean }) => {
   return (
     <>
       {!noTop && (
-        <SkeletonLayout height="30px" width="200px" alignSelf="center" />
+        <SkeletonLayout height="30px" width="150px" alignSelf="center" />
       )}
       <SimpleGrid
         columns={{ base: 1, sm: 2, md: 3, lg: 2, xl: 3 }}
