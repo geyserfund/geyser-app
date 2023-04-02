@@ -1,22 +1,18 @@
-import { HStack, Image } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../components/layouts'
-import { H2 } from '../../../components/typography'
+import { Body2, H2 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
-import { getPath, ProjectLaunch3DUrl } from '../../../constants'
+import { getPath } from '../../../constants'
 
 export const CreateProject = () => {
   return (
-    <CardLayout padding="20px">
+    <CardLayout padding="20px" spacing="15px">
       <H2>Launch your project</H2>
-      <HStack width="100%" justifyContent="center">
-        <Image
-          maxWidth="300px"
-          alt="project-launch-3d-image"
-          src={ProjectLaunch3DUrl}
-        />
-      </HStack>
+      <Body2 color="neutral.700">
+        It only takes 2 minutes! If you’re not sure whether your idea is ready
+        you can start and launch it later.
+      </Body2>
       <ButtonComponent
         marginTop="20px "
         as={Link}
