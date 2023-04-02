@@ -112,7 +112,7 @@ export const Profile = () => {
         spacingY="20px"
         width="100%"
         height="full"
-        maxWidth="1500px"
+        maxWidth="1590px"
       >
         <GridItem colSpan={{ base: 1, lg: 2 }}>
           <AccountInfo

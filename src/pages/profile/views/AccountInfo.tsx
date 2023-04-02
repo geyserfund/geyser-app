@@ -1,7 +1,7 @@
-import { Avatar, SkeletonCircle } from '@chakra-ui/react'
+import { Avatar, SkeletonCircle, VStack } from '@chakra-ui/react'
 
 import { CardLayout, SkeletonLayout } from '../../../components/layouts'
-import { H1 } from '../../../components/typography'
+import { Body1, H1 } from '../../../components/typography'
 import { ConnectAccounts } from '../../auth'
 import { LightningAddress } from '../../projectView/projectMainBody/components'
 import { ExternalAccountDisplay } from '../components'
@@ -33,7 +33,7 @@ export const AccountInfo = ({
       padding="20px"
       direction="column"
       alignItems="start"
-      spacing="10px"
+      spacing="20px"
     >
       <Avatar
         src={`${userProfile.imageUrl}`}
@@ -50,23 +50,28 @@ export const AccountInfo = ({
           borderColor="neutral.200"
           backgroundColor="neutral.100"
           overflow="hidden"
-          w="full"
+          maxWidth="full"
         />
       )}
+      <VStack w="full" alignItems="start">
+        <Body1 bold color="neutral.900">
+          Connected accounts
+        </Body1>
+        {userProfile.externalAccounts.map((externalAccount) => {
+          if (externalAccount) {
+            return (
+              <ExternalAccountDisplay
+                key={externalAccount?.id}
+                account={externalAccount}
+                userProfile={userProfile}
+                setUserProfile={setUserProfile}
+                isEdit={isEdit}
+              />
+            )
+          }
+        })}
+      </VStack>
 
-      {userProfile.externalAccounts.map((externalAccount) => {
-        if (externalAccount) {
-          return (
-            <ExternalAccountDisplay
-              key={externalAccount?.id}
-              account={externalAccount}
-              userProfile={userProfile}
-              setUserProfile={setUserProfile}
-              isEdit={isEdit}
-            />
-          )
-        }
-      })}
       {isEdit && <ConnectAccounts user={userProfile} />}
     </CardLayout>
   )

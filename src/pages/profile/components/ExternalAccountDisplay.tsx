@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { Box, Link, Tooltip } from '@chakra-ui/react'
+import { nip19 } from 'nostr-tools'
 import { useState } from 'react'
 
 import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
@@ -22,8 +23,8 @@ export const ExternalAccountDisplay = ({
 }: ExternalAccountDisplayProps) => {
   const [copy, setCopy] = useState(false)
 
-  const handleCopyPubkey = () => {
-    navigator.clipboard.writeText(account.externalId)
+  const handleCopyPubkey = (npub: string) => {
+    navigator.clipboard.writeText(npub)
     setCopy(true)
     setTimeout(() => {
       setCopy(false)
@@ -54,7 +55,8 @@ export const ExternalAccountDisplay = ({
   if (isTwitter) {
     return (
       <ExternalAccountBody
-        account={account}
+        type={account.type as ExternalAccountType}
+        username={account.externalUsername}
         handleDelete={isEdit ? handleAccountDisconnect : undefined}
         as={Link}
         href={`https://twitter.com/${account.externalUsername}`}
@@ -64,13 +66,15 @@ export const ExternalAccountDisplay = ({
   }
 
   if (isNostr) {
+    const npub = nip19.npubEncode(account.externalId)
     return (
       <Tooltip label={copy ? 'copied!' : 'copy'} placement="top-start">
         <Box w="full">
           <ExternalAccountBody
-            account={account}
+            type={account.type as ExternalAccountType}
+            username={npub}
             handleDelete={isEdit ? handleAccountDisconnect : undefined}
-            onClick={handleCopyPubkey}
+            onClick={() => handleCopyPubkey(npub)}
             backgroundColor={copy ? 'primary.200' : 'neutral.100'}
           />
         </Box>
@@ -80,7 +84,8 @@ export const ExternalAccountDisplay = ({
 
   return (
     <ExternalAccountBody
-      account={account}
+      type={account.type as ExternalAccountType}
+      username={account.externalUsername}
       handleDelete={isEdit ? handleAccountDisconnect : undefined}
     />
   )

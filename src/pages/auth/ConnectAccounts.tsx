@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 
-import { Body1, Body2 } from '../../components/typography'
+import { Body2 } from '../../components/typography'
 import { User } from '../../types'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
@@ -28,10 +28,8 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
   return (
     <>
       <VStack w="full" alignItems="start">
-        <Body1 bold>Connect more accounts</Body1>
-        <Body2>
-          Connect more social profiles to your Geyser account so you can login
-          from more devices and accounts.
+        <Body2 color="neutral.900">
+          Connect more social profiles to your Geyser account.
         </Body2>
         {displayTwitterButton && <ConnectWithTwitter />}
         {displayNostrButton && <ConnectWithNostr />}
