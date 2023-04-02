@@ -75,7 +75,7 @@ export const ExternalAccountDisplay = ({
             username={npub}
             handleDelete={isEdit ? handleAccountDisconnect : undefined}
             onClick={() => handleCopyPubkey(npub)}
-            backgroundColor={copy ? 'primary.200' : 'neutral.100'}
+            backgroundColor={copy ? 'brand.primary' : 'neutral.100'}
           />
         </Box>
       </Tooltip>
