@@ -1,8 +1,9 @@
 import { useMutation } from '@apollo/client'
-import { Box, Link, Tooltip } from '@chakra-ui/react'
+import { Box, Link, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
 import { useState } from 'react'
 
+import { DeleteConfirmModal } from '../../../components/molecules'
 import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
 import { ExternalAccount } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
@@ -21,6 +22,9 @@ export const ExternalAccountDisplay = ({
   userProfile,
   setUserProfile,
 }: ExternalAccountDisplayProps) => {
+  const { toast } = useNotification()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [copy, setCopy] = useState(false)
 
   const handleCopyPubkey = (npub: string) => {
@@ -31,19 +35,21 @@ export const ExternalAccountDisplay = ({
     }, 1000)
   }
 
-  const { toast } = useNotification()
-  const [unlinkAccount] = useMutation(MUTATION_UNLINK_ACCOUNT, {
-    onError(error) {
-      toast({
-        title: 'Failed to unlink account',
-        description: `${error.message}`,
-        status: 'error',
-      })
+  const [unlinkAccount, { loading: unlinkAccountLoading }] = useMutation(
+    MUTATION_UNLINK_ACCOUNT,
+    {
+      onError(error) {
+        toast({
+          title: 'Failed to unlink account',
+          description: `${error.message}`,
+          status: 'error',
+        })
+      },
+      onCompleted(data) {
+        setUserProfile({ ...userProfile, ...data.unlinkExternalAccount })
+      },
     },
-    onCompleted(data) {
-      setUserProfile({ ...userProfile, ...data.unlinkExternalAccount })
-    },
-  })
+  )
 
   const handleAccountDisconnect = () => {
     unlinkAccount({ variables: { id: toInt(account.id) } })
@@ -52,41 +58,62 @@ export const ExternalAccountDisplay = ({
   const isNostr = account.type === ExternalAccountType.nostr
   const isTwitter = account.type === ExternalAccountType.twitter
 
-  if (isTwitter) {
+  const renderExternalAccountBody = () => {
+    if (isTwitter) {
+      return (
+        <ExternalAccountBody
+          type={account.type as ExternalAccountType}
+          username={account.externalUsername}
+          handleDelete={isEdit ? onOpen : undefined}
+          as={Link}
+          href={`https://twitter.com/${account.externalUsername}`}
+          isLoading={unlinkAccountLoading}
+          isExternal
+        />
+      )
+    }
+
+    if (isNostr) {
+      const npub = nip19.npubEncode(account.externalId)
+      return (
+        <Tooltip label={copy ? 'copied!' : 'copy'} placement="top-start">
+          <Box w="full">
+            <ExternalAccountBody
+              type={account.type as ExternalAccountType}
+              username={npub}
+              handleDelete={isEdit ? onOpen : undefined}
+              onClick={() => handleCopyPubkey(npub)}
+              backgroundColor={copy ? 'brand.primary' : 'neutral.100'}
+              isLoading={unlinkAccountLoading}
+            />
+          </Box>
+        </Tooltip>
+      )
+    }
+
     return (
       <ExternalAccountBody
         type={account.type as ExternalAccountType}
         username={account.externalUsername}
-        handleDelete={isEdit ? handleAccountDisconnect : undefined}
-        as={Link}
-        href={`https://twitter.com/${account.externalUsername}`}
-        isExternal
+        handleDelete={isEdit ? onOpen : undefined}
+        isLoading={unlinkAccountLoading}
       />
     )
   }
 
-  if (isNostr) {
-    const npub = nip19.npubEncode(account.externalId)
-    return (
-      <Tooltip label={copy ? 'copied!' : 'copy'} placement="top-start">
-        <Box w="full">
-          <ExternalAccountBody
-            type={account.type as ExternalAccountType}
-            username={npub}
-            handleDelete={isEdit ? handleAccountDisconnect : undefined}
-            onClick={() => handleCopyPubkey(npub)}
-            backgroundColor={copy ? 'brand.primary' : 'neutral.100'}
-          />
-        </Box>
-      </Tooltip>
-    )
-  }
-
   return (
-    <ExternalAccountBody
-      type={account.type as ExternalAccountType}
-      username={account.externalUsername}
-      handleDelete={isEdit ? handleAccountDisconnect : undefined}
-    />
+    <>
+      {renderExternalAccountBody()}
+      {isEdit && (
+        <DeleteConfirmModal
+          title={`Are you sure you want to disconnect your ${account.type} account ?`}
+          description={`${account.externalUsername} will be removed from your geyser account.`}
+          isOpen={isOpen}
+          onClose={onClose}
+          confirm={handleAccountDisconnect}
+          isLoading={unlinkAccountLoading}
+        />
+      )}
+    </>
   )
 }

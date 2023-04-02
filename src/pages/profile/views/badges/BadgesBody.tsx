@@ -60,7 +60,7 @@ export const BadgesBody = ({
       )}
       {hasBadgeNoNostrForOwn && (
         <HStack w="full" justifyContent="center">
-          <Image maxWidth="400px" alt="badges-group" src={BadgesGroupUrl} />
+          <Image maxWidth="350px" alt="badges-group" src={BadgesGroupUrl} />
         </HStack>
       )}
 
