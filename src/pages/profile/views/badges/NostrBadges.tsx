@@ -79,7 +79,6 @@ export const NostrBadges = ({
         columns={{ base: 1, sm: 2, md: 3, lg: 2, xl: 3 }}
         spacingX="20px"
         spacingY="40px"
-        w="full"
       >
         {claimedBadges.map((userBadge) => {
           return (

@@ -43,7 +43,7 @@ export const Badges = ({
   }
 
   return (
-    <CardLayout padding="20px">
+    <CardLayout padding="20px" spacing="20px">
       <HStack w="full" justifyContent="space-between">
         <H2>Badges</H2>
         {!isEdit && (
