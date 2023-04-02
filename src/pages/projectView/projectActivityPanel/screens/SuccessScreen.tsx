@@ -122,13 +122,12 @@ export const SuccessScreen = ({
         </VStack>
 
         <Text textAlign={'left'}>
-          The contribution went through! You can now share this campaign with
-          friends.
+          You can now share this campaign with friends.
         </Text>
         {!fundingState.anonymous && (
           <Text textAlign="left" paddingBlockEnd="30px">
-            🤖 Check your Twitter! Our bot{' '}
-            <a href={BotTwitterUrl}>@geyserfunders</a> just sent out a tweet.
+            🤖 Our bot <a href={BotTwitterUrl}>@geyserfunders</a> just sent out
+            a tweet.
           </Text>
         )}
         <ContributionInfoBox

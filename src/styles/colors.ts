@@ -98,4 +98,5 @@ export const colors = {
   nostrDark: '#52095c',
 
   lightning: '#FFE600',
+  lightningDark: '#CCA300',
 }
