@@ -129,7 +129,7 @@ export const ContributionInfoBox = ({
     <VStack
       padding={2}
       width={'full'}
-      borderRadius={'md'}
+      borderRadius="8px"
       backgroundColor={
         version === ContributionInfoBoxVersion.NEUTRAL
           ? 'brand.neutral100'
