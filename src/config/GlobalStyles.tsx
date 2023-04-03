@@ -5,16 +5,13 @@ export const GlobalStyles = () => (
     styles={`
         @import url('https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
 		    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Livvic:wght@400;500;600;700&display=swap');
         @import url("https://use.typekit.net/spz1ard.css");
         
         @font-face {
-            font-family: 'Myanmar-Khyay';
-            src:url('/Myanmar-Khyay.ttf.woff') format('woff'),
-                url('/Myanmar-Khyay.ttf.svg#Myanmar-Khyay') format('svg'),
-                url('/Myanmar-Khyay.ttf.eot'),
-                url('/Myanmar-Khyay.ttf.eot?#iefix') format('embedded-opentype');
+            font-family: 'Inter', sans-serif;
             font-weight: 400;
             font-style: normal;
             font-display: swap;

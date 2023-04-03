@@ -1,7 +1,6 @@
 import { Image, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 
-import { Body2 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { ClaimABadgeProps } from '../../../../hooks/useNostrBadges'
 import { UserBadge } from '../../../../types'

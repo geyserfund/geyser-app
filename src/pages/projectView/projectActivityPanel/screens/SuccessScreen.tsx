@@ -1,19 +1,17 @@
 import { useQuery } from '@apollo/client'
-import { Center, CloseButton, Image, Text, VStack } from '@chakra-ui/react'
+import { CloseButton, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import ReactConfetti from 'react-confetti'
 import { BiCopyAlt } from 'react-icons/bi'
-import { HiOutlineCheck, HiOutlineSpeakerphone } from 'react-icons/hi'
+import { HiOutlineSpeakerphone } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 
-import { Body2 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
-import { BotTwitterUrl, getPath } from '../../../../constants'
-import { useAuthContext } from '../../../../context'
+import { getPath } from '../../../../constants'
 import { QUERY_GET_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
-import { IFundingTx, IProject } from '../../../../interfaces'
+import { IProject } from '../../../../interfaces'
 import { Satoshis } from '../../../../types'
 import {
   FundingTx,
@@ -24,10 +22,11 @@ import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
 } from '../../projectMainBody/components/ContributionInfoBox'
+import { SuccessImageComponent } from '../components'
 
 type Props = {
   fundingState: IFundForm
-  fundingTx: FundingTx | IFundingTx
+  fundingTx: FundingTx
   project: Project | IProject
   handleCloseButton: () => void
 }
@@ -38,8 +37,6 @@ export const SuccessScreen = ({
   project,
   handleCloseButton,
 }: Props) => {
-  const { user } = useAuthContext()
-
   const [hasCopiedProjectLink, setCopy] = useState(false)
 
   const { getTotalAmount } = useFundCalc(fundingState)
@@ -75,14 +72,14 @@ export const SuccessScreen = ({
       }}
       paddingY={{
         base: '10px',
-        md: '64px',
+        md: '25px',
       }}
       spacing={4}
       width="100%"
       height="100%"
       overflowY="hidden"
       position="relative"
-      backgroundColor="brand.primary"
+      backgroundColor="primary.400"
       alignItems="center"
       justifyContent="flex-start"
     >
@@ -92,49 +89,31 @@ export const SuccessScreen = ({
         borderRadius="50%"
         position="absolute"
         right="10px"
-        top="10px"
+        top="-10px"
         onClick={handleCloseButton}
       />
 
-      <VStack spacing={6}>
-        <VStack>
-          <Text fontSize="22px" fontWeight={'semibold'} textAlign="center">
-            Contribution Successful!
-          </Text>
-          {currentBadge && user ? (
-            <VStack w="full">
-              <Image src={currentBadge.image} width="150px" />
-
-              <Body2>You won a Nostr badge!</Body2>
-              <Body2 as={Link} to={getPath('userProfile', user.id)}>
-                Go to your profile page to check it out
-              </Body2>
-            </VStack>
-          ) : (
-            <Center
-              boxSize={'85px'}
-              borderRadius="full"
-              backgroundColor={'brand.neutral50'}
-            >
-              <HiOutlineCheck color={'brand.textBlack'} fontSize="3rem" />
-            </Center>
-          )}
-        </VStack>
-
-        <Text textAlign={'left'}>
-          You can now share this campaign with friends.
-        </Text>
-        {!fundingState.anonymous && (
-          <Text textAlign="left" paddingBlockEnd="30px">
-            🤖 Our bot <a href={BotTwitterUrl}>@geyserfunders</a> just sent out
-            a tweet.
-          </Text>
+      <VStack w="full" spacing={6}>
+        <SuccessImageComponent
+          currentBadge={currentBadge}
+          fundingTx={fundingTx}
+        />
+        {fundingTx.funder.user?.id && (
+          <ButtonComponent
+            as={Link}
+            to={getPath('userProfile', fundingTx.funder.user?.id)}
+            standard
+            width="100%"
+            onClick={shareProjectWithFriends}
+          >
+            See badge in Profile
+          </ButtonComponent>
         )}
         <ContributionInfoBox
           project={project as Project}
           formState={fundingState}
           contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
-          rewardsEarned={fundingState.rewardsByIDAndCount}
+          // rewardsEarned={fundingState.rewardsByIDAndCount}
           isFunderAnonymous={fundingState.anonymous}
           funderUsername={fundingState.funderUsername}
           funderEmail={fundingState.email}
