@@ -39,7 +39,7 @@ type Props = HTMLChakraProps<'div'> & {
   funderEmail?: string
   funderUsername?: string
   funderAvatarURL?: string
-  rewardsEarned?: { [rewardID: string]: number }
+  // rewardsEarned?: { [rewardID: string]: number }
   badgesEarned?: IBadge[]
   formState: IFundForm
   version: ContributionInfoBoxVersion
