@@ -24,6 +24,17 @@ export const theme = extendTheme({
         height: '200px',
       },
       variants: {
+        transparent: {
+          backgroundColor: 'transparent',
+          border: '1px solid',
+          borderColor: 'transparent',
+          _hover: {
+            borderColor: colors.neutral900,
+          },
+          _active: {
+            backgroundColor: colors.neutral900,
+          },
+        },
         outlined: {
           border: `2px solid`,
           borderColor: colors.neutral200,

@@ -1,7 +1,7 @@
 import { Avatar, AvatarProps, Box, HStack, StackProps } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { Body2 } from '../../../../components/typography'
+import { Body2, BodyProps } from '../../../../components/typography'
 import { Maybe, User } from '../../../../types/generated/graphql'
 import { getRandomOrb } from '../../../../utils'
 
@@ -11,6 +11,7 @@ interface IAvatarElement extends AvatarProps {
   seed?: number
   wrapperProps?: StackProps
   noLink?: boolean
+  textProps?: BodyProps
 }
 
 export const AvatarElement = ({
@@ -19,6 +20,7 @@ export const AvatarElement = ({
   seed,
   wrapperProps,
   noLink,
+  textProps,
   ...rest
 }: IAvatarElement) => {
   const image = user?.imageUrl || getRandomOrb(seed || 1)
@@ -38,8 +40,8 @@ export const AvatarElement = ({
       {...wrapperProps}
     >
       {avatar}
-      <Body2 semiBold color="brand.neutral600" isTruncated>
-        {user.username}
+      <Body2 semiBold color="brand.neutral600" isTruncated {...textProps}>
+        {user.username || 'Anonymous'}
       </Body2>
     </HStack>
   )
