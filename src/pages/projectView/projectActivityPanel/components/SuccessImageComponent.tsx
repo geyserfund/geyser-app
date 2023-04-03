@@ -4,11 +4,10 @@ import {
   IconButton,
   Image,
   Tooltip,
-  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import * as htmlToImage from 'html-to-image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { BiCopy, BiDownload } from 'react-icons/bi'
 import { HiOutlineCheck } from 'react-icons/hi'
 
