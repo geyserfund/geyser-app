@@ -1,4 +1,4 @@
-import { Accordion, Text } from '@chakra-ui/react'
+import { Accordion, Link, Text } from '@chakra-ui/react'
 
 import { CardLayout } from '../../components/layouts'
 import { AccordionButton } from './AccordionButton'
@@ -17,7 +17,7 @@ export const BadgesFAQ = () => {
             Relays&quot;. Like HTTP or TCP-IP, Nostr is a protocol; an open
             standard upon which anyone can build. Nostr itself is not an app or
             service that you sign up for. Check out{' '}
-            <a href="https://nostr.how">nostr.how</a> for more info.
+            <Link href="https://nostr.how">nostr.how</Link> for more info.
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
@@ -65,7 +65,8 @@ export const BadgesFAQ = () => {
           <AccordionButton>Hey, I should have that badge!</AccordionButton>
           <AccordionPanel>
             If you think you should have access to a badge reach out to us at
-            hello@geyser.fund and we can review your badge privilege!
+            <Link href="mailto:hello@geyser.fund">hello@geyser.fund</Link> and
+            we can review your badge privilege!
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

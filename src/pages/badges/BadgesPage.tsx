@@ -1,4 +1,6 @@
-import { Box, Container, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Container, Text, VStack } from '@chakra-ui/react'
+import { FaArrowLeft } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../components/layouts'
 import { useBadges } from '../../graphql/hooks/useBadges'
@@ -6,11 +8,42 @@ import BadgeItem from './BadgeItem'
 import BadgeList from './BadgeList'
 import { BadgesFAQ } from './BadgesFAQ'
 
+export const BADGE_TYPE_MAP: Record<string, string> = {
+  contributor: 'Contributor',
+  creator: 'Creator',
+  grant: 'Grant',
+}
+
+export const BADGE_SUBTYPE_MAP: Record<string, string> = {
+  // contributor
+  'amount-funded': 'Amount funded',
+  'count-projects-funded': 'Projects funded',
+  'open-source': 'Open source',
+  // creator
+  podcast: 'Podcast',
+  epic: 'Epic',
+  // grant
+  winner: 'Winner',
+  board: 'Board',
+}
+
 export const BadgesPage = () => {
+  const navigate = useNavigate()
   const { badges } = useBadges()
 
   return (
     <Container maxWidth="5xl" pt={10}>
+      <Button
+        mt={4}
+        size="sm"
+        bg="brand.bgWhite"
+        variant="outline"
+        gap={2}
+        onClick={() => navigate(-1)}
+        fontSize="sm"
+      >
+        <FaArrowLeft /> Back
+      </Button>
       <VStack spacing={4} justify="center" textAlign="center" mb={12}>
         <Container maxWidth="xl">
           <Text mb={4} variant="h2">
@@ -22,9 +55,9 @@ export const BadgesPage = () => {
           </Text>
         </Container>
         {badges &&
-          Object.keys(badges).map((category) => {
+          Object.keys(badges).map((type) => {
             return (
-              <Box key={category} pt={6} width="100%">
+              <Box key={type} pt={6} width="100%">
                 <CardLayout width="100%">
                   <Box pb={4}>
                     <Text
@@ -33,17 +66,17 @@ export const BadgesPage = () => {
                       borderBottom="2px solid"
                       borderColor="neutral.200"
                       pb={1}
-                      variant="h3"
+                      variant="h2"
                     >
-                      {category}
+                      {BADGE_TYPE_MAP[type]}
                     </Text>
-                    {badges[category] &&
-                      Object.keys(badges[category]).map((subcategory) => {
+                    {badges[type] &&
+                      Object.keys(badges[type]).map((subtype) => {
                         return (
-                          <Box key={subcategory}>
-                            <BadgeList title={subcategory}>
-                              {badges[category][subcategory] &&
-                                badges[category][subcategory].map(
+                          <Box key={subtype}>
+                            <BadgeList title={BADGE_SUBTYPE_MAP[subtype]}>
+                              {badges[type][subtype] &&
+                                badges[type][subtype].map(
                                   (badge) =>
                                     badge && (
                                       <BadgeItem key={badge.id} {...badge} />
