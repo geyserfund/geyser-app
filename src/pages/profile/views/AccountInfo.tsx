@@ -44,7 +44,7 @@ export const AccountInfo = ({
   }
 
   return (
-    <VStack>
+    <>
       <CardLayout
         padding="20px"
         direction="column"
@@ -103,7 +103,7 @@ export const AccountInfo = ({
           {modalProps.isOpen && <EditProfileModal {...modalProps} />}
         </>
       )}
-    </VStack>
+    </>
   )
 }
 

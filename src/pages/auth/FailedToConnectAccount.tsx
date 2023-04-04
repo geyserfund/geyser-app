@@ -15,7 +15,7 @@ import { BsArrowLeft } from 'react-icons/bs'
 
 import { Body1 } from '../../components/typography'
 import { ButtonComponent } from '../../components/ui'
-import { CannotConnectAccountUrl } from '../../constants'
+import { CannotConnectAccountUrl, GeyserTelegramUrl } from '../../constants'
 
 interface FailedToConnectAccountProps {
   isOpen: boolean
@@ -49,9 +49,9 @@ export const FailedToConnectAccount = ({
             <Body1 semiBold color="black">
               This account is connected to another Geyser profile. Make sure you
               use a unique account. For any questions reach out to the Geyser
-              team at
-              <ChakraLink href="mailto: hello@geyser.fund" isExternal>
-                hello@geyser.fund
+              team via
+              <ChakraLink href={GeyserTelegramUrl} isExternal>
+                {' telegram.'}
               </ChakraLink>
             </Body1>
             <ButtonComponent

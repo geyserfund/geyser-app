@@ -17,7 +17,7 @@ export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf'
 // Geyser footer Links
 
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
-export const GeyserTelegramUrl = 'https://t.me/+EZ5otIPhVcxhMmFk'
+export const GeyserTelegramUrl = 'https://t.me/geyserfund'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
 export const GeyserHomepageUrl = 'https://geyser.fund/'
 export const GeyserPrivacyUrl =
