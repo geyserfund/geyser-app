@@ -201,7 +201,6 @@ const getUpdateWalletInput = (lightningAddress: string, walletId: number) => {
   return {
     lightningAddressConnectionDetailsInput: {
       lightningAddress,
-      walletId,
     },
     id: walletId,
   }
