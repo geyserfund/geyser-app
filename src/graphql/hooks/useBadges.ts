@@ -50,8 +50,6 @@ export const useBadges = () => {
       return {}
     }
 
-    console.log(data.badges)
-
     const map: any = {}
     for (const category in BADGE_CATEGORY_MAP) {
       if (BADGE_CATEGORY_MAP[category]) {
