@@ -42,6 +42,7 @@ export const ME_PROJECT_FOLLOWS = gql`
 export const USER_PROFILE_QUERY = gql`
   query User($where: UserGetInput!) {
     user(where: $where) {
+      __typename
       id
       username
       bio

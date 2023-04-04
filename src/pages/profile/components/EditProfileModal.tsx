@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client'
 import {
-  Avatar,
   Box,
   Button,
   Input,
@@ -13,16 +12,22 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { FormEventHandler, useState } from 'react'
+import { FormEventHandler, useEffect, useState } from 'react'
+import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
-import { AddPictureIcon } from '../../../components/icons/svg/AddPictureIcon'
-import { FileUpload } from '../../../components/molecules'
-import { TextArea } from '../../../components/ui'
+import { TextArea, TextInputBox } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
-import { MUTATION_UPDATE_USER, USER_PROFILE_QUERY } from '../../../graphql'
-import { LightningAddressConnectionDetails } from '../../../types'
-import { getRandomOrb, useNotification } from '../../../utils'
+import { MUTATION_UPDATE_USER } from '../../../graphql'
+import { useDebounce } from '../../../hooks'
+import {
+  LNAddressEvaluationState,
+  useUserLightningAddress,
+} from '../../../hooks/useUserLightningAddress'
+import { colors } from '../../../styles'
+import { useNotification } from '../../../utils'
+import { getLightningAddressFromUser } from '../../../utils/validations/wallet'
 import { EditProfileModalProps } from '../hooks/useEditProfileModal'
+import { EditableAvatar } from './EditableAvatar'
 
 export const EditProfileModal = ({
   isOpen,
@@ -34,25 +39,32 @@ export const EditProfileModal = ({
   const [name, setName] = useState(() => props.user?.username || '')
   const [bio, setBio] = useState(() => props.user?.bio || '')
   const [imageUrl, setImageUrl] = useState(() => props.user?.imageUrl || '')
-  const [isImageLoading, setImageLoading] = useState(false)
 
-  const [lnAddress, setLnAddress] = useState(() => {
-    const connectionDetails = (
-      props.user?.wallet?.connectionDetails.__typename ===
-      'LightningAddressConnectionDetails'
-        ? props.user.wallet?.connectionDetails
-        : {}
-    ) as LightningAddressConnectionDetails
-    return connectionDetails.lightningAddress || ''
-  })
+  const {
+    error: lightningAddressError,
+    loading: lightningAddressLoading,
+    evaluationState,
+    lightningAddress,
+    setLightningAddress,
+    validate,
+    evaluate,
+    mutate,
+  } = useUserLightningAddress(props.user)
+
+  const debouncedLightningAddress = useDebounce(lightningAddress, 500)
 
   const [updateUser, { loading }] = useMutation(MUTATION_UPDATE_USER, {
     onError: unexpected,
-    refetchQueries: [USER_PROFILE_QUERY],
-    onQueryUpdated: close,
+    onCompleted: close,
   })
 
   const { user } = props
+
+  useEffect(() => {
+    if (debouncedLightningAddress !== getLightningAddressFromUser(user)) {
+      validate()
+    }
+  }, [debouncedLightningAddress, mutate, user, validate])
 
   if (!user) {
     return null
@@ -63,12 +75,35 @@ export const EditProfileModal = ({
     updateUser({ variables: { input: { id: user.id, imageUrl } } })
   }
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
     event.stopPropagation()
+
+    if (
+      lightningAddress !== getLightningAddressFromUser(user) &&
+      (await evaluate())
+    ) {
+      await mutate()
+    }
+
     updateUser({
       variables: { input: { id: user.id, username: name, bio } },
     })
+  }
+
+  const renderRightElementContent = () => {
+    switch (evaluationState) {
+      case LNAddressEvaluationState.IDLE:
+        return null
+      case LNAddressEvaluationState.LOADING:
+        return <Loader size="md"></Loader>
+      case LNAddressEvaluationState.FAILED:
+        return <BsFillXCircleFill fill={colors.error} size="24px" />
+      case LNAddressEvaluationState.SUCCEEDED:
+        return <BsFillCheckCircleFill fill={colors.primary500} size="24px" />
+      default:
+        return null
+    }
   }
 
   return (
@@ -86,46 +121,12 @@ export const EditProfileModal = ({
               {isOpen && (
                 <Box>
                   <VStack align="start" gap={3}>
-                    <FileUpload
-                      onUploadComplete={onUploadImage}
-                      onLoading={setImageLoading}
-                    >
-                      <Box
-                        borderRadius="50%"
-                        width="100px"
-                        position="relative"
-                        cursor="pointer"
-                      >
-                        <Avatar
-                          src={imageUrl || getRandomOrb(user.id)}
-                          h="100px"
-                          w="100px"
-                          border="2px solid"
-                          borderColor="neutral.200 !important"
-                        />
-                        <Box
-                          position="absolute"
-                          top="0"
-                          h="100px"
-                          w="100px"
-                          borderRadius="50%"
-                          backgroundColor="neutral.900"
-                          opacity={0.3}
-                        />
-                        <Box
-                          position="absolute"
-                          left="39px"
-                          top="40px"
-                          color="white"
-                        >
-                          {isImageLoading ? (
-                            <Loader size="md" />
-                          ) : (
-                            <AddPictureIcon w="22px" h="20px" />
-                          )}
-                        </Box>
-                      </Box>
-                    </FileUpload>
+                    <EditableAvatar
+                      onUploadImage={onUploadImage}
+                      userId={user.id}
+                      imageUrl={imageUrl}
+                    />
+
                     <VStack align="start" gap={1} w="100%">
                       <Text>Name</Text>
                       <Input
@@ -134,14 +135,27 @@ export const EditProfileModal = ({
                         onChange={(e) => setName(e.currentTarget.value)}
                       />
                     </VStack>
+
                     <VStack align="start" gap={1} w="100%">
                       <Text>Lightning Address</Text>
-                      <Input
+                      <TextInputBox
                         name="lightningAddress"
-                        value={lnAddress}
-                        onChange={(e) => setLnAddress(e.currentTarget.value)}
+                        type="email"
+                        placeholder="satoshi@getalby.com"
+                        value={lightningAddress}
+                        rightIcon={renderRightElementContent()}
+                        onChange={(e) => {
+                          setLightningAddress(e.currentTarget.value)
+                        }}
+                        isInvalid={Boolean(lightningAddressError)}
+                        focusBorderColor={colors.neutral200}
+                        _valid={{
+                          focusBorderColor: colors.primary500,
+                        }}
+                        error={lightningAddressError}
                       />
                     </VStack>
+
                     <VStack align="start" gap={1} w="100%">
                       <Text>Bio</Text>
                       <TextArea
@@ -149,9 +163,10 @@ export const EditProfileModal = ({
                         onChange={(e) => setBio(e.currentTarget.value)}
                       />
                     </VStack>
+
                     <Button
-                      isLoading={Boolean(loading)}
-                      isDisabled={Boolean(loading)}
+                      isLoading={Boolean(loading || lightningAddressLoading)}
+                      isDisabled={Boolean(loading || lightningAddressLoading)}
                       variant="contained"
                       type="submit"
                     >
