@@ -1,7 +1,10 @@
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { useCallback, useState } from 'react'
 
-import { MUTATION_CREATE_WALLET } from '../graphql/mutations'
+import {
+  MUTATION_CREATE_WALLET,
+  MUTATION_UPDATE_WALLET,
+} from '../graphql/mutations'
 import { QUERY_LIGHTNING_ADDRESS_EVALUATION } from '../graphql/queries/wallet'
 import {
   LightningAddressVerifyResponse,
@@ -9,7 +12,7 @@ import {
   WalletResourceType,
 } from '../types'
 import { useNotification, validateEmail } from '../utils'
-import { getLightningAddressFromUser } from '../utils/validations/wallet'
+import { getUserLightningAddress } from '../utils/validations/wallet'
 
 export enum LNAddressEvaluationState {
   IDLE = 'IDLE',
@@ -29,7 +32,7 @@ type LightningAddressVerificationResponseData = {
 export const useUserLightningAddress = (user?: User) => {
   const { unexpected } = useNotification()
   const [lightningAddress, setLightningAddress] = useState(() => {
-    return getLightningAddressFromUser(user)
+    return getUserLightningAddress(user)
   })
 
   const [validationError, setValidationError] = useState<string | null>(null)
@@ -62,30 +65,19 @@ export const useUserLightningAddress = (user?: User) => {
     },
   })
 
-  const [createWallet, { loading }] = useMutation(MUTATION_CREATE_WALLET, {
-    onError: unexpected,
-  })
+  const [createWallet, { loading: createLoading }] = useMutation(
+    MUTATION_CREATE_WALLET,
+    {
+      onError: unexpected,
+    },
+  )
 
-  const getCreateWalletInput = useCallback(() => {
-    if (!user) {
-      return null
-    }
-
-    const resourceInput: {
-      resourceId: number
-      resourceType: WalletResourceType
-    } = {
-      resourceId: Number(user.id),
-      resourceType: WalletResourceType.User,
-    }
-
-    return {
-      lightningAddressConnectionDetailsInput: {
-        lightningAddress,
-      },
-      resourceInput,
-    }
-  }, [lightningAddress, user])
+  const [updateWallet, { loading: updateLoading }] = useMutation(
+    MUTATION_UPDATE_WALLET,
+    {
+      onError: unexpected,
+    },
+  )
 
   const validate = useCallback(() => {
     setEvaluationState(LNAddressEvaluationState.IDLE)
@@ -134,9 +126,33 @@ export const useUserLightningAddress = (user?: User) => {
   }, [evaluateLightningAddress])
 
   const mutate = useCallback(async () => {
-    if (!validationError && !evaluationError) {
-      await createWallet({
-        variables: { input: getCreateWalletInput() },
+    if (
+      user &&
+      !validationError &&
+      lightningAddress !== getUserLightningAddress(user) &&
+      (await evaluate())
+    ) {
+      const alreadyHasAddress =
+        user?.wallet &&
+        user.wallet.id &&
+        user.wallet.connectionDetails.__typename ===
+          'LightningAddressConnectionDetails'
+
+      if (alreadyHasAddress) {
+        return updateWallet({
+          variables: {
+            input: getUpdateWalletInput(lightningAddress, user.wallet?.id),
+          },
+          onError() {
+            setMutationError(
+              'We could not save this as your Lightning Address, please try again later',
+            )
+          },
+        })
+      }
+
+      return createWallet({
+        variables: { input: getCreateWalletInput(lightningAddress, user.id) },
         onError() {
           setMutationError(
             'We could not save this as your Lightning Address, please try again later',
@@ -144,16 +160,49 @@ export const useUserLightningAddress = (user?: User) => {
         },
       })
     }
-  }, [createWallet, evaluationError, validationError, getCreateWalletInput])
+  }, [
+    validationError,
+    lightningAddress,
+    user,
+    evaluate,
+    updateWallet,
+    createWallet,
+  ])
 
   return {
     evaluationState,
     error: validationError || evaluationError || mutationError || null,
+    loading: createLoading || updateLoading || false,
     lightningAddress,
     setLightningAddress,
     validate,
-    evaluate,
     mutate,
-    loading,
+  }
+}
+
+const getCreateWalletInput = (lightningAddress: string, userId: number) => {
+  const resourceInput: {
+    resourceId: number
+    resourceType: WalletResourceType
+  } = {
+    resourceId: Number(userId),
+    resourceType: WalletResourceType.User,
+  }
+
+  return {
+    lightningAddressConnectionDetailsInput: {
+      lightningAddress,
+    },
+    resourceInput,
+  }
+}
+
+const getUpdateWalletInput = (lightningAddress: string, walletId: number) => {
+  return {
+    lightningAddressConnectionDetailsInput: {
+      lightningAddress,
+      walletId,
+    },
+    id: walletId,
   }
 }

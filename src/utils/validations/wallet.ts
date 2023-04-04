@@ -1,6 +1,6 @@
 import { LightningAddressConnectionDetails, User } from '../../types'
 
-export const getLightningAddressFromUser = (user?: User) => {
+export const getUserLightningAddress = (user?: User) => {
   const connectionDetails = (
     user?.wallet?.connectionDetails.__typename ===
     'LightningAddressConnectionDetails'

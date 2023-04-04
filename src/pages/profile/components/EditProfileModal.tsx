@@ -25,7 +25,7 @@ import {
 } from '../../../hooks/useUserLightningAddress'
 import { colors } from '../../../styles'
 import { useNotification } from '../../../utils'
-import { getLightningAddressFromUser } from '../../../utils/validations/wallet'
+import { getUserLightningAddress } from '../../../utils/validations/wallet'
 import { EditProfileModalProps } from '../hooks/useEditProfileModal'
 import { EditableAvatar } from './EditableAvatar'
 
@@ -47,7 +47,6 @@ export const EditProfileModal = ({
     lightningAddress,
     setLightningAddress,
     validate,
-    evaluate,
     mutate,
   } = useUserLightningAddress(props.user)
 
@@ -61,7 +60,7 @@ export const EditProfileModal = ({
   const { user } = props
 
   useEffect(() => {
-    if (debouncedLightningAddress !== getLightningAddressFromUser(user)) {
+    if (debouncedLightningAddress !== getUserLightningAddress(user)) {
       validate()
     }
   }, [debouncedLightningAddress, mutate, user, validate])
@@ -79,12 +78,7 @@ export const EditProfileModal = ({
     event.preventDefault()
     event.stopPropagation()
 
-    if (
-      lightningAddress !== getLightningAddressFromUser(user) &&
-      (await evaluate())
-    ) {
-      await mutate()
-    }
+    await mutate()
 
     updateUser({
       variables: { input: { id: user.id, username: name, bio } },
