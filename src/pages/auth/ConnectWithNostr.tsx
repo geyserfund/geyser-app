@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 
 import { NostrSvgIcon } from '../../components/icons'
 import { useNostrExtensonLogin } from '../../hooks/useNostrExtensionLogin'
+import { isAccountDuplicateError } from '../../utils'
 import { FailedToConnectAccount } from './FailedToConnectAccount'
 type Props = {
   onClose?: () => void
@@ -22,7 +23,10 @@ export const ConnectWithNostr = ({ onClose }: Props) => {
 
   useEffect(() => {
     if (error) {
-      onOpen()
+      if (isAccountDuplicateError(error)) {
+        onOpen()
+      }
+
       clearError()
     }
   }, [error])
