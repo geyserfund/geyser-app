@@ -1,22 +1,31 @@
-import { Button } from '@chakra-ui/react'
+import { Button, useDisclosure } from '@chakra-ui/react'
+import { useEffect } from 'react'
 
 import { NostrSvgIcon } from '../../components/icons'
 import { useNostrExtensonLogin } from '../../hooks/useNostrExtensionLogin'
+import { FailedToConnectAccount } from './FailedToConnectAccount'
 type Props = {
   onClose?: () => void
 }
 export const ConnectWithNostr = ({ onClose }: Props) => {
-  const { connect } = useNostrExtensonLogin()
+  const { isOpen, onOpen, onClose: onClosePopup } = useDisclosure()
+
+  const { connect, error, clearError } = useNostrExtensonLogin()
 
   const handleClick = async () => {
     try {
       await connect()
-    } catch (e) {
-      // noop
     } finally {
       onClose?.()
     }
   }
+
+  useEffect(() => {
+    if (error) {
+      onOpen()
+      clearError()
+    }
+  }, [error])
 
   return (
     <>
@@ -30,6 +39,7 @@ export const ConnectWithNostr = ({ onClose }: Props) => {
       >
         Nostr
       </Button>
+      <FailedToConnectAccount isOpen={isOpen} onClose={onClosePopup} />
     </>
   )
 }

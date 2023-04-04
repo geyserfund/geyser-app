@@ -169,3 +169,8 @@ export const commonMarkdownUrl = 'https://commonmark.org/help/'
 
 export const BadgesGroupUrl =
   'https://storage.googleapis.com/geyser-projects-media/badge/badges-group.png'
+
+// UTILS
+
+export const CannotConnectAccountUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/connect-account-failed.png'
