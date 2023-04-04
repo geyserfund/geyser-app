@@ -11,12 +11,19 @@ const BadgeList = ({ children, title }: PropsWithChildren<BadgeListProps>) => {
       <Box
         width="100%"
         borderBottom="2px solid neutral.200"
-        textAlign="center"
+        textAlign="left"
         pb={2}
       >
         <Text variant="h3">{title}</Text>
       </Box>
-      <HStack flexWrap="wrap">{children}</HStack>
+      <HStack
+        pt={3}
+        flexWrap="wrap"
+        justifyContent="space-between"
+        width="100%"
+      >
+        {children}
+      </HStack>
     </VStack>
   )
 }

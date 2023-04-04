@@ -107,6 +107,11 @@ export const theme = extendTheme({
         }),
       },
     },
+    Link: {
+      baseStyle: {
+        textDecoration: 'underline',
+      },
+    },
     Divider: {
       variant: {
         lg: {
