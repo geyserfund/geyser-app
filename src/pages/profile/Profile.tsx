@@ -1,4 +1,4 @@
-import { useLazyQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import {
   Center,
   Container,
@@ -6,8 +6,8 @@ import {
   SimpleGrid,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router'
+import { useEffect, useMemo, useState } from 'react'
+import { useParams } from 'react-router'
 
 import { AlertBox } from '../../components/ui'
 import { useAuthContext } from '../../context'
@@ -26,55 +26,42 @@ type QueryVariables = {
 }
 
 export const Profile = () => {
-  const location = useLocation()
   const { user: currentAppUser } = useAuthContext()
   const params = useParams<{ userId: string }>()
 
   const [userProfile, setUserProfile] = useState<User>({ ...defaultUser })
 
-  const [queryCurrentUser, { loading: profileLoading, error }] = useLazyQuery<
-    ResponseData,
-    QueryVariables
-  >(USER_PROFILE_QUERY, {
-    onCompleted(data) {
-      if (data && data.user) {
-        const user = data.user as User
-        if (isViewingOwnProfile) {
-          setUserProfile({
-            ...currentAppUser,
-            ...user,
-          })
-        } else {
-          setUserProfile({
-            ...user,
-          })
-        }
-      }
+  const {
+    loading: profileLoading,
+    error,
+    data,
+  } = useQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY, {
+    variables: {
+      where: {
+        id: toInt(params.userId),
+      },
     },
+    skip: !params.userId,
   })
 
-  const isViewingOwnProfile =
-    location.pathname === `/profile/${currentAppUser.id}`
+  const isViewingOwnProfile = useMemo(
+    () => params.userId === currentAppUser.id,
+    [params.userId, currentAppUser.id],
+  )
 
   useEffect(() => {
-    if (params.userId) {
-      const variables: QueryVariables = {
-        where: {
-          id: toInt(params.userId),
-        },
+    if (data && data.user) {
+      const user = data.user as User
+      if (isViewingOwnProfile) {
+        setUserProfile({
+          ...currentAppUser,
+          ...user,
+        })
+      } else {
+        setUserProfile(user)
       }
-      queryCurrentUser({ variables })
     }
-  }, [params])
-
-  useEffect(() => {
-    if (isViewingOwnProfile) {
-      setUserProfile({
-        ...userProfile,
-        ...currentAppUser,
-      })
-    }
-  }, [currentAppUser])
+  }, [currentAppUser, data, isViewingOwnProfile])
 
   if (error) {
     return (

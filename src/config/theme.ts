@@ -55,6 +55,18 @@ export const theme = extendTheme({
             backgroundColor: colors.neutral200,
           },
         },
+        contained: {
+          background: colors.primary400,
+          width: '100%',
+          borderRadius: '8px',
+          padding: '10px 30px',
+          color: colors.neutral800,
+          fontWeight: 500,
+          fontFamily: fonts.inter,
+          _hover: {
+            background: colors.primary500,
+          },
+        },
         hugeContained: {
           background: colors.primary400,
           width: '100%',
@@ -65,6 +77,9 @@ export const theme = extendTheme({
           textTransform: 'uppercase',
           fontFamily: fonts.livvic,
           fontWeight: 700,
+          _hover: {
+            background: colors.primary500,
+          },
         },
       },
     },
