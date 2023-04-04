@@ -52,10 +52,7 @@ export const EditProfileModal = ({
 
   const debouncedLightningAddress = useDebounce(lightningAddress, 500)
 
-  const [updateUser, { loading }] = useMutation(MUTATION_UPDATE_USER, {
-    onError: unexpected,
-    onCompleted: close,
-  })
+  const [updateUser, { loading }] = useMutation(MUTATION_UPDATE_USER)
 
   const { user } = props
 
@@ -71,7 +68,10 @@ export const EditProfileModal = ({
 
   const onUploadImage = (url: string) => {
     setImageUrl(url)
-    updateUser({ variables: { input: { id: user.id, imageUrl } } })
+    updateUser({
+      variables: { input: { id: user.id, imageUrl } },
+      onError: unexpected,
+    })
   }
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -82,6 +82,8 @@ export const EditProfileModal = ({
 
     updateUser({
       variables: { input: { id: user.id, username: name, bio } },
+      onError: unexpected,
+      onCompleted: close,
     })
   }
 
