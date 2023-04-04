@@ -3,13 +3,13 @@ import { Box, Link, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
 import { useState } from 'react'
 
-import { DeleteConfirmModal } from '../../../components/molecules'
 import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
 import { ExternalAccount } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
 import { ExternalAccountType } from '../../auth'
 import { UserProfileState } from '../type'
 import { ExternalAccountBody } from './ExternalAccountBody'
+import { RemoveExternalAccountModal } from './RemoveExternalAccountModal'
 
 interface ExternalAccountDisplayProps extends UserProfileState {
   account: ExternalAccount
@@ -105,11 +105,10 @@ export const ExternalAccountDisplay = ({
     <>
       {renderExternalAccountBody()}
       {isEdit && (
-        <DeleteConfirmModal
-          title={`Are you sure you want to disconnect your ${account.type} account ?`}
-          description={`${account.externalUsername} will be removed from your geyser account.`}
+        <RemoveExternalAccountModal
           isOpen={isOpen}
           onClose={onClose}
+          isNostr={isNostr}
           confirm={handleAccountDisconnect}
           isLoading={unlinkAccountLoading}
         />

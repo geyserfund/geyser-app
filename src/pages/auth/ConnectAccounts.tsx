@@ -5,6 +5,7 @@ import { User } from '../../types'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
 import { ConnectWithTwitter } from './ConnectWithTwitter'
+import { ExternalAccountType } from './type'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
   const hasNostrAccount = user.externalAccounts.some(
@@ -14,14 +15,15 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
   const displayNostrButton = !hasNostrAccount && window.nostr
 
   const displayTwitterButton = !user.externalAccounts.some(
-    (externalAccount) => externalAccount?.type === 'twitter',
+    (externalAccount) => externalAccount?.type === ExternalAccountType.twitter,
   )
 
-  const displayLighntingButton = !user.externalAccounts.some(
-    (externalAccount) => externalAccount?.type === 'lightning',
+  const displayLightningButton = !user.externalAccounts.some(
+    (externalAccount) =>
+      externalAccount?.type === ExternalAccountType.lightning,
   )
 
-  if (!displayNostrButton && !displayTwitterButton && !displayLighntingButton) {
+  if (!displayNostrButton && !displayTwitterButton && !displayLightningButton) {
     return null
   }
 
@@ -33,7 +35,7 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
         </Body2>
         {displayTwitterButton && <ConnectWithTwitter />}
         {displayNostrButton && <ConnectWithNostr />}
-        {displayLighntingButton && <ConnectWithLightning />}
+        {displayLightningButton && <ConnectWithLightning />}
       </VStack>
     </>
   )

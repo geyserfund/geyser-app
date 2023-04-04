@@ -58,7 +58,6 @@ export const ProjectFundingQRScreen = ({
         version={ContributionInfoBoxVersion.NEUTRAL}
         project={project as Project}
         contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
-        // rewardsEarned={state.rewardsByIDAndCount}
         isFunderAnonymous={state.anonymous}
         funderUsername={state.funderUsername}
         funderEmail={state.email}

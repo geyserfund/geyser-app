@@ -24,6 +24,13 @@ export const theme = extendTheme({
         height: '200px',
       },
       variants: {
+        danger: {
+          backgroundColor: colors.secondaryRed,
+          color: 'white',
+          _hover: {
+            backgroundColor: colors.secondaryRedDark,
+          },
+        },
         transparent: {
           backgroundColor: 'transparent',
           border: '1px solid',
@@ -41,11 +48,24 @@ export const theme = extendTheme({
           color: colors.neutral900,
           fontSize: '16px',
           padding: '2px 5px',
+          backgroundColor: 'white',
           _hover: {
             borderColor: colors.neutral400,
           },
           _active: {
             backgroundColor: colors.neutral200,
+          },
+        },
+        contained: {
+          background: colors.primary400,
+          width: '100%',
+          borderRadius: '8px',
+          padding: '10px 30px',
+          color: colors.neutral800,
+          fontWeight: 500,
+          fontFamily: fonts.inter,
+          _hover: {
+            background: colors.primary500,
           },
         },
         hugeContained: {
@@ -58,6 +78,9 @@ export const theme = extendTheme({
           textTransform: 'uppercase',
           fontFamily: fonts.livvic,
           fontWeight: 700,
+          _hover: {
+            background: colors.primary500,
+          },
         },
       },
     },

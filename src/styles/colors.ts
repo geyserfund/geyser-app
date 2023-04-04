@@ -80,6 +80,8 @@ export const colors = {
   secondaryRed: '#DF3634',
   secondaryGold: '#C7BB50',
 
+  secondaryRedDark: '#B01E1C',
+
   neutral50: '#FCFCFC',
   neutral100: '#F4F4F4',
   neutral200: '#E9ECEF',

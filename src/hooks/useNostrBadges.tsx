@@ -113,7 +113,7 @@ export const useNostrBadges = (pubKey: string) => {
         toast({
           status: 'success',
           title: 'Congratulations!',
-          description: 'You claimed the geyser badge on nostr.',
+          description: 'You claimed the Geyser badge on Nostr.',
         })
       })
       pub.on('failed', (reason: any) => {

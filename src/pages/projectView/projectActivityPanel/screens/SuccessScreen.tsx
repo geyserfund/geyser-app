@@ -93,27 +93,42 @@ export const SuccessScreen = ({
         onClick={handleCloseButton}
       />
 
-      <VStack w="full" spacing={6}>
+      <VStack w="full" spacing="20px">
         <SuccessImageComponent
           currentBadge={currentBadge}
           fundingTx={fundingTx}
         />
-        {fundingTx.funder.user?.id && (
+        <VStack w="full" spacing="10px">
+          {fundingTx.funder.user?.id && currentBadge && (
+            <ButtonComponent
+              as={Link}
+              size="sm"
+              to={getPath('userProfile', fundingTx.funder.user?.id)}
+              width="100%"
+              onClick={shareProjectWithFriends}
+            >
+              See badge in Profile
+            </ButtonComponent>
+          )}
           <ButtonComponent
-            as={Link}
-            to={getPath('userProfile', fundingTx.funder.user?.id)}
-            standard
+            size="sm"
+            primary={hasCopiedProjectLink}
+            leftIcon={
+              hasCopiedProjectLink ? <BiCopyAlt /> : <HiOutlineSpeakerphone />
+            }
             width="100%"
             onClick={shareProjectWithFriends}
           >
-            See badge in Profile
+            {hasCopiedProjectLink
+              ? 'Project Link Copied'
+              : 'Share This Project With Friends'}
           </ButtonComponent>
-        )}
+        </VStack>
+
         <ContributionInfoBox
           project={project as Project}
           formState={fundingState}
           contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
-          // rewardsEarned={fundingState.rewardsByIDAndCount}
           isFunderAnonymous={fundingState.anonymous}
           funderUsername={fundingState.funderUsername}
           funderEmail={fundingState.email}
@@ -122,19 +137,6 @@ export const SuccessScreen = ({
           referenceCode={fundingTx.uuid}
           showGeyserFee={false}
         />
-        <ButtonComponent
-          standard
-          primary={hasCopiedProjectLink}
-          leftIcon={
-            hasCopiedProjectLink ? <BiCopyAlt /> : <HiOutlineSpeakerphone />
-          }
-          width="100%"
-          onClick={shareProjectWithFriends}
-        >
-          {hasCopiedProjectLink
-            ? 'Project Link Copied'
-            : 'Share This Project With Friends'}
-        </ButtonComponent>
       </VStack>
     </VStack>
   )

@@ -13,7 +13,7 @@ import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
 import { SkeletonLayout } from '../../../../components/layouts'
 import { ExternalAccountLinkIcon } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
-import { Caption } from '../../../../components/typography'
+import { Caption, MonoBody1 } from '../../../../components/typography'
 import {
   AnonymousAvatar,
   AvatarLink,
@@ -131,16 +131,16 @@ export const ContributionActivityItem = ({
           {/* Funding Amount */}
           <Box display="flex" alignItems="center">
             <SatoshiIconTilted scale={0.7} />
-            <Text>{`${commaFormatted(fundingTx.amount)}`} </Text>
+            <MonoBody1 fontFamily={fonts.mono}>
+              {commaFormatted(fundingTx.amount)}
+            </MonoBody1>
           </Box>
         </Box>
 
         <Stack marginTop="6px" width="100%" spacing={'6px'}>
           {/* Funding Comment */}
 
-          {fundingTx.comment ? (
-            <Text fontFamily={fonts.courier}>{fundingTx.comment}</Text>
-          ) : null}
+          {fundingTx.comment ? <Text>{fundingTx.comment}</Text> : null}
 
           {/* Funding Media Attachment */}
 

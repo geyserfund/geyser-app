@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { AUTH_SERVICE_ENDPOINT } from '../constants'
 import { useAuthContext } from '../context'
 import { sha256, useNotification } from '../utils'
@@ -6,6 +8,7 @@ import { getPubkey, signMessage } from '../utils/nostr/nip07'
 export const useNostrExtensonLogin = () => {
   const { toast } = useNotification()
   const { getAuthToken, queryCurrentUser } = useAuthContext()
+  const [error, setError] = useState<any>()
 
   const connect = async () => {
     try {
@@ -36,23 +39,31 @@ export const useNostrExtensonLogin = () => {
           redirect: 'follow',
         },
       )
-      if (response.status >= 200 && response.status <= 400) {
+
+      if (response.status >= 200 && response.status < 400) {
         queryCurrentUser()
       } else {
-        throwErrorToast()
+        const errorResponse = await response.json()
+        setError(errorResponse)
+        throwErrorToast(errorResponse?.reason)
       }
-    } catch {
+    } catch (e) {
+      setError(e)
       throwErrorToast()
     }
   }
 
-  const throwErrorToast = () => {
+  const throwErrorToast = (description?: string) => {
     toast({
       status: 'error',
       title: 'Something went wrong.',
-      description: 'Please try again',
+      description: description || 'Please try again',
     })
   }
 
-  return { connect }
+  const clearError = () => {
+    setError(undefined)
+  }
+
+  return { connect, error, clearError }
 }

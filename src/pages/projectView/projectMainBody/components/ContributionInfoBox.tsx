@@ -39,7 +39,6 @@ type Props = HTMLChakraProps<'div'> & {
   funderEmail?: string
   funderUsername?: string
   funderAvatarURL?: string
-  // rewardsEarned?: { [rewardID: string]: number }
   badgesEarned?: IBadge[]
   formState: IFundForm
   version: ContributionInfoBoxVersion
@@ -76,32 +75,9 @@ export const ContributionInfoBox = ({
   funderUsername,
   funderAvatarURL,
   showGeyserFee,
-  // rewardsEarned = {},
   version,
   ...rest
 }: Props) => {
-  // const rewardNameString: string = useMemo(() => {
-  //   let nameString = '';
-
-  //   project.rewards?.map((reward) => {
-  //     const rewardCount = rewardsEarned[reward?.id];
-
-  //     if (rewardCount) {
-  //       if (nameString.length === 0) {
-  //         nameString = `${reward?.name}(x${rewardCount})`;
-  //       } else {
-  //         nameString = `${nameString}, ${reward?.name}(x${rewardCount})`;
-  //       }
-  //     }
-  //   });
-
-  //   return nameString;
-  // }, [project.rewards, rewardsEarned]);
-
-  // TODO: implement badges in contribution info box
-  // const hasRewardsOrBadgesInfo =
-  //   Boolean(rewardNameString) || badgesEarned.length > 0;
-
   const rewards = project.rewards?.filter(
     (reward) => reward !== null,
   ) as ProjectReward[]
@@ -129,7 +105,7 @@ export const ContributionInfoBox = ({
     <VStack
       padding={2}
       width={'full'}
-      borderRadius={'md'}
+      borderRadius="8px"
       backgroundColor={
         version === ContributionInfoBoxVersion.NEUTRAL
           ? 'brand.neutral100'

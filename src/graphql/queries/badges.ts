@@ -35,15 +35,3 @@ export const QUERY_GET_USER_BADGES = gql`
     }
   }
 `
-
-/*
-Input
-{
-  "input": {
-    "where": {
-      "fundingTxId": null,
-      "userId": null
-    }
-  }
-}
-*/
