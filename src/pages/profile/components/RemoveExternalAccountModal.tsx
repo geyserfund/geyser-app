@@ -53,14 +53,16 @@ export const RemoveExternalAccountModal = ({
           </HStack>
           {isNostr && (
             <Body2 semiBold wordBreak="break-word">
-              By disconnecting this Nostr profile from your Geyser account you
+              By disconnecting this Nostr account from your Geyser profile you
               will be able to connect a different Nostr account. However, you
               will be unable to create a new Geyser profile with this existing
-              Nostr profile.
+              Nostr account.
             </Body2>
           )}
           <Body2 semiBold wordBreak="break-word" alignSelf="start">
-            Are you sure you want to disconnect this account?
+            {`${
+              isNostr ? 'Your badges are connected to this Nostr account.' : ''
+            } Are you sure you want to disconnect this account?`}
           </Body2>
           <HStack width="100%" justifyContent="space-between" spacing="20px">
             <ButtonComponent w="full" onClick={onClose}>
