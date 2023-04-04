@@ -2,7 +2,7 @@ import { Avatar, SkeletonCircle, VStack } from '@chakra-ui/react'
 
 import { CardLayout, SkeletonLayout } from '../../../components/layouts'
 import { Body1, H1 } from '../../../components/typography'
-import { ConnectAccounts } from '../../auth'
+import { ConnectAccounts, ExternalAccountType } from '../../auth'
 import { LightningAddress } from '../../projectView/projectMainBody/components'
 import { ExternalAccountDisplay } from '../components'
 import { UserProfileState } from '../type'
@@ -27,6 +27,17 @@ export const AccountInfo = ({
     'LightningAddressConnectionDetails'
       ? userProfile.wallet.connectionDetails.lightningAddress
       : ''
+
+  const getIsEdit = (accountType: ExternalAccountType) => {
+    if (
+      (accountType === 'nostr' || accountType === 'twitter') &&
+      userProfile.ownerOf.length > 0
+    ) {
+      return false
+    }
+
+    return userProfile.externalAccounts.length > 1 ? isEdit : false
+  }
 
   return (
     <CardLayout
@@ -65,7 +76,7 @@ export const AccountInfo = ({
                 account={externalAccount}
                 userProfile={userProfile}
                 setUserProfile={setUserProfile}
-                isEdit={isEdit}
+                isEdit={getIsEdit(externalAccount.type as ExternalAccountType)}
               />
             )
           }
