@@ -24,6 +24,13 @@ export const theme = extendTheme({
         height: '200px',
       },
       variants: {
+        danger: {
+          backgroundColor: colors.secondaryRed,
+          color: 'white',
+          _hover: {
+            backgroundColor: colors.secondaryRedDark,
+          },
+        },
         transparent: {
           backgroundColor: 'transparent',
           border: '1px solid',
