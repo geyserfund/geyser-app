@@ -32,10 +32,9 @@ export const SuccessImageComponent = ({
 
   const handleDownload = async () => {
     try {
-      const dataUrl = await getDataurl()
-      console.log('checking dataUrl', dataUrl)
+      const dataUrl = await getDataUrl()
       const link = document.createElement('a')
-      link.download = 'my-image-name.png'
+      link.download = `share-contribution-to-${project.name}.png`
       link.href = dataUrl
       link.click()
     } catch (error) {
@@ -49,7 +48,7 @@ export const SuccessImageComponent = ({
 
   const handleCopy = async () => {
     try {
-      const dataUrl = await getDataurl()
+      const dataUrl = await getDataUrl()
       const base64Response = await fetch(dataUrl)
       const blob = await base64Response.blob()
       const items = { [blob.type]: blob }
@@ -68,7 +67,7 @@ export const SuccessImageComponent = ({
     }
   }
 
-  const getDataurl = async () => {
+  const getDataUrl = async () => {
     const element = document.getElementById('successful-contribution-banner')
     if (element) {
       const dataUrl = await htmlToImage.toPng(element, {

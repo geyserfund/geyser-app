@@ -132,7 +132,7 @@ export const ContributionActivityItem = ({
           <Box display="flex" alignItems="center">
             <SatoshiIconTilted scale={0.7} />
             <MonoBody1 fontFamily={fonts.mono}>
-              {`${commaFormatted(fundingTx.amount)}`}{' '}
+              {commaFormatted(fundingTx.amount)}
             </MonoBody1>
           </Box>
         </Box>
