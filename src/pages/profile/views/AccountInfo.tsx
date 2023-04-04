@@ -59,6 +59,9 @@ export const AccountInfo = ({
           borderColor="neutral.200 !important"
         />
         <H1>{userProfile.username}</H1>
+        <Body1 semiBold color="neutral.600" wordBreak="break-word">
+          {userProfile.bio}
+        </Body1>
         {lightningAddress && (
           <LightningAddress
             name={lightningAddress}
@@ -97,6 +100,7 @@ export const AccountInfo = ({
             onClick={() => modalProps.open({ user: userProfile })}
             width="100%"
             variant="outlined"
+            marginTop="20px"
           >
             Edit
           </Button>
