@@ -1,4 +1,5 @@
 import { useToast, UseToastOptions } from '@chakra-ui/react'
+import { useCallback } from 'react'
 // "subtle" | "solid" | "left-accent" | "top-accent"
 
 export const useNotification = (options?: UseToastOptions | undefined) => {
@@ -12,5 +13,14 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
     },
     ...options,
   })
-  return { toast }
+
+  const unexpected = useCallback(() => {
+    toast({
+      status: 'error',
+      title: 'Something went wrong.',
+      description: 'Please try again',
+    })
+  }, [toast])
+
+  return { toast, unexpected }
 }

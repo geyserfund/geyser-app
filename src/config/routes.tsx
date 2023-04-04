@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
+import { BadgesPage } from '../pages/badges/BadgesPage'
 import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
 import { EntryPreview } from '../pages/creation/entry/EntryPreview'
 import {
@@ -20,7 +21,7 @@ import { MobileLeaderboard } from '../pages/landing/projectLeaderboard'
 import { LandingPageProjects } from '../pages/landing/projects'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
-import { ProfilePage } from '../pages/profile/ProfilePage'
+import { Profile } from '../pages/profile'
 import {
   ProjectContributors,
   ProjectDashboard,
@@ -92,7 +93,8 @@ const platformRoutes = [
   },
   {
     path: getPath('userProfile', PathName.userId),
-    element: ProfilePage,
+    element: Profile,
+    // element: ProfilePage,
   },
   {
     path: getPath('projectEntryPreview', PathName.projectId, PathName.entryId),
@@ -168,6 +170,10 @@ const platformRoutes = [
   {
     path: getPath('leaderboard'),
     element: MobileLeaderboard,
+  },
+  {
+    path: getPath('badges'),
+    element: BadgesPage,
   },
   {
     path: getPath('landingPage'),

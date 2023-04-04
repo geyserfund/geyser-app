@@ -19,6 +19,7 @@ const defaultContext: AuthContextProps = {
   user: defaultUser,
   loading: false,
   error: undefined,
+  login() {},
   logout() {},
   isAuthModalOpen: false,
   isUserAProjectCreator: false,
@@ -26,6 +27,9 @@ const defaultContext: AuthContextProps = {
   loginOnClose() {},
   setIsLoggedIn() {},
   queryCurrentUser() {},
+  async getAuthToken() {
+    return false
+  },
   setUser(user: User) {},
   followedProjects: [],
   queryFollowedProjects() {},
@@ -43,6 +47,7 @@ type AuthContextProps = {
   user: User
   loading: boolean
   error?: ApolloError
+  login: (me: User) => void
   logout: () => void
   isAuthModalOpen: boolean
   loginOnOpen: () => void
@@ -50,6 +55,7 @@ type AuthContextProps = {
   isUserAProjectCreator: boolean
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
   queryCurrentUser: () => void
+  getAuthToken: () => Promise<boolean>
   setUser: (user: User) => void
   followedProjects: Project[]
   queryFollowedProjects: () => void
@@ -68,14 +74,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
+    fetchPolicy: 'network-only',
     onCompleted(data: { me: User }) {
       if (data && data.me) {
-        setUser({ ...defaultUser, ...data.me })
-        setIsLoggedIn(true)
-        setIsUserAProjectCreator(data.me.ownerOf?.length > 0)
+        login(data.me)
       }
     },
   })
+
+  const login = (me: User) => {
+    setUser({ ...defaultUser, ...me })
+    setIsLoggedIn(true)
+    setIsUserAProjectCreator(me.ownerOf?.length > 0)
+  }
+
+  const getAuthToken = async () => {
+    try {
+      const response = await fetch(`${AUTH_SERVICE_ENDPOINT}/auth-token`, {
+        credentials: 'include',
+        redirect: 'follow',
+      })
+
+      if (response.status >= 200 && response.status < 400) {
+        return true
+      }
+
+      return false
+    } catch (e) {
+      return false
+    }
+  }
 
   const [queryFollowedProjects] = useLazyQuery<{ me: User }>(
     ME_PROJECT_FOLLOWS,
@@ -140,12 +168,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoggedIn,
         setIsLoggedIn,
         isUserAProjectCreator,
+        login,
         logout,
         isAuthModalOpen: loginIsOpen,
         loginOnOpen,
         loginOnClose,
         followedProjects,
         queryFollowedProjects,
+        getAuthToken,
       }}
     >
       {children}

@@ -25,7 +25,6 @@ interface IQRModal {
   name: string
   projectId: string
   title: string
-  setCopy: any
 }
 
 export const ProjectFundingQRModal = ({
@@ -34,7 +33,6 @@ export const ProjectFundingQRModal = ({
   name,
   projectId,
   title,
-  setCopy,
 }: IQRModal) => {
   const isMobile = useMobileMode()
   const [imageDownload, setImageDownload] = useState<string | undefined>()
@@ -64,10 +62,7 @@ export const ProjectFundingQRModal = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={() => {
-        setCopy(false)
-        onClose()
-      }}
+      onClose={onClose}
       size={isMobile ? 'md' : '3xl'}
       isCentered
     >

@@ -1,24 +1,32 @@
-import { Center, CloseButton, Text, VStack } from '@chakra-ui/react'
+import { useQuery } from '@apollo/client'
+import { CloseButton, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import ReactConfetti from 'react-confetti'
 import { BiCopyAlt } from 'react-icons/bi'
-import { HiOutlineCheck, HiOutlineSpeakerphone } from 'react-icons/hi'
+import { HiOutlineSpeakerphone } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
 
 import { ButtonComponent } from '../../../../components/ui'
-import { BotTwitterUrl } from '../../../../constants'
+import { getPath } from '../../../../constants'
+import { QUERY_GET_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
-import { IFundingTx, IProject } from '../../../../interfaces'
+import { IProject } from '../../../../interfaces'
 import { Satoshis } from '../../../../types'
-import { FundingTx, Project } from '../../../../types/generated/graphql'
+import {
+  FundingTx,
+  Project,
+  UserBadge,
+} from '../../../../types/generated/graphql'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
 } from '../../projectMainBody/components/ContributionInfoBox'
+import { SuccessImageComponent } from '../components'
 
 type Props = {
   fundingState: IFundForm
-  fundingTx: FundingTx | IFundingTx
+  fundingTx: FundingTx
   project: Project | IProject
   handleCloseButton: () => void
 }
@@ -38,6 +46,13 @@ export const SuccessScreen = ({
     setCopy(true)
   }
 
+  const { data } = useQuery<{ userBadges: UserBadge[] }>(
+    QUERY_GET_USER_BADGES,
+    {
+      variables: { input: { where: { fundingTxId: fundingTx.id } } },
+    },
+  )
+
   useEffect(() => {
     if (hasCopiedProjectLink) {
       setTimeout(() => {
@@ -45,6 +60,9 @@ export const SuccessScreen = ({
       }, 2000)
     }
   }, [hasCopiedProjectLink])
+
+  const userBadge = data?.userBadges[0]
+  const currentBadge = userBadge ? userBadge.badge : undefined
 
   return (
     <VStack
@@ -54,14 +72,14 @@ export const SuccessScreen = ({
       }}
       paddingY={{
         base: '10px',
-        md: '64px',
+        md: '25px',
       }}
       spacing={4}
       width="100%"
       height="100%"
       overflowY="hidden"
       position="relative"
-      backgroundColor="brand.primary"
+      backgroundColor="primary.400"
       alignItems="center"
       justifyContent="flex-start"
     >
@@ -71,40 +89,46 @@ export const SuccessScreen = ({
         borderRadius="50%"
         position="absolute"
         right="10px"
-        top="10px"
+        top="-10px"
         onClick={handleCloseButton}
       />
 
-      <VStack spacing={6}>
-        <VStack>
-          <Text fontSize="22px" fontWeight={'semibold'} textAlign="center">
-            Contribution Successful!
-          </Text>
-
-          <Center
-            boxSize={'85px'}
-            borderRadius="full"
-            backgroundColor={'brand.neutral50'}
+      <VStack w="full" spacing="20px">
+        <SuccessImageComponent
+          currentBadge={currentBadge}
+          fundingTx={fundingTx}
+        />
+        <VStack w="full" spacing="10px">
+          {fundingTx.funder.user?.id && currentBadge && (
+            <ButtonComponent
+              as={Link}
+              size="sm"
+              to={getPath('userProfile', fundingTx.funder.user?.id)}
+              width="100%"
+              onClick={shareProjectWithFriends}
+            >
+              See badge in Profile
+            </ButtonComponent>
+          )}
+          <ButtonComponent
+            size="sm"
+            primary={hasCopiedProjectLink}
+            leftIcon={
+              hasCopiedProjectLink ? <BiCopyAlt /> : <HiOutlineSpeakerphone />
+            }
+            width="100%"
+            onClick={shareProjectWithFriends}
           >
-            <HiOutlineCheck color={'brand.textBlack'} fontSize="3rem" />
-          </Center>
+            {hasCopiedProjectLink
+              ? 'Project Link Copied'
+              : 'Share This Project With Friends'}
+          </ButtonComponent>
         </VStack>
 
-        <Text textAlign={'left'}>
-          The contribution went through! You can now share this campaign with
-          friends.
-        </Text>
-        {!fundingState.anonymous && (
-          <Text textAlign="left" paddingBlockEnd="30px">
-            🤖 Check your Twitter! Our bot{' '}
-            <a href={BotTwitterUrl}>@geyserfunders</a> just sent out a tweet.
-          </Text>
-        )}
         <ContributionInfoBox
           project={project as Project}
           formState={fundingState}
           contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
-          rewardsEarned={fundingState.rewardsByIDAndCount}
           isFunderAnonymous={fundingState.anonymous}
           funderUsername={fundingState.funderUsername}
           funderEmail={fundingState.email}
@@ -113,19 +137,6 @@ export const SuccessScreen = ({
           referenceCode={fundingTx.uuid}
           showGeyserFee={false}
         />
-        <ButtonComponent
-          standard
-          primary={hasCopiedProjectLink}
-          leftIcon={
-            hasCopiedProjectLink ? <BiCopyAlt /> : <HiOutlineSpeakerphone />
-          }
-          width="100%"
-          onClick={shareProjectWithFriends}
-        >
-          {hasCopiedProjectLink
-            ? 'Project Link Copied'
-            : 'Share This Project With Friends'}
-        </ButtonComponent>
       </VStack>
     </VStack>
   )

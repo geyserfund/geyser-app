@@ -18,6 +18,7 @@ interface IDeleteConfirmModal {
   title: string
   description?: string
   confirm: () => any
+  isLoading?: boolean
 }
 
 export const DeleteConfirmModal = ({
@@ -26,6 +27,7 @@ export const DeleteConfirmModal = ({
   title,
   description,
   confirm,
+  isLoading,
 }: IDeleteConfirmModal) => (
   <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
     <ModalOverlay />
@@ -38,10 +40,14 @@ export const DeleteConfirmModal = ({
       <ModalCloseButton />
       <ModalBody>
         <VStack width="100%" spacing="30px">
-          <Text>{description}</Text>
+          <Text wordBreak="break-word">{description}</Text>
           <HStack width="100%" justifyContent="space-between" spacing="20px">
             <ButtonComponent onClick={onClose}>Cancel</ButtonComponent>
-            <ButtonComponent backgroundColor="red.500" onClick={confirm}>
+            <ButtonComponent
+              backgroundColor="red.500"
+              onClick={confirm}
+              isLoading={isLoading}
+            >
               Confirm
             </ButtonComponent>
           </HStack>

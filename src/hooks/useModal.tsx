@@ -8,11 +8,11 @@ export type UseModalReturn<T extends Record<string, any>> = ReturnType<
 export function useModal<T extends Record<string, any>>(defaultProps?: T) {
   const { isOpen, onClose: close, onToggle, onOpen } = useDisclosure()
 
-  const [props, setProps] = useState<T | void>(defaultProps)
+  const [props, setProps] = useState<T>(defaultProps || ({} as T))
 
   const open = useCallback(
     (props?: T) => {
-      setProps(props)
+      setProps(props || ({} as T))
       onOpen()
     },
     [onOpen],
@@ -20,7 +20,7 @@ export function useModal<T extends Record<string, any>>(defaultProps?: T) {
 
   const toggle = useCallback(
     (props?: T) => {
-      setProps(props)
+      setProps(props || ({} as T))
       onToggle()
     },
     [onToggle],

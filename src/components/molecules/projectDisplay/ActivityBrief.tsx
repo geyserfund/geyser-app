@@ -154,7 +154,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
         )}
         <SatoshiAmount
           fontSize="32px"
-          fontFamily={fonts.courier}
+          fontFamily={fonts.mono}
           fontWeight={400}
           fontStyle={'normal'}
           color="brand.primary600"
