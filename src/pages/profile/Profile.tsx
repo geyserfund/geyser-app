@@ -108,7 +108,7 @@ export const Profile = () => {
     >
       <SimpleGrid
         columns={{ base: 1, lg: 7 }}
-        spacingX={{ lg: '40px', xl: '80px' }}
+        spacingX={{ lg: '30px', xl: '40px' }}
         spacingY="20px"
         width="100%"
         height="full"
