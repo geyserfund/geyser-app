@@ -3,7 +3,7 @@ const LinkedToAnotherAccountReason =
 
 export const isAccountDuplicateError = (error: any) => {
   if (error && error.reason) {
-    return error.reason.contains(LinkedToAnotherAccountReason)
+    return `${error.reason}`.includes(LinkedToAnotherAccountReason)
   }
 
   return false
