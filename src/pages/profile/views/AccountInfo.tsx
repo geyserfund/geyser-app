@@ -51,27 +51,32 @@ export const AccountInfo = ({
         alignItems="start"
         spacing="20px"
       >
-        <Avatar
-          src={`${userProfile.imageUrl}`}
-          h="100px"
-          w="100px"
-          border="2px solid"
-          borderColor="neutral.200 !important"
-        />
-        <H1>{userProfile.username}</H1>
-        <Body1 semiBold color="neutral.600" wordBreak="break-word">
-          {userProfile.bio}
-        </Body1>
-        {lightningAddress && (
-          <LightningAddress
-            name={lightningAddress}
-            border="1px solid"
-            borderColor="neutral.200"
-            backgroundColor="neutral.100"
-            overflow="hidden"
-            maxWidth="full"
+        <VStack w="full" alignItems="start" spacing="10px">
+          <Avatar
+            src={`${userProfile.imageUrl}`}
+            h="100px"
+            w="100px"
+            border="2px solid"
+            borderColor="neutral.200 !important"
           />
-        )}
+          <H1>{userProfile.username}</H1>
+          {lightningAddress && (
+            <LightningAddress
+              name={lightningAddress}
+              border="1px solid"
+              borderColor="neutral.200"
+              backgroundColor="neutral.100"
+              overflow="hidden"
+              maxWidth="full"
+            />
+          )}
+          {userProfile.bio && (
+            <Body1 semiBold color="neutral.600" wordBreak="break-word">
+              {userProfile.bio}
+            </Body1>
+          )}
+        </VStack>
+
         <VStack w="full" alignItems="start">
           <Body1 bold color="neutral.900">
             Connected accounts
