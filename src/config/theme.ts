@@ -48,6 +48,7 @@ export const theme = extendTheme({
           color: colors.neutral900,
           fontSize: '16px',
           padding: '2px 5px',
+          backgroundColor: 'white',
           _hover: {
             borderColor: colors.neutral400,
           },
