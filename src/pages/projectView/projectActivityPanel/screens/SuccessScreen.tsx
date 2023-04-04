@@ -129,7 +129,6 @@ export const SuccessScreen = ({
           project={project as Project}
           formState={fundingState}
           contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
-          // rewardsEarned={fundingState.rewardsByIDAndCount}
           isFunderAnonymous={fundingState.anonymous}
           funderUsername={fundingState.funderUsername}
           funderEmail={fundingState.email}
