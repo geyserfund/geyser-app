@@ -80,6 +80,8 @@ export const colors = {
   secondaryRed: '#DF3634',
   secondaryGold: '#C7BB50',
 
+  secondaryRedDark: '#B01E1C',
+
   neutral50: '#FCFCFC',
   neutral100: '#F4F4F4',
   neutral200: '#E9ECEF',
@@ -90,4 +92,13 @@ export const colors = {
   neutral700: '#495057',
   neutral800: '#343A40',
   neutral900: '#212529',
+
+  twitter: '#2AA9E0',
+  twitterDark: '#0d5a82',
+
+  nostr: '#670C8B',
+  nostrDark: '#52095c',
+
+  lightning: '#FFE600',
+  lightningDark: '#CCA300',
 }

@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
 import { colors, fonts, neutralColors, primaryColors } from '../styles'
 
@@ -24,12 +24,49 @@ export const theme = extendTheme({
         height: '200px',
       },
       variants: {
+        danger: {
+          backgroundColor: colors.secondaryRed,
+          color: 'white',
+          _hover: {
+            backgroundColor: colors.secondaryRedDark,
+          },
+        },
+        transparent: {
+          backgroundColor: 'transparent',
+          border: '1px solid',
+          borderColor: 'transparent',
+          _hover: {
+            borderColor: colors.neutral900,
+          },
+          _active: {
+            backgroundColor: colors.neutral900,
+          },
+        },
         outlined: {
-          border: `1px solid ${colors.neutral200}`,
-          background: colors.bgGrey4,
+          border: `2px solid`,
+          borderColor: colors.neutral200,
           color: colors.neutral900,
           fontSize: '16px',
           padding: '2px 5px',
+          backgroundColor: 'white',
+          _hover: {
+            borderColor: colors.neutral400,
+          },
+          _active: {
+            backgroundColor: colors.neutral200,
+          },
+        },
+        contained: {
+          background: colors.primary400,
+          width: '100%',
+          borderRadius: '8px',
+          padding: '10px 30px',
+          color: colors.neutral800,
+          fontWeight: 500,
+          fontFamily: fonts.inter,
+          _hover: {
+            background: colors.primary500,
+          },
         },
         hugeContained: {
           background: colors.primary400,
@@ -41,12 +78,33 @@ export const theme = extendTheme({
           textTransform: 'uppercase',
           fontFamily: fonts.livvic,
           fontWeight: 700,
+          _hover: {
+            background: colors.primary500,
+          },
         },
       },
     },
     Text: {
       baseStyle: {
         fontSize: '14px',
+      },
+      variants: {
+        h3: () => ({
+          fontWeight: 600,
+          fontSize: '18px',
+          lineHeight: 1.4,
+        }),
+        h2: () => ({
+          fontWeight: 700,
+          fontSize: '24px',
+          lineHeight: 1.4,
+        }),
+        body1: ({ theme }: StyleFunctionProps) => ({
+          fontWeight: 500,
+          lineHeight: 1.6,
+          fontSize: '16px',
+          color: theme.colors.neutral[600],
+        }),
       },
     },
     Divider: {
@@ -59,7 +117,7 @@ export const theme = extendTheme({
     },
     Radio: {
       variants: {
-        primary: ({ colorScheme = 'primary' }) => ({
+        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
           color: `brand.${colorScheme}400`,
           control: {
             _checked: {

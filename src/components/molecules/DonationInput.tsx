@@ -101,7 +101,6 @@ export const DonationInput = ({
     if (!satoshi) {
       onChange(name, 0)
     } else {
-      console.log({ isDollar, isSatoshi, satoshi, dollar })
       onChange(name, satoshi)
     }
   }, [satoshi])

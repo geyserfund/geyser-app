@@ -228,7 +228,7 @@ export const ProjectCreateForm = ({
         <Body2>Project Image</Body2>
         <FileUpload
           onUploadComplete={handleImageUpload}
-          onLoading={<UploadBox loading />}
+          childrenOnLoading={<UploadBox loading />}
         >
           <UploadBox />
         </FileUpload>
@@ -240,7 +240,7 @@ export const ProjectCreateForm = ({
         <Body2>Header Image</Body2>
         <FileUpload
           onUploadComplete={handleHeaderImageUpload}
-          onLoading={<UploadBox loading />}
+          childrenOnLoading={<UploadBox loading />}
         >
           <UploadBox />
         </FileUpload>
