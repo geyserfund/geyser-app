@@ -93,7 +93,7 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
                 >
                   {canVote && (
                     <Button
-                      onClick={() => modalProps.open({ project })}
+                      onClick={() => modalProps.onOpen({ project })}
                       height="51px"
                       variant="hugeContained"
                     >
@@ -137,7 +137,7 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
                 {canVote && (
                   <Box ml={8} flexGrow={1}>
                     <Button
-                      onClick={() => modalProps.open({ project })}
+                      onClick={() => modalProps.onOpen({ project })}
                       mt={3}
                       height="57px"
                       variant="hugeContained"

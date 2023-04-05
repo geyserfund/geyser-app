@@ -102,7 +102,7 @@ export const AccountInfo = ({
       {isEdit && userProfile && (
         <>
           <Button
-            onClick={() => modalProps.open({ user: userProfile })}
+            onClick={() => modalProps.onOpen({ user: userProfile })}
             width="100%"
             variant="outlined"
             marginTop="20px"

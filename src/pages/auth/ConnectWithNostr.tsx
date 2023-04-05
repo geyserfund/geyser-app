@@ -1,19 +1,26 @@
-import { Button, useDisclosure } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
 import { NostrSvgIcon } from '../../components/icons'
+import { useModal } from '../../hooks/useModal'
 import { useNostrExtensonLogin } from '../../hooks/useNostrExtensionLogin'
 import { isAccountDuplicateError } from '../../utils'
-import { FailedToConnectAccount } from './FailedToConnectAccount'
+import { FailedToConnectAccount } from './components/FailedToConnectAccount'
+import { NostrHelpModal } from './components/NostrHelpModal'
 type Props = {
   onClose?: () => void
 }
 export const ConnectWithNostr = ({ onClose }: Props) => {
-  const { isOpen, onOpen, onClose: onClosePopup } = useDisclosure()
-
   const { connect, error, clearError } = useNostrExtensonLogin()
 
+  const failedModal = useModal()
+  const nostrHelpModal = useModal()
+
   const handleClick = async () => {
+    if (!window.nostr) {
+      return nostrHelpModal.onOpen()
+    }
+
     try {
       await connect()
     } finally {
@@ -24,7 +31,7 @@ export const ConnectWithNostr = ({ onClose }: Props) => {
   useEffect(() => {
     if (error) {
       if (isAccountDuplicateError(error)) {
-        onOpen()
+        failedModal.onOpen()
       }
 
       clearError()
@@ -43,7 +50,8 @@ export const ConnectWithNostr = ({ onClose }: Props) => {
       >
         Nostr
       </Button>
-      <FailedToConnectAccount isOpen={isOpen} onClose={onClosePopup} />
+      <NostrHelpModal {...nostrHelpModal} />
+      <FailedToConnectAccount {...failedModal} />
     </>
   )
 }

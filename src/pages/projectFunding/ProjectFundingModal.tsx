@@ -15,7 +15,7 @@ import { ProjectFunding } from './ProjectFunding'
 
 export const ProjectFundingModal = ({
   isOpen,
-  close,
+  onClose,
   props,
 }: ProjectFundingModalProps) => {
   const [title, setTitle] = useState<string | null>(null)
@@ -28,7 +28,7 @@ export const ProjectFundingModal = ({
   }, [props])
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={close} size="sm">
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size="sm">
       <ModalOverlay
         bg="blackAlpha.300"
         backdropFilter="blur(10px) hue-rotate(90deg)"
