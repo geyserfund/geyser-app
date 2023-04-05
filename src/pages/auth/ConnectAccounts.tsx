@@ -8,11 +8,9 @@ import { ConnectWithTwitter } from './ConnectWithTwitter'
 import { ExternalAccountType } from './type'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
-  const hasNostrAccount = user.externalAccounts.some(
+  const displayNostrButton = !user.externalAccounts.some(
     (externalAccount) => externalAccount?.type === 'nostr',
   )
-
-  const displayNostrButton = !hasNostrAccount && window.nostr
 
   const displayTwitterButton = !user.externalAccounts.some(
     (externalAccount) => externalAccount?.type === ExternalAccountType.twitter,
