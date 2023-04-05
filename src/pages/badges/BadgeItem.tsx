@@ -24,7 +24,7 @@ const BadgeItem = ({ image, name, description, winners }: BadgeItemProps) => {
 
   return (
     <VStack justify="center" maxWidth="272px">
-      <Image alt="badge" src={image} />
+      <Image alt="badge" objectFit="contain" src={image} width="190px" />
       <Text variant="h3">{name}</Text>
       <Text>{description}</Text>
       <HStack>
