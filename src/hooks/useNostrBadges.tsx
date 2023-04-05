@@ -1,6 +1,6 @@
 import 'websocket-polyfill'
 
-import { getEventHash, Relay, relayInit } from 'nostr-tools'
+import { Filter, getEventHash, Relay, relayInit } from 'nostr-tools'
 import { Event } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
@@ -12,13 +12,17 @@ const relayUri = 'wss://relay.damus.io'
 
 export type ClaimABadgeProps = {
   badgeId: string
-  badgeAwardId: string
   onFail?: any
   isClaiming?: (claiming: boolean) => void
 }
 
+type AwardedBadges = {
+  badgeId: string
+  badgeAwardId: string
+}
+
 export const useNostrBadges = (pubKey: string) => {
-  const { toast } = useNotification()
+  const { toast, unexpected } = useNotification()
 
   const [relay, setRelay] = useState<Relay>()
 
@@ -26,6 +30,7 @@ export const useNostrBadges = (pubKey: string) => {
   const [claiming, setClaiming] = useState(true)
 
   const [badgeIds, setBadgeIds] = useState<string[]>([])
+  const [awardedBadgeIds, setAwardedBadgeIds] = useState<AwardedBadges[]>([])
 
   // NOTE: these are for when  we do have to fetch badges data from nostr
   // const [badges, setBadges] = useState<NostrBadges[]>([])
@@ -70,12 +75,37 @@ export const useNostrBadges = (pubKey: string) => {
     handleEventsInit()
   }, [pubKey])
 
+  useEffect(() => {
+    if (relay) {
+      const handleAwardEventsInit = async () => {
+        const badgeAwardFilter = {} as Filter
+
+        badgeAwardFilter.kinds = [8]
+        badgeAwardFilter.authors = [VITE_APP_GEYSER_NOSTR_PUBKEY]
+        badgeAwardFilter['#p'] = [pubKey]
+        const events = await relay.list([badgeAwardFilter])
+        const parsedBadges = events ? parseBadgesFromAwardEvents(events) : []
+        setAwardedBadgeIds(parsedBadges)
+      }
+
+      handleAwardEventsInit()
+    }
+  }, [relay])
+
   const claimABadge = async ({
     badgeId,
-    badgeAwardId,
     onFail,
     isClaiming,
   }: ClaimABadgeProps) => {
+    const badgeAwardId =
+      awardedBadgeIds.find((badgeAward) => badgeAward.badgeId === badgeId)
+        ?.badgeAwardId || ''
+
+    if (badgeAwardId) {
+      unexpected()
+      return
+    }
+
     if (relay) {
       setClaiming(true)
       isClaiming?.(true)
@@ -144,6 +174,22 @@ const parseBadgesFromProfileEvents = (event: Event): string[] => {
   return badges
 }
 
+const parseBadgesFromAwardEvents = (events: Event[]): AwardedBadges[] => {
+  const badges: AwardedBadges[] = []
+
+  events.map((event) => {
+    const firstTag = event.tags[0]
+    if (firstTag && firstTag[0] === 'a') {
+      const values = firstTag[1].split(':')
+      const badgeId = values[2]
+      if (badgeId) {
+        badges.push({ badgeId, badgeAwardId: event.id })
+      }
+    }
+  })
+
+  return badges
+}
 // NOTE: for parsing badge dat from nostr badge definition event
 // const parseBadgesFromDefinitionEvent = (events: Event[]): NostrBadges[] => {
 //   const badges = [] as NostrBadges[]

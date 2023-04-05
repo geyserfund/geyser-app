@@ -22,7 +22,6 @@ export const BadgeItem = ({
   const handleClick = () => {
     claimABadge({
       badgeId: badge.uniqueName,
-      badgeAwardId: userBadge.badgeAwardEventId || '',
       isClaiming: setClaiming,
     })
   }
