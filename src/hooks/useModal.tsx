@@ -31,5 +31,5 @@ export function useModal<T extends Record<string, any>>(defaultProps?: T) {
     [_onToggle],
   )
 
-  return { onOpen, onClose, toggle: onToggle, isOpen, props }
+  return { onOpen, onClose, onToggle, isOpen, props }
 }
