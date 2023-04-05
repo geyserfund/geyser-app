@@ -13,27 +13,40 @@ import {
 } from '@chakra-ui/react'
 import { BsArrowLeft } from 'react-icons/bs'
 
-import { Body1 } from '../../components/typography'
-import { ButtonComponent } from '../../components/ui'
-import { CannotConnectAccountUrl, GeyserTelegramUrl } from '../../constants'
+import { Body1 } from '../../../components/typography'
+import { ButtonComponent } from '../../../components/ui'
+import { CannotConnectAccountUrl, GeyserTelegramUrl } from '../../../constants'
+import { useModal } from '../../../hooks/useModal'
 
-interface FailedToConnectAccountProps {
-  isOpen: boolean
-  onClose: () => void
+interface FailedToConnectAccountProps extends ReturnType<typeof useModal> {
+  title?: string
+  children?: JSX.Element
 }
+
+const DEFAULT_TITLE = 'Account connection error'
+
+const DEFAULT_DESCRIPTION = (
+  <Body1 semiBold color="black">
+    This account is connected to another Geyser profile. Make sure you use a
+    unique account. For any questions reach out to the Geyser team via
+    <ChakraLink href={GeyserTelegramUrl} isExternal>
+      {' telegram.'}
+    </ChakraLink>
+  </Body1>
+)
 
 export const FailedToConnectAccount = ({
   isOpen,
   onClose,
+  title = DEFAULT_TITLE,
+  children = DEFAULT_DESCRIPTION,
 }: FailedToConnectAccountProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent display="flex" alignItems="center" padding="20px 15px">
         <ModalHeader>
-          <Text fontSize="lg" fontWeight="bold">
-            Account connection error
-          </Text>
+          <Text variant="h2">{title}</Text>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody width="100%">
@@ -46,21 +59,13 @@ export const FailedToConnectAccount = ({
                 src={CannotConnectAccountUrl}
               />
             </Box>
-            <Body1 semiBold color="black">
-              This account is connected to another Geyser profile. Make sure you
-              use a unique account. For any questions reach out to the Geyser
-              team via
-              <ChakraLink href={GeyserTelegramUrl} isExternal>
-                {' telegram.'}
-              </ChakraLink>
-            </Body1>
+            <Box pb={6}>{children}</Box>
             <ButtonComponent
-              width="full"
-              maxWidth="200px"
+              width="100%"
               leftIcon={<BsArrowLeft fontSize="25px" />}
               onClick={onClose}
             >
-              Go back
+              Back
             </ButtonComponent>
           </VStack>
         </ModalBody>
