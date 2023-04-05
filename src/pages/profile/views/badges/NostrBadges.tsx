@@ -2,50 +2,43 @@ import { GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { Body2 } from '../../../../components/typography'
-import { useNostrBadges } from '../../../../hooks/useNostrBadges'
-import { UserBadge } from '../../../../types'
+import { NostrBadge, useNostrBadges } from '../../../../hooks/useNostrBadges'
 import { BadgeItem } from './BadgeItem'
 import { BadgesBodySkeleton } from './BadgesBody'
 
 export const NostrBadges = ({
   nostrId,
-  userBadges,
   isEdit,
 }: {
   nostrId: string
-  userBadges: UserBadge[]
   isEdit: boolean
 }) => {
-  const [claimedBadges, setClaimedBadges] = useState<UserBadge[]>([])
-  const [unClaimedBadges, setUnClaimedBadges] = useState<UserBadge[]>([])
+  const [claimedBadges, setClaimedBadges] = useState<NostrBadge[]>([])
+  const [unClaimedBadges, setUnClaimedBadges] = useState<NostrBadge[]>([])
 
   const {
-    badgeIds: nostrBadgeIds,
+    badges,
+    claimedBadgeIds: nostrBadgeIds,
     loading: nostrBadgesLoading,
     claimABadge,
   } = useNostrBadges(nostrId)
 
   useEffect(() => {
-    if (userBadges.length > 0) {
+    if (badges.length > 0) {
       const claimedBadges =
         (nostrBadgeIds.length > 0 &&
-          userBadges?.filter((userbadge) =>
-            nostrBadgeIds.includes(userbadge.badge.uniqueName),
-          )) ||
+          badges?.filter((badge) => nostrBadgeIds.includes(badge.id))) ||
         []
 
       const unClaimedBadges =
         nostrBadgeIds.length > 0
-          ? userBadges?.filter(
-              (userbadge) =>
-                !nostrBadgeIds.includes(userbadge.badge.uniqueName),
-            ) || []
-          : userBadges
+          ? badges?.filter((badges) => !nostrBadgeIds.includes(badges.id)) || []
+          : badges
 
       setClaimedBadges(claimedBadges)
       setUnClaimedBadges(unClaimedBadges)
     }
-  }, [nostrBadgeIds, userBadges])
+  }, [nostrBadgeIds, badges])
 
   const numberOfBadges = nostrBadgeIds?.length || 0
 

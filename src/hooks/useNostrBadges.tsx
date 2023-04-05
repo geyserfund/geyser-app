@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
 import { useNotification } from '../utils'
 import { signEvent } from '../utils/nostr/nip07'
+import { useDebounce } from './useDebounce'
 
 const relayUri = 'wss://relay.damus.io'
 
@@ -29,28 +30,40 @@ export const useNostrBadges = (pubKey: string) => {
   const [loading, setLoading] = useState(true)
   const [claiming, setClaiming] = useState(true)
 
-  const [badgeIds, setBadgeIds] = useState<string[]>([])
+  const [badges, setBadges] = useState<NostrBadge[]>([])
+
+  const [claimedBadgeIds, setClaimedBadgeIds] = useState<string[]>([])
   const [awardedBadgeIds, setAwardedBadgeIds] = useState<AwardedBadges[]>([])
 
+  const debouncedaAwardedBadgeIds = useDebounce(awardedBadgeIds, 500)
+
+  useEffect(() => {
+    if (debouncedaAwardedBadgeIds && debouncedaAwardedBadgeIds.length > 0) {
+      const badgeIds = debouncedaAwardedBadgeIds.map(
+        (awardedBadge) => awardedBadge.badgeId,
+      )
+      handleFetchBadges(badgeIds)
+    }
+  }, [debouncedaAwardedBadgeIds])
+
   // NOTE: these are for when  we do have to fetch badges data from nostr
-  // const [badges, setBadges] = useState<NostrBadges[]>([])
 
-  // const handleFetchBadges = async (badgeIds: string[]) => {
-  //   const badgeFilter = {} as Filter
+  const handleFetchBadges = async (badgeIds: string[]) => {
+    const badgeFilter = {} as Filter
 
-  //   badgeFilter.kinds = [30009]
-  //   badgeFilter.authors = [VITE_APP_GEYSER_NOSTR_PUBKEY]
-  //   badgeFilter['#d'] = badgeIds
+    badgeFilter.kinds = [30009]
+    badgeFilter.authors = [VITE_APP_GEYSER_NOSTR_PUBKEY]
+    badgeFilter['#d'] = badgeIds
 
-  //   const events = await relay?.list([badgeFilter])
+    const events = await relay?.list([badgeFilter])
 
-  //   if (events) {
-  //     const parsedBadges = parseBadgesFromDefinitionEvent(events)
-  //     setBadges(parsedBadges)
-  //   }
+    if (events) {
+      const parsedBadges = parseBadgesFromDefinitionEvent(events)
+      setBadges(parsedBadges)
+    }
 
-  //   setLoading(false)
-  // }
+    setLoading(false)
+  }
 
   useEffect(() => {
     const handleEventsInit = async () => {
@@ -62,7 +75,7 @@ export const useNostrBadges = (pubKey: string) => {
           authors: [pubKey],
         })
         const parsedBadges = event ? parseBadgesFromProfileEvents(event) : []
-        setBadgeIds(parsedBadges)
+        setClaimedBadgeIds(parsedBadges)
 
         setLoading(false)
       })
@@ -85,6 +98,11 @@ export const useNostrBadges = (pubKey: string) => {
         badgeAwardFilter['#p'] = [pubKey]
         const events = await relay.list([badgeAwardFilter])
         const parsedBadges = events ? parseBadgesFromAwardEvents(events) : []
+
+        if (parsedBadges.length === 0) {
+          setLoading(false)
+        }
+
         setAwardedBadgeIds(parsedBadges)
       }
 
@@ -101,7 +119,7 @@ export const useNostrBadges = (pubKey: string) => {
       awardedBadgeIds.find((badgeAward) => badgeAward.badgeId === badgeId)
         ?.badgeAwardId || ''
 
-    if (badgeAwardId) {
+    if (!badgeAwardId) {
       unexpected()
       return
     }
@@ -139,7 +157,7 @@ export const useNostrBadges = (pubKey: string) => {
       pub.on('ok', () => {
         setClaiming(false)
         isClaiming?.(false)
-        setBadgeIds([...badgeIds, badgeId])
+        setClaimedBadgeIds([...claimedBadgeIds, badgeId])
         toast({
           status: 'success',
           title: 'Congratulations!',
@@ -156,7 +174,7 @@ export const useNostrBadges = (pubKey: string) => {
     }
   }
 
-  return { badgeIds, claimABadge, loading, claiming }
+  return { badges, claimedBadgeIds, claimABadge, loading, claiming }
 }
 
 const parseBadgesFromProfileEvents = (event: Event): string[] => {
@@ -190,27 +208,28 @@ const parseBadgesFromAwardEvents = (events: Event[]): AwardedBadges[] => {
 
   return badges
 }
+
 // NOTE: for parsing badge dat from nostr badge definition event
-// const parseBadgesFromDefinitionEvent = (events: Event[]): NostrBadges[] => {
-//   const badges = [] as NostrBadges[]
+const parseBadgesFromDefinitionEvent = (events: Event[]): NostrBadge[] => {
+  const badges = [] as NostrBadge[]
 
-//   events.map((event) => {
-//     const badge = {} as NostrBadges
-//     event.tags.map((tag) => {
-//       if (tag[0] === 'd') {
-//         badge.id = tag[1]
-//       } else {
-//         badge[tag[0] as keyof NostrBadges] = tag[1]
-//       }
-//     })
+  events.map((event) => {
+    const badge = {} as NostrBadge
+    event.tags.map((tag) => {
+      if (tag[0] === 'd') {
+        badge.id = tag[1]
+      } else {
+        badge[tag[0] as keyof NostrBadge] = tag[1]
+      }
+    })
 
-//     badges.push(badge)
-//   })
+    badges.push(badge)
+  })
 
-//   return badges
-// }
+  return badges
+}
 
-export type NostrBadges = {
+export type NostrBadge = {
   id: string
   name: string
   description: string

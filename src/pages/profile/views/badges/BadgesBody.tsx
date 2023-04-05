@@ -64,13 +64,7 @@ export const BadgesBody = ({
         </HStack>
       )}
 
-      {nostrId && (
-        <NostrBadges
-          nostrId={nostrId}
-          userBadges={userBadges}
-          isEdit={isEdit}
-        />
-      )}
+      {nostrId && <NostrBadges nostrId={nostrId} isEdit={isEdit} />}
     </>
   )
 }
