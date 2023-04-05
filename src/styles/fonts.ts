@@ -3,9 +3,7 @@ export const fonts = {
   header: "'Red Hat Display', sans-serif",
   solway: "'Solway', serif",
   inter: "'Inter', sans-serif;",
-  myanmar: 'Myanmar-Khyay',
   interBlack: "'Inter/Black', sans-serif;",
   mono: "'Courier Prime', monospace;",
   livvic: `'Livvic', sans-serif;`,
-  courier: "'courier-std', monospace;",
 }

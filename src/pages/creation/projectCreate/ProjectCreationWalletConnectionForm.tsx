@@ -37,11 +37,10 @@ import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations'
 import { colors } from '../../../styles'
 import {
   CreateWalletInput,
-  FundingResourceType,
   LightningAddressVerifyResponse,
   LndNodeType,
   Project,
-  ResourceInput,
+  WalletResourceType,
 } from '../../../types/generated/graphql'
 import { toInt, useNotification, validateEmail } from '../../../utils'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
@@ -161,9 +160,12 @@ export const ProjectCreationWalletConnectionForm = ({
   )
 
   const createWalletInput: CreateWalletInput | null = useMemo(() => {
-    const resourceInput: ResourceInput = {
+    const resourceInput: {
+      resourceId: number
+      resourceType: WalletResourceType
+    } = {
       resourceId: toInt(project.id),
-      resourceType: FundingResourceType.Project,
+      resourceType: WalletResourceType.Project,
     }
 
     if (connectionOption === ConnectionOption.PERSONAL_NODE) {

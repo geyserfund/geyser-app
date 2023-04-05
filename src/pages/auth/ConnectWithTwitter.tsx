@@ -1,7 +1,7 @@
 import { useLazyQuery } from '@apollo/client'
-import Icon from '@chakra-ui/icon'
+import { Button, ButtonProps } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { SiTwitter } from 'react-icons/si'
+import { BsTwitter } from 'react-icons/bs'
 
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
@@ -9,13 +9,15 @@ import { defaultUser } from '../../defaults'
 import { ME } from '../../graphql'
 import { User } from '../../types/generated/graphql'
 import { hasTwitterAccount, useNotification } from '../../utils'
-import { ButtonComponent } from '../ui'
 
-type Props = {
+interface ConnectWithTwitterProps extends ButtonProps {
   onClose?: () => void
 }
 
-export const TwitterConnect = ({ onClose }: Props) => {
+export const ConnectWithTwitter = ({
+  onClose,
+  ...rest
+}: ConnectWithTwitterProps) => {
   const { setUser, setIsLoggedIn } = useAuthContext()
   const { toast } = useNotification()
 
@@ -107,14 +109,16 @@ export const TwitterConnect = ({ onClose }: Props) => {
   }
 
   return (
-    <ButtonComponent
-      w="full"
-      primary
-      standard
-      leftIcon={<Icon as={SiTwitter} />}
+    <Button
+      w="100%"
+      backgroundColor="brand.twitter"
+      leftIcon={<BsTwitter />}
+      color="white"
+      _hover={{ backgroundColor: 'brand.twitterDark' }}
       onClick={handleClick}
+      {...rest}
     >
-      Connect Twitter
-    </ButtonComponent>
+      Twitter
+    </Button>
   )
 }

@@ -296,7 +296,7 @@ export const RewardAdditionModal = ({
             <VStack width="100%" alignItems="flex-start">
               <FileUpload
                 onUploadComplete={handleUpload}
-                onLoading={<UploadBox loading />}
+                childrenOnLoading={<UploadBox loading />}
               >
                 {rewards.current.image ? (
                   <HStack justifyContent="center">

@@ -109,8 +109,7 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
             <Box pl={2} filter="opacity(0.4)">
               {project.funders?.filter(Boolean).map(
                 (funder) =>
-                  funder &&
-                  funder.user && (
+                  funder && (
                     <AvatarElement
                       key={funder.id}
                       width="28px"
@@ -122,6 +121,7 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
                       }}
                       avatarOnly
                       borderRadius="50%"
+                      seed={funder.id}
                       user={funder.user}
                     />
                   ),

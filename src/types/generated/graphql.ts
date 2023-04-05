@@ -50,8 +50,8 @@ export type Scalars = {
 export type Activity = {
   __typename?: 'Activity';
   createdAt: Scalars['Date'];
-  id?: Maybe<Scalars['String']>;
-  resource?: Maybe<ActivityResource>;
+  id: Scalars['String'];
+  resource: ActivityResource;
 };
 
 export type ActivityCreatedSubscriptionInput = {
@@ -88,6 +88,30 @@ export type AmountSummary = {
   rewardsCost: Scalars['Int'];
   shippingCost: Scalars['Int'];
   total: Scalars['Int'];
+};
+
+export type Badge = {
+  __typename?: 'Badge';
+  createdAt: Scalars['Date'];
+  description: Scalars['String'];
+  id: Scalars['String'];
+  image: Scalars['String'];
+  name: Scalars['String'];
+  thumb: Scalars['String'];
+  uniqueName: Scalars['String'];
+};
+
+export type BadgeClaimInput = {
+  userBadgeId: Scalars['BigInt'];
+};
+
+export type BadgesGetInput = {
+  where?: InputMaybe<BadgesGetWhereInput>;
+};
+
+export type BadgesGetWhereInput = {
+  fundingTxId?: InputMaybe<Scalars['BigInt']>;
+  userId?: InputMaybe<Scalars['BigInt']>;
 };
 
 export type ConnectionDetails = LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic;
@@ -156,7 +180,7 @@ export type CreateWalletInput = {
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsCreateInput>;
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsCreateInput>;
   name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>;
-  resourceInput: ResourceInput;
+  resourceInput: WalletResourceInput;
 };
 
 export enum Currency {
@@ -692,6 +716,7 @@ export type Location = {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
+  claimBadge: UserBadge;
   createEntry: Entry;
   createProject: Project;
   createProjectMilestone: ProjectMilestone;
@@ -723,6 +748,11 @@ export type Mutation = {
   /** This operation is currently not supported. */
   updateWallet: Wallet;
   updateWalletState: Wallet;
+};
+
+
+export type MutationClaimBadgeArgs = {
+  input: BadgeClaimInput;
 };
 
 
@@ -1099,6 +1129,7 @@ export type ProjectsSummary = {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
+  badges: Array<Badge>;
   entry?: Maybe<Entry>;
   fundingTx: FundingTx;
   /** Returns all activities. */
@@ -1129,6 +1160,8 @@ export type Query = {
   statusCheck: Scalars['Boolean'];
   tagsGet: Array<TagsGetResult>;
   user: User;
+  userBadge?: Maybe<UserBadge>;
+  userBadges: Array<UserBadge>;
 };
 
 
@@ -1219,6 +1252,16 @@ export type QueryProjectsMostFundedOfTheWeekGetArgs = {
 
 export type QueryUserArgs = {
   where: UserGetInput;
+};
+
+
+export type QueryUserBadgeArgs = {
+  userBadgeId: Scalars['BigInt'];
+};
+
+
+export type QueryUserBadgesArgs = {
+  input: BadgesGetInput;
 };
 
 export type ResourceInput = {
@@ -1382,6 +1425,7 @@ export type UpdateProjectRewardInput = {
 };
 
 export type UpdateUserInput = {
+  bio?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['email_String_format_email']>;
   id: Scalars['BigInt'];
   imageUrl?: InputMaybe<Scalars['String']>;
@@ -1403,6 +1447,8 @@ export type UpdateWalletStateInput = {
 
 export type User = {
   __typename?: 'User';
+  badges: Array<UserBadge>;
+  bio?: Maybe<Scalars['String']>;
   /** Details on the participation of a User in a project. */
   contributions: Array<Maybe<UserProjectContribution>>;
   email?: Maybe<Scalars['String']>;
@@ -1429,6 +1475,7 @@ export type User = {
    */
   projects: Array<Maybe<Project>>;
   username: Scalars['String'];
+  wallet?: Maybe<Wallet>;
 };
 
 
@@ -1440,6 +1487,24 @@ export type UserEntriesArgs = {
 export type UserProjectsArgs = {
   input?: InputMaybe<UserProjectsGetInput>;
 };
+
+export type UserBadge = {
+  __typename?: 'UserBadge';
+  badge: Badge;
+  badgeAwardEventId?: Maybe<Scalars['String']>;
+  badgeDefinitionEventId: Scalars['String'];
+  createdAt: Scalars['Date'];
+  fundingTxId?: Maybe<Scalars['BigInt']>;
+  id: Scalars['BigInt'];
+  status?: Maybe<UserBadgeStatus>;
+  updatedAt: Scalars['Date'];
+  userId: Scalars['BigInt'];
+};
+
+export enum UserBadgeStatus {
+  Accepted = 'ACCEPTED',
+  Pending = 'PENDING'
+}
 
 export type UserEntriesGetInput = {
   where?: InputMaybe<UserEntriesGetWhereInput>;
@@ -1489,6 +1554,16 @@ export type Wallet = {
   name?: Maybe<Scalars['name_String_minLength_5_maxLength_60']>;
   state: WalletState;
 };
+
+export type WalletResourceInput = {
+  resourceId: Scalars['BigInt'];
+  resourceType: WalletResourceType;
+};
+
+export enum WalletResourceType {
+  Project = 'project',
+  User = 'user'
+}
 
 export type WalletState = {
   __typename?: 'WalletState';
@@ -1601,18 +1676,29 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type ResolversUnionTypes = {
+  ActivityResource: ( Entry ) | ( Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> } ) | ( Project ) | ( ProjectReward );
+  ConnectionDetails: ( LightningAddressConnectionDetails ) | ( LndConnectionDetailsPrivate ) | ( LndConnectionDetailsPublic );
+  SourceResource: ( Entry ) | ( Project );
+};
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource?: Maybe<ResolversTypes['ActivityResource']> }>;
+  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>;
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityResource: ResolversTypes['Entry'] | ResolversTypes['FundingTx'] | ResolversTypes['Project'] | ResolversTypes['ProjectReward'];
+  ActivityResource: ResolverTypeWrapper<ResolversUnionTypes['ActivityResource']>;
   ActivityResourceType: ActivityResourceType;
   Ambassador: ResolverTypeWrapper<Ambassador>;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
+  Badge: ResolverTypeWrapper<Badge>;
+  BadgeClaimInput: BadgeClaimInput;
+  BadgesGetInput: BadgesGetInput;
+  BadgesGetWhereInput: BadgesGetWhereInput;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  ConnectionDetails: ResolversTypes['LightningAddressConnectionDetails'] | ResolversTypes['LndConnectionDetailsPrivate'] | ResolversTypes['LndConnectionDetailsPublic'];
+  ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes['ConnectionDetails']>;
   Country: ResolverTypeWrapper<Country>;
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
@@ -1729,7 +1815,7 @@ export type ResolversTypes = {
   ShippingDestination: ShippingDestination;
   ShippingInput: ShippingInput;
   SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>;
-  SourceResource: ResolversTypes['Entry'] | ResolversTypes['Project'];
+  SourceResource: ResolverTypeWrapper<ResolversUnionTypes['SourceResource']>;
   Sponsor: ResolverTypeWrapper<Sponsor>;
   SponsorStatus: SponsorStatus;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -1746,6 +1832,8 @@ export type ResolversTypes = {
   UpdateWalletInput: UpdateWalletInput;
   UpdateWalletStateInput: UpdateWalletStateInput;
   User: ResolverTypeWrapper<User>;
+  UserBadge: ResolverTypeWrapper<UserBadge>;
+  UserBadgeStatus: UserBadgeStatus;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
   UserGetInput: UserGetInput;
@@ -1753,6 +1841,8 @@ export type ResolversTypes = {
   UserProjectsGetInput: UserProjectsGetInput;
   UserProjectsGetWhereInput: UserProjectsGetWhereInput;
   Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
+  WalletResourceInput: WalletResourceInput;
+  WalletResourceType: WalletResourceType;
   WalletState: ResolverTypeWrapper<WalletState>;
   WalletStatus: WalletStatus;
   WalletStatusCode: WalletStatusCode;
@@ -1792,15 +1882,19 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Activity: Omit<Activity, 'resource'> & { resource?: Maybe<ResolversParentTypes['ActivityResource']> };
+  Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] };
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityResource: ResolversParentTypes['Entry'] | ResolversParentTypes['FundingTx'] | ResolversParentTypes['Project'] | ResolversParentTypes['ProjectReward'];
+  ActivityResource: ResolversUnionTypes['ActivityResource'];
   Ambassador: Ambassador;
   AmountSummary: AmountSummary;
+  Badge: Badge;
+  BadgeClaimInput: BadgeClaimInput;
+  BadgesGetInput: BadgesGetInput;
+  BadgesGetWhereInput: BadgesGetWhereInput;
   BigInt: Scalars['BigInt'];
   Boolean: Scalars['Boolean'];
-  ConnectionDetails: ResolversParentTypes['LightningAddressConnectionDetails'] | ResolversParentTypes['LndConnectionDetailsPrivate'] | ResolversParentTypes['LndConnectionDetailsPublic'];
+  ConnectionDetails: ResolversUnionTypes['ConnectionDetails'];
   Country: Country;
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
@@ -1902,7 +1996,7 @@ export type ResolversParentTypes = {
   RewardInput: RewardInput;
   ShippingInput: ShippingInput;
   SignedUploadUrl: SignedUploadUrl;
-  SourceResource: ResolversParentTypes['Entry'] | ResolversParentTypes['Project'];
+  SourceResource: ResolversUnionTypes['SourceResource'];
   Sponsor: Sponsor;
   String: Scalars['String'];
   Subscription: {};
@@ -1918,6 +2012,7 @@ export type ResolversParentTypes = {
   UpdateWalletInput: UpdateWalletInput;
   UpdateWalletStateInput: UpdateWalletStateInput;
   User: User;
+  UserBadge: UserBadge;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
   UserGetInput: UserGetInput;
@@ -1925,6 +2020,7 @@ export type ResolversParentTypes = {
   UserProjectsGetInput: UserProjectsGetInput;
   UserProjectsGetWhereInput: UserProjectsGetWhereInput;
   Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] };
+  WalletResourceInput: WalletResourceInput;
   WalletState: WalletState;
   amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1'];
   amount_Float_min_1: Scalars['amount_Float_min_1'];
@@ -1981,8 +2077,8 @@ export type ConstraintDirectiveResolver<Result, Parent, ContextType = any, Args 
 
 export type ActivityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity']> = {
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  resource?: Resolver<Maybe<ResolversTypes['ActivityResource']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  resource?: Resolver<ResolversTypes['ActivityResource'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2002,6 +2098,17 @@ export type AmountSummaryResolvers<ContextType = any, ParentType extends Resolve
   rewardsCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   shippingCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BadgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Badge'] = ResolversParentTypes['Badge']> = {
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  thumb?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  uniqueName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2220,6 +2327,7 @@ export type LocationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
   createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
   createProjectMilestone?: Resolver<ResolversTypes['ProjectMilestone'], ParentType, ContextType, Partial<MutationCreateProjectMilestoneArgs>>;
@@ -2361,6 +2469,7 @@ export type ProjectsSummaryResolvers<ContextType = any, ParentType extends Resol
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
   entry?: Resolver<Maybe<ResolversTypes['Entry']>, ParentType, ContextType, RequireFields<QueryEntryArgs, 'id'>>;
   fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, RequireFields<QueryFundingTxArgs, 'id'>>;
   getActivities?: Resolver<Array<Maybe<ResolversTypes['Activity']>>, ParentType, ContextType, Partial<QueryGetActivitiesArgs>>;
@@ -2386,6 +2495,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
+  userBadge?: Resolver<Maybe<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgeArgs, 'userBadgeId'>>;
+  userBadges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgesArgs, 'input'>>;
 };
 
 export type SignedUploadUrlResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignedUploadUrl'] = ResolversParentTypes['SignedUploadUrl']> = {
@@ -2431,6 +2542,8 @@ export type TagsGetResultResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  badges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType>;
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contributions?: Resolver<Array<Maybe<ResolversTypes['UserProjectContribution']>>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   entries?: Resolver<Array<Maybe<ResolversTypes['Entry']>>, ParentType, ContextType, Partial<UserEntriesArgs>>;
@@ -2442,6 +2555,20 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   projectFollows?: Resolver<Array<Maybe<ResolversTypes['Project']>>, ParentType, ContextType>;
   projects?: Resolver<Array<Maybe<ResolversTypes['Project']>>, ParentType, ContextType, Partial<UserProjectsArgs>>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  wallet?: Resolver<Maybe<ResolversTypes['Wallet']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserBadgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserBadge'] = ResolversParentTypes['UserBadge']> = {
+  badge?: Resolver<ResolversTypes['Badge'], ParentType, ContextType>;
+  badgeAwardEventId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  badgeDefinitionEventId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  fundingTxId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['UserBadgeStatus']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2601,6 +2728,7 @@ export type Resolvers<ContextType = any> = {
   ActivityResource?: ActivityResourceResolvers<ContextType>;
   Ambassador?: AmbassadorResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
+  Badge?: BadgeResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>;
   Country?: CountryResolvers<ContextType>;
@@ -2648,6 +2776,7 @@ export type Resolvers<ContextType = any> = {
   Tag?: TagResolvers<ContextType>;
   TagsGetResult?: TagsGetResultResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserBadge?: UserBadgeResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
   WalletState?: WalletStateResolvers<ContextType>;

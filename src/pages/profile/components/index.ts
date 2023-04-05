@@ -1,3 +1,4 @@
+export * from './ExternalAccountDisplay'
 export * from './ExternalAccountLinkItem'
 export * from './UserProfileHeader'
 export * from './UserProfilePageContributionsList'

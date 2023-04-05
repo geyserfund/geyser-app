@@ -501,7 +501,7 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={showHaveTransparentBackground ? 'transparent' : 'brand.bgGrey4'}
+        bg={showHaveTransparentBackground ? 'transparent' : 'brand.bgWhite'}
         px={4}
         position="fixed"
         top={0}

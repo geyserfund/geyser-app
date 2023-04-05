@@ -13,7 +13,7 @@ import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
 import { SkeletonLayout } from '../../../../components/layouts'
 import { ExternalAccountLinkIcon } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
-import { Caption } from '../../../../components/typography'
+import { Caption, MonoBody1 } from '../../../../components/typography'
 import {
   AnonymousAvatar,
   AvatarLink,
@@ -23,7 +23,7 @@ import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
 import { FundingTx } from '../../../../types/generated/graphql'
-import { getDaysAgo, toSmallImageUrl } from '../../../../utils'
+import { getDaysAgo, getRandomOrb, toSmallImageUrl } from '../../../../utils'
 import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
 
 type Props = HTMLChakraProps<'div'> & {
@@ -99,7 +99,7 @@ export const ContributionActivityItem = ({
               </HStack>
             ) : (
               <LinkableAvatar
-                imageSrc={funder.user?.imageUrl || ''}
+                imageSrc={funder.user?.imageUrl || getRandomOrb(funder.id)}
                 avatarUsername={funder.user?.username || ''}
                 userProfileID={funder.user?.id}
                 imageSize={'24px'}
@@ -131,7 +131,9 @@ export const ContributionActivityItem = ({
           {/* Funding Amount */}
           <Box display="flex" alignItems="center">
             <SatoshiIconTilted scale={0.7} />
-            <Text>{`${commaFormatted(fundingTx.amount)}`} </Text>
+            <MonoBody1 fontFamily={fonts.mono}>
+              {commaFormatted(fundingTx.amount)}
+            </MonoBody1>
           </Box>
         </Box>
 
