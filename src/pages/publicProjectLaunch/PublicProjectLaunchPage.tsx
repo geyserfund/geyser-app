@@ -14,10 +14,12 @@ import { createUseStyles } from 'react-jss'
 import { useNavigate } from 'react-router-dom'
 
 import { ButtonComponent } from '../../components/ui'
-import { getPath, LaunchImage2Url } from '../../constants'
+import { getPath, ProjectLaunch3DUrl } from '../../constants'
 import { useAuthContext } from '../../context'
 import { colors } from '../../styles'
 import { hasTwitterAccount, useMobileMode } from '../../utils'
+import { hasNostrAccount } from '../../utils/validations/hasNostrAccount'
+import { ConnectWithNostr } from '../auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../auth/ConnectWithTwitter'
 
 const useStyles = createUseStyles({
@@ -80,7 +82,7 @@ export const PublicProjectLaunchPage = () => {
           alignContent="center"
         >
           <VStack
-            spacing="30px"
+            spacing="0px"
             width="100%"
             maxWidth="350px"
             minWidth="350px"
@@ -91,13 +93,13 @@ export const PublicProjectLaunchPage = () => {
               fontSize="30px"
               fontWeight={700}
               paddingTop={isMobile ? 5 : 0}
-              paddingBottom="10%"
+              paddingBottom="10px"
             >
               {' '}
               Create A New Project
             </Text>
             <VStack spacing="20px" width="100%" justifyContent="center">
-              <Image src={LaunchImage2Url} />
+              <Image maxHeight="300px" src={ProjectLaunch3DUrl} />
               <Text fontSize="18px" fontWeight={600} color={colors.neutral900}>
                 Transform your ideas into real world projects backed by your
                 community
@@ -121,14 +123,15 @@ export const PublicProjectLaunchPage = () => {
               {!loading ? (
                 !user ||
                 (user && !user.id) ||
-                (user && !hasTwitterAccount(user)) ? (
+                (user && !hasTwitterAccount(user) && !hasNostrAccount(user)) ? (
                   <VStack>
                     <Text color={colors.neutral700} paddingBottom={3}>
-                      We require creators to login with Twitter to start their
-                      Geyser projects.
+                      We require creators to login with Twitter or Nostr to
+                      start their Geyser projects.
                     </Text>
 
                     <ConnectWithTwitter />
+                    <ConnectWithNostr />
 
                     {isMobile ? (
                       <Text
@@ -136,7 +139,7 @@ export const PublicProjectLaunchPage = () => {
                         fontWeight={400}
                         color={'brand.gray500'}
                       >
-                        {`If this button isn't opening a Twitter authentication
+                        {`If twitter button isn't opening a Twitter authentication
                         page, make sure pop-ups are enabled in your browser's
                         preferences.`}
                       </Text>
