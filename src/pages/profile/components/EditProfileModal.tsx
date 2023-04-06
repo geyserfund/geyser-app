@@ -68,10 +68,6 @@ export const EditProfileModal = ({
 
   const onUploadImage = (url: string) => {
     setImageUrl(url)
-    updateUser({
-      variables: { input: { id: user.id, imageUrl } },
-      onError: unexpected,
-    })
   }
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -81,7 +77,7 @@ export const EditProfileModal = ({
     await mutate()
 
     updateUser({
-      variables: { input: { id: user.id, username: name, bio } },
+      variables: { input: { id: user.id, username: name, bio, imageUrl } },
       onError: unexpected,
       onCompleted: onClose,
     })

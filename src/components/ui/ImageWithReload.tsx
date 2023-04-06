@@ -100,9 +100,10 @@ export const ImageWithReload = ({
     return (
       <>
         <Skeleton
-          height={rest.height || '300px'}
-          width={rest.width || '500px'}
-          maxHeight={rest.maxHeight || '500px'}
+          height={'300px'}
+          width={'500px'}
+          maxHeight={'500px'}
+          {...rest}
         />
       </>
     )

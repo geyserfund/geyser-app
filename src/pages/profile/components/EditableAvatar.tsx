@@ -1,8 +1,9 @@
-import { Avatar, Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import { AddPictureIcon } from '../../../components/icons/svg/AddPictureIcon'
 import { FileUpload } from '../../../components/molecules'
+import { ImageWithReload } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { getRandomOrb } from '../../../utils'
 
@@ -25,7 +26,8 @@ export const EditableAvatar = ({ onUploadImage, imageUrl, userId }: Props) => {
         position="relative"
         cursor="pointer"
       >
-        <Avatar
+        <ImageWithReload
+          borderRadius="50%"
           src={src}
           h="100px"
           w="100px"
