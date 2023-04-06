@@ -2,7 +2,6 @@ import { Box, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 
-import { AppFooter } from '../../../components/molecules'
 import { IFundingStages } from '../../../constants'
 import {
   MobileViews,
@@ -116,7 +115,6 @@ export const ProjectMainBody = ({
             <Milestones />
           </VStack>
         </VStack>
-        <AppFooter />
       </Box>
     </Box>
   )
