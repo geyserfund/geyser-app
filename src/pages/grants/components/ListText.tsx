@@ -29,7 +29,7 @@ export const ListText = ({
             <SatSymbolIcon {...satLogoProps} />
           </Box>
         ) : null}
-        {typeof children === 'string' ? (
+        {typeof children === 'string' || typeof children === 'number' ? (
           <Text
             fontWeight={'700'}
             fontSize={'19px'}
