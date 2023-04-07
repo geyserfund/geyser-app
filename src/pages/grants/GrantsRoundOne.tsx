@@ -193,6 +193,7 @@ export const GrantsRoundOne = ({
                 title="Grant Winners"
                 applicants={applicants}
                 canVote={false}
+                isClosed={true}
               />
             </Box>
           ) : null}

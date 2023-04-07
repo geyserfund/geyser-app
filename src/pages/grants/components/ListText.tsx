@@ -23,7 +23,7 @@ export const ListText = ({
 }: PropsWithChildren<Props & BoxProps>) => {
   return (
     <Box display={'flex'} alignItems="center" flexDirection="column" {...props}>
-      <Box display={'flex'} alignItems="center" pt={1}>
+      <Box display={'flex'} alignItems="center">
         {isSatLogo ? (
           <Box mr={1}>
             <SatSymbolIcon {...satLogoProps} />

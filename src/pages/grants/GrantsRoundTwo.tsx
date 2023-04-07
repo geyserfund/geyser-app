@@ -163,6 +163,7 @@ export const GrantsRoundTwo = ({
                   title="Grant Winners"
                   applicants={applicants}
                   canVote={false}
+                  isClosed={true}
                 />
               </Box>
             )}

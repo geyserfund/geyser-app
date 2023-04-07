@@ -1,11 +1,13 @@
-import { Box, Link, Text, Tooltip } from '@chakra-ui/react'
+import { Box, Link, Stack, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { useTheme } from '@chakra-ui/react'
 
+import { CardLayout } from '../../components/layouts'
 import { AppFooter } from '../../components/molecules'
 import { H2, H3 } from '../../components/typography'
 import { getPath } from '../../constants'
 import { useAnimatedClipboard } from '../../hooks/useAnimatedClipboard'
 import { colors, fonts } from '../../styles'
+import { Grant } from '../../types'
 import { getShortAmountLabel, useMobileMode } from '../../utils'
 import { CustomGrantCard } from './components/CustomGrantCard'
 import { GrantsContributeModal } from './components/GrantsContributeModal'
@@ -21,21 +23,25 @@ export const GrantsLandingPage = () => {
 
   const { grants, activeGrant, inactiveGrants } = useGrants()
 
-  const [handleCopyAddress, hasCopied] =
-    useAnimatedClipboard(CONTRIBUTION_ADDRESS)
-
   if (!grants || !grants.length) {
     return null
   }
 
   return (
-    <>
-      <Box
-        paddingTop={isMobile ? '10px' : '20px'}
-        bg={theme.colors.brand.bgGrey4}
-        minHeight="100%"
+    <VStack
+      paddingTop={{ base: '10px', md: '20px' }}
+      bg={theme.colors.brand.bgGrey4}
+      minHeight="100%"
+      width="100%"
+      alignItems="center"
+    >
+      <VStack
+        my={{ base: 0, md: 5 }}
+        px={{ base: '10px', md: '0px' }}
+        spacing="20px"
+        width={isMobile ? '100%' : '909px'}
       >
-        <Box my={5} px={isMobile ? '1rem' : ''}>
+        <VStack spacing="10px">
           <Text
             fontSize={isMobile ? '4xl' : '44px'}
             fontWeight="medium"
@@ -55,7 +61,7 @@ export const GrantsLandingPage = () => {
           </Text>
           <H2
             textAlign="center"
-            paddingY="10px"
+            paddingY="5px"
             fontSize="44px"
             fontWeight="700"
           >
@@ -66,155 +72,157 @@ export const GrantsLandingPage = () => {
             projects on Geyser. <br /> Funded by bitcoiners who want to change
             the world.
           </H3>
+        </VStack>
 
-          <Box
-            display="flex"
-            justifyContent={'center'}
-            alignItems="center"
-            flexDirection="column"
-          >
-            <Box
-              border={'2px solid #E9ECEF'}
-              borderRadius="12px"
-              pb={4}
-              pt={6}
-              bg="brand.bgWhite"
-              mt={6}
-              px={4}
-              width={isMobile ? '100%' : '909px'}
-              display="flex"
-              flexDirection={'column'}
-              justifyContent="center"
-              alignItems={'center'}
+        <GrantsContributeCard grants={grants} />
+
+        <VStack w="full" justifyContent={'center'} alignItems="center">
+          {activeGrant && (
+            <VStack w="full" alignItems="start" spacing="10px">
+              <Text
+                fontWeight={'bold'}
+                fontSize="19px"
+                mb={1}
+                fontFamily={fonts.interBlack}
+              >
+                Latest Grant
+              </Text>
+              <CustomGrantCard
+                grant={activeGrant}
+                to={getPath('grants', activeGrant.id)}
+                showBanner
+              />
+            </VStack>
+          )}
+          <VStack w="full" mt={7} alignItems="start" spacing="10px">
+            <Text
+              fontWeight={'bold'}
+              fontSize="19px"
+              mb={1}
+              fontFamily={fonts.interBlack}
             >
-              <Box
-                display="flex"
-                alignItems="center"
-                width="100%"
-                px={isMobile ? undefined : '25%'}
-                justifyContent="space-around"
-              >
-                <ListText
-                  titleProps={{ fontSize: '24px' }}
-                  subtitle="GRANT CONTRIBUTIONS"
-                  subtitleProps={{ fontSize: '10px' }}
-                  isSatLogo={true}
-                >
-                  {getShortAmountLabel(
-                    grants.reduce(
-                      (prev, curr) => prev + (curr?.balance || 0),
+              Previous Grants
+            </Text>
+            {inactiveGrants
+              .sort((a, b) => {
+                const grantASplit = a.name.split('-')
+                const grantBSplit = b.name.split('-')
+                const grantA = grantASplit[grantASplit.length - 1]
+                const grantB = grantBSplit[grantBSplit.length - 1]
+                return Number(grantB) - Number(grantA)
+              })
+              .map((grant) => (
+                <CustomGrantCard
+                  key={grant.id}
+                  to={getPath('grants', grant.id)}
+                  showBanner={false}
+                  grant={grant}
+                />
+              ))}{' '}
+          </VStack>
+        </VStack>
+        <MoreInfo />
+      </VStack>
+      <AppFooter />
+    </VStack>
+  )
+}
+
+export const GrantsContributeCard = ({ grants }: { grants: Grant[] }) => {
+  const isMobile = useMobileMode()
+
+  const [handleCopyAddress, hasCopied] =
+    useAnimatedClipboard(CONTRIBUTION_ADDRESS)
+
+  return (
+    <CardLayout
+      width="100%"
+      maxWidth="909px"
+      padding="20px"
+      alignItems="center"
+      spacing="20px"
+    >
+      <Box
+        display="flex"
+        alignItems="center"
+        width="100%"
+        px={{ base: undefined, md: '25%' }}
+        justifyContent="space-around"
+      >
+        <ListText
+          titleProps={{ fontSize: '24px' }}
+          subtitle="GRANT CONTRIBUTIONS"
+          subtitleProps={{ fontSize: '10px' }}
+          isSatLogo={true}
+        >
+          {getShortAmountLabel(
+            grants.reduce((prev, curr) => prev + (curr?.balance || 0), 0),
+          )}
+        </ListText>
+        <ListText
+          titleProps={{ fontSize: '24px' }}
+          subtitle="GRANTS DISTRIBUTED"
+          subtitleProps={{ fontSize: '10px' }}
+          isSatLogo={true}
+        >
+          {getShortAmountLabel(
+            grants.reduce(
+              (p, c) =>
+                p +
+                (c.applicants
+                  ? c.applicants.reduce(
+                      (prev, curr) =>
+                        prev + (curr?.funding.grantAmountDistributed || 0),
                       0,
-                    ),
-                  )}
-                </ListText>
-                <ListText
-                  titleProps={{ fontSize: '24px' }}
-                  subtitle="GRANTS DISTRIBUTED"
-                  subtitleProps={{ fontSize: '10px' }}
-                  isSatLogo={true}
-                >
-                  {getShortAmountLabel(
-                    grants.reduce(
-                      (p, c) =>
-                        p +
-                        (c.applicants
-                          ? c.applicants.reduce(
-                              (prev, curr) =>
-                                prev +
-                                (curr?.funding.grantAmountDistributed || 0),
-                              0,
-                            )
-                          : 0),
-                      0,
-                    ),
-                  )}
-                </ListText>
-              </Box>
-              <Box
-                display="flex"
-                alignItems={'center'}
-                mt="6"
-                flexDirection={isMobile ? 'column' : 'row'}
-              >
-                <GrantsContributeModal />
-                {isMobile ? (
-                  <Text
-                    fontSize={'14px'}
-                    fontWeight="500"
-                    mt={3}
-                    color="brand.neutral600"
-                  >
-                    Contribute to the Bitcoin ecosystem by becoming a Geyser
-                    Grants sponsor. You can also easily contribute by sending or
-                    streaming recurring payments to{' '}
-                    <Link
-                      textColor={hasCopied ? undefined : colors.primary500}
-                      href="#"
-                      onClick={() => handleCopyAddress()}
-                    >
-                      {CONTRIBUTION_ADDRESS}
-                    </Link>
-                  </Text>
-                ) : (
-                  <Box display="flex" alignItems={'center'}>
-                    <Text fontWeight="500" mr={1} color="brand.neutral600">
-                      Or sending SATs to our lightning address:{' '}
-                      <Tooltip label="Copied to clipboard!" isOpen={hasCopied}>
-                        <Link
-                          textColor={hasCopied ? undefined : colors.primary500}
-                          href="#"
-                          onClick={() => handleCopyAddress()}
-                        >
-                          {CONTRIBUTION_ADDRESS}
-                        </Link>
-                      </Tooltip>
-                    </Text>
-                  </Box>
-                )}
-              </Box>
-            </Box>
-            <Box width={isMobile ? '100%' : '909px'} mt="4">
-              {activeGrant && (
-                <Box>
-                  <Text
-                    fontWeight={'bold'}
-                    fontSize="19px"
-                    mb={1}
-                    fontFamily={fonts.interBlack}
-                  >
-                    Latest Grant
-                  </Text>
-                  <CustomGrantCard
-                    grant={activeGrant}
-                    to={getPath('grants', activeGrant.id)}
-                    showBanner
-                  />
-                </Box>
-              )}
-              <Box mt={7}>
-                <Text
-                  fontWeight={'bold'}
-                  fontSize="19px"
-                  mb={1}
-                  fontFamily={fonts.interBlack}
-                >
-                  Previous Grants
-                </Text>
-                {inactiveGrants.map((grant) => (
-                  <CustomGrantCard
-                    key={grant.id}
-                    to={getPath('grants', grant.id)}
-                    showBanner={false}
-                    grant={grant}
-                  />
-                ))}
-              </Box>
-              <MoreInfo />
-            </Box>
-          </Box>
-        </Box>
-        <AppFooter />
+                    )
+                  : 0),
+              0,
+            ),
+          )}
+        </ListText>
       </Box>
-    </>
+      <Stack
+        display="flex"
+        mt="6"
+        direction={{ base: 'column', md: 'row' }}
+        justify="center"
+      >
+        <GrantsContributeModal />
+        {isMobile ? (
+          <Text
+            fontSize={'14px'}
+            fontWeight="500"
+            mt={3}
+            color="brand.neutral600"
+          >
+            Contribute to the Bitcoin ecosystem by becoming a Geyser Grants
+            sponsor. You can also easily contribute by sending or streaming
+            recurring payments to{' '}
+            <Link
+              textColor={hasCopied ? undefined : colors.primary500}
+              href="#"
+              onClick={() => handleCopyAddress()}
+            >
+              {CONTRIBUTION_ADDRESS}
+            </Link>
+          </Text>
+        ) : (
+          <Box display="flex" alignItems={'center'}>
+            <Text fontWeight="500" mr={1} color="brand.neutral600">
+              Or sending SATs to our lightning address:{' '}
+              <Tooltip label="Copied to clipboard!" isOpen={hasCopied}>
+                <Link
+                  textColor={hasCopied ? undefined : colors.primary500}
+                  href="#"
+                  onClick={() => handleCopyAddress()}
+                >
+                  {CONTRIBUTION_ADDRESS}
+                </Link>
+              </Tooltip>
+            </Text>
+          </Box>
+        )}
+      </Stack>
+    </CardLayout>
   )
 }
