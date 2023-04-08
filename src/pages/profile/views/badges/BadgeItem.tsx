@@ -21,6 +21,7 @@ export const BadgeItem = ({
   const [claiming, setClaiming] = useState(false)
   const handleClick = () => {
     claimABadge({
+      userBadgeId: userBadge.id,
       badgeId: badge.uniqueName,
       badgeAwardId: userBadge.badgeAwardEventId || '',
       isClaiming: setClaiming,
