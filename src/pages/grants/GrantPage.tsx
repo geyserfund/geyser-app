@@ -1,14 +1,19 @@
-import { Box, Button, Container, Image } from '@chakra-ui/react'
+import { Box, Button, Container, Image, Link } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { CardLayout } from '../../components/layouts'
 import { Body1, H1, H3 } from '../../components/typography'
 import Loader from '../../components/ui/Loader'
 import { StatusLabel } from '../../components/ui/StatusLabel'
 import { Head } from '../../config'
-import { getPath } from '../../constants'
+import {
+  getPath,
+  Grant3AnnouncementImageUrl,
+  Grant3AnnouncementTwitterUrl,
+} from '../../constants'
 import {
   GrantApplicant,
   GrantApplicantStatus,
@@ -190,8 +195,40 @@ export const GrantPage = () => {
         </Box>
       </SectionCard>
       <DistributionChart applicants={applicants} />
+      <Grant3WinnerAnnouncement />
       <CommunityVoting applicants={applicants} canVote={canVote} />
       <MoreInfo />
     </PageContainer>
+  )
+}
+
+export const Grant3WinnerAnnouncement = () => {
+  return (
+    <CardLayout
+      backgroundColor="white"
+      w="full"
+      alignItems="center"
+      spacing="20px"
+    >
+      <H3>See the winner announcement</H3>
+
+      <Image
+        maxWidth="350px"
+        alt="grant-3-announcement-url"
+        src={Grant3AnnouncementImageUrl}
+      />
+
+      <Button
+        as={Link}
+        isExternal
+        href={Grant3AnnouncementTwitterUrl}
+        size="sm"
+        variant="outlined"
+        px="10px"
+        textDecoration="none"
+      >
+        Announcement
+      </Button>
+    </CardLayout>
   )
 }

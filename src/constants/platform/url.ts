@@ -174,3 +174,10 @@ export const BadgesGroupUrl =
 
 export const CannotConnectAccountUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/connect-account-failed.png'
+
+// GRANTS
+
+export const Grant3AnnouncementImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/grant-3-announcement.png'
+export const Grant3AnnouncementTwitterUrl =
+  'https://twitter.com/geyserfund/status/1642478024699310080?s=20'
