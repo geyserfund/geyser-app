@@ -1,7 +1,11 @@
 import { useQuery } from '@apollo/client'
 import { Box, Link, Stack, Text, Tooltip } from '@chakra-ui/react'
 
-import { CardLayout, SkeletonLayout } from '../../../components/layouts'
+import {
+  CardLayout,
+  CardLayoutProps,
+  SkeletonLayout,
+} from '../../../components/layouts'
 import { QUERY_GRANT_STATISTICS } from '../../../graphql/queries/grant'
 import { useAnimatedClipboard } from '../../../hooks/useAnimatedClipboard'
 import { colors } from '../../../styles'
@@ -11,7 +15,7 @@ import { GrantsContributeModal } from '../components/GrantsContributeModal'
 import { ListText } from '../components/ListText'
 import { CONTRIBUTION_ADDRESS } from '../constants'
 
-export const GrantsContributeCard = () => {
+export const GrantsContributeCard = (props: CardLayoutProps) => {
   const isMobile = useMobileMode()
 
   const [handleCopyAddress, hasCopied] =
@@ -31,6 +35,7 @@ export const GrantsContributeCard = () => {
       padding="20px"
       alignItems="center"
       spacing="20px"
+      {...props}
     >
       <Box
         display="flex"

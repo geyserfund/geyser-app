@@ -15,10 +15,15 @@ import { useNavigate } from 'react-router'
 import satsymbol from '../../assets/satsymbolprimary.svg'
 import { AppFooter } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
-import { GrantsRound2Url } from '../../constants'
+import {
+  Grant2AnnouncementImageUrl,
+  Grant2AnnouncementTwitterUrl,
+  GrantsRound2Url,
+} from '../../constants'
 import { fonts } from '../../styles'
 import { GrantApplicant, Maybe, Sponsor } from '../../types'
 import { useMobileMode } from '../../utils'
+import { GrantWinnerAnnouncement } from './components'
 import { BoardMembers } from './components/BoardMembers'
 import { CommunityVoting } from './components/CommunityVoting'
 import { GrantDevelopers } from './components/GrantDevs'
@@ -157,6 +162,14 @@ export const GrantsRoundTwo = ({
                 }
               />
             </Box>
+
+            <GrantWinnerAnnouncement
+              imageUrl={Grant2AnnouncementImageUrl}
+              linkUrl={Grant2AnnouncementTwitterUrl}
+              w="auto"
+              mt="20px"
+            />
+
             {applicants && Boolean(applicants.length) && (
               <Box my={5}>
                 <CommunityVoting
@@ -304,22 +317,6 @@ export const GrantsRoundTwo = ({
               Geyser Grants.
             </Text>
             <GrantDevelopers />
-          </Box>
-          <Box
-            border={'2px solid #E9ECEF'}
-            minWidth="100%"
-            p="2"
-            rounded={'md'}
-            minHeight={'300px'}
-          >
-            <Text
-              fontWeight={'bold'}
-              fontSize="large"
-              mt={'2'}
-              fontFamily={fonts.interBlack}
-            >
-              Applications
-            </Text>
           </Box>
         </Box>
         <AppFooter />
