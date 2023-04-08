@@ -22,7 +22,7 @@ export type ClaimABadgeProps = {
 }
 
 export const useNostrBadges = (pubKey: string) => {
-  const { toast, unexpected } = useNotification()
+  const { toast } = useNotification()
 
   const [relay, setRelay] = useState<Relay>()
   const [loading, setLoading] = useState(true)
@@ -32,9 +32,7 @@ export const useNostrBadges = (pubKey: string) => {
   const [awardBadge] = useMutation<
     { userBadgeAward: UserBadge },
     MutationUserBadgeAwardArgs
-  >(MUTATION_USER_BADGE_AWARD, {
-    onError: unexpected,
-  })
+  >(MUTATION_USER_BADGE_AWARD)
 
   // NOTE: these are for when  we do have to fetch badges data from nostr
   // const [badges, setBadges] = useState<NostrBadges[]>([])
@@ -110,6 +108,8 @@ export const useNostrBadges = (pubKey: string) => {
           }
         } catch (error) {
           handleErrorToast()
+          setClaiming(false)
+          isClaiming?.(false)
           return
         }
       }
