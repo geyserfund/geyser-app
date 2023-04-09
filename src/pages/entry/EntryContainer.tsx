@@ -2,7 +2,6 @@ import { Box, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 
-import { AppFooter } from '../../components/molecules'
 import { MobileViews, useProjectContext } from '../../context'
 import { fadeOut, slideInLeft } from '../../styles/animations'
 import { Entry } from '../../types/generated/graphql'
@@ -84,7 +83,6 @@ export const EntryContainer = ({ entry }: IActivityProps) => {
             <EntryDetails entry={entry} />
           </VStack>
         </VStack>
-        <AppFooter />
       </Box>
     </Box>
   )

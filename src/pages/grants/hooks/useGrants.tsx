@@ -14,9 +14,9 @@ export const useGrants = () => {
   const activeGrant = useMemo(
     () =>
       data
-        ? (data.grants
-            .filter((grant) => grant.status !== GrantStatusEnum.Closed)
-            .at(0) as Grant)
+        ? (data.grants.find(
+            (grant) => grant.status !== GrantStatusEnum.Closed,
+          ) as Grant)
         : null,
     [data],
   )
@@ -24,7 +24,18 @@ export const useGrants = () => {
   const inactiveGrants = useMemo(
     () =>
       data
-        ? data.grants.filter((grant) => grant.status === GrantStatusEnum.Closed)
+        ? data.grants
+            .filter((grant) => grant.status === GrantStatusEnum.Closed)
+            .sort((a, b) => {
+              const statusA = a.statuses.find(
+                (s) => s.status === GrantStatusEnum.Closed,
+              ) || { endAt: 0 }
+              const statusB = b.statuses.find(
+                (s) => s.status === GrantStatusEnum.Closed,
+              ) || { endAt: 0 }
+
+              return statusB.endAt - statusA.endAt
+            })
         : [],
     [data],
   )

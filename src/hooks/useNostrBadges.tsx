@@ -1,16 +1,20 @@
 import 'websocket-polyfill'
 
+import { useMutation } from '@apollo/client'
 import { getEventHash, Relay, relayInit } from 'nostr-tools'
 import { Event } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
 import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
+import { MUTATION_USER_BADGE_AWARD } from '../graphql/mutations'
+import { MutationUserBadgeAwardArgs, UserBadge } from '../types'
 import { useNotification } from '../utils'
 import { signEvent } from '../utils/nostr/nip07'
 
 const relayUri = 'wss://relay.damus.io'
 
 export type ClaimABadgeProps = {
+  userBadgeId: number
   badgeId: string
   badgeAwardId: string
   onFail?: any
@@ -21,11 +25,14 @@ export const useNostrBadges = (pubKey: string) => {
   const { toast } = useNotification()
 
   const [relay, setRelay] = useState<Relay>()
-
   const [loading, setLoading] = useState(true)
   const [claiming, setClaiming] = useState(true)
-
   const [badgeIds, setBadgeIds] = useState<string[]>([])
+
+  const [awardBadge] = useMutation<
+    { userBadgeAward: UserBadge },
+    MutationUserBadgeAwardArgs
+  >(MUTATION_USER_BADGE_AWARD)
 
   // NOTE: these are for when  we do have to fetch badges data from nostr
   // const [badges, setBadges] = useState<NostrBadges[]>([])
@@ -70,7 +77,16 @@ export const useNostrBadges = (pubKey: string) => {
     handleEventsInit()
   }, [pubKey])
 
+  const handleErrorToast = () => {
+    toast({
+      status: 'error',
+      title: 'failed to claim the badge',
+      description: 'Please try again later.',
+    })
+  }
+
   const claimABadge = async ({
+    userBadgeId,
     badgeId,
     badgeAwardId,
     onFail,
@@ -79,6 +95,25 @@ export const useNostrBadges = (pubKey: string) => {
     if (relay) {
       setClaiming(true)
       isClaiming?.(true)
+
+      let badgeAwardEventId = badgeAwardId
+      if (!badgeAwardId) {
+        try {
+          const result = await awardBadge({ variables: { userBadgeId } })
+          badgeAwardEventId =
+            result.data?.userBadgeAward.badgeAwardEventId || ''
+          if (!badgeAwardEventId) {
+            handleErrorToast()
+            return
+          }
+        } catch (error) {
+          handleErrorToast()
+          setClaiming(false)
+          isClaiming?.(false)
+          return
+        }
+      }
+
       const event = await relay.get({
         kinds: [30008],
         authors: [pubKey],
@@ -93,7 +128,7 @@ export const useNostrBadges = (pubKey: string) => {
       } as any
       const badgeToAdd = [
         ['a', `30009:${VITE_APP_GEYSER_NOSTR_PUBKEY}:${badgeId}`],
-        ['e', badgeAwardId],
+        ['e', badgeAwardEventId],
       ]
       if (!event) {
         eventToPublish.tags = [['d', 'profile_badges'], ...badgeToAdd]
@@ -123,6 +158,8 @@ export const useNostrBadges = (pubKey: string) => {
           onFail(reason)
         }
       })
+    } else {
+      handleErrorToast()
     }
   }
 

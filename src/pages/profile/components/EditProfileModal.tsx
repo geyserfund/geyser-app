@@ -31,7 +31,7 @@ import { EditableAvatar } from './EditableAvatar'
 
 export const EditProfileModal = ({
   isOpen,
-  close,
+  onClose,
   props,
 }: EditProfileModalProps) => {
   const { unexpected } = useNotification()
@@ -68,10 +68,6 @@ export const EditProfileModal = ({
 
   const onUploadImage = (url: string) => {
     setImageUrl(url)
-    updateUser({
-      variables: { input: { id: user.id, imageUrl } },
-      onError: unexpected,
-    })
   }
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -81,9 +77,9 @@ export const EditProfileModal = ({
     await mutate()
 
     updateUser({
-      variables: { input: { id: user.id, username: name, bio } },
+      variables: { input: { id: user.id, username: name, bio, imageUrl } },
       onError: unexpected,
-      onCompleted: close,
+      onCompleted: onClose,
     })
   }
 
@@ -103,7 +99,7 @@ export const EditProfileModal = ({
   }
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={close} size="sm">
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size="sm">
       <ModalOverlay
         bg="blackAlpha.300"
         backdropFilter="blur(10px) hue-rotate(90deg)"

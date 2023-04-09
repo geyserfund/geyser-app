@@ -629,7 +629,6 @@ export type LightningAddressConnectionDetailsCreateInput = {
 
 export type LightningAddressConnectionDetailsUpdateInput = {
   lightningAddress: Scalars['String'];
-  walletId: Scalars['BigInt'];
 };
 
 export type LightningAddressVerifyResponse = {
@@ -692,13 +691,14 @@ export type LndConnectionDetailsUpdateInput = {
   grpcPort?: InputMaybe<Scalars['Int']>;
   /** Hostname where the gRPC calls should be made. */
   hostname?: InputMaybe<Scalars['String']>;
+  /** Type of the LND node. */
+  lndNodeType?: InputMaybe<LndNodeType>;
   /** Invoice macaroon for authenticating gRPC calls to the LND node. */
   macaroon?: InputMaybe<Scalars['String']>;
   /** Public key of the LND node. */
   pubkey?: InputMaybe<Scalars['pubkey_String_minLength_66_maxLength_66']>;
   /** TLS certificate for the LND node (optional for Voltage nodes). */
   tlsCertificate?: InputMaybe<Scalars['String']>;
-  walletId: Scalars['BigInt'];
 };
 
 export enum LndNodeType {
@@ -748,6 +748,7 @@ export type Mutation = {
   /** This operation is currently not supported. */
   updateWallet: Wallet;
   updateWalletState: Wallet;
+  userBadgeAward: UserBadge;
 };
 
 
@@ -898,6 +899,11 @@ export type MutationUpdateWalletArgs = {
 
 export type MutationUpdateWalletStateArgs = {
   input: UpdateWalletStateInput;
+};
+
+
+export type MutationUserBadgeAwardArgs = {
+  userBadgeId: Scalars['BigInt'];
 };
 
 export type OffsetBasedPaginationInput = {
@@ -1492,7 +1498,6 @@ export type UserBadge = {
   __typename?: 'UserBadge';
   badge: Badge;
   badgeAwardEventId?: Maybe<Scalars['String']>;
-  badgeDefinitionEventId: Scalars['String'];
   createdAt: Scalars['Date'];
   fundingTxId?: Maybe<Scalars['BigInt']>;
   id: Scalars['BigInt'];
@@ -2357,6 +2362,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
   updateWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletArgs, 'input'>>;
   updateWalletState?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletStateArgs, 'input'>>;
+  userBadgeAward?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationUserBadgeAwardArgs, 'userBadgeId'>>;
 };
 
 export type OwnerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Owner'] = ResolversParentTypes['Owner']> = {
@@ -2562,7 +2568,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type UserBadgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserBadge'] = ResolversParentTypes['UserBadge']> = {
   badge?: Resolver<ResolversTypes['Badge'], ParentType, ContextType>;
   badgeAwardEventId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  badgeDefinitionEventId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   fundingTxId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
