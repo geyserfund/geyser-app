@@ -49,6 +49,7 @@ export const theme = extendTheme({
           fontSize: '16px',
           padding: '2px 5px',
           backgroundColor: 'white',
+          borderRadius: '8px',
           _hover: {
             borderColor: colors.neutral400,
           },

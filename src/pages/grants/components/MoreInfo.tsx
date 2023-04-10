@@ -10,23 +10,22 @@ interface MoreInfoProps {
 
 export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
   return (
-    <>
-      <Box mt={8}>
-        <Text
-          fontWeight={'bold'}
-          fontSize="19px"
-          fontFamily={fonts.interBlack}
-          {...titleProps}
-        >
-          More Information
-        </Text>
-        <Text
-          mt="5px"
-          color="brand.neutral600"
-          fontSize={'14px'}
-          textAlign="justify"
-        >
-          {`Bitcoin is signal, everything else is noise. We created Geyser Grants
+    <Box>
+      <Text
+        fontWeight={'bold'}
+        fontSize="19px"
+        fontFamily={fonts.interBlack}
+        {...titleProps}
+      >
+        More Information
+      </Text>
+      <Text
+        mt="5px"
+        color="brand.neutral600"
+        fontSize={'14px'}
+        textAlign="justify"
+      >
+        {`Bitcoin is signal, everything else is noise. We created Geyser Grants
           to help broadcast more Bitcoin signal into the world. That is, to
           accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin
           awareness, enabling Bitcoin culture, and supporting needed
@@ -39,26 +38,25 @@ export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
           applications will be opened, and they will be evaluated once the
           Rounds close. Grants will be given away as soon as the goal is
           reached. For more information see this doc.`}
-        </Text>
-        <Box w={20} mt="4" mb={10}>
-          <Link href={GrantsFAQUrl} isExternal _focus={{}}>
-            <Box
-              shadow="md"
-              px="4"
-              gap={4}
-              py={'2'}
-              alignItems="center"
-              display="flex"
-              borderRadius="4px"
-              _hover={{ shadow: 'xl' }}
-              transition="all ease-out 0.3s"
-            >
-              <Text fontWeight={'600'}>faq</Text>
-              <img src={shareicon} alt="icon" />
-            </Box>
-          </Link>
-        </Box>
+      </Text>
+      <Box w={20} mt="4" mb={10}>
+        <Link href={GrantsFAQUrl} isExternal _focus={{}}>
+          <Box
+            shadow="md"
+            px="4"
+            gap={4}
+            py={'2'}
+            alignItems="center"
+            display="flex"
+            borderRadius="4px"
+            _hover={{ shadow: 'xl' }}
+            transition="all ease-out 0.3s"
+          >
+            <Text fontWeight={'600'}>faq</Text>
+            <img src={shareicon} alt="icon" />
+          </Box>
+        </Link>
       </Box>
-    </>
+    </Box>
   )
 }

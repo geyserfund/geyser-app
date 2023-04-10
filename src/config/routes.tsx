@@ -11,14 +11,18 @@ import {
   ProjectCreationWalletConnectionPage,
 } from '../pages/creation/projectCreate'
 import { EntryPage } from '../pages/entry/EntryPage'
-import { GrantPage } from '../pages/grants/GrantPage'
-import { GrantsLandingPage } from '../pages/grants/GrantsLandingPage'
-import { GrantsRoundOne } from '../pages/grants/GrantsRoundOne'
-import { GrantsRoundTwo } from '../pages/grants/GrantsRoundTwo'
-import { LandingPage } from '../pages/landing'
-import { LandingFeed } from '../pages/landing/feed'
-import { MobileLeaderboard } from '../pages/landing/projectLeaderboard'
-import { LandingPageProjects } from '../pages/landing/projects'
+import {
+  GrantPage,
+  GrantsLandingPage,
+  GrantsRoundOne,
+  GrantsRoundTwo,
+} from '../pages/grants'
+import {
+  LandingFeed,
+  LandingPage,
+  LandingPageProjects,
+  MobileLeaderboard,
+} from '../pages/landing'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
 import { Profile } from '../pages/profile'
