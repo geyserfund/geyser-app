@@ -8,7 +8,11 @@ import { Body1, H1, H3 } from '../../components/typography'
 import Loader from '../../components/ui/Loader'
 import { StatusLabel } from '../../components/ui/StatusLabel'
 import { Head } from '../../config'
-import { getPath } from '../../constants'
+import {
+  getPath,
+  Grant3AnnouncementImageUrl,
+  Grant3AnnouncementTwitterUrl,
+} from '../../constants'
 import {
   GrantApplicant,
   GrantApplicantStatus,
@@ -20,6 +24,7 @@ import {
   useMobileMode,
   useNotification,
 } from '../../utils'
+import { GrantWinnerAnnouncement } from './components'
 import { CommunityVoting } from './components/CommunityVoting'
 import { ContributionsWidget } from './components/ContributionsWidget'
 import { DistributionChart } from './components/DistributionChart'
@@ -190,6 +195,10 @@ export const GrantPage = () => {
         </Box>
       </SectionCard>
       <DistributionChart applicants={applicants} />
+      <GrantWinnerAnnouncement
+        imageUrl={Grant3AnnouncementImageUrl}
+        linkUrl={Grant3AnnouncementTwitterUrl}
+      />
       <CommunityVoting applicants={applicants} canVote={canVote} />
       <MoreInfo />
     </PageContainer>

@@ -574,12 +574,12 @@ export type GrantApplicantFunding = {
   __typename?: 'GrantApplicantFunding';
   /** The amount of funding the grant applicant has received from the community. */
   communityFunding: Scalars['Int'];
+  /** The amount of grant funding the applicant is elligible for. */
+  grantAmount: Scalars['Int'];
   /**
    * The amount of funding that the Grant applicant has been confirmed to receive. Can only be confirmed after the
    * grant has been closed.
    */
-  grantAmount: Scalars['Int'];
-  /** The amount of funding that the grant applicant has received. */
   grantAmountDistributed: Scalars['Int'];
 };
 
@@ -597,6 +597,30 @@ export type GrantGetInput = {
 
 export type GrantGetWhereInput = {
   id: Scalars['BigInt'];
+};
+
+export type GrantStatistics = {
+  __typename?: 'GrantStatistics';
+  /** Statistic about the grant applicants */
+  applicants?: Maybe<GrantStatisticsApplicant>;
+  /** Statistic about the grants */
+  grants?: Maybe<GrantStatisticsGrant>;
+};
+
+export type GrantStatisticsApplicant = {
+  __typename?: 'GrantStatisticsApplicant';
+  /** Count of applicants that have been funded */
+  countFunded: Scalars['Int'];
+};
+
+export type GrantStatisticsGrant = {
+  __typename?: 'GrantStatisticsGrant';
+  /** Total amount sent to grants (in sats) */
+  amountFunded: Scalars['Int'];
+  /** Total amount granted to projects (in sats) */
+  amountGranted: Scalars['Int'];
+  /** Total rounds of grants */
+  count: Scalars['Int'];
 };
 
 export type GrantStatus = {
@@ -1152,6 +1176,7 @@ export type Query = {
   getSignedUploadUrl: SignedUploadUrl;
   getWallet: Wallet;
   grant: Grant;
+  grantStatistics: GrantStatistics;
   grants: Array<Grant>;
   lightningAddressVerify: LightningAddressVerifyResponse;
   me?: Maybe<User>;
@@ -1772,6 +1797,9 @@ export type ResolversTypes = {
   GrantApplicantStatus: GrantApplicantStatus;
   GrantGetInput: GrantGetInput;
   GrantGetWhereInput: GrantGetWhereInput;
+  GrantStatistics: ResolverTypeWrapper<GrantStatistics>;
+  GrantStatisticsApplicant: ResolverTypeWrapper<GrantStatisticsApplicant>;
+  GrantStatisticsGrant: ResolverTypeWrapper<GrantStatisticsGrant>;
   GrantStatus: ResolverTypeWrapper<GrantStatus>;
   GrantStatusEnum: GrantStatusEnum;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -1961,6 +1989,9 @@ export type ResolversParentTypes = {
   GrantApplicantFunding: GrantApplicantFunding;
   GrantGetInput: GrantGetInput;
   GrantGetWhereInput: GrantGetWhereInput;
+  GrantStatistics: GrantStatistics;
+  GrantStatisticsApplicant: GrantStatisticsApplicant;
+  GrantStatisticsGrant: GrantStatisticsGrant;
   GrantStatus: GrantStatus;
   Int: Scalars['Int'];
   LightningAddressConnectionDetails: LightningAddressConnectionDetails;
@@ -2282,6 +2313,24 @@ export type GrantApplicantFundingResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GrantStatisticsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantStatistics'] = ResolversParentTypes['GrantStatistics']> = {
+  applicants?: Resolver<Maybe<ResolversTypes['GrantStatisticsApplicant']>, ParentType, ContextType>;
+  grants?: Resolver<Maybe<ResolversTypes['GrantStatisticsGrant']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GrantStatisticsApplicantResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantStatisticsApplicant'] = ResolversParentTypes['GrantStatisticsApplicant']> = {
+  countFunded?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GrantStatisticsGrantResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantStatisticsGrant'] = ResolversParentTypes['GrantStatisticsGrant']> = {
+  amountFunded?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amountGranted?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GrantStatusResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantStatus'] = ResolversParentTypes['GrantStatus']> = {
   endAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   startAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -2489,6 +2538,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getSignedUploadUrl?: Resolver<ResolversTypes['SignedUploadUrl'], ParentType, ContextType, RequireFields<QueryGetSignedUploadUrlArgs, 'input'>>;
   getWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<QueryGetWalletArgs, 'id'>>;
   grant?: Resolver<ResolversTypes['Grant'], ParentType, ContextType, RequireFields<QueryGrantArgs, 'input'>>;
+  grantStatistics?: Resolver<ResolversTypes['GrantStatistics'], ParentType, ContextType>;
   grants?: Resolver<Array<ResolversTypes['Grant']>, ParentType, ContextType>;
   lightningAddressVerify?: Resolver<ResolversTypes['LightningAddressVerifyResponse'], ParentType, ContextType, Partial<QueryLightningAddressVerifyArgs>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -2754,6 +2804,9 @@ export type Resolvers<ContextType = any> = {
   Grant?: GrantResolvers<ContextType>;
   GrantApplicant?: GrantApplicantResolvers<ContextType>;
   GrantApplicantFunding?: GrantApplicantFundingResolvers<ContextType>;
+  GrantStatistics?: GrantStatisticsResolvers<ContextType>;
+  GrantStatisticsApplicant?: GrantStatisticsApplicantResolvers<ContextType>;
+  GrantStatisticsGrant?: GrantStatisticsGrantResolvers<ContextType>;
   GrantStatus?: GrantStatusResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
   LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>;

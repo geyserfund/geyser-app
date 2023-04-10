@@ -23,13 +23,13 @@ export const ListText = ({
 }: PropsWithChildren<Props & BoxProps>) => {
   return (
     <Box display={'flex'} alignItems="center" flexDirection="column" {...props}>
-      <Box display={'flex'} alignItems="center" pt={1}>
+      <Box display={'flex'} alignItems="center">
         {isSatLogo ? (
           <Box mr={1}>
             <SatSymbolIcon {...satLogoProps} />
           </Box>
         ) : null}
-        {typeof children === 'string' ? (
+        {typeof children === 'string' || typeof children === 'number' ? (
           <Text
             fontWeight={'700'}
             fontSize={'19px'}
