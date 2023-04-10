@@ -86,3 +86,18 @@ export const QUERY_GRANT = gql`
     }
   }
 `
+
+export const QUERY_GRANT_STATISTICS = gql`
+  query Query {
+    grantStatistics {
+      grants {
+        amountFunded
+        amountGranted
+        count
+      }
+      applicants {
+        countFunded
+      }
+    }
+  }
+`

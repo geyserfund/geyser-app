@@ -1,4 +1,6 @@
+export * from './GrantPage'
 export * from './Grants'
-export * from './GrantsLandingPage'
+export * from './grantsLanding'
 export * from './GrantsMaintenancePage'
 export * from './GrantsRoundOne'
+export * from './GrantsRoundTwo'
