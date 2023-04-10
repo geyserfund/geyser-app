@@ -56,7 +56,7 @@ export const CommunityVoting = ({
         {getShortAmountLabel(
           !isClosed
             ? funding.communityFunding
-            : funding.grantAmountDistributed || 0,
+            : funding.grantAmount + funding.communityFunding || 0,
         )}
       </WidgetItem>
     )
@@ -80,7 +80,7 @@ export const CommunityVoting = ({
         {sectionTitle}
       </H3>
       {applicants
-        .filter((application) => application.funding.grantAmountDistributed)
+        .filter((application) => application.funding.grantAmount)
         .map(({ project, funding }) => {
           const projectLink = getPath('project', project.name)
           return (
