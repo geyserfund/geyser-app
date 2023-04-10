@@ -199,7 +199,12 @@ export const GrantPage = () => {
         imageUrl={Grant3AnnouncementImageUrl}
         linkUrl={Grant3AnnouncementTwitterUrl}
       />
-      <CommunityVoting applicants={applicants} canVote={canVote} />
+      <CommunityVoting
+        title="Grant winners!"
+        applicants={applicants}
+        canVote={canVote}
+        isClosed={true}
+      />
       <MoreInfo />
     </PageContainer>
   )
