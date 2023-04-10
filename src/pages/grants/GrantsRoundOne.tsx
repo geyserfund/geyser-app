@@ -179,6 +179,55 @@ export const GrantsRoundOne = ({
               ))}
             </Grid>
           </Box>
+          <Box
+            width={isMobile ? '90%' : isMedium ? '75%' : '60%'}
+            display="flex"
+            justifyContent="center"
+            justifyItems="center"
+            margin="0 auto"
+          >
+            <VStack>
+              <Text
+                fontFamily={fonts.interBlack}
+                fontSize="24px"
+                fontWeight={'bold'}
+                textAlign="center"
+                mt={8}
+              >
+                Round 1 Announcement
+              </Text>
+              <Text textAlign="justify" fontSize="sm">
+                The Geyser Grant Round 1 winners have been released.{' '}
+                <Link
+                  _hover={{ textDecoration: 'none' }}
+                  isExternal
+                  href="https://twitter.com/geyserfund/status/1567537222005530625?s=20&t=ubMlkMfNudkbogo-IKhkHw"
+                >
+                  Check out our Twitter announcement.
+                </Link>
+              </Text>
+              <Image
+                htmlHeight={450}
+                htmlWidth={800}
+                src="https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-1-results.jpeg"
+              ></Image>
+              <Link
+                margin="0 auto"
+                w="87px"
+                _hover={{ textDecoration: 'none' }}
+                isExternal
+                href="https://twitter.com/geyserfund/status/1567537222005530625"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <ButtonComponent fontSize="lg">
+                  Announcement
+                  <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
+                </ButtonComponent>
+              </Link>
+            </VStack>
+          </Box>
 
           {applicants && applicants.length ? (
             <Box my={5}>
@@ -238,55 +287,6 @@ export const GrantsRoundOne = ({
             <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
               <img src={satwalletimg} width="195px" />
             </Box>
-          </Box>
-          <Box
-            width={isMobile ? '90%' : isMedium ? '75%' : '60%'}
-            display="flex"
-            justifyContent="center"
-            justifyItems="center"
-            margin="0 auto"
-          >
-            <VStack>
-              <Text
-                fontFamily={fonts.interBlack}
-                fontSize="24px"
-                fontWeight={'bold'}
-                textAlign="center"
-                mt={8}
-              >
-                Round 1 Announcement
-              </Text>
-              <Text textAlign="justify" fontSize="sm">
-                The Geyser Grant Round 1 winners have been released.{' '}
-                <Link
-                  _hover={{ textDecoration: 'none' }}
-                  isExternal
-                  href="https://twitter.com/geyserfund/status/1567537222005530625?s=20&t=ubMlkMfNudkbogo-IKhkHw"
-                >
-                  Check out our Twitter announcement.
-                </Link>
-              </Text>
-              <Image
-                htmlHeight={450}
-                htmlWidth={800}
-                src="https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-1-results.jpeg"
-              ></Image>
-              <Link
-                margin="0 auto"
-                w="87px"
-                _hover={{ textDecoration: 'none' }}
-                isExternal
-                href="https://twitter.com/geyserfund/status/1567537222005530625"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <ButtonComponent fontSize="lg">
-                  Announcement
-                  <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
-                </ButtonComponent>
-              </Link>
-            </VStack>
           </Box>
         </Box>
         <AppFooter />
