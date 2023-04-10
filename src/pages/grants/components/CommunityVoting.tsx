@@ -79,91 +79,89 @@ export const CommunityVoting = ({
       <H3 fontSize="18px" mb={3}>
         {sectionTitle}
       </H3>
-      {applicants
-        .filter((application) => application.funding.grantAmount)
-        .map(({ project, funding }) => {
-          const projectLink = getPath('project', project.name)
-          return (
-            <SectionCard my={3} p={2} key={project.id}>
-              <Box display="flex">
-                {project.thumbnailImage && (
-                  <Box mr={3} height={'101px'}>
-                    <Link
-                      to={projectLink}
-                      className={classNames(
-                        classes.image,
-                        isMobile ? classes.mobileImage : classes.desktopImage,
-                      )}
-                    >
-                      <Image
-                        objectFit="cover"
-                        borderRadius="7px"
-                        width={isMobile ? '90px' : '144px'}
-                        height={'101px'}
-                        src={project.thumbnailImage}
-                        alt="project thumbnail"
-                      />
-                    </Link>
-                  </Box>
-                )}
-                <Box pr={2} flexGrow={1}>
-                  <Link to={projectLink}>
-                    <H3 fontSize="18px">{project.title}</H3>
-                  </Link>
-                  <Link to={projectLink}>
-                    <Text noOfLines={4}>{project.description}</Text>
+      {applicants.map(({ project, funding }) => {
+        const projectLink = getPath('project', project.name)
+        return (
+          <SectionCard my={3} p={2} key={project.id}>
+            <Box display="flex">
+              {project.thumbnailImage && (
+                <Box mr={3} height={'101px'}>
+                  <Link
+                    to={projectLink}
+                    className={classNames(
+                      classes.image,
+                      isMobile ? classes.mobileImage : classes.desktopImage,
+                    )}
+                  >
+                    <Image
+                      objectFit="cover"
+                      borderRadius="7px"
+                      width={isMobile ? '90px' : '144px'}
+                      height={'101px'}
+                      src={project.thumbnailImage}
+                      alt="project thumbnail"
+                    />
                   </Link>
                 </Box>
-                {!isMobile && (
-                  <Box
-                    minWidth="166px"
-                    pr={4}
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    {canVote && renderVoteButton(project)}
-                    {renderWidgetItem(funding)}
+              )}
+              <Box pr={2} flexGrow={1}>
+                <Link to={projectLink}>
+                  <H3 fontSize="18px">{project.title}</H3>
+                </Link>
+                <Link to={projectLink}>
+                  <Text noOfLines={4}>{project.description}</Text>
+                </Link>
+              </Box>
+              {!isMobile && (
+                <Box
+                  minWidth="166px"
+                  pr={4}
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  {canVote && renderVoteButton(project)}
+                  {renderWidgetItem(funding)}
+                </Box>
+              )}
+            </Box>
+            {canVote && (
+              <Box pl={2} filter="opacity(0.4)">
+                {project.funders?.filter(Boolean).map(
+                  (funder) =>
+                    funder && (
+                      <AvatarElement
+                        key={funder.id}
+                        width="28px"
+                        height="28px"
+                        wrapperProps={{
+                          display: 'inline-block',
+                          marginLeft: '-5px',
+                          marginTop: 2,
+                        }}
+                        avatarOnly
+                        borderRadius="50%"
+                        seed={funder.id}
+                        user={funder.user}
+                      />
+                    ),
+                )}
+              </Box>
+            )}
+            {isMobile && (
+              <Box display="flex" pl={6}>
+                <Box pt={2}>{renderWidgetItem(funding)}</Box>
+                {canVote && (
+                  <Box ml={8} flexGrow={1}>
+                    {renderVoteButton(project)}
                   </Box>
                 )}
               </Box>
-              {canVote && (
-                <Box pl={2} filter="opacity(0.4)">
-                  {project.funders?.filter(Boolean).map(
-                    (funder) =>
-                      funder && (
-                        <AvatarElement
-                          key={funder.id}
-                          width="28px"
-                          height="28px"
-                          wrapperProps={{
-                            display: 'inline-block',
-                            marginLeft: '-5px',
-                            marginTop: 2,
-                          }}
-                          avatarOnly
-                          borderRadius="50%"
-                          seed={funder.id}
-                          user={funder.user}
-                        />
-                      ),
-                  )}
-                </Box>
-              )}
-              {isMobile && (
-                <Box display="flex" pl={6}>
-                  <Box pt={2}>{renderWidgetItem(funding)}</Box>
-                  {canVote && (
-                    <Box ml={8} flexGrow={1}>
-                      {renderVoteButton(project)}
-                    </Box>
-                  )}
-                </Box>
-              )}
-            </SectionCard>
-          )
-        })}
+            )}
+          </SectionCard>
+        )
+      })}
       <ProjectFundingModal {...modalProps} />
     </SectionCard>
   )
