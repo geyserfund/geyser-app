@@ -7,14 +7,13 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
-import { useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
-import { RiLinksLine, RiLinkUnlinkM } from 'react-icons/ri'
 import { useNavigate } from 'react-router'
 
+import AlbyPNG from '../../assets/images/third-party-icons/alby@3x.png'
 import satsymbol from '../../assets/satsymbolprimary.svg'
+import satwalletimg from '../../assets/walletsats.svg'
 import { AppFooter } from '../../components/molecules'
-import { ButtonComponent } from '../../components/ui'
 import {
   Grant2AnnouncementImageUrl,
   Grant2AnnouncementTwitterUrl,
@@ -27,7 +26,6 @@ import { GrantWinnerAnnouncement } from './components'
 import { BoardMembers } from './components/BoardMembers'
 import { CommunityVoting } from './components/CommunityVoting'
 import { GrantDevelopers } from './components/GrantDevs'
-import { GrantsContributeModal } from './components/GrantsContributeModal'
 import { MoreInfo } from './components/MoreInfo'
 
 export type GrantSponsor = {
@@ -47,16 +45,6 @@ export const GrantsRoundTwo = ({
 }) => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
-
-  const [copy, setCopy] = useState(false)
-
-  const handleCopyOnchain = () => {
-    navigator.clipboard.writeText('grants@geyser.fund')
-    setCopy(true)
-    setTimeout(() => {
-      setCopy(false)
-    }, 1000)
-  }
 
   return (
     <>
@@ -238,77 +226,14 @@ export const GrantsRoundTwo = ({
             alignItems={'center'}
           >
             <Box width="100%" display="flex" alignItems={'center'} my={4}>
-              <>
-                {sponsors && sponsors.length > 0 ? (
-                  <Wrap width="100%" justify="center" spacing="25px">
-                    {sponsors.map(
-                      (sponsor) =>
-                        sponsor && (
-                          <WrapItem key={sponsor.name}>
-                            {sponsor.image ? (
-                              <Image
-                                borderRadius="4px"
-                                height="70px"
-                                src={sponsor.image}
-                              />
-                            ) : null}
-                          </WrapItem>
-                        ),
-                    )}
-                  </Wrap>
-                ) : (
-                  <Box
-                    display="flex"
-                    width="100%"
-                    justifyContent={'center'}
-                    gap={4}
-                  >
-                    {[1, 2].map((item) => (
-                      <Box
-                        height={'34px'}
-                        rounded="full"
-                        bg="brand.neutral200"
-                        width={'138px'}
-                        key={item}
-                      ></Box>
-                    ))}
-                  </Box>
-                )}
-              </>
-            </Box>
-
-            <Box display="flex" alignItems={'center'} mt={2}>
-              <Box
-                display="flex"
-                alignItems={'center'}
-                mt="3"
-                flexDirection={isMobile ? 'column' : 'row'}
-              >
-                <GrantsContributeModal />
-
-                <Box
-                  display="flex"
-                  alignItems={'center'}
-                  marginTop={isMobile ? '15px' : '0px'}
-                >
-                  <Text
-                    fontSize={'13px'}
-                    fontWeight="500"
-                    mr={1}
-                    color="brand.neutral600"
-                  >
-                    Or sending SATs to our lightning address:{' '}
-                  </Text>
-                  <ButtonComponent
-                    size="sm"
-                    primary={copy}
-                    onClick={handleCopyOnchain}
-                    leftIcon={copy ? <RiLinkUnlinkM /> : <RiLinksLine />}
-                  >
-                    grants@geyser.fund
-                  </ButtonComponent>
-                </Box>
-              </Box>
+              <Wrap width="100%" justify="center" spacing="25px">
+                <WrapItem>
+                  <Image height="70px" src={satwalletimg} />
+                </WrapItem>
+                <WrapItem>
+                  <Image height="70px" src={AlbyPNG} />
+                </WrapItem>
+              </Wrap>
             </Box>
           </Box>
           <Box my={6}>
