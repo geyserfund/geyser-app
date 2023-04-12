@@ -90,7 +90,7 @@ export const AccountInfo = ({
                   userProfile={userProfile}
                   setUserProfile={setUserProfile}
                   isEdit={getIsEdit(
-                    externalAccount.type as ExternalAccountType,
+                    externalAccount.accountType as ExternalAccountType,
                   )}
                 />
               )
