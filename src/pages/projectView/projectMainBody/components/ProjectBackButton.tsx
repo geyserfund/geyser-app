@@ -1,4 +1,4 @@
-import { Button, HStack } from '@chakra-ui/react'
+import { Box, Button, HStack } from '@chakra-ui/react'
 import { BsArrowLeft, BsLightningChargeFill } from 'react-icons/bs'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -27,25 +27,29 @@ export const ProjectBackButton = () => {
   const isFundingDisabled = !isActive(project.status)
 
   return (
-    <HStack padding="10px 10px 2px 10px">
-      <Button
-        variant="outlined"
-        size="sm"
-        leftIcon={<BsArrowLeft fontSize="20px" />}
-        onClick={handleGoBack}
-      >
-        back
-      </Button>
-      <Button
-        size="sm"
-        flexGrow={1}
-        variant="contained"
-        isDisabled={isFundingDisabled}
-        leftIcon={<BsLightningChargeFill />}
-        onClick={() => setMobileView(MobileViews.funding)}
-      >
-        Contribute
-      </Button>
-    </HStack>
+    <Box>
+      <HStack padding="10px 10px 2px 10px">
+        <Button
+          variant="outlined"
+          size="sm"
+          leftIcon={<BsArrowLeft fontSize="20px" />}
+          onClick={handleGoBack}
+        >
+          back
+        </Button>
+        {isMobile ? (
+          <Button
+            size="sm"
+            flexGrow={1}
+            variant="contained"
+            isDisabled={isFundingDisabled}
+            leftIcon={<BsLightningChargeFill />}
+            onClick={() => setMobileView(MobileViews.funding)}
+          >
+            Contribute
+          </Button>
+        ) : null}
+      </HStack>
+    </Box>
   )
 }
