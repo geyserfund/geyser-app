@@ -267,11 +267,11 @@ export enum EntryType {
 
 export type ExternalAccount = {
   __typename?: 'ExternalAccount'
+  accountType: Scalars['String']
   externalId: Scalars['String']
   externalUsername: Scalars['String']
   id: Scalars['BigInt']
   public: Scalars['Boolean']
-  type: Scalars['String']
 }
 
 export type FileUploadInput = {
@@ -1048,15 +1048,8 @@ export type ProjectRegionsGetResult = {
 
 export type ProjectReward = {
   __typename?: 'ProjectReward'
-  /** @deprecated Deprecated field please use 'sold' instead */
-  backers: Scalars['Int']
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int']
-  /**
-   * Currency used for the cost
-   * @deprecated Field no longer supported
-   */
-  costCurrency: RewardCurrency
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
    * rewards should only be visible by the project owner and the users that purchased it.
@@ -2343,11 +2336,11 @@ export type ExternalAccountResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ExternalAccount'] = ResolversParentTypes['ExternalAccount'],
 > = {
+  accountType?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   externalId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   externalUsername?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   public?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3085,13 +3078,7 @@ export type ProjectRewardResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
 > = {
-  backers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  costCurrency?: Resolver<
-    ResolversTypes['RewardCurrency'],
-    ParentType,
-    ContextType
-  >
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   description?: Resolver<
     Maybe<ResolversTypes['description_String_maxLength_250']>,
