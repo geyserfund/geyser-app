@@ -83,7 +83,10 @@ export const useUserLightningAddress = (user?: User) => {
   const [deleteWallet, { loading: deleteLoading }] = useMutation(
     MUTATION_DELETE_WALLET,
     {
-      onError: unexpected,
+      onError() {
+        unexpected()
+        setLightningAddress(getUserLightningAddress(user))
+      },
     },
   )
 
@@ -139,8 +142,12 @@ export const useUserLightningAddress = (user?: User) => {
     if (lightningAddress.length === 0) {
       // delete wallet if it exists
       if (user.wallet) {
-        await deleteWallet({ variables: { id: user.wallet.id } })
-        return setLightningAddress('')
+        const data = await deleteWallet({ variables: { id: user.wallet.id } })
+        if (data) {
+          return setLightningAddress('')
+        }
+
+        return setLightningAddress(getUserLightningAddress(user))
       }
 
       return

@@ -17,3 +17,9 @@ export const MUTATION_UPDATE_WALLET = gql`
     }
   }
 `
+
+export const MUTATION_DELETE_WALLET = gql`
+  mutation WalletDelete($walletDeleteId: BigInt!) {
+    walletDelete(id: $walletDeleteId)
+  }
+`
