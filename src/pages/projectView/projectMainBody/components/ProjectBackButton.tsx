@@ -1,14 +1,13 @@
-import { Box } from '@chakra-ui/react'
-import { BsArrowLeft } from 'react-icons/bs'
+import { Button, HStack } from '@chakra-ui/react'
+import { BsArrowLeft, BsLightningChargeFill } from 'react-icons/bs'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { ButtonComponent } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
-import { useMobileMode } from '../../../../utils'
+import { isActive, useMobileMode } from '../../../../utils'
 
 export const ProjectBackButton = () => {
-  const { mobileView } = useProjectContext()
+  const { mobileView, project, setMobileView } = useProjectContext()
   const navigate = useNavigate()
   const location = useLocation()
   const isMobile = useMobileMode()
@@ -25,16 +24,28 @@ export const ProjectBackButton = () => {
     return null
   }
 
+  const isFundingDisabled = !isActive(project.status)
+
   return (
-    <Box padding={{ base: '10px 2px 2px 10px', md: '20px 2px 2px 20px' }}>
-      <ButtonComponent
-        to={getPath('landingPage')}
+    <HStack padding="10px 10px 2px 10px">
+      <Button
+        variant="outlined"
         size="sm"
         leftIcon={<BsArrowLeft fontSize="20px" />}
         onClick={handleGoBack}
       >
         back
-      </ButtonComponent>
-    </Box>
+      </Button>
+      <Button
+        size="sm"
+        flexGrow={1}
+        variant="contained"
+        isDisabled={isFundingDisabled}
+        leftIcon={<BsLightningChargeFill />}
+        onClick={() => setMobileView(MobileViews.funding)}
+      >
+        Contribute
+      </Button>
+    </HStack>
   )
 }

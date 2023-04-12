@@ -57,7 +57,8 @@ export const theme = extendTheme({
           borderColor: colors.neutral200,
           color: colors.neutral900,
           fontSize: '16px',
-          padding: '2px 5px',
+          padding: '8px 20px',
+          height: '32px',
           backgroundColor: 'white',
           borderRadius: '8px',
           _hover: {
@@ -69,9 +70,9 @@ export const theme = extendTheme({
         },
         contained: {
           background: colors.primary400,
-          width: '100%',
           borderRadius: '8px',
-          padding: '10px 30px',
+          padding: '8px 20px',
+          height: '31px',
           color: colors.neutral800,
           fontWeight: 500,
           fontFamily: fonts.inter,
