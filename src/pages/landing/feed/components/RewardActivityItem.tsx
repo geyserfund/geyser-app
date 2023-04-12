@@ -90,7 +90,7 @@ export const RewardItem = ({ reward }: { reward: ProjectReward }) => {
               padding="2px 5px"
               borderRadius="4px"
             >
-              <b>{reward.backers || 0}</b> collected
+              <b>{reward.sold || 0}</b> collected
             </Text>
           </VStack>
         </HStack>

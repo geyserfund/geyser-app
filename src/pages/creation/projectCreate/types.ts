@@ -70,7 +70,7 @@ export type TRewards = {
   projectId?: number
   cost: number
   image?: string
-  backers?: number
+  sold?: number
 }
 
 export type TNodeInput = {

@@ -27,7 +27,7 @@ import { ButtonComponent, UndecoratedLink } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { AUTH_SERVICE_ENDPOINT } from '../../../constants'
 import { AuthContext } from '../../../context'
-import { Maybe } from '../../../types/generated/graphql'
+import { ExternalAccount, Maybe } from '../../../types/generated/graphql'
 import { useMobileMode, useNotification } from '../../../utils'
 
 interface RecipientButtonProps {
@@ -72,7 +72,7 @@ export const RecipientButton = ({
       setSubmitting(true)
       const userCopy = JSON.parse(JSON.stringify(user))
       const twitterID = userCopy.externalAccounts.find(
-        (account: any) => account.type === 'twitter',
+        (account: ExternalAccount) => account.accountType === 'twitter',
       ).externalId
       const records = [
         {
