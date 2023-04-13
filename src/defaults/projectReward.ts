@@ -1,8 +1,4 @@
-import {
-  Project,
-  ProjectReward,
-  RewardCurrency,
-} from '../types/generated/graphql'
+import { Project, ProjectReward } from '../types/generated/graphql'
 
 export const defaultProjectReward: ProjectReward = {
   id: 0,
@@ -13,6 +9,5 @@ export const defaultProjectReward: ProjectReward = {
   deleted: false,
   stock: 0,
   sold: 0,
-  costCurrency: RewardCurrency.Usdcent,
   project: {} as Project,
 }

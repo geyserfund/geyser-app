@@ -127,7 +127,7 @@ export const RewardAdditionModal = ({
     return {
       projectId: toInt(projectId),
       cost: rewards.current.cost,
-      costCurrency: rewards.current.costCurrency,
+      costCurrency: RewardCurrency.Usdcent,
       description: rewards.current.description,
       image: rewards.current.image || undefined,
       name: rewards.current.name,
@@ -139,7 +139,7 @@ export const RewardAdditionModal = ({
     return {
       projectRewardId: toInt((rewards.current as ProjectReward).id),
       cost: rewards.current.cost,
-      costCurrency: RewardCurrency.Usdcent,
+      costCurrency: RewardCurrency.Usdcent, // TODO: when we do have more options for reward currency this will be updated
       description: rewards.current.description,
       image: rewards.current.image || undefined,
       name: rewards.current.name,
