@@ -5,8 +5,7 @@ import { AuthModal } from '../components/molecules'
 import { getPath, PathName } from '../constants'
 import { useAuthContext } from '../context'
 import { LoadingPage } from '../pages/loading'
-import { hasTwitterAccount } from '../utils'
-import { hasNostrAccount } from '../utils/validations/hasNostrAccount'
+import { hasNostrAccount, hasTwitterAccount } from '../utils'
 
 interface IPrivateRoute {
   children: React.ReactNode

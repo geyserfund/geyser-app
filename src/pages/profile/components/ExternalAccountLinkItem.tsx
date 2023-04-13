@@ -30,7 +30,7 @@ const useStyles = createUseStyles({
 })
 
 export const ExternalAccountLinkItem = ({ account }: Props) => {
-  const { type, externalUsername } = account
+  const { accountType: type, externalUsername } = account
   const styles = useStyles()
 
   const linkDestination: string = useMemo(() => {

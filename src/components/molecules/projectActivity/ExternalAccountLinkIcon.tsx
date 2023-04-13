@@ -31,7 +31,7 @@ export const ExternalAccountLinkIcon = ({
 
   const getExternalAccount = (type: string) => {
     return funder.user?.externalAccounts.find(
-      (account) => account?.type === type,
+      (account) => account?.accountType === type,
     )?.externalUsername
   }
 
