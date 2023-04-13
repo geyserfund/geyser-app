@@ -102,7 +102,7 @@ export const Profile = () => {
         height="100%"
         maxWidth="1590px"
       >
-        <GridItem colSpan={{ base: 1, lg: 2 }}>
+        <GridItem colSpan={{ base: 1, lg: 2 }} order={1}>
           <AccountInfo
             userProfile={userProfile}
             setUserProfile={setUserProfile}
@@ -111,10 +111,20 @@ export const Profile = () => {
           />
           {isViewingOwnProfile && <CreateProject marginTop="20px" />}
         </GridItem>
-        <GridItem h="100%" overflow="hidden" colSpan={{ base: 1, lg: 3 }}>
-          <ProfileTabs userProfile={userProfile} />
+        <GridItem
+          h="100%"
+          overflow="hidden"
+          colSpan={{ base: 1, lg: 3 }}
+          order={{ base: 3, md: 2 }}
+        >
+          <ProfileTabs userProfile={userProfile} isLoading={profileLoading} />
         </GridItem>
-        <GridItem h="100%" overflow="hidden" colSpan={{ base: 1, lg: 2 }}>
+        <GridItem
+          h="100%"
+          overflow="hidden"
+          colSpan={{ base: 1, lg: 2 }}
+          order={{ base: 2, md: 3 }}
+        >
           <Badges
             userProfile={userProfile}
             isEdit={isViewingOwnProfile}

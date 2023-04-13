@@ -81,6 +81,7 @@ export const NostrBadges = ({
         spacingY="40px"
         justify="center"
         overflowY="auto"
+        paddingBottom="20px"
       >
         {claimedBadges.map((userBadge) => {
           return (

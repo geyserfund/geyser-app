@@ -1,5 +1,3 @@
-import { Loader } from '@giphy/react-components'
-
 import { CardLayout } from '../../../../components/layouts'
 import { AlertBox } from '../../../../components/ui'
 import { ID } from '../../../../constants'
@@ -11,6 +9,7 @@ import {
   MapAliasedActivityProperties,
   QUERY_ACTIVITIES_FOR_LANDING_PAGE,
 } from '../../../landing/feed/activity.graphql'
+import { ContributionsSkeleton } from '../../../landing/feed/ActivityFeed'
 import { ActivityList } from '../../../landing/feed/views/ActivityList'
 
 const MaxProfileActivityLimit = 12
@@ -46,20 +45,22 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
     )
   }
 
-  if (isLoading) {
-    return <Loader />
-  }
-
   return (
-    <CardLayout spacing="20px" h="100%" overflowY="auto">
-      <ActivityList activities={activities} />
+    <CardLayout spacing="20px" maxHeight="100%" overflowY="auto">
+      {isLoading ? (
+        <ContributionsSkeleton />
+      ) : (
+        <>
+          <ActivityList activities={activities} />
 
-      <ScrollInvoke
-        elementId={isMobile ? undefined : ID.root}
-        onScrollEnd={fetchNext}
-        isLoading={isLoadingMore}
-        noMoreItems={noMoreItems}
-      />
+          <ScrollInvoke
+            elementId={isMobile ? undefined : ID.root}
+            onScrollEnd={fetchNext}
+            isLoading={isLoadingMore}
+            noMoreItems={noMoreItems}
+          />
+        </>
+      )}
     </CardLayout>
   )
 }

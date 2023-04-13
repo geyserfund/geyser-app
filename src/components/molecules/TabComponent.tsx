@@ -8,6 +8,10 @@ import {
   Tabs,
 } from '@chakra-ui/react'
 
+import { dimensions, ID } from '../../constants'
+import { useMobileMode } from '../../utils'
+import { StickToTop } from '../layouts'
+
 interface TabComponentProps {
   tabs: RenderTab[]
 }
@@ -19,8 +23,10 @@ export type RenderTab = {
 }
 
 export const TabComponent = ({ tabs }: TabComponentProps) => {
+  const isMobile = useMobileMode()
   return (
     <Tabs
+      id={ID.profile.tabs}
       display="flex"
       flexDirection="column"
       h="full"
@@ -28,27 +34,42 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
       size="sm"
       w="full"
     >
-      <TabList>
-        {tabs.map(({ title, sub }) => {
-          return (
-            <Tab key={title} {...tabButtonStyles}>
-              {title}
-              {sub && (
-                <Box
-                  as="span"
-                  ml="5px"
-                  paddingX="7px"
-                  backgroundColor="neutral.200"
-                  borderRadius="4px"
-                >
-                  {sub}
-                </Box>
-              )}
-            </Tab>
-          )
-        })}
-      </TabList>
-      <TabPanels height={`calc(100% - 64px)`} flex="1" marginTop="32px">
+      <StickToTop
+        id={ID.profile.tabList}
+        width="100%"
+        offset={dimensions.topNavBar.desktop.height}
+        bias={20}
+        buffer={10}
+        disable={!isMobile}
+        _onStick={{ width: `calc(100% - 20px)` }}
+      >
+        <TabList w="100%" paddingY="10px">
+          {tabs.map(({ title, sub }) => {
+            return (
+              <Tab key={title} {...tabButtonStyles}>
+                {title}
+                {sub && (
+                  <Box
+                    as="span"
+                    ml="5px"
+                    paddingX="7px"
+                    backgroundColor="neutral.200"
+                    borderRadius="4px"
+                  >
+                    {sub}
+                  </Box>
+                )}
+              </Tab>
+            )
+          })}
+        </TabList>
+      </StickToTop>
+
+      <TabPanels
+        height={{ base: '100%', md: `calc(100% - 64px)` }}
+        flex="1"
+        marginTop="32px"
+      >
         {tabs.map(({ title, Component }) => {
           return (
             <TabPanel h="full" key={title} padding="0px">
