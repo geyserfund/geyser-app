@@ -139,9 +139,15 @@ export const useUserLightningAddress = (user?: User) => {
   const mutate = useCallback(async () => {
     if (!user) return
 
+    const alreadyHasAddress =
+      user?.wallet &&
+      user.wallet.id &&
+      user.wallet.connectionDetails.__typename ===
+        'LightningAddressConnectionDetails'
+
     if (lightningAddress.length === 0) {
       // delete wallet if it exists
-      if (user.wallet) {
+      if (user.wallet && alreadyHasAddress) {
         const data = await deleteWallet({
           variables: { walletId: user.wallet.id },
         })
@@ -160,12 +166,6 @@ export const useUserLightningAddress = (user?: User) => {
       lightningAddress !== getUserLightningAddress(user) &&
       (await evaluate())
     ) {
-      const alreadyHasAddress =
-        user?.wallet &&
-        user.wallet.id &&
-        user.wallet.connectionDetails.__typename ===
-          'LightningAddressConnectionDetails'
-
       if (alreadyHasAddress) {
         return updateWallet({
           variables: {
