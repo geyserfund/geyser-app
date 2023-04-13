@@ -8,7 +8,7 @@ export const MUTATION_UNLINK_ACCOUNT = gql`
       imageUrl
       externalAccounts {
         id
-        type
+        accountType
         externalUsername
         externalId
         public

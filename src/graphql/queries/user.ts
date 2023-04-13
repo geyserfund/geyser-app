@@ -9,7 +9,7 @@ export const ME = gql`
       email
       externalAccounts {
         id
-        type
+        accountType
         externalUsername
         externalId
         public
@@ -57,7 +57,7 @@ export const USER_PROFILE_QUERY = gql`
       }
       externalAccounts {
         id
-        type
+        accountType
         externalUsername
         externalId
         public
