@@ -27,7 +27,7 @@ export const BadgesBody = ({
 }: BadgesBodyProps) => {
   const nostrId =
     userProfile.externalAccounts.find(
-      (account) => account?.type === ExternalAccountType.nostr,
+      (account) => account?.accountType === ExternalAccountType.nostr,
     )?.externalId || ''
   const hasBadgeNoNostrForOwn = userBadges.length > 0 && !nostrId && isEdit
 
