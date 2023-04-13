@@ -142,7 +142,9 @@ export const useUserLightningAddress = (user?: User) => {
     if (lightningAddress.length === 0) {
       // delete wallet if it exists
       if (user.wallet) {
-        const data = await deleteWallet({ variables: { id: user.wallet.id } })
+        const data = await deleteWallet({
+          variables: { walletId: user.wallet.id },
+        })
         if (data) {
           return setLightningAddress('')
         }
