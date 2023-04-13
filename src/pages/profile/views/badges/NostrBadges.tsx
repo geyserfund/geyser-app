@@ -1,4 +1,4 @@
-import { GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
+import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { Body2 } from '../../../../components/typography'
@@ -75,31 +75,33 @@ export const NostrBadges = ({
         </VStack>
       )}
 
-      <SimpleGrid
-        columns={{ base: 1, sm: 2, md: 3, lg: 2, xl: 3 }}
-        spacingX="20px"
+      <Wrap
+        w="full"
+        spacingX="10px"
         spacingY="40px"
+        justify="center"
+        overflowY="auto"
       >
         {claimedBadges.map((userBadge) => {
           return (
-            <GridItem key={userBadge.id}>
+            <WrapItem key={userBadge.id}>
               <BadgeItem
                 isClaimed
                 userBadge={userBadge}
                 claimABadge={claimABadge}
               />
-            </GridItem>
+            </WrapItem>
           )
         })}
         {isEdit &&
           unClaimedBadges.map((userBadge) => {
             return (
-              <GridItem key={userBadge.id}>
+              <WrapItem key={userBadge.id}>
                 <BadgeItem userBadge={userBadge} claimABadge={claimABadge} />
-              </GridItem>
+              </WrapItem>
             )
           })}
-      </SimpleGrid>
+      </Wrap>
     </>
   )
 }

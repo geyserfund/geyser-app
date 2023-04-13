@@ -1,0 +1,65 @@
+import { Loader } from '@giphy/react-components'
+
+import { CardLayout } from '../../../../components/layouts'
+import { AlertBox } from '../../../../components/ui'
+import { ID } from '../../../../constants'
+import { ScrollInvoke } from '../../../../helpers'
+import { useQueryWithPagination } from '../../../../hooks'
+import { Activity, User } from '../../../../types'
+import { useMobileMode } from '../../../../utils'
+import {
+  MapAliasedActivityProperties,
+  QUERY_ACTIVITIES_FOR_LANDING_PAGE,
+} from '../../../landing/feed/activity.graphql'
+import { ActivityList } from '../../../landing/feed/views/ActivityList'
+
+const MaxProfileActivityLimit = 12
+
+export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
+  const isMobile = useMobileMode()
+
+  const {
+    isLoading,
+    isLoadingMore,
+    noMoreItems,
+    data: activities,
+    error,
+    fetchNext,
+  } = useQueryWithPagination<Activity>({
+    itemLimit: MaxProfileActivityLimit,
+    queryName: 'getActivities',
+    query: QUERY_ACTIVITIES_FOR_LANDING_PAGE,
+    resultMap: MapAliasedActivityProperties,
+    where: {
+      userIds: [userProfile?.id],
+    },
+  })
+
+  if (error) {
+    return (
+      <AlertBox
+        height="200px"
+        status="error"
+        title="An error occurred while attempting to fetch user activity."
+        message="Please try refreshing the page. You may also want to contact support if the problem persists."
+      />
+    )
+  }
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  return (
+    <CardLayout spacing="20px" h="100%" overflowY="auto">
+      <ActivityList activities={activities} />
+
+      <ScrollInvoke
+        elementId={isMobile ? undefined : ID.root}
+        onScrollEnd={fetchNext}
+        isLoading={isLoadingMore}
+        noMoreItems={noMoreItems}
+      />
+    </CardLayout>
+  )
+}

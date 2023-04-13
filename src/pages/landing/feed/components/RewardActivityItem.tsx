@@ -22,7 +22,7 @@ export const RewardActivityItem = ({
   const owner = reward.project.owners[0].user
 
   return (
-    <VStack w="full">
+    <VStack w="full" alignItems="start">
       <HStack w="full" justifyContent="start">
         <LinkableAvatar
           imageSrc={`${owner.imageUrl}`}
