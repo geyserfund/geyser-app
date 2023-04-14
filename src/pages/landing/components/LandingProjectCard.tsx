@@ -26,6 +26,7 @@ export const LandingProjectCard = ({
       fundersCount={project.fundersCount || 0}
       amountFunded={project.balance}
       projectId={project.id}
+      minHeight="125px"
       {...rest}
     />
   )
