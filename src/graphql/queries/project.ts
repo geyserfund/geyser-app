@@ -301,7 +301,7 @@ export const QUERY_GET_PROJECT_FUNDERS = gql`
           externalId
           externalUsername
           id
-          type
+          accountType
         }
         imageUrl
       }

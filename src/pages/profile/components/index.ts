@@ -1,5 +1,6 @@
 export * from './ExternalAccountDisplay'
 export * from './ExternalAccountLinkItem'
+export * from './ProfileTabLayout'
 export * from './UserProfileHeader'
 export * from './UserProfilePageContributionsList'
 export * from './UserProfilePageEntriesList'
