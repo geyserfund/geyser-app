@@ -1,4 +1,4 @@
-import { DocumentNode, OperationVariables, useQuery } from '@apollo/client'
+import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client'
 import { isDocumentNode } from '@apollo/client/utilities'
 
 import { PaginationHookReturn, QueryResponseData } from './types'
@@ -11,7 +11,7 @@ export type useQueryWithPaginationProps = {
   where?: any
   orderBy?: any
   resultMap?: (_: any[]) => any[]
-  options?: OperationVariables
+  options?: QueryHookOptions
 }
 
 export const useQueryWithPagination = <Type,>({

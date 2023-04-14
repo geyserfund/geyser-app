@@ -9,9 +9,11 @@ import { ProfileProjects } from './ProfileProjects'
 export const ProfileTabs = ({
   userProfile,
   isLoading,
+  isViewingOwnProfile,
 }: {
   userProfile: User
   isLoading: boolean
+  isViewingOwnProfile?: boolean
 }) => {
   const activityTab = useMemo(
     () => ({
@@ -24,8 +26,13 @@ export const ProfileTabs = ({
   const projectsTab = useMemo(
     () => ({
       title: 'Projects',
-      sub: userProfile.ownerOf?.length,
-      Component: () => <ProfileProjects userProfile={userProfile} />,
+      sub: userProfile.ownerOf?.length || undefined,
+      Component: () => (
+        <ProfileProjects
+          userProfile={userProfile}
+          isViewingOwnProfile={isViewingOwnProfile}
+        />
+      ),
     }),
     [userProfile],
   )
@@ -45,7 +52,7 @@ export const ProfileTabs = ({
       return [activityTab]
     }
 
-    if (userProfile.ownerOf?.length > 0) {
+    if (userProfile.ownerOf?.length > 0 || isViewingOwnProfile) {
       tabs = [projectsTab, ...tabs]
     }
 

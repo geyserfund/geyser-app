@@ -16,6 +16,7 @@ export const ProfileFollowed = ({ userProfile }: { userProfile: User }) => {
         id: userProfile.id,
       },
     },
+    skip: !userProfile?.id,
   })
 
   const projects = (data?.user.projectFollows as Project[]) || []

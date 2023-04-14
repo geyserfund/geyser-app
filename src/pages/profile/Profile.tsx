@@ -109,7 +109,6 @@ export const Profile = () => {
             isEdit={isViewingOwnProfile}
             isLoading={profileLoading}
           />
-          {isViewingOwnProfile && <CreateProject marginTop="20px" />}
         </GridItem>
         <GridItem
           h="100%"
@@ -117,7 +116,11 @@ export const Profile = () => {
           colSpan={{ base: 1, lg: 3 }}
           order={{ base: 3, md: 2 }}
         >
-          <ProfileTabs userProfile={userProfile} isLoading={profileLoading} />
+          <ProfileTabs
+            userProfile={userProfile}
+            isLoading={profileLoading}
+            isViewingOwnProfile={isViewingOwnProfile}
+          />
         </GridItem>
         <GridItem
           h="100%"

@@ -32,6 +32,9 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
     where: {
       userIds: [userProfile?.id],
     },
+    options: {
+      skip: !userProfile?.id,
+    },
   })
 
   if (error) {
