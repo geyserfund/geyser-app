@@ -20,8 +20,18 @@ export const theme = extendTheme({
     Button: {
       // 1. We can update the base styles
       baseStyle: {
-        fontWeight: 'normal', // Normally, it is "semibold"
-        height: '200px',
+        fontWeight: 500,
+        fontFamily: fonts.inter,
+      },
+      sizes: {
+        xl: {
+          borderRadius: '8px',
+          padding: '10px 30px',
+          fontSize: '22px',
+          textTransform: 'uppercase',
+          fontFamily: fonts.livvic,
+          fontWeight: 700,
+        },
       },
       variants: {
         primary: {
@@ -58,7 +68,6 @@ export const theme = extendTheme({
           color: colors.neutral900,
           fontSize: '16px',
           padding: '8px 20px',
-          height: '32px',
           backgroundColor: 'white',
           borderRadius: '8px',
           _hover: {
@@ -72,24 +81,7 @@ export const theme = extendTheme({
           background: colors.primary400,
           borderRadius: '8px',
           padding: '8px 20px',
-          height: '31px',
           color: colors.neutral800,
-          fontWeight: 500,
-          fontFamily: fonts.inter,
-          _hover: {
-            background: colors.primary500,
-          },
-        },
-        hugeContained: {
-          background: colors.primary400,
-          width: '100%',
-          borderRadius: '8px',
-          padding: '10px 30px',
-          fontSize: '22px',
-          color: colors.neutral800,
-          textTransform: 'uppercase',
-          fontFamily: fonts.livvic,
-          fontWeight: 700,
           _hover: {
             background: colors.primary500,
           },

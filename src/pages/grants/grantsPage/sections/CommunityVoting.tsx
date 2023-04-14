@@ -72,7 +72,9 @@ export const CommunityVoting = ({
       <Button
         onClick={() => modalProps.onOpen({ project })}
         height="51px"
-        variant="hugeContained"
+        width="100%"
+        size="xl"
+        variant="contained"
       >
         Vote
       </Button>
@@ -124,7 +126,7 @@ export const CommunityVoting = ({
                   justifyContent="center"
                   alignItems="center"
                 >
-                  {canVote && renderVoteButton(project)}
+                  {renderVoteButton(project)}
                   {renderWidgetItem(funding)}
                 </Box>
               )}
@@ -155,11 +157,11 @@ export const CommunityVoting = ({
             {isMobile && (
               <Box display="flex" pl={6}>
                 <Box pt={2}>{renderWidgetItem(funding)}</Box>
-                {canVote && (
+                {
                   <Box ml={8} flexGrow={1}>
                     {renderVoteButton(project)}
                   </Box>
-                )}
+                }
               </Box>
             )}
           </SectionCard>
