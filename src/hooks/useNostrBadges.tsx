@@ -9,7 +9,7 @@ import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
 import { MUTATION_USER_BADGE_AWARD } from '../graphql/mutations'
 import { MutationUserBadgeAwardArgs, UserBadge } from '../types'
 import { useNotification } from '../utils'
-import { signEvent } from '../utils/nostr/nip07'
+import { signEventToBeDeprecated } from '../utils/nostr/nip07'
 
 const relayUri = 'wss://relay.damus.io'
 
@@ -138,7 +138,7 @@ export const useNostrBadges = (pubKey: string) => {
       }
 
       eventToPublish.id = getEventHash(eventToPublish)
-      eventToPublish.sig = await signEvent(eventToPublish) // this is where you sign with private key replaccing pubkey
+      eventToPublish.sig = await signEventToBeDeprecated(eventToPublish) // this is where you sign with private key replaccing pubkey
 
       const pub = relay.publish(eventToPublish) // this is where you sign with private key replaccing pubkey
 
