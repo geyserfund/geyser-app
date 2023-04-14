@@ -8,7 +8,11 @@ import { Body1, H1, H3 } from '../../components/typography'
 import Loader from '../../components/ui/Loader'
 import { StatusLabel } from '../../components/ui/StatusLabel'
 import { Head } from '../../config'
-import { getPath } from '../../constants'
+import {
+  getPath,
+  Grant3AnnouncementImageUrl,
+  Grant3AnnouncementTwitterUrl,
+} from '../../constants'
 import {
   GrantApplicant,
   GrantApplicantStatus,
@@ -20,6 +24,7 @@ import {
   useMobileMode,
   useNotification,
 } from '../../utils'
+import { GrantWinnerAnnouncement } from './components'
 import { CommunityVoting } from './components/CommunityVoting'
 import { ContributionsWidget } from './components/ContributionsWidget'
 import { DistributionChart } from './components/DistributionChart'
@@ -177,19 +182,29 @@ export const GrantPage = () => {
               sponsors={grant.sponsors}
               endDateSubtitle={GRANT_STATUS_COUNTDOWN_TITLES[grant.status]}
               endDateTimestamp={votingEndDate}
-              balance={getShortAmountLabel(grant.balance || 0)}
+              balance={getShortAmountLabel(grant.balance || 0, true)}
               contributions={getShortAmountLabel(
                 grant.applicants.reduce(
                   (prev, curr) => prev + (curr?.funding.communityFunding || 0),
                   0,
                 ) || 0,
+                true,
               )}
             />
           </Box>
         </Box>
       </SectionCard>
       <DistributionChart applicants={applicants} />
-      <CommunityVoting applicants={applicants} canVote={canVote} />
+      <GrantWinnerAnnouncement
+        imageUrl={Grant3AnnouncementImageUrl}
+        linkUrl={Grant3AnnouncementTwitterUrl}
+      />
+      <CommunityVoting
+        title="Grant winners!"
+        applicants={applicants}
+        canVote={canVote}
+        isClosed={true}
+      />
       <MoreInfo />
     </PageContainer>
   )

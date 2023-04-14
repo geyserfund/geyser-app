@@ -34,6 +34,7 @@ COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.cjs .p
 ARG VITE_APP_API_ENDPOINT
 ARG VITE_APP_AIR_TABLE_KEY
 ARG VITE_APP_GIPHY_API_KEY
+ARG VITE_APP_GEYSER_NOSTR_PUBKEY
 ARG VITE_APP_ENV
 ARG VITE_APP_AUTH_SERVICE_ENDPOINT
 RUN /bin/sh -c "printenv > .env && yarn build"

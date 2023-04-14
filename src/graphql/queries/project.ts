@@ -48,7 +48,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
         cost
         description
         name
-        backers
+        sold
         image
       }
       ambassadors {
@@ -301,7 +301,7 @@ export const QUERY_GET_PROJECT_FUNDERS = gql`
           externalId
           externalUsername
           id
-          type
+          accountType
         }
         imageUrl
       }

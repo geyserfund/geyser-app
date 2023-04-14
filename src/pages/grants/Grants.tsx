@@ -30,6 +30,12 @@ const useStyles = createUseStyles({
   },
 })
 
+export const GrantHasVoting: { [key: string]: boolean } = {
+  'grant-round-001': false,
+  'grant-round-002': false,
+  'grant-round-003': true,
+}
+
 export const Grants = ({ project }: { project: Project }) => {
   const [applicants, setApplicants] = useState(['loading'])
   const classes = useStyles()

@@ -1,28 +1,33 @@
 import { Avatar, AvatarProps, Box, HStack, StackProps } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { Body2 } from '../../../../components/typography'
-import { User } from '../../../../types/generated/graphql'
+import { Body2, BodyProps } from '../../../../components/typography'
+import { Maybe, User } from '../../../../types/generated/graphql'
+import { getRandomOrb } from '../../../../utils'
 
 interface IAvatarElement extends AvatarProps {
   avatarOnly?: boolean
-  user: User
+  user?: Maybe<User>
+  seed?: number
   wrapperProps?: StackProps
   noLink?: boolean
+  textProps?: BodyProps
 }
 
 export const AvatarElement = ({
   avatarOnly = false,
   user,
+  seed,
   wrapperProps,
   noLink,
+  textProps,
   ...rest
 }: IAvatarElement) => {
-  const avatar = (
-    <Avatar size="xs" borderRadius="4px" src={`${user.imageUrl}`} {...rest} />
-  )
+  const image = user?.imageUrl || getRandomOrb(seed || 1)
 
-  if (avatarOnly) {
+  const avatar = <Avatar size="xs" borderRadius="4px" src={image} {...rest} />
+
+  if (avatarOnly || !user) {
     return <Box {...wrapperProps}>{avatar}</Box>
   }
 
@@ -35,9 +40,13 @@ export const AvatarElement = ({
       {...wrapperProps}
     >
       {avatar}
-      <Body2 semiBold color="brand.neutral600" isTruncated>
-        {user.username}
+      <Body2 semiBold color="brand.neutral600" isTruncated {...textProps}>
+        {user.username || 'Anonymous'}
       </Body2>
     </HStack>
   )
 }
+
+export const AvatarCircle = (props: AvatarProps) => (
+  <Avatar size="xs" borderRadius="4px" {...props} />
+)

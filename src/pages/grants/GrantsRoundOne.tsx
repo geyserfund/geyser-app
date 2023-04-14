@@ -7,10 +7,8 @@ import {
   Image,
   Link,
   Text,
-  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import React from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
@@ -18,7 +16,6 @@ import satwalletimg from '../../assets/walletsats.svg'
 import { AppFooter } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
 import {
-  getPath,
   GrantsBitcoinCulture,
   GrantsBitcoinDevelopment,
   GrantsBitcoinEducation,
@@ -30,7 +27,6 @@ import { useMediumScreen, useMobileMode } from '../../utils'
 import { ApplyGrantCard } from './components/ApplyGrantCard'
 import { Board } from './components/Board'
 import { CommunityVoting } from './components/CommunityVoting'
-import { GrantsContributeModal } from './components/GrantsContributeModal'
 
 const grants = [
   {
@@ -73,9 +69,6 @@ export const GrantsRoundOne = ({
   const isMobile = useMobileMode()
   const navigate = useNavigate()
   const isMedium = useMediumScreen()
-  const [link, setLink] = React.useState('')
-
-  const modalProps = useDisclosure()
 
   return (
     <>
@@ -186,6 +179,55 @@ export const GrantsRoundOne = ({
               ))}
             </Grid>
           </Box>
+          <Box
+            width={isMobile ? '90%' : isMedium ? '75%' : '60%'}
+            display="flex"
+            justifyContent="center"
+            justifyItems="center"
+            margin="0 auto"
+          >
+            <VStack>
+              <Text
+                fontFamily={fonts.interBlack}
+                fontSize="24px"
+                fontWeight={'bold'}
+                textAlign="center"
+                mt={8}
+              >
+                Round 1 Announcement
+              </Text>
+              <Text textAlign="justify" fontSize="sm">
+                The Geyser Grant Round 1 winners have been released.{' '}
+                <Link
+                  _hover={{ textDecoration: 'none' }}
+                  isExternal
+                  href="https://twitter.com/geyserfund/status/1567537222005530625?s=20&t=ubMlkMfNudkbogo-IKhkHw"
+                >
+                  Check out our Twitter announcement.
+                </Link>
+              </Text>
+              <Image
+                htmlHeight={450}
+                htmlWidth={800}
+                src="https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-1-results.jpeg"
+              ></Image>
+              <Link
+                margin="0 auto"
+                w="87px"
+                _hover={{ textDecoration: 'none' }}
+                isExternal
+                href="https://twitter.com/geyserfund/status/1567537222005530625"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <ButtonComponent fontSize="lg">
+                  Announcement
+                  <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
+                </ButtonComponent>
+              </Link>
+            </VStack>
+          </Box>
 
           {applicants && applicants.length ? (
             <Box my={5}>
@@ -193,6 +235,7 @@ export const GrantsRoundOne = ({
                 title="Grant Winners"
                 applicants={applicants}
                 canVote={false}
+                isClosed={true}
               />
             </Box>
           ) : null}
@@ -243,116 +286,7 @@ export const GrantsRoundOne = ({
           >
             <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
               <img src={satwalletimg} width="195px" />
-
-              <>
-                {typeof link === 'string' && link.trim().length === 0 ? (
-                  <Box display="flex" alignItems={'center'} gap={4}>
-                    {[1, 2].map((item) => (
-                      <Box
-                        height={'34px'}
-                        rounded="full"
-                        bg="brand.neutral200"
-                        width={'138px'}
-                        key={item}
-                      ></Box>
-                    ))}
-                  </Box>
-                ) : (
-                  <img src={link} width="100px" />
-                )}
-              </>
             </Box>
-
-            <Box display="flex" alignItems={'center'} mt={2}>
-              <Box
-                display="flex"
-                alignItems={'center'}
-                mt="3"
-                flexDirection={isMobile ? 'column' : 'row'}
-              >
-                <Button
-                  variant={'solid'}
-                  fontWeight="500"
-                  fontSize="16px"
-                  px={12}
-                  mr="2"
-                  height={10}
-                  onClick={() => modalProps.onOpen()}
-                  backgroundColor="brand.primary"
-                >
-                  Contribute
-                </Button>
-                <GrantsContributeModal
-                  onSuccess={(_contribution, project) =>
-                    project && setLink(getPath('project', project.name))
-                  }
-                />
-
-                <Box display="flex" alignItems={'center'}>
-                  <Text
-                    fontSize={'13px'}
-                    fontWeight="500"
-                    mr={1}
-                    color="brand.neutral600"
-                  >
-                    Or sending SATs to our lightning address:{' '}
-                  </Text>
-                  <Text decoration={'underline'} color="brand.primary">
-                    {' '}
-                    <a href="">grants@geyser.fund.</a>
-                  </Text>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-          <Box
-            width={isMobile ? '90%' : isMedium ? '75%' : '60%'}
-            display="flex"
-            justifyContent="center"
-            justifyItems="center"
-            margin="0 auto"
-          >
-            <VStack>
-              <Text
-                fontFamily={fonts.interBlack}
-                fontSize="24px"
-                fontWeight={'bold'}
-                textAlign="center"
-                mt={8}
-              >
-                Round 1 Announcement
-              </Text>
-              <Text textAlign="justify" fontSize="sm">
-                The Geyser Grant Round 1 winners have been released.{' '}
-                <Link
-                  _hover={{ textDecoration: 'none' }}
-                  isExternal
-                  href="https://twitter.com/geyserfund/status/1567537222005530625?s=20&t=ubMlkMfNudkbogo-IKhkHw"
-                >
-                  Check out our Twitter announcement.
-                </Link>
-              </Text>
-              <Image
-                htmlHeight={450}
-                htmlWidth={800}
-                src="https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-1-results.jpeg"
-              ></Image>
-              <Link
-                margin="0 auto"
-                w="87px"
-                _hover={{ textDecoration: 'none' }}
-                isExternal
-                href="https://twitter.com/geyserfund/status/1567537222005530625"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <ButtonComponent fontSize="lg">
-                  Announcement
-                  <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
-                </ButtonComponent>
-              </Link>
-            </VStack>
           </Box>
         </Box>
         <AppFooter />

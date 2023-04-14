@@ -1,18 +1,11 @@
-import {
-  Box,
-  HStack,
-  Skeleton,
-  SkeletonText,
-  Stack,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Stack, VStack } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
 import { H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { Grant } from '../../../../types'
+import { FeaturedCardSkeleton } from './FeaturedSkeleton'
 import { ProjectRowLayout } from './ProjectRowLayout'
 
 interface Props {
@@ -24,7 +17,7 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
   const navigate = useNavigate()
 
   if (loading || !grant) {
-    return <FeaturedGrantSkeleton />
+    return <FeaturedCardSkeleton title="Featured Grant" />
   }
 
   return (
@@ -78,48 +71,6 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
           </H3>
         </VStack>
       </Stack>
-    </ProjectRowLayout>
-  )
-}
-
-export const FeaturedGrantSkeleton = () => {
-  return (
-    <ProjectRowLayout title="Featured Project" width="100%">
-      <CardLayout
-        noborder
-        direction={{ base: 'column', sm: 'row' }}
-        width="100%"
-        height={{ base: 'auto', sm: '245px' }}
-        alignItems="start"
-        spacing="20px"
-        padding="0px"
-      >
-        <Skeleton
-          width={{ base: '100%', sm: '55%' }}
-          height={{ base: '240px', sm: '100%' }}
-          borderRadius="8px"
-          overflow="hidden"
-        />
-        <VStack
-          width={{ base: '100%', sm: '45%' }}
-          height="100%"
-          minWidth="200px"
-          alignItems="start"
-          justifyContent="start"
-          spacing="10px"
-          overflow="hidden"
-        >
-          <Skeleton borderRadius="8px" width="80%" height="20px" />
-          <Skeleton borderRadius="8px" width="60%" height="20px" />
-          <Skeleton borderRadius="8px" width="100%" height="20px" />
-          <SkeletonText noOfLines={5} width="100%" />
-          <HStack>
-            <Skeleton borderRadius="8px" height="40px" width="40px" />
-            <Skeleton borderRadius="8px" height="40px" width="40px" />
-            <Skeleton borderRadius="8px" height="40px" width="40px" />
-          </HStack>
-        </VStack>
-      </CardLayout>
     </ProjectRowLayout>
   )
 }

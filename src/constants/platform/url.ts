@@ -17,7 +17,7 @@ export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf'
 // Geyser footer Links
 
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
-export const GeyserTelegramUrl = 'https://t.me/+EZ5otIPhVcxhMmFk'
+export const GeyserTelegramUrl = 'https://t.me/geyserfund'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
 export const GeyserHomepageUrl = 'https://geyser.fund/'
 export const GeyserPrivacyUrl =
@@ -149,6 +149,9 @@ export const GrantsHero =
 export const NoResultsSearchUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/empty-search.png'
 
+export const ProjectLaunch3DUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/project-launch-3d.png'
+
 // Geyser Notion Links
 
 export const GrantsFAQUrl =
@@ -161,3 +164,25 @@ export const GeyserProhibitedItemsUrl =
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
+
+// BADGES
+
+export const BadgesGroupUrl =
+  'https://storage.googleapis.com/geyser-projects-media/badge/badges-group.png'
+
+// UTILS
+
+export const CannotConnectAccountUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/connect-account-failed.png'
+
+// GRANTS
+
+export const Grant3AnnouncementImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/grant-3-announcement.png'
+export const Grant3AnnouncementTwitterUrl =
+  'https://twitter.com/geyserfund/status/1642478024699310080?s=20'
+
+export const Grant2AnnouncementImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/grant-2-announcement.png'
+export const Grant2AnnouncementTwitterUrl =
+  'https://twitter.com/geyserfund/status/1628842072802312193?s=20'

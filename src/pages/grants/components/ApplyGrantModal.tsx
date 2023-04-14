@@ -19,13 +19,13 @@ import { FaCheck } from 'react-icons/fa'
 import { MdClose } from 'react-icons/md'
 
 import { createApplicantRecordRound2 } from '../../../api'
-import { TwitterConnect } from '../../../components/molecules'
 import { TextArea, TextInputBox } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
 import { AuthContext } from '../../../context'
 import { useFormState } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import { hasTwitterAccount, useNotification, validUrl } from '../../../utils'
+import { ConnectWithTwitter } from '../../auth/ConnectWithTwitter'
 
 interface Grant {
   applicant: number
@@ -382,7 +382,7 @@ export const ApplyGrantModal = ({
             </Text>
 
             <Box mt={6}>
-              <TwitterConnect
+              <ConnectWithTwitter
                 onClose={() => {
                   loginOnClose()
                   onLoginAlertModalClose()

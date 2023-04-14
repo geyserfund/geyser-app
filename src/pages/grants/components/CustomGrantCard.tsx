@@ -17,6 +17,19 @@ interface Props {
   showBanner: boolean
 }
 
+export const GrantValues: {
+  [key: string]: { applicants: number; amount: number }
+} = {
+  'grant-round-001': {
+    applicants: 90,
+    amount: 100000000,
+  },
+  'grant-round-002': {
+    applicants: 45,
+    amount: 100000000,
+  },
+}
+
 export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
   const isMobile = useMobileMode()
 
@@ -24,16 +37,20 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
 
   const isActive = grant.status !== GrantStatusEnum.Closed
 
-  const Applicants = grant.applicants ? (
-    <ListText mx={4} subtitle="APPLICANTS" isSatLogo={false}>
-      {grant.applicants.filter(
-        (applicant) => applicant?.status === GrantApplicantStatus.Accepted,
-      ).length || 0}
-    </ListText>
-  ) : null
+  const renderApplicants = (value?: number) =>
+    value || grant.applicants ? (
+      <ListText mx={4} subtitle="APPLICANTS" isSatLogo={false}>
+        {value ||
+          grant.applicants.filter(
+            (applicant) => applicant?.status === GrantApplicantStatus.Accepted,
+          ).length ||
+          0}
+      </ListText>
+    ) : null
 
   return (
     <Box
+      mt={3}
       onClick={() => navigate(to)}
       minWidth={'100%'}
       cursor="pointer"
@@ -92,9 +109,11 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 alignItems="center"
                 justifyContent="space-around"
               >
-                {Applicants}
+                {renderApplicants(GrantValues[grant.name]?.applicants)}
                 <ListText mx={4} subtitle="GRANT" isSatLogo={true}>
-                  {getShortAmountLabel(grant.balance || 0)}
+                  {getShortAmountLabel(
+                    GrantValues[grant.name]?.applicants || grant.balance || 0,
+                  )}
                 </ListText>
               </Box>
             ) : (
@@ -104,25 +123,29 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 alignItems="center"
                 justifyContent="space-around"
               >
-                {Applicants}
-                {grant.applicants && (
+                {renderApplicants(GrantValues[grant.name]?.applicants)}
+                {
                   <ListText mx={4} subtitle="GRANT" isSatLogo={true}>
                     {getShortAmountLabel(
-                      grant.applicants.reduce(
-                        (prev, curr) =>
-                          prev +
-                          (curr?.funding.communityFunding || 0) +
-                          (curr?.funding.grantAmount || 0),
+                      GrantValues[grant.name]?.amount ||
+                        grant.applicants?.reduce(
+                          (prev, curr) =>
+                            prev +
+                            (curr?.funding.communityFunding || 0) +
+                            (curr?.funding.grantAmount || 0),
+                          0,
+                        ) ||
                         0,
-                      ) || 0,
                     )}
                   </ListText>
-                )}
+                }
               </Box>
             )}
           </Box>
         </Box>
-        {!isMobile && <SponsorList sponsors={grant.sponsors} />}
+        {!isMobile && (
+          <SponsorList justifyContent="start" sponsors={grant.sponsors} />
+        )}
       </Box>
     </Box>
   )

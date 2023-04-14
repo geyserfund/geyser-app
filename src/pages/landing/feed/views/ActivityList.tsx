@@ -49,7 +49,7 @@ export const ActivityList = ({ activities }: { activities: Activity[] }) => {
   }
 
   if (activities.length === 0) {
-    return <Text>No any activity</Text>
+    return <Text>This user has no activity yet.</Text>
   }
 
   return (

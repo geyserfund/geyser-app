@@ -7,7 +7,6 @@ import { GeyserTelegramUrl } from '../../../../constants'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
 import { IFundForm } from '../../../../hooks'
 import { IFundingAmounts, IProject } from '../../../../interfaces'
-import { fonts } from '../../../../styles'
 import { Satoshis } from '../../../../types'
 import { Project } from '../../../../types/generated/graphql'
 import { useMobileMode } from '../../../../utils'
@@ -59,7 +58,6 @@ export const ProjectFundingQRScreen = ({
         version={ContributionInfoBoxVersion.NEUTRAL}
         project={project as Project}
         contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
-        rewardsEarned={state.rewardsByIDAndCount}
         isFunderAnonymous={state.anonymous}
         funderUsername={state.funderUsername}
         funderEmail={state.email}
@@ -83,12 +81,7 @@ export const ProjectFundingQRScreen = ({
         </Link>
       </HStack>
 
-      <Text
-        fontSize="8px"
-        fontWeight={400}
-        fontFamily={fonts.myanmar}
-        color={'brand.gray500'}
-      >
+      <Text fontSize="8px" fontWeight={400} color={'brand.gray500'}>
         Geyser is not a store. It’s a way to bring creative projects to life
         using Bitcoin. Your donation will support a creative project that has
         yet to be developed. There’s a risk that, despite a creator’s best

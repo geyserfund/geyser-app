@@ -18,5 +18,6 @@
     "jsx": "react-jsx"
   },
   "include": ["src"],
+  "exclude":["src/types/generated/graphql.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

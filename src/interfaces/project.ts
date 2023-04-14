@@ -1,6 +1,6 @@
 import { ProjectStatus, User } from '../types/generated/graphql'
 import { IFundingTx } from './funding'
-import { IFunder, IGrantee, IParticipant, ISponsor } from './participant'
+import { IFunder, IParticipant, ISponsor } from './participant'
 
 export type IProjectType = 'reward' | 'grant' | 'donation'
 
@@ -24,7 +24,6 @@ export interface IProject {
   ambassadors: IParticipant[]
   funders: IFunder[]
   sponsors: ISponsor[]
-  grantees: IGrantee[]
   fundingTxs: IFundingTx[]
   rewards?: IProjectReward[]
   milestones?: IProjectMilestone[]
@@ -51,7 +50,7 @@ export interface IProjectReward {
   cost: number
   name: string
   description?: string
-  backers: number
+  sold: number
   image?: string
 }
 

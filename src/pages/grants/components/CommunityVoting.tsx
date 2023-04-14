@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { H3 } from '../../../components/typography'
 import { getPath } from '../../../constants'
-import { GrantApplicant } from '../../../types'
+import { GrantApplicant, GrantApplicantFunding, Project } from '../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
 import { useProjectFundingModal } from '../../projectFunding/hooks/useProjectFundingModal'
 import { ProjectFundingModal } from '../../projectFunding/ProjectFundingModal'
@@ -17,6 +17,7 @@ interface Props {
   applicants: Array<GrantApplicant>
   canVote: boolean
   title?: string
+  isClosed?: boolean
 }
 
 const useStyles = createUseStyles({
@@ -32,7 +33,12 @@ const useStyles = createUseStyles({
   },
 })
 
-export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
+export const CommunityVoting = ({
+  applicants,
+  canVote,
+  title,
+  isClosed,
+}: Props) => {
   const isMobile = useMobileMode()
   const classes = useStyles()
   const modalProps = useProjectFundingModal()
@@ -43,6 +49,30 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
 
   const sectionTitle =
     title || 'Let the Sats flow to your favorite projects. 1 Sat = 1 vote.'
+
+  const renderWidgetItem = (funding: GrantApplicantFunding) => {
+    return (
+      <WidgetItem subtitle={!isClosed ? 'worth of votes' : 'distributed'}>
+        {getShortAmountLabel(
+          !isClosed
+            ? funding.communityFunding
+            : funding.grantAmount + funding.communityFunding || 0,
+        )}
+      </WidgetItem>
+    )
+  }
+
+  const renderVoteButton = (project: Project) => {
+    return (
+      <Button
+        onClick={() => modalProps.onOpen({ project })}
+        height="51px"
+        variant="hugeContained"
+      >
+        Vote
+      </Button>
+    )
+  }
 
   return (
     <SectionCard p={5}>
@@ -91,59 +121,40 @@ export const CommunityVoting = ({ applicants, canVote, title }: Props) => {
                   justifyContent="center"
                   alignItems="center"
                 >
-                  {canVote && (
-                    <Button
-                      onClick={() => modalProps.open({ project })}
-                      height="51px"
-                      variant="hugeContained"
-                    >
-                      Vote
-                    </Button>
-                  )}
-                  <WidgetItem subtitle="worth of votes">
-                    {getShortAmountLabel(funding.communityFunding || 0)}
-                  </WidgetItem>
+                  {canVote && renderVoteButton(project)}
+                  {renderWidgetItem(funding)}
                 </Box>
               )}
             </Box>
-            <Box pl={2} filter="opacity(0.4)">
-              {project.funders?.filter(Boolean).map(
-                (funder) =>
-                  funder &&
-                  funder.user && (
-                    <AvatarElement
-                      key={funder.id}
-                      width="28px"
-                      height="28px"
-                      wrapperProps={{
-                        display: 'inline-block',
-                        marginLeft: '-5px',
-                        marginTop: 2,
-                      }}
-                      avatarOnly
-                      borderRadius="50%"
-                      user={funder.user}
-                    />
-                  ),
-              )}
-            </Box>
+            {canVote && (
+              <Box pl={2} filter="opacity(0.4)">
+                {project.funders?.filter(Boolean).map(
+                  (funder) =>
+                    funder && (
+                      <AvatarElement
+                        key={funder.id}
+                        width="28px"
+                        height="28px"
+                        wrapperProps={{
+                          display: 'inline-block',
+                          marginLeft: '-5px',
+                          marginTop: 2,
+                        }}
+                        avatarOnly
+                        borderRadius="50%"
+                        seed={funder.id}
+                        user={funder.user}
+                      />
+                    ),
+                )}
+              </Box>
+            )}
             {isMobile && (
               <Box display="flex" pl={6}>
-                <Box pt={2}>
-                  <WidgetItem subtitle="worth of votes">
-                    {getShortAmountLabel(funding.communityFunding || 0)}
-                  </WidgetItem>
-                </Box>
+                <Box pt={2}>{renderWidgetItem(funding)}</Box>
                 {canVote && (
                   <Box ml={8} flexGrow={1}>
-                    <Button
-                      onClick={() => modalProps.open({ project })}
-                      mt={3}
-                      height="57px"
-                      variant="hugeContained"
-                    >
-                      Vote
-                    </Button>
+                    {renderVoteButton(project)}
                   </Box>
                 )}
               </Box>

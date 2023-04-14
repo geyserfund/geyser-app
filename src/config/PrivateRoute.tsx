@@ -5,7 +5,7 @@ import { AuthModal } from '../components/molecules'
 import { getPath, PathName } from '../constants'
 import { useAuthContext } from '../context'
 import { LoadingPage } from '../pages/loading'
-import { hasTwitterAccount } from '../utils'
+import { hasNostrAccount, hasTwitterAccount } from '../utils'
 
 interface IPrivateRoute {
   children: React.ReactNode
@@ -73,7 +73,10 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
       if (
         !user ||
         (user && !user.id) ||
-        (isPrivateProjectCreationPath && user && !hasTwitterAccount(user))
+        (isPrivateProjectCreationPath &&
+          user &&
+          !hasTwitterAccount(user) &&
+          !hasNostrAccount(user))
       ) {
         loginOnOpen()
       }
@@ -81,15 +84,25 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   }, [user, loading])
 
   const modalTitle = () => {
-    if (isPrivateProjectCreationPath && user && !hasTwitterAccount(user)) {
-      return 'Connect Twitter'
+    if (
+      isPrivateProjectCreationPath &&
+      user &&
+      !hasTwitterAccount(user) &&
+      !hasNostrAccount(user)
+    ) {
+      return 'Connect'
     }
 
     return 'The page you are trying to access required authorization.'
   }
 
   const modalDescription = () => {
-    if (isPrivateProjectCreationPath && user && !hasTwitterAccount(user)) {
+    if (
+      isPrivateProjectCreationPath &&
+      user &&
+      !hasTwitterAccount(user) &&
+      !hasNostrAccount(user)
+    ) {
       return 'Connect your Twitter social profile to create a project. We require creators to login with twitter to start their Geyser projects.'
     }
 

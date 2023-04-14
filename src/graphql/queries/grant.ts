@@ -15,6 +15,14 @@ export const QUERY_GRANTS = gql`
         endAt
         startAt
       }
+      applicants {
+        status
+        funding {
+          communityFunding
+          grantAmount
+          grantAmountDistributed
+        }
+      }
       sponsors {
         id
         name
@@ -74,6 +82,21 @@ export const QUERY_GRANT = gql`
         image
         status
         createdAt
+      }
+    }
+  }
+`
+
+export const QUERY_GRANT_STATISTICS = gql`
+  query Query {
+    grantStatistics {
+      grants {
+        amountFunded
+        amountGranted
+        count
+      }
+      applicants {
+        countFunded
       }
     }
   }
