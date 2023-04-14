@@ -137,7 +137,7 @@ export const CommunityVoting = ({
                   (funder) =>
                     funder && (
                       <AvatarElement
-                        key={funder.id + funder.user.id}
+                        key={funder.id}
                         width="28px"
                         height="28px"
                         wrapperProps={{
