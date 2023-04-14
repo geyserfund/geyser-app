@@ -25,12 +25,11 @@ export const theme = extendTheme({
       },
       sizes: {
         xl: {
-          borderRadius: '8px',
           padding: '10px 30px',
           fontSize: '22px',
+          fontWeight: 700,
           textTransform: 'uppercase',
           fontFamily: fonts.livvic,
-          fontWeight: 700,
         },
       },
       variants: {
