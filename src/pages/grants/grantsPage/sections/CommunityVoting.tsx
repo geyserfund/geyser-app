@@ -126,7 +126,7 @@ export const CommunityVoting = ({
                   justifyContent="center"
                   alignItems="center"
                 >
-                  {renderVoteButton(project)}
+                  {canVote && renderVoteButton(project)}
                   {renderWidgetItem(funding)}
                 </Box>
               )}
@@ -137,7 +137,7 @@ export const CommunityVoting = ({
                   (funder) =>
                     funder && (
                       <AvatarElement
-                        key={funder.id}
+                        key={funder.id + funder.user.id}
                         width="28px"
                         height="28px"
                         wrapperProps={{
@@ -157,11 +157,11 @@ export const CommunityVoting = ({
             {isMobile && (
               <Box display="flex" pl={6}>
                 <Box pt={2}>{renderWidgetItem(funding)}</Box>
-                {
+                {canVote && (
                   <Box ml={8} flexGrow={1}>
                     {renderVoteButton(project)}
                   </Box>
-                }
+                )}
               </Box>
             )}
           </SectionCard>
