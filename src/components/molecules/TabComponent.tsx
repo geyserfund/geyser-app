@@ -39,8 +39,6 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
         width="100%"
         offset={dimensions.topNavBar.desktop.height}
         backgroundColor="brand.bgGrey4"
-        bias={10}
-        buffer={10}
         disable={!isMobile}
         _onStick={{ width: `calc(100% - 20px)` }}
       >

@@ -42,7 +42,7 @@ export const Badges = ({
   }
 
   return (
-    <CardLayout padding="0px" paddingTop="20px" spacing="20px" maxHeight="100%">
+    <CardLayout padding="0px" paddingY="20px" spacing="20px" maxHeight="100%">
       <HStack paddingX="20px" w="full" justifyContent="space-between">
         <H2>Badges</H2>
         <Button
