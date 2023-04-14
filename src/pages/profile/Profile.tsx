@@ -15,7 +15,7 @@ import { defaultUser } from '../../defaults'
 import { USER_PROFILE_QUERY } from '../../graphql'
 import { User, UserGetInput } from '../../types/generated/graphql'
 import { toInt } from '../../utils'
-import { AccountInfo, Badges, CreateProject } from './views'
+import { AccountInfo, Badges } from './views'
 import { ProfileTabs } from './views/profileTabs'
 
 type ResponseData = {
