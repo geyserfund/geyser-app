@@ -36,16 +36,9 @@ export const useNostrExtensonLogin = () => {
       const signedEvent = await signEvent(event)
       const serialisedEvent = JSON.stringify(signedEvent)
 
-      const nostrAuthToken = Buffer.from(
-        encodeURIComponent(serialisedEvent).replace(
-          /%([0-9A-F]{2})/g,
-          (_, p1) => String.fromCharCode('0x' + p1),
-        ),
-      )
-        .toString('base64')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '')
+      const nostrAuthToken = encodeURIComponent(
+        Buffer.from(serialisedEvent).toString('base64'),
+      ).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16))
 
       const response = await fetch(
         `${AUTH_SERVICE_ENDPOINT}/nostr?token=${nostrAuthToken}`,
