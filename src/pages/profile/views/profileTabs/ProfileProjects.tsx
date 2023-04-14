@@ -22,12 +22,34 @@ export const ProfileProjects = ({ userProfile }: { userProfile: User }) => {
     (data?.user.ownerOf?.map((val) => val?.project) as Project[]) || []
 
   return (
-    <ProfileTabLayout title="Followed projects">
+    <ProfileTabLayout title="Projects">
       {projectsLoading
         ? [1, 2].map((val) => <LandingCardBaseSkeleton key={val} isMobile />)
         : projects.map((project) => {
             return (
-              <LandingProjectCard key={project.id} project={project} isMobile />
+              <>
+                <LandingProjectCard
+                  key={project.id}
+                  project={project}
+                  isMobile
+                />
+
+                <LandingProjectCard
+                  key={project.id}
+                  project={project}
+                  isMobile
+                />
+                <LandingProjectCard
+                  key={project.id}
+                  project={project}
+                  isMobile
+                />
+                <LandingProjectCard
+                  key={project.id}
+                  project={project}
+                  isMobile
+                />
+              </>
             )
           })}
     </ProfileTabLayout>
