@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayoutProps, LandingCardBase } from '../../../components/layouts'
 import { getPath } from '../../../constants'
-import { Project } from '../../../types'
+import { FeaturedProjectForLandingPageQuery } from '../../../types'
 
 interface LandingProjectCardProps extends CardLayoutProps {
-  project: Project
+  project: NonNullable<FeaturedProjectForLandingPageQuery['project']>
   isMobile?: boolean
 }
 

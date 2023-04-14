@@ -23,7 +23,7 @@ export interface LandingCardBaseProps
   isMobile?: boolean
   imageSrc: string
   title: string
-  user: User
+  user: Partial<User>
 }
 
 export const LandingCardBase = ({
