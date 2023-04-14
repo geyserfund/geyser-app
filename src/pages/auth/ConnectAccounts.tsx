@@ -2,24 +2,21 @@ import { VStack } from '@chakra-ui/react'
 
 import { Body2 } from '../../components/typography'
 import { User } from '../../types'
+import {
+  hasLightningAccount,
+  hasNostrAccount,
+  hasTwitterAccount,
+} from '../../utils'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
 import { ConnectWithTwitter } from './ConnectWithTwitter'
-import { ExternalAccountType } from './type'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
-  const displayNostrButton = !user.externalAccounts.some(
-    (externalAccount) => externalAccount?.type === 'nostr',
-  )
+  const displayNostrButton = !hasNostrAccount(user)
 
-  const displayTwitterButton = !user.externalAccounts.some(
-    (externalAccount) => externalAccount?.type === ExternalAccountType.twitter,
-  )
+  const displayTwitterButton = !hasTwitterAccount(user)
 
-  const displayLightningButton = !user.externalAccounts.some(
-    (externalAccount) =>
-      externalAccount?.type === ExternalAccountType.lightning,
-  )
+  const displayLightningButton = !hasLightningAccount(user)
 
   if (!displayNostrButton && !displayTwitterButton && !displayLightningButton) {
     return null

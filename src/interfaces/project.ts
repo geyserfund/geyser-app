@@ -50,7 +50,7 @@ export interface IProjectReward {
   cost: number
   name: string
   description?: string
-  backers: number
+  sold: number
   image?: string
 }
 

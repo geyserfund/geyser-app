@@ -25,4 +25,8 @@ export const ID = {
       milestones: 'project-main-milestones-container',
     },
   },
+  profile: {
+    tabs: 'user-profile-tab-container',
+    tabList: 'user-profile-tab-List',
+  },
 }

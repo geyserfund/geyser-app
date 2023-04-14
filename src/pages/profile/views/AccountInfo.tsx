@@ -34,7 +34,8 @@ export const AccountInfo = ({
 
   const getIsEdit = (accountType: ExternalAccountType) => {
     if (
-      (accountType === 'nostr' || accountType === 'twitter') &&
+      (accountType === ExternalAccountType.nostr ||
+        accountType === ExternalAccountType.twitter) &&
       userProfile.ownerOf.length > 0
     ) {
       return false
@@ -90,7 +91,7 @@ export const AccountInfo = ({
                   userProfile={userProfile}
                   setUserProfile={setUserProfile}
                   isEdit={getIsEdit(
-                    externalAccount.type as ExternalAccountType,
+                    externalAccount.accountType as ExternalAccountType,
                   )}
                 />
               )

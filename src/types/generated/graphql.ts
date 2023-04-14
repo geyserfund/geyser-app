@@ -64,6 +64,7 @@ export type ActivityCreatedSubscriptionWhereInput = {
   region?: InputMaybe<Scalars['String']>;
   resourceType?: InputMaybe<ActivityResourceType>;
   tagIds?: InputMaybe<Array<Scalars['Int']>>;
+  userIds?: InputMaybe<Array<Scalars['BigInt']>>;
 };
 
 export type ActivityResource = Entry | FundingTx | Project | ProjectReward;
@@ -248,11 +249,11 @@ export enum EntryType {
 
 export type ExternalAccount = {
   __typename?: 'ExternalAccount';
+  accountType: Scalars['String'];
   externalId: Scalars['String'];
   externalUsername: Scalars['String'];
   id: Scalars['BigInt'];
   public: Scalars['Boolean'];
-  type: Scalars['String'];
 };
 
 export type FileUploadInput = {
@@ -466,6 +467,7 @@ export type GetActivityWhereInput = {
   region?: InputMaybe<Scalars['String']>;
   resourceType?: InputMaybe<ActivityResourceType>;
   tagIds?: InputMaybe<Array<Scalars['Int']>>;
+  userIds?: InputMaybe<Array<Scalars['BigInt']>>;
 };
 
 export type GetDashboardFundersWhereInput = {
@@ -773,6 +775,7 @@ export type Mutation = {
   updateWallet: Wallet;
   updateWalletState: Wallet;
   userBadgeAward: UserBadge;
+  walletDelete: Scalars['Boolean'];
 };
 
 
@@ -930,6 +933,11 @@ export type MutationUserBadgeAwardArgs = {
   userBadgeId: Scalars['BigInt'];
 };
 
+
+export type MutationWalletDeleteArgs = {
+  id: Scalars['BigInt'];
+};
+
 export type OffsetBasedPaginationInput = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -1062,15 +1070,8 @@ export type ProjectRegionsGetResult = {
 
 export type ProjectReward = {
   __typename?: 'ProjectReward';
-  /** @deprecated Deprecated field please use 'sold' instead */
-  backers: Scalars['Int'];
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int'];
-  /**
-   * Currency used for the cost
-   * @deprecated No longer supported
-   */
-  costCurrency: RewardCurrency;
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
    * rewards should only be visible by the project owner and the users that purchased it.
@@ -2192,11 +2193,11 @@ export type EntryPublishedSubscriptionResponseResolvers<ContextType = any, Paren
 };
 
 export type ExternalAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['ExternalAccount'] = ResolversParentTypes['ExternalAccount']> = {
+  accountType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   externalId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   externalUsername?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   public?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2412,6 +2413,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletArgs, 'input'>>;
   updateWalletState?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletStateArgs, 'input'>>;
   userBadgeAward?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationUserBadgeAwardArgs, 'userBadgeId'>>;
+  walletDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationWalletDeleteArgs, 'id'>>;
 };
 
 export type OwnerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Owner'] = ResolversParentTypes['Owner']> = {
@@ -2489,9 +2491,7 @@ export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType exten
 };
 
 export type ProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward']> = {
-  backers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  costCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['description_String_maxLength_250']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;

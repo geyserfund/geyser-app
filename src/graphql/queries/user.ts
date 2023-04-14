@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { ProjectParametersForLandingPage } from '../../pages/landing/projects/projects.graphql'
+
 export const ME = gql`
   query Me {
     me {
@@ -9,7 +11,7 @@ export const ME = gql`
       email
       externalAccounts {
         id
-        type
+        accountType
         externalUsername
         externalId
         public
@@ -57,7 +59,7 @@ export const USER_PROFILE_QUERY = gql`
       }
       externalAccounts {
         id
-        type
+        accountType
         externalUsername
         externalId
         public
@@ -85,33 +87,29 @@ export const USER_PROFILE_QUERY = gql`
       ownerOf {
         project {
           id
-          title
-          name
-          description
-          balance
-          fundingGoal
-          createdAt
-          updatedAt
-          status
-          media
-          expiresAt
-          funders {
-            id
-          }
-          owners {
-            id
-            user {
-              imageUrl
-            }
-          }
         }
       }
-      entries {
+      projectFollows {
         id
       }
-      fundingTxs {
-        id
+    }
+  }
+`
+
+export const USER_PROFILE_PROJECTS = gql`
+  query User($where: UserGetInput!) {
+    user(where: $where) {
+      ownerOf {
+        project ${ProjectParametersForLandingPage}
       }
+    }
+  }
+`
+
+export const USER_FOLLOWED_PROJECTS = gql`
+  query User($where: UserGetInput!) {
+    user(where: $where) {
+      projectFollows ${ProjectParametersForLandingPage}
     }
   }
 `

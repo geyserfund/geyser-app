@@ -22,7 +22,7 @@ export const RewardActivityItem = ({
   const owner = reward.project.owners[0].user
 
   return (
-    <VStack w="full">
+    <VStack w="full" alignItems="start">
       <HStack w="full" justifyContent="start">
         <LinkableAvatar
           imageSrc={`${owner.imageUrl}`}
@@ -90,7 +90,7 @@ export const RewardItem = ({ reward }: { reward: ProjectReward }) => {
               padding="2px 5px"
               borderRadius="4px"
             >
-              <b>{reward.backers || 0}</b> collected
+              <b>{reward.sold || 0}</b> collected
             </Text>
           </VStack>
         </HStack>

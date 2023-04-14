@@ -1,9 +1,11 @@
+import { Buffer } from 'buffer'
+import { getEventHash } from 'nostr-tools'
 import { useState } from 'react'
 
 import { AUTH_SERVICE_ENDPOINT } from '../constants'
 import { useAuthContext } from '../context'
-import { sha256, useNotification } from '../utils'
-import { getPubkey, signMessage } from '../utils/nostr/nip07'
+import { useNotification } from '../utils'
+import { getPubkey, signEvent } from '../utils/nostr/nip07'
 
 export const useNostrExtensonLogin = () => {
   const { toast } = useNotification()
@@ -20,20 +22,26 @@ export const useNostrExtensonLogin = () => {
 
       const pubkey = await getPubkey()
 
-      const getSecret = await fetch(
-        `${AUTH_SERVICE_ENDPOINT}/nostr?pubkey=${pubkey}`,
-        {
-          credentials: 'include',
-          redirect: 'follow',
-        },
-      )
+      const getAuthEvent = await fetch(`${AUTH_SERVICE_ENDPOINT}/nostr`, {
+        credentials: 'include',
+        redirect: 'follow',
+      })
 
-      const { k1 } = await getSecret.json()
-      const hashedK1 = await sha256(k1)
-      const sig = await signMessage(hashedK1)
+      const { event } = await getAuthEvent.json()
+
+      event.pubkey = pubkey
+      event.id = getEventHash(event)
+
+      // TODO: refactor the utils sign event to return entire event
+      const signedEvent = await signEvent(event)
+      const serialisedEvent = JSON.stringify(signedEvent)
+
+      const nostrAuthToken = encodeURIComponent(
+        Buffer.from(serialisedEvent).toString('base64'),
+      ).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16))
 
       const response = await fetch(
-        `${AUTH_SERVICE_ENDPOINT}/nostr?pubkey=${pubkey}&k1=${k1}&sig=${sig}`,
+        `${AUTH_SERVICE_ENDPOINT}/nostr?token=${nostrAuthToken}`,
         {
           credentials: 'include',
           redirect: 'follow',

@@ -55,14 +55,14 @@ export const ExternalAccountDisplay = ({
     unlinkAccount({ variables: { id: toInt(account.id) } })
   }
 
-  const isNostr = account.type === ExternalAccountType.nostr
-  const isTwitter = account.type === ExternalAccountType.twitter
+  const isNostr = account.accountType === ExternalAccountType.nostr
+  const isTwitter = account.accountType === ExternalAccountType.twitter
 
   const renderExternalAccountBody = () => {
     if (isTwitter) {
       return (
         <ExternalAccountBody
-          type={account.type as ExternalAccountType}
+          type={account.accountType as ExternalAccountType}
           username={account.externalUsername}
           handleDelete={isEdit ? onOpen : undefined}
           as={Link}
@@ -79,7 +79,7 @@ export const ExternalAccountDisplay = ({
         <Tooltip label={copy ? 'copied!' : 'copy'} placement="top-start">
           <Box w="full">
             <ExternalAccountBody
-              type={account.type as ExternalAccountType}
+              type={account.accountType as ExternalAccountType}
               username={npub}
               handleDelete={isEdit ? onOpen : undefined}
               onClick={() => handleCopyPubkey(npub)}
@@ -93,7 +93,7 @@ export const ExternalAccountDisplay = ({
 
     return (
       <ExternalAccountBody
-        type={account.type as ExternalAccountType}
+        type={account.accountType as ExternalAccountType}
         username={account.externalUsername}
         handleDelete={isEdit ? onOpen : undefined}
         isLoading={unlinkAccountLoading}

@@ -15,7 +15,8 @@ import { defaultUser } from '../../defaults'
 import { USER_PROFILE_QUERY } from '../../graphql'
 import { User, UserGetInput } from '../../types/generated/graphql'
 import { toInt } from '../../utils'
-import { AccountInfo, Badges, CreateProject } from './views'
+import { AccountInfo, Badges } from './views'
+import { ProfileTabs } from './views/profileTabs'
 
 type ResponseData = {
   user: User
@@ -87,10 +88,10 @@ export const Profile = () => {
   return (
     <VStack
       position="relative"
-      width="full"
-      height="full"
+      width="100%"
+      height="100%"
       backgroundColor={'brand.bgGrey4'}
-      paddingTop={{ base: '20px', lg: '80px' }}
+      paddingY={{ base: '20px', lg: '40px' }}
       paddingX={{ base: '10px', lg: '40px' }}
     >
       <SimpleGrid
@@ -98,10 +99,10 @@ export const Profile = () => {
         spacingX={{ lg: '30px', xl: '40px' }}
         spacingY="20px"
         width="100%"
-        height="full"
+        height="100%"
         maxWidth="1590px"
       >
-        <GridItem colSpan={{ base: 1, lg: 2 }}>
+        <GridItem colSpan={{ base: 1, lg: 2 }} order={1}>
           <AccountInfo
             userProfile={userProfile}
             setUserProfile={setUserProfile}
@@ -109,15 +110,29 @@ export const Profile = () => {
             isLoading={profileLoading}
           />
         </GridItem>
-        <GridItem colSpan={{ base: 1, lg: 3 }}>
+        <GridItem
+          h="100%"
+          overflow="hidden"
+          colSpan={{ base: 1, lg: 3 }}
+          order={{ base: 3, md: 2 }}
+        >
+          <ProfileTabs
+            userProfile={userProfile}
+            isLoading={profileLoading}
+            isViewingOwnProfile={isViewingOwnProfile}
+          />
+        </GridItem>
+        <GridItem
+          h="100%"
+          overflow="hidden"
+          colSpan={{ base: 1, lg: 2 }}
+          order={{ base: 2, md: 3 }}
+        >
           <Badges
             userProfile={userProfile}
             isEdit={isViewingOwnProfile}
             isLoading={profileLoading}
           />
-        </GridItem>
-        <GridItem colSpan={{ base: 1, lg: 2 }}>
-          {isViewingOwnProfile && <CreateProject />}
         </GridItem>
       </SimpleGrid>
     </VStack>

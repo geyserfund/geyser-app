@@ -90,7 +90,7 @@ export const UserProfilePageHeader = ({
           if (account) {
             return (
               <WrapItem alignSelf={'center'} key={account.id}>
-                {account.type === 'lnurl' ? (
+                {account.accountType === 'lnurl' ? (
                   <HStack spacing={1.5}>
                     <BsLightningChargeFill />
                     <Text>{account.externalUsername}</Text>

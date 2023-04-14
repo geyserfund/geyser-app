@@ -70,7 +70,7 @@ export const FundingFormRewardItem = ({
 }: IRewardItemProps) => {
   const classes = useStyles()
 
-  const { cost, name, backers, description } = item
+  const { cost, name, sold, description } = item
 
   const [count, setCount] = useState(initialCount || 0)
   const { isOpen: focus, onOpen: setFocus, onClose: setBlur } = useDisclosure()
@@ -115,7 +115,7 @@ export const FundingFormRewardItem = ({
         <VStack alignItems="flex-start" flex={1} spacing="0px">
           <Text fontSize="14px">{name}</Text>
           <Box className={classes.backer}>
-            {backers === 1 ? `${backers} backer` : `${backers} backers`}
+            {sold === 1 ? `${sold} backer` : `${sold} backers`}
           </Box>
         </VStack>
         {!readOnly && (

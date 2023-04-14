@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react'
 
 import {
   MUTATION_CREATE_WALLET,
+  MUTATION_DELETE_WALLET,
   MUTATION_UPDATE_WALLET,
 } from '../graphql/mutations'
 import { QUERY_LIGHTNING_ADDRESS_EVALUATION } from '../graphql/queries/wallet'
@@ -79,12 +80,22 @@ export const useUserLightningAddress = (user?: User) => {
     },
   )
 
+  const [deleteWallet, { loading: deleteLoading }] = useMutation(
+    MUTATION_DELETE_WALLET,
+    {
+      onError() {
+        unexpected()
+        setLightningAddress(getUserLightningAddress(user))
+      },
+    },
+  )
+
   const validate = useCallback(() => {
     setEvaluationState(LNAddressEvaluationState.IDLE)
     setEvaluationError(null)
     if (lightningAddress.length === 0) {
-      setValidationError(`Lightning Address can't be empty.`)
-      return false
+      setValidationError(null)
+      return true
     }
 
     if (lightningAddress.endsWith('@geyser.fund')) {
@@ -126,18 +137,35 @@ export const useUserLightningAddress = (user?: User) => {
   }, [evaluateLightningAddress])
 
   const mutate = useCallback(async () => {
+    if (!user) return
+
+    const alreadyHasAddress =
+      user?.wallet &&
+      user.wallet.id &&
+      user.wallet.connectionDetails.__typename ===
+        'LightningAddressConnectionDetails'
+
+    if (lightningAddress.length === 0) {
+      // delete wallet if it exists
+      if (user.wallet && alreadyHasAddress) {
+        const data = await deleteWallet({
+          variables: { walletId: user.wallet.id },
+        })
+        if (data) {
+          return setLightningAddress('')
+        }
+
+        return setLightningAddress(getUserLightningAddress(user))
+      }
+
+      return
+    }
+
     if (
-      user &&
       !validationError &&
       lightningAddress !== getUserLightningAddress(user) &&
       (await evaluate())
     ) {
-      const alreadyHasAddress =
-        user?.wallet &&
-        user.wallet.id &&
-        user.wallet.connectionDetails.__typename ===
-          'LightningAddressConnectionDetails'
-
       if (alreadyHasAddress) {
         return updateWallet({
           variables: {
@@ -167,12 +195,13 @@ export const useUserLightningAddress = (user?: User) => {
     evaluate,
     updateWallet,
     createWallet,
+    deleteWallet,
   ])
 
   return {
     evaluationState,
     error: validationError || evaluationError || mutationError || null,
-    loading: createLoading || updateLoading || false,
+    loading: createLoading || updateLoading || deleteLoading || false,
     lightningAddress,
     setLightningAddress,
     validate,

@@ -42,8 +42,8 @@ export const Badges = ({
   }
 
   return (
-    <CardLayout padding="20px" spacing="20px">
-      <HStack w="full" justifyContent="space-between">
+    <CardLayout padding="0px" paddingY="20px" spacing="20px" maxHeight="100%">
+      <HStack paddingX="20px" w="full" justifyContent="space-between">
         <H2>Badges</H2>
         <Button
           as={ChakraLink}
@@ -55,7 +55,7 @@ export const Badges = ({
           See badges
         </Button>
       </HStack>
-      <Body2 color="neutral.700">
+      <Body2 paddingX="20px" color="neutral.700">
         Geyser badges are earned for launching successful projects, contributing
         to them and being an active community member.{' '}
       </Body2>

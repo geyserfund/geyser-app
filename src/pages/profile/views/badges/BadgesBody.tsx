@@ -1,10 +1,10 @@
 import {
-  GridItem,
   HStack,
   Image,
-  SimpleGrid,
   SkeletonText,
   VStack,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react'
 
 import { SkeletonLayout } from '../../../../components/layouts'
@@ -27,7 +27,7 @@ export const BadgesBody = ({
 }: BadgesBodyProps) => {
   const nostrId =
     userProfile.externalAccounts.find(
-      (account) => account?.type === ExternalAccountType.nostr,
+      (account) => account?.accountType === ExternalAccountType.nostr,
     )?.externalId || ''
   const hasBadgeNoNostrForOwn = userBadges.length > 0 && !nostrId && isEdit
 
@@ -81,15 +81,16 @@ export const BadgesBodySkeleton = ({ noTop }: { noTop?: boolean }) => {
       {!noTop && (
         <SkeletonLayout height="30px" width="150px" alignSelf="center" />
       )}
-      <SimpleGrid
-        columns={{ base: 1, sm: 2, md: 3, lg: 2, xl: 3 }}
-        spacingX="20px"
+      <Wrap
+        spacingX="90px"
         spacingY="40px"
         w="full"
+        paddingX="30px"
+        justify="center"
       >
-        {[1, 2, 3].map((value) => {
+        {[1, 2].map((value) => {
           return (
-            <GridItem
+            <WrapItem
               key={value}
               display="flex"
               flexDirection="column"
@@ -97,20 +98,20 @@ export const BadgesBodySkeleton = ({ noTop }: { noTop?: boolean }) => {
               paddingTop="20px"
             >
               <SkeletonLayout
-                height="63px"
-                width="63px"
+                height="100px"
+                width="100px"
                 transform="rotate(-45deg)"
               />
               <SkeletonText
                 borderRadius="8px"
-                pt="20px"
-                width="60%"
+                pt="30px"
+                width="full"
                 noOfLines={2}
               />
-            </GridItem>
+            </WrapItem>
           )
         })}
-      </SimpleGrid>
+      </Wrap>
     </>
   )
 }
