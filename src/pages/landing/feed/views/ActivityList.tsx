@@ -2,7 +2,7 @@ import { Divider, Text } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
 import { Activity } from '../../../../types'
-import { ActivityResource } from '../activity.graphql'
+import { ActivityResource } from '../types'
 import { ContributionActivityItem, EntryActivityItem } from '../components'
 import { ProjectActivityItem } from '../components/ProjectActivityItem'
 import { RewardActivityItem } from '../components/RewardActivityItem'

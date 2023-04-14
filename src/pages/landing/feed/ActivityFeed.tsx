@@ -17,7 +17,7 @@ import { FilterTopBar } from '../projects/components'
 import {
   ActivityResource,
   QUERY_ACTIVITIES_FOR_LANDING_PAGE,
-} from './activity.graphql'
+} from './types'
 import { ContributionActivityItemSkeleton } from './components'
 import { NoFollowedProjects } from './views'
 import { ActivityList } from './views/ActivityList'

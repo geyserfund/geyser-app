@@ -1,11 +1,7 @@
 import { gql } from '@apollo/client'
 
-import { FundingTxQueryParameterForLandingPage } from '../../pages/landing/feed/activity.graphql'
+import { FRAGMENT_FUNDING_TX_QUERY_FOR_LANDING_PAGE } from './activities'
 
-/**
- * - https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts
- * - [`FundingTx` type](https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts#L44)
- */
 export const QUERY_GET_FUNDING = gql`
   query GetFundingTx($id: BigInt!) {
     fundingTx(id: $id) {
@@ -32,12 +28,11 @@ export const QUERY_GET_FUNDING = gql`
   }
 `
 
-/**
- * - https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts
- * - [`FundingTx` type](https://github.com/geyserfund/geyser-server/blob/fa64826471/src/typeDefs/funding.ts#L44)
- */
 export const QUERY_GET_FUNDING_TXS_LANDING = gql`
+  ${FRAGMENT_FUNDING_TX_QUERY_FOR_LANDING_PAGE}
   query GetFundingTxs($input: GetFundingTxsInput) {
-    getFundingTxs(input: $input) ${FundingTxQueryParameterForLandingPage}
+    getFundingTxs(input: $input) {
+      ...FragmentFundingTxLandingPage
+    }
   }
 `

@@ -15,7 +15,7 @@
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
     "graph:format": "prettier --write \"src/types/generated/graphql.ts\"",
     "graph:fetch": "run(){ rover graph fetch geyser-graph@$1 > ./schema.graphql; }; run",
-    "graph:generate": "run(){ yarn graph:fetch $1 && graphql-codegen --config codegen.yaml && rm schema.graphql && yarn graph:format; }; run",
+    "graph:generate": "run(){ yarn graph:fetch $1 && graphql-codegen --config codegen.ts && rm schema.graphql && yarn graph:format; }; run",
     "graph:generate:staging": "yarn graph:generate staging"
   },
   "dependencies": {
@@ -75,6 +75,8 @@
     "@commitlint/cli": "^17.4.2",
     "@commitlint/config-conventional": "^17.4.2",
     "@graphql-codegen/cli": "^3.2.1",
+    "@graphql-codegen/typescript-operations": "^3.0.3",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@graphql-codegen/typescript-resolvers": "^3.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

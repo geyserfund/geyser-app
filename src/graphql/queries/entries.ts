@@ -29,8 +29,8 @@ export const QUERY_GET_ENTRY = gql`
   }
 `
 
-export const QUERY_GET_ENTRY_FOR_ADD_EDIT = gql`
-  query Entry($id: BigInt!) {
+export const QUERY_GET_ENTRY_WITH_OWNERS = gql`
+  query EntryWithOwners($id: BigInt!) {
     entry(id: $id) {
       id
       title
@@ -67,7 +67,7 @@ export const QUERY_GET_ENTRY_FOR_ADD_EDIT = gql`
  * @returns `Entry`
  */
 export const QUERY_ALL_GEYSER_PROJECT_ENTRIES = gql`
-  query GetEntries($input: GetEntriesInput!) {
+  query AllEntries($input: GetEntriesInput!) {
     getEntries(input: $input) {
       id
       title

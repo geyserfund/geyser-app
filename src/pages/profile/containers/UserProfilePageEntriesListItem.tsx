@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client'
 import { Entry } from '../../../types/generated/graphql'
 import { toInt } from '../../../utils'
 import { LandingEntryCard } from '../../landing/components'
-import { EntryQueryParametersForLandingPage } from '../../landing/feed/activity.graphql'
+import { EntryQueryParametersForLandingPage } from '../../landing/feed/types'
 
 type Props = {
   entryID: number

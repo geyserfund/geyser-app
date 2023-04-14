@@ -7,7 +7,7 @@ import { useMobileMode } from '../../../../utils'
 import {
   MapAliasedActivityProperties,
   QUERY_ACTIVITIES_FOR_LANDING_PAGE,
-} from '../../../landing/feed/activity.graphql'
+} from '../../../landing/feed/types'
 import { ContributionsSkeleton } from '../../../landing/feed/ActivityFeed'
 import { ActivityList } from '../../../landing/feed/views/ActivityList'
 import { ProfileTabLayout } from '../../components'
