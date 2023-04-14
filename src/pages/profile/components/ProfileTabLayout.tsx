@@ -15,7 +15,7 @@ export const ProfileTabLayout = ({
   ...rest
 }: ProfileTabLayoutProps) => {
   return (
-    <CardLayout spacing="20px" h="100%" overflowY="auto" {...rest}>
+    <CardLayout spacing="20px" maxHeight="100%" overflowY="auto" {...rest}>
       <H3 color="neutral.900">{title}</H3>
       <Divider borderBottomWidth="2px" />
       {children}

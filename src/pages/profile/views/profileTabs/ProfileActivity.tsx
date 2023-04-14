@@ -1,4 +1,3 @@
-import { CardLayout } from '../../../../components/layouts'
 import { AlertBox } from '../../../../components/ui'
 import { ID } from '../../../../constants'
 import { ScrollInvoke } from '../../../../helpers'
@@ -11,6 +10,7 @@ import {
 } from '../../../landing/feed/activity.graphql'
 import { ContributionsSkeleton } from '../../../landing/feed/ActivityFeed'
 import { ActivityList } from '../../../landing/feed/views/ActivityList'
+import { ProfileTabLayout } from '../../components'
 
 const MaxProfileActivityLimit = 12
 
@@ -46,7 +46,7 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
   }
 
   return (
-    <CardLayout spacing="20px" maxHeight="100%" overflowY="auto">
+    <ProfileTabLayout title="Activity">
       {isLoading ? (
         <ContributionsSkeleton />
       ) : (
@@ -61,6 +61,6 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
           />
         </>
       )}
-    </CardLayout>
+    </ProfileTabLayout>
   )
 }

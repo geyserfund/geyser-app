@@ -38,7 +38,8 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
         id={ID.profile.tabList}
         width="100%"
         offset={dimensions.topNavBar.desktop.height}
-        bias={20}
+        backgroundColor="brand.bgGrey4"
+        bias={10}
         buffer={10}
         disable={!isMobile}
         _onStick={{ width: `calc(100% - 20px)` }}
@@ -66,9 +67,9 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
       </StickToTop>
 
       <TabPanels
-        height={{ base: '100%', md: `calc(100% - 64px)` }}
+        height={{ base: '100%', md: `calc(100% - 74px)` }}
         flex="1"
-        marginTop="32px"
+        marginTop="22px"
       >
         {tabs.map(({ title, Component }) => {
           return (

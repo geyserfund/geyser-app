@@ -1,12 +1,10 @@
 import { useQuery } from '@apollo/client'
 
-import {
-  CardLayout,
-  LandingCardBaseSkeleton,
-} from '../../../../components/layouts'
+import { LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { USER_FOLLOWED_PROJECTS } from '../../../../graphql'
 import { Project, User, UserGetInput } from '../../../../types'
 import { LandingProjectCard } from '../../../landing/components'
+import { ProfileTabLayout } from '../../components'
 
 export const ProfileFollowed = ({ userProfile }: { userProfile: User }) => {
   const { data, loading: projectsLoading } = useQuery<
@@ -23,7 +21,7 @@ export const ProfileFollowed = ({ userProfile }: { userProfile: User }) => {
   const projects = (data?.user.projectFollows as Project[]) || []
 
   return (
-    <CardLayout spacing="20px" maxHeight="100%" overflowY="auto">
+    <ProfileTabLayout title="Followed projects">
       {projectsLoading
         ? [1, 2].map((val) => <LandingCardBaseSkeleton key={val} isMobile />)
         : projects.map((project) => {
@@ -31,6 +29,6 @@ export const ProfileFollowed = ({ userProfile }: { userProfile: User }) => {
               <LandingProjectCard key={project.id} project={project} isMobile />
             )
           })}
-    </CardLayout>
+    </ProfileTabLayout>
   )
 }
