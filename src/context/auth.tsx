@@ -73,14 +73,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(QUERY_ME, {
-    fetchPolicy: 'network-only',
-    onCompleted(data: { me: User }) {
-      if (data && data.me) {
-        login(data.me)
-      }
+  const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(
+    QUERY_ME,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted(data: { me: User }) {
+        if (data && data.me) {
+          login(data.me)
+        }
+      },
     },
-  })
+  )
 
   const login = (me: User) => {
     setUser({ ...defaultUser, ...me })
