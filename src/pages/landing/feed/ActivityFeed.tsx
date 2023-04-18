@@ -8,16 +8,13 @@ import {
   useAuthContext,
   useFilterContext,
 } from '../../../context'
+import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../graphql/queries/activities'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
-import { Activity } from '../../../types/generated/graphql'
+import { ActivityForLandingPageFragment } from '../../../types/generated/graphql'
 import { useMobileMode } from '../../../utils'
 import { NoSearchResults } from '../components'
 import { FilterTopBar } from '../projects/components'
-import {
-  ActivityResource,
-  QUERY_ACTIVITIES_FOR_LANDING_PAGE,
-} from './types'
 import { ContributionActivityItemSkeleton } from './components'
 import { NoFollowedProjects } from './views'
 import { ActivityList } from './views/ActivityList'
@@ -33,7 +30,9 @@ export const ActivityFeed = () => {
   const { filters } = useFilterContext()
   const { activity, tagIds, region, countryCode } = filters
 
-  const [aggregatedActivites, setAggregatedActivites] = useState<Activity[]>([])
+  const [aggregatedActivites, setAggregatedActivites] = useState<
+    ActivityForLandingPageFragment[]
+  >([])
 
   const {
     isLoading,
@@ -42,28 +41,10 @@ export const ActivityFeed = () => {
     data: activities,
     error,
     fetchNext,
-  } = useQueryWithPagination<Activity>({
+  } = useQueryWithPagination<ActivityForLandingPageFragment>({
     itemLimit,
     queryName: 'getActivities',
     query: QUERY_ACTIVITIES_FOR_LANDING_PAGE,
-    resultMap(rawActivities: any[]) {
-      // Re-mapping aliased keys to stick to Generated Types
-      const newActivities = rawActivities.map((activity) => {
-        const newResource = { ...activity.resource }
-        if (newResource.__typename === ActivityResource.entry) {
-          newResource.fundersCount = newResource.entryFundersCount
-          newResource.description = newResource.entrydescription
-        }
-
-        if (newResource.__typename === ActivityResource.projectReward) {
-          newResource.name = newResource.rewardName
-          newResource.project = newResource.rewardProject
-        }
-
-        return { ...activity, resource: newResource }
-      })
-      return newActivities
-    },
     where: {
       countryCode,
       region,

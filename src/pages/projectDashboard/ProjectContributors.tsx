@@ -26,7 +26,7 @@ import {
 } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
 import { useProjectContext } from '../../context'
-import { QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS } from '../../graphql'
+import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../graphql'
 import { computeFunderBadges } from '../../helpers'
 import { useQueryWithPagination } from '../../hooks'
 import { Funder } from '../../types/generated/graphql'
@@ -50,7 +50,7 @@ export const ProjectContributors = () => {
   const funders = useQueryWithPagination<Funder>({
     queryName: 'getDashboardFunders',
     itemLimit: 100,
-    query: QUERY_GET_PROJECT_DASHBOARD_CONTRIBUTORS,
+    query: QUERY_PROJECT_DASHBOARD_FUNDERS,
     where: { projectId: toInt(project.id), confirmed: true },
     orderBy: {
       confirmedAt: 'desc',

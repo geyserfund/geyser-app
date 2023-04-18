@@ -1,14 +1,18 @@
 import { Divider, Text } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
-import { Activity } from '../../../../types'
-import { ActivityResource } from '../types'
+import { ActivityForLandingPageFragment } from '../../../../types'
 import { ContributionActivityItem, EntryActivityItem } from '../components'
 import { ProjectActivityItem } from '../components/ProjectActivityItem'
 import { RewardActivityItem } from '../components/RewardActivityItem'
+import { ActivityResource } from '../types'
 
-export const ActivityList = ({ activities }: { activities: Activity[] }) => {
-  const renderActivity = (activity: Activity) => {
+export const ActivityList = ({
+  activities,
+}: {
+  activities: ActivityForLandingPageFragment[]
+}) => {
+  const renderActivity = (activity: ActivityForLandingPageFragment) => {
     if (!activity.resource) {
       return null
     }

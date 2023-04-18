@@ -2,14 +2,14 @@ import { HStack, VStack } from '@chakra-ui/react'
 
 import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
-import { Project } from '../../../../types'
+import { ProjectForLandingPageFragment } from '../../../../types'
 import { LandingProjectCard, TimeAgo } from '../../components'
 
 export const ProjectActivityItem = ({
   project,
   dateTime,
 }: {
-  project: Project
+  project: ProjectForLandingPageFragment
   dateTime?: string
 }) => {
   const owner = project.owners[0]?.user

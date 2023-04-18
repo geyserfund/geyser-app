@@ -1,7 +1,7 @@
 import { QueryHookOptions, useLazyQuery, useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
 
-import { QUERY_GET_ENTRY_WITH_OWNERS } from '../../graphql'
+import { QUERY_ENTRY_WITH_OWNERS } from '../../graphql'
 import {
   MUTATION_CREATE_ENTRY,
   MUTATION_UPDATE_ENTRY,
@@ -111,7 +111,7 @@ export const useEntryState = (
   const [getEntryQuery, { loading }] = useLazyQuery<
     TEntryData,
     TEntryVariables
-  >(QUERY_GET_ENTRY_WITH_OWNERS, {
+  >(QUERY_ENTRY_WITH_OWNERS, {
     variables: {
       id: toInt(entryId),
     },

@@ -11,7 +11,7 @@ import { getPath } from '../../constants'
 import { useNavContext } from '../../context'
 import { ProjectProvider } from '../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
-import { QUERY_GET_ENTRY } from '../../graphql/queries/entries'
+import { QUERY_ENTRY } from '../../graphql/queries/entries'
 import { useFundingFlow, useFundingFormState } from '../../hooks'
 import {
   Entry,
@@ -58,7 +58,7 @@ export const EntryPage = () => {
     })
 
   const [getEntry, { loading: loadingPosts, error, data: entryData }] =
-    useLazyQuery(QUERY_GET_ENTRY, {
+    useLazyQuery(QUERY_ENTRY, {
       onCompleted(data) {
         const { entry } = data
         if (!entry) {

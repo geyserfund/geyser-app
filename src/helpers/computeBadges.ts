@@ -1,7 +1,10 @@
 import { DateTime, Interval } from 'luxon'
 
-import { IBadge, IFunder } from '../interfaces'
-import { Funder } from '../types/generated/graphql'
+import { IBadge } from '../interfaces'
+import {
+  Funder,
+  FundingTxForLandingPageFragment,
+} from '../types/generated/graphql'
 
 type IBadges<TKey extends string = string> = Record<TKey, IBadge>
 
@@ -42,7 +45,7 @@ const roleBadges: IBadges<RoleBadges> = {
 
 interface Props {
   creationDateStringOfFundedContent: string
-  funder: Funder | IFunder
+  funder: Funder | FundingTxForLandingPageFragment['funder']
   useShortForm?: boolean
 }
 

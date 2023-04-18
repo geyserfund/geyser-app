@@ -1,13 +1,15 @@
 import { BreezLogoUrl, FountainLogoUrl } from '../constants'
-import { IFunder } from '../interfaces'
-import { Funder } from '../types/generated/graphql'
+import {
+  Funder,
+  FundingTxForLandingPageFragment,
+} from '../types/generated/graphql'
 import { getRandomOrb } from '../utils'
 
 export const getAvatarMetadata = ({
   funder,
   source,
 }: {
-  funder: IFunder | Funder
+  funder: Funder | FundingTxForLandingPageFragment['funder']
   source?: string
 }) => {
   if (!funder.user) {

@@ -1,35 +1,17 @@
-import { gql, useQuery } from '@apollo/client'
-
-import { Entry } from '../../../types/generated/graphql'
+import { useEntryForLandingPageQuery } from '../../../types/generated/graphql'
 import { toInt } from '../../../utils'
 import { LandingEntryCard } from '../../landing/components'
-import { EntryQueryParametersForLandingPage } from '../../landing/feed/types'
 
 type Props = {
   entryID: number
 }
 
-const GET_ENTRY = gql`
-  query GetEntry($entryID: BigInt!) {
-    entry(id: $entryID) ${EntryQueryParametersForLandingPage}
-  }
-`
-
-type ResponseData = {
-  entry: Entry
-}
-
-type QueryVariables = {
-  entryID: number
-}
-
 export const UserProfilePageEntriesListItem = ({ entryID }: Props) => {
-  const { data, loading, error } = useQuery<ResponseData, QueryVariables>(
-    GET_ENTRY,
-    { variables: { entryID: toInt(entryID) } },
-  )
+  const { data, loading, error } = useEntryForLandingPageQuery({
+    variables: { entryID: toInt(entryID) },
+  })
 
-  if (error || loading) {
+  if (error || loading || !data || !data.entry) {
     return null
   }
 

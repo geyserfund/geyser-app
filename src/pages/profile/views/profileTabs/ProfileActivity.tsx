@@ -1,14 +1,12 @@
 import { AlertBox } from '../../../../components/ui'
 import { ID } from '../../../../constants'
+import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../../graphql/queries/activities'
 import { ScrollInvoke } from '../../../../helpers'
 import { useQueryWithPagination } from '../../../../hooks'
-import { Activity, User } from '../../../../types'
+import { ActivityForLandingPageFragment, User } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
-import {
-  MapAliasedActivityProperties,
-  QUERY_ACTIVITIES_FOR_LANDING_PAGE,
-} from '../../../landing/feed/types'
 import { ContributionsSkeleton } from '../../../landing/feed/ActivityFeed'
+import { MapAliasedActivityProperties } from '../../../landing/feed/types'
 import { ActivityList } from '../../../landing/feed/views/ActivityList'
 import { ProfileTabLayout } from '../../components'
 
@@ -24,7 +22,7 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
     data: activities,
     error,
     fetchNext,
-  } = useQueryWithPagination<Activity>({
+  } = useQueryWithPagination<ActivityForLandingPageFragment>({
     itemLimit: MaxProfileActivityLimit,
     queryName: 'getActivities',
     query: QUERY_ACTIVITIES_FOR_LANDING_PAGE,

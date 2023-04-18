@@ -2,13 +2,16 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from './project'
 
-export const FRAGMENT_FUNDING_TX_QUERY_FOR_LANDING_PAGE = gql`
-  fragment FragmentFundingTxLandingPage on FundingTx {
+export const FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE = gql`
+  fragment FundingTxForLandingPage on FundingTx {
     id
     comment
     amount
     funder {
       id
+      amountFunded
+      timesFunded
+      confirmedAt
       user {
         id
         username
@@ -32,9 +35,11 @@ export const FRAGMENT_FUNDING_TX_QUERY_FOR_LANDING_PAGE = gql`
         name
         title
         image
+        createdAt
         thumbnailImage
       }
       ... on Entry {
+        createdAt
         id
         image
         title
@@ -43,8 +48,8 @@ export const FRAGMENT_FUNDING_TX_QUERY_FOR_LANDING_PAGE = gql`
   }
 `
 
-export const FRAGMENT_ENTRY_QUERY_FOR_LANDING_PAGE = gql`
-  fragment FragmentEntryQueryForLandingPage on Entry {
+export const FRAGMENT_ENTRY_FOR_LANDING_PAGE = gql`
+  fragment EntryForLandingPage on Entry {
     amountFunded
     entryFundersCount: fundersCount
     entryDescription: description
@@ -53,6 +58,7 @@ export const FRAGMENT_ENTRY_QUERY_FOR_LANDING_PAGE = gql`
     title
     project {
       id
+      name
       thumbnailImage
       title
     }
@@ -64,8 +70,8 @@ export const FRAGMENT_ENTRY_QUERY_FOR_LANDING_PAGE = gql`
   }
 `
 
-export const FRAGMENT_REWARD_QUERY_FOR_LANDING_PAGE = gql`
-  fragment FragmentRewardQueryForLandingPage on ProjectReward {
+export const FRAGMENT_REWARD_FOR_LANDING_PAGE = gql`
+  fragment RewardForLandingPage on ProjectReward {
     cost
     description
     id
@@ -90,29 +96,36 @@ export const FRAGMENT_REWARD_QUERY_FOR_LANDING_PAGE = gql`
   }
 `
 
-export const QUERY_ACTIVITIES_FOR_LANDING_PAGE = gql`
-  ${FRAGMENT_ENTRY_QUERY_FOR_LANDING_PAGE}
-  ${FRAGMENT_REWARD_QUERY_FOR_LANDING_PAGE}
-  ${FRAGMENT_FUNDING_TX_QUERY_FOR_LANDING_PAGE}
+export const FRAGMENT_ACTIVITY_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_ENTRY_FOR_LANDING_PAGE}
+  ${FRAGMENT_REWARD_FOR_LANDING_PAGE}
+  ${FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE}
   ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
-  query GetActivities($input: GetActivitiesInput) {
-    getActivities(input: $input) {
-      id
-      createdAt
-      resource {
-        ... on Entry {
-          ...FragmentEntryQueryForLandingPage
-        }
-        ... on Project {
-          ...FragmentProjectForLandingPage
-        }
-        ... on FundingTx {
-          ...FragmentFundingTxLandingPage
-        }
-        ... on ProjectReward {
-          ...FragmentRewardQueryForLandingPage
-        }
+  fragment ActivityForLandingPage on Activity {
+    id
+    createdAt
+    resource {
+      ... on Entry {
+        ...EntryForLandingPage
       }
+      ... on Project {
+        ...ProjectForLandingPage
+      }
+      ... on FundingTx {
+        ...FundingTxForLandingPage
+      }
+      ... on ProjectReward {
+        ...RewardForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_ACTIVITIES_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_ACTIVITY_FOR_LANDING_PAGE}
+  query ActivitiesForLandingPage($input: GetActivitiesInput) {
+    getActivities(input: $input) {
+      ...ActivityForLandingPage
     }
   }
 `

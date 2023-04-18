@@ -14,7 +14,7 @@ import { AppFooter } from '../../components/molecules'
 import { AlertBox } from '../../components/ui'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
-import { USER_PROFILE_QUERY } from '../../graphql'
+import { QUERY_USER_PROFILE } from '../../graphql'
 import { User, UserGetInput } from '../../types/generated/graphql'
 import { toInt, useDarkMode } from '../../utils'
 import { UserProfilePageHeader, UserProfilePageTabs } from './components'
@@ -38,7 +38,7 @@ export const ProfilePage = () => {
   const [
     queryCurrentUser,
     { loading: profileLoading, error, data: userProfileData },
-  ] = useLazyQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY)
+  ] = useLazyQuery<ResponseData, QueryVariables>(QUERY_USER_PROFILE)
 
   const isViewingOwnProfile = () =>
     location.pathname === `/profile/${currentAppUser.id}`

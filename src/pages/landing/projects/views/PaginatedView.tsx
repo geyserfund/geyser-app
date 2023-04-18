@@ -1,11 +1,15 @@
 import { ID } from '../../../../constants'
 import { useFilterContext } from '../../../../context'
+import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../../../graphql'
 import { ScrollInvoke } from '../../../../helpers'
 import { useQueryWithPagination } from '../../../../hooks'
-import { OrderByOptions, Project, ProjectStatus } from '../../../../types'
+import {
+  OrderByOptions,
+  ProjectForLandingPageFragment,
+  ProjectStatus,
+} from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { FilteredProjectList } from '../components/FilteredProjectList'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 
 const TOTAL_PROJECTS_TO_FETCH = 20
 
@@ -23,7 +27,7 @@ export const PaginatedView = () => {
     data: projects,
     error,
     fetchNext,
-  } = useQueryWithPagination<Project>({
+  } = useQueryWithPagination<ProjectForLandingPageFragment>({
     itemLimit: TOTAL_PROJECTS_TO_FETCH,
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,

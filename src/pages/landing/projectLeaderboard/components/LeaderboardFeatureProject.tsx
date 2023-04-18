@@ -5,12 +5,12 @@ import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { Project } from '../../../../types'
+import { ProjectForLandingPageFragment } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
 import { LeaderboardFundingStats } from '.'
 
 interface LeaderboardFeatureProjectProps extends StackProps {
-  project: Project
+  project: ProjectForLandingPageFragment
 }
 
 export const LeaderboardFeatureProject = ({

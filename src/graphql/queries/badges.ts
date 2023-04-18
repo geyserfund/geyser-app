@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export const BADGES_QUERY = gql`
+export const QUERY_BADGES = gql`
   query Badges {
     badges {
       createdAt
@@ -13,7 +13,7 @@ export const BADGES_QUERY = gql`
     }
   }
 `
-export const QUERY_GET_USER_BADGES = gql`
+export const QUERY_USER_BADGES = gql`
   query UserBadges($input: BadgesGetInput!) {
     userBadges(input: $input) {
       badge {

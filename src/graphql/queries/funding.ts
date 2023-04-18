@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_FUNDING_TX_QUERY_FOR_LANDING_PAGE } from './activities'
+import { FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE } from './activities'
 
 export const QUERY_GET_FUNDING = gql`
   query GetFundingTx($id: BigInt!) {
@@ -29,10 +29,10 @@ export const QUERY_GET_FUNDING = gql`
 `
 
 export const QUERY_GET_FUNDING_TXS_LANDING = gql`
-  ${FRAGMENT_FUNDING_TX_QUERY_FOR_LANDING_PAGE}
+  ${FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE}
   query GetFundingTxs($input: GetFundingTxsInput) {
     getFundingTxs(input: $input) {
-      ...FragmentFundingTxLandingPage
+      ...FundingTxForLandingPage
     }
   }
 `
