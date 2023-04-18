@@ -1,7 +1,9 @@
 import { useMutation } from '@apollo/client'
+import { CheckIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
+  HStack,
   Image,
   Modal,
   ModalBody,
@@ -13,6 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { BsCheckLg } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2, H3 } from '../../../../components/typography'
@@ -62,22 +65,26 @@ export const ApplyGrant = ({ grant }: GrantProps) => {
 
 interface ApplyGrantModalProps {
   grant: Grant
-  onOpen: () => void
   isOpen: boolean
   onClose: () => void
 }
 
 export const ApplyGrantModal = ({
   grant,
-  onOpen,
   isOpen,
   onClose,
 }: ApplyGrantModalProps) => {
   const { isLoggedIn, user } = useAuthContext()
 
+  const [isSuccessful, setIsSuccessfull] = useState(false)
+
   const getModalTitle = () => {
     if (!isLoggedIn) {
       return 'Login to apply'
+    }
+
+    if (isSuccessful) {
+      return 'Success!'
     }
 
     return 'Select a project'
@@ -88,6 +95,17 @@ export const ApplyGrantModal = ({
       return <LoginForGrant />
     }
 
+    if (isSuccessful) {
+      return (
+        <ApplicationSuccessful
+          onClose={() => {
+            onClose()
+            setIsSuccessfull(false)
+          }}
+        />
+      )
+    }
+
     if (!user.ownerOf || user.ownerOf.length === 0) {
       return <CreateAProject />
     }
@@ -95,16 +113,21 @@ export const ApplyGrantModal = ({
     return (
       <SelectAProject
         grantId={grant.id}
-        onClose={onClose}
+        onSuccess={() => setIsSuccessfull(true)}
         projects={user.ownerOf.map((owner) => owner?.project as Project)}
       />
     )
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent display="flex" alignItems="center" padding="20px 15px">
+      <ModalContent
+        display="flex"
+        alignItems="center"
+        padding="20px 15px"
+        marginX="10px"
+      >
         <ModalHeader alignSelf="start">
           <H3>{getModalTitle()}</H3>
         </ModalHeader>
@@ -151,16 +174,40 @@ export const CreateAProject = () => {
   )
 }
 
+export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <>
+      <HStack
+        w="60px"
+        h="60px"
+        borderRadius="50%"
+        backgroundColor="primary.400"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <BsCheckLg fontSize="35px" color="black" />
+      </HStack>
+      <Body1>
+        You successfully applied to be part of the Geyser Grant. You should be
+        receiving a notification soon.
+      </Body1>
+      <Button w="full" variant="primary" onClick={onClose}>
+        Close
+      </Button>
+    </>
+  )
+}
+
 interface SelectAProjectProps {
   grantId: number
   projects: Project[]
-  onClose: () => void
+  onSuccess: () => void
 }
 
 export const SelectAProject = ({
   grantId,
   projects,
-  onClose,
+  onSuccess,
 }: SelectAProjectProps) => {
   const { toast } = useNotification()
 
@@ -178,11 +225,7 @@ export const SelectAProject = ({
       })
     },
     onCompleted() {
-      onClose()
-      toast({
-        status: 'success',
-        title: 'Grant application was successfull!',
-      })
+      onSuccess()
     },
   })
 
@@ -242,6 +285,7 @@ export const SelectAProject = ({
         })}
       </VStack>
       <Button
+        w="full"
         variant="primary"
         isDisabled={!selectedProjectId}
         onClick={handleApply}
