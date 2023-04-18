@@ -14,7 +14,6 @@ const config: CodegenConfig = {
       ],
       config: {
         withHooks: true,
-        // documentMode: 'documentNodeImportFragments',
         inlineFragmentTypes: 'combine',
       },
     },
