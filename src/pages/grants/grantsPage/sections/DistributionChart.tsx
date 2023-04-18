@@ -1,9 +1,9 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react'
 
-import { H3 } from '../../../components/typography'
-import { colors } from '../../../styles'
-import { GrantApplicant } from '../../../types'
-import { SectionCard } from './SectionCard'
+import { H3 } from '../../../../components/typography'
+import { colors } from '../../../../styles'
+import { GrantApplicant } from '../../../../types'
+import { SectionCard } from '../../components/SectionCard'
 
 const CHART_BAR_COLORS = [
   colors.primary900,

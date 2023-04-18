@@ -26,7 +26,7 @@ import { GrantApplicant } from '../../../types'
 import { useMediumScreen, useMobileMode } from '../../../utils'
 import { ApplyGrantCard } from '../components/ApplyGrantCard'
 import { Board } from '../components/Board'
-import { CommunityVoting } from '../components/CommunityVoting'
+import { CommunityVoting } from './sections/CommunityVoting'
 
 const grants = [
   {

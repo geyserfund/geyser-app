@@ -593,6 +593,11 @@ export enum GrantApplicantStatus {
   Rejected = 'REJECTED'
 }
 
+export type GrantApplyInput = {
+  grantId: Scalars['BigInt'];
+  projectId: Scalars['BigInt'];
+};
+
 export type GrantGetInput = {
   where: GrantGetWhereInput;
 };
@@ -758,6 +763,7 @@ export type Mutation = {
   fundingInvoiceCancel: FundinginvoiceCancel;
   fundingInvoiceRefresh: FundingTx;
   fundingPend: FundingPendingResponse;
+  grantApply: GrantApplicant;
   projectFollow: Scalars['Boolean'];
   projectTagAdd: Array<Tag>;
   projectTagRemove: Array<Tag>;
@@ -856,6 +862,11 @@ export type MutationFundingInvoiceRefreshArgs = {
 
 export type MutationFundingPendArgs = {
   input: FundingPendingInput;
+};
+
+
+export type MutationGrantApplyArgs = {
+  input?: InputMaybe<GrantApplyInput>;
 };
 
 
@@ -1796,6 +1807,7 @@ export type ResolversTypes = {
   GrantApplicant: ResolverTypeWrapper<GrantApplicant>;
   GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>;
   GrantApplicantStatus: GrantApplicantStatus;
+  GrantApplyInput: GrantApplyInput;
   GrantGetInput: GrantGetInput;
   GrantGetWhereInput: GrantGetWhereInput;
   GrantStatistics: ResolverTypeWrapper<GrantStatistics>;
@@ -1988,6 +2000,7 @@ export type ResolversParentTypes = {
   Grant: Grant;
   GrantApplicant: GrantApplicant;
   GrantApplicantFunding: GrantApplicantFunding;
+  GrantApplyInput: GrantApplyInput;
   GrantGetInput: GrantGetInput;
   GrantGetWhereInput: GrantGetWhereInput;
   GrantStatistics: GrantStatistics;
@@ -2398,6 +2411,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   fundingInvoiceCancel?: Resolver<ResolversTypes['FundinginvoiceCancel'], ParentType, ContextType, RequireFields<MutationFundingInvoiceCancelArgs, 'invoiceId'>>;
   fundingInvoiceRefresh?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, RequireFields<MutationFundingInvoiceRefreshArgs, 'fundingTxId'>>;
   fundingPend?: Resolver<ResolversTypes['FundingPendingResponse'], ParentType, ContextType, RequireFields<MutationFundingPendArgs, 'input'>>;
+  grantApply?: Resolver<ResolversTypes['GrantApplicant'], ParentType, ContextType, Partial<MutationGrantApplyArgs>>;
   projectFollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectFollowArgs, 'input'>>;
   projectTagAdd?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagAddArgs, 'input'>>;
   projectTagRemove?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagRemoveArgs, 'input'>>;

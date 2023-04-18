@@ -1,12 +1,9 @@
-import { Box, Button, Container, Image, VStack } from '@chakra-ui/react'
+import { Button, Container, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
-import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { Body1, H1, H3 } from '../../../components/typography'
 import Loader from '../../../components/ui/Loader'
-import { StatusLabel } from '../../../components/ui/StatusLabel'
 import { Head } from '../../../config'
 import { getPath } from '../../../constants'
 import {
@@ -15,28 +12,17 @@ import {
   GrantStatusEnum,
   Maybe,
 } from '../../../types'
-import {
-  getShortAmountLabel,
-  useMobileMode,
-  useNotification,
-} from '../../../utils'
+import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement } from '../components'
-import { CommunityVoting } from '../components/CommunityVoting'
-import { ContributionsWidget } from '../components/ContributionsWidget'
-import { DistributionChart } from '../components/DistributionChart'
-import { MoreInfo } from '../components/MoreInfo'
-import { SectionCard } from '../components/SectionCard'
-import {
-  GRANT_STATUS_COUNTDOWN_TITLES,
-  GRANT_STATUS_MAP,
-  GrantAnnouncements,
-  GrantHasVoting,
-} from '../constants'
+import { GrantAnnouncements, GrantHasVoting } from '../constants'
 import { useGrant } from '../hooks/useGrant'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
 import { GrantContribute, GrantSummary } from './sections'
+import { CommunityVoting } from './sections/CommunityVoting'
+import { DistributionChart } from './sections/DistributionChart'
 import { GrantApply } from './sections/GrantApply'
+import { MoreInfo } from './sections/MoreInfo'
 
 const PageContainer = ({
   children,
@@ -58,7 +44,6 @@ const PageContainer = ({
 export const GrantPage = () => {
   const { toast } = useNotification()
   const { grantId } = useParams<{ grantId: string }>()
-  const isMobile = useMobileMode()
   const navigate = useNavigate()
 
   const { grant, loading, error } = useGrant(grantId)
@@ -120,6 +105,10 @@ export const GrantPage = () => {
   }
 
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen
+  const showDistributionChart =
+    grant.status !== GrantStatusEnum.ApplicationsOpen
+
+  const showGrantApply = grant.status === GrantStatusEnum.ApplicationsOpen
 
   return (
     <PageContainer title={grant.title} image={grant.image}>
@@ -135,11 +124,11 @@ export const GrantPage = () => {
           <FaArrowLeft /> See all Grants
         </Button>
         <GrantSummary grant={grant} />
-        <GrantApply />
+        {showGrantApply && <GrantApply />}
 
         <GrantContribute />
 
-        <DistributionChart applicants={applicants} />
+        {showDistributionChart && <DistributionChart applicants={applicants} />}
         {winnerAnnouncement && (
           <GrantWinnerAnnouncement {...winnerAnnouncement} />
         )}

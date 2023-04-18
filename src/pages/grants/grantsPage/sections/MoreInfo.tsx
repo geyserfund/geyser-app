@@ -1,8 +1,8 @@
 import { Box, Link, Text, TextProps } from '@chakra-ui/react'
 
-import shareicon from '../../../assets/shareico.svg'
-import { GrantsFAQUrl } from '../../../constants'
-import { fonts } from '../../../styles'
+import { ShareIcon } from '../../../../assets'
+import { GrantsFAQUrl } from '../../../../constants'
+import { fonts } from '../../../../styles'
 
 interface MoreInfoProps {
   titleProps?: TextProps
@@ -53,7 +53,7 @@ export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
             transition="all ease-out 0.3s"
           >
             <Text fontWeight={'600'}>faq</Text>
-            <img src={shareicon} alt="icon" />
+            <img src={ShareIcon} alt="icon" />
           </Box>
         </Link>
       </Box>

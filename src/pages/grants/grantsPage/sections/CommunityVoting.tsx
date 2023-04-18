@@ -3,16 +3,20 @@ import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../components/layouts'
-import { H3 } from '../../../components/typography'
-import { getPath } from '../../../constants'
-import { GrantApplicant, GrantApplicantFunding, Project } from '../../../types'
-import { getShortAmountLabel, useMobileMode } from '../../../utils'
-import { useProjectFundingModal } from '../../projectFunding/hooks/useProjectFundingModal'
-import { ProjectFundingModal } from '../../projectFunding/ProjectFundingModal'
-import { AvatarElement } from '../../projectView/projectMainBody/components'
-import { SectionCard } from './SectionCard'
-import { WidgetItem } from './WidgetItem'
+import { CardLayout } from '../../../../components/layouts'
+import { H3 } from '../../../../components/typography'
+import { getPath } from '../../../../constants'
+import {
+  GrantApplicant,
+  GrantApplicantFunding,
+  Project,
+} from '../../../../types'
+import { getShortAmountLabel, useMobileMode } from '../../../../utils'
+import { useProjectFundingModal } from '../../../projectFunding/hooks/useProjectFundingModal'
+import { ProjectFundingModal } from '../../../projectFunding/ProjectFundingModal'
+import { AvatarElement } from '../../../projectView/projectMainBody/components'
+import { SectionCard } from '../../components/SectionCard'
+import { WidgetItem } from '../../components/WidgetItem'
 
 interface Props {
   applicants: Array<GrantApplicant>

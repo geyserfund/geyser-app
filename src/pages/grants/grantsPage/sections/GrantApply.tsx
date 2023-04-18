@@ -12,6 +12,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { useState } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'
 import { AuthModal } from '../../../../components/molecules'
@@ -119,7 +120,7 @@ export const LoginForGrant = () => {
 export const CreateAProject = () => {
   return (
     <>
-      <Body2>Select your Geyser project from the list</Body2>
+      <Body2 alignSelf='start'>Select your Geyser project from the list</Body2>
       <Box
         w="full"
         paddingY="10px"
@@ -138,13 +139,26 @@ export const CreateAProject = () => {
 }
 
 export const SelectAProject = ({ projects }: { projects: Project[] }) => {
+
+  const [selectedProject, setSelectedProject] = useState<number>(0)
+
+  const handleSelection = (id: number) => {
+    if(selectedProject === id){
+      setSelectedProject(0)
+    } else {
+      setSelectedProject(id)
+    }
+  }
+
   return (
     <>
-      <Body2>Select your Geyser project from the list</Body2>
+      <Body2 alignSelf='start'>Select your Geyser project from the list</Body2>
       <VStack w="full">
         {projects.map((project) => {
+          const isSelected = selectedProject === project.id
           return (
             <CardLayout
+              hover
               key={project.id}
               w="full"
               h="80px"
@@ -152,6 +166,9 @@ export const SelectAProject = ({ projects }: { projects: Project[] }) => {
               direction="row"
               alignItems="center"
               overflow="hidden"
+              onClick={() => handleSelection(project.id)}
+              borderColor={isSelected ? 'brand.primary' : 'neutral.200'}
+              _hover={{ cursor: 'pointer', borderColor: isSelected ? 'brand.primary' : 'neutral.400' }}
             >
               <Image
                 h="100%"
@@ -164,7 +181,7 @@ export const SelectAProject = ({ projects }: { projects: Project[] }) => {
           )
         })}
       </VStack>
-      <Button variant="primary">Apply</Button>
+      <Button variant="primary" isDisabled={!selectedProject}>Apply</Button>
     </>
   )
 }

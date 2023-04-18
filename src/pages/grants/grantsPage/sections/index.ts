@@ -1,2 +1,6 @@
+export * from './CommunityVoting'
+export * from './DistributionChart'
+export * from './GrantApply'
 export * from './GrantContribute'
 export * from './GrantSummary'
+export * from './MoreInfo'

@@ -22,9 +22,9 @@ import { GrantApplicant, Maybe, Sponsor } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { GrantWinnerAnnouncement } from '../components'
 import { BoardMembers } from '../components/BoardMembers'
-import { CommunityVoting } from '../components/CommunityVoting'
+import { CommunityVoting } from './sections/CommunityVoting'
 import { GrantDevelopers } from '../components/GrantDevs'
-import { MoreInfo } from '../components/MoreInfo'
+import { MoreInfo } from './sections/MoreInfo'
 
 export type GrantSponsor = {
   name: string

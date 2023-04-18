@@ -7,7 +7,7 @@ import { getPath } from '../../../constants'
 import { fonts } from '../../../styles'
 import { useMobileMode } from '../../../utils'
 import { CustomGrantCard } from '../components/CustomGrantCard'
-import { MoreInfo } from '../components/MoreInfo'
+import { MoreInfo } from '../grantsPage/sections/MoreInfo'
 import { useGrants } from '../hooks/useGrants'
 import { GrantsContributeCard } from './GrantsContributeCard'
 
