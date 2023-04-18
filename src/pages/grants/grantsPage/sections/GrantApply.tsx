@@ -15,12 +15,14 @@ import {
 
 import { CardLayout } from '../../../../components/layouts'
 import { AuthModal } from '../../../../components/molecules'
-import { Body1, H3 } from '../../../../components/typography'
+import { Body1, Body2, H3 } from '../../../../components/typography'
 import { UndecoratedLink } from '../../../../components/ui'
 import { LockedConnectAccountUrl } from '../../../../constants'
 import { useAuthContext } from '../../../../context'
+import { Project } from '../../../../types'
 import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../../../auth/ConnectWithTwitter'
+import { CreateAProjectButton } from '../../../profile/components'
 
 export const GrantApply = () => {
   return (
@@ -59,18 +61,30 @@ export const ApplyGrantModal = ({
   isOpen,
   onClose,
 }: ApplyGrantModalProps) => {
-  const { isLoggedIn } = useAuthContext()
+  const { isLoggedIn, user } = useAuthContext()
 
   const getModalTitle = () => {
     if (!isLoggedIn) {
       return 'Login to apply'
     }
+
+    return 'Select a project'
   }
 
   const getModalContent = () => {
     if (!isLoggedIn) {
       return <LoginForGrant />
     }
+
+    if (!user.ownerOf || user.ownerOf.length === 0) {
+      return <CreateAProject />
+    }
+
+    return (
+      <SelectAProject
+        projects={user.ownerOf.map((owner) => owner?.project as Project)}
+      />
+    )
   }
 
   return (
@@ -81,7 +95,7 @@ export const ApplyGrantModal = ({
           <H3>{getModalTitle()}</H3>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody as={VStack} spacing="20px" alignItems="center">
+        <ModalBody w="full" as={VStack} spacing="20px" alignItems="center">
           {getModalContent()}
         </ModalBody>
       </ModalContent>
@@ -94,10 +108,63 @@ export const LoginForGrant = () => {
     <>
       <Image src={LockedConnectAccountUrl} maxWidth="200px" />
       <Body1>To apply to a grant you need to first login into Geyser.</Body1>
-      <VStack>
+      <VStack w="full">
         <ConnectWithTwitter />
         <ConnectWithNostr />
       </VStack>
+    </>
+  )
+}
+
+export const CreateAProject = () => {
+  return (
+    <>
+      <Body2>Select your Geyser project from the list</Body2>
+      <Box
+        w="full"
+        paddingY="10px"
+        backgroundColor="neutral.100"
+        borderRadius="8px"
+        textAlign="center"
+      >
+        You have not created any projects
+      </Box>
+      <Body1>
+        To apply for a grant you need to create a project on Geyser.
+      </Body1>
+      <CreateAProjectButton />
+    </>
+  )
+}
+
+export const SelectAProject = ({ projects }: { projects: Project[] }) => {
+  return (
+    <>
+      <Body2>Select your Geyser project from the list</Body2>
+      <VStack w="full">
+        {projects.map((project) => {
+          return (
+            <CardLayout
+              key={project.id}
+              w="full"
+              h="80px"
+              padding="0px"
+              direction="row"
+              alignItems="center"
+              overflow="hidden"
+            >
+              <Image
+                h="100%"
+                width="135px"
+                src={project.thumbnailImage || ''}
+                objectFit="cover"
+              />
+              <Body1 bold>{project.title}</Body1>
+            </CardLayout>
+          )
+        })}
+      </VStack>
+      <Button variant="primary">Apply</Button>
     </>
   )
 }
