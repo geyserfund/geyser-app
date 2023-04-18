@@ -175,6 +175,9 @@ export const BadgesGroupUrl =
 export const CannotConnectAccountUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/connect-account-failed.png'
 
+export const LockedConnectAccountUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/connect-account-locked.png'
+
 // GRANTS
 
 export const Grant3AnnouncementImageUrl =

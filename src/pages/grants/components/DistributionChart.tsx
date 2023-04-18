@@ -35,21 +35,23 @@ export const DistributionChart = ({ applicants }: Props) => {
   return (
     <SectionCard p={5}>
       <H3>Grant distribution status</H3>
-      <Box py={2}>
-        {percentages
-          .sort((a, b) => {
-            return a.percentage < b.percentage ? 1 : -1
-          })
-          .map(({ project, percentage }, i) => (
-            <Item
-              key={project.id}
-              bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
-              title={project.title}
-              percentage={percentage}
-              width={Math.trunc((percentage * 100) / maxPercentage)}
-            />
-          ))}
-      </Box>
+      {percentages.length > 0 && (
+        <Box py={2}>
+          {percentages
+            .sort((a, b) => {
+              return a.percentage < b.percentage ? 1 : -1
+            })
+            .map(({ project, percentage }, i) => (
+              <Item
+                key={project.id}
+                bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
+                title={project.title}
+                percentage={percentage}
+                width={Math.trunc((percentage * 100) / maxPercentage)}
+              />
+            ))}
+        </Box>
+      )}
     </SectionCard>
   )
 }

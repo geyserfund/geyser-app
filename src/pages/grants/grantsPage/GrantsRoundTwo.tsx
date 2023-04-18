@@ -10,23 +10,21 @@ import {
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
-import AlbyPNG from '../../assets/images/third-party-icons/alby@3x.png'
-import satsymbol from '../../assets/satsymbolprimary.svg'
-import satwalletimg from '../../assets/walletsats.svg'
-import { AppFooter } from '../../components/molecules'
+import { AlbyPNG, SatSymbol, SatWalletImg } from '../../../assets'
+import { AppFooter } from '../../../components/molecules'
 import {
   Grant2AnnouncementImageUrl,
   Grant2AnnouncementTwitterUrl,
   GrantsRound2Url,
-} from '../../constants'
-import { fonts } from '../../styles'
-import { GrantApplicant, Maybe, Sponsor } from '../../types'
-import { useMobileMode } from '../../utils'
-import { GrantWinnerAnnouncement } from './components'
-import { BoardMembers } from './components/BoardMembers'
-import { CommunityVoting } from './components/CommunityVoting'
-import { GrantDevelopers } from './components/GrantDevs'
-import { MoreInfo } from './components/MoreInfo'
+} from '../../../constants'
+import { fonts } from '../../../styles'
+import { GrantApplicant, Maybe, Sponsor } from '../../../types'
+import { useMobileMode } from '../../../utils'
+import { GrantWinnerAnnouncement } from '../components'
+import { BoardMembers } from '../components/BoardMembers'
+import { CommunityVoting } from '../components/CommunityVoting'
+import { GrantDevelopers } from '../components/GrantDevs'
+import { MoreInfo } from '../components/MoreInfo'
 
 export type GrantSponsor = {
   name: string
@@ -113,7 +111,7 @@ export const GrantsRoundTwo = ({
                 justifyContent={'center'}
               >
                 <Box mr={1}>
-                  <img src={satsymbol} width="30px" alt="satsymbol" />
+                  <img src={SatSymbol} width="30px" alt="satsymbol" />
                 </Box>
 
                 <Text
@@ -228,7 +226,7 @@ export const GrantsRoundTwo = ({
             <Box width="100%" display="flex" alignItems={'center'} my={4}>
               <Wrap width="100%" justify="center" spacing="25px">
                 <WrapItem>
-                  <Image height="70px" src={satwalletimg} />
+                  <Image height="70px" src={SatWalletImg} />
                 </WrapItem>
                 <WrapItem>
                   <Image height="70px" src={AlbyPNG} />

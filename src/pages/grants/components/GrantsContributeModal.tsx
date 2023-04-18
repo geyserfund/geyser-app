@@ -424,17 +424,12 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
   return (
     <>
       <Button
-        variant={'solid'}
-        fontWeight="500"
-        fontSize="16px"
+        variant="primary"
         px={12}
-        mr="2"
-        height={10}
         onClick={() => {
           gotoNextStage()
           onOpen()
         }}
-        backgroundColor="brand.primary"
       >
         Contribute
       </Button>
