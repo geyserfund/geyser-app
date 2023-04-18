@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayoutProps, LandingCardBase } from '../../../components/layouts'
 import { getPath } from '../../../constants'
-import { FeaturedProjectForLandingPageQuery } from '../../../types'
+import { ProjectForLandingPageFragment } from '../../../types'
 
 interface LandingProjectCardProps extends CardLayoutProps {
-  project: NonNullable<FeaturedProjectForLandingPageQuery['project']>
+  project: ProjectForLandingPageFragment
   isMobile?: boolean
 }
 
@@ -30,7 +30,6 @@ export const LandingProjectCard = ({
       fundersCount={project.fundersCount || 0}
       amountFunded={project.balance}
       projectId={project.id}
-      minHeight="125px"
       {...rest}
     />
   )
