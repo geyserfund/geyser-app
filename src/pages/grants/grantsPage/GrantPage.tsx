@@ -124,7 +124,7 @@ export const GrantPage = () => {
           <FaArrowLeft /> See all Grants
         </Button>
         <GrantSummary grant={grant} />
-        {showGrantApply && <GrantApply />}
+        {showGrantApply && <GrantApply grant={grant} />}
 
         <GrantContribute />
 
