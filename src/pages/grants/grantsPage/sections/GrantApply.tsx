@@ -4,6 +4,7 @@ import {
   Button,
   HStack,
   Image,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,7 +19,10 @@ import { BsCheckLg } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2, H3 } from '../../../../components/typography'
-import { LockedConnectAccountUrl } from '../../../../constants'
+import {
+  GrantApplicationDetailsUrl,
+  LockedConnectAccountUrl,
+} from '../../../../constants'
 import { useAuthContext } from '../../../../context'
 import { MUTATION_APPLY_GRANT } from '../../../../graphql/mutations'
 import {
@@ -42,8 +46,11 @@ export const GrantApply = ({ grant }: GrantProps) => {
       <H3 alignSelf="start">Apply</H3>
       <Body1 alignSelf="start">
         {
-          "Apply to be part of the 'Bitcoin Gaming Grant' community-voting grant."
+          'Apply to be part of the { Bitcoin Gaming Grant } community-voting grant. Find out more about how projects will be selected and how voting works '
         }
+        <Link href={GrantApplicationDetailsUrl} isExternal>
+          here.
+        </Link>
       </Body1>
       <ApplyGrant grant={grant} />
     </CardLayout>
