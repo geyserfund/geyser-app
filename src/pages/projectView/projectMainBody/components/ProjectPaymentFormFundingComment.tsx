@@ -19,7 +19,7 @@ import {
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { IGif } from '@giphy/js-types'
 import { Grid } from '@giphy/react-components'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { GifIcon } from '../../../../components/icons'
 import { TextArea } from '../../../../components/ui'
@@ -40,11 +40,18 @@ export const ProjectPaymentFormFundingComment = ({
 }: Props) => {
   const isMobile = useMobileMode()
 
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
   const {
     isOpen: isGIFModalOpen,
     onOpen: onGIFModalOpened,
     onClose: onGIFModalClosed,
   } = useDisclosure()
+
+  const onGIFModalOpenClick = () => {
+    textAreaRef.current?.blur()
+    onGIFModalOpened()
+  }
 
   const [giphyFetch, setGiphyFetch] = useState<GiphyFetch | any>()
   const [gifSearch, setGifSearch] = useState('bitcoin')
@@ -68,6 +75,7 @@ export const ProjectPaymentFormFundingComment = ({
     <Box {...rest}>
       <HStack width="100%" position="relative">
         <TextArea
+          ref={textAreaRef}
           pr={16}
           placeholder="Leave a public message here."
           fontSize="14px"
@@ -102,7 +110,7 @@ export const ProjectPaymentFormFundingComment = ({
               }}
             />
           ) : (
-            <Button bg="none" p={0} onClick={onGIFModalOpened}>
+            <Button bg="none" p={0} onClick={onGIFModalOpenClick}>
               <GifIcon />
             </Button>
           )}

@@ -31,7 +31,9 @@ export const ProjectSettings = () => {
     status: project.status as ProjectStatus,
   })
 
-  const [deactivate, setDeactivate] = useState(!isActive(project.status))
+  const [deactivate, setDeactivate] = useState(
+    !isActive(project.status),
+  )
   const [formError, setFormError] = useState<FormError<ProjectSettingsForm>>({})
 
   const { setIsFormDirty } = useBeforeClose()
