@@ -28,8 +28,6 @@ export const theme = extendTheme({
           padding: '10px 30px',
           fontSize: '22px',
           fontWeight: 700,
-          textTransform: 'uppercase',
-          fontFamily: fonts.livvic,
         },
       },
       variants: {

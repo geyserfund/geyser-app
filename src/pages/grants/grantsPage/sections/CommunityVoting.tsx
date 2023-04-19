@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { CardLayout } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
+import { fonts } from '../../../../styles'
 import {
   GrantApplicant,
   GrantApplicantFunding,
@@ -74,6 +75,8 @@ export const CommunityVoting = ({
         height="51px"
         width="100%"
         size="xl"
+        textTransform="uppercase"
+        fontFamily={fonts.livvic}
         variant="contained"
       >
         Vote
