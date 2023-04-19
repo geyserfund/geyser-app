@@ -38,3 +38,7 @@ export const GRANT_STATUS_COUNTDOWN_TITLES = {
   [GrantStatusEnum.FundingOpen]: 'Time left to vote',
   [GrantStatusEnum.Closed]: 'Time left to vote',
 }
+
+export const GrantProjectNameMap: { [key: string]: string } = {
+  'grant-round-004': 'bitcoingaminggrant',
+}

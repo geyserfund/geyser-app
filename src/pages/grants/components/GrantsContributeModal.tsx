@@ -20,7 +20,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { FaCheck } from 'react-icons/fa'
 
 import { createGrantContributionRecord } from '../../../api'
-import { Body2 } from '../../../components/typography'
+import { Body2, Caption } from '../../../components/typography'
 import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
@@ -57,9 +57,13 @@ export const defaultGrantContribution = {
 
 interface Props {
   onSuccess?: (input: GrantContributeInput, project?: Project) => unknown
+  grantProjectName?: string
 }
 
-export const GrantsContributeModal = ({ onSuccess }: Props) => {
+export const GrantsContributeModal = ({
+  onSuccess,
+  grantProjectName,
+}: Props) => {
   const { toast } = useNotification()
   const { user } = useAuthContext()
   const { getSatoshisFromUSDCents } = useBTCConverter()
@@ -75,7 +79,7 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
     useState<FormStateError<GrantContributeInput>>()
 
   const { data: grantsData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
-    variables: { where: { name: GRANTS_PROJECT_NAME } },
+    variables: { where: { name: grantProjectName || GRANTS_PROJECT_NAME } },
     onCompleted(data) {
       if (!data?.project?.id) {
         toast({
@@ -270,6 +274,10 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
             {formError?.amount}
           </Text>
         )}
+        <Caption>
+          Funding over $1000 can get you featured as a sponsor. Reach out to us
+          at hello@geyser.fund to let us know.
+        </Caption>
       </VStack>
 
       <VStack w="full" spacing="10px" alignItems="start">
@@ -278,7 +286,7 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
         </Body2>
         <Input
           _focus={{ borderColor: 'brand.primary' }}
-          placeholder="Love what you guys are doing. Let the Sats flow!"
+          placeholder="Love what you guys are doing."
           name="comment"
           value={state.comment}
           onChange={setTarget}
