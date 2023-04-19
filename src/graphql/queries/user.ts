@@ -21,6 +21,7 @@ export const ME = gql`
           id
           name
           image
+          thumbnailImage
           title
           status
         }

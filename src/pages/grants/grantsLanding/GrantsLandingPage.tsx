@@ -7,7 +7,7 @@ import { getPath } from '../../../constants'
 import { fonts } from '../../../styles'
 import { useMobileMode } from '../../../utils'
 import { CustomGrantCard } from '../components/CustomGrantCard'
-import { MoreInfo } from '../components/MoreInfo'
+import { MoreInfo } from '../grantsPage/sections/MoreInfo'
 import { useGrants } from '../hooks/useGrants'
 import { GrantsContributeCard } from './GrantsContributeCard'
 
@@ -71,49 +71,47 @@ export const GrantsLandingPage = () => {
 
         <GrantsContributeCard />
 
-        <VStack w="full" justifyContent={'center'} alignItems="center">
-          {activeGrant && (
-            <VStack w="full" alignItems="start" spacing="10px">
-              <Text
-                fontWeight={'bold'}
-                fontSize="19px"
-                mb={1}
-                fontFamily={fonts.interBlack}
-              >
-                Latest Grant
-              </Text>
-              <CustomGrantCard
-                grant={activeGrant}
-                to={getPath('grants', activeGrant.id)}
-                showBanner
-              />
-            </VStack>
-          )}
+        {activeGrant && (
           <VStack w="full" alignItems="start" spacing="10px">
             <Text
               fontWeight={'bold'}
               fontSize="19px"
+              mb={1}
               fontFamily={fonts.interBlack}
             >
-              Previous Grants
+              Latest Grant
             </Text>
-            {inactiveGrants
-              .sort((a, b) => {
-                const grantASplit = a.name.split('-')
-                const grantBSplit = b.name.split('-')
-                const grantA = grantASplit[grantASplit.length - 1]
-                const grantB = grantBSplit[grantBSplit.length - 1]
-                return Number(grantB) - Number(grantA)
-              })
-              .map((grant) => (
-                <CustomGrantCard
-                  key={grant.id}
-                  to={getPath('grants', grant.id)}
-                  showBanner={false}
-                  grant={grant}
-                />
-              ))}{' '}
+            <CustomGrantCard
+              grant={activeGrant}
+              to={getPath('grants', activeGrant.id)}
+              showBanner
+            />
           </VStack>
+        )}
+        <VStack w="full" alignItems="start" spacing="10px">
+          <Text
+            fontWeight={'bold'}
+            fontSize="19px"
+            fontFamily={fonts.interBlack}
+          >
+            Previous Grants
+          </Text>
+          {inactiveGrants
+            .sort((a, b) => {
+              const grantASplit = a.name.split('-')
+              const grantBSplit = b.name.split('-')
+              const grantA = grantASplit[grantASplit.length - 1]
+              const grantB = grantBSplit[grantBSplit.length - 1]
+              return Number(grantB) - Number(grantA)
+            })
+            .map((grant) => (
+              <CustomGrantCard
+                key={grant.id}
+                to={getPath('grants', grant.id)}
+                showBanner={false}
+                grant={grant}
+              />
+            ))}
         </VStack>
         <MoreInfo />
       </VStack>
