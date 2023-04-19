@@ -1,5 +1,4 @@
 import { useMutation } from '@apollo/client'
-import { CheckIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
