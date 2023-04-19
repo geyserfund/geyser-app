@@ -7,8 +7,10 @@ import {
   Stack,
   Text,
   Tooltip,
+  useOutsideClick,
   VStack,
 } from '@chakra-ui/react'
+import { useRef, useState } from 'react'
 import { BsInfoCircle } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
@@ -101,6 +103,15 @@ export const ContributionInfoBox = ({
   const isNoFees = noFeeProjects.includes(project.name) || hadOwnNode()
 
   const { getTotalAmount } = useFundCalc(formState)
+
+  const [isFeeTooltipOpen, setFeeTooltipOpen] = useState(false)
+  const tooltipContainerRef = useRef(null)
+
+  useOutsideClick({
+    ref: tooltipContainerRef,
+    handler: () => setFeeTooltipOpen(false),
+  })
+
   return (
     <VStack
       padding={2}
@@ -202,23 +213,24 @@ export const ContributionInfoBox = ({
           >
             <Text flex={0}>Rewards</Text>
             <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
-              {Object.entries(formState.rewardsByIDAndCount!).map(
-                ([key, value]) => {
-                  const reward = rewards!.find(({ id }) => id === key)
-                  if (reward) {
-                    return (
-                      <Text
-                        key={key}
-                        fontSize={'14px'}
-                        fontWeight={'medium'}
-                        color="brand.neutral700"
-                      >
-                        {value} x {reward.name}
-                      </Text>
-                    )
-                  }
-                },
-              )}
+              {formState.rewardsByIDAndCount &&
+                Object.entries(formState.rewardsByIDAndCount).map(
+                  ([key, value]) => {
+                    const reward = rewards?.find(({ id }) => id === key)
+                    if (reward) {
+                      return (
+                        <Text
+                          key={key}
+                          fontSize={'14px'}
+                          fontWeight={'medium'}
+                          color="brand.neutral700"
+                        >
+                          {value} x {reward.name}
+                        </Text>
+                      )
+                    }
+                  },
+                )}
             </VStack>
           </HStack>
         </>
@@ -235,15 +247,23 @@ export const ContributionInfoBox = ({
               >
                 Geyser fee
               </Text>
-              <Tooltip
-                borderRadius="4px"
-                label={GEYSER_FEE_DISCLAIMER}
-                placement="top"
-              >
-                <Box as="span">
-                  <BsInfoCircle fontSize="12px" />
-                </Box>
-              </Tooltip>
+              <Box as="span" ref={tooltipContainerRef}>
+                <Tooltip
+                  borderRadius="4px"
+                  label={GEYSER_FEE_DISCLAIMER}
+                  isOpen={isFeeTooltipOpen}
+                  placement="top"
+                >
+                  <Box
+                    as="span"
+                    onMouseEnter={() => setFeeTooltipOpen(true)}
+                    onMouseLeave={() => setFeeTooltipOpen(false)}
+                    onClick={() => setFeeTooltipOpen(true)}
+                  >
+                    <BsInfoCircle fontSize="12px" />
+                  </Box>
+                </Tooltip>
+              </Box>
             </HStack>
 
             <HStack>
