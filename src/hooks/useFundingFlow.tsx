@@ -269,7 +269,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       if (
         fundingStatus.fundingTx.status === FundingStatus.Paid ||
         (fundingStatus.fundingTx.status === FundingStatus.Pending &&
-          fundingTx.onChain)
+          fundingStatus.fundingTx.onChain)
       ) {
         clearInterval(fundInterval)
         gotoNextStage()
