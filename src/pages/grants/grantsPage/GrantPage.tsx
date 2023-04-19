@@ -108,7 +108,7 @@ export const GrantPage = () => {
   const showDistributionChart =
     grant.status !== GrantStatusEnum.ApplicationsOpen
 
-  const showGrantApply = grant.status === GrantStatusEnum.ApplicationsOpen
+  const showGrantApply = grant.status !== GrantStatusEnum.Closed
 
   return (
     <PageContainer title={grant.title} image={grant.image}>
