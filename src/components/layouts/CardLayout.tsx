@@ -25,6 +25,7 @@ export const CardLayout = ({
       borderRadius="8px"
       boxShadow="none"
       padding="24px"
+      spacing="10px"
       _hover={
         hover ? { cursor: 'pointer', borderColor: 'brand.neutral400' } : {}
       }

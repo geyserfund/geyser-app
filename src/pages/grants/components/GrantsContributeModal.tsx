@@ -2,8 +2,6 @@ import { useQuery } from '@apollo/client'
 import {
   Box,
   Button,
-  FormControl,
-  FormLabel,
   Input,
   InputGroup,
   InputLeftElement,
@@ -15,7 +13,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  Textarea,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -23,6 +20,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { FaCheck } from 'react-icons/fa'
 
 import { createGrantContributionRecord } from '../../../api'
+import { Body2, Caption } from '../../../components/typography'
 import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
@@ -59,9 +57,13 @@ export const defaultGrantContribution = {
 
 interface Props {
   onSuccess?: (input: GrantContributeInput, project?: Project) => unknown
+  grantProjectName?: string
 }
 
-export const GrantsContributeModal = ({ onSuccess }: Props) => {
+export const GrantsContributeModal = ({
+  onSuccess,
+  grantProjectName,
+}: Props) => {
   const { toast } = useNotification()
   const { user } = useAuthContext()
   const { getSatoshisFromUSDCents } = useBTCConverter()
@@ -77,7 +79,7 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
     useState<FormStateError<GrantContributeInput>>()
 
   const { data: grantsData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
-    variables: { where: { name: GRANTS_PROJECT_NAME } },
+    variables: { where: { name: grantProjectName || GRANTS_PROJECT_NAME } },
     onCompleted(data) {
       if (!data?.project?.id) {
         toast({
@@ -142,10 +144,6 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
     }
   }, [fundState])
 
-  const linkChangeHandler = (e: any) => {
-    setValue('imageUrl', e.target.value)
-  }
-
   const handleClose = () => {
     resetFundingFlow()
     setModalHeader(defaultModalHeader)
@@ -186,7 +184,6 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
       }
 
       requestFunding(input)
-      gotoNextStage()
     }
   }
 
@@ -221,135 +218,85 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
   )
 
   const contributionForm = () => (
-    <Box>
+    <VStack w="full" spacing="20px">
       <Text fontWeight={'500'} mb={2} fontSize="16px">
         Contribute to Geyser Grants to support the Bitcoin ecosystem. Donations
         are non-refundable and not tax deductible.
       </Text>
-      <Box mb={3}>
+      <VStack mb={3} spacing="10px" w="full" alignItems="start">
         <Text fontWeight={'700'} fontSize="14px">
           Amount
         </Text>
         <Box display="flex" alignItems={'flex-start'} gap={3}>
-          <Box display="flex" alignItems={'center'} mt={1} cursor="pointer">
-            <Box
-              px="20px"
-              py="6px"
-              border={
-                state.amount === 100 ? '2px solid #20ECC7' : '2px solid #E9ECEF'
-              }
-              rounded="md"
-              fontWeight={'bold'}
-              onClick={() => setValue('amount', 100)}
-            >
-              $100
-            </Box>
-          </Box>
-          <Box display="flex" alignItems={'center'} mt={1} cursor="pointer">
-            <Box
-              px="20px"
-              py="6px"
-              fontWeight="bold"
-              border={
-                state.amount === 1000
-                  ? '2px solid #20ECC7'
-                  : '2px solid #E9ECEF'
-              }
-              rounded="md"
-              onClick={() => setValue('amount', 1000)}
-            >
-              $1,000
-            </Box>
-          </Box>
-
-          <VStack width="100%" alignItems={'center'} mt={1} cursor="pointer">
-            <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                <Text>$</Text>
-              </InputLeftElement>
-              <Input
-                placeholder="12,120"
-                type={'number'}
-                _focus={{
-                  borderColor: 'brand.primary',
-                }}
-                border="2px solid #20ECC7"
-                value={state.amount}
-                name="amount"
-                variant={'outline'}
-                isInvalid={Boolean(formError?.amount)}
-                onChange={setTarget}
-              />
-            </InputGroup>
-            {formError?.amount && (
-              <Text color="brand.error" fontSize="12px">
-                {formError?.amount}
-              </Text>
-            )}
-          </VStack>
+          <AmountButtonComponent
+            stateAmount={state.amount}
+            amount={10}
+            setValue={setValue}
+          />
+          <AmountButtonComponent
+            stateAmount={state.amount}
+            amount={50}
+            setValue={setValue}
+          />
+          <AmountButtonComponent
+            stateAmount={state.amount}
+            amount={100}
+            setValue={setValue}
+          />
+          <AmountButtonComponent
+            stateAmount={state.amount}
+            amount={1000}
+            setValue={setValue}
+          />
         </Box>
-      </Box>
+      </VStack>
+      <VStack width="100%" alignItems={'center'} mt={1} cursor="pointer">
+        <InputGroup>
+          <InputLeftElement pointerEvents="none">
+            <Text>$</Text>
+          </InputLeftElement>
+          <Input
+            placeholder="12,120"
+            type={'number'}
+            _focus={{
+              borderColor: 'brand.primary',
+            }}
+            border="2px solid #20ECC7"
+            value={state.amount}
+            name="amount"
+            variant={'outline'}
+            isInvalid={Boolean(formError?.amount)}
+            onChange={setTarget}
+          />
+        </InputGroup>
+        {formError?.amount && (
+          <Text color="brand.error" fontSize="12px">
+            {formError?.amount}
+          </Text>
+        )}
+        <Caption>
+          Funding over $1000 can get you featured as a sponsor. Reach out to us
+          at hello@geyser.fund to let us know.
+        </Caption>
+      </VStack>
 
-      <FormControl mb={3}>
-        <FormLabel fontWeight={'700'} fontSize="14px">
-          Name/ Nym (optional)
-        </FormLabel>
-        <Input
-          placeholder="Satoshi"
-          _focus={{ borderColor: 'brand.primary' }}
-          name="name"
-          value={state.name}
-          onChange={setTarget}
-        />
-      </FormControl>
-      <FormControl mb={3}>
-        <FormLabel fontWeight={'700'} fontSize="14px">
-          Email/contact (optional)
-        </FormLabel>
-        <Input
-          placeholder="satoshi@geyser.fund"
-          _focus={{ borderColor: 'brand.primary' }}
-          value={state.email}
-          name="email"
-          onChange={setTarget}
-        />
-      </FormControl>
-      <FormControl mb={3}>
-        <FormLabel fontWeight={'700'} fontSize="14px">
+      <VStack w="full" spacing="10px" alignItems="start">
+        <Body2 bold fontSize="14px">
           Leave us a comment (optional)
-        </FormLabel>
+        </Body2>
         <Input
           _focus={{ borderColor: 'brand.primary' }}
-          placeholder="Love what you guys are doing. Let the Sats flow!"
+          placeholder="Love what you guys are doing."
           name="comment"
           value={state.comment}
           onChange={setTarget}
         />
-      </FormControl>
-      <Box>
-        <Text fontWeight={'700'} fontSize="14px">
-          Add a profile image link (optional)
-        </Text>
-        <Text fontWeight={'400'} fontSize="11px">
-          If you fund over $1,000 we will feature your PFP or logo in the Grant
-          page drop the Image link in here and we will add it to the list of
-          sponsors on the Grant page and the landing page.
-        </Text>
-        <Textarea
-          mt={3}
-          onChange={linkChangeHandler}
-          size={'lg'}
-          _focus={{ borderColor: 'brand.primary' }}
-          placeholder="https://pbs.twimg.com/profile_images/15544291/img_400x400.jpg"
-          disabled={state.amount < 1000}
-        />
-      </Box>
-      <Box mt={4}>
-        <Button bg="brand.primary" onClick={handleFormConfirmClick} w="full">
-          Confirm
-        </Button>
-      </Box>
-    </Box>
+      </VStack>
+
+      <Button bg="brand.primary" onClick={handleFormConfirmClick} w="full">
+        Confirm
+      </Button>
+    </VStack>
   )
 
   const completedScreen = () => {
@@ -424,17 +371,12 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
   return (
     <>
       <Button
-        variant={'solid'}
-        fontWeight="500"
-        fontSize="16px"
+        variant="primary"
         px={12}
-        mr="2"
-        height={10}
         onClick={() => {
           gotoNextStage()
           onOpen()
         }}
-        backgroundColor="brand.primary"
       >
         Contribute
       </Button>
@@ -451,5 +393,34 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
         </Modal>
       )}
     </>
+  )
+}
+
+export const AmountButtonComponent = ({
+  amount,
+  setValue,
+  stateAmount,
+}: {
+  amount: number
+  setValue: any
+  stateAmount: number
+}) => {
+  return (
+    <Box
+      display="flex"
+      alignItems={'center'}
+      mt={1}
+      cursor="pointer"
+      px="15px"
+      py="6px"
+      border={
+        stateAmount === amount ? '2px solid #20ECC7' : '2px solid #E9ECEF'
+      }
+      rounded="md"
+      fontWeight={'bold'}
+      onClick={() => setValue('amount', amount)}
+    >
+      {`$${amount}`}
+    </Box>
   )
 }

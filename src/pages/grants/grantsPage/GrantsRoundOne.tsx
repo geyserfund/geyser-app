@@ -12,21 +12,21 @@ import {
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
-import satwalletimg from '../../assets/walletsats.svg'
-import { AppFooter } from '../../components/molecules'
-import { ButtonComponent } from '../../components/ui'
+import { SatWalletImg } from '../../../assets'
+import { AppFooter } from '../../../components/molecules'
+import { ButtonComponent } from '../../../components/ui'
 import {
   GrantsBitcoinCulture,
   GrantsBitcoinDevelopment,
   GrantsBitcoinEducation,
   GrantsHero,
-} from '../../constants'
-import { fonts } from '../../styles'
-import { GrantApplicant } from '../../types'
-import { useMediumScreen, useMobileMode } from '../../utils'
-import { ApplyGrantCard } from './components/ApplyGrantCard'
-import { Board } from './components/Board'
-import { CommunityVoting } from './components/CommunityVoting'
+} from '../../../constants'
+import { fonts } from '../../../styles'
+import { GrantApplicant } from '../../../types'
+import { useMediumScreen, useMobileMode } from '../../../utils'
+import { ApplyGrantCard } from '../components/ApplyGrantCard'
+import { Board } from '../components/Board'
+import { CommunityVoting } from './sections/CommunityVoting'
 
 const grants = [
   {
@@ -285,7 +285,7 @@ export const GrantsRoundOne = ({
             alignItems={'center'}
           >
             <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
-              <img src={satwalletimg} width="195px" />
+              <img src={SatWalletImg} width="195px" />
             </Box>
           </Box>
         </Box>

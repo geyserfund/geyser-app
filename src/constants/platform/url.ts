@@ -161,6 +161,9 @@ export const LearnAboutCrowdfundingUrl =
 export const GeyserProhibitedItemsUrl =
   'https://geyser.notion.site/Prohibited-items-a67b8e1e050d433ca747a3522833a7f3'
 
+export const GrantApplicationDetailsUrl =
+  'https://geyser.notion.site/Bitcoin-Gaming-Grant-c03cde06930d46f9a082fabb096d967c'
+
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
@@ -174,6 +177,9 @@ export const BadgesGroupUrl =
 
 export const CannotConnectAccountUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/connect-account-failed.png'
+
+export const LockedConnectAccountUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/connect-account-locked.png'
 
 // GRANTS
 

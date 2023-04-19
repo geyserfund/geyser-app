@@ -4,6 +4,7 @@ import { CheckIcon } from '@chakra-ui/icons'
 import { VStack } from '@chakra-ui/layout'
 import {
   Box,
+  ButtonProps,
   HStack,
   IconButton,
   Image,
@@ -41,7 +42,7 @@ import {
 import { toInt, useMobileMode, useNotification } from '../../../utils'
 import { commaFormatted } from '../../../utils/formatData/helperFunctions'
 
-interface ContributeButtonProps {
+interface ContributeButtonProps extends ButtonProps {
   active: boolean
   title: string
   project: Project
@@ -51,6 +52,7 @@ export const ContributeButton = ({
   active,
   title,
   project,
+  ...rest
 }: ContributeButtonProps) => {
   const [name, setName] = useState('')
   const [contact, setContact] = useState('')
@@ -494,11 +496,11 @@ export const ContributeButton = ({
         disabled={!active}
         primary
         standard
-        w="100%"
         onClick={() => {
           onOpen()
           gotoNextStage()
         }}
+        {...rest}
       >
         {title}
       </ButtonComponent>

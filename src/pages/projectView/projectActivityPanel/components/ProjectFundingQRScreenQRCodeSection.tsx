@@ -4,12 +4,14 @@ import {
   HStack,
   HTMLChakraProps,
   Text,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { BiRefresh } from 'react-icons/bi'
 import { BsExclamationCircle } from 'react-icons/bs'
 import { FaBitcoin, FaCopy } from 'react-icons/fa'
+import { IoMdRefresh } from 'react-icons/io'
 import { RiLinkUnlink } from 'react-icons/ri'
 import { QRCode } from 'react-qrcode-logo'
 
@@ -282,14 +284,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
         return <FundingErrorView error={error} />
 
       default:
-        return (
-          <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
-            <VStack>
-              <Loader />
-              <Text>Generating Invoice</Text>
-            </VStack>
-          </VStack>
-        )
+        return <GeneratingInvoice refreshInvoice={refreshFundingInvoice} />
     }
   }
 
@@ -321,6 +316,49 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             : 'hidden'
         }
       />
+    </VStack>
+  )
+}
+
+export const GeneratingInvoice = ({
+  refreshInvoice,
+}: {
+  refreshInvoice: () => void
+}) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  useEffect(() => {
+    setTimeout(onOpen, 15000)
+  }, [])
+
+  const handleRefresh = () => {
+    refreshInvoice()
+    onClose()
+    setTimeout(onOpen, 15000)
+  }
+
+  return (
+    <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
+      <VStack>
+        <Loader />
+        <Text>Generating Invoice</Text>
+      </VStack>
+
+      {isOpen && (
+        <VStack>
+          <Body2>
+            Generating invoice is taking too long, if this continues please
+            refresh the invoice.
+          </Body2>
+          <Button
+            variant="primary"
+            leftIcon={<IoMdRefresh />}
+            onClick={handleRefresh}
+          >
+            refresh
+          </Button>
+        </VStack>
+      )}
     </VStack>
   )
 }

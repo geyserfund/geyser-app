@@ -20,10 +20,27 @@ export const theme = extendTheme({
     Button: {
       // 1. We can update the base styles
       baseStyle: {
-        fontWeight: 'normal', // Normally, it is "semibold"
-        height: '200px',
+        fontWeight: 500,
+        fontFamily: fonts.inter,
+      },
+      sizes: {
+        xl: {
+          padding: '10px 30px',
+          fontSize: '22px',
+          fontWeight: 700,
+        },
       },
       variants: {
+        primary: {
+          borderRadius: '8px',
+          backgroundColor: colors.primary,
+          color: 'black',
+          fontWeight: 'medium',
+          minWidth: '220px',
+          _hover: {
+            backgroundColor: colors.primary500,
+          },
+        },
         danger: {
           backgroundColor: colors.secondaryRed,
           color: 'white',
@@ -47,7 +64,7 @@ export const theme = extendTheme({
           borderColor: colors.neutral200,
           color: colors.neutral900,
           fontSize: '16px',
-          padding: '2px 5px',
+          padding: '8px 20px',
           backgroundColor: 'white',
           borderRadius: '8px',
           _hover: {
@@ -59,26 +76,9 @@ export const theme = extendTheme({
         },
         contained: {
           background: colors.primary400,
-          width: '100%',
           borderRadius: '8px',
-          padding: '10px 30px',
+          padding: '8px 20px',
           color: colors.neutral800,
-          fontWeight: 500,
-          fontFamily: fonts.inter,
-          _hover: {
-            background: colors.primary500,
-          },
-        },
-        hugeContained: {
-          background: colors.primary400,
-          width: '100%',
-          borderRadius: '8px',
-          padding: '10px 30px',
-          fontSize: '22px',
-          color: colors.neutral800,
-          textTransform: 'uppercase',
-          fontFamily: fonts.livvic,
-          fontWeight: 700,
           _hover: {
             background: colors.primary500,
           },
