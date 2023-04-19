@@ -108,6 +108,8 @@ export const GrantPage = () => {
   const showDistributionChart =
     grant.status !== GrantStatusEnum.ApplicationsOpen
 
+  const showGrantApply = grant.status !== GrantStatusEnum.Closed
+
   return (
     <PageContainer title={grant.title} image={grant.image}>
       <VStack w="full" spacing="30px" alignItems="start">
@@ -121,10 +123,8 @@ export const GrantPage = () => {
         >
           <FaArrowLeft /> See all Grants
         </Button>
-
         <GrantSummary grant={grant} />
-
-        <GrantApply grant={grant} />
+        {showGrantApply && <GrantApply grant={grant} />}
 
         <GrantContribute />
 
