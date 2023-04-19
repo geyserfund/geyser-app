@@ -24,6 +24,16 @@ export const theme = extendTheme({
         height: '200px',
       },
       variants: {
+        primary: {
+          borderRadius: '8px',
+          backgroundColor: colors.primary,
+          color: 'black',
+          fontWeight: 'medium',
+          minWidth: '220px',
+          _hover: {
+            backgroundColor: colors.primary500,
+          },
+        },
         danger: {
           backgroundColor: colors.secondaryRed,
           color: 'white',

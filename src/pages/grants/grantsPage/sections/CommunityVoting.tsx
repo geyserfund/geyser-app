@@ -3,15 +3,20 @@ import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
-import { H3 } from '../../../components/typography'
-import { getPath } from '../../../constants'
-import { GrantApplicant, GrantApplicantFunding, Project } from '../../../types'
-import { getShortAmountLabel, useMobileMode } from '../../../utils'
-import { useProjectFundingModal } from '../../projectFunding/hooks/useProjectFundingModal'
-import { ProjectFundingModal } from '../../projectFunding/ProjectFundingModal'
-import { AvatarElement } from '../../projectView/projectMainBody/components'
-import { SectionCard } from './SectionCard'
-import { WidgetItem } from './WidgetItem'
+import { CardLayout } from '../../../../components/layouts'
+import { H3 } from '../../../../components/typography'
+import { getPath } from '../../../../constants'
+import {
+  GrantApplicant,
+  GrantApplicantFunding,
+  Project,
+} from '../../../../types'
+import { getShortAmountLabel, useMobileMode } from '../../../../utils'
+import { useProjectFundingModal } from '../../../projectFunding/hooks/useProjectFundingModal'
+import { ProjectFundingModal } from '../../../projectFunding/ProjectFundingModal'
+import { AvatarElement } from '../../../projectView/projectMainBody/components'
+import { SectionCard } from '../../components/SectionCard'
+import { WidgetItem } from '../../components/WidgetItem'
 
 interface Props {
   applicants: Array<GrantApplicant>
@@ -75,10 +80,8 @@ export const CommunityVoting = ({
   }
 
   return (
-    <SectionCard p={5}>
-      <H3 fontSize="18px" mb={3}>
-        {sectionTitle}
-      </H3>
+    <CardLayout p="20px" spacing="20px" w="full">
+      <H3 fontSize="18px">{sectionTitle}</H3>
       {applicants.map(({ project, funding }) => {
         const projectLink = getPath('project', project.name)
         return (
@@ -163,6 +166,6 @@ export const CommunityVoting = ({
         )
       })}
       <ProjectFundingModal {...modalProps} />
-    </SectionCard>
+    </CardLayout>
   )
 }

@@ -1,6 +1,7 @@
 export * from './badges'
 export * from './entries'
 export * from './funding'
+export * from './grant'
 export * from './project'
 export * from './tags'
 export * from './user'
