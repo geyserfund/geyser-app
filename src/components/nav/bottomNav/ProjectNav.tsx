@@ -8,7 +8,6 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BiHeart, BiNews, BiTrophy } from 'react-icons/bi'
-import { BsLightningChargeFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
@@ -108,7 +107,7 @@ export const ProjectNavUI = () => {
       justifyContent="center"
       alignItems="center"
       spacing={{
-        base: '35px',
+        base: '18px',
         md: '50px',
       }}
       paddingBottom="2px"
@@ -144,7 +143,7 @@ export const ProjectNavUI = () => {
       >
         {fundersCount && <Text fontFamily={fonts.mono}>{fundersCount}</Text>}
       </Button>
-      <HStack>
+      <HStack flexGrow={1}>
         {isOwner ? (
           <Button
             as={Link}
@@ -162,6 +161,7 @@ export const ProjectNavUI = () => {
                 : 'brand.primary'
             }
             _hover={{}}
+            width="100%"
             paddingX="5px"
           >
             Dashboard
@@ -172,12 +172,12 @@ export const ProjectNavUI = () => {
             backgroundColor={
               showGreyButton ? 'brand.neutral500' : 'brand.primary'
             }
+            width="100%"
             border="1px solid"
             borderColor={showGreyButton ? 'brand.neutral500' : 'brand.primary'}
             _hover={{}}
             padding="5px"
             isDisabled={isFundingDisabled}
-            leftIcon={<BsLightningChargeFill />}
             onClick={() => handleClick(MobileViews.funding)}
           >
             Contribute
