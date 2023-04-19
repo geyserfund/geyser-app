@@ -14,7 +14,11 @@ import {
 } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement } from '../components'
-import { GrantAnnouncements, GrantHasVoting } from '../constants'
+import {
+  GrantAnnouncements,
+  GrantHasVoting,
+  GrantProjectNameMap,
+} from '../constants'
 import { useGrant } from '../hooks/useGrant'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
@@ -126,7 +130,7 @@ export const GrantPage = () => {
         <GrantSummary grant={grant} />
         {showGrantApply && <GrantApply grant={grant} />}
 
-        <GrantContribute />
+        <GrantContribute grantProjectName={GrantProjectNameMap[grant.name]} />
 
         {showDistributionChart && <DistributionChart applicants={applicants} />}
         {winnerAnnouncement && (
