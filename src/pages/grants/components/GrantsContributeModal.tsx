@@ -180,7 +180,6 @@ export const GrantsContributeModal = ({ onSuccess }: Props) => {
       }
 
       requestFunding(input)
-      gotoNextStage()
     }
   }
 
