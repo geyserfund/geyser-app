@@ -10,6 +10,7 @@ export const QUERY_GRANTS = gql`
       description
       status
       image
+      balance
       statuses {
         status
         endAt

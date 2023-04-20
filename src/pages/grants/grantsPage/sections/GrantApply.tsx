@@ -46,7 +46,7 @@ export const GrantApply = ({ grant }: GrantProps) => {
       <H3 alignSelf="start">Apply</H3>
       <Body1 alignSelf="start">
         {
-          'Apply to be part of the { Bitcoin Gaming Grant } community-voting grant. Find out more about how projects will be selected and how voting works '
+          'Apply to be part of the Bitcoin Gaming Grant community-voting grant. Find out more about how projects will be selected and how voting works '
         }
         <Link href={GrantApplicationDetailsUrl} isExternal>
           here.
