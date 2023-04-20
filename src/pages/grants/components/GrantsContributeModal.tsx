@@ -332,7 +332,7 @@ export const GrantsContributeModal = ({
         <Text fontSize={'14px'}>
           Donations are non-refundable and not tax deductible.
         </Text>
-        {!fundingTx.onChain && (
+        {fundingTx.onChain && (
           <Text mt={4} fontSize={'14px'}>
             Check out the{' '}
             <ChakraLink
