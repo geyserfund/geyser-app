@@ -14,6 +14,7 @@ import {
   InvoiceStatus,
 } from '../types/generated/graphql'
 import { sha256, toInt, useNotification } from '../utils'
+import { useDebugPropChanges } from '../utils/debug/useDebugPropChanges'
 
 export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
 
@@ -249,6 +250,14 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
   )
 
+  const gotoNextStage = useCallback(() => {
+    setFundState((currentState) => {
+      const currentIndex = stageList.indexOf(currentState)
+      const nextState = stageList[currentIndex + 1]
+      return nextState
+    })
+  }, [])
+
   useEffect(() => {
     if (fundingStatus && fundingStatus.fundingTx) {
       /*
@@ -275,7 +284,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         gotoNextStage()
       }
     }
-  }, [fundingStatus])
+  }, [fundingStatus, fundingTx, gotoNextStage])
 
   useEffect(() => {
     if (
@@ -286,14 +295,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       clearInterval(fundInterval)
     }
   }, [fundState])
-
-  const gotoNextStage = useCallback(() => {
-    setFundState((currentState) => {
-      const currentIndex = stageList.indexOf(currentState)
-      const nextState = stageList[currentIndex + 1]
-      return nextState
-    })
-  }, [])
 
   const requestFunding = async (input: FundingInput) => {
     gotoNextStage()
@@ -313,7 +314,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
   })
 
-  const refreshFundingInvoice = async () => {
+  const refreshFundingInvoice = useCallback(async () => {
     try {
       setFundingTx({
         ...fundingTx,
@@ -336,7 +337,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     } catch (_) {
       //
     }
-  }
+  }, [fundingTx, refreshInvoice])
 
   const resetFundingFlow = () => {
     setFundState(fundingStages.initial)
@@ -365,6 +366,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     refreshFundingInvoice,
     setFundState,
     error,
-    hasWebLN: hasWebLN && Boolean(webln),
+    hasWebLN: useMemo(() => hasWebLN && Boolean(webln), [hasWebLN, webln]),
   }
 }
