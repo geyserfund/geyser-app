@@ -17,7 +17,7 @@ import { BsArrowRepeat } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
 import { useBtcContext } from '../../context/btc'
-import { colors } from '../../styles'
+import { colors, fonts } from '../../styles'
 import {
   CrownIcon,
   MedalIcon,
@@ -25,6 +25,7 @@ import {
   StarIcon,
   TrophyIcon,
 } from '../icons'
+import { SatSymbolIcon } from '../icons/svg'
 import { ButtonComponent } from '../ui'
 
 const useStyles = createUseStyles({
@@ -34,6 +35,9 @@ const useStyles = createUseStyles({
       borderColor: colors.normalLightGreen,
       boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
     },
+    fontFamily: fonts.inter,
+    fontWeight: 700,
+    fontSize: '30px',
   },
   switchButtton: {
     width: '100%',
@@ -144,18 +148,28 @@ export const DonationInput = ({
       </HStack>
 
       <InputGroup {...inputGroup}>
-        <InputLeftElement>
-          {isSatoshi ? <SatoshiIconTilted /> : <BiDollar fontSize="25px" />}
+        <InputLeftElement pt={1} pl={4} height={14}>
+          {isSatoshi ? (
+            <SatSymbolIcon fontSize="16px" />
+          ) : (
+            <BiDollar fontSize="18px" />
+          )}
         </InputLeftElement>
         <Input
+          height={14}
           value={satoshi > 0 ? (isSatoshi ? satoshi : dollar) : ''}
           type="number"
           className={classNames(classes.inputElement, className)}
           onChange={handleInput}
+          pl={10}
           {...rest}
+          _placeholder={{
+            color: 'primary.textBlack',
+          }}
+          color="primary.textBlack"
           placeholder="0"
         />
-        <InputRightElement width="50px">
+        <InputRightElement pt={1} pr={6} height={14}>
           <Button
             className={classes.switchButtton}
             onClick={onToggle}
