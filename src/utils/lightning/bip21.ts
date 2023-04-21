@@ -19,5 +19,5 @@ export const getBip21Invoice = (
     return `bitcoin:${onChainAddress}?amount=${btcAmount}&lightning=${lnAddress}`
   }
 
-  return ''
+  return onChainAddress
 }
