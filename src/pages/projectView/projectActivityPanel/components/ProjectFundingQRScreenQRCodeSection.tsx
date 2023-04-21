@@ -18,13 +18,13 @@ import LogoPrimary from '../../../../assets/logo-brand.svg'
 import LogoDark from '../../../../assets/logo-dark.svg'
 import { Body2 } from '../../../../components/typography'
 import Loader from '../../../../components/ui/Loader'
-import { SATOSHIS_IN_BTC } from '../../../../constants'
 import { UseFundingFlowReturn } from '../../../../hooks'
 import { colors } from '../../../../styles'
 import {
   FundingStatus,
   InvoiceStatus,
 } from '../../../../types/generated/graphql'
+import { getBip21Invoice } from '../../../../utils/lightning/bip21'
 
 type Props = {
   fundingFlow: UseFundingFlowReturn
@@ -151,27 +151,15 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     const { id, paymentRequest, address, amount } = fundingTx
 
     if (id === 0) {
-      return setFallbackAddress('')
+      setOnchainAddress('')
+      setLightningAddress('')
+      setFallbackAddress('')
+      return
     }
 
-    const btcAmount = Number(amount / SATOSHIS_IN_BTC).toFixed(8)
-
+    setFallbackAddress(getBip21Invoice(amount, paymentRequest, address))
     setOnchainAddress(address || '')
     setLightningAddress(paymentRequest || '')
-
-    // If no on-chain address could be generated, only show the payment request
-    if (!address) {
-      return setFallbackAddress(paymentRequest || '')
-    }
-
-    // If no payment request could be generated, only show the on-chain option
-    if (!paymentRequest) {
-      return setFallbackAddress(`bitcoin:${address}?amount=${btcAmount}`)
-    }
-
-    setFallbackAddress(
-      `bitcoin:${address}?amount=${btcAmount}&lightning=${paymentRequest}`,
-    )
   }, [
     fundingTx,
     fundingTx.paymentRequest,
