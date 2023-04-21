@@ -14,7 +14,6 @@ import {
   InvoiceStatus,
 } from '../types/generated/graphql'
 import { sha256, toInt, useNotification } from '../utils'
-import { useDebugPropChanges } from '../utils/debug/useDebugPropChanges'
 
 export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
 
