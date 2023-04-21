@@ -18,6 +18,7 @@ import LogoPrimary from '../../../../assets/logo-brand.svg'
 import LogoDark from '../../../../assets/logo-dark.svg'
 import { Body2 } from '../../../../components/typography'
 import Loader from '../../../../components/ui/Loader'
+import { SATOSHIS_IN_BTC } from '../../../../constants'
 import { UseFundingFlowReturn } from '../../../../hooks'
 import { colors } from '../../../../styles'
 import {
@@ -153,7 +154,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
       return setFallbackAddress('')
     }
 
-    const btcAmount = amount / 10 ** 8
+    const btcAmount = Number(amount / SATOSHIS_IN_BTC).toFixed(8)
 
     setOnchainAddress(address || '')
     setLightningAddress(paymentRequest || '')
