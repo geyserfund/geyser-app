@@ -8,7 +8,7 @@ import {
 import { FeaturedProjectCard } from '../elements'
 // import { FeaturedGrantCard } from '../elements'
 
-export const DefaultView = () => {
+export const LandingPageDefaultView = () => {
   // const { activeGrant, loading } = useGrants()
   return (
     <CardLayout w="full" spacing="50px" padding="20px">

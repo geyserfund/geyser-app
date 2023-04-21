@@ -23,6 +23,10 @@ import {
   LandingPageProjects,
   MobileLeaderboard,
 } from '../pages/landing'
+import {
+  LandingPageDefaultView,
+  LandingPageFilteredView,
+} from '../pages/landing/projects/views'
 import { NotAuthorized } from '../pages/notAuthorized'
 import { NotFoundPage } from '../pages/notFound'
 import { Profile } from '../pages/profile'
@@ -186,7 +190,17 @@ const platformRoutes = [
       {
         path: getPath('landingPage'),
         element: LandingPageProjects,
-        isIndex: true,
+        nested: [
+          {
+            path: getPath('landingPage'),
+            element: LandingPageDefaultView,
+            isIndex: true,
+          },
+          {
+            path: getPath('landingProjects'),
+            element: LandingPageFilteredView,
+          },
+        ],
       },
       {
         path: getPath('landingFeed'),

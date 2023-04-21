@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useLocation, useMatch, useNavigate } from 'react-router-dom'
+import { useLocation, useMatch, useNavigate, useParams } from 'react-router-dom'
 
 import { getPath } from '../constants'
 import { disableSortByTrending } from '../pages/landing/filters/sort'
@@ -32,7 +32,9 @@ export interface FilterState {
 }
 
 const defaultFilterContext = {
-  filters: {},
+  filters: {
+    countryCode: 'np',
+  },
   updateFilter() {},
   sort: {},
   updateSort() {},
@@ -56,7 +58,10 @@ export const FilterProvider = ({
   const isLandingFeedPage = useMatch(getPath('landingFeed'))
 
   const location = useLocation()
+  const { countryCode } = useParams()
   const navigate = useNavigate()
+
+  console.log('checking params', countryCode)
 
   const updateFilter = (value: Partial<FilterType>) => {
     if (isLandingFeedPage && !isLoggedIn) {
