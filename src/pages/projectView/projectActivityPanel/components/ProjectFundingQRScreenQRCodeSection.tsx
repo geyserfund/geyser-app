@@ -324,11 +324,10 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
         >
           <FaBitcoin fontSize={'120px'} />
           <Text fontSize={'10px'} fontWeight={400}>
-            Scan this QR code to fund with Bitcoin on any wallet (on-chain or
-            lightning). If you are paying on-chain, make sure to send the exact
-            amount, otherwise it will not be displayed in the activity feed. For
-            on-chain, the transaction will be acknowledged immediately with a
-            success screen and will be confirmed after 1 on-chain confirmation.
+            Fund with any on-chain or lightning wallet. If you are paying
+            on-chain, make sure to send the exact amount, otherwise it will not
+            be displayed. The transaction will be confirmed after 1
+            confirmation.
           </Text>
         </HStack>
         {renderQrBox()}
