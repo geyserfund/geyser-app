@@ -76,8 +76,8 @@ export const SuccessScreen = ({
       }}
       spacing={4}
       width="100%"
-      height="100%"
-      overflowY="hidden"
+      height={{ base: 'calc(100vh - 115px)', md: '100%' }}
+      overflow="hidden"
       position="relative"
       backgroundColor="primary.400"
       alignItems="center"
@@ -89,7 +89,7 @@ export const SuccessScreen = ({
         borderRadius="50%"
         position="absolute"
         right="10px"
-        top="-10px"
+        top="-20px"
         onClick={handleCloseButton}
       />
 
