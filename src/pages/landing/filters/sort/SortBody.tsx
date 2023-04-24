@@ -1,7 +1,6 @@
 import { MenuItem } from '@chakra-ui/react'
 
-import { useFilterContext } from '../../../../context'
-import { OrderByOptions } from '../../../../types'
+import { SortType, useFilterContext } from '../../../../context'
 import { disableSortByTrending, getCurrentSelection } from './sortSelection'
 
 export enum SortOptions {
@@ -11,16 +10,16 @@ export enum SortOptions {
 }
 
 export const SortBody = () => {
-  const { sort, filters, updateFilter, updateSort } = useFilterContext()
+  const { filters, updateFilter } = useFilterContext()
 
   const onSortSelect = (value: SortOptions) => {
     switch (value) {
       case SortOptions.mostRecentProjects:
-        updateSort({ createdAt: OrderByOptions.Desc })
+        updateFilter({ sort: SortType.createdAt })
         break
 
       case SortOptions.mostFundedAllTime:
-        updateSort({ balance: OrderByOptions.Desc })
+        updateFilter({ sort: SortType.balance })
         break
 
       default:
@@ -29,8 +28,8 @@ export const SortBody = () => {
           type: undefined,
           region: undefined,
           countryCode: undefined,
+          sort: SortType.recent,
         })
-        updateSort({ recent: true })
         break
     }
   }
@@ -52,7 +51,7 @@ export const SortBody = () => {
           <MenuItem
             key={value}
             backgroundColor={
-              getCurrentSelection(sort) === value
+              getCurrentSelection(filters.sort) === value
                 ? 'brand.neutral100'
                 : undefined
             }

@@ -1,15 +1,28 @@
 import { useCallback } from 'react'
-import { Outlet } from 'react-router-dom'
 
 import { StickToTop } from '../../../components/layouts'
-import { useFilterContext } from '../../../context'
+import { FilterType, SortType, useFilterContext } from '../../../context'
 import { checkKeyValueExists, useMobileMode } from '../../../utils'
 import { FilterBySearch } from '../filters/FilterBySearch'
 import { MobileTopBar } from '../filters/mobile/MobileTopBar'
-import { LandingPageDefaultView, PaginatedView, TrendingView } from './views'
+import { DefaultView, PaginatedView, TrendingView } from './views'
 
 export const LandingPageProjects = () => {
   const isMobileMode = useMobileMode()
+
+  const { filters } = useFilterContext()
+
+  const renderView = useCallback(() => {
+    if (checkIfRenderFilter(filters)) {
+      if (filters.sort === SortType.recent) {
+        return <TrendingView />
+      }
+
+      return <PaginatedView />
+    }
+
+    return <DefaultView />
+  }, [filters])
 
   return (
     <>
@@ -27,7 +40,22 @@ export const LandingPageProjects = () => {
           <FilterBySearch />
         </>
       )}
-      <Outlet />
+      {renderView()}
     </>
   )
+}
+
+export const checkIfRenderFilter = (filters: FilterType) => {
+  if (
+    checkKeyValueExists(
+      filters,
+      ['countryCode', 'region', 'search', 'status', 'type', 'recent'],
+      'any',
+    ) ||
+    (filters.tagIds && filters.tagIds.length > 0)
+  ) {
+    return true
+  }
+
+  return false
 }
