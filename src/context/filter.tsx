@@ -124,7 +124,7 @@ export const FilterProvider = ({
     let newfilters = {} as FilterType
 
     if (checkIfRenderFilter(value)) {
-      if (!filters.sort) {
+      if (!filters.sort && !isLandingFeedPage) {
         newfilters = {
           ...filters,
           recent: undefined,
