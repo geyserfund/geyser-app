@@ -345,24 +345,26 @@ export const GeneratingInvoice = ({
 
   return (
     <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
-      <VStack>
-        <Loader />
-        <Text>Generating Invoice</Text>
-      </VStack>
-
-      {isOpen && (
-        <VStack>
-          <Body2>
-            Generating invoice is taking too long, if this continues please
-            refresh the invoice.
+      {isOpen ? (
+        <VStack w="full" alignItems="center">
+          <Body2 bold textAlign="center">
+            Generating an invoice is taking longer than expected
           </Body2>
+          <Body2>Click refresh to try again</Body2>
           <Button
-            variant="primary"
+            variant="outlined"
+            size="sm"
+            borderRadius="40px"
             leftIcon={<IoMdRefresh />}
             onClick={handleRefresh}
           >
-            refresh
+            REFRESH
           </Button>
+        </VStack>
+      ) : (
+        <VStack>
+          <Loader />
+          <Text>Generating Invoice</Text>
         </VStack>
       )}
     </VStack>
