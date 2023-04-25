@@ -33,39 +33,22 @@ export const getFeaturedProject = () => {
 }
 
 const productionTagsList = [
-  { label: 'bitcoin-education', id: 9 },
-
-  { label: 'bitcoin-culture', id: 6 },
-
-  { label: 'bitcoin-community', id: 13 },
-
-  { label: 'games', id: 19 },
-
-  { label: 'artists', id: 39 },
-
   { label: 'films', id: 57 },
-
-  { label: 'meetup', id: 68 },
-
-  { label: 'translation', id: 37 },
-
-  { label: 'nostr', id: 2 },
-
-  { label: 'open-source', id: 4 },
-
-  { label: 'podcasts', id: 7 },
-
-  { label: 'developers', id: 3 },
-
-  { label: 'giveaways', id: 40 },
-
-  { label: 'earn', id: 42 },
-
+  { label: 'collectibles', id: 97 },
+  { label: 'orange-pilling', id: 10 },
+  { label: 'economics', id: 77 },
+  { label: 'bitcoin-films', id: 134 },
   { label: 'maker', id: 49 },
-
-  { label: 'bitcoin-book', id: 70 },
-
+  { label: 'games', id: 19 },
+  { label: 'shop', id: 52 },
+  { label: 'podcasts', id: 7 },
+  { label: 'translation', id: 37 },
+  { label: 'humanitarian', id: 15 },
+  { label: 'open-source', id: 4 },
+  { label: 'developers', id: 3 },
   { label: 'events', id: 1 },
-
+  { label: 'media', id: 8 },
   { label: 'sports', id: 43 },
+  { label: 'earn', id: 42 },
+  { label: 'creative', id: 75 },
 ]

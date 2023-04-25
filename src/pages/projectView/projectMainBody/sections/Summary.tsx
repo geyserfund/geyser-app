@@ -116,12 +116,7 @@ export const Summary = () => {
               justifyContent="space-between"
               overflow="hidden"
             >
-              <Text
-                fontSize="30px"
-                fontWeight={700}
-                wordBreak="break-all"
-                isTruncated
-              >
+              <Text fontSize="30px" fontWeight={700} wordBreak="break-all">
                 {project.title}
               </Text>
 

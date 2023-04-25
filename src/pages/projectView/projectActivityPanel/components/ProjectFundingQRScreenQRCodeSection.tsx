@@ -2,12 +2,11 @@ import {
   Box,
   Button,
   HStack,
-  HTMLChakraProps,
   Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BiRefresh } from 'react-icons/bi'
 import { BsExclamationCircle } from 'react-icons/bs'
 import { FaBitcoin, FaCopy } from 'react-icons/fa'
@@ -18,7 +17,6 @@ import { QRCode } from 'react-qrcode-logo'
 import LogoPrimary from '../../../../assets/logo-brand.svg'
 import LogoDark from '../../../../assets/logo-dark.svg'
 import { Body2 } from '../../../../components/typography'
-import { ButtonComponent } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { UseFundingFlowReturn } from '../../../../hooks'
 import { colors } from '../../../../styles'
@@ -26,6 +24,7 @@ import {
   FundingStatus,
   InvoiceStatus,
 } from '../../../../types/generated/graphql'
+import { getBip21Invoice } from '../../../../utils/lightning/bip21'
 
 type Props = {
   fundingFlow: UseFundingFlowReturn
@@ -97,8 +96,12 @@ const InvoiceErrorView = ({
 }
 
 export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
-  const [hasCopiedQRCode, setHasCopiedQRCode] = useState(false)
-  const [errorFromRefresh, setErrorFromRefresh] = useState<string | null>(null)
+  const [hasCopiedLightning, setHasCopiedLightning] = useState(false)
+  const [hasCopiedOnchain, setHasCopiedOnchain] = useState(false)
+
+  const [lightningAddress, setLightningAddress] = useState<string>('')
+  const [onchainAddress, setOnchainAddress] = useState<string>('')
+  const [fallbackAddress, setFallbackAddress] = useState<string>('')
 
   const {
     fundingTx,
@@ -136,82 +139,89 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   }, [
     invoiceRefreshLoading,
     fundingRequestLoading,
-    fundingTx.invoiceStatus,
-    fundingTx.status,
-    weblnErrored,
-    errorFromRefresh,
-    invoiceRefreshErrored,
     fundingRequestErrored,
+    fundingTx.status,
+    fundingTx.invoiceStatus,
+    invoiceRefreshErrored,
+    hasWebLN,
+    weblnErrored,
   ])
 
-  const value = useMemo(() => {
-    // QUESTION: What should we do if the `paymentRequest` property returned
-    // from the `fundingInvoiceRefresh` mutation is null?
-
+  useEffect(() => {
     const { id, paymentRequest, address, amount } = fundingTx
 
     if (id === 0) {
-      return ''
+      setOnchainAddress('')
+      setLightningAddress('')
+      setFallbackAddress('')
+      return
     }
 
-    let value
-    if ((!address && !paymentRequest) || !amount) {
-      setErrorFromRefresh('Could not fetch funding data')
-    }
+    setFallbackAddress(getBip21Invoice(amount, paymentRequest, address))
+    setOnchainAddress(address || '')
+    setLightningAddress(paymentRequest || '')
+  }, [
+    fundingTx,
+    fundingTx.paymentRequest,
+    fundingTx.address,
+    refreshFundingInvoice,
+  ])
 
-    const btcAmount = amount / 10 ** 8
-
-    // If no on-chain address could be generated, only show the payment request
-    if (!address) {
-      value = paymentRequest
-    }
-
-    // If no payment request could be generated, only show the on-chain option
-    if (!paymentRequest) {
-      value = `bitcoin:${address}?amount=${btcAmount}`
-    }
-
-    value = `bitcoin:${address}?amount=${btcAmount}&lightning=${paymentRequest}`
-    return value
-  }, [fundingTx, fundingTx.paymentRequest, fundingTx.address])
-
-  const handleCopyButtonTapped = () => {
-    navigator.clipboard.writeText(value)
-
-    setHasCopiedQRCode(true)
-
+  const onCopyLightning = useCallback(() => {
+    navigator.clipboard.writeText(lightningAddress)
+    setHasCopiedLightning(true)
     setTimeout(() => {
-      setHasCopiedQRCode(false)
+      setHasCopiedLightning(false)
     }, 500)
-  }
+  }, [lightningAddress])
 
-  const PaymentRequestCopyButton = ({ ...rest }: HTMLChakraProps<'button'>) => {
+  const onCopyOnchain = useCallback(() => {
+    navigator.clipboard.writeText(onchainAddress)
+    setHasCopiedOnchain(true)
+    setTimeout(() => {
+      setHasCopiedOnchain(false)
+    }, 500)
+  }, [onchainAddress])
+
+  const PaymentRequestCopyButton = useCallback(() => {
     return (
-      <ButtonComponent
-        w="full"
-        onClick={handleCopyButtonTapped}
-        _disabled={{
-          opacity: hasCopiedQRCode ? '1' : '0.4',
-          pointerEvents: 'none',
-        }}
-        backgroundColor={hasCopiedQRCode ? 'brand.bgWhite' : 'brand.primary400'}
-        borderColor={hasCopiedQRCode ? 'brand.neutral200' : 'none'}
-        borderWidth={hasCopiedQRCode ? '1px' : '0'}
-        {...rest}
+      <HStack
+        width="100%"
+        visibility={
+          qrDisplayState === QRDisplayState.AWAITING_PAYMENT
+            ? 'visible'
+            : 'hidden'
+        }
       >
-        <HStack spacing={4}>
-          {hasCopiedQRCode ? (
-            <RiLinkUnlink fontSize={'2em'} />
-          ) : (
-            <FaCopy fontSize={'2em'} />
-          )}
-          <Text>{hasCopiedQRCode ? 'Copied' : 'Copy'}</Text>
-        </HStack>
-      </ButtonComponent>
+        <Button
+          leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
+          minWidth="50%"
+          width="50%"
+          onClick={onCopyLightning}
+          variant="contained"
+        >
+          <Text>{hasCopiedLightning ? 'Copied!' : 'Lightning invoice'}</Text>
+        </Button>
+        <Button
+          leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
+          minWidth="50%"
+          width="50%"
+          onClick={onCopyOnchain}
+          variant="contained"
+        >
+          <Text>{hasCopiedOnchain ? 'Copied!' : 'Onchain invoice'}</Text>
+        </Button>
+      </HStack>
     )
-  }
+  }, [
+    hasCopiedLightning,
+    hasCopiedOnchain,
+    onCopyLightning,
+    onCopyOnchain,
+    qrDisplayState,
+  ])
 
-  const renderQrBox = () => {
+  const renderQrBox = useCallback(() => {
     switch (qrDisplayState) {
       case QRDisplayState.AWAITING_PAYMENT:
         return (
@@ -222,10 +232,10 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           */
           <VStack>
             <Box borderRadius={'4px'} borderWidth={'2px'} padding={'2px'}>
-              {hasCopiedQRCode ? (
+              {hasCopiedLightning || hasCopiedOnchain ? (
                 <Box borderColor={colors.primary}>
                   <QRCode
-                    value={value}
+                    value={fallbackAddress}
                     size={208}
                     bgColor={colors.bgWhite}
                     fgColor={colors.primary}
@@ -238,12 +248,9 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                   />
                 </Box>
               ) : (
-                <Box
-                  visibility={!hasCopiedQRCode ? 'visible' : 'hidden'}
-                  borderColor={colors.textBlack}
-                >
+                <Box borderColor={colors.textBlack}>
                   <QRCode
-                    value={value}
+                    value={fallbackAddress}
                     size={208}
                     bgColor={colors.bgWhite}
                     fgColor={colors.textBlack}
@@ -286,7 +293,14 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
       default:
         return <GeneratingInvoice refreshInvoice={refreshFundingInvoice} />
     }
-  }
+  }, [
+    error,
+    fallbackAddress,
+    hasCopiedLightning,
+    hasCopiedOnchain,
+    qrDisplayState,
+    refreshFundingInvoice,
+  ])
 
   return (
     <VStack spacing={4}>
@@ -299,23 +313,15 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
         >
           <FaBitcoin fontSize={'120px'} />
           <Text fontSize={'10px'} fontWeight={400}>
-            Scan this QR code to fund with Bitcoin on any wallet (on-chain or
-            lightning). If you are paying on-chain, make sure to send the exact
-            amount, otherwise it will not be displayed in the activity feed. For
-            on-chain, the transaction will be acknowledged immediately with a
-            success screen and will be confirmed after 1 on-chain confirmation.
+            Fund with any on-chain or lightning wallet. If you are paying
+            on-chain, make sure to send the exact amount, otherwise it will not
+            be displayed. The transaction will be confirmed after 1
+            confirmation.
           </Text>
         </HStack>
         {renderQrBox()}
       </VStack>
-
-      <PaymentRequestCopyButton
-        visibility={
-          qrDisplayState === QRDisplayState.AWAITING_PAYMENT
-            ? 'visible'
-            : 'hidden'
-        }
-      />
+      <PaymentRequestCopyButton />
     </VStack>
   )
 }
@@ -339,24 +345,26 @@ export const GeneratingInvoice = ({
 
   return (
     <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
-      <VStack>
-        <Loader />
-        <Text>Generating Invoice</Text>
-      </VStack>
-
-      {isOpen && (
-        <VStack>
-          <Body2>
-            Generating invoice is taking too long, if this continues please
-            refresh the invoice.
+      {isOpen ? (
+        <VStack w="full" alignItems="center">
+          <Body2 bold textAlign="center">
+            Generating an invoice is taking longer than expected
           </Body2>
+          <Body2>Click refresh to try again</Body2>
           <Button
-            variant="primary"
+            variant="outlined"
+            size="sm"
+            borderRadius="40px"
             leftIcon={<IoMdRefresh />}
             onClick={handleRefresh}
           >
-            refresh
+            REFRESH
           </Button>
+        </VStack>
+      ) : (
+        <VStack>
+          <Loader />
+          <Text>Generating Invoice</Text>
         </VStack>
       )}
     </VStack>
