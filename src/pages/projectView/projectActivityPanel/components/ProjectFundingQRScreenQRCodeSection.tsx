@@ -157,8 +157,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
       return
     }
 
-    setFallbackAddress(getBip21Invoice(amount, paymentRequest, address))
-    setOnchainAddress(address || '')
+    setFallbackAddress(getBip21Invoice(amount, address, paymentRequest))
+    setOnchainAddress(getBip21Invoice(amount, address))
     setLightningAddress(paymentRequest || '')
   }, [
     fundingTx,
