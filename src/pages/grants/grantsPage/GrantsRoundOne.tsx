@@ -63,8 +63,12 @@ const grants = [
 
 export const GrantsRoundOne = ({
   applicants,
+  fundingOpenStartDate,
+  fundingOpenEndDate,
 }: {
   applicants?: GrantApplicant[]
+  fundingOpenStartDate: number
+  fundingOpenEndDate: number
 }) => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
@@ -236,6 +240,8 @@ export const GrantsRoundOne = ({
                 applicants={applicants}
                 canVote={false}
                 isClosed={true}
+                fundingOpenEndDate={fundingOpenEndDate}
+                fundingOpenStartDate={fundingOpenStartDate}
               />
             </Box>
           ) : null}

@@ -81,15 +81,25 @@ export const GrantPage = () => {
         ) as Array<GrantApplicant>)
       : []
 
+  const fundingOpenStatus = grant.statuses.find(
+    (s) => s.status === GrantStatusEnum.FundingOpen,
+  )
+
   if (grant.name === 'grant-round-001') {
-    return <GrantsRoundOne applicants={applicants} />
+    return (
+      <GrantsRoundOne
+        fundingOpenEndDate={fundingOpenStatus?.endAt}
+        fundingOpenStartDate={fundingOpenStatus?.startAt}
+        applicants={applicants}
+      />
+    )
   }
 
   if (grant.name === 'grant-round-002') {
     return (
       <GrantsRoundTwo
-        isLoading={loading}
-        sponsors={grant.sponsors}
+        fundingOpenEndDate={fundingOpenStatus?.endAt}
+        fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
       />
     )
@@ -113,10 +123,6 @@ export const GrantPage = () => {
     grant.status !== GrantStatusEnum.ApplicationsOpen
 
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
-
-  const fundingOpenStatus = grant.statuses.find(
-    (s) => s.status === GrantStatusEnum.FundingOpen,
-  )
 
   return (
     <PageContainer title={grant.title} image={grant.image}>
