@@ -57,12 +57,12 @@ export const ProjectProvider = ({
   const { user } = useAuthContext()
 
   useEffect(() => {
-    if (project.id && project.owners[0].user.id === user.id) {
+    if (project.id && project.owners[0]?.user.id === user.id) {
       setIsProjectOwner(true)
     } else {
       setIsProjectOwner(false)
     }
-  }, [project.id, user])
+  }, [project.id, project.owners, user])
 
   return (
     <ProjectContext.Provider

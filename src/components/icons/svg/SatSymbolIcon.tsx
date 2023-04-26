@@ -6,7 +6,6 @@ export const SatSymbolIcon = ({
 }: IconProps & { tilted?: boolean }) => {
   return (
     <Icon
-      mb={1}
       transform={tilted ? 'rotate(15deg)' : undefined}
       viewBox="0 0 360 360"
       fill={props.color || 'black'}
