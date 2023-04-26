@@ -24,6 +24,7 @@ interface Props {
   canVote: boolean
   title?: string
   isClosed?: boolean
+  fundingOpenStartDate: number
 }
 
 const useStyles = createUseStyles({
@@ -40,6 +41,7 @@ const useStyles = createUseStyles({
 })
 
 export const CommunityVoting = ({
+  fundingOpenStartDate,
   applicants,
   canVote,
   title,
@@ -136,25 +138,30 @@ export const CommunityVoting = ({
             </Box>
             {canVote && (
               <Box pl={2} filter="opacity(0.4)">
-                {project.funders?.filter(Boolean).map(
-                  (funder) =>
-                    funder && (
-                      <AvatarElement
-                        key={funder.id}
-                        width="28px"
-                        height="28px"
-                        wrapperProps={{
-                          display: 'inline-block',
-                          marginLeft: '-5px',
-                          marginTop: 2,
-                        }}
-                        avatarOnly
-                        borderRadius="50%"
-                        seed={funder.id}
-                        user={funder.user}
-                      />
-                    ),
-                )}
+                {project.funders
+                  .filter(
+                    (funder) =>
+                      funder && funder.confirmedAt > fundingOpenStartDate,
+                  )
+                  .map(
+                    (funder) =>
+                      funder && (
+                        <AvatarElement
+                          key={funder.id}
+                          width="28px"
+                          height="28px"
+                          wrapperProps={{
+                            display: 'inline-block',
+                            marginLeft: '-5px',
+                            marginTop: 2,
+                          }}
+                          avatarOnly
+                          borderRadius="50%"
+                          seed={funder.id}
+                          user={funder.user}
+                        />
+                      ),
+                  )}
               </Box>
             )}
             {isMobile && (

@@ -141,6 +141,11 @@ export const GrantPage = () => {
             title={getTitle()}
             applicants={applicants}
             canVote={canVote}
+            fundingOpenStartDate={
+              grant.statuses.find(
+                (s) => s.status === GrantStatusEnum.FundingOpen,
+              )?.endAt
+            }
             isClosed={grant.status === GrantStatusEnum.Closed}
           />
         )}
