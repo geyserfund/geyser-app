@@ -18,12 +18,12 @@ import {
   GrantsRound2Url,
 } from '../../../constants'
 import { fonts } from '../../../styles'
-import { GrantApplicant, Maybe, Sponsor } from '../../../types'
+import { GrantApplicant } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { GrantWinnerAnnouncement } from '../components'
 import { BoardMembers } from '../components/BoardMembers'
-import { CommunityVoting } from './sections/CommunityVoting'
 import { GrantDevelopers } from '../components/GrantDevs'
+import { CommunityVoting } from './sections/CommunityVoting'
 import { MoreInfo } from './sections/MoreInfo'
 
 export type GrantSponsor = {
@@ -33,13 +33,13 @@ export type GrantSponsor = {
 }
 
 export const GrantsRoundTwo = ({
-  isLoading,
-  sponsors,
+  fundingOpenStartDate,
+  fundingOpenEndDate,
   applicants,
 }: {
-  isLoading: boolean
+  fundingOpenStartDate: number
+  fundingOpenEndDate: number
   applicants?: GrantApplicant[]
-  sponsors?: Maybe<Sponsor>[]
 }) => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
@@ -163,6 +163,8 @@ export const GrantsRoundTwo = ({
                   applicants={applicants}
                   canVote={false}
                   isClosed={true}
+                  fundingOpenEndDate={fundingOpenEndDate}
+                  fundingOpenStartDate={fundingOpenStartDate}
                 />
               </Box>
             )}
