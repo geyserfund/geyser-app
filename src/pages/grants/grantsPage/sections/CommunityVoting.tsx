@@ -25,6 +25,7 @@ interface Props {
   title?: string
   isClosed?: boolean
   fundingOpenStartDate: number
+  fundingOpenEndDate: number
 }
 
 const useStyles = createUseStyles({
@@ -42,6 +43,7 @@ const useStyles = createUseStyles({
 
 export const CommunityVoting = ({
   fundingOpenStartDate,
+  fundingOpenEndDate,
   applicants,
   canVote,
   title,
@@ -141,7 +143,9 @@ export const CommunityVoting = ({
                 {project.funders
                   .filter(
                     (funder) =>
-                      funder && funder.confirmedAt > fundingOpenStartDate,
+                      funder &&
+                      funder.confirmedAt > fundingOpenStartDate &&
+                      funder.confirmedAt <= fundingOpenEndDate,
                   )
                   .map(
                     (funder) =>
