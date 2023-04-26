@@ -25,7 +25,7 @@ export const RewardActivityItem = ({
     <VStack w="full" alignItems="start">
       <HStack w="full" justifyContent="start">
         <LinkableAvatar
-          imageSrc={`${owner.imageUrl}`}
+          imageSrc={owner.imageUrl || ''}
           avatarUsername={owner.username}
           userProfileID={owner.id}
           imageSize={'24px'}
