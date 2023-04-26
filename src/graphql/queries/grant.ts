@@ -62,6 +62,7 @@ export const QUERY_GRANT = gql`
           description
           funders {
             id
+            confirmedAt
             user {
               id
               username
