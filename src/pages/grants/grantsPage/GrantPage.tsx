@@ -144,7 +144,7 @@ export const GrantPage = () => {
             fundingOpenStartDate={
               grant.statuses.find(
                 (s) => s.status === GrantStatusEnum.FundingOpen,
-              )?.endAt
+              )?.startAt
             }
             isClosed={grant.status === GrantStatusEnum.Closed}
           />
