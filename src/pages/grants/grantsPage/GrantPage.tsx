@@ -114,6 +114,10 @@ export const GrantPage = () => {
 
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
 
+  const fundingOpenStatus = grant.statuses.find(
+    (s) => s.status === GrantStatusEnum.FundingOpen,
+  )
+
   return (
     <PageContainer title={grant.title} image={grant.image}>
       <VStack w="full" spacing="30px" alignItems="start">
@@ -141,11 +145,8 @@ export const GrantPage = () => {
             title={getTitle()}
             applicants={applicants}
             canVote={canVote}
-            fundingOpenStartDate={
-              grant.statuses.find(
-                (s) => s.status === GrantStatusEnum.FundingOpen,
-              )?.startAt
-            }
+            fundingOpenEndDate={fundingOpenStatus?.endAt}
+            fundingOpenStartDate={fundingOpenStatus?.startAt}
             isClosed={grant.status === GrantStatusEnum.Closed}
           />
         )}
