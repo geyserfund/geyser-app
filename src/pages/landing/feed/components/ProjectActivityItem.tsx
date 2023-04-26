@@ -17,13 +17,15 @@ export const ProjectActivityItem = ({
   return (
     <VStack w="full" alignItems="start">
       <HStack w="full" justifyContent="start">
-        <LinkableAvatar
-          imageSrc={owner.imageUrl || ''}
-          avatarUsername={owner.username}
-          userProfileID={owner.id}
-          imageSize={'24px'}
-          textColor="brand.neutral600"
-        />
+        {owner ? (
+          <LinkableAvatar
+            imageSrc={owner.imageUrl || ''}
+            avatarUsername={owner.username}
+            userProfileID={owner.id}
+            imageSize={'24px'}
+            textColor="brand.neutral600"
+          />
+        ) : null}
         <Body2>launched a new Project</Body2>
       </HStack>
       <LandingProjectCard project={project} isMobile />
