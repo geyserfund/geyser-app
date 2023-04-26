@@ -19,18 +19,20 @@ export const RewardActivityItem = ({
   reward: ProjectReward
   dateTime?: string
 }) => {
-  const owner = reward.project.owners[0].user
+  const owner = reward.project.owners[0]?.user
 
   return (
     <VStack w="full" alignItems="start">
       <HStack w="full" justifyContent="start">
-        <LinkableAvatar
-          imageSrc={`${owner.imageUrl}`}
-          avatarUsername={owner.username}
-          userProfileID={owner.id}
-          imageSize={'24px'}
-          textColor="brand.neutral600"
-        />
+        {owner ? (
+          <LinkableAvatar
+            imageSrc={owner.imageUrl || ''}
+            avatarUsername={owner.username}
+            userProfileID={owner.id}
+            imageSize={'24px'}
+            textColor="brand.neutral600"
+          />
+        ) : null}
         <Body2>created a new reward for</Body2>
         <Body2
           as={Link}

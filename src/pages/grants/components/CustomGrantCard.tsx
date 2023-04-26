@@ -42,7 +42,13 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
       <ListText mx={4} subtitle="APPLICANTS" isSatLogo={false}>
         {value ||
           grant.applicants.filter(
-            (applicant) => applicant?.status === GrantApplicantStatus.Accepted,
+            (applicant) =>
+              applicant &&
+              [
+                GrantApplicantStatus.Accepted,
+                GrantApplicantStatus.Pending,
+                GrantApplicantStatus.Funded,
+              ].includes(applicant.status),
           ).length ||
           0}
       </ListText>
