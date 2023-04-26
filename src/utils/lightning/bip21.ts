@@ -2,22 +2,23 @@ import { SATOSHIS_IN_BTC } from '../../constants'
 
 export const getBip21Invoice = (
   amountInSats: number,
-  lnAddress?: string | null,
   onChainAddress?: string | null,
+  lnAddress?: string | null,
 ) => {
   if (!onChainAddress) {
     return lnAddress || ''
   }
 
-  if (isFinite(amountInSats)) {
-    const btcAmount = Number(amountInSats / SATOSHIS_IN_BTC).toFixed(8)
+  const btcAmount = Number(amountInSats / SATOSHIS_IN_BTC).toFixed(8)
+  const btcAddress = `bitcoin:${onChainAddress}?amount=${btcAmount}`
 
+  if (isFinite(amountInSats)) {
     if (!lnAddress) {
-      return `bitcoin:${onChainAddress}?amount=${btcAmount}`
+      return btcAddress
     }
 
-    return `bitcoin:${onChainAddress}?amount=${btcAmount}&lightning=${lnAddress}`
+    return `${btcAddress}&lightning=${lnAddress}`
   }
 
-  return onChainAddress
+  return btcAddress
 }
