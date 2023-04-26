@@ -21,7 +21,7 @@ import { SectionNav } from './sections/SectionNav'
 type Rules = string
 
 type Styles = {
-  isMobile: boolean
+  isMobile?: boolean
   inView: boolean
   fadeStarted?: boolean
 }

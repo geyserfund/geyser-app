@@ -1,6 +1,6 @@
 import { FundingMethod, FundingTx } from '../../types/generated/graphql'
 
-export interface FundingTxWithCount extends FundingTx {
+export interface FundingTxWithCount extends Partial<FundingTx> {
   count?: number
 }
 

@@ -32,11 +32,16 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
     const missingPermissions: string[] = []
 
     Object.keys(requiredPermissions).forEach((key) => {
+      const required = requiredPermissions[key]
+      if (!required) {
+        return
+      }
+
       if (!permissions[key]) {
-        missingPermissions.push(`${key}: ${requiredPermissions[key].join()}`)
+        missingPermissions.push(`${key}: ${required.join()}`)
       } else {
-        const missingPermission = requiredPermissions[key]
-          .filter((permission) => !permissions[key].includes(permission))
+        const missingPermission = required
+          .filter((permission) => !permission.includes(permission))
           .join()
         if (missingPermission) {
           missingPermissions.push(`${key}: ${missingPermission}`)
@@ -56,14 +61,14 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
       if (!requiredPermissions[key]) {
         extraPermissions.push(`${key}: ${permissions[key].join()}`)
       } else {
-        const extraPermission = permissions[key]
-          .filter(
-            (permission: string) =>
-              !requiredPermissions[key].includes(permission),
-          )
-          .join()
-        if (extraPermission) {
-          missingPermissions.push(`${key}: ${extraPermission}`)
+        const required = requiredPermissions[key]
+        if (required) {
+          const extraPermission = permissions[key]
+            .filter((permission: string) => !required.includes(permission))
+            .join()
+          if (extraPermission) {
+            missingPermissions.push(`${key}: ${extraPermission}`)
+          }
         }
       }
     })
