@@ -78,7 +78,7 @@ export const FeaturedProjectCard = ({
             wrapperProps={{ minHeight: '20px' }}
             noLink
             rounded="full"
-            user={project.owners[0].user}
+            user={project.owners[0]?.user}
           />
           <H3
             color="brand.neutral800"

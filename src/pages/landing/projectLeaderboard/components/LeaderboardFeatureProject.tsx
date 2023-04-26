@@ -45,7 +45,7 @@ export const LeaderboardFeatureProject = ({
       <Body1 bold color="brand.neutral9000" width="100%" isTruncated>
         {project.title}
       </Body1>
-      <AvatarElement noLink borderRadius="50%" user={project.owners[0].user} />
+      <AvatarElement noLink borderRadius="50%" user={project.owners[0]?.user} />
       <Body2
         color="neutral.800"
         noOfLines={3}
