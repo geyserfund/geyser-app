@@ -28,7 +28,9 @@ export const ProjectBackButton = () => {
 
   return (
     <Box>
-      <HStack padding="10px 10px 2px 10px">
+      <HStack
+        padding={{ base: '10px 10px 2px 10px', md: '20px 10px 2px 10px' }}
+      >
         <Button
           variant="outlined"
           size="sm"

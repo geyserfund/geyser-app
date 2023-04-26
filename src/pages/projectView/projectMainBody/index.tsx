@@ -55,14 +55,12 @@ const useStyles = createUseStyles<Rules, Styles>({
 type Props = {
   project: Project
   fundState: IFundingStages
-  setFundState: React.Dispatch<React.SetStateAction<IFundingStages>>
   updateReward: UpdateReward
 }
 
 export const ProjectMainBody = ({
   project,
   fundState,
-  setFundState,
   updateReward,
 }: Props) => {
   const isMobile = useMobileMode()
