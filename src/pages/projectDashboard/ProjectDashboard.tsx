@@ -65,7 +65,7 @@ export const ProjectDashboard = () => {
       onCompleted(data) {
         const { project } = data
         if (project) {
-          if (project.owners[0].user.id !== user.id) {
+          if (project.owners[0]?.user.id !== user.id) {
             navigate(getPath('notAuthorized'))
           }
 

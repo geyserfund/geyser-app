@@ -19,7 +19,7 @@ export const RewardActivityItem = ({
   reward: ProjectReward
   dateTime?: string
 }) => {
-  const owner = reward.project.owners[0].user
+  const owner = reward.project.owners[0]?.user
 
   return (
     <VStack w="full" alignItems="start">

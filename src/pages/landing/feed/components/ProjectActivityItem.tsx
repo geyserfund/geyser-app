@@ -12,7 +12,7 @@ export const ProjectActivityItem = ({
   project: Project
   dateTime?: string
 }) => {
-  const owner = project.owners[0].user
+  const owner = project.owners[0]?.user
 
   return (
     <VStack w="full" alignItems="start">
