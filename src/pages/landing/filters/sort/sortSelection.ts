@@ -1,20 +1,16 @@
 import type { FilterType } from '../../../../context'
 import { SortType } from '../../../../context'
-import { OrderByOptions } from '../../../../types'
 import { checkKeyValueExists } from '../../../../utils'
 import { SortOptions } from './SortBody'
 
-export const getCurrentSelection = (sort: SortType) => {
-  if (sort.recent) {
-    return SortOptions.mostFundedThisWeek
-  }
-
-  if (sort.createdAt) {
-    return SortOptions.mostRecentProjects
-  }
-
-  if (sort.balance === OrderByOptions.Desc) {
-    return SortOptions.mostFundedAllTime
+export const getCurrentSelection = (sort?: SortType) => {
+  switch (sort) {
+    case SortType.recent:
+      return SortOptions.mostFundedThisWeek
+    case SortType.createdAt:
+      return SortOptions.mostRecentProjects
+    default:
+      return SortOptions.mostFundedAllTime
   }
 }
 

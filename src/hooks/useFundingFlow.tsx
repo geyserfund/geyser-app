@@ -124,6 +124,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const [invoiceRefreshLoading, setRefreshingInvoice] = useState(false)
 
+  const [fundingInput, setFundingInput] = useState<FundingInput | null>(null)
   const [fundingTx, setFundingTx] = useState<FundingTx>({
     ...initialFunding,
     funder: { ...initialFunding.funder, user },
@@ -295,10 +296,14 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     }
   }, [fundState])
 
-  const requestFunding = async (input: FundingInput) => {
-    gotoNextStage()
-    await fundProject({ variables: { input } })
-  }
+  const requestFunding = useCallback(
+    async (input: FundingInput) => {
+      gotoNextStage()
+      setFundingInput(input)
+      await fundProject({ variables: { input } })
+    },
+    [fundProject, gotoNextStage],
+  )
 
   const [refreshInvoice] = useMutation<
     InvoiceRefreshMutationResponseData,
@@ -338,7 +343,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     }
   }, [fundingTx, refreshInvoice])
 
-  const resetFundingFlow = () => {
+  const resetFundingFlow = useCallback(() => {
     setFundState(fundingStages.initial)
     setFundingRequestErrored(false)
     setInvoiceRefreshErrored(false)
@@ -348,7 +353,16 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       funder: { ...initialFunding.funder, user },
     })
     setAmounts(initialAmounts)
-  }
+  }, [user])
+
+  const retryFundingFlow = useCallback(() => {
+    if (!fundingInput) {
+      return
+    }
+
+    resetFundingFlow()
+    requestFunding(fundingInput)
+  }, [fundingInput, requestFunding, resetFundingFlow])
 
   return {
     fundingRequestErrored,
@@ -359,6 +373,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     fundState,
     amounts,
     fundingTx,
+    retryFundingFlow,
     gotoNextStage,
     resetFundingFlow,
     requestFunding,
