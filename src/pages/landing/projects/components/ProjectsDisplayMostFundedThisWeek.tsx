@@ -1,13 +1,13 @@
 import { useQuery } from '@apollo/client'
 
-import { useFilterContext } from '../../../../context'
+import { SortType, useFilterContext } from '../../../../context'
 import {
   GetProjectsMostFundedOfTheWeekInput,
   ProjectsMostFundedOfTheWeekGet,
   Tag,
 } from '../../../../types'
-import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 import { ProjectDisplayBody } from '../elements'
+import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 import { ProjectsDisplaySkeleton } from './ProjectsDisplay'
 
 interface ProjectDisplayProps {
@@ -19,7 +19,7 @@ const NO_OF_PROJECT_TO_LOAD = 3
 export const ProjectsDisplayMostFundedThisWeek = ({
   tag,
 }: ProjectDisplayProps) => {
-  const { updateFilter, updateSort } = useFilterContext()
+  const { updateFilter } = useFilterContext()
 
   const { data, loading } = useQuery<
     { projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet[] },
@@ -35,11 +35,9 @@ export const ProjectsDisplayMostFundedThisWeek = ({
 
   const onSeeAllClick = () => {
     if (tag) {
-      updateFilter({ tagIds: [tag.id] })
-      updateSort({ recent: true })
+      updateFilter({ tagIds: [tag.id], sort: SortType.recent })
     } else {
-      updateFilter({ recent: true })
-      updateSort({ recent: true })
+      updateFilter({ sort: SortType.recent, recent: true })
     }
   }
 
