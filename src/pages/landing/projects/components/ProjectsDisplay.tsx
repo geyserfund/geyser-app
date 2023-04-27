@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { HStack, Skeleton, Stack, VStack } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
-import { useFilterContext } from '../../../../context'
+import { SortType, useFilterContext } from '../../../../context'
 import {
   OrderByOptions,
   Project,
@@ -44,7 +44,7 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
     if (tag) {
       updateFilter({ tagIds: [tag.id] })
     } else {
-      updateFilter({ recent: true })
+      updateFilter({ recent: true, sort: SortType.recent })
     }
   }
 

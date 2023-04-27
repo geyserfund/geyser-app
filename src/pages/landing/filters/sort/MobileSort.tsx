@@ -19,14 +19,14 @@ import { getCurrentSelection } from './sortSelection'
 type MobileSortProps = AccordionItemProps
 
 export const MobileSort = ({ ...rest }: MobileSortProps) => {
-  const { sort } = useFilterContext()
+  const { filters } = useFilterContext()
   return (
     <AccordionItem {...rest}>
       <AccordionButton paddingY="15px">
         <HStack width="100%">
           <BsSliders fontSize="16px" color={colors.neutral600} />
           <Body1 fontSize="16px" color={colors.neutral800}>
-            {getCurrentSelection(sort)}
+            {getCurrentSelection(filters.sort)}
           </Body1>
         </HStack>
         <AccordionIcon />
@@ -38,7 +38,7 @@ export const MobileSort = ({ ...rest }: MobileSortProps) => {
         maxHeight="500px"
       >
         <Menu isOpen={true}>
-          <SortBody />
+          <SortBody isMobile />
         </Menu>
       </AccordionPanel>
     </AccordionItem>

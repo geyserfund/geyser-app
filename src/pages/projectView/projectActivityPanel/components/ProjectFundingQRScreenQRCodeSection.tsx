@@ -6,7 +6,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BiRefresh } from 'react-icons/bi'
 import { BsExclamationCircle } from 'react-icons/bs'
 import { FaBitcoin, FaCopy } from 'react-icons/fa'
@@ -25,6 +25,8 @@ import {
   InvoiceStatus,
 } from '../../../../types/generated/graphql'
 import { getBip21Invoice } from '../../../../utils/lightning/bip21'
+
+const FUNDING_REQUEST_TIMEOUT = 45_000
 
 type Props = {
   fundingFlow: UseFundingFlowReturn
@@ -106,13 +108,14 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   const {
     fundingTx,
     fundingRequestErrored,
-    refreshFundingInvoice,
     invoiceRefreshErrored,
     invoiceRefreshLoading,
     fundingRequestLoading,
     hasWebLN,
     weblnErrored,
     error,
+    refreshFundingInvoice,
+    retryFundingFlow,
   } = fundingFlow
 
   const qrDisplayState = useMemo(() => {
@@ -140,8 +143,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     invoiceRefreshLoading,
     fundingRequestLoading,
     fundingRequestErrored,
-    fundingTx.status,
-    fundingTx.invoiceStatus,
+    fundingTx,
     invoiceRefreshErrored,
     hasWebLN,
     weblnErrored,
@@ -291,7 +293,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
         return <FundingErrorView error={error} />
 
       default:
-        return <GeneratingInvoice refreshInvoice={refreshFundingInvoice} />
+        return <GeneratingInvoice refreshInvoice={retryFundingFlow} />
     }
   }, [
     error,
@@ -300,6 +302,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     hasCopiedOnchain,
     qrDisplayState,
     refreshFundingInvoice,
+    retryFundingFlow,
   ])
 
   return (
@@ -333,14 +336,17 @@ export const GeneratingInvoice = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const timeout = useRef<NodeJS.Timeout | undefined>()
+
   useEffect(() => {
-    setTimeout(onOpen, 15000)
-  }, [])
+    timeout.current = setTimeout(onOpen, FUNDING_REQUEST_TIMEOUT)
+    return () => clearTimeout(timeout.current)
+  }, [onOpen])
 
   const handleRefresh = () => {
     refreshInvoice()
     onClose()
-    setTimeout(onOpen, 15000)
+    timeout.current = setTimeout(onOpen, FUNDING_REQUEST_TIMEOUT)
   }
 
   return (
@@ -352,13 +358,14 @@ export const GeneratingInvoice = ({
           </Body2>
           <Body2>Click refresh to try again</Body2>
           <Button
+            textTransform="uppercase"
             variant="outlined"
             size="sm"
             borderRadius="40px"
             leftIcon={<IoMdRefresh />}
             onClick={handleRefresh}
           >
-            REFRESH
+            Refresh
           </Button>
         </VStack>
       ) : (
