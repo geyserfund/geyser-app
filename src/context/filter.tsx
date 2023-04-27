@@ -107,7 +107,6 @@ export const FilterProvider = ({
         }
       }
     })
-
     setSearchParams(newParameters)
   }
 
@@ -156,8 +155,6 @@ export const FilterProvider = ({
     } else if (location.state?.filter) {
       updateFilter(location.state.filter)
       navigate('', { state: null })
-    } else {
-      setUrlParamsFromFilters({})
     }
   }, [location.pathname])
 

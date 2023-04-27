@@ -15,22 +15,43 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
   const onSortSelect = (value: SortOptions) => {
     switch (value) {
       case SortOptions.mostRecentProjects:
-        updateFilter({ recent: isMobile, sort: SortType.createdAt })
+        if (isMobile) {
+          updateFilter({ recent: true, sort: SortType.createdAt })
+        } else {
+          updateFilter({ sort: SortType.createdAt })
+        }
+
         break
 
       case SortOptions.mostFundedAllTime:
-        updateFilter({ recent: isMobile, sort: SortType.balance })
+        if (isMobile) {
+          updateFilter({ recent: true, sort: SortType.balance })
+        } else {
+          updateFilter({ sort: SortType.balance })
+        }
+
         break
 
       default:
-        updateFilter({
-          status: undefined,
-          type: undefined,
-          region: undefined,
-          countryCode: undefined,
-          recent: isMobile,
-          sort: SortType.recent,
-        })
+        if (isMobile) {
+          updateFilter({
+            status: undefined,
+            type: undefined,
+            region: undefined,
+            countryCode: undefined,
+            recent: true,
+            sort: SortType.recent,
+          })
+        } else {
+          updateFilter({
+            status: undefined,
+            type: undefined,
+            region: undefined,
+            countryCode: undefined,
+            sort: SortType.recent,
+          })
+        }
+
         break
     }
   }
