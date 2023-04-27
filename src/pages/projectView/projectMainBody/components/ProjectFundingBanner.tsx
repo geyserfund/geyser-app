@@ -3,7 +3,7 @@ import { forwardRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { QRCode } from 'react-qrcode-logo'
 
-import LogoLight from '../../../../assets/logo-brand.svg'
+import LogoDark from '../../../../assets/logo-dark.svg'
 import { BoltSvgIcon, CurvedArrow } from '../../../../components/icons'
 import { colors } from '../../../../styles'
 
@@ -28,7 +28,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
       <>
         <img
           style={{ display: 'none' }}
-          src={LogoLight}
+          src={LogoDark}
           loading="eager"
           onLoad={() => setLogoReady(true)}
         />
@@ -102,7 +102,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                 >
                   <QRCode
                     qrStyle="dots"
-                    logoImage={LogoLight}
+                    logoImage={LogoDark}
                     eyeRadius={2}
                     logoHeight={60}
                     logoWidth={60}
