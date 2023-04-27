@@ -255,7 +255,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       const nextState = stageList[currentIndex + 1]
       return nextState
     })
-  }, [])
+  }, [setFundState])
 
   useEffect(() => {
     if (fundingStatus && fundingStatus.fundingTx) {
@@ -283,7 +283,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         gotoNextStage()
       }
     }
-  }, [fundingStatus, fundingTx, gotoNextStage])
+  }, [fundingStatus])
 
   useEffect(() => {
     if (
