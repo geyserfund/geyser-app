@@ -15,7 +15,7 @@ import { SortBody } from './SortBody'
 import { getCurrentSelection } from './sortSelection'
 
 export const SortMenu = () => {
-  const { sort } = useFilterContext()
+  const { filters } = useFilterContext()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -23,7 +23,7 @@ export const SortMenu = () => {
       <MenuButton as={Button} size="xs" backgroundColor="brand.neutral100">
         <HStack overflow="hidden">
           <Body2 semiBold isTruncated>
-            {getCurrentSelection(sort)}
+            {getCurrentSelection(filters.sort)}
           </Body2>
           <BsSliders fontSize="16px" />
         </HStack>

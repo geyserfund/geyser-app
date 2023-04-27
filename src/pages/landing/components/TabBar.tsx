@@ -13,10 +13,10 @@ export const TabBar = (props: TabBarProps) => {
   const navigate = useNavigate()
   const { user } = useAuthContext()
 
-  const isCurrentTabProjects = useMatch(getPath('landingPage'))
+  const isCurrentTabActivity = useMatch(getPath('landingFeed'))
 
   const handleProjectsClick = () => {
-    if (isCurrentTabProjects) {
+    if (!isCurrentTabActivity) {
       clearFilter()
       return
     }
@@ -33,7 +33,7 @@ export const TabBar = (props: TabBarProps) => {
       <ButtonComponent
         noBorder
         {...buttonStyles}
-        backgroundColor={isCurrentTabProjects ? 'brand.neutral100' : 'white'}
+        backgroundColor={!isCurrentTabActivity ? 'brand.neutral100' : 'white'}
         onClick={handleProjectsClick}
       >
         Projects
@@ -41,7 +41,7 @@ export const TabBar = (props: TabBarProps) => {
       <ButtonComponent
         noBorder
         {...buttonStyles}
-        backgroundColor={!isCurrentTabProjects ? 'brand.neutral100' : 'white'}
+        backgroundColor={isCurrentTabActivity ? 'brand.neutral100' : 'white'}
         onClick={handleActivityClick}
       >
         {user.imageUrl ? (

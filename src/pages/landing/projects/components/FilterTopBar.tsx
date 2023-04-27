@@ -5,7 +5,7 @@ import { HiOutlineTag } from 'react-icons/hi'
 import { SlLocationPin } from 'react-icons/sl'
 
 import { H3 } from '../../../../components/typography'
-import { useFilterContext } from '../../../../context'
+import { SortType, useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import { colors } from '../../../../styles'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
@@ -20,7 +20,7 @@ interface FilterTopBarProps extends StackProps {
 }
 
 export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
-  const { filters, updateFilter, sort } = useFilterContext()
+  const { filters, updateFilter } = useFilterContext()
   const isMobile = useMobileMode()
 
   const {
@@ -151,12 +151,19 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     }
 
     let value = ''
-    if (sort.balance) {
-      value = 'Most funded all time'
-    } else if (sort.createdAt) {
-      value = 'Most recent projects'
-    } else if (sort.recent) {
-      value = 'Most funded this week'
+
+    switch (filters.sort) {
+      case SortType.balance:
+        value = 'Most funded all time'
+        break
+      case SortType.createdAt:
+        value = 'Most recent projects'
+        break
+      case SortType.recent:
+        value = 'Most funded this week'
+        break
+      default:
+        value = 'Most funded all time'
     }
 
     return <H3 color="brand.primary600">{value}</H3>
