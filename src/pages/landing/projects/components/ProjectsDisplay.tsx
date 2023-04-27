@@ -8,6 +8,7 @@ import {
   Project,
   ProjectsGetQueryInput,
   ProjectsResponse,
+  ProjectStatus,
   Tag,
 } from '../../../../types'
 import { ProjectDisplayBody } from '../elements'
@@ -31,6 +32,7 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
       input: {
         where: {
           tagIds: tag ? [tag.id] : undefined,
+          status: ProjectStatus.Active,
         },
         pagination: { take: NO_OF_PROJECT_TO_LOAD },
         orderBy: [{ createdAt: OrderByOptions.Desc }],
