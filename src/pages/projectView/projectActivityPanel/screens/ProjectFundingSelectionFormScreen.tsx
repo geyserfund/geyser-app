@@ -205,18 +205,19 @@ export const ProjectFundingSelectionFormScreen = ({
                   Rewards
                 </Text>
                 <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
-                  {Object.entries(formState.rewardsByIDAndCount!).map(
-                    ([key, value]) => {
-                      const reward = rewards.find(({ id }) => id === key)
-                      if (reward) {
-                        return (
-                          <Text key={key}>
-                            {value}x {reward.name}
-                          </Text>
-                        )
-                      }
-                    },
-                  )}
+                  {formState.rewardsByIDAndCount &&
+                    Object.entries(formState.rewardsByIDAndCount).map(
+                      ([key, value]) => {
+                        const reward = rewards.find(({ id }) => id === key)
+                        if (reward) {
+                          return (
+                            <Text key={key}>
+                              {value}x {reward.name}
+                            </Text>
+                          )
+                        }
+                      },
+                    )}
                 </VStack>
               </HStack>
             ) : null}
