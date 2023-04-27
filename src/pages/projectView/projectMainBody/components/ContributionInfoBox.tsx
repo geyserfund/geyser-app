@@ -90,7 +90,11 @@ export const ContributionInfoBox = ({
 
   const hadOwnNode = () => {
     const currentProject = project.wallets && project.wallets[0]
-    const { connectionDetails } = currentProject
+    const { connectionDetails } = currentProject || {}
+
+    if (!connectionDetails) {
+      return false
+    }
 
     switch (connectionDetails.__typename) {
       case 'LightningAddressConnectionDetails':

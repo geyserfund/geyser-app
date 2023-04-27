@@ -1,6 +1,6 @@
 import { FundingMethod, FundingTx } from '../../types/generated/graphql'
 
-export interface FundingTxWithCount extends Partial<FundingTx> {
+export interface FundingTxWithCount extends FundingTx {
   count?: number
 }
 
@@ -73,7 +73,7 @@ export const aggregateTransactions = (
       ...sortedTransaction[0],
       amount,
       count: sortedTransaction.length,
-    }
+    } as FundingTx
 
     aggregatedTxs.push(newContribution)
   })

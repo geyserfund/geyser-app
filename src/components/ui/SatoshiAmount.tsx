@@ -32,7 +32,7 @@ export const SatoshiAmount = ({
       let size = 0
 
       if (typeof fontSize === 'string') {
-        size = parseInt(fontSize.split('px')[0], 10)
+        size = Number(fontSize.split('px')?.[0])
       }
 
       return (size / 14) * (scale || 0.4)

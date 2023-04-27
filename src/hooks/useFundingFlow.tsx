@@ -155,6 +155,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     setFundState((currentState) => {
       const currentIndex = stageList.indexOf(currentState)
       const nextState = stageList[currentIndex + 1]
+      if (!nextState) {
+        return currentState
+      }
+
       return nextState
     })
   }, [setFundState])

@@ -3,11 +3,11 @@ import { DateTime, Interval } from 'luxon'
 import { IBadge, IFunder } from '../interfaces'
 import { Funder } from '../types/generated/graphql'
 
-interface IBadges {
-  [threshold: string]: IBadge
-}
+type IBadges<TKey extends string = string> = Record<TKey, IBadge>
 
-const amountBadges: IBadges = {
+type AmountBadges = '21000' | '120000' | '1000000' | '10000000'
+
+const amountBadges: IBadges<AmountBadges> = {
   21000: {
     badge: '🏅',
     description: 'This user funded more than 21,000 sats!',
@@ -26,7 +26,9 @@ const amountBadges: IBadges = {
   },
 }
 
-const roleBadges: IBadges = {
+type RoleBadges = 'funder' | 'earlyFunder'
+
+const roleBadges: IBadges<RoleBadges> = {
   funder: {
     badge: 'Funder',
     description: 'The user funded this project!',
@@ -63,12 +65,15 @@ export const computeFunderBadges = ({
   const funderBadges: IBadge[] = []
 
   // Check if earned amount badge
-  const amountBadgeIndex: string | undefined = Object.keys(amountBadges)
+  const amountBadgeKey: AmountBadges | undefined = Object.keys(amountBadges)
     .reverse()
-    .find((threshold) => amountFunded > Number(threshold))
+    .find((threshold) => amountFunded > Number(threshold)) as AmountBadges
 
-  if (amountBadgeIndex) {
-    funderBadges.push(amountBadges[amountBadgeIndex])
+  if (amountBadgeKey) {
+    const badge = amountBadges[amountBadgeKey]
+    if (badge) {
+      funderBadges.push(badge)
+    }
   }
 
   // Check if early funder

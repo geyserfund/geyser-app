@@ -106,7 +106,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
                 getUSDCentsAmount(reward.cost as Satoshis)
 
           rewardsCost +=
-            cost * newRewardsCountInfo[rewardID as keyof ProjectReward]
+            cost * (newRewardsCountInfo[rewardID as keyof ProjectReward] || 1)
         }
       })
     }

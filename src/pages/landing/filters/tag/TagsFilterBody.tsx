@@ -28,7 +28,9 @@ export const TagsFilterBody = ({
   const isDisabled = tagIds.length >= 3
 
   const handleTagsSelection = (newValue: MultiValue<TagsGetResult>) => {
-    updateFilter({ tagIds: [...tagIds, newValue[0].id] })
+    if (newValue[0]) {
+      updateFilter({ tagIds: [...tagIds, newValue[0].id] })
+    }
   }
 
   const handleInputChange = (newValue: string) => {

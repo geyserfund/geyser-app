@@ -43,24 +43,24 @@ export const ProjectFundingSettings = () => {
   }
 
   const renderWalletConnectionDetails = () => {
-    const { connectionDetails } = projectWallet
-    let castedConnectionDetails
-    switch (connectionDetails.__typename) {
-      case 'LightningAddressConnectionDetails':
-        castedConnectionDetails =
-          connectionDetails as LightningAddressConnectionDetails
+    const { connectionDetails } = projectWallet || {}
 
+    const lndConnectionDetails =
+      connectionDetails as LndConnectionDetailsPrivate
+
+    const lightningConnectionDetails =
+      connectionDetails as LightningAddressConnectionDetails
+
+    switch (connectionDetails?.__typename) {
+      case 'LightningAddressConnectionDetails':
         return (
           <GridItem colSpan={8} display="flex" justifyContent="center">
             <ProjectFundingSettingsLightningAddressView
-              lightningAddress={castedConnectionDetails.lightningAddress}
+              lightningAddress={lightningConnectionDetails.lightningAddress}
             />
           </GridItem>
         )
-
       default:
-        castedConnectionDetails =
-          connectionDetails as LndConnectionDetailsPrivate
         return (
           <>
             <VStack
@@ -91,7 +91,7 @@ export const ProjectFundingSettings = () => {
                   color="brand.neutral900"
                   fontSize="14px"
                 >
-                  {castedConnectionDetails.hostname}
+                  {lndConnectionDetails.hostname}
                 </Text>
               </VStack>
 
@@ -104,7 +104,7 @@ export const ProjectFundingSettings = () => {
                   color="brand.neutral900"
                   fontSize="14px"
                 >
-                  {castedConnectionDetails.pubkey}
+                  {lndConnectionDetails.pubkey}
                 </Text>
               </VStack>
               <VStack
@@ -121,10 +121,10 @@ export const ProjectFundingSettings = () => {
                   color="brand.neutral900"
                   fontSize="14px"
                 >
-                  {castedConnectionDetails.macaroon}
+                  {lndConnectionDetails.macaroon}
                 </Text>
               </VStack>
-              {castedConnectionDetails.tlsCertificate && (
+              {lndConnectionDetails.tlsCertificate && (
                 <VStack width="100%" spacing="4px" alignItems="flex-start">
                   <Text color="brand.neutral700" fontSize="10px">
                     TLS certificate
@@ -134,7 +134,7 @@ export const ProjectFundingSettings = () => {
                     color="brand.neutral900"
                     fontSize="14px"
                   >
-                    {castedConnectionDetails.tlsCertificate}
+                    {lndConnectionDetails.tlsCertificate}
                   </Text>
                 </VStack>
               )}
@@ -147,7 +147,7 @@ export const ProjectFundingSettings = () => {
                   color="brand.neutral900"
                   fontSize="14px"
                 >
-                  {castedConnectionDetails.grpcPort}
+                  {lndConnectionDetails.grpcPort}
                 </Text>
               </VStack>
             </VStack>
