@@ -169,15 +169,10 @@ export const ProjectNavUI = () => {
         ) : (
           <Button
             size="sm"
-            backgroundColor={
-              showGreyButton ? 'brand.neutral500' : 'brand.primary'
-            }
+            variant="contained"
             width="100%"
-            border="1px solid"
-            borderColor={showGreyButton ? 'brand.neutral500' : 'brand.primary'}
-            _hover={{}}
             padding="5px"
-            isDisabled={isFundingDisabled}
+            isDisabled={showGreyButton}
             onClick={() => handleClick(MobileViews.funding)}
           >
             Contribute
