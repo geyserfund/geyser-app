@@ -48,6 +48,9 @@ interface ProjectTagsCreateEditProps extends StackProps {
   updateTags: (_: Tag[]) => void
 }
 
+const TAG_MIN_LENGTH = 3
+const TAG_MAX_LENGTH = 25
+
 export const ProjectTagsCreateEdit = ({
   tags,
   updateTags,
@@ -109,15 +112,25 @@ export const ProjectTagsCreateEdit = ({
   }
 
   const handleCreateTag = () => {
-    if (inputValue.length >= 3) {
-      createTag({
-        variables: {
-          input: {
-            label: inputValue,
-          },
-        },
+    if (
+      inputValue.length < TAG_MIN_LENGTH &&
+      inputValue.length > TAG_MAX_LENGTH
+    ) {
+      toast({
+        status: 'error',
+        title: 'failed to create tag',
+        description: `tag length must be between ${TAG_MIN_LENGTH} and ${TAG_MAX_LENGTH}`,
       })
+      return
     }
+
+    createTag({
+      variables: {
+        input: {
+          label: inputValue,
+        },
+      },
+    })
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
