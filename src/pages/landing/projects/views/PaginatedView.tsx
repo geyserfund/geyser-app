@@ -2,7 +2,7 @@ import { ID } from '../../../../constants'
 import { useFilterContext } from '../../../../context'
 import { ScrollInvoke } from '../../../../helpers'
 import { useQueryWithPagination } from '../../../../hooks'
-import { Project } from '../../../../types'
+import { Project, ProjectStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { FilteredProjectList } from '../components/FilteredProjectList'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
@@ -28,7 +28,11 @@ export const PaginatedView = () => {
     itemLimit: TOTAL_PROJECTS_TO_FETCH,
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
-    where: { ...restFilters, tagIds: tagIds?.length ? tagIds : undefined },
+    where: {
+      ...restFilters,
+      tagIds: tagIds?.length ? tagIds : undefined,
+      status: ProjectStatus.Active,
+    },
     orderBy: [restSort],
   })
 
