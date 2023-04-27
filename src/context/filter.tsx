@@ -116,32 +116,33 @@ export const FilterProvider = ({
     setFilters(urlFilters)
   }, [location])
 
-  const updateFilter = (value: Partial<FilterType>) => {
+  const updateFilter = async (value: Partial<FilterType>) => {
     if (isLandingFeedPage && !isLoggedIn) {
       navigate('/', { state: { save: true } })
     }
 
+    const currentFilters = getFiltersFromUrlParams()
+
     let newfilters = {} as FilterType
 
     if (checkIfRenderFilter(value)) {
-      if (!filters.sort && !isLandingFeedPage) {
+      if (!currentFilters.sort && !isLandingFeedPage) {
         newfilters = {
-          ...filters,
+          ...currentFilters,
           recent: undefined,
           sort: SortType.recent,
           ...value,
         }
       } else {
         newfilters = {
-          ...filters,
+          ...currentFilters,
           recent: undefined,
           ...value,
         }
       }
     } else {
       newfilters = {
-        ...filters,
-        sort: undefined,
+        ...currentFilters,
         ...value,
       }
     }

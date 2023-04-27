@@ -38,7 +38,7 @@ export const MobileSort = ({ ...rest }: MobileSortProps) => {
         maxHeight="500px"
       >
         <Menu isOpen={true}>
-          <SortBody />
+          <SortBody isMobile />
         </Menu>
       </AccordionPanel>
     </AccordionItem>

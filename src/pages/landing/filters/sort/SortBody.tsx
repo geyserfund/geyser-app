@@ -9,17 +9,17 @@ export enum SortOptions {
   mostRecentProjects = 'Most recent projects',
 }
 
-export const SortBody = () => {
+export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
   const { filters, updateFilter } = useFilterContext()
 
   const onSortSelect = (value: SortOptions) => {
     switch (value) {
       case SortOptions.mostRecentProjects:
-        updateFilter({ sort: SortType.createdAt })
+        updateFilter({ recent: isMobile, sort: SortType.createdAt })
         break
 
       case SortOptions.mostFundedAllTime:
-        updateFilter({ sort: SortType.balance })
+        updateFilter({ recent: isMobile, sort: SortType.balance })
         break
 
       default:
@@ -28,6 +28,7 @@ export const SortBody = () => {
           type: undefined,
           region: undefined,
           countryCode: undefined,
+          recent: isMobile,
           sort: SortType.recent,
         })
         break
