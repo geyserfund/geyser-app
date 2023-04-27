@@ -113,7 +113,7 @@ export const ProjectTagsCreateEdit = ({
 
   const handleCreateTag = () => {
     if (
-      inputValue.length < TAG_MIN_LENGTH &&
+      inputValue.length < TAG_MIN_LENGTH ||
       inputValue.length > TAG_MAX_LENGTH
     ) {
       toast({
