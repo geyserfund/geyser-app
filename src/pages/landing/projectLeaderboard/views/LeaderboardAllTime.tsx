@@ -3,7 +3,7 @@ import { StackProps } from '@chakra-ui/react'
 import { NoDataError } from '../../../../components/errors'
 import Loader from '../../../../components/ui/Loader'
 import { useQueryWithPagination } from '../../../../hooks'
-import { OrderByOptions, Project } from '../../../../types'
+import { OrderByOptions, Project, ProjectStatus } from '../../../../types'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../projects/projects.graphql'
 import { LeaderboardBody } from '../components'
 interface LeaderboardAllTimeProps extends StackProps {
@@ -23,6 +23,9 @@ export const LeaderboardAllTime = ({
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
     orderBy: { balance: OrderByOptions.Desc },
+    where: {
+      status: ProjectStatus.Active,
+    },
   })
 
   if (error) {

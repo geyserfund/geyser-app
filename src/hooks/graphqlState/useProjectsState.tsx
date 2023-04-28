@@ -1,7 +1,7 @@
 import { QueryHookOptions, useQuery } from '@apollo/client'
 
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../pages/landing/projects/projects.graphql'
-import { Project, ProjectsGetQueryInput } from '../../types'
+import { Project, ProjectsGetQueryInput, ProjectStatus } from '../../types'
 
 type TProjectsData = {
   projects: Project[]
@@ -24,6 +24,7 @@ export const useProjectsState = ({
       variables: {
         where: {
           tagIds: tagIds || [],
+          status: ProjectStatus.Active,
         },
         pagination: { take },
       },
