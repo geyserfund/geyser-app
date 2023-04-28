@@ -138,9 +138,6 @@ export const GrantPage = () => {
           <FaArrowLeft /> See all Grants
         </Button>
         <GrantSummary grant={grant} />
-        {showGrantApply && <GrantApply grant={grant} />}
-
-        <GrantContribute grantProjectName={GrantProjectNameMap[grant.name]} />
 
         {showDistributionChart && <DistributionChart applicants={applicants} />}
         {winnerAnnouncement && (
@@ -156,6 +153,8 @@ export const GrantPage = () => {
             isClosed={grant.status === GrantStatusEnum.Closed}
           />
         )}
+        {showGrantApply && <GrantApply grant={grant} />}
+        <GrantContribute grantProjectName={GrantProjectNameMap[grant.name]} />
         <MoreInfo />
       </VStack>
     </PageContainer>
