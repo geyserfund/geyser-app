@@ -65,7 +65,7 @@ export const cache: InMemoryCache = new InMemoryCache({
           // Don't cache separate results based on
           // any of this field's arguments.
           // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
-          keyArgs: ['input', ['where', 'orderby']],
+          keyArgs: ['input', ['where', 'orderBy']],
           merge: false,
         },
       },
