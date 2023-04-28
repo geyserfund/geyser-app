@@ -361,6 +361,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     }
 
     resetFundingFlow()
+    gotoNextStage()
     requestFunding(fundingInput)
   }, [fundingInput, requestFunding, resetFundingFlow])
 
