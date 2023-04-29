@@ -6,10 +6,10 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { BsBoxArrowUpRight } from 'react-icons/bs'
-import { RiFlag2Line } from 'react-icons/ri'
 import { Link, useParams } from 'react-router-dom'
 
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
+import { MilestoneIcon } from '../../../../components/icons/svg'
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
@@ -92,9 +92,9 @@ export const Creator = () => {
             onClick={openReward}
           />
           <CreationCardItem
-            icon={<RiFlag2Line fontSize="30px" />}
-            title="Edit Milestones"
-            description="Clarify your next steps by keeping your milestones up to date"
+            icon={<MilestoneIcon fontSize="25px" />}
+            title="Add project goal"
+            description="Setting milestones helps you reach your overall project goal"
             onClick={openMilestoneModal}
           />
         </Stack>

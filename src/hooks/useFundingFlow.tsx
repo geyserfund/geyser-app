@@ -298,6 +298,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const requestFunding = useCallback(
     async (input: FundingInput) => {
+      const { isValid, error } = validateFundingInput(input)
+
+      if (!isValid) {
+        toast({
+          status: 'error',
+          title: 'failed to generate invoice',
+          description: error,
+        })
+        return
+      }
+
       gotoNextStage()
       setFundingInput(input)
       await fundProject({ variables: { input } })
@@ -383,4 +394,16 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     error,
     hasWebLN: useMemo(() => hasWebLN && Boolean(webln), [hasWebLN, webln]),
   }
+}
+
+export const validateFundingInput = (input: FundingInput) => {
+  let isValid = true
+  let error = ''
+
+  if (!input.donationInput?.donationAmount && !input.rewardInput?.rewardsCost) {
+    isValid = false
+    error = 'cannot initiate funding without amount'
+  }
+
+  return { isValid, error }
 }
