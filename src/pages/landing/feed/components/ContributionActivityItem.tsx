@@ -71,7 +71,7 @@ export const ContributionActivityItem = ({
         return (
           <AvatarLink
             title={resource.title}
-            path={getPath('project', resource.id)}
+            path={getPath('entry', resource.id)}
             imageSrc={toSmallImageUrl(`${resource.image}`)}
           />
         )

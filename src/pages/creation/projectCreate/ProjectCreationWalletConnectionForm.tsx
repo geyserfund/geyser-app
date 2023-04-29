@@ -226,6 +226,15 @@ export const ProjectCreationWalletConnectionForm = ({
   const handleProjectLaunchSelected = async () => {
     await validateLightningAddress()
 
+    if (!createWalletInput) {
+      toast({
+        title: 'failed to create project wallet',
+        description: 'please provide valid wallet details',
+        status: 'error',
+      })
+      return
+    }
+
     try {
       await createWallet({ variables: { input: createWalletInput } })
       onProjectLaunchSelected(createWalletInput!)
