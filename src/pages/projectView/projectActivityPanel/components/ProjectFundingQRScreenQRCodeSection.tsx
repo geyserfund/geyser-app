@@ -291,13 +291,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
         return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />
 
       case QRDisplayState.FUNDING_CANCELED:
-        return (
-          <div>
-            {fundingTx.status}
-            {JSON.stringify(fundingRequestErrored)}
-            <FundingErrorView error={error} />
-          </div>
-        )
+        return <FundingErrorView error={error} />
 
       default:
         return <GeneratingInvoice refreshInvoice={retryFundingFlow} />
@@ -305,8 +299,6 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   }, [
     error,
     fallbackAddress,
-    fundingRequestErrored,
-    fundingTx.status,
     hasCopiedLightning,
     hasCopiedOnchain,
     qrDisplayState,
