@@ -1,5 +1,12 @@
 import { ApolloError, gql, useLazyQuery, useMutation } from '@apollo/client'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
 import { ApolloErrors, fundingStages, stageList } from '../constants'
@@ -90,8 +97,6 @@ const initialFunding: FundingTx = {
 
 const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 
-let fundInterval: any
-
 interface IFundingFlowOptions {
   hasBolt11?: boolean
   hasWebLN?: boolean
@@ -114,12 +119,27 @@ const requestWebLNPayment = async (fundingTx: FundingTx) => {
     throw new Error('payment request not found')
   }
 
-  const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
+  let preimage = ''
+
+  try {
+    const res = await webln.sendPayment(fundingTx.paymentRequest)
+    preimage = res.preimage
+  } catch (e) {
+    throw new Error(WEBLN_ENABLE_ERROR)
+  }
+
   const paymentHash = await sha256(preimage)
   return paymentHash
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
+  const fundIntervalRef = useRef<NodeJS.Timeout>()
+
+  useEffect(() => {
+    // Cleanup interval on unmount
+    return () => clearInterval(fundIntervalRef.current)
+  }, [])
+
   const { hasBolt11 = true, hasWebLN = true } = options || {
     hasBolt11: true,
     hasWebLN: true,
@@ -228,6 +248,11 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     MUTATION_FUND,
     {
       onCompleted(data) {
+        const intervalFactory = () => {
+          clearInterval(fundIntervalRef.current)
+          return setInterval(getFundingStatus, 1500)
+        }
+
         setError('')
         setFundingRequestErrored(false)
         setFundingTx(data.fund.fundingTx)
@@ -237,17 +262,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           startWebLNFlow(data.fund.fundingTx)
             .then((success) => {
               if (!success) {
-                fundInterval = setInterval(getFundingStatus, 1500)
+                fundIntervalRef.current = intervalFactory()
                 setWebLNErrored(true)
               }
             })
             .catch((e) => {
               console.error(e)
-              fundInterval = setInterval(getFundingStatus, 1500)
+              fundIntervalRef.current = intervalFactory()
               setFundingRequestErrored(true)
             })
         } else {
-          fundInterval = setInterval(getFundingStatus, 1500)
+          fundIntervalRef.current = intervalFactory()
         }
       },
       onError(error: ApolloError) {
@@ -260,7 +285,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         setFundingRequestErrored(true)
-        clearInterval(fundInterval)
+        clearInterval(fundIntervalRef.current)
         toast({
           title: 'Something went wrong',
           description: 'Please refresh the page and try again',
@@ -292,7 +317,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         (fundingStatus.fundingTx.status === FundingStatus.Pending &&
           fundingTx.onChain)
       ) {
-        clearInterval(fundInterval)
+        clearInterval(fundIntervalRef.current)
         gotoNextStage()
       }
     }
@@ -304,7 +329,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       fundState === fundingStages.canceled ||
       fundState
     ) {
-      clearInterval(fundInterval)
+      clearInterval(fundIntervalRef.current)
     }
   }, [fundState])
 
@@ -337,7 +362,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
     onError(_) {
       setInvoiceRefreshErrored(true)
-      clearInterval(fundInterval)
+      clearInterval(fundIntervalRef.current)
     },
   })
 
