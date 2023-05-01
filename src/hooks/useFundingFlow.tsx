@@ -193,6 +193,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
               'The payment preimage returned by the WebLN provider did not match the payment hash.',
             status: 'error',
           })
+          return false
         }
 
         if (
@@ -204,6 +205,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             description: 'Please use the invoice instead.',
             status: 'info',
           })
+          return false
         }
 
         if (error.message === WEBLN_ENABLE_ERROR) {
