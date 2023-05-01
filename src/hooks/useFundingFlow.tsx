@@ -88,6 +88,8 @@ const initialFunding: FundingTx = {
   },
 }
 
+const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
+
 let fundInterval: any
 
 interface IFundingFlowOptions {
@@ -102,7 +104,11 @@ const requestWebLNPayment = async (fundingTx: FundingTx) => {
     throw new Error('no provider')
   }
 
-  await webln.enable()
+  try {
+    await webln.enable()
+  } catch (e) {
+    throw new Error(WEBLN_ENABLE_ERROR)
+  }
 
   if (!fundingTx.paymentRequest) {
     throw new Error('payment request not found')
@@ -178,14 +184,18 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       } catch (error: any) {
         if (error.message === 'no provider') {
           throw error
-        } else if (error.message === 'wrong preimage') {
+        }
+
+        if (error.message === 'wrong preimage') {
           toast({
             title: 'Wrong payment preimage',
             description:
               'The payment preimage returned by the WebLN provider did not match the payment hash.',
             status: 'error',
           })
-        } else if (
+        }
+
+        if (
           error.constructor === RejectionError ||
           error.message === 'User rejected'
         ) {
@@ -194,13 +204,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             description: 'Please use the invoice instead.',
             status: 'info',
           })
-        } else {
-          toast({
-            title: 'Oops! Something went wrong with WebLN.',
-            description: 'Please copy the invoice manually instead.',
-            status: 'error',
-          })
         }
+
+        if (error.message === WEBLN_ENABLE_ERROR) {
+          return false
+        }
+
+        toast({
+          title: 'Oops! Something went wrong with WebLN.',
+          description: 'Please copy the invoice manually instead.',
+          status: 'error',
+        })
 
         return false
       }
