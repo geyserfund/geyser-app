@@ -95,20 +95,29 @@ interface IFundingFlowOptions {
   hasWebLN?: boolean
 }
 
+const { webln }: { webln: WebLNProvider } = window as any
+
+const requestWebLNPayment = async (fundingTx: FundingTx) => {
+  if (!webln) {
+    throw new Error('no provider')
+  }
+
+  await webln.enable()
+
+  if (!fundingTx.paymentRequest) {
+    throw new Error('payment request not found')
+  }
+
+  const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
+  const paymentHash = await sha256(preimage)
+  return paymentHash
+}
+
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const { hasBolt11 = true, hasWebLN = true } = options || {
     hasBolt11: true,
     hasWebLN: true,
   }
-
-  const webln = useMemo(() => {
-    const { webln }: { webln: WebLNProvider } = window as any
-    if (!webln) {
-      return
-    }
-
-    return webln
-  }, [])
 
   const { user } = useContext(AuthContext)
   const { toast } = useNotification()
@@ -156,32 +165,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         return
       }
 
-      let succeeded = false
-
-      const requestWebLNPayment = async () => {
-        if (!webln) {
-          throw new Error('no provider')
-        }
-
-        await webln.enable()
-
-        if (!fundingTx.paymentRequest) {
-          throw new Error('payment request not found')
-        }
-
-        const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
-        const paymentHash = await sha256(preimage)
-        return paymentHash
-      }
-
       try {
-        const paymentHash = await requestWebLNPayment()
+        const paymentHash = await requestWebLNPayment(fundingTx)
 
         // Check preimage
         if (paymentHash === fundingTx.invoiceId) {
           gotoNextStage()
-          succeeded = true
-          return succeeded
+          return true
         }
 
         throw new Error('wrong preimage')
@@ -212,10 +202,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           })
         }
 
-        return succeeded
+        return false
       }
     },
-    [gotoNextStage, toast, webln, weblnErrored],
+    [gotoNextStage, toast, weblnErrored],
   )
 
   const [fundProject, { loading: fundingRequestLoading }] = useMutation(
