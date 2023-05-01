@@ -17,9 +17,9 @@ export const aggregateTransactions = (
   // List of FundingTx IDs that are already a part of a group, and need to be skipped.
   const groupedTxIds: string[] = []
 
-  data.map((f1) => {
+  for (const f1 of data) {
     if (groupedTxIds.includes(f1.id)) {
-      return
+      continue
     }
 
     // If a FundingTx iterating from the first loop has not been grouped, will start a new group,
@@ -55,28 +55,28 @@ export const aggregateTransactions = (
       }
     })
     groupedTxs.push(matches)
-  })
+  }
 
   // Each group of matches, is then changed into a single FundingTx with the count of the length of the matches.
-  groupedTxs.map((transactions) => {
-    const sortedTransaction = transactions.sort((a, b) => a.paidAt - b.paidAt)
+  for (const transactions of groupedTxs) {
+    const sortedTransactions = transactions.sort((a, b) => a.paidAt - b.paidAt)
 
     let amount = 0
 
-    sortedTransaction.map((transaction) => {
+    for (const transaction of sortedTransactions) {
       if (transaction?.amount) {
         amount += transaction.amount
       }
-    })
+    }
 
     const newContribution = {
-      ...sortedTransaction[0],
+      ...sortedTransactions[0],
       amount,
-      count: sortedTransaction.length,
+      count: sortedTransactions.length,
     } as FundingTx
 
     aggregatedTxs.push(newContribution)
-  })
+  }
 
   return aggregatedTxs
 }

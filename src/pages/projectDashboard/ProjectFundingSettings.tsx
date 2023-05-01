@@ -51,7 +51,11 @@ export const ProjectFundingSettings = () => {
     const lightningConnectionDetails =
       connectionDetails as LightningAddressConnectionDetails
 
-    switch (connectionDetails?.__typename) {
+    if (!connectionDetails) {
+      return null
+    }
+
+    switch (connectionDetails.__typename) {
       case 'LightningAddressConnectionDetails':
         return (
           <GridItem colSpan={8} display="flex" justifyContent="center">
