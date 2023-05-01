@@ -15,7 +15,5 @@ export const UserProfilePageEntriesListItem = ({ entryID }: Props) => {
     return null
   }
 
-  return data ? (
-    <LandingEntryCard entry={data.entry} isMobile maxWidth="500px" />
-  ) : null
+  return <LandingEntryCard entry={data.entry} isMobile maxWidth="500px" />
 }
