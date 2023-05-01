@@ -1,5 +1,5 @@
 import { HStack, Text, VStack } from '@chakra-ui/layout'
-import { CloseButton, IconButton, Link } from '@chakra-ui/react'
+import { Button, CloseButton, IconButton, Link } from '@chakra-ui/react'
 import { FaTelegramPlane } from 'react-icons/fa'
 
 import { SectionTitle } from '../../../../components/ui'
@@ -65,22 +65,13 @@ export const ProjectFundingQRScreen = ({
         backgroundColor={'brand.neutral100'}
         showGeyserFee={true}
       />
-      <HStack>
-        <Text>
-          If you’re experiencing any issues with this payment, please reach out
-          to us on Telegram.
-        </Text>
-
-        <Link href={GeyserTelegramUrl} isExternal>
-          <IconButton
-            background={'none'}
-            aria-label="telegram"
-            icon={<FaTelegramPlane fontSize="20px" />}
-            color={'#6C757D'}
-          />
-        </Link>
-      </HStack>
-
+      <Button
+        variant="outline"
+        width="100%"
+        leftIcon={<FaTelegramPlane aria-label="telegram" fontSize="20px" />}
+      >
+        Reach out for help
+      </Button>
       <Text fontSize="8px" fontWeight={400} color={'brand.gray500'}>
         Geyser is not a store. It’s a way to bring creative projects to life
         using Bitcoin. Your donation will support a creative project that has
