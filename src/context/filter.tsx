@@ -61,7 +61,8 @@ export const FilterProvider = ({
 
   const getFiltersFromUrlParams = () => {
     const countryCode = searchParams.get('countryCode') || undefined
-    const region = searchParams.get('search') || undefined
+    const region = searchParams.get('region') || undefined
+    const search = searchParams.get('search') || undefined
     const status = (searchParams.get('status') as ProjectStatus) || undefined
     const type = (searchParams.get('type') as ProjectType) || undefined
     const tagIds =
@@ -77,6 +78,7 @@ export const FilterProvider = ({
     return {
       countryCode,
       region,
+      search,
       status,
       type,
       tagIds,
