@@ -230,29 +230,24 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       onCompleted(data) {
         setError('')
         setFundingRequestErrored(false)
-        try {
-          setFundingTx(data.fund.fundingTx)
-          setAmounts(data.fund.amountSummary)
+        setFundingTx(data.fund.fundingTx)
+        setAmounts(data.fund.amountSummary)
 
-          if (hasBolt11 && hasWebLN && webln) {
-            startWebLNFlow(data.fund.fundingTx)
-              .then((success) => {
-                if (!success) {
-                  fundInterval = setInterval(getFundingStatus, 1500)
-                  setWebLNErrored(true)
-                }
-              })
-              .catch(console.error)
-          } else {
-            fundInterval = setInterval(getFundingStatus, 1500)
-          }
-        } catch (_) {
-          setFundingRequestErrored(true)
-          toast({
-            title: 'Something went wrong',
-            description: 'Please refresh the page and try again',
-            status: 'error',
-          })
+        if (hasBolt11 && hasWebLN && webln) {
+          startWebLNFlow(data.fund.fundingTx)
+            .then((success) => {
+              if (!success) {
+                fundInterval = setInterval(getFundingStatus, 1500)
+                setWebLNErrored(true)
+              }
+            })
+            .catch((e) => {
+              console.error(e)
+              fundInterval = setInterval(getFundingStatus, 1500)
+              setFundingRequestErrored(true)
+            })
+        } else {
+          fundInterval = setInterval(getFundingStatus, 1500)
         }
       },
       onError(error: ApolloError) {
