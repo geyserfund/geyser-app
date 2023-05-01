@@ -2,10 +2,12 @@ import { useQuery } from '@apollo/client'
 import { Box, Container, HStack, Image, Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
+import LetTheSatsFlow from '../../../assets/let-the-sats-flow.svg'
 import { SkeletonLayout } from '../../../components/layouts'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
-import { dimensions, LetTheSatsFlow3DUrl } from '../../../constants'
+import { dimensions } from '../../../constants'
 import { ALL_PROJECTS_SUMMARY } from '../../../graphql'
+import { fonts } from '../../../styles'
 import {
   getBitcoinAmount,
   getShortAmountLabel,
@@ -58,6 +60,7 @@ export const GradientBanner = () => {
       </Box>
       <Container maxW={'6xl'}>
         <Stack
+          fontFamily={fonts.livvic}
           textAlign={'center'}
           align={'center'}
           spacing="17px"
@@ -67,12 +70,12 @@ export const GradientBanner = () => {
           <VStack
             spacing={3}
             marginTop={{
-              base: `${dimensions.topNavBar.desktop.height}px`,
+              base: `${dimensions.topNavBar.mobile.height + 12}px`,
               lg: `${dimensions.topNavBar.desktop.height - 24}px`,
             }}
-            marginBottom={{ base: '70px', md: '60px' }}
+            marginBottom={{ base: '70px', lg: '60px' }}
           >
-            <Image src={LetTheSatsFlow3DUrl} maxHeight="76px" />
+            <Image src={LetTheSatsFlow} maxHeight="76px" />
           </VStack>
 
           <VStack
@@ -85,7 +88,7 @@ export const GradientBanner = () => {
             spacing="10px"
             color={'brand.neutral900'}
           >
-            <H3>Play a part in world-changing ideas</H3>
+            <H3 fontFamily="inherit">Play a part in world-changing ideas</H3>
             <HStack fontSize={'sm'} spacing={4}>
               {isSummaryLoading ? (
                 <SummarySkeleton />
