@@ -142,27 +142,41 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     fetchPolicy: 'network-only',
   })
 
-  const startWebLNFlow = async (fundingTx: FundingTx) => {
-    let succeeded = false
+  const gotoNextStage = useCallback(() => {
+    setFundState((currentState) => {
+      const currentIndex = stageList.indexOf(currentState)
+      const nextState = stageList[currentIndex + 1]
+      return nextState
+    })
+  }, [setFundState])
 
-    const requestWebLNPayment = async () => {
-      if (!webln) {
-        throw new Error('no provider')
+  const startWebLNFlow = useCallback(
+    async (fundingTx: FundingTx) => {
+      if (weblnErrored) {
+        return
       }
 
-      await webln.enable()
+      let succeeded = false
 
-      if (!fundingTx.paymentRequest) {
-        throw new Error('payment request not found')
+      const requestWebLNPayment = async () => {
+        if (!webln) {
+          throw new Error('no provider')
+        }
+
+        await webln.enable()
+
+        if (!fundingTx.paymentRequest) {
+          throw new Error('payment request not found')
+        }
+
+        const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
+        const paymentHash = await sha256(preimage)
+        return paymentHash
       }
 
-      const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
-      const paymentHash = await sha256(preimage)
-      return paymentHash
-    }
+      try {
+        const paymentHash = await requestWebLNPayment()
 
-    return requestWebLNPayment()
-      .then((paymentHash) => {
         // Check preimage
         if (paymentHash === fundingTx.invoiceId) {
           gotoNextStage()
@@ -171,8 +185,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         throw new Error('wrong preimage')
-      })
-      .catch((error) => {
+      } catch (error: any) {
         if (error.message === 'no provider') {
           throw error
         } else if (error.message === 'wrong preimage') {
@@ -200,13 +213,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         return succeeded
-      })
-  }
+      }
+    },
+    [gotoNextStage, toast, webln, weblnErrored],
+  )
 
   const [fundProject, { loading: fundingRequestLoading }] = useMutation(
     MUTATION_FUND,
     {
       onCompleted(data) {
+        setError('')
+        setFundingRequestErrored(false)
         try {
           setFundingTx(data.fund.fundingTx)
           setAmounts(data.fund.amountSummary)
@@ -250,14 +267,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
   )
 
-  const gotoNextStage = useCallback(() => {
-    setFundState((currentState) => {
-      const currentIndex = stageList.indexOf(currentState)
-      const nextState = stageList[currentIndex + 1]
-      return nextState
-    })
-  }, [setFundState])
-
   useEffect(() => {
     if (fundingStatus && fundingStatus.fundingTx) {
       /*
@@ -284,7 +293,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         gotoNextStage()
       }
     }
-  }, [fundingStatus])
+  }, [fundingStatus, fundingTx, gotoNextStage])
 
   useEffect(() => {
     if (
@@ -313,7 +322,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       setFundingInput(input)
       await fundProject({ variables: { input } })
     },
-    [fundProject, gotoNextStage],
+    [fundProject, gotoNextStage, toast],
   )
 
   const [refreshInvoice] = useMutation<
@@ -358,6 +367,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     setFundState(fundingStages.initial)
     setFundingRequestErrored(false)
     setInvoiceRefreshErrored(false)
+    setError('')
     setWebLNErrored(false)
     setFundingTx({
       ...initialFunding,
@@ -374,7 +384,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     resetFundingFlow()
     gotoNextStage()
     requestFunding(fundingInput)
-  }, [fundingInput, requestFunding, resetFundingFlow])
+  }, [fundingInput, gotoNextStage, requestFunding, resetFundingFlow])
 
   return {
     fundingRequestErrored,
