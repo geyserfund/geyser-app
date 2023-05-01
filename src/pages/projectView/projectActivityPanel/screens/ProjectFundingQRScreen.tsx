@@ -1,9 +1,8 @@
 import { HStack, Text, VStack } from '@chakra-ui/layout'
-import { Button, CloseButton, IconButton, Link } from '@chakra-ui/react'
+import { Button, CloseButton } from '@chakra-ui/react'
 import { FaTelegramPlane } from 'react-icons/fa'
 
 import { SectionTitle } from '../../../../components/ui'
-import { GeyserTelegramUrl } from '../../../../constants'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
 import { IFundForm } from '../../../../hooks'
 import { IFundingAmounts, IProject } from '../../../../interfaces'
