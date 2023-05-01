@@ -235,12 +235,14 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           setAmounts(data.fund.amountSummary)
 
           if (hasBolt11 && hasWebLN && webln) {
-            startWebLNFlow(data.fund.fundingTx).then((success) => {
-              if (!success) {
-                fundInterval = setInterval(getFundingStatus, 1500)
-                setWebLNErrored(true)
-              }
-            })
+            startWebLNFlow(data.fund.fundingTx)
+              .then((success) => {
+                if (!success) {
+                  fundInterval = setInterval(getFundingStatus, 1500)
+                  setWebLNErrored(true)
+                }
+              })
+              .catch(console.error)
           } else {
             fundInterval = setInterval(getFundingStatus, 1500)
           }
