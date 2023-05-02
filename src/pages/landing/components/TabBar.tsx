@@ -1,4 +1,4 @@
-import { Avatar, AvatarBadge, Box, ButtonProps } from '@chakra-ui/react'
+import { Avatar, Box, ButtonProps, Text, VStack } from '@chakra-ui/react'
 import { useMatch, useNavigate } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
@@ -50,16 +50,29 @@ export const TabBar = (props: TabBarProps) => {
         onClick={handleActivityClick}
       >
         {user.imageUrl ? (
-          <Avatar height="23px" width="23px" src={user.imageUrl} mr="10px">
-            {activities.length > 0 && (
-              <AvatarBadge placement="top-end" color="primary.600" />
-            )}
-          </Avatar>
+          <Avatar height="23px" width="23px" src={user.imageUrl} mr="10px" />
         ) : (
           ''
         )}
-        Activity
-        <Box />
+        <VStack
+          h="100%"
+          position="relative"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text fontSize="16px">Activity</Text>
+          {activities.length > 0 && (
+            <Box
+              height="10px"
+              width="10px"
+              top="-10px"
+              right="-10px"
+              borderRadius="50%"
+              position="absolute"
+              backgroundColor="primary.600"
+            />
+          )}
+        </VStack>
       </ButtonComponent>
     </CardLayout>
   )

@@ -1,8 +1,13 @@
 import { useSubscription } from '@apollo/client'
+import { DateTime } from 'luxon'
 import { createContext, useCallback, useContext, useState } from 'react'
 
 import { ACTIVITY_CREATION_SUBSCRIPTION } from '../graphql/subscriptions'
-import { Activity, ActivityCreatedSubscriptionInput } from '../types'
+import {
+  Activity,
+  ActivityCreatedSubscriptionInput,
+  ActivityResource,
+} from '../types'
 import { toInt } from '../utils'
 import { useAuthContext } from './auth'
 
@@ -26,24 +31,30 @@ export const ActivitySubscriptionProvider = ({
   children: React.ReactNode
 }) => {
   const [activities, setActivities] = useState<Activity[]>([])
-  const { isLoggedIn, user } = useAuthContext()
+  const { isLoggedIn, followedProjects } = useAuthContext()
 
-  const skipSubscription = !isLoggedIn || !(user?.projectFollows?.length > 0)
-
+  const skipSubscription = !isLoggedIn || !(followedProjects.length > 0)
   useSubscription<
-    { activityCreated: Activity },
+    { activityCreated: ActivityResource },
     ActivityCreatedSubscriptionInput
   >(ACTIVITY_CREATION_SUBSCRIPTION, {
     variables: {
       where: {
-        projectIds: user?.projectFollows.map((projects) => toInt(projects?.id)),
+        projectIds: followedProjects.map((projects) => toInt(projects?.id)),
       },
     },
     skip: skipSubscription,
-    onSubscriptionData(options) {
-      const activityCreated = options.subscriptionData.data?.activityCreated
+    onData(options) {
+      const activityCreated = options.data.data?.activityCreated
+      const currentDateTime = DateTime.now().toMillis() // TODO this will have to come from the backend
+      const newActivity = {
+        createdAt: currentDateTime,
+        id: `${currentDateTime}`,
+        resource: activityCreated,
+      } as Activity
+
       if (activityCreated) {
-        setActivities([...activities, activityCreated])
+        setActivities([...activities, newActivity])
       }
     },
   })
