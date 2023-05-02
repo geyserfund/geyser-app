@@ -224,7 +224,7 @@ export const Router = () => {
 
           return (
             <Route key={path} path={path} element={renderElement}>
-              {nested && renderRoutes(nested)}
+              {renderRoutes(nested)}
             </Route>
           )
         },
