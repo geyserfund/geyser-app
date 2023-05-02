@@ -95,20 +95,29 @@ interface IFundingFlowOptions {
   hasWebLN?: boolean
 }
 
+const { webln }: { webln: WebLNProvider } = window as any
+
+const requestWebLNPayment = async (fundingTx: FundingTx) => {
+  if (!webln) {
+    throw new Error('no provider')
+  }
+
+  await webln.enable()
+
+  if (!fundingTx.paymentRequest) {
+    throw new Error('payment request not found')
+  }
+
+  const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
+  const paymentHash = await sha256(preimage)
+  return paymentHash
+}
+
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const { hasBolt11 = true, hasWebLN = true } = options || {
     hasBolt11: true,
     hasWebLN: true,
   }
-
-  const webln = useMemo(() => {
-    const { webln }: { webln: WebLNProvider } = window as any
-    if (!webln) {
-      return
-    }
-
-    return webln
-  }, [])
 
   const { user } = useContext(AuthContext)
   const { toast } = useNotification()
@@ -142,37 +151,31 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     fetchPolicy: 'network-only',
   })
 
-  const startWebLNFlow = async (fundingTx: FundingTx) => {
-    let succeeded = false
+  const gotoNextStage = useCallback(() => {
+    setFundState((currentState) => {
+      const currentIndex = stageList.indexOf(currentState)
+      const nextState = stageList[currentIndex + 1]
+      return nextState
+    })
+  }, [setFundState])
 
-    const requestWebLNPayment = async () => {
-      if (!webln) {
-        throw new Error('no provider')
+  const startWebLNFlow = useCallback(
+    async (fundingTx: FundingTx) => {
+      if (weblnErrored) {
+        return
       }
 
-      await webln.enable()
+      try {
+        const paymentHash = await requestWebLNPayment(fundingTx)
 
-      if (!fundingTx.paymentRequest) {
-        throw new Error('payment request not found')
-      }
-
-      const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
-      const paymentHash = await sha256(preimage)
-      return paymentHash
-    }
-
-    return requestWebLNPayment()
-      .then((paymentHash) => {
         // Check preimage
         if (paymentHash === fundingTx.invoiceId) {
           gotoNextStage()
-          succeeded = true
-          return succeeded
+          return true
         }
 
         throw new Error('wrong preimage')
-      })
-      .catch((error) => {
+      } catch (error: any) {
         if (error.message === 'no provider') {
           throw error
         } else if (error.message === 'wrong preimage') {
@@ -199,14 +202,18 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           })
         }
 
-        return succeeded
-      })
-  }
+        return false
+      }
+    },
+    [gotoNextStage, toast, weblnErrored],
+  )
 
   const [fundProject, { loading: fundingRequestLoading }] = useMutation(
     MUTATION_FUND,
     {
       onCompleted(data) {
+        setError('')
+        setFundingRequestErrored(false)
         try {
           setFundingTx(data.fund.fundingTx)
           setAmounts(data.fund.amountSummary)
@@ -250,14 +257,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
   )
 
-  const gotoNextStage = useCallback(() => {
-    setFundState((currentState) => {
-      const currentIndex = stageList.indexOf(currentState)
-      const nextState = stageList[currentIndex + 1]
-      return nextState
-    })
-  }, [setFundState])
-
   useEffect(() => {
     if (fundingStatus && fundingStatus.fundingTx) {
       /*
@@ -284,7 +283,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         gotoNextStage()
       }
     }
-  }, [fundingStatus])
+  }, [fundingStatus, fundingTx, gotoNextStage])
 
   useEffect(() => {
     if (
@@ -298,11 +297,22 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const requestFunding = useCallback(
     async (input: FundingInput) => {
+      const { isValid, error } = validateFundingInput(input)
+
+      if (!isValid) {
+        toast({
+          status: 'error',
+          title: 'failed to generate invoice',
+          description: error,
+        })
+        return
+      }
+
       gotoNextStage()
       setFundingInput(input)
       await fundProject({ variables: { input } })
     },
-    [fundProject, gotoNextStage],
+    [fundProject, gotoNextStage, toast],
   )
 
   const [refreshInvoice] = useMutation<
@@ -347,6 +357,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     setFundState(fundingStages.initial)
     setFundingRequestErrored(false)
     setInvoiceRefreshErrored(false)
+    setError('')
     setWebLNErrored(false)
     setFundingTx({
       ...initialFunding,
@@ -363,7 +374,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     resetFundingFlow()
     gotoNextStage()
     requestFunding(fundingInput)
-  }, [fundingInput, requestFunding, resetFundingFlow])
+  }, [fundingInput, gotoNextStage, requestFunding, resetFundingFlow])
 
   return {
     fundingRequestErrored,
@@ -383,4 +394,16 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     error,
     hasWebLN: useMemo(() => hasWebLN && Boolean(webln), [hasWebLN, webln]),
   }
+}
+
+export const validateFundingInput = (input: FundingInput) => {
+  let isValid = true
+  let error = ''
+
+  if (!input.donationInput?.donationAmount && !input.rewardInput?.rewardsCost) {
+    isValid = false
+    error = 'cannot initiate funding without amount'
+  }
+
+  return { isValid, error }
 }
