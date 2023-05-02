@@ -16,7 +16,7 @@ import { __production__, __staging__ } from './constants'
 const SENTRY_DSN =
   'https://2355dca8304c4e32b35bf421d3cf4d87@o4504351883984896.ingest.sentry.io/4505088829292544'
 
-if (__staging__ || __production__) {
+if (__production__) {
   Sentry.init({
     dsn: SENTRY_DSN,
     integrations: [

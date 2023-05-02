@@ -197,10 +197,9 @@ const platformRoutes = [
   },
 ] as PlatformRoutes[]
 
-const SentryRoutes =
-  __production__ || __staging__
-    ? withSentryReactRouterV6Routing(Routes)
-    : Routes
+const SentryRoutes = __production__
+  ? withSentryReactRouterV6Routing(Routes)
+  : Routes
 
 export const Router = () => {
   const renderRoutes = (routes: PlatformRoutes[]) => {
