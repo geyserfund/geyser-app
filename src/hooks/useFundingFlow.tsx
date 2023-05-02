@@ -306,27 +306,31 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
         older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
       */
-      if (
-        (fundingStatus.fundingTx.invoiceStatus !== fundingTx.invoiceStatus ||
-          fundingStatus.fundingTx.status !== fundingTx.status) &&
-        fundingStatus.fundingTx.invoiceId === fundingTx.invoiceId
-      ) {
-        setFundingTx({
-          ...fundingTx,
-          ...fundingStatus.fundingTx,
-        })
-      }
+      setFundingTx((current) => {
+        if (
+          (fundingStatus.fundingTx.invoiceStatus !== current.invoiceStatus ||
+            fundingStatus.fundingTx.status !== current.status) &&
+          fundingStatus.fundingTx.invoiceId === current.invoiceId
+        ) {
+          return {
+            ...current,
+            ...fundingStatus.fundingTx,
+          }
+        }
+
+        return current
+      })
 
       if (
         fundingStatus.fundingTx.status === FundingStatus.Paid ||
         (fundingStatus.fundingTx.status === FundingStatus.Pending &&
-          fundingTx.onChain)
+          fundingStatus.fundingTx.onChain)
       ) {
         clearInterval(fundIntervalRef.current)
         gotoNextStage()
       }
     }
-  }, [fundingStatus, fundingTx, gotoNextStage])
+  }, [fundingStatus, gotoNextStage])
 
   useEffect(() => {
     if (
