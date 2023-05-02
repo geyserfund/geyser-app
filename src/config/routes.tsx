@@ -1,3 +1,4 @@
+import { withSentryReactRouterV6Routing } from '@sentry/react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { getPath, PathName } from '../constants'
@@ -196,6 +197,8 @@ const platformRoutes = [
   },
 ] as PlatformRoutes[]
 
+const SentryRoutes = withSentryReactRouterV6Routing(Routes)
+
 export const Router = () => {
   const renderRoutes = (routes: PlatformRoutes[]) => {
     return [
@@ -225,5 +228,5 @@ export const Router = () => {
     ]
   }
 
-  return <Routes>{renderRoutes(platformRoutes)}</Routes>
+  return <SentryRoutes>{renderRoutes(platformRoutes)}</SentryRoutes>
 }
