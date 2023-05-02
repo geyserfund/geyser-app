@@ -1,8 +1,9 @@
-import { HStack, Text, VStack } from '@chakra-ui/layout'
+import { HStack, Link, Text, VStack } from '@chakra-ui/layout'
 import { Button, CloseButton } from '@chakra-ui/react'
 import { FaTelegramPlane } from 'react-icons/fa'
 
 import { SectionTitle } from '../../../../components/ui'
+import { GeyserTelegramUrl } from '../../../../constants'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
 import { IFundForm } from '../../../../hooks'
 import { IFundingAmounts, IProject } from '../../../../interfaces'
@@ -65,6 +66,10 @@ export const ProjectFundingQRScreen = ({
         showGeyserFee={true}
       />
       <Button
+        as={Link}
+        textDecoration="none"
+        href={GeyserTelegramUrl}
+        target="_blank"
         variant="outline"
         width="100%"
         leftIcon={<FaTelegramPlane aria-label="telegram" fontSize="20px" />}
