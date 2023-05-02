@@ -27,7 +27,3 @@ yarn-error.log*
 
 faker/custom-extended-schemas/
 src/config/apollo-client/customClientTypeDefs.ts
-
-# Ignore generated types, generate when needed
-
-src/types/generated
