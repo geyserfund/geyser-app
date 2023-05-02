@@ -435,7 +435,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     refreshFundingInvoice,
     setFundState,
     error,
-    hasWebLN: useMemo(() => hasWebLN && Boolean(webln), [hasWebLN, webln]),
+    hasWebLN: useMemo(() => hasWebLN && Boolean(webln), [hasWebLN]),
   }
 }
 
