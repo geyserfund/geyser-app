@@ -1,7 +1,7 @@
 import { withSentryReactRouterV6Routing } from '@sentry/react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import { __production__, __staging__, getPath, PathName } from '../constants'
+import { __production__, getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import { BadgesPage } from '../pages/badges/BadgesPage'
 import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
