@@ -9,10 +9,15 @@ import {
   FountainLogoUrl,
   PodverseLogoUrl,
 } from '../../../constants'
-import { FundingTxForLandingPageFragment } from '../../../types/generated/graphql'
+import {
+  FundingTxForLandingPageFragment,
+  FundingTxForUserContributionFragment,
+} from '../../../types/generated/graphql'
 
 type ExternalAccountLinkIconProps = {
-  fundingTx: FundingTxForLandingPageFragment
+  fundingTx:
+    | FundingTxForLandingPageFragment
+    | FundingTxForUserContributionFragment
 }
 
 const sourceUrlMap: any = {

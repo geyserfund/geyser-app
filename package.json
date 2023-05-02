@@ -60,7 +60,7 @@
     "react-qr-code": "^2.0.11",
     "react-qrcode-logo": "^2.8.0",
     "react-quill": "^2.0.0",
-    "react-router-dom": "^6.7.0",
+    "react-router-dom": "^6.11.0",
     "react-select": "^5.7.0",
     "react-tweet-embed": "^2.0.0",
     "react-youtube": "^10.1.0",

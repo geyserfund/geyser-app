@@ -4,17 +4,17 @@ import { isDocumentNode } from '@apollo/client/utilities'
 import { PaginationHookReturn, QueryResponseData } from './types'
 import { usePaginationHook } from './usePaginationHook'
 
-export type useQueryWithPaginationProps = {
+export type useQueryWithPaginationProps<TEntity, TTransformed = TEntity> = {
   query: DocumentNode
   queryName: string | string[]
   itemLimit?: number
   where?: any
   orderBy?: any
-  resultMap?: (_: any[]) => any[]
+  resultMap?: (_: TEntity[]) => TTransformed[]
   options?: QueryHookOptions
 }
 
-export const useQueryWithPagination = <Type,>({
+export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
   itemLimit = 10,
   where,
   query,
@@ -22,13 +22,13 @@ export const useQueryWithPagination = <Type,>({
   resultMap,
   orderBy,
   options,
-}: useQueryWithPaginationProps): PaginationHookReturn<Type> => {
+}: useQueryWithPaginationProps<TEntity, TTransformed>) => {
   if (!isDocumentNode(query)) {
     throw Error('Invalid query')
   }
 
   const { error, loading, fetchMore, refetch } = useQuery<
-    QueryResponseData<Type>
+    QueryResponseData<TEntity>
   >(query, {
     fetchPolicy: 'network-only',
     variables: {
@@ -42,7 +42,10 @@ export const useQueryWithPagination = <Type,>({
     },
     ...options,
     onCompleted(data) {
-      const resultItems = getNestedValue(data, queryName)
+      const resultItems = getNestedValue<QueryResponseData<TEntity>>(
+        data,
+        queryName,
+      )
       handleDataUpdate(resultItems)
       if (options && options.onCompleted) {
         options.onCompleted(data)
@@ -51,7 +54,7 @@ export const useQueryWithPagination = <Type,>({
   })
 
   const { data, isLoadingMore, fetchNext, noMoreItems, handleDataUpdate } =
-    usePaginationHook<Type>({
+    usePaginationHook<TEntity, TTransformed>({
       fetchMore,
       resultMap,
       queryName,
@@ -68,10 +71,13 @@ export const useQueryWithPagination = <Type,>({
     error,
     fetchNext,
     refetch,
-  }
+  } as PaginationHookReturn<(typeof data)[number]>
 }
 
-export const getNestedValue = (obj: any, name: string | string[]) => {
+export function getNestedValue<T extends Record<string, any>>(
+  obj: T,
+  name: string | string[],
+) {
   if (typeof name === 'string') {
     return obj[name]
   }

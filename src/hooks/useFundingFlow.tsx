@@ -1,4 +1,4 @@
-import { ApolloError, gql, useLazyQuery, useMutation } from '@apollo/client'
+import { ApolloError } from '@apollo/client'
 import {
   useCallback,
   useContext,
@@ -12,55 +12,19 @@ import { RejectionError, WebLNProvider } from 'webln'
 import { ApolloErrors, fundingStages, stageList } from '../constants'
 import { IFundingStages } from '../constants'
 import { AuthContext } from '../context'
-import { MUTATION_FUND } from '../graphql'
-import { IFundingAmounts } from '../interfaces'
 import {
   FundingInput,
+  FundingMutationResponse,
   FundingStatus,
-  FundingTx,
+  FundingTxFragment,
   InvoiceStatus,
-} from '../types/generated/graphql'
+  useFundingTxWithInvoiceStatusLazyQuery,
+  useFundMutation,
+  useRefreshFundingInvoiceMutation,
+} from '../types'
 import { sha256, toInt, useNotification } from '../utils'
 
 export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
-
-type FundingTXQueryResponseData = {
-  fundingTx: FundingTx
-}
-
-type FundingTXQueryInput = {
-  fundingTxID: number
-}
-
-type InvoiceRefreshMutationResponseData = {
-  fundingInvoiceRefresh: FundingTx
-}
-
-type InvoiceRefreshMutationInput = {
-  fundingTxID: number
-}
-
-const QUERY_GET_FUNDING_TX_STATUS_AND_INVOICE_STATUS = gql`
-  query GetFundingTxStatusAndInvoiceStatus($fundingTxID: BigInt!) {
-    fundingTx(id: $fundingTxID) {
-      invoiceId
-      status
-      onChain
-      invoiceStatus
-    }
-  }
-`
-
-const REFRESH_FUNDING_INVOICE = gql`
-  mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
-    fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
-      id
-      invoiceId
-      invoiceStatus
-      paymentRequest
-    }
-  }
-`
 
 const initialAmounts = {
   total: 0,
@@ -69,7 +33,7 @@ const initialAmounts = {
   rewardsCost: 0,
 }
 
-const initialFunding: FundingTx = {
+const initialFunding: FundingTxFragment = {
   id: 0,
   uuid: '',
   invoiceId: '',
@@ -86,12 +50,10 @@ const initialFunding: FundingTx = {
   source: '',
   funder: {
     id: 0,
-    amountFunded: 0,
-    timesFunded: 0,
-    confirmed: false,
-    confirmedAt: '',
-    rewards: [],
-    fundingTxs: [],
+    user: {
+      id: 0,
+      username: '',
+    },
   },
 }
 
@@ -104,7 +66,7 @@ interface IFundingFlowOptions {
 
 const { webln }: { webln: WebLNProvider } = window as any
 
-const requestWebLNPayment = async (fundingTx: FundingTx) => {
+const requestWebLNPayment = async (fundingTx: FundingTxFragment) => {
   if (!webln) {
     throw new Error('no provider')
   }
@@ -160,22 +122,21 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [invoiceRefreshLoading, setRefreshingInvoice] = useState(false)
 
   const [fundingInput, setFundingInput] = useState<FundingInput | null>(null)
-  const [fundingTx, setFundingTx] = useState<FundingTx>({
+  const [fundingTx, setFundingTx] = useState<FundingTxFragment>({
     ...initialFunding,
     funder: { ...initialFunding.funder, user },
   })
 
-  const [amounts, setAmounts] = useState<IFundingAmounts>(initialAmounts)
+  const [amounts, setAmounts] =
+    useState<FundingMutationResponse['amountSummary']>(initialAmounts)
 
-  const [getFundingStatus, { data: fundingStatus }] = useLazyQuery<
-    FundingTXQueryResponseData,
-    FundingTXQueryInput
-  >(QUERY_GET_FUNDING_TX_STATUS_AND_INVOICE_STATUS, {
-    variables: {
-      fundingTxID: toInt(fundingTx.id),
-    },
-    fetchPolicy: 'network-only',
-  })
+  const [getFundingStatus, { data: fundingStatus }] =
+    useFundingTxWithInvoiceStatusLazyQuery({
+      variables: {
+        fundingTxID: toInt(fundingTx.id),
+      },
+      fetchPolicy: 'network-only',
+    })
 
   const gotoNextStage = useCallback(() => {
     setFundState((currentState) => {
@@ -191,7 +152,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   }, [])
 
   const startWebLNFlow = useCallback(
-    async (fundingTx: FundingTx) => {
+    async (fundingTx: FundingTxFragment) => {
       if (weblnErrored) {
         return
       }
@@ -249,10 +210,9 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     [gotoNextStage, toast, weblnErrored],
   )
 
-  const [fundProject, { loading: fundingRequestLoading }] = useMutation(
-    MUTATION_FUND,
-    {
-      onCompleted(data) {
+  const [fundProject, { loading: fundingRequestLoading }] = useFundMutation({
+    onCompleted(data) {
+      try {
         const intervalFactory = () => {
           clearInterval(fundIntervalRef.current)
           return setInterval(getFundingStatus, 1500)
@@ -260,6 +220,11 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
         setError('')
         setFundingRequestErrored(false)
+
+        if (!data.fund || !data.fund.fundingTx) {
+          throw new Error('Undefined funding tx')
+        }
+
         setFundingTx(data.fund.fundingTx)
         setAmounts(data.fund.amountSummary)
 
@@ -279,16 +244,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         } else {
           fundIntervalRef.current = intervalFactory()
         }
-      },
-      onError(error: ApolloError) {
-        if (
-          error?.graphQLErrors[0] &&
-          error?.graphQLErrors[0]?.extensions?.code ===
-            ApolloErrors.BAD_USER_INPUT
-        ) {
-          setError(error?.graphQLErrors[0].message)
-        }
-
+      } catch (e) {
         setFundingRequestErrored(true)
         clearInterval(fundIntervalRef.current)
         toast({
@@ -296,9 +252,26 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           description: 'Please refresh the page and try again',
           status: 'error',
         })
-      },
+      }
     },
-  )
+    onError(error: ApolloError) {
+      if (
+        error?.graphQLErrors[0] &&
+        error?.graphQLErrors[0]?.extensions?.code ===
+          ApolloErrors.BAD_USER_INPUT
+      ) {
+        setError(error?.graphQLErrors[0].message)
+      }
+
+      setFundingRequestErrored(true)
+      clearInterval(fundIntervalRef.current)
+      toast({
+        title: 'Something went wrong',
+        description: 'Please refresh the page and try again',
+        status: 'error',
+      })
+    },
+  })
 
   useEffect(() => {
     if (fundingStatus && fundingStatus.fundingTx) {
@@ -362,10 +335,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     [fundProject, gotoNextStage, toast],
   )
 
-  const [refreshInvoice] = useMutation<
-    InvoiceRefreshMutationResponseData,
-    InvoiceRefreshMutationInput
-  >(REFRESH_FUNDING_INVOICE, {
+  const [refreshInvoice] = useRefreshFundingInvoiceMutation({
     variables: {
       fundingTxID: fundingTx.id,
     },

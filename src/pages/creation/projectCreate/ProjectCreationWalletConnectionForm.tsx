@@ -1,4 +1,3 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client'
 import {
   HStack,
   Image,
@@ -33,13 +32,13 @@ import {
   VoltageExplainerPageForGeyserURL,
   WalletOfSatoshiLightningAddressURL,
 } from '../../../constants'
-import { MUTATION_CREATE_WALLET } from '../../../graphql/mutations'
 import { colors } from '../../../styles'
 import {
   CreateWalletInput,
-  LightningAddressVerifyResponse,
   LndNodeType,
   Project,
+  useCreateWalletMutation,
+  useLightningAddressVerifyLazyQuery,
   WalletResourceType,
 } from '../../../types/generated/graphql'
 import { toInt, useNotification, validateEmail } from '../../../utils'
@@ -70,23 +69,6 @@ export enum LNAddressEvaluationState {
 
   SUCCEEDED = 'SUCCEEDED',
 }
-
-type LightningAddressVerificationQueryVariables = {
-  lightningAddress: string
-}
-
-type LightningAddressVerificationResponseData = {
-  lightningAddressVerify: LightningAddressVerifyResponse
-}
-
-export const QUERY_LIGHTNING_ADDRESS_EVALUATION = gql`
-  query LightningAddressVerify($lightningAddress: String) {
-    lightningAddressVerify(lightningAddress: $lightningAddress) {
-      reason
-      valid
-    }
-  }
-`
 
 export const ProjectCreationWalletConnectionForm = ({
   project,
@@ -136,10 +118,7 @@ export const ProjectCreationWalletConnectionForm = ({
   }
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
-    useLazyQuery<
-      LightningAddressVerificationResponseData,
-      LightningAddressVerificationQueryVariables
-    >(QUERY_LIGHTNING_ADDRESS_EVALUATION, {
+    useLightningAddressVerifyLazyQuery({
       variables: {
         lightningAddress: lightningAddressFormValue,
       },
@@ -155,9 +134,8 @@ export const ProjectCreationWalletConnectionForm = ({
       },
     })
 
-  const [createWallet, { loading: isCreateWalletLoading }] = useMutation(
-    MUTATION_CREATE_WALLET,
-  )
+  const [createWallet, { loading: isCreateWalletLoading }] =
+    useCreateWalletMutation()
 
   const createWalletInput: CreateWalletInput | null = useMemo(() => {
     const resourceInput: {
@@ -169,26 +147,26 @@ export const ProjectCreationWalletConnectionForm = ({
     }
 
     if (connectionOption === ConnectionOption.PERSONAL_NODE) {
-      if (Boolean(nodeInput) === false) {
+      if (!nodeInput) {
         return null
       }
 
       return {
         lndConnectionDetailsInput: {
-          macaroon: nodeInput!.invoiceMacaroon,
-          tlsCertificate: nodeInput!.tlsCert,
-          hostname: nodeInput!.hostname,
-          grpcPort: nodeInput!.isVoltage
+          macaroon: nodeInput.invoiceMacaroon,
+          tlsCertificate: nodeInput.tlsCert,
+          hostname: nodeInput.hostname,
+          grpcPort: nodeInput.isVoltage
             ? 10009
-            : nodeInput!.grpc
-            ? parseInt(nodeInput!.grpc, 10)
+            : nodeInput.grpc
+            ? parseInt(nodeInput.grpc, 10)
             : 0,
-          lndNodeType: nodeInput!.isVoltage
+          lndNodeType: nodeInput.isVoltage
             ? LndNodeType.Voltage
             : LndNodeType.Custom,
-          pubkey: nodeInput!.publicKey,
+          pubkey: nodeInput.publicKey,
         },
-        name: nodeInput!.name,
+        name: nodeInput.name,
         resourceInput,
       }
     }
@@ -237,7 +215,7 @@ export const ProjectCreationWalletConnectionForm = ({
 
     try {
       await createWallet({ variables: { input: createWalletInput } })
-      onProjectLaunchSelected(createWalletInput!)
+      onProjectLaunchSelected(createWalletInput)
     } catch (error) {
       toast({
         title: 'Something went wrong',
@@ -408,10 +386,10 @@ export const ProjectCreationWalletConnectionForm = ({
             </>
           </ButtonComponent>
 
-          {onSaveAsDraftSelected && (
+          {onSaveAsDraftSelected && createWalletInput && (
             <ButtonComponent
               w="full"
-              onClick={() => onSaveAsDraftSelected(createWalletInput!)}
+              onClick={() => onSaveAsDraftSelected(createWalletInput)}
               disabled={isCreateWalletLoading || isEvaluatingLightningAddress}
             >
               Save As Draft
