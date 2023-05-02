@@ -188,7 +188,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
       return currentState
     })
-  }, [setFundState])
+  }, [])
 
   const startWebLNFlow = useCallback(
     async (fundingTx: FundingTx) => {
