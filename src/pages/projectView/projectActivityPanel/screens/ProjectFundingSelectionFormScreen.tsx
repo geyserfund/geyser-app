@@ -25,7 +25,7 @@ import { ProjectPaymentFormFundingComment } from '../../projectMainBody/componen
 import { FundingFormSection } from '../components/FundingFormSection'
 
 type Props = {
-  isMobile: boolean
+  isMobile?: boolean
   fundingRequestLoading: boolean
   handleCloseButton: () => void
   formState: IFundForm

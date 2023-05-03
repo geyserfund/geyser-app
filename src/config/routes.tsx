@@ -1,6 +1,7 @@
+import { withSentryReactRouterV6Routing } from '@sentry/react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import { getPath, PathName } from '../constants'
+import { __production__, getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import { BadgesPage } from '../pages/badges/BadgesPage'
 import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
@@ -196,6 +197,10 @@ const platformRoutes = [
   },
 ] as PlatformRoutes[]
 
+const SentryRoutes = __production__
+  ? withSentryReactRouterV6Routing(Routes)
+  : Routes
+
 export const Router = () => {
   const renderRoutes = (routes: PlatformRoutes[]) => {
     return [
@@ -213,9 +218,13 @@ export const Router = () => {
             return <Route index key={path} element={renderElement} />
           }
 
+          if (!nested) {
+            return null
+          }
+
           return (
             <Route key={path} path={path} element={renderElement}>
-              {nested?.length && renderRoutes(nested)}
+              {renderRoutes(nested)}
             </Route>
           )
         },
@@ -225,5 +234,5 @@ export const Router = () => {
     ]
   }
 
-  return <Routes>{renderRoutes(platformRoutes)}</Routes>
+  return <SentryRoutes>{renderRoutes(platformRoutes)}</SentryRoutes>
 }

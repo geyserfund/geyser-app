@@ -21,7 +21,7 @@ import { WidgetItem } from '../../components/WidgetItem'
 
 interface Props {
   applicants: Array<GrantApplicant>
-  canVote: boolean
+  canVote?: boolean
   title?: string
   isClosed?: boolean
   fundingOpenStartDate: number

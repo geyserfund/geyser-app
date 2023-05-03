@@ -31,6 +31,8 @@ type Props = {
   fundForm: IFundFormState
 }
 
+type FilteredReward = { id: number; quantity: number }
+
 export const ProjectActivityPanel = ({
   project,
   fundingFlow,
@@ -147,7 +149,8 @@ export const ProjectActivityPanel = ({
         quantity: rewardsByIDAndCount[key as keyof ProjectReward],
       }))
       const filteredRewards = rewardsArray.filter(
-        (reward) => reward.quantity !== 0,
+        (reward): reward is FilteredReward =>
+          reward.quantity !== 0 && reward.quantity !== undefined,
       )
       const rewardInput: IRewardFundingInput = {
         shipping: { cost, destination },

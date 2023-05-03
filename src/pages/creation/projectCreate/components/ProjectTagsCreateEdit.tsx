@@ -90,6 +90,10 @@ export const ProjectTagsCreateEdit = ({
   })
 
   const handleChange = (value: MultiValue<TagsGetResult>) => {
+    if (!value[0]) {
+      return
+    }
+
     const newTag: Tag = { id: value[0].id, label: value[0].label }
     if (!tags.some((tag) => tag.id === newTag.id)) {
       updateTags([...tags, newTag])

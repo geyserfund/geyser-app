@@ -109,7 +109,7 @@ export const MilestoneAdditionModal = ({
     if (newMilestone) {
       newMilestone.amount = newAmount
 
-      milestones.current[itemIndex] = newMilestone
+      milestones.current[itemIndex] = newMilestone as ProjectMilestone
     }
 
     setFormError([])
@@ -257,10 +257,9 @@ export const MilestoneAdditionModal = ({
         isValid = false
       }
 
-      if (
-        index > 0 &&
-        milestones.current[index - 1].amount > milestone.amount
-      ) {
+      const previous = milestones.current[index - 1]
+
+      if (index > 0 && previous && previous.amount > milestone.amount) {
         errors.amount = 'Amount must to be at greater than previous milestone.'
         isValid = false
       }

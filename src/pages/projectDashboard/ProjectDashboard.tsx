@@ -49,9 +49,10 @@ export const ProjectDashboard = () => {
     )
   }
 
-  const checkValue = (splitValue: string) => {
-    if (splitValue === '' || splitValue === '/')
+  const checkValue = (splitValue?: string) => {
+    if (!splitValue || splitValue === '/') {
       return DashboardTabs.editProject
+    }
 
     return splitValue.replaceAll('/', '') as DashboardTabs
   }

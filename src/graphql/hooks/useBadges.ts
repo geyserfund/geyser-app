@@ -21,6 +21,10 @@ export const useBadges = () => {
     for (const badge of data.badges) {
       const [type, subtype] = badge.uniqueName.split('_')
 
+      if (!type || !subtype) {
+        continue
+      }
+
       if (!map[type]) {
         map[type] = { [subtype]: [badge] }
         continue
