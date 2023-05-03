@@ -16,7 +16,6 @@ export const CardLayout = ({
   hover,
   ...rest
 }: CardLayoutProps) => {
-  console.log(rest)
   return (
     <Stack
       as={rest.to ? Link : undefined}
