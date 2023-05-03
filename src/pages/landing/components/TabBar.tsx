@@ -1,10 +1,14 @@
-import { Avatar, ButtonProps } from '@chakra-ui/react'
+import { Avatar, Box, ButtonProps, Text, VStack } from '@chakra-ui/react'
 import { useMatch, useNavigate } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { ButtonComponent } from '../../../components/ui'
 import { getPath } from '../../../constants'
-import { useAuthContext, useFilterContext } from '../../../context'
+import {
+  useActivitySubsciptionContext,
+  useAuthContext,
+  useFilterContext,
+} from '../../../context'
 
 type TabBarProps = CardLayoutProps
 
@@ -12,6 +16,7 @@ export const TabBar = (props: TabBarProps) => {
   const { clearFilter } = useFilterContext()
   const navigate = useNavigate()
   const { user } = useAuthContext()
+  const { activities } = useActivitySubsciptionContext()
 
   const isCurrentTabActivity = useMatch(getPath('landingFeed'))
 
@@ -49,7 +54,25 @@ export const TabBar = (props: TabBarProps) => {
         ) : (
           ''
         )}
-        Activity
+        <VStack
+          h="100%"
+          position="relative"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text fontSize="16px">Activity</Text>
+          {activities.length > 0 && (
+            <Box
+              height="10px"
+              width="10px"
+              top="-10px"
+              right="-10px"
+              borderRadius="50%"
+              position="absolute"
+              backgroundColor="primary.600"
+            />
+          )}
+        </VStack>
       </ButtonComponent>
     </CardLayout>
   )
