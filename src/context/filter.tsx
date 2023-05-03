@@ -91,7 +91,7 @@ export const FilterProvider = ({
   const setUrlParamsFromFilters = (value: FilterType) => {
     const newParameters = [] as [string, string][]
 
-    Object.keys(value).map((key) => {
+    for (const key of Object.keys(value)) {
       if (value[key as keyof FilterType]) {
         if (key === 'tagIds') {
           const tagIds = value[key as keyof FilterType] as number[]
@@ -108,7 +108,8 @@ export const FilterProvider = ({
           newParameters.push([key, `${value[key as keyof FilterType]}`])
         }
       }
-    })
+    }
+
     setSearchParams(newParameters)
   }
 
