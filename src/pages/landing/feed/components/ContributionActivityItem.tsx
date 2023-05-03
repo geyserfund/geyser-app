@@ -22,12 +22,16 @@ import {
 import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
-import { FundingTx } from '../../../../types/generated/graphql'
-import { getDaysAgo, getRandomOrb, toSmallImageUrl } from '../../../../utils'
+import {
+  FundingTxWithCount,
+  getDaysAgo,
+  getRandomOrb,
+  toSmallImageUrl,
+} from '../../../../utils'
 import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTx
+  fundingTx: FundingTxWithCount
   dateTime?: string
   showsProjectLink?: boolean
   count?: number

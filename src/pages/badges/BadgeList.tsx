@@ -2,7 +2,7 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
 interface BadgeListProps {
-  title: string
+  title?: string
 }
 
 const BadgeList = ({ children, title }: PropsWithChildren<BadgeListProps>) => {

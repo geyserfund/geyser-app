@@ -11,7 +11,7 @@ import { EntryDetails } from './EntryDetails'
 type Rules = string
 
 interface IStyles {
-  isMobile: boolean
+  isMobile?: boolean
   inView: boolean
   fadeStarted?: boolean
 }

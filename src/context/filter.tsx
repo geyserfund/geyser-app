@@ -61,7 +61,8 @@ export const FilterProvider = ({
 
   const getFiltersFromUrlParams = () => {
     const countryCode = searchParams.get('countryCode') || undefined
-    const region = searchParams.get('search') || undefined
+    const region = searchParams.get('region') || undefined
+    const search = searchParams.get('search') || undefined
     const status = (searchParams.get('status') as ProjectStatus) || undefined
     const type = (searchParams.get('type') as ProjectType) || undefined
     const tagIds =
@@ -77,6 +78,7 @@ export const FilterProvider = ({
     return {
       countryCode,
       region,
+      search,
       status,
       type,
       tagIds,
@@ -89,7 +91,7 @@ export const FilterProvider = ({
   const setUrlParamsFromFilters = (value: FilterType) => {
     const newParameters = [] as [string, string][]
 
-    Object.keys(value).map((key) => {
+    for (const key of Object.keys(value)) {
       if (value[key as keyof FilterType]) {
         if (key === 'tagIds') {
           const tagIds = value[key as keyof FilterType] as number[]
@@ -106,7 +108,8 @@ export const FilterProvider = ({
           newParameters.push([key, `${value[key as keyof FilterType]}`])
         }
       }
-    })
+    }
+
     setSearchParams(newParameters)
   }
 

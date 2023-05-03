@@ -16,6 +16,10 @@ export const LandingProjectCard = ({
 }: LandingProjectCardProps) => {
   const navigate = useNavigate()
 
+  if (!project.owners[0]) {
+    return null
+  }
+
   return (
     <LandingCardBase
       isMobile={isMobile}

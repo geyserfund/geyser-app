@@ -32,7 +32,7 @@ export const useNostrExtensonLogin = () => {
       event.pubkey = pubkey
       event.id = getEventHash(event)
 
-      // TODO: refactor the utils sign event to return entire event
+      // @TODO: refactor the utils sign event to return entire event
       const signedEvent = await signEvent(event)
       const serialisedEvent = JSON.stringify(signedEvent)
 

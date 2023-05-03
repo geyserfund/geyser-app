@@ -101,7 +101,7 @@ export const SuccessImageComponent = ({
             Successful contribution to
           </H3>
           <H3 fontSize="22px" fontWeight={700} fontFamily={fonts.livvic}>
-            {project.name}
+            {project.title}
           </H3>
         </VStack>
         {currentBadge ? (

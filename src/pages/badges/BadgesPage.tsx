@@ -56,6 +56,7 @@ export const BadgesPage = () => {
         </Container>
         {badges &&
           Object.keys(badges).map((type) => {
+            const subtypes = badges[type]
             return (
               <Box key={type} pt={6} width="100%">
                 <CardLayout width="100%">
@@ -70,13 +71,14 @@ export const BadgesPage = () => {
                     >
                       {BADGE_TYPE_MAP[type]}
                     </Text>
-                    {badges[type] &&
-                      Object.keys(badges[type]).map((subtype) => {
+                    {subtypes &&
+                      Object.keys(subtypes).map((subtype) => {
+                        const subtypeBadges = subtypes[subtype]
                         return (
                           <Box key={subtype}>
                             <BadgeList title={BADGE_SUBTYPE_MAP[subtype]}>
-                              {badges[type][subtype] &&
-                                badges[type][subtype].map(
+                              {subtypeBadges &&
+                                subtypeBadges.map(
                                   (badge) =>
                                     badge && (
                                       <BadgeItem key={badge.id} {...badge} />

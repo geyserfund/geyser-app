@@ -1,8 +1,13 @@
-import { Divider, VStack } from '@chakra-ui/react'
+import { Button, Divider, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
 import { AlertBox } from '../../../components/ui'
 import { ID } from '../../../constants/components'
-import { useAuthContext, useFilterContext } from '../../../context'
+import {
+  useActivitySubsciptionContext,
+  useAuthContext,
+  useFilterContext,
+} from '../../../context'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
 import { Activity } from '../../../types/generated/graphql'
@@ -21,9 +26,14 @@ const itemLimit = 50
 
 export const ActivityFeed = () => {
   const isMobile = useMobileMode()
+
   const { followedProjects } = useAuthContext()
+  const { clearActivity, activities: subscriptionActivities } =
+    useActivitySubsciptionContext()
   const { filters } = useFilterContext()
   const { activity, tagIds, region, countryCode } = filters
+
+  const [aggregatedActivites, setAggregatedActivites] = useState<Activity[]>([])
 
   const {
     isLoading,
@@ -61,7 +71,21 @@ export const ActivityFeed = () => {
       tagIds,
       projectIds: followedProjects.map((project) => project.id),
     },
+    options: {
+      onCompleted() {
+        clearActivity()
+      },
+    },
   })
+
+  useEffect(() => {
+    setAggregatedActivites(activities)
+  }, [activities])
+
+  const handleClick = () => {
+    setAggregatedActivites([...subscriptionActivities, ...aggregatedActivites])
+    clearActivity()
+  }
 
   if (error) {
     return (
@@ -96,7 +120,12 @@ export const ActivityFeed = () => {
         paddingX="10px"
       >
         {!isMobile && <FilterTopBar noSort paddingBottom="20px" />}
-        <ActivityList activities={activities} />
+
+        {subscriptionActivities.length > 0 && (
+          <ViewUpdates onClick={handleClick} />
+        )}
+
+        <ActivityList activities={aggregatedActivites} />
       </VStack>
 
       <ScrollInvoke
@@ -129,5 +158,16 @@ export const ContributionsSkeleton = () => {
         })}
       </VStack>
     </VStack>
+  )
+}
+
+export const ViewUpdates = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <>
+      <Button size="sm" variant="outlined" onClick={onClick}>
+        view updates
+      </Button>
+      <Divider borderBottomWidth="2px" maxWidth="500px" color="brand.200" />
+    </>
   )
 }

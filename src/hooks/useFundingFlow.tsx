@@ -1,5 +1,12 @@
 import { ApolloError, gql, useLazyQuery, useMutation } from '@apollo/client'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
 import { ApolloErrors, fundingStages, stageList } from '../constants'
@@ -88,27 +95,55 @@ const initialFunding: FundingTx = {
   },
 }
 
-let fundInterval: any
+const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 
 interface IFundingFlowOptions {
   hasBolt11?: boolean
   hasWebLN?: boolean
 }
 
+const { webln }: { webln: WebLNProvider } = window as any
+
+const requestWebLNPayment = async (fundingTx: FundingTx) => {
+  if (!webln) {
+    throw new Error('no provider')
+  }
+
+  try {
+    await webln.enable()
+  } catch (e) {
+    throw new Error(WEBLN_ENABLE_ERROR)
+  }
+
+  if (!fundingTx.paymentRequest) {
+    throw new Error('payment request not found')
+  }
+
+  let preimage = ''
+
+  try {
+    const res = await webln.sendPayment(fundingTx.paymentRequest)
+    preimage = res.preimage
+  } catch (e) {
+    throw new Error(WEBLN_ENABLE_ERROR)
+  }
+
+  const paymentHash = await sha256(preimage)
+  return paymentHash
+}
+
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
+  const fundIntervalRef = useRef<NodeJS.Timeout>()
+
+  useEffect(() => {
+    // Cleanup interval on unmount
+    return () => clearInterval(fundIntervalRef.current)
+  }, [])
+
   const { hasBolt11 = true, hasWebLN = true } = options || {
     hasBolt11: true,
     hasWebLN: true,
   }
-
-  const webln = useMemo(() => {
-    const { webln }: { webln: WebLNProvider } = window as any
-    if (!webln) {
-      return
-    }
-
-    return webln
-  }, [])
 
   const { user } = useContext(AuthContext)
   const { toast } = useNotification()
@@ -142,47 +177,51 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     fetchPolicy: 'network-only',
   })
 
-  const startWebLNFlow = async (fundingTx: FundingTx) => {
-    let succeeded = false
+  const gotoNextStage = useCallback(() => {
+    setFundState((currentState) => {
+      const currentIndex = stageList.indexOf(currentState)
+      const nextState = stageList[currentIndex + 1]
 
-    const requestWebLNPayment = async () => {
-      if (!webln) {
-        throw new Error('no provider')
+      if (nextState) {
+        return nextState
       }
 
-      await webln.enable()
+      return currentState
+    })
+  }, [])
 
-      if (!fundingTx.paymentRequest) {
-        throw new Error('payment request not found')
+  const startWebLNFlow = useCallback(
+    async (fundingTx: FundingTx) => {
+      if (weblnErrored) {
+        return
       }
 
-      const { preimage } = await webln.sendPayment(fundingTx.paymentRequest)
-      const paymentHash = await sha256(preimage)
-      return paymentHash
-    }
+      try {
+        const paymentHash = await requestWebLNPayment(fundingTx)
 
-    return requestWebLNPayment()
-      .then((paymentHash) => {
         // Check preimage
         if (paymentHash === fundingTx.invoiceId) {
           gotoNextStage()
-          succeeded = true
-          return succeeded
+          return true
         }
 
         throw new Error('wrong preimage')
-      })
-      .catch((error) => {
+      } catch (error: any) {
         if (error.message === 'no provider') {
           throw error
-        } else if (error.message === 'wrong preimage') {
+        }
+
+        if (error.message === 'wrong preimage') {
           toast({
             title: 'Wrong payment preimage',
             description:
               'The payment preimage returned by the WebLN provider did not match the payment hash.',
             status: 'error',
           })
-        } else if (
+          return false
+        }
+
+        if (
           error.constructor === RejectionError ||
           error.message === 'User rejected'
         ) {
@@ -191,43 +230,54 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             description: 'Please use the invoice instead.',
             status: 'info',
           })
-        } else {
-          toast({
-            title: 'Oops! Something went wrong with WebLN.',
-            description: 'Please copy the invoice manually instead.',
-            status: 'error',
-          })
+          return false
         }
 
-        return succeeded
-      })
-  }
+        if (error.message === WEBLN_ENABLE_ERROR) {
+          return false
+        }
+
+        toast({
+          title: 'Oops! Something went wrong with WebLN.',
+          description: 'Please copy the invoice manually instead.',
+          status: 'error',
+        })
+
+        return false
+      }
+    },
+    [gotoNextStage, toast, weblnErrored],
+  )
 
   const [fundProject, { loading: fundingRequestLoading }] = useMutation(
     MUTATION_FUND,
     {
       onCompleted(data) {
-        try {
-          setFundingTx(data.fund.fundingTx)
-          setAmounts(data.fund.amountSummary)
+        const intervalFactory = () => {
+          clearInterval(fundIntervalRef.current)
+          return setInterval(getFundingStatus, 1500)
+        }
 
-          if (hasBolt11 && hasWebLN && webln) {
-            startWebLNFlow(data.fund.fundingTx).then((success) => {
+        setError('')
+        setFundingRequestErrored(false)
+        setFundingTx(data.fund.fundingTx)
+        setAmounts(data.fund.amountSummary)
+
+        if (hasBolt11 && hasWebLN && webln) {
+          startWebLNFlow(data.fund.fundingTx)
+            .then((success) => {
               if (!success) {
-                fundInterval = setInterval(getFundingStatus, 1500)
+                fundIntervalRef.current = intervalFactory()
                 setWebLNErrored(true)
               }
             })
-          } else {
-            fundInterval = setInterval(getFundingStatus, 1500)
-          }
-        } catch (_) {
-          setFundingRequestErrored(true)
-          toast({
-            title: 'Something went wrong',
-            description: 'Please refresh the page and try again',
-            status: 'error',
-          })
+            .catch((e) => {
+              console.error(e)
+              fundIntervalRef.current = intervalFactory()
+              setFundingRequestErrored(true)
+            })
+        } else {
+          fundIntervalRef.current = intervalFactory()
         }
       },
       onError(error: ApolloError) {
@@ -240,7 +290,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         setFundingRequestErrored(true)
-        clearInterval(fundInterval)
+        clearInterval(fundIntervalRef.current)
         toast({
           title: 'Something went wrong',
           description: 'Please refresh the page and try again',
@@ -250,41 +300,37 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
   )
 
-  const gotoNextStage = useCallback(() => {
-    setFundState((currentState) => {
-      const currentIndex = stageList.indexOf(currentState)
-      const nextState = stageList[currentIndex + 1]
-      return nextState
-    })
-  }, [setFundState])
-
   useEffect(() => {
     if (fundingStatus && fundingStatus.fundingTx) {
       /*
         We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
         older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
       */
-      if (
-        (fundingStatus.fundingTx.invoiceStatus !== fundingTx.invoiceStatus ||
-          fundingStatus.fundingTx.status !== fundingTx.status) &&
-        fundingStatus.fundingTx.invoiceId === fundingTx.invoiceId
-      ) {
-        setFundingTx({
-          ...fundingTx,
-          ...fundingStatus.fundingTx,
-        })
-      }
+      setFundingTx((current) => {
+        if (
+          (fundingStatus.fundingTx.invoiceStatus !== current.invoiceStatus ||
+            fundingStatus.fundingTx.status !== current.status) &&
+          fundingStatus.fundingTx.invoiceId === current.invoiceId
+        ) {
+          return {
+            ...current,
+            ...fundingStatus.fundingTx,
+          }
+        }
+
+        return current
+      })
 
       if (
         fundingStatus.fundingTx.status === FundingStatus.Paid ||
         (fundingStatus.fundingTx.status === FundingStatus.Pending &&
           fundingStatus.fundingTx.onChain)
       ) {
-        clearInterval(fundInterval)
+        clearInterval(fundIntervalRef.current)
         gotoNextStage()
       }
     }
-  }, [fundingStatus])
+  }, [fundingStatus, gotoNextStage])
 
   useEffect(() => {
     if (
@@ -292,7 +338,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       fundState === fundingStages.canceled ||
       fundState
     ) {
-      clearInterval(fundInterval)
+      clearInterval(fundIntervalRef.current)
     }
   }, [fundState])
 
@@ -313,7 +359,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       setFundingInput(input)
       await fundProject({ variables: { input } })
     },
-    [fundProject, gotoNextStage],
+    [fundProject, gotoNextStage, toast],
   )
 
   const [refreshInvoice] = useMutation<
@@ -325,7 +371,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
     onError(_) {
       setInvoiceRefreshErrored(true)
-      clearInterval(fundInterval)
+      clearInterval(fundIntervalRef.current)
     },
   })
 
@@ -358,6 +404,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     setFundState(fundingStages.initial)
     setFundingRequestErrored(false)
     setInvoiceRefreshErrored(false)
+    setError('')
     setWebLNErrored(false)
     setFundingTx({
       ...initialFunding,
@@ -374,7 +421,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     resetFundingFlow()
     gotoNextStage()
     requestFunding(fundingInput)
-  }, [fundingInput, requestFunding, resetFundingFlow])
+  }, [fundingInput, gotoNextStage, requestFunding, resetFundingFlow])
 
   return {
     fundingRequestErrored,
@@ -392,7 +439,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     refreshFundingInvoice,
     setFundState,
     error,
-    hasWebLN: useMemo(() => hasWebLN && Boolean(webln), [hasWebLN, webln]),
+    hasWebLN: useMemo(() => hasWebLN && Boolean(webln), [hasWebLN]),
   }
 }
 

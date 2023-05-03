@@ -152,6 +152,7 @@ export const Summary = () => {
                   icon={<AmbossIcon fontSize="20px" />}
                   aria-label="share"
                   onClick={() =>
+                    project.wallets[0] &&
                     window
                       .open(
                         `${AmbossUrl}${project.wallets[0].connectionDetails.pubkey}`,
@@ -175,7 +176,7 @@ export const Summary = () => {
             </span>
           }
         >
-          <AvatarElement borderRadius="50%" user={owner.user} />
+          <AvatarElement borderRadius="50%" user={owner?.user} />
         </SummaryInfoLine>
 
         <ProjectLinks links={project.links as string[]} />
