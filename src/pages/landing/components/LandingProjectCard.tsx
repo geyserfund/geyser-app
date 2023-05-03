@@ -1,10 +1,8 @@
-import { useNavigate } from 'react-router-dom'
-
 import { CardLayoutProps, LandingCardBase } from '../../../components/layouts'
 import { getPath } from '../../../constants'
 import { ProjectForLandingPageFragment } from '../../../types'
 
-interface LandingProjectCardProps extends CardLayoutProps {
+interface LandingProjectCardProps extends Omit<CardLayoutProps, 'to'> {
   project: ProjectForLandingPageFragment
   isMobile?: boolean
 }
@@ -14,16 +12,14 @@ export const LandingProjectCard = ({
   isMobile,
   ...rest
 }: LandingProjectCardProps) => {
-  const navigate = useNavigate()
-
   if (!project.owners[0]) {
     return null
   }
 
   return (
     <LandingCardBase
+      to={getPath('project', project.name)}
       isMobile={isMobile}
-      onClick={() => navigate(getPath('project', project.name))}
       imageSrc={`${project.thumbnailImage}`}
       title={project.title}
       user={project.owners[0].user}
