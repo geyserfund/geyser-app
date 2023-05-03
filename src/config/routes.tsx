@@ -218,13 +218,9 @@ export const Router = () => {
             return <Route index key={path} element={renderElement} />
           }
 
-          if (!nested) {
-            return null
-          }
-
           return (
             <Route key={path} path={path} element={renderElement}>
-              {renderRoutes(nested)}
+              {nested?.length && renderRoutes(nested)}
             </Route>
           )
         },
