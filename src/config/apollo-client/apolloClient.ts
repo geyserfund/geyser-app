@@ -4,8 +4,12 @@ import {
   createHttpLink,
   from,
   NormalizedCacheObject,
+  split,
 } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { getMainDefinition } from '@apollo/client/utilities'
+import { createClient } from 'graphql-ws'
 
 import { API_SERVICE_ENDPOINT } from '../../constants'
 import { cache } from './apollo-client-cache'
@@ -14,6 +18,12 @@ const httpLink = createHttpLink({
   uri: `${API_SERVICE_ENDPOINT}/graphql`,
   credentials: 'include',
 })
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: `ws://${API_SERVICE_ENDPOINT.split('//')[1]}/graphql`,
+  }),
+)
 
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
@@ -27,8 +37,20 @@ const errorLink = onError(({ graphQLErrors }) => {
   }
 })
 
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query)
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    )
+  },
+  wsLink,
+  httpLink,
+)
+
 const clientConfig: ApolloClientOptions<NormalizedCacheObject> = {
-  link: from([errorLink, httpLink]),
+  link: from([errorLink, splitLink]),
   cache,
 }
 

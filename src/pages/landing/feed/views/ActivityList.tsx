@@ -1,4 +1,5 @@
 import { Divider, Text } from '@chakra-ui/react'
+import { Fragment } from 'react'
 
 import { Activity } from '../../../../types'
 import { ActivityResource } from '../activity.graphql'
@@ -56,7 +57,7 @@ export const ActivityList = ({ activities }: { activities: Activity[] }) => {
     <>
       {activities.map((activity, index) => {
         return (
-          <>
+          <Fragment key={activity.id}>
             {renderActivity(activity)}
             {index < activities.length - 1 && (
               <Divider
@@ -65,7 +66,7 @@ export const ActivityList = ({ activities }: { activities: Activity[] }) => {
                 color="brand.200"
               />
             )}
-          </>
+          </Fragment>
         )
       })}
     </>
