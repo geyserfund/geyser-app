@@ -6,7 +6,6 @@ import { useQueryWithPagination } from '../../../../hooks'
 import { ActivityForLandingPageFragment, User } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { ContributionsSkeleton } from '../../../landing/feed/ActivityFeed'
-import { MapAliasedActivityProperties } from '../../../landing/feed/types'
 import { ActivityList } from '../../../landing/feed/views/ActivityList'
 import { ProfileTabLayout } from '../../components'
 
@@ -26,7 +25,6 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
     itemLimit: MaxProfileActivityLimit,
     queryName: 'getActivities',
     query: QUERY_ACTIVITIES_FOR_LANDING_PAGE,
-    resultMap: MapAliasedActivityProperties,
     where: {
       userIds: [userProfile?.id],
     },
