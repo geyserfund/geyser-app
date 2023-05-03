@@ -1,21 +1,17 @@
-import { QueryHookOptions, useQuery } from '@apollo/client'
+import { QueryHookOptions } from '@apollo/client'
 
-import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../../pages/landing/projects/projects.graphql'
 import {
-  GetProjectsMostFundedOfTheWeekInput,
-  ProjectsMostFundedOfTheWeekGet,
+  ProjectForLandingPageFragment,
+  ProjectsMostFundedOfTheWeekGetQuery,
+  ProjectsMostFundedOfTheWeekGetQueryVariables,
+  useProjectsMostFundedOfTheWeekGetQuery,
 } from '../../types'
+import { truthyFilter } from '../../utils/array'
 
-type TMostFundedOfTheWeekProjectsData = {
-  projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet[]
-}
-type TMostFundedOfTheWeekProjectsVariables = {
-  input: GetProjectsMostFundedOfTheWeekInput
-}
 interface UseMostFundedOfTheWeekProjectsStateProps
   extends QueryHookOptions<
-    TMostFundedOfTheWeekProjectsData,
-    TMostFundedOfTheWeekProjectsVariables
+    ProjectsMostFundedOfTheWeekGetQuery,
+    ProjectsMostFundedOfTheWeekGetQueryVariables
   > {
   take: number
   tagIds?: number[]
@@ -26,10 +22,7 @@ export const useMostFundedOfTheWeekProjectsState = ({
   tagIds,
   ...options
 }: UseMostFundedOfTheWeekProjectsStateProps) => {
-  const { data, ...rest } = useQuery<
-    TMostFundedOfTheWeekProjectsData,
-    TMostFundedOfTheWeekProjectsVariables
-  >(QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE, {
+  const { data, ...rest } = useProjectsMostFundedOfTheWeekGetQuery({
     variables: {
       input: {
         tagIds: tagIds || [],
@@ -40,9 +33,9 @@ export const useMostFundedOfTheWeekProjectsState = ({
   })
 
   const projects =
-    data?.projectsMostFundedOfTheWeekGet.map(
-      (projectsData) => projectsData.project,
-    ) || []
+    data?.projectsMostFundedOfTheWeekGet
+      .filter<{ project: ProjectForLandingPageFragment }>(truthyFilter)
+      .map((projectsData) => projectsData.project) || []
 
   return { projects, ...rest }
 }

@@ -2,7 +2,7 @@ import { useLazyQuery } from '@apollo/client'
 import { useState } from 'react'
 
 import { API_SERVICE_ENDPOINT, GeyserAssetDomainUrl } from '../constants'
-import { QUERY_GET_SIGNED_URL } from '../graphql/queries/entries'
+import { QUERY_SIGNED_UPLOAD_URL } from '../graphql/queries/entries'
 import { testImage, useNotification } from '../utils'
 
 type FileUploadURL = string
@@ -15,7 +15,7 @@ export const useSignedUpload = ({
 }) => {
   const { toast } = useNotification()
 
-  const [getSignedUrl] = useLazyQuery(QUERY_GET_SIGNED_URL, {
+  const [getSignedUrl] = useLazyQuery(QUERY_SIGNED_UPLOAD_URL, {
     onError() {
       failedToast()
       setIsLoading(false)

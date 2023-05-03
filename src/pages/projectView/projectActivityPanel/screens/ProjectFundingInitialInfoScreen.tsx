@@ -14,10 +14,10 @@ import { ButtonComponent } from '../../../../components/ui'
 import { MobileViews, useProjectContext } from '../../../../context'
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
-  QUERY_GET_PROJECT_FUNDERS,
+  QUERY_PROJECT_FUNDERS,
 } from '../../../../graphql'
 import { useQueryWithPagination } from '../../../../hooks'
-import { Funder, Project } from '../../../../types/generated/graphql'
+import { Funder, FundingTx, Project } from '../../../../types/generated/graphql'
 import {
   aggregateTransactions,
   FundingTxWithCount,
@@ -33,7 +33,7 @@ type Props = {
   project: Project
   btcRate: number
   test?: boolean
-  fundingTx: any
+  fundingTx: FundingTx
 }
 
 const itemLimit = 50
@@ -53,7 +53,7 @@ export const ProjectFundingInitialInfoScreen = ({
     FundingTxWithCount[]
   >([])
 
-  const fundingTxs = useQueryWithPagination<FundingTxWithCount>({
+  const fundingTxs = useQueryWithPagination<FundingTx, FundingTxWithCount>({
     itemLimit,
     queryName: 'getFundingTxs',
     query: QUERY_GET_FUNDING_TXS_LANDING,
@@ -72,7 +72,7 @@ export const ProjectFundingInitialInfoScreen = ({
   const funders = useQueryWithPagination<Funder>({
     queryName: 'getFunders',
     itemLimit,
-    query: QUERY_GET_PROJECT_FUNDERS,
+    query: QUERY_PROJECT_FUNDERS,
     where: { projectId: toInt(project.id) },
     orderBy: {
       amountFunded: 'desc',

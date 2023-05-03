@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 
 import { ButtonComponent } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { QUERY_GET_USER_BADGES } from '../../../../graphql/queries/badges'
+import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
 import { IProject } from '../../../../interfaces'
@@ -47,7 +47,7 @@ export const SuccessScreen = ({
   }
 
   const { data } = useQuery<{ userBadges: UserBadge[] }>(
-    QUERY_GET_USER_BADGES,
+    QUERY_USER_BADGES,
     {
       variables: { input: { where: { fundingTxId: fundingTx.id } } },
     },

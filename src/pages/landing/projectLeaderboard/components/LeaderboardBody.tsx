@@ -7,11 +7,11 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-import { Project } from '../../../../types'
+import { ProjectForLandingPageFragment } from '../../../../types'
 import { LeaderboardCardListItem, LeaderboardFeatureProject } from '.'
 
 export interface LeaderboardBodyProps extends StackProps {
-  projects: Project[]
+  projects: ProjectForLandingPageFragment[]
 }
 
 export const LeaderboardBody = ({

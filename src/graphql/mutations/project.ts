@@ -107,26 +107,8 @@ export const MUTATION_DELETE_PROJECT_MILESTONE = gql`
   }
 `
 
-export const MUTATION_ADD_PROJECT_LINK = gql`
-  mutation ProjectLinkAdd($input: ProjectLinkMutationInput!) {
-    projectLinkAdd(input: $input) {
-      id
-      links
-    }
-  }
-`
-
-export const MUTATION_REMOVE_PROJECT_LINK = gql`
-  mutation ProjectLinkRemove($input: ProjectLinkMutationInput!) {
-    projectLinkRemove(input: $input) {
-      id
-      links
-    }
-  }
-`
-
 export const MUTATION_FOLLOW_PROJECT = gql`
-  mutation Mutation($input: ProjectFollowMutationInput!) {
+  mutation ProjectFollow($input: ProjectFollowMutationInput!) {
     projectFollow(input: $input)
   }
 `

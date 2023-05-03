@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import { HStack, Skeleton, Stack, VStack } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
@@ -6,13 +5,11 @@ import { SortType, useFilterContext } from '../../../../context'
 import {
   OrderByOptions,
   Project,
-  ProjectsGetQueryInput,
-  ProjectsResponse,
   ProjectStatus,
   Tag,
+  useProjectsForLandingPageQuery,
 } from '../../../../types'
 import { ProjectDisplayBody } from '../elements'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 
 interface ProjectDisplayProps {
   tag?: Tag
@@ -24,10 +21,7 @@ const NO_OF_PROJECT_TO_LOAD = 3
 export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
   const { updateFilter } = useFilterContext()
 
-  const { data, loading } = useQuery<
-    { projects: ProjectsResponse },
-    { input: ProjectsGetQueryInput }
-  >(QUERY_PROJECTS_FOR_LANDING_PAGE, {
+  const { data, loading } = useProjectsForLandingPageQuery({
     variables: {
       input: {
         where: {

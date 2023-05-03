@@ -4,15 +4,15 @@ import { createContext, useCallback, useContext, useState } from 'react'
 
 import { ACTIVITY_CREATION_SUBSCRIPTION } from '../graphql/subscriptions'
 import {
-  Activity,
+  ActivityCreatedSubscription,
   ActivityCreatedSubscriptionInput,
-  ActivityResource,
+  ActivityForLandingPageFragment,
 } from '../types'
 import { toInt } from '../utils'
 import { useAuthContext } from './auth'
 
 export interface ActivitySubscriptionState {
-  activities: Activity[]
+  activities: ActivityForLandingPageFragment[]
   clearActivity: () => void
 }
 
@@ -30,12 +30,14 @@ export const ActivitySubscriptionProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const [activities, setActivities] = useState<Activity[]>([])
+  const [activities, setActivities] = useState<
+    ActivityForLandingPageFragment[]
+  >([])
   const { isLoggedIn, followedProjects } = useAuthContext()
 
   const skipSubscription = !isLoggedIn || !(followedProjects.length > 0)
   useSubscription<
-    { activityCreated: ActivityResource },
+    ActivityCreatedSubscription,
     ActivityCreatedSubscriptionInput
   >(ACTIVITY_CREATION_SUBSCRIPTION, {
     variables: {
@@ -46,15 +48,15 @@ export const ActivitySubscriptionProvider = ({
     skip: skipSubscription,
     onData(options) {
       const activityCreated = options.data.data?.activityCreated
-      const currentDateTime = DateTime.now().toMillis() // TODO this will have to come from the backend
+      const currentDateTime = DateTime.now().toMillis() // @TODO this will have to come from the backend
       const newActivity = {
         createdAt: currentDateTime,
         id: `${currentDateTime}`,
         resource: activityCreated,
-      } as Activity
+      } as ActivityForLandingPageFragment
 
       if (activityCreated) {
-        setActivities([...activities, newActivity])
+        setActivities((current) => [...current, newActivity])
       }
     },
   })

@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const MUTATION_PROJECT_TAG_ADD = gql`
-  mutation Mutation($input: ProjectTagMutationInput!) {
+  mutation ProjectTagAdd($input: ProjectTagMutationInput!) {
     projectTagAdd(input: $input) {
       id
       label
@@ -18,7 +18,7 @@ export const MUTATION_PROJECT_TAG__REMOVE = gql`
   }
 `
 export const MUTATION_TAG_CREATE = gql`
-  mutation TagCreate($input: TagCreateInput!) {
+  mutation ProjectTagCreate($input: TagCreateInput!) {
     tagCreate(input: $input) {
       id
       label

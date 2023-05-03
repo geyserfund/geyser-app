@@ -1,12 +1,12 @@
 import { Stack } from '@chakra-ui/react'
 
-import { Project } from '../../../../types'
+import { ProjectForLandingPageFragment } from '../../../../types'
 import { LandingProjectCard } from '../../components'
 import { ProjectRowLayout, ProjectRowLayoutProps } from '../elements'
 
 interface ProjectDisplayBodyProps
   extends Omit<ProjectRowLayoutProps, 'children'> {
-  projects: Project[]
+  projects: ProjectForLandingPageFragment[]
   seeAllText?: string
 }
 

@@ -1,22 +1,29 @@
+import { useState } from 'react'
+
 import { PaginationInput } from '../types/generated/graphql'
 import { validNumber } from '../utils'
 import { useListenerState } from './useListenerState'
 import { getNestedValue } from './useQueryWithPagination'
 
-export type usePaginationHookProps = {
+export type usePaginationHookProps<TEntity, TTransformed = TEntity> = {
   fetchMore: any
   queryName: string | string[]
   itemLimit?: number
   cursorID?: number
   where?: any
   orderBy?: any
-  resultMap?: (_: any[]) => any[]
+  resultMap?: (_: TEntity[]) => TTransformed[]
 }
+
+export type PaginatedListType<
+  TEntity,
+  TTransformed = TEntity,
+> = TTransformed extends never[] ? TEntity[] : TTransformed[]
 
 const thresholdNoOfAggregatedResultsToFetchMore = 5
 const noOfTimesToRefetchMore = 5
 
-export const usePaginationHook = <Type,>({
+export const usePaginationHook = <TEntity, TTransformed = TEntity>({
   fetchMore,
   queryName,
   itemLimit = 10,
@@ -24,8 +31,10 @@ export const usePaginationHook = <Type,>({
   where,
   orderBy,
   resultMap,
-}: usePaginationHookProps) => {
-  const [list, setList] = useListenerState<Type[]>([])
+}: usePaginationHookProps<TEntity, TTransformed>) => {
+  const [list, setList] = useState<PaginatedListType<TEntity, TTransformed>>(
+    [] as unknown as PaginatedListType<TEntity, TTransformed>,
+  )
 
   const [noMoreItems, setNoMoreItems] = useListenerState(false)
 
@@ -36,7 +45,7 @@ export const usePaginationHook = <Type,>({
     ...(cursorID !== undefined && { id: cursorID }),
   })
 
-  const handleDataUpdate = (data: Type[]) => {
+  const handleDataUpdate = (data: TEntity[]) => {
     if (data) {
       if (data.length < itemLimit) {
         setNoMoreItems(true)
@@ -72,12 +81,14 @@ export const usePaginationHook = <Type,>({
     }
   }
 
-  const handleMapData = (data: Type[]) => {
+  const handleMapData = (
+    data: TEntity[],
+  ): PaginatedListType<TEntity, TTransformed> => {
     if (resultMap) {
-      return resultMap(data)
+      return resultMap(data) as PaginatedListType<TEntity, TTransformed>
     }
 
-    return data
+    return data as PaginatedListType<TEntity, TTransformed>
   }
 
   const fetchNext = async (count?: number) => {
@@ -106,7 +117,13 @@ export const usePaginationHook = <Type,>({
 
         const mappedData = handleMapData(data)
 
-        setList([...list.current, ...mappedData])
+        setList(
+          (current) =>
+            [...current, ...mappedData] as PaginatedListType<
+              TEntity,
+              TTransformed
+            >,
+        )
         // If the aggregated length of the data is too small next pagination is automatically fetched
         if (
           data.length === itemLimit &&
@@ -129,6 +146,6 @@ export const usePaginationHook = <Type,>({
     isLoadingMore,
     fetchNext,
     noMoreItems,
-    data: list.current,
+    data: list,
   }
 }

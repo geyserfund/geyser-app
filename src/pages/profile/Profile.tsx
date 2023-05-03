@@ -12,7 +12,7 @@ import { useParams } from 'react-router'
 import { AlertBox } from '../../components/ui'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
-import { USER_PROFILE_QUERY } from '../../graphql'
+import { QUERY_USER_PROFILE } from '../../graphql'
 import { User, UserGetInput } from '../../types/generated/graphql'
 import { toInt } from '../../utils'
 import { AccountInfo, Badges } from './views'
@@ -36,7 +36,7 @@ export const Profile = () => {
     loading: profileLoading,
     error,
     data,
-  } = useQuery<ResponseData, QueryVariables>(USER_PROFILE_QUERY, {
+  } = useQuery<ResponseData, QueryVariables>(QUERY_USER_PROFILE, {
     variables: {
       where: {
         id: toInt(params.userId),

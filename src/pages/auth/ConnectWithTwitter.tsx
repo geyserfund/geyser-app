@@ -6,7 +6,7 @@ import { BsTwitter } from 'react-icons/bs'
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
-import { ME } from '../../graphql'
+import { QUERY_ME } from '../../graphql'
 import { User } from '../../types/generated/graphql'
 import { hasTwitterAccount, useNotification } from '../../utils'
 
@@ -21,7 +21,7 @@ export const ConnectWithTwitter = ({
   const { setUser, setIsLoggedIn } = useAuthContext()
   const { toast } = useNotification()
 
-  const [queryCurrentUser, { stopPolling }] = useLazyQuery(ME, {
+  const [queryCurrentUser, { stopPolling }] = useLazyQuery(QUERY_ME, {
     onCompleted(data: { me: User }) {
       if (data && data.me) {
         const hasTwitter = hasTwitterAccount(data.me)

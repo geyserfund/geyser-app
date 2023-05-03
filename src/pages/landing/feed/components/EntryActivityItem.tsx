@@ -3,14 +3,14 @@ import { HStack, Link, VStack } from '@chakra-ui/react'
 import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { Entry } from '../../../../types'
+import { EntryForLandingPageFragment } from '../../../../types'
 import { LandingEntryCard, TimeAgo } from '../../components'
 
 export const EntryActivityItem = ({
   entry,
   dateTime,
 }: {
-  entry: Entry
+  entry: EntryForLandingPageFragment
   dateTime?: string
 }) => {
   const { creator } = entry
