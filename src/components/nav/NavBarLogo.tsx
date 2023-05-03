@@ -47,8 +47,8 @@ export const NavBarLogo = ({
       : LogoDark
 
   return (
-    <Box {...rest}>
-      <Link to="/" className={`${classes.container} ${className}`}>
+    <Box {...rest} className={`${classes.container} ${className}`}>
+      <Link to="/">
         <Image
           className={imageClassName}
           height="32px"
