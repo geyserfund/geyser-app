@@ -62,7 +62,7 @@ const Item = ({
   width,
   percentage,
 }: {
-  bg: string
+  bg?: string
   title: string
   width: number
   percentage: number

@@ -99,14 +99,19 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
         )
 
         if (reward && reward.id) {
+          const rewardMultiplier =
+            newRewardsCountInfo[rewardID as keyof ProjectReward]
+          if (!rewardMultiplier) {
+            return 0
+          }
+
           const cost =
             state.rewardCurrency === RewardCurrency.Usdcent
               ? reward.cost
               : // Assume sats if not USD cents
                 getUSDCentsAmount(reward.cost as Satoshis)
 
-          rewardsCost +=
-            cost * newRewardsCountInfo[rewardID as keyof ProjectReward]
+          rewardsCost += cost * rewardMultiplier
         }
       })
     }
