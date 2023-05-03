@@ -310,12 +310,15 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     <VStack spacing={4}>
       <VStack spacing={4}>
         <HStack
+          mb={4}
           spacing={4}
           display={
             qrDisplayState === QRDisplayState.AWAITING_PAYMENT ? 'flex' : 'none'
           }
         >
-          <FaBitcoin fontSize={'120px'} />
+          <Box>
+            <FaBitcoin fontSize={'50px'} />
+          </Box>
           <Text fontSize={'10px'} fontWeight={400}>
             Fund with any on-chain or lightning wallet. If you are paying
             on-chain, make sure to send the exact amount, otherwise it will not

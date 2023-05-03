@@ -36,15 +36,15 @@ export const ProjectFundingQRScreen = ({
   return (
     <VStack
       padding={isMobile ? '10px 0px' : '10px 20px'}
-      spacing="12px"
+      spacing="20px"
       width="100%"
       height="100%"
       overflowY="auto"
       margin="10px 15px"
       display="flex"
-      flexDirection={'column'}
-      justifyContent={'space-between'}
-      alignItems={'center'}
+      flexDirection="column"
+      justifyContent="start"
+      alignItems="center"
       paddingX={5}
       marginTop={2}
     >
