@@ -138,22 +138,28 @@ export const Summary = () => {
               />
             </Tooltip>
             {project.wallets && getPossibleWalletPubkey(project.wallets[0]) && (
-              <IconButton
-                {...greenBorderButtonStyles}
-                icon={<AmbossIcon fontSize="20px" />}
-                aria-label="share"
-                onClick={() =>
-                  getPossibleWalletPubkey(project.wallets[0]) &&
-                  window
-                    .open(
-                      `${AmbossUrl}${getPossibleWalletPubkey(
-                        project.wallets[0],
-                      )}`,
-                      '_blank',
-                    )
-                    ?.focus()
-                }
-              />
+              <Tooltip
+                label="Lightning Node"
+                placement="top"
+                closeOnClick={false}
+              >
+                <IconButton
+                  {...greenBorderButtonStyles}
+                  icon={<AmbossIcon fontSize="20px" />}
+                  aria-label="share"
+                  onClick={() =>
+                    getPossibleWalletPubkey(project.wallets[0]) &&
+                    window
+                      .open(
+                        `${AmbossUrl}${getPossibleWalletPubkey(
+                          project.wallets[0],
+                        )}`,
+                        '_blank',
+                      )
+                      ?.focus()
+                  }
+                />
+              </Tooltip>
             )}
             <FollowButton projectId={project.id} />
           </HStack>
