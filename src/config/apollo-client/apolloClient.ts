@@ -11,7 +11,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 
-import { API_SERVICE_ENDPOINT } from '../../constants'
+import { __development__, API_SERVICE_ENDPOINT } from '../../constants'
 import { cache } from './apollo-client-cache'
 
 const httpLink = createHttpLink({
@@ -19,9 +19,11 @@ const httpLink = createHttpLink({
   credentials: 'include',
 })
 
+const prefix = __development__ ? 'ws' : 'wss'
+
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: `ws://${API_SERVICE_ENDPOINT.split('//')[1]}/graphql`,
+    url: `${prefix}://${API_SERVICE_ENDPOINT.split('//')[1]}/graphql`,
   }),
 )
 
