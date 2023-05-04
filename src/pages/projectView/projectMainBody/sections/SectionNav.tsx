@@ -38,7 +38,7 @@ export const SectionNav = () => {
   return (
     <VStack width="100%" spacing="40px">
       <HStack justifyContent="center" spacing="13px">
-        {(hasEntries || isProjectOwner) && (
+        {hasEntries && (
           <Button
             background="none"
             rightIcon={
@@ -49,7 +49,7 @@ export const SectionNav = () => {
             Entries
           </Button>
         )}
-        {(isRewardBased || isProjectOwner) && (
+        {isRewardBased && (
           <Button
             background="none"
             rightIcon={
@@ -60,7 +60,7 @@ export const SectionNav = () => {
             Rewards
           </Button>
         )}
-        {(hasMilestones || isProjectOwner) && (
+        {hasMilestones && (
           <Button
             background="none"
             rightIcon={
