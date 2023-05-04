@@ -11,7 +11,7 @@ import {
 
 import { AUTH_SERVICE_ENDPOINT } from '../constants'
 import { defaultUser } from '../defaults'
-import { ME, ME_PROJECT_FOLLOWS } from '../graphql'
+import { QUERY_ME, QUERY_ME_PROJECT_FOLLOWS } from '../graphql'
 import { Project, User } from '../types/generated/graphql'
 
 const defaultContext: AuthContextProps = {
@@ -73,14 +73,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(ME, {
-    fetchPolicy: 'network-only',
-    onCompleted(data: { me: User }) {
-      if (data && data.me) {
-        login(data.me)
-      }
+  const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(
+    QUERY_ME,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted(data: { me: User }) {
+        if (data && data.me) {
+          login(data.me)
+        }
+      },
     },
-  })
+  )
 
   const login = (me: User) => {
     setUser({ ...defaultUser, ...me })
@@ -106,7 +109,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const [queryFollowedProjects] = useLazyQuery<{ me: User }>(
-    ME_PROJECT_FOLLOWS,
+    QUERY_ME_PROJECT_FOLLOWS,
     {
       fetchPolicy: 'network-only',
       onCompleted(data) {

@@ -90,7 +90,7 @@ export const QUERY_GRANT = gql`
 `
 
 export const QUERY_GRANT_STATISTICS = gql`
-  query Query {
+  query GrantStatistics {
     grantStatistics {
       grants {
         amountFunded

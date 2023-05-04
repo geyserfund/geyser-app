@@ -5,7 +5,7 @@ import { BsBoxArrowUpRight } from 'react-icons/bs'
 import { CardLayout } from '../../../../components/layouts'
 import { Body2, H2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
-import { QUERY_GET_USER_BADGES } from '../../../../graphql/queries/badges'
+import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
 import { User, UserBadge } from '../../../../types'
 import { toInt } from '../../../../utils'
 import { BadgesBody, BadgesBodySkeleton } from './BadgesBody'
@@ -21,7 +21,7 @@ export const Badges = ({
 }) => {
   const { data: userBadgesData, loading: userBadgeLoading } = useQuery<{
     userBadges: UserBadge[]
-  }>(QUERY_GET_USER_BADGES, {
+  }>(QUERY_USER_BADGES, {
     variables: { input: { where: { userId: toInt(userProfile.id) } } },
   })
 

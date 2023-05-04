@@ -3,10 +3,10 @@ import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../components/layouts'
-import { useBadges } from '../../graphql/hooks/useBadges'
 import BadgeItem from './BadgeItem'
 import BadgeList from './BadgeList'
 import { BadgesFAQ } from './BadgesFAQ'
+import { useBadges } from './hooks/useBadges'
 
 export const BADGE_TYPE_MAP: Record<string, string> = {
   contributor: 'Contributor',

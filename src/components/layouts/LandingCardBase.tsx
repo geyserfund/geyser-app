@@ -12,7 +12,10 @@ import {
   FundingStatWithFollowProps,
 } from '../../pages/landing/components/FundingStatWithFollow'
 import { AvatarElement } from '../../pages/projectView/projectMainBody/components'
-import { User } from '../../types'
+import {
+  EntryForLandingPageFragment,
+  ProjectForLandingPageFragment,
+} from '../../types'
 import { H3 } from '../typography'
 import { ImageWithReload } from '../ui'
 import { CardLayout, CardLayoutProps } from '.'
@@ -23,7 +26,9 @@ export interface LandingCardBaseProps
   isMobile?: boolean
   imageSrc: string
   title: string
-  user: User
+  user:
+    | EntryForLandingPageFragment['creator']
+    | ProjectForLandingPageFragment['owners'][number]['user']
 }
 
 export const LandingCardBase = ({

@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayoutProps, LandingCardBase } from '../../../components/layouts'
 import { getPath } from '../../../constants'
-import { Entry } from '../../../types'
+import { EntryForLandingPageFragment } from '../../../types'
 import { toSmallImageUrl } from '../../../utils'
 
 interface LandingEntryCardProps extends CardLayoutProps {
-  entry: Entry
+  entry: EntryForLandingPageFragment
   isMobile?: boolean
 }
 
@@ -24,7 +24,7 @@ export const LandingEntryCard = ({
       imageSrc={toSmallImageUrl(`${entry.image}`)}
       title={entry.title}
       user={entry.creator}
-      fundersCount={entry.fundersCount}
+      fundersCount={entry.entryFundersCount}
       amountFunded={entry.amountFunded}
       projectId={entry.project?.id}
       {...rest}

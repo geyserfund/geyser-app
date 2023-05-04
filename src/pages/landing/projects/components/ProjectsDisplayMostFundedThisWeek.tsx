@@ -1,13 +1,7 @@
-import { useQuery } from '@apollo/client'
-
 import { SortType, useFilterContext } from '../../../../context'
-import {
-  GetProjectsMostFundedOfTheWeekInput,
-  ProjectsMostFundedOfTheWeekGet,
-  Tag,
-} from '../../../../types'
+import { useMostFundedOfTheWeekProjectsState } from '../../../../hooks/graphqlState'
+import { Tag } from '../../../../types'
 import { ProjectDisplayBody } from '../elements'
-import { QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE } from '../projects.graphql'
 import { ProjectsDisplaySkeleton } from './ProjectsDisplay'
 
 interface ProjectDisplayProps {
@@ -21,16 +15,9 @@ export const ProjectsDisplayMostFundedThisWeek = ({
 }: ProjectDisplayProps) => {
   const { updateFilter } = useFilterContext()
 
-  const { data, loading } = useQuery<
-    { projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet[] },
-    { input: GetProjectsMostFundedOfTheWeekInput }
-  >(QUERY_TRENDING_PROJECTS_FOR_LANDING_PAGE, {
-    variables: {
-      input: {
-        tagIds: tag ? [tag.id] : [],
-        take: NO_OF_PROJECT_TO_LOAD,
-      },
-    },
+  const { projects, loading } = useMostFundedOfTheWeekProjectsState({
+    tagIds: tag ? [tag.id] : [],
+    take: NO_OF_PROJECT_TO_LOAD,
   })
 
   const onSeeAllClick = () => {
@@ -41,16 +28,11 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     }
   }
 
-  const projectList =
-    data?.projectsMostFundedOfTheWeekGet.map(
-      (projectData) => projectData.project,
-    ) || []
-
   if (loading) {
     return <ProjectsDisplaySkeleton />
   }
 
-  if (projectList.length === 0) {
+  if (projects.length === 0) {
     return null
   }
 
@@ -58,7 +40,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     <ProjectDisplayBody
       title={tag?.label || 'Recent Projects'}
       subtitle={tag?.label ? 'Trending in' : ''}
-      projects={projectList}
+      projects={projects}
       onSeeAllClick={onSeeAllClick}
     />
   )

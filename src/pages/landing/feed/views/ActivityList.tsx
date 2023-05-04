@@ -1,54 +1,58 @@
 import { Divider, Text } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
-import { Activity } from '../../../../types'
-import { ActivityResource } from '../activity.graphql'
+import { ActivityForLandingPageFragment } from '../../../../types'
 import { ContributionActivityItem, EntryActivityItem } from '../components'
 import { ProjectActivityItem } from '../components/ProjectActivityItem'
 import { RewardActivityItem } from '../components/RewardActivityItem'
+import { ActivityResource } from '../types'
 
-export const ActivityList = ({ activities }: { activities: Activity[] }) => {
-  const renderActivity = (activity: Activity) => {
-    if (!activity.resource) {
-      return null
-    }
-
-    switch (activity.resource.__typename) {
-      case ActivityResource.fundingTx:
-        return (
-          <ContributionActivityItem
-            fundingTx={activity.resource}
-            dateTime={activity.createdAt}
-            showsProjectLink
-          />
-        )
-      case ActivityResource.project:
-        return (
-          <ProjectActivityItem
-            project={activity.resource}
-            dateTime={activity.createdAt}
-          />
-        )
-      case ActivityResource.entry:
-        return (
-          <EntryActivityItem
-            entry={activity.resource}
-            dateTime={activity.createdAt}
-          />
-        )
-      case ActivityResource.projectReward:
-        return (
-          <RewardActivityItem
-            reward={activity.resource}
-            dateTime={activity.createdAt}
-          />
-        )
-
-      default:
-        return null
-    }
+const renderActivity = (activity: ActivityForLandingPageFragment) => {
+  if (!activity.resource) {
+    return null
   }
 
+  switch (activity.resource.__typename) {
+    case ActivityResource.fundingTx:
+      return (
+        <ContributionActivityItem
+          fundingTx={activity.resource}
+          dateTime={activity.createdAt}
+          showsProjectLink
+        />
+      )
+    case ActivityResource.project:
+      return (
+        <ProjectActivityItem
+          project={activity.resource}
+          dateTime={activity.createdAt}
+        />
+      )
+    case ActivityResource.entry:
+      return (
+        <EntryActivityItem
+          entry={activity.resource}
+          dateTime={activity.createdAt}
+        />
+      )
+    case ActivityResource.projectReward:
+      return (
+        <RewardActivityItem
+          reward={activity.resource}
+          dateTime={activity.createdAt}
+        />
+      )
+
+    default:
+      return null
+  }
+}
+
+export const ActivityList = ({
+  activities,
+}: {
+  activities: ActivityForLandingPageFragment[]
+}) => {
   if (activities.length === 0) {
     return <Text>This user has no activity yet.</Text>
   }

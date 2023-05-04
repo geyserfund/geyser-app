@@ -19,7 +19,7 @@ import {
   MUTATION_PUBLISH_ENTRY,
   MUTATION_UPDATE_ENTRY,
 } from '../../../graphql/mutations/entries'
-import { QUERY_GET_ENTRY } from '../../../graphql/queries/entries'
+import { QUERY_ENTRY } from '../../../graphql/queries/entries'
 import { IEntryUpdateInput } from '../../../interfaces/entry'
 import { EntryStatus, Owner, Project } from '../../../types/generated/graphql'
 import { isDraft, toInt, useNotification } from '../../../utils'
@@ -42,7 +42,7 @@ export const EntryPreview = () => {
   const [entry, setEntry] = useState<TEntry>(defaultEntry)
 
   const [getPost, { loading: loadingPosts, data: entryData }] = useLazyQuery(
-    QUERY_GET_ENTRY,
+    QUERY_ENTRY,
     {
       onCompleted(data) {
         if (data.entry === null) {

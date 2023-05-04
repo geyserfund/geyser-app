@@ -1,15 +1,9 @@
-import { useQuery } from '@apollo/client'
 import { useMemo } from 'react'
 
-import { Badge } from '../../types'
-import { BADGES_QUERY } from '../queries/badges'
-
-type ResponseData = {
-  badges: Badge[]
-}
+import { Badge, useBadgesQuery } from '../../../types'
 
 export const useBadges = () => {
-  const { data, error, loading, refetch } = useQuery<ResponseData>(BADGES_QUERY)
+  const { data, error, loading, refetch } = useBadgesQuery()
 
   const badges = useMemo(() => {
     if (!data) {

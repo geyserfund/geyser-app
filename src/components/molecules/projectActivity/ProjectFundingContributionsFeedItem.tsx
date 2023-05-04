@@ -11,7 +11,10 @@ import { HTMLChakraProps } from '@chakra-ui/system'
 
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
 import { fonts } from '../../../styles'
-import { FundingTx, Project } from '../../../types/generated/graphql'
+import {
+  FundingTxForUserContributionFragment,
+  Project,
+} from '../../../types/generated/graphql'
 import { getDaysAgo } from '../../../utils'
 import { commaFormatted } from '../../../utils/formatData/helperFunctions'
 import { LightningIcon, SatoshiIconTilted } from '../../icons'
@@ -20,7 +23,7 @@ import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon'
 import { renderFunderBadges } from './renderFunderBadges'
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTx
+  fundingTx: FundingTxForUserContributionFragment
   showsProjectLink?: boolean
   linkedProject?: Project
   count?: number
