@@ -145,7 +145,7 @@ export const ContributionsSkeleton = () => {
 export const ViewUpdates = ({ onClick }: { onClick: () => void }) => {
   return (
     <>
-      <Button size="sm" variant="outlined" onClick={onClick}>
+      <Button size="sm" variant="containedWhite" onClick={onClick}>
         view updates
       </Button>
       <Divider borderBottomWidth="2px" maxWidth="500px" color="brand.200" />

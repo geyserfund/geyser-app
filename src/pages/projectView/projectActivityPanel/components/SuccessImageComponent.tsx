@@ -1,8 +1,9 @@
 import {
+  Button,
   Center,
   HStack,
-  IconButton,
   Image,
+  Text,
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
@@ -132,24 +133,28 @@ export const SuccessImageComponent = ({
         </VStack>
       </VStack>
       <HStack w="full" justifyContent="end">
-        <Body2 color="neutral.900">Share with friends</Body2>
         <Tooltip placement="top" label={copied ? 'copied' : 'copy'}>
-          <IconButton
+          <Button
             size="sm"
-            rounded="full"
+            isActive={copied}
+            variant="containedWhite"
             aria-label="copy-success-image"
-            icon={<BiCopy />}
+            leftIcon={<BiCopy />}
             onClick={handleCopy}
-          />
+          >
+            <Text variant="caption">Copy</Text>
+          </Button>
         </Tooltip>
         <Tooltip placement="top" label="download">
-          <IconButton
+          <Button
             size="sm"
-            rounded="full"
+            variant="containedWhite"
             aria-label="download-success-image"
-            icon={<BiDownload />}
+            leftIcon={<BiDownload />}
             onClick={handleDownload}
-          />
+          >
+            <Text variant="caption">Download</Text>
+          </Button>
         </Tooltip>
       </HStack>
     </VStack>
