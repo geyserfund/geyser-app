@@ -6,9 +6,9 @@ import { SectionTitle } from '../../../../components/ui'
 import { GeyserTelegramUrl } from '../../../../constants'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
 import { IFundForm } from '../../../../hooks'
-import { IFundingAmounts, IProject } from '../../../../interfaces'
+import { IFundingAmounts } from '../../../../interfaces'
 import { Satoshis } from '../../../../types'
-import { Project } from '../../../../types/generated/graphql'
+import { Project, ProjectFragment } from '../../../../types/generated/graphql'
 import { useMobileMode } from '../../../../utils'
 import {
   ContributionInfoBox,
@@ -21,7 +21,7 @@ type Props = {
   fundingFlow: any
   amounts: IFundingAmounts
   state: IFundForm
-  project: Project | IProject
+  project: ProjectFragment
 }
 
 export const ProjectFundingQRScreen = ({

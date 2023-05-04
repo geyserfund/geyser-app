@@ -4,7 +4,7 @@ import { ProjectProvider } from '../../context'
 import { useFundingFormState } from '../../hooks'
 import {
   FundingResourceType,
-  Project,
+  ProjectFragment,
   ProjectReward,
 } from '../../types/generated/graphql'
 import { useMobileMode } from '../../utils'
@@ -13,8 +13,8 @@ import { ProjectMainBody } from './projectMainBody'
 import { ProjectBackButton } from './projectMainBody/components/ProjectBackButton'
 
 type Props = {
-  project: Project
-  updateProject: (value: Project) => void
+  project: ProjectFragment
+  updateProject: (value: Partial<ProjectFragment>) => void
   fundingFlow: any
   resourceType?: string
   resourceId?: number

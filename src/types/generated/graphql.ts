@@ -3880,6 +3880,317 @@ export type DirectiveResolvers<ContextType = any> = {
   constraint?: ConstraintDirectiveResolver<any, any, ContextType>
 }
 
+export type EntryForLandingPageFragment = {
+  __typename?: 'Entry'
+  amountFunded: number
+  id: any
+  image?: string | null
+  title: any
+  entryFundersCount: number
+  entryDescription: any
+  project?: {
+    __typename?: 'Project'
+    id: any
+    name: any
+    thumbnailImage?: string | null
+    title: any
+  } | null
+  creator: {
+    __typename?: 'User'
+    id: any
+    imageUrl?: string | null
+    username: string
+  }
+}
+
+export type EntryForProjectFragment = {
+  __typename?: 'Entry'
+  id: any
+  title: any
+  description: any
+  image?: string | null
+  type: EntryType
+  fundersCount: number
+  amountFunded: number
+  published: boolean
+  status: EntryStatus
+  createdAt: string
+  publishedAt?: string | null
+  creator: {
+    __typename?: 'User'
+    id: any
+    username: string
+    imageUrl?: string | null
+  }
+}
+
+export type FundingTxForLandingPageFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  comment?: string | null
+  amount: number
+  paidAt?: any | null
+  onChain: boolean
+  media?: string | null
+  source: string
+  method?: FundingMethod | null
+  projectId: any
+  funder: {
+    __typename?: 'Funder'
+    id: any
+    amountFunded?: number | null
+    timesFunded?: number | null
+    confirmedAt?: any | null
+    user?: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+      externalAccounts: Array<{
+        __typename?: 'ExternalAccount'
+        externalUsername: string
+        public: boolean
+        accountType: string
+      } | null>
+    } | null
+  }
+  sourceResource?:
+    | {
+        __typename?: 'Entry'
+        createdAt: string
+        id: any
+        image?: string | null
+        title: any
+      }
+    | {
+        __typename?: 'Project'
+        id: any
+        name: any
+        title: any
+        image?: string | null
+        createdAt: string
+        thumbnailImage?: string | null
+      }
+    | null
+}
+
+export type FundingTxWithInvoiceStatusFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  invoiceId: string
+  status: FundingStatus
+  onChain: boolean
+  invoiceStatus: InvoiceStatus
+  paymentRequest?: string | null
+}
+
+export type FundingTxFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  uuid: string
+  invoiceId: string
+  paymentRequest?: string | null
+  amount: number
+  status: FundingStatus
+  invoiceStatus: InvoiceStatus
+  comment?: string | null
+  media?: string | null
+  paidAt?: any | null
+  onChain: boolean
+  address?: string | null
+  source: string
+  method?: FundingMethod | null
+  projectId: any
+  funder: {
+    __typename?: 'Funder'
+    id: any
+    user?: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    } | null
+  }
+}
+
+export type ProjectForLandingPageFragment = {
+  __typename?: 'Project'
+  id: any
+  name: any
+  balance: number
+  createdAt: string
+  fundersCount?: number | null
+  fundingTxsCount?: number | null
+  thumbnailImage?: string | null
+  shortDescription?: any | null
+  title: any
+  status?: ProjectStatus | null
+  tags: Array<{ __typename?: 'Tag'; id: number; label: string }>
+  owners: Array<{
+    __typename?: 'Owner'
+    id: any
+    user: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    }
+  }>
+}
+
+export type ProjectRewardForLandingPageFragment = {
+  __typename?: 'ProjectReward'
+  cost: number
+  description?: any | null
+  id: any
+  image?: string | null
+  sold: number
+  stock?: number | null
+  rewardName: any
+  rewardProject: {
+    __typename?: 'Project'
+    id: any
+    name: any
+    title: any
+    rewardCurrency?: RewardCurrency | null
+    owners: Array<{
+      __typename?: 'Owner'
+      id: any
+      user: {
+        __typename?: 'User'
+        id: any
+        username: string
+        imageUrl?: string | null
+      }
+    }>
+  }
+}
+
+export type ProjectRewardForCreateUpdateFragment = {
+  __typename?: 'ProjectReward'
+  id: any
+  name: any
+  description?: any | null
+  cost: number
+  image?: string | null
+  deleted: boolean
+  stock?: number | null
+  sold: number
+}
+
+export type ProjectFragment = {
+  __typename?: 'Project'
+  id: any
+  title: any
+  name: any
+  type: ProjectType
+  shortDescription?: any | null
+  description?: any | null
+  balance: number
+  fundingGoal?: any | null
+  createdAt: string
+  updatedAt: string
+  expiresAt?: string | null
+  image?: string | null
+  thumbnailImage?: string | null
+  links: Array<string | null>
+  status?: ProjectStatus | null
+  rewardCurrency?: RewardCurrency | null
+  fundersCount?: number | null
+  fundingTxsCount?: number | null
+  location?: {
+    __typename?: 'Location'
+    region?: string | null
+    country?: { __typename?: 'Country'; name: string; code: string } | null
+  } | null
+  tags: Array<{ __typename?: 'Tag'; id: number; label: string }>
+  owners: Array<{
+    __typename?: 'Owner'
+    id: any
+    user: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    }
+  }>
+  rewards?: Array<
+    | ({ __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment)
+    | null
+  > | null
+  ambassadors: Array<{
+    __typename?: 'Ambassador'
+    id: any
+    confirmed: boolean
+    user: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    }
+  } | null>
+  sponsors: Array<{
+    __typename?: 'Sponsor'
+    id: any
+    url?: string | null
+    image?: string | null
+    user?: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    } | null
+  } | null>
+  funders: Array<{
+    __typename?: 'Funder'
+    id: any
+    amountFunded?: number | null
+    confirmed: boolean
+    confirmedAt?: any | null
+    timesFunded?: number | null
+    user?: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+      email?: string | null
+    } | null
+  } | null>
+  milestones?: Array<{
+    __typename?: 'ProjectMilestone'
+    id: any
+    name: any
+    description?: any | null
+    amount: number
+  } | null> | null
+  entries: Array<({ __typename?: 'Entry' } & EntryForProjectFragment) | null>
+  wallets: Array<{
+    __typename?: 'Wallet'
+    id: any
+    name?: any | null
+    state: {
+      __typename?: 'WalletState'
+      status: WalletStatus
+      statusCode: WalletStatusCode
+    }
+    connectionDetails:
+      | {
+          __typename?: 'LightningAddressConnectionDetails'
+          lightningAddress: string
+        }
+      | {
+          __typename?: 'LndConnectionDetailsPrivate'
+          macaroon: string
+          tlsCertificate?: string | null
+          hostname: string
+          grpcPort: number
+          lndNodeType: LndNodeType
+          pubkey?: any | null
+        }
+      | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
+  }>
+}
+
 export type UserBadgeAwardMutationVariables = Exact<{
   userBadgeId: Scalars['BigInt']
 }>
@@ -4067,15 +4378,7 @@ export type CreateProjectRewardMutation = {
   __typename?: 'Mutation'
   createProjectReward: {
     __typename?: 'ProjectReward'
-    id: any
-    name: any
-    description?: any | null
-    cost: number
-    image?: string | null
-    deleted: boolean
-    stock?: number | null
-    sold: number
-  }
+  } & ProjectRewardForCreateUpdateFragment
 }
 
 export type UpdateProjectRewardMutationVariables = Exact<{
@@ -4086,15 +4389,7 @@ export type UpdateProjectRewardMutation = {
   __typename?: 'Mutation'
   updateProjectReward: {
     __typename?: 'ProjectReward'
-    id: any
-    name: any
-    description?: any | null
-    cost: number
-    image?: string | null
-    deleted: boolean
-    stock?: number | null
-    sold: number
-  }
+  } & ProjectRewardForCreateUpdateFragment
 }
 
 export type CreateProjectMilestoneMutationVariables = Exact<{
@@ -4256,107 +4551,6 @@ export type WalletDeleteMutation = {
   walletDelete: boolean
 }
 
-export type FundingTxForLandingPageFragment = {
-  __typename?: 'FundingTx'
-  id: any
-  comment?: string | null
-  amount: number
-  paidAt?: any | null
-  onChain: boolean
-  media?: string | null
-  source: string
-  method?: FundingMethod | null
-  projectId: any
-  funder: {
-    __typename?: 'Funder'
-    id: any
-    amountFunded?: number | null
-    timesFunded?: number | null
-    confirmedAt?: any | null
-    user?: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-      externalAccounts: Array<{
-        __typename?: 'ExternalAccount'
-        externalUsername: string
-        public: boolean
-        accountType: string
-      } | null>
-    } | null
-  }
-  sourceResource?:
-    | {
-        __typename?: 'Entry'
-        createdAt: string
-        id: any
-        image?: string | null
-        title: any
-      }
-    | {
-        __typename?: 'Project'
-        id: any
-        name: any
-        title: any
-        image?: string | null
-        createdAt: string
-        thumbnailImage?: string | null
-      }
-    | null
-}
-
-export type EntryForLandingPageFragment = {
-  __typename?: 'Entry'
-  amountFunded: number
-  id: any
-  image?: string | null
-  title: any
-  entryFundersCount: number
-  entryDescription: any
-  project?: {
-    __typename?: 'Project'
-    id: any
-    name: any
-    thumbnailImage?: string | null
-    title: any
-  } | null
-  creator: {
-    __typename?: 'User'
-    id: any
-    imageUrl?: string | null
-    username: string
-  }
-}
-
-export type RewardForLandingPageFragment = {
-  __typename?: 'ProjectReward'
-  cost: number
-  description?: any | null
-  id: any
-  image?: string | null
-  sold: number
-  stock?: number | null
-  rewardName: any
-  rewardProject: {
-    __typename?: 'Project'
-    id: any
-    name: any
-    title: any
-    rewardCurrency?: RewardCurrency | null
-    owners: Array<{
-      __typename?: 'Owner'
-      id: any
-      user: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-      }
-    }>
-  }
-}
-
 export type ActivityForLandingPageFragment = {
   __typename?: 'Activity'
   id: string
@@ -4365,7 +4559,7 @@ export type ActivityForLandingPageFragment = {
     | ({ __typename?: 'Entry' } & EntryForLandingPageFragment)
     | ({ __typename?: 'FundingTx' } & FundingTxForLandingPageFragment)
     | ({ __typename?: 'Project' } & ProjectForLandingPageFragment)
-    | ({ __typename?: 'ProjectReward' } & RewardForLandingPageFragment)
+    | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
 export type ActivitiesForLandingPageQueryVariables = Exact<{
@@ -4536,45 +4730,6 @@ export type SignedUploadUrlQuery = {
     __typename?: 'SignedUploadUrl'
     uploadUrl: string
     distributionUrl: string
-  }
-}
-
-export type FundingTxWithInvoiceStatusFragment = {
-  __typename?: 'FundingTx'
-  id: any
-  invoiceId: string
-  status: FundingStatus
-  onChain: boolean
-  invoiceStatus: InvoiceStatus
-  paymentRequest?: string | null
-}
-
-export type FundingTxFragment = {
-  __typename?: 'FundingTx'
-  id: any
-  uuid: string
-  invoiceId: string
-  paymentRequest?: string | null
-  amount: number
-  status: FundingStatus
-  invoiceStatus: InvoiceStatus
-  comment?: string | null
-  media?: string | null
-  paidAt?: any | null
-  onChain: boolean
-  address?: string | null
-  source: string
-  method?: FundingMethod | null
-  projectId: any
-  funder: {
-    __typename?: 'Funder'
-    id: any
-    user?: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-    } | null
   }
 }
 
@@ -4795,142 +4950,7 @@ export type ProjectByNameOrIdQueryVariables = Exact<{
 
 export type ProjectByNameOrIdQuery = {
   __typename?: 'Query'
-  project?: {
-    __typename?: 'Project'
-    id: any
-    title: any
-    name: any
-    type: ProjectType
-    shortDescription?: any | null
-    description?: any | null
-    balance: number
-    fundingGoal?: any | null
-    createdAt: string
-    updatedAt: string
-    expiresAt?: string | null
-    image?: string | null
-    thumbnailImage?: string | null
-    links: Array<string | null>
-    status?: ProjectStatus | null
-    rewardCurrency?: RewardCurrency | null
-    fundersCount?: number | null
-    fundingTxsCount?: number | null
-    location?: {
-      __typename?: 'Location'
-      region?: string | null
-      country?: { __typename?: 'Country'; name: string; code: string } | null
-    } | null
-    tags: Array<{ __typename?: 'Tag'; id: number; label: string }>
-    owners: Array<{
-      __typename?: 'Owner'
-      id: any
-      user: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-      }
-    }>
-    rewards?: Array<{
-      __typename?: 'ProjectReward'
-      id: any
-      cost: number
-      description?: any | null
-      name: any
-      sold: number
-      image?: string | null
-    } | null> | null
-    ambassadors: Array<{
-      __typename?: 'Ambassador'
-      id: any
-      confirmed: boolean
-      user: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-      }
-    } | null>
-    sponsors: Array<{
-      __typename?: 'Sponsor'
-      id: any
-      url?: string | null
-      image?: string | null
-      user?: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-      } | null
-    } | null>
-    funders: Array<{
-      __typename?: 'Funder'
-      id: any
-      amountFunded?: number | null
-      confirmed: boolean
-      confirmedAt?: any | null
-      timesFunded?: number | null
-      user?: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-        email?: string | null
-      } | null
-    } | null>
-    milestones?: Array<{
-      __typename?: 'ProjectMilestone'
-      id: any
-      name: any
-      description?: any | null
-      amount: number
-    } | null> | null
-    entries: Array<{
-      __typename?: 'Entry'
-      id: any
-      title: any
-      description: any
-      image?: string | null
-      type: EntryType
-      fundersCount: number
-      amountFunded: number
-      published: boolean
-      status: EntryStatus
-      createdAt: string
-      publishedAt?: string | null
-      creator: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-      }
-    } | null>
-    wallets: Array<{
-      __typename?: 'Wallet'
-      id: any
-      name?: any | null
-      state: {
-        __typename?: 'WalletState'
-        status: WalletStatus
-        statusCode: WalletStatusCode
-      }
-      connectionDetails:
-        | {
-            __typename?: 'LightningAddressConnectionDetails'
-            lightningAddress: string
-          }
-        | {
-            __typename?: 'LndConnectionDetailsPrivate'
-            macaroon: string
-            tlsCertificate?: string | null
-            hostname: string
-            grpcPort: number
-            lndNodeType: LndNodeType
-            pubkey?: any | null
-          }
-        | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
-    }>
-  } | null
+  project?: ({ __typename?: 'Project' } & ProjectFragment) | null
 }
 
 export type ProjectFundingDataQueryVariables = Exact<{
@@ -5060,26 +5080,7 @@ export type ProjectUnplublishedEntriesQuery = {
   __typename?: 'Query'
   project?: {
     __typename?: 'Project'
-    entries: Array<{
-      __typename?: 'Entry'
-      id: any
-      title: any
-      description: any
-      image?: string | null
-      type: EntryType
-      fundersCount: number
-      amountFunded: number
-      published: boolean
-      publishedAt?: string | null
-      status: EntryStatus
-      createdAt: string
-      creator: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-      }
-    } | null>
+    entries: Array<({ __typename?: 'Entry' } & EntryForProjectFragment) | null>
   } | null
 }
 
@@ -5091,30 +5092,12 @@ export type ProjectDashboardDataQuery = {
   __typename?: 'Query'
   project?: {
     __typename?: 'Project'
-    unpublishedEntries: Array<{
-      __typename?: 'Entry'
-      id: any
-      title: any
-      image?: string | null
-      description: any
-      fundersCount: number
-      amountFunded: number
-      published: boolean
-      publishedAt?: string | null
-      status: EntryStatus
-    } | null>
-    publishedEntries: Array<{
-      __typename?: 'Entry'
-      id: any
-      title: any
-      image?: string | null
-      description: any
-      fundersCount: number
-      amountFunded: number
-      published: boolean
-      publishedAt?: string | null
-      status: EntryStatus
-    } | null>
+    unpublishedEntries: Array<
+      ({ __typename?: 'Entry' } & EntryForProjectFragment) | null
+    >
+    publishedEntries: Array<
+      ({ __typename?: 'Entry' } & EntryForProjectFragment) | null
+    >
     statistics?: {
       __typename?: 'ProjectStatistics'
       totalVisitors: number
@@ -5177,31 +5160,6 @@ export type ProjectDashboardFundersQuery = {
       projectReward: { __typename?: 'ProjectReward'; id: any; name: any }
     } | null>
   } | null>
-}
-
-export type ProjectForLandingPageFragment = {
-  __typename?: 'Project'
-  id: any
-  name: any
-  balance: number
-  createdAt: string
-  fundersCount?: number | null
-  fundingTxsCount?: number | null
-  thumbnailImage?: string | null
-  shortDescription?: any | null
-  title: any
-  status?: ProjectStatus | null
-  tags: Array<{ __typename?: 'Tag'; id: number; label: string }>
-  owners: Array<{
-    __typename?: 'Owner'
-    id: any
-    user: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-    }
-  }>
 }
 
 export type ProjectsMostFundedOfTheWeekGetQueryVariables = Exact<{
@@ -5437,9 +5395,190 @@ export type ActivityCreatedSubscription = {
     | ({ __typename?: 'Entry' } & EntryForLandingPageFragment)
     | ({ __typename?: 'FundingTx' } & FundingTxForLandingPageFragment)
     | ({ __typename?: 'Project' } & ProjectForLandingPageFragment)
-    | ({ __typename?: 'ProjectReward' } & RewardForLandingPageFragment)
+    | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
+export const FundingTxWithInvoiceStatusFragmentDoc = gql`
+  fragment FundingTxWithInvoiceStatus on FundingTx {
+    id
+    invoiceId
+    status
+    onChain
+    invoiceStatus
+    invoiceStatus
+    paymentRequest
+  }
+`
+export const FundingTxFragmentDoc = gql`
+  fragment FundingTx on FundingTx {
+    id
+    uuid
+    invoiceId
+    paymentRequest
+    amount
+    status
+    invoiceStatus
+    comment
+    media
+    paidAt
+    onChain
+    address
+    source
+    method
+    projectId
+    funder {
+      id
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+  }
+`
+export const ProjectRewardForCreateUpdateFragmentDoc = gql`
+  fragment ProjectRewardForCreateUpdate on ProjectReward {
+    id
+    name
+    description
+    cost
+    image
+    deleted
+    stock
+    sold
+  }
+`
+export const EntryForProjectFragmentDoc = gql`
+  fragment EntryForProject on Entry {
+    id
+    title
+    description
+    image
+    type
+    fundersCount
+    amountFunded
+    published
+    status
+    createdAt
+    publishedAt
+    creator {
+      id
+      username
+      imageUrl
+    }
+  }
+`
+export const ProjectFragmentDoc = gql`
+  fragment Project on Project {
+    id
+    title
+    name
+    type
+    shortDescription
+    description
+    balance
+    fundingGoal
+    createdAt
+    updatedAt
+    expiresAt
+    image
+    thumbnailImage
+    links
+    status
+    rewardCurrency
+    fundersCount
+    fundingTxsCount
+    location {
+      country {
+        name
+        code
+      }
+      region
+    }
+    tags {
+      id
+      label
+    }
+    owners {
+      id
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+    rewards {
+      ...ProjectRewardForCreateUpdate
+    }
+    ambassadors {
+      id
+      confirmed
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+    sponsors {
+      id
+      url
+      image
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+    funders {
+      id
+      user {
+        id
+        username
+        imageUrl
+        email
+      }
+      amountFunded
+      confirmed
+      confirmedAt
+      timesFunded
+    }
+    milestones {
+      id
+      name
+      description
+      amount
+    }
+    entries(input: $input) {
+      ...EntryForProject
+    }
+    wallets {
+      id
+      name
+      state {
+        status
+        statusCode
+      }
+      connectionDetails {
+        ... on LightningAddressConnectionDetails {
+          lightningAddress
+        }
+        ... on LndConnectionDetailsPrivate {
+          macaroon
+          tlsCertificate
+          hostname
+          grpcPort
+          lndNodeType
+          pubkey
+        }
+        ... on LndConnectionDetailsPublic {
+          pubkey
+        }
+      }
+    }
+  }
+  ${ProjectRewardForCreateUpdateFragmentDoc}
+  ${EntryForProjectFragmentDoc}
+`
 export const EntryForLandingPageFragmentDoc = gql`
   fragment EntryForLandingPage on Entry {
     amountFunded
@@ -5532,8 +5671,8 @@ export const FundingTxForLandingPageFragmentDoc = gql`
     }
   }
 `
-export const RewardForLandingPageFragmentDoc = gql`
-  fragment RewardForLandingPage on ProjectReward {
+export const ProjectRewardForLandingPageFragmentDoc = gql`
+  fragment ProjectRewardForLandingPage on ProjectReward {
     cost
     description
     id
@@ -5572,52 +5711,14 @@ export const ActivityForLandingPageFragmentDoc = gql`
         ...FundingTxForLandingPage
       }
       ... on ProjectReward {
-        ...RewardForLandingPage
+        ...ProjectRewardForLandingPage
       }
     }
   }
   ${EntryForLandingPageFragmentDoc}
   ${ProjectForLandingPageFragmentDoc}
   ${FundingTxForLandingPageFragmentDoc}
-  ${RewardForLandingPageFragmentDoc}
-`
-export const FundingTxWithInvoiceStatusFragmentDoc = gql`
-  fragment FundingTxWithInvoiceStatus on FundingTx {
-    id
-    invoiceId
-    status
-    onChain
-    invoiceStatus
-    invoiceStatus
-    paymentRequest
-  }
-`
-export const FundingTxFragmentDoc = gql`
-  fragment FundingTx on FundingTx {
-    id
-    uuid
-    invoiceId
-    paymentRequest
-    amount
-    status
-    invoiceStatus
-    comment
-    media
-    paidAt
-    onChain
-    address
-    source
-    method
-    projectId
-    funder {
-      id
-      user {
-        id
-        username
-        imageUrl
-      }
-    }
-  }
+  ${ProjectRewardForLandingPageFragmentDoc}
 `
 export const FundingTxForUserContributionFragmentDoc = gql`
   fragment FundingTxForUserContribution on FundingTx {
@@ -6240,16 +6341,10 @@ export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<
 export const CreateProjectRewardDocument = gql`
   mutation CreateProjectReward($input: CreateProjectRewardInput!) {
     createProjectReward(input: $input) {
-      id
-      name
-      description
-      cost
-      image
-      deleted
-      stock
-      sold
+      ...ProjectRewardForCreateUpdate
     }
   }
+  ${ProjectRewardForCreateUpdateFragmentDoc}
 `
 export type CreateProjectRewardMutationFn = Apollo.MutationFunction<
   CreateProjectRewardMutation,
@@ -6297,16 +6392,10 @@ export type CreateProjectRewardMutationOptions = Apollo.BaseMutationOptions<
 export const UpdateProjectRewardDocument = gql`
   mutation UpdateProjectReward($input: UpdateProjectRewardInput!) {
     updateProjectReward(input: $input) {
-      id
-      name
-      description
-      cost
-      image
-      deleted
-      stock
-      sold
+      ...ProjectRewardForCreateUpdate
     }
   }
+  ${ProjectRewardForCreateUpdateFragmentDoc}
 `
 export type UpdateProjectRewardMutationFn = Apollo.MutationFunction<
   UpdateProjectRewardMutation,
@@ -8015,133 +8104,10 @@ export const ProjectByNameOrIdDocument = gql`
     $input: ProjectEntriesGetInput
   ) {
     project(where: $where) {
-      id
-      title
-      name
-      type
-      shortDescription
-      description
-      balance
-      fundingGoal
-      createdAt
-      updatedAt
-      expiresAt
-      image
-      thumbnailImage
-      links
-      status
-      rewardCurrency
-      fundersCount
-      fundingTxsCount
-      location {
-        country {
-          name
-          code
-        }
-        region
-      }
-      tags {
-        id
-        label
-      }
-      owners {
-        id
-        user {
-          id
-          username
-          imageUrl
-        }
-      }
-      rewards {
-        id
-        cost
-        description
-        name
-        sold
-        image
-      }
-      ambassadors {
-        id
-        confirmed
-        user {
-          id
-          username
-          imageUrl
-        }
-      }
-      sponsors {
-        id
-        url
-        image
-        user {
-          id
-          username
-          imageUrl
-        }
-      }
-      funders {
-        id
-        user {
-          id
-          username
-          imageUrl
-          email
-        }
-        amountFunded
-        confirmed
-        confirmedAt
-        timesFunded
-      }
-      milestones {
-        id
-        name
-        description
-        amount
-      }
-      entries(input: $input) {
-        id
-        title
-        description
-        image
-        type
-        fundersCount
-        amountFunded
-        published
-        status
-        createdAt
-        publishedAt
-        creator {
-          id
-          username
-          imageUrl
-        }
-      }
-      wallets {
-        id
-        name
-        state {
-          status
-          statusCode
-        }
-        connectionDetails {
-          ... on LightningAddressConnectionDetails {
-            lightningAddress
-          }
-          ... on LndConnectionDetailsPrivate {
-            macaroon
-            tlsCertificate
-            hostname
-            grpcPort
-            lndNodeType
-            pubkey
-          }
-          ... on LndConnectionDetailsPublic {
-            pubkey
-          }
-        }
-      }
+      ...Project
     }
   }
+  ${ProjectFragmentDoc}
 `
 
 /**
@@ -8488,25 +8454,11 @@ export const ProjectUnplublishedEntriesDocument = gql`
   query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
     project(where: $where) {
       entries: entries(input: { where: { published: false } }) {
-        id
-        title
-        description
-        image
-        type
-        fundersCount
-        amountFunded
-        published
-        publishedAt
-        status
-        createdAt
-        creator {
-          id
-          username
-          imageUrl
-        }
+        ...EntryForProject
       }
     }
   }
+  ${EntryForProjectFragmentDoc}
 `
 
 /**
@@ -8563,32 +8515,17 @@ export const ProjectDashboardDataDocument = gql`
   query ProjectDashboardData($where: UniqueProjectQueryInput!) {
     project(where: $where) {
       unpublishedEntries: entries(input: { where: { published: false } }) {
-        id
-        title
-        image
-        description
-        fundersCount
-        amountFunded
-        published
-        publishedAt
-        status
+        ...EntryForProject
       }
       publishedEntries: entries(input: { where: { published: true } }) {
-        id
-        title
-        image
-        description
-        fundersCount
-        amountFunded
-        published
-        publishedAt
-        status
+        ...EntryForProject
       }
       statistics {
         totalVisitors
       }
     }
   }
+  ${EntryForProjectFragmentDoc}
 `
 
 /**
@@ -9563,14 +9500,14 @@ export const ActivityCreatedDocument = gql`
         ...FundingTxForLandingPage
       }
       ... on ProjectReward {
-        ...RewardForLandingPage
+        ...ProjectRewardForLandingPage
       }
     }
   }
   ${EntryForLandingPageFragmentDoc}
   ${ProjectForLandingPageFragmentDoc}
   ${FundingTxForLandingPageFragmentDoc}
-  ${RewardForLandingPageFragmentDoc}
+  ${ProjectRewardForLandingPageFragmentDoc}
 `
 
 /**

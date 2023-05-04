@@ -7,7 +7,6 @@ import { getPath, PathName } from '../../constants'
 import { ProjectProvider, useAuthContext, useNavContext } from '../../context'
 import { useProjectState } from '../../hooks/graphqlState'
 import { noScrollBar } from '../../styles/common'
-import { Owner } from '../../types/generated/graphql'
 import { useMobileMode } from '../../utils'
 
 enum DashboardTabs {
@@ -75,7 +74,7 @@ export const ProjectDashboard = () => {
             projectTitle: project.title,
             projectPath: `${getPath('project', project.name)}`,
             projectOwnerIDs:
-              project.owners.map((ownerInfo: Owner) => {
+              project.owners.map((ownerInfo) => {
                 return Number(ownerInfo.user.id || -1)
               }) || [],
           })

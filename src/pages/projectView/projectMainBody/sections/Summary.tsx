@@ -24,8 +24,8 @@ import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { colors } from '../../../../styles'
-import { Project } from '../../../../types/generated/graphql'
 import { MarkDown, toInt, useMobileMode } from '../../../../utils'
+import { getPossibleWalletPubkey } from '../../../../utils/validations/wallet'
 import {
   AvatarElement,
   FollowButton,
@@ -41,15 +41,7 @@ import {
 export const Summary = () => {
   const isMobile = useMobileMode()
 
-  const {
-    project,
-    isProjectOwner,
-  }: {
-    project: Project & {
-      wallets?: { connectionDetails?: { pubkey?: string } }[]
-    }
-    isProjectOwner: boolean
-  } = useProjectContext()
+  const { project, isProjectOwner } = useProjectContext()
 
   const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false)
   const owner = project.owners[0]
@@ -145,23 +137,24 @@ export const Summary = () => {
                 onClick={handleShareButtonTapped}
               />
             </Tooltip>
-            {project.wallets &&
-              project.wallets[0]?.connectionDetails?.pubkey && (
-                <IconButton
-                  {...greenBorderButtonStyles}
-                  icon={<AmbossIcon fontSize="20px" />}
-                  aria-label="share"
-                  onClick={() =>
-                    project.wallets[0] &&
-                    window
-                      .open(
-                        `${AmbossUrl}${project.wallets[0].connectionDetails.pubkey}`,
-                        '_blank',
-                      )
-                      ?.focus()
-                  }
-                />
-              )}
+            {project.wallets && getPossibleWalletPubkey(project.wallets[0]) && (
+              <IconButton
+                {...greenBorderButtonStyles}
+                icon={<AmbossIcon fontSize="20px" />}
+                aria-label="share"
+                onClick={() =>
+                  getPossibleWalletPubkey(project.wallets[0]) &&
+                  window
+                    .open(
+                      `${AmbossUrl}${getPossibleWalletPubkey(
+                        project.wallets[0],
+                      )}`,
+                      '_blank',
+                    )
+                    ?.focus()
+                }
+              />
+            )}
             <FollowButton projectId={project.id} />
           </HStack>
         </VStack>

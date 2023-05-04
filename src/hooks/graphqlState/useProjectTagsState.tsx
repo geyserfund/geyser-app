@@ -8,6 +8,7 @@ import {
 import {
   MutationInput,
   Project,
+  ProjectFragment,
   ProjectTagMutationInput,
   Tag,
 } from '../../types'
@@ -17,7 +18,7 @@ export const useProjectTagsState = ({
   project,
   updateProject,
 }: {
-  project: Project
+  project: ProjectFragment
   updateProject?: (_: Project) => void
 }) => {
   const [tags, setTags] = useState<Tag[]>([])

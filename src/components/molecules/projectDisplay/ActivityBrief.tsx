@@ -5,14 +5,17 @@ import { createUseStyles } from 'react-jss'
 import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
 import { colors } from '../../../styles'
 import { fonts } from '../../../styles'
-import { Project, ProjectMilestone } from '../../../types/generated/graphql'
+import {
+  ProjectFragment,
+  ProjectMilestone,
+} from '../../../types/generated/graphql'
 import { isActive, useMobileMode } from '../../../utils'
 import { getProjectBalance } from '../../../utils/helpers'
 import { SatoshiAmount } from '../../ui'
 
 interface IActivityBrief {
   loading?: boolean
-  project: Project
+  project: ProjectFragment
 }
 
 const useStyles = createUseStyles({

@@ -11,11 +11,11 @@ import { getPath } from '../../../../constants'
 import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
-import { IProject } from '../../../../interfaces'
 import { Satoshis } from '../../../../types'
 import {
   FundingTx,
   Project,
+  ProjectFragment,
   UserBadge,
 } from '../../../../types/generated/graphql'
 import {
@@ -27,7 +27,7 @@ import { SuccessImageComponent } from '../components'
 type Props = {
   fundingState: IFundForm
   fundingTx: FundingTx
-  project: Project | IProject
+  project: ProjectFragment
   handleCloseButton: () => void
 }
 
@@ -46,12 +46,9 @@ export const SuccessScreen = ({
     setCopy(true)
   }
 
-  const { data } = useQuery<{ userBadges: UserBadge[] }>(
-    QUERY_USER_BADGES,
-    {
-      variables: { input: { where: { fundingTxId: fundingTx.id } } },
-    },
-  )
+  const { data } = useQuery<{ userBadges: UserBadge[] }>(QUERY_USER_BADGES, {
+    variables: { input: { where: { fundingTxId: fundingTx.id } } },
+  })
 
   useEffect(() => {
     if (hasCopiedProjectLink) {
