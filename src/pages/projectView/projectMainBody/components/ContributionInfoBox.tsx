@@ -25,6 +25,7 @@ import { IFundForm } from '../../../../hooks'
 import { IBadge } from '../../../../interfaces'
 import { Project, ProjectReward } from '../../../../types/generated/graphql'
 import { Satoshis } from '../../../../types/types'
+import { hasOwnNode } from '../../../../utils/helpers'
 
 export enum ContributionInfoBoxVersion {
   NEUTRAL = 'neutral',
@@ -88,23 +89,7 @@ export const ContributionInfoBox = ({
     formState.rewardsByIDAndCount &&
     Object.entries(formState.rewardsByIDAndCount).length > 0
 
-  const hadOwnNode = () => {
-    const currentProject = project.wallets && project.wallets[0]
-    const { connectionDetails } = currentProject || {}
-
-    if (!connectionDetails) {
-      return false
-    }
-
-    switch (connectionDetails.__typename) {
-      case 'LightningAddressConnectionDetails':
-        return false
-      default:
-        return true
-    }
-  }
-
-  const isNoFees = noFeeProjects.includes(project.name) || hadOwnNode()
+  const isNoFees = noFeeProjects.includes(project.name) || hasOwnNode(project)
 
   const { getTotalAmount } = useFundCalc(formState)
 
