@@ -147,7 +147,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
             fontSize="18px"
             fontWeight={600}
             color="brand.neutral900"
-            wordBreak="break-all"
+            wordBreak="break-word"
           >
             {project.title}
           </Text>
