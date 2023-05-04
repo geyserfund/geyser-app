@@ -4,7 +4,7 @@ import { BiPencil } from 'react-icons/bi'
 
 import { TRewards } from '../../../pages/creation/projectCreate/types'
 import { colors } from '../../../styles'
-import { ProjectReward } from '../../../types/generated/graphql'
+import { ProjectRewardForCreateUpdateFragment } from '../../../types/generated/graphql'
 import { CardLayout } from '../../layouts'
 import {
   ICard,
@@ -14,7 +14,7 @@ import {
 } from '../../ui'
 
 type Props = ICard & {
-  reward: TRewards | ProjectReward
+  reward: TRewards | ProjectRewardForCreateUpdateFragment
   isSatoshi: boolean
   handleEdit?: any
   handleRemove?: any

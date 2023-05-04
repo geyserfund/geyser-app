@@ -19,7 +19,11 @@ import { fundingStages, ID, IFundingStages } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../../graphql/mutations'
 import { UpdateReward } from '../../../../hooks'
-import { Project, ProjectReward, RewardCurrency } from '../../../../types'
+import {
+  Project,
+  ProjectRewardForCreateUpdateFragment,
+  RewardCurrency,
+} from '../../../../types'
 import {
   isActive,
   toInt,
@@ -40,7 +44,8 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
   const { project, setMobileView, updateProject, isProjectOwner } =
     useProjectContext()
   const [isSmallerThan1302] = useMediaQuery('(max-width: 1302px)')
-  const [selectedReward, setSelectedReward] = useState<ProjectReward>()
+  const [selectedReward, setSelectedReward] =
+    useState<ProjectRewardForCreateUpdateFragment>()
 
   const {
     isOpen: isRewardOpen,
@@ -69,7 +74,9 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
     openRewardDelete()
   }
 
-  const handleRewardUpdate = (updateReward: ProjectReward) => {
+  const handleRewardUpdate = (
+    updateReward: ProjectRewardForCreateUpdateFragment,
+  ) => {
     const findReward = project.rewards?.find(
       (reward) => reward?.id === updateReward.id,
     )

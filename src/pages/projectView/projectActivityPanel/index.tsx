@@ -10,7 +10,7 @@ import { IFundForm, IFundFormState } from '../../../hooks'
 import { IFundingInput, IRewardFundingInput } from '../../../interfaces'
 import {
   FundingResourceType,
-  Project,
+  ProjectFragment,
   ProjectReward,
 } from '../../../types/generated/graphql'
 import { toInt, useMobileMode } from '../../../utils'
@@ -24,7 +24,7 @@ import { SuccessScreen } from './screens/SuccessScreen'
 import { useStyles } from './styles'
 
 type Props = {
-  project: Project
+  project: ProjectFragment
   fundingFlow: any
   resourceType: FundingResourceType
   resourceId: number

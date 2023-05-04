@@ -51,6 +51,10 @@ const useStyles = createUseStyles({
     fontSize: '12px',
     height: '40px',
   },
+  plusIcon: {
+    backgroundColor: colors.neutral100,
+    border: `2px solid ${colors.neutral200}`,
+  },
 })
 
 interface IRewardItemProps {
@@ -145,6 +149,7 @@ export const FundingFormRewardItem = ({
             <IconButton
               onFocus={setFocus}
               onBlur={setBlur}
+              className={classes.plusIcon}
               backgroundColor={count ? colors.primary : undefined}
               aria-label="select-reward"
               icon={renderIcon}
