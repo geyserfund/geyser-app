@@ -5427,6 +5427,19 @@ export type LightningAddressVerifyQuery = {
   }
 }
 
+export type ActivityCreatedSubscriptionVariables = Exact<{
+  input?: InputMaybe<ActivityCreatedSubscriptionInput>
+}>
+
+export type ActivityCreatedSubscription = {
+  __typename?: 'Subscription'
+  activityCreated:
+    | ({ __typename?: 'Entry' } & EntryForLandingPageFragment)
+    | ({ __typename?: 'FundingTx' } & FundingTxForLandingPageFragment)
+    | ({ __typename?: 'Project' } & ProjectForLandingPageFragment)
+    | ({ __typename?: 'ProjectReward' } & RewardForLandingPageFragment)
+}
+
 export const EntryForLandingPageFragmentDoc = gql`
   fragment EntryForLandingPage on Entry {
     amountFunded
@@ -9537,3 +9550,59 @@ export type LightningAddressVerifyQueryResult = Apollo.QueryResult<
   LightningAddressVerifyQuery,
   LightningAddressVerifyQueryVariables
 >
+export const ActivityCreatedDocument = gql`
+  subscription ActivityCreated($input: ActivityCreatedSubscriptionInput) {
+    activityCreated(input: $input) {
+      ... on Entry {
+        ...EntryForLandingPage
+      }
+      ... on Project {
+        ...ProjectForLandingPage
+      }
+      ... on FundingTx {
+        ...FundingTxForLandingPage
+      }
+      ... on ProjectReward {
+        ...RewardForLandingPage
+      }
+    }
+  }
+  ${EntryForLandingPageFragmentDoc}
+  ${ProjectForLandingPageFragmentDoc}
+  ${FundingTxForLandingPageFragmentDoc}
+  ${RewardForLandingPageFragmentDoc}
+`
+
+/**
+ * __useActivityCreatedSubscription__
+ *
+ * To run a query within a React component, call `useActivityCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useActivityCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActivityCreatedSubscription({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useActivityCreatedSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    ActivityCreatedSubscription,
+    ActivityCreatedSubscriptionVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSubscription<
+    ActivityCreatedSubscription,
+    ActivityCreatedSubscriptionVariables
+  >(ActivityCreatedDocument, options)
+}
+export type ActivityCreatedSubscriptionHookResult = ReturnType<
+  typeof useActivityCreatedSubscription
+>
+export type ActivityCreatedSubscriptionResult =
+  Apollo.SubscriptionResult<ActivityCreatedSubscription>
