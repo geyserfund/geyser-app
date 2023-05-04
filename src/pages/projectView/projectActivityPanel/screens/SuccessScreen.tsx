@@ -1,12 +1,11 @@
 import { useQuery } from '@apollo/client'
-import { CloseButton, VStack } from '@chakra-ui/react'
+import { Button, CloseButton, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import ReactConfetti from 'react-confetti'
 import { BiCopyAlt } from 'react-icons/bi'
 import { HiOutlineSpeakerphone } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 
-import { ButtonComponent } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
@@ -97,19 +96,20 @@ export const SuccessScreen = ({
         />
         <VStack w="full" spacing="10px">
           {fundingTx.funder.user?.id && currentBadge && (
-            <ButtonComponent
+            <Button
+              variant="containedWhite"
               as={Link}
               size="sm"
               to={getPath('userProfile', fundingTx.funder.user?.id)}
               width="100%"
-              onClick={shareProjectWithFriends}
             >
               See badge in Profile
-            </ButtonComponent>
+            </Button>
           )}
-          <ButtonComponent
+          <Button
+            variant="containedWhite"
+            isActive={hasCopiedProjectLink}
             size="sm"
-            primary={hasCopiedProjectLink}
             leftIcon={
               hasCopiedProjectLink ? <BiCopyAlt /> : <HiOutlineSpeakerphone />
             }
@@ -117,9 +117,9 @@ export const SuccessScreen = ({
             onClick={shareProjectWithFriends}
           >
             {hasCopiedProjectLink
-              ? 'Project Link Copied'
-              : 'Share This Project With Friends'}
-          </ButtonComponent>
+              ? 'Project link copied!'
+              : 'Copy project link'}
+          </Button>
         </VStack>
 
         <ContributionInfoBox
