@@ -29,4 +29,7 @@ export const ID = {
     tabs: 'user-profile-tab-container',
     tabList: 'user-profile-tab-List',
   },
+  entry: {
+    editEntryScrollContainer: 'edit-entry-scroll-container',
+  },
 }

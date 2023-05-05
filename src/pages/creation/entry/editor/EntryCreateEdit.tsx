@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router'
 import { FileUpload } from '../../../../components/molecules'
 import { ImageWithReload } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
-import { getPath } from '../../../../constants'
+import { getPath, ID } from '../../../../constants'
 import { ProjectEntryValidations } from '../../../../constants/validations'
 import { useAuthContext, useNavContext } from '../../../../context'
 import { useDebounce } from '../../../../hooks'
@@ -220,11 +220,13 @@ export const EntryCreateEdit = () => {
         justifyContent="space-between"
       >
         <Box
+          id={ID.entry.editEntryScrollContainer}
           width="100%"
           height="100%"
           display="flex"
           justifyContent="center"
           overflowY="auto"
+          marginBottom="70px"
         >
           <VStack
             spacing="20px"

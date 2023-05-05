@@ -116,7 +116,7 @@ export const Summary = () => {
               justifyContent="space-between"
               overflow="hidden"
             >
-              <Text fontSize="30px" fontWeight={700} wordBreak="break-all">
+              <Text fontSize="30px" fontWeight={700} wordBreak="break-word">
                 {project.title}
               </Text>
 

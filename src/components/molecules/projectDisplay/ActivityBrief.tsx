@@ -2,12 +2,12 @@ import { CircularProgress, HStack, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { GEYSER_FEE, noFeeProjects } from '../../../constants'
 import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
 import { colors } from '../../../styles'
 import { fonts } from '../../../styles'
 import { Project, ProjectMilestone } from '../../../types/generated/graphql'
 import { isActive, useMobileMode } from '../../../utils'
+import { getProjectBalance } from '../../../utils/helpers'
 import { SatoshiAmount } from '../../ui'
 
 interface IActivityBrief {
@@ -35,9 +35,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
   const [prevMilestone, setPrevMilestone] = useState(0)
 
-  const balance = noFeeProjects.includes(project.name)
-    ? project.balance
-    : Math.round(project.balance * (1 - GEYSER_FEE))
+  const balance = getProjectBalance(project)
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
@@ -147,7 +145,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
             fontSize="18px"
             fontWeight={600}
             color="brand.neutral900"
-            wordBreak="break-all"
+            wordBreak="break-word"
           >
             {project.title}
           </Text>
