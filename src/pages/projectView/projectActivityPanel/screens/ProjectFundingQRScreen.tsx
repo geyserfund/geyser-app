@@ -48,7 +48,7 @@ export const ProjectFundingQRScreen = ({
       paddingX={5}
       marginTop={2}
     >
-      <HStack justifyContent="space-between" width={'full'}>
+      <HStack justifyContent="space-between" width="100%">
         <SectionTitle>Confirm & Contribute</SectionTitle>
         <CloseButton onClick={handleCloseButton} />
       </HStack>

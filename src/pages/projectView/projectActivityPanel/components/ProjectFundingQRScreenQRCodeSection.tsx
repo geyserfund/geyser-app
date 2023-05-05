@@ -190,30 +190,34 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     return (
       <HStack
         width="100%"
+        flexWrap="wrap"
+        align="center"
+        spacing={1}
+        justify="center"
         visibility={
           qrDisplayState === QRDisplayState.AWAITING_PAYMENT
             ? 'visible'
             : 'hidden'
         }
       >
-        <Button
-          leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
-          minWidth="50%"
-          width="50%"
-          onClick={onCopyLightning}
-          variant="contained"
-        >
-          <Text>{hasCopiedLightning ? 'Copied!' : 'Lightning invoice'}</Text>
-        </Button>
-        <Button
-          leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
-          minWidth="50%"
-          width="50%"
-          onClick={onCopyOnchain}
-          variant="contained"
-        >
-          <Text>{hasCopiedOnchain ? 'Copied!' : 'Onchain invoice'}</Text>
-        </Button>
+        <Box py={1}>
+          <Button
+            leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
+            onClick={onCopyLightning}
+            variant="contained"
+          >
+            <Text>{hasCopiedLightning ? 'Copied!' : 'Lightning invoice'}</Text>
+          </Button>
+        </Box>
+        <Box py={1}>
+          <Button
+            leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
+            onClick={onCopyOnchain}
+            variant="contained"
+          >
+            <Text>{hasCopiedOnchain ? 'Copied!' : 'Onchain invoice'}</Text>
+          </Button>
+        </Box>
       </HStack>
     )
   }, [
@@ -233,7 +237,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             render both elements in a Grid, make them overlap and hide one of the two based on the value of "hasCopiedQrCode".
             This way the component is already rendered, and the visual effect is smoother.
           */
-          <VStack>
+          <VStack flexWrap="wrap" maxWidth="100%">
             <Box borderRadius={'4px'} borderWidth={'2px'} padding={'2px'}>
               {hasCopiedLightning || hasCopiedOnchain ? (
                 <Box borderColor={colors.primary}>
@@ -307,7 +311,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   ])
 
   return (
-    <VStack spacing={4}>
+    <VStack spacing={4} width="100%">
       <VStack spacing={4}>
         <HStack
           mb={4}
@@ -333,13 +337,12 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   )
 }
 
-export const GeneratingInvoice = ({
+const GeneratingInvoice = ({
   refreshInvoice,
 }: {
   refreshInvoice: () => void
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const { onOpen, onClose, isOpen } = useDisclosure()
   const timeout = useRef<NodeJS.Timeout | undefined>()
 
   useEffect(() => {
