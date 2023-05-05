@@ -128,11 +128,13 @@ type Props = {
   noPadding?: boolean
 }
 
-const editorDOMID = 'editor'
+const editorDOMID = 'entry-editor'
 
 type QuillType = InstanceType<typeof Quill>
 
-const editorModules = (toast: ReturnType<typeof useNotification>['toast']) => ({
+const editorModules = (
+  uploadMedia: (file: any) => Promise<string | false>,
+) => ({
   toolbar: {
     container: [
       ['bold', 'italic', 'blockquote', 'code-block'],
@@ -147,19 +149,7 @@ const editorModules = (toast: ReturnType<typeof useNotification>['toast']) => ({
     ],
   },
   imageUploader: {
-    async upload(file: any) {
-      try {
-        const response = await getSignedUploadAPI(file)
-        return response
-      } catch (e) {
-        toast({
-          title: 'Something went wrong',
-          description: 'Image upload failed, please try again.',
-          status: 'error',
-        })
-        return false
-      }
-    },
+    upload: uploadMedia,
   },
   imageEdit: {
     modules: ['Resize', 'DisplaySize'],
@@ -175,6 +165,41 @@ const editorModules = (toast: ReturnType<typeof useNotification>['toast']) => ({
     },
   },
 })
+
+function dataURLToBlob(dataURL: string) {
+  const BASE64_MARKER = ';base64,'
+
+  if (dataURL.indexOf(BASE64_MARKER) === -1) {
+    const parts = dataURL.split(',')
+    const contentType = parts[0]?.split(':')[1]
+    const cmp = parts[1]
+    if (!cmp) {
+      return
+    }
+
+    const raw = decodeURIComponent(cmp)
+
+    return new Blob([raw], { type: contentType })
+  }
+
+  const parts = dataURL.split(BASE64_MARKER)
+  const contentType = parts[0]?.split(':')[1]
+  const cmp = parts[1]
+  if (!cmp) {
+    return
+  }
+
+  const raw = window.atob(cmp)
+  const rawLength = raw.length
+
+  const uInt8Array = new Uint8Array(rawLength)
+
+  for (let i = 0; i < rawLength; ++i) {
+    uInt8Array[i] = raw.charCodeAt(i)
+  }
+
+  return new Blob([uInt8Array], { type: contentType })
+}
 
 export const ProjectEntryEditor = ({
   name,
@@ -197,15 +222,50 @@ export const ProjectEntryEditor = ({
         return current
       }
 
+      async function uploadMedia(file: any) {
+        try {
+          const response = await getSignedUploadAPI(file)
+          return response
+        } catch (e) {
+          toast({
+            title: 'Something went wrong',
+            description: 'Image upload failed, please try again.',
+            status: 'error',
+          })
+          return false
+        }
+      }
+
       Quill.register('modules/imageUploader', ImageUploader)
       Quill.register('modules/imageEdit', ImageEdit)
 
       const quill = new Quill(`#${editorDOMID}`, {
-        modules: editorModules(toast),
+        modules: editorModules(uploadMedia),
         readOnly: isReadOnly,
         theme: 'snow',
         placeholder: 'The description of the entry .....',
         scrollingContainer: `#${ID.entry.editEntryScrollContainer}`,
+      })
+
+      // Magic from https://github.com/quilljs/quill/issues/2214
+      quill.clipboard.addMatcher('img', (node: any) => {
+        const blob = dataURLToBlob(node.getAttribute('src'))
+
+        const Delta = Quill.import('delta')
+
+        const delta = new Delta()
+        uploadMedia({
+          file: blob,
+        })
+          .then((res: any) => {
+            quill.updateContents(
+              new Delta().retain(quill.getSelection()?.index ?? 0).insert({
+                image: res,
+              }),
+            )
+          })
+          .catch(console.error)
+        return delta
       })
 
       quill.keyboard.addBinding(

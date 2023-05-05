@@ -66,9 +66,9 @@ export const EntryDetails = ({ entry }: Props) => {
           <HStack>
             <Avatar size="sm" src={entry.creator.imageUrl || ''} />
             <Text fontWeight={500}>{entry.creator.username}</Text>
-            {entry.published && (
+            {entry.publishedAt && (
               <Text paddingX="10px" color="brand.neutral900">
-                {DateTime.fromMillis(parseInt(entry.publishedAt!, 10)).toFormat(
+                {DateTime.fromMillis(parseInt(entry.publishedAt, 10)).toFormat(
                   'dd LLL yyyy',
                 )}
               </Text>
