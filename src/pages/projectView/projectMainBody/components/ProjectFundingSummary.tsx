@@ -12,7 +12,10 @@ import { getProjectBalance } from '../../../../utils/helpers'
 export const ProjectFundingSummary = ({
   project,
 }: {
-  project: Pick<ProjectFragment, 'balance' | 'fundersCount' | 'funders'>
+  project: Pick<
+    ProjectFragment,
+    'balance' | 'fundersCount' | 'funders' | 'name' | 'balance' | 'wallets'
+  >
 }) => {
   const { user } = useAuthContext()
   const currentFund = project.funders.find(

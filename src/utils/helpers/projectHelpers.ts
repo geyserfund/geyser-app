@@ -3,9 +3,11 @@ import {
   noFeeProjects,
   WalletConnectDetails,
 } from '../../constants'
-import { Project } from '../../types'
+import { ProjectFragment } from '../../types'
 
-export const getProjectBalance = (project: Project) => {
+type PickProject = Pick<ProjectFragment, 'name' | 'balance' | 'wallets'>
+
+export const getProjectBalance = (project: PickProject) => {
   if (noFeeProjects.includes(project.name) || hasOwnNode(project)) {
     return project.balance
   }
@@ -13,7 +15,7 @@ export const getProjectBalance = (project: Project) => {
   return Math.round(project.balance * (1 - GEYSER_FEE))
 }
 
-export const hasOwnNode = (project: Project) => {
+export const hasOwnNode = (project: PickProject) => {
   const currentWallet = project.wallets && project.wallets[0]
   const { connectionDetails } = currentWallet || {}
 

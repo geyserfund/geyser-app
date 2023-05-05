@@ -164,7 +164,9 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
         </SatoshiAmount>
         {getMilestoneValue()}
         {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
-        {showCountdown && <Countdown endDate={project.expiresAt!} />}
+        {showCountdown && project.expiresAt && (
+          <Countdown endDate={project.expiresAt} />
+        )}
       </VStack>
     </HStack>
   )
