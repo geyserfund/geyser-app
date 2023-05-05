@@ -4,7 +4,7 @@ import { DeltaStatic } from 'quill'
 import ImageEdit from 'quill-image-edit-module'
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Quill } from 'react-quill'
 
@@ -132,6 +132,50 @@ const editorDOMID = 'editor'
 
 type QuillType = InstanceType<typeof Quill>
 
+const editorModules = (toast: ReturnType<typeof useNotification>['toast']) => ({
+  toolbar: {
+    container: [
+      ['bold', 'italic', 'blockquote', 'code-block'],
+      [{ header: 1 }, { header: 2 }],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image', 'video'],
+    ],
+  },
+  imageUploader: {
+    async upload(file: any) {
+      try {
+        const response = await getSignedUploadAPI(file)
+        return response
+      } catch (e) {
+        toast({
+          title: 'Something went wrong',
+          description: 'Image upload failed, please try again.',
+          status: 'error',
+        })
+        return false
+      }
+    },
+  },
+  imageEdit: {
+    modules: ['Resize', 'DisplaySize'],
+    overlayStyles: {
+      border: '2px solid',
+      borderColor: colors.primary400,
+      boxShadow: `0px 0px 0px 2px ${colors.primary400}`,
+      borderRadius: '4px',
+    },
+    handleStyles: {
+      backgroundColor: 'transparent',
+      border: 'none',
+    },
+  },
+})
+
 export const ProjectEntryEditor = ({
   name,
   value,
@@ -142,99 +186,58 @@ export const ProjectEntryEditor = ({
 }: Props) => {
   const isMobile = useMobileMode()
 
-  const [_quillObj, _setQuillObj] = useState<QuillType>()
-  const quillObj = useRef(_quillObj)
-
-  const setQuillObj = (value: QuillType) => {
-    quillObj.current = value
-    _setQuillObj(value)
-  }
+  const [editor, setEditor] = useState<QuillType>()
 
   const { toast } = useNotification()
   const classes = useStyles({ isReadOnly, noPadding, isMobile })
 
-  const editorModules = {
-    toolbar: {
-      container: [
-        ['bold', 'italic', 'blockquote', 'code-block'],
-        [{ header: 1 }, { header: 2 }],
-        [
-          { list: 'ordered' },
-          { list: 'bullet' },
-          { indent: '-1' },
-          { indent: '+1' },
-        ],
-        ['link', 'image', 'video'],
-      ],
-    },
-    imageUploader: {
-      async upload(file: any) {
-        try {
-          const response = await getSignedUploadAPI(file)
-          return response
-        } catch {
-          toast({
-            title: 'Something went wrong',
-            description: 'Image upload failed, please try again.',
-            status: 'error',
-          })
-          return false
-        }
-      },
-    },
-    imageEdit: {
-      modules: ['Resize', 'DisplaySize'],
-      overlayStyles: {
-        border: '2px solid',
-        borderColor: colors.primary400,
-        boxShadow: `0px 0px 0px 2px ${colors.primary400}`,
-        borderRadius: '4px',
-      },
-      handleStyles: {
-        backgroundColor: 'transparent',
-        border: 'none',
-      },
-    },
-  }
-
   useEffect(() => {
-    Quill.register('modules/imageUploader', ImageUploader)
-    Quill.register('modules/imageEdit', ImageEdit)
+    setEditor((current) => {
+      if (current) {
+        return current
+      }
 
-    const editor = new Quill(`#${editorDOMID}`, {
-      modules: editorModules,
-      readOnly: isReadOnly,
-      theme: 'snow',
-      placeholder: 'The description of the entry .....',
-      scrollingContainer: `#${ID.entry.editEntryScrollContainer}`,
+      Quill.register('modules/imageUploader', ImageUploader)
+      Quill.register('modules/imageEdit', ImageEdit)
+
+      const quill = new Quill(`#${editorDOMID}`, {
+        modules: editorModules(toast),
+        readOnly: isReadOnly,
+        theme: 'snow',
+        placeholder: 'The description of the entry .....',
+        scrollingContainer: `#${ID.entry.editEntryScrollContainer}`,
+      })
+
+      quill.keyboard.addBinding(
+        {
+          key: 'up',
+        },
+        function (range) {
+          if (range.index === 0 && range.length === 0) {
+            document.getElementById('entry-description-input')?.focus()
+            return false
+          }
+
+          return true
+        },
+      )
+
+      if (value) {
+        const textValue = JSON.parse(value)
+        quill.setContents(textValue, 'api')
+      }
+
+      return quill
     })
-
-    if (value) {
-      const textValue = JSON.parse(value)
-
-      editor.setContents(textValue, 'api')
-    }
-
-    editor.keyboard.addBinding(
-      {
-        key: 'up',
-      },
-      function (range) {
-        if (range.index === 0 && range.length === 0) {
-          document.getElementById('entry-description-input')?.focus()
-          return false
-        }
-
-        return true
-      },
-    )
-
-    setQuillObj(editor)
-  }, [])
+  }, [isReadOnly, toast, value])
 
   const handleQueryChange = useCallback(
     (delta: DeltaStatic) => {
-      const contents = quillObj.current?.getContents()
+      if (!editor) {
+        return
+      }
+
+      const contents = editor.getContents()
 
       if (
         delta &&
@@ -250,22 +253,22 @@ export const ProjectEntryEditor = ({
         handleChange(name, JSON.stringify(contents))
       }
     },
-    [handleChange],
+    [handleChange, name, editor],
   )
 
   useEffect(() => {
-    quillObj.current?.on('text-change', handleQueryChange)
+    editor?.on('text-change', handleQueryChange)
 
     return () => {
-      quillObj.current?.off('text-change', handleQueryChange)
+      editor?.off('text-change', handleQueryChange)
     }
-  }, [handleChange, quillObj])
+  }, [handleChange, handleQueryChange, editor])
 
   useEffect(() => {
     if (focusFlag) {
-      quillObj.current?.focus()
+      editor?.focus()
     }
-  }, [focusFlag])
+  }, [focusFlag, editor])
 
   return (
     <div className={classes.container}>

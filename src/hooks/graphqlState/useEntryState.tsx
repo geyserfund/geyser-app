@@ -1,5 +1,5 @@
 import { QueryHookOptions, useLazyQuery, useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { QUERY_ENTRY_WITH_OWNERS } from '../../graphql'
 import {
@@ -19,7 +19,6 @@ import {
   useNotification,
 } from '../../utils'
 import { useBeforeClose } from '../useBeforeClose'
-import { useListenerState } from '../useListenerState'
 
 type TEntryVariables = {
   id?: Number
@@ -66,7 +65,7 @@ export const useEntryState = (
 
   const [hasDiff, setHasDiff] = useState(false)
 
-  const [saving, setSaving] = useListenerState(false)
+  const [saving, setSaving] = useState(false)
 
   const [createEntryMutation] = useMutation<
     TEntryCreateData,
@@ -131,25 +130,25 @@ export const useEntryState = (
     if (entryId && entryId !== 'new') {
       getEntryQuery()
     }
-  }, [entryId])
+  }, [entryId, getEntryQuery])
 
   useEffect(() => {
     const isDiff = checkDiff(entry, baseEntry, entryEditKeyList)
     setHasDiff(isDiff)
     setIsFormDirty(isDiff)
-  }, [entry, baseEntry])
+  }, [entry, baseEntry, setIsFormDirty])
 
-  const sync = (value: Entry) => {
+  const sync = useCallback((value: Entry) => {
     setBaseEntry(value)
     setEntry(value)
-  }
+  }, [])
 
-  const updateEntry = (value: Partial<Entry>) => {
-    setEntry({ ...entry, ...value })
-  }
+  const updateEntry = useCallback((value: Partial<Entry>) => {
+    setEntry((current) => ({ ...current, ...value }))
+  }, [])
 
-  const saveEntry = () => {
-    if (saving.current) {
+  const saveEntry = useCallback(() => {
+    if (saving) {
       return
     }
 
@@ -183,11 +182,20 @@ export const useEntryState = (
       setSaving(true)
       createEntryMutation({ variables: { input } })
     }
-  }
+  }, [
+    baseEntry,
+    createEntryMutation,
+    entry,
+    entryId,
+    projectId,
+    saving,
+    setSaving,
+    updateEntryMutation,
+  ])
 
   return {
     loading,
-    saving: saving.current,
+    saving,
     entry,
     hasDiff,
     updateEntry,

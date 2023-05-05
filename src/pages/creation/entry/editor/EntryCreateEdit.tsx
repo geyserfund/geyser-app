@@ -1,5 +1,5 @@
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BsImage } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router'
@@ -47,6 +47,9 @@ export const defaultEntry = {
   published: false,
   type: 'article',
 }
+
+const PROJECT_EDITOR_NAME = 'content'
+const ENTRY_UPDATE_DEVOUNCE_MS = 1000
 
 export const EntryCreateEdit = () => {
   const isMobile = useMobileMode()
@@ -97,12 +100,16 @@ export const EntryCreateEdit = () => {
         },
       },
     )
-  const debouncedUpdateEntry = useDebounce(entry, 1000)
+  const debouncedUpdateEntry = useDebounce(entry, ENTRY_UPDATE_DEVOUNCE_MS)
 
   useEffect(() => {
-    if (debouncedUpdateEntry && entry.status !== EntryStatus.Published) {
+    if (
+      debouncedUpdateEntry &&
+      debouncedUpdateEntry.status !== EntryStatus.Published
+    ) {
       saveEntry()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedUpdateEntry])
 
   useEffect(() => {
@@ -111,9 +118,12 @@ export const EntryCreateEdit = () => {
     }
   }, [entry])
 
-  const handleContentUpdate = (name: string, value: string) => {
-    updateEntry({ [name]: value })
-  }
+  const handleContentUpdate = useCallback(
+    (name: string, value: string) => {
+      updateEntry({ [name]: value })
+    },
+    [updateEntry],
+  )
 
   const handleInput = (event: any) => {
     const { name, value } = event.target
@@ -164,11 +174,18 @@ export const EntryCreateEdit = () => {
           event.preventDefault()
           document.getElementById('entry-description-input')?.focus()
         }
-      } else if (event.target.name === 'description') {
+
+        return
+      }
+
+      if (event.target.name === 'description') {
         if (event.key === 'ArrowUp') {
           event.preventDefault()
           document.getElementById('entry-title-input')?.focus()
-        } else if (
+          return
+        }
+
+        if (
           event.key === 'ArrowDown' ||
           event.key === 'Tab' ||
           event.key === 'Enter'
@@ -280,7 +297,7 @@ export const EntryCreateEdit = () => {
                 paddingBottom="5px"
                 paddingX="15px"
                 name="title"
-                value={entry.title}
+                value={entry.title || ''}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
               />
@@ -296,7 +313,7 @@ export const EntryCreateEdit = () => {
                 paddingX="15px"
                 fontWeight={600}
                 name="description"
-                value={entry.description}
+                value={entry.description || ''}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
               />
@@ -304,7 +321,7 @@ export const EntryCreateEdit = () => {
 
             <Box flex={1} width="100%">
               <ProjectEntryEditor
-                name="content"
+                name={PROJECT_EDITOR_NAME}
                 handleChange={handleContentUpdate}
                 value={entry.content as string}
                 focusFlag={focusFlag}
