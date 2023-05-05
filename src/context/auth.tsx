@@ -32,7 +32,6 @@ const defaultContext: AuthContextProps = {
   },
   setUser(user: User) {},
   followedProjects: [],
-  queryFollowedProjects() {},
 }
 
 export type NavContextProps = {
@@ -58,7 +57,6 @@ type AuthContextProps = {
   getAuthToken: () => Promise<boolean>
   setUser: (user: User) => void
   followedProjects: Project[]
-  queryFollowedProjects: () => void
 }
 
 export const AuthContext = createContext<AuthContextProps>(defaultContext)
@@ -177,7 +175,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loginOnOpen,
         loginOnClose,
         followedProjects,
-        queryFollowedProjects,
         getAuthToken,
       }}
     >
