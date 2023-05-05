@@ -366,7 +366,7 @@ const GeneratingInvoice = ({
           <Body2>Click refresh to try again</Body2>
           <Button
             textTransform="uppercase"
-            variant="containedWhite"
+            variant="containedClear"
             size="sm"
             borderRadius="40px"
             leftIcon={<IoMdRefresh />}

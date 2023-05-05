@@ -32,7 +32,7 @@ export const ProjectBackButton = () => {
         padding={{ base: '10px 10px 2px 10px', md: '20px 10px 2px 10px' }}
       >
         <Button
-          variant="containedWhite"
+          variant="containedClear"
           size="sm"
           leftIcon={<BsArrowLeft fontSize="20px" />}
           onClick={handleGoBack}

@@ -137,7 +137,7 @@ export const SuccessImageComponent = ({
           <Button
             size="sm"
             isActive={copied}
-            variant="containedWhite"
+            variant="containedClear"
             aria-label="copy-success-image"
             leftIcon={<BiCopy />}
             onClick={handleCopy}
@@ -148,7 +148,7 @@ export const SuccessImageComponent = ({
         <Tooltip placement="top" label="download">
           <Button
             size="sm"
-            variant="containedWhite"
+            variant="containedClear"
             aria-label="download-success-image"
             leftIcon={<BiDownload />}
             onClick={handleDownload}

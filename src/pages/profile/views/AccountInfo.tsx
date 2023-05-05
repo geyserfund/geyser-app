@@ -105,7 +105,7 @@ export const AccountInfo = ({
           <Button
             onClick={() => modalProps.onOpen({ user: userProfile })}
             width="100%"
-            variant="containedWhite"
+            variant="containedClear"
             marginTop="20px"
           >
             Edit

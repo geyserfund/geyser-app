@@ -59,7 +59,7 @@ export const theme = extendTheme({
             backgroundColor: colors.neutral900,
           },
         },
-        containedWhite: {
+        containedClear: {
           border: `2px solid`,
           borderColor: colors.neutral200,
           color: colors.neutral900,

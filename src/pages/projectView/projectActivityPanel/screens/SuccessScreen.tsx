@@ -97,7 +97,7 @@ export const SuccessScreen = ({
         <VStack w="full" spacing="10px">
           {fundingTx.funder.user?.id && currentBadge && (
             <Button
-              variant="containedWhite"
+              variant="containedClear"
               as={Link}
               size="sm"
               to={getPath('userProfile', fundingTx.funder.user?.id)}
@@ -107,7 +107,7 @@ export const SuccessScreen = ({
             </Button>
           )}
           <Button
-            variant="containedWhite"
+            variant="containedClear"
             isActive={hasCopiedProjectLink}
             size="sm"
             leftIcon={
