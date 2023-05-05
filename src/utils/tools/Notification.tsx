@@ -1,5 +1,5 @@
 import { useToast, UseToastOptions } from '@chakra-ui/react'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 // "subtle" | "solid" | "left-accent" | "top-accent"
 
 const DEFAULT = {}
@@ -7,21 +7,16 @@ const DEFAULT = {}
 export const useNotification = (
   options: UseToastOptions | undefined = DEFAULT,
 ) => {
-  const toast = useToast(
-    useMemo(
-      () => ({
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-        variant: 'left-accent',
-        containerStyle: {
-          marginTop: 65,
-        },
-        ...options,
-      }),
-      [options],
-    ),
-  )
+  const toast = useToast({
+    duration: 3000,
+    isClosable: true,
+    position: 'top-right',
+    variant: 'left-accent',
+    containerStyle: {
+      marginTop: 65,
+    },
+    ...options,
+  })
 
   const unexpected = useCallback(() => {
     toast({
