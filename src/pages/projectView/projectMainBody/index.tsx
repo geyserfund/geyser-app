@@ -10,7 +10,7 @@ import {
   useProjectContext,
 } from '../../../context'
 import { UpdateReward } from '../../../hooks'
-import { Project } from '../../../types/generated/graphql'
+import { ProjectFragment } from '../../../types/generated/graphql'
 import { useDarkMode, useMobileMode } from '../../../utils'
 import { NoWallet } from './components'
 import { Creator, Entries, Summary } from './sections'
@@ -53,7 +53,7 @@ const useStyles = createUseStyles<Rules, Styles>({
 })
 
 type Props = {
-  project: Project
+  project: ProjectFragment
   fundState: IFundingStages
   updateReward: UpdateReward
 }

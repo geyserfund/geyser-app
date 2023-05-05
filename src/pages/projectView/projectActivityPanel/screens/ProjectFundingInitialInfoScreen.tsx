@@ -17,7 +17,11 @@ import {
   QUERY_PROJECT_FUNDERS,
 } from '../../../../graphql'
 import { useQueryWithPagination } from '../../../../hooks'
-import { Funder, FundingTx, Project } from '../../../../types/generated/graphql'
+import {
+  Funder,
+  FundingTx,
+  ProjectFragment,
+} from '../../../../types/generated/graphql'
 import {
   aggregateTransactions,
   FundingTxWithCount,
@@ -30,7 +34,7 @@ import { ProjectContributionList } from '../components/ProjectContributionList'
 import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
 
 type Props = {
-  project: Project
+  project: ProjectFragment
   btcRate: number
   test?: boolean
   fundingTx: FundingTx

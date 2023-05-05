@@ -5,11 +5,18 @@ import { SatoshiIcon } from '../../../../components/icons'
 import { Caption, MonoBody1 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
 import { colors } from '../../../../styles'
-import { Project } from '../../../../types'
+import { ProjectFragment } from '../../../../types'
 import { getShortAmountLabel } from '../../../../utils'
 import { getProjectBalance } from '../../../../utils/helpers'
 
-export const ProjectFundingSummary = ({ project }: { project: Project }) => {
+export const ProjectFundingSummary = ({
+  project,
+}: {
+  project: Pick<
+    ProjectFragment,
+    'balance' | 'fundersCount' | 'funders' | 'name' | 'balance' | 'wallets'
+  >
+}) => {
   const { user } = useAuthContext()
   const currentFund = project.funders.find(
     (funder) => funder?.user?.id === user.id,

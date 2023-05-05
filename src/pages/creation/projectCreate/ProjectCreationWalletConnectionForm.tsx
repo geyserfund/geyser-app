@@ -36,7 +36,7 @@ import { colors } from '../../../styles'
 import {
   CreateWalletInput,
   LndNodeType,
-  Project,
+  ProjectFragment,
   useCreateWalletMutation,
   useLightningAddressVerifyLazyQuery,
   WalletResourceType,
@@ -47,7 +47,7 @@ import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOpti
 import { TNodeInput } from './types'
 
 type Props = {
-  project: Project
+  project: ProjectFragment
   onProjectLaunchSelected: (_: CreateWalletInput) => void
   onSaveAsDraftSelected?: (_: CreateWalletInput) => void
   triggerWallet?: boolean

@@ -9,14 +9,17 @@ import {
   SatoshiAmount,
 } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { RewardCurrency, RewardForLandingPageFragment } from '../../../../types'
+import {
+  ProjectRewardForLandingPageFragment,
+  RewardCurrency,
+} from '../../../../types'
 import { TimeAgo } from '../../components'
 
 export const RewardActivityItem = ({
   reward,
   dateTime,
 }: {
-  reward: RewardForLandingPageFragment
+  reward: ProjectRewardForLandingPageFragment
   dateTime?: string
 }) => {
   const owner = reward.rewardProject.owners[0]?.user
@@ -51,7 +54,11 @@ export const RewardActivityItem = ({
   )
 }
 
-const RewardItem = ({ reward }: { reward: RewardForLandingPageFragment }) => {
+const RewardItem = ({
+  reward,
+}: {
+  reward: ProjectRewardForLandingPageFragment
+}) => {
   return (
     <CardLayout
       padding="0px"

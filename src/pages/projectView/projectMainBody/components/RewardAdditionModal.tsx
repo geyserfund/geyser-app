@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import {
   HStack,
   Input,
@@ -29,32 +28,23 @@ import {
 import { ProjectRewardValidations } from '../../../../constants/validations'
 import { defaultProjectReward } from '../../../../defaults'
 import {
-  MUTATION_CREATE_PROJECT_REWARD,
-  MUTATION_UPDATE_PROJECT_REWARD,
-} from '../../../../graphql/mutations'
-import {
   CreateProjectRewardInput,
   ProjectReward,
+  ProjectRewardForCreateUpdateFragment,
   RewardCurrency,
   UpdateProjectRewardInput,
+  useCreateProjectRewardMutation,
+  useUpdateProjectRewardMutation,
 } from '../../../../types/generated/graphql'
 import { commaFormatted, toInt, useNotification } from '../../../../utils'
 
 type Props = {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (_: ProjectReward) => void
-  reward?: ProjectReward
+  onSubmit: (reward: ProjectRewardForCreateUpdateFragment) => void
+  reward?: ProjectRewardForCreateUpdateFragment
   isSatoshi: boolean
   projectId: number
-}
-
-type CreateRewardMutationResponseData = {
-  createProjectReward: ProjectReward
-}
-
-type UpdateRewardMutationResponseData = {
-  updateProjectReward: ProjectReward
 }
 
 export const RewardAdditionModal = ({
@@ -71,57 +61,54 @@ export const RewardAdditionModal = ({
     (availableReward || defaultProjectReward).cost / 100,
   )
 
-  const [_rewards, _setRewards] = useState<ProjectReward>(
-    availableReward || defaultProjectReward,
-  )
+  const [_rewards, _setRewards] =
+    useState<ProjectRewardForCreateUpdateFragment>(
+      availableReward || defaultProjectReward,
+    )
 
   const rewards = useRef(_rewards)
 
-  const setRewards = (value: ProjectReward) => {
+  const setRewards = (value: ProjectRewardForCreateUpdateFragment) => {
     rewards.current = value
     _setRewards(value)
   }
 
   const [formError, setFormError] = useState<any>({})
 
-  const [createReward, { loading: createRewardLoading }] = useMutation<
-    CreateRewardMutationResponseData,
-    { input: CreateProjectRewardInput }
-  >(MUTATION_CREATE_PROJECT_REWARD, {
-    onCompleted(data) {
-      onSubmit(data.createProjectReward)
-      onClose()
-    },
-    onError(error) {
-      toast({
-        title: 'Failed to create reward',
-        description: `${error}`,
-        status: 'error',
-      })
-    },
-  })
+  const [createReward, { loading: createRewardLoading }] =
+    useCreateProjectRewardMutation({
+      onCompleted(data) {
+        onSubmit(data.createProjectReward)
+        onClose()
+      },
+      onError(error) {
+        toast({
+          title: 'Failed to create reward',
+          description: `${error}`,
+          status: 'error',
+        })
+      },
+    })
 
-  const [updateReward, { loading: updateRewardLoading }] = useMutation<
-    UpdateRewardMutationResponseData,
-    { input: UpdateProjectRewardInput }
-  >(MUTATION_UPDATE_PROJECT_REWARD, {
-    onCompleted({ updateProjectReward }) {
-      toast({
-        title: 'Successfully updated!',
-        description: `Reward ${updateProjectReward.name} was successfully updated`,
-        status: 'success',
-      })
-      onSubmit(updateProjectReward)
-      onClose()
-    },
-    onError(error) {
-      toast({
-        title: 'Failed to update reward',
-        description: `${error}`,
-        status: 'error',
-      })
-    },
-  })
+  const [updateReward, { loading: updateRewardLoading }] =
+    useUpdateProjectRewardMutation({
+      onCompleted({ updateProjectReward }) {
+        toast({
+          title: 'Successfully updated!',
+          description: `Reward ${updateProjectReward.name} was successfully updated`,
+          status: 'success',
+        })
+        onSubmit(updateProjectReward)
+        onClose()
+      },
+      onError(error) {
+        toast({
+          title: 'Failed to update reward',
+          description: `${error}`,
+          status: 'error',
+        })
+      },
+    })
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
@@ -139,7 +126,7 @@ export const RewardAdditionModal = ({
     return {
       projectRewardId: toInt((rewards.current as ProjectReward).id),
       cost: rewards.current.cost,
-      costCurrency: RewardCurrency.Usdcent, // TODO: when we do have more options for reward currency this will be updated
+      costCurrency: RewardCurrency.Usdcent, // @TODO: when we do have more options for reward currency this will be updated
       description: rewards.current.description,
       image: rewards.current.image || undefined,
       name: rewards.current.name,
@@ -285,8 +272,8 @@ export const RewardAdditionModal = ({
             <VStack width="100%" alignItems="flex-start">
               <Text>Description</Text>
               <TextArea
-                placeholder={' ...'}
-                value={rewards.current.description!}
+                placeholder="..."
+                value={rewards.current.description || ''}
                 name="description"
                 onChange={handleTextChange}
                 error={formError.description}
@@ -321,7 +308,7 @@ export const RewardAdditionModal = ({
                 </InputLeftAddon>
 
                 {/*
-                   TODO: Use a different `value` here if when we support currency
+                   @TODO: Use a different `value` here if when we support currency
                    types beyond USD cents (e.g: satoshis)
                  */}
                 <Input
