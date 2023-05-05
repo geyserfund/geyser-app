@@ -103,7 +103,10 @@ export const ActivityFeed = () => {
         {!isMobile && <FilterTopBar noSort paddingBottom="20px" />}
 
         {subscriptionActivities.length > 0 && (
-          <ViewUpdates onClick={handleClick} />
+          <ViewUpdates
+            length={subscriptionActivities.length}
+            onClick={handleClick}
+          />
         )}
 
         <ActivityList activities={aggregatedActivites} />
@@ -142,11 +145,27 @@ export const ContributionsSkeleton = () => {
   )
 }
 
-export const ViewUpdates = ({ onClick }: { onClick: () => void }) => {
+const ViewUpdates = ({
+  onClick,
+  length,
+}: {
+  length: number
+  onClick: () => void
+}) => {
+  const displayText =
+    length > 1 ? `Show ${length} new items` : `Show ${length} new item`
   return (
     <>
-      <Button size="sm" variant="outlined" onClick={onClick}>
-        view updates
+      <Button
+        size="sm"
+        variant="transparent"
+        onClick={onClick}
+        _hover={{}}
+        _focus={{ color: 'primary.700' }}
+        _active={{ color: 'primary.700' }}
+        color="primary.500"
+      >
+        {displayText}
       </Button>
       <Divider borderBottomWidth="2px" maxWidth="500px" color="brand.200" />
     </>
