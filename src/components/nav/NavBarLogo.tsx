@@ -1,15 +1,15 @@
 import { Image } from '@chakra-ui/image'
-import { Box } from '@chakra-ui/layout'
+import { Box, BoxProps } from '@chakra-ui/layout'
 import { useMediaQuery } from '@chakra-ui/media-query'
-import { HTMLChakraProps, useColorMode } from '@chakra-ui/system'
+import { useColorMode } from '@chakra-ui/system'
 import { createUseStyles } from 'react-jss'
-import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 
 import LogoSmall from '../../assets/logo-brand.svg'
 import LogoDark from '../../assets/logo-dark.svg'
 import LogoName from '../../assets/logo-name-brand.svg'
 
-type Props = HTMLChakraProps<'div'> & {
+type Props = BoxProps & {
   className?: string
   imageClassName?: string
   full?: boolean
@@ -33,7 +33,6 @@ export const NavBarLogo = ({
 }: Props) => {
   const classes = useStyles()
   const { colorMode } = useColorMode()
-  const navigate = useNavigate()
   const [isLargerThan720] = useMediaQuery('(min-width: 900px)')
 
   const useFullOne = (isLargerThan720 || full) && !small
@@ -47,23 +46,17 @@ export const NavBarLogo = ({
       ? LogoName
       : LogoDark
 
-  const handleClick = () => {
-    navigate('/')
-  }
-
   return (
-    <Box
-      className={`${classes.container} ${className}`}
-      {...rest}
-      onClick={handleClick}
-    >
-      <Image
-        className={imageClassName}
-        height="32px"
-        src={imageToUse}
-        alt="geyser logo image"
-        objectFit="contain"
-      />
+    <Box {...rest} className={`${classes.container} ${className}`}>
+      <Link to="/">
+        <Image
+          className={imageClassName}
+          height="32px"
+          src={imageToUse}
+          alt="geyser logo image"
+          objectFit="contain"
+        />
+      </Link>
     </Box>
   )
 }
