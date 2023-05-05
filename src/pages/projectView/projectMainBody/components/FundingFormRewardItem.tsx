@@ -11,6 +11,7 @@ import classNames from 'classnames'
 import { useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
+import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { ImageWithReload } from '../../../../components/ui'
 import { IRewardCount } from '../../../../interfaces'
 import { colors } from '../../../../styles'
@@ -18,20 +19,6 @@ import { ProjectReward } from '../../../../types/generated/graphql'
 import { toInt } from '../../../../utils'
 
 const useStyles = createUseStyles({
-  container: {
-    backgroundColor: '#FDFDFD',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '10px',
-    border: '2px solid',
-    borderColor: colors.bgLightGrey,
-    borderRadius: '12px',
-    '&:hover': {
-      cursor: 'pointer',
-      borderColor: colors.gray300,
-    },
-  },
   focused: {
     borderColor: `${colors.normalLightGreen} !important`,
     boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
@@ -96,11 +83,11 @@ export const FundingFormRewardItem = ({
   const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />
 
   return (
-    <Box
+    <ItemCard
       tabIndex={-1}
       onFocus={setFocus}
       onBlur={setBlur}
-      className={classNames(classes.container, { [classes.focused]: focus })}
+      className={classNames({ [classes.focused]: focus })}
       onClick={onClick}
     >
       <HStack className={classes.upperContainer}>
@@ -165,6 +152,6 @@ export const FundingFormRewardItem = ({
         </Box>
       )}
       <Text marginTop="5px">{description}</Text>
-    </Box>
+    </ItemCard>
   )
 }
