@@ -14,17 +14,15 @@ export const getProjectBalance = (project: Project) => {
 }
 
 export const hasOwnNode = (project: Project) => {
-  const currentProject = project.wallets && project.wallets[0]
-  const { connectionDetails } = currentProject || {}
+  const currentWallet = project.wallets && project.wallets[0]
+  const { connectionDetails } = currentWallet || {}
 
   if (!connectionDetails) {
     return false
   }
 
-  switch (connectionDetails.__typename) {
-    case WalletConnectDetails.LightningAddressConnectionDetails:
-      return false
-    default:
-      return true
-  }
+  return (
+    connectionDetails.__typename !==
+    WalletConnectDetails.LightningAddressConnectionDetails
+  )
 }
