@@ -59,6 +59,7 @@ export const EntryPage = () => {
 
   const [getEntry, { loading: loadingPosts, error, data: entryData }] =
     useLazyQuery(QUERY_ENTRY, {
+      fetchPolicy: 'network-only',
       onCompleted(data) {
         const { entry } = data
         if (!entry) {
