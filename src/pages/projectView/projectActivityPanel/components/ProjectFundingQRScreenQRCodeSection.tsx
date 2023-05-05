@@ -337,8 +337,12 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   )
 }
 
-
-<<<<<<< Updated upstream
+const GeneratingInvoice = ({
+  refreshInvoice,
+}: {
+  refreshInvoice: () => void
+}) => {
+  const { onOpen, onClose, isOpen } = useDisclosure()
   const timeout = useRef<NodeJS.Timeout | undefined>()
 
   useEffect(() => {
@@ -380,5 +384,3 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     </VStack>
   )
 }
-=======
->>>>>>> Stashed changes
