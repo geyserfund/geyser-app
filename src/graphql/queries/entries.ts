@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_ENTRY_FOR_LANDING_PAGE } from './activities'
+import { FRAGMENT_ENTRY_FOR_LANDING_PAGE } from '../fragments/entries'
 
 export const QUERY_ENTRY = gql`
   query Entry($id: BigInt!) {

@@ -5,14 +5,24 @@ import { SatoshiIcon } from '../../../../components/icons'
 import { Caption, MonoBody1 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
 import { colors } from '../../../../styles'
-import { Project } from '../../../../types'
+import { ProjectFragment } from '../../../../types'
 import { getShortAmountLabel } from '../../../../utils'
+import { getProjectBalance } from '../../../../utils/helpers'
 
-export const ProjectFundingSummary = ({ project }: { project: Project }) => {
+export const ProjectFundingSummary = ({
+  project,
+}: {
+  project: Pick<
+    ProjectFragment,
+    'balance' | 'fundersCount' | 'funders' | 'name' | 'balance' | 'wallets'
+  >
+}) => {
   const { user } = useAuthContext()
   const currentFund = project.funders.find(
     (funder) => funder?.user?.id === user.id,
   )
+
+  const projectBalance = getProjectBalance(project)
   return (
     <HStack
       height="72px"
@@ -36,7 +46,7 @@ export const ProjectFundingSummary = ({ project }: { project: Project }) => {
       <VStack spacing="0px">
         <HStack spacing="5px">
           <SatoshiIcon scale={0.7} />
-          <MonoBody1>{getShortAmountLabel(project.balance)}</MonoBody1>
+          <MonoBody1>{getShortAmountLabel(projectBalance)}</MonoBody1>
         </HStack>
         <Caption>TOTAL CONTRIBUTED</Caption>
       </VStack>

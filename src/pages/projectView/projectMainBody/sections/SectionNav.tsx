@@ -4,15 +4,11 @@ import { ID } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 
 export const SectionNav = () => {
-  const { project, isProjectOwner } = useProjectContext()
+  const { project } = useProjectContext()
 
   const entriesLength = project.entries ? project.entries.length : 0
   const rewardsLength = project.rewards ? project.rewards.length : 0
   const milestoneLength = project.milestones ? project.milestones.length : 0
-
-  const isRewardBased = project.rewards && project.rewards.length > 0
-  const hasMilestones = project.milestones && project.milestones.length > 0
-  const hasEntries = project.entries && project.entries.length > 0
 
   const handleEntriesClick = () => {
     const entriesElement = document.getElementById(ID.project.view.entries)
@@ -38,34 +34,28 @@ export const SectionNav = () => {
   return (
     <VStack width="100%" spacing="40px">
       <HStack justifyContent="center" spacing="13px">
-        {(hasEntries || isProjectOwner) && (
+        {entriesLength && (
           <Button
             background="none"
-            rightIcon={
-              entriesLength ? <Badge>{entriesLength}</Badge> : undefined
-            }
+            rightIcon={<Badge>{entriesLength}</Badge>}
             onClick={handleEntriesClick}
           >
             Entries
           </Button>
         )}
-        {(isRewardBased || isProjectOwner) && (
+        {rewardsLength && (
           <Button
             background="none"
-            rightIcon={
-              rewardsLength ? <Badge>{rewardsLength}</Badge> : undefined
-            }
+            rightIcon={<Badge>{rewardsLength}</Badge>}
             onClick={handleRewardsClick}
           >
             Rewards
           </Button>
         )}
-        {(hasMilestones || isProjectOwner) && (
+        {milestoneLength && (
           <Button
             background="none"
-            rightIcon={
-              milestoneLength ? <Badge>{milestoneLength}</Badge> : undefined
-            }
+            rightIcon={<Badge>{milestoneLength}</Badge>}
             onClick={handleMilestonesClick}
           >
             Milestones

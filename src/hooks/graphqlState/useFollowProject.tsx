@@ -1,47 +1,34 @@
-import { useMutation } from '@apollo/client'
 import React from 'react'
 
 import { useAuthContext } from '../../context'
+import { QUERY_ME_PROJECT_FOLLOWS } from '../../graphql'
 import {
-  MUTATION_FOLLOW_PROJECT,
-  MUTATION_UNFOLLOW_PROJECT,
-} from '../../graphql/mutations'
-import {
-  MutationProjectFollowArgs,
-  MutationProjectUnfollowArgs,
+  useProjectFollowMutation,
+  useProjectUnfollowMutation,
 } from '../../types'
 import { toInt } from '../../utils'
 
 export const useFollowProject = (projectId: number) => {
-  const { followedProjects, queryFollowedProjects } = useAuthContext()
+  const { followedProjects } = useAuthContext()
 
-  const [followProject, { loading: followLoading }] = useMutation<
-    any,
-    MutationProjectFollowArgs
-  >(MUTATION_FOLLOW_PROJECT, {
+  const [followProject, { loading: followLoading }] = useProjectFollowMutation({
     variables: {
       input: {
         projectId: toInt(projectId),
       },
     },
-    onCompleted() {
-      queryFollowedProjects()
-    },
+    refetchQueries: [QUERY_ME_PROJECT_FOLLOWS],
   })
 
-  const [unFollowProject, { loading: unfollowLoading }] = useMutation<
-    any,
-    MutationProjectUnfollowArgs
-  >(MUTATION_UNFOLLOW_PROJECT, {
-    variables: {
-      input: {
-        projectId: toInt(projectId),
+  const [unFollowProject, { loading: unfollowLoading }] =
+    useProjectUnfollowMutation({
+      variables: {
+        input: {
+          projectId: toInt(projectId),
+        },
       },
-    },
-    onCompleted() {
-      queryFollowedProjects()
-    },
-  })
+      refetchQueries: [QUERY_ME_PROJECT_FOLLOWS],
+    })
 
   const isFollowed = Boolean(
     followedProjects.find((project) => toInt(project?.id) === toInt(projectId)),

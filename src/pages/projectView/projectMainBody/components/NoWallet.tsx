@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { ButtonComponent } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { Project } from '../../../../types'
+import { ProjectFragment } from '../../../../types'
 
-export const NoWallet = ({ project }: { project: Project }) => {
+export const NoWallet = ({ project }: { project: ProjectFragment }) => {
   const hasWallet = project.wallets.length > 0
   const navigate = useNavigate()
 

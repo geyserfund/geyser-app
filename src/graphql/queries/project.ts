@@ -1,136 +1,19 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_ENTRY_FOR_PROJECT } from '../fragments/entries'
+import {
+  FRAGMENT_PROJECT,
+  FRAGMENT_PROJECT_FOR_LANDING_PAGE,
+} from '../fragments/project'
+
 export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
+  ${FRAGMENT_PROJECT}
   query ProjectByNameOrId(
     $where: UniqueProjectQueryInput!
     $input: ProjectEntriesGetInput
   ) {
     project(where: $where) {
-      id
-      title
-      name
-      type
-      shortDescription
-      description
-      balance
-      fundingGoal
-      createdAt
-      updatedAt
-      expiresAt
-      image
-      thumbnailImage
-      links
-      status
-      rewardCurrency
-      fundersCount
-      fundingTxsCount
-      location {
-        country {
-          name
-          code
-        }
-        region
-      }
-      tags {
-        id
-        label
-      }
-      owners {
-        id
-        user {
-          id
-          username
-          imageUrl
-        }
-      }
-      rewards {
-        id
-        cost
-        description
-        name
-        sold
-        image
-      }
-      ambassadors {
-        id
-        confirmed
-        user {
-          id
-          username
-          imageUrl
-        }
-      }
-      sponsors {
-        id
-        url
-        image
-        user {
-          id
-          username
-          imageUrl
-        }
-      }
-      funders {
-        id
-        user {
-          id
-          username
-          imageUrl
-          email
-        }
-        amountFunded
-        confirmed
-        confirmedAt
-        timesFunded
-      }
-      milestones {
-        id
-        name
-        description
-        amount
-      }
-      entries(input: $input) {
-        id
-        title
-        description
-        image
-        type
-        fundersCount
-        amountFunded
-        published
-        status
-        createdAt
-        publishedAt
-        creator {
-          id
-          username
-          imageUrl
-        }
-      }
-      wallets {
-        id
-        name
-        state {
-          status
-          statusCode
-        }
-        connectionDetails {
-          ... on LightningAddressConnectionDetails {
-            lightningAddress
-          }
-          ... on LndConnectionDetailsPrivate {
-            macaroon
-            tlsCertificate
-            hostname
-            grpcPort
-            lndNodeType
-            pubkey
-          }
-          ... on LndConnectionDetailsPublic {
-            pubkey
-          }
-        }
-      }
+      ...Project
     }
   }
 `
@@ -230,54 +113,25 @@ export const QUERY_PROJECTS_SUMMARY = gql`
   }
 `
 export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
+  ${FRAGMENT_ENTRY_FOR_PROJECT}
   query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
     project(where: $where) {
       entries: entries(input: { where: { published: false } }) {
-        id
-        title
-        description
-        image
-        type
-        fundersCount
-        amountFunded
-        published
-        publishedAt
-        status
-        createdAt
-        creator {
-          id
-          username
-          imageUrl
-        }
+        ...EntryForProject
       }
     }
   }
 `
 
 export const QUERY_PROJECT_DASHBOARD_DATA = gql`
+  ${FRAGMENT_ENTRY_FOR_PROJECT}
   query ProjectDashboardData($where: UniqueProjectQueryInput!) {
     project(where: $where) {
       unpublishedEntries: entries(input: { where: { published: false } }) {
-        id
-        title
-        image
-        description
-        fundersCount
-        amountFunded
-        published
-        publishedAt
-        status
+        ...EntryForProject
       }
       publishedEntries: entries(input: { where: { published: true } }) {
-        id
-        title
-        image
-        description
-        fundersCount
-        amountFunded
-        published
-        publishedAt
-        status
+        ...EntryForProject
       }
       statistics {
         totalVisitors
@@ -332,33 +186,6 @@ export const QUERY_PROJECT_DASHBOARD_FUNDERS = gql`
       confirmed
       confirmedAt
       timesFunded
-    }
-  }
-`
-
-export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
-  fragment ProjectForLandingPage on Project {
-    id
-    name
-    balance
-    createdAt
-    fundersCount
-    fundingTxsCount
-    thumbnailImage
-    shortDescription
-    tags {
-      id
-      label
-    }
-    title
-    status
-    owners {
-      id
-      user {
-        id
-        username
-        imageUrl
-      }
     }
   }
 `

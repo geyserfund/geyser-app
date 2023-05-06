@@ -1,73 +1,71 @@
-import { QueryHookOptions, useMutation, useQuery } from '@apollo/client'
+import { QueryHookOptions } from '@apollo/client'
 import { useState } from 'react'
 
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
-import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
-import { Project, UpdateProjectInput } from '../../types'
+import {
+  ProjectByNameOrIdQuery,
+  ProjectByNameOrIdQueryVariables,
+  ProjectFragment,
+  UpdateProjectInput,
+  useProjectByNameOrIdQuery,
+  useUpdateProjectMutation,
+} from '../../types'
 import { getDiff, toInt, useNotification } from '../../utils'
-
-type TProjectVariables = {
-  where?: {
-    id?: Number
-    name?: string
-  }
-}
-
-type TProjectData = {
-  project: Project
-}
 
 export const useProjectState = (
   projectId: string | number,
-  options?: QueryHookOptions<TProjectData, TProjectVariables>,
+  options?: QueryHookOptions<
+    ProjectByNameOrIdQuery,
+    ProjectByNameOrIdQueryVariables
+  >,
   type: 'name' | 'id' = 'name',
 ) => {
   const { toast } = useNotification()
 
-  const [project, setProject] = useState<Project>({} as Project)
-  const [baseProject, setBaseProject] = useState<Project>({} as Project)
+  const [project, setProject] = useState<ProjectFragment>({} as ProjectFragment)
+  const [baseProject, setBaseProject] = useState<ProjectFragment>(
+    {} as ProjectFragment,
+  )
 
-  const { loading } = useQuery<TProjectData, TProjectVariables>(
-    QUERY_PROJECT_BY_NAME_OR_ID,
-    {
-      variables: {
-        where: { [type]: type === 'name' ? projectId : toInt(projectId) },
-      },
-      ...options,
-      onCompleted(data) {
-        const { project } = data
+  const { loading } = useProjectByNameOrIdQuery({
+    variables: {
+      where: { [type]: type === 'name' ? projectId : toInt(projectId) },
+    },
+    ...options,
+    onCompleted(data) {
+      const { project } = data
+      if (project) {
         syncProject(project)
-        if (options?.onCompleted) {
-          options?.onCompleted(data)
+      }
+
+      if (options?.onCompleted) {
+        options?.onCompleted(data)
+      }
+    },
+  })
+
+  const [updateProjectMutation, { loading: saving }] = useUpdateProjectMutation(
+    {
+      onError() {
+        toast({
+          status: 'error',
+          title: 'failed to update project',
+        })
+      },
+      onCompleted(data) {
+        if (data.updateProject) {
+          syncProject({ ...baseProject, ...data.updateProject })
         }
       },
     },
   )
 
-  const [updateProjectMutation, { loading: saving }] = useMutation<
-    { updateProject: Project },
-    { input: UpdateProjectInput }
-  >(MUTATION_UPDATE_PROJECT, {
-    onError() {
-      toast({
-        status: 'error',
-        title: 'failed to update project',
-      })
-    },
-    onCompleted(data) {
-      if (data.updateProject) {
-        syncProject({ ...baseProject, ...data.updateProject })
-      }
-    },
-  })
-
-  const syncProject = (project: Project) => {
+  const syncProject = (project: ProjectFragment) => {
     setProject(project)
     setBaseProject(project)
   }
 
-  const updateProject = (value: Project) => {
-    setProject({ ...project, ...value })
+  const updateProject = (value: Partial<ProjectFragment>) => {
+    setProject((current) => ({ ...current, ...value }))
   }
 
   const saveProject = async () => {

@@ -9,7 +9,10 @@ import { useNavigate } from 'react-router-dom'
 import { getPath } from '../../../constants'
 import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
 import { colors, fonts } from '../../../styles'
-import { Entry, EntryStatus } from '../../../types/generated/graphql'
+import {
+  EntryForProjectFragment,
+  EntryStatus,
+} from '../../../types/generated/graphql'
 import { getShortAmountLabel, toInt } from '../../../utils'
 import { CardLayout } from '../../layouts'
 import { Body1, Body2, H2, MonoBody1 } from '../../typography'
@@ -18,7 +21,7 @@ import { EntryStatusLabel } from '../../ui/EntryStatusLabel'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
 
 type Props = ICard & {
-  entry: Entry
+  entry: EntryForProjectFragment
   onEdit?: () => void
   onDelete?: () => void
 }

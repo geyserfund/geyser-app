@@ -1,46 +1,10 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE } from './activities'
-
-export const FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS = gql`
-  fragment FundingTxWithInvoiceStatus on FundingTx {
-    id
-    invoiceId
-    status
-    onChain
-    invoiceStatus
-    invoiceStatus
-    paymentRequest
-  }
-`
-
-export const FRAGMENT_FUNDING_TX = gql`
-  fragment FundingTx on FundingTx {
-    id
-    uuid
-    invoiceId
-    paymentRequest
-    amount
-    status
-    invoiceStatus
-    comment
-    media
-    paidAt
-    onChain
-    address
-    source
-    method
-    projectId
-    funder {
-      id
-      user {
-        id
-        username
-        imageUrl
-      }
-    }
-  }
-`
+import {
+  FRAGMENT_FUNDING_TX,
+  FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE,
+  FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS,
+} from '../fragments/funding'
 
 export const QUERY_GET_FUNDING = gql`
   ${FRAGMENT_FUNDING_TX}

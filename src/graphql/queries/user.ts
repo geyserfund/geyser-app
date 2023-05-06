@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from './project'
+import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from '../fragments/project'
 
 export const QUERY_ME = gql`
   query Me {

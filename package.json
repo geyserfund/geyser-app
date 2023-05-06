@@ -16,7 +16,8 @@
     "graph:format": "prettier --write \"src/types/generated/graphql.ts\"",
     "graph:fetch": "run(){ rover graph fetch geyser-graph@$1 > ./schema.graphql; }; run",
     "graph:generate": "run(){ yarn graph:fetch $1 && graphql-codegen --config codegen.ts && rm schema.graphql && yarn graph:format; }; run",
-    "graph:generate:staging": "yarn graph:generate staging"
+    "graph:generate:staging": "yarn graph:generate staging",
+    "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
@@ -93,6 +94,7 @@
     "@typescript-eslint/parser": "^5.49.0",
     "@vitejs/plugin-react": "^3.0.0",
     "@vitejs/plugin-react-swc": "^3.0.1",
+    "conventional-changelog-cli": "^2.2.2",
     "eslint": ">=8.0.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-xo": "^0.43.1",

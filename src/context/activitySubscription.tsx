@@ -1,6 +1,12 @@
 import { useSubscription } from '@apollo/client'
 import { DateTime } from 'luxon'
-import { createContext, useCallback, useContext, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
 import { ACTIVITY_CREATION_SUBSCRIPTION } from '../graphql/subscriptions'
 import {
@@ -14,13 +20,16 @@ import { useAuthContext } from './auth'
 export interface ActivitySubscriptionState {
   activities: ActivityForLandingPageFragment[]
   clearActivity: () => void
+  hasNewActivity: boolean
 }
 
 const defaultActivitySubscriptionContext = {
   activities: [],
-  addActivitiy() {},
   clearActivity() {},
+  hasNewActivity: false,
 }
+
+export const NEW_ACTIVITY_FLAG = 'NEW_ACTIVITY_FLAG'
 
 export const ActivitySubscriptionContext =
   createContext<ActivitySubscriptionState>(defaultActivitySubscriptionContext)
@@ -30,6 +39,8 @@ export const ActivitySubscriptionProvider = ({
 }: {
   children: React.ReactNode
 }) => {
+  const [hasNewActivity, setHasNewActivity] = useState(false)
+
   const [activities, setActivities] = useState<
     ActivityForLandingPageFragment[]
   >([])
@@ -56,17 +67,31 @@ export const ActivitySubscriptionProvider = ({
       } as ActivityForLandingPageFragment
 
       if (activityCreated) {
+        localStorage.setItem(NEW_ACTIVITY_FLAG, 'true')
+        setHasNewActivity(true)
         setActivities((current) => [...current, newActivity])
       }
     },
   })
 
   const clearActivity = useCallback(() => {
+    localStorage.removeItem(NEW_ACTIVITY_FLAG)
+    setHasNewActivity(false)
     setActivities([])
   }, [])
 
+  useEffect(() => {
+    const isNewActivity = localStorage.getItem(NEW_ACTIVITY_FLAG)
+
+    if (isNewActivity) {
+      setHasNewActivity(true)
+    }
+  }, [])
+
   return (
-    <ActivitySubscriptionContext.Provider value={{ activities, clearActivity }}>
+    <ActivitySubscriptionContext.Provider
+      value={{ hasNewActivity, activities, clearActivity }}
+    >
       {children}
     </ActivitySubscriptionContext.Provider>
   )

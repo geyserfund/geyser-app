@@ -2,7 +2,9 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
   // Buffer can be used server-side and atob client side
   // const utf8Encoded = Buffer.from(macaroon, 'base64').toString('utf8');
   try {
-    const utf8Encoded = atob(macaroon)
+    const base64Macaroon = convertMacaroonToBase64(macaroon)
+
+    const utf8Encoded = atob(base64Macaroon)
 
     const chunks = utf8Encoded
       .split('\n')
@@ -82,4 +84,29 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
   } catch (error) {
     return 'invalid macaroon, please add a valid invoice macaroon'
   }
+}
+
+export const convertMacaroonToBase64 = (macaroon: string): string => {
+  if (isBase64(macaroon)) {
+    return macaroon
+  }
+
+  if (isHex(macaroon)) {
+    return Buffer.from(macaroon, 'hex').toString('base64')
+  }
+
+  throw new Error(
+    'unknown macaroon encoding, please check the macaroon is either in Hex or Base64 format',
+  )
+}
+
+export const isBase64 = (text: string) => {
+  const base64Regex =
+    /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+  return base64Regex.test(text)
+}
+
+export const isHex = (text: string) => {
+  const hexRegex = /^[0-9a-fA-F]+$/
+  return hexRegex.test(text)
 }
