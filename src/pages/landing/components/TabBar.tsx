@@ -16,7 +16,7 @@ export const TabBar = (props: TabBarProps) => {
   const { clearFilter } = useFilterContext()
   const navigate = useNavigate()
   const { user } = useAuthContext()
-  const { activities } = useActivitySubsciptionContext()
+  const { hasNewActivity } = useActivitySubsciptionContext()
 
   const isCurrentTabActivity = useMatch(getPath('landingFeed'))
 
@@ -61,7 +61,7 @@ export const TabBar = (props: TabBarProps) => {
           alignItems="center"
         >
           <Text fontSize="16px">Activity</Text>
-          {activities.length > 0 && (
+          {hasNewActivity && (
             <Box
               height="10px"
               width="10px"

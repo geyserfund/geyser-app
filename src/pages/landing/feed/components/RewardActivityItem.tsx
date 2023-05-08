@@ -9,17 +9,20 @@ import {
   SatoshiAmount,
 } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { ProjectReward, RewardCurrency } from '../../../../types'
+import {
+  ProjectRewardForLandingPageFragment,
+  RewardCurrency,
+} from '../../../../types'
 import { TimeAgo } from '../../components'
 
 export const RewardActivityItem = ({
   reward,
   dateTime,
 }: {
-  reward: ProjectReward
+  reward: ProjectRewardForLandingPageFragment
   dateTime?: string
 }) => {
-  const owner = reward.project.owners[0]?.user
+  const owner = reward.rewardProject.owners[0]?.user
 
   return (
     <VStack w="full" alignItems="start">
@@ -36,13 +39,13 @@ export const RewardActivityItem = ({
         <Body2>created a new reward for</Body2>
         <Body2
           as={Link}
-          to={getPath('project', reward.project.name)}
+          to={getPath('project', reward.rewardProject.name)}
           semiBold
           _hover={{ textDecoration: 'underline' }}
           isTruncated
           flex={1}
         >
-          {reward.project.title}
+          {reward.rewardProject.title}
         </Body2>
       </HStack>
       <RewardItem reward={reward} />
@@ -51,7 +54,11 @@ export const RewardActivityItem = ({
   )
 }
 
-export const RewardItem = ({ reward }: { reward: ProjectReward }) => {
+const RewardItem = ({
+  reward,
+}: {
+  reward: ProjectRewardForLandingPageFragment
+}) => {
   return (
     <CardLayout
       padding="0px"
@@ -68,7 +75,7 @@ export const RewardItem = ({ reward }: { reward: ProjectReward }) => {
       <VStack w="full" padding="10px" alignItems="start">
         <HStack w="full">
           <VStack spacing="0px">
-            {reward.project.rewardCurrency === RewardCurrency.Usdcent ? (
+            {reward.rewardProject.rewardCurrency === RewardCurrency.Usdcent ? (
               <Text color="brand.textBlack" fontWeight="bold">
                 {`$ ${reward.cost / 100}`}
               </Text>
@@ -84,7 +91,7 @@ export const RewardItem = ({ reward }: { reward: ProjectReward }) => {
           </VStack>
           <VStack spacing="0px" alignItems="flex-start">
             <Text fontWeight={500} color="brand.neutral900">
-              {reward.name}
+              {reward.rewardName}
             </Text>
             <Text
               fontSize="12px"

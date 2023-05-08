@@ -1,26 +1,35 @@
 import { useSubscription } from '@apollo/client'
 import { DateTime } from 'luxon'
-import { createContext, useCallback, useContext, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
 import { ACTIVITY_CREATION_SUBSCRIPTION } from '../graphql/subscriptions'
 import {
-  Activity,
+  ActivityCreatedSubscription,
   ActivityCreatedSubscriptionInput,
-  ActivityResource,
+  ActivityForLandingPageFragment,
 } from '../types'
 import { toInt } from '../utils'
 import { useAuthContext } from './auth'
 
 export interface ActivitySubscriptionState {
-  activities: Activity[]
+  activities: ActivityForLandingPageFragment[]
   clearActivity: () => void
+  hasNewActivity: boolean
 }
 
 const defaultActivitySubscriptionContext = {
   activities: [],
-  addActivitiy() {},
   clearActivity() {},
+  hasNewActivity: false,
 }
+
+export const NEW_ACTIVITY_FLAG = 'NEW_ACTIVITY_FLAG'
 
 export const ActivitySubscriptionContext =
   createContext<ActivitySubscriptionState>(defaultActivitySubscriptionContext)
@@ -30,12 +39,16 @@ export const ActivitySubscriptionProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const [activities, setActivities] = useState<Activity[]>([])
+  const [hasNewActivity, setHasNewActivity] = useState(false)
+
+  const [activities, setActivities] = useState<
+    ActivityForLandingPageFragment[]
+  >([])
   const { isLoggedIn, followedProjects } = useAuthContext()
 
   const skipSubscription = !isLoggedIn || !(followedProjects.length > 0)
   useSubscription<
-    { activityCreated: ActivityResource },
+    ActivityCreatedSubscription,
     ActivityCreatedSubscriptionInput
   >(ACTIVITY_CREATION_SUBSCRIPTION, {
     variables: {
@@ -46,25 +59,39 @@ export const ActivitySubscriptionProvider = ({
     skip: skipSubscription,
     onData(options) {
       const activityCreated = options.data.data?.activityCreated
-      const currentDateTime = DateTime.now().toMillis() // TODO this will have to come from the backend
+      const currentDateTime = DateTime.now().toMillis() // @TODO this will have to come from the backend
       const newActivity = {
         createdAt: currentDateTime,
         id: `${currentDateTime}`,
         resource: activityCreated,
-      } as Activity
+      } as ActivityForLandingPageFragment
 
       if (activityCreated) {
-        setActivities([...activities, newActivity])
+        localStorage.setItem(NEW_ACTIVITY_FLAG, 'true')
+        setHasNewActivity(true)
+        setActivities((current) => [...current, newActivity])
       }
     },
   })
 
   const clearActivity = useCallback(() => {
+    localStorage.removeItem(NEW_ACTIVITY_FLAG)
+    setHasNewActivity(false)
     setActivities([])
   }, [])
 
+  useEffect(() => {
+    const isNewActivity = localStorage.getItem(NEW_ACTIVITY_FLAG)
+
+    if (isNewActivity) {
+      setHasNewActivity(true)
+    }
+  }, [])
+
   return (
-    <ActivitySubscriptionContext.Provider value={{ activities, clearActivity }}>
+    <ActivitySubscriptionContext.Provider
+      value={{ hasNewActivity, activities, clearActivity }}
+    >
       {children}
     </ActivitySubscriptionContext.Provider>
   )

@@ -15,7 +15,11 @@ import { Body2, H3 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { getPath, LearnAboutCrowdfundingUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
-import { Project, ProjectMilestone, ProjectReward } from '../../../../types'
+import {
+  Project,
+  ProjectMilestone,
+  ProjectRewardForCreateUpdateFragment,
+} from '../../../../types'
 import {
   defaultMilestone,
   MilestoneAdditionModal,
@@ -39,9 +43,9 @@ export const Creator = () => {
     onOpen: openMilestoneModal,
   } = useDisclosure()
 
-  const handleRewardAdd = (addReward: ProjectReward) => {
-    const newRewards = project.rewards as ProjectReward[]
-    updateProject({ rewards: [...newRewards, addReward] } as Project)
+  const handleRewardAdd = (addReward: ProjectRewardForCreateUpdateFragment) => {
+    const newRewards = project.rewards || []
+    updateProject({ rewards: [...newRewards, addReward] })
   }
 
   const handleMilestoneSubmit = (newMilestones: ProjectMilestone[]) => {

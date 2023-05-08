@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const MUTATION_CREATE_ENTRY = gql`
-  mutation Mutation($input: CreateEntryInput!) {
+  mutation CreateEntry($input: CreateEntryInput!) {
     createEntry(input: $input) {
       id
       published
@@ -43,7 +43,7 @@ export const MUTATION_UPDATE_ENTRY = gql`
 `
 
 export const MUTATION_PUBLISH_ENTRY = gql`
-  mutation Mutation($id: BigInt!) {
+  mutation PublishEntry($id: BigInt!) {
     publishEntry(id: $id) {
       id
       published

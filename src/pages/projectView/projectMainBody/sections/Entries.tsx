@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { Center, Text, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -11,9 +11,11 @@ import {
 } from '../../../../components/molecules'
 import { getPath, ID } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
-import { QUERY_PROJECT_UNPUBLISHED_ENTRIES } from '../../../../graphql'
 import { MUTATION_DELETE_ENTRY } from '../../../../graphql/mutations'
-import { Entry, Project } from '../../../../types'
+import {
+  EntryForProjectFragment,
+  useProjectUnplublishedEntriesLazyQuery,
+} from '../../../../types'
 import { isActive, isDraft, toInt, useNotification } from '../../../../utils'
 
 export const Entries = () => {
@@ -22,33 +24,30 @@ export const Entries = () => {
   const { project, isProjectOwner, updateProject } = useProjectContext()
   const { toast } = useNotification()
 
-  const [selectedEntry, setSelectedEntry] = useState<Entry>()
+  const [selectedEntry, setSelectedEntry] = useState<EntryForProjectFragment>()
 
   const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY, {
     onCompleted() {
       const newEntries = project.entries.filter(
         (entry) => entry?.id !== selectedEntry?.id,
       )
-      updateProject({ entries: newEntries } as Project)
+      updateProject({ entries: newEntries })
       setSelectedEntry(undefined)
     },
   })
-  const [fetchUnpublishedEntries] = useLazyQuery<{ project: Project }>(
-    QUERY_PROJECT_UNPUBLISHED_ENTRIES,
-    {
-      variables: {
-        where: { name: project.name },
-      },
-      onCompleted(data) {
-        if (updateProject) {
-          updateProject({
-            ...data.project,
-            entries: [...project.entries, ...data.project.entries],
-          })
-        }
-      },
+  const [fetchUnpublishedEntries] = useProjectUnplublishedEntriesLazyQuery({
+    variables: {
+      where: { name: project.name },
     },
-  )
+    onCompleted(data) {
+      if (data.project && updateProject) {
+        updateProject({
+          ...data.project,
+          entries: [...project.entries, ...data.project.entries],
+        })
+      }
+    },
+  })
 
   useEffect(() => {
     if (isProjectOwner) {
@@ -68,11 +67,11 @@ export const Entries = () => {
   const canCreateEntries: boolean =
     isProjectOwner && (isActive(project.status) || isDraft(project.status))
 
-  const handleEntryEditButtonTapped = (entry: Entry) => {
+  const handleEntryEditButtonTapped = (entry: EntryForProjectFragment) => {
     navigate(getPath('projectEntryDetails', project.name, entry.id))
   }
 
-  const triggerDeleteEntry = (entry: Entry) => {
+  const triggerDeleteEntry = (entry: EntryForProjectFragment) => {
     setSelectedEntry(entry)
     openDeleteEntry()
   }

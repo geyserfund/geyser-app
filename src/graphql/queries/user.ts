@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
-import { ProjectParametersForLandingPage } from '../../pages/landing/projects/projects.graphql'
+import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from '../fragments/project'
 
-export const ME = gql`
+export const QUERY_ME = gql`
   query Me {
     me {
       id
@@ -30,8 +30,8 @@ export const ME = gql`
   }
 `
 
-export const ME_PROJECT_FOLLOWS = gql`
-  query Me {
+export const QUERY_ME_PROJECT_FOLLOWS = gql`
+  query MeProjectFollows {
     me {
       projectFollows {
         id
@@ -42,8 +42,8 @@ export const ME_PROJECT_FOLLOWS = gql`
   }
 `
 
-export const USER_PROFILE_QUERY = gql`
-  query User($where: UserGetInput!) {
+export const QUERY_USER_PROFILE = gql`
+  query UserProfile($where: UserGetInput!) {
     user(where: $where) {
       __typename
       id
@@ -97,20 +97,26 @@ export const USER_PROFILE_QUERY = gql`
   }
 `
 
-export const USER_PROFILE_PROJECTS = gql`
-  query User($where: UserGetInput!) {
+export const QUERY_USER_PROFILE_PROJECTS = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query UserProfileProjects($where: UserGetInput!) {
     user(where: $where) {
       ownerOf {
-        project ${ProjectParametersForLandingPage}
+        project {
+          ...ProjectForLandingPage
+        }
       }
     }
   }
 `
 
-export const USER_FOLLOWED_PROJECTS = gql`
-  query User($where: UserGetInput!) {
+export const QUERY_USER_FOLLOWED_PROJECTS = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query UserFollowedProjects($where: UserGetInput!) {
     user(where: $where) {
-      projectFollows ${ProjectParametersForLandingPage}
+      projectFollows {
+        ...ProjectForLandingPage
+      }
     }
   }
 `

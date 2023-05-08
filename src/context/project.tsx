@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { Project } from '../types'
+import { ProjectFragment } from '../types'
 import { useAuthContext } from './auth'
 
 export enum MobileViews {
@@ -11,15 +11,15 @@ export enum MobileViews {
 }
 
 type ProjectState = {
-  project: Project
-  updateProject?: (updateProject: Project) => void
+  project: ProjectFragment
+  updateProject?: (updateProject: Partial<ProjectFragment>) => void
   saveProject?: () => Promise<void>
   saving?: boolean
 }
 
 type ProjectContextProps = {
-  project: Project
-  updateProject: (updateProject: Project) => void
+  project: ProjectFragment
+  updateProject: (updateProject: Partial<ProjectFragment>) => void
   saveProject: () => Promise<void>
   mobileView: MobileViews
   setMobileView: (view: MobileViews) => void
@@ -29,8 +29,8 @@ type ProjectContextProps = {
 
 const defaultProjectContext = {
   mobileView: MobileViews.description,
-  setMobileView(view: MobileViews) {},
-  project: {} as Project,
+  setMobileView(_view: MobileViews) {},
+  project: {} as ProjectFragment,
   updateProject() {},
   async saveProject() {},
   isProjectOwner: false,

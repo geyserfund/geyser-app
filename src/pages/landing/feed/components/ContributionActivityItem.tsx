@@ -22,16 +22,12 @@ import {
 import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
-import {
-  FundingTxWithCount,
-  getDaysAgo,
-  getRandomOrb,
-  toSmallImageUrl,
-} from '../../../../utils'
+import { FundingTxForLandingPageFragment } from '../../../../types'
+import { getDaysAgo, getRandomOrb, toSmallImageUrl } from '../../../../utils'
 import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTxWithCount
+  fundingTx: FundingTxForLandingPageFragment
   dateTime?: string
   showsProjectLink?: boolean
   count?: number

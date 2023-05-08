@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Quill } from 'react-quill'
 
+import { ID } from '../../../../constants'
 import { getSignedUploadAPI } from '../../../../hooks'
 import { colors, fonts } from '../../../../styles'
 import { useMobileMode, useNotification } from '../../../../utils'
@@ -205,6 +206,7 @@ export const ProjectEntryEditor = ({
       readOnly: isReadOnly,
       theme: 'snow',
       placeholder: 'The description of the entry .....',
+      scrollingContainer: `#${ID.entry.editEntryScrollContainer}`,
     })
 
     if (value) {

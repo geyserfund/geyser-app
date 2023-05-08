@@ -59,7 +59,7 @@ export const theme = extendTheme({
             backgroundColor: colors.neutral900,
           },
         },
-        outlined: {
+        containedClear: {
           border: `2px solid`,
           borderColor: colors.neutral200,
           color: colors.neutral900,
@@ -90,6 +90,10 @@ export const theme = extendTheme({
         fontSize: '14px',
       },
       variants: {
+        caption: () => ({
+          fontSize: '10px',
+          fontWeight: 700,
+        }),
         h3: () => ({
           fontWeight: 600,
           fontSize: '18px',

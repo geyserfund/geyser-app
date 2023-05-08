@@ -1,6 +1,8 @@
 import { gql } from '@apollo/client'
 
-export const QUERY_GET_ENTRY = gql`
+import { FRAGMENT_ENTRY_FOR_LANDING_PAGE } from '../fragments/entries'
+
+export const QUERY_ENTRY = gql`
   query Entry($id: BigInt!) {
     entry(id: $id) {
       id
@@ -29,8 +31,17 @@ export const QUERY_GET_ENTRY = gql`
   }
 `
 
-export const QUERY_GET_ENTRY_FOR_ADD_EDIT = gql`
-  query Entry($id: BigInt!) {
+export const QUERY_ENTRY_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_ENTRY_FOR_LANDING_PAGE}
+  query EntryForLandingPage($entryID: BigInt!) {
+    entry(id: $entryID) {
+      ...EntryForLandingPage
+    }
+  }
+`
+
+export const QUERY_ENTRY_WITH_OWNERS = gql`
+  query EntryWithOwners($id: BigInt!) {
     entry(id: $id) {
       id
       title
@@ -67,7 +78,7 @@ export const QUERY_GET_ENTRY_FOR_ADD_EDIT = gql`
  * @returns `Entry`
  */
 export const QUERY_ALL_GEYSER_PROJECT_ENTRIES = gql`
-  query GetEntries($input: GetEntriesInput!) {
+  query Entries($input: GetEntriesInput!) {
     getEntries(input: $input) {
       id
       title
@@ -77,7 +88,6 @@ export const QUERY_ALL_GEYSER_PROJECT_ENTRIES = gql`
       amountFunded
       type
       published
-
       project {
         title
         name
@@ -87,8 +97,8 @@ export const QUERY_ALL_GEYSER_PROJECT_ENTRIES = gql`
   }
 `
 
-export const QUERY_GET_SIGNED_URL = gql`
-  query GetSignedUploadUrl($input: FileUploadInput!) {
+export const QUERY_SIGNED_UPLOAD_URL = gql`
+  query SignedUploadUrl($input: FileUploadInput!) {
     getSignedUploadUrl(input: $input) {
       uploadUrl
       distributionUrl

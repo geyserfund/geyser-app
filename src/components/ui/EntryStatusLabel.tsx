@@ -3,10 +3,13 @@ import { HTMLChakraProps } from '@chakra-ui/system'
 import { BsFillXCircleFill } from 'react-icons/bs'
 
 import { colors } from '../../styles'
-import { Entry, EntryStatus } from '../../types/generated/graphql'
+import {
+  EntryForProjectFragment,
+  EntryStatus,
+} from '../../types/generated/graphql'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
-  entry: Entry
+  entry: EntryForProjectFragment
   fontSize?: string
   iconSize?: string
   fontFamily?: string

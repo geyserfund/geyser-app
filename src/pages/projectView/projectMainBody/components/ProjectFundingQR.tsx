@@ -1,11 +1,11 @@
 import { IconButton, Tooltip, useDisclosure } from '@chakra-ui/react'
 
 import { QrIcon } from '../../../../components/icons'
-import { Project } from '../../../../types/generated/graphql'
+import { ProjectFragment } from '../../../../types/generated/graphql'
 import { ProjectFundingQRModal } from './ProjectFundingQRModal'
 
 interface ProjectFundingQRProps {
-  project: Project
+  project: Pick<ProjectFragment, 'name' | 'id' | 'title'>
 }
 
 export const ProjectFundingQR = ({ project }: ProjectFundingQRProps) => {

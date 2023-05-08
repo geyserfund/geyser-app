@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
-import { USER_PROFILE_PROJECTS } from '../../../../graphql'
+import { QUERY_USER_PROFILE_PROJECTS } from '../../../../graphql'
 import { Project, User, UserGetInput } from '../../../../types'
 import { LandingProjectCard } from '../../../landing/components'
 import { CreateAProjectButton, ProfileTabLayout } from '../../components'
@@ -17,7 +17,7 @@ export const ProfileProjects = ({
   const { data, loading: projectsLoading } = useQuery<
     { user: User },
     { where: UserGetInput }
-  >(USER_PROFILE_PROJECTS, {
+  >(QUERY_USER_PROFILE_PROJECTS, {
     variables: {
       where: {
         id: userProfile.id,

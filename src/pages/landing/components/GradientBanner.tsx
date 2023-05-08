@@ -6,7 +6,7 @@ import LetTheSatsFlow from '../../../assets/let-the-sats-flow.svg'
 import { SkeletonLayout } from '../../../components/layouts'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import { dimensions } from '../../../constants'
-import { ALL_PROJECTS_SUMMARY } from '../../../graphql'
+import { QUERY_PROJECTS_SUMMARY } from '../../../graphql'
 import { fonts } from '../../../styles'
 import {
   getBitcoinAmount,
@@ -25,7 +25,7 @@ export const GradientBanner = () => {
     loading: isSummaryLoading,
     error: summaryError,
     data: summaryData,
-  } = useQuery(ALL_PROJECTS_SUMMARY)
+  } = useQuery(QUERY_PROJECTS_SUMMARY)
 
   const projectsSummaryData = (summaryData && summaryData.projectsSummary) || {}
 

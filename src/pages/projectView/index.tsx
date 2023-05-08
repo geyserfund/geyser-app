@@ -6,7 +6,6 @@ import { getPath } from '../../constants'
 import { useNavContext } from '../../context'
 import { useFundingFlow } from '../../hooks'
 import { useProjectState } from '../../hooks/graphqlState'
-import { Owner } from '../../types/generated/graphql'
 import { useMobileMode } from '../../utils'
 import { ProjectContainer } from './ProjectContainer'
 
@@ -39,7 +38,7 @@ export const ProjectView = () => {
         projectTitle: project.title,
         projectPath: getPath('project', project.name),
         projectOwnerIDs:
-          project.owners.map((ownerInfo: Owner) => {
+          project.owners.map((ownerInfo) => {
             return Number(ownerInfo.user.id || -1)
           }) || [],
       })

@@ -1,5 +1,5 @@
 import { Box, Stack, VStack } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
@@ -14,8 +14,6 @@ interface Props {
 }
 
 export const FeaturedGrantCard = ({ grant, loading }: Props) => {
-  const navigate = useNavigate()
-
   if (loading || !grant) {
     return <FeaturedCardSkeleton title="Featured Grant" />
   }
@@ -23,6 +21,7 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
   return (
     <ProjectRowLayout title="Featured Grant" width="100%">
       <Stack
+        as={Link}
         direction={{ base: 'column', sm: 'row' }}
         width="100%"
         height={{ base: 'auto', sm: '245px' }}
@@ -31,7 +30,7 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
         padding="0px"
         borderRadius="8px"
         overflow="hidden"
-        onClick={() => navigate(getPath('grants', grant.id))}
+        to={getPath('grants', grant.id)}
         _hover={{ backgroundColor: 'neutral.100', cursor: 'pointer' }}
       >
         {grant.image && (

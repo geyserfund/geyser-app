@@ -7,7 +7,7 @@ import { getRandomOrb } from '../../../../utils'
 
 interface IAvatarElement extends AvatarProps {
   avatarOnly?: boolean
-  user?: Maybe<User>
+  user?: Maybe<Partial<User>>
   seed?: number
   wrapperProps?: StackProps
   noLink?: boolean

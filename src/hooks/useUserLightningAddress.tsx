@@ -6,7 +6,7 @@ import {
   MUTATION_DELETE_WALLET,
   MUTATION_UPDATE_WALLET,
 } from '../graphql/mutations'
-import { QUERY_LIGHTNING_ADDRESS_EVALUATION } from '../graphql/queries/wallet'
+import { QUERY_LIGHTNING_ADDRESS_VERIFY } from '../graphql/queries/wallet'
 import {
   LightningAddressVerifyResponse,
   User,
@@ -46,7 +46,7 @@ export const useUserLightningAddress = (user?: User) => {
   const [evaluateLightningAddress] = useLazyQuery<
     LightningAddressVerificationResponseData,
     LightningAddressVerificationQueryVariables
-  >(QUERY_LIGHTNING_ADDRESS_EVALUATION, {
+  >(QUERY_LIGHTNING_ADDRESS_VERIFY, {
     variables: {
       lightningAddress,
     },

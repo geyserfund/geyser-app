@@ -5,13 +5,13 @@ import {
   CardLayout,
   LandingCardBaseSkeleton,
 } from '../../../../components/layouts'
-import { Project } from '../../../../types'
+import { ProjectForLandingPageFragment } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { LandingProjectCard, NoSearchResults } from '../../components'
 import { FilterTopBar } from './FilterTopBar'
 
 interface FilteredProjectListProps {
-  projects: Project[]
+  projects: ProjectForLandingPageFragment[]
   error?: any
   loading?: boolean
 }

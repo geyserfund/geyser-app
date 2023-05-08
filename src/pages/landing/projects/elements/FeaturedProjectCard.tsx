@@ -1,14 +1,12 @@
-import { useQuery } from '@apollo/client'
 import { Box, Stack, VStack } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
 import { H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { Project, UniqueProjectQueryInput } from '../../../../types'
+import { useFeaturedProjectForLandingPageQuery } from '../../../../types'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
 import { FundingStatWithFollow } from '../../components/FundingStatWithFollow'
-import { QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE } from '../projects.graphql'
 import { FeaturedCardSkeleton } from './FeaturedSkeleton'
 import { ProjectRowLayout } from './ProjectRowLayout'
 
@@ -18,10 +16,7 @@ export const FeaturedProjectCard = ({
   projectName: string
 }) => {
   const navigate = useNavigate()
-  const { data, loading } = useQuery<
-    { project: Project },
-    { where: UniqueProjectQueryInput }
-  >(QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE, {
+  const { data, loading } = useFeaturedProjectForLandingPageQuery({
     variables: {
       where: {
         name: projectName,

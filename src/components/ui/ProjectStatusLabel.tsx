@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
 import { colors } from '../../styles'
-import { Project, WalletStatus } from '../../types/generated/graphql'
+import { ProjectFragment, WalletStatus } from '../../types/generated/graphql'
 import { isActive, isDraft } from '../../utils'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
-  project: Project
+  project: ProjectFragment
   fontSize?: string
   iconSize?: string
   fontFamily?: string

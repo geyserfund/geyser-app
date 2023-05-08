@@ -121,7 +121,9 @@ export const CommunityVoting = ({
                   <H3 fontSize="18px">{project.title}</H3>
                 </Link>
                 <Link to={projectLink}>
-                  <Text noOfLines={4}>{project.description}</Text>
+                  <Text noOfLines={4} wordBreak="break-word">
+                    {project.description}
+                  </Text>
                 </Link>
               </Box>
               {!isMobile && (

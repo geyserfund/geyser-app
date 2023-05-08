@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE } from '../fragments/project'
+
 export const MUTATION_CREATE_PROJECT = gql`
   mutation CreateProject($input: CreateProjectInput!) {
     createProject(input: $input) {
@@ -50,31 +52,19 @@ export const MUTATION_UPDATE_PROJECT = gql`
 `
 
 export const MUTATION_CREATE_PROJECT_REWARD = gql`
+  ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
   mutation CreateProjectReward($input: CreateProjectRewardInput!) {
     createProjectReward(input: $input) {
-      id
-      name
-      description
-      cost
-      image
-      deleted
-      stock
-      sold
+      ...ProjectRewardForCreateUpdate
     }
   }
 `
 
 export const MUTATION_UPDATE_PROJECT_REWARD = gql`
+  ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
   mutation UpdateProjectReward($input: UpdateProjectRewardInput!) {
     updateProjectReward(input: $input) {
-      id
-      name
-      description
-      cost
-      image
-      deleted
-      stock
-      sold
+      ...ProjectRewardForCreateUpdate
     }
   }
 `
@@ -107,26 +97,8 @@ export const MUTATION_DELETE_PROJECT_MILESTONE = gql`
   }
 `
 
-export const MUTATION_ADD_PROJECT_LINK = gql`
-  mutation ProjectLinkAdd($input: ProjectLinkMutationInput!) {
-    projectLinkAdd(input: $input) {
-      id
-      links
-    }
-  }
-`
-
-export const MUTATION_REMOVE_PROJECT_LINK = gql`
-  mutation ProjectLinkRemove($input: ProjectLinkMutationInput!) {
-    projectLinkRemove(input: $input) {
-      id
-      links
-    }
-  }
-`
-
 export const MUTATION_FOLLOW_PROJECT = gql`
-  mutation Mutation($input: ProjectFollowMutationInput!) {
+  mutation ProjectFollow($input: ProjectFollowMutationInput!) {
     projectFollow(input: $input)
   }
 `

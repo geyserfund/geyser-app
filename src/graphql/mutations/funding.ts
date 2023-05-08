@@ -1,29 +1,16 @@
 import { gql } from '@apollo/client'
 
+import {
+  FRAGMENT_FUNDING_TX,
+  FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS,
+} from '../fragments/funding'
+
 export const MUTATION_FUND = gql`
+  ${FRAGMENT_FUNDING_TX}
   mutation Fund($input: FundingInput!) {
     fund(input: $input) {
       fundingTx {
-        id
-        uuid
-        invoiceId
-        paymentRequest
-        amount
-        status
-        invoiceStatus
-        comment
-        media
-        paidAt
-        onChain
-        address
-        source
-        funder {
-          user {
-            id
-            username
-            imageUrl
-          }
-        }
+        ...FundingTx
       }
       amountSummary {
         total
@@ -31,6 +18,15 @@ export const MUTATION_FUND = gql`
         shippingCost
         rewardsCost
       }
+    }
+  }
+`
+
+export const REFRESH_FUNDING_INVOICE = gql`
+  ${FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS}
+  mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
+    fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
+      ...FundingTxWithInvoiceStatus
     }
   }
 `
