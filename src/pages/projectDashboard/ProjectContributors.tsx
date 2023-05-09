@@ -50,8 +50,11 @@ export const ProjectContributors = () => {
   const funders = useQueryWithPagination<Funder>({
     queryName: 'getDashboardFunders',
     itemLimit: 100,
+    options: {
+      skip: !project,
+    },
     query: QUERY_PROJECT_DASHBOARD_FUNDERS,
-    where: { projectId: toInt(project.id), confirmed: true },
+    where: { projectId: toInt(project?.id), confirmed: true },
     orderBy: {
       confirmedAt: 'desc',
     },
@@ -75,7 +78,7 @@ export const ProjectContributors = () => {
         key: 'name',
         render(val: Funder) {
           const funderBadges = computeFunderBadges({
-            creationDateStringOfFundedContent: project.createdAt || '',
+            creationDateStringOfFundedContent: project?.createdAt || '',
             funder: val,
           })
           const isFunderAnonymous = Boolean(val?.user) === false
@@ -247,10 +250,9 @@ export const ProjectContributors = () => {
         <VStack maxWidth="1200px" width="100%" alignItems="center">
           <HStack width="100%" justifyContent="space-between">
             <HStack>
-              <Text
-                fontSize={'16px'}
-                fontWeight={600}
-              >{`${project.fundersCount} Contributors`}</Text>
+              <Text fontSize={'16px'} fontWeight={600}>
+                {project?.fundersCount} Contributors
+              </Text>
               <Text fontSize={'14px'}>
                 {selectedFunders.length > 0
                   ? `( ${selectedFunders.length} selected )`

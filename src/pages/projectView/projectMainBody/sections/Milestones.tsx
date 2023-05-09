@@ -13,14 +13,18 @@ import { MilestoneComponent } from '../components/MilestoneComponent'
 export const Milestones = () => {
   const { project, isProjectOwner, updateProject } = useProjectContext()
 
-  const hasMilestones = project.milestones && project.milestones.length > 0
-  const milestoneLength = project.milestones ? project.milestones.length : 0
-
   const {
     isOpen: isMilestoneModalOpen,
     onClose: onMilestoneModalClose,
     onOpen: openMilestoneModal,
   } = useDisclosure()
+
+  if (!project) {
+    return null
+  }
+
+  const hasMilestones = project.milestones && project.milestones.length > 0
+  const milestoneLength = project.milestones ? project.milestones.length : 0
 
   const handleMilestoneSubmit = (newMilestones: ProjectMilestone[]) => {
     updateProject({ milestones: newMilestones } as Project)

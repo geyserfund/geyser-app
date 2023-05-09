@@ -4,7 +4,7 @@ import { AuthContext } from '../context'
 import { useBTCConverter } from '../helpers'
 import { IRewardCount } from '../interfaces'
 import {
-  ProjectReward,
+  ProjectRewardForCreateUpdateFragment,
   RewardCurrency,
   ShippingDestination,
 } from '../types/generated/graphql'
@@ -26,7 +26,7 @@ export interface IFundForm {
 }
 
 type UseFundStateProps = {
-  rewards?: ProjectReward[]
+  rewards?: ProjectRewardForCreateUpdateFragment[]
 }
 
 export type UpdateReward = (_: IRewardCount) => void
@@ -82,57 +82,51 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
 
   const updateReward = useCallback(
     ({ id, count }: IRewardCount) => {
-      const newRewardsCountInfo = { ...state.rewardsByIDAndCount }
+      _setState((current) => {
+        const newRewardsCountInfo = { ...current.rewardsByIDAndCount }
 
-      if (count !== 0) {
-        newRewardsCountInfo[id as unknown as keyof ProjectReward] = count
-      } else if (count === 0) {
-        delete newRewardsCountInfo[id as unknown as keyof ProjectReward]
-      }
+        if (count !== 0) {
+          newRewardsCountInfo[id.toString()] = count
+        } else if (count === 0) {
+          delete newRewardsCountInfo[id.toString()]
+        }
 
-      let rewardsCost = 0
+        let rewardsCost = 0
 
-      if (rewards) {
-        Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
-          const id = parseInt(rewardID, 10)
+        if (rewards) {
+          Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
+            const id = parseInt(rewardID, 10)
 
-          const reward = rewards.find(
-            (reward: ProjectReward) =>
-              reward.id === id || `${reward.id}` === rewardID,
-          )
+            const reward = rewards.find(
+              (reward) => reward.id === id || `${reward.id}` === rewardID,
+            )
 
-          if (reward && reward.id) {
-            const rewardMultiplier =
-              newRewardsCountInfo[rewardID as keyof ProjectReward]
-            if (!rewardMultiplier) {
-              return 0
+            if (reward && reward.id) {
+              const rewardMultiplier = newRewardsCountInfo[rewardID.toString()]
+              if (!rewardMultiplier) {
+                return 0
+              }
+
+              const cost =
+                current.rewardCurrency === RewardCurrency.Usdcent
+                  ? reward.cost
+                  : // Assume sats if not USD cents
+                    getUSDCentsAmount(reward.cost as Satoshis)
+
+              rewardsCost += cost * rewardMultiplier
             }
+          })
+        }
 
-            const cost =
-              state.rewardCurrency === RewardCurrency.Usdcent
-                ? reward.cost
-                : // Assume sats if not USD cents
-                  getUSDCentsAmount(reward.cost as Satoshis)
-
-            rewardsCost += cost * rewardMultiplier
-          }
-        })
-      }
-
-      _setState((current) => ({
-        ...current,
-        rewardsByIDAndCount: newRewardsCountInfo,
-        rewardsCost,
-        totalAmount: rewardsCost + state.donationAmount,
-      }))
+        return {
+          ...current,
+          rewardsByIDAndCount: newRewardsCountInfo,
+          rewardsCost,
+          totalAmount: rewardsCost + current.donationAmount,
+        }
+      })
     },
-    [
-      getUSDCentsAmount,
-      rewards,
-      state.donationAmount,
-      state.rewardCurrency,
-      state.rewardsByIDAndCount,
-    ],
+    [getUSDCentsAmount, rewards],
   )
 
   const resetForm = useCallback(() => {

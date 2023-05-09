@@ -61,11 +61,15 @@ export const Rewards = ({ fundState, updateReward }: Props) => {
 
   const [updateRewardMutation] = useMutation(MUTATION_UPDATE_PROJECT_REWARD)
 
+  if (!project) {
+    return null
+  }
+
   const rewardsLength = project.rewards ? project.rewards.length : 0
-  const isRewardBased = project?.rewards && project.rewards.length > 0
+  const isRewardBased = project.rewards && project.rewards.length > 0
 
   const triggerRewardRemoval = (id?: number) => {
-    const currentReward = project?.rewards?.find((reward) => reward?.id === id)
+    const currentReward = project.rewards?.find((reward) => reward?.id === id)
     if (!currentReward) {
       return
     }

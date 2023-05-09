@@ -44,6 +44,11 @@ export const Summary = () => {
   const { project, isProjectOwner } = useProjectContext()
 
   const [hasCopiedSharingLink, setHasCopiedSharingLink] = useState(false)
+
+  if (!project) {
+    return null
+  }
+
   const owner = project.owners[0]
 
   const handleShareButtonTapped = () => {

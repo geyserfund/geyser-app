@@ -315,6 +315,7 @@ export type FunderReward = {
 
 export type FundingCancelInput = {
   address?: InputMaybe<Scalars['String']>
+  failureReason?: InputMaybe<Scalars['String']>
   id?: InputMaybe<Scalars['BigInt']>
   invoiceId?: InputMaybe<Scalars['String']>
 }
@@ -788,6 +789,7 @@ export type Mutation = {
   fundingPend: FundingPendingResponse
   grantApply: GrantApplicant
   projectFollow: Scalars['Boolean']
+  projectStatusUpdate: Project
   projectTagAdd: Array<Tag>
   projectTagRemove: Array<Tag>
   projectUnfollow: Scalars['Boolean']
@@ -877,6 +879,10 @@ export type MutationGrantApplyArgs = {
 
 export type MutationProjectFollowArgs = {
   input: ProjectFollowMutationInput
+}
+
+export type MutationProjectStatusUpdateArgs = {
+  input: ProjectStatusUpdate
 }
 
 export type MutationProjectTagAddArgs = {
@@ -973,6 +979,8 @@ export type Project = {
   ambassadors: Array<Maybe<Ambassador>>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
+  /** Boolean flag to indicate if the project can be deleted. */
+  canDelete: Scalars['Boolean']
   createdAt: Scalars['String']
   /** Description of the project. */
   description?: Maybe<Scalars['description_String_maxLength_2200']>
@@ -1100,6 +1108,11 @@ export enum ProjectStatus {
   Deleted = 'deleted',
   Draft = 'draft',
   Inactive = 'inactive',
+}
+
+export type ProjectStatusUpdate = {
+  projectId: Scalars['BigInt']
+  status: ProjectStatus
 }
 
 export type ProjectTagMutationInput = {
@@ -1406,7 +1419,10 @@ export type UpdateProjectInput = {
   shortDescription?: InputMaybe<
     Scalars['shortDescription_String_maxLength_500']
   >
-  /** Current status of the project */
+  /**
+   * Current status of the project
+   * @deprecated Use the projectStatusUpdate mutation instead
+   */
   status?: InputMaybe<ProjectStatus>
   /** Project header image. */
   thumbnailImage?: InputMaybe<Scalars['String']>
@@ -1871,6 +1887,7 @@ export type ResolversTypes = {
   ProjectReward: ResolverTypeWrapper<ProjectReward>
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
   ProjectStatus: ProjectStatus
+  ProjectStatusUpdate: ProjectStatusUpdate
   ProjectTagMutationInput: ProjectTagMutationInput
   ProjectType: ProjectType
   ProjectWhereInput: ProjectWhereInput
@@ -2119,6 +2136,7 @@ export type ResolversParentTypes = {
   ProjectRegionsGetResult: ProjectRegionsGetResult
   ProjectReward: ProjectReward
   ProjectStatistics: ProjectStatistics
+  ProjectStatusUpdate: ProjectStatusUpdate
   ProjectTagMutationInput: ProjectTagMutationInput
   ProjectWhereInput: ProjectWhereInput
   ProjectsGetQueryInput: ProjectsGetQueryInput
@@ -2826,6 +2844,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationProjectFollowArgs, 'input'>
   >
+  projectStatusUpdate?: Resolver<
+    ResolversTypes['Project'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectStatusUpdateArgs, 'input'>
+  >
   projectTagAdd?: Resolver<
     Array<ResolversTypes['Tag']>,
     ParentType,
@@ -2946,6 +2970,7 @@ export type ProjectResolvers<
     ContextType
   >
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   description?: Resolver<
     Maybe<ResolversTypes['description_String_maxLength_2200']>,
@@ -3880,6 +3905,31 @@ export type DirectiveResolvers<ContextType = any> = {
   constraint?: ConstraintDirectiveResolver<any, any, ContextType>
 }
 
+export type EntryFragment = {
+  __typename?: 'Entry'
+  id: any
+  title: any
+  description: any
+  image?: string | null
+  published: boolean
+  content?: string | null
+  createdAt: string
+  updatedAt: string
+  publishedAt?: string | null
+  status: EntryStatus
+  fundersCount: number
+  amountFunded: number
+  type: EntryType
+  creator: { __typename?: 'User' } & UserForAvatarFragment
+  project?: {
+    __typename?: 'Project'
+    id: any
+    title: any
+    name: any
+    image?: string | null
+  } | null
+}
+
 export type EntryForLandingPageFragment = {
   __typename?: 'Entry'
   amountFunded: number
@@ -3895,12 +3945,7 @@ export type EntryForLandingPageFragment = {
     thumbnailImage?: string | null
     title: any
   } | null
-  creator: {
-    __typename?: 'User'
-    id: any
-    imageUrl?: string | null
-    username: string
-  }
+  creator: { __typename?: 'User' } & UserForAvatarFragment
 }
 
 export type EntryForProjectFragment = {
@@ -3916,12 +3961,7 @@ export type EntryForProjectFragment = {
   status: EntryStatus
   createdAt: string
   publishedAt?: string | null
-  creator: {
-    __typename?: 'User'
-    id: any
-    username: string
-    imageUrl?: string | null
-  }
+  creator: { __typename?: 'User' } & UserForAvatarFragment
 }
 
 export type FundingTxForLandingPageFragment = {
@@ -4194,6 +4234,13 @@ export type ProjectFragment = {
   }>
 }
 
+export type UserForAvatarFragment = {
+  __typename?: 'User'
+  id: any
+  imageUrl?: string | null
+  username: string
+}
+
 export type UserBadgeAwardMutationVariables = Exact<{
   userBadgeId: Scalars['BigInt']
 }>
@@ -4353,6 +4400,7 @@ export type CreateProjectMutation = {
         id: any
         ownerOf: Array<{
           __typename?: 'OwnerOf'
+          owner?: { __typename?: 'Owner'; id: any } | null
           project?: { __typename?: 'Project'; id: any } | null
         } | null>
       }
@@ -4639,28 +4687,7 @@ export type EntryQueryVariables = Exact<{
 
 export type EntryQuery = {
   __typename?: 'Query'
-  entry?: {
-    __typename?: 'Entry'
-    id: any
-    title: any
-    description: any
-    image?: string | null
-    published: boolean
-    content?: string | null
-    createdAt: string
-    updatedAt: string
-    publishedAt?: string | null
-    status: EntryStatus
-    fundersCount: number
-    type: EntryType
-    creator: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-    }
-    project?: { __typename?: 'Project'; id: any; title: any; name: any } | null
-  } | null
+  entry?: ({ __typename?: 'Entry' } & EntryFragment) | null
 }
 
 export type EntryForLandingPageQueryVariables = Exact<{
@@ -5414,6 +5441,40 @@ export type ActivityCreatedSubscription = {
     | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
+export const UserForAvatarFragmentDoc = gql`
+  fragment UserForAvatar on User {
+    id
+    imageUrl
+    username
+  }
+`
+export const EntryFragmentDoc = gql`
+  fragment Entry on Entry {
+    id
+    title
+    description
+    image
+    published
+    content
+    createdAt
+    updatedAt
+    publishedAt
+    status
+    fundersCount
+    amountFunded
+    type
+    creator {
+      ...UserForAvatar
+    }
+    project {
+      id
+      title
+      name
+      image
+    }
+  }
+  ${UserForAvatarFragmentDoc}
+`
 export const FundingTxWithInvoiceStatusFragmentDoc = gql`
   fragment FundingTxWithInvoiceStatus on FundingTx {
     id
@@ -5481,11 +5542,10 @@ export const EntryForProjectFragmentDoc = gql`
     createdAt
     publishedAt
     creator {
-      id
-      username
-      imageUrl
+      ...UserForAvatar
     }
   }
+  ${UserForAvatarFragmentDoc}
 `
 export const ProjectFragmentDoc = gql`
   fragment Project on Project {
@@ -5613,11 +5673,10 @@ export const EntryForLandingPageFragmentDoc = gql`
       title
     }
     creator {
-      id
-      imageUrl
-      username
+      ...UserForAvatar
     }
   }
+  ${UserForAvatarFragmentDoc}
 `
 export const ProjectForLandingPageFragmentDoc = gql`
   fragment ProjectForLandingPage on Project {
@@ -6290,6 +6349,9 @@ export const CreateProjectDocument = gql`
         user {
           id
           ownerOf {
+            owner {
+              id
+            }
             project {
               id
             }
@@ -7369,30 +7431,10 @@ export type UserBadgesQueryResult = Apollo.QueryResult<
 export const EntryDocument = gql`
   query Entry($id: BigInt!) {
     entry(id: $id) {
-      id
-      title
-      description
-      image
-      published
-      content
-      createdAt
-      updatedAt
-      publishedAt
-      status
-      fundersCount
-      type
-      creator {
-        id
-        username
-        imageUrl
-      }
-      project {
-        id
-        title
-        name
-      }
+      ...Entry
     }
   }
+  ${EntryFragmentDoc}
 `
 
 /**

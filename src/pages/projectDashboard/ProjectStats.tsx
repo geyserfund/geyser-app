@@ -44,11 +44,16 @@ export const ProjectStats = () => {
   const { loading, data } = useQuery<ResponseData, QueryVariables>(
     QUERY_PROJECT_DASHBOARD_DATA,
     {
-      variables: { where: { id: toInt(project.id) } },
+      skip: !project,
+      variables: { where: { id: toInt(project?.id) } },
     },
   )
 
   const visitorsCount = data?.project?.statistics?.totalVisitors || 0
+
+  if (!project) {
+    return null
+  }
 
   const getFundersToVisitorsPercentage = (): number => {
     if (visitorsCount === 0) {

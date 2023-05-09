@@ -20,7 +20,10 @@ export const ProjectBackButton = () => {
     }
   }
 
-  if (isMobile && mobileView && mobileView !== MobileViews.description) {
+  if (
+    !project ||
+    (isMobile && mobileView && mobileView !== MobileViews.description)
+  ) {
     return null
   }
 

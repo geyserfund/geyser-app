@@ -6,6 +6,10 @@ import { useProjectContext } from '../../../../context'
 export const SectionNav = () => {
   const { project } = useProjectContext()
 
+  if (!project) {
+    return null
+  }
+
   const entriesLength = project.entries ? project.entries.length : 0
   const rewardsLength = project.rewards ? project.rewards.length : 0
   const milestoneLength = project.milestones ? project.milestones.length : 0

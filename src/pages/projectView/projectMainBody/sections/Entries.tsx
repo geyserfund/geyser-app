@@ -17,6 +17,7 @@ import {
   useProjectUnplublishedEntriesLazyQuery,
 } from '../../../../types'
 import { isActive, isDraft, toInt, useNotification } from '../../../../utils'
+import { truthyFilter } from '../../../../utils/array'
 
 export const Entries = () => {
   const navigate = useNavigate()
@@ -28,7 +29,7 @@ export const Entries = () => {
 
   const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY, {
     onCompleted() {
-      const newEntries = project.entries.filter(
+      const newEntries = project?.entries.filter(
         (entry) => entry?.id !== selectedEntry?.id,
       )
       updateProject({ entries: newEntries })
@@ -37,13 +38,15 @@ export const Entries = () => {
   })
   const [fetchUnpublishedEntries] = useProjectUnplublishedEntriesLazyQuery({
     variables: {
-      where: { name: project.name },
+      where: { name: project?.name },
     },
     onCompleted(data) {
       if (data.project && updateProject) {
         updateProject({
           ...data.project,
-          entries: [...project.entries, ...data.project.entries],
+          entries: project
+            ? [...project.entries, ...data.project.entries]
+            : data.project.entries,
         })
       }
     },
@@ -53,13 +56,17 @@ export const Entries = () => {
     if (isProjectOwner) {
       fetchUnpublishedEntries()
     }
-  }, [isProjectOwner])
+  }, [fetchUnpublishedEntries, isProjectOwner])
 
   const {
     isOpen: isDeleteEntryOpen,
     onClose: closeDeleteEntry,
     onOpen: openDeleteEntry,
   } = useDisclosure()
+
+  if (!project) {
+    return null
+  }
 
   const hasEntries = project.entries && project.entries.length > 0
   const entriesLength = project.entries ? project.entries.length : 0
@@ -105,10 +112,9 @@ export const Entries = () => {
     if (project.entries && project.entries.length > 0) {
       const sortedEntries =
         project.entries &&
-        project.entries.sort(
-          (a, b) =>
-            parseInt(b?.createdAt || '', 10) - parseInt(a?.createdAt || '', 10),
-        )
+        project.entries
+          .filter(truthyFilter)
+          .sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
       return sortedEntries.map((entry) => {
         if (entry) {
           const entryWithProject = { ...entry, project }

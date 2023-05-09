@@ -100,9 +100,13 @@ export const EntryCreateEdit = () => {
   const debouncedUpdateEntry = useDebounce(entry, 1000)
 
   useEffect(() => {
-    if (debouncedUpdateEntry && entry.status !== EntryStatus.Published) {
+    if (
+      debouncedUpdateEntry &&
+      debouncedUpdateEntry.status !== EntryStatus.Published
+    ) {
       saveEntry()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedUpdateEntry])
 
   useEffect(() => {
