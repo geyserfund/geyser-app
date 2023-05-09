@@ -17,6 +17,7 @@ import { Project, User } from '../types/generated/graphql'
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
   user: defaultUser,
+  isAnonymous: true,
   loading: false,
   error: undefined,
   login() {},
@@ -44,6 +45,7 @@ export type NavContextProps = {
 type AuthContextProps = {
   isLoggedIn: boolean
   user: User
+  isAnonymous: boolean
   loading: boolean
   error?: ApolloError
   login: (me: User) => void
@@ -162,6 +164,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
+        isAnonymous: !(user && user.id),
         queryCurrentUser,
         setUser,
         loading,

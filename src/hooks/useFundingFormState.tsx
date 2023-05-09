@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { AuthContext } from '../context'
 import { useBTCConverter } from '../helpers'
@@ -45,28 +45,38 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
   const { user } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
 
-  const initialState: IFundForm = {
-    donationAmount: 0,
-    rewardsCost: 0,
-    comment: '',
-    shippingDestination: ShippingDestination.National,
-    shippingCost: 0,
-    anonymous: !(user && user.id), // The default user has id 0
-    funderAvatarURL: user.imageUrl || '',
-    funderUsername: user.username,
-    email: '',
-    media: '',
-    rewardsByIDAndCount: undefined,
-    rewardCurrency: RewardCurrency.Usdcent,
-  }
+  const initialState: IFundForm = useMemo(
+    () => ({
+      donationAmount: 0,
+      rewardsCost: 0,
+      comment: '',
+      shippingDestination: ShippingDestination.National,
+      shippingCost: 0,
+      anonymous: !(user && user.id), // The default user has id 0
+      funderAvatarURL: user.imageUrl || '',
+      funderUsername: user.username,
+      email: '',
+      media: '',
+      rewardsByIDAndCount: undefined,
+      rewardCurrency: RewardCurrency.Usdcent,
+    }),
+    [user],
+  )
 
   const [state, _setState] = useState<IFundForm>(initialState)
 
-  const setTarget = (event: any) => {
-    const { name, value } = event.target
-    const newState = { ...state, [name]: value }
-    _setState(newState)
-  }
+  const setTarget = useCallback(
+    (event: any) => {
+      const { name, value } = event.target
+      const newState = { ...state, [name]: value }
+      _setState(newState)
+    },
+    [state],
+  )
+
+  const setState = useCallback((name: string, value: any) => {
+    _setState((current) => ({ ...current, [name]: value }))
+  }, [])
 
   useEffect(() => {
     if (!user || !user.id) {
@@ -74,64 +84,66 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
     } else {
       setState('anonymous', false)
     }
-  }, [user])
+  }, [setState, user])
 
-  const setState = (name: string, value: any) => {
-    const newState = { ...state, [name]: value }
-    _setState(newState)
-  }
+  const updateReward = useCallback(
+    ({ id, count }: IRewardCount) => {
+      const newRewardsCountInfo = { ...state.rewardsByIDAndCount }
 
-  const updateReward = ({ id, count }: IRewardCount) => {
-    const newRewardsCountInfo = { ...state.rewardsByIDAndCount }
+      if (count !== 0) {
+        newRewardsCountInfo[id as unknown as keyof ProjectReward] = count
+      } else if (count === 0) {
+        delete newRewardsCountInfo[id as unknown as keyof ProjectReward]
+      }
 
-    if (count !== 0) {
-      newRewardsCountInfo[id as unknown as keyof ProjectReward] = count
-    } else if (count === 0) {
-      delete newRewardsCountInfo[id as unknown as keyof ProjectReward]
-    }
+      let rewardsCost = 0
 
-    let rewardsCost = 0
+      if (rewards) {
+        Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
+          const id = parseInt(rewardID, 10)
 
-    if (rewards) {
-      Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
-        const id = parseInt(rewardID, 10)
+          const reward = rewards.find(
+            (reward: ProjectReward) =>
+              reward.id === id || `${reward.id}` === rewardID,
+          )
 
-        const reward = rewards.find(
-          (reward: ProjectReward) =>
-            reward.id === id || `${reward.id}` === rewardID,
-        )
+          if (reward && reward.id) {
+            const rewardMultiplier =
+              newRewardsCountInfo[rewardID as keyof ProjectReward]
+            if (!rewardMultiplier) {
+              return 0
+            }
 
-        if (reward && reward.id) {
-          const rewardMultiplier =
-            newRewardsCountInfo[rewardID as keyof ProjectReward]
-          if (!rewardMultiplier) {
-            return 0
+            const cost =
+              state.rewardCurrency === RewardCurrency.Usdcent
+                ? reward.cost
+                : // Assume sats if not USD cents
+                  getUSDCentsAmount(reward.cost as Satoshis)
+
+            rewardsCost += cost * rewardMultiplier
           }
+        })
+      }
 
-          const cost =
-            state.rewardCurrency === RewardCurrency.Usdcent
-              ? reward.cost
-              : // Assume sats if not USD cents
-                getUSDCentsAmount(reward.cost as Satoshis)
+      _setState((current) => ({
+        ...current,
+        rewardsByIDAndCount: newRewardsCountInfo,
+        rewardsCost,
+        totalAmount: rewardsCost + state.donationAmount,
+      }))
+    },
+    [
+      getUSDCentsAmount,
+      rewards,
+      state.donationAmount,
+      state.rewardCurrency,
+      state.rewardsByIDAndCount,
+    ],
+  )
 
-          rewardsCost += cost * rewardMultiplier
-        }
-      })
-    }
-
-    const newState = {
-      ...state,
-      rewardsByIDAndCount: newRewardsCountInfo,
-      rewardsCost,
-      totalAmount: rewardsCost + state.donationAmount,
-    }
-
-    _setState(newState)
-  }
-
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     _setState(initialState)
-  }
+  }, [initialState])
 
   return { state, setTarget, setState, updateReward, resetForm }
 }
