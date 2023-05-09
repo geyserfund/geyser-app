@@ -160,3 +160,5 @@ export const GrantPage = () => {
     </PageContainer>
   )
 }
+
+export default GrantPage

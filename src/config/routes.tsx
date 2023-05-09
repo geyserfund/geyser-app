@@ -1,6 +1,8 @@
 import { withSentryReactRouterV6Routing } from '@sentry/react'
+import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
+import Loader from '../components/ui/Loader'
 import { __production__, getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import { BadgesPage } from '../pages/badges/BadgesPage'
@@ -12,12 +14,12 @@ import {
   ProjectCreationWalletConnectionPage,
 } from '../pages/creation/projectCreate'
 import { EntryPage } from '../pages/entry/EntryPage'
-import {
-  GrantPage,
-  GrantsLandingPage,
-  GrantsRoundOne,
-  GrantsRoundTwo,
-} from '../pages/grants'
+// import {
+//   GrantPage,
+//   // GrantsLandingPage,
+//   // GrantsRoundOne,
+//   // GrantsRoundTwo,
+// } from '../pages/grants'
 import {
   LandingFeed,
   LandingPage,
@@ -40,6 +42,18 @@ import { ProjectView } from '../pages/projectView'
 import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch'
 import { PrivateRoute } from './PrivateRoute'
 
+const GrantsLandingPage = React.lazy(
+  () => import('../pages/grants/grantsLanding/GrantsLandingPage'),
+)
+const GrantsRoundOne = React.lazy(
+  () => import('../pages/grants/grantsPage/GrantsRoundOne'),
+)
+const GrantsRoundTwo = React.lazy(
+  () => import('../pages/grants/grantsPage/GrantsRoundTwo'),
+)
+const GrantPage = React.lazy(
+  () => import('../pages/grants/grantsPage/GrantPage'),
+)
 type PlatformRoutes = {
   path: string
   element: () => JSX.Element
@@ -99,7 +113,6 @@ const platformRoutes = [
   {
     path: getPath('userProfile', PathName.userId),
     element: Profile,
-    // element: ProfilePage,
   },
   {
     path: getPath('projectEntryPreview', PathName.projectId, PathName.entryId),
@@ -169,10 +182,6 @@ const platformRoutes = [
     element: NotAuthorized,
   },
   {
-    path: getPath('index'),
-    element: LandingPage,
-  },
-  {
     path: getPath('leaderboard'),
     element: MobileLeaderboard,
   },
@@ -230,5 +239,9 @@ export const Router = () => {
     ]
   }
 
-  return <SentryRoutes>{renderRoutes(platformRoutes)}</SentryRoutes>
+  return (
+    <React.Suspense fallback={<Loader />}>
+      <SentryRoutes>{renderRoutes(platformRoutes)}</SentryRoutes>
+    </React.Suspense>
+  )
 }
