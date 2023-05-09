@@ -33,16 +33,14 @@ export type UpdateReward = (_: IRewardCount) => void
 
 export interface IFundFormState {
   state: IFundForm
-
   setTarget: (event: any) => void
-
   setState: (name: string, value: any) => void
   updateReward: UpdateReward
   resetForm: () => void
 }
 
 export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
-  const { user } = useContext(AuthContext)
+  const { user, isAnonymous } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
 
   const initialState: IFundForm = useMemo(
@@ -52,7 +50,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
       comment: '',
       shippingDestination: ShippingDestination.National,
       shippingCost: 0,
-      anonymous: !(user && user.id), // The default user has id 0
+      anonymous: isAnonymous, // The default user has id 0
       funderAvatarURL: user.imageUrl || '',
       funderUsername: user.username,
       email: '',
@@ -60,7 +58,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
       rewardsByIDAndCount: undefined,
       rewardCurrency: RewardCurrency.Usdcent,
     }),
-    [user],
+    [isAnonymous, user.imageUrl, user.username],
   )
 
   const [state, _setState] = useState<IFundForm>(initialState)

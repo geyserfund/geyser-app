@@ -144,6 +144,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setInitialLoad(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -158,7 +159,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (initialLoad) {
       setLoading(loadingUser)
     }
-  }, [loadingUser])
+  }, [initialLoad, loadingUser])
 
   return (
     <AuthContext.Provider
