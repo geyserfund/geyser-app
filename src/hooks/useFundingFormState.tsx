@@ -63,14 +63,10 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
 
   const [state, _setState] = useState<IFundForm>(initialState)
 
-  const setTarget = useCallback(
-    (event: any) => {
-      const { name, value } = event.target
-      const newState = { ...state, [name]: value }
-      _setState(newState)
-    },
-    [state],
-  )
+  const setTarget = useCallback((event: any) => {
+    const { name, value } = event.target
+    _setState((current) => ({ ...current, [name]: value }))
+  }, [])
 
   const setState = useCallback((name: string, value: any) => {
     _setState((current) => ({ ...current, [name]: value }))
