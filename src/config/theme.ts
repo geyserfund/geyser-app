@@ -50,13 +50,15 @@ export const theme = extendTheme({
         },
         transparent: {
           backgroundColor: 'transparent',
-          border: '1px solid',
+          color: colors.neutral600,
+          border: 'none',
           borderColor: 'transparent',
           _hover: {
-            borderColor: colors.neutral900,
+            backgroundColor: colors.neutral200,
           },
           _active: {
-            backgroundColor: colors.neutral900,
+            backgroundColor: colors.neutral300,
+            color: colors.textBlack,
           },
         },
         containedClear: {

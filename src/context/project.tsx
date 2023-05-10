@@ -63,13 +63,11 @@ export const ProjectProvider = ({
       skip: !projectId,
 
       onError() {
-        console.log('ONEERROR')
         navigate(getPath('notFound'))
       },
 
       onCompleted(data) {
         if (!data?.project) {
-          console.log('ON NO DATA')
           navigate(getPath('notFound'))
           return
         }

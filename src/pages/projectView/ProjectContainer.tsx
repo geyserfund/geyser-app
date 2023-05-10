@@ -12,7 +12,6 @@ import {
 import { useMobileMode } from '../../utils'
 import { ProjectActivityPanel } from './projectActivityPanel'
 import { ProjectMainBody } from './projectMainBody'
-import { ProjectBackButton } from './projectMainBody/components/ProjectBackButton'
 
 type Props = {
   fundingFlow: any
@@ -36,7 +35,7 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
 
   const { setFundState, fundState } = fundingFlow
 
-  if (loading || !project) {
+  if (loading) {
     return (
       <Box width="100%" display="flex" justifyContent="center">
         <Loader paddingTop="65px" />
@@ -47,13 +46,11 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
   return (
     <>
       <Head
-        title={project.title}
-        description={project.description}
-        image={project.image || ''}
+        title={project?.title || ''}
+        description={project?.description || ''}
+        image={project?.image || ''}
         type="article"
       />
-
-      <ProjectBackButton />
 
       <ProjectMainBody
         {...{
@@ -68,7 +65,7 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
         project={project}
         {...{ fundingFlow, fundForm }}
         resourceType={FundingResourceType.Project}
-        resourceId={project.id}
+        resourceId={project?.id}
       />
 
       {isMobile && <ProjectNav fixed />}

@@ -10,7 +10,7 @@ import {
   Wrap,
 } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { CgProfile } from 'react-icons/cg'
 import { FiTag } from 'react-icons/fi'
@@ -38,7 +38,7 @@ import {
   TagBox,
 } from '../components'
 
-export const Summary = () => {
+export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
   const isMobile = useMobileMode()
 
   const { project, isProjectOwner } = useProjectContext()
@@ -63,6 +63,7 @@ export const Summary = () => {
       <VStack position="relative">
         <Box
           width="100%"
+          ref={ref}
           height="230px"
           overflow="hidden"
           backgroundColor="white"
@@ -276,7 +277,7 @@ export const Summary = () => {
       </VStack>
     </CardLayout>
   )
-}
+})
 
 const greenBorderButtonStyles: ButtonProps = {
   size: 'sm',

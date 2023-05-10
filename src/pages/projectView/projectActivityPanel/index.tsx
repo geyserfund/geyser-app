@@ -26,7 +26,7 @@ import { SuccessScreen } from './screens/SuccessScreen'
 import { useStyles } from './styles'
 
 type Props = {
-  project: ProjectFragment
+  project?: ProjectFragment | null
   fundingFlow: UseFundingFlowReturn
   resourceType: FundingResourceType
   resourceId: number
@@ -36,7 +36,6 @@ type Props = {
 type FilteredReward = { id: number; quantity: number }
 
 export const ProjectActivityPanel = ({
-  project,
   fundingFlow,
   fundForm,
   resourceType,
@@ -46,6 +45,7 @@ export const ProjectActivityPanel = ({
 
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
+  const { project } = useProjectContext()
 
   const { mobileView, setMobileView } = useProjectContext()
   // required for knowing the rewards and the funds
@@ -126,7 +126,7 @@ export const ProjectActivityPanel = ({
     } = state
 
     const input: FundingInput = {
-      projectId: toInt(project.id),
+      projectId: toInt(project?.id),
       anonymous,
       ...(donationAmount !== 0 && { donationInput: { donationAmount } }),
       metadataInput: {
@@ -135,7 +135,7 @@ export const ProjectActivityPanel = ({
         ...(comment && { comment }),
       },
       sourceResourceInput: {
-        resourceId: toInt(resourceId) || toInt(project.id),
+        resourceId: toInt(resourceId) || toInt(project?.id),
         resourceType: resourceType || 'project',
       },
     }
@@ -170,7 +170,7 @@ export const ProjectActivityPanel = ({
   }
 
   const renderPanelContent = () => {
-    if (!project || !project.id) {
+    if (!project) {
       return <InfoPageSkeleton />
     }
 
@@ -182,7 +182,6 @@ export const ProjectActivityPanel = ({
               project,
               fundingTx,
               btcRate,
-              test: false,
             }}
           />
         )
