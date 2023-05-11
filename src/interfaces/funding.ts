@@ -1,4 +1,4 @@
-import { ShippingDestination } from '../constants'
+import { ShippingDestination } from '../types'
 import { IFunder } from './participant'
 import { IProject, IProjectListEntryItem } from './project'
 

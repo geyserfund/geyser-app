@@ -1,10 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 
-import { ShippingDestination, shippingTypes } from '../constants'
 import { AuthContext } from '../context'
 import { useBTCConverter } from '../helpers'
 import { IRewardCount } from '../interfaces'
-import { ProjectReward, RewardCurrency } from '../types/generated/graphql'
+import {
+  ProjectReward,
+  RewardCurrency,
+  ShippingDestination,
+} from '../types/generated/graphql'
 import { Satoshis } from '../types/types'
 
 export interface IFundForm {
@@ -46,7 +49,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
     donationAmount: 0,
     rewardsCost: 0,
     comment: '',
-    shippingDestination: shippingTypes.national,
+    shippingDestination: ShippingDestination.National,
     shippingCost: 0,
     anonymous: !(user && user.id), // The default user has id 0
     funderAvatarURL: user.imageUrl || '',

@@ -12,12 +12,14 @@ import {
 import {
   FundingTxForLandingPageFragment,
   FundingTxForUserContributionFragment,
+  FundingTxFragment,
 } from '../../../types/generated/graphql'
 
 type ExternalAccountLinkIconProps = {
   fundingTx:
     | FundingTxForLandingPageFragment
     | FundingTxForUserContributionFragment
+    | FundingTxFragment
 }
 
 const sourceUrlMap: any = {
@@ -35,9 +37,13 @@ export const ExternalAccountLinkIcon = ({
   const { source, funder } = fundingTx
 
   const getExternalAccount = (type: string) => {
-    return funder.user?.externalAccounts.find(
-      (account) => account?.accountType === type,
-    )?.externalUsername
+    return (
+      funder.user &&
+      'externalAccounts' in funder.user &&
+      funder.user.externalAccounts.find(
+        (account) => account?.accountType === type,
+      )?.externalUsername
+    )
   }
 
   const linkDestination: string = useMemo(() => {
