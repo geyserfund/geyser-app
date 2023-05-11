@@ -1,3 +1,4 @@
+import loadable from '@loadable/component'
 import { withSentryReactRouterV6Routing } from '@sentry/react'
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
@@ -6,78 +7,79 @@ import { __production__, getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import { PrivateRoute } from './PrivateRoute'
 
-const GrantsLandingPage = React.lazy(
+const GrantsLandingPage = loadable(
   () => import('../pages/grants/grantsLanding/GrantsLandingPage'),
 )
-const GrantsRoundOne = React.lazy(
+const GrantsRoundOne = loadable(
   () => import('../pages/grants/grantsPage/GrantsRoundOne'),
 )
-const GrantsRoundTwo = React.lazy(
+const GrantsRoundTwo = loadable(
   () => import('../pages/grants/grantsPage/GrantsRoundTwo'),
 )
-const GrantPage = React.lazy(
-  () => import('../pages/grants/grantsPage/GrantPage'),
-)
+const GrantPage = loadable(() => import('../pages/grants/grantsPage/GrantPage'))
 
-const PublicProjectLaunchPage = React.lazy(
+const PublicProjectLaunchPage = loadable(
   () => import('../pages/publicProjectLaunch'),
 )
-const ProjectCreationWalletConnectionPage = React.lazy(
+const ProjectCreationWalletConnectionPage = loadable(
   () =>
     import(
       '../pages/creation/projectCreate/ProjectCreationWalletConnectionPage'
     ),
 )
-const ProjectAdditionalDetails = React.lazy(
+const ProjectAdditionalDetails = loadable(
   () => import('../pages/creation/projectCreate/ProjectAdditionalDetails'),
 )
-const ProjectCreate = React.lazy(
+const ProjectCreate = loadable(
   () => import('../pages/creation/projectCreate/ProjectCreate'),
 )
 
-const Profile = React.lazy(() => import('../pages/profile/Profile'))
+const Profile = loadable(() => import('../pages/profile/Profile'))
 
-const EntryCreateEdit = React.lazy(
+const EntryCreateEdit = loadable(
   () => import('../pages/creation/entry/editor/EntryCreateEdit'),
 )
-const EntryPreview = React.lazy(
+const EntryPreview = loadable(
   () => import('../pages/creation/entry/EntryPreview'),
 )
-const EntryPage = React.lazy(() => import('../pages/entry/EntryPage'))
+const EntryPage = loadable(() => import('../pages/entry/EntryPage'))
 
-const CreatorDashboard = React.lazy(() => import('../pages/projectDashboard'))
-const ProjectDescription = React.lazy(
-  () => import('../pages/projectDashboard/ProjectDescription'),
+const ProjectDashboard = loadable(() =>
+  import('../pages/projectDashboard').then((m) => m.default.ProjectDashboard),
 )
-const ProjectContributors = React.lazy(
-  () => import('../pages/projectDashboard/ProjectContributors'),
+const ProjectDescription = loadable(() =>
+  import('../pages/projectDashboard').then((m) => m.default.ProjectDescription),
+)
+const ProjectContributors = loadable(() =>
+  import('../pages/projectDashboard').then(
+    (m) => m.default.ProjectContributors,
+  ),
+)
+const ProjectDetails = loadable(() =>
+  import('../pages/projectDashboard').then((m) => m.default.ProjectDetails),
+)
+const ProjectFundingSettings = loadable(() =>
+  import('../pages/projectDashboard').then(
+    (m) => m.default.ProjectFundingSettings,
+  ),
+)
+const ProjectStats = loadable(() =>
+  import('../pages/projectDashboard').then((m) => m.default.ProjectStats),
+)
+const ProjectSettings = loadable(() =>
+  import('../pages/projectDashboard').then((m) => m.default.ProjectSettings),
 )
 
-const ProjectDetails = React.lazy(
-  () => import('../pages/projectDashboard/ProjectDetails'),
-)
-const ProjectFundingSettings = React.lazy(
-  () => import('../pages/projectDashboard/ProjectFundingSettings'),
-)
-const ProjectStats = React.lazy(
-  () => import('../pages/projectDashboard/ProjectStats'),
-)
-const ProjectSettings = React.lazy(
-  () => import('../pages/projectDashboard/ProjectSettings'),
-)
-
-const ProjectView = React.lazy(() => import('../pages/projectView'))
-const NotFoundPage = React.lazy(() => import('../pages/notFound'))
-const NotAuthorized = React.lazy(() => import('../pages/notAuthorized'))
-const MobileLeaderboard = React.lazy(
+const ProjectView = loadable(() => import('../pages/projectView'))
+const NotFoundPage = loadable(() => import('../pages/notFound'))
+const NotAuthorized = loadable(() => import('../pages/notAuthorized'))
+const MobileLeaderboard = loadable(
   () => import('../pages/landing/projectLeaderboard/MobileLeaderboard'),
 )
-const BadgesPage = React.lazy(() => import('../pages/badges/BadgesPage'))
-const LandingPage = React.lazy(() => import('../pages/landing/LandingPage'))
-const LandingPageProjects = React.lazy(
-  () => import('../pages/landing/projects'),
-)
-const LandingFeed = React.lazy(() => import('../pages/landing/feed'))
+const BadgesPage = loadable(() => import('../pages/badges/BadgesPage'))
+const LandingPage = loadable(() => import('../pages/landing/LandingPage'))
+const LandingPageProjects = loadable(() => import('../pages/landing/projects'))
+const LandingFeed = loadable(() => import('../pages/landing/feed'))
 
 type PlatformRoutes = {
   path: string
