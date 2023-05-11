@@ -39,8 +39,10 @@ export type Scalars = {
   cost_Int_NotNull_min_1_max_1000000: any
   description_String_NotNull_maxLength_250: any
   description_String_NotNull_maxLength_2200: any
+  description_String_NotNull_maxLength_4000: any
   description_String_maxLength_250: any
   description_String_maxLength_2200: any
+  description_String_maxLength_4000: any
   donationAmount_Int_NotNull_min_1: any
   email_String_NotNull_format_email: any
   email_String_format_email: any
@@ -159,7 +161,7 @@ export type CreateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']>
   /** A short description of the project. */
-  description: Scalars['description_String_NotNull_maxLength_2200']
+  description: Scalars['description_String_NotNull_maxLength_4000']
   email: Scalars['email_String_NotNull_format_email']
   expiresAt?: InputMaybe<Scalars['Date']>
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>
@@ -315,6 +317,7 @@ export type FunderReward = {
 
 export type FundingCancelInput = {
   address?: InputMaybe<Scalars['String']>
+  failureReason?: InputMaybe<Scalars['String']>
   id?: InputMaybe<Scalars['BigInt']>
   invoiceId?: InputMaybe<Scalars['String']>
 }
@@ -788,6 +791,7 @@ export type Mutation = {
   fundingPend: FundingPendingResponse
   grantApply: GrantApplicant
   projectFollow: Scalars['Boolean']
+  projectStatusUpdate: Project
   projectTagAdd: Array<Tag>
   projectTagRemove: Array<Tag>
   projectUnfollow: Scalars['Boolean']
@@ -877,6 +881,10 @@ export type MutationGrantApplyArgs = {
 
 export type MutationProjectFollowArgs = {
   input: ProjectFollowMutationInput
+}
+
+export type MutationProjectStatusUpdateArgs = {
+  input: ProjectStatusUpdate
 }
 
 export type MutationProjectTagAddArgs = {
@@ -973,9 +981,11 @@ export type Project = {
   ambassadors: Array<Maybe<Ambassador>>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
+  /** Boolean flag to indicate if the project can be deleted. */
+  canDelete: Scalars['Boolean']
   createdAt: Scalars['String']
   /** Description of the project. */
-  description?: Maybe<Scalars['description_String_maxLength_2200']>
+  description?: Maybe<Scalars['description_String_maxLength_4000']>
   /**
    * By default, returns all the entries of a project, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
@@ -1100,6 +1110,11 @@ export enum ProjectStatus {
   Deleted = 'deleted',
   Draft = 'draft',
   Inactive = 'inactive',
+}
+
+export type ProjectStatusUpdate = {
+  projectId: Scalars['BigInt']
+  status: ProjectStatus
 }
 
 export type ProjectTagMutationInput = {
@@ -1390,7 +1405,7 @@ export type UpdateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']>
   /** Description of the project. */
-  description?: InputMaybe<Scalars['description_String_maxLength_2200']>
+  description?: InputMaybe<Scalars['description_String_maxLength_4000']>
   expiresAt?: InputMaybe<Scalars['Date']>
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>
   /** Main project image. */
@@ -1406,7 +1421,10 @@ export type UpdateProjectInput = {
   shortDescription?: InputMaybe<
     Scalars['shortDescription_String_maxLength_500']
   >
-  /** Current status of the project */
+  /**
+   * Current status of the project
+   * @deprecated Use the projectStatusUpdate mutation instead
+   */
   status?: InputMaybe<ProjectStatus>
   /** Project header image. */
   thumbnailImage?: InputMaybe<Scalars['String']>
@@ -1871,6 +1889,7 @@ export type ResolversTypes = {
   ProjectReward: ResolverTypeWrapper<ProjectReward>
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
   ProjectStatus: ProjectStatus
+  ProjectStatusUpdate: ProjectStatusUpdate
   ProjectTagMutationInput: ProjectTagMutationInput
   ProjectType: ProjectType
   ProjectWhereInput: ProjectWhereInput
@@ -1938,11 +1957,17 @@ export type ResolversTypes = {
   description_String_NotNull_maxLength_2200: ResolverTypeWrapper<
     Scalars['description_String_NotNull_maxLength_2200']
   >
+  description_String_NotNull_maxLength_4000: ResolverTypeWrapper<
+    Scalars['description_String_NotNull_maxLength_4000']
+  >
   description_String_maxLength_250: ResolverTypeWrapper<
     Scalars['description_String_maxLength_250']
   >
   description_String_maxLength_2200: ResolverTypeWrapper<
     Scalars['description_String_maxLength_2200']
+  >
+  description_String_maxLength_4000: ResolverTypeWrapper<
+    Scalars['description_String_maxLength_4000']
   >
   donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<
     Scalars['donationAmount_Int_NotNull_min_1']
@@ -2119,6 +2144,7 @@ export type ResolversParentTypes = {
   ProjectRegionsGetResult: ProjectRegionsGetResult
   ProjectReward: ProjectReward
   ProjectStatistics: ProjectStatistics
+  ProjectStatusUpdate: ProjectStatusUpdate
   ProjectTagMutationInput: ProjectTagMutationInput
   ProjectWhereInput: ProjectWhereInput
   ProjectsGetQueryInput: ProjectsGetQueryInput
@@ -2166,8 +2192,10 @@ export type ResolversParentTypes = {
   cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000']
   description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250']
   description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200']
+  description_String_NotNull_maxLength_4000: Scalars['description_String_NotNull_maxLength_4000']
   description_String_maxLength_250: Scalars['description_String_maxLength_250']
   description_String_maxLength_2200: Scalars['description_String_maxLength_2200']
+  description_String_maxLength_4000: Scalars['description_String_maxLength_4000']
   donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1']
   email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email']
   email_String_format_email: Scalars['email_String_format_email']
@@ -2826,6 +2854,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationProjectFollowArgs, 'input'>
   >
+  projectStatusUpdate?: Resolver<
+    ResolversTypes['Project'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectStatusUpdateArgs, 'input'>
+  >
   projectTagAdd?: Resolver<
     Array<ResolversTypes['Tag']>,
     ParentType,
@@ -2946,9 +2980,10 @@ export type ProjectResolvers<
     ContextType
   >
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   description?: Resolver<
-    Maybe<ResolversTypes['description_String_maxLength_2200']>,
+    Maybe<ResolversTypes['description_String_maxLength_4000']>,
     ParentType,
     ContextType
   >
@@ -3591,6 +3626,14 @@ export interface Description_String_NotNull_MaxLength_2200ScalarConfig
   name: 'description_String_NotNull_maxLength_2200'
 }
 
+export interface Description_String_NotNull_MaxLength_4000ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['description_String_NotNull_maxLength_4000'],
+    any
+  > {
+  name: 'description_String_NotNull_maxLength_4000'
+}
+
 export interface Description_String_MaxLength_250ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['description_String_maxLength_250'],
@@ -3605,6 +3648,14 @@ export interface Description_String_MaxLength_2200ScalarConfig
     any
   > {
   name: 'description_String_maxLength_2200'
+}
+
+export interface Description_String_MaxLength_4000ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['description_String_maxLength_4000'],
+    any
+  > {
+  name: 'description_String_maxLength_4000'
 }
 
 export interface DonationAmount_Int_NotNull_Min_1ScalarConfig
@@ -3850,8 +3901,10 @@ export type Resolvers<ContextType = any> = {
   cost_Int_NotNull_min_1_max_1000000?: GraphQLScalarType
   description_String_NotNull_maxLength_250?: GraphQLScalarType
   description_String_NotNull_maxLength_2200?: GraphQLScalarType
+  description_String_NotNull_maxLength_4000?: GraphQLScalarType
   description_String_maxLength_250?: GraphQLScalarType
   description_String_maxLength_2200?: GraphQLScalarType
+  description_String_maxLength_4000?: GraphQLScalarType
   donationAmount_Int_NotNull_min_1?: GraphQLScalarType
   email_String_NotNull_format_email?: GraphQLScalarType
   email_String_format_email?: GraphQLScalarType
