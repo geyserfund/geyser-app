@@ -66,8 +66,7 @@ export const ProjectCreateFormValidation = (form: Partial<Project>) => {
     errors.shortDescription = 'Project objective is a required field.'
     isValid = false
   } else if (
-    JSON.stringify(form.shortDescription).length >
-    ProjectValidations.shortDescription.maxLength
+    form.shortDescription.length > ProjectValidations.shortDescription.maxLength
   ) {
     errors.shortDescription = `Project objective should be shorter than ${ProjectValidations.shortDescription.maxLength} characters.`
     isValid = false
@@ -77,8 +76,7 @@ export const ProjectCreateFormValidation = (form: Partial<Project>) => {
     errors.description = 'Project objective is a required field.'
     isValid = false
   } else if (
-    JSON.stringify(form.description).length >
-    ProjectValidations.description.maxLength
+    form.description.length > ProjectValidations.description.maxLength
   ) {
     errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`
     isValid = false
@@ -152,40 +150,38 @@ export const ProjectCreateForm = ({
 
       setForm(newForm)
 
-      const valueLength = JSON.stringify(value).length
-
       if (
         name === 'title' &&
-        valueLength > ProjectValidations.title.maxLength
+        value.length > ProjectValidations.title.maxLength
       ) {
         setFormError({
           title: (
             <CharacterLimitError
-              length={valueLength}
+              length={value.length}
               limit={ProjectValidations.title.maxLength}
             />
           ),
         })
       } else if (
         name === 'description' &&
-        valueLength > ProjectValidations.description.maxLength
+        value.length > ProjectValidations.description.maxLength
       ) {
         setFormError({
           description: (
             <CharacterLimitError
-              length={valueLength}
+              length={value.length}
               limit={ProjectValidations.description.maxLength}
             />
           ),
         })
       } else if (
         name === 'shortDescription' &&
-        valueLength > ProjectValidations.shortDescription.maxLength
+        value.length > ProjectValidations.shortDescription.maxLength
       ) {
         setFormError({
           shortDescription: (
             <CharacterLimitError
-              length={valueLength}
+              length={value.length}
               limit={ProjectValidations.shortDescription.maxLength}
             />
           ),
@@ -267,9 +263,10 @@ export const ProjectCreateForm = ({
         {!formError.shortDescription && (
           <HStack width="100%" justifyContent="space-between">
             <Text fontSize="12px" color="brand.neutral700" />
-            <Text fontSize="12px" color="brand.neutral700">{`${
-              JSON.stringify(form?.shortDescription).length
-            }/${ProjectValidations.shortDescription.maxLength}`}</Text>
+            <Text
+              fontSize="12px"
+              color="brand.neutral700"
+            >{`${form?.shortDescription?.length}/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
         )}
       </VStack>
@@ -305,9 +302,10 @@ export const ProjectCreateForm = ({
               </HStack>
             </HStack>
 
-            <Text fontSize="12px" color="brand.neutral700">{`${
-              JSON.stringify(form?.description).length
-            }/${ProjectValidations.description.maxLength}`}</Text>
+            <Text
+              fontSize="12px"
+              color="brand.neutral700"
+            >{`${form?.description?.length}/${ProjectValidations.description.maxLength}`}</Text>
           </HStack>
         )}
       </VStack>

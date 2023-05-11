@@ -12,7 +12,7 @@ import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
 import { Satoshis } from '../../../../types'
 import {
-  FundingTxFragment,
+  FundingTx,
   Project,
   ProjectFragment,
   UserBadge,
@@ -25,8 +25,8 @@ import { SuccessImageComponent } from '../components'
 
 type Props = {
   fundingState: IFundForm
+  fundingTx: FundingTx
   project: ProjectFragment
-  fundingTx: FundingTxFragment
   handleCloseButton: () => void
 }
 

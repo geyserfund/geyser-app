@@ -6,13 +6,12 @@ import { AuthModal } from '../../../components/molecules'
 import { fundingStages } from '../../../constants'
 import { AuthContext, MobileViews, useProjectContext } from '../../../context'
 import { useBtcContext } from '../../../context/btc'
-import { IFundForm, IFundFormState, UseFundingFlowReturn } from '../../../hooks'
+import { IFundForm, IFundFormState } from '../../../hooks'
+import { IFundingInput, IRewardFundingInput } from '../../../interfaces'
 import {
-  FundingInput,
   FundingResourceType,
   ProjectFragment,
   ProjectReward,
-  RewardFundingInput,
 } from '../../../types/generated/graphql'
 import { toInt, useMobileMode } from '../../../utils'
 import {
@@ -26,7 +25,7 @@ import { useStyles } from './styles'
 
 type Props = {
   project: ProjectFragment
-  fundingFlow: UseFundingFlowReturn
+  fundingFlow: any
   resourceType: FundingResourceType
   resourceId: number
   fundForm: IFundFormState
@@ -59,6 +58,7 @@ export const ProjectActivityPanel = ({
   const {
     fundState,
     setFundState,
+    amounts,
     fundingRequestLoading,
     fundingTx,
     resetFundingFlow,
@@ -124,7 +124,7 @@ export const ProjectActivityPanel = ({
       media,
     } = state
 
-    const input: FundingInput = {
+    const input: IFundingInput = {
       projectId: toInt(project.id),
       anonymous,
       ...(donationAmount !== 0 && { donationInput: { donationAmount } }),
@@ -152,7 +152,7 @@ export const ProjectActivityPanel = ({
         (reward): reward is FilteredReward =>
           reward.quantity !== 0 && reward.quantity !== undefined,
       )
-      const rewardInput: RewardFundingInput = {
+      const rewardInput: IRewardFundingInput = {
         shipping: { cost, destination },
         rewards: filteredRewards,
         rewardsCost: Math.round(rewardsCost / btcRate),
@@ -215,6 +215,7 @@ export const ProjectActivityPanel = ({
             state={formState}
             project={project}
             fundingFlow={fundingFlow}
+            amounts={amounts}
             handleCloseButton={handleQRCloseButton}
           />
         )

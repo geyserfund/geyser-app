@@ -19,7 +19,7 @@ import {
 import { useQueryWithPagination } from '../../../../hooks'
 import {
   Funder,
-  FundingTxFragment,
+  FundingTx,
   ProjectFragment,
 } from '../../../../types/generated/graphql'
 import {
@@ -37,7 +37,7 @@ type Props = {
   project: ProjectFragment
   btcRate: number
   test?: boolean
-  fundingTx: FundingTxFragment
+  fundingTx: FundingTx
 }
 
 const itemLimit = 50
@@ -57,10 +57,7 @@ export const ProjectFundingInitialInfoScreen = ({
     FundingTxWithCount[]
   >([])
 
-  const fundingTxs = useQueryWithPagination<
-    FundingTxFragment,
-    FundingTxWithCount
-  >({
+  const fundingTxs = useQueryWithPagination<FundingTx, FundingTxWithCount>({
     itemLimit,
     queryName: 'getFundingTxs',
     query: QUERY_GET_FUNDING_TXS_LANDING,

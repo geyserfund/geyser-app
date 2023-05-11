@@ -1,17 +1,14 @@
 import { HStack, Link, Text, VStack } from '@chakra-ui/layout'
 import { Button, CloseButton } from '@chakra-ui/react'
-import { useEffect } from 'react'
 import { FaTelegramPlane } from 'react-icons/fa'
 
 import { SectionTitle } from '../../../../components/ui'
 import { GeyserTelegramUrl } from '../../../../constants'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
-import { IFundForm, UseFundingFlowReturn } from '../../../../hooks'
-import {
-  ProjectFragment,
-  Satoshis,
-  useFundingInvoiceCancelMutation,
-} from '../../../../types'
+import { IFundForm } from '../../../../hooks'
+import { IFundingAmounts } from '../../../../interfaces'
+import { Satoshis } from '../../../../types'
+import { Project, ProjectFragment } from '../../../../types/generated/graphql'
 import { useMobileMode } from '../../../../utils'
 import {
   ContributionInfoBox,
@@ -21,7 +18,8 @@ import { ProjectFundingQRScreenQRCodeSection } from '../components/ProjectFundin
 
 type Props = {
   handleCloseButton: () => void
-  fundingFlow: UseFundingFlowReturn
+  fundingFlow: any
+  amounts: IFundingAmounts
   state: IFundForm
   project: ProjectFragment
 }
@@ -34,21 +32,6 @@ export const ProjectFundingQRScreen = ({
 }: Props) => {
   const { getTotalAmount } = useFundCalc(state)
   const isMobile = useMobileMode()
-
-  const [cancelInvoice] = useFundingInvoiceCancelMutation({
-    ignoreResults: true,
-  })
-
-  useEffect(() => {
-    // Cancel invoice on the backend after QR section unmounts
-    return () => {
-      if (fundingFlow.fundingTx.invoiceId) {
-        cancelInvoice({
-          variables: { invoiceId: fundingFlow.fundingTx.invoiceId },
-        })
-      }
-    }
-  }, [cancelInvoice, fundingFlow])
 
   return (
     <VStack
@@ -73,7 +56,7 @@ export const ProjectFundingQRScreen = ({
       <ContributionInfoBox
         formState={state}
         version={ContributionInfoBoxVersion.NEUTRAL}
-        project={project}
+        project={project as Project}
         contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
         isFunderAnonymous={state.anonymous}
         funderUsername={state.funderUsername}
