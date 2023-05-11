@@ -1,18 +1,18 @@
-import { FundingMethod, FundingTxFragment } from '../../types/generated/graphql'
+import { FundingMethod, FundingTx } from '../../types/generated/graphql'
 
-export interface FundingTxWithCount extends FundingTxFragment {
+export interface FundingTxWithCount extends FundingTx {
   count?: number
 }
 
 const ThresholdTimeToAggregateTransactions = 3600000 // 60 * 60 * 1000  -> 1 hour;
 
 export const aggregateTransactions = (
-  data: FundingTxFragment[],
+  data: FundingTx[],
 ): FundingTxWithCount[] => {
   const aggregatedTxs: FundingTxWithCount[] = []
 
   // Array of group of alike FundingTx that are grouped together based on defined categories.
-  const groupedTxs: FundingTxFragment[][] = []
+  const groupedTxs: FundingTx[][] = []
 
   // List of FundingTx IDs that are already a part of a group, and need to be skipped.
   const groupedTxIds: string[] = []
@@ -33,7 +33,7 @@ export const aggregateTransactions = (
       }
       // We start the second loop to match items with this first Item that started a new match group, skipping FundingTx that are already grouped.
 
-      const isAnon = (f: FundingTxFragment) =>
+      const isAnon = (f: FundingTx) =>
         f.funder.user === null || f.funder.user === undefined
 
       if (
@@ -73,7 +73,7 @@ export const aggregateTransactions = (
       ...sortedTransactions[0],
       amount,
       count: sortedTransactions.length,
-    } as FundingTxWithCount
+    } as FundingTx
 
     aggregatedTxs.push(newContribution)
   }

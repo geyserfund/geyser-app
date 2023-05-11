@@ -4,7 +4,6 @@ import { IBadge } from '../interfaces'
 import {
   Funder,
   FundingTxForLandingPageFragment,
-  FundingTxFragment,
 } from '../types/generated/graphql'
 
 type IBadges<TKey extends string = string> = Record<TKey, IBadge>
@@ -45,12 +44,9 @@ const roleBadges: IBadges<RoleBadges> = {
 }
 
 interface Props {
-  useShortForm?: boolean
   creationDateStringOfFundedContent: string
-  funder:
-    | Funder
-    | FundingTxForLandingPageFragment['funder']
-    | FundingTxFragment['funder']
+  funder: Funder | FundingTxForLandingPageFragment['funder']
+  useShortForm?: boolean
 }
 
 /**

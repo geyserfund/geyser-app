@@ -4004,9 +4004,6 @@ export type FundingTxFragment = {
   funder: {
     __typename?: 'Funder'
     id: any
-    amountFunded?: number | null
-    timesFunded?: number | null
-    confirmedAt?: any | null
     user?: {
       __typename?: 'User'
       id: any
@@ -4306,19 +4303,6 @@ export type RefreshFundingInvoiceMutation = {
   fundingInvoiceRefresh: {
     __typename?: 'FundingTx'
   } & FundingTxWithInvoiceStatusFragment
-}
-
-export type FundingInvoiceCancelMutationVariables = Exact<{
-  invoiceId: Scalars['String']
-}>
-
-export type FundingInvoiceCancelMutation = {
-  __typename?: 'Mutation'
-  fundingInvoiceCancel: {
-    __typename?: 'FundinginvoiceCancel'
-    id: any
-    success: boolean
-  }
 }
 
 export type GrantApplyMutationVariables = Exact<{
@@ -5444,9 +5428,6 @@ export const FundingTxFragmentDoc = gql`
     projectId
     funder {
       id
-      amountFunded
-      timesFunded
-      confirmedAt
       user {
         id
         username
@@ -6174,57 +6155,6 @@ export type RefreshFundingInvoiceMutationResult =
 export type RefreshFundingInvoiceMutationOptions = Apollo.BaseMutationOptions<
   RefreshFundingInvoiceMutation,
   RefreshFundingInvoiceMutationVariables
->
-export const FundingInvoiceCancelDocument = gql`
-  mutation FundingInvoiceCancel($invoiceId: String!) {
-    fundingInvoiceCancel(invoiceId: $invoiceId) {
-      id
-      success
-    }
-  }
-`
-export type FundingInvoiceCancelMutationFn = Apollo.MutationFunction<
-  FundingInvoiceCancelMutation,
-  FundingInvoiceCancelMutationVariables
->
-
-/**
- * __useFundingInvoiceCancelMutation__
- *
- * To run a mutation, you first call `useFundingInvoiceCancelMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useFundingInvoiceCancelMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [fundingInvoiceCancelMutation, { data, loading, error }] = useFundingInvoiceCancelMutation({
- *   variables: {
- *      invoiceId: // value for 'invoiceId'
- *   },
- * });
- */
-export function useFundingInvoiceCancelMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    FundingInvoiceCancelMutation,
-    FundingInvoiceCancelMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    FundingInvoiceCancelMutation,
-    FundingInvoiceCancelMutationVariables
-  >(FundingInvoiceCancelDocument, options)
-}
-export type FundingInvoiceCancelMutationHookResult = ReturnType<
-  typeof useFundingInvoiceCancelMutation
->
-export type FundingInvoiceCancelMutationResult =
-  Apollo.MutationResult<FundingInvoiceCancelMutation>
-export type FundingInvoiceCancelMutationOptions = Apollo.BaseMutationOptions<
-  FundingInvoiceCancelMutation,
-  FundingInvoiceCancelMutationVariables
 >
 export const GrantApplyDocument = gql`
   mutation GrantApply($input: GrantApplyInput) {

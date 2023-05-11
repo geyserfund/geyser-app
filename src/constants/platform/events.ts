@@ -65,6 +65,13 @@ export const projectTypes = {
 
 export type FundingTxStatus = 'unpaid' | 'paid' | 'canceled' | 'pending'
 
+export type ShippingDestination = 'national' | 'international'
+
+export const shippingTypes = {
+  national: 'national' as ShippingDestination,
+  international: 'international' as ShippingDestination,
+}
+
 export const SelectCountryOptions: ISelectOption[] = [
   {
     label: 'Deliver inside the USA',
