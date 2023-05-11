@@ -418,3 +418,5 @@ export const ProjectCreationWalletConnectionForm = ({
     </>
   )
 }
+
+export default ProjectCreationWalletConnectionForm

@@ -1,1 +1,3 @@
-export * from './PublicProjectLaunchPage'
+import { PublicProjectLaunchPage } from './PublicProjectLaunchPage'
+
+export default PublicProjectLaunchPage

@@ -92,3 +92,5 @@ export const ProjectDetails = () => {
     </DashboardGridLayout>
   )
 }
+
+export default ProjectDetails

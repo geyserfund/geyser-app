@@ -160,3 +160,5 @@ export const ProjectDescription = () => {
     </DashboardGridLayout>
   )
 }
+
+export default ProjectDescription

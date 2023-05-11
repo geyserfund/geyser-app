@@ -125,3 +125,5 @@ export const ProjectCreationWalletConnectionPage = () => {
     </ProjectCreateLayout>
   )
 }
+
+export default ProjectCreationWalletConnectionPage

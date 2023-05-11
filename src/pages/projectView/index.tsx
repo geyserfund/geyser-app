@@ -70,3 +70,5 @@ export const ProjectView = () => {
     </Box>
   )
 }
+
+export default ProjectView

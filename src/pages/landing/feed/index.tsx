@@ -55,3 +55,5 @@ export const ActivityTopbar = () => {
     </HStack>
   )
 }
+
+export default LandingFeed

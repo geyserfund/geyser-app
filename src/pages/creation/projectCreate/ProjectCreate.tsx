@@ -241,3 +241,5 @@ export const ProjectCreate = () => {
     </ProjectCreateLayout>
   )
 }
+
+export default ProjectCreate

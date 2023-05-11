@@ -1,7 +1,19 @@
-export * from './ProjectContributors'
-export * from './ProjectDashboard'
-export * from './ProjectDescription'
-export * from './ProjectDetails'
-export * from './ProjectFundingSettings'
-export * from './ProjectSettings'
-export * from './ProjectStats'
+import { ProjectContributors } from './ProjectContributors'
+import { ProjectDashboard } from './ProjectDashboard'
+import { ProjectDescription } from './ProjectDescription'
+import { ProjectDetails } from './ProjectDetails'
+import { ProjectFundingSettings } from './ProjectFundingSettings'
+import { ProjectSettings } from './ProjectSettings'
+import { ProjectStats } from './ProjectStats'
+
+const CreatorDashboard = {
+  ProjectContributors,
+  ProjectDashboard,
+  ProjectDescription,
+  ProjectDetails,
+  ProjectFundingSettings,
+  ProjectSettings,
+  ProjectStats,
+}
+
+export default CreatorDashboard

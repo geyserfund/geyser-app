@@ -93,3 +93,5 @@ export const ProjectAdditionalDetails = () => {
     </>
   )
 }
+
+export default ProjectAdditionalDetails

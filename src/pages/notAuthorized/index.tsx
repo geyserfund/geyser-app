@@ -24,3 +24,5 @@ export const NotAuthorized = () => (
     </Text>
   </VStack>
 )
+
+export default NotAuthorized

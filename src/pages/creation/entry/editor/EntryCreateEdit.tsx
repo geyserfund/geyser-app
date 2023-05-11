@@ -316,3 +316,5 @@ export const EntryCreateEdit = () => {
     </>
   )
 }
+
+export default EntryCreateEdit

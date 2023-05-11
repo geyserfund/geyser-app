@@ -59,3 +59,5 @@ export const checkIfRenderFilter = (filters: FilterType) => {
 
   return false
 }
+
+export default LandingPageProjects

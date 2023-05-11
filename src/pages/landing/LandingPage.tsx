@@ -104,3 +104,5 @@ export const LandingPage = () => {
     </FilterProvider>
   )
 }
+
+export default LandingPage

@@ -2,44 +2,8 @@ import { withSentryReactRouterV6Routing } from '@sentry/react'
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import Loader from '../components/ui/Loader'
 import { __production__, getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
-import { BadgesPage } from '../pages/badges/BadgesPage'
-import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
-import { EntryPreview } from '../pages/creation/entry/EntryPreview'
-import {
-  ProjectAdditionalDetails,
-  ProjectCreate,
-  ProjectCreationWalletConnectionPage,
-} from '../pages/creation/projectCreate'
-import { EntryPage } from '../pages/entry/EntryPage'
-// import {
-//   GrantPage,
-//   // GrantsLandingPage,
-//   // GrantsRoundOne,
-//   // GrantsRoundTwo,
-// } from '../pages/grants'
-import {
-  LandingFeed,
-  LandingPage,
-  LandingPageProjects,
-  MobileLeaderboard,
-} from '../pages/landing'
-import { NotAuthorized } from '../pages/notAuthorized'
-import { NotFoundPage } from '../pages/notFound'
-import { Profile } from '../pages/profile'
-import {
-  ProjectContributors,
-  ProjectDashboard,
-  ProjectDescription,
-  ProjectDetails,
-  ProjectFundingSettings,
-  ProjectSettings,
-  ProjectStats,
-} from '../pages/projectDashboard'
-import { ProjectView } from '../pages/projectView'
-import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch'
 import { PrivateRoute } from './PrivateRoute'
 
 const GrantsLandingPage = React.lazy(
@@ -54,6 +18,67 @@ const GrantsRoundTwo = React.lazy(
 const GrantPage = React.lazy(
   () => import('../pages/grants/grantsPage/GrantPage'),
 )
+
+const PublicProjectLaunchPage = React.lazy(
+  () => import('../pages/publicProjectLaunch'),
+)
+const ProjectCreationWalletConnectionPage = React.lazy(
+  () =>
+    import(
+      '../pages/creation/projectCreate/ProjectCreationWalletConnectionPage'
+    ),
+)
+const ProjectAdditionalDetails = React.lazy(
+  () => import('../pages/creation/projectCreate/ProjectAdditionalDetails'),
+)
+const ProjectCreate = React.lazy(
+  () => import('../pages/creation/projectCreate/ProjectCreate'),
+)
+
+const Profile = React.lazy(() => import('../pages/profile/Profile'))
+
+const EntryCreateEdit = React.lazy(
+  () => import('../pages/creation/entry/editor/EntryCreateEdit'),
+)
+const EntryPreview = React.lazy(
+  () => import('../pages/creation/entry/EntryPreview'),
+)
+const EntryPage = React.lazy(() => import('../pages/entry/EntryPage'))
+
+const CreatorDashboard = React.lazy(() => import('../pages/projectDashboard'))
+const ProjectDescription = React.lazy(
+  () => import('../pages/projectDashboard/ProjectDescription'),
+)
+const ProjectContributors = React.lazy(
+  () => import('../pages/projectDashboard/ProjectContributors'),
+)
+
+const ProjectDetails = React.lazy(
+  () => import('../pages/projectDashboard/ProjectDetails'),
+)
+const ProjectFundingSettings = React.lazy(
+  () => import('../pages/projectDashboard/ProjectFundingSettings'),
+)
+const ProjectStats = React.lazy(
+  () => import('../pages/projectDashboard/ProjectStats'),
+)
+const ProjectSettings = React.lazy(
+  () => import('../pages/projectDashboard/ProjectSettings'),
+)
+
+const ProjectView = React.lazy(() => import('../pages/projectView'))
+const NotFoundPage = React.lazy(() => import('../pages/notFound'))
+const NotAuthorized = React.lazy(() => import('../pages/notAuthorized'))
+const MobileLeaderboard = React.lazy(
+  () => import('../pages/landing/projectLeaderboard/MobileLeaderboard'),
+)
+const BadgesPage = React.lazy(() => import('../pages/badges/BadgesPage'))
+const LandingPage = React.lazy(() => import('../pages/landing/LandingPage'))
+const LandingPageProjects = React.lazy(
+  () => import('../pages/landing/projects'),
+)
+const LandingFeed = React.lazy(() => import('../pages/landing/feed'))
+
 type PlatformRoutes = {
   path: string
   element: () => JSX.Element
@@ -144,10 +169,6 @@ const platformRoutes = [
         element: ProjectContributors,
       },
       {
-        path: getPath('dashboardContributors', PathName.projectId),
-        element: ProjectContributors,
-      },
-      {
         path: getPath('dashboardDetails', PathName.projectId),
         element: ProjectDetails,
       },
@@ -224,11 +245,27 @@ export const Router = () => {
           )
           // index routes cannot have children routes
           if (isIndex) {
-            return <Route index key={path} element={renderElement} />
+            return (
+              <Route
+                index
+                key={path}
+                element={
+                  <React.Suspense fallback={null}>
+                    {renderElement}
+                  </React.Suspense>
+                }
+              />
+            )
           }
 
           return (
-            <Route key={path} path={path} element={renderElement}>
+            <Route
+              key={path}
+              path={path}
+              element={
+                <React.Suspense fallback={null}>{renderElement}</React.Suspense>
+              }
+            >
               {nested?.length && renderRoutes(nested)}
             </Route>
           )
@@ -239,9 +276,5 @@ export const Router = () => {
     ]
   }
 
-  return (
-    <React.Suspense fallback={<Loader />}>
-      <SentryRoutes>{renderRoutes(platformRoutes)}</SentryRoutes>
-    </React.Suspense>
-  )
+  return <SentryRoutes>{renderRoutes(platformRoutes)}</SentryRoutes>
 }

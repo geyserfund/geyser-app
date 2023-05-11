@@ -236,3 +236,5 @@ export const ProjectFundingSettings = () => {
     </DashboardGridLayout>
   )
 }
+
+export default ProjectFundingSettings

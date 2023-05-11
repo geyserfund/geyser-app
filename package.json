@@ -17,7 +17,8 @@
     "graph:fetch": "run(){ rover graph fetch geyser-graph@$1 > ./schema.graphql; }; run",
     "graph:generate": "run(){ yarn graph:fetch $1 && graphql-codegen --config codegen.ts && rm schema.graphql && yarn graph:format; }; run",
     "graph:generate:staging": "yarn graph:generate staging",
-    "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
+    "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
+    "analyze": "source-map-explorer dist/assets/index-4e5beaf4.js"
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
@@ -108,6 +109,7 @@
     "husky": "^8.0.3",
     "jsdom": "^21.1.0",
     "prettier": "^2.8.3",
+    "source-map-explorer": "^2.5.3",
     "typescript": "^4.9.5",
     "vite": "^4.0.0",
     "vite-plugin-mkcert": "^1.11.0",

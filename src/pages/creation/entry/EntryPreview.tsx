@@ -348,3 +348,5 @@ export const EntryPreview = () => {
     </>
   )
 }
+
+export default EntryPreview

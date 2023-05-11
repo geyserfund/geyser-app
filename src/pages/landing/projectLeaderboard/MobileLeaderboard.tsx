@@ -122,3 +122,5 @@ export const LeaderboardTopbar = ({
     </VStack>
   )
 }
+
+export default MobileLeaderboard
