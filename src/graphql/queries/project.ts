@@ -204,6 +204,7 @@ export const QUERY_PROJECTS_MOST_FUNDED_OF_THE_WEEK = gql`
 `
 
 export const QUERY_PROJECTS_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
   query ProjectsForLandingPage($input: ProjectsGetQueryInput) {
     projects(input: $input) {
       projects {
@@ -213,6 +214,7 @@ export const QUERY_PROJECTS_FOR_LANDING_PAGE = gql`
   }
 `
 export const QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
   query FeaturedProjectForLandingPage($where: UniqueProjectQueryInput!) {
     project(where: $where) {
       ...ProjectForLandingPage
