@@ -2,7 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { BiPencil } from 'react-icons/bi'
 
-import { TRewards } from '../../../pages/creation/projectCreate/types'
+import { TRewards } from '../../../pages/projectCreate/types'
 import { colors } from '../../../styles'
 import { ProjectRewardForCreateUpdateFragment } from '../../../types/generated/graphql'
 import { CardLayout } from '../../layouts'

@@ -5,81 +5,95 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { __production__, getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
+import BadgesPage from '../pages/badges/BadgesPage'
+import NotAuthorized from '../pages/notAuthorized'
+import NotFoundPage from '../pages/notFound'
 import { PrivateRoute } from './PrivateRoute'
 
-const GrantsLandingPage = loadable(
-  () => import('../pages/grants/grantsLanding/GrantsLandingPage'),
-)
-const GrantsRoundOne = loadable(
-  () => import('../pages/grants/grantsPage/GrantsRoundOne'),
-)
-const GrantsRoundTwo = loadable(
-  () => import('../pages/grants/grantsPage/GrantsRoundTwo'),
-)
-const GrantPage = loadable(() => import('../pages/grants/grantsPage/GrantPage'))
+// GRANTS
 
-const PublicProjectLaunchPage = loadable(
-  () => import('../pages/publicProjectLaunch'),
+const Grants = import(/* webpackChunkName: "grants" */ '../pages/grants')
+
+const GrantsLandingPage = loadable(() =>
+  Grants.then((m) => m.GrantsLandingPage),
 )
-const ProjectCreationWalletConnectionPage = loadable(
-  () =>
-    import(
-      '../pages/creation/projectCreate/ProjectCreationWalletConnectionPage'
-    ),
-)
-const ProjectAdditionalDetails = loadable(
-  () => import('../pages/creation/projectCreate/ProjectAdditionalDetails'),
-)
-const ProjectCreate = loadable(
-  () => import('../pages/creation/projectCreate/ProjectCreate'),
+const GrantsRoundOne = loadable(() => Grants.then((m) => m.GrantsRoundOne))
+const GrantsRoundTwo = loadable(() => Grants.then((m) => m.GrantsRoundTwo))
+const GrantPage = loadable(() => Grants.then((m) => m.GrantPage))
+
+// PROJECT LAUNCH
+
+const ProjectLaunch = import(
+  /* webpackChunkName: "projectLaunch" */ '../pages/projectCreate'
 )
 
-const Profile = loadable(() => import('../pages/profile/Profile'))
+const PublicProjectLaunchPage = loadable(() =>
+  ProjectLaunch.then((m) => m.PublicProjectLaunchPage),
+)
+const ProjectCreationWalletConnectionPage = loadable(() =>
+  ProjectLaunch.then((m) => m.ProjectCreationWalletConnectionPage),
+)
+const ProjectAdditionalDetails = loadable(() =>
+  ProjectLaunch.then((m) => m.ProjectAdditionalDetails),
+)
+const ProjectCreate = loadable(() => ProjectLaunch.then((m) => m.ProjectCreate))
 
-const EntryCreateEdit = loadable(
-  () => import('../pages/creation/entry/editor/EntryCreateEdit'),
+// ENTRY VIEW & EDIT
+
+const Entry = import(/* webpackChunkName: "entryViewEdit" */ '../pages/entry')
+
+const EntryCreateEdit = loadable(() => Entry.then((m) => m.EntryCreateEdit))
+const EntryPreview = loadable(() => Entry.then((m) => m.EntryPreview))
+const EntryPage = loadable(() => Entry.then((m) => m.EntryPage))
+
+// PROJECT DASHBOARD
+
+const CreatorDashboard = import(
+  /* webpackChunkName: "creatorDashboard" */ '../pages/projectDashboard'
 )
-const EntryPreview = loadable(
-  () => import('../pages/creation/entry/EntryPreview'),
-)
-const EntryPage = loadable(() => import('../pages/entry/EntryPage'))
 
 const ProjectDashboard = loadable(() =>
-  import('../pages/projectDashboard').then((m) => m.default.ProjectDashboard),
+  CreatorDashboard.then((m) => m.ProjectDashboard),
 )
 const ProjectDescription = loadable(() =>
-  import('../pages/projectDashboard').then((m) => m.default.ProjectDescription),
+  CreatorDashboard.then((m) => m.ProjectDescription),
 )
 const ProjectContributors = loadable(() =>
-  import('../pages/projectDashboard').then(
-    (m) => m.default.ProjectContributors,
-  ),
+  CreatorDashboard.then((m) => m.ProjectContributors),
 )
 const ProjectDetails = loadable(() =>
-  import('../pages/projectDashboard').then((m) => m.default.ProjectDetails),
+  CreatorDashboard.then((m) => m.ProjectDetails),
 )
 const ProjectFundingSettings = loadable(() =>
-  import('../pages/projectDashboard').then(
-    (m) => m.default.ProjectFundingSettings,
-  ),
+  CreatorDashboard.then((m) => m.ProjectFundingSettings),
 )
 const ProjectStats = loadable(() =>
-  import('../pages/projectDashboard').then((m) => m.default.ProjectStats),
+  CreatorDashboard.then((m) => m.ProjectStats),
 )
 const ProjectSettings = loadable(() =>
-  import('../pages/projectDashboard').then((m) => m.default.ProjectSettings),
+  CreatorDashboard.then((m) => m.ProjectSettings),
 )
 
-const ProjectView = loadable(() => import('../pages/projectView'))
-const NotFoundPage = loadable(() => import('../pages/notFound'))
-const NotAuthorized = loadable(() => import('../pages/notAuthorized'))
-const MobileLeaderboard = loadable(
-  () => import('../pages/landing/projectLeaderboard/MobileLeaderboard'),
+const ProjectView = loadable(
+  () => import(/* webpackChunkName: "project" */ '../pages/projectView'),
 )
-const BadgesPage = loadable(() => import('../pages/badges/BadgesPage'))
-const LandingPage = loadable(() => import('../pages/landing/LandingPage'))
-const LandingPageProjects = loadable(() => import('../pages/landing/projects'))
-const LandingFeed = loadable(() => import('../pages/landing/feed'))
+
+const Profile = loadable(
+  () => import(/* webpackChunkName: "profile" */ '../pages/profile/Profile'),
+)
+
+// LANDING PAGE
+
+const Landing = import(/* webpackChunkName: "landingPage" */ '../pages/landing')
+
+const MobileLeaderboard = loadable(() =>
+  Landing.then((m) => m.MobileLeaderboard),
+)
+const LandingPage = loadable(() => Landing.then((m) => m.LandingPage))
+const LandingPageProjects = loadable(() =>
+  Landing.then((m) => m.LandingPageProjects),
+)
+const LandingFeed = loadable(() => Landing.then((m) => m.LandingFeed))
 
 type PlatformRoutes = {
   path: string

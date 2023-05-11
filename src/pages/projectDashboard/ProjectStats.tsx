@@ -118,5 +118,3 @@ export const ProjectStats = () => {
     </DashboardGridLayout>
   )
 }
-
-export default ProjectStats

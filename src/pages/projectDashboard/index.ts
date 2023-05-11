@@ -7,7 +7,8 @@ import { ProjectSettings } from './ProjectSettings'
 import { ProjectStats } from './ProjectStats'
 
 // This is exported as part of the CreatorDashboard chunk for code-splitting
-const CreatorDashboard = {
+
+export {
   ProjectContributors,
   ProjectDashboard,
   ProjectDescription,
@@ -16,5 +17,3 @@ const CreatorDashboard = {
   ProjectSettings,
   ProjectStats,
 }
-
-export default CreatorDashboard

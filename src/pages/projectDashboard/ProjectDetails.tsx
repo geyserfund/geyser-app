@@ -6,9 +6,9 @@ import { useProjectContext } from '../../context'
 import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
 import { useProjectLinksValidation } from '../../hooks/validations'
 import { useNotification } from '../../utils'
-import { ProjectRegion } from '../creation/projectCreate/components'
-import { ProjectLinks } from '../creation/projectCreate/components/ProjectLinks'
-import { ProjectTagsCreateEdit } from '../creation/projectCreate/components/ProjectTagsCreateEdit'
+import { ProjectRegion } from '../projectCreate/components'
+import { ProjectLinks } from '../projectCreate/components/ProjectLinks'
+import { ProjectTagsCreateEdit } from '../projectCreate/components/ProjectTagsCreateEdit'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 export const ProjectDetails = () => {
@@ -92,5 +92,3 @@ export const ProjectDetails = () => {
     </DashboardGridLayout>
   )
 }
-
-export default ProjectDetails

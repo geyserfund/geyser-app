@@ -4,16 +4,13 @@ import { useState } from 'react'
 import { BiPencil } from 'react-icons/bi'
 import { Navigate, useNavigate, useParams } from 'react-router'
 
-import { IconButtonComponent } from '../../../components/ui'
-import Loader from '../../../components/ui/Loader'
-import { getPath } from '../../../constants'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
-import { colors } from '../../../styles'
-import {
-  Project,
-  UniqueProjectQueryInput,
-} from '../../../types/generated/graphql'
-import { toInt, useNotification } from '../../../utils'
+import { IconButtonComponent } from '../../components/ui'
+import Loader from '../../components/ui/Loader'
+import { getPath } from '../../constants'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
+import { colors } from '../../styles'
+import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
+import { toInt, useNotification } from '../../utils'
 import { ProjectCreationWalletConnectionForm } from '.'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { TNodeInput } from './types'
@@ -125,5 +122,3 @@ export const ProjectCreationWalletConnectionPage = () => {
     </ProjectCreateLayout>
   )
 }
-
-export default ProjectCreationWalletConnectionPage

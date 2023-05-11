@@ -151,5 +151,3 @@ const EntryViewWrapper = ({
     </ProjectProvider>
   )
 }
-
-export default EntryPage

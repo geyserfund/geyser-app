@@ -5,17 +5,17 @@ import { useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
-import { Body1, Body2, Caption } from '../../../../components/typography'
+import { Body1, Body2, Caption } from '../../../components/typography'
 import {
   ButtonComponent,
   IconButtonComponent,
   SelectComponent,
-} from '../../../../components/ui'
-import { MUTATION_TAG_CREATE } from '../../../../graphql/mutations'
-import { QUERY_TAGS } from '../../../../graphql/queries/tags'
-import { colors } from '../../../../styles'
-import { Tag, TagCreateInput, TagsGetResult } from '../../../../types'
-import { useNotification } from '../../../../utils'
+} from '../../../components/ui'
+import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
+import { QUERY_TAGS } from '../../../graphql/queries/tags'
+import { colors } from '../../../styles'
+import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
+import { useNotification } from '../../../utils'
 
 const useStyles = createUseStyles({
   container: {

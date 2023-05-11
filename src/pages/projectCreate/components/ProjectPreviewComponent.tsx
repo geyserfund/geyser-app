@@ -1,8 +1,8 @@
 import { Box, Text, VStack } from '@chakra-ui/react'
 
-import { H2, H3 } from '../../../../components/typography'
-import { Card, ImageWithReload } from '../../../../components/ui'
-import { MarkDown, toSmallImageUrl, useMobileMode } from '../../../../utils'
+import { H2, H3 } from '../../../components/typography'
+import { Card, ImageWithReload } from '../../../components/ui'
+import { MarkDown, toSmallImageUrl, useMobileMode } from '../../../utils'
 
 interface ProjectPreviewComponentProps {
   data: {

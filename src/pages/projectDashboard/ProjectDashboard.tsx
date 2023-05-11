@@ -159,5 +159,3 @@ export const ProjectDashboard = () => {
     </Box>
   )
 }
-
-export default ProjectDashboard

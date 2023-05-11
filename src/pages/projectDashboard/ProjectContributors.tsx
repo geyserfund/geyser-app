@@ -361,5 +361,3 @@ export const ProjectContributors = () => {
     </Fade>
   )
 }
-
-export default ProjectContributors

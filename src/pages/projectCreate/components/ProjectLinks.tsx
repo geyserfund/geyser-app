@@ -1,11 +1,11 @@
 import { Box, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
-import { ProjectLinkInput } from '../../../../components/inputs'
-import { Body2, Caption } from '../../../../components/typography'
-import { ButtonComponent } from '../../../../components/ui'
-import { getIconForLink } from '../../../../helpers/getIconForLinks'
-import { Maybe } from '../../../../types'
+import { ProjectLinkInput } from '../../../components/inputs'
+import { Body2, Caption } from '../../../components/typography'
+import { ButtonComponent } from '../../../components/ui'
+import { getIconForLink } from '../../../helpers/getIconForLinks'
+import { Maybe } from '../../../types'
 
 interface ProjectLinksProps {
   links: string[]

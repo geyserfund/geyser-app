@@ -4,19 +4,19 @@ import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router'
 
-import { Body2 } from '../../../components/typography'
-import { ButtonComponent, TextInputBox } from '../../../components/ui'
-import { getPath } from '../../../constants'
-import { UserValidations } from '../../../constants/validations'
-import { useAuthContext } from '../../../context'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
+import { Body2 } from '../../components/typography'
+import { ButtonComponent, TextInputBox } from '../../components/ui'
+import { getPath } from '../../constants'
+import { UserValidations } from '../../constants/validations'
+import { useAuthContext } from '../../context'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
 import {
   MUTATION_CREATE_PROJECT,
   MUTATION_UPDATE_PROJECT,
-} from '../../../graphql/mutations'
-import { FormError } from '../../../types'
-import { Project } from '../../../types/generated/graphql'
-import { toInt, useNotification, validateEmail } from '../../../utils'
+} from '../../graphql/mutations'
+import { FormError } from '../../types'
+import { Project } from '../../types/generated/graphql'
+import { toInt, useNotification, validateEmail } from '../../utils'
 import {
   ProjectCreateForm,
   ProjectCreateFormValidation,
@@ -241,5 +241,3 @@ export const ProjectCreate = () => {
     </ProjectCreateLayout>
   )
 }
-
-export default ProjectCreate

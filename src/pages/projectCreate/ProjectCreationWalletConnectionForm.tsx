@@ -15,24 +15,24 @@ import { AiOutlineSetting } from 'react-icons/ai'
 import { BiRocket } from 'react-icons/bi'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
-import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png'
-import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png'
-import WalletOfSatoshiPNG from '../../../assets/images/third-party-icons/wallet-of-satoshi@3x.png'
-import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg'
+import AlbyPNG from '../../assets/images/third-party-icons/alby@3x.png'
+import BitNobPNG from '../../assets/images/third-party-icons/bitnob@3x.png'
+import WalletOfSatoshiPNG from '../../assets/images/third-party-icons/wallet-of-satoshi@3x.png'
+import VoltageLogoSmall from '../../assets/voltage-logo-small.svg'
 import {
   ButtonComponent,
   TextInputBox,
   UndecoratedLink,
-} from '../../../components/ui'
-import Loader from '../../../components/ui/Loader'
+} from '../../components/ui'
+import Loader from '../../components/ui/Loader'
 import {
   AlbyLightningAddressURL,
   BitNobURL,
   GeyserTermsAndConditionsURL,
   VoltageExplainerPageForGeyserURL,
   WalletOfSatoshiLightningAddressURL,
-} from '../../../constants'
-import { colors } from '../../../styles'
+} from '../../constants'
+import { colors } from '../../styles'
 import {
   CreateWalletInput,
   LndNodeType,
@@ -40,8 +40,8 @@ import {
   useCreateWalletMutation,
   useLightningAddressVerifyLazyQuery,
   WalletResourceType,
-} from '../../../types/generated/graphql'
-import { toInt, useNotification, validateEmail } from '../../../utils'
+} from '../../types/generated/graphql'
+import { toInt, useNotification, validateEmail } from '../../utils'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
 import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox'
 import { TNodeInput } from './types'
@@ -418,5 +418,3 @@ export const ProjectCreationWalletConnectionForm = ({
     </>
   )
 }
-
-export default ProjectCreationWalletConnectionForm

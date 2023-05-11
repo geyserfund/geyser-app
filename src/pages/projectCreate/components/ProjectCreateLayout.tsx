@@ -8,9 +8,9 @@ import {
 } from '@chakra-ui/react'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
-import TitleWithProgressBar from '../../../../components/molecules/TitleWithProgressBar'
-import { ButtonComponent } from '../../../../components/ui'
-import { useMobileMode } from '../../../../utils'
+import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar'
+import { ButtonComponent } from '../../../components/ui'
+import { useMobileMode } from '../../../utils'
 
 interface ProjectCreateLayoutProps {
   children: React.ReactNode

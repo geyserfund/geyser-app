@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
 
 import { StickToTop } from '../../../components/layouts'
-import { FilterType, SortType, useFilterContext } from '../../../context'
-import { checkKeyValueExists, useMobileMode } from '../../../utils'
+import { SortType, useFilterContext } from '../../../context'
+import { useMobileMode } from '../../../utils'
+import { checkIfRenderFilter } from '../../../utils/helpers'
 import { FilterBySearch } from '../filters/FilterBySearch'
 import { MobileTopBar } from '../filters/mobile/MobileTopBar'
 import { DefaultView, PaginatedView, TrendingView } from './views'
@@ -44,20 +45,3 @@ export const LandingPageProjects = () => {
     </>
   )
 }
-
-export const checkIfRenderFilter = (filters: FilterType) => {
-  if (
-    checkKeyValueExists(
-      filters,
-      ['countryCode', 'region', 'search', 'status', 'type', 'recent'],
-      'any',
-    ) ||
-    (filters.tagIds && filters.tagIds.length > 0)
-  ) {
-    return true
-  }
-
-  return false
-}
-
-export default LandingPageProjects

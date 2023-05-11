@@ -11,15 +11,15 @@ import {
 } from '@chakra-ui/react'
 import { BiInfoCircle } from 'react-icons/bi'
 
-import { CharacterLimitError } from '../../../../components/errors'
-import { FileUpload } from '../../../../components/molecules'
-import { Body2 } from '../../../../components/typography'
-import { TextArea, TextInputBox, UploadBox } from '../../../../components/ui'
-import { commonMarkdownUrl, ProjectValidations } from '../../../../constants'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../graphql'
-import { colors } from '../../../../styles'
-import { FormError, Project } from '../../../../types'
-import { toMediumImageUrl, validLightningAddress } from '../../../../utils'
+import { CharacterLimitError } from '../../../components/errors'
+import { FileUpload } from '../../../components/molecules'
+import { Body2 } from '../../../components/typography'
+import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
+import { commonMarkdownUrl, ProjectValidations } from '../../../constants'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
+import { colors } from '../../../styles'
+import { FormError, Project } from '../../../types'
+import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 
 type ProjectCreate = {
   title?: string

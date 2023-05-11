@@ -300,5 +300,3 @@ export const GrantsRoundOne = ({
     </>
   )
 }
-
-export default GrantsRoundOne

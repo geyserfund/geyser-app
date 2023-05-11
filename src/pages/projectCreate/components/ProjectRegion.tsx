@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
 
-import { Body1, Body2, Caption } from '../../../../components/typography'
-import { IconButtonComponent, SelectComponent } from '../../../../components/ui'
-import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphql/queries/tags'
-import { colors } from '../../../../styles'
+import { Body1, Body2, Caption } from '../../../components/typography'
+import { IconButtonComponent, SelectComponent } from '../../../components/ui'
+import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries/tags'
+import { colors } from '../../../styles'
 import {
   Country,
   Location,
@@ -16,7 +16,7 @@ import {
   Project,
   ProjectCountriesGetResult,
   ProjectRegionsGetResult,
-} from '../../../../types'
+} from '../../../types'
 
 const useStyles = createUseStyles({
   container: {

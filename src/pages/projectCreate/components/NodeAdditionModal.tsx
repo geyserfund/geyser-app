@@ -12,18 +12,14 @@ import {
 import { useState } from 'react'
 import { BsExclamation, BsQuestion } from 'react-icons/bs'
 
-import { DescriptionLinkWithIconComponent } from '../../../../components/molecules'
-import {
-  ButtonComponent,
-  TextArea,
-  TextInputBox,
-} from '../../../../components/ui'
-import { VoltageNodeConnectionDemoURL } from '../../../../constants'
-import { ProjectNodeValidations } from '../../../../constants/validations'
-import { useMobileMode } from '../../../../utils'
-import { checkMacaroonPermissions } from '../../../../utils/validations/checkMacaroonPermissions'
-import { isSecp256k1Compressed } from '../../../../utils/validations/isSecp256k1Compressed'
-import { isTorV3Address } from '../../../../utils/validations/isTorV3Address'
+import { DescriptionLinkWithIconComponent } from '../../../components/molecules'
+import { ButtonComponent, TextArea, TextInputBox } from '../../../components/ui'
+import { VoltageNodeConnectionDemoURL } from '../../../constants'
+import { ProjectNodeValidations } from '../../../constants/validations'
+import { useMobileMode } from '../../../utils'
+import { checkMacaroonPermissions } from '../../../utils/validations/checkMacaroonPermissions'
+import { isSecp256k1Compressed } from '../../../utils/validations/isSecp256k1Compressed'
+import { isTorV3Address } from '../../../utils/validations/isTorV3Address'
 import { TNodeInput } from '../types'
 
 type Props = {

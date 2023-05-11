@@ -1,13 +1,13 @@
 import { VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router'
 
-import { ButtonComponent } from '../../../components/ui'
-import Loader from '../../../components/ui/Loader'
-import { getPath } from '../../../constants'
-import { useProjectState } from '../../../hooks/graphqlState'
-import { useProjectTagsState } from '../../../hooks/graphqlState/useProjectTagsState'
-import { useProjectLinksValidation } from '../../../hooks/validations'
-import { toInt, useNotification } from '../../../utils'
+import { ButtonComponent } from '../../components/ui'
+import Loader from '../../components/ui/Loader'
+import { getPath } from '../../constants'
+import { useProjectState } from '../../hooks/graphqlState'
+import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
+import { useProjectLinksValidation } from '../../hooks/validations'
+import { toInt, useNotification } from '../../utils'
 import { ProjectRegion } from './components'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectLinks } from './components/ProjectLinks'
@@ -93,5 +93,3 @@ export const ProjectAdditionalDetails = () => {
     </>
   )
 }
-
-export default ProjectAdditionalDetails

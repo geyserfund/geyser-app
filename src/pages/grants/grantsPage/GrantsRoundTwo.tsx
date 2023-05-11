@@ -249,5 +249,3 @@ export const GrantsRoundTwo = ({
     </>
   )
 }
-
-export default GrantsRoundTwo

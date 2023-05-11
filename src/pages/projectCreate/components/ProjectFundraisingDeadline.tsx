@@ -1,9 +1,9 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 
-import { CalendarButton } from '../../../../components/molecules'
-import { Body2, Caption } from '../../../../components/typography'
-import { ButtonComponent } from '../../../../components/ui'
+import { CalendarButton } from '../../../components/molecules'
+import { Body2, Caption } from '../../../components/typography'
+import { ButtonComponent } from '../../../components/ui'
 
 interface ProjectFundraisingDeadlineProps {
   form: { expiresAt?: string }
