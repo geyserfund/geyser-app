@@ -22,11 +22,20 @@ export const MUTATION_FUND = gql`
   }
 `
 
-export const REFRESH_FUNDING_INVOICE = gql`
+export const MUTATION_FUNDING_INVOICE_REFRESH = gql`
   ${FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS}
   mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
     fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
       ...FundingTxWithInvoiceStatus
+    }
+  }
+`
+
+export const MUTATION_FUNDING_INVOICE_CANCEL = gql`
+  mutation FundingInvoiceCancel($invoiceId: String!) {
+    fundingInvoiceCancel(invoiceId: $invoiceId) {
+      id
+      success
     }
   }
 `

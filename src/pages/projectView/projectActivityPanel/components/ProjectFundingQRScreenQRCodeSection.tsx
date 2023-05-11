@@ -323,12 +323,16 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           <Box>
             <FaBitcoin fontSize={'50px'} />
           </Box>
-          <Text fontSize={'10px'} fontWeight={400}>
-            Fund with any on-chain or lightning wallet. If you are paying
-            on-chain, make sure to send the exact amount, otherwise it will not
-            be displayed. The transaction will be confirmed after 1
-            confirmation.
-          </Text>
+          <Box>
+            <Text fontSize={'10px'} fontWeight={700}>
+              Fund with any on-chain or lightning wallet.
+            </Text>
+            <Text fontSize={'10px'} fontWeight={400}>
+              If you are paying on-chain, make sure to send the exact amount,
+              otherwise it will not be displayed. The transaction will be
+              confirmed after 1 confirmation.
+            </Text>
+          </Box>
         </HStack>
         {renderQrBox()}
       </VStack>
