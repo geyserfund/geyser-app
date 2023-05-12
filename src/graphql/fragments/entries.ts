@@ -1,6 +1,37 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_USER_FOR_AVATAR } from './user'
+
+export const FRAGMENT_ENTRY = gql`
+  ${FRAGMENT_USER_FOR_AVATAR}
+  fragment Entry on Entry {
+    id
+    title
+    description
+    image
+    published
+    content
+    createdAt
+    updatedAt
+    publishedAt
+    status
+    fundersCount
+    amountFunded
+    type
+    creator {
+      ...UserForAvatar
+    }
+    project {
+      id
+      title
+      name
+      image
+    }
+  }
+`
+
 export const FRAGMENT_ENTRY_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_USER_FOR_AVATAR}
   fragment EntryForLandingPage on Entry {
     amountFunded
     entryFundersCount: fundersCount
@@ -15,14 +46,13 @@ export const FRAGMENT_ENTRY_FOR_LANDING_PAGE = gql`
       title
     }
     creator {
-      id
-      imageUrl
-      username
+      ...UserForAvatar
     }
   }
 `
 
 export const FRAGMENT_ENTRY_FOR_PROJECT = gql`
+  ${FRAGMENT_USER_FOR_AVATAR}
   fragment EntryForProject on Entry {
     id
     title
@@ -36,9 +66,7 @@ export const FRAGMENT_ENTRY_FOR_PROJECT = gql`
     createdAt
     publishedAt
     creator {
-      id
-      username
-      imageUrl
+      ...UserForAvatar
     }
   }
 `

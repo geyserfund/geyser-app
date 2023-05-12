@@ -1,5 +1,6 @@
 import { ProjectContributors } from './ProjectContributors'
 import { ProjectDashboard } from './ProjectDashboard'
+import { ProjectDashboardPage } from './ProjectDashboardPage'
 import { ProjectDescription } from './ProjectDescription'
 import { ProjectDetails } from './ProjectDetails'
 import { ProjectFundingSettings } from './ProjectFundingSettings'
@@ -11,6 +12,7 @@ import { ProjectStats } from './ProjectStats'
 export {
   ProjectContributors,
   ProjectDashboard,
+  ProjectDashboardPage,
   ProjectDescription,
   ProjectDetails,
   ProjectFundingSettings,

@@ -17,6 +17,9 @@ export const MUTATION_CREATE_PROJECT = gql`
         user {
           id
           ownerOf {
+            owner {
+              id
+            }
             project {
               id
             }

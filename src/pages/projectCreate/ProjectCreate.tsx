@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
@@ -10,12 +10,14 @@ import { getPath } from '../../constants'
 import { UserValidations } from '../../constants/validations'
 import { useAuthContext } from '../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
-import {
-  MUTATION_CREATE_PROJECT,
-  MUTATION_UPDATE_PROJECT,
-} from '../../graphql/mutations'
 import { FormError } from '../../types'
-import { Project } from '../../types/generated/graphql'
+import {
+  CreateProjectMutation,
+  Project,
+  useCreateProjectMutation,
+  User,
+  useUpdateProjectMutation,
+} from '../../types/generated/graphql'
 import { toInt, useNotification, validateEmail } from '../../utils'
 import {
   ProjectCreateForm,
@@ -24,15 +26,7 @@ import {
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectFundraisingDeadline } from './components/ProjectFundraisingDeadline'
 import { ProjectPreviewComponent } from './components/ProjectPreviewComponent'
-import { ProjectCreationVariables, ProjectUpdateVariables } from './types'
-
-type CreateProjectMutationResponseData = {
-  createProject: Project | null
-}
-
-type UpdateProjectMutationResponseData = {
-  updateProject: Project | null
-}
+import { ProjectCreationVariables } from './types'
 
 const useStyles = createUseStyles({
   backIcon: {
@@ -69,25 +63,26 @@ export const ProjectCreate = () => {
     FormError<ProjectCreationVariables>
   >({})
 
-  const [createProject, { loading: createLoading }] = useMutation<
-    CreateProjectMutationResponseData,
-    { input: ProjectCreationVariables }
-  >(MUTATION_CREATE_PROJECT, {
+  const [createProject, { loading: createLoading }] = useCreateProjectMutation({
     onCompleted({ createProject: createdProject }) {
       if (createdProject && createdProject.owners[0]) {
-        const newOwnershipInfo = user.ownerOf.concat([
+        const newOwnershipInfo = [
+          ...user.ownerOf,
           {
             project: createdProject,
             owner: createdProject.owners[0],
           },
-        ])
+        ] satisfies CreateProjectMutation['createProject']['owners'][number]['user']['ownerOf']
 
-        setUser({
-          ...user,
-          ...{
-            ownerOf: newOwnershipInfo,
-          },
-        })
+        setUser(
+          (current) =>
+            ({
+              ...current,
+              ownerOf: current.ownerOf
+                ? [...current.ownerOf, newOwnershipInfo]
+                : [newOwnershipInfo],
+            } as User),
+        )
 
         navigate(getPath('launchProjectDetails', createdProject.id))
       }
@@ -101,10 +96,7 @@ export const ProjectCreate = () => {
     },
   })
 
-  const [updateProject, { loading: updateLoading }] = useMutation<
-    UpdateProjectMutationResponseData,
-    { input: ProjectUpdateVariables }
-  >(MUTATION_UPDATE_PROJECT, {
+  const [updateProject, { loading: updateLoading }] = useUpdateProjectMutation({
     onCompleted() {
       navigate(getPath('launchProjectDetails', params.projectId || ''))
     },
@@ -136,15 +128,21 @@ export const ProjectCreate = () => {
     },
   })
 
+  useEffect(() => {
+    if (params.projectId) {
+      getProjectById()
+    }
+  }, [getProjectById, params.projectId])
+
   const handleNextButtonTapped = () => {
     const isValid = validateForm()
 
-    if (isValid) {
+    if (data?.project && isValid) {
       if (isEditingExistingProject) {
         updateProject({
           variables: {
             input: {
-              projectId: toInt(data?.project?.id),
+              projectId: toInt(data.project.id),
               title: form.title,
               image: `${form.image}`,
               thumbnailImage: `${form.thumbnailImage}`,
@@ -194,12 +192,6 @@ export const ProjectCreate = () => {
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, email: event.target.value })
   }
-
-  useEffect(() => {
-    if (params.projectId) {
-      getProjectById()
-    }
-  }, [params.projectId])
 
   return (
     <ProjectCreateLayout

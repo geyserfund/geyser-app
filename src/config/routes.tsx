@@ -52,8 +52,8 @@ const CreatorDashboard = import(
   /* webpackChunkName: "creatorDashboard" */ '../pages/projectDashboard'
 )
 
-const ProjectDashboard = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectDashboard),
+const ProjectDashboardPage = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectDashboardPage),
 )
 const ProjectDescription = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectDescription),
@@ -74,17 +74,13 @@ const ProjectSettings = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectSettings),
 )
 
-const ProjectView = loadable(
-  () => import(/* webpackChunkName: "project" */ '../pages/projectView'),
-)
+const ProjectView = loadable(() => import('../pages/projectView'))
 
-const Profile = loadable(
-  () => import(/* webpackChunkName: "profile" */ '../pages/profile/Profile'),
-)
+const Profile = loadable(() => import('../pages/profile/Profile'))
 
 // LANDING PAGE
 
-const Landing = import(/* webpackChunkName: "landingPage" */ '../pages/landing')
+const Landing = import('../pages/landing')
 
 const MobileLeaderboard = loadable(() =>
   Landing.then((m) => m.MobileLeaderboard),
@@ -172,7 +168,7 @@ const platformRoutes = [
   },
   {
     path: getPath('projectDashboard', PathName.projectId),
-    element: ProjectDashboard,
+    element: ProjectDashboardPage,
     authenticated: true,
     nested: [
       {

@@ -43,6 +43,10 @@ export const Creator = () => {
     onOpen: openMilestoneModal,
   } = useDisclosure()
 
+  if (!project) {
+    return null
+  }
+
   const handleRewardAdd = (addReward: ProjectRewardForCreateUpdateFragment) => {
     const newRewards = project.rewards || []
     updateProject({ rewards: [...newRewards, addReward] })
@@ -109,7 +113,7 @@ export const Creator = () => {
           onClose={onRewardClose}
           onSubmit={handleRewardAdd}
           isSatoshi={false}
-          projectId={parseInt(`${project.id}`, 10)}
+          projectId={parseInt(project.id, 10)}
         />
       )}
       {isMilestoneModalOpen && (

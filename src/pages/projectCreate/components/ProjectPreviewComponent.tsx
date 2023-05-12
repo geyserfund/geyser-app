@@ -6,8 +6,8 @@ import { MarkDown, toSmallImageUrl, useMobileMode } from '../../../utils'
 
 interface ProjectPreviewComponentProps {
   data: {
-    image?: string
-    thumbnailImage?: string
+    image?: string | null
+    thumbnailImage?: string | null
     title?: string
     shortDescription?: string
     description?: string
@@ -32,7 +32,7 @@ export const ProjectPreviewComponent = ({
           <Box height="100px" overflow="hidden" backgroundColor="white">
             <ImageWithReload
               grey
-              src={data.image}
+              src={data.image || ''}
               height="100px"
               width="100%"
               noCacheId={(Math.random() + 1).toString(36).substring(7)}

@@ -15,7 +15,7 @@ import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { ImageWithReload } from '../../../../components/ui'
 import { IRewardCount } from '../../../../interfaces'
 import { colors } from '../../../../styles'
-import { ProjectReward } from '../../../../types/generated/graphql'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
 import { toInt } from '../../../../utils'
 
 const useStyles = createUseStyles({
@@ -45,7 +45,7 @@ const useStyles = createUseStyles({
 })
 
 interface IRewardItemProps {
-  item: ProjectReward
+  item: ProjectRewardForCreateUpdateFragment
   updateCount?: (_: IRewardCount) => void
   count?: number
   readOnly?: boolean

@@ -30,10 +30,14 @@ export const ProjectFundingSettings = () => {
   const [tiggerWalletOpen, setTriggerWalletOpen] = useState(false)
 
   const projectWallet: Wallet | undefined = useMemo(() => {
-    return project.wallets && project.wallets[0]
-  }, [project.wallets])
+    return project?.wallets && project.wallets[0]
+  }, [project])
 
   const handleProjectLaunch = async () => {
+    if (!project) {
+      return
+    }
+
     navigate(getPath('project', project.name))
     toast({
       status: 'success',

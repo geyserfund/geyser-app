@@ -18,7 +18,7 @@ export const useProjectTagsState = ({
   project,
   updateProject,
 }: {
-  project: ProjectFragment
+  project: ProjectFragment | null
   updateProject?: (_: Project) => void
 }) => {
   const [tags, setTags] = useState<Tag[]>([])
@@ -26,7 +26,7 @@ export const useProjectTagsState = ({
   const { toast } = useNotification()
 
   useEffect(() => {
-    if (project?.tags?.length > 0) {
+    if (project && project?.tags?.length > 0) {
       setTags(project?.tags)
     }
   }, [project])
@@ -69,6 +69,10 @@ export const useProjectTagsState = ({
   })
 
   const saveTags = async () => {
+    if (!project) {
+      return
+    }
+
     const addTags =
       project?.tags?.length > 0
         ? tags.filter((tag) => !project.tags.some((tag2) => tag.id === tag2.id))

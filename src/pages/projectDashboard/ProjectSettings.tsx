@@ -16,7 +16,7 @@ import { DashboardGridLayout } from './components/DashboardGridLayout'
 type ProjectSettingsForm = {
   expiresAt?: string
   email: string
-  status: ProjectStatus
+  status: ProjectStatus | ''
 }
 
 export const ProjectSettings = () => {
@@ -26,17 +26,21 @@ export const ProjectSettings = () => {
   const { project, updateProject } = useProjectContext()
 
   const [form, setForm] = useState<ProjectSettingsForm>({
-    expiresAt: project.expiresAt as string,
+    expiresAt: project?.expiresAt || '',
     email: '',
-    status: project.status as ProjectStatus,
+    status: project?.status || '',
   })
 
-  const [deactivate, setDeactivate] = useState(!isActive(project.status))
+  const [deactivate, setDeactivate] = useState(!isActive(project?.status))
   const [formError, setFormError] = useState<FormError<ProjectSettingsForm>>({})
 
   const { setIsFormDirty } = useBeforeClose()
 
   useEffect(() => {
+    if (!project) {
+      return
+    }
+
     const isFormDirty = () => {
       if (
         ((Boolean(form.expiresAt) || Boolean(project.expiresAt)) &&
@@ -51,7 +55,7 @@ export const ProjectSettings = () => {
     }
 
     setIsFormDirty(isFormDirty())
-  }, [project, form, deactivate])
+  }, [project, form, deactivate, setIsFormDirty])
 
   const [updateProjectMutation, { loading: updateLoading }] = useMutation<{
     updateProject: Project
@@ -90,7 +94,7 @@ export const ProjectSettings = () => {
 
     const newForm = form
     newForm.email = user.email || form.email
-    if (isValid) {
+    if (project && isValid) {
       updateProjectMutation({
         variables: {
           input: {
@@ -112,6 +116,10 @@ export const ProjectSettings = () => {
     }
 
     return isValid
+  }
+
+  if (!project) {
+    return null
   }
 
   return (

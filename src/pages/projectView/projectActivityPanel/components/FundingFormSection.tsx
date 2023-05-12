@@ -7,13 +7,13 @@ import { SectionTitle } from '../../../../components/ui'
 import { IFundForm } from '../../../../hooks'
 import { IRewardCount } from '../../../../interfaces'
 import { colors } from '../../../../styles'
-import { ProjectReward } from '../../../../types/generated/graphql'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
 import { FundingFormRewardItem } from '../../projectMainBody/components/FundingFormRewardItem'
 
 type Props = {
   setFormState: any
   updateReward: (_: IRewardCount) => void
-  rewards?: ProjectReward[]
+  rewards?: ProjectRewardForCreateUpdateFragment[]
   formState?: IFundForm
 }
 
@@ -25,7 +25,9 @@ export const FundingFormSection = ({
 }: Props) => {
   const getRewardCount = (rewardId: number) =>
     formState?.rewardsByIDAndCount
-      ? formState?.rewardsByIDAndCount[`${rewardId}` as keyof ProjectReward]
+      ? formState?.rewardsByIDAndCount[
+          `${rewardId}` as keyof ProjectRewardForCreateUpdateFragment
+        ]
       : 0
 
   const hasRewards = rewards && rewards.length
@@ -82,7 +84,7 @@ export const FundingFormSection = ({
                   />
                 </HStack>
               </ItemCard>
-              {rewards.map((reward: ProjectReward) => (
+              {rewards.map((reward) => (
                 <FundingFormRewardItem
                   key={reward.id}
                   item={reward}
