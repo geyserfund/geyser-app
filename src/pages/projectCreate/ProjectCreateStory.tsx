@@ -55,15 +55,16 @@ export const ProjectCreateStory = () => {
       'id',
     )
 
-  const handleBack = () =>
-    project && navigate(getPath('launchProjectDetails', project.id))
-
-  const handleNext = async () => {
+  const handleBack = () => {
     if (!project) {
-      return
+      return navigate(-1)
     }
 
-    const { error } = validateDescription(project.description)
+    navigate(getPath('launchProjectDetails', project?.id))
+  }
+
+  const handleNext = async () => {
+    const { error } = validateDescription(project?.description)
 
     if (error) {
       setError(error)
@@ -72,7 +73,7 @@ export const ProjectCreateStory = () => {
 
     try {
       await saveProject()
-      navigate(getPath('launchProjectWithNode', project.id))
+      navigate(getPath('launchProjectWithNode', project?.id))
     } catch (e) {
       toast({
         title: 'Error saving project',
@@ -133,7 +134,7 @@ export const ProjectCreateStory = () => {
                 </HStack>
               </HStack>
               <Text fontSize="12px" color="brand.neutral700">
-                {`${project?.description.length}/${ProjectValidations.description.maxLength}`}
+                {`${project?.description?.length}/${ProjectValidations.description.maxLength}`}
               </Text>
             </HStack>
           )}

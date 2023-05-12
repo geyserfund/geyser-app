@@ -31,7 +31,8 @@ export const ProjectCreate = () => {
 
   const { user, setUser } = useAuthContext()
 
-  const [form, setForm] = useState<ProjectCreationVariables>({
+  // @TODO: Figure a better way to type the form to reuse with the update flow
+  const [form, setForm] = useState<any>({
     title: '',
     shortDescription: '',
     description: '',
