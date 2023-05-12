@@ -141,23 +141,27 @@ export const SuccessImageComponent = ({
           <Button
             size="sm"
             isActive={copied}
-            variant="containedClear"
+            variant="secondary"
             aria-label="copy-success-image"
             leftIcon={<BiCopy />}
             onClick={handleCopy}
           >
-            <Text variant="caption">Copy</Text>
+            <Text variant="caption" fontWeight="bold">
+              Copy
+            </Text>
           </Button>
         </Tooltip>
         <Tooltip placement="top" label="download">
           <Button
             size="sm"
-            variant="containedClear"
+            variant="secondary"
             aria-label="download-success-image"
             leftIcon={<BiDownload />}
             onClick={handleDownload}
           >
-            <Text variant="caption">Download</Text>
+            <Text variant="caption" fontWeight="bold">
+              Download
+            </Text>
           </Button>
         </Tooltip>
       </HStack>

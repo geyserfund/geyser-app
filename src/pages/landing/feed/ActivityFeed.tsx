@@ -158,7 +158,7 @@ const ViewUpdates = ({
     <>
       <Button
         size="sm"
-        variant="transparent"
+        variant="secondary"
         onClick={onClick}
         _hover={{}}
         _focus={{ color: 'primary.700' }}

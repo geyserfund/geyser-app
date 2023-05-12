@@ -18,7 +18,7 @@ export const ProjectBackButton = (props: ButtonProps) => {
 
   return (
     <Button
-      variant="containedClear"
+      variant="secondary"
       size="sm"
       leftIcon={<BsArrowLeft fontSize="20px" />}
       onClick={handleGoBack}

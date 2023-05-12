@@ -73,12 +73,7 @@ export const ProjectNavigationButton = ({
   Pick<ButtonProps, 'leftIcon' | 'onClick' | 'isActive'>
 >) => {
   return (
-    <Button
-      justifyContent="start"
-      width="100%"
-      variant="transparent"
-      {...props}
-    >
+    <Button justifyContent="start" width="100%" variant="secondary" {...props}>
       <H3 pl={1}>{children}</H3>
     </Button>
   )

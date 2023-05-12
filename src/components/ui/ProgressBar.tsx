@@ -8,7 +8,7 @@ export const ProgressBar = ({ value, ...rest }: IProgressBar) => (
   <Box
     display="flex"
     borderRadius="3px"
-    height="10px"
+    height="4px"
     backgroundColor="brand.gray300"
     {...rest}
   >
@@ -16,7 +16,7 @@ export const ProgressBar = ({ value, ...rest }: IProgressBar) => (
       height={'100%'}
       borderRadius="3px"
       width={`${value}%`}
-      backgroundColor="brand.primary"
+      backgroundColor="primary.600"
     ></Box>
   </Box>
 )

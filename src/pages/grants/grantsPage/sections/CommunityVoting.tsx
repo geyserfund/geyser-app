@@ -81,7 +81,7 @@ export const CommunityVoting = ({
         size="xl"
         textTransform="uppercase"
         fontFamily={fonts.livvic}
-        variant="contained"
+        variant="primary"
       >
         Vote
       </Button>

@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { API_SERVICE_ENDPOINT, GeyserAssetDomainUrl } from '../constants'
 import { QUERY_SIGNED_UPLOAD_URL } from '../graphql/queries/entries'
@@ -57,17 +57,20 @@ export const useSignedUpload = ({
     })
   }
 
-  const uploadFile = (file: any) => {
-    setCurrentFile(file)
-    try {
-      setIsLoading(true)
-      getSignedUrl({
-        variables: { input: { name: file.name, type: file.type } },
-      })
-    } catch {
-      setIsLoading(false)
-    }
-  }
+  const uploadFile = useCallback(
+    (file: any) => {
+      setCurrentFile(file)
+      try {
+        setIsLoading(true)
+        getSignedUrl({
+          variables: { input: { name: file.name, type: file.type } },
+        })
+      } catch {
+        setIsLoading(false)
+      }
+    },
+    [getSignedUrl],
+  )
 
   return { uploadFile, isLoading }
 }

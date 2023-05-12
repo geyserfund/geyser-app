@@ -5,37 +5,41 @@ import {
   Input,
   InputGroup,
   InputRightAddon,
-  Link,
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { BiInfoCircle } from 'react-icons/bi'
+import { Dispatch, SetStateAction } from 'react'
 
 import { CharacterLimitError } from '../../../components/errors'
 import { FileUpload } from '../../../components/molecules'
-import { Body2 } from '../../../components/typography'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
-import { commonMarkdownUrl, ProjectValidations } from '../../../constants'
+import { ProjectValidations } from '../../../constants'
+import { useAuthContext } from '../../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { colors } from '../../../styles'
 import { FormError, Project } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
+import { ProjectCreationVariables } from '../types'
+import { FormInputContainer } from './FormInputContainer'
+import { ProjectFundraisingDeadline } from './ProjectFundraisingDeadline'
 
 type ProjectCreate = {
   title?: string
   name?: string
   shortDescription?: string
   description?: string
-  image?: string | null
+  image?: string
+  expiresAt?: string
+  email: string
   headerImage?: string
 }
 
 interface ProjectCreateFormProps {
   isEdit?: boolean
-  form: ProjectCreate
-  setForm: (_: any) => void
+  form: ProjectCreationVariables
   formError: FormError<ProjectCreate>
   setFormError: any
+  setForm: Dispatch<SetStateAction<ProjectCreationVariables>>
 }
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
@@ -73,16 +77,16 @@ export const ProjectCreateFormValidation = (form: Partial<Project>) => {
     isValid = false
   }
 
-  if (!form.description) {
-    errors.description = 'Project objective is a required field.'
-    isValid = false
-  } else if (
-    JSON.stringify(form.description).length >
-    ProjectValidations.description.maxLength
-  ) {
-    errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`
-    isValid = false
-  }
+  // if (!form.description) {
+  //   errors.description = 'Project objective is a required field.'
+  //   isValid = false
+  // } else if (
+  //   JSON.stringify(form.description).length >
+  //   ProjectValidations.description.maxLength
+  // ) {
+  //   errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`
+  //   isValid = false
+  // }
 
   return { isValid, errors }
 }
@@ -94,7 +98,7 @@ export const ProjectCreateForm = ({
   formError,
   setFormError,
 }: ProjectCreateFormProps) => {
-  const rowStyles = { width: '100%', alignItems: 'flex-start', spacing: '5px' }
+  const { user } = useAuthContext()
 
   const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: {
@@ -123,11 +127,26 @@ export const ProjectCreateForm = ({
   }
 
   const handleImageUpload = (url: string) => {
-    setForm({ ...form, thumbnailImage: toMediumImageUrl(url) })
+    setForm((current) => ({
+      ...current,
+      thumbnailImage: toMediumImageUrl(url),
+    }))
   }
 
   const handleHeaderImageUpload = (url: string) => {
-    setForm({ ...form, image: url })
+    setForm((current) => ({ ...current, image: url }))
+  }
+
+  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((current) => ({ ...current, email: event.target.value }))
+  }
+
+  const deleteThumbnnailHandler = () => {
+    setForm((current) => ({ ...current, thumbnailImage: '' }))
+  }
+
+  const deleteImageHandler = () => {
+    setForm((current) => ({ ...current, image: '' }))
   }
 
   const handleChange = (event: any) => {
@@ -197,9 +216,11 @@ export const ProjectCreateForm = ({
   }
 
   return (
-    <>
-      <VStack {...rowStyles}>
-        <Body2>Project Title</Body2>
+    <VStack spacing={6}>
+      <FormInputContainer
+        title="Title"
+        subtitle="A few words that make your project stand out"
+      >
         <TextInputBox
           name="title"
           onChange={handleChange}
@@ -207,9 +228,13 @@ export const ProjectCreateForm = ({
           error={formError.title}
           onBlur={handleProjectFetch}
         />
-      </VStack>
-      <VStack {...rowStyles}>
-        <Body2>Lightning Address Preview</Body2>
+      </FormInputContainer>
+
+      <FormInputContainer
+        title="Lightning Address Preview"
+        subtitle="This is the lightning address for your project. Funds sent to this lightning address will show in your project activity"
+        error={FormErrorIcon.name}
+      >
         <InputGroup size="md" borderRadius="8px">
           <Input
             name="name"
@@ -222,39 +247,12 @@ export const ProjectCreateForm = ({
           />
           <InputRightAddon>@geyser.fund</InputRightAddon>
         </InputGroup>
-        {FormErrorIcon.name && (
-          <Text color="brand.error" fontSize="12px">
-            {FormErrorIcon.name}
-          </Text>
-        )}
-      </VStack>
-      <VStack width="100%" alignItems="flex-start" spacing="5px">
-        <Body2>Project Image</Body2>
-        <FileUpload
-          onUploadComplete={handleImageUpload}
-          childrenOnLoading={<UploadBox loading />}
-        >
-          <UploadBox />
-        </FileUpload>
-        <Text fontSize="10px" color="brand.neutral700">
-          For best fit, pick a square image. Image size limit: 10MB.
-        </Text>
-      </VStack>
-      <VStack width="100%" alignItems="flex-start" spacing="5px">
-        <Body2>Header Image</Body2>
-        <FileUpload
-          onUploadComplete={handleHeaderImageUpload}
-          childrenOnLoading={<UploadBox loading />}
-        >
-          <UploadBox />
-        </FileUpload>
-        <Text fontSize="10px" color="brand.neutral700">
-          For best fit, pick an image around 800px x 200px. Image size limit:
-          10MB.
-        </Text>
-      </VStack>
-      <VStack {...rowStyles}>
-        <Body2>Project objective</Body2>
+      </FormInputContainer>
+
+      <FormInputContainer
+        title="Objective"
+        subtitle="Add 'one liner' a simple descriptions of what your project is about"
+      >
         <TextArea
           name="shortDescription"
           noOfLines={2}
@@ -272,45 +270,61 @@ export const ProjectCreateForm = ({
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
         )}
-      </VStack>
-      <VStack {...rowStyles}>
-        <Body2>Description</Body2>
-        <TextArea
-          name="description"
-          minHeight="120px"
-          maxHeight="800px"
-          height="fit-content"
-          overflowY="auto"
-          value={form.description || ''}
-          onChange={handleChange}
-          error={formError.description}
-        />
-        {!formError.description && (
-          <HStack width="100%" justifyContent="space-between">
-            <HStack>
-              <Text fontSize="12px" color="brand.neutral700">
-                For **Bold** and *Italic*, see more{' '}
-              </Text>
-              <HStack
-                as={Link}
-                href={commonMarkdownUrl}
-                isExternal
-                spacing="0px"
-                _focus={{}}
-              >
-                <BiInfoCircle />
-                <Text fontSize="12px" color="brand.neutral700">
-                  MarkDown
-                </Text>
-              </HStack>
-            </HStack>
+      </FormInputContainer>
 
-            <Text fontSize="12px" color="brand.neutral700">{`${
-              JSON.stringify(form?.description).length
-            }/${ProjectValidations.description.maxLength}`}</Text>
-          </HStack>
-        )}
-      </VStack>
-    </>
+      <FormInputContainer
+        title="Image"
+        subtitle="Add the main project image that will be displayed in all thumbnails"
+      >
+        <FileUpload
+          showcase
+          caption="For best fit, pick a square image. Image size limit: 10MB."
+          src={form.thumbnailImage}
+          onUploadComplete={handleImageUpload}
+          onDeleteClick={deleteThumbnnailHandler}
+          childrenOnLoading={<UploadBox loading />}
+        >
+          <UploadBox h={10} title={form.image ? 'Change image' : undefined} />
+        </FileUpload>
+      </FormInputContainer>
+
+      <FormInputContainer
+        title="Header"
+        subtitle="Add a header with a video link or by uploading an image to help bring your project to life"
+      >
+        <FileUpload
+          showcase
+          showcaseW="80px"
+          caption="For best fit, pick an image around 800px x 200px. Image size limit:
+        10MB."
+          src={form.image}
+          onUploadComplete={handleHeaderImageUpload}
+          onDeleteClick={deleteImageHandler}
+          childrenOnLoading={<UploadBox loading />}
+        >
+          <UploadBox h={10} title={form.image ? 'Change header' : undefined} />
+        </FileUpload>
+      </FormInputContainer>
+
+      <FormInputContainer
+        title="Fundraising deadline"
+        subtitle="Add a deadline to your project if you have one, or just keep it as ongoing."
+      >
+        <ProjectFundraisingDeadline form={form} setForm={setForm} />
+      </FormInputContainer>
+
+      <FormInputContainer
+        title="Email"
+        subtitle="Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure."
+      >
+        <TextInputBox
+          name="email"
+          value={user.email || form.email}
+          onChange={handleEmail}
+          error={formError.email}
+          isDisabled={Boolean(user.email)}
+        />
+      </FormInputContainer>
+    </VStack>
   )
 }

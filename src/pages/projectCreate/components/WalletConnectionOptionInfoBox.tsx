@@ -1,32 +1,39 @@
-import { Box, HTMLChakraProps, Text, VStack } from '@chakra-ui/react'
+import { HTMLChakraProps, Text, VStack } from '@chakra-ui/react'
 
 type Props = HTMLChakraProps<'div'> & {
   primaryText: string | React.ReactElement
+  promoText?: string
   secondaryText: string | React.ReactElement
 }
 
 export const WalletConnectionOptionInfoBox = ({
   primaryText,
+  promoText,
   secondaryText,
   children,
 }: Props) => {
   return (
-    <Box
-      padding={'16px'}
+    <VStack
       backgroundColor={'brand.neutral100'}
-      display="flex"
-      flexDirection={'column'}
-      alignItems="flex-start"
       textColor={'brand.gray500'}
+      spacing={2}
+      p={4}
+      alignItems="start"
       fontSize={'10px'}
       borderRadius={'md'}
     >
-      <VStack spacing={4} alignItems="flex-start">
-        <Text fontWeight={'bold'}>{primaryText}</Text>
-        <Text fontWeight={'normal'}>{secondaryText}</Text>
-
-        {children}
-      </VStack>
-    </Box>
+      <Text variant="body1" fontWeight="medium">
+        {primaryText}
+      </Text>
+      {promoText && (
+        <Text fontWeight="medium" variant="body2" color="primary.600">
+          {promoText}
+        </Text>
+      )}
+      <Text variant="body2" color="neutral.600">
+        {secondaryText}
+      </Text>
+      {children}
+    </VStack>
   )
 }
