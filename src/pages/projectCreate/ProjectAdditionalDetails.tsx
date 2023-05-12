@@ -77,7 +77,11 @@ export const ProjectAdditionalDetails = () => {
   }
 
   const handleBack = () => {
-    navigate(getPath('privateProjectLaunch'))
+    navigate(
+      params.projectId
+        ? `${getPath('privateProjectLaunch')}/${params.projectId}`
+        : getPath('privateProjectLaunch'),
+    )
   }
 
   if (projectLoading) {
