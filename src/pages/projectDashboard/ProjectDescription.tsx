@@ -24,18 +24,25 @@ export const ProjectDescription = () => {
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
-  const [form, setForm] = useState<ProjectUpdateVariables>({
-    projectId: project.id,
+  const [form, setForm] = useState<
+    ProjectUpdateVariables & { projectId: string | number }
+  >({
+    projectId: project?.id || '',
     title: '',
     shortDescription: '',
     description: '',
     image: '',
     thumbnailImage: '',
   })
+
   const { setIsFormDirty } = useBeforeClose()
 
   useEffect(() => {
-    const isDiff = checkDiff(project as Partial<ProjectUpdateVariables>, form, [
+    if (!project) {
+      return
+    }
+
+    const isDiff = checkDiff(project, form, [
       'title',
       'shortDescription',
       'description',
@@ -44,7 +51,7 @@ export const ProjectDescription = () => {
     ])
 
     setIsFormDirty(isDiff)
-  }, [project, form])
+  }, [project, form, setIsFormDirty])
 
   const [formError, setFormError] = useState<FormError<ProjectUpdateVariables>>(
     {},
@@ -85,6 +92,10 @@ export const ProjectDescription = () => {
       })
     }
   }, [project])
+
+  if (!project) {
+    return null
+  }
 
   const handleNext = async () => {
     const isValid = validateForm()

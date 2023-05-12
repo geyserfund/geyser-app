@@ -1,5 +1,5 @@
 import {
-  ProjectStatus,
+  Project,
   ProjectType,
   RewardCurrency,
 } from '../../../types/generated/graphql'
@@ -19,20 +19,22 @@ export type ProjectCreationVariables = {
   type?: ProjectType
 }
 
-export type ProjectUpdateVariables = {
-  projectId: number
-  title?: string
-  name?: string
-  image?: string
-  thumbnailImage?: string
-  shortDescription?: string
-  description?: string
-  expiresAt?: string
-  type?: ProjectType
-  rewardCurrency?: RewardCurrency
-  fundingGoal?: number
-  status?: ProjectStatus
-}
+export type ProjectUpdateVariables = Partial<
+  Pick<
+    Project,
+    | 'title'
+    | 'name'
+    | 'image'
+    | 'thumbnailImage'
+    | 'shortDescription'
+    | 'description'
+    | 'expiresAt'
+    | 'type'
+    | 'rewardCurrency'
+    | 'fundingGoal'
+    | 'status'
+  >
+>
 
 export type ProjectRewardCreationVariables = {
   projectId: number

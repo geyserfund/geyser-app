@@ -26,7 +26,7 @@ export const checkKeyValueExists = (
 
 export const checkDiff = <T extends {}>(
   val1: T,
-  val2: T,
+  val2: Partial<T>,
   keys?: (keyof T)[],
 ): boolean => {
   const loopVal =

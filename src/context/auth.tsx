@@ -31,7 +31,7 @@ const defaultContext: AuthContextProps = {
   async getAuthToken() {
     return false
   },
-  setUser(user: User) {},
+  setUser() {},
   followedProjects: [],
 }
 
@@ -57,7 +57,7 @@ type AuthContextProps = {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
   queryCurrentUser: () => void
   getAuthToken: () => Promise<boolean>
-  setUser: (user: User) => void
+  setUser: Dispatch<SetStateAction<User>>
   followedProjects: Project[]
 }
 
