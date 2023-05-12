@@ -12,7 +12,7 @@ import { PrivateRoute } from './PrivateRoute'
 
 // GRANTS
 
-const Grants = import(/* webpackChunkName: "grants" */ '../pages/grants')
+const Grants = import('../pages/grants')
 
 const GrantsLandingPage = loadable(() =>
   Grants.then((m) => m.GrantsLandingPage),
@@ -23,9 +23,7 @@ const GrantPage = loadable(() => Grants.then((m) => m.GrantPage))
 
 // PROJECT LAUNCH
 
-const ProjectLaunch = import(
-  /* webpackChunkName: "projectLaunch" */ '../pages/projectCreate'
-)
+const ProjectLaunch = import('../pages/projectCreate')
 
 const PublicProjectLaunchPage = loadable(() =>
   ProjectLaunch.then((m) => m.PublicProjectLaunchPage),
@@ -40,7 +38,7 @@ const ProjectCreate = loadable(() => ProjectLaunch.then((m) => m.ProjectCreate))
 
 // ENTRY VIEW & EDIT
 
-const Entry = import(/* webpackChunkName: "entryViewEdit" */ '../pages/entry')
+const Entry = import('../pages/entry')
 
 const EntryCreateEdit = loadable(() => Entry.then((m) => m.EntryCreateEdit))
 const EntryPreview = loadable(() => Entry.then((m) => m.EntryPreview))
@@ -48,9 +46,7 @@ const EntryPage = loadable(() => Entry.then((m) => m.EntryPage))
 
 // PROJECT DASHBOARD
 
-const CreatorDashboard = import(
-  /* webpackChunkName: "creatorDashboard" */ '../pages/projectDashboard'
-)
+const CreatorDashboard = import('../pages/projectDashboard')
 
 const ProjectDashboardPage = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectDashboardPage),
