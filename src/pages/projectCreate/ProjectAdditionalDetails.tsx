@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router'
 
-import { ButtonComponent } from '../../components/ui'
+import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { useProjectState } from '../../hooks/graphqlState'
@@ -10,6 +10,7 @@ import { useProjectLinksValidation } from '../../hooks/validations'
 import { toInt, useNotification } from '../../utils'
 import { truthyFilter } from '../../utils/array'
 import { ProjectRegion } from './components'
+import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectLinks } from './components/ProjectLinks'
 import { ProjectTagsCreateEdit } from './components/ProjectTagsCreateEdit'
@@ -18,9 +19,14 @@ export const ProjectAdditionalDetails = () => {
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
 
-  const { toast } = useNotification()
+  const { toast, unexpected } = useNotification()
 
-  const { loading, project, updateProject, saveProject } = useProjectState(
+  const {
+    loading: projectLoading,
+    project,
+    updateProject,
+    saveProject,
+  } = useProjectState(
     toInt(params.projectId),
     {
       onError() {
@@ -36,12 +42,22 @@ export const ProjectAdditionalDetails = () => {
   const { setLinks, linkError } = useProjectLinksValidation({
     updateProject,
   })
-  const { tags, setTags, saveTags } = useProjectTagsState({
+
+  const {
+    tags,
+    setTags,
+    saveTags,
+    loading: tagsLoading,
+  } = useProjectTagsState({
     project,
     updateProject,
   })
 
   const handleNext = async () => {
+    if (!project) {
+      return
+    }
+
     if (linkError.includes(true)) {
       toast({
         status: 'warning',
@@ -51,28 +67,44 @@ export const ProjectAdditionalDetails = () => {
       return
     }
 
-    saveTags()
-    saveProject()
-    navigate(getPath('launchProjectWithNode', params.projectId || ''))
+    try {
+      await saveTags()
+      await saveProject()
+      navigate(getPath('launchProjectStory', project.id))
+    } catch (e) {
+      unexpected()
+    }
   }
 
   const handleBack = () => {
-    navigate(`/launch/${params.projectId}`)
+    navigate(getPath('privateProjectLaunch'))
   }
 
-  if (loading) {
+  if (projectLoading) {
     return <Loader />
+  }
+
+  const nextProps = {
+    onClick: handleNext,
+    isLoading: tagsLoading,
+    isDisabled: tagsLoading,
   }
 
   return (
     <>
       <ProjectCreateLayout
+        continueButton={<FormContinueButton flexGrow={1} {...nextProps} />}
         handleBack={handleBack}
-        title="Project details"
-        subtitle="Step 2 of 3"
-        percentage={67}
+        title={
+          <TitleWithProgressBar
+            title="Links & tags"
+            subtitle="Create a project"
+            index={2}
+            length={4}
+          />
+        }
       >
-        <VStack width="100%" alignItems="flex-start" spacing="40px">
+        <VStack spacing={6}>
           <ProjectLinks
             links={project?.links.filter(truthyFilter) || []}
             setLinks={setLinks}
@@ -85,9 +117,7 @@ export const ProjectAdditionalDetails = () => {
             updateProject={updateProject}
           />
 
-          <ButtonComponent primary w="full" onClick={handleNext}>
-            Continue
-          </ButtonComponent>
+          <FormContinueButton width="100%" {...nextProps} />
         </VStack>
       </ProjectCreateLayout>
     </>

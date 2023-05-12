@@ -15,6 +15,7 @@ export enum PathName {
   projectDashboard = 'dashboard',
   preview = 'preview',
   launchProjectDetails = 'details',
+  launchProjectStory = 'story',
   node = 'node',
   discover = 'discover',
   dashboardDescription = 'description',
@@ -29,7 +30,7 @@ export enum PathName {
   entryId = ':entryId',
 }
 
-// TODO: These definitions are currently a WIP.
+// @TODO: These definitions are currently a WIP.
 // (Getting them started as part of the changes for
 // https://geyserteam.atlassian.net/browse/GT-207.)
 
@@ -60,6 +61,8 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.node}`,
   launchProjectDetails: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
+  launchProjectStory: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   projectDashboard: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,

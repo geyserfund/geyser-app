@@ -1,12 +1,11 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import { CalendarButton } from '../../../components/molecules'
-import { Body2, Caption } from '../../../components/typography'
-import { ButtonComponent } from '../../../components/ui'
+import { ProjectCreationVariables } from '../types'
 
 interface ProjectFundraisingDeadlineProps {
-  form: { expiresAt?: string }
+  form: Pick<ProjectCreationVariables, 'expiresAt'>
   setForm: (_: any) => void
 }
 
@@ -33,27 +32,23 @@ export const ProjectFundraisingDeadline = ({
   }
 
   return (
-    <VStack width="100%" alignItems="flex-start" spacing="5px">
-      <Body2>Fundraising deadline</Body2>
-      <HStack width="100%" spacing="20px">
-        <ButtonComponent
-          primary={selectedButton === 'ongoing'}
-          onClick={handleOngoingSelect}
-        >
-          Ongoing
-        </ButtonComponent>
-        <CalendarButton
-          primary={selectedButton === 'custom'}
-          value={selectedDate}
-          onChange={handleDateChange}
-        >
-          With Deadline
-        </CalendarButton>
-      </HStack>
-      <Caption>
-        Add a deadline for your project if you have one, or just keep it as
-        ongoing.
-      </Caption>
-    </VStack>
+    <HStack width="100%" spacing={4}>
+      <Button
+        w="50%"
+        variant="secondary"
+        isActive={selectedButton === 'ongoing'}
+        onClick={handleOngoingSelect}
+      >
+        Ongoing
+      </Button>
+      <CalendarButton
+        containerProps={{ w: '50%' }}
+        isActive={selectedButton === 'custom'}
+        value={selectedDate}
+        onChange={handleDateChange}
+      >
+        With Deadline
+      </CalendarButton>
+    </HStack>
   )
 }

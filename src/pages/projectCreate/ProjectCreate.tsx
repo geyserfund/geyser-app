@@ -1,46 +1,28 @@
-import { useLazyQuery } from '@apollo/client'
 import { VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { createUseStyles } from 'react-jss'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { Body2 } from '../../components/typography'
-import { ButtonComponent, TextInputBox } from '../../components/ui'
-import { getPath } from '../../constants'
-import { UserValidations } from '../../constants/validations'
+import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
+import { getPath, UserValidations } from '../../constants'
 import { useAuthContext } from '../../context'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
-import { FormError } from '../../types'
 import {
   CreateProjectMutation,
-  Project,
+  FormError,
   useCreateProjectMutation,
+  useProjectByNameOrIdLazyQuery,
   User,
   useUpdateProjectMutation,
-} from '../../types/generated/graphql'
-import { toInt, useNotification, validateEmail } from '../../utils'
+} from '../../types'
+import { useNotification, validateEmail } from '../../utils'
+import { FormContinueButton } from './components/FormContinueButton'
 import {
   ProjectCreateForm,
   ProjectCreateFormValidation,
 } from './components/ProjectCreateForm'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
-import { ProjectFundraisingDeadline } from './components/ProjectFundraisingDeadline'
-import { ProjectPreviewComponent } from './components/ProjectPreviewComponent'
 import { ProjectCreationVariables } from './types'
 
-const useStyles = createUseStyles({
-  backIcon: {
-    fontSize: '25px',
-  },
-  rowItem: {
-    width: '100%',
-    alignItems: 'flex-start',
-  },
-})
-
 export const ProjectCreate = () => {
-  const classes = useStyles()
-
   const params = useParams<{ projectId: string }>()
   const isEditingExistingProject = Boolean(params.projectId)
 
@@ -64,13 +46,13 @@ export const ProjectCreate = () => {
   >({})
 
   const [createProject, { loading: createLoading }] = useCreateProjectMutation({
-    onCompleted({ createProject: createdProject }) {
-      if (createdProject && createdProject.owners[0]) {
+    onCompleted({ createProject }) {
+      if (createProject && createProject.owners[0]) {
         const newOwnershipInfo = [
           ...user.ownerOf,
           {
-            project: createdProject,
-            owner: createdProject.owners[0],
+            project: createProject,
+            owner: createProject.owners[0],
           },
         ] satisfies CreateProjectMutation['createProject']['owners'][number]['user']['ownerOf']
 
@@ -84,7 +66,7 @@ export const ProjectCreate = () => {
             } as User),
         )
 
-        navigate(getPath('launchProjectDetails', createdProject.id))
+        navigate(getPath('launchProjectDetails', createProject.id))
       }
     },
     onError(error) {
@@ -109,17 +91,15 @@ export const ProjectCreate = () => {
     },
   })
 
-  const [getProjectById, { loading, data }] = useLazyQuery<{
-    project: Project
-  }>(QUERY_PROJECT_BY_NAME_OR_ID, {
-    variables: { where: { id: toInt(params.projectId) } },
+  const [getProjectById, { loading, data }] = useProjectByNameOrIdLazyQuery({
+    variables: { where: { id: Number(params.projectId) } },
     onCompleted(data) {
       if (data && data.project) {
         setForm({
           title: data.project.title,
           name: data.project.name,
-          image: `${data.project.image}`,
-          thumbnailImage: `${data.project.thumbnailImage}`,
+          image: data.project.image || '',
+          thumbnailImage: data.project.thumbnailImage || '',
           shortDescription: data.project.shortDescription,
           description: data.project.description,
           email: user.email || '',
@@ -128,42 +108,7 @@ export const ProjectCreate = () => {
     },
   })
 
-  useEffect(() => {
-    if (params.projectId) {
-      getProjectById()
-    }
-  }, [getProjectById, params.projectId])
-
-  const handleNextButtonTapped = () => {
-    const isValid = validateForm()
-    if (isValid) {
-      if (isEditingExistingProject && data?.project) {
-        updateProject({
-          variables: {
-            input: {
-              projectId: toInt(data.project.id),
-              title: form.title,
-              image: `${form.image}`,
-              thumbnailImage: `${form.thumbnailImage}`,
-              shortDescription: form.shortDescription,
-              description: form.description,
-            },
-          },
-        })
-      } else {
-        createProject({
-          variables: {
-            input: {
-              ...form,
-              email: user.email || form.email,
-            },
-          },
-        })
-      }
-    }
-  }
-
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     let { errors, isValid } = ProjectCreateFormValidation(form)
 
     if (!form.email && !user.email) {
@@ -182,52 +127,77 @@ export const ProjectCreate = () => {
     }
 
     return isValid
+  }, [form, user.email])
+
+  const handleNext = () => {
+    if (validateForm()) {
+      if (isEditingExistingProject && data?.project) {
+        updateProject({
+          variables: {
+            input: {
+              projectId: Number(data.project.id),
+              title: form.title,
+              image: form.image || '',
+              thumbnailImage: form.thumbnailImage || '',
+              shortDescription: form.shortDescription,
+              description: form.description,
+            },
+          },
+        })
+      } else {
+        createProject({
+          variables: {
+            input: {
+              ...form,
+              email: user.email || form.email,
+            },
+          },
+        })
+      }
+    }
   }
 
   const handleBack = () => {
-    navigate(getPath('publicProjectLaunch'))
+    navigate(
+      params.projectId
+        ? `${getPath('publicProjectLaunch')}/${params.projectId}`
+        : getPath('publicProjectLaunch'),
+    )
   }
 
-  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, email: event.target.value })
+  useEffect(() => {
+    if (params.projectId) {
+      getProjectById()
+    }
+  }, [getProjectById, params.projectId])
+
+  const nextProps = {
+    isLoading: loading || createLoading || updateLoading,
+    isDisabled: createLoading || updateLoading,
+    onClick: handleNext,
   }
 
   return (
     <ProjectCreateLayout
+      continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
       handleBack={handleBack}
-      sideView={<ProjectPreviewComponent data={form} />}
-      title="Project details"
-      subtitle="Step 1 of 3"
-      percentage={33}
+      title={
+        <TitleWithProgressBar
+          title="Project description"
+          subtitle="Create a project"
+          index={1}
+          length={4}
+        />
+      }
     >
-      <VStack width="100%" alignItems="flex-start" spacing="24px">
+      <VStack width="100%" alignItems="flex-start" spacing={6}>
         <ProjectCreateForm
           form={form}
           formError={formError}
           setForm={setForm}
           setFormError={setFormError}
         />
-        <ProjectFundraisingDeadline form={form} setForm={setForm} />
-
-        <VStack className={classes.rowItem} spacing="5px">
-          <Body2>Project E-mail</Body2>
-          <TextInputBox
-            name="email"
-            value={user.email || form.email}
-            onChange={handleEmail}
-            error={formError.email}
-            isDisabled={Boolean(user.email)}
-          />
-        </VStack>
-        <ButtonComponent
-          isLoading={loading || createLoading || updateLoading}
-          primary
-          w="full"
-          onClick={handleNextButtonTapped}
-          isDisabled={createLoading || updateLoading}
-        >
-          Next
-        </ButtonComponent>
+        <FormContinueButton width="100%" {...nextProps} />
       </VStack>
     </ProjectCreateLayout>
   )

@@ -14,11 +14,10 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
   ({ children, noborder, click, hover, ...rest }, ref) => {
     return (
       <Stack
-        ref={ref}
         as={rest.to ? Link : undefined}
         tabIndex={-1}
         overflow={'hidden'}
-        backgroundColor="white"
+        backgroundColor="neutral.0"
         border="2px solid"
         borderColor={noborder ? 'transparent' : 'brand.neutral200'}
         borderRadius="8px"
