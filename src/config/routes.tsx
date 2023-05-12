@@ -29,7 +29,7 @@ import { NotFoundPage } from '../pages/notFound'
 import { Profile } from '../pages/profile'
 import {
   ProjectContributors,
-  ProjectDashboard,
+  ProjectDashboardPage,
   ProjectDescription,
   ProjectDetails,
   ProjectFundingSettings,
@@ -118,7 +118,7 @@ const platformRoutes = [
   },
   {
     path: getPath('projectDashboard', PathName.projectId),
-    element: ProjectDashboard,
+    element: ProjectDashboardPage,
     authenticated: true,
     nested: [
       {

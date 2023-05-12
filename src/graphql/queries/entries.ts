@@ -1,32 +1,15 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_ENTRY_FOR_LANDING_PAGE } from '../fragments/entries'
+import {
+  FRAGMENT_ENTRY,
+  FRAGMENT_ENTRY_FOR_LANDING_PAGE,
+} from '../fragments/entries'
 
 export const QUERY_ENTRY = gql`
+  ${FRAGMENT_ENTRY}
   query Entry($id: BigInt!) {
     entry(id: $id) {
-      id
-      title
-      description
-      image
-      published
-      content
-      createdAt
-      updatedAt
-      publishedAt
-      status
-      fundersCount
-      type
-      creator {
-        id
-        username
-        imageUrl
-      }
-      project {
-        id
-        title
-        name
-      }
+      ...Entry
     }
   }
 `

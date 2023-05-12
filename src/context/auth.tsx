@@ -17,6 +17,7 @@ import { Project, User } from '../types/generated/graphql'
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
   user: defaultUser,
+  isAnonymous: true,
   loading: false,
   error: undefined,
   login() {},
@@ -30,7 +31,7 @@ const defaultContext: AuthContextProps = {
   async getAuthToken() {
     return false
   },
-  setUser(user: User) {},
+  setUser() {},
   followedProjects: [],
 }
 
@@ -44,6 +45,7 @@ export type NavContextProps = {
 type AuthContextProps = {
   isLoggedIn: boolean
   user: User
+  isAnonymous: boolean
   loading: boolean
   error?: ApolloError
   login: (me: User) => void
@@ -55,7 +57,7 @@ type AuthContextProps = {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
   queryCurrentUser: () => void
   getAuthToken: () => Promise<boolean>
-  setUser: (user: User) => void
+  setUser: Dispatch<SetStateAction<User>>
   followedProjects: Project[]
 }
 
@@ -142,6 +144,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setInitialLoad(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -156,12 +159,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (initialLoad) {
       setLoading(loadingUser)
     }
-  }, [loadingUser])
+  }, [initialLoad, loadingUser])
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        isAnonymous: !(user && user.id),
         queryCurrentUser,
         setUser,
         loading,

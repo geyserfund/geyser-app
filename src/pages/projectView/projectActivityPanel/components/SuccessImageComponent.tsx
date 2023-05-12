@@ -31,6 +31,10 @@ export const SuccessImageComponent = ({
 
   const { project } = useProjectContext()
 
+  if (!project) {
+    return null
+  }
+
   const handleDownload = async () => {
     try {
       const dataUrl = await getDataUrl()

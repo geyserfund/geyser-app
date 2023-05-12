@@ -47,7 +47,7 @@ import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOpti
 import { TNodeInput } from './types'
 
 type Props = {
-  project: ProjectFragment
+  project: ProjectFragment | null
   onProjectLaunchSelected: (_: CreateWalletInput) => void
   onSaveAsDraftSelected?: (_: CreateWalletInput) => void
   triggerWallet?: boolean
@@ -142,7 +142,7 @@ export const ProjectCreationWalletConnectionForm = ({
       resourceId: number
       resourceType: WalletResourceType
     } = {
-      resourceId: toInt(project.id),
+      resourceId: toInt(project?.id),
       resourceType: WalletResourceType.Project,
     }
 
