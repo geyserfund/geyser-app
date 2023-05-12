@@ -15,10 +15,6 @@ import { AiOutlineSetting } from 'react-icons/ai'
 import { BiRocket } from 'react-icons/bi'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
-import AlbyPNG from '../../assets/images/third-party-icons/alby@3x.png'
-import BitNobPNG from '../../assets/images/third-party-icons/bitnob@3x.png'
-import WalletOfSatoshiPNG from '../../assets/images/third-party-icons/wallet-of-satoshi@3x.png'
-import VoltageLogoSmall from '../../assets/voltage-logo-small.svg'
 import {
   ButtonComponent,
   TextInputBox,
@@ -27,10 +23,14 @@ import {
 import Loader from '../../components/ui/Loader'
 import {
   AlbyLightningAddressURL,
+  AlbyUrl,
   BitNobURL,
+  BitnobUrl,
   GeyserTermsAndConditionsURL,
   VoltageExplainerPageForGeyserURL,
+  VoltageUrl,
   WalletOfSatoshiLightningAddressURL,
+  WalletOfSatoshiUrl,
 } from '../../constants'
 import { colors } from '../../styles'
 import {
@@ -320,7 +320,7 @@ export const ProjectCreationWalletConnectionForm = ({
                 >
                   <UndecoratedLink isExternal href={AlbyLightningAddressURL}>
                     <HStack>
-                      <Image src={AlbyPNG} height="24px" />
+                      <Image src={AlbyUrl} height="24px" />
                       <Text fontSize={'12px'} fontWeight={'bold'}>
                         Alby
                       </Text>
@@ -328,11 +328,11 @@ export const ProjectCreationWalletConnectionForm = ({
                   </UndecoratedLink>
 
                   <Link isExternal href={WalletOfSatoshiLightningAddressURL}>
-                    <Image src={WalletOfSatoshiPNG} height="24px" />
+                    <Image src={WalletOfSatoshiUrl} height="24px" />
                   </Link>
 
                   <Link isExternal href={BitNobURL}>
-                    <Image src={BitNobPNG} height="24px" />
+                    <Image src={BitnobUrl} height="24px" />
                   </Link>
                 </HStack>
               </WalletConnectionOptionInfoBox>
@@ -360,7 +360,7 @@ export const ProjectCreationWalletConnectionForm = ({
               >
                 <HStack width={'full'} justifyContent={'flex-start'}>
                   <Link isExternal href={VoltageExplainerPageForGeyserURL}>
-                    <Image src={VoltageLogoSmall} />
+                    <Image src={VoltageUrl} />
                   </Link>
                 </HStack>
               </WalletConnectionOptionInfoBox>

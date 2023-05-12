@@ -4,7 +4,7 @@ import { HTMLChakraProps } from '@chakra-ui/system'
 import { createUseStyles } from 'react-jss'
 import { useNavigate } from 'react-router'
 
-import geyserBlack from '../../assets/images/geyser-short-black.svg'
+import geyserBlack from '../../assets/logo-dark.svg'
 
 interface ILogoP extends HTMLChakraProps<'div'> {
   className?: string

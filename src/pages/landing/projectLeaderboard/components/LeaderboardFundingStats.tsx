@@ -1,7 +1,7 @@
 import { HStack, Image, StackProps } from '@chakra-ui/react'
 
-import { SatoshiPng } from '../../../../assets'
 import { Caption, MonoBody1 } from '../../../../components/typography'
+import { SatoshiUrl } from '../../../../constants'
 import { Project } from '../../../../types'
 import { getShortAmountLabel } from '../../../../utils'
 
@@ -22,7 +22,7 @@ export const LeaderboardFundingStats = ({
         <Caption>FUNDERS</Caption>
       </HStack>
       <HStack spacing="4px">
-        <Image src={SatoshiPng} height="18px" />
+        <Image src={SatoshiUrl} height="18px" />
         <MonoBody1 semiBold>{getShortAmountLabel(funded)}</MonoBody1>
         <Caption>FUNDED</Caption>
       </HStack>

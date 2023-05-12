@@ -146,6 +146,13 @@ export const NoResultsSearchUrl =
 export const ProjectLaunch3DUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/project-launch-3d.png'
 
+export const FeedLoggedOutUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/feedLoggedOut.svg'
+export const FollowAProjectUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/followAProject.svg'
+export const ProjectEntryThumbnailPlaceholderUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/projectEntryThumbnailPlaceholder.svg'
+
 // Geyser Notion Links
 
 export const GrantsFAQUrl =
@@ -186,3 +193,39 @@ export const Grant2AnnouncementImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/grant-2-announcement.png'
 export const Grant2AnnouncementTwitterUrl =
   'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
+
+// PLATFORMS
+
+export const VoltageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/voltage.png'
+export const AlbyUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/alby.png'
+export const BitnobUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/bitnob.png'
+export const WalletOfSatoshiUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/walletOfSatoshi.png'
+
+// ICONS
+
+export const CrownUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/crown.png'
+export const EnvelopeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/envelope.png'
+export const GiftUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/gift.png'
+export const HourglassUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/hourglass.png'
+export const MagnifyUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/magnify.png'
+export const MedalUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/medal.png'
+export const RopeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/rope.png'
+export const SatoshiUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/satoshi.png'
+export const StarUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/star.png'
+export const TrophyUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/trophy.png'
+export const LightningUrl =
+  'https://storage.googleapis.com/geyser-projects-media/icons/lightning.png'

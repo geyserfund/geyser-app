@@ -3,11 +3,10 @@ import { Box } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg'
 import { ProjectNav } from '../../components/nav'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config/Head'
-import { getPath } from '../../constants'
+import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useProjectContext } from '../../context'
 import { ProjectProvider } from '../../context'
 import { useFundingFlow, useFundingFormState } from '../../hooks'
@@ -116,7 +115,11 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
         <Head
           title={`${entry.title} - ${project.title}`}
           description={entry.description}
-          image={entry.image || entry.project?.image || GeyserTempImage}
+          image={
+            entry.image ||
+            entry.project?.image ||
+            ProjectEntryThumbnailPlaceholderUrl
+          }
         />
         <EntryContainer
           entry={entry}

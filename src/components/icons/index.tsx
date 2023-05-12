@@ -3,24 +3,26 @@ import { Box } from '@chakra-ui/layout'
 import { ImageProps } from '@chakra-ui/react'
 
 import BoltSvg from '../../assets/bolt.svg'
-import CrownPng from '../../assets/crown.png'
-import EnvelopePng from '../../assets/envelope.png'
 import GifSvg from '../../assets/gif.svg'
-import GiftPng from '../../assets/gift.png'
-import HourglassPng from '../../assets/hourglass.png'
 import InfoSvg from '../../assets/i.svg'
-import LightningPng from '../../assets/lightning.png'
-import MagnifyPng from '../../assets/magnify.png'
-import MedalPng from '../../assets/medal.png'
 import QrSvg from '../../assets/qr.svg'
-import RopePng from '../../assets/rope.png'
-import SatoshiPng from '../../assets/satoshi.png'
 import SatoshiTilted from '../../assets/satoshi-tilted.svg'
 import SatoshiTiltedDash from '../../assets/satoshi-tilted-dash.svg'
 import ShareSvg from '../../assets/share.svg'
-import StarPng from '../../assets/star.png'
-import TrophyPng from '../../assets/trophy.png'
-import { FountainLogoUrl } from '../../constants'
+import {
+  CrownUrl,
+  EnvelopeUrl,
+  FountainLogoUrl,
+  GiftUrl,
+  HourglassUrl,
+  LightningUrl,
+  MagnifyUrl,
+  MedalUrl,
+  RopeUrl,
+  SatoshiUrl,
+  StarUrl,
+  TrophyUrl,
+} from '../../constants'
 
 interface SatoshiIconProps extends ImageProps {
   scale?: number
@@ -55,7 +57,7 @@ export const SatoshiIcon = ({
         minHeight={`${26 * scale}px`}
         width={`${14 * scale}px`}
         minWidth={`${14 * scale}px`}
-        src={SatoshiPng}
+        src={SatoshiUrl}
         alt="satoshi"
         {...rest}
       />
@@ -106,7 +108,7 @@ export const SatoshiIconTilted = ({
 
 export const StarIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image height="20px" width="20px" src={StarPng} alt="star" {...props} />
+    <Image height="20px" width="20px" src={StarUrl} alt="star" {...props} />
   </Box>
 )
 
@@ -115,7 +117,7 @@ export const MagnifyGlassIcon = (props: ImageProps) => (
     <Image
       height="20px"
       width="20px"
-      src={MagnifyPng}
+      src={MagnifyUrl}
       alt="magnify glass"
       {...props}
     />
@@ -124,7 +126,7 @@ export const MagnifyGlassIcon = (props: ImageProps) => (
 
 export const MedalIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image height="20px" width="20px" src={MedalPng} alt="medal" {...props} />
+    <Image height="20px" width="20px" src={MedalUrl} alt="medal" {...props} />
   </Box>
 )
 
@@ -133,7 +135,7 @@ export const LightningIcon = (props: ImageProps) => (
     <Image
       height="20px"
       width="20px"
-      src={LightningPng}
+      src={LightningUrl}
       alt="lightning"
       {...props}
     />
@@ -142,13 +144,13 @@ export const LightningIcon = (props: ImageProps) => (
 
 export const TrophyIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image height="20px" width="20px" src={TrophyPng} alt="trophy" {...props} />
+    <Image height="20px" width="20px" src={TrophyUrl} alt="trophy" {...props} />
   </Box>
 )
 
 export const CrownIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image height="20px" width="20px" src={CrownPng} alt="crown" {...props} />
+    <Image height="20px" width="20px" src={CrownUrl} alt="crown" {...props} />
   </Box>
 )
 
@@ -157,7 +159,7 @@ export const HourglassIcon = (props: ImageProps) => (
     <Image
       height="20px"
       width="20px"
-      src={HourglassPng}
+      src={HourglassUrl}
       alt="hourglass"
       {...props}
     />
@@ -166,7 +168,7 @@ export const HourglassIcon = (props: ImageProps) => (
 
 export const GiftIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image height="20px" width="20px" src={GiftPng} alt="gift" {...props} />
+    <Image height="20px" width="20px" src={GiftUrl} alt="gift" {...props} />
   </Box>
 )
 
@@ -181,7 +183,7 @@ export const EnvelopeIcon = (props: ImageProps) => (
     <Image
       height="20px"
       width="20px"
-      src={EnvelopePng}
+      src={EnvelopeUrl}
       alt="envelope"
       {...props}
     />
@@ -190,7 +192,7 @@ export const EnvelopeIcon = (props: ImageProps) => (
 
 export const RopeIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image height="20px" width="20px" src={RopePng} alt="rope" {...props} />
+    <Image height="20px" width="20px" src={RopeUrl} alt="rope" {...props} />
   </Box>
 )
 

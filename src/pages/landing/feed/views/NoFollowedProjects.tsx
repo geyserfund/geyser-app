@@ -2,8 +2,8 @@ import { Box, Button, Image, VStack } from '@chakra-ui/react'
 import { BiRightArrow } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
-import { FollowAProjectImage } from '../../../../assets'
 import { Body1 } from '../../../../components/typography'
+import { FollowAProjectUrl } from '../../../../constants'
 import { colors } from '../../../../styles'
 
 export const NoFollowedProjects = () => {
@@ -14,7 +14,7 @@ export const NoFollowedProjects = () => {
           w="full"
           h="auto"
           alt="feed-logged-out"
-          src={FollowAProjectImage}
+          src={FollowAProjectUrl}
         />
       </Box>
       <VStack w="full">
