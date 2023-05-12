@@ -2,10 +2,10 @@ import { Button, HStack } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import { CalendarButton } from '../../../../components/molecules'
-import { ProjectCreationVariables } from '../types'
+import { ProjectCreationVariables, ProjectUpdateVariables } from '../types'
 
 interface ProjectFundraisingDeadlineProps {
-  form: Pick<ProjectCreationVariables, 'expiresAt'>
+  form: Pick<ProjectCreationVariables | ProjectUpdateVariables, 'expiresAt'>
   setForm: (_: any) => void
 }
 
