@@ -1,9 +1,9 @@
 import { Box, Button } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
-import { ProjectLinkInput } from '../../../components/inputs'
-import { getIconForLink } from '../../../helpers/getIconForLinks'
-import { Maybe } from '../../../types'
+import { ProjectLinkInput } from '../../../../components/inputs'
+import { getIconForLink } from '../../../../helpers/getIconForLinks'
+import { Maybe } from '../../../../types'
 import { FormInputContainer } from './FormInputContainer'
 
 interface ProjectLinksProps {
