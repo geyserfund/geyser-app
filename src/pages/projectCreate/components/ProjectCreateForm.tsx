@@ -19,7 +19,7 @@ import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { colors } from '../../../styles'
 import { FormError, Project } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
-import { ProjectCreationVariables } from '../types'
+import { ProjectCreationVariables, ProjectUpdateVariables } from '../types'
 import { FormInputContainer } from './FormInputContainer'
 import { ProjectFundraisingDeadline } from './ProjectFundraisingDeadline'
 
@@ -36,10 +36,12 @@ type ProjectCreate = {
 
 interface ProjectCreateFormProps {
   isEdit?: boolean
-  form: ProjectCreationVariables
+  form: ProjectCreationVariables | ProjectUpdateVariables
   formError: FormError<ProjectCreate>
   setFormError: any
-  setForm: Dispatch<SetStateAction<ProjectCreationVariables>>
+  setForm: Dispatch<
+    SetStateAction<ProjectCreationVariables | ProjectUpdateVariables>
+  >
 }
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
@@ -319,7 +321,7 @@ export const ProjectCreateForm = ({
       >
         <TextInputBox
           name="email"
-          value={user.email || form.email}
+          value={user.email || ('email' in form ? form.email : '')}
           onChange={handleEmail}
           error={formError.email}
           isDisabled={Boolean(user.email)}

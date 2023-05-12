@@ -70,7 +70,7 @@ export const ProjectAdditionalDetails = () => {
     try {
       await saveTags()
       await saveProject()
-      navigate(getPath('launchProjectStory', project.id))
+      navigate(getPath('launchProjectStory', project?.id))
     } catch (e) {
       unexpected()
     }

@@ -24,9 +24,8 @@ export const ProjectDescription = () => {
 
   const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
-  const [form, setForm] = useState<
-    ProjectUpdateVariables & { projectId: string | number }
-  >({
+  // @TODO: Figure a better way to type the form to reuse with create flow
+  const [form, setForm] = useState<any>({
     projectId: project?.id || '',
     title: '',
     shortDescription: '',

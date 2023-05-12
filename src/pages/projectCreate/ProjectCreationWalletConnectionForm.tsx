@@ -11,7 +11,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BiRocket } from 'react-icons/bi'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
@@ -46,13 +46,27 @@ import { ProjectCreateCompleted } from './components/ProjectCreateCompleted'
 import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox'
 import { TNodeInput } from './types'
 
-type Props = {
-  project: ProjectFragment | null
-  triggerWallet?: boolean
-  isReadyForLaunch: boolean
-  setNodeInput?: React.Dispatch<React.SetStateAction<TNodeInput | undefined>>
-  setReadyForLaunch: React.Dispatch<React.SetStateAction<boolean>>
-}
+type Props =
+  | {
+      project: ProjectFragment | null
+      triggerWallet?: boolean
+      isReadyForLaunch: boolean
+      setNodeInput?: React.Dispatch<
+        React.SetStateAction<TNodeInput | undefined>
+      >
+      setReadyForLaunch: React.Dispatch<React.SetStateAction<boolean>>
+      onNextClick?: undefined
+    }
+  | {
+      project: ProjectFragment | null
+      triggerWallet?: boolean
+      onNextClick(): void
+      isReadyForLaunch?: undefined
+      setReadyForLaunch?: undefined
+      setNodeInput?: React.Dispatch<
+        React.SetStateAction<TNodeInput | undefined>
+      >
+    }
 
 export enum ConnectionOption {
   LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
@@ -66,15 +80,20 @@ export enum LNAddressEvaluationState {
   SUCCEEDED = 'SUCCEEDED',
 }
 
+const noop = () => {}
+
 export const ProjectCreationWalletConnectionForm = ({
   project,
-  setReadyForLaunch,
   isReadyForLaunch,
+  triggerWallet,
+  setReadyForLaunch,
+  onNextClick,
+  setNodeInput: setParentNode = noop,
 }: Props) => {
   const navigate = useNavigate()
   const { toast } = useNotification()
 
-  const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined)
+  const [nodeInput, setNode] = useState<TNodeInput | undefined>(undefined)
 
   const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
 
@@ -94,7 +113,8 @@ export const ProjectCreationWalletConnectionForm = ({
   } = useDisclosure()
 
   const onSubmit = (value: TNodeInput) => {
-    setNodeInput(value)
+    setNode(value)
+    setParentNode(value)
   }
 
   const handleSavingAsDraft = async () => {
@@ -104,6 +124,12 @@ export const ProjectCreationWalletConnectionForm = ({
 
     navigate(getPath('project', project.name))
   }
+
+  useEffect(() => {
+    if (triggerWallet) {
+      openWallet()
+    }
+  }, [openWallet, triggerWallet])
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
     useLightningAddressVerifyLazyQuery({
@@ -189,7 +215,39 @@ export const ProjectCreationWalletConnectionForm = ({
     }
   }
 
-  const handleProjectLaunchSelected = async () => {
+  const handleNext = async () => {
+    if (onNextClick) {
+      try {
+        await handleLaunch()
+        return onNextClick()
+      } catch (error) {
+        toast({
+          title: 'Something went wrong',
+          description: `${error}`,
+          status: 'error',
+        })
+      }
+
+      return
+    }
+
+    setReadyForLaunch(true)
+  }
+
+  const onLaunchClick = async () => {
+    try {
+      await handleLaunch()
+      navigate(getPath('project', project?.name))
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `${error}`,
+        status: 'error',
+      })
+    }
+  }
+
+  const handleLaunch = async () => {
     await validateLightningAddress()
 
     if (!createWalletInput) {
@@ -201,16 +259,7 @@ export const ProjectCreationWalletConnectionForm = ({
       return
     }
 
-    try {
-      await createWallet({ variables: { input: createWalletInput } })
-      navigate(getPath('project', project?.name))
-    } catch (error) {
-      toast({
-        title: 'Something went wrong',
-        description: `${error}`,
-        status: 'error',
-      })
-    }
+    await createWallet({ variables: { input: createWalletInput } })
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
@@ -238,7 +287,7 @@ export const ProjectCreationWalletConnectionForm = ({
               variant="primary"
               w="full"
               leftIcon={<BiRocket />}
-              onClick={handleProjectLaunchSelected}
+              onClick={onLaunchClick}
               isLoading={isCreateWalletLoading}
               disabled={
                 isSubmitEnabled === false ||
@@ -386,10 +435,7 @@ export const ProjectCreationWalletConnectionForm = ({
         </VStack>
       </RadioGroup>
 
-      <FormContinueButton
-        width="100%"
-        onClick={() => setReadyForLaunch(true)}
-      />
+      <FormContinueButton width="100%" onClick={handleNext} />
 
       <NodeAdditionModal
         isOpen={isWalletOpen}
