@@ -1,14 +1,14 @@
 import { VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router'
 
-import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
-import Loader from '../../components/ui/Loader'
-import { getPath } from '../../constants'
-import { useProjectState } from '../../hooks/graphqlState'
-import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
-import { useProjectLinksValidation } from '../../hooks/validations'
-import { toInt, useNotification } from '../../utils'
-import { truthyFilter } from '../../utils/array'
+import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar'
+import Loader from '../../../components/ui/Loader'
+import { getPath } from '../../../constants'
+import { useProjectState } from '../../../hooks/graphqlState'
+import { useProjectTagsState } from '../../../hooks/graphqlState/useProjectTagsState'
+import { useProjectLinksValidation } from '../../../hooks/validations'
+import { toInt, useNotification } from '../../../utils'
+import { truthyFilter } from '../../../utils/array'
 import { ProjectRegion } from './components'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
@@ -54,10 +54,6 @@ export const ProjectAdditionalDetails = () => {
   })
 
   const handleNext = async () => {
-    if (!project) {
-      return
-    }
-
     if (linkError.includes(true)) {
       toast({
         status: 'warning',
@@ -70,18 +66,14 @@ export const ProjectAdditionalDetails = () => {
     try {
       await saveTags()
       await saveProject()
-      navigate(getPath('launchProjectStory', project?.id))
+      navigate(getPath('launchProjectStory', project.id))
     } catch (e) {
       unexpected()
     }
   }
 
   const handleBack = () => {
-    navigate(
-      params.projectId
-        ? `${getPath('privateProjectLaunch')}/${params.projectId}`
-        : getPath('privateProjectLaunch'),
-    )
+    navigate(getPath('privateProjectLaunch'))
   }
 
   if (projectLoading) {

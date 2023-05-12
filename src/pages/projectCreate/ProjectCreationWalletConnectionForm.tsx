@@ -11,26 +11,26 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BiRocket } from 'react-icons/bi'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 
-import { TextInputBox, UndecoratedLink } from '../../components/ui'
-import Loader from '../../components/ui/Loader'
+import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png'
+import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png'
+import WalletOfSatoshiPNG from '../../../assets/images/third-party-icons/wallet-of-satoshi@3x.png'
+import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg'
+import { TextInputBox, UndecoratedLink } from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
 import {
   AlbyLightningAddressURL,
-  AlbyUrl,
   BitNobURL,
-  BitnobUrl,
   getPath,
   VoltageExplainerPageForGeyserURL,
-  VoltageUrl,
   WalletOfSatoshiLightningAddressURL,
-  WalletOfSatoshiUrl,
-} from '../../constants'
-import { colors } from '../../styles'
+} from '../../../constants'
+import { colors } from '../../../styles'
 import {
   CreateWalletInput,
   LndNodeType,
@@ -38,35 +38,21 @@ import {
   useCreateWalletMutation,
   useLightningAddressVerifyLazyQuery,
   WalletResourceType,
-} from '../../types/generated/graphql'
-import { toInt, useNotification, validateEmail } from '../../utils'
+} from '../../../types/generated/graphql'
+import { toInt, useNotification, validateEmail } from '../../../utils'
 import { FormContinueButton } from './components/FormContinueButton'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
 import { ProjectCreateCompleted } from './components/ProjectCreateCompleted'
 import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox'
 import { TNodeInput } from './types'
 
-type Props =
-  | {
-      project: ProjectFragment | null
-      triggerWallet?: boolean
-      isReadyForLaunch: boolean
-      setNodeInput?: React.Dispatch<
-        React.SetStateAction<TNodeInput | undefined>
-      >
-      setReadyForLaunch: React.Dispatch<React.SetStateAction<boolean>>
-      onNextClick?: undefined
-    }
-  | {
-      project: ProjectFragment | null
-      triggerWallet?: boolean
-      onNextClick(): void
-      isReadyForLaunch?: undefined
-      setReadyForLaunch?: undefined
-      setNodeInput?: React.Dispatch<
-        React.SetStateAction<TNodeInput | undefined>
-      >
-    }
+type Props = {
+  project: ProjectFragment | null
+  triggerWallet?: boolean
+  isReadyForLaunch: boolean
+  setNodeInput?: React.Dispatch<React.SetStateAction<TNodeInput | undefined>>
+  setReadyForLaunch: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 export enum ConnectionOption {
   LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
@@ -80,20 +66,15 @@ export enum LNAddressEvaluationState {
   SUCCEEDED = 'SUCCEEDED',
 }
 
-const noop = () => {}
-
 export const ProjectCreationWalletConnectionForm = ({
   project,
-  isReadyForLaunch,
-  triggerWallet,
   setReadyForLaunch,
-  onNextClick,
-  setNodeInput: setParentNode = noop,
+  isReadyForLaunch,
 }: Props) => {
   const navigate = useNavigate()
   const { toast } = useNotification()
 
-  const [nodeInput, setNode] = useState<TNodeInput | undefined>(undefined)
+  const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined)
 
   const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
 
@@ -113,8 +94,7 @@ export const ProjectCreationWalletConnectionForm = ({
   } = useDisclosure()
 
   const onSubmit = (value: TNodeInput) => {
-    setNode(value)
-    setParentNode(value)
+    setNodeInput(value)
   }
 
   const handleSavingAsDraft = async () => {
@@ -124,12 +104,6 @@ export const ProjectCreationWalletConnectionForm = ({
 
     navigate(getPath('project', project.name))
   }
-
-  useEffect(() => {
-    if (triggerWallet) {
-      openWallet()
-    }
-  }, [openWallet, triggerWallet])
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
     useLightningAddressVerifyLazyQuery({
@@ -215,39 +189,7 @@ export const ProjectCreationWalletConnectionForm = ({
     }
   }
 
-  const handleNext = async () => {
-    if (onNextClick) {
-      try {
-        await handleLaunch()
-        return onNextClick()
-      } catch (error) {
-        toast({
-          title: 'Something went wrong',
-          description: `${error}`,
-          status: 'error',
-        })
-      }
-
-      return
-    }
-
-    setReadyForLaunch(true)
-  }
-
-  const onLaunchClick = async () => {
-    try {
-      await handleLaunch()
-      navigate(getPath('project', project?.name))
-    } catch (error) {
-      toast({
-        title: 'Something went wrong',
-        description: `${error}`,
-        status: 'error',
-      })
-    }
-  }
-
-  const handleLaunch = async () => {
+  const handleProjectLaunchSelected = async () => {
     await validateLightningAddress()
 
     if (!createWalletInput) {
@@ -259,7 +201,16 @@ export const ProjectCreationWalletConnectionForm = ({
       return
     }
 
-    await createWallet({ variables: { input: createWalletInput } })
+    try {
+      await createWallet({ variables: { input: createWalletInput } })
+      navigate(getPath('project', project?.name))
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `${error}`,
+        status: 'error',
+      })
+    }
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
@@ -287,7 +238,7 @@ export const ProjectCreationWalletConnectionForm = ({
               variant="primary"
               w="full"
               leftIcon={<BiRocket />}
-              onClick={onLaunchClick}
+              onClick={handleProjectLaunchSelected}
               isLoading={isCreateWalletLoading}
               disabled={
                 isSubmitEnabled === false ||
@@ -386,7 +337,7 @@ export const ProjectCreationWalletConnectionForm = ({
               <HStack width={'full'} justifyContent={'flex-start'} spacing={4}>
                 <UndecoratedLink isExternal href={AlbyLightningAddressURL}>
                   <HStack>
-                    <Image src={AlbyUrl} height="24px" />
+                    <Image src={AlbyPNG} height="24px" />
                     <Text fontSize={'12px'} fontWeight={'bold'}>
                       Alby
                     </Text>
@@ -394,11 +345,11 @@ export const ProjectCreationWalletConnectionForm = ({
                 </UndecoratedLink>
 
                 <Link isExternal href={WalletOfSatoshiLightningAddressURL}>
-                  <Image src={WalletOfSatoshiUrl} height="24px" />
+                  <Image src={WalletOfSatoshiPNG} height="24px" />
                 </Link>
 
                 <Link isExternal href={BitNobURL}>
-                  <Image src={BitnobUrl} height="24px" />
+                  <Image src={BitNobPNG} height="24px" />
                 </Link>
               </HStack>
             </WalletConnectionOptionInfoBox>
@@ -427,7 +378,7 @@ export const ProjectCreationWalletConnectionForm = ({
             >
               <HStack>
                 <Link isExternal href={VoltageExplainerPageForGeyserURL}>
-                  <Image src={VoltageUrl} />
+                  <Image src={VoltageLogoSmall} />
                 </Link>
               </HStack>
             </WalletConnectionOptionInfoBox>
@@ -435,7 +386,10 @@ export const ProjectCreationWalletConnectionForm = ({
         </VStack>
       </RadioGroup>
 
-      <FormContinueButton width="100%" onClick={handleNext} />
+      <FormContinueButton
+        width="100%"
+        onClick={() => setReadyForLaunch(true)}
+      />
 
       <NodeAdditionModal
         isOpen={isWalletOpen}
