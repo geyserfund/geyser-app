@@ -75,7 +75,11 @@ export const GradientBanner = () => {
             }}
             marginBottom={{ base: '70px', lg: '60px' }}
           >
-            <Image src={LetTheSatsFlow} maxHeight="76px" />
+            <Image
+              src={LetTheSatsFlow}
+              maxHeight="76px"
+              alt="landing-header-image"
+            />
           </VStack>
 
           <VStack

@@ -25,7 +25,15 @@ export const AvatarElement = ({
 }: IAvatarElement) => {
   const image = user?.imageUrl || getRandomOrb(seed || 1)
 
-  const avatar = <Avatar size="xs" borderRadius="4px" src={image} {...rest} />
+  const avatar = (
+    <Avatar
+      size="xs"
+      borderRadius="4px"
+      src={image}
+      alt={user ? `user-${user.username}-avatar` : 'anonymous-avatar'}
+      {...rest}
+    />
+  )
 
   if (avatarOnly || !user) {
     return <Box {...wrapperProps}>{avatar}</Box>
