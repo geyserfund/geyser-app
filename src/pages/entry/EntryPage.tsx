@@ -33,8 +33,7 @@ export const EntryPage = () => {
         navigate(getPath('notFound'))
       }
     },
-    onError(error) {
-      console.error(error)
+    onError() {
       navigate(getPath('notFound'))
     },
   })

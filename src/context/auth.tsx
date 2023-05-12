@@ -129,10 +129,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     setUser(defaultUser)
     setFollowedProjects([])
-
-    fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
-      credentials: 'include',
-    }).catch((error) => console.error(error))
+    try {
+      fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
+        credentials: 'include',
+      })
+    } catch {}
   }
 
   useEffect(() => {
