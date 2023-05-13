@@ -39,8 +39,10 @@ export type Scalars = {
   cost_Int_NotNull_min_1_max_1000000: any
   description_String_NotNull_maxLength_250: any
   description_String_NotNull_maxLength_2200: any
+  description_String_NotNull_maxLength_4000: any
   description_String_maxLength_250: any
   description_String_maxLength_2200: any
+  description_String_maxLength_4000: any
   donationAmount_Int_NotNull_min_1: any
   email_String_NotNull_format_email: any
   email_String_format_email: any
@@ -159,7 +161,7 @@ export type CreateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']>
   /** A short description of the project. */
-  description: Scalars['description_String_NotNull_maxLength_2200']
+  description: Scalars['description_String_NotNull_maxLength_4000']
   email: Scalars['email_String_NotNull_format_email']
   expiresAt?: InputMaybe<Scalars['Date']>
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>
@@ -236,7 +238,7 @@ export type Entry = {
   /** Number of funders that were created from the Entry's page. */
   fundersCount: Scalars['Int']
   /** Funding transactions that were created from the Entry's page. */
-  fundingTxs: Array<Maybe<FundingTx>>
+  fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
   /** Header image of the Entry. */
   image?: Maybe<Scalars['String']>
@@ -296,7 +298,7 @@ export type Funder = {
   /** Funder's funding txs. */
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
-  rewards: Array<Maybe<FunderReward>>
+  rewards: Array<FunderReward>
   /** Number of (confirmed) times a Funder funded a particular project. */
   timesFunded?: Maybe<Scalars['Int']>
   user?: Maybe<User>
@@ -575,14 +577,14 @@ export type GetProjectsMostFundedOfTheWeekInput = {
 
 export type Grant = {
   __typename?: 'Grant'
-  applicants: Array<Maybe<GrantApplicant>>
+  applicants: Array<GrantApplicant>
   balance: Scalars['Int']
   description?: Maybe<Scalars['String']>
   id: Scalars['BigInt']
   image?: Maybe<Scalars['String']>
   name: Scalars['String']
   shortDescription: Scalars['String']
-  sponsors: Array<Maybe<Sponsor>>
+  sponsors: Array<Sponsor>
   status: GrantStatusEnum
   statuses: Array<GrantStatus>
   title: Scalars['String']
@@ -976,45 +978,45 @@ export type PaginationInput = {
 export type Project = {
   __typename?: 'Project'
   /** @deprecated Field no longer supported */
-  ambassadors: Array<Maybe<Ambassador>>
+  ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
   /** Boolean flag to indicate if the project can be deleted. */
   canDelete: Scalars['Boolean']
   createdAt: Scalars['String']
   /** Description of the project. */
-  description?: Maybe<Scalars['description_String_maxLength_2200']>
+  description?: Maybe<Scalars['description_String_maxLength_4000']>
   /**
    * By default, returns all the entries of a project, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
    * An unpublished entry is only returned if the requesting user is the creator of the entry.
    */
-  entries: Array<Maybe<Entry>>
+  entries: Array<Entry>
   expiresAt?: Maybe<Scalars['String']>
-  followers: Array<Maybe<User>>
-  funders: Array<Maybe<Funder>>
+  followers: Array<User>
+  funders: Array<Funder>
   fundersCount?: Maybe<Scalars['Int']>
   fundingGoal?: Maybe<Scalars['fundingGoal_Int_min_1']>
-  fundingTxs?: Maybe<Array<Maybe<FundingTx>>>
+  fundingTxs: Array<FundingTx>
   fundingTxsCount?: Maybe<Scalars['Int']>
   /** Returns the project's grant applications. */
-  grants: Array<Maybe<GrantApplicant>>
+  grants: Array<GrantApplicant>
   id: Scalars['BigInt']
   image?: Maybe<Scalars['String']>
-  links: Array<Maybe<Scalars['String']>>
+  links: Array<Scalars['String']>
   location?: Maybe<Location>
   /** @deprecated Field no longer supported */
-  media: Array<Maybe<Scalars['String']>>
-  milestones?: Maybe<Array<Maybe<ProjectMilestone>>>
+  media: Array<Scalars['String']>
+  milestones: Array<ProjectMilestone>
   /** Unique name for the project. Used for the project URL and lightning address. */
   name: Scalars['name_String_NotNull_minLength_3_maxLength_280']
   owners: Array<Owner>
   rewardCurrency?: Maybe<RewardCurrency>
-  rewards?: Maybe<Array<Maybe<ProjectReward>>>
+  rewards: Array<ProjectReward>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['shortDescription_String_maxLength_500']>
   /** @deprecated Field no longer supported */
-  sponsors: Array<Maybe<Sponsor>>
+  sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
   status?: Maybe<ProjectStatus>
@@ -1156,7 +1158,7 @@ export type ProjectsOrderByInput = {
 
 export type ProjectsResponse = {
   __typename?: 'ProjectsResponse'
-  projects: Array<Maybe<Project>>
+  projects: Array<Project>
   summary?: Maybe<ProjectsSummary>
 }
 
@@ -1177,16 +1179,16 @@ export type Query = {
   entry?: Maybe<Entry>
   fundingTx: FundingTx
   /** Returns all activities. */
-  getActivities: Array<Maybe<Activity>>
-  getDashboardFunders: Array<Maybe<Funder>>
+  getActivities: Array<Activity>
+  getDashboardFunders: Array<Funder>
   /** Returns all published entries. */
-  getEntries: Array<Maybe<Entry>>
-  getFunders: Array<Maybe<Funder>>
-  getFundingTxs: Array<Maybe<FundingTx>>
+  getEntries: Array<Entry>
+  getFunders: Array<Funder>
+  getFundingTxs: Array<FundingTx>
   /** Returns the public key of the Lightning node linked to a project, if there is one. */
   getProjectPubkey?: Maybe<Scalars['String']>
   getProjectReward: ProjectReward
-  getProjectRewards: Array<Maybe<ProjectReward>>
+  getProjectRewards: Array<ProjectReward>
   getSignedUploadUrl: SignedUploadUrl
   getWallet: Wallet
   grant: Grant
@@ -1199,7 +1201,7 @@ export type Query = {
   projectRegionsGet: Array<ProjectRegionsGetResult>
   /** By default, returns a list of all active projects. */
   projects: ProjectsResponse
-  projectsMostFundedOfTheWeekGet: Array<Maybe<ProjectsMostFundedOfTheWeekGet>>
+  projectsMostFundedOfTheWeekGet: Array<ProjectsMostFundedOfTheWeekGet>
   /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary
   statusCheck: Scalars['Boolean']
@@ -1403,7 +1405,7 @@ export type UpdateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']>
   /** Description of the project. */
-  description?: InputMaybe<Scalars['description_String_maxLength_2200']>
+  description?: InputMaybe<Scalars['description_String_maxLength_4000']>
   expiresAt?: InputMaybe<Scalars['Date']>
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>
   /** Main project image. */
@@ -1419,10 +1421,7 @@ export type UpdateProjectInput = {
   shortDescription?: InputMaybe<
     Scalars['shortDescription_String_maxLength_500']
   >
-  /**
-   * Current status of the project
-   * @deprecated Use the projectStatusUpdate mutation instead
-   */
+  /** Current status of the project */
   status?: InputMaybe<ProjectStatus>
   /** Project header image. */
   thumbnailImage?: InputMaybe<Scalars['String']>
@@ -1479,30 +1478,30 @@ export type User = {
   badges: Array<UserBadge>
   bio?: Maybe<Scalars['String']>
   /** Details on the participation of a User in a project. */
-  contributions: Array<Maybe<UserProjectContribution>>
+  contributions: Array<UserProjectContribution>
   email?: Maybe<Scalars['String']>
   /**
    * By default, returns all the entries of a user, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
    * An unpublished entry is only returned if the requesting user is the creator of the entry.
    */
-  entries: Array<Maybe<Entry>>
+  entries: Array<Entry>
   /**
    * External accounts linked to the User. It can be a twitter account if the User linked their account. For anonymous
    * users, this field can contain the wallet or app from which they funded, eg: Fountain, Breeze, etc.
    */
-  externalAccounts: Array<Maybe<ExternalAccount>>
+  externalAccounts: Array<ExternalAccount>
   /** Returns a user's funding transactions accross all projects. */
-  fundingTxs: Array<Maybe<FundingTx>>
+  fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
   imageUrl?: Maybe<Scalars['String']>
-  ownerOf: Array<Maybe<OwnerOf>>
-  projectFollows: Array<Maybe<Project>>
+  ownerOf: Array<OwnerOf>
+  projectFollows: Array<Project>
   /**
    * Returns the projects of a user. By default, this field returns all the projects for that user, both draft and non-draft.
    * To filter the result set, an explicit input can be passed that specifies a value of the status field.
    */
-  projects: Array<Maybe<Project>>
+  projects: Array<Project>
   username: Scalars['String']
   wallet?: Maybe<Wallet>
 }
@@ -1955,11 +1954,17 @@ export type ResolversTypes = {
   description_String_NotNull_maxLength_2200: ResolverTypeWrapper<
     Scalars['description_String_NotNull_maxLength_2200']
   >
+  description_String_NotNull_maxLength_4000: ResolverTypeWrapper<
+    Scalars['description_String_NotNull_maxLength_4000']
+  >
   description_String_maxLength_250: ResolverTypeWrapper<
     Scalars['description_String_maxLength_250']
   >
   description_String_maxLength_2200: ResolverTypeWrapper<
     Scalars['description_String_maxLength_2200']
+  >
+  description_String_maxLength_4000: ResolverTypeWrapper<
+    Scalars['description_String_maxLength_4000']
   >
   donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<
     Scalars['donationAmount_Int_NotNull_min_1']
@@ -2184,8 +2189,10 @@ export type ResolversParentTypes = {
   cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000']
   description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250']
   description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200']
+  description_String_NotNull_maxLength_4000: Scalars['description_String_NotNull_maxLength_4000']
   description_String_maxLength_250: Scalars['description_String_maxLength_250']
   description_String_maxLength_2200: Scalars['description_String_maxLength_2200']
+  description_String_maxLength_4000: Scalars['description_String_maxLength_4000']
   donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1']
   email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email']
   email_String_format_email: Scalars['email_String_format_email']
@@ -2342,7 +2349,7 @@ export type EntryResolvers<
   >
   fundersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   fundingTxs?: Resolver<
-    Array<Maybe<ResolversTypes['FundingTx']>>,
+    Array<ResolversTypes['FundingTx']>,
     ParentType,
     ContextType
   >
@@ -2401,7 +2408,7 @@ export type FunderResolvers<
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   rewards?: Resolver<
-    Array<Maybe<ResolversTypes['FunderReward']>>,
+    Array<ResolversTypes['FunderReward']>,
     ParentType,
     ContextType
   >
@@ -2549,7 +2556,7 @@ export type GrantResolvers<
   ParentType extends ResolversParentTypes['Grant'] = ResolversParentTypes['Grant'],
 > = {
   applicants?: Resolver<
-    Array<Maybe<ResolversTypes['GrantApplicant']>>,
+    Array<ResolversTypes['GrantApplicant']>,
     ParentType,
     ContextType
   >
@@ -2563,11 +2570,7 @@ export type GrantResolvers<
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   shortDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  sponsors?: Resolver<
-    Array<Maybe<ResolversTypes['Sponsor']>>,
-    ParentType,
-    ContextType
-  >
+  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>
   status?: Resolver<ResolversTypes['GrantStatusEnum'], ParentType, ContextType>
   statuses?: Resolver<
     Array<ResolversTypes['GrantStatus']>,
@@ -2965,7 +2968,7 @@ export type ProjectResolvers<
   ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
 > = {
   ambassadors?: Resolver<
-    Array<Maybe<ResolversTypes['Ambassador']>>,
+    Array<ResolversTypes['Ambassador']>,
     ParentType,
     ContextType
   >
@@ -2973,27 +2976,19 @@ export type ProjectResolvers<
   canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   description?: Resolver<
-    Maybe<ResolversTypes['description_String_maxLength_2200']>,
+    Maybe<ResolversTypes['description_String_maxLength_4000']>,
     ParentType,
     ContextType
   >
   entries?: Resolver<
-    Array<Maybe<ResolversTypes['Entry']>>,
+    Array<ResolversTypes['Entry']>,
     ParentType,
     ContextType,
     Partial<ProjectEntriesArgs>
   >
   expiresAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  followers?: Resolver<
-    Array<Maybe<ResolversTypes['User']>>,
-    ParentType,
-    ContextType
-  >
-  funders?: Resolver<
-    Array<Maybe<ResolversTypes['Funder']>>,
-    ParentType,
-    ContextType
-  >
+  followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>
+  funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>
   fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   fundingGoal?: Resolver<
     Maybe<ResolversTypes['fundingGoal_Int_min_1']>,
@@ -3001,7 +2996,7 @@ export type ProjectResolvers<
     ContextType
   >
   fundingTxs?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['FundingTx']>>>,
+    Array<ResolversTypes['FundingTx']>,
     ParentType,
     ContextType
   >
@@ -3011,29 +3006,21 @@ export type ProjectResolvers<
     ContextType
   >
   grants?: Resolver<
-    Array<Maybe<ResolversTypes['GrantApplicant']>>,
+    Array<ResolversTypes['GrantApplicant']>,
     ParentType,
     ContextType
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  links?: Resolver<
-    Array<Maybe<ResolversTypes['String']>>,
-    ParentType,
-    ContextType
-  >
+  links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
   location?: Resolver<
     Maybe<ResolversTypes['Location']>,
     ParentType,
     ContextType
   >
-  media?: Resolver<
-    Array<Maybe<ResolversTypes['String']>>,
-    ParentType,
-    ContextType
-  >
+  media?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
   milestones?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['ProjectMilestone']>>>,
+    Array<ResolversTypes['ProjectMilestone']>,
     ParentType,
     ContextType
   >
@@ -3049,7 +3036,7 @@ export type ProjectResolvers<
     ContextType
   >
   rewards?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['ProjectReward']>>>,
+    Array<ResolversTypes['ProjectReward']>,
     ParentType,
     ContextType
   >
@@ -3058,11 +3045,7 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >
-  sponsors?: Resolver<
-    Array<Maybe<ResolversTypes['Sponsor']>>,
-    ParentType,
-    ContextType
-  >
+  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>
   statistics?: Resolver<
     Maybe<ResolversTypes['ProjectStatistics']>,
     ParentType,
@@ -3172,11 +3155,7 @@ export type ProjectsResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectsResponse'] = ResolversParentTypes['ProjectsResponse'],
 > = {
-  projects?: Resolver<
-    Array<Maybe<ResolversTypes['Project']>>,
-    ParentType,
-    ContextType
-  >
+  projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>
   summary?: Resolver<
     Maybe<ResolversTypes['ProjectsSummary']>,
     ParentType,
@@ -3218,31 +3197,31 @@ export type QueryResolvers<
     RequireFields<QueryFundingTxArgs, 'id'>
   >
   getActivities?: Resolver<
-    Array<Maybe<ResolversTypes['Activity']>>,
+    Array<ResolversTypes['Activity']>,
     ParentType,
     ContextType,
     Partial<QueryGetActivitiesArgs>
   >
   getDashboardFunders?: Resolver<
-    Array<Maybe<ResolversTypes['Funder']>>,
+    Array<ResolversTypes['Funder']>,
     ParentType,
     ContextType,
     Partial<QueryGetDashboardFundersArgs>
   >
   getEntries?: Resolver<
-    Array<Maybe<ResolversTypes['Entry']>>,
+    Array<ResolversTypes['Entry']>,
     ParentType,
     ContextType,
     Partial<QueryGetEntriesArgs>
   >
   getFunders?: Resolver<
-    Array<Maybe<ResolversTypes['Funder']>>,
+    Array<ResolversTypes['Funder']>,
     ParentType,
     ContextType,
     RequireFields<QueryGetFundersArgs, 'input'>
   >
   getFundingTxs?: Resolver<
-    Array<Maybe<ResolversTypes['FundingTx']>>,
+    Array<ResolversTypes['FundingTx']>,
     ParentType,
     ContextType,
     Partial<QueryGetFundingTxsArgs>
@@ -3260,7 +3239,7 @@ export type QueryResolvers<
     RequireFields<QueryGetProjectRewardArgs, 'id'>
   >
   getProjectRewards?: Resolver<
-    Array<Maybe<ResolversTypes['ProjectReward']>>,
+    Array<ResolversTypes['ProjectReward']>,
     ParentType,
     ContextType,
     RequireFields<QueryGetProjectRewardsArgs, 'input'>
@@ -3319,7 +3298,7 @@ export type QueryResolvers<
     Partial<QueryProjectsArgs>
   >
   projectsMostFundedOfTheWeekGet?: Resolver<
-    Array<Maybe<ResolversTypes['projectsMostFundedOfTheWeekGet']>>,
+    Array<ResolversTypes['projectsMostFundedOfTheWeekGet']>,
     ParentType,
     ContextType,
     Partial<QueryProjectsMostFundedOfTheWeekGetArgs>
@@ -3448,41 +3427,37 @@ export type UserResolvers<
   badges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType>
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   contributions?: Resolver<
-    Array<Maybe<ResolversTypes['UserProjectContribution']>>,
+    Array<ResolversTypes['UserProjectContribution']>,
     ParentType,
     ContextType
   >
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   entries?: Resolver<
-    Array<Maybe<ResolversTypes['Entry']>>,
+    Array<ResolversTypes['Entry']>,
     ParentType,
     ContextType,
     Partial<UserEntriesArgs>
   >
   externalAccounts?: Resolver<
-    Array<Maybe<ResolversTypes['ExternalAccount']>>,
+    Array<ResolversTypes['ExternalAccount']>,
     ParentType,
     ContextType
   >
   fundingTxs?: Resolver<
-    Array<Maybe<ResolversTypes['FundingTx']>>,
+    Array<ResolversTypes['FundingTx']>,
     ParentType,
     ContextType
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  ownerOf?: Resolver<
-    Array<Maybe<ResolversTypes['OwnerOf']>>,
-    ParentType,
-    ContextType
-  >
+  ownerOf?: Resolver<Array<ResolversTypes['OwnerOf']>, ParentType, ContextType>
   projectFollows?: Resolver<
-    Array<Maybe<ResolversTypes['Project']>>,
+    Array<ResolversTypes['Project']>,
     ParentType,
     ContextType
   >
   projects?: Resolver<
-    Array<Maybe<ResolversTypes['Project']>>,
+    Array<ResolversTypes['Project']>,
     ParentType,
     ContextType,
     Partial<UserProjectsArgs>
@@ -3616,6 +3591,14 @@ export interface Description_String_NotNull_MaxLength_2200ScalarConfig
   name: 'description_String_NotNull_maxLength_2200'
 }
 
+export interface Description_String_NotNull_MaxLength_4000ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['description_String_NotNull_maxLength_4000'],
+    any
+  > {
+  name: 'description_String_NotNull_maxLength_4000'
+}
+
 export interface Description_String_MaxLength_250ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['description_String_maxLength_250'],
@@ -3630,6 +3613,14 @@ export interface Description_String_MaxLength_2200ScalarConfig
     any
   > {
   name: 'description_String_maxLength_2200'
+}
+
+export interface Description_String_MaxLength_4000ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['description_String_maxLength_4000'],
+    any
+  > {
+  name: 'description_String_maxLength_4000'
 }
 
 export interface DonationAmount_Int_NotNull_Min_1ScalarConfig
@@ -3875,8 +3866,10 @@ export type Resolvers<ContextType = any> = {
   cost_Int_NotNull_min_1_max_1000000?: GraphQLScalarType
   description_String_NotNull_maxLength_250?: GraphQLScalarType
   description_String_NotNull_maxLength_2200?: GraphQLScalarType
+  description_String_NotNull_maxLength_4000?: GraphQLScalarType
   description_String_maxLength_250?: GraphQLScalarType
   description_String_maxLength_2200?: GraphQLScalarType
+  description_String_maxLength_4000?: GraphQLScalarType
   donationAmount_Int_NotNull_min_1?: GraphQLScalarType
   email_String_NotNull_format_email?: GraphQLScalarType
   email_String_format_email?: GraphQLScalarType
@@ -3991,7 +3984,7 @@ export type FundingTxForLandingPageFragment = {
         externalUsername: string
         public: boolean
         accountType: string
-      } | null>
+      }>
     } | null
   }
   sourceResource?:
@@ -4136,7 +4129,7 @@ export type ProjectFragment = {
   expiresAt?: string | null
   image?: string | null
   thumbnailImage?: string | null
-  links: Array<string | null>
+  links: Array<string>
   status?: ProjectStatus | null
   rewardCurrency?: RewardCurrency | null
   fundersCount?: number | null
@@ -4157,10 +4150,9 @@ export type ProjectFragment = {
       imageUrl?: string | null
     }
   }>
-  rewards?: Array<
-    | ({ __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment)
-    | null
-  > | null
+  rewards: Array<
+    { __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment
+  >
   ambassadors: Array<{
     __typename?: 'Ambassador'
     id: any
@@ -4171,7 +4163,7 @@ export type ProjectFragment = {
       username: string
       imageUrl?: string | null
     }
-  } | null>
+  }>
   sponsors: Array<{
     __typename?: 'Sponsor'
     id: any
@@ -4183,7 +4175,7 @@ export type ProjectFragment = {
       username: string
       imageUrl?: string | null
     } | null
-  } | null>
+  }>
   funders: Array<{
     __typename?: 'Funder'
     id: any
@@ -4198,15 +4190,15 @@ export type ProjectFragment = {
       imageUrl?: string | null
       email?: string | null
     } | null
-  } | null>
-  milestones?: Array<{
+  }>
+  milestones: Array<{
     __typename?: 'ProjectMilestone'
     id: any
     name: any
     description?: any | null
     amount: number
-  } | null> | null
-  entries: Array<({ __typename?: 'Entry' } & EntryForProjectFragment) | null>
+  }>
+  entries: Array<{ __typename?: 'Entry' } & EntryForProjectFragment>
   wallets: Array<{
     __typename?: 'Wallet'
     id: any
@@ -4402,7 +4394,7 @@ export type CreateProjectMutation = {
           __typename?: 'OwnerOf'
           owner?: { __typename?: 'Owner'; id: any } | null
           project?: { __typename?: 'Project'; id: any } | null
-        } | null>
+        }>
       }
     }>
   }
@@ -4424,7 +4416,7 @@ export type UpdateProjectMutation = {
     image?: string | null
     thumbnailImage?: string | null
     status?: ProjectStatus | null
-    links: Array<string | null>
+    links: Array<string>
     expiresAt?: string | null
     location?: {
       __typename?: 'Location'
@@ -4558,7 +4550,7 @@ export type UnlinkExternalAccountMutation = {
       externalUsername: string
       externalId: string
       public: boolean
-    } | null>
+    }>
   }
 }
 
@@ -4633,7 +4625,7 @@ export type ActivitiesForLandingPageQueryVariables = Exact<{
 export type ActivitiesForLandingPageQuery = {
   __typename?: 'Query'
   getActivities: Array<
-    ({ __typename?: 'Activity' } & ActivityForLandingPageFragment) | null
+    { __typename?: 'Activity' } & ActivityForLandingPageFragment
   >
 }
 
@@ -4760,7 +4752,7 @@ export type EntriesQuery = {
       name: any
       image?: string | null
     } | null
-  } | null>
+  }>
 }
 
 export type SignedUploadUrlQueryVariables = Exact<{
@@ -4810,7 +4802,7 @@ export type FundingTxForUserContributionFragment = {
         externalUsername: string
         public: boolean
         accountType: string
-      } | null>
+      }>
     } | null
   }
   sourceResource?:
@@ -4848,7 +4840,7 @@ export type FundingTxsForLandingPageQueryVariables = Exact<{
 export type FundingTxsForLandingPageQuery = {
   __typename?: 'Query'
   getFundingTxs: Array<
-    ({ __typename?: 'FundingTx' } & FundingTxForLandingPageFragment) | null
+    { __typename?: 'FundingTx' } & FundingTxForLandingPageFragment
   >
 }
 
@@ -4890,7 +4882,7 @@ export type GrantsQuery = {
         grantAmount: number
         grantAmountDistributed: number
       }
-    } | null>
+    }>
     sponsors: Array<{
       __typename?: 'Sponsor'
       id: any
@@ -4899,7 +4891,7 @@ export type GrantsQuery = {
       image?: string | null
       status: SponsorStatus
       createdAt: any
-    } | null>
+    }>
   }>
 }
 
@@ -4946,7 +4938,7 @@ export type GrantQuery = {
             username: string
             imageUrl?: string | null
           } | null
-        } | null>
+        }>
       }
       funding: {
         __typename?: 'GrantApplicantFunding'
@@ -4954,7 +4946,7 @@ export type GrantQuery = {
         grantAmount: number
         grantAmountDistributed: number
       }
-    } | null>
+    }>
     sponsors: Array<{
       __typename?: 'Sponsor'
       id: any
@@ -4963,7 +4955,7 @@ export type GrantQuery = {
       image?: string | null
       status: SponsorStatus
       createdAt: any
-    } | null>
+    }>
   }
 }
 
@@ -5016,7 +5008,7 @@ export type ProjectFundingDataQuery = {
         username: string
         imageUrl?: string | null
       } | null
-    } | null>
+    }>
   } | null
 }
 
@@ -5039,9 +5031,9 @@ export type ProjectsQuery = {
       createdAt: string
       expiresAt?: string | null
       status?: ProjectStatus | null
-      media: Array<string | null>
+      media: Array<string>
       image?: string | null
-    } | null>
+    }>
   }
 }
 
@@ -5069,7 +5061,7 @@ export type ProjectsFullQuery = {
       thumbnailImage?: string | null
       image?: string | null
       status?: ProjectStatus | null
-      media: Array<string | null>
+      media: Array<string>
       owners: Array<{
         __typename?: 'Owner'
         id: any
@@ -5090,7 +5082,7 @@ export type ProjectsFullQuery = {
           username: string
           imageUrl?: string | null
         } | null
-      } | null>
+      }>
       wallets: Array<{
         __typename?: 'Wallet'
         state: {
@@ -5099,7 +5091,7 @@ export type ProjectsFullQuery = {
           statusCode: WalletStatusCode
         }
       }>
-    } | null>
+    }>
   }
 }
 
@@ -5123,7 +5115,7 @@ export type ProjectUnplublishedEntriesQuery = {
   __typename?: 'Query'
   project?: {
     __typename?: 'Project'
-    entries: Array<({ __typename?: 'Entry' } & EntryForProjectFragment) | null>
+    entries: Array<{ __typename?: 'Entry' } & EntryForProjectFragment>
   } | null
 }
 
@@ -5136,11 +5128,9 @@ export type ProjectDashboardDataQuery = {
   project?: {
     __typename?: 'Project'
     unpublishedEntries: Array<
-      ({ __typename?: 'Entry' } & EntryForProjectFragment) | null
+      { __typename?: 'Entry' } & EntryForProjectFragment
     >
-    publishedEntries: Array<
-      ({ __typename?: 'Entry' } & EntryForProjectFragment) | null
-    >
+    publishedEntries: Array<{ __typename?: 'Entry' } & EntryForProjectFragment>
     statistics?: {
       __typename?: 'ProjectStatistics'
       totalVisitors: number
@@ -5172,9 +5162,9 @@ export type ProjectFundersQuery = {
         externalUsername: string
         id: any
         accountType: string
-      } | null>
+      }>
     } | null
-  } | null>
+  }>
 }
 
 export type ProjectDashboardFundersQueryVariables = Exact<{
@@ -5201,8 +5191,8 @@ export type ProjectDashboardFundersQuery = {
       __typename?: 'FunderReward'
       quantity: number
       projectReward: { __typename?: 'ProjectReward'; id: any; name: any }
-    } | null>
-  } | null>
+    }>
+  }>
 }
 
 export type ProjectsMostFundedOfTheWeekGetQueryVariables = Exact<{
@@ -5214,7 +5204,7 @@ export type ProjectsMostFundedOfTheWeekGetQuery = {
   projectsMostFundedOfTheWeekGet: Array<{
     __typename?: 'projectsMostFundedOfTheWeekGet'
     project: { __typename?: 'Project' } & ProjectForLandingPageFragment
-  } | null>
+  }>
 }
 
 export type ProjectsForLandingPageQueryVariables = Exact<{
@@ -5225,9 +5215,7 @@ export type ProjectsForLandingPageQuery = {
   __typename?: 'Query'
   projects: {
     __typename?: 'ProjectsResponse'
-    projects: Array<
-      ({ __typename?: 'Project' } & ProjectForLandingPageFragment) | null
-    >
+    projects: Array<{ __typename?: 'Project' } & ProjectForLandingPageFragment>
   }
 }
 
@@ -5291,7 +5279,7 @@ export type MeQuery = {
       externalUsername: string
       externalId: string
       public: boolean
-    } | null>
+    }>
     ownerOf: Array<{
       __typename?: 'OwnerOf'
       project?: {
@@ -5303,7 +5291,7 @@ export type MeQuery = {
         title: any
         status?: ProjectStatus | null
       } | null
-    } | null>
+    }>
   } | null
 }
 
@@ -5318,7 +5306,7 @@ export type MeProjectFollowsQuery = {
       id: any
       title: any
       name: any
-    } | null>
+    }>
   } | null
 }
 
@@ -5352,7 +5340,7 @@ export type UserProfileQuery = {
       externalUsername: string
       externalId: string
       public: boolean
-    } | null>
+    }>
     contributions: Array<{
       __typename?: 'UserProjectContribution'
       isAmbassador: boolean
@@ -5371,16 +5359,16 @@ export type UserProfileQuery = {
         title: any
         name: any
         description?: any | null
-        media: Array<string | null>
+        media: Array<string>
         createdAt: string
         status?: ProjectStatus | null
       }
-    } | null>
+    }>
     ownerOf: Array<{
       __typename?: 'OwnerOf'
       project?: { __typename?: 'Project'; id: any } | null
-    } | null>
-    projectFollows: Array<{ __typename?: 'Project'; id: any } | null>
+    }>
+    projectFollows: Array<{ __typename?: 'Project'; id: any }>
   }
 }
 
@@ -5397,7 +5385,7 @@ export type UserProfileProjectsQuery = {
       project?:
         | ({ __typename?: 'Project' } & ProjectForLandingPageFragment)
         | null
-    } | null>
+    }>
   }
 }
 
@@ -5410,7 +5398,7 @@ export type UserFollowedProjectsQuery = {
   user: {
     __typename?: 'User'
     projectFollows: Array<
-      ({ __typename?: 'Project' } & ProjectForLandingPageFragment) | null
+      { __typename?: 'Project' } & ProjectForLandingPageFragment
     >
   }
 }

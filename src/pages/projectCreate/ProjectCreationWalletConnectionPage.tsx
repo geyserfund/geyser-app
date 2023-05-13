@@ -2,17 +2,14 @@ import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 
-import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar'
-import Loader from '../../../components/ui/Loader'
-import { getPath } from '../../../constants'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
-import {
-  Project,
-  UniqueProjectQueryInput,
-} from '../../../types/generated/graphql'
-import { toInt, useNotification } from '../../../utils'
+import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
+import Loader from '../../components/ui/Loader'
+import { getPath } from '../../constants'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
+import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
+import { toInt, useNotification } from '../../utils'
 import { ProjectCreationWalletConnectionForm } from '.'
-import { ProjectCreateLayout } from '../../projectCreate/components/ProjectCreateLayout'
+import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 
 type ResponseDataForGetProject = {
   project: Project
@@ -71,7 +68,7 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   return (
     <ProjectCreateLayout
-      handleBack={handleBackClick}
+      onBackClick={handleBackClick}
       title={
         <TitleWithProgressBar
           hideSteps={isReadyForLaunch}

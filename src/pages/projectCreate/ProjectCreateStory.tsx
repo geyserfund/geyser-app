@@ -90,7 +90,7 @@ export const ProjectCreateStory = () => {
   return (
     <ProjectCreateLayout
       continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
-      handleBack={handleBack}
+      onBackClick={handleBack}
       title={
         <TitleWithProgressBar
           title="Project description"

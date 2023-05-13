@@ -13,38 +13,74 @@ import {
   User,
   useUpdateProjectMutation,
 } from '../../types'
-import { useNotification, validateEmail } from '../../utils'
+import { checkDiff, useNotification, validateEmail } from '../../utils'
 import { FormContinueButton } from './components/FormContinueButton'
 import {
   ProjectCreateForm,
   ProjectCreateFormValidation,
 } from './components/ProjectCreateForm'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
+import {
+  ProjectUnsavedModal,
+  useProjectUnsavedModal,
+} from './components/ProjectUnsavedModal'
 import { ProjectCreationVariables } from './types'
+
+const INITIAL_VALUES: ProjectCreationVariables = {
+  title: '',
+  shortDescription: '',
+  description: '',
+  image: '',
+  thumbnailImage: '',
+  email: '',
+  name: '',
+}
 
 export const ProjectCreate = () => {
   const params = useParams<{ projectId: string }>()
-  const isEditingExistingProject = Boolean(params.projectId)
-
   const navigate = useNavigate()
-  const { toast } = useNotification()
 
+  const { toast } = useNotification()
   const { user, setUser } = useAuthContext()
 
+  const isEditingExistingProject = Boolean(params.projectId)
+
   // @TODO: Figure a better way to type the form to reuse with the update flow
-  const [form, setForm] = useState<any>({
-    title: '',
-    shortDescription: '',
-    description: '',
-    image: '',
-    thumbnailImage: '',
-    email: '',
-    name: '',
-  })
+  const [form, setForm] = useState<any>(INITIAL_VALUES)
 
   const [formError, setFormError] = useState<
     FormError<ProjectCreationVariables>
   >({})
+
+  const navigateBack = () => {
+    navigate(
+      params.projectId
+        ? `${getPath('publicProjectLaunch')}/${params.projectId}`
+        : getPath('publicProjectLaunch'),
+    )
+  }
+
+  const onBackClick = () => {
+    if (!data || !data.project || !params.projectId) {
+      return unsavedModal.onOpen()
+    }
+
+    const diff = checkDiff(
+      form,
+      data.project,
+      Object.keys(INITIAL_VALUES).filter(
+        (v) => v !== 'email',
+      ) as (keyof ProjectCreationVariables)[],
+    )
+
+    if (diff) {
+      return unsavedModal.onOpen()
+    }
+
+    navigateBack()
+  }
+
+  const unsavedModal = useProjectUnsavedModal(navigateBack)
 
   const [createProject, { loading: createLoading }] = useCreateProjectMutation({
     onCompleted({ createProject }) {
@@ -158,14 +194,6 @@ export const ProjectCreate = () => {
     }
   }
 
-  const handleBack = () => {
-    navigate(
-      params.projectId
-        ? `${getPath('publicProjectLaunch')}/${params.projectId}`
-        : getPath('publicProjectLaunch'),
-    )
-  }
-
   useEffect(() => {
     if (params.projectId) {
       getProjectById()
@@ -181,7 +209,7 @@ export const ProjectCreate = () => {
   return (
     <ProjectCreateLayout
       continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
-      handleBack={handleBack}
+      onBackClick={onBackClick}
       title={
         <TitleWithProgressBar
           title="Project description"
@@ -200,6 +228,8 @@ export const ProjectCreate = () => {
         />
         <FormContinueButton width="100%" {...nextProps} />
       </VStack>
+
+      <ProjectUnsavedModal {...unsavedModal} />
     </ProjectCreateLayout>
   )
 }

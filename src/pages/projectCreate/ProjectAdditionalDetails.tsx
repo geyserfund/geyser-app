@@ -1,14 +1,14 @@
 import { VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router'
 
-import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar'
-import Loader from '../../../components/ui/Loader'
-import { getPath } from '../../../constants'
-import { useProjectState } from '../../../hooks/graphqlState'
-import { useProjectTagsState } from '../../../hooks/graphqlState/useProjectTagsState'
-import { useProjectLinksValidation } from '../../../hooks/validations'
-import { toInt, useNotification } from '../../../utils'
-import { truthyFilter } from '../../../utils/array'
+import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
+import Loader from '../../components/ui/Loader'
+import { getPath } from '../../constants'
+import { useProjectState } from '../../hooks/graphqlState'
+import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
+import { useProjectLinksValidation } from '../../hooks/validations'
+import { toInt, useNotification } from '../../utils'
+import { truthyFilter } from '../../utils/array'
 import { ProjectRegion } from './components'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
@@ -94,7 +94,7 @@ export const ProjectAdditionalDetails = () => {
     <>
       <ProjectCreateLayout
         continueButton={<FormContinueButton flexGrow={1} {...nextProps} />}
-        handleBack={handleBack}
+        onBackClick={handleBack}
         title={
           <TitleWithProgressBar
             title="Links & tags"

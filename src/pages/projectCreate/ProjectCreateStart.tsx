@@ -38,7 +38,7 @@ export const ProjectCreateStart = () => {
   return (
     <ProjectCreateLayout
       title={<Text variant="h2">Create a new project</Text>}
-      handleBack={handleBack}
+      onBackClick={handleBack}
     >
       <VStack spacing={8} w="100%">
         <Image src={LaunchProjectRocketUrl} alt="create project rocket" />
