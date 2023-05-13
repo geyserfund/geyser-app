@@ -49,6 +49,8 @@ const pathsMap = {
   _deprecatedPathForProject: (projectName: string) =>
     `/${PathName._deprecatedPathNameForProject}/${projectName}`,
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
+  projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
+    `/${PathName.project}/${projectName}/?${state}`,
   projectEntryCreation: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}`,
   projectEntryDetails: (projectName: string, entryID: string) =>

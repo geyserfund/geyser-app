@@ -1,7 +1,7 @@
 import { Button, HStack } from '@chakra-ui/react'
 import { useState } from 'react'
 
-import { CalendarButton } from '../../../../components/molecules'
+import { CalendarButton } from '../../../components/molecules'
 import { ProjectCreationVariables, ProjectUpdateVariables } from '../types'
 
 interface ProjectFundraisingDeadlineProps {

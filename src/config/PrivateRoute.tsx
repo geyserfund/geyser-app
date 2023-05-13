@@ -23,6 +23,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   const {
     loading,
     user,
+    isAnonymous,
     loginOnClose,
     isAuthModalOpen: loginIsOpen,
     loginOnOpen,
@@ -63,16 +64,14 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   )
 
   const isUserViewingTheirOwnProject: boolean = useMemo(
-    () =>
-      user.ownerOf.some(({ project }: any) => project.id === params.projectId),
+    () => user.ownerOf.some(({ project }) => project?.id === params.projectId),
     [params.projectId, user.ownerOf],
   )
 
   useEffect(() => {
     if (!loading) {
       if (
-        !user ||
-        (user && !user.id) ||
+        isAnonymous ||
         (isPrivateProjectCreationPath &&
           user &&
           !hasTwitterAccount(user) &&
@@ -81,7 +80,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
         loginOnOpen()
       }
     }
-  }, [user, loading])
+  }, [user, loading, isPrivateProjectCreationPath, loginOnOpen, isAnonymous])
 
   const modalTitle = () => {
     if (

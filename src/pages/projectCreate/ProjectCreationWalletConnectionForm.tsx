@@ -17,20 +17,20 @@ import { BiRocket } from 'react-icons/bi'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 
-import AlbyPNG from '../../../assets/images/third-party-icons/alby@3x.png'
-import BitNobPNG from '../../../assets/images/third-party-icons/bitnob@3x.png'
-import WalletOfSatoshiPNG from '../../../assets/images/third-party-icons/wallet-of-satoshi@3x.png'
-import VoltageLogoSmall from '../../../assets/voltage-logo-small.svg'
-import { TextInputBox, UndecoratedLink } from '../../../components/ui'
-import Loader from '../../../components/ui/Loader'
+import AlbyPNG from '../../assets/images/third-party-icons/alby@3x.png'
+import BitNobPNG from '../../assets/images/third-party-icons/bitnob@3x.png'
+import WalletOfSatoshiPNG from '../../assets/images/third-party-icons/wallet-of-satoshi@3x.png'
+import VoltageLogoSmall from '../../assets/voltage-logo-small.svg'
+import { TextInputBox, UndecoratedLink } from '../../components/ui'
+import Loader from '../../components/ui/Loader'
 import {
   AlbyLightningAddressURL,
   BitNobURL,
   getPath,
   VoltageExplainerPageForGeyserURL,
   WalletOfSatoshiLightningAddressURL,
-} from '../../../constants'
-import { colors } from '../../../styles'
+} from '../../constants'
+import { colors } from '../../styles'
 import {
   CreateWalletInput,
   LndNodeType,
@@ -38,8 +38,8 @@ import {
   useCreateWalletMutation,
   useLightningAddressVerifyLazyQuery,
   WalletResourceType,
-} from '../../../types/generated/graphql'
-import { toInt, useNotification, validateEmail } from '../../../utils'
+} from '../../types/generated/graphql'
+import { toInt, useNotification, validateEmail } from '../../utils'
 import { FormContinueButton } from './components/FormContinueButton'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
 import { ProjectCreateCompleted } from './components/ProjectCreateCompleted'
@@ -117,12 +117,12 @@ export const ProjectCreationWalletConnectionForm = ({
     setParentNode(value)
   }
 
-  const handleSavingAsDraft = async () => {
+  const onSaveDraftClick = async () => {
     if (!project) {
       return
     }
 
-    navigate(getPath('project', project.name))
+    navigate(getPath('projectLaunch', project.name, 'draft'))
   }
 
   useEffect(() => {
@@ -237,7 +237,7 @@ export const ProjectCreationWalletConnectionForm = ({
   const onLaunchClick = async () => {
     try {
       await handleLaunch()
-      navigate(getPath('project', project?.name))
+      navigate(getPath('projectLaunch', project?.name))
     } catch (error) {
       toast({
         title: 'Something went wrong',
@@ -301,7 +301,7 @@ export const ProjectCreationWalletConnectionForm = ({
           <Button
             variant="secondary"
             w="full"
-            onClick={handleSavingAsDraft}
+            onClick={onSaveDraftClick}
             disabled={isCreateWalletLoading || isEvaluatingLightningAddress}
           >
             Save As Draft

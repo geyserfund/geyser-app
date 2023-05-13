@@ -8,12 +8,12 @@ interface ProjectCreateLayoutProps {
   children: ReactNode
   title: ReactNode
   continueButton?: ReactNode
-  handleBack: () => void
+  onBackClick: () => void
 }
 
 export const ProjectCreateLayout = ({
   children,
-  handleBack,
+  onBackClick,
   title,
   continueButton = null,
 }: ProjectCreateLayoutProps) => {
@@ -23,7 +23,7 @@ export const ProjectCreateLayout = ({
         <Button
           flexGrow={1}
           variant="secondary"
-          onClick={handleBack}
+          onClick={onBackClick}
           leftIcon={<BiLeftArrowAlt fontSize="25px" />}
         >
           Back

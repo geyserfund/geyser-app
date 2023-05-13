@@ -23,21 +23,10 @@ import { ProjectCreationVariables, ProjectUpdateVariables } from '../types'
 import { FormInputContainer } from './FormInputContainer'
 import { ProjectFundraisingDeadline } from './ProjectFundraisingDeadline'
 
-type ProjectCreate = {
-  title?: string
-  name?: string
-  shortDescription?: string
-  description?: string
-  image?: string
-  expiresAt?: string
-  email: string
-  headerImage?: string
-}
-
 interface ProjectCreateFormProps {
   isEdit?: boolean
   form: ProjectCreationVariables | ProjectUpdateVariables
-  formError: FormError<ProjectCreate>
+  formError: FormError<ProjectCreationVariables>
   setFormError: any
   setForm: Dispatch<
     SetStateAction<ProjectCreationVariables | ProjectUpdateVariables>
