@@ -177,6 +177,8 @@ export const GrantApplicationDetailsUrl =
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
 
+export const GeyserFeedbackFromUrl = 'https://airtable.com/shr2GiORBI2CWSuhk'
+
 // BADGES
 
 export const BadgesGroupUrl =

@@ -2,6 +2,7 @@ import { Link, Text, VStack } from '@chakra-ui/react'
 import { BiErrorAlt } from 'react-icons/bi'
 
 import { Head } from '../../config/Head'
+import { GeyserFeedbackFromUrl } from '../../constants'
 
 export const NotFoundPage = () => (
   <>
@@ -24,7 +25,10 @@ export const NotFoundPage = () => (
         <Link href="https://t.me/+EZ5otIPhVcxhMmFk" target="_blank">
           telegram
         </Link>{' '}
-        or this <Link>feedback form.</Link>
+        or this{' '}
+        <Link href={GeyserFeedbackFromUrl} isExternal>
+          feedback form.
+        </Link>
       </Text>
     </VStack>
   </>
