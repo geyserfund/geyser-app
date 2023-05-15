@@ -24,7 +24,12 @@ import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { colors } from '../../../../styles'
-import { MarkDown, toInt, useMobileMode } from '../../../../utils'
+import {
+  copyTextToClipboard,
+  MarkDown,
+  toInt,
+  useMobileMode,
+} from '../../../../utils'
 import { getPossibleWalletPubkey } from '../../../../utils/validations/wallet'
 import {
   AvatarElement,
@@ -54,7 +59,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
   const handleShareButtonTapped = () => {
     const relativePath = getPath('project', project.name)
 
-    navigator.clipboard.writeText(`${HomeUrl}${relativePath}`)
+    copyTextToClipboard(`${HomeUrl}${relativePath}`)
     setHasCopiedSharingLink(true)
   }
 

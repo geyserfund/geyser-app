@@ -17,6 +17,7 @@ import {
   ProjectFragment,
   UserBadge,
 } from '../../../../types/generated/graphql'
+import { copyTextToClipboard } from '../../../../utils'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
@@ -41,7 +42,7 @@ export const SuccessScreen = ({
   const { getTotalAmount } = useFundCalc(fundingState)
 
   const shareProjectWithFriends = () => {
-    navigator.clipboard.writeText(window.location.href)
+    copyTextToClipboard(window.location.href)
     setCopy(true)
   }
 
