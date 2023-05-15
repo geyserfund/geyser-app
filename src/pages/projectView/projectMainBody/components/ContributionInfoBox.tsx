@@ -23,7 +23,10 @@ import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../../constants'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
 import { IFundForm } from '../../../../hooks'
 import { IBadge } from '../../../../interfaces'
-import { Project, ProjectReward } from '../../../../types/generated/graphql'
+import {
+  ProjectFragment,
+  ProjectReward,
+} from '../../../../types/generated/graphql'
 import { Satoshis } from '../../../../types/types'
 import { hasOwnNode } from '../../../../utils/helpers'
 
@@ -34,7 +37,7 @@ export enum ContributionInfoBoxVersion {
 }
 
 type Props = HTMLChakraProps<'div'> & {
-  project: Project
+  project: ProjectFragment
   contributionAmount: Satoshis
   referenceCode?: string
   isFunderAnonymous?: boolean

@@ -15,11 +15,11 @@ import { ProjectFundersCountIndicator } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
 import { EntryStatusLabel } from '../../components/ui/EntryStatusLabel'
 import { getPath } from '../../constants'
-import { Entry } from '../../types/generated/graphql'
+import { EntryFragment } from '../../types/generated/graphql'
 import { ProjectEntryEditor } from '../creation/entry/editor'
 
 type Props = {
-  entry: Entry
+  entry: EntryFragment
 }
 
 export const EntryDetails = ({ entry }: Props) => {
@@ -31,7 +31,7 @@ export const EntryDetails = ({ entry }: Props) => {
       <ButtonComponent
         size="sm"
         as={Link}
-        to={getPath('project', entry.project!.name)}
+        to={getPath('project', entry.project?.name)}
         leftIcon={<BiLeftArrowAlt fontSize="15px" />}
       >
         View project

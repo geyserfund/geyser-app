@@ -38,7 +38,7 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
     if (tag) {
       updateFilter({ tagIds: [tag.id] })
     } else {
-      updateFilter({ recent: true, sort: SortType.recent })
+      updateFilter({ recent: true, sort: SortType.createdAt })
     }
   }
 

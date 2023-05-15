@@ -1,5 +1,6 @@
 import { Box, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
+import { useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { IFundingStages } from '../../../constants'
@@ -12,6 +13,9 @@ import {
 import { UpdateReward } from '../../../hooks'
 import { ProjectFragment } from '../../../types/generated/graphql'
 import { useDarkMode, useMobileMode } from '../../../utils'
+import { ProjectMobileNavigation } from '../projectNavigation/components/ProjectMobileNavigation'
+import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
+import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
 import { NoWallet } from './components'
 import { Creator, Entries, Summary } from './sections'
 import { Milestones } from './sections/Milestones'
@@ -53,7 +57,7 @@ const useStyles = createUseStyles<Rules, Styles>({
 })
 
 type Props = {
-  project: ProjectFragment
+  project?: ProjectFragment | null
   fundState: IFundingStages
   updateReward: UpdateReward
 }
@@ -68,6 +72,20 @@ export const ProjectMainBody = ({
 
   const { mobileView } = useProjectContext()
 
+  const headerRef = useRef<HTMLDivElement>(null)
+  const entriesRef = useRef<HTMLDivElement>(null)
+  const rewardsRef = useRef<HTMLDivElement>(null)
+  const milestonesRef = useRef<HTMLDivElement>(null)
+
+  const projectAnchors = useProjectAnchors(project, {
+    header: headerRef,
+    entries: entriesRef,
+    rewards: rewardsRef,
+    milestones: milestonesRef,
+  })
+
+  const { entriesLength, rewardsLength, milestonesLength } = projectAnchors
+
   const inView = mobileView === MobileViews.description
 
   const classes = useStyles({ isMobile, inView })
@@ -80,40 +98,57 @@ export const ProjectMainBody = ({
   )
 
   return (
-    <Box
-      className={classNames(classes.container)}
-      backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
-      flex={!isMobile ? 3 : undefined}
-      height="100%"
-      w="100%"
-      flexDirection="column"
-      overflow="hidden"
-    >
-      <Box className={classes.detailsContainer} id="project-scroll-container">
-        <VStack alignItems="center" width="100%" flex="1">
-          <VStack
-            spacing="30px"
-            alignItems="left"
-            marginTop={isMobile ? '0px' : '20px'}
-            maxWidth="1000px"
-            w="100%"
-            padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
-          >
-            <Summary />
+    <>
+      {isMobile ? (
+        <ProjectMobileNavigation />
+      ) : (
+        <ProjectNavigation {...projectAnchors} />
+      )}
+      <Box
+        className={classNames(classes.container)}
+        backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
+        flex={!isMobile ? 3 : undefined}
+        height="100%"
+        w="100%"
+        flexDirection="column"
+        overflow="hidden"
+      >
+        <Box className={classes.detailsContainer} id="project-scroll-container">
+          <VStack alignItems="center" width="100%" flex="1">
+            <VStack
+              spacing="30px"
+              alignItems="left"
+              marginTop={isMobile ? '0px' : '20px'}
+              maxWidth="1000px"
+              w="100%"
+              padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
+            >
+              <Summary ref={headerRef} />
 
-            {isViewerTheProjectOwner && <NoWallet project={project} />}
-            {isViewerTheProjectOwner && <Creator />}
+              {project && isViewerTheProjectOwner && (
+                <NoWallet project={project} />
+              )}
+              {isViewerTheProjectOwner && <Creator />}
 
-            <SectionNav />
+              <SectionNav {...projectAnchors} />
 
-            <Entries />
+              <Entries ref={entriesRef} entriesLength={entriesLength} />
 
-            <Rewards {...{ fundState, updateReward }} />
+              <Rewards
+                ref={rewardsRef}
+                rewardsLength={rewardsLength}
+                fundState={fundState}
+                updateReward={updateReward}
+              />
 
-            <Milestones />
+              <Milestones
+                ref={milestonesRef}
+                milestonesLength={milestonesLength}
+              />
+            </VStack>
           </VStack>
-        </VStack>
+        </Box>
       </Box>
-    </Box>
+    </>
   )
 }
