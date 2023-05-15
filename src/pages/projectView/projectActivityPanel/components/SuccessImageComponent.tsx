@@ -15,7 +15,7 @@ import { HiOutlineCheck } from 'react-icons/hi'
 import { Body2, H3 } from '../../../../components/typography'
 import { useProjectContext } from '../../../../context'
 import { colors, fonts } from '../../../../styles'
-import { Badge, FundingTx } from '../../../../types/generated/graphql'
+import { Badge, FundingTxFragment } from '../../../../types/generated/graphql'
 import { useNotification } from '../../../../utils'
 import { AvatarElement } from '../../projectMainBody/components'
 
@@ -24,12 +24,16 @@ export const SuccessImageComponent = ({
   fundingTx,
 }: {
   currentBadge?: Badge
-  fundingTx: FundingTx
+  fundingTx: FundingTxFragment
 }) => {
   const { toast } = useNotification()
   const [copied, setCopied] = useState(false)
 
   const { project } = useProjectContext()
+
+  if (!project) {
+    return null
+  }
 
   const handleDownload = async () => {
     try {

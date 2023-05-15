@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss'
 
 import { MobileViews, useProjectContext } from '../../context'
 import { fadeOut, slideInLeft } from '../../styles/animations'
-import { Entry } from '../../types/generated/graphql'
+import { EntryFragment } from '../../types/generated/graphql'
 import { useDarkMode, useMobileMode } from '../../utils'
 import { EntryDetails } from './EntryDetails'
 
@@ -45,7 +45,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
 })
 
 interface IActivityProps {
-  entry: Entry
+  entry: EntryFragment
   detailOpen: boolean
 }
 

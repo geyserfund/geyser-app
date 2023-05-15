@@ -15,5 +15,9 @@ export const useMobileMode = (
 ) => {
   const [isMobile] = useMediaQuery(`(max-width: ${props.mobileBreakpoint}px)`)
 
+  if (isMobile === undefined) {
+    return true
+  }
+
   return isMobile
 }

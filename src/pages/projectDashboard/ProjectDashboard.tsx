@@ -4,8 +4,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 
 import Loader from '../../components/ui/Loader'
 import { getPath, PathName } from '../../constants'
-import { ProjectProvider, useAuthContext, useNavContext } from '../../context'
-import { useProjectState } from '../../hooks/graphqlState'
+import { useAuthContext, useProjectContext } from '../../context'
 import { noScrollBar } from '../../styles/common'
 import { useMobileMode } from '../../utils'
 
@@ -26,7 +25,6 @@ export const ProjectDashboard = () => {
   const location = useLocation()
 
   const { user } = useAuthContext()
-  const { setNavData } = useNavContext()
 
   const [activeTab, setActiveTab] = useState<DashboardTabs>()
 
@@ -56,31 +54,13 @@ export const ProjectDashboard = () => {
     return splitValue.replaceAll('/', '') as DashboardTabs
   }
 
-  const { loading, saving, project, updateProject, saveProject } =
-    useProjectState(projectId || '', {
-      fetchPolicy: 'network-only',
-      onError() {
-        navigate(getPath('notFound'))
-      },
-      onCompleted(data) {
-        const { project } = data
-        if (project) {
-          if (project.owners[0]?.user.id !== user.id) {
-            navigate(getPath('notAuthorized'))
-          }
+  const { loading, project } = useProjectContext()
 
-          setNavData({
-            projectName: project.name,
-            projectTitle: project.title,
-            projectPath: `${getPath('project', project.name)}`,
-            projectOwnerIDs:
-              project.owners.map((ownerInfo) => {
-                return Number(ownerInfo.user.id || -1)
-              }) || [],
-          })
-        }
-      },
-    })
+  useEffect(() => {
+    if (project && project.owners[0]?.user.id !== user.id) {
+      navigate(getPath('notAuthorized'))
+    }
+  }, [navigate, project, user.id])
 
   if (loading) {
     return <Loader alignItems="flex-start" paddingTop="120px" />
@@ -148,14 +128,7 @@ export const ProjectDashboard = () => {
           {navList.map((nav) => renderButton(nav))}
         </HStack>
       </HStack>
-      <ProjectProvider
-        project={project}
-        updateProject={updateProject}
-        saveProject={saveProject}
-        saving={saving}
-      >
-        <Outlet />
-      </ProjectProvider>
+      <Outlet />
     </Box>
   )
 }

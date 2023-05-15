@@ -19,7 +19,7 @@ import {
 import { useQueryWithPagination } from '../../../../hooks'
 import {
   Funder,
-  FundingTx,
+  FundingTxFragment,
   ProjectFragment,
 } from '../../../../types/generated/graphql'
 import {
@@ -36,15 +36,13 @@ import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
 type Props = {
   project: ProjectFragment
   btcRate: number
-  test?: boolean
-  fundingTx: FundingTx
+  fundingTx: FundingTxFragment
 }
 
 const itemLimit = 50
 
 export const ProjectFundingInitialInfoScreen = ({
   project,
-  test,
   fundingTx,
 }: Props) => {
   const isMobile = useMobileMode()
@@ -57,7 +55,10 @@ export const ProjectFundingInitialInfoScreen = ({
     FundingTxWithCount[]
   >([])
 
-  const fundingTxs = useQueryWithPagination<FundingTx, FundingTxWithCount>({
+  const fundingTxs = useQueryWithPagination<
+    FundingTxFragment,
+    FundingTxWithCount
+  >({
     itemLimit,
     queryName: 'getFundingTxs',
     query: QUERY_GET_FUNDING_TXS_LANDING,
@@ -109,21 +110,16 @@ export const ProjectFundingInitialInfoScreen = ({
     }
   }, [mobileView])
 
-  if (test) {
-    return <InfoPageSkeleton />
-  }
-
   const renderActivityList = () => {
-    switch (tab) {
-      case 'activity':
-        return (
-          <ProjectContributionList
-            fundingTxs={{ ...fundingTxs, data: aggregatedFundingTxs }}
-          />
-        )
-      default:
-        return <ProjectLeaderboardList project={project} funders={funders} />
+    if (tab === 'activity') {
+      return (
+        <ProjectContributionList
+          fundingTxs={{ ...fundingTxs, data: aggregatedFundingTxs }}
+        />
+      )
     }
+
+    return <ProjectLeaderboardList project={project} funders={funders} />
   }
 
   const contributionButton = () => {

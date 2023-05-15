@@ -22,12 +22,15 @@ import {
 import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
-import { FundingTxForLandingPageFragment } from '../../../../types'
+import {
+  FundingTxForLandingPageFragment,
+  FundingTxFragment,
+} from '../../../../types'
 import { getDaysAgo, getRandomOrb, toSmallImageUrl } from '../../../../utils'
 import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
 
 type Props = HTMLChakraProps<'div'> & {
-  fundingTx: FundingTxForLandingPageFragment
+  fundingTx: FundingTxFragment | FundingTxForLandingPageFragment
   dateTime?: string
   showsProjectLink?: boolean
   count?: number
@@ -52,11 +55,17 @@ export const ContributionActivityItem = ({
 
   const funderBadges = computeFunderBadges({
     creationDateStringOfFundedContent:
-      fundingTx.sourceResource?.createdAt || '',
+      'sourceResource' in fundingTx && fundingTx.sourceResource?.createdAt
+        ? fundingTx.sourceResource.createdAt
+        : '',
     funder,
   })
 
   const renderResource = () => {
+    if (!('sourceResource' in fundingTx)) {
+      return null
+    }
+
     const resource = fundingTx.sourceResource
     switch (resource?.__typename) {
       case 'Project':
@@ -167,7 +176,7 @@ export const ContributionActivityItem = ({
 
             <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
-            {showsProjectLink && fundingTx.sourceResource && (
+            {showsProjectLink && 'sourceResource' in fundingTx && (
               <HStack
                 overflow="hidden"
                 backgroundColor="neutral.100"

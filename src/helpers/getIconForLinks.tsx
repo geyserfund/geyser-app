@@ -79,7 +79,10 @@ export const getIconForLink = (value: Maybe<string>) => {
     return BsInstagram
   }
 
-  if (value?.toLowerCase().includes('youtube')) {
+  if (
+    value?.toLowerCase().includes('youtube') ||
+    value?.toLowerCase().includes('youtu.be')
+  ) {
     return BsYoutube
   }
 

@@ -1,10 +1,13 @@
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-import { ShippingDestination, shippingTypes } from '../constants'
 import { AuthContext } from '../context'
 import { useBTCConverter } from '../helpers'
 import { IRewardCount } from '../interfaces'
-import { ProjectReward, RewardCurrency } from '../types/generated/graphql'
+import {
+  ProjectRewardForCreateUpdateFragment,
+  RewardCurrency,
+  ShippingDestination,
+} from '../types/generated/graphql'
 import { Satoshis } from '../types/types'
 
 export interface IFundForm {
@@ -23,47 +26,51 @@ export interface IFundForm {
 }
 
 type UseFundStateProps = {
-  rewards?: ProjectReward[]
+  rewards?: ProjectRewardForCreateUpdateFragment[]
 }
 
 export type UpdateReward = (_: IRewardCount) => void
 
 export interface IFundFormState {
   state: IFundForm
-
   setTarget: (event: any) => void
-
   setState: (name: string, value: any) => void
   updateReward: UpdateReward
   resetForm: () => void
 }
 
 export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
-  const { user } = useContext(AuthContext)
+  const { user, isAnonymous } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
 
-  const initialState: IFundForm = {
-    donationAmount: 0,
-    rewardsCost: 0,
-    comment: '',
-    shippingDestination: shippingTypes.national,
-    shippingCost: 0,
-    anonymous: !(user && user.id), // The default user has id 0
-    funderAvatarURL: user.imageUrl || '',
-    funderUsername: user.username,
-    email: '',
-    media: '',
-    rewardsByIDAndCount: undefined,
-    rewardCurrency: RewardCurrency.Usdcent,
-  }
+  const initialState: IFundForm = useMemo(
+    () => ({
+      donationAmount: 0,
+      rewardsCost: 0,
+      comment: '',
+      shippingDestination: ShippingDestination.National,
+      shippingCost: 0,
+      anonymous: isAnonymous, // The default user has id 0
+      funderAvatarURL: user.imageUrl || '',
+      funderUsername: user.username,
+      email: '',
+      media: '',
+      rewardsByIDAndCount: undefined,
+      rewardCurrency: RewardCurrency.Usdcent,
+    }),
+    [isAnonymous, user.imageUrl, user.username],
+  )
 
   const [state, _setState] = useState<IFundForm>(initialState)
 
-  const setTarget = (event: any) => {
+  const setTarget = useCallback((event: any) => {
     const { name, value } = event.target
-    const newState = { ...state, [name]: value }
-    _setState(newState)
-  }
+    _setState((current) => ({ ...current, [name]: value }))
+  }, [])
+
+  const setState = useCallback((name: string, value: any) => {
+    _setState((current) => ({ ...current, [name]: value }))
+  }, [])
 
   useEffect(() => {
     if (!user || !user.id) {
@@ -71,64 +78,60 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
     } else {
       setState('anonymous', false)
     }
-  }, [user])
+  }, [setState, user])
 
-  const setState = (name: string, value: any) => {
-    const newState = { ...state, [name]: value }
-    _setState(newState)
-  }
+  const updateReward = useCallback(
+    ({ id, count }: IRewardCount) => {
+      _setState((current) => {
+        const newRewardsCountInfo = { ...current.rewardsByIDAndCount }
 
-  const updateReward = ({ id, count }: IRewardCount) => {
-    const newRewardsCountInfo = { ...state.rewardsByIDAndCount }
+        if (count !== 0) {
+          newRewardsCountInfo[id.toString()] = count
+        } else if (count === 0) {
+          delete newRewardsCountInfo[id.toString()]
+        }
 
-    if (count !== 0) {
-      newRewardsCountInfo[id as unknown as keyof ProjectReward] = count
-    } else if (count === 0) {
-      delete newRewardsCountInfo[id as unknown as keyof ProjectReward]
-    }
+        let rewardsCost = 0
 
-    let rewardsCost = 0
+        if (rewards) {
+          Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
+            const id = parseInt(rewardID, 10)
 
-    if (rewards) {
-      Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
-        const id = parseInt(rewardID, 10)
+            const reward = rewards.find(
+              (reward) => reward.id === id || `${reward.id}` === rewardID,
+            )
 
-        const reward = rewards.find(
-          (reward: ProjectReward) =>
-            reward.id === id || `${reward.id}` === rewardID,
-        )
+            if (reward && reward.id) {
+              const rewardMultiplier = newRewardsCountInfo[rewardID.toString()]
+              if (!rewardMultiplier) {
+                return 0
+              }
 
-        if (reward && reward.id) {
-          const rewardMultiplier =
-            newRewardsCountInfo[rewardID as keyof ProjectReward]
-          if (!rewardMultiplier) {
-            return 0
-          }
+              const cost =
+                current.rewardCurrency === RewardCurrency.Usdcent
+                  ? reward.cost
+                  : // Assume sats if not USD cents
+                    getUSDCentsAmount(reward.cost as Satoshis)
 
-          const cost =
-            state.rewardCurrency === RewardCurrency.Usdcent
-              ? reward.cost
-              : // Assume sats if not USD cents
-                getUSDCentsAmount(reward.cost as Satoshis)
+              rewardsCost += cost * rewardMultiplier
+            }
+          })
+        }
 
-          rewardsCost += cost * rewardMultiplier
+        return {
+          ...current,
+          rewardsByIDAndCount: newRewardsCountInfo,
+          rewardsCost,
+          totalAmount: rewardsCost + current.donationAmount,
         }
       })
-    }
+    },
+    [getUSDCentsAmount, rewards],
+  )
 
-    const newState = {
-      ...state,
-      rewardsByIDAndCount: newRewardsCountInfo,
-      rewardsCost,
-      totalAmount: rewardsCost + state.donationAmount,
-    }
-
-    _setState(newState)
-  }
-
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     _setState(initialState)
-  }
+  }, [initialState])
 
   return { state, setTarget, setState, updateReward, resetForm }
 }

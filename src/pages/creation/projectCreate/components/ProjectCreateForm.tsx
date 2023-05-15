@@ -26,7 +26,7 @@ type ProjectCreate = {
   name?: string
   shortDescription?: string
   description?: string
-  image?: string
+  image?: string | null
   headerImage?: string
 }
 
