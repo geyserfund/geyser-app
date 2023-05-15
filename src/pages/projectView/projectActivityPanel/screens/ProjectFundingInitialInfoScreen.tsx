@@ -36,7 +36,6 @@ import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
 type Props = {
   project: ProjectFragment
   btcRate: number
-  test?: boolean
   fundingTx: FundingTxFragment
 }
 
@@ -44,7 +43,6 @@ const itemLimit = 50
 
 export const ProjectFundingInitialInfoScreen = ({
   project,
-  test,
   fundingTx,
 }: Props) => {
   const isMobile = useMobileMode()
@@ -112,21 +110,16 @@ export const ProjectFundingInitialInfoScreen = ({
     }
   }, [mobileView])
 
-  if (test) {
-    return <InfoPageSkeleton />
-  }
-
   const renderActivityList = () => {
-    switch (tab) {
-      case 'activity':
-        return (
-          <ProjectContributionList
-            fundingTxs={{ ...fundingTxs, data: aggregatedFundingTxs }}
-          />
-        )
-      default:
-        return <ProjectLeaderboardList project={project} funders={funders} />
+    if (tab === 'activity') {
+      return (
+        <ProjectContributionList
+          fundingTxs={{ ...fundingTxs, data: aggregatedFundingTxs }}
+        />
+      )
     }
+
+    return <ProjectLeaderboardList project={project} funders={funders} />
   }
 
   const contributionButton = () => {

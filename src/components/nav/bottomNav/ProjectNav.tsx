@@ -35,7 +35,7 @@ export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
       setNoTransition(false)
       onClose()
     }
-  }, [isScrollingUp, mobileView, fixed])
+  }, [isScrollingUp, mobileView, fixed, onOpen, onClose])
 
   return (
     <>
@@ -78,10 +78,13 @@ export const ProjectNavUI = () => {
     return 'brand.neutral600'
   }
 
-  const transactionCount = project?.fundingTxsCount
-  const fundersCount = project?.fundersCount
+  if (!project) {
+    return null
+  }
 
-  const isOwner = project?.owners[0]?.user?.id === user.id
+  const { fundersCount, fundingTxsCount } = project
+
+  const isOwner = project.owners[0]?.user?.id === user.id
 
   const handleClick = (value: MobileViews) => {
     if (mobileView === value) {
@@ -129,8 +132,8 @@ export const ProjectNavUI = () => {
         _hover={{}}
         paddingX="5px"
       >
-        {transactionCount && (
-          <Text fontFamily={fonts.mono}>{transactionCount}</Text>
+        {fundingTxsCount && (
+          <Text fontFamily={fonts.mono}>{fundingTxsCount}</Text>
         )}
       </Button>
       <Button

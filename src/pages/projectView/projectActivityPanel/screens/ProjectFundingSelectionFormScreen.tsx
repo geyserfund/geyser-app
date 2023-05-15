@@ -19,9 +19,9 @@ import { MAX_FUNDING_AMOUNT_USD } from '../../../../constants'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
 import { IFundForm } from '../../../../hooks'
 import { IProjectType } from '../../../../interfaces'
-import { ProjectReward } from '../../../../types/generated/graphql'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
 import { useNotification } from '../../../../utils'
-import { ProjectPaymentFormFundingComment } from '../../projectMainBody/components/ProjectPaymentFormFundingComment'
+import { ProjectFundingFormCommentField } from '../../projectMainBody/components/ProjectFundingFormCommentField'
 import { FundingFormSection } from '../components/FundingFormSection'
 
 type Props = {
@@ -34,7 +34,7 @@ type Props = {
   setFormState: any
   handleFund: () => void
   type: IProjectType
-  rewards?: ProjectReward[]
+  rewards?: ProjectRewardForCreateUpdateFragment[]
   name: string
 }
 
@@ -59,6 +59,7 @@ export const ProjectFundingSelectionFormScreen = ({
   const hasSelectedRewards =
     formState.rewardsByIDAndCount &&
     Object.entries(formState.rewardsByIDAndCount).length > 0
+
   const submit = () => {
     const valid = validateFundingAmount()
     if (valid) {
@@ -125,12 +126,10 @@ export const ProjectFundingSelectionFormScreen = ({
 
       <Box width="100%" overflowY="auto" flex={1}>
         <FundingFormSection
-          {...{
-            rewards,
-            setFormState,
-            updateReward,
-            formState,
-          }}
+          rewards={rewards}
+          setFormState={setFormState}
+          updateReward={updateReward}
+          formState={formState}
         />
       </Box>
       <VStack
@@ -159,11 +158,11 @@ export const ProjectFundingSelectionFormScreen = ({
           <VStack spacing={1.5} alignItems="flex-start" width={'full'}>
             <SectionTitle>Comment</SectionTitle>
 
-            <ProjectPaymentFormFundingComment
+            <ProjectFundingFormCommentField
               comment={formState.comment}
               setTarget={setTarget}
               setFormState={setFormState}
-              width={'full'}
+              width="full"
             />
 
             {formState.rewardsCost && (

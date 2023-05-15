@@ -21,15 +21,21 @@ export const useProjectState = (
 ) => {
   const { toast } = useNotification()
 
-  const [project, setProject] = useState<ProjectFragment>({} as ProjectFragment)
+  const [project, setProject] = useState<ProjectFragment | null>(null)
   const [baseProject, setBaseProject] = useState<ProjectFragment>(
     {} as ProjectFragment,
   )
 
-  const { loading } = useProjectByNameOrIdQuery({
+  const idType =
+    type === 'name' && typeof projectId === 'string' ? 'name' : 'id'
+
+  const { loading, error } = useProjectByNameOrIdQuery({
     variables: {
-      where: { [type]: type === 'name' ? projectId : toInt(projectId) },
+      where: {
+        [idType]: type === 'name' ? projectId : toInt(projectId),
+      },
     },
+    skip: !projectId,
     ...options,
     onCompleted(data) {
       const { project } = data
@@ -65,10 +71,16 @@ export const useProjectState = (
   }
 
   const updateProject = (value: Partial<ProjectFragment>) => {
-    setProject((current) => ({ ...current, ...value }))
+    setProject((current) =>
+      current ? { ...current, ...value } : (value as ProjectFragment),
+    )
   }
 
   const saveProject = async () => {
+    if (!project) {
+      return
+    }
+
     const [isDiff, diffKeys] = getDiff(project, baseProject, [
       'location',
       'description',
@@ -108,5 +120,5 @@ export const useProjectState = (
     await updateProjectMutation({ variables: { input } })
   }
 
-  return { loading, saving, project, updateProject, saveProject }
+  return { loading, error, saving, project, updateProject, saveProject }
 }

@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { FaTelegramPlane } from 'react-icons/fa'
 
 import { SectionTitle } from '../../../../components/ui'
-import { GeyserTelegramUrl } from '../../../../constants'
+import { fundingStages, GeyserTelegramUrl } from '../../../../constants'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
 import { IFundForm, UseFundingFlowReturn } from '../../../../hooks'
 import {
@@ -42,7 +42,11 @@ export const ProjectFundingQRScreen = ({
   useEffect(() => {
     // Cancel invoice on the backend after QR section unmounts
     return () => {
-      if (fundingFlow.fundingTx.invoiceId) {
+      if (
+        fundingFlow.fundState !== fundingStages.started &&
+        fundingFlow.fundState !== fundingStages.canceled &&
+        fundingFlow.fundingTx.invoiceId
+      ) {
         cancelInvoice({
           variables: { invoiceId: fundingFlow.fundingTx.invoiceId },
         })

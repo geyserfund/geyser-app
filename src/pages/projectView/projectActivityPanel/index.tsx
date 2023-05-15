@@ -15,6 +15,7 @@ import {
   RewardFundingInput,
 } from '../../../types/generated/graphql'
 import { toInt, useMobileMode } from '../../../utils'
+import { truthyFilter } from '../../../utils/array'
 import {
   InfoPageSkeleton,
   ProjectFundingInitialInfoScreen,
@@ -25,7 +26,7 @@ import { SuccessScreen } from './screens/SuccessScreen'
 import { useStyles } from './styles'
 
 type Props = {
-  project: ProjectFragment
+  project?: ProjectFragment | null
   fundingFlow: UseFundingFlowReturn
   resourceType: FundingResourceType
   resourceId: number
@@ -35,7 +36,6 @@ type Props = {
 type FilteredReward = { id: number; quantity: number }
 
 export const ProjectActivityPanel = ({
-  project,
   fundingFlow,
   fundForm,
   resourceType,
@@ -45,6 +45,7 @@ export const ProjectActivityPanel = ({
 
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
+  const { project } = useProjectContext()
 
   const { mobileView, setMobileView } = useProjectContext()
   // required for knowing the rewards and the funds
@@ -86,20 +87,20 @@ export const ProjectActivityPanel = ({
       resetFundingFlow()
       resetForm()
     }
-  }, [mobileView])
+  }, [mobileView, resetForm, resetFundingFlow, setFundState])
 
   useEffect(() => {
     if (user && user.id) {
       setFormState('anonymous', false)
     }
-  }, [user])
+  }, [setFormState, user])
 
   useEffect(() => {
     if (!formState.anonymous && (!user || !user.id)) {
       loginOnOpen()
       setFormState('anonymous', true)
     }
-  }, [formState.anonymous])
+  }, [formState.anonymous, loginOnOpen, setFormState, user])
 
   const handleCloseButton = () => {
     setMobileView(MobileViews.contribution)
@@ -125,7 +126,7 @@ export const ProjectActivityPanel = ({
     } = state
 
     const input: FundingInput = {
-      projectId: toInt(project.id),
+      projectId: toInt(project?.id),
       anonymous,
       ...(donationAmount !== 0 && { donationInput: { donationAmount } }),
       metadataInput: {
@@ -134,7 +135,7 @@ export const ProjectActivityPanel = ({
         ...(comment && { comment }),
       },
       sourceResourceInput: {
-        resourceId: toInt(resourceId) || toInt(project.id),
+        resourceId: toInt(resourceId) || toInt(project?.id),
         resourceType: resourceType || 'project',
       },
     }
@@ -168,12 +169,8 @@ export const ProjectActivityPanel = ({
     requestFunding(input)
   }
 
-  const getActivityHeight = () => {
-    return 'calc(100% - 20px)'
-  }
-
   const renderPanelContent = () => {
-    if (!project || !project.id) {
+    if (!project) {
       return <InfoPageSkeleton />
     }
 
@@ -185,28 +182,23 @@ export const ProjectActivityPanel = ({
               project,
               fundingTx,
               btcRate,
-              test: false,
             }}
           />
         )
       case fundingStages.form:
         return (
           <ProjectFundingSelectionFormScreen
-            {...{
-              fundingRequestLoading,
-              isMobile,
-              handleCloseButton,
-              formState,
-              setFormState,
-              setTarget,
-              updateReward,
-              handleFund,
-              rewards: project.rewards?.filter(
-                (reward) => reward !== null,
-              ) as ProjectReward[],
-              type: project.type,
-              name: project.name,
-            }}
+            fundingRequestLoading={fundingRequestLoading}
+            isMobile={isMobile}
+            handleCloseButton={handleCloseButton}
+            formState={formState}
+            setFormState={setFormState}
+            setTarget={setTarget}
+            updateReward={updateReward}
+            handleFund={handleFund}
+            rewards={project.rewards?.filter(truthyFilter)}
+            type={project.type}
+            name={project.name}
           />
         )
       case fundingStages.started:
@@ -245,7 +237,7 @@ export const ProjectActivityPanel = ({
         alignItems="center"
         backgroundColor="#FFFFFF"
         marginTop={isMobile ? '0px' : '20px'}
-        height={getActivityHeight()}
+        height="calc(100% - 20px)"
         borderTopLeftRadius={isMobile ? 'initial' : '8px'}
         overflow="hidden"
         borderTop={isMobile ? 'none' : '2px solid'}
