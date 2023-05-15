@@ -162,7 +162,7 @@ export const GrantsRoundOne = ({
             </Box>
 
             <Grid
-              templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+              templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
               gap={6}
               minWidth="100%"
               mt={8}

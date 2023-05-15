@@ -60,18 +60,18 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
       width={{
         base: '100%',
       }}
-      direction={{ base: 'column', md: 'row' }}
+      direction={{ base: 'column', lg: 'row' }}
       cursor={isDraft ? 'auto' : 'pointer'}
-      alignItems={{ base: 'flex-start', md: 'center' }}
+      alignItems={{ base: 'flex-start', lg: 'center' }}
     >
       <Box
         minWidth={{
           base: 'full',
-          md: '142px',
+          lg: '142px',
         }}
         maxWidth={{
           base: 'full',
-          md: '142px',
+          lg: '142px',
         }}
         height="142px"
         maxHeight="142px"
@@ -92,7 +92,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
         height="100%"
         width={{
           base: 'full',
-          md: 'calc(100% - 142px)',
+          lg: 'calc(100% - 142px)',
         }}
         flexDirection="column"
         justifyContent="space-between"
@@ -107,7 +107,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
         >
           <Stack
             flex={1}
-            direction={{ base: 'column', md: 'row' }}
+            direction={{ base: 'column', lg: 'row' }}
             justifyContent="space-between"
             alignItems="center"
             overflow="hidden"
@@ -160,7 +160,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
           align="center"
           justify="start"
           direction={'row'}
-          spacing={{ base: '10px', md: '22px' }}
+          spacing={{ base: '10px', lg: '22px' }}
           overflow="hidden"
         >
           <HStack spacing={'10px'} align={'center'} flex={0}>

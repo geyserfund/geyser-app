@@ -67,12 +67,12 @@ export const Creator = () => {
             as={ChakraLink}
             href={LearnAboutCrowdfundingUrl}
             variant="ghost"
-            size={{ base: 'xs', md: 'sm' }}
+            size={{ base: 'xs', lg: 'sm' }}
             noBorder
             leftIcon={<BsBoxArrowUpRight />}
             paddingX="0px"
           >
-            <Text fontSize={{ base: '10px', md: '12px' }}>
+            <Text fontSize={{ base: '10px', lg: '12px' }}>
               Learn more about crowdfunding
             </Text>
           </ButtonComponent>

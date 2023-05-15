@@ -111,7 +111,7 @@ export const ProjectNavUI = () => {
       alignItems="center"
       spacing={{
         base: '18px',
-        md: '50px',
+        lg: '50px',
       }}
       paddingBottom="2px"
     >
