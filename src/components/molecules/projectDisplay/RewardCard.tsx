@@ -59,7 +59,12 @@ export const RewardCard = ({
                   {`$ ${reward.cost / 100}`}
                 </Text>
               )}
-              <Text fontSize="12px" color={colors.textBlack} fontWeight="bold">
+              <Text
+                whiteSpace="nowrap"
+                fontSize="12px"
+                color={colors.textBlack}
+                fontWeight="bold"
+              >
                 per item
               </Text>
             </VStack>
