@@ -18,47 +18,50 @@ export const ProjectNavigation = ({
   onRewardsClick,
   onMilestonesClick,
 }: UseProjectAnchors) => {
+  const hasItems = Boolean(entriesLength || rewardsLength || milestonesLength)
   return (
     <VStack ml={4} pt={5} pb={2}>
       <ProjectBackButton width="100%" />
-      <CardLayout>
-        <VStack maxWidth="100%">
-          <ProjectNavigationButton
-            // isActive={inView === 'header'}
-            onClick={onProjectClick}
-            leftIcon={<ProjectIcon />}
-          >
-            Project
-          </ProjectNavigationButton>
-          {Boolean(entriesLength) && (
+      {hasItems ? (
+        <CardLayout padding={2}>
+          <VStack maxWidth="100%">
             <ProjectNavigationButton
-              // isActive={inView === 'entries'}
-              onClick={onEntriesClick}
-              leftIcon={<EntryEditIcon />}
+              // isActive={inView === 'header'}
+              onClick={onProjectClick}
+              leftIcon={<ProjectIcon />}
             >
-              Entries
+              Project
             </ProjectNavigationButton>
-          )}
-          {Boolean(rewardsLength) && (
-            <ProjectNavigationButton
-              // isActive={inView === 'rewards'}
-              onClick={onRewardsClick}
-              leftIcon={<RewardGiftIcon />}
-            >
-              Rewards
-            </ProjectNavigationButton>
-          )}
-          {Boolean(milestonesLength) && (
-            <ProjectNavigationButton
-              // isActive={inView === 'milestones'}
-              onClick={onMilestonesClick}
-              leftIcon={<MilestoneIcon />}
-            >
-              Milestones
-            </ProjectNavigationButton>
-          )}
-        </VStack>
-      </CardLayout>
+            {Boolean(entriesLength) && (
+              <ProjectNavigationButton
+                // isActive={inView === 'entries'}
+                onClick={onEntriesClick}
+                leftIcon={<EntryEditIcon />}
+              >
+                Entries
+              </ProjectNavigationButton>
+            )}
+            {Boolean(rewardsLength) && (
+              <ProjectNavigationButton
+                // isActive={inView === 'rewards'}
+                onClick={onRewardsClick}
+                leftIcon={<RewardGiftIcon />}
+              >
+                Rewards
+              </ProjectNavigationButton>
+            )}
+            {Boolean(milestonesLength) && (
+              <ProjectNavigationButton
+                // isActive={inView === 'milestones'}
+                onClick={onMilestonesClick}
+                leftIcon={<MilestoneIcon />}
+              >
+                Milestones
+              </ProjectNavigationButton>
+            )}
+          </VStack>
+        </CardLayout>
+      ) : null}
     </VStack>
   )
 }
