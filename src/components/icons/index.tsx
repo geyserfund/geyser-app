@@ -3,9 +3,6 @@ import { Box } from '@chakra-ui/layout'
 import { ImageProps } from '@chakra-ui/react'
 
 import BoltSvg from '../../assets/bolt.svg'
-import GifSvg from '../../assets/gif.svg'
-import InfoSvg from '../../assets/i.svg'
-import QrSvg from '../../assets/qr.svg'
 import SatoshiTilted from '../../assets/satoshi-tilted.svg'
 import SatoshiTiltedDash from '../../assets/satoshi-tilted-dash.svg'
 import ShareSvg from '../../assets/share.svg'
@@ -172,12 +169,6 @@ export const GiftIcon = (props: ImageProps) => (
   </Box>
 )
 
-export const GifIcon = (props: ImageProps) => (
-  <Box padding="3px 0px">
-    <Image height="20px" width="20px" src={GifSvg} alt="gif" {...props} />
-  </Box>
-)
-
 export const EnvelopeIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
     <Image
@@ -193,18 +184,6 @@ export const EnvelopeIcon = (props: ImageProps) => (
 export const RopeIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
     <Image height="20px" width="20px" src={RopeUrl} alt="rope" {...props} />
-  </Box>
-)
-
-export const InfoIcon = (props: ImageProps) => (
-  <Box padding="3px 0px">
-    <Image height="12px" width="12px" src={InfoSvg} alt="info" {...props} />
-  </Box>
-)
-
-export const QrIcon = (props: ImageProps) => (
-  <Box padding="3px 0px">
-    <Image height="20px" width="20px" src={QrSvg} alt="qr" {...props} />
   </Box>
 )
 

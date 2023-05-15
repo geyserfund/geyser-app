@@ -147,11 +147,19 @@ export const ProjectLaunch3DUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/project-launch-3d.png'
 
 export const FeedLoggedOutUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/feedLoggedOut.svg'
+  'https://storage.googleapis.com/geyser-projects-media/app/feed-logged-out.svg'
 export const FollowAProjectUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/followAProject.svg'
+  'https://storage.googleapis.com/geyser-projects-media/app/follow-a-project.svg'
 export const ProjectEntryThumbnailPlaceholderUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/projectEntryThumbnailPlaceholder.svg'
+  'https://storage.googleapis.com/geyser-projects-media/app/project-entry-thumbnail-placeholder.svg'
+
+export const LetTheSatsFlowNoNameEdition =
+  'https://storage.googleapis.com/geyser-projects-media/app/let-the-sats-flow-no-name-edition.svg'
+
+export const LogoNameBrand =
+  'https://storage.googleapis.com/geyser-projects-media/app/logo-name-brand.svg'
+export const LogoNameDark =
+  'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg'
 
 // Geyser Notion Links
 
@@ -203,7 +211,7 @@ export const AlbyUrl =
 export const BitnobUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/bitnob.png'
 export const WalletOfSatoshiUrl =
-  'https://storage.googleapis.com/geyser-projects-media/platform/walletOfSatoshi.png'
+  'https://storage.googleapis.com/geyser-projects-media/platform/wallet-of-satoshi.png'
 
 // ICONS
 

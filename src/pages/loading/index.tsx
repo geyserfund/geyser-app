@@ -1,6 +1,6 @@
 import { Image, VStack } from '@chakra-ui/react'
 
-import LogoNameLight from '../../assets/logo-name-brand.svg'
+import { LogoNameBrand } from '../../constants'
 
 export const LoadingPage = () => (
   <VStack
@@ -13,7 +13,7 @@ export const LoadingPage = () => (
   >
     <Image
       height="75px"
-      src={LogoNameLight}
+      src={LogoNameBrand}
       alt="geyser logo image"
       objectFit="contain"
     />
