@@ -1,3 +1,46 @@
+## [0.1.1](https://github.com/geyserfund/geyser-app/compare/v0.1.0...v0.1.1) (2023-05-15)
+
+
+### Features
+
+* add hotjar to production ([5c18485](https://github.com/geyserfund/geyser-app/commit/5c184858f37d20f8023b9587d70a051bd11f5361))
+* Allow funder to login from funding flow ([#859](https://github.com/geyserfund/geyser-app/issues/859)) ([d53547e](https://github.com/geyserfund/geyser-app/commit/d53547e6c04a0569bd72fea7e7f837588c2b9eac)), closes [#864](https://github.com/geyserfund/geyser-app/issues/864)
+* test out hotjar for staging ([06fae45](https://github.com/geyserfund/geyser-app/commit/06fae456ed26faff0366933302100139db976fb5))
+* update featured project to orangepilljam ([563672f](https://github.com/geyserfund/geyser-app/commit/563672f5176b974487fb9dc984f9b16c26c49906))
+* update no fee projects list ([3fecbcc](https://github.com/geyserfund/geyser-app/commit/3fecbcc2972234f814eea47c0f21f704d7ded736))
+
+
+### Bug Fixes
+
+* add bold to contribution disclaimer ([240dfd4](https://github.com/geyserfund/geyser-app/commit/240dfd4003bf6e69919758d5f4c86365f9b6e174))
+* add match value for youtu.be formatted links ([bfca128](https://github.com/geyserfund/geyser-app/commit/bfca12821bc99ee6ac3eab1c9cdab0b798270ca7))
+* add missing fragments ([3d87739](https://github.com/geyserfund/geyser-app/commit/3d8773971ffb8df96b06611b34435a260139cd38))
+* display featured project ([3c998d1](https://github.com/geyserfund/geyser-app/commit/3c998d19dc7730600ed8ad94bc4ebe2c68998fe6))
+* dont cancel invoice if fundstate is in started state ([#870](https://github.com/geyserfund/geyser-app/issues/870)) ([84fecd5](https://github.com/geyserfund/geyser-app/commit/84fecd5c8428326d4f2e76d69082401ebfe3ad5b))
+* entry view ([8ff7b61](https://github.com/geyserfund/geyser-app/commit/8ff7b61331c93a8470d06cb8150d611b81f93c6c))
+* fix styles in funding comment box ([#882](https://github.com/geyserfund/geyser-app/issues/882)) ([40ab4b5](https://github.com/geyserfund/geyser-app/commit/40ab4b599602d9d3c80055e6134bdda3c762a037))
+* funding flow success for on-chain funding ([e0c31a8](https://github.com/geyserfund/geyser-app/commit/e0c31a8603cf93f28a502c71aff6e99d848fbd78))
+* handle conflict ([d35bd7a](https://github.com/geyserfund/geyser-app/commit/d35bd7af8eb38dd48c18334c09ae815f2dc305b9))
+* hotfix for search ([891b0b4](https://github.com/geyserfund/geyser-app/commit/891b0b4690ebc875bd049cd2cf54e75e52c77712))
+* increase spacing ([cce108d](https://github.com/geyserfund/geyser-app/commit/cce108d0364ae712e135d23a90ce1bc9242f0112))
+* pass in date time value ([0ded6d7](https://github.com/geyserfund/geyser-app/commit/0ded6d753e98cb3b09ac9f48b1bfc6b60021e9e5))
+* profile page ([2c9b570](https://github.com/geyserfund/geyser-app/commit/2c9b570de050848584ed8d73dd8b0ed755070e15))
+* project navigation styles ([5d76361](https://github.com/geyserfund/geyser-app/commit/5d7636182323a33d75d3bbfbbf17278964159e3c))
+* remove featured grant ([5128001](https://github.com/geyserfund/geyser-app/commit/51280016550acb39c306830c3b3ecbace3efd662))
+* revert deepscan change ([#840](https://github.com/geyserfund/geyser-app/issues/840)) ([#841](https://github.com/geyserfund/geyser-app/issues/841)) ([6b8da55](https://github.com/geyserfund/geyser-app/commit/6b8da55c8b79c7dbfb263bbf6e7e21e9c7e1403c))
+* support for no good lightning email address ([187107c](https://github.com/geyserfund/geyser-app/commit/187107ca3540860b2c3baf0cac0b7aefba949b87))
+* update featured project to miprimerbitcoinbiggestgraduationinmay ([f95d0af](https://github.com/geyserfund/geyser-app/commit/f95d0afb0af9e83ad4a0732970b30f7d29ce966b))
+* update hot-jar id ([c36d07b](https://github.com/geyserfund/geyser-app/commit/c36d07b89a9955f1f8f040ca107254c8bcbca4e0))
+* update recent projects to see recent ([7039218](https://github.com/geyserfund/geyser-app/commit/7039218752a96b5adea688516c3ae6c0846897fb))
+* use default value as fundingTx paidAt if date is not provided ([a42d29d](https://github.com/geyserfund/geyser-app/commit/a42d29d9475b67bf0e5b776256afc1a8fe6a5d76))
+* validations to parse before checking values ([a86f369](https://github.com/geyserfund/geyser-app/commit/a86f3695432e7e3f13461e9489209ee93ca97f4d))
+* word-wrap in community voting widget ([cb668a7](https://github.com/geyserfund/geyser-app/commit/cb668a72ff8766f745fe501bf31450f9551490cd))
+
+
+### Reverts
+
+* Revert "Revert "PRODUCTION PUSH"" ([f349517](https://github.com/geyserfund/geyser-app/commit/f3495175717cef8daf91b9e2087eaabe031e3174))
+
 ## 0.1.0 (2023-05-05)
 
 
