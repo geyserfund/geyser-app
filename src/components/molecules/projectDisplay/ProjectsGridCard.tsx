@@ -9,8 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import SatoshiPng from '../../../assets/satoshi.png'
-import { getPath } from '../../../constants'
+import { getPath, SatoshiUrl } from '../../../constants'
 import { fonts } from '../../../styles'
 import { Project } from '../../../types/generated/graphql'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
@@ -102,7 +101,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
 
               <VStack alignItems={'center'}>
                 <HStack spacing="3px">
-                  <Image src={SatoshiPng} height="20px" />
+                  <Image src={SatoshiUrl} height="20px" />
                   <Text
                     fontSize="16px"
                     fontWeight={600}

@@ -35,3 +35,5 @@ export const ProjectView = () => {
     </ProjectProvider>
   )
 }
+
+export default ProjectView

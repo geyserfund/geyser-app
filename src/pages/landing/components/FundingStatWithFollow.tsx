@@ -9,9 +9,9 @@ import {
 } from '@chakra-ui/react'
 import { BsFillHeartFill } from 'react-icons/bs'
 
-import { SatoshiPng } from '../../../assets'
 import { MonoBody1 } from '../../../components/typography'
 import { IconButtonComponent } from '../../../components/ui'
+import { SatoshiUrl } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { useFollowProject } from '../../../hooks/graphqlState'
 import { fonts } from '../../../styles'
@@ -58,7 +58,7 @@ export const FundingStatWithFollow = ({
 
       <VStack alignItems={'center'} spacing={0}>
         <HStack spacing="3px">
-          <Image src={SatoshiPng} height="18px" />
+          <Image src={SatoshiUrl} height="18px" />
           <MonoBody1 bold={bold}>{getShortAmountLabel(amountFunded)}</MonoBody1>
         </HStack>
         <Text

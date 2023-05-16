@@ -119,3 +119,5 @@ export const GrantsLandingPage = () => {
     </VStack>
   )
 }
+
+export default GrantsLandingPage

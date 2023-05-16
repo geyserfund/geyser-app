@@ -236,8 +236,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
                 setWebLNErrored(true)
               }
             })
-            .catch((e) => {
-              console.error(e)
+            .catch(() => {
               fundIntervalRef.current = intervalFactory()
               setFundingRequestErrored(true)
             })

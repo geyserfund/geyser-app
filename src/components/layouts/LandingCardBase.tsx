@@ -68,6 +68,7 @@ export const LandingCardBase = ({
           height="100%"
           objectFit="cover"
           src={imageSrc}
+          alt={`${title}-header-image`}
         />
       </Box>
       <VStack

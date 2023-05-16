@@ -29,3 +29,5 @@ export const NotFoundPage = () => (
     </VStack>
   </>
 )
+
+export default NotFoundPage

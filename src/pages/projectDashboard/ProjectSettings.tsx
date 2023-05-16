@@ -9,8 +9,8 @@ import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
 import { useBeforeClose } from '../../hooks'
 import { FormError, Project, ProjectStatus } from '../../types'
 import { isActive, toInt, useNotification } from '../../utils'
-import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
-import { ProjectUpdateVariables } from '../creation/projectCreate/types'
+import { ProjectFundraisingDeadline } from '../projectCreate/components/ProjectFundraisingDeadline'
+import { ProjectUpdateVariables } from '../projectCreate/types'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 type ProjectSettingsForm = {

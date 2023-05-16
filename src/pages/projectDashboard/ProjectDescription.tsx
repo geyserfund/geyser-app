@@ -11,9 +11,9 @@ import { checkDiff, toInt, useMobileMode, useNotification } from '../../utils'
 import {
   ProjectCreateForm,
   ProjectCreateFormValidation,
-} from '../creation/projectCreate/components/ProjectCreateForm'
-import { ProjectPreviewComponent } from '../creation/projectCreate/components/ProjectPreviewComponent'
-import { ProjectUpdateVariables } from '../creation/projectCreate/types'
+} from '../projectCreate/components/ProjectCreateForm'
+import { ProjectPreviewComponent } from '../projectCreate/components/ProjectPreviewComponent'
+import { ProjectUpdateVariables } from '../projectCreate/types'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 export const ProjectDescription = () => {

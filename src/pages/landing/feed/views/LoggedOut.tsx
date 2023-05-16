@@ -1,8 +1,8 @@
 import { Box, Image, VStack } from '@chakra-ui/react'
 
-import { FeedLoggedOutImage } from '../../../../assets'
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
+import { FeedLoggedOutUrl } from '../../../../constants'
 import { useAuthContext } from '../../../../context'
 
 export const LoggedOut = () => {
@@ -10,12 +10,7 @@ export const LoggedOut = () => {
   return (
     <VStack w="full" padding="12px" spacing="20px">
       <Box width="200px">
-        <Image
-          w="full"
-          h="auto"
-          alt="feed-logged-out"
-          src={FeedLoggedOutImage}
-        />
+        <Image w="full" h="auto" alt="feed-logged-out" src={FeedLoggedOutUrl} />
       </Box>
       <VStack w="full">
         <Body1 bold color="black">

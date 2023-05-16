@@ -14,8 +14,8 @@ import {
   Wallet,
 } from '../../types/generated/graphql'
 import { useNotification } from '../../utils'
-import { ProjectCreationWalletConnectionForm } from '../creation/projectCreate'
-import { TNodeInput } from '../creation/projectCreate/types'
+import { ProjectCreationWalletConnectionForm } from '../projectCreate'
+import { TNodeInput } from '../projectCreate/types'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 import { ProjectFundingSettingsLightningAddressView } from './components/ProjectFundingSettingsLightningAddressView'
 

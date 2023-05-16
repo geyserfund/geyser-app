@@ -138,3 +138,5 @@ export const Profile = () => {
     </VStack>
   )
 }
+
+export default Profile

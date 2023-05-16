@@ -1,7 +1,7 @@
 import { Box, Image, ImageProps, Skeleton } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 
-import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg'
+import { ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useNotification } from '../../utils'
 
 interface IImageWithReload extends ImageProps {
@@ -87,7 +87,7 @@ export const ImageWithReload = ({
 
     return (
       <Image
-        src={defaultImage || GeyserTempImage}
+        src={defaultImage || ProjectEntryThumbnailPlaceholderUrl}
         maxHeight="500px"
         height="222px"
         width="350px"

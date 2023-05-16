@@ -7,10 +7,10 @@ import {
 } from 'react-router-dom'
 
 import { getPath } from '../constants'
-import { checkIfRenderFilter } from '../pages/landing'
 import { disableSortByTrending } from '../pages/landing/filters/sort'
 import { ActivityResourceType, ProjectStatus, ProjectType } from '../types'
 import { toInt } from '../utils'
+import { checkIfRenderFilter } from '../utils/helpers'
 
 export type FilterType = {
   countryCode?: string
