@@ -136,9 +136,8 @@ export const ProjectCreate = () => {
 
   const handleNextButtonTapped = () => {
     const isValid = validateForm()
-
-    if (data?.project && isValid) {
-      if (isEditingExistingProject) {
+    if (isValid) {
+      if (isEditingExistingProject && data?.project) {
         updateProject({
           variables: {
             input: {

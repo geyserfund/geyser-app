@@ -137,16 +137,18 @@ export const Rewards = forwardRef<HTMLDivElement, Props>(
           return (
             <HStack
               key={reward.id}
-              height="100%"
-              spacing="20px"
+              pb={6}
+              px={2}
+              alignSelf="stretch"
               alignItems="stretch"
+              justifySelf="stretch"
               justifyContent="stretch"
+              maxWidth="350px"
+              flexWrap="wrap"
             >
               <RewardCard
-                maxWidth="350px"
                 key={reward.id}
                 width="100%"
-                mx={2}
                 reward={reward}
                 isSatoshi={false}
                 handleEdit={
@@ -200,7 +202,7 @@ export const Rewards = forwardRef<HTMLDivElement, Props>(
         >
           <ProjectSectionBar name={'Rewards'} number={rewardsLength} />
 
-          <HStack width="100%" justifyContent="center">
+          <HStack width="100%" flexWrap="wrap" justifyContent="center">
             {renderRewards()}
           </HStack>
         </CardLayout>
