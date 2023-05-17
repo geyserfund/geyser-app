@@ -8,7 +8,6 @@ import { useProjectState } from '../../../hooks/graphqlState'
 import { useProjectTagsState } from '../../../hooks/graphqlState/useProjectTagsState'
 import { useProjectLinksValidation } from '../../../hooks/validations'
 import { toInt, useNotification } from '../../../utils'
-import { truthyFilter } from '../../../utils/array'
 import { ProjectRegion } from './components'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectLinks } from './components/ProjectLinks'
@@ -74,7 +73,7 @@ export const ProjectAdditionalDetails = () => {
       >
         <VStack width="100%" alignItems="flex-start" spacing="40px">
           <ProjectLinks
-            links={project?.links.filter(truthyFilter) || []}
+            links={(project?.links as string[]) || []}
             setLinks={setLinks}
             linkError={linkError}
           />
