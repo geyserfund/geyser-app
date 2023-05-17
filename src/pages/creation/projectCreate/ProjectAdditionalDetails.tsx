@@ -74,7 +74,7 @@ export const ProjectAdditionalDetails = () => {
       >
         <VStack width="100%" alignItems="flex-start" spacing="40px">
           <ProjectLinks
-            links={project?.links.filter(truthyFilter) || []}
+            links={(project?.links as string[]) || []}
             setLinks={setLinks}
             linkError={linkError}
           />
