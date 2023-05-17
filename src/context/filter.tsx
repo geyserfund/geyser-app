@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import {
   useLocation,
   useMatch,
@@ -59,7 +65,7 @@ export const FilterProvider = ({
   const navigate = useNavigate()
   const location = useLocation()
 
-  const getFiltersFromUrlParams = () => {
+  const getFiltersFromUrlParams = useCallback(() => {
     const countryCode = searchParams.get('countryCode') || undefined
     const region = searchParams.get('region') || undefined
     const search = searchParams.get('search') || undefined
@@ -86,84 +92,93 @@ export const FilterProvider = ({
       activity,
       sort,
     }
-  }
+  }, [searchParams])
 
-  const setUrlParamsFromFilters = (value: FilterType) => {
-    const newParameters = [] as [string, string][]
+  const setUrlParamsFromFilters = useCallback(
+    (value: FilterType) => {
+      const newParameters = [] as [string, string][]
 
-    for (const key of Object.keys(value)) {
-      if (value[key as keyof FilterType]) {
-        if (key === 'tagIds') {
-          const tagIds = value[key as keyof FilterType] as number[]
-          if (tagIds.length > 0) {
-            newParameters.push([key, `${tagIds.join(',')}`])
+      for (const key of Object.keys(value)) {
+        if (value[key as keyof FilterType]) {
+          if (key === 'tagIds') {
+            const tagIds = value[key as keyof FilterType] as number[]
+            if (tagIds.length > 0) {
+              newParameters.push([key, `${tagIds.join(',')}`])
+            }
+          } else if (
+            key === 'sort' &&
+            value[key as keyof FilterType] === SortType.recent &&
+            disableSortByTrending(value)
+          ) {
+            newParameters.push([key, SortType.createdAt])
+          } else {
+            newParameters.push([key, `${value[key as keyof FilterType]}`])
           }
-        } else if (
-          key === 'sort' &&
-          value[key as keyof FilterType] === SortType.recent &&
-          disableSortByTrending(value)
-        ) {
-          newParameters.push([key, SortType.createdAt])
-        } else {
-          newParameters.push([key, `${value[key as keyof FilterType]}`])
         }
       }
-    }
 
-    setSearchParams(newParameters)
-  }
+      navigate(location.pathname, { state: null })
+      setSearchParams(newParameters)
+    },
+    [location, navigate, setSearchParams],
+  )
 
-  useEffect(() => {
-    const urlFilters = getFiltersFromUrlParams()
-    setFilters(urlFilters)
-  }, [location])
+  const updateFilter = useCallback(
+    async (value: Partial<FilterType>) => {
+      if (isLandingFeedPage && !isLoggedIn) {
+        navigate('/', { state: { save: true } })
+      }
 
-  const updateFilter = async (value: Partial<FilterType>) => {
-    if (isLandingFeedPage && !isLoggedIn) {
-      navigate('/', { state: { save: true } })
-    }
+      const currentFilters = getFiltersFromUrlParams()
 
-    const currentFilters = getFiltersFromUrlParams()
+      let newfilters = {} as FilterType
 
-    let newfilters = {} as FilterType
-
-    if (checkIfRenderFilter(value)) {
-      if (!currentFilters.sort && !isLandingFeedPage) {
-        newfilters = {
-          ...currentFilters,
-          recent: undefined,
-          sort: SortType.recent,
-          ...value,
+      if (checkIfRenderFilter(value)) {
+        if (!currentFilters.sort && !isLandingFeedPage) {
+          newfilters = {
+            ...currentFilters,
+            recent: undefined,
+            sort: SortType.recent,
+            ...value,
+          }
+        } else {
+          newfilters = {
+            ...currentFilters,
+            recent: undefined,
+            ...value,
+          }
         }
       } else {
         newfilters = {
           ...currentFilters,
-          recent: undefined,
           ...value,
         }
       }
-    } else {
-      newfilters = {
-        ...currentFilters,
-        ...value,
-      }
-    }
 
-    setUrlParamsFromFilters(newfilters)
-  }
+      setUrlParamsFromFilters(newfilters)
+    },
+    [
+      isLandingFeedPage,
+      getFiltersFromUrlParams,
+      setUrlParamsFromFilters,
+      navigate,
+      isLoggedIn,
+    ],
+  )
 
   useEffect(() => {
+    const urlFilters = getFiltersFromUrlParams()
+    setFilters(urlFilters)
     if (location.state?.save) {
       navigate('', { state: null })
     } else if (location.state?.filter) {
       updateFilter(location.state.filter)
-      navigate('', { state: null })
     }
-  }, [location.pathname])
+  }, [location, getFiltersFromUrlParams, navigate, updateFilter])
 
-  const clearFilter = () => {
+  const clearFilter = useCallback(() => {
     setUrlParamsFromFilters({} as FilterType)
-  }
+  }, [setUrlParamsFromFilters])
 
   return (
     <FilterContext.Provider
