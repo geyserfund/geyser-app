@@ -103,7 +103,7 @@ export const FilterProvider = ({
           if (key === 'tagIds') {
             const tagIds = value[key as keyof FilterType] as number[]
             if (tagIds.length > 0) {
-              newParameters.push([key, `${tagIds.join(',')}`])
+              newParameters.push([key, tagIds.join(',')])
             }
           } else if (
             key === 'sort' &&
