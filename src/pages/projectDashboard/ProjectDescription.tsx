@@ -48,16 +48,6 @@ export const ProjectDescription = () => {
       },
     })
 
-  const _onNavigate = (onLeave: () => void) => {
-    if (form.formState.isDirty) {
-      return unsavedModal.onOpen({
-        onLeave,
-      })
-    }
-
-    onLeave()
-  }
-
   const onSubmit = ({ email, name, ...values }: ProjectCreationVariables) => {
     if (project) {
       updateProjectMutation({

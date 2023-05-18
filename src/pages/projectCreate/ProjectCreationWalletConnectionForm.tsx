@@ -48,7 +48,7 @@ import { TNodeInput } from './types'
 
 type Props =
   | {
-      project: ProjectFragment | null
+      project: ProjectFragment
       triggerWallet?: boolean
       isReadyForLaunch: boolean
       setNodeInput?: React.Dispatch<
@@ -58,7 +58,7 @@ type Props =
       onNextClick?: undefined
     }
   | {
-      project: ProjectFragment | null
+      project: ProjectFragment
       triggerWallet?: boolean
       onNextClick(): void
       isReadyForLaunch?: undefined

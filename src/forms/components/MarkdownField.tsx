@@ -12,7 +12,7 @@ import {
   useRemirrorContext,
   WysiwygToolbar,
 } from '@remirror/react'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { Control, useController } from 'react-hook-form'
 import { getRemirrorJSON, InvalidContentHandler } from 'remirror'
 import {

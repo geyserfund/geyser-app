@@ -185,7 +185,7 @@ export const ProjectFundingSettings = () => {
           flexDirection="column"
           alignItems="center"
         >
-          {!projectWallet && (
+          {!projectWallet && project && (
             <ProjectCreationWalletConnectionForm
               project={project}
               onNextClick={handleProjectLaunch}
