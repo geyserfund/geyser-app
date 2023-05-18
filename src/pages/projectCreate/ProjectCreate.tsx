@@ -13,13 +13,13 @@ import {
 } from '../../types'
 import { useNotification } from '../../utils'
 import { FormContinueButton } from './components/FormContinueButton'
-import { ProjectCreateForm } from './components/ProjectCreateForm'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
+import { ProjectForm } from './components/ProjectForm'
 import {
   ProjectUnsavedModal,
   useProjectUnsavedModal,
 } from './components/ProjectUnsavedModal'
-import { useProjectCreateForm } from './hooks/useProjectCreateForm'
+import { useProjectForm } from './hooks/useProjectForm'
 import { ProjectCreationVariables } from './types'
 
 export const ProjectCreate = () => {
@@ -36,7 +36,7 @@ export const ProjectCreate = () => {
     variables: { where: { id: Number(params.projectId) } },
   })
 
-  const form = useProjectCreateForm({
+  const form = useProjectForm({
     isEdit,
     project: data?.project,
   })
@@ -87,7 +87,7 @@ export const ProjectCreate = () => {
     },
   })
 
-  const navigateBack = () =>
+  const onLeave = () =>
     navigate(
       params.projectId
         ? `${getPath('publicProjectLaunch')}/${params.projectId}`
@@ -95,29 +95,26 @@ export const ProjectCreate = () => {
     )
 
   const unsavedModal = useProjectUnsavedModal({
-    onLeave: navigateBack,
     hasUnsaved: form.formState.isDirty,
   })
 
   const onBackClick = () => {
     if (form.formState.isDirty) {
-      return unsavedModal.onOpen()
+      return unsavedModal.onOpen({
+        onLeave,
+      })
     }
 
-    navigateBack()
+    onLeave()
   }
 
-  const handleNext = (values: ProjectCreationVariables) => {
+  const onSubmit = ({ email, name, ...values }: ProjectCreationVariables) => {
     if (isEdit && data?.project) {
       updateProject({
         variables: {
           input: {
             projectId: Number(data.project.id),
-            title: values.title,
-            image: values.image || '',
-            thumbnailImage: values.thumbnailImage || '',
-            shortDescription: values.shortDescription,
-            description: values.description,
+            ...values,
           },
         },
       })
@@ -126,23 +123,22 @@ export const ProjectCreate = () => {
         variables: {
           input: {
             ...values,
-            email: user.email || values.email,
+            name,
+            email,
           },
         },
       })
     }
   }
 
-  const onSubmit = form.handleSubmit(handleNext)
-
   const nextProps = {
     isLoading: loading || createLoading || updateLoading,
     isDisabled: createLoading || updateLoading,
-    onClick: onSubmit,
+    onClick: form.handleSubmit(onSubmit),
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <ProjectCreateLayout
         continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
         onBackClick={onBackClick}
@@ -156,7 +152,7 @@ export const ProjectCreate = () => {
         }
       >
         <VStack width="100%" alignItems="flex-start" spacing={6}>
-          <ProjectCreateForm form={form} isEdit={isEdit} />
+          <ProjectForm form={form} isEdit={isEdit} />
           <FormContinueButton width="100%" {...nextProps} />
         </VStack>
       </ProjectCreateLayout>

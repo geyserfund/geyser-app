@@ -2,30 +2,24 @@ import { Button, GridItem, useBreakpointValue, VStack } from '@chakra-ui/react'
 
 import { useProjectContext } from '../../context'
 import { useUpdateProjectMutation } from '../../types'
-import { useMobileMode, useNotification } from '../../utils'
-import { ProjectForm } from '../projectCreate/components/ProjectForm'
+import { useNotification } from '../../utils'
 import { ProjectPreviewComponent } from '../projectCreate/components/ProjectPreviewComponent'
+import { ProjectStoryForm } from '../projectCreate/components/ProjectStoryForm'
 import {
   ProjectUnsavedModal,
   useProjectUnsavedModal,
 } from '../projectCreate/components/ProjectUnsavedModal'
-import { useProjectForm } from '../projectCreate/hooks/useProjectForm'
-import { ProjectCreationVariables } from '../projectCreate/types'
+import { useProjectStoryForm } from '../projectCreate/hooks/useProjectStoryForm'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 
-export const ProjectDescription = () => {
-  const isMobile = useMobileMode()
+export const ProjectStory = () => {
   const { toast } = useNotification()
 
-  const { project, updateProject } = useProjectContext()
+  const { project, updateProject, loading } = useProjectContext()
 
   const isViewXL = useBreakpointValue({ xl: true, base: false })
 
-  const form = useProjectForm({ isEdit: true, project })
-
-  const unsavedModal = useProjectUnsavedModal({
-    hasUnsaved: form.formState.isDirty,
-  })
+  const form = useProjectStoryForm({ project })
 
   const [updateProjectMutation, { loading: updateLoading }] =
     useUpdateProjectMutation({
@@ -35,40 +29,33 @@ export const ProjectDescription = () => {
         }
 
         toast({
-          title: 'Project updated successfully!',
+          title: 'Project story updated successfully!',
           status: 'success',
         })
       },
       onError(error) {
         toast({
-          title: 'project update failed!',
+          title: 'There was a problem while trying to update the project story',
           description: `${error}`,
           status: 'error',
         })
       },
     })
 
-  const _onNavigate = (onLeave: () => void) => {
-    if (form.formState.isDirty) {
-      return unsavedModal.onOpen({
-        onLeave,
-      })
+  const unsavedModal = useProjectUnsavedModal({
+    hasUnsaved: form.formState.isDirty,
+  })
+
+  const onSubmit = async ({ description }: { description: string }) => {
+    if (!project) {
+      return
     }
 
-    onLeave()
-  }
-
-  const onSubmit = ({ email, name, ...values }: ProjectCreationVariables) => {
-    if (project) {
-      updateProjectMutation({
-        variables: {
-          input: {
-            projectId: Number(project.id),
-            ...values,
-          },
-        },
-      })
-    }
+    updateProjectMutation({
+      variables: {
+        input: { projectId: project.id, description },
+      },
+    })
   }
 
   return (
@@ -87,10 +74,11 @@ export const ProjectDescription = () => {
             marginBottom="40px"
             display="flex"
             flexDirection="column"
+            justifyContent="center"
             alignItems="center"
           >
             <VStack width="100%" alignItems="flex-start" spacing="24px">
-              <ProjectForm form={form} isEdit />
+              <ProjectStoryForm form={form} isLoading={loading} />
               <Button
                 isLoading={updateLoading}
                 variant="primary"
@@ -105,7 +93,7 @@ export const ProjectDescription = () => {
         <GridItem
           colSpan={isViewXL ? 3 : 2}
           display="flex"
-          marginTop={isMobile ? '0px' : '0px'}
+          marginTop={0}
           alignItems="flex-start"
           justifyContent="center"
         >

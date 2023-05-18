@@ -33,10 +33,10 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
 
   const { project, loading } = useProjectContext()
 
-  const launchModalOpen = location.search.split('launch').length > 1
-  const draftModalOpen = location.search.split('draft').length > 1
-
   useEffect(() => {
+    const launchModalOpen = location.search.split('launch').length > 1
+    const draftModalOpen = location.search.split('draft').length > 1
+
     if (launchModalOpen) {
       return launchModal.onOpen()
     }
@@ -47,21 +47,9 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
 
     launchModal.onClose()
     draftModal.onClose()
-  }, [
-    draftModal,
-    draftModalOpen,
-    launchModal,
-    launchModalOpen,
-    location.search,
-  ])
+  }, [draftModal, launchModal, location.search])
 
   const fundForm = useFundingFormState({
-    /*
-     * Passing an empty array as fallback would probably make
-     * more sense but I think at the moment most checks look
-     * for an undefined value.
-      
-     */
     rewards: project
       ? (project.rewards as ProjectRewardForCreateUpdateFragment[])
       : undefined,

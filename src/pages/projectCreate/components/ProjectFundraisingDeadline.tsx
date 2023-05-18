@@ -1,4 +1,5 @@
 import { Button, HStack } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
 import { useState } from 'react'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 
@@ -13,22 +14,22 @@ export const ProjectFundraisingDeadline = ({
   setValue,
   watch,
 }: ProjectFundraisingDeadlineProps) => {
-  const [selectedButton, setSelectedButton] = useState(
-    watch('expiresAt') ? 'custom' : 'ongoing',
+  const value = watch('expiresAt')
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    value ? DateTime.fromMillis(Number(value)).toJSDate() : null,
   )
-  const [selectedDate, setSelectedDate] = useState<Date>()
+
+  const selectedButton = value ? 'custom' : 'ongoing'
 
   const handleDateChange = (value: Date) => {
-    setSelectedButton('custom')
     setSelectedDate(value)
-
-    setValue('expiresAt', `${value.getTime()}`)
+    setValue('expiresAt', value.getTime().toString(), { shouldDirty: true })
   }
 
   const handleOngoingSelect = () => {
-    setSelectedButton('ongoing')
-    setSelectedDate(undefined)
-    setValue('expiresAt', undefined)
+    setSelectedDate(null)
+    setValue('expiresAt', '', { shouldDirty: true })
   }
 
   return (

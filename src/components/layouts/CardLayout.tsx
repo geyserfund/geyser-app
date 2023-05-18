@@ -14,6 +14,7 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
   ({ children, noborder, click, hover, ...rest }, ref) => {
     return (
       <Stack
+        ref={ref}
         as={rest.to ? Link : undefined}
         tabIndex={-1}
         overflow={'hidden'}

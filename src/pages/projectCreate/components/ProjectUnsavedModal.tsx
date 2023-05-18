@@ -1,41 +1,35 @@
-import { Button, ModalProps, Text, VStack } from '@chakra-ui/react'
+import { Button, Text, VStack } from '@chakra-ui/react'
 
 import { Modal } from '../../../components/layouts/Modal'
 import { useUnsavedAlert } from '../../../hooks'
 import { useModal, UseModalReturn } from '../../../hooks/useModal'
 
-interface Props extends Omit<ModalProps, 'children'> {
-  onLeave: (() => void) | null
+interface Props extends Omit<UseModalReturn<{ onLeave(): void }>, 'children'> {
   hasUnsaved: boolean
 }
 
 const ARE_YOU_SURE = `If you quit from this view your information will be unsaved. You may
                       want to save your work as a draft before leaving this view`
 
-export type UseProjectUnsavedModalProps = Pick<Props, 'onLeave' | 'hasUnsaved'>
+export type UseProjectUnsavedModalProps = Pick<Props, 'hasUnsaved'>
 
 export const useProjectUnsavedModal = ({
-  onLeave,
   hasUnsaved,
 }: UseProjectUnsavedModalProps): UseProjectUnsavedModalProps &
-  UseModalReturn => {
-  const modal = useModal()
+  UseModalReturn<{ onLeave(): void }> => {
+  const modal = useModal<{ onLeave(): void }>()
 
-  return { ...modal, onLeave, hasUnsaved }
+  return { ...modal, hasUnsaved }
 }
 
-export const ProjectUnsavedModal = ({
-  onLeave,
-  hasUnsaved,
-  ...props
-}: Props) => {
+export const ProjectUnsavedModal = ({ hasUnsaved, ...modalProps }: Props) => {
   useUnsavedAlert(hasUnsaved)
 
   return (
     <Modal
-      {...props}
+      {...modalProps}
       title={<Text variant="h3">Leave project creation</Text>}
-      isOpen={props.isOpen && hasUnsaved}
+      isOpen={modalProps.isOpen && hasUnsaved}
     >
       <VStack w="100%" spacing={6} pt={1}>
         <Text>{ARE_YOU_SURE}</Text>
@@ -43,7 +37,7 @@ export const ProjectUnsavedModal = ({
           w="100%"
           variant="secondary"
           color="brand.secondaryRed"
-          onClick={onLeave || undefined}
+          onClick={modalProps.props.onLeave || undefined}
         >
           Leave without saving
         </Button>

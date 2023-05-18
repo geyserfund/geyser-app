@@ -1,10 +1,17 @@
-import { Button, Container, HStack, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Container,
+  ContainerProps,
+  HStack,
+  VStack,
+} from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
 import { CardLayout } from '../../../components/layouts'
 
-interface ProjectCreateLayoutProps {
+interface ProjectCreateLayoutProps
+  extends Omit<ContainerProps, 'children' | 'title'> {
   children: ReactNode
   title: ReactNode
   continueButton?: ReactNode
@@ -16,9 +23,10 @@ export const ProjectCreateLayout = ({
   onBackClick,
   title,
   continueButton = null,
+  ...props
 }: ProjectCreateLayoutProps) => {
   return (
-    <Container py={4}>
+    <Container py={4} {...props}>
       <HStack>
         <Button
           flexGrow={1}

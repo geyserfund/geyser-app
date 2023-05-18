@@ -1,5 +1,5 @@
 import { useDisclosure, UseDisclosureProps } from '@chakra-ui/react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 export type UseModalReturn<T extends Record<string, any> = {}> = ReturnType<
   typeof useModal<T>
@@ -34,5 +34,8 @@ export function useModal<T extends Record<string, any>>(
     [_onToggle],
   )
 
-  return { onOpen, onClose, onToggle, isOpen, props }
+  return useMemo(
+    () => ({ onOpen, onClose, onToggle, isOpen, props }),
+    [isOpen, onClose, onOpen, onToggle, props],
+  )
 }

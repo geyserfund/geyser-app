@@ -24,12 +24,12 @@ import { ProjectFundraisingDeadline } from './ProjectFundraisingDeadline'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
-type ProjectCreateFormProps = {
+type ProjectFormProps = {
   form: UseFormReturn<ProjectCreationVariables>
   isEdit: boolean
 }
 
-export const ProjectCreateForm = ({ form, isEdit }: ProjectCreateFormProps) => {
+export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   const { user } = useAuthContext()
 
   const { formState, setValue, watch, setError } = form

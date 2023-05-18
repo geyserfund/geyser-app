@@ -66,6 +66,9 @@ const ProjectDetails = loadable(() =>
 const ProjectFundingSettings = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectFundingSettings),
 )
+const ProjectStory = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectStory),
+)
 const ProjectStats = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectStats),
 )
@@ -191,6 +194,10 @@ const platformRoutes = [
       {
         path: getPath('dashboardDetails', PathName.projectId),
         element: ProjectDetails,
+      },
+      {
+        path: getPath('dashboardStory', PathName.projectId),
+        element: ProjectStory,
       },
       {
         path: getPath('dashboardFunding', PathName.projectId),

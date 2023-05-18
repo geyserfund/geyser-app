@@ -46,18 +46,16 @@ const schema = yup
         `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`,
       ),
     email: yup.string().required('Email address is a required field.'),
+    expiresAt: yup.string().nullable(),
   })
   .required()
 
-type UseProjectCreateFormProps = {
+type UseProjectFormProps = {
   isEdit: boolean
   project: ProjectFragment | undefined | null
 }
 
-export const useProjectCreateForm = ({
-  isEdit,
-  project,
-}: UseProjectCreateFormProps) => {
+export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
   const { user } = useAuthContext()
 
   const form = useForm<ProjectCreationVariables>({
@@ -72,6 +70,7 @@ export const useProjectCreateForm = ({
           thumbnailImage: project.thumbnailImage || '',
           shortDescription: project.shortDescription,
           description: project.description,
+          expiresAt: project.expiresAt,
           email: user.email || '',
         }
       }

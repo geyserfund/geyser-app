@@ -23,20 +23,20 @@ export const ProjectDetails = () => {
   const { toast, unexpected } = useNotification()
 
   const {
-    project,
-    isDirty,
-    linkError,
-    projectLoading,
     updateProject,
     saveProject,
     saveTags,
     setLinks,
     setTags,
+    project,
     tags,
+    isDirty,
+    linkError,
     tagsLoading,
+    projectLoading,
   } = useProjectDetailsForm({ projectId: params.projectId })
 
-  const handleNext = async () => {
+  const onSubmit = async () => {
     if (!project) {
       return
     }
@@ -60,7 +60,7 @@ export const ProjectDetails = () => {
     }
   }
 
-  const navigateBack = () => {
+  const onLeave = () => {
     navigate(
       project
         ? `${getPath('privateProjectLaunch')}/${project.id}`
@@ -69,16 +69,17 @@ export const ProjectDetails = () => {
   }
 
   const unsavedModal = useProjectUnsavedModal({
-    onLeave: navigateBack,
     hasUnsaved: isDirty,
   })
 
-  const handleBack = () => {
+  const onBackClick = () => {
     if (isDirty) {
-      return unsavedModal.onOpen()
+      return unsavedModal.onOpen({
+        onLeave,
+      })
     }
 
-    navigateBack()
+    onLeave()
   }
 
   if (projectLoading) {
@@ -86,7 +87,7 @@ export const ProjectDetails = () => {
   }
 
   const nextProps = {
-    onClick: handleNext,
+    onClick: onSubmit,
     isLoading: tagsLoading,
     isDisabled: tagsLoading,
   }
@@ -95,7 +96,7 @@ export const ProjectDetails = () => {
     <>
       <ProjectCreateLayout
         continueButton={<FormContinueButton flexGrow={1} {...nextProps} />}
-        onBackClick={handleBack}
+        onBackClick={onBackClick}
         title={
           <TitleWithProgressBar
             title="Links & tags"

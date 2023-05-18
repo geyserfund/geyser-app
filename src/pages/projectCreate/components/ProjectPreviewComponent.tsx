@@ -2,7 +2,8 @@ import { Box, Text, VStack } from '@chakra-ui/react'
 
 import { H2, H3 } from '../../../components/typography'
 import { Card, ImageWithReload } from '../../../components/ui'
-import { MarkDown, toSmallImageUrl, useMobileMode } from '../../../utils'
+import { MarkdownField } from '../../../forms/components/MarkdownField'
+import { toSmallImageUrl } from '../../../utils'
 
 interface ProjectPreviewComponentProps {
   data: {
@@ -17,9 +18,10 @@ interface ProjectPreviewComponentProps {
 export const ProjectPreviewComponent = ({
   data,
 }: ProjectPreviewComponentProps) => {
-  const isMobile = useMobileMode()
   return (
     <VStack
+      zIndex={90}
+      bg="neutral.0"
       justifyContent="flex-start"
       alignItems="flex-start"
       minWidth="350px"
@@ -66,12 +68,10 @@ export const ProjectPreviewComponent = ({
           <H3 wordBreak="break-all">
             {data.shortDescription || 'Project Objective'}
           </H3>
-          <MarkDown
-            fontSize={isMobile ? '14px' : '16px'}
-            color="brand.textGrey"
-          >
-            {data.description || 'Project Description'}
-          </MarkDown>
+          <MarkdownField
+            preview
+            content={data.description || 'Project Description'}
+          />
         </VStack>
       </Card>
     </VStack>

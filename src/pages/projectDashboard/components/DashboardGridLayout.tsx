@@ -1,20 +1,18 @@
-import { Fade, Grid, GridItem, useMediaQuery } from '@chakra-ui/react'
-
-import { useMobileMode } from '../../../utils'
+import { Fade, Grid, GridItem, useBreakpointValue } from '@chakra-ui/react'
 
 export const DashboardGridLayout = ({
   children,
 }: {
   children: React.ReactNode
 }) => {
-  const isMobile = useMobileMode()
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
+  const isMobile = useBreakpointValue({ lg: false, base: true })
+  const isViewXL = useBreakpointValue({ xl: true, base: false })
   return (
     <Fade in>
       <Grid
         width="100%"
         templateColumns={
-          isLargerThan1280
+          isViewXL
             ? 'repeat(12, 1fr)'
             : isMobile
             ? 'repeat(2, 1fr)'
@@ -23,13 +21,13 @@ export const DashboardGridLayout = ({
         padding={
           isMobile
             ? '10px'
-            : isLargerThan1280
+            : isViewXL
             ? '40px 40px 20px 40px'
             : '40px 20px 20px 20px'
         }
       >
         <GridItem
-          colSpan={isLargerThan1280 ? 3 : 1}
+          colSpan={isViewXL ? 3 : 1}
           display="flex"
           justifyContent="flex-start"
         ></GridItem>
