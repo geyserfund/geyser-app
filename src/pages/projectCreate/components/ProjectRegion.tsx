@@ -15,6 +15,7 @@ import {
   Maybe,
   Project,
   ProjectCountriesGetResult,
+  ProjectFragment,
   ProjectRegionsGetResult,
 } from '../../../types'
 
@@ -46,7 +47,7 @@ const useStyles = createUseStyles({
 
 interface ProjectRegionProps extends StackProps {
   location?: Maybe<Location>
-  updateProject: (_: Project) => void
+  updateProject: (project: Partial<ProjectFragment>) => void
 }
 
 export const ProjectRegion = ({
@@ -108,7 +109,7 @@ export const ProjectRegion = ({
   const removeRegion = () => {
     updateProject({
       location: { region: '', country: { code: '', name: '' } },
-    } as Project)
+    })
   }
 
   const isLoading = countriesLoading || regionsLoading

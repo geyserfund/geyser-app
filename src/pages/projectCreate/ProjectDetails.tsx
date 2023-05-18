@@ -4,56 +4,43 @@ import { useNavigate, useParams } from 'react-router'
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
-import { useProjectState } from '../../hooks/graphqlState'
-import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
-import { useProjectLinksValidation } from '../../hooks/validations'
-import { toInt, useNotification } from '../../utils'
-import { truthyFilter } from '../../utils/array'
+import { useNotification } from '../../utils'
 import { ProjectRegion } from './components'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectLinks } from './components/ProjectLinks'
 import { ProjectTagsCreateEdit } from './components/ProjectTagsCreateEdit'
+import {
+  ProjectUnsavedModal,
+  useProjectUnsavedModal,
+} from './components/ProjectUnsavedModal'
+import { useProjectDetailsForm } from './hooks/useProjectDetailsForm'
 
-export const ProjectAdditionalDetails = () => {
+export const ProjectDetails = () => {
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
 
   const { toast, unexpected } = useNotification()
 
   const {
-    loading: projectLoading,
     project,
+    isDirty,
+    linkError,
+    projectLoading,
     updateProject,
     saveProject,
-  } = useProjectState(
-    toInt(params.projectId),
-    {
-      onError() {
-        toast({
-          title: 'Error fetching project',
-          status: 'error',
-        })
-      },
-    },
-    'id',
-  )
-
-  const { setLinks, linkError } = useProjectLinksValidation({
-    updateProject,
-  })
-
-  const {
-    tags,
-    setTags,
     saveTags,
-    loading: tagsLoading,
-  } = useProjectTagsState({
-    project,
-    updateProject,
-  })
+    setLinks,
+    setTags,
+    tags,
+    tagsLoading,
+  } = useProjectDetailsForm({ projectId: params.projectId })
 
   const handleNext = async () => {
+    if (!project) {
+      return
+    }
+
     if (linkError.includes(true)) {
       toast({
         status: 'warning',
@@ -66,14 +53,32 @@ export const ProjectAdditionalDetails = () => {
     try {
       await saveTags()
       await saveProject()
-      navigate(getPath('launchProjectStory', project?.id))
+
+      navigate(getPath('launchProjectStory', project.id))
     } catch (e) {
       unexpected()
     }
   }
 
+  const navigateBack = () => {
+    navigate(
+      project
+        ? `${getPath('privateProjectLaunch')}/${project.id}`
+        : getPath('privateProjectLaunch'),
+    )
+  }
+
+  const unsavedModal = useProjectUnsavedModal({
+    onLeave: navigateBack,
+    hasUnsaved: isDirty,
+  })
+
   const handleBack = () => {
-    navigate(getPath('privateProjectLaunch'))
+    if (isDirty) {
+      return unsavedModal.onOpen()
+    }
+
+    navigateBack()
   }
 
   if (projectLoading) {
@@ -102,7 +107,7 @@ export const ProjectAdditionalDetails = () => {
       >
         <VStack spacing={6}>
           <ProjectLinks
-            links={project?.links.filter(truthyFilter) || []}
+            links={project?.links || []}
             setLinks={setLinks}
             linkError={linkError}
           />
@@ -116,6 +121,7 @@ export const ProjectAdditionalDetails = () => {
           <FormContinueButton width="100%" {...nextProps} />
         </VStack>
       </ProjectCreateLayout>
+      <ProjectUnsavedModal {...unsavedModal} />
     </>
   )
 }

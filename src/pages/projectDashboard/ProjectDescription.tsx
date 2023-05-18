@@ -5,13 +5,10 @@ import { useEffect, useState } from 'react'
 import { ButtonComponent } from '../../components/ui'
 import { useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
-import { useBeforeClose } from '../../hooks'
+import { useUnsavedAlert } from '../../hooks'
 import { FormError, Project } from '../../types'
 import { checkDiff, toInt, useMobileMode, useNotification } from '../../utils'
-import {
-  ProjectCreateForm,
-  ProjectCreateFormValidation,
-} from '../projectCreate/components/ProjectCreateForm'
+import { ProjectCreateForm } from '../projectCreate/components/ProjectCreateForm'
 import { ProjectPreviewComponent } from '../projectCreate/components/ProjectPreviewComponent'
 import { ProjectUpdateVariables } from '../projectCreate/types'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
@@ -34,7 +31,7 @@ export const ProjectDescription = () => {
     thumbnailImage: '',
   })
 
-  const { setIsFormDirty } = useBeforeClose()
+  const { setIsFormDirty } = useUnsavedAlert()
 
   useEffect(() => {
     if (!project) {

@@ -1,7 +1,6 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 
-type Props = Required<Pick<ButtonProps, 'onClick'>> &
-  Pick<ButtonProps, 'isLoading' | 'width' | 'flexGrow' | 'isDisabled'>
+type Props = ButtonProps
 
 export const FormContinueButton = (props: Props) => {
   return (

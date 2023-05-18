@@ -8,101 +8,41 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { Dispatch, SetStateAction } from 'react'
+import { ChangeEventHandler } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 
-import { CharacterLimitError } from '../../../components/errors'
 import { FileUpload } from '../../../components/molecules'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { colors } from '../../../styles'
-import { FormError, Project } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
-import { ProjectCreationVariables, ProjectUpdateVariables } from '../types'
+import { ProjectCreationVariables } from '../types'
 import { FormInputContainer } from './FormInputContainer'
 import { ProjectFundraisingDeadline } from './ProjectFundraisingDeadline'
 
-interface ProjectCreateFormProps {
-  isEdit?: boolean
-  form: ProjectCreationVariables | ProjectUpdateVariables
-  formError: FormError<ProjectCreationVariables>
-  setFormError: any
-  setForm: Dispatch<
-    SetStateAction<ProjectCreationVariables | ProjectUpdateVariables>
-  >
-}
-
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
-export const ProjectCreateFormValidation = (form: Partial<Project>) => {
-  const errors = {} as { [key: string]: string }
-  let isValid = true
-  if (!form.title) {
-    errors.title = 'Title is a required field.'
-    isValid = false
-  } else if (form.title.length > ProjectValidations.title.maxLength) {
-    errors.title = `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`
-    isValid = false
-  }
-
-  if (!form.name) {
-    errors.name = 'Project name is a required field.'
-    isValid = false
-  } else if (
-    form.name.length < ProjectValidations.name.minLength ||
-    form.name.length > ProjectValidations.name.maxLength
-  ) {
-    errors.name = `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`
-    isValid = false
-  }
-
-  if (!form.shortDescription) {
-    errors.shortDescription = 'Project objective is a required field.'
-    isValid = false
-  } else if (
-    JSON.stringify(form.shortDescription).length >
-    ProjectValidations.shortDescription.maxLength
-  ) {
-    errors.shortDescription = `Project objective should be shorter than ${ProjectValidations.shortDescription.maxLength} characters.`
-    isValid = false
-  }
-
-  // if (!form.description) {
-  //   errors.description = 'Project objective is a required field.'
-  //   isValid = false
-  // } else if (
-  //   JSON.stringify(form.description).length >
-  //   ProjectValidations.description.maxLength
-  // ) {
-  //   errors.description = `Project objective should be shorter than ${ProjectValidations.description.maxLength} characters.`
-  //   isValid = false
-  // }
-
-  return { isValid, errors }
+type ProjectCreateFormProps = {
+  form: UseFormReturn<ProjectCreationVariables>
+  isEdit: boolean
 }
 
-export const ProjectCreateForm = ({
-  isEdit,
-  form,
-  setForm,
-  formError,
-  setFormError,
-}: ProjectCreateFormProps) => {
+export const ProjectCreateForm = ({ form, isEdit }: ProjectCreateFormProps) => {
   const { user } = useAuthContext()
+
+  const { formState, setValue, watch, setError } = form
 
   const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: {
       where: {
-        name: form.name,
+        name: watch('name'),
       },
     },
     onCompleted(data) {
       if (data && data.project && data.project.id) {
-        setFormError({
-          ...formError,
-          name: 'This lightning address is already taken.',
-        })
+        setError('name', new Error('This lightning address is already taken.'))
       }
     },
   })
@@ -110,99 +50,57 @@ export const ProjectCreateForm = ({
   const handleProjectFetch = () => {
     if (
       !isEdit &&
-      form?.name &&
-      form.name.length >= MIN_LENGTH_TO_QUERY_PROJECT
+      watch('name') &&
+      watch('name').length >= MIN_LENGTH_TO_QUERY_PROJECT
     ) {
       getProject()
     }
   }
 
   const handleImageUpload = (url: string) => {
-    setForm((current) => ({
-      ...current,
-      thumbnailImage: toMediumImageUrl(url),
-    }))
+    setValue('thumbnailImage', toMediumImageUrl(url), { shouldDirty: true })
   }
 
   const handleHeaderImageUpload = (url: string) => {
-    setForm((current) => ({ ...current, image: url }))
+    setValue('image', url, { shouldDirty: true })
   }
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((current) => ({ ...current, email: event.target.value }))
+    setValue('email', event.target.value, { shouldDirty: true })
   }
 
-  const deleteThumbnnailHandler = () => {
-    setForm((current) => ({ ...current, thumbnailImage: '' }))
+  const handleDeleteThumbnail = () => {
+    setValue('thumbnailImage', '', { shouldDirty: true })
   }
 
-  const deleteImageHandler = () => {
-    setForm((current) => ({ ...current, image: '' }))
+  const handleDeleteImage = () => {
+    setValue('image', '', { shouldDirty: true })
   }
 
-  const handleChange = (event: any) => {
+  const handleChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (event) => {
     if (event) {
       const { name, value } = event.target
-
-      const newForm = { ...form, [name]: value || '' }
 
       if (name === 'title' && !isEdit) {
         const projectName: string = value.split(' ').join('').toLowerCase()
         const sanitizedName = projectName.replaceAll(validLightningAddress, '')
 
-        newForm.name = sanitizedName
+        setValue('name', sanitizedName, { shouldDirty: true })
       }
 
       if (name === 'name') {
         const sanitizedName = `${value}`
           .toLocaleLowerCase()
           .replaceAll(validLightningAddress, '')
-        newForm.name = sanitizedName
+
+        return setValue(name, sanitizedName, { shouldDirty: true })
       }
 
-      setForm(newForm)
-
-      const valueLength = JSON.stringify(value).length
-
-      if (
-        name === 'title' &&
-        valueLength > ProjectValidations.title.maxLength
-      ) {
-        setFormError({
-          title: (
-            <CharacterLimitError
-              length={valueLength}
-              limit={ProjectValidations.title.maxLength}
-            />
-          ),
-        })
-      } else if (
-        name === 'description' &&
-        valueLength > ProjectValidations.description.maxLength
-      ) {
-        setFormError({
-          description: (
-            <CharacterLimitError
-              length={valueLength}
-              limit={ProjectValidations.description.maxLength}
-            />
-          ),
-        })
-      } else if (
-        name === 'shortDescription' &&
-        valueLength > ProjectValidations.shortDescription.maxLength
-      ) {
-        setFormError({
-          shortDescription: (
-            <CharacterLimitError
-              length={valueLength}
-              limit={ProjectValidations.shortDescription.maxLength}
-            />
-          ),
-        })
-      } else {
-        setFormError({})
-      }
+      setValue(name as keyof ProjectCreationVariables, value, {
+        shouldDirty: true,
+      })
     }
   }
 
@@ -215,8 +113,8 @@ export const ProjectCreateForm = ({
         <TextInputBox
           name="title"
           onChange={handleChange}
-          value={form.title}
-          error={formError.title}
+          value={watch('title')}
+          error={formState.errors.title?.message}
           onBlur={handleProjectFetch}
         />
       </FormInputContainer>
@@ -230,8 +128,8 @@ export const ProjectCreateForm = ({
           <Input
             name="name"
             onChange={handleChange}
-            value={form.name || ''}
-            isInvalid={Boolean(formError.name)}
+            value={watch('name')}
+            isInvalid={Boolean(formState.errors.name)}
             focusBorderColor={colors.primary}
             disabled={isEdit}
             onBlur={handleProjectFetch}
@@ -249,15 +147,15 @@ export const ProjectCreateForm = ({
           noOfLines={2}
           height="fit-content"
           overflowY="auto"
-          value={form.shortDescription || ''}
+          value={watch('shortDescription')}
           onChange={handleChange}
-          error={formError.shortDescription}
+          error={formState.errors.shortDescription?.message}
         />
-        {!formError.shortDescription && (
+        {!formState.errors.shortDescription && (
           <HStack width="100%" justifyContent="space-between">
             <Text fontSize="12px" color="brand.neutral700" />
             <Text fontSize="12px" color="brand.neutral700">{`${
-              JSON.stringify(form?.shortDescription).length
+              watch('shortDescription').length
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
         )}
@@ -270,12 +168,15 @@ export const ProjectCreateForm = ({
         <FileUpload
           showcase
           caption="For best fit, pick a square image. Image size limit: 10MB."
-          src={form.thumbnailImage}
+          src={watch('thumbnailImage')}
           onUploadComplete={handleImageUpload}
-          onDeleteClick={deleteThumbnnailHandler}
+          onDeleteClick={handleDeleteThumbnail}
           childrenOnLoading={<UploadBox loading />}
         >
-          <UploadBox h={10} title={form.image ? 'Change image' : undefined} />
+          <UploadBox
+            h={10}
+            title={watch('image') ? 'Change image' : undefined}
+          />
         </FileUpload>
       </FormInputContainer>
 
@@ -288,12 +189,15 @@ export const ProjectCreateForm = ({
           showcaseW="80px"
           caption="For best fit, pick an image around 800px x 200px. Image size limit:
         10MB."
-          src={form.image}
+          src={watch('image')}
           onUploadComplete={handleHeaderImageUpload}
-          onDeleteClick={deleteImageHandler}
+          onDeleteClick={handleDeleteImage}
           childrenOnLoading={<UploadBox loading />}
         >
-          <UploadBox h={10} title={form.image ? 'Change header' : undefined} />
+          <UploadBox
+            h={10}
+            title={watch('image') ? 'Change header' : undefined}
+          />
         </FileUpload>
       </FormInputContainer>
 
@@ -301,7 +205,7 @@ export const ProjectCreateForm = ({
         title="Fundraising deadline"
         subtitle="Add a deadline to your project if you have one, or just keep it as ongoing."
       >
-        <ProjectFundraisingDeadline form={form} setForm={setForm} />
+        <ProjectFundraisingDeadline setValue={setValue} watch={watch} />
       </FormInputContainer>
 
       <FormInputContainer
@@ -310,9 +214,9 @@ export const ProjectCreateForm = ({
       >
         <TextInputBox
           name="email"
-          value={user.email || ('email' in form ? form.email : '')}
+          value={watch('email')}
           onChange={handleEmail}
-          error={formError.email}
+          error={formState.errors.email?.message}
           isDisabled={Boolean(user.email)}
         />
       </FormInputContainer>

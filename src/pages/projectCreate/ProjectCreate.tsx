@@ -1,40 +1,26 @@
 import { VStack } from '@chakra-ui/react'
-import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
-import { getPath, UserValidations } from '../../constants'
+import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
 import {
   CreateProjectMutation,
-  FormError,
   useCreateProjectMutation,
-  useProjectByNameOrIdLazyQuery,
+  useProjectByNameOrIdQuery,
   User,
   useUpdateProjectMutation,
 } from '../../types'
-import { checkDiff, useNotification, validateEmail } from '../../utils'
+import { useNotification } from '../../utils'
 import { FormContinueButton } from './components/FormContinueButton'
-import {
-  ProjectCreateForm,
-  ProjectCreateFormValidation,
-} from './components/ProjectCreateForm'
+import { ProjectCreateForm } from './components/ProjectCreateForm'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import {
   ProjectUnsavedModal,
   useProjectUnsavedModal,
 } from './components/ProjectUnsavedModal'
+import { useProjectCreateForm } from './hooks/useProjectCreateForm'
 import { ProjectCreationVariables } from './types'
-
-const INITIAL_VALUES: ProjectCreationVariables = {
-  title: '',
-  shortDescription: '',
-  description: '',
-  image: '',
-  thumbnailImage: '',
-  email: '',
-  name: '',
-}
 
 export const ProjectCreate = () => {
   const params = useParams<{ projectId: string }>()
@@ -43,44 +29,17 @@ export const ProjectCreate = () => {
   const { toast } = useNotification()
   const { user, setUser } = useAuthContext()
 
-  const isEditingExistingProject = Boolean(params.projectId)
+  const isEdit = Boolean(params.projectId)
 
-  // @TODO: Figure a better way to type the form to reuse with the update flow
-  const [form, setForm] = useState<any>(INITIAL_VALUES)
+  const { loading, data } = useProjectByNameOrIdQuery({
+    skip: !params.projectId,
+    variables: { where: { id: Number(params.projectId) } },
+  })
 
-  const [formError, setFormError] = useState<
-    FormError<ProjectCreationVariables>
-  >({})
-
-  const navigateBack = () => {
-    navigate(
-      params.projectId
-        ? `${getPath('publicProjectLaunch')}/${params.projectId}`
-        : getPath('publicProjectLaunch'),
-    )
-  }
-
-  const onBackClick = () => {
-    if (!data || !data.project || !params.projectId) {
-      return unsavedModal.onOpen()
-    }
-
-    const diff = checkDiff(
-      form,
-      data.project,
-      Object.keys(INITIAL_VALUES).filter(
-        (v) => v !== 'email',
-      ) as (keyof ProjectCreationVariables)[],
-    )
-
-    if (diff) {
-      return unsavedModal.onOpen()
-    }
-
-    navigateBack()
-  }
-
-  const unsavedModal = useProjectUnsavedModal(navigateBack)
+  const form = useProjectCreateForm({
+    isEdit,
+    project: data?.project,
+  })
 
   const [createProject, { loading: createLoading }] = useCreateProjectMutation({
     onCompleted({ createProject }) {
@@ -128,108 +87,80 @@ export const ProjectCreate = () => {
     },
   })
 
-  const [getProjectById, { loading, data }] = useProjectByNameOrIdLazyQuery({
-    variables: { where: { id: Number(params.projectId) } },
-    onCompleted(data) {
-      if (data && data.project) {
-        setForm({
-          title: data.project.title,
-          name: data.project.name,
-          image: data.project.image || '',
-          thumbnailImage: data.project.thumbnailImage || '',
-          shortDescription: data.project.shortDescription,
-          description: data.project.description,
-          email: user.email || '',
-        })
-      }
-    },
+  const navigateBack = () =>
+    navigate(
+      params.projectId
+        ? `${getPath('publicProjectLaunch')}/${params.projectId}`
+        : getPath('publicProjectLaunch'),
+    )
+
+  const unsavedModal = useProjectUnsavedModal({
+    onLeave: navigateBack,
+    hasUnsaved: form.formState.isDirty,
   })
 
-  const validateForm = useCallback(() => {
-    let { errors, isValid } = ProjectCreateFormValidation(form)
-
-    if (!form.email && !user.email) {
-      errors.email = 'Email address is a required field.'
-      isValid = false
-    } else if (!user.email && !validateEmail(form.email)) {
-      errors.email = 'Please enter a valid email address.'
-      isValid = false
-    } else if (form.email.length > UserValidations.email.maxLength) {
-      errors.email = `Email address should be shorter than ${UserValidations.email.maxLength} characters.`
-      isValid = false
+  const onBackClick = () => {
+    if (form.formState.isDirty) {
+      return unsavedModal.onOpen()
     }
 
-    if (!isValid) {
-      setFormError(errors)
-    }
+    navigateBack()
+  }
 
-    return isValid
-  }, [form, user.email])
-
-  const handleNext = () => {
-    if (validateForm()) {
-      if (isEditingExistingProject && data?.project) {
-        updateProject({
-          variables: {
-            input: {
-              projectId: Number(data.project.id),
-              title: form.title,
-              image: form.image || '',
-              thumbnailImage: form.thumbnailImage || '',
-              shortDescription: form.shortDescription,
-              description: form.description,
-            },
+  const handleNext = (values: ProjectCreationVariables) => {
+    if (isEdit && data?.project) {
+      updateProject({
+        variables: {
+          input: {
+            projectId: Number(data.project.id),
+            title: values.title,
+            image: values.image || '',
+            thumbnailImage: values.thumbnailImage || '',
+            shortDescription: values.shortDescription,
+            description: values.description,
           },
-        })
-      } else {
-        createProject({
-          variables: {
-            input: {
-              ...form,
-              email: user.email || form.email,
-            },
+        },
+      })
+    } else {
+      createProject({
+        variables: {
+          input: {
+            ...values,
+            email: user.email || values.email,
           },
-        })
-      }
+        },
+      })
     }
   }
 
-  useEffect(() => {
-    if (params.projectId) {
-      getProjectById()
-    }
-  }, [getProjectById, params.projectId])
+  const onSubmit = form.handleSubmit(handleNext)
 
   const nextProps = {
     isLoading: loading || createLoading || updateLoading,
     isDisabled: createLoading || updateLoading,
-    onClick: handleNext,
+    onClick: onSubmit,
   }
 
   return (
-    <ProjectCreateLayout
-      continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
-      onBackClick={onBackClick}
-      title={
-        <TitleWithProgressBar
-          title="Project description"
-          subtitle="Create a project"
-          index={1}
-          length={4}
-        />
-      }
-    >
-      <VStack width="100%" alignItems="flex-start" spacing={6}>
-        <ProjectCreateForm
-          form={form}
-          formError={formError}
-          setForm={setForm}
-          setFormError={setFormError}
-        />
-        <FormContinueButton width="100%" {...nextProps} />
-      </VStack>
-
+    <form onSubmit={onSubmit}>
+      <ProjectCreateLayout
+        continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
+        onBackClick={onBackClick}
+        title={
+          <TitleWithProgressBar
+            title="Project description"
+            subtitle="Create a project"
+            index={1}
+            length={4}
+          />
+        }
+      >
+        <VStack width="100%" alignItems="flex-start" spacing={6}>
+          <ProjectCreateForm form={form} isEdit={isEdit} />
+          <FormContinueButton width="100%" {...nextProps} />
+        </VStack>
+      </ProjectCreateLayout>
       <ProjectUnsavedModal {...unsavedModal} />
-    </ProjectCreateLayout>
+    </form>
   )
 }

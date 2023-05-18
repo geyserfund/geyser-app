@@ -1,12 +1,12 @@
-import { ProjectAdditionalDetails } from './ProjectAdditionalDetails'
 import { ProjectCreate } from './ProjectCreate'
 import { ProjectCreateStart } from './ProjectCreateStart'
 import { ProjectCreateStory } from './ProjectCreateStory'
 import { ProjectCreationWalletConnectionForm } from './ProjectCreationWalletConnectionForm'
 import { ProjectCreationWalletConnectionPage } from './ProjectCreationWalletConnectionPage'
+import { ProjectDetails } from './ProjectDetails'
 
 export {
-  ProjectAdditionalDetails,
+  ProjectDetails as ProjectAdditionalDetails,
   ProjectCreate,
   ProjectCreateStart,
   ProjectCreateStory,

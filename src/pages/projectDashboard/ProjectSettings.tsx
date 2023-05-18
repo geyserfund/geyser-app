@@ -6,7 +6,7 @@ import { Body2 } from '../../components/typography'
 import { ButtonComponent, TextInputBox } from '../../components/ui'
 import { useAuthContext, useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
-import { useBeforeClose } from '../../hooks'
+import { useUnsavedAlert } from '../../hooks'
 import { FormError, Project, ProjectStatus } from '../../types'
 import { isActive, toInt, useNotification } from '../../utils'
 import { ProjectFundraisingDeadline } from '../projectCreate/components/ProjectFundraisingDeadline'
@@ -34,7 +34,7 @@ export const ProjectSettings = () => {
   const [deactivate, setDeactivate] = useState(!isActive(project?.status))
   const [formError, setFormError] = useState<FormError<ProjectSettingsForm>>({})
 
-  const { setIsFormDirty } = useBeforeClose()
+  const { setIsFormDirty } = useUnsavedAlert()
 
   useEffect(() => {
     if (!project) {

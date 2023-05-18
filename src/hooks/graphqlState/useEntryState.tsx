@@ -18,7 +18,7 @@ import {
   toInt,
   useNotification,
 } from '../../utils'
-import { useBeforeClose } from '../useBeforeClose'
+import { useUnsavedAlert } from '../useUnsavedAlert'
 import { useListenerState } from '../useListenerState'
 
 type TEntryVariables = {
@@ -59,7 +59,7 @@ export const useEntryState = (
   options?: QueryHookOptions<TEntryData, TEntryVariables>,
 ) => {
   const { toast } = useNotification()
-  const { setIsFormDirty } = useBeforeClose()
+  const { setIsFormDirty } = useUnsavedAlert()
 
   const [entry, setEntry] = useState<Entry>({} as Entry)
   const [baseEntry, setBaseEntry] = useState<Entry>({} as Entry)

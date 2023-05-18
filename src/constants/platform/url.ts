@@ -48,9 +48,7 @@ export const BotTwitterUrl = 'https://twitter.com/geyserfunders'
 export const LaunchImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch.png'
 export const LaunchProjectRocketUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/launch-project-rocket.png'
-
-// https://storage.googleapis.com/geyser-projects-media/app/create-project-rocket.png
+  'https://storage.googleapis.com/geyser-projects-media/app/create-project-rocket.png'
 
 export const LaunchProjectEntryUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/create-project-entry.png'

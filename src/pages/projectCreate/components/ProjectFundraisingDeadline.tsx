@@ -1,20 +1,20 @@
 import { Button, HStack } from '@chakra-ui/react'
 import { useState } from 'react'
+import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 
 import { CalendarButton } from '../../../components/molecules'
-import { ProjectCreationVariables, ProjectUpdateVariables } from '../types'
 
 interface ProjectFundraisingDeadlineProps {
-  form: Pick<ProjectCreationVariables | ProjectUpdateVariables, 'expiresAt'>
-  setForm: (_: any) => void
+  setValue: UseFormSetValue<any>
+  watch: UseFormWatch<any>
 }
 
 export const ProjectFundraisingDeadline = ({
-  form,
-  setForm,
+  setValue,
+  watch,
 }: ProjectFundraisingDeadlineProps) => {
   const [selectedButton, setSelectedButton] = useState(
-    form.expiresAt ? 'custom' : 'ongoing',
+    watch('expiresAt') ? 'custom' : 'ongoing',
   )
   const [selectedDate, setSelectedDate] = useState<Date>()
 
@@ -22,13 +22,13 @@ export const ProjectFundraisingDeadline = ({
     setSelectedButton('custom')
     setSelectedDate(value)
 
-    setForm({ ...form, expiresAt: `${value.getTime()}` })
+    setValue('expiresAt', `${value.getTime()}`)
   }
 
   const handleOngoingSelect = () => {
     setSelectedButton('ongoing')
     setSelectedDate(undefined)
-    setForm({ ...form, expiresAt: undefined })
+    setValue('expiresAt', undefined)
   }
 
   return (

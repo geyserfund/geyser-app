@@ -28,8 +28,10 @@
     "@emotion/styled": "^11.10.5",
     "@giphy/js-fetch-api": "^4.7.1",
     "@giphy/react-components": "^6.5.2",
+    "@hookform/resolvers": "^3.1.0",
     "@loadable/component": "^5.15.3",
     "@sentry/react": "^7.50.0",
+    "@types/yup": "^0.32.0",
     "bech32": "^2.0.0",
     "buffer": "^6.0.3",
     "classnames": "^2.3.2",
@@ -55,6 +57,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.43.9",
     "react-icons": "^4.7.1",
     "react-jss": "^10.9.2",
     "react-markdown": "^8.0.5",
@@ -70,7 +73,8 @@
     "serve-handler": "^6.1.5",
     "sort-by": "^1.2.0",
     "webln": "^0.3.2",
-    "websocket-polyfill": "^0.0.3"
+    "websocket-polyfill": "^0.0.3",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.3.0",
