@@ -4,6 +4,13 @@ import { colors, fonts, neutralColors, primaryColors } from '../styles'
 
 export const theme = extendTheme({
   initialColorMode: 'light',
+  breakpoints: {
+    sm: '30em', // 480px
+    md: '48em', // 768px
+    lg: '57em', // Desktop ~900px
+    xl: '80em', // 1280px
+    '2xl': '96em', // 1536px
+  },
   colors: {
     brand: {
       ...colors,

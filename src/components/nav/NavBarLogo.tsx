@@ -1,6 +1,6 @@
 import { Image } from '@chakra-ui/image'
 import { Box, BoxProps } from '@chakra-ui/layout'
-import { useMediaQuery } from '@chakra-ui/media-query'
+import { useBreakpointValue } from '@chakra-ui/media-query'
 import { useColorMode } from '@chakra-ui/system'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
@@ -33,9 +33,10 @@ export const NavBarLogo = ({
 }: Props) => {
   const classes = useStyles()
   const { colorMode } = useColorMode()
-  const [isLargerThan720] = useMediaQuery('(min-width: 900px)')
 
-  const useFullOne = (isLargerThan720 || full) && !small
+  const isLg = useBreakpointValue({ lg: true, base: false })
+
+  const useFullOne = (isLg || full) && !small
 
   const imageToUse =
     colorMode === 'light'
