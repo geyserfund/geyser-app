@@ -1,8 +1,7 @@
-import { useBreakpoint } from '@chakra-ui/media-query'
-
-export const DEFAULT_MOBILE_BREAK_POINT = 900
+import { useBreakpointValue } from '@chakra-ui/media-query'
 
 export const useMobileMode = () => {
-  const isLg = useBreakpoint('lg')
-  return !isLg
+  const isMobile = useBreakpointValue({ base: true, lg: false }, { ssr: false })
+
+  return isMobile
 }

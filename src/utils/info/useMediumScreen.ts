@@ -1,6 +1,10 @@
-import { useBreakpoint } from '@chakra-ui/media-query'
+import { useBreakpointValue } from '@chakra-ui/media-query'
 
 export const useMediumScreen = (): boolean => {
-  const isXl = useBreakpoint('xl')
-  return !isXl
+  const isMediumScreen = useBreakpointValue(
+    { xl: false, base: true },
+    { ssr: false },
+  )
+
+  return isMediumScreen || false
 }
