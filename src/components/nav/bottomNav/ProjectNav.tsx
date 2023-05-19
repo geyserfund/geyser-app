@@ -111,7 +111,7 @@ export const ProjectNavUI = () => {
       alignItems="center"
       spacing={{
         base: '18px',
-        md: '50px',
+        lg: '50px',
       }}
       paddingBottom="2px"
     >
@@ -172,7 +172,7 @@ export const ProjectNavUI = () => {
         ) : (
           <Button
             size="sm"
-            variant="contained"
+            variant="primary"
             width="100%"
             padding="5px"
             isDisabled={showGreyButton}

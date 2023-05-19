@@ -22,7 +22,12 @@ import {
 import { QUERY_ENTRY } from '../../../graphql/queries/entries'
 import { IEntryUpdateInput } from '../../../interfaces/entry'
 import { EntryStatus, Owner, Project } from '../../../types/generated/graphql'
-import { isDraft, toInt, useNotification } from '../../../utils'
+import {
+  copyTextToClipboard,
+  isDraft,
+  toInt,
+  useNotification,
+} from '../../../utils'
 import { defaultEntry } from './editor'
 import { CreateNav } from './editor/CreateNav'
 import { TEntry } from './types'
@@ -181,7 +186,7 @@ export const EntryPreview = () => {
 
   const handleTwitterShareButtonTapped = () => {
     if (params.entryId) {
-      navigator.clipboard.writeText(
+      copyTextToClipboard(
         `${window.location.origin}${getPath('entry', params.entryId)}`,
       )
 

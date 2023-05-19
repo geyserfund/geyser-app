@@ -12,7 +12,6 @@ export const neutralColors = {
   900: '#212529',
   1000: '#141A19',
 }
-
 export const primaryColors = {
   50: '#E9FFFB',
   100: '#B7FFF2',
@@ -85,6 +84,7 @@ export const colors = {
 
   secondaryRedDark: '#B01E1C',
 
+  neutral0: '#fff',
   neutral50: '#FCFCFC',
   neutral100: '#F4F4F4',
   neutral200: '#E9ECEF',
@@ -95,6 +95,7 @@ export const colors = {
   neutral700: '#495057',
   neutral800: '#343A40',
   neutral900: '#212529',
+  neutral1000: '#000',
 
   twitter: '#2AA9E0',
   twitterDark: '#0d5a82',

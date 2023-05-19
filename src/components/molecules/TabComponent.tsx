@@ -65,7 +65,7 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
       </StickToTop>
 
       <TabPanels
-        height={{ base: '100%', md: `calc(100% - 74px)` }}
+        height={{ base: '100%', lg: `calc(100% - 74px)` }}
         flex="1"
         marginTop="22px"
       >

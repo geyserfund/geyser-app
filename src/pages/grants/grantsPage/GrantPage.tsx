@@ -35,9 +35,9 @@ const PageContainer = ({
 }: PropsWithChildren<{ image?: Maybe<string>; title?: string }>) => {
   return (
     <Container
-      marginTop={{ base: '20px', md: '40px' }}
+      marginTop={{ base: '20px', lg: '40px' }}
       maxWidth="879px"
-      px={{ base: '10px', md: '20px' }}
+      px={{ base: '10px', lg: '20px' }}
     >
       <Head title={title} image={image || ''} />
       {children}

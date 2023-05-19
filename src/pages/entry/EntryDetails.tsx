@@ -38,7 +38,7 @@ export const EntryDetails = ({ entry }: Props) => {
       </ButtonComponent>
 
       <Stack
-        direction={{ base: 'column', md: 'row' }}
+        direction={{ base: 'column', lg: 'row' }}
         overflow="hidden"
         width="100%"
         justifyContent="space-between"

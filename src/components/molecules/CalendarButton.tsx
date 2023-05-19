@@ -1,50 +1,64 @@
 import 'react-datepicker/dist/react-datepicker.css'
 
+import { Box, BoxProps, Button, ButtonProps, Text } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { forwardRef } from 'react'
 import DatePicker from 'react-datepicker'
 import { createUseStyles } from 'react-jss'
 
-import { getFormattedDate } from '../../utils'
-import { ButtonComponent } from '../ui'
-
-interface ICalendarButton {
+interface ICalendarButton extends Pick<ButtonProps, 'isActive'> {
   children: React.ReactNode
   value?: Date | null
   onChange: (_: Date) => void
-  primary?: boolean
+  containerProps: BoxProps
 }
 
 const useStyles = createUseStyles({
   dateTimeWrapper: {
-    width: 'auto',
+    width: '100%',
   },
 })
+
+const ButtonDateInput = forwardRef<
+  HTMLButtonElement,
+  Pick<ButtonProps, 'onClick'> & Pick<ICalendarButton, 'value' | 'children'>
+>(({ value, onClick, children, ...props }, ref) => (
+  <Button
+    variant="secondary"
+    width="100%"
+    ref={ref}
+    onClick={onClick}
+    {...props}
+  >
+    <Text>{value?.toString() || children}</Text>
+  </Button>
+))
+ButtonDateInput.displayName = 'ButtonDateInput'
 
 export const CalendarButton = ({
   children,
   value,
   onChange,
-  primary,
+  containerProps,
+  ...buttonProps
 }: ICalendarButton) => {
   const classes = useStyles()
-
-  const ExampleCustomInput = forwardRef<any, any>(({ onClick }, ref) => (
-    <ButtonComponent primary={primary} onClick={onClick}>
-      {value ? getFormattedDate(value.getTime()) : children}
-    </ButtonComponent>
-  ))
-  ExampleCustomInput.displayName = 'ExampleInputButton'
 
   const currentDate = DateTime.now().plus({ days: 7 })
 
   return (
-    <DatePicker
-      wrapperClassName={classes.dateTimeWrapper}
-      selected={value}
-      onChange={onChange}
-      customInput={<ExampleCustomInput />}
-      minDate={currentDate.toJSDate()}
-    />
+    <Box {...containerProps}>
+      <DatePicker
+        wrapperClassName={classes.dateTimeWrapper}
+        selected={value}
+        onChange={onChange}
+        customInput={
+          <ButtonDateInput {...buttonProps} value={value}>
+            {children}
+          </ButtonDateInput>
+        }
+        minDate={currentDate.toJSDate()}
+      />
+    </Box>
   )
 }

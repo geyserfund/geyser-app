@@ -6,6 +6,7 @@ import { ProjectDetails } from './ProjectDetails'
 import { ProjectFundingSettings } from './ProjectFundingSettings'
 import { ProjectSettings } from './ProjectSettings'
 import { ProjectStats } from './ProjectStats'
+import { ProjectStory } from './ProjectStory'
 
 // This is exported as part of the CreatorDashboard chunk for code-splitting
 
@@ -18,4 +19,5 @@ export {
   ProjectFundingSettings,
   ProjectSettings,
   ProjectStats,
+  ProjectStory,
 }

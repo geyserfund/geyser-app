@@ -27,7 +27,7 @@ export const checkKeyValueExists = (
 export const checkDiff = <T extends {}>(
   val1: T,
   val2: Partial<T>,
-  keys?: (keyof T)[],
+  keys?: (keyof Partial<T>)[],
 ): boolean => {
   const loopVal =
     Object.keys(val1).length >= Object.keys(val2).length ? val1 : val2
@@ -43,7 +43,7 @@ export const checkDiff = <T extends {}>(
 
 export const getDiff = <T extends {}>(
   val1: T,
-  val2: T,
+  val2: Partial<T>,
   keys?: Partial<keyof T>[],
 ): [boolean, Partial<keyof T>[]] => {
   const loopVal =

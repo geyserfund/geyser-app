@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Checkbox,
   Modal,
   ModalBody,
@@ -177,14 +178,23 @@ export const NodeAdditionModal = ({
               Add a Node
             </Text>
 
-            <Text fontSize={'14px'} fontWeight="medium" color="neutral.600">
-              We currently support non-Tor nodes. So Tor nodes will not work at
-              this time.
+            <Text
+              fontSize={'14px'}
+              fontWeight="medium"
+              color="brand.neutral600"
+            >
+              We currently support LND and clearnet nodes. So Tor nodes will not
+              work at this time.
             </Text>
             <DescriptionLinkWithIconComponent
-              title="Keep in mind that you are responsible for managing the liquidity
-                  of your node."
-              icon={<BsExclamation fontSize="50px" color="neutral.900" />}
+              title="Keep in mind that you are responsible for managing the liquidity of your node. Find out more."
+              icon={
+                <Avatar
+                  bgColor="neutral.300"
+                  color="neutral.900"
+                  icon={<BsExclamation fontSize="36px" />}
+                />
+              }
             />
           </VStack>
         </ModalHeader>
@@ -225,7 +235,13 @@ export const NodeAdditionModal = ({
                 <DescriptionLinkWithIconComponent
                   title="Find our demo here on how to load a Voltage node."
                   link={VoltageNodeConnectionDemoURL}
-                  icon={<BsQuestion fontSize={'30px'} color="neutral.900" />}
+                  icon={
+                    <Avatar
+                      bgColor="neutral.300"
+                      color="neutral.900"
+                      icon={<BsQuestion fontSize="36px" />}
+                    />
+                  }
                 />
               ) : null}
             </VStack>

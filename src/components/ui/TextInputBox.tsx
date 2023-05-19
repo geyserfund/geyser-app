@@ -55,7 +55,6 @@ export const TextInputBox = ({
           </InputRightElement>
         )}
       </InputGroup>
-
       {error ? (
         typeof error === 'object' ? (
           error

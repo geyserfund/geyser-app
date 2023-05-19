@@ -48,7 +48,20 @@ export const BotTwitterUrl = 'https://twitter.com/geyserfunders'
 export const LaunchImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch.png'
 export const LaunchProjectRocketUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/launch-project-rocket.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/create-project-rocket.png'
+
+export const LaunchProjectEntryUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/create-project-entry.png'
+export const LaunchProjectFeesUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/create-project-fees.png'
+export const LaunchProjectGiftUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/create-project-gift.png'
+export const LaunchProjectKeyUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/create-project-key.png'
+export const LaunchProjectLightningUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/create-project-lightning.png'
+export const LaunchProjectWorldUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/create-project-world.png'
 
 export const GeyserLignteningNodeUrl =
   'https://amboss.space/node/0272e8731c6feda7fb7e2b8dbe0fbf1322f9e3b60cc2727f4ee4ca0f820b9cd169'
@@ -176,6 +189,8 @@ export const GrantApplicationDetailsUrl =
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
+
+export const GeyserFeedbackFromUrl = 'https://airtable.com/shr2GiORBI2CWSuhk'
 
 // BADGES
 

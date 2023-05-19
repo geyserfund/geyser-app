@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react'
 
+import { copyTextToClipboard } from '../utils'
+
 export const useAnimatedClipboard = (
   defaultValue?: string,
 ): [(v?: string) => void, boolean] => {
@@ -8,7 +10,7 @@ export const useAnimatedClipboard = (
   const copy = useCallback(
     (value?: string) => {
       const str = typeof value === 'string' ? value : null
-      navigator.clipboard.writeText(str || defaultValue || '')
+      copyTextToClipboard(str || defaultValue || '')
       setCopied(true)
       setTimeout(() => {
         setCopied(false)

@@ -1,4 +1,4 @@
-import { Box, Button, HStack } from '@chakra-ui/react'
+import { Box, Button, HStack, useBreakpointValue } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 
@@ -6,11 +6,11 @@ import Loader from '../../components/ui/Loader'
 import { getPath, PathName } from '../../constants'
 import { useAuthContext, useProjectContext } from '../../context'
 import { noScrollBar } from '../../styles/common'
-import { useMobileMode } from '../../utils'
 
 enum DashboardTabs {
   funds = 'funds',
   editProject = 'edit project',
+  story = 'story',
   contributors = 'contributors',
   details = 'details',
   stats = 'stats',
@@ -18,7 +18,7 @@ enum DashboardTabs {
 }
 
 export const ProjectDashboard = () => {
-  const isMobile = useMobileMode()
+  const isMobile = useBreakpointValue({ lg: false, base: true })
   const { projectId } = useParams<{ projectId: string }>()
 
   const navigate = useNavigate()
@@ -94,6 +94,7 @@ export const ProjectDashboard = () => {
   const navList: DashboardTabs[] = [
     DashboardTabs.editProject,
     DashboardTabs.details,
+    DashboardTabs.story,
     DashboardTabs.funds,
     DashboardTabs.contributors,
     DashboardTabs.stats,
@@ -128,7 +129,9 @@ export const ProjectDashboard = () => {
           {navList.map((nav) => renderButton(nav))}
         </HStack>
       </HStack>
-      <Outlet />
+      <Box maxW="100%">
+        <Outlet />
+      </Box>
     </Box>
   )
 }

@@ -30,7 +30,7 @@ export const GrantWinnerAnnouncement = ({
         isExternal
         href={linkUrl}
         size="sm"
-        variant="containedClear"
+        variant="secondary"
         px="10px"
         textDecoration="none"
       >

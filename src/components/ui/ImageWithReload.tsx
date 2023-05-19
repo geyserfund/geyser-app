@@ -27,7 +27,7 @@ export const ImageWithReload = ({
   ...rest
 }: IImageWithReload) => {
   const { toast } = useNotification()
-  const componentRef = useRef<number>()
+  const componentRef = useRef<number>(0)
 
   const [hasValidSource, setHasValidSource] = useState(Boolean(src))
   const [loading, setLoading] = useState<boolean>(false)
@@ -51,7 +51,7 @@ export const ImageWithReload = ({
       setTimeout(() => {
         currentTarget.onerror = null
         currentTarget.src = src
-        componentRef.current! += 1
+        componentRef.current += 1
       }, BACKOFF ** componentRef.current * MILLISECONDS)
     } else {
       setLoading(false)

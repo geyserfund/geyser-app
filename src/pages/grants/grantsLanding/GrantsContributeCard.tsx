@@ -41,7 +41,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
         display="flex"
         alignItems="center"
         width="100%"
-        px={{ base: undefined, md: '25%' }}
+        px={{ base: undefined, lg: '25%' }}
         justifyContent="space-around"
       >
         <ListText
@@ -72,7 +72,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
       <Stack
         display="flex"
         mt="6"
-        direction={{ base: 'column', md: 'row' }}
+        direction={{ base: 'column', lg: 'row' }}
         justify="center"
       >
         <GrantsContributeModal />

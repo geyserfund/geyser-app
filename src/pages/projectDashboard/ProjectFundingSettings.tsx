@@ -165,10 +165,10 @@ export const ProjectFundingSettings = () => {
           flexDirection="column"
           alignItems="center"
         >
-          {!projectWallet && (
+          {!projectWallet && project && (
             <ProjectCreationWalletConnectionForm
               project={project}
-              onProjectLaunchSelected={handleProjectLaunch}
+              onNextClick={handleProjectLaunch}
               setNodeInput={setNodeData}
               triggerWallet={tiggerWalletOpen}
             />
@@ -194,7 +194,7 @@ export const ProjectFundingSettings = () => {
               <VStack
                 width="100%"
                 border="1px solid"
-                borderColor={colors.gray300}
+                borderColor="brand.gray300"
                 borderRadius="4px"
                 alignItems="flex-start"
                 padding="10px"

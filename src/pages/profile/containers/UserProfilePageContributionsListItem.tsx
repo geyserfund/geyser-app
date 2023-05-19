@@ -30,7 +30,7 @@ export const UserProfilePageContributionsListItem = ({
       fundingTx={data.fundingTx}
       width={{
         base: '100%',
-        md: '375px',
+        lg: '375px',
       }}
       linkedProject={project}
     />

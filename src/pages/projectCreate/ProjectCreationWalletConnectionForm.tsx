@@ -1,4 +1,5 @@
 import {
+  Button,
   HStack,
   Image,
   InputGroup,
@@ -14,19 +15,16 @@ import { useEffect, useMemo, useState } from 'react'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BiRocket } from 'react-icons/bi'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
 
-import {
-  ButtonComponent,
-  TextInputBox,
-  UndecoratedLink,
-} from '../../components/ui'
+import { TextInputBox, UndecoratedLink } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
 import {
   AlbyLightningAddressURL,
   AlbyUrl,
   BitNobURL,
   BitnobUrl,
-  GeyserTermsAndConditionsURL,
+  getPath,
   VoltageExplainerPageForGeyserURL,
   VoltageUrl,
   WalletOfSatoshiLightningAddressURL,
@@ -42,44 +40,60 @@ import {
   WalletResourceType,
 } from '../../types/generated/graphql'
 import { toInt, useNotification, validateEmail } from '../../utils'
+import { FormContinueButton } from './components/FormContinueButton'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
+import { ProjectCreateCompleted } from './components/ProjectCreateCompleted'
 import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox'
 import { TNodeInput } from './types'
 
-type Props = {
-  project: ProjectFragment | null
-  onProjectLaunchSelected: (_: CreateWalletInput) => void
-  onSaveAsDraftSelected?: (_: CreateWalletInput) => void
-  triggerWallet?: boolean
-  setNodeInput?: React.Dispatch<React.SetStateAction<TNodeInput | undefined>>
-}
+type Props =
+  | {
+      project: ProjectFragment
+      triggerWallet?: boolean
+      isReadyForLaunch: boolean
+      setNodeInput?: React.Dispatch<
+        React.SetStateAction<TNodeInput | undefined>
+      >
+      setReadyForLaunch: React.Dispatch<React.SetStateAction<boolean>>
+      onNextClick?: undefined
+    }
+  | {
+      project: ProjectFragment
+      triggerWallet?: boolean
+      onNextClick(): void
+      isReadyForLaunch?: undefined
+      setReadyForLaunch?: undefined
+      setNodeInput?: React.Dispatch<
+        React.SetStateAction<TNodeInput | undefined>
+      >
+    }
 
 export enum ConnectionOption {
   LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
-
   PERSONAL_NODE = 'PERSONAL_NODE',
 }
 
 export enum LNAddressEvaluationState {
   IDLE = 'IDLE',
-
   LOADING = 'LOADING',
-
   FAILED = 'FAILED',
-
   SUCCEEDED = 'SUCCEEDED',
 }
 
+const noop = () => {}
+
 export const ProjectCreationWalletConnectionForm = ({
   project,
-  onProjectLaunchSelected,
-  onSaveAsDraftSelected,
+  isReadyForLaunch,
   triggerWallet,
-  setNodeInput: setNode,
+  setReadyForLaunch,
+  onNextClick,
+  setNodeInput: setParentNode = noop,
 }: Props) => {
+  const navigate = useNavigate()
   const { toast } = useNotification()
 
-  const [nodeInput, setNodeInput] = useState<TNodeInput | undefined>(undefined)
+  const [nodeInput, setNode] = useState<TNodeInput | undefined>(undefined)
 
   const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
 
@@ -98,24 +112,24 @@ export const ProjectCreationWalletConnectionForm = ({
     onOpen: openWallet,
   } = useDisclosure()
 
+  const onSubmit = (value: TNodeInput) => {
+    setNode(value)
+    setParentNode(value)
+  }
+
+  const onSaveDraftClick = async () => {
+    if (!project) {
+      return
+    }
+
+    navigate(getPath('projectLaunch', project.name, 'draft'))
+  }
+
   useEffect(() => {
     if (triggerWallet) {
       openWallet()
     }
-  }, [triggerWallet])
-
-  useEffect(() => {
-    if (setNode) {
-      setNode(nodeInput)
-    }
-  }, [nodeInput])
-
-  const onSubmit = (value: TNodeInput) => {
-    setNodeInput(value)
-    if (setNode) {
-      setNode(value)
-    }
-  }
+  }, [openWallet, triggerWallet])
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
     useLightningAddressVerifyLazyQuery({
@@ -201,7 +215,39 @@ export const ProjectCreationWalletConnectionForm = ({
     }
   }
 
-  const handleProjectLaunchSelected = async () => {
+  const handleNext = async () => {
+    if (onNextClick) {
+      try {
+        await handleLaunch()
+        return onNextClick()
+      } catch (error) {
+        toast({
+          title: 'Something went wrong',
+          description: `${error}`,
+          status: 'error',
+        })
+      }
+
+      return
+    }
+
+    setReadyForLaunch(true)
+  }
+
+  const onLaunchClick = async () => {
+    try {
+      await handleLaunch()
+      navigate(getPath('projectLaunch', project?.name))
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `${error}`,
+        status: 'error',
+      })
+    }
+  }
+
+  const handleLaunch = async () => {
     await validateLightningAddress()
 
     if (!createWalletInput) {
@@ -213,16 +259,7 @@ export const ProjectCreationWalletConnectionForm = ({
       return
     }
 
-    try {
-      await createWallet({ variables: { input: createWalletInput } })
-      onProjectLaunchSelected(createWalletInput)
-    } catch (error) {
-      toast({
-        title: 'Something went wrong',
-        description: `${error}`,
-        status: 'error',
-      })
-    }
+    await createWallet({ variables: { input: createWalletInput } })
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
@@ -239,6 +276,39 @@ export const ProjectCreationWalletConnectionForm = ({
     } else {
       setLightningAddressFormError(null)
     }
+  }
+
+  if (isReadyForLaunch) {
+    return (
+      <ProjectCreateCompleted>
+        <VStack w="100%">
+          {createWalletInput && (
+            <Button
+              variant="primary"
+              w="full"
+              leftIcon={<BiRocket />}
+              onClick={onLaunchClick}
+              isLoading={isCreateWalletLoading}
+              disabled={
+                isSubmitEnabled === false ||
+                isEvaluatingLightningAddress ||
+                Boolean(lightningAddressFormError)
+              }
+            >
+              Launch Project
+            </Button>
+          )}
+          <Button
+            variant="secondary"
+            w="full"
+            onClick={onSaveDraftClick}
+            disabled={isCreateWalletLoading || isEvaluatingLightningAddress}
+          >
+            Save As Draft
+          </Button>
+        </VStack>
+      </ProjectCreateCompleted>
+    )
   }
 
   const renderRightElementContent = () => {
@@ -261,153 +331,111 @@ export const ProjectCreationWalletConnectionForm = ({
   }
 
   return (
-    <>
-      <VStack width="100%" alignItems="flex-start" spacing="40px">
-        <RadioGroup onChange={setConnectionOption} value={connectionOption}>
-          <VStack spacing={10}>
-            <VStack width="100%" alignItems="flex-start" spacing={3}>
-              <Radio size="lg" value={ConnectionOption.LIGHTNING_ADDRESS}>
-                Lightning Address
-              </Radio>
+    <VStack width="100%" alignItems="flex-start" spacing="40px">
+      <RadioGroup onChange={setConnectionOption} value={connectionOption}>
+        <VStack spacing={10}>
+          <VStack width="100%" alignItems="flex-start" spacing={3}>
+            <Radio size="lg" value={ConnectionOption.LIGHTNING_ADDRESS}>
+              Lightning Address
+            </Radio>
 
-              {connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? (
-                <InputGroup size={'md'}>
-                  <TextInputBox
-                    name="lightning-address"
-                    type={'email'}
-                    placeholder={'satoshi@getalby.com'}
-                    value={lightningAddressFormValue}
-                    onChange={(event) => {
-                      setLightningAddressFormValue(event.target.value)
-                      validateLightningAddressFormat(event.target.value)
-                    }}
-                    onBlur={validateLightningAddress}
-                    isInvalid={Boolean(lightningAddressFormError)}
-                    focusBorderColor={colors.neutral200}
-                    _valid={{
-                      focusBorderColor: colors.primary500,
-                    }}
-                    error={lightningAddressFormError}
-                  />
-                  <InputRightElement>
-                    {renderRightElementContent()}
-                  </InputRightElement>
-                </InputGroup>
-              ) : null}
+            {connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? (
+              <InputGroup size={'md'}>
+                <TextInputBox
+                  name="lightning-address"
+                  type={'email'}
+                  placeholder={'satoshi@getalby.com'}
+                  value={lightningAddressFormValue}
+                  onChange={(event) => {
+                    setLightningAddressFormValue(event.target.value)
+                    validateLightningAddressFormat(event.target.value)
+                  }}
+                  onBlur={validateLightningAddress}
+                  isInvalid={Boolean(lightningAddressFormError)}
+                  focusBorderColor={colors.neutral200}
+                  _valid={{
+                    focusBorderColor: colors.primary500,
+                  }}
+                  error={lightningAddressFormError}
+                />
+                <InputRightElement>
+                  {renderRightElementContent()}
+                </InputRightElement>
+              </InputGroup>
+            ) : null}
 
-              <WalletConnectionOptionInfoBox
-                primaryText="Easy setup process for beginners and Geyser charges a 2% operational fee per transaction."
-                secondaryText={
-                  <>
-                    <Link
-                      textDecoration="underline"
-                      href="https://lightningaddress.com/"
-                      isExternal
-                    >
-                      Lightning Addresses
-                    </Link>{' '}
-                    are like an email address, but for your Bitcoin. You can
-                    receive your funds from both lightning and onchain
-                    transactions. Get your own lightning access using these
-                    recommended apps.
-                  </>
-                }
-              >
-                <HStack
-                  width={'full'}
-                  justifyContent={'flex-start'}
-                  spacing={4}
-                >
-                  <UndecoratedLink isExternal href={AlbyLightningAddressURL}>
-                    <HStack>
-                      <Image src={AlbyUrl} height="24px" />
-                      <Text fontSize={'12px'} fontWeight={'bold'}>
-                        Alby
-                      </Text>
-                    </HStack>
-                  </UndecoratedLink>
+            <WalletConnectionOptionInfoBox
+              primaryText="Connect your lightning address"
+              promoText="2% Geyser fee per transaction"
+              secondaryText={
+                <>
+                  <Link
+                    textDecoration="underline"
+                    href="https://lightningaddress.com/"
+                    isExternal
+                  >
+                    Lightning Addresses
+                  </Link>{' '}
+                  are like an email address, but for your Bitcoin. You’ll
+                  receive all on-chain and lightning transactions directly to
+                  your lightning wallet. Get your own lightning access using
+                  these recommended apps.
+                </>
+              }
+            >
+              <HStack width={'full'} justifyContent={'flex-start'} spacing={4}>
+                <UndecoratedLink isExternal href={AlbyLightningAddressURL}>
+                  <HStack>
+                    <Image src={AlbyUrl} height="24px" />
+                    <Text fontSize={'12px'} fontWeight={'bold'}>
+                      Alby
+                    </Text>
+                  </HStack>
+                </UndecoratedLink>
 
-                  <Link isExternal href={WalletOfSatoshiLightningAddressURL}>
-                    <Image src={WalletOfSatoshiUrl} height="24px" />
-                  </Link>
+                <Link isExternal href={WalletOfSatoshiLightningAddressURL}>
+                  <Image src={WalletOfSatoshiUrl} height="24px" />
+                </Link>
 
-                  <Link isExternal href={BitNobURL}>
-                    <Image src={BitnobUrl} height="24px" />
-                  </Link>
-                </HStack>
-              </WalletConnectionOptionInfoBox>
-            </VStack>
-
-            <VStack width="100%" alignItems="flex-start" spacing={3}>
-              <Radio size="lg" value={ConnectionOption.PERSONAL_NODE}>
-                Connect Your Node
-              </Radio>
-
-              {connectionOption === ConnectionOption.PERSONAL_NODE ? (
-                <ButtonComponent w="full" onClick={openWallet}>
-                  {' '}
-                  <AiOutlineSetting
-                    style={{ marginRight: '5px' }}
-                    fontSize="20px"
-                  />{' '}
-                  Connect Your Node
-                </ButtonComponent>
-              ) : null}
-
-              <WalletConnectionOptionInfoBox
-                primaryText="Connect your node, manage your own liquidity, and Geyser won't charge any fees."
-                secondaryText="Connect your Lightning node to receive incoming transactions directly. Beware that your node's liquidity remains your own responsibility. Don't have a node? You can get one on the cloud using Voltage."
-              >
-                <HStack width={'full'} justifyContent={'flex-start'}>
-                  <Link isExternal href={VoltageExplainerPageForGeyserURL}>
-                    <Image src={VoltageUrl} />
-                  </Link>
-                </HStack>
-              </WalletConnectionOptionInfoBox>
-            </VStack>
+                <Link isExternal href={BitNobURL}>
+                  <Image src={BitnobUrl} height="24px" />
+                </Link>
+              </HStack>
+            </WalletConnectionOptionInfoBox>
           </VStack>
-        </RadioGroup>
 
-        <VStack width="100%" alignItems="flex-start">
-          <ButtonComponent
-            primary
-            w="full"
-            onClick={handleProjectLaunchSelected}
-            isLoading={isCreateWalletLoading}
-            disabled={
-              isSubmitEnabled === false ||
-              isEvaluatingLightningAddress ||
-              Boolean(lightningAddressFormError)
-            }
-          >
-            <>
-              <BiRocket style={{ marginRight: '10px' }} />
-              Launch Project
-            </>
-          </ButtonComponent>
+          <VStack width="100%" alignItems="flex-start" spacing={3}>
+            <Radio size="lg" value={ConnectionOption.PERSONAL_NODE}>
+              Connect Your Node
+            </Radio>
 
-          {onSaveAsDraftSelected && createWalletInput && (
-            <ButtonComponent
-              w="full"
-              onClick={() => onSaveAsDraftSelected(createWalletInput)}
-              disabled={isCreateWalletLoading || isEvaluatingLightningAddress}
+            {connectionOption === ConnectionOption.PERSONAL_NODE ? (
+              <Button
+                leftIcon={<AiOutlineSetting fontSize="20px" />}
+                w="full"
+                variant="secondary"
+                onClick={openWallet}
+              >
+                Connect Your Node
+              </Button>
+            ) : null}
+
+            <WalletConnectionOptionInfoBox
+              primaryText="Connect your node"
+              promoText="No fee per transaction"
+              secondaryText="Connect your lightning node to receive incoming transactions directly. Don't have a node? You can create a cloud node with the recommended app."
             >
-              Save As Draft
-            </ButtonComponent>
-          )}
-
-          <HStack color={'neutral.600'} spacing={2} mt={2}>
-            <Text>By continuing, I agree with Geyser&apos;s</Text>
-            <Link
-              href={GeyserTermsAndConditionsURL}
-              isExternal
-              textDecoration="underline"
-            >
-              Terms & Conditions
-            </Link>
-          </HStack>
+              <HStack>
+                <Link isExternal href={VoltageExplainerPageForGeyserURL}>
+                  <Image src={VoltageUrl} />
+                </Link>
+              </HStack>
+            </WalletConnectionOptionInfoBox>
+          </VStack>
         </VStack>
-      </VStack>
+      </RadioGroup>
+
+      <FormContinueButton width="100%" onClick={handleNext} />
 
       <NodeAdditionModal
         isOpen={isWalletOpen}
@@ -415,6 +443,6 @@ export const ProjectCreationWalletConnectionForm = ({
         nodeInput={nodeInput}
         onSubmit={onSubmit}
       />
-    </>
+    </VStack>
   )
 }

@@ -1,7 +1,10 @@
-import { useMediaQuery } from '@chakra-ui/media-query'
+import { useBreakpointValue } from '@chakra-ui/media-query'
 
 export const useMediumScreen = (): boolean => {
-  const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
+  const isMediumScreen = useBreakpointValue(
+    { xl: false, base: true },
+    { ssr: false },
+  )
 
-  return !isLargerThan1280
+  return isMediumScreen || false
 }
