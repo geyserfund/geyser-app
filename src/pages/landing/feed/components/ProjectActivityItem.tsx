@@ -23,7 +23,7 @@ export const ProjectActivityItem = ({
             avatarUsername={owner.username}
             userProfileID={owner.id}
             imageSize={'24px'}
-            textColor="brand.neutral600"
+            textColor="neutral.600"
           />
         ) : null}
         <Body2>launched a new Project</Body2>

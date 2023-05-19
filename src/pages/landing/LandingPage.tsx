@@ -29,6 +29,7 @@ export const LandingPage = () => {
           height="auto"
           overflowX="hidden"
           spacing={{ base: '30px', md: '50px' }}
+          backgroundColor="primary.light.50"
         >
           <GradientBanner />
           <HStack

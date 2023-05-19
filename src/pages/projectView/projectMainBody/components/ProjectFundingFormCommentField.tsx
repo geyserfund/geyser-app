@@ -94,7 +94,7 @@ export const ProjectFundingFormCommentField = ({
             backgroundColor={'brand.bgWhite'}
             onChange={setTarget}
           />
-          <Text pt={1} px={1} fontSize="10px" color="brand.neutral600">
+          <Text pt={1} px={1} fontSize="10px" color="neutral.600">
             Funding as <i>{isAnonymous ? 'anonymous' : user.username}</i>
           </Text>
         </Box>

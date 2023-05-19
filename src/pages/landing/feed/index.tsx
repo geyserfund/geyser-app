@@ -45,7 +45,7 @@ export const ActivityTopbar = () => {
     <HStack
       width="100%"
       borderBottom="2px solid"
-      borderColor="brand.neutral200"
+      borderColor="neutral.200"
       paddingY="6px"
       marginBottom="10px"
     >

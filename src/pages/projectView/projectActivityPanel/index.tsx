@@ -242,7 +242,7 @@ export const ProjectActivityPanel = ({
         overflow="hidden"
         borderTop={isMobile ? 'none' : '2px solid'}
         borderLeft="2px solid"
-        borderColor="brand.neutral200"
+        borderColor="neutral.200"
       >
         {renderPanelContent()}
       </Box>

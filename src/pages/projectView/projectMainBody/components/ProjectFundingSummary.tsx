@@ -28,7 +28,7 @@ export const ProjectFundingSummary = ({
       height="72px"
       w="100%"
       borderRadius="4px"
-      backgroundColor="brand.neutral100"
+      backgroundColor="neutral.100"
       spacing={{
         base: '10px',
       }}

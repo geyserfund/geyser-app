@@ -17,7 +17,7 @@ export const TagComponent = ({ icon, label, onClick }: TagComponentProps) => {
       rightIcon={<CloseIcon fontSize="10px" color="neutral.500" />}
       fontWeight="600"
       borderRadius="8px"
-      color="brand.primary600"
+      color="primary.600"
       backgroundColor="neutral.100"
       textTransform="lowercase"
       onClick={onClick}

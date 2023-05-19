@@ -26,7 +26,7 @@ export const MobileTopBar = ({
       <VStack
         width="100%"
         borderBottom="2px solid"
-        borderColor="brand.neutral200"
+        borderColor="neutral.200"
         spacing="0px"
         {...rest}
       >
@@ -38,7 +38,7 @@ export const MobileTopBar = ({
             ref={btnRef}
             noBorder
             size="sm"
-            color="brand.neutral800"
+            color="neutral.800"
             rightIcon={<BsSliders fontSize="16px" />}
             onClick={onOpen}
           >

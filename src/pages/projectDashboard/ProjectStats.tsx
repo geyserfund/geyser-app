@@ -79,7 +79,7 @@ export const ProjectStats = () => {
         >
           <VStack w="100%" spacing="40px">
             <VStack alignItems="flex-start">
-              <Text fontSize="18px" fontWeight={600} color="brand.neutral600">
+              <Text fontSize="18px" fontWeight={600} color="neutral.600">
                 All Time Statistics
               </Text>
               <HStack spacing="22px">
@@ -92,7 +92,7 @@ export const ProjectStats = () => {
                 <VStack className={classes.statBox}>
                   <SatoshiAmount
                     fontSize="28px"
-                    color="brand.neutral900"
+                    color="neutral.900"
                     fontFamily={fonts.mono}
                   >
                     {loading ? 0 : project.balance}

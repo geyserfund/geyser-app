@@ -64,7 +64,7 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
               <Tab
                 key={index}
                 fontSize="16px"
-                color={'brand.neutral900'}
+                color={'neutral.900'}
                 _selected={styles.selectedTab}
               >
                 <HStack
@@ -80,7 +80,7 @@ export const UserProfilePageTabs = ({ profileUser }: Props) => {
                   ) : (
                     <Text
                       fontSize={'inherit'}
-                      backgroundColor="brand.neutral200"
+                      backgroundColor="neutral.200"
                       padding="0.33em"
                       lineHeight={1}
                       borderRadius="0.25em"

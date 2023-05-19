@@ -79,7 +79,7 @@ export const LeaderboardTopbar = ({
       <HStack
         width="100%"
         borderBottom="2px solid"
-        borderColor="brand.neutral200"
+        borderColor="neutral.200"
         paddingY="6px"
       >
         <Body1 semiBold color="black">
@@ -89,7 +89,7 @@ export const LeaderboardTopbar = ({
       <HStack
         width="100%"
         borderBottom="2px solid"
-        borderColor="brand.neutral200"
+        borderColor="neutral.200"
         paddingY="6px"
       >
         <ButtonComponent

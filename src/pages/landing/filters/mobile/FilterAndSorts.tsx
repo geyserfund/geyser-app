@@ -15,8 +15,8 @@ export const FilterAndSorts = () => {
   return (
     <Accordion allowToggle>
       <FilterTopBar padding="10px" />
-      <Box width="100%" padding="8px 30px" backgroundColor="brand.neutral200">
-        <Body1 semiBold color="brand.neutral800">
+      <Box width="100%" padding="8px 30px" backgroundColor="neutral.200">
+        <Body1 semiBold color="neutral.800">
           Filter
         </Body1>
       </Box>
@@ -27,12 +27,8 @@ export const FilterAndSorts = () => {
       ) : (
         <>
           <FilterByStatus mobile />
-          <Box
-            width="100%"
-            padding="8px 30px"
-            backgroundColor="brand.neutral200"
-          >
-            <Body1 semiBold color="brand.neutral800">
+          <Box width="100%" padding="8px 30px" backgroundColor="neutral.200">
+            <Body1 semiBold color="neutral.800">
               Sort
             </Body1>
           </Box>

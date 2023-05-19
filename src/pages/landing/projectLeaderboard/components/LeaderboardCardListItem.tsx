@@ -33,7 +33,7 @@ export const LeaderboardCardListItem = ({
       </Box>
 
       <VStack flex={1} overflow="hidden">
-        <Body1 color="brand.neutral900" isTruncated bold width="100%">
+        <Body1 color="neutral.900" isTruncated bold width="100%">
           {project.title}
         </Body1>
         <LeaderboardFundingStats

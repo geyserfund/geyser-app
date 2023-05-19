@@ -19,12 +19,7 @@ export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
       >
         More Information
       </Text>
-      <Text
-        mt="5px"
-        color="brand.neutral600"
-        fontSize={'14px'}
-        textAlign="justify"
-      >
+      <Text mt="5px" color="neutral.600" fontSize={'14px'} textAlign="justify">
         {`Bitcoin is signal, everything else is noise.
           We created Geyser Grants to help broadcast more Bitcoin signal into the world.
           That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awareness, enabling Bitcoin culture, and supporting needed development.

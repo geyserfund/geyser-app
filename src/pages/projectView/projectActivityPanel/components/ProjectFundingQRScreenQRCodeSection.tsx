@@ -73,7 +73,7 @@ const InvoiceErrorView = ({
       width={252}
       spacing="10px"
       padding={3}
-      backgroundColor={'brand.primary100'}
+      backgroundColor={'primary.100'}
       justifyContent="center"
       borderRadius={'md'}
     >
@@ -274,7 +274,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             <Box marginBottom={4} fontSize={'10px'}>
               <HStack spacing={5}>
                 <Loader size="md" />
-                <Text color={'brand.neutral900'} fontWeight={400}>
+                <Text color={'neutral.900'} fontWeight={400}>
                   Waiting for payment...
                 </Text>
               </HStack>

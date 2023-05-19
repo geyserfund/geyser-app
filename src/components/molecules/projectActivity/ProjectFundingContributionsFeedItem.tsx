@@ -56,7 +56,7 @@ export const ProjectFundingContributionsFeedItem = ({
     <Box
       bg={useColorModeValue('white', 'gray.900')}
       borderWidth="2px"
-      borderColor={'brand.neutral100'}
+      borderColor={'neutral.100'}
       _hover={{ boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)' }}
       rounded={'md'}
       px={'26px'}
@@ -75,7 +75,7 @@ export const ProjectFundingContributionsFeedItem = ({
                   seed={funder.id}
                   image={avatarMetadata.image}
                   imageSize={'20px'}
-                  textColor="brand.neutral900"
+                  textColor="neutral.900"
                 />
               </HStack>
             ) : (
@@ -85,7 +85,7 @@ export const ProjectFundingContributionsFeedItem = ({
                 userProfileID={funder.user?.id}
                 fontSize={'14px'}
                 imageSize={'20px'}
-                textColor="brand.neutral900"
+                textColor="neutral.900"
                 badgeNames={funderBadges.map((badge) => badge.badge)}
                 badgeElements={renderFunderBadges(funderBadges)}
               />
@@ -139,7 +139,7 @@ export const ProjectFundingContributionsFeedItem = ({
 
           {/* Timestamp and Funded-Project Info */}
 
-          <HStack color="brand.neutral700" spacing={2}>
+          <HStack color="neutral.700" spacing={2}>
             <Text fontSize={'xs'} noOfLines={1}>
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}

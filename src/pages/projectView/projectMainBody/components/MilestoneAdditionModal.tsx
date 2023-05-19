@@ -291,7 +291,7 @@ export const MilestoneAdditionModal = ({
           <Text fontSize="18px" fontWeight={600}>
             Select Milestones
           </Text>
-          <Body2 color="brand.neutral900">
+          <Body2 color="neutral.900">
             Milestones help you clarify your next steps, aims and objectives
           </Body2>
         </ModalHeader>

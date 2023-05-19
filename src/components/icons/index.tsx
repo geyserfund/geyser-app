@@ -78,9 +78,9 @@ export const SatoshiIconTilted = ({
     switch (color) {
       case 'brand.primary':
         return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)'
-      case 'brand.primary600':
+      case 'primary.600':
         return 'invert(50%) sepia(59%) saturate(5011%) hue-rotate(143deg) brightness(96%) contrast(98%)'
-      case 'brand.primary800':
+      case 'primary.800':
         return 'invert(31%) sepia(17%) saturate(2529%) hue-rotate(123deg) brightness(93%) contrast(102%)'
       default:
         return undefined

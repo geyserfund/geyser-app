@@ -152,7 +152,7 @@ export const ProjectFundingSelectionFormScreen = ({
           padding={2}
           width={'100%'}
           borderRadius={'md'}
-          backgroundColor={'brand.neutral100'}
+          backgroundColor={'neutral.100'}
           spacing={2}
         >
           <VStack spacing={1.5} alignItems="flex-start" width={'full'}>
@@ -182,7 +182,7 @@ export const ProjectFundingSelectionFormScreen = ({
 
           <VStack
             padding={2}
-            color={'brand.neutral700'}
+            color={'neutral.700'}
             fontWeight={'medium'}
             width={'full'}
             alignItems="flex-start"
@@ -193,12 +193,12 @@ export const ProjectFundingSelectionFormScreen = ({
                 justifyContent={'space-between'}
                 width={'full'}
                 alignItems="flex-start"
-                color="brand.neutral700"
+                color="neutral.700"
               >
                 <Text
                   flex={0}
                   fontSize="14px"
-                  textColor={'brand.neutral700'}
+                  textColor={'neutral.700'}
                   fontWeight={'normal'}
                 >
                   Rewards

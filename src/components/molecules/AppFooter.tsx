@@ -42,7 +42,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
       bottom={0}
       className={wrapperClassName}
       width="100%"
-      backgroundColor="brand.primary50"
+      backgroundColor="primary.50"
       alignItems="center"
       justifyContent="center"
       padding={isMobile ? '10px 10px' : '25px 32px'}
@@ -57,7 +57,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
         <Wrap
           spacing={isMobile ? '10px' : '24px'}
           justify={isMobile ? 'center' : ' flex-start'}
-          color={'brand.neutral600'}
+          color={'neutral.600'}
           flex={isMobile ? 0 : 1}
         >
           <Link href={GeyserTwitterUrl} isExternal>
@@ -98,7 +98,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
           spacing="24px"
           width={isMobile ? '100%' : 'auto'}
           justifyContent={isMobile ? 'center' : undefined}
-          color="brand.neutral600"
+          color="neutral.600"
           fontWeight={'medium'}
           fontSize="14px"
         >

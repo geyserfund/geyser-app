@@ -22,7 +22,7 @@ export const NoWallet = ({ project }: { project: ProjectFragment }) => {
       paddingRight="25%"
       paddingBottom="5%"
       paddingTop="5%"
-      backgroundColor="brand.primary50"
+      backgroundColor="primary.50"
     >
       <Text color={'brand.gray500'} paddingBottom="5%">
         Your project is not live yet as you have not added a wallet where you

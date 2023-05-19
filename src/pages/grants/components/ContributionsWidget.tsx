@@ -57,7 +57,7 @@ export const ContributionsWidget = ({
             mr={2}
             width="36px"
             height="100%"
-            color="brand.primary500"
+            color="primary.500"
           />
           <WidgetItem subtitle={endDateSubtitle}>
             <Countdown
@@ -83,7 +83,7 @@ export const ContributionsWidget = ({
             mr={2}
             width="36px"
             height="100%"
-            color="brand.primary500"
+            color="primary.500"
           />
           <WidgetItem subtitle="Geyser grant">{balance}</WidgetItem>
         </Box>
@@ -93,7 +93,7 @@ export const ContributionsWidget = ({
             mr={2}
             width="36px"
             height="100%"
-            color="brand.primary500"
+            color="primary.500"
           />
           <WidgetItem subtitle="Worth of votes">{contributions}</WidgetItem>
         </Box>

@@ -48,7 +48,7 @@ export const AvatarElement = ({
       {...wrapperProps}
     >
       {avatar}
-      <Body2 semiBold color="brand.neutral600" isTruncated {...textProps}>
+      <Body2 semiBold color="neutral.600" isTruncated {...textProps}>
         {user.username || 'Anonymous'}
       </Body2>
     </HStack>

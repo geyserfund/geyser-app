@@ -91,27 +91,19 @@ export const ProjectFundingSettings = () => {
           </HStack>
 
           <VStack width="100%" spacing="4px" alignItems="flex-start">
-            <Text color="brand.neutral700" fontSize="10px">
+            <Text color="neutral.700" fontSize="10px">
               Hostname or IP address
             </Text>
-            <Text
-              wordBreak="break-all"
-              color="brand.neutral900"
-              fontSize="14px"
-            >
+            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.hostname}
             </Text>
           </VStack>
 
           <VStack width="100%" spacing="4px" alignItems="flex-start">
-            <Text color="brand.neutral700" fontSize="10px">
+            <Text color="neutral.700" fontSize="10px">
               Public key
             </Text>
-            <Text
-              wordBreak="break-all"
-              color="brand.neutral900"
-              fontSize="14px"
-            >
+            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.pubkey}
             </Text>
           </VStack>
@@ -121,45 +113,33 @@ export const ProjectFundingSettings = () => {
             alignItems="flex-start"
             flexWrap="wrap"
           >
-            <Text color="brand.neutral700" fontSize="10px">
+            <Text color="neutral.700" fontSize="10px">
               Invoice Macaroon
             </Text>
-            <Text
-              wordBreak="break-all"
-              color="brand.neutral900"
-              fontSize="14px"
-            >
+            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.macaroon}
             </Text>
           </VStack>
           {lndConnectionDetails.tlsCertificate && (
             <VStack width="100%" spacing="4px" alignItems="flex-start">
-              <Text color="brand.neutral700" fontSize="10px">
+              <Text color="neutral.700" fontSize="10px">
                 TLS certificate
               </Text>
-              <Text
-                wordBreak="break-all"
-                color="brand.neutral900"
-                fontSize="14px"
-              >
+              <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
                 {lndConnectionDetails.tlsCertificate}
               </Text>
             </VStack>
           )}
           <VStack width="100%" spacing="4px" alignItems="flex-start">
-            <Text color="brand.neutral700" fontSize="10px">
+            <Text color="neutral.700" fontSize="10px">
               gRPC port
             </Text>
-            <Text
-              wordBreak="break-all"
-              color="brand.neutral900"
-              fontSize="14px"
-            >
+            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.grpcPort}
             </Text>
           </VStack>
         </VStack>
-        <Text color="brand.neutral700" fontSize="10px">
+        <Text color="neutral.700" fontSize="10px">
           If you want to change how you receive your funds reach out to
           hello@geyser.fund. We are not currently enabling editing of this
           information for security reasons.

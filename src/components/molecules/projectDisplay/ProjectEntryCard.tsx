@@ -145,7 +145,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
 
         <Body1
           marginTop="2"
-          color={'brand.neutral600'}
+          color={'neutral.600'}
           fontSize="lg"
           as={'p'}
           noOfLines={[0, 2]}

@@ -42,7 +42,7 @@ export const LeaderboardFeatureProject = ({
         funders={project.fundersCount}
         funded={project.balance}
       />
-      <Body1 bold color="brand.neutral9000" width="100%" isTruncated>
+      <Body1 bold color="neutral.9000" width="100%" isTruncated>
         {project.title}
       </Body1>
       <AvatarElement noLink borderRadius="50%" user={project.owners[0]?.user} />

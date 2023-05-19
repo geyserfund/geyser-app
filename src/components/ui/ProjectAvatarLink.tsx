@@ -12,7 +12,7 @@ type Props = {
 
 export const ProjectAvatarLink = ({
   project,
-  textColor = 'brand.neutral700',
+  textColor = 'neutral.700',
 }: Props) => {
   const avatarSrc = toSmallImageUrl(project.thumbnailImage || '')
 

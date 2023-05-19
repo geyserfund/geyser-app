@@ -84,12 +84,12 @@ export const GradientBanner = () => {
           <VStack
             position="absolute"
             bottom="-20px"
-            backgroundColor={'brand.primary50'}
+            backgroundColor={'primary.50'}
             shadow="md"
             padding="10px 20px"
             borderRadius="8px"
             spacing="10px"
-            color={'brand.neutral900'}
+            color={'neutral.900'}
           >
             <H3 fontFamily="inherit">Play a part in world-changing ideas</H3>
             <HStack fontSize={'sm'} spacing={4}>

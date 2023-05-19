@@ -74,7 +74,7 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
             key={value}
             backgroundColor={
               getCurrentSelection(filters.sort) === value
-                ? 'brand.neutral100'
+                ? 'neutral.100'
                 : undefined
             }
             onClick={() => onSortSelect(value)}

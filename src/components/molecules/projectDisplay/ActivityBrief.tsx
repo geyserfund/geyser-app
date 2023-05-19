@@ -66,11 +66,11 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
     switch (milestoneIndex % 3) {
       case 1:
         if (milestoneIndex === 1) return undefined
-        return 'brand.primary800'
+        return 'primary.800'
       case 2:
-        return 'brand.primary400'
+        return 'primary.400'
       case 0:
-        return 'brand.primary600'
+        return 'primary.600'
       default:
         return undefined
     }
@@ -79,13 +79,13 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const getColor = () => {
     switch (milestoneIndex % 3) {
       case 1:
-        return 'brand.primary400'
+        return 'primary.400'
       case 2:
-        return 'brand.primary600'
+        return 'primary.600'
       case 0:
-        return 'brand.primary800'
+        return 'primary.800'
       default:
-        return 'brand.primary300'
+        return 'primary.300'
     }
   }
 
@@ -147,7 +147,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           <Text
             fontSize="18px"
             fontWeight={600}
-            color="brand.neutral900"
+            color="neutral.900"
             wordBreak="break-word"
           >
             {project.title}
@@ -158,7 +158,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           fontFamily={fonts.mono}
           fontWeight={400}
           fontStyle={'normal'}
-          color="brand.primary600"
+          color="primary.600"
         >
           {balance}
         </SatoshiAmount>

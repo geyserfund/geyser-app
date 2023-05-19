@@ -24,7 +24,7 @@ export const ProjectRowLayout = ({
   return (
     <VStack alignItems="start" spacing="10px" {...rest}>
       <HStack width="100%" justifyContent="space-between">
-        <H3 color="brand.primary600">
+        <H3 color="primary.600">
           {subtitle && (
             <span style={{ color: colors.neutral800 }}>{`${subtitle} `}</span>
           )}

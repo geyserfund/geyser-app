@@ -43,7 +43,7 @@ export const EntryDetails = ({ entry }: Props) => {
         width="100%"
         justifyContent="space-between"
       >
-        <Text fontSize="35px" fontWeight={700} color="brand.neutral900">
+        <Text fontSize="35px" fontWeight={700} color="neutral.900">
           {entry.title}
         </Text>
         <EntryStatusLabel entry={entry} />
@@ -67,7 +67,7 @@ export const EntryDetails = ({ entry }: Props) => {
             <Avatar size="sm" src={entry.creator.imageUrl || ''} />
             <Text fontWeight={500}>{entry.creator.username}</Text>
             {entry.published && (
-              <Text paddingX="10px" color="brand.neutral900">
+              <Text paddingX="10px" color="neutral.900">
                 {DateTime.fromMillis(parseInt(entry.publishedAt!, 10)).toFormat(
                   'dd LLL yyyy',
                 )}

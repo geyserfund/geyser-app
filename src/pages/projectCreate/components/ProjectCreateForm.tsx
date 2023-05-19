@@ -236,7 +236,7 @@ export const ProjectCreateForm = ({
         >
           <UploadBox />
         </FileUpload>
-        <Text fontSize="10px" color="brand.neutral700">
+        <Text fontSize="10px" color="neutral.700">
           For best fit, pick a square image. Image size limit: 10MB.
         </Text>
       </VStack>
@@ -248,7 +248,7 @@ export const ProjectCreateForm = ({
         >
           <UploadBox />
         </FileUpload>
-        <Text fontSize="10px" color="brand.neutral700">
+        <Text fontSize="10px" color="neutral.700">
           For best fit, pick an image around 800px x 200px. Image size limit:
           10MB.
         </Text>
@@ -266,8 +266,8 @@ export const ProjectCreateForm = ({
         />
         {!formError.shortDescription && (
           <HStack width="100%" justifyContent="space-between">
-            <Text fontSize="12px" color="brand.neutral700" />
-            <Text fontSize="12px" color="brand.neutral700">{`${
+            <Text fontSize="12px" color="neutral.700" />
+            <Text fontSize="12px" color="neutral.700">{`${
               JSON.stringify(form?.shortDescription).length
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
@@ -288,7 +288,7 @@ export const ProjectCreateForm = ({
         {!formError.description && (
           <HStack width="100%" justifyContent="space-between">
             <HStack>
-              <Text fontSize="12px" color="brand.neutral700">
+              <Text fontSize="12px" color="neutral.700">
                 For **Bold** and *Italic*, see more{' '}
               </Text>
               <HStack
@@ -299,13 +299,13 @@ export const ProjectCreateForm = ({
                 _focus={{}}
               >
                 <BiInfoCircle />
-                <Text fontSize="12px" color="brand.neutral700">
+                <Text fontSize="12px" color="neutral.700">
                   MarkDown
                 </Text>
               </HStack>
             </HStack>
 
-            <Text fontSize="12px" color="brand.neutral700">{`${
+            <Text fontSize="12px" color="neutral.700">{`${
               JSON.stringify(form?.description).length
             }/${ProjectValidations.description.maxLength}`}</Text>
           </HStack>

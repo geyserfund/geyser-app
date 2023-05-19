@@ -13,7 +13,7 @@ export const WalletConnectionOptionInfoBox = ({
   return (
     <Box
       padding={'16px'}
-      backgroundColor={'brand.neutral100'}
+      backgroundColor={'neutral.100'}
       display="flex"
       flexDirection={'column'}
       alignItems="flex-start"

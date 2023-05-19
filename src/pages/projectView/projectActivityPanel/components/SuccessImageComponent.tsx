@@ -118,7 +118,7 @@ export const SuccessImageComponent = ({
           <Center
             boxSize={'70px'}
             borderRadius="full"
-            backgroundColor={'brand.neutral50'}
+            backgroundColor={'neutral.50'}
           >
             <HiOutlineCheck color={'brand.textBlack'} fontSize="50px" />
           </Center>

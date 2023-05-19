@@ -10,7 +10,7 @@ export const AccordionButton = (props: AccordionButtonProps) => {
     <ChakraAccordionButton
       borderRadius="8px 8px 0 0"
       py={5}
-      backgroundColor="brand.neutral100"
+      backgroundColor="neutral.100"
       {...props}
     >
       <Text flex="1" textAlign="left" variant="body1" fontWeight={600}>

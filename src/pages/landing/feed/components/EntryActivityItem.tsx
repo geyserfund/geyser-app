@@ -22,7 +22,7 @@ export const EntryActivityItem = ({
           avatarUsername={creator.username}
           userProfileID={creator.id}
           imageSize={'24px'}
-          textColor="brand.neutral600"
+          textColor="neutral.600"
         />
         <Body2>published a new entry for</Body2>
         <Body2

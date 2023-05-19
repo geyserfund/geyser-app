@@ -87,7 +87,7 @@ export const ProjectContributors = () => {
               <AnonymousAvatar
                 seed={val.id}
                 imageSize={'20px'}
-                textColor="brand.neutral900"
+                textColor="neutral.900"
               />
             )
           }
@@ -302,7 +302,7 @@ export const ProjectContributors = () => {
           </HStack>
           <TableContainer width="100%">
             <Table size="sm">
-              <Thead backgroundColor={'brand.primary100'}>
+              <Thead backgroundColor={'primary.100'}>
                 <Tr>
                   <Th maxWidth="30px">
                     <Checkbox

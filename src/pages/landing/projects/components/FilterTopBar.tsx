@@ -166,7 +166,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
         value = 'Most funded all time'
     }
 
-    return <H3 color="brand.primary600">{value}</H3>
+    return <H3 color="primary.600">{value}</H3>
   }
 
   const viewFilterSearch = renderFilterSearch()

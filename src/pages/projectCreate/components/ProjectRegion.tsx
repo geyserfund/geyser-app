@@ -146,7 +146,7 @@ export const ProjectRegion = ({
             <HStack
               borderRadius="4px"
               paddingLeft="8px"
-              backgroundColor="brand.neutral100"
+              backgroundColor="neutral.100"
             >
               <Body1 semiBold>{displayLocation}</Body1>
               <IconButtonComponent

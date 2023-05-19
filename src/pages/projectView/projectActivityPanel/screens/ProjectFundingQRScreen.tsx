@@ -83,7 +83,7 @@ export const ProjectFundingQRScreen = ({
         funderUsername={state.funderUsername}
         funderEmail={state.email}
         funderAvatarURL={state.funderAvatarURL}
-        backgroundColor={'brand.neutral100'}
+        backgroundColor={'neutral.100'}
         showGeyserFee={true}
       />
       <Button

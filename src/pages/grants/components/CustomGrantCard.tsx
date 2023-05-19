@@ -90,7 +90,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 {grant.title}
               </Text>
               <Text
-                bg={isActive ? 'brand.primary100' : 'brand.neutral200'}
+                bg={isActive ? 'primary.100' : 'neutral.200'}
                 fontSize={'14px'}
                 px="14px"
                 py="5px"
@@ -100,7 +100,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 {isActive ? 'ACTIVE' : 'CLOSED'}
               </Text>
             </Box>
-            <Text color={'brand.neutral600'}>
+            <Text color={'neutral.600'}>
               {getFormattedDate(
                 grant.statuses.find(
                   (status) => status.status === GrantStatusEnum.Closed,

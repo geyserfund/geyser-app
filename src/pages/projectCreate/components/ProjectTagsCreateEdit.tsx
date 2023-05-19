@@ -202,7 +202,7 @@ export const ProjectTagsCreateEdit = ({
                 key={tag.id}
                 borderRadius="4px"
                 paddingLeft="8px"
-                backgroundColor="brand.neutral100"
+                backgroundColor="neutral.100"
               >
                 <Body1 semiBold>{tag.label}</Body1>
                 <IconButtonComponent

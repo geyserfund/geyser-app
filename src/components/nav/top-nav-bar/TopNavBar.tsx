@@ -1,6 +1,7 @@
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Box } from '@chakra-ui/layout'
 import {
+  Button,
   Heading,
   HStack,
   Modal,
@@ -10,6 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useColorMode,
 } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
 import {
@@ -136,6 +138,8 @@ export const TopNavBar = () => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
   const location = useLocation()
+
+  const { toggleColorMode, colorMode } = useColorMode()
 
   const currentPathName = location.pathname
 
@@ -510,7 +514,7 @@ export const TopNavBar = () => {
         zIndex={1000}
         borderBottom="2px solid"
         borderBottomColor={
-          showHaveTransparentBackground ? 'transparent' : 'brand.neutral100'
+          showHaveTransparentBackground ? 'transparent' : 'neutral.100'
         }
         transition="background 0.5s ease-out"
       >
@@ -541,7 +545,7 @@ export const TopNavBar = () => {
                           fontWeight={'500'}
                           textDecoration="none"
                           fontSize="16px"
-                          color={'brand.neutral700'}
+                          color={'neutral.700'}
                         >
                           {item.name}
                         </Text>
@@ -560,7 +564,7 @@ export const TopNavBar = () => {
                           fontWeight={'500'}
                           textDecoration="none"
                           fontSize="16px"
-                          color={'brand.neutral700'}
+                          color={'neutral.700'}
                         >
                           {item.name}
                         </Text>
@@ -586,7 +590,7 @@ export const TopNavBar = () => {
               <ButtonComponent
                 size="sm"
                 variant={'solid'}
-                backgroundColor="brand.primary400"
+                backgroundColor="primary.400"
                 onClick={handleProjectDashboardButtonPress}
               >
                 Edit project
@@ -597,7 +601,7 @@ export const TopNavBar = () => {
               <ButtonComponent
                 variant={'solid'}
                 size="sm"
-                backgroundColor="brand.primary400"
+                backgroundColor="primary.400"
                 onClick={handleMyProjectsButtonPress}
               >
                 View my projects
@@ -608,7 +612,7 @@ export const TopNavBar = () => {
               <ButtonComponent
                 variant={'solid'}
                 size="sm"
-                backgroundColor="brand.primary400"
+                backgroundColor="primary.400"
                 onClick={handleMyProjectButtonPress}
               >
                 View my project
@@ -619,7 +623,7 @@ export const TopNavBar = () => {
               <ButtonComponent
                 variant={'solid'}
                 size="sm"
-                backgroundColor="brand.primary400"
+                backgroundColor="primary.400"
                 onClick={handleProjectButtonPress}
               >
                 Project
@@ -630,7 +634,7 @@ export const TopNavBar = () => {
               <ButtonComponent
                 variant={'solid'}
                 size="sm"
-                backgroundColor="brand.primary400"
+                backgroundColor="primary.400"
                 onClick={handleProjectLaunchButtonPress}
               >
                 Launch Your Project
@@ -643,12 +647,14 @@ export const TopNavBar = () => {
                 variant={'solid'}
                 backgroundColor="white"
                 borderWidth={1}
-                borderColor={'brand.neutral200'}
+                borderColor={'neutral.200'}
                 onClick={loginOnOpen}
               >
                 Connect
               </ButtonComponent>
             ) : null}
+
+            <Button onClick={toggleColorMode}>color mode</Button>
 
             {shouldShowDropdownMenuButton ? (
               <TopNavBarMenu

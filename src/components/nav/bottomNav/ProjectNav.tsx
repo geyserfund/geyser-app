@@ -75,7 +75,7 @@ export const ProjectNavUI = () => {
       return 'black'
     }
 
-    return 'brand.neutral600'
+    return 'neutral.600'
   }
 
   if (!project) {
@@ -100,12 +100,12 @@ export const ProjectNavUI = () => {
 
   return (
     <HStack
-      backgroundColor="brand.neutral50"
+      backgroundColor="neutral.50"
       width="100%"
       bottom="0px"
       height="60px"
       borderTop="2px solid"
-      borderTopColor="brand.neutral200"
+      borderTopColor="neutral.200"
       paddingX="10px"
       justifyContent="center"
       alignItems="center"
@@ -154,13 +154,13 @@ export const ProjectNavUI = () => {
             size="sm"
             backgroundColor={
               mobileView === MobileViews.funding
-                ? 'brand.neutral500'
+                ? 'neutral.500'
                 : 'brand.primary'
             }
             border="1px solid"
             borderColor={
               mobileView === MobileViews.funding
-                ? 'brand.neutral500'
+                ? 'neutral.500'
                 : 'brand.primary'
             }
             _hover={{}}

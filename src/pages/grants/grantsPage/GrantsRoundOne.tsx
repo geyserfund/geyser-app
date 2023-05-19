@@ -112,7 +112,7 @@ export const GrantsRoundOne = ({
             textAlign="center"
             fontFamily={fonts.livvic}
             textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
-            color={'brand.primary500'}
+            color={'primary.500'}
           >
             Geyser Grants
           </Text>
@@ -134,7 +134,7 @@ export const GrantsRoundOne = ({
           </Box>
           <Box display="flex" justifyContent={'center'} my="2" rounded={'sm'}>
             <Text
-              bg="brand.neutral200"
+              bg="neutral.200"
               px={'3'}
               py="2"
               fontWeight={'500'}
@@ -146,7 +146,7 @@ export const GrantsRoundOne = ({
           <Text
             fontSize={isMobile ? '15px' : '16px'}
             fontWeight="500"
-            color={'brand.neutral600'}
+            color={'neutral.600'}
             textAlign="center"
             justifyContent="center"
           >
@@ -155,7 +155,7 @@ export const GrantsRoundOne = ({
             sponsors who want to change the world for the better.
           </Text>
           <Box display="flex" flexDirection={'column'} alignItems="center">
-            <Box color={'brand.primary500'} my={8}>
+            <Box color={'primary.500'} my={8}>
               <Box>
                 <img src={GrantsHero} />
               </Box>
@@ -254,7 +254,7 @@ export const GrantsRoundOne = ({
             >
               Principled Bitcoiners Board
             </Text>
-            <Text color={'brand.neutral600'} fontWeight="600">
+            <Text color={'neutral.600'} fontWeight="600">
               The board will be responsible for reviewing and evaluating the
               applications.
             </Text>
@@ -270,7 +270,7 @@ export const GrantsRoundOne = ({
             >
               Made possible by sponsors
             </Text>
-            <Text color={'brand.neutral600'} fontWeight="600">
+            <Text color={'neutral.600'} fontWeight="600">
               Bitcoin companies and anon individuals that want to bring hope to
               the world.
             </Text>

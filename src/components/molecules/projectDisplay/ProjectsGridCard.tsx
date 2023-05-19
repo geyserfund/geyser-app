@@ -35,12 +35,12 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
         bg={useColorModeValue('white', 'gray.900')}
         borderWidth="3px"
         cursor="pointer"
-        borderColor={'brand.neutral300'}
+        borderColor={'neutral.300'}
         rounded={'md'}
         overflow={'hidden'}
         spacing={2.5}
         _hover={{
-          borderColor: 'brand.neutral500',
+          borderColor: 'neutral.500',
           boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)',
           cursor: 'pointer',
         }}
@@ -91,7 +91,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
 
                 <Text
                   fontSize="12px"
-                  color={'brand.neutral600'}
+                  color={'neutral.600'}
                   fontFamily={fonts.mono}
                   textTransform="uppercase"
                 >
@@ -112,7 +112,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
                 </HStack>
                 <Text
                   fontSize="12px"
-                  color={'brand.neutral600'}
+                  color={'neutral.600'}
                   fontFamily={fonts.mono}
                   textTransform="uppercase"
                 >

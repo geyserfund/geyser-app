@@ -130,7 +130,7 @@ export const TopNavBarMenu = ({
               as={Link}
               to={getPath('userProfile', user.id)}
               _focus={{ boxShadow: 'none' }}
-              _hover={{ backgroundColor: 'brand.neutral200' }}
+              _hover={{ backgroundColor: 'neutral.200' }}
               width="100%"
               overflow="hidden"
             >

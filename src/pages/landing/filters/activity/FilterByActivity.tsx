@@ -40,32 +40,32 @@ export const getActivityButtonContent = (
       return {
         icon: ProjectNavIcon,
         text: 'Projects',
-        color: 'brand.neutral600',
+        color: 'neutral.600',
       }
     case ActivityResourceType.FundingTx:
       return {
         icon: (props) => <Icon as={FaHeart} {...props} />,
         text: 'Contributions',
-        color: 'brand.neutral600',
+        color: 'neutral.600',
       }
     case ActivityResourceType.Entry:
       return {
         icon: EntryEditIcon,
         text: 'Entry',
-        color: 'brand.neutral600',
+        color: 'neutral.600',
       }
     case ActivityResourceType.ProjectReward:
       return {
         icon: RewardGiftIcon,
         text: 'Rewards',
-        color: 'brand.neutral600',
+        color: 'neutral.600',
       }
 
     default:
       return {
         icon: (props) => <Icon fontSize="20px" as={BsCardText} {...props} />,
         text: 'All activity',
-        color: 'brand.neutral600',
+        color: 'neutral.600',
       }
   }
 }

@@ -48,7 +48,7 @@ export const FundingStatWithFollow = ({
 
         <Text
           fontSize="12px"
-          color={'brand.neutral600'}
+          color={'neutral.600'}
           fontFamily={fonts.mono}
           textTransform="uppercase"
         >
@@ -63,7 +63,7 @@ export const FundingStatWithFollow = ({
         </HStack>
         <Text
           fontSize="12px"
-          color={'brand.neutral600'}
+          color={'neutral.600'}
           fontFamily={fonts.mono}
           textTransform="uppercase"
         >
@@ -85,8 +85,8 @@ export const FundingStatWithFollow = ({
             isDisabled={!isLoggedIn}
             _hover={{
               border: `2px solid`,
-              borderColor: 'brand.primary600',
-              color: 'brand.primary600',
+              borderColor: 'primary.600',
+              color: 'primary.600',
             }}
           />
         </Tooltip>
@@ -100,9 +100,9 @@ export const FundingStatWithFollow = ({
             borderRadius="8px"
             onClick={handleUnFollow}
             boxShadow="none !important"
-            color="brand.primary500"
+            color="primary.500"
             border={`1px solid`}
-            borderColor="brand.primary500"
+            borderColor="primary.500"
             _hover={{
               border: `2px solid`,
               borderColor: 'brand.secondaryRed',

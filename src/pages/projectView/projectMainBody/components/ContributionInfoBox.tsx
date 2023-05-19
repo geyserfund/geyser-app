@@ -111,8 +111,8 @@ export const ContributionInfoBox = ({
       borderRadius="8px"
       backgroundColor={
         version === ContributionInfoBoxVersion.NEUTRAL
-          ? 'brand.neutral100'
-          : 'brand.primary100'
+          ? 'neutral.100'
+          : 'primary.100'
       }
       spacing={2}
       justify={'flex-start'}
@@ -125,7 +125,7 @@ export const ContributionInfoBox = ({
 
       {referenceCode && (
         <Stack direction="column" spacing="2">
-          <Text textTransform={'uppercase'} color="brand.neutral600">
+          <Text textTransform={'uppercase'} color="neutral.600">
             Reference Code
           </Text>
 
@@ -138,7 +138,7 @@ export const ContributionInfoBox = ({
       <VStack
         spacing={2}
         width="full"
-        color="brand.neutral900"
+        color="neutral.900"
         justify={'space-between'}
       >
         {funderEmail && (
@@ -146,15 +146,11 @@ export const ContributionInfoBox = ({
             <Text
               fontSize={'14px'}
               fontWeight={'normal'}
-              textColor={'brand.neutral700'}
+              textColor={'neutral.700'}
             >
               Email
             </Text>
-            <Text
-              fontSize={'14px'}
-              fontWeight={'medium'}
-              color="brand.neutral700"
-            >
+            <Text fontSize={'14px'} fontWeight={'medium'} color="neutral.700">
               {funderEmail}
             </Text>
           </HStack>
@@ -163,29 +159,21 @@ export const ContributionInfoBox = ({
           <Text
             fontSize={'14px'}
             fontWeight={'normal'}
-            textColor={'brand.neutral700'}
+            textColor={'neutral.700'}
           >
             Funding as
           </Text>
           {isFunderAnonymous ? (
             <HStack>
               <AnonymousAvatar seed={0} imageSize={'20px'} />
-              <Text
-                fontSize={'14px'}
-                fontWeight={'medium'}
-                color="brand.neutral700"
-              >
+              <Text fontSize={'14px'} fontWeight={'medium'} color="neutral.700">
                 anonymous
               </Text>
             </HStack>
           ) : (
             <HStack>
               <Avatar width={'20px'} height={'20px'} src={funderAvatarURL} />
-              <Text
-                fontSize={'14px'}
-                fontWeight={'medium'}
-                color="brand.neutral700"
-              >
+              <Text fontSize={'14px'} fontWeight={'medium'} color="neutral.700">
                 {funderUsername}
               </Text>
             </HStack>
@@ -200,7 +188,7 @@ export const ContributionInfoBox = ({
             justifyContent={'space-between'}
             width={'full'}
             alignItems="flex-start"
-            color="brand.neutral700"
+            color="neutral.700"
             fontWeight={'normal'}
           >
             <Text flex={0}>Rewards</Text>
@@ -215,7 +203,7 @@ export const ContributionInfoBox = ({
                           key={key}
                           fontSize={'14px'}
                           fontWeight={'medium'}
-                          color="brand.neutral700"
+                          color="neutral.700"
                         >
                           {value} x {reward.name}
                         </Text>
@@ -234,7 +222,7 @@ export const ContributionInfoBox = ({
             <HStack>
               <Text
                 fontSize="14px"
-                textColor={'brand.neutral700'}
+                textColor={'neutral.700'}
                 fontWeight={'normal'}
               >
                 Geyser fee
@@ -261,14 +249,14 @@ export const ContributionInfoBox = ({
             <HStack>
               <SatoshiAmount
                 fontSize="14px"
-                textColor={'brand.neutral700'}
+                textColor={'neutral.700'}
                 fontWeight={'medium'}
               >
                 {isNoFees ? 0 : Math.round(contributionAmount * 0.02)}
               </SatoshiAmount>
               <Text
                 fontSize="14px"
-                textColor={'brand.neutral700'}
+                textColor={'neutral.700'}
                 fontWeight={'normal'}
               >
                 {isNoFees ? `(0%)` : `(2%)`}

@@ -20,13 +20,13 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
         overflow={'hidden'}
         backgroundColor="white"
         border="2px solid"
-        borderColor={noborder ? 'transparent' : 'brand.neutral200'}
+        borderColor={noborder ? 'transparent' : 'neutral.200'}
         borderRadius="8px"
         boxShadow="none"
         padding="24px"
         spacing="10px"
         _hover={
-          hover ? { cursor: 'pointer', borderColor: 'brand.neutral400' } : {}
+          hover ? { cursor: 'pointer', borderColor: 'neutral.400' } : {}
         }
         _active={click ? { borderColor: 'brand.primary' } : {}}
         _focus={click ? { borderColor: 'brand.primary' } : {}}

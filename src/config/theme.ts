@@ -1,6 +1,15 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import { colors, fonts, neutralColors, primaryColors } from '../styles'
+import {
+  colors,
+  fonts,
+  neutralColors,
+  neutralColorsDark,
+  neutralColorsLight,
+  primaryColors,
+  primaryColorsDark,
+  primaryColorsLight,
+} from '../styles'
 
 export const theme = extendTheme({
   initialColorMode: 'light',
@@ -8,13 +17,16 @@ export const theme = extendTheme({
     brand: {
       ...colors,
     },
-    neutral: neutralColors,
-    primary: primaryColors,
+    // neutral: neutralColors,
+    // primary: primaryColors,
   },
   fonts: {
     heading: fonts.brand,
     body: fonts.brand,
     default: fonts.brand,
+  },
+  breakpoints: {
+    mb: '900px',
   },
   components: {
     Button: {

@@ -78,11 +78,11 @@ export const LandingNavBar = () => {
       <>
         <Box height="60px" width="100%"></Box>
         <HStack
-          backgroundColor="brand.neutral50"
+          backgroundColor="neutral.50"
           width="100%"
           height="60px"
           borderTop="2px solid"
-          borderTopColor="brand.neutral200"
+          borderTopColor="neutral.200"
           paddingX="15%"
           justifyContent="center"
           alignItems="center"

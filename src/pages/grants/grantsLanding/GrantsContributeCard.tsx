@@ -77,12 +77,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
       >
         <GrantsContributeModal />
         {isMobile ? (
-          <Text
-            fontSize={'14px'}
-            fontWeight="500"
-            mt={3}
-            color="brand.neutral600"
-          >
+          <Text fontSize={'14px'} fontWeight="500" mt={3} color="neutral.600">
             Contribute to the Bitcoin ecosystem by becoming a Geyser Grants
             sponsor. You can also easily contribute by sending or streaming
             recurring payments to{' '}
@@ -96,7 +91,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
           </Text>
         ) : (
           <Box display="flex" alignItems={'center'}>
-            <Text fontWeight="500" mr={1} color="brand.neutral600">
+            <Text fontWeight="500" mr={1} color="neutral.600">
               Or sending SATs to our lightning address:{' '}
               <Tooltip label="Copied to clipboard!" isOpen={hasCopied}>
                 <Link

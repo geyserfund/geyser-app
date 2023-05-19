@@ -50,7 +50,7 @@ export const GrantsLandingPage = () => {
             textAlign="center"
             fontFamily={fonts.header}
             textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
-            color={'brand.primary500'}
+            color={'primary.500'}
           >
             GEYSER GRANTS
           </Text>
@@ -62,7 +62,7 @@ export const GrantsLandingPage = () => {
           >
             Empowering bitcoin creators
           </H2>
-          <H3 textAlign="center" color={'brand.neutral600'}>
+          <H3 textAlign="center" color={'neutral.600'}>
             Funding educators, creatives and builders doing Bitcoin-only
             projects on Geyser. <br /> Funded by bitcoiners who want to change
             the world.

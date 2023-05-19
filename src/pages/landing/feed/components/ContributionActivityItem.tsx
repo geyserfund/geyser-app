@@ -103,7 +103,7 @@ export const ContributionActivityItem = ({
                   seed={funder.id}
                   image={avatarMetadata.image}
                   imageSize={'20px'}
-                  textColor="brand.neutral900"
+                  textColor="neutral.900"
                 />
               </HStack>
             ) : (
@@ -112,7 +112,7 @@ export const ContributionActivityItem = ({
                 avatarUsername={funder.user?.username || ''}
                 userProfileID={funder.user?.id}
                 imageSize={'24px'}
-                textColor="brand.neutral600"
+                textColor="neutral.600"
                 badgeNames={funderBadges.map((badge) => badge.badge)}
                 badgeElements={renderFunderBadges(funderBadges)}
               />
@@ -168,7 +168,7 @@ export const ContributionActivityItem = ({
 
           {/* Timestamp and Funded-Project Info */}
 
-          <HStack w="full" color="brand.neutral700" spacing={2}>
+          <HStack w="full" color="neutral.700" spacing={2}>
             <Caption whiteSpace="nowrap">
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}

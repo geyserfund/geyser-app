@@ -271,7 +271,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
         </Wrap>
 
         <VStack alignItems="flex-start">
-          <MarkDown color='"brand.neutral800"'>{project.description}</MarkDown>
+          <MarkDown color='"neutral.800"'>{project.description}</MarkDown>
         </VStack>
         <ProjectFundingSummary project={project} />
       </VStack>

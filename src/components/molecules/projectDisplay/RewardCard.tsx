@@ -69,12 +69,12 @@ export const RewardCard = ({
               </Text>
             </VStack>
             <VStack spacing="0px" alignItems="flex-start">
-              <Text fontWeight={500} color="brand.neutral900">
+              <Text fontWeight={500} color="neutral.900">
                 {reward.name}
               </Text>
               <Text
                 fontSize="12px"
-                backgroundColor="brand.neutral200"
+                backgroundColor="neutral.200"
                 padding="2px 5px"
                 borderRadius="4px"
               >

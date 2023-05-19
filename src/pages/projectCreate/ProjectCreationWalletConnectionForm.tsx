@@ -396,7 +396,7 @@ export const ProjectCreationWalletConnectionForm = ({
             </ButtonComponent>
           )}
 
-          <HStack color={'brand.neutral600'} spacing={2} mt={2}>
+          <HStack color={'neutral.600'} spacing={2} mt={2}>
             <Text>By continuing, I agree with Geyser&apos;s</Text>
             <Link
               href={GeyserTermsAndConditionsURL}

@@ -237,7 +237,7 @@ export const EntryPreview = () => {
             </VStack>
           ) : null}
 
-          <Text fontSize="14px" color="brand.neutral800">
+          <Text fontSize="14px" color="neutral.800">
             {!isEntryPublished ? 'Edit Social Preview' : 'Preview'}{' '}
           </Text>
 
@@ -245,7 +245,7 @@ export const EntryPreview = () => {
             alignItems="flex-start"
             backgroundColor="white"
             border="1px solid"
-            borderColor="brand.neutral200"
+            borderColor="neutral.200"
             borderRadius="4px"
           >
             <Box height="220px" width="350px" overflow="hidden">
@@ -295,7 +295,7 @@ export const EntryPreview = () => {
           </VStack>
           {!isEntryPublished && (
             <VStack alignItems="flex-start" width="100%">
-              <Text fontSize="14px" color="brand.neutral800">
+              <Text fontSize="14px" color="neutral.800">
                 Linked project
               </Text>
               <Text>Where should Satoshi donations go to?</Text>

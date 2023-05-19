@@ -31,7 +31,7 @@ export const ProjectLinkInput = ({
       backgroundColor="white"
       borderRadius="8px"
       border="1px solid"
-      borderColor="brand.neutral400"
+      borderColor="neutral.400"
       {...rest}
     >
       <HStack justifyContent="center" width="50px">
@@ -40,7 +40,7 @@ export const ProjectLinkInput = ({
       <Input
         border="1px solid"
         borderRadius="4px !important"
-        borderColor={'brand.neutral400'}
+        borderColor={'neutral.400'}
         placeholder="https://twitter.com/halfin"
         value={value}
         onChange={onChange}

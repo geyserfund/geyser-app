@@ -32,7 +32,7 @@ export const Countdown = ({ endDate }: { endDate: string }) => {
         textAlign="center"
         fontSize="14px"
         fontFamily={fonts.mono}
-        color="brand.neutral600"
+        color="neutral.600"
       >{`${countDown}`}</Text>
     </HStack>
   )
