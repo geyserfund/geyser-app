@@ -1,16 +1,11 @@
-import { useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
-  MUTATION_PROJECT_TAG__REMOVE,
-  MUTATION_PROJECT_TAG_ADD,
-} from '../../graphql/mutations'
-import {
-  MutationInput,
   Project,
   ProjectFragment,
-  ProjectTagMutationInput,
   Tag,
+  useProjectTagAddMutation,
+  useProjectTagRemoveMutation,
 } from '../../types'
 import { toInt, useNotification } from '../../utils'
 
@@ -26,18 +21,15 @@ export const useProjectTagsState = ({
   const { toast } = useNotification()
 
   useEffect(() => {
-    if (project && project?.tags?.length > 0) {
-      setTags(project?.tags)
+    if (project && project.tags?.length) {
+      setTags(project.tags)
     }
   }, [project])
 
-  const [addTag, { loading: addTagLoading }] = useMutation<
-    { projectTagAdd: Tag[] },
-    MutationInput<ProjectTagMutationInput>
-  >(MUTATION_PROJECT_TAG_ADD, {
+  const [addTag, { loading: addTagLoading }] = useProjectTagAddMutation({
     onError() {
       toast({
-        title: 'failed to add project tag',
+        title: 'failed to add tag',
         status: 'error',
       })
     },
@@ -49,66 +41,83 @@ export const useProjectTagsState = ({
       }
     },
   })
-  const [removeTag, { loading: removeTagLoading }] = useMutation<
-    { projectTagRemove: Tag[] },
-    MutationInput<ProjectTagMutationInput>
-  >(MUTATION_PROJECT_TAG__REMOVE, {
-    onError() {
-      toast({
-        title: 'failed to remove project tag',
-        status: 'error',
-      })
-    },
-    onCompleted(data) {
-      if (updateProject && data.projectTagRemove) {
-        updateProject({
-          tags: data.projectTagRemove,
-        } as Project)
-      }
-    },
-  })
+
+  const [removeTag, { loading: removeTagLoading }] =
+    useProjectTagRemoveMutation({
+      onError() {
+        toast({
+          title: 'failed to remove tag',
+          status: 'error',
+        })
+      },
+      onCompleted(data) {
+        if (updateProject && data.projectTagRemove) {
+          updateProject({
+            tags: data.projectTagRemove,
+          } as Project)
+        }
+      },
+    })
+
+  const addTags = useMemo(
+    () =>
+      project && project.tags?.length > 0
+        ? tags.filter(
+            (tag) =>
+              !project.tags.some((projectTag) => tag.id === projectTag.id),
+          )
+        : tags,
+
+    [project, tags],
+  )
+
+  const removeTags = useMemo(
+    () =>
+      project && project.tags?.length > 0
+        ? project.tags.filter(
+            (tag) => !tags.some((projectTag) => tag.id === projectTag.id),
+          )
+        : [],
+    [project, tags],
+  )
+
+  const isDirty = useMemo(
+    () => Boolean(addTags.length || removeTags.length),
+    [addTags.length, removeTags.length],
+  )
 
   const saveTags = async () => {
     if (!project) {
       return
     }
 
-    const addTags =
-      project?.tags?.length > 0
-        ? tags.filter((tag) => !project.tags.some((tag2) => tag.id === tag2.id))
-        : tags
-    const removeTags =
-      project?.tags?.length > 0
-        ? project.tags.filter((tag) => !tags.some((tag2) => tag.id === tag2.id))
-        : []
-
     if (removeTags.length > 0) {
-      await Promise.all(
-        removeTags.map(async (tag) => {
-          await removeTag({
+      await Promise.allSettled(
+        removeTags.map((tag) =>
+          removeTag({
             variables: {
               input: {
                 projectId: toInt(project.id),
                 tagId: tag.id,
               },
             },
-          })
-        }),
+          }),
+        ),
       )
     }
 
     if (addTags.length > 0) {
-      await Promise.all(
-        addTags.map(async (tag) => {
-          await addTag({
+      await Promise.allSettled(
+        addTags.map((tag) =>
+          addTag({
             variables: {
               input: {
                 projectId: toInt(project.id),
                 tagId: tag.id,
               },
             },
-          })
-        }),
+          }),
+        ),
       )
     }
   }
@@ -119,6 +128,7 @@ export const useProjectTagsState = ({
     tags,
     setTags,
     saveTags,
+    isDirty,
     loading,
   }
 }

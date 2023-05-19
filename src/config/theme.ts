@@ -29,6 +29,10 @@ export const theme = extendTheme({
       baseStyle: {
         fontWeight: 500,
         fontFamily: fonts.inter,
+        boxShadow: 'none',
+        outline: 'none',
+        borderRadius: '8px',
+        fontSize: '16px',
       },
       sizes: {
         xl: {
@@ -36,60 +40,68 @@ export const theme = extendTheme({
           fontSize: '22px',
           fontWeight: 700,
         },
+        sm: {
+          padding: '6px',
+          fontSize: '14px',
+          fontWeight: 500,
+        },
       },
       variants: {
         primary: {
-          borderRadius: '8px',
-          backgroundColor: colors.primary,
-          color: 'black',
-          fontWeight: 'medium',
-          minWidth: '220px',
-          _hover: {
-            backgroundColor: colors.primary500,
-          },
-        },
-        danger: {
-          backgroundColor: colors.secondaryRed,
-          color: 'white',
-          _hover: {
-            backgroundColor: colors.secondaryRedDark,
-          },
-        },
-        transparent: {
-          backgroundColor: 'transparent',
-          color: colors.neutral600,
+          backgroundColor: colors.primary400,
           border: 'none',
-          borderColor: 'transparent',
+          color: colors.neutral900,
           _hover: {
             backgroundColor: colors.neutral200,
           },
           _active: {
             backgroundColor: colors.neutral300,
-            color: colors.textBlack,
           },
         },
-        containedClear: {
+        primaryNeutral: {
+          backgroundColor: colors.neutral100,
+          border: 'none',
+          color: colors.neutral900,
+          _hover: {
+            backgroundColor: colors.neutral200,
+          },
+          _active: {
+            backgroundColor: colors.neutral300,
+          },
+        },
+        secondary: {
+          boxShadow: 'none',
+          outline: 'none',
           border: `2px solid`,
           borderColor: colors.neutral200,
           color: colors.neutral900,
-          fontSize: '16px',
-          padding: '8px 20px',
-          backgroundColor: 'white',
-          borderRadius: '8px',
+          backgroundColor: colors.neutral50,
           _hover: {
-            borderColor: colors.neutral400,
+            borderColor: colors.primary400,
           },
           _active: {
-            backgroundColor: colors.neutral200,
+            borderColor: colors.primary400,
+            backgroundColor: colors.primary100,
           },
         },
-        contained: {
-          background: colors.primary400,
-          borderRadius: '8px',
-          padding: '8px 20px',
-          color: colors.neutral800,
+        secondaryNeutral: {
+          border: `2px solid`,
+          borderColor: colors.neutral200,
+          color: colors.neutral900,
+          backgroundColor: colors.neutral100,
           _hover: {
-            background: colors.primary500,
+            borderColor: colors.primary400,
+          },
+          _active: {
+            borderColor: colors.primary400,
+            backgroundColor: colors.primary100,
+          },
+        },
+        danger: {
+          backgroundColor: colors.secondaryRed,
+          color: colors.neutral0,
+          _hover: {
+            backgroundColor: colors.secondaryRedDark,
           },
         },
       },
@@ -97,11 +109,13 @@ export const theme = extendTheme({
     Text: {
       baseStyle: {
         fontSize: '14px',
+        color: colors.neutral900,
+        lineHeight: 1.6,
       },
       variants: {
         caption: () => ({
           fontSize: '10px',
-          fontWeight: 700,
+          fontWeight: 400,
         }),
         h3: () => ({
           fontWeight: 600,
@@ -113,11 +127,10 @@ export const theme = extendTheme({
           fontSize: '24px',
           lineHeight: 1.4,
         }),
-        body1: ({ theme }: StyleFunctionProps) => ({
+        body1: () => ({
           fontWeight: 500,
           lineHeight: 1.6,
           fontSize: '16px',
-          color: theme.colors.neutral[600],
         }),
       },
     },

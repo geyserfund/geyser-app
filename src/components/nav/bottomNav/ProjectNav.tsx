@@ -172,7 +172,7 @@ export const ProjectNavUI = () => {
         ) : (
           <Button
             size="sm"
-            variant="contained"
+            variant="primary"
             width="100%"
             padding="5px"
             isDisabled={showGreyButton}

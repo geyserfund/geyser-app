@@ -1,5 +1,5 @@
 import { QueryHookOptions } from '@apollo/client'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   ProjectByNameOrIdQuery,
@@ -12,7 +12,7 @@ import {
 import { getDiff, toInt, useNotification } from '../../utils'
 
 export const useProjectState = (
-  projectId: string | number,
+  projectId?: string | number,
   options?: QueryHookOptions<
     ProjectByNameOrIdQuery,
     ProjectByNameOrIdQueryVariables
@@ -76,26 +76,28 @@ export const useProjectState = (
     )
   }
 
+  const [isDiff, diffKeys] = useMemo(
+    () =>
+      project
+        ? getDiff(project, baseProject, [
+            'location',
+            'description',
+            'expiresAt',
+            'fundingGoal',
+            'image',
+            'rewardCurrency',
+            'shortDescription',
+            'status',
+            'thumbnailImage',
+            'title',
+            'links',
+          ])
+        : [],
+    [baseProject, project],
+  )
+
   const saveProject = async () => {
-    if (!project) {
-      return
-    }
-
-    const [isDiff, diffKeys] = getDiff(project, baseProject, [
-      'location',
-      'description',
-      'expiresAt',
-      'fundingGoal',
-      'image',
-      'rewardCurrency',
-      'shortDescription',
-      'status',
-      'thumbnailImage',
-      'title',
-      'links',
-    ])
-
-    if (!isDiff) {
+    if (!isDiff || !diffKeys || !project) {
       return
     }
 
@@ -120,5 +122,13 @@ export const useProjectState = (
     await updateProjectMutation({ variables: { input } })
   }
 
-  return { loading, error, saving, project, updateProject, saveProject }
+  return {
+    loading,
+    error,
+    saving,
+    project,
+    updateProject,
+    saveProject,
+    isDirty: isDiff,
+  }
 }

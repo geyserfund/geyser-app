@@ -16,7 +16,7 @@ import { useDarkMode, useMobileMode } from '../../../utils'
 import { ProjectMobileNavigation } from '../projectNavigation/components/ProjectMobileNavigation'
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
-import { NoWallet } from './components'
+import { LaunchProjectNotice } from './components'
 import { Creator, Entries, Summary } from './sections'
 import { Milestones } from './sections/Milestones'
 import { Rewards } from './sections/Rewards'
@@ -126,8 +126,9 @@ export const ProjectMainBody = ({
               <Summary ref={headerRef} />
 
               {project && isViewerTheProjectOwner && (
-                <NoWallet project={project} />
+                <LaunchProjectNotice project={project} />
               )}
+
               {isViewerTheProjectOwner && <Creator />}
 
               <SectionNav {...projectAnchors} />

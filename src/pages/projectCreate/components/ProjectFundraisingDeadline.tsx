@@ -1,59 +1,55 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
 import { useState } from 'react'
+import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 
 import { CalendarButton } from '../../../components/molecules'
-import { Body2, Caption } from '../../../components/typography'
-import { ButtonComponent } from '../../../components/ui'
 
 interface ProjectFundraisingDeadlineProps {
-  form: { expiresAt?: string }
-  setForm: (_: any) => void
+  setValue: UseFormSetValue<any>
+  watch: UseFormWatch<any>
 }
 
 export const ProjectFundraisingDeadline = ({
-  form,
-  setForm,
+  setValue,
+  watch,
 }: ProjectFundraisingDeadlineProps) => {
-  const [selectedButton, setSelectedButton] = useState(
-    form.expiresAt ? 'custom' : 'ongoing',
+  const value = watch('expiresAt')
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    value ? DateTime.fromMillis(Number(value)).toJSDate() : null,
   )
-  const [selectedDate, setSelectedDate] = useState<Date>()
+
+  const selectedButton = value ? 'custom' : 'ongoing'
 
   const handleDateChange = (value: Date) => {
-    setSelectedButton('custom')
     setSelectedDate(value)
-
-    setForm({ ...form, expiresAt: `${value.getTime()}` })
+    setValue('expiresAt', value.getTime().toString(), { shouldDirty: true })
   }
 
   const handleOngoingSelect = () => {
-    setSelectedButton('ongoing')
-    setSelectedDate(undefined)
-    setForm({ ...form, expiresAt: undefined })
+    setSelectedDate(null)
+    setValue('expiresAt', '', { shouldDirty: true })
   }
 
   return (
-    <VStack width="100%" alignItems="flex-start" spacing="5px">
-      <Body2>Fundraising deadline</Body2>
-      <HStack width="100%" spacing="20px">
-        <ButtonComponent
-          primary={selectedButton === 'ongoing'}
-          onClick={handleOngoingSelect}
-        >
-          Ongoing
-        </ButtonComponent>
-        <CalendarButton
-          primary={selectedButton === 'custom'}
-          value={selectedDate}
-          onChange={handleDateChange}
-        >
-          With Deadline
-        </CalendarButton>
-      </HStack>
-      <Caption>
-        Add a deadline for your project if you have one, or just keep it as
-        ongoing.
-      </Caption>
-    </VStack>
+    <HStack width="100%" spacing={4}>
+      <Button
+        w="50%"
+        variant="secondary"
+        isActive={selectedButton === 'ongoing'}
+        onClick={handleOngoingSelect}
+      >
+        Ongoing
+      </Button>
+      <CalendarButton
+        containerProps={{ w: '50%' }}
+        isActive={selectedButton === 'custom'}
+        value={selectedDate}
+        onChange={handleDateChange}
+      >
+        With Deadline
+      </CalendarButton>
+    </HStack>
   )
 }

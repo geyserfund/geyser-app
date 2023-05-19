@@ -9,7 +9,7 @@ export const CreateAProjectButton = (props: ButtonProps) => {
     <ButtonComponent
       marginTop="20px "
       as={Link}
-      to={getPath('privateProjectLaunch')}
+      to={getPath('publicProjectLaunch')}
       primary
       {...props}
     >

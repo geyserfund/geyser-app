@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-import { Project } from '../../types'
+import { ProjectFragment } from '../../types'
 
 export const useProjectLinksValidation = ({
   updateProject,
 }: {
-  updateProject: (_: Project) => void
+  updateProject: (project: Partial<ProjectFragment>) => void
 }) => {
   const [linkError, setLinkError] = useState<boolean[]>([false])
 
@@ -34,7 +34,7 @@ export const useProjectLinksValidation = ({
 
     setLinkError(errors)
 
-    updateProject({ links } as Project)
+    updateProject({ links })
   }
 
   return { setLinks, linkError }

@@ -205,7 +205,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           <Button
             leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
             onClick={onCopyLightning}
-            variant="contained"
+            variant="primary"
           >
             <Text>{hasCopiedLightning ? 'Copied!' : 'Lightning invoice'}</Text>
           </Button>
@@ -214,7 +214,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           <Button
             leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
             onClick={onCopyOnchain}
-            variant="contained"
+            variant="primary"
           >
             <Text>{hasCopiedOnchain ? 'Copied!' : 'Onchain invoice'}</Text>
           </Button>
@@ -371,7 +371,7 @@ const GeneratingInvoice = ({
           <Body2>Click refresh to try again</Body2>
           <Button
             textTransform="uppercase"
-            variant="containedClear"
+            variant="secondary"
             size="sm"
             borderRadius="40px"
             leftIcon={<IoMdRefresh />}

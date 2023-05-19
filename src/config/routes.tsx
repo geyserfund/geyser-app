@@ -25,8 +25,11 @@ const GrantPage = loadable(() => Grants.then((m) => m.GrantPage))
 
 const ProjectLaunch = import('../pages/projectCreate')
 
-const PublicProjectLaunchPage = loadable(() =>
-  ProjectLaunch.then((m) => m.PublicProjectLaunchPage),
+const ProjectCreateStart = loadable(() =>
+  ProjectLaunch.then((m) => m.ProjectCreateStart),
+)
+const ProjectCreateStory = loadable(() =>
+  ProjectLaunch.then((m) => m.ProjectCreateStory),
 )
 const ProjectCreationWalletConnectionPage = loadable(() =>
   ProjectLaunch.then((m) => m.ProjectCreationWalletConnectionPage),
@@ -62,6 +65,9 @@ const ProjectDetails = loadable(() =>
 )
 const ProjectFundingSettings = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectFundingSettings),
+)
+const ProjectStory = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectStory),
 )
 const ProjectStats = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectStats),
@@ -122,7 +128,11 @@ const platformRoutes = [
   },
   {
     path: getPath('publicProjectLaunch'),
-    element: PublicProjectLaunchPage,
+    element: ProjectCreateStart,
+  },
+  {
+    path: `${getPath('publicProjectLaunch')}/:projectId`,
+    element: ProjectCreateStart,
   },
   {
     path: getPath('launchProjectWithNode', PathName.projectId),
@@ -136,6 +146,11 @@ const platformRoutes = [
   {
     path: `${getPath('privateProjectLaunch')}/:projectId`,
     element: ProjectCreate,
+    authenticated: true,
+  },
+  {
+    path: getPath('launchProjectStory', PathName.projectId),
+    element: ProjectCreateStory,
     authenticated: true,
   },
   {
@@ -179,6 +194,10 @@ const platformRoutes = [
       {
         path: getPath('dashboardDetails', PathName.projectId),
         element: ProjectDetails,
+      },
+      {
+        path: getPath('dashboardStory', PathName.projectId),
+        element: ProjectStory,
       },
       {
         path: getPath('dashboardFunding', PathName.projectId),
