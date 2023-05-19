@@ -118,7 +118,12 @@ export const MarkdownField = ({
     return (
       <RemirrorStyleProvider>
         <RemirrorRenderer
-          json={getRemirrorJSON(manager.createState({ content }))}
+          json={getRemirrorJSON(
+            manager.createState({
+              content: content?.replaceAll('\n', '<br>'),
+              stringHandler: 'markdown',
+            }),
+          )}
         />
       </RemirrorStyleProvider>
     )

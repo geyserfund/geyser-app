@@ -21,7 +21,7 @@ export const ProjectBackButton = (props: ButtonProps) => {
       variant="secondary"
       size="sm"
       leftIcon={<BsArrowLeft fontSize="20px" />}
-      onClick={handleGoBack}
+      onClick={() => handleGoBack()}
       {...props}
     >
       Back

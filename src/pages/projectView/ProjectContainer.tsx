@@ -26,7 +26,7 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const onModalClose = () => navigate(location.pathname)
+  const onModalClose = () => navigate(location.pathname, { replace: true })
 
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
@@ -34,19 +34,24 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
   const { project, loading } = useProjectContext()
 
   useEffect(() => {
-    const launchModalOpen = location.search.split('launch').length > 1
-    const draftModalOpen = location.search.split('draft').length > 1
+    const launchModalShouldOpen = location.search.split('launch').length > 1
+    const draftModalShouldOpen = location.search.split('draft').length > 1
 
-    if (launchModalOpen) {
+    if (launchModalShouldOpen) {
       return launchModal.onOpen()
     }
 
-    if (draftModalOpen) {
+    if (draftModalShouldOpen) {
       return draftModal.onOpen()
     }
 
-    launchModal.onClose()
-    draftModal.onClose()
+    if (draftModal.isOpen) {
+      draftModal.onClose()
+    }
+
+    if (launchModal.isOpen) {
+      launchModal.onClose()
+    }
   }, [draftModal, launchModal, location.search])
 
   const fundForm = useFundingFormState({
