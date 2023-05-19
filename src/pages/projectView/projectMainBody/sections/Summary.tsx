@@ -25,12 +25,7 @@ import { AmbossUrl, getPath, HomeUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { MarkdownField } from '../../../../forms/components/MarkdownField'
 import { colors } from '../../../../styles'
-import {
-  copyTextToClipboard,
-  MarkDown,
-  toInt,
-  useMobileMode,
-} from '../../../../utils'
+import { copyTextToClipboard, toInt, useMobileMode } from '../../../../utils'
 import { getPossibleWalletPubkey } from '../../../../utils/validations/wallet'
 import {
   AvatarElement,
