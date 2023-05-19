@@ -133,7 +133,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
         credentials: 'include',
       })
-    } catch {}
+    } catch {
+      alert('Failed to log out properly. Please clear your cookies.')
+    }
   }
 
   useEffect(() => {

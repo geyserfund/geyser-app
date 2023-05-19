@@ -46,7 +46,7 @@ export const ProjectFundingFormCommentField = ({
   ...rest
 }: Props) => {
   const isMobile = useMobileMode()
-
+  const { isAnonymous, loginOnOpen, user } = useAuthContext()
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const {
@@ -73,8 +73,6 @@ export const ProjectFundingFormCommentField = ({
     [gifSearch],
   )
 
-  const { isAnonymous, loginOnOpen, user } = useAuthContext()
-
   return (
     <Box {...rest}>
       <HStack width="100%" position="relative">
@@ -90,7 +88,9 @@ export const ProjectFundingFormCommentField = ({
             name="comment"
             pl={10}
             borderWidth="2px"
-            borderColor="brand.primary500"
+            _active={{
+              borderColor: 'primary.500',
+            }}
             backgroundColor={'brand.bgWhite'}
             onChange={setTarget}
           />
@@ -109,6 +109,7 @@ export const ProjectFundingFormCommentField = ({
               label="Funding annonymously. Click to login"
             >
               <AvatarElement
+                borderRadius="50%"
                 cursor="pointer"
                 noLink
                 onClick={loginOnOpen}
@@ -116,7 +117,7 @@ export const ProjectFundingFormCommentField = ({
               />
             </Tooltip>
           ) : (
-            <AvatarElement user={user} avatarOnly />
+            <AvatarElement borderRadius="50%" user={user} avatarOnly />
           )}
         </Box>
 
