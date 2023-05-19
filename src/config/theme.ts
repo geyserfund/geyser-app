@@ -97,6 +97,17 @@ export const theme = extendTheme({
             backgroundColor: colors.primary100,
           },
         },
+        transparent: {
+          backgroundColor: 'transparent',
+          _hover: {
+            borderColor: colors.primary400,
+            backgroundColor: colors.neutral100,
+          },
+          _active: {
+            borderColor: colors.primary400,
+            backgroundColor: colors.primary100,
+          },
+        },
         danger: {
           backgroundColor: colors.secondaryRed,
           color: colors.neutral0,
