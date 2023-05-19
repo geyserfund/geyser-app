@@ -97,7 +97,6 @@ export const ProjectActivityPanel = ({
 
   useEffect(() => {
     if (!formState.anonymous && (!user || !user.id)) {
-      loginOnOpen()
       setFormState('anonymous', true)
     }
   }, [formState.anonymous, loginOnOpen, setFormState, user])
