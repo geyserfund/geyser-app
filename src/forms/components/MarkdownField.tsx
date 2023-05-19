@@ -1,5 +1,3 @@
-import 'remirror/styles/all.css'
-
 import { Box } from '@chakra-ui/react'
 import { useDebouncedCallback } from '@react-hookz/web'
 import {
@@ -12,7 +10,8 @@ import {
   useRemirrorContext,
   WysiwygToolbar,
 } from '@remirror/react'
-import { useCallback } from 'react'
+import { AllStyledComponent } from '@remirror/styles/emotion'
+import { PropsWithChildren, useCallback } from 'react'
 import { Control, useController } from 'react-hook-form'
 import { getRemirrorJSON, InvalidContentHandler } from 'remirror'
 import {
@@ -117,13 +116,11 @@ export const MarkdownField = ({
 
   if (preview) {
     return (
-      <Box className="remirror-theme" width="100%">
-        <ThemeProvider>
-          <RemirrorRenderer
-            json={getRemirrorJSON(manager.createState({ content }))}
-          />
-        </ThemeProvider>
-      </Box>
+      <RemirrorStyleProvider>
+        <RemirrorRenderer
+          json={getRemirrorJSON(manager.createState({ content }))}
+        />
+      </RemirrorStyleProvider>
     )
   }
 
@@ -132,18 +129,22 @@ export const MarkdownField = ({
   }
 
   return (
-    <Box className="remirror-theme" width="100%">
-      <ThemeProvider>
-        <Remirror
-          autoFocus
-          manager={manager}
-          initialContent={initialContent?.()}
-        >
-          <WysiwygToolbar />
-          <EditorComponent />
-          <SaveModule name={name} />
-        </Remirror>
-      </ThemeProvider>
+    <RemirrorStyleProvider>
+      <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
+        <WysiwygToolbar />
+        <EditorComponent />
+        <SaveModule name={name} />
+      </Remirror>
+    </RemirrorStyleProvider>
+  )
+}
+
+const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
+  return (
+    <Box width="100%">
+      <AllStyledComponent>
+        <ThemeProvider>{children}</ThemeProvider>
+      </AllStyledComponent>
     </Box>
   )
 }
