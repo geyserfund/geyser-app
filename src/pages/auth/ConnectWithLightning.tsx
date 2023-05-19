@@ -25,7 +25,11 @@ import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
 import { User } from '../../types'
-import { useMobileMode, useNotification } from '../../utils'
+import {
+  copyTextToClipboard,
+  useMobileMode,
+  useNotification,
+} from '../../utils'
 
 interface ConnectWithLightningModalProps {
   isOpen: boolean
@@ -68,7 +72,7 @@ export const ConnectWithLightningModal = ({
   const [copy, setcopy] = useState(false)
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(qrContent)
+    copyTextToClipboard(qrContent)
     setcopy(true)
     setTimeout(() => {
       setcopy(false)

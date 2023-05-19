@@ -24,6 +24,7 @@ import {
   FundingStatus,
   InvoiceStatus,
 } from '../../../../types/generated/graphql'
+import { copyTextToClipboard } from '../../../../utils'
 import { getBip21Invoice } from '../../../../utils/lightning/bip21'
 
 const FUNDING_REQUEST_TIMEOUT = 45_000
@@ -171,7 +172,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   ])
 
   const onCopyLightning = useCallback(() => {
-    navigator.clipboard.writeText(lightningAddress)
+    copyTextToClipboard(lightningAddress)
     setHasCopiedLightning(true)
     setTimeout(() => {
       setHasCopiedLightning(false)
@@ -179,7 +180,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   }, [lightningAddress])
 
   const onCopyOnchain = useCallback(() => {
-    navigator.clipboard.writeText(onchainAddress)
+    copyTextToClipboard(onchainAddress)
     setHasCopiedOnchain(true)
     setTimeout(() => {
       setHasCopiedOnchain(false)

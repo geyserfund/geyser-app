@@ -6,7 +6,6 @@ import { useProjectContext } from '../../context'
 import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
 import { useProjectLinksValidation } from '../../hooks/validations'
 import { useNotification } from '../../utils'
-import { truthyFilter } from '../../utils/array'
 import { ProjectRegion } from '../projectCreate/components'
 import { ProjectLinks } from '../projectCreate/components/ProjectLinks'
 import { ProjectTagsCreateEdit } from '../projectCreate/components/ProjectTagsCreateEdit'
@@ -76,7 +75,7 @@ export const ProjectDetails = () => {
             <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
             <ProjectLinks
-              links={project?.links.filter(truthyFilter) || []}
+              links={(project?.links as string[]) || []}
               setLinks={setLinks}
               linkError={linkError}
             />

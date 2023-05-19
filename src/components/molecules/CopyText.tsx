@@ -1,11 +1,13 @@
 import { Box, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 
+import { copyTextToClipboard } from '../../utils'
+
 export const CopyText = ({ children }: { children: React.ReactNode }) => {
   const [copy, setCopy] = useState(false)
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`${children}`)
+    copyTextToClipboard(`${children}`)
 
     setCopy(true)
     setTimeout(() => {

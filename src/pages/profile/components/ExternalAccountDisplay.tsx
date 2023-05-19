@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
 import { ExternalAccount } from '../../../types'
-import { toInt, useNotification } from '../../../utils'
+import { copyTextToClipboard, toInt, useNotification } from '../../../utils'
 import { ExternalAccountType } from '../../auth'
 import { UserProfileState } from '../type'
 import { ExternalAccountBody } from './ExternalAccountBody'
@@ -28,7 +28,7 @@ export const ExternalAccountDisplay = ({
   const [copy, setCopy] = useState(false)
 
   const handleCopyPubkey = (npub: string) => {
-    navigator.clipboard.writeText(npub)
+    copyTextToClipboard(npub)
     setCopy(true)
     setTimeout(() => {
       setCopy(false)
