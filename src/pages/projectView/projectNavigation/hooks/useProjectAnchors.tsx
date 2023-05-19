@@ -32,7 +32,7 @@ export const useProjectAnchors = (
   // const isHeaderView = useOnScreen(refs.header)
   // const isEntriesView = useOnScreen(refs.entries)
   // const isRewardsView = useOnScreen(refs.rewards)
-  // const isMilestones:clapView = useOnScreen(refs.milestones)
+  // const isMilestonesView = useOnScreen(refs.milestones)
 
   const entriesLength = useMemo(
     () => (project && project.entries ? project.entries.length : 0),
