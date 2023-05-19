@@ -127,7 +127,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   } = useDisclosure()
 
   const logout = () => {
-    setUser(defaultUser)
+    setUser({ ...defaultUser })
     setFollowedProjects([])
     try {
       fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
@@ -168,7 +168,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
-        isAnonymous: !(user && user.id),
+        isAnonymous: !user || !user.id,
         queryCurrentUser,
         setUser,
         loading,

@@ -44,6 +44,7 @@ export const AvatarElement = ({
       as={noLink ? 'div' : Link}
       to={`/profile/${user.id}`}
       overflow="hidden"
+      cursor={rest.onClick ? 'pointer' : 'initial'}
       _hover={noLink ? {} : { textDecoration: 'underline', fontWeight: 500 }}
       {...wrapperProps}
     >

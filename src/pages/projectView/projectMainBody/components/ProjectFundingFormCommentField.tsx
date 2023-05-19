@@ -28,7 +28,9 @@ import { GifIcon } from '../../../../components/icons'
 import { TextArea } from '../../../../components/ui'
 import { VITE_APP_GIPHY_API_KEY } from '../../../../constants'
 import { useAuthContext } from '../../../../context'
+import { useModal } from '../../../../hooks/useModal'
 import { useMobileMode } from '../../../../utils'
+import { LogoutConfirmationModal } from '../../../auth/components/LogoutConfirmationModal'
 import { AvatarElement } from './AvatarElement'
 
 type Props = HTMLChakraProps<'div'> & {
@@ -48,6 +50,8 @@ export const ProjectFundingFormCommentField = ({
   const isMobile = useMobileMode()
   const { isAnonymous, loginOnOpen, user } = useAuthContext()
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+  const logoutConfirmationModal = useModal()
 
   const {
     isOpen: isGIFModalOpen,
@@ -103,21 +107,30 @@ export const ProjectFundingFormCommentField = ({
         )}
 
         <Box zIndex="10" position="absolute" left={0.8} top={2}>
-          {isAnonymous ? (
+          {isAnonymous || !user ? (
             <Tooltip
               shouldWrapChildren
               label="Funding annonymously. Click to login"
             >
               <AvatarElement
                 borderRadius="50%"
-                cursor="pointer"
                 noLink
                 onClick={loginOnOpen}
                 avatarOnly
               />
             </Tooltip>
           ) : (
-            <AvatarElement borderRadius="50%" user={user} avatarOnly />
+            <Tooltip
+              shouldWrapChildren
+              label={`Funding as ${user.username}. Click to logout`}
+            >
+              <AvatarElement
+                onClick={logoutConfirmationModal.onOpen}
+                borderRadius="50%"
+                user={user}
+                avatarOnly
+              />
+            </Tooltip>
           )}
         </Box>
 
@@ -203,6 +216,7 @@ export const ProjectFundingFormCommentField = ({
           </ModalContent>
         </Modal>
       )}
+      <LogoutConfirmationModal {...logoutConfirmationModal} />
     </Box>
   )
 }
