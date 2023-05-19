@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { HStack, useTheme, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -6,7 +6,6 @@ import { CardLayout, StickToTop } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
 import { getPath, ID } from '../../../constants'
-import { DEFAULT_MOBILE_BREAK_POINT } from '../../../utils'
 import { LeaderboardAllTime, LeaderboardThisWeek } from './views'
 
 enum LeaderboardTabs {
@@ -16,9 +15,10 @@ enum LeaderboardTabs {
 
 export const MobileLeaderboard = () => {
   const navigate = useNavigate()
+  const theme = useTheme()
 
   useEffect(() => {
-    if (window.innerWidth > DEFAULT_MOBILE_BREAK_POINT) {
+    if (window.innerWidth > theme.__breakpoints?.get('lg')?.minW) {
       navigate(getPath('landingPage'))
     }
   }, [])

@@ -28,7 +28,7 @@ export const LandingPage = () => {
           minHeight="100%"
           height="auto"
           overflowX="hidden"
-          spacing={{ base: '30px', md: '50px' }}
+          spacing={{ base: '30px', lg: '50px' }}
         >
           <GradientBanner />
           <HStack
@@ -63,7 +63,7 @@ export const LandingPage = () => {
             <VStack
               flex={2}
               maxWidth="800px"
-              minWidth={{ base: '100%', md: '400px', xl: '800px' }}
+              minWidth={{ base: '100%', lg: '400px', xl: '800px' }}
               paddingBottom="40px"
             >
               {!isMobile && <TabBar />}

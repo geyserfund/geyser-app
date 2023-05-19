@@ -65,15 +65,15 @@ export const SuccessScreen = ({
     <VStack
       paddingX={{
         base: '10px',
-        md: '20px',
+        lg: '20px',
       }}
       paddingY={{
         base: '10px',
-        md: '25px',
+        lg: '25px',
       }}
       spacing={4}
       width="100%"
-      height={{ base: 'calc(100vh - 115px)', md: '100%' }}
+      height={{ base: 'calc(100vh - 115px)', lg: '100%' }}
       overflow="hidden"
       position="relative"
       backgroundColor="primary.400"
