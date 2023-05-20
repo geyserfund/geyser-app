@@ -4,8 +4,11 @@ import {
   ThemeProviderProps,
   useColorMode,
 } from '@chakra-ui/react'
+import { ThemeProvider as ReactJSSThemeProvideer } from 'react-jss'
 
 import { darkModeColors, lightModeColors } from '../styles'
+
+export type ReactJSSTheme = typeof lightModeColors
 
 export const DynamicColorMode = ({
   children,
@@ -18,7 +21,11 @@ export const DynamicColorMode = ({
 
   return (
     <ThemeProvider {...props} theme={theme}>
-      {children}
+      <ReactJSSThemeProvideer
+        theme={colorMode === 'light' ? lightModeColors : darkModeColors}
+      >
+        {children}
+      </ReactJSSThemeProvideer>
     </ThemeProvider>
   )
 }

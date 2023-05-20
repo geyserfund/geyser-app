@@ -23,7 +23,6 @@ import {
   LNAddressEvaluationState,
   useUserLightningAddress,
 } from '../../../hooks/useUserLightningAddress'
-import { colors } from '../../../styles'
 import { useNotification } from '../../../utils'
 import { getUserLightningAddress } from '../../../utils/validations/wallet'
 import { EditProfileModalProps } from '../hooks/useEditProfileModal'
@@ -90,9 +89,9 @@ export const EditProfileModal = ({
       case LNAddressEvaluationState.LOADING:
         return <Loader size="md"></Loader>
       case LNAddressEvaluationState.FAILED:
-        return <BsFillXCircleFill fill={colors.error} size="24px" />
+        return <BsFillXCircleFill fill={'secondary.red'} size="24px" />
       case LNAddressEvaluationState.SUCCEEDED:
-        return <BsFillCheckCircleFill fill={colors.primary500} size="24px" />
+        return <BsFillCheckCircleFill fill={'primary.500'} size="24px" />
       default:
         return null
     }
@@ -140,9 +139,9 @@ export const EditProfileModal = ({
                           setLightningAddress(e.currentTarget.value)
                         }}
                         isInvalid={Boolean(lightningAddressError)}
-                        focusBorderColor={colors.neutral200}
+                        focusBorderColor={'neutral.200'}
                         _valid={{
-                          focusBorderColor: colors.primary500,
+                          focusBorderColor: 'primary.500',
                         }}
                         error={lightningAddressError}
                       />

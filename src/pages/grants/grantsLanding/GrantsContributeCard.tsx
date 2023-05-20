@@ -8,7 +8,6 @@ import {
 } from '../../../components/layouts'
 import { QUERY_GRANT_STATISTICS } from '../../../graphql/queries/grant'
 import { useAnimatedClipboard } from '../../../hooks/useAnimatedClipboard'
-import { colors } from '../../../styles'
 import { GrantStatistics } from '../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
 import { GrantsContributeModal } from '../components/GrantsContributeModal'
@@ -82,7 +81,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
             sponsor. You can also easily contribute by sending or streaming
             recurring payments to{' '}
             <Link
-              textColor={hasCopied ? undefined : colors.primary500}
+              textColor={hasCopied ? undefined : 'primary.500'}
               href="#"
               onClick={() => handleCopyAddress()}
             >
@@ -95,7 +94,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
               Or sending SATs to our lightning address:{' '}
               <Tooltip label="Copied to clipboard!" isOpen={hasCopied}>
                 <Link
-                  textColor={hasCopied ? undefined : colors.primary500}
+                  textColor={hasCopied ? undefined : 'primary.500'}
                   href="#"
                   onClick={() => handleCopyAddress()}
                 >

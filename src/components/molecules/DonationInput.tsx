@@ -16,8 +16,9 @@ import { BiDollar } from 'react-icons/bi'
 import { BsArrowRepeat } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
+import { ReactJSSTheme } from '../../context'
 import { useBtcContext } from '../../context/btc'
-import { colors, fonts } from '../../styles'
+import { fonts } from '../../styles'
 import {
   CrownIcon,
   MedalIcon,
@@ -28,12 +29,12 @@ import {
 import { SatSymbolIcon } from '../icons/svg'
 import { ButtonComponent } from '../ui'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   inputElement: {
     borderWidth: '2px',
     '&:focus': {
-      borderColor: colors.normalLightGreen,
-      boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+      borderColor: theme.neutral[500],
+      boxShadow: `0 0 0 1px ${theme.neutral[500]}`,
     },
     fontFamily: fonts.inter,
     fontWeight: 700,
@@ -46,7 +47,7 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     padding: 0,
     background: 'none',
-    color: colors.textGrey,
+    color: theme.neutral[600],
     position: 'relative',
     '&:hover': {
       background: 'none',
@@ -62,10 +63,10 @@ const useStyles = createUseStyles({
     borderWidth: '2px',
     boxShadow: 'none',
     '&:focus': {
-      borderColor: colors.normalLightGreen,
+      borderColor: theme.neutral[500],
     },
   },
-})
+}))
 
 interface IDonationInputProps extends InputProps {
   name: string

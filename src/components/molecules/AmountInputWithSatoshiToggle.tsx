@@ -13,21 +13,21 @@ import { BiDollar } from 'react-icons/bi'
 import { BsArrowRepeat } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../styles'
+import { ReactJSSTheme } from '../../context'
 import { Satoshis, USDollars } from '../../types/types'
 import { SatoshiIconTilted } from '../icons'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   inputElement: {
     borderWidth: '2px',
     '&:focus': {
-      borderColor: colors.normalLightGreen,
-      boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+      borderColor: theme.neutral[500],
+      boxShadow: `0 0 0 1px ${theme.neutral[500]}`,
     },
   },
   inputError: {
-    borderColor: colors.error,
-    boxShadow: `0 0 0 1px ${colors.error}`,
+    borderColor: theme.secondary.red,
+    boxShadow: `0 0 0 1px ${theme.secondary.red}`,
   },
   switchButtton: {
     width: '100%',
@@ -36,7 +36,7 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     padding: 0,
     background: 'none',
-    color: colors.textGrey,
+    color: theme.neutral[600],
     position: 'relative',
     '&:hover': {
       background: 'none',
@@ -48,7 +48,7 @@ const useStyles = createUseStyles({
   switchIcon: {
     fontSize: '35px',
   },
-})
+}))
 
 type Props = InputProps & {
   name?: string

@@ -8,7 +8,6 @@ import { SingleValue } from 'react-select'
 import { Body1, Body2, Caption } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries/tags'
-import { colors } from '../../../styles'
 import {
   Country,
   Location,
@@ -30,7 +29,7 @@ const useStyles = createUseStyles({
     width: '100%',
     backgroundColor: 'neutral.0',
     border: '1px solid',
-    borderColor: colors.neutral400,
+    borderColor: 'neutral.400',
     borderRadius: '8px',
     padding: '12px',
   },

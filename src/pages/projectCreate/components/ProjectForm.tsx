@@ -16,7 +16,6 @@ import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
-import { colors } from '../../../styles'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../types'
 import { FormInputContainer } from './FormInputContainer'
@@ -130,7 +129,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             onChange={handleChange}
             value={watch('name')}
             isInvalid={Boolean(formState.errors.name)}
-            focusBorderColor={colors.primary}
+            focusBorderColor={'primary.400'}
             disabled={isEdit}
             onBlur={handleProjectFetch}
           />

@@ -2,7 +2,6 @@ import { Image } from '@chakra-ui/image'
 import { Box, BoxProps } from '@chakra-ui/layout'
 import { useBreakpoint } from '@chakra-ui/media-query'
 import { useColorMode } from '@chakra-ui/system'
-import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
 import LogoSmall from '../../assets/logo-brand.svg'
@@ -16,14 +15,6 @@ type Props = BoxProps & {
   small?: boolean
 }
 
-const useStyles = createUseStyles({
-  container: {
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-})
-
 export const NavBarLogo = ({
   className,
   imageClassName,
@@ -31,7 +22,6 @@ export const NavBarLogo = ({
   small,
   ...rest
 }: Props) => {
-  const classes = useStyles()
   const { colorMode } = useColorMode()
 
   const isLg = useBreakpoint('lg')
@@ -48,7 +38,7 @@ export const NavBarLogo = ({
       : LogoDark
 
   return (
-    <Box {...rest} className={`${classes.container} ${className}`}>
+    <Box {...rest} className={className} _hover={{ cursor: 'pointer' }}>
       <Link to="/">
         <Image
           className={imageClassName}

@@ -2,7 +2,6 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { Box, HStack, Input, InputProps, StackProps } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
 
-import { colors } from '../../styles'
 import { IconButtonComponent } from '../ui'
 
 interface ProjectLinkInputProps extends StackProps {
@@ -46,8 +45,8 @@ export const ProjectLinkInput = ({
         onChange={onChange}
         isInvalid={isError}
         _focusVisible={{
-          borderColor: isError ? 'red' : colors.normalLightGreen,
-          boxShadow: !isError && `0 0 0 1px ${colors.normalLightGreen}`,
+          borderColor: isError ? 'red' : 'neutral.500',
+          boxShadow: !isError && `0 0 0 1px ${'neutral.500'}`,
         }}
         {...inputProps}
       />

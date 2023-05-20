@@ -1,4 +1,4 @@
-import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Input, Text, theme, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsImage } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
@@ -9,10 +9,13 @@ import { ImageWithReload } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { getPath, ID } from '../../../../constants'
 import { ProjectEntryValidations } from '../../../../constants/validations'
-import { useAuthContext, useNavContext } from '../../../../context'
+import {
+  ReactJSSTheme,
+  useAuthContext,
+  useNavContext,
+} from '../../../../context'
 import { useDebounce } from '../../../../hooks'
 import { useEntryState } from '../../../../hooks/graphqlState'
-import { colors } from '../../../../styles'
 import {
   EntryStatus,
   Owner,
@@ -22,21 +25,21 @@ import { toInt, useMobileMode, useNotification } from '../../../../utils'
 import { CreateNav } from './CreateNav'
 import { ProjectEntryEditor } from './ProjectEntryEditor'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   uploadContainer: {
     width: '100%',
     minHeight: '65px',
     borderRadius: '4px',
-    backgroundColor: colors.bgGrey,
+    backgroundColor: theme.neutral[100],
     justifyContent: 'center',
     transition: 'background-color 0.5s ease',
     '&:hover': {
       cursor: 'pointer',
-      backgroundColor: colors.gray300,
+      backgroundColor: 'neutral.400',
       transition: 'background-color 0.5s ease',
     },
   },
-})
+}))
 
 export const defaultEntry = {
   id: 0,

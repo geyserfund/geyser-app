@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom'
 
 import { AboutUsUrl, FAQUrl, FeedbackUrl, getPath } from '../../../constants'
 import { AuthContext } from '../../../context'
-import { colors } from '../../../styles'
 import { buttonCommon } from '../../../styles/common'
 import { ProjectStatus } from '../../../types'
 import { ButtonComponent } from '../../ui'
@@ -34,7 +33,7 @@ export const TopNavBarMenu = ({
   onMyProjectsSelected,
   onSignOutSelected,
 }: Props) => {
-  const textColor = useColorModeValue(colors.textBlack, colors.textWhite)
+  const textColor = useColorModeValue('neutral.1000', 'neutral.0')
 
   const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext)
 
@@ -55,7 +54,7 @@ export const TopNavBarMenu = ({
         borderRadius="md"
         color={textColor}
         backgroundColor="neutral.0"
-        _hover={{ backgroundColor: colors.gray200 }}
+        _hover={{ backgroundColor: 'neutral.100' }}
         border={'1px'}
         borderColor="neutral.200"
         sx={buttonCommon}

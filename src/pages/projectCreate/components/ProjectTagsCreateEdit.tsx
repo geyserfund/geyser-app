@@ -13,7 +13,6 @@ import {
 } from '../../../components/ui'
 import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
-import { colors } from '../../../styles'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
 
@@ -28,7 +27,7 @@ const useStyles = createUseStyles({
     width: '100%',
     backgroundColor: 'neutral.0',
     border: '1px solid',
-    borderColor: colors.neutral400,
+    borderColor: 'neutral.400',
     borderRadius: '8px',
     padding: '12px',
   },

@@ -1,7 +1,5 @@
 import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../../styles'
-
 type Rules = string
 
 interface IStyles {
@@ -28,7 +26,7 @@ export const useStyles = createUseStyles<Rules, IStyles>({
     borderTopLeftRadius: 0,
     borderBottomRightRadius: '40px',
     borderTopRightRadius: '40px',
-    backgroundColor: colors.primary,
+    backgroundColor: 'primary.400',
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'column',

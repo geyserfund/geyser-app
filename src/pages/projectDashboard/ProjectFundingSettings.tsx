@@ -209,7 +209,7 @@ export const ProjectFundingSettings = () => {
                 </HStack>
 
                 <VStack width="100%" alignItems="flex-start">
-                  <Text color="brand.textGray">Hostname or IP address</Text>
+                  <Text color="neutral.600">Hostname or IP address</Text>
                   <Text>{nodeData?.hostname}</Text>
                 </VStack>
               </VStack>

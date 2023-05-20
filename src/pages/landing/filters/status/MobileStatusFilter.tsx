@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react'
 
 import { Body1 } from '../../../../components/typography'
-import { colors } from '../../../../styles'
 import { StatusTypeButton } from '.'
 import { StatusFilterBody } from './StatusFilterBody'
 
@@ -27,7 +26,7 @@ export const MobileStatusFilter = ({
         <HStack width="100%">
           <HStack width="100%" spacing="10px">
             <button.icon color={button.color} height="20px" />
-            <Body1 color={colors.neutral900}>{button.text}</Body1>
+            <Body1 color={'neutral.900'}>{button.text}</Body1>
           </HStack>
         </HStack>
         <AccordionIcon />

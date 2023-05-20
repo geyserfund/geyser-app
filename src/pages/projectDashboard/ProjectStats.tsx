@@ -5,7 +5,6 @@ import { createUseStyles } from 'react-jss'
 import { SatoshiAmount } from '../../components/ui'
 import { useProjectContext } from '../../context'
 import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
-import { colors } from '../../styles'
 import { fonts } from '../../styles'
 import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
 import { numberWithCommas, toInt } from '../../utils'
@@ -14,17 +13,17 @@ import { DashboardGridLayout } from './components/DashboardGridLayout'
 const useStyles = createUseStyles({
   statBox: {
     padding: '22px',
-    backgroundColor: colors.primary100,
+    backgroundColor: 'primary.100',
     borderRadius: '4px',
   },
   numberText: {
     fontFamily: fonts.mono,
     fontSize: '28px',
-    color: colors.neutral900,
+    color: 'neutral.900',
   },
   labelText: {
     fontSize: '16px',
-    color: colors.neutral600,
+    color: 'neutral.600',
   },
 })
 

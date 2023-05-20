@@ -14,22 +14,21 @@ import { createUseStyles } from 'react-jss'
 import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { ImageWithReload } from '../../../../components/ui'
 import { IRewardCount } from '../../../../interfaces'
-import { colors } from '../../../../styles'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
 import { toInt } from '../../../../utils'
 
 const useStyles = createUseStyles({
   focused: {
-    borderColor: `${colors.normalLightGreen} !important`,
-    boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+    borderColor: `${'neutral.500'} !important`,
+    boxShadow: `0 0 0 1px ${'neutral.500'}`,
   },
   upperContainer: {
-    borderBottom: `1px solid ${colors.bgLightGrey}`,
+    borderBottom: `1px solid ${'neutral.100'}`,
     paddingBottom: '10px',
   },
   backer: {
     padding: '3px 5px',
-    backgroundColor: colors.bgLightGrey,
+    backgroundColor: 'neutral.100',
     fontSize: '10px',
     borderRadius: '5px',
   },
@@ -39,8 +38,8 @@ const useStyles = createUseStyles({
     height: '40px',
   },
   plusIcon: {
-    backgroundColor: colors.neutral100,
-    border: `2px solid ${colors.neutral200}`,
+    backgroundColor: 'neutral.100',
+    border: `2px solid ${'neutral.200'}`,
   },
 })
 
@@ -96,10 +95,10 @@ export const FundingFormRewardItem = ({
     >
       <HStack className={classes.upperContainer}>
         <VStack spacing={0}>
-          <Text fontSize="14px" color={colors.textBlack} fontWeight="bold">{`$${
+          <Text fontSize="14px" color={'neutral.1000'} fontWeight="bold">{`$${
             cost / 100
           }`}</Text>
-          <Text fontSize="10px" color={colors.textBlack} fontWeight="bold">
+          <Text fontSize="10px" color={'neutral.1000'} fontWeight="bold">
             per item
           </Text>
         </VStack>
@@ -137,7 +136,7 @@ export const FundingFormRewardItem = ({
               onFocus={setFocus}
               onBlur={setBlur}
               className={classes.plusIcon}
-              backgroundColor={count ? colors.primary : undefined}
+              backgroundColor={count ? 'primary.400' : undefined}
               aria-label="select-reward"
               icon={renderIcon}
               onClick={handleAdd}

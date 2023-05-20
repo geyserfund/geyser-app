@@ -9,7 +9,9 @@ import { colors } from '../../../../styles'
 
 const useStyles = createUseStyles({
   gradientContainer: {
-    background: `linear-gradient(270deg, ${colors.primary400} -0.16%, ${colors.primary} 35.26%, ${colors.bgLightGreenGradient} 99.84%)`,
+    background: `linear-gradient(270deg, ${'primary.400'} -0.16%, ${'primary.400'} 35.26%, ${
+      colors.bgLightGreenGradient
+    } 99.84%)`,
   },
 })
 
@@ -107,7 +109,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                     logoHeight={60}
                     logoWidth={60}
                     logoOpacity={1}
-                    fgColor={colors.neutral900}
+                    fgColor={'neutral.900'}
                     bgColor="transparent"
                     removeQrCodeBehindLogo={true}
                     size={360}

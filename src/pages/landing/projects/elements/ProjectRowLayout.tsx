@@ -3,7 +3,6 @@ import { HStack, StackProps, VStack } from '@chakra-ui/react'
 
 import { H3 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
-import { colors } from '../../../../styles'
 
 export interface ProjectRowLayoutProps extends StackProps {
   title: string
@@ -26,7 +25,7 @@ export const ProjectRowLayout = ({
       <HStack width="100%" justifyContent="space-between">
         <H3 color="primary.600">
           {subtitle && (
-            <span style={{ color: colors.neutral800 }}>{`${subtitle} `}</span>
+            <span style={{ color: 'neutral.800' }}>{`${subtitle} `}</span>
           )}
           {title}
         </H3>

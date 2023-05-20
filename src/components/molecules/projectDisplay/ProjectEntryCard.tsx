@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
-import { colors, fonts } from '../../../styles'
+import { fonts } from '../../../styles'
 import {
   EntryForProjectFragment,
   EntryStatus,
@@ -168,7 +168,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
               <MonoBody1 color="primary.400" fontWeight={'bold'}>
                 {entry.fundersCount}
               </MonoBody1>
-              <BsHeartFill color={colors.primary} />
+              <BsHeartFill color={'primary.400'} />
             </HStack>
 
             <SatoshiAmount

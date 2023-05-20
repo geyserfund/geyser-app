@@ -2,12 +2,10 @@ import { Box, BoxProps } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../../styles'
-
 const useStyles = createUseStyles({
   box: {
     border: '2px solid',
-    borderColor: colors.neutral200,
+    borderColor: 'neutral.200',
     borderRadius: '8px',
     boxSizing: 'border-box',
   },

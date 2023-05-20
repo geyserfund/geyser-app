@@ -24,7 +24,6 @@ import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { MarkdownField } from '../../../../forms/components/MarkdownField'
-import { colors } from '../../../../styles'
 import { copyTextToClipboard, toInt, useMobileMode } from '../../../../utils'
 import { getPossibleWalletPubkey } from '../../../../utils/validations/wallet'
 import {
@@ -178,7 +177,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
           label="Creator"
           icon={
             <span>
-              <CgProfile color={colors.neutral600} fontSize="22px" />
+              <CgProfile color={'neutral.600'} fontSize="22px" />
             </span>
           }
         >
@@ -191,7 +190,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
               label="Tags"
               icon={
                 <span>
-                  <FiTag color={colors.neutral600} fontSize="22px" />
+                  <FiTag color={'neutral.600'} fontSize="22px" />
                 </span>
               }
               alignItems="start"
@@ -217,7 +216,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
               label="Region"
               icon={
                 <span>
-                  <SlLocationPin color={colors.neutral600} fontSize="22px" />
+                  <SlLocationPin color={'neutral.600'} fontSize="22px" />
                 </span>
               }
             >
@@ -257,13 +256,13 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
             label="Launched"
             icon={
               <span>
-                <AiOutlineCalendar color={colors.neutral600} fontSize="22px" />
+                <AiOutlineCalendar color={'neutral.600'} fontSize="22px" />
               </span>
             }
           >
             <Body2
               semiBold
-              color={colors.neutral600}
+              color={'neutral.600'}
             >{`Launched ${DateTime.fromMillis(
               toInt(project.createdAt),
             ).toFormat('dd LLL yyyy')}`}</Body2>

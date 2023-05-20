@@ -11,7 +11,6 @@ import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { FountainIcon } from '../../../components/icons'
 import { GeyserHomepageUrl } from '../../../constants'
-import { colors } from '../../../styles'
 import { ExternalAccount } from '../../../types/generated/graphql'
 
 type Props = {
@@ -20,7 +19,7 @@ type Props = {
 
 const useStyles = createUseStyles({
   linkContainer: {
-    color: colors.textBlack,
+    color: 'neutral.1000',
   },
   linkButton: {
     fontSize: '14px',

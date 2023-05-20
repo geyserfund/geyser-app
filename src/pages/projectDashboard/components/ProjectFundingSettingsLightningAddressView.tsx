@@ -1,7 +1,5 @@
 import { Container, Text, VStack } from '@chakra-ui/react'
 
-import { colors } from '../../../styles'
-
 type Props = {
   lightningAddress: string
 }
@@ -21,7 +19,7 @@ export const ProjectFundingSettingsLightningAddressView = ({
           alignItems={'flex-start'}
           width={'full'}
           border="1px solid"
-          borderColor={colors.neutral300}
+          borderColor={'neutral.300'}
           borderRadius="4px"
           padding="16px"
         >

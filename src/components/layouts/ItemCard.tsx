@@ -1,24 +1,22 @@
 import { Box, BoxProps } from '@chakra-ui/react'
 
-import { colors } from '../../styles'
-
 type Props = BoxProps
 
 export const ItemCard = ({ children, ...props }: Props) => {
   return (
     <Box
       sx={{
-        backgroundColor: '#FDFDFD',
+        backgroundColor: 'neutral.50',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         padding: '10px',
         border: '2px solid',
-        borderColor: colors.bgLightGrey,
+        borderColor: 'neutral.100',
         borderRadius: '12px',
         '&:hover': {
           cursor: 'pointer',
-          borderColor: colors.gray300,
+          borderColor: 'neutral.400',
         },
       }}
       {...props}

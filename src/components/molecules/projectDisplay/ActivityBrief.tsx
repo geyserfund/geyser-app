@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
-import { colors } from '../../../styles'
 import { fonts } from '../../../styles'
 import {
   ProjectFragment,
@@ -124,7 +123,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
         <Text
           fontSize="14px"
           fontFamily={fonts.mono}
-          color={colors.neutral600}
+          color={'neutral.600'}
           maxW="100%"
         >{`${percentage}% of ${currentMilestone.name}`}</Text>
       )

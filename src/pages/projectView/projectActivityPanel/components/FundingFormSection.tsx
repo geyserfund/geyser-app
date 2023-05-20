@@ -6,7 +6,6 @@ import { DonationInput } from '../../../../components/molecules'
 import { SectionTitle } from '../../../../components/ui'
 import { IFundForm } from '../../../../hooks'
 import { IRewardCount } from '../../../../interfaces'
-import { colors } from '../../../../styles'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
 import { FundingFormRewardItem } from '../../projectMainBody/components/FundingFormRewardItem'
 
@@ -73,11 +72,11 @@ export const FundingFormSection = ({
                   <IconButton
                     sx={{
                       border: hasSelectedRewards
-                        ? `1px solid ${colors.neutral200}`
+                        ? `1px solid ${'neutral.200'}`
                         : undefined,
                     }}
                     backgroundColor={
-                      hasSelectedRewards ? colors.bgWhite : colors.primary
+                      hasSelectedRewards ? 'neutral.0' : 'primary.400'
                     }
                     aria-label="select-reward"
                     icon={hasSelectedRewards ? undefined : <CheckIcon />}

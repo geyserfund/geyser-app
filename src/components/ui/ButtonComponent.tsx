@@ -1,11 +1,10 @@
 import { Button, ButtonProps } from '@chakra-ui/button'
 import { Box } from '@chakra-ui/layout'
-import { useColorModeValue } from '@chakra-ui/system'
 import classNames from 'classnames'
 import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../styles'
+import { ReactJSSTheme } from '../../context'
 import { buttonCommon } from '../../styles/common'
 
 interface IButtonComponentP extends ButtonProps {
@@ -20,7 +19,7 @@ interface IButtonComponentP extends ButtonProps {
   isExternal?: boolean
 }
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   container: {
     minHeight: '40px',
     position: 'relative',
@@ -30,7 +29,7 @@ const useStyles = createUseStyles({
     },
     '&.primary': {
       '& .chakra-button__icon': {
-        color: 'black',
+        color: theme.neutral[1000],
       },
     },
   },
@@ -40,7 +39,7 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     alignItems: 'center',
   },
-})
+}))
 
 export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
   (
@@ -60,9 +59,6 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
     ref,
   ) => {
     const classes = useStyles()
-    const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark)
-    const defaultColor = useColorModeValue(colors.textBlack, colors.textWhite)
-    const textColor = color || defaultColor
 
     return (
       <Button
@@ -79,12 +75,10 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
             ? backgroundColor
             : primary
             ? 'primary.400'
-            : bgColor
+            : 'neutral.0'
         }
         borderRadius={circular ? '50px' : standard ? '8px' : undefined}
-        _hover={
-          _hover ? _hover : primary ? { bg: 'primary.400Tint' } : undefined
-        }
+        _hover={_hover ? _hover : primary ? { bg: 'primary.600' } : undefined}
         fontSize="14px"
         fontWeight="medium"
         color={color}
@@ -94,7 +88,7 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
         <Box
           as="span"
           className={classes.text}
-          textColor={primary ? 'black' : textColor}
+          textColor={color || 'neutral.1000'}
         >
           {children}
         </Box>

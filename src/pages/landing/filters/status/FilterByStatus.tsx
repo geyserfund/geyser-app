@@ -3,7 +3,6 @@ import { IconProps } from '@chakra-ui/react'
 import { ProjectNavIcon, RewardGiftIcon } from '../../../../components/icons'
 import { projectTypes } from '../../../../constants'
 import { useFilterContext } from '../../../../context'
-import { colors } from '../../../../styles'
 import { ProjectStatus, ProjectType } from '../../../../types'
 import { DesktopStatusFilter } from './DesktopStatusFilter'
 import { MobileStatusFilter } from './MobileStatusFilter'
@@ -49,7 +48,7 @@ export const getStatusTypeButtonContent = ({
     return {
       icon: RewardGiftIcon,
       text: 'Projects with perks',
-      color: colors.neutral900,
+      color: 'neutral.900',
     }
   }
 
@@ -58,13 +57,13 @@ export const getStatusTypeButtonContent = ({
       return {
         icon: ProjectNavIcon,
         text: 'Inactive Projects',
-        color: colors.neutral600,
+        color: 'neutral.600',
       }
     default:
       return {
         icon: ProjectNavIcon,
         text: 'Active Projects',
-        color: colors.primary500,
+        color: 'primary.500',
       }
   }
 }

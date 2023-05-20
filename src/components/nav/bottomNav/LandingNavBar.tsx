@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
-import { colors } from '../../../styles'
 import {
   FeedNavIcon,
   GrantsNavIcon,
@@ -105,10 +104,10 @@ export const LandingNavBar = () => {
                 display="flex"
                 flexDirection="column"
               >
-                <Icon color={isActive ? 'black' : colors.neutral500} />
+                <Icon color={isActive ? 'neutral.1000' : 'neutral.500'} />
                 <Caption
                   semiBold
-                  color={isActive ? 'black' : colors.neutral500}
+                  color={isActive ? 'neutral.1000' : 'neutral.500'}
                 >
                   {name}
                 </Caption>

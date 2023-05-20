@@ -48,71 +48,71 @@ export const theme = extendTheme({
       },
       variants: {
         primary: {
-          backgroundColor: colors.primary400,
+          backgroundColor: 'primary.400',
           border: 'none',
-          color: colors.neutral900,
+          color: 'neutral.900',
           _hover: {
-            backgroundColor: colors.neutral200,
+            backgroundColor: 'neutral.200',
           },
           _active: {
-            backgroundColor: colors.neutral300,
+            backgroundColor: 'neutral.300',
           },
         },
         primaryNeutral: {
-          backgroundColor: colors.neutral100,
+          backgroundColor: 'neutral.100',
           border: 'none',
-          color: colors.neutral900,
+          color: 'neutral.900',
           _hover: {
-            backgroundColor: colors.neutral200,
+            backgroundColor: 'neutral.200',
           },
           _active: {
-            backgroundColor: colors.neutral300,
+            backgroundColor: 'neutral.300',
           },
         },
         secondary: {
           boxShadow: 'none',
           outline: 'none',
           border: `2px solid`,
-          borderColor: colors.neutral200,
-          color: colors.neutral900,
-          backgroundColor: colors.neutral50,
+          borderColor: 'neutral.200',
+          color: 'neutral.900',
+          backgroundColor: 'neutral.50',
           _hover: {
-            borderColor: colors.primary400,
+            borderColor: 'primary.400',
           },
           _active: {
-            borderColor: colors.primary400,
-            backgroundColor: colors.primary100,
+            borderColor: 'primary.400',
+            backgroundColor: 'primary.100',
           },
         },
         secondaryNeutral: {
           border: `2px solid`,
-          borderColor: colors.neutral200,
-          color: colors.neutral900,
-          backgroundColor: colors.neutral100,
+          borderColor: 'neutral.200',
+          color: 'neutral.900',
+          backgroundColor: 'neutral.100',
           _hover: {
-            borderColor: colors.primary400,
+            borderColor: 'primary.400',
           },
           _active: {
-            borderColor: colors.primary400,
-            backgroundColor: colors.primary100,
+            borderColor: 'primary.400',
+            backgroundColor: 'primary.100',
           },
         },
         transparent: {
           backgroundColor: 'transparent',
           _hover: {
-            borderColor: colors.primary400,
-            backgroundColor: colors.neutral100,
+            borderColor: 'primary.400',
+            backgroundColor: 'neutral.100',
           },
           _active: {
-            borderColor: colors.primary400,
-            backgroundColor: colors.primary100,
+            borderColor: 'primary.400',
+            backgroundColor: 'primary.100',
           },
         },
         danger: {
-          backgroundColor: colors.secondaryRed,
+          backgroundColor: 'secondary.red',
           color: colors.neutral0,
           _hover: {
-            backgroundColor: colors.secondaryRedDark,
+            backgroundColor: 'secondary.red',
           },
         },
       },
@@ -120,7 +120,7 @@ export const theme = extendTheme({
     Text: {
       baseStyle: {
         fontSize: '14px',
-        color: colors.neutral900,
+        color: 'neutral.900',
         lineHeight: 1.6,
       },
       variants: {

@@ -1,7 +1,5 @@
 import { Box } from '@chakra-ui/react'
 
-import { colors } from '../../../styles'
-
 type Props = {
   borderRadius?: string
   backgroundColor?: string
@@ -10,7 +8,7 @@ type Props = {
 
 export const ProjectImageListItemPlaceholder = ({
   borderRadius = 'md',
-  backgroundColor = colors.neutral100,
+  backgroundColor = 'neutral.100',
   padding = '0.5em',
 }: Props) => {
   return (

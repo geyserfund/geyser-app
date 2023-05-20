@@ -228,7 +228,7 @@ export const ProjectFundingInitialInfoScreen = ({
           leftIcon={<SatoshiIconTilted />}
           width="100%"
           backgroundColor={
-            isActive(project.status) ? 'primary.400' : 'brand.grayPlaceholder'
+            isActive(project.status) ? 'primary.400' : 'neutral.500'
           }
           onClick={() => setMobileView(MobileViews.funding)}
           isDisabled={!isActive(project.status)}

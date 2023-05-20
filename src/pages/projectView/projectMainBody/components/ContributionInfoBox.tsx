@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { BsInfoCircle } from 'react-icons/bs'
-import { createUseStyles } from 'react-jss'
 
 import {
   AnonymousAvatar,
@@ -50,22 +49,19 @@ type Props = HTMLChakraProps<'div'> & {
   version: ContributionInfoBoxVersion
 }
 
-const useStyles = createUseStyles({
-  divider: {
-    borderColor: 'neutral.0',
-    mixBlendMode: 'screen',
-  },
-})
-
 const ContributionInfoBoxDivider = ({
   version,
 }: {
   version: ContributionInfoBoxVersion
 }) => {
-  const styles = useStyles()
-
   if (version === ContributionInfoBoxVersion.PRIMARY) {
-    return <Divider className={styles.divider} orientation="horizontal" />
+    return (
+      <Divider
+        borderColor="neutral.0"
+        mixBlendMode="screen"
+        orientation="horizontal"
+      />
+    )
   }
 
   return <Divider />

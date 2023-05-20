@@ -72,7 +72,7 @@ export const ProjectNavUI = () => {
 
   const getTextColor = (value: string) => {
     if (value === mobileView) {
-      return 'black'
+      return 'neutral.1000'
     }
 
     return 'neutral.600'
@@ -153,15 +153,11 @@ export const ProjectNavUI = () => {
             to={getPath('projectDashboard', project.name)}
             size="sm"
             backgroundColor={
-              mobileView === MobileViews.funding
-                ? 'neutral.500'
-                : 'primary.400'
+              mobileView === MobileViews.funding ? 'neutral.500' : 'primary.400'
             }
             border="1px solid"
             borderColor={
-              mobileView === MobileViews.funding
-                ? 'neutral.500'
-                : 'primary.400'
+              mobileView === MobileViews.funding ? 'neutral.500' : 'primary.400'
             }
             _hover={{}}
             width="100%"

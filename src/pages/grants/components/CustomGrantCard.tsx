@@ -1,7 +1,6 @@
 import { Box, Image, Text } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
-import { colors } from '../../../styles'
 import { Grant, GrantApplicantStatus, GrantStatusEnum } from '../../../types'
 import {
   getFormattedDate,
@@ -60,7 +59,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
       onClick={() => navigate(to)}
       minWidth={'100%'}
       cursor="pointer"
-      border={`2px solid ${colors.neutral200}`}
+      border={`2px solid ${'neutral.200'}`}
       borderRadius="12px"
     >
       {showBanner && grant.image ? (

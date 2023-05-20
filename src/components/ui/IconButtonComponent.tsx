@@ -15,8 +15,8 @@ export const IconButtonComponent = forwardRef<
   HTMLButtonElement,
   IconButtonComponentProps
 >(({ primary, noBorder, ...rest }, ref) => {
-  const backgroundColor = useColorModeValue(colors.bgWhite, colors.bgDark)
-  const textColor = useColorModeValue(colors.textBlack, colors.textWhite)
+  const backgroundColor = useColorModeValue('neutral.0', colors.bgDark)
+  const textColor = useColorModeValue('neutral.1000', 'neutral.0')
 
   return (
     <IconButton
@@ -26,9 +26,9 @@ export const IconButtonComponent = forwardRef<
         noBorder ? 'transparent' : primary ? 'primary.400' : backgroundColor
       }
       borderRadius="50%"
-      color={primary ? 'black' : textColor}
+      color={primary ? 'neutral.1000' : textColor}
       _hover={primary ? { bg: 'primary.400Tint' } : undefined}
-      border={noBorder ? undefined : `1px solid ${colors.neutral300}`}
+      border={noBorder ? undefined : `1px solid ${'neutral.300'}`}
       {...rest}
     />
   )

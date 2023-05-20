@@ -3,7 +3,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 export const GeyserLogoNameIcon = (props: IconProps) => (
   <Icon
     viewBox="0 0 1148 365"
-    fill={props.color || 'black'}
+    fill={props.color || 'neutral.1000'}
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >

@@ -9,18 +9,18 @@ import {
 } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../styles'
+import { ReactJSSTheme } from '../../context'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   inputElement: {
     borderRadius: '8px',
     borderWidth: '2px',
     '&:focus': {
-      borderColor: colors.normalLightGreen,
-      boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+      borderColor: theme.neutral[500],
+      boxShadow: `0 0 0 1px ${theme.neutral[500]}`,
     },
   },
-})
+}))
 
 interface TextInputBoxProps extends InputProps {
   error?: React.ReactNode

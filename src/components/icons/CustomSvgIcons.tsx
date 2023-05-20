@@ -316,7 +316,7 @@ export const SatSvgIcon = ({
       mb={1}
       transform={tilted ? 'rotate(15deg)' : undefined}
       viewBox="0 0 360 360"
-      fill={props.color || 'black'}
+      fill={props.color || 'neutral.1000'}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >

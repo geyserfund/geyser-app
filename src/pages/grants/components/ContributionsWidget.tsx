@@ -63,13 +63,13 @@ export const ContributionsWidget = ({
             <Countdown
               endDate={endDateTimestamp}
               sectionProps={{
-                color: colors.primary500,
+                color: 'primary.500',
                 fontSize: '22px',
                 fontWeight: 700,
                 fontFamily: fonts.livvic,
               }}
               dividerProps={{
-                color: colors.neutral500,
+                color: 'neutral.500',
                 fontSize: '26px',
                 fontWeight: 700,
                 fontFamily: fonts.livvic,

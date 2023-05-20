@@ -3,7 +3,6 @@ import { BsLink45Deg } from 'react-icons/bs'
 
 import { IconButtonComponent } from '../../../../components/ui'
 import { getIconForLink } from '../../../../helpers/getIconForLinks'
-import { colors } from '../../../../styles'
 import { SummaryInfoLine } from './SummaryInfoLine'
 
 export const ProjectLinks = ({ links }: { links: string[] }) => {
@@ -18,7 +17,7 @@ export const ProjectLinks = ({ links }: { links: string[] }) => {
       label="Links"
       icon={
         <span>
-          <BsLink45Deg color={colors.neutral600} fontSize="22px" />
+          <BsLink45Deg color={'neutral.600'} fontSize="22px" />
         </span>
       }
     >
