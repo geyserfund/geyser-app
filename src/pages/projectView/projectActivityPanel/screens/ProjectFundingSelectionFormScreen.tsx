@@ -133,7 +133,7 @@ export const ProjectFundingSelectionFormScreen = ({
         />
       </Box>
       <VStack
-        backgroundColor={'white'}
+        backgroundColor="neutral.0"
         position={isMobile ? 'fixed' : 'relative'}
         bottom={isMobile ? '60px' : '0px'}
         paddingBottom="5px"
@@ -171,7 +171,7 @@ export const ProjectFundingSelectionFormScreen = ({
                   type="email"
                   name="email"
                   fontSize="14px"
-                  backgroundColor={'brand.bgWhite'}
+                  backgroundColor={'neutral.0'}
                   placeholder="Contact Email"
                   value={formState.email}
                   onChange={setTarget}

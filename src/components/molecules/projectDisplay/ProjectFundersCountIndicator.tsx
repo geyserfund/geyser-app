@@ -14,7 +14,7 @@ export const ProjectFundersCountIndicator = ({ count }: Props) => (
     padding="5px 10px"
     boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"
   >
-    <Text color="brand.primary" fontWeight={'bold'}>
+    <Text color="primary.400" fontWeight={'bold'}>
       {count || 0}
     </Text>
     <BsHeartFill color={colors.neutral500} />

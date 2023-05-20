@@ -1,15 +1,6 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import {
-  colors,
-  fonts,
-  neutralColors,
-  neutralColorsDark,
-  neutralColorsLight,
-  primaryColors,
-  primaryColorsDark,
-  primaryColorsLight,
-} from '../styles'
+import { colors, fonts } from '../styles'
 
 export const theme = extendTheme({
   initialColorMode: 'light',
@@ -170,10 +161,10 @@ export const theme = extendTheme({
     Radio: {
       variants: {
         primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
-          color: `brand.${colorScheme}400`,
+          color: `${colorScheme}.400`,
           control: {
             _checked: {
-              color: `brand.${colorScheme}400`,
+              color: `${colorScheme}.400`,
               _before: {
                 width: '90%',
                 height: '90%',
@@ -185,7 +176,7 @@ export const theme = extendTheme({
             },
             _focus: {
               ring: 2,
-              ringColor: `brand.${colorScheme}500`,
+              ringColor: `${colorScheme}.500`,
             },
           },
         }),

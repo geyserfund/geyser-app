@@ -55,7 +55,7 @@ export const StatusFilterBody = ({
         return (
           <Button
             key={index}
-            background={isActive ? 'neutral.100' : 'white'}
+            background={isActive ? 'neutral.100' : 'neutral.0'}
             color="neutral.800"
             onClick={() => handleClick(option)}
             w="100%"

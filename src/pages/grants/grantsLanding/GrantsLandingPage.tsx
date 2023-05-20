@@ -1,5 +1,4 @@
 import { Text, VStack } from '@chakra-ui/react'
-import { useTheme } from '@chakra-ui/react'
 
 import { AppFooter } from '../../../components/molecules'
 import { H2, H3 } from '../../../components/typography'
@@ -14,8 +13,6 @@ import { GrantsContributeCard } from './GrantsContributeCard'
 export const GrantsLandingPage = () => {
   const isMobile = useMobileMode()
 
-  const theme = useTheme()
-
   const { grants, activeGrant, inactiveGrants } = useGrants()
 
   if (!grants || !grants.length) {
@@ -25,7 +22,7 @@ export const GrantsLandingPage = () => {
   return (
     <VStack
       paddingTop={{ base: '10px', lg: '20px' }}
-      bg={theme.colors.brand.bgGrey4}
+      bg="neutral.50"
       minHeight="100%"
       width="100%"
       alignItems="center"

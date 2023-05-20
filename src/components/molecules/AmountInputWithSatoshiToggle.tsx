@@ -125,7 +125,7 @@ export const AmountInputWithSatoshiToggle = ({
       </InputGroup>
 
       {error && (
-        <Text color="brand.error" fontSize="12px">
+        <Text color="secondary.red" fontSize="12px">
           {error}
         </Text>
       )}

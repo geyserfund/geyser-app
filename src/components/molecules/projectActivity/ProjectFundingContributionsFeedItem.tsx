@@ -1,12 +1,4 @@
-import {
-  Box,
-  HStack,
-  Image,
-  Stack,
-  Text,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
@@ -54,7 +46,7 @@ export const ProjectFundingContributionsFeedItem = ({
 
   return (
     <Box
-      bg={useColorModeValue('white', 'gray.900')}
+      bg="neutral.0"
       borderWidth="2px"
       borderColor={'neutral.100'}
       _hover={{ boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.08)' }}
@@ -92,7 +84,7 @@ export const ProjectFundingContributionsFeedItem = ({
             )}
             {count && count > 1 && (
               <HStack
-                backgroundColor="brand.gray100"
+                backgroundColor="neutral.200"
                 px="3px"
                 borderRadius="sm"
                 spacing="2px"

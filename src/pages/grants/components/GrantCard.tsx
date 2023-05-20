@@ -114,7 +114,7 @@ export const GrantCard = ({
                 <Text
                   width="100%"
                   p={1}
-                  bg="brand.primary"
+                  bg="primary.400"
                   rounded="md"
                   textAlign="center"
                   fontWeight="bold"
@@ -125,7 +125,7 @@ export const GrantCard = ({
                 <Text
                   width="100%"
                   p={1}
-                  bg="brand.bgGrey3"
+                  bg="neutral.200"
                   rounded="md"
                   textAlign="center"
                   fontWeight="bold"

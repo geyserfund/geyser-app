@@ -10,7 +10,7 @@ export const CloseIconButton = (
       noBorder
       aria-label="close-icon"
       size="xs"
-      _hover={{ backgroundColor: 'brand.bgLightRed' }}
+      _hover={{ backgroundColor: 'secondary.red' }}
       icon={<CloseIcon />}
       {...props}
     />

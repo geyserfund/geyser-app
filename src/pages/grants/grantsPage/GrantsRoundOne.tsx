@@ -78,7 +78,7 @@ export const GrantsRoundOne = ({
     <>
       <Box
         paddingTop={isMobile ? '10px' : '20px'}
-        bg={'brand.bgGrey4'}
+        bg={'neutral.50'}
         minHeight="100vh"
         display="flex"
         alignItems={'center'}
@@ -91,7 +91,7 @@ export const GrantsRoundOne = ({
         >
           <Button
             size={'sm'}
-            bg="brand.bgWhite"
+            bg="neutral.0"
             variant={'outline'}
             gap={2}
             onClick={() => navigate(-1)}
@@ -280,7 +280,7 @@ export const GrantsRoundOne = ({
             borderRadius="12px"
             pb={4}
             pt={6}
-            bg="brand.bgWhite"
+            bg="neutral.0"
             mt={8}
             mb={3}
             px={4}

@@ -68,10 +68,10 @@ export const UserProfilePageHeader = ({
               as={Button}
               rightIcon={<ChevronDownIcon fontSize={'1.5em'} />}
               borderRadius="4px"
-              bgColor="brand.primary"
-              _hover={{ bgColor: 'brand.normalLightGreen' }}
-              _focus={{ bgColor: 'brand.normalLightGreen' }}
-              _active={{ bgColor: 'brand.normalLightGreen' }}
+              bgColor="primary.400"
+              _hover={{ bgColor: 'primary.500' }}
+              _focus={{ bgColor: 'primary.500' }}
+              _active={{ bgColor: 'primary.500' }}
             >
               Create
             </MenuButton>

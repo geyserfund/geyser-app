@@ -1,12 +1,4 @@
-import {
-  Box,
-  Heading,
-  HStack,
-  Image,
-  Text,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { getPath, SatoshiUrl } from '../../../constants'
@@ -32,7 +24,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
         width={'full'}
         maxWidth={'284px'}
         minWidth={isMobile ? '284px' : '250px'}
-        bg={useColorModeValue('white', 'gray.900')}
+        bg="neutral.0"
         borderWidth="3px"
         cursor="pointer"
         borderColor={'neutral.300'}
@@ -67,7 +59,7 @@ export const ProjectsGridCard = ({ project, ...rest }: Props) => {
         <Box paddingX="18px" paddingY={'14px'}>
           <VStack spacing={4} alignItems="flex-start">
             <Heading
-              color={useColorModeValue('gray.700', 'white')}
+              color="neutral.700"
               fontSize={'2xl'}
               fontFamily={'body'}
               noOfLines={1}

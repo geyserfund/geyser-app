@@ -78,12 +78,12 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
           backgroundColor
             ? backgroundColor
             : primary
-            ? 'brand.primary'
+            ? 'primary.400'
             : bgColor
         }
         borderRadius={circular ? '50px' : standard ? '8px' : undefined}
         _hover={
-          _hover ? _hover : primary ? { bg: 'brand.primaryTint' } : undefined
+          _hover ? _hover : primary ? { bg: 'primary.400Tint' } : undefined
         }
         fontSize="14px"
         fontWeight="medium"

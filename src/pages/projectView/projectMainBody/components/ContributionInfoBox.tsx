@@ -52,7 +52,7 @@ type Props = HTMLChakraProps<'div'> & {
 
 const useStyles = createUseStyles({
   divider: {
-    borderColor: 'white',
+    borderColor: 'neutral.0',
     mixBlendMode: 'screen',
   },
 })

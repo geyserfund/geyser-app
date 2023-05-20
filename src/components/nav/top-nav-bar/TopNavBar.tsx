@@ -139,7 +139,7 @@ export const TopNavBar = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { toggleColorMode, colorMode } = useColorMode()
+  const { toggleColorMode } = useColorMode()
 
   const currentPathName = location.pathname
 
@@ -505,7 +505,7 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={showHaveTransparentBackground ? 'transparent' : 'brand.bgWhite'}
+        bg={showHaveTransparentBackground ? 'transparent' : 'neutral.0'}
         px={4}
         position="fixed"
         top={0}
@@ -574,7 +574,7 @@ export const TopNavBar = () => {
                             position="absolute"
                             height="15px"
                             width="15px"
-                            backgroundColor="brand.primary"
+                            backgroundColor="primary.400"
                             right="-4px"
                             top="-2px"
                             zIndex={-1}

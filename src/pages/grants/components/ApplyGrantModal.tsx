@@ -224,7 +224,7 @@ export const ApplyGrantModal = ({
         <Box mt={4}>
           {isClose ? (
             <Button
-              bg="brand.primary"
+              bg="primary.400"
               onClick={() => {
                 setApplicationStages(GrantApplicationStages.form)
               }}
@@ -249,7 +249,7 @@ export const ApplyGrantModal = ({
         <ModalBody>
           <Text
             fontWeight={'700'}
-            color="brand.gray700"
+            color="neutral.700"
             mb={2}
             mt={4}
             fontSize="22px"
@@ -262,7 +262,7 @@ export const ApplyGrantModal = ({
                 Which Grant are you applying to?
               </FormLabel>
               <Select
-                _focus={{ borderColor: 'brand.primary' }}
+                _focus={{ borderColor: 'primary.400' }}
                 name="grantType"
                 value={state.grantType}
                 onChange={setTarget}
@@ -280,7 +280,7 @@ export const ApplyGrantModal = ({
               </FormLabel>
               <TextInputBox
                 placeholder="Bitcoin for Fairness"
-                _focus={{ borderColor: 'brand.primary' }}
+                _focus={{ borderColor: 'primary.400' }}
                 name="name"
                 value={state.name}
                 onChange={setTarget}
@@ -306,7 +306,7 @@ export const ApplyGrantModal = ({
                 onChange={setTarget}
                 error={formError.link}
                 size={'md'}
-                _focus={{ borderColor: 'brand.primary' }}
+                _focus={{ borderColor: 'primary.400' }}
                 placeholder="https://geyser.fund/project/bitcoin-for-fairness"
               />
             </Box>
@@ -321,7 +321,7 @@ export const ApplyGrantModal = ({
                 onChange={setTarget}
                 error={formError.goals}
                 size={'md'}
-                _focus={{ borderColor: 'brand.primary' }}
+                _focus={{ borderColor: 'primary.400' }}
                 placeholder="The project aims to raise 5,000 $ for ...."
               />
             </FormControl>
@@ -330,7 +330,7 @@ export const ApplyGrantModal = ({
                 Which area of the world will you be focusing your efforts on?
               </FormLabel>
               <Select
-                _focus={{ borderColor: 'brand.primary' }}
+                _focus={{ borderColor: 'primary.400' }}
                 name="area"
                 value={state.area}
                 onChange={setTarget}
@@ -352,7 +352,7 @@ export const ApplyGrantModal = ({
               <Button
                 isLoading
                 loadingText="Loading"
-                bg="brand.primary"
+                bg="primary.400"
                 w="full"
                 isDisabled
                 spinnerPlacement="start"
@@ -360,7 +360,7 @@ export const ApplyGrantModal = ({
                 Submit
               </Button>
             ) : (
-              <Button bg="brand.primary" onClick={submitForm} w="full">
+              <Button bg="primary.400" onClick={submitForm} w="full">
                 Submit
               </Button>
             )}
@@ -410,7 +410,7 @@ export const ApplyGrantModal = ({
           display="flex"
           justifyContent={'center'}
           alignItems="center"
-          bg="brand.primary"
+          bg="primary.400"
         >
           <FaCheck />
         </Box>
@@ -447,7 +447,7 @@ export const ApplyGrantModal = ({
           minWidth={'100%'}
           fontSize="14px"
           onClick={onOpen}
-          backgroundColor="brand.primary"
+          backgroundColor="primary.400"
         >
           View
         </Button>
@@ -486,7 +486,7 @@ export const ApplyGrantModal = ({
                   }
                   gap={2}
                   width="50px"
-                  backgroundColor="brand.bgWhite"
+                  backgroundColor="neutral.0"
                 >
                   <BiLeftArrowAlt fontSize={'25px'} />
                 </Button>
@@ -499,7 +499,7 @@ export const ApplyGrantModal = ({
               onClick={handleClose}
               gap={2}
               width="100px"
-              backgroundColor="brand.bgWhite"
+              backgroundColor="neutral.0"
             >
               <MdClose fontSize={'18px'} /> Close
             </Button>
@@ -507,7 +507,7 @@ export const ApplyGrantModal = ({
 
           <Box
             flex="1"
-            bg="brand.bgWhite"
+            bg="neutral.0"
             pb={3}
             borderRadius="4px"
             overflowY="auto"

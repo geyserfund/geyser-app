@@ -76,16 +76,16 @@ const RewardItem = ({
         <HStack w="full">
           <VStack spacing="0px">
             {reward.rewardProject.rewardCurrency === RewardCurrency.Usdcent ? (
-              <Text color="brand.textBlack" fontWeight="bold">
+              <Text color="neutral.1000" fontWeight="bold">
                 {`$ ${reward.cost / 100}`}
               </Text>
             ) : (
-              <SatoshiAmount fontSize="12px" color="brand.textBlack">
+              <SatoshiAmount fontSize="12px" color="neutral.1000">
                 {reward.cost}
               </SatoshiAmount>
             )}
 
-            <Text fontSize="12px" color="brand.textBlack" fontWeight="bold">
+            <Text fontSize="12px" color="neutral.1000" fontWeight="bold">
               per item
             </Text>
           </VStack>

@@ -1,12 +1,4 @@
-import {
-  Box,
-  HStack,
-  Image,
-  Stack,
-  Text,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 
 import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
@@ -90,7 +82,7 @@ export const ContributionActivityItem = ({
   }
 
   return (
-    <Box w="full" bg={useColorModeValue('white', 'gray.900')} {...rest}>
+    <Box w="full" bg="neutral.0" {...rest}>
       <VStack flexDirection="column" spacing={'6px'} overflow={'hidden'}>
         {/* Funding Stats Header */}
 
@@ -119,7 +111,7 @@ export const ContributionActivityItem = ({
             )}
             {count && count > 1 && (
               <HStack
-                backgroundColor="brand.gray100"
+                backgroundColor="neutral.200"
                 px="3px"
                 borderRadius="sm"
                 spacing="2px"

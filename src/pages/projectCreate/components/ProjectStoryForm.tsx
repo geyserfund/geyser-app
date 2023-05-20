@@ -26,13 +26,13 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
               />
 
               {typeof formError === 'string' ? (
-                <Text pt={1} color="brand.error">
+                <Text pt={1} color="secondary.red">
                   {formError}
                 </Text>
               ) : (
                 <HStack pt={1} width="100%" justifyContent="space-between">
                   <HStack>
-                    <Text fontSize="12px" color="brand.neutral700">
+                    <Text fontSize="12px" color="neutral.700">
                       For **Bold** and *Italic*, see more{' '}
                     </Text>
                     <HStack
@@ -42,12 +42,12 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
                       spacing="0px"
                     >
                       <BiInfoCircle />
-                      <Text fontSize="12px" color="brand.neutral700">
+                      <Text fontSize="12px" color="neutral.700">
                         MarkDown
                       </Text>
                     </HStack>
                   </HStack>
-                  <Text fontSize="12px" color="brand.neutral700">
+                  <Text fontSize="12px" color="neutral.700">
                     <span>{form.watch('description').length}</span>/
                     <span>{ProjectValidations.description.maxLength}</span>
                   </Text>

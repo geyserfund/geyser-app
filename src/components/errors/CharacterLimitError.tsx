@@ -19,10 +19,10 @@ export const CharacterLimitError = ({
       paddingTop="5px"
       {...rest}
     >
-      <Text fontSize="12px" color="brand.error">
+      <Text fontSize="12px" color="secondary.red">
         {message || " You're over the character limit"}
       </Text>
-      <Text fontSize="12px" color="brand.error">{` ${length}/${limit}`}</Text>
+      <Text fontSize="12px" color="secondary.red">{` ${length}/${limit}`}</Text>
     </HStack>
   )
 }

@@ -85,7 +85,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, ITextBoxProps>(
           typeof error === 'object' ? (
             error
           ) : (
-            <Text color="brand.error" fontSize="12px" width="100%">
+            <Text color="secondary.red" fontSize="12px" width="100%">
               {error}
             </Text>
           )

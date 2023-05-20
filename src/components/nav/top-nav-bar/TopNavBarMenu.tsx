@@ -54,14 +54,14 @@ export const TopNavBarMenu = ({
         maxHeight="32px"
         borderRadius="md"
         color={textColor}
-        backgroundColor="brand.bgWhite"
+        backgroundColor="neutral.0"
         _hover={{ backgroundColor: colors.gray200 }}
         border={'1px'}
-        borderColor="brand.bgGrey3"
+        borderColor="neutral.200"
         sx={buttonCommon}
       >
         <HStack
-          color={useColorModeValue('brand.gray500', 'brand.gray200')}
+          color={useColorModeValue('neutral.700', 'neutral.200')}
           spacing="4px"
         >
           <HamburgerIcon color={'#ADB5BD'} fontSize="22px" />
@@ -170,19 +170,19 @@ export const TopNavBarMenu = ({
 
         <MenuDivider />
 
-        <MenuItem color={'brand.gray500'}>
+        <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={AboutUsUrl} isExternal>
             About
           </MenuItemLink>
         </MenuItem>
 
-        <MenuItem color={'brand.gray500'}>
+        <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={FAQUrl} isExternal>
             FAQ
           </MenuItemLink>
         </MenuItem>
 
-        <MenuItem color={'brand.gray500'}>
+        <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={FeedbackUrl} isExternal>
             Feedback
           </MenuItemLink>
@@ -194,7 +194,7 @@ export const TopNavBarMenu = ({
 
             <MenuItem
               onClick={onSignOutSelected}
-              color={'brand.gray500'}
+              color={'neutral.700'}
               px={4}
               py={2}
             >

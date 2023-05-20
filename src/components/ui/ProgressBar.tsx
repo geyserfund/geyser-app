@@ -9,7 +9,7 @@ export const ProgressBar = ({ value, ...rest }: IProgressBar) => (
     display="flex"
     borderRadius="3px"
     height="4px"
-    backgroundColor="brand.gray300"
+    backgroundColor="neutral.300"
     {...rest}
   >
     <Box

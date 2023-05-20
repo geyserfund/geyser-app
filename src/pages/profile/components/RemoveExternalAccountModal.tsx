@@ -46,7 +46,7 @@ export const RemoveExternalAccountModal = ({
             width="60px"
             justifyContent="center"
             alignItems="center"
-            backgroundColor="brand.secondaryRed"
+            backgroundColor="secondary.red"
             rounded="full"
           >
             <BsXLg color="white" fontSize="40px" />

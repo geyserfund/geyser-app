@@ -312,7 +312,7 @@ export const RewardAdditionModal = ({
                    types beyond USD cents (e.g: satoshis)
                  */}
                 <Input
-                  focusBorderColor="brand.primary"
+                  focusBorderColor="primary.400"
                   name="Dollar Amount Cost"
                   type="number"
                   onChange={handleCostAmountChange}

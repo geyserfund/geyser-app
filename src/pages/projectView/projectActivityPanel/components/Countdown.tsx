@@ -25,7 +25,7 @@ export const Countdown = ({ endDate }: { endDate: string }) => {
           height="5px"
           width="5px"
           borderRadius="50%"
-          backgroundColor="brand.primary"
+          backgroundColor="primary.400"
         />
       )}
       <Text

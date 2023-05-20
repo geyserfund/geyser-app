@@ -12,10 +12,10 @@ interface IProjectBalance {
 
 const USDBalance = ({ balance }: { balance: number }) => (
   <>
-    <Text color="brand.primary" fontSize="40px" mr={1}>
+    <Text color="primary.400" fontSize="40px" mr={1}>
       $
     </Text>
-    <Text color="brand.primary" fontWeight="bold" fontSize="5xl">
+    <Text color="primary.400" fontWeight="bold" fontSize="5xl">
       {balance.toFixed(2)}
     </Text>
   </>
@@ -27,15 +27,15 @@ const BTCBalance = ({ balance }: { balance: number }) => {
 
   return displaySatoshis ? (
     <>
-      <SatoshiIconTilted scale={1.5} color="brand.primary" />
-      <Text color="brand.primary" fontWeight="bold" fontSize="5xl">
+      <SatoshiIconTilted scale={1.5} color="primary.400" />
+      <Text color="primary.400" fontWeight="bold" fontSize="5xl">
         {commaFormatted(balance)}
       </Text>
     </>
   ) : (
     <>
       <BsCurrencyBitcoin fontSize="40px" color="#20ECC7" />
-      <Text color="brand.primary" fontWeight="bold" fontSize="5xl">
+      <Text color="primary.400" fontWeight="bold" fontSize="5xl">
         {parseFloat((balance / 100000000).toFixed(4))}
       </Text>
     </>
@@ -60,7 +60,7 @@ export const ProjectBalance = ({ balance, rate }: IProjectBalance) => {
           <BTCBalance balance={balance} />
         )}
       </Box>
-      <Text color="brand.textGrey" fontSize="xs" textAlign="center">
+      <Text color="neutral.600" fontSize="xs" textAlign="center">
         RAISED
       </Text>
     </Box>

@@ -53,13 +53,13 @@ export const ApplyGrantCard = ({
         >
           {isClose ? (
             <>
-              <Text fontWeight={'400'} fontSize="9px" color={'brand.gray500'}>
+              <Text fontWeight={'400'} fontSize="9px" color={'neutral.700'}>
                 {applicant}
               </Text>
               <Text
                 fontWeight={'400'}
                 fontSize="11px"
-                color={'brand.gray500'}
+                color={'neutral.700'}
                 mt={1}
               >
                 APPLICANTS

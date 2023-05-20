@@ -165,7 +165,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
         >
           <HStack spacing={'10px'} align={'center'} flex={0}>
             <HStack spacing={1}>
-              <MonoBody1 color="brand.primary" fontWeight={'bold'}>
+              <MonoBody1 color="primary.400" fontWeight={'bold'}>
                 {entry.fundersCount}
               </MonoBody1>
               <BsHeartFill color={colors.primary} />
@@ -173,7 +173,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
 
             <SatoshiAmount
               fontFamily={fonts.mono}
-              color="brand.primary"
+              color="primary.400"
               fontSize="16px"
               fontWeight="bold"
               scale={0.8}

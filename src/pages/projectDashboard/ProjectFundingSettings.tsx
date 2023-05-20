@@ -194,7 +194,7 @@ export const ProjectFundingSettings = () => {
               <VStack
                 width="100%"
                 border="1px solid"
-                borderColor="brand.gray300"
+                borderColor="neutral.300"
                 borderRadius="4px"
                 alignItems="flex-start"
                 padding="10px"

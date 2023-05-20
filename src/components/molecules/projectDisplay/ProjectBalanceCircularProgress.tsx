@@ -89,7 +89,7 @@ export const ProjectBalanceCircularProgress = ({
     <Stat textAlign="center" borderRadius="50%">
       <StatLabel
         fontSize="12px"
-        color={isDark ? 'brand.textWhite' : 'brand.textGrey'}
+        color={isDark ? 'neutral.0' : 'neutral.600'}
       >
         Raised
       </StatLabel>
@@ -112,7 +112,7 @@ export const ProjectBalanceCircularProgress = ({
         justify="center"
         spacing={0}
         fontSize="12px"
-        color={isDark ? 'brand.textWhite' : 'brand.textGrey'}
+        color={isDark ? 'neutral.0' : 'neutral.600'}
       >
         <Text fontSize="12px">{getDisplayPercent(percentage)}% of</Text>
         <BTCBalance balance={goal} pixelFontSize={12} />
@@ -131,7 +131,7 @@ export const ProjectBalanceCircularProgress = ({
           value={percentage}
           size="208px"
           thickness="6px"
-          color="brand.primary"
+          color="primary.400"
           filter="drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))"
         >
           <Box position="absolute" fontSize="12px">
@@ -150,7 +150,7 @@ export const ProjectBalanceCircularProgress = ({
           <Box
             width="176px"
             height="176px"
-            backgroundColor="brand.primary"
+            backgroundColor="primary.400"
             borderRadius="50%"
             padding="10px"
             className={classes.circularProgress}

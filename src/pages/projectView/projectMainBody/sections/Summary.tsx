@@ -284,6 +284,6 @@ const greenBorderButtonStyles: ButtonProps = {
     backgroundColor: 'none',
     border: '1px solid #20ECC7',
   },
-  _active: { backgroundColor: 'brand.primary' },
+  _active: { backgroundColor: 'primary.400' },
   bg: 'none',
 }

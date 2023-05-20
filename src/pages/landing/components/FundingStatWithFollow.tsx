@@ -105,8 +105,8 @@ export const FundingStatWithFollow = ({
             borderColor="primary.500"
             _hover={{
               border: `2px solid`,
-              borderColor: 'brand.secondaryRed',
-              color: 'brand.secondaryRed',
+              borderColor: 'secondary.red',
+              color: 'secondary.red',
             }}
           />
         </Tooltip>

@@ -14,8 +14,8 @@ export const WalletConnectionOptionInfoBox = ({
 }: Props) => {
   return (
     <VStack
-      backgroundColor={'brand.neutral100'}
-      textColor={'brand.gray500'}
+      backgroundColor={'neutral.100'}
+      textColor={'neutral.700'}
       spacing={2}
       p={4}
       alignItems="start"

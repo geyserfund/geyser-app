@@ -35,7 +35,7 @@ export const SatoshiIcon = ({
   ...rest
 }: SatoshiIconProps) => {
   const getFilter = () => {
-    if (color === 'brand.primary') {
+    if (color === 'primary.400') {
       return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)'
     }
 
@@ -76,7 +76,7 @@ export const SatoshiIconTilted = ({
     }
 
     switch (color) {
-      case 'brand.primary':
+      case 'primary.400':
         return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)'
       case 'primary.600':
         return 'invert(50%) sepia(59%) saturate(5011%) hue-rotate(143deg) brightness(96%) contrast(98%)'

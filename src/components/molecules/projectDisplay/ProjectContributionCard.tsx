@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom'
 
 import { computeFunderBadges } from '../../../helpers'
 import { UserProjectContribution } from '../../../types/generated/graphql'
-import { useDarkMode } from '../../../utils'
 import { Card, ICard } from '../../ui'
 
 type Props = ICard & {
@@ -39,7 +38,7 @@ const useStyles = createUseStyles({
       boxShadow:
         'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
       '.rocketicon': {
-        color: 'brand.primary',
+        color: 'primary.400',
       },
     },
 
@@ -61,7 +60,6 @@ export const ProjectContributionCard = ({
   ...rest
 }: Props) => {
   const classes = useStyles()
-  const isDark = useDarkMode()
 
   const { project } = contribution
 
@@ -71,7 +69,7 @@ export const ProjectContributionCard = ({
     <Link to={`/project/${project.name}`}>
       <Card
         className={classNames(classes.container, className)}
-        backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
+        backgroundColor="neutral.0"
         {...rest}
       >
         <Box height="160px" width="100%" position="relative">

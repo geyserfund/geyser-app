@@ -28,7 +28,7 @@ const useStyles = createUseStyles({
 
   tagContainer: {
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: 'neutral.0',
     border: '1px solid',
     borderColor: colors.neutral400,
     borderRadius: '8px',

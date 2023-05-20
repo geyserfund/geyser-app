@@ -71,7 +71,7 @@ export const ProjectDashboard = () => {
       <Box
         key={nav}
         borderBottom="3px solid"
-        borderColor={activeTab === nav ? 'brand.primary' : 'neutral.500'}
+        borderColor={activeTab === nav ? 'primary.400' : 'neutral.500'}
       >
         <Button
           borderRadius="4px"
@@ -107,7 +107,7 @@ export const ProjectDashboard = () => {
 
   return (
     <Box
-      background={'brand.bgGrey4'}
+      background={'neutral.50'}
       position="relative"
       paddingBottom={10}
       height="100%"

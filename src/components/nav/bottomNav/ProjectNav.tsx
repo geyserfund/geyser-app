@@ -155,13 +155,13 @@ export const ProjectNavUI = () => {
             backgroundColor={
               mobileView === MobileViews.funding
                 ? 'neutral.500'
-                : 'brand.primary'
+                : 'primary.400'
             }
             border="1px solid"
             borderColor={
               mobileView === MobileViews.funding
                 ? 'neutral.500'
-                : 'brand.primary'
+                : 'primary.400'
             }
             _hover={{}}
             width="100%"

@@ -83,7 +83,7 @@ export const ExternalAccountDisplay = ({
               username={npub}
               handleDelete={isEdit ? onOpen : undefined}
               onClick={() => handleCopyPubkey(npub)}
-              backgroundColor={copy ? 'brand.primary' : 'neutral.100'}
+              backgroundColor={copy ? 'primary.400' : 'neutral.100'}
               isLoading={unlinkAccountLoading}
             />
           </Box>

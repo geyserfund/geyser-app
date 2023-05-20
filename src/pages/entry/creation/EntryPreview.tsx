@@ -207,7 +207,7 @@ export const EntryPreview = () => {
         onBack={onBack}
       />
       <CardLayout
-        background={'brand.bgGrey4'}
+        background={'neutral.50'}
         position="relative"
         paddingTop={'70px'}
         height="100%"
@@ -224,7 +224,7 @@ export const EntryPreview = () => {
           alignItems="flex-start"
           paddingBottom="80px"
         >
-          <Text fontSize="33px" fontWeight={600} color="brand.gray500">
+          <Text fontSize="33px" fontWeight={600} color="neutral.700">
             {isEntryPublished ? 'Share entry' : 'Publish entry'}
           </Text>
 
@@ -232,7 +232,7 @@ export const EntryPreview = () => {
             <VStack width="100%" alignItems="center">
               <Box
                 borderRadius="50%"
-                backgroundColor="brand.primary"
+                backgroundColor="primary.400"
                 padding="10px"
               >
                 <BsCheckLg />
@@ -262,7 +262,7 @@ export const EntryPreview = () => {
               />
             </Box>
             <VStack width="100%" padding="5px">
-              <Text fontSize="11px" color="brand.gray500">
+              <Text fontSize="11px" color="neutral.700">
                 {`geyser.fund/${projectData?.project?.name}`}
               </Text>
 
@@ -271,7 +271,7 @@ export const EntryPreview = () => {
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder="Title"
-                color="brand.gray500"
+                color="neutral.700"
                 fontSize="28px"
                 fontWeight={700}
                 marginTop="20px"
@@ -286,7 +286,7 @@ export const EntryPreview = () => {
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder="Title"
-                color="brand.gray500"
+                color="neutral.700"
                 fontSize="16px"
                 fontWeight={700}
                 marginTop="0px"

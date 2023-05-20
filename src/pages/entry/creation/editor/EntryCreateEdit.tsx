@@ -217,7 +217,7 @@ export const EntryCreateEdit = () => {
         onBack={onBack}
       />
       <VStack
-        background={'brand.bgGrey4'}
+        background={'neutral.50'}
         position="relative"
         paddingTop={isMobile ? '0px' : '15px'}
         height="100%"
@@ -278,7 +278,7 @@ export const EntryCreateEdit = () => {
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder="The Entry Title"
-                color="brand.gray500"
+                color="neutral.700"
                 fontSize={isMobile ? '35px' : '40px'}
                 fontWeight={700}
                 paddingBottom="5px"
@@ -295,7 +295,7 @@ export const EntryCreateEdit = () => {
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder="The summary of this entry"
-                color="brand.gray500"
+                color="neutral.700"
                 fontSize={isMobile ? '20px' : '26px'}
                 paddingX="15px"
                 fontWeight={600}

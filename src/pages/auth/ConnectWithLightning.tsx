@@ -44,9 +44,9 @@ export const ConnectWithLightning = (props: ConnectWithLightningProps) => {
     <>
       <Button
         w="100%"
-        backgroundColor="brand.lightning"
+        backgroundColor="social.lightning"
         leftIcon={<BoltSvgIcon height="20px" width="20px" />}
-        _hover={{ backgroundColor: 'brand.lightningDark' }}
+        _hover={{ backgroundColor: 'social.lightningDark' }}
         onClick={onOpen}
         {...props}
       >
@@ -213,7 +213,7 @@ export const ConnectWithLightningModal = ({
               borderRadius={4}
               p={2}
             >
-              <Text w="75%" color="brand.textGrey" cursor="default">
+              <Text w="75%" color="neutral.600" cursor="default">
                 {qrContent?.slice(0, isMobile ? 21 : 30)}...
               </Text>
               <ButtonComponent

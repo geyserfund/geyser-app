@@ -155,7 +155,7 @@ export const Subscribe = ({
                         background={'none'}
                         aria-label="twitter"
                         icon={<FaTwitter fontSize="20px" />}
-                        color={'brand.gray500'}
+                        color={'neutral.700'}
                       />
                     </Link>
                     <Link href={GeyserTelegramUrl} isExternal>
@@ -164,7 +164,7 @@ export const Subscribe = ({
                         background={'none'}
                         aria-label="telegram"
                         icon={<FaTelegramPlane fontSize="20px" />}
-                        color={'brand.gray500'}
+                        color={'neutral.700'}
                       />
                     </Link>
                   </HStack>
@@ -189,7 +189,7 @@ export const Subscribe = ({
           </Text>
           {success && (
             <Box
-              bg="brand.primary"
+              bg="primary.400"
               borderRadius="full"
               width="75px"
               height="75px"

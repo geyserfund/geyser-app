@@ -259,7 +259,7 @@ export const GrantsContributeModal = ({
             placeholder="12,120"
             type={'number'}
             _focus={{
-              borderColor: 'brand.primary',
+              borderColor: 'primary.400',
             }}
             border="2px solid #20ECC7"
             value={state.amount}
@@ -270,7 +270,7 @@ export const GrantsContributeModal = ({
           />
         </InputGroup>
         {formError?.amount && (
-          <Text color="brand.error" fontSize="12px">
+          <Text color="secondary.red" fontSize="12px">
             {formError?.amount}
           </Text>
         )}
@@ -285,7 +285,7 @@ export const GrantsContributeModal = ({
           Leave us a comment (optional)
         </Body2>
         <Input
-          _focus={{ borderColor: 'brand.primary' }}
+          _focus={{ borderColor: 'primary.400' }}
           placeholder="Love what you guys are doing."
           name="comment"
           value={state.comment}
@@ -293,7 +293,7 @@ export const GrantsContributeModal = ({
         />
       </VStack>
 
-      <Button bg="brand.primary" onClick={handleFormConfirmClick} w="full">
+      <Button bg="primary.400" onClick={handleFormConfirmClick} w="full">
         Confirm
       </Button>
     </VStack>
@@ -310,7 +310,7 @@ export const GrantsContributeModal = ({
             display="flex"
             justifyContent={'center'}
             alignItems="center"
-            bg="brand.primary"
+            bg="primary.400"
           >
             <FaCheck />
           </Box>
@@ -384,7 +384,7 @@ export const GrantsContributeModal = ({
         <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
           {OverlayOne}
           <ModalContent bg="transparent" boxShadow={0}>
-            <Box borderRadius="4px" bg="brand.bgWhite" pb={3}>
+            <Box borderRadius="4px" bg="neutral.0" pb={3}>
               <ModalHeader pb={2}>{modalHeader}</ModalHeader>
               <ModalCloseButton />
               <ModalBody>{renderModalBody()}</ModalBody>

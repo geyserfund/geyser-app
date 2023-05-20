@@ -273,10 +273,10 @@ export const SelectAProject = ({
               alignItems="center"
               overflow="hidden"
               onClick={() => handleSelection(project.id)}
-              borderColor={isSelected ? 'brand.primary' : 'neutral.200'}
+              borderColor={isSelected ? 'primary.400' : 'neutral.200'}
               _hover={{
                 cursor: 'pointer',
-                borderColor: isSelected ? 'brand.primary' : 'neutral.400',
+                borderColor: isSelected ? 'primary.400' : 'neutral.400',
               }}
             >
               <Image

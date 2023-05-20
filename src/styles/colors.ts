@@ -182,14 +182,27 @@ export const secondaryColors = {
   purple: '#670C8B',
 }
 
+export const socialColors = {
+  twitter: '#2AA9E0',
+  twitterDark: '#0d5a82',
+
+  nostr: '#670C8B',
+  nostrDark: '#52095c',
+
+  lightning: '#FFE600',
+  lightningDark: '#CCA300',
+}
+
 export const lightModeColors = {
   primary: primaryColorsLight,
   neutral: neutralColorsLight,
   secondary: secondaryColors,
+  social: socialColors,
 }
 
 export const darkModeColors = {
   primary: primaryColorsDark,
   neutral: neutralColorsDark,
   secondary: secondaryColors,
+  social: socialColors,
 }

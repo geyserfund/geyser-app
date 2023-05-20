@@ -31,7 +31,7 @@ type TabData = {
 const styles = {
   selectedTab: {
     borderBottom: '4px solid',
-    borderBottomColor: 'brand.primary',
+    borderBottomColor: 'primary.400',
     fontWeight: 'bold',
   },
 }

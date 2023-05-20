@@ -95,7 +95,7 @@ export const ProjectFundingFormCommentField = ({
             _active={{
               borderColor: 'primary.500',
             }}
-            backgroundColor={'brand.bgWhite'}
+            backgroundColor={'neutral.0'}
             onChange={setTarget}
           />
           <Text pt={1} px={1} fontSize="10px" color="neutral.600">
@@ -180,7 +180,7 @@ export const ProjectFundingFormCommentField = ({
                   onBlur={() => setFocus(false)}
                   placeholder="Search"
                   variant="filled"
-                  focusBorderColor="brand.primary"
+                  focusBorderColor="primary.400"
                   bg="#DDFFF8"
                   onChange={(e) => setGifSearch(e.target.value)}
                 />

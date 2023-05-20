@@ -90,7 +90,7 @@ export const Profile = () => {
       position="relative"
       width="100%"
       height="100%"
-      backgroundColor={'brand.bgGrey4'}
+      backgroundColor={'neutral.50'}
       paddingY={{ base: '20px', lg: '40px' }}
       paddingX={{ base: '10px', lg: '40px' }}
     >

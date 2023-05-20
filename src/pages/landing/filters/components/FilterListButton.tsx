@@ -25,7 +25,7 @@ export const FilterListItem = ({
       w="full"
       noBorder
       key={label}
-      backgroundColor={isActive ? 'neutral.100' : 'white'}
+      backgroundColor={isActive ? 'neutral.100' : 'neutral.0'}
       position="relative"
       onClick={() => handleClick(value)}
     >

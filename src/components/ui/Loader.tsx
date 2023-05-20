@@ -17,7 +17,7 @@ const Loader = ({ size, ...rest }: ILoader) => (
       thickness="4px"
       speed="0.65s"
       emptyColor="gray.200"
-      color="brand.primary"
+      color="primary.400"
       size={size ? size : 'xl'}
     />
   </Box>

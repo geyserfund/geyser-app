@@ -34,7 +34,7 @@ const useStyles = createUseStyles<Rules, StyleProps>({
       bottom: '20px',
       float: 'center',
       zIndex: 99,
-      background: 'white',
+      background: 'neutral.0',
       borderRadius: '4px',
       borderWidth: '0px',
       boxShadow: '0px 3px 12px rgba(0, 0, 0, 0.1)',

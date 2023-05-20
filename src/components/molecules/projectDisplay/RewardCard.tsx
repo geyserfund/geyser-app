@@ -48,7 +48,7 @@ export const RewardCard = ({
           <HStack>
             <VStack spacing="0px">
               {isSatoshi ? (
-                <SatoshiAmount color="brand.primary">
+                <SatoshiAmount color="primary.400">
                   {reward.cost}
                 </SatoshiAmount>
               ) : (

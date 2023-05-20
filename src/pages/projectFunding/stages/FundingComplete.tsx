@@ -23,7 +23,7 @@ export const FundingComplete = ({
           display="flex"
           justifyContent={'center'}
           alignItems="center"
-          bg="brand.primary"
+          bg="primary.400"
         >
           <FaCheck />
         </Box>

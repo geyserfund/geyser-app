@@ -52,7 +52,7 @@ const FundingErrorView = ({ error }: { error?: string }) => {
       width={252}
       spacing="10px"
       padding={3}
-      backgroundColor={'brand.bgLightRed'}
+      backgroundColor={'secondary.red'}
       justifyContent="center"
       borderRadius={'md'}
     >
@@ -86,7 +86,7 @@ const InvoiceErrorView = ({
       <Button
         leftIcon={<BiRefresh fontSize={'2em'} />}
         iconSpacing={2}
-        backgroundColor={'brand.bgWhite'}
+        backgroundColor={'neutral.0'}
         textTransform={'uppercase'}
         onClick={onRefreshSelected}
         borderRadius={'full'}

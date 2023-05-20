@@ -99,7 +99,7 @@ export const LeaderboardTopbar = ({
           fontSize="16px"
           borderRadius="8px"
           backgroundColor={
-            tab === LeaderboardTabs.thisWeek ? 'neutral.100' : 'white'
+            tab === LeaderboardTabs.thisWeek ? 'neutral.100' : 'neutral.0'
           }
           onClick={() => setTab(LeaderboardTabs.thisWeek)}
         >
@@ -112,7 +112,7 @@ export const LeaderboardTopbar = ({
           fontSize="16px"
           borderRadius="8px"
           backgroundColor={
-            tab === LeaderboardTabs.allTime ? 'neutral.100' : 'white'
+            tab === LeaderboardTabs.allTime ? 'neutral.100' : 'neutral.0'
           }
           onClick={() => setTab(LeaderboardTabs.allTime)}
         >

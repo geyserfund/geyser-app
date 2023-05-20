@@ -23,11 +23,11 @@ export const IconButtonComponent = forwardRef<
       ref={ref}
       variant="solid"
       backgroundColor={
-        noBorder ? 'transparent' : primary ? 'brand.primary' : backgroundColor
+        noBorder ? 'transparent' : primary ? 'primary.400' : backgroundColor
       }
       borderRadius="50%"
       color={primary ? 'black' : textColor}
-      _hover={primary ? { bg: 'brand.primaryTint' } : undefined}
+      _hover={primary ? { bg: 'primary.400Tint' } : undefined}
       border={noBorder ? undefined : `1px solid ${colors.neutral300}`}
       {...rest}
     />
