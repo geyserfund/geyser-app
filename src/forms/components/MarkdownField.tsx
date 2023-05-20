@@ -1,9 +1,23 @@
-import { Box } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  ListItem,
+  OrderedList,
+  UnorderedList,
+} from '@chakra-ui/react'
 import { useDebouncedCallback } from '@react-hookz/web'
 import {
+  Callout,
+  CodeBlock,
+  createIFrameHandler,
+  createLinkHandler,
+  Doc,
   EditorComponent,
+  Heading,
+  MarkMap,
   Remirror,
   RemirrorRenderer,
+  TextHandler,
   ThemeProvider,
   useHelpers,
   useRemirror,
@@ -118,9 +132,11 @@ export const MarkdownField = ({
     return (
       <RemirrorStyleProvider>
         <RemirrorRenderer
+          typeMap={typeMap}
+          markMap={markMap}
           json={getRemirrorJSON(
             manager.createState({
-              content: content?.replaceAll('\n', '<br>'),
+              content,
               stringHandler: 'markdown',
             }),
           )}
@@ -152,6 +168,31 @@ const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
       </AllStyledComponent>
     </Box>
   )
+}
+
+const typeMap: MarkMap = {
+  blockquote: 'blockquote',
+  bulletList: UnorderedList,
+  callout: Callout,
+  codeBlock: CodeBlock,
+  doc: Doc,
+  hardBreak: 'br',
+  heading: Heading,
+  horizontalRule: Divider,
+  iframe: createIFrameHandler(),
+  image: 'img',
+  listItem: ListItem,
+  paragraph: 'p',
+  orderedList: OrderedList,
+  text: TextHandler,
+}
+
+const markMap: MarkMap = {
+  italic: 'em',
+  bold: 'strong',
+  code: 'code',
+  link: createLinkHandler({ target: '_blank' }),
+  underline: 'u',
 }
 
 function SaveModule(props: { control?: Control; name?: string }) {
