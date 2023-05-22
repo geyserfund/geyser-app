@@ -654,7 +654,9 @@ export const TopNavBar = () => {
               </ButtonComponent>
             ) : null}
 
-            <Button onClick={toggleColorMode}>color mode</Button>
+            <Button variant="primary" onClick={toggleColorMode}>
+              color mode
+            </Button>
 
             {shouldShowDropdownMenuButton ? (
               <TopNavBarMenu

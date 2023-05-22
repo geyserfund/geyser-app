@@ -1,11 +1,14 @@
 import { HStack } from '@chakra-ui/react'
 import { useCallback, useEffect } from 'react'
+import { useTheme } from 'react-jss'
 
-import { colors } from '../../../styles'
-
-const DEFAULT_BACKGROUND = `radial-gradient( at center, ${colors.primary400}, ${colors.bgWhite})`
+import { ReactJSSTheme } from '../../../context'
 
 export const BannerBackground = () => {
+  const theme = useTheme<ReactJSSTheme>()
+
+  const defaultBackground = `radial-gradient( at center, ${theme.primary[400]}, ${theme.neutral[0]})`
+
   const handleMouseMove = useCallback((event: MouseEvent) => {
     const element = document.getElementById('radial-gradient')
 
@@ -16,7 +19,7 @@ export const BannerBackground = () => {
         const mouseXpercentage = Math.round((event.pageX / windowWidth) * 100)
         const mouseYpercentage = Math.round((event.pageY / windowHeight) * 100)
 
-        element.style.background = `radial-gradient( at ${mouseXpercentage}% ${mouseYpercentage}%, ${colors.primary400}, ${colors.bgWhite}`
+        element.style.background = `radial-gradient( at ${mouseXpercentage}% ${mouseYpercentage}%, ${theme.primary[400]}, ${theme.neutral[0]}`
       }
     }
   }, [])
@@ -35,7 +38,7 @@ export const BannerBackground = () => {
       left="0px"
       height="100%"
       width="100%"
-      background={DEFAULT_BACKGROUND}
+      background={defaultBackground}
       transition="background 0.5s ease"
       borderBottom="4px solid"
       borderColor="neutral.100"

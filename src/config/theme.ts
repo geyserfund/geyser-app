@@ -1,6 +1,7 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import { colors, fonts } from '../styles'
+import { colors, darkModeColors, fonts, lightModeColors } from '../styles'
+import { isDarkMode } from '../utils'
 
 export const theme = extendTheme({
   initialColorMode: 'light',
@@ -47,8 +48,10 @@ export const theme = extendTheme({
         },
       },
       variants: {
-        primary: {
-          backgroundColor: 'primary.400',
+        primary: (props: StyleFunctionProps) => ({
+          backgroundColor: isDarkMode(props)
+            ? darkModeColors.primary[400]
+            : lightModeColors.primary[400],
           border: 'none',
           color: 'neutral.900',
           _hover: {
@@ -57,7 +60,7 @@ export const theme = extendTheme({
           _active: {
             backgroundColor: 'neutral.300',
           },
-        },
+        }),
         primaryNeutral: {
           backgroundColor: 'neutral.100',
           border: 'none',
