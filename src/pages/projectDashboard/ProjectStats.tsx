@@ -3,29 +3,29 @@ import { GridItem, HStack, Text, VStack } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
 import { SatoshiAmount } from '../../components/ui'
-import { useProjectContext } from '../../context'
+import { ReactJSSTheme, useProjectContext } from '../../context'
 import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
 import { fonts } from '../../styles'
 import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
 import { numberWithCommas, toInt } from '../../utils'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   statBox: {
     padding: '22px',
-    backgroundColor: 'primary.100',
+    backgroundColor: theme.primary[100],
     borderRadius: '4px',
   },
   numberText: {
     fontFamily: fonts.mono,
     fontSize: '28px',
-    color: 'neutral.900',
+    color: theme.neutral[900],
   },
   labelText: {
     fontSize: '16px',
-    color: 'neutral.600',
+    color: theme.neutral[600],
   },
-})
+}))
 
 type ResponseData = {
   project: Project

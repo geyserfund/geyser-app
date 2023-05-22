@@ -7,6 +7,7 @@ import { SingleValue } from 'react-select'
 
 import { Body1, Body2, Caption } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
+import { ReactJSSTheme } from '../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries/tags'
 import {
   Country,
@@ -18,7 +19,7 @@ import {
   ProjectRegionsGetResult,
 } from '../../../types'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   container: {
     width: '100%',
     alignItems: 'flex-start',
@@ -27,9 +28,9 @@ const useStyles = createUseStyles({
 
   tagContainer: {
     width: '100%',
-    backgroundColor: 'neutral.0',
+    backgroundColor: theme.neutral[0],
     border: '1px solid',
-    borderColor: 'neutral.400',
+    borderColor: theme.neutral[400],
     borderRadius: '8px',
     padding: '12px',
   },
@@ -42,7 +43,7 @@ const useStyles = createUseStyles({
   menuGroup: {
     backgroundColor: 'red',
   },
-})
+}))
 
 interface ProjectRegionProps extends StackProps {
   location?: Maybe<Location>

@@ -13,22 +13,23 @@ import { createUseStyles } from 'react-jss'
 
 import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { ImageWithReload } from '../../../../components/ui'
+import { ReactJSSTheme } from '../../../../context'
 import { IRewardCount } from '../../../../interfaces'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
 import { toInt } from '../../../../utils'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   focused: {
-    borderColor: `${'neutral.500'} !important`,
-    boxShadow: `0 0 0 1px ${'neutral.500'}`,
+    borderColor: `${theme.neutral[500]} !important`,
+    boxShadow: `0 0 0 1px ${theme.neutral[500]}`,
   },
   upperContainer: {
-    borderBottom: `1px solid ${'neutral.100'}`,
+    borderBottom: `1px solid ${theme.neutral[100]}`,
     paddingBottom: '10px',
   },
   backer: {
     padding: '3px 5px',
-    backgroundColor: 'neutral.100',
+    backgroundColor: theme.neutral[100],
     fontSize: '10px',
     borderRadius: '5px',
   },
@@ -38,10 +39,10 @@ const useStyles = createUseStyles({
     height: '40px',
   },
   plusIcon: {
-    backgroundColor: 'neutral.100',
-    border: `2px solid ${'neutral.200'}`,
+    backgroundColor: theme.neutral[100],
+    border: `2px solid ${theme.neutral[200]}`,
   },
-})
+}))
 
 interface IRewardItemProps {
   item: ProjectRewardForCreateUpdateFragment

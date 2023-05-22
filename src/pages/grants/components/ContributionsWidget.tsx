@@ -1,13 +1,11 @@
 import { Box, Text } from '@chakra-ui/react'
-import { createUseStyles } from 'react-jss'
 
 import { BadgeIcon } from '../../../components/icons/svg/BadgeIcon'
 import { ContributionsIcon } from '../../../components/icons/svg/ContributionsIcon'
 import { TimerIcon } from '../../../components/icons/svg/TimerIcon'
 import { Countdown } from '../../../components/ui/Countdown'
-import { colors, fonts } from '../../../styles'
+import { fonts } from '../../../styles'
 import { Maybe, Sponsor } from '../../../types'
-import { useMobileMode } from '../../../utils'
 import { SponsorList } from './SponsorList'
 import { WidgetItem } from './WidgetItem'
 
@@ -19,13 +17,6 @@ interface Props {
   endDateTimestamp: number
 }
 
-const useStyles = createUseStyles({
-  container: {
-    borderRadius: '8px',
-    backgroundColor: colors.gray2,
-  },
-})
-
 export const ContributionsWidget = ({
   sponsors,
   balance,
@@ -33,11 +24,8 @@ export const ContributionsWidget = ({
   endDateTimestamp,
   endDateSubtitle,
 }: Props) => {
-  const classes = useStyles()
-  const isMobile = useMobileMode()
-
   return (
-    <Box className={classes.container} pb={4} pt={2} mt={4}>
+    <Box borderRadius="8px" backgroundColor="neutral.100" pb={4} pt={2} mt={4}>
       <Box
         display="flex"
         flexWrap="wrap"
@@ -46,7 +34,7 @@ export const ContributionsWidget = ({
       >
         <Box
           px={2}
-          width={isMobile ? '100%' : undefined}
+          width={{ base: '100%', lg: 'auto' }}
           display="flex"
           alignItems="start"
           justifyContent="center"
@@ -99,7 +87,7 @@ export const ContributionsWidget = ({
         </Box>
       </Box>
       <Box
-        mt={isMobile ? 1 : 4}
+        mt={{ base: 1, lg: 4 }}
         display="flex"
         alignItems="center"
         justifyContent="center"

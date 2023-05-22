@@ -11,22 +11,23 @@ import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { FountainIcon } from '../../../components/icons'
 import { GeyserHomepageUrl } from '../../../constants'
+import { ReactJSSTheme } from '../../../context'
 import { ExternalAccount } from '../../../types/generated/graphql'
 
 type Props = {
   account: ExternalAccount
 }
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   linkContainer: {
-    color: 'neutral.1000',
+    color: theme.neutral[1000],
   },
   linkButton: {
     fontSize: '14px',
     fontWeight: '500',
     textDecoration: 'none',
   },
-})
+}))
 
 export const ExternalAccountLinkItem = ({ account }: Props) => {
   const { accountType: type, externalUsername } = account

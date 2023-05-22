@@ -11,12 +11,13 @@ import {
   IconButtonComponent,
   SelectComponent,
 } from '../../../components/ui'
+import { ReactJSSTheme } from '../../../context'
 import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   container: {
     width: '100%',
     alignItems: 'flex-start',
@@ -25,9 +26,9 @@ const useStyles = createUseStyles({
 
   tagContainer: {
     width: '100%',
-    backgroundColor: 'neutral.0',
+    backgroundColor: theme.neutral[0],
     border: '1px solid',
-    borderColor: 'neutral.400',
+    borderColor: theme.neutral[400],
     borderRadius: '8px',
     padding: '12px',
   },
@@ -38,9 +39,9 @@ const useStyles = createUseStyles({
   },
 
   menuGroup: {
-    backgroundColor: 'red',
+    backgroundColor: theme.secondary.red,
   },
-})
+}))
 
 interface ProjectTagsCreateEditProps extends StackProps {
   tags: Tag[]
