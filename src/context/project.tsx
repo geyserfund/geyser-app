@@ -117,24 +117,26 @@ export const ProjectProvider = ({
     }
   }, [project, user])
 
-  const onRewardSubmit = (reward: ProjectRewardForCreateUpdateFragment) => {
+  const onRewardSubmit = (
+    reward: ProjectRewardForCreateUpdateFragment,
+    isEdit: boolean,
+  ) => {
     if (!project) {
       return
     }
 
-    const findReward = project.rewards?.find(
-      (reward) => reward?.id === reward.id,
-    )
-
-    if (findReward) {
-      const newRewards = project.rewards?.map((reward) => {
-        if (reward?.id === reward.id) {
+    if (isEdit) {
+      const newRewards = project.rewards?.map((pr) => {
+        if (pr.id === reward.id) {
           return reward
         }
 
-        return reward
+        return pr
       })
+
       updateProject({ rewards: newRewards })
+
+      return
     }
 
     const newRewards = project.rewards || []
