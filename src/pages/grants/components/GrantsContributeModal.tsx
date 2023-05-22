@@ -259,9 +259,10 @@ export const GrantsContributeModal = ({
             placeholder="12,120"
             type={'number'}
             _focus={{
-              borderColor: 'primary.400',
+              borderColor: 'primary.500',
             }}
-            border="2px solid #20ECC7"
+            border="2px solid"
+            borderColor="primary.400"
             value={state.amount}
             name="amount"
             variant={'outline'}
@@ -413,9 +414,8 @@ export const AmountButtonComponent = ({
       cursor="pointer"
       px="15px"
       py="6px"
-      border={
-        stateAmount === amount ? '2px solid #20ECC7' : '2px solid #E9ECEF'
-      }
+      border="2px solid"
+      borderColor={stateAmount === amount ? 'primary.400' : 'neutral.200'}
       rounded="md"
       fontWeight={'bold'}
       onClick={() => setValue('amount', amount)}

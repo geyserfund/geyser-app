@@ -160,7 +160,7 @@ export const RecipientButton = ({
                       ref={initialRef}
                       name="name"
                       placeholder="Bitcoin for Fairness"
-                      focusBorderColor="#20ECC7"
+                      focusBorderColor="primary.400"
                       onChange={(event) => setGrantee(event.target.value)}
                       value={grantee}
                       isRequired={true}
@@ -171,7 +171,7 @@ export const RecipientButton = ({
                     <Textarea
                       name="description"
                       placeholder="Teaching young Africans the basics about Bitcoin."
-                      focusBorderColor="#20ECC7"
+                      focusBorderColor="primary.400"
                       onChange={(event) => setDescription(event.target.value)}
                       value={description}
                       isRequired={true}
@@ -184,7 +184,7 @@ export const RecipientButton = ({
                     <Input
                       name="link"
                       placeholder="https://geyser.fund/project/bitcoin-for-fairness"
-                      focusBorderColor="#20ECC7"
+                      focusBorderColor="primary.400"
                       onChange={(event) => setUrl(event.target.value)}
                       value={url}
                       isRequired={true}
@@ -195,7 +195,7 @@ export const RecipientButton = ({
                     <Input
                       name="stage"
                       placeholder="Implementation stage"
-                      focusBorderColor="#20ECC7"
+                      focusBorderColor="primary.400"
                       onChange={(event) => setStage(event.target.value)}
                       value={stage}
                       isRequired={true}
@@ -206,7 +206,7 @@ export const RecipientButton = ({
                     <Select
                       name="region"
                       placeholder="Select option"
-                      focusBorderColor="#20ECC7"
+                      focusBorderColor="primary.400"
                       onChange={(event) => setRegion(event.target.value)}
                       isRequired={true}
                     >
@@ -224,7 +224,7 @@ export const RecipientButton = ({
                     <Input
                       name="contact"
                       placeholder="anita@geyser.fund"
-                      focusBorderColor="#20ECC7"
+                      focusBorderColor="primary.400"
                       onChange={(event) => setContact(event.target.value)}
                       value={contact}
                       isRequired={true}

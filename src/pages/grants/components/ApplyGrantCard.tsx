@@ -79,7 +79,7 @@ export const ApplyGrantCard = ({
                     {contributed}
                   </Text>
                 </HStack>
-                <Text fontSize="xs" color="#5B5B5B" fontWeight="bold">
+                <Text fontSize="xs" color="neutral600" fontWeight="bold">
                   CONTRIBUTED
                 </Text>
               </Box>
@@ -91,7 +91,7 @@ export const ApplyGrantCard = ({
                     {distributed}
                   </Text>
                 </HStack>
-                <Text fontSize="xs" color="#5B5B5B" fontWeight="bold">
+                <Text fontSize="xs" color="neutral600" fontWeight="bold">
                   DISTRIBUTED
                 </Text>
               </Box>

@@ -457,7 +457,8 @@ export const ApplyGrantModal = ({
           size="sm"
           w="full"
           onClick={onOpen}
-          style={{ border: 'solid 2px #20ECC7' }}
+          border="solid 2px"
+          borderColor="primary.400"
         >
           Closed
         </Button>

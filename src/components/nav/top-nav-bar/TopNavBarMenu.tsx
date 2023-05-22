@@ -1,7 +1,6 @@
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
 import { Avatar, HStack, MenuDivider, Stack } from '@chakra-ui/react'
-import { useColorModeValue } from '@chakra-ui/system'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -33,8 +32,6 @@ export const TopNavBarMenu = ({
   onMyProjectsSelected,
   onSignOutSelected,
 }: Props) => {
-  const textColor = useColorModeValue('neutral.1000', 'neutral.0')
-
   const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext)
 
   const toDisplayProject =
@@ -52,18 +49,15 @@ export const TopNavBarMenu = ({
         transition="all 0.2s"
         maxHeight="32px"
         borderRadius="md"
-        color={textColor}
+        color="neutral.1000"
         backgroundColor="neutral.0"
         _hover={{ backgroundColor: 'neutral.100' }}
         border={'1px'}
         borderColor="neutral.200"
         sx={buttonCommon}
       >
-        <HStack
-          color={useColorModeValue('neutral.700', 'neutral.200')}
-          spacing="4px"
-        >
-          <HamburgerIcon color={'#ADB5BD'} fontSize="22px" />
+        <HStack color="neutral.700" spacing="4px">
+          <HamburgerIcon color="neutral.500" fontSize="22px" />
 
           {isLoggedIn ? (
             <Avatar height="22px" width="22px" src={user.imageUrl || ''} />

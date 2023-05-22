@@ -47,7 +47,7 @@ const BoardMember = ({ image, name, link, handle }: BoardMemberProps) => (
           _hover={{ textDecoration: 'none' }}
           isExternal
           href={link}
-          color="#4C9AF4"
+          color="social.twitter"
         >
           @{handle}
         </Link>

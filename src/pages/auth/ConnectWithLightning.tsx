@@ -27,6 +27,7 @@ import { defaultUser } from '../../defaults'
 import { User } from '../../types'
 import {
   copyTextToClipboard,
+  useCustomTheme,
   useMobileMode,
   useNotification,
 } from '../../utils'
@@ -70,6 +71,8 @@ export const ConnectWithLightningModal = ({
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
+
+  const theme = useCustomTheme()
 
   const handleCopy = () => {
     copyTextToClipboard(qrContent)
@@ -178,7 +181,11 @@ export const ConnectWithLightningModal = ({
               Check if your wallet supports LNURL-auth here.
             </Link>
             <VStack marginTop={3} marginBottom={3}>
-              <Box border="4px solid #20ECC7" borderRadius={4}>
+              <Box
+                border="4px solid"
+                borderColor="primary.400"
+                borderRadius={4}
+              >
                 <Link href={`lightning:${qrContent}`}>
                   <QRCode
                     qrStyle="dots"
@@ -187,8 +194,8 @@ export const ConnectWithLightningModal = ({
                     logoWidth={30}
                     eyeRadius={2}
                     removeQrCodeBehindLogo={true}
-                    bgColor="#fff"
-                    fgColor="#004236"
+                    bgColor={theme.neutral[0]}
+                    fgColor={theme.primary[900]}
                     size={186}
                     value={qrContent}
                     id="lnurl-auth-qr-code"
@@ -209,7 +216,8 @@ export const ConnectWithLightningModal = ({
               display="flex"
               justifyContent="between"
               alignItems="center"
-              border="1px solid lightgrey"
+              border="1px solid"
+              borderColor="neutral.200"
               borderRadius={4}
               p={2}
             >

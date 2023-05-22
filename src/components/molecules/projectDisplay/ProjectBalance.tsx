@@ -1,7 +1,9 @@
 import { Box, Text } from '@chakra-ui/layout'
 import { useState } from 'react'
 import { BsCurrencyBitcoin } from 'react-icons/bs'
+import { useTheme } from 'react-jss'
 
+import { ReactJSSTheme } from '../../../context'
 import { commaFormatted } from '../../../utils/formatData/helperFunctions'
 import { SatoshiIconTilted } from '../../icons'
 
@@ -24,7 +26,7 @@ const USDBalance = ({ balance }: { balance: number }) => (
 const BTCBalance = ({ balance }: { balance: number }) => {
   // Let bitcoins = 0;
   const displaySatoshis = balance < 1000000
-
+  const theme = useTheme<ReactJSSTheme>()
   return displaySatoshis ? (
     <>
       <SatoshiIconTilted scale={1.5} color="primary.400" />
@@ -34,7 +36,7 @@ const BTCBalance = ({ balance }: { balance: number }) => {
     </>
   ) : (
     <>
-      <BsCurrencyBitcoin fontSize="40px" color="#20ECC7" />
+      <BsCurrencyBitcoin fontSize="40px" color={theme.primary[400]} />
       <Text color="primary.400" fontWeight="bold" fontSize="5xl">
         {parseFloat((balance / 100000000).toFixed(4))}
       </Text>

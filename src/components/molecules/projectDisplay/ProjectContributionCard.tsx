@@ -135,7 +135,7 @@ const RenderBadges = ({
         <WrapItem key={badge.badge}>
           <Tooltip label={badge.description}>
             <Box
-              backgroundColor="#C9FFF5"
+              backgroundColor="neutral.300"
               padding="2px 10px"
               borderRadius="7px"
             >

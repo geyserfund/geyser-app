@@ -259,7 +259,7 @@ export const GrantsRoundOne = ({
               applications.
             </Text>
           </Box>
-          <Box minWidth={'100%'} p="2" bg="white">
+          <Box minWidth={'100%'} p="2" bg="neutral.200">
             <Board />
           </Box>
           <Box my={8}>
@@ -276,7 +276,8 @@ export const GrantsRoundOne = ({
             </Text>
           </Box>
           <Box
-            border={'2px solid #E9ECEF'}
+            border={'2px solid'}
+            borderColor="neutral.200"
             borderRadius="12px"
             pb={4}
             pt={6}

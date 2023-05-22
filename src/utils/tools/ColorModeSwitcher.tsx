@@ -6,6 +6,9 @@ import {
 } from '@chakra-ui/react'
 import * as React from 'react'
 import { FaMoon, FaSun } from 'react-icons/fa'
+import { useTheme } from 'react-jss'
+
+import { ReactJSSTheme } from '../../context'
 
 type ColorModeSwitcherProps = Omit<IconButtonProps, 'aria-label'>
 
@@ -28,3 +31,5 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
     />
   )
 }
+
+export const useCustomTheme = () => useTheme<ReactJSSTheme>()

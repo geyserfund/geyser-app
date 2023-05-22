@@ -81,7 +81,7 @@ export const GrantCard = ({
                       M
                     </Text>
                   </HStack>
-                  <Text fontSize="md" color="#5B5B5B" fontWeight="bold">
+                  <Text fontSize="md" color="neutral.600" fontWeight="bold">
                     CONTRIBUTED
                   </Text>
                 </Box>
@@ -93,7 +93,7 @@ export const GrantCard = ({
                       {distributed} M
                     </Text>
                   </HStack>
-                  <Text fontSize="md" color="#5B5B5B" fontWeight="bold">
+                  <Text fontSize="md" color="neutral.600" fontWeight="bold">
                     DISTRIBUTED
                   </Text>
                 </Box>
@@ -103,7 +103,8 @@ export const GrantCard = ({
                 <Text
                   width="100%"
                   p={1}
-                  border="2px solid #20ECC7"
+                  border="2px solid"
+                  borderColor="primary.400"
                   rounded="md"
                   textAlign="center"
                   fontWeight="bold"

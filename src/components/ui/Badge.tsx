@@ -7,7 +7,7 @@ export const Badge = ({ badge }: { badge: string }) => {
     <Box
       position="relative"
       as="span"
-      backgroundColor="#C9FFF5"
+      backgroundColor="neutral.300"
       padding="0px 8px"
       borderRadius="20px"
       onMouseEnter={() => {
@@ -30,34 +30,34 @@ export const Badge = ({ badge }: { badge: string }) => {
             left="-93px"
             p={2}
             zIndex={2}
-            bg="#5B5B5B"
+            bg="neutral.500"
             rounded="lg"
           >
-            <Text color="white" fontWeight="bold" fontSize="10px">
+            <Text color="neutral.0" fontWeight="bold" fontSize="10px">
               Emoji badges
             </Text>
             <HStack mt={1}>
               <VStack spacing={0} rounded="lg" bg="rgba(0, 0, 0, 0.11)" px={3}>
                 <Box>🏅</Box>
-                <Text color="white" fontSize="9px" fontWeight="medium">
+                <Text color="neutral.0" fontSize="9px" fontWeight="medium">
                   $10
                 </Text>
               </VStack>
               <VStack spacing={0} rounded="lg" bg="rgba(0, 0, 0, 0.11)" px={3}>
                 <Box>🏆</Box>
-                <Text color="white" fontSize="9px" fontWeight="medium">
+                <Text color="neutral.0" fontSize="9px" fontWeight="medium">
                   $100
                 </Text>
               </VStack>
               <VStack spacing={0} rounded="lg" bg="rgba(0, 0, 0, 0.11)" px={3}>
                 <Box>👑</Box>
-                <Text color="white" fontSize="9px" fontWeight="medium">
+                <Text color="neutral.0" fontSize="9px" fontWeight="medium">
                   $300
                 </Text>
               </VStack>
               <VStack spacing={0} rounded="lg" bg="rgba(0, 0, 0, 0.11)" px={3}>
                 <Box>⭐</Box>
-                <Text color="white" fontSize="9px" fontWeight="medium">
+                <Text color="neutral.0" fontSize="9px" fontWeight="medium">
                   $500
                 </Text>
               </VStack>
@@ -70,7 +70,8 @@ export const Badge = ({ badge }: { badge: string }) => {
             zIndex={1}
             borderLeft="20px solid transparent"
             borderRight="20px solid transparent"
-            borderBottom="20px solid #5B5B5B"
+            borderBottom="20px solid"
+            borderBottomColor="neutral.500"
           />
         </>
       )}
