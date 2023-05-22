@@ -64,7 +64,6 @@ export const useNostrExtensonLogin = () => {
         throwErrorToast(errorResponse?.reason)
       }
     } catch (e) {
-      console.log('WTF', e)
       setError(e)
       throwErrorToast()
     }
