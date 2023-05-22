@@ -4226,6 +4226,34 @@ export type ProjectFragment = {
   }>
 }
 
+export type UserMeFragment = {
+  __typename?: 'User'
+  id: any
+  username: string
+  imageUrl?: string | null
+  email?: string | null
+  externalAccounts: Array<{
+    __typename?: 'ExternalAccount'
+    id: any
+    accountType: string
+    externalUsername: string
+    externalId: string
+    public: boolean
+  }>
+  ownerOf: Array<{
+    __typename?: 'OwnerOf'
+    project?: {
+      __typename?: 'Project'
+      id: any
+      name: any
+      image?: string | null
+      thumbnailImage?: string | null
+      title: any
+      status?: ProjectStatus | null
+    } | null
+  }>
+}
+
 export type UserForAvatarFragment = {
   __typename?: 'User'
   id: any
@@ -5266,33 +5294,7 @@ export type MeQueryVariables = Exact<{ [key: string]: never }>
 
 export type MeQuery = {
   __typename?: 'Query'
-  me?: {
-    __typename?: 'User'
-    id: any
-    username: string
-    imageUrl?: string | null
-    email?: string | null
-    externalAccounts: Array<{
-      __typename?: 'ExternalAccount'
-      id: any
-      accountType: string
-      externalUsername: string
-      externalId: string
-      public: boolean
-    }>
-    ownerOf: Array<{
-      __typename?: 'OwnerOf'
-      project?: {
-        __typename?: 'Project'
-        id: any
-        name: any
-        image?: string | null
-        thumbnailImage?: string | null
-        title: any
-        status?: ProjectStatus | null
-      } | null
-    }>
-  } | null
+  me?: ({ __typename?: 'User' } & UserMeFragment) | null
 }
 
 export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never }>
@@ -5645,6 +5647,31 @@ export const ProjectFragmentDoc = gql`
   }
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${EntryForProjectFragmentDoc}
+`
+export const UserMeFragmentDoc = gql`
+  fragment UserMe on User {
+    id
+    username
+    imageUrl
+    email
+    externalAccounts {
+      id
+      accountType
+      externalUsername
+      externalId
+      public
+    }
+    ownerOf {
+      project {
+        id
+        name
+        image
+        thumbnailImage
+        title
+        status
+      }
+    }
+  }
 `
 export const EntryForLandingPageFragmentDoc = gql`
   fragment EntryForLandingPage on Entry {
@@ -9185,29 +9212,10 @@ export type ProjectRegionsGetQueryResult = Apollo.QueryResult<
 export const MeDocument = gql`
   query Me {
     me {
-      id
-      username
-      imageUrl
-      email
-      externalAccounts {
-        id
-        accountType
-        externalUsername
-        externalId
-        public
-      }
-      ownerOf {
-        project {
-          id
-          name
-          image
-          thumbnailImage
-          title
-          status
-        }
-      }
+      ...UserMe
     }
   }
+  ${UserMeFragmentDoc}
 `
 
 /**

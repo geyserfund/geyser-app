@@ -1,7 +1,7 @@
 import { ExternalAccountType } from '../../pages/auth'
-import { User } from '../../types/generated/graphql'
+import { UserMeFragment } from '../../types/generated/graphql'
 
-export const hasNostrAccount = (user: User) => {
+export const hasNostrAccount = (user: UserMeFragment) => {
   if (!user || !user.id) {
     return false
   }
@@ -11,7 +11,7 @@ export const hasNostrAccount = (user: User) => {
   })
 }
 
-export const hasTwitterAccount = (user: User) => {
+export const hasTwitterAccount = (user: UserMeFragment) => {
   if (!user || !user.id) {
     return false
   }
@@ -21,7 +21,7 @@ export const hasTwitterAccount = (user: User) => {
   })
 }
 
-export const hasLightningAccount = (user: User) => {
+export const hasLightningAccount = (user: UserMeFragment) => {
   if (!user || !user.id) {
     return false
   }

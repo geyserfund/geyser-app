@@ -30,6 +30,7 @@ import {
   useMobileMode,
   useNotification,
 } from '../../../../utils'
+import { useDebugPropChanges } from '../../../../utils/debug/useDebugPropChanges'
 import { ProjectContributionList } from '../components/ProjectContributionList'
 import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
 
@@ -45,6 +46,8 @@ export const ProjectFundingInitialInfoScreen = ({
   project,
   fundingTx,
 }: Props) => {
+  useDebugPropChanges({ project, fundingTx })
+
   const isMobile = useMobileMode()
   const { toast } = useNotification()
 
