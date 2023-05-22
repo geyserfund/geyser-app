@@ -3,7 +3,16 @@ import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../constants'
 import { useProjectState } from '../hooks/graphqlState'
-import { ProjectFragment } from '../types'
+import { useModal } from '../hooks/useModal'
+import {
+  MilestoneAdditionModal,
+  RewardAdditionModal,
+} from '../pages/projectView/projectMainBody/components'
+import {
+  ProjectFragment,
+  ProjectMilestone,
+  ProjectRewardForCreateUpdateFragment,
+} from '../types'
 import { useAuthContext } from './auth'
 import { useNavContext } from './nav'
 
@@ -29,24 +38,22 @@ type ProjectContextProps = {
   saving?: boolean
   isDirty?: boolean
   error: any
+  onRewardsModalOpen(props?: {
+    reward?: ProjectRewardForCreateUpdateFragment
+  }): void
+  onMilestonesModalOpen(): void
 }
 
-const defaultProjectContext = {
-  mobileView: MobileViews.description,
-  setMobileView(_view: MobileViews) {},
-  project: null,
-  updateProject() {},
-  async saveProject() {},
-  isProjectOwner: false,
-  loading: false,
-  error: null,
+export const ProjectContext = createContext<ProjectContextProps | null>(null)
+
+export const useProjectContext = () => {
+  const context = useContext(ProjectContext)
+  if (!context) {
+    throw new Error('useProjectContext must be usd inside ProjectProvider')
+  }
+
+  return context
 }
-
-export const ProjectContext = createContext<ProjectContextProps>(
-  defaultProjectContext,
-)
-
-export const useProjectContext = () => useContext(ProjectContext)
 
 export const ProjectProvider = ({
   projectId,
@@ -59,6 +66,11 @@ export const ProjectProvider = ({
   )
   const [isProjectOwner, setIsProjectOwner] = useState(false)
   const { user } = useAuthContext()
+
+  const milestonesModal = useModal()
+  const rewardsModal = useModal<{
+    reward?: ProjectRewardForCreateUpdateFragment
+  }>()
 
   const {
     error,
@@ -105,6 +117,36 @@ export const ProjectProvider = ({
     }
   }, [project, user])
 
+  const onRewardSubmit = (reward: ProjectRewardForCreateUpdateFragment) => {
+    if (!project) {
+      return
+    }
+
+    const findReward = project.rewards?.find(
+      (reward) => reward?.id === reward.id,
+    )
+
+    if (findReward) {
+      const newRewards = project.rewards?.map((reward) => {
+        if (reward?.id === reward.id) {
+          return reward
+        }
+
+        return reward
+      })
+      updateProject({ rewards: newRewards })
+    }
+
+    const newRewards = project.rewards || []
+
+    updateProject({ rewards: [...newRewards, reward] })
+  }
+
+  const onMilestonesSubmit = (newMilestones: ProjectMilestone[]) => {
+    updateProject({ milestones: newMilestones })
+    milestonesModal.onClose()
+  }
+
   return (
     <ProjectContext.Provider
       value={{
@@ -118,9 +160,26 @@ export const ProjectProvider = ({
         saving,
         error,
         loading,
+        onRewardsModalOpen: rewardsModal.onOpen,
+        onMilestonesModalOpen: milestonesModal.onOpen,
       }}
     >
       {children}
+      {project && isProjectOwner && (
+        <>
+          <MilestoneAdditionModal
+            {...milestonesModal}
+            onSubmit={onMilestonesSubmit}
+            project={project}
+          />
+          <RewardAdditionModal
+            {...rewardsModal}
+            isSatoshi={false}
+            onSubmit={onRewardSubmit}
+            project={project}
+          />
+        </>
+      )}
     </ProjectContext.Provider>
   )
 }
