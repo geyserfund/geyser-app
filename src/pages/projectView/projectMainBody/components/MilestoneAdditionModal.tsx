@@ -121,15 +121,16 @@ export const MilestoneAdditionModal = ({
 
   const handleTextChange = (event: any, itemIndex: number) => {
     if (event) {
-      const newMilestones = milestones.map((milestone, index) => {
-        if (index === itemIndex) {
-          return { ...milestone, name: event.target.value }
-        }
-
-        return milestone
-      })
       setFormError([])
-      setMilestones(newMilestones)
+      setMilestones((current) =>
+        current.map((milestone, index) => {
+          if (index === itemIndex) {
+            return { ...milestone, name: event.target.value }
+          }
+
+          return milestone
+        }),
+      )
     }
   }
 
@@ -222,8 +223,6 @@ export const MilestoneAdditionModal = ({
           status: 'error',
         })
       }
-    } else {
-      setMilestones(newMilestones)
     }
   }
 
