@@ -68,13 +68,12 @@ export const ProjectProvider = ({
     saveProject,
     isDirty,
     saving,
-  } = useProjectState(projectId || '', {
-    skip: !projectId,
-
+  } = useProjectState(projectId, {
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
     onError() {
       navigate(getPath('notFound'))
     },
-
     onCompleted(data) {
       if (!data?.project) {
         navigate(getPath('notFound'))
