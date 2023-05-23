@@ -151,7 +151,12 @@ export const MarkdownField = ({
 
   return (
     <RemirrorStyleProvider>
-      <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
+      <Remirror
+        attributes={{}}
+        autoFocus
+        manager={manager}
+        initialContent={initialContent?.()}
+      >
         <WysiwygToolbar />
         <EditorComponent />
         <SaveModule name={name} />

@@ -14,9 +14,12 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
   const formError = form.formState.errors.description?.message
   return (
     <FormProvider {...form}>
-      <form>
+      <form style={{ width: '100%' }}>
         <VStack width="100%" alignItems="flex-start" spacing={6}>
-          <FormInputContainer subtitle="Write a more in-depth description of the project. You can also add images and videos.">
+          <FormInputContainer
+            width="100%"
+            subtitle="Write a more in-depth description of the project. You can also add images and videos."
+          >
             <Box width="100%" pt={3}>
               <MarkdownField
                 initialContentReady={!isLoading}
