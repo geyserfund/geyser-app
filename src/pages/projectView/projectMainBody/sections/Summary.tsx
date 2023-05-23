@@ -23,8 +23,9 @@ import { Body2, H3 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
+import { MarkdownField } from '../../../../forms/components/MarkdownField'
 import { colors } from '../../../../styles'
-import { MarkDown, toInt, useMobileMode } from '../../../../utils'
+import { copyTextToClipboard, toInt, useMobileMode } from '../../../../utils'
 import { getPossibleWalletPubkey } from '../../../../utils/validations/wallet'
 import {
   AvatarElement,
@@ -54,7 +55,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
   const handleShareButtonTapped = () => {
     const relativePath = getPath('project', project.name)
 
-    navigator.clipboard.writeText(`${HomeUrl}${relativePath}`)
+    copyTextToClipboard(`${HomeUrl}${relativePath}`)
     setHasCopiedSharingLink(true)
   }
 
@@ -183,7 +184,6 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
         >
           <AvatarElement borderRadius="50%" user={owner?.user} />
         </SummaryInfoLine>
-
         <ProjectLinks links={project.links as string[]} />
         <Wrap spacing="18px">
           {project.tags?.length > 0 && (
@@ -269,9 +269,8 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
             ).toFormat('dd LLL yyyy')}`}</Body2>
           </SummaryInfoLine>
         </Wrap>
-
         <VStack alignItems="flex-start">
-          <MarkDown color='"brand.neutral800"'>{project.description}</MarkDown>
+          <MarkdownField preview content={project.description} />
         </VStack>
         <ProjectFundingSummary project={project} />
       </VStack>

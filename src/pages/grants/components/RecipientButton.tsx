@@ -296,7 +296,7 @@ export const RecipientButton = ({
             justifyContent="center"
           >
             <Box
-              bg="brand.primary"
+              bg="primary.400"
               borderRadius="full"
               width="100px"
               height="100px"

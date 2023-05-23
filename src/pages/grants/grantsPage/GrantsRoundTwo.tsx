@@ -10,12 +10,14 @@ import {
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
-import { AlbyPNG, SatSymbol, SatWalletImg } from '../../../assets'
+import { SatSymbol } from '../../../assets'
 import { AppFooter } from '../../../components/molecules'
 import {
+  AlbyUrl,
   Grant2AnnouncementImageUrl,
   Grant2AnnouncementTwitterUrl,
   GrantsRound2Url,
+  WalletOfSatoshiUrl,
 } from '../../../constants'
 import { fonts } from '../../../styles'
 import { GrantApplicant } from '../../../types'
@@ -228,10 +230,10 @@ export const GrantsRoundTwo = ({
             <Box width="100%" display="flex" alignItems={'center'} my={4}>
               <Wrap width="100%" justify="center" spacing="25px">
                 <WrapItem>
-                  <Image height="70px" src={SatWalletImg} />
+                  <Image height="70px" src={WalletOfSatoshiUrl} />
                 </WrapItem>
                 <WrapItem>
-                  <Image height="70px" src={AlbyPNG} />
+                  <Image height="70px" src={AlbyUrl} />
                 </WrapItem>
               </Wrap>
             </Box>

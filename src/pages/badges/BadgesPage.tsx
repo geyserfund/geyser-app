@@ -100,3 +100,5 @@ export const BadgesPage = () => {
     </Container>
   )
 }
+
+export default BadgesPage

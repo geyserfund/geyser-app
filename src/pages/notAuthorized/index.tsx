@@ -1,6 +1,8 @@
 import { Link, Text, VStack } from '@chakra-ui/react'
 import { BiErrorAlt } from 'react-icons/bi'
 
+import { GeyserFeedbackFromUrl } from '../../constants'
+
 export const NotAuthorized = () => (
   <VStack
     width="100%"
@@ -20,7 +22,12 @@ export const NotAuthorized = () => (
       <Link href="https://t.me/+EZ5otIPhVcxhMmFk" target="_blank">
         telegram
       </Link>{' '}
-      or this <Link>feedback form.</Link>
+      or this{' '}
+      <Link href={GeyserFeedbackFromUrl} isExternal>
+        feedback form.
+      </Link>
     </Text>
   </VStack>
 )
+
+export default NotAuthorized

@@ -346,3 +346,111 @@ export const SatSvgIcon = ({
     </Icon>
   )
 }
+
+export const QrIcon = ({
+  tilted = true,
+  ...props
+}: IconProps & { tilted?: boolean }) => {
+  return (
+    <Icon
+      width="20px"
+      height="20px"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <rect
+        x="2"
+        y="2"
+        width="4"
+        height="4"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <rect
+        x="14"
+        y="2"
+        width="4"
+        height="4"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <rect
+        x="2"
+        y="14"
+        width="4"
+        height="4"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <rect x="1.5" y="9.5" width="1" height="1" stroke="currentColor" />
+      <rect x="5.5" y="9.5" width="1" height="1" stroke="currentColor" />
+      <rect x="9.5" y="9.5" width="1" height="1" stroke="currentColor" />
+      <rect x="9.5" y="13.5" width="1" height="1" stroke="currentColor" />
+      <rect x="9.5" y="17.5" width="1" height="1" stroke="currentColor" />
+      <rect x="9.5" y="5.5" width="1" height="1" stroke="currentColor" />
+      <rect x="9.5" y="1.5" width="1" height="1" stroke="currentColor" />
+      <rect x="13.5" y="9.5" width="1" height="1" stroke="currentColor" />
+      <rect x="17.5" y="9.5" width="1" height="1" stroke="currentColor" />
+      <rect x="13.5" y="13.5" width="1" height="1" stroke="currentColor" />
+      <rect x="17.5" y="13.5" width="1" height="1" stroke="currentColor" />
+      <rect x="13.5" y="17.5" width="1" height="1" stroke="currentColor" />
+      <rect x="17.5" y="17.5" width="1" height="1" stroke="currentColor" />
+    </Icon>
+  )
+}
+
+export const GifIcon = ({
+  tilted = true,
+  ...props
+}: IconProps & { tilted?: boolean }) => {
+  return (
+    <Icon
+      width="17"
+      height="15"
+      viewBox="0 0 17 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <rect
+        x="0.7"
+        y="0.7"
+        width="15.6"
+        height="12.6435"
+        rx="2.3"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <path
+        d="M8.83936 3.69922V10.0346"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.0433 3.69922H11.3281V10.0346"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M13.3645 6.86719H11.3281"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.21919 6.86658H6.57678V8.22417C6.57678 8.70424 6.38607 9.16465 6.04661 9.50411C5.70714 9.84358 5.24673 10.0343 4.76666 10.0343C4.28659 10.0343 3.82618 9.84358 3.48672 9.50411C3.14725 9.16465 2.95655 8.70424 2.95655 8.22417V5.509C2.95568 5.0678 3.11597 4.64148 3.40731 4.31016C3.69864 3.97883 4.10095 3.76532 4.53863 3.70974C4.97631 3.65416 5.41922 3.76034 5.78412 4.00834C6.14902 4.25633 6.41078 4.62906 6.52021 5.05647"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  )
+}

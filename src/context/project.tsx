@@ -26,6 +26,8 @@ type ProjectContextProps = {
   setMobileView: (view: MobileViews) => void
   isProjectOwner: boolean
   loading?: boolean
+  saving?: boolean
+  isDirty?: boolean
   error: any
 }
 
@@ -58,33 +60,38 @@ export const ProjectProvider = ({
   const [isProjectOwner, setIsProjectOwner] = useState(false)
   const { user } = useAuthContext()
 
-  const { error, loading, project, updateProject, saveProject } =
-    useProjectState(projectId || '', {
-      skip: !projectId,
-
-      onError() {
+  const {
+    error,
+    loading,
+    project,
+    updateProject,
+    saveProject,
+    isDirty,
+    saving,
+  } = useProjectState(projectId, {
+    fetchPolicy: 'network-only',
+    onError() {
+      navigate(getPath('notFound'))
+    },
+    onCompleted(data) {
+      if (!data?.project) {
         navigate(getPath('notFound'))
-      },
+        return
+      }
 
-      onCompleted(data) {
-        if (!data?.project) {
-          navigate(getPath('notFound'))
-          return
-        }
+      const { project } = data
 
-        const { project } = data
-
-        setNavData({
-          projectName: project.name,
-          projectTitle: project.title,
-          projectPath: getPath('project', project.name),
-          projectOwnerIDs:
-            project.owners.map((ownerInfo) => {
-              return Number(ownerInfo.user.id || -1)
-            }) || [],
-        })
-      },
-    })
+      setNavData({
+        projectName: project.name,
+        projectTitle: project.title,
+        projectPath: getPath('project', project.name),
+        projectOwnerIDs:
+          project.owners.map((ownerInfo) => {
+            return Number(ownerInfo.user.id || -1)
+          }) || [],
+      })
+    },
+  })
 
   useEffect(() => {
     if (!project) {
@@ -107,6 +114,8 @@ export const ProjectProvider = ({
         isProjectOwner,
         updateProject,
         saveProject,
+        isDirty,
+        saving,
         error,
         loading,
       }}

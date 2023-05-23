@@ -1,13 +1,10 @@
-import { useLazyQuery } from '@apollo/client'
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsTwitter } from 'react-icons/bs'
 
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
-import { defaultUser } from '../../defaults'
-import { QUERY_ME } from '../../graphql'
-import { User } from '../../types/generated/graphql'
+import { useMeLazyQuery } from '../../types/generated/graphql'
 import { hasTwitterAccount, useNotification } from '../../utils'
 
 interface ConnectWithTwitterProps extends ButtonProps {
@@ -18,11 +15,11 @@ export const ConnectWithTwitter = ({
   onClose,
   ...rest
 }: ConnectWithTwitterProps) => {
-  const { setUser, setIsLoggedIn } = useAuthContext()
+  const { login } = useAuthContext()
   const { toast } = useNotification()
 
-  const [queryCurrentUser, { stopPolling }] = useLazyQuery(QUERY_ME, {
-    onCompleted(data: { me: User }) {
+  const [queryCurrentUser, { stopPolling }] = useMeLazyQuery({
+    onCompleted(data) {
       if (data && data.me) {
         const hasTwitter = hasTwitterAccount(data.me)
 
@@ -32,8 +29,7 @@ export const ConnectWithTwitter = ({
           }
 
           stopPolling()
-          setUser({ ...defaultUser, ...data.me })
-          setIsLoggedIn(true)
+          login(data.me)
         }
       }
     },

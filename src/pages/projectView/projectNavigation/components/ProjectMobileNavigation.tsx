@@ -25,7 +25,7 @@ export const ProjectMobileNavigation = () => {
       <Button
         size="sm"
         flexGrow={1}
-        variant="contained"
+        variant="primary"
         isDisabled={isFundingDisabled}
         leftIcon={<BsLightningChargeFill />}
         onClick={() => setMobileView(MobileViews.funding)}

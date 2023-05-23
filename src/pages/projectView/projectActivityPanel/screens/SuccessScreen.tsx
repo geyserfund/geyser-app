@@ -17,6 +17,7 @@ import {
   ProjectFragment,
   UserBadge,
 } from '../../../../types/generated/graphql'
+import { copyTextToClipboard } from '../../../../utils'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
@@ -41,7 +42,7 @@ export const SuccessScreen = ({
   const { getTotalAmount } = useFundCalc(fundingState)
 
   const shareProjectWithFriends = () => {
-    navigator.clipboard.writeText(window.location.href)
+    copyTextToClipboard(window.location.href)
     setCopy(true)
   }
 
@@ -64,15 +65,15 @@ export const SuccessScreen = ({
     <VStack
       paddingX={{
         base: '10px',
-        md: '20px',
+        lg: '20px',
       }}
       paddingY={{
         base: '10px',
-        md: '25px',
+        lg: '25px',
       }}
       spacing={4}
       width="100%"
-      height={{ base: 'calc(100vh - 115px)', md: '100%' }}
+      height={{ base: 'calc(100vh - 115px)', lg: '100%' }}
       overflow="hidden"
       position="relative"
       backgroundColor="primary.400"
@@ -97,7 +98,7 @@ export const SuccessScreen = ({
         <VStack w="full" spacing="10px">
           {fundingTx.funder.user?.id && currentBadge && (
             <Button
-              variant="containedClear"
+              variant="secondary"
               as={Link}
               size="sm"
               to={getPath('userProfile', fundingTx.funder.user?.id)}
@@ -107,7 +108,7 @@ export const SuccessScreen = ({
             </Button>
           )}
           <Button
-            variant="containedClear"
+            variant="secondary"
             isActive={hasCopiedProjectLink}
             size="sm"
             leftIcon={

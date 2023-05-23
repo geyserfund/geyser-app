@@ -18,8 +18,8 @@ import {
   toInt,
   useNotification,
 } from '../../utils'
-import { useBeforeClose } from '../useBeforeClose'
 import { useListenerState } from '../useListenerState'
+import { useUnsavedAlert } from '../useUnsavedAlert'
 
 type TEntryVariables = {
   id?: Number
@@ -59,7 +59,6 @@ export const useEntryState = (
   options?: QueryHookOptions<TEntryData, TEntryVariables>,
 ) => {
   const { toast } = useNotification()
-  const { setIsFormDirty } = useBeforeClose()
 
   const [entry, setEntry] = useState<Entry>({} as Entry)
   const [baseEntry, setBaseEntry] = useState<Entry>({} as Entry)
@@ -67,6 +66,8 @@ export const useEntryState = (
   const [hasDiff, setHasDiff] = useState(false)
 
   const [saving, setSaving] = useListenerState(false)
+
+  useUnsavedAlert(hasDiff)
 
   const [createEntryMutation] = useMutation<
     TEntryCreateData,
@@ -136,7 +137,6 @@ export const useEntryState = (
   useEffect(() => {
     const isDiff = checkDiff(entry, baseEntry, entryEditKeyList)
     setHasDiff(isDiff)
-    setIsFormDirty(isDiff)
   }, [entry, baseEntry])
 
   const sync = (value: Entry) => {

@@ -1,44 +1,97 @@
+import loadable from '@loadable/component'
 import { withSentryReactRouterV6Routing } from '@sentry/react'
+import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { __production__, getPath, PathName } from '../constants'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
-import { BadgesPage } from '../pages/badges/BadgesPage'
-import { EntryCreateEdit } from '../pages/creation/entry/editor/EntryCreateEdit'
-import { EntryPreview } from '../pages/creation/entry/EntryPreview'
-import {
-  ProjectAdditionalDetails,
-  ProjectCreate,
-  ProjectCreationWalletConnectionPage,
-} from '../pages/creation/projectCreate'
-import { EntryPage } from '../pages/entry/EntryPage'
-import {
-  GrantPage,
-  GrantsLandingPage,
-  GrantsRoundOne,
-  GrantsRoundTwo,
-} from '../pages/grants'
-import {
-  LandingFeed,
-  LandingPage,
-  LandingPageProjects,
-  MobileLeaderboard,
-} from '../pages/landing'
-import { NotAuthorized } from '../pages/notAuthorized'
-import { NotFoundPage } from '../pages/notFound'
-import { Profile } from '../pages/profile'
-import {
-  ProjectContributors,
-  ProjectDashboardPage,
-  ProjectDescription,
-  ProjectDetails,
-  ProjectFundingSettings,
-  ProjectSettings,
-  ProjectStats,
-} from '../pages/projectDashboard'
-import { ProjectView } from '../pages/projectView'
-import { PublicProjectLaunchPage } from '../pages/publicProjectLaunch'
+import BadgesPage from '../pages/badges/BadgesPage'
+import NotAuthorized from '../pages/notAuthorized'
+import NotFoundPage from '../pages/notFound'
 import { PrivateRoute } from './PrivateRoute'
+
+// GRANTS
+
+const Grants = import('../pages/grants')
+
+const GrantsLandingPage = loadable(() =>
+  Grants.then((m) => m.GrantsLandingPage),
+)
+const GrantsRoundOne = loadable(() => Grants.then((m) => m.GrantsRoundOne))
+const GrantsRoundTwo = loadable(() => Grants.then((m) => m.GrantsRoundTwo))
+const GrantPage = loadable(() => Grants.then((m) => m.GrantPage))
+
+// PROJECT LAUNCH
+
+const ProjectLaunch = import('../pages/projectCreate')
+
+const ProjectCreateStart = loadable(() =>
+  ProjectLaunch.then((m) => m.ProjectCreateStart),
+)
+const ProjectCreateStory = loadable(() =>
+  ProjectLaunch.then((m) => m.ProjectCreateStory),
+)
+const ProjectCreationWalletConnectionPage = loadable(() =>
+  ProjectLaunch.then((m) => m.ProjectCreationWalletConnectionPage),
+)
+const ProjectAdditionalDetails = loadable(() =>
+  ProjectLaunch.then((m) => m.ProjectAdditionalDetails),
+)
+const ProjectCreate = loadable(() => ProjectLaunch.then((m) => m.ProjectCreate))
+
+// ENTRY VIEW & EDIT
+
+const Entry = import('../pages/entry')
+
+const EntryCreateEdit = loadable(() => Entry.then((m) => m.EntryCreateEdit))
+const EntryPreview = loadable(() => Entry.then((m) => m.EntryPreview))
+const EntryPage = loadable(() => Entry.then((m) => m.EntryPage))
+
+// PROJECT DASHBOARD
+
+const CreatorDashboard = import('../pages/projectDashboard')
+
+const ProjectDashboardPage = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectDashboardPage),
+)
+const ProjectDescription = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectDescription),
+)
+const ProjectContributors = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectContributors),
+)
+const ProjectDetails = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectDetails),
+)
+const ProjectFundingSettings = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectFundingSettings),
+)
+const ProjectStory = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectStory),
+)
+const ProjectStats = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectStats),
+)
+const ProjectSettings = loadable(() =>
+  CreatorDashboard.then((m) => m.ProjectSettings),
+)
+
+const ProjectView = loadable(() => import('../pages/projectView'))
+
+const Profile = loadable(() => import('../pages/profile/Profile'))
+
+// LANDING PAGE
+
+const Landing = import('../pages/landing')
+
+const MobileLeaderboard = loadable(() =>
+  Landing.then((m) => m.MobileLeaderboard),
+)
+const LandingPage = loadable(() => Landing.then((m) => m.LandingPage))
+const LandingPageProjects = loadable(() =>
+  Landing.then((m) => m.LandingPageProjects),
+)
+const LandingFeed = loadable(() => Landing.then((m) => m.LandingFeed))
 
 type PlatformRoutes = {
   path: string
@@ -75,7 +128,11 @@ const platformRoutes = [
   },
   {
     path: getPath('publicProjectLaunch'),
-    element: PublicProjectLaunchPage,
+    element: ProjectCreateStart,
+  },
+  {
+    path: `${getPath('publicProjectLaunch')}/:projectId`,
+    element: ProjectCreateStart,
   },
   {
     path: getPath('launchProjectWithNode', PathName.projectId),
@@ -92,6 +149,11 @@ const platformRoutes = [
     authenticated: true,
   },
   {
+    path: getPath('launchProjectStory', PathName.projectId),
+    element: ProjectCreateStory,
+    authenticated: true,
+  },
+  {
     path: getPath('privateProjectLaunch'),
     element: ProjectCreate,
     authenticated: true,
@@ -99,7 +161,6 @@ const platformRoutes = [
   {
     path: getPath('userProfile', PathName.userId),
     element: Profile,
-    // element: ProfilePage,
   },
   {
     path: getPath('projectEntryPreview', PathName.projectId, PathName.entryId),
@@ -131,12 +192,12 @@ const platformRoutes = [
         element: ProjectContributors,
       },
       {
-        path: getPath('dashboardContributors', PathName.projectId),
-        element: ProjectContributors,
-      },
-      {
         path: getPath('dashboardDetails', PathName.projectId),
         element: ProjectDetails,
+      },
+      {
+        path: getPath('dashboardStory', PathName.projectId),
+        element: ProjectStory,
       },
       {
         path: getPath('dashboardFunding', PathName.projectId),
@@ -167,10 +228,6 @@ const platformRoutes = [
   {
     path: getPath('notAuthorized'),
     element: NotAuthorized,
-  },
-  {
-    path: getPath('index'),
-    element: LandingPage,
   },
   {
     path: getPath('leaderboard'),
@@ -215,11 +272,27 @@ export const Router = () => {
           )
           // index routes cannot have children routes
           if (isIndex) {
-            return <Route index key={path} element={renderElement} />
+            return (
+              <Route
+                index
+                key={path}
+                element={
+                  <React.Suspense fallback={null}>
+                    {renderElement}
+                  </React.Suspense>
+                }
+              />
+            )
           }
 
           return (
-            <Route key={path} path={path} element={renderElement}>
+            <Route
+              key={path}
+              path={path}
+              element={
+                <React.Suspense fallback={null}>{renderElement}</React.Suspense>
+              }
+            >
               {nested?.length && renderRoutes(nested)}
             </Route>
           )

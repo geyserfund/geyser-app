@@ -16,7 +16,7 @@ import { ButtonComponent } from '../../components/ui'
 import { EntryStatusLabel } from '../../components/ui/EntryStatusLabel'
 import { getPath } from '../../constants'
 import { EntryFragment } from '../../types/generated/graphql'
-import { ProjectEntryEditor } from '../creation/entry/editor'
+import { ProjectEntryEditor } from './creation/editor'
 
 type Props = {
   entry: EntryFragment
@@ -38,7 +38,7 @@ export const EntryDetails = ({ entry }: Props) => {
       </ButtonComponent>
 
       <Stack
-        direction={{ base: 'column', md: 'row' }}
+        direction={{ base: 'column', lg: 'row' }}
         overflow="hidden"
         width="100%"
         justifyContent="space-between"

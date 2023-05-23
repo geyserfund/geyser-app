@@ -12,7 +12,6 @@ import {
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
-import { SatWalletImg } from '../../../assets'
 import { AppFooter } from '../../../components/molecules'
 import { ButtonComponent } from '../../../components/ui'
 import {
@@ -20,6 +19,7 @@ import {
   GrantsBitcoinDevelopment,
   GrantsBitcoinEducation,
   GrantsHero,
+  WalletOfSatoshiUrl,
 } from '../../../constants'
 import { fonts } from '../../../styles'
 import { GrantApplicant } from '../../../types'
@@ -162,7 +162,7 @@ export const GrantsRoundOne = ({
             </Box>
 
             <Grid
-              templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+              templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
               gap={6}
               minWidth="100%"
               mt={8}
@@ -291,7 +291,7 @@ export const GrantsRoundOne = ({
             alignItems={'center'}
           >
             <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
-              <img src={SatWalletImg} width="195px" />
+              <img src={WalletOfSatoshiUrl} width="195px" />
             </Box>
           </Box>
         </Box>

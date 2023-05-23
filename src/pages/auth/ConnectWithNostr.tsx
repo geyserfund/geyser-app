@@ -46,7 +46,7 @@ export const ConnectWithNostr = ({ onClose }: Props) => {
         leftIcon={<NostrSvgIcon height="20px" width="20px" />}
         color="white"
         _hover={{ backgroundColor: 'brand.nostrDark' }}
-        onClick={() => handleClick()}
+        onClick={handleClick}
       >
         Nostr
       </Button>

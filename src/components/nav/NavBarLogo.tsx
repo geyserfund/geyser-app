@@ -1,13 +1,13 @@
 import { Image } from '@chakra-ui/image'
 import { Box, BoxProps } from '@chakra-ui/layout'
-import { useMediaQuery } from '@chakra-ui/media-query'
+import { useBreakpoint } from '@chakra-ui/media-query'
 import { useColorMode } from '@chakra-ui/system'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
 import LogoSmall from '../../assets/logo-brand.svg'
 import LogoDark from '../../assets/logo-dark.svg'
-import LogoName from '../../assets/logo-name-brand.svg'
+import { LogoNameBrand } from '../../constants'
 
 type Props = BoxProps & {
   className?: string
@@ -33,17 +33,18 @@ export const NavBarLogo = ({
 }: Props) => {
   const classes = useStyles()
   const { colorMode } = useColorMode()
-  const [isLargerThan720] = useMediaQuery('(min-width: 900px)')
 
-  const useFullOne = (isLargerThan720 || full) && !small
+  const isLg = useBreakpoint('lg')
+
+  const useFullOne = (isLg || full) && !small
 
   const imageToUse =
     colorMode === 'light'
       ? useFullOne
-        ? LogoName
+        ? LogoNameBrand
         : LogoSmall
       : useFullOne
-      ? LogoName
+      ? LogoNameBrand
       : LogoDark
 
   return (

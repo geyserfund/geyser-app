@@ -24,6 +24,7 @@ import {
 import { FaTiktok } from 'react-icons/fa'
 
 import { AmbossIcon } from '../components/icons'
+import { WavlakeIcon } from '../components/icons/svg'
 import { Maybe } from '../types'
 
 export const getIconForLink = (value: Maybe<string>) => {
@@ -116,6 +117,10 @@ export const getIconForLink = (value: Maybe<string>) => {
 
   if (value?.toLowerCase().includes('amboss')) {
     return AmbossIcon as IconType
+  }
+
+  if (value?.toLowerCase().includes('wavlake')) {
+    return WavlakeIcon as IconType
   }
 
   return BsGlobe

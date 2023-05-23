@@ -24,15 +24,15 @@ export const GrantsLandingPage = () => {
 
   return (
     <VStack
-      paddingTop={{ base: '10px', md: '20px' }}
+      paddingTop={{ base: '10px', lg: '20px' }}
       bg={theme.colors.brand.bgGrey4}
       minHeight="100%"
       width="100%"
       alignItems="center"
     >
       <VStack
-        my={{ base: 0, md: 5 }}
-        px={{ base: '10px', md: '0px' }}
+        my={{ base: 0, lg: 5 }}
+        px={{ base: '10px', lg: '0px' }}
         spacing="20px"
         width={isMobile ? '100%' : '909px'}
       >
@@ -119,3 +119,5 @@ export const GrantsLandingPage = () => {
     </VStack>
   )
 }
+
+export default GrantsLandingPage

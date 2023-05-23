@@ -68,12 +68,13 @@ export const LandingCardBase = ({
           height="100%"
           objectFit="cover"
           src={imageSrc}
+          alt={`${title}-header-image`}
         />
       </Box>
       <VStack
         flex={1}
         width={getResponsiveValue({ base: 'auto', xl: '100%' })}
-        minWidth={getResponsiveValue({ base: '170px', md: 'auto' })}
+        minWidth={getResponsiveValue({ base: '170px', lg: 'auto' })}
         padding="10px"
         alignItems="start"
         justifyContent="space-between"
@@ -133,7 +134,7 @@ export const LandingCardBaseSkeleton = ({
       <VStack
         flex={1}
         width={getResponsiveValue({ base: 'auto', xl: '100%' })}
-        minWidth={getResponsiveValue({ base: '170px', md: 'auto' })}
+        minWidth={getResponsiveValue({ base: '170px', lg: 'auto' })}
         padding="10px"
         alignItems="start"
         justifyContent="center"

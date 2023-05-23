@@ -112,9 +112,9 @@ export const Profile = () => {
         </GridItem>
         <GridItem
           h="100%"
-          overflow={{ base: 'visible', md: 'hidden' }}
+          overflow={{ base: 'visible', lg: 'hidden' }}
           colSpan={{ base: 1, lg: 3 }}
-          order={{ base: 3, md: 2 }}
+          order={{ base: 3, lg: 2 }}
         >
           <ProfileTabs
             userProfile={userProfile}
@@ -124,9 +124,9 @@ export const Profile = () => {
         </GridItem>
         <GridItem
           h="100%"
-          overflow={{ base: 'visible', md: 'hidden' }}
+          overflow={{ base: 'visible', lg: 'hidden' }}
           colSpan={{ base: 1, lg: 2 }}
-          order={{ base: 2, md: 3 }}
+          order={{ base: 2, lg: 3 }}
         >
           <Badges
             userProfile={userProfile}
@@ -138,3 +138,5 @@ export const Profile = () => {
     </VStack>
   )
 }
+
+export default Profile

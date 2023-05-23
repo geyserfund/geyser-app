@@ -15,9 +15,9 @@ export const DescriptionLinkWithIconComponent = ({
     <HStack
       width="100%"
       borderRadius="4px"
-      spacing="15px"
-      py="7px"
-      px="24px"
+      spacing={3}
+      py={2}
+      px={3}
       minHeight="42px"
       backgroundColor="brand.neutral100"
     >

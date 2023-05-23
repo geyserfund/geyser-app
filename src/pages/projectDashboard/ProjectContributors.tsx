@@ -30,7 +30,7 @@ import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../graphql'
 import { computeFunderBadges } from '../../helpers'
 import { useQueryWithPagination } from '../../hooks'
 import { Funder } from '../../types/generated/graphql'
-import { toInt } from '../../utils'
+import { copyTextToClipboard, toInt } from '../../utils'
 
 type TableData = {
   header: string
@@ -223,7 +223,7 @@ export const ProjectContributors = () => {
       })
       .join('\n')
 
-    navigator.clipboard.writeText(textString)
+    copyTextToClipboard(textString)
     setCopied(true)
     setTimeout(() => {
       setCopied(false)

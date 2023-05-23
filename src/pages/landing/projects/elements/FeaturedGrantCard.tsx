@@ -46,6 +46,7 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
               width="full"
               src={grant.image}
               objectFit="cover"
+              alt={`grant-${grant.name}-header`}
             />
           </Box>
         )}

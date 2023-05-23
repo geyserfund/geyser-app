@@ -1,31 +1,41 @@
-import { GridItem, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Button, GridItem, VStack } from '@chakra-ui/react'
 
-import { ButtonComponent } from '../../components/ui'
 import { useProjectContext } from '../../context'
-import { useProjectTagsState } from '../../hooks/graphqlState/useProjectTagsState'
-import { useProjectLinksValidation } from '../../hooks/validations'
 import { useNotification } from '../../utils'
-import { ProjectRegion } from '../creation/projectCreate/components'
-import { ProjectLinks } from '../creation/projectCreate/components/ProjectLinks'
-import { ProjectTagsCreateEdit } from '../creation/projectCreate/components/ProjectTagsCreateEdit'
+import { ProjectRegion } from '../projectCreate/components'
+import { ProjectLinks } from '../projectCreate/components/ProjectLinks'
+import { ProjectTagsCreateEdit } from '../projectCreate/components/ProjectTagsCreateEdit'
+import {
+  ProjectUnsavedModal,
+  useProjectUnsavedModal,
+} from '../projectCreate/components/ProjectUnsavedModal'
+import { useProjectDetailsForm } from '../projectCreate/hooks/useProjectDetailsForm'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 
 export const ProjectDetails = () => {
   const { toast } = useNotification()
 
-  const [saving, setSaving] = useState(false)
-  const { project, updateProject, saveProject } = useProjectContext()
+  const { project: contextProject } = useProjectContext()
 
-  const { setLinks, linkError } = useProjectLinksValidation({
-    updateProject,
-  })
-  const { tags, setTags, saveTags } = useProjectTagsState({
+  const {
     project,
+    isDirty,
+    linkError,
+    projectLoading,
+    saveProject,
+    saveTags,
+    setLinks,
+    setTags,
+    tags,
+    tagsLoading,
     updateProject,
+  } = useProjectDetailsForm({ projectId: contextProject?.id })
+
+  const unsavedModal = useProjectUnsavedModal({
+    hasUnsaved: isDirty,
   })
 
-  const handleNext = async () => {
+  const onSubmit = async () => {
     if (linkError.includes(true)) {
       toast({
         status: 'warning',
@@ -35,7 +45,6 @@ export const ProjectDetails = () => {
       return
     }
 
-    setSaving(true)
     try {
       await saveProject()
       await saveTags()
@@ -49,48 +58,54 @@ export const ProjectDetails = () => {
         title: 'failed to update project',
       })
     }
-
-    setSaving(false)
   }
 
   return (
-    <DashboardGridLayout>
-      <GridItem colSpan={6} display="flex" justifyContent="center">
-        <VStack
-          spacing="30px"
-          width="100%"
-          minWidth="350px"
-          maxWidth="600px"
-          marginBottom="40px"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-        >
-          <VStack width="100%" alignItems="flex-start" spacing="24px">
-            <ProjectRegion
-              location={project?.location}
-              updateProject={updateProject}
-            />
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSubmit()
+      }}
+    >
+      <DashboardGridLayout>
+        <GridItem colSpan={6} display="flex" justifyContent="center">
+          <VStack
+            spacing="30px"
+            width="100%"
+            minWidth="350px"
+            maxWidth="600px"
+            marginBottom="40px"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <VStack width="100%" alignItems="flex-start" spacing="24px">
+              <ProjectRegion
+                location={project?.location}
+                updateProject={updateProject}
+              />
 
-            <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
+              <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
-            <ProjectLinks
-              links={(project?.links as string[]) || []}
-              setLinks={setLinks}
-              linkError={linkError}
-            />
+              <ProjectLinks
+                links={(project?.links as string[]) || []}
+                setLinks={setLinks}
+                linkError={linkError}
+              />
 
-            <ButtonComponent
-              isLoading={saving}
-              primary
-              w="full"
-              onClick={handleNext}
-            >
-              Save
-            </ButtonComponent>
+              <Button
+                isLoading={tagsLoading || projectLoading}
+                variant="primary"
+                w="full"
+                type="submit"
+              >
+                Save
+              </Button>
+            </VStack>
           </VStack>
-        </VStack>
-      </GridItem>
-    </DashboardGridLayout>
+        </GridItem>
+        <ProjectUnsavedModal {...unsavedModal} />
+      </DashboardGridLayout>
+    </form>
   )
 }

@@ -159,7 +159,7 @@ export const EditProfileModal = ({
                     <Button
                       isLoading={Boolean(loading || lightningAddressLoading)}
                       isDisabled={Boolean(loading || lightningAddressLoading)}
-                      variant="contained"
+                      variant="primary"
                       width="100%"
                       type="submit"
                     >

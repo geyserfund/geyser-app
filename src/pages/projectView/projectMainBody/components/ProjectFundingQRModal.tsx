@@ -16,7 +16,7 @@ import { useCallback, useState } from 'react'
 
 import { ButtonComponent } from '../../../../components/ui'
 import { API_SERVICE_ENDPOINT } from '../../../../constants'
-import { encodeLNURL, useMobileMode } from '../../../../utils'
+import { encodeLNURL, useMobileMode, useNotification } from '../../../../utils'
 import { ProjectFundingBanner } from './ProjectFundingBanner'
 
 interface IQRModal {
@@ -37,6 +37,8 @@ export const ProjectFundingQRModal = ({
   const isMobile = useMobileMode()
   const [imageDownload, setImageDownload] = useState<string | undefined>()
 
+  const { toast } = useNotification()
+
   const bannerRef = useCallback((node: HTMLDivElement) => {
     if (!node) {
       return
@@ -48,10 +50,11 @@ export const ProjectFundingQRModal = ({
         setImageDownload(image)
       })
       .catch((error) => {
-        console.error(
-          'oops, something went wrong rendering the html to image',
-          error,
-        )
+        toast({
+          status: 'error',
+          title: 'something went wrong rendering the html to image',
+          description: `${error}`,
+        })
       })
   }, [])
 

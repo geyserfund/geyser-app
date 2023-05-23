@@ -1,22 +1,26 @@
 import { useMutation } from '@apollo/client'
-import { GridItem, Switch, Text, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { Button, GridItem, Switch, Text, VStack } from '@chakra-ui/react'
+import { useMemo } from 'react'
+import { useForm } from 'react-hook-form'
 
 import { Body2 } from '../../components/typography'
-import { ButtonComponent, TextInputBox } from '../../components/ui'
+import { TextInputBox } from '../../components/ui'
 import { useAuthContext, useProjectContext } from '../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../graphql/mutations'
-import { useBeforeClose } from '../../hooks'
-import { FormError, Project, ProjectStatus } from '../../types'
-import { isActive, toInt, useNotification } from '../../utils'
-import { ProjectFundraisingDeadline } from '../creation/projectCreate/components/ProjectFundraisingDeadline'
-import { ProjectUpdateVariables } from '../creation/projectCreate/types'
+import { Project, ProjectStatus } from '../../types'
+import { isActive, useNotification } from '../../utils'
+import { ProjectFundraisingDeadline } from '../projectCreate/components/ProjectFundraisingDeadline'
+import {
+  ProjectUnsavedModal,
+  useProjectUnsavedModal,
+} from '../projectCreate/components/ProjectUnsavedModal'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 
-type ProjectSettingsForm = {
+export type ProjectSettingsVariables = {
   expiresAt?: string
   email: string
   status: ProjectStatus | ''
+  deactivate: boolean
 }
 
 export const ProjectSettings = () => {
@@ -25,37 +29,23 @@ export const ProjectSettings = () => {
 
   const { project, updateProject } = useProjectContext()
 
-  const [form, setForm] = useState<ProjectSettingsForm>({
-    expiresAt: project?.expiresAt || '',
-    email: '',
-    status: project?.status || '',
+  const form = useForm<ProjectSettingsVariables>({
+    values: useMemo(
+      () => ({
+        expiresAt: project?.expiresAt || '',
+        email: user.email || '',
+        status: project?.status || '',
+        deactivate: !isActive(project?.status),
+      }),
+      [project?.expiresAt, project?.status, user.email],
+    ),
   })
 
-  const [deactivate, setDeactivate] = useState(!isActive(project?.status))
-  const [formError, setFormError] = useState<FormError<ProjectSettingsForm>>({})
+  const { formState, handleSubmit, setValue, watch } = form
 
-  const { setIsFormDirty } = useBeforeClose()
-
-  useEffect(() => {
-    if (!project) {
-      return
-    }
-
-    const isFormDirty = () => {
-      if (
-        ((Boolean(form.expiresAt) || Boolean(project.expiresAt)) &&
-          `${form.expiresAt}` !== `${project.expiresAt}`) ||
-        form.status !==
-          (deactivate ? ProjectStatus.Inactive : ProjectStatus.Active)
-      ) {
-        return true
-      }
-
-      return false
-    }
-
-    setIsFormDirty(isFormDirty())
-  }, [project, form, deactivate, setIsFormDirty])
+  const unsavedModal = useProjectUnsavedModal({
+    hasUnsaved: formState.isDirty,
+  })
 
   const [updateProjectMutation, { loading: updateLoading }] = useMutation<{
     updateProject: Project
@@ -80,42 +70,32 @@ export const ProjectSettings = () => {
   })
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, email: event.target.value })
+    setValue('email', event.target.value, { shouldDirty: true })
   }
 
   const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event) {
-      setDeactivate(event.target.checked)
+      const shouldDeactivate = event.target.checked
+      setValue('deactivate', shouldDeactivate, { shouldDirty: true })
+      setValue(
+        'status',
+        shouldDeactivate ? ProjectStatus.Inactive : ProjectStatus.Active,
+      )
     }
   }
 
-  const handleNext = () => {
-    const isValid = validateForm()
-
-    const newForm = form
-    newForm.email = user.email || form.email
-    if (project && isValid) {
+  const onSubmit = ({ expiresAt, status }: ProjectSettingsVariables) => {
+    if (project) {
       updateProjectMutation({
         variables: {
           input: {
-            projectId: toInt(project.id),
-            expiresAt: form.expiresAt || null,
-            status: deactivate ? ProjectStatus.Inactive : ProjectStatus.Active,
+            projectId: Number(project.id),
+            expiresAt: expiresAt || null,
+            status,
           },
         },
       })
     }
-  }
-
-  const validateForm = () => {
-    const errors = {} as FormError<ProjectUpdateVariables>
-    const isValid = true
-
-    if (!isValid) {
-      setFormError(errors)
-    }
-
-    return isValid
   }
 
   if (!project) {
@@ -123,60 +103,63 @@ export const ProjectSettings = () => {
   }
 
   return (
-    <DashboardGridLayout>
-      <GridItem colSpan={6} display="flex" justifyContent="center">
-        <VStack
-          spacing="30px"
-          width="100%"
-          minWidth="350px"
-          maxWidth="600px"
-          marginBottom="40px"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-        >
-          <VStack width="100%" alignItems="flex-start" spacing="24px">
-            <ProjectFundraisingDeadline {...{ form, setForm }} />
-            <VStack width="100%" alignItems="flex-start" spacing="5px">
-              <Body2>Project E-mail</Body2>
-              <TextInputBox
-                name="email"
-                value={user.email || form.email}
-                onChange={handleEmail}
-                error={formError.email}
-                isDisabled={Boolean(user.email)}
-              />
-            </VStack>
-            {project.status !== ProjectStatus.Deleted && (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <DashboardGridLayout>
+        <GridItem colSpan={6} display="flex" justifyContent="center">
+          <VStack
+            spacing="30px"
+            width="100%"
+            minWidth="350px"
+            maxWidth="600px"
+            marginBottom="40px"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <VStack width="100%" alignItems="flex-start" spacing="24px">
+              <ProjectFundraisingDeadline setValue={setValue} watch={watch} />
               <VStack width="100%" alignItems="flex-start" spacing="5px">
-                <Body2>Deactivate</Body2>
-                <Switch
-                  defaultChecked={deactivate}
-                  onChange={handleDeactivate}
-                  colorScheme="red"
-                >
-                  {' '}
-                  Deactivate Project
-                </Switch>
-                <Text fontSize="12px">
-                  Deactivating your project would not allow others to fund your
-                  project, but your project will still be visible to everyone
-                  else. You will be able to re-activate your project at any
-                  time.
-                </Text>
+                <Body2>Project E-mail</Body2>
+                <TextInputBox
+                  name="email"
+                  value={watch('email')}
+                  onChange={handleEmail}
+                  error={formState.errors.email?.message}
+                  isDisabled={Boolean(user.email)}
+                />
               </VStack>
-            )}
-            <ButtonComponent
-              isLoading={updateLoading}
-              primary
-              w="full"
-              onClick={handleNext}
-            >
-              Save
-            </ButtonComponent>
+              {project.status !== ProjectStatus.Deleted && (
+                <VStack width="100%" alignItems="flex-start" spacing="5px">
+                  <Body2>Deactivate</Body2>
+                  <Switch
+                    defaultChecked={watch('deactivate')}
+                    onChange={handleDeactivate}
+                    colorScheme="red"
+                  >
+                    {' '}
+                    Deactivate Project
+                  </Switch>
+                  <Text fontSize="12px">
+                    Deactivating your project would not allow others to fund
+                    your project, but your project will still be visible to
+                    everyone else. You will be able to re-activate your project
+                    at any time.
+                  </Text>
+                </VStack>
+              )}
+              <Button
+                isLoading={updateLoading}
+                variant="primary"
+                w="full"
+                type="submit"
+              >
+                Save
+              </Button>
+            </VStack>
           </VStack>
-        </VStack>
-      </GridItem>
-    </DashboardGridLayout>
+        </GridItem>
+        <ProjectUnsavedModal {...unsavedModal} />
+      </DashboardGridLayout>
+    </form>
   )
 }

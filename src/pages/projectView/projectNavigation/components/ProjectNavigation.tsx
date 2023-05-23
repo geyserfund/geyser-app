@@ -1,4 +1,11 @@
-import { Button, ButtonProps, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  ButtonProps,
+  IconButton,
+  IconButtonProps,
+  useBreakpointValue,
+  VStack,
+} from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
@@ -23,12 +30,13 @@ export const ProjectNavigation = ({
     <VStack ml={4} pt={5} pb={2}>
       <ProjectBackButton width="100%" />
       {hasItems ? (
-        <CardLayout padding={2}>
-          <VStack maxWidth="100%">
+        <CardLayout padding={2} width="100%">
+          <VStack width="100%">
             <ProjectNavigationButton
               // isActive={inView === 'header'}
               onClick={onProjectClick}
-              leftIcon={<ProjectIcon />}
+              aria-label="header"
+              leftIcon={<ProjectIcon height="1.6em" />}
             >
               Project
             </ProjectNavigationButton>
@@ -36,6 +44,7 @@ export const ProjectNavigation = ({
               <ProjectNavigationButton
                 // isActive={inView === 'entries'}
                 onClick={onEntriesClick}
+                aria-label="entries"
                 leftIcon={<EntryEditIcon />}
               >
                 Entries
@@ -45,6 +54,7 @@ export const ProjectNavigation = ({
               <ProjectNavigationButton
                 // isActive={inView === 'rewards'}
                 onClick={onRewardsClick}
+                aria-label="rewards"
                 leftIcon={<RewardGiftIcon />}
               >
                 Rewards
@@ -54,6 +64,7 @@ export const ProjectNavigation = ({
               <ProjectNavigationButton
                 // isActive={inView === 'milestones'}
                 onClick={onMilestonesClick}
+                aria-label="milestones"
                 leftIcon={<MilestoneIcon />}
               >
                 Milestones
@@ -68,18 +79,30 @@ export const ProjectNavigation = ({
 
 export const ProjectNavigationButton = ({
   children,
+  leftIcon,
   ...props
 }: PropsWithChildren<
-  Pick<ButtonProps, 'leftIcon' | 'onClick' | 'isActive'>
+  Pick<ButtonProps, 'leftIcon' | 'onClick' | 'isActive'> &
+    Pick<IconButtonProps, 'aria-label'>
 >) => {
-  return (
-    <Button
-      justifyContent="start"
-      width="100%"
-      variant="transparent"
-      {...props}
-    >
-      <H3 pl={1}>{children}</H3>
-    </Button>
-  )
+  const hideLabel = useBreakpointValue({ base: true, xl: false })
+
+  const Component = hideLabel ? IconButton : Button
+
+  const ComponentProps = hideLabel
+    ? {
+        variant: 'secondary',
+        children: leftIcon,
+        ...props,
+      }
+    : {
+        leftIcon,
+        width: '100%',
+        justifyContent: 'start',
+        variant: 'transparent',
+        children: <H3 pl={1}>{children}</H3>,
+        ...props,
+      }
+
+  return <Component {...ComponentProps} />
 }

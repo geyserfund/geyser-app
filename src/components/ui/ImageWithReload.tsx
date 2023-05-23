@@ -1,7 +1,7 @@
 import { Box, Image, ImageProps, Skeleton } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 
-import GeyserTempImage from '../../assets/images/project-entry-thumbnail-placeholder.svg'
+import { ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useNotification } from '../../utils'
 
 interface IImageWithReload extends ImageProps {
@@ -27,7 +27,7 @@ export const ImageWithReload = ({
   ...rest
 }: IImageWithReload) => {
   const { toast } = useNotification()
-  const componentRef = useRef<number>()
+  const componentRef = useRef<number>(0)
 
   const [hasValidSource, setHasValidSource] = useState(Boolean(src))
   const [loading, setLoading] = useState<boolean>(false)
@@ -51,7 +51,7 @@ export const ImageWithReload = ({
       setTimeout(() => {
         currentTarget.onerror = null
         currentTarget.src = src
-        componentRef.current! += 1
+        componentRef.current += 1
       }, BACKOFF ** componentRef.current * MILLISECONDS)
     } else {
       setLoading(false)
@@ -87,7 +87,7 @@ export const ImageWithReload = ({
 
     return (
       <Image
-        src={defaultImage || GeyserTempImage}
+        src={defaultImage || ProjectEntryThumbnailPlaceholderUrl}
         maxHeight="500px"
         height="222px"
         width="350px"
