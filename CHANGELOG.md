@@ -1,3 +1,52 @@
+## [0.1.3](https://github.com/geyserfund/geyser-app/compare/v0.1.1...v0.1.3) (2023-05-23)
+
+
+### Features
+
+* add markdown editor + add form hooks + reuse forms in dashboard + add story to dashboard ([8ae9eea](https://github.com/geyserfund/geyser-app/commit/8ae9eeabaef16c62bc29a4eeb62d3e74d8bf97cd))
+* add project just launched and draft modals ([9cc22f4](https://github.com/geyserfund/geyser-app/commit/9cc22f4c3f42d510f6993b9ffa5bce410a6f3dc7))
+* add project navigation in left panel ([a32fbde](https://github.com/geyserfund/geyser-app/commit/a32fbde55ea0242d0d42a443b0480eb4bbd47452))
+* make project navigation show only icons in smaller screens ([7eb637d](https://github.com/geyserfund/geyser-app/commit/7eb637dc573bc169eb821d97af2ad21ecf128689))
+* refactor project creation flow ([6464ede](https://github.com/geyserfund/geyser-app/commit/6464edeee4977422abfa45be91e64a42c630b801))
+* refactor project creation flow ([8e3d4d0](https://github.com/geyserfund/geyser-app/commit/8e3d4d0158c4595a00f6cf8964fe1a68233cafe8))
+* use react-form-hooks and share state ([6a635f2](https://github.com/geyserfund/geyser-app/commit/6a635f2fb13b4d900e8216665a4a2026dab8cd80))
+
+
+### Bug Fixes
+
+* add alt values to images in critical places ([a1b38e8](https://github.com/geyserfund/geyser-app/commit/a1b38e8933b4406fd0bbf4323e3ebb0ba5a42aed))
+* add message for logout fail ([eb20d05](https://github.com/geyserfund/geyser-app/commit/eb20d05d6d4bebd2351e2f288a6c79d06433a960))
+* breakpoint hooks ([cbb6eb6](https://github.com/geyserfund/geyser-app/commit/cbb6eb6dbaba315cb2a439d6ef7ffaa86418902c))
+* cannot add project link ([8bfe905](https://github.com/geyserfund/geyser-app/commit/8bfe905f7f8503dd3932c13fca5a7ee17f15c8cb))
+* changelog ([1d52a7e](https://github.com/geyserfund/geyser-app/commit/1d52a7e7897da0d0ea14aa26fbeb018c568b7487))
+* cleanup routes ([1f148fd](https://github.com/geyserfund/geyser-app/commit/1f148fdbdf6249e03ee518216ddf99d46bba056c))
+* error page link ([69dd972](https://github.com/geyserfund/geyser-app/commit/69dd9728c3e34e0ab6c1ea0bc76ea614733f5d22))
+* fix edit project in dashboard ([b1ca3b6](https://github.com/geyserfund/geyser-app/commit/b1ca3b6f6bd0ffd6b1b672ee59981bc1c875a36e))
+* fix edit project in dashboard ([16d6b7e](https://github.com/geyserfund/geyser-app/commit/16d6b7e53480bf010c24773fa0da29197d3733fd))
+* flickers + renders ([a217874](https://github.com/geyserfund/geyser-app/commit/a21787419805f226a3309ae946a489f5c767cfe2))
+* hot-fix creation flow update ([1b0ec54](https://github.com/geyserfund/geyser-app/commit/1b0ec548c4212eacd1e23d20f7a4a4f6d0dc639f))
+* hot-fix update featured project to heroOfBitcoin ([0c42f01](https://github.com/geyserfund/geyser-app/commit/0c42f01dcc9aaaeeaa63e2f5cedba842caba7449))
+* linter issues ([6f2a757](https://github.com/geyserfund/geyser-app/commit/6f2a75762a8d997f2e8ac83500c0a5a93c99dc8c))
+* make breakpoints consistent ([71a209e](https://github.com/geyserfund/geyser-app/commit/71a209e896a03bda9be8e4b1a5250470f1a33ec7))
+* make lg  breakpoint 900px ([2f98a71](https://github.com/geyserfund/geyser-app/commit/2f98a712cf3bbdd24187c87dcc57f43e69261133))
+* make user be able to logout to fund anonymously ([12be801](https://github.com/geyserfund/geyser-app/commit/12be8010012f0d937755b85feed752ebdfb6d0bf))
+* markdown missing typemap ([19b9401](https://github.com/geyserfund/geyser-app/commit/19b94015d2d6acba58efb7e6692b96696b2c055e))
+* navigation + markdown linebreaks ([c27d0d5](https://github.com/geyserfund/geyser-app/commit/c27d0d500dac8d21b9625dbf99a7938084961ef2))
+* new icon for links ([d80666f](https://github.com/geyserfund/geyser-app/commit/d80666f64a88e09fa03b7cf8f8c62296e3a24de3))
+* nostr refresh on login removed ([031396b](https://github.com/geyserfund/geyser-app/commit/031396bc5065cb82a55abfa989ba373f466ca7a6))
+* project link can't create issue ([ab47eeb](https://github.com/geyserfund/geyser-app/commit/ab47eeb610bb50f24e3e622a04b4aff83cf3b606))
+* project tags update + image upload ([#898](https://github.com/geyserfund/geyser-app/issues/898)) ([a40409b](https://github.com/geyserfund/geyser-app/commit/a40409b8a043064eec838da5a024b51ae23caf92))
+* refactor filter context to support updating filter from location state ([6cbc89a](https://github.com/geyserfund/geyser-app/commit/6cbc89adbb0a1465beb971a1a38b3e4f9184e971))
+* remove console logs and errors ([7e68c21](https://github.com/geyserfund/geyser-app/commit/7e68c21d4dbaea2886caea65c1cbb6bfc681532a))
+* remove hardcoded breakpoint ([8af0bb9](https://github.com/geyserfund/geyser-app/commit/8af0bb98ab640df09a5296a689f8aef4e9a76cbf))
+* remove new activity badge when logged out ([#899](https://github.com/geyserfund/geyser-app/issues/899)) ([e484632](https://github.com/geyserfund/geyser-app/commit/e484632b514ec5c35380dabd14133a0d7f131b2e))
+* reorganize files for better chunks while code-splitting ([cdad00d](https://github.com/geyserfund/geyser-app/commit/cdad00d25137aa08e13661abcca826968e7985f0))
+* replace copy text to clipboard with a function for fallback ([2aedf9d](https://github.com/geyserfund/geyser-app/commit/2aedf9d9ce5ae3868f17f7d31e8a8341c75ad17e))
+* reward grid fix ([#884](https://github.com/geyserfund/geyser-app/issues/884)) ([9c676bf](https://github.com/geyserfund/geyser-app/commit/9c676bf41f1ff42457f52cba1aa0416d03cc0f12))
+* wip ([291172c](https://github.com/geyserfund/geyser-app/commit/291172ca1b7b8bf6ee423297ddc184286ad6011f))
+* wip ([21e82d4](https://github.com/geyserfund/geyser-app/commit/21e82d4247b4ccdcad213e393beb779ca8a4e928))
+* wip code-splitting routes ([30d99ad](https://github.com/geyserfund/geyser-app/commit/30d99ad7f185380316975c3f8a3b1b8288be39b6))
+
 ## [0.1.2](https://github.com/geyserfund/geyser-app/compare/v0.1.1...v0.1.2) (2023-05-22)
 
 
