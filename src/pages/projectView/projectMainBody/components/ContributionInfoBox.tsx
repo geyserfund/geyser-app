@@ -268,7 +268,7 @@ export const ContributionInfoBox = ({
 
         <HStack>
           <SatoshiAmount
-            color="#1A1A1A"
+            color="neutral.700"
             fontWeight="bold"
             marginLeft={'auto'}
             fontSize={'21px'}
@@ -276,7 +276,7 @@ export const ContributionInfoBox = ({
             {getTotalAmount('sats', project.name)}
           </SatoshiAmount>
 
-          <Text color="#1A1A1A" fontWeight="bold" fontSize={'21px'}>
+          <Text color="neutral.700" fontWeight="bold" fontSize={'21px'}>
             {`($${getTotalAmount('dollar', project.name)})`}
           </Text>
         </HStack>

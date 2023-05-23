@@ -15,7 +15,7 @@ export const GrantWinnerAnnouncement = ({
 }: GrantWinnerAnnouncementProps) => {
   return (
     <CardLayout
-      backgroundColor="white"
+      backgroundColor="neutral.0"
       w="full"
       alignItems="center"
       spacing="20px"

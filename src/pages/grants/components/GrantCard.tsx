@@ -31,7 +31,7 @@ export const GrantCard = ({
 
   return (
     <Box
-      backgroundColor="white"
+      backgroundColor="neutral.0"
       _hover={{
         boxShadow:
           'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',

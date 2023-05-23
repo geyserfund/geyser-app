@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom'
 
 import { Body1 } from '../../../../components/typography'
 import { FollowAProjectUrl } from '../../../../constants'
-import { colors } from '../../../../styles'
+import { useCustomTheme } from '../../../../utils'
 
 export const NoFollowedProjects = () => {
+  const theme = useCustomTheme()
   return (
     <VStack w="full" padding="12px" spacing="20px">
       <Box width="200px">
@@ -33,7 +34,7 @@ export const NoFollowedProjects = () => {
         width="full"
         maxWidth="200px"
         rightIcon={<BiRightArrow />}
-        background={`linear-gradient(270deg, ${colors.primary400} -0.16%, ${colors.primary} 35.26%, ${colors.bgLightGreenGradient} 99.84%)`}
+        background={`linear-gradient(270deg, ${theme.primary[400]} -0.16%, ${theme.primary[400]} 35.26%, ${theme.secondary.green} 99.84%)`}
       >
         Discover Projects
       </Button>

@@ -645,7 +645,7 @@ export const TopNavBar = () => {
               <ButtonComponent
                 size="sm"
                 variant={'solid'}
-                backgroundColor="white"
+                backgroundColor="neutral.0"
                 borderWidth={1}
                 borderColor={'neutral.200'}
                 onClick={loginOnOpen}

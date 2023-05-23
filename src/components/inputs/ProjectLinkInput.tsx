@@ -27,7 +27,7 @@ export const ProjectLinkInput = ({
       w="100%"
       size="md"
       padding="12px 5px"
-      backgroundColor="white"
+      backgroundColor="neutral.0"
       borderRadius="8px"
       border="1px solid"
       borderColor="neutral.400"
@@ -45,12 +45,12 @@ export const ProjectLinkInput = ({
         onChange={onChange}
         isInvalid={isError}
         _focusVisible={{
-          borderColor: isError ? 'red' : 'neutral.500',
+          borderColor: isError ? 'secondary.red' : 'neutral.500',
           boxShadow: !isError && `0 0 0 1px ${'neutral.500'}`,
         }}
         {...inputProps}
       />
-      <Box paddingX="5px" backgroundColor="white" border="none">
+      <Box paddingX="5px" backgroundColor="neutral.0" border="none">
         <IconButtonComponent
           noBorder
           variant="ghost"

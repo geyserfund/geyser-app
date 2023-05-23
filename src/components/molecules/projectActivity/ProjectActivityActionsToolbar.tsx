@@ -30,7 +30,7 @@ IProjectActivityActionsToolbarProps) => {
         w="100%"
         p={0}
         px={2}
-        bg="white"
+        bg="neutral.0"
         zIndex={100}
       >
         <ButtonComponent primary onClick={fundButtonFunction} w="100%">

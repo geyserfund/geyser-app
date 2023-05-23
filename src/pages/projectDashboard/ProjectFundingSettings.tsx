@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router'
 import { IconButtonComponent } from '../../components/ui'
 import { getPath } from '../../constants'
 import { useProjectContext } from '../../context'
-import { colors } from '../../styles'
 import {
   LightningAddressConnectionDetails,
   LndConnectionDetailsPrivate,
@@ -74,7 +73,7 @@ export const ProjectFundingSettings = () => {
         <VStack
           width="100%"
           border="1px solid"
-          borderColor={colors.gray300}
+          borderColor="neutral.400"
           borderRadius="4px"
           alignItems="flex-start"
           padding="10px"
@@ -84,8 +83,8 @@ export const ProjectFundingSettings = () => {
             <Text fontWeight={500}>{projectWallet?.name}</Text>
           </HStack>
           <HStack width="100%">
-            <CheckCircleIcon color={colors.primary800} fontSize="12px" />
-            <Text color={colors.primary800} fontSize="12px">
+            <CheckCircleIcon color="primary.800" fontSize="12px" />
+            <Text color="primary.800" fontSize="12px">
               RUNNING
             </Text>
           </HStack>

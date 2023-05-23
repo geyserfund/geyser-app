@@ -14,7 +14,7 @@ export const TwitterSkeleton = () => {
       overflow="hidden"
       padding="20px 40px"
       boxShadow="lg"
-      bg="white"
+      bg="neutral.0"
     >
       <SkeletonCircle size="10" />
       <SkeletonText mt="4" noOfLines={4} spacing="4" />

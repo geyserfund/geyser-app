@@ -181,7 +181,7 @@ export const ProjectFundingFormCommentField = ({
                   placeholder="Search"
                   variant="filled"
                   focusBorderColor="primary.400"
-                  bg="#DDFFF8"
+                  bg="neutral.400"
                   onChange={(e) => setGifSearch(e.target.value)}
                 />
                 <InputRightElement mb={2}>

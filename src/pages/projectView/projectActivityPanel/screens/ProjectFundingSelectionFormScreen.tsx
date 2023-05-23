@@ -106,7 +106,7 @@ export const ProjectFundingSelectionFormScreen = ({
       height="100%"
       position="relative"
       alignItems="flex-start"
-      backgroundColor="#FFFFFF"
+      backgroundColor="neutral.0"
       marginBottom={
         isMobile && commentContainerRef.current
           ? `${commentContainerRef.current.offsetHeight}px`
@@ -230,7 +230,7 @@ export const ProjectFundingSelectionFormScreen = ({
 
               <HStack>
                 <SatoshiAmount
-                  color="#1A1A1A"
+                  color="neutral.700"
                   fontWeight="bold"
                   marginLeft={'auto'}
                   fontSize={'21px'}
@@ -238,7 +238,7 @@ export const ProjectFundingSelectionFormScreen = ({
                   {getTotalAmount('sats', name)}
                 </SatoshiAmount>
 
-                <Text color="#1A1A1A" fontWeight="bold" fontSize={'21px'}>
+                <Text color="neutral.700" fontWeight="bold" fontSize={'21px'}>
                   {`($${getTotalAmount('dollar', name)})`}
                 </Text>
               </HStack>

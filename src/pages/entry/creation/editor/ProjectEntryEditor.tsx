@@ -101,7 +101,7 @@ const useStyles = createUseStyles<Rules, StyleProps, ReactJSSTheme>(
         display: 'block',
       },
       '& .ql-syntax': {
-        backgroundColor: `${colors.bgGrey} !important`,
+        backgroundColor: `${theme.neutral[100]} !important`,
         color: `${theme.neutral[600]} !important`,
       },
       '& .ql-video': {

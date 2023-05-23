@@ -66,7 +66,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
           ref={ref}
           height="230px"
           overflow="hidden"
-          backgroundColor="white"
+          backgroundColor="neutral.0"
         >
           <ImageWithReload
             grey
@@ -81,12 +81,13 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
           width="155px"
           height="155px"
           borderRadius="8px"
-          border="2px solid white"
+          border="2px solid "
+          borderColor="neutral.0"
           overflow="hidden"
           position="absolute"
           bottom="-30px"
           left="24px"
-          backgroundColor="white"
+          backgroundColor="neutral.0"
         >
           <ImageWithReload
             grey
@@ -281,7 +282,8 @@ const greenBorderButtonStyles: ButtonProps = {
   size: 'sm',
   _hover: {
     backgroundColor: 'none',
-    border: '1px solid #20ECC7',
+    border: '1px solid',
+    borderColor: 'primary.400',
   },
   _active: { backgroundColor: 'primary.400' },
   bg: 'none',

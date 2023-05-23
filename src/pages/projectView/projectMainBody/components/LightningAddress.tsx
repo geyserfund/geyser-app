@@ -28,12 +28,12 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
           leftIcon={<BoltIcon scale={0.8} />}
           border="1px solid"
           borderColor="transparent"
-          _hover={{ backgroundColor: 'none', borderColor: '#20ECC7' }}
+          _hover={{ backgroundColor: 'none', borderColor: 'primary.400' }}
           _active={{ backgroundColor: 'primary.400' }}
           bg="none"
           fontWeight="medium"
           onClick={handleAddressCopy}
-          color="#2F423E"
+          color="neutral.600"
           id="lightning-address"
           {...rest}
         >

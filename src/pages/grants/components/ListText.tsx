@@ -47,7 +47,7 @@ export const ListText = ({
           fontWeight={'700'}
           fontSize="13px"
           fontFamily={fonts.interBlack}
-          color={colors.gray500}
+          color="neutral.600"
           {...subtitleProps}
         >
           {subtitle}

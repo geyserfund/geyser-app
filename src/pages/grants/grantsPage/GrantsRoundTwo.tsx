@@ -213,7 +213,8 @@ export const GrantsRoundTwo = ({
             </Text>
           </Box>
           <Box
-            border={'2px solid #E9ECEF'}
+            border={'2px solid'}
+            borderColor="neutral.200"
             borderRadius="12px"
             pb={4}
             pt={6}

@@ -7,7 +7,7 @@ type Props = {
 
 export const ProjectFundersCountIndicator = ({ count }: Props) => (
   <HStack
-    background="white"
+    background="neutral.0"
     borderRadius="35px"
     padding="5px 10px"
     boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"

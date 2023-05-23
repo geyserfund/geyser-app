@@ -248,7 +248,7 @@ export const EntryPreview = () => {
 
           <VStack
             alignItems="flex-start"
-            backgroundColor="white"
+            backgroundColor="neutral.0"
             border="1px solid"
             borderColor="neutral.200"
             borderRadius="4px"

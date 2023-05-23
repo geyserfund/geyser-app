@@ -49,7 +49,7 @@ export const RemoveExternalAccountModal = ({
             backgroundColor="secondary.red"
             rounded="full"
           >
-            <BsXLg color="white" fontSize="40px" />
+            <BsXLg color="neutral.0" fontSize="40px" />
           </HStack>
           {isNostr && (
             <Body2 semiBold wordBreak="break-word">
