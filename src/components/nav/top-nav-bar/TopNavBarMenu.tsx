@@ -8,6 +8,7 @@ import { AboutUsUrl, FAQUrl, FeedbackUrl, getPath } from '../../../constants'
 import { AuthContext } from '../../../context'
 import { buttonCommon } from '../../../styles/common'
 import { ProjectStatus } from '../../../types'
+import { ColorModeSwitcher } from '../../../utils'
 import { ButtonComponent } from '../../ui'
 import { MenuItemLink } from './MenuItemLink'
 import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem'
@@ -195,6 +196,8 @@ export const TopNavBarMenu = ({
             </MenuItem>
           </>
         ) : null}
+        <MenuDivider />
+        <ColorModeSwitcher />
       </MenuList>
     </Menu>
   )

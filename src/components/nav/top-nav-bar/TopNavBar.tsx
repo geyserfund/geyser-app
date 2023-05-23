@@ -654,10 +654,6 @@ export const TopNavBar = () => {
               </ButtonComponent>
             ) : null}
 
-            <Button variant="primary" onClick={toggleColorMode}>
-              color mode
-            </Button>
-
             {shouldShowDropdownMenuButton ? (
               <TopNavBarMenu
                 shouldShowDashboardMenuItem={
