@@ -70,7 +70,6 @@ export const ProjectProvider = ({
     saving,
   } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first',
     onError() {
       navigate(getPath('notFound'))
     },
