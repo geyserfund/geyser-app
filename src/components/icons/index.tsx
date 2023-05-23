@@ -3,8 +3,6 @@ import { Box } from '@chakra-ui/layout'
 import { ImageProps } from '@chakra-ui/react'
 
 import BoltSvg from '../../assets/bolt.svg'
-import SatoshiTilted from '../../assets/satoshi-tilted.svg'
-import SatoshiTiltedDash from '../../assets/satoshi-tilted-dash.svg'
 import ShareSvg from '../../assets/share.svg'
 import {
   CrownUrl,
@@ -55,47 +53,6 @@ export const SatoshiIcon = ({
         width={`${14 * scale}px`}
         minWidth={`${14 * scale}px`}
         src={SatoshiUrl}
-        alt="satoshi"
-        {...rest}
-      />
-    </Box>
-  )
-}
-
-export const SatoshiIconTilted = ({
-  scale = 1,
-  wrapperClass,
-  isDark,
-  color,
-  dash,
-  ...rest
-}: any) => {
-  const getFilter = () => {
-    if (isDark) {
-      return 'invert(100%)'
-    }
-
-    switch (color) {
-      case 'primary.400':
-        return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)'
-      case 'primary.600':
-        return 'invert(50%) sepia(59%) saturate(5011%) hue-rotate(143deg) brightness(96%) contrast(98%)'
-      case 'primary.800':
-        return 'invert(31%) sepia(17%) saturate(2529%) hue-rotate(123deg) brightness(93%) contrast(102%)'
-      default:
-        return undefined
-    }
-  }
-
-  return (
-    <Box padding="3px 0px" className={wrapperClass}>
-      <Image
-        filter={getFilter()}
-        height={`${26 * scale}px`}
-        minHeight={`${26 * scale}px`}
-        width={`${26 * scale}px`}
-        minWidth={`${26 * scale}px`}
-        src={dash ? SatoshiTiltedDash : SatoshiTilted}
         alt="satoshi"
         {...rest}
       />
@@ -222,3 +179,4 @@ export const FountainIcon = (props: ImageProps) => (
 )
 
 export * from './CustomSvgIcons'
+export * from './svg'

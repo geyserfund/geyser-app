@@ -180,10 +180,7 @@ export const DonationInput = ({
             {isSatoshi ? (
               <BiDollar className={classes.insideIcon} />
             ) : (
-              <SatoshiIconTilted
-                wrapperClass={classes.insideIcon}
-                scale={0.7}
-              />
+              <SatoshiIconTilted position="absolute" scale={0.7} />
             )}
           </Button>
         </InputRightElement>
