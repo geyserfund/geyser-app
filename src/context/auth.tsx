@@ -91,6 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = (me: UserMeFragment) => {
     setUser({ ...defaultUser, ...me })
     setIsLoggedIn(true)
+    setIsUserAProjectCreator(me.ownerOf?.length > 0)
   }
 
   const getAuthToken = async () => {

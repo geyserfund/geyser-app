@@ -6,7 +6,7 @@ import { ProjectImageListItemPlaceholder } from '..'
 
 type Props = HTMLChakraProps<'div'> & {
   imageSrc?: string
-  project: Project
+  project: Pick<Project, 'name' | 'thumbnailImage'>
   boxSize?: string
   borderRadius?: string
 }
