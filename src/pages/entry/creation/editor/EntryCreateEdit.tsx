@@ -1,4 +1,4 @@
-import { Box, HStack, Input, Text, theme, VStack } from '@chakra-ui/react'
+import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsImage } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'

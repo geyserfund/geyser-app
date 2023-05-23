@@ -2,7 +2,7 @@ import { Box, BoxProps, IconProps, Text, TextProps } from '@chakra-ui/react'
 import { PropsWithChildren, ReactNode } from 'react'
 
 import { SatSymbolIcon } from '../../../components/icons/svg/SatSymbolIcon'
-import { colors, fonts } from '../../../styles'
+import { fonts } from '../../../styles'
 
 export type Props = {
   isSatLogo?: boolean
