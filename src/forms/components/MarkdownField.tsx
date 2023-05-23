@@ -60,6 +60,7 @@ interface Props {
   initialContent?: () => string
   initialContentReady?: boolean
   name?: string
+  control?: Control<any, any>
 }
 
 export const MarkdownField = ({
@@ -69,6 +70,7 @@ export const MarkdownField = ({
   initialContent,
   initialContentReady = true,
   name,
+  control,
 }: Props) => {
   const onError: InvalidContentHandler = useCallback(
     ({ json, invalidContent, transformers }) => {
@@ -159,7 +161,7 @@ export const MarkdownField = ({
       >
         <WysiwygToolbar />
         <EditorComponent />
-        <SaveModule name={name} />
+        <SaveModule name={name} control={control} />
       </Remirror>
     </RemirrorStyleProvider>
   )

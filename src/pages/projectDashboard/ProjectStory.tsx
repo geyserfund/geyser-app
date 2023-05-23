@@ -79,6 +79,7 @@ export const ProjectStory = () => {
               <ProjectStoryForm form={form} isLoading={loading} />
               <Button
                 isLoading={updateLoading}
+                isDisabled={!form.formState.isValid}
                 variant="primary"
                 w="full"
                 type="submit"
