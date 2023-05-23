@@ -11,11 +11,12 @@ export const SatoshiIconTilted = ({
   if (dash) {
     return (
       <Icon
-        width="10"
+        width="auto"
         height={`${height}px`}
         viewBox="0 0 10 11"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        {...rest}
       >
         <g clipPath="url(#clip0_593_123592)">
           <path
@@ -59,11 +60,12 @@ export const SatoshiIconTilted = ({
 
   return (
     <Icon
-      width="10"
+      width="auto"
       height={`${height}px`}
       viewBox="0 0 10 11"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...rest}
     >
       <g clipPath="url(#clip0_593_123592)">
         <path

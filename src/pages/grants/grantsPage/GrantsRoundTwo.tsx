@@ -10,7 +10,7 @@ import {
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
-import { SatSymbol } from '../../../assets'
+import { SatoshiIconTilted } from '../../../components/icons'
 import { AppFooter } from '../../../components/molecules'
 import {
   AlbyUrl,
@@ -113,7 +113,7 @@ export const GrantsRoundTwo = ({
                 justifyContent={'center'}
               >
                 <Box mr={1}>
-                  <img src={SatSymbol} width="30px" alt="satsymbol" />
+                  <SatoshiIconTilted scale={1.4} />
                 </Box>
 
                 <Text

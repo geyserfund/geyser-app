@@ -14,51 +14,9 @@ import {
   MagnifyUrl,
   MedalUrl,
   RopeUrl,
-  SatoshiUrl,
   StarUrl,
   TrophyUrl,
 } from '../../constants'
-
-interface SatoshiIconProps extends ImageProps {
-  scale?: number
-  wrapperClass?: string
-  isDark?: boolean
-}
-
-export const SatoshiIcon = ({
-  scale = 1,
-  wrapperClass,
-  isDark,
-  color,
-  ...rest
-}: SatoshiIconProps) => {
-  const getFilter = () => {
-    if (color === 'primary.400') {
-      return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)'
-    }
-
-    if (isDark) {
-      return 'invert(100%)'
-    }
-
-    return undefined
-  }
-
-  return (
-    <Box padding="3px 0px" className={wrapperClass}>
-      <Image
-        filter={getFilter()}
-        height={`${26 * scale}px`}
-        minHeight={`${26 * scale}px`}
-        width={`${14 * scale}px`}
-        minWidth={`${14 * scale}px`}
-        src={SatoshiUrl}
-        alt="satoshi"
-        {...rest}
-      />
-    </Box>
-  )
-}
 
 export const StarIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
