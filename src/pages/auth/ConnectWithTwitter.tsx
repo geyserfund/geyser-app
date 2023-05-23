@@ -1,13 +1,10 @@
-import { useLazyQuery } from '@apollo/client'
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsTwitter } from 'react-icons/bs'
 
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
-import { defaultUser } from '../../defaults'
-import { QUERY_ME } from '../../graphql'
-import { useMeLazyQuery, User } from '../../types/generated/graphql'
+import { useMeLazyQuery } from '../../types/generated/graphql'
 import { hasTwitterAccount, useNotification } from '../../utils'
 
 interface ConnectWithTwitterProps extends ButtonProps {
