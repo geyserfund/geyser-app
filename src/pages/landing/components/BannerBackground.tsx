@@ -1,28 +1,36 @@
 import { HStack } from '@chakra-ui/react'
-import { useCallback, useEffect } from 'react'
-import { useTheme } from 'react-jss'
+import { useCallback, useEffect, useMemo } from 'react'
 
-import { ReactJSSTheme } from '../../../context'
+import { useCustomTheme } from '../../../utils'
 
 export const BannerBackground = () => {
-  const theme = useTheme<ReactJSSTheme>()
+  const theme = useCustomTheme()
 
-  const defaultBackground = `radial-gradient( at center, ${theme.primary[400]}, ${theme.neutral[0]})`
+  const defaultBackground = useMemo(
+    () =>
+      `radial-gradient( at center, ${theme.primary[400]}, ${theme.neutral[0]})`,
+    [theme],
+  )
 
-  const handleMouseMove = useCallback((event: MouseEvent) => {
-    const element = document.getElementById('radial-gradient')
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      const element = document.getElementById('radial-gradient')
 
-    if (element) {
-      if (event.pageY <= 186) {
-        const windowWidth = element.clientWidth
-        const windowHeight = element.clientHeight
-        const mouseXpercentage = Math.round((event.pageX / windowWidth) * 100)
-        const mouseYpercentage = Math.round((event.pageY / windowHeight) * 100)
+      if (element) {
+        if (event.pageY <= 186) {
+          const windowWidth = element.clientWidth
+          const windowHeight = element.clientHeight
+          const mouseXpercentage = Math.round((event.pageX / windowWidth) * 100)
+          const mouseYpercentage = Math.round(
+            (event.pageY / windowHeight) * 100,
+          )
 
-        element.style.background = `radial-gradient( at ${mouseXpercentage}% ${mouseYpercentage}%, ${theme.primary[400]}, ${theme.neutral[0]}`
+          element.style.background = `radial-gradient( at ${mouseXpercentage}% ${mouseYpercentage}%, ${theme.primary[400]}, ${theme.neutral[0]}`
+        }
       }
-    }
-  }, [])
+    },
+    [theme],
+  )
 
   useEffect(() => {
     document.addEventListener('mousemove', handleMouseMove)
@@ -30,7 +38,8 @@ export const BannerBackground = () => {
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
     }
-  }, [])
+  }, [handleMouseMove])
+
   return (
     <HStack
       id="radial-gradient"
@@ -42,6 +51,6 @@ export const BannerBackground = () => {
       transition="background 0.5s ease"
       borderBottom="4px solid"
       borderColor="neutral.100"
-    ></HStack>
+    />
   )
 }

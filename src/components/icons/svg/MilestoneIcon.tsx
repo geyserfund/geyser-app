@@ -1,10 +1,9 @@
 import { Icon, IconProps } from '@chakra-ui/react'
-import { useTheme } from 'react-jss'
 
-import { ReactJSSTheme } from '../../../context'
+import { useCustomTheme } from '../../../utils'
 
 export const MilestoneIcon = (props: IconProps) => {
-  const theme = useTheme<ReactJSSTheme>()
+  const theme = useCustomTheme()
   return (
     <Icon
       viewBox="0 0 18 18"

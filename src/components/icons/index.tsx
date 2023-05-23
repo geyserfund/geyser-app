@@ -118,12 +118,6 @@ export const BoltIcon = (props: ImageProps) => {
   )
 }
 
-export const ShareIcon = (props: ImageProps) => (
-  <Box padding="3px 0px">
-    <Image src={ShareSvg} alt="share" {...props} />
-  </Box>
-)
-
 export const FountainIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
     <Image

@@ -6,7 +6,7 @@ import { QRCode } from 'react-qrcode-logo'
 import LogoDark from '../../../../assets/logo-dark.svg'
 import { BoltSvgIcon, CurvedArrow } from '../../../../components/icons'
 import { ReactJSSTheme } from '../../../../context'
-import { useCustomTheme } from '../../../../utils'
+import { lightModeColors } from '../../../../styles'
 
 const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   gradientContainer: {
@@ -24,8 +24,6 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
   ({ title, banner, lnurlPayUrl }, ref) => {
     const classes = useStyles()
     const [isLogoReady, setLogoReady] = useState(false)
-
-    const theme = useCustomTheme()
 
     return (
       <>
@@ -63,6 +61,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                   alignItems="end"
                   justifyContent="end"
                   flexDirection="column"
+                  color={lightModeColors.neutral[900]}
                   pr="1.8em"
                   pb="0.3em"
                 >
@@ -99,7 +98,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                 <Box
                   display="flex"
                   justifyContent="center"
-                  bgColor="neutral.0"
+                  bgColor="white"
                   borderRadius="3xl"
                   filter="drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.1))"
                 >
@@ -110,7 +109,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                     logoHeight={60}
                     logoWidth={60}
                     logoOpacity={1}
-                    fgColor={theme.neutral[900]}
+                    fgColor={lightModeColors.neutral[900]}
                     bgColor="transparent"
                     removeQrCodeBehindLogo={true}
                     size={360}

@@ -1,6 +1,7 @@
-import { createUseStyles, useTheme } from 'react-jss'
+import { createUseStyles } from 'react-jss'
 
 import { ReactJSSTheme } from '../../../context'
+import { useCustomTheme } from '../../../utils'
 
 const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   thumbnailImagePlaceholder: {
@@ -17,7 +18,7 @@ type Props = React.SVGProps<SVGSVGElement>
 export const ProjectEntryCardThumbnailPlaceholder = ({ ...rest }: Props) => {
   const styles = useStyles()
 
-  const theme = useTheme<ReactJSSTheme>()
+  const theme = useCustomTheme()
 
   return (
     <svg

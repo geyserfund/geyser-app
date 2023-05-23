@@ -1,9 +1,8 @@
 import { Box, Text } from '@chakra-ui/layout'
 import { useState } from 'react'
 import { BsCurrencyBitcoin } from 'react-icons/bs'
-import { useTheme } from 'react-jss'
 
-import { ReactJSSTheme } from '../../../context'
+import { useCustomTheme } from '../../../utils'
 import { commaFormatted } from '../../../utils/formatData/helperFunctions'
 import { SatoshiIconTilted } from '../../icons'
 
@@ -26,7 +25,7 @@ const USDBalance = ({ balance }: { balance: number }) => (
 const BTCBalance = ({ balance }: { balance: number }) => {
   // Let bitcoins = 0;
   const displaySatoshis = balance < 1000000
-  const theme = useTheme<ReactJSSTheme>()
+  const theme = useCustomTheme()
   return displaySatoshis ? (
     <>
       <SatoshiIconTilted scale={1.5} color="primary.400" />

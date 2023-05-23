@@ -5,14 +5,18 @@ import ImageEdit from 'quill-image-edit-module'
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createUseStyles, useTheme } from 'react-jss'
+import { createUseStyles } from 'react-jss'
 import { Quill } from 'react-quill'
 
 import { ID } from '../../../../constants'
 import { ReactJSSTheme } from '../../../../context'
 import { getSignedUploadAPI } from '../../../../hooks'
 import { fonts } from '../../../../styles'
-import { useMobileMode, useNotification } from '../../../../utils'
+import {
+  useCustomTheme,
+  useMobileMode,
+  useNotification,
+} from '../../../../utils'
 
 type Rules = string
 
@@ -155,7 +159,7 @@ export const ProjectEntryEditor = ({
 
   const { toast } = useNotification()
   const classes = useStyles({ isReadOnly, noPadding, isMobile })
-  const theme = useTheme<ReactJSSTheme>()
+  const theme = useCustomTheme()
 
   const editorModules = {
     toolbar: {
