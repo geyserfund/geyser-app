@@ -8,7 +8,7 @@ export const FormInputContainer = ({
   error = null,
 }: PropsWithChildren<{
   title?: string
-  subtitle?: string
+  subtitle?: ReactNode
   error?: ReactNode
 }>) => {
   return (

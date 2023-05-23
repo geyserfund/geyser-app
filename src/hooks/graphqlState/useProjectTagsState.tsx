@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import {
-  Project,
   ProjectFragment,
   Tag,
   useProjectTagAddMutation,
@@ -14,14 +13,14 @@ export const useProjectTagsState = ({
   updateProject,
 }: {
   project: ProjectFragment | null
-  updateProject?: (_: Project) => void
+  updateProject: (_: Partial<ProjectFragment>) => void
 }) => {
   const [tags, setTags] = useState<Tag[]>([])
 
   const { toast } = useNotification()
 
   useEffect(() => {
-    if (project && project.tags?.length) {
+    if (project && project.tags) {
       setTags(project.tags)
     }
   }, [project])
@@ -37,7 +36,7 @@ export const useProjectTagsState = ({
       if (updateProject && data.projectTagAdd) {
         updateProject({
           tags: data.projectTagAdd,
-        } as Project)
+        })
       }
     },
   })
@@ -54,7 +53,7 @@ export const useProjectTagsState = ({
         if (updateProject && data.projectTagRemove) {
           updateProject({
             tags: data.projectTagRemove,
-          } as Project)
+          })
         }
       },
     })
@@ -92,7 +91,7 @@ export const useProjectTagsState = ({
     }
 
     if (removeTags.length > 0) {
-      await Promise.allSettled(
+      const results = await Promise.all(
         removeTags.map((tag) =>
           removeTag({
             variables: {
@@ -104,10 +103,14 @@ export const useProjectTagsState = ({
           }),
         ),
       )
+
+      updateProject({
+        tags: results.flatMap(({ data }) => data?.projectTagRemove || []),
+      })
     }
 
     if (addTags.length > 0) {
-      await Promise.allSettled(
+      const results = await Promise.all(
         addTags.map((tag) =>
           addTag({
             variables: {
@@ -119,6 +122,10 @@ export const useProjectTagsState = ({
           }),
         ),
       )
+
+      updateProject({
+        tags: results.flatMap(({ data }) => data?.projectTagAdd || []),
+      })
     }
   }
 

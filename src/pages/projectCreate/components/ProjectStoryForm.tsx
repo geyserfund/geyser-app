@@ -1,8 +1,7 @@
-import { Box, HStack, Link, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
-import { BiInfoCircle } from 'react-icons/bi'
 
-import { commonMarkdownUrl, ProjectValidations } from '../../../constants'
+import { ProjectValidations } from '../../../constants'
 import { MarkdownField } from '../../../forms/components/MarkdownField'
 import { FormInputContainer } from './FormInputContainer'
 
@@ -30,23 +29,7 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
                   {formError}
                 </Text>
               ) : (
-                <HStack pt={1} width="100%" justifyContent="space-between">
-                  <HStack>
-                    <Text fontSize="12px" color="brand.neutral700">
-                      For **Bold** and *Italic*, see more{' '}
-                    </Text>
-                    <HStack
-                      as={Link}
-                      href={commonMarkdownUrl}
-                      isExternal
-                      spacing="0px"
-                    >
-                      <BiInfoCircle />
-                      <Text fontSize="12px" color="brand.neutral700">
-                        MarkDown
-                      </Text>
-                    </HStack>
-                  </HStack>
+                <HStack pt={1} width="100%" justifyContent="end">
                   <Text fontSize="12px" color="brand.neutral700">
                     <span>{form.watch('description').length}</span>/
                     <span>{ProjectValidations.description.maxLength}</span>

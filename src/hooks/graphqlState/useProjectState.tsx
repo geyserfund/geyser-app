@@ -72,7 +72,7 @@ export const useProjectState = (
 
   const updateProject = (value: Partial<ProjectFragment>) => {
     setProject((current) =>
-      current ? { ...current, ...value } : (value as ProjectFragment),
+      current ? { ...current, ...value } : { ...baseProject, ...value },
     )
   }
 
@@ -121,6 +121,8 @@ export const useProjectState = (
 
     await updateProjectMutation({ variables: { input } })
   }
+
+  console.log({ tags: project?.tags, project })
 
   return {
     loading,
