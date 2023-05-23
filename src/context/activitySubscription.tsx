@@ -88,6 +88,12 @@ export const ActivitySubscriptionProvider = ({
     }
   }, [])
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setHasNewActivity(false)
+    }
+  }, [isLoggedIn])
+
   return (
     <ActivitySubscriptionContext.Provider
       value={{ hasNewActivity, activities, clearActivity }}
