@@ -21,6 +21,7 @@ export const useProjectDetailsForm = ({
   } = useProjectState(
     projectId,
     {
+      fetchPolicy: 'network-only',
       onError() {
         toast({
           title: 'Error fetching project',

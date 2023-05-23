@@ -25,6 +25,7 @@ export const useSignedUpload = ({
   }, [toast])
 
   const [getSignedUrl] = useLazyQuery(QUERY_SIGNED_UPLOAD_URL, {
+    fetchPolicy: 'network-only',
     onError() {
       failedToast()
       setIsLoading(false)
@@ -51,6 +52,8 @@ export const useSignedUpload = ({
           })
 
           const imageUrl = `${GeyserAssetDomainUrl}${getSignedUploadUrl.distributionUrl}`
+
+          await testImage(imageUrl)
 
           onUpload?.(imageUrl, file)
           setIsLoading(false)
@@ -84,6 +87,12 @@ export const getSignedUploadAPI = async (file: any): Promise<string> => {
   })
 
   const distributionUrl = `${GeyserAssetDomainUrl}${response.distributionUrl}`
-  await testImage(distributionUrl)
+
+  try {
+    await testImage(distributionUrl)
+  } catch (e) {
+    console.error(e)
+  }
+
   return distributionUrl
 }

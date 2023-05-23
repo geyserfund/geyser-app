@@ -30,6 +30,8 @@ export const useProjectLinksValidation = ({
       } catch (error) {
         errors.push(true)
       }
+
+      return link
     })
 
     setLinkError(errors)
