@@ -1,6 +1,7 @@
 import {
   Box,
   Divider,
+  Image,
   ListItem,
   OrderedList,
   UnorderedList,
@@ -27,7 +28,7 @@ import {
 import { AllStyledComponent } from '@remirror/styles/emotion'
 import { PropsWithChildren, useCallback } from 'react'
 import { Control, useController } from 'react-hook-form'
-import { getRemirrorJSON, InvalidContentHandler } from 'remirror'
+import { getRemirrorJSON, InvalidContentHandler, RemirrorJSON } from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -177,6 +178,10 @@ const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
   )
 }
 
+const imageHandler = ({ node: { attrs } }: { node: RemirrorJSON }) => {
+  return <Image my={4} borderRadius="8px" {...attrs} />
+}
+
 const typeMap: MarkMap = {
   blockquote: 'blockquote',
   bulletList: UnorderedList,
@@ -187,7 +192,7 @@ const typeMap: MarkMap = {
   heading: Heading,
   horizontalRule: Divider,
   iframe: createIFrameHandler(),
-  image: 'img',
+  image: imageHandler,
   listItem: ListItem,
   paragraph: 'p',
   orderedList: OrderedList,
