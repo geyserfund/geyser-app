@@ -91,7 +91,7 @@ export const ProjectNavigationButton = ({
 
   const ComponentProps = hideLabel
     ? {
-        variant: 'secondary',
+        variant: 'transparent',
         children: leftIcon,
         ...props,
       }
