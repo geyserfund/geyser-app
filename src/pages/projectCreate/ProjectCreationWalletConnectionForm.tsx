@@ -188,6 +188,10 @@ export const ProjectCreationWalletConnectionForm = ({
     }
 
     if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
+      if (!lightningAddressFormValue) {
+        return null
+      }
+
       return {
         lightningAddressConnectionDetailsInput: {
           lightningAddress: lightningAddressFormValue,
@@ -212,7 +216,7 @@ export const ProjectCreationWalletConnectionForm = ({
   }, [connectionOption, lightningAddressFormValue, createWalletInput])
 
   const validateLightningAddress = async () => {
-    if (lightningAddressFormError === null) {
+    if (lightningAddressFormError === null && lightningAddressFormValue) {
       await evaluateLightningAddress()
     }
   }
@@ -273,9 +277,11 @@ export const ProjectCreationWalletConnectionForm = ({
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
-    if (lightningAddress.length === 0) {
-      setLightningAddressFormError(`Lightning Address can't be empty.`)
-    } else if (lightningAddress.endsWith('@geyser.fund')) {
+    if (!lightningAddress) {
+      return setLightningAddressFormError(null)
+    }
+
+    if (lightningAddress.endsWith('@geyser.fund')) {
       setLightningAddressFormError(
         `Custom Lightning Addresses can't end with "@geyser.fund".`,
       )
@@ -438,11 +444,20 @@ export const ProjectCreationWalletConnectionForm = ({
             <WalletConnectionOptionInfoBox
               primaryText="Connect your node"
               promoText="No fee per transaction"
-              secondaryText="Connect your lightning node to receive incoming transactions directly. Don't have a node? You can create a cloud node with the recommended app."
+              secondaryText={
+                <span>
+                  Connect your lightning node to receive incoming transactions
+                  directly. Don&apos;t have a node? You can{' '}
+                  <Link href={VoltageExplainerPageForGeyserURL}>
+                    create a cloud node
+                  </Link>{' '}
+                  with the recommended app.
+                </span>
+              }
             >
               <HStack>
                 <Link isExternal href={VoltageExplainerPageForGeyserURL}>
-                  <Image src={VoltageUrl} />
+                  <Image maxWidth="8em" src={VoltageUrl} />
                 </Link>
               </HStack>
             </WalletConnectionOptionInfoBox>

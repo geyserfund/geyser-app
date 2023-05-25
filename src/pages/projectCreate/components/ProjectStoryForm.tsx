@@ -1,5 +1,5 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { UseFormReturn } from 'react-hook-form'
+import { FormProvider, UseFormReturn } from 'react-hook-form'
 
 import { ProjectValidations } from '../../../constants'
 import { MarkdownField } from '../../../forms/components/MarkdownField'
@@ -12,7 +12,7 @@ interface Props {
 
 export const ProjectStoryForm = ({ form, isLoading }: Props) => {
   return (
-    <form style={{ width: '100%' }}>
+    <FormProvider {...form}>
       <VStack width="100%" alignItems="flex-start" spacing={6}>
         <FormInputContainer
           width="100%"
@@ -22,13 +22,12 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
             <MarkdownField
               initialContentReady={!isLoading}
               initialContent={() => form.watch('description') || ''}
-              control={form.control}
               name="description"
             />
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
                 <Text pt={1} color="brand.error">
-                  Project story is required (max: 4000 characters)
+                  {form.getFieldState('description').error?.message}
                 </Text>
               )}
               <Text
@@ -44,6 +43,6 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
           </Box>
         </FormInputContainer>
       </VStack>
-    </form>
+    </FormProvider>
   )
 }
