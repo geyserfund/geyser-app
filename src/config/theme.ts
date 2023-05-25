@@ -1,7 +1,6 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import { darkModeColors, fonts, lightModeColors } from '../styles'
-import { isDarkMode } from '../utils'
+import { fonts, lightModeColors } from '../styles'
 
 export const theme = extendTheme({
   initialColorMode: 'light',
@@ -42,79 +41,76 @@ export const theme = extendTheme({
       },
       variants: {
         primary: {
-          backgroundColor: 'primary.400',
+          backgroundColor: lightModeColors.primary[400],
           border: 'none',
-          color: 'neutral.900',
+          color: lightModeColors.neutral[900],
           _hover: {
-            backgroundColor: 'neutral.200',
+            backgroundColor: lightModeColors.neutral[200],
           },
           _active: {
-            backgroundColor: 'neutral.300',
+            backgroundColor: lightModeColors.neutral[300],
           },
         },
         primaryNeutral: {
-          backgroundColor: 'neutral.100',
+          backgroundColor: lightModeColors.neutral[100],
           border: 'none',
-          color: 'neutral.900',
+          color: lightModeColors.neutral[900],
           _hover: {
-            backgroundColor: 'neutral.200',
+            backgroundColor: lightModeColors.neutral[200],
           },
           _active: {
-            backgroundColor: 'neutral.300',
+            backgroundColor: lightModeColors.neutral[300],
           },
         },
         secondary: {
           boxShadow: 'none',
           outline: 'none',
           border: `2px solid`,
-          borderColor: 'neutral.200',
-          color: 'neutral.900',
-          backgroundColor: 'neutral.50',
+          borderColor: lightModeColors.neutral[200],
+          color: lightModeColors.neutral[900],
+          backgroundColor: lightModeColors.neutral[50],
           _hover: {
-            borderColor: 'primary.400',
+            borderColor: lightModeColors.primary[400],
           },
           _active: {
-            borderColor: 'primary.400',
-            backgroundColor: 'primary.100',
+            borderColor: lightModeColors.primary[400],
+            backgroundColor: lightModeColors.primary[100],
           },
         },
         secondaryNeutral: {
           border: `2px solid`,
-          borderColor: 'neutral.200',
-          color: 'neutral.900',
-          backgroundColor: 'neutral.100',
+          borderColor: lightModeColors.neutral[200],
+          color: lightModeColors.neutral[900],
+          backgroundColor: lightModeColors.neutral[100],
           _hover: {
-            borderColor: 'primary.400',
+            borderColor: lightModeColors.primary[400],
           },
           _active: {
-            borderColor: 'primary.400',
-            backgroundColor: 'primary.100',
+            borderColor: lightModeColors.primary[400],
+            backgroundColor: lightModeColors.primary[100],
           },
         },
         transparent: {
           backgroundColor: 'transparent',
           _hover: {
-            borderColor: 'primary.400',
-            backgroundColor: 'neutral.100',
+            borderColor: lightModeColors.primary[400],
+            backgroundColor: lightModeColors.neutral[100],
           },
           _active: {
-            borderColor: 'primary.400',
-            backgroundColor: 'primary.100',
+            borderColor: lightModeColors.primary[400],
+            backgroundColor: lightModeColors.primary[100],
           },
         },
         danger: {
-          backgroundColor: 'secondary.red',
-          color: 'neutral.0',
-          _hover: {
-            backgroundColor: 'secondary.red',
-          },
+          backgroundColor: lightModeColors.secondary.red,
+          color: lightModeColors.neutral[0],
         },
       },
     },
     Text: {
       baseStyle: {
         fontSize: '14px',
-        color: 'neutral.900',
+        color: lightModeColors.neutral[900],
         lineHeight: 1.6,
       },
       variants: {
