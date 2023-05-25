@@ -54,6 +54,7 @@ export const LandingPage = () => {
                   offset={dimensions.topNavBar.desktop.height + 20}
                   bias={20}
                   buffer={10}
+                  backgroundColor="transparent"
                 >
                   <Filters />
                 </StickToTop>

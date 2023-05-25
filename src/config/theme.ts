@@ -40,56 +40,56 @@ export const theme = {
         },
       },
       variants: {
-        primary: {
-          backgroundColor: lightModeColors.primary[400],
+        primary: ({ theme }: StyleFunctionProps) => ({
+          backgroundColor: theme.colors.primary[400],
           border: 'none',
-          color: lightModeColors.neutral[900],
+          color: theme.colors.neutral[900],
           _hover: {
-            backgroundColor: lightModeColors.neutral[200],
+            backgroundColor: theme.colors.neutral[200],
           },
           _active: {
-            backgroundColor: lightModeColors.neutral[300],
+            backgroundColor: theme.colors.neutral[300],
           },
-        },
-        primaryNeutral: {
-          backgroundColor: lightModeColors.neutral[100],
+        }),
+        primaryNeutral: ({ theme }: StyleFunctionProps) => ({
+          backgroundColor: theme.colors.neutral[100],
           border: 'none',
-          color: lightModeColors.neutral[900],
+          color: theme.colors.neutral[900],
           _hover: {
-            backgroundColor: lightModeColors.neutral[200],
+            backgroundColor: theme.colors.neutral[200],
           },
           _active: {
-            backgroundColor: lightModeColors.neutral[300],
+            backgroundColor: theme.colors.neutral[300],
           },
-        },
-        secondary: {
+        }),
+        secondary: ({ theme }: StyleFunctionProps) => ({
           boxShadow: 'none',
           outline: 'none',
           border: `2px solid`,
-          borderColor: lightModeColors.neutral[200],
-          color: lightModeColors.neutral[900],
-          backgroundColor: lightModeColors.neutral[50],
+          borderColor: theme.colors.neutral[200],
+          color: theme.colors.neutral[900],
+          backgroundColor: theme.colors.neutral[50],
           _hover: {
-            borderColor: lightModeColors.primary[400],
+            borderColor: theme.colors.primary[400],
           },
           _active: {
-            borderColor: lightModeColors.primary[400],
-            backgroundColor: lightModeColors.primary[100],
+            borderColor: theme.colors.primary[400],
+            backgroundColor: theme.colors.primary[100],
           },
-        },
-        secondaryNeutral: {
+        }),
+        secondaryNeutral: ({ theme }: StyleFunctionProps) => ({
           border: `2px solid`,
-          borderColor: lightModeColors.neutral[200],
-          color: lightModeColors.neutral[900],
-          backgroundColor: lightModeColors.neutral[100],
+          borderColor: theme.colors.neutral[200],
+          color: theme.colors.neutral[900],
+          backgroundColor: theme.colors.neutral[100],
           _hover: {
-            borderColor: lightModeColors.primary[400],
+            borderColor: theme.colors.primary[400],
           },
           _active: {
-            borderColor: lightModeColors.primary[400],
-            backgroundColor: lightModeColors.primary[100],
+            borderColor: theme.colors.primary[400],
+            backgroundColor: theme.colors.primary[100],
           },
-        },
+        }),
         transparent: {
           backgroundColor: 'transparent',
           _hover: {
@@ -110,7 +110,6 @@ export const theme = {
     Text: {
       baseStyle: {
         fontSize: '14px',
-        color: lightModeColors.neutral[900],
         lineHeight: 1.6,
       },
       variants: {

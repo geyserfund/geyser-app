@@ -105,13 +105,15 @@ export const GradientBanner = () => {
                       alignItems={'center'}
                       direction={isMobile ? 'column' : 'row'}
                     >
-                      <MonoBody1 bold marginTop="2px">
+                      <MonoBody1 bold marginTop="2px" color="neutral.700">
                         {index === 1
                           ? getBitcoinAmount(toInt(statsData[0]), true)
                           : getShortAmountLabel(toInt(statsData[0]))}
                       </MonoBody1>
 
-                      <Body2 textTransform={'uppercase'}>{statsData[1]}</Body2>
+                      <Body2 textTransform={'uppercase'} color="neutral.700">
+                        {statsData[1]}
+                      </Body2>
                     </Stack>
                   )
                 })
