@@ -18,9 +18,9 @@ type Props = {
   account: ExternalAccount
 }
 
-const useStyles = createUseStyles((theme: AppTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   linkContainer: {
-    color: theme.neutral[1000],
+    color: colors.neutral[1000],
   },
   linkButton: {
     fontSize: '14px',
