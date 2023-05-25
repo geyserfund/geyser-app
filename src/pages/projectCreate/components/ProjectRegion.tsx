@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
 
-import { Body1, Body2, Caption } from '../../../components/typography'
+import { Body1 } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries/tags'
@@ -18,6 +18,7 @@ import {
   ProjectFragment,
   ProjectRegionsGetResult,
 } from '../../../types'
+import { FormInputContainer } from './FormInputContainer'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
@@ -121,12 +122,16 @@ export const ProjectRegion = ({
     : location?.region || ''
 
   return (
-    <VStack className={classes.container} {...rest}>
-      <Body2>Region</Body2>
-      <Caption>
-        Get found more easily by putting your project on the map. Select a
-        country or region
-      </Caption>
+    <FormInputContainer
+      title="Region"
+      subtitle={
+        <span>
+          Get found more easily by putting your project on the map. Select a
+          country or region
+        </span>
+      }
+      {...rest}
+    >
       <VStack className={classes.tagContainer} spacing="10px">
         <SelectComponent<Country, false>
           menuIsOpen={isOpen}
@@ -162,6 +167,6 @@ export const ProjectRegion = ({
           )}
         </HStack>
       </VStack>
-    </VStack>
+    </FormInputContainer>
   )
 }

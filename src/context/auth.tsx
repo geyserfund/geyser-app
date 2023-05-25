@@ -1,4 +1,4 @@
-import { ApolloError, useLazyQuery } from '@apollo/client'
+import { ApolloError } from '@apollo/client'
 import { useDisclosure } from '@chakra-ui/react'
 import {
   createContext,
@@ -11,8 +11,12 @@ import {
 
 import { AUTH_SERVICE_ENDPOINT } from '../constants'
 import { defaultUser } from '../defaults'
-import { QUERY_ME, QUERY_ME_PROJECT_FOLLOWS } from '../graphql'
-import { Project, User } from '../types/generated/graphql'
+import {
+  Project,
+  useMeLazyQuery,
+  useMeProjectFollowsLazyQuery,
+  UserMeFragment,
+} from '../types/generated/graphql'
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
@@ -44,11 +48,11 @@ export type NavContextProps = {
 
 type AuthContextProps = {
   isLoggedIn: boolean
-  user: User
+  user: UserMeFragment
   isAnonymous: boolean
   loading: boolean
   error?: ApolloError
-  login: (me: User) => void
+  login: (me: UserMeFragment) => void
   logout: () => void
   isAuthModalOpen: boolean
   loginOnOpen: () => void
@@ -57,8 +61,8 @@ type AuthContextProps = {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
   queryCurrentUser: () => void
   getAuthToken: () => Promise<boolean>
-  setUser: Dispatch<SetStateAction<User>>
-  followedProjects: Project[]
+  setUser: Dispatch<SetStateAction<UserMeFragment>>
+  followedProjects: Pick<Project, 'id' | 'title' | 'name'>[]
 }
 
 export const AuthContext = createContext<AuthContextProps>(defaultContext)
@@ -67,25 +71,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true)
   const [initialLoad, setInitialLoad] = useState(false)
 
-  const [user, setUser] = useState<User>(defaultUser)
-  const [followedProjects, setFollowedProjects] = useState<Project[]>([])
+  const [user, setUser] = useState<UserMeFragment>(defaultUser)
+  const [followedProjects, setFollowedProjects] = useState<
+    Pick<Project, 'id' | 'title' | 'name'>[]
+  >([])
 
   const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const [queryCurrentUser, { loading: loadingUser, error }] = useLazyQuery(
-    QUERY_ME,
-    {
-      fetchPolicy: 'network-only',
-      onCompleted(data: { me: User }) {
-        if (data && data.me) {
-          login(data.me)
-        }
-      },
+  const [queryCurrentUser, { loading: loadingUser, error }] = useMeLazyQuery({
+    fetchPolicy: 'network-only',
+    onCompleted(data) {
+      if (data && data.me) {
+        login(data.me)
+      }
     },
-  )
+  })
 
-  const login = (me: User) => {
+  const login = (me: UserMeFragment) => {
     setUser({ ...defaultUser, ...me })
     setIsLoggedIn(true)
     setIsUserAProjectCreator(me.ownerOf?.length > 0)
@@ -108,17 +111,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const [queryFollowedProjects] = useLazyQuery<{ me: User }>(
-    QUERY_ME_PROJECT_FOLLOWS,
-    {
-      fetchPolicy: 'network-only',
-      onCompleted(data) {
-        if (data?.me?.projectFollows) {
-          setFollowedProjects(data?.me.projectFollows as Project[])
-        }
-      },
+  const [queryFollowedProjects] = useMeProjectFollowsLazyQuery({
+    fetchPolicy: 'network-only',
+    onCompleted(data) {
+      if (data?.me?.projectFollows) {
+        setFollowedProjects(data?.me.projectFollows)
+      }
     },
-  )
+  })
 
   const {
     isOpen: loginIsOpen,

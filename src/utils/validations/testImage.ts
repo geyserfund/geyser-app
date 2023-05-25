@@ -1,32 +1,28 @@
 export const testImage = (url: string, timesT?: number) =>
-  new Promise((resolve, reject) => {
+  new Promise<void>((resolve, reject) => {
     const timeout = timesT || 0
     const img = new Image()
     img.src = url
 
     img.onerror = function () {
       if (timeout < 10) {
-        return setTimeout(async () => {
-          const test = await testImage(url, timeout + 1)
-          resolve(test)
-        }, 1000)
+        setTimeout(() => testImage(url, timeout + 1).then(resolve), 1000)
+        return
       }
 
-      return resolve(false)
+      reject()
     }
 
     img.onabort = function () {
-      if (timeout < 5) {
-        return setTimeout(async () => {
-          const test = await testImage(url, timeout + 1)
-          resolve(test)
-        }, 1000)
+      if (timeout < 10) {
+        setTimeout(() => testImage(url, timeout + 1).then(resolve), 1000)
+        return
       }
 
-      return resolve(false)
+      reject()
     }
 
     img.onload = function () {
-      resolve('success')
+      resolve()
     }
   })

@@ -4,13 +4,18 @@ import { useState } from 'react'
 
 import { AUTH_SERVICE_ENDPOINT } from '../constants'
 import { useAuthContext } from '../context'
+import { useMeLazyQuery } from '../types'
 import { useNotification } from '../utils'
 import { getPubkey, signEvent } from '../utils/nostr/nip07'
 
 export const useNostrExtensonLogin = () => {
   const { toast } = useNotification()
-  const { getAuthToken, queryCurrentUser } = useAuthContext()
+  const { getAuthToken, login } = useAuthContext()
   const [error, setError] = useState<any>()
+
+  const [queryCurrentUser] = useMeLazyQuery({
+    fetchPolicy: 'network-only',
+  })
 
   const connect = async () => {
     try {
@@ -49,7 +54,10 @@ export const useNostrExtensonLogin = () => {
       )
 
       if (response.status >= 200 && response.status < 400) {
-        queryCurrentUser()
+        const { data } = await queryCurrentUser()
+        if (data && data.me) {
+          login(data.me)
+        }
       } else {
         const errorResponse = await response.json()
         setError(errorResponse)

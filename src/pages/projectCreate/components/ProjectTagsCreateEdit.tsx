@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
-import { Body1, Body2, Caption } from '../../../components/typography'
+import { Body1 } from '../../../components/typography'
 import {
   ButtonComponent,
   IconButtonComponent,
@@ -16,14 +16,9 @@ import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
+import { FormInputContainer } from './FormInputContainer'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
-  container: {
-    width: '100%',
-    alignItems: 'flex-start',
-    spacing: '5px',
-  },
-
   tagContainer: {
     width: '100%',
     backgroundColor: colors.neutral[0],
@@ -45,7 +40,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 
 interface ProjectTagsCreateEditProps extends StackProps {
   tags: Tag[]
-  updateTags: (_: Tag[]) => void
+  updateTags: Dispatch<SetStateAction<Tag[]>>
 }
 
 const TAG_MIN_LENGTH = 3
@@ -82,7 +77,7 @@ export const ProjectTagsCreateEdit = ({
     },
     onCompleted(data) {
       if (data.tagCreate) {
-        updateTags([...tags, data.tagCreate])
+        updateTags((current) => [...current, data.tagCreate])
         setInputValue('')
         onClose()
       }
@@ -170,12 +165,16 @@ export const ProjectTagsCreateEdit = ({
   const disableShowAddTag = inputValue.length < 3 || createLoading
 
   return (
-    <VStack className={classes.container} {...rest}>
-      <Body2>Tags</Body2>
-      <Caption>
-        Get discovered more easily by users through Tags. You can select up to 3
-        project tags.{' '}
-      </Caption>
+    <FormInputContainer
+      title="Tags"
+      subtitle={
+        <span>
+          Get discovered more easily by users through Tags. You can select up to
+          3 project tags.
+        </span>
+      }
+      {...rest}
+    >
       <VStack className={classes.tagContainer} spacing="10px">
         <SelectComponent<TagsGetResult, true>
           isMulti
@@ -218,6 +217,6 @@ export const ProjectTagsCreateEdit = ({
           })}
         </HStack>
       </VStack>
-    </VStack>
+    </FormInputContainer>
   )
 }

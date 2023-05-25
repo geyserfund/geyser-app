@@ -1,31 +1,13 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from '../fragments/project'
+import { FRAGMENT_USER_ME } from '../fragments/user'
 
 export const QUERY_ME = gql`
+  ${FRAGMENT_USER_ME}
   query Me {
     me {
-      id
-      username
-      imageUrl
-      email
-      externalAccounts {
-        id
-        accountType
-        externalUsername
-        externalId
-        public
-      }
-      ownerOf {
-        project {
-          id
-          name
-          image
-          thumbnailImage
-          title
-          status
-        }
-      }
+      ...UserMe
     }
   }
 `

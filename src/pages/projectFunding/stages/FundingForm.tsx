@@ -17,7 +17,7 @@ import {
   FundingInput,
   FundingResourceType,
   Project,
-  User,
+  UserMeFragment,
 } from '../../../types'
 import { useNotification } from '../../../utils'
 
@@ -33,7 +33,7 @@ const defaultFormState = {
 
 interface Props {
   project: Project
-  user?: User
+  user?: UserMeFragment
   fundingFlow: UseFundingFlowReturn
   onFundingRequested?(state: ProjectFundingFormState): void
 }

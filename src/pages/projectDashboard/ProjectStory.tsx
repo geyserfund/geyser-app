@@ -1,9 +1,8 @@
-import { Button, GridItem, useBreakpointValue, VStack } from '@chakra-ui/react'
+import { Button, GridItem, VStack } from '@chakra-ui/react'
 
 import { useProjectContext } from '../../context'
 import { useUpdateProjectMutation } from '../../types'
-import { useNotification } from '../../utils'
-import { ProjectPreviewComponent } from '../projectCreate/components/ProjectPreviewComponent'
+import { useMobileMode, useNotification } from '../../utils'
 import { ProjectStoryForm } from '../projectCreate/components/ProjectStoryForm'
 import {
   ProjectUnsavedModal,
@@ -17,7 +16,7 @@ export const ProjectStory = () => {
 
   const { project, updateProject, loading } = useProjectContext()
 
-  const isViewXL = useBreakpointValue({ xl: true, base: false })
+  const isMobile = useMobileMode()
 
   const form = useProjectStoryForm({ project })
 
@@ -62,25 +61,25 @@ export const ProjectStory = () => {
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <DashboardGridLayout>
         <GridItem
-          colSpan={isViewXL ? 6 : 2}
+          colSpan={isMobile ? 2 : 6}
           display="flex"
           justifyContent="center"
         >
           <VStack
-            spacing="30px"
             width="100%"
-            minWidth="350px"
             maxWidth="600px"
             marginBottom="40px"
             display="flex"
+            px={2}
             flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
+            justifyContent="start"
+            alignItems="start"
           >
-            <VStack width="100%" alignItems="flex-start" spacing="24px">
+            <VStack width="100%" alignItems="flex-start">
               <ProjectStoryForm form={form} isLoading={loading} />
               <Button
                 isLoading={updateLoading}
+                isDisabled={!form.formState.isValid}
                 variant="primary"
                 w="full"
                 type="submit"
@@ -89,15 +88,6 @@ export const ProjectStory = () => {
               </Button>
             </VStack>
           </VStack>
-        </GridItem>
-        <GridItem
-          colSpan={isViewXL ? 3 : 2}
-          display="flex"
-          marginTop={0}
-          alignItems="flex-start"
-          justifyContent="center"
-        >
-          <ProjectPreviewComponent data={form.getValues()} />
         </GridItem>
         <ProjectUnsavedModal {...unsavedModal} />
       </DashboardGridLayout>

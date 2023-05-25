@@ -4,7 +4,7 @@ import { Project } from '../../../types/generated/graphql'
 import { ProjectListItemImage } from '../../molecules'
 
 type Props = {
-  project: Project
+  project: Pick<Project, 'title' | 'name' | 'thumbnailImage'>
 }
 
 export const NavBarUserProjectMenuItem = ({ project }: Props) => {

@@ -1,4 +1,4 @@
-import { Text, VStack } from '@chakra-ui/react'
+import { StackProps, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, ReactNode } from 'react'
 
 export const FormInputContainer = ({
@@ -6,13 +6,16 @@ export const FormInputContainer = ({
   subtitle,
   children,
   error = null,
-}: PropsWithChildren<{
-  title?: string
-  subtitle?: string
-  error?: ReactNode
-}>) => {
+  ...props
+}: PropsWithChildren<
+  {
+    title?: string
+    subtitle?: ReactNode
+    error?: ReactNode
+  } & StackProps
+>) => {
   return (
-    <VStack spacing={1} alignItems="start" w="100%">
+    <VStack spacing={1} alignItems="start" w="100%" {...props}>
       {title && <Text variant="body1">{title}</Text>}
       {subtitle && (
         <Text variant="body2" color="neutral.600">

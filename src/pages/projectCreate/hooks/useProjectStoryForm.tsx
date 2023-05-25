@@ -9,11 +9,11 @@ import { ProjectFragment } from '../../../types'
 const schema = yup.object({
   description: yup
     .string()
-    .required('You must write a project story.')
     .max(
       ProjectValidations.description.maxLength,
       `Project story should be shorter than ${ProjectValidations.description.maxLength} characters.`,
-    ),
+    )
+    .required('You must write a project story.'),
 })
 
 export const useProjectStoryForm = ({

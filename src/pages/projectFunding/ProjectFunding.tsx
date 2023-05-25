@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { fundingStages } from '../../constants'
 import { useFundingFlow } from '../../hooks'
-import { Project, User } from '../../types'
+import { Project, UserMeFragment } from '../../types'
 import { ProjectFundingQRScreenQRCodeSection } from '../projectView/projectActivityPanel/components'
 import { FundingComplete } from './stages/FundingComplete'
 import { FundingForm, ProjectFundingFormState } from './stages/FundingForm'
@@ -11,7 +11,7 @@ const SUCCESS_TITLE = 'Contribution Successfull'
 
 interface Props {
   project: Project | undefined
-  user: User
+  user: UserMeFragment
   onTitleChange?(title: string | null): void
 }
 
