@@ -3,6 +3,7 @@ import {
   Divider,
   Image,
   ListItem,
+  ListProps,
   OrderedList,
   UnorderedList,
 } from '@chakra-ui/react'
@@ -16,6 +17,7 @@ import {
   EditorComponent,
   Heading,
   MarkMap,
+  NodeViewComponentProps,
   Remirror,
   RemirrorRenderer,
   TextHandler,
@@ -26,9 +28,9 @@ import {
   WysiwygToolbar,
 } from '@remirror/react'
 import { AllStyledComponent } from '@remirror/styles/emotion'
-import { PropsWithChildren, useCallback } from 'react'
+import { ForwardedRef, PropsWithChildren, useCallback } from 'react'
 import { Control, useController } from 'react-hook-form'
-import { getRemirrorJSON, InvalidContentHandler, RemirrorJSON } from 'remirror'
+import { getRemirrorJSON, InvalidContentHandler } from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -40,11 +42,12 @@ import {
   ImageExtension,
   ItalicExtension,
   LinkExtension,
-  ListItemExtension,
   MarkdownExtension,
   OrderedListExtension,
   PlaceholderExtension,
   TableExtension,
+  TextExtension,
+  TrailingNodeExtension,
   UnderlineExtension,
 } from 'remirror/extensions'
 import TurndownService from 'turndown'
@@ -103,12 +106,13 @@ export const MarkdownField = ({
       new HeadingExtension(),
       new BlockquoteExtension(),
       new OrderedListExtension(),
-      new ListItemExtension(),
       new CodeExtension(),
       new IframeExtension(),
       new HardBreakExtension(),
       new TableExtension(),
+      new TrailingNodeExtension(),
       new BulletListExtension(),
+      new TextExtension(),
       new ImageExtension({
         uploadHandler(files) {
           return files.map(
@@ -129,6 +133,17 @@ export const MarkdownField = ({
     extensions,
     stringHandler: 'markdown',
     onError,
+    react: {
+      nodeViewComponents: {
+        image: imageHandler,
+        bulletList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
+          <Box pl={5} ref={forwardRef} />
+        ),
+        orderedList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
+          <Box pl={5} ref={forwardRef} />
+        ),
+      },
+    },
   })
 
   if (preview) {
@@ -154,12 +169,7 @@ export const MarkdownField = ({
 
   return (
     <RemirrorStyleProvider>
-      <Remirror
-        attributes={{}}
-        autoFocus
-        manager={manager}
-        initialContent={initialContent?.()}
-      >
+      <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
         <WysiwygToolbar />
         <EditorComponent />
         <SaveModule name={name} control={control} />
@@ -178,13 +188,25 @@ const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
   )
 }
 
-const imageHandler = ({ node: { attrs } }: { node: RemirrorJSON }) => {
-  return <Image my={4} borderRadius="8px" {...attrs} />
+const imageHandler = ({
+  node: {
+    attrs: { src, alt },
+  },
+}: NodeViewComponentProps) => {
+  return <Image my={4} borderRadius="8px" src={src} alt={alt} />
 }
 
-const typeMap: MarkMap = {
+const unorderedListHandler = ({ children }: ListProps) => {
+  return <UnorderedList>{children}</UnorderedList>
+}
+
+const listItemHandler = ({ children }: ListProps) => {
+  return <ListItem>{children}</ListItem>
+}
+
+const typeMap = {
   blockquote: 'blockquote',
-  bulletList: UnorderedList,
+  bulletList: unorderedListHandler,
   callout: Callout,
   codeBlock: CodeBlock,
   doc: Doc,
@@ -193,19 +215,19 @@ const typeMap: MarkMap = {
   horizontalRule: Divider,
   iframe: createIFrameHandler(),
   image: imageHandler,
-  listItem: ListItem,
+  listItem: listItemHandler,
   paragraph: 'p',
   orderedList: OrderedList,
   text: TextHandler,
-}
+} satisfies MarkMap
 
-const markMap: MarkMap = {
+const markMap = {
   italic: 'em',
   bold: 'strong',
   code: 'code',
   link: createLinkHandler({ target: '_blank' }),
   underline: 'u',
-}
+} satisfies MarkMap
 
 function SaveModule(props: { control?: Control; name?: string }) {
   const {
