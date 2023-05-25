@@ -11,6 +11,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     '& .platform__select__control': {
       borderRadius: '8px',
       borderWidth: '2px',
+      backgroundColor: colors.neutral[50],
       borderColor: colors.neutral[100],
       '&:hover': {
         borderColor: colors.neutral[400],
@@ -23,6 +24,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     },
     '& .platform__select__input': {
       fontWeight: 600,
+      color: colors.neutral[600],
     },
     '& .platform__select__control--is-focused': {
       borderColor: `${colors.neutral[500]} !important`,
