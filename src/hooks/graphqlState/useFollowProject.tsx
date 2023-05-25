@@ -36,6 +36,7 @@ export const useFollowProject = (projectId: number) => {
 
   const handleFollow = (event?: React.MouseEvent<HTMLButtonElement>) => {
     if (event) {
+      event.preventDefault()
       event.stopPropagation()
       event.nativeEvent.stopImmediatePropagation()
     }
@@ -45,6 +46,7 @@ export const useFollowProject = (projectId: number) => {
 
   const handleUnFollow = (event?: React.MouseEvent<HTMLButtonElement>) => {
     if (event) {
+      event.preventDefault()
       event.stopPropagation()
       event.nativeEvent.stopImmediatePropagation()
     }
