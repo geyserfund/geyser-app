@@ -113,7 +113,7 @@ export const ConnectWithTwitter = ({
       w="100%"
       backgroundColor="social.twitter"
       leftIcon={<BsTwitter />}
-      color="neutral.0"
+      color="white"
       _hover={{ backgroundColor: 'social.twitterDark' }}
       onClick={handleClick}
       {...rest}

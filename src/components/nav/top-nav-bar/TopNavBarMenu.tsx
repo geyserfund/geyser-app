@@ -197,8 +197,22 @@ export const TopNavBarMenu = ({
           </>
         ) : null}
         <MenuDivider />
-        <ColorModeSwitcher />
+        <ModeChange />
       </MenuList>
     </Menu>
+  )
+}
+
+export const ModeChange = () => {
+  return (
+    <HStack
+      bgColor="neutral.200"
+      justifyContent="space-between"
+      borderRadius={8}
+      mx={3}
+      p={2}
+    >
+      <ColorModeSwitcher />
+    </HStack>
   )
 }

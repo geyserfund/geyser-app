@@ -1,16 +1,10 @@
 import { HStack } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { useCustomTheme } from '../../../utils'
 
 export const BannerBackground = () => {
   const theme = useCustomTheme()
-
-  const defaultBackground = useMemo(
-    () =>
-      `radial-gradient( at center, ${theme.primary[400]}, ${theme.neutral[0]})`,
-    [theme],
-  )
 
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
@@ -40,6 +34,13 @@ export const BannerBackground = () => {
     }
   }, [handleMouseMove])
 
+  useEffect(() => {
+    const element = document.getElementById('radial-gradient')
+    if (element) {
+      element.style.background = `radial-gradient( at center, ${theme.primary[400]}, ${theme.neutral[0]})`
+    }
+  }, [theme])
+
   return (
     <HStack
       id="radial-gradient"
@@ -47,7 +48,6 @@ export const BannerBackground = () => {
       left="0px"
       height="100%"
       width="100%"
-      background={defaultBackground}
       transition="background 0.5s ease"
       borderBottom="4px solid"
       borderColor="neutral.100"

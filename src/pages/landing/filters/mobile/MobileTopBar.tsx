@@ -31,7 +31,7 @@ export const MobileTopBar = ({
         {...rest}
       >
         <HStack width="100%" justifyContent="space-between" paddingY="6px">
-          <Body1 semiBold color="black">
+          <Body1 semiBold color="neutral.1000">
             {title}
           </Body1>
           <ButtonComponent

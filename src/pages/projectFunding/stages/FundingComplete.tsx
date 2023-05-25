@@ -51,14 +51,14 @@ export const FundingComplete = ({
           <ChakraLink
             href={`https://mempool.space/address/${fundingTx.address}`}
           >
-            <span
-              style={{
-                fontWeight: 'bold',
-                borderBottom: '1px solid black',
-              }}
+            <Box
+              as="span"
+              fontWeight="bold"
+              borderBottom="1px solid"
+              borderColor="neutral.1000"
             >
               block explorer
-            </span>
+            </Box>
           </ChakraLink>
         </Text>
       )}

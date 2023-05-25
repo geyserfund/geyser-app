@@ -1,7 +1,6 @@
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Box } from '@chakra-ui/layout'
 import {
-  Button,
   Heading,
   HStack,
   Modal,
@@ -11,7 +10,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  useColorMode,
 } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
 import {
@@ -138,8 +136,6 @@ export const TopNavBar = () => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
   const location = useLocation()
-
-  const { toggleColorMode } = useColorMode()
 
   const currentPathName = location.pathname
 

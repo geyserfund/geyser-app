@@ -19,10 +19,10 @@ export const NoFollowedProjects = () => {
         />
       </Box>
       <VStack w="full">
-        <Body1 bold color="black">
+        <Body1 bold color="neutral.1000">
           {"You don't follow any projects"}
         </Body1>
-        <Body1 color="black">
+        <Body1 color="neutral.1000">
           Check out some trending projects this week that you can follow in the
           discovery view!
         </Body1>

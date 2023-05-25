@@ -165,9 +165,9 @@ export const DonationInput = ({
           pl={10}
           {...rest}
           _placeholder={{
-            color: 'primary.textBlack',
+            color: 'neutral.1000',
           }}
-          color="primary.textBlack"
+          color="neutral.1000"
           placeholder="0"
         />
         <InputRightElement pt={1} pr={6} height={14}>

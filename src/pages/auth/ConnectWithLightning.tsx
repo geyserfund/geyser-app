@@ -48,6 +48,7 @@ export const ConnectWithLightning = (props: ConnectWithLightningProps) => {
         backgroundColor="social.lightning"
         leftIcon={<BoltSvgIcon height="20px" width="20px" />}
         _hover={{ backgroundColor: 'social.lightningDark' }}
+        color="black"
         onClick={onOpen}
         {...props}
       >

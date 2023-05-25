@@ -3,7 +3,6 @@ import { Box } from '@chakra-ui/layout'
 import { ImageProps } from '@chakra-ui/react'
 
 import BoltSvg from '../../assets/bolt.svg'
-import ShareSvg from '../../assets/share.svg'
 import {
   CrownUrl,
   EnvelopeUrl,

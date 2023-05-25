@@ -49,7 +49,7 @@ export const ActivityTopbar = () => {
       paddingY="6px"
       marginBottom="10px"
     >
-      <Body1 semiBold color="black">
+      <Body1 semiBold color="neutral.1000">
         Activity
       </Body1>
     </HStack>

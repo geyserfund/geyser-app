@@ -1,6 +1,6 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import { colors, darkModeColors, fonts, lightModeColors } from '../styles'
+import { darkModeColors, fonts, lightModeColors } from '../styles'
 import { isDarkMode } from '../utils'
 
 export const theme = extendTheme({
@@ -11,13 +11,6 @@ export const theme = extendTheme({
     lg: '57em', // Desktop ~900px
     xl: '80em', // 1280px
     '2xl': '96em', // 1536px
-  },
-  colors: {
-    brand: {
-      ...colors,
-    },
-    // neutral: neutralColors,
-    // primary: primaryColors,
   },
   fonts: {
     heading: fonts.brand,
@@ -113,7 +106,7 @@ export const theme = extendTheme({
         },
         danger: {
           backgroundColor: 'secondary.red',
-          color: colors.neutral0,
+          color: 'neutral.0',
           _hover: {
             backgroundColor: 'secondary.red',
           },

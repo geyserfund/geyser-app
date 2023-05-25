@@ -82,7 +82,7 @@ export const LeaderboardTopbar = ({
         borderColor="neutral.200"
         paddingY="6px"
       >
-        <Body1 semiBold color="black">
+        <Body1 semiBold color="neutral.1000">
           Activity
         </Body1>
       </HStack>

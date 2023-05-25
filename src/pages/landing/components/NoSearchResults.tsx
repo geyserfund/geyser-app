@@ -15,10 +15,12 @@ export const NoSearchResults = () => {
         />
       </Box>
       <VStack w="full">
-        <Body1 bold color="black">
+        <Body1 bold color="neutral.1000">
           Could not find any results for your search
         </Body1>
-        <Body1 color="black">Please try again or apply another search</Body1>
+        <Body1 color="neutral.1000">
+          Please try again or apply another search
+        </Body1>
       </VStack>
     </VStack>
   )
