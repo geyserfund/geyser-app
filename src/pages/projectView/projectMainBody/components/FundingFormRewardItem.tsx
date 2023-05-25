@@ -13,23 +13,23 @@ import { createUseStyles } from 'react-jss'
 
 import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { ImageWithReload } from '../../../../components/ui'
-import { ReactJSSTheme } from '../../../../context'
+import { AppTheme } from '../../../../context'
 import { IRewardCount } from '../../../../interfaces'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
 import { toInt } from '../../../../utils'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   focused: {
-    borderColor: `${theme.neutral[500]} !important`,
-    boxShadow: `0 0 0 1px ${theme.neutral[500]}`,
+    borderColor: `${colors.neutral[500]} !important`,
+    boxShadow: `0 0 0 1px ${colors.neutral[500]}`,
   },
   upperContainer: {
-    borderBottom: `1px solid ${theme.neutral[100]}`,
+    borderBottom: `1px solid ${colors.neutral[100]}`,
     paddingBottom: '10px',
   },
   backer: {
     padding: '3px 5px',
-    backgroundColor: theme.neutral[100],
+    backgroundColor: colors.neutral[100],
     fontSize: '10px',
     borderRadius: '5px',
   },
@@ -39,8 +39,8 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
     height: '40px',
   },
   plusIcon: {
-    backgroundColor: theme.neutral[100],
-    border: `2px solid ${theme.neutral[200]}`,
+    backgroundColor: colors.neutral[100],
+    border: `2px solid ${colors.neutral[200]}`,
   },
 }))
 

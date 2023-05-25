@@ -25,7 +25,7 @@ const USDBalance = ({ balance }: { balance: number }) => (
 const BTCBalance = ({ balance }: { balance: number }) => {
   // Let bitcoins = 0;
   const displaySatoshis = balance < 1000000
-  const theme = useCustomTheme()
+  const { colors } = useCustomTheme()
   return displaySatoshis ? (
     <>
       <SatoshiIconTilted scale={1.5} color="primary.400" />
@@ -35,7 +35,7 @@ const BTCBalance = ({ balance }: { balance: number }) => {
     </>
   ) : (
     <>
-      <BsCurrencyBitcoin fontSize="40px" color={theme.primary[400]} />
+      <BsCurrencyBitcoin fontSize="40px" color={colors.primary[400]} />
       <Text color="primary.400" fontWeight="bold" fontSize="5xl">
         {parseFloat((balance / 100000000).toFixed(4))}
       </Text>

@@ -4,7 +4,7 @@ import { useCallback, useEffect } from 'react'
 import { useCustomTheme } from '../../../utils'
 
 export const BannerBackground = () => {
-  const theme = useCustomTheme()
+  const { colors } = useCustomTheme()
 
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
@@ -19,11 +19,11 @@ export const BannerBackground = () => {
             (event.pageY / windowHeight) * 100,
           )
 
-          element.style.background = `radial-gradient( at ${mouseXpercentage}% ${mouseYpercentage}%, ${theme.primary[400]}, ${theme.neutral[0]}`
+          element.style.background = `radial-gradient( at ${mouseXpercentage}% ${mouseYpercentage}%, ${colors.primary[400]}, ${colors.neutral[0]}`
         }
       }
     },
-    [theme],
+    [colors],
   )
 
   useEffect(() => {
@@ -37,9 +37,9 @@ export const BannerBackground = () => {
   useEffect(() => {
     const element = document.getElementById('radial-gradient')
     if (element) {
-      element.style.background = `radial-gradient( at center, ${theme.primary[400]}, ${theme.neutral[0]})`
+      element.style.background = `radial-gradient( at center, ${colors.primary[400]}, ${colors.neutral[0]})`
     }
-  }, [theme])
+  }, [colors])
 
   return (
     <HStack

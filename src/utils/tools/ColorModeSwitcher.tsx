@@ -8,7 +8,7 @@ import * as React from 'react'
 import { BsFillBrightnessLowFill, BsFillMoonStarsFill } from 'react-icons/bs'
 import { useTheme } from 'react-jss'
 
-import { ReactJSSTheme } from '../../context'
+import { AppTheme } from '../../context'
 
 type ColorModeSwitcherProps = Omit<IconButtonProps, 'aria-label'>
 
@@ -34,4 +34,4 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
   )
 }
 
-export const useCustomTheme = () => useTheme<ReactJSSTheme>()
+export const useCustomTheme = () => useTheme<AppTheme>()

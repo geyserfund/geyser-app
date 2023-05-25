@@ -3,7 +3,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 import { useCustomTheme } from '../../../utils'
 
 export const BadgeIcon = (props: IconProps) => {
-  const theme = useCustomTheme()
+  const { colors } = useCustomTheme()
   return (
     <Icon
       viewBox="0 0 36 36"
@@ -17,7 +17,7 @@ export const BadgeIcon = (props: IconProps) => {
         stroke="currentColor"
         strokeWidth="0.72"
       />
-      <mask id="path-2-inside-1_6900_185593" fill={theme.neutral[0]}>
+      <mask id="path-2-inside-1_6900_185593" fill={colors.neutral[0]}>
         <path
           fillRule="evenodd"
           clipRule="evenodd"

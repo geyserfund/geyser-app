@@ -105,7 +105,7 @@ export const StickToTop = ({
       <Box
         id={id}
         ref={containerRef}
-        backgroundColor="transparent"
+        backgroundColor="neutral.0"
         position={stick.current ? 'fixed' : 'static'}
         top={`${offset}px`}
         zIndex={10}

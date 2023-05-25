@@ -5,12 +5,12 @@ import { QRCode } from 'react-qrcode-logo'
 
 import LogoDark from '../../../../assets/logo-dark.svg'
 import { BoltSvgIcon, CurvedArrow } from '../../../../components/icons'
-import { ReactJSSTheme } from '../../../../context'
+import { AppTheme } from '../../../../context'
 import { lightModeColors } from '../../../../styles'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   gradientContainer: {
-    background: `linear-gradient(270deg, ${theme.primary[400]} -0.16%, ${theme.primary[400]} 35.26%, ${theme.primary[800]} 99.84%)`,
+    background: `linear-gradient(270deg, ${colors.primary[400]} -0.16%, ${colors.primary[400]} 35.26%, ${colors.primary[800]} 99.84%)`,
   },
 }))
 

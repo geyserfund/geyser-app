@@ -1,6 +1,6 @@
 import { createUseStyles } from 'react-jss'
 
-import { ReactJSSTheme } from '../../../context'
+import { AppTheme } from '../../../context'
 
 type Rules = string
 
@@ -10,8 +10,8 @@ interface IStyles {
   fadeStarted?: boolean
 }
 
-export const useStyles = createUseStyles<Rules, IStyles, ReactJSSTheme>(
-  (theme) => ({
+export const useStyles = createUseStyles<Rules, IStyles, AppTheme>(
+  ({ colors }) => ({
     container: ({ isMobile, inView, fadeStarted }: IStyles) => ({
       position: fadeStarted ? 'absolute' : 'relative',
       display: !isMobile || inView || fadeStarted ? 'flex' : 'none',
@@ -29,7 +29,7 @@ export const useStyles = createUseStyles<Rules, IStyles, ReactJSSTheme>(
       borderTopLeftRadius: 0,
       borderBottomRightRadius: '40px',
       borderTopRightRadius: '40px',
-      backgroundColor: theme.primary[400],
+      backgroundColor: colors.primary[400],
       textAlign: 'center',
       display: 'flex',
       flexDirection: 'column',

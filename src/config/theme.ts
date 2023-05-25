@@ -1,8 +1,8 @@
-import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
+import { StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../styles'
 
-export const theme = extendTheme({
+export const theme = {
   initialColorMode: 'light',
   breakpoints: {
     sm: '30em', // 480px
@@ -177,4 +177,4 @@ export const theme = extendTheme({
       },
     },
   },
-})
+}

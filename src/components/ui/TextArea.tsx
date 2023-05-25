@@ -2,20 +2,20 @@ import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react'
 import { forwardRef, useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { ReactJSSTheme } from '../../context'
+import { AppTheme } from '../../context'
 import { useListenerState } from '../../hooks'
 import { toInt } from '../../utils'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {
     borderRadius: '8px',
     borderWidth: '2px',
     '&:focus': {
-      borderColor: `${theme.neutral[500]} !important`,
-      boxShadow: `0 0 0 1px ${theme.neutral[500]}`,
+      borderColor: `${colors.neutral[500]} !important`,
+      boxShadow: `0 0 0 1px ${colors.neutral[500]}`,
     },
     '&:hover': {
-      borderColor: theme.neutral[400],
+      borderColor: colors.neutral[400],
     },
   },
 }))

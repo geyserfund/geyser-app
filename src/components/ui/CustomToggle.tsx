@@ -3,24 +3,24 @@ import classNames from 'classnames'
 import { useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { ReactJSSTheme } from '../../context'
+import { AppTheme } from '../../context'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   toggleContainer: {
     width: '100%',
     height: '46px',
-    backgroundColor: theme.neutral[100],
+    backgroundColor: colors.neutral[100],
     borderRadius: '14px',
     display: 'flex',
     border: '1px solid',
-    borderColor: theme.neutral[100],
+    borderColor: colors.neutral[100],
     alighItems: 'center',
     position: 'relative',
     overflow: 'hidden',
     '&:hover': {
       cursor: 'pointer',
       border: '1px solid',
-      borderColor: theme.neutral[100],
+      borderColor: colors.neutral[100],
       '& $toggleShade': {
         backgroundColor: 'rgba(0,0,0,1)',
         opacity: '0.13',
@@ -32,7 +32,7 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: theme.neutral[1000],
+    backgroundColor: colors.neutral[1000],
     opacity: '0',
     transition: 'opacity 300ms',
     zIndex: 3,
@@ -49,7 +49,7 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
     zIndex: 2,
   },
   activeBox: {
-    backgroundColor: theme.primary[400],
+    backgroundColor: colors.primary[400],
     zIndex: 4,
   },
 }))

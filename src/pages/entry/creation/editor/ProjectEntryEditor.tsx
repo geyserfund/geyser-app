@@ -9,7 +9,7 @@ import { createUseStyles } from 'react-jss'
 import { Quill } from 'react-quill'
 
 import { ID } from '../../../../constants'
-import { ReactJSSTheme } from '../../../../context'
+import { AppTheme } from '../../../../context'
 import { getSignedUploadAPI } from '../../../../hooks'
 import { fonts } from '../../../../styles'
 import {
@@ -26,8 +26,8 @@ type StyleProps = {
   isMobile?: boolean
 }
 
-const useStyles = createUseStyles<Rules, StyleProps, ReactJSSTheme>(
-  (theme) => ({
+const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(
+  ({ colors }) => ({
     container: ({ isReadOnly, noPadding, isMobile }: StyleProps) => ({
       width: '100%',
       position: 'relative',
@@ -40,7 +40,7 @@ const useStyles = createUseStyles<Rules, StyleProps, ReactJSSTheme>(
         bottom: '20px',
         float: 'center',
         zIndex: 99,
-        background: theme.neutral[0],
+        background: colors.neutral[0],
         borderRadius: '4px',
         borderWidth: '0px',
         boxShadow: '0px 3px 12px rgba(0, 0, 0, 0.1)',
@@ -71,7 +71,7 @@ const useStyles = createUseStyles<Rules, StyleProps, ReactJSSTheme>(
             fontSize: '18px',
             lineHeight: 1.5,
             fontStyle: 'normal',
-            color: theme.neutral[500],
+            color: colors.neutral[500],
           },
         },
       },
@@ -105,8 +105,8 @@ const useStyles = createUseStyles<Rules, StyleProps, ReactJSSTheme>(
         display: 'block',
       },
       '& .ql-syntax': {
-        backgroundColor: `${theme.neutral[100]} !important`,
-        color: `${theme.neutral[600]} !important`,
+        backgroundColor: `${colors.neutral[100]} !important`,
+        color: `${colors.neutral[600]} !important`,
       },
       '& .ql-video': {
         width: '100%',
@@ -114,13 +114,13 @@ const useStyles = createUseStyles<Rules, StyleProps, ReactJSSTheme>(
         maxHeight: '500px',
       },
       '& button.ql-active': {
-        color: `${theme.primary[400]} !important`,
+        color: `${colors.primary[400]} !important`,
       },
       '& button.ql-active .ql-stroke': {
-        stroke: `${theme.primary[400]} !important`,
+        stroke: `${colors.primary[400]} !important`,
       },
       '& button.ql-active .ql-fill': {
-        fill: `${theme.primary[400]} !important`,
+        fill: `${colors.primary[400]} !important`,
       },
     }),
   }),
@@ -159,7 +159,7 @@ export const ProjectEntryEditor = ({
 
   const { toast } = useNotification()
   const classes = useStyles({ isReadOnly, noPadding, isMobile })
-  const theme = useCustomTheme()
+  const { colors } = useCustomTheme()
 
   const editorModules = {
     toolbar: {
@@ -194,8 +194,8 @@ export const ProjectEntryEditor = ({
       modules: ['Resize', 'DisplaySize'],
       overlayStyles: {
         border: '2px solid',
-        borderColor: theme.primary[400],
-        boxShadow: `0px 0px 0px 2px ${theme.primary[400]}`,
+        borderColor: colors.primary[400],
+        boxShadow: `0px 0px 0px 2px ${colors.primary[400]}`,
         borderRadius: '4px',
       },
       handleStyles: {

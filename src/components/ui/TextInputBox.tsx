@@ -9,15 +9,15 @@ import {
 } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
-import { ReactJSSTheme } from '../../context'
+import { AppTheme } from '../../context'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {
     borderRadius: '8px',
     borderWidth: '2px',
     '&:focus': {
-      borderColor: theme.neutral[500],
-      boxShadow: `0 0 0 1px ${theme.neutral[500]}`,
+      borderColor: colors.neutral[500],
+      boxShadow: `0 0 0 1px ${colors.neutral[500]}`,
     },
   },
 }))

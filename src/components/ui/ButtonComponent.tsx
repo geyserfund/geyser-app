@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { ReactJSSTheme } from '../../context'
+import { AppTheme } from '../../context'
 import { buttonCommon } from '../../styles/common'
 
 interface IButtonComponentP extends ButtonProps {
@@ -19,7 +19,7 @@ interface IButtonComponentP extends ButtonProps {
   isExternal?: boolean
 }
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
     minHeight: '40px',
     position: 'relative',
@@ -29,7 +29,7 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
     },
     '&.primary': {
       '& .chakra-button__icon': {
-        color: theme.neutral[1000],
+        color: colors.neutral[1000],
       },
     },
   },

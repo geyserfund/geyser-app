@@ -73,7 +73,7 @@ export const ConnectWithLightningModal = ({
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
 
-  const theme = useCustomTheme()
+  const { colors } = useCustomTheme()
 
   const handleCopy = () => {
     copyTextToClipboard(qrContent)
@@ -195,8 +195,8 @@ export const ConnectWithLightningModal = ({
                     logoWidth={30}
                     eyeRadius={2}
                     removeQrCodeBehindLogo={true}
-                    bgColor={theme.neutral[0]}
-                    fgColor={theme.primary[900]}
+                    bgColor={colors.neutral[0]}
+                    fgColor={colors.primary[900]}
                     size={186}
                     value={qrContent}
                     id="lnurl-auth-qr-code"

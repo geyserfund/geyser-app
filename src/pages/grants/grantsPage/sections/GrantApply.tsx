@@ -181,7 +181,7 @@ export const CreateAProject = () => {
 }
 
 export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
-  const theme = useCustomTheme()
+  const { colors } = useCustomTheme()
   return (
     <>
       <HStack
@@ -192,7 +192,7 @@ export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
         justifyContent="center"
         alignItems="center"
       >
-        <BsCheckLg fontSize="35px" color={theme.neutral[1000]} />
+        <BsCheckLg fontSize="35px" color={colors.neutral[1000]} />
       </HStack>
       <Body1>
         You successfully applied to be part of the Geyser Grant. You should be

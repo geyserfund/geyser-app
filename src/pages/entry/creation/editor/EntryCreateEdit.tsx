@@ -9,11 +9,7 @@ import { ImageWithReload } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { getPath, ID } from '../../../../constants'
 import { ProjectEntryValidations } from '../../../../constants/validations'
-import {
-  ReactJSSTheme,
-  useAuthContext,
-  useNavContext,
-} from '../../../../context'
+import { AppTheme, useAuthContext, useNavContext } from '../../../../context'
 import { useDebounce } from '../../../../hooks'
 import { useEntryState } from '../../../../hooks/graphqlState'
 import {
@@ -25,12 +21,12 @@ import { toInt, useMobileMode, useNotification } from '../../../../utils'
 import { CreateNav } from './CreateNav'
 import { ProjectEntryEditor } from './ProjectEntryEditor'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   uploadContainer: {
     width: '100%',
     minHeight: '65px',
     borderRadius: '4px',
-    backgroundColor: theme.neutral[100],
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     transition: 'background-color 0.5s ease',
     '&:hover': {

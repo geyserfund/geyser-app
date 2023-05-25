@@ -11,13 +11,13 @@ import {
   IconButtonComponent,
   SelectComponent,
 } from '../../../components/ui'
-import { ReactJSSTheme } from '../../../context'
+import { AppTheme } from '../../../context'
 import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
     width: '100%',
     alignItems: 'flex-start',
@@ -26,9 +26,9 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
 
   tagContainer: {
     width: '100%',
-    backgroundColor: theme.neutral[0],
+    backgroundColor: colors.neutral[0],
     border: '1px solid',
-    borderColor: theme.neutral[400],
+    borderColor: colors.neutral[400],
     borderRadius: '8px',
     padding: '12px',
   },
@@ -39,7 +39,7 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
   },
 
   menuGroup: {
-    backgroundColor: theme.secondary.red,
+    backgroundColor: colors.secondary.red,
   },
 }))
 

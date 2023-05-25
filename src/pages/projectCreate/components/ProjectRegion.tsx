@@ -7,7 +7,7 @@ import { SingleValue } from 'react-select'
 
 import { Body1, Body2, Caption } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
-import { ReactJSSTheme } from '../../../context'
+import { AppTheme } from '../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries/tags'
 import {
   Country,
@@ -19,7 +19,7 @@ import {
   ProjectRegionsGetResult,
 } from '../../../types'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
     width: '100%',
     alignItems: 'flex-start',
@@ -28,9 +28,9 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
 
   tagContainer: {
     width: '100%',
-    backgroundColor: theme.neutral[0],
+    backgroundColor: colors.neutral[0],
     border: '1px solid',
-    borderColor: theme.neutral[400],
+    borderColor: colors.neutral[400],
     borderRadius: '8px',
     padding: '12px',
   },

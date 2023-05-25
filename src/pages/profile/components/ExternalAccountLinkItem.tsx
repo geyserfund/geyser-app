@@ -11,14 +11,14 @@ import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { FountainIcon } from '../../../components/icons'
 import { GeyserHomepageUrl } from '../../../constants'
-import { ReactJSSTheme } from '../../../context'
+import { AppTheme } from '../../../context'
 import { ExternalAccount } from '../../../types/generated/graphql'
 
 type Props = {
   account: ExternalAccount
 }
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles((theme: AppTheme) => ({
   linkContainer: {
     color: theme.neutral[1000],
   },

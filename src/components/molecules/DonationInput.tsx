@@ -16,7 +16,7 @@ import { BiDollar } from 'react-icons/bi'
 import { BsArrowRepeat } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
-import { ReactJSSTheme } from '../../context'
+import { AppTheme } from '../../context'
 import { useBtcContext } from '../../context/btc'
 import { fonts } from '../../styles'
 import {
@@ -29,12 +29,12 @@ import {
 import { SatSymbolIcon } from '../icons/svg'
 import { ButtonComponent } from '../ui'
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {
     borderWidth: '2px',
     '&:focus': {
-      borderColor: theme.neutral[500],
-      boxShadow: `0 0 0 1px ${theme.neutral[500]}`,
+      borderColor: colors.neutral[500],
+      boxShadow: `0 0 0 1px ${colors.neutral[500]}`,
     },
     fontFamily: fonts.inter,
     fontWeight: 700,
@@ -47,7 +47,7 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
     alignItems: 'center',
     padding: 0,
     background: 'none',
-    color: theme.neutral[600],
+    color: colors.neutral[600],
     position: 'relative',
     '&:hover': {
       background: 'none',
@@ -63,7 +63,7 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
     borderWidth: '2px',
     boxShadow: 'none',
     '&:focus': {
-      borderColor: theme.neutral[500],
+      borderColor: colors.neutral[500],
     },
   },
 }))

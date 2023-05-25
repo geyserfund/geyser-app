@@ -12,7 +12,7 @@ import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
-import { ReactJSSTheme } from '../../../context'
+import { AppTheme } from '../../../context'
 import { computeFunderBadges } from '../../../helpers'
 import { UserProjectContribution } from '../../../types/generated/graphql'
 import { Card, ICard } from '../../ui'
@@ -22,7 +22,7 @@ type Props = ICard & {
   contribution: UserProjectContribution
 }
 
-const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
     borderRadius: '4px',
     display: 'flex',
@@ -39,7 +39,7 @@ const useStyles = createUseStyles((theme: ReactJSSTheme) => ({
       boxShadow:
         'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
       '.rocketicon': {
-        color: theme.primary[400],
+        color: colors.primary[400],
       },
     },
 

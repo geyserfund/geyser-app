@@ -3,9 +3,9 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter, useLocation } from 'react-router-dom'
 
 import { AppLayout } from './AppLayout'
-import { client, theme } from './config'
+import { client } from './config'
 import { Head } from './config/Head'
-import { AuthProvider, DynamicColorMode, NavProvider } from './context'
+import { AuthProvider, ChakraThemeProvider, NavProvider } from './context'
 import { BtcProvider } from './context/btc'
 
 const DebugRouter = ({ children }: { children: any }) => {
@@ -22,8 +22,8 @@ const DebugRouter = ({ children }: { children: any }) => {
 }
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
-    <DynamicColorMode>
+  <ChakraProvider>
+    <ChakraThemeProvider>
       <BrowserRouter>
         <DebugRouter>
           <ApolloProvider client={client}>
@@ -38,6 +38,6 @@ export const App = () => (
           </ApolloProvider>
         </DebugRouter>
       </BrowserRouter>
-    </DynamicColorMode>
+    </ChakraThemeProvider>
   </ChakraProvider>
 )

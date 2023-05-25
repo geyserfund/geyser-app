@@ -7,7 +7,7 @@ import { FollowAProjectUrl } from '../../../../constants'
 import { useCustomTheme } from '../../../../utils'
 
 export const NoFollowedProjects = () => {
-  const theme = useCustomTheme()
+  const { colors } = useCustomTheme()
   return (
     <VStack w="full" padding="12px" spacing="20px">
       <Box width="200px">
@@ -34,7 +34,7 @@ export const NoFollowedProjects = () => {
         width="full"
         maxWidth="200px"
         rightIcon={<BiRightArrow />}
-        background={`linear-gradient(270deg, ${theme.primary[400]} -0.16%, ${theme.primary[400]} 35.26%, ${theme.secondary.green} 99.84%)`}
+        background={`linear-gradient(270deg, ${colors.primary[400]} -0.16%, ${colors.primary[400]} 35.26%, ${colors.secondary.green} 99.84%)`}
       >
         Discover Projects
       </Button>
