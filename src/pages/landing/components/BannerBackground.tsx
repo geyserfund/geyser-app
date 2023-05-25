@@ -50,7 +50,7 @@ export const BannerBackground = () => {
       width="100%"
       transition="background 0.5s ease"
       borderBottom="4px solid"
-      borderColor="neutral.100"
+      borderColor="neutral.50"
     />
   )
 }

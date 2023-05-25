@@ -85,6 +85,7 @@ export const LandingPage = () => {
                   wrapperId={ID.landing.leaderboard.wrapper}
                   width="100%"
                   offset={dimensions.topNavBar.desktop.height + 20}
+                  backgroundColor="transparent"
                   bias={20}
                   buffer={10}
                 >

@@ -1,6 +1,7 @@
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Box } from '@chakra-ui/layout'
 import {
+  Button,
   Heading,
   HStack,
   Modal,
@@ -638,16 +639,14 @@ export const TopNavBar = () => {
             ) : null}
 
             {shouldShowSignInButton ? (
-              <ButtonComponent
+              <Button
                 size="sm"
-                variant={'solid'}
-                backgroundColor="neutral.0"
+                variant="secondary"
                 borderWidth={1}
-                borderColor={'neutral.200'}
                 onClick={loginOnOpen}
               >
                 Connect
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowDropdownMenuButton ? (
