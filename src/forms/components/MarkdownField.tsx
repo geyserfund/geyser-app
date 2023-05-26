@@ -30,7 +30,11 @@ import {
 import { AllStyledComponent } from '@remirror/styles/emotion'
 import { ForwardedRef, PropsWithChildren, useCallback } from 'react'
 import { Control, useController } from 'react-hook-form'
-import { getRemirrorJSON, InvalidContentHandler } from 'remirror'
+import {
+  ExtensionPriority,
+  getRemirrorJSON,
+  InvalidContentHandler,
+} from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -52,6 +56,7 @@ import {
 } from 'remirror/extensions'
 import TurndownService from 'turndown'
 
+import { remirrorTheme } from '../../config'
 import { useSignedUpload } from '../../hooks'
 
 const turndownService = new TurndownService()
@@ -181,8 +186,8 @@ export const MarkdownField = ({
 const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
   return (
     <Box width="100%">
-      <AllStyledComponent>
-        <ThemeProvider>{children}</ThemeProvider>
+      <AllStyledComponent theme={remirrorTheme}>
+        <ThemeProvider theme={remirrorTheme}>{children}</ThemeProvider>
       </AllStyledComponent>
     </Box>
   )

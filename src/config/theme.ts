@@ -1,6 +1,24 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
+import { RemirrorThemeType } from 'remirror'
 
 import { colors, fonts, neutralColors, primaryColors } from '../styles'
+
+export const remirrorTheme: RemirrorThemeType = {
+  color: {
+    text: colors.neutral900,
+    background: colors.neutral0,
+    primary: colors.primary400,
+    primaryText: colors.neutral900,
+    hover: {
+      background: colors.neutral100,
+      primary: colors.primary400,
+    },
+    secondary: colors.primary400,
+    secondaryText: colors.neutral900,
+    border: colors.neutral200,
+    outline: colors.primary400,
+  },
+}
 
 export const theme = extendTheme({
   initialColorMode: 'light',
