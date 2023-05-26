@@ -20,6 +20,13 @@ interface ProjectCreateLayoutProps
   onBackClick: () => void
 }
 
+const contentSx = {
+  display: 'flex',
+  direction: 'column',
+  flexGrow: 1,
+  height: '100%',
+}
+
 export const ProjectCreateLayout = ({
   children,
   onBackClick,
@@ -46,7 +53,14 @@ export const ProjectCreateLayout = ({
   )
 
   return (
-    <Container py={4} {...props}>
+    <Container
+      py={4}
+      {...props}
+      display="flex"
+      flexDirection="column"
+      minHeight="100%"
+      flexGrow={1}
+    >
       <HStack>
         <Button
           flexGrow={1}
@@ -59,9 +73,13 @@ export const ProjectCreateLayout = ({
         {continueButton}
       </HStack>
       {isMobile ? (
-        <Box mt={4}>{content}</Box>
+        <Box sx={contentSx} mt={4}>
+          {content}
+        </Box>
       ) : (
-        <CardLayout mt={3}>{content}</CardLayout>
+        <CardLayout sx={contentSx} mt={3}>
+          {content}
+        </CardLayout>
       )}
     </Container>
   )
