@@ -98,6 +98,7 @@ export const theme = extendTheme({
           },
         },
         transparent: {
+          color: colors.neutral900,
           backgroundColor: 'transparent',
           _hover: {
             borderColor: colors.primary400,

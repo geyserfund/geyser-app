@@ -30,7 +30,7 @@ export const ProjectNavigation = ({
     <VStack ml={4} pt={5} pb={2}>
       <ProjectBackButton width="100%" />
       {hasItems ? (
-        <CardLayout padding={2} width="100%">
+        <CardLayout p={2} width="100%">
           <VStack width="100%">
             <ProjectNavigationButton
               // isActive={inView === 'header'}
@@ -65,7 +65,7 @@ export const ProjectNavigation = ({
                 // isActive={inView === 'milestones'}
                 onClick={onMilestonesClick}
                 aria-label="milestones"
-                leftIcon={<MilestoneIcon />}
+                leftIcon={<MilestoneIcon width="1.75em" />}
               >
                 Milestones
               </ProjectNavigationButton>
@@ -83,7 +83,7 @@ export const ProjectNavigationButton = ({
   ...props
 }: PropsWithChildren<
   Pick<ButtonProps, 'leftIcon' | 'onClick' | 'isActive'> &
-    Pick<IconButtonProps, 'aria-label'>
+    Pick<IconButtonProps, 'aria-label' | 'variant'>
 >) => {
   const hideLabel = useBreakpointValue({ base: true, xl: false })
 
@@ -91,7 +91,7 @@ export const ProjectNavigationButton = ({
 
   const ComponentProps = hideLabel
     ? {
-        variant: 'secondary',
+        variant: 'transparent',
         children: leftIcon,
         ...props,
       }
