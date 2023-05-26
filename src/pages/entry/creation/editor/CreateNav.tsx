@@ -1,17 +1,17 @@
-import { Avatar, Box, HStack } from '@chakra-ui/react';
-import { MdOutlineArrowBackIos } from 'react-icons/md';
+import { Avatar, Box, HStack } from '@chakra-ui/react'
+import { MdOutlineArrowBackIos } from 'react-icons/md'
 
-import { NavBarLogo } from '../../../../components/nav/NavBarLogo';
-import { ButtonComponent } from '../../../../components/ui';
-import { useAuthContext } from '../../../../context';
-import { useMobileMode } from '../../../../utils';
+import { NavBarLogo } from '../../../../components/nav/NavBarLogo'
+import { ButtonComponent } from '../../../../components/ui'
+import { useAuthContext } from '../../../../context'
+import { useMobileMode } from '../../../../utils'
 
 interface ICreateNavProps {
-  isSaving: boolean;
-  onSave: () => void;
-  saveText?: string;
-  onPreview?: () => void;
-  onBack?: () => void;
+  isSaving: boolean
+  onSave: () => void
+  saveText?: string
+  onPreview?: () => void
+  onBack?: () => void
 }
 
 export const CreateNav = ({
@@ -21,9 +21,9 @@ export const CreateNav = ({
   onPreview,
   onBack,
 }: ICreateNavProps) => {
-  const isMobile = useMobileMode();
+  const isMobile = useMobileMode()
 
-  const { user } = useAuthContext();
+  const { user } = useAuthContext()
 
   return (
     <>
@@ -77,5 +77,5 @@ export const CreateNav = ({
         </Box>
       </Box>
     </>
-  );
-};
+  )
+}

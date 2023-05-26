@@ -522,7 +522,12 @@ export const TopNavBar = () => {
           justifyContent={'space-between'}
           overflow="hidden"
         >
-          <NavBarLogo marginRight={isMobile ? 0 : 5} />
+          <NavBarLogo
+            marginRight={isMobile ? 0 : 5}
+            color={
+              routeMatchesForTransaparentBackground ? 'primary.900' : undefined
+            }
+          />
 
           {shouldShowCustomTitle ? (
             <Link to={navData.projectPath}>
