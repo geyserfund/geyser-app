@@ -22,9 +22,11 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
         boxShadow: `none`,
       },
     },
+    '& .platform__select__input-container': {
+      color: colors.neutral[600],
+    },
     '& .platform__select__input': {
       fontWeight: 600,
-      color: colors.neutral[600],
     },
     '& .platform__select__control--is-focused': {
       borderColor: `${colors.neutral[500]} !important`,
