@@ -29,12 +29,8 @@ import {
 } from '@remirror/react'
 import { AllStyledComponent } from '@remirror/styles/emotion'
 import { ForwardedRef, PropsWithChildren, useCallback } from 'react'
-import { Control, useController } from 'react-hook-form'
-import {
-  ExtensionPriority,
-  getRemirrorJSON,
-  InvalidContentHandler,
-} from 'remirror'
+import { Control, useController, useFormContext } from 'react-hook-form'
+import { getRemirrorJSON, InvalidContentHandler } from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -242,10 +238,15 @@ function SaveModule(props: { control?: Control; name?: string }) {
     name: props.name ?? 'content',
   })
 
+  const { trigger } = useFormContext()
+
   const { getMarkdown } = useHelpers()
 
   const changeCallback = useDebouncedCallback(
-    (ctx) => onChange(getMarkdown(ctx.state)),
+    (ctx) => {
+      onChange(getMarkdown(ctx.state))
+      trigger(props.name ?? 'content')
+    },
     [],
     500,
   )
