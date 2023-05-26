@@ -54,6 +54,7 @@ const dashboardRoutes = [
   getPath('dashboardFunding', PathName.projectId),
   getPath('dashboardSettings', PathName.projectId),
   getPath('dashboardStats', PathName.projectId),
+  getPath('dashboardStory', PathName.projectId),
 ]
 
 const routesForHidingTopNav = [
@@ -210,6 +211,7 @@ export const TopNavBar = () => {
       queryCurrentUser()
       navigate(location.pathname, { state: {} })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   const handleProjectLaunchButtonPress = () => {
@@ -492,7 +494,7 @@ export const TopNavBar = () => {
         return Boolean(routeMatch)
       })
     )
-  }, [routeMatchesForTransaparentBackground])
+  }, [routeMatchesForTransaparentBackground, scrollTop])
 
   if (shouldTopNavBeHidden) {
     return null
