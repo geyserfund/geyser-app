@@ -1,6 +1,6 @@
 import { StyleFunctionProps } from '@chakra-ui/react'
 
-import { fonts, lightModeColors } from '../styles'
+import { fonts } from '../styles'
 
 export const theme = {
   initialColorMode: 'light',
@@ -90,21 +90,21 @@ export const theme = {
             backgroundColor: theme.colors.primary[100],
           },
         }),
-        transparent: {
+        transparent: ({ theme }: StyleFunctionProps) => ({
           backgroundColor: 'transparent',
           _hover: {
-            borderColor: lightModeColors.primary[400],
-            backgroundColor: lightModeColors.neutral[100],
+            borderColor: theme.colors.primary[400],
+            backgroundColor: theme.colors.neutral[100],
           },
           _active: {
-            borderColor: lightModeColors.primary[400],
-            backgroundColor: lightModeColors.primary[100],
+            borderColor: theme.colors.primary[400],
+            backgroundColor: theme.colors.primary[100],
           },
-        },
-        danger: {
-          backgroundColor: lightModeColors.secondary.red,
-          color: lightModeColors.neutral[0],
-        },
+        }),
+        danger: ({ theme }: StyleFunctionProps) => ({
+          backgroundColor: theme.colors.secondary.red,
+          color: theme.colors.neutral[0],
+        }),
       },
     },
     Text: {
