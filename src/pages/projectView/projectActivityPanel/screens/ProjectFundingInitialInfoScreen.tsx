@@ -140,9 +140,9 @@ export const ProjectFundingInitialInfoScreen = ({
           </Text>
         </Button>
         <Box
-          bg={tab === 'activity' ? 'darkgrey' : 'lightgrey'}
+          bg={tab === 'activity' ? 'primary.800' : 'primary.50'}
           w="100%"
-          h="2px"
+          h="4px"
           rounded="lg"
         ></Box>
       </>
@@ -167,9 +167,9 @@ export const ProjectFundingInitialInfoScreen = ({
           </Text>
         </Button>
         <Box
-          bg={tab === 'activity' ? 'lightgrey' : 'darkgrey'}
+          bg={tab === 'activity' ? 'primary.50' : 'primary.800'}
           w="100%"
-          h="2px"
+          h="4px"
           rounded="lg"
         ></Box>
       </>
