@@ -13,16 +13,24 @@ interface Props {
 export const ProjectStoryForm = ({ form, isLoading }: Props) => {
   return (
     <FormProvider {...form}>
-      <VStack width="100%" alignItems="flex-start" spacing={6}>
+      <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
         <FormInputContainer
           width="100%"
+          flexGrow={1}
           subtitle="Write a more in-depth description of the project. You can also add images and videos."
         >
-          <Box width="100%" pt={3}>
+          <Box
+            width="100%"
+            pt={3}
+            flexGrow={1}
+            display="flex"
+            flexDirection="column"
+          >
             <MarkdownField
               initialContentReady={!isLoading}
               initialContent={() => form.watch('description') || ''}
               name="description"
+              flex
             />
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (

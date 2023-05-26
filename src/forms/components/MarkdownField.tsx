@@ -70,6 +70,7 @@ interface Props {
   initialContentReady?: boolean
   name?: string
   control?: Control<any, any>
+  flex?: boolean
 }
 
 export const MarkdownField = ({
@@ -80,6 +81,7 @@ export const MarkdownField = ({
   initialContentReady = true,
   name,
   control,
+  flex,
 }: Props) => {
   const onError: InvalidContentHandler = useCallback(
     ({ json, invalidContent, transformers }) => {
@@ -153,7 +155,7 @@ export const MarkdownField = ({
 
   if (preview) {
     return (
-      <RemirrorStyleProvider>
+      <RemirrorStyleProvider flex={flex}>
         <RemirrorRenderer
           typeMap={typeMap}
           markMap={markMap}
@@ -173,7 +175,7 @@ export const MarkdownField = ({
   }
 
   return (
-    <RemirrorStyleProvider>
+    <RemirrorStyleProvider flex={flex}>
       <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
         <WysiwygToolbar />
         <EditorComponent />
@@ -183,7 +185,10 @@ export const MarkdownField = ({
   )
 }
 
-const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
+const RemirrorStyleProvider = ({
+  children,
+  flex,
+}: PropsWithChildren<{ flex?: boolean }>) => {
   const { colors } = useCustomTheme()
 
   const remirrorTheme: RemirrorThemeType = useMemo(
@@ -207,14 +212,39 @@ const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
   )
   return (
     <Box
-      width="100%"
-      sx={{
-        '& p': {
-          mb: 4,
-        },
-      }}
+      sx={
+        flex
+          ? {
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+              '& p': {
+                mb: 4,
+              },
+              width: '100%',
+              '& div.remirror-editor-wrapper, & div.remirror-editor, & div.remirror-theme':
+                {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                },
+            }
+          : {
+              '& p': {
+                mb: 4,
+              },
+              width: '100%',
+            }
+      }
     >
-      <AllStyledComponent theme={remirrorTheme}>
+      <AllStyledComponent
+        theme={remirrorTheme}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+        }}
+      >
         <ThemeProvider theme={remirrorTheme}>{children}</ThemeProvider>
       </AllStyledComponent>
     </Box>
