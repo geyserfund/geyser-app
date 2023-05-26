@@ -35,8 +35,10 @@ import {
   CreateWalletInput,
   LndNodeType,
   ProjectFragment,
+  ProjectStatus,
   useCreateWalletMutation,
   useLightningAddressVerifyLazyQuery,
+  useProjectStatusUpdateMutation,
   WalletResourceType,
 } from '../../types/generated/graphql'
 import { toInt, useNotification, validateEmail } from '../../utils'
@@ -247,6 +249,9 @@ export const ProjectCreationWalletConnectionForm = ({
     }
   }
 
+  const [updateStatus, { loading: isUpdateStatusLoading }] =
+    useProjectStatusUpdateMutation()
+
   const handleLaunch = async () => {
     await validateLightningAddress()
 
@@ -260,6 +265,11 @@ export const ProjectCreationWalletConnectionForm = ({
     }
 
     await createWallet({ variables: { input: createWalletInput } })
+    await updateStatus({
+      variables: {
+        input: { projectId: project.id, status: ProjectStatus.Active },
+      },
+    })
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
@@ -278,6 +288,11 @@ export const ProjectCreationWalletConnectionForm = ({
     }
   }
 
+  const isLoading =
+    isCreateWalletLoading ||
+    isUpdateStatusLoading ||
+    isEvaluatingLightningAddress
+
   if (isReadyForLaunch) {
     return (
       <ProjectCreateCompleted>
@@ -288,10 +303,10 @@ export const ProjectCreationWalletConnectionForm = ({
               w="full"
               leftIcon={<BiRocket />}
               onClick={onLaunchClick}
-              isLoading={isCreateWalletLoading}
+              isLoading={isLoading}
               disabled={
                 isSubmitEnabled === false ||
-                isEvaluatingLightningAddress ||
+                isLoading ||
                 Boolean(lightningAddressFormError)
               }
             >
@@ -302,7 +317,7 @@ export const ProjectCreationWalletConnectionForm = ({
             variant="secondary"
             w="full"
             onClick={onSaveDraftClick}
-            disabled={isCreateWalletLoading || isEvaluatingLightningAddress}
+            disabled={isLoading}
           >
             Save As Draft
           </Button>
