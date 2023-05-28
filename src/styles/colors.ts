@@ -10,17 +10,17 @@ export const ColorsAppDark = {
 
 export const neutralColorsLight = {
   0: '#FFFFFF',
-  50: '#F8F9FA',
-  100: '#E9ECEF',
-  200: '#DEE2E6',
-  300: '#ADB5BD',
-  400: '#A2A5A9',
-  500: '#757878',
-  600: '#454646',
-  700: '#282929',
-  800: '#1F2020',
-  900: '#121313',
-  1000: '#0D0D0D',
+  50: '#FCFCFC',
+  100: '#F4F4F4',
+  200: '#E9ECEF',
+  300: '#DEE2E6',
+  400: '#CED4DA',
+  500: '#ADB5BD',
+  600: '#6C757D',
+  700: '#495057',
+  800: '#343A40',
+  900: '#212529',
+  1000: '#141A19',
 }
 
 export const neutralColorsDark = {
