@@ -5,6 +5,7 @@ import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '../../context'
+import { lightModeColors } from '../../styles'
 import { buttonCommon } from '../../styles/common'
 
 interface IButtonComponentP extends ButtonProps {
@@ -88,7 +89,7 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
         <Box
           as="span"
           className={classes.text}
-          textColor={color || 'neutral.1000'}
+          textColor={color || lightModeColors.neutral[1000]}
         >
           {children}
         </Box>
