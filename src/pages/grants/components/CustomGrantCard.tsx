@@ -59,8 +59,10 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
       onClick={() => navigate(to)}
       minWidth={'100%'}
       cursor="pointer"
-      border={`2px solid ${'neutral.200'}`}
+      border={`2px solid`}
+      borderColor="neutral.200"
       borderRadius="12px"
+      bgColor="neutral.0"
     >
       {showBanner && grant.image ? (
         <Box
