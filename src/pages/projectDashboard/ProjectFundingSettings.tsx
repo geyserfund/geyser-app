@@ -157,8 +157,6 @@ export const ProjectFundingSettings = () => {
         <VStack
           spacing="40px"
           width="100%"
-          minWidth="350px"
-          maxWidth="600px"
           marginBottom="40px"
           display="flex"
           flexDirection="column"

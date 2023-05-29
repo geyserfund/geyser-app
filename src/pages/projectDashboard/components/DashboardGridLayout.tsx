@@ -12,6 +12,7 @@ export const DashboardGridLayout = ({
     <Fade in>
       <Grid
         width="100%"
+        minHeight="100%"
         templateColumns={isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)'}
         padding={isMobile ? '10px' : '40px 20px 20px 20px'}
       >

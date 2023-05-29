@@ -62,7 +62,7 @@ export const ProjectDescription = () => {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form onSubmit={form.handleSubmit(onSubmit)} style={{ width: '100%' }}>
       <DashboardGridLayout>
         <GridItem
           colSpan={isViewXL ? 6 : 2}
@@ -72,7 +72,6 @@ export const ProjectDescription = () => {
           <VStack
             spacing="30px"
             width="100%"
-            minWidth="350px"
             maxWidth="600px"
             marginBottom="40px"
             display="flex"

@@ -3,6 +3,7 @@ import { FormProvider, UseFormReturn } from 'react-hook-form'
 
 import { ProjectValidations } from '../../../constants'
 import { MarkdownField } from '../../../forms/components/MarkdownField'
+import { useMobileMode } from '../../../utils'
 import { FormInputContainer } from './FormInputContainer'
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export const ProjectStoryForm = ({ form, isLoading }: Props) => {
+  const isMobile = useMobileMode()
   return (
     <FormProvider {...form}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
@@ -31,6 +33,7 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
               initialContent={() => form.watch('description') || ''}
               name="description"
               flex
+              stickyToolbar={isMobile}
             />
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (

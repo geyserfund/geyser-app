@@ -18,8 +18,11 @@ export const AppLayout = () => {
   }
 
   return (
-    <Fade in={true}>
-      <Box height={isMobile ? '100%' : '100vh'} display="flex" flexDir="column">
+    <Fade
+      in={true}
+      style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+    >
+      <Box height="100vh" display="flex" flexDirection="column" flexGrow={1}>
         <TopNavBar />
 
         <Box

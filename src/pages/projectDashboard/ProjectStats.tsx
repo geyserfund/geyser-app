@@ -70,7 +70,6 @@ export const ProjectStats = () => {
         <VStack
           spacing="30px"
           width="100%"
-          minWidth="350px"
           marginBottom="40px"
           display="flex"
           flexDirection="column"
