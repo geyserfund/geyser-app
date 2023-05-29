@@ -5,7 +5,8 @@ import { menuTheme } from './menuTheme'
 import { modalTheme } from './modalTheme'
 
 export const theme = {
-  initialColorMode: 'light',
+  initialColorMode: 'system',
+  useSystemColorMode: true,
   breakpoints: {
     sm: '30em', // 480px
     md: '48em', // 768px

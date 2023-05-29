@@ -1,7 +1,6 @@
 import { Icon, IconProps } from '@chakra-ui/react'
 
 export const SatoshiIconTilted = ({
-  color,
   dash,
   scale = 1,
   ...rest
