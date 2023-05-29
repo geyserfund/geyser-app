@@ -110,7 +110,7 @@ export const ProjectDashboard = () => {
       background={'brand.bgGrey4'}
       position="relative"
       paddingBottom={10}
-      height="100%"
+      minHeight="100%"
       justifyContent="space-between"
     >
       <HStack
@@ -129,7 +129,7 @@ export const ProjectDashboard = () => {
           {navList.map((nav) => renderButton(nav))}
         </HStack>
       </HStack>
-      <Box maxW="100%">
+      <Box maxW="100%" px={2}>
         <Outlet />
       </Box>
     </Box>

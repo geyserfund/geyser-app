@@ -67,6 +67,7 @@ interface Props {
   name?: string
   control?: Control<any, any>
   flex?: boolean
+  stickyToolbar?: boolean
 }
 
 export const MarkdownField = ({
@@ -78,6 +79,7 @@ export const MarkdownField = ({
   name,
   control,
   flex,
+  stickyToolbar,
 }: Props) => {
   const onError: InvalidContentHandler = useCallback(
     ({ json, invalidContent, transformers }) => {
@@ -173,7 +175,20 @@ export const MarkdownField = ({
   return (
     <RemirrorStyleProvider flex={flex}>
       <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
-        <WysiwygToolbar />
+        <Box
+          sx={
+            stickyToolbar
+              ? {
+                  position: 'sticky',
+                  top: 0,
+                  backgroundColor: 'neutral.50',
+                  zIndex: 1,
+                }
+              : {}
+          }
+        >
+          <WysiwygToolbar />
+        </Box>
         <EditorComponent />
         <SaveModule name={name} control={control} />
       </Remirror>

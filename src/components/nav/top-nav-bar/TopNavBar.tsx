@@ -20,7 +20,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { getPath, PathName } from '../../../constants'
+import { getPath, ID, PathName } from '../../../constants'
 import { useAuthContext, useNavContext } from '../../../context'
 import { useScrollDirection } from '../../../hooks'
 import { useMobileMode } from '../../../utils'
@@ -484,7 +484,7 @@ export const TopNavBar = () => {
   }, [routesMatchesForShowingNavItems, isMobile])
 
   const { scrollTop } = useScrollDirection({
-    elementId: isMobile ? '' : 'app-route-content-root',
+    elementId: ID.root,
     initialValue: true,
   })
   const showHaveTransparentBackground: boolean = useMemo(() => {

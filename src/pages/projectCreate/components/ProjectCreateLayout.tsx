@@ -22,9 +22,8 @@ interface ProjectCreateLayoutProps
 
 const contentSx = {
   display: 'flex',
-  direction: 'column',
+  flexDirection: 'column',
   flexGrow: 1,
-  height: '100%',
 }
 
 export const ProjectCreateLayout = ({
@@ -55,11 +54,11 @@ export const ProjectCreateLayout = ({
   return (
     <Container
       py={4}
-      {...props}
       display="flex"
       flexDirection="column"
       minHeight="100%"
       flexGrow={1}
+      {...props}
     >
       <HStack>
         <Button

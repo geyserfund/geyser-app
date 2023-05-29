@@ -58,7 +58,7 @@ export const ProjectStory = () => {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form onSubmit={form.handleSubmit(onSubmit)} style={{ width: '100%' }}>
       <DashboardGridLayout>
         <GridItem
           colSpan={isMobile ? 2 : 6}
@@ -68,9 +68,7 @@ export const ProjectStory = () => {
           <VStack
             width="100%"
             maxWidth="600px"
-            marginBottom="40px"
             display="flex"
-            px={2}
             flexDirection="column"
             justifyContent="start"
             alignItems="start"
