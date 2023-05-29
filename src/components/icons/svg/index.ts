@@ -1,4 +1,5 @@
 export * from './BadgeIcon'
+export * from './BoltIcon'
 export * from './ContributionsIcon'
 export * from './GeyserLogoNameIcon'
 export * from './LightningIcon'

@@ -60,7 +60,8 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
     ref,
   ) => {
     const classes = useStyles()
-
+    const bodyColor =
+      color || primary ? lightModeColors.neutral[1000] : 'neutral.1000'
     return (
       <Button
         ref={ref}
@@ -82,14 +83,15 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
         _hover={_hover ? _hover : primary ? { bg: 'primary.600' } : undefined}
         fontSize="14px"
         fontWeight="medium"
-        color={color}
+        color={bodyColor}
         {...rest}
         sx={!noBorder ? buttonCommon : {}}
       >
         <Box
           as="span"
           className={classes.text}
-          textColor={color || lightModeColors.neutral[1000]}
+          textColor={bodyColor}
+          color={bodyColor}
         >
           {children}
         </Box>

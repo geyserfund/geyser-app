@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   CloseButton,
   Divider,
   HStack,
@@ -10,7 +11,6 @@ import { useRef } from 'react'
 
 import { BoltIcon } from '../../../../components/icons'
 import {
-  ButtonComponent,
   SatoshiAmount,
   SectionTitle,
   TextInputBox,
@@ -245,18 +245,15 @@ export const ProjectFundingSelectionFormScreen = ({
             </HStack>
           </VStack>
 
-          <Box width="100%" marginTop={2}>
-            <ButtonComponent
-              isLoading={fundingRequestLoading}
-              primary
-              standard
-              leftIcon={<BoltIcon />}
-              width="100%"
-              onClick={submit}
-            >
-              Fund Project
-            </ButtonComponent>
-          </Box>
+          <Button
+            w="full"
+            mt={2}
+            variant="primary"
+            leftIcon={<BoltIcon />}
+            onClick={submit}
+          >
+            Fund Project
+          </Button>
         </VStack>
       </VStack>
     </VStack>
