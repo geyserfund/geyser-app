@@ -36,7 +36,7 @@ export const ProjectNavigation = ({
               // isActive={inView === 'header'}
               onClick={onProjectClick}
               aria-label="header"
-              leftIcon={<ProjectIcon height="1.6em" />}
+              leftIcon={<ProjectIcon />}
             >
               Project
             </ProjectNavigationButton>
