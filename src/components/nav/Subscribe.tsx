@@ -125,12 +125,7 @@ export const Subscribe = ({
       onClose !== undefined ? (
         <Modal isOpen={isOpen} onClose={handleClose} isCentered>
           <ModalOverlay />
-          <ModalContent
-            bg="neutral.0"
-            display="flex"
-            alignItems="center"
-            padding="20px 15px"
-          >
+          <ModalContent display="flex" alignItems="center" padding="20px 15px">
             <ModalHeader>
               <Text fontSize="16px" fontWeight={600}>
                 {success ? 'Success!' : 'Subscribe'}

@@ -129,7 +129,6 @@ export const ApplyGrantModal = ({
     <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent
-        bg="neutral.0"
         display="flex"
         alignItems="center"
         padding="20px 15px"

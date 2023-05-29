@@ -285,12 +285,7 @@ export const MilestoneAdditionModal = ({
   return (
     <Modal isOpen={isOpen} onClose={handleModalClose} size="sm" isCentered>
       <ModalOverlay />
-      <ModalContent
-        bg="neutral.0"
-        display="flex"
-        alignItems="flex-start"
-        padding="20px 0px"
-      >
+      <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
         <ModalHeader paddingX="20px">
           <Text fontSize="18px" fontWeight={600}>
             Select Milestones

@@ -70,7 +70,7 @@ export const ProjectFundingQRModal = ({
       isCentered
     >
       <ModalOverlay />
-      <ModalContent bg="neutral.0">
+      <ModalContent>
         <ModalHeader>
           <Text fontSize="3xl">Share project on social media</Text>
         </ModalHeader>

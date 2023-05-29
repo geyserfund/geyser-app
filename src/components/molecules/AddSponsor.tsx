@@ -26,12 +26,7 @@ export const AddSponsor = ({ isOpen, onClose }: IConnectTwitter) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent
-        bg="neutral.0"
-        display="flex"
-        alignItems="center"
-        padding="20px 15px"
-      >
+      <ModalContent display="flex" alignItems="center" padding="20px 15px">
         <ModalHeader>
           <Text fontSize="16px" fontWeight="normal">
             {useTitle}

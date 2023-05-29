@@ -1,6 +1,8 @@
 import { StyleFunctionProps } from '@chakra-ui/react'
 
-import { fonts } from '../styles'
+import { fonts } from '../../styles'
+import { menuTheme } from './menuTheme'
+import { modalTheme } from './modalTheme'
 
 export const theme = {
   initialColorMode: 'light',
@@ -175,5 +177,7 @@ export const theme = {
         colorScheme: 'primary',
       },
     },
+    Menu: menuTheme,
+    Modal: modalTheme,
   },
 }

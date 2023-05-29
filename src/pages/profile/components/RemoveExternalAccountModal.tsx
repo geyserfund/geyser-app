@@ -32,12 +32,7 @@ export const RemoveExternalAccountModal = ({
 }: IDeleteConfirmModal) => (
   <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered>
     <ModalOverlay />
-    <ModalContent
-      bg="neutral.0"
-      display="flex"
-      alignItems="center"
-      padding="10px"
-    >
+    <ModalContent display="flex" alignItems="center" padding="10px">
       <ModalHeader w="full" justifyContent="start">
         <Text fontSize="22px" fontWeight={600}>
           Disconnect account
