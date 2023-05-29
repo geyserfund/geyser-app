@@ -44,7 +44,12 @@ export const FailedToConnectAccount = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent display="flex" alignItems="center" padding="20px 15px">
+      <ModalContent
+        bg="neutral.0"
+        display="flex"
+        alignItems="center"
+        padding="20px 15px"
+      >
         <ModalHeader>
           <Text variant="h2">{title}</Text>
         </ModalHeader>

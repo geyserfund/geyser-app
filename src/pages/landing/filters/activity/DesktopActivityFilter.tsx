@@ -77,7 +77,12 @@ export const DesktopActivityFilter = ({
       </CardLayout>
       <Modal isOpen={isOpen} onClose={onClose} size="xs">
         <ModalOverlay />
-        <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
+        <ModalContent
+          bg="neutral.0"
+          maxHeight="700px"
+          overflow="hidden"
+          borderRadius="8px"
+        >
           <ModalHeader>
             <HStack width="100%" position="relative" alignItems="center">
               <Body1 color={'neutral.600'}>Filter by:</Body1>

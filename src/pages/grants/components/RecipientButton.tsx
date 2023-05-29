@@ -132,7 +132,7 @@ export const RecipientButton = ({
         initialFocusRef={initialRef}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg="neutral.0">
           <HStack p={6}>
             <Image src={`${image}`} alt="icon" rounded="lg" w="100px" mr={1} />
             <Box>
@@ -279,7 +279,7 @@ export const RecipientButton = ({
   const renderSuccessModal = () => (
     <Modal onClose={close} isOpen={isOpen} isCentered>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bg="neutral.0">
         <ModalHeader fontWeight="bold" fontSize="2xl" textAlign="center">
           Success!
         </ModalHeader>

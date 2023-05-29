@@ -167,6 +167,7 @@ export const NodeAdditionModal = ({
       <ModalOverlay />
 
       <ModalContent
+        bg="neutral.0"
         display="flex"
         alignItems="flex-start"
         paddingY="20px"

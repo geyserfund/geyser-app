@@ -672,7 +672,12 @@ export const TopNavBar = () => {
 
       <Modal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose}>
         <ModalOverlay />
-        <ModalContent display="flex" alignItems="center" padding="20px 15px">
+        <ModalContent
+          bg="neutral.0"
+          display="flex"
+          alignItems="center"
+          padding="20px 15px"
+        >
           <ModalHeader>
             <Text fontSize="16px" fontWeight="normal">
               You have been logged out

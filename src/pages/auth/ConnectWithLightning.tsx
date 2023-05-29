@@ -154,7 +154,12 @@ export const ConnectWithLightningModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent display="flex" alignItems="center" padding="20px 15px">
+      <ModalContent
+        bg="neutral.0"
+        display="flex"
+        alignItems="center"
+        padding="20px 15px"
+      >
         <ModalHeader>
           <Text fontSize="lg" fontWeight="bold">
             Connect with Lightning

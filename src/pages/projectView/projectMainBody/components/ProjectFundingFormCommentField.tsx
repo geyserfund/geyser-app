@@ -169,7 +169,7 @@ export const ProjectFundingFormCommentField = ({
         >
           <ModalOverlay />
 
-          <ModalContent mt={focus && isMobile ? 100 : 0}>
+          <ModalContent bg="neutral.0" mt={focus && isMobile ? 100 : 0}>
             <ModalBody p={2}>
               <InputGroup mb={2}>
                 <InputLeftElement>

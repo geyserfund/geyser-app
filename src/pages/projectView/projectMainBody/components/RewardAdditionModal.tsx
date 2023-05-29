@@ -236,7 +236,12 @@ export const RewardAdditionModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
       <ModalOverlay />
-      <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
+      <ModalContent
+        bg="neutral.0"
+        display="flex"
+        alignItems="flex-start"
+        padding="20px 0px"
+      >
         <ModalHeader paddingX="20px">
           <Text fontSize="18px" fontWeight={600}>
             Reward

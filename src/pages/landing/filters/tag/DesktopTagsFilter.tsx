@@ -67,7 +67,12 @@ export const DesktopTagsFilter = ({
       </CardLayout>
       <Modal isOpen={isOpen} onClose={onClose} size="sm">
         <ModalOverlay />
-        <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
+        <ModalContent
+          bg="neutral.0"
+          maxHeight="700px"
+          overflow="hidden"
+          borderRadius="8px"
+        >
           <ModalHeader>
             <HStack width="100%" position="relative">
               <HiOutlineTag color={'neutral.600'} />
