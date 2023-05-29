@@ -1,4 +1,4 @@
-import { Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
+import { Icon, Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { useEffect, useState } from 'react'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
@@ -103,13 +103,13 @@ export const ProjectStatusLabel = ({
     setStatus(currentStatus)
   }, [project])
 
-  const Icon = ProjectStatusIcons[status]
+  const CurrentIcon = ProjectStatusIcons[status]
   const color = ProjectStatusColors[status]
   const tooltip = ProjectStatusTooltip[status]
   return (
     <Tooltip label={tooltip} placement="top" size="sm">
       <Stack direction={direction} alignItems="center">
-        <Icon fontSize={iconSize} color={color} />
+        <Icon as={CurrentIcon} fontSize={iconSize} color={color} />
         <Text color={color} {...commonStyles}>
           {status}
         </Text>
