@@ -181,4 +181,11 @@ export const theme = {
     Menu: menuTheme,
     Modal: modalTheme,
   },
+  styles: {
+    global: ({ theme }: StyleFunctionProps) => ({
+      body: {
+        bg: theme.colors.neutral[50],
+      },
+    }),
+  },
 }
