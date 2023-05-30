@@ -9,6 +9,7 @@ import { ThemeProvider as ReactJSSThemeProvider } from 'react-jss'
 
 import { theme } from '../config'
 import { darkModeColors, lightModeColors } from '../styles'
+import { UserSetColorMode } from '../utils'
 import { useThemeDetector } from '../utils/hooks'
 
 export type AppTheme = typeof theme & { colors: typeof lightModeColors }
@@ -19,7 +20,6 @@ export const ChakraThemeProvider = ({
 }: Omit<ThemeProviderProps, 'theme'>) => {
   const { colorMode, setColorMode } = useColorMode()
   const systemColorMode = useThemeDetector()
-
   const finalTheme = {
     ...theme,
     colors: colorMode === 'light' ? lightModeColors : darkModeColors,
@@ -29,7 +29,10 @@ export const ChakraThemeProvider = ({
 
   useEffect(() => {
     if (systemColorMode) {
-      setColorMode(systemColorMode)
+      const userSet = localStorage.getItem(UserSetColorMode)
+      if (!userSet) {
+        setColorMode(systemColorMode)
+      }
     }
   }, [systemColorMode, setColorMode])
 

@@ -42,7 +42,7 @@ if (__production__) {
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ColorModeScript initialColorMode="system" />
+    <ColorModeScript initialColorMode="system" type="localStorage" />
     <GlobalStyles />
     <App />
   </React.StrictMode>,

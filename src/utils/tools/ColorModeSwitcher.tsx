@@ -12,6 +12,8 @@ import { AppTheme } from '../../context'
 
 type ColorModeSwitcherProps = Omit<IconButtonProps, 'aria-label'>
 
+export const UserSetColorMode = 'userSetColorMode'
+
 export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
   const { toggleColorMode } = useColorMode()
   const text = useColorModeValue('dark', 'light')
@@ -20,13 +22,18 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
     BsFillBrightnessLowFill,
   )
 
+  const handleToggleColorMode = () => {
+    toggleColorMode()
+    localStorage.setItem(UserSetColorMode, 'true')
+  }
+
   return (
     <IconButton
       size="md"
       fontSize="lg"
       bg="neutral.50"
       color="neutral.600"
-      onClick={toggleColorMode}
+      onClick={handleToggleColorMode}
       icon={<SwitchIcon />}
       aria-label={`Switch to ${text} mode`}
       {...props}
