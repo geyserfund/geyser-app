@@ -1,9 +1,14 @@
-import { HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  StackProps,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { useRef } from 'react'
 import { BsSliders } from 'react-icons/bs'
 
 import { Body1 } from '../../../../components/typography'
-import { ButtonComponent } from '../../../../components/ui'
 import { FilterTopBar } from '../../projects/components'
 import { FilterDrawer } from './FilterDrawer'
 
@@ -34,16 +39,16 @@ export const MobileTopBar = ({
           <Body1 semiBold color="neutral.1000">
             {title}
           </Body1>
-          <ButtonComponent
+          <Button
             ref={btnRef}
-            noBorder
             size="sm"
+            variant="primaryNeutral"
             color="neutral.800"
             rightIcon={<BsSliders fontSize="16px" />}
             onClick={onOpen}
           >
             {subTitle || 'Sort & filter'}
-          </ButtonComponent>
+          </Button>
         </HStack>
         <FilterTopBar paddingBottom="10px" />
       </VStack>
