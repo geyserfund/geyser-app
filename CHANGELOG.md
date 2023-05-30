@@ -1,3 +1,25 @@
+## [0.1.3](https://github.com/geyserfund/geyser-app/compare/v0.1.2...v0.1.3) (2023-05-30)
+
+
+### Features
+
+* activate project on launch ([#910](https://github.com/geyserfund/geyser-app/issues/910)) ([3306881](https://github.com/geyserfund/geyser-app/commit/3306881d04b9fb0215d33cbd5e15db671daec1ec))
+* remove card canvas on mobile ([#908](https://github.com/geyserfund/geyser-app/issues/908)) ([17eff4a](https://github.com/geyserfund/geyser-app/commit/17eff4a6bdbd1cc473d69fc3e28650fc11241d4f))
+* update draft modal copy ([#913](https://github.com/geyserfund/geyser-app/issues/913)) ([6e32988](https://github.com/geyserfund/geyser-app/commit/6e329880b1827ac0aa96afbbcab49d0d297c72c4))
+* update project icon ([#914](https://github.com/geyserfund/geyser-app/issues/914)) ([2ff5657](https://github.com/geyserfund/geyser-app/commit/2ff56576f7e5c2b51e08021ae749fd6bd8e29514))
+
+
+### Bug Fixes
+
+* add spacing between project links ([#912](https://github.com/geyserfund/geyser-app/issues/912)) ([3dd1f16](https://github.com/geyserfund/geyser-app/commit/3dd1f169523f729134b6dbd74345736f26c7029b))
+* add theme for remirror and update some copies ([#905](https://github.com/geyserfund/geyser-app/issues/905)) ([ebc01fa](https://github.com/geyserfund/geyser-app/commit/ebc01fa21f086fcf701020f3b3985c29ff3f8385))
+* creation flow story + wallet updates ([#906](https://github.com/geyserfund/geyser-app/issues/906)) ([44973d6](https://github.com/geyserfund/geyser-app/commit/44973d6515c98b066f7b7babcaa06f20fc4181af))
+* geyser logo should be the same color as the let the sats ([#909](https://github.com/geyserfund/geyser-app/issues/909)) ([10c16d1](https://github.com/geyserfund/geyser-app/commit/10c16d106b10f79ea33dcc9b6ae69b9a0ece15f1))
+* paragraphs padding in markdown + logo on landing color + ssr false ([#915](https://github.com/geyserfund/geyser-app/issues/915)) ([9b9d7f5](https://github.com/geyserfund/geyser-app/commit/9b9d7f5f5100746e5eebc94670c846538d3212f9))
+* topnavbar on story edit ([#904](https://github.com/geyserfund/geyser-app/issues/904)) ([de698f5](https://github.com/geyserfund/geyser-app/commit/de698f5a2587774b5cf9c65395cc343b4c1460e5))
+* update featured project to caseforbitcoin ([6623639](https://github.com/geyserfund/geyser-app/commit/6623639d30a5e8db79500ea5e6df41d5d033cf57))
+* update launch copy ([#907](https://github.com/geyserfund/geyser-app/issues/907)) ([4b1d510](https://github.com/geyserfund/geyser-app/commit/4b1d510d4faf874e0202f6d82243c2f872f952eb))
+
 ## [0.1.2](https://github.com/geyserfund/geyser-app/compare/v0.1.1...v0.1.2) (2023-05-22)
 
 

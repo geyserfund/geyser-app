@@ -1,4 +1,4 @@
-import { Box, Button } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
 import { ProjectLinkInput } from '../../../components/inputs'
@@ -53,7 +53,7 @@ export const ProjectLinks = ({
       title="Project links"
       subtitle="Connect your sites so viewers can see more proof of your work"
     >
-      <Box w="full">
+      <VStack w="full" spacing={3}>
         {links &&
           links.map((link, index) => {
             return (
@@ -67,16 +67,16 @@ export const ProjectLinks = ({
               />
             )
           })}
-      </Box>
-      <Button
-        size="sm"
-        variant="secondary"
-        w="full"
-        onClick={addNewLink}
-        isDisabled={links.length >= 7}
-      >
-        Add Project Link
-      </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          w="full"
+          onClick={addNewLink}
+          isDisabled={links.length >= 7}
+        >
+          Add Project Link
+        </Button>
+      </VStack>
     </FormInputContainer>
   )
 }

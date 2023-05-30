@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Container,
   ContainerProps,
@@ -9,6 +10,7 @@ import { ReactNode } from 'react'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
 import { CardLayout } from '../../../components/layouts'
+import { useMobileMode } from '../../../utils'
 
 interface ProjectCreateLayoutProps
   extends Omit<ContainerProps, 'children' | 'title'> {
@@ -25,6 +27,24 @@ export const ProjectCreateLayout = ({
   continueButton = null,
   ...props
 }: ProjectCreateLayoutProps) => {
+  const isMobile = useMobileMode()
+
+  const content = (
+    <>
+      <VStack
+        spacing={6}
+        width="100%"
+        marginBottom={6}
+        display="flex"
+        flexDirection="column"
+        alignItems="flex-start"
+      >
+        {title}
+      </VStack>
+      {children}
+    </>
+  )
+
   return (
     <Container py={4} {...props}>
       <HStack>
@@ -38,19 +58,11 @@ export const ProjectCreateLayout = ({
         </Button>
         {continueButton}
       </HStack>
-      <CardLayout mt={3}>
-        <VStack
-          spacing={6}
-          width="100%"
-          marginBottom={6}
-          display="flex"
-          flexDirection="column"
-          alignItems="flex-start"
-        >
-          {title}
-        </VStack>
-        {children}
-      </CardLayout>
+      {isMobile ? (
+        <Box mt={4}>{content}</Box>
+      ) : (
+        <CardLayout mt={3}>{content}</CardLayout>
+      )}
     </Container>
   )
 }

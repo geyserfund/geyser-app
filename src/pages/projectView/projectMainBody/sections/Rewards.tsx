@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { GridItem, HStack, Text, useDisclosure } from '@chakra-ui/react'
+import { GridItem, HStack, Text } from '@chakra-ui/react'
 import { forwardRef, useState } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -12,6 +12,7 @@ import { fundingStages, IFundingStages } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../../graphql/mutations'
 import { UpdateReward } from '../../../../hooks'
+import { useModal } from '../../../../hooks/useModal'
 import {
   Project,
   ProjectRewardForCreateUpdateFragment,
@@ -24,7 +25,6 @@ import {
   useNotification,
 } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
-import { RewardAdditionModal } from '../components'
 
 type Props = {
   rewardsLength: number
@@ -37,22 +37,21 @@ export const Rewards = forwardRef<HTMLDivElement, Props>(
     const isMobile = useMobileMode()
     const { toast } = useNotification()
 
-    const { project, setMobileView, updateProject, isProjectOwner } =
-      useProjectContext()
+    const {
+      project,
+      setMobileView,
+      updateProject,
+      isProjectOwner,
+      onRewardsModalOpen,
+    } = useProjectContext()
     const [selectedReward, setSelectedReward] =
       useState<ProjectRewardForCreateUpdateFragment>()
-
-    const {
-      isOpen: isRewardOpen,
-      onClose: onRewardClose,
-      onOpen: openReward,
-    } = useDisclosure()
 
     const {
       isOpen: isRewardDeleteOpen,
       onClose: onRewardDeleteClose,
       onOpen: openRewardDelete,
-    } = useDisclosure()
+    } = useModal()
 
     const [updateRewardMutation] = useMutation(MUTATION_UPDATE_PROJECT_REWARD)
 
@@ -68,25 +67,6 @@ export const Rewards = forwardRef<HTMLDivElement, Props>(
 
       setSelectedReward(currentReward)
       openRewardDelete()
-    }
-
-    const handleRewardUpdate = (
-      updateReward: ProjectRewardForCreateUpdateFragment,
-    ) => {
-      const findReward = project.rewards?.find(
-        (reward) => reward?.id === updateReward.id,
-      )
-
-      if (findReward) {
-        const newRewards = project.rewards?.map((reward) => {
-          if (reward?.id === updateReward.id) {
-            return updateReward
-          }
-
-          return reward
-        })
-        updateProject({ rewards: newRewards } as Project)
-      }
     }
 
     const handleRemoveReward = async (id?: number) => {
@@ -155,7 +135,7 @@ export const Rewards = forwardRef<HTMLDivElement, Props>(
                   isProjectOwner
                     ? () => {
                         setSelectedReward(reward)
-                        openReward()
+                        onRewardsModalOpen({ reward })
                       }
                     : undefined
                 }
@@ -206,16 +186,6 @@ export const Rewards = forwardRef<HTMLDivElement, Props>(
             {renderRewards()}
           </HStack>
         </CardLayout>
-        {isRewardOpen && (
-          <RewardAdditionModal
-            isOpen={isRewardOpen}
-            onClose={onRewardClose}
-            reward={selectedReward}
-            onSubmit={handleRewardUpdate}
-            isSatoshi={false}
-            projectId={parseInt(`${project.id}`, 10)}
-          />
-        )}
         <DeleteConfirmModal
           isOpen={isRewardDeleteOpen}
           onClose={onRewardDeleteClose}

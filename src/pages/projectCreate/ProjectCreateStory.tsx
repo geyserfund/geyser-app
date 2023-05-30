@@ -72,7 +72,7 @@ export const ProjectCreateStory = () => {
   })
 
   const nextProps = {
-    isDisabled: loading || updateLoading,
+    isDisabled: loading || updateLoading || !form.formState.isValid,
     onClick: form.handleSubmit(onSubmit),
   }
 
@@ -90,7 +90,7 @@ export const ProjectCreateStory = () => {
         />
       }
     >
-      <ProjectStoryForm form={form} isLoading={loading} />
+      <ProjectStoryForm form={form} isLoading={loading || !project} />
       <FormContinueButton width="100%" {...nextProps} />
       <ProjectUnsavedModal {...unsavedModal} />
     </ProjectCreateLayout>
