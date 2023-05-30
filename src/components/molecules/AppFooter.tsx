@@ -42,7 +42,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
       bottom={0}
       className={wrapperClassName}
       width="100%"
-      backgroundColor="primary.50"
+      backgroundColor="neutral.100"
       alignItems="center"
       justifyContent="center"
       padding={isMobile ? '10px 10px' : '25px 32px'}
