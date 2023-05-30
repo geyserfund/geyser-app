@@ -7,9 +7,9 @@ export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
   return (
     <VStack w="100%" spacing={4}>
       <Text variant="body1" color="neutral.1000" mb={2}>
-        Your project is almost live. You can now either{' '}
-        <b>launch the project</b> and make it public or <b>save it as draft</b>.
-        And you can always <b>edit project</b> at any time during your project.
+        Your project is almost live. You can now either launch the project and
+        make it public or save it as draft. And you can always edit project at
+        any time.
       </Text>
       {children}
       <HStack w="100%" spacing={2} mt={2}>

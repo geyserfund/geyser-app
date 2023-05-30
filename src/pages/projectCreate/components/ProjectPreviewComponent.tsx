@@ -69,10 +69,7 @@ export const ProjectPreviewComponent = ({
           <H3 wordBreak="break-all">
             {data.shortDescription || 'Project Objective'}
           </H3>
-          <MarkdownField
-            preview
-            content={data.description || 'Project Description'}
-          />
+          <MarkdownField preview content={data.description || 'Story'} />
         </VStack>
       </Card>
     </VStack>
