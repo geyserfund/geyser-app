@@ -585,9 +585,9 @@ export const TopNavBar = () => {
             ) : null}
             {shouldShowDashboardButton ? (
               <ButtonComponent
+                primary
                 size="sm"
                 variant={'solid'}
-                backgroundColor="primary.400"
                 onClick={handleProjectDashboardButtonPress}
               >
                 Edit project
@@ -596,9 +596,8 @@ export const TopNavBar = () => {
 
             {shouldShowMyProjectsButton ? (
               <ButtonComponent
-                variant={'solid'}
+                primary
                 size="sm"
-                backgroundColor="primary.400"
                 onClick={handleMyProjectsButtonPress}
               >
                 View my projects
@@ -607,9 +606,8 @@ export const TopNavBar = () => {
 
             {shouldShowMyProjectButton ? (
               <ButtonComponent
-                variant={'solid'}
+                primary
                 size="sm"
-                backgroundColor="primary.400"
                 onClick={handleMyProjectButtonPress}
               >
                 View my project
