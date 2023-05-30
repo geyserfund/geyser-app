@@ -1,26 +1,8 @@
 import { StyleFunctionProps } from '@chakra-ui/react'
-import { RemirrorThemeType } from 'remirror'
 
 import { fonts, lightModeColors } from '../../styles'
 import { menuTheme } from './menuTheme'
 import { modalTheme } from './modalTheme'
-
-export const remirrorTheme: RemirrorThemeType = {
-  color: {
-    text: lightModeColors.neutral[900],
-    background: lightModeColors.neutral[0],
-    primary: lightModeColors.primary[400],
-    primaryText: lightModeColors.neutral[900],
-    hover: {
-      background: lightModeColors.neutral[100],
-      primary: lightModeColors.primary[400],
-    },
-    secondary: lightModeColors.primary[400],
-    secondaryText: lightModeColors.neutral[900],
-    border: lightModeColors.neutral[200],
-    outline: lightModeColors.primary[400],
-  },
-}
 
 export const theme = {
   initialColorMode: 'system',
