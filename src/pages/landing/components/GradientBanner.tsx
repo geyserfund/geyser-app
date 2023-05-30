@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Box, Container, HStack, Image, Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
+import { LetTheSatsFlowIcon } from '../../../components/icons'
 import { SkeletonLayout } from '../../../components/layouts'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import { dimensions, LetTheSatsFlowNoNameEdition } from '../../../constants'
@@ -66,11 +67,12 @@ export const GradientBanner = () => {
             }}
             marginBottom={{ base: '70px', lg: '60px' }}
           >
-            <Image
+            {/* <Image
               src={LetTheSatsFlowNoNameEdition}
               maxHeight="76px"
               alt="landing-header-image"
-            />
+            /> */}
+            <LetTheSatsFlowIcon color="primary.800" />
           </VStack>
 
           <VStack
