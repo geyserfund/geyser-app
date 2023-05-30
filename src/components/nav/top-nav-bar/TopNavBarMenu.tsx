@@ -2,10 +2,12 @@ import { HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
 import {
   Avatar,
+  Button,
   HStack,
   IconButton,
   MenuDivider,
   Stack,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
@@ -15,7 +17,7 @@ import { AuthContext } from '../../../context'
 import { buttonCommon } from '../../../styles/common'
 import { ProjectStatus } from '../../../types'
 import { ColorModeSwitcher } from '../../../utils'
-import { SatoshiIconTilted } from '../../icons'
+import { SatSymbolIcon } from '../../icons'
 import { ButtonComponent } from '../../ui'
 import { MenuItemLink } from './MenuItemLink'
 import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem'
@@ -212,19 +214,27 @@ export const TopNavBarMenu = ({
 
 export const ModeChange = () => {
   return (
-    <HStack
-      bgColor="neutral.200"
-      justifyContent="space-between"
-      borderRadius={8}
-      mx={3}
-      p={2}
-    >
+    <HStack bgColor="neutral.200" borderRadius={8} mx={3} p={2} spacing={3}>
       <ColorModeSwitcher />
-      <IconButton
-        variant="primaryNeutral"
-        aria-label="currency-convert"
-        icon={<SatoshiIconTilted />}
-      />
+      <Tooltip label="currency">
+        <IconButton
+          bgColor="neutral.50"
+          variant="primaryNeutral"
+          aria-label="currency-convert"
+          icon={<SatSymbolIcon color="neutral.600" />}
+          isDisabled
+        />
+      </Tooltip>
+      <Tooltip label="language">
+        <Button
+          bgColor="neutral.50"
+          color="neutral.600"
+          variant="primaryNeutral"
+          isDisabled
+        >
+          English
+        </Button>
+      </Tooltip>
     </HStack>
   )
 }
