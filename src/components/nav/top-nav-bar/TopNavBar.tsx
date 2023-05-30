@@ -524,9 +524,7 @@ export const TopNavBar = () => {
         >
           <NavBarLogo
             marginRight={isMobile ? 0 : 5}
-            color={
-              routeMatchesForTransaparentBackground ? 'primary.900' : undefined
-            }
+            color={showHaveTransparentBackground ? 'primary.900' : undefined}
           />
 
           {shouldShowCustomTitle ? (

@@ -181,7 +181,14 @@ export const MarkdownField = ({
 
 const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
   return (
-    <Box width="100%">
+    <Box
+      width="100%"
+      sx={{
+        '& p': {
+          mb: 4,
+        },
+      }}
+    >
       <AllStyledComponent theme={remirrorTheme}>
         <ThemeProvider theme={remirrorTheme}>{children}</ThemeProvider>
       </AllStyledComponent>

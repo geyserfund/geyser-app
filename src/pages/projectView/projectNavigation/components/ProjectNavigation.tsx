@@ -85,7 +85,10 @@ export const ProjectNavigationButton = ({
   Pick<ButtonProps, 'leftIcon' | 'onClick' | 'isActive'> &
     Pick<IconButtonProps, 'aria-label' | 'variant'>
 >) => {
-  const hideLabel = useBreakpointValue({ base: true, xl: false })
+  const hideLabel = useBreakpointValue(
+    { base: true, xl: false },
+    { ssr: false },
+  )
 
   const Component = hideLabel ? IconButton : Button
 
