@@ -1,6 +1,12 @@
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
-import { Avatar, HStack, MenuDivider, Stack } from '@chakra-ui/react'
+import {
+  Avatar,
+  HStack,
+  IconButton,
+  MenuDivider,
+  Stack,
+} from '@chakra-ui/react'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -9,6 +15,7 @@ import { AuthContext } from '../../../context'
 import { buttonCommon } from '../../../styles/common'
 import { ProjectStatus } from '../../../types'
 import { ColorModeSwitcher } from '../../../utils'
+import { SatoshiIconTilted } from '../../icons'
 import { ButtonComponent } from '../../ui'
 import { MenuItemLink } from './MenuItemLink'
 import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem'
@@ -213,6 +220,11 @@ export const ModeChange = () => {
       p={2}
     >
       <ColorModeSwitcher />
+      <IconButton
+        variant="primaryNeutral"
+        aria-label="currency-convert"
+        icon={<SatoshiIconTilted />}
+      />
     </HStack>
   )
 }
