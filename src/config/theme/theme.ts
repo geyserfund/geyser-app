@@ -1,9 +1,12 @@
 import { StyleFunctionProps } from '@chakra-ui/react'
 
-import { fonts } from '../styles'
+import { fonts, lightModeColors } from '../../styles'
+import { menuTheme } from './menuTheme'
+import { modalTheme } from './modalTheme'
 
 export const theme = {
-  initialColorMode: 'light',
+  initialColorMode: 'system',
+  useSystemColorMode: true,
   breakpoints: {
     sm: '30em', // 480px
     md: '48em', // 768px
@@ -40,17 +43,17 @@ export const theme = {
         },
       },
       variants: {
-        primary: ({ theme }: StyleFunctionProps) => ({
-          backgroundColor: theme.colors.primary[400],
+        primary: {
+          backgroundColor: lightModeColors.primary[400],
           border: 'none',
-          color: theme.colors.neutral[900],
+          color: lightModeColors.neutral[900],
           _hover: {
-            backgroundColor: theme.colors.neutral[200],
+            backgroundColor: lightModeColors.neutral[200],
           },
           _active: {
-            backgroundColor: theme.colors.neutral[300],
+            backgroundColor: lightModeColors.neutral[300],
           },
-        }),
+        },
         primaryNeutral: ({ theme }: StyleFunctionProps) => ({
           backgroundColor: theme.colors.neutral[100],
           border: 'none',
@@ -91,6 +94,7 @@ export const theme = {
           },
         }),
         transparent: ({ theme }: StyleFunctionProps) => ({
+          color: theme.colors.neutral900,
           backgroundColor: 'transparent',
           _hover: {
             borderColor: theme.colors.primary[400],
@@ -175,5 +179,14 @@ export const theme = {
         colorScheme: 'primary',
       },
     },
+    Menu: menuTheme,
+    Modal: modalTheme,
+  },
+  styles: {
+    global: ({ theme }: StyleFunctionProps) => ({
+      body: {
+        bg: theme.colors.neutral[50],
+      },
+    }),
   },
 }

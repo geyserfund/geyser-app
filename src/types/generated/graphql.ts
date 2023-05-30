@@ -220,6 +220,16 @@ export type CursorInputString = {
   id: Scalars['String']
 }
 
+export type DeleteProjectInput = {
+  projectId: Scalars['BigInt']
+}
+
+export type DeleteUserResponse = MutationResponse & {
+  __typename?: 'DeleteUserResponse'
+  message?: Maybe<Scalars['String']>
+  success: Scalars['Boolean']
+}
+
 export type DonationFundingInput = {
   /** The donation amount, in satoshis. */
   donationAmount: Scalars['donationAmount_Int_NotNull_min_1']
@@ -790,6 +800,7 @@ export type Mutation = {
   fundingInvoiceRefresh: FundingTx
   fundingPend: FundingPendingResponse
   grantApply: GrantApplicant
+  projectDelete: ProjectDeleteResponse
   projectFollow: Scalars['Boolean']
   projectStatusUpdate: Project
   projectTagAdd: Array<Tag>
@@ -808,6 +819,7 @@ export type Mutation = {
   updateWallet: Wallet
   updateWalletState: Wallet
   userBadgeAward: UserBadge
+  userDelete: DeleteUserResponse
   walletDelete: Scalars['Boolean']
 }
 
@@ -879,6 +891,10 @@ export type MutationGrantApplyArgs = {
   input?: InputMaybe<GrantApplyInput>
 }
 
+export type MutationProjectDeleteArgs = {
+  input: DeleteProjectInput
+}
+
 export type MutationProjectFollowArgs = {
   input: ProjectFollowMutationInput
 }
@@ -945,6 +961,11 @@ export type MutationUserBadgeAwardArgs = {
 
 export type MutationWalletDeleteArgs = {
   id: Scalars['BigInt']
+}
+
+export type MutationResponse = {
+  message?: Maybe<Scalars['String']>
+  success: Scalars['Boolean']
 }
 
 export type OffsetBasedPaginationInput = {
@@ -1044,6 +1065,12 @@ export type ProjectCountriesGetResult = {
   __typename?: 'ProjectCountriesGetResult'
   count: Scalars['Int']
   country: Country
+}
+
+export type ProjectDeleteResponse = MutationResponse & {
+  __typename?: 'ProjectDeleteResponse'
+  message?: Maybe<Scalars['String']>
+  success: Scalars['Boolean']
 }
 
 export type ProjectEntriesGetInput = {
@@ -1787,6 +1814,8 @@ export type ResolversTypes = {
   CursorInput: CursorInput
   CursorInputString: CursorInputString
   Date: ResolverTypeWrapper<Scalars['Date']>
+  DeleteProjectInput: DeleteProjectInput
+  DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>
   DonationFundingInput: DonationFundingInput
   Entry: ResolverTypeWrapper<Entry>
   EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>
@@ -1869,6 +1898,9 @@ export type ResolversTypes = {
   LndNodeType: LndNodeType
   Location: ResolverTypeWrapper<Location>
   Mutation: ResolverTypeWrapper<{}>
+  MutationResponse:
+    | ResolversTypes['DeleteUserResponse']
+    | ResolversTypes['ProjectDeleteResponse']
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   OrderByOptions: OrderByOptions
   Owner: ResolverTypeWrapper<Owner>
@@ -1877,6 +1909,7 @@ export type ResolversTypes = {
   Project: ResolverTypeWrapper<Project>
   ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>
   ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>
+  ProjectDeleteResponse: ResolverTypeWrapper<ProjectDeleteResponse>
   ProjectEntriesGetInput: ProjectEntriesGetInput
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
   ProjectFollowMutationInput: ProjectFollowMutationInput
@@ -2055,6 +2088,8 @@ export type ResolversParentTypes = {
   CursorInput: CursorInput
   CursorInputString: CursorInputString
   Date: Scalars['Date']
+  DeleteProjectInput: DeleteProjectInput
+  DeleteUserResponse: DeleteUserResponse
   DonationFundingInput: DonationFundingInput
   Entry: Entry
   EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse
@@ -2126,6 +2161,9 @@ export type ResolversParentTypes = {
   LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
   Location: Location
   Mutation: {}
+  MutationResponse:
+    | ResolversParentTypes['DeleteUserResponse']
+    | ResolversParentTypes['ProjectDeleteResponse']
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   Owner: Owner
   OwnerOf: OwnerOf
@@ -2133,6 +2171,7 @@ export type ResolversParentTypes = {
   Project: Project
   ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse
   ProjectCountriesGetResult: ProjectCountriesGetResult
+  ProjectDeleteResponse: ProjectDeleteResponse
   ProjectEntriesGetInput: ProjectEntriesGetInput
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
   ProjectFollowMutationInput: ProjectFollowMutationInput
@@ -2332,6 +2371,15 @@ export type CountryResolvers<
 export interface DateScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date'
+}
+
+export type DeleteUserResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['DeleteUserResponse'] = ResolversParentTypes['DeleteUserResponse'],
+> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
 export type EntryResolvers<
@@ -2841,6 +2889,12 @@ export type MutationResolvers<
     ContextType,
     Partial<MutationGrantApplyArgs>
   >
+  projectDelete?: Resolver<
+    ResolversTypes['ProjectDeleteResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectDeleteArgs, 'input'>
+  >
   projectFollow?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
@@ -2937,12 +2991,30 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUserBadgeAwardArgs, 'userBadgeId'>
   >
+  userDelete?: Resolver<
+    ResolversTypes['DeleteUserResponse'],
+    ParentType,
+    ContextType
+  >
   walletDelete?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
     ContextType,
     RequireFields<MutationWalletDeleteArgs, 'id'>
   >
+}
+
+export type MutationResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse'],
+> = {
+  __resolveType: TypeResolveFn<
+    'DeleteUserResponse' | 'ProjectDeleteResponse',
+    ParentType,
+    ContextType
+  >
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
 }
 
 export type OwnerResolvers<
@@ -3087,6 +3159,15 @@ export type ProjectCountriesGetResultResolvers<
 > = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   country?: Resolver<ResolversTypes['Country'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectDeleteResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectDeleteResponse'] = ResolversParentTypes['ProjectDeleteResponse'],
+> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3809,6 +3890,7 @@ export type Resolvers<ContextType = any> = {
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>
   Country?: CountryResolvers<ContextType>
   Date?: GraphQLScalarType
+  DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>
   Entry?: EntryResolvers<ContextType>
   EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>
   ExternalAccount?: ExternalAccountResolvers<ContextType>
@@ -3836,11 +3918,13 @@ export type Resolvers<ContextType = any> = {
   LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>
   Location?: LocationResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
+  MutationResponse?: MutationResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
   Project?: ProjectResolvers<ContextType>
   ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>
   ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>
+  ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>
   ProjectMilestone?: ProjectMilestoneResolvers<ContextType>
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>
   ProjectReward?: ProjectRewardResolvers<ContextType>
@@ -4395,6 +4479,19 @@ export type GrantApplyMutationVariables = Exact<{
 export type GrantApplyMutation = {
   __typename?: 'Mutation'
   grantApply: { __typename?: 'GrantApplicant'; status: GrantApplicantStatus }
+}
+
+export type ProjectStatusUpdateMutationVariables = Exact<{
+  input: ProjectStatusUpdate
+}>
+
+export type ProjectStatusUpdateMutation = {
+  __typename?: 'Mutation'
+  projectStatusUpdate: {
+    __typename?: 'Project'
+    id: any
+    status?: ProjectStatus | null
+  }
 }
 
 export type CreateProjectMutationVariables = Exact<{
@@ -6348,6 +6445,57 @@ export type GrantApplyMutationResult = Apollo.MutationResult<GrantApplyMutation>
 export type GrantApplyMutationOptions = Apollo.BaseMutationOptions<
   GrantApplyMutation,
   GrantApplyMutationVariables
+>
+export const ProjectStatusUpdateDocument = gql`
+  mutation ProjectStatusUpdate($input: ProjectStatusUpdate!) {
+    projectStatusUpdate(input: $input) {
+      id
+      status
+    }
+  }
+`
+export type ProjectStatusUpdateMutationFn = Apollo.MutationFunction<
+  ProjectStatusUpdateMutation,
+  ProjectStatusUpdateMutationVariables
+>
+
+/**
+ * __useProjectStatusUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectStatusUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectStatusUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectStatusUpdateMutation, { data, loading, error }] = useProjectStatusUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectStatusUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ProjectStatusUpdateMutation,
+    ProjectStatusUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    ProjectStatusUpdateMutation,
+    ProjectStatusUpdateMutationVariables
+  >(ProjectStatusUpdateDocument, options)
+}
+export type ProjectStatusUpdateMutationHookResult = ReturnType<
+  typeof useProjectStatusUpdateMutation
+>
+export type ProjectStatusUpdateMutationResult =
+  Apollo.MutationResult<ProjectStatusUpdateMutation>
+export type ProjectStatusUpdateMutationOptions = Apollo.BaseMutationOptions<
+  ProjectStatusUpdateMutation,
+  ProjectStatusUpdateMutationVariables
 >
 export const CreateProjectDocument = gql`
   mutation CreateProject($input: CreateProjectInput!) {

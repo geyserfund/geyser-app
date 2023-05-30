@@ -25,7 +25,7 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
       >
         <Button
           size="sm"
-          leftIcon={<BoltIcon scale={0.8} />}
+          leftIcon={<BoltIcon />}
           border="1px solid"
           borderColor="transparent"
           _hover={{ backgroundColor: 'none', borderColor: 'primary.400' }}

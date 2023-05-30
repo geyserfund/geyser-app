@@ -26,7 +26,6 @@ import { useAuthContext, useNavContext } from '../../../context'
 import { useScrollDirection } from '../../../hooks'
 import { useMobileMode } from '../../../utils'
 import { AuthModal } from '../../molecules'
-import { ButtonComponent } from '../../ui'
 import { NavBarLogo } from '../NavBarLogo'
 import { TopNavBarMenu } from './TopNavBarMenu'
 
@@ -55,6 +54,7 @@ const dashboardRoutes = [
   getPath('dashboardFunding', PathName.projectId),
   getPath('dashboardSettings', PathName.projectId),
   getPath('dashboardStats', PathName.projectId),
+  getPath('dashboardStory', PathName.projectId),
 ]
 
 const routesForHidingTopNav = [
@@ -211,6 +211,7 @@ export const TopNavBar = () => {
       queryCurrentUser()
       navigate(location.pathname, { state: {} })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   const handleProjectLaunchButtonPress = () => {
@@ -493,7 +494,7 @@ export const TopNavBar = () => {
         return Boolean(routeMatch)
       })
     )
-  }, [routeMatchesForTransaparentBackground])
+  }, [routeMatchesForTransaparentBackground, scrollTop])
 
   if (shouldTopNavBeHidden) {
     return null
@@ -521,7 +522,10 @@ export const TopNavBar = () => {
           justifyContent={'space-between'}
           overflow="hidden"
         >
-          <NavBarLogo marginRight={isMobile ? 0 : 5} />
+          <NavBarLogo
+            marginRight={isMobile ? 0 : 5}
+            color={showHaveTransparentBackground ? 'primary.900' : undefined}
+          />
 
           {shouldShowCustomTitle ? (
             <Link to={navData.projectPath}>
@@ -584,58 +588,53 @@ export const TopNavBar = () => {
               </Box>
             ) : null}
             {shouldShowDashboardButton ? (
-              <ButtonComponent
+              <Button
                 size="sm"
-                variant={'solid'}
-                backgroundColor="primary.400"
+                variant={'primary'}
                 onClick={handleProjectDashboardButtonPress}
               >
                 Edit project
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowMyProjectsButton ? (
-              <ButtonComponent
-                variant={'solid'}
+              <Button
+                variant={'primary'}
                 size="sm"
-                backgroundColor="primary.400"
                 onClick={handleMyProjectsButtonPress}
               >
                 View my projects
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowMyProjectButton ? (
-              <ButtonComponent
-                variant={'solid'}
+              <Button
+                variant={'primary'}
                 size="sm"
-                backgroundColor="primary.400"
                 onClick={handleMyProjectButtonPress}
               >
                 View my project
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowProjectButton && (
-              <ButtonComponent
-                variant={'solid'}
+              <Button
+                variant={'primary'}
                 size="sm"
-                backgroundColor="primary.400"
                 onClick={handleProjectButtonPress}
               >
                 Project
-              </ButtonComponent>
+              </Button>
             )}
 
             {shouldShowProjectLaunchButton ? (
-              <ButtonComponent
-                variant={'solid'}
+              <Button
+                variant="primary"
                 size="sm"
-                backgroundColor="primary.400"
                 onClick={handleProjectLaunchButtonPress}
               >
                 Launch Your Project
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowSignInButton ? (
@@ -689,16 +688,22 @@ export const TopNavBar = () => {
               justifyContent="space-between"
               paddingTop="20px"
             >
-              <ButtonComponent width="50%" mx={1} primary onClick={loginOnOpen}>
+              <Button
+                variant="primary"
+                width="50%"
+                mx={1}
+                onClick={loginOnOpen}
+              >
                 Log In
-              </ButtonComponent>
-              <ButtonComponent
+              </Button>
+              <Button
+                variant="primaryNeutral"
                 width="50%"
                 mx={1}
                 onClick={onLoginAlertModalClose}
               >
                 Continue
-              </ButtonComponent>
+              </Button>
             </Box>
           </ModalBody>
         </ModalContent>

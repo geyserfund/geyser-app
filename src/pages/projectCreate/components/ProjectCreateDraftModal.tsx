@@ -23,8 +23,9 @@ export const ProjectCreateDraftModal = (
       <VStack w="100%" spacing={6} pt={2}>
         <CheckCircleIcon fontSize="3.4em" color="primary.400" />
         <Text variant="body1">
-          Your project information is saved and ready for you to edit. Feel free
-          to launch your project when you’re ready!
+          Your project data has been saved, except for your wallet information
+          (lightning address or node). Come back to the creation flow in order
+          to add your wallet information or edit your project.
         </Text>
         <Button w="100%" variant="secondary" onClick={props.onClose}>
           Go to project

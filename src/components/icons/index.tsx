@@ -2,7 +2,6 @@ import { Image } from '@chakra-ui/image'
 import { Box } from '@chakra-ui/layout'
 import { ImageProps } from '@chakra-ui/react'
 
-import BoltSvg from '../../assets/bolt.svg'
 import {
   CrownUrl,
   EnvelopeUrl,
@@ -100,22 +99,6 @@ export const RopeIcon = (props: ImageProps) => (
     <Image height="20px" width="20px" src={RopeUrl} alt="rope" {...props} />
   </Box>
 )
-
-export const BoltIcon = (props: ImageProps) => {
-  const scale = props.scale as number
-
-  return (
-    <Box padding="3px 0px">
-      <Image
-        height={scale ? (scale * 20).toString() + 'px' : '20px'}
-        width={scale ? (scale * 20).toString() + 'px' : '20px'}
-        src={BoltSvg}
-        alt="bolt"
-        {...props}
-      />
-    </Box>
-  )
-}
 
 export const FountainIcon = (props: ImageProps) => (
   <Box padding="3px 0px">

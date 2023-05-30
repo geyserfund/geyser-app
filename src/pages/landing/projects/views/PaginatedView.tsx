@@ -32,8 +32,8 @@ export const PaginatedView = () => {
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
     where: {
-      tagIds: tagIds?.length ? tagIds : undefined,
       status: ProjectStatus.Active,
+      tagIds: tagIds?.length ? tagIds : undefined,
       ...restFilters,
     },
     orderBy: sort ? [{ [sort]: OrderByOptions.Desc }] : undefined,

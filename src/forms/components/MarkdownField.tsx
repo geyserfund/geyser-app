@@ -1,7 +1,9 @@
 import {
   Box,
   Divider,
+  Image,
   ListItem,
+  ListProps,
   OrderedList,
   UnorderedList,
 } from '@chakra-ui/react'
@@ -15,6 +17,7 @@ import {
   EditorComponent,
   Heading,
   MarkMap,
+  NodeViewComponentProps,
   Remirror,
   RemirrorRenderer,
   TextHandler,
@@ -25,9 +28,13 @@ import {
   WysiwygToolbar,
 } from '@remirror/react'
 import { AllStyledComponent } from '@remirror/styles/emotion'
-import { PropsWithChildren, useCallback } from 'react'
-import { Control, useController } from 'react-hook-form'
-import { getRemirrorJSON, InvalidContentHandler } from 'remirror'
+import { ForwardedRef, PropsWithChildren, useCallback, useMemo } from 'react'
+import { Control, useController, useFormContext } from 'react-hook-form'
+import {
+  getRemirrorJSON,
+  InvalidContentHandler,
+  RemirrorThemeType,
+} from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -39,16 +46,18 @@ import {
   ImageExtension,
   ItalicExtension,
   LinkExtension,
-  ListItemExtension,
   MarkdownExtension,
   OrderedListExtension,
   PlaceholderExtension,
   TableExtension,
+  TextExtension,
+  TrailingNodeExtension,
   UnderlineExtension,
 } from 'remirror/extensions'
 import TurndownService from 'turndown'
 
 import { useSignedUpload } from '../../hooks'
+import { useCustomTheme } from '../../utils'
 
 const turndownService = new TurndownService()
 turndownService.keep(['iframe'])
@@ -102,12 +111,13 @@ export const MarkdownField = ({
       new HeadingExtension(),
       new BlockquoteExtension(),
       new OrderedListExtension(),
-      new ListItemExtension(),
       new CodeExtension(),
       new IframeExtension(),
       new HardBreakExtension(),
       new TableExtension(),
+      new TrailingNodeExtension(),
       new BulletListExtension(),
+      new TextExtension(),
       new ImageExtension({
         uploadHandler(files) {
           return files.map(
@@ -128,6 +138,17 @@ export const MarkdownField = ({
     extensions,
     stringHandler: 'markdown',
     onError,
+    react: {
+      nodeViewComponents: {
+        image: imageHandler,
+        bulletList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
+          <Box pl={5} ref={forwardRef} />
+        ),
+        orderedList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
+          <Box pl={5} ref={forwardRef} />
+        ),
+      },
+    },
   })
 
   if (preview) {
@@ -153,12 +174,7 @@ export const MarkdownField = ({
 
   return (
     <RemirrorStyleProvider>
-      <Remirror
-        attributes={{}}
-        autoFocus
-        manager={manager}
-        initialContent={initialContent?.()}
-      >
+      <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
         <WysiwygToolbar />
         <EditorComponent />
         <SaveModule name={name} control={control} />
@@ -168,18 +184,62 @@ export const MarkdownField = ({
 }
 
 const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
+  const { colors } = useCustomTheme()
+
+  const remirrorTheme: RemirrorThemeType = useMemo(
+    () => ({
+      color: {
+        text: colors.neutral[900],
+        background: colors.neutral[0],
+        primary: colors.primary[400],
+        primaryText: colors.neutral[900],
+        hover: {
+          background: colors.neutral[100],
+          primary: colors.primary[400],
+        },
+        secondary: colors.primary[400],
+        secondaryText: colors.neutral[900],
+        border: colors.neutral[200],
+        outline: colors.primary[400],
+      },
+    }),
+    [colors],
+  )
   return (
-    <Box width="100%">
-      <AllStyledComponent>
-        <ThemeProvider>{children}</ThemeProvider>
+    <Box
+      width="100%"
+      sx={{
+        '& p': {
+          mb: 4,
+        },
+      }}
+    >
+      <AllStyledComponent theme={remirrorTheme}>
+        <ThemeProvider theme={remirrorTheme}>{children}</ThemeProvider>
       </AllStyledComponent>
     </Box>
   )
 }
 
-const typeMap: MarkMap = {
+const imageHandler = ({
+  node: {
+    attrs: { src, alt },
+  },
+}: NodeViewComponentProps) => {
+  return <Image my={4} borderRadius="8px" src={src} alt={alt} />
+}
+
+const unorderedListHandler = ({ children }: ListProps) => {
+  return <UnorderedList>{children}</UnorderedList>
+}
+
+const listItemHandler = ({ children }: ListProps) => {
+  return <ListItem>{children}</ListItem>
+}
+
+const typeMap = {
   blockquote: 'blockquote',
-  bulletList: UnorderedList,
+  bulletList: unorderedListHandler,
   callout: Callout,
   codeBlock: CodeBlock,
   doc: Doc,
@@ -187,20 +247,20 @@ const typeMap: MarkMap = {
   heading: Heading,
   horizontalRule: Divider,
   iframe: createIFrameHandler(),
-  image: 'img',
-  listItem: ListItem,
+  image: imageHandler,
+  listItem: listItemHandler,
   paragraph: 'p',
   orderedList: OrderedList,
   text: TextHandler,
-}
+} satisfies MarkMap
 
-const markMap: MarkMap = {
+const markMap = {
   italic: 'em',
   bold: 'strong',
   code: 'code',
   link: createLinkHandler({ target: '_blank' }),
   underline: 'u',
-}
+} satisfies MarkMap
 
 function SaveModule(props: { control?: Control; name?: string }) {
   const {
@@ -210,10 +270,15 @@ function SaveModule(props: { control?: Control; name?: string }) {
     name: props.name ?? 'content',
   })
 
+  const { trigger } = useFormContext()
+
   const { getMarkdown } = useHelpers()
 
   const changeCallback = useDebouncedCallback(
-    (ctx) => onChange(getMarkdown(ctx.state)),
+    (ctx) => {
+      onChange(getMarkdown(ctx.state))
+      trigger(props.name ?? 'content')
+    },
     [],
     500,
   )

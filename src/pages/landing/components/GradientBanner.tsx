@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Box, Container, HStack, Image, Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
+import { LetTheSatsFlowIcon } from '../../../components/icons'
 import { SkeletonLayout } from '../../../components/layouts'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import { dimensions, LetTheSatsFlowNoNameEdition } from '../../../constants'
@@ -45,15 +46,7 @@ export const GradientBanner = () => {
   ]
 
   return (
-    <VStack
-      width="full"
-      align="center"
-      // backgroundImage={BannerGlowImage}
-      // backgroundPosition="50% 50%"
-      // backgroundSize="cover"
-      marginBottom="25px"
-      position="relative"
-    >
+    <VStack width="full" align="center" marginBottom="25px" position="relative">
       <Box w="full" h="full" position="absolute">
         <BannerBackground />
       </Box>
@@ -74,17 +67,18 @@ export const GradientBanner = () => {
             }}
             marginBottom={{ base: '70px', lg: '60px' }}
           >
-            <Image
+            {/* <Image
               src={LetTheSatsFlowNoNameEdition}
               maxHeight="76px"
               alt="landing-header-image"
-            />
+            /> */}
+            <LetTheSatsFlowIcon color="primary.800" />
           </VStack>
 
           <VStack
             position="absolute"
             bottom="-20px"
-            backgroundColor={'primary.50'}
+            backgroundColor={'neutral.100'}
             shadow="md"
             padding="10px 20px"
             borderRadius="8px"

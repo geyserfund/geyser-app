@@ -1,4 +1,4 @@
-import { Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { Text, VStack } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { BiPencil } from 'react-icons/bi'
 
@@ -6,29 +6,16 @@ import { CardLayout } from '../../../../components/layouts'
 import { ProjectSectionBar } from '../../../../components/molecules'
 import { IconButtonComponent } from '../../../../components/ui'
 import { useProjectContext } from '../../../../context'
-import { Project, ProjectMilestone } from '../../../../types'
-import { defaultMilestone, MilestoneAdditionModal } from '../components'
 import { MilestoneComponent } from '../components/MilestoneComponent'
 
 export const Milestones = forwardRef<
   HTMLDivElement,
   { milestonesLength: number }
 >(({ milestonesLength }, ref) => {
-  const { project, isProjectOwner, updateProject } = useProjectContext()
-
-  const {
-    isOpen: isMilestoneModalOpen,
-    onClose: onMilestoneModalClose,
-    onOpen: openMilestoneModal,
-  } = useDisclosure()
+  const { project, isProjectOwner, onMilestonesModalOpen } = useProjectContext()
 
   if (!project) {
     return null
-  }
-
-  const handleMilestoneSubmit = (newMilestones: ProjectMilestone[]) => {
-    updateProject({ milestones: newMilestones } as Project)
-    onMilestoneModalClose()
   }
 
   const renderMilestones = () => {
@@ -73,7 +60,7 @@ export const Milestones = forwardRef<
                 aria-label="edit-milestone"
                 noBorder
                 variant="ghost"
-                onClick={openMilestoneModal}
+                onClick={onMilestonesModalOpen}
                 icon={<BiPencil fontSize="16px" />}
               />
             )
@@ -83,19 +70,6 @@ export const Milestones = forwardRef<
           {renderMilestones()}
         </VStack>
       </CardLayout>
-      {isMilestoneModalOpen ? (
-        <MilestoneAdditionModal
-          isOpen={isMilestoneModalOpen}
-          onClose={onMilestoneModalClose}
-          availableMilestones={
-            project?.milestones && project.milestones.length > 0
-              ? (project.milestones as ProjectMilestone[])
-              : [defaultMilestone]
-          }
-          onSubmit={handleMilestoneSubmit}
-          projectId={parseInt(`${project.id}`, 10)}
-        />
-      ) : null}
     </>
   )
 })

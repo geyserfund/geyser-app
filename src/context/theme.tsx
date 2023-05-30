@@ -4,10 +4,12 @@ import {
   ThemeProviderProps,
   useColorMode,
 } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { ThemeProvider as ReactJSSThemeProvider } from 'react-jss'
 
 import { theme } from '../config'
 import { darkModeColors, lightModeColors } from '../styles'
+import { useThemeDetector } from '../utils/hooks'
 
 export type AppTheme = typeof theme & { colors: typeof lightModeColors }
 
@@ -15,7 +17,8 @@ export const ChakraThemeProvider = ({
   children,
   ...props
 }: Omit<ThemeProviderProps, 'theme'>) => {
-  const { colorMode } = useColorMode()
+  const { colorMode, setColorMode } = useColorMode()
+  const systemColorMode = useThemeDetector()
 
   const finalTheme = {
     ...theme,
@@ -23,6 +26,12 @@ export const ChakraThemeProvider = ({
   }
 
   const chakraTheme = extendTheme(finalTheme)
+
+  useEffect(() => {
+    if (systemColorMode) {
+      setColorMode(systemColorMode)
+    }
+  }, [systemColorMode, setColorMode])
 
   return (
     <ThemeProvider {...props} theme={chakraTheme}>

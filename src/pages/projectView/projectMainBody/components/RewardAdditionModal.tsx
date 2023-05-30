@@ -12,7 +12,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BiDollar } from 'react-icons/bi'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
@@ -29,7 +29,7 @@ import { ProjectRewardValidations } from '../../../../constants/validations'
 import { defaultProjectReward } from '../../../../defaults'
 import {
   CreateProjectRewardInput,
-  ProjectReward,
+  ProjectFragment,
   ProjectRewardForCreateUpdateFragment,
   RewardCurrency,
   UpdateProjectRewardInput,
@@ -41,44 +41,40 @@ import { commaFormatted, toInt, useNotification } from '../../../../utils'
 type Props = {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (reward: ProjectRewardForCreateUpdateFragment) => void
-  reward?: ProjectRewardForCreateUpdateFragment
+  onSubmit: (
+    reward: ProjectRewardForCreateUpdateFragment,
+    isEdit: boolean,
+  ) => void
   isSatoshi: boolean
-  projectId: number
+  project: ProjectFragment
+  props: {
+    reward?: ProjectRewardForCreateUpdateFragment
+  }
 }
 
 export const RewardAdditionModal = ({
   isOpen,
   onClose,
-  reward: availableReward,
   onSubmit,
-  projectId,
   isSatoshi,
+  project,
+  props,
 }: Props) => {
   const { toast } = useNotification()
 
   const [formCostDollarValue, setFormCostDollarValue] = useState(
-    (availableReward || defaultProjectReward).cost / 100,
+    defaultProjectReward.cost / 100,
   )
 
-  const [_rewards, _setRewards] =
-    useState<ProjectRewardForCreateUpdateFragment>(
-      availableReward || defaultProjectReward,
-    )
-
-  const rewards = useRef(_rewards)
-
-  const setRewards = (value: ProjectRewardForCreateUpdateFragment) => {
-    rewards.current = value
-    _setRewards(value)
-  }
+  const [reward, setReward] =
+    useState<ProjectRewardForCreateUpdateFragment>(defaultProjectReward)
 
   const [formError, setFormError] = useState<any>({})
 
   const [createReward, { loading: createRewardLoading }] =
     useCreateProjectRewardMutation({
       onCompleted(data) {
-        onSubmit(data.createProjectReward)
+        onSubmit(data.createProjectReward, false)
         onClose()
       },
       onError(error) {
@@ -98,7 +94,7 @@ export const RewardAdditionModal = ({
           description: `Reward ${updateProjectReward.name} was successfully updated`,
           status: 'success',
         })
-        onSubmit(updateProjectReward)
+        onSubmit(updateProjectReward, true)
         onClose()
       },
       onError(error) {
@@ -112,33 +108,37 @@ export const RewardAdditionModal = ({
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
-      projectId: toInt(projectId),
-      cost: rewards.current.cost,
+      projectId: project.id,
+      cost: reward.cost,
       costCurrency: RewardCurrency.Usdcent,
-      description: rewards.current.description,
-      image: rewards.current.image || undefined,
-      name: rewards.current.name,
-      stock: rewards.current.stock || undefined,
+      description: reward.description,
+      image: reward.image || undefined,
+      name: reward.name,
+      stock: reward.stock || undefined,
     }
   }
 
   const getRewardUpdateInputVariables = (): UpdateProjectRewardInput => {
     return {
-      projectRewardId: toInt((rewards.current as ProjectReward).id),
-      cost: rewards.current.cost,
+      projectRewardId: toInt(reward.id),
+      cost: reward.cost,
       costCurrency: RewardCurrency.Usdcent, // @TODO: when we do have more options for reward currency this will be updated
-      description: rewards.current.description,
-      image: rewards.current.image || undefined,
-      name: rewards.current.name,
-      stock: rewards.current.stock || undefined,
+      description: reward.description,
+      image: reward.image || undefined,
+      name: reward.name,
+      stock: reward.stock || undefined,
     }
   }
 
   useEffect(() => {
-    if (availableReward && availableReward !== rewards.current) {
-      setRewards(availableReward)
+    if (props.reward) {
+      setFormCostDollarValue(props.reward.cost / 100)
+      return setReward(props.reward)
     }
-  }, [availableReward])
+
+    setFormCostDollarValue(defaultProjectReward.cost)
+    return setReward(defaultProjectReward)
+  }, [props.reward])
 
   const handleTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -146,7 +146,7 @@ export const RewardAdditionModal = ({
     setFormError({})
     const { name, value } = event.target
     if (name) {
-      setRewards({ ...rewards.current, [name]: value })
+      setReward((current) => ({ ...current, [name]: value }))
     }
   }
 
@@ -161,7 +161,10 @@ export const RewardAdditionModal = ({
     setFormCostDollarValue(dollarValue)
 
     // set cost with the dollar value converted to cents
-    setRewards({ ...rewards.current, ...{ cost: toInt(dollarValue * 100) } })
+    setReward((current) => ({
+      ...current,
+      cost: toInt(dollarValue * 100),
+    }))
   }
 
   const handleConfirmReward = () => {
@@ -171,7 +174,7 @@ export const RewardAdditionModal = ({
       return
     }
 
-    if ((rewards.current as ProjectReward).id) {
+    if (reward.id) {
       updateReward({
         variables: { input: getRewardUpdateInputVariables() },
       })
@@ -185,24 +188,22 @@ export const RewardAdditionModal = ({
   }
 
   const handleUpload = (url: string) => {
-    setRewards({ ...rewards.current, image: url })
+    setReward((current) => ({ ...current, image: url }))
   }
 
   const validateReward = () => {
     const errors: any = {}
     let isValid = true
 
-    if (!rewards.current.name) {
+    if (!reward.name) {
       errors.name = 'Name is a required field'
       isValid = false
-    } else if (
-      rewards.current.name.length > ProjectRewardValidations.name.maxLength
-    ) {
+    } else if (reward.name.length > ProjectRewardValidations.name.maxLength) {
       errors.name = `Name should be less than ${ProjectRewardValidations.name.maxLength} characters`
       isValid = false
     }
 
-    if (!rewards.current.cost || rewards.current.cost <= 0) {
+    if (!reward.cost || reward.cost <= 0) {
       errors.cost = `Cost must be greater than 0.`
       isValid = false
     }
@@ -218,9 +219,8 @@ export const RewardAdditionModal = ({
     }
 
     if (
-      rewards.current.description &&
-      rewards.current.description.length >
-        ProjectRewardValidations.description.maxLength
+      reward.description &&
+      reward.description.length > ProjectRewardValidations.description.maxLength
     ) {
       errors.description = `Description should be less than ${ProjectRewardValidations.description.maxLength} characters`
       isValid = false
@@ -231,6 +231,10 @@ export const RewardAdditionModal = ({
     }
 
     return isValid
+  }
+
+  if (!isOpen) {
+    return null
   }
 
   return (
@@ -262,7 +266,7 @@ export const RewardAdditionModal = ({
               <Text>Name</Text>
               <TextInputBox
                 placeholder={'T - Shirt ...'}
-                value={rewards.current.name}
+                value={reward.name}
                 name="name"
                 onChange={handleTextChange}
                 error={formError.name}
@@ -273,7 +277,7 @@ export const RewardAdditionModal = ({
               <Text>Description</Text>
               <TextArea
                 placeholder="..."
-                value={rewards.current.description || ''}
+                value={reward.description || ''}
                 name="description"
                 onChange={handleTextChange}
                 error={formError.description}
@@ -285,11 +289,11 @@ export const RewardAdditionModal = ({
                 onUploadComplete={handleUpload}
                 childrenOnLoading={<UploadBox loading />}
               >
-                {rewards.current.image ? (
+                {reward.image ? (
                   <HStack justifyContent="center">
                     <ImageWithReload
                       borderRadius="4px"
-                      src={rewards.current.image}
+                      src={reward.image}
                       maxHeight="200px"
                     />
                   </HStack>
