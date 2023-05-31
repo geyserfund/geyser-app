@@ -37,10 +37,28 @@ interface ConnectWithLightningModalProps {
   onClose: () => void
 }
 
-type ConnectWithLightningProps = ButtonProps
+interface ConnectWithLightningProps extends ButtonProps {
+  onClose?: () => void
+}
 
-export const ConnectWithLightning = (props: ConnectWithLightningProps) => {
-  const { isOpen, onClose, onOpen } = useDisclosure()
+export const ConnectWithLightning = ({
+  onClose,
+  ...rest
+}: ConnectWithLightningProps) => {
+  const {
+    isOpen: isModalOpen,
+    onClose: onModalClose,
+    onOpen: onModalOpen,
+  } = useDisclosure()
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose()
+    }
+
+    onModalClose()
+  }
+
   return (
     <>
       <Button
@@ -49,14 +67,14 @@ export const ConnectWithLightning = (props: ConnectWithLightningProps) => {
         leftIcon={<BoltSvgIcon height="20px" width="20px" />}
         _hover={{ backgroundColor: 'social.lightningDark' }}
         color="black"
-        onClick={onOpen}
-        {...props}
+        onClick={onModalOpen}
+        {...rest}
       >
         Lightning
       </Button>
       {/* To make sure the polling gets stopped, the component is demounted. */}
-      {isOpen && (
-        <ConnectWithLightningModal isOpen={isOpen} onClose={onClose} />
+      {isModalOpen && (
+        <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />
       )}
     </>
   )
