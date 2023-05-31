@@ -67,11 +67,8 @@ export const StickToTop = ({
   async function handleScroll(this: HTMLElement) {
     let scrollTop = 0
 
-    console.log('handing scroll')
-
     if (scrollContainerId) {
       scrollTop = this.scrollTop
-      console.log('if scrollContainerId', scrollTop)
     } else {
       scrollTop = document.scrollingElement?.scrollTop || 0
     }
