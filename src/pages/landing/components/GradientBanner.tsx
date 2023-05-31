@@ -1,11 +1,11 @@
 import { useQuery } from '@apollo/client'
-import { Box, Container, HStack, Image, Stack, VStack } from '@chakra-ui/react'
+import { Box, Container, HStack, Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
 import { LetTheSatsFlowIcon } from '../../../components/icons'
 import { SkeletonLayout } from '../../../components/layouts'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
-import { dimensions, LetTheSatsFlowNoNameEdition } from '../../../constants'
+import { dimensions } from '../../../constants'
 import { QUERY_PROJECTS_SUMMARY } from '../../../graphql'
 import { fonts } from '../../../styles'
 import {
