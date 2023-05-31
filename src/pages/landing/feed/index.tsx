@@ -45,11 +45,11 @@ export const ActivityTopbar = () => {
     <HStack
       width="100%"
       borderBottom="2px solid"
-      borderColor="brand.neutral200"
+      borderColor="neutral.200"
       paddingY="6px"
       marginBottom="10px"
     >
-      <Body1 semiBold color="black">
+      <Body1 semiBold color="neutral.1000">
         Activity
       </Body1>
     </HStack>

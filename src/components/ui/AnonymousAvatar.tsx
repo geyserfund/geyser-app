@@ -23,7 +23,7 @@ export const AnonymousAvatar = ({
     align="center"
     justify="center"
     p={'4px'}
-    backgroundColor="brand.gray50"
+    backgroundColor="neutral.100"
   >
     <Avatar
       width={imageSize}

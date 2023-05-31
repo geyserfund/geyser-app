@@ -21,7 +21,7 @@ export const LogoutConfirmationModal = ({ ...modalProps }: UseModalProps) => {
         <Button
           w="100%"
           variant="secondary"
-          color="brand.secondaryRed"
+          color="secondary.red"
           onClick={() => {
             logout()
             modalProps.onClose()

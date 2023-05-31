@@ -26,7 +26,7 @@ export const ProjectView = () => {
           display="flex"
           overflow="hidden"
           position="relative"
-          bg="brand.bgGrey4"
+          bg="neutral.50"
           flexDirection={isMobile ? 'column' : 'row'}
         >
           <ProjectContainer fundingFlow={fundingFlow} />

@@ -8,7 +8,7 @@ export const FundingStatus = ({ open }: IFundingStatusProp) => (
   <Box display="flex" alignItems="center">
     <Box
       borderRadius="50%"
-      backgroundColor={open ? 'brand.lightGreen' : 'red'}
+      backgroundColor={open ? 'secondary.green' : 'red'}
       height="10px"
       width="10px"
       marginRight="15px"

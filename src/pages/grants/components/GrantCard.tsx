@@ -31,7 +31,7 @@ export const GrantCard = ({
 
   return (
     <Box
-      backgroundColor="white"
+      backgroundColor="neutral.0"
       _hover={{
         boxShadow:
           'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
@@ -81,7 +81,7 @@ export const GrantCard = ({
                       M
                     </Text>
                   </HStack>
-                  <Text fontSize="md" color="#5B5B5B" fontWeight="bold">
+                  <Text fontSize="md" color="neutral.600" fontWeight="bold">
                     CONTRIBUTED
                   </Text>
                 </Box>
@@ -93,7 +93,7 @@ export const GrantCard = ({
                       {distributed} M
                     </Text>
                   </HStack>
-                  <Text fontSize="md" color="#5B5B5B" fontWeight="bold">
+                  <Text fontSize="md" color="neutral.600" fontWeight="bold">
                     DISTRIBUTED
                   </Text>
                 </Box>
@@ -103,7 +103,8 @@ export const GrantCard = ({
                 <Text
                   width="100%"
                   p={1}
-                  border="2px solid #20ECC7"
+                  border="2px solid"
+                  borderColor="primary.400"
                   rounded="md"
                   textAlign="center"
                   fontWeight="bold"
@@ -114,7 +115,7 @@ export const GrantCard = ({
                 <Text
                   width="100%"
                   p={1}
-                  bg="brand.primary"
+                  bg="primary.400"
                   rounded="md"
                   textAlign="center"
                   fontWeight="bold"
@@ -125,7 +126,7 @@ export const GrantCard = ({
                 <Text
                   width="100%"
                   p={1}
-                  bg="brand.bgGrey3"
+                  bg="neutral.200"
                   rounded="md"
                   textAlign="center"
                   fontWeight="bold"

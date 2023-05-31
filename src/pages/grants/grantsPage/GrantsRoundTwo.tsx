@@ -10,7 +10,7 @@ import {
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
-import { SatSymbol } from '../../../assets'
+import { SatoshiIconTilted } from '../../../components/icons'
 import { AppFooter } from '../../../components/molecules'
 import {
   AlbyUrl,
@@ -50,7 +50,7 @@ export const GrantsRoundTwo = ({
     <>
       <Box
         paddingTop={isMobile ? '10px' : '20px'}
-        bg={'brand.bgGrey4'}
+        bg={'neutral.50'}
         minHeight="100vh"
         display="flex"
         alignItems={'center'}
@@ -65,7 +65,7 @@ export const GrantsRoundTwo = ({
         >
           <Button
             size={'sm'}
-            bg="brand.bgWhite"
+            bg="neutral.0"
             variant={'outline'}
             gap={2}
             onClick={() => navigate(-1)}
@@ -85,7 +85,7 @@ export const GrantsRoundTwo = ({
             gap={4}
           >
             <Text
-              bg="brand.primary100"
+              bg="primary.100"
               fontSize={'10px'}
               px="14px"
               py={'5px'}
@@ -97,7 +97,7 @@ export const GrantsRoundTwo = ({
           <Text
             fontSize={isMobile ? '15px' : '16px'}
             fontWeight="500"
-            color={'brand.neutral600'}
+            color={'neutral.600'}
             textAlign="center"
             justifyContent="center"
           >
@@ -106,14 +106,14 @@ export const GrantsRoundTwo = ({
             sponsors who want to change the world for the better.
           </Text>
           <Box display="flex" flexDirection={'column'} alignItems="center">
-            <Box color={'brand.primary500'} my={8}>
+            <Box color={'primary.500'} my={8}>
               <Box
                 display={'flex'}
                 alignItems="center"
                 justifyContent={'center'}
               >
                 <Box mr={1}>
-                  <img src={SatSymbol} width="30px" alt="satsymbol" />
+                  <SatoshiIconTilted scale={1.4} />
                 </Box>
 
                 <Text
@@ -128,7 +128,7 @@ export const GrantsRoundTwo = ({
                   fontSize={'xs'}
                   ml="1"
                   fontWeight="800"
-                  color="brand.neutral400"
+                  color="neutral.400"
                 >
                   <small>($20K)</small>
                 </Text>
@@ -173,11 +173,11 @@ export const GrantsRoundTwo = ({
           </Box>
 
           <Box display={'flex'} justifyContent="center" my={6}>
-            <Text fontWeight={'400'} fontSize="14px" color={'brand.neutral600'}>
+            <Text fontWeight={'400'} fontSize="14px" color={'neutral.600'}>
               Designs by
               <Link
                 href="https://twitter.com/tachirahomestd"
-                color={'brand.primary500'}
+                color={'primary.500'}
               >
                 @tachirahomestd
               </Link>
@@ -191,7 +191,7 @@ export const GrantsRoundTwo = ({
             >
               Principled Bitcoiners Board
             </Text>
-            <Text color={'brand.neutral600'} fontWeight="600">
+            <Text color={'neutral.600'} fontWeight="600">
               The board will be responsible for reviewing and evaluating the
               applications.
             </Text>
@@ -207,17 +207,18 @@ export const GrantsRoundTwo = ({
             >
               Made possible by sponsors
             </Text>
-            <Text color={'brand.neutral600'} fontWeight="600">
+            <Text color={'neutral.600'} fontWeight="600">
               Bitcoin companies and anon individuals that want to bring hope to
               the world.
             </Text>
           </Box>
           <Box
-            border={'2px solid #E9ECEF'}
+            border={'2px solid'}
+            borderColor="neutral.200"
             borderRadius="12px"
             pb={4}
             pt={6}
-            bg="brand.bgWhite"
+            bg="neutral.0"
             mt={8}
             mb={3}
             px={4}
@@ -239,7 +240,7 @@ export const GrantsRoundTwo = ({
             </Box>
           </Box>
           <Box my={6}>
-            <Text color={'brand.neutral600'} fontWeight="600" mb={4}>
+            <Text color={'neutral.600'} fontWeight="600" mb={4}>
               Thanks to the developers and designers that built and designed
               Geyser Grants.
             </Text>

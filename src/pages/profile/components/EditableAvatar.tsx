@@ -43,7 +43,7 @@ export const EditableAvatar = ({ onUploadImage, imageUrl, userId }: Props) => {
           backgroundColor="neutral.900"
           opacity={0.3}
         />
-        <Box position="absolute" left="39px" top="40px" color="white">
+        <Box position="absolute" left="39px" top="40px" color="neutral.0">
           {isImageLoading ? (
             <Loader size="md" />
           ) : (

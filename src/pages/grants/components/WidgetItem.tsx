@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from 'react'
 
-import { colors, fonts } from '../../../styles'
+import { fonts } from '../../../styles'
 import { ListText } from './ListText'
 
 export const WidgetItem = ({
@@ -14,7 +14,7 @@ export const WidgetItem = ({
       isSatLogo
       subtitle={subtitle}
       titleProps={{
-        color: colors.primary500,
+        color: 'primary.500',
         fontSize: '26px',
         fontWeight: 700,
         fontFamily: fonts.livvic,
@@ -23,9 +23,9 @@ export const WidgetItem = ({
         fontStyle: 'normal',
         fontSize: '10px',
         fontWeight: 400,
-        color: colors.neutral900,
+        color: 'neutral.900',
       }}
-      satLogoProps={{ color: colors.primary500, height: '17px' }}
+      satLogoProps={{ color: 'primary.500', height: '17px' }}
     >
       {children}
     </ListText>

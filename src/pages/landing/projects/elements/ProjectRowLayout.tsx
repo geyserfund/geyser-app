@@ -1,9 +1,8 @@
 import { ChevronRightIcon } from '@chakra-ui/icons'
-import { HStack, StackProps, VStack } from '@chakra-ui/react'
+import { Box, HStack, StackProps, VStack } from '@chakra-ui/react'
 
 import { H3 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
-import { colors } from '../../../../styles'
 
 export interface ProjectRowLayoutProps extends StackProps {
   title: string
@@ -24,9 +23,11 @@ export const ProjectRowLayout = ({
   return (
     <VStack alignItems="start" spacing="10px" {...rest}>
       <HStack width="100%" justifyContent="space-between">
-        <H3 color="brand.primary600">
+        <H3 color="primary.600">
           {subtitle && (
-            <span style={{ color: colors.neutral800 }}>{`${subtitle} `}</span>
+            <Box as="span" color="neutral.800">
+              {subtitle}
+            </Box>
           )}
           {title}
         </H3>

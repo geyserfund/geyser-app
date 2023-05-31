@@ -16,8 +16,9 @@ import { BiDollar } from 'react-icons/bi'
 import { BsArrowRepeat } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
+import { AppTheme } from '../../context'
 import { useBtcContext } from '../../context/btc'
-import { colors, fonts } from '../../styles'
+import { fonts } from '../../styles'
 import {
   CrownIcon,
   MedalIcon,
@@ -28,12 +29,12 @@ import {
 import { SatSymbolIcon } from '../icons/svg'
 import { ButtonComponent } from '../ui'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {
     borderWidth: '2px',
     '&:focus': {
-      borderColor: colors.normalLightGreen,
-      boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+      borderColor: colors.neutral[500],
+      boxShadow: `0 0 0 1px ${colors.neutral[500]}`,
     },
     fontFamily: fonts.inter,
     fontWeight: 700,
@@ -46,7 +47,7 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     padding: 0,
     background: 'none',
-    color: colors.textGrey,
+    color: colors.neutral[600],
     position: 'relative',
     '&:hover': {
       background: 'none',
@@ -62,10 +63,10 @@ const useStyles = createUseStyles({
     borderWidth: '2px',
     boxShadow: 'none',
     '&:focus': {
-      borderColor: colors.normalLightGreen,
+      borderColor: colors.neutral[500],
     },
   },
-})
+}))
 
 interface IDonationInputProps extends InputProps {
   name: string
@@ -164,9 +165,9 @@ export const DonationInput = ({
           pl={10}
           {...rest}
           _placeholder={{
-            color: 'primary.textBlack',
+            color: 'neutral.1000',
           }}
-          color="primary.textBlack"
+          color="neutral.1000"
           placeholder="0"
         />
         <InputRightElement pt={1} pr={6} height={14}>
@@ -179,10 +180,7 @@ export const DonationInput = ({
             {isSatoshi ? (
               <BiDollar className={classes.insideIcon} />
             ) : (
-              <SatoshiIconTilted
-                wrapperClass={classes.insideIcon}
-                scale={0.7}
-              />
+              <SatoshiIconTilted position="absolute" scale={0.7} />
             )}
           </Button>
         </InputRightElement>

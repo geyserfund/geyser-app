@@ -10,7 +10,6 @@ import {
 import { SlLocationPin } from 'react-icons/sl'
 
 import { Body1 } from '../../../../components/typography'
-import { colors } from '../../../../styles'
 import {
   Country,
   ProjectCountriesGetResult,
@@ -36,8 +35,8 @@ export const MobileRegionFilter = ({
     <AccordionItem {...rest}>
       <AccordionButton paddingY="15px">
         <HStack width="100%">
-          <SlLocationPin fontSize="20px" color={colors.neutral600} />
-          <Body1 fontSize="16px" color={colors.neutral800}>
+          <SlLocationPin fontSize="20px" color={'neutral.600'} />
+          <Body1 fontSize="16px" color={'neutral.800'}>
             {label}
           </Body1>
         </HStack>

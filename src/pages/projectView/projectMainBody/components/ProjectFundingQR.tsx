@@ -18,8 +18,8 @@ export const ProjectFundingQR = ({ project }: ProjectFundingQRProps) => {
           size="sm"
           border="1px solid"
           borderColor="transparent"
-          _hover={{ backgroundColor: 'none', borderColor: '#20ECC7' }}
-          _active={{ backgroundColor: 'brand.primary' }}
+          _hover={{ backgroundColor: 'none', borderColor: 'primary.400' }}
+          _active={{ backgroundColor: 'primary.400' }}
           bg="none"
           icon={<QrIcon />}
           aria-label="qr"

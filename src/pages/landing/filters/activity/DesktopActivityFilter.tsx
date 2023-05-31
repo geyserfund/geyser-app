@@ -16,7 +16,6 @@ import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { useFilterContext } from '../../../../context'
-import { colors } from '../../../../styles'
 import { StatusTypeButton } from '../status'
 import { ActivityFilterBody } from './ActivityFilterBody'
 
@@ -58,7 +57,7 @@ export const DesktopActivityFilter = ({
         >
           <HStack width="100%" spacing="10px">
             <button.icon color={button.color} height="20px" />
-            <Body1 color={colors.neutral900}>{button.text}</Body1>
+            <Body1 color={'neutral.900'}>{button.text}</Body1>
           </HStack>
           {!isSelected && (
             <ChevronRightIcon
@@ -81,7 +80,7 @@ export const DesktopActivityFilter = ({
         <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
           <ModalHeader>
             <HStack width="100%" position="relative" alignItems="center">
-              <Body1 color={colors.neutral600}>Filter by:</Body1>
+              <Body1 color={'neutral.600'}>Filter by:</Body1>
             </HStack>
           </ModalHeader>
           <ModalCloseButton />

@@ -28,9 +28,13 @@ import {
   WysiwygToolbar,
 } from '@remirror/react'
 import { AllStyledComponent } from '@remirror/styles/emotion'
-import { ForwardedRef, PropsWithChildren, useCallback } from 'react'
+import { ForwardedRef, PropsWithChildren, useCallback, useMemo } from 'react'
 import { Control, useController, useFormContext } from 'react-hook-form'
-import { getRemirrorJSON, InvalidContentHandler } from 'remirror'
+import {
+  getRemirrorJSON,
+  InvalidContentHandler,
+  RemirrorThemeType,
+} from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -52,8 +56,8 @@ import {
 } from 'remirror/extensions'
 import TurndownService from 'turndown'
 
-import { remirrorTheme } from '../../config'
 import { useSignedUpload } from '../../hooks'
+import { useCustomTheme } from '../../utils'
 
 const turndownService = new TurndownService()
 turndownService.keep(['iframe'])
@@ -180,6 +184,27 @@ export const MarkdownField = ({
 }
 
 const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
+  const { colors } = useCustomTheme()
+
+  const remirrorTheme: RemirrorThemeType = useMemo(
+    () => ({
+      color: {
+        text: colors.neutral[900],
+        background: colors.neutral[0],
+        primary: colors.primary[400],
+        primaryText: colors.neutral[900],
+        hover: {
+          background: colors.neutral[100],
+          primary: colors.primary[400],
+        },
+        secondary: colors.primary[400],
+        secondaryText: colors.neutral[900],
+        border: colors.neutral[200],
+        outline: colors.primary[400],
+      },
+    }),
+    [colors],
+  )
   return (
     <Box
       width="100%"

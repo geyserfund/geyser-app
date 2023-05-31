@@ -8,7 +8,6 @@ import {
 } from '../../../components/layouts'
 import { QUERY_GRANT_STATISTICS } from '../../../graphql/queries/grant'
 import { useAnimatedClipboard } from '../../../hooks/useAnimatedClipboard'
-import { colors } from '../../../styles'
 import { GrantStatistics } from '../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
 import { GrantsContributeModal } from '../components/GrantsContributeModal'
@@ -77,17 +76,12 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
       >
         <GrantsContributeModal />
         {isMobile ? (
-          <Text
-            fontSize={'14px'}
-            fontWeight="500"
-            mt={3}
-            color="brand.neutral600"
-          >
+          <Text fontSize={'14px'} fontWeight="500" mt={3} color="neutral.600">
             Contribute to the Bitcoin ecosystem by becoming a Geyser Grants
             sponsor. You can also easily contribute by sending or streaming
             recurring payments to{' '}
             <Link
-              textColor={hasCopied ? undefined : colors.primary500}
+              textColor={hasCopied ? undefined : 'primary.500'}
               href="#"
               onClick={() => handleCopyAddress()}
             >
@@ -96,11 +90,11 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
           </Text>
         ) : (
           <Box display="flex" alignItems={'center'}>
-            <Text fontWeight="500" mr={1} color="brand.neutral600">
+            <Text fontWeight="500" mr={1} color="neutral.600">
               Or sending SATs to our lightning address:{' '}
               <Tooltip label="Copied to clipboard!" isOpen={hasCopied}>
                 <Link
-                  textColor={hasCopied ? undefined : colors.primary500}
+                  textColor={hasCopied ? undefined : 'primary.500'}
                   href="#"
                   onClick={() => handleCopyAddress()}
                 >

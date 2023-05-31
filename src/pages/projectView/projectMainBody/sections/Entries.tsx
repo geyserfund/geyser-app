@@ -158,11 +158,7 @@ export const Entries = forwardRef<HTMLDivElement, { entriesLength: number }>(
 
           {isProjectOwner && Boolean(canCreateEntries) === false && (
             <Center>
-              <Text
-                textColor={'brand.neutral600'}
-                textAlign="center"
-                paddingX={2}
-              >
+              <Text textColor={'neutral.600'} textAlign="center" paddingX={2}>
                 You cannot publish an entry in an inactive project. Finish the
                 project configuration or re-activate the project to publish this
                 entry.

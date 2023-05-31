@@ -245,7 +245,7 @@ export const RewardAdditionModal = ({
           <Text fontSize="18px" fontWeight={600}>
             Reward
           </Text>
-          <Body2 color="brand.neutral900">
+          <Body2 color="neutral.900">
             Adding rewards and items that can be purchased makes it more
             worthwhile for contributors to fund your project
           </Body2>
@@ -316,7 +316,7 @@ export const RewardAdditionModal = ({
                    types beyond USD cents (e.g: satoshis)
                  */}
                 <Input
-                  focusBorderColor="brand.primary"
+                  focusBorderColor="primary.400"
                   name="Dollar Amount Cost"
                   type="number"
                   onChange={handleCostAmountChange}

@@ -1,9 +1,8 @@
-import { Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
+import { Icon, Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { useEffect, useState } from 'react'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
-import { colors } from '../../styles'
 import { ProjectFragment, WalletStatus } from '../../types/generated/graphql'
 import { isActive, isDraft } from '../../utils'
 
@@ -24,11 +23,11 @@ export enum ProjectStatusLabels {
 }
 
 export const ProjectStatusColors = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: colors.secondaryRed,
-  [ProjectStatusLabels.INACTIVE_WALLET]: colors.secondaryGold,
-  [ProjectStatusLabels.RUNNING]: colors.primary500,
-  [ProjectStatusLabels.DRAFT]: colors.neutral500,
-  [ProjectStatusLabels.INACTIVE]: colors.neutral500,
+  [ProjectStatusLabels.UNSTABLE_WALLET]: 'secondary.red',
+  [ProjectStatusLabels.INACTIVE_WALLET]: 'secondary.yellow',
+  [ProjectStatusLabels.RUNNING]: 'primary.500',
+  [ProjectStatusLabels.DRAFT]: 'neutral.500',
+  [ProjectStatusLabels.INACTIVE]: 'neutral.500',
 }
 
 export const ProjectStatusIcons = {
@@ -104,13 +103,13 @@ export const ProjectStatusLabel = ({
     setStatus(currentStatus)
   }, [project])
 
-  const Icon = ProjectStatusIcons[status]
+  const CurrentIcon = ProjectStatusIcons[status]
   const color = ProjectStatusColors[status]
   const tooltip = ProjectStatusTooltip[status]
   return (
     <Tooltip label={tooltip} placement="top" size="sm">
       <Stack direction={direction} alignItems="center">
-        <Icon fontSize={iconSize} color={color} />
+        <Icon as={CurrentIcon} fontSize={iconSize} color={color} />
         <Text color={color} {...commonStyles}>
           {status}
         </Text>

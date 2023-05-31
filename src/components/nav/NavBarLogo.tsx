@@ -1,6 +1,5 @@
 import { Box, BoxProps } from '@chakra-ui/layout'
 import { useBreakpoint } from '@chakra-ui/media-query'
-import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
 import { GeyserLogoNameIcon } from '../icons/svg'
@@ -13,14 +12,6 @@ type Props = BoxProps & {
   small?: boolean
 }
 
-const useStyles = createUseStyles({
-  container: {
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-})
-
 export const NavBarLogo = ({
   className,
   full,
@@ -28,14 +19,12 @@ export const NavBarLogo = ({
   color,
   ...rest
 }: Props) => {
-  const classes = useStyles()
-
   const isLg = useBreakpoint('lg')
 
   const useFullOne = (isLg || full) && !small
 
   return (
-    <Box {...rest} className={`${classes.container} ${className}`}>
+    <Box {...rest} className={className} _hover={{ cursor: 'pointer' }}>
       <Link to="/">
         {useFullOne ? (
           <GeyserLogoNameIcon

@@ -28,7 +28,7 @@ export const ApplyGrantCard = ({
       rounded="md"
       shadow="sm"
       borderWidth="1px"
-      borderColor="brand.neutral100"
+      borderColor="neutral.100"
       minWidth={'100%'}
       overflow="hidden"
       _hover={{ shadow: 'lg' }}
@@ -53,13 +53,13 @@ export const ApplyGrantCard = ({
         >
           {isClose ? (
             <>
-              <Text fontWeight={'400'} fontSize="9px" color={'brand.gray500'}>
+              <Text fontWeight={'400'} fontSize="9px" color={'neutral.700'}>
                 {applicant}
               </Text>
               <Text
                 fontWeight={'400'}
                 fontSize="11px"
-                color={'brand.gray500'}
+                color={'neutral.700'}
                 mt={1}
               >
                 APPLICANTS
@@ -79,7 +79,7 @@ export const ApplyGrantCard = ({
                     {contributed}
                   </Text>
                 </HStack>
-                <Text fontSize="xs" color="#5B5B5B" fontWeight="bold">
+                <Text fontSize="xs" color="neutral600" fontWeight="bold">
                   CONTRIBUTED
                 </Text>
               </Box>
@@ -91,7 +91,7 @@ export const ApplyGrantCard = ({
                     {distributed}
                   </Text>
                 </HStack>
-                <Text fontSize="xs" color="#5B5B5B" fontWeight="bold">
+                <Text fontSize="xs" color="neutral600" fontWeight="bold">
                   DISTRIBUTED
                 </Text>
               </Box>

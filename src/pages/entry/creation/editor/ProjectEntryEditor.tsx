@@ -9,9 +9,14 @@ import { createUseStyles } from 'react-jss'
 import { Quill } from 'react-quill'
 
 import { ID } from '../../../../constants'
+import { AppTheme } from '../../../../context'
 import { getSignedUploadAPI } from '../../../../hooks'
-import { colors, fonts } from '../../../../styles'
-import { useMobileMode, useNotification } from '../../../../utils'
+import { fonts } from '../../../../styles'
+import {
+  useCustomTheme,
+  useMobileMode,
+  useNotification,
+} from '../../../../utils'
 
 type Rules = string
 
@@ -21,103 +26,105 @@ type StyleProps = {
   isMobile?: boolean
 }
 
-const useStyles = createUseStyles<Rules, StyleProps>({
-  container: ({ isReadOnly, noPadding, isMobile }: StyleProps) => ({
-    width: '100%',
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'center',
-    minHeight: '350px',
-    '& .ql-toolbar': {
-      position: 'fixed',
-      display: isReadOnly ? 'none' : 'flex',
-      bottom: '20px',
-      float: 'center',
-      zIndex: 99,
-      background: 'white',
-      borderRadius: '4px',
-      borderWidth: '0px',
-      boxShadow: '0px 3px 12px rgba(0, 0, 0, 0.1)',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      maxWidth: '100%',
-      overflowX: 'auto',
-      '& .ql-formats': {
-        display: 'flex',
-        margin: isMobile ? '0px' : '0px 10px',
-      },
-    },
-
-    '& .ql-container': {
+const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(
+  ({ colors }) => ({
+    container: ({ isReadOnly, noPadding, isMobile }: StyleProps) => ({
       width: '100%',
-      border: 'none',
-      fontFamily: fonts.inter,
-    },
-
-    '& .ql-editor': {
-      paddingBottom: '70px !important',
-      paddingLeft: noPadding ? '0px !important' : undefined,
-      paddingRight: noPadding ? '0px !important' : undefined,
-      overflow: 'hidden',
-      '&.ql-blank': {
-        '&:before': {
-          fontFamily: fonts.inter,
-          fontSize: '18px',
-          lineHeight: 1.5,
-          fontStyle: 'normal',
-          color: colors.grayPlaceholder,
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      minHeight: '350px',
+      '& .ql-toolbar': {
+        position: 'fixed',
+        display: isReadOnly ? 'none' : 'flex',
+        bottom: '20px',
+        float: 'center',
+        zIndex: 99,
+        background: colors.neutral[0],
+        borderRadius: '4px',
+        borderWidth: '0px',
+        boxShadow: '0px 3px 12px rgba(0, 0, 0, 0.1)',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        maxWidth: '100%',
+        overflowX: 'auto',
+        '& .ql-formats': {
+          display: 'flex',
+          margin: isMobile ? '0px' : '0px 10px',
         },
       },
-    },
 
-    '& .ql-editor li': {
-      fontSize: '18px',
-    },
+      '& .ql-container': {
+        width: '100%',
+        border: 'none',
+        fontFamily: fonts.inter,
+      },
 
-    '& p': {
-      fontFamily: fonts.inter,
-      fontSize: '18px',
-      lineHeight: 1.5,
-    },
+      '& .ql-editor': {
+        paddingBottom: '70px !important',
+        paddingLeft: noPadding ? '0px !important' : undefined,
+        paddingRight: noPadding ? '0px !important' : undefined,
+        overflow: 'hidden',
+        '&.ql-blank': {
+          '&:before': {
+            fontFamily: fonts.inter,
+            fontSize: '18px',
+            lineHeight: 1.5,
+            fontStyle: 'normal',
+            color: colors.neutral[500],
+          },
+        },
+      },
 
-    '& h1': {
-      fontFamily: fonts.inter,
-      fontSize: '22px',
-      fontWeight: '500px',
-    },
-    '& h2': {
-      fontFamily: fonts.inter,
-      fontSize: '28px',
-      fontWeight: '500px',
-    },
-    '& img': {
-      borderRadius: '4px',
-      display: 'block',
-      margin: 'auto',
-    },
-    '& .image-uploading': {
-      display: 'block',
-    },
-    '& .ql-syntax': {
-      backgroundColor: `${colors.bgGrey} !important`,
-      color: `${colors.textGrey} !important`,
-    },
-    '& .ql-video': {
-      width: '100%',
-      height: '40vw',
-      maxHeight: '500px',
-    },
-    '& button.ql-active': {
-      color: `${colors.primary} !important`,
-    },
-    '& button.ql-active .ql-stroke': {
-      stroke: `${colors.primary} !important`,
-    },
-    '& button.ql-active .ql-fill': {
-      fill: `${colors.primary} !important`,
-    },
+      '& .ql-editor li': {
+        fontSize: '18px',
+      },
+
+      '& p': {
+        fontFamily: fonts.inter,
+        fontSize: '18px',
+        lineHeight: 1.5,
+      },
+
+      '& h1': {
+        fontFamily: fonts.inter,
+        fontSize: '22px',
+        fontWeight: '500px',
+      },
+      '& h2': {
+        fontFamily: fonts.inter,
+        fontSize: '28px',
+        fontWeight: '500px',
+      },
+      '& img': {
+        borderRadius: '4px',
+        display: 'block',
+        margin: 'auto',
+      },
+      '& .image-uploading': {
+        display: 'block',
+      },
+      '& .ql-syntax': {
+        backgroundColor: `${colors.neutral[100]} !important`,
+        color: `${colors.neutral[600]} !important`,
+      },
+      '& .ql-video': {
+        width: '100%',
+        height: '40vw',
+        maxHeight: '500px',
+      },
+      '& button.ql-active': {
+        color: `${colors.primary[400]} !important`,
+      },
+      '& button.ql-active .ql-stroke': {
+        stroke: `${colors.primary[400]} !important`,
+      },
+      '& button.ql-active .ql-fill': {
+        fill: `${colors.primary[400]} !important`,
+      },
+    }),
   }),
-})
+)
 
 type Props = {
   name: string
@@ -152,6 +159,7 @@ export const ProjectEntryEditor = ({
 
   const { toast } = useNotification()
   const classes = useStyles({ isReadOnly, noPadding, isMobile })
+  const { colors } = useCustomTheme()
 
   const editorModules = {
     toolbar: {
@@ -186,8 +194,8 @@ export const ProjectEntryEditor = ({
       modules: ['Resize', 'DisplaySize'],
       overlayStyles: {
         border: '2px solid',
-        borderColor: colors.primary400,
-        boxShadow: `0px 0px 0px 2px ${colors.primary400}`,
+        borderColor: colors.primary[400],
+        boxShadow: `0px 0px 0px 2px ${colors.primary[400]}`,
         borderRadius: '4px',
       },
       handleStyles: {

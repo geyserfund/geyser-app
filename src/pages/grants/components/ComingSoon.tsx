@@ -21,7 +21,7 @@ export const ComingSoon = ({
   const [imageLoad, setImageLoad] = useState(false)
   return (
     <Box
-      backgroundColor="white"
+      backgroundColor="neutral.0"
       boxShadow="0px 0px 10px rgba(0, 0, 0, 0.08)"
       borderRadius="4px"
       my={10}
@@ -60,7 +60,7 @@ export const ComingSoon = ({
                     0 M
                   </Text>
                 </HStack>
-                <Text fontSize="md" color="#5B5B5B" fontWeight="bold">
+                <Text fontSize="md" color="neutral.600" fontWeight="bold">
                   CONTRIBUTED
                 </Text>
               </Box>
@@ -72,7 +72,7 @@ export const ComingSoon = ({
                     0 M
                   </Text>
                 </HStack>
-                <Text fontSize="md" color="#5B5B5B" fontWeight="bold">
+                <Text fontSize="md" color="neutral.600" fontWeight="bold">
                   DISTRIBUTED
                 </Text>
               </Box>
@@ -81,7 +81,8 @@ export const ComingSoon = ({
             <Text
               width="100%"
               p={1}
-              border="2px solid #20ECC7"
+              border="2px solid"
+              borderColor="primary.400"
               rounded="md"
               textAlign="center"
               fontWeight="bold"

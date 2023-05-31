@@ -1,7 +1,6 @@
 import { Box, Image, Text } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
-import { colors } from '../../../styles'
 import { Grant, GrantApplicantStatus, GrantStatusEnum } from '../../../types'
 import {
   getFormattedDate,
@@ -60,8 +59,10 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
       onClick={() => navigate(to)}
       minWidth={'100%'}
       cursor="pointer"
-      border={`2px solid ${colors.neutral200}`}
+      border={`2px solid`}
+      borderColor="neutral.200"
       borderRadius="12px"
+      bgColor="neutral.0"
     >
       {showBanner && grant.image ? (
         <Box
@@ -90,7 +91,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 {grant.title}
               </Text>
               <Text
-                bg={isActive ? 'brand.primary100' : 'brand.neutral200'}
+                bg={isActive ? 'primary.100' : 'neutral.200'}
                 fontSize={'14px'}
                 px="14px"
                 py="5px"
@@ -100,7 +101,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 {isActive ? 'ACTIVE' : 'CLOSED'}
               </Text>
             </Box>
-            <Text color={'brand.neutral600'}>
+            <Text color={'neutral.600'}>
               {getFormattedDate(
                 grant.statuses.find(
                   (status) => status.status === GrantStatusEnum.Closed,

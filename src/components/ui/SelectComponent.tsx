@@ -3,29 +3,33 @@ import { createUseStyles } from 'react-jss'
 import Select from 'react-select'
 import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager'
 
-import { colors } from '../../styles'
+import { AppTheme } from '../../context'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {
     width: '100%',
     '& .platform__select__control': {
       borderRadius: '8px',
       borderWidth: '2px',
-      borderColor: colors.gray200,
+      backgroundColor: colors.neutral[50],
+      borderColor: colors.neutral[100],
       '&:hover': {
-        borderColor: colors.gray300,
+        borderColor: colors.neutral[400],
         cursor: 'text',
       },
       '&:active': {
-        borderColor: colors.normalLightGreen,
+        borderColor: colors.neutral[500],
         boxShadow: `none`,
       },
+    },
+    '& .platform__select__input-container': {
+      color: colors.neutral[600],
     },
     '& .platform__select__input': {
       fontWeight: 600,
     },
     '& .platform__select__control--is-focused': {
-      borderColor: `${colors.normalLightGreen} !important`,
+      borderColor: `${colors.neutral[500]} !important`,
       boxShadow: `none`,
     },
     '& .platform__select__control--menu-is-open': {
@@ -38,12 +42,12 @@ const useStyles = createUseStyles({
       borderTopRightRadius: 0,
       borderTopLeftRadius: 0,
       border: '2px solid',
-      borderColor: colors.normalLightGreen,
+      borderColor: colors.neutral[500],
       boxShadow: 'none',
       borderTopWidth: 0,
       marginTop: '-2px',
       paddingTop: '10px',
-      backgroundColor: colors.neutral50,
+      backgroundColor: colors.neutral[50],
       zIndex: 9,
     },
     '& .platform__select__menu-notice': {
@@ -56,7 +60,7 @@ const useStyles = createUseStyles({
     '& .platform__select__option': {
       fontSize: '14px',
       '&:hover': {
-        backgroundColor: colors.gray300,
+        backgroundColor: colors.neutral[400],
       },
     },
     '& .platform__select__indicator-separator ': {
@@ -66,14 +70,14 @@ const useStyles = createUseStyles({
       display: 'none',
     },
     '& .platform__select__option--is-focused': {
-      backgroundColor: colors.neutral200,
+      backgroundColor: colors.neutral[200],
     },
     '& .platform__select__option--is-selected': {
-      backgroundColor: colors.bgWhite,
-      color: colors.neutral600,
+      backgroundColor: colors.neutral[0],
+      color: colors.neutral[600],
     },
   },
-})
+}))
 
 export function SelectComponent<T, S extends boolean>({
   className,

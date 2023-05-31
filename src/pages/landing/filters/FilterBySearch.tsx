@@ -6,7 +6,6 @@ import { CloseIconButton } from '../../../components/buttons'
 import { TextInputBox } from '../../../components/ui'
 import { useFilterContext } from '../../../context'
 import { useDebounce } from '../../../hooks'
-import { colors } from '../../../styles'
 
 export const FilterBySearch = () => {
   const { updateFilter } = useFilterContext()
@@ -35,7 +34,7 @@ export const FilterBySearch = () => {
   return (
     <HStack width="100%" position="relative" alignItems="center">
       <TextInputBox
-        leftIcon={<SearchIcon color={colors.neutral700} />}
+        leftIcon={<SearchIcon color={'neutral.700'} />}
         placeholder="Search"
         onChange={handleSearchUpdate}
         value={search}

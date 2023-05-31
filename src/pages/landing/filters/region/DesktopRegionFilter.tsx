@@ -17,7 +17,6 @@ import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { useFilterContext } from '../../../../context'
-import { colors } from '../../../../styles'
 import {
   Country,
   ProjectCountriesGetResult,
@@ -72,8 +71,8 @@ export const DesktopRegionFilter = ({
           paddingX="10px"
         >
           <HStack width="100%">
-            <SlLocationPin color={colors.neutral600} fontSize="20px" />
-            <Body1 color={colors.neutral900}>{label}</Body1>
+            <SlLocationPin color={'neutral.600'} fontSize="20px" />
+            <Body1 color={'neutral.900'}>{label}</Body1>
           </HStack>
           {!isSelected && (
             <ChevronRightIcon
@@ -97,11 +96,11 @@ export const DesktopRegionFilter = ({
           <ModalHeader>
             <HStack width="100%" position="relative" alignItems="center">
               <SlLocationPin
-                stroke={colors.neutral600}
-                color={colors.neutral600}
+                stroke={'neutral.600'}
+                color={'neutral.600'}
                 fontSize="20px"
               />
-              <Body1 color={colors.neutral600}>Filter by location</Body1>
+              <Body1 color={'neutral.600'}>Filter by location</Body1>
             </HStack>
           </ModalHeader>
           <ModalCloseButton />

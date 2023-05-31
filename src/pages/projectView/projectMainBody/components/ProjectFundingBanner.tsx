@@ -5,13 +5,14 @@ import { QRCode } from 'react-qrcode-logo'
 
 import LogoDark from '../../../../assets/logo-dark.svg'
 import { BoltSvgIcon, CurvedArrow } from '../../../../components/icons'
-import { colors } from '../../../../styles'
+import { AppTheme } from '../../../../context'
+import { lightModeColors } from '../../../../styles'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   gradientContainer: {
-    background: `linear-gradient(270deg, ${colors.primary400} -0.16%, ${colors.primary} 35.26%, ${colors.bgLightGreenGradient} 99.84%)`,
+    background: `linear-gradient(270deg, ${colors.primary[400]} -0.16%, ${colors.primary[400]} 35.26%, ${colors.primary[800]} 99.84%)`,
   },
-})
+}))
 
 interface Props {
   banner?: string
@@ -60,6 +61,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                   alignItems="end"
                   justifyContent="end"
                   flexDirection="column"
+                  color={lightModeColors.neutral[900]}
                   pr="1.8em"
                   pb="0.3em"
                 >
@@ -96,7 +98,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                 <Box
                   display="flex"
                   justifyContent="center"
-                  bgColor="#fff"
+                  bgColor="white"
                   borderRadius="3xl"
                   filter="drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.1))"
                 >
@@ -107,7 +109,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                     logoHeight={60}
                     logoWidth={60}
                     logoOpacity={1}
-                    fgColor={colors.neutral900}
+                    fgColor={lightModeColors.neutral[900]}
                     bgColor="transparent"
                     removeQrCodeBehindLogo={true}
                     size={360}

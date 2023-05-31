@@ -38,7 +38,7 @@ export const TabBar = (props: TabBarProps) => {
       <ButtonComponent
         noBorder
         {...buttonStyles}
-        backgroundColor={!isCurrentTabActivity ? 'brand.neutral100' : 'white'}
+        backgroundColor={!isCurrentTabActivity ? 'neutral.100' : 'neutral.0'}
         onClick={handleProjectsClick}
       >
         Projects
@@ -46,7 +46,7 @@ export const TabBar = (props: TabBarProps) => {
       <ButtonComponent
         noBorder
         {...buttonStyles}
-        backgroundColor={isCurrentTabActivity ? 'brand.neutral100' : 'white'}
+        backgroundColor={isCurrentTabActivity ? 'neutral.100' : 'neutral.0'}
         onClick={handleActivityClick}
       >
         {user.imageUrl ? (

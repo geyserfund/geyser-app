@@ -67,7 +67,7 @@ export const ActivityList = ({
               <Divider
                 borderBottomWidth="2px"
                 maxWidth="500px"
-                color="brand.200"
+                color="neutral.200"
               />
             )}
           </Fragment>

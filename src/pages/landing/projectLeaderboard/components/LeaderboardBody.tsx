@@ -48,7 +48,7 @@ export const LeaderboardBodySkeleton = () => {
       {[1, 2, 3].map((value) => (
         <HStack
           key={value}
-          backgroundColor="white"
+          backgroundColor="neutral.0"
           borderRadius="8px"
           _hover={{ backgroundColor: 'neutral.100' }}
           width="100%"

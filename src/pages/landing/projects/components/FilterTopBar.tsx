@@ -7,7 +7,6 @@ import { SlLocationPin } from 'react-icons/sl'
 import { H3 } from '../../../../components/typography'
 import { SortType, useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
-import { colors } from '../../../../styles'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { getActivityButtonContent } from '../../filters/activity'
@@ -62,7 +61,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
           return (
             <TagComponent
               key={tag.id}
-              icon={<HiOutlineTag color={colors.neutral500} />}
+              icon={<HiOutlineTag color={'neutral.500'} />}
               label={tag.label}
               onClick={() => handleClearTag(tag.id)}
             />
@@ -81,7 +80,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
         return (
           <TagComponent
             label={country.country.name}
-            icon={<SlLocationPin color={colors.neutral500} />}
+            icon={<SlLocationPin color={'neutral.500'} />}
             onClick={() => updateFilter({ countryCode: undefined })}
           />
         )
@@ -92,7 +91,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
       return (
         <TagComponent
           label={region}
-          icon={<SlLocationPin color={colors.neutral500} />}
+          icon={<SlLocationPin color={'neutral.500'} />}
           onClick={() => updateFilter({ region: undefined })}
         />
       )
@@ -109,7 +108,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     return (
       <TagComponent
         label={search}
-        icon={<SearchIcon color={colors.neutral500} />}
+        icon={<SearchIcon color={'neutral.500'} />}
         onClick={() => updateFilter({ search: undefined })}
       />
     )
@@ -124,7 +123,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     return (
       <TagComponent
         label={text}
-        icon={<Icon height="18px" color={colors.neutral500} />}
+        icon={<Icon height="18px" color={'neutral.500'} />}
         onClick={() => updateFilter({ type: undefined, status: undefined })}
       />
     )
@@ -166,7 +165,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
         value = 'Most funded all time'
     }
 
-    return <H3 color="brand.primary600">{value}</H3>
+    return <H3 color="primary.600">{value}</H3>
   }
 
   const viewFilterSearch = renderFilterSearch()

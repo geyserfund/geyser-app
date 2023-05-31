@@ -1,5 +1,7 @@
 import { Global } from '@emotion/react'
 
+import { darkModeColors, lightModeColors } from '../styles'
+
 export const GlobalStyles = () => (
   <Global
     styles={`
@@ -39,6 +41,14 @@ export const GlobalStyles = () => (
         }
         body {
             overflow: overlay;
+        }
+
+        .chakra-ui-dark {
+          background: ${darkModeColors.neutral[50]}
+        }
+
+        .chakra-ui-light {
+          background: ${lightModeColors.neutral[50]}
         }
 
         #project-scroll-container::-webkit-scrollbar {

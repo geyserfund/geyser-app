@@ -7,20 +7,6 @@ import {
   InputRightElement,
   Text,
 } from '@chakra-ui/react'
-import { createUseStyles } from 'react-jss'
-
-import { colors } from '../../styles'
-
-const useStyles = createUseStyles({
-  inputElement: {
-    borderRadius: '8px',
-    borderWidth: '2px',
-    '&:focus': {
-      borderColor: colors.normalLightGreen,
-      boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
-    },
-  },
-})
 
 interface TextInputBoxProps extends InputProps {
   error?: React.ReactNode
@@ -35,7 +21,6 @@ export const TextInputBox = ({
   rightIcon,
   ...rest
 }: TextInputBoxProps) => {
-  const classes = useStyles()
   return (
     <Box width="100%">
       <InputGroup>
@@ -44,7 +29,17 @@ export const TextInputBox = ({
         )}
         <Input
           isInvalid={Boolean(error)}
-          className={classes.inputElement}
+          borderRadius="8px"
+          borderWidth="2px"
+          borderColor="neutral.200"
+          backgroundColor="neutral.0"
+          _hover={{
+            borderColor: 'neutral.400',
+          }}
+          _focus={{ borderColor: `neutral.500`, boxShadow: 'none' }}
+          _placeholder={{
+            color: 'neutral.600',
+          }}
           {...rest}
         >
           {children}
@@ -59,7 +54,7 @@ export const TextInputBox = ({
         typeof error === 'object' ? (
           error
         ) : (
-          <Text color="brand.error" fontSize="12px">
+          <Text color="secondary.red" fontSize="12px">
             {error}
           </Text>
         )

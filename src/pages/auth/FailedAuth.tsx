@@ -50,7 +50,7 @@ export const FailedAuthComponent = () => {
         Error
       </Text>
       <Box
-        bg="brand.error"
+        bg="secondary.red"
         borderRadius="full"
         width="75px"
         height="75px"

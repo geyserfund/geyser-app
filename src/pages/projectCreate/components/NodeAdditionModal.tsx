@@ -167,6 +167,7 @@ export const NodeAdditionModal = ({
       <ModalOverlay />
 
       <ModalContent
+        bg="neutral.0"
         display="flex"
         alignItems="flex-start"
         paddingY="20px"
@@ -178,11 +179,7 @@ export const NodeAdditionModal = ({
               Add a Node
             </Text>
 
-            <Text
-              fontSize={'14px'}
-              fontWeight="medium"
-              color="brand.neutral600"
-            >
+            <Text fontSize={'14px'} fontWeight="medium" color="neutral.600">
               We currently support LND and clearnet nodes. So Tor nodes will not
               work at this time.
             </Text>

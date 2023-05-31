@@ -36,7 +36,7 @@ export const BadgesPage = () => {
       <Button
         mt={4}
         size="sm"
-        bg="brand.bgWhite"
+        bg="neutral.0"
         variant="outline"
         gap={2}
         onClick={() => navigate(-1)}

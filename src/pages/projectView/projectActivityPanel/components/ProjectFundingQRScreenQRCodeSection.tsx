@@ -19,7 +19,6 @@ import LogoDark from '../../../../assets/logo-dark.svg'
 import { Body2 } from '../../../../components/typography'
 import Loader from '../../../../components/ui/Loader'
 import { UseFundingFlowReturn } from '../../../../hooks'
-import { colors } from '../../../../styles'
 import {
   FundingStatus,
   InvoiceStatus,
@@ -52,7 +51,7 @@ const FundingErrorView = ({ error }: { error?: string }) => {
       width={252}
       spacing="10px"
       padding={3}
-      backgroundColor={'brand.bgLightRed'}
+      backgroundColor={'secondary.red'}
       justifyContent="center"
       borderRadius={'md'}
     >
@@ -74,7 +73,7 @@ const InvoiceErrorView = ({
       width={252}
       spacing="10px"
       padding={3}
-      backgroundColor={'brand.primary100'}
+      backgroundColor={'primary.100'}
       justifyContent="center"
       borderRadius={'md'}
     >
@@ -86,7 +85,7 @@ const InvoiceErrorView = ({
       <Button
         leftIcon={<BiRefresh fontSize={'2em'} />}
         iconSpacing={2}
-        backgroundColor={'brand.bgWhite'}
+        backgroundColor={'neutral.0'}
         textTransform={'uppercase'}
         onClick={onRefreshSelected}
         borderRadius={'full'}
@@ -241,12 +240,12 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           <VStack flexWrap="wrap" maxWidth="100%">
             <Box borderRadius={'4px'} borderWidth={'2px'} padding={'2px'}>
               {hasCopiedLightning || hasCopiedOnchain ? (
-                <Box borderColor={colors.primary}>
+                <Box borderColor={'primary.400'}>
                   <QRCode
                     value={fallbackAddress}
                     size={208}
-                    bgColor={colors.bgWhite}
-                    fgColor={colors.primary}
+                    bgColor={'neutral.0'}
+                    fgColor={'primary.400'}
                     qrStyle="dots"
                     logoImage={LogoPrimary}
                     logoHeight={40}
@@ -256,12 +255,12 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                   />
                 </Box>
               ) : (
-                <Box borderColor={colors.textBlack}>
+                <Box borderColor={'neutral.1000'}>
                   <QRCode
                     value={fallbackAddress}
                     size={208}
-                    bgColor={colors.bgWhite}
-                    fgColor={colors.textBlack}
+                    bgColor={'neutral.0'}
+                    fgColor={'neutral.1000'}
                     qrStyle="dots"
                     logoImage={LogoDark}
                     logoHeight={40}
@@ -275,7 +274,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             <Box marginBottom={4} fontSize={'10px'}>
               <HStack spacing={5}>
                 <Loader size="md" />
-                <Text color={'brand.neutral900'} fontWeight={400}>
+                <Text color={'neutral.900'} fontWeight={400}>
                   Waiting for payment...
                 </Text>
               </HStack>

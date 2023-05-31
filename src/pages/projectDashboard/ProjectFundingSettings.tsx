@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router'
 import { IconButtonComponent } from '../../components/ui'
 import { getPath } from '../../constants'
 import { useProjectContext } from '../../context'
-import { colors } from '../../styles'
 import {
   LightningAddressConnectionDetails,
   LndConnectionDetailsPrivate,
@@ -74,7 +73,7 @@ export const ProjectFundingSettings = () => {
         <VStack
           width="100%"
           border="1px solid"
-          borderColor={colors.gray300}
+          borderColor="neutral.400"
           borderRadius="4px"
           alignItems="flex-start"
           padding="10px"
@@ -84,34 +83,26 @@ export const ProjectFundingSettings = () => {
             <Text fontWeight={500}>{projectWallet?.name}</Text>
           </HStack>
           <HStack width="100%">
-            <CheckCircleIcon color={colors.primary800} fontSize="12px" />
-            <Text color={colors.primary800} fontSize="12px">
+            <CheckCircleIcon color="primary.800" fontSize="12px" />
+            <Text color="primary.800" fontSize="12px">
               RUNNING
             </Text>
           </HStack>
 
           <VStack width="100%" spacing="4px" alignItems="flex-start">
-            <Text color="brand.neutral700" fontSize="10px">
+            <Text color="neutral.700" fontSize="10px">
               Hostname or IP address
             </Text>
-            <Text
-              wordBreak="break-all"
-              color="brand.neutral900"
-              fontSize="14px"
-            >
+            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.hostname}
             </Text>
           </VStack>
 
           <VStack width="100%" spacing="4px" alignItems="flex-start">
-            <Text color="brand.neutral700" fontSize="10px">
+            <Text color="neutral.700" fontSize="10px">
               Public key
             </Text>
-            <Text
-              wordBreak="break-all"
-              color="brand.neutral900"
-              fontSize="14px"
-            >
+            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.pubkey}
             </Text>
           </VStack>
@@ -121,45 +112,33 @@ export const ProjectFundingSettings = () => {
             alignItems="flex-start"
             flexWrap="wrap"
           >
-            <Text color="brand.neutral700" fontSize="10px">
+            <Text color="neutral.700" fontSize="10px">
               Invoice Macaroon
             </Text>
-            <Text
-              wordBreak="break-all"
-              color="brand.neutral900"
-              fontSize="14px"
-            >
+            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.macaroon}
             </Text>
           </VStack>
           {lndConnectionDetails.tlsCertificate && (
             <VStack width="100%" spacing="4px" alignItems="flex-start">
-              <Text color="brand.neutral700" fontSize="10px">
+              <Text color="neutral.700" fontSize="10px">
                 TLS certificate
               </Text>
-              <Text
-                wordBreak="break-all"
-                color="brand.neutral900"
-                fontSize="14px"
-              >
+              <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
                 {lndConnectionDetails.tlsCertificate}
               </Text>
             </VStack>
           )}
           <VStack width="100%" spacing="4px" alignItems="flex-start">
-            <Text color="brand.neutral700" fontSize="10px">
+            <Text color="neutral.700" fontSize="10px">
               gRPC port
             </Text>
-            <Text
-              wordBreak="break-all"
-              color="brand.neutral900"
-              fontSize="14px"
-            >
+            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.grpcPort}
             </Text>
           </VStack>
         </VStack>
-        <Text color="brand.neutral700" fontSize="10px">
+        <Text color="neutral.700" fontSize="10px">
           If you want to change how you receive your funds reach out to
           hello@geyser.fund. We are not currently enabling editing of this
           information for security reasons.
@@ -214,7 +193,7 @@ export const ProjectFundingSettings = () => {
               <VStack
                 width="100%"
                 border="1px solid"
-                borderColor="brand.gray300"
+                borderColor="neutral.300"
                 borderRadius="4px"
                 alignItems="flex-start"
                 padding="10px"
@@ -229,7 +208,7 @@ export const ProjectFundingSettings = () => {
                 </HStack>
 
                 <VStack width="100%" alignItems="flex-start">
-                  <Text color="brand.textGray">Hostname or IP address</Text>
+                  <Text color="neutral.600">Hostname or IP address</Text>
                   <Text>{nodeData?.hostname}</Text>
                 </VStack>
               </VStack>

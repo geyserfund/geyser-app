@@ -3,30 +3,29 @@ import { GridItem, HStack, Text, VStack } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
 import { SatoshiAmount } from '../../components/ui'
-import { useProjectContext } from '../../context'
+import { AppTheme, useProjectContext } from '../../context'
 import { QUERY_PROJECT_DASHBOARD_DATA } from '../../graphql'
-import { colors } from '../../styles'
 import { fonts } from '../../styles'
 import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
 import { numberWithCommas, toInt } from '../../utils'
 import { DashboardGridLayout } from './components/DashboardGridLayout'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   statBox: {
     padding: '22px',
-    backgroundColor: colors.primary100,
+    backgroundColor: colors.primary[100],
     borderRadius: '4px',
   },
   numberText: {
     fontFamily: fonts.mono,
     fontSize: '28px',
-    color: colors.neutral900,
+    color: colors.neutral[900],
   },
   labelText: {
     fontSize: '16px',
-    color: colors.neutral600,
+    color: colors.neutral[600],
   },
-})
+}))
 
 type ResponseData = {
   project: Project
@@ -79,7 +78,7 @@ export const ProjectStats = () => {
         >
           <VStack w="100%" spacing="40px">
             <VStack alignItems="flex-start">
-              <Text fontSize="18px" fontWeight={600} color="brand.neutral600">
+              <Text fontSize="18px" fontWeight={600} color="neutral.600">
                 All Time Statistics
               </Text>
               <HStack spacing="22px">
@@ -92,7 +91,7 @@ export const ProjectStats = () => {
                 <VStack className={classes.statBox}>
                   <SatoshiAmount
                     fontSize="28px"
-                    color="brand.neutral900"
+                    color="neutral.900"
                     fontFamily={fonts.mono}
                   >
                     {loading ? 0 : project.balance}

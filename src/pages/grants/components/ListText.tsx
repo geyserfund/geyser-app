@@ -2,7 +2,7 @@ import { Box, BoxProps, IconProps, Text, TextProps } from '@chakra-ui/react'
 import { PropsWithChildren, ReactNode } from 'react'
 
 import { SatSymbolIcon } from '../../../components/icons/svg/SatSymbolIcon'
-import { colors, fonts } from '../../../styles'
+import { fonts } from '../../../styles'
 
 export type Props = {
   isSatLogo?: boolean
@@ -47,7 +47,7 @@ export const ListText = ({
           fontWeight={'700'}
           fontSize="13px"
           fontFamily={fonts.interBlack}
-          color={colors.gray500}
+          color="neutral.600"
           {...subtitleProps}
         >
           {subtitle}

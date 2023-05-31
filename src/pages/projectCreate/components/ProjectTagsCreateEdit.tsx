@@ -11,19 +11,19 @@ import {
   IconButtonComponent,
   SelectComponent,
 } from '../../../components/ui'
+import { AppTheme } from '../../../context'
 import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
-import { colors } from '../../../styles'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
 import { FormInputContainer } from './FormInputContainer'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   tagContainer: {
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: colors.neutral[0],
     border: '1px solid',
-    borderColor: colors.neutral400,
+    borderColor: colors.neutral[400],
     borderRadius: '8px',
     padding: '12px',
   },
@@ -34,9 +34,9 @@ const useStyles = createUseStyles({
   },
 
   menuGroup: {
-    backgroundColor: 'red',
+    backgroundColor: colors.secondary.red,
   },
-})
+}))
 
 interface ProjectTagsCreateEditProps extends StackProps {
   tags: Tag[]
@@ -201,7 +201,7 @@ export const ProjectTagsCreateEdit = ({
                 key={tag.id}
                 borderRadius="4px"
                 paddingLeft="8px"
-                backgroundColor="brand.neutral100"
+                backgroundColor="neutral.100"
               >
                 <Body1 semiBold>{tag.label}</Body1>
                 <IconButtonComponent

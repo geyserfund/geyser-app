@@ -6,7 +6,7 @@ export const LoadingPage = () => (
   <VStack
     height="100vh"
     width="100%"
-    color="brand.primary"
+    color="primary.400"
     justifyContent="center"
     alignItems="center"
     spacing="20px"

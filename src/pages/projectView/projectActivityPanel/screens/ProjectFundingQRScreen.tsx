@@ -83,7 +83,7 @@ export const ProjectFundingQRScreen = ({
         funderUsername={state.funderUsername}
         funderEmail={state.email}
         funderAvatarURL={state.funderAvatarURL}
-        backgroundColor={'brand.neutral100'}
+        backgroundColor={'neutral.100'}
         showGeyserFee={true}
       />
       <Button
@@ -97,7 +97,7 @@ export const ProjectFundingQRScreen = ({
       >
         Reach out for help
       </Button>
-      <Text fontSize="8px" fontWeight={400} color={'brand.gray500'}>
+      <Text fontSize="8px" fontWeight={400} color={'neutral.700'}>
         Geyser is not a store. It’s a way to bring creative projects to life
         using Bitcoin. Your donation will support a creative project that has
         yet to be developed. There’s a risk that, despite a creator’s best

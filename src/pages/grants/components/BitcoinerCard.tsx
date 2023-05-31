@@ -25,7 +25,7 @@ export const BitcoinerCard = ({ image, name, role, link }: BitcoinersProp) => {
             transition="box-shadow ease-out 0.3s"
             borderRadius="4px"
             border="1px solid"
-            borderColor="brand.neutral100"
+            borderColor="neutral.100"
           >
             <Box width={'60px'} height="60px" rounded={'full'}>
               <Avatar src={image} size="full" />

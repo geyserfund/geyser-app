@@ -1,5 +1,4 @@
 import { Box, Image } from '@chakra-ui/react'
-import { createUseStyles } from 'react-jss'
 
 import { Body1, H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
@@ -12,21 +11,7 @@ import {
   GRANT_STATUS_MAP,
 } from '../../constants'
 
-const useStyles = createUseStyles({
-  imageContainer: {
-    width: '100%',
-  },
-  headerImage: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    borderTopLeftRadius: '6px',
-    borderTopRightRadius: '6px',
-  },
-})
-
 export const GrantSummary = ({ grant }: { grant: Grant }) => {
-  const classes = useStyles()
   const isMobile = useMobileMode()
 
   const votingEndDate = grant.statuses.find(
@@ -36,12 +21,13 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
   return (
     <SectionCard>
       {grant.image ? (
-        <Box
-          className={classes.imageContainer}
-          height={isMobile ? '127px' : '291px'}
-        >
+        <Box width="100%" height={{ base: '127px', lg: '291px' }}>
           <Image
-            className={classes.headerImage}
+            width="100%"
+            height="100%"
+            objectFit="cover"
+            borderTopLeftRadius="6px"
+            borderTopRightRadius="6px"
             alt="grant header image"
             src={grant.image}
           />
@@ -57,7 +43,7 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
         )}
         <Box
           display="flex"
-          flexDir={isMobile ? 'column' : 'row'}
+          flexDir={{ base: 'column', lg: 'row' }}
           width="100%"
           pt={2}
           justifyContent="space-between"

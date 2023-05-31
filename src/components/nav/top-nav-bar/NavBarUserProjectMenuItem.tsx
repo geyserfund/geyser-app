@@ -15,7 +15,7 @@ export const NavBarUserProjectMenuItem = ({ project }: Props) => {
         paddingX={2}
         paddingY={1.5}
         alignItems="flex-start"
-        backgroundColor={'brand.neutral200'}
+        backgroundColor={'neutral.200'}
         borderRadius="sm"
         overflow={'hidden'}
       >
@@ -23,7 +23,7 @@ export const NavBarUserProjectMenuItem = ({ project }: Props) => {
           textTransform={'uppercase'}
           fontSize="xs"
           fontWeight={'bold'}
-          color={'brand.neutral500'}
+          color={'neutral.500'}
         >
           Project
         </Text>

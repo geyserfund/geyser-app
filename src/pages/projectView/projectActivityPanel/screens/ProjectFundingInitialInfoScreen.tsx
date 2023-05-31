@@ -135,14 +135,14 @@ export const ProjectFundingInitialInfoScreen = ({
           onClick={() => setTab('activity')}
         >
           Contributions{' '}
-          <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+          <Text ml={2} bg="neutral.100" rounded="lg" px={3} py={1}>
             {project.fundingTxsCount}
           </Text>
         </Button>
         <Box
-          bg={tab === 'activity' ? 'darkgrey' : 'lightgrey'}
+          bg={tab === 'activity' ? 'primary.800' : 'primary.50'}
           w="100%"
-          h="2px"
+          h="4px"
           rounded="lg"
         ></Box>
       </>
@@ -162,14 +162,14 @@ export const ProjectFundingInitialInfoScreen = ({
           onClick={() => setTab('leaderboard')}
         >
           Leaderboard{' '}
-          <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+          <Text ml={2} bg="neutral.100" rounded="lg" px={3} py={1}>
             {project.fundersCount}
           </Text>
         </Button>
         <Box
-          bg={tab === 'activity' ? 'lightgrey' : 'darkgrey'}
+          bg={tab === 'activity' ? 'primary.50' : 'primary.800'}
           w="100%"
-          h="2px"
+          h="4px"
           rounded="lg"
         ></Box>
       </>
@@ -228,7 +228,7 @@ export const ProjectFundingInitialInfoScreen = ({
           leftIcon={<SatoshiIconTilted />}
           width="100%"
           backgroundColor={
-            isActive(project.status) ? 'brand.primary' : 'brand.grayPlaceholder'
+            isActive(project.status) ? 'primary.400' : 'neutral.500'
           }
           onClick={() => setMobileView(MobileViews.funding)}
           isDisabled={!isActive(project.status)}

@@ -31,7 +31,7 @@ export const ProjectPreviewComponent = ({
       <Text>Preview</Text>
       <Card overflow="hidden" width="100%">
         <Box position="relative" marginBottom="10px">
-          <Box height="100px" overflow="hidden" backgroundColor="white">
+          <Box height="100px" overflow="hidden" backgroundColor="neutral.0">
             <ImageWithReload
               grey
               src={data.image || ''}
@@ -44,13 +44,14 @@ export const ProjectPreviewComponent = ({
           <Box
             width="60px"
             height="60px"
-            border="1px solid white"
+            border="1px solid"
+            borderColor="neutral.0"
             borderRadius="6px"
             overflow="hidden"
             position="absolute"
             bottom="-10px"
             left="10px"
-            backgroundColor="white"
+            backgroundColor="neutral.0"
           >
             <ImageWithReload
               grey

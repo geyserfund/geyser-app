@@ -12,12 +12,12 @@ export const UploadBox = ({ loading, title, ...rest }: UploadBoxProps) => {
   return (
     <HStack
       borderRadius="8px"
-      backgroundColor="brand.bgGrey"
+      backgroundColor="neutral.100"
       width="100%"
       height="70px"
       justifyContent="center"
       alignItems="center"
-      _hover={{ backgroundColor: 'brand.gray300' }}
+      _hover={{ backgroundColor: 'neutral.300' }}
       {...rest}
     >
       {loading ? (

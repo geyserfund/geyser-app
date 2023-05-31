@@ -2,7 +2,6 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { Box, HStack, Input, InputProps, StackProps } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
 
-import { colors } from '../../styles'
 import { IconButtonComponent } from '../ui'
 
 interface ProjectLinkInputProps extends StackProps {
@@ -28,10 +27,10 @@ export const ProjectLinkInput = ({
       w="100%"
       size="md"
       padding="12px 5px"
-      backgroundColor="white"
+      backgroundColor="neutral.0"
       borderRadius="8px"
       border="1px solid"
-      borderColor="brand.neutral400"
+      borderColor="neutral.400"
       {...rest}
     >
       <HStack justifyContent="center" width="50px">
@@ -40,18 +39,18 @@ export const ProjectLinkInput = ({
       <Input
         border="1px solid"
         borderRadius="4px !important"
-        borderColor={'brand.neutral400'}
+        borderColor={'neutral.400'}
         placeholder="https://twitter.com/halfin"
         value={value}
         onChange={onChange}
         isInvalid={isError}
         _focusVisible={{
-          borderColor: isError ? 'red' : colors.normalLightGreen,
-          boxShadow: !isError && `0 0 0 1px ${colors.normalLightGreen}`,
+          borderColor: isError ? 'secondary.red' : 'neutral.500',
+          boxShadow: !isError && `0 0 0 1px ${'neutral.500'}`,
         }}
         {...inputProps}
       />
-      <Box paddingX="5px" backgroundColor="white" border="none">
+      <Box paddingX="5px" backgroundColor="neutral.0" border="none">
         <IconButtonComponent
           noBorder
           variant="ghost"

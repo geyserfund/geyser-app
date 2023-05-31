@@ -14,7 +14,7 @@ import { HiOutlineCheck } from 'react-icons/hi'
 
 import { Body2, H3 } from '../../../../components/typography'
 import { useProjectContext } from '../../../../context'
-import { colors, fonts } from '../../../../styles'
+import { fonts } from '../../../../styles'
 import { Badge, FundingTxFragment } from '../../../../types/generated/graphql'
 import { useNotification } from '../../../../utils'
 import { AvatarElement } from '../../projectMainBody/components'
@@ -76,7 +76,7 @@ export const SuccessImageComponent = ({
     const element = document.getElementById('successful-contribution-banner')
     if (element) {
       const dataUrl = await htmlToImage.toPng(element, {
-        style: { backgroundColor: colors.primary, borderStyle: 'double' },
+        style: { backgroundColor: 'primary.400', borderStyle: 'double' },
       })
       return dataUrl
     }
@@ -118,9 +118,9 @@ export const SuccessImageComponent = ({
           <Center
             boxSize={'70px'}
             borderRadius="full"
-            backgroundColor={'brand.neutral50'}
+            backgroundColor={'neutral.50'}
           >
-            <HiOutlineCheck color={'brand.textBlack'} fontSize="50px" />
+            <HiOutlineCheck color={'neutral.1000'} fontSize="50px" />
           </Center>
         )}
 

@@ -27,6 +27,7 @@ import { defaultUser } from '../../defaults'
 import { User } from '../../types'
 import {
   copyTextToClipboard,
+  useCustomTheme,
   useMobileMode,
   useNotification,
 } from '../../utils'
@@ -44,9 +45,10 @@ export const ConnectWithLightning = (props: ConnectWithLightningProps) => {
     <>
       <Button
         w="100%"
-        backgroundColor="brand.lightning"
+        backgroundColor="social.lightning"
         leftIcon={<BoltSvgIcon height="20px" width="20px" />}
-        _hover={{ backgroundColor: 'brand.lightningDark' }}
+        _hover={{ backgroundColor: 'social.lightningDark' }}
+        color="black"
         onClick={onOpen}
         {...props}
       >
@@ -70,6 +72,8 @@ export const ConnectWithLightningModal = ({
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
+
+  const { colors } = useCustomTheme()
 
   const handleCopy = () => {
     copyTextToClipboard(qrContent)
@@ -178,7 +182,11 @@ export const ConnectWithLightningModal = ({
               Check if your wallet supports LNURL-auth here.
             </Link>
             <VStack marginTop={3} marginBottom={3}>
-              <Box border="4px solid #20ECC7" borderRadius={4}>
+              <Box
+                border="4px solid"
+                borderColor="primary.400"
+                borderRadius={4}
+              >
                 <Link href={`lightning:${qrContent}`}>
                   <QRCode
                     qrStyle="dots"
@@ -187,8 +195,8 @@ export const ConnectWithLightningModal = ({
                     logoWidth={30}
                     eyeRadius={2}
                     removeQrCodeBehindLogo={true}
-                    bgColor="#fff"
-                    fgColor="#004236"
+                    bgColor={colors.neutral[0]}
+                    fgColor={colors.primary[900]}
                     size={186}
                     value={qrContent}
                     id="lnurl-auth-qr-code"
@@ -209,11 +217,12 @@ export const ConnectWithLightningModal = ({
               display="flex"
               justifyContent="between"
               alignItems="center"
-              border="1px solid lightgrey"
+              border="1px solid"
+              borderColor="neutral.200"
               borderRadius={4}
               p={2}
             >
-              <Text w="75%" color="brand.textGrey" cursor="default">
+              <Text w="75%" color="neutral.600" cursor="default">
                 {qrContent?.slice(0, isMobile ? 21 : 30)}...
               </Text>
               <ButtonComponent

@@ -31,7 +31,7 @@ import {
   GrantApplyInput,
   Project,
 } from '../../../../types'
-import { toInt, useNotification } from '../../../../utils'
+import { toInt, useCustomTheme, useNotification } from '../../../../utils'
 import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../../../auth/ConnectWithTwitter'
 import { CreateAProjectButton } from '../../../profile/components'
@@ -181,6 +181,7 @@ export const CreateAProject = () => {
 }
 
 export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
+  const { colors } = useCustomTheme()
   return (
     <>
       <HStack
@@ -191,7 +192,7 @@ export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
         justifyContent="center"
         alignItems="center"
       >
-        <BsCheckLg fontSize="35px" color="black" />
+        <BsCheckLg fontSize="35px" color={colors.neutral[1000]} />
       </HStack>
       <Body1>
         You successfully applied to be part of the Geyser Grant. You should be
@@ -273,10 +274,10 @@ export const SelectAProject = ({
               alignItems="center"
               overflow="hidden"
               onClick={() => handleSelection(project.id)}
-              borderColor={isSelected ? 'brand.primary' : 'neutral.200'}
+              borderColor={isSelected ? 'primary.400' : 'neutral.200'}
               _hover={{
                 cursor: 'pointer',
-                borderColor: isSelected ? 'brand.primary' : 'neutral.400',
+                borderColor: isSelected ? 'primary.400' : 'neutral.400',
               }}
             >
               <Image

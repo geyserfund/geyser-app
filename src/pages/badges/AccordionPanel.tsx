@@ -8,7 +8,7 @@ export const AccordionPanel = (props: AccordionPanelProps) => {
     <ChakraAccordionPanel
       textAlign="left"
       borderRadius="0 0 8px 8px"
-      backgroundColor="brand.neutral50"
+      backgroundColor="neutral.50"
       {...props}
     />
   )

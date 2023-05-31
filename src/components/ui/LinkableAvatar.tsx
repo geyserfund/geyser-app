@@ -95,7 +95,7 @@ export const LinkableAvatar = ({
           width={imageSize}
           height={imageSize}
           scale={0.8}
-          backgroundColor="brand.grey200"
+          backgroundColor="neutral.200"
           src={imageSrc}
           sx={{
             '& .chakra-avatar__initials': {

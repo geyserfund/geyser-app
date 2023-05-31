@@ -2,7 +2,6 @@ import { Stack, StackDirection, Text } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { BsFillXCircleFill } from 'react-icons/bs'
 
-import { colors } from '../../styles'
 import {
   EntryForProjectFragment,
   EntryStatus,
@@ -34,8 +33,8 @@ export const EntryStatusLabel = ({
 
   return (
     <Stack direction={direction} alignItems="center">
-      <BsFillXCircleFill fontSize={iconSize} color={colors.secondaryGold} />
-      <Text color={colors.secondaryGold} {...commonStyles}>
+      <BsFillXCircleFill fontSize={iconSize} color={'secondary.yellow'} />
+      <Text color={'secondary.yellow'} {...commonStyles}>
         DRAFT
       </Text>
     </Stack>

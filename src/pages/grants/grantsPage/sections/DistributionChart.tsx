@@ -1,16 +1,15 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react'
 
 import { H3 } from '../../../../components/typography'
-import { colors } from '../../../../styles'
 import { GrantApplicant } from '../../../../types'
 import { SectionCard } from '../../components/SectionCard'
 
 const CHART_BAR_COLORS = [
-  colors.primary900,
-  colors.primary700,
-  colors.primary500,
-  colors.primary400,
-  colors.primary100,
+  'primary.900',
+  'primary.700',
+  'primary.500',
+  'primary.400',
+  'primary.100',
 ]
 
 interface Props {

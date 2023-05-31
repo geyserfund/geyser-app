@@ -34,7 +34,7 @@ export const ProjectFundingModal = ({
         backdropFilter="blur(10px) hue-rotate(90deg)"
       />
       <ModalContent bg="transparent" boxShadow={0}>
-        <Box borderRadius="4px" bg="brand.bgWhite" pb={3}>
+        <Box borderRadius="4px" bg="neutral.0" pb={3}>
           <ModalHeader pb={2}>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

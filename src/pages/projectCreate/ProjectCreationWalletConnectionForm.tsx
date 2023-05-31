@@ -30,7 +30,6 @@ import {
   WalletOfSatoshiLightningAddressURL,
   WalletOfSatoshiUrl,
 } from '../../constants'
-import { colors } from '../../styles'
 import {
   CreateWalletInput,
   LndNodeType,
@@ -343,9 +342,9 @@ export const ProjectCreationWalletConnectionForm = ({
       case LNAddressEvaluationState.LOADING:
         return <Loader size="md"></Loader>
       case LNAddressEvaluationState.FAILED:
-        return <BsFillXCircleFill fill={colors.error} size="24px" />
+        return <BsFillXCircleFill fill={'secondary.red'} size="24px" />
       case LNAddressEvaluationState.SUCCEEDED:
-        return <BsFillCheckCircleFill fill={colors.primary500} size="24px" />
+        return <BsFillCheckCircleFill fill={'primary.500'} size="24px" />
       default:
         return null
     }
@@ -373,9 +372,9 @@ export const ProjectCreationWalletConnectionForm = ({
                   }}
                   onBlur={validateLightningAddress}
                   isInvalid={Boolean(lightningAddressFormError)}
-                  focusBorderColor={colors.neutral200}
+                  focusBorderColor={'neutral.200'}
                   _valid={{
-                    focusBorderColor: colors.primary500,
+                    focusBorderColor: 'primary.500',
                   }}
                   error={lightningAddressFormError}
                 />

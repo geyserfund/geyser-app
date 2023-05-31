@@ -1,4 +1,5 @@
 export * from './checkKeyValueExists'
+export * from './colorMode'
 export * from './hasExternalAccount'
 export * from './hasOnChain'
 export * from './hasShipping'

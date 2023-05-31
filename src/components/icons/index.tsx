@@ -2,10 +2,6 @@ import { Image } from '@chakra-ui/image'
 import { Box } from '@chakra-ui/layout'
 import { ImageProps } from '@chakra-ui/react'
 
-import BoltSvg from '../../assets/bolt.svg'
-import SatoshiTilted from '../../assets/satoshi-tilted.svg'
-import SatoshiTiltedDash from '../../assets/satoshi-tilted-dash.svg'
-import ShareSvg from '../../assets/share.svg'
 import {
   CrownUrl,
   EnvelopeUrl,
@@ -16,92 +12,9 @@ import {
   MagnifyUrl,
   MedalUrl,
   RopeUrl,
-  SatoshiUrl,
   StarUrl,
   TrophyUrl,
 } from '../../constants'
-
-interface SatoshiIconProps extends ImageProps {
-  scale?: number
-  wrapperClass?: string
-  isDark?: boolean
-}
-
-export const SatoshiIcon = ({
-  scale = 1,
-  wrapperClass,
-  isDark,
-  color,
-  ...rest
-}: SatoshiIconProps) => {
-  const getFilter = () => {
-    if (color === 'brand.primary') {
-      return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)'
-    }
-
-    if (isDark) {
-      return 'invert(100%)'
-    }
-
-    return undefined
-  }
-
-  return (
-    <Box padding="3px 0px" className={wrapperClass}>
-      <Image
-        filter={getFilter()}
-        height={`${26 * scale}px`}
-        minHeight={`${26 * scale}px`}
-        width={`${14 * scale}px`}
-        minWidth={`${14 * scale}px`}
-        src={SatoshiUrl}
-        alt="satoshi"
-        {...rest}
-      />
-    </Box>
-  )
-}
-
-export const SatoshiIconTilted = ({
-  scale = 1,
-  wrapperClass,
-  isDark,
-  color,
-  dash,
-  ...rest
-}: any) => {
-  const getFilter = () => {
-    if (isDark) {
-      return 'invert(100%)'
-    }
-
-    switch (color) {
-      case 'brand.primary':
-        return 'invert(76%) sepia(48%) saturate(708%) hue-rotate(109deg) brightness(96%) contrast(92%)'
-      case 'brand.primary600':
-        return 'invert(50%) sepia(59%) saturate(5011%) hue-rotate(143deg) brightness(96%) contrast(98%)'
-      case 'brand.primary800':
-        return 'invert(31%) sepia(17%) saturate(2529%) hue-rotate(123deg) brightness(93%) contrast(102%)'
-      default:
-        return undefined
-    }
-  }
-
-  return (
-    <Box padding="3px 0px" className={wrapperClass}>
-      <Image
-        filter={getFilter()}
-        height={`${26 * scale}px`}
-        minHeight={`${26 * scale}px`}
-        width={`${26 * scale}px`}
-        minWidth={`${26 * scale}px`}
-        src={dash ? SatoshiTiltedDash : SatoshiTilted}
-        alt="satoshi"
-        {...rest}
-      />
-    </Box>
-  )
-}
 
 export const StarIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
@@ -187,28 +100,6 @@ export const RopeIcon = (props: ImageProps) => (
   </Box>
 )
 
-export const BoltIcon = (props: ImageProps) => {
-  const scale = props.scale as number
-
-  return (
-    <Box padding="3px 0px">
-      <Image
-        height={scale ? (scale * 20).toString() + 'px' : '20px'}
-        width={scale ? (scale * 20).toString() + 'px' : '20px'}
-        src={BoltSvg}
-        alt="bolt"
-        {...props}
-      />
-    </Box>
-  )
-}
-
-export const ShareIcon = (props: ImageProps) => (
-  <Box padding="3px 0px">
-    <Image src={ShareSvg} alt="share" {...props} />
-  </Box>
-)
-
 export const FountainIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
     <Image
@@ -222,3 +113,4 @@ export const FountainIcon = (props: ImageProps) => (
 )
 
 export * from './CustomSvgIcons'
+export * from './svg'
