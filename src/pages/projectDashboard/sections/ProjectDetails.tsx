@@ -65,8 +65,9 @@ export const ProjectDetails = () => {
         e.preventDefault()
         onSubmit()
       }}
+      style={{ flexGrow: 1, display: 'flex' }}
     >
-      <VStack width="100%" alignItems="flex-start" spacing="24px">
+      <VStack spacing={6} flexGrow={1}>
         <ProjectRegion
           location={project?.location}
           updateProject={updateProject}
@@ -80,14 +81,16 @@ export const ProjectDetails = () => {
           linkError={linkError}
         />
 
-        <Button
-          isLoading={tagsLoading || projectLoading}
-          variant="primary"
-          w="full"
-          type="submit"
-        >
-          Save
-        </Button>
+        <VStack w="100%" flexGrow={1} justifyContent="end">
+          <Button
+            isLoading={tagsLoading || projectLoading}
+            variant="primary"
+            w="full"
+            type="submit"
+          >
+            Save
+          </Button>
+        </VStack>
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />
     </form>

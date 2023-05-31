@@ -55,17 +55,21 @@ export const ProjectStory = () => {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      style={{ flexGrow: 1, display: 'flex' }}
+    >
       <VStack
         width="100%"
         maxWidth="600px"
+        flexGrow={1}
         display="flex"
         px={2}
         flexDirection="column"
         justifyContent="start"
         alignItems="start"
       >
-        <VStack width="100%" alignItems="flex-start">
+        <VStack width="100%" alignItems="flex-start" flexGrow={1}>
           <ProjectStoryForm form={form} isLoading={loading} />
           <Button
             isLoading={updateLoading}

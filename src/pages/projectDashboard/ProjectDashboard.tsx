@@ -1,6 +1,5 @@
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import {
-  Box,
   Container,
   ContainerProps,
   Divider,
@@ -62,10 +61,10 @@ export const projectSections: Record<string, DashboardSection> = {
     label: 'Project settings',
     path: 'dashboardSettings',
   },
-  shop: {
-    label: 'Shop items',
-    path: 'dashboardShop',
-  },
+  // shop: {
+  //   label: 'Shop items',
+  //   path: 'dashboardShop',
+  // },
 }
 
 const sections = { ...creatorSections, ...projectSections }
@@ -118,7 +117,7 @@ export const ProjectDashboard = () => {
   )
 
   return (
-    <HStack align="start">
+    <HStack alignItems="stretch" flexGrow={1} minHeight="100%">
       <ProjectDashboardNavigation
         project={project}
         setDrawerOpen={setDrawerOpen}
@@ -128,8 +127,11 @@ export const ProjectDashboard = () => {
         position={{ base: 'sticky', '2xl': 'fixed' }}
         top={{ base: 0, '2xl': dimensions.topNavBar.desktop.height + 'px' }}
       />
-      <Box flexGrow={1}>
+      <VStack flexGrow={1}>
         <Container
+          flexGrow={1}
+          display="flex"
+          flexDirection="column"
           py={{ base: 4, lg: 10 }}
           maxWidth={isMobile ? '100vw' : activeSection?.containerWidth || '2xl'}
           justifyItems="center"
@@ -137,10 +139,12 @@ export const ProjectDashboard = () => {
           {isMobile && activeSection?.disableCanvas ? (
             content
           ) : (
-            <CardLayout pt={4}>{content}</CardLayout>
+            <CardLayout pt={4} flexGrow={1}>
+              {content}
+            </CardLayout>
           )}
         </Container>
-      </Box>
+      </VStack>
     </HStack>
   )
 }
