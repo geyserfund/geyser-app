@@ -34,12 +34,12 @@ export const ProfileTabs = ({
         />
       ),
     }),
-    [userProfile],
+    [userProfile, isViewingOwnProfile],
   )
 
   const followedTab = useMemo(
     () => ({
-      title: 'Followed',
+      title: 'Following',
       sub: userProfile.projectFollows?.length || undefined,
       Component: () => <ProfileFollowed userProfile={userProfile} />,
     }),
@@ -61,7 +61,14 @@ export const ProfileTabs = ({
     }
 
     return tabs
-  }, [userProfile, isLoading])
+  }, [
+    userProfile,
+    isLoading,
+    activityTab,
+    followedTab,
+    isViewingOwnProfile,
+    projectsTab,
+  ])
 
   return <TabComponent tabs={getTabs()} />
 }

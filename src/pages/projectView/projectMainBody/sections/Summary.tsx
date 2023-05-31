@@ -22,7 +22,7 @@ import { CardLayout } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../../constants'
-import { useProjectContext } from '../../../../context'
+import { SortType, useProjectContext } from '../../../../context'
 import { MarkdownField } from '../../../../forms/components/MarkdownField'
 import { copyTextToClipboard, toInt, useMobileMode } from '../../../../utils'
 import { getPossibleWalletPubkey } from '../../../../utils/validations/wallet'
@@ -202,7 +202,9 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
                     <Link
                       key={tag.id}
                       to={getPath('landingPage')}
-                      state={{ filter: { tagIds: [tag.id] } }}
+                      state={{
+                        filter: { tagIds: [tag.id], sort: SortType.recent },
+                      }}
                     >
                       <TagBox>{tag.label}</TagBox>
                     </Link>
@@ -230,6 +232,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
                       state={{
                         filter: {
                           countryCode: project?.location?.country?.code,
+                          sort: SortType.recent,
                         },
                       }}
                     >
@@ -243,6 +246,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
                     state={{
                       filter: {
                         region: project?.location?.region,
+                        sort: SortType.recent,
                       },
                     }}
                   >
