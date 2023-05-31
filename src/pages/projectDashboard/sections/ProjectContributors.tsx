@@ -17,20 +17,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi'
 
-import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges'
+import { renderFunderBadges } from '../../../components/molecules/projectActivity/renderFunderBadges'
 import {
   AnonymousAvatar,
   ButtonComponent,
   LinkableAvatar,
   SatoshiAmount,
-} from '../../components/ui'
-import Loader from '../../components/ui/Loader'
-import { useProjectContext } from '../../context'
-import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../graphql'
-import { computeFunderBadges } from '../../helpers'
-import { useQueryWithPagination } from '../../hooks'
-import { Funder } from '../../types/generated/graphql'
-import { copyTextToClipboard, toInt } from '../../utils'
+} from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { useProjectContext } from '../../../context'
+import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../../graphql'
+import { computeFunderBadges } from '../../../helpers'
+import { useQueryWithPagination } from '../../../hooks'
+import { Funder } from '../../../types/generated/graphql'
+import { copyTextToClipboard, toInt } from '../../../utils'
 
 type TableData = {
   header: string
@@ -246,21 +246,21 @@ export const ProjectContributors = () => {
 
   return (
     <Fade in>
-      <HStack width="100%" justifyContent={'center'} paddingTop="20px">
-        <VStack maxWidth="1200px" width="100%" alignItems="center">
-          <HStack width="100%" justifyContent="space-between">
-            <HStack>
-              <Text fontSize={'16px'} fontWeight={600}>
+      <HStack width="100%">
+        <VStack width="100%">
+          <HStack width="100%">
+            <HStack flexWrap="wrap">
+              <Text fontSize={'16px'} fontWeight={600} whiteSpace="nowrap">
                 {project?.fundersCount} Contributors
               </Text>
               <Text fontSize={'14px'}>
                 {selectedFunders.length > 0
-                  ? `( ${selectedFunders.length} selected )`
-                  : '( none selected )'}
+                  ? `(${selectedFunders.length} selected)`
+                  : '(none selected)'}
               </Text>
             </HStack>
 
-            <HStack>
+            <HStack flexWrap="wrap">
               <ButtonComponent
                 size="sm"
                 primary={copied}

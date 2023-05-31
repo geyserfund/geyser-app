@@ -207,7 +207,7 @@ export const Router = () => {
               element: ProjectStory,
             },
             {
-              path: getPath('dashboardFunding', PathName.projectId),
+              path: getPath('dashboardWallet', PathName.projectId),
               element: ProjectFundingSettings,
             },
             {
@@ -216,6 +216,10 @@ export const Router = () => {
             },
             {
               path: getPath('dashboardSettings', PathName.projectId),
+              element: ProjectSettings,
+            },
+            {
+              path: getPath('dashboardShop', PathName.projectId),
               element: ProjectSettings,
             },
           ],

@@ -1,137 +1,146 @@
-import { Box, Button, HStack, useBreakpointValue } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
+import { ChevronRightIcon } from '@chakra-ui/icons'
+import {
+  Box,
+  Container,
+  ContainerProps,
+  Divider,
+  HStack,
+  IconButton,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+import { useState } from 'react'
+import { Outlet, useMatch } from 'react-router-dom'
 
+import { CardLayout } from '../../components/layouts'
 import Loader from '../../components/ui/Loader'
-import { getPath, PathName } from '../../constants'
-import { useAuthContext, useProjectContext } from '../../context'
-import { noScrollBar } from '../../styles/common'
+import { dimensions, getPath, PathsMap } from '../../constants'
+import { useProjectContext } from '../../context'
+import { useMobileMode } from '../../utils'
+import { ProjectDashboardNavigation } from './ProjectDashboardNavigation'
 
-enum DashboardTabs {
-  funds = 'funds',
-  editProject = 'edit project',
-  story = 'story',
-  contributors = 'contributors',
-  details = 'details',
-  stats = 'stats',
-  settings = 'settings',
+export type DashboardSection = {
+  label: string
+  path: keyof PathsMap
+  containerWidth?: ContainerProps['maxWidth']
+  disableCanvas?: boolean
 }
 
+export const creatorSections: Record<string, DashboardSection> = {
+  contributors: {
+    label: 'Contributors',
+    path: 'dashboardContributors',
+    disableCanvas: true,
+    containerWidth: '5xl',
+  },
+  stats: {
+    label: 'Stats',
+    path: 'dashboardStats',
+    containerWidth: '4xl',
+  },
+}
+
+export const projectSections: Record<string, DashboardSection> = {
+  description: {
+    label: 'Description',
+    path: 'projectDashboard',
+  },
+  details: {
+    label: 'Links & tags',
+    path: 'dashboardDetails',
+  },
+  story: {
+    label: 'Story',
+    path: 'dashboardStory',
+    disableCanvas: true,
+  },
+  wallet: {
+    label: 'Wallet',
+    path: 'dashboardWallet',
+  },
+  settings: {
+    label: 'Project settings',
+    path: 'dashboardSettings',
+  },
+  shop: {
+    label: 'Shop items',
+    path: 'dashboardShop',
+  },
+}
+
+const sections = { ...creatorSections, ...projectSections }
+
 export const ProjectDashboard = () => {
-  const isMobile = useBreakpointValue({ lg: false, base: true })
-  const { projectId } = useParams<{ projectId: string }>()
+  const isMobile = useMobileMode()
+  const [isDrawerOpen, setDrawerOpen] = useState(false)
 
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { project } = useProjectContext({ ownerAccessOnly: true })
 
-  const { user } = useAuthContext()
+  const match = useMatch(
+    `${getPath('projectDashboard', project?.name)}/:section`,
+  )
 
-  const [activeTab, setActiveTab] = useState<DashboardTabs>()
+  const activeSectionKey = match?.params.section || 'description'
+  const activeSection = sections[activeSectionKey]
 
-  useEffect(() => {
-    if (location.pathname) {
-      const splitValue = location.pathname.split(
-        `${PathName.projectDashboard}`,
-      )[1]
-      const pathName = checkValue(splitValue)
-      setActiveTab(pathName)
-    }
-  }, [location])
-
-  const handleTabSelection = async (selectedTab: DashboardTabs) => {
-    const routePath =
-      selectedTab === DashboardTabs.editProject ? '' : selectedTab
-    navigate(
-      `/${PathName.project}/${projectId}/${PathName.projectDashboard}/${routePath}`,
-    )
-  }
-
-  const checkValue = (splitValue?: string) => {
-    if (!splitValue || splitValue === '/') {
-      return DashboardTabs.editProject
-    }
-
-    return splitValue.replaceAll('/', '') as DashboardTabs
-  }
-
-  const { loading, project } = useProjectContext()
-
-  useEffect(() => {
-    if (project && project.owners[0]?.user.id !== user.id) {
-      navigate(getPath('notAuthorized'))
-    }
-  }, [navigate, project, user.id])
-
-  if (loading) {
-    return <Loader alignItems="flex-start" paddingTop="120px" />
-  }
-
-  const renderButton = (nav: DashboardTabs) => {
+  if (!project) {
     return (
-      <Box
-        key={nav}
-        borderBottom="3px solid"
-        borderColor={activeTab === nav ? 'primary.400' : 'neutral.500'}
-      >
-        <Button
-          borderRadius="4px"
-          _hover={{ backgroundColor: 'none' }}
-          w="100%"
-          rounded="none"
-          bg="none"
-          fontWeight={activeTab === nav ? 'bold' : 'normal'}
-          fontSize="16px"
-          marginTop="10px"
-          onClick={() => handleTabSelection(nav)}
-          textTransform="capitalize"
-        >
-          {nav}
-        </Button>
-      </Box>
+      <Container pt={12}>
+        <Loader />
+      </Container>
     )
   }
 
-  const navList: DashboardTabs[] = [
-    DashboardTabs.editProject,
-    DashboardTabs.details,
-    DashboardTabs.story,
-    DashboardTabs.funds,
-    DashboardTabs.contributors,
-    DashboardTabs.stats,
-    DashboardTabs.settings,
-  ]
-
-  if (loading) {
-    return <Loader />
-  }
+  const content = (
+    <>
+      {isMobile ? (
+        <VStack spacing={0} mb={4}>
+          <HStack justifyContent="start" w="100%">
+            <Text variant="h3" flexGrow={1} textAlign="left">
+              {activeSection?.label}
+            </Text>
+            <IconButton
+              aria-label="open dashboard menu"
+              onClick={() => setDrawerOpen(true)}
+              variant="transparent"
+              justifyContent="end"
+            >
+              <ChevronRightIcon fontSize="1.7em" />
+            </IconButton>
+          </HStack>
+          <Divider />
+        </VStack>
+      ) : (
+        <Text variant="h3">{activeSection?.label}</Text>
+      )}
+      <Outlet />
+    </>
+  )
 
   return (
-    <Box
-      background={'neutral.50'}
-      position="relative"
-      paddingBottom={10}
-      minHeight="100%"
-      justifyContent="space-between"
-    >
-      <HStack
-        width="100%"
-        justifyContent="center"
-        paddingTop={isMobile ? '10px' : '30px'}
-        overflowX={isMobile ? 'auto' : undefined}
-        __css={noScrollBar}
-      >
-        <HStack
-          spacing="0px"
-          minWidth="350px"
-          display="flex"
-          alignItems="center"
+    <HStack align="start">
+      <ProjectDashboardNavigation
+        project={project}
+        setDrawerOpen={setDrawerOpen}
+        isDrawerOpen={isDrawerOpen}
+        activeSectionKey={activeSectionKey}
+        p={10}
+        position={{ base: 'sticky', '2xl': 'fixed' }}
+        top={{ base: 0, '2xl': dimensions.topNavBar.desktop.height + 'px' }}
+      />
+      <Box flexGrow={1}>
+        <Container
+          py={{ base: 4, lg: 10 }}
+          maxWidth={isMobile ? '100vw' : activeSection?.containerWidth || '2xl'}
+          justifyItems="center"
         >
-          {navList.map((nav) => renderButton(nav))}
-        </HStack>
-      </HStack>
-      <Box maxW="100%" px={2}>
-        <Outlet />
+          {isMobile && activeSection?.disableCanvas ? (
+            content
+          ) : (
+            <CardLayout pt={4}>{content}</CardLayout>
+          )}
+        </Container>
       </Box>
-    </Box>
+    </HStack>
   )
 }

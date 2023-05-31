@@ -21,10 +21,11 @@ export enum PathName {
   dashboardDescription = 'description',
   dashboardContributors = 'contributors',
   dashboardDetails = 'details',
-  dashboardFunds = 'funds',
+  dashboardWallet = 'wallet',
   dashboardStats = 'stats',
   dashboardSettings = 'settings',
   dashboardStory = 'story',
+  dashboardShop = 'shop',
   badges = 'badges',
   projectId = ':projectId',
   userId = ':userId',
@@ -75,19 +76,21 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
   dashboardDetails: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardDetails}`,
-  dashboardFunding: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardFunds}`,
+  dashboardWallet: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
   dashboardStats: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStats}`,
   dashboardSettings: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardStory: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
+  dashboardShop: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
   entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
   badges: () => `/${PathName.badges}`,
 }
 
-type PathsMap = typeof pathsMap
+export type PathsMap = typeof pathsMap
 
 export const getPath = <TRoute extends keyof PathsMap>(
   route: TRoute,

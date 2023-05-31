@@ -51,7 +51,7 @@ const dashboardRoutes = [
   getPath('projectDashboard', PathName.projectId),
   getPath('dashboardContributors', PathName.projectId),
   getPath('dashboardDetails', PathName.projectId),
-  getPath('dashboardFunding', PathName.projectId),
+  getPath('dashboardWallet', PathName.projectId),
   getPath('dashboardSettings', PathName.projectId),
   getPath('dashboardStats', PathName.projectId),
   getPath('dashboardStory', PathName.projectId),
@@ -523,6 +523,7 @@ export const TopNavBar = () => {
           overflow="hidden"
         >
           <NavBarLogo
+            small={isMobile}
             marginRight={isMobile ? 0 : 5}
             color={showHaveTransparentBackground ? 'primary.900' : undefined}
           />

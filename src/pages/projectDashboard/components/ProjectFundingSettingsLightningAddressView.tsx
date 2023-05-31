@@ -4,7 +4,7 @@ type Props = {
   lightningAddress: string
 }
 
-// TODO: This view should eventually support updates.
+// @TODO: This view should eventually support updates.
 
 export const ProjectFundingSettingsLightningAddressView = ({
   lightningAddress,

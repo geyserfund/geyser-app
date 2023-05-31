@@ -33,7 +33,7 @@ type ProjectContextProps = {
   saveProject: () => Promise<void>
   mobileView: MobileViews
   setMobileView: (view: MobileViews) => void
-  isProjectOwner: boolean
+  isProjectOwner: boolean | undefined
   loading?: boolean
   saving?: boolean
   isDirty?: boolean
@@ -46,11 +46,23 @@ type ProjectContextProps = {
 
 export const ProjectContext = createContext<ProjectContextProps | null>(null)
 
-export const useProjectContext = () => {
+export const useProjectContext = ({
+  ownerAccessOnly = false,
+}: {
+  ownerAccessOnly?: boolean
+} = {}) => {
+  const navigate = useNavigate()
   const context = useContext(ProjectContext)
+
   if (!context) {
     throw new Error('useProjectContext must be usd inside ProjectProvider')
   }
+
+  useEffect(() => {
+    if (ownerAccessOnly && context.isProjectOwner === false) {
+      navigate(getPath('notAuthorized'))
+    }
+  }, [context, navigate, ownerAccessOnly])
 
   return context
 }
@@ -64,7 +76,7 @@ export const ProjectProvider = ({
   const [mobileView, setMobileView] = useState<MobileViews>(
     MobileViews.description,
   )
-  const [isProjectOwner, setIsProjectOwner] = useState(false)
+  const [isProjectOwner, setIsProjectOwner] = useState<boolean | undefined>()
   const { user } = useAuthContext()
 
   const milestonesModal = useModal()
