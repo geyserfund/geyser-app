@@ -102,11 +102,16 @@ export const ProjectSettings = () => {
   }
 
   return (
+<<<<<<< HEAD
     <form
       onSubmit={handleSubmit(onSubmit)}
       style={{ flexGrow: 1, display: 'flex' }}
     >
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
+=======
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <VStack width="100%" alignItems="flex-start" spacing="24px">
+>>>>>>> 8ccd8aaf (feat: updated project dashboard design)
         <ProjectFundraisingDeadline setValue={setValue} watch={watch} />
         <VStack width="100%" alignItems="flex-start" spacing="5px">
           <Body2>Project E-mail</Body2>
@@ -136,6 +141,7 @@ export const ProjectSettings = () => {
             </Text>
           </VStack>
         )}
+<<<<<<< HEAD
 
         <VStack w="100%" flexGrow={1} justifyContent="end">
           <Button
@@ -147,6 +153,16 @@ export const ProjectSettings = () => {
             Save
           </Button>
         </VStack>
+=======
+        <Button
+          isLoading={updateLoading}
+          variant="primary"
+          w="full"
+          type="submit"
+        >
+          Save
+        </Button>
+>>>>>>> 8ccd8aaf (feat: updated project dashboard design)
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />
     </form>
