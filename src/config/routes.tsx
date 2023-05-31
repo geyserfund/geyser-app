@@ -64,7 +64,7 @@ const ProjectDetails = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectDetails),
 )
 const ProjectFundingSettings = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectFundingSettings),
+  CreatorDashboard.then((m) => m.ProjectWallet),
 )
 const ProjectStory = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectStory),
