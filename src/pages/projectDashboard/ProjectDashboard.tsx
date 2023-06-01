@@ -22,14 +22,12 @@ export type DashboardSection = {
   label: string
   path: keyof PathsMap
   containerWidth?: ContainerProps['maxWidth']
-  disableCanvas?: boolean
 }
 
 export const creatorSections: Record<string, DashboardSection> = {
   contributors: {
     label: 'Contributors',
     path: 'dashboardContributors',
-    disableCanvas: true,
     containerWidth: '5xl',
   },
   stats: {
@@ -51,7 +49,6 @@ export const projectSections: Record<string, DashboardSection> = {
   story: {
     label: 'Story',
     path: 'dashboardStory',
-    disableCanvas: true,
   },
   wallet: {
     label: 'Wallet',
@@ -136,7 +133,7 @@ export const ProjectDashboard = () => {
           maxWidth={isMobile ? '100vw' : activeSection?.containerWidth || '2xl'}
           justifyItems="center"
         >
-          {isMobile && activeSection?.disableCanvas ? (
+          {isMobile ? (
             content
           ) : (
             <CardLayout pt={4} flexGrow={1}>
