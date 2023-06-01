@@ -1,33 +1,17 @@
-import { useQuery } from '@apollo/client'
 import { HStack, Text, VStack } from '@chakra-ui/react'
 
 import { useProjectContext } from '../../../context'
-import { QUERY_PROJECT_DASHBOARD_DATA } from '../../../graphql'
-import {
-  Project,
-  UniqueProjectQueryInput,
-} from '../../../types/generated/graphql'
+import { useProjectDashboardDataQuery } from '../../../types/generated/graphql'
 import { numberWithCommas, toInt } from '../../../utils'
 import { StatCard } from '../components/StatCard'
-
-type ResponseData = {
-  project: Project
-}
-
-type QueryVariables = {
-  where: UniqueProjectQueryInput
-}
 
 export const ProjectStats = () => {
   const { project } = useProjectContext()
 
-  const { loading, data } = useQuery<ResponseData, QueryVariables>(
-    QUERY_PROJECT_DASHBOARD_DATA,
-    {
-      skip: !project,
-      variables: { where: { id: toInt(project?.id) } },
-    },
-  )
+  const { loading, data } = useProjectDashboardDataQuery({
+    skip: !project,
+    variables: { where: { id: toInt(project?.id) } },
+  })
 
   const visitorsCount = data?.project?.statistics?.totalVisitors || 0
 
