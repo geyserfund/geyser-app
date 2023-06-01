@@ -37,13 +37,13 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
             />
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
-                <Text pt={1} color="brand.error">
+                <Text pt={1} color="secondary.red">
                   {form.getFieldState('description').error?.message}
                 </Text>
               )}
               <Text
                 fontSize="12px"
-                color="brand.neutral700"
+                color="neutral.700"
                 flexGrow={1}
                 textAlign="right"
               >

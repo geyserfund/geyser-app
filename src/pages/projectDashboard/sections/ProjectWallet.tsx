@@ -170,7 +170,7 @@ export const ProjectWallet = () => {
             <VStack
               width="100%"
               border="1px solid"
-              borderColor="brand.gray300"
+              borderColor="neutral.300"
               borderRadius="4px"
               alignItems="flex-start"
               padding="10px"
@@ -185,7 +185,7 @@ export const ProjectWallet = () => {
               </HStack>
 
               <VStack width="100%" alignItems="flex-start">
-                <Text color="brand.textGray">Hostname or IP address</Text>
+                <Text color="neutral.900">Hostname or IP address</Text>
                 <Text>{nodeData?.hostname}</Text>
               </VStack>
             </VStack>

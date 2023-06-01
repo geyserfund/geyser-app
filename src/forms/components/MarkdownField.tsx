@@ -211,6 +211,7 @@ const RemirrorStyleProvider = ({
       color: {
         text: colors.neutral[900],
         background: colors.neutral[0],
+        foreground: colors.neutral[900],
         primary: colors.primary[400],
         primaryText: colors.neutral[900],
         hover: {
@@ -225,6 +226,7 @@ const RemirrorStyleProvider = ({
     }),
     [colors],
   )
+
   return (
     <Box
       sx={

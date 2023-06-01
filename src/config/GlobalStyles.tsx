@@ -41,6 +41,9 @@ export const GlobalStyles = () => (
         }
         body {
             overflow: overlay;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .chakra-ui-dark {

@@ -16,7 +16,7 @@ export const StatCard = ({
         borderRadius="12px"
         bg="primary.100"
       >
-        <Text variant="h2" color="brand.neutral900">
+        <Text variant="h2" color="neutral.900">
           {children}
         </Text>
         <Text color="neutral.600" variant="body">
