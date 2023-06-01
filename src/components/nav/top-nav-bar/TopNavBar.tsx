@@ -523,7 +523,7 @@ export const TopNavBar = () => {
           overflow="hidden"
         >
           <NavBarLogo
-            small={isMobile}
+            small={isMobile && shouldShowCustomTitle}
             marginRight={isMobile ? 0 : 5}
             color={showHaveTransparentBackground ? 'primary.900' : undefined}
           />
