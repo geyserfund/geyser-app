@@ -6,23 +6,21 @@ import {
   Drawer,
   DrawerContent,
   DrawerOverlay,
-  IconButton,
   Menu,
   Text,
 } from '@chakra-ui/react'
 import { Dispatch, SetStateAction } from 'react'
 import { NavLink } from 'react-router-dom'
 
-import { CardLayout } from '../../components/layouts'
-import { getPath } from '../../constants'
-import { ProjectFragment } from '../../types'
-import { useMobileMode } from '../../utils'
-import { DashboardMobileNavButton } from './components/DashboardMobileNavButton'
-import { DashboardMobileNavItem } from './components/DashboardMobileNavItem'
-import { DashboardNavItem } from './components/DashboardNavItem'
-import { creatorSections, projectSections } from './ProjectDashboard'
+import { CardLayout } from '../../../components/layouts'
+import { getPath } from '../../../constants'
+import { ProjectFragment } from '../../../types'
+import { useMobileMode } from '../../../utils'
+import { creatorSections, projectSections } from '../ProjectDashboard'
+import { MobileNavButton } from './NavButton'
+import { MobileNavItem, NavItem } from './NavItem'
 
-export const ProjectDashboardNavigation = ({
+export const DashboardNavigation = ({
   isDrawerOpen,
   setDrawerOpen,
   project,
@@ -41,48 +39,46 @@ export const ProjectDashboardNavigation = ({
         <DrawerOverlay />
         <DrawerContent>
           <Menu>
-            <DashboardMobileNavButton
+            <MobileNavButton
               color="neutral.1000"
-              fontSize="16px"
               fontWeight={500}
+              onClick={() => setDrawerOpen(false)}
               rightIcon={
-                <IconButton
-                  variant="transparent"
-                  aria-label="close dashboard menu"
-                  onClick={() => setDrawerOpen(false)}
-                >
+                <Box p={3}>
                   <CloseIcon fontSize="0.8em" />
-                </IconButton>
+                </Box>
               }
             >
               Menu
-            </DashboardMobileNavButton>
-            <DashboardMobileNavButton
+            </MobileNavButton>
+            <MobileNavButton
               bg="neutral.200"
               color="neutral.1000"
               fontWeight={700}
             >
               Creator dashboard
-            </DashboardMobileNavButton>
+            </MobileNavButton>
             {Object.entries(creatorSections).map(([key, section]) => (
-              <DashboardMobileNavItem
+              <MobileNavItem
                 onClick={() => setDrawerOpen(false)}
                 key={key}
+                isActive={activeSectionKey === key}
                 projectName={project.name}
                 section={section}
               />
             ))}
-            <DashboardMobileNavButton
+            <MobileNavButton
               bg="neutral.200"
               color="neutral.1000"
               fontWeight={700}
             >
               Edit project
-            </DashboardMobileNavButton>
+            </MobileNavButton>
             {Object.entries(projectSections).map(([key, section]) => (
-              <DashboardMobileNavItem
+              <MobileNavItem
                 onClick={() => setDrawerOpen(false)}
                 key={key}
+                isActive={activeSectionKey === key}
                 projectName={project.name}
                 section={section}
               />
@@ -110,7 +106,7 @@ export const ProjectDashboardNavigation = ({
           Creator dashboard
         </Text>
         {Object.entries(creatorSections).map(([key, section]) => (
-          <DashboardNavItem
+          <NavItem
             key={key}
             isActive={activeSectionKey === key}
             projectName={project.name}
@@ -121,7 +117,7 @@ export const ProjectDashboardNavigation = ({
           Edit project
         </Text>
         {Object.entries(projectSections).map(([key, section]) => (
-          <DashboardNavItem
+          <NavItem
             key={key}
             isActive={activeSectionKey === key}
             projectName={project.name}

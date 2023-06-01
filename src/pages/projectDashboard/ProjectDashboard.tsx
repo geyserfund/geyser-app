@@ -16,7 +16,7 @@ import Loader from '../../components/ui/Loader'
 import { dimensions, getPath, PathsMap } from '../../constants'
 import { useProjectContext } from '../../context'
 import { useMobileMode } from '../../utils'
-import { ProjectDashboardNavigation } from './ProjectDashboardNavigation'
+import { DashboardNavigation } from './navigation/DashboardNavigation'
 
 export type DashboardSection = {
   label: string
@@ -118,7 +118,7 @@ export const ProjectDashboard = () => {
 
   return (
     <HStack alignItems="stretch" flexGrow={1} minHeight="100%">
-      <ProjectDashboardNavigation
+      <DashboardNavigation
         project={project}
         setDrawerOpen={setDrawerOpen}
         isDrawerOpen={isDrawerOpen}

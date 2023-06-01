@@ -61,7 +61,6 @@ export const ProjectStory = () => {
     >
       <VStack
         width="100%"
-        maxWidth="600px"
         flexGrow={1}
         display="flex"
         px={2}
