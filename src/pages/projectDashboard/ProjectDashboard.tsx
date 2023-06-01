@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import {
   Container,
-  ContainerProps,
   Divider,
   HStack,
   IconButton,
@@ -21,19 +20,19 @@ import { DashboardNavigation } from './navigation/DashboardNavigation'
 export type DashboardSection = {
   label: string
   path: keyof PathsMap
-  containerWidth?: ContainerProps['maxWidth']
+  fullWidth?: boolean
 }
 
 export const creatorSections: Record<string, DashboardSection> = {
   contributors: {
     label: 'Contributors',
     path: 'dashboardContributors',
-    containerWidth: '5xl',
+    fullWidth: true,
   },
   stats: {
     label: 'Stats',
     path: 'dashboardStats',
-    containerWidth: '4xl',
+    fullWidth: true,
   },
 }
 
@@ -121,16 +120,24 @@ export const ProjectDashboard = () => {
         isDrawerOpen={isDrawerOpen}
         activeSectionKey={activeSectionKey}
         p={10}
-        position={{ base: 'sticky', '2xl': 'fixed' }}
-        top={{ base: 0, '2xl': dimensions.topNavBar.desktop.height + 'px' }}
+        position={{ base: 'sticky', xl: 'fixed' }}
+        top={{ base: 0, xl: dimensions.topNavBar.desktop.height + 'px' }}
       />
-      <VStack flexGrow={1}>
+      <VStack justifySelf="stretch" flexGrow={1} w="100%">
         <Container
+          alignSelf="stretch"
           flexGrow={1}
           display="flex"
           flexDirection="column"
           py={{ base: 4, lg: 10 }}
-          maxWidth={isMobile ? '100vw' : activeSection?.containerWidth || '2xl'}
+          pl={{
+            base: 4,
+            xl: activeSection?.fullWidth ? '18em' : undefined,
+          }}
+          maxWidth={{
+            base: '100%',
+            lg: activeSection?.fullWidth ? '100%' : '2xl',
+          }}
           justifyItems="center"
         >
           {isMobile ? (
