@@ -6,7 +6,7 @@ import { ToolbarCommand } from '../commands/ToolbarCommand'
 
 export const ToolbarCommon = () => {
   return (
-    <ButtonGroup isAttached>
+    <ButtonGroup isAttached py={1}>
       <ToolbarCommand cmd="toggleBold" name="bold" label="Bold" Icon={BiBold} />
       <ToolbarCommand
         cmd="toggleItalic"

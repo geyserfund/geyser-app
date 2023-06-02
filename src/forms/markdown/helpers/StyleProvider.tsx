@@ -33,18 +33,25 @@ export const StyleProvider = ({
     [colors],
   )
 
+  const sx = {
+    '& p, & iframe': {
+      mt: 4,
+    },
+    '& a': {
+      textDecoration: 'underline',
+    },
+    width: '100%',
+  }
+
   return (
     <Box
       sx={
         flex
           ? {
+              ...sx,
               display: 'flex',
               flexDirection: 'column',
               flexGrow: 1,
-              '& p': {
-                mt: 4,
-              },
-              width: '100%',
               '& div.remirror-editor-wrapper, & div.remirror-editor, & div.remirror-theme':
                 {
                   display: 'flex',
@@ -52,12 +59,7 @@ export const StyleProvider = ({
                   flexGrow: 1,
                 },
             }
-          : {
-              '& p': {
-                mt: 4,
-              },
-              width: '100%',
-            }
+          : sx
       }
     >
       <AllStyledComponent

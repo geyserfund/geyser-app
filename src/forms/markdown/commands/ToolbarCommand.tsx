@@ -26,7 +26,7 @@ export const ToolbarCommand = ({
       isDisabled={isDisabled()}
       name={name}
       label={label}
-      onClick={runCommand}
+      onClick={() => runCommand()}
     >
       <Icon />
     </ToolbarCommandButton>

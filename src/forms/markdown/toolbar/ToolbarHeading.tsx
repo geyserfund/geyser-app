@@ -17,7 +17,7 @@ export const ToolbarHeading = () => {
   )
 
   return (
-    <ButtonGroup isAttached>
+    <ButtonGroup isAttached py={1}>
       {headingsArray.map(({ level, name, Icon }) => (
         <ToolbarCommandButton
           isDisabled={isDisabled()}
