@@ -223,18 +223,14 @@ export const ProjectFundingInitialInfoScreen = ({
       <ActivityBrief project={project} />
 
       {!isMobile ? (
-        <ButtonComponent
-          standard
+        <Button
           leftIcon={<SatoshiIconTilted />}
           width="100%"
-          backgroundColor={
-            isActive(project.status) ? 'primary.400' : 'neutral.500'
-          }
           onClick={() => setMobileView(MobileViews.funding)}
           isDisabled={!isActive(project.status)}
         >
           Contribute
-        </ButtonComponent>
+        </Button>
       ) : null}
 
       <Box
