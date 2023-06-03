@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react'
 import { SatoshiIconTilted } from '../../../../components/icons'
 import { StickToTop } from '../../../../components/layouts'
 import { ActivityBrief } from '../../../../components/molecules'
-import { ButtonComponent } from '../../../../components/ui'
 import { MobileViews, useProjectContext } from '../../../../context'
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
