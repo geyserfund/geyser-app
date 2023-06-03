@@ -224,6 +224,7 @@ export const ProjectFundingInitialInfoScreen = ({
 
       {!isMobile ? (
         <Button
+          variant="primary"
           leftIcon={<SatoshiIconTilted />}
           width="100%"
           onClick={() => setMobileView(MobileViews.funding)}

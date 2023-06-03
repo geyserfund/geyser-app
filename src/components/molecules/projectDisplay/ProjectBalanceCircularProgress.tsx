@@ -87,10 +87,7 @@ export const ProjectBalanceCircularProgress = ({
 
   const getStat = () => (
     <Stat textAlign="center" borderRadius="50%">
-      <StatLabel
-        fontSize="12px"
-        color={isDark ? 'neutral.0' : 'neutral.600'}
-      >
+      <StatLabel fontSize="12px" color={isDark ? 'neutral.0' : 'neutral.600'}>
         Raised
       </StatLabel>
       <StatNumber
