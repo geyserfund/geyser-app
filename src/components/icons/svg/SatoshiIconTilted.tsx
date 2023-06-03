@@ -15,6 +15,7 @@ export const SatoshiIconTilted = ({
         viewBox="0 0 10 11"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        paddingBottom="2px"
         {...rest}
       >
         <g clipPath="url(#clip0_593_123592)">
@@ -64,6 +65,7 @@ export const SatoshiIconTilted = ({
       viewBox="0 0 10 11"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      paddingBottom="3px"
       {...rest}
     >
       <g clipPath="url(#clip0_593_123592)">
