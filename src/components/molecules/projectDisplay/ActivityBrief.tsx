@@ -64,14 +64,14 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const getTrackColor = () => {
     switch (milestoneIndex % 3) {
       case 1:
-        if (milestoneIndex === 1) return undefined
+        if (milestoneIndex === 1) return 'neutral.200'
         return 'primary.800'
       case 2:
         return 'primary.400'
       case 0:
         return 'primary.600'
       default:
-        return undefined
+        return 'neutral.200'
     }
   }
 
