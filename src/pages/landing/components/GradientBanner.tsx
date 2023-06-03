@@ -72,7 +72,7 @@ export const GradientBanner = () => {
               maxHeight="76px"
               alt="landing-header-image"
             /> */}
-            <LetTheSatsFlowIcon color="primary.800" />
+            <LetTheSatsFlowIcon color="primary.900" />
           </VStack>
 
           <VStack
