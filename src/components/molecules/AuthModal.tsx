@@ -49,7 +49,7 @@ const ConnectAccounts = ({
         {!hasNostrAccount(user) && showNostr && (
           <ConnectWithNostr onClose={onClose} />
         )}
-        {showLightning && <ConnectWithLightning />}
+        {showLightning && <ConnectWithLightning onClose={onClose} />}
       </Stack>
       <Caption paddingTop="5px">
         {
