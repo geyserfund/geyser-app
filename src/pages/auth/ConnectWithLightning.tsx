@@ -24,10 +24,10 @@ import Loader from '../../components/ui/Loader'
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
+import { lightModeColors } from '../../styles'
 import { User } from '../../types'
 import {
   copyTextToClipboard,
-  useCustomTheme,
   useMobileMode,
   useNotification,
 } from '../../utils'
@@ -90,8 +90,6 @@ export const ConnectWithLightningModal = ({
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
-
-  const { colors } = useCustomTheme()
 
   const handleCopy = () => {
     copyTextToClipboard(qrContent)
@@ -213,8 +211,8 @@ export const ConnectWithLightningModal = ({
                     logoWidth={30}
                     eyeRadius={2}
                     removeQrCodeBehindLogo={true}
-                    bgColor={colors.neutral[0]}
-                    fgColor={colors.primary[900]}
+                    bgColor={lightModeColors.neutral[0]}
+                    fgColor={lightModeColors.primary[900]}
                     size={186}
                     value={qrContent}
                     id="lnurl-auth-qr-code"

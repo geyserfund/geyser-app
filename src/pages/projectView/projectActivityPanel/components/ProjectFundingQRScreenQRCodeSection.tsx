@@ -19,6 +19,7 @@ import LogoDark from '../../../../assets/logo-dark.svg'
 import { Body2 } from '../../../../components/typography'
 import Loader from '../../../../components/ui/Loader'
 import { UseFundingFlowReturn } from '../../../../hooks'
+import { lightModeColors } from '../../../../styles'
 import {
   FundingStatus,
   InvoiceStatus,
@@ -244,8 +245,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                   <QRCode
                     value={fallbackAddress}
                     size={208}
-                    bgColor={'neutral.0'}
-                    fgColor={'primary.400'}
+                    bgColor={lightModeColors.neutral[0]}
+                    fgColor={lightModeColors.primary[400]}
                     qrStyle="dots"
                     logoImage={LogoPrimary}
                     logoHeight={40}
@@ -259,8 +260,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                   <QRCode
                     value={fallbackAddress}
                     size={208}
-                    bgColor={'neutral.0'}
-                    fgColor={'neutral.1000'}
+                    bgColor={lightModeColors.neutral[0]}
+                    fgColor={lightModeColors.neutral[1000]}
                     qrStyle="dots"
                     logoImage={LogoDark}
                     logoHeight={40}

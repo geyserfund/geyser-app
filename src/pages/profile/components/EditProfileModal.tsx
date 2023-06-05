@@ -99,10 +99,7 @@ export const EditProfileModal = ({
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="sm">
-      <ModalOverlay
-        bg="blackAlpha.300"
-        backdropFilter="blur(10px) hue-rotate(90deg)"
-      />
+      <ModalOverlay />
       <ModalContent bg="transparent" boxShadow={0}>
         <Box borderRadius="4px" bg="neutral.0" pb={3}>
           <ModalHeader pb={2}>Edit Profile</ModalHeader>

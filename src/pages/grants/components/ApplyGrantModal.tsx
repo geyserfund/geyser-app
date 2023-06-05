@@ -181,15 +181,7 @@ export const ApplyGrantModal = ({
     setFormError({})
   }, [state])
 
-  const OverlayOne = useMemo(
-    () => (
-      <ModalOverlay
-        bg="blackAlpha.300"
-        backdropFilter="blur(10px) hue-rotate(90deg)"
-      />
-    ),
-    [],
-  )
+  const OverlayOne = useMemo(() => <ModalOverlay />, [])
 
   const grantInfo = () => (
     <>

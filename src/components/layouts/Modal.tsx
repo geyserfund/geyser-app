@@ -17,10 +17,7 @@ interface Props extends ModalProps {
 export const Modal = ({ children, title, ...props }: Props) => {
   return (
     <ChakraModal isCentered {...props} size="sm">
-      <ModalOverlay
-        bg="blackAlpha.300"
-        backdropFilter="blur(10px) hue-rotate(90deg)"
-      />
+      <ModalOverlay />
       <ModalContent bg="transparent" boxShadow={0}>
         <Box borderRadius="8px" bg="neutral.0" pb={3}>
           {title && <ModalHeader pb={2}>{title}</ModalHeader>}
