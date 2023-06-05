@@ -1,4 +1,7 @@
-import { ProjectStatus, User } from '../types/generated/graphql'
+import {
+  EntryForProjectFragment,
+  ProjectStatus,
+} from '../types/generated/graphql'
 import { IFundingTx } from './funding'
 import { IFunder, IParticipant, ISponsor } from './participant'
 
@@ -27,7 +30,7 @@ export interface IProject {
   fundingTxs: IFundingTx[]
   rewards?: IProjectReward[]
   milestones?: IProjectMilestone[]
-  entries?: IProjectListEntryItem[]
+  entries?: EntryForProjectFragment[]
   wallets?: IProjectWallet[]
 }
 
@@ -91,35 +94,6 @@ export interface IProjectMilestone {
   name: string
   description: string
   amount: number
-}
-
-/**
- * Corresponds to https://github.com/geyserfund/geyser-server/blob/development/src/typeDefs/entry.ts
- */
-export interface IProjectListEntryItem {
-  id: number
-  title: string
-  description: string
-
-  /**
-   * A URL path for the image source.
-   */
-  image?: string
-
-  /**
-   * The type of the entry.
-   *
-   * TODO: These should be strongly-typed as a set
-   * of constants.
-   */
-  type: string
-
-  creator: User
-  fundersCount: number
-  amountFunded: number
-  published: boolean
-  project: IProject
-  createdAt: string
 }
 
 export interface IRewardCount {

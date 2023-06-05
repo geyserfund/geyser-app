@@ -9,7 +9,7 @@ export const FRAGMENT_ENTRY = gql`
     title
     description
     image
-    published
+    status
     content
     createdAt
     updatedAt
@@ -61,7 +61,6 @@ export const FRAGMENT_ENTRY_FOR_PROJECT = gql`
     type
     fundersCount
     amountFunded
-    published
     status
     createdAt
     publishedAt
