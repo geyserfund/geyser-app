@@ -10,6 +10,7 @@ import { ReactNode } from 'react'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
 import { CardLayout } from '../../../components/layouts'
+import { dimensions } from '../../../constants'
 import { useMobileMode } from '../../../utils'
 
 interface ProjectCreateLayoutProps
@@ -56,7 +57,7 @@ export const ProjectCreateLayout = ({
       py={4}
       display="flex"
       flexDirection="column"
-      minHeight="100%"
+      minHeight={`calc(100vh - ${dimensions.topNavBar.mobile.height}px)`}
       flexGrow={1}
       {...props}
     >

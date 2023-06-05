@@ -113,7 +113,11 @@ export const ProjectDashboard = () => {
   )
 
   return (
-    <HStack alignItems="stretch" flexGrow={1} minHeight="100%">
+    <HStack
+      alignItems="stretch"
+      flexGrow={1}
+      minHeight={`calc(100vh - ${dimensions.topNavBar.mobile.height}px)`}
+    >
       <DashboardNavigation
         project={project}
         setDrawerOpen={setDrawerOpen}

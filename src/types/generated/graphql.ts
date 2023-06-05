@@ -5311,7 +5311,11 @@ export type ProjectDashboardFundersQuery = {
       username: string
       imageUrl?: string | null
     } | null
-    fundingTxs: Array<{ __typename?: 'FundingTx'; email?: string | null }>
+    fundingTxs: Array<{
+      __typename?: 'FundingTx'
+      email?: string | null
+      uuid: string
+    }>
     rewards: Array<{
       __typename?: 'FunderReward'
       quantity: number
@@ -8937,6 +8941,7 @@ export const ProjectDashboardFundersDocument = gql`
       }
       fundingTxs {
         email
+        uuid
       }
       rewards {
         quantity

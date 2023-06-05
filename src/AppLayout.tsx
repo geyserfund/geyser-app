@@ -18,16 +18,14 @@ export const AppLayout = () => {
   }
 
   return (
-    <Fade
-      in={true}
-      style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
-    >
-      <Box height="100vh" display="flex" flexDirection="column" flexGrow={1}>
+    <Fade in={true}>
+      <Box height={isMobile ? '100%' : '100vh'} display="flex" flexDir="column">
         <TopNavBar />
 
         <Box
           id={ID.root}
-          minHeight="100%"
+          maxHeight="100%"
+          minHeight="100vh"
           flex="1"
           paddingTop={`${dimensions.topNavBar.desktop.height}px`}
           backgroundColor="neutral.50"

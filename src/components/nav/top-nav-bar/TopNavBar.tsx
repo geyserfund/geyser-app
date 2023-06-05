@@ -484,7 +484,7 @@ export const TopNavBar = () => {
   }, [routesMatchesForShowingNavItems, isMobile])
 
   const { scrollTop } = useScrollDirection({
-    elementId: ID.root,
+    elementId: isMobile ? '' : ID.root,
     initialValue: true,
   })
   const showHaveTransparentBackground: boolean = useMemo(() => {
