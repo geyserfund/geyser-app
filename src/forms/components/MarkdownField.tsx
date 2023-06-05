@@ -30,6 +30,7 @@ import {
 import { AllStyledComponent } from '@remirror/styles/emotion'
 import { ForwardedRef, PropsWithChildren, useCallback, useMemo } from 'react'
 import { Control, useController, useFormContext } from 'react-hook-form'
+import { createUseStyles } from 'react-jss'
 import {
   getRemirrorJSON,
   InvalidContentHandler,
@@ -56,6 +57,7 @@ import {
 } from 'remirror/extensions'
 import TurndownService from 'turndown'
 
+import { AppTheme } from '../../context'
 import { useSignedUpload } from '../../hooks'
 import { useCustomTheme } from '../../utils'
 
@@ -72,6 +74,23 @@ interface Props {
   control?: Control<any, any>
 }
 
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
+  toolbarContainer: {
+    '& .MuiStack-root': {
+      backgroundColor: colors.neutral[50],
+      paddingBottom: '5px',
+    },
+    '& .MuiBox-root': {
+      backgroundColor: colors.neutral[0],
+    },
+    '& .MuiButtonBase-root': {
+      backgroundColor: colors.neutral[0],
+      borderColor: colors.neutral[200],
+      color: colors.neutral[600],
+    },
+  },
+}))
+
 export const MarkdownField = ({
   preview,
   content,
@@ -81,6 +100,8 @@ export const MarkdownField = ({
   name,
   control,
 }: Props) => {
+  const classes = useStyles()
+
   const onError: InvalidContentHandler = useCallback(
     ({ json, invalidContent, transformers }) => {
       // Automatically remove all invalid nodes and marks.
@@ -175,7 +196,9 @@ export const MarkdownField = ({
   return (
     <RemirrorStyleProvider>
       <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
-        <WysiwygToolbar />
+        <Box className={classes.toolbarContainer}>
+          <WysiwygToolbar />
+        </Box>
         <EditorComponent />
         <SaveModule name={name} control={control} />
       </Remirror>
