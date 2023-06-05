@@ -2,7 +2,7 @@ import { Box, Text, VStack } from '@chakra-ui/react'
 
 import { H2, H3 } from '../../../components/typography'
 import { Card, ImageWithReload } from '../../../components/ui'
-import { MarkdownField } from '../../../forms/components/MarkdownField'
+import { MarkdownField } from '../../../forms/markdown/MarkdownField'
 import { toSmallImageUrl } from '../../../utils'
 
 interface ProjectPreviewComponentProps {
