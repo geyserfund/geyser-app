@@ -25,7 +25,6 @@ export const AppLayout = () => {
         <Box
           id={ID.root}
           maxHeight="100%"
-          minHeight="100vh"
           flex="1"
           paddingTop={`${dimensions.topNavBar.desktop.height}px`}
           backgroundColor="neutral.50"
