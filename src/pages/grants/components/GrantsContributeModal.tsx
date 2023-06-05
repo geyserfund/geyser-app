@@ -207,15 +207,7 @@ export const GrantsContributeModal = ({
     return true
   }
 
-  const OverlayOne = useMemo(
-    () => (
-      <ModalOverlay
-        bg="blackAlpha.300"
-        backdropFilter="blur(10px) hue-rotate(90deg)"
-      />
-    ),
-    [],
-  )
+  const OverlayOne = useMemo(() => <ModalOverlay />, [])
 
   const contributionForm = () => (
     <VStack w="full" spacing="20px">
