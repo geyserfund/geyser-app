@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 
 import { StickToTop } from '../../../components/layouts'
-import { ID } from '../../../constants'
 import { SortType, useFilterContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { checkIfRenderFilter } from '../../../utils/helpers'
@@ -32,9 +31,8 @@ export const LandingPageProjects = () => {
         <>
           <StickToTop
             id="landing-page-mobile-projects-sort-filter"
-            scrollContainerId={ID.root}
             width="100%"
-            _onStick={{ width: 'calc(100% - 28px)' }}
+            _onStick={{ width: 'calc(100% - 20px)' }}
             backgroundColor="neutral.50"
             bias={10}
             buffer={10}
