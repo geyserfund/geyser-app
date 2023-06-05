@@ -28,6 +28,7 @@ import {
   WysiwygToolbar,
 } from '@remirror/react'
 import { AllStyledComponent } from '@remirror/styles/emotion'
+import classNames from 'classnames'
 import { ForwardedRef, PropsWithChildren, useCallback, useMemo } from 'react'
 import { Control, useController, useFormContext } from 'react-hook-form'
 import { createUseStyles } from 'react-jss'
@@ -72,6 +73,8 @@ interface Props {
   initialContentReady?: boolean
   name?: string
   control?: Control<any, any>
+  flex?: boolean
+  stickyToolbar?: boolean
 }
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
@@ -89,6 +92,11 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
       color: colors.neutral[600],
     },
   },
+  stickyContainer: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 1,
+  },
 }))
 
 export const MarkdownField = ({
@@ -99,6 +107,8 @@ export const MarkdownField = ({
   initialContentReady = true,
   name,
   control,
+  flex,
+  stickyToolbar,
 }: Props) => {
   const classes = useStyles()
 
@@ -174,7 +184,7 @@ export const MarkdownField = ({
 
   if (preview) {
     return (
-      <RemirrorStyleProvider>
+      <RemirrorStyleProvider flex={flex}>
         <RemirrorRenderer
           typeMap={typeMap}
           markMap={markMap}
@@ -194,9 +204,13 @@ export const MarkdownField = ({
   }
 
   return (
-    <RemirrorStyleProvider>
+    <RemirrorStyleProvider flex={flex}>
       <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
-        <Box className={classes.toolbarContainer}>
+        <Box
+          className={classNames(classes.toolbarContainer, {
+            [classes.stickyContainer]: stickyToolbar,
+          })}
+        >
           <WysiwygToolbar />
         </Box>
         <EditorComponent />
@@ -206,7 +220,10 @@ export const MarkdownField = ({
   )
 }
 
-const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
+const RemirrorStyleProvider = ({
+  children,
+  flex,
+}: PropsWithChildren<{ flex?: boolean }>) => {
   const { colors } = useCustomTheme()
 
   const remirrorTheme: RemirrorThemeType = useMemo(
@@ -214,6 +231,7 @@ const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
       color: {
         text: colors.neutral[900],
         background: colors.neutral[0],
+        foreground: colors.neutral[900],
         primary: colors.primary[400],
         primaryText: colors.neutral[900],
         hover: {
@@ -228,16 +246,42 @@ const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
     }),
     [colors],
   )
+
   return (
     <Box
-      width="100%"
-      sx={{
-        '& p': {
-          mb: 4,
-        },
-      }}
+      sx={
+        flex
+          ? {
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+              '& p': {
+                mb: 4,
+              },
+              width: '100%',
+              '& div.remirror-editor-wrapper, & div.remirror-editor, & div.remirror-theme':
+                {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                },
+            }
+          : {
+              '& p': {
+                mb: 4,
+              },
+              width: '100%',
+            }
+      }
     >
-      <AllStyledComponent theme={remirrorTheme}>
+      <AllStyledComponent
+        theme={remirrorTheme}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+        }}
+      >
         <ThemeProvider theme={remirrorTheme}>{children}</ThemeProvider>
       </AllStyledComponent>
     </Box>

@@ -3988,12 +3988,11 @@ export type EntryFragment = {
   title: any
   description: any
   image?: string | null
-  published: boolean
+  status: EntryStatus
   content?: string | null
   createdAt: string
   updatedAt: string
   publishedAt?: string | null
-  status: EntryStatus
   fundersCount: number
   amountFunded: number
   type: EntryType
@@ -4034,7 +4033,6 @@ export type EntryForProjectFragment = {
   type: EntryType
   fundersCount: number
   amountFunded: number
-  published: boolean
   status: EntryStatus
   createdAt: string
   publishedAt?: string | null
@@ -4366,7 +4364,7 @@ export type CreateEntryMutation = {
   createEntry: {
     __typename?: 'Entry'
     id: any
-    published: boolean
+    status: EntryStatus
     createdAt: string
     type: EntryType
     title: any
@@ -4387,7 +4385,7 @@ export type UpdateEntryMutation = {
   updateEntry: {
     __typename?: 'Entry'
     id: any
-    published: boolean
+    status: EntryStatus
     createdAt: string
     type: EntryType
     title: any
@@ -4408,7 +4406,7 @@ export type PublishEntryMutation = {
   publishEntry: {
     __typename?: 'Entry'
     id: any
-    published: boolean
+    status: EntryStatus
     createdAt: string
     type: EntryType
     title: any
@@ -4828,13 +4826,12 @@ export type EntryWithOwnersQuery = {
     title: any
     description: any
     image?: string | null
-    published: boolean
+    status: EntryStatus
     content?: string | null
     createdAt: string
     updatedAt: string
     publishedAt?: string | null
     fundersCount: number
-    status: EntryStatus
     type: EntryType
     creator: {
       __typename?: 'User'
@@ -4870,7 +4867,7 @@ export type EntriesQuery = {
     fundersCount: number
     amountFunded: number
     type: EntryType
-    published: boolean
+    status: EntryStatus
     project?: {
       __typename?: 'Project'
       title: any
@@ -5311,7 +5308,11 @@ export type ProjectDashboardFundersQuery = {
       username: string
       imageUrl?: string | null
     } | null
-    fundingTxs: Array<{ __typename?: 'FundingTx'; email?: string | null }>
+    fundingTxs: Array<{
+      __typename?: 'FundingTx'
+      email?: string | null
+      uuid: string
+    }>
     rewards: Array<{
       __typename?: 'FunderReward'
       quantity: number
@@ -5541,7 +5542,7 @@ export const EntryFragmentDoc = gql`
     title
     description
     image
-    published
+    status
     content
     createdAt
     updatedAt
@@ -5624,7 +5625,6 @@ export const EntryForProjectFragmentDoc = gql`
     type
     fundersCount
     amountFunded
-    published
     status
     createdAt
     publishedAt
@@ -6006,7 +6006,7 @@ export const CreateEntryDocument = gql`
   mutation CreateEntry($input: CreateEntryInput!) {
     createEntry(input: $input) {
       id
-      published
+      status
       createdAt
       type
       title
@@ -6069,7 +6069,7 @@ export const UpdateEntryDocument = gql`
   mutation UpdateEntry($input: UpdateEntryInput!) {
     updateEntry(input: $input) {
       id
-      published
+      status
       createdAt
       type
       title
@@ -6132,7 +6132,7 @@ export const PublishEntryDocument = gql`
   mutation PublishEntry($id: BigInt!) {
     publishEntry(id: $id) {
       id
-      published
+      status
       createdAt
       type
       title
@@ -7706,7 +7706,7 @@ export const EntryWithOwnersDocument = gql`
       title
       description
       image
-      published
+      status
       content
       createdAt
       updatedAt
@@ -7793,7 +7793,7 @@ export const EntriesDocument = gql`
       fundersCount
       amountFunded
       type
-      published
+      status
       project {
         title
         name
@@ -8937,6 +8937,7 @@ export const ProjectDashboardFundersDocument = gql`
       }
       fundingTxs {
         email
+        uuid
       }
       rewards {
         quantity

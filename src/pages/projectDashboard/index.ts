@@ -1,12 +1,12 @@
-import { ProjectContributors } from './ProjectContributors'
 import { ProjectDashboard } from './ProjectDashboard'
 import { ProjectDashboardPage } from './ProjectDashboardPage'
-import { ProjectDescription } from './ProjectDescription'
-import { ProjectDetails } from './ProjectDetails'
-import { ProjectFundingSettings } from './ProjectFundingSettings'
-import { ProjectSettings } from './ProjectSettings'
-import { ProjectStats } from './ProjectStats'
-import { ProjectStory } from './ProjectStory'
+import { ProjectContributors } from './sections/ProjectContributors'
+import { ProjectDescription } from './sections/ProjectDescription'
+import { ProjectDetails } from './sections/ProjectDetails'
+import { ProjectSettings } from './sections/ProjectSettings'
+import { ProjectStats } from './sections/ProjectStats'
+import { ProjectStory } from './sections/ProjectStory'
+import { ProjectWallet } from './sections/ProjectWallet'
 
 // This is exported as part of the CreatorDashboard chunk for code-splitting
 
@@ -16,8 +16,8 @@ export {
   ProjectDashboardPage,
   ProjectDescription,
   ProjectDetails,
-  ProjectFundingSettings,
   ProjectSettings,
   ProjectStats,
   ProjectStory,
+  ProjectWallet,
 }

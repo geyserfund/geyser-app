@@ -14,6 +14,7 @@ import { useDebounce } from '../../../../hooks'
 import { useEntryState } from '../../../../hooks/graphqlState'
 import {
   EntryStatus,
+  EntryType,
   Owner,
   Project,
 } from '../../../../types/generated/graphql'
@@ -43,8 +44,15 @@ export const defaultEntry = {
   description: '',
   image: '',
   content: '',
-  published: false,
-  type: 'article',
+  status: EntryStatus.Unpublished,
+  type: EntryType.Article,
+  createdAt: '',
+  updatedAt: '',
+  fundersCount: 0,
+  amountFunded: 0,
+  creator: { id: 0, username: '' },
+  project: { id: 0, name: '', title: '' },
+  publishedAt: '',
 }
 
 export const EntryCreateEdit = () => {

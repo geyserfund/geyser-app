@@ -21,7 +21,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { getPath, PathName } from '../../../constants'
+import { getPath, ID, PathName } from '../../../constants'
 import { useAuthContext, useNavContext } from '../../../context'
 import { useScrollDirection } from '../../../hooks'
 import { useMobileMode } from '../../../utils'
@@ -51,7 +51,7 @@ const dashboardRoutes = [
   getPath('projectDashboard', PathName.projectId),
   getPath('dashboardContributors', PathName.projectId),
   getPath('dashboardDetails', PathName.projectId),
-  getPath('dashboardFunding', PathName.projectId),
+  getPath('dashboardWallet', PathName.projectId),
   getPath('dashboardSettings', PathName.projectId),
   getPath('dashboardStats', PathName.projectId),
   getPath('dashboardStory', PathName.projectId),
@@ -484,7 +484,7 @@ export const TopNavBar = () => {
   }, [routesMatchesForShowingNavItems, isMobile])
 
   const { scrollTop } = useScrollDirection({
-    elementId: isMobile ? '' : 'app-route-content-root',
+    elementId: isMobile ? '' : ID.root,
     initialValue: true,
   })
   const showHaveTransparentBackground: boolean = useMemo(() => {
@@ -523,6 +523,7 @@ export const TopNavBar = () => {
           overflow="hidden"
         >
           <NavBarLogo
+            small={isMobile && shouldShowCustomTitle}
             marginRight={isMobile ? 0 : 5}
             color={showHaveTransparentBackground ? 'primary.900' : undefined}
           />
