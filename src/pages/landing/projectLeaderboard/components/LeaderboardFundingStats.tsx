@@ -1,6 +1,6 @@
 import { HStack, StackProps } from '@chakra-ui/react'
 
-import { SatoshiIcon } from '../../../../components/icons'
+import { SatSymbolIcon } from '../../../../components/icons'
 import { Caption, MonoBody1 } from '../../../../components/typography'
 import { Project } from '../../../../types'
 import { getShortAmountLabel } from '../../../../utils'
@@ -22,7 +22,7 @@ export const LeaderboardFundingStats = ({
         <Caption>FUNDERS</Caption>
       </HStack>
       <HStack spacing="4px">
-        <SatoshiIcon fontSize="14px" />
+        <SatSymbolIcon fontSize="14px" />
         <MonoBody1 semiBold>{getShortAmountLabel(funded)}</MonoBody1>
         <Caption>FUNDED</Caption>
       </HStack>

@@ -2,7 +2,7 @@ import { AddIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { BsFillHeartFill } from 'react-icons/bs'
 
-import { SatoshiIcon } from '../../../components/icons'
+import { SatSymbolIcon } from '../../../components/icons'
 import { MonoBody1 } from '../../../components/typography'
 import { IconButtonComponent } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
@@ -51,7 +51,7 @@ export const FundingStatWithFollow = ({
 
       <VStack alignItems={'center'} spacing={0}>
         <HStack spacing="3px">
-          <SatoshiIcon fontSize="14px" />
+          <SatSymbolIcon fontSize="14px" />
           <MonoBody1 bold={bold}>{getShortAmountLabel(amountFunded)}</MonoBody1>
         </HStack>
         <Text

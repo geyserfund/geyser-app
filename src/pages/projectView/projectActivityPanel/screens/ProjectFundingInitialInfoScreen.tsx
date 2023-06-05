@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react'
 import { SatoshiIconTilted } from '../../../../components/icons'
 import { StickToTop } from '../../../../components/layouts'
 import { ActivityBrief } from '../../../../components/molecules'
-import { ButtonComponent } from '../../../../components/ui'
 import { MobileViews, useProjectContext } from '../../../../context'
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
@@ -223,18 +222,15 @@ export const ProjectFundingInitialInfoScreen = ({
       <ActivityBrief project={project} />
 
       {!isMobile ? (
-        <ButtonComponent
-          standard
+        <Button
+          variant="primary"
           leftIcon={<SatoshiIconTilted />}
           width="100%"
-          backgroundColor={
-            isActive(project.status) ? 'primary.400' : 'neutral.500'
-          }
           onClick={() => setMobileView(MobileViews.funding)}
           isDisabled={!isActive(project.status)}
         >
           Contribute
-        </ButtonComponent>
+        </Button>
       ) : null}
 
       <Box

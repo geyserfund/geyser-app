@@ -25,7 +25,7 @@ export const ProjectRowLayout = ({
       <HStack width="100%" justifyContent="space-between">
         <H3 color="primary.600">
           {subtitle && (
-            <Box as="span" color="neutral.800">
+            <Box as="span" color="neutral.800" paddingRight="10px">
               {subtitle}
             </Box>
           )}

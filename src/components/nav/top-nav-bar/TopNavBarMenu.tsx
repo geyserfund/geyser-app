@@ -18,7 +18,6 @@ import { buttonCommon } from '../../../styles/common'
 import { ProjectStatus } from '../../../types'
 import { ColorModeSwitcher } from '../../../utils'
 import { SatSymbolIcon } from '../../icons'
-import { ButtonComponent } from '../../ui'
 import { MenuItemLink } from './MenuItemLink'
 import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem'
 import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem'
@@ -79,13 +78,13 @@ export const TopNavBarMenu = ({
         {shouldShowSignInMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
-              <ButtonComponent
-                variant="solid"
+              <Button
+                variant="secondary"
                 width="100%"
                 onClick={onSignInSelected}
               >
                 Connect
-              </ButtonComponent>
+              </Button>
             </MenuItem>
 
             <MenuDivider />
@@ -95,14 +94,13 @@ export const TopNavBarMenu = ({
         {shouldShowDashboardMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
-              <ButtonComponent
-                primary
-                variant="solid"
+              <Button
+                variant="primary"
                 width="100%"
                 onClick={onDashboardSelected}
               >
                 Edit project
-              </ButtonComponent>
+              </Button>
             </MenuItem>
 
             <MenuDivider />
@@ -112,14 +110,13 @@ export const TopNavBarMenu = ({
         {shouldShowMyProjectsMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
-              <ButtonComponent
-                primary
-                variant="solid"
+              <Button
+                variant="primary"
                 width="100%"
                 onClick={onMyProjectsSelected}
               >
                 View my projects
-              </ButtonComponent>
+              </Button>
             </MenuItem>
 
             <MenuDivider />

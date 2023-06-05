@@ -65,7 +65,7 @@ export const ProjectNavigation = ({
                 // isActive={inView === 'milestones'}
                 onClick={onMilestonesClick}
                 aria-label="milestones"
-                leftIcon={<MilestoneIcon width="1.75em" />}
+                leftIcon={<MilestoneIcon fontSize="25px" />}
               >
                 Milestones
               </ProjectNavigationButton>

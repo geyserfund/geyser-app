@@ -6,6 +6,7 @@ export const SatoshiIcon = ({ ...props }: IconProps) => {
       viewBox="0 0 360 360"
       fill={props.color || 'neutral.1000'}
       xmlns="http://www.w3.org/2000/svg"
+      paddingBottom="3px"
       {...props}
     >
       <rect x="166.06" y="2.83" width="27.89" height="47.65" />
