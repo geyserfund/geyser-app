@@ -28,10 +28,8 @@ import {
   WysiwygToolbar,
 } from '@remirror/react'
 import { AllStyledComponent } from '@remirror/styles/emotion'
-import classNames from 'classnames'
 import { ForwardedRef, PropsWithChildren, useCallback, useMemo } from 'react'
 import { Control, useController, useFormContext } from 'react-hook-form'
-import { createUseStyles } from 'react-jss'
 import {
   getRemirrorJSON,
   InvalidContentHandler,
@@ -58,7 +56,6 @@ import {
 } from 'remirror/extensions'
 import TurndownService from 'turndown'
 
-import { AppTheme } from '../../context'
 import { useSignedUpload } from '../../hooks'
 import { useCustomTheme } from '../../utils'
 
@@ -73,31 +70,7 @@ interface Props {
   initialContentReady?: boolean
   name?: string
   control?: Control<any, any>
-  flex?: boolean
-  stickyToolbar?: boolean
 }
-
-const useStyles = createUseStyles(({ colors }: AppTheme) => ({
-  toolbarContainer: {
-    '& .MuiStack-root': {
-      backgroundColor: colors.neutral[50],
-      paddingBottom: '5px',
-    },
-    '& .MuiBox-root': {
-      backgroundColor: colors.neutral[0],
-    },
-    '& .MuiButtonBase-root': {
-      backgroundColor: colors.neutral[0],
-      borderColor: colors.neutral[200],
-      color: colors.neutral[600],
-    },
-  },
-  stickyContainer: {
-    position: 'sticky',
-    top: 0,
-    zIndex: 1,
-  },
-}))
 
 export const MarkdownField = ({
   preview,
@@ -107,11 +80,7 @@ export const MarkdownField = ({
   initialContentReady = true,
   name,
   control,
-  flex,
-  stickyToolbar,
 }: Props) => {
-  const classes = useStyles()
-
   const onError: InvalidContentHandler = useCallback(
     ({ json, invalidContent, transformers }) => {
       // Automatically remove all invalid nodes and marks.
@@ -184,7 +153,7 @@ export const MarkdownField = ({
 
   if (preview) {
     return (
-      <RemirrorStyleProvider flex={flex}>
+      <RemirrorStyleProvider>
         <RemirrorRenderer
           typeMap={typeMap}
           markMap={markMap}
@@ -204,15 +173,9 @@ export const MarkdownField = ({
   }
 
   return (
-    <RemirrorStyleProvider flex={flex}>
+    <RemirrorStyleProvider>
       <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
-        <Box
-          className={classNames(classes.toolbarContainer, {
-            [classes.stickyContainer]: stickyToolbar,
-          })}
-        >
-          <WysiwygToolbar />
-        </Box>
+        <WysiwygToolbar />
         <EditorComponent />
         <SaveModule name={name} control={control} />
       </Remirror>
@@ -220,10 +183,7 @@ export const MarkdownField = ({
   )
 }
 
-const RemirrorStyleProvider = ({
-  children,
-  flex,
-}: PropsWithChildren<{ flex?: boolean }>) => {
+const RemirrorStyleProvider = ({ children }: PropsWithChildren) => {
   const { colors } = useCustomTheme()
 
   const remirrorTheme: RemirrorThemeType = useMemo(
@@ -231,7 +191,6 @@ const RemirrorStyleProvider = ({
       color: {
         text: colors.neutral[900],
         background: colors.neutral[0],
-        foreground: colors.neutral[900],
         primary: colors.primary[400],
         primaryText: colors.neutral[900],
         hover: {
@@ -246,42 +205,16 @@ const RemirrorStyleProvider = ({
     }),
     [colors],
   )
-
   return (
     <Box
-      sx={
-        flex
-          ? {
-              display: 'flex',
-              flexDirection: 'column',
-              flexGrow: 1,
-              '& p': {
-                mb: 4,
-              },
-              width: '100%',
-              '& div.remirror-editor-wrapper, & div.remirror-editor, & div.remirror-theme':
-                {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flexGrow: 1,
-                },
-            }
-          : {
-              '& p': {
-                mb: 4,
-              },
-              width: '100%',
-            }
-      }
+      width="100%"
+      sx={{
+        '& p': {
+          mb: 4,
+        },
+      }}
     >
-      <AllStyledComponent
-        theme={remirrorTheme}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          flexGrow: 1,
-        }}
-      >
+      <AllStyledComponent theme={remirrorTheme}>
         <ThemeProvider theme={remirrorTheme}>{children}</ThemeProvider>
       </AllStyledComponent>
     </Box>
