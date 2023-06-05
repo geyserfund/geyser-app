@@ -23,7 +23,7 @@ import { Body2, H3 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { AmbossUrl, getPath, HomeUrl } from '../../../../constants'
 import { SortType, useProjectContext } from '../../../../context'
-import { MarkdownField } from '../../../../forms/components/MarkdownField'
+import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
 import { copyTextToClipboard, toInt, useMobileMode } from '../../../../utils'
 import { getPossibleWalletPubkey } from '../../../../utils/validations/wallet'
 import {

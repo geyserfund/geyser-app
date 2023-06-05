@@ -2,7 +2,7 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
 
 import { ProjectValidations } from '../../../constants'
-import { MarkdownField } from '../../../forms/components/MarkdownField'
+import { MarkdownField } from '../../../forms/markdown/MarkdownField'
 import { useMobileMode } from '../../../utils'
 import { FormInputContainer } from './FormInputContainer'
 
