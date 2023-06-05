@@ -64,7 +64,7 @@ const ProjectDetails = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectDetails),
 )
 const ProjectFundingSettings = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectFundingSettings),
+  CreatorDashboard.then((m) => m.ProjectWallet),
 )
 const ProjectStory = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectStory),
@@ -207,7 +207,7 @@ export const Router = () => {
               element: ProjectStory,
             },
             {
-              path: getPath('dashboardFunding', PathName.projectId),
+              path: getPath('dashboardWallet', PathName.projectId),
               element: ProjectFundingSettings,
             },
             {
@@ -216,6 +216,10 @@ export const Router = () => {
             },
             {
               path: getPath('dashboardSettings', PathName.projectId),
+              element: ProjectSettings,
+            },
+            {
+              path: getPath('dashboardShop', PathName.projectId),
               element: ProjectSettings,
             },
           ],

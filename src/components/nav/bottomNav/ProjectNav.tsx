@@ -160,6 +160,7 @@ export const ProjectNavUI = () => {
               mobileView === MobileViews.funding ? 'neutral.500' : 'primary.400'
             }
             _hover={{}}
+            variant="primary"
             width="100%"
             paddingX="5px"
           >

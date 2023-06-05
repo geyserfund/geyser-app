@@ -71,7 +71,8 @@ export const Entries = forwardRef<HTMLDivElement, { entriesLength: number }>(
     }
 
     const canCreateEntries: boolean =
-      isProjectOwner && (isActive(project.status) || isDraft(project.status))
+      Boolean(isProjectOwner) &&
+      (isActive(project.status) || isDraft(project.status))
 
     const handleEntryEditButtonTapped = (entry: EntryForProjectFragment) => {
       navigate(getPath('projectEntryDetails', project.name, entry.id))
