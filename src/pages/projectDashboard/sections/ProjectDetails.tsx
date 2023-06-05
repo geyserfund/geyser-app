@@ -65,20 +65,9 @@ export const ProjectDetails = () => {
         e.preventDefault()
         onSubmit()
       }}
-<<<<<<< HEAD
-<<<<<<< HEAD
       style={{ flexGrow: 1, display: 'flex' }}
     >
       <VStack spacing={6} flexGrow={1}>
-=======
-    >
-      <VStack width="100%" alignItems="flex-start" spacing="24px">
->>>>>>> 8ccd8aaf (feat: updated project dashboard design)
-=======
-      style={{ flexGrow: 1, display: 'flex' }}
-    >
-      <VStack spacing={6} flexGrow={1}>
->>>>>>> 79b56342 (fix: flex grow)
         <ProjectRegion
           location={project?.location}
           updateProject={updateProject}
@@ -92,10 +81,6 @@ export const ProjectDetails = () => {
           linkError={linkError}
         />
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 79b56342 (fix: flex grow)
         <VStack w="100%" flexGrow={1} justifyContent="end">
           <Button
             isLoading={tagsLoading || projectLoading}
@@ -106,19 +91,6 @@ export const ProjectDetails = () => {
             Save
           </Button>
         </VStack>
-<<<<<<< HEAD
-=======
-        <Button
-          isLoading={tagsLoading || projectLoading}
-          variant="primary"
-          w="full"
-          type="submit"
-        >
-          Save
-        </Button>
->>>>>>> 8ccd8aaf (feat: updated project dashboard design)
-=======
->>>>>>> 79b56342 (fix: flex grow)
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />
     </form>
