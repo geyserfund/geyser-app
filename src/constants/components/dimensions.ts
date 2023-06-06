@@ -4,7 +4,7 @@ export const dimensions = {
       height: 54,
     },
     mobile: {
-      height: 56,
+      height: 54,
     },
   },
   bottomNavBar: {

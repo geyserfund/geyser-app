@@ -89,7 +89,14 @@ export const ProjectDashboard = () => {
   const content = (
     <>
       {isMobile ? (
-        <VStack spacing={0} mb={4}>
+        <VStack
+          bg="neutral.0"
+          spacing={0}
+          mb={4}
+          zIndex={10}
+          position="sticky"
+          top={dimensions.topNavBar.desktop.height + 'px'}
+        >
           <HStack justifyContent="start" w="100%">
             <Text variant="h3" flexGrow={1} textAlign="left">
               {activeSection?.label}

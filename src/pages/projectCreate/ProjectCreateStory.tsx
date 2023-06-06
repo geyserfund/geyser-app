@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
-import { getPath } from '../../constants'
+import { dimensions, getPath } from '../../constants'
 import {
   useProjectByNameOrIdQuery,
   useUpdateProjectMutation,
@@ -90,7 +90,11 @@ export const ProjectCreateStory = () => {
         />
       }
     >
-      <ProjectStoryForm form={form} isLoading={loading || !project} />
+      <ProjectStoryForm
+        form={form}
+        isLoading={loading || !project}
+        toolbarTop={dimensions.topNavBar.mobile.height + 'px'}
+      />
       <FormContinueButton width="100%" {...nextProps} />
       <ProjectUnsavedModal {...unsavedModal} />
     </ProjectCreateLayout>

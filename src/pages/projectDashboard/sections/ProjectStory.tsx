@@ -69,7 +69,11 @@ export const ProjectStory = () => {
         alignItems="start"
       >
         <VStack width="100%" alignItems="flex-start" flexGrow={1}>
-          <ProjectStoryForm form={form} isLoading={loading} />
+          <ProjectStoryForm
+            form={form}
+            isLoading={loading}
+            toolbarTop="5.5em"
+          />
           <Button
             isLoading={updateLoading}
             isDisabled={!form.formState.isValid}

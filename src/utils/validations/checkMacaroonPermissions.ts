@@ -1,10 +1,10 @@
+import { Buffer } from 'buffer'
+
 export const checkMacaroonPermissions = (macaroon: string): string => {
-  // Buffer can be used server-side and atob client side
-  // const utf8Encoded = Buffer.from(macaroon, 'base64').toString('utf8');
   try {
     const base64Macaroon = convertMacaroonToBase64(macaroon)
 
-    const utf8Encoded = atob(base64Macaroon)
+    const utf8Encoded = Buffer.from(base64Macaroon, 'base64').toString('utf8')
 
     const chunks = utf8Encoded
       .split('\n')
@@ -13,6 +13,8 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
       .map((chunk) => chunk.replace(/[^a-z ]/gi, '').trim())
       .filter((chunk) => chunk.includes('read') || chunk.includes('write'))
       .map((chunk) => chunk.split('  '))
+
+    console.log({ base64Macaroon, utf8Encoded, chunks })
 
     const requiredPermissions: { [key: string]: string[] } = {
       address: ['read', 'write'],
@@ -81,18 +83,18 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
     }
 
     return ''
-  } catch (error) {
-    return 'invalid macaroon, please add a valid invoice macaroon'
+  } catch (error: any) {
+    return error.message
   }
 }
 
 export const convertMacaroonToBase64 = (macaroon: string): string => {
-  if (isBase64(macaroon)) {
-    return macaroon
-  }
-
   if (isHex(macaroon)) {
     return Buffer.from(macaroon, 'hex').toString('base64')
+  }
+
+  if (isBase64(macaroon)) {
+    return macaroon
   }
 
   throw new Error(

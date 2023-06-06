@@ -9,9 +9,10 @@ import { FormInputContainer } from './FormInputContainer'
 interface Props {
   form: UseFormReturn<{ description: string }>
   isLoading?: boolean
+  toolbarTop?: string
 }
 
-export const ProjectStoryForm = ({ form, isLoading }: Props) => {
+export const ProjectStoryForm = ({ form, isLoading, toolbarTop }: Props) => {
   const isMobile = useMobileMode()
   return (
     <FormProvider {...form}>
@@ -33,7 +34,7 @@ export const ProjectStoryForm = ({ form, isLoading }: Props) => {
               initialContent={() => form.watch('description') || ''}
               name="description"
               flex
-              stickyToolbar={isMobile}
+              stickyToolbar={isMobile ? toolbarTop : undefined}
             />
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
