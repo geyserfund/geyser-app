@@ -14,8 +14,6 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
       .filter((chunk) => chunk.includes('read') || chunk.includes('write'))
       .map((chunk) => chunk.split('  '))
 
-    console.log({ base64Macaroon, utf8Encoded, chunks })
-
     const requiredPermissions: { [key: string]: string[] } = {
       address: ['read', 'write'],
       invoices: ['read', 'write'],
