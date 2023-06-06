@@ -1,6 +1,7 @@
 import { StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../../styles'
+import { drawerTheme } from './drawerTheme'
 import { menuTheme } from './menuTheme'
 import { modalTheme } from './modalTheme'
 
@@ -181,6 +182,7 @@ export const theme = {
     },
     Menu: menuTheme,
     Modal: modalTheme,
+    Drawer: drawerTheme,
   },
   styles: {
     global: ({ theme }: StyleFunctionProps) => ({

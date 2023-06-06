@@ -16,7 +16,11 @@ export const FormInputContainer = ({
 >) => {
   return (
     <VStack spacing={1} alignItems="start" w="100%" {...props}>
-      {title && <Text variant="body1">{title}</Text>}
+      {title && (
+        <Text variant="body1" wordBreak="keep-all">
+          {title}
+        </Text>
+      )}
       {subtitle && (
         <Text variant="body2" color="neutral.600">
           {subtitle}

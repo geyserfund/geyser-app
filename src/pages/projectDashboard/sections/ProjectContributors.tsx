@@ -1,4 +1,5 @@
 import {
+  Button,
   Checkbox,
   Fade,
   HStack,
@@ -20,7 +21,6 @@ import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi'
 import { renderFunderBadges } from '../../../components/molecules/projectActivity/renderFunderBadges'
 import {
   AnonymousAvatar,
-  ButtonComponent,
   LinkableAvatar,
   SatoshiAmount,
 } from '../../../components/ui'
@@ -255,7 +255,7 @@ export const ProjectContributors = () => {
   return (
     <Fade in>
       <VStack width="100%">
-        <HStack width="100%">
+        <VStack width="100%" alignItems="start">
           <HStack flexWrap="wrap">
             <Text fontSize={'16px'} fontWeight={600} whiteSpace="nowrap">
               {project?.fundersCount} Contributors
@@ -268,9 +268,10 @@ export const ProjectContributors = () => {
           </HStack>
 
           <HStack flexWrap="wrap">
-            <ButtonComponent
+            <Button
               size="sm"
-              primary={copied}
+              variant="secondary"
+              isActive={copied}
               onClick={handleCopy}
               leftIcon={
                 copied ? (
@@ -279,30 +280,26 @@ export const ProjectContributors = () => {
                   <BiCopy fontSize="20px" />
                 )
               }
-              isDisabled={selectedFunders.length === 0}
+              isDisabled={!selectedFunders.length}
             >
               {copied ? 'Copied' : 'Copy'}
-            </ButtonComponent>
-            {selectedFunders.length === 0 ? (
-              <ButtonComponent
+            </Button>
+            <CSVLink
+              aria-disabled={!selectedFunders.length}
+              data={csvData}
+              asyncOnClick
+              onClick={handleDownloadCSV}
+            >
+              <Button
                 size="sm"
-                leftIcon={<BiDownload fontSize="20px" />}
-                isDisabled
+                isDisabled={!selectedFunders.length}
+                leftIcon={<BiDownload style={{ fontSize: '20px' }} />}
               >
                 Download CSV
-              </ButtonComponent>
-            ) : (
-              <CSVLink data={csvData} asyncOnClick onClick={handleDownloadCSV}>
-                <ButtonComponent
-                  size="sm"
-                  leftIcon={<BiDownload style={{ fontSize: '20px' }} />}
-                >
-                  Download CSV
-                </ButtonComponent>
-              </CSVLink>
-            )}
+              </Button>
+            </CSVLink>
           </HStack>
-        </HStack>
+        </VStack>
         <TableContainer width="100%">
           <Table size="sm">
             <Thead backgroundColor={'primary.100'}>

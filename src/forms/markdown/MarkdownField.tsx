@@ -43,7 +43,7 @@ interface Props {
   name?: string
   control?: Control<any, any>
   flex?: boolean
-  stickyToolbar?: boolean
+  stickyToolbar?: string | number | boolean // top value if string or number (Ex: "48px")
 }
 
 export const MarkdownField = ({
@@ -146,12 +146,12 @@ export const MarkdownField = ({
     <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
       <Box
         sx={
-          stickyToolbar
+          stickyToolbar !== undefined && stickyToolbar !== false
             ? {
                 position: 'sticky',
-                top: 0,
+                top: stickyToolbar || 0,
                 backgroundColor: 'neutral.50',
-                zIndex: 1,
+                zIndex: 11,
               }
             : {}
         }

@@ -6,7 +6,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerOverlay,
-  Menu,
   Text,
 } from '@chakra-ui/react'
 import { Dispatch, SetStateAction } from 'react'
@@ -38,52 +37,50 @@ export const DashboardNavigation = ({
       <Drawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
         <DrawerOverlay />
         <DrawerContent>
-          <Menu>
-            <MobileNavButton
-              color="neutral.1000"
-              fontWeight={500}
+          <MobileNavButton
+            color="neutral.1000"
+            fontWeight={500}
+            onClick={() => setDrawerOpen(false)}
+            rightIcon={
+              <Box p={3}>
+                <CloseIcon fontSize="0.8em" />
+              </Box>
+            }
+          >
+            Menu
+          </MobileNavButton>
+          <MobileNavButton
+            bg="neutral.200"
+            color="neutral.1000"
+            fontWeight={700}
+          >
+            Creator dashboard
+          </MobileNavButton>
+          {Object.entries(creatorSections).map(([key, section]) => (
+            <MobileNavItem
               onClick={() => setDrawerOpen(false)}
-              rightIcon={
-                <Box p={3}>
-                  <CloseIcon fontSize="0.8em" />
-                </Box>
-              }
-            >
-              Menu
-            </MobileNavButton>
-            <MobileNavButton
-              bg="neutral.200"
-              color="neutral.1000"
-              fontWeight={700}
-            >
-              Creator dashboard
-            </MobileNavButton>
-            {Object.entries(creatorSections).map(([key, section]) => (
-              <MobileNavItem
-                onClick={() => setDrawerOpen(false)}
-                key={key}
-                isActive={activeSectionKey === key}
-                projectName={project.name}
-                section={section}
-              />
-            ))}
-            <MobileNavButton
-              bg="neutral.200"
-              color="neutral.1000"
-              fontWeight={700}
-            >
-              Edit project
-            </MobileNavButton>
-            {Object.entries(projectSections).map(([key, section]) => (
-              <MobileNavItem
-                onClick={() => setDrawerOpen(false)}
-                key={key}
-                isActive={activeSectionKey === key}
-                projectName={project.name}
-                section={section}
-              />
-            ))}
-          </Menu>
+              key={key}
+              isActive={activeSectionKey === key}
+              projectName={project.name}
+              section={section}
+            />
+          ))}
+          <MobileNavButton
+            bg="neutral.200"
+            color="neutral.1000"
+            fontWeight={700}
+          >
+            Edit project
+          </MobileNavButton>
+          {Object.entries(projectSections).map(([key, section]) => (
+            <MobileNavItem
+              onClick={() => setDrawerOpen(false)}
+              key={key}
+              isActive={activeSectionKey === key}
+              projectName={project.name}
+              section={section}
+            />
+          ))}
         </DrawerContent>
       </Drawer>
     )

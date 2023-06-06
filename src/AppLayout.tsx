@@ -28,7 +28,7 @@ export const AppLayout = () => {
           flex="1"
           paddingTop={`${dimensions.topNavBar.desktop.height}px`}
           backgroundColor="neutral.50"
-          overflowY="auto"
+          overflowY={isMobile ? 'initial' : 'auto'}
         >
           <Router />
         </Box>
