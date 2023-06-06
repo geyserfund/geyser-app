@@ -38,7 +38,7 @@ export const FilteredProjectList = ({
 
     return projects.map((project) => {
       return (
-        <GridItem key={project.id} overflow="hidden">
+        <GridItem key={project.id}>
           <LandingProjectCard project={project} />
         </GridItem>
       )
