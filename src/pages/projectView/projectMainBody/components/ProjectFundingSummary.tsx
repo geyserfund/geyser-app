@@ -44,7 +44,7 @@ export const ProjectFundingSummary = ({
       </VStack>
       <VStack spacing="0px">
         <HStack spacing="5px">
-          <SatoshiIcon scale={0.7} />
+          <SatoshiIcon fontSize="14px" />
           <MonoBody1>{getShortAmountLabel(projectBalance)}</MonoBody1>
         </HStack>
         <Caption>TOTAL CONTRIBUTED</Caption>
@@ -52,7 +52,7 @@ export const ProjectFundingSummary = ({
       {currentFund && (
         <VStack spacing="0px">
           <HStack spacing="5px">
-            <SatoshiIcon scale={0.7} />
+            <SatoshiIcon fontSize="14px" />
             <MonoBody1>
               {getShortAmountLabel(currentFund.amountFunded || 0)}
             </MonoBody1>
