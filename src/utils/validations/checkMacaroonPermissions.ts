@@ -81,8 +81,8 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
     }
 
     return ''
-  } catch (error: any) {
-    return error.message
+  } catch (error) {
+    return 'invalid macaroon, please add a valid invoice macaroon'
   }
 }
 
