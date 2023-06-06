@@ -174,6 +174,7 @@ export const QUERY_PROJECT_DASHBOARD_FUNDERS = gql`
       }
       fundingTxs {
         email
+        paidAt
         uuid
       }
       rewards {
