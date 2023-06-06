@@ -203,7 +203,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
                       key={tag.id}
                       to={getPath('landingPage')}
                       state={{
-                        filter: { tagIds: [tag.id], sort: SortType.recent },
+                        filter: { tagIds: [tag.id], sort: SortType.balance },
                       }}
                     >
                       <TagBox>{tag.label}</TagBox>
@@ -232,7 +232,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
                       state={{
                         filter: {
                           countryCode: project?.location?.country?.code,
-                          sort: SortType.recent,
+                          sort: SortType.balance,
                         },
                       }}
                     >
@@ -246,7 +246,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
                     state={{
                       filter: {
                         region: project?.location?.region,
-                        sort: SortType.recent,
+                        sort: SortType.balance,
                       },
                     }}
                   >
