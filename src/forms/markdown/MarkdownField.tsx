@@ -43,7 +43,7 @@ interface Props {
   name?: string
   control?: Control<any, any>
   flex?: boolean
-  stickyToolbar?: string | number | boolean // top position if string (Ex: "48px")
+  stickyToolbar?: string | number | boolean // top value if string or number (Ex: "48px")
 }
 
 export const MarkdownField = ({
