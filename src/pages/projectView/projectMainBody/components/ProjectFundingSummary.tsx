@@ -4,7 +4,6 @@ import { BsHeartFill } from 'react-icons/bs'
 import { SatoshiIcon } from '../../../../components/icons'
 import { Caption, MonoBody1 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
-import { colors } from '../../../../styles'
 import { ProjectFragment } from '../../../../types'
 import { getShortAmountLabel } from '../../../../utils'
 import { getProjectBalance } from '../../../../utils/helpers'
@@ -28,7 +27,7 @@ export const ProjectFundingSummary = ({
       height="72px"
       w="100%"
       borderRadius="4px"
-      backgroundColor="brand.neutral100"
+      backgroundColor="neutral.100"
       spacing={{
         base: '10px',
       }}
@@ -36,7 +35,7 @@ export const ProjectFundingSummary = ({
     >
       <VStack spacing="0px">
         <HStack spacing="5px">
-          <BsHeartFill color={colors.neutral500} />
+          <BsHeartFill color={'neutral.500'} />
           <MonoBody1>
             {getShortAmountLabel(project.fundersCount || 0)}
           </MonoBody1>
@@ -45,7 +44,7 @@ export const ProjectFundingSummary = ({
       </VStack>
       <VStack spacing="0px">
         <HStack spacing="5px">
-          <SatoshiIcon scale={0.7} />
+          <SatoshiIcon fontSize="14px" />
           <MonoBody1>{getShortAmountLabel(projectBalance)}</MonoBody1>
         </HStack>
         <Caption>TOTAL CONTRIBUTED</Caption>
@@ -53,7 +52,7 @@ export const ProjectFundingSummary = ({
       {currentFund && (
         <VStack spacing="0px">
           <HStack spacing="5px">
-            <SatoshiIcon scale={0.7} />
+            <SatoshiIcon fontSize="14px" />
             <MonoBody1>
               {getShortAmountLabel(currentFund.amountFunded || 0)}
             </MonoBody1>

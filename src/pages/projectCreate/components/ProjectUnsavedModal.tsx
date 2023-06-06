@@ -36,7 +36,7 @@ export const ProjectUnsavedModal = ({ hasUnsaved, ...modalProps }: Props) => {
         <Button
           w="100%"
           variant="secondary"
-          color="brand.secondaryRed"
+          color="secondary.red"
           onClick={modalProps.props.onLeave || undefined}
         >
           Leave without saving

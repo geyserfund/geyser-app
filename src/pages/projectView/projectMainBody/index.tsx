@@ -12,7 +12,7 @@ import {
 } from '../../../context'
 import { UpdateReward } from '../../../hooks'
 import { ProjectFragment } from '../../../types/generated/graphql'
-import { useDarkMode, useMobileMode } from '../../../utils'
+import { useMobileMode } from '../../../utils'
 import { ProjectMobileNavigation } from '../projectNavigation/components/ProjectMobileNavigation'
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
@@ -68,7 +68,6 @@ export const ProjectMainBody = ({
   updateReward,
 }: Props) => {
   const isMobile = useMobileMode()
-  const isDark = useDarkMode()
 
   const { mobileView } = useProjectContext()
 
@@ -106,7 +105,7 @@ export const ProjectMainBody = ({
       )}
       <Box
         className={classNames(classes.container)}
-        backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
+        backgroundColor="neutral.50"
         flex={!isMobile ? 3 : undefined}
         height="100%"
         w="100%"

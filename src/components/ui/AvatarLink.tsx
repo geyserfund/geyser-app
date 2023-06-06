@@ -15,7 +15,7 @@ export const AvatarLink = ({
   title,
   path,
   imageSrc,
-  textColor = 'brand.neutral700',
+  textColor = 'neutral.700',
 }: Props) => {
   const avatarSrc = toSmallImageUrl(imageSrc)
 

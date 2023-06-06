@@ -1,10 +1,16 @@
-import { IconButton, Link, useDisclosure, VStack, Wrap } from '@chakra-ui/react'
+import {
+  Button,
+  IconButton,
+  Link,
+  useDisclosure,
+  VStack,
+  Wrap,
+} from '@chakra-ui/react'
 import { FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 
 import { NostrSvgIcon } from '../../../components/icons'
 import { Subscribe } from '../../../components/nav/Subscribe'
 import { Caption } from '../../../components/typography'
-import { ButtonComponent } from '../../../components/ui'
 import {
   AnalyticsUrl,
   GeyserHomepageUrl,
@@ -21,16 +27,15 @@ export const FilterFooter = () => {
 
   return (
     <VStack width="100%" alignItems="start" color="neutral.500">
-      <ButtonComponent
-        noBorder
-        backgroundColor="neutral.100"
+      <Button
+        variant="primaryNeutral"
+        color="neutral.600"
         size="sm"
         width="100%"
-        color="neutral.500"
         onClick={onOpen}
       >
         Subscribe
-      </ButtonComponent>
+      </Button>
       <Wrap>
         <Link href={GeyserHomepageUrl} isExternal>
           <Caption bold>Geyser, Inc.</Caption>

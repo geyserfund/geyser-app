@@ -79,17 +79,17 @@ export const LeaderboardTopbar = ({
       <HStack
         width="100%"
         borderBottom="2px solid"
-        borderColor="brand.neutral200"
+        borderColor="neutral.200"
         paddingY="6px"
       >
-        <Body1 semiBold color="black">
+        <Body1 semiBold color="neutral.1000">
           Activity
         </Body1>
       </HStack>
       <HStack
         width="100%"
         borderBottom="2px solid"
-        borderColor="brand.neutral200"
+        borderColor="neutral.200"
         paddingY="6px"
       >
         <ButtonComponent
@@ -99,7 +99,7 @@ export const LeaderboardTopbar = ({
           fontSize="16px"
           borderRadius="8px"
           backgroundColor={
-            tab === LeaderboardTabs.thisWeek ? 'neutral.100' : 'white'
+            tab === LeaderboardTabs.thisWeek ? 'neutral.100' : 'neutral.0'
           }
           onClick={() => setTab(LeaderboardTabs.thisWeek)}
         >
@@ -112,7 +112,7 @@ export const LeaderboardTopbar = ({
           fontSize="16px"
           borderRadius="8px"
           backgroundColor={
-            tab === LeaderboardTabs.allTime ? 'neutral.100' : 'white'
+            tab === LeaderboardTabs.allTime ? 'neutral.100' : 'neutral.0'
           }
           onClick={() => setTab(LeaderboardTabs.allTime)}
         >

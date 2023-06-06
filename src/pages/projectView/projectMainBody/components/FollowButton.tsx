@@ -22,10 +22,10 @@ export const FollowButton = ({ projectId }: { projectId: number }) => {
         {...buttonStyle}
         _hover={{
           backgroundColor: 'none',
-          borderColor: 'brand.secondaryRed',
-          color: 'brand.secondaryRed',
+          borderColor: 'secondary.red',
+          color: 'secondary.red',
         }}
-        _active={{ backgroundColor: 'brand.secondaryRed' }}
+        _active={{ backgroundColor: 'secondary.red' }}
         borderColor="primary.500"
         color="primary.500"
         leftIcon={<BsFillHeartFill fontSize="14px" />}
@@ -43,7 +43,7 @@ export const FollowButton = ({ projectId }: { projectId: number }) => {
       {...buttonStyle}
       _hover={{
         backgroundColor: 'none',
-        borderColor: 'brand.primary',
+        borderColor: 'primary.400',
       }}
       borderColor="neutral.200"
       leftIcon={<AddIcon />}

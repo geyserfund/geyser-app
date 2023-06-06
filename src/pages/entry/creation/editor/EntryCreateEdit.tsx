@@ -9,12 +9,12 @@ import { ImageWithReload } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { getPath, ID } from '../../../../constants'
 import { ProjectEntryValidations } from '../../../../constants/validations'
-import { useAuthContext, useNavContext } from '../../../../context'
+import { AppTheme, useAuthContext, useNavContext } from '../../../../context'
 import { useDebounce } from '../../../../hooks'
 import { useEntryState } from '../../../../hooks/graphqlState'
-import { colors } from '../../../../styles'
 import {
   EntryStatus,
+  EntryType,
   Owner,
   Project,
 } from '../../../../types/generated/graphql'
@@ -22,21 +22,21 @@ import { toInt, useMobileMode, useNotification } from '../../../../utils'
 import { CreateNav } from './CreateNav'
 import { ProjectEntryEditor } from './ProjectEntryEditor'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   uploadContainer: {
     width: '100%',
     minHeight: '65px',
     borderRadius: '4px',
-    backgroundColor: colors.bgGrey,
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     transition: 'background-color 0.5s ease',
     '&:hover': {
       cursor: 'pointer',
-      backgroundColor: colors.gray300,
+      backgroundColor: 'neutral.400',
       transition: 'background-color 0.5s ease',
     },
   },
-})
+}))
 
 export const defaultEntry = {
   id: 0,
@@ -44,8 +44,15 @@ export const defaultEntry = {
   description: '',
   image: '',
   content: '',
-  published: false,
-  type: 'article',
+  status: EntryStatus.Unpublished,
+  type: EntryType.Article,
+  createdAt: '',
+  updatedAt: '',
+  fundersCount: 0,
+  amountFunded: 0,
+  creator: { id: 0, username: '' },
+  project: { id: 0, name: '', title: '' },
+  publishedAt: '',
 }
 
 export const EntryCreateEdit = () => {
@@ -217,7 +224,7 @@ export const EntryCreateEdit = () => {
         onBack={onBack}
       />
       <VStack
-        background={'brand.bgGrey4'}
+        background={'neutral.50'}
         position="relative"
         paddingTop={isMobile ? '0px' : '15px'}
         height="100%"
@@ -278,7 +285,7 @@ export const EntryCreateEdit = () => {
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder="The Entry Title"
-                color="brand.gray500"
+                color="neutral.700"
                 fontSize={isMobile ? '35px' : '40px'}
                 fontWeight={700}
                 paddingBottom="5px"
@@ -295,7 +302,7 @@ export const EntryCreateEdit = () => {
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder="The summary of this entry"
-                color="brand.gray500"
+                color="neutral.700"
                 fontSize={isMobile ? '20px' : '26px'}
                 paddingX="15px"
                 fontWeight={600}

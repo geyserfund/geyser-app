@@ -234,14 +234,14 @@ export const ProjectActivityPanel = ({
         flexDirection="column"
         justifyContent="flex-start"
         alignItems="center"
-        backgroundColor="#FFFFFF"
+        backgroundColor="neutral.0"
         marginTop={isMobile ? '0px' : '20px'}
         height="calc(100% - 20px)"
         borderTopLeftRadius={isMobile ? 'initial' : '8px'}
         overflow="hidden"
         borderTop={isMobile ? 'none' : '2px solid'}
         borderLeft="2px solid"
-        borderColor="brand.neutral200"
+        borderColor="neutral.200"
       >
         {renderPanelContent()}
       </Box>

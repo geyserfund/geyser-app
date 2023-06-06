@@ -1,17 +1,10 @@
 import { AddIcon } from '@chakra-ui/icons'
-import {
-  HStack,
-  Image,
-  StackProps,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { HStack, StackProps, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { BsFillHeartFill } from 'react-icons/bs'
 
+import { SatSymbolIcon } from '../../../components/icons'
 import { MonoBody1 } from '../../../components/typography'
 import { IconButtonComponent } from '../../../components/ui'
-import { SatoshiUrl } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { useFollowProject } from '../../../hooks/graphqlState'
 import { fonts } from '../../../styles'
@@ -48,7 +41,7 @@ export const FundingStatWithFollow = ({
 
         <Text
           fontSize="12px"
-          color={'brand.neutral600'}
+          color={'neutral.600'}
           fontFamily={fonts.mono}
           textTransform="uppercase"
         >
@@ -58,12 +51,12 @@ export const FundingStatWithFollow = ({
 
       <VStack alignItems={'center'} spacing={0}>
         <HStack spacing="3px">
-          <Image src={SatoshiUrl} height="18px" />
+          <SatSymbolIcon fontSize="14px" />
           <MonoBody1 bold={bold}>{getShortAmountLabel(amountFunded)}</MonoBody1>
         </HStack>
         <Text
           fontSize="12px"
-          color={'brand.neutral600'}
+          color={'neutral.600'}
           fontFamily={fonts.mono}
           textTransform="uppercase"
         >
@@ -85,8 +78,8 @@ export const FundingStatWithFollow = ({
             isDisabled={!isLoggedIn}
             _hover={{
               border: `2px solid`,
-              borderColor: 'brand.primary600',
-              color: 'brand.primary600',
+              borderColor: 'primary.600',
+              color: 'primary.600',
             }}
           />
         </Tooltip>
@@ -100,13 +93,13 @@ export const FundingStatWithFollow = ({
             borderRadius="8px"
             onClick={handleUnFollow}
             boxShadow="none !important"
-            color="brand.primary500"
+            color="primary.500"
             border={`1px solid`}
-            borderColor="brand.primary500"
+            borderColor="primary.500"
             _hover={{
               border: `2px solid`,
-              borderColor: 'brand.secondaryRed',
-              color: 'brand.secondaryRed',
+              borderColor: 'secondary.red',
+              color: 'secondary.red',
             }}
           />
         </Tooltip>

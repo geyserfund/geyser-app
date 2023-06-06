@@ -134,7 +134,7 @@ export const ContributionsSkeleton = () => {
                 <Divider
                   borderBottomWidth="2px"
                   maxWidth="500px"
-                  color="brand.200"
+                  color="neutral.200"
                 />
               )}
             </VStack>
@@ -167,7 +167,7 @@ const ViewUpdates = ({
       >
         {displayText}
       </Button>
-      <Divider borderBottomWidth="2px" maxWidth="500px" color="brand.200" />
+      <Divider borderBottomWidth="2px" maxWidth="500px" color="neutral.200" />
     </>
   )
 }

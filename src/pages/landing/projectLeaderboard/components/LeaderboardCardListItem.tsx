@@ -17,7 +17,7 @@ export const LeaderboardCardListItem = ({
     <HStack
       as={Link}
       to={getPath('project', project.name)}
-      backgroundColor="white"
+      backgroundColor="neutral.0"
       borderRadius="8px"
       _hover={{ backgroundColor: 'neutral.100' }}
       width="100%"
@@ -33,7 +33,7 @@ export const LeaderboardCardListItem = ({
       </Box>
 
       <VStack flex={1} overflow="hidden">
-        <Body1 color="brand.neutral900" isTruncated bold width="100%">
+        <Body1 color="neutral.900" isTruncated bold width="100%">
           {project.title}
         </Body1>
         <LeaderboardFundingStats

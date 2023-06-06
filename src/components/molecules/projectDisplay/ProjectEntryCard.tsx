@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
-import { colors, fonts } from '../../../styles'
+import { fonts } from '../../../styles'
 import {
   EntryForProjectFragment,
   EntryStatus,
@@ -145,7 +145,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
 
         <Body1
           marginTop="2"
-          color={'brand.neutral600'}
+          color={'neutral.600'}
           fontSize="lg"
           as={'p'}
           noOfLines={[0, 2]}
@@ -165,15 +165,15 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
         >
           <HStack spacing={'10px'} align={'center'} flex={0}>
             <HStack spacing={1}>
-              <MonoBody1 color="brand.primary" fontWeight={'bold'}>
+              <MonoBody1 color="primary.400" fontWeight={'bold'}>
                 {entry.fundersCount}
               </MonoBody1>
-              <BsHeartFill color={colors.primary} />
+              <BsHeartFill color={'primary.400'} />
             </HStack>
 
             <SatoshiAmount
               fontFamily={fonts.mono}
-              color="brand.primary"
+              color="primary.400"
               fontSize="16px"
               fontWeight="bold"
               scale={0.8}

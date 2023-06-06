@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   CloseButton,
   Divider,
   HStack,
@@ -10,7 +11,6 @@ import { useRef } from 'react'
 
 import { BoltIcon } from '../../../../components/icons'
 import {
-  ButtonComponent,
   SatoshiAmount,
   SectionTitle,
   TextInputBox,
@@ -106,7 +106,7 @@ export const ProjectFundingSelectionFormScreen = ({
       height="100%"
       position="relative"
       alignItems="flex-start"
-      backgroundColor="#FFFFFF"
+      backgroundColor="neutral.0"
       marginBottom={
         isMobile && commentContainerRef.current
           ? `${commentContainerRef.current.offsetHeight}px`
@@ -133,7 +133,7 @@ export const ProjectFundingSelectionFormScreen = ({
         />
       </Box>
       <VStack
-        backgroundColor={'white'}
+        backgroundColor="neutral.0"
         position={isMobile ? 'fixed' : 'relative'}
         bottom={isMobile ? '60px' : '0px'}
         paddingBottom="5px"
@@ -152,7 +152,7 @@ export const ProjectFundingSelectionFormScreen = ({
           padding={2}
           width={'100%'}
           borderRadius={'md'}
-          backgroundColor={'brand.neutral100'}
+          backgroundColor={'neutral.100'}
           spacing={2}
         >
           <VStack spacing={1.5} alignItems="flex-start" width={'full'}>
@@ -171,7 +171,7 @@ export const ProjectFundingSelectionFormScreen = ({
                   type="email"
                   name="email"
                   fontSize="14px"
-                  backgroundColor={'brand.bgWhite'}
+                  backgroundColor={'neutral.0'}
                   placeholder="Contact Email"
                   value={formState.email}
                   onChange={setTarget}
@@ -182,7 +182,7 @@ export const ProjectFundingSelectionFormScreen = ({
 
           <VStack
             padding={2}
-            color={'brand.neutral700'}
+            color={'neutral.700'}
             fontWeight={'medium'}
             width={'full'}
             alignItems="flex-start"
@@ -193,12 +193,12 @@ export const ProjectFundingSelectionFormScreen = ({
                 justifyContent={'space-between'}
                 width={'full'}
                 alignItems="flex-start"
-                color="brand.neutral700"
+                color="neutral.700"
               >
                 <Text
                   flex={0}
                   fontSize="14px"
-                  textColor={'brand.neutral700'}
+                  textColor={'neutral.700'}
                   fontWeight={'normal'}
                 >
                   Rewards
@@ -230,7 +230,7 @@ export const ProjectFundingSelectionFormScreen = ({
 
               <HStack>
                 <SatoshiAmount
-                  color="#1A1A1A"
+                  color="neutral.700"
                   fontWeight="bold"
                   marginLeft={'auto'}
                   fontSize={'21px'}
@@ -238,25 +238,22 @@ export const ProjectFundingSelectionFormScreen = ({
                   {getTotalAmount('sats', name)}
                 </SatoshiAmount>
 
-                <Text color="#1A1A1A" fontWeight="bold" fontSize={'21px'}>
+                <Text color="neutral.700" fontWeight="bold" fontSize={'21px'}>
                   {`($${getTotalAmount('dollar', name)})`}
                 </Text>
               </HStack>
             </HStack>
           </VStack>
 
-          <Box width="100%" marginTop={2}>
-            <ButtonComponent
-              isLoading={fundingRequestLoading}
-              primary
-              standard
-              leftIcon={<BoltIcon />}
-              width="100%"
-              onClick={submit}
-            >
-              Fund Project
-            </ButtonComponent>
-          </Box>
+          <Button
+            w="full"
+            mt={2}
+            variant="primary"
+            leftIcon={<BoltIcon />}
+            onClick={submit}
+          >
+            Fund Project
+          </Button>
         </VStack>
       </VStack>
     </VStack>

@@ -16,7 +16,6 @@ import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { useFilterContext } from '../../../../context'
-import { colors } from '../../../../styles'
 import { TagsGetResult } from '../../../../types'
 import { RenderTags } from '../components'
 import { TagsFilterBody } from './TagsFilterBody'
@@ -49,8 +48,8 @@ export const DesktopTagsFilter = ({
         {...rest}
       >
         <HStack width="100%" position="relative">
-          <HiOutlineTag color={colors.neutral600} />
-          <Body1 color={colors.neutral600}>Filter by project tags</Body1>
+          <HiOutlineTag color={'neutral.600'} />
+          <Body1 color={'neutral.600'}>Filter by project tags</Body1>
         </HStack>
         <VStack width="100%" alignItems="start" spacing="5px">
           <RenderTags
@@ -71,8 +70,8 @@ export const DesktopTagsFilter = ({
         <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
           <ModalHeader>
             <HStack width="100%" position="relative">
-              <HiOutlineTag color={colors.neutral600} />
-              <Body1 color={colors.neutral600}>Filter by project tags</Body1>
+              <HiOutlineTag color={'neutral.600'} />
+              <Body1 color={'neutral.600'}>Filter by project tags</Body1>
             </HStack>
           </ModalHeader>
           <ModalCloseButton />
@@ -94,8 +93,8 @@ export const DesktopFilterLayoutSkeleton = () => {
   return (
     <CardLayout width="100%" direction="column" padding="10px" spacing="15px">
       <HStack width="100%" position="relative">
-        <HiOutlineTag color={colors.neutral600} />
-        <Body1 color={colors.neutral600}>Filter by project tags</Body1>
+        <HiOutlineTag color={'neutral.600'} />
+        <Body1 color={'neutral.600'}>Filter by project tags</Body1>
       </HStack>
       <VStack width="100%" alignItems="start" spacing="10px">
         {[1, 2, 3, 4, 5].map((val) => {

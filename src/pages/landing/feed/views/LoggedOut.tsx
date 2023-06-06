@@ -13,10 +13,10 @@ export const LoggedOut = () => {
         <Image w="full" h="auto" alt="feed-logged-out" src={FeedLoggedOutUrl} />
       </Box>
       <VStack w="full">
-        <Body1 bold color="black">
+        <Body1 bold color="neutral.1000">
           {"You're not logged in."}
         </Body1>
-        <Body1 color="black">
+        <Body1 color="neutral.1000">
           Login now to see activity from projects you funded or follow
         </Body1>
       </VStack>

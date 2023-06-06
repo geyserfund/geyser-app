@@ -1,11 +1,11 @@
 import { Button, ButtonProps } from '@chakra-ui/button'
 import { Box } from '@chakra-ui/layout'
-import { useColorModeValue } from '@chakra-ui/system'
 import classNames from 'classnames'
 import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../styles'
+import { AppTheme } from '../../context'
+import { lightModeColors } from '../../styles'
 import { buttonCommon } from '../../styles/common'
 
 interface IButtonComponentP extends ButtonProps {
@@ -20,7 +20,7 @@ interface IButtonComponentP extends ButtonProps {
   isExternal?: boolean
 }
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
     minHeight: '40px',
     position: 'relative',
@@ -30,7 +30,7 @@ const useStyles = createUseStyles({
     },
     '&.primary': {
       '& .chakra-button__icon': {
-        color: 'black',
+        color: colors.neutral[1000],
       },
     },
   },
@@ -40,7 +40,7 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     alignItems: 'center',
   },
-})
+}))
 
 export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
   (
@@ -60,10 +60,8 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
     ref,
   ) => {
     const classes = useStyles()
-    const bgColor = useColorModeValue(colors.bgWhite, colors.bgDark)
-    const defaultColor = useColorModeValue(colors.textBlack, colors.textWhite)
-    const textColor = color || defaultColor
-
+    const bodyColor =
+      color || primary ? lightModeColors.neutral[1000] : 'neutral.1000'
     return (
       <Button
         ref={ref}
@@ -78,23 +76,22 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
           backgroundColor
             ? backgroundColor
             : primary
-            ? 'brand.primary'
-            : bgColor
+            ? 'primary.400'
+            : 'neutral.0'
         }
         borderRadius={circular ? '50px' : standard ? '8px' : undefined}
-        _hover={
-          _hover ? _hover : primary ? { bg: 'brand.primaryTint' } : undefined
-        }
+        _hover={_hover ? _hover : primary ? { bg: 'primary.600' } : undefined}
         fontSize="14px"
         fontWeight="medium"
-        color={color}
+        color={bodyColor}
         {...rest}
         sx={!noBorder ? buttonCommon : {}}
       >
         <Box
           as="span"
           className={classes.text}
-          textColor={primary ? 'black' : textColor}
+          textColor={bodyColor}
+          color={bodyColor}
         >
           {children}
         </Box>

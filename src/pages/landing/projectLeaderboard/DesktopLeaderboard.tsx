@@ -16,7 +16,7 @@ type ProjectLeaderboardProps = CardLayoutProps
 export const ProjectLeaderboard = (props: ProjectLeaderboardProps) => {
   return (
     <CardLayout padding="20px" {...props}>
-      <H3 color="brand.primary600">Project leaderboard</H3>
+      <H3 color={{ base: 'primary.600', mb: 'red' }}>Project leaderboard</H3>
       <Tabs variant="unstyled" size="sm">
         <TabList>
           <Tab {...tabButtonStyles} whiteSpace="nowrap">

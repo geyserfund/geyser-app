@@ -16,7 +16,11 @@ export const FormInputContainer = ({
 >) => {
   return (
     <VStack spacing={1} alignItems="start" w="100%" {...props}>
-      {title && <Text variant="body1">{title}</Text>}
+      {title && (
+        <Text variant="body1" wordBreak="keep-all">
+          {title}
+        </Text>
+      )}
       {subtitle && (
         <Text variant="body2" color="neutral.600">
           {subtitle}
@@ -24,7 +28,7 @@ export const FormInputContainer = ({
       )}
       {children}
       {error && (
-        <Text color="brand.error" fontSize="12px">
+        <Text color="secondary.red" fontSize="12px">
           {error}
         </Text>
       )}

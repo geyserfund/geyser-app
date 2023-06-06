@@ -20,7 +20,7 @@ export const SortMenu = () => {
 
   return (
     <Menu isOpen={isOpen} onClose={onClose} onOpen={onOpen}>
-      <MenuButton as={Button} size="xs" backgroundColor="brand.neutral100">
+      <MenuButton as={Button} size="xs" backgroundColor="neutral.100">
         <HStack overflow="hidden">
           <Body2 semiBold isTruncated>
             {getCurrentSelection(filters.sort)}

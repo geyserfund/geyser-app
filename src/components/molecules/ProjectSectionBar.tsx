@@ -17,11 +17,11 @@ export const ProjectSectionBar = ({
     width="100%"
     alignItems="flex-start"
     borderBottom="2px solid"
-    borderColor="brand.neutral300"
+    borderColor="neutral.300"
   >
     <HStack width="100%" marginBottom="3px" justifyContent="space-between">
       <HStack>
-        <H3 color="brand.neutral800">{name}</H3>
+        <H3 color="neutral.800">{name}</H3>
         {number && (
           <Badge borderRadius="4px" paddingX="2" fontSize={'15px'}>
             {number}

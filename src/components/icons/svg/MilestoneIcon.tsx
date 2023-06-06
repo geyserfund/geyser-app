@@ -1,6 +1,9 @@
 import { Icon, IconProps } from '@chakra-ui/react'
 
+import { useCustomTheme } from '../../../utils'
+
 export const MilestoneIcon = (props: IconProps) => {
+  const { colors } = useCustomTheme()
   return (
     <Icon
       viewBox="0 0 18 18"
@@ -12,7 +15,7 @@ export const MilestoneIcon = (props: IconProps) => {
         cx="9"
         cy="9"
         r="7.33333"
-        stroke="#E9ECEF"
+        stroke={colors.neutral[200]}
         strokeWidth="3.33333"
       />
       <mask id="path-2-inside-1_8326_146769" fill="white">

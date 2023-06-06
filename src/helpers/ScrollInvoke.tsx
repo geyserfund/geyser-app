@@ -39,6 +39,7 @@ export const ScrollInvoke = ({
     return () => {
       document.removeEventListener('scroll', handleScroll)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elementId])
 
   async function handleScroll(this: HTMLElement) {

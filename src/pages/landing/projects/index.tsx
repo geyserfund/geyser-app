@@ -33,6 +33,7 @@ export const LandingPageProjects = () => {
             id="landing-page-mobile-projects-sort-filter"
             width="100%"
             _onStick={{ width: 'calc(100% - 20px)' }}
+            backgroundColor="neutral.50"
             bias={10}
             buffer={10}
           >

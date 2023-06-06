@@ -3,37 +3,36 @@ import classNames from 'classnames'
 import { useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../styles'
-import { useDarkMode } from '../../utils'
+import { AppTheme } from '../../context'
 
-const useStyles = createUseStyles({
-  toggleContainer: ({ isDark }: { isDark: boolean }) => ({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
+  toggleContainer: {
     width: '100%',
     height: '46px',
-    backgroundColor: isDark ? colors.bglightDarkMode : colors.bgLightGrey,
+    backgroundColor: colors.neutral[100],
     borderRadius: '14px',
     display: 'flex',
     border: '1px solid',
-    borderColor: colors.bgLightGrey,
+    borderColor: colors.neutral[100],
     alighItems: 'center',
     position: 'relative',
     overflow: 'hidden',
     '&:hover': {
       cursor: 'pointer',
       border: '1px solid',
-      borderColor: colors.bgLightGrey,
+      borderColor: colors.neutral[100],
       '& $toggleShade': {
         backgroundColor: 'rgba(0,0,0,1)',
         opacity: '0.13',
         transition: 'opacity 300ms',
       },
     },
-  }),
+  },
   toggleShade: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: 'black',
+    backgroundColor: colors.neutral[1000],
     opacity: '0',
     transition: 'opacity 300ms',
     zIndex: 3,
@@ -50,10 +49,10 @@ const useStyles = createUseStyles({
     zIndex: 2,
   },
   activeBox: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primary[400],
     zIndex: 4,
   },
-})
+}))
 
 interface ICustomToggle {
   value: boolean
@@ -70,8 +69,7 @@ export const CustomToggle = ({
   onChange,
   name,
 }: ICustomToggle) => {
-  const isDark = useDarkMode()
-  const classes = useStyles({ isDark })
+  const classes = useStyles()
   const [anonymous, setAnonymous] = useState(value)
 
   const handleToggle = () => {

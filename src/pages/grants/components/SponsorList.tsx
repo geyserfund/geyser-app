@@ -25,7 +25,7 @@ export const SponsorList = ({
     >
       {children || (
         <Box {...titleProps}>
-          <Text color="brand.neutral600" fontSize="11px" fontWeight="700">
+          <Text color="neutral.600" fontSize="11px" fontWeight="700">
             SPONSORS
           </Text>
         </Box>

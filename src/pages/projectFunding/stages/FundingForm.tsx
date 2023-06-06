@@ -120,7 +120,7 @@ export const FundingForm = ({
           onChange={setValue}
         />
         {formError?.donationAmount && (
-          <Text color="brand.error" fontSize="12px">
+          <Text color="secondary.red" fontSize="12px">
             {formError?.donationAmount}
           </Text>
         )}
@@ -130,7 +130,7 @@ export const FundingForm = ({
           Leave us a comment (optional)
         </FormLabel>
         <Input
-          _focus={{ borderColor: 'brand.primary' }}
+          _focus={{ borderColor: 'primary.400' }}
           placeholder="Love what you guys are doing. Let the Sats flow!"
           name="comment"
           value={state.comment}
@@ -138,7 +138,7 @@ export const FundingForm = ({
         />
       </FormControl>
       <Box mt={4}>
-        <Button bg="brand.primary" onClick={onSubmit} w="full">
+        <Button bg="primary.400" onClick={onSubmit} w="full">
           Confirm
         </Button>
       </Box>

@@ -25,19 +25,15 @@ export const FilterListItem = ({
       w="full"
       noBorder
       key={label}
-      backgroundColor={isActive ? 'brand.neutral100' : 'white'}
+      backgroundColor={isActive ? 'neutral.100' : 'neutral.0'}
       position="relative"
       onClick={() => handleClick(value)}
     >
       <HStack width="100%" justifyContent="start">
-        <Body1 color="brand.neutral900" semiBold>
+        <Body1 color="neutral.900" semiBold>
           {label}
         </Body1>
-        <Badge
-          rounded="full"
-          color="brand.neutral900"
-          backgroundColor="brand.neutral200"
-        >
+        <Badge rounded="full" color="neutral.900" backgroundColor="neutral.200">
           {count}
         </Badge>
       </HStack>

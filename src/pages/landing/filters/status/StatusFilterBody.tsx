@@ -2,7 +2,6 @@ import { Button, StackProps, VStack } from '@chakra-ui/react'
 
 import { Body1 } from '../../../../components/typography'
 import { useFilterContext } from '../../../../context'
-import { colors } from '../../../../styles'
 import { ProjectStatus, ProjectType } from '../../../../types'
 import { getStatusTypeButtonContent, StatusTypeButton } from '.'
 
@@ -55,15 +54,15 @@ export const StatusFilterBody = ({
         return (
           <Button
             key={index}
-            background={isActive ? 'brand.neutral100' : 'white'}
-            color="brand.neutral800"
+            background={isActive ? 'neutral.100' : 'neutral.0'}
+            color="neutral.800"
             onClick={() => handleClick(option)}
             w="100%"
             display="flex"
             justifyContent="start"
           >
             <Icon color={color} />
-            <Body1 ml="10px" color={colors.neutral900}>
+            <Body1 ml="10px" color={'neutral.900'}>
               {text}
             </Body1>
           </Button>

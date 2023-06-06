@@ -129,7 +129,7 @@ export const GrantPage = () => {
       <VStack w="full" spacing="30px" alignItems="start">
         <Button
           size="sm"
-          bg="brand.bgWhite"
+          bg="neutral.0"
           variant="outline"
           gap={2}
           onClick={() => navigate(getPath('grants'))}

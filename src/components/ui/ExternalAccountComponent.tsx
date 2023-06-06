@@ -14,7 +14,8 @@ export const ExternalAccountComponent = ({
 }: IExternalAccountComponentProps) => (
   <ButtonComponent
     leftIcon={<Icon mr={2} as={icon} />}
-    border="2px solid #20ECC7"
+    border="2px solid"
+    borderColor="primary.400"
     cursor="default"
     style={{ backgroundColor: 'transparent' }}
     {...rest}

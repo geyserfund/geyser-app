@@ -1,6 +1,6 @@
-import { ShippingDestination } from '../types'
+import { EntryFragment, ShippingDestination } from '../types'
 import { IFunder } from './participant'
-import { IProject, IProjectListEntryItem } from './project'
+import { IProject } from './project'
 
 export interface IFundingTx {
   id: number
@@ -17,7 +17,7 @@ export interface IFundingTx {
   paidAt: string
   onChain: boolean
   source: string
-  sourceResource: IProject | IProjectListEntryItem
+  sourceResource: IProject | EntryFragment
 }
 
 export interface IFundingReward {

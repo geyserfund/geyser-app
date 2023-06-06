@@ -4,13 +4,13 @@ import { BsTwitter } from 'react-icons/bs'
 import { CloseIconButton } from '../../../components/buttons'
 import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
 import { Body2 } from '../../../components/typography'
-import { colors } from '../../../styles'
+import { socialColors } from '../../../styles'
 import { ExternalAccountType } from '../../auth'
 
 const externalAccountColorMap = {
-  [ExternalAccountType.twitter]: colors.twitter,
-  [ExternalAccountType.lightning]: colors.lightning,
-  [ExternalAccountType.nostr]: colors.nostr,
+  [ExternalAccountType.twitter]: socialColors.twitter,
+  [ExternalAccountType.lightning]: socialColors.lightning,
+  [ExternalAccountType.nostr]: socialColors.nostr,
 } as { [key: string]: string }
 
 const externalAccountIconMap = {

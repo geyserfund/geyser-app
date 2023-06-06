@@ -47,7 +47,7 @@ const BoardMember = ({ image, name, link, handle }: BoardMemberProps) => (
           _hover={{ textDecoration: 'none' }}
           isExternal
           href={link}
-          color="#4C9AF4"
+          color="social.twitter"
         >
           @{handle}
         </Link>
@@ -121,9 +121,9 @@ export const Board = () => (
     {/*	<Box display="flex" justifyContent="center" alignItems="center" p={2} mx={2} mt={4} width="200px" height="200px" rounded="md" _hover={{boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px'}} boxShadow="rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px" transition="box-shadow 0.3s ease-in-out">
 			<Box>
 				<Box display="flex" justifyContent="center" alignItems="center">
-					<Avatar size="xl" src="" bg="brand.bgGrey3" />
+					<Avatar size="xl" src="" bg="neutral.200" />
 				</Box>
-				<Box mt={4} mb={1} h="43px" w="111px" bg="brand.bgGrey3" borderRadius="md" />
+				<Box mt={4} mb={1} h="43px" w="111px" bg="neutral.200" borderRadius="md" />
 			</Box>
 		</Box> */}
   </Box>

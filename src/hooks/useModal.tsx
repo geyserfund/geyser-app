@@ -20,7 +20,7 @@ export function useModal<T extends Record<string, any>>(
 
   const onOpen = useCallback(
     (props?: T) => {
-      setProps(props || ({} as T))
+      setProps((current) => (props ? { ...current, ...props } : current))
       _onOpen()
     },
     [_onOpen],
@@ -28,7 +28,7 @@ export function useModal<T extends Record<string, any>>(
 
   const onToggle = useCallback(
     (props?: T) => {
-      setProps(props || ({} as T))
+      setProps((current) => (props ? { ...current, ...props } : current))
       _onToggle()
     },
     [_onToggle],

@@ -10,7 +10,6 @@ import {
 import { HiOutlineTag } from 'react-icons/hi'
 
 import { Body1 } from '../../../../components/typography'
-import { colors } from '../../../../styles'
 import { TagsGetResult } from '../../../../types'
 import { TagsFilterBody } from './TagsFilterBody'
 
@@ -28,8 +27,8 @@ export const MobileTagsFilter = ({
     <AccordionItem height="100%">
       <AccordionButton paddingY="15px">
         <HStack width="100%">
-          <HiOutlineTag fontSize="20px" color={colors.neutral600} />
-          <Body1 fontSize="16px" color={colors.neutral800}>
+          <HiOutlineTag fontSize="20px" color={'neutral.600'} />
+          <Body1 fontSize="16px" color={'neutral.800'}>
             Project tags
           </Body1>
         </HStack>

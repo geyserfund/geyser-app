@@ -1,6 +1,7 @@
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Box } from '@chakra-ui/layout'
 import {
+  Button,
   Heading,
   HStack,
   Modal,
@@ -20,12 +21,11 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { getPath, PathName } from '../../../constants'
+import { getPath, ID, PathName } from '../../../constants'
 import { useAuthContext, useNavContext } from '../../../context'
 import { useScrollDirection } from '../../../hooks'
 import { useMobileMode } from '../../../utils'
 import { AuthModal } from '../../molecules'
-import { ButtonComponent } from '../../ui'
 import { NavBarLogo } from '../NavBarLogo'
 import { TopNavBarMenu } from './TopNavBarMenu'
 
@@ -51,7 +51,7 @@ const dashboardRoutes = [
   getPath('projectDashboard', PathName.projectId),
   getPath('dashboardContributors', PathName.projectId),
   getPath('dashboardDetails', PathName.projectId),
-  getPath('dashboardFunding', PathName.projectId),
+  getPath('dashboardWallet', PathName.projectId),
   getPath('dashboardSettings', PathName.projectId),
   getPath('dashboardStats', PathName.projectId),
   getPath('dashboardStory', PathName.projectId),
@@ -484,7 +484,7 @@ export const TopNavBar = () => {
   }, [routesMatchesForShowingNavItems, isMobile])
 
   const { scrollTop } = useScrollDirection({
-    elementId: isMobile ? '' : 'app-route-content-root',
+    elementId: isMobile ? '' : ID.root,
     initialValue: true,
   })
   const showHaveTransparentBackground: boolean = useMemo(() => {
@@ -503,7 +503,7 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        bg={showHaveTransparentBackground ? 'transparent' : 'brand.bgWhite'}
+        bg={showHaveTransparentBackground ? 'transparent' : 'neutral.0'}
         px={4}
         position="fixed"
         top={0}
@@ -512,7 +512,7 @@ export const TopNavBar = () => {
         zIndex={1000}
         borderBottom="2px solid"
         borderBottomColor={
-          showHaveTransparentBackground ? 'transparent' : 'brand.neutral100'
+          showHaveTransparentBackground ? 'transparent' : 'neutral.100'
         }
         transition="background 0.5s ease-out"
       >
@@ -523,6 +523,7 @@ export const TopNavBar = () => {
           overflow="hidden"
         >
           <NavBarLogo
+            small={isMobile && shouldShowCustomTitle}
             marginRight={isMobile ? 0 : 5}
             color={showHaveTransparentBackground ? 'primary.900' : undefined}
           />
@@ -546,7 +547,7 @@ export const TopNavBar = () => {
                           fontWeight={'500'}
                           textDecoration="none"
                           fontSize="16px"
-                          color={'brand.neutral700'}
+                          color={'neutral.700'}
                         >
                           {item.name}
                         </Text>
@@ -565,7 +566,7 @@ export const TopNavBar = () => {
                           fontWeight={'500'}
                           textDecoration="none"
                           fontSize="16px"
-                          color={'brand.neutral700'}
+                          color={'neutral.700'}
                         >
                           {item.name}
                         </Text>
@@ -575,7 +576,7 @@ export const TopNavBar = () => {
                             position="absolute"
                             height="15px"
                             width="15px"
-                            backgroundColor="brand.primary"
+                            backgroundColor="primary.400"
                             right="-4px"
                             top="-2px"
                             zIndex={-1}
@@ -588,71 +589,64 @@ export const TopNavBar = () => {
               </Box>
             ) : null}
             {shouldShowDashboardButton ? (
-              <ButtonComponent
+              <Button
                 size="sm"
-                variant={'solid'}
-                backgroundColor="brand.primary400"
+                variant={'primary'}
                 onClick={handleProjectDashboardButtonPress}
               >
                 Edit project
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowMyProjectsButton ? (
-              <ButtonComponent
-                variant={'solid'}
+              <Button
+                variant={'primary'}
                 size="sm"
-                backgroundColor="brand.primary400"
                 onClick={handleMyProjectsButtonPress}
               >
                 View my projects
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowMyProjectButton ? (
-              <ButtonComponent
-                variant={'solid'}
+              <Button
+                variant={'primary'}
                 size="sm"
-                backgroundColor="brand.primary400"
                 onClick={handleMyProjectButtonPress}
               >
                 View my project
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowProjectButton && (
-              <ButtonComponent
-                variant={'solid'}
+              <Button
+                variant={'primary'}
                 size="sm"
-                backgroundColor="brand.primary400"
                 onClick={handleProjectButtonPress}
               >
                 Project
-              </ButtonComponent>
+              </Button>
             )}
 
             {shouldShowProjectLaunchButton ? (
-              <ButtonComponent
-                variant={'solid'}
+              <Button
+                variant="primary"
                 size="sm"
-                backgroundColor="brand.primary400"
                 onClick={handleProjectLaunchButtonPress}
               >
                 Launch Your Project
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowSignInButton ? (
-              <ButtonComponent
+              <Button
                 size="sm"
-                variant={'solid'}
-                backgroundColor="white"
+                variant="secondary"
                 borderWidth={1}
-                borderColor={'brand.neutral200'}
                 onClick={loginOnOpen}
               >
                 Connect
-              </ButtonComponent>
+              </Button>
             ) : null}
 
             {shouldShowDropdownMenuButton ? (
@@ -695,16 +689,22 @@ export const TopNavBar = () => {
               justifyContent="space-between"
               paddingTop="20px"
             >
-              <ButtonComponent width="50%" mx={1} primary onClick={loginOnOpen}>
+              <Button
+                variant="primary"
+                width="50%"
+                mx={1}
+                onClick={loginOnOpen}
+              >
                 Log In
-              </ButtonComponent>
-              <ButtonComponent
+              </Button>
+              <Button
+                variant="primaryNeutral"
                 width="50%"
                 mx={1}
                 onClick={onLoginAlertModalClose}
               >
                 Continue
-              </ButtonComponent>
+              </Button>
             </Box>
           </ModalBody>
         </ModalContent>

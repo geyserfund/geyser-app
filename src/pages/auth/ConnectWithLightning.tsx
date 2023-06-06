@@ -24,6 +24,7 @@ import Loader from '../../components/ui/Loader'
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
+import { lightModeColors } from '../../styles'
 import { User } from '../../types'
 import {
   copyTextToClipboard,
@@ -36,25 +37,44 @@ interface ConnectWithLightningModalProps {
   onClose: () => void
 }
 
-type ConnectWithLightningProps = ButtonProps
+interface ConnectWithLightningProps extends ButtonProps {
+  onClose?: () => void
+}
 
-export const ConnectWithLightning = (props: ConnectWithLightningProps) => {
-  const { isOpen, onClose, onOpen } = useDisclosure()
+export const ConnectWithLightning = ({
+  onClose,
+  ...rest
+}: ConnectWithLightningProps) => {
+  const {
+    isOpen: isModalOpen,
+    onClose: onModalClose,
+    onOpen: onModalOpen,
+  } = useDisclosure()
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose()
+    }
+
+    onModalClose()
+  }
+
   return (
     <>
       <Button
         w="100%"
-        backgroundColor="brand.lightning"
+        backgroundColor="social.lightning"
         leftIcon={<BoltSvgIcon height="20px" width="20px" />}
-        _hover={{ backgroundColor: 'brand.lightningDark' }}
-        onClick={onOpen}
-        {...props}
+        _hover={{ backgroundColor: 'social.lightningDark' }}
+        color="black"
+        onClick={onModalOpen}
+        {...rest}
       >
         Lightning
       </Button>
       {/* To make sure the polling gets stopped, the component is demounted. */}
-      {isOpen && (
-        <ConnectWithLightningModal isOpen={isOpen} onClose={onClose} />
+      {isModalOpen && (
+        <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />
       )}
     </>
   )
@@ -178,7 +198,11 @@ export const ConnectWithLightningModal = ({
               Check if your wallet supports LNURL-auth here.
             </Link>
             <VStack marginTop={3} marginBottom={3}>
-              <Box border="4px solid #20ECC7" borderRadius={4}>
+              <Box
+                border="4px solid"
+                borderColor="primary.400"
+                borderRadius={4}
+              >
                 <Link href={`lightning:${qrContent}`}>
                   <QRCode
                     qrStyle="dots"
@@ -187,8 +211,8 @@ export const ConnectWithLightningModal = ({
                     logoWidth={30}
                     eyeRadius={2}
                     removeQrCodeBehindLogo={true}
-                    bgColor="#fff"
-                    fgColor="#004236"
+                    bgColor={lightModeColors.neutral[0]}
+                    fgColor={lightModeColors.primary[900]}
                     size={186}
                     value={qrContent}
                     id="lnurl-auth-qr-code"
@@ -209,11 +233,12 @@ export const ConnectWithLightningModal = ({
               display="flex"
               justifyContent="between"
               alignItems="center"
-              border="1px solid lightgrey"
+              border="1px solid"
+              borderColor="neutral.200"
               borderRadius={4}
               p={2}
             >
-              <Text w="75%" color="brand.textGrey" cursor="default">
+              <Text w="75%" color="neutral.600" cursor="default">
                 {qrContent?.slice(0, isMobile ? 21 : 30)}...
               </Text>
               <ButtonComponent

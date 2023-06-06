@@ -74,7 +74,7 @@ export const LandingCardBase = ({
       <VStack
         flex={1}
         width={getResponsiveValue({ base: 'auto', xl: '100%' })}
-        minWidth={getResponsiveValue({ base: '170px', lg: 'auto' })}
+        minWidth={getResponsiveValue({ base: '170px', xl: 'auto' })}
         padding="10px"
         alignItems="start"
         justifyContent="space-between"
@@ -134,7 +134,7 @@ export const LandingCardBaseSkeleton = ({
       <VStack
         flex={1}
         width={getResponsiveValue({ base: 'auto', xl: '100%' })}
-        minWidth={getResponsiveValue({ base: '170px', lg: 'auto' })}
+        minWidth={getResponsiveValue({ base: '170px', xl: 'auto' })}
         padding="10px"
         alignItems="start"
         justifyContent="center"

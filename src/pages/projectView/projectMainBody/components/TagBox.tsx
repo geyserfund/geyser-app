@@ -9,10 +9,10 @@ export const TagBox = ({ children, ...rest }: TagBoxProps) => {
     <Box
       borderRadius="4px"
       padding="2px 5px"
-      backgroundColor="brand.neutral100"
+      backgroundColor="neutral.100"
       {...rest}
     >
-      <Body2 color="brand.neutral600" semiBold>
+      <Body2 color="neutral.600" semiBold>
         {children}
       </Body2>
     </Box>

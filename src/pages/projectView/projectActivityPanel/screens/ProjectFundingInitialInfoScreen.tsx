@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react'
 import { SatoshiIconTilted } from '../../../../components/icons'
 import { StickToTop } from '../../../../components/layouts'
 import { ActivityBrief } from '../../../../components/molecules'
-import { ButtonComponent } from '../../../../components/ui'
 import { MobileViews, useProjectContext } from '../../../../context'
 import {
   QUERY_GET_FUNDING_TXS_LANDING,
@@ -135,14 +134,14 @@ export const ProjectFundingInitialInfoScreen = ({
           onClick={() => setTab('activity')}
         >
           Contributions{' '}
-          <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+          <Text ml={2} bg="neutral.100" rounded="lg" px={3} py={1}>
             {project.fundingTxsCount}
           </Text>
         </Button>
         <Box
-          bg={tab === 'activity' ? 'darkgrey' : 'lightgrey'}
+          bg={tab === 'activity' ? 'primary.800' : 'primary.50'}
           w="100%"
-          h="2px"
+          h="4px"
           rounded="lg"
         ></Box>
       </>
@@ -162,14 +161,14 @@ export const ProjectFundingInitialInfoScreen = ({
           onClick={() => setTab('leaderboard')}
         >
           Leaderboard{' '}
-          <Text ml={2} bg="brand.bgGrey" rounded="lg" px={3} py={1}>
+          <Text ml={2} bg="neutral.100" rounded="lg" px={3} py={1}>
             {project.fundersCount}
           </Text>
         </Button>
         <Box
-          bg={tab === 'activity' ? 'lightgrey' : 'darkgrey'}
+          bg={tab === 'activity' ? 'primary.50' : 'primary.800'}
           w="100%"
-          h="2px"
+          h="4px"
           rounded="lg"
         ></Box>
       </>
@@ -223,18 +222,15 @@ export const ProjectFundingInitialInfoScreen = ({
       <ActivityBrief project={project} />
 
       {!isMobile ? (
-        <ButtonComponent
-          standard
+        <Button
+          variant="primary"
           leftIcon={<SatoshiIconTilted />}
           width="100%"
-          backgroundColor={
-            isActive(project.status) ? 'brand.primary' : 'brand.grayPlaceholder'
-          }
           onClick={() => setMobileView(MobileViews.funding)}
           isDisabled={!isActive(project.status)}
         >
           Contribute
-        </ButtonComponent>
+        </Button>
       ) : null}
 
       <Box

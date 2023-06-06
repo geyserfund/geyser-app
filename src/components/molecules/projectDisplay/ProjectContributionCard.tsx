@@ -12,9 +12,9 @@ import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
+import { AppTheme } from '../../../context'
 import { computeFunderBadges } from '../../../helpers'
 import { UserProjectContribution } from '../../../types/generated/graphql'
-import { useDarkMode } from '../../../utils'
 import { Card, ICard } from '../../ui'
 
 type Props = ICard & {
@@ -22,7 +22,7 @@ type Props = ICard & {
   contribution: UserProjectContribution
 }
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
     borderRadius: '4px',
     display: 'flex',
@@ -39,7 +39,7 @@ const useStyles = createUseStyles({
       boxShadow:
         'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
       '.rocketicon': {
-        color: 'brand.primary',
+        color: colors.primary[400],
       },
     },
 
@@ -53,7 +53,7 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.15))',
   },
-})
+}))
 
 export const ProjectContributionCard = ({
   contribution,
@@ -61,7 +61,6 @@ export const ProjectContributionCard = ({
   ...rest
 }: Props) => {
   const classes = useStyles()
-  const isDark = useDarkMode()
 
   const { project } = contribution
 
@@ -71,7 +70,7 @@ export const ProjectContributionCard = ({
     <Link to={`/project/${project.name}`}>
       <Card
         className={classNames(classes.container, className)}
-        backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'white'}
+        backgroundColor="neutral.0"
         {...rest}
       >
         <Box height="160px" width="100%" position="relative">
@@ -136,7 +135,7 @@ const RenderBadges = ({
         <WrapItem key={badge.badge}>
           <Tooltip label={badge.description}>
             <Box
-              backgroundColor="#C9FFF5"
+              backgroundColor="neutral.300"
               padding="2px 10px"
               borderRadius="7px"
             >

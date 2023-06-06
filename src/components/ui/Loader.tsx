@@ -16,8 +16,8 @@ const Loader = ({ size, ...rest }: ILoader) => (
     <Spinner
       thickness="4px"
       speed="0.65s"
-      emptyColor="gray.200"
-      color="brand.primary"
+      emptyColor="neutral.200"
+      color="primary.400"
       size={size ? size : 'xl'}
     />
   </Box>

@@ -16,7 +16,6 @@ import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
-import { colors } from '../../../styles'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../types'
 import { FormInputContainer } from './FormInputContainer'
@@ -130,7 +129,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             onChange={handleChange}
             value={watch('name')}
             isInvalid={Boolean(formState.errors.name)}
-            focusBorderColor={colors.primary}
+            focusBorderColor={'primary.400'}
             disabled={isEdit}
             onBlur={handleProjectFetch}
           />
@@ -153,8 +152,8 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         />
         {!formState.errors.shortDescription && (
           <HStack width="100%" justifyContent="space-between">
-            <Text fontSize="12px" color="brand.neutral700" />
-            <Text fontSize="12px" color="brand.neutral700">{`${
+            <Text fontSize="12px" color="neutral.700" />
+            <Text fontSize="12px" color="neutral.700">{`${
               watch('shortDescription').length
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>

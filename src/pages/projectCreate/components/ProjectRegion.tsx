@@ -7,8 +7,8 @@ import { SingleValue } from 'react-select'
 
 import { Body1 } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
+import { AppTheme } from '../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries/tags'
-import { colors } from '../../../styles'
 import {
   Country,
   Location,
@@ -20,7 +20,7 @@ import {
 } from '../../../types'
 import { FormInputContainer } from './FormInputContainer'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
     width: '100%',
     alignItems: 'flex-start',
@@ -29,9 +29,9 @@ const useStyles = createUseStyles({
 
   tagContainer: {
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: colors.neutral[0],
     border: '1px solid',
-    borderColor: colors.neutral400,
+    borderColor: colors.neutral[400],
     borderRadius: '8px',
     padding: '12px',
   },
@@ -44,7 +44,7 @@ const useStyles = createUseStyles({
   menuGroup: {
     backgroundColor: 'red',
   },
-})
+}))
 
 interface ProjectRegionProps extends StackProps {
   location?: Maybe<Location>
@@ -152,7 +152,7 @@ export const ProjectRegion = ({
             <HStack
               borderRadius="4px"
               paddingLeft="8px"
-              backgroundColor="brand.neutral100"
+              backgroundColor="neutral.100"
             >
               <Body1 semiBold>{displayLocation}</Body1>
               <IconButtonComponent

@@ -7,7 +7,6 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal'
-import { createUseStyles } from 'react-jss'
 
 import { AddSponsorUrl } from '../../constants'
 import { ButtonComponent, UndecoratedLink } from '../ui'
@@ -19,16 +18,7 @@ interface IConnectTwitter {
   description?: string
 }
 
-const useStyles = createUseStyles({
-  twitterContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-})
-
 export const AddSponsor = ({ isOpen, onClose }: IConnectTwitter) => {
-  const classes = useStyles()
   const useTitle = 'Become a sponsor'
   const useDescription =
     'Interested in sponsoring this project? Click continue to let us know your details and we can quickly add you as a sponsor.'
@@ -45,7 +35,7 @@ export const AddSponsor = ({ isOpen, onClose }: IConnectTwitter) => {
         <ModalCloseButton />
         <ModalBody>
           <Text>{useDescription}</Text>
-          <Box className={classes.twitterContainer}>
+          <Box display="flex" flexDirection="column" justifyContent="center">
             <UndecoratedLink href={AddSponsorUrl} isExternal>
               <ButtonComponent margin="10px" w="full" primary standard>
                 Continue

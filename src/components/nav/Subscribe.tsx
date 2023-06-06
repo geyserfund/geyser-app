@@ -155,7 +155,7 @@ export const Subscribe = ({
                         background={'none'}
                         aria-label="twitter"
                         icon={<FaTwitter fontSize="20px" />}
-                        color={'brand.gray500'}
+                        color={'neutral.700'}
                       />
                     </Link>
                     <Link href={GeyserTelegramUrl} isExternal>
@@ -164,7 +164,7 @@ export const Subscribe = ({
                         background={'none'}
                         aria-label="telegram"
                         icon={<FaTelegramPlane fontSize="20px" />}
-                        color={'brand.gray500'}
+                        color={'neutral.700'}
                       />
                     </Link>
                   </HStack>
@@ -189,7 +189,7 @@ export const Subscribe = ({
           </Text>
           {success && (
             <Box
-              bg="brand.primary"
+              bg="primary.400"
               borderRadius="full"
               width="75px"
               height="75px"
@@ -218,7 +218,7 @@ export const Subscribe = ({
                     mb={isMobile ? 2 : 0}
                   >
                     <Input
-                      focusBorderColor="#20ECC7"
+                      focusBorderColor="primary.400"
                       type="email"
                       isRequired={true}
                       placeholder="satoshi@geyser.fund"
@@ -249,11 +249,11 @@ export const Subscribe = ({
               href={GeyserTelegramUrl}
               _hover={{ textDecoration: 'none' }}
               isExternal
-              bg="#5B5B5B"
+              bg="neutral.600"
               borderRadius="md"
               h="40px"
               px={3}
-              color="white"
+              color="neutral.0"
               fontWeight="bold"
               display="flex"
               justifyContent="center"
@@ -274,7 +274,7 @@ export const Subscribe = ({
           {!success ? (
             <VStack>
               <Input
-                focusBorderColor="#20ECC7"
+                focusBorderColor="primary.400"
                 type="email"
                 isRequired={true}
                 placeholder="satoshi@geyser.fund"

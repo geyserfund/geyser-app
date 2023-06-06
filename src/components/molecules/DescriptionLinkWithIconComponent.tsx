@@ -19,17 +19,17 @@ export const DescriptionLinkWithIconComponent = ({
       py={2}
       px={3}
       minHeight="42px"
-      backgroundColor="brand.neutral100"
+      backgroundColor="neutral.100"
     >
       {icon}
       {link ? (
         <Link isExternal href={link}>
-          <Text fontSize={'12px'} fontWeight={600} color="brand.neutral900">
+          <Text fontSize={'12px'} fontWeight={600} color="neutral.900">
             {title}
           </Text>
         </Link>
       ) : (
-        <Text fontSize={'12px'} fontWeight={600} color="brand.neutral900">
+        <Text fontSize={'12px'} fontWeight={600} color="neutral.900">
           {title}
         </Text>
       )}

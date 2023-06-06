@@ -27,7 +27,6 @@ import {
   MUTATION_UPDATE_PROJECT_MILESTONE,
 } from '../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../helpers'
-import { colors } from '../../../../styles'
 import { ProjectFragment, ProjectMilestone } from '../../../../types'
 import { Satoshis, USDCents, USDollars } from '../../../../types/types'
 import { toInt, useNotification } from '../../../../utils'
@@ -291,7 +290,7 @@ export const MilestoneAdditionModal = ({
           <Text fontSize="18px" fontWeight={600}>
             Select Milestones
           </Text>
-          <Body2 color="brand.neutral900">
+          <Body2 color="neutral.900">
             Milestones help you clarify your next steps, aims and objectives
           </Body2>
         </ModalHeader>
@@ -302,7 +301,7 @@ export const MilestoneAdditionModal = ({
             paddingBottom="20px"
             marginBottom="20px"
             borderBottom="1px solid"
-            borderBottomColor={colors.gray300}
+            borderBottomColor="neutral.400"
             maxHeight="600px"
             overflowY="auto"
             spacing="15px"

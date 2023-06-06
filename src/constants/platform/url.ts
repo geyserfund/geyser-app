@@ -244,8 +244,6 @@ export const MedalUrl =
   'https://storage.googleapis.com/geyser-projects-media/icons/medal.png'
 export const RopeUrl =
   'https://storage.googleapis.com/geyser-projects-media/icons/rope.png'
-export const SatoshiUrl =
-  'https://storage.googleapis.com/geyser-projects-media/icons/satoshi.png'
 export const StarUrl =
   'https://storage.googleapis.com/geyser-projects-media/icons/star.png'
 export const TrophyUrl =

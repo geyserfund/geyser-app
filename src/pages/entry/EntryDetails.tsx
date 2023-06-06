@@ -15,7 +15,7 @@ import { ProjectFundersCountIndicator } from '../../components/molecules'
 import { ButtonComponent } from '../../components/ui'
 import { EntryStatusLabel } from '../../components/ui/EntryStatusLabel'
 import { getPath } from '../../constants'
-import { EntryFragment } from '../../types/generated/graphql'
+import { EntryFragment, EntryStatus } from '../../types/generated/graphql'
 import { ProjectEntryEditor } from './creation/editor'
 
 type Props = {
@@ -43,7 +43,7 @@ export const EntryDetails = ({ entry }: Props) => {
         width="100%"
         justifyContent="space-between"
       >
-        <Text fontSize="35px" fontWeight={700} color="brand.neutral900">
+        <Text fontSize="35px" fontWeight={700} color="neutral.900">
           {entry.title}
         </Text>
         <EntryStatusLabel entry={entry} />
@@ -66,9 +66,9 @@ export const EntryDetails = ({ entry }: Props) => {
           <HStack>
             <Avatar size="sm" src={entry.creator.imageUrl || ''} />
             <Text fontWeight={500}>{entry.creator.username}</Text>
-            {entry.published && (
-              <Text paddingX="10px" color="brand.neutral900">
-                {DateTime.fromMillis(parseInt(entry.publishedAt!, 10)).toFormat(
+            {entry.status === EntryStatus.Published && entry.publishedAt && (
+              <Text paddingX="10px" color="neutral.900">
+                {DateTime.fromMillis(parseInt(entry.publishedAt, 10)).toFormat(
                   'dd LLL yyyy',
                 )}
               </Text>

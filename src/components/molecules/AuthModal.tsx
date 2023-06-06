@@ -38,7 +38,7 @@ const ConnectAccounts = ({
   const { user } = useAuthContext()
   return (
     <VStack justifyContent="center" alignItems="center">
-      <Text color="brand.textGrey2" fontSize="12px" marginBottom={5}>
+      <Text color="neutral.6002" fontSize="12px" marginBottom={5}>
         Connecting with Twitter or Lightning allows you to keep track of your
         favorite projects and to launch your own projects.
       </Text>
@@ -49,7 +49,7 @@ const ConnectAccounts = ({
         {!hasNostrAccount(user) && showNostr && (
           <ConnectWithNostr onClose={onClose} />
         )}
-        {showLightning && <ConnectWithLightning />}
+        {showLightning && <ConnectWithLightning onClose={onClose} />}
       </Stack>
       <Caption paddingTop="5px">
         {

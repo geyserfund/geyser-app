@@ -1,6 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons'
-
-import { ButtonComponent } from '../../../../components/ui'
+import { Button } from '@chakra-ui/react'
 
 interface TagComponentProps {
   icon: React.ReactElement
@@ -10,19 +9,19 @@ interface TagComponentProps {
 
 export const TagComponent = ({ icon, label, onClick }: TagComponentProps) => {
   return (
-    <ButtonComponent
-      noBorder
+    <Button
+      variant="primary"
       size="xs"
       leftIcon={icon}
       rightIcon={<CloseIcon fontSize="10px" color="neutral.500" />}
       fontWeight="600"
       borderRadius="8px"
-      color="brand.primary600"
+      color="primary.700"
       backgroundColor="neutral.100"
       textTransform="lowercase"
       onClick={onClick}
     >
       {label}
-    </ButtonComponent>
+    </Button>
   )
 }

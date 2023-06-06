@@ -25,14 +25,14 @@ export const Countdown = ({ endDate }: { endDate: string }) => {
           height="5px"
           width="5px"
           borderRadius="50%"
-          backgroundColor="brand.primary"
+          backgroundColor="primary.400"
         />
       )}
       <Text
         textAlign="center"
         fontSize="14px"
         fontFamily={fonts.mono}
-        color="brand.neutral600"
+        color="neutral.600"
       >{`${countDown}`}</Text>
     </HStack>
   )

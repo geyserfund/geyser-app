@@ -30,7 +30,7 @@ export const QUERY_ENTRY_WITH_OWNERS = gql`
       title
       description
       image
-      published
+      status
       content
       createdAt
       updatedAt
@@ -70,7 +70,7 @@ export const QUERY_ALL_GEYSER_PROJECT_ENTRIES = gql`
       fundersCount
       amountFunded
       type
-      published
+      status
       project {
         title
         name

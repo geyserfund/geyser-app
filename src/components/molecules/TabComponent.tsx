@@ -38,7 +38,7 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
         id={ID.profile.tabList}
         width="100%"
         offset={dimensions.topNavBar.desktop.height}
-        backgroundColor="brand.bgGrey4"
+        backgroundColor="neutral.50"
         disable={!isMobile}
         _onStick={{ width: `calc(100% - 20px)` }}
       >

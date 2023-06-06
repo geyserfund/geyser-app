@@ -3,7 +3,6 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { BiPencil } from 'react-icons/bi'
 
 import { TRewards } from '../../../pages/projectCreate/types'
-import { colors } from '../../../styles'
 import { ProjectRewardForCreateUpdateFragment } from '../../../types/generated/graphql'
 import { CardLayout } from '../../layouts'
 import {
@@ -48,11 +47,9 @@ export const RewardCard = ({
           <HStack>
             <VStack spacing="0px">
               {isSatoshi ? (
-                <SatoshiAmount color="brand.primary">
-                  {reward.cost}
-                </SatoshiAmount>
+                <SatoshiAmount color="primary.400">{reward.cost}</SatoshiAmount>
               ) : (
-                <Text color={colors.textBlack} fontWeight="bold">
+                <Text color={'neutral.1000'} fontWeight="bold">
                   {/*
                     Divided by 100 as cost is in cents
                   */}
@@ -62,19 +59,19 @@ export const RewardCard = ({
               <Text
                 whiteSpace="nowrap"
                 fontSize="12px"
-                color={colors.textBlack}
+                color={'neutral.1000'}
                 fontWeight="bold"
               >
                 per item
               </Text>
             </VStack>
             <VStack spacing="0px" alignItems="flex-start">
-              <Text fontWeight={500} color="brand.neutral900">
+              <Text fontWeight={500} color="neutral.900">
                 {reward.name}
               </Text>
               <Text
                 fontSize="12px"
-                backgroundColor="brand.neutral200"
+                backgroundColor="neutral.200"
                 padding="2px 5px"
                 borderRadius="4px"
               >

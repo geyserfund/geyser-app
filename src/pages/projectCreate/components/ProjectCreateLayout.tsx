@@ -10,6 +10,7 @@ import { ReactNode } from 'react'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
 import { CardLayout } from '../../../components/layouts'
+import { dimensions } from '../../../constants'
 import { useMobileMode } from '../../../utils'
 
 interface ProjectCreateLayoutProps
@@ -18,6 +19,12 @@ interface ProjectCreateLayoutProps
   title: ReactNode
   continueButton?: ReactNode
   onBackClick: () => void
+}
+
+const contentSx = {
+  display: 'flex',
+  flexDirection: 'column',
+  flexGrow: 1,
 }
 
 export const ProjectCreateLayout = ({
@@ -46,7 +53,14 @@ export const ProjectCreateLayout = ({
   )
 
   return (
-    <Container py={4} {...props}>
+    <Container
+      py={4}
+      display="flex"
+      flexDirection="column"
+      minHeight={`calc(100vh - ${dimensions.topNavBar.mobile.height}px)`}
+      flexGrow={1}
+      {...props}
+    >
       <HStack>
         <Button
           flexGrow={1}
@@ -59,9 +73,13 @@ export const ProjectCreateLayout = ({
         {continueButton}
       </HStack>
       {isMobile ? (
-        <Box mt={4}>{content}</Box>
+        <Box sx={contentSx} mt={4}>
+          {content}
+        </Box>
       ) : (
-        <CardLayout mt={3}>{content}</CardLayout>
+        <CardLayout sx={contentSx} mt={3}>
+          {content}
+        </CardLayout>
       )}
     </Container>
   )

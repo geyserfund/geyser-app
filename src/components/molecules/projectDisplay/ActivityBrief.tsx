@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
-import { colors } from '../../../styles'
 import { fonts } from '../../../styles'
 import {
   ProjectFragment,
@@ -65,27 +64,27 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const getTrackColor = () => {
     switch (milestoneIndex % 3) {
       case 1:
-        if (milestoneIndex === 1) return undefined
-        return 'brand.primary800'
+        if (milestoneIndex === 1) return 'neutral.200'
+        return 'primary.800'
       case 2:
-        return 'brand.primary400'
+        return 'primary.400'
       case 0:
-        return 'brand.primary600'
+        return 'primary.600'
       default:
-        return undefined
+        return 'neutral.200'
     }
   }
 
   const getColor = () => {
     switch (milestoneIndex % 3) {
       case 1:
-        return 'brand.primary400'
+        return 'primary.400'
       case 2:
-        return 'brand.primary600'
+        return 'primary.600'
       case 0:
-        return 'brand.primary800'
+        return 'primary.800'
       default:
-        return 'brand.primary300'
+        return 'primary.300'
     }
   }
 
@@ -124,7 +123,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
         <Text
           fontSize="14px"
           fontFamily={fonts.mono}
-          color={colors.neutral600}
+          color={'neutral.600'}
           maxW="100%"
         >{`${percentage}% of ${currentMilestone.name}`}</Text>
       )
@@ -147,7 +146,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           <Text
             fontSize="18px"
             fontWeight={600}
-            color="brand.neutral900"
+            color="neutral.900"
             wordBreak="break-word"
           >
             {project.title}
@@ -158,7 +157,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           fontFamily={fonts.mono}
           fontWeight={400}
           fontStyle={'normal'}
-          color="brand.primary600"
+          color="primary.600"
         >
           {balance}
         </SatoshiAmount>

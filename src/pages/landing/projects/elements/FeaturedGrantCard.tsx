@@ -60,9 +60,9 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
           overflow="hidden"
           padding="10px"
         >
-          <H2 color="brand.neutral700"> {grant.title} </H2>
+          <H2 color="neutral.700"> {grant.title} </H2>
           <H3
-            color="brand.neutral800"
+            color="neutral.800"
             noOfLines={3}
             isTruncated
             whiteSpace="normal"

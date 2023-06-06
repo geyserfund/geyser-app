@@ -12,7 +12,7 @@ export const NavBarUserProfileMenuItem = () => {
         textTransform={'uppercase'}
         fontSize="xs"
         fontWeight={'bold'}
-        color={'brand.neutral500'}
+        color={'neutral.500'}
       >
         Profile
       </Text>

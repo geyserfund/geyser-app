@@ -26,7 +26,7 @@ interface FailedToConnectAccountProps extends ReturnType<typeof useModal> {
 const DEFAULT_TITLE = 'Account connection error'
 
 const DEFAULT_DESCRIPTION = (
-  <Body1 semiBold color="black">
+  <Body1 semiBold color="neutral.1000">
     This account is connected to another Geyser profile. Make sure you use a
     unique account. For any questions reach out to the Geyser team via
     <ChakraLink href={GeyserTelegramUrl} isExternal>

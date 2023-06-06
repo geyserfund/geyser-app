@@ -7,7 +7,7 @@ export const NotAuthorized = () => (
   <VStack
     width="100%"
     height="100%"
-    backgroundColor="brand.bgGrey"
+    backgroundColor="neutral.100"
     display="flex"
     flexDirection="column"
     justifyContent="center"

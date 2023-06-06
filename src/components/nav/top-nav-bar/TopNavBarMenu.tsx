@@ -1,16 +1,23 @@
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
-import { Avatar, HStack, MenuDivider, Stack } from '@chakra-ui/react'
-import { useColorModeValue } from '@chakra-ui/system'
+import {
+  Avatar,
+  Button,
+  HStack,
+  IconButton,
+  MenuDivider,
+  Stack,
+  Tooltip,
+} from '@chakra-ui/react'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 import { AboutUsUrl, FAQUrl, FeedbackUrl, getPath } from '../../../constants'
 import { AuthContext } from '../../../context'
-import { colors } from '../../../styles'
 import { buttonCommon } from '../../../styles/common'
 import { ProjectStatus } from '../../../types'
-import { ButtonComponent } from '../../ui'
+import { ColorModeSwitcher } from '../../../utils'
+import { SatSymbolIcon } from '../../icons'
 import { MenuItemLink } from './MenuItemLink'
 import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem'
 import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem'
@@ -34,8 +41,6 @@ export const TopNavBarMenu = ({
   onMyProjectsSelected,
   onSignOutSelected,
 }: Props) => {
-  const textColor = useColorModeValue(colors.textBlack, colors.textWhite)
-
   const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext)
 
   const toDisplayProject =
@@ -53,18 +58,15 @@ export const TopNavBarMenu = ({
         transition="all 0.2s"
         maxHeight="32px"
         borderRadius="md"
-        color={textColor}
-        backgroundColor="brand.bgWhite"
-        _hover={{ backgroundColor: colors.gray200 }}
+        color="neutral.1000"
+        backgroundColor="neutral.0"
+        _hover={{ backgroundColor: 'neutral.100' }}
         border={'1px'}
-        borderColor="brand.bgGrey3"
+        borderColor="neutral.200"
         sx={buttonCommon}
       >
-        <HStack
-          color={useColorModeValue('brand.gray500', 'brand.gray200')}
-          spacing="4px"
-        >
-          <HamburgerIcon color={'#ADB5BD'} fontSize="22px" />
+        <HStack color="neutral.700" spacing="4px">
+          <HamburgerIcon color="neutral.500" fontSize="22px" />
 
           {isLoggedIn ? (
             <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
@@ -76,13 +78,13 @@ export const TopNavBarMenu = ({
         {shouldShowSignInMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
-              <ButtonComponent
-                variant="solid"
+              <Button
+                variant="secondary"
                 width="100%"
                 onClick={onSignInSelected}
               >
                 Connect
-              </ButtonComponent>
+              </Button>
             </MenuItem>
 
             <MenuDivider />
@@ -92,14 +94,13 @@ export const TopNavBarMenu = ({
         {shouldShowDashboardMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
-              <ButtonComponent
-                primary
-                variant="solid"
+              <Button
+                variant="primary"
                 width="100%"
                 onClick={onDashboardSelected}
               >
                 Edit project
-              </ButtonComponent>
+              </Button>
             </MenuItem>
 
             <MenuDivider />
@@ -109,14 +110,13 @@ export const TopNavBarMenu = ({
         {shouldShowMyProjectsMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
-              <ButtonComponent
-                primary
-                variant="solid"
+              <Button
+                variant="primary"
                 width="100%"
                 onClick={onMyProjectsSelected}
               >
                 View my projects
-              </ButtonComponent>
+              </Button>
             </MenuItem>
 
             <MenuDivider />
@@ -130,7 +130,7 @@ export const TopNavBarMenu = ({
               as={Link}
               to={getPath('userProfile', user.id)}
               _focus={{ boxShadow: 'none' }}
-              _hover={{ backgroundColor: 'brand.neutral200' }}
+              _hover={{ backgroundColor: 'neutral.200' }}
               width="100%"
               overflow="hidden"
             >
@@ -170,19 +170,19 @@ export const TopNavBarMenu = ({
 
         <MenuDivider />
 
-        <MenuItem color={'brand.gray500'}>
+        <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={AboutUsUrl} isExternal>
             About
           </MenuItemLink>
         </MenuItem>
 
-        <MenuItem color={'brand.gray500'}>
+        <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={FAQUrl} isExternal>
             FAQ
           </MenuItemLink>
         </MenuItem>
 
-        <MenuItem color={'brand.gray500'}>
+        <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={FeedbackUrl} isExternal>
             Feedback
           </MenuItemLink>
@@ -194,7 +194,7 @@ export const TopNavBarMenu = ({
 
             <MenuItem
               onClick={onSignOutSelected}
-              color={'brand.gray500'}
+              color={'neutral.700'}
               px={4}
               py={2}
             >
@@ -202,7 +202,36 @@ export const TopNavBarMenu = ({
             </MenuItem>
           </>
         ) : null}
+        <MenuDivider />
+        <ModeChange />
       </MenuList>
     </Menu>
+  )
+}
+
+export const ModeChange = () => {
+  return (
+    <HStack bgColor="neutral.200" borderRadius={8} mx={3} p={2} spacing={3}>
+      <ColorModeSwitcher />
+      <Tooltip label="currency">
+        <IconButton
+          bgColor="neutral.50"
+          variant="primaryNeutral"
+          aria-label="currency-convert"
+          icon={<SatSymbolIcon color="neutral.600" />}
+          isDisabled
+        />
+      </Tooltip>
+      <Tooltip label="language">
+        <Button
+          bgColor="neutral.50"
+          color="neutral.600"
+          variant="primaryNeutral"
+          isDisabled
+        >
+          English
+        </Button>
+      </Tooltip>
+    </HStack>
   )
 }

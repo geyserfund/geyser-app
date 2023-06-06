@@ -1,40 +1,19 @@
-import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
-import { RemirrorThemeType } from 'remirror'
+import { StyleFunctionProps } from '@chakra-ui/react'
 
-import { colors, fonts, neutralColors, primaryColors } from '../styles'
+import { fonts, lightModeColors } from '../../styles'
+import { drawerTheme } from './drawerTheme'
+import { menuTheme } from './menuTheme'
+import { modalTheme } from './modalTheme'
 
-export const remirrorTheme: RemirrorThemeType = {
-  color: {
-    text: colors.neutral900,
-    background: colors.neutral0,
-    primary: colors.primary400,
-    primaryText: colors.neutral900,
-    hover: {
-      background: colors.neutral100,
-      primary: colors.primary400,
-    },
-    secondary: colors.primary400,
-    secondaryText: colors.neutral900,
-    border: colors.neutral200,
-    outline: colors.primary400,
-  },
-}
-
-export const theme = extendTheme({
-  initialColorMode: 'light',
+export const theme = {
+  initialColorMode: 'system',
+  useSystemColorMode: true,
   breakpoints: {
     sm: '30em', // 480px
     md: '48em', // 768px
     lg: '57em', // Desktop ~900px
     xl: '80em', // 1280px
     '2xl': '96em', // 1536px
-  },
-  colors: {
-    brand: {
-      ...colors,
-    },
-    neutral: neutralColors,
-    primary: primaryColors,
   },
   fonts: {
     heading: fonts.brand,
@@ -66,80 +45,76 @@ export const theme = extendTheme({
       },
       variants: {
         primary: {
-          backgroundColor: colors.primary400,
+          backgroundColor: lightModeColors.primary[400],
           border: 'none',
-          color: colors.neutral900,
+          color: lightModeColors.neutral[900],
           _hover: {
-            backgroundColor: colors.neutral200,
+            backgroundColor: lightModeColors.neutral[200],
           },
           _active: {
-            backgroundColor: colors.neutral300,
+            backgroundColor: lightModeColors.neutral[300],
           },
         },
-        primaryNeutral: {
-          backgroundColor: colors.neutral100,
+        primaryNeutral: ({ theme }: StyleFunctionProps) => ({
+          backgroundColor: theme.colors.neutral[100],
           border: 'none',
-          color: colors.neutral900,
+          color: theme.colors.neutral[900],
           _hover: {
-            backgroundColor: colors.neutral200,
+            backgroundColor: theme.colors.neutral[200],
           },
           _active: {
-            backgroundColor: colors.neutral300,
+            backgroundColor: theme.colors.neutral[300],
           },
-        },
-        secondary: {
+        }),
+        secondary: ({ theme }: StyleFunctionProps) => ({
           boxShadow: 'none',
           outline: 'none',
           border: `2px solid`,
-          borderColor: colors.neutral200,
-          color: colors.neutral900,
-          backgroundColor: colors.neutral50,
+          borderColor: theme.colors.neutral[200],
+          color: theme.colors.neutral[900],
+          backgroundColor: theme.colors.neutral[50],
           _hover: {
-            borderColor: colors.primary400,
+            borderColor: theme.colors.primary[400],
           },
           _active: {
-            borderColor: colors.primary400,
-            backgroundColor: colors.primary100,
+            borderColor: theme.colors.primary[400],
+            backgroundColor: theme.colors.primary[100],
           },
-        },
-        secondaryNeutral: {
+        }),
+        secondaryNeutral: ({ theme }: StyleFunctionProps) => ({
           border: `2px solid`,
-          borderColor: colors.neutral200,
-          color: colors.neutral900,
-          backgroundColor: colors.neutral100,
+          borderColor: theme.colors.neutral[200],
+          color: theme.colors.neutral[900],
+          backgroundColor: theme.colors.neutral[100],
           _hover: {
-            borderColor: colors.primary400,
+            borderColor: theme.colors.primary[400],
           },
           _active: {
-            borderColor: colors.primary400,
-            backgroundColor: colors.primary100,
+            borderColor: theme.colors.primary[400],
+            backgroundColor: theme.colors.primary[100],
           },
-        },
-        transparent: {
-          color: colors.neutral900,
+        }),
+        transparent: ({ theme }: StyleFunctionProps) => ({
+          color: theme.colors.neutral900,
           backgroundColor: 'transparent',
           _hover: {
-            borderColor: colors.primary400,
-            backgroundColor: colors.neutral100,
+            borderColor: theme.colors.primary[400],
+            backgroundColor: theme.colors.neutral[100],
           },
           _active: {
-            borderColor: colors.primary400,
-            backgroundColor: colors.primary100,
+            borderColor: theme.colors.primary[400],
+            backgroundColor: theme.colors.primary[100],
           },
-        },
-        danger: {
-          backgroundColor: colors.secondaryRed,
-          color: colors.neutral0,
-          _hover: {
-            backgroundColor: colors.secondaryRedDark,
-          },
-        },
+        }),
+        danger: ({ theme }: StyleFunctionProps) => ({
+          backgroundColor: theme.colors.secondary.red,
+          color: theme.colors.neutral[0],
+        }),
       },
     },
     Text: {
       baseStyle: {
         fontSize: '14px',
-        color: colors.neutral900,
         lineHeight: 1.6,
       },
       variants: {
@@ -180,10 +155,10 @@ export const theme = extendTheme({
     Radio: {
       variants: {
         primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
-          color: `brand.${colorScheme}400`,
+          color: `${colorScheme}.400`,
           control: {
             _checked: {
-              color: `brand.${colorScheme}400`,
+              color: `${colorScheme}.400`,
               _before: {
                 width: '90%',
                 height: '90%',
@@ -195,7 +170,7 @@ export const theme = extendTheme({
             },
             _focus: {
               ring: 2,
-              ringColor: `brand.${colorScheme}500`,
+              ringColor: `${colorScheme}.500`,
             },
           },
         }),
@@ -205,5 +180,15 @@ export const theme = extendTheme({
         colorScheme: 'primary',
       },
     },
+    Menu: menuTheme,
+    Modal: modalTheme,
+    Drawer: drawerTheme,
   },
-})
+  styles: {
+    global: ({ theme }: StyleFunctionProps) => ({
+      body: {
+        bg: theme.colors.neutral[50],
+      },
+    }),
+  },
+}

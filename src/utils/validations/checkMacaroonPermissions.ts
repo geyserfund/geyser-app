@@ -1,10 +1,10 @@
+import { Buffer } from 'buffer'
+
 export const checkMacaroonPermissions = (macaroon: string): string => {
-  // Buffer can be used server-side and atob client side
-  // const utf8Encoded = Buffer.from(macaroon, 'base64').toString('utf8');
   try {
     const base64Macaroon = convertMacaroonToBase64(macaroon)
 
-    const utf8Encoded = atob(base64Macaroon)
+    const utf8Encoded = Buffer.from(base64Macaroon, 'base64').toString('utf8')
 
     const chunks = utf8Encoded
       .split('\n')
@@ -87,12 +87,12 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
 }
 
 export const convertMacaroonToBase64 = (macaroon: string): string => {
-  if (isBase64(macaroon)) {
-    return macaroon
-  }
-
   if (isHex(macaroon)) {
     return Buffer.from(macaroon, 'hex').toString('base64')
+  }
+
+  if (isBase64(macaroon)) {
+    return macaroon
   }
 
   throw new Error(

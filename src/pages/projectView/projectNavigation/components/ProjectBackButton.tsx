@@ -9,7 +9,7 @@ export const ProjectBackButton = (props: ButtonProps) => {
   const location = useLocation()
 
   const handleGoBack = () => {
-    if (location.key) {
+    if (location.key && location.key !== 'default') {
       navigate(-1)
     } else {
       navigate(getPath('landingPage'))

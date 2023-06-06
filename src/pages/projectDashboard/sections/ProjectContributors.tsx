@@ -1,4 +1,5 @@
 import {
+  Button,
   Checkbox,
   Fade,
   HStack,
@@ -17,20 +18,19 @@ import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi'
 
-import { renderFunderBadges } from '../../components/molecules/projectActivity/renderFunderBadges'
+import { renderFunderBadges } from '../../../components/molecules/projectActivity/renderFunderBadges'
 import {
   AnonymousAvatar,
-  ButtonComponent,
   LinkableAvatar,
   SatoshiAmount,
-} from '../../components/ui'
-import Loader from '../../components/ui/Loader'
-import { useProjectContext } from '../../context'
-import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../graphql'
-import { computeFunderBadges } from '../../helpers'
-import { useQueryWithPagination } from '../../hooks'
-import { Funder } from '../../types/generated/graphql'
-import { copyTextToClipboard, toInt } from '../../utils'
+} from '../../../components/ui'
+import Loader from '../../../components/ui/Loader'
+import { useProjectContext } from '../../../context'
+import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../../graphql'
+import { computeFunderBadges } from '../../../helpers'
+import { useQueryWithPagination } from '../../../hooks'
+import { Funder } from '../../../types/generated/graphql'
+import { copyTextToClipboard, toInt } from '../../../utils'
 
 type TableData = {
   header: string
@@ -87,7 +87,7 @@ export const ProjectContributors = () => {
               <AnonymousAvatar
                 seed={val.id}
                 imageSize={'20px'}
-                textColor="brand.neutral900"
+                textColor="neutral.900"
               />
             )
           }
@@ -144,6 +144,14 @@ export const ProjectContributors = () => {
           return val.rewards.length > 0
             ? val.fundingTxs?.find((val) => val.email)?.email || '-'
             : '-'
+        },
+      },
+      {
+        header: 'Reference code',
+        key: 'reference',
+        value(val: Funder) {
+          const tx = val.fundingTxs.find((tx) => tx.paidAt)
+          return tx?.uuid || '-'
         },
       },
     ],
@@ -246,120 +254,111 @@ export const ProjectContributors = () => {
 
   return (
     <Fade in>
-      <HStack width="100%" justifyContent={'center'} paddingTop="20px">
-        <VStack maxWidth="1200px" width="100%" alignItems="center">
-          <HStack width="100%" justifyContent="space-between">
-            <HStack>
-              <Text fontSize={'16px'} fontWeight={600}>
-                {project?.fundersCount} Contributors
-              </Text>
-              <Text fontSize={'14px'}>
-                {selectedFunders.length > 0
-                  ? `( ${selectedFunders.length} selected )`
-                  : '( none selected )'}
-              </Text>
-            </HStack>
-
-            <HStack>
-              <ButtonComponent
-                size="sm"
-                primary={copied}
-                onClick={handleCopy}
-                leftIcon={
-                  copied ? (
-                    <BiCheck fontSize="20px" />
-                  ) : (
-                    <BiCopy fontSize="20px" />
-                  )
-                }
-                isDisabled={selectedFunders.length === 0}
-              >
-                {copied ? 'Copied' : 'Copy'}
-              </ButtonComponent>
-              {selectedFunders.length === 0 ? (
-                <ButtonComponent
-                  size="sm"
-                  leftIcon={<BiDownload fontSize="20px" />}
-                  isDisabled
-                >
-                  Download CSV
-                </ButtonComponent>
-              ) : (
-                <CSVLink
-                  data={csvData}
-                  asyncOnClick
-                  onClick={handleDownloadCSV}
-                >
-                  <ButtonComponent
-                    size="sm"
-                    leftIcon={<BiDownload style={{ fontSize: '20px' }} />}
-                  >
-                    Download CSV
-                  </ButtonComponent>
-                </CSVLink>
-              )}
-            </HStack>
+      <VStack width="100%">
+        <VStack width="100%" alignItems="start">
+          <HStack flexWrap="wrap">
+            <Text fontSize={'16px'} fontWeight={600} whiteSpace="nowrap">
+              {project?.fundersCount} Contributors
+            </Text>
+            <Text fontSize={'14px'}>
+              {selectedFunders.length > 0
+                ? `(${selectedFunders.length} selected)`
+                : '(none selected)'}
+            </Text>
           </HStack>
-          <TableContainer width="100%">
-            <Table size="sm">
-              <Thead backgroundColor={'brand.primary100'}>
-                <Tr>
-                  <Th maxWidth="30px">
-                    <Checkbox
-                      size="lg"
-                      colorScheme="teal"
-                      isChecked={checkIfAllIsSelected()}
-                      onChange={handleAllCheckClicked}
-                    />
-                  </Th>
-                  {tableData.map((row) => {
-                    return (
-                      <Th key={row.key} paddingY="10px">
-                        <Text textTransform="capitalize">{row.header}</Text>
-                      </Th>
-                    )
-                  })}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {funders.data.map((funder) => {
-                  if (funder)
-                    return (
-                      <Tr key={funder.id}>
-                        <Td maxWidth="30px">
-                          <Checkbox
-                            size="lg"
-                            colorScheme="teal"
-                            isChecked={checkIfSelected(funder.id)}
-                            onChange={(event) =>
-                              handleCheckClicked(event, funder)
-                            }
-                          />
-                        </Td>
-                        {tableData.map((row) => {
-                          let value: any = ''
-                          if (row.value) {
-                            value = row.value(funder)
-                          } else if (row.render) {
-                            value = row.render(funder)
-                          } else {
-                            value = funder && funder[row.key as keyof Funder]
-                          }
 
-                          return (
-                            <Td key={row.key} fontSize="14px">
-                              {value}
-                            </Td>
-                          )
-                        })}
-                      </Tr>
-                    )
-                })}
-              </Tbody>
-            </Table>
-          </TableContainer>
+          <HStack flexWrap="wrap">
+            <Button
+              size="sm"
+              variant="secondary"
+              isActive={copied}
+              onClick={handleCopy}
+              leftIcon={
+                copied ? (
+                  <BiCheck fontSize="20px" />
+                ) : (
+                  <BiCopy fontSize="20px" />
+                )
+              }
+              isDisabled={!selectedFunders.length}
+            >
+              {copied ? 'Copied' : 'Copy'}
+            </Button>
+            <CSVLink
+              aria-disabled={!selectedFunders.length}
+              data={csvData}
+              asyncOnClick
+              onClick={handleDownloadCSV}
+            >
+              <Button
+                size="sm"
+                isDisabled={!selectedFunders.length}
+                leftIcon={<BiDownload style={{ fontSize: '20px' }} />}
+              >
+                Download CSV
+              </Button>
+            </CSVLink>
+          </HStack>
         </VStack>
-      </HStack>
+        <TableContainer width="100%">
+          <Table size="sm">
+            <Thead backgroundColor={'primary.100'}>
+              <Tr>
+                <Th maxWidth="30px">
+                  <Checkbox
+                    size="lg"
+                    colorScheme="teal"
+                    isChecked={checkIfAllIsSelected()}
+                    onChange={handleAllCheckClicked}
+                  />
+                </Th>
+                {tableData.map((row) => {
+                  return (
+                    <Th key={row.key} paddingY="10px">
+                      <Text textTransform="capitalize">{row.header}</Text>
+                    </Th>
+                  )
+                })}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {funders.data.map((funder) => {
+                if (funder)
+                  return (
+                    <Tr key={funder.id}>
+                      <Td maxWidth="30px">
+                        <Checkbox
+                          size="lg"
+                          colorScheme="teal"
+                          isChecked={checkIfSelected(funder.id)}
+                          onChange={(event) =>
+                            handleCheckClicked(event, funder)
+                          }
+                        />
+                      </Td>
+                      {tableData.map((row) => {
+                        let value: any = ''
+                        if (row.value) {
+                          value = row.value(funder)
+                        } else if (row.render) {
+                          value = row.render(funder)
+                        } else {
+                          value = funder && funder[row.key as keyof Funder]
+                        }
+
+                        return (
+                          <Td key={row.key} fontSize="14px">
+                            {value}
+                          </Td>
+                        )
+                      })}
+                    </Tr>
+                  )
+              })}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </VStack>
     </Fade>
   )
 }

@@ -207,15 +207,7 @@ export const GrantsContributeModal = ({
     return true
   }
 
-  const OverlayOne = useMemo(
-    () => (
-      <ModalOverlay
-        bg="blackAlpha.300"
-        backdropFilter="blur(10px) hue-rotate(90deg)"
-      />
-    ),
-    [],
-  )
+  const OverlayOne = useMemo(() => <ModalOverlay />, [])
 
   const contributionForm = () => (
     <VStack w="full" spacing="20px">
@@ -259,9 +251,10 @@ export const GrantsContributeModal = ({
             placeholder="12,120"
             type={'number'}
             _focus={{
-              borderColor: 'brand.primary',
+              borderColor: 'primary.500',
             }}
-            border="2px solid #20ECC7"
+            border="2px solid"
+            borderColor="primary.400"
             value={state.amount}
             name="amount"
             variant={'outline'}
@@ -270,7 +263,7 @@ export const GrantsContributeModal = ({
           />
         </InputGroup>
         {formError?.amount && (
-          <Text color="brand.error" fontSize="12px">
+          <Text color="secondary.red" fontSize="12px">
             {formError?.amount}
           </Text>
         )}
@@ -285,7 +278,7 @@ export const GrantsContributeModal = ({
           Leave us a comment (optional)
         </Body2>
         <Input
-          _focus={{ borderColor: 'brand.primary' }}
+          _focus={{ borderColor: 'primary.400' }}
           placeholder="Love what you guys are doing."
           name="comment"
           value={state.comment}
@@ -293,7 +286,7 @@ export const GrantsContributeModal = ({
         />
       </VStack>
 
-      <Button bg="brand.primary" onClick={handleFormConfirmClick} w="full">
+      <Button bg="primary.400" onClick={handleFormConfirmClick} w="full">
         Confirm
       </Button>
     </VStack>
@@ -310,7 +303,7 @@ export const GrantsContributeModal = ({
             display="flex"
             justifyContent={'center'}
             alignItems="center"
-            bg="brand.primary"
+            bg="primary.400"
           >
             <FaCheck />
           </Box>
@@ -338,14 +331,14 @@ export const GrantsContributeModal = ({
             <ChakraLink
               href={`https://mempool.space/address/${fundingTx.address}`}
             >
-              <span
-                style={{
-                  fontWeight: 'bold',
-                  borderBottom: '1px solid black',
-                }}
+              <Box
+                as="span"
+                fontWeight="bold"
+                borderBottom="1px solid"
+                borderBottomColor="neutral.1000"
               >
                 block explorer
-              </span>
+              </Box>
             </ChakraLink>
           </Text>
         )}
@@ -384,7 +377,7 @@ export const GrantsContributeModal = ({
         <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
           {OverlayOne}
           <ModalContent bg="transparent" boxShadow={0}>
-            <Box borderRadius="4px" bg="brand.bgWhite" pb={3}>
+            <Box borderRadius="4px" bg="neutral.0" pb={3}>
               <ModalHeader pb={2}>{modalHeader}</ModalHeader>
               <ModalCloseButton />
               <ModalBody>{renderModalBody()}</ModalBody>
@@ -413,9 +406,8 @@ export const AmountButtonComponent = ({
       cursor="pointer"
       px="15px"
       py="6px"
-      border={
-        stateAmount === amount ? '2px solid #20ECC7' : '2px solid #E9ECEF'
-      }
+      border="2px solid"
+      borderColor={stateAmount === amount ? 'primary.400' : 'neutral.200'}
       rounded="md"
       fontWeight={'bold'}
       onClick={() => setValue('amount', amount)}

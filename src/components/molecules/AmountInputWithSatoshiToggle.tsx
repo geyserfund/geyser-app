@@ -13,21 +13,21 @@ import { BiDollar } from 'react-icons/bi'
 import { BsArrowRepeat } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
-import { colors } from '../../styles'
+import { AppTheme } from '../../context'
 import { Satoshis, USDollars } from '../../types/types'
 import { SatoshiIconTilted } from '../icons'
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {
     borderWidth: '2px',
     '&:focus': {
-      borderColor: colors.normalLightGreen,
-      boxShadow: `0 0 0 1px ${colors.normalLightGreen}`,
+      borderColor: colors.neutral[500],
+      boxShadow: `0 0 0 1px ${colors.neutral[500]}`,
     },
   },
   inputError: {
-    borderColor: colors.error,
-    boxShadow: `0 0 0 1px ${colors.error}`,
+    borderColor: colors.secondary.red,
+    boxShadow: `0 0 0 1px ${colors.secondary.red}`,
   },
   switchButtton: {
     width: '100%',
@@ -36,7 +36,7 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     padding: 0,
     background: 'none',
-    color: colors.textGrey,
+    color: colors.neutral[600],
     position: 'relative',
     '&:hover': {
       background: 'none',
@@ -48,7 +48,7 @@ const useStyles = createUseStyles({
   switchIcon: {
     fontSize: '35px',
   },
-})
+}))
 
 type Props = InputProps & {
   name?: string
@@ -115,17 +115,14 @@ export const AmountInputWithSatoshiToggle = ({
             {isUsingSatoshis ? (
               <BiDollar className={classes.insideIcon} />
             ) : (
-              <SatoshiIconTilted
-                wrapperClass={classes.insideIcon}
-                scale={0.7}
-              />
+              <SatoshiIconTilted position="absolute" scale={0.7} />
             )}
           </Button>
         </InputRightElement>
       </InputGroup>
 
       {error && (
-        <Text color="brand.error" fontSize="12px">
+        <Text color="secondary.red" fontSize="12px">
           {error}
         </Text>
       )}

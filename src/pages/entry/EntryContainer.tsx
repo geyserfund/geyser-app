@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss'
 import { MobileViews, useProjectContext } from '../../context'
 import { fadeOut, slideInLeft } from '../../styles/animations'
 import { EntryFragment } from '../../types/generated/graphql'
-import { useDarkMode, useMobileMode } from '../../utils'
+import { useMobileMode } from '../../utils'
 import { EntryDetails } from './EntryDetails'
 
 type Rules = string
@@ -51,7 +51,6 @@ interface IActivityProps {
 
 export const EntryContainer = ({ entry }: IActivityProps) => {
   const isMobile = useMobileMode()
-  const isDark = useDarkMode()
 
   const { mobileView } = useProjectContext()
 
@@ -62,7 +61,7 @@ export const EntryContainer = ({ entry }: IActivityProps) => {
   return (
     <Box
       className={classNames(classes.container)}
-      backgroundColor={isDark ? 'brand.bgHeavyDarkMode' : 'brand.bgGrey4'}
+      backgroundColor={'neutral.50'}
       flex={!isMobile ? 3 : undefined}
       height="100%"
       w="100%"

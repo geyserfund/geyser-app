@@ -1,12 +1,4 @@
-import {
-  Box,
-  HStack,
-  Image,
-  Stack,
-  Text,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 
 import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
@@ -90,7 +82,7 @@ export const ContributionActivityItem = ({
   }
 
   return (
-    <Box w="full" bg={useColorModeValue('white', 'gray.900')} {...rest}>
+    <Box w="full" bg="neutral.0" {...rest}>
       <VStack flexDirection="column" spacing={'6px'} overflow={'hidden'}>
         {/* Funding Stats Header */}
 
@@ -103,7 +95,7 @@ export const ContributionActivityItem = ({
                   seed={funder.id}
                   image={avatarMetadata.image}
                   imageSize={'20px'}
-                  textColor="brand.neutral900"
+                  textColor="neutral.900"
                 />
               </HStack>
             ) : (
@@ -112,14 +104,14 @@ export const ContributionActivityItem = ({
                 avatarUsername={funder.user?.username || ''}
                 userProfileID={funder.user?.id}
                 imageSize={'24px'}
-                textColor="brand.neutral600"
+                textColor="neutral.600"
                 badgeNames={funderBadges.map((badge) => badge.badge)}
                 badgeElements={renderFunderBadges(funderBadges)}
               />
             )}
             {count && count > 1 && (
               <HStack
-                backgroundColor="brand.gray100"
+                backgroundColor="neutral.200"
                 px="3px"
                 borderRadius="sm"
                 spacing="2px"
@@ -168,7 +160,7 @@ export const ContributionActivityItem = ({
 
           {/* Timestamp and Funded-Project Info */}
 
-          <HStack w="full" color="brand.neutral700" spacing={2}>
+          <HStack w="full" color="neutral.700" spacing={2}>
             <Caption whiteSpace="nowrap">
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
               {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
