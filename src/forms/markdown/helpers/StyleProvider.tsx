@@ -52,6 +52,15 @@ export const StyleProvider = ({
               display: 'flex',
               flexDirection: 'column',
               flexGrow: 1,
+              '& div.remirror-editor-wrapper': {
+                px: 1,
+                pt: '2px',
+                m: 0,
+              },
+              '& div.remirror-theme': {
+                pt: 0,
+                m: 0,
+              },
               '& div.remirror-editor-wrapper, & div.remirror-editor, & div.remirror-theme':
                 {
                   display: 'flex',

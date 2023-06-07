@@ -42,6 +42,11 @@ export const theme = {
           fontSize: '14px',
           fontWeight: 500,
         },
+        md: {
+          padding: 2,
+          fontSize: '16px',
+          fontWeight: 500,
+        },
       },
       variants: {
         primary: {
