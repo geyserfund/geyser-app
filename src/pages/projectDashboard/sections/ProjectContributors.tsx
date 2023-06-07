@@ -10,6 +10,7 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   VStack,
 } from '@chakra-ui/react'
@@ -147,11 +148,23 @@ export const ProjectContributors = () => {
         },
       },
       {
-        header: 'Reference code',
+        header: 'Reference codes',
         key: 'reference',
-        value(val: Funder) {
-          const tx = val.fundingTxs.find((tx) => tx.paidAt)
-          return tx?.uuid || '-'
+        render({ fundingTxs }: Funder) {
+          return (
+            <VStack alignItems="start">
+              {fundingTxs
+                .filter((tx) => Boolean(tx.paidAt))
+                .map((tx) => (
+                  <Tooltip
+                    key={tx.uuid}
+                    label={<SatoshiAmount>{tx.amount}</SatoshiAmount>}
+                  >
+                    <Text variant="caption">{tx.uuid}</Text>
+                  </Tooltip>
+                ))}
+            </VStack>
+          )
         },
       },
     ],
