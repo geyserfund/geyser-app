@@ -228,6 +228,9 @@ export const ProjectContributors = () => {
           rewardValue || '-',
           dateString || '-',
           funder.fundingTxs?.find((val) => val.email)?.email || '-',
+          funder.fundingTxs
+            .filter((tx) => Boolean(tx.paidAt))
+            .reduce((acc, tx) => `${acc} ${tx.uuid}`, ''),
         ]
         csvData.push(funderData)
       }
