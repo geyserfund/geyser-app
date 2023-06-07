@@ -170,7 +170,7 @@ export const ProjectSettings = () => {
           <Button
             w="100%"
             variant="danger"
-            isDisabled={project.balance <= 0}
+            isDisabled={project.balance > 0}
             onClick={() => deleteProjectModal.onOpen()}
           >
             Delete
