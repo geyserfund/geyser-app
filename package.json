@@ -23,7 +23,7 @@
     "@apollo/client": "^3.7.4",
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/media-query": "^3.2.11",
-    "@chakra-ui/react": "^2.4.9",
+    "@chakra-ui/react": "^2.7.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@giphy/js-fetch-api": "^4.7.1",

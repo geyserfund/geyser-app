@@ -1,6 +1,7 @@
 import { StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../../styles'
+import { alertTheme } from './alertTheme'
 import { drawerTheme } from './drawerTheme'
 import { menuTheme } from './menuTheme'
 import { modalTheme } from './modalTheme'
@@ -107,8 +108,20 @@ export const theme = {
           },
         }),
         danger: ({ theme }: StyleFunctionProps) => ({
-          backgroundColor: theme.colors.secondary.red,
-          color: theme.colors.neutral[0],
+          boxShadow: 'none',
+          outline: 'none',
+          border: `2px solid`,
+          borderColor: theme.colors.neutral[200],
+          color: theme.colors.secondary.red,
+          backgroundColor: theme.colors.neutral[50],
+          _hover: {
+            borderColor: theme.colors.secondary.red,
+          },
+          _active: {
+            borderColor: theme.colors.secondary.red,
+            backgroundColor: theme.colors.secondary.red,
+            color: theme.colors.neutral[50],
+          },
         }),
       },
     },
@@ -180,6 +193,7 @@ export const theme = {
         colorScheme: 'primary',
       },
     },
+    Alert: alertTheme,
     Menu: menuTheme,
     Modal: modalTheme,
     Drawer: drawerTheme,

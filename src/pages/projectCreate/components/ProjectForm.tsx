@@ -15,10 +15,10 @@ import { FileUpload } from '../../../components/molecules'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
+import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../types'
-import { FormInputContainer } from './FormInputContainer'
 import { ProjectFundraisingDeadline } from './ProjectFundraisingDeadline'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
@@ -105,7 +105,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   return (
     <VStack spacing={6}>
-      <FormInputContainer
+      <FieldContainer
         title="Title"
         subtitle="A few words that make your project stand out"
       >
@@ -116,9 +116,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           error={formState.errors.title?.message}
           onBlur={handleProjectFetch}
         />
-      </FormInputContainer>
+      </FieldContainer>
 
-      <FormInputContainer
+      <FieldContainer
         title="Lightning Address Preview"
         subtitle="This is the lightning address for your project. Funds sent to this lightning address will show in your project activity"
         error={FormErrorIcon.name}
@@ -135,9 +135,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           />
           <InputRightAddon>@geyser.fund</InputRightAddon>
         </InputGroup>
-      </FormInputContainer>
+      </FieldContainer>
 
-      <FormInputContainer
+      <FieldContainer
         title="Objective"
         subtitle="Add 'one liner' a simple descriptions of what your project is about"
       >
@@ -158,9 +158,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
         )}
-      </FormInputContainer>
+      </FieldContainer>
 
-      <FormInputContainer
+      <FieldContainer
         title="Image"
         subtitle="Add the main project image that will be displayed in all thumbnails"
       >
@@ -177,9 +177,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             title={watch('image') ? 'Change image' : undefined}
           />
         </FileUpload>
-      </FormInputContainer>
+      </FieldContainer>
 
-      <FormInputContainer
+      <FieldContainer
         title="Header"
         subtitle="Add a header with a video link or by uploading an image to help bring your project to life"
       >
@@ -198,16 +198,16 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             title={watch('image') ? 'Change header' : undefined}
           />
         </FileUpload>
-      </FormInputContainer>
+      </FieldContainer>
 
-      <FormInputContainer
+      <FieldContainer
         title="Fundraising deadline"
         subtitle="Add a deadline to your project if you have one, or just keep it as ongoing."
       >
         <ProjectFundraisingDeadline setValue={setValue} watch={watch} />
-      </FormInputContainer>
+      </FieldContainer>
 
-      <FormInputContainer
+      <FieldContainer
         title="Email"
         subtitle="Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure."
       >
@@ -218,7 +218,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           error={formState.errors.email?.message}
           isDisabled={Boolean(user.email)}
         />
-      </FormInputContainer>
+      </FieldContainer>
     </VStack>
   )
 }
