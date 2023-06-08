@@ -1,4 +1,4 @@
-import { ApolloError } from '@apollo/client'
+import { ApolloError, useQuery } from '@apollo/client'
 import {
   useCallback,
   useContext,
@@ -9,9 +9,9 @@ import {
 } from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
-import { ApolloErrors, fundingStages, stageList } from '../constants'
-import { IFundingStages } from '../constants'
-import { AuthContext } from '../context'
+import { ApolloErrors, fundingStages, stageList } from '../../constants'
+import { IFundingStages } from '../../constants'
+import { AuthContext } from '../../context'
 import {
   FundingInput,
   FundingMutationResponse,
@@ -20,9 +20,11 @@ import {
   InvoiceStatus,
   useFundingTxWithInvoiceStatusLazyQuery,
   useFundMutation,
+  useGetFundingTxLazyQuery,
   useRefreshFundingInvoiceMutation,
-} from '../types'
-import { sha256, toInt, useNotification } from '../utils'
+} from '../../types'
+import { sha256, toInt, useNotification } from '../../utils'
+import { useFundSubscription } from './useFundSubscription'
 
 export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
 
@@ -125,6 +127,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundingTx, setFundingTx] = useState<FundingTxFragment>({
     ...initialFunding,
     funder: { ...initialFunding.funder, user },
+  })
+
+  const { startListening } = useFundSubscription({
+    projectId: fundingTx.projectId,
   })
 
   const [amounts, setAmounts] =
@@ -233,14 +239,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             .then((success) => {
               if (!success) {
                 fundIntervalRef.current = intervalFactory()
+                startListening(data.fund.fundingTx?.id)
                 setWebLNErrored(true)
               }
             })
             .catch(() => {
               fundIntervalRef.current = intervalFactory()
+              startListening(data.fund.fundingTx?.id)
               setFundingRequestErrored(true)
             })
         } else {
+          startListening(data.fund.fundingTx?.id)
           fundIntervalRef.current = intervalFactory()
         }
       } catch (e) {
@@ -329,10 +338,23 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
       gotoNextStage()
       setFundingInput(input)
-      await fundProject({ variables: { input } })
+
+      // await fundProject({ variables: { input } })
+      await getFundingTx()
     },
     [fundProject, gotoNextStage, toast],
   )
+
+  const [getFundingTx] = useGetFundingTxLazyQuery({
+    variables: {
+      id: 185727,
+    },
+    onCompleted(data) {
+      console.log('we are getting data', data)
+      setFundingTx(data.fundingTx)
+      startListening(data.fundingTx?.id)
+    },
+  })
 
   const [refreshInvoice] = useRefreshFundingInvoiceMutation({
     variables: {
