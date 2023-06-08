@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { ProjectNav } from '../../components/nav'
+import { ProjectMobileBottomNavigation } from '../../components/nav'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config/Head'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
@@ -129,7 +129,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
           resourceType={FundingResourceType.Entry}
           resourceId={entry.id}
         />
-        {isMobile && <ProjectNav />}
+        {isMobile && <ProjectMobileBottomNavigation />}
       </Box>
     </Box>
   )

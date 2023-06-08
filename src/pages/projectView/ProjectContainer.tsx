@@ -2,7 +2,6 @@ import { Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { ProjectNav } from '../../components/nav/bottomNav/ProjectNav'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config/Head'
 import { useProjectContext } from '../../context'
@@ -13,6 +12,7 @@ import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCrea
 import { ProjectCreateLaunchedModal } from '../projectCreate/components/ProjectCreateLaunchedModal'
 import { ProjectActivityPanel } from './projectActivityPanel'
 import { ProjectMainBody } from './projectMainBody'
+import { ProjectMobileBottomNavigation } from './projectNavigation/components/ProjectMobileBottomNavigation'
 
 export const ProjectContainer = () => {
   const navigate = useNavigate()
@@ -75,7 +75,7 @@ export const ProjectContainer = () => {
       <ProjectCreateLaunchedModal {...launchModal} />
       <ProjectCreateDraftModal {...draftModal} />
 
-      {isMobile && <ProjectNav fixed />}
+      {isMobile && <ProjectMobileBottomNavigation fixed />}
     </>
   )
 }

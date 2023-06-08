@@ -12,15 +12,19 @@ import { useEffect, useState } from 'react'
 import { BiNews } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../constants'
-import { useAuthContext } from '../../../context'
-import { MobileViews, useProjectContext } from '../../../context'
-import { useScrollDirection } from '../../../hooks'
-import { fonts } from '../../../styles'
-import { isActive } from '../../../utils'
-import { MilestoneIcon, RewardGiftIcon } from '../../icons'
+import { MilestoneIcon, RewardGiftIcon } from '../../../../components/icons'
+import { getPath } from '../../../../constants'
+import { useAuthContext } from '../../../../context'
+import { MobileViews, useProjectContext } from '../../../../context'
+import { useScrollDirection } from '../../../../hooks'
+import { fonts } from '../../../../styles'
+import { isActive } from '../../../../utils'
 
-export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
+export const ProjectMobileBottomNavigation = ({
+  fixed,
+}: {
+  fixed?: boolean
+}) => {
   const { mobileView } = useProjectContext()
 
   const { isScrollingUp } = useScrollDirection({
@@ -151,6 +155,7 @@ export const ProjectNavUI = () => {
         aria-label="rewards"
         _hover={{}}
         _active={{}}
+        isDisabled={!project.rewards.length}
         paddingX="5px"
       >
         <>
