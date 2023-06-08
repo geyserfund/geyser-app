@@ -68,7 +68,11 @@ export const ProjectFundingSelectionFormScreen = ({
   }
 
   const validateFundingAmount = () => {
-    if (getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD) {
+    const isException = name === 'bitcoinizepos'
+    if (
+      !isException &&
+      getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD
+    ) {
       toast({
         title: `Payment above ${MAX_FUNDING_AMOUNT_USD} is not allowed at the moment.`,
         description:
