@@ -8,7 +8,6 @@ import {
 import { useEffect, useState } from 'react'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
-import { StickToTop } from '../../../../components/layouts'
 import { ActivityBrief } from '../../../../components/molecules'
 import { MobileViews, useProjectContext } from '../../../../context'
 import {
@@ -176,32 +175,6 @@ export const ProjectFundingInitialInfoScreen = ({
   }
 
   const renderTabsList = () => {
-    if (isMobile) {
-      switch (mobileView) {
-        case MobileViews.contribution:
-          return (
-            <StickToTop
-              id="contribute-tab-activity-table"
-              w="100%"
-              _onStick={{ w: 'calc(100% - 20px)' }}
-            >
-              {contributionButton()}
-            </StickToTop>
-          )
-        case MobileViews.leaderboard:
-          return (
-            <StickToTop
-              id="contribute-tab-activity-table"
-              w="100%"
-              _onStick={{ w: 'calc(100% - 20px)' }}
-            >
-              {leaderBoardButton()}
-            </StickToTop>
-          )
-        default:
-      }
-    }
-
     return (
       <HStack width="100%" spacing="0px">
         <Box w="50%">{contributionButton()}</Box>;

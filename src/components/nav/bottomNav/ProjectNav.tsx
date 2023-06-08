@@ -1,13 +1,15 @@
 import {
+  Badge,
   Box,
   Button,
   HStack,
+  IconButton,
   Slide,
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { BiHeart, BiNews, BiTrophy } from 'react-icons/bi'
+import { BiNews } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
@@ -16,6 +18,7 @@ import { MobileViews, useProjectContext } from '../../../context'
 import { useScrollDirection } from '../../../hooks'
 import { fonts } from '../../../styles'
 import { isActive } from '../../../utils'
+import { MilestoneIcon, RewardGiftIcon } from '../../icons'
 
 export const ProjectNav = ({ fixed }: { fixed?: boolean }) => {
   const { mobileView } = useProjectContext()
@@ -124,28 +127,41 @@ export const ProjectNavUI = () => {
       >
         <BiNews fontSize="30px" />
       </Button>
-      <Button
+      <IconButton
         variant="ghost"
+        aria-label="milestones"
+        _hover={{}}
+        _active={{}}
         onClick={() => handleClick(MobileViews.contribution)}
         color={getTextColor(MobileViews.contribution)}
-        leftIcon={<BiHeart fontSize="30px" />}
-        _hover={{}}
-        paddingX="5px"
       >
-        {fundingTxsCount && (
-          <Text fontFamily={fonts.mono}>{fundingTxsCount}</Text>
-        )}
-      </Button>
-      <Button
+        <>
+          <MilestoneIcon fontSize="1.5em" />
+          {fundingTxsCount && (
+            <Badge>
+              <Text fontFamily={fonts.mono}>{fundingTxsCount}</Text>
+            </Badge>
+          )}
+        </>
+      </IconButton>
+      <IconButton
         variant="ghost"
-        onClick={() => handleClick(MobileViews.leaderboard)}
-        color={getTextColor(MobileViews.leaderboard)}
-        leftIcon={<BiTrophy fontSize="30px" />}
+        onClick={() => handleClick(MobileViews.rewards)}
+        color={getTextColor(MobileViews.rewards)}
+        aria-label="rewards"
         _hover={{}}
+        _active={{}}
         paddingX="5px"
       >
-        {fundersCount && <Text fontFamily={fonts.mono}>{fundersCount}</Text>}
-      </Button>
+        <>
+          <RewardGiftIcon fontSize="1.5em" />
+          {fundersCount && (
+            <Badge>
+              <Text fontFamily={fonts.mono}>{fundersCount}</Text>
+            </Badge>
+          )}
+        </>
+      </IconButton>
       <HStack flexGrow={1}>
         {isOwner ? (
           <Button

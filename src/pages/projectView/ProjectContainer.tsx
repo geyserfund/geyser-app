@@ -6,23 +6,15 @@ import { ProjectNav } from '../../components/nav/bottomNav/ProjectNav'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config/Head'
 import { useProjectContext } from '../../context'
-import { UseFundingFlowReturn, useFundingFormState } from '../../hooks'
 import { useModal } from '../../hooks/useModal'
-import {
-  FundingResourceType,
-  ProjectRewardForCreateUpdateFragment,
-} from '../../types/generated/graphql'
+import { FundingResourceType } from '../../types/generated/graphql'
 import { useMobileMode } from '../../utils'
 import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCreateDraftModal'
 import { ProjectCreateLaunchedModal } from '../projectCreate/components/ProjectCreateLaunchedModal'
 import { ProjectActivityPanel } from './projectActivityPanel'
 import { ProjectMainBody } from './projectMainBody'
 
-type Props = {
-  fundingFlow: UseFundingFlowReturn
-}
-
-export const ProjectContainer = ({ fundingFlow }: Props) => {
+export const ProjectContainer = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -54,12 +46,6 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
     }
   }, [draftModal, launchModal, location.search])
 
-  const fundForm = useFundingFormState({
-    rewards: project
-      ? (project.rewards as ProjectRewardForCreateUpdateFragment[])
-      : undefined,
-  })
-
   const isMobile = useMobileMode()
 
   if (loading) {
@@ -79,16 +65,9 @@ export const ProjectContainer = ({ fundingFlow }: Props) => {
         type="article"
       />
 
-      <ProjectMainBody
-        project={project}
-        fundState={fundingFlow.fundState}
-        updateReward={fundForm.updateReward}
-      />
+      <ProjectMainBody />
 
       <ProjectActivityPanel
-        project={project}
-        fundingFlow={fundingFlow}
-        fundForm={fundForm}
         resourceType={FundingResourceType.Project}
         resourceId={project?.id}
       />
