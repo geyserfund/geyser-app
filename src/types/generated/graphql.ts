@@ -254,8 +254,6 @@ export type Entry = {
   image?: Maybe<Scalars['String']>
   /** Project within which the Entry was created. */
   project?: Maybe<Project>
-  /** @deprecated This field was replaced by the status field and will eventually be removed. */
-  published: Scalars['Boolean']
   publishedAt?: Maybe<Scalars['String']>
   status: EntryStatus
   /** Title of the Entry. */
@@ -467,7 +465,8 @@ export type FundingTx = {
   source: Scalars['String']
   sourceResource?: Maybe<SourceResource>
   status: FundingStatus
-  uuid: Scalars['String']
+  /** Private reference code viewable only by the Funder and the ProjectOwner related to this FundingTx */
+  uuid?: Maybe<Scalars['String']>
 }
 
 export type FundingTxConfirmedSubscriptionResponse = {
@@ -2404,7 +2403,6 @@ export type EntryResolvers<
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType>
-  published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   publishedAt?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -2578,7 +2576,7 @@ export type FundingTxResolvers<
     ContextType
   >
   status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>
-  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  uuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4102,7 +4100,7 @@ export type FundingTxWithInvoiceStatusFragment = {
 export type FundingTxFragment = {
   __typename?: 'FundingTx'
   id: any
-  uuid: string
+  uuid?: string | null
   invoiceId: string
   paymentRequest?: string | null
   amount: number
@@ -4626,6 +4624,19 @@ export type ProjectUnfollowMutationVariables = Exact<{
 export type ProjectUnfollowMutation = {
   __typename?: 'Mutation'
   projectUnfollow: boolean
+}
+
+export type ProjectDeleteMutationVariables = Exact<{
+  input: DeleteProjectInput
+}>
+
+export type ProjectDeleteMutation = {
+  __typename?: 'Mutation'
+  projectDelete: {
+    __typename?: 'ProjectDeleteResponse'
+    message?: string | null
+    success: boolean
+  }
 }
 
 export type ProjectTagAddMutationVariables = Exact<{
@@ -5311,7 +5322,8 @@ export type ProjectDashboardFundersQuery = {
     fundingTxs: Array<{
       __typename?: 'FundingTx'
       email?: string | null
-      uuid: string
+      paidAt?: any | null
+      uuid?: string | null
     }>
     rewards: Array<{
       __typename?: 'FunderReward'
@@ -6984,6 +6996,57 @@ export type ProjectUnfollowMutationResult =
 export type ProjectUnfollowMutationOptions = Apollo.BaseMutationOptions<
   ProjectUnfollowMutation,
   ProjectUnfollowMutationVariables
+>
+export const ProjectDeleteDocument = gql`
+  mutation ProjectDelete($input: DeleteProjectInput!) {
+    projectDelete(input: $input) {
+      message
+      success
+    }
+  }
+`
+export type ProjectDeleteMutationFn = Apollo.MutationFunction<
+  ProjectDeleteMutation,
+  ProjectDeleteMutationVariables
+>
+
+/**
+ * __useProjectDeleteMutation__
+ *
+ * To run a mutation, you first call `useProjectDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectDeleteMutation, { data, loading, error }] = useProjectDeleteMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectDeleteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ProjectDeleteMutation,
+    ProjectDeleteMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    ProjectDeleteMutation,
+    ProjectDeleteMutationVariables
+  >(ProjectDeleteDocument, options)
+}
+export type ProjectDeleteMutationHookResult = ReturnType<
+  typeof useProjectDeleteMutation
+>
+export type ProjectDeleteMutationResult =
+  Apollo.MutationResult<ProjectDeleteMutation>
+export type ProjectDeleteMutationOptions = Apollo.BaseMutationOptions<
+  ProjectDeleteMutation,
+  ProjectDeleteMutationVariables
 >
 export const ProjectTagAddDocument = gql`
   mutation ProjectTagAdd($input: ProjectTagMutationInput!) {
@@ -8937,6 +9000,7 @@ export const ProjectDashboardFundersDocument = gql`
       }
       fundingTxs {
         email
+        paidAt
         uuid
       }
       rewards {
