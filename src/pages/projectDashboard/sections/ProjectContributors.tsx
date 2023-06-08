@@ -153,16 +153,14 @@ export const ProjectContributors = () => {
         render({ fundingTxs }: Funder) {
           return (
             <VStack alignItems="start">
-              {fundingTxs
-                .filter((tx) => Boolean(tx.paidAt))
-                .map((tx) => (
-                  <Tooltip
-                    key={tx.uuid}
-                    label={<SatoshiAmount>{tx.amount}</SatoshiAmount>}
-                  >
-                    <Text variant="caption">{tx.uuid}</Text>
-                  </Tooltip>
-                ))}
+              {fundingTxs.map((tx) => (
+                <Tooltip
+                  key={tx.uuid}
+                  label={<SatoshiAmount>{tx.amount}</SatoshiAmount>}
+                >
+                  <Text variant="caption">{tx.uuid}</Text>
+                </Tooltip>
+              ))}
             </VStack>
           )
         },
@@ -227,10 +225,8 @@ export const ProjectContributors = () => {
           funder.amountFunded || '-',
           rewardValue || '-',
           dateString || '-',
-          funder.fundingTxs?.find((val) => val.email)?.email || '-',
-          funder.fundingTxs
-            .filter((tx) => Boolean(tx.paidAt))
-            .reduce((acc, tx) => `${acc} ${tx.uuid}`, ''),
+          funder.fundingTxs.find((val) => val.email)?.email || '-',
+          funder.fundingTxs.reduce((acc, tx) => `${acc} ${tx.uuid}`, ''),
         ]
         csvData.push(funderData)
       }
