@@ -143,11 +143,19 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       >
         <TextArea
           name="shortDescription"
-          noOfLines={2}
           height="fit-content"
           overflowY="auto"
           value={watch('shortDescription')}
-          onChange={handleChange}
+          onChange={({ target, ...event }) => {
+            handleChange({
+              target: {
+                ...target,
+                name: target.name,
+                value: target.value.replace(/\s/gm, ''),
+              },
+              ...event,
+            })
+          }}
           error={formState.errors.shortDescription?.message}
         />
         {!formState.errors.shortDescription && (
