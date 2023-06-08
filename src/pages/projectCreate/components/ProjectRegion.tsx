@@ -8,6 +8,7 @@ import { SingleValue } from 'react-select'
 import { Body1 } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
+import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries/tags'
 import {
   Country,
@@ -18,7 +19,6 @@ import {
   ProjectFragment,
   ProjectRegionsGetResult,
 } from '../../../types'
-import { FormInputContainer } from './FormInputContainer'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
@@ -122,7 +122,7 @@ export const ProjectRegion = ({
     : location?.region || ''
 
   return (
-    <FormInputContainer
+    <FieldContainer
       title="Region"
       subtitle={
         <span>
@@ -167,6 +167,6 @@ export const ProjectRegion = ({
           )}
         </HStack>
       </VStack>
-    </FormInputContainer>
+    </FieldContainer>
   )
 }
