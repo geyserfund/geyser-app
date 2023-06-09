@@ -138,7 +138,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       return currentState
     })
   }, [])
-  console.log('checking go to next stage call', fundState)
 
   const startWebLNFlow = useCallback(
     async (fundingTx: FundingTxFragment) => {
@@ -263,8 +262,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
       */
       setFundingTx((current) => {
-        console.log('checking current', current)
-        console.log('checking funding activity', fundingActivity)
         if (
           (fundingActivity.invoiceStatus !== current.invoiceStatus ||
             fundingActivity.status !== current.status) &&
