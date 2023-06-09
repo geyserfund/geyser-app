@@ -316,22 +316,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       gotoNextStage()
       setFundingInput(input)
 
-      // await fundProject({ variables: { input } })
-      await getFundingTx()
+      await fundProject({ variables: { input } })
     },
     [fundProject, gotoNextStage, toast],
   )
-
-  const [getFundingTx] = useGetFundingTxLazyQuery({
-    variables: {
-      id: 185727,
-    },
-    onCompleted(data) {
-      console.log('we are getting data', data)
-      setFundingTx(data.fundingTx)
-      startListening()
-    },
-  })
 
   const [refreshInvoice] = useRefreshFundingInvoiceMutation({
     variables: {
