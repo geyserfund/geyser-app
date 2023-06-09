@@ -70,7 +70,7 @@ export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
           thumbnailImage: project.thumbnailImage || '',
           shortDescription: project.shortDescription,
           description: project.description,
-          expiresAt: project.expiresAt,
+          expiresAt: project.expiresAt || null,
           email: user.email || '',
         }
       }
