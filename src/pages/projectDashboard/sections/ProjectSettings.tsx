@@ -165,8 +165,14 @@ export const ProjectSettings = () => {
           </VStack>
         )}
 
-        <VStack w="100%" justifyContent="center">
+        <VStack w="100%" alignItems="start">
           <Text variant="body1">Delete Project</Text>
+          <Text variant="caption">
+            Deleting a project will make the project unaccessible to you and
+            others. You can delete a project only if it has received no
+            contributions. This is to ensure transparency for those who have
+            contributed towards the project.
+          </Text>
           <Button
             w="100%"
             variant="danger"
@@ -175,12 +181,6 @@ export const ProjectSettings = () => {
           >
             Delete
           </Button>
-          <Text variant="caption">
-            Deleting a project will make the project unaccessible to you and
-            others. You can delete a project only if it has received no
-            contributions. This is to ensure transparency for those who have
-            contributed towards the project.
-          </Text>
         </VStack>
 
         <VStack w="100%" flexGrow={1} justifyContent="end">
