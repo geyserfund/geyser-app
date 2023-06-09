@@ -515,12 +515,18 @@ export const TopNavBar = () => {
         }
         transition="background 0.5s ease-out"
       >
-        <HStack paddingY="10px" alignItems="center" overflow="hidden">
+        <HStack
+          paddingY="10px"
+          alignItems="center"
+          justifyContent="start"
+          overflow="hidden"
+        >
           <NavBarLogo
             small={isMobile && shouldShowCustomTitle}
             marginRight={isMobile ? 0 : 5}
             color={showHaveTransparentBackground ? 'primary.900' : undefined}
             flexGrow={0}
+            textAlign="left"
           />
 
           {shouldShowCustomTitle ? (
@@ -535,7 +541,9 @@ export const TopNavBar = () => {
             >
               {navData.projectTitle}
             </Text>
-          ) : null}
+          ) : (
+            <Box flexGrow={1} />
+          )}
 
           <HStack alignItems={'center'} spacing={2} flexGrow={0}>
             {shouldShowNavItems ? (
