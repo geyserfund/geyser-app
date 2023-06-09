@@ -10,6 +10,7 @@ import { getPath } from '../../../../constants'
 import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
+import { lightModeColors } from '../../../../styles'
 import { Satoshis } from '../../../../types'
 import {
   FundingTxFragment,
@@ -85,12 +86,13 @@ export const SuccessScreen = ({
       <CloseButton
         borderRadius="50%"
         position="absolute"
+        color={lightModeColors.neutral[900]}
         right="10px"
-        top="-20px"
+        top="-10px"
         onClick={handleCloseButton}
       />
 
-      <VStack w="full" spacing="20px">
+      <VStack w="full" spacing="20px" pt={2}>
         <SuccessImageComponent
           currentBadge={currentBadge}
           fundingTx={fundingTx}
