@@ -33,7 +33,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
     width: '100%',
     fontSize: '14px',
   },
-  detailsContainer: ({ isMobile }: IStyles) => ({
+  detailsContainer: () => ({
     height: '100%',
     overflowY: 'scroll',
     WebkitOverflowScrolling: 'touch',
@@ -46,7 +46,6 @@ const useStyles = createUseStyles<Rules, IStyles>({
 
 interface IActivityProps {
   entry: EntryFragment
-  detailOpen: boolean
 }
 
 export const EntryContainer = ({ entry }: IActivityProps) => {
