@@ -37,7 +37,7 @@ export const ProjectNavigation = ({
               // isActive={inView === 'header'}
               onClick={onProjectClick}
               aria-label="header"
-              leftIcon={<ProjectIcon />}
+              leftIcon={<ProjectIcon fontSize="1.5em" width="1.3em" />}
             >
               Project
             </ProjectNavigationButton>
@@ -46,7 +46,7 @@ export const ProjectNavigation = ({
                 // isActive={inView === 'entries'}
                 onClick={onEntriesClick}
                 aria-label="entries"
-                leftIcon={<EntryEditIcon />}
+                leftIcon={<EntryEditIcon fontSize="1.5em" width="1.3em" />}
               >
                 Entries
               </ProjectNavigationButton>
@@ -56,7 +56,7 @@ export const ProjectNavigation = ({
                 // isActive={inView === 'rewards'}
                 onClick={onRewardsClick}
                 aria-label="rewards"
-                leftIcon={<RewardGiftIcon />}
+                leftIcon={<RewardGiftIcon fontSize="1.5em" width="1.3em" />}
               >
                 Rewards
               </ProjectNavigationButton>
@@ -66,7 +66,7 @@ export const ProjectNavigation = ({
                 // isActive={inView === 'milestones'}
                 onClick={onMilestonesClick}
                 aria-label="milestones"
-                leftIcon={<MilestoneIcon fontSize="25px" />}
+                leftIcon={<MilestoneIcon fontSize="1.5em" width="1.3em" />}
               >
                 Milestones
               </ProjectNavigationButton>
@@ -109,7 +109,7 @@ export const ProjectNavigationButton = ({
       leftIcon={leftIcon}
       {...props}
     >
-      <Text variant="h3" pl={1}>
+      <Text variant="h3" width="100%" textAlign="left" pl={1}>
         {children}
       </Text>
     </Button>
