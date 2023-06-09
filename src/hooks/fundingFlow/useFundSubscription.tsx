@@ -1,8 +1,10 @@
-import { useSubscription } from '@apollo/client'
 import { useCallback, useState } from 'react'
 
-import { PROJECT_FUNDING_SUBSCRIPTION } from '../../graphql/subscriptions/fundingActivity'
-import { ActivityResourceType, FundingTxFragment } from '../../types'
+import {
+  ActivityResourceType,
+  FundingTxFragment,
+  useFundingActivityCreatedSubscription,
+} from '../../types'
 
 type UseFundSubscriptionProps = {
   projectId: number
@@ -24,11 +26,14 @@ export const useFundSubscription = ({
   }, [])
 
   const skipSubscription = skip || !projectId
-  useSubscription(PROJECT_FUNDING_SUBSCRIPTION, {
+
+  useFundingActivityCreatedSubscription({
     variables: {
-      where: {
-        projectIds: [projectId],
-        resourceType: ActivityResourceType.FundingTx,
+      input: {
+        where: {
+          projectIds: [projectId],
+          resourceType: ActivityResourceType.FundingTx,
+        },
       },
     },
     skip: skipSubscription,
@@ -38,5 +43,6 @@ export const useFundSubscription = ({
       setFundingActivity(activityCreated)
     },
   })
+
   return { startListening, stopListening, fundingActivity }
 }
