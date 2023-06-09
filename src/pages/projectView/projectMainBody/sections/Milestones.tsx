@@ -8,10 +8,7 @@ import { IconButtonComponent } from '../../../../components/ui'
 import { useProjectContext } from '../../../../context'
 import { MilestoneComponent } from '../components/MilestoneComponent'
 
-export const Milestones = forwardRef<
-  HTMLDivElement,
-  { milestonesLength: number }
->(({ milestonesLength }, ref) => {
+export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
   const { project, isProjectOwner, onMilestonesModalOpen } = useProjectContext()
 
   if (!project) {
@@ -38,7 +35,7 @@ export const Milestones = forwardRef<
     return <Text>There are no milestones available.</Text>
   }
 
-  if (!milestonesLength) {
+  if (!project.milestones.length) {
     return null
   }
 
@@ -53,7 +50,7 @@ export const Milestones = forwardRef<
       >
         <ProjectSectionBar
           name={'Milestones'}
-          number={milestonesLength}
+          number={project.milestones.length}
           rightSection={
             isProjectOwner && (
               <IconButtonComponent
