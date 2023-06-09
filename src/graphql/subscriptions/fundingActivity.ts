@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client'
 
-import { FundingTxWithInvoiceStatusFragmentDoc } from '../../types'
+import { FRAGMENT_FUNDING_TX } from '../fragments/funding'
 
 export const PROJECT_FUNDING_SUBSCRIPTION = gql`
-  ${FundingTxWithInvoiceStatusFragmentDoc}
+  ${FRAGMENT_FUNDING_TX}
   subscription ActivityCreated($input: ActivityCreatedSubscriptionInput) {
     activityCreated(input: $input) {
       ... on FundingTx {
-        ...FundingTxWithInvoiceStatus
+        ...FundingTx
       }
     }
   }
