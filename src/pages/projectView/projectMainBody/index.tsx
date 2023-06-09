@@ -3,15 +3,12 @@ import classNames from 'classnames'
 import { useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { IFundingStages } from '../../../constants'
 import {
   MobileViews,
   useAuthContext,
   useNavContext,
   useProjectContext,
 } from '../../../context'
-import { UpdateReward } from '../../../hooks'
-import { ProjectFragment } from '../../../types/generated/graphql'
 import { useMobileMode } from '../../../utils'
 import { ProjectMobileNavigation } from '../projectNavigation/components/ProjectMobileNavigation'
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
@@ -56,18 +53,10 @@ const useStyles = createUseStyles<Rules, Styles>({
   },
 })
 
-type Props = {
-  project?: ProjectFragment | null
-  fundState: IFundingStages
-  updateReward: UpdateReward
-}
-
-export const ProjectMainBody = ({
-  project,
-  fundState,
-  updateReward,
-}: Props) => {
+export const ProjectMainBody = () => {
   const isMobile = useMobileMode()
+
+  const { project } = useProjectContext()
 
   const { mobileView } = useProjectContext()
 
@@ -82,8 +71,6 @@ export const ProjectMainBody = ({
     rewards: rewardsRef,
     milestones: milestonesRef,
   })
-
-  const { entriesLength, rewardsLength, milestonesLength } = projectAnchors
 
   const inView = mobileView === MobileViews.description
 
@@ -132,19 +119,11 @@ export const ProjectMainBody = ({
 
               <SectionNav {...projectAnchors} />
 
-              <Entries ref={entriesRef} entriesLength={entriesLength} />
+              <Entries ref={entriesRef} />
 
-              <Rewards
-                ref={rewardsRef}
-                rewardsLength={rewardsLength}
-                fundState={fundState}
-                updateReward={updateReward}
-              />
+              <Rewards ref={rewardsRef} />
 
-              <Milestones
-                ref={milestonesRef}
-                milestonesLength={milestonesLength}
-              />
+              <Milestones ref={milestonesRef} />
             </VStack>
           </VStack>
         </Box>

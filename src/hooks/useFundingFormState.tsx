@@ -39,6 +39,8 @@ export interface IFundFormState {
   resetForm: () => void
 }
 
+export type UseFundingFormStateReturn = ReturnType<typeof useFundingFormState>
+
 export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
