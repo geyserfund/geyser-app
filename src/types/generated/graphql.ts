@@ -5322,7 +5322,7 @@ export type ProjectDashboardFundersQuery = {
     fundingTxs: Array<{
       __typename?: 'FundingTx'
       email?: string | null
-      paidAt?: any | null
+      amount: number
       uuid?: string | null
     }>
     rewards: Array<{
@@ -9000,7 +9000,7 @@ export const ProjectDashboardFundersDocument = gql`
       }
       fundingTxs {
         email
-        paidAt
+        amount
         uuid
       }
       rewards {
