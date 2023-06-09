@@ -1,12 +1,10 @@
 import { useSubscription } from '@apollo/client'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
-import { ACTIVITY_CREATION_SUBSCRIPTION } from '../../graphql/subscriptions'
+import { PROJECT_FUNDING_SUBSCRIPTION } from '../../graphql/subscriptions/fundingActivity'
 import {
-  ActivityCreatedSubscription,
-  ActivityCreatedSubscriptionInput,
   ActivityResourceType,
-  FundingTxForLandingPageFragment,
+  FundingTxWithInvoiceStatusFragment,
 } from '../../types'
 
 type UseFundSubscriptionProps = {
@@ -17,26 +15,20 @@ export const useFundSubscription = ({
   projectId,
 }: UseFundSubscriptionProps) => {
   const [skip, setSkip] = useState(true)
-  const [fundingTxId, setFundingTxId] = useState<number | null>(null)
-  const [funded, setFunded] = useState(false)
+  const [fundingActivity, setFundingActivity] =
+    useState<FundingTxWithInvoiceStatusFragment>()
 
-  const startListening = (id: number) => {
-    setFundingTxId(id)
+  const startListening = useCallback(() => {
     setSkip(false)
-  }
+  }, [])
 
-  const stopListening = () => {
-    setFundingTxId(null)
-    setFunded(false)
+  const stopListening = useCallback(() => {
+    setFundingActivity(undefined)
     setSkip(true)
-  }
+  }, [])
 
-  const skipSubscription = skip || !projectId || !fundingTxId
-
-  const { loading } = useSubscription<
-    ActivityCreatedSubscription,
-    ActivityCreatedSubscriptionInput
-  >(ACTIVITY_CREATION_SUBSCRIPTION, {
+  const skipSubscription = skip || !projectId
+  useSubscription(PROJECT_FUNDING_SUBSCRIPTION, {
     variables: {
       where: {
         projectIds: [projectId],
@@ -45,14 +37,10 @@ export const useFundSubscription = ({
     },
     skip: skipSubscription,
     onData(options) {
-      console.log('checking value', options)
       const activityCreated = options.data.data
-        ?.activityCreated as FundingTxForLandingPageFragment
-      if (activityCreated.id === fundingTxId) {
-        setFunded(false)
-      }
+        ?.activityCreated as FundingTxWithInvoiceStatusFragment
+      setFundingActivity(activityCreated)
     },
   })
-  console.log('checking loading', loading)
-  return { startListening, stopListening, funded }
+  return { startListening, stopListening, fundingActivity }
 }
