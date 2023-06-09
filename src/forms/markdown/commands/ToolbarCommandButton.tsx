@@ -12,7 +12,7 @@ export const ToolbarCommandButton = forwardRef<
     <Tooltip openDelay={300} isDisabled={!label} label={label}>
       <IconButton
         ref={ref}
-        size={{ base: 'xs', md: 'sm' }}
+        size={{ base: 'xs', md: 'md' }}
         variant="secondary"
         aria-label={`editor ${name} command`}
         {...props}
