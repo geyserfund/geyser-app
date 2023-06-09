@@ -5542,6 +5542,19 @@ export type ActivityCreatedSubscription = {
     | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
+export type FundingActivityCreatedSubscriptionVariables = Exact<{
+  input?: InputMaybe<ActivityCreatedSubscriptionInput>
+}>
+
+export type FundingActivityCreatedSubscription = {
+  __typename?: 'Subscription'
+  activityCreated:
+    | { __typename?: 'Entry' }
+    | ({ __typename?: 'FundingTx' } & FundingTxFragment)
+    | { __typename?: 'Project' }
+    | { __typename?: 'ProjectReward' }
+}
+
 export const UserForAvatarFragmentDoc = gql`
   fragment UserForAvatar on User {
     id
@@ -9866,3 +9879,49 @@ export type ActivityCreatedSubscriptionHookResult = ReturnType<
 >
 export type ActivityCreatedSubscriptionResult =
   Apollo.SubscriptionResult<ActivityCreatedSubscription>
+export const FundingActivityCreatedDocument = gql`
+  subscription fundingActivityCreated(
+    $input: ActivityCreatedSubscriptionInput
+  ) {
+    activityCreated(input: $input) {
+      ... on FundingTx {
+        ...FundingTx
+      }
+    }
+  }
+  ${FundingTxFragmentDoc}
+`
+
+/**
+ * __useFundingActivityCreatedSubscription__
+ *
+ * To run a query within a React component, call `useFundingActivityCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFundingActivityCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingActivityCreatedSubscription({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingActivityCreatedSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    FundingActivityCreatedSubscription,
+    FundingActivityCreatedSubscriptionVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSubscription<
+    FundingActivityCreatedSubscription,
+    FundingActivityCreatedSubscriptionVariables
+  >(FundingActivityCreatedDocument, options)
+}
+export type FundingActivityCreatedSubscriptionHookResult = ReturnType<
+  typeof useFundingActivityCreatedSubscription
+>
+export type FundingActivityCreatedSubscriptionResult =
+  Apollo.SubscriptionResult<FundingActivityCreatedSubscription>

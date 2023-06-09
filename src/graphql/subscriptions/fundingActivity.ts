@@ -4,7 +4,9 @@ import { FRAGMENT_FUNDING_TX } from '../fragments/funding'
 
 export const PROJECT_FUNDING_SUBSCRIPTION = gql`
   ${FRAGMENT_FUNDING_TX}
-  subscription ActivityCreated($input: ActivityCreatedSubscriptionInput) {
+  subscription fundingActivityCreated(
+    $input: ActivityCreatedSubscriptionInput
+  ) {
     activityCreated(input: $input) {
       ... on FundingTx {
         ...FundingTx
