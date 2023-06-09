@@ -150,6 +150,11 @@ export const theme = {
           fontSize: '24px',
           lineHeight: 1.4,
         }),
+        h1: () => ({
+          fontSize: '35px',
+          lineHeight: 1.4,
+          fontWeight: 700,
+        }),
         body1: () => ({
           fontWeight: 500,
           lineHeight: 1.6,

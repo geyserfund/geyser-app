@@ -14,10 +14,16 @@ import { ProjectMobileNavigation } from '../projectNavigation/components/Project
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
 import { LaunchProjectNotice } from './components'
-import { Creator, Entries, Summary } from './sections'
-import { Milestones } from './sections/Milestones'
-import { Rewards } from './sections/Rewards'
-import { SectionNav } from './sections/SectionNav'
+import {
+  CreatorMenu,
+  Entries,
+  Header,
+  Milestones,
+  Rewards,
+  SectionNav,
+  Story,
+} from './sections'
+import { CreatorSocial } from './sections/CreatorSocial'
 
 type Rules = string
 
@@ -109,13 +115,17 @@ export const ProjectMainBody = () => {
               w="100%"
               padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
             >
-              <Summary ref={headerRef} />
+              <Header ref={headerRef} />
+
+              <CreatorSocial />
+
+              <Story />
 
               {project && isViewerTheProjectOwner && (
                 <LaunchProjectNotice project={project} />
               )}
 
-              {isViewerTheProjectOwner && <Creator />}
+              {isViewerTheProjectOwner && <CreatorMenu />}
 
               <SectionNav {...projectAnchors} />
 
