@@ -93,7 +93,7 @@ export const ProjectNavigationButton = ({
 
   if (hideLabel) {
     return (
-      <Tooltip label={children}>
+      <Tooltip label={children} placement="right">
         <IconButton variant="transparent" {...props}>
           {leftIcon}
         </IconButton>
