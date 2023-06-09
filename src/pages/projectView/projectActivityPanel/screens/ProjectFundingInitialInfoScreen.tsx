@@ -15,6 +15,7 @@ import {
   QUERY_PROJECT_FUNDERS,
 } from '../../../../graphql'
 import { useQueryWithPagination } from '../../../../hooks'
+import { useFundSubscription } from '../../../../hooks/fundingFlow/useFundSubscription'
 import {
   Funder,
   FundingTxFragment,
@@ -49,6 +50,10 @@ export const ProjectFundingInitialInfoScreen = ({
   const { mobileView, setMobileView } = useProjectContext()
 
   const [tab, setTab] = useState('activity')
+
+  const { startListening, stopListening, fundingActivity } =
+    useFundSubscription({ projectId: project.id })
+
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]
   >([])
@@ -91,8 +96,25 @@ export const ProjectFundingInitialInfoScreen = ({
   })
 
   useEffect(() => {
+    startListening()
+
+    return () => {
+      stopListening()
+    }
+  }, [startListening, stopListening])
+
+  useEffect(() => {
     setAggregatedFundingTxs(fundingTxs.data)
   }, [fundingTxs.data])
+
+  useEffect(() => {
+    if (
+      fundingActivity &&
+      !aggregatedFundingTxs.some((txs) => txs.id === fundingActivity.id)
+    ) {
+      setAggregatedFundingTxs((current) => [fundingActivity, ...current])
+    }
+  }, [fundingActivity, aggregatedFundingTxs])
 
   useEffect(() => {
     if (mobileView === MobileViews.contribution) {

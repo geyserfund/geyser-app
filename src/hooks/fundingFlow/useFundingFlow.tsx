@@ -12,7 +12,6 @@ import {
   FundingTxFragment,
   InvoiceStatus,
   useFundMutation,
-  useGetFundingTxLazyQuery,
   useRefreshFundingInvoiceMutation,
 } from '../../types'
 import { sha256, useNotification } from '../../utils'

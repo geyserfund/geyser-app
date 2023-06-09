@@ -1,10 +1,9 @@
-import { useSubscription } from '@apollo/client'
 import { useCallback, useState } from 'react'
 
-import { PROJECT_FUNDING_SUBSCRIPTION } from '../../graphql/subscriptions/fundingActivity'
 import {
   ActivityResourceType,
-  FundingTxWithInvoiceStatusFragment,
+  FundingTxFragment,
+  useFundingActivityCreatedSubscription,
 } from '../../types'
 
 type UseFundSubscriptionProps = {
@@ -15,8 +14,7 @@ export const useFundSubscription = ({
   projectId,
 }: UseFundSubscriptionProps) => {
   const [skip, setSkip] = useState(true)
-  const [fundingActivity, setFundingActivity] =
-    useState<FundingTxWithInvoiceStatusFragment>()
+  const [fundingActivity, setFundingActivity] = useState<FundingTxFragment>()
 
   const startListening = useCallback(() => {
     setSkip(false)
@@ -28,19 +26,23 @@ export const useFundSubscription = ({
   }, [])
 
   const skipSubscription = skip || !projectId
-  useSubscription(PROJECT_FUNDING_SUBSCRIPTION, {
+
+  useFundingActivityCreatedSubscription({
     variables: {
-      where: {
-        projectIds: [projectId],
-        resourceType: ActivityResourceType.FundingTx,
+      input: {
+        where: {
+          projectIds: [projectId],
+          resourceType: ActivityResourceType.FundingTx,
+        },
       },
     },
     skip: skipSubscription,
     onData(options) {
       const activityCreated = options.data.data
-        ?.activityCreated as FundingTxWithInvoiceStatusFragment
+        ?.activityCreated as FundingTxFragment
       setFundingActivity(activityCreated)
     },
   })
+
   return { startListening, stopListening, fundingActivity }
 }
