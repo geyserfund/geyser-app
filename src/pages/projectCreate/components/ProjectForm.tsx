@@ -151,7 +151,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
               target: {
                 ...target,
                 name: target.name,
-                value: target.value.replace(/\s/gm, ''),
+                value: target.value.replace(/\n/gm, ''),
               },
               ...event,
             })
