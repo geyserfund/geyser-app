@@ -3,6 +3,8 @@ import {
   ButtonProps,
   IconButton,
   IconButtonProps,
+  Text,
+  Tooltip,
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
@@ -12,7 +14,6 @@ import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
 import { MilestoneIcon } from '../../../../components/icons/svg'
 import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { CardLayout } from '../../../../components/layouts'
-import { H3 } from '../../../../components/typography'
 import { UseProjectAnchors } from '../hooks/useProjectAnchors'
 import { ProjectBackButton } from './ProjectBackButton'
 
@@ -90,22 +91,27 @@ export const ProjectNavigationButton = ({
     { ssr: false },
   )
 
-  const Component = hideLabel ? IconButton : Button
+  if (hideLabel) {
+    return (
+      <Tooltip label={children}>
+        <IconButton variant="transparent" {...props}>
+          {leftIcon}
+        </IconButton>
+      </Tooltip>
+    )
+  }
 
-  const ComponentProps = hideLabel
-    ? {
-        variant: 'transparent',
-        children: leftIcon,
-        ...props,
-      }
-    : {
-        leftIcon,
-        width: '100%',
-        justifyContent: 'start',
-        variant: 'transparent',
-        children: <H3 pl={1}>{children}</H3>,
-        ...props,
-      }
-
-  return <Component {...ComponentProps} />
+  return (
+    <Button
+      variant="transparent"
+      justifyContent="start"
+      width="100%"
+      leftIcon={leftIcon}
+      {...props}
+    >
+      <Text variant="h3" pl={1}>
+        {children}
+      </Text>
+    </Button>
+  )
 }
