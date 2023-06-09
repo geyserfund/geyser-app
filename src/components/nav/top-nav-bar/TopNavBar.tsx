@@ -2,7 +2,6 @@ import { useDisclosure } from '@chakra-ui/hooks'
 import { Box } from '@chakra-ui/layout'
 import {
   Button,
-  Heading,
   HStack,
   Modal,
   ModalBody,
@@ -516,27 +515,29 @@ export const TopNavBar = () => {
         }
         transition="background 0.5s ease-out"
       >
-        <HStack
-          paddingY="10px"
-          alignItems={'center'}
-          justifyContent={'space-between'}
-          overflow="hidden"
-        >
+        <HStack paddingY="10px" alignItems="center" overflow="hidden">
           <NavBarLogo
             small={isMobile && shouldShowCustomTitle}
             marginRight={isMobile ? 0 : 5}
             color={showHaveTransparentBackground ? 'primary.900' : undefined}
+            flexGrow={0}
           />
 
           {shouldShowCustomTitle ? (
-            <Link to={navData.projectPath}>
-              <Heading as={'h3'} noOfLines={1} size="sm">
-                {navData.projectTitle}
-              </Heading>
-            </Link>
+            <Text
+              variant="h3"
+              noOfLines={1}
+              size="sm"
+              textAlign="center"
+              as={Link}
+              to={navData.projectPath}
+              flexGrow={1}
+            >
+              {navData.projectTitle}
+            </Text>
           ) : null}
 
-          <HStack alignItems={'center'} spacing={2}>
+          <HStack alignItems={'center'} spacing={2} flexGrow={0}>
             {shouldShowNavItems ? (
               <Box display={'flex'} alignItems="center" gap={4} mr={4}>
                 {navItems.map((item) => {

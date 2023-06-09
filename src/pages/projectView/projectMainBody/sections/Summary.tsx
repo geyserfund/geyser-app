@@ -273,7 +273,7 @@ export const Summary = forwardRef<HTMLDivElement>((_props, ref) => {
             ).toFormat('dd LLL yyyy')}`}</Body2>
           </SummaryInfoLine>
         </Wrap>
-        <VStack alignItems="flex-start">
+        <VStack alignItems="flex-start" width="100%">
           <MarkdownField preview content={project.description} />
         </VStack>
         <ProjectFundingSummary project={project} />
