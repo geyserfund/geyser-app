@@ -96,12 +96,6 @@ export const ProjectFundingInitialInfoScreen = ({
   }, [fundingTxs.data])
 
   useEffect(() => {
-    if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
-      setAggregatedFundingTxs([fundingTx, ...aggregatedFundingTxs])
-    }
-  }, [aggregatedFundingTxs, fundingTx])
-
-  useEffect(() => {
     if (mobileView === MobileViews.contribution) {
       setTab('activity')
     } else if (mobileView === MobileViews.leaderboard) {
