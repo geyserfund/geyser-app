@@ -20,7 +20,7 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.4",
+    "@apollo/client": "^3.7.15",
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/media-query": "^3.2.11",
     "@chakra-ui/react": "^2.7.0",
