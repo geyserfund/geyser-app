@@ -25,9 +25,9 @@ const requestWebLNPayment = async (paymentRequest: string) => {
   console.log('checking webln ', webln.getInfo())
   console.log('checking webln ', paymentRequest)
   try {
-    const res = await webln.sendPayment(paymentRequest)
+    const res = await webln.signMessage(paymentRequest)
     console.log('checking res', res)
-    preimage = res.preimage
+    preimage = res.message
   } catch (e) {
     throw new Error(WEBLN_ENABLE_ERROR)
   }
