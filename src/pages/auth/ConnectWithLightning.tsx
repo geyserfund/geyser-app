@@ -31,6 +31,7 @@ import {
   useMobileMode,
   useNotification,
 } from '../../utils'
+import { startWebLNFlow } from './components/webLnFlow'
 
 interface ConnectWithLightningModalProps {
   isOpen: boolean
@@ -107,6 +108,7 @@ export const ConnectWithLightningModal = ({
       .then((response) => response.json())
       .then(({ lnurl }) => {
         setQrContent(lnurl)
+        startWebLNFlow({ paymentRequest: lnurl, toast })
       })
       .catch((err) => {
         toast({
