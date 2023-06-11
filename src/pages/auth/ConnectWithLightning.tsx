@@ -183,6 +183,8 @@ export const ConnectWithLightningModal = ({
         status: 'error',
       })
 
+      console.log('checking error', error)
+
       return false
     }
   }
