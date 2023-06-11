@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
+import { RejectionError, WebLNProvider } from 'webln'
 
 import { LogoDarkGreenImage } from '../../assets'
 import { BoltSvgIcon } from '../../components/icons'
@@ -28,10 +29,45 @@ import { lightModeColors } from '../../styles'
 import { User } from '../../types'
 import {
   copyTextToClipboard,
+  sha256,
   useMobileMode,
   useNotification,
 } from '../../utils'
-import { startWebLNFlow } from './components/webLnFlow'
+
+const { webln }: { webln: WebLNProvider } = window as any
+
+const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
+
+const requestWebLNPayment = async (paymentRequest: string) => {
+  console.log('checking webln ', webln.getInfo())
+  console.log('checking webln ', paymentRequest)
+  if (!webln) {
+    throw new Error('no provider')
+  }
+
+  try {
+    await webln.enable()
+  } catch (e) {
+    throw new Error(WEBLN_ENABLE_ERROR)
+  }
+
+  if (!paymentRequest) {
+    throw new Error('payment request not found')
+  }
+
+  let preimage = ''
+
+  try {
+    const res = await webln.signMessage(paymentRequest)
+    console.log('checking res', res)
+    preimage = res.message
+  } catch (e) {
+    throw new Error(WEBLN_ENABLE_ERROR)
+  }
+
+  const paymentHash = await sha256(preimage)
+  return paymentHash
+}
 
 interface ConnectWithLightningModalProps {
   isOpen: boolean
@@ -100,6 +136,57 @@ export const ConnectWithLightningModal = ({
     }, 2000)
   }
 
+  const startWebLNFlow = async ({
+    paymentRequest,
+  }: {
+    paymentRequest: string
+  }) => {
+    try {
+      const paymentHash = await requestWebLNPayment(paymentRequest)
+
+      // Check preimage
+      console.log('checking paymentHas', paymentHash)
+    } catch (error: any) {
+      if (error.message === 'no provider') {
+        throw error
+      }
+
+      if (error.message === 'wrong preimage') {
+        toast({
+          title: 'Wrong payment preimage',
+          description:
+            'The payment preimage returned by the WebLN provider did not match the payment hash.',
+          status: 'error',
+        })
+        return false
+      }
+
+      if (
+        error.constructor === RejectionError ||
+        error.message === 'User rejected'
+      ) {
+        toast({
+          title: 'Requested operation declined',
+          description: 'Please use the invoice instead.',
+          status: 'info',
+        })
+        return false
+      }
+
+      if (error.message === WEBLN_ENABLE_ERROR) {
+        return false
+      }
+
+      toast({
+        title: 'Oops! Something went wrong with WebLN.',
+        description: 'Please copy the invoice manually instead.',
+        status: 'error',
+      })
+
+      return false
+    }
+  }
+
   const handleLnurlLogin = async () => {
     fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, {
       credentials: 'include',
@@ -108,7 +195,7 @@ export const ConnectWithLightningModal = ({
       .then((response) => response.json())
       .then(({ lnurl }) => {
         setQrContent(lnurl)
-        startWebLNFlow({ paymentRequest: lnurl, toast })
+        startWebLNFlow({ paymentRequest: lnurl })
       })
       .catch((err) => {
         toast({
