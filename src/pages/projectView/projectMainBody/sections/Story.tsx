@@ -11,6 +11,11 @@ import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
 export const Story = () => {
   const navigate = useNavigate()
   const { project } = useProjectContext()
+
+  if (!project?.description) {
+    return null
+  }
+
   return (
     <CardLayout>
       <TitleDivider
