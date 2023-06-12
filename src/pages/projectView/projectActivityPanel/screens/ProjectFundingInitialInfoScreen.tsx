@@ -149,7 +149,7 @@ export const ProjectFundingInitialInfoScreen = ({
           onClick={() => setTab('activity')}
         >
           Contributions{' '}
-          <Text ml={2} bg="neutral.100" rounded="lg" px={3} py={1}>
+          <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
             {project.fundingTxsCount}
           </Text>
         </Button>
@@ -176,7 +176,7 @@ export const ProjectFundingInitialInfoScreen = ({
           onClick={() => setTab('leaderboard')}
         >
           Leaderboard{' '}
-          <Text ml={2} bg="neutral.100" rounded="lg" px={3} py={1}>
+          <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
             {project.fundersCount}
           </Text>
         </Button>
