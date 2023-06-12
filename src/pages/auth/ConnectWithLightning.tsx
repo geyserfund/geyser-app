@@ -34,7 +34,17 @@ import {
   useNotification,
 } from '../../utils'
 
-const { webln }: { webln: WebLNProvider } = window as any
+type LNURLResponse =
+  | {
+      status: 'OK'
+      data?: unknown
+    }
+  | { status: 'ERROR'; reason: string }
+interface WebLNAuthProvider extends WebLNProvider {
+  lnurl: (lnurl: string) => Promise<LNURLResponse>
+}
+
+const { webln }: { webln: WebLNAuthProvider } = window as any
 
 const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 
@@ -55,18 +65,12 @@ const requestWebLNPayment = async (paymentRequest: string) => {
     throw new Error('payment request not found')
   }
 
-  let preimage = ''
-
   try {
-    const res = await webln.signMessage(paymentRequest)
+    const res = await webln.lnurl(paymentRequest)
     console.log('checking res', res)
-    preimage = res.message
   } catch (e) {
     throw new Error(WEBLN_ENABLE_ERROR)
   }
-
-  const paymentHash = await sha256(preimage)
-  return paymentHash
 }
 
 interface ConnectWithLightningModalProps {
@@ -142,10 +146,10 @@ export const ConnectWithLightningModal = ({
     paymentRequest: string
   }) => {
     try {
-      const paymentHash = await requestWebLNPayment(paymentRequest)
+      await requestWebLNPayment(paymentRequest)
 
       // Check preimage
-      console.log('checking paymentHas', paymentHash)
+      console.log('checking paymentHas')
     } catch (error: any) {
       if (error.message === 'no provider') {
         throw error
@@ -238,11 +242,10 @@ export const ConnectWithLightningModal = ({
             throw new Error(response.reason)
           }
 
-          const { user: userData }: { user: User } = response
-          console.log('checking access token response', userData)
+          const { user: userData }: { user: { user: User } } = response
 
           if (userData) {
-            login({ ...defaultUser, ...userData })
+            login({ ...defaultUser, ...userData.user })
             onClose()
           }
         })
