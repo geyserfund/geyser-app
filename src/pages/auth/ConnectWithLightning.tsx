@@ -29,7 +29,6 @@ import { lightModeColors } from '../../styles'
 import { User } from '../../types'
 import {
   copyTextToClipboard,
-  sha256,
   useMobileMode,
   useNotification,
 } from '../../utils'
