@@ -58,9 +58,9 @@ const requestWebLNPayment = async (paymentRequest: string) => {
   let preimage = ''
 
   try {
-    const res = await webln.signMessage(paymentRequest)
+    const res = await webln.sendPayment(paymentRequest)
     console.log('checking res', res)
-    preimage = res.message
+    preimage = res.preimage
   } catch (e) {
     throw new Error(WEBLN_ENABLE_ERROR)
   }
@@ -123,7 +123,7 @@ export const ConnectWithLightningModal = ({
 }: ConnectWithLightningModalProps) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
-  const { setUser } = useAuthContext()
+  const { login } = useAuthContext()
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
@@ -238,10 +238,11 @@ export const ConnectWithLightningModal = ({
             throw new Error(response.reason)
           }
 
+          console.log('checking access token response', response)
           const { user: userData }: { user: User } = response
 
           if (userData) {
-            setUser({ ...defaultUser, ...userData })
+            login({ ...defaultUser, ...userData })
             onClose()
           }
         })
