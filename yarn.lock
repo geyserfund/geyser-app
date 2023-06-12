@@ -2173,58 +2173,58 @@
   dependencies:
     "@floating-ui/core" "^1.2.4"
 
-"@giphy/js-analytics@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.npmjs.org/@giphy/js-analytics/-/js-analytics-4.2.0.tgz"
-  integrity sha512-AikTYgDp+d9yB9Ox4IDLOeZw/LGoL+gd4AdQpW9OLg8cHVHu8TuizXndby+2eGkjMy+O4XxfVNC6ADGalyG5jQ==
+"@giphy/js-analytics@*":
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/@giphy/js-analytics/-/js-analytics-4.3.2.tgz#9710c7eb6e401571d4219a870cb6b0d35df61cdc"
+  integrity sha512-DCBOAxGixRg8+5Pz/H9gmMP7b5qDhNw49spWleIGLT+4FQHm9eDjVrY5wKlY8Y0c91CmK9V6kqTCpJ+2aGLdmQ==
   dependencies:
-    "@giphy/js-types" "^4.4.0"
-    "@giphy/js-util" "^4.3.0"
+    "@giphy/js-types" "*"
+    "@giphy/js-util" "*"
     append-query "^2.1.0"
     throttle-debounce "^3.0.1"
 
-"@giphy/js-brand@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.npmjs.org/@giphy/js-brand/-/js-brand-2.2.2.tgz"
-  integrity sha512-ZHdnkDLDJt4L6nlogeElxoCmCJvFBWQ5HV6R5mz26G7ZfWs45//mjz7maqLP/UqA+9azBERPewAKm2zTtxy5kQ==
+"@giphy/js-brand@*":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@giphy/js-brand/-/js-brand-2.3.2.tgz#490137ac3391c0e49784c3c2a25c06f8c0be11a1"
+  integrity sha512-mclG3NI3cpeVEnacum8Hq4+Ste0yF/TIu+cs7VgLlJMybE6K+cvShsz6JiXkyvi8csP7DhFJlbeXERhgV5yFOQ==
   dependencies:
     emotion "10.0.27"
 
-"@giphy/js-fetch-api@^4.7.1":
-  version "4.7.1"
-  resolved "https://registry.npmjs.org/@giphy/js-fetch-api/-/js-fetch-api-4.7.1.tgz"
-  integrity sha512-LFpi8ZbV/N51nhIDc7ig6HnBUZ0Y/Av0GVCVDOs9zmUK1/zgTA33fkWMCNVxc4wgrugwRXCJA7Mj8Zb8BTea2w==
+"@giphy/js-fetch-api@*", "@giphy/js-fetch-api@^4.9.3":
+  version "4.9.3"
+  resolved "https://registry.yarnpkg.com/@giphy/js-fetch-api/-/js-fetch-api-4.9.3.tgz#98072e739fb27bf00cbb9f28f38ecefaa8a2a615"
+  integrity sha512-SV+7ttNrU9pGRp7otVRSAKTQxT8fHNObYAeJ5gCVk3pr9LhP1b2Az8KIXn2IlpxdIHOnuFNKP919oO5MvESDkA==
   dependencies:
-    "@giphy/js-types" "^4.4.0"
-    "@giphy/js-util" "^4.3.0"
+    "@giphy/js-types" "*"
+    "@giphy/js-util" "*"
     qs "^6.9.4"
 
-"@giphy/js-types@^4.4.0":
+"@giphy/js-types@*":
   version "4.4.0"
-  resolved "https://registry.npmjs.org/@giphy/js-types/-/js-types-4.4.0.tgz"
+  resolved "https://registry.yarnpkg.com/@giphy/js-types/-/js-types-4.4.0.tgz#4f491a408293e52d77aa4d6b38d20f6b2828723a"
   integrity sha512-W9G6crS2oqTn7g0RpvYu1l/sna4LnivRTk25jmxdzujOFb9kvQ+VFM/v9RPYV2GIBnzT/maW/EwjFIba9jkflA==
 
-"@giphy/js-util@^4.3.0":
-  version "4.3.0"
-  resolved "https://registry.npmjs.org/@giphy/js-util/-/js-util-4.3.0.tgz"
-  integrity sha512-ZxYw4DiNVchMxtCjVdLzXJ6+40To1C1B37PJ2a7zUP8Dxa62uGctbyb2PXAB1NmsCZOhy1d0QGEnjxK5LQocHQ==
+"@giphy/js-util@*":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@giphy/js-util/-/js-util-4.4.2.tgz#a424e9043f9fb0d7a97b9dd96c975f17623a811c"
+  integrity sha512-ltthBrFDGXeDTdtuHM+Y8x1FMX7WaT3sCZ8MC/I179+1DJg82/IvDks9yR0mDywYtHvkNxgg5IqC5arvnA8V/w==
   dependencies:
-    "@giphy/js-types" "^4.4.0"
+    "@giphy/js-types" "*"
     dompurify "^2.2.2"
-    uuid "^8.3.0"
+    uuid "^9.0.0"
 
-"@giphy/react-components@^6.5.2":
-  version "6.7.0"
-  resolved "https://registry.npmjs.org/@giphy/react-components/-/react-components-6.7.0.tgz"
-  integrity sha512-hraLHEpSsF+CFhCFSClyp1+PdPJHIn3jNnkQa3WDpwtEsqhk2LRC8hNpy7Ltwaj+ZkQ1+3HPxGfD6Mfo3Z/rrQ==
+"@giphy/react-components@^6.9.4":
+  version "6.9.4"
+  resolved "https://registry.yarnpkg.com/@giphy/react-components/-/react-components-6.9.4.tgz#f6e6db0306fddb7cb43f60443bd22145ba066d2e"
+  integrity sha512-Ql7dHnfCTgE5qWbzhqDYBwY+sjBlIxBZNGrSTMGOkEFKy9y2JIvJP7UKaXyYPNIluOZNGlnkP7EARY4uAJiDTQ==
   dependencies:
     "@emotion/react" "11.9.3"
     "@emotion/styled" "11.9.3"
-    "@giphy/js-analytics" "^4.2.0"
-    "@giphy/js-brand" "^2.2.2"
-    "@giphy/js-fetch-api" "^4.7.1"
-    "@giphy/js-types" "^4.4.0"
-    "@giphy/js-util" "^4.3.0"
+    "@giphy/js-analytics" "*"
+    "@giphy/js-brand" "*"
+    "@giphy/js-fetch-api" "*"
+    "@giphy/js-types" "*"
+    "@giphy/js-util" "*"
     intersection-observer "^0.12.2"
     react-use "17.4.0"
     throttle-debounce "^3.0.1"
@@ -12409,10 +12409,10 @@ uuid@^3.3.2:
   resolved "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.3.0:
-  version "8.3.2"
-  resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
-  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+uuid@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+  integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"
