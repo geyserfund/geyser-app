@@ -47,9 +47,7 @@ const { webln }: { webln: WebLNAuthProvider } = window as any
 
 const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 
-const requestWebLNPayment = async (paymentRequest: string) => {
-  console.log('checking webln ', webln)
-  console.log('checking webln ', paymentRequest)
+const requestWebLNUrlAuth = async (paymentRequest: string) => {
   if (!webln) {
     throw new Error('no provider')
   }
@@ -66,7 +64,9 @@ const requestWebLNPayment = async (paymentRequest: string) => {
 
   try {
     const res = await webln.lnurl(paymentRequest)
-    console.log('checking res', res)
+    if (res.status !== 'OK') {
+      throw new Error(WEBLN_ENABLE_ERROR)
+    }
   } catch (e) {
     throw new Error(WEBLN_ENABLE_ERROR)
   }
@@ -145,23 +145,10 @@ export const ConnectWithLightningModal = ({
     paymentRequest: string
   }) => {
     try {
-      await requestWebLNPayment(paymentRequest)
-
-      // Check preimage
-      console.log('checking paymentHas')
+      await requestWebLNUrlAuth(paymentRequest)
     } catch (error: any) {
       if (error.message === 'no provider') {
         throw error
-      }
-
-      if (error.message === 'wrong preimage') {
-        toast({
-          title: 'Wrong payment preimage',
-          description:
-            'The payment preimage returned by the WebLN provider did not match the payment hash.',
-          status: 'error',
-        })
-        return false
       }
 
       if (
@@ -185,9 +172,6 @@ export const ConnectWithLightningModal = ({
         description: 'Please copy the invoice manually instead.',
         status: 'error',
       })
-
-      console.log('checking error', error)
-
       return false
     }
   }
