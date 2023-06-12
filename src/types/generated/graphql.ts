@@ -254,8 +254,6 @@ export type Entry = {
   image?: Maybe<Scalars['String']>
   /** Project within which the Entry was created. */
   project?: Maybe<Project>
-  /** @deprecated This field was replaced by the status field and will eventually be removed. */
-  published: Scalars['Boolean']
   publishedAt?: Maybe<Scalars['String']>
   status: EntryStatus
   /** Title of the Entry. */
@@ -467,7 +465,8 @@ export type FundingTx = {
   source: Scalars['String']
   sourceResource?: Maybe<SourceResource>
   status: FundingStatus
-  uuid: Scalars['String']
+  /** Private reference code viewable only by the Funder and the ProjectOwner related to this FundingTx */
+  uuid?: Maybe<Scalars['String']>
 }
 
 export type FundingTxConfirmedSubscriptionResponse = {
@@ -2404,7 +2403,6 @@ export type EntryResolvers<
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType>
-  published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   publishedAt?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -2578,7 +2576,7 @@ export type FundingTxResolvers<
     ContextType
   >
   status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>
-  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  uuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4092,6 +4090,7 @@ export type FundingTxForLandingPageFragment = {
 export type FundingTxWithInvoiceStatusFragment = {
   __typename?: 'FundingTx'
   id: any
+  uuid?: string | null
   invoiceId: string
   status: FundingStatus
   onChain: boolean
@@ -4102,7 +4101,7 @@ export type FundingTxWithInvoiceStatusFragment = {
 export type FundingTxFragment = {
   __typename?: 'FundingTx'
   id: any
-  uuid: string
+  uuid?: string | null
   invoiceId: string
   paymentRequest?: string | null
   amount: number
@@ -5311,7 +5310,8 @@ export type ProjectDashboardFundersQuery = {
     fundingTxs: Array<{
       __typename?: 'FundingTx'
       email?: string | null
-      uuid: string
+      paidAt?: any | null
+      uuid?: string | null
     }>
     rewards: Array<{
       __typename?: 'FunderReward'
@@ -5566,6 +5566,7 @@ export const EntryFragmentDoc = gql`
 export const FundingTxWithInvoiceStatusFragmentDoc = gql`
   fragment FundingTxWithInvoiceStatus on FundingTx {
     id
+    uuid
     invoiceId
     status
     onChain
@@ -8937,6 +8938,7 @@ export const ProjectDashboardFundersDocument = gql`
       }
       fundingTxs {
         email
+        paidAt
         uuid
       }
       rewards {

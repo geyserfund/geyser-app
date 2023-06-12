@@ -132,7 +132,7 @@ export const SuccessScreen = ({
           funderEmail={fundingState.email}
           funderAvatarURL={fundingState.funderAvatarURL}
           version={ContributionInfoBoxVersion.PRIMARY}
-          referenceCode={fundingTx.uuid}
+          referenceCode={fundingTx.uuid || ''}
           showGeyserFee={false}
         />
       </VStack>
