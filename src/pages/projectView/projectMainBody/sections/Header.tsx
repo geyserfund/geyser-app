@@ -48,7 +48,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         />
       </Box>
 
-      <HStack flexGrow={1} width="100%" spacing={3}>
+      <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">
         <ImageWithReload
           borderRadius="8px"
           src={project.thumbnailImage || undefined}
@@ -68,7 +68,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             overflowY="hidden"
             width="100%"
           >
-            {project.title}
+            {project.title} {project.title}
           </Text>
           {isMobile ? (
             statusContent
