@@ -16,7 +16,6 @@ export const UserAvatar = ({ user, seed, ...props }: Props) => {
     <Avatar
       p={0}
       src={image}
-      size="xs"
       alt={user ? `user-${user.username}-avatar` : 'anonymous-avatar'}
       {...props}
     />
