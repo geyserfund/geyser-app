@@ -58,9 +58,9 @@ const requestWebLNPayment = async (paymentRequest: string) => {
   let preimage = ''
 
   try {
-    const res = await webln.sendPayment(paymentRequest)
+    const res = await webln.signMessage(paymentRequest)
     console.log('checking res', res)
-    preimage = res.preimage
+    preimage = res.message
   } catch (e) {
     throw new Error(WEBLN_ENABLE_ERROR)
   }
@@ -238,8 +238,8 @@ export const ConnectWithLightningModal = ({
             throw new Error(response.reason)
           }
 
-          console.log('checking access token response', response)
           const { user: userData }: { user: User } = response
+          console.log('checking access token response', userData)
 
           if (userData) {
             login({ ...defaultUser, ...userData })
