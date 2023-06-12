@@ -21,11 +21,7 @@ export const FieldContainer = ({
           {title}
         </Text>
       )}
-      {subtitle && (
-        <Text variant="body2" color="neutral.600">
-          {subtitle}
-        </Text>
-      )}
+      {subtitle && <Text color="neutral.600">{subtitle}</Text>}
       {children}
       {error && (
         <Text color="secondary.red" fontSize="12px">
