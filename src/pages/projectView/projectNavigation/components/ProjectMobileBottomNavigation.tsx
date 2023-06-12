@@ -89,7 +89,7 @@ export const ProjectNavUI = () => {
     return null
   }
 
-  const { fundersCount, fundingTxsCount } = project
+  const { fundingTxsCount } = project
 
   const isOwner = project.owners[0]?.user?.id === user.id
 
@@ -158,14 +158,7 @@ export const ProjectNavUI = () => {
         isDisabled={!project.rewards.length}
         paddingX="5px"
       >
-        <>
-          <RewardGiftIcon fontSize="1.5em" />
-          {fundersCount && (
-            <Badge>
-              <Text fontFamily={fonts.mono}>{fundersCount}</Text>
-            </Badge>
-          )}
-        </>
+        <RewardGiftIcon fontSize="1.5em" />
       </IconButton>
       <HStack flexGrow={1}>
         {isOwner ? (
