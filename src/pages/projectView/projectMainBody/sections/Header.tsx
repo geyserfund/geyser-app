@@ -69,7 +69,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             overflowY="hidden"
             width="100%"
           >
-            {project.title}
+            {project.title} {project.title}
           </Text>
           {isMobile ? (
             statusContent
