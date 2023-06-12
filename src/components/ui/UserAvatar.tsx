@@ -11,18 +11,29 @@ type Props = {
 } & AvatarProps
 
 export const UserAvatar = ({ user, seed, ...props }: Props) => {
-  const navigate = useNavigate()
   const image = user?.imageUrl || getRandomOrb(seed || 1)
   return (
     <Avatar
-      as={user ? Button : undefined}
       p={0}
-      onClick={
-        user ? () => navigate(getPath('userProfile', user.id)) : undefined
-      }
       src={image}
       size="xs"
       alt={user ? `user-${user.username}-avatar` : 'anonymous-avatar'}
+      {...props}
+    />
+  )
+}
+
+export const UserAvatarWithLink = ({ ...props }: Props) => {
+  const navigate = useNavigate()
+  return (
+    <UserAvatar
+      as={props.user ? Button : undefined}
+      p={0}
+      onClick={
+        props.user
+          ? () => navigate(getPath('userProfile', props.user?.id))
+          : undefined
+      }
       {...props}
     />
   )

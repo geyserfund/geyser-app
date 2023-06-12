@@ -3,12 +3,7 @@ import classNames from 'classnames'
 import { useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import {
-  MobileViews,
-  useAuthContext,
-  useNavContext,
-  useProjectContext,
-} from '../../../context'
+import { MobileViews, useProjectContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { ProjectMobileNavigation } from '../projectNavigation/components/ProjectMobileNavigation'
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
@@ -81,9 +76,6 @@ export const ProjectMainBody = () => {
   const inView = mobileView === MobileViews.description
 
   const classes = useStyles({ isMobile, inView })
-
-  const { user } = useAuthContext()
-  const { navData } = useNavContext()
 
   return (
     <>

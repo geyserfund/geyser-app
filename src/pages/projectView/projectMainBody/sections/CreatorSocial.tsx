@@ -2,7 +2,7 @@ import { Box, HStack, Link, Text } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
-import { UserAvatar } from '../../../../components/ui/UserAvatar'
+import { UserAvatarWithLink } from '../../../../components/ui/UserAvatar'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { useExternalAccountsButtons } from '../../../../hooks/useExternalAccountsButtons'
@@ -26,7 +26,7 @@ export const CreatorSocial = () => {
     <CardLayout>
       <HStack spacing={4}>
         <Box>
-          <UserAvatar
+          <UserAvatarWithLink
             height="40px"
             width="40px"
             user={user}
