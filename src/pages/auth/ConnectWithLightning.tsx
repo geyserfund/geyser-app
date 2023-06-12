@@ -39,7 +39,7 @@ const { webln }: { webln: WebLNProvider } = window as any
 const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 
 const requestWebLNPayment = async (paymentRequest: string) => {
-  console.log('checking webln ', webln.getInfo())
+  console.log('checking webln ', webln)
   console.log('checking webln ', paymentRequest)
   if (!webln) {
     throw new Error('no provider')
