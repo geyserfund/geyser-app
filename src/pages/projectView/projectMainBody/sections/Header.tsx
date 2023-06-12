@@ -76,8 +76,8 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <HStack width="100%" flexWrap="wrap">
               <HStack flexGrow={1} flexWrap="wrap">
                 <FollowButton projectId={project.id} />
-                <ProjectFundingQR project={project} />
                 <LightningAddress name={`${project.name}@geyser.fund`} />
+                <ProjectFundingQR project={project} />
               </HStack>
               {statusContent}
             </HStack>

@@ -1,7 +1,9 @@
-import { Box, HStack, Text } from '@chakra-ui/react'
+import { Box, HStack, Link, Text } from '@chakra-ui/react'
+import { NavLink } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { UserAvatar } from '../../../../components/ui/UserAvatar'
+import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { useExternalAccountsButtons } from '../../../../hooks/useExternalAccountsButtons'
 import { useMobileMode } from '../../../../utils'
@@ -31,7 +33,13 @@ export const CreatorSocial = () => {
             seed={project.id}
           />
         </Box>
-        <Text variant="h3">{user.username}</Text>
+        <Link
+          textDecoration="none"
+          as={NavLink}
+          to={getPath('userProfile', user.id)}
+        >
+          <Text variant="h3">{user.username}</Text>
+        </Link>
         <HStack ml={2}>
           {accountButtonProps.map(({ key, username, icon, color, props }) => {
             if (!icon || !props) {

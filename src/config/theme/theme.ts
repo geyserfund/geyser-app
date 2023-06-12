@@ -134,6 +134,7 @@ export const theme = {
       baseStyle: {
         fontSize: '14px',
         lineHeight: 1.6,
+        fontWeight: 400,
       },
       variants: {
         caption: () => ({
@@ -156,7 +157,7 @@ export const theme = {
           fontWeight: 700,
         }),
         body1: () => ({
-          fontWeight: 500,
+          fontWeight: 400,
           lineHeight: 1.6,
           fontSize: '16px',
         }),

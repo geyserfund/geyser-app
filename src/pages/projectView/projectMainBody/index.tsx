@@ -62,7 +62,7 @@ const useStyles = createUseStyles<Rules, Styles>({
 export const ProjectMainBody = () => {
   const isMobile = useMobileMode()
 
-  const { project } = useProjectContext()
+  const { project, isProjectOwner } = useProjectContext()
 
   const { mobileView } = useProjectContext()
 
@@ -84,10 +84,6 @@ export const ProjectMainBody = () => {
 
   const { user } = useAuthContext()
   const { navData } = useNavContext()
-
-  const isViewerTheProjectOwner = navData.projectOwnerIDs.includes(
-    Number(user.id),
-  )
 
   return (
     <>
@@ -117,15 +113,15 @@ export const ProjectMainBody = () => {
             >
               <Header ref={headerRef} />
 
+              {project && isProjectOwner && (
+                <LaunchProjectNotice project={project} />
+              )}
+
               <CreatorSocial />
 
               <Story />
 
-              {project && isViewerTheProjectOwner && (
-                <LaunchProjectNotice project={project} />
-              )}
-
-              {isViewerTheProjectOwner && <CreatorMenu />}
+              {isProjectOwner && <CreatorMenu />}
 
               <SectionNav {...projectAnchors} />
 
