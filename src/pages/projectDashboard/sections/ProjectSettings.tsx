@@ -157,7 +157,7 @@ export const ProjectSettings = () => {
                 />
               </HStack>
             </FieldContainer>
-            <Text variant="caption">
+            <Text color="neutral.600">
               Deactivating your project would not allow others to fund your
               project, but your project will still be visible to everyone else.
               You will be able to re-activate your project at any time.
@@ -167,7 +167,7 @@ export const ProjectSettings = () => {
 
         <VStack w="100%" alignItems="start">
           <Text variant="body1">Delete Project</Text>
-          <Text variant="caption">
+          <Text color="neutral.600">
             Deleting a project will make the project unaccessible to you and
             others. You can delete a project only if it has received no
             contributions. This is to ensure transparency for those who have
