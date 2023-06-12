@@ -11,6 +11,9 @@ const Container = styled(Box, {
     '& p, & iframe': {
       mt: 4,
     },
+    '& iframe': {
+      minHeight: '28em',
+    },
     '& a': {
       textDecoration: 'underline',
     },
