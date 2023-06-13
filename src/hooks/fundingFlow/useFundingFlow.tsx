@@ -14,7 +14,7 @@ import {
   useFundMutation,
   useRefreshFundingInvoiceMutation,
 } from '../../types'
-import { sha256, useNotification } from '../../utils'
+import { sha256, toInt, useNotification } from '../../utils'
 import { useFundSubscription } from './useFundSubscription'
 
 export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
@@ -396,12 +396,15 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 }
 
 export const validateFundingInput = (input: FundingInput) => {
-  let isValid = true
-  let error = ''
+  let isValid = false
+  let error = 'cannot initiate funding without amount'
 
-  if (!input.donationInput?.donationAmount && !input.rewardInput?.rewardsCost) {
-    isValid = false
-    error = 'cannot initiate funding without amount'
+  if (
+    (input.donationInput && toInt(input.donationInput.donationAmount) > 0) ||
+    (input.rewardInput && toInt(input.rewardInput.rewardsCost) > 0)
+  ) {
+    isValid = true
+    error = ''
   }
 
   return { isValid, error }
