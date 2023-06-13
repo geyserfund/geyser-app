@@ -1,5 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import { Box, HStack, Image, Spacer, Stack } from '@chakra-ui/react'
+import { Box, HStack, Image, Spacer, Stack, Text } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { BiPencil } from 'react-icons/bi'
@@ -163,18 +163,22 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
           spacing={{ base: '10px', lg: '22px' }}
           overflow="hidden"
         >
-          <HStack spacing={'10px'} align={'center'} flex={0}>
+          <HStack
+            color="primary.400"
+            spacing={'10px'}
+            align={'center'}
+            flex={0}
+          >
             <HStack spacing={1}>
-              <MonoBody1 color="primary.400" fontWeight={'bold'}>
+              <Text fontFamily={fonts.mono} fontWeight="bold" variant="body1">
                 {entry.fundersCount}
-              </MonoBody1>
-              <BsHeartFill color={'primary.400'} />
+              </Text>
+              <BsHeartFill />
             </HStack>
 
             <SatoshiAmount
               fontFamily={fonts.mono}
-              color="primary.400"
-              fontSize="16px"
+              variant="body1"
               fontWeight="bold"
               scale={0.8}
             >
