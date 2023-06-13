@@ -83,7 +83,6 @@ export const ProjectMobileBottomNavigation = ({
 }
 
 export const ProjectNavUI = () => {
-  debugger
   const { mobileView, setMobileView, project } = useProjectContext()
   const { user } = useAuthContext()
 
