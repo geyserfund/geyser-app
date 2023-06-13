@@ -15,7 +15,7 @@ import {
 } from '../../../types/generated/graphql'
 import { getShortAmountLabel, toInt } from '../../../utils'
 import { CardLayout } from '../../layouts'
-import { Body1, Body2, H2, MonoBody1 } from '../../typography'
+import { Body1, Body2, H2 } from '../../typography'
 import { ICard, IconButtonComponent, SatoshiAmount } from '../../ui'
 import { EntryStatusLabel } from '../../ui/EntryStatusLabel'
 import { ProjectEntryCardThumbnailPlaceholder } from './ProjectEntryCardThumbnailPlaceholder'
