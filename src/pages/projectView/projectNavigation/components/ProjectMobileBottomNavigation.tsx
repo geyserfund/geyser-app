@@ -8,7 +8,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { BiNews } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
@@ -33,16 +33,38 @@ export const ProjectMobileBottomNavigation = ({
   })
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [noTransition, setNoTransition] = useState(true)
 
   useEffect(() => {
-    if (isScrollingUp) {
-      onOpen()
-    } else if (!fixed) {
-      setNoTransition(false)
+    if (!fixed) {
+      if (isScrollingUp) {
+        return onOpen()
+      }
+
       onClose()
     }
   }, [isScrollingUp, mobileView, fixed, onOpen, onClose])
+
+  if (fixed) {
+    return (
+      <Slide
+        direction="bottom"
+        in
+        style={{
+          zIndex: 10,
+        }}
+        transition={{
+          exit: {
+            duration: 0,
+          },
+          enter: {
+            duration: 0,
+          },
+        }}
+      >
+        <ProjectNavUI />
+      </Slide>
+    )
+  }
 
   return (
     <>
@@ -53,19 +75,6 @@ export const ProjectMobileBottomNavigation = ({
         style={{
           zIndex: 10,
         }}
-        unmountOnExit
-        transition={
-          noTransition
-            ? {
-                exit: {
-                  duration: 0,
-                },
-                enter: {
-                  duration: 0,
-                },
-              }
-            : undefined
-        }
       >
         <ProjectNavUI />
       </Slide>
