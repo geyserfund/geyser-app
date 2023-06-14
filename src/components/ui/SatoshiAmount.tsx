@@ -1,15 +1,12 @@
 import { HStack, Text, TextProps } from '@chakra-ui/react'
 
-import { useBTCConverter } from '../../helpers'
-import { Satoshis } from '../../types'
-import { numberWithCommas, toInt } from '../../utils'
+import { numberWithCommas } from '../../utils'
 import { SatoshiIconTilted } from '../icons'
 
 type Props = TextProps & {
   label?: string
   extra?: string
   isLoading?: boolean
-  shouldShowDollarConversion?: boolean
   wrapperClassName?: string
   scale?: number
 }
@@ -19,14 +16,11 @@ export const SatoshiAmount = ({
   extra,
   fontSize,
   isLoading = false,
-  shouldShowDollarConversion,
   wrapperClassName,
   children,
   scale,
   ...rest
 }: Props) => {
-  const btcConverter = useBTCConverter()
-
   const getScale = () => {
     if (fontSize) {
       let size = 0
@@ -42,7 +36,7 @@ export const SatoshiAmount = ({
   }
 
   return (
-    <HStack alignItems="center" className={wrapperClassName}>
+    <HStack alignItems="center" className={wrapperClassName} spacing={0}>
       {label ? (
         <Text fontSize={fontSize} {...rest}>
           {`${label}: `}
@@ -58,17 +52,6 @@ export const SatoshiAmount = ({
           extra ? '( ' + extra + ' )' : ''
         }`}
       </Text>
-
-      {shouldShowDollarConversion ? (
-        <Text
-          marginLeft={4}
-          marginInlineStart={4}
-          fontSize={fontSize}
-          {...rest}
-        >
-          (${btcConverter.getUSDAmount(toInt(children) as Satoshis).toFixed(2)})
-        </Text>
-      ) : null}
     </HStack>
   )
 }
