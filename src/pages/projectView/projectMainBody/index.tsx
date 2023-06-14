@@ -3,21 +3,22 @@ import classNames from 'classnames'
 import { useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import {
-  MobileViews,
-  useAuthContext,
-  useNavContext,
-  useProjectContext,
-} from '../../../context'
+import { MobileViews, useProjectContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { ProjectMobileNavigation } from '../projectNavigation/components/ProjectMobileNavigation'
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
 import { LaunchProjectNotice } from './components'
-import { Creator, Entries, Summary } from './sections'
-import { Milestones } from './sections/Milestones'
-import { Rewards } from './sections/Rewards'
-import { SectionNav } from './sections/SectionNav'
+import {
+  CreatorMenu,
+  Entries,
+  Header,
+  Milestones,
+  Rewards,
+  SectionNav,
+  Story,
+} from './sections'
+import { CreatorSocial } from './sections/CreatorSocial'
 
 type Rules = string
 
@@ -56,7 +57,7 @@ const useStyles = createUseStyles<Rules, Styles>({
 export const ProjectMainBody = () => {
   const isMobile = useMobileMode()
 
-  const { project } = useProjectContext()
+  const { project, isProjectOwner } = useProjectContext()
 
   const { mobileView } = useProjectContext()
 
@@ -75,13 +76,6 @@ export const ProjectMainBody = () => {
   const inView = mobileView === MobileViews.description
 
   const classes = useStyles({ isMobile, inView })
-
-  const { user } = useAuthContext()
-  const { navData } = useNavContext()
-
-  const isViewerTheProjectOwner = navData.projectOwnerIDs.includes(
-    Number(user.id),
-  )
 
   return (
     <>
@@ -109,13 +103,17 @@ export const ProjectMainBody = () => {
               w="100%"
               padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
             >
-              <Summary ref={headerRef} />
+              <Header ref={headerRef} />
 
-              {project && isViewerTheProjectOwner && (
+              {project && isProjectOwner && (
                 <LaunchProjectNotice project={project} />
               )}
 
-              {isViewerTheProjectOwner && <Creator />}
+              <CreatorSocial />
+
+              <Story />
+
+              {isProjectOwner && <CreatorMenu />}
 
               <SectionNav {...projectAnchors} />
 
