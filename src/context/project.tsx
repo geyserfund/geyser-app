@@ -14,6 +14,7 @@ import {
   MilestoneAdditionModal,
   RewardAdditionModal,
 } from '../pages/projectView/projectMainBody/components'
+import { ProjectCreatorModal } from '../pages/projectView/projectNavigation/components/ProjectCreatorModal'
 import {
   ProjectFragment,
   ProjectMilestone,
@@ -51,6 +52,7 @@ type ProjectContextProps = {
     reward?: ProjectRewardForCreateUpdateFragment
   }): void
   onMilestonesModalOpen(): void
+  onCreatorModalOpen(): void
 }
 
 export const ProjectContext = createContext<ProjectContextProps | null>(null)
@@ -88,6 +90,7 @@ export const ProjectProvider = ({
   const [isProjectOwner, setIsProjectOwner] = useState<boolean | undefined>()
   const { user } = useAuthContext()
 
+  const creatorModal = useModal()
   const milestonesModal = useModal()
   const rewardsModal = useModal<{
     reward?: ProjectRewardForCreateUpdateFragment
@@ -191,6 +194,7 @@ export const ProjectProvider = ({
         loading,
         fundForm,
         fundingFlow,
+        onCreatorModalOpen: creatorModal.onOpen,
         onRewardsModalOpen: rewardsModal.onOpen,
         onMilestonesModalOpen: milestonesModal.onOpen,
       }}
@@ -198,6 +202,7 @@ export const ProjectProvider = ({
       {children}
       {project && isProjectOwner && (
         <>
+          <ProjectCreatorModal {...creatorModal} />
           <MilestoneAdditionModal
             {...milestonesModal}
             onSubmit={onMilestonesSubmit}
