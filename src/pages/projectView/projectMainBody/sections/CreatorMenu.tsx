@@ -10,7 +10,7 @@ import { ButtonComponent } from '../../../../components/ui'
 import { getPath, LearnAboutCrowdfundingUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 
-export const Creator = () => {
+export const CreatorMenu = () => {
   const params = useParams<{ projectId: string }>()
 
   const { project, onMilestonesModalOpen, onRewardsModalOpen } =
@@ -47,21 +47,21 @@ export const Creator = () => {
         }}
         spacing="20px"
       >
-        <CreationCardItem
+        <CreationMenuItem
           as={Link}
           to={getPath('projectEntryCreation', `${params.projectId}`)}
           icon={<EntryEditIcon />}
           title="Write an entry"
           description="Engage your community with articles about your project updates"
         />
-        <CreationCardItem
+        <CreationMenuItem
           icon={<RewardGiftIcon />}
           title="Sell an item or perk"
           description="Make it exciting and worthwhile for contributors to fund your
             project"
           onClick={() => onRewardsModalOpen()}
         />
-        <CreationCardItem
+        <CreationMenuItem
           icon={<MilestoneIcon fontSize="25px" />}
           title="Add project goal"
           description="Setting milestones helps you reach your overall project goal"
@@ -72,18 +72,18 @@ export const Creator = () => {
   )
 }
 
-interface CreationCardItemProps extends CardLayoutProps {
+interface CreationMenuItemProps extends CardLayoutProps {
   icon: React.ReactNode
   title: string
   description: string
 }
 
-export const CreationCardItem = ({
+export const CreationMenuItem = ({
   icon,
   title,
   description,
   ...rest
-}: CreationCardItemProps) => {
+}: CreationMenuItemProps) => {
   return (
     <CardLayout hover height="100%" padding="12px" {...rest}>
       <HStack>
