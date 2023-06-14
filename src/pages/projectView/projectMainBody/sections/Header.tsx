@@ -106,7 +106,6 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               <FiTag color="neutral.600" />
             </span>
           }
-          alignItems="start"
         >
           <Wrap>
             {project.tags.map((tag) => {

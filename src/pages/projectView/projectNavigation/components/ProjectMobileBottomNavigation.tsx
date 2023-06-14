@@ -10,11 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { BiNews } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
 
 import { MilestoneIcon, RewardGiftIcon } from '../../../../components/icons'
-import { getPath } from '../../../../constants'
-import { useAuthContext } from '../../../../context'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { useScrollDirection } from '../../../../hooks'
 import { fonts } from '../../../../styles'
@@ -83,8 +80,13 @@ export const ProjectMobileBottomNavigation = ({
 }
 
 export const ProjectNavUI = () => {
-  const { mobileView, setMobileView, project } = useProjectContext()
-  const { user } = useAuthContext()
+  const {
+    mobileView,
+    setMobileView,
+    project,
+    isProjectOwner,
+    onCreatorModalOpen,
+  } = useProjectContext()
 
   const getTextColor = (value: string) => {
     if (value === mobileView) {
@@ -99,8 +101,6 @@ export const ProjectNavUI = () => {
   }
 
   const { fundingTxsCount } = project
-
-  const isOwner = project.owners[0]?.user?.id === user.id
 
   const handleClick = (value: MobileViews) => {
     if (mobileView === value) {
@@ -125,69 +125,60 @@ export const ProjectNavUI = () => {
       paddingX="10px"
       justifyContent="center"
       alignItems="center"
-      spacing={{
-        base: '18px',
-        lg: '50px',
-      }}
+      spacing={8}
       paddingBottom="2px"
     >
-      <Button
-        variant="ghost"
-        onClick={() => handleClick(MobileViews.description)}
-        color={getTextColor(MobileViews.description)}
-        _hover={{}}
-        paddingX="5px"
-      >
-        <BiNews fontSize="30px" />
-      </Button>
-      <IconButton
-        variant="ghost"
-        aria-label="milestones"
-        _hover={{}}
-        _active={{}}
-        onClick={() => handleClick(MobileViews.contribution)}
-        color={getTextColor(MobileViews.contribution)}
-      >
-        <>
-          <MilestoneIcon fontSize="1.5em" />
-          {fundingTxsCount ? (
-            <Badge ml={1}>
-              <Text fontFamily={fonts.mono}>{fundingTxsCount}</Text>
-            </Badge>
-          ) : null}
-        </>
-      </IconButton>
-      <IconButton
-        variant="ghost"
-        onClick={() => handleClick(MobileViews.rewards)}
-        color={getTextColor(MobileViews.rewards)}
-        aria-label="rewards"
-        _hover={{}}
-        _active={{}}
-        isDisabled={!project.rewards.length}
-        paddingX="5px"
-      >
-        <RewardGiftIcon fontSize="1.5em" />
-      </IconButton>
+      <HStack flexGrow={1} justifyContent="space-between">
+        <Button
+          variant="ghost"
+          onClick={() => handleClick(MobileViews.description)}
+          color={getTextColor(MobileViews.description)}
+          _hover={{}}
+          paddingX="5px"
+        >
+          <BiNews fontSize="30px" />
+        </Button>
+        <IconButton
+          variant="ghost"
+          aria-label="milestones"
+          _hover={{}}
+          _active={{}}
+          onClick={() => handleClick(MobileViews.contribution)}
+          color={getTextColor(MobileViews.contribution)}
+        >
+          <>
+            <MilestoneIcon fontSize="1.5em" />
+            {fundingTxsCount ? (
+              <Badge ml={1}>
+                <Text fontFamily={fonts.mono}>{fundingTxsCount}</Text>
+              </Badge>
+            ) : null}
+          </>
+        </IconButton>
+        <IconButton
+          variant="ghost"
+          onClick={() => handleClick(MobileViews.rewards)}
+          color={getTextColor(MobileViews.rewards)}
+          aria-label="rewards"
+          _hover={{}}
+          _active={{}}
+          isDisabled={!project.rewards.length}
+          paddingX="5px"
+        >
+          <RewardGiftIcon fontSize="1.5em" />
+        </IconButton>
+      </HStack>
       <HStack flexGrow={1}>
-        {isOwner ? (
+        {isProjectOwner ? (
           <Button
-            as={Link}
-            to={getPath('projectDashboard', project.name)}
             size="sm"
-            backgroundColor={
-              mobileView === MobileViews.funding ? 'neutral.500' : 'primary.400'
-            }
-            border="1px solid"
-            borderColor={
-              mobileView === MobileViews.funding ? 'neutral.500' : 'primary.400'
-            }
-            _hover={{}}
             variant="primary"
             width="100%"
-            paddingX="5px"
+            padding="5px"
+            isDisabled={showGreyButton}
+            onClick={() => onCreatorModalOpen()}
           >
-            Dashboard
+            Create
           </Button>
         ) : (
           <Button

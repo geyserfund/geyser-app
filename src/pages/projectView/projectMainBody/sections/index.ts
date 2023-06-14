@@ -1,4 +1,3 @@
-export * from './CreatorMenu'
 export * from './CreatorSocial'
 export * from './Entries'
 export * from './Header'
