@@ -4223,12 +4223,7 @@ export type ProjectFragment = {
   owners: Array<{
     __typename?: 'Owner'
     id: any
-    user: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-    }
+    user: { __typename?: 'User' } & UserMeFragment
   }>
   rewards: Array<
     { __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment
@@ -4237,24 +4232,14 @@ export type ProjectFragment = {
     __typename?: 'Ambassador'
     id: any
     confirmed: boolean
-    user: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-    }
+    user: { __typename?: 'User' } & UserForAvatarFragment
   }>
   sponsors: Array<{
     __typename?: 'Sponsor'
     id: any
     url?: string | null
     image?: string | null
-    user?: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-    } | null
+    user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
   }>
   funders: Array<{
     __typename?: 'Funder'
@@ -4263,13 +4248,7 @@ export type ProjectFragment = {
     confirmed: boolean
     confirmedAt?: any | null
     timesFunded?: number | null
-    user?: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-      email?: string | null
-    } | null
+    user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
   }>
   milestones: Array<{
     __typename?: 'ProjectMilestone'
@@ -4338,6 +4317,7 @@ export type UserForAvatarFragment = {
   __typename?: 'User'
   id: any
   imageUrl?: string | null
+  email?: string | null
   username: string
 }
 
@@ -5558,6 +5538,7 @@ export const UserForAvatarFragmentDoc = gql`
   fragment UserForAvatar on User {
     id
     imageUrl
+    email
     username
   }
 `
@@ -5629,6 +5610,31 @@ export const FundingTxFragmentDoc = gql`
     }
   }
 `
+export const UserMeFragmentDoc = gql`
+  fragment UserMe on User {
+    id
+    username
+    imageUrl
+    email
+    externalAccounts {
+      id
+      accountType
+      externalUsername
+      externalId
+      public
+    }
+    ownerOf {
+      project {
+        id
+        name
+        image
+        thumbnailImage
+        title
+        status
+      }
+    }
+  }
+`
 export const ProjectRewardForCreateUpdateFragmentDoc = gql`
   fragment ProjectRewardForCreateUpdate on ProjectReward {
     id
@@ -5693,9 +5699,7 @@ export const ProjectFragmentDoc = gql`
     owners {
       id
       user {
-        id
-        username
-        imageUrl
+        ...UserMe
       }
     }
     rewards {
@@ -5705,9 +5709,7 @@ export const ProjectFragmentDoc = gql`
       id
       confirmed
       user {
-        id
-        username
-        imageUrl
+        ...UserForAvatar
       }
     }
     sponsors {
@@ -5715,18 +5717,13 @@ export const ProjectFragmentDoc = gql`
       url
       image
       user {
-        id
-        username
-        imageUrl
+        ...UserForAvatar
       }
     }
     funders {
       id
       user {
-        id
-        username
-        imageUrl
-        email
+        ...UserForAvatar
       }
       amountFunded
       confirmed
@@ -5767,33 +5764,10 @@ export const ProjectFragmentDoc = gql`
       }
     }
   }
+  ${UserMeFragmentDoc}
   ${ProjectRewardForCreateUpdateFragmentDoc}
+  ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
-`
-export const UserMeFragmentDoc = gql`
-  fragment UserMe on User {
-    id
-    username
-    imageUrl
-    email
-    externalAccounts {
-      id
-      accountType
-      externalUsername
-      externalId
-      public
-    }
-    ownerOf {
-      project {
-        id
-        name
-        image
-        thumbnailImage
-        title
-        status
-      }
-    }
-  }
 `
 export const EntryForLandingPageFragmentDoc = gql`
   fragment EntryForLandingPage on Entry {
