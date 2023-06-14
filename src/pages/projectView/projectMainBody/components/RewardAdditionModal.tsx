@@ -308,9 +308,9 @@ export const RewardAdditionModal = ({
             </InputLeftAddon>
 
             {/*
-                   @TODO: Use a different `value` here if when we support currency
-                   types beyond USD cents (e.g: satoshis)
-                 */}
+              @TODO: Use a different `value` here if when we support currency
+              types beyond USD cents (e.g: satoshis)
+            */}
             <Input
               focusBorderColor="primary.400"
               name="Dollar Amount Cost"
