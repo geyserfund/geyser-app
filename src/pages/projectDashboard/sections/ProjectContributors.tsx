@@ -108,9 +108,7 @@ export const ProjectContributors = () => {
         header: 'Contribution',
         key: 'amount',
         render: (val: Funder) => (
-          <SatoshiAmount scale={0.7} fontSize="14px">
-            {val.amountFunded}
-          </SatoshiAmount>
+          <SatoshiAmount fontSize="14px">{val.amountFunded}</SatoshiAmount>
         ),
       },
       {
@@ -156,7 +154,9 @@ export const ProjectContributors = () => {
               {fundingTxs.map((tx) => (
                 <Tooltip
                   key={tx.uuid}
-                  label={<SatoshiAmount>{tx.amount}</SatoshiAmount>}
+                  label={
+                    <SatoshiAmount variant="body1">{tx.amount}</SatoshiAmount>
+                  }
                 >
                   <Text variant="caption">{tx.uuid}</Text>
                 </Tooltip>
