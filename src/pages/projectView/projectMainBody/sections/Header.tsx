@@ -55,6 +55,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           width="76px"
           height="100%"
           maxHeight="91px"
+          boxShadow="lg"
         />
         <VStack
           flexGrow={1}
