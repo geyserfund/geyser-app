@@ -36,9 +36,7 @@ export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
   const debouncedGifSearch = useDebounce(gifSearch, 500)
 
   const fetchGifs = (offset: number) =>
-    giphy.search(debouncedGifSearch, { offset, sort: 'relevant', limit: 9 })
-
-  const [focus, setFocus] = useState(true)
+    giphy.search(debouncedGifSearch, { offset, sort: 'relevant', limit: 12 })
 
   return (
     <Modal
@@ -51,15 +49,13 @@ export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
     >
       <ModalOverlay />
 
-      <ModalContent mt={focus && isMobile ? 100 : 0}>
+      <ModalContent mt={100}>
         <ModalBody p={2}>
           <InputGroup mb={2}>
             <InputLeftElement>
               <SearchIcon />
             </InputLeftElement>
             <Input
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
               placeholder="Search"
               variant="filled"
               focusBorderColor="primary.400"
@@ -73,26 +69,19 @@ export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
             </InputRightElement>
           </InputGroup>
 
-          <Box height="450px" overflow="auto">
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              cursor="pointer"
-            >
-              <Grid
-                key={debouncedGifSearch}
-                width={isMobile ? 350 : 400}
-                columns={3}
-                fetchGifs={fetchGifs}
-                onGifsFetchError={(error) =>
-                  console.log('gif fetch error', error)
-                }
-                noLink={true}
-                hideAttribution={true}
-                onGifClick={onSelect}
-              />
-            </Box>
+          <Box height="450px" overflow="auto" cursor="pointer">
+            <Grid
+              key={debouncedGifSearch}
+              width={isMobile ? 350 : 400}
+              columns={3}
+              fetchGifs={fetchGifs}
+              onGifsFetchError={(error) =>
+                console.log('gif fetch error', error)
+              }
+              noLink={true}
+              hideAttribution={true}
+              onGifClick={onSelect}
+            />
           </Box>
         </ModalBody>
       </ModalContent>
