@@ -141,11 +141,11 @@ export const ProjectNavUI = () => {
       >
         <>
           <MilestoneIcon fontSize="1.5em" />
-          {fundingTxsCount && (
-            <Badge>
+          {fundingTxsCount ? (
+            <Badge ml={1}>
               <Text fontFamily={fonts.mono}>{fundingTxsCount}</Text>
             </Badge>
-          )}
+          ) : null}
         </>
       </IconButton>
       <IconButton
