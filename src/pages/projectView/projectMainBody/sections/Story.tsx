@@ -10,7 +10,7 @@ import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
 
 export const Story = () => {
   const navigate = useNavigate()
-  const { project } = useProjectContext()
+  const { project, isProjectOwner } = useProjectContext()
 
   if (!project?.description) {
     return null
@@ -20,15 +20,17 @@ export const Story = () => {
     <CardLayout>
       <TitleDivider
         rightAction={
-          <IconButton
-            aria-label="go to edit story"
-            onClick={() =>
-              project && navigate(getPath('dashboardStory', project.name))
-            }
-            variant="transparent"
-          >
-            <BiPencil />
-          </IconButton>
+          isProjectOwner ? (
+            <IconButton
+              aria-label="go to edit story"
+              onClick={() =>
+                project && navigate(getPath('dashboardStory', project.name))
+              }
+              variant="transparent"
+            >
+              <BiPencil />
+            </IconButton>
+          ) : undefined
         }
       >
         Story

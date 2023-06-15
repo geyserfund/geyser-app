@@ -8,7 +8,7 @@ import { useCustomTheme } from '../../../utils'
 
 const Container = styled(Box, {
   baseStyle: {
-    '& p, & iframe': {
+    '& p, & iframe, & h1, & h2, & h3, & h4, & h5': {
       mt: 4,
     },
     '& iframe': {
