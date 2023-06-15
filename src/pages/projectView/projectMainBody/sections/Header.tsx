@@ -8,8 +8,10 @@ import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
+import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { getPath } from '../../../../constants'
 import { SortType, useProjectContext } from '../../../../context'
+import { validateImageUrl } from '../../../../forms/validations/image'
 import { useMobileMode } from '../../../../utils'
 import {
   FollowButton,
@@ -36,16 +38,23 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
     </HStack>
   )
 
+  const isImage = validateImageUrl(project.image)
+  const isVideo = project.image && !isImage
+
   return (
     <CardLayout ref={ref}>
       <Box>
-        <ImageWithReload
-          width="100%"
-          maxHeight="471px"
-          objectFit="cover"
-          borderRadius="8px"
-          src={project.image || undefined}
-        />
+        {isImage ? (
+          <ImageWithReload
+            width="100%"
+            maxHeight="471px"
+            objectFit="cover"
+            borderRadius="8px"
+            src={project.image || undefined}
+          />
+        ) : null}
+
+        {isVideo && project.image ? <VideoPlayer url={project.image} /> : null}
       </Box>
 
       <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">
