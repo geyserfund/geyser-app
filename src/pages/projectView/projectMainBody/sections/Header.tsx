@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
+import { DefaultImage } from '../../../../components/ui/DefaultImage'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { getPath } from '../../../../constants'
 import { SortType, useProjectContext } from '../../../../context'
@@ -38,24 +39,38 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
     </HStack>
   )
 
-  const isImage = validateImageUrl(project.image)
-  const isVideo = project.image && !isImage
+  const renderImageOrVideo = () => {
+    const isImage = validateImageUrl(project.image)
+
+    if (isImage) {
+      return (
+        <ImageWithReload
+          width="100%"
+          maxHeight="471px"
+          objectFit="cover"
+          borderRadius="8px"
+          src={project.image || undefined}
+        />
+      )
+    }
+
+    if (project.image && !isImage) {
+      return <VideoPlayer url={project.image} />
+    }
+
+    return (
+      <DefaultImage
+        width="100%"
+        maxHeight="471px"
+        objectFit="cover"
+        borderRadius="8px"
+      />
+    )
+  }
 
   return (
     <CardLayout ref={ref}>
-      <Box>
-        {isImage ? (
-          <ImageWithReload
-            width="100%"
-            maxHeight="471px"
-            objectFit="cover"
-            borderRadius="8px"
-            src={project.image || undefined}
-          />
-        ) : null}
-
-        {isVideo && project.image ? <VideoPlayer url={project.image} /> : null}
-      </Box>
+      <Box>{renderImageOrVideo()}</Box>
 
       <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">
         <ImageWithReload
