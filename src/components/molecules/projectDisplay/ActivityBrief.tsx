@@ -1,14 +1,12 @@
 import { CircularProgress, HStack, Text, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { createUseStyles } from 'react-jss'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
-import { fonts } from '../../../styles'
 import {
   ProjectFragment,
   ProjectMilestone,
 } from '../../../types/generated/graphql'
-import { isActive, useMobileMode } from '../../../utils'
+import { isActive } from '../../../utils'
 import { getProjectBalance } from '../../../utils/helpers'
 import { SatoshiAmount } from '../../ui'
 
@@ -17,27 +15,12 @@ interface IActivityBrief {
   project: ProjectFragment
 }
 
-const useStyles = createUseStyles({
-  circularProgress: {
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '& .amount-label-sat': {
-      alignItems: 'flex-start',
-      justifyContent: 'center',
-    },
-  },
-})
-
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
-  const classes = useStyles()
-  const isMobile = useMobileMode()
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
   const [prevMilestone, setPrevMilestone] = useState(0)
 
-  const balance = getProjectBalance(project)
+  const balance = useMemo(() => getProjectBalance(project), [project])
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
@@ -59,7 +42,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
       })
       setPrevMilestone(prevTotal)
     }
-  }, [project])
+  }, [balance, project])
 
   const getTrackColor = () => {
     switch (milestoneIndex % 3) {
@@ -88,21 +71,25 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
     }
   }
 
-  const renderCircularProgress = () => {
+  const circularPercentage = useMemo(() => {
     if (currentMilestone) {
-      const circularPercentage =
+      return (
         ((balance - prevMilestone) /
           (currentMilestone.amount - prevMilestone)) *
         100
+      )
+    }
+  }, [balance, currentMilestone, prevMilestone])
 
+  const renderCircularProgress = () => {
+    if (currentMilestone) {
       return (
         <CircularProgress
           capIsRound
           isIndeterminate={loading}
-          className={classes.circularProgress}
           value={circularPercentage}
-          size="105px"
-          thickness="15px"
+          size="116px"
+          thickness="16px"
           color={getColor()}
           trackColor={getTrackColor()}
         />
@@ -120,12 +107,12 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
           100,
       )
       return (
-        <Text
-          fontSize="14px"
-          fontFamily={fonts.mono}
-          color={'neutral.600'}
-          maxW="100%"
-        >{`${percentage}% of ${currentMilestone.name}`}</Text>
+        <Text pl={2} color="neutral.600" w="100%">
+          <Text w="100%" fontWeight={500} display="inline">
+            {percentage}% of Milestone {milestoneIndex}:
+          </Text>{' '}
+          {currentMilestone.name}
+        </Text>
       )
     }
 
@@ -135,30 +122,16 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
   const showCountdown = isActive(project.status) && Boolean(project.expiresAt)
 
   return (
-    <HStack
-      width="100%"
-      padding={isMobile ? '20px 20px 0px 20px' : '10px 20px'}
-      justifyContent="space-between"
-    >
+    <HStack width="100%" padding={3} justifyContent="start">
       {renderCircularProgress()}
-      <VStack flex="1" spacing="5px" width="100%" overflow="hidden">
-        {!isMobile && (
-          <Text
-            fontSize="18px"
-            fontWeight={600}
-            color="neutral.900"
-            wordBreak="break-word"
-          >
-            {project.title}
-          </Text>
-        )}
-        <SatoshiAmount
-          fontSize="32px"
-          fontFamily={fonts.mono}
-          fontWeight={400}
-          fontStyle={'normal'}
-          color="primary.600"
-        >
+      <VStack
+        flex="1"
+        spacing={0}
+        width="100%"
+        px={2}
+        alignItems={circularPercentage === undefined ? 'center' : 'start'}
+      >
+        <SatoshiAmount variant="satoshi" color="primary.600">
           {balance}
         </SatoshiAmount>
         {getMilestoneValue()}

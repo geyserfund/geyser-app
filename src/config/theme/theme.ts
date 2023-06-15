@@ -161,6 +161,13 @@ export const theme = {
           lineHeight: 1.6,
           fontSize: '16px',
         }),
+        satoshi: () => ({
+          fontFamily: fonts.mono,
+          fontWeight: 500,
+          fontSize: '32px',
+          lineHeight: '1.4em',
+          letterSpacing: '0.01125em',
+        }),
       },
     },
     Link: {
