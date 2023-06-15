@@ -2,8 +2,12 @@ import { ApolloError } from '@apollo/client'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
-import { ApolloErrors, fundingStages, stageList } from '../../constants'
-import { IFundingStages } from '../../constants'
+import {
+  ApolloErrors,
+  fundingStages,
+  IFundingStages,
+  stageList,
+} from '../../constants'
 import { AuthContext } from '../../context'
 import {
   FundingInput,
@@ -83,8 +87,7 @@ const requestWebLNPayment = async (fundingTx: FundingTxFragment) => {
     throw new Error(WEBLN_ENABLE_ERROR)
   }
 
-  const paymentHash = await sha256(preimage)
-  return paymentHash
+  return sha256(preimage)
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
@@ -269,6 +272,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           return {
             ...current,
             ...fundingActivity,
+            uuid: fundingActivity.uuid || current.uuid,
           }
         }
 
