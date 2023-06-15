@@ -121,7 +121,6 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
               key={reward.id}
               width="100%"
               reward={reward}
-              isSatoshi={false}
               handleEdit={
                 isProjectOwner
                   ? () => {

@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
-import { fonts } from '../../../styles'
 import {
   EntryForProjectFragment,
   EntryStatus,
@@ -164,24 +163,19 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
           overflow="hidden"
         >
           <HStack
-            color="primary.400"
             spacing={'10px'}
             align={'center'}
             flex={0}
+            color="primary.400"
           >
             <HStack spacing={1}>
-              <Text fontFamily={fonts.mono} fontWeight="bold" variant="body1">
-                {entry.fundersCount}
+              <Text variant="body1">{entry.fundersCount}</Text>
+              <Text variant="body1">
+                <BsHeartFill />
               </Text>
-              <BsHeartFill />
             </HStack>
 
-            <SatoshiAmount
-              fontFamily={fonts.mono}
-              variant="body1"
-              fontWeight="bold"
-              scale={0.8}
-            >
+            <SatoshiAmount variant="body1">
               {getShortAmountLabel(entry.amountFunded)}
             </SatoshiAmount>
           </HStack>
