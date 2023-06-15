@@ -204,7 +204,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   width="initial"
                   type="text"
                   placeholder="www.youtube.com/2ms0j2n93c"
-                  {...(field as any)}
+                  {...field}
                 />
                 <FileUpload
                   containerProps={{ flexGrow: 1 }}
