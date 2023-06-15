@@ -17,10 +17,6 @@ import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { validateImageUrl } from '../../../forms/validations/image'
-import {
-  getVideoIdFromUrl,
-  validateYouTubeUrl,
-} from '../../../forms/validations/youtube'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../types'
