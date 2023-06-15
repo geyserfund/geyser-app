@@ -1,13 +1,13 @@
 import { Maybe, ProjectStatus } from '../../types/generated/graphql'
 
 export const isActive = (status?: Maybe<ProjectStatus>) => {
-  return status ? status === ProjectStatus.Active : false
+  return status === ProjectStatus.Active
 }
 
 export const isDraft = (status?: Maybe<ProjectStatus>) => {
-  return status ? status === ProjectStatus.Draft : false
+  return status === ProjectStatus.Draft
 }
 
 export const isInactive = (status?: Maybe<ProjectStatus>) => {
-  return status ? status === ProjectStatus.Inactive : false
+  return status === ProjectStatus.Inactive
 }
