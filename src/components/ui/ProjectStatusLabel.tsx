@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
 import { ProjectFragment, WalletStatus } from '../../types/generated/graphql'
-import { isActive, isDraft } from '../../utils'
+import { isActive, isDraft, isInactive } from '../../utils'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: ProjectFragment
@@ -64,9 +64,7 @@ export const ProjectStatusLabel = ({
     fontSize: fontSize || '12px',
   }
 
-  const [status, setStatus] = useState<ProjectStatusLabels>(
-    ProjectStatusLabels.DRAFT,
-  )
+  const [status, setStatus] = useState<ProjectStatusLabels | null>(null)
 
   useEffect(() => {
     if (!project) {
@@ -96,16 +94,25 @@ export const ProjectStatusLabel = ({
         return ProjectStatusLabels.DRAFT
       }
 
-      return ProjectStatusLabels.INACTIVE
+      if (isInactive(project.status)) {
+        return ProjectStatusLabels.INACTIVE
+      }
+
+      return null
     }
 
     const currentStatus = getStatus()
     setStatus(currentStatus)
   }, [project])
 
+  if (!status) {
+    return null
+  }
+
   const CurrentIcon = ProjectStatusIcons[status]
   const color = ProjectStatusColors[status]
   const tooltip = ProjectStatusTooltip[status]
+
   return (
     <Tooltip label={tooltip} placement="top" size="sm">
       <Stack direction={direction} alignItems="center">

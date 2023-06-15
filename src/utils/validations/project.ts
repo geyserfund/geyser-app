@@ -7,3 +7,7 @@ export const isActive = (status?: Maybe<ProjectStatus>) => {
 export const isDraft = (status?: Maybe<ProjectStatus>) => {
   return status ? status === ProjectStatus.Draft : false
 }
+
+export const isInactive = (status?: Maybe<ProjectStatus>) => {
+  return status ? status === ProjectStatus.Inactive : false
+}
