@@ -202,12 +202,9 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             </span>
           }
         >
-          <Text
-            variant="body2"
-            color="neutral.600"
-          >{`Launched ${DateTime.fromMillis(Number(project.createdAt)).toFormat(
-            'dd LLL yyyy',
-          )}`}</Text>
+          <Text variant="body2" color="neutral.600">{`${DateTime.fromMillis(
+            Number(project.createdAt),
+          ).toFormat('dd LLL yyyy')}`}</Text>
         </SummaryInfoLine>
       </HStack>
     </CardLayout>
