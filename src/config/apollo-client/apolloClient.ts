@@ -27,12 +27,18 @@ const wsLink = new GraphQLWsLink(
   }),
 )
 
-const errorLink = onError(({ graphQLErrors }) => {
+const errorLink = onError(({ graphQLErrors, forward, operation }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
       if (err && err.extensions && err.extensions.code) {
-        if (err.extensions.code === 'UNAUTHENTICATED') {
-          window.location.href = `${window.location.pathname}?loggedOut=true`
+        switch (err.extensions.code) {
+          case 'UNAUTHENTICATED':
+            window.location.href = `${window.location.pathname}?loggedOut=true`
+            break
+          case 'EXPIRED_REFRESH_TOKEN':
+            return forward(operation)
+          default:
+            break
         }
       }
     }
