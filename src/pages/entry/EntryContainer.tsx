@@ -3,8 +3,8 @@ import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 
 import { MobileViews, useProjectContext } from '../../context'
-import { fadeOut, slideInLeft } from '../../styles/animations'
-import { EntryFragment } from '../../types/generated/graphql'
+import { fadeOut, slideInLeft } from '../../styles'
+import { EntryFragment } from '../../types'
 import { useMobileMode } from '../../utils'
 import { EntryDetails } from './EntryDetails'
 
