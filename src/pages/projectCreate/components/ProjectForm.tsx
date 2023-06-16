@@ -9,13 +9,14 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { ChangeEventHandler } from 'react'
-import { UseFormReturn } from 'react-hook-form'
+import { Controller, UseFormReturn } from 'react-hook-form'
 
 import { FileUpload } from '../../../components/molecules'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
+import { validateImageUrl } from '../../../forms/validations/image'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../types'
@@ -31,7 +32,7 @@ type ProjectFormProps = {
 export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   const { user } = useAuthContext()
 
-  const { formState, setValue, watch, setError } = form
+  const { formState, setValue, watch, setError, control } = form
 
   const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: {
@@ -174,15 +175,16 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       >
         <FileUpload
           showcase
+          containerProps={{ w: '100%' }}
           caption="For best fit, pick a square image. Image size limit: 10MB."
           src={watch('thumbnailImage')}
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
-          childrenOnLoading={<UploadBox loading />}
+          childrenOnLoading={<UploadBox loading h={10} />}
         >
           <UploadBox
             h={10}
-            title={watch('image') ? 'Change image' : undefined}
+            title={watch('thumbnailImage') ? 'Change image' : undefined}
           />
         </FileUpload>
       </FieldContainer>
@@ -191,21 +193,38 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         title="Header"
         subtitle="Add a header with a video link or by uploading an image to help bring your project to life"
       >
-        <FileUpload
-          showcase
-          showcaseW="80px"
-          caption="For best fit, pick an image around 800px x 200px. Image size limit:
-        10MB."
-          src={watch('image')}
-          onUploadComplete={handleHeaderImageUpload}
-          onDeleteClick={handleDeleteImage}
-          childrenOnLoading={<UploadBox loading />}
-        >
-          <UploadBox
-            h={10}
-            title={watch('image') ? 'Change header' : undefined}
-          />
-        </FileUpload>
+        <Controller
+          name="image"
+          control={control}
+          render={({ field }) => {
+            const isImage = validateImageUrl(field.value)
+            return (
+              <HStack alignItems="start">
+                <Input
+                  width="initial"
+                  type="text"
+                  placeholder="www.youtube.com/2ms0j2n93c"
+                  {...field}
+                />
+                <FileUpload
+                  containerProps={{ flexGrow: 1 }}
+                  showcase={isImage}
+                  showcaseW="80px"
+                  caption="For best fit, select horizontal 1:3 image. Image size limit: 10MB"
+                  src={isImage ? field.value : undefined}
+                  onUploadComplete={handleHeaderImageUpload}
+                  onDeleteClick={handleDeleteImage}
+                  childrenOnLoading={<UploadBox loading h={10} />}
+                >
+                  <UploadBox
+                    h={10}
+                    title={field.value ? 'Change header' : undefined}
+                  />
+                </FileUpload>
+              </HStack>
+            )
+          }}
+        />
       </FieldContainer>
 
       <FieldContainer
