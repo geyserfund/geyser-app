@@ -8,7 +8,7 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const server = {
     port: Number(env.PORT),
-    https: false,
+    https: Boolean(env.HTTPS),
     proxy: undefined,
     // open: env.DOCKER ? false : `http://dev.geyser.fund:${PORT}/`,
     watch: {
