@@ -10,7 +10,6 @@ import { ProjectNavigation } from '../projectNavigation/components/ProjectNaviga
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
 import { LaunchProjectNotice } from './components'
 import {
-  CreatorMenu,
   Entries,
   Header,
   Milestones,
@@ -112,8 +111,6 @@ export const ProjectMainBody = () => {
               <CreatorSocial />
 
               <Story />
-
-              {isProjectOwner && <CreatorMenu />}
 
               <SectionNav {...projectAnchors} />
 
