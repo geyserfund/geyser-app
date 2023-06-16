@@ -75,9 +75,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">
         <ImageWithReload
           borderRadius="8px"
+          objectFit="cover"
           src={project.thumbnailImage || undefined}
-          width="76px"
-          height="100%"
+          width="80px"
+          height="76px"
           maxHeight="91px"
           boxShadow="lg"
         />
