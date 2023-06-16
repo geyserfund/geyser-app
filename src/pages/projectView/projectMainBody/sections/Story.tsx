@@ -18,24 +18,26 @@ export const Story = () => {
 
   return (
     <CardLayout>
-      <TitleDivider
-        rightAction={
-          isProjectOwner ? (
-            <IconButton
-              aria-label="go to edit story"
-              onClick={() =>
-                project && navigate(getPath('dashboardStory', project.name))
-              }
-              variant="transparent"
-            >
-              <BiPencil />
-            </IconButton>
-          ) : undefined
-        }
-      >
-        Story
-      </TitleDivider>
-      <MarkdownField preview content={project?.description} />
+      <article>
+        <TitleDivider
+          rightAction={
+            isProjectOwner ? (
+              <IconButton
+                aria-label="go to edit story"
+                onClick={() =>
+                  project && navigate(getPath('dashboardStory', project.name))
+                }
+                variant="transparent"
+              >
+                <BiPencil />
+              </IconButton>
+            ) : undefined
+          }
+        >
+          Story
+        </TitleDivider>
+        <MarkdownField preview content={project?.description} />
+      </article>
     </CardLayout>
   )
 }
