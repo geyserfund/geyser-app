@@ -1,8 +1,8 @@
-import { Box, Image, ImageProps, Skeleton } from '@chakra-ui/react'
+import { Image, ImageProps, Skeleton } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 
-import { ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useNotification } from '../../utils'
+import { DefaultImage } from './DefaultImage'
 
 interface IImageWithReload extends ImageProps {
   noCacheId?: string
@@ -73,29 +73,6 @@ export const ImageWithReload = ({
     setHasValidSource(true)
   }
 
-  const renderDefaultImage = () => {
-    if (grey) {
-      return (
-        <Box
-          height="100%"
-          width="100%"
-          backgroundColor="neutral.200"
-          {...rest}
-        />
-      )
-    }
-
-    return (
-      <Image
-        src={defaultImage || ProjectEntryThumbnailPlaceholderUrl}
-        maxHeight="500px"
-        height="222px"
-        width="350px"
-        {...rest}
-      />
-    )
-  }
-
   const renderSkeletonImage = () => {
     return (
       <>
@@ -129,7 +106,11 @@ export const ImageWithReload = ({
 
   return (
     <>
-      {hasValidSource ? loading && renderSkeletonImage() : renderDefaultImage()}
+      {hasValidSource ? (
+        loading && renderSkeletonImage()
+      ) : (
+        <DefaultImage grey={grey} {...rest} />
+      )}
       {hasValidSource && renderSourceImage()}
     </>
   )
