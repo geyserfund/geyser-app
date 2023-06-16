@@ -1,4 +1,4 @@
-import { Box, HStack, Link, Text } from '@chakra-ui/react'
+import { Box, HStack, Link, Text, useBreakpointValue } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -6,10 +6,9 @@ import { UserAvatarWithLink } from '../../../../components/ui/UserAvatar'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { useExternalAccountsButtons } from '../../../../hooks/useExternalAccountsButtons'
-import { useMobileMode } from '../../../../utils'
 
 export const CreatorSocial = () => {
-  const isMobile = useMobileMode()
+  const isMd = useBreakpointValue({ base: false, md: true }, { ssr: false })
   const { project } = useProjectContext()
 
   const user = project?.owners[0]?.user
@@ -62,14 +61,12 @@ export const CreatorSocial = () => {
                 fontWeight={500}
                 bg="neutral.100"
               >
-                <Box as="span" pr={2}>
-                  {icon}
-                </Box>
-                {isMobile ? null : (
-                  <Text variant="body" maxW="12em" isTruncated>
+                <Box as="span">{icon}</Box>
+                {isMd ? (
+                  <Text ml={2} variant="body" maxW="12em" isTruncated>
                     {username}
                   </Text>
-                )}
+                ) : null}
               </Text>
             )
           })}
