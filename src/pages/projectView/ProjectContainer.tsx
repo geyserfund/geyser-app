@@ -61,7 +61,7 @@ export const ProjectContainer = () => {
       <Head
         title={project?.title || ''}
         description={project?.description || ''}
-        image={project?.image || ''}
+        image={project?.thumbnailImage || ''}
         type="article"
       />
 
