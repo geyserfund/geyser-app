@@ -7,9 +7,10 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
     duration: 3000,
     isClosable: true,
     position: 'top-right',
-    variant: 'left-accent',
+    variant: 'solid',
     containerStyle: {
       marginTop: 65,
+      marginRight: 10,
     },
     ...options,
   })
