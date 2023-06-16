@@ -7,8 +7,8 @@ import { CardLayout } from '../../../../components/layouts'
 import {
   DeleteConfirmModal,
   ProjectEntryCard,
-  ProjectSectionBar,
 } from '../../../../components/molecules'
+import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { MUTATION_DELETE_ENTRY } from '../../../../graphql/mutations'
@@ -149,7 +149,7 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
         flexDirection="column"
         padding="24px"
       >
-        <ProjectSectionBar name={'Entries'} number={project.entries.length} />
+        <TitleDivider badge={project.entries.length}>Entries</TitleDivider>
 
         {renderEntries()}
 

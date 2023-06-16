@@ -3,8 +3,8 @@ import { forwardRef } from 'react'
 import { BiPencil } from 'react-icons/bi'
 
 import { CardLayout } from '../../../../components/layouts'
-import { ProjectSectionBar } from '../../../../components/molecules'
 import { IconButtonComponent } from '../../../../components/ui'
+import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { useProjectContext } from '../../../../context'
 import { MilestoneComponent } from '../components/MilestoneComponent'
 
@@ -48,10 +48,9 @@ export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
         alignItems="flex-start"
         spacing="25px"
       >
-        <ProjectSectionBar
-          name={'Milestones'}
-          number={project.milestones.length}
-          rightSection={
+        <TitleDivider
+          badge={project.milestones.length}
+          rightAction={
             isProjectOwner && (
               <IconButtonComponent
                 aria-label="edit-milestone"
@@ -62,7 +61,9 @@ export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
               />
             )
           }
-        />
+        >
+          Milestones
+        </TitleDivider>
         <VStack alignItems="flex-start" spacing="12px">
           {renderMilestones()}
         </VStack>
