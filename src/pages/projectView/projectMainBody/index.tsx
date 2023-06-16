@@ -95,9 +95,9 @@ export const ProjectMainBody = () => {
         <Box className={classes.detailsContainer} id="project-scroll-container">
           <VStack alignItems="center" width="100%" flex="1">
             <VStack
-              spacing="30px"
+              spacing={5}
               alignItems="left"
-              marginTop={isMobile ? '0px' : '20px'}
+              mt={isMobile ? 0 : 5}
               maxWidth="1000px"
               w="100%"
               padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
