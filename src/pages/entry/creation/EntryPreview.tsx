@@ -170,8 +170,9 @@ export const EntryPreview = () => {
         await handleUpdateEntry()
       }
 
-      if (toInt(entry.id)) {
-        await publishPost({ variables: { id: toInt(entry.id) } })
+      const entryId = toInt(entry.id)
+      if (entryId) {
+        await publishPost({ variables: { id: entryId } })
       }
     } catch (error) {
       toast({
