@@ -13,17 +13,16 @@ import {
   ProjectFragment,
   ProjectReward,
   RewardFundingInput,
-} from '../../../types/generated/graphql'
+} from '../../../types'
 import { toInt, useMobileMode } from '../../../utils'
 import { truthyFilter } from '../../../utils/array'
+import { InfoPageSkeleton, ProjectFundingInitialInfoScreen } from './screens'
 import {
-  InfoPageSkeleton,
-  ProjectFundingInitialInfoScreen,
-} from './screens/ProjectFundingInitialInfoScreen'
-import { ProjectFundingQRScreen } from './screens/ProjectFundingQRScreen'
-import { ProjectFundingRewardSelectionScreen } from './screens/ProjectFundingRewardSelectionScreen'
-import { ProjectFundingSelectionFormScreen } from './screens/ProjectFundingSelectionFormScreen'
-import { SuccessScreen } from './screens/SuccessScreen'
+  ProjectFundingQRScreen,
+  ProjectFundingRewardSelectionScreen,
+  ProjectFundingSelectionFormScreen,
+  SuccessScreen,
+} from './screens'
 import { useStyles } from './styles'
 
 type Props = {
