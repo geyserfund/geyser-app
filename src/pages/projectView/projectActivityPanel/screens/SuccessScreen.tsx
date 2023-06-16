@@ -17,12 +17,12 @@ import {
   Project,
   ProjectFragment,
   UserBadge,
-} from '../../../../types/generated/graphql'
+} from '../../../../types'
 import { copyTextToClipboard } from '../../../../utils'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
-} from '../../projectMainBody/components/ContributionInfoBox'
+} from '../../projectMainBody/components'
 import { SuccessImageComponent } from '../components'
 
 type Props = {
@@ -75,7 +75,8 @@ export const SuccessScreen = ({
       spacing={4}
       width="100%"
       height={{ base: 'calc(100vh - 115px)', lg: '100%' }}
-      overflow="hidden"
+      overflowX="hidden"
+      overflowY={{ base: 'auto', lg: 'hidden' }}
       position="relative"
       backgroundColor="primary.400"
       alignItems="center"
