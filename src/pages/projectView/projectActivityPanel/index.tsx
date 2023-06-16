@@ -182,7 +182,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
             }}
           />
         )
-      case fundingStages.completed:
+      case fundingStages.form:
         return (
           <ProjectFundingSelectionFormScreen
             isMobile={isMobile}
@@ -206,7 +206,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
             handleCloseButton={handleQRCloseButton}
           />
         )
-      case fundingStages.form:
+      case fundingStages.completed:
         return (
           <SuccessScreen
             fundingState={formState}
