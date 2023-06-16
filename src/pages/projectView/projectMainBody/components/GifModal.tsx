@@ -75,9 +75,6 @@ export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
               width={isMobile ? 350 : 400}
               columns={3}
               fetchGifs={fetchGifs}
-              onGifsFetchError={(error) =>
-                console.log('gif fetch error', error)
-              }
               noLink={true}
               hideAttribution={true}
               onGifClick={onSelect}
