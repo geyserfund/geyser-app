@@ -1,7 +1,7 @@
 import { HStack, Link, Text } from '@chakra-ui/react'
 
 interface DescriptionLinkWithIconComponentProps {
-  title: string
+  title: React.ReactNode
   link?: string
   icon?: React.ReactNode
 }
