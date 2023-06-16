@@ -14,6 +14,7 @@ import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
 import { MilestoneIcon } from '../../../../components/icons/svg'
 import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { CardLayout } from '../../../../components/layouts'
+import { useProjectContext } from '../../../../context'
 import { UseProjectAnchors } from '../hooks/useProjectAnchors'
 import { ProjectBackButton } from './ProjectBackButton'
 
@@ -26,6 +27,7 @@ export const ProjectNavigation = ({
   onRewardsClick,
   onMilestonesClick,
 }: UseProjectAnchors) => {
+  const { isProjectOwner, onCreatorModalOpen } = useProjectContext()
   const hasItems = Boolean(entriesLength || rewardsLength || milestonesLength)
   return (
     <VStack ml={4} pt={5} pb={2}>
@@ -73,6 +75,17 @@ export const ProjectNavigation = ({
             )}
           </VStack>
         </CardLayout>
+      ) : null}
+      {isProjectOwner ? (
+        <>
+          <Button
+            w="100%"
+            variant="primary"
+            onClick={() => onCreatorModalOpen()}
+          >
+            Create
+          </Button>
+        </>
       ) : null}
     </VStack>
   )
