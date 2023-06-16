@@ -5,9 +5,9 @@ import { forwardRef, useState } from 'react'
 import { CardLayout } from '../../../../components/layouts'
 import {
   DeleteConfirmModal,
-  ProjectSectionBar,
   RewardCard,
 } from '../../../../components/molecules'
+import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { fundingStages } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../../graphql/mutations'
@@ -170,8 +170,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         spacing="25px"
         padding="24px"
       >
-        <ProjectSectionBar name={'Rewards'} number={project.rewards.length} />
-
+        <TitleDivider badge={project.rewards.length}>Rewards</TitleDivider>
         <HStack width="100%" flexWrap="wrap" justifyContent="center">
           {renderRewards()}
         </HStack>
