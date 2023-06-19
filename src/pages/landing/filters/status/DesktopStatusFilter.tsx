@@ -10,6 +10,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { CloseIconButton } from '../../../../components/buttons'
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
@@ -27,6 +28,7 @@ export const DesktopStatusFilter = ({
   button,
   ...rest
 }: DesktopStatusFilterProps) => {
+  const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -57,7 +59,7 @@ export const DesktopStatusFilter = ({
         >
           <HStack width="100%" spacing="10px">
             <button.icon color={button.color} height="20px" />
-            <Body1 color={'neutral.900'}>{button.text}</Body1>
+            <Body1 color={'neutral.900'}>{t(button.text)}</Body1>
           </HStack>
           {!isSelected && (
             <ChevronRightIcon
@@ -80,7 +82,7 @@ export const DesktopStatusFilter = ({
         <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
           <ModalHeader>
             <HStack width="100%" position="relative" alignItems="center">
-              <Body1 color={'neutral.600'}>Filter by:</Body1>
+              <Body1 color={'neutral.600'}>{t('Filter by:')}</Body1>
             </HStack>
           </ModalHeader>
           <ModalCloseButton />

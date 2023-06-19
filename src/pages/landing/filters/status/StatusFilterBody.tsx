@@ -1,4 +1,5 @@
 import { Button, StackProps, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../components/typography'
 import { useFilterContext } from '../../../../context'
@@ -20,6 +21,7 @@ export const StatusFilterBody = ({
   button,
   ...rest
 }: StatusFilterBodyProps) => {
+  const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
 
   const handleClick = ({ status, type }: StatusAndType) => {
@@ -63,7 +65,7 @@ export const StatusFilterBody = ({
           >
             <Icon color={color} />
             <Body1 ml="10px" color={'neutral.900'}>
-              {text}
+              {t(text)}
             </Body1>
           </Button>
         )

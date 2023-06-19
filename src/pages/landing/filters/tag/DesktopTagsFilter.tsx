@@ -10,6 +10,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { HiOutlineTag } from 'react-icons/hi'
 
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
@@ -32,6 +33,7 @@ export const DesktopTagsFilter = ({
   handleTagsClick,
   ...rest
 }: DesktopTagsFilterProps) => {
+  const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { filters } = useFilterContext()
@@ -47,10 +49,7 @@ export const DesktopTagsFilter = ({
         spacing="10px"
         {...rest}
       >
-        <HStack width="100%" position="relative">
-          <HiOutlineTag color={'neutral.600'} />
-          <Body1 color={'neutral.600'}>Filter by project tags</Body1>
-        </HStack>
+        <ProjectTagsHeader />
         <VStack width="100%" alignItems="start" spacing="5px">
           <RenderTags
             {...{
@@ -62,17 +61,14 @@ export const DesktopTagsFilter = ({
           />
         </VStack>
         <ButtonComponent size="sm" onClick={onOpen}>
-          View more tags
+          {t('View more tags')}
         </ButtonComponent>
       </CardLayout>
       <Modal isOpen={isOpen} onClose={onClose} size="sm">
         <ModalOverlay />
         <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
           <ModalHeader>
-            <HStack width="100%" position="relative">
-              <HiOutlineTag color={'neutral.600'} />
-              <Body1 color={'neutral.600'}>Filter by project tags</Body1>
-            </HStack>
+            <ProjectTagsHeader />
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -89,13 +85,20 @@ export const DesktopTagsFilter = ({
   )
 }
 
+export const ProjectTagsHeader = () => {
+  const { t } = useTranslation()
+  return (
+    <HStack width="100%" position="relative">
+      <HiOutlineTag color={'neutral.600'} />
+      <Body1 color={'neutral.600'}>{t('Filter by project tags')}</Body1>
+    </HStack>
+  )
+}
+
 export const DesktopFilterLayoutSkeleton = () => {
   return (
     <CardLayout width="100%" direction="column" padding="10px" spacing="15px">
-      <HStack width="100%" position="relative">
-        <HiOutlineTag color={'neutral.600'} />
-        <Body1 color={'neutral.600'}>Filter by project tags</Body1>
-      </HStack>
+      <ProjectTagsHeader />
       <VStack width="100%" alignItems="start" spacing="10px">
         {[1, 2, 3, 4, 5].map((val) => {
           return (

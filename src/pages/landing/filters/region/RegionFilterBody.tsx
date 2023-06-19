@@ -1,4 +1,5 @@
 import { Box, Divider, useDisclosure, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { SingleValue } from 'react-select'
 
 import { SelectComponent } from '../../../../components/ui'
@@ -23,6 +24,7 @@ export const RegionFilterBody = ({
   options,
   onClose,
 }: RegionFilterBodyProps) => {
+  const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
   const { countryCode, region } = filters
 
@@ -95,7 +97,7 @@ export const RegionFilterBody = ({
           getOptionLabel={(option) => option.name}
           onChange={handleRegionSelect}
           onInputChange={handleInputChange}
-          placeholder="Find country or region"
+          placeholder={t('Find country or region')}
         />
       </Box>
 

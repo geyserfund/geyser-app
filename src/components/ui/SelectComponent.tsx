@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import Select from 'react-select'
 import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager'
@@ -81,13 +82,16 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 
 export function SelectComponent<T, S extends boolean>({
   className,
+  placeholder,
   ...rest
 }: { fullWidth?: boolean } & StateManagerProps<T, S, any>) {
+  const { t } = useTranslation()
   const classes = useStyles()
   return (
     <Select
       classNamePrefix="platform__select"
       className={classNames(classes.inputElement, className)}
+      placeholder={placeholder || t('Select...')}
       {...rest}
     />
   )

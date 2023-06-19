@@ -6,6 +6,7 @@ import {
   VStack,
   Wrap,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 
 import { NostrSvgIcon } from '../../../components/icons'
@@ -23,6 +24,7 @@ import {
 } from '../../../constants'
 
 export const FilterFooter = () => {
+  const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -34,7 +36,7 @@ export const FilterFooter = () => {
         width="100%"
         onClick={onOpen}
       >
-        Subscribe
+        {t('Subscribe')}
       </Button>
       <Wrap>
         <Link href={GeyserHomepageUrl} isExternal>
@@ -46,11 +48,11 @@ export const FilterFooter = () => {
         </Link>
 
         <Link href={GeyserPrivacyUrl} isExternal>
-          <Caption bold>Privacy</Caption>
+          <Caption bold>{t('Privacy')}</Caption>
         </Link>
 
         <Link href={AnalyticsUrl} isExternal>
-          <Caption bold>Analytics</Caption>
+          <Caption bold>{t('Analytics')}</Caption>
         </Link>
       </Wrap>
       <Wrap>

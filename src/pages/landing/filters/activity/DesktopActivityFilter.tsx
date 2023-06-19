@@ -10,6 +10,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { CloseIconButton } from '../../../../components/buttons'
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
@@ -27,6 +28,7 @@ export const DesktopActivityFilter = ({
   button,
   ...rest
 }: DesktopActivityFilterProps) => {
+  const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -80,7 +82,7 @@ export const DesktopActivityFilter = ({
         <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
           <ModalHeader>
             <HStack width="100%" position="relative" alignItems="center">
-              <Body1 color={'neutral.600'}>Filter by:</Body1>
+              <Body1 color={'neutral.600'}>{t('Filter by:')}</Body1>
             </HStack>
           </ModalHeader>
           <ModalCloseButton />
