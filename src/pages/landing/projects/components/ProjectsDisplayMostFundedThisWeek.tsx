@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { SortType, useFilterContext } from '../../../../context'
 import { useMostFundedOfTheWeekProjectsState } from '../../../../hooks/graphqlState'
 import { Tag } from '../../../../types'
@@ -13,6 +15,7 @@ const NO_OF_PROJECT_TO_LOAD = 3
 export const ProjectsDisplayMostFundedThisWeek = ({
   tag,
 }: ProjectDisplayProps) => {
+  const { t } = useTranslation()
   const { updateFilter } = useFilterContext()
 
   const { projects, loading } = useMostFundedOfTheWeekProjectsState({
@@ -38,8 +41,8 @@ export const ProjectsDisplayMostFundedThisWeek = ({
 
   return (
     <ProjectDisplayBody
-      title={tag?.label || 'Recent Projects'}
-      subtitle={tag?.label ? 'Trending in' : ''}
+      title={tag?.label || t('Recent Projects')}
+      subtitle={tag?.label ? t('Trending in') : ''}
       projects={projects}
       onSeeAllClick={onSeeAllClick}
     />
