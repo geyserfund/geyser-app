@@ -17,8 +17,8 @@
     "Subscribe": "Suscribir",
     "Privacy": "Privacidad",
     "Analytics": "Analítica",
-    "activity": null,
-    "Select": null,
-    "Trending in": null,
-    "Recent Projects": null
+    "activity": "actividad",
+    "Select": "Seleccionar",
+    "Trending in": "Tendencia en",
+    "Recent Projects": "Proyectos recientes"
 }
