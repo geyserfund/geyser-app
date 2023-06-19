@@ -19,10 +19,31 @@ i18next
       escapeValue: false, // not needed for react as it escapes by default
     },
     resources: {
-      en: {
+      [lng.en]: {
         translation: EnglishTranslations,
       },
-      es: {
+      [lng.es]: {
+        translation: SpanishTranslations,
+      },
+      [lng.pt]: {
+        translation: SpanishTranslations,
+      },
+      [lng.de]: {
+        translation: SpanishTranslations,
+      },
+      [lng.nl]: {
+        translation: SpanishTranslations,
+      },
+      [lng.it]: {
+        translation: SpanishTranslations,
+      },
+      [lng.el]: {
+        translation: SpanishTranslations,
+      },
+      [lng.pl]: {
+        translation: SpanishTranslations,
+      },
+      [lng.ng]: {
         translation: SpanishTranslations,
       },
     },

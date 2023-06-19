@@ -8,14 +8,11 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { languages } from '../../../constants'
 import { ColorModeSwitcher } from '../../../utils'
 import { SatSymbolIcon } from '../../icons'
 import { Modal } from '../../layouts'
 
-export const languages = {
-  en: 'English',
-  es: 'Espanyol',
-} as { [key: string]: string }
 export const ModeChange = () => {
   const { i18n } = useTranslation()
 
