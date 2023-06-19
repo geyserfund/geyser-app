@@ -1,4 +1,5 @@
 import { Box, Stack, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { H2, H3 } from '../../../../components/typography'
@@ -15,6 +16,7 @@ export const FeaturedProjectCard = ({
 }: {
   projectName: string
 }) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { data, loading } = useFeaturedProjectForLandingPageQuery({
     variables: {
@@ -31,7 +33,7 @@ export const FeaturedProjectCard = ({
   }
 
   return (
-    <ProjectRowLayout title="Featured Project" width="100%">
+    <ProjectRowLayout title={t('Featured Project')} width="100%">
       <Stack
         direction={{ base: 'column', sm: 'row' }}
         width="100%"
@@ -75,12 +77,7 @@ export const FeaturedProjectCard = ({
             rounded="full"
             user={project.owners[0]?.user}
           />
-          <H3
-            color="neutral.800"
-            noOfLines={3}
-            isTruncated
-            whiteSpace="normal"
-          >
+          <H3 color="neutral.800" noOfLines={3} isTruncated whiteSpace="normal">
             {project.shortDescription}
           </H3>
           <FundingStatWithFollow
