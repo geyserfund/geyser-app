@@ -2,6 +2,7 @@ import i18next from 'i18next'
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
+import { lng } from '../constants'
 import { EnglishTranslations, SpanishTranslations } from '../translations'
 
 i18next
