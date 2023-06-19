@@ -3,7 +3,18 @@ import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
 import { lng } from '../constants'
-import { EnglishTranslations, SpanishTranslations } from '../translations'
+import {
+  ChineseTranslations,
+  CzechTranslations,
+  EnglishTranslations,
+  FrenchTranslations,
+  GermanTranslations,
+  GreekTranslations,
+  ItalianTranslations,
+  PolishTranslations,
+  PortugueseTranslation,
+  SpanishTranslations,
+} from '../translations'
 
 i18next
   // detect user language
@@ -27,25 +38,28 @@ i18next
         translation: SpanishTranslations,
       },
       [lng.pt]: {
-        translation: SpanishTranslations,
+        translation: PortugueseTranslation,
+      },
+      [lng.fr]: {
+        translation: FrenchTranslations,
       },
       [lng.de]: {
-        translation: SpanishTranslations,
-      },
-      [lng.nl]: {
-        translation: SpanishTranslations,
+        translation: GermanTranslations,
       },
       [lng.it]: {
-        translation: SpanishTranslations,
+        translation: ItalianTranslations,
       },
       [lng.el]: {
-        translation: SpanishTranslations,
+        translation: GreekTranslations,
       },
       [lng.pl]: {
-        translation: SpanishTranslations,
+        translation: PolishTranslations,
       },
-      [lng.ng]: {
-        translation: SpanishTranslations,
+      [lng.cz]: {
+        translation: CzechTranslations,
+      },
+      [lng.zh]: {
+        translation: ChineseTranslations,
       },
     },
   })
