@@ -91,7 +91,7 @@ export function SelectComponent<T, S extends boolean>({
     <Select
       classNamePrefix="platform__select"
       className={classNames(classes.inputElement, className)}
-      placeholder={placeholder || t('Select...')}
+      placeholder={placeholder || t('Select')}
       {...rest}
     />
   )

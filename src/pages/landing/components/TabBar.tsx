@@ -1,4 +1,5 @@
 import { Avatar, Box, ButtonProps, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { useMatch, useNavigate } from 'react-router-dom'
 
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
@@ -13,6 +14,8 @@ import {
 type TabBarProps = CardLayoutProps
 
 export const TabBar = (props: TabBarProps) => {
+  const { t } = useTranslation()
+
   const { clearFilter } = useFilterContext()
   const navigate = useNavigate()
   const { user } = useAuthContext()
@@ -40,8 +43,9 @@ export const TabBar = (props: TabBarProps) => {
         {...buttonStyles}
         backgroundColor={!isCurrentTabActivity ? 'neutral.100' : 'neutral.0'}
         onClick={handleProjectsClick}
+        textTransform="capitalize"
       >
-        Projects
+        {t('projects')}
       </ButtonComponent>
       <ButtonComponent
         noBorder
@@ -60,7 +64,9 @@ export const TabBar = (props: TabBarProps) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Text fontSize="16px">Activity</Text>
+          <Text fontSize="16px" textTransform="capitalize">
+            {t('activity')}
+          </Text>
           {hasNewActivity && (
             <Box
               height="10px"
