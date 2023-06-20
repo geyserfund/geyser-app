@@ -46,7 +46,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       return (
         <ImageWithReload
           width="100%"
-          maxHeight="471px"
+          maxHeight="350px"
           objectFit="cover"
           borderRadius="8px"
           src={project.image || undefined}
@@ -61,7 +61,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
     return (
       <DefaultImage
         width="100%"
-        maxHeight="471px"
+        maxHeight="350px"
         objectFit="cover"
         borderRadius="8px"
       />
@@ -78,8 +78,8 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           objectFit="cover"
           src={project.thumbnailImage || undefined}
           width="80px"
-          height="76px"
-          maxHeight="91px"
+          height="80px"
+          maxHeight="80px"
           boxShadow="lg"
         />
         <VStack
