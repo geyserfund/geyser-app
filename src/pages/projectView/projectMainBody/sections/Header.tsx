@@ -87,14 +87,8 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           alignItems="start"
           maxWidth="calc(100% - 76px - 24px)"
         >
-          <Text
-            variant="h1"
-            noOfLines={2}
-            overflow="ellipsis"
-            overflowY="hidden"
-            width="100%"
-          >
-            {project.title} {project.title}
+          <Text variant="h1" noOfLines={2} width="100%">
+            {project.title}
           </Text>
           {isMobile ? (
             statusContent
