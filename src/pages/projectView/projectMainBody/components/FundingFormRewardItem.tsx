@@ -8,6 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import classNames from 'classnames'
+import { MouseEvent } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { ItemCard } from '../../../../components/layouts/ItemCard'
@@ -41,9 +42,9 @@ interface IRewardItemProps {
   item: ProjectRewardForCreateUpdateFragment
   count?: number
   readOnly?: boolean
-  onClick?: () => void
-  onRemoveClick?: () => void
-  onAddClick?: () => void
+  onClick?: (e: MouseEvent<HTMLDivElement>) => void
+  onRemoveClick?: (e: MouseEvent<HTMLButtonElement>) => void
+  onAddClick?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
 export const FundingFormRewardItem = ({

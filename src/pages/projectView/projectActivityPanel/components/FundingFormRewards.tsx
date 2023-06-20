@@ -15,7 +15,7 @@ type Props = {
 export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
   const {
     project,
-    fundForm: { state, updateReward },
+    fundForm: { state, updateReward, resetRewards },
   } = useProjectContext()
 
   const rewards = project?.rewards || []
@@ -60,7 +60,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
       {rewards.length > 0 ? (
         <VStack mt={1} padding="2px">
           {readOnly ? null : (
-            <ItemCard cursor="initial">
+            <ItemCard cursor="initial" onClick={resetRewards}>
               <HStack>
                 <Text flexGrow={1} fontWeight={500}>
                   No reward
@@ -79,14 +79,17 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
           )}
           {rewards.map((reward) => {
             const count = getRewardCount(reward.id)
+            const add = () => handleAdd(reward.id, count)
             return (
               <FundingFormRewardItem
                 readOnly={readOnly}
-                onClick={
-                  onRewardClick ? () => onRewardClick(reward) : undefined
-                }
-                onRemoveClick={() => handleRemove(reward.id, count)}
-                onAddClick={() => handleAdd(reward.id, count)}
+                onClick={onRewardClick ? () => onRewardClick(reward) : add}
+                onRemoveClick={(e) => {
+                  e.stopPropagation()
+                  e.preventDefault()
+                  handleRemove(reward.id, count)
+                }}
+                onAddClick={add}
                 key={reward.id}
                 item={reward}
                 count={count}
