@@ -20,5 +20,18 @@
   "activity": "activity",
   "Select": "Select",
   "Trending in": "Trending in",
-  "Recent Projects": "Recent Projects"
+  "Recent Projects": "Recent Projects",
+  "See recent": "See recent",
+  "funders": "funders",
+  "funded": "funded",
+  "follow project": "follow project",
+  "login to follow project": "login to follow project",
+  "See all": "See all",
+  "Most funded all time": "Most funded all time",
+  "Most recent projects": "Most recent projects",
+  "Most funded this week": "Most funded this week",
+  "Sort By": "Sort By",
+  "Project leaderboard": "Project leaderboard",
+  "This week": "This week",
+  "All time": "All time"
 }

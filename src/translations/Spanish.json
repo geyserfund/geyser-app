@@ -20,5 +20,18 @@
     "activity": "actividad",
     "Select": "Seleccionar",
     "Trending in": "Tendencia en",
-    "Recent Projects": "Proyectos recientes"
+    "Recent Projects": "Proyectos recientes",
+    "See recent": "Ver reciente",
+    "funders": "financiadores",
+    "funded": "fundado",
+    "follow project": "seguir proyecto",
+    "login to follow project": "iniciar sesión para seguir el proyecto",
+    "See all": "Ver todo",
+    "Most funded all time": "Más financiado de todos los tiempos",
+    "Most recent projects": "Más recientes proyectos",
+    "Most funded this week": "Más financiado esta semana",
+    "Sort By": "Ordenar por",
+    "Project leaderboard": "Tabla del proyecto",
+    "This week": "Esta semana",
+    "All time": "Todo el tiempo"
 }

@@ -1,5 +1,6 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsFillHeartFill } from 'react-icons/bs'
 
 import { SatSymbolIcon } from '../../../components/icons'
@@ -24,6 +25,7 @@ export const FundingStatWithFollow = ({
   projectId,
   ...rest
 }: FundingStatWithFollowProps) => {
+  const { t } = useTranslation()
   const { isLoggedIn } = useAuthContext()
 
   const {
@@ -45,7 +47,7 @@ export const FundingStatWithFollow = ({
           fontFamily={fonts.mono}
           textTransform="uppercase"
         >
-          funders
+          {t('funders')}
         </Text>
       </VStack>
 
@@ -60,12 +62,14 @@ export const FundingStatWithFollow = ({
           fontFamily={fonts.mono}
           textTransform="uppercase"
         >
-          Funded
+          {t('funded')}
         </Text>
       </VStack>
       {!isFollowed ? (
         <Tooltip
-          label={isLoggedIn ? 'follow project' : 'login to follow project'}
+          label={
+            isLoggedIn ? t('follow project') : t('login to follow project')
+          }
           placement="top"
         >
           <IconButtonComponent
