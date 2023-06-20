@@ -9,14 +9,7 @@ import { ProjectMobileNavigation } from '../projectNavigation/components/Project
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
 import { LaunchProjectNotice } from './components'
-import {
-  Entries,
-  Header,
-  Milestones,
-  Rewards,
-  SectionNav,
-  Story,
-} from './sections'
+import { Entries, Header, Milestones, Rewards, Story } from './sections'
 import { CreatorSocial } from './sections/CreatorSocial'
 
 type Rules = string
@@ -111,8 +104,6 @@ export const ProjectMainBody = () => {
               <CreatorSocial />
 
               <Story />
-
-              <SectionNav {...projectAnchors} />
 
               <Entries ref={entriesRef} />
 
