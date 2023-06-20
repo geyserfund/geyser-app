@@ -39,6 +39,7 @@ export const useExternalAccountsButtons = ({
             color: theme.colors.social.twitter,
             props: {
               as: Link,
+              target: '_blank',
               href: `https://twitter.com/${account.externalUsername}`,
             },
           }
