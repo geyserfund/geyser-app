@@ -4,12 +4,18 @@ import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { SectionTitle } from '../../../../components/ui'
 import { useProjectContext } from '../../../../context'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../types'
 import { FundingFormRewardItem } from '../../projectMainBody/components'
 
-export const FundingFormRewards = () => {
+type Props = {
+  readOnly?: boolean
+  onRewardClick?: (reward: ProjectRewardForCreateUpdateFragment) => void
+}
+
+export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
   const {
     project,
-    fundForm: { state, updateReward },
+    fundForm: { state, updateReward, resetRewards },
   } = useProjectContext()
 
   const rewards = project?.rewards || []
@@ -29,8 +35,23 @@ export const FundingFormRewards = () => {
     ),
   )
 
-  const getRewardCount = (rewardId: number) =>
-    state.rewardsByIDAndCount ? state.rewardsByIDAndCount[`${rewardId}`] : 0
+  const getRewardCount = (rewardId: number) => {
+    if (state.rewardsByIDAndCount) {
+      return state.rewardsByIDAndCount[`${rewardId}`] || 0
+    }
+
+    return 0
+  }
+
+  const handleAdd = (rewardId: number, count: number) => {
+    updateReward({ id: rewardId, count: count + 1 })
+  }
+
+  const handleRemove = (rewardId: number, count: number) => {
+    if (count > 0) {
+      updateReward({ id: rewardId, count: count - 1 })
+    }
+  }
 
   return (
     <Box width="100%">
@@ -38,30 +59,43 @@ export const FundingFormRewards = () => {
 
       {rewards.length > 0 ? (
         <VStack mt={1} padding="2px">
-          <ItemCard cursor="initial">
-            <HStack>
-              <Text flexGrow={1} fontWeight={500}>
-                No reward
-              </Text>
-              <IconButton
-                variant="secondary"
-                isActive={!hasSelectedRewards}
-                border={
-                  hasSelectedRewards ? `1px solid ${'neutral.200'}` : undefined
-                }
-                aria-label="select-reward"
-                icon={hasSelectedRewards ? undefined : <CheckIcon />}
+          {readOnly ? null : (
+            <ItemCard cursor="initial" onClick={resetRewards}>
+              <HStack>
+                <Text flexGrow={1} fontWeight={500}>
+                  No reward
+                </Text>
+                <IconButton
+                  variant="secondary"
+                  isActive={!hasSelectedRewards}
+                  border={
+                    hasSelectedRewards ? '1px solid neutral.200' : undefined
+                  }
+                  aria-label="select-reward"
+                  icon={hasSelectedRewards ? undefined : <CheckIcon />}
+                />
+              </HStack>
+            </ItemCard>
+          )}
+          {rewards.map((reward) => {
+            const count = getRewardCount(reward.id)
+            const add = () => handleAdd(reward.id, count)
+            return (
+              <FundingFormRewardItem
+                readOnly={readOnly}
+                onClick={onRewardClick ? () => onRewardClick(reward) : add}
+                onRemoveClick={(e) => {
+                  e.stopPropagation()
+                  e.preventDefault()
+                  handleRemove(reward.id, count)
+                }}
+                onAddClick={add}
+                key={reward.id}
+                item={reward}
+                count={count}
               />
-            </HStack>
-          </ItemCard>
-          {rewards.map((reward) => (
-            <FundingFormRewardItem
-              key={reward.id}
-              item={reward}
-              count={getRewardCount(reward.id)}
-              updateCount={updateReward}
-            />
-          ))}
+            )
+          })}
         </VStack>
       ) : null}
     </Box>
