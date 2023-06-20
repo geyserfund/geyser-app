@@ -3,6 +3,8 @@ import {
   ButtonProps,
   IconButton,
   IconButtonProps,
+  Text,
+  Tooltip,
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
@@ -12,7 +14,7 @@ import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
 import { MilestoneIcon } from '../../../../components/icons/svg'
 import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { CardLayout } from '../../../../components/layouts'
-import { H3 } from '../../../../components/typography'
+import { useProjectContext } from '../../../../context'
 import { UseProjectAnchors } from '../hooks/useProjectAnchors'
 import { ProjectBackButton } from './ProjectBackButton'
 
@@ -25,6 +27,7 @@ export const ProjectNavigation = ({
   onRewardsClick,
   onMilestonesClick,
 }: UseProjectAnchors) => {
+  const { isProjectOwner, onCreatorModalOpen } = useProjectContext()
   const hasItems = Boolean(entriesLength || rewardsLength || milestonesLength)
   return (
     <VStack ml={4} pt={5} pb={2}>
@@ -36,7 +39,7 @@ export const ProjectNavigation = ({
               // isActive={inView === 'header'}
               onClick={onProjectClick}
               aria-label="header"
-              leftIcon={<ProjectIcon />}
+              leftIcon={<ProjectIcon fontSize="1.5em" width="1.3em" />}
             >
               Project
             </ProjectNavigationButton>
@@ -45,7 +48,7 @@ export const ProjectNavigation = ({
                 // isActive={inView === 'entries'}
                 onClick={onEntriesClick}
                 aria-label="entries"
-                leftIcon={<EntryEditIcon />}
+                leftIcon={<EntryEditIcon fontSize="1.5em" width="1.3em" />}
               >
                 Entries
               </ProjectNavigationButton>
@@ -55,7 +58,7 @@ export const ProjectNavigation = ({
                 // isActive={inView === 'rewards'}
                 onClick={onRewardsClick}
                 aria-label="rewards"
-                leftIcon={<RewardGiftIcon />}
+                leftIcon={<RewardGiftIcon fontSize="1.5em" width="1.3em" />}
               >
                 Rewards
               </ProjectNavigationButton>
@@ -65,13 +68,24 @@ export const ProjectNavigation = ({
                 // isActive={inView === 'milestones'}
                 onClick={onMilestonesClick}
                 aria-label="milestones"
-                leftIcon={<MilestoneIcon fontSize="25px" />}
+                leftIcon={<MilestoneIcon fontSize="1.5em" width="1.3em" />}
               >
                 Milestones
               </ProjectNavigationButton>
             )}
           </VStack>
         </CardLayout>
+      ) : null}
+      {isProjectOwner ? (
+        <>
+          <Button
+            w="100%"
+            variant="primary"
+            onClick={() => onCreatorModalOpen()}
+          >
+            Create
+          </Button>
+        </>
       ) : null}
     </VStack>
   )
@@ -90,22 +104,27 @@ export const ProjectNavigationButton = ({
     { ssr: false },
   )
 
-  const Component = hideLabel ? IconButton : Button
+  if (hideLabel) {
+    return (
+      <Tooltip label={children} placement="right">
+        <IconButton variant="transparent" {...props}>
+          {leftIcon}
+        </IconButton>
+      </Tooltip>
+    )
+  }
 
-  const ComponentProps = hideLabel
-    ? {
-        variant: 'transparent',
-        children: leftIcon,
-        ...props,
-      }
-    : {
-        leftIcon,
-        width: '100%',
-        justifyContent: 'start',
-        variant: 'transparent',
-        children: <H3 pl={1}>{children}</H3>,
-        ...props,
-      }
-
-  return <Component {...ComponentProps} />
+  return (
+    <Button
+      variant="transparent"
+      justifyContent="start"
+      width="100%"
+      leftIcon={leftIcon}
+      {...props}
+    >
+      <Text variant="h3" width="100%" textAlign="left" pl={1}>
+        {children}
+      </Text>
+    </Button>
+  )
 }

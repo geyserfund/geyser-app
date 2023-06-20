@@ -10,6 +10,7 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   VStack,
 } from '@chakra-ui/react'
@@ -107,9 +108,7 @@ export const ProjectContributors = () => {
         header: 'Contribution',
         key: 'amount',
         render: (val: Funder) => (
-          <SatoshiAmount scale={0.7} fontSize="14px">
-            {val.amountFunded}
-          </SatoshiAmount>
+          <SatoshiAmount fontSize="14px">{val.amountFunded}</SatoshiAmount>
         ),
       },
       {
@@ -147,11 +146,23 @@ export const ProjectContributors = () => {
         },
       },
       {
-        header: 'Reference code',
+        header: 'Reference codes',
         key: 'reference',
-        value(val: Funder) {
-          const tx = val.fundingTxs.find((tx) => tx.paidAt)
-          return tx?.uuid || '-'
+        render({ fundingTxs }: Funder) {
+          return (
+            <VStack alignItems="start">
+              {fundingTxs.map((tx) => (
+                <Tooltip
+                  key={tx.uuid}
+                  label={
+                    <SatoshiAmount variant="body1">{tx.amount}</SatoshiAmount>
+                  }
+                >
+                  <Text variant="caption">{tx.uuid}</Text>
+                </Tooltip>
+              ))}
+            </VStack>
+          )
         },
       },
     ],
@@ -214,7 +225,8 @@ export const ProjectContributors = () => {
           funder.amountFunded || '-',
           rewardValue || '-',
           dateString || '-',
-          funder.fundingTxs?.find((val) => val.email)?.email || '-',
+          funder.fundingTxs.find((val) => val.email)?.email || '-',
+          funder.fundingTxs.reduce((acc, tx) => `${acc} ${tx.uuid}`, ''),
         ]
         csvData.push(funderData)
       }
