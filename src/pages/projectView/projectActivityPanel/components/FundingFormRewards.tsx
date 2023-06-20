@@ -49,8 +49,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
 
   const handleRemove = (rewardId: number, count: number) => {
     if (count > 0) {
-      const newCount = count - 1
-      updateReward({ id: rewardId, count: newCount })
+      updateReward({ id: rewardId, count: count - 1 })
     }
   }
 
@@ -70,9 +69,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
                   variant="secondary"
                   isActive={!hasSelectedRewards}
                   border={
-                    hasSelectedRewards
-                      ? `1px solid ${'neutral.200'}`
-                      : undefined
+                    hasSelectedRewards ? '1px solid neutral.200' : undefined
                   }
                   aria-label="select-reward"
                   icon={hasSelectedRewards ? undefined : <CheckIcon />}
