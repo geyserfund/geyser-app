@@ -1,12 +1,10 @@
 import {
   Icon,
-  SkeletonCircle,
   SkeletonText,
   Stack,
   StackDirection,
   Text,
   Tooltip,
-  VStack,
 } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { useEffect, useState } from 'react'
