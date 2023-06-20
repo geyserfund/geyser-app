@@ -1,4 +1,11 @@
-import { Icon, Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
+import {
+  Icon,
+  SkeletonText,
+  Stack,
+  StackDirection,
+  Text,
+  Tooltip,
+} from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { useEffect, useState } from 'react'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
@@ -106,7 +113,11 @@ export const ProjectStatusLabel = ({
   }, [project])
 
   if (!status) {
-    return null
+    return (
+      <Stack direction={direction} alignItems="center">
+        <SkeletonText width="80px" skeletonHeight={4} noOfLines={1} />
+      </Stack>
+    )
   }
 
   const CurrentIcon = ProjectStatusIcons[status]
