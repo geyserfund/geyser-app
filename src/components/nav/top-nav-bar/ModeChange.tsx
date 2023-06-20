@@ -58,7 +58,10 @@ export const ModeChange = () => {
                 fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal',
               }}
               type="submit"
-              onClick={() => i18n.changeLanguage(lng)}
+              onClick={() => {
+                i18n.changeLanguage(lng)
+                onClose()
+              }}
             >
               {languages[lng]}
             </Button>
