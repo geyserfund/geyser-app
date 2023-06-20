@@ -43,7 +43,7 @@ export const typeMap = {
   hardBreak: 'br',
   heading: Heading,
   horizontalRule: Divider,
-  iframe: createIFrameHandler({ style: { width: '100%' } }),
+  iframe: createIFrameHandler(),
   image: imageHandler,
   listItem: listItemHandler,
   paragraph: 'p',

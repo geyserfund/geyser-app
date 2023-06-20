@@ -235,11 +235,6 @@ export type DonationFundingInput = {
   donationAmount: Scalars['donationAmount_Int_NotNull_min_1']
 }
 
-export type EmailVerifyInput = {
-  otp: Scalars['Int']
-  otpVerificationToken: Scalars['String']
-}
-
 export type Entry = {
   __typename?: 'Entry'
   /** Total amount of satoshis funded from the Entry page. */
@@ -784,12 +779,6 @@ export type Location = {
   region?: Maybe<Scalars['String']>
 }
 
-export enum MfaAction {
-  ProjectWalletUpdate = 'PROJECT_WALLET_UPDATE',
-  UserEmailUpdate = 'USER_EMAIL_UPDATE',
-  UserEmailVerification = 'USER_EMAIL_VERIFICATION',
-}
-
 export type Mutation = {
   __typename?: 'Mutation'
   _?: Maybe<Scalars['Boolean']>
@@ -818,11 +807,6 @@ export type Mutation = {
   projectUnfollow: Scalars['Boolean']
   /** Makes the Entry public. */
   publishEntry: Entry
-  /**
-   * Sends an OTP to the user's email address and responds with a token that can be used, together with the OTP, to two-factor authenticate
-   * a request made by the client.
-   */
-  sendOTPByEmail: OtpResponse
   tagCreate: Tag
   unlinkExternalAccount: User
   updateEntry: Entry
@@ -835,8 +819,6 @@ export type Mutation = {
   updateWalletState: Wallet
   userBadgeAward: UserBadge
   userDelete: DeleteUserResponse
-  userEmailUpdate: User
-  userEmailVerify: Scalars['Boolean']
   walletDelete: Scalars['Boolean']
 }
 
@@ -936,10 +918,6 @@ export type MutationPublishEntryArgs = {
   id: Scalars['BigInt']
 }
 
-export type MutationSendOtpByEmailArgs = {
-  action: MfaAction
-}
-
 export type MutationTagCreateArgs = {
   input: TagCreateInput
 }
@@ -980,14 +958,6 @@ export type MutationUserBadgeAwardArgs = {
   userBadgeId: Scalars['BigInt']
 }
 
-export type MutationUserEmailUpdateArgs = {
-  input: UserEmailUpdateInput
-}
-
-export type MutationUserEmailVerifyArgs = {
-  input: EmailVerifyInput
-}
-
 export type MutationWalletDeleteArgs = {
   id: Scalars['BigInt']
 }
@@ -995,19 +965,6 @@ export type MutationWalletDeleteArgs = {
 export type MutationResponse = {
   message?: Maybe<Scalars['String']>
   success: Scalars['Boolean']
-}
-
-export type OtpInput = {
-  otp: Scalars['Int']
-  otpVerificationToken: Scalars['String']
-}
-
-export type OtpResponse = {
-  __typename?: 'OTPResponse'
-  /** Expiration time of the OTP. Can be used to display a countdown to the user. */
-  expiresAt: Scalars['Date']
-  /** Encrypted token containing the OTP 2FA details, such as the action to be authorised and the factor used (eg: email). */
-  otpVerificationToken: Scalars['String']
 }
 
 export type OffsetBasedPaginationInput = {
@@ -1438,10 +1395,6 @@ export type SubscriptionActivityCreatedArgs = {
   input?: InputMaybe<ActivityCreatedSubscriptionInput>
 }
 
-export type TotpInput = {
-  totp: Scalars['Int']
-}
-
 export type Tag = {
   __typename?: 'Tag'
   id: Scalars['Int']
@@ -1457,12 +1410,6 @@ export type TagsGetResult = {
   count: Scalars['Int']
   id: Scalars['Int']
   label: Scalars['String']
-}
-
-export type TwoFaInput = {
-  OTP?: InputMaybe<OtpInput>
-  /** TOTP is not supported yet. */
-  TOTP?: InputMaybe<TotpInput>
 }
 
 export type UniqueProjectQueryInput = {
@@ -1533,6 +1480,7 @@ export type UpdateProjectRewardInput = {
 
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars['String']>
+  email?: InputMaybe<Scalars['email_String_format_email']>
   id: Scalars['BigInt']
   imageUrl?: InputMaybe<Scalars['String']>
   username?: InputMaybe<Scalars['String']>
@@ -1543,7 +1491,6 @@ export type UpdateWalletInput = {
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsUpdateInput>
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsUpdateInput>
   name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>
-  twoFAInput?: InputMaybe<TwoFaInput>
 }
 
 export type UpdateWalletStateInput = {
@@ -1559,7 +1506,6 @@ export type User = {
   /** Details on the participation of a User in a project. */
   contributions: Array<UserProjectContribution>
   email?: Maybe<Scalars['String']>
-  emailVerifiedAt?: Maybe<Scalars['Date']>
   /**
    * By default, returns all the entries of a user, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
@@ -1575,7 +1521,6 @@ export type User = {
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
   imageUrl?: Maybe<Scalars['String']>
-  isEmailVerified: Scalars['Boolean']
   ownerOf: Array<OwnerOf>
   projectFollows: Array<Project>
   /**
@@ -1610,11 +1555,6 @@ export type UserBadge = {
 export enum UserBadgeStatus {
   Accepted = 'ACCEPTED',
   Pending = 'PENDING',
-}
-
-export type UserEmailUpdateInput = {
-  email: Scalars['String']
-  twoFAInput: TwoFaInput
 }
 
 export type UserEntriesGetInput = {
@@ -1876,7 +1816,6 @@ export type ResolversTypes = {
   DeleteProjectInput: DeleteProjectInput
   DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>
   DonationFundingInput: DonationFundingInput
-  EmailVerifyInput: EmailVerifyInput
   Entry: ResolverTypeWrapper<Entry>
   EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>
   EntryStatus: EntryStatus
@@ -1957,13 +1896,10 @@ export type ResolversTypes = {
   LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
   LndNodeType: LndNodeType
   Location: ResolverTypeWrapper<Location>
-  MFAAction: MfaAction
   Mutation: ResolverTypeWrapper<{}>
   MutationResponse:
     | ResolversTypes['DeleteUserResponse']
     | ResolversTypes['ProjectDeleteResponse']
-  OTPInput: OtpInput
-  OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   OrderByOptions: OrderByOptions
   Owner: ResolverTypeWrapper<Owner>
@@ -2003,11 +1939,9 @@ export type ResolversTypes = {
   SponsorStatus: SponsorStatus
   String: ResolverTypeWrapper<Scalars['String']>
   Subscription: ResolverTypeWrapper<{}>
-  TOTPInput: TotpInput
   Tag: ResolverTypeWrapper<Tag>
   TagCreateInput: TagCreateInput
   TagsGetResult: ResolverTypeWrapper<TagsGetResult>
-  TwoFAInput: TwoFaInput
   UniqueProjectQueryInput: UniqueProjectQueryInput
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
@@ -2019,7 +1953,6 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>
   UserBadge: ResolverTypeWrapper<UserBadge>
   UserBadgeStatus: UserBadgeStatus
-  UserEmailUpdateInput: UserEmailUpdateInput
   UserEntriesGetInput: UserEntriesGetInput
   UserEntriesGetWhereInput: UserEntriesGetWhereInput
   UserGetInput: UserGetInput
@@ -2157,7 +2090,6 @@ export type ResolversParentTypes = {
   DeleteProjectInput: DeleteProjectInput
   DeleteUserResponse: DeleteUserResponse
   DonationFundingInput: DonationFundingInput
-  EmailVerifyInput: EmailVerifyInput
   Entry: Entry
   EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse
   ExternalAccount: ExternalAccount
@@ -2231,8 +2163,6 @@ export type ResolversParentTypes = {
   MutationResponse:
     | ResolversParentTypes['DeleteUserResponse']
     | ResolversParentTypes['ProjectDeleteResponse']
-  OTPInput: OtpInput
-  OTPResponse: OtpResponse
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   Owner: Owner
   OwnerOf: OwnerOf
@@ -2266,11 +2196,9 @@ export type ResolversParentTypes = {
   Sponsor: Sponsor
   String: Scalars['String']
   Subscription: {}
-  TOTPInput: TotpInput
   Tag: Tag
   TagCreateInput: TagCreateInput
   TagsGetResult: TagsGetResult
-  TwoFAInput: TwoFaInput
   UniqueProjectQueryInput: UniqueProjectQueryInput
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
@@ -2281,7 +2209,6 @@ export type ResolversParentTypes = {
   UpdateWalletStateInput: UpdateWalletStateInput
   User: User
   UserBadge: UserBadge
-  UserEmailUpdateInput: UserEmailUpdateInput
   UserEntriesGetInput: UserEntriesGetInput
   UserEntriesGetWhereInput: UserEntriesGetWhereInput
   UserGetInput: UserGetInput
@@ -3002,12 +2929,6 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationPublishEntryArgs, 'id'>
   >
-  sendOTPByEmail?: Resolver<
-    ResolversTypes['OTPResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationSendOtpByEmailArgs, 'action'>
-  >
   tagCreate?: Resolver<
     ResolversTypes['Tag'],
     ParentType,
@@ -3073,18 +2994,6 @@ export type MutationResolvers<
     ParentType,
     ContextType
   >
-  userEmailUpdate?: Resolver<
-    ResolversTypes['User'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUserEmailUpdateArgs, 'input'>
-  >
-  userEmailVerify?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUserEmailVerifyArgs, 'input'>
-  >
   walletDelete?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
@@ -3104,19 +3013,6 @@ export type MutationResponseResolvers<
   >
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-}
-
-export type OtpResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['OTPResponse'] = ResolversParentTypes['OTPResponse'],
-> = {
-  expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
-  otpVerificationToken?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType
-  >
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
 export type OwnerResolvers<
@@ -3615,11 +3511,6 @@ export type UserResolvers<
     ContextType
   >
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  emailVerifiedAt?: Resolver<
-    Maybe<ResolversTypes['Date']>,
-    ParentType,
-    ContextType
-  >
   entries?: Resolver<
     Array<ResolversTypes['Entry']>,
     ParentType,
@@ -3638,7 +3529,6 @@ export type UserResolvers<
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  isEmailVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   ownerOf?: Resolver<Array<ResolversTypes['OwnerOf']>, ParentType, ContextType>
   projectFollows?: Resolver<
     Array<ResolversTypes['Project']>,
@@ -4027,7 +3917,6 @@ export type Resolvers<ContextType = any> = {
   Location?: LocationResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
-  OTPResponse?: OtpResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
   Project?: ProjectResolvers<ContextType>
@@ -4335,7 +4224,12 @@ export type ProjectFragment = {
   owners: Array<{
     __typename?: 'Owner'
     id: any
-    user: { __typename?: 'User' } & UserMeFragment
+    user: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    }
   }>
   rewards: Array<
     { __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment
@@ -4344,14 +4238,24 @@ export type ProjectFragment = {
     __typename?: 'Ambassador'
     id: any
     confirmed: boolean
-    user: { __typename?: 'User' } & UserForAvatarFragment
+    user: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    }
   }>
   sponsors: Array<{
     __typename?: 'Sponsor'
     id: any
     url?: string | null
     image?: string | null
-    user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
+    user?: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    } | null
   }>
   funders: Array<{
     __typename?: 'Funder'
@@ -4360,7 +4264,13 @@ export type ProjectFragment = {
     confirmed: boolean
     confirmedAt?: any | null
     timesFunded?: number | null
-    user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
+    user?: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+      email?: string | null
+    } | null
   }>
   milestones: Array<{
     __typename?: 'ProjectMilestone'
@@ -4429,7 +4339,6 @@ export type UserForAvatarFragment = {
   __typename?: 'User'
   id: any
   imageUrl?: string | null
-  email?: string | null
   username: string
 }
 
@@ -4716,19 +4625,6 @@ export type ProjectUnfollowMutationVariables = Exact<{
 export type ProjectUnfollowMutation = {
   __typename?: 'Mutation'
   projectUnfollow: boolean
-}
-
-export type ProjectDeleteMutationVariables = Exact<{
-  input: DeleteProjectInput
-}>
-
-export type ProjectDeleteMutation = {
-  __typename?: 'Mutation'
-  projectDelete: {
-    __typename?: 'ProjectDeleteResponse'
-    message?: string | null
-    success: boolean
-  }
 }
 
 export type ProjectTagAddMutationVariables = Exact<{
@@ -5414,7 +5310,7 @@ export type ProjectDashboardFundersQuery = {
     fundingTxs: Array<{
       __typename?: 'FundingTx'
       email?: string | null
-      amount: number
+      paidAt?: any | null
       uuid?: string | null
     }>
     rewards: Array<{
@@ -5633,24 +5529,10 @@ export type ActivityCreatedSubscription = {
     | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
-export type FundingActivityCreatedSubscriptionVariables = Exact<{
-  input?: InputMaybe<ActivityCreatedSubscriptionInput>
-}>
-
-export type FundingActivityCreatedSubscription = {
-  __typename?: 'Subscription'
-  activityCreated:
-    | { __typename?: 'Entry' }
-    | ({ __typename?: 'FundingTx' } & FundingTxFragment)
-    | { __typename?: 'Project' }
-    | { __typename?: 'ProjectReward' }
-}
-
 export const UserForAvatarFragmentDoc = gql`
   fragment UserForAvatar on User {
     id
     imageUrl
-    email
     username
   }
 `
@@ -5723,31 +5605,6 @@ export const FundingTxFragmentDoc = gql`
     }
   }
 `
-export const UserMeFragmentDoc = gql`
-  fragment UserMe on User {
-    id
-    username
-    imageUrl
-    email
-    externalAccounts {
-      id
-      accountType
-      externalUsername
-      externalId
-      public
-    }
-    ownerOf {
-      project {
-        id
-        name
-        image
-        thumbnailImage
-        title
-        status
-      }
-    }
-  }
-`
 export const ProjectRewardForCreateUpdateFragmentDoc = gql`
   fragment ProjectRewardForCreateUpdate on ProjectReward {
     id
@@ -5812,7 +5669,9 @@ export const ProjectFragmentDoc = gql`
     owners {
       id
       user {
-        ...UserMe
+        id
+        username
+        imageUrl
       }
     }
     rewards {
@@ -5822,7 +5681,9 @@ export const ProjectFragmentDoc = gql`
       id
       confirmed
       user {
-        ...UserForAvatar
+        id
+        username
+        imageUrl
       }
     }
     sponsors {
@@ -5830,13 +5691,18 @@ export const ProjectFragmentDoc = gql`
       url
       image
       user {
-        ...UserForAvatar
+        id
+        username
+        imageUrl
       }
     }
     funders {
       id
       user {
-        ...UserForAvatar
+        id
+        username
+        imageUrl
+        email
       }
       amountFunded
       confirmed
@@ -5877,10 +5743,33 @@ export const ProjectFragmentDoc = gql`
       }
     }
   }
-  ${UserMeFragmentDoc}
   ${ProjectRewardForCreateUpdateFragmentDoc}
-  ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
+`
+export const UserMeFragmentDoc = gql`
+  fragment UserMe on User {
+    id
+    username
+    imageUrl
+    email
+    externalAccounts {
+      id
+      accountType
+      externalUsername
+      externalId
+      public
+    }
+    ownerOf {
+      project {
+        id
+        name
+        image
+        thumbnailImage
+        title
+        status
+      }
+    }
+  }
 `
 export const EntryForLandingPageFragmentDoc = gql`
   fragment EntryForLandingPage on Entry {
@@ -7096,57 +6985,6 @@ export type ProjectUnfollowMutationResult =
 export type ProjectUnfollowMutationOptions = Apollo.BaseMutationOptions<
   ProjectUnfollowMutation,
   ProjectUnfollowMutationVariables
->
-export const ProjectDeleteDocument = gql`
-  mutation ProjectDelete($input: DeleteProjectInput!) {
-    projectDelete(input: $input) {
-      message
-      success
-    }
-  }
-`
-export type ProjectDeleteMutationFn = Apollo.MutationFunction<
-  ProjectDeleteMutation,
-  ProjectDeleteMutationVariables
->
-
-/**
- * __useProjectDeleteMutation__
- *
- * To run a mutation, you first call `useProjectDeleteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectDeleteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectDeleteMutation, { data, loading, error }] = useProjectDeleteMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectDeleteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ProjectDeleteMutation,
-    ProjectDeleteMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    ProjectDeleteMutation,
-    ProjectDeleteMutationVariables
-  >(ProjectDeleteDocument, options)
-}
-export type ProjectDeleteMutationHookResult = ReturnType<
-  typeof useProjectDeleteMutation
->
-export type ProjectDeleteMutationResult =
-  Apollo.MutationResult<ProjectDeleteMutation>
-export type ProjectDeleteMutationOptions = Apollo.BaseMutationOptions<
-  ProjectDeleteMutation,
-  ProjectDeleteMutationVariables
 >
 export const ProjectTagAddDocument = gql`
   mutation ProjectTagAdd($input: ProjectTagMutationInput!) {
@@ -9100,7 +8938,7 @@ export const ProjectDashboardFundersDocument = gql`
       }
       fundingTxs {
         email
-        amount
+        paidAt
         uuid
       }
       rewards {
@@ -9964,49 +9802,3 @@ export type ActivityCreatedSubscriptionHookResult = ReturnType<
 >
 export type ActivityCreatedSubscriptionResult =
   Apollo.SubscriptionResult<ActivityCreatedSubscription>
-export const FundingActivityCreatedDocument = gql`
-  subscription fundingActivityCreated(
-    $input: ActivityCreatedSubscriptionInput
-  ) {
-    activityCreated(input: $input) {
-      ... on FundingTx {
-        ...FundingTx
-      }
-    }
-  }
-  ${FundingTxFragmentDoc}
-`
-
-/**
- * __useFundingActivityCreatedSubscription__
- *
- * To run a query within a React component, call `useFundingActivityCreatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useFundingActivityCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFundingActivityCreatedSubscription({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFundingActivityCreatedSubscription(
-  baseOptions?: Apollo.SubscriptionHookOptions<
-    FundingActivityCreatedSubscription,
-    FundingActivityCreatedSubscriptionVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSubscription<
-    FundingActivityCreatedSubscription,
-    FundingActivityCreatedSubscriptionVariables
-  >(FundingActivityCreatedDocument, options)
-}
-export type FundingActivityCreatedSubscriptionHookResult = ReturnType<
-  typeof useFundingActivityCreatedSubscription
->
-export type FundingActivityCreatedSubscriptionResult =
-  Apollo.SubscriptionResult<FundingActivityCreatedSubscription>

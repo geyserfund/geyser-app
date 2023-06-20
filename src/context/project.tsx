@@ -2,19 +2,12 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../constants'
-import {
-  useFundingFlow,
-  UseFundingFlowReturn,
-  useFundingFormState,
-  UseFundingFormStateReturn,
-} from '../hooks'
 import { useProjectState } from '../hooks/graphqlState'
 import { useModal } from '../hooks/useModal'
 import {
   MilestoneAdditionModal,
   RewardAdditionModal,
 } from '../pages/projectView/projectMainBody/components'
-import { ProjectCreatorModal } from '../pages/projectView/projectNavigation/components/ProjectCreatorModal'
 import {
   ProjectFragment,
   ProjectMilestone,
@@ -25,7 +18,6 @@ import { useNavContext } from './nav'
 
 export enum MobileViews {
   description = 'description',
-  rewards = 'rewards',
   contribution = 'contribution',
   leaderboard = 'leaderBoard',
   funding = 'funding',
@@ -44,15 +36,12 @@ type ProjectContextProps = {
   isProjectOwner: boolean | undefined
   loading?: boolean
   saving?: boolean
-  fundForm: UseFundingFormStateReturn
-  fundingFlow: UseFundingFlowReturn
   isDirty?: boolean
   error: any
   onRewardsModalOpen(props?: {
     reward?: ProjectRewardForCreateUpdateFragment
   }): void
   onMilestonesModalOpen(): void
-  onCreatorModalOpen(): void
 }
 
 export const ProjectContext = createContext<ProjectContextProps | null>(null)
@@ -90,7 +79,6 @@ export const ProjectProvider = ({
   const [isProjectOwner, setIsProjectOwner] = useState<boolean | undefined>()
   const { user } = useAuthContext()
 
-  const creatorModal = useModal()
   const milestonesModal = useModal()
   const rewardsModal = useModal<{
     reward?: ProjectRewardForCreateUpdateFragment
@@ -127,12 +115,6 @@ export const ProjectProvider = ({
           }) || [],
       })
     },
-  })
-
-  const fundingFlow = useFundingFlow()
-
-  const fundForm = useFundingFormState({
-    rewards: project ? project.rewards : undefined,
   })
 
   useEffect(() => {
@@ -192,9 +174,6 @@ export const ProjectProvider = ({
         saving,
         error,
         loading,
-        fundForm,
-        fundingFlow,
-        onCreatorModalOpen: creatorModal.onOpen,
         onRewardsModalOpen: rewardsModal.onOpen,
         onMilestonesModalOpen: milestonesModal.onOpen,
       }}
@@ -202,7 +181,6 @@ export const ProjectProvider = ({
       {children}
       {project && isProjectOwner && (
         <>
-          <ProjectCreatorModal {...creatorModal} />
           <MilestoneAdditionModal
             {...milestonesModal}
             onSubmit={onMilestonesSubmit}

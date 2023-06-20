@@ -38,7 +38,7 @@ export enum ContributionInfoBoxVersion {
 type Props = HTMLChakraProps<'div'> & {
   project: ProjectFragment
   contributionAmount: Satoshis
-  referenceCode?: string | null
+  referenceCode?: string
   isFunderAnonymous?: boolean
   showGeyserFee: boolean
   funderEmail?: string

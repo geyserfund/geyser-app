@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from 'react'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
+import { StickToTop } from '../../../../components/layouts'
 import { ActivityBrief } from '../../../../components/molecules'
 import { MobileViews, useProjectContext } from '../../../../context'
 import {
@@ -15,7 +16,6 @@ import {
   QUERY_PROJECT_FUNDERS,
 } from '../../../../graphql'
 import { useQueryWithPagination } from '../../../../hooks'
-import { useFundSubscription } from '../../../../hooks/fundingFlow/useFundSubscription'
 import {
   Funder,
   FundingTxFragment,
@@ -50,10 +50,6 @@ export const ProjectFundingInitialInfoScreen = ({
   const { mobileView, setMobileView } = useProjectContext()
 
   const [tab, setTab] = useState('activity')
-
-  const { startListening, stopListening, fundingActivity } =
-    useFundSubscription({ projectId: project.id })
-
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<
     FundingTxWithCount[]
   >([])
@@ -96,25 +92,14 @@ export const ProjectFundingInitialInfoScreen = ({
   })
 
   useEffect(() => {
-    startListening()
-
-    return () => {
-      stopListening()
-    }
-  }, [startListening, stopListening])
-
-  useEffect(() => {
     setAggregatedFundingTxs(fundingTxs.data)
   }, [fundingTxs.data])
 
   useEffect(() => {
-    if (
-      fundingActivity &&
-      !aggregatedFundingTxs.some((txs) => txs.id === fundingActivity.id)
-    ) {
-      setAggregatedFundingTxs((current) => [fundingActivity, ...current])
+    if (fundingTx && fundingTx.id && fundingTx.status === 'paid') {
+      setAggregatedFundingTxs([fundingTx, ...aggregatedFundingTxs])
     }
-  }, [fundingActivity, aggregatedFundingTxs])
+  }, [aggregatedFundingTxs, fundingTx])
 
   useEffect(() => {
     if (mobileView === MobileViews.contribution) {
@@ -149,7 +134,7 @@ export const ProjectFundingInitialInfoScreen = ({
           onClick={() => setTab('activity')}
         >
           Contributions{' '}
-          <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
+          <Text ml={2} bg="neutral.100" rounded="lg" px={3} py={1}>
             {project.fundingTxsCount}
           </Text>
         </Button>
@@ -176,7 +161,7 @@ export const ProjectFundingInitialInfoScreen = ({
           onClick={() => setTab('leaderboard')}
         >
           Leaderboard{' '}
-          <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
+          <Text ml={2} bg="neutral.100" rounded="lg" px={3} py={1}>
             {project.fundersCount}
           </Text>
         </Button>
@@ -191,6 +176,32 @@ export const ProjectFundingInitialInfoScreen = ({
   }
 
   const renderTabsList = () => {
+    if (isMobile) {
+      switch (mobileView) {
+        case MobileViews.contribution:
+          return (
+            <StickToTop
+              id="contribute-tab-activity-table"
+              w="100%"
+              _onStick={{ w: 'calc(100% - 20px)' }}
+            >
+              {contributionButton()}
+            </StickToTop>
+          )
+        case MobileViews.leaderboard:
+          return (
+            <StickToTop
+              id="contribute-tab-activity-table"
+              w="100%"
+              _onStick={{ w: 'calc(100% - 20px)' }}
+            >
+              {leaderBoardButton()}
+            </StickToTop>
+          )
+        default:
+      }
+    }
+
     return (
       <HStack width="100%" spacing="0px">
         <Box w="50%">{contributionButton()}</Box>;

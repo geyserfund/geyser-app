@@ -39,8 +39,6 @@ export interface IFundFormState {
   resetForm: () => void
 }
 
-export type UseFundingFormStateReturn = ReturnType<typeof useFundingFormState>
-
 export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
@@ -81,15 +79,6 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
       setState('anonymous', false)
     }
   }, [setState, user])
-
-  const resetRewards = useCallback(() => {
-    _setState((current) => ({
-      ...current,
-      rewardsByIDAndCount: {},
-      rewardsCost: 0,
-      totalAmount: current.donationAmount,
-    }))
-  }, [])
 
   const updateReward = useCallback(
     ({ id, count }: IRewardCount) => {
@@ -144,12 +133,5 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
     _setState(initialState)
   }, [initialState])
 
-  return {
-    state,
-    setTarget,
-    setState,
-    updateReward,
-    resetForm,
-    resetRewards,
-  }
+  return { state, setTarget, setState, updateReward, resetForm }
 }

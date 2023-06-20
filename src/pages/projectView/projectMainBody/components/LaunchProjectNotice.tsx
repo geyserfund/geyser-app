@@ -21,16 +21,14 @@ export const LaunchProjectNotice = ({
   if (hasWallet) return null
 
   return (
-    <CardLayout>
-      <Text variant="h3">Finalize project</Text>
-
-      <Text variant="body1">
-        Your project is not live yet. Head back to the creation flow to finalize
-        your project information and launch it!
+    <CardLayout bgColor="primary.50" border="none" px="24%" py={6}>
+      <Text textAlign="center" color="neutral.700" mb={4}>
+        Your project is not live yet as you have not finalized your creation
+        flow. Head back to the creation flow to launch your project.
       </Text>
 
       <Button variant="primary" w="full" onClick={handleConnectNodeClick}>
-        Finalize project
+        Connect Wallet
       </Button>
     </CardLayout>
   )

@@ -2,12 +2,15 @@ import { Box } from '@chakra-ui/layout'
 import { useParams } from 'react-router'
 
 import { ProjectProvider } from '../../context'
+import { useFundingFlow } from '../../hooks'
 import { useMobileMode } from '../../utils'
 import { ProjectContainer } from './ProjectContainer'
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>()
   const isMobile = useMobileMode()
+
+  const fundingFlow = useFundingFlow()
 
   return (
     <ProjectProvider projectId={projectId || ''}>
@@ -26,7 +29,7 @@ export const ProjectView = () => {
           bg="neutral.50"
           flexDirection={isMobile ? 'column' : 'row'}
         >
-          <ProjectContainer />
+          <ProjectContainer fundingFlow={fundingFlow} />
         </Box>
       </Box>
     </ProjectProvider>

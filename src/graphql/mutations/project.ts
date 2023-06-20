@@ -120,12 +120,3 @@ export const MUTATION_UNFOLLOW_PROJECT = gql`
     projectUnfollow(input: $input)
   }
 `
-
-export const MUTATION_DELETE_PROJECT = gql`
-  mutation ProjectDelete($input: DeleteProjectInput!) {
-    projectDelete(input: $input) {
-      message
-      success
-    }
-  }
-`
